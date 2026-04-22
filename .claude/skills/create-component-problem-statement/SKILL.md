@@ -1,5 +1,5 @@
 ---
-allowed-tools: Web Search(*),Fetch(vaadin.com:*),Fetch(https://mui.com),Fetch(www.carbondesignsystem.com:*),Fetch(https://www.atlassian.design:*),Fetch(ant.design),Fetch(chakra-ui.com:*),Fetch(shoelace.style),Fetch(https://radix-ui.com:*),Fetch(https://react-aria.adobe.com:*),Read,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(git add packages/*/spec/problem-statement.md && git commit *),Bash(git diff packages/*/spec/problem-statement.md)
+allowed-tools: Web Search(*),Fetch(vaadin.com:*),Fetch(https://mui.com),Fetch(www.carbondesignsystem.com:*),Fetch(https://www.atlassian.design:*),Fetch(ant.design),Fetch(chakra-ui.com:*),Fetch(shoelace.style),Fetch(https://radix-ui.com:*),Fetch(https://react-aria.adobe.com:*),Read,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(git add packages/*/spec/problem-statement.md && git commit *),Bash(git diff packages/*/spec/problem-statement.md),Agent
 description: Define the core problem and product-level use cases for a Vaadin web component, before researching requirements
 user-invocable: false
 ---
@@ -47,7 +47,9 @@ TASK OVERVIEW:
 
 9. Write the problem statement at `packages/{component-name}/spec/problem-statement.md` (create the directory if needed).
 
-10. **Commit the result.** After writing the file, commit it with a message following this pattern:
+10. **Review the spec.** Spawn an Agent to review the problem statement. The agent has no prior context — provide a self-contained prompt containing: the path to the spec file just written (`packages/{component-name}/spec/problem-statement.md`), a note that there are no prerequisite specs to cross-reference (this is the first document in the pipeline), and an instruction to read `.claude/skills/shared/spec-reviewer-instructions.md` for review instructions. After receiving the reviewer's findings, address each one: fix clear gaps or hygiene issues directly in the spec, present ambiguities or design decisions that need user input via AskUserQuestion, and ignore false positives.
+
+11. **Commit the result.** After writing the file, commit it with a message following this pattern:
    ```
    docs({component-name}): add problem statement for {component-name} component
    ```

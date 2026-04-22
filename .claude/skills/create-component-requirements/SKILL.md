@@ -1,5 +1,5 @@
 ---
-allowed-tools: Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh search:*),Bash(gh repo view:*),Bash(gh api:*),Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://www.atlassian.design:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Web Search(*),Read,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(git add packages/*/spec/requirements.md && git commit *),Bash(git diff packages/*/spec/requirements.md)
+allowed-tools: Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh search:*),Bash(gh repo view:*),Bash(gh api:*),Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://www.atlassian.design:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Web Search(*),Read,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(git add packages/*/spec/requirements.md && git commit *),Bash(git diff packages/*/spec/requirements.md),Agent
 description: Research behavioral requirements for a Vaadin web component's use cases and produce a requirements.md
 user-invocable: false
 ---
@@ -58,6 +58,8 @@ Research guidance: Steps 2–7 search for real-world evidence and refinement of 
     - A specific interaction pattern the universal rule does not pin down (e.g. an overflow menu that additionally opens with arrow keys on top of standard Tab/Enter).
 
     When such a component-specific requirement is included, state only the component-specific aspect. Do not re-derive the universal rule, and keep the requirement focused on the addition.
+
+11. **Review the spec.** Spawn an Agent to review the requirements document. The agent has no prior context — provide a self-contained prompt containing: the path to the spec file just written (`packages/{component-name}/spec/requirements.md`), the prerequisite file for cross-reference (`packages/{component-name}/spec/problem-statement.md`), and an instruction to read `.claude/skills/shared/spec-reviewer-instructions.md` for review instructions. After receiving the reviewer's findings, address each one: fix clear gaps or hygiene issues directly in the spec, present ambiguities or design decisions that need user input via AskUserQuestion, and ignore false positives.
 
 OUTPUT:
 

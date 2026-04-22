@@ -1,5 +1,5 @@
 ---
-allowed-tools: Read(packages/*/spec/*),Read(flow-components/**),Read(../flow-components/**),Read(.claude/skills/create-component-flow-api/*),Glob(flow-components/**),Glob(../flow-components/**),Grep,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(ls flow-components),Bash(ls ../flow-components)
+allowed-tools: Read(packages/*/spec/*),Read(flow-components/**),Read(../flow-components/**),Read(.claude/skills/create-component-flow-api/*),Read(.claude/skills/shared/*),Glob(flow-components/**),Glob(../flow-components/**),Grep,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(ls flow-components),Bash(ls ../flow-components),Agent
 description: Design the developer-facing Flow (Java) API for a Vaadin component based on its requirements and the already-designed web component API
 user-invocable: false
 ---
@@ -51,6 +51,8 @@ TASK OVERVIEW:
    - **Router-agnostic.** Per `DESIGN_GUIDELINES.md`, the Flow API must not depend on any specific client-side router. Navigation is wired by the application (e.g. via `UI.navigate(...)` or `RouteConfiguration`). The Flow wrapper exposes path/URL setters but does not call a router itself.
 
 8. Write the output to `packages/{component-name}/spec/flow-api.md`.
+
+9. **Review the spec.** Spawn an Agent to review the Flow API document. The agent has no prior context — provide a self-contained prompt containing: the path to the spec file just written (`packages/{component-name}/spec/flow-api.md`), the prerequisite files for cross-reference (`packages/{component-name}/spec/requirements.md`, `packages/{component-name}/spec/web-component-api.md`, and `packages/{component-name}/spec/problem-statement.md`), and an instruction to read `.claude/skills/shared/spec-reviewer-instructions.md` for review instructions. After receiving the reviewer's findings, address each one: fix clear gaps or hygiene issues directly in the spec, present ambiguities or design decisions that need user input via AskUserQuestion, and ignore false positives.
 
 OUTPUT FORMAT:
 

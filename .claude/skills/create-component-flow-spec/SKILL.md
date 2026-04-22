@@ -1,5 +1,5 @@
 ---
-allowed-tools: Read,Glob,Grep,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(grep *),Bash(find *),Bash(ls flow-components),Bash(ls ../flow-components)
+allowed-tools: Read,Glob,Grep,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(grep *),Bash(find *),Bash(ls flow-components),Bash(ls ../flow-components),Agent
 description: Reconcile an ideal Flow developer API with existing flow-components source to produce a full Flow implementation specification
 user-invocable: false
 ---
@@ -57,7 +57,9 @@ TASK OVERVIEW:
 
 10. Read `FLOW_SPEC_TEMPLATE.md` in this skill's directory. Write the spec at `packages/{component-name}/spec/flow-spec.md`, following the template structure.
 
-11. Verify coverage. Cross-reference the spec against `requirements.md` (universal + flow only) — every requirement must be addressed in the spec. Cross-reference against `flow-api.md` — every API feature is either present in the spec or has a documented deviation in Key Design Decisions. Cross-reference against the Web API coverage check in `flow-api.md` — every web-component API surface that was mapped to a Flow API must now have a concrete class/method/field entry in the spec.
+11. **Review the spec.** Spawn an Agent to review the Flow implementation spec. The agent has no prior context — provide a self-contained prompt containing: the path to the spec file just written (`packages/{component-name}/spec/flow-spec.md`), the prerequisite files for cross-reference (`packages/{component-name}/spec/flow-api.md`, `packages/{component-name}/spec/web-component-api.md`, `packages/{component-name}/spec/requirements.md`, `packages/{component-name}/spec/problem-statement.md`, and `packages/{component-name}/spec/web-component-spec.md` if it exists), and an instruction to read `.claude/skills/shared/spec-reviewer-instructions.md` for review instructions. After receiving the reviewer's findings, address each one: fix clear gaps or hygiene issues directly in the spec, present ambiguities or design decisions that need user input via AskUserQuestion, and ignore false positives.
+
+12. Verify coverage. Cross-reference the spec against `requirements.md` (universal + flow only) — every requirement must be addressed in the spec. Cross-reference against `flow-api.md` — every API feature is either present in the spec or has a documented deviation in Key Design Decisions. Cross-reference against the Web API coverage check in `flow-api.md` — every web-component API surface that was mapped to a Flow API must now have a concrete class/method/field entry in the spec.
 
 SOURCE CODE ANALYSIS:
 

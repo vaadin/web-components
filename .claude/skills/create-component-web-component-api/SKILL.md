@@ -1,5 +1,5 @@
 ---
-allowed-tools: Web Search(*),Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Read(packages/*/spec/*),Read(.claude/skills/create-component-web-component-api/*),Write(packages/:*),Bash(mkdir -p packages/*/spec),mcp__vaadin
+allowed-tools: Web Search(*),Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Read(packages/*/spec/*),Read(.claude/skills/create-component-web-component-api/*),Read(.claude/skills/shared/*),Write(packages/:*),Bash(mkdir -p packages/*/spec),mcp__vaadin,Agent
 description: Design the developer-facing API for a Vaadin web component based on its requirements, without studying implementation source code
 user-invocable: false
 ---
@@ -42,6 +42,8 @@ Use the project version for the Vaadin version.
    - **Informed by Vaadin docs.** Align with conventions and patterns found in step 4.
 
 8. Write the output to `packages/{component-name}/spec/web-component-api.md`.
+
+9. **Review the spec.** Spawn an Agent to review the API document. The agent has no prior context — provide a self-contained prompt containing: the path to the spec file just written (`packages/{component-name}/spec/web-component-api.md`), the prerequisite files for cross-reference (`packages/{component-name}/spec/requirements.md` and `packages/{component-name}/spec/problem-statement.md`), and an instruction to read `.claude/skills/shared/spec-reviewer-instructions.md` for review instructions. After receiving the reviewer's findings, address each one: fix clear gaps or hygiene issues directly in the spec, present ambiguities or design decisions that need user input via AskUserQuestion, and ignore false positives.
 
 OUTPUT FORMAT:
 

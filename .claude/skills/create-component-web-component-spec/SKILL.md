@@ -1,5 +1,5 @@
 ---
-allowed-tools: Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Read,Glob,Grep,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(grep *),Bash(find *)
+allowed-tools: Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Read,Glob,Grep,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(grep *),Bash(find *),Agent
 description: Reconcile an ideal developer API with existing source code to produce a full implementation specification for a Vaadin web component
 user-invocable: false
 ---
@@ -30,7 +30,9 @@ TASK OVERVIEW:
 
 7. Read `SPEC_TEMPLATE.md` in this skill's directory. Write the spec at `packages/{component-name}/spec/web-component-spec.md`, following the template structure.
 
-8. Verify coverage. Cross-reference the spec against `requirements.md` — every requirement must be addressed in the spec. Cross-reference against `web-component-api.md` — every API feature is either present in the spec or has a documented deviation in Key Design Decisions.
+8. **Review the spec.** Spawn an Agent to review the implementation spec. The agent has no prior context — provide a self-contained prompt containing: the path to the spec file just written (`packages/{component-name}/spec/web-component-spec.md`), the prerequisite files for cross-reference (`packages/{component-name}/spec/web-component-api.md`, `packages/{component-name}/spec/requirements.md`, and `packages/{component-name}/spec/problem-statement.md`), and an instruction to read `.claude/skills/shared/spec-reviewer-instructions.md` for review instructions. After receiving the reviewer's findings, address each one: fix clear gaps or hygiene issues directly in the spec, present ambiguities or design decisions that need user input via AskUserQuestion, and ignore false positives.
+
+9. Verify coverage. Cross-reference the spec against `requirements.md` — every requirement must be addressed in the spec. Cross-reference against `web-component-api.md` — every API feature is either present in the spec or has a documented deviation in Key Design Decisions.
 
 SOURCE CODE ANALYSIS:
 
