@@ -599,5 +599,70 @@ describe('a11y', () => {
         });
       });
     });
+
+    describe('noTabFocus', () => {
+      let input, overlayInput;
+
+      beforeEach(async () => {
+        // Place popover after target so DOM = [target, popover, input]
+        target.parentElement.insertBefore(target, popover);
+
+        input = document.createElement('input');
+        target.parentElement.appendChild(input);
+
+        overlayInput = popover.querySelector('input');
+
+        popover.trigger = [];
+        popover.noTabFocus = true;
+        popover.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+      });
+
+      it('should focus next element after target on target Tab', async () => {
+        target.focus();
+
+        await sendKeys({ press: 'Tab' });
+
+        expect(getDeepActiveElement()).to.equal(input);
+      });
+
+      it('should focus target on next element Shift Tab', async () => {
+        input.focus();
+
+        await sendKeys({ press: 'Shift+Tab' });
+
+        expect(getDeepActiveElement()).to.equal(target);
+      });
+
+      it('should focus next element after target on last overlay child Tab', async () => {
+        overlayInput.focus();
+
+        await sendKeys({ press: 'Tab' });
+
+        expect(getDeepActiveElement()).to.equal(input);
+      });
+
+      it('should focus target on popover host Shift Tab', async () => {
+        popover.focus();
+
+        await sendKeys({ press: 'Shift+Tab' });
+
+        expect(getDeepActiveElement()).to.equal(target);
+      });
+
+      it('should not affect modal popover behavior', async () => {
+        popover.opened = false;
+        await nextUpdate(popover);
+        popover.modal = true;
+        popover.opened = true;
+        await oneEvent(overlay, 'vaadin-overlay-open');
+
+        target.focus();
+        await sendKeys({ press: 'Tab' });
+
+        // Modal popover uses overlay focus trap; noTabFocus has no effect.
+        expect(getDeepActiveElement()).to.equal(popover);
+      });
+    });
   });
 });

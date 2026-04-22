@@ -39,14 +39,20 @@ export class PopoverFocusController {
     const targetFocusable = this.__getTargetFocusable();
 
     if (targetFocusable && isElementFocused(targetFocusable)) {
-      event.preventDefault();
-      host.focus();
+      if (host.noTabFocus) {
+        this.__moveLogicalNext(event, targetFocusable);
+      } else {
+        event.preventDefault();
+        host.focus();
+      }
       return;
     }
 
     const lastPopoverFocusable = this.__getLastPopoverFocusable();
     if (isElementFocused(lastPopoverFocusable)) {
-      this.__moveLogicalNext(event, host);
+      // With noTabFocus the popover isn't in the logical list, so the target
+      // becomes the reference for "next after the popover".
+      this.__moveLogicalNext(event, host.noTabFocus ? targetFocusable : host);
       return;
     }
 
@@ -167,7 +173,7 @@ export class PopoverFocusController {
   /**
    * Scope focusables in *logical* tab order: the popover is moved from its DOM
    * position to right after the target focusable. The popover is left out of
-   * the list entirely when there is no target.
+   * the list entirely when there is no target, or when `noTabFocus` is set.
    * @private
    */
   __buildLogicalList(scopeFocusables = this.__getScopeFocusables()) {
@@ -175,7 +181,7 @@ export class PopoverFocusController {
     const targetFocusable = this.__getTargetFocusable();
     const logicalFocusables = scopeFocusables.filter((el) => el !== host);
 
-    if (targetFocusable && targetFocusable !== host) {
+    if (!host.noTabFocus && targetFocusable && targetFocusable !== host) {
       const targetIdx = logicalFocusables.indexOf(targetFocusable);
       if (targetIdx >= 0) {
         logicalFocusables.splice(targetIdx + 1, 0, host);
