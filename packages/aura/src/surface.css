@@ -72,3 +72,12 @@ vaadin-crud-dialog::part(overlay) {
   --aura-surface-opacity: 1;
   background: var(--aura-surface-color-solid) padding-box;
 }
+
+.aura-accent-surface {
+  background: var(--aura-accent-surface) padding-box;
+}
+
+.aura-accent-surface-solid {
+  background: var(--aura-accent-surface) padding-box;
+  --aura-surface-opacity: 1;
+}
