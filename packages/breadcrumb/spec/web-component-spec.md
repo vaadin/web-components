@@ -13,7 +13,7 @@
 
 4. **Programmatic `items` property on the container** — An array of `{ text, path }` objects. When set, the container creates `<vaadin-breadcrumb-item>` elements internally, replacing any slotted children. Follows the `<vaadin-menu-bar>` pattern of an `items` array driving rendered child elements. Icons are only supported via the declarative API (`slot="prefix"`), not via `items`. (See web-component-api.md §6.)
 
-5. **Separator via `mask-image` CSS on `:host::after`** — Each item (except the last) renders a separator via a `:host::after` pseudo-element on `<vaadin-breadcrumb-item>`, using the `mask-image` pattern from button-base-styles (background: currentColor, shaped by mask-image). The base styles define `--vaadin-breadcrumb-separator` pointing to `--_vaadin-icon-chevron-right`. In RTL, the icon is flipped via `transform: scaleX(-1)`. (See web-component-api.md §3.)
+5. **Separator via `mask-image` CSS on an `::after` pseudo-element** — A separator pseudo-element is rendered on every element that sits in the list flow: on `<vaadin-breadcrumb-item>` via `:host::after` (in the item's base styles) and on `[part="overflow"]` via `::after` (in the container's base styles). Both use the same `mask-image` pattern from button-base-styles (background: currentColor, shaped by mask-image) and the same `--vaadin-breadcrumb-separator` custom property, which defaults to `--_vaadin-icon-chevron-right`. In RTL, the icon is flipped via `transform: scaleX(-1)`. (See web-component-api.md §3.)
 
 6. **Progressive overflow collapse using `ResizeMixin`** — The container uses `ResizeMixin` to detect when items don't fit. Items collapse from closest-to-root first, replacing collapsed items with an overflow button (`…`). The overflow button opens an overlay listing the hidden items. The `i18n` property (via `I18nMixin`) allows localizing the overflow button's `aria-label`. (See web-component-api.md §4.)
 
@@ -48,18 +48,17 @@ BreadcrumbMixin(
 )
 ```
 
-The host carries `role="navigation"`.
+The host carries `role="navigation"`. Items are distributed across two slots so the overflow element can sit in the DOM between the root item and the rest — ensuring DOM order matches the visual order `[root] [overflow] [rest…]` per DESIGN_GUIDELINES.
 
 Shadow DOM:
 ```html
-<ol part="list">
-  <slot></slot>
-  <li part="overflow">
+<div role="list" part="list">
+  <slot name="root"></slot>
+  <div role="listitem" part="overflow" hidden>
     <button part="overflow-button"
             aria-label="…"
             aria-haspopup="true"
-            aria-expanded="false"
-            hidden>
+            aria-expanded="false">
       <!-- ::before pseudo-element renders ellipsis icon via mask-image -->
     </button>
     <div part="overlay"
@@ -69,9 +68,12 @@ Shadow DOM:
         <!-- Collapsed items rendered here as links -->
       </div>
     </div>
-  </li>
-</ol>
+  </div>
+  <slot></slot>
+</div>
 ```
+
+The `<div role="list">` is used instead of `<ol>` because (a) `<ol>` accepts only `<li>` children per HTML spec, and the slotted elements are `<vaadin-breadcrumb-item>`, and (b) `<ol>`/`<ul>` with `list-style: none` has its list role stripped by Safari/VoiceOver, which would suppress "list with N items" announcements. An explicit `role="list"` is immune to both issues.
 
 | Property | Type | Default | Reflected | Description |
 |---|---|---|---|---|
@@ -80,12 +82,13 @@ Shadow DOM:
 
 | Slot | Description |
 |---|---|
-| (default) | `<vaadin-breadcrumb-item>` elements representing the trail. |
+| `root` | The first `<vaadin-breadcrumb-item>` in the trail. The container assigns `slot="root"` to the first item automatically — the application does not set it. |
+| (default) | All remaining `<vaadin-breadcrumb-item>` elements in the trail. |
 
 | Part | Description |
 |---|---|
-| `list` | The `<ol>` element wrapping all items. |
-| `overflow` | The `<li>` element containing the overflow button and overlay. |
+| `list` | The element with `role="list"` wrapping all items. |
+| `overflow` | The listitem element containing the overflow button and overlay. |
 | `overflow-button` | The button that reveals collapsed items. |
 | `overlay` | The overlay panel that appears when the overflow button is activated. |
 | `content` | The wrapper inside the overlay that holds the collapsed items. |
@@ -100,11 +103,11 @@ Shadow DOM:
 
 Internal behavior:
 
-- **Slot observation.** The breadcrumb subclasses `SlotController` and overrides `initNode`/`initCustomNode` to re-evaluate overflow and `current` state when children are added or removed.
-- **Overflow detection.** On resize (via `ResizeMixin`) and on slot changes, the component measures whether all items fit within the container width. If not, it progressively hides items starting from the one closest to the root (index 1, preserving the root at index 0), setting a `data-overflow-hidden` attribute on each hidden item. If further space is needed, the root collapses too. The last item (current page) never collapses. Hidden items are listed in the overflow overlay.
+- **Slot observation and root assignment.** The breadcrumb subclasses `SlotController` and overrides `initNode`/`initCustomNode` to watch the children. When children change, the controller sets `slot="root"` on the first `<vaadin-breadcrumb-item>` child and removes `slot` from any previous holder. This routes the first item into the named `root` slot in shadow DOM, so the overflow element sits in the DOM between the root and the rest — matching visual order. The same controller pass also re-evaluates overflow detection and `current` state on the last item.
+- **Overflow detection.** On resize (via `ResizeMixin`) and on slot changes, the component measures whether all items fit within the container width. If not, it progressively hides items starting from the one closest to the root (the first default-slot item), setting a `data-overflow-hidden` attribute on each hidden item. If further space is needed, the root item collapses too. The last item (current page) never collapses. Hidden items are listed in the overflow overlay.
 - **Overflow overlay positioning.** The overlay uses `position: fixed` with coordinates from `getBoundingClientRect()` on the overflow button, per WEB_COMPONENT_GUIDELINES. It closes on outside click, Escape key, and item activation.
-- **Overflow DOM order.** The overflow `<li>` is placed in the shadow DOM immediately after the default slot, so when items render it appears right after the root item in light+shadow composition. This ensures focus order follows visual order per DESIGN_GUIDELINES.
-- **`items` property.** When `items` is set, the component renders `<vaadin-breadcrumb-item>` elements into the light DOM using Lit's `render()`, following the `<vaadin-menu-bar>` pattern. Each generated item gets its `path` and text content from the corresponding items entry. When `items` is set to `null`/`undefined`, generated items are removed, and any slotted children take effect again.
+- **Overflow separator.** The overflow element sits in the list flow between the root and the rest, so it needs a separator after it when visible. The container's base styles render a `[part="overflow"]::after` pseudo-element using the same `mask-image` + `currentColor` pattern as `<vaadin-breadcrumb-item>`, reading the same `--vaadin-breadcrumb-separator` custom property, and applying the same RTL flip (`transform: scaleX(-1)`). When `has-overflow` is not set, the overflow element is hidden, so the separator is not visible either.
+- **`items` property.** When `items` is set, the component renders `<vaadin-breadcrumb-item>` elements into the light DOM using Lit's `render()`, following the `<vaadin-menu-bar>` pattern. The controller assigns `slot="root"` to the first generated item just like it does for user-provided items. Each generated item gets its `path` and text content from the corresponding items entry. When `items` is set to `null`/`undefined`, generated items are removed, and any slotted children take effect again.
 
 ---
 
@@ -167,7 +170,7 @@ When `path` is not set (current page):
 Internal behavior:
 
 - **Link rendering.** When `path` is set, renders `<a href="${path}" target="${target}">`, matching the approach in `<vaadin-side-nav-item>`. When `path` is not set, renders `<span>`. The `<a>` is a plain HTML link — no router integration, no click interception. SPA routers intercept link clicks at the document level.
-- **Separator rendering.** A `:host::after` pseudo-element renders the separator. It uses `background: currentColor` with `mask-image: var(--vaadin-breadcrumb-separator)`, following the button-base-styles pattern. The last item's separator is hidden via `:host(:last-of-type)::after { display: none }`. Items with the `current` attribute also hide the separator.
+- **Separator rendering.** A `:host::after` pseudo-element renders the separator. It uses `background: currentColor` with `mask-image: var(--vaadin-breadcrumb-separator)`, following the button-base-styles pattern. The last item's separator is hidden via `:host(:last-of-type)::after { display: none }`. Items with the `current` attribute also hide the separator. The same separator styling is duplicated on the container's `[part="overflow"]::after` (see the container's Overflow separator behavior) so the overflow element visually matches peer items in the list flow.
 - **RTL separator flip.** In RTL contexts, `:host::after` gets `transform: scaleX(-1)`.
 - **`aria-current="page"`.** When the parent sets the `current` attribute, the item's internal link/span element gets `aria-current="page"`.
 - **Prefix slot.** A `SlotController` observes the `prefix` slot and toggles `has-prefix` on the host for styling.
@@ -236,4 +239,12 @@ No. `SlotChildObserveController` bundles two concerns the breadcrumb does not ne
 
 **Q: Should the shadow DOM wrap content in `<nav>` and each item in `<li>`?**
 
-No. Per the "Use `role` on the host instead of a semantic wrapper inside it" rule in DESIGN_GUIDELINES.md, `<vaadin-breadcrumb>` carries `role="navigation"` on the host and `<vaadin-breadcrumb-item>` carries `role="listitem"` on the host. The inner `<ol part="list">` in the container is retained as a genuine exception — a single element cannot carry both the `navigation` and `list` roles, so the list semantics live on an inner wrapper.
+No. Per the "Use `role` on the host instead of a semantic wrapper inside it" rule in DESIGN_GUIDELINES.md, `<vaadin-breadcrumb>` carries `role="navigation"` on the host and `<vaadin-breadcrumb-item>` carries `role="listitem"` on the host. The inner list wrapper in the container is retained as a genuine exception — a single element cannot carry both the `navigation` and `list` roles, so the list semantics live on an inner element.
+
+**Q: Should the list wrapper be `<ol>` or a generic element with `role="list"`?**
+
+A generic element with explicit `role="list"`. Two reasons: (a) HTML `<ol>` accepts only `<li>` children, and the slotted items are `<vaadin-breadcrumb-item>` custom elements, so `<ol>` would be non-conforming; (b) Safari + VoiceOver strips the list role from `<ol>`/`<ul>` when `list-style: none` is applied (which a themed breadcrumb always applies), suppressing "list with N items" announcements. Explicit `role="list"` is immune to both issues.
+
+**Q: How is the overflow element positioned so it appears visually between the root and the rest of the items?**
+
+Two shadow slots with the overflow in shadow DOM between them: `<slot name="root"></slot>`, then `<div part="overflow">`, then `<slot></slot>`. The component's `SlotController` assigns `slot="root"` to the first `<vaadin-breadcrumb-item>` child automatically — the application doesn't set it. This keeps DOM order aligned with visual order `[root] [overflow] [rest…]`, satisfying the "focus order matches visual order" rule. The alternative considered — inserting the overflow as a light-DOM sibling between items — was rejected because it would add a component-authored element to the user's light DOM, changing `breadcrumb.children.length` and conflicting with the "light DOM is the application's territory" principle.
