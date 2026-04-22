@@ -34,7 +34,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Test
-        run: yarn test
+        run: yarn test --all
   firefox:
     name: Firefox
     runs-on: ubuntu-latest
@@ -60,7 +60,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Test
-        run: yarn test:firefox
+        run: yarn test:firefox --all
   webkit:
     name: WebKit
     runs-on: ubuntu-latest
@@ -86,4 +86,4 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Test
-        run: yarn test:webkit
+        run: yarn test:webkit --all
