@@ -16,7 +16,18 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * window.Vaadin.featureFlags.breadcrumbComponent = true;
  * ```
  */
-declare class BreadcrumbItem extends ElementMixin(ThemableMixin(HTMLElement)) {}
+declare class BreadcrumbItem extends ElementMixin(ThemableMixin(HTMLElement)) {
+  /**
+   * The URL to navigate to. When set, the item renders as an `<a>` link.
+   * When absent, the item renders as a non-interactive `<span>`.
+   */
+  path?: string | null;
+
+  /**
+   * The link target (e.g. `_blank`). Only applies when `path` is set.
+   */
+  target?: string | null;
+}
 
 declare global {
   interface HTMLElementTagNameMap {
