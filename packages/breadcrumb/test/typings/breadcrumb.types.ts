@@ -1,8 +1,10 @@
 import '../../vaadin-breadcrumb.js';
 import '../../vaadin-breadcrumb-item.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
+import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { Breadcrumb, BreadcrumbItemData } from '../../src/vaadin-breadcrumb.js';
+import type { Breadcrumb, BreadcrumbI18n, BreadcrumbItemData } from '../../src/vaadin-breadcrumb.js';
 import type { BreadcrumbItem } from '../../src/vaadin-breadcrumb-item.js';
 import type { BreadcrumbMixinClass } from '../../src/vaadin-breadcrumb-mixin.js';
 
@@ -19,6 +21,8 @@ assertType<BreadcrumbItem>(item);
 assertType<ElementMixinClass>(breadcrumb);
 assertType<ThemableMixinClass>(breadcrumb);
 assertType<BreadcrumbMixinClass>(breadcrumb);
+assertType<I18nMixinClass<BreadcrumbI18n>>(breadcrumb);
+assertType<ResizeMixinClass>(breadcrumb);
 
 // Mixins on the item
 assertType<ElementMixinClass>(item);
@@ -37,3 +41,21 @@ breadcrumb.items = [{ text: 'Home', path: '/' }, { text: 'Reports', path: '/repo
 breadcrumb.items = null;
 breadcrumb.items = undefined;
 assertType<BreadcrumbItemData[] | null | undefined>(breadcrumb.items);
+
+// I18n
+assertType<BreadcrumbI18n>(breadcrumb.i18n);
+assertType<BreadcrumbI18n>({});
+assertType<BreadcrumbI18n>({ moreItems: 'Show more' });
+assertType<string | undefined>(breadcrumb.i18n.moreItems);
+breadcrumb.i18n = { moreItems: 'More' };
+breadcrumb.i18n = {};
+
+// `<vaadin-breadcrumb-item>` `path` and `target` are `string | null | undefined`.
+assertType<string | null | undefined>(item.path);
+assertType<string | null | undefined>(item.target);
+item.path = '/home';
+item.path = null;
+item.path = undefined;
+item.target = '_blank';
+item.target = null;
+item.target = undefined;
