@@ -179,6 +179,32 @@ If a requirement can be fulfilled by slotting an existing Vaadin component (e.g.
 
 ---
 
+## Use `role` on the host instead of a semantic wrapper inside it
+
+When a custom element needs the semantics of a standard HTML element (`<li>`, `<ol>`, `<button>`, `<nav>`, etc.), apply that semantic via a `role` attribute on the host itself — do not wrap the host's shadow DOM around an inner semantic element.
+
+**Rule:** a custom element is a single node from the application's perspective. Adding an inner `<li>`, `<ol>`, `<button>`, or similar element inside the shadow root produces a redundant wrapper that the host could be instead. Give the host the correct `role` and drop the wrapper.
+
+**Examples:**
+
+- `<vaadin-breadcrumb-item>` sets `role="listitem"` on itself rather than rendering `<li>` in its shadow DOM.
+- `<vaadin-breadcrumb>` sets `role="list"` (or uses `<nav>` semantics via role) rather than rendering an inner `<ol>`.
+- A custom toggle element sets `role="button"` and handles activation itself rather than wrapping a shadow `<button>`.
+
+**Why:**
+
+- The shadow wrapper is invisible to the application but adds extra DOM, extra styling surface, and extra part names that all have to be named, documented, and themed.
+- Parts named after the wrapper (`part="li"`, `part="button"`) are redundant and confusing on an element that already *is* that thing semantically.
+- Accessibility tooling, CSS selectors, and focus handling treat the custom element as the single addressable node — the wrapper just sits in the way.
+- Removing the wrapper often eliminates an entire layer of layout and styling workarounds (the wrapper cannot be `display: contents`-ed in all browsers, so its box affects flex/grid layouts around it).
+
+**Exceptions:**
+
+- A wrapper is justified when it holds **multiple** distinct parts that need independent styling, positioning, or state attributes (e.g. a field component's `input-container` that groups prefix, input, and suffix). The wrapper earns its place by grouping, not by repeating a semantic that the host could carry directly.
+- A wrapper is justified when the host cannot legally carry the required role in the application's DOM (for example, `<li>` is only valid as a child of `<ol>`/`<ul>`, so `role="listitem"` on a custom element is preferable to forcing the host tag name to be `<li>`).
+
+---
+
 ## Ship new components as experimental
 
 Every new component enters the library behind a feature flag and graduates to stable only after its API has been validated in practice.
