@@ -3,7 +3,9 @@
 <!--
 Full implementation specification derived from web-component-api.md, grounded in the actual source code of this repository.
 
-This IS a specification — it includes shadow DOM structure, mixin chains, properties, slots, parts, events, CSS custom properties, and accessibility behavior.
+This IS a specification — it includes shadow DOM structure, properties, slots, parts, events, CSS custom properties, and accessibility behavior.
+
+Do NOT include mixin chains. Mixin selection is an implementation detail, not a specification concern. The Reuse and Proposed Adjustments section covers any shared modules the component needs.
 
 Usage examples and API rationale live in web-component-api.md. This spec references them by section number/name where relevant (e.g., "see web-component-api.md §3 Custom separator") rather than duplicating them.
 
@@ -23,7 +25,7 @@ One entry per significant choice. For any deviation from web-component-api.md, s
 
 Reference web-component-api.md sections by number/name when discussing the API feature that motivated the decision.
 
-Also document mixin selection, slot design, and event naming decisions.
+Also document slot design and event naming decisions. Do NOT document mixin selection here — mixins are an implementation detail.
 -->
 
 1. **{Decision}** — {rationale}.
