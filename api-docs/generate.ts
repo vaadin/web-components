@@ -159,7 +159,6 @@ function generate() {
         methods: members.filter((m: any) => m.kind === 'method' && !m.static),
         staticMethods: members.filter((m: any) => m.kind === 'method' && m.static),
         events: decl.events || [],
-        privacy: 'public',
       });
     }
   }
