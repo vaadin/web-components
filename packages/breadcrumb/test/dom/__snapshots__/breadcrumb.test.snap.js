@@ -25,6 +25,7 @@ snapshots["vaadin-breadcrumb shadow default"] =
 </div>
 <vaadin-breadcrumb-overlay
   exportparts="overlay, content"
+  no-vertical-overlap=""
   popover="manual"
 >
   <slot name="overlay">
@@ -57,6 +58,7 @@ snapshots["vaadin-breadcrumb shadow has-overflow shadow"] =
 </div>
 <vaadin-breadcrumb-overlay
   exportparts="overlay, content"
+  no-vertical-overlap=""
   popover="manual"
 >
   <slot name="overlay">

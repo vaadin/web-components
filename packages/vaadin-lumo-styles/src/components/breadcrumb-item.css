@@ -105,15 +105,15 @@
     content: '';
     display: inline-block;
     flex: none;
-    height: 1lh;
-    width: 1lh;
+    height: var(--vaadin-breadcrumb-separator-size, 1em);
+    width: var(--vaadin-breadcrumb-separator-size, 1em);
     mask-image: var(
       --vaadin-breadcrumb-separator,
       url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>')
     );
     mask-position: 50%;
     mask-repeat: no-repeat;
-    mask-size: 70%;
+    mask-size: 100%;
   }
 
   :host(:last-of-type)::after,

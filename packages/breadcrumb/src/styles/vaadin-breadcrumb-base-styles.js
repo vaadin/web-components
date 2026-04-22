@@ -24,9 +24,13 @@ export const breadcrumbStyles = css`
     /*
      * The list clips its overflow so that 'scrollWidth > clientWidth' is a
      * meaningful overflow signal for the ResizeMixin-driven detection in
-     * BreadcrumbMixin (see Task 9).
+     * BreadcrumbMixin (see Task 9). 'overflow: clip' constrains layout
+     * (scrollWidth still measures the inner width) while
+     * 'overflow-clip-margin' lets visual decorations like focus outlines
+     * paint outside the box without being clipped.
      */
-    overflow: hidden;
+    overflow: clip;
+    overflow-clip-margin: 1em;
   }
 
   /*
@@ -117,8 +121,8 @@ export const breadcrumbStyles = css`
     content: '';
     display: inline-block;
     flex: none;
-    height: var(--vaadin-icon-size, 1lh);
-    width: var(--vaadin-icon-size, 1lh);
+    height: var(--vaadin-breadcrumb-separator-size, 1em);
+    width: var(--vaadin-breadcrumb-separator-size, 1em);
     mask-image: var(--vaadin-breadcrumb-separator, var(--_vaadin-icon-chevron-right));
     mask-position: 50%;
     mask-repeat: no-repeat;

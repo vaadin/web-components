@@ -62,19 +62,33 @@ export const breadcrumbItemStyles = css`
    * Reads the --vaadin-breadcrumb-separator custom property (defaulting
    * to the shared chevron-right token) so applications can override the
    * separator on the parent <vaadin-breadcrumb> and have it cascade
-   * down to all items.
+   * down to all items. The separator is sized to 1em (cap-height of the
+   * surrounding text) by default so the chevron sits visually centered
+   * on the text baseline rather than dwarfing it.
    */
   :host::after {
     background: currentColor;
     content: '';
     display: inline-block;
     flex: none;
-    height: var(--vaadin-icon-size, 1lh);
-    width: var(--vaadin-icon-size, 1lh);
+    height: var(--vaadin-breadcrumb-separator-size, 1em);
+    width: var(--vaadin-breadcrumb-separator-size, 1em);
     mask-image: var(--vaadin-breadcrumb-separator, var(--_vaadin-icon-chevron-right));
     mask-position: 50%;
     mask-repeat: no-repeat;
     mask-size: var(--vaadin-icon-visual-size, 100%);
+  }
+
+  /*
+   * Constrain prefix-slot content (typically a <vaadin-icon>) to the
+   * cap-height of the text so the icon sits neatly next to the label
+   * rather than rendering at the icon set's intrinsic / theme-default
+   * size, which is taller than the breadcrumb's text line.
+   */
+  ::slotted([slot='prefix']) {
+    --vaadin-icon-size: 1em;
+    height: 1em;
+    width: 1em;
   }
 
   :host(:last-of-type)::after,

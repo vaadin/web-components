@@ -67,6 +67,7 @@ class Breadcrumb extends BreadcrumbMixin(ElementMixin(ThemableMixin(PolylitMixin
         .opened="${this._overlayOpened}"
         .renderer="${this._overlayRenderer}"
         .positionTarget="${this._overflowButton}"
+        no-vertical-overlap
         exportparts="overlay, content"
         @vaadin-overlay-close="${this._onVaadinOverlayClose}"
         @opened-changed="${this._onOverlayOpenedChanged}"

@@ -8,6 +8,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
+import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { breadcrumbOverlayStyles } from './styles/vaadin-breadcrumb-overlay-base-styles.js';
@@ -20,12 +21,13 @@ import { BreadcrumbOverlayMixin } from './vaadin-breadcrumb-overlay-mixin.js';
  * @customElement vaadin-breadcrumb-overlay
  * @extends HTMLElement
  * @mixes BreadcrumbOverlayMixin
+ * @mixes PositionMixin
  * @mixes OverlayMixin
  * @mixes ThemableMixin
  * @private
  */
 class BreadcrumbOverlay extends BreadcrumbOverlayMixin(
-  OverlayMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
+  PositionMixin(OverlayMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-breadcrumb-overlay';
