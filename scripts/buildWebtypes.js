@@ -42,6 +42,8 @@ function getRelevantPackages() {
 
 /**
  * Loads the custom-elements.json manifest for a specific package.
+ * Returns null only when the manifest file does not exist; other failures
+ * (e.g., corrupt JSON) are rethrown so they fail the build loudly.
  * @param {string} packageName - The package name (e.g., 'button')
  * @returns {object|null} - The manifest object, or null if not found
  */
@@ -49,8 +51,11 @@ function loadCustomElementsManifest(packageName) {
   const manifestPath = path.resolve(`./packages/${packageName}/custom-elements.json`);
   try {
     return JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-  } catch (_) {
-    return null; // Package may not have a manifest
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return null;
+    }
+    throw error;
   }
 }
 

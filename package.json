@@ -4,7 +4,6 @@
   "author": "Vaadin Ltd",
   "type": "module",
   "scripts": {
-    "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js",
     "api-docs:build": "yarn release:cem && yarn workspace api-docs generate ../custom-elements.json && yarn workspace api-docs build",
     "api-docs:start": "yarn release:cem && yarn workspace api-docs generate ../custom-elements.json && yarn workspace api-docs start",
     "debug": "yarn test --watch",
