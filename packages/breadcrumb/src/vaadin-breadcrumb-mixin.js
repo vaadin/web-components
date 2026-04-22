@@ -6,16 +6,29 @@
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
- * A controller that observes the breadcrumb's default light-DOM slot and
- * routes the first `<vaadin-breadcrumb-item>` child into the named `root`
- * slot in shadow DOM. Any previous root holder has its `slot` attribute
- * cleared. Non-item children (e.g. plain `<span>` elements) are ignored.
+ * A controller that observes the breadcrumb's default light-DOM slot and:
+ *
+ * 1. Routes the first `<vaadin-breadcrumb-item>` child into the named `root`
+ *    slot in shadow DOM. Any previous root holder has its `slot` attribute
+ *    cleared. Non-item children (e.g. plain `<span>` elements) are ignored.
+ * 2. Toggles the `current` state attribute on the last
+ *    `<vaadin-breadcrumb-item>` child whenever the trail changes (children
+ *    added/removed) or whenever an item's `path` attribute is added/removed.
+ *    The last item is marked `current` if and only if it has no `path`
+ *    attribute, per Key Design Decisions §3 (the current page is the last
+ *    item without `path`). All other items have `current` cleared.
+ *
+ * To detect `path` attribute mutations after the trail is rendered, the
+ * controller installs a per-item `MutationObserver` filtered to `path` in
+ * `initNode`/`initCustomNode`, and tears it down in `teardownNode`.
  *
  * @private
  */
 class RootItemController extends SlotController {
   constructor(host) {
     super(host, '', null, { multiple: true, observe: true });
+    /** @private */
+    this.__pathObservers = new WeakMap();
   }
 
   /**
@@ -35,6 +48,7 @@ class RootItemController extends SlotController {
       if (rootSlot) {
         rootSlot.addEventListener('slotchange', () => {
           this.__updateRootSlotAssignment();
+          this.__updateCurrentItem();
         });
         this.__rootSlotListenerAttached = true;
       }
@@ -45,29 +59,59 @@ class RootItemController extends SlotController {
    * @protected
    * @override
    */
-  initNode() {
+  initNode(node) {
+    this.__observePath(node);
     this.__updateRootSlotAssignment();
+    this.__updateCurrentItem();
   }
 
   /**
    * @protected
    * @override
    */
-  initCustomNode() {
+  initCustomNode(node) {
+    this.__observePath(node);
     this.__updateRootSlotAssignment();
+    this.__updateCurrentItem();
   }
 
   /**
    * @protected
    * @override
    */
-  teardownNode() {
+  teardownNode(node) {
+    this.__unobservePath(node);
     this.__updateRootSlotAssignment();
+    this.__updateCurrentItem();
+  }
+
+  /** @private */
+  __observePath(node) {
+    if (!node || node.nodeType !== Node.ELEMENT_NODE || node.localName !== 'vaadin-breadcrumb-item') {
+      return;
+    }
+    if (this.__pathObservers.has(node)) {
+      return;
+    }
+    const observer = new MutationObserver(() => {
+      this.__updateCurrentItem();
+    });
+    observer.observe(node, { attributes: true, attributeFilter: ['path'] });
+    this.__pathObservers.set(node, observer);
+  }
+
+  /** @private */
+  __unobservePath(node) {
+    if (!node || !this.__pathObservers.has(node)) {
+      return;
+    }
+    this.__pathObservers.get(node).disconnect();
+    this.__pathObservers.delete(node);
   }
 
   /** @private */
   __updateRootSlotAssignment() {
-    const items = Array.from(this.host.children).filter((child) => child.localName === 'vaadin-breadcrumb-item');
+    const items = this.__getItems();
     const firstItem = items[0];
 
     items.forEach((item) => {
@@ -79,6 +123,28 @@ class RootItemController extends SlotController {
         item.removeAttribute('slot');
       }
     });
+  }
+
+  /** @private */
+  __updateCurrentItem() {
+    const items = this.__getItems();
+    const lastItem = items[items.length - 1];
+    const currentItem = lastItem && !lastItem.hasAttribute('path') ? lastItem : null;
+
+    items.forEach((item) => {
+      if (item === currentItem) {
+        if (!item.hasAttribute('current')) {
+          item.toggleAttribute('current', true);
+        }
+      } else if (item.hasAttribute('current')) {
+        item.toggleAttribute('current', false);
+      }
+    });
+  }
+
+  /** @private */
+  __getItems() {
+    return Array.from(this.host.children).filter((child) => child.localName === 'vaadin-breadcrumb-item');
   }
 }
 

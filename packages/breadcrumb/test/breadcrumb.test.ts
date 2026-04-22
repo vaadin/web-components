@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 
 window.Vaadin ??= {};
 window.Vaadin.featureFlags ??= {};
@@ -217,6 +217,161 @@ describe('vaadin-breadcrumb', () => {
 
       expect(span.hasAttribute('slot')).to.be.false;
       expect(firstItem.getAttribute('slot')).to.equal('root');
+    });
+  });
+
+  describe('current item detection', () => {
+    function getItems(breadcrumb: Breadcrumb): BreadcrumbItem[] {
+      return Array.from(breadcrumb.querySelectorAll('vaadin-breadcrumb-item')) as BreadcrumbItem[];
+    }
+
+    function getById(breadcrumb: Breadcrumb, id: string): BreadcrumbItem {
+      return breadcrumb.querySelector(`[data-test-id="${id}"]`) as BreadcrumbItem;
+    }
+
+    // Wait for the per-item path MutationObserver callback to fire and the
+    // resulting `current` attribute toggle to render. MutationObserver
+    // callbacks are queued as microtasks, so a microtask flush plus an
+    // update cycle is enough.
+    async function flushCurrentDetection(breadcrumb: Breadcrumb): Promise<void> {
+      await Promise.resolve();
+      await nextUpdate(breadcrumb);
+    }
+
+    it('should set current on the last item when the last item has no path', async () => {
+      const breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item data-test-id="a" path="/a">A</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item data-test-id="b" path="/b">B</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item data-test-id="c">C</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `) as Breadcrumb;
+      await nextRender();
+
+      const a = getById(breadcrumb, 'a');
+      const b = getById(breadcrumb, 'b');
+      const c = getById(breadcrumb, 'c');
+
+      expect(a.hasAttribute('current')).to.be.false;
+      expect(b.hasAttribute('current')).to.be.false;
+      expect(c.hasAttribute('current')).to.be.true;
+    });
+
+    it('should not set current on any item when every item has a path', async () => {
+      const breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item data-test-id="a" path="/a">A</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item data-test-id="b" path="/b">B</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item data-test-id="c" path="/c">C</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `) as Breadcrumb;
+      await nextRender();
+
+      const items = getItems(breadcrumb);
+      items.forEach((item) => {
+        expect(item.hasAttribute('current')).to.be.false;
+      });
+    });
+
+    it('should add current to the last item when its path is removed at runtime', async () => {
+      const breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item data-test-id="a" path="/a">A</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item data-test-id="b" path="/b">B</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item data-test-id="c" path="/c">C</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `) as Breadcrumb;
+      await nextRender();
+
+      const a = getById(breadcrumb, 'a');
+      const b = getById(breadcrumb, 'b');
+      const c = getById(breadcrumb, 'c');
+
+      expect(c.hasAttribute('current')).to.be.false;
+
+      c.removeAttribute('path');
+      await flushCurrentDetection(breadcrumb);
+
+      expect(a.hasAttribute('current')).to.be.false;
+      expect(b.hasAttribute('current')).to.be.false;
+      expect(c.hasAttribute('current')).to.be.true;
+    });
+
+    it('should remove current from the last item when its path is added at runtime', async () => {
+      const breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item data-test-id="a" path="/a">A</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item data-test-id="b" path="/b">B</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item data-test-id="c">C</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `) as Breadcrumb;
+      await nextRender();
+
+      const a = getById(breadcrumb, 'a');
+      const b = getById(breadcrumb, 'b');
+      const c = getById(breadcrumb, 'c');
+
+      expect(c.hasAttribute('current')).to.be.true;
+
+      c.setAttribute('path', '/c');
+      await flushCurrentDetection(breadcrumb);
+
+      expect(a.hasAttribute('current')).to.be.false;
+      expect(b.hasAttribute('current')).to.be.false;
+      expect(c.hasAttribute('current')).to.be.false;
+    });
+
+    it('should move current from the previous last item to a newly appended last item', async () => {
+      const breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item data-test-id="a" path="/a">A</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item data-test-id="b" path="/b">B</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item data-test-id="c">C</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `) as Breadcrumb;
+      await nextRender();
+
+      const c = getById(breadcrumb, 'c');
+      expect(c.hasAttribute('current')).to.be.true;
+
+      const newLast = document.createElement('vaadin-breadcrumb-item') as BreadcrumbItem;
+      newLast.dataset.testId = 'd';
+      newLast.textContent = 'D';
+      breadcrumb.appendChild(newLast);
+      await nextRender();
+      await flushCurrentDetection(breadcrumb);
+
+      const a = getById(breadcrumb, 'a');
+      const b = getById(breadcrumb, 'b');
+      expect(a.hasAttribute('current')).to.be.false;
+      expect(b.hasAttribute('current')).to.be.false;
+      expect(c.hasAttribute('current')).to.be.false;
+      expect(newLast.hasAttribute('current')).to.be.true;
+    });
+
+    it('should set aria-current="page" on the inner link of the current item', async () => {
+      const breadcrumb = fixtureSync(`
+        <vaadin-breadcrumb>
+          <vaadin-breadcrumb-item data-test-id="a" path="/a">A</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item data-test-id="b" path="/b">B</vaadin-breadcrumb-item>
+          <vaadin-breadcrumb-item data-test-id="c">C</vaadin-breadcrumb-item>
+        </vaadin-breadcrumb>
+      `) as Breadcrumb;
+      await nextRender();
+
+      const a = getById(breadcrumb, 'a');
+      const c = getById(breadcrumb, 'c');
+
+      // The Task 3 MutationObserver on the item reacts to the `current`
+      // attribute set by the container. Wait for that update cycle to render
+      // the inner link/span with `aria-current`.
+      await nextUpdate(c);
+
+      const currentLink = c.shadowRoot!.querySelector('[part="link"]')!;
+      expect(currentLink.getAttribute('aria-current')).to.equal('page');
+
+      const otherLink = a.shadowRoot!.querySelector('[part="link"]')!;
+      expect(otherLink.hasAttribute('aria-current')).to.be.false;
     });
   });
 });
