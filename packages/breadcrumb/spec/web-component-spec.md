@@ -31,23 +31,6 @@
 
 **`<vaadin-breadcrumb>`** — Container element
 
-Mixin chain:
-```
-BreadcrumbMixin(
-  I18nMixin(DEFAULT_I18N,
-    ResizeMixin(
-      ElementMixin(
-        ThemableMixin(
-          PolylitMixin(
-            LumoInjectionMixin(LitElement)
-          )
-        )
-      )
-    )
-  )
-)
-```
-
 The host carries `role="navigation"`. Items are distributed across two slots so the overflow element can sit in the DOM between the root item and the rest — ensuring DOM order matches the visual order `[root] [overflow] [rest…]` per DESIGN_GUIDELINES.
 
 Shadow DOM:
@@ -112,17 +95,6 @@ Internal behavior:
 ---
 
 **`<vaadin-breadcrumb-item>`** — Individual breadcrumb item
-
-Mixin chain:
-```
-ElementMixin(
-  ThemableMixin(
-    PolylitMixin(
-      LumoInjectionMixin(LitElement)
-    )
-  )
-)
-```
 
 The host carries `role="listitem"`. A separator pseudo-element is attached directly to the host via `:host::after`.
 
