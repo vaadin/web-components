@@ -1,4 +1,4 @@
-# Breadcrumb Figma Design
+# BreadcrumbTrail Figma Design
 
 <!--
 Traceability document linking the Figma design to the component specification.
@@ -14,15 +14,15 @@ This document records:
 ## Figma File
 
 **URL:** https://www.figma.com/design/Wefhd9p9STiZ0ukB5syePq
-**Page:** Breadcrumb
+**Page:** BreadcrumbTrail
 
 ## Element Mapping
 
 | Spec Element | Figma Component/Frame | Notes |
 |---|---|---|
-| `<vaadin-breadcrumb>` | Default Trail, Overflow Trail, Icon Trail, Long Labels Trail | Container represented as horizontal auto-layout with item + separator sequences |
-| `<vaadin-breadcrumb-item>` | Item text nodes (link color or body text color) | Link items use primary/accent text color; current page uses body text color with medium weight |
-| `<vaadin-breadcrumb-overlay>` | Overlay Panel | Shadow-elevated panel showing collapsed item links |
+| `<vaadin-breadcrumb-trail>` | Default Trail, Overflow Trail, Icon Trail, Long Labels Trail | Container represented as horizontal auto-layout with item + separator sequences |
+| `<vaadin-breadcrumb-trail-item>` | Item text nodes (link color or body text color) | Link items use primary/accent text color; current page uses body text color with medium weight |
+| `<vaadin-breadcrumb-trail-overlay>` | Overlay Panel | Shadow-elevated panel showing collapsed item links |
 | Separator (`::after`) | `›` text character | Chevron-right represented as text glyph; actual implementation uses `mask-image` SVG |
 | Overflow button | Overflow Button frame | Ellipsis (`…`) with optional hover background |
 | `prefix` slot | Icon placeholder rectangle | 16x16 (Lumo) or 14x14 (Aura) colored rectangle |
@@ -83,13 +83,13 @@ This document records:
 
 ## Deviations from Spec
 
-1. **Separator rendered as text glyph, not mask-image SVG** -- Figma does not support CSS `mask-image`. The separator is represented as a `›` text character. The actual implementation uses a chevron-right SVG via `--vaadin-breadcrumb-separator` with `mask-image` + `currentColor`.
+1. **Separator rendered as text glyph, not mask-image SVG** -- Figma does not support CSS `mask-image`. The separator is represented as a `›` text character. The actual implementation uses a chevron-right SVG via `--vaadin-breadcrumb-trail-separator` with `mask-image` + `currentColor`.
 
 2. **Font family fallback** -- Instrument Sans (Aura's font) is not available in the Figma file. Inter is used as the closest system fallback for both themes. In production, Lumo uses the system font stack and Aura uses Instrument Sans.
 
 3. **Aura oklch colors approximated** -- Aura uses `oklch()` with relative color syntax and `color-mix()` which are dynamically computed in CSS. Figma values are static approximations for default settings (light mode, `--aura-contrast-level: 1`).
 
-4. **Overlay position is inline, not floating** -- In the actual component, `<vaadin-breadcrumb-overlay>` uses the popover API for top-layer rendering and positions relative to the overflow button. In Figma, the overlay panel is placed inline below the breadcrumb trail as a static representation.
+4. **Overlay position is inline, not floating** -- In the actual component, `<vaadin-breadcrumb-trail-overlay>` uses the popover API for top-layer rendering and positions relative to the overflow button. In Figma, the overlay panel is placed inline below the breadcrumb trail as a static representation.
 
 5. **Interactive states shown as separate instances** -- CSS pseudo-classes (`:hover`, `:focus`, `:active`) are represented as distinct side-by-side frames rather than interactive states.
 

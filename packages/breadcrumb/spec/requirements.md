@@ -1,4 +1,4 @@
-# Breadcrumb Requirements
+# BreadcrumbTrail Requirements
 
 ## 1. Displaying the ancestor trail
 
@@ -102,7 +102,7 @@ When the component renders in a right-to-left context, directional separators (s
 
 In the Flow wrapper, instantiating a breadcrumb without configuring its items causes it to populate itself automatically from the application's router. The default strategy walks up the URL path of the current route and matches each prefix to a registered Flow route, producing one breadcrumb item per matched ancestor. The text shown for each item is the matched route's view title (the value Flow uses to set the page title for that route — typically the route's `@PageTitle`, or the title supplied dynamically by the view).
 
-*Example: A user navigates to `/customers/acme/orders`. The orders view is annotated `@PageTitle("Orders")`, the customer detail view dynamically sets its title to "Acme Corp", the customers list view is `@PageTitle("Customers")`, and the root view is `@PageTitle("Home")`. A view that simply does `add(new Breadcrumb())` shows "Home › Customers › Acme Corp › Orders" — one item per matched route, each labeled with that route's view title.*
+*Example: A user navigates to `/customers/acme/orders`. The orders view is annotated `@PageTitle("Orders")`, the customer detail view dynamically sets its title to "Acme Corp", the customers list view is `@PageTitle("Customers")`, and the root view is `@PageTitle("Home")`. A view that simply does `add(new BreadcrumbTrail())` shows "Home › Customers › Acme Corp › Orders" — one item per matched route, each labeled with that route's view title.*
 
 ---
 

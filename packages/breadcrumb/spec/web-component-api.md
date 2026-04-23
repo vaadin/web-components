@@ -1,17 +1,17 @@
-# Breadcrumb Developer API
+# BreadcrumbTrail Developer API
 
 ## 1. Displaying the ancestor trail as links
 
 Covers requirement(s): 1, 2
 
 ```html
-<vaadin-breadcrumb>
-  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/docs">Developer Guide</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/docs/api">API Reference</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/docs/api/auth">Authentication</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item>OAuth2</vaadin-breadcrumb-item>
-</vaadin-breadcrumb>
+<vaadin-breadcrumb-trail>
+  <vaadin-breadcrumb-trail-item path="/">Home</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item path="/docs">Developer Guide</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item path="/docs/api">API Reference</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item path="/docs/api/auth">Authentication</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item>OAuth2</vaadin-breadcrumb-trail-item>
+</vaadin-breadcrumb-trail>
 ```
 
 **Why this shape:** Items with a `path` attribute render as links; the last item without `path` is the current page — visually distinct and not interactive. This follows the Side Nav convention (`path` attribute, child elements as items) and needs no extra boolean to mark the current item. The convention is simple: if it has a `path`, it's a link; if it doesn't, it's the current location.
@@ -24,11 +24,11 @@ Covers requirement(s): 3
 
 ```html
 <!-- Current page omitted — all items have a path -->
-<vaadin-breadcrumb>
-  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/docs">Developer Guide</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/docs/api">API Reference</vaadin-breadcrumb-item>
-</vaadin-breadcrumb>
+<vaadin-breadcrumb-trail>
+  <vaadin-breadcrumb-trail-item path="/">Home</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item path="/docs">Developer Guide</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item path="/docs/api">API Reference</vaadin-breadcrumb-trail-item>
+</vaadin-breadcrumb-trail>
 ```
 
 **Why this shape:** No extra API needed. When every item has a `path`, every item is a link and no current-page indicator appears. The application simply decides what to include in the trail.
@@ -41,21 +41,21 @@ Covers requirement(s): 4, 5, 12
 
 ```html
 <!-- Default: theme renders a chevron separator between items -->
-<vaadin-breadcrumb>
-  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item>Laptops</vaadin-breadcrumb-item>
-</vaadin-breadcrumb>
+<vaadin-breadcrumb-trail>
+  <vaadin-breadcrumb-trail-item path="/">Home</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item path="/products">Products</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item>Laptops</vaadin-breadcrumb-trail-item>
+</vaadin-breadcrumb-trail>
 ```
 
 ```css
 /* Override the separator icon via the CSS custom property */
-vaadin-breadcrumb {
-  --vaadin-breadcrumb-separator: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="4" x2="17" y2="20"/></svg>');
+vaadin-breadcrumb-trail {
+  --vaadin-breadcrumb-trail-separator: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="4" x2="17" y2="20"/></svg>');
 }
 ```
 
-**Why this shape:** The separator is rendered as a `::after` pseudo-element on each item using `mask-image`, matching the pattern used across Vaadin components (select's toggle button, combo-box's dropdown arrow, clear buttons). The pseudo-element has `background: currentColor` shaped by `mask-image: var(--vaadin-breadcrumb-separator)`. Applications override the separator by setting the CSS custom property on the item. The theme handles flipping the separator direction in RTL contexts. This keeps the HTML clean — separators are purely visual, styled through CSS, not DOM content.
+**Why this shape:** The separator is rendered as a `::after` pseudo-element on each item using `mask-image`, matching the pattern used across Vaadin components (select's toggle button, combo-box's dropdown arrow, clear buttons). The pseudo-element has `background: currentColor` shaped by `mask-image: var(--vaadin-breadcrumb-trail-separator)`. Applications override the separator by setting the CSS custom property on the item. The theme handles flipping the separator direction in RTL contexts. This keeps the HTML clean — separators are purely visual, styled through CSS, not DOM content.
 
 ---
 
@@ -66,20 +66,20 @@ Covers requirement(s): 6, 7
 ```html
 <!-- Overflow is automatic — no developer action needed -->
 <!-- The component progressively collapses items closest to the root first -->
-<vaadin-breadcrumb>
-  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/docs">Documents</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/docs/projects">Projects</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/docs/projects/2026">2026</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/docs/projects/2026/q1">Q1</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/docs/projects/2026/q1/reports">Reports</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item>Summary</vaadin-breadcrumb-item>
-</vaadin-breadcrumb>
+<vaadin-breadcrumb-trail>
+  <vaadin-breadcrumb-trail-item path="/">Home</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item path="/docs">Documents</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item path="/docs/projects">Projects</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item path="/docs/projects/2026">2026</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item path="/docs/projects/2026/q1">Q1</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item path="/docs/projects/2026/q1/reports">Reports</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item>Summary</vaadin-breadcrumb-trail-item>
+</vaadin-breadcrumb-trail>
 ```
 
 ```js
 // The overflow button's accessible label is customizable via i18n
-const breadcrumb = document.querySelector('vaadin-breadcrumb');
+const breadcrumb = document.querySelector('vaadin-breadcrumb-trail');
 breadcrumb.i18n = {
   moreItems: 'Show hidden items'
 };
@@ -94,17 +94,17 @@ breadcrumb.i18n = {
 Covers requirement(s): 8
 
 ```html
-<vaadin-breadcrumb>
-  <vaadin-breadcrumb-item path="/">
+<vaadin-breadcrumb-trail>
+  <vaadin-breadcrumb-trail-item path="/">
     <vaadin-icon icon="vaadin:home" slot="prefix"></vaadin-icon>
     Home
-  </vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/docs">
+  </vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item path="/docs">
     <vaadin-icon icon="vaadin:folder" slot="prefix"></vaadin-icon>
     Documents
-  </vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item>Report.pdf</vaadin-breadcrumb-item>
-</vaadin-breadcrumb>
+  </vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item>Report.pdf</vaadin-breadcrumb-trail-item>
+</vaadin-breadcrumb-trail>
 ```
 
 **Why this shape:** The `prefix` slot follows Side Nav's convention for placing icons before item text. Icons are optional — items without a prefix slot are plain text. This uses Vaadin's existing `<vaadin-icon>` component rather than introducing a new icon mechanism.
@@ -116,7 +116,7 @@ Covers requirement(s): 8
 Covers requirement(s): 9
 
 ```js
-const breadcrumb = document.querySelector('vaadin-breadcrumb');
+const breadcrumb = document.querySelector('vaadin-breadcrumb-trail');
 
 // Programmatic API — equivalent to the declarative form
 breadcrumb.items = [
@@ -147,11 +147,11 @@ Covers requirement(s): 10
 ```html
 <!-- The component renders a <nav> element automatically -->
 <!-- The application provides an accessible label -->
-<vaadin-breadcrumb aria-label="Product navigation">
-  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item>Laptops</vaadin-breadcrumb-item>
-</vaadin-breadcrumb>
+<vaadin-breadcrumb-trail aria-label="Product navigation">
+  <vaadin-breadcrumb-trail-item path="/">Home</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item path="/products">Products</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item>Laptops</vaadin-breadcrumb-trail-item>
+</vaadin-breadcrumb-trail>
 ```
 
 **Why this shape:** The component renders as a `<nav>` landmark automatically. The application provides the `aria-label` when it wants to distinguish this breadcrumb from other landmarks on the page — following the universal rule that accessible names are customizable. No component-specific API is needed beyond standard ARIA attributes.
@@ -166,11 +166,11 @@ Covers requirement(s): 11
 <!-- No developer action needed -->
 <!-- The component automatically adds aria-current="page" to the last item
      when it has no path (i.e., it represents the current page) -->
-<vaadin-breadcrumb>
-  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/docs">Docs</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item>OAuth2</vaadin-breadcrumb-item>  <!-- aria-current="page" applied automatically -->
-</vaadin-breadcrumb>
+<vaadin-breadcrumb-trail>
+  <vaadin-breadcrumb-trail-item path="/">Home</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item path="/docs">Docs</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-trail-item>OAuth2</vaadin-breadcrumb-trail-item>  <!-- aria-current="page" applied automatically -->
+</vaadin-breadcrumb-trail>
 ```
 
 **Why this shape:** The ARIA Authoring Practices Guide specifies `aria-current="page"` for the current breadcrumb item. Since the component already knows which item is current (the last item, if it has no `path`), it applies this automatically — no developer action required.
@@ -185,7 +185,7 @@ Covers requirement(s): 11
 
 **Q: How should the separator be customizable?**
 
-CSS `mask-image` pattern — matching how the select toggle button, combo-box dropdown arrow, and clear buttons render their icons. The separator is a `::after` pseudo-element on each item with `background: currentColor` shaped by `mask-image`. Applications override via the `--vaadin-breadcrumb-separator` CSS custom property on `vaadin-breadcrumb`, which cascades to all items. No slot needed; separators are a theme/visual concern, not structural content.
+CSS `mask-image` pattern — matching how the select toggle button, combo-box dropdown arrow, and clear buttons render their icons. The separator is a `::after` pseudo-element on each item with `background: currentColor` shaped by `mask-image`. Applications override via the `--vaadin-breadcrumb-trail-separator` CSS custom property on `vaadin-breadcrumb-trail`, which cascades to all items. No slot needed; separators are a theme/visual concern, not structural content.
 
 **Q: Should breadcrumb items support a `suffix` slot?**
 
@@ -193,11 +193,11 @@ No. We considered it but decided not to add it before we have a real use case fo
 
 **Q: Where should the separator CSS custom property override be applied?**
 
-On `vaadin-breadcrumb` (the parent), not on individual items. The property cascades down to all items, keeping the override in one place.
+On `vaadin-breadcrumb-trail` (the parent), not on individual items. The property cascades down to all items, keeping the override in one place.
 
 **Q: Should the separator `mask-image` reference the SVG directly or via a CSS custom property?**
 
-Via a CSS custom property (`--vaadin-breadcrumb-separator`). The base styles set `mask-image: var(--vaadin-breadcrumb-separator)` on the `::after` pseudo-element, and applications override the custom property to change the icon. This matches how other Vaadin components handle icon customization.
+Via a CSS custom property (`--vaadin-breadcrumb-trail-separator`). The base styles set `mask-image: var(--vaadin-breadcrumb-trail-separator)` on the `::after` pseudo-element, and applications override the custom property to change the icon. This matches how other Vaadin components handle icon customization.
 
 **Q: Should the programmatic `items` API support icons (e.g., a `prefix` string property)?**
 
