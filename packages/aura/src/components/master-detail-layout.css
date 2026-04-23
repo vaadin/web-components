@@ -1,9 +1,9 @@
 vaadin-master-detail-layout::part(detail) {
-  --aura-surface-level: 2;
   background: var(--vaadin-master-detail-layout-detail-background, var(--aura-surface-color) padding-box);
 }
 
 vaadin-master-detail-layout[has-detail][overlay]::part(detail) {
+  --aura-surface-level: 3;
   --aura-surface-opacity: var(--aura-overlay-surface-opacity);
   -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
   backdrop-filter: var(--aura-overlay-backdrop-filter);
