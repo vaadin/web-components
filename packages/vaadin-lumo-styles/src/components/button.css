@@ -115,7 +115,7 @@ Note, to make it work, the form fields should have the same "::before" pseudo-el
   /* Hover */
 
   @media (any-hover: hover) {
-    :host(:not([disabled]):hover)::before {
+    :host(:hover)::before {
       opacity: 0.02;
     }
   }
@@ -199,7 +199,7 @@ Note, to make it work, the form fields should have the same "::before" pseudo-el
   }
 
   @media (any-hover: hover) {
-    :host([theme~='primary']:not([disabled]):hover)::before {
+    :host([theme~='primary']:hover)::before {
       opacity: 0.05;
     }
   }
