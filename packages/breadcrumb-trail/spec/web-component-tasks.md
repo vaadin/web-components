@@ -3,9 +3,9 @@
 <!--
 Ordered implementation tasks derived from web-component-spec.md. Each task is a self-contained unit of work following test-driven development: define tests first, then implement to make them pass. Each task results in a merge-ready branch.
 
-Primary input: packages/breadcrumb/spec/web-component-spec.md
-API context: packages/breadcrumb/spec/web-component-api.md
-Traceability: packages/breadcrumb/spec/requirements.md
+Primary input: packages/breadcrumb-trail/spec/web-component-spec.md
+API context: packages/breadcrumb-trail/spec/web-component-api.md
+Traceability: packages/breadcrumb-trail/spec/requirements.md
 
 Tasks are pointers into the spec, not a second copy of it. The spec sections field tells the implementer where to find the full details. Do not restate shadow DOM structures, property tables, or behavioral logic here.
 -->
@@ -27,33 +27,33 @@ Tasks are pointers into the spec, not a second copy of it. The spec sections fie
 Create the `@vaadin/breadcrumb-trail` package with empty shells of all three elements (`<vaadin-breadcrumb-trail>`, `<vaadin-breadcrumb-item>`, `<vaadin-breadcrumb-trail-overlay>`) using the standard mixin chains called out in `WEB_COMPONENT_GUIDELINES.md`. Each element registers, has a `static get is()`, an empty `render()`, an empty base styles file, and matching `.d.ts` files. The container is wired up with the experimental feature flag (`breadcrumbTrailComponent`) per `@vaadin/component-base/src/define.js` so it requires `window.Vaadin.featureFlags.breadcrumbTrailComponent = true`. A smoke test confirms the elements register and render without errors.
 
 **Files:**
-- `packages/breadcrumb/package.json` (create)
-- `packages/breadcrumb/LICENSE` (create — Apache 2.0)
-- `packages/breadcrumb/README.md` (create)
-- `packages/breadcrumb/vaadin-breadcrumb-trail.js` (create — root export)
-- `packages/breadcrumb/vaadin-breadcrumb-trail.d.ts` (create — root types)
-- `packages/breadcrumb/vaadin-breadcrumb-item.js` (create — root export)
-- `packages/breadcrumb/vaadin-breadcrumb-item.d.ts` (create — root types)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail.js` (create)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail.d.ts` (create)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-mixin.js` (create — empty mixin shell)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-mixin.d.ts` (create)
-- `packages/breadcrumb/src/vaadin-breadcrumb-item.js` (create)
-- `packages/breadcrumb/src/vaadin-breadcrumb-item.d.ts` (create)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-overlay.js` (create)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-overlay.d.ts` (create)
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-trail-base-styles.js` (create — empty `css\`\``)
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-trail-base-styles.d.ts` (create)
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-item-base-styles.js` (create — empty)
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-item-base-styles.d.ts` (create)
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-trail-overlay-base-styles.js` (create — empty)
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-trail-overlay-base-styles.d.ts` (create)
-- `packages/breadcrumb/test/breadcrumb-trail.test.ts` (create — smoke test)
-- `packages/breadcrumb/test/typings/breadcrumb-trail.types.ts` (create — empty type test)
-- `packages/breadcrumb/test/dom/` (create directory)
-- `packages/breadcrumb/test/visual/base/` (create directory)
-- `packages/breadcrumb/test/visual/lumo/` (create directory)
-- `packages/breadcrumb/test/visual/aura/` (create directory)
+- `packages/breadcrumb-trail/package.json` (create)
+- `packages/breadcrumb-trail/LICENSE` (create — Apache 2.0)
+- `packages/breadcrumb-trail/README.md` (create)
+- `packages/breadcrumb-trail/vaadin-breadcrumb-trail.js` (create — root export)
+- `packages/breadcrumb-trail/vaadin-breadcrumb-trail.d.ts` (create — root types)
+- `packages/breadcrumb-trail/vaadin-breadcrumb-item.js` (create — root export)
+- `packages/breadcrumb-trail/vaadin-breadcrumb-item.d.ts` (create — root types)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail.js` (create)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail.d.ts` (create)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-mixin.js` (create — empty mixin shell)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-mixin.d.ts` (create)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-item.js` (create)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-item.d.ts` (create)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-overlay.js` (create)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-overlay.d.ts` (create)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-trail-base-styles.js` (create — empty `css\`\``)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-trail-base-styles.d.ts` (create)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-item-base-styles.js` (create — empty)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-item-base-styles.d.ts` (create)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-trail-overlay-base-styles.js` (create — empty)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-trail-overlay-base-styles.d.ts` (create)
+- `packages/breadcrumb-trail/test/breadcrumb-trail.test.ts` (create — smoke test)
+- `packages/breadcrumb-trail/test/typings/breadcrumb-trail.types.ts` (create — empty type test)
+- `packages/breadcrumb-trail/test/dom/` (create directory)
+- `packages/breadcrumb-trail/test/visual/base/` (create directory)
+- `packages/breadcrumb-trail/test/visual/lumo/` (create directory)
+- `packages/breadcrumb-trail/test/visual/aura/` (create directory)
 
 **Tests:**
 - [ ] Without setting the feature flag, importing the package does not register `vaadin-breadcrumb-trail` (the registry returns `undefined`)
@@ -101,9 +101,9 @@ Add the `--_vaadin-icon-chevron-right` CSS custom property to `packages/componen
 Implement the item's render template: when `path` is set, render `<a href="${path}" target="${target}" part="link">` wrapping the label; when `path` is unset, render `<span part="link">` with the same inner structure. Apply `aria-current="page"` to the inner link/span when the host carries the `current` state attribute (the parent sets/removes this attribute — see Task 7). Add `role="listitem"` on the host in `firstUpdated()`.
 
 **Files:**
-- `packages/breadcrumb/src/vaadin-breadcrumb-item.js` (modify)
-- `packages/breadcrumb/src/vaadin-breadcrumb-item.d.ts` (modify)
-- `packages/breadcrumb/test/breadcrumb-item.test.ts` (create)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-item.js` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-item.d.ts` (modify)
+- `packages/breadcrumb-trail/test/breadcrumb-item.test.ts` (create)
 
 **Tests:**
 - [ ] With `path="/foo"`, the shadow DOM contains an `<a>` with `href="/foo"` and `part="link"`
@@ -132,8 +132,8 @@ Implement the item's render template: when `path` is set, render `<a href="${pat
 Add the `prefix` slot inside the item's link/span (before the label slot) and use a `SlotController` to toggle the `has-prefix` attribute on the host whenever the slot has assigned content.
 
 **Files:**
-- `packages/breadcrumb/src/vaadin-breadcrumb-item.js` (modify)
-- `packages/breadcrumb/test/breadcrumb-item.test.ts` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-item.js` (modify)
+- `packages/breadcrumb-trail/test/breadcrumb-item.test.ts` (modify)
 
 **Tests:**
 - [ ] The shadow DOM contains a `<slot name="prefix">` placed before `[part="label"]` and inside `[part="link"]`
@@ -158,8 +158,8 @@ Add the `prefix` slot inside the item's link/span (before the label slot) and us
 Add a `:host::after` pseudo-element on `<vaadin-breadcrumb-item>` that renders the separator using the `mask-image` + `currentColor` pattern from button-base-styles. The mask-image reads `--vaadin-breadcrumb-trail-separator`, which defaults to `var(--_vaadin-icon-chevron-right)`. Hide the separator on the last item (`:host(:last-of-type)::after`) and on the current item (`:host([current])::after`). Flip the icon in RTL with `transform: scaleX(-1)`. The separator has no text content — it is decorative and not announced.
 
 **Files:**
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-item-base-styles.js` (modify)
-- `packages/breadcrumb/test/breadcrumb-item.test.ts` (modify)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-item-base-styles.js` (modify)
+- `packages/breadcrumb-trail/test/breadcrumb-item.test.ts` (modify)
 
 **Tests:**
 - [ ] On a non-last item, `getComputedStyle(item, '::after')` reports a non-`none` `mask-image` and non-`none` `display`
@@ -186,11 +186,11 @@ Add a `:host::after` pseudo-element on `<vaadin-breadcrumb-item>` that renders t
 Implement the container's shadow DOM (the `[role="list"]` wrapper, the `root` slot, the `[part="overflow"]` listitem with its hidden button, and the default slot — see the spec for the exact shape). Set `role="navigation"` on the host in `firstUpdated()`. Subclass `SlotController` (overriding `initNode`/`initCustomNode`) to assign `slot="root"` to the first `<vaadin-breadcrumb-item>` light-DOM child and remove `slot` from any prior holder when the children change. Do not yet wire overflow detection or current-item detection — those are Tasks 7 and 9.
 
 **Files:**
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail.js` (modify)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail.d.ts` (modify)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-mixin.js` (modify)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-mixin.d.ts` (modify)
-- `packages/breadcrumb/test/breadcrumb-trail.test.ts` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail.js` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail.d.ts` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-mixin.js` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-mixin.d.ts` (modify)
+- `packages/breadcrumb-trail/test/breadcrumb-trail.test.ts` (modify)
 
 **Tests:**
 - [ ] The host has `role="navigation"` after `firstUpdated`
@@ -217,8 +217,8 @@ Implement the container's shadow DOM (the `[role="list"]` wrapper, the `root` sl
 When the slotted children change, the container must add the `current` state attribute to the last `<vaadin-breadcrumb-item>` if and only if it has no `path` attribute. Items that previously held `current` lose it. When all items have a `path` (current page omitted, requirement 3), no item ends up with `current`. This drives the `aria-current="page"` behavior already implemented in Task 3.
 
 **Files:**
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-mixin.js` (modify)
-- `packages/breadcrumb/test/breadcrumb-trail.test.ts` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-mixin.js` (modify)
+- `packages/breadcrumb-trail/test/breadcrumb-trail.test.ts` (modify)
 
 **Tests:**
 - [ ] Given items where the last has no `path`, the last item has the `current` attribute and no other item does
@@ -245,11 +245,11 @@ When the slotted children change, the container must add the `current` state att
 Add the `items` property (typed `BreadcrumbItemData[] | null | undefined`). When set, render `<vaadin-breadcrumb-item>` elements into the breadcrumb's light DOM via Lit `render()` (see Menu Bar for the pattern), replacing any pre-existing slotted children. Each generated item carries the entry's `text` as content and `path` as the attribute (omit `path` when the entry has none). Setting `items` to `null` or `undefined` removes the generated items, restoring any author-supplied light DOM. The `BreadcrumbItemData` type must be exported from the package.
 
 **Files:**
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-mixin.js` (modify)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-mixin.d.ts` (modify)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail.d.ts` (modify — re-export `BreadcrumbItemData`)
-- `packages/breadcrumb/test/breadcrumb-trail.test.ts` (modify)
-- `packages/breadcrumb/test/typings/breadcrumb-trail.types.ts` (modify — assert `BreadcrumbItemData` shape)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-mixin.js` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-mixin.d.ts` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail.d.ts` (modify — re-export `BreadcrumbItemData`)
+- `packages/breadcrumb-trail/test/breadcrumb-trail.test.ts` (modify)
+- `packages/breadcrumb-trail/test/typings/breadcrumb-trail.types.ts` (modify — assert `BreadcrumbItemData` shape)
 
 **Tests:**
 - [ ] Setting `items` on an empty breadcrumb renders one `<vaadin-breadcrumb-item>` light-DOM child per array entry
@@ -277,9 +277,9 @@ Add the `items` property (typed `BreadcrumbItemData[] | null | undefined`). When
 Apply `ResizeMixin` to the container. On resize and on slot changes, measure whether the items fit. When they do not, progressively hide intermediate items by setting `data-overflow-hidden` on each, starting from the item closest to the root (first default-slot item). The root collapses last, and the current item never collapses. While any item is hidden, set the `has-overflow` attribute on the host and unhide the `[part="overflow"]` element. When everything fits again, clear `has-overflow`, hide the overflow element, and remove `data-overflow-hidden` from all items.
 
 **Files:**
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-mixin.js` (modify)
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-trail-base-styles.js` (modify — `:host(:not([has-overflow])) [part='overflow'] { display: none }`, `[data-overflow-hidden] { display: none }`)
-- `packages/breadcrumb/test/breadcrumb-trail.test.ts` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-mixin.js` (modify)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-trail-base-styles.js` (modify — `:host(:not([has-overflow])) [part='overflow'] { display: none }`, `[data-overflow-hidden] { display: none }`)
+- `packages/breadcrumb-trail/test/breadcrumb-trail.test.ts` (modify)
 
 **Tests:**
 - [ ] In a wide container that fits all items, `has-overflow` is not set and `[part="overflow"]` has computed `display: none`
@@ -307,8 +307,8 @@ Apply `ResizeMixin` to the container. On resize and on slot changes, measure whe
 Render `[part="overflow"]::after` using the same `mask-image` + `currentColor` + `--vaadin-breadcrumb-trail-separator` pattern used on `<vaadin-breadcrumb-item>::after` (Task 5), with the same `transform: scaleX(-1)` flip in RTL. Because the overflow element is hidden when `has-overflow` is unset, the separator is implicitly hidden then too — no additional rule is needed.
 
 **Files:**
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-trail-base-styles.js` (modify)
-- `packages/breadcrumb/test/breadcrumb-trail.test.ts` (modify)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-trail-base-styles.js` (modify)
+- `packages/breadcrumb-trail/test/breadcrumb-trail.test.ts` (modify)
 
 **Tests:**
 - [ ] When `has-overflow` is set, `getComputedStyle(overflowEl, '::after')` reports a non-`none` `mask-image` matching the configured `--vaadin-breadcrumb-trail-separator`
@@ -334,12 +334,12 @@ Render `[part="overflow"]::after` using the same `mask-image` + `currentColor` +
 Build the `<vaadin-breadcrumb-trail-overlay>` element on top of `OverlayMixin` (from `@vaadin/overlay/src/vaadin-overlay-mixin.js`) plus a new `BreadcrumbTrailOverlayMixin` that holds any breadcrumb-specific overlay tweaks (mirrors how `<vaadin-combo-box-overlay>` pairs `OverlayMixin` with `ComboBoxOverlayMixin`). Render the standard `[part="overlay"]` / `[part="content"]` shadow structure with a default slot inside content. The element exposes no public properties of its own — it inherits `opened`, `owner`, `renderer`, and `positionTarget` from `OverlayMixin`.
 
 **Files:**
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-overlay.js` (modify)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-overlay.d.ts` (modify)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-overlay-mixin.js` (create — `BreadcrumbTrailOverlayMixin`)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-overlay-mixin.d.ts` (create)
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-trail-overlay-base-styles.js` (modify — minimal structural rules; theme polish later)
-- `packages/breadcrumb/test/breadcrumb-trail-overlay.test.ts` (create)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-overlay.js` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-overlay.d.ts` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-overlay-mixin.js` (create — `BreadcrumbTrailOverlayMixin`)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-overlay-mixin.d.ts` (create)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-trail-overlay-base-styles.js` (modify — minimal structural rules; theme polish later)
+- `packages/breadcrumb-trail/test/breadcrumb-trail-overlay.test.ts` (create)
 
 **Tests:**
 - [ ] `customElements.get('vaadin-breadcrumb-trail-overlay')` returns a class
@@ -366,10 +366,10 @@ Build the `<vaadin-breadcrumb-trail-overlay>` element on top of `OverlayMixin` (
 Render `<vaadin-breadcrumb-trail-overlay>` directly in the container's shadow DOM with `.owner`, `.opened`, `.renderer`, and `.positionTarget` bound to the host's state and the overflow button (also pass `exportparts="overlay, content"` so themes can target both via `vaadin-breadcrumb-trail-overlay::part(...)`; project a `<slot name="overlay">` inside it for consistency with other overlay hosts). Clicking the overflow button toggles `_overlayOpened`. The `renderer` writes one navigable link into `[part="content"]` per currently hidden item, in original DOM order, using each item's `path` as href and its text content as the link label. Apply `I18nMixin` with the `i18n` object containing `moreItems` (default `''`); bind it to the overflow button's `aria-label`. Keep `aria-haspopup="true"` and update `aria-expanded` on the overflow button to reflect open/closed.
 
 **Files:**
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail.js` (modify)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-mixin.js` (modify)
-- `packages/breadcrumb/src/vaadin-breadcrumb-trail-mixin.d.ts` (modify)
-- `packages/breadcrumb/test/breadcrumb-trail.test.ts` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail.js` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-mixin.js` (modify)
+- `packages/breadcrumb-trail/src/vaadin-breadcrumb-trail-mixin.d.ts` (modify)
+- `packages/breadcrumb-trail/test/breadcrumb-trail.test.ts` (modify)
 
 **Tests:**
 - [ ] In the initial closed state, the overflow button has `aria-expanded="false"` and the overlay's `opened` is `false`
@@ -397,7 +397,7 @@ Render `<vaadin-breadcrumb-trail-overlay>` directly in the container's shadow DO
 Add an end-to-end accessibility test suite that verifies all the ARIA pieces work together once the container is fully assembled. No new behavior to implement — this task locks down the expected screen-reader shape so future regressions are caught. Confirm the navigation landmark accepts an `aria-label` from the application without the component overwriting it.
 
 **Files:**
-- `packages/breadcrumb/test/breadcrumb-trail-a11y.test.ts` (create)
+- `packages/breadcrumb-trail/test/breadcrumb-trail-a11y.test.ts` (create)
 
 **Tests:**
 - [ ] `<vaadin-breadcrumb-trail>` host has `role="navigation"` and an application-supplied `aria-label` on the host is preserved (the component does not set or overwrite it)
@@ -424,7 +424,7 @@ Add an end-to-end accessibility test suite that verifies all the ARIA pieces wor
 Add a keyboard interaction test suite. No new keyboard logic should be needed (Tab order is purely DOM order, the overflow button is a native `<button>` so Enter/Space activate it natively, and Escape on the overlay is provided by `OverlayMixin`) — this task verifies all of that end to end and pins the focus-order rule from `WEB_COMPONENT_GUIDELINES.md` (focus follows DOM order: root → overflow button → remaining items).
 
 **Files:**
-- `packages/breadcrumb/test/breadcrumb-trail-keyboard.test.ts` (create)
+- `packages/breadcrumb-trail/test/breadcrumb-trail-keyboard.test.ts` (create)
 
 **Tests:**
 - [ ] With `has-overflow` set and the focus on the document body, pressing Tab moves focus to the root item's inner `<a>`, then to the overflow button, then to each subsequent visible item's inner `<a>` in DOM order
@@ -450,9 +450,9 @@ Add a keyboard interaction test suite. No new keyboard logic should be needed (T
 Add an RTL test suite verifying that the breadcrumb is usable in `dir="rtl"` contexts: separators flip via `transform: scaleX(-1)` (already implemented in Tasks 5 and 10 — re-verify in an integrated trail), the visual / DOM / focus order all match (root on the right, current on the left, overflow between them), and the base styles use logical CSS properties (no physical `margin-left` / `padding-right` etc. that would not flip).
 
 **Files:**
-- `packages/breadcrumb/test/breadcrumb-trail-rtl.test.ts` (create)
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-trail-base-styles.js` (modify if needed to switch any physical properties to logical equivalents)
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-item-base-styles.js` (modify if needed)
+- `packages/breadcrumb-trail/test/breadcrumb-trail-rtl.test.ts` (create)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-trail-base-styles.js` (modify if needed to switch any physical properties to logical equivalents)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-item-base-styles.js` (modify if needed)
 
 **Tests:**
 - [ ] Inside `dir="rtl"`, every item's `::after` and the overflow `::after` have a transform whose `a` (x-scale) component is `-1`
@@ -479,10 +479,10 @@ Add an RTL test suite verifying that the breadcrumb is usable in `dir="rtl"` con
 Round out the structural base styles for all three elements: `:host` defaults (display, flex layout for the container, alignment for items), `:host([hidden])` rules, hookups for every shadow part, state-attribute selectors (`:host([disabled])` where applicable to the overflow button, `:host([has-overflow])`, `:host([current])`, `:host([has-prefix])`), forced-colors mode rules so separator/icons remain visible in high-contrast, and ensure every CSS custom property declared in the spec is wired up with a sensible fallback. Add a base-styles visual test suite that captures the unstyled baseline for the breadcrumb, item with/without prefix, and an overflow state.
 
 **Files:**
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-trail-base-styles.js` (modify)
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-item-base-styles.js` (modify)
-- `packages/breadcrumb/src/styles/vaadin-breadcrumb-trail-overlay-base-styles.js` (modify)
-- `packages/breadcrumb/test/visual/base/breadcrumb-trail.test.js` (create)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-trail-base-styles.js` (modify)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-item-base-styles.js` (modify)
+- `packages/breadcrumb-trail/src/styles/vaadin-breadcrumb-trail-overlay-base-styles.js` (modify)
+- `packages/breadcrumb-trail/test/visual/base/breadcrumb-trail.test.js` (create)
 
 **Tests:**
 - [ ] Visual baseline: a basic three-item breadcrumb (`Home / Docs / OAuth2`) renders with separators and current-item styling
@@ -515,7 +515,7 @@ Author Lumo styles for all three elements: container layout/spacing, item link c
 - `packages/vaadin-lumo-styles/src/components/breadcrumb.css` (create)
 - `packages/vaadin-lumo-styles/src/components/breadcrumb-item.css` (create)
 - `packages/vaadin-lumo-styles/src/components/breadcrumb-overlay.css` (create)
-- `packages/breadcrumb/test/visual/lumo/breadcrumb-trail.test.js` (create)
+- `packages/breadcrumb-trail/test/visual/lumo/breadcrumb-trail.test.js` (create)
 
 **Tests:**
 - [ ] Lumo visual baseline: basic three-item trail renders with Lumo typography, link color, and chevron separator
@@ -548,7 +548,7 @@ Author Aura styles for all three elements using Aura's modern CSS conventions (`
 - `packages/aura/src/components/breadcrumb-item.css` (create)
 - `packages/aura/src/components/breadcrumb-overlay.css` (create)
 - `packages/aura/aura.css` (modify — `@import` the three new files)
-- `packages/breadcrumb/test/visual/aura/breadcrumb-trail.test.js` (create)
+- `packages/breadcrumb-trail/test/visual/aura/breadcrumb-trail.test.js` (create)
 
 **Tests:**
 - [ ] Aura visual baseline: basic three-item trail with Aura typography and chevron separator
@@ -579,10 +579,10 @@ Add the dev page in `dev/breadcrumb.html` with all major variants (declarative, 
 
 **Files:**
 - `dev/breadcrumb.html` (create — wrap overflow examples in `resize: horizontal; overflow: hidden` per `WEB_COMPONENT_GUIDELINES.md`)
-- `packages/breadcrumb/test/dom/breadcrumb-trail.test.js` (create)
-- `packages/breadcrumb/test/dom/breadcrumb-item.test.js` (create)
-- `packages/breadcrumb/test/dom/breadcrumb-trail-overlay.test.js` (create)
-- `packages/breadcrumb/test/typings/breadcrumb-trail.types.ts` (modify — assert `items: BreadcrumbItemData[] | null | undefined`, `i18n.moreItems`, `path`/`target` on item, event types)
+- `packages/breadcrumb-trail/test/dom/breadcrumb-trail.test.js` (create)
+- `packages/breadcrumb-trail/test/dom/breadcrumb-item.test.js` (create)
+- `packages/breadcrumb-trail/test/dom/breadcrumb-trail-overlay.test.js` (create)
+- `packages/breadcrumb-trail/test/typings/breadcrumb-trail.types.ts` (modify — assert `items: BreadcrumbItemData[] | null | undefined`, `i18n.moreItems`, `path`/`target` on item, event types)
 
 **Tests:**
 - [ ] DOM snapshot: `<vaadin-breadcrumb-trail>` shadow DOM in the default state
