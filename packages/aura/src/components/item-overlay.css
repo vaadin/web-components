@@ -63,8 +63,18 @@ vaadin-select-item:where([role]) {
     }
   }
 
-  &:active {
+  &:not([disabled], [aria-disabled='true']):active {
     background: var(--_highlight-color);
+
+    &[theme~='filled'] {
+      background: var(--aura-accent-color);
+      color: var(--aura-accent-contrast-color);
+      --vaadin-text-color: var(--aura-accent-contrast-color);
+      --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
+      --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
+      --vaadin-icon-color: var(--aura-accent-contrast-color);
+      --vaadin-item-checkmark-color: var(--aura-accent-contrast-color);
+    }
   }
 
   &[aria-expanded='true']:not(:hover) {
@@ -93,6 +103,28 @@ vaadin-select-item:where([role]) {
       --aura-accent-color: light-dark(var(--aura-accent-color-light-initial), var(--aura-accent-color-dark-initial));
     }
   }
+}
+
+@media (any-hover: hover) {
+  vaadin-select[theme~='filled'] > [slot='overlay'] [role='option']:not([disabled], [aria-disabled='true']):hover {
+    background: var(--aura-accent-color);
+    color: var(--aura-accent-contrast-color);
+    --vaadin-text-color: var(--aura-accent-contrast-color);
+    --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
+    --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
+    --vaadin-icon-color: var(--aura-accent-contrast-color);
+    --vaadin-item-checkmark-color: var(--aura-accent-contrast-color);
+  }
+}
+
+vaadin-select[theme~='filled'] > [slot='overlay'] [role='option']:not([disabled], [aria-disabled='true']):active {
+  background: var(--aura-accent-color);
+  color: var(--aura-accent-contrast-color);
+  --vaadin-text-color: var(--aura-accent-contrast-color);
+  --vaadin-text-color-secondary: color-mix(in srgb, var(--aura-accent-contrast-color) 70%, transparent);
+  --vaadin-text-color-disabled: color-mix(in srgb, var(--aura-accent-contrast-color) 50%, transparent);
+  --vaadin-icon-color: var(--aura-accent-contrast-color);
+  --vaadin-item-checkmark-color: var(--aura-accent-contrast-color);
 }
 
 /* TODO is there a better selector? */
