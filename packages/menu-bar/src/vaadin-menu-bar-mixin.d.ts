@@ -118,6 +118,18 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
    * // Set before any menu bar is attached to the DOM.
    * window.Vaadin.featureFlags.accessibleDisabledButtons = true;
    * ```
+   *
+   * #### Disabled sub-menu items
+   *
+   * Likewise, disabled sub-menu items are not focusable or hoverable
+   * by default. Enabling the feature flag `accessibleDisabledMenuItems`
+   * makes them focusable and hoverable, while still preventing them
+   * from being triggered:
+   *
+   * ```js
+   * // Set before any menu bar is attached to the DOM.
+   * window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
+   * ```
    */
   items: TItem[];
 

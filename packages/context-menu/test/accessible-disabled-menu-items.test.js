@@ -19,13 +19,18 @@ describe('accessible disabled menu items', () => {
   });
 
   beforeEach(async () => {
+    // Firefox: when a previous test ends with focus on an overlay item
+    // that then gets removed during fixture teardown, element.focus()
+    // calls in the next test's overlay silently no-op (activeElement
+    // stays on <body>), breaking sendKeys-based arrow navigation.
+    // Adding a real focusable sibling outside the overlay helps work
+    // this around
     const wrapper = fixtureSync(`
       <div>
         <input id="first-global-focusable" />
         <vaadin-context-menu>
           <button id="target"></button>
         </vaadin-context-menu>
-        <input id="last-global-focusable" />
       </div>
     `);
     rootMenu = wrapper.querySelector('vaadin-context-menu');
@@ -103,7 +108,6 @@ describe('accessible disabled menu items (feature flag disabled)', () => {
         <vaadin-context-menu>
           <button id="target"></button>
         </vaadin-context-menu>
-        <input id="last-global-focusable" />
       </div>
     `);
     rootMenu = wrapper.querySelector('vaadin-context-menu');
