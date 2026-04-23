@@ -101,35 +101,25 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
    * ];
    * ```
    *
-   * #### Disabled buttons
+   * #### Disabled items
    *
-   * When disabled, menu bar buttons (root-level items) are rendered
-   * as "dimmed" and prevent all user interactions (mouse and keyboard).
+   * When disabled, menu bar items are rendered as "dimmed".
    *
-   * Since disabled buttons are not focusable and cannot react to hover
-   * events by default, it can cause accessibility issues by making them
-   * entirely invisible to assistive technologies, and prevents the use
-   * of Tooltips to explain why the action is not available. This can be
-   * addressed by enabling the feature flag `accessibleDisabledButtons`,
-   * which makes disabled buttons focusable and hoverable, while still
-   * preventing them from being triggered:
+   * By default, disabled items are not focusable and don't react to hover.
+   * As a result, they are hidden from assistive technologies, and it's not
+   * possible to show a tooltip to explain why they are disabled. This can be
+   * addressed by enabling several feature flags, which makes disabled items
+   * focusable and hoverable, while still preventing them from being activated:
    *
    * ```js
-   * // Set before any menu bar is attached to the DOM.
+   * // Allow focus and hover interactions with disabled menu bar root items (buttons)
    * window.Vaadin.featureFlags.accessibleDisabledButtons = true;
-   * ```
    *
-   * #### Disabled sub-menu items
-   *
-   * Likewise, disabled sub-menu items are not focusable or hoverable
-   * by default. Enabling the feature flag `accessibleDisabledMenuItems`
-   * makes them focusable and hoverable, while still preventing them
-   * from being triggered:
-   *
-   * ```js
-   * // Set before any menu bar is attached to the DOM.
+   * // Allow focus and hover interactions with disabled menu bar sub-menu items
    * window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
    * ```
+   *
+   * Both flags must be set before any menu bar is attached to the DOM.
    */
   items: TItem[];
 
