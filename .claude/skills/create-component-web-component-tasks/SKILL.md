@@ -22,7 +22,15 @@ TASK OVERVIEW:
 
 4. Check if `packages/{component-name}/spec/figma-design.md` exists. If present, read it and reference the Figma design in theme styling tasks as visual guidance. If absent, proceed without it — Figma designs are optional.
 
-5. Read `WEB_COMPONENT_GUIDELINES.md` in the project root. **The document is 2000+ lines — read it in batches** (e.g., 500 lines at a time using offset/limit) to ensure you cover ALL relevant sections. The document defines file structure, naming conventions, mixin patterns, styling architecture, theming, testing, accessibility, and a Checklist. Use the Checklist section as the completeness reference — every checklist item must be covered by at least one task. The styling rules contain constraints that must be reflected in task descriptions and acceptance criteria. The "Avoid vacuous assertions" section (§7 Testing) defines how test assertions in tasks must be written — assertions must be specific enough to fail when the behaviour is wrong.
+5. Read the sections of `WEB_COMPONENT_GUIDELINES.md` that matter for task planning. The document is 2362 lines; do not read it end to end. Read these sections directly using offset/limit:
+   - **File Structure (§4)** — drives the file list the scaffolding task must produce
+   - **Component Implementation (§5)** — mixin chains and render patterns that shape Phase 2 tasks
+   - **Styling (§6)** — styling constraints that must appear in task descriptions
+   - **Testing (§9)**, especially the "Avoid vacuous assertions" subsection — every test assertion written into a task must pass this bar
+   - **Accessibility (§14)** — drives the cross-cutting ARIA / keyboard / RTL task
+   - **Checklist (§17, from ~line 2136)** — the completeness reference; every checklist item must be covered by at least one task
+
+   Skip Installation, Packaging, Theme Comparison appendices, and Notes — they are not relevant to task planning. Open them only if a specific task genuinely needs them.
 
 6. Parse the spec into implementation units. For each element in the spec, extract:
    - Mixin chain
@@ -42,13 +50,22 @@ TASK OVERVIEW:
 
    If any item is not covered, add it to an existing task or create a new task for it.
 
-10. Read `TASKS_TEMPLATE.md` in this skill's directory. Write the tasks at `packages/{component-name}/spec/web-component-tasks.md`, following the template structure.
+10. Self-review the task list before writing. Pass through the full list once more and check for:
+    - **Dependency cycles.** No task transitively depends on itself.
+    - **Unnecessary serialization.** Two tasks that don't actually share data/structure should have independent `Depends on:` lines — don't chain them just because they sit next to each other.
+    - **Vague test assertions.** Every assertion must describe an observable outcome specific enough to fail if the behavior regresses. Reject phrasing like "component works correctly" or "renders as expected".
+    - **Oversized tasks.** A task with more than ~10 test assertions should be split, unless the assertions are genuinely one tightly-coupled feature.
+    - **Missed coverage** (second pass over step 9, with fresh eyes).
+
+    Fix in place before proceeding.
+
+11. Read `TASKS_TEMPLATE.md` in this skill's directory. Write the tasks at `packages/{component-name}/spec/web-component-tasks.md`, following the template structure.
 
 PHASE STRUCTURE:
 
 Organize tasks into these phases, in order. Each phase builds on the previous one.
 
-**Phase 1 — Scaffolding.** One task that creates the package directory, `package.json`, `LICENSE`, `README.md`, root export files, root `.d.ts` files, source files with empty element classes (correct mixin chains, empty `render()`, `static get is()`, `static get styles()`), TypeScript definitions for source files, base styles files (structural CSS only), and the test directory structure. This task includes a basic smoke test: the element registers and renders without errors. The goal is a clean package that passes `yarn lint` and `yarn lint:types`.
+**Phase 1 — Scaffolding.** One task that creates the package directory, `package.json`, `LICENSE`, `README.md`, root export files, root `.d.ts` files, source files with empty element classes (correct mixin chains, empty `render()`, `static get is()`, `static get styles()`), TypeScript definitions for source files, base styles files (structural CSS only), the test directory structure, and a minimal dev page at `dev/{component-name}.html` that imports the main entry and shows a default instance of the component. The dev page exists from Phase 1 so that visual verification in later phases has something to render; subsequent feature tasks extend it with additional variants. This task includes a basic smoke test: the element registers and renders without errors. The goal is a clean package that passes `yarn lint` and `yarn lint:types`.
 
 **Phase 2 — Core features.** One task per feature or tightly coupled feature group. Each task adds behavior to the component and includes unit tests that verify that behavior. Order tasks by dependency — properties before behaviors that depend on them, child element features before container features that observe children. Group tightly coupled behaviors into one task when they cannot function independently (e.g., a property and the rendering logic that uses it). Keep loosely related behaviors in separate tasks.
 
@@ -65,7 +82,7 @@ These may be combined into fewer tasks when they are tightly coupled for the spe
 3. Aura theme — component CSS file (`packages/aura/src/components/{name}.css`), import in `packages/aura/aura.css`, token bindings. Includes Aura visual tests. Reference `figma-design.md` for visual alignment if it exists.
 
 **Phase 5 — Integration.** One task covering:
-- Dev page in `dev/{component-name}.html`
+- Final review of the dev page (created in Phase 1, extended by feature tasks) — ensure every major variant is exercised
 - DOM snapshot tests
 - TypeScript type tests
 - Final validation: `yarn lint`, `yarn lint:types`, `yarn test --group {name}`, `yarn test:snapshots --group {name}`, `yarn test:base --group {name}`, `yarn test:lumo --group {name}`, `yarn test:aura --group {name}`
@@ -83,9 +100,11 @@ Each task in the output document must include:
 - **Requirements** — which requirement numbers from `requirements.md` the task covers
 - **Depends on** — prerequisite task numbers (see DEPENDENCY RULES)
 - **Description** — what to implement and test, in 2–4 sentences. Name the feature and the spec sections that define it. Do not restate the spec — point to it.
-- **Files** — every file to create or modify, with full paths from the repo root and (create) or (modify) annotation
-- **Tests** — behavioral assertions to verify the feature works. Describe the expected outcome, not implementation details. Keep assertions at the level of "what the user or developer observes."
-- **Acceptance criteria** — meta checks: all new tests pass, existing tests still pass, lint is clean, types compile
+- **Tests** — a plain bullet list of behavioral assertions that verify the feature works. Describe the expected outcome, not implementation details. Keep assertions at the level of "what the user or developer observes." No checkboxes.
+
+Do NOT include a `Files` list. The implementation agent infers files from the spec and codebase patterns; an explicit list constrains it unhelpfully and adds no value for a human reader.
+
+Do NOT include a generic `Acceptance criteria` section (tests pass, lint clean, types compile). Those checks run as standard post-task steps in the implementation skill — restating them on every task is noise. Only include task-specific acceptance notes in the Description if the task has a genuinely unique gate.
 
 DEPENDENCY RULES:
 

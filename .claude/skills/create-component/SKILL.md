@@ -27,7 +27,7 @@ All output files live under `packages/{kebab-name}/spec/` unless noted otherwise
 | 4 | `create-component-web-component-spec` | `web-component-spec.md` | `web-component-api.md` |
 | 5 | `create-component-web-component-figma-design` | `figma-design.md` | `web-component-spec.md` | 
 | 6 | `create-component-web-component-tasks` | `web-component-tasks.md` | `web-component-spec.md` |
-| 7 | `create-component-web-component-implementation` | `.js` files in `packages/{kebab-name}/src/` | `web-component-tasks.md` |
+| 7 | `create-component-web-component-implementation` | one commit per task, tracked in `implementation-notes.md` | `web-component-tasks.md` |
 
 ### Flow Track
 
@@ -56,7 +56,13 @@ Extract ComponentName from the argument. Derive `kebab-name` by converting to lo
 
 Use Glob to list existing files in the spec directory: `packages/{kebab-name}/spec/*`.
 
-For implementation steps (7 and 6b), check whether `packages/{kebab-name}/src/` contains `.js` files — if it does, consider step 7 done. For step 6b, check whether the `flow-components` or `../flow-components` directory has relevant Java source files for the component.
+For step 7 (web component implementation), Read both `packages/{kebab-name}/spec/web-component-tasks.md` and `packages/{kebab-name}/spec/implementation-notes.md` and count lines starting with `## Task` in each file — call these M (total tasks) and N (completed tasks).
+- If `web-component-tasks.md` does not exist, step 7's prerequisite is unmet.
+- If `implementation-notes.md` does not exist and `web-component-tasks.md` does, step 7 is `[ready]` at `0/M`.
+- If `N < M`, step 7 is `[ready]` at `N/M` — the next invocation will run task `N+1`.
+- If `N == M`, step 7 is `[done]`.
+
+For step 6b, check whether the `flow-components` or `../flow-components` directory has relevant Java source files for the component.
 
 ### Step 3 — Print dashboard
 
@@ -92,6 +98,8 @@ Status markers:
 - `[done]` — output file exists (step is complete)
 - `[ready]` — all prerequisites are met, step can be run now
 - `[    ]` — prerequisites not yet met
+
+For step 7, when in progress, append the progress count to the label, e.g. `[ready] 7. Implementation (5/19)`. Invoking the skill again runs the next task.
 
 If all steps are done, print the dashboard and stop. Do not invoke any skill.
 

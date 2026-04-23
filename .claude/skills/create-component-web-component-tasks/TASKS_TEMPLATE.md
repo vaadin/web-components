@@ -12,10 +12,10 @@ Tasks are pointers into the spec, not a second copy of it. The spec sections fie
 Each task:
 - Has a short descriptive title
 - References spec sections and requirements (the implementer reads the spec for details)
-- Lists explicit dependencies on prior tasks (enables parallel work)
-- Lists files to create or modify (full paths from repo root)
+- Lists explicit dependencies on prior tasks (for ordering clarity)
 - Defines test assertions (observable behavior, not implementation details)
-- Includes acceptance criteria (tests pass, lint clean, types compile)
+
+The implementation skill always runs `yarn test`, `yarn lint`, and `yarn lint:types` after each task — do not add a per-task acceptance-criteria block for those.
 
 Tasks are organized in phases:
 1. Scaffolding — package setup, element shells, smoke tests
@@ -45,19 +45,9 @@ Do NOT add tasks for features not in the spec.
 
 {What to implement and test in 2-4 sentences. Name the feature and point to the spec sections that define it — do not restate the spec.}
 
-**Files:**
-- `packages/{component-name}/path/to/file.js` (create)
-- `packages/{component-name}/path/to/file.js` (modify)
-
 **Tests:**
-- [ ] {Concrete test assertion — what the user or developer observes, e.g., "the element is defined as a custom element with tag name `vaadin-{name}`"}
-- [ ] {Another assertion — what the user or developer observes, e.g., "the element renders a shadow root containing a `<slot>`"}
-
-**Acceptance criteria:**
-- [ ] All new tests pass
-- [ ] Existing tests still pass
-- [ ] `yarn lint` passes
-- [ ] `yarn lint:types` passes
+- {Concrete test assertion — what the user or developer observes, e.g., "the element is defined as a custom element with tag name `vaadin-{name}`"}
+- {Another assertion — what the user or developer observes, e.g., "the element renders a shadow root containing a `<slot>`"}
 
 ---
 
