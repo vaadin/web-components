@@ -130,28 +130,34 @@ function isWritablePrimitiveAttribute(attribute) {
 }
 
 /**
- * Gets public writable field members from a CEM element declaration.
- * CEM already filters to public members based on config, and fields with
- * an `attribute` property are reactive properties.
+ * Gets public field members from a CEM element declaration, including
+ * readonly ones. CEM already filters to public members based on config.
  * @param {object} elementDeclaration - The element declaration from CEM
  * @returns {object[]}
  */
-function getPublicWritableProperties(elementDeclaration) {
+function getPublicProperties(elementDeclaration) {
   const members = elementDeclaration.members || [];
   // Members without explicit privacy are treated as public (private/protected
   // are already filtered out by the CEM config).
   return members.filter(
-    (member) =>
-      member.kind === 'field' && member.privacy !== 'private' && member.privacy !== 'protected' && !member.readonly,
+    (member) => member.kind === 'field' && member.privacy !== 'private' && member.privacy !== 'protected',
   );
 }
 
+/**
+ * Same as getPublicProperties but drops readonly members. Used for Lit
+ * bindings, where setting a read-only property is not meaningful.
+ * @param {object} elementDeclaration
+ * @returns {object[]}
+ */
+function getPublicWritableProperties(elementDeclaration) {
+  return getPublicProperties(elementDeclaration).filter((member) => !member.readonly);
+}
+
 function createPlainElementDefinition(packageJson, elementDeclaration) {
-  const readonlyFields = new Set((elementDeclaration.members || []).filter((m) => m.readonly).map((m) => m.name));
   const elementAttributes = elementDeclaration.attributes || [];
   const attributes = [...elementAttributes, ...additionalAttributes]
     .filter((attribute) => isWritablePrimitiveAttribute(attribute))
-    .filter((attribute) => !readonlyFields.has(attribute.fieldName))
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((attribute) => ({
       name: attribute.name,
@@ -161,7 +167,7 @@ function createPlainElementDefinition(packageJson, elementDeclaration) {
       },
     }));
 
-  const properties = getPublicWritableProperties(elementDeclaration)
+  const properties = getPublicProperties(elementDeclaration)
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((prop) => ({
       name: prop.name,
