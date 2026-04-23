@@ -89,6 +89,24 @@ export declare class ComboBoxMixinClass<TItem> {
   itemIdPath: string | null | undefined;
 
   /**
+   * When true, the dropdown automatically scrolls to and focuses the
+   * currently selected item when the overlay opens.
+   *
+   * With a `dataProvider`, the auto-scroll is best-effort: it only
+   * succeeds when the selected item's page is already loaded in the
+   * cache. For reliable scroll-to-selected with lazy data, compute
+   * the index externally (e.g. via a server-side `ItemIndexProvider`)
+   * and call `scrollToIndex(index)` directly, typically from a
+   * `vaadin-combo-box-dropdown-opened` event listener.
+   *
+   * An explicit `scrollToIndex` call pending from before the overlay
+   * opened takes precedence over this property.
+   *
+   * @attr {boolean} focus-selected-item
+   */
+  focusSelectedItem: boolean;
+
+  /**
    * Requests an update for the content of items.
    * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
    *

@@ -213,6 +213,132 @@ describe('scrollToIndex', () => {
     });
   });
 
+  describe('focusSelectedItem', () => {
+    const SIZE = 200;
+
+    beforeEach(async () => {
+      comboBox = fixtureSync(`
+        <vaadin-combo-box
+          style="--vaadin-combo-box-overlay-max-height: 400px"
+        ></vaadin-combo-box>
+      `);
+      await nextRender();
+      comboBox.items = makeItems(SIZE);
+    });
+
+    it('should default to false', () => {
+      expect(comboBox.focusSelectedItem).to.be.false;
+    });
+
+    it('should scroll to the selected item on open when true', () => {
+      comboBox.focusSelectedItem = true;
+      comboBox.selectedItem = comboBox.items[150];
+
+      comboBox.opened = true;
+      flushComboBox(comboBox);
+
+      expect(comboBox._focusedIndex).to.equal(150);
+      const viewport = getViewportItems(comboBox);
+      expect(viewport.map((item) => item.index)).to.include(150);
+    });
+
+    it('should not scroll when there is no selectedItem', () => {
+      comboBox.focusSelectedItem = true;
+
+      comboBox.opened = true;
+      flushComboBox(comboBox);
+
+      expect(comboBox._focusedIndex).to.equal(-1);
+      expect(getViewportItems(comboBox)[0].index).to.equal(0);
+    });
+
+    it('should prefer an explicit scrollToIndex call queued before open', () => {
+      comboBox.focusSelectedItem = true;
+      comboBox.selectedItem = comboBox.items[150];
+
+      comboBox.scrollToIndex(50);
+      comboBox.opened = true;
+      flushComboBox(comboBox);
+
+      expect(comboBox._focusedIndex).to.equal(50);
+      const viewport = getViewportItems(comboBox);
+      expect(viewport.map((item) => item.index)).to.include(50);
+    });
+
+    it('should scroll again when reopened after close', async () => {
+      comboBox.focusSelectedItem = true;
+      comboBox.selectedItem = comboBox.items[150];
+
+      comboBox.opened = true;
+      flushComboBox(comboBox);
+      expect(comboBox._focusedIndex).to.equal(150);
+
+      comboBox.opened = false;
+      await nextFrame();
+      comboBox.opened = true;
+      flushComboBox(comboBox);
+
+      expect(comboBox._focusedIndex).to.equal(150);
+    });
+  });
+
+  describe('focusSelectedItem with dataProvider', () => {
+    const SIZE = 500;
+    const PAGE_SIZE = 50;
+    let pendingCallbacks;
+
+    function flushPendingCallbacks() {
+      const callbacks = pendingCallbacks;
+      pendingCallbacks = [];
+      callbacks.forEach((cb) => cb());
+    }
+
+    const asyncDataProvider = (params, callback) => {
+      pendingCallbacks.push(() => {
+        const items = makeItems(SIZE).slice(params.page * params.pageSize, (params.page + 1) * params.pageSize);
+        callback(items, SIZE);
+      });
+    };
+
+    beforeEach(async () => {
+      pendingCallbacks = [];
+      comboBox = fixtureSync(`
+        <vaadin-combo-box
+          style="--vaadin-combo-box-overlay-max-height: 400px"
+        ></vaadin-combo-box>
+      `);
+      await nextRender();
+      comboBox.pageSize = PAGE_SIZE;
+      comboBox.dataProvider = asyncDataProvider;
+      comboBox.focusSelectedItem = true;
+    });
+
+    it('should scroll to the selected item when its page is already loaded', async () => {
+      // Item 30 is in the first page, which loads on open.
+      comboBox.selectedItem = 'item 30';
+
+      comboBox.opened = true;
+      flushPendingCallbacks();
+      await nextFrame();
+      flushComboBox(comboBox);
+
+      expect(comboBox._focusedIndex).to.equal(30);
+    });
+
+    it('should not scroll when the selected item is on an unloaded page', async () => {
+      // Item 300 is on page 6; only page 0 loads on open.
+      comboBox.selectedItem = 'item 300';
+
+      comboBox.opened = true;
+      flushPendingCallbacks();
+      await nextFrame();
+      flushComboBox(comboBox);
+
+      expect(comboBox._focusedIndex).to.equal(-1);
+      expect(getViewportItems(comboBox)[0].index).to.equal(0);
+    });
+  });
+
   describe('regressions', () => {
     it('should not scroll on open when scrollToIndex was never called', async () => {
       comboBox = fixtureSync(`

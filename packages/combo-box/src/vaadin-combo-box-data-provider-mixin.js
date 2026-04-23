@@ -168,6 +168,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       this.__synchronizeControllerState();
 
       this.__scrollToPendingIndexIfNeeded();
+      this.__scrollToSelectedItemIfNeeded();
 
       if (!this.opened && !this._isInputFocused()) {
         this._commitValue();
@@ -176,14 +177,38 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
     /**
      * Override method from `ComboBoxBaseMixin` to flush any pending
-     * `scrollToIndex` call after the overlay opens.
+     * `scrollToIndex` call after the overlay opens, and (for combo-box only)
+     * apply the `focusSelectedItem` auto-scroll behavior.
      *
      * @protected
      * @override
      */
     _onOpened() {
       super._onOpened();
+      // Latch the auto-scroll intent now so that a caller-queued
+      // `scrollToIndex` (which `__scrollToPendingIndexIfNeeded` is about to
+      // consume) takes precedence over the `focusSelectedItem` behavior.
+      // `selectedItem` is checked at retry time, not here: with a
+      // dataProvider, it's set asynchronously when the matching page loads.
+      this.__shouldFocusSelectedItem = this.focusSelectedItem && this.__scrollToPendingIndex === undefined;
+
       this.__scrollToPendingIndexIfNeeded();
+      this.__scrollToSelectedItemIfNeeded();
+    }
+
+    /** @private */
+    __scrollToSelectedItemIfNeeded() {
+      if (!this.__shouldFocusSelectedItem || !this.selectedItem) {
+        return;
+      }
+      const index = this.__getItemIndexByValue(this._dropdownItems, this._getItemValue(this.selectedItem));
+      if (index < 0) {
+        // With a dataProvider, the item's page may not be loaded yet.
+        // Keep the flag set so `__onDataProviderPageLoaded` can retry.
+        return;
+      }
+      delete this.__shouldFocusSelectedItem;
+      this.scrollToIndex(index);
     }
 
     /**

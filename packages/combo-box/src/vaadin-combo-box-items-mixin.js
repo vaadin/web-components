@@ -200,9 +200,10 @@ export const ComboBoxItemsMixin = (superClass) =>
 
     /** @private */
     _filterChanged(filter) {
-      // A pending scrollToIndex targets an index in the unfiltered list,
-      // so it becomes stale when the filter changes.
+      // Scroll intents pinned at open time are canceled when the user
+      // starts filtering — the browsing context has changed.
       delete this.__scrollToPendingIndex;
+      delete this.__shouldFocusSelectedItem;
 
       // Scroll to the top of the list whenever the filter changes.
       this._scrollIntoView(0);
