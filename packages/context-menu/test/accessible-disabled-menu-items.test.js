@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-context-menu.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getMenuItems, getSubMenu, openMenu } from './helpers.js';
@@ -18,11 +19,16 @@ describe('accessible disabled menu items', () => {
   });
 
   beforeEach(async () => {
-    rootMenu = fixtureSync(`
-      <vaadin-context-menu>
-        <button id="target"></button>
-      </vaadin-context-menu>
+    const wrapper = fixtureSync(`
+      <div>
+        <input id="first-global-focusable" />
+        <vaadin-context-menu>
+          <button id="target"></button>
+        </vaadin-context-menu>
+        <input id="last-global-focusable" />
+      </div>
     `);
+    rootMenu = wrapper.querySelector('vaadin-context-menu');
     rootMenu.openOn = isTouch ? 'click' : 'mouseover';
     target = rootMenu.firstElementChild;
     rootMenu.items = [
@@ -61,8 +67,10 @@ describe('accessible disabled menu items', () => {
   });
 
   it('should not select a disabled item on click', async () => {
+    const spy = sinon.spy();
+    rootMenu.addEventListener('item-selected', spy);
     await sendMouseToElement({ type: 'click', element: items[1] });
-    expect(items[1].selected).to.be.false;
+    expect(spy.called).to.be.false;
   });
 
   it('should not open sub-menu on disabled parent item hover', async () => {
@@ -89,11 +97,16 @@ describe('accessible disabled menu items (feature flag disabled)', () => {
   let rootMenu, target, items;
 
   beforeEach(async () => {
-    rootMenu = fixtureSync(`
-      <vaadin-context-menu>
-        <button id="target"></button>
-      </vaadin-context-menu>
+    const wrapper = fixtureSync(`
+      <div>
+        <input id="first-global-focusable" />
+        <vaadin-context-menu>
+          <button id="target"></button>
+        </vaadin-context-menu>
+        <input id="last-global-focusable" />
+      </div>
     `);
+    rootMenu = wrapper.querySelector('vaadin-context-menu');
     rootMenu.openOn = isTouch ? 'click' : 'mouseover';
     target = rootMenu.firstElementChild;
     rootMenu.items = [{ text: 'Item 0' }, { text: 'Item 1', disabled: true }, { text: 'Item 2' }];

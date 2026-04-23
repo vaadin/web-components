@@ -17,7 +17,14 @@ describe('accessible disabled menu items', () => {
   });
 
   beforeEach(async () => {
-    menuBar = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
+    const wrapper = fixtureSync(`
+      <div>
+        <input id="first-global-focusable" />
+        <vaadin-menu-bar></vaadin-menu-bar>
+        <input id="last-global-focusable" />
+      </div>
+    `);
+    menuBar = wrapper.querySelector('vaadin-menu-bar');
     menuBar.items = [
       {
         text: 'Item 0',
