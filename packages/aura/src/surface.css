@@ -62,7 +62,7 @@ vaadin-upload-file,
   --_u: calc(var(--_up) / 4);
   --_e-light: clamp(
     0,
-    calc(3 * var(--_u) - (3.5 * var(--_u) * var(--_u)) + (2 * var(--_u) * var(--_u) * var(--_u))),
+    calc(4 * var(--_u) - (8 * var(--_u) * var(--_u)) + (6.5 * var(--_u) * var(--_u) * var(--_u))),
     1
   );
   --_e-dark: calc(var(--_down) / 20);
@@ -70,7 +70,12 @@ vaadin-upload-file,
   --aura-surface-color-solid: light-dark(
     oklch(
       from var(--aura-background-color-light) clamp(0, calc(l + (1 - l) * var(--_e-light) - l * var(--_e-dark)), 1)
-        clamp(0, calc(c * (1 - var(--_e-light)) * (1 - 0.35 * var(--_e-dark))), 0.4) h
+        clamp(
+          0,
+          calc(c * (1 - 0.5 * var(--_e-light) - 0.15 * var(--aura-surface-level)) * (1 - 0.35 * var(--_e-dark))),
+          0.4
+        )
+        h
     ),
     oklch(
       from var(--aura-background-color-dark)
