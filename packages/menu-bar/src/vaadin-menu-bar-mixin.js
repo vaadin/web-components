@@ -148,7 +148,8 @@ export const MenuBarMixin = (superClass) =>
          *
          * #### Item tooltips
          *
-         * To show tooltips on buttons and sub-menu items, add a slotted
+         * Buttons and sub-menu items can have tooltips that are shown on
+         * hover and keyboard focus. To enable them, add a slotted
          * `<vaadin-tooltip>` element and set the `tooltip` property on
          * each item that should have one:
          *

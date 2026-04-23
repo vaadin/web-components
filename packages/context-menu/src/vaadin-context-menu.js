@@ -72,9 +72,9 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  *
  * #### Item tooltips
  *
- * An item can have a tooltip displayed on hover and keyboard focus by
- * setting its `tooltip` property. Item tooltips require a
- * `<vaadin-tooltip>` element slotted into the menu:
+ * Menu items can have tooltips that are shown on hover and keyboard
+ * focus. To enable them, add a slotted `<vaadin-tooltip>` element
+ * and set the `tooltip` property on each item that should have one:
  *
  * ```html
  * <vaadin-context-menu>
