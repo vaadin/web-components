@@ -9,6 +9,7 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-base-styles.js';
 import {
@@ -93,7 +94,7 @@ import {
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-master-detail-layout';
   }

@@ -5,6 +5,9 @@
   --vaadin-tabs-gap: 2px;
   --vaadin-tabs-border-radius: calc(var(--vaadin-tab-border-radius) + var(--vaadin-tabs-padding));
   --vaadin-tabs-padding: 3px;
+
+  --_lumo-vaadin-tabs-inject: 1;
+  --_lumo-vaadin-tabs-inject-modules: lumo_components_tabs;
 }
 
 vaadin-tabs {
@@ -12,30 +15,6 @@ vaadin-tabs {
   --aura-surface-level: -0.5;
   --aura-surface-opacity: 0.3;
   background: var(--vaadin-tabs-background, var(--vaadin-background-container));
-}
-
-vaadin-tabs::part(tabs) {
-  padding: 3px;
-  margin: -3px;
-  --_mask-fade-start: 0.5lh;
-  --_mask-fade-size: 2lh;
-  mask-image: linear-gradient(
-    var(--_mask-dir, to right),
-    var(--_mask-start, black) var(--_mask-fade-start),
-    black var(--_mask-fade-size),
-    black calc(100% - var(--_mask-fade-size)),
-    var(--_mask-end, black) calc(100% - var(--_mask-fade-start))
-  );
-}
-
-vaadin-tabs[dir='rtl']::part(tabs) {
-  --_mask-dir: to left;
-}
-
-vaadin-tabs[orientation='vertical']::part(tabs) {
-  --_mask-dir: to bottom;
-  --_mask-fade-start: 0px;
-  --_mask-fade-size: 0.5lh;
 }
 
 vaadin-tabs[overflow~='start'] {
@@ -46,24 +25,50 @@ vaadin-tabs[overflow~='end'] {
   --_mask-end: transparent;
 }
 
-vaadin-tabs::part(back-button),
-vaadin-tabs::part(forward-button) {
-  background: var(--aura-background-color) padding-box;
-  border: 1px solid var(--vaadin-border-color-secondary);
-  border-radius: var(--vaadin-radius-m);
-  padding: var(--vaadin-padding-xs);
-  height: auto;
-  align-self: center;
-  box-shadow: var(--aura-shadow-s);
-  transition: opacity 120ms;
-}
+@media lumo_components_tabs {
+  [part~='tabs'] {
+    padding: 3px;
+    margin: -3px;
+    --_mask-fade-start: 0.5lh;
+    --_mask-fade-size: 2lh;
+    mask-image: linear-gradient(
+      var(--_mask-dir, to right),
+      var(--_mask-start, black) var(--_mask-fade-start),
+      black var(--_mask-fade-size),
+      black calc(100% - var(--_mask-fade-size)),
+      var(--_mask-end, black) calc(100% - var(--_mask-fade-start))
+    );
+  }
 
-vaadin-tabs::part(back-button) {
-  inset-inline-start: 5px;
-}
+  :host([dir='rtl']) [part~='tabs'] {
+    --_mask-dir: to left;
+  }
 
-vaadin-tabs::part(forward-button) {
-  inset-inline-end: 5px;
+  :host([orientation='vertical']) [part~='tabs'] {
+    --_mask-dir: to bottom;
+    --_mask-fade-start: 0px;
+    --_mask-fade-size: 0.5lh;
+  }
+
+  [part~='back-button'],
+  [part~='forward-button'] {
+    background: var(--aura-background-color) padding-box;
+    border: 1px solid var(--vaadin-border-color-secondary);
+    border-radius: var(--vaadin-radius-m);
+    padding: var(--vaadin-padding-xs);
+    height: auto;
+    align-self: center;
+    box-shadow: var(--aura-shadow-s);
+    transition: opacity 120ms;
+  }
+
+  [part~='back-button'] {
+    inset-inline-start: 5px;
+  }
+
+  [part~='forward-button'] {
+    inset-inline-end: 5px;
+  }
 }
 
 vaadin-tab {

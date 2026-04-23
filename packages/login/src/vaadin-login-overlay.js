@@ -13,6 +13,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { LoginFormMixin } from './vaadin-login-form-mixin.js';
 import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
@@ -81,7 +82,9 @@ import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
  * @mixes LoginFormMixin
  * @mixes LoginOverlayMixin
  */
-class LoginOverlay extends LoginFormMixin(LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
+class LoginOverlay extends LoginFormMixin(
+  LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+) {
   static get is() {
     return 'vaadin-login-overlay';
   }

@@ -1,10 +1,18 @@
-vaadin-popover::part(overlay) {
-  background: var(--vaadin-popover-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
-  box-shadow:
-    var(--aura-overlay-outline-shadow),
-    var(--vaadin-popover-shadow, var(--vaadin-overlay-shadow, var(--aura-overlay-shadow)));
+:where(:root),
+:where(:host) {
+  --_lumo-vaadin-popover-overlay-inject: 1;
+  --_lumo-vaadin-popover-overlay-inject-modules: lumo_components_popover-overlay;
 }
 
-vaadin-popover::part(arrow) {
-  background: var(--vaadin-popover-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
+@media lumo_components_popover-overlay {
+  [part~='overlay'] {
+    background: var(--vaadin-popover-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
+    box-shadow:
+      var(--aura-overlay-outline-shadow),
+      var(--vaadin-popover-shadow, var(--vaadin-overlay-shadow, var(--aura-overlay-shadow)));
+  }
+
+  [part~='arrow'] {
+    background: var(--vaadin-popover-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
+  }
 }

@@ -18,6 +18,11 @@
   --vaadin-upload-file-error-line-height: var(--aura-line-height-s);
   --vaadin-upload-drop-label-color: var(--vaadin-text-color-secondary);
   --vaadin-upload-drop-label-font-weight: var(--aura-font-weight-medium);
+
+  --_lumo-vaadin-upload-inject: 1;
+  --_lumo-vaadin-upload-inject-modules: lumo_components_upload;
+  --_lumo-vaadin-upload-file-inject: 1;
+  --_lumo-vaadin-upload-file-inject-modules: lumo_components_upload-file;
 }
 
 vaadin-upload {
@@ -25,20 +30,8 @@ vaadin-upload {
   --_divider-offset-end: var(--vaadin-padding-s);
 }
 
-vaadin-upload::part(primary-buttons) {
-  flex-wrap: wrap;
-  gap: var(--vaadin-gap-s) var(--vaadin-gap-m);
-}
-
 vaadin-upload:not([nodrop]) vaadin-button[slot='add-button'] {
   flex: 1;
-}
-
-vaadin-upload::part(drop-label) {
-  flex: 100;
-  padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);
-  min-width: fit-content;
-  margin-inline-start: calc(var(--vaadin-upload-padding) * -1);
 }
 
 vaadin-upload[dragover-valid] {
@@ -65,35 +58,9 @@ vaadin-upload-file {
   border-radius: var(--vaadin-upload-file-border-radius, var(--vaadin-radius-m));
   margin-inline: calc(var(--_divider-offset-start, 0) * -1) calc(var(--_divider-offset-end, 0) * -1);
 
-  &:not([complete], [error])::part(done-icon)::before {
-    background: var(--vaadin-border-color-secondary);
-  }
-
-  &::part(start-button),
-  &::part(remove-button),
-  &::part(retry-button) {
-    color: var(--vaadin-upload-file-button-text-color, var(--vaadin-text-color-secondary));
-    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
-  }
-
   vaadin-progress-bar {
     --vaadin-progress-bar-height: var(--vaadin-gap-xs);
     margin-top: var(--vaadin-gap-xs);
-  }
-
-  &:not([error])::part(status) {
-    max-height: 2lh;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  &[complete]::part(status) {
-    height: 1lh; /* ensure some height to transition from */
-    visibility: hidden;
-    transition: 200ms max-height;
-    max-height: 0;
   }
 
   &[complete] vaadin-progress-bar {
@@ -119,22 +86,6 @@ vaadin-upload-file[theme~='thumbnails'] {
     border-radius: inherit;
     border: 1px solid light-dark(transparent, var(--vaadin-border-color-secondary));
     pointer-events: none;
-  }
-
-  &::part(done-icon),
-  &::part(warning-icon) {
-    --vaadin-icon-visual-size: 1lh;
-    background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
-  }
-
-  &::part(commands) {
-    gap: 0;
-  }
-
-  &::part(start-button),
-  &::part(retry-button),
-  &::part(remove-button) {
-    --vaadin-icon-visual-size: 0.8lh;
   }
 
   &[error] {
@@ -180,10 +131,68 @@ vaadin-upload[theme~='no-border'] {
   }
 }
 
-@media (any-hover: hover) {
-  vaadin-upload-file::part(start-button):hover,
-  vaadin-upload-file::part(remove-button):hover,
-  vaadin-upload-file::part(retry-button):hover {
-    --vaadin-upload-file-button-text-color: var(--vaadin-text-color);
+@media lumo_components_upload {
+  [part~='primary-buttons'] {
+    flex-wrap: wrap;
+    gap: var(--vaadin-gap-s) var(--vaadin-gap-m);
+  }
+
+  [part~='drop-label'] {
+    flex: 100;
+    padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);
+    min-width: fit-content;
+    margin-inline-start: calc(var(--vaadin-upload-padding) * -1);
+  }
+}
+
+@media lumo_components_upload-file {
+  :host(:not([complete], [error])) [part~='done-icon']::before {
+    background: var(--vaadin-border-color-secondary);
+  }
+
+  [part~='start-button'],
+  [part~='remove-button'],
+  [part~='retry-button'] {
+    color: var(--vaadin-upload-file-button-text-color, var(--vaadin-text-color-secondary));
+    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
+  }
+
+  :host(:not([error])) [part~='status'] {
+    max-height: 2lh;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  :host([complete]) [part~='status'] {
+    height: 1lh; /* ensure some height to transition from */
+    visibility: hidden;
+    transition: 200ms max-height;
+    max-height: 0;
+  }
+
+  :host([theme~='thumbnails']) [part~='done-icon'],
+  :host([theme~='thumbnails']) [part~='warning-icon'] {
+    --vaadin-icon-visual-size: 1lh;
+    background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+  }
+
+  :host([theme~='thumbnails']) [part~='commands'] {
+    gap: 0;
+  }
+
+  :host([theme~='thumbnails']) [part~='start-button'],
+  :host([theme~='thumbnails']) [part~='retry-button'],
+  :host([theme~='thumbnails']) [part~='remove-button'] {
+    --vaadin-icon-visual-size: 0.8lh;
+  }
+
+  @media (any-hover: hover) {
+    [part~='start-button']:hover,
+    [part~='remove-button']:hover,
+    [part~='retry-button']:hover {
+      --vaadin-upload-file-button-text-color: var(--vaadin-text-color);
+    }
   }
 }

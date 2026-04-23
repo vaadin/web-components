@@ -1,6 +1,15 @@
 :where(:root),
 :where(:host) {
   --vaadin-button-shadow: var(--aura-shadow-xs);
+
+  --_lumo-vaadin-button-inject: 1;
+  --_lumo-vaadin-button-inject-modules: lumo_components_button;
+  --_lumo-vaadin-upload-button-inject: 1;
+  --_lumo-vaadin-upload-button-inject-modules: lumo_components_button;
+  --_lumo-vaadin-menu-bar-button-inject: 1;
+  --_lumo-vaadin-menu-bar-button-inject-modules: lumo_components_button;
+  --_lumo-vaadin-drawer-toggle-inject: 1;
+  --_lumo-vaadin-drawer-toggle-inject-modules: lumo_components_drawer-toggle;
 }
 
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit) {
@@ -8,10 +17,6 @@
   position: relative;
   --_background: var(--aura-accent-surface) padding-box;
   color: var(--vaadin-button-text-color, var(--aura-accent-text-color));
-}
-
-vaadin-drawer-toggle[theme~='tertiary']::part(icon) {
-  opacity: 0.6;
 }
 
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):where(
@@ -67,10 +72,6 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
   --vaadin-button-background: var(--aura-accent-color);
   --vaadin-button-border-color: var(--vaadin-border-color-secondary);
   --vaadin-button-shadow: var(--aura-shadow-s);
-}
-
-:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button)[disabled][theme~='primary']::part(label) {
-  color: color-mix(in srgb, currentColor 50%, transparent);
 }
 
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit):not(
@@ -133,4 +134,16 @@ vaadin-menu-bar-button[aria-haspopup='true']:not([slot='overflow']) {
 /* prettier-ignore */
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button, vaadin-drawer-toggle, vaadin-crud-edit)[theme~='primary'][active]:not([disabled])::before {
   opacity: 0.16;
+}
+
+@media lumo_components_button {
+  :host([disabled][theme~='primary']) [part~='label'] {
+    color: color-mix(in srgb, currentColor 50%, transparent);
+  }
+}
+
+@media lumo_components_drawer-toggle {
+  :host([theme~='tertiary']) [part~='icon'] {
+    opacity: 0.6;
+  }
 }

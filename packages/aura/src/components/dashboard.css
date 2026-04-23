@@ -4,6 +4,11 @@
   --vaadin-dashboard-widget-header-padding: var(--vaadin-padding-s) var(--vaadin-padding-m);
   --vaadin-dashboard-widget-header-gap: var(--vaadin-gap-xs);
   --vaadin-dashboard-widget-border-radius: var(--vaadin-radius-m);
+
+  --_lumo-vaadin-dashboard-widget-inject: 1;
+  --_lumo-vaadin-dashboard-widget-inject-modules: lumo_components_dashboard-widget;
+  --_lumo-vaadin-dashboard-section-inject: 1;
+  --_lumo-vaadin-dashboard-section-inject-modules: lumo_components_dashboard-section;
 }
 
 vaadin-dashboard-widget {
@@ -15,18 +20,6 @@ vaadin-dashboard-widget {
   &::before {
     inset: calc(var(--vaadin-dashboard-widget-border-width, 1px) * -1);
     border-radius: var(--vaadin-dashboard-widget-border-radius);
-  }
-
-  &::part(content) {
-    transition: 200ms;
-    transition-property: filter, opacity;
-  }
-
-  &:is([resize-mode], [move-mode])::part(content) {
-    opacity: 0.75;
-    filter: blur(10px);
-    clip-path: inset(0);
-    transition-duration: 50ms;
   }
 
   &[theme~='outlined'] {
@@ -59,12 +52,30 @@ vaadin-dashboard-section {
 }
 
 :is(vaadin-dashboard-widget, vaadin-dashboard-section) {
-  &::part(move-forward-button),
-  &::part(move-backward-button),
-  &::part(resize-shrink-height-button),
-  &::part(resize-grow-height-button),
-  &::part(resize-shrink-width-button),
-  &::part(resize-grow-width-button) {
+  &[editable] {
+    --vaadin-dashboard-widget-header-padding: var(--vaadin-padding-xs);
+  }
+}
+
+@media lumo_components_dashboard-widget {
+  [part~='content'] {
+    transition: 200ms;
+    transition-property: filter, opacity;
+  }
+
+  :host(:is([resize-mode], [move-mode])) [part~='content'] {
+    opacity: 0.75;
+    filter: blur(10px);
+    clip-path: inset(0);
+    transition-duration: 50ms;
+  }
+
+  [part~='move-forward-button'],
+  [part~='move-backward-button'],
+  [part~='resize-shrink-height-button'],
+  [part~='resize-grow-height-button'],
+  [part~='resize-shrink-width-button'],
+  [part~='resize-grow-width-button'] {
     background: var(--aura-surface-color) padding-box;
     color: var(--vaadin-text-color-secondary);
     border: 1px solid var(--vaadin-border-color);
@@ -72,47 +83,98 @@ vaadin-dashboard-section {
     outline-offset: -1px;
   }
 
-  &::part(resize-shrink-height-button),
-  &::part(resize-grow-height-button) {
+  [part~='resize-shrink-height-button'],
+  [part~='resize-grow-height-button'] {
     margin-top: 0;
     border-bottom: 0;
   }
 
-  &::part(move-forward-button),
-  &::part(resize-shrink-width-button),
-  &::part(resize-grow-width-button) {
+  [part~='move-forward-button'],
+  [part~='resize-shrink-width-button'],
+  [part~='resize-grow-width-button'] {
     margin-inline-start: 0;
     border-inline-end: 0;
   }
 
-  &::part(move-backward-button) {
+  [part~='move-backward-button'] {
     margin-inline-end: 0;
     border-inline-start: 0;
   }
 
-  &::part(move-apply-button),
-  &::part(resize-apply-button) {
+  [part~='move-apply-button'],
+  [part~='resize-apply-button'] {
     background: var(--aura-accent-color);
     color: var(--aura-accent-contrast-color);
     box-shadow: 0 0 0 3px var(--aura-surface-color);
     outline-offset: 2px;
   }
 
-  &::part(move-button),
-  &::part(remove-button),
-  &::part(resize-button) {
+  [part~='move-button'],
+  [part~='remove-button'],
+  [part~='resize-button'] {
     color: var(--vaadin-text-color-disabled);
     transition: 120ms color;
     outline-offset: -2px;
   }
 
-  &[editable] {
-    --vaadin-dashboard-widget-header-padding: var(--vaadin-padding-xs);
+  @media (any-hover: hover) {
+    [part~='button']:hover {
+      color: var(--vaadin-text-color);
+    }
   }
 }
 
-@media (any-hover: hover) {
-  :is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(button):hover {
-    color: var(--vaadin-text-color);
+@media lumo_components_dashboard-section {
+  [part~='move-forward-button'],
+  [part~='move-backward-button'],
+  [part~='resize-shrink-height-button'],
+  [part~='resize-grow-height-button'],
+  [part~='resize-shrink-width-button'],
+  [part~='resize-grow-width-button'] {
+    background: var(--aura-surface-color) padding-box;
+    color: var(--vaadin-text-color-secondary);
+    border: 1px solid var(--vaadin-border-color);
+    transition: 120ms color;
+    outline-offset: -1px;
+  }
+
+  [part~='resize-shrink-height-button'],
+  [part~='resize-grow-height-button'] {
+    margin-top: 0;
+    border-bottom: 0;
+  }
+
+  [part~='move-forward-button'],
+  [part~='resize-shrink-width-button'],
+  [part~='resize-grow-width-button'] {
+    margin-inline-start: 0;
+    border-inline-end: 0;
+  }
+
+  [part~='move-backward-button'] {
+    margin-inline-end: 0;
+    border-inline-start: 0;
+  }
+
+  [part~='move-apply-button'],
+  [part~='resize-apply-button'] {
+    background: var(--aura-accent-color);
+    color: var(--aura-accent-contrast-color);
+    box-shadow: 0 0 0 3px var(--aura-surface-color);
+    outline-offset: 2px;
+  }
+
+  [part~='move-button'],
+  [part~='remove-button'],
+  [part~='resize-button'] {
+    color: var(--vaadin-text-color-disabled);
+    transition: 120ms color;
+    outline-offset: -2px;
+  }
+
+  @media (any-hover: hover) {
+    [part~='button']:hover {
+      color: var(--vaadin-text-color);
+    }
   }
 }

@@ -2,28 +2,34 @@
 :where(:host) {
   --vaadin-progress-bar-border-width: 0px;
   --vaadin-progress-bar-height: var(--vaadin-gap-s);
+
+  --_lumo-vaadin-progress-bar-inject: 1;
+  --_lumo-vaadin-progress-bar-inject-modules: lumo_components_progress-bar;
 }
 
-vaadin-progress-bar::part(value) {
-  background: var(
-      --vaadin-progress-bar-value-background,
-      linear-gradient(
-        90deg in oklab,
-        var(--aura-accent-color),
-        light-dark(
-          oklch(
-            from var(--aura-accent-color-light) clamp(0.5, l * 1.2, 1) c calc(h - 30 * var(--_vaadin-safari-17-deg, 1))
-          ),
-          oklch(
-            from var(--aura-accent-color-dark) clamp(0.5, l * 1.2, 1) c calc(h - 30 * var(--_vaadin-safari-17-deg, 1))
+@media lumo_components_progress-bar {
+  [part~='value'] {
+    background: var(
+        --vaadin-progress-bar-value-background,
+        linear-gradient(
+          90deg in oklab,
+          var(--aura-accent-color),
+          light-dark(
+            oklch(
+              from var(--aura-accent-color-light) clamp(0.5, l * 1.2, 1) c
+                calc(h - 30 * var(--_vaadin-safari-17-deg, 1))
+            ),
+            oklch(
+              from var(--aura-accent-color-dark) clamp(0.5, l * 1.2, 1) c calc(h - 30 * var(--_vaadin-safari-17-deg, 1))
+            )
           )
         )
       )
-    )
-    border-box;
-  box-shadow: inset 0 0 0 1px var(--vaadin-border-color-secondary);
-}
+      border-box;
+    box-shadow: inset 0 0 0 1px var(--vaadin-border-color-secondary);
+  }
 
-vaadin-progress-bar[dir='rtl']::part(value) {
-  scale: -1;
+  :host([dir='rtl']) [part~='value'] {
+    scale: -1;
+  }
 }

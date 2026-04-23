@@ -5,50 +5,16 @@
   --vaadin-side-nav-item-font-weight: var(--aura-font-weight-medium);
   --vaadin-side-nav-item-border-width: 1px;
   --vaadin-side-nav-items-gap: var(--vaadin-gap-xs);
+
+  --_lumo-vaadin-side-nav-inject: 1;
+  --_lumo-vaadin-side-nav-inject-modules: lumo_components_side-nav;
+  --_lumo-vaadin-side-nav-item-inject: 1;
+  --_lumo-vaadin-side-nav-item-inject-modules: lumo_components_side-nav-item, lumo_color, lumo_surface;
 }
 
 vaadin-side-nav + vaadin-side-nav {
   margin-top: var(--vaadin-gap-l);
 }
-
-vaadin-side-nav::part(label) {
-  gap: var(--vaadin-gap-xs);
-  transition: color 80ms;
-}
-
-vaadin-side-nav-item::part(content) {
-  --aura-surface-level: 4;
-  --aura-surface-opacity: 0.5;
-  transition: color 80ms;
-}
-
-vaadin-side-nav-item:not([disabled], [current])::part(content):active {
-  --vaadin-side-nav-item-background: var(--vaadin-background-container);
-}
-
-@media (any-hover: hover) {
-  vaadin-side-nav::part(label):hover {
-    --vaadin-side-nav-label-color: var(--vaadin-text-color);
-  }
-
-  vaadin-side-nav-item:not([disabled], [current])::part(content):hover {
-    --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
-  }
-}
-
-vaadin-side-nav-item[current]::part(content) {
-  transition: none;
-  --vaadin-side-nav-item-background: var(--aura-surface-color) padding-box;
-  --vaadin-side-nav-item-text-color: var(--aura-accent-text-color);
-  --vaadin-side-nav-item-border-color: var(--vaadin-border-color-secondary);
-}
-
-vaadin-side-nav::part(toggle-button),
-vaadin-side-nav-item::part(toggle-button) {
-  --vaadin-icon-visual-size: 0.9lh;
-}
-
-/* Filled variant */
 
 vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current]::part(content) {
   --vaadin-side-nav-item-background: var(--aura-accent-color) border-box;
@@ -62,4 +28,50 @@ vaadin-side-nav[theme~='filled'] > vaadin-side-nav-item[current]::part(content) 
 
 vaadin-side-nav-item:not([current]) > vaadin-icon[slot='prefix'] {
   opacity: 0.8;
+}
+
+@media lumo_components_side-nav {
+  [part~='label'] {
+    gap: var(--vaadin-gap-xs);
+    transition: color 80ms;
+  }
+
+  [part~='toggle-button'] {
+    --vaadin-icon-visual-size: 0.9lh;
+  }
+
+  @media (any-hover: hover) {
+    [part~='label']:hover {
+      --vaadin-side-nav-label-color: var(--vaadin-text-color);
+    }
+  }
+}
+
+@media lumo_components_side-nav-item {
+  [part~='content'] {
+    --aura-surface-level: 4;
+    --aura-surface-opacity: 0.5;
+    transition: color 80ms;
+  }
+
+  :host(:not([disabled], [current])) [part~='content']:active {
+    --vaadin-side-nav-item-background: var(--vaadin-background-container);
+  }
+
+  @media (any-hover: hover) {
+    :host(:not([disabled], [current])) [part~='content']:hover {
+      --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
+    }
+  }
+
+  :host([current]) [part~='content'] {
+    transition: none;
+    --vaadin-side-nav-item-background: var(--aura-surface-color) padding-box;
+    --vaadin-side-nav-item-text-color: var(--aura-accent-text-color);
+    --vaadin-side-nav-item-border-color: var(--vaadin-border-color-secondary);
+  }
+
+  [part~='toggle-button'] {
+    --vaadin-icon-visual-size: 0.9lh;
+  }
 }

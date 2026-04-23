@@ -10,35 +10,24 @@
 .aura-surface-solid,
 vaadin-accordion-panel[theme~='filled'],
 vaadin-app-layout,
-vaadin-app-layout::part(navbar),
-vaadin-app-layout::part(drawer),
 vaadin-button,
 vaadin-upload-button,
 vaadin-card,
-vaadin-checkbox::part(checkbox),
 vaadin-details[theme~='filled'],
 vaadin-dashboard-widget,
 vaadin-grid,
 vaadin-grid-pro,
-vaadin-master-detail-layout::part(detail),
 vaadin-menu-bar-button,
-vaadin-message::part(attachment),
 vaadin-message-input,
-vaadin-radio-button::part(radio),
 vaadin-range-slider,
 vaadin-rich-text-editor,
-vaadin-side-nav-item::part(content),
 vaadin-slider,
 vaadin-tab,
 vaadin-tabs,
 vaadin-upload,
 vaadin-upload-file,
 ::part(input-field),
-::part(overlay),
-vaadin-confirm-dialog::part(overlay),
-vaadin-dialog::part(overlay),
-vaadin-login-overlay::part(overlay),
-vaadin-crud-dialog::part(overlay) {
+::part(overlay) {
   --aura-surface-opacity: 0.5;
 
   --aura-surface-color-solid: light-dark(
@@ -62,6 +51,41 @@ vaadin-crud-dialog::part(overlay) {
     transparent
   );
   --vaadin-background-color: var(--aura-surface-color-solid);
+}
+
+@media lumo_surface {
+  [part~='navbar'],
+  [part~='drawer'],
+  [part~='checkbox'],
+  [part~='detail'],
+  [part~='attachment'],
+  [part~='radio'],
+  [part~='content'],
+  [part~='overlay'] {
+    --aura-surface-opacity: 0.5;
+
+    --aura-surface-color-solid: light-dark(
+      oklch(
+        from var(--aura-background-color-light) min(1, l + ((1 - l) / 2 + 0.04) * var(--aura-surface-level))
+          clamp(0, c - (c / 3 + (l / 1000)) * var(--aura-surface-level), c) h
+      ),
+      oklch(
+        from var(--aura-background-color-dark)
+          calc(
+            max(0.03, l) + 0.03 * var(--aura-surface-level) + max(0, 0.2 - max(0.03, l)) *
+              (1.1 - 0.06 * var(--aura-surface-level))
+          )
+          clamp(0, c * (1 + l), 0.2) h
+      )
+    );
+
+    --aura-surface-color: color-mix(
+      in oklab,
+      var(--aura-surface-color-solid) calc(100% * var(--aura-surface-opacity)),
+      transparent
+    );
+    --vaadin-background-color: var(--aura-surface-color-solid);
+  }
 }
 
 .aura-surface {

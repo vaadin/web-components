@@ -1,3 +1,9 @@
+:where(:root),
+:where(:host) {
+  --_lumo-vaadin-menu-bar-button-inject: 1;
+  --_lumo-vaadin-menu-bar-button-inject-modules: lumo_components_button, lumo_components_menu-bar-button;
+}
+
 vaadin-menu-bar:not([has-single-button]) vaadin-menu-bar-button:not([first-visible], [focus-ring]) {
   clip-path: inset(-10px -10px -10px max(-10px, var(--vaadin-menu-bar-gap, 0px) * -1 + 0.8px));
 }
@@ -14,10 +20,6 @@ vaadin-menu-bar-button[slot='overflow'] {
   font-weight: 600;
 }
 
-vaadin-menu-bar-button[aria-haspopup='true']::part(suffix)::after {
-  --vaadin-icon-visual-size: 90%;
-}
-
 vaadin-menu-bar-button > vaadin-menu-bar-item {
   padding-inline: 0;
 }
@@ -25,4 +27,10 @@ vaadin-menu-bar-button > vaadin-menu-bar-item {
 vaadin-menu-bar-button > vaadin-menu-bar-item::part(content) {
   padding-inline: 0;
   gap: var(--vaadin-button-gap, var(--vaadin-gap-s));
+}
+
+@media lumo_components_menu-bar-button {
+  :host([aria-haspopup='true']) [part~='suffix']::after {
+    --vaadin-icon-visual-size: 90%;
+  }
 }

@@ -6,6 +6,11 @@
   --vaadin-slider-thumb-width: round(1lh - 4px, 2px);
   --vaadin-slider-thumb-height: round(1lh - 4px, 2px);
   --vaadin-slider-marks-font-size: var(--aura-font-size-xs);
+
+  --_lumo-vaadin-slider-inject: 1;
+  --_lumo-vaadin-slider-inject-modules: lumo_components_slider;
+  --_lumo-vaadin-range-slider-inject: 1;
+  --_lumo-vaadin-range-slider-inject-modules: lumo_components_slider, lumo_components_range-slider;
 }
 
 :is(vaadin-slider, vaadin-range-slider) {
@@ -28,30 +33,6 @@
     --_bg-dir: -90deg;
   }
 
-  &::part(track-fill) {
-    margin-inline-end: -1px;
-  }
-
-  &::part(thumb) {
-    position: relative;
-    background: var(
-        --vaadin-slider-thumb-background,
-        linear-gradient(
-            light-dark(transparent, var(--vaadin-border-color-secondary)),
-            transparent 33%,
-            transparent 66%,
-            light-dark(var(--vaadin-border-color-secondary), transparent)
-          )
-          var(--aura-surface-color-solid)
-      )
-      border-box;
-    border-color: var(--vaadin-slider-thumb-border-color, oklch(1 0 0 / 0.1));
-    outline-offset: -1px;
-    box-shadow:
-      0 0 0 1px light-dark(var(--vaadin-border-color), oklch(0 0 0 / 0.1)),
-      var(--_thumb-shadow, var(--aura-shadow-s));
-  }
-
   &[readonly] {
     --aura-surface-level: 4;
     --vaadin-slider-fill-background: var(--vaadin-text-color-secondary);
@@ -71,13 +52,42 @@
       )
       var(--vaadin-background-color);
     --vaadin-slider-thumb-border-color: var(--vaadin-border-color-secondary);
+  }
+}
 
-    &::part(thumb) {
-      box-shadow: none;
-    }
+@media lumo_components_slider {
+  [part~='track-fill'] {
+    margin-inline-end: -1px;
   }
 
-  &::part(thumb)::before {
+  [part~='thumb'] {
+    position: relative;
+    background: var(
+        --vaadin-slider-thumb-background,
+        linear-gradient(
+            light-dark(transparent, var(--vaadin-border-color-secondary)),
+            transparent 33%,
+            transparent 66%,
+            light-dark(var(--vaadin-border-color-secondary), transparent)
+          )
+          var(--aura-surface-color-solid)
+      )
+      border-box;
+    border-color: var(--vaadin-slider-thumb-border-color, oklch(1 0 0 / 0.1));
+    box-shadow:
+      0 0 0 1px light-dark(var(--vaadin-border-color), oklch(0 0 0 / 0.1)),
+      var(--_thumb-shadow, var(--aura-shadow-s));
+  }
+
+  :host([focus-ring]) [part~='thumb'] {
+    outline-offset: -1px;
+  }
+
+  :host([disabled]) [part~='thumb'] {
+    box-shadow: none;
+  }
+
+  [part~='thumb']::before {
     content: '';
     position: absolute;
     inset: -1px;
@@ -88,14 +98,24 @@
       opacity 100ms,
       background-color 100ms;
   }
+
+  :host([active]:not([readonly], [disabled])) [part~='thumb']::before {
+    opacity: 0.1;
+  }
+
+  :host([start-active]:not([readonly], [disabled])) [part~='thumb-start']::before,
+  :host([end-active]:not([readonly], [disabled])) [part~='thumb-end']::before {
+    opacity: 0.1;
+  }
 }
 
-vaadin-range-slider::part(track-fill) {
-  margin-inline-start: calc(var(--vaadin-slider-thumb-width) - 1px);
-}
+@media lumo_components_range-slider {
+  [part~='track-fill'] {
+    margin-inline-start: calc(var(--vaadin-slider-thumb-width) - 1px);
+  }
 
-vaadin-slider[active]:not([readonly], [disabled])::part(thumb)::before,
-vaadin-range-slider[start-active]:not([readonly], [disabled])::part(thumb-start)::before,
-vaadin-range-slider[end-active]:not([readonly], [disabled])::part(thumb-end)::before {
-  opacity: 0.1;
+  :host([focus-ring][start-focused]) [part~='thumb-start'],
+  :host([focus-ring][end-focused]) [part~='thumb-end'] {
+    outline-offset: -1px;
+  }
 }

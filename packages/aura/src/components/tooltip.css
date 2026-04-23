@@ -5,9 +5,16 @@
   --vaadin-tooltip-font-weight: var(--aura-font-weight-medium);
   --vaadin-tooltip-line-height: var(--aura-line-height-s);
   --vaadin-tooltip-border-radius: var(--vaadin-radius-s);
+
+  --_lumo-vaadin-tooltip-overlay-inject: 1;
+  --_lumo-vaadin-tooltip-overlay-inject-modules: lumo_components_tooltip-overlay;
+  --_lumo-vaadin-slider-bubble-overlay-inject: 1;
+  --_lumo-vaadin-slider-bubble-overlay-inject-modules: lumo_components_tooltip-overlay;
 }
 
-:is(vaadin-tooltip, vaadin-slider-bubble)::part(overlay) {
-  background: var(--vaadin-tooltip-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
-  box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-tooltip-shadow, var(--aura-shadow-s));
+@media lumo_components_tooltip-overlay {
+  [part~='overlay'] {
+    background: var(--vaadin-tooltip-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
+    box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-tooltip-shadow, var(--aura-shadow-s));
+  }
 }

@@ -9,6 +9,11 @@
   --vaadin-login-overlay-title-font-weight: var(--aura-font-weight-semibold);
   --vaadin-login-overlay-title-color: var(--vaadin-text-color);
   --vaadin-login-overlay-description-color: var(--vaadin-text-color-secondary);
+
+  --_lumo-vaadin-login-overlay-inject: 1;
+  --_lumo-vaadin-login-overlay-inject-modules: lumo_components_login-overlay;
+  --_lumo-vaadin-login-overlay-wrapper-inject: 1;
+  --_lumo-vaadin-login-overlay-wrapper-inject-modules: lumo_components_login-overlay-wrapper, lumo_surface;
 }
 
 vaadin-login-form::part(error-message) {
@@ -24,7 +29,13 @@ vaadin-login-form::part(error-message-title) {
 vaadin-login-overlay {
   --vaadin-overlay-backdrop-background: var(--aura-app-background);
 
-  &::part(overlay) {
+  [slot='title'] {
+    letter-spacing: -0.03em;
+  }
+}
+
+@media lumo_components_login-overlay-wrapper {
+  [part~='overlay'] {
     --aura-surface-level: 2;
     background: var(--vaadin-login-overlay-background, var(--vaadin-overlay-background, var(--aura-surface-color)));
     box-shadow:
@@ -32,16 +43,14 @@ vaadin-login-overlay {
       var(--vaadin-login-overlay-shadow, var(--vaadin-overlay-shadow, var(--aura-overlay-shadow)));
   }
 
-  &::part(brand) {
+  [part~='brand'] {
     text-align: center;
     padding-bottom: 0;
   }
+}
 
-  &::part(form-title) {
+@media lumo_components_login-overlay {
+  [part~='form-title'] {
     display: none;
-  }
-
-  [slot='title'] {
-    letter-spacing: -0.03em;
   }
 }

@@ -3,16 +3,15 @@
   --vaadin-grid-row-selected-background-color: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
   --vaadin-grid-background: linear-gradient(var(--aura-surface-color), var(--aura-surface-color))
     var(--aura-background-color) padding-box;
-}
 
-:is(vaadin-grid, vaadin-crud-grid, vaadin-grid-pro)::part(empty-state) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-vaadin-grid-sorter::part(indicators) {
-  transition: color 120ms;
+  --_lumo-vaadin-grid-inject: 1;
+  --_lumo-vaadin-grid-inject-modules: lumo_components_grid;
+  --_lumo-vaadin-grid-pro-inject: 1;
+  --_lumo-vaadin-grid-pro-inject-modules: lumo_components_grid;
+  --_lumo-vaadin-crud-grid-inject: 1;
+  --_lumo-vaadin-crud-grid-inject-modules: lumo_components_grid;
+  --_lumo-vaadin-grid-sorter-inject: 1;
+  --_lumo-vaadin-grid-sorter-inject-modules: lumo_components_grid-sorter;
 }
 
 :is(vaadin-grid, vaadin-crud, vaadin-grid-pro)[theme~='column-borders'] {
@@ -21,4 +20,18 @@ vaadin-grid-sorter::part(indicators) {
 
 :is(vaadin-grid, vaadin-crud, vaadin-grid-pro)[theme~='no-row-borders'] {
   --vaadin-grid-row-border-width: 0px;
+}
+
+@media lumo_components_grid {
+  [part~='empty-state'] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media lumo_components_grid-sorter {
+  [part~='indicators'] {
+    transition: color 120ms;
+  }
 }

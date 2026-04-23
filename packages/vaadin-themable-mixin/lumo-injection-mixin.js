@@ -60,7 +60,7 @@ export const LumoInjectionMixin = (superClass) =>
     static get lumoInjector() {
       return {
         is: this.is,
-        includeBaseStyles: false,
+        includeBaseStyles: true,
       };
     }
 

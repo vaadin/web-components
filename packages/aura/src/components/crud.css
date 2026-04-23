@@ -1,6 +1,11 @@
 :where(:root),
 :where(:host) {
   --vaadin-crud-background: var(--aura-surface-color) padding-box;
+
+  --_lumo-vaadin-crud-inject: 1;
+  --_lumo-vaadin-crud-inject-modules: lumo_components_crud;
+  --_lumo-vaadin-crud-dialog-overlay-inject: 1;
+  --_lumo-vaadin-crud-dialog-overlay-inject-modules: lumo_surface;
 }
 
 vaadin-crud-edit {
@@ -8,10 +13,12 @@ vaadin-crud-edit {
   --vaadin-icon-visual-size: 0.75lh;
 }
 
-vaadin-crud::part(editor) {
-  background: var(--aura-surface-color);
-}
-
 vaadin-crud vaadin-confirm-dialog {
   color-scheme: inherit;
+}
+
+@media lumo_components_crud {
+  [part~='editor'] {
+    background: var(--aura-surface-color);
+  }
 }

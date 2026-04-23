@@ -56,7 +56,6 @@
 
 :where(:root),
 :where(:host),
-vaadin-app-layout::part(content),
 vaadin-avatar,
 vaadin-badge,
 vaadin-button,
@@ -68,13 +67,8 @@ vaadin-drawer-toggle,
 vaadin-dialog,
 vaadin-menu-bar-button,
 vaadin-menu-bar-item,
-vaadin-message::part(attachment),
 vaadin-notification-container,
 vaadin-notification-card,
-vaadin-notification-card::part(overlay),
-vaadin-checkbox::part(checkbox),
-vaadin-radio-button::part(radio),
-vaadin-side-nav-item::part(content),
 vaadin-tab,
 vaadin-upload-file,
 :where(
@@ -195,6 +189,119 @@ vaadin-upload-file,
     transparent
   );
   accent-color: var(--aura-accent-color);
+}
+
+@media lumo_color {
+  [part~='content'],
+  [part~='attachment'],
+  [part~='overlay'],
+  [part~='checkbox'],
+  [part~='radio'] {
+    --aura-neutral-light: oklch(
+      from var(--aura-background-color-light) calc(0.2 - 0.05 * var(--aura-contrast-level)) calc(c * l * 0.8) h
+    );
+    --aura-neutral-dark: oklch(
+      from var(--aura-background-color-dark) calc(0.9 + 0.1 * var(--aura-contrast-level)) calc(c * l) h
+    );
+    --aura-neutral: light-dark(var(--aura-neutral-light), var(--aura-neutral-dark));
+    --vaadin-text-color: light-dark(var(--aura-neutral-light), var(--aura-neutral-dark));
+    --vaadin-text-color-secondary: color-mix(
+      in oklch,
+      var(--vaadin-text-color) min(95%, 60% + 5% * var(--aura-contrast-level)),
+      transparent
+    );
+    --vaadin-text-color-disabled: color-mix(
+      in oklch,
+      var(--vaadin-text-color) min(95%, 30% + 3% * var(--aura-contrast-level)),
+      transparent
+    );
+    --_border-color-base: light-dark(
+      oklch(from var(--aura-background-color-light) 0.1 c h),
+      oklch(from var(--aura-background-color-dark) calc(0.8 + max(0, 0.2 - l) + c / 2) calc(c - l / 4) h)
+    );
+    --vaadin-border-color: color-mix(
+      in srgb,
+      var(--_border-color-base) calc(14% + 6% * var(--aura-contrast-level)),
+      transparent
+    );
+    --vaadin-border-color-secondary: light-dark(
+      color-mix(in srgb, var(--_border-color-base) max(6%, 5% + 3% * var(--aura-contrast-level)), transparent),
+      color-mix(in srgb, var(--_border-color-base) max(8%, 7% + 3% * var(--aura-contrast-level)), transparent)
+    );
+    --aura-accent-contrast-color-light: oklch(
+      from var(--aura-accent-color-light) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1)
+    );
+    --aura-accent-contrast-color-dark: oklch(
+      from var(--aura-accent-color-dark) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1)
+    );
+    --aura-accent-text-color-light: oklch(
+      from var(--aura-accent-color-light) min(0.55, 0.35 - 0.05 * var(--aura-contrast-level) + c) calc(c * 0.9) h
+    );
+    --aura-accent-text-color-dark: oklch(
+      from var(--aura-accent-color-dark) max(0.8, 0.9 + 0.1 * var(--aura-contrast-level) - c * 2) calc(c * 0.9) h
+    );
+    --aura-accent-color: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+    --aura-accent-contrast-color: light-dark(
+      var(--aura-accent-contrast-color-light),
+      var(--aura-accent-contrast-color-dark)
+    );
+    --aura-accent-text-color: light-dark(var(--aura-accent-text-color-light), var(--aura-accent-text-color-dark));
+    --_accent-surface-light: color-mix(
+      in srgb,
+      color-mix(
+          in srgb,
+          oklch(from var(--aura-accent-color-light) l c h / min(max(c / 0.4, 0), 1))
+            calc(23% - 4% * var(--aura-surface-level)),
+          var(--aura-surface-color-solid)
+        )
+        calc(100% * var(--aura-surface-opacity)),
+      transparent
+    );
+    --_accent-surface-dark: color-mix(
+      in srgb,
+      color-mix(
+          in srgb,
+          oklch(from var(--aura-accent-color-dark) l c h / min(max(c / 0.4, 0), 1))
+            calc(23% - 3% * var(--aura-surface-level)),
+          var(--aura-surface-color-solid)
+        )
+        calc(100% * var(--aura-surface-opacity)),
+      transparent
+    );
+    /* This color is very slightly semi-transparent, depending on the saturation/chroma of the accent color (only an issue in Safari 17). */
+    --aura-accent-surface: light-dark(var(--_accent-surface-light), var(--_accent-surface-dark));
+    @supports (color: hsl(0 0 0)) {
+      /* This removes the semi-transparency */
+      --aura-accent-surface: oklch(
+        from light-dark(var(--_accent-surface-light), var(--_accent-surface-dark)) l c h / var(--aura-surface-opacity)
+      );
+    }
+    --_accent-border: light-dark(
+      oklch(from var(--aura-accent-color-light) 0.8 calc(c * 1.1) h / min(1, c + (1 - l) / 10)),
+      oklch(from var(--aura-accent-color-dark) 0.8 calc(c * 1.1) h / min(1, c + (1 - l) / 10))
+    );
+    --aura-accent-border-color: color-mix(
+      in srgb,
+      var(--_accent-border) calc(30% - 1% * var(--aura-surface-level) + 1% * var(--aura-contrast-level)),
+      var(--vaadin-border-color) 60%
+    );
+    --_color-base: light-dark(
+      oklch(from var(--aura-background-color-light) 0.1 calc(c / 2 + c * (1 - c)) h),
+      oklch(from var(--aura-background-color-dark) 1 c h)
+    );
+    --aura-background-color: light-dark(var(--aura-background-color-light), var(--aura-background-color-dark));
+    --vaadin-background-container: color-mix(
+      in srgb,
+      var(--_color-base) calc(3% + min(3%, 1% * var(--aura-contrast-level))),
+      transparent
+    );
+    --vaadin-background-container-strong: color-mix(
+      in srgb,
+      var(--_color-base) calc(7% + min(8%, 1.5% * var(--aura-contrast-level))),
+      transparent
+    );
+    accent-color: var(--aura-accent-color);
+  }
 }
 
 :where(h1, h2, h3, h4, h5, h6) {

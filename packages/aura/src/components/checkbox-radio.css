@@ -3,75 +3,118 @@
   --vaadin-radio-button-marker-size: 6px;
   --vaadin-checkbox-size: round(1lh - 2px, 2px);
   --vaadin-radio-button-size: round(1lh - 2px, 2px);
+
+  --_lumo-vaadin-checkbox-inject: 1;
+  --_lumo-vaadin-checkbox-inject-modules: lumo_components_checkbox, lumo_color, lumo_surface;
+  --_lumo-vaadin-radio-button-inject: 1;
+  --_lumo-vaadin-radio-button-inject-modules: lumo_components_radio-button, lumo_color, lumo_surface;
 }
 
-vaadin-checkbox::part(checkbox),
-vaadin-radio-button::part(radio) {
-  transition: background-color 100ms;
-}
+@media lumo_components_checkbox {
+  [part~='checkbox'] {
+    transition: background-color 100ms;
+  }
 
-vaadin-checkbox:not([disabled], [readonly])::part(checkbox) {
-  background: var(--vaadin-checkbox-background, var(--aura-surface-color));
-}
+  :host(:not([disabled], [readonly])) [part~='checkbox'] {
+    background: var(--vaadin-checkbox-background, var(--aura-surface-color));
+    --aura-surface-level: 4;
+    box-shadow: var(--aura-shadow-xs);
+    --_shade: color-mix(in srgb, var(--vaadin-border-color-secondary) 50%, transparent);
+    background-image: linear-gradient(
+      light-dark(transparent, var(--_shade)),
+      transparent 33%,
+      transparent 66%,
+      light-dark(var(--_shade), transparent)
+    );
+  }
 
-vaadin-radio-button:not([disabled], [readonly])::part(radio) {
-  background: var(--vaadin-radio-button-background, var(--aura-surface-color));
-}
+  :host(:not([checked], [indeterminate])) [part~='checkbox'] {
+    background-clip: padding-box;
+  }
 
-vaadin-checkbox:not([readonly], [disabled])::part(checkbox),
-vaadin-radio-button:not([disabled])::part(radio) {
-  --aura-surface-level: 4;
-  box-shadow: var(--aura-shadow-xs);
-  --_shade: color-mix(in srgb, var(--vaadin-border-color-secondary) 50%, transparent);
-  background-image: linear-gradient(
-    light-dark(transparent, var(--_shade)),
-    transparent 33%,
-    transparent 66%,
-    light-dark(var(--_shade), transparent)
-  );
-}
+  :host(:is([checked], [indeterminate]):not([readonly], [disabled])) [part~='checkbox'] {
+    --vaadin-checkbox-background: var(--aura-accent-color);
+    --vaadin-checkbox-marker-color: var(--aura-accent-contrast-color);
+    --vaadin-checkbox-border-color: var(--vaadin-border-color-secondary);
+    box-shadow: var(--aura-shadow-s);
+  }
 
-vaadin-checkbox:not([checked], [indeterminate])::part(checkbox),
-vaadin-radio-button:not([checked])::part(radio) {
-  background-clip: padding-box;
-}
+  :host(:not([readonly], [disabled])) [part~='checkbox']::before {
+    content: '';
+    position: absolute;
+    inset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    transition:
+      opacity 100ms,
+      background-color 100ms;
+  }
 
-vaadin-checkbox:is([checked], [indeterminate]):not([readonly], [disabled])::part(checkbox) {
-  --vaadin-checkbox-background: var(--aura-accent-color);
-  --vaadin-checkbox-marker-color: var(--aura-accent-contrast-color);
-  --vaadin-checkbox-border-color: var(--vaadin-border-color-secondary);
-  box-shadow: var(--aura-shadow-s);
-}
+  @media (any-hover: hover) {
+    :host(:hover:not([readonly], [disabled], [active])) [part~='checkbox']::before {
+      opacity: 0.04;
+    }
+  }
 
-vaadin-radio-button[checked]:not([readonly], [disabled])::part(radio) {
-  --vaadin-radio-button-background: var(--aura-accent-color);
-  --vaadin-radio-button-marker-color: var(--aura-accent-contrast-color);
-  --vaadin-radio-button-border-color: var(--vaadin-border-color-secondary);
-  box-shadow: var(--aura-shadow-s);
-}
-
-vaadin-checkbox:not([readonly], [disabled])::part(checkbox)::before,
-vaadin-radio-button:not([disabled])::part(radio)::before {
-  content: '';
-  position: absolute;
-  inset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
-  border-radius: inherit;
-  background-color: currentColor;
-  opacity: 0;
-  transition:
-    opacity 100ms,
-    background-color 100ms;
-}
-
-@media (any-hover: hover) {
-  vaadin-checkbox:hover:not([readonly], [disabled], [active])::part(checkbox)::before,
-  vaadin-radio-button:hover:not([disabled], [active])::part(radio)::before {
-    opacity: 0.04;
+  :host([active]:not([readonly], [disabled])) [part~='checkbox']::before {
+    opacity: 0.1;
+    background: #000;
   }
 }
 
-vaadin-checkbox[active]:not([readonly], [disabled])::part(checkbox)::before,
-vaadin-radio-button[active]:not([disabled])::part(radio)::before {
-  opacity: 0.1;
-  background: #000;
+@media lumo_components_radio-button {
+  [part~='radio'] {
+    transition: background-color 100ms;
+  }
+
+  :host(:not([disabled], [readonly])) [part~='radio'] {
+    background: var(--vaadin-radio-button-background, var(--aura-surface-color));
+  }
+
+  :host(:not([disabled])) [part~='radio'] {
+    --aura-surface-level: 4;
+    box-shadow: var(--aura-shadow-xs);
+    --_shade: color-mix(in srgb, var(--vaadin-border-color-secondary) 50%, transparent);
+    background-image: linear-gradient(
+      light-dark(transparent, var(--_shade)),
+      transparent 33%,
+      transparent 66%,
+      light-dark(var(--_shade), transparent)
+    );
+  }
+
+  :host(:not([checked])) [part~='radio'] {
+    background-clip: padding-box;
+  }
+
+  :host([checked]:not([readonly], [disabled])) [part~='radio'] {
+    --vaadin-radio-button-background: var(--aura-accent-color);
+    --vaadin-radio-button-marker-color: var(--aura-accent-contrast-color);
+    --vaadin-radio-button-border-color: var(--vaadin-border-color-secondary);
+    box-shadow: var(--aura-shadow-s);
+  }
+
+  :host(:not([disabled])) [part~='radio']::before {
+    content: '';
+    position: absolute;
+    inset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    transition:
+      opacity 100ms,
+      background-color 100ms;
+  }
+
+  @media (any-hover: hover) {
+    :host(:hover:not([disabled], [active])) [part~='radio']::before {
+      opacity: 0.04;
+    }
+  }
+
+  :host([active]:not([disabled])) [part~='radio']::before {
+    opacity: 0.1;
+    background: #000;
+  }
 }

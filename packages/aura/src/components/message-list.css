@@ -2,22 +2,27 @@
 :where(:host) {
   --vaadin-message-attachment-font-weight: var(--aura-font-weight-medium);
   --vaadin-message-attachment-border-width: 1px;
+
+  --_lumo-vaadin-message-inject: 1;
+  --_lumo-vaadin-message-inject-modules: lumo_components_message, lumo_color, lumo_surface;
 }
 
-vaadin-message::part(attachment) {
-  --aura-surface-level: 4;
-  background: var(--vaadin-message-attachment-background, var(--aura-surface-color) padding-box);
-}
+@media lumo_components_message {
+  [part~='attachment'] {
+    --aura-surface-level: 4;
+    background: var(--vaadin-message-attachment-background, var(--aura-surface-color) padding-box);
+  }
 
-vaadin-message::part(attachment):hover {
-  --aura-surface-opacity: 0.7;
-}
+  [part~='attachment']:hover {
+    --aura-surface-opacity: 0.7;
+  }
 
-vaadin-message::part(attachment):active {
-  --aura-surface-opacity: 0.4;
-}
+  [part~='attachment']:active {
+    --aura-surface-opacity: 0.4;
+  }
 
-vaadin-message::part(attachment-icon) {
-  background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
-  color: var(--aura-accent-color);
+  [part~='attachment-icon'] {
+    background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
+    color: var(--aura-accent-color);
+  }
 }

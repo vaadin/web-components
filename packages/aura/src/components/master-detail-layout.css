@@ -1,33 +1,45 @@
-vaadin-master-detail-layout::part(detail) {
-  --aura-surface-level: 2;
-  background: var(--vaadin-master-detail-layout-detail-background, var(--aura-surface-color) padding-box);
+:where(:root),
+:where(:host) {
+  --_lumo-vaadin-master-detail-layout-inject: 1;
+  --_lumo-vaadin-master-detail-layout-inject-modules: lumo_components_master-detail-layout, lumo_surface;
 }
 
-vaadin-master-detail-layout[has-detail][overlay]::part(detail) {
-  --aura-surface-opacity: var(--aura-overlay-surface-opacity);
-  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
-  backdrop-filter: var(--aura-overlay-backdrop-filter);
-  box-shadow: var(
-    --vaadin-master-detail-layout-detail-shadow,
-    inset 1px 0 0 0 var(--aura-overlay-inner-outline-color),
-    -1px 0 0 0 var(--aura-overlay-outline-color),
-    var(--aura-overlay-shadow)
-  );
-  --_inset: var(--aura-master-detail-layout-detail-inset, round(var(--aura-app-layout-inset) / 1.5, 1px));
-  margin: var(--_inset);
-  border-radius: clamp(
-    0px,
-    var(--_inset) * 1000,
-    max(var(--vaadin-radius-m), var(--vaadin-radius-l) - round(var(--_inset) / 2, 1px))
-  );
-}
-
-vaadin-master-detail-layout[has-detail][overlay][overlay-containment='page']::part(detail) {
-  border-radius: clamp(0px, var(--_inset) * 1000, var(--vaadin-radius-l));
-}
-
-vaadin-master-detail-layout > vaadin-master-detail-layout,
-vaadin-master-detail-layout:not([overlay])::part(detail) {
+vaadin-master-detail-layout > vaadin-master-detail-layout {
   border-start-end-radius: var(--_app-layout-radius);
   border-end-end-radius: var(--_app-layout-radius);
+}
+
+@media lumo_components_master-detail-layout {
+  [part~='detail'] {
+    --aura-surface-level: 2;
+    background: var(--vaadin-master-detail-layout-detail-background, var(--aura-surface-color) padding-box);
+  }
+
+  :host([has-detail][overlay]) [part~='detail'] {
+    --aura-surface-opacity: var(--aura-overlay-surface-opacity);
+    -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+    backdrop-filter: var(--aura-overlay-backdrop-filter);
+    box-shadow: var(
+      --vaadin-master-detail-layout-detail-shadow,
+      inset 1px 0 0 0 var(--aura-overlay-inner-outline-color),
+      -1px 0 0 0 var(--aura-overlay-outline-color),
+      var(--aura-overlay-shadow)
+    );
+    --_inset: var(--aura-master-detail-layout-detail-inset, round(var(--aura-app-layout-inset) / 1.5, 1px));
+    margin: var(--_inset);
+    border-radius: clamp(
+      0px,
+      var(--_inset) * 1000,
+      max(var(--vaadin-radius-m), var(--vaadin-radius-l) - round(var(--_inset) / 2, 1px))
+    );
+  }
+
+  :host([has-detail][overlay][overlay-containment='page']) [part~='detail'] {
+    border-radius: clamp(0px, var(--_inset) * 1000, var(--vaadin-radius-l));
+  }
+
+  :host(:not([overlay])) [part~='detail'] {
+    border-start-end-radius: var(--_app-layout-radius);
+    border-end-end-radius: var(--_app-layout-radius);
+  }
 }

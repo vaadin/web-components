@@ -2,19 +2,11 @@
 :where(:host) {
   --vaadin-accordion-heading-gap: var(--vaadin-gap-xs);
   --vaadin-details-summary-gap: var(--vaadin-gap-xs);
-}
 
-:is(vaadin-details, vaadin-accordion-panel):not([theme~='no-padding'])::part(content) {
-  padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
-  padding-top: 0;
-}
-
-vaadin-details:not([theme~='no-padding'], [theme~='reverse'])::part(content) {
-  margin-inline-start: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-details-summary-gap));
-}
-
-vaadin-accordion-panel:not([theme~='no-padding'], [theme~='reverse'])::part(content) {
-  margin-inline-start: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-accordion-heading-gap));
+  --_lumo-vaadin-details-inject: 1;
+  --_lumo-vaadin-details-inject-modules: lumo_components_details;
+  --_lumo-vaadin-accordion-panel-inject: 1;
+  --_lumo-vaadin-accordion-panel-inject-modules: lumo_components_accordion-panel;
 }
 
 :is(vaadin-details, vaadin-accordion-panel)[theme~='reverse'] {
@@ -25,6 +17,36 @@ vaadin-accordion-panel:not([theme~='no-padding'], [theme~='reverse'])::part(cont
   > [slot='summary']::part(toggle) {
     order: 1;
     margin-inline-start: auto;
+  }
+}
+
+@media lumo_components_details {
+  /* stylelint-disable declaration-block-no-redundant-longhand-properties -- shorthand `padding: var() var()` followed by `padding-top: 0` loses right/bottom/left values via CSSOM serialization when injected */
+  :host(:not([theme~='no-padding'])) [part~='content'] {
+    padding-top: 0;
+    padding-right: var(--vaadin-padding-inline-container);
+    padding-bottom: var(--vaadin-padding-block-container);
+    padding-left: var(--vaadin-padding-inline-container);
+  }
+  /* stylelint-enable declaration-block-no-redundant-longhand-properties */
+
+  :host(:not([theme~='no-padding'], [theme~='reverse'])) [part~='content'] {
+    margin-inline-start: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-details-summary-gap));
+  }
+}
+
+@media lumo_components_accordion-panel {
+  /* stylelint-disable declaration-block-no-redundant-longhand-properties -- shorthand `padding: var() var()` followed by `padding-top: 0` loses right/bottom/left values via CSSOM serialization when injected */
+  :host(:not([theme~='no-padding'])) [part~='content'] {
+    padding-top: 0;
+    padding-right: var(--vaadin-padding-inline-container);
+    padding-bottom: var(--vaadin-padding-block-container);
+    padding-left: var(--vaadin-padding-inline-container);
+  }
+  /* stylelint-enable declaration-block-no-redundant-longhand-properties */
+
+  :host(:not([theme~='no-padding'], [theme~='reverse'])) [part~='content'] {
+    margin-inline-start: calc(var(--vaadin-icon-size, 1lh) + var(--vaadin-accordion-heading-gap));
   }
 }
 

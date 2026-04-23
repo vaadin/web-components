@@ -6,6 +6,9 @@
   --vaadin-app-layout-navbar-padding-top: max(var(--aura-app-layout-inset), var(--vaadin-padding-s));
   --vaadin-app-layout-navbar-padding-inline-start: max(var(--aura-app-layout-inset), var(--vaadin-padding-s));
   --vaadin-app-layout-navbar-padding-inline-end: max(var(--aura-app-layout-inset), var(--vaadin-padding-s));
+
+  --_lumo-vaadin-app-layout-inject: 1;
+  --_lumo-vaadin-app-layout-inject-modules: lumo_components_app-layout, lumo_color, lumo_surface;
 }
 
 /* Aligned with App Layout overlay breakpoint */
@@ -24,31 +27,9 @@ vaadin-app-layout {
   padding-inline-end: var(--aura-app-layout-inset);
 }
 
-vaadin-app-layout[overlay]::part(drawer) {
-  background: var(--vaadin-app-layout-drawer-background, var(--aura-surface-color));
-  --aura-surface-opacity: var(--aura-overlay-surface-opacity);
-  -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
-  backdrop-filter: var(--aura-overlay-backdrop-filter);
-}
-
 vaadin-app-layout:is([overlay], :not([drawer-opened])),
 vaadin-app-layout:not([has-drawer]) {
   padding-inline-start: var(--aura-app-layout-inset);
-}
-
-vaadin-app-layout::part(navbar) {
-  background: var(--vaadin-app-layout-navbar-background, transparent);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-}
-
-vaadin-app-layout:not([overlay])::part(drawer) {
-  padding-block: var(--aura-app-layout-inset);
-  padding-inline: max(0px, var(--aura-app-layout-inset) - var(--vaadin-padding-s));
-}
-
-vaadin-app-layout[has-navbar]::part(drawer) {
-  padding-top: var(--safe-area-inset-top);
 }
 
 vaadin-app-layout > vaadin-scroller[slot='drawer'] {
@@ -58,33 +39,57 @@ vaadin-app-layout > vaadin-scroller[slot='drawer'] {
   padding-inline-start: max(0px, var(--vaadin-padding-m) - var(--safe-area-inset-inline-start));
 }
 
-vaadin-app-layout::part(content) {
-  color-scheme: var(--aura-content-color-scheme);
-  color: var(--vaadin-text-color);
-  background: linear-gradient(var(--aura-surface-color), var(--aura-surface-color)), var(--aura-app-background);
-  background-clip: padding-box;
-  background-origin: border-box;
-  min-height: 1lh;
-  box-sizing: border-box;
-  border-radius: var(--_app-layout-radius);
-  border: var(--aura-app-layout-border-width) solid var(--vaadin-border-color-secondary);
-  border-block-width: min(var(--aura-app-layout-inset), var(--aura-app-layout-border-width));
-  border-inline-width: min(var(--aura-app-layout-inset), var(--aura-app-layout-border-width));
-}
-
-vaadin-app-layout[has-drawer][drawer-opened]:not([overlay])::part(content) {
-  border-inline-start-width: var(--aura-app-layout-border-width);
-}
-
-vaadin-app-layout[has-navbar][has-drawer][drawer-opened]:not([overlay])::part(content) {
-  border-start-start-radius: var(--aura-app-layout-radius);
-}
-
-vaadin-app-layout[has-navbar]::part(content) {
-  border-top-width: var(--aura-app-layout-border-width);
-}
-
 vaadin-drawer-toggle {
   --aura-accent-color-light: var(--aura-neutral);
   --aura-accent-color-dark: var(--aura-neutral);
+}
+
+@media lumo_components_app-layout {
+  :host([overlay]) [part~='drawer'] {
+    background: var(--vaadin-app-layout-drawer-background, var(--aura-surface-color));
+    --aura-surface-opacity: var(--aura-overlay-surface-opacity);
+    -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
+    backdrop-filter: var(--aura-overlay-backdrop-filter);
+  }
+
+  [part~='navbar'] {
+    background: var(--vaadin-app-layout-navbar-background, transparent);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+  }
+
+  :host(:not([overlay])) [part~='drawer'] {
+    padding-block: var(--aura-app-layout-inset);
+    padding-inline: max(0px, var(--aura-app-layout-inset) - var(--vaadin-padding-s));
+  }
+
+  :host([has-navbar]) [part~='drawer'] {
+    padding-top: var(--safe-area-inset-top);
+  }
+
+  [part~='content'] {
+    color-scheme: var(--aura-content-color-scheme);
+    color: var(--vaadin-text-color);
+    background: linear-gradient(var(--aura-surface-color), var(--aura-surface-color)), var(--aura-app-background);
+    background-clip: padding-box;
+    background-origin: border-box;
+    min-height: 1lh;
+    box-sizing: border-box;
+    border-radius: var(--_app-layout-radius);
+    border: var(--aura-app-layout-border-width) solid var(--vaadin-border-color-secondary);
+    border-block-width: min(var(--aura-app-layout-inset), var(--aura-app-layout-border-width));
+    border-inline-width: min(var(--aura-app-layout-inset), var(--aura-app-layout-border-width));
+  }
+
+  :host([has-drawer][drawer-opened]:not([overlay])) [part~='content'] {
+    border-inline-start-width: var(--aura-app-layout-border-width);
+  }
+
+  :host([has-navbar][has-drawer][drawer-opened]:not([overlay])) [part~='content'] {
+    border-start-start-radius: var(--aura-app-layout-radius);
+  }
+
+  :host([has-navbar]) [part~='content'] {
+    border-top-width: var(--aura-app-layout-border-width);
+  }
 }
