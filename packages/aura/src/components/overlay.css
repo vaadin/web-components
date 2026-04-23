@@ -25,13 +25,48 @@
   --vaadin-slider-bubble-arrow-size: 6px;
 }
 
-::part(overlay) {
+:where(
+  vaadin-avatar-group,
+  vaadin-combo-box,
+  vaadin-confirm-dialog,
+  vaadin-context-menu,
+  vaadin-crud-dialog,
+  vaadin-date-picker,
+  vaadin-dialog,
+  vaadin-login-overlay,
+  vaadin-menu-bar-submenu,
+  vaadin-multi-select-combo-box,
+  vaadin-notification-card,
+  vaadin-popover,
+  vaadin-rich-text-editor-popup,
+  vaadin-select,
+  vaadin-slider-bubble,
+  vaadin-time-picker,
+  vaadin-tooltip
+)::part(overlay) {
   background: var(--vaadin-overlay-background, var(--aura-surface-color));
   --aura-surface-level: 4;
   --aura-surface-opacity: var(--aura-overlay-surface-opacity);
   box-shadow: var(--aura-overlay-outline-shadow), var(--vaadin-overlay-shadow, var(--aura-overlay-shadow));
   -webkit-backdrop-filter: var(--aura-overlay-backdrop-filter);
   backdrop-filter: var(--aura-overlay-backdrop-filter);
+}
+
+:where(
+  vaadin-combo-box,
+  vaadin-date-picker,
+  vaadin-menu-bar-submenu,
+  vaadin-multi-select-combo-box,
+  vaadin-rich-text-editor-popup,
+  vaadin-time-picker
+) {
+  &[top-aligned]::part(overlay) {
+    margin-top: calc(var(--vaadin-focus-ring-width, 2px) + 1px);
+  }
+
+  &[bottom-aligned]::part(overlay) {
+    margin-bottom: calc(var(--vaadin-focus-ring-width, 2px) + 1px);
+  }
 }
 
 :not(vaadin-tooltip, vaadin-slider-bubble)::part(overlay) {

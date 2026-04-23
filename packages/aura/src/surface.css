@@ -34,11 +34,25 @@ vaadin-tabs,
 vaadin-upload,
 vaadin-upload-file,
 ::part(input-field),
-::part(overlay),
-vaadin-confirm-dialog::part(overlay),
-vaadin-dialog::part(overlay),
-vaadin-login-overlay::part(overlay),
-vaadin-crud-dialog::part(overlay) {
+:where(
+  vaadin-avatar-group,
+  vaadin-combo-box,
+  vaadin-confirm-dialog,
+  vaadin-context-menu,
+  vaadin-crud-dialog,
+  vaadin-date-picker,
+  vaadin-dialog,
+  vaadin-login-overlay,
+  vaadin-menu-bar-submenu,
+  vaadin-multi-select-combo-box,
+  vaadin-notification-card,
+  vaadin-popover,
+  vaadin-rich-text-editor-popup,
+  vaadin-select,
+  vaadin-slider-bubble,
+  vaadin-time-picker,
+  vaadin-tooltip
+)::part(overlay) {
   --aura-surface-opacity: 0.5;
 
   --aura-surface-color-solid: light-dark(
