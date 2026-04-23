@@ -98,6 +98,38 @@ When the component renders in a right-to-left context, directional separators (s
 
 ---
 
+## 13. Flow: Default trail derived from the router hierarchy
+
+In the Flow wrapper, instantiating a breadcrumb without configuring its items causes it to populate itself automatically from the application's router. The default strategy walks up the URL path of the current route and matches each prefix to a registered Flow route, producing one breadcrumb item per matched ancestor. The text shown for each item is the matched route's view title (the value Flow uses to set the page title for that route — typically the route's `@PageTitle`, or the title supplied dynamically by the view).
+
+*Example: A user navigates to `/customers/acme/orders`. The orders view is annotated `@PageTitle("Orders")`, the customer detail view dynamically sets its title to "Acme Corp", the customers list view is `@PageTitle("Customers")`, and the root view is `@PageTitle("Home")`. A view that simply does `add(new Breadcrumb())` shows "Home › Customers › Acme Corp › Orders" — one item per matched route, each labeled with that route's view title.*
+
+---
+
+## 14. Flow: Opting out of automatic trail population
+
+The Flow wrapper lets the application disable automatic population so the breadcrumb shows only the items the application provides explicitly. Opting out is a per-instance choice and does not affect other breadcrumbs in the application.
+
+*Example: A product catalog view builds its trail from category data rather than the URL structure. It opts the breadcrumb out of automatic population and supplies the items itself, so router-derived ancestors are not mixed in.*
+
+---
+
+## 15. Flow: Sitemap parent annotation overrides URL-based parent lookup
+
+A Flow `@Route` class can carry an annotation that declares its sitemap parent. When the annotation is present, the automatic trail uses the declared parent for that view instead of inferring one from the URL hierarchy. Walking continues from the declared parent using the same rules.
+
+*Example: A route registered at `/orders/edit/123` declares its sitemap parent as the orders list view. The breadcrumb shows "Home › Orders › Edit Order" instead of the URL-derived "Home › Orders › Edit › Edit Order".*
+
+---
+
+## 16. Flow: Routes can dynamically supply their breadcrumb contribution
+
+A Flow `@Route` class can implement an interface that lets it dynamically provide what should appear in the breadcrumb for that view. The contribution is evaluated at navigation time, so it can depend on the data the view is currently showing, and it can replace the view's default item, add additional ancestors, or both.
+
+*Example: A `CustomerView` showing customer "Acme Corp" implements the interface and returns "Acme Corp" as its own label plus an extra ancestor "Enterprise" (the customer's segment). The breadcrumb shows "Home › Customers › Enterprise › Acme Corp" instead of a generic "Home › Customers › Customer".*
+
+---
+
 ## Discussion
 
 Questions posed while producing this document, with the user's answers.
@@ -125,3 +157,15 @@ No. Truncation of individual labels is not a component-level requirement — rem
 **Q: Should the navigation landmark have a default label (e.g., "Breadcrumb")?**
 
 No. The component identifies itself as a navigation landmark but does not provide a component-specific default label.
+
+**Q: Why does the Flow wrapper auto-populate the trail from the router by default?**
+
+A Flow application already declares its sitemap as `@Route` classes, so requiring every view to manually build a breadcrumb duplicates information the framework already has. Defaulting to router-derived items (req 13) lets the trivial case work with zero configuration. Apps that need full control can opt out per instance (req 14).
+
+**Q: What text does the auto-populated trail show for each item?**
+
+Each item is labeled with the matched route's view title — i.e., whatever Flow already uses as the page title for that route (the `@PageTitle` value, or a dynamically supplied title). Reusing the existing title means a route's breadcrumb label and browser tab title stay in sync without the developer having to declare them twice.
+
+**Q: Why support both a parent annotation and a runtime interface for influencing the trail?**
+
+URL hierarchy alone cannot express two common cases: (a) a route whose conceptual parent differs from its URL parent — e.g., an edit view whose parent is the list view, not the URL segment "edit" (req 15) — and (b) a trail that depends on the data the view is showing, such as inserting a customer's segment as an ancestor (req 16). A static annotation handles the first cleanly without runtime cost; a runtime interface handles the second. Together they cover the cases the URL-walking default cannot.
