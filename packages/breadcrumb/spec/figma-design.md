@@ -21,7 +21,7 @@ This document records:
 | Spec Element | Figma Component/Frame | Notes |
 |---|---|---|
 | `<vaadin-breadcrumb-trail>` | Default Trail, Overflow Trail, Icon Trail, Long Labels Trail | Container represented as horizontal auto-layout with item + separator sequences |
-| `<vaadin-breadcrumb-trail-item>` | Item text nodes (link color or body text color) | Link items use primary/accent text color; current page uses body text color with medium weight |
+| `<vaadin-breadcrumb-item>` | Item text nodes (link color or body text color) | Link items use primary/accent text color; current page uses body text color with medium weight |
 | `<vaadin-breadcrumb-trail-overlay>` | Overlay Panel | Shadow-elevated panel showing collapsed item links |
 | Separator (`::after`) | `›` text character | Chevron-right represented as text glyph; actual implementation uses `mask-image` SVG |
 | Overflow button | Overflow Button frame | Ellipsis (`…`) with optional hover background |

@@ -6,11 +6,11 @@ Covers requirement(s): 1, 2
 
 ```html
 <vaadin-breadcrumb-trail>
-  <vaadin-breadcrumb-trail-item path="/">Home</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item path="/docs">Developer Guide</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item path="/docs/api">API Reference</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item path="/docs/api/auth">Authentication</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item>OAuth2</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/docs">Developer Guide</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/docs/api">API Reference</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/docs/api/auth">Authentication</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item>OAuth2</vaadin-breadcrumb-item>
 </vaadin-breadcrumb-trail>
 ```
 
@@ -25,9 +25,9 @@ Covers requirement(s): 3
 ```html
 <!-- Current page omitted — all items have a path -->
 <vaadin-breadcrumb-trail>
-  <vaadin-breadcrumb-trail-item path="/">Home</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item path="/docs">Developer Guide</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item path="/docs/api">API Reference</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/docs">Developer Guide</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/docs/api">API Reference</vaadin-breadcrumb-item>
 </vaadin-breadcrumb-trail>
 ```
 
@@ -42,9 +42,9 @@ Covers requirement(s): 4, 5, 12
 ```html
 <!-- Default: theme renders a chevron separator between items -->
 <vaadin-breadcrumb-trail>
-  <vaadin-breadcrumb-trail-item path="/">Home</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item path="/products">Products</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item>Laptops</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item>Laptops</vaadin-breadcrumb-item>
 </vaadin-breadcrumb-trail>
 ```
 
@@ -67,13 +67,13 @@ Covers requirement(s): 6, 7
 <!-- Overflow is automatic — no developer action needed -->
 <!-- The component progressively collapses items closest to the root first -->
 <vaadin-breadcrumb-trail>
-  <vaadin-breadcrumb-trail-item path="/">Home</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item path="/docs">Documents</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item path="/docs/projects">Projects</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item path="/docs/projects/2026">2026</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item path="/docs/projects/2026/q1">Q1</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item path="/docs/projects/2026/q1/reports">Reports</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item>Summary</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/docs">Documents</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/docs/projects">Projects</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/docs/projects/2026">2026</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/docs/projects/2026/q1">Q1</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/docs/projects/2026/q1/reports">Reports</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item>Summary</vaadin-breadcrumb-item>
 </vaadin-breadcrumb-trail>
 ```
 
@@ -95,15 +95,15 @@ Covers requirement(s): 8
 
 ```html
 <vaadin-breadcrumb-trail>
-  <vaadin-breadcrumb-trail-item path="/">
+  <vaadin-breadcrumb-item path="/">
     <vaadin-icon icon="vaadin:home" slot="prefix"></vaadin-icon>
     Home
-  </vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item path="/docs">
+  </vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/docs">
     <vaadin-icon icon="vaadin:folder" slot="prefix"></vaadin-icon>
     Documents
-  </vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item>Report.pdf</vaadin-breadcrumb-trail-item>
+  </vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item>Report.pdf</vaadin-breadcrumb-item>
 </vaadin-breadcrumb-trail>
 ```
 
@@ -148,9 +148,9 @@ Covers requirement(s): 10
 <!-- The component renders a <nav> element automatically -->
 <!-- The application provides an accessible label -->
 <vaadin-breadcrumb-trail aria-label="Product navigation">
-  <vaadin-breadcrumb-trail-item path="/">Home</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item path="/products">Products</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item>Laptops</vaadin-breadcrumb-trail-item>
+  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item>Laptops</vaadin-breadcrumb-item>
 </vaadin-breadcrumb-trail>
 ```
 
@@ -167,9 +167,9 @@ Covers requirement(s): 11
 <!-- The component automatically adds aria-current="page" to the last item
      when it has no path (i.e., it represents the current page) -->
 <vaadin-breadcrumb-trail>
-  <vaadin-breadcrumb-trail-item path="/">Home</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item path="/docs">Docs</vaadin-breadcrumb-trail-item>
-  <vaadin-breadcrumb-trail-item>OAuth2</vaadin-breadcrumb-trail-item>  <!-- aria-current="page" applied automatically -->
+  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item path="/docs">Docs</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item>OAuth2</vaadin-breadcrumb-item>  <!-- aria-current="page" applied automatically -->
 </vaadin-breadcrumb-trail>
 ```
 
