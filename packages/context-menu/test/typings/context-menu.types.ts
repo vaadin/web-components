@@ -51,6 +51,15 @@ const renderer: ContextMenuRenderer = (root, contextMenu, context) => {
 
 menu.renderer = renderer;
 
+// Menu item properties
+const menuItem: MenuItem = {};
+assertType<string | undefined>(menuItem.text);
+assertType<string | undefined>(menuItem.tooltip);
+assertType<boolean | undefined>(menuItem.disabled);
+assertType<boolean | undefined>(menuItem.checked);
+assertType<boolean | undefined>(menuItem.keepOpen);
+assertType<MenuItem[] | undefined>(menuItem.children);
+
 // Custom item data
 interface ItemData {
   type: 'copy' | 'cut' | 'paste';

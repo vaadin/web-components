@@ -10,7 +10,7 @@ import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaad
 import type { MenuBarButton } from '../../src/vaadin-menu-bar-button.js';
 import type { MenuBarItem } from '../../src/vaadin-menu-bar-item.js';
 import type { MenuBarListBox } from '../../src/vaadin-menu-bar-list-box.js';
-import type { MenuBarI18n, MenuBarMixinClass } from '../../src/vaadin-menu-bar-mixin.js';
+import type { MenuBarI18n, MenuBarMixinClass, SubMenuItem } from '../../src/vaadin-menu-bar-mixin.js';
 import type { MenuBarSubmenu } from '../../src/vaadin-menu-bar-submenu.js';
 import type { MenuBar, MenuBarItem as MenuItem, MenuBarItemSelectedEvent } from '../../vaadin-menu-bar.js';
 
@@ -42,6 +42,14 @@ assertType<boolean | undefined>(menuItem.disabled);
 assertType<string[] | string | undefined>(menuItem.theme);
 assertType<MenuItem[] | undefined>(menuItem.children);
 assertType<HTMLElement | string | undefined>(menuItem.component);
+
+// Sub-menu item properties
+const subMenuItem: SubMenuItem = {};
+assertType<string | undefined>(subMenuItem.text);
+assertType<string | undefined>(subMenuItem.tooltip);
+assertType<boolean | undefined>(subMenuItem.disabled);
+assertType<boolean | undefined>(subMenuItem.checked);
+assertType<SubMenuItem[] | undefined>(subMenuItem.children);
 
 // Custom item data
 interface ItemData {

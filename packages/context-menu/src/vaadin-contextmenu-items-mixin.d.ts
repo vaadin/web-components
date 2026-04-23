@@ -9,6 +9,11 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 
 export type ContextMenuItem<TItemData extends object = object> = {
   text?: string;
+  /**
+   * Text to be set as the menu item's tooltip.
+   * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-context-menu>`.
+   */
+  tooltip?: string;
   component?: HTMLElement | string;
   disabled?: boolean;
   checked?: boolean;

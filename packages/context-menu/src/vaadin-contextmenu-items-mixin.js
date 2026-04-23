@@ -3,7 +3,9 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 
 /**
  * @polymerMixin
@@ -16,6 +18,8 @@ export const ItemsMixin = (superClass) =>
          * @typedef ContextMenuItem
          * @type {object}
          * @property {string} text - Text to be set as the menu item component's textContent
+         * @property {string} tooltip - Text to be set as the menu item's tooltip.
+         * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-context-menu>`.
          * @property {string | HTMLElement} component - The component to represent the item.
          * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected
@@ -54,6 +58,18 @@ export const ItemsMixin = (superClass) =>
          * ];
          * ```
          *
+         * #### Item tooltips
+         *
+         * An item can have a tooltip displayed on hover and keyboard focus
+         * by setting its `tooltip` property. Item tooltips require a
+         * `<vaadin-tooltip>` element slotted into the menu:
+         *
+         * ```html
+         * <vaadin-context-menu>
+         *   <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
+         * </vaadin-context-menu>
+         * ```
+         *
          * @type {!Array<!ContextMenuItem> | undefined}
          */
         items: {
@@ -71,6 +87,8 @@ export const ItemsMixin = (superClass) =>
 
     constructor() {
       super();
+
+      this.__boundOnTooltipMouseLeave = this.__onTooltipOverlayMouseLeave.bind(this);
 
       // Overlay's outside click listener doesn't work with modeless
       // overlays (submenus) so we need additional logic for it
@@ -102,9 +120,19 @@ export const ItemsMixin = (superClass) =>
     }
 
     /** @protected */
+    ready() {
+      super.ready();
+
+      this._tooltipController = new TooltipController(this);
+      this._tooltipController.setManual(true);
+      this.addController(this._tooltipController);
+    }
+
+    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
       document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener);
+      this._hideTooltip(true);
     }
 
     /**
@@ -138,6 +166,8 @@ export const ItemsMixin = (superClass) =>
 
     /** @private */
     __openSubMenu(subMenu, itemElement) {
+      this._hideTooltip(true);
+
       // Update sub-menu items and position target
       this.__updateSubMenuForItem(subMenu, itemElement);
 
@@ -244,6 +274,15 @@ export const ItemsMixin = (superClass) =>
         }
       });
 
+      listBox.addEventListener('item-focused', (event) => {
+        const item = event.detail.item;
+        if (item && item._item.tooltip && isKeyboardActive()) {
+          this._showTooltip(item, false);
+        } else {
+          this._hideTooltip(true);
+        }
+      });
+
       return listBox;
     }
 
@@ -264,6 +303,17 @@ export const ItemsMixin = (superClass) =>
         }
 
         this.__showSubMenu(event);
+
+        const item = event.composedPath().find((node) => node.localName === `${this._tagNamePrefix}-item`);
+        if (item && item._item.tooltip) {
+          this._showTooltip(item, true);
+        } else {
+          this._hideTooltip(true);
+        }
+      });
+
+      overlay.addEventListener('mouseleave', () => {
+        this._hideTooltip(true);
       });
 
       overlay.addEventListener('keydown', (event) => {
@@ -412,6 +462,71 @@ export const ItemsMixin = (superClass) =>
       // items otherwise have `pointer-events: none` and never receive mouseover).
       if (item && item.disabled) {
         subMenu.close();
+      }
+    }
+
+    /**
+     * Return the `TooltipController` used to show item tooltips.
+     * Sub-classes may override this method to use a different controller,
+     * e.g. to reuse the parent menu-bar's tooltip for sub-menu items.
+     *
+     * @return {TooltipController | undefined}
+     * @protected
+     */
+    _getItemTooltipController() {
+      return this._tooltipController;
+    }
+
+    /**
+     * @param {HTMLElement} item
+     * @param {boolean} isHover
+     * @protected
+     */
+    _showTooltip(item, isHover) {
+      const controller = this._getItemTooltipController();
+      // Check if there is a slotted vaadin-tooltip element.
+      const tooltip = controller && controller.node;
+      if (tooltip && tooltip.isConnected) {
+        // If the tooltip element doesn't have a generator assigned, use a default one
+        // that reads the `tooltip` property of an item.
+        if (tooltip.generator === undefined) {
+          tooltip.generator = ({ item }) => item && item.tooltip;
+        }
+
+        if (!tooltip._mouseLeaveListenerAdded) {
+          tooltip._overlayElement.addEventListener('mouseleave', this.__boundOnTooltipMouseLeave);
+          tooltip._mouseLeaveListenerAdded = true;
+        }
+
+        controller.setTarget(item);
+        controller.setContext({ item: item._item });
+
+        // Trigger opening using the corresponding delay.
+        tooltip._stateController.open({
+          hover: isHover,
+          focus: !isHover,
+        });
+      }
+    }
+
+    /**
+     * @param {boolean} immediate
+     * @protected
+     */
+    _hideTooltip(immediate) {
+      const controller = this._getItemTooltipController();
+      const tooltip = controller && controller.node;
+      if (tooltip) {
+        controller.setContext({ item: null });
+        tooltip._stateController.close(immediate);
+      }
+    }
+
+    /** @private */
+    __onTooltipOverlayMouseLeave(event) {
+      const controller = this._getItemTooltipController();
+      if (controller && event.relatedTarget !== controller.target) {
+        this._hideTooltip();
       }
     }
 

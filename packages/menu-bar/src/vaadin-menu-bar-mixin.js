@@ -88,6 +88,8 @@ export const MenuBarMixin = (superClass) =>
          * @typedef SubMenuItem
          * @type {object}
          * @property {string} text - Text to be set as the menu item component's textContent.
+         * @property {string} tooltip - Text to be set as the menu item's tooltip.
+         * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-menu-bar>`.
          * @property {string | HTMLElement} component - The component to represent the item.
          * Either a tagName or an element instance. Defaults to "vaadin-menu-bar-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected.
@@ -143,6 +145,18 @@ export const MenuBarMixin = (superClass) =>
          * ```
          *
          * Both flags must be set before any menu bar is attached to the DOM.
+         *
+         * #### Item tooltips
+         *
+         * To show tooltips on buttons and sub-menu items, add a slotted
+         * `<vaadin-tooltip>` element and set the `tooltip` property on
+         * each item that should have one:
+         *
+         * ```html
+         * <vaadin-menu-bar>
+         *   <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
+         * </vaadin-menu-bar>
+         * ```
          *
          * @type {!Array<!MenuBarItem>}
          */

@@ -86,6 +86,8 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
         <slot name="overlay"></slot>
         <slot name="submenu" slot="submenu"></slot>
       </vaadin-menu-bar-overlay>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -124,6 +126,25 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
     }
 
     return super._shouldCloseOnOutsideClick(event);
+  }
+
+  /**
+   * Override method from `ItemsMixin` to reuse the parent `<vaadin-menu-bar>`
+   * tooltip for sub-menu item tooltips. The menu-bar is the element users
+   * slot their `<vaadin-tooltip>` on, so sub-menu items share it with the
+   * root-level buttons.
+   *
+   * @return {TooltipController | undefined}
+   * @protected
+   * @override
+   */
+  _getItemTooltipController() {
+    const menuBar = this.parentElement;
+    if (menuBar && menuBar._tooltipController) {
+      return menuBar._tooltipController;
+    }
+
+    return super._getItemTooltipController();
   }
 }
 

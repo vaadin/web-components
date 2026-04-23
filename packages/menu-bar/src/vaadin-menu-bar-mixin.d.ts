@@ -48,6 +48,11 @@ export type MenuBarItem<TItemData extends object = object> = {
 
 export type SubMenuItem<TItemData extends object = object> = {
   text?: string;
+  /**
+   * Text to be set as the menu item's tooltip.
+   * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-menu-bar>`.
+   */
+  tooltip?: string;
   component?: HTMLElement | string;
   disabled?: boolean;
   theme?: string[] | string;
@@ -120,6 +125,18 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
    * ```
    *
    * Both flags must be set before any menu bar is attached to the DOM.
+   *
+   * #### Item tooltips
+   *
+   * To show tooltips on buttons and sub-menu items, add a slotted
+   * `<vaadin-tooltip>` element and set the `tooltip` property on
+   * each item that should have one:
+   *
+   * ```html
+   * <vaadin-menu-bar>
+   *   <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
+   * </vaadin-menu-bar>
+   * ```
    */
   items: TItem[];
 
