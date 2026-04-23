@@ -34,7 +34,7 @@
   vaadin-date-picker,
   vaadin-dialog,
   vaadin-login-overlay,
-  vaadin-menu-bar,
+  vaadin-menu-bar-submenu,
   vaadin-multi-select-combo-box,
   vaadin-notification-card,
   vaadin-popover,
@@ -55,7 +55,7 @@
 :where(
   vaadin-combo-box,
   vaadin-date-picker,
-  vaadin-menu-bar,
+  vaadin-menu-bar-submenu,
   vaadin-multi-select-combo-box,
   vaadin-rich-text-editor-popup,
   vaadin-time-picker
