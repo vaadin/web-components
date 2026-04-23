@@ -54,6 +54,24 @@ export const ItemsMixin = (superClass) =>
          * ];
          * ```
          *
+         * #### Disabled menu items
+         *
+         * When disabled, menu items are rendered as "dimmed" and prevent all
+         * user interactions (mouse and keyboard).
+         *
+         * Since disabled items are not focusable and cannot react to hover
+         * events by default, it can cause accessibility issues by making them
+         * entirely invisible to assistive technologies, and prevents the use
+         * of Tooltips to explain why the action is not available. This can be
+         * addressed by enabling the feature flag `accessibleDisabledMenuItems`,
+         * which makes disabled items focusable and hoverable, while still
+         * preventing them from being triggered:
+         *
+         * ```js
+         * // Set before any context menu is attached to the DOM.
+         * window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
+         * ```
+         *
          * @type {!Array<!ContextMenuItem> | undefined}
          */
         items: {
@@ -374,7 +392,7 @@ export const ItemsMixin = (superClass) =>
       const subMenu = this._subMenu;
       const expandedItem = this._listBox.querySelector('[expanded]');
 
-      if (item && item !== expandedItem) {
+      if (item && item !== expandedItem && !item.disabled) {
         const { children } = item._item;
 
         // Check if the sub-menu was focused before closing it.
