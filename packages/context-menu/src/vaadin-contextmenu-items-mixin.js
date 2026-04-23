@@ -374,7 +374,7 @@ export const ItemsMixin = (superClass) =>
       const subMenu = this._subMenu;
       const expandedItem = this._listBox.querySelector('[expanded]');
 
-      if (item && item !== expandedItem) {
+      if (item && item !== expandedItem && !item.disabled) {
         const { children } = item._item;
 
         // Check if the sub-menu was focused before closing it.

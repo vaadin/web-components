@@ -8,6 +8,11 @@
     <script type="module" src="./common.js"></script>
 
     <script type="module">
+      window.Vaadin ??= {};
+      window.Vaadin.featureFlags ??= {};
+      window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
+    </script>
+    <script type="module">
       import '@vaadin/context-menu';
       import '@vaadin/radio-group';
 

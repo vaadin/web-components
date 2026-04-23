@@ -47,6 +47,11 @@ class ContextMenuItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(Lumo
 
     this.setAttribute('role', 'menuitem');
   }
+
+  /** @override */
+  __shouldAllowFocusWhenDisabled() {
+    return window.Vaadin.featureFlags.accessibleDisabledMenuItems;
+  }
 }
 
 defineCustomElement(ContextMenuItem);
