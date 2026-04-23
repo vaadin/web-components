@@ -89,7 +89,10 @@ function getTypeText(type) {
  */
 function mapType(type) {
   const typeString = getTypeText(type);
-  const sanitizedTypeString = typeString.replace(/[!()]/gu, '');
+  // Closure's `function(X): Y` needs a space between `function` and `X` after
+  // the parens are stripped, so rewrite `(` as a space. `!` (non-null) and `)`
+  // are dropped; consecutive spaces from the rewrite are collapsed.
+  const sanitizedTypeString = typeString.replace(/[!)]/gu, '').replace(/\(/gu, ' ').replace(/ {2,}/gu, ' ');
   const types = sanitizedTypeString.split('|');
   return types.map((t) => t.trim());
 }
