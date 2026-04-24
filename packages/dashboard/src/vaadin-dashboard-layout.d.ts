@@ -13,17 +13,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 
 /**
- * Fired when the `rootHeadingLevel` property changes.
- */
-export type DashboardLayoutRootHeadingLevelChangedEvent = CustomEvent<{ value: number | null }>;
-
-export interface DashboardLayoutCustomEventMap {
-  'dashboard-root-heading-level-changed': DashboardLayoutRootHeadingLevelChangedEvent;
-}
-
-export interface DashboardLayoutEventMap extends HTMLElementEventMap, DashboardLayoutCustomEventMap {}
-
-/**
  * A responsive, grid-based dashboard layout component
  *
  * ```html
@@ -56,22 +45,8 @@ export interface DashboardLayoutEventMap extends HTMLElementEventMap, DashboardL
  * `dense-layout` | Set when the dashboard is in dense mode.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
- *
- * @fires {CustomEvent} dashboard-root-heading-level-changed - Fired when the `rootHeadingLevel` property changes.
  */
-declare class DashboardLayout extends DashboardLayoutMixin(ElementMixin(ThemableMixin(HTMLElement))) {
-  addEventListener<K extends keyof DashboardLayoutEventMap>(
-    type: K,
-    listener: (this: DashboardLayout, ev: DashboardLayoutEventMap[K]) => void,
-    options?: AddEventListenerOptions | boolean,
-  ): void;
-
-  removeEventListener<K extends keyof DashboardLayoutEventMap>(
-    type: K,
-    listener: (this: DashboardLayout, ev: DashboardLayoutEventMap[K]) => void,
-    options?: EventListenerOptions | boolean,
-  ): void;
-}
+declare class DashboardLayout extends DashboardLayoutMixin(ElementMixin(ThemableMixin(HTMLElement))) {}
 
 declare global {
   interface HTMLElementTagNameMap {
