@@ -257,12 +257,6 @@ public class BreadcrumbItem extends Component
     public void setPath(Class<? extends Component> view);
     public void setPath(Class<? extends Component> view, RouteParameters parameters);
 
-    // Target — applies only when path is set; writes the `target` attribute
-    public String getTarget();
-    public void setTarget(String target);
-    public boolean isOpenInNewBrowserTab();
-    public void setOpenInNewBrowserTab(boolean openInNewBrowserTab);   // convenience: target = "_blank" / null
-
     // Prefix — inherited from HasPrefix:
     //   setPrefixComponent(Component)
     //   getPrefixComponent()
@@ -286,9 +280,7 @@ public class BreadcrumbItem extends Component
 
 **Path resolution.** `setPath(Class<? extends Component>)` and `setPath(Class, RouteParameters)` mirror `SideNavItem.setPath(...)` exactly: `RouteConfiguration.forRegistry(ComponentUtil.getRouter(this).getRegistry()).getUrl(view, params)` and the resulting string is written to the `path` attribute. Router-agnosticism: Flow wraps the routing resolution, but the anchor `<a href="...">` is still plain HTML — Flow does not intercept clicks at the component level.
 
-**Target handling.** The `target` attribute on `<vaadin-breadcrumb-item>` (exposed by web-component-spec.md) is reachable via `setTarget(String)` / `getTarget()`, with `setOpenInNewBrowserTab(boolean)` as a convenience wrapper mirroring `SideNavItem`. `target` only applies when `path` is set — consistent with the web component's behaviour.
-
-**No @Synchronize'd properties.** `path` and `target` are server-driven.
+**No @Synchronize'd properties.** `path` is server-driven.
 
 **Events:** none.
 
@@ -327,7 +319,6 @@ Not applicable. No `BreadcrumbTrailVariant` enum is introduced. See flow-api.md 
 **No connector required.** All state is set via Element attributes and properties directly from server-side Java:
 
 - `path` — `setAttribute("path", ...)` on `BreadcrumbItem`
-- `target` — `setAttribute("target", ...)` on `BreadcrumbItem`
 - `prefix` slot — managed by `HasPrefix` / `SlotUtils.setSlot(this, "prefix", component)`
 - `i18n` — `setPropertyJson("i18n", JacksonUtils.beanToJson(i18n))` on `BreadcrumbTrail`
 - `aria-label` — `HasAriaLabel` attribute
@@ -344,7 +335,7 @@ No JavaScript file under `src/main/resources/META-INF/resources/frontend/`.
   - `BreadcrumbTrailI18n` (implements `Serializable`, only holds a `String`).
   - `navigationRegistration` field holding the `AfterNavigationListener` `Registration` is declared `transient` — it is non-serialisable and is re-created in `onAttach` on every re-attach.
   - `routerUpdateInProgress` is a `boolean` — serialisable; its default `false` value is correct after deserialisation.
-  - `BreadcrumbItem` introduces no new fields: text goes through `HasText.setText(...)` (= `getElement().setText(...)`), path and target are element attributes, and the prefix component reference is held by `SlotUtils` as a slot child under the element tree — all of which are captured by the standard `Component` serialisation.
+  - `BreadcrumbItem` introduces no new fields: text goes through `HasText.setText(...)` (= `getElement().setText(...)`), path is an element attribute, and the prefix component reference is held by `SlotUtils` as a slot child under the element tree — all of which are captured by the standard `Component` serialisation.
 
 - **Signal support.** `BreadcrumbItem` inherits `bindText(Signal<String>) → SignalBinding<String>` from `HasText` — reactive per-item text works without additional wiring. Reactive trails that change shape (items added or removed) are driven at the container level via `Signal.effect(breadcrumbTrail, () -> { removeAll(); add(...); })` or the `HasComponentsOfType.bindChildren(Signal<List<...>>, factory)` default method — both per flow-api.md §5.
 
@@ -549,8 +540,6 @@ public class BreadcrumbItemElement extends TestBenchElement {
 
     public String getPath();
 
-    public String getTarget();
-
     public boolean isCurrent();                             // reads `current` state attribute
 
     public boolean hasPrefix();                             // reads `has-prefix` state attribute
@@ -655,6 +644,10 @@ Not via a dedicated `bindItems` method. Per flow-api.md Discussion "Why no dedic
 **Q: Why `Mode` instead of a `Breadcrumb{Trail,Router}Mode` or similar prefixed enum?**
 
 Nested enum `BreadcrumbTrail.Mode` is the Vaadin convention for short enum types strongly tied to a single component (e.g. `Dialog.Position`, `Notification.Position`). Fully-qualified `BreadcrumbTrail.Mode.MANUAL` and imported `Mode.MANUAL` both read naturally.
+
+**Q: Why is there no `setTarget(String)` / `setOpenInNewBrowserTab(boolean)` on `BreadcrumbItem`?**
+
+An earlier iteration mirrored `SideNavItem` and exposed `setTarget(String)` for setting the anchor's `target` attribute (e.g. `_blank` to open in a new tab). It was removed along with the underlying web-component property. Breadcrumb items are part of a hierarchical navigation trail within the current application — opening an ancestor in a new tab is not a supported interaction and introducing API for it encourages patterns that fight the component's purpose (the user would end up with two tabs for the same hierarchy, neither reflecting the other's state). If a concrete use case emerges later, adding `setTarget` is strictly additive.
 
 **Q: Is per-item reactive text available?**
 

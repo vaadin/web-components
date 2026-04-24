@@ -126,7 +126,6 @@ When `path` is not set (current page):
 | Property | Type | Default | Reflected | Description |
 |---|---|---|---|---|
 | `path` | `string \| null \| undefined` | `undefined` | No | The URL to navigate to. When set, the item renders as an `<a>` link. When absent, the item renders as a non-interactive `<span>`. |
-| `target` | `string \| null \| undefined` | `undefined` | No | The link target (e.g. `_blank`). Only applies when `path` is set. |
 
 | Slot | Description |
 |---|---|
@@ -145,7 +144,7 @@ When `path` is not set (current page):
 
 Internal behavior:
 
-- **Link rendering.** When `path` is set, renders `<a href="${path}" target="${target}">`, matching the approach in `<vaadin-side-nav-item>`. When `path` is not set, renders `<span>`. The `<a>` is a plain HTML link — no router integration, no click interception. SPA routers intercept link clicks at the document level.
+- **Link rendering.** When `path` is set, renders `<a href="${path}">`, matching the approach in `<vaadin-side-nav-item>`. When `path` is not set, renders `<span>`. The `<a>` is a plain HTML link — no router integration, no click interception. SPA routers intercept link clicks at the document level.
 - **Separator rendering.** A `:host::after` pseudo-element renders the separator. It uses `background: currentColor` with `mask-image: var(--vaadin-breadcrumb-trail-separator)`, following the button-base-styles pattern. The last item's separator is hidden via `:host(:last-of-type)::after { display: none }`. Items with the `current` attribute also hide the separator. The same separator styling is duplicated on the container's `[part="overflow"]::after` (see the container's Overflow separator behavior) so the overflow element visually matches peer items in the list flow.
 - **RTL separator flip.** In RTL contexts, `:host::after` gets `transform: scaleX(-1)`.
 - **`aria-current="page"`.** When the parent sets the `current` attribute, the item's internal link/span element gets `aria-current="page"`.
@@ -228,6 +227,10 @@ The breadcrumb container subclasses `SlotController` and overrides `initNode`/`i
 ## Discussion
 
 Decisions made during specification review, with their reasoning.
+
+**Q: Should `<vaadin-breadcrumb-item>` expose a `target` property?**
+
+No. An earlier revision included `target` mirroring `<vaadin-side-nav-item>`'s support for `_blank`-style anchor targets. It was removed because a breadcrumb trail represents the user's position within a single application hierarchy, and opening an ancestor in a new tab is not a supported interaction — it would produce two tabs of the same application, neither reflecting the other's state. The rendered `<a>` still honours standard HTML link behaviour (middle-click, Ctrl/Cmd-click for user-driven new-tab/new-window opens) because the browser handles those on its own; only the programmatic `target` attribute is dropped. Reintroducing `target` is strictly additive if a concrete use case emerges.
 
 **Q: Should the `items` property entry type be called `BreadcrumbItem`?**
 
