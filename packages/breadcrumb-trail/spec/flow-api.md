@@ -13,7 +13,7 @@ The Flow API ALWAYS wraps the web component. Every attribute/property/slot/event
 Covers requirement(s): 1, 2
 
 ```java
-BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail(Mode.MANUAL);
 breadcrumbTrail.add(
         new BreadcrumbItem("Home", HomeView.class),
         new BreadcrumbItem("Developer Guide", DeveloperGuideView.class),
@@ -30,7 +30,7 @@ breadcrumbTrail.add(
         new BreadcrumbItem("External", "https://example.com/docs"));
 ```
 
-**Why this shape:** `BreadcrumbTrail` is a standard Flow container — it implements `HasComponentsOfType<BreadcrumbItem>` and accepts `BreadcrumbItem` children through the inherited `add(BreadcrumbItem...)` / `addComponentAsFirst(BreadcrumbItem)` / `addComponentAtIndex(int, BreadcrumbItem)` / `remove(BreadcrumbItem...)` / `removeAll()` methods. No component-specific `setItems`/`addItem` API is invented: a breadcrumb is a component tree of items, so it uses the same primitives as any other component tree, and the generic typing gives compile-time enforcement that only `BreadcrumbItem` instances can be added. On the web-component side the `items` JS property takes data objects, but that is a client-side concern; in Flow, items are `BreadcrumbItem` components and child management uses the Flow conventions developers already know. `BreadcrumbItem` offers the same constructor overloads as `SideNavItem`: `(label)` for the current page (no path), `(label, String path)` for hand-managed paths, `(label, Class<? extends Component> view)` as the type-safe primary form required by `DESIGN_GUIDELINES.md` "Integrate with Flow Router", and `(label, Class<? extends Component> view, RouteParameters routeParameters)` for parameterised routes. Each path-taking overload also has a prefix-component variant ending in `Component prefixComponent` (see section 4). The "current" distinction needs no extra API — an item without a path is the current item, matching the web component's declarative convention.
+**Why this shape:** `BreadcrumbTrail` has an explicit `Mode` that determines who owns the trail. The nested enum `BreadcrumbTrail.Mode` has two values: `ROUTER` (default — auto-populated from Flow routing metadata, see section 8) and `MANUAL` (the application manages the items). The mode is chosen at construction — `new BreadcrumbTrail()` defaults to `ROUTER`, `new BreadcrumbTrail(Mode.MANUAL)` is explicit. Adding or removing children while in `ROUTER` mode throws `IllegalStateException`, so the two models never silently mix. In `MANUAL` mode, `BreadcrumbTrail` is a standard Flow container — it implements `HasComponentsOfType<BreadcrumbItem>` and accepts items through the inherited `add(BreadcrumbItem...)` / `addComponentAsFirst(BreadcrumbItem)` / `addComponentAtIndex(int, BreadcrumbItem)` / `remove(BreadcrumbItem...)` / `removeAll()` methods, with compile-time enforcement that only `BreadcrumbItem` instances can be added. On the web-component side the `items` JS property takes data objects, but that is a client-side concern; in Flow, items are `BreadcrumbItem` components. `BreadcrumbItem` offers the same constructor overloads as `SideNavItem`: `(label)` for the current page (no path), `(label, String path)` for hand-managed paths, `(label, Class<? extends Component> view)` as the type-safe primary form required by `DESIGN_GUIDELINES.md` "Integrate with Flow Router", and `(label, Class<? extends Component> view, RouteParameters routeParameters)` for parameterised routes. Each path-taking overload also has a prefix-component variant ending in `Component prefixComponent` (see section 4). The "current" distinction needs no extra API — an item without a path is the current item, matching the web component's declarative convention.
 
 ---
 
@@ -40,7 +40,7 @@ Covers requirement(s): 3
 
 ```java
 // All items linkable — no current-page item included in the trail
-BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail(Mode.MANUAL);
 breadcrumbTrail.add(
         new BreadcrumbItem("Home", HomeView.class),
         new BreadcrumbItem("Developer Guide", DeveloperGuideView.class),
@@ -56,7 +56,7 @@ breadcrumbTrail.add(
 Covers requirement(s): 6, 7
 
 ```java
-BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail(Mode.MANUAL);
 breadcrumbTrail.add(
         new BreadcrumbItem("Home", HomeView.class),
         new BreadcrumbItem("Documents", DocumentsView.class),
@@ -80,7 +80,7 @@ Covers requirement(s): 8
 
 ```java
 // Inline with construction — one line per item
-BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail(Mode.MANUAL);
 breadcrumbTrail.add(
         new BreadcrumbItem("Home", HomeView.class, new Icon(VaadinIcon.HOME)),
         new BreadcrumbItem("Documents", DocumentsView.class, new Icon(VaadinIcon.FOLDER)),
@@ -103,7 +103,7 @@ Covers requirement(s): 9
 
 ```java
 // Imperative form — rebuild the trail when the browsed category changes
-BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail(Mode.MANUAL);
 breadcrumbTrail.add(
         new BreadcrumbItem("Home", HomeView.class),
         new BreadcrumbItem("Electronics", CategoryView.class, new RouteParameters("slug", "electronics")),
@@ -125,7 +125,7 @@ categorySelector.addValueChangeListener(event -> {
 // Reactive form — run an effect that rebuilds the children when a signal changes
 ValueSignal<Category> current = new ValueSignal<>(initialCategory);
 
-BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail(Mode.MANUAL);
 Signal.effect(breadcrumbTrail, () -> {
     Category category = current.get();
     breadcrumbTrail.removeAll();
@@ -140,7 +140,7 @@ Signal.effect(breadcrumbTrail, () -> {
 current.set(nextCategory);
 ```
 
-**Why this shape:** Imperative updates use the standard component-tree primitives `add(...)`, `remove(...)`, `removeAll()` inherited from `HasComponentsOfType<BreadcrumbItem>` — the same API a Flow developer uses for any container, with the generic parameter ensuring only `BreadcrumbItem` instances can be passed. Reactive updates use `Signal.effect(component, Runnable)`, Flow core's primitive for running a callback whenever the observed signals change; the effect is the right granularity here because the trail is rebuilt as a tree operation (`removeAll` + `add`), not a single property set. This avoids inventing a component-specific `bindItems` surface when the generic effect primitive already covers the case. The web component's `items` JS property (see web-component-api.md §6) is never exposed directly from Java — it represents a data array on the client, while the Flow wrapper always manages a tree of `BreadcrumbItem` components.
+**Why this shape:** In `Mode.MANUAL`, imperative updates use the standard component-tree primitives `add(...)`, `remove(...)`, `removeAll()` inherited from `HasComponentsOfType<BreadcrumbItem>` — the same API a Flow developer uses for any container, with the generic parameter ensuring only `BreadcrumbItem` instances can be passed. Reactive updates use `Signal.effect(component, Runnable)`, Flow core's primitive for running a callback whenever the observed signals change; the effect is the right granularity here because the trail is rebuilt as a tree operation (`removeAll` + `add`), not a single property set. This avoids inventing a component-specific `bindItems` surface when the generic effect primitive already covers the case. The web component's `items` JS property (see web-component-api.md §6) is never exposed directly from Java — it represents a data array on the client, while the Flow wrapper always manages a tree of `BreadcrumbItem` components.
 
 ---
 
@@ -149,7 +149,7 @@ current.set(nextCategory);
 Covers requirement(s): 10
 
 ```java
-BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail(Mode.MANUAL);
 breadcrumbTrail.setAriaLabel("Product navigation");
 breadcrumbTrail.add(
         new BreadcrumbItem("Home", HomeView.class),
@@ -195,14 +195,14 @@ public class CustomersView extends Div { ... }
 @PageTitle("Archive")
 public class ArchiveView extends Div {
     public ArchiveView() {
-        // Zero configuration: empty breadcrumb auto-populates from the router.
+        // Zero configuration: router mode is the default, populates from routing metadata.
         add(new BreadcrumbTrail());
         // Renders as: Home › Customers › Archive
     }
 }
 ```
 
-**Why this shape:** A `BreadcrumbTrail` that has no children at attach time auto-populates itself from static route metadata. `@PageTitle` supplies each item's label and `@RouteParent` (or URL-prefix walking, see section 10) supplies the hierarchy — so auto-population never instantiates ancestor views. For the current (instantiated) view, `HasDynamicTitle` is honoured so a dynamic self-label works without further configuration. Data-dependent ancestor labels (e.g. "Acme Corp" for a specific customer) are out of scope for auto-population — applications that need them construct the trail themselves via `add(...)` (section 9). This is a Flow-only behaviour; the web component itself remains router-agnostic.
+**Why this shape:** A `BreadcrumbTrail` constructed with the default (`Mode.ROUTER`) populates itself from static route metadata. `@PageTitle` supplies each item's label and `@RouteParent` (or URL-prefix walking, see section 10) supplies the hierarchy — so auto-population never instantiates ancestor views. For the current (instantiated) view, `HasDynamicTitle` is honoured so a dynamic self-label works without further configuration. Data-dependent ancestor labels (e.g. "Acme Corp" for a specific customer) are out of scope for auto-population — applications that need them switch the trail to `Mode.MANUAL` and build it themselves (section 9). This is a Flow-only behaviour; the web component itself remains router-agnostic.
 
 ---
 
@@ -211,26 +211,35 @@ public class ArchiveView extends Div {
 Covers requirement(s): 14
 
 ```java
-// The common case: just add the items. Auto-population is skipped.
-BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+// Explicitly declare manual ownership in the constructor, then add items.
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail(Mode.MANUAL);
 breadcrumbTrail.add(
         new BreadcrumbItem("Catalog", CatalogView.class),
         new BreadcrumbItem(category.getName()));
 ```
 
 ```java
-// Async loading — add a placeholder so the breadcrumb has a child at
-// attach time and the router-derived default does not flash in.
-BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
-BreadcrumbItem placeholder = new BreadcrumbItem("");
-breadcrumbTrail.add(placeholder);
-loadCategoryAsync(category -> {
-    breadcrumbTrail.removeAll();
-    breadcrumbTrail.add(buildTrail(category));
-});
+// Async loading — MANUAL mode leaves the trail empty until the data arrives,
+// so the router-derived default never flashes in.
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail(Mode.MANUAL);
+loadCategoryAsync(category -> breadcrumbTrail.add(buildTrail(category)));
 ```
 
-**Why this shape:** Opting out is a consequence of being a parent, not a separate toggle. If the `BreadcrumbTrail` has any child at attach time, auto-population is skipped — the application has declared ownership by populating the tree. For the asynchronous-loading scenario, adding a single empty placeholder before attach claims ownership deterministically; the placeholder is replaced (`removeAll` + `add`) when data arrives. No public `setAutoPopulate` / `isAutoPopulate` surface is needed — the state is a consequence of the component tree, kept internal to the breadcrumb. This keeps the API surface for requirement 14 tiny and removes precedence questions between a flag and the children list.
+```java
+// Switch mode after construction if the intent changes later.
+breadcrumbTrail.setMode(Mode.MANUAL);
+BreadcrumbTrail.Mode current = breadcrumbTrail.getMode();
+```
+
+```java
+// In ROUTER mode, calling add(...) is a programming error.
+BreadcrumbTrail routerTrail = new BreadcrumbTrail(); // defaults to Mode.ROUTER
+routerTrail.add(new BreadcrumbItem("Home", HomeView.class));
+// → throws IllegalStateException: BreadcrumbTrail is in Mode.ROUTER;
+//   switch to Mode.MANUAL before adding items.
+```
+
+**Why this shape:** `BreadcrumbTrail.Mode` with values `ROUTER` (default) and `MANUAL` makes the two configuration styles explicit. The application picks one at construction (`new BreadcrumbTrail(Mode.MANUAL)`) or via `setMode(Mode)` at any time; `getMode()` reads the current value. Children can only be added or removed while in `Mode.MANUAL` — calling `add`, `remove`, or `removeAll` while in `Mode.ROUTER` throws `IllegalStateException`, so the two models never silently mix. `MANUAL` mode also keeps the trail empty until the application populates it, which covers the asynchronous-loading scenario without requiring a placeholder child: the router-derived default simply does not run.
 
 ---
 
@@ -271,7 +280,7 @@ public class EditOrderView extends Div { ... }
 | `aria-label` on the host | `BreadcrumbTrail implements HasAriaLabel` | `setAriaLabel(String)` / `getAriaLabel()` from Flow core |
 | `--vaadin-breadcrumb-trail-separator` CSS custom property | `BreadcrumbTrail#getStyle().set("--vaadin-breadcrumb-trail-separator", ...)` via `HasStyle` | per `DESIGN_GUIDELINES.md` "Styling lives in CSS, not Java" — no dedicated Java setter |
 | RTL separator flipping | — (handled in CSS when `dir="rtl"`) | inherited from the application / `HasStyle` |
-| Flow: auto-populate from router | no public toggle — internal state | runs at attach only when the `BreadcrumbTrail` has no children; any child (including a placeholder) suppresses it |
+| Flow: auto-populate from router | `BreadcrumbTrail.Mode` enum (`ROUTER`, `MANUAL`); `new BreadcrumbTrail()` / `new BreadcrumbTrail(Mode)`; `setMode(Mode)` / `getMode()` | default `ROUTER`; `add`/`remove`/`removeAll` throw `IllegalStateException` while in `ROUTER` mode |
 | Flow: route-parent override | `@RouteParent(Class<? extends Component>)` | class-level annotation on `@Route` views |
 
 ## Discussion
@@ -280,9 +289,9 @@ public class EditOrderView extends Div { ... }
 
 Icons are the primary real-world use of the prefix slot (home icon on the root, folder icon on category items), and calling `setPrefixComponent(...)` on a separate line after construction is noticeably more verbose than the idiomatic Flow form for other components. `SideNavItem` — the closest convention anchor — already exposes the same prefix-component overloads, so BreadcrumbTrail matching them keeps the two components consistent and lets the most common declaration (icon + label + route) fit on one line. `setPrefixComponent` remains available for the case where the prefix is determined after construction (e.g. dynamic icon based on data), so the convenience overloads do not reduce flexibility.
 
-**Q: Why no public `setAutoPopulate` / `isAutoPopulate`?**
+**Q: Why an explicit `Mode` enum instead of inferring ownership from whether children were added?**
 
-Keeping the flag internal means there's only one way to express "the application is managing this trail": add a child to the `BreadcrumbTrail`. A separate public boolean introduces precedence questions ("does the flag override the children, or vice versa?") and a footgun class ("I added items but forgot to flip the flag, and the next re-attach surprised me"). Collapsing the concern into the child tree makes intent unambiguous: having any child — real item or placeholder — means the application owns the trail for that instance, and the router-derived default is not re-applied. The asynchronous-loading case that earlier designs used `setAutoPopulate(false)` for is now expressed by adding a placeholder item (section 9). Keeping the API surface for requirement 14 tiny is worth more than retaining a direct boolean accessor.
+Earlier iterations of this design relied on an internal "no children at attach = auto-populate" heuristic. That works for the happy path but becomes ambiguous in edge cases: re-attach after `removeAll`, children added in `BeforeEnter` vs. in the constructor, async loading, tests that move the component. An explicit `Mode` enum removes the ambiguity — the application declares its intent at construction (or via `setMode`), and the component enforces the contract. Calling `add`, `remove`, or `removeAll` while in `Mode.ROUTER` throws `IllegalStateException` rather than silently discarding the call or mixing the two models, so the footgun turns into a clear failure at the point of misuse. A boolean `setAutoPopulate(boolean)` was considered but rejected because "automatic" does not name the *source* of the items; `ROUTER` makes the meaning explicit and leaves room for other modes (e.g. a future `PROVIDER` mode tied to a deferred `BreadcrumbProvider`) without a breaking name change.
 
 **Q: How is requirement 16 (data-driven trails that depend on runtime data) covered without a dedicated API?**
 
