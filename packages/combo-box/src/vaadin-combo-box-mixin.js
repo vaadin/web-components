@@ -164,15 +164,21 @@ export const ComboBoxMixin = (superClass) =>
         this._scroller.style.maxHeight =
           getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
       } else {
-        // Reset both the DOM scrollTop and the virtualizer adapter's
+        // Reset the DOM scrollTop and the virtualizer adapter's
         // `_scrollPosition` cache. Without the cache reset, the adapter's
         // ResizeObserver restores the prior scroll position on next open,
         // leaving the dropdown stuck at the previous offset. The virtualizer's
         // own `scrollToIndex` can't help here: by the time this observer runs,
         // `offsetHeight` is already 0 and its scroll API is a no-op.
-        this._scroller.scrollTop = 0;
+        // Guarded on `_scrollPosition > 0` so the reset is skipped when
+        // there is nothing to reset (e.g. the initial `opened=undefined`
+        // observer run, before the dropdown has ever been opened) —
+        // unconditionally touching `scrollTop` on connect can affect the
+        // outer document's scroll position (see the combo-box re-layout
+        // integration test).
         const adapter = this._scroller.__virtualizer && this._scroller.__virtualizer.__adapter;
-        if (adapter) {
+        if (adapter && adapter._scrollPosition > 0) {
+          this._scroller.scrollTop = 0;
           adapter._scrollPosition = 0;
         }
       }
