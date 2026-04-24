@@ -19,7 +19,7 @@ export type SliderChangeEvent = Event & {
 /**
  * Fired when the slider value changes during user interaction.
  */
-export type SliderInputEvent = Event & {
+export type SliderInputEvent = InputEvent & {
   target: Slider;
 };
 
