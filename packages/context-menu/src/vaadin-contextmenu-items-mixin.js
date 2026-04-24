@@ -88,7 +88,7 @@ export const ItemsMixin = (superClass) =>
     constructor() {
       super();
 
-      this.__boundOnTooltipMouseLeave = this.__onTooltipOverlayMouseLeave.bind(this);
+      this.__onTooltipOverlayMouseLeave = this.__onTooltipOverlayMouseLeave.bind(this);
 
       // Overlay's outside click listener doesn't work with modeless
       // overlays (submenus) so we need additional logic for it
@@ -494,7 +494,7 @@ export const ItemsMixin = (superClass) =>
         }
 
         if (!tooltip._mouseLeaveListenerAdded) {
-          tooltip._overlayElement.addEventListener('mouseleave', this.__boundOnTooltipMouseLeave);
+          tooltip._overlayElement.addEventListener('mouseleave', this.__onTooltipOverlayMouseLeave);
           tooltip._mouseLeaveListenerAdded = true;
         }
 
