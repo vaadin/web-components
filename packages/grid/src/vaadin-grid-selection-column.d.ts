@@ -37,7 +37,9 @@ export * from './vaadin-grid-selection-column-mixin.js';
  *
  * @fires {CustomEvent} select-all-changed - Fired when the `selectAll` property changes.
  */
-declare class GridSelectionColumn<TItem = GridDefaultItem> extends HTMLElement {}
+declare class GridSelectionColumn<TItem = GridDefaultItem> extends HTMLElement {
+  hidden: boolean;
+}
 
 interface GridSelectionColumn<TItem = GridDefaultItem>
   extends GridSelectionColumnMixinClass<TItem>, GridColumnMixin<TItem, GridColumn<TItem>>, GridColumn<TItem> {
