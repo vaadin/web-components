@@ -51,6 +51,8 @@ import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @fires {CustomEvent} dashboard-root-heading-level-changed - Fired when the `rootHeadingLevel` property changes.
+ *
  * @customElement vaadin-dashboard-layout
  * @extends HTMLElement
  * @mixes DashboardLayoutMixin
