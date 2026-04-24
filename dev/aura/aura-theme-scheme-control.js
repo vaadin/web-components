@@ -17,7 +17,7 @@ class AuraThemeSchemeControl extends AuraControl {
     { id: 'light', label: 'Light', main: 'light', content: 'light', notification: 'light' },
     { id: 'dark', label: 'Dark', main: 'dark', content: 'dark', notification: 'dark' },
     { id: 'auto', label: 'Auto', main: 'light dark', content: 'light dark', notification: 'light dark' },
-    { id: 'mixed', label: 'Mixed', main: 'dark', content: 'light', notification: 'dark' },
+    { id: 'mixed', label: 'Mixed', main: 'dark', content: 'light dark', notification: 'dark' },
   ];
 
   constructor() {

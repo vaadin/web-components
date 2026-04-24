@@ -1,3 +1,4 @@
+import '@vaadin/select';
 import { AuraControl } from './aura-abstract-control.js';
 
 class AuraFontFamilyControl extends AuraControl {
@@ -17,7 +18,7 @@ class AuraFontFamilyControl extends AuraControl {
 
   // UI options with font stack values and optional Google Fonts imports.
   #opts = [
-    { label: 'Instrument Sans (local)', value: "'Instrument Sans', var(--aura-font-family-system)" },
+    { label: 'Instrument Sans (local)', value: "'Instrument Sans', var(--aura-font-family-system)", default: true },
     { label: 'System (local)', value: 'var(--aura-font-family-system)' },
     {
       label: 'Inter',
@@ -72,11 +73,48 @@ class AuraFontFamilyControl extends AuraControl {
     super();
     this.initControl({
       label: 'Font family',
-      content: '<select></select>',
+      content: '<vaadin-select></vaadin-select>',
     });
-    this.#select = this.querySelector('select');
+    this.#select = this.querySelector('vaadin-select');
     this.#labelEl = this.labelElement;
     this.#resetBtn = this.resetButton;
+
+    this.#select.renderer = (root) => {
+      this.#renderOptions(root);
+    };
+  }
+
+  get optionValues() {
+    return this.#opts.map((opt) => this.#normalizeToken(opt.value)).filter(Boolean);
+  }
+
+  get defaultValue() {
+    return this.#defaultValue();
+  }
+
+  get value() {
+    return this.#normalizeToken(this.#select?.value) || this.#defaultValue();
+  }
+
+  set value(token) {
+    const normalized = this.#normalizeToken(token);
+    const allowed = this.optionValues;
+    this.#select.value = allowed.includes(normalized) ? normalized : this.#defaultValue();
+  }
+
+  applyValue(token, { source = 'user' } = {}) {
+    this.value = token;
+    const selected = this.value;
+    if (selected === this.#defaultValue()) {
+      document.documentElement.style.removeProperty(this.#prop);
+      localStorage.removeItem(this.#storageKey());
+      this.#ensureFontImport(selected);
+    } else {
+      this.#setVar(selected);
+      this.#persist(selected);
+    }
+    this.#emit(selected, { source });
+    this.#updateComputedReadout();
   }
 
   attributeChangedCallback(name, _old, val) {
@@ -94,24 +132,17 @@ class AuraFontFamilyControl extends AuraControl {
       this.#labelEl.textContent = this.getAttribute('label');
     }
 
-    // Render options (value = final font-family stack)
-    this.#select.innerHTML = '';
-    this.#opts.forEach((opt) => {
-      const el = document.createElement('option');
-      el.textContent = opt.label;
-      el.value = this.#normalizeToken(opt.value);
-      this.#select.appendChild(el);
-    });
+    if (typeof this.#select.requestContentUpdate === 'function') {
+      this.#select.requestContentUpdate();
+    }
 
     this.#initialize();
 
     // User change → set var + persist
-    this.#select.addEventListener('change', () => {
-      const token = this.#select.value;
-      this.#setVar(token);
-      this.#persist(token);
-      this.#emit(token, { source: 'user' });
-      this.#updateComputedReadout();
+    this.#select.addEventListener('value-changed', (event) => {
+      const token = this.#normalizeToken(event.detail.value);
+      if (!token) return;
+      this.applyValue(token, { source: 'user' });
     });
 
     // Reset → clear storage, remove inline override, reselect by stylesheet
@@ -119,7 +150,8 @@ class AuraFontFamilyControl extends AuraControl {
       localStorage.removeItem(this.#storageKey());
       document.documentElement.style.removeProperty(this.#prop);
       this.#selectByComputed(); // UI only
-      this.#emit(this.#select.value, { source: 'reset' });
+      this.#ensureFontImport(this.value);
+      this.#emit(this.value, { source: 'reset' });
       this.#updateComputedReadout();
     });
 
@@ -132,10 +164,7 @@ class AuraFontFamilyControl extends AuraControl {
     const stored = localStorage.getItem(this.#storageKey());
     if (stored) {
       const token = this.#normalizeToken(stored) || this.#defaultValue();
-      this.#select.value = token;
-      this.#setVar(token); // apply because it came from storage
-      this.#persist(token); // normalize storage
-      this.#emit(token, { source: 'storage' });
+      this.applyValue(token, { source: 'storage' });
       return;
     }
 
@@ -168,7 +197,7 @@ class AuraFontFamilyControl extends AuraControl {
       }
     }
 
-    this.#select.value = matched ?? this.#defaultValue();
+    this.value = matched ?? this.#defaultValue();
   }
 
   // ----- Actions ------------------------------------------------------------
@@ -197,8 +226,22 @@ class AuraFontFamilyControl extends AuraControl {
     return `aura:font-family:${this.#prop}`;
   }
 
+  #renderOptions(root) {
+    root.textContent = '';
+    const listBox = document.createElement('vaadin-select-list-box');
+
+    this.#opts.forEach((opt) => {
+      const item = document.createElement('vaadin-select-item');
+      item.value = this.#normalizeToken(opt.value);
+      item.textContent = opt.label;
+      listBox.appendChild(item);
+    });
+
+    root.appendChild(listBox);
+  }
+
   #defaultValue() {
-    return this.#normalizeToken(this.#opts.find((opt) => opt.label === 'System')?.value || this.#opts[0].value);
+    return this.#normalizeToken(this.#opts.find((opt) => opt.default)?.value || this.#opts[0]?.value);
   }
 
   #ensureFontImport(token) {
@@ -224,22 +267,22 @@ class AuraFontFamilyControl extends AuraControl {
   }
 
   #legacyTokenForOption(opt) {
-    if (opt.label === 'Instrument Sans') {
+    if (opt.label.startsWith('Instrument Sans')) {
       return this.#normalizeToken('var(--aura-font-family-instrument-sans)');
     }
-    if (opt.label === 'System') {
+    if (opt.label.startsWith('System')) {
       return this.#normalizeToken('var(--aura-font-family-system)');
     }
     return null;
   }
 
   #legacyResolvedValueForOption(opt) {
-    if (opt.label === 'Instrument Sans') {
+    if (opt.label.startsWith('Instrument Sans')) {
       return this.#normalizeToken(
         getComputedStyle(document.documentElement).getPropertyValue('--aura-font-family-instrument-sans'),
       );
     }
-    if (opt.label === 'System') {
+    if (opt.label.startsWith('System')) {
       return this.#normalizeToken(
         getComputedStyle(document.documentElement).getPropertyValue('--aura-font-family-system'),
       );
