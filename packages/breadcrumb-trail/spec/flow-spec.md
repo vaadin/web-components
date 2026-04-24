@@ -10,7 +10,7 @@
 
 3. **Router integration via `AfterNavigationListener`.** For `Mode.ROUTER`, the component registers `UI.addAfterNavigationListener(...)` in its attach handler and unregisters in detach. The listener walks the route hierarchy — `@RouteParent` first, then URL-prefix — and calls `updateChildrenInternal(List<BreadcrumbItem>)` to replace the trail. `updateChildrenInternal` sets an internal `boolean routerUpdateInProgress` flag, routes the update through the normal component API (`removeAll()` + `add(...)`), then clears the flag; the `Mode.ROUTER` guard on the public methods skips the throw when the flag is set. This means router-derived items are regular child components — `getChildren()` returns them, serialisation captures them, and the Flow virtual-children mechanism is not involved.
 
-4. **`@RouteParent` annotation.** Per flow-api.md §10. The annotation sits outside the breadcrumb module (the name is deliberately non-breadcrumb-specific, per flow-api.md Discussion "Why `@RouteParent` rather than a breadcrumb-specific name?"). Two placements are possible; the recommendation and fallback are documented in "Reuse and Proposed Adjustments".
+4. **`@RouteParent` annotation lives in Flow core.** Per flow-api.md §10. `com.vaadin.flow.router.RouteParent` is introduced in Flow core alongside `@Route`, `@RouteAlias`, `@ParentLayout`. The breadcrumb module only consumes it — it neither defines it nor re-exports it. See "Reuse and Proposed Adjustments" for the Flow core dependency.
 
 5. **Router-walker algorithm resolves a route's ancestors by metadata only.** It never instantiates ancestor views. For each walked route it reads `@PageTitle` for the label; for the terminal (current) view, `HasDynamicTitle.getPageTitle()` is called on the already-instantiated view instance. `@RouteParent` is checked first; if absent, URL-prefix walking strips the last path segment and resolves via `RouteConfiguration.forSessionScope().getRoute(...)`. Cycles (a → b → a) are detected by a visited-set and truncated at the first repeat; an `@RouteParent` pointing at a class without `@Route` falls back to URL-prefix walking for that step.
 
@@ -46,9 +46,9 @@ flow-components/
     │       │   ├── BreadcrumbItem.java                 # <vaadin-breadcrumb-item>
     │       │   ├── BreadcrumbTrailFeatureFlagProvider.java  # defines the Feature constant
     │       │   ├── ExperimentalFeatureException.java   # local exception with a helpful message
-    │       │   ├── RouteParent.java                    # @RouteParent annotation (see §10 — may move to Flow core)
     │       │   └── internal/
-    │       │       └── RouteParentResolver.java        # static helper that walks the hierarchy
+    │       │       └── RouteParentResolver.java        # static helper that walks the hierarchy,
+    │       │                                           #   consuming com.vaadin.flow.router.RouteParent
     │       ├── main/resources/
     │       │   └── META-INF/services/
     │       │       └── com.vaadin.experimental.FeatureFlagProvider   # one-line ServiceLoader registration
@@ -422,24 +422,30 @@ Integration-tests module enables the flag at startup with `src/main/resources/va
 
 ## `@RouteParent` Annotation
 
+`com.vaadin.flow.router.RouteParent` is introduced in Flow core (see "Reuse and Proposed Adjustments → Flow core dependencies"). The breadcrumb module only reads it — it does not redefine or re-export it.
+
+Expected shape in Flow core:
+
 ```java
+package com.vaadin.flow.router;
+
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface RouteParent {
     /**
      * The view class that is the conceptual parent of the annotated
-     * {@link com.vaadin.flow.router.Route @Route} class.
+     * {@link Route @Route} class.
      *
      * The parent class should itself be annotated with {@code @Route}. If
-     * it is not, the breadcrumb resolver falls back to URL-prefix walking
-     * for this step.
+     * it is not, consumers of this annotation (e.g. the breadcrumb
+     * resolver) fall back to URL-prefix walking for this step.
      */
     Class<? extends Component> value();
 }
 ```
 
-Placement: initially in `com.vaadin.flow.component.breadcrumbtrail`. Long-term home is `com.vaadin.flow.router` in Flow core (see "Reuse and Proposed Adjustments"). The annotation is read by `RouteParentResolver.resolveParent(Class)` using reflection. No framework-level route registration change is needed — `@Route` is discovered the same way it already is; `@RouteParent` is only read by the breadcrumb's resolver.
+The annotation is read by `RouteParentResolver.resolveParent(Class)` using reflection. No framework-level route registration change is needed — `@Route` is discovered the same way it already is; `@RouteParent` is only read by consumers like the breadcrumb's resolver.
 
 ### `RouteParentResolver` (internal)
 
@@ -529,14 +535,13 @@ Queries use the same pattern as `SideNavElement` / `SideNavItemElement`: `$("vaa
 
 ## Reuse and Proposed Adjustments to Existing Modules
 
-### `com.vaadin.flow.router.RouteParent` — Proposed new annotation in Flow core
+### `com.vaadin.flow.router.RouteParent` — Flow core dependency
 
 `@RouteParent` is not tied to breadcrumb rendering — per flow-api.md Discussion "Why `@RouteParent` rather than a breadcrumb-specific name?", the annotation belongs in `com.vaadin.flow.router` alongside `@Route`, `@RouteAlias`, `@ParentLayout`. This lets any future navigation component (back-helpers, parent-link renderers, SEO link-graph utilities) consume the same declaration.
 
-- **Preferred placement:** `com.vaadin.flow.router.RouteParent` in Flow core.
-- **Fallback placement (if Flow core PR is not landed):** `com.vaadin.flow.component.breadcrumbtrail.RouteParent` in the breadcrumb-trail module, accepting the slightly awkward import path. Moving it to Flow core later requires deprecating the breadcrumb-package one and re-exporting.
+The annotation will land in Flow core and this module depends on it. Ensure `flow-components-bom` targets a Flow version that includes the `RouteParent` annotation.
 
-Affects: Flow core. Additive. No other flow-components modules currently declare similar annotations.
+Affects: no flow-components module defines this annotation; the breadcrumb module imports `com.vaadin.flow.router.RouteParent` and reads it via reflection in `RouteParentResolver`.
 
 ### `HasComponentsOfType<T>` in Flow core — Dependency
 
@@ -584,10 +589,6 @@ No modifications.
 
 Questions raised during spec production, with their resolutions.
 
-**Q: Where does the `@RouteParent` annotation live?**
-
-Recommended: `com.vaadin.flow.router` in Flow core (alongside `@Route`, `@RouteAlias`, `@ParentLayout`). Fallback: `com.vaadin.flow.component.breadcrumbtrail` in the breadcrumb-trail module. The spec targets the Flow-core placement as the intent; the implementation task is free to start with the module-local placement if the Flow-core PR has not landed, and move it later. See "Reuse and Proposed Adjustments".
-
 **Q: How does `Mode.ROUTER` react to navigation?**
 
 `onAttach` registers `UI.addAfterNavigationListener(event -> rebuildFromRouter(...))` and holds the returned `Registration` in a transient field. `onDetach` unregisters. Each navigation rebuilds the trail via `RouteParentResolver.resolveTrail` and calls an internal `updateChildrenInternal(List<BreadcrumbItem>)` that bypasses the `Mode.ROUTER` guard on `add`/`remove`/`removeAll` — user code cannot reach this path.
@@ -616,6 +617,3 @@ Yes — the listener is unregistered in `onDetach`, but a navigation may fire be
 
 For consistency with `SideNav.getI18n()`, which returns `null` until `setI18n(...)` is called. Applications that want to tweak a single field build a new instance: `trail.setI18n(new BreadcrumbTrailI18n().setMoreItems("Show hidden items"))`. A lazy-init getter would hide the fact that the i18n object is a JSON payload pushed to the client — making it feel like a reactive bean when it isn't. The current shape also lets `null` mean "use the web component's built-in defaults", which is a meaningful state the lazy-init pattern cannot express.
 
-**Q: What's the migration path if `@RouteParent` eventually lands in Flow core?**
-
-The module-local `com.vaadin.flow.component.breadcrumbtrail.RouteParent` is deprecated with a Javadoc pointer to `com.vaadin.flow.router.RouteParent` when the Flow-core variant ships. The Breadcrumb resolver reads both for a deprecation cycle (one Vaadin minor version), preferring the Flow-core variant. This avoids forcing applications to edit imports immediately. The module-local variant is removed in a subsequent major version.
