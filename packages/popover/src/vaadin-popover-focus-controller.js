@@ -65,10 +65,12 @@ export class PopoverFocusController {
     const host = this.host;
     const targetFocusable = this.__getTargetFocusable();
 
-    // Just clear the flag so native Shift+Tab from the target doesn't reopen.
+    // Clear the flag so native Shift+Tab from the target doesn't reopen. Fall
+    // through to the redirect logic: when the popover is DOM-prev of the target,
+    // case 5 steers focus away from it instead of letting the browser land on
+    // the popover host or its content.
     if (targetFocusable && isElementFocused(targetFocusable) && host.__shouldRestoreFocus) {
       host.__shouldRestoreFocus = false;
-      return;
     }
 
     if (isElementFocused(host)) {

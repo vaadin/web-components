@@ -528,48 +528,75 @@ describe('a11y', () => {
       });
     });
 
-    describe('focus', () => {
-      let input;
+    describe('focus trigger', () => {
+      describe('popover after target', () => {
+        let input;
 
-      beforeEach(async () => {
-        // Place popover after target
-        target.parentElement.insertBefore(target, popover);
+        beforeEach(async () => {
+          // DOM = [target, popover, input]
+          target.parentElement.insertBefore(target, popover);
 
-        input = document.createElement('input');
-        target.parentElement.appendChild(input);
+          input = document.createElement('input');
+          target.parentElement.appendChild(input);
 
-        popover.trigger = ['focus'];
-        target.focus();
+          popover.trigger = ['focus'];
+          target.focus();
 
-        await oneEvent(overlay, 'vaadin-overlay-open');
+          await oneEvent(overlay, 'vaadin-overlay-open');
+        });
+
+        it('should focus the next element after target on last overlay child Tab', async () => {
+          // Move focus to the overlay
+          await sendKeys({ press: 'Tab' });
+
+          // Move focus to the input inside the overlay
+          await sendKeys({ press: 'Tab' });
+
+          // Move focus to the input after the overlay
+          await sendKeys({ press: 'Tab' });
+
+          const activeElement = getDeepActiveElement();
+          expect(activeElement).to.equal(input);
+        });
+
+        it('should focus the popover on focusable content Shift Tab', async () => {
+          // Move focus to the overlay
+          await sendKeys({ press: 'Tab' });
+
+          // Move focus to the input inside the overlay
+          await sendKeys({ press: 'Tab' });
+
+          // Move focus back to the popover
+          await sendKeys({ press: 'Shift+Tab' });
+
+          const activeElement = getDeepActiveElement();
+          expect(activeElement).to.equal(popover);
+        });
       });
 
-      it('should focus the next element after target on last overlay child Tab', async () => {
-        // Move focus to the overlay
-        await sendKeys({ press: 'Tab' });
+      describe('popover before target', () => {
+        let before;
 
-        // Move focus to the input inside the overlay
-        await sendKeys({ press: 'Tab' });
+        beforeEach(async () => {
+          // DOM = [before, popover, target, input]
+          before = document.createElement('input');
+          const input = document.createElement('input');
+          target.parentElement.insertBefore(popover, target);
+          target.parentElement.insertBefore(before, popover);
+          target.parentElement.appendChild(input);
 
-        // Move focus to the input after the overlay
-        await sendKeys({ press: 'Tab' });
+          popover.trigger = ['focus'];
+          target.focus();
+          await oneEvent(overlay, 'vaadin-overlay-open');
+        });
 
-        const activeElement = getDeepActiveElement();
-        expect(activeElement).to.equal(input);
-      });
+        it('should focus previous element on target Shift Tab without entering popover', async () => {
+          // Shift+Tab from target must not land on the popover (DOM-prev).
+          await sendKeys({ press: 'Shift+Tab' });
+          await nextRender();
 
-      it('should focus the popover on focusable content Shift Tab', async () => {
-        // Move focus to the overlay
-        await sendKeys({ press: 'Tab' });
-
-        // Move focus to the input inside the overlay
-        await sendKeys({ press: 'Tab' });
-
-        // Move focus back to the popover
-        await sendKeys({ press: 'Shift+Tab' });
-
-        const activeElement = getDeepActiveElement();
-        expect(activeElement).to.equal(popover);
+          expect(getDeepActiveElement()).to.equal(before);
+        });
       });
     });
   });
