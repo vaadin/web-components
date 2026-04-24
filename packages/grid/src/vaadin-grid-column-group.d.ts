@@ -36,7 +36,9 @@ export * from './vaadin-grid-column-group-mixin.js';
  * column2.renderer = (root, column, model) => { ... };
  * ```
  */
-declare class GridColumnGroup extends HTMLElement {}
+declare class GridColumnGroup extends HTMLElement {
+  hidden: boolean;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface GridColumnGroup<TItem = GridDefaultItem> extends GridColumnGroupMixin<TItem, GridColumnGroup<TItem>> {}
