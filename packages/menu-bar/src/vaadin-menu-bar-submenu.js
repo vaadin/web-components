@@ -135,16 +135,16 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
    * root-level buttons.
    *
    * @return {TooltipController | undefined}
-   * @protected
+   * @private
    * @override
    */
-  _getItemTooltipController() {
+  __getItemTooltipController() {
     const menuBar = this.parentElement;
     if (menuBar && menuBar._tooltipController) {
       return menuBar._tooltipController;
     }
 
-    return super._getItemTooltipController();
+    return super.__getItemTooltipController();
   }
 }
 

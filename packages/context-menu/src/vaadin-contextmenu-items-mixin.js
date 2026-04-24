@@ -132,7 +132,7 @@ export const ItemsMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
       document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener);
-      this._hideTooltip(true);
+      this.__hideTooltip(true);
     }
 
     /**
@@ -166,7 +166,7 @@ export const ItemsMixin = (superClass) =>
 
     /** @private */
     __openSubMenu(subMenu, itemElement) {
-      this._hideTooltip(true);
+      this.__hideTooltip(true);
 
       // Update sub-menu items and position target
       this.__updateSubMenuForItem(subMenu, itemElement);
@@ -277,9 +277,9 @@ export const ItemsMixin = (superClass) =>
       listBox.addEventListener('item-focused', (event) => {
         const item = event.detail.item;
         if (item && item._item.tooltip && isKeyboardActive()) {
-          this._showTooltip(item, false);
+          this.__showTooltip(item, false);
         } else {
-          this._hideTooltip(true);
+          this.__hideTooltip(true);
         }
       });
 
@@ -306,14 +306,14 @@ export const ItemsMixin = (superClass) =>
 
         const item = event.composedPath().find((node) => node.localName === `${this._tagNamePrefix}-item`);
         if (item && item._item.tooltip) {
-          this._showTooltip(item, true);
+          this.__showTooltip(item, true);
         } else {
-          this._hideTooltip(true);
+          this.__hideTooltip(true);
         }
       });
 
       overlay.addEventListener('mouseleave', () => {
-        this._hideTooltip(true);
+        this.__hideTooltip(true);
       });
 
       overlay.addEventListener('keydown', (event) => {
@@ -466,24 +466,24 @@ export const ItemsMixin = (superClass) =>
     }
 
     /**
-     * Return the `TooltipController` used to show item tooltips.
-     * Sub-classes may override this method to use a different controller,
-     * e.g. to reuse the parent menu-bar's tooltip for sub-menu items.
+     * Returns the `TooltipController` used to show item tooltips.
+     * Overridden internally by `MenuBarSubmenu` to reuse the parent
+     * menu-bar's tooltip; not intended as a public extension point.
      *
      * @return {TooltipController | undefined}
-     * @protected
+     * @private
      */
-    _getItemTooltipController() {
+    __getItemTooltipController() {
       return this._tooltipController;
     }
 
     /**
      * @param {HTMLElement} item
      * @param {boolean} isHover
-     * @protected
+     * @private
      */
-    _showTooltip(item, isHover) {
-      const controller = this._getItemTooltipController();
+    __showTooltip(item, isHover) {
+      const controller = this.__getItemTooltipController();
       // Check if there is a slotted vaadin-tooltip element.
       const tooltip = controller && controller.node;
       if (tooltip && tooltip.isConnected) {
@@ -511,10 +511,10 @@ export const ItemsMixin = (superClass) =>
 
     /**
      * @param {boolean} immediate
-     * @protected
+     * @private
      */
-    _hideTooltip(immediate) {
-      const controller = this._getItemTooltipController();
+    __hideTooltip(immediate) {
+      const controller = this.__getItemTooltipController();
       const tooltip = controller && controller.node;
       if (tooltip) {
         controller.setContext({ item: null });
@@ -524,9 +524,9 @@ export const ItemsMixin = (superClass) =>
 
     /** @private */
     __onTooltipOverlayMouseLeave(event) {
-      const controller = this._getItemTooltipController();
+      const controller = this.__getItemTooltipController();
       if (controller && event.relatedTarget !== controller.target) {
-        this._hideTooltip();
+        this.__hideTooltip();
       }
     }
 
