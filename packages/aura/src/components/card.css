@@ -2,7 +2,7 @@
 :where(:host) {
   --vaadin-card-title-font-weight: var(--aura-font-weight-medium);
   --vaadin-card-title-font-size: var(--aura-font-size-l);
-  --vaadin-card-padding: var(--vaadin-padding-l);
+  --vaadin-card-padding: calc(var(--vaadin-padding-l) - var(--vaadin-card-border-width));
   --vaadin-card-gap: var(--vaadin-gap-m) var(--vaadin-gap-l);
   --vaadin-card-border-width: 1px;
 }
