@@ -12,7 +12,7 @@
 
 4. **`@RouteParent` annotation lives in Flow core.** Per flow-api.md §10. `com.vaadin.flow.router.RouteParent` is introduced in Flow core alongside `@Route`, `@RouteAlias`, `@ParentLayout`. The breadcrumb module only consumes it — it neither defines it nor re-exports it. See "Reuse and Proposed Adjustments" for the Flow core dependency.
 
-5. **Router-walker algorithm resolves a route's ancestors by metadata only.** It never instantiates ancestor views. For each walked route it reads `@PageTitle` for the label; for the terminal (current) view, `HasDynamicTitle.getPageTitle()` is called on the already-instantiated view instance. `@RouteParent` is checked first; if absent, URL-prefix walking strips the last path segment and resolves via `RouteConfiguration.forSessionScope().getRoute(...)`. Cycles (a → b → a) are detected by a visited-set and truncated at the first repeat; an `@RouteParent` pointing at a class without `@Route` falls back to URL-prefix walking for that step.
+5. **Router-walker algorithm resolves a route's ancestors by metadata only.** It never instantiates ancestor views. For each walked route it reads `@PageTitle` for the item text; for the terminal (current) view, `HasDynamicTitle.getPageTitle()` is called on the already-instantiated view instance. `@RouteParent` is checked first; if absent, URL-prefix walking strips the last path segment and resolves via `RouteConfiguration.forSessionScope().getRoute(...)`. Cycles (a → b → a) are detected by a visited-set and truncated at the first repeat; an `@RouteParent` pointing at a class without `@Route` falls back to URL-prefix walking for that step.
 
 6. **No connector needed.** All state is set via standard Element attributes/properties from server-side Java — `setPath` writes the `path` attribute, `setPrefixComponent` uses `SlotUtils.setSlot` for the prefix slot, `setI18n` pushes a JSON object to the `i18n` client property. The web component's overflow behaviour is entirely client-side. No client-side items array is regenerated from server-side changes (Flow manages items as a component tree, not a data array — see flow-api.md coverage-table row "items JS property"). No connector file under `src/main/resources/META-INF/resources/frontend/`.
 
@@ -234,21 +234,22 @@ The public `add` / `addComponentAsFirst` / `addComponentAtIndex` / `remove` / `r
 @NpmPackage(value = "@vaadin/breadcrumb-trail", version = "25.2.0-alpha{N}")
 @JsModule("@vaadin/breadcrumb-trail/src/vaadin-breadcrumb-item.js")
 public class BreadcrumbItem extends Component
-        implements HasEnabled, HasPrefix, HasTooltip {
+        implements HasText, HasEnabled, HasPrefix, HasTooltip {
 
     // Constructors — mirror SideNavItem's overload set
-    public BreadcrumbItem(String label);                                                            // current page (no path)
-    public BreadcrumbItem(String label, String path);
-    public BreadcrumbItem(String label, Class<? extends Component> view);
-    public BreadcrumbItem(String label, Class<? extends Component> view, RouteParameters params);
-    public BreadcrumbItem(String label, String path, Component prefixComponent);
-    public BreadcrumbItem(String label, Class<? extends Component> view, Component prefixComponent);
-    public BreadcrumbItem(String label, Class<? extends Component> view,
+    public BreadcrumbItem(String text);                                                            // current page (no path)
+    public BreadcrumbItem(String text, String path);
+    public BreadcrumbItem(String text, Class<? extends Component> view);
+    public BreadcrumbItem(String text, Class<? extends Component> view, RouteParameters params);
+    public BreadcrumbItem(String text, String path, Component prefixComponent);
+    public BreadcrumbItem(String text, Class<? extends Component> view, Component prefixComponent);
+    public BreadcrumbItem(String text, Class<? extends Component> view,
                           RouteParameters params, Component prefixComponent);
 
-    // Label — default-slot text content of the item
-    public String getLabel();
-    public void setLabel(String label);
+    // Text — inherited from HasText:
+    //   setText(String)
+    //   getText()
+    //   bindText(Signal<String>) — returns SignalBinding<String>
 
     // Path
     public String getPath();
@@ -274,11 +275,10 @@ public class BreadcrumbItem extends Component
 
 **Implemented mixin interfaces:**
 
+- `HasText` — the default slot of `<vaadin-breadcrumb-item>` holds the item's text content. `HasText` from Flow core provides `setText(String)` / `getText()` and `bindText(Signal<String>) → SignalBinding<String>` as default methods, so the signal-binding entry point for reactive item text is also available without additional code.
 - `HasEnabled` — lets the application disable individual items (e.g. an ancestor the user has no permission to visit).
 - `HasPrefix` — requirement 8 (icons). `slot="prefix"` on `<vaadin-breadcrumb-item>`, shared mixin from `vaadin-flow-components-base`.
 - `HasTooltip` — useful for long labels that may not fit. Shared mixin.
-
-**Not `HasText`.** The default slot contains the label text, so `HasText` would technically work, but mirroring `SideNavItem`'s `setLabel`/`getLabel` naming keeps the two components consistent and avoids exposing two ways (`setText`/`setLabel`) to set the same content. `setLabel(String)` delegates internally to `getElement().setText(label)`.
 
 **No `HasSuffix`** — web-component-api.md explicitly excludes it. If added later on the web-component side, the Flow class adds `HasSuffix` to the `implements` clause; that is strictly additive.
 
@@ -344,9 +344,9 @@ No JavaScript file under `src/main/resources/META-INF/resources/frontend/`.
   - `BreadcrumbTrailI18n` (implements `Serializable`, only holds a `String`).
   - `navigationRegistration` field holding the `AfterNavigationListener` `Registration` is declared `transient` — it is non-serialisable and is re-created in `onAttach` on every re-attach.
   - `routerUpdateInProgress` is a `boolean` — serialisable; its default `false` value is correct after deserialisation.
-  - `BreadcrumbItem` introduces no new fields: label goes through `getElement().setText(...)`, path and target are element attributes, and the prefix component reference is held by `SlotUtils` as a slot child under the element tree — all of which are captured by the standard `Component` serialisation.
+  - `BreadcrumbItem` introduces no new fields: text goes through `HasText.setText(...)` (= `getElement().setText(...)`), path and target are element attributes, and the prefix component reference is held by `SlotUtils` as a slot child under the element tree — all of which are captured by the standard `Component` serialisation.
 
-- **Signal support.** `BreadcrumbItem` does not expose `bindText(Signal<String>)` — there is no `SignalPropertySupport<String>` wired up for the label. Reactive trails are achieved at the container level via `Signal.effect(breadcrumbTrail, () -> { removeAll(); add(...); })` per flow-api.md §5. This mirrors the decision not to expose `bindItems`; introducing a `bindLabel` on items would invite new state-management edge cases without a concrete use case that `Signal.effect` cannot already cover. A future `BreadcrumbItem.bindLabel(Signal<String>)` is a strictly additive option if real applications want it.
+- **Signal support.** `BreadcrumbItem` inherits `bindText(Signal<String>) → SignalBinding<String>` from `HasText` — reactive per-item text works without additional wiring. Reactive trails that change shape (items added or removed) are driven at the container level via `Signal.effect(breadcrumbTrail, () -> { removeAll(); add(...); })` or the `HasComponentsOfType.bindChildren(Signal<List<...>>, factory)` default method — both per flow-api.md §5.
 
 - **Routing.** The component is router-aware (`Mode.ROUTER` populates the trail from `AfterNavigationEvent`), but it does NOT navigate — it only reads current route + registered routes. `BreadcrumbItem` resolves `Class<? extends Component>` → URL via `RouteConfiguration`; the anchor `<a href>` is plain HTML and Flow's router intercepts clicks at the document level the same way it does for `SideNavItem` links.
 
@@ -496,7 +496,7 @@ final class RouteParentResolver {
 
 **Algorithm:**
 
-1. **Current item.** Label: `currentViewInstance instanceof HasDynamicTitle h ? h.getPageTitle() : readPageTitle(currentRoute)`. Path: no path (current item is the non-link). Construct `new BreadcrumbItem(label)`.
+1. **Current item.** Text: `currentViewInstance instanceof HasDynamicTitle h ? h.getPageTitle() : readPageTitle(currentRoute)`. Path: no path (current item is the non-link). Construct `new BreadcrumbItem(text)`.
 2. **Walk ancestors.** Maintain `Set<Class<? extends Component>> visited = new HashSet<>()`, initialised with `currentRoute`. Current walk target = `currentRoute`.
    - **Find parent class.** If target has `@RouteParent`, read its value. If the declared parent has `@Route`, jump there. Otherwise (annotation absent, or points at a non-`@Route` class), fall back to URL-prefix walking: take the current target's URL via `RouteConfiguration#getUrl(target, RouteParameters.empty())`, strip the last `/`-separated segment, call `RouteConfiguration#getRoute(strippedUrl)`. The `Optional<Class<? extends Component>>` returned is the parent if present.
    - **Terminate.** Stop when no parent is found (reached root), or when the parent is already in `visited` (cycle), or when URL-prefix walking produces an empty URL.
@@ -523,7 +523,7 @@ public class BreadcrumbTrailElement extends TestBenchElement {
 
     public BreadcrumbItemElement getCurrentItem();          // the item with the `current` state attribute (last no-path)
 
-    public BreadcrumbItemElement getItemByLabel(String label);
+    public BreadcrumbItemElement getItemByText(String text);
 
     public BreadcrumbItemElement getItemByPath(String path);
 
@@ -545,7 +545,7 @@ public class BreadcrumbTrailElement extends TestBenchElement {
 @Element("vaadin-breadcrumb-item")
 public class BreadcrumbItemElement extends TestBenchElement {
 
-    public String getLabel();
+    public String getText();
 
     public String getPath();
 
@@ -617,8 +617,8 @@ No modifications.
 
 | Requirement | Addressed in spec section(s) |
 |---|---|
-| 1. Displaying the ancestor trail | Component Classes → `BreadcrumbTrail` (`HasComponentsOfType<BreadcrumbItem>`); `BreadcrumbItem` (constructors with label + path) |
-| 2. Current page indication | `BreadcrumbItem(String label)` (no path) — web component renders as non-link, applies `current` state attribute |
+| 1. Displaying the ancestor trail | Component Classes → `BreadcrumbTrail` (`HasComponentsOfType<BreadcrumbItem>`); `BreadcrumbItem` (constructors with text + path) |
+| 2. Current page indication | `BreadcrumbItem(String text)` (no path) — web component renders as non-link, applies `current` state attribute |
 | 3. Optionally omitting the current page | No API — application chooses whether to add a no-path final item |
 | 4. Visual separator between items | Web component + theme (no Flow API) |
 | 5. Customizable separator appearance | `HasStyle` → `getStyle().set("--vaadin-breadcrumb-trail-separator", ...)` |
@@ -656,9 +656,9 @@ Not via a dedicated `bindItems` method. Per flow-api.md Discussion "Why no dedic
 
 Nested enum `BreadcrumbTrail.Mode` is the Vaadin convention for short enum types strongly tied to a single component (e.g. `Dialog.Position`, `Notification.Position`). Fully-qualified `BreadcrumbTrail.Mode.MANUAL` and imported `Mode.MANUAL` both read naturally.
 
-**Q: Can `BreadcrumbItem.bindLabel(Signal<String>)` be added later without breaking the API?**
+**Q: Is per-item reactive text available?**
 
-Yes — additive. The constructor set stays the same; `bindLabel` would be a new method next to `setLabel`. It is deferred because no requirement in requirements.md (universal + flow) asks for per-item reactive labels, and the item-tree reactive pattern (`Signal.effect` on the container) already covers every case.
+Yes — `BreadcrumbItem` implements `HasText`, which provides `bindText(Signal<String>) → SignalBinding<String>` as a default method from Flow core. Applications that want per-item reactive text bind a signal to a specific item directly: `item.bindText(textSignal)`. The container-level reactive pattern (`Signal.effect` on the `BreadcrumbTrail`) remains the right choice when the whole trail's shape changes; `bindText` is for the narrower case where an item's text updates without the trail structure changing.
 
 **Q: Does the router listener need to guard against the detached-component case?**
 
