@@ -12,7 +12,7 @@
 
 4. **`@RouteParent` annotation lives in Flow core.** Per flow-api.md §10. `com.vaadin.flow.router.RouteParent` is introduced in Flow core alongside `@Route`, `@RouteAlias`, `@ParentLayout`. The breadcrumb module only consumes it — it neither defines it nor re-exports it. See "Reuse and Proposed Adjustments" for the Flow core dependency.
 
-5. **Router-walker algorithm resolves a route's ancestors by metadata only.** It never instantiates ancestor views. For each walked route it reads `@PageTitle` for the item text; for the terminal (current) view, `HasDynamicTitle.getPageTitle()` is called on the already-instantiated view instance. `@RouteParent` is checked first; if absent, URL-prefix walking strips the last path segment and resolves via `RouteConfiguration.forSessionScope().getRoute(...)`. Cycles (a → b → a) are detected by a visited-set and truncated at the first repeat; an `@RouteParent` pointing at a class without `@Route` falls back to URL-prefix walking for that step.
+5. **Route-hierarchy walking is a Flow core feature, not a breadcrumb-specific resolver.** The "given a route class, walk up via `@RouteParent` then URL-prefix fallback" algorithm is useful to any navigation component (back-button helpers, SEO link-graph generators, sitemap renderers), so it lives in Flow core next to `@RouteParent` itself. The breadcrumb consumes it via a public helper — see "Reuse and Proposed Adjustments → Flow core: route-hierarchy walker". The resolver reads only static metadata (`@PageTitle`, `@RouteParent`) and therefore never instantiates ancestor views; the breadcrumb adds the dynamic-title step for the current (already-instantiated) view itself.
 
 6. **No connector needed.** All state is set via standard Element attributes/properties from server-side Java — `setPath` writes the `path` attribute, `setPrefixComponent` uses `SlotUtils.setSlot` for the prefix slot, `setI18n` pushes a JSON object to the `i18n` client property. The web component's overflow behaviour is entirely client-side. No client-side items array is regenerated from server-side changes (Flow manages items as a component tree, not a data array — see flow-api.md coverage-table row "items JS property"). No connector file under `src/main/resources/META-INF/resources/frontend/`.
 
@@ -45,10 +45,7 @@ flow-components/
     │       │   ├── BreadcrumbTrail.java                # host element, Mode enum, BreadcrumbTrailI18n nested class
     │       │   ├── BreadcrumbItem.java                 # <vaadin-breadcrumb-item>
     │       │   ├── BreadcrumbTrailFeatureFlagProvider.java  # defines the Feature constant
-    │       │   ├── ExperimentalFeatureException.java   # local exception with a helpful message
-    │       │   └── internal/
-    │       │       └── RouteParentResolver.java        # static helper that walks the hierarchy,
-    │       │                                           #   consuming com.vaadin.flow.router.RouteParent
+    │       │   └── ExperimentalFeatureException.java   # local exception with a helpful message
     │       ├── main/resources/
     │       │   └── META-INF/services/
     │       │       └── com.vaadin.experimental.FeatureFlagProvider   # one-line ServiceLoader registration
@@ -58,7 +55,6 @@ flow-components/
     │           ├── BreadcrumbItemTest.java
     │           ├── BreadcrumbTrailSerializableTest.java
     │           ├── BreadcrumbTrailI18nTest.java
-    │           ├── RouteParentResolverTest.java
     │           └── FeatureFlagTest.java
     ├── vaadin-breadcrumb-trail-flow-integration-tests/
     │   ├── pom.xml
@@ -200,7 +196,7 @@ void rebuildFromRouter(Location currentLocation,
                       RouteConfiguration routeConfiguration);
 ```
 
-Both overloads ultimately call `RouteParentResolver.resolveTrail(...)` with the same parameter shape (see "`RouteParentResolver` (internal)" below), then `updateChildrenInternal(trail)`. Both guard against stale callbacks: `if (!isAttached()) return;` first.
+Both overloads ultimately build the trail via the same private routine (see "How `BreadcrumbTrail` builds the trail" below), which calls the Flow core `RouteHierarchy` walker, wraps the returned ancestor classes into `BreadcrumbItem` instances, and hands the result to `updateChildrenInternal(trail)`. Both guard against stale callbacks: `if (!isAttached()) return;` first.
 
 `updateChildrenInternal(List<BreadcrumbItem> trail)`:
 
@@ -431,53 +427,34 @@ public @interface RouteParent {
 }
 ```
 
-The annotation is read by `RouteParentResolver.resolveParent(Class)` using reflection. No framework-level route registration change is needed — `@Route` is discovered the same way it already is; `@RouteParent` is only read by consumers like the breadcrumb's resolver.
+The annotation is consumed by a Flow core helper (see "Reuse and Proposed Adjustments → Flow core: route-hierarchy walker") — not by breadcrumb-specific code — so any navigation component can use it.
 
-### `RouteParentResolver` (internal)
+### How `BreadcrumbTrail` builds the trail
 
-Walks the route hierarchy using Flow's existing router / router-utils API. Every call below is either a public Flow method or a semi-public helper in `com.vaadin.flow.router.internal.RouteUtil` / `com.vaadin.flow.component.internal.UIInternals` that we already rely on.
+The breadcrumb does no walking of its own. On each navigation it:
 
-```java
-package com.vaadin.flow.component.breadcrumbtrail.internal;
+1. Identifies the current route class and the current view instance from `AfterNavigationEvent#getActiveChain()`.
+2. Calls the Flow core walker to get the ancestor chain: `List<Class<? extends Component>> chain = RouteHierarchy.resolveAncestors(currentRoute, routeConfiguration);` (root-first, inclusive of `currentRoute` as the last entry — see the walker's contract in "Reuse and Proposed Adjustments").
+3. For each ancestor class in `chain` except the last, reads its `@PageTitle` and resolves its URL via `RouteConfiguration#getUrl(ancestorClass, RouteParameters.empty())`, producing `new BreadcrumbItem(title, ancestorClass)`.
+4. For the last entry (the current route): uses `HasDynamicTitle#getPageTitle()` on the current view instance if it implements the interface, otherwise reads `@PageTitle` on the class. Constructs `new BreadcrumbItem(title)` with no path — the current item is the non-link.
+5. Calls `updateChildrenInternal(trail)`.
 
-final class RouteParentResolver {
+Everything the breadcrumb contributes — the dynamic-title step for the current view, the wrapping into `BreadcrumbItem` components, the `Mode.ROUTER` guard bypass — is breadcrumb-specific. The hierarchy walking, cycle detection, and `@RouteParent`-versus-URL-prefix fallback live in Flow core.
 
-    static List<BreadcrumbItem> resolveTrail(
-            Class<? extends Component> currentRoute,
-            Component currentViewInstance,
-            RouteParameters currentRouteParameters,
-            RouteConfiguration routeConfiguration);
-}
-```
+**Flow APIs used directly by the breadcrumb (all public):**
 
-**Flow APIs used (all public or explicitly enumerated in "Reuse"):**
+| Purpose | API call |
+|---|---|
+| Current active chain at navigation time | `AfterNavigationEvent#getActiveChain()` |
+| Current route params at navigation time | `AfterNavigationEvent#getRouteParameters()` |
+| Current location at navigation time | `AfterNavigationEvent#getLocation()` |
+| Resolve `Class<? extends Component>` → URL | `RouteConfiguration#getUrl(Class, RouteParameters)` |
+| Obtain the registry-scoped config | `RouteConfiguration.forRegistry(ComponentUtil.getRouter(this).getRegistry())` |
+| Read the current view's dynamic title | `HasDynamicTitle#getPageTitle()` on the view instance |
+| Read a route class's static title | `routeClass.getAnnotation(PageTitle.class).value()` |
+| Walk the route hierarchy | Flow core walker (see Reuse) |
 
-| Purpose | API call | Visibility |
-|---|---|---|
-| Resolve `Class<? extends Component>` → URL | `RouteConfiguration#getUrl(Class, RouteParameters)` | public |
-| Resolve URL prefix → route class | `RouteConfiguration#getRoute(String, List<String>)` / `getRoute(String)` | public |
-| Obtain the registry-scoped config | `RouteConfiguration.forRegistry(ComponentUtil.getRouter(this).getRegistry())` | public (mirrors `SideNavItem.setPath(Class)`) |
-| Read the current view's dynamic title | `HasDynamicTitle#getPageTitle()` on the view instance | public |
-| Read a route class's static title | `routeClass.getAnnotation(PageTitle.class).value()` | public (`@PageTitle`) |
-| Read a route's declared parent | `routeClass.getAnnotation(RouteParent.class).value()` | public (Flow core annotation — see Reuse) |
-| Identify the current-view instance at navigation time | `AfterNavigationEvent#getActiveChain()` → last element implementing `Component` | public |
-| Current route params at navigation time | `AfterNavigationEvent#getRouteParameters()` | public |
-| Current location at navigation time | `AfterNavigationEvent#getLocation()` | public |
-
-**Algorithm:**
-
-1. **Current item.** Text: `currentViewInstance instanceof HasDynamicTitle h ? h.getPageTitle() : readPageTitle(currentRoute)`. Path: no path (current item is the non-link). Construct `new BreadcrumbItem(text)`.
-2. **Walk ancestors.** Maintain `Set<Class<? extends Component>> visited = new HashSet<>()`, initialised with `currentRoute`. Current walk target = `currentRoute`.
-   - **Find parent class.** If target has `@RouteParent`, read its value. If the declared parent has `@Route`, jump there. Otherwise (annotation absent, or points at a non-`@Route` class), fall back to URL-prefix walking: take the current target's URL via `RouteConfiguration#getUrl(target, RouteParameters.empty())`, strip the last `/`-separated segment, call `RouteConfiguration#getRoute(strippedUrl)`. The `Optional<Class<? extends Component>>` returned is the parent if present.
-   - **Terminate.** Stop when no parent is found (reached root), or when the parent is already in `visited` (cycle), or when URL-prefix walking produces an empty URL.
-   - **Otherwise.** Read `@PageTitle` on the parent class (absent → skip this level and continue walking from the parent). Resolve its URL via `RouteConfiguration#getUrl(parentClass, RouteParameters.empty())`. Prepend a `new BreadcrumbItem(title, parentClass)` to the trail. Add parent to `visited`. Repeat with parent as the new target.
-3. **Return the trail root-first.**
-
-**Cycle behaviour:** `@RouteParent(X.class)` where X is already in `visited` stops the walk at the first repeat — no item is added for the repeated class. Matches flow-api.md Discussion "What happens if `@RouteParent` forms a cycle or points at a class without `@Route`?".
-
-**Parent without `@Route`:** `@RouteParent(X.class)` where X has no `@Route` annotation is treated as if the annotation were absent — the walker falls back to URL-prefix walking for that step. Matches flow-api.md Discussion.
-
-**Route parameters on ancestors:** the walker uses `RouteParameters.empty()` when resolving an ancestor's URL because ancestor routes may have a different parameter set from the current route. Applications that need ancestor labels with live data should use `Mode.MANUAL` and build the trail themselves (flow-api.md §9).
+**Route parameters on ancestors:** the breadcrumb resolves ancestor URLs with `RouteParameters.empty()`, because ancestor routes may have a different parameter set from the current route. Applications that need ancestor labels with live data should use `Mode.MANUAL` and build the trail themselves (flow-api.md §9).
 
 ---
 
@@ -580,13 +557,59 @@ Until the signal ships, the resolver calls `UIInternals` directly and accepts th
 
 Affects: Flow core. Fits the broader direction of making Flow state reactive-first (alongside `ValueSignal`, `Signal.effect`, `HasComponentsOfType.bindChildren`).
 
+### Flow core: route-hierarchy walker — Proposed
+
+`@RouteParent` is generic routing metadata, so the code that reads it and walks the route hierarchy is generic too. Rather than ship breadcrumb-specific resolver logic that any future navigation component would have to duplicate, the walker lands in Flow core alongside `@RouteParent`.
+
+Expected shape (names indicative; exact placement is a Flow-core decision):
+
+```java
+// in com.vaadin.flow.router
+public final class RouteHierarchy {
+
+    /**
+     * Returns the chain of route classes from the root down to and
+     * including {@code routeClass}, using {@code @RouteParent} when
+     * present and falling back to URL-prefix walking otherwise. Cycles
+     * are detected and truncated.
+     *
+     * @return a root-first list; the last element is always
+     *         {@code routeClass} when it is routable.
+     */
+    public static List<Class<? extends Component>> resolveAncestors(
+            Class<? extends Component> routeClass,
+            RouteConfiguration routeConfiguration);
+
+    /**
+     * Returns the immediate parent of {@code routeClass}, or empty if
+     * no parent can be resolved. Reads {@code @RouteParent} first, then
+     * URL-prefix walks.
+     */
+    public static Optional<Class<? extends Component>> resolveParent(
+            Class<? extends Component> routeClass,
+            RouteConfiguration routeConfiguration);
+}
+```
+
+**Algorithm contract** (implemented in Flow core; the breadcrumb only consumes it):
+
+1. Start with `routeClass`; if it has no `@Route` annotation, return an empty list (no hierarchy to walk).
+2. Maintain `Set<Class<? extends Component>> visited`, initialised with `routeClass`.
+3. At each step: read `@RouteParent` from the current class. If present and its value has `@Route`, jump there. Otherwise (annotation absent, or target is not a `@Route`), strip the last `/`-separated segment from the current class's URL (resolved via `RouteConfiguration#getUrl`) and call `RouteConfiguration#getRoute(strippedUrl)`; use that as the parent if present.
+4. Terminate when no parent is found, when the candidate is already in `visited` (cycle), or when URL-prefix stripping produces an empty URL.
+5. Return the list root-first, inclusive of the original `routeClass` as the last element.
+
+This is additive to Flow core — one new class next to `@RouteParent`, no change to existing router API. Tests for the walker (including cycle handling and parent-without-`@Route` fallback) live with Flow core, not with the breadcrumb module.
+
+Affects: Flow core. The breadcrumb depends on it for `Mode.ROUTER` but adds no code of its own for hierarchy walking.
+
 ### `com.vaadin.flow.router.RouteParent` — Flow core dependency
 
 `@RouteParent` is not tied to breadcrumb rendering — per flow-api.md Discussion "Why `@RouteParent` rather than a breadcrumb-specific name?", the annotation belongs in `com.vaadin.flow.router` alongside `@Route`, `@RouteAlias`, `@ParentLayout`. This lets any future navigation component (back-helpers, parent-link renderers, SEO link-graph utilities) consume the same declaration.
 
 The annotation will land in Flow core and this module depends on it. Ensure `flow-components-bom` targets a Flow version that includes the `RouteParent` annotation.
 
-Affects: no flow-components module defines this annotation; the breadcrumb module imports `com.vaadin.flow.router.RouteParent` and reads it via reflection in `RouteParentResolver`.
+Affects: no flow-components module defines this annotation; the breadcrumb module imports `com.vaadin.flow.router.RouteParent` indirectly through the Flow core `RouteHierarchy` walker.
 
 ### `HasComponentsOfType<T>` in Flow core — Dependency
 
@@ -623,9 +646,9 @@ No modifications.
 | 10. Navigation landmark | `BreadcrumbTrail implements HasAriaLabel` |
 | 11. Current page announced as current | Web component (no Flow API) |
 | 12. Directional separator flips in RTL | Web component + theme (no Flow API) |
-| 13. Flow: Default trail derived from router | `Mode.ROUTER` (default); `onAttach` registers `AfterNavigationListener`; `RouteParentResolver.resolveTrail` walks `@PageTitle` + `@RouteParent` + URL prefixes; `HasDynamicTitle` honoured for the current view |
+| 13. Flow: Default trail derived from router | `Mode.ROUTER` (default); `onAttach` registers `AfterNavigationListener`; the Flow core `RouteHierarchy.resolveAncestors(...)` walker walks `@RouteParent` + URL prefixes; the breadcrumb adds `@PageTitle` / `HasDynamicTitle` label resolution for the returned classes |
 | 14. Flow: Opting out of automatic trail population | `Mode.MANUAL` (via constructor or `setMode`); `add`/`remove`/`removeAll` throw `IllegalStateException` in `Mode.ROUTER` |
-| 15. Flow: Sitemap parent annotation overrides URL-based parent lookup | `@RouteParent` annotation; `RouteParentResolver` consults it before URL-prefix walking |
+| 15. Flow: Sitemap parent annotation overrides URL-based parent lookup | `@RouteParent` annotation in Flow core; `RouteHierarchy.resolveAncestors` consults it before URL-prefix walking |
 | 16. Flow: Routes can dynamically supply their breadcrumb contribution | Covered via the manual-construction pattern: `Mode.MANUAL` + application-side data loading + `add(...)` (see flow-api.md Discussion "How is requirement 16 … covered without a dedicated API?"). No new Flow API in this iteration — explicitly documented as a possible future addition. |
 
 ---
@@ -636,7 +659,7 @@ Questions raised during spec production, with their resolutions.
 
 **Q: How does `Mode.ROUTER` react to navigation?**
 
-`onAttach` registers `UI.addAfterNavigationListener(event -> rebuildFromRouter(...))` and holds the returned `Registration` in a transient field. `onDetach` unregisters. Each navigation rebuilds the trail via `RouteParentResolver.resolveTrail` and calls an internal `updateChildrenInternal(List<BreadcrumbItem>)` that bypasses the `Mode.ROUTER` guard on `add`/`remove`/`removeAll` — user code cannot reach this path.
+`onAttach` registers `UI.addAfterNavigationListener(event -> rebuildFromRouter(...))` and holds the returned `Registration` in a transient field. `onDetach` unregisters. Each navigation rebuilds the trail by calling the Flow core `RouteHierarchy.resolveAncestors(...)` walker, wrapping each returned class into a `BreadcrumbItem`, and handing the list to an internal `updateChildrenInternal(List<BreadcrumbItem>)` that bypasses the `Mode.ROUTER` guard on `add`/`remove`/`removeAll` — user code cannot reach this path.
 
 **Q: What happens if the user calls `setMode(Mode.ROUTER)` on a trail that already has children?**
 
