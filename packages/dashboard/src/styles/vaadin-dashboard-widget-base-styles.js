@@ -22,19 +22,7 @@ const widgetStyles = css`
     background: var(--_widget-background);
     border-radius: var(--_widget-border-radius);
     box-shadow: var(--_widget-shadow);
-    border-color: var(--_widget-border-color);
-  }
-
-  :host::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-color: inherit;
-    border-width: var(--_widget-border-width);
-    border-style: solid;
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 1;
+    border: var(--_widget-border-width) solid var(--_widget-border-color);
   }
 
   :host([hidden]) {

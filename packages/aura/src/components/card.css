@@ -4,7 +4,6 @@
   --vaadin-card-title-font-size: var(--aura-font-size-l);
   --vaadin-card-padding: var(--vaadin-padding-l);
   --vaadin-card-gap: var(--vaadin-gap-m) var(--vaadin-gap-l);
-  --vaadin-card-border-color: var(--vaadin-border-color-secondary);
   --vaadin-card-border-width: 1px;
 }
 
@@ -13,34 +12,21 @@ vaadin-card {
   background-clip: padding-box;
   --aura-surface-level: 2;
   --aura-surface-opacity: 0.5;
-  border: var(--vaadin-card-border-width) solid transparent;
-  --_padding: calc(var(--vaadin-card-padding) - var(--vaadin-card-border-width, 1px));
-}
-
-vaadin-card[theme~='outlined'] {
-  --vaadin-card-border-color: var(--vaadin-border-color);
-}
-
-vaadin-card::before {
-  inset: calc(var(--vaadin-card-border-width) * -1);
-}
-
-vaadin-card[theme~='cover-media'] [slot='media']:is(img, video, svg, vaadin-icon) {
-  /* TODO relies on internal API - should refactor base styles to support this (background-clip: padding-box) */
-  margin-inline: calc((var(--_padding) + var(--vaadin-card-border-width)) * -1);
-  margin-top: calc((var(--_padding) + var(--vaadin-card-border-width)) * -1);
-  width: calc(var(--_media-width) + var(--vaadin-card-border-width) * 2);
-}
-
-vaadin-card[theme~='cover-media'][theme~='horizontal'] [slot='media']:is(img, video, svg, vaadin-icon) {
-  height: calc(100% + (var(--_padding) + var(--vaadin-card-border-width)) * 2);
 }
 
 vaadin-card[theme~='elevated'] {
   --aura-surface-opacity: 0.7;
   --aura-surface-level: 3;
   background: var(--aura-surface-color) padding-box;
-  box-shadow: var(--vaadin-card-shadow, var(--aura-shadow-s));
+  box-shadow: var(--vaadin-card-shadow, var(--aura-shadow-xs));
+  --vaadin-card-border-color: light-dark(
+    color-mix(in srgb, var(--vaadin-border-color-secondary) 70%, var(--aura-shadow-color)),
+    var(--vaadin-border-color-secondary)
+  );
+}
+
+vaadin-card[theme~='outlined'] {
+  --vaadin-card-border-color: var(--vaadin-border-color);
 }
 
 vaadin-card[theme~='stretch-media']:not([theme~='cover-media']) [slot='media']:is(img, video, svg, vaadin-icon) {
