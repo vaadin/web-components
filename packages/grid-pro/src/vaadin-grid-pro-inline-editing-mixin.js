@@ -28,7 +28,6 @@ export const InlineEditingMixin = (superClass) =>
          */
         enterNextRow: {
           type: Boolean,
-          notify: true, // FIXME(yuriy-fix): needed by Flow counterpart
         },
 
         /**
@@ -41,7 +40,6 @@ export const InlineEditingMixin = (superClass) =>
          */
         singleCellEdit: {
           type: Boolean,
-          notify: true, // FIXME(yuriy-fix): needed by Flow counterpart
         },
 
         /**
