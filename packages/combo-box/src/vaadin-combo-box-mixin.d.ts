@@ -95,20 +95,4 @@ export declare class ComboBoxMixinClass<TItem> {
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate(): void;
-
-  /**
-   * Scrolls the dropdown to the item at the given index and sets it as the
-   * focused (highlighted) item. Safe to call before the dropdown is opened
-   * or while the data provider is loading: the call is queued and executed
-   * once the overlay is open and not loading.
-   *
-   * Because this sets the focused item, closing the dropdown without an
-   * explicit selection change (e.g. via outside click or blur) will commit
-   * the focused item as `selectedItem`. In the typical use case (scroll to
-   * the currently selected item) this is a no-op; callers scrolling to a
-   * different index should be aware of this behavior.
-   *
-   * @param index Index of the item to scroll to
-   */
-  scrollToIndex(index: number): void;
 }
