@@ -604,7 +604,7 @@ describe('a11y', () => {
       let input, overlayInput;
 
       beforeEach(async () => {
-        // Place popover after target so DOM = [target, popover, input]
+        // DOM = [target, popover, input]
         target.parentElement.insertBefore(target, popover);
 
         input = document.createElement('input');
@@ -664,58 +664,77 @@ describe('a11y', () => {
         expect(getDeepActiveElement()).to.equal(popover);
       });
 
-      it('should not focus popover on target Tab when popover is last in DOM', async () => {
-        // Remove the input so DOM = [target, popover] — popover is the last focusable.
-        input.remove();
+      describe('popover last in DOM', () => {
+        beforeEach(() => {
+          // DOM = [target, popover]
+          input.remove();
+        });
 
-        target.focus();
-        await sendKeys({ press: 'Tab' });
+        it('should not focus popover on target Tab', async () => {
+          target.focus();
+          await sendKeys({ press: 'Tab' });
 
-        // Focus must not land on the popover; nothing else to Tab to, so it stays on target.
-        expect(getDeepActiveElement()).to.equal(target);
+          // Nothing to Tab to past the popover, so focus stays on target.
+          expect(getDeepActiveElement()).to.equal(target);
+        });
       });
 
-      it('should not focus popover on target Shift Tab when popover is before target and focus trigger', async () => {
-        // Rearrange to DOM = [beforeInput, popover, target, input].
-        const beforeInput = document.createElement('input');
-        target.parentElement.insertBefore(popover, target); // move popover before target
-        target.parentElement.insertBefore(beforeInput, popover);
+      describe('sibling between target and popover', () => {
+        beforeEach(() => {
+          // DOM = [target, input, popover] — native Tab from input would land on the popover.
+          target.parentElement.appendChild(popover);
+        });
 
-        popover.opened = false;
-        popover.trigger = ['focus'];
-        await nextUpdate(popover);
+        it('should not focus popover on sibling Tab', async () => {
+          input.focus();
+          await sendKeys({ press: 'Tab' });
 
-        target.focus();
-        await oneEvent(overlay, 'vaadin-overlay-open');
-
-        await sendKeys({ press: 'Shift+Tab' });
-        await nextRender();
-
-        expect(getDeepActiveElement()).to.equal(beforeInput);
+          expect(getDeepActiveElement()).to.equal(input);
+        });
       });
 
-      it('should not focus popover on sibling Tab when popover is last in DOM', async () => {
-        // Rearrange to DOM = [target, input, popover] — popover is the last focusable,
-        // and native Tab from input would land on the popover host.
-        target.parentElement.appendChild(popover);
+      describe('popover before target, focus trigger', () => {
+        let beforeInput;
 
-        input.focus();
-        await sendKeys({ press: 'Tab' });
+        beforeEach(async () => {
+          // DOM = [beforeInput, popover, target, input]
+          beforeInput = document.createElement('input');
+          target.parentElement.insertBefore(popover, target);
+          target.parentElement.insertBefore(beforeInput, popover);
 
-        expect(getDeepActiveElement()).to.equal(input);
+          popover.opened = false;
+          popover.trigger = ['focus'];
+          await nextUpdate(popover);
+
+          target.focus();
+          await oneEvent(overlay, 'vaadin-overlay-open');
+        });
+
+        it('should not focus popover on target Shift Tab', async () => {
+          await sendKeys({ press: 'Shift+Tab' });
+          await nextRender();
+
+          expect(getDeepActiveElement()).to.equal(beforeInput);
+        });
       });
 
-      it('should not focus popover on sibling Shift Tab when popover is first in DOM', async () => {
-        // Rearrange to DOM = [popover, firstInput, target, input]. Shift+Tab
-        // from firstInput must not reach the popover host (DOM-prev).
-        const firstInput = document.createElement('input');
-        target.parentElement.insertBefore(popover, target);
-        target.parentElement.insertBefore(firstInput, target);
+      describe('popover first in DOM', () => {
+        let firstInput;
 
-        firstInput.focus();
-        await sendKeys({ press: 'Shift+Tab' });
+        beforeEach(() => {
+          // DOM = [popover, firstInput, target, input] — native Shift+Tab
+          // from firstInput would land on the popover host.
+          firstInput = document.createElement('input');
+          target.parentElement.insertBefore(popover, target);
+          target.parentElement.insertBefore(firstInput, target);
+        });
 
-        expect(getDeepActiveElement()).to.equal(firstInput);
+        it('should not focus popover on sibling Shift Tab', async () => {
+          firstInput.focus();
+          await sendKeys({ press: 'Shift+Tab' });
+
+          expect(getDeepActiveElement()).to.equal(firstInput);
+        });
       });
     });
   });
