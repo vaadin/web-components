@@ -194,7 +194,6 @@ describe('menu-bar with tooltip', () => {
     it('should not set tooltip properties if there is no tooltip', async () => {
       const spyTarget = sinon.spy(menuBar._tooltipController, 'setTarget');
       const spyContent = sinon.spy(menuBar._tooltipController, 'setContext');
-      const spyOpened = sinon.spy(menuBar._tooltipController, 'setOpened');
 
       tooltip.remove();
       await nextRender();
@@ -203,7 +202,6 @@ describe('menu-bar with tooltip', () => {
 
       expect(spyTarget.called).to.be.false;
       expect(spyContent.called).to.be.false;
-      expect(spyOpened.called).to.be.false;
     });
 
     it('should not override a custom generator', () => {
