@@ -162,29 +162,45 @@ public class BreadcrumbTrail extends Component
 
 **Feature-flag check.** `onAttach` calls `BreadcrumbTrail.checkFeatureFlag(attachEvent.getUI())` following the pattern from `MasterDetailLayout.checkFeatureFlag`: throws `ExperimentalFeatureException` when `FeatureFlags.BREADCRUMB_TRAIL_COMPONENT` is disabled.
 
-**Router mode wiring (attach):**
+**Router mode wiring (attach).** The component relies on Flow's existing router and router-utils API; no new per-call mechanism is invented. Two entry points feed the resolver:
+
+- `UI.addAfterNavigationListener(AfterNavigationListener)` — public API on `UI`. The listener receives an `AfterNavigationEvent` whose `getLocation()`, `getActiveChain()`, and `getRouteParameters()` are all public accessors. This catches every navigation for the lifetime of the attachment (including long-lived shell placement).
+- An initial, synchronous rebuild in `onAttach` itself, for the case where the breadcrumb is added to a view that has already finished rendering (so no navigation is pending and the listener has nothing to fire on). Flow core does not currently expose a public "read current navigation state" API at arbitrary times — `UI.getInternals().getActiveViewLocation()` and `UI.getInternals().getActiveRouterTargetsChain()` are the de facto accessors (public methods, but on `UIInternals` which sits in `com.vaadin.flow.component.internal`). See "Reuse and Proposed Adjustments → Flow core dependencies" for the proposal to promote these to a public `Router`/`RouteUtil` entry point.
 
 ```java
-if (mode == Mode.ROUTER) {
-    UI ui = attachEvent.getUI();
-    navigationRegistration = ui.addAfterNavigationListener(
-            event -> rebuildFromRouter(ui, event.getLocation(), event.getActiveChain()));
-    // Initial population uses the UI's current active location and chain,
-    // which are available at attach time (e.g. when the component is created
-    // inside the view constructor of the current navigation).
-    rebuildFromRouter(ui, ui.getInternals().getActiveViewLocation(),
-            ui.getInternals().getActiveRouterTargetsObservers());
+protected void onAttach(AttachEvent attachEvent) {
+    super.onAttach(attachEvent);
+    checkFeatureFlag(attachEvent.getUI());
+
+    if (mode == Mode.ROUTER) {
+        UI ui = attachEvent.getUI();
+        navigationRegistration = ui.addAfterNavigationListener(this::rebuildFromRouter);
+
+        // Initial population: read current navigation state from the UI.
+        // Today this goes through UIInternals; see the Proposed Adjustments
+        // section for the preferred public-API landing.
+        UIInternals internals = ui.getInternals();
+        rebuildFromRouter(internals.getActiveViewLocation(),
+                          internals.getActiveRouterTargetsChain(),
+                          RouteConfiguration.forRegistry(
+                                  ComponentUtil.getRouter(this).getRegistry()));
+    }
 }
 ```
 
-`rebuildFromRouter(UI, Location, List<HasElement> activeChain)`:
+`rebuildFromRouter` has two overloads that normalise on the same private builder:
 
-1. Identifies the current view's route class from `activeChain` (the last element that is a `Component` with `@Route`).
-2. Extracts `RouteParameters` from the current `Location` / `BeforeEnterEvent` equivalent via `RouteConfiguration`.
-3. Calls the current view's `HasDynamicTitle.getPageTitle()` if it implements the interface, otherwise reads its `@PageTitle`. That becomes the current-item label.
-4. Delegates ancestor walking to `RouteParentResolver.resolveTrail(...)` which reads only static metadata (see "`RouteParentResolver` (internal)" below).
-5. Calls `updateChildrenInternal(trail)`.
-6. Guards against stale callbacks: returns early when `!isAttached()`.
+```java
+// Overload 1 — AfterNavigationEvent-driven (ongoing navigations)
+void rebuildFromRouter(AfterNavigationEvent event);
+
+// Overload 2 — direct state (initial attach)
+void rebuildFromRouter(Location currentLocation,
+                      List<HasElement> activeChain,
+                      RouteConfiguration routeConfiguration);
+```
+
+Both overloads ultimately call `RouteParentResolver.resolveTrail(...)` with the same parameter shape (see "`RouteParentResolver` (internal)" below), then `updateChildrenInternal(trail)`. Both guard against stale callbacks: `if (!isAttached()) return;` first.
 
 `updateChildrenInternal(List<BreadcrumbItem> trail)`:
 
@@ -449,6 +465,8 @@ The annotation is read by `RouteParentResolver.resolveParent(Class)` using refle
 
 ### `RouteParentResolver` (internal)
 
+Walks the route hierarchy using Flow's existing router / router-utils API. Every call below is either a public Flow method or a semi-public helper in `com.vaadin.flow.router.internal.RouteUtil` / `com.vaadin.flow.component.internal.UIInternals` that we already rely on.
+
 ```java
 package com.vaadin.flow.component.breadcrumbtrail.internal;
 
@@ -458,23 +476,38 @@ final class RouteParentResolver {
             Class<? extends Component> currentRoute,
             Component currentViewInstance,
             RouteParameters currentRouteParameters,
-            Router router);
-
-    // Implementation walks:
-    //   1. Collect labels: the current view's HasDynamicTitle.getPageTitle() if
-    //      implemented, otherwise @PageTitle on currentRoute.
-    //   2. For each ancestor: resolve via @RouteParent (if present and target
-    //      has @Route), otherwise strip one URL segment and resolve via
-    //      RouteConfiguration. Label = @PageTitle on the ancestor class.
-    //   3. Stop when the root route is reached, when the walker cannot resolve
-    //      a parent, or when a cycle is detected (visited-set).
-    //   4. Return list root-first.
+            RouteConfiguration routeConfiguration);
 }
 ```
 
-Cycles: the walker carries a `Set<Class<? extends Component>> visited`. If `@RouteParent(X.class)` points at an X already in `visited`, the walk stops (no item is added for the repeated class).
+**Flow APIs used (all public or explicitly enumerated in "Reuse"):**
 
-Parent without `@Route`: `@RouteParent(X.class)` where X has no `@Route` annotation falls back to URL-prefix walking from the current route's URL. This is documented behaviour per flow-api.md Discussion "What happens if `@RouteParent` forms a cycle or points at a class without `@Route`?".
+| Purpose | API call | Visibility |
+|---|---|---|
+| Resolve `Class<? extends Component>` → URL | `RouteConfiguration#getUrl(Class, RouteParameters)` | public |
+| Resolve URL prefix → route class | `RouteConfiguration#getRoute(String, List<String>)` / `getRoute(String)` | public |
+| Obtain the registry-scoped config | `RouteConfiguration.forRegistry(ComponentUtil.getRouter(this).getRegistry())` | public (mirrors `SideNavItem.setPath(Class)`) |
+| Read the current view's dynamic title | `HasDynamicTitle#getPageTitle()` on the view instance | public |
+| Read a route class's static title | `routeClass.getAnnotation(PageTitle.class).value()` | public (`@PageTitle`) |
+| Read a route's declared parent | `routeClass.getAnnotation(RouteParent.class).value()` | public (Flow core annotation — see Reuse) |
+| Identify the current-view instance at navigation time | `AfterNavigationEvent#getActiveChain()` → last element implementing `Component` | public |
+| Current route params at navigation time | `AfterNavigationEvent#getRouteParameters()` | public |
+| Current location at navigation time | `AfterNavigationEvent#getLocation()` | public |
+
+**Algorithm:**
+
+1. **Current item.** Label: `currentViewInstance instanceof HasDynamicTitle h ? h.getPageTitle() : readPageTitle(currentRoute)`. Path: no path (current item is the non-link). Construct `new BreadcrumbItem(label)`.
+2. **Walk ancestors.** Maintain `Set<Class<? extends Component>> visited = new HashSet<>()`, initialised with `currentRoute`. Current walk target = `currentRoute`.
+   - **Find parent class.** If target has `@RouteParent`, read its value. If the declared parent has `@Route`, jump there. Otherwise (annotation absent, or points at a non-`@Route` class), fall back to URL-prefix walking: take the current target's URL via `RouteConfiguration#getUrl(target, RouteParameters.empty())`, strip the last `/`-separated segment, call `RouteConfiguration#getRoute(strippedUrl)`. The `Optional<Class<? extends Component>>` returned is the parent if present.
+   - **Terminate.** Stop when no parent is found (reached root), or when the parent is already in `visited` (cycle), or when URL-prefix walking produces an empty URL.
+   - **Otherwise.** Read `@PageTitle` on the parent class (absent → skip this level and continue walking from the parent). Resolve its URL via `RouteConfiguration#getUrl(parentClass, RouteParameters.empty())`. Prepend a `new BreadcrumbItem(title, parentClass)` to the trail. Add parent to `visited`. Repeat with parent as the new target.
+3. **Return the trail root-first.**
+
+**Cycle behaviour:** `@RouteParent(X.class)` where X is already in `visited` stops the walk at the first repeat — no item is added for the repeated class. Matches flow-api.md Discussion "What happens if `@RouteParent` forms a cycle or points at a class without `@Route`?".
+
+**Parent without `@Route`:** `@RouteParent(X.class)` where X has no `@Route` annotation is treated as if the annotation were absent — the walker falls back to URL-prefix walking for that step. Matches flow-api.md Discussion.
+
+**Route parameters on ancestors:** the walker uses `RouteParameters.empty()` when resolving an ancestor's URL because ancestor routes may have a different parameter set from the current route. Applications that need ancestor labels with live data should use `Mode.MANUAL` and build the trail themselves (flow-api.md §9).
 
 ---
 
@@ -534,6 +567,24 @@ Queries use the same pattern as `SideNavElement` / `SideNavItemElement`: `$("vaa
 ---
 
 ## Reuse and Proposed Adjustments to Existing Modules
+
+### Flow core: "read current navigation state" public helper — Proposed
+
+The resolver's initial-attach path needs to read the active location and active router-targets chain without a pending `AfterNavigationEvent`. Today this goes through `UIInternals.getActiveViewLocation()` and `UIInternals.getActiveRouterTargetsChain()` — both public methods on a type that sits in `com.vaadin.flow.component.internal`. The `internal` package suffix signals "not part of the stable public API".
+
+Preferred landing: a small public facade on `Router` or `RouteUtil`:
+
+```java
+// in com.vaadin.flow.router.Router (or RouteConfiguration):
+public Optional<Location> getActiveLocation(UI ui);
+public List<HasElement> getActiveRouterTargetsChain(UI ui);
+// or a single call:
+public Optional<NavigationState> getActiveNavigationState(UI ui);
+```
+
+Any variant that exposes the same information through a public, documented entry point is fine. Until this lands, the resolver calls `UIInternals` directly and acknowledges the compatibility risk — the semi-public calls have been stable for many Vaadin releases, and any flow-components code using them would need to migrate in the same release as the public facade anyway.
+
+Affects: Flow core. Additive — a thin wrapper over existing `UIInternals` methods.
 
 ### `com.vaadin.flow.router.RouteParent` — Flow core dependency
 
