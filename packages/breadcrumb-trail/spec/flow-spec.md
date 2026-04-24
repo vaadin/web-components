@@ -328,29 +328,6 @@ No JavaScript file under `src/main/resources/META-INF/resources/frontend/`.
 
 ---
 
-## Implementation Notes
-
-Loose ends that don't fit a dedicated section but matter to the implementation. None of the items below are about client↔server property sync (there are no `@Synchronize`'d properties and no `@DomEvent`'d events on this component — see the main class declarations).
-
-- **Serialisation.** All fields are `Serializable`:
-  - `Mode` enum (intrinsically serialisable).
-  - `BreadcrumbTrailI18n` (implements `Serializable`, only holds a `String`).
-  - `navigationRegistration` field holding the `AfterNavigationListener` `Registration` is declared `transient` — it is non-serialisable and is re-created in `onAttach` on every re-attach.
-  - `routerUpdateInProgress` is a `boolean` — serialisable; its default `false` value is correct after deserialisation.
-  - `BreadcrumbItem` introduces no new fields: text goes through `HasText.setText(...)` (= `getElement().setText(...)`), path is an element attribute, and the prefix component reference is held by `SlotUtils` as a slot child under the element tree — all of which are captured by the standard `Component` serialisation.
-
-- **Signal support.** `BreadcrumbItem` inherits `bindText(Signal<String>) → SignalBinding<String>` from `HasText` — reactive per-item text works without additional wiring. Reactive trails that change shape (items added or removed) are driven at the container level via `Signal.effect(breadcrumbTrail, () -> { removeAll(); add(...); })` or the `HasComponentsOfType.bindChildren(Signal<List<...>>, factory)` default method — both per flow-api.md §5.
-
-- **Routing.** The component is router-aware (`Mode.ROUTER` populates the trail from `AfterNavigationEvent`), but it does NOT navigate — it only reads current route + registered routes. `BreadcrumbItem` resolves `Class<? extends Component>` → URL via `RouteConfiguration`; the anchor `<a href>` is plain HTML and Flow's router intercepts clicks at the document level the same way it does for `SideNavItem` links.
-
-- **`DisabledUpdateMode`.** No override. Standard Flow disabled propagation is sufficient — `HasEnabled` on `BreadcrumbItem` writes the `disabled` attribute to the client and the web component styles / disables the anchor accordingly.
-
-- **Disable-on-click.** Not applicable — the component issues no server-side action that would need suppression during a round trip.
-
-- **Feature-flag check.** `onAttach` runs `checkFeatureFlag(attachEvent.getUI())` before doing any other setup; throws `ExperimentalFeatureException` if the flag is disabled. Same pattern as `Badge`, `Slider`, and `MasterDetailLayout`.
-
----
-
 ## Feature Flag
 
 The component is experimental and the Flow wrapper is gated by a feature flag defined locally in this module — mirroring the convention used by `Badge`, `Slider`, and the other experimental components in flow-components. No Flow core change is needed.
