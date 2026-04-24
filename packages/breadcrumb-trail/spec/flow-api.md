@@ -13,24 +13,24 @@ The Flow API ALWAYS wraps the web component. Every attribute/property/slot/event
 Covers requirement(s): 1, 2
 
 ```java
-BreadcrumbTrail breadcrumb = new BreadcrumbTrail();
-breadcrumb.add(
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+breadcrumbTrail.add(
         new BreadcrumbItem("Home", HomeView.class),
         new BreadcrumbItem("Developer Guide", DeveloperGuideView.class),
         new BreadcrumbItem("API Reference", ApiReferenceView.class),
         new BreadcrumbItem("Authentication", AuthenticationView.class),
         new BreadcrumbItem("OAuth2")); // last item without a path is the current page
-add(breadcrumb);
+add(breadcrumbTrail);
 ```
 
 ```java
 // String-path overload for cases with no Flow route class
-breadcrumb.add(
+breadcrumbTrail.add(
         new BreadcrumbItem("Home", "/"),
         new BreadcrumbItem("External", "https://example.com/docs"));
 ```
 
-**Why this shape:** `BreadcrumbTrail` is a standard Flow container — it implements `HasComponents` and accepts `BreadcrumbItem` children through the inherited `add(Component...)` / `addComponentAsFirst(...)` / `addComponentAtIndex(int, Component)` / `remove(Component...)` / `removeAll()` methods. No component-specific `setItems`/`addItem` API is invented: a breadcrumb is a component tree of items, so it uses the same primitives as any other component tree. On the web-component side the `items` JS property takes data objects, but that is a client-side concern; in Flow, items are `BreadcrumbItem` components and child management uses the Flow conventions developers already know. `BreadcrumbItem` offers the same constructor overloads as `SideNavItem`: `(label)` for the current page (no path), `(label, String path)` for hand-managed paths, `(label, Class<? extends Component> view)` as the type-safe primary form required by `DESIGN_GUIDELINES.md` "Integrate with Flow Router", and `(label, Class<? extends Component> view, RouteParameters routeParameters)` for parameterised routes. Each path-taking overload also has a prefix-component variant ending in `Component prefixComponent` (see section 4). The "current" distinction needs no extra API — an item without a path is the current item, matching the web component's declarative convention.
+**Why this shape:** `BreadcrumbTrail` is a standard Flow container — it implements `HasComponentsOfType<BreadcrumbItem>` and accepts `BreadcrumbItem` children through the inherited `add(BreadcrumbItem...)` / `addComponentAsFirst(BreadcrumbItem)` / `addComponentAtIndex(int, BreadcrumbItem)` / `remove(BreadcrumbItem...)` / `removeAll()` methods. No component-specific `setItems`/`addItem` API is invented: a breadcrumb is a component tree of items, so it uses the same primitives as any other component tree, and the generic typing gives compile-time enforcement that only `BreadcrumbItem` instances can be added. On the web-component side the `items` JS property takes data objects, but that is a client-side concern; in Flow, items are `BreadcrumbItem` components and child management uses the Flow conventions developers already know. `BreadcrumbItem` offers the same constructor overloads as `SideNavItem`: `(label)` for the current page (no path), `(label, String path)` for hand-managed paths, `(label, Class<? extends Component> view)` as the type-safe primary form required by `DESIGN_GUIDELINES.md` "Integrate with Flow Router", and `(label, Class<? extends Component> view, RouteParameters routeParameters)` for parameterised routes. Each path-taking overload also has a prefix-component variant ending in `Component prefixComponent` (see section 4). The "current" distinction needs no extra API — an item without a path is the current item, matching the web component's declarative convention.
 
 ---
 
@@ -40,8 +40,8 @@ Covers requirement(s): 3
 
 ```java
 // All items linkable — no current-page item included in the trail
-BreadcrumbTrail breadcrumb = new BreadcrumbTrail();
-breadcrumb.add(
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+breadcrumbTrail.add(
         new BreadcrumbItem("Home", HomeView.class),
         new BreadcrumbItem("Developer Guide", DeveloperGuideView.class),
         new BreadcrumbItem("API Reference", ApiReferenceView.class));
@@ -56,8 +56,8 @@ breadcrumb.add(
 Covers requirement(s): 6, 7
 
 ```java
-BreadcrumbTrail breadcrumb = new BreadcrumbTrail();
-breadcrumb.add(
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+breadcrumbTrail.add(
         new BreadcrumbItem("Home", HomeView.class),
         new BreadcrumbItem("Documents", DocumentsView.class),
         new BreadcrumbItem("Projects", ProjectsView.class),
@@ -67,7 +67,7 @@ breadcrumb.add(
         new BreadcrumbItem("Summary"));
 
 // Localise the overflow button's accessible label
-breadcrumb.setI18n(new BreadcrumbTrailI18n().setMoreItems("Show hidden items"));
+breadcrumbTrail.setI18n(new BreadcrumbTrailI18n().setMoreItems("Show hidden items"));
 ```
 
 **Why this shape:** Overflow collapse and the expansion menu opened by the overflow indicator (req 7) are handled entirely inside the web component — the collapsed items reappear as menu rows sourced from the same `BreadcrumbItem` components the container already holds, so no Flow-side surface is needed to wire them up. The only Flow-visible concern is the overflow indicator's accessible label, localised via a nested `BreadcrumbTrailI18n` class following the `SideNavI18n` / `MenuBarI18n` convention: `Serializable`, `@JsonInclude(JsonInclude.Include.NON_NULL)`, fluent setters. Exposed via `setI18n(BreadcrumbTrailI18n)` / `getI18n()` on `BreadcrumbTrail`.
@@ -80,8 +80,8 @@ Covers requirement(s): 8
 
 ```java
 // Inline with construction — one line per item
-BreadcrumbTrail breadcrumb = new BreadcrumbTrail();
-breadcrumb.add(
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+breadcrumbTrail.add(
         new BreadcrumbItem("Home", HomeView.class, new Icon(VaadinIcon.HOME)),
         new BreadcrumbItem("Documents", DocumentsView.class, new Icon(VaadinIcon.FOLDER)),
         new BreadcrumbItem("Report.pdf"));
@@ -103,8 +103,8 @@ Covers requirement(s): 9
 
 ```java
 // Imperative form — rebuild the trail when the browsed category changes
-BreadcrumbTrail breadcrumb = new BreadcrumbTrail();
-breadcrumb.add(
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+breadcrumbTrail.add(
         new BreadcrumbItem("Home", HomeView.class),
         new BreadcrumbItem("Electronics", CategoryView.class, new RouteParameters("slug", "electronics")),
         new BreadcrumbItem("Laptops", CategoryView.class, new RouteParameters("slug", "laptops")),
@@ -112,8 +112,8 @@ breadcrumb.add(
 
 categorySelector.addValueChangeListener(event -> {
     Category category = event.getValue();
-    breadcrumb.removeAll();
-    breadcrumb.add(
+    breadcrumbTrail.removeAll();
+    breadcrumbTrail.add(
             new BreadcrumbItem("Home", HomeView.class),
             new BreadcrumbItem(category.getName(), CategoryView.class,
                     new RouteParameters("slug", category.getSlug())),
@@ -125,11 +125,11 @@ categorySelector.addValueChangeListener(event -> {
 // Reactive form — run an effect that rebuilds the children when a signal changes
 ValueSignal<Category> current = new ValueSignal<>(initialCategory);
 
-BreadcrumbTrail breadcrumb = new BreadcrumbTrail();
-Signal.effect(breadcrumb, () -> {
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+Signal.effect(breadcrumbTrail, () -> {
     Category category = current.get();
-    breadcrumb.removeAll();
-    breadcrumb.add(
+    breadcrumbTrail.removeAll();
+    breadcrumbTrail.add(
             new BreadcrumbItem("Home", HomeView.class),
             new BreadcrumbItem(category.getName(), CategoryView.class,
                     new RouteParameters("slug", category.getSlug())),
@@ -140,7 +140,7 @@ Signal.effect(breadcrumb, () -> {
 current.set(nextCategory);
 ```
 
-**Why this shape:** Imperative updates use the standard component-tree primitives `add(...)`, `remove(...)`, `removeAll()` inherited from `HasComponents` — the same API a Flow developer uses for any container. Reactive updates use `Signal.effect(component, Runnable)`, Flow core's primitive for running a callback whenever the observed signals change; the effect is the right granularity here because the trail is rebuilt as a tree operation (`removeAll` + `add`), not a single property set. This avoids inventing a component-specific `bindItems` surface when the generic effect primitive already covers the case. The web component's `items` JS property (see web-component-api.md §6) is never exposed directly from Java — it represents a data array on the client, while the Flow wrapper always manages a tree of `BreadcrumbItem` components.
+**Why this shape:** Imperative updates use the standard component-tree primitives `add(...)`, `remove(...)`, `removeAll()` inherited from `HasComponentsOfType<BreadcrumbItem>` — the same API a Flow developer uses for any container, with the generic parameter ensuring only `BreadcrumbItem` instances can be passed. Reactive updates use `Signal.effect(component, Runnable)`, Flow core's primitive for running a callback whenever the observed signals change; the effect is the right granularity here because the trail is rebuilt as a tree operation (`removeAll` + `add`), not a single property set. This avoids inventing a component-specific `bindItems` surface when the generic effect primitive already covers the case. The web component's `items` JS property (see web-component-api.md §6) is never exposed directly from Java — it represents a data array on the client, while the Flow wrapper always manages a tree of `BreadcrumbItem` components.
 
 ---
 
@@ -149,9 +149,9 @@ current.set(nextCategory);
 Covers requirement(s): 10
 
 ```java
-BreadcrumbTrail breadcrumb = new BreadcrumbTrail();
-breadcrumb.setAriaLabel("Product navigation");
-breadcrumb.add(
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+breadcrumbTrail.setAriaLabel("Product navigation");
+breadcrumbTrail.add(
         new BreadcrumbItem("Home", HomeView.class),
         new BreadcrumbItem("Products", ProductsView.class),
         new BreadcrumbItem("Laptops"));
@@ -168,7 +168,7 @@ Covers requirement(s): 11
 ```java
 // No Flow API needed — the last item without a path is automatically
 // the current page, and the web component applies aria-current="page" to it.
-breadcrumb.add(
+breadcrumbTrail.add(
         new BreadcrumbItem("Home", HomeView.class),
         new BreadcrumbItem("Docs", DocsView.class),
         new BreadcrumbItem("OAuth2")); // aria-current="page" applied automatically
@@ -212,8 +212,8 @@ Covers requirement(s): 14
 
 ```java
 // The common case: just add the items. Auto-population is skipped.
-BreadcrumbTrail breadcrumb = new BreadcrumbTrail();
-breadcrumb.add(
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
+breadcrumbTrail.add(
         new BreadcrumbItem("Catalog", CatalogView.class),
         new BreadcrumbItem(category.getName()));
 ```
@@ -221,12 +221,12 @@ breadcrumb.add(
 ```java
 // Async loading — add a placeholder so the breadcrumb has a child at
 // attach time and the router-derived default does not flash in.
-BreadcrumbTrail breadcrumb = new BreadcrumbTrail();
+BreadcrumbTrail breadcrumbTrail = new BreadcrumbTrail();
 BreadcrumbItem placeholder = new BreadcrumbItem("");
-breadcrumb.add(placeholder);
+breadcrumbTrail.add(placeholder);
 loadCategoryAsync(category -> {
-    breadcrumb.removeAll();
-    breadcrumb.add(buildTrail(category));
+    breadcrumbTrail.removeAll();
+    breadcrumbTrail.add(buildTrail(category));
 });
 ```
 
@@ -258,13 +258,13 @@ public class EditOrderView extends Div { ... }
 
 | Web API surface (from web-component-api.md) | Flow API | Notes |
 |---|---|---|
-| `<vaadin-breadcrumb-trail>` element | `new BreadcrumbTrail()` | constructor; `HasSize`, `HasStyle`, `HasAriaLabel`, `HasComponents` |
-| `<vaadin-breadcrumb-item>` child | `HasComponents#add(Component...)`, `addComponentAsFirst(...)`, `addComponentAtIndex(int, Component)`, `remove(Component...)`, `removeAll()` | standard component-tree management; no component-specific `setItems`/`addItem` |
+| `<vaadin-breadcrumb-trail>` element | `new BreadcrumbTrail()` | constructor; `HasSize`, `HasStyle`, `HasAriaLabel`, `HasComponentsOfType<BreadcrumbItem>` |
+| `<vaadin-breadcrumb-item>` child | `HasComponentsOfType<BreadcrumbItem>#add(BreadcrumbItem...)`, `addComponentAsFirst(BreadcrumbItem)`, `addComponentAtIndex(int, BreadcrumbItem)`, `remove(BreadcrumbItem...)`, `removeAll()` | standard component-tree management, typed to `BreadcrumbItem` at compile time; no component-specific `setItems`/`addItem` |
 | `path` attribute on item | `BreadcrumbItem#setPath(String)` / `setPath(Class<? extends Component>)` / `setPath(Class, RouteParameters)` / constructor overloads | type-safe primary form per `DESIGN_GUIDELINES.md` "Integrate with Flow Router" |
 | last-item-without-path → current item | implicit — construct with `new BreadcrumbItem(String label)` (no path) | no dedicated current flag |
 | `aria-current="page"` on current item | — (set automatically by the web component) | no Flow API needed |
 | `slot="prefix"` on item | `BreadcrumbItem implements HasPrefix` → `setPrefixComponent(Component)` | shared mixin from `vaadin-flow-components-base` |
-| `items` JS property | — (not exposed from Java) | client-side concern; the Flow wrapper always manages a tree of `BreadcrumbItem` components via `HasComponents` |
+| `items` JS property | — (not exposed from Java) | client-side concern; the Flow wrapper always manages a tree of `BreadcrumbItem` components via `HasComponentsOfType<BreadcrumbItem>` |
 | `i18n` JS property | `BreadcrumbTrail#setI18n(BreadcrumbTrailI18n)` / `getI18n()` | nested class; `Serializable`, `@JsonInclude(NON_NULL)`, fluent setters |
 | `i18n.moreItems` | `BreadcrumbTrailI18n#setMoreItems(String)` / `getMoreItems()` | overflow button accessible label |
 | `<nav>` landmark rendering | — (automatic in web component) | no Flow API needed |
@@ -286,7 +286,7 @@ Keeping the flag internal means there's only one way to express "the application
 
 **Q: How is requirement 16 (data-driven trails that depend on runtime data) covered without a dedicated API?**
 
-It is covered by manual construction: the application loads the data it needs in the view and calls `add(...)` / `removeAll()` (section 5 and section 9) to build the trail. Every dynamic case — the customer-name example, per-user conditional items, trails derived from domain state — can be expressed this way using the standard component-tree APIs. For reactive updates, `Signal.effect(breadcrumb, ...)` rebuilds the children whenever observed signals change. A dedicated declarative mechanism (for example a `BreadcrumbTrailProvider` that receives a `BreadcrumbTrailContext` describing the current navigation, and returns the full trail so that the breadcrumb recomputes itself on each route change) was designed out through several iterations and ultimately excluded from this first version. The reasons: the manual-construction path already works end-to-end; a good provider API carries non-trivial surface (a context type, lookup helpers for static metadata, rules for when the provider runs, per-instance vs. application-wide scope) that is hard to get right without real application feedback; and once introduced the provider shape is hard to evolve. A provider API remains a likely future addition once usage patterns are known — this version intentionally keeps the surface small.
+It is covered by manual construction: the application loads the data it needs in the view and calls `add(...)` / `removeAll()` (section 5 and section 9) to build the trail. Every dynamic case — the customer-name example, per-user conditional items, trails derived from domain state — can be expressed this way using the standard component-tree APIs. For reactive updates, `Signal.effect(breadcrumbTrail, ...)` rebuilds the children whenever observed signals change. A dedicated declarative mechanism (for example a `BreadcrumbTrailProvider` that receives a `BreadcrumbTrailContext` describing the current navigation, and returns the full trail so that the breadcrumb recomputes itself on each route change) was designed out through several iterations and ultimately excluded from this first version. The reasons: the manual-construction path already works end-to-end; a good provider API carries non-trivial surface (a context type, lookup helpers for static metadata, rules for when the provider runs, per-instance vs. application-wide scope) that is hard to get right without real application feedback; and once introduced the provider shape is hard to evolve. A provider API remains a likely future addition once usage patterns are known — this version intentionally keeps the surface small.
 
 **Q: Why is there no section for the separator (reqs 4, 5, 12)?**
 
@@ -300,13 +300,9 @@ Items render as plain anchors (`<a href>`) under the hood. With `setPath(Class<?
 
 web-component-api.md does not expose any theme variants for BreadcrumbTrail — the component has a single canonical appearance with theme-layer differences only (Lumo vs Aura). No `BreadcrumbTrailVariant` enum is added because there is nothing for it to contain. One can be introduced later if variants emerge.
 
-**Q: Why use `HasComponents#add(Component...)` rather than a typed `setItems(BreadcrumbItem...)` / `addItem(BreadcrumbItem...)` API?**
+**Q: Why use `HasComponentsOfType<BreadcrumbItem>` rather than a bespoke `setItems(BreadcrumbItem...)` / `addItem(BreadcrumbItem...)` API?**
 
-A breadcrumb is a container of items — in Flow terms, a component that holds child components. Expressing that through the standard `HasComponents` interface (the same one used by `Div`, `VerticalLayout`, `Dialog`'s content, etc.) keeps the API consistent with every other Flow container, gives developers `add`, `addComponentAsFirst`, `addComponentAtIndex`, `remove`, and `removeAll` for free, and avoids inventing yet another bespoke item-collection surface. The cost — `add` accepts any `Component` rather than only `BreadcrumbItem` — is handled at runtime: non-`BreadcrumbItem` children are rejected by the breadcrumb (implementation detail, not part of this design). On the web-component side the `items` JS property takes data objects, but that is a client-side rendering concern; in Flow, a trail is a component tree.
-
-**Q: Should we revisit `HasComponents` once Flow exposes a typed children interface?**
-
-Yes. The current choice accepts `HasComponents`'s compile-time looseness (any `Component` is assignable; non-`BreadcrumbItem` children are rejected only at runtime) in exchange for convention consistency with every other Flow container. If Flow core adds a generic, type-parameterised children interface — something like `HasTypedComponents<BreadcrumbItem>` with `add(BreadcrumbItem...)` / `remove(BreadcrumbItem...)` / `removeAll()` that the compiler enforces — `BreadcrumbTrail` should switch to it. That change would be strictly narrowing (`BreadcrumbItem` is still a `Component`, so existing correct calls keep compiling) while eliminating the runtime-rejection class of errors. Until such an interface exists, inventing a one-off typed collection for BreadcrumbTrail alone is not worth the divergence from the standard pattern; this decision is explicitly provisional and should be re-evaluated when the Flow core primitive lands.
+A breadcrumb is a container of items — in Flow terms, a component that holds child components. Expressing that through the standard `HasComponentsOfType<T>` interface from Flow core keeps the API consistent with every other typed Flow container, gives developers `add`, `addComponentAsFirst`, `addComponentAtIndex`, `remove`, and `removeAll` for free, and avoids inventing yet another bespoke item-collection surface. The generic parameter `BreadcrumbItem` gives compile-time enforcement that only `BreadcrumbItem` instances can be added, so developers get type safety without the component needing to reject foreign children at runtime. On the web-component side the `items` JS property takes data objects, but that is a client-side rendering concern; in Flow, a trail is a component tree.
 
 **Q: Why no dedicated `bindItems(Signal<...>)` method?**
 
