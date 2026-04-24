@@ -40,13 +40,19 @@ export class PopoverFocusController {
 
     if (targetFocusable && isElementFocused(targetFocusable)) {
       event.preventDefault();
-      host.focus();
+      if (host.noTabFocus) {
+        this.__moveLogicalNext(event, targetFocusable);
+      } else {
+        host.focus();
+      }
       return;
     }
 
     const lastPopoverFocusable = this.__getLastPopoverFocusable();
     if (isElementFocused(lastPopoverFocusable)) {
-      this.__moveLogicalNext(event, host);
+      // With noTabFocus the popover isn't in the logical list, so the target
+      // becomes the reference for "next after the popover".
+      this.__moveLogicalNext(event, host.noTabFocus ? targetFocusable : host);
       return;
     }
 
@@ -106,6 +112,10 @@ export class PopoverFocusController {
         prevFocusable.focus();
       } else if (getActiveTrappingNode(host)) {
         this.__wrapToLogicalLast(event, logicalFocusables);
+      } else if (host.noTabFocus) {
+        // No redirect target and no trap: still block native Shift+Tab so the
+        // popover host can never receive Shift+Tab focus.
+        event.preventDefault();
       }
       return;
     }
@@ -167,7 +177,7 @@ export class PopoverFocusController {
   /**
    * Scope focusables in *logical* tab order: the popover is moved from its DOM
    * position to right after the target focusable. The popover is left out of
-   * the list entirely when there is no target.
+   * the list entirely when there is no target, or when `noTabFocus` is set.
    * @private
    */
   __buildLogicalList(scopeFocusables = this.__getScopeFocusables()) {
@@ -175,7 +185,7 @@ export class PopoverFocusController {
     const targetFocusable = this.__getTargetFocusable();
     const logicalFocusables = scopeFocusables.filter((el) => el !== host);
 
-    if (targetFocusable && targetFocusable !== host) {
+    if (!host.noTabFocus && targetFocusable && targetFocusable !== host) {
       const targetIdx = logicalFocusables.indexOf(targetFocusable);
       if (targetIdx >= 0) {
         logicalFocusables.splice(targetIdx + 1, 0, host);
@@ -189,28 +199,32 @@ export class PopoverFocusController {
     const host = this.host;
     const logicalFocusables = this.__buildLogicalList(scopeFocusables);
     const fromIdx = logicalFocusables.indexOf(from);
-    if (fromIdx < 0) {
-      return;
-    }
 
-    // The popover sits right after the target in the logical list, so it can
-    // be the logical next only when `from` is the target. Skip it: the popover
-    // is Tab-reachable only from its target (handled in __handleTab case 1).
-    let nextIdx = fromIdx + 1;
-    if (logicalFocusables[nextIdx] === host) {
-      nextIdx += 1;
-    }
+    let focusable;
+    if (fromIdx >= 0) {
+      // The popover sits right after the target in the logical list, so it can
+      // be the logical next only when `from` is the target. Skip it: the popover
+      // is Tab-reachable only from its target (handled in __handleTab case 1).
+      let nextIdx = fromIdx + 1;
+      if (logicalFocusables[nextIdx] === host) {
+        nextIdx += 1;
+      }
 
-    // Past the end inside a trap: wrap to the first element. The popover
-    // never sits at position 0 (it only follows a target), so list[0] is real.
-    let focusable = logicalFocusables[nextIdx];
-    if (!focusable && getActiveTrappingNode(host)) {
-      focusable = logicalFocusables[0];
+      // Past the end inside a trap: wrap to the first element. The popover
+      // never sits at position 0 (it only follows a target), so list[0] is real.
+      focusable = logicalFocusables[nextIdx];
+      if (!focusable && getActiveTrappingNode(host)) {
+        focusable = logicalFocusables[0];
+      }
     }
 
     if (focusable) {
       event.preventDefault();
       focusable.focus();
+    } else if (host.noTabFocus) {
+      // No redirect target found: still block native Tab so the popover host
+      // can never receive Tab focus when it is DOM-adjacent.
+      event.preventDefault();
     }
   }
 
