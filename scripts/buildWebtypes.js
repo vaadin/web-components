@@ -17,6 +17,7 @@ const blacklistedPackages = [
   /^icons/u,
   /^input-container/u,
   /^lit-renderer/u,
+  /^overlay/u,
   /^aura/u,
 ];
 
