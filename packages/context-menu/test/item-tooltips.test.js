@@ -132,6 +132,23 @@ describe('item tooltips', () => {
     expect(tooltipContent.textContent.trim()).to.equal('custom: Item 0');
   });
 
+  it('should default tooltip position to end', async () => {
+    await openMenu(target);
+    const [item0] = getMenuItems(contextMenu);
+    await sendMouseToElement({ type: 'move', element: item0 });
+    await nextRender();
+    expect(tooltip.position).to.equal('end');
+  });
+
+  it('should not override tooltip position set by the user', async () => {
+    tooltip.position = 'top';
+    await openMenu(target);
+    const [item0] = getMenuItems(contextMenu);
+    await sendMouseToElement({ type: 'move', element: item0 });
+    await nextRender();
+    expect(tooltip.position).to.equal('top');
+  });
+
   describe('disabled item', () => {
     before(() => {
       window.Vaadin.featureFlags ??= {};

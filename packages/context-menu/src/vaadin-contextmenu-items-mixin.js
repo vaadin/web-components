@@ -493,6 +493,12 @@ export const ItemsMixin = (superClass) =>
           tooltip.generator = ({ item }) => item && item.tooltip;
         }
 
+        // Place the tooltip at the end of the item so it doesn't overlap
+        // sibling items above or below.
+        if (tooltip.position === undefined) {
+          tooltip.position = 'end';
+        }
+
         if (!tooltip._mouseLeaveListenerAdded) {
           tooltip._overlayElement.addEventListener('mouseleave', this.__onTooltipOverlayMouseLeave);
           tooltip._mouseLeaveListenerAdded = true;
