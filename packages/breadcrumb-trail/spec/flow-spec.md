@@ -328,9 +328,11 @@ No JavaScript file under `src/main/resources/META-INF/resources/frontend/`.
 
 ---
 
-## Server/Client Sync Concerns
+## Implementation Notes
 
-- **Serialisation.** All public fields are `Serializable`:
+Loose ends that don't fit a dedicated section but matter to the implementation. None of the items below are about client↔server property sync (there are no `@Synchronize`'d properties and no `@DomEvent`'d events on this component — see the main class declarations).
+
+- **Serialisation.** All fields are `Serializable`:
   - `Mode` enum (intrinsically serialisable).
   - `BreadcrumbTrailI18n` (implements `Serializable`, only holds a `String`).
   - `navigationRegistration` field holding the `AfterNavigationListener` `Registration` is declared `transient` — it is non-serialisable and is re-created in `onAttach` on every re-attach.
@@ -341,11 +343,11 @@ No JavaScript file under `src/main/resources/META-INF/resources/frontend/`.
 
 - **Routing.** The component is router-aware (`Mode.ROUTER` populates the trail from `AfterNavigationEvent`), but it does NOT navigate — it only reads current route + registered routes. `BreadcrumbItem` resolves `Class<? extends Component>` → URL via `RouteConfiguration`; the anchor `<a href>` is plain HTML and Flow's router intercepts clicks at the document level the same way it does for `SideNavItem` links.
 
-- **`DisabledUpdateMode`.** No override. Standard Flow disabled propagation is sufficient.
+- **`DisabledUpdateMode`.** No override. Standard Flow disabled propagation is sufficient — `HasEnabled` on `BreadcrumbItem` writes the `disabled` attribute to the client and the web component styles / disables the anchor accordingly.
 
-- **Disable-on-click.** Not applicable.
+- **Disable-on-click.** Not applicable — the component issues no server-side action that would need suppression during a round trip.
 
-- **Feature-flag check.** `onAttach` runs `checkFeatureFlag(attachEvent.getUI())` before doing any other setup; throws `ExperimentalFeatureException` if the flag is disabled. Same pattern as `MasterDetailLayout`.
+- **Feature-flag check.** `onAttach` runs `checkFeatureFlag(attachEvent.getUI())` before doing any other setup; throws `ExperimentalFeatureException` if the flag is disabled. Same pattern as `Badge`, `Slider`, and `MasterDetailLayout`.
 
 ---
 
