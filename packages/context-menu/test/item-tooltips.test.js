@@ -140,13 +140,24 @@ describe('item tooltips', () => {
     expect(tooltip.position).to.equal('end');
   });
 
-  it('should not override tooltip position set by the user', async () => {
+  it('should use per-item tooltipPosition over the default', async () => {
+    contextMenu.items = [{ text: 'Item 0', tooltip: 'Tooltip 0', tooltipPosition: 'top-start' }, { text: 'Item 1' }];
+    contextMenu.requestContentUpdate();
+    await nextRender();
+    await openMenu(target);
+    const [item0] = getMenuItems(contextMenu);
+    await sendMouseToElement({ type: 'move', element: item0 });
+    await nextRender();
+    expect(tooltip.position).to.equal('top-start');
+  });
+
+  it('should ignore the position set on the tooltip element', async () => {
     tooltip.position = 'top';
     await openMenu(target);
     const [item0] = getMenuItems(contextMenu);
     await sendMouseToElement({ type: 'move', element: item0 });
     await nextRender();
-    expect(tooltip.position).to.equal('top');
+    expect(tooltip.position).to.equal('end');
   });
 
   describe('disabled item', () => {

@@ -55,6 +55,7 @@ menu.renderer = renderer;
 const menuItem: MenuItem = {};
 assertType<string | undefined>(menuItem.text);
 assertType<string | undefined>(menuItem.tooltip);
+assertType<string | undefined>(menuItem.tooltipPosition);
 assertType<boolean | undefined>(menuItem.disabled);
 assertType<boolean | undefined>(menuItem.checked);
 assertType<boolean | undefined>(menuItem.keepOpen);

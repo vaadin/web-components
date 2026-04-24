@@ -23,6 +23,12 @@ export type MenuBarItem<TItemData extends object = object> = {
    */
   tooltip?: string;
   /**
+   * Position of the button's tooltip relative to the button
+   * (e.g. `bottom`, `top-start`). Falls back to the position set on the
+   * `<vaadin-tooltip>` element when omitted.
+   */
+  tooltipPosition?: string;
+  /**
    * The component to represent the button content.
    * Either a tagName or an element instance. Defaults to "vaadin-menu-bar-item".
    */
@@ -53,6 +59,11 @@ export type SubMenuItem<TItemData extends object = object> = {
    * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-menu-bar>`.
    */
   tooltip?: string;
+  /**
+   * Position of the item's tooltip relative to the item
+   * (e.g. `end`, `top`, `bottom-start`). Defaults to `end`.
+   */
+  tooltipPosition?: string;
   component?: HTMLElement | string;
   disabled?: boolean;
   theme?: string[] | string;

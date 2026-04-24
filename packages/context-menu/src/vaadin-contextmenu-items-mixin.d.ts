@@ -14,6 +14,11 @@ export type ContextMenuItem<TItemData extends object = object> = {
    * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-context-menu>`.
    */
   tooltip?: string;
+  /**
+   * Position of the item's tooltip relative to the item
+   * (e.g. `end`, `top`, `bottom-start`). Defaults to `end`.
+   */
+  tooltipPosition?: string;
   component?: HTMLElement | string;
   disabled?: boolean;
   checked?: boolean;

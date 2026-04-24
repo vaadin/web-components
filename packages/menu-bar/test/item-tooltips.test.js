@@ -110,6 +110,89 @@ describe('sub-menu item tooltips', () => {
     expect(tooltipOverlay.opened).to.be.not.ok;
   });
 
+  it('should not leak the end position back to menu-bar button tooltips', async () => {
+    await sendMouseToElement({ type: 'click', element: buttons[0] });
+    await nextRender();
+
+    const items = getSubMenuItems();
+    await sendMouseToElement({ type: 'move', element: items[0] });
+    await nextRender();
+    expect(tooltip.position).to.equal('end');
+
+    subMenu.close();
+    await nextRender();
+    expect(tooltip.position).to.be.undefined;
+  });
+
+  it('should ignore the position set on the tooltip element for sub-menu items', async () => {
+    tooltip.position = 'top';
+
+    await sendMouseToElement({ type: 'click', element: buttons[0] });
+    await nextRender();
+
+    const items = getSubMenuItems();
+    await sendMouseToElement({ type: 'move', element: items[0] });
+    await nextRender();
+    expect(tooltip.position).to.equal('end');
+
+    subMenu.close();
+    await nextRender();
+    expect(tooltip.position).to.equal('top');
+  });
+
+  it('should use per-item tooltipPosition for sub-menu items', async () => {
+    menuBar.items = [
+      {
+        text: 'Item 0',
+        children: [{ text: 'SubItem 0', tooltip: 'Sub tooltip 0', tooltipPosition: 'top-start' }],
+      },
+    ];
+    await nextRender();
+
+    await sendMouseToElement({ type: 'click', element: menuBar._buttons[0] });
+    await nextRender();
+
+    const items = getSubMenuItems();
+    await sendMouseToElement({ type: 'move', element: items[0] });
+    await nextRender();
+    expect(tooltip.position).to.equal('top-start');
+  });
+
+  describe('root button tooltipPosition', () => {
+    beforeEach(async () => {
+      menuBar.items = [
+        { text: 'Button 0', tooltip: 'Tooltip 0', tooltipPosition: 'bottom-end' },
+        { text: 'Button 1', tooltip: 'Tooltip 1' },
+      ];
+      await nextRender();
+      buttons = menuBar._buttons;
+    });
+
+    it('should use per-button tooltipPosition', async () => {
+      await sendMouseToElement({ type: 'move', element: buttons[0] });
+      await nextRender();
+      expect(tooltip.position).to.equal('bottom-end');
+    });
+
+    it('should fall back to the tooltip element position when tooltipPosition is not set', async () => {
+      tooltip.position = 'top';
+      await sendMouseToElement({ type: 'move', element: buttons[1] });
+      await nextRender();
+      expect(tooltip.position).to.equal('top');
+    });
+
+    it('should restore the tooltip element position after hiding', async () => {
+      tooltip.position = 'top';
+      await sendMouseToElement({ type: 'move', element: buttons[0] });
+      await nextRender();
+      expect(tooltip.position).to.equal('bottom-end');
+
+      await sendMouseToElement({ type: 'move', element: document.body });
+      await nextRender();
+      expect(tooltip.position).to.equal('top');
+    });
+  });
+
   describe('disabled item', () => {
     before(() => {
       window.Vaadin.featureFlags ??= {};

@@ -37,6 +37,7 @@ menu.addEventListener('item-selected', (event) => {
 const menuItem = menu.items[0];
 
 assertType<string | undefined>(menuItem.tooltip);
+assertType<string | undefined>(menuItem.tooltipPosition);
 assertType<string | undefined>(menuItem.text);
 assertType<boolean | undefined>(menuItem.disabled);
 assertType<string[] | string | undefined>(menuItem.theme);
@@ -47,6 +48,7 @@ assertType<HTMLElement | string | undefined>(menuItem.component);
 const subMenuItem: SubMenuItem = {};
 assertType<string | undefined>(subMenuItem.text);
 assertType<string | undefined>(subMenuItem.tooltip);
+assertType<string | undefined>(subMenuItem.tooltipPosition);
 assertType<boolean | undefined>(subMenuItem.disabled);
 assertType<boolean | undefined>(subMenuItem.checked);
 assertType<SubMenuItem[] | undefined>(subMenuItem.children);

@@ -20,6 +20,8 @@ export const ItemsMixin = (superClass) =>
          * @property {string} text - Text to be set as the menu item component's textContent
          * @property {string} tooltip - Text to be set as the menu item's tooltip.
          * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-context-menu>`.
+         * @property {string} tooltipPosition - Position of the item's tooltip relative to the item
+         * (e.g. `end`, `top`, `bottom-start`). Defaults to `end`.
          * @property {string | HTMLElement} component - The component to represent the item.
          * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected
@@ -493,11 +495,16 @@ export const ItemsMixin = (superClass) =>
           tooltip.generator = ({ item }) => item && item.tooltip;
         }
 
-        // Place the tooltip at the end of the item so it doesn't overlap
-        // sibling items above or below.
-        if (tooltip.position === undefined) {
-          tooltip.position = 'end';
+        // Apply per-item `tooltipPosition`, defaulting to `end` so the
+        // tooltip doesn't overlap sibling items above or below. The
+        // position set on `<vaadin-tooltip>` is intentionally ignored
+        // for sub-menu items. Stash it once so the menu-bar buttons —
+        // which share this tooltip element — can still fall back to it.
+        if (!('__userPosition' in tooltip)) {
+          tooltip.__userPosition = tooltip.position;
         }
+        const itemPosition = item._item.tooltipPosition;
+        tooltip.position = itemPosition === undefined ? 'end' : itemPosition;
 
         if (!tooltip._mouseLeaveListenerAdded) {
           tooltip._overlayElement.addEventListener('mouseleave', this.__onTooltipOverlayMouseLeave);
@@ -523,6 +530,12 @@ export const ItemsMixin = (superClass) =>
       const controller = this.__getItemTooltipController();
       const tooltip = controller && controller.node;
       if (tooltip) {
+        // Restore the user's originally configured position so the shared
+        // tooltip element doesn't keep our `end` default when used by
+        // other targets (e.g. menu-bar buttons).
+        if ('__userPosition' in tooltip) {
+          tooltip.position = tooltip.__userPosition;
+        }
         controller.setContext({ item: null });
         tooltip._stateController.close(immediate);
       }
