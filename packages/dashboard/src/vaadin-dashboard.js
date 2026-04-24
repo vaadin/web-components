@@ -100,6 +100,7 @@ const DEFAULT_I18N = getDefaultI18n();
  * @fires {CustomEvent} dashboard-item-selected-changed - Fired when an item selected state changed
  * @fires {CustomEvent} dashboard-item-move-mode-changed - Fired when an item move mode changed
  * @fires {CustomEvent} dashboard-item-resize-mode-changed - Fired when an item resize mode changed
+ * @fires {CustomEvent} dashboard-root-heading-level-changed - Fired when the `rootHeadingLevel` property changes.
  *
  * @customElement vaadin-dashboard
  * @extends HTMLElement

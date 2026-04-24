@@ -131,6 +131,11 @@ export type DashboardItemResizeModeChangedEvent<TItem extends DashboardItem> = C
   value: boolean;
 }>;
 
+/**
+ * Fired when the `rootHeadingLevel` property changes.
+ */
+export type DashboardRootHeadingLevelChangedEvent = CustomEvent<{ value: number | null }>;
+
 export interface DashboardCustomEventMap<TItem extends DashboardItem> {
   'dashboard-item-moved': DashboardItemMovedEvent<TItem>;
 
@@ -145,6 +150,8 @@ export interface DashboardCustomEventMap<TItem extends DashboardItem> {
   'dashboard-item-move-mode-changed': DashboardItemMoveModeChangedEvent<TItem>;
 
   'dashboard-item-resize-mode-changed': DashboardItemResizeModeChangedEvent<TItem>;
+
+  'dashboard-root-heading-level-changed': DashboardRootHeadingLevelChangedEvent;
 }
 
 export type DashboardEventMap<TItem extends DashboardItem> = DashboardCustomEventMap<TItem> & HTMLElementEventMap;
@@ -232,6 +239,7 @@ export interface DashboardI18n {
  * @fires {CustomEvent} dashboard-item-selected-changed - Fired when an item selected state changed
  * @fires {CustomEvent} dashboard-item-move-mode-changed - Fired when an item move mode changed
  * @fires {CustomEvent} dashboard-item-resize-mode-changed - Fired when an item resize mode changed
+ * @fires {CustomEvent} dashboard-root-heading-level-changed - Fired when the `rootHeadingLevel` property changes.
  */
 declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends DashboardLayoutMixin(
   I18nMixin({} as DashboardI18n, ElementMixin(ThemableMixin(HTMLElement))),
