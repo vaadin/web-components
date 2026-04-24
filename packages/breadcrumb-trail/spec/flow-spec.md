@@ -557,23 +557,49 @@ Queries use the same pattern as `SideNavElement` / `SideNavItemElement`: `$("vaa
 
 ## Reuse and Proposed Adjustments to Existing Modules
 
-### Flow core: "read current navigation state" public helper — Proposed
+### Flow core: a `Signal<NavigationState>` for the current route — Proposed
 
 The resolver's initial-attach path needs to read the active location and active router-targets chain without a pending `AfterNavigationEvent`. Today this goes through `UIInternals.getActiveViewLocation()` and `UIInternals.getActiveRouterTargetsChain()` — both public methods on a type that sits in `com.vaadin.flow.component.internal`. The `internal` package suffix signals "not part of the stable public API".
 
-Preferred landing: a small public facade on `Router` or `RouteUtil`:
+Rather than promote these two accessors to a public facade, the preferred landing is a **reactive signal** exposing the UI's current navigation state:
 
 ```java
-// in com.vaadin.flow.router.Router (or RouteConfiguration):
-public Optional<Location> getActiveLocation(UI ui);
-public List<HasElement> getActiveRouterTargetsChain(UI ui);
-// or a single call:
-public Optional<NavigationState> getActiveNavigationState(UI ui);
+// in com.vaadin.flow.router.Router (or on UI directly):
+public Signal<NavigationState> getCurrentNavigation();
+
+// where NavigationState carries the same data the resolver needs:
+public record NavigationState(
+        Class<? extends Component> routeClass,
+        Component viewInstance,                // for HasDynamicTitle
+        RouteParameters routeParameters,
+        Location location) {}
+
+// finer-grained variants, so consumers rerun only on relevant changes:
+public Signal<Class<? extends Component>> getCurrentRoute();
+public Signal<RouteParameters>            getCurrentRouteParameters();
+public Signal<Location>                   getCurrentLocation();
 ```
 
-Any variant that exposes the same information through a public, documented entry point is fine. Until this lands, the resolver calls `UIInternals` directly and acknowledges the compatibility risk — the semi-public calls have been stable for many Vaadin releases, and any flow-components code using them would need to migrate in the same release as the public facade anyway.
+With this primitive in place, the breadcrumb's router mode collapses to a single subscription:
 
-Affects: Flow core. Additive — a thin wrapper over existing `UIInternals` methods.
+```java
+Signal.effect(breadcrumbTrail,
+        () -> updateChildrenInternal(resolveTrail(Router.getCurrent().getCurrentNavigation().get())));
+```
+
+What falls away compared to the current listener-based design:
+
+- **No `addAfterNavigationListener` / `Registration` lifecycle** — `Signal.effect(component, Runnable)` is already bound to the component's attach/detach; auto-unsubscribes on detach, re-subscribes on re-attach.
+- **No `transient navigationRegistration` field** — signals handle lifecycle.
+- **No stale-callback guard** — signal subscriptions stop delivering as soon as the component detaches.
+- **No split between "initial state" and "subsequent events"** — `Signal#get()` always returns current truth, so the "what if the component attaches after the navigation already fired" edge case just works.
+- **No `UIInternals` dependency anywhere in the breadcrumb** — the signal is the public, documented accessor for current navigation state.
+
+The signal composes beyond breadcrumbs: SideNav's current-item highlighting (today client-side URL matching) could become a server-side `Signal.computed(...)` over `getCurrentLocation`; a back-button's visibility could bind to whether `getCurrentRoute().get()` carries a `@RouteParent`; analytics hooks and page-title manipulators each become one-liners. `AfterNavigationListener` stays — the signal is a reactive overlay, not a replacement for the event API.
+
+Until the signal ships, the resolver calls `UIInternals` directly and accepts the compatibility risk. Those accessors have been stable across many Vaadin releases, and any flow-components code depending on them would need to migrate in the same release as the signal lands anyway.
+
+Affects: Flow core. Fits the broader direction of making Flow state reactive-first (alongside `ValueSignal`, `Signal.effect`, `HasComponentsOfType.bindChildren`).
 
 ### `com.vaadin.flow.router.RouteParent` — Flow core dependency
 
