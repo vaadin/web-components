@@ -4,7 +4,7 @@
 
 ## Key Design Decisions
 
-1. **`Mode` enum drives ownership.** Following flow-api.md §1 and §9, `BreadcrumbTrail.Mode` is a public nested enum with values `ROUTER` (default) and `MANUAL`. The mode is set at construction (`new BreadcrumbTrail()` / `new BreadcrumbTrail(Mode)`) and can be switched at runtime via `setMode(Mode)`. `add`/`remove`/`removeAll` throw `IllegalStateException` while in `Mode.ROUTER`. `setMode` semantics are asymmetric: `ROUTER → MANUAL` clears any router-derived items and unregisters the navigation listener; `MANUAL → ROUTER` requires the trail to already be empty and throws `IllegalStateException` otherwise — the application must `removeAll()` first if it wants the switch. See "Mode switching" below for the full contract.
+1. **`Mode` enum drives ownership.** Following flow-api.md §1 and §9, `BreadcrumbTrail.Mode` is a public nested enum with values `ROUTER` (default) and `MANUAL`. The mode is set at construction (`new BreadcrumbTrail()` / `new BreadcrumbTrail(Mode)`) and can be switched at runtime via `setMode(Mode)`. `add`/`remove`/`removeAll` throw `IllegalStateException` while in `Mode.ROUTER`. `setMode(Mode)` is symmetric: both transitions clear the current children and install the new mode's wiring — `ROUTER → MANUAL` drops router-derived items and unregisters the navigation listener, `MANUAL → ROUTER` drops manually-added items and starts the router listener plus an initial rebuild. See "Mode switching" below for the full contract.
 
 2. **`HasComponentsOfType<BreadcrumbItem>` for child management.** Per flow-api.md §1 "Why this shape". Implemented by the type-parameterised children interface from Flow core ([PR #24186](https://github.com/vaadin/flow/pull/24186)). The interface extends `HasElement, HasEnabled` and supplies — as default methods — `add(T...)`, `add(Collection<T>)`, `remove(T...)`, `remove(Collection<T>)`, `removeAll()`, `addComponentAtIndex(int, T)`, `addComponentAsFirst(T)`, `replace(T, T)`, and `bindChildren(Signal<List<S>>, SerializableFunction<S, T>)`. All of these are available on `BreadcrumbTrail` without the component re-implementing them, and all of them must be intercepted by the `Mode.ROUTER` guard (see KDD §1). `HasEnabled` is inherited transitively — it does not need to appear in `BreadcrumbTrail`'s `implements` list.
 
@@ -222,8 +222,8 @@ The public `add` / `addComponentAsFirst` / `addComponentAtIndex` / `remove` / `r
 
 **Mode switching.** `setMode(Mode newMode)`:
 - If already equal, no-op.
-- On transition `ROUTER → MANUAL`: clear any router-derived items via `updateChildrenInternal(List.of())`, unregister the navigation listener.
-- On transition `MANUAL → ROUTER`: throw `IllegalStateException` if the component has any children — the caller must `removeAll()` first. Otherwise register the navigation listener (if attached) and trigger an initial `rebuildFromRouter`. If not attached, registration happens in the next `onAttach`.
+- On transition `ROUTER → MANUAL`: clear any router-derived items via `updateChildrenInternal(List.of())`, unregister the navigation listener. Subsequent `add(...)` calls are the application's responsibility.
+- On transition `MANUAL → ROUTER`: clear any manually-added items via `updateChildrenInternal(List.of())` (same bypass — the children are replaced by the router-derived trail anyway). Register the navigation listener if attached and trigger an initial `rebuildFromRouter`; if not attached, registration happens in the next `onAttach`.
 
 ---
 
@@ -646,7 +646,7 @@ Questions raised during spec production, with their resolutions.
 
 **Q: What happens if the user calls `setMode(Mode.ROUTER)` on a trail that already has children?**
 
-`setMode` throws `IllegalStateException`. Switching into `ROUTER` requires an empty trail because the router populator is about to install its own children; silently discarding the user's items would be surprising. Applications can call `removeAll()` before `setMode(Mode.ROUTER)` if they really want the switch.
+`setMode` clears the trail and installs the router-derived one — no exception. Both transitions (`ROUTER → MANUAL` and `MANUAL → ROUTER`) discard the existing children and let the new mode's wiring start fresh. Earlier designs considered throwing `IllegalStateException` on `MANUAL → ROUTER` with children, forcing the caller to `removeAll()` first; that was rejected because `setMode` semantically asks "change who owns the trail", which implies the old owner's items are no longer authoritative. Making the caller call `removeAll()` adds no safety — the next line of application code does exactly that — and creates a class of boilerplate-plus-exception traps when a mode switch happens in a handler that doesn't know what state the trail is in. The symmetric auto-clear rule is simpler and matches how `setItems`-shaped APIs behave elsewhere in Flow.
 
 **Q: Is there a way to drive the trail reactively from a `Signal<List<BreadcrumbItem>>`?**
 
