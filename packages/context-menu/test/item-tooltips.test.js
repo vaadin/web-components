@@ -132,12 +132,23 @@ describe('item tooltips', () => {
     expect(tooltipContent.textContent.trim()).to.equal('custom: Item 0');
   });
 
-  it('should default tooltip position to end', async () => {
+  it('should default tooltip position to end for items without a sub-menu', async () => {
     await openMenu(target);
     const [item0] = getMenuItems(contextMenu);
     await sendMouseToElement({ type: 'move', element: item0 });
     await nextRender();
     expect(tooltip.position).to.equal('end');
+  });
+
+  it('should default tooltip position to start for items with a sub-menu', async () => {
+    contextMenu.items = [{ text: 'Item 0', tooltip: 'Tooltip 0', children: [{ text: 'Child 0' }] }, { text: 'Item 1' }];
+    contextMenu.requestContentUpdate();
+    await nextRender();
+    await openMenu(target);
+    const [item0] = getMenuItems(contextMenu);
+    await sendMouseToElement({ type: 'move', element: item0 });
+    await nextRender();
+    expect(tooltip.position).to.equal('start');
   });
 
   it('should use per-item tooltipPosition over the default', async () => {
@@ -179,6 +190,20 @@ describe('item tooltips', () => {
       await nextRender();
       expect(tooltipOverlay.opened).to.be.true;
       expect(tooltipContent.textContent.trim()).to.equal('Disabled tooltip');
+    });
+
+    it('should default tooltip position to end for disabled items with a sub-menu', async () => {
+      contextMenu.items = [
+        { text: 'Item 0', tooltip: 'Tooltip 0', disabled: true, children: [{ text: 'Child 0' }] },
+        { text: 'Item 1' },
+      ];
+      contextMenu.requestContentUpdate();
+      await nextRender();
+      await openMenu(target);
+      const [item0] = getMenuItems(contextMenu);
+      await sendMouseToElement({ type: 'move', element: item0 });
+      await nextRender();
+      expect(tooltip.position).to.equal('end');
     });
   });
 });

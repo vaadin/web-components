@@ -61,7 +61,9 @@ export type SubMenuItem<TItemData extends object = object> = {
   tooltip?: string;
   /**
    * Position of the item's tooltip relative to the item
-   * (e.g. `end`, `top`, `bottom-start`). Defaults to `end`.
+   * (e.g. `end`, `top`, `bottom-start`). Defaults to `start` for items with a sub-menu
+   * (to avoid overlap with the opening sub-menu) and to `end` otherwise. Disabled items
+   * also default to `end` because their sub-menus cannot be opened.
    */
   tooltipPosition?: string;
   component?: HTMLElement | string;

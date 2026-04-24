@@ -21,7 +21,9 @@ export const ItemsMixin = (superClass) =>
          * @property {string} tooltip - Text to be set as the menu item's tooltip.
          * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-context-menu>`.
          * @property {string} tooltipPosition - Position of the item's tooltip relative to the item
-         * (e.g. `end`, `top`, `bottom-start`). Defaults to `end`.
+         * (e.g. `end`, `top`, `bottom-start`). Defaults to `start` for items with a sub-menu
+         * (to avoid overlap with the opening sub-menu) and to `end` otherwise. Disabled items
+         * also default to `end` because their sub-menus cannot be opened.
          * @property {string | HTMLElement} component - The component to represent the item.
          * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected
@@ -495,16 +497,21 @@ export const ItemsMixin = (superClass) =>
           tooltip.generator = ({ item }) => item && item.tooltip;
         }
 
-        // Apply per-item `tooltipPosition`, defaulting to `end` so the
-        // tooltip doesn't overlap sibling items above or below. The
-        // position set on `<vaadin-tooltip>` is intentionally ignored
-        // for sub-menu items. Stash it once so the menu-bar buttons —
+        // Apply per-item `tooltipPosition`. The default keeps the
+        // tooltip off of sibling items above or below: it sits on the
+        // `start` side for items whose sub-menu will open on the `end`
+        // side, and on the `end` side otherwise. Disabled items never
+        // open a sub-menu, so they also default to `end`. The position
+        // set on `<vaadin-tooltip>` is intentionally ignored for
+        // sub-menu items. Stash it once so the menu-bar buttons —
         // which share this tooltip element — can still fall back to it.
         if (!('__userPosition' in tooltip)) {
           tooltip.__userPosition = tooltip.position;
         }
+        const hasSubMenu = Array.isArray(item._item.children) && item._item.children.length > 0;
+        const defaultPosition = hasSubMenu && !item._item.disabled ? 'start' : 'end';
         const itemPosition = item._item.tooltipPosition;
-        tooltip.position = itemPosition === undefined ? 'end' : itemPosition;
+        tooltip.position = itemPosition === undefined ? defaultPosition : itemPosition;
 
         if (!tooltip._mouseLeaveListenerAdded) {
           tooltip._overlayElement.addEventListener('mouseleave', this.__onTooltipOverlayMouseLeave);
