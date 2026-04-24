@@ -693,6 +693,30 @@ describe('a11y', () => {
 
         expect(getDeepActiveElement()).to.equal(beforeInput);
       });
+
+      it('should not focus popover on sibling Tab when popover is last in DOM', async () => {
+        // Rearrange to DOM = [target, input, popover] — popover is the last focusable,
+        // and native Tab from input would land on the popover host.
+        target.parentElement.appendChild(popover);
+
+        input.focus();
+        await sendKeys({ press: 'Tab' });
+
+        expect(getDeepActiveElement()).to.equal(input);
+      });
+
+      it('should not focus popover on sibling Shift Tab when popover is first in DOM', async () => {
+        // Rearrange to DOM = [popover, firstInput, target, input]. Shift+Tab
+        // from firstInput must not reach the popover host (DOM-prev).
+        const firstInput = document.createElement('input');
+        target.parentElement.insertBefore(popover, target);
+        target.parentElement.insertBefore(firstInput, target);
+
+        firstInput.focus();
+        await sendKeys({ press: 'Shift+Tab' });
+
+        expect(getDeepActiveElement()).to.equal(firstInput);
+      });
     });
   });
 });
