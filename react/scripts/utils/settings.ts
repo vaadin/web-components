@@ -44,9 +44,12 @@ export const eventSettings = new Map<string, EventSettings>([
   ['Grid', { makeUnknown: ['size-changed', 'data-provider-changed'] }],
   [
     'GridPro',
-    { makeUnknown: ['size-changed', 'data-provider-changed', 'enter-next-row-changed', 'single-cell-edit-changed'] },
+    {
+      remove: ['enter-next-row-changed', 'single-cell-edit-changed'],
+      makeUnknown: ['size-changed', 'data-provider-changed'],
+    },
   ],
-  ['GridProEditColumn', { makeUnknown: ['editor-type-changed'] }],
+  ['GridProEditColumn', { remove: ['editor-type-changed'] }],
   [
     'MultiSelectComboBox',
     {
