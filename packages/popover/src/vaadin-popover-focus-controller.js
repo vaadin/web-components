@@ -39,10 +39,10 @@ export class PopoverFocusController {
     const targetFocusable = this.__getTargetFocusable();
 
     if (targetFocusable && isElementFocused(targetFocusable)) {
+      event.preventDefault();
       if (host.noTabFocus) {
         this.__moveLogicalNext(event, targetFocusable);
       } else {
-        event.preventDefault();
         host.focus();
       }
       return;

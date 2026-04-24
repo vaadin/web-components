@@ -663,6 +663,36 @@ describe('a11y', () => {
         // Modal popover uses overlay focus trap; noTabFocus has no effect.
         expect(getDeepActiveElement()).to.equal(popover);
       });
+
+      it('should not focus popover on target Tab when popover is last in DOM', async () => {
+        // Remove the input so DOM = [target, popover] — popover is the last focusable.
+        input.remove();
+
+        target.focus();
+        await sendKeys({ press: 'Tab' });
+
+        // Focus must not land on the popover; nothing else to Tab to, so it stays on target.
+        expect(getDeepActiveElement()).to.equal(target);
+      });
+
+      it('should not focus popover on target Shift Tab when popover is before target and focus trigger', async () => {
+        // Rearrange to DOM = [beforeInput, popover, target, input].
+        const beforeInput = document.createElement('input');
+        target.parentElement.insertBefore(popover, target); // move popover before target
+        target.parentElement.insertBefore(beforeInput, popover);
+
+        popover.opened = false;
+        popover.trigger = ['focus'];
+        await nextUpdate(popover);
+
+        target.focus();
+        await oneEvent(overlay, 'vaadin-overlay-open');
+
+        await sendKeys({ press: 'Shift+Tab' });
+        await nextRender();
+
+        expect(getDeepActiveElement()).to.equal(beforeInput);
+      });
     });
   });
 });
