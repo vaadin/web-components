@@ -69,6 +69,7 @@ snapshots["menu-bar basic"] =
 snapshots["menu-bar opened"] = 
 `<vaadin-menu-bar
   role="menubar"
+  safe-triangle-active=""
   style="pointer-events: auto;"
 >
   <vaadin-menu-bar-submenu

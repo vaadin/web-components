@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { SafeTriangleController } from './vaadin-safe-triangle-controller.js';
 
 /**
  * @polymerMixin
@@ -163,6 +164,11 @@ export const ItemsMixin = (superClass) =>
           },
         }),
       );
+
+      // Activate safe triangle tracking for the newly opened submenu
+      if (this.__safeTriangle) {
+        this.__safeTriangle.activate(subMenuOverlay, itemElement, this._listBox);
+      }
     }
 
     /** @private */
@@ -263,7 +269,18 @@ export const ItemsMixin = (superClass) =>
           return;
         }
 
-        this.__showSubMenu(event);
+        // Extract item reference eagerly since composedPath() is only valid synchronously
+        const item = event.composedPath().find((node) => node.localName === `${this._tagNamePrefix}-item`);
+
+        // If a submenu is open and the safe triangle indicates the user is
+        // aiming at it, defer the switch instead of switching immediately.
+        if (this._subMenu.opened && this.__safeTriangle && this.__safeTriangle.shouldKeepOpen()) {
+          this.__safeTriangle.scheduleSwitch(() => {
+            this.__showSubMenu(event, item);
+          });
+        } else {
+          this.__showSubMenu(event, item);
+        }
       });
 
       overlay.addEventListener('keydown', (event) => {
@@ -348,6 +365,10 @@ export const ItemsMixin = (superClass) =>
           const expandedItem = this._listBox.querySelector('[expanded]');
           if (expandedItem) {
             this.__updateExpanded(expandedItem, false);
+          }
+          // Deactivate safe triangle tracking when submenu closes
+          if (this.__safeTriangle) {
+            this.__safeTriangle.deactivate();
           }
         }
       });
@@ -471,6 +492,10 @@ export const ItemsMixin = (superClass) =>
         subMenu.slot = 'submenu';
         this._subMenu = subMenu;
         this.appendChild(subMenu);
+
+        if (!isTouch) {
+          this.__safeTriangle = new SafeTriangleController();
+        }
 
         requestAnimationFrame(() => {
           this.__openListenerActive = true;
