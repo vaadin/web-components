@@ -186,6 +186,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           type: Number,
           value: -1,
           observer: '_focusedChipIndexChanged',
+          sync: true,
         },
 
         /** @private */
