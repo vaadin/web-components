@@ -186,7 +186,7 @@ function createPR(title, head, base, body) {
           responseBody += data;
         });
         res.on('end', () => {
-           resolve({ status: res.statusCode, body: responseBody });
+          resolve({ status: res.statusCode, body: responseBody });
         });
       },
     );
