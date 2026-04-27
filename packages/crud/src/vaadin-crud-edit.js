@@ -51,6 +51,7 @@ class CrudEdit extends Button {
   /** @private */
   __onClick(e) {
     const tr = e.target.parentElement.assignedSlot.parentElement.parentElement;
+    /** @internal to not document it in CEM */
     tr.dispatchEvent(
       new CustomEvent('edit', { detail: { item: tr._item, index: tr.index }, bubbles: true, composed: true }),
     );
