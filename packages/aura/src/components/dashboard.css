@@ -43,12 +43,6 @@ vaadin-dashboard-widget {
       var(--vaadin-border-color-secondary)
     );
   }
-
-  &[selected] {
-    --vaadin-dashboard-widget-background: var(--aura-accent-surface) padding-box;
-    --vaadin-dashboard-widget-border-color: var(--aura-accent-color);
-    --vaadin-dashboard-widget-shadow: var(--aura-shadow-s);
-  }
 }
 
 vaadin-dashboard-section {
@@ -66,7 +60,12 @@ vaadin-dashboard-section {
 }
 
 :is(vaadin-dashboard-widget, vaadin-dashboard-section) {
-  &::part(button) {
+  &::part(move-forward-button),
+  &::part(move-backward-button),
+  &::part(resize-shrink-height-button),
+  &::part(resize-grow-height-button),
+  &::part(resize-shrink-width-button),
+  &::part(resize-grow-width-button) {
     background: var(--aura-surface-color) padding-box;
     color: var(--vaadin-text-color-secondary);
     border: 1px solid var(--vaadin-border-color);
@@ -100,27 +99,21 @@ vaadin-dashboard-section {
     outline-offset: 2px;
   }
 
-  @media (any-hover: hover) {
-    &::part(button):hover {
-      color: var(--vaadin-text-color);
-    }
-
-    &::part(move-apply-button):hover,
-    &::part(resize-apply-button):hover {
-      color: var(--aura-accent-contrast-color);
-    }
-  }
-
   &::part(move-button),
   &::part(remove-button),
   &::part(resize-button) {
-    background: transparent;
-    border: 0;
     color: var(--vaadin-text-color-disabled);
+    transition: 120ms color;
     outline-offset: -2px;
   }
 
   &[editable] {
     --vaadin-dashboard-widget-header-padding: var(--vaadin-padding-xs);
+  }
+}
+
+@media (any-hover: hover) {
+  :is(vaadin-dashboard-widget, vaadin-dashboard-section)::part(button):hover {
+    color: var(--vaadin-text-color);
   }
 }
