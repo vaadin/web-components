@@ -67,21 +67,6 @@ class MenuBarListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LumoI
 
     this.setAttribute('role', 'menu');
   }
-
-  /**
-   * Override method inherited from `KeyboardDirectionMixin` to dispatch
-   * an `item-focused` event used by the `ItemsMixin` to show item tooltips.
-   *
-   * @param {Element} item
-   * @param {FocusOptions} options
-   * @protected
-   * @override
-   */
-  _focusItem(item, options) {
-    super._focusItem(item, options);
-
-    this.dispatchEvent(new CustomEvent('item-focused', { detail: { item } }));
-  }
 }
 
 defineCustomElement(MenuBarListBox);

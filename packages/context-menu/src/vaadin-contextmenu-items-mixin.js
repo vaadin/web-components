@@ -92,8 +92,6 @@ export const ItemsMixin = (superClass) =>
     constructor() {
       super();
 
-      this.__onTooltipOverlayMouseLeave = this.__onTooltipOverlayMouseLeave.bind(this);
-
       // Overlay's outside click listener doesn't work with modeless
       // overlays (submenus) so we need additional logic for it
       this.__itemsOutsideClickListener = (e) => {
@@ -140,7 +138,7 @@ export const ItemsMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
       document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener);
-      this.__hideTooltip(true);
+      this.__hideTooltip();
     }
 
     /**
@@ -174,8 +172,6 @@ export const ItemsMixin = (superClass) =>
 
     /** @private */
     __openSubMenu(subMenu, itemElement) {
-      this.__hideTooltip(true);
-
       // Update sub-menu items and position target
       this.__updateSubMenuForItem(subMenu, itemElement);
 
@@ -282,15 +278,6 @@ export const ItemsMixin = (superClass) =>
         }
       });
 
-      listBox.addEventListener('item-focused', (event) => {
-        const item = event.detail.item;
-        if (item && item._item.tooltip && isKeyboardActive()) {
-          this.__showTooltip(item, false);
-        } else {
-          this.__hideTooltip(true);
-        }
-      });
-
       return listBox;
     }
 
@@ -312,16 +299,36 @@ export const ItemsMixin = (superClass) =>
 
         this.__showSubMenu(event);
 
-        const item = event.composedPath().find((node) => node.localName === `${this._tagNamePrefix}-item`);
-        if (item && item._item.tooltip) {
-          this.__showTooltip(item, true);
+        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
+        if (itemElement && itemElement._item.tooltip) {
+          this.__showTooltip(itemElement, true);
         } else {
-          this.__hideTooltip(true);
+          this.__hideTooltip();
         }
       });
 
-      overlay.addEventListener('mouseleave', () => {
-        this.__hideTooltip(true);
+      overlay.addEventListener('mouseleave', (event) => {
+        // Ignore events from the submenus
+        if (event.composedPath().includes(this._subMenu)) {
+          return;
+        }
+
+        this.__hideTooltip();
+      });
+
+      overlay.addEventListener('focusin', (event) => {
+        // Ignore events from the submenus
+        // Ignore non-keyboard focus changes (e.g. clicks).
+        if (event.composedPath().includes(this._subMenu) || !isKeyboardActive()) {
+          return;
+        }
+
+        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
+        if (itemElement && itemElement._item.tooltip) {
+          this.__showTooltip(itemElement, false);
+        } else {
+          this.__hideTooltip();
+        }
       });
 
       overlay.addEventListener('keydown', (event) => {
@@ -357,6 +364,12 @@ export const ItemsMixin = (superClass) =>
     /** @private */
     __initSubMenu() {
       const subMenu = document.createElement(this.constructor.is);
+
+      // Share the tooltip controller with the sub-menu so the user's
+      // slotted `<vaadin-tooltip>` (which lives on the outer host) is
+      // reused for sub-menu items. Without this, the sub-menu would
+      // create its own controller that finds no slotted tooltip.
+      subMenu._tooltipController = this._tooltipController;
 
       subMenu._modeless = true;
       subMenu.openOn = 'opensubmenu';
@@ -473,74 +486,28 @@ export const ItemsMixin = (superClass) =>
       }
     }
 
-    /**
-     * @param {HTMLElement} item
-     * @param {boolean} isHover
-     * @private
-     */
-    __showTooltip(item, isHover) {
-      // Check if there is a slotted vaadin-tooltip element.
+    /** @private */
+    __showTooltip(target, isHover) {
       const tooltip = this._tooltipController.node;
       if (tooltip && tooltip.isConnected) {
-        // If the tooltip element doesn't have a generator assigned, use a default one
-        // that reads the `tooltip` property of an item.
-        if (tooltip.generator === undefined) {
-          tooltip.generator = ({ item }) => item && item.tooltip;
-        }
-
-        // Apply per-item `tooltipPosition`. The default keeps the
-        // tooltip off of sibling items above or below: it sits on the
-        // `start` side for items whose sub-menu will open on the `end`
-        // side, and on the `end` side otherwise. Disabled items never
-        // open a sub-menu, so they also default to `end`. The position
-        // set on `<vaadin-tooltip>` is intentionally ignored for
-        // sub-menu items. Stash it once so the menu-bar buttons —
-        // which share this tooltip element — can still fall back to it.
-        if (!('__userPosition' in tooltip)) {
-          tooltip.__userPosition = tooltip.position;
-        }
-        const hasSubMenu = Array.isArray(item._item.children) && item._item.children.length > 0;
-        const defaultPosition = hasSubMenu && !item._item.disabled ? 'start' : 'end';
-        const itemPosition = item._item.tooltipPosition;
-        tooltip.position = itemPosition === undefined ? defaultPosition : itemPosition;
-
-        if (!tooltip._mouseLeaveListenerAdded) {
-          tooltip._overlayElement.addEventListener('mouseleave', this.__onTooltipOverlayMouseLeave);
-          tooltip._mouseLeaveListenerAdded = true;
-        }
-
-        this._tooltipController.setTarget(item);
-        this._tooltipController.setContext({ item: item._item });
-
-        // Trigger opening using the corresponding delay.
-        this._tooltipController.open({
-          hover: isHover,
-          focus: !isHover,
-        });
+        tooltip.generator = tooltip.generator || (({ item }) => item && item.tooltip);
       }
-    }
 
-    /**
-     * @param {boolean} immediate
-     * @private
-     */
-    __hideTooltip(immediate) {
-      const tooltip = this._tooltipController.node;
-      // Restore the user's originally configured position so the shared
-      // tooltip element doesn't keep our `end` default when used by
-      // other targets (e.g. menu-bar buttons).
-      if (tooltip && '__userPosition' in tooltip) {
-        tooltip.position = tooltip.__userPosition;
-      }
-      this._tooltipController.setContext({ item: null });
-      this._tooltipController.close(immediate);
+      const item = target._item;
+      const defaultPosition = item.children && item.children.length > 0 && !item.disabled ? 'start' : 'end';
+
+      this._tooltipController.setTarget(target);
+      this._tooltipController.setContext({ item });
+      this._tooltipController.setPosition(item.tooltipPosition || defaultPosition);
+      this._tooltipController.open({ hover: isHover, focus: !isHover });
     }
 
     /** @private */
-    __onTooltipOverlayMouseLeave(event) {
-      if (event.relatedTarget !== this._tooltipController.target) {
-        this.__hideTooltip();
-      }
+    __hideTooltip(immediate) {
+      console.warn('HIDE');
+      this._tooltipController.setTarget(null);
+      this._tooltipController.setContext({ item: null });
+      this._tooltipController.close(immediate);
     }
 
     /** @protected */

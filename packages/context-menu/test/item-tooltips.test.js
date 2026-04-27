@@ -4,7 +4,7 @@ import { arrowDownKeyDown, arrowUpKeyDown, fire, fixtureSync, nextRender } from 
 import '../src/vaadin-context-menu.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { getMenuItems, openMenu } from './helpers.js';
+import { getMenuItems, getSubMenu, openMenu } from './helpers.js';
 
 describe('item tooltips', () => {
   let contextMenu, target, tooltip, tooltipOverlay, tooltipContent;
@@ -71,14 +71,14 @@ describe('item tooltips', () => {
     expect(tooltipOverlay.opened).to.be.not.ok;
   });
 
-  it('should hide tooltip when mouse leaves the overlay', async () => {
+  it('should hide tooltip when mouse leaves the list box', async () => {
     await openMenu(target);
     const [item0] = getMenuItems(contextMenu);
     await sendMouseToElement({ type: 'move', element: item0 });
     await nextRender();
     expect(tooltipOverlay.opened).to.be.true;
 
-    fire(contextMenu._overlayElement, 'mouseleave');
+    fire(contextMenu._listBox, 'mouseleave');
     await nextRender();
     expect(tooltipOverlay.opened).to.be.not.ok;
   });
@@ -137,7 +137,7 @@ describe('item tooltips', () => {
     const [item0] = getMenuItems(contextMenu);
     await sendMouseToElement({ type: 'move', element: item0 });
     await nextRender();
-    expect(tooltip.position).to.equal('end');
+    expect(tooltipOverlay.position).to.equal('end');
   });
 
   it('should default tooltip position to start for items with a sub-menu', async () => {
@@ -148,7 +148,7 @@ describe('item tooltips', () => {
     const [item0] = getMenuItems(contextMenu);
     await sendMouseToElement({ type: 'move', element: item0 });
     await nextRender();
-    expect(tooltip.position).to.equal('start');
+    expect(tooltipOverlay.position).to.equal('start');
   });
 
   it('should use per-item tooltipPosition over the default', async () => {
@@ -159,16 +159,16 @@ describe('item tooltips', () => {
     const [item0] = getMenuItems(contextMenu);
     await sendMouseToElement({ type: 'move', element: item0 });
     await nextRender();
-    expect(tooltip.position).to.equal('top-start');
+    expect(tooltipOverlay.position).to.equal('top-start');
   });
 
-  it('should ignore the position set on the tooltip element', async () => {
+  it('should respect the position set on the tooltip element', async () => {
     tooltip.position = 'top';
     await openMenu(target);
     const [item0] = getMenuItems(contextMenu);
     await sendMouseToElement({ type: 'move', element: item0 });
     await nextRender();
-    expect(tooltip.position).to.equal('end');
+    expect(tooltipOverlay.position).to.equal('top');
   });
 
   describe('disabled item', () => {
@@ -203,7 +203,34 @@ describe('item tooltips', () => {
       const [item0] = getMenuItems(contextMenu);
       await sendMouseToElement({ type: 'move', element: item0 });
       await nextRender();
-      expect(tooltip.position).to.equal('end');
+      expect(tooltipOverlay.position).to.equal('end');
+    });
+  });
+
+  describe('sub-menu items', () => {
+    beforeEach(async () => {
+      contextMenu.items = [
+        {
+          text: 'Parent',
+          children: [{ text: 'Child 0', tooltip: 'Child tooltip 0' }, { text: 'Child 1' }],
+        },
+      ];
+      contextMenu.requestContentUpdate();
+      await nextRender();
+    });
+
+    it('should show tooltip when hovering a sub-menu item with a tooltip', async () => {
+      await openMenu(target);
+      const [parent] = getMenuItems(contextMenu);
+      await openMenu(parent);
+
+      const subMenu = getSubMenu(contextMenu);
+      const [child0] = getMenuItems(subMenu);
+      await sendMouseToElement({ type: 'move', element: child0 });
+      await nextRender();
+
+      expect(tooltipOverlay.opened).to.be.true;
+      expect(tooltipContent.textContent.trim()).to.equal('Child tooltip 0');
     });
   });
 });

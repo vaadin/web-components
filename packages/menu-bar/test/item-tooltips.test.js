@@ -96,7 +96,7 @@ describe('sub-menu item tooltips', () => {
     expect(tooltipOverlay.opened).to.be.not.ok;
   });
 
-  it('should hide tooltip when mouse leaves sub-menu overlay', async () => {
+  it('should hide tooltip when mouse leaves sub-menu list box', async () => {
     await sendMouseToElement({ type: 'click', element: buttons[0] });
     await nextRender();
 
@@ -105,7 +105,7 @@ describe('sub-menu item tooltips', () => {
     await nextRender();
     expect(tooltipOverlay.opened).to.be.true;
 
-    fire(subMenu._overlayElement, 'mouseleave');
+    fire(subMenu._listBox, 'mouseleave');
     await nextRender();
     expect(tooltipOverlay.opened).to.be.not.ok;
   });
@@ -117,14 +117,14 @@ describe('sub-menu item tooltips', () => {
     const items = getSubMenuItems();
     await sendMouseToElement({ type: 'move', element: items[0] });
     await nextRender();
-    expect(tooltip.position).to.equal('end');
+    expect(tooltipOverlay.position).to.equal('end');
 
     subMenu.close();
     await nextRender();
-    expect(tooltip.position).to.be.undefined;
+    expect(tooltipOverlay.opened).to.be.not.ok;
   });
 
-  it('should ignore the position set on the tooltip element for sub-menu items', async () => {
+  it('should respect the position set on the tooltip element for sub-menu items', async () => {
     tooltip.position = 'top';
 
     await sendMouseToElement({ type: 'click', element: buttons[0] });
@@ -133,11 +133,7 @@ describe('sub-menu item tooltips', () => {
     const items = getSubMenuItems();
     await sendMouseToElement({ type: 'move', element: items[0] });
     await nextRender();
-    expect(tooltip.position).to.equal('end');
-
-    subMenu.close();
-    await nextRender();
-    expect(tooltip.position).to.equal('top');
+    expect(tooltipOverlay.position).to.equal('top');
   });
 
   it('should use per-item tooltipPosition for sub-menu items', async () => {
@@ -155,7 +151,7 @@ describe('sub-menu item tooltips', () => {
     const items = getSubMenuItems();
     await sendMouseToElement({ type: 'move', element: items[0] });
     await nextRender();
-    expect(tooltip.position).to.equal('top-start');
+    expect(tooltipOverlay.position).to.equal('top-start');
   });
 
   describe('root button tooltipPosition', () => {
@@ -171,25 +167,21 @@ describe('sub-menu item tooltips', () => {
     it('should use per-button tooltipPosition', async () => {
       await sendMouseToElement({ type: 'move', element: buttons[0] });
       await nextRender();
-      expect(tooltip.position).to.equal('bottom-end');
+      expect(tooltipOverlay.position).to.equal('bottom-end');
     });
 
     it('should fall back to the tooltip element position when tooltipPosition is not set', async () => {
       tooltip.position = 'top';
       await sendMouseToElement({ type: 'move', element: buttons[1] });
       await nextRender();
-      expect(tooltip.position).to.equal('top');
+      expect(tooltipOverlay.position).to.equal('top');
     });
 
-    it('should restore the tooltip element position after hiding', async () => {
+    it('should respect the tooltip element position over tooltipPosition', async () => {
       tooltip.position = 'top';
       await sendMouseToElement({ type: 'move', element: buttons[0] });
       await nextRender();
-      expect(tooltip.position).to.equal('bottom-end');
-
-      await sendMouseToElement({ type: 'move', element: document.body });
-      await nextRender();
-      expect(tooltip.position).to.equal('top');
+      expect(tooltipOverlay.position).to.equal('top');
     });
   });
 
