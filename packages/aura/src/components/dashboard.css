@@ -43,6 +43,12 @@ vaadin-dashboard-widget {
       var(--vaadin-border-color-secondary)
     );
   }
+
+  &[selected] {
+    --vaadin-dashboard-widget-background: var(--aura-accent-surface) padding-box;
+    --vaadin-dashboard-widget-border-color: var(--aura-accent-color);
+    --vaadin-dashboard-widget-shadow: var(--aura-shadow-s);
+  }
 }
 
 vaadin-dashboard-section {
