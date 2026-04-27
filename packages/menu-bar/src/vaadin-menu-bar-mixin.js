@@ -15,6 +15,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 
 /**
  * Custom Lit directive for rendering item components
@@ -310,11 +311,15 @@ export const MenuBarMixin = (superClass) =>
         },
       });
 
-      this.addController(this._subMenuController);
-      this.addController(this._overflowController);
+      this._tooltipController = new TooltipController(this);
+      this._tooltipController.setManual(true);
 
       this.addEventListener('mousedown', () => this._hideTooltip(true));
       this.addEventListener('mouseleave', () => this._hideTooltip());
+
+      this.addController(this._tooltipController);
+      this.addController(this._subMenuController);
+      this.addController(this._overflowController);
 
       this._container = this.shadowRoot.querySelector('[part="container"]');
     }
@@ -662,7 +667,7 @@ export const MenuBarMixin = (superClass) =>
           this._tooltipController.setContext({ item: button.item });
 
           // Trigger opening using the corresponding delay.
-          tooltip._stateController.open({
+          this._tooltipController.open({
             hover: isHover,
             focus: !isHover,
           });
@@ -672,11 +677,8 @@ export const MenuBarMixin = (superClass) =>
 
     /** @protected */
     _hideTooltip(immediate) {
-      const tooltip = this._tooltipController && this._tooltipController.node;
-      if (tooltip) {
-        this._tooltipController.setContext({ item: null });
-        tooltip._stateController.close(immediate);
-      }
+      this._tooltipController.setContext({ item: null });
+      this._tooltipController.close(immediate);
     }
 
     /** @private */

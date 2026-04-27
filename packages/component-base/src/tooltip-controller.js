@@ -39,10 +39,6 @@ export class TooltipController extends SlotController {
       tooltipNode.manual = this.manual;
     }
 
-    if (this.opened !== undefined) {
-      tooltipNode.opened = this.opened;
-    }
-
     if (this.position !== undefined) {
       tooltipNode._position = this.position;
     }
@@ -114,19 +110,6 @@ export class TooltipController extends SlotController {
   }
 
   /**
-   * Toggle opened state on the slotted tooltip.
-   * @param {boolean} opened
-   */
-  setOpened(opened) {
-    this.opened = opened;
-
-    const tooltipNode = this.node;
-    if (tooltipNode) {
-      tooltipNode.opened = opened;
-    }
-  }
-
-  /**
    * Set default position for the slotted tooltip.
    * This can be overridden by setting the position
    * using corresponding property or attribute.
@@ -165,6 +148,34 @@ export class TooltipController extends SlotController {
     const tooltipNode = this.node;
     if (tooltipNode) {
       tooltipNode.target = target;
+    }
+  }
+
+  /**
+   * Schedule opening the slotted tooltip. Respects the tooltip's
+   * configured `hoverDelay` / `focusDelay` and the shared warm-up state.
+   * No-op when no tooltip is slotted.
+   *
+   * @param {{ hover?: boolean, focus?: boolean, immediate?: boolean }} [options]
+   */
+  open(options) {
+    const tooltipNode = this.node;
+    if (tooltipNode && tooltipNode.isConnected) {
+      tooltipNode._stateController.open(options);
+    }
+  }
+
+  /**
+   * Schedule closing the slotted tooltip. Respects the tooltip's
+   * configured `hideDelay` unless `immediate` is true.
+   * No-op when no tooltip is slotted.
+   *
+   * @param {boolean} [immediate]
+   */
+  close(immediate) {
+    const tooltipNode = this.node;
+    if (tooltipNode) {
+      tooltipNode._stateController.close(immediate);
     }
   }
 
