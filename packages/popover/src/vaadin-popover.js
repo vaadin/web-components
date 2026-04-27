@@ -6,13 +6,7 @@
 import './vaadin-popover-overlay.js';
 import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { getActiveTrappingNode } from '@vaadin/a11y-base/src/focus-trap-controller.js';
-import {
-  getDeepActiveElement,
-  getFocusableElements,
-  isElementFocused,
-  isKeyboardActive,
-} from '@vaadin/a11y-base/src/focus-utils.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -22,6 +16,7 @@ import {
   isLastOverlay as isLastOverlayBase,
 } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import { PopoverFocusController } from './vaadin-popover-focus-controller.js';
 import { PopoverPositionMixin } from './vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from './vaadin-popover-target-mixin.js';
 
@@ -484,7 +479,6 @@ class Popover extends PopoverPositionMixin(
 
     this.__generatedId = `vaadin-popover-${generateUniqueId()}`;
 
-    this.__onGlobalKeyDown = this.__onGlobalKeyDown.bind(this);
     this.__onTargetClick = this.__onTargetClick.bind(this);
     this.__onTargetFocusIn = this.__onTargetFocusIn.bind(this);
     this.__onTargetFocusOut = this.__onTargetFocusOut.bind(this);
@@ -492,6 +486,7 @@ class Popover extends PopoverPositionMixin(
     this.__onTargetMouseLeave = this.__onTargetMouseLeave.bind(this);
 
     this._openedStateController = new PopoverOpenedStateController(this);
+    this._focusController = new PopoverFocusController(this);
   }
 
   /** @protected */
@@ -665,9 +660,9 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __openedChanged(opened, oldOpened) {
     if (opened) {
-      document.addEventListener('keydown', this.__onGlobalKeyDown, true);
+      this._focusController.activate();
     } else if (oldOpened) {
-      document.removeEventListener('keydown', this.__onGlobalKeyDown, true);
+      this._focusController.deactivate();
     }
   }
 
@@ -710,230 +705,6 @@ class Popover extends PopoverPositionMixin(
         this._openedStateController.open({ immediate: true });
       }
     }
-  }
-
-  /**
-   * Overlay's global Escape press listener doesn't work when
-   * the overlay is modeless, so we use a separate listener.
-   * @private
-   */
-  __onGlobalKeyDown(event) {
-    // Modal popover uses overlay logic focus trap.
-    if (this.modal) {
-      return;
-    }
-
-    // Include popover content in the Tab order after the target.
-    if (event.key === 'Tab') {
-      if (event.shiftKey) {
-        this.__onGlobalShiftTab(event);
-      } else {
-        this.__onGlobalTab(event);
-      }
-    }
-  }
-
-  /** @private */
-  __onGlobalTab(event) {
-    // Move focus to the popover on target element Tab
-    if (this.target && isElementFocused(this.__getTargetFocusable())) {
-      event.preventDefault();
-      this.focus();
-      return;
-    }
-
-    // Cache filtered focusable list for this keystroke to avoid redundant DOM traversals
-    const focusables = this.__getScopeFocusables();
-
-    // Move focus to the next element after target on last content Tab,
-    // or when popover itself is focused and has no focusable content
-    const lastFocusable = this.__getLastFocusable();
-    const isFocusOut = lastFocusable ? isElementFocused(lastFocusable) : isElementFocused(this);
-    if (isFocusOut) {
-      let focusable = this.__getNextScopeFocusable(this.__getTargetFocusable(), focusables);
-      // If the next element after the target is the popover itself (DOM position
-      // differs from logical position), skip past it to the actual next element.
-      if (focusable === this) {
-        focusable = this.__getNextScopeFocusable(this, focusables);
-      }
-      if (focusable) {
-        event.preventDefault();
-        focusable.focus();
-        return;
-      }
-      // No next element after the target in the scope. When inside a focus trap,
-      // wrap explicitly to the first focusable. Don't fall through - the
-      // FocusTrapController uses DOM order which may differ from the popover's
-      // logical tab position.
-      if (getActiveTrappingNode(this) && focusables[0]) {
-        event.preventDefault();
-        focusables[0].focus();
-        return;
-      }
-    }
-
-    // Handle cases where Tab from the current element would land on the popover
-    const activeElement = getDeepActiveElement();
-    const nextFocusable = this.__getNextScopeFocusable(activeElement, focusables);
-    if (nextFocusable === this) {
-      // The popover should only be Tab-reachable from its target (handled above).
-      // Skip the popover when Tab from any other element would land on it
-      // due to its DOM position.
-      const focusableAfterPopover = this.__getNextScopeFocusable(this, focusables);
-      if (focusableAfterPopover) {
-        event.preventDefault();
-        focusableAfterPopover.focus();
-      } else if (getActiveTrappingNode(this) && focusables[0]) {
-        // Popover is last in DOM scope but shouldn't be Tab-reachable from
-        // non-target elements. Wrap to first focusable in focus trap.
-        event.preventDefault();
-        focusables[0].focus();
-      }
-    }
-  }
-
-  /** @private */
-  __onGlobalShiftTab(event) {
-    // Prevent restoring focus after target blur on Shift + Tab
-    if (this.target && isElementFocused(this.__getTargetFocusable()) && this.__shouldRestoreFocus) {
-      this.__shouldRestoreFocus = false;
-      return;
-    }
-
-    // Move focus back to the target on popover Shift + Tab
-    if (this.target && isElementFocused(this)) {
-      event.preventDefault();
-      this.__getTargetFocusable().focus();
-      return;
-    }
-
-    // Don't intercept if focus is inside the popover content.
-    // The browser's native Shift+Tab handles navigation within
-    // the overlay (e.g. between focusable content and the popover element itself).
-    const activeElement = getDeepActiveElement();
-    if (this.contains(activeElement)) {
-      return;
-    }
-
-    // Cache filtered focusable list for this keystroke to avoid redundant DOM traversals
-    const focusables = this.__getScopeFocusables();
-
-    // Get previous focusable element excluding the popover
-    const prevFocusable = this.__getPrevScopeFocusable(activeElement, focusables);
-    const targetFocusable = this.__getTargetFocusable();
-
-    // Intercept Shift+Tab when the previous focusable (excluding the popover)
-    // is the target. Instead of moving to the target, redirect focus into
-    // the popover's last focusable content (or the popover itself).
-    if (prevFocusable === targetFocusable) {
-      event.preventDefault();
-      this.__focusLastOrSelf();
-      return;
-    }
-
-    // Move focus into the popover when:
-    // 1. There is no previous focusable element in the focus trap (at the
-    //    beginning, would wrap around), and
-    // 2. The target is the last focusable in the focus trap (making the
-    //    popover logically last).
-    // Don't fall through - the FocusTrapController uses DOM order which
-    // may differ from the popover's logical tab position.
-    if (!prevFocusable && getActiveTrappingNode(this)) {
-      const list = focusables.filter((el) => el !== this);
-      if (list.at(-1) === targetFocusable) {
-        event.preventDefault();
-        this.__focusLastOrSelf();
-        return;
-      }
-      // Popover is last in DOM but target is not the last focusable.
-      // Wrap to last non-popover focusable to prevent FocusTrapController
-      // from landing on the popover.
-      const last = list.at(-1);
-      if (last) {
-        event.preventDefault();
-        last.focus();
-        return;
-      }
-    }
-
-    // Get previous focusable element including the popover (simulates native Tab order)
-    const prevFocusableNative = this.__getPrevScopeFocusable(activeElement, focusables, true);
-    // Skip the popover when native Shift+Tab would land on it
-    // and redirect to the actual previous element
-    if (prevFocusableNative === this) {
-      if (prevFocusable) {
-        event.preventDefault();
-        prevFocusable.focus();
-      } else if (getActiveTrappingNode(this)) {
-        // Popover is first in DOM scope but shouldn't be Shift+Tab-reachable
-        // from non-target elements. Wrap to last non-popover focusable.
-        const list = focusables.filter((el) => el !== this);
-        const last = list.at(-1);
-        if (last) {
-          event.preventDefault();
-          last.focus();
-        }
-      }
-    }
-  }
-
-  /**
-   * Returns whether the element is a light DOM child of this popover
-   * (i.e. slotted popover content, excluding the popover element itself).
-   * @param {Element} el
-   * @return {boolean}
-   * @private
-   */
-  __isPopoverContent(el) {
-    return el !== this && this.contains(el);
-  }
-
-  /**
-   * Returns focusable elements within the current scope (active focus trap or
-   * document body) with popover light DOM children filtered out.
-   * @return {Element[]}
-   * @private
-   */
-  __getScopeFocusables() {
-    const scope = getActiveTrappingNode(this) || document.body;
-    return getFocusableElements(scope).filter((el) => !this.__isPopoverContent(el));
-  }
-
-  /** @private */
-  __getNextScopeFocusable(target, focusables = this.__getScopeFocusables()) {
-    const idx = focusables.findIndex((el) => el === target);
-    return idx >= 0 ? focusables[idx + 1] : undefined;
-  }
-
-  /** @private */
-  __getPrevScopeFocusable(target, focusables = this.__getScopeFocusables(), includePopover = false) {
-    const list = includePopover ? focusables : focusables.filter((el) => el !== this);
-    const idx = list.findIndex((el) => el === target);
-    // Returns null both when target is the first element (idx === 0)
-    // and when target is not found in the list (idx === -1)
-    return idx > 0 ? list[idx - 1] : null;
-  }
-
-  /** @private */
-  __getLastFocusable() {
-    // Search within the overlay's content area to avoid returning the popover element itself
-    const focusables = getFocusableElements(this._overlayElement.$.content);
-    return focusables.pop();
-  }
-
-  /** @private */
-  __focusLastOrSelf() {
-    (this.__getLastFocusable() || this).focus();
-  }
-
-  /** @private */
-  __getTargetFocusable() {
-    if (!this.target) {
-      return null;
-    }
-
-    // If target has `focusElement`, check if that one is focused.
-    return this.target.focusElement || this.target;
   }
 
   /** @private */
