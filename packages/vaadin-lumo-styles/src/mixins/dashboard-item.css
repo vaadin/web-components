@@ -34,10 +34,6 @@
     font-size: var(--lumo-icon-size-m);
   }
 
-  :host([focused]) {
-    outline: none;
-  }
-
   header {
     overflow: hidden;
     align-items: start;

@@ -4,9 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_card {
-  :host::before {
-    inset: var(--_card-border-inset, 0);
-    border-radius: var(--_card-border-pseudo-radius, inherit);
+  :host(:where([theme~='stretch-media'])) [part~='media'] {
+    border-radius: var(--lumo-border-radius-m);
   }
 
   :host([theme~='outlined']) {
@@ -18,26 +17,10 @@
     --vaadin-card-background: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct)) var(--lumo-base-color);
     --vaadin-card-shadow: var(--lumo-box-shadow-xs);
     --vaadin-card-border-width: 1px;
-    --_card-border-inset: calc(-1 * var(--vaadin-card-border-width));
-    --_card-border-pseudo-radius: calc(var(--vaadin-card-border-radius) + var(--vaadin-card-border-width));
+    --vaadin-card-border-color: light-dark(transparent, var(--lumo-contrast-5pct));
   }
 
-  :host([theme~='elevated']:not([theme~='outlined'])) {
-    --vaadin-card-border-color: var(--lumo-contrast-10pct);
-  }
-
-  :host(:where([theme~='stretch-media'])) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
-    border-radius: var(--lumo-border-radius-m);
-  }
-
-  :host([theme~='elevated'][theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
-    margin-top: calc((var(--_padding) + var(--vaadin-card-border-width)) * -1);
-    margin-inline: calc((var(--_padding) + var(--vaadin-card-border-width)) * -1);
-    width: calc(var(--_media-width) + var(--vaadin-card-border-width) * 2);
-  }
-
-  :host([theme~='elevated'][theme~='horizontal'][theme~='cover-media'])
-    ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
-    height: calc(100% + (var(--_padding) + var(--vaadin-card-border-width)) * 2);
+  :host([theme~='elevated'][theme~='outlined']) {
+    --vaadin-card-border-color: light-dark(var(--lumo-contrast-30pct), var(--lumo-contrast-20pct));
   }
 }
