@@ -177,7 +177,7 @@ function createPR(title, head, base, body) {
           Authorization: `token ${token}`,
           'User-Agent': 'Vaadin Cherry Pick',
           'Content-Type': 'application/json',
-          'Content-Length': content.length,
+          'Content-Length': Buffer.byteLength(content),
         },
       },
       (res) => {
@@ -186,15 +186,19 @@ function createPR(title, head, base, body) {
           responseBody += data;
         });
         res.on('end', () => {
-          resolve(responseBody);
+          resolve({ status: res.statusCode, body: responseBody });
         });
       },
     );
     req.write(content);
     req.end();
-  }).then((body) => {
+  }).then(({ status, body }) => {
+    if (status >= 300) {
+      console.error(`Failed to create PR '${title}' (HTTP ${status}): ${body}`);
+      return;
+    }
     const resp = JSON.parse(body);
-    console.log(`Created PR '${title}' ${resp.url}`);
+    console.log(`Created PR '${title}' ${resp.html_url || resp.url}`);
   });
 }
 
