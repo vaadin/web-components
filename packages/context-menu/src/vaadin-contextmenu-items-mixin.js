@@ -127,9 +127,13 @@ export const ItemsMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this._tooltipController = new TooltipController(this);
-      this._tooltipController.setManual(true);
-      this.addController(this._tooltipController);
+      // Subclasses may pre-assign `_tooltipController` (e.g. to share
+      // a controller with an outer host) before calling `super.ready()`.
+      if (!this._tooltipController) {
+        this._tooltipController = new TooltipController(this);
+        this._tooltipController.setManual(true);
+        this.addController(this._tooltipController);
+      }
     }
 
     /** @protected */
@@ -470,26 +474,13 @@ export const ItemsMixin = (superClass) =>
     }
 
     /**
-     * Returns the `TooltipController` used to show item tooltips.
-     * Overridden internally by `MenuBarSubmenu` to reuse the parent
-     * menu-bar's tooltip; not intended as a public extension point.
-     *
-     * @return {TooltipController | undefined}
-     * @private
-     */
-    __getItemTooltipController() {
-      return this._tooltipController;
-    }
-
-    /**
      * @param {HTMLElement} item
      * @param {boolean} isHover
      * @private
      */
     __showTooltip(item, isHover) {
-      const controller = this.__getItemTooltipController();
       // Check if there is a slotted vaadin-tooltip element.
-      const tooltip = controller && controller.node;
+      const tooltip = this._tooltipController.node;
       if (tooltip && tooltip.isConnected) {
         // If the tooltip element doesn't have a generator assigned, use a default one
         // that reads the `tooltip` property of an item.
@@ -518,11 +509,11 @@ export const ItemsMixin = (superClass) =>
           tooltip._mouseLeaveListenerAdded = true;
         }
 
-        controller.setTarget(item);
-        controller.setContext({ item: item._item });
+        this._tooltipController.setTarget(item);
+        this._tooltipController.setContext({ item: item._item });
 
         // Trigger opening using the corresponding delay.
-        tooltip._stateController.open({
+        this._tooltipController.open({
           hover: isHover,
           focus: !isHover,
         });
@@ -534,24 +525,20 @@ export const ItemsMixin = (superClass) =>
      * @private
      */
     __hideTooltip(immediate) {
-      const controller = this.__getItemTooltipController();
-      const tooltip = controller && controller.node;
-      if (tooltip) {
-        // Restore the user's originally configured position so the shared
-        // tooltip element doesn't keep our `end` default when used by
-        // other targets (e.g. menu-bar buttons).
-        if ('__userPosition' in tooltip) {
-          tooltip.position = tooltip.__userPosition;
-        }
-        controller.setContext({ item: null });
-        tooltip._stateController.close(immediate);
+      const tooltip = this._tooltipController.node;
+      // Restore the user's originally configured position so the shared
+      // tooltip element doesn't keep our `end` default when used by
+      // other targets (e.g. menu-bar buttons).
+      if (tooltip && '__userPosition' in tooltip) {
+        tooltip.position = tooltip.__userPosition;
       }
+      this._tooltipController.setContext({ item: null });
+      this._tooltipController.close(immediate);
     }
 
     /** @private */
     __onTooltipOverlayMouseLeave(event) {
-      const controller = this.__getItemTooltipController();
-      if (controller && event.relatedTarget !== controller.target) {
+      if (event.relatedTarget !== this._tooltipController.target) {
         this.__hideTooltip();
       }
     }

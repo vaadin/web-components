@@ -47,7 +47,7 @@ describe('sub-menu item tooltips', () => {
   }
 
   it('should share the same tooltip element with root-level buttons', () => {
-    expect(subMenu.__getItemTooltipController()).to.equal(menuBar._tooltipController);
+    expect(subMenu._tooltipController).to.equal(menuBar._tooltipController);
   });
 
   it('should show tooltip on sub-menu item hover', async () => {
