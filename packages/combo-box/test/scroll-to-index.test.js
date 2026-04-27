@@ -207,6 +207,36 @@ describe('scrollToIndex', () => {
       expect(comboBox.__scrollToPendingIndex).to.be.undefined;
     });
 
+    it('should scroll to an unloaded index on reopen with cached first page', async () => {
+      // First open caches page 0, then close.
+      comboBox.opened = true;
+      flushPendingCallbacks();
+      await nextFrame();
+      comboBox.opened = false;
+      await nextFrame();
+
+      // Queue a scroll to a far index whose page is NOT cached. Reopening
+      // hits the page-0 cache so `loading` never flips to true — the only
+      // signal that index 300 was requested has to come from `scrollToIndex`
+      // itself, via its placeholder branch.
+      comboBox.scrollToIndex(300);
+      expect(comboBox.__scrollToPendingIndex).to.equal(300);
+
+      comboBox.opened = true;
+      await nextFrame();
+
+      // The placeholder branch must enqueue the page-6 request directly
+      // rather than hoping a viewport scroll triggers it (the virtualizer
+      // is mid-rebuild on reopen and its scroll API is unreliable here).
+      expect(pendingCallbacks.length).to.be.greaterThan(0);
+
+      flushPendingCallbacks();
+      await nextFrame();
+      flushComboBox(comboBox);
+
+      expect(comboBox._focusedIndex).to.equal(300);
+    });
+
     it('should not throw when scrollToIndex is called before a data provider is set', () => {
       comboBox.dataProvider = undefined;
       expect(() => comboBox.scrollToIndex(100)).to.not.throw();

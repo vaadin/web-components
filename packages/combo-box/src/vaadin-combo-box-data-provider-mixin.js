@@ -215,12 +215,16 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       }
 
       if (this._dropdownItems[index] instanceof ComboBoxPlaceholder) {
-        // The target item is on a page that has not been loaded yet. Trigger
-        // a viewport scroll so the data provider requests the containing page,
-        // and queue the actual focus-index update for after the page loads
-        // (see `__onDataProviderPageLoaded` → `__scrollToPendingIndexIfNeeded`).
+        // The target item is on a page that has not been loaded yet. Request
+        // the page directly and queue the focus-index update for after the
+        // page loads (see `__onDataProviderPageLoaded` →
+        // `__scrollToPendingIndexIfNeeded`). Relying on `_scrollIntoView` to
+        // trigger the page load via the visible-placeholder `index-requested`
+        // chain is unreliable on reopen with cached data: the virtualizer
+        // has just been torn down by `_updateScroller(opened=false)` and its
+        // scroll API is a no-op while it rebuilds physical items.
         this.__scrollToPendingIndex = index;
-        this._scrollIntoView(index);
+        this.__dataProviderController.ensureFlatIndexLoaded(index);
         return;
       }
 
