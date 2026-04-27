@@ -407,6 +407,12 @@ export const ItemsMixin = (superClass) =>
           this._overlayElement.$.overlay.focus();
         }
       }
+
+      // Only reachable with `accessibleDisabledMenuItems` enabled (disabled
+      // items otherwise have `pointer-events: none` and never receive mouseover).
+      if (item && item.disabled) {
+        subMenu.close();
+      }
     }
 
     /** @protected */
