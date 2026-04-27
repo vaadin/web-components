@@ -64,10 +64,6 @@ export default function DatePickerPage() {
             const target = e.target as HTMLInputElement;
             logEvent(`change: ${target.value}`);
           }}
-          onInput={(e: Event) => {
-            const target = e.target as HTMLInputElement;
-            logEvent(`input: ${target.value}`);
-          }}
           min={minDate}
           max={maxDate}
           initialPosition={initialPos}
