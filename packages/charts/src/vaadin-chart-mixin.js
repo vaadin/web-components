@@ -380,7 +380,9 @@ export const ChartMixin = (superClass) =>
     }
 
     /**
-     * @return {!Options}
+     * Highcharts configuration object derived from the chart's reactive
+     * properties, base config, and `additionalOptions`.
+     * @type {!Options}
      */
     get options() {
       const options = { ...this._baseConfig };
