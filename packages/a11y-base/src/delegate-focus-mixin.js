@@ -152,6 +152,7 @@ export const DelegateFocusMixin = dedupeMixin(
        */
       _onFocus(event) {
         event.stopPropagation();
+        /** @internal to not document it in CEM */
         this.dispatchEvent(new Event('focus'));
       }
 
@@ -164,6 +165,7 @@ export const DelegateFocusMixin = dedupeMixin(
        */
       _onBlur(event) {
         event.stopPropagation();
+        /** @internal to not document it in CEM */
         this.dispatchEvent(new Event('blur'));
       }
 
