@@ -52,7 +52,7 @@ Shadow DOM:
   .opened="${this._overlayOpened}"
   .renderer="${this._overlayRenderer}"
   .positionTarget="${this._overflowButton}"
-  exportparts="overlay, content"
+  exportparts="overlay, content: overlay-content"
 >
   <slot name="overlay"></slot>
 </vaadin-breadcrumb-trail-overlay>
@@ -77,7 +77,7 @@ The `<div role="list">` is used instead of `<ol>` because (a) `<ol>` accepts onl
 | `overflow` | The listitem element containing the overflow button. |
 | `overflow-button` | The button that reveals collapsed items. |
 
-The `overlay` and `content` parts (the panel that appears when the overflow button is activated, and its inner wrapper) live on `<vaadin-breadcrumb-trail-overlay>` and are re-exported through `exportparts="overlay, content"` on the overlay element so that themes target them on the host: `vaadin-breadcrumb-trail::part(overlay)` and `vaadin-breadcrumb-trail::part(content)`. The `<vaadin-breadcrumb-trail-overlay>` element itself is an internal implementation detail and is not part of the theming contract.
+The overflow overlay's outer panel and its inner wrapper live on `<vaadin-breadcrumb-trail-overlay>` and are re-exported on the breadcrumb host through `exportparts="overlay, content: overlay-content"` — the overlay's `content` part is renamed to `overlay-content` on export so it does not collide with anything else themes might expect on the breadcrumb. Themes target them as `vaadin-breadcrumb-trail::part(overlay)` and `vaadin-breadcrumb-trail::part(overlay-content)`. The `<vaadin-breadcrumb-trail-overlay>` element itself is an internal implementation detail and is not part of the theming contract.
 
 | State attribute | Description |
 |---|---|
@@ -170,8 +170,8 @@ The element exposes no public properties or slots of its own — it inherits eve
 
 | Part | Description |
 |---|---|
-| `overlay` | The outer panel. Inherited `OverlayMixin` part naming. Re-exported on the breadcrumb host via `exportparts`. |
-| `content` | The inner wrapper holding the overlay content. Carries `role="list"` so the slotted `<vaadin-breadcrumb-item>` elements (each `role="listitem"`) form a valid ARIA list. Inherited `OverlayMixin` part naming. Re-exported on the breadcrumb host via `exportparts`. |
+| `overlay` | The outer panel. Inherited `OverlayMixin` part naming. Re-exported on the breadcrumb host as `overlay` via `exportparts`. |
+| `content` | The inner wrapper holding the overlay content. Carries `role="list"` so the slotted `<vaadin-breadcrumb-item>` elements (each `role="listitem"`) form a valid ARIA list. Inherited `OverlayMixin` part naming. Re-exported on the breadcrumb host as **`overlay-content`** via `exportparts="content: overlay-content"`, so theme authors targeting the breadcrumb's host write `vaadin-breadcrumb-trail::part(overlay-content)` and there is no ambiguity with the breadcrumb's own parts. |
 
 Internal behavior:
 
@@ -238,6 +238,10 @@ So global page CSS can style the rendered hidden-item links. Anything written in
 **Q: Why expose the `overlay` and `content` parts on the breadcrumb host rather than on `<vaadin-breadcrumb-trail-overlay>`?**
 
 `<vaadin-breadcrumb-trail-overlay>` is an internal element — applications and theme authors should not need to know it exists. Re-exporting its parts via `exportparts="overlay, content"` lets themes target `vaadin-breadcrumb-trail::part(overlay)` directly, which keeps the theming surface inside the public element name and avoids leaking the overlay's identity into stylesheet selectors.
+
+**Q: Why is the overlay's `content` part re-exported as `overlay-content` on the breadcrumb host?**
+
+`OverlayMixin` names the outer panel `overlay` and the inner wrapper `content`. Re-exporting both names verbatim onto `<vaadin-breadcrumb-trail>` would expose `vaadin-breadcrumb-trail::part(content)` to theme authors — and "content" reads as if it should refer to the visible trail of items, not to the inner wrapper of the overflow popup that only appears when items collapse. To avoid that misreading, the overlay element re-exports `content` as `overlay-content` on the breadcrumb host (`exportparts="overlay, content: overlay-content"`). The overlay's `overlay` part keeps its name on the host because there is no comparable ambiguity. Inside `<vaadin-breadcrumb-trail-overlay>` itself the part is still called `content`, matching every other Vaadin overlay; the rename is a host-side disambiguation only.
 
 **Q: Why does the current item carry `part="current"` rather than reusing `part="link"`?**
 
