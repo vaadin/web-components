@@ -6,7 +6,8 @@ registerStyles(
     :host([opening]),
     :host([closing]),
     :host([opening]) [part='overlay'],
-    :host([closing]) [part='overlay'] {
+    :host([closing]) [part='overlay'],
+    [part='backdrop'] {
       animation: none !important;
     }
   `,
