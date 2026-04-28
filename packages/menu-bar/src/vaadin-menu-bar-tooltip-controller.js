@@ -5,16 +5,37 @@
  */
 import { SlotController } from '@vaadin/component-base/src/slot-controller';
 
+/**
+ * Controller for the tooltip slotted into a menu-bar. Configures the
+ * tooltip in manual mode and drives its target/context based on the
+ * currently hovered or focused button.
+ */
 export class MenuBarTooltipController extends SlotController {
   constructor(host) {
     super(host, 'tooltip');
   }
 
+  /**
+   * Initialize the slotted tooltip: switch it to manual mode and
+   * provide a default generator that reads the `tooltip` property
+   * of the menu-bar item.
+   *
+   * @param {HTMLElement} tooltipNode
+   * @protected
+   * @override
+   */
   initCustomNode(tooltipNode) {
     tooltipNode.manual = true;
     tooltipNode.generator = tooltipNode.generator || (({ item }) => item && item.tooltip);
   }
 
+  /**
+   * Attach the tooltip to the given button. When the button has no
+   * tooltip text (or is `null`), clears the target/context and closes
+   * the tooltip immediately.
+   *
+   * @param {HTMLElement | null} target
+   */
   attachTo(target) {
     const tooltipNode = this.node;
     if (!tooltipNode) {
@@ -32,6 +53,11 @@ export class MenuBarTooltipController extends SlotController {
     tooltipNode.context = { item: target.item };
   }
 
+  /**
+   * Schedule opening the tooltip. No-op when no target is attached.
+   *
+   * @param {{ trigger: 'hover' | 'focus' }} options
+   */
   open({ trigger }) {
     const tooltipNode = this.node;
     if (tooltipNode && tooltipNode.isConnected && tooltipNode.target) {
@@ -42,7 +68,12 @@ export class MenuBarTooltipController extends SlotController {
     }
   }
 
-  /** @protected */
+  /**
+   * Schedule closing the tooltip, respecting the configured hide delay
+   * unless `immediate` is true.
+   *
+   * @param {boolean} [immediate]
+   */
   close(immediate) {
     const tooltipNode = this.node;
     if (tooltipNode) {
