@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Breadcrumb Trail</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      // Enable feature flag
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.breadcrumbTrailComponent = true;
+
+      import '@vaadin/breadcrumb-trail';
+    </script>
+    <style>
+      .resizable {
+        resize: horizontal;
+        overflow: hidden;
+        width: 600px;
+        max-width: 100%;
+        padding: 1rem;
+        border: 1px dashed lightgray;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="resizable">
+      <vaadin-breadcrumb-trail aria-label="Breadcrumb">
+        <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/products">Products</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item path="/products/laptops">Laptops</vaadin-breadcrumb-item>
+        <vaadin-breadcrumb-item>Details</vaadin-breadcrumb-item>
+      </vaadin-breadcrumb-trail>
+    </div>
+  </body>
+</html>
