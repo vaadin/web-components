@@ -18,6 +18,7 @@ import {
   setMaximumColumnWidth,
   setMinimumColumnWidth,
   setMinimumRowHeight,
+  setRowHeight,
   setRowspan,
   setSpacing,
 } from './helpers.js';
@@ -216,6 +217,80 @@ describe('dashboard layout', () => {
       setMinimumRowHeight(dashboard, rowHeight);
       await nextResize(dashboard);
       expect(getRowHeights(dashboard)).to.eql([rowHeight, rowHeight]);
+    });
+  });
+
+  describe('fixed row height', () => {
+    const rowHeight = 100;
+
+    it('should set a fixed row height', async () => {
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(getRowHeights(dashboard)).to.eql([rowHeight]);
+    });
+
+    it('should not grow rows to fit larger content', async () => {
+      childElements[0].style.height = `${rowHeight * 2}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(getRowHeights(dashboard)).to.eql([rowHeight]);
+    });
+
+    it('should use fixed row height for all rows', async () => {
+      dashboard.style.width = `${columnWidth}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextResize(dashboard);
+      expect(getRowHeights(dashboard)).to.eql([rowHeight, rowHeight]);
+    });
+
+    it('should override the minimum row height', async () => {
+      setMinimumRowHeight(dashboard, rowHeight * 3);
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(getRowHeights(dashboard)).to.eql([rowHeight]);
+    });
+
+    it('should allow widget content to use 100% height', async () => {
+      const content = document.createElement('div');
+      content.style.height = '100%';
+      content.id = 'content';
+      childElements[0].appendChild(content);
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(content.offsetHeight).to.eql(rowHeight);
+    });
+
+    it('should fit a multi-row child to its full rowspan including the gap', async () => {
+      // Use a non-zero gap so the cap calculation has to scale with rowspan AND
+      // include the gap between the spanned rows; otherwise the child gets capped
+      // to a single row's height.
+      const gap = 10;
+      setSpacing(dashboard, gap);
+      setRowspan(childElements[0], 2);
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(childElements[0].offsetHeight).to.eql(rowHeight * 2 + gap);
+    });
+
+    it('should fit a 3-row child to its full rowspan including all inter-row gaps', async () => {
+      // With rowspan = N > 2 the cap needs (N - 1) gap terms, not just one.
+      const gap = 10;
+      setSpacing(dashboard, gap);
+      setRowspan(childElements[0], 3);
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(childElements[0].offsetHeight).to.eql(rowHeight * 3 + gap * 2);
+    });
+
+    it('should not grow rows to fit larger content when gap is non-zero', async () => {
+      // The rowspan=1 cap must equal exactly the row-height, with no spurious gap added,
+      // otherwise tall child content can push the track to grow.
+      const gap = 10;
+      setSpacing(dashboard, gap);
+      childElements[0].style.height = `${rowHeight * 2}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(getRowHeights(dashboard)).to.eql([rowHeight]);
     });
   });
 
@@ -535,6 +610,25 @@ describe('dashboard layout', () => {
 
       expect(childElements[2].offsetHeight).to.eql(300);
       expect(childElements[3].offsetHeight).to.eql(300);
+    });
+
+    it('should use fixed row height for all section sub-rows', async () => {
+      dashboard.style.width = `${columnWidth}px`;
+      setRowHeight(dashboard, 100);
+      await nextResize(dashboard);
+
+      expect(childElements[2].offsetHeight).to.eql(100);
+      expect(childElements[3].offsetHeight).to.eql(100);
+    });
+
+    it('should grow the section to fit all sub-rows with fixed row height', async () => {
+      dashboard.style.width = `${columnWidth}px`;
+      setRowHeight(dashboard, 100);
+      await nextResize(dashboard);
+
+      // Section should be tall enough to contain its header and both sub-rows
+      // (rather than being constrained to a single fixed-height row).
+      expect(section.offsetHeight).to.be.greaterThan(200);
     });
 
     it('should not use minimum row height for section header row', async () => {

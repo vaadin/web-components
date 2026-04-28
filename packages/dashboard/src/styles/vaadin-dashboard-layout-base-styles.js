@@ -56,10 +56,13 @@ export const dashboardLayoutStyles = css`
 
     /* Default row min height */
     --_default-row-min-height: 12em;
-    /* Effective row min height */
-    --_row-min-height: var(--vaadin-dashboard-row-min-height, var(--_default-row-min-height));
-    /* Effective row height */
-    --_row-height: minmax(var(--_row-min-height, auto), auto);
+    /* Effective row min height. A fixed row height takes precedence so it acts as the track min as well */
+    --_row-min-height: var(
+      --vaadin-dashboard-row-height,
+      var(--vaadin-dashboard-row-min-height, var(--_default-row-min-height))
+    );
+    /* Effective row height for nested rows (e.g. inside sections). Fixed when --vaadin-dashboard-row-height is set, otherwise grows from min height */
+    --_row-height: var(--vaadin-dashboard-row-height, minmax(var(--_row-min-height, auto), auto));
 
     display: grid;
     overflow: hidden;
@@ -70,7 +73,8 @@ export const dashboardLayoutStyles = css`
       minmax(var(--_col-min-width), var(--_col-max-width))
     );
 
-    grid-auto-rows: var(--_row-height);
+    /* Always allow rows to grow so that sections can expand to wrap multiple sub-rows. Widgets are kept at the fixed row height via max-height (see ::slotted below and the widget host styles). */
+    grid-auto-rows: minmax(var(--_row-min-height, auto), auto);
   }
 
   ::slotted(*) {
@@ -82,5 +86,13 @@ export const dashboardLayoutStyles = css`
     /* The grid-row value applied to children */
     --_item-row: span var(--vaadin-dashboard-widget-rowspan, 1);
     grid-row: var(--_item-row);
+  }
+
+  /* Cap the height when a fixed row height is set, so the track does not grow beyond it. When --vaadin-dashboard-row-height is unset, --_row-height resolves to a minmax() expression which is invalid in calc(), so max-height falls back to none. Sections are excluded so they can grow to wrap multiple sub-rows. */
+  ::slotted(:not(vaadin-dashboard-section)) {
+    max-height: calc(
+      var(--vaadin-dashboard-widget-rowspan, 1) * var(--_row-height) + (var(--vaadin-dashboard-widget-rowspan, 1) - 1) *
+        var(--_gap)
+    );
   }
 `;

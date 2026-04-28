@@ -34,6 +34,7 @@ import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
  * `--vaadin-dashboard-col-min-width`  | minimum column width of the layout
  * `--vaadin-dashboard-col-max-width`  | maximum column width of the layout
  * `--vaadin-dashboard-row-min-height` | minimum row height of the layout
+ * `--vaadin-dashboard-row-height`     | fixed row height of the layout. Overrides `--vaadin-dashboard-row-min-height` and prevents rows from growing to fit content, allowing widget content to use 100% height
  * `--vaadin-dashboard-col-max-count`  | maximum column count of the layout
  * `--vaadin-dashboard-gap`            | gap between child elements. Must be in length units (0 is not allowed, 0px is)
  * `--vaadin-dashboard-padding`        | space around the dashboard's outer edges. Must be in length units (0 is not allowed, 0px is)

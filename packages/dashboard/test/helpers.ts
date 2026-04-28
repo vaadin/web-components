@@ -138,6 +138,13 @@ export function setMinimumRowHeight(dashboard: HTMLElement, height?: number): vo
 }
 
 /**
+ * Sets the fixed row height of the dashboard.
+ */
+export function setRowHeight(dashboard: HTMLElement, height?: number): void {
+  dashboard.style.setProperty('--vaadin-dashboard-row-height', height !== undefined ? `${height}px` : null);
+}
+
+/**
  * Validates the given grid layout.
  *
  * This function iterates through a number matrix representing the IDs of

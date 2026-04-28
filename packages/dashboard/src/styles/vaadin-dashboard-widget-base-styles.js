@@ -23,6 +23,11 @@ const widgetStyles = css`
     border-radius: var(--_widget-border-radius);
     box-shadow: var(--_widget-shadow);
     border: var(--_widget-border-width) solid var(--_widget-border-color);
+    /* Cap the height when a fixed row height is set so the track does not grow beyond it. When --vaadin-dashboard-row-height is unset, --_row-height resolves to a minmax() expression which is invalid in calc(), so max-height falls back to none. */
+    max-height: calc(
+      var(--vaadin-dashboard-widget-rowspan, 1) * var(--_row-height) + (var(--vaadin-dashboard-widget-rowspan, 1) - 1) *
+        var(--_gap)
+    );
   }
 
   :host([hidden]) {
