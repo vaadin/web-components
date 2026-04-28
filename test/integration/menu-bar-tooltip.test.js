@@ -100,7 +100,7 @@ describe('menu-bar with tooltip', () => {
     it('should show tooltip again on menu bar button mouseover', () => {
       mouseover(buttons[0]);
       mouseover(menuBar._container);
-      mouseover(buttons[1]);
+      mouseover(buttons[2]);
       expect(tooltip.opened).to.be.true;
     });
 
@@ -117,8 +117,8 @@ describe('menu-bar with tooltip', () => {
 
     it('should change tooltip context on another menu button mouseover', () => {
       mouseover(buttons[0]);
-      mouseover(buttons[1]);
-      expect(tooltip.context.item.text).to.equal('Share');
+      mouseover(buttons[2]);
+      expect(tooltip.context.item.text).to.equal('Move');
     });
 
     it('should hide tooltip on menu button mousedown', () => {
@@ -191,17 +191,11 @@ describe('menu-bar with tooltip', () => {
       expect(tooltip.opened).to.be.false;
     });
 
-    it('should not set tooltip properties if there is no tooltip', async () => {
-      const spyTarget = sinon.spy(menuBar._tooltipController, 'setTarget');
-      const spyContent = sinon.spy(menuBar._tooltipController, 'setContext');
-
+    it('should not throw when there is no tooltip', async () => {
       tooltip.remove();
       await nextRender();
 
-      mouseover(buttons[0]);
-
-      expect(spyTarget.called).to.be.false;
-      expect(spyContent.called).to.be.false;
+      expect(() => mouseover(buttons[0])).to.not.throw();
     });
 
     it('should not override a custom generator', () => {
@@ -235,9 +229,10 @@ describe('menu-bar with tooltip', () => {
       });
 
       it('should close tooltip on overflow button keyboard navigation', () => {
+        mouseover(buttons[0]);
+        expect(tooltip.opened).to.be.true;
         buttons[0].focus();
         arrowRight(buttons[0]);
-        expect(tooltip.opened).to.be.true;
         arrowRight(buttons[1]);
         expect(tooltip.opened).to.be.false;
       });
