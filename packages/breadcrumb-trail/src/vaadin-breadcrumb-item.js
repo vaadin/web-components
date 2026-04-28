@@ -40,9 +40,35 @@ class BreadcrumbItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement)
     return 'breadcrumbTrailComponent';
   }
 
+  static get properties() {
+    return {
+      /**
+       * The URL the breadcrumb item links to. When set, the item renders as
+       * an `<a>` link; when unset, it renders as a non-interactive `<span>`
+       * representing the current page.
+       */
+      path: {
+        type: String,
+      },
+    };
+  }
+
   /** @protected */
   render() {
-    return html``;
+    if (this.path != null) {
+      return html`
+        <a part="link" href="${this.path}">
+          <slot name="prefix"></slot>
+          <span part="label"><slot></slot></span>
+        </a>
+      `;
+    }
+    return html`
+      <span part="nolink">
+        <slot name="prefix"></slot>
+        <span part="label"><slot></slot></span>
+      </span>
+    `;
   }
 }
 

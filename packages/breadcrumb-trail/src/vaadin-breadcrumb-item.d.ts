@@ -14,7 +14,14 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * This component is experimental and only registers when the
  * `breadcrumbTrailComponent` feature flag is enabled.
  */
-declare class BreadcrumbItem extends ElementMixin(ThemableMixin(HTMLElement)) {}
+declare class BreadcrumbItem extends ElementMixin(ThemableMixin(HTMLElement)) {
+  /**
+   * The URL the breadcrumb item links to. When set, the item renders as
+   * an `<a>` link; when unset, it renders as a non-interactive `<span>`
+   * representing the current page.
+   */
+  path: string | null | undefined;
+}
 
 declare global {
   interface HTMLElementTagNameMap {
