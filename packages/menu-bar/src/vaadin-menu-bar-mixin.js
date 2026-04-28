@@ -15,7 +15,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { MenuBarTooltipController } from './vaadin-menu-bar-tooltip-controller.js';
 
 /**
  * Custom Lit directive for rendering item components
@@ -206,7 +206,6 @@ export const MenuBarMixin = (superClass) =>
     constructor() {
       super();
       this.__boundOnContextMenuKeydown = this.__onContextMenuKeydown.bind(this);
-      this.__boundOnTooltipMouseLeave = this.__onTooltipOverlayMouseLeave.bind(this);
     }
 
     /**
@@ -262,6 +261,12 @@ export const MenuBarMixin = (superClass) =>
       return Array.from(this.querySelectorAll('vaadin-menu-bar-button'));
     }
 
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this._tooltipController.attachTo(null);
+    }
+
     /** @private */
     get _hasOverflow() {
       return this._overflow && !this._overflow.hasAttribute('hidden');
@@ -311,11 +316,10 @@ export const MenuBarMixin = (superClass) =>
         },
       });
 
-      this._tooltipController = new TooltipController(this);
-      this._tooltipController.setManual(true);
+      this._tooltipController = new MenuBarTooltipController(this);
 
-      this.addEventListener('mousedown', () => this._hideTooltip(true));
-      this.addEventListener('mouseleave', () => this._hideTooltip());
+      this.addEventListener('mousedown', () => this._tooltipController.close(true));
+      this.addEventListener('mouseleave', () => this._tooltipController.close());
 
       this.addController(this._tooltipController);
       this.addController(this._subMenuController);
@@ -367,12 +371,6 @@ export const MenuBarMixin = (superClass) =>
      */
     _getItems() {
       return this._buttons;
-    }
-
-    /** @protected */
-    disconnectedCallback() {
-      super.disconnectedCallback();
-      this._hideTooltip(true);
     }
 
     /**
@@ -643,51 +641,6 @@ export const MenuBarMixin = (superClass) =>
       }
     }
 
-    /**
-     * @param {HTMLElement} button
-     * @protected
-     */
-    _showTooltip(button, isHover) {
-      // Check if there is a slotted vaadin-tooltip element.
-      const tooltip = this._tooltipController.node;
-      if (tooltip && tooltip.isConnected) {
-        // If the tooltip element doesn't have a generator assigned, use a default one
-        // that reads the `tooltip` property of an item.
-        if (tooltip.generator === undefined) {
-          tooltip.generator = ({ item }) => item && item.tooltip;
-        }
-
-        if (!tooltip._mouseLeaveListenerAdded) {
-          tooltip._overlayElement.addEventListener('mouseleave', this.__boundOnTooltipMouseLeave);
-          tooltip._mouseLeaveListenerAdded = true;
-        }
-
-        if (!this._subMenu.opened) {
-          this._tooltipController.setTarget(button);
-          this._tooltipController.setContext({ item: button.item });
-
-          // Trigger opening using the corresponding delay.
-          this._tooltipController.open({
-            hover: isHover,
-            focus: !isHover,
-          });
-        }
-      }
-    }
-
-    /** @protected */
-    _hideTooltip(immediate) {
-      this._tooltipController.setContext({ item: null });
-      this._tooltipController.close(immediate);
-    }
-
-    /** @private */
-    __onTooltipOverlayMouseLeave(event) {
-      if (event.relatedTarget !== this._tooltipController.target) {
-        this._hideTooltip();
-      }
-    }
-
     /** @protected */
     _setExpanded(button, expanded) {
       button.toggleAttribute('expanded', expanded);
@@ -715,24 +668,24 @@ export const MenuBarMixin = (superClass) =>
      * @protected
      * @override
      */
-    _focusItem(item, options, navigating) {
+    _focusItem(button, options, navigating) {
       const wasExpanded = navigating && this.focused === this._expandedButton;
       if (wasExpanded) {
         this._close();
       }
 
-      super._focusItem(item, options, navigating);
+      super._focusItem(button, options, navigating);
 
       this._buttons.forEach((btn) => {
-        this._setTabindex(btn, btn === item);
+        this._setTabindex(btn, btn === button);
       });
 
-      if (wasExpanded && item.item && item.item.children) {
-        this.__openSubMenu(item, true, { keepFocus: true });
-      } else if (item === this._overflow) {
-        this._hideTooltip();
+      this._tooltipController.attachTo(button);
+
+      if (wasExpanded && button.item && button.item.children) {
+        this.__openSubMenu(button, true, { keepFocus: true });
       } else {
-        this._showTooltip(item);
+        this._tooltipController.open({ trigger: 'focus' });
       }
     }
 
@@ -777,18 +730,19 @@ export const MenuBarMixin = (superClass) =>
      * @protected
      */
     _setFocused(focused) {
-      if (focused) {
-        const target = this.__getFocusTarget();
-        if (target) {
-          this._buttons.forEach((btn) => {
-            this._setTabindex(btn, btn === target);
-            if (btn === target && btn !== this._overflow && isKeyboardActive()) {
-              this._showTooltip(btn);
-            }
-          });
+      const target = focused ? this.__getFocusTarget() : null;
+      if (target) {
+        this._tooltipController.attachTo(target);
+
+        this._buttons.forEach((btn) => {
+          this._setTabindex(btn, btn === target);
+        });
+
+        if (isKeyboardActive()) {
+          this._tooltipController.open({ trigger: 'focus' });
         }
       } else {
-        this._hideTooltip();
+        this._tooltipController.close();
       }
     }
 
@@ -858,7 +812,7 @@ export const MenuBarMixin = (superClass) =>
         this._close(true);
       }
 
-      this._hideTooltip(true);
+      this._tooltipController.close(true);
     }
 
     /**
@@ -903,21 +857,16 @@ export const MenuBarMixin = (superClass) =>
       }
 
       const button = this._getButtonFromEvent(event);
-      if (!button) {
-        // Hide tooltip on mouseover to disabled button
-        this._hideTooltip();
-      } else if (button !== this._expandedButton) {
+      this._tooltipController.attachTo(button);
+
+      if (button && button !== this._expandedButton) {
         // Switch sub-menu when moving cursor over another button
         // with children, regardless of whether openOnHover is set.
         // If the button has no children, keep the sub-menu opened.
         if (button.item.children && (this.openOnHover || this._subMenu.opened)) {
           this.__openSubMenu(button, false);
-        }
-
-        if (button === this._overflow || (this.openOnHover && button.item.children)) {
-          this._hideTooltip();
         } else {
-          this._showTooltip(button, true);
+          this._tooltipController.open({ trigger: 'hover' });
         }
       }
     }
@@ -984,7 +933,7 @@ export const MenuBarMixin = (superClass) =>
       const overlay = subMenu._overlayElement;
       overlay.noVerticalOverlap = true;
 
-      this._hideTooltip(true);
+      this._tooltipController.close(true);
 
       this._expandedButton = button;
       this._setExpanded(button, true);
