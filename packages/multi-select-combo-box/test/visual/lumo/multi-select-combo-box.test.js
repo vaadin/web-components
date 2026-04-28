@@ -1,5 +1,5 @@
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextResize } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/multi-select-combo-box.css';
@@ -75,9 +75,10 @@ describe('multi-select-combo-box', () => {
   });
 
   describe('selected items', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       element.style.width = '250px';
       element.selectedItems = ['Apple', 'Banana'];
+      await nextResize(element);
     });
 
     it('default', async () => {
