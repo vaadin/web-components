@@ -204,6 +204,17 @@ describe('menu-bar with tooltip', () => {
       expect(tooltip.textContent).to.equal('Custom tooltip');
     });
 
+    // https://github.com/vaadin/web-components/issues/4781
+    it('should set aria-describedby on a menu button with tooltip', () => {
+      mouseover(buttons[0]);
+      expect(buttons[0].hasAttribute('aria-describedby')).to.be.true;
+    });
+
+    it('should not set aria-describedby on a menu button without tooltip', () => {
+      mouseover(buttons[1]);
+      expect(buttons[1].hasAttribute('aria-describedby')).to.be.false;
+    });
+
     describe('overflow button', () => {
       beforeEach(async () => {
         // Reduce the width by the width of the last visible button
