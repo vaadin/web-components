@@ -261,12 +261,6 @@ export const MenuBarMixin = (superClass) =>
       return Array.from(this.querySelectorAll('vaadin-menu-bar-button'));
     }
 
-    /** @protected */
-    disconnectedCallback() {
-      super.disconnectedCallback();
-      this._tooltipController.attachTo(null);
-    }
-
     /** @private */
     get _hasOverflow() {
       return this._overflow && !this._overflow.hasAttribute('hidden');
@@ -371,6 +365,12 @@ export const MenuBarMixin = (superClass) =>
      */
     _getItems() {
       return this._buttons;
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this._tooltipController.attachTo(null);
     }
 
     /**

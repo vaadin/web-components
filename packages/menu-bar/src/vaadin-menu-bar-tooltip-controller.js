@@ -24,7 +24,7 @@ export class MenuBarTooltipController extends SlotController {
     if (!target || !target.item || !target.item.tooltip) {
       tooltipNode.target = null;
       tooltipNode.context = { item: null };
-      tooltipNode._stateController.close(true);
+      this.close(true);
       return;
     }
 
