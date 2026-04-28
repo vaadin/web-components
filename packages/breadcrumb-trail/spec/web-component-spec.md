@@ -113,7 +113,7 @@ Shadow DOM:
 
 When `path` is not set (current page):
 ```html
-<span part="current">
+<span part="nolink">
   <slot name="prefix"></slot>
   <span part="label">
     <slot></slot>
@@ -121,7 +121,7 @@ When `path` is not set (current page):
 </span>
 ```
 
-The outer wrapper carries `part="link"` when the item is interactive and `part="current"` when it is the non-link current page. Distinct part names let themes target the two cases without `:not([path])` selectors and avoid implying that the current page is a link.
+The outer wrapper carries `part="link"` when the item is interactive and `part="nolink"` whenever it is rendered as plain text instead of a link — most commonly the current page, but also any item the application chooses to display non-interactively (for example an ancestor the user has no permission to navigate to). Distinct part names let themes target the two cases without `:not([path])` selectors and without overloading any single state attribute.
 
 | Property | Type | Default | Reflected | Description |
 |---|---|---|---|---|
@@ -135,7 +135,7 @@ The outer wrapper carries `part="link"` when the item is interactive and `part="
 | Part | Description |
 |---|---|
 | `link` | The `<a>` element containing the label, when the item is interactive (`path` is set). |
-| `current` | The `<span>` element containing the label, when the item is the current page (`path` is not set). Mutually exclusive with `link`. |
+| `nolink` | The `<span>` element containing the label, when the item is rendered as plain text rather than as a link (the current page, or any item where `path` is not set). Mutually exclusive with `link`. |
 | `label` | The `<span>` wrapping the default slot text. Present in both cases. |
 
 | State attribute | Description |
@@ -145,10 +145,10 @@ The outer wrapper carries `part="link"` when the item is interactive and `part="
 
 Internal behavior:
 
-- **Link rendering.** When `path` is set, renders `<a href="${path}" part="link">`, matching the approach in `<vaadin-side-nav-item>`. When `path` is not set, renders `<span part="current">`. The `<a>` is a plain HTML link — no router integration, no click interception. SPA routers intercept link clicks at the document level.
+- **Link rendering.** When `path` is set, renders `<a href="${path}" part="link">`, matching the approach in `<vaadin-side-nav-item>`. When `path` is not set, renders `<span part="nolink">`. The `<a>` is a plain HTML link — no router integration, no click interception. SPA routers intercept link clicks at the document level.
 - **Separator rendering.** A `:host::after` pseudo-element renders the separator. It uses `background: currentColor` with `mask-image: var(--vaadin-breadcrumb-trail-separator)`, following the button-base-styles pattern. The last item's separator is hidden via `:host(:last-of-type)::after { display: none }`. Items with the `current` attribute also hide the separator. The same separator styling is duplicated on the container's `[part="overflow"]::after` (see the container's Overflow separator behavior) so the overflow element visually matches peer items in the list flow.
 - **RTL separator flip.** In RTL contexts, `:host::after` gets `transform: scaleX(-1)`.
-- **`aria-current="page"`.** When the parent sets the `current` state attribute on the host, the inner `<span part="current">` element gets `aria-current="page"`.
+- **`aria-current="page"`.** When the parent sets the `current` state attribute on the host, the inner `<span part="nolink">` element gets `aria-current="page"`.
 - **Prefix slot.** A `SlotController` observes the `prefix` slot and toggles `has-prefix` on the host for styling.
 
 ---
@@ -243,9 +243,9 @@ So global page CSS can style the rendered hidden-item links. Anything written in
 
 `OverlayMixin` names the outer panel `overlay` and the inner wrapper `content`. Re-exporting both names verbatim onto `<vaadin-breadcrumb-trail>` would expose `vaadin-breadcrumb-trail::part(content)` to theme authors — and "content" reads as if it should refer to the visible trail of items, not to the inner wrapper of the overflow popup that only appears when items collapse. To avoid that misreading, the overlay element re-exports `content` as `overlay-content` on the breadcrumb host (`exportparts="overlay, content: overlay-content"`). The overlay's `overlay` part keeps its name on the host because there is no comparable ambiguity. Inside `<vaadin-breadcrumb-trail-overlay>` itself the part is still called `content`, matching every other Vaadin overlay; the rename is a host-side disambiguation only.
 
-**Q: Why does the current item carry `part="current"` rather than reusing `part="link"`?**
+**Q: Why does the non-link rendering carry `part="nolink"` rather than reusing `part="link"`?**
 
-Distinct part names match the two cases the item can be in (interactive anchor vs. non-interactive label). Reusing `part="link"` for both forces theme authors to write `vaadin-breadcrumb-item:not([path])::part(link)` to target the current page, and reads as if the current page were a link — which it explicitly is not. `part="current"` aligns with the `current` state attribute and lets themes style the two cases independently with simple selectors.
+Distinct part names match the two cases the item can be in (interactive anchor vs. non-interactive plain text). Reusing `part="link"` for both forces theme authors to write `vaadin-breadcrumb-item:not([path])::part(link)` to target non-link items and reads as if a non-link item were a link — which it explicitly is not. An earlier revision used `part="current"`, but that name described only one *reason* for the non-link rendering — the last item with no path. Items can also be rendered as plain text for other reasons (e.g. an ancestor the user has no permission to navigate to), and `[part="current"]` on a non-current item would be misleading. The neutral name `nolink` covers every reason an item might render without an anchor, without favouring one cause over another. The `current` state attribute on the host stays as a separate concept; themes that want to single out the current-page case combine the two: `vaadin-breadcrumb-item[current]::part(nolink)`.
 
 **Q: Why does the overflow overlay support both arrow keys and Tab?**
 

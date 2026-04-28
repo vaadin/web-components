@@ -98,7 +98,7 @@ Add the `--_vaadin-icon-chevron-right` CSS custom property to `packages/componen
 **Requirements:** 1, 2, 11
 **Depends on:** 1
 
-Implement the item's render template: when `path` is set, render `<a href="${path}" part="link">` wrapping the label; when `path` is unset, render `<span part="current">` with the same inner structure. Apply `aria-current="page"` to the inner `<span part="current">` when the host carries the `current` state attribute (the parent sets/removes this attribute — see Task 7). Add `role="listitem"` on the host in `firstUpdated()`.
+Implement the item's render template: when `path` is set, render `<a href="${path}" part="link">` wrapping the label; when `path` is unset, render `<span part="nolink">` with the same inner structure. Apply `aria-current="page"` to the inner `<span part="nolink">` when the host carries the `current` state attribute (the parent sets/removes this attribute — see Task 7). Add `role="listitem"` on the host in `firstUpdated()`.
 
 **Files:**
 - `packages/breadcrumb-trail/src/vaadin-breadcrumb-item.js` (modify)
@@ -106,11 +106,11 @@ Implement the item's render template: when `path` is set, render `<a href="${pat
 - `packages/breadcrumb-trail/test/breadcrumb-item.test.ts` (create)
 
 **Tests:**
-- [ ] With `path="/foo"`, the shadow DOM contains an `<a>` with `href="/foo"` and `part="link"`, and no element with `part="current"`
-- [ ] With `path` unset, the shadow DOM contains a `<span part="current">` and no element with `part="link"`
-- [ ] Setting `path` after the element is rendered switches the `<span part="current">` to an `<a part="link">` with the new href; clearing `path` switches it back
+- [ ] With `path="/foo"`, the shadow DOM contains an `<a>` with `href="/foo"` and `part="link"`, and no element with `part="nolink"`
+- [ ] With `path` unset, the shadow DOM contains a `<span part="nolink">` and no element with `part="link"`
+- [ ] Setting `path` after the element is rendered switches the `<span part="nolink">` to an `<a part="link">` with the new href; clearing `path` switches it back
 - [ ] The default slot's text content is wrapped in a `<span part="label">` in both cases
-- [ ] Adding the `current` state attribute on the host adds `aria-current="page"` to the inner `<span part="current">`
+- [ ] Adding the `current` state attribute on the host adds `aria-current="page"` to the inner `<span part="nolink">`
 - [ ] Removing the `current` state attribute removes `aria-current`
 - [ ] The host has `role="listitem"`
 
@@ -225,7 +225,7 @@ When the slotted children change, the container must add the `current` state att
 - [ ] Removing `path` from the last item in a "current page omitted" trail adds `current` to it
 - [ ] Adding `path` to the previously current last item removes `current` from it
 - [ ] Appending a new last item (with no `path`) moves `current` from the previous last to the new last
-- [ ] The current item's inner `<span part="current">` carries `aria-current="page"` (regression check for the integration with Task 3)
+- [ ] The current item's inner `<span part="nolink">` carries `aria-current="page"` (regression check for the integration with Task 3)
 
 **Acceptance criteria:**
 - [ ] All new tests pass
@@ -399,7 +399,7 @@ Add a keyboard interaction test suite. The trail itself uses native focus order 
 Trail-level Tab navigation:
 - [ ] With `has-overflow` set and focus on the document body, pressing Tab moves focus to the root item's inner `<a>`, then to the overflow button, then to each subsequent visible item's inner `<a>` in DOM order
 - [ ] Items hidden via `data-overflow-hidden` are skipped in the Tab cycle
-- [ ] The current item's inner `<span part="current">` (no `path`) is not in the Tab cycle
+- [ ] The current item's inner `<span part="nolink">` (no `path`) is not in the Tab cycle
 
 Overflow button activation:
 - [ ] Focusing the overflow button and pressing Enter opens the overlay; pressing Space also opens it
@@ -567,7 +567,7 @@ Add the dev page in `dev/breadcrumb.html` with all major variants (declarative, 
 - [ ] DOM snapshot: `<vaadin-breadcrumb-trail>` shadow DOM in the default state
 - [ ] DOM snapshot: `<vaadin-breadcrumb-trail>` shadow DOM with `has-overflow` set
 - [ ] DOM snapshot: `<vaadin-breadcrumb-item>` shadow DOM with `path` set (`part="link"` element present)
-- [ ] DOM snapshot: `<vaadin-breadcrumb-item>` shadow DOM without `path` and with `current` set (`part="current"` element present, `aria-current="page"`)
+- [ ] DOM snapshot: `<vaadin-breadcrumb-item>` shadow DOM without `path` and with `current` set (`part="nolink"` element present, `aria-current="page"`)
 - [ ] DOM snapshot: `<vaadin-breadcrumb-item>` shadow DOM with prefix slot content
 - [ ] DOM snapshot: `<vaadin-breadcrumb-trail-overlay>` shadow DOM
 - [ ] Type test: `<vaadin-breadcrumb-trail>` exposes `i18n` typed as `{ moreItems?: string }` (and no `items` property)
