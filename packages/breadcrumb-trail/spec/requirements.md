@@ -56,6 +56,8 @@ When items are collapsed behind the overflow indicator, the user can activate th
 
 *Example: The user clicks the "…" button and sees a menu listing "Documents", "Projects", "2026", "Q1", and "Reports". They click "Q1" to navigate directly to that level.*
 
+The expanded list is reachable through both keyboard models the user might bring to it: standard linear Tab navigation (so any user moving through the page with Tab encounters the hidden links the same way they encounter every other anchor) and menu-style Up/Down arrow keys (so users who recognise the visual as a menu, or who arrive at it from an in-page menu interaction, can navigate it without breaking that mental model). Pressing Escape closes the expanded list and returns focus to the overflow indicator.
+
 ---
 
 ## 8. Items may display icons
@@ -133,6 +135,10 @@ A Flow `@Route` class can implement an interface that lets it dynamically provid
 ## Discussion
 
 Questions posed while producing this document, with the user's answers.
+
+**Q: How should the user navigate the expanded list of collapsed items with the keyboard?**
+
+Both menu-style arrow keys and linear Tab. The visual reads as a menu, so users coming from menu-bar / context-menu expect Up/Down to step through entries. At the same time, the entries are plain anchors and a screen-reader user (or anyone navigating the page entirely with Tab) expects to traverse them the same way they traverse any other link. Supporting both — Tab as the primary document-level mechanism, arrows as a menu-style convenience — covers both audiences without forcing one to adopt the other's interaction model. Escape closes the list regardless of how it was opened.
 
 **Q: When the breadcrumb trail is too long to fit the available width, how should the component handle overflow?**
 

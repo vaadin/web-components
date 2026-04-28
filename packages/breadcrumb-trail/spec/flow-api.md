@@ -140,7 +140,7 @@ Signal.effect(breadcrumbTrail, () -> {
 current.set(nextCategory);
 ```
 
-**Why this shape:** In `Mode.MANUAL`, imperative updates use the standard component-tree primitives `add(...)`, `remove(...)`, `removeAll()` inherited from `HasComponentsOfType<BreadcrumbItem>` — the same API a Flow developer uses for any container, with the generic parameter ensuring only `BreadcrumbItem` instances can be passed. Reactive updates use `Signal.effect(component, Runnable)`, Flow core's primitive for running a callback whenever the observed signals change; the effect is the right granularity here because the trail is rebuilt as a tree operation (`removeAll` + `add`), not a single property set. This avoids inventing a component-specific `bindItems` surface when the generic effect primitive already covers the case. The web component's `items` JS property (see web-component-api.md §6) is never exposed directly from Java — it represents a data array on the client, while the Flow wrapper always manages a tree of `BreadcrumbItem` components.
+**Why this shape:** In `Mode.MANUAL`, imperative updates use the standard component-tree primitives `add(...)`, `remove(...)`, `removeAll()` inherited from `HasComponentsOfType<BreadcrumbItem>` — the same API a Flow developer uses for any container, with the generic parameter ensuring only `BreadcrumbItem` instances can be passed. Reactive updates use `Signal.effect(component, Runnable)`, Flow core's primitive for running a callback whenever the observed signals change; the effect is the right granularity here because the trail is rebuilt as a tree operation (`removeAll` + `add`), not a single property set. This avoids inventing a component-specific `bindItems` surface when the generic effect primitive already covers the case. The web component itself accepts only `<vaadin-breadcrumb-item>` light-DOM children (no parallel `items` data-array property — see web-component-api.md §6), so the Flow wrapper has nothing else to map.
 
 ---
 
@@ -273,7 +273,7 @@ public class EditOrderView extends Div { ... }
 | last-item-without-path → current item | implicit — construct with `new BreadcrumbItem(String label)` (no path) | no dedicated current flag |
 | `aria-current="page"` on current item | — (set automatically by the web component) | no Flow API needed |
 | `slot="prefix"` on item | `BreadcrumbItem implements HasPrefix` → `setPrefixComponent(Component)` | shared mixin from `vaadin-flow-components-base` |
-| `items` JS property | — (not exposed from Java) | client-side concern; the Flow wrapper always manages a tree of `BreadcrumbItem` components via `HasComponentsOfType<BreadcrumbItem>` |
+| Programmatic items data array | — (no such property on the web component, see web-component-api.md §6) | not applicable; Flow manages items as a tree of `BreadcrumbItem` components via `HasComponentsOfType<BreadcrumbItem>` |
 | `i18n` JS property | `BreadcrumbTrail#setI18n(BreadcrumbTrailI18n)` / `getI18n()` | nested class; `Serializable`, `@JsonInclude(NON_NULL)`, fluent setters |
 | `i18n.moreItems` | `BreadcrumbTrailI18n#setMoreItems(String)` / `getMoreItems()` | overflow button accessible label |
 | `<nav>` landmark rendering | — (automatic in web component) | no Flow API needed |
@@ -311,7 +311,7 @@ web-component-api.md does not expose any theme variants for BreadcrumbTrail — 
 
 **Q: Why use `HasComponentsOfType<BreadcrumbItem>` rather than a bespoke `setItems(BreadcrumbItem...)` / `addItem(BreadcrumbItem...)` API?**
 
-A breadcrumb is a container of items — in Flow terms, a component that holds child components. Expressing that through the standard `HasComponentsOfType<T>` interface from Flow core keeps the API consistent with every other typed Flow container, gives developers `add`, `addComponentAsFirst`, `addComponentAtIndex`, `remove`, and `removeAll` for free, and avoids inventing yet another bespoke item-collection surface. The generic parameter `BreadcrumbItem` gives compile-time enforcement that only `BreadcrumbItem` instances can be added, so developers get type safety without the component needing to reject foreign children at runtime. On the web-component side the `items` JS property takes data objects, but that is a client-side rendering concern; in Flow, a trail is a component tree.
+A breadcrumb is a container of items — in Flow terms, a component that holds child components. Expressing that through the standard `HasComponentsOfType<T>` interface from Flow core keeps the API consistent with every other typed Flow container, gives developers `add`, `addComponentAsFirst`, `addComponentAtIndex`, `remove`, and `removeAll` for free, and avoids inventing yet another bespoke item-collection surface. The generic parameter `BreadcrumbItem` gives compile-time enforcement that only `BreadcrumbItem` instances can be added, so developers get type safety without the component needing to reject foreign children at runtime. The web component itself only accepts `<vaadin-breadcrumb-item>` light-DOM children (no parallel data-array `items` property), so the Flow wrapper's component-tree model is a one-to-one fit.
 
 **Q: Why no dedicated `bindItems(Signal<...>)` method?**
 

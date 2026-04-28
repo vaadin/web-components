@@ -111,32 +111,26 @@ Covers requirement(s): 8
 
 ---
 
-## 6. Dynamic trail updates via items property
+## 6. Dynamic trail updates
 
 Covers requirement(s): 9
 
 ```js
 const breadcrumb = document.querySelector('vaadin-breadcrumb-trail');
 
-// Programmatic API — equivalent to the declarative form
-breadcrumb.items = [
-  { text: 'Home', path: '/' },
-  { text: 'Electronics', path: '/electronics' },
-  { text: 'Laptops', path: '/electronics/laptops' },
-  { text: 'Gaming' }
-];
-
-// Update the trail when navigation changes
-function onCategoryChange(category) {
-  breadcrumb.items = [
-    { text: 'Home', path: '/' },
-    { text: category.name, path: category.path },
-    { text: category.child.name }
-  ];
-}
+// Replace the trail by mutating the light-DOM children directly
+breadcrumb.replaceChildren(
+    Object.assign(document.createElement('vaadin-breadcrumb-item'),
+                  { textContent: 'Home', path: '/' }),
+    Object.assign(document.createElement('vaadin-breadcrumb-item'),
+                  { textContent: 'Electronics', path: '/electronics' }),
+    Object.assign(document.createElement('vaadin-breadcrumb-item'),
+                  { textContent: 'Laptops', path: '/electronics/laptops' }),
+    Object.assign(document.createElement('vaadin-breadcrumb-item'),
+                  { textContent: 'Gaming' }));
 ```
 
-**Why this shape:** Breadcrumb trails are almost always data-driven (built from the current route or navigation state), so a programmatic `items` property is essential. The shape mirrors the declarative API: `text` for the label, `path` for the link destination (omit for the current page). Icons are only supported via the declarative API (`slot="prefix"`), not via the `items` property. This follows the DESIGN_GUIDELINES requirement that both declarative and programmatic APIs coexist and produce the same rendering.
+**Why this shape:** The component reflects whatever `<vaadin-breadcrumb-item>` children sit in its light DOM — applications drive dynamic updates with the standard DOM APIs (`appendChild`, `replaceChildren`, framework-level rendering, etc.). No parallel `items` data-array property is exposed: the declarative form already covers every dynamic case, and a second API would need its own parser, item-construction logic, and rules for how the two forms interact (see Discussion: "Why is there no programmatic `items` property?").
 
 ---
 
@@ -199,6 +193,6 @@ On `vaadin-breadcrumb-trail` (the parent), not on individual items. The property
 
 Via a CSS custom property (`--vaadin-breadcrumb-trail-separator`). The base styles set `mask-image: var(--vaadin-breadcrumb-trail-separator)` on the `::after` pseudo-element, and applications override the custom property to change the icon. This matches how other Vaadin components handle icon customization.
 
-**Q: Should the programmatic `items` API support icons (e.g., a `prefix` string property)?**
+**Q: Why is there no programmatic `items` property?**
 
-No. No existing Vaadin component uses a simple icon string in its `items` array — Menu Bar uses a `component` property (a DOM element), and Side Nav has no programmatic items API at all. Rather than inventing a new pattern, icons are supported only via the declarative API (`slot="prefix"`). A programmatic icon property can be added later if a real need and a consistent cross-component pattern emerge.
+An earlier revision exposed a parallel `items` array on `<vaadin-breadcrumb-trail>` — `{ text, path }[]` mirroring the declarative form — on the assumption that "both should coexist". That assumption was reconsidered: across the Vaadin component set only `<vaadin-select>` exposes both, and only because of overlay-teleportation limits, not as a general rule. Unlike `<vaadin-menu-bar>` (where nested sub-menus make a declarative API impractical, see [#925](https://github.com/vaadin/web-components/issues/925)), the breadcrumb trail's flat structure expresses cleanly through `<vaadin-breadcrumb-item>` light-DOM children — and standard DOM APIs (`appendChild`, `replaceChildren`, framework rendering) already cover every dynamic case. A parallel `items` array would need its own parser, item construction, and merge rules with the declarative form for no concrete benefit; adding it later if a real need emerges is strictly additive.
