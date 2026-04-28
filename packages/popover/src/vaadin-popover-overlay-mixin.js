@@ -24,6 +24,15 @@ export const PopoverOverlayMixin = (superClass) =>
       };
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('position')) {
+        this._updatePosition();
+      }
+    }
+
     /**
      * @protected
      * @override

@@ -31,8 +31,9 @@ export class MenuBarTooltipController extends SlotController {
 
   /**
    * Set the tooltip target to the given button. When the button has no
-   * tooltip text (or is `null`), clears the target/context and closes
-   * the tooltip immediately.
+   * tooltip text (or is `null`), clears the target/context, restores
+   * the user-set position on the tooltip element and closes the tooltip
+   * immediately.
    *
    * @param {HTMLElement | null} target
    */
@@ -45,9 +46,18 @@ export class MenuBarTooltipController extends SlotController {
     if (!target || !target.item || !target.item.tooltip) {
       tooltipNode.target = null;
       tooltipNode.context = { item: null };
+      if ('__userPosition' in tooltipNode) {
+        tooltipNode.position = tooltipNode.__userPosition;
+      }
       this.close(true);
       return;
     }
+
+    if (!('__userPosition' in tooltipNode)) {
+      tooltipNode.__userPosition = tooltipNode.position;
+    }
+    const itemPosition = target.item.tooltipPosition;
+    tooltipNode.position = itemPosition === undefined ? tooltipNode.__userPosition : itemPosition;
 
     tooltipNode.target = target;
     tooltipNode.context = { item: target.item };

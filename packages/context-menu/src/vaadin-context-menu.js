@@ -70,6 +70,18 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  * window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
  * ```
  *
+ * #### Item tooltips
+ *
+ * Menu items can have tooltips that are shown on hover and keyboard
+ * focus. To enable them, add a slotted `<vaadin-tooltip>` element
+ * and set the `tooltip` property on each item that should have one:
+ *
+ * ```html
+ * <vaadin-context-menu>
+ *   <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
+ * </vaadin-context-menu>
+ * ```
+ *
  * ### Rendering
  *
  * The content of the menu can be populated by using the renderer callback function.
@@ -299,6 +311,8 @@ class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(Polyl
         <slot name="overlay"></slot>
         <slot name="submenu" slot="submenu"></slot>
       </vaadin-context-menu-overlay>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
