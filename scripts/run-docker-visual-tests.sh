@@ -37,6 +37,33 @@ fi
 echo "Running visual tests in Docker (${IMAGE})..."
 echo "  Command: yarn $*"
 
+# When running inside a git worktree, .git is a file pointing to a gitdir
+# outside the mounted source tree. Mount the referenced gitdir (and the
+# shared common .git directory) at the same absolute path so git commands
+# work inside the container.
+GIT_MOUNTS=()
+if [ -f .git ]; then
+  WORKTREE_GIT_DIR=$(sed -n 's/^gitdir: //p' .git)
+  if [ -n "$WORKTREE_GIT_DIR" ] && [ -d "$WORKTREE_GIT_DIR" ]; then
+    COMMONDIR_FILE="$WORKTREE_GIT_DIR/commondir"
+    COMMON_DIR=""
+    if [ -f "$COMMONDIR_FILE" ]; then
+      COMMON_DIR_RAW=$(cat "$COMMONDIR_FILE")
+      case "$COMMON_DIR_RAW" in
+        /*) COMMON_DIR="$COMMON_DIR_RAW" ;;
+        *)  COMMON_DIR=$(cd "$WORKTREE_GIT_DIR/$COMMON_DIR_RAW" && pwd) ;;
+      esac
+    fi
+    if [ -n "$COMMON_DIR" ] && [ -d "$COMMON_DIR" ]; then
+      # The worktree's gitdir lives under $COMMON_DIR/worktrees/<name>,
+      # so mounting $COMMON_DIR alone covers both.
+      GIT_MOUNTS+=(-v "$COMMON_DIR:$COMMON_DIR")
+    else
+      GIT_MOUNTS+=(-v "$WORKTREE_GIT_DIR:$WORKTREE_GIT_DIR")
+    fi
+  fi
+fi
+
 # Run Docker:
 # - --rm: Remove container after exit
 # - -i: Enables input in --watch mode
@@ -50,6 +77,7 @@ docker run --rm --ipc=host \
   -t \
   -v "$(pwd)":/work \
   -v "${NODE_MODULES_VOLUME}":/work/node_modules \
+  "${GIT_MOUNTS[@]}" \
   -w /work \
   -e PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
   -e TEST_ENV \
