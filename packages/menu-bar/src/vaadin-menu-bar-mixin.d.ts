@@ -23,6 +23,12 @@ export type MenuBarItem<TItemData extends object = object> = {
    */
   tooltip?: string;
   /**
+   * Position of the button's tooltip relative to the button
+   * (e.g. `bottom`, `top-start`). Falls back to the position set on the
+   * `<vaadin-tooltip>` element when omitted.
+   */
+  tooltipPosition?: string;
+  /**
    * The component to represent the button content.
    * Either a tagName or an element instance. Defaults to "vaadin-menu-bar-item".
    */
@@ -48,6 +54,18 @@ export type MenuBarItem<TItemData extends object = object> = {
 
 export type SubMenuItem<TItemData extends object = object> = {
   text?: string;
+  /**
+   * Text to be set as the menu item's tooltip.
+   * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-menu-bar>`.
+   */
+  tooltip?: string;
+  /**
+   * Position of the item's tooltip relative to the item
+   * (e.g. `end`, `top`, `bottom-start`). Defaults to `start` for items with a sub-menu
+   * (to avoid overlap with the opening sub-menu) and to `end` otherwise. Disabled items
+   * also default to `end` because their sub-menus cannot be opened.
+   */
+  tooltipPosition?: string;
   component?: HTMLElement | string;
   disabled?: boolean;
   theme?: string[] | string;
@@ -120,6 +138,19 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
    * ```
    *
    * Both flags must be set before any menu bar is attached to the DOM.
+   *
+   * #### Item tooltips
+   *
+   * Buttons and sub-menu items can have tooltips that are shown on
+   * hover and keyboard focus. To enable them, add a slotted
+   * `<vaadin-tooltip>` element and set the `tooltip` property on
+   * each item that should have one:
+   *
+   * ```html
+   * <vaadin-menu-bar>
+   *   <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
+   * </vaadin-menu-bar>
+   * ```
    */
   items: TItem[];
 

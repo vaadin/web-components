@@ -3,7 +3,9 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 
 /**
  * @polymerMixin
@@ -16,6 +18,12 @@ export const ItemsMixin = (superClass) =>
          * @typedef ContextMenuItem
          * @type {object}
          * @property {string} text - Text to be set as the menu item component's textContent
+         * @property {string} tooltip - Text to be set as the menu item's tooltip.
+         * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-context-menu>`.
+         * @property {string} tooltipPosition - Position of the item's tooltip relative to the item
+         * (e.g. `end`, `top`, `bottom-start`). Defaults to `start` for items with a sub-menu
+         * (to avoid overlap with the opening sub-menu) and to `end` otherwise. Disabled items
+         * also default to `end` because their sub-menus cannot be opened.
          * @property {string | HTMLElement} component - The component to represent the item.
          * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected
@@ -52,6 +60,18 @@ export const ItemsMixin = (superClass) =>
          *   },
          *   { text: 'Menu Item 3', disabled: true, className: 'last' }
          * ];
+         * ```
+         *
+         * #### Item tooltips
+         *
+         * Menu items can have tooltips that are shown on hover and keyboard
+         * focus. To enable them, add a slotted `<vaadin-tooltip>` element
+         * and set the `tooltip` property on each item that should have one:
+         *
+         * ```html
+         * <vaadin-context-menu>
+         *   <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
+         * </vaadin-context-menu>
          * ```
          *
          * @type {!Array<!ContextMenuItem> | undefined}
@@ -102,9 +122,23 @@ export const ItemsMixin = (superClass) =>
     }
 
     /** @protected */
+    ready() {
+      super.ready();
+
+      // Subclasses may pre-assign `_tooltipController` (e.g. to share
+      // a controller with an outer host) before calling `super.ready()`.
+      if (!this._tooltipController) {
+        this._tooltipController = new TooltipController(this);
+        this._tooltipController.setManual(true);
+        this.addController(this._tooltipController);
+      }
+    }
+
+    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
       document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener);
+      this.__hideTooltip();
     }
 
     /**
@@ -264,6 +298,37 @@ export const ItemsMixin = (superClass) =>
         }
 
         this.__showSubMenu(event);
+
+        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
+        if (itemElement && itemElement._item.tooltip) {
+          this.__showTooltip(itemElement, true);
+        } else {
+          this.__hideTooltip();
+        }
+      });
+
+      overlay.addEventListener('mouseleave', (event) => {
+        // Ignore events from the submenus
+        if (event.composedPath().includes(this._subMenu)) {
+          return;
+        }
+
+        this.__hideTooltip();
+      });
+
+      overlay.addEventListener('focusin', (event) => {
+        // Ignore events from the submenus
+        // Ignore non-keyboard focus changes (e.g. clicks).
+        if (event.composedPath().includes(this._subMenu) || !isKeyboardActive()) {
+          return;
+        }
+
+        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
+        if (itemElement && itemElement._item.tooltip) {
+          this.__showTooltip(itemElement, false);
+        } else {
+          this.__hideTooltip();
+        }
       });
 
       overlay.addEventListener('keydown', (event) => {
@@ -299,6 +364,12 @@ export const ItemsMixin = (superClass) =>
     /** @private */
     __initSubMenu() {
       const subMenu = document.createElement(this.constructor.is);
+
+      // Share the tooltip controller with the sub-menu so the user's
+      // slotted `<vaadin-tooltip>` (which lives on the outer host) is
+      // reused for sub-menu items. Without this, the sub-menu would
+      // create its own controller that finds no slotted tooltip.
+      subMenu._tooltipController = this._tooltipController;
 
       subMenu._modeless = true;
       subMenu.openOn = 'opensubmenu';
@@ -413,6 +484,30 @@ export const ItemsMixin = (superClass) =>
       if (item && item.disabled) {
         subMenu.close();
       }
+    }
+
+    /** @private */
+    __showTooltip(target, isHover) {
+      const tooltip = this._tooltipController.node;
+      if (tooltip && tooltip.isConnected) {
+        tooltip.generator = tooltip.generator || (({ item }) => item && item.tooltip);
+      }
+
+      const item = target._item;
+      const defaultPosition = item.children && item.children.length > 0 && !item.disabled ? 'start' : 'end';
+
+      this._tooltipController.setTarget(target);
+      this._tooltipController.setContext({ item });
+      this._tooltipController.setPosition(item.tooltipPosition || defaultPosition);
+      this._tooltipController.open({ hover: isHover, focus: !isHover });
+    }
+
+    /** @private */
+    __hideTooltip(immediate) {
+      console.warn('HIDE');
+      this._tooltipController.setTarget(null);
+      this._tooltipController.setContext({ item: null });
+      this._tooltipController.close(immediate);
     }
 
     /** @protected */
