@@ -370,7 +370,7 @@ export const MenuBarMixin = (superClass) =>
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      this._tooltipController.attachTo(null);
+      this._tooltipController.setTarget(null);
     }
 
     /**
@@ -680,7 +680,7 @@ export const MenuBarMixin = (superClass) =>
         this._setTabindex(btn, btn === button);
       });
 
-      this._tooltipController.attachTo(button);
+      this._tooltipController.setTarget(button);
 
       if (wasExpanded && button.item && button.item.children) {
         this.__openSubMenu(button, true, { keepFocus: true });
@@ -732,7 +732,7 @@ export const MenuBarMixin = (superClass) =>
     _setFocused(focused) {
       const target = focused ? this.__getFocusTarget() : null;
       if (target) {
-        this._tooltipController.attachTo(target);
+        this._tooltipController.setTarget(target);
 
         this._buttons.forEach((btn) => {
           this._setTabindex(btn, btn === target);
@@ -857,7 +857,7 @@ export const MenuBarMixin = (superClass) =>
       }
 
       const button = this._getButtonFromEvent(event);
-      this._tooltipController.attachTo(button);
+      this._tooltipController.setTarget(button);
 
       if (button && button !== this._expandedButton) {
         // Switch sub-menu when moving cursor over another button

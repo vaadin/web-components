@@ -1,9 +1,9 @@
 /**
  * @license
- * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ * Copyright (c) 2019 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotController } from '@vaadin/component-base/src/slot-controller';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
  * Controller for the tooltip slotted into a menu-bar. Configures the
@@ -30,13 +30,13 @@ export class MenuBarTooltipController extends SlotController {
   }
 
   /**
-   * Attach the tooltip to the given button. When the button has no
+   * Set the tooltip target to the given button. When the button has no
    * tooltip text (or is `null`), clears the target/context and closes
    * the tooltip immediately.
    *
    * @param {HTMLElement | null} target
    */
-  attachTo(target) {
+  setTarget(target) {
     const tooltipNode = this.node;
     if (!tooltipNode) {
       return;
