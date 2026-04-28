@@ -78,6 +78,8 @@ vaadin-side-nav-item::part(content),
 vaadin-tab,
 vaadin-upload-file,
 :where(
+  .aura-accent-surface,
+  .aura-accent-surface-solid,
   .aura-accent-color,
   .aura-accent-neutral,
   .aura-accent-red,
