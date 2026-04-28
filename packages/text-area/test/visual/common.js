@@ -10,6 +10,7 @@ registerStyles(
 
     /* Show error message immediately */
     [part='label'],
+    [part='input-field'],
     [part='helper-text'],
     [part='error-message'],
     [part='required-indicator'] {
