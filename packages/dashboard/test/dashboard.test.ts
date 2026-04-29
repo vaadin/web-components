@@ -307,6 +307,71 @@ describe('dashboard', () => {
       expect(widget.offsetHeight).to.eql(rowHeight);
     });
 
+    it('should not let an inline style.height on a widget override the fixed row height', async () => {
+      // The widget host's cap must clamp inline heights that exceed the fixed row height.
+      // A bare `height` declaration would lose to inline style; only `max-height` (paired
+      // with `min-height` so the row stays pinned for empty content too) clamps inline height.
+      const rowHeight = 100;
+      dashboard.style.width = `${columnWidth}px`;
+      dashboard.items = [{ id: '0' }];
+      dashboard.renderer = (root, _, model) => {
+        root.textContent = '';
+        const widget = document.createElement('vaadin-dashboard-widget');
+        widget.id = (model.item as TestDashboardItem).id;
+        widget.style.height = `${rowHeight * 2}px`;
+        root.appendChild(widget);
+      };
+      setRowHeight(dashboard, rowHeight);
+      await updateComplete(dashboard);
+      await nextResize(dashboard);
+
+      const widget = getElementFromCell(dashboard, 0, 0)!;
+      expect(widget.offsetHeight).to.eql(rowHeight);
+    });
+
+    it('should not let an inline style.height shrink a widget below the fixed row height', async () => {
+      // The widget host cap pins to row-height in both directions: a smaller inline
+      // style.height would otherwise leave empty space inside the cell. max-height alone
+      // only enforces the upper bound; min-height is needed for the lower.
+      const rowHeight = 100;
+      dashboard.style.width = `${columnWidth}px`;
+      dashboard.items = [{ id: '0' }];
+      dashboard.renderer = (root, _, model) => {
+        root.textContent = '';
+        const widget = document.createElement('vaadin-dashboard-widget');
+        widget.id = (model.item as TestDashboardItem).id;
+        widget.style.height = `${rowHeight / 2}px`;
+        root.appendChild(widget);
+      };
+      setRowHeight(dashboard, rowHeight);
+      await updateComplete(dashboard);
+      await nextResize(dashboard);
+
+      const widget = dashboard.querySelector('vaadin-dashboard-widget') as DashboardWidget;
+      expect(widget.offsetHeight).to.eql(rowHeight);
+    });
+
+    it('should respect an inline style.height on a widget when no fixed row height is set', async () => {
+      // The widget cap must only apply when a fixed row-height is set. With
+      // `height: var(--_widget-fixed-height) !important`, an invalid calc reduces to
+      // `height: auto !important`, which silently overrides any inline height even
+      // outside the fixed-row-height feature.
+      dashboard.style.width = `${columnWidth}px`;
+      dashboard.items = [{ id: '0' }];
+      dashboard.renderer = (root, _, model) => {
+        root.textContent = '';
+        const widget = document.createElement('vaadin-dashboard-widget');
+        widget.id = (model.item as TestDashboardItem).id;
+        widget.style.height = '200px';
+        root.appendChild(widget);
+      };
+      await updateComplete(dashboard);
+      await nextResize(dashboard);
+
+      const widget = dashboard.querySelector('vaadin-dashboard-widget') as DashboardWidget;
+      expect(widget.offsetHeight).to.eql(200);
+    });
+
     it('should fit a 3-row widget to its full rowspan including all inter-row gaps', async () => {
       // With rowspan = N > 2 the widget cap needs (N - 1) gap terms, not just one.
       const gap = 10;
@@ -342,6 +407,32 @@ describe('dashboard', () => {
       await nextResize(dashboard);
 
       const widget = getElementFromCell(dashboard, 0, 0)!;
+      expect(widget.offsetHeight).to.eql(rowHeight);
+    });
+
+    it('should cap a widget nested inside a section to the fixed row height', async () => {
+      // The layout's ::slotted(...) rule excludes sections, so it never defines
+      // --_widget-fixed-height on a section, and widgets inside a section don't inherit
+      // it. The widget host therefore needs its own definition to keep the cap working
+      // for nested widgets — otherwise tall widget content pushes the section's sub-row.
+      const rowHeight = 100;
+      dashboard.style.width = `${columnWidth}px`;
+      const sectionItem: DashboardSectionItem<TestDashboardItem> = { items: [{ id: '0' }] };
+      dashboard.items = [sectionItem];
+      dashboard.renderer = (root, _, model) => {
+        root.textContent = '';
+        const widget = document.createElement('vaadin-dashboard-widget');
+        widget.id = (model.item as TestDashboardItem).id;
+        const tall = document.createElement('div');
+        tall.style.height = `${rowHeight * 2}px`;
+        widget.appendChild(tall);
+        root.appendChild(widget);
+      };
+      setRowHeight(dashboard, rowHeight);
+      await updateComplete(dashboard);
+      await nextResize(dashboard);
+
+      const widget = dashboard.querySelector('vaadin-dashboard-widget') as DashboardWidget;
       expect(widget.offsetHeight).to.eql(rowHeight);
     });
   });
