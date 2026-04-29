@@ -77,9 +77,9 @@ import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires {CustomEvent} file-abort - Fired when the abort button is pressed.
- * @fires {CustomEvent} file-retry - Fired when the retry button is pressed.
- * @fires {CustomEvent} file-start - Fired when the start button is pressed.
+ * @fires {CustomEvent} file-abort - Fired when the abort button is pressed. Listened by `vaadin-upload`, which aborts the upload in progress and removes the file from the list.
+ * @fires {CustomEvent} file-retry - Fired when the retry button is pressed. Listened by `vaadin-upload`, which starts a new upload of this file.
+ * @fires {CustomEvent} file-start - Fired when the start button is pressed. Listened by `vaadin-upload`, which starts a new upload of this file.
  *
  * @customElement vaadin-upload-file
  * @extends HTMLElement

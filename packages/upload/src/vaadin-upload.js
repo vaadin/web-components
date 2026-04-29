@@ -88,19 +88,19 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires {CustomEvent} file-reject - Fired when a file cannot be added to the queue due to a constrain.
+ * @fires {CustomEvent} file-reject - Fired when a file cannot be added to the queue due to a constraint: file size, file type, or maxFiles.
  * @fires {CustomEvent} file-remove - Fired when a file is removed from the list.
  * @fires {CustomEvent} files-changed - Fired when the `files` property changes.
  * @fires {CustomEvent} max-files-reached-changed - Fired when the `maxFilesReached` property changes.
- * @fires {CustomEvent} upload-before - Fired before the XHR is opened.
+ * @fires {CustomEvent} upload-before - Fired before the XHR is opened. Useful for changing the request URL. If the default is prevented, the XHR is not opened.
  * @fires {CustomEvent} upload-start - Fired when the XHR is sent.
  * @fires {CustomEvent} upload-progress - Fired as many times as the progress is updated.
- * @fires {CustomEvent} upload-success - Fired in case the upload process succeeded.
- * @fires {CustomEvent} upload-error - Fired in case the upload process failed.
- * @fires {CustomEvent} upload-request - Fired when the XHR has been opened but not sent yet.
- * @fires {CustomEvent} upload-response - Fired when on the server response before analyzing it.
- * @fires {CustomEvent} upload-retry - Fired when retry upload is requested.
- * @fires {CustomEvent} upload-abort - Fired when upload abort is requested.
+ * @fires {CustomEvent} upload-success - Fired when the upload process succeeds.
+ * @fires {CustomEvent} upload-error - Fired when the upload process fails.
+ * @fires {CustomEvent} upload-request - Fired when the XHR has been opened but not sent yet. Useful for appending data to the FormData or modifying request parameters. If the default is prevented, the request is not sent.
+ * @fires {CustomEvent} upload-response - Fired when the server response is received, before the component analyzes it. If the default is prevented, the component returns and the listener can handle `xhr` and `file` directly; otherwise the normal flow checks `xhr.status` and `file.error`, which can be modified to force a custom outcome.
+ * @fires {CustomEvent} upload-retry - Fired when retry upload is requested. If the default is prevented, the retry is not performed.
+ * @fires {CustomEvent} upload-abort - Fired when upload abort is requested. If the default is prevented, the upload is not aborted.
  *
  * @customElement vaadin-upload
  * @extends HTMLElement
