@@ -746,6 +746,25 @@ describe('dashboard layout', () => {
       expect(child.offsetHeight).to.eql(rowHeight);
     });
 
+    it('should let a section nested inside another section grow with its own sub-rows', async () => {
+      // The section's ::slotted cap must exclude vaadin-dashboard-section, mirroring the
+      // layout's exclusion. Otherwise an inner section is clamped to one row's height
+      // and can't wrap its own children.
+      const rowHeight = 100;
+      const innerSection = document.createElement('vaadin-dashboard-section');
+      innerSection.appendChild(document.createElement('div'));
+      innerSection.appendChild(document.createElement('div'));
+      section.appendChild(innerSection);
+
+      dashboard.style.width = `${columnWidth}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextResize(dashboard);
+
+      // Inner section should fit its header plus the two sub-rows; capping it to
+      // a single row's worth of height would leave it ≤ rowHeight.
+      expect(innerSection.offsetHeight).to.be.greaterThan(rowHeight);
+    });
+
     it('should respect an inline style.height on a section child when no fixed row height is set', async () => {
       // The section's cap must only apply when a fixed row-height is set. With
       // `height: var(--_widget-fixed-height) !important`, an invalid calc reduces to

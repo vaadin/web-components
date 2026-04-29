@@ -10,6 +10,7 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
+import { widgetFixedHeightDeclarations } from './vaadin-dashboard-layout-base-styles.js';
 import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-widget-section-base-styles.js';
 
 const widgetStyles = css`
@@ -24,13 +25,8 @@ const widgetStyles = css`
     box-shadow: var(--_widget-shadow);
     border: var(--_widget-border-width) solid var(--_widget-border-color);
 
-    /* Pin to the fixed row height when one is set, so the parent track does not grow beyond it. Split into min/max so an inline style.height cannot override the cap. When --vaadin-dashboard-row-height is unset the calc is invalid and both fall back to their initial values (auto / none). */
-    --_widget-fixed-height: calc(
-      var(--vaadin-dashboard-widget-rowspan, 1) * var(--vaadin-dashboard-row-height) +
-        (var(--vaadin-dashboard-widget-rowspan, 1) - 1) * var(--_gap)
-    );
-    min-height: var(--_widget-fixed-height);
-    max-height: var(--_widget-fixed-height);
+    /* Pin to the fixed row height when one is set. The widget host's own definition is needed so widgets nested inside sections in vaadin-dashboard-layout (where the layout-level cap doesn't reach) still get capped. */
+    ${widgetFixedHeightDeclarations};
   }
 
   :host([hidden]) {
