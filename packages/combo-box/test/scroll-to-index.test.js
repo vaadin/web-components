@@ -133,6 +133,17 @@ describe('scrollToIndex', () => {
 
       expect(getViewportItems(comboBox)[0].index).to.equal(0);
     });
+
+    it('should not auto-scroll on open when scrollToIndex was never called', () => {
+      comboBox.selectedItem = comboBox.items[100];
+
+      comboBox.opened = true;
+      flushComboBox(comboBox);
+
+      // PR #6055: opening with a mid-list selectedItem must not auto-scroll.
+      const viewport = getViewportItems(comboBox);
+      expect(viewport[0].index).to.equal(0);
+    });
   });
 
   describe('data provider', () => {
@@ -269,26 +280,6 @@ describe('scrollToIndex', () => {
     it('should not throw when scrollToIndex is called before a data provider is set', () => {
       comboBox.dataProvider = undefined;
       expect(() => comboBox.scrollToIndex(100)).to.not.throw();
-    });
-  });
-
-  describe('regressions', () => {
-    it('should not scroll on open when scrollToIndex was never called', async () => {
-      comboBox = fixtureSync(`
-        <vaadin-combo-box
-          style="--vaadin-combo-box-overlay-max-height: 400px"
-        ></vaadin-combo-box>
-      `);
-      await nextRender();
-      comboBox.items = makeItems(200);
-      comboBox.selectedItem = comboBox.items[100];
-
-      comboBox.opened = true;
-      flushComboBox(comboBox);
-
-      // PR #6055: opening with a mid-list selectedItem should not auto-scroll.
-      const viewport = getViewportItems(comboBox);
-      expect(viewport[0].index).to.equal(0);
     });
   });
 });
