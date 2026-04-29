@@ -42,8 +42,8 @@ import { MultiSelectListMixin } from './vaadin-multi-select-list-mixin.js';
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
- * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
- * @fires {CustomEvent} selected-values-changed - Fired when the `selectedValues` property changes.
+ * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes. Not fired in multiple selection mode.
+ * @fires {CustomEvent} selected-values-changed - Fired when the `selectedValues` property changes. Not fired in single selection mode.
  *
  * @customElement vaadin-list-box
  * @extends HTMLElement
