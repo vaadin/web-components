@@ -63,7 +63,7 @@ import { LoginFormMixin } from './vaadin-login-form-mixin.js';
  * @fires {CustomEvent} disabled-changed - Fired when the `disabled` property changes.
  * @fires {CustomEvent} error-changed - Fired when the `error` property changes.
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
- * @fires {CustomEvent} login - Fired when a user submits the login.
+ * @fires {CustomEvent} login - Fired when a user submits the login form. The event detail contains `username` and `password`.
  *
  * @customElement vaadin-login-form
  * @extends HTMLElement
