@@ -262,6 +262,25 @@ export const ComboBoxScrollerMixin = (superClass) =>
         }
 
         this.requestContentUpdate();
+        return;
+      }
+
+      // Reset the DOM scrollTop and the virtualizer adapter's
+      // `_scrollPosition` cache. Without the cache reset, the adapter's
+      // ResizeObserver restores the prior offset when the overlay becomes
+      // visible again, leaving the next open stuck at the previous offset
+      // (or blank with dataProvider) until the user scrolls. The
+      // virtualizer's own `scrollToIndex` can't help — by the time this
+      // observer runs, `offsetHeight` is already 0 and its scroll API is
+      // a no-op. Guarded on `_scrollPosition > 0` so the reset is skipped
+      // when there is nothing to reset (e.g. the initial observer run
+      // before the dropdown has ever been opened); unconditionally
+      // touching `scrollTop` on connect can affect the outer document's
+      // scroll position (see the combo-box re-layout integration test).
+      const adapter = this.__virtualizer && this.__virtualizer.__adapter;
+      if (adapter && adapter._scrollPosition > 0) {
+        this.scrollTop = 0;
+        adapter._scrollPosition = 0;
       }
     }
 
