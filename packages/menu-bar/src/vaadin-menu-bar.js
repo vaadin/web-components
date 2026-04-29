@@ -95,14 +95,6 @@ class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoI
       <slot name="tooltip"></slot>
     `;
   }
-
-  /**
-   * Fired when either a submenu item or menu bar button without nested children is clicked.
-   *
-   * @event item-selected
-   * @param {Object} detail
-   * @param {Object} detail.value the selected menu bar item
-   */
 }
 
 defineCustomElement(MenuBar);
