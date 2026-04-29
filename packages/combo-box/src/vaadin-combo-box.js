@@ -157,6 +157,8 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  * @fires {CustomEvent} selected-item-changed - Fired when the `selectedItem` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
+ * @fires {CustomEvent} vaadin-combo-box-dropdown-opened - Fired after the `vaadin-combo-box-overlay` opens.
+ * @fires {CustomEvent} vaadin-combo-box-dropdown-closed - Fired after the `vaadin-combo-box-overlay` closes.
  *
  * @customElement vaadin-combo-box
  * @extends HTMLElement
