@@ -501,48 +501,6 @@ class Dashboard extends DashboardLayoutMixin(
       });
     }
   }
-
-  /**
-   * Fired when an item selected state changed
-   *
-   * @event dashboard-item-selected-changed
-   */
-
-  /**
-   * Fired when an item move mode changed
-   *
-   * @event dashboard-item-move-mode-changed
-   */
-
-  /**
-   * Fired when an item resize mode changed
-   *
-   * @event dashboard-item-resize-mode-changed
-   */
-
-  /**
-   * Fired when an item was moved
-   *
-   * @event dashboard-item-moved
-   */
-
-  /**
-   * Fired when an item was resized
-   *
-   * @event dashboard-item-resized
-   */
-
-  /**
-   * Fired before an item is removed
-   *
-   * @event dashboard-item-before-remove
-   */
-
-  /**
-   * Fired when an item was removed
-   *
-   * @event dashboard-item-removed
-   */
 }
 
 defineCustomElement(Dashboard);
