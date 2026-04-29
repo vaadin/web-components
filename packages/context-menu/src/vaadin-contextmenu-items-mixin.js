@@ -296,7 +296,7 @@ export const ItemsMixin = (superClass) =>
           return;
         }
 
-        this._tooltipController.setTarget(null);
+        this._tooltipController.close();
       });
 
       overlay.addEventListener('focusin', (event) => {

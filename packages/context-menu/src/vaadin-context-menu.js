@@ -14,7 +14,6 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
-import { ContextMenuTooltipController } from './vaadin-context-menu-tooltip-controller.js';
 
 /**
  * `<vaadin-context-menu>` is a Web Component for creating context menus.
@@ -280,12 +279,6 @@ class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(Polyl
         type: String,
       },
     };
-  }
-
-  ready() {
-    super.ready();
-
-    this._tooltipController = this._tooltipController || new ContextMenuTooltipController(this);
   }
 
   /** @protected */
