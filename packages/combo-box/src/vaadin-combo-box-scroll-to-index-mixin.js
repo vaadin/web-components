@@ -29,7 +29,7 @@ export const ComboBoxScrollToIndexMixin = (superClass) =>
      * @param {number} index Index of the item to scroll to
      */
     scrollToIndex(index) {
-      if (typeof index !== 'number' || isNaN(index) || index < 0) {
+      if (typeof index !== 'number' || Number.isNaN(index) || index < 0) {
         return;
       }
 

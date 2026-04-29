@@ -46,7 +46,7 @@ describe('scrollToIndex', () => {
       expect(comboBox.__scrollToPendingIndex).to.be.undefined;
     });
 
-    [-1, NaN, SIZE + 50].forEach((invalidIndex) => {
+    [-1, Number.NaN, SIZE + 50].forEach((invalidIndex) => {
       it(`should ignore invalid index: ${String(invalidIndex)}`, () => {
         comboBox.opened = true;
         comboBox.scrollToIndex(invalidIndex);
