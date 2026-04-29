@@ -19,7 +19,7 @@ export const accordionPanel = css`
   }
 
   :host(:not([opened])) [part='content'] {
-    display: none !important;
+    display: none;
   }
 
   :host([focus-ring]) {

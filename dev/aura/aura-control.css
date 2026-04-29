@@ -33,13 +33,15 @@
     flex: none;
     gap: 0;
     color: var(--vaadin-text-color-disabled);
-    padding: var(--vaadin-padding-xs);
+    padding: 3px;
+    margin-block: 2px;
 
     &:hover {
       color: var(--vaadin-text-color-secondary);
     }
 
     &[aria-pressed='true'] {
+      background: color-mix(in srgb, var(--aura-accent-color) 10%, transparent);
       color: var(--aura-accent-text-color);
     }
 
@@ -112,7 +114,7 @@
 
   /* Selected state */
   .segmented label:has(input:checked) {
-    backdrop-filter: brightness(1.8) saturate(0.8);
+    background: light-dark(hsla(0deg, 0%, 100%, 1), hsla(0deg, 0%, 100%, 0.2));
     color: var(--vaadin-text-color);
     box-shadow: var(--aura-shadow-s);
     border-radius: var(--vaadin-radius-m);
