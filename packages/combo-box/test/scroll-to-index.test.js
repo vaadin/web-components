@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { escKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-combo-box.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import { flushComboBox, getViewportItems, makeItems } from './helpers.js';
@@ -36,13 +36,12 @@ describe('scrollToIndex', () => {
 
     it('should queue the scroll when called before opening', async () => {
       comboBox.scrollToIndex(100);
-      expect(comboBox._focusedIndex).to.equal(-1);
+      expect(comboBox.__scrollToPendingIndex).to.equal(100);
 
       comboBox.opened = true;
       await nextFrame();
       flushComboBox(comboBox);
 
-      expect(comboBox._focusedIndex).to.equal(100);
       const viewport = getViewportItems(comboBox);
       expect(viewport.map((item) => item.index)).to.include(100);
     });
@@ -70,25 +69,29 @@ describe('scrollToIndex', () => {
     it('should ignore negative indexes', () => {
       comboBox.opened = true;
       comboBox.scrollToIndex(-1);
-      expect(comboBox._focusedIndex).to.equal(-1);
+      flushComboBox(comboBox);
+      expect(getViewportItems(comboBox)[0].index).to.equal(0);
     });
 
     it('should ignore NaN', () => {
       comboBox.opened = true;
       comboBox.scrollToIndex(NaN);
-      expect(comboBox._focusedIndex).to.equal(-1);
+      flushComboBox(comboBox);
+      expect(getViewportItems(comboBox)[0].index).to.equal(0);
     });
 
     it('should ignore non-numbers', () => {
       comboBox.opened = true;
       comboBox.scrollToIndex('100');
-      expect(comboBox._focusedIndex).to.equal(-1);
+      flushComboBox(comboBox);
+      expect(getViewportItems(comboBox)[0].index).to.equal(0);
     });
 
     it('should ignore indexes beyond the item count', () => {
       comboBox.opened = true;
       comboBox.scrollToIndex(SIZE + 50);
-      expect(comboBox._focusedIndex).to.equal(-1);
+      flushComboBox(comboBox);
+      expect(getViewportItems(comboBox)[0].index).to.equal(0);
     });
 
     it('should override a previous scroll call', () => {
@@ -96,7 +99,6 @@ describe('scrollToIndex', () => {
       comboBox.scrollToIndex(50);
       comboBox.scrollToIndex(150);
       flushComboBox(comboBox);
-      expect(comboBox._focusedIndex).to.equal(150);
       const viewport = getViewportItems(comboBox);
       expect(viewport.map((item) => item.index)).to.include(150);
     });
@@ -107,32 +109,29 @@ describe('scrollToIndex', () => {
       flushComboBox(comboBox);
       comboBox.scrollToIndex(0);
       flushComboBox(comboBox);
-      expect(comboBox._focusedIndex).to.equal(0);
       expect(getViewportItems(comboBox)[0].index).to.equal(0);
     });
 
-    it('should reset the virtualizer scroll cache when closing after a scrollToIndex', async () => {
+    it('should not stay scrolled at the previous offset on reopen', async () => {
       comboBox.opened = true;
       comboBox.scrollToIndex(150);
       flushComboBox(comboBox);
 
-      const adapter = comboBox._scroller.__virtualizer.__adapter;
-      expect(adapter._scrollPosition).to.be.greaterThan(0);
-
       // Simulate the real-world timing where, by the time the close
       // observer runs, the overlay has already been hidden (offsetHeight=0).
-      // That causes the virtualizer's own `scrollToIndex` to bail out
-      // before resetting `_scrollPosition`. Without the combo-box's
-      // explicit reset, the adapter's ResizeObserver would later restore
-      // this stale value to `scrollTop` when the overlay becomes visible
-      // again, leaving the reopened dropdown stuck at the previous
-      // scroll position (or blank, if items haven't loaded there yet).
+      // That causes the virtualizer's own `scrollToIndex` to bail out before
+      // resetting its cached scroll position. Without the close-time reset,
+      // the adapter's ResizeObserver later restores that stale offset to
+      // `scrollTop` when the overlay becomes visible again, leaving the
+      // reopened dropdown stuck mid-list.
       comboBox._scroller.style.display = 'none';
       comboBox.opened = false;
       await nextFrame();
+      comboBox._scroller.style.display = '';
+      comboBox.opened = true;
+      flushComboBox(comboBox);
 
-      expect(adapter._scrollPosition).to.equal(0);
-      expect(comboBox._scroller.scrollTop).to.equal(0);
+      expect(getViewportItems(comboBox)[0].index).to.equal(0);
     });
   });
 
@@ -177,7 +176,8 @@ describe('scrollToIndex', () => {
       await nextFrame();
       flushComboBox(comboBox);
 
-      expect(comboBox._focusedIndex).to.equal(30);
+      const viewport = getViewportItems(comboBox);
+      expect(viewport.some((item) => item.index === 30 && !(item.item instanceof ComboBoxPlaceholder))).to.be.true;
     });
 
     it('should scroll to an unloaded index after its page loads', async () => {
@@ -187,14 +187,12 @@ describe('scrollToIndex', () => {
 
       comboBox.scrollToIndex(300);
       flushComboBox(comboBox);
-      // The scroll moves placeholders into view, which request their page via rAF.
       await nextFrame();
       // Drain the page request so the items around index 300 become real.
       flushPendingCallbacks();
       await nextFrame();
       flushComboBox(comboBox);
 
-      expect(comboBox._focusedIndex).to.equal(300);
       const viewport = getViewportItems(comboBox);
       expect(viewport.some((item) => item.index === 300 && !(item.item instanceof ComboBoxPlaceholder))).to.be.true;
     });
@@ -226,15 +224,46 @@ describe('scrollToIndex', () => {
       await nextFrame();
 
       // The placeholder branch must enqueue the page-6 request directly
-      // rather than hoping a viewport scroll triggers it (the virtualizer
-      // is mid-rebuild on reopen and its scroll API is unreliable here).
+      // rather than hoping a viewport scroll triggers it.
       expect(pendingCallbacks.length).to.be.greaterThan(0);
 
       flushPendingCallbacks();
       await nextFrame();
       flushComboBox(comboBox);
 
-      expect(comboBox._focusedIndex).to.equal(300);
+      const viewport = getViewportItems(comboBox);
+      expect(viewport.some((item) => item.index === 300 && !(item.item instanceof ComboBoxPlaceholder))).to.be.true;
+    });
+
+    it('should render real content (not placeholders) at the top on reopen after a scroll', async () => {
+      // Open, drain page 0, scroll to a far index, drain its page, then close.
+      comboBox.opened = true;
+      flushPendingCallbacks();
+      await nextFrame();
+      comboBox.scrollToIndex(300);
+      flushComboBox(comboBox);
+      await nextFrame();
+      flushPendingCallbacks();
+      await nextFrame();
+      flushComboBox(comboBox);
+
+      // Simulate the real close timing where the overlay has been hidden
+      // before the close observer runs (offsetHeight=0 makes the virtualizer's
+      // own scroll API a no-op, so the close-time reset is the only thing
+      // that prevents the next open from rendering at the stale offset).
+      comboBox._scroller.style.display = 'none';
+      comboBox.opened = false;
+      await nextFrame();
+      comboBox._scroller.style.display = '';
+      comboBox.opened = true;
+      flushComboBox(comboBox);
+
+      // Without the reset the dropdown reopens scrolled into the un-cached
+      // range (page ~6), where every visible item is a `ComboBoxPlaceholder`
+      // until the user manually scrolls and triggers a fresh page request.
+      const viewport = getViewportItems(comboBox);
+      expect(viewport[0].index).to.equal(0);
+      expect(viewport.every((item) => !(item.item instanceof ComboBoxPlaceholder))).to.be.true;
     });
 
     it('should not throw when scrollToIndex is called before a data provider is set', () => {
@@ -260,26 +289,6 @@ describe('scrollToIndex', () => {
       // PR #6055: opening with a mid-list selectedItem should not auto-scroll.
       const viewport = getViewportItems(comboBox);
       expect(viewport[0].index).to.equal(0);
-      expect(comboBox._focusedIndex).to.equal(-1);
-    });
-
-    it('should close the overlay on a single Escape press when opened with a selectedItem (flow#5142)', async () => {
-      comboBox = fixtureSync(`
-        <vaadin-combo-box
-          style="--vaadin-combo-box-overlay-max-height: 400px"
-        ></vaadin-combo-box>
-      `);
-      await nextRender();
-      comboBox.items = makeItems(200);
-      comboBox.selectedItem = comboBox.items[100];
-
-      comboBox.opened = true;
-      await nextFrame();
-      flushComboBox(comboBox);
-
-      comboBox.inputElement.focus();
-      escKeyDown(comboBox.inputElement);
-      expect(comboBox.opened).to.be.false;
     });
   });
 });

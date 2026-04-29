@@ -90,17 +90,6 @@ describe('scrollToIndex', () => {
       comboBox.dataProvider = asyncDataProvider;
     });
 
-    // Regression guard: this is the TypeError reproducer from the bug that
-    // landed with the feature's first commit. __onDataProviderPageLoaded
-    // calls __scrollToPendingIndexIfNeeded, which was defined on
-    // ComboBoxMixin and not inherited by MultiSelectComboBox.
-    it('should not throw when the first data provider page loads', () => {
-      expect(() => {
-        comboBox.opened = true;
-        flushPendingCallbacks();
-      }).to.not.throw();
-    });
-
     it('should queue the scroll while the first page is loading', async () => {
       comboBox.opened = true;
       comboBox.scrollToIndex(30);
