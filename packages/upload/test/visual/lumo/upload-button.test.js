@@ -5,6 +5,7 @@ import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/upload-button.css';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '@vaadin/icon';
+import '../not-animated-styles.js';
 import '../../../vaadin-upload-button.js';
 import { UploadManager } from '../../../src/vaadin-upload-manager.js';
 

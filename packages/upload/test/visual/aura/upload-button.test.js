@@ -4,6 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
 import '@vaadin/icon/vaadin-icon.js';
 import '@vaadin/icons/vaadin-iconset.js';
+import '../not-animated-styles.js';
 import '../../../vaadin-upload-button.js';
 import { UploadManager } from '../../../src/vaadin-upload-manager.js';
 
