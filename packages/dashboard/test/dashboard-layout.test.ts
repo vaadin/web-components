@@ -18,6 +18,7 @@ import {
   setMaximumColumnWidth,
   setMinimumColumnWidth,
   setMinimumRowHeight,
+  setRowHeight,
   setRowspan,
   setSpacing,
 } from './helpers.js';
@@ -216,6 +217,107 @@ describe('dashboard layout', () => {
       setMinimumRowHeight(dashboard, rowHeight);
       await nextResize(dashboard);
       expect(getRowHeights(dashboard)).to.eql([rowHeight, rowHeight]);
+    });
+  });
+
+  describe('fixed row height', () => {
+    const rowHeight = 100;
+
+    it('should set a fixed row height', async () => {
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(getRowHeights(dashboard)).to.eql([rowHeight]);
+    });
+
+    it('should not grow rows to fit larger content', async () => {
+      childElements[0].style.height = `${rowHeight * 2}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(getRowHeights(dashboard)).to.eql([rowHeight]);
+    });
+
+    it('should use fixed row height for all rows', async () => {
+      dashboard.style.width = `${columnWidth}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextResize(dashboard);
+      expect(getRowHeights(dashboard)).to.eql([rowHeight, rowHeight]);
+    });
+
+    it('should override the minimum row height', async () => {
+      setMinimumRowHeight(dashboard, rowHeight * 3);
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(getRowHeights(dashboard)).to.eql([rowHeight]);
+    });
+
+    it('should allow widget content to use 100% height', async () => {
+      const content = document.createElement('div');
+      content.style.height = '100%';
+      content.id = 'content';
+      childElements[0].appendChild(content);
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(content.offsetHeight).to.eql(rowHeight);
+    });
+
+    it('should fit a multi-row child to its full rowspan including the gap', async () => {
+      // Use a non-zero gap so the cap calculation has to scale with rowspan AND
+      // include the gap between the spanned rows; otherwise the child gets capped
+      // to a single row's height.
+      const gap = 10;
+      setSpacing(dashboard, gap);
+      setRowspan(childElements[0], 2);
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(childElements[0].offsetHeight).to.eql(rowHeight * 2 + gap);
+    });
+
+    it('should fit a 3-row child to its full rowspan including all inter-row gaps', async () => {
+      // With rowspan = N > 2 the cap needs (N - 1) gap terms, not just one.
+      const gap = 10;
+      setSpacing(dashboard, gap);
+      setRowspan(childElements[0], 3);
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(childElements[0].offsetHeight).to.eql(rowHeight * 3 + gap * 2);
+    });
+
+    it('should not grow rows to fit larger content when gap is non-zero', async () => {
+      // The rowspan=1 cap must equal exactly the row-height, with no spurious gap added,
+      // otherwise tall child content can push the track to grow.
+      const gap = 10;
+      setSpacing(dashboard, gap);
+      childElements[0].style.height = `${rowHeight * 2}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(getRowHeights(dashboard)).to.eql([rowHeight]);
+    });
+
+    it('should not let an inline style.height shrink a child below the fixed row height', async () => {
+      // The cap pins children to row-height in both directions: a smaller inline
+      // style.height would otherwise leave empty space inside the cell. max-height
+      // alone only enforces the upper bound; min-height is needed for the lower.
+      childElements[0].style.height = `${rowHeight / 2}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(childElements[0].offsetHeight).to.eql(rowHeight);
+    });
+
+    it('should clamp an inline min-height that exceeds the fixed row height', async () => {
+      childElements[0].style.minHeight = `${rowHeight * 2}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(childElements[0].offsetHeight).to.eql(rowHeight);
+    });
+
+    it('should clamp an inline max-height that exceeds the fixed row height', async () => {
+      // Without !important on the cap's max-height, an inline max-height higher than the
+      // cap wins by specificity and lets the child grow with its content past the cell.
+      childElements[0].style.maxHeight = `${rowHeight * 2}px`;
+      childElements[0].style.height = `${rowHeight * 2}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(childElements[0].offsetHeight).to.eql(rowHeight);
     });
   });
 
@@ -535,6 +637,165 @@ describe('dashboard layout', () => {
 
       expect(childElements[2].offsetHeight).to.eql(300);
       expect(childElements[3].offsetHeight).to.eql(300);
+    });
+
+    it('should use fixed row height for all section sub-rows', async () => {
+      dashboard.style.width = `${columnWidth}px`;
+      setRowHeight(dashboard, 100);
+      await nextResize(dashboard);
+
+      expect(childElements[2].offsetHeight).to.eql(100);
+      expect(childElements[3].offsetHeight).to.eql(100);
+    });
+
+    it('should grow the section to fit all sub-rows with fixed row height', async () => {
+      dashboard.style.width = `${columnWidth}px`;
+      setRowHeight(dashboard, 100);
+      await nextResize(dashboard);
+
+      // Section should be tall enough to contain its header and both sub-rows
+      // (rather than being constrained to a single fixed-height row).
+      expect(section.offsetHeight).to.be.greaterThan(200);
+    });
+
+    it('should cap a widget nested inside a section to the fixed row height', async () => {
+      // The layout's ::slotted(:not(vaadin-dashboard-section)) rule excludes sections,
+      // so --_widget-fixed-height isn't set on the section. In vaadin-dashboard-layout
+      // the section is the direct slotted element (no display:contents wrapper above the
+      // widget to carry the variable through), so the widget host needs its own
+      // --_widget-fixed-height definition to keep the cap working for nested widgets.
+      const rowHeight = 100;
+      const widget = document.createElement('vaadin-dashboard-widget');
+      const tall = document.createElement('div');
+      tall.style.height = `${rowHeight * 2}px`;
+      widget.appendChild(tall);
+      section.appendChild(widget);
+
+      dashboard.style.width = `${columnWidth}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextResize(dashboard);
+
+      expect(widget.offsetHeight).to.eql(rowHeight);
+    });
+
+    it('should cap a non-widget child nested inside a section to the fixed row height', async () => {
+      // Section's ::slotted(*) rule does not apply min/max-height, so non-widget
+      // children currently bypass the cap — tall content pushes the section's sub-row
+      // beyond the fixed row-height.
+      const rowHeight = 100;
+      const tall = document.createElement('div');
+      tall.style.height = `${rowHeight * 2}px`;
+      section.appendChild(tall);
+
+      dashboard.style.width = `${columnWidth}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextResize(dashboard);
+
+      expect(tall.offsetHeight).to.eql(rowHeight);
+    });
+
+    it('should not let an inline style.height shrink a non-widget child inside a section below the fixed row height', async () => {
+      // The section's ::slotted cap pins children to row-height in both directions,
+      // mirroring the layout-side cap. max-height alone allows a smaller inline height
+      // to win and leaves empty space inside the cell — min-height is needed for the lower bound.
+      const rowHeight = 100;
+      const child = document.createElement('div');
+      child.style.height = `${rowHeight / 2}px`;
+      section.appendChild(child);
+
+      dashboard.style.width = `${columnWidth}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextResize(dashboard);
+
+      expect(child.offsetHeight).to.eql(rowHeight);
+    });
+
+    it('should fit a multi-row non-widget child inside a section to its full rowspan including the gap', async () => {
+      // The section's cap calc must scale with --vaadin-dashboard-widget-rowspan and
+      // include (rowspan - 1) inter-row gaps. A constant `row-height + gap` clamps
+      // multi-row children to a single row's worth of height. Widget children are
+      // unaffected because the widget host's own cap wins via shadow-tree precedence,
+      // but non-widget children rely entirely on the section's ::slotted rule.
+      const gap = 10;
+      const rowHeight = 100;
+      setSpacing(dashboard, gap);
+      const child = document.createElement('div');
+      child.style.setProperty('--vaadin-dashboard-widget-rowspan', '2');
+      section.appendChild(child);
+
+      dashboard.style.width = `${columnWidth}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextResize(dashboard);
+
+      expect(child.offsetHeight).to.eql(rowHeight * 2 + gap);
+    });
+
+    it('should fit a 3-row non-widget child inside a section including all inter-row gaps', async () => {
+      // With rowspan = N > 2 the section's cap needs (N - 1) gap terms, not just one.
+      const gap = 10;
+      const rowHeight = 100;
+      setSpacing(dashboard, gap);
+      const child = document.createElement('div');
+      child.style.setProperty('--vaadin-dashboard-widget-rowspan', '3');
+      section.appendChild(child);
+
+      dashboard.style.width = `${columnWidth}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextResize(dashboard);
+
+      expect(child.offsetHeight).to.eql(rowHeight * 3 + gap * 2);
+    });
+
+    it('should not let a non-widget child inside a section grow the section sub-row when gap is non-zero', async () => {
+      // The rowspan=1 cap must equal exactly the row-height with no spurious gap added,
+      // otherwise tall content can push the section's sub-row beyond the fixed row-height.
+      const gap = 10;
+      const rowHeight = 100;
+      setSpacing(dashboard, gap);
+      const child = document.createElement('div');
+      child.style.height = `${rowHeight * 2}px`;
+      section.appendChild(child);
+
+      dashboard.style.width = `${columnWidth}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextResize(dashboard);
+
+      expect(child.offsetHeight).to.eql(rowHeight);
+    });
+
+    it('should let a section nested inside another section grow with its own sub-rows', async () => {
+      // The section's ::slotted cap must exclude vaadin-dashboard-section, mirroring the
+      // layout's exclusion. Otherwise an inner section is clamped to one row's height
+      // and can't wrap its own children.
+      const rowHeight = 100;
+      const innerSection = document.createElement('vaadin-dashboard-section');
+      innerSection.appendChild(document.createElement('div'));
+      innerSection.appendChild(document.createElement('div'));
+      section.appendChild(innerSection);
+
+      dashboard.style.width = `${columnWidth}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextResize(dashboard);
+
+      // Inner section should fit its header plus the two sub-rows; capping it to
+      // a single row's worth of height would leave it ≤ rowHeight.
+      expect(innerSection.offsetHeight).to.be.greaterThan(rowHeight);
+    });
+
+    it('should respect an inline style.height on a section child when no fixed row height is set', async () => {
+      // The section's cap must only apply when a fixed row-height is set. With
+      // `height: var(--_widget-fixed-height) !important`, an invalid calc reduces to
+      // `height: auto !important`, which silently overrides any inline height even
+      // outside the fixed-row-height feature.
+      setMinimumRowHeight(dashboard);
+      const child = document.createElement('div');
+      child.style.height = '200px';
+      section.appendChild(child);
+
+      dashboard.style.width = `${columnWidth}px`;
+      await nextResize(dashboard);
+
+      expect(child.offsetHeight).to.eql(200);
     });
 
     it('should not use minimum row height for section header row', async () => {
