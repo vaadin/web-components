@@ -43,7 +43,7 @@ import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
  * @fires {CustomEvent} grid-dragstart - Fired when starting to drag grid rows.
  * @fires {CustomEvent} grid-dragend - Fired when the dragging of the rows ends.
  * @fires {CustomEvent} grid-drop - Fired when a drop occurs on top of the grid.
- * @fires {CustomEvent} item-property-changed - Fired before exiting the cell edit mode, if the value has been changed.
+ * @fires {CustomEvent} item-property-changed - Fired before exiting cell edit mode if the value has been changed. If the default is prevented, the value change is not applied.
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  *
