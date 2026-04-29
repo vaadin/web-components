@@ -88,4 +88,16 @@ export const ComboBoxScrollToIndexMixin = (superClass) =>
       super._onOpened();
       this.__scrollToPendingIndexIfNeeded();
     }
+
+    /**
+     * Override method from `ComboBoxDataProviderMixin` to flush any pending
+     * `scrollToIndex` call after a data-provider page lands.
+     *
+     * @private
+     * @override
+     */
+    __onDataProviderPageLoaded() {
+      super.__onDataProviderPageLoaded();
+      this.__scrollToPendingIndexIfNeeded();
+    }
   };
