@@ -9,17 +9,17 @@ import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
 export type { UploadFileI18n } from './vaadin-upload-file-mixin.js';
 
 /**
- * Fired when the retry button is pressed.
+ * Fired when the retry button is pressed to request retrying the upload of this file.
  */
 export type UploadFileRetryEvent = CustomEvent<{ file: File }>;
 
 /**
- * Fired when the start button is pressed.
+ * Fired when the start button is pressed to request starting the upload of this file.
  */
 export type UploadFileStartEvent = CustomEvent<{ file: File }>;
 
 /**
- * Fired when the abort button is pressed.
+ * Fired when the abort button is pressed to request aborting the upload of this file.
  */
 export type UploadFileAbortEvent = CustomEvent<{ file: File }>;
 
@@ -97,9 +97,9 @@ export interface UploadFileEventMap extends HTMLElementEventMap, UploadFileCusto
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires {CustomEvent} file-abort - Fired when the abort button is pressed. Listened by `vaadin-upload`, which aborts the upload in progress and removes the file from the list.
- * @fires {CustomEvent} file-retry - Fired when the retry button is pressed. Listened by `vaadin-upload`, which starts a new upload of this file.
- * @fires {CustomEvent} file-start - Fired when the start button is pressed. Listened by `vaadin-upload`, which starts a new upload of this file.
+ * @fires {CustomEvent} file-abort - Fired when the abort button is pressed to request aborting the upload of this file.
+ * @fires {CustomEvent} file-retry - Fired when the retry button is pressed to request retrying the upload of this file.
+ * @fires {CustomEvent} file-start - Fired when the start button is pressed to request starting the upload of this file.
  */
 declare class UploadFile extends UploadFileMixin(ThemableMixin(HTMLElement)) {
   addEventListener<K extends keyof UploadFileEventMap>(
