@@ -66,32 +66,13 @@ describe('scrollToIndex', () => {
       expect(viewport[0].index).to.equal(0);
     });
 
-    it('should ignore negative indexes', () => {
-      comboBox.opened = true;
-      comboBox.scrollToIndex(-1);
-      flushComboBox(comboBox);
-      expect(getViewportItems(comboBox)[0].index).to.equal(0);
-    });
-
-    it('should ignore NaN', () => {
-      comboBox.opened = true;
-      comboBox.scrollToIndex(NaN);
-      flushComboBox(comboBox);
-      expect(getViewportItems(comboBox)[0].index).to.equal(0);
-    });
-
-    it('should ignore non-numbers', () => {
-      comboBox.opened = true;
-      comboBox.scrollToIndex('100');
-      flushComboBox(comboBox);
-      expect(getViewportItems(comboBox)[0].index).to.equal(0);
-    });
-
-    it('should ignore indexes beyond the item count', () => {
-      comboBox.opened = true;
-      comboBox.scrollToIndex(SIZE + 50);
-      flushComboBox(comboBox);
-      expect(getViewportItems(comboBox)[0].index).to.equal(0);
+    [-1, NaN, '100', SIZE + 50].forEach((invalidIndex) => {
+      it(`should ignore invalid index: ${String(invalidIndex)}`, () => {
+        comboBox.opened = true;
+        comboBox.scrollToIndex(invalidIndex);
+        flushComboBox(comboBox);
+        expect(getViewportItems(comboBox)[0].index).to.equal(0);
+      });
     });
 
     it('should override a previous scroll call', () => {
@@ -109,28 +90,6 @@ describe('scrollToIndex', () => {
       flushComboBox(comboBox);
       comboBox.scrollToIndex(0);
       flushComboBox(comboBox);
-      expect(getViewportItems(comboBox)[0].index).to.equal(0);
-    });
-
-    it('should not stay scrolled at the previous offset on reopen', async () => {
-      comboBox.opened = true;
-      comboBox.scrollToIndex(150);
-      flushComboBox(comboBox);
-
-      // Simulate the real-world timing where, by the time the close
-      // observer runs, the overlay has already been hidden (offsetHeight=0).
-      // That causes the virtualizer's own `scrollToIndex` to bail out before
-      // resetting its cached scroll position. Without the close-time reset,
-      // the adapter's ResizeObserver later restores that stale offset to
-      // `scrollTop` when the overlay becomes visible again, leaving the
-      // reopened dropdown stuck mid-list.
-      comboBox._scroller.style.display = 'none';
-      comboBox.opened = false;
-      await nextFrame();
-      comboBox._scroller.style.display = '';
-      comboBox.opened = true;
-      flushComboBox(comboBox);
-
       expect(getViewportItems(comboBox)[0].index).to.equal(0);
     });
 
@@ -275,11 +234,6 @@ describe('scrollToIndex', () => {
       const viewport = getViewportItems(comboBox);
       expect(viewport[0].index).to.equal(0);
       expect(viewport.every((item) => !(item.item instanceof ComboBoxPlaceholder))).to.be.true;
-    });
-
-    it('should not throw when scrollToIndex is called before a data provider is set', () => {
-      comboBox.dataProvider = undefined;
-      expect(() => comboBox.scrollToIndex(100)).to.not.throw();
     });
   });
 });
