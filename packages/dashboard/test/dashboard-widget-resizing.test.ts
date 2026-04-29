@@ -295,7 +295,7 @@ describe('dashboard - widget resizing', () => {
     });
 
     it('should resize vertically if fixed row height is defined without minimum row height', async () => {
-      setMinimumRowHeight(dashboard, undefined);
+      setMinimumRowHeight(dashboard);
       setRowHeight(dashboard, rowHeight);
       dashboard.items = [{ id: 0 }, { id: 1 }, { id: 2 }];
       await nextFrame();

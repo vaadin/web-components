@@ -293,7 +293,7 @@ describe('dashboard', () => {
       dashboard.renderer = (root, _, model) => {
         root.textContent = '';
         const widget = document.createElement('vaadin-dashboard-widget');
-        widget.id = (model.item as TestDashboardItem).id;
+        widget.id = model.item.id;
         const tall = document.createElement('div');
         tall.style.height = `${rowHeight * 2}px`;
         widget.appendChild(tall);
@@ -317,7 +317,7 @@ describe('dashboard', () => {
       dashboard.renderer = (root, _, model) => {
         root.textContent = '';
         const widget = document.createElement('vaadin-dashboard-widget');
-        widget.id = (model.item as TestDashboardItem).id;
+        widget.id = model.item.id;
         widget.style.height = `${rowHeight * 2}px`;
         root.appendChild(widget);
       };
@@ -339,7 +339,7 @@ describe('dashboard', () => {
       dashboard.renderer = (root, _, model) => {
         root.textContent = '';
         const widget = document.createElement('vaadin-dashboard-widget');
-        widget.id = (model.item as TestDashboardItem).id;
+        widget.id = model.item.id;
         widget.style.height = `${rowHeight / 2}px`;
         root.appendChild(widget);
       };
@@ -361,7 +361,7 @@ describe('dashboard', () => {
       dashboard.renderer = (root, _, model) => {
         root.textContent = '';
         const widget = document.createElement('vaadin-dashboard-widget');
-        widget.id = (model.item as TestDashboardItem).id;
+        widget.id = model.item.id;
         widget.style.height = '200px';
         root.appendChild(widget);
       };
@@ -396,7 +396,7 @@ describe('dashboard', () => {
       dashboard.renderer = (root, _, model) => {
         root.textContent = '';
         const widget = document.createElement('vaadin-dashboard-widget');
-        widget.id = (model.item as TestDashboardItem).id;
+        widget.id = model.item.id;
         const tall = document.createElement('div');
         tall.style.height = `${rowHeight * 2}px`;
         widget.appendChild(tall);
@@ -422,7 +422,7 @@ describe('dashboard', () => {
       dashboard.renderer = (root, _, model) => {
         root.textContent = '';
         const widget = document.createElement('vaadin-dashboard-widget');
-        widget.id = (model.item as TestDashboardItem).id;
+        widget.id = model.item.id;
         const tall = document.createElement('div');
         tall.style.height = `${rowHeight * 2}px`;
         widget.appendChild(tall);

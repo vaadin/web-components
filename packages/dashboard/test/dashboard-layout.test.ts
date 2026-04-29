@@ -787,7 +787,7 @@ describe('dashboard layout', () => {
       // `height: var(--_widget-fixed-height) !important`, an invalid calc reduces to
       // `height: auto !important`, which silently overrides any inline height even
       // outside the fixed-row-height feature.
-      setMinimumRowHeight(dashboard, undefined);
+      setMinimumRowHeight(dashboard);
       const child = document.createElement('div');
       child.style.height = '200px';
       section.appendChild(child);
