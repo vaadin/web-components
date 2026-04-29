@@ -10,3 +10,13 @@ registerStyles(
     }
   `,
 );
+
+registerStyles(
+  'vaadin-tabs',
+  css`
+    [part='forward-button'],
+    [part='back-button'] {
+      transition: none !important;
+    }
+  `,
+);
