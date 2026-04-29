@@ -19,10 +19,11 @@ export const ItemsMixin = (superClass) =>
          * @property {string} text - Text to be set as the menu item component's textContent
          * @property {string} tooltip - Text to be set as the menu item's tooltip.
          * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-context-menu>`.
-         * @property {string} tooltipPosition - Position of the item's tooltip relative to the item
-         * (e.g. `end`, `top`, `bottom-start`). Defaults to `start` for items with a sub-menu
-         * (to avoid overlap with the opening sub-menu) and to `end` otherwise. Disabled items
-         * also default to `end` because their sub-menus cannot be opened.
+         * @property {string} tooltipPosition - Position of the item's tooltip relative to the
+         * item (e.g. `end`, `top`, `bottom-start`). Items with a sub-menu default to `start`
+         * to avoid overlap with the opening sub-menu; all other items, including disabled
+         * ones (whose sub-menus cannot be opened), default to `end`. If the slotted
+         * `<vaadin-tooltip>` has its `position` property set, that value is used instead.
          * @property {string | HTMLElement} component - The component to represent the item.
          * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected

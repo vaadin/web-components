@@ -24,8 +24,9 @@ export type MenuBarItem<TItemData extends object = object> = {
   tooltip?: string;
   /**
    * Position of the button's tooltip relative to the button
-   * (e.g. `bottom`, `top-start`). Falls back to the position set on the
-   * `<vaadin-tooltip>` element when omitted.
+   * (e.g. `bottom`, `top-start`). Defaults to `bottom`. If the slotted
+   * `<vaadin-tooltip>` has its `position` property set, that value is
+   * used instead.
    */
   tooltipPosition?: string;
   /**
@@ -61,9 +62,10 @@ export type SubMenuItem<TItemData extends object = object> = {
   tooltip?: string;
   /**
    * Position of the item's tooltip relative to the item
-   * (e.g. `end`, `top`, `bottom-start`). Defaults to `start` for items with a sub-menu
-   * (to avoid overlap with the opening sub-menu) and to `end` otherwise. Disabled items
-   * also default to `end` because their sub-menus cannot be opened.
+   * (e.g. `end`, `top`, `bottom-start`). Items with a sub-menu default to `start` to
+   * avoid overlap with the opening sub-menu; all other items, including disabled ones
+   * (whose sub-menus cannot be opened), default to `end`. If the slotted
+   * `<vaadin-tooltip>` has its `position` property set, that value is used instead.
    */
   tooltipPosition?: string;
   component?: HTMLElement | string;
