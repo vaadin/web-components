@@ -77,9 +77,9 @@ import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires {CustomEvent} file-abort - Fired when the abort button is pressed. Listened by `vaadin-upload`, which aborts the upload in progress and removes the file from the list.
- * @fires {CustomEvent} file-retry - Fired when the retry button is pressed. Listened by `vaadin-upload`, which starts a new upload of this file.
- * @fires {CustomEvent} file-start - Fired when the start button is pressed. Listened by `vaadin-upload`, which starts a new upload of this file.
+ * @fires {CustomEvent} file-abort - Fired when the abort button is pressed to request aborting the upload of this file.
+ * @fires {CustomEvent} file-retry - Fired when the retry button is pressed to request retrying the upload of this file.
+ * @fires {CustomEvent} file-start - Fired when the start button is pressed to request starting the upload of this file.
  *
  * @customElement vaadin-upload-file
  * @extends HTMLElement
@@ -159,8 +159,8 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LumoInjectio
   }
 
   /**
-   * Fired when the retry button is pressed. It is listened by `vaadin-upload`
-   * which will start a new upload process of this file.
+   * Fired when the retry button is pressed to request retrying the upload
+   * of this file.
    *
    * @event file-retry
    * @param {Object} detail
@@ -168,8 +168,8 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LumoInjectio
    */
 
   /**
-   * Fired when the start button is pressed. It is listened by `vaadin-upload`
-   * which will start a new upload process of this file.
+   * Fired when the start button is pressed to request starting the upload
+   * of this file.
    *
    * @event file-start
    * @param {Object} detail
@@ -177,8 +177,8 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LumoInjectio
    */
 
   /**
-   * Fired when abort button is pressed. It is listened by `vaadin-upload` which
-   * will abort the upload in progress, and then remove the file from the list.
+   * Fired when the abort button is pressed to request aborting the upload
+   * of this file.
    *
    * @event file-abort
    * @param {Object} detail
