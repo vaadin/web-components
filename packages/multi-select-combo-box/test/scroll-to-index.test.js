@@ -1,6 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-multi-select-combo-box.js';
+import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
+import { flushComboBox, getViewportItems } from './helpers.js';
 
 describe('scrollToIndex', () => {
   let comboBox;
@@ -18,20 +20,24 @@ describe('scrollToIndex', () => {
       comboBox.items = Array.from({ length: SIZE }, (_, i) => `item ${i}`);
     });
 
-    it('should set the focused index to the given index when opened', () => {
+    it('should scroll to the item at the given index when opened', () => {
       comboBox.opened = true;
       comboBox.scrollToIndex(100);
-      expect(comboBox._focusedIndex).to.equal(100);
+      flushComboBox(comboBox);
+      const viewport = getViewportItems(comboBox);
+      expect(viewport.map((item) => item.index)).to.include(100);
     });
 
     it('should queue the scroll when called before opening', async () => {
       comboBox.scrollToIndex(100);
-      expect(comboBox._focusedIndex).to.equal(-1);
+      expect(comboBox.__scrollToPendingIndex).to.equal(100);
 
       comboBox.opened = true;
-      await nextRender();
+      await nextFrame();
+      flushComboBox(comboBox);
 
-      expect(comboBox._focusedIndex).to.equal(100);
+      const viewport = getViewportItems(comboBox);
+      expect(viewport.map((item) => item.index)).to.include(100);
     });
 
     it('should clear pending scroll when filter changes', () => {
@@ -40,22 +46,13 @@ describe('scrollToIndex', () => {
       expect(comboBox.__scrollToPendingIndex).to.be.undefined;
     });
 
-    it('should ignore negative indexes', () => {
-      comboBox.opened = true;
-      comboBox.scrollToIndex(-1);
-      expect(comboBox._focusedIndex).to.equal(-1);
-    });
-
-    it('should ignore NaN', () => {
-      comboBox.opened = true;
-      comboBox.scrollToIndex(NaN);
-      expect(comboBox._focusedIndex).to.equal(-1);
-    });
-
-    it('should ignore indexes beyond the item count', () => {
-      comboBox.opened = true;
-      comboBox.scrollToIndex(SIZE + 50);
-      expect(comboBox._focusedIndex).to.equal(-1);
+    [-1, NaN, SIZE + 50].forEach((invalidIndex) => {
+      it(`should ignore invalid index: ${String(invalidIndex)}`, () => {
+        comboBox.opened = true;
+        comboBox.scrollToIndex(invalidIndex);
+        flushComboBox(comboBox);
+        expect(getViewportItems(comboBox)[0].index).to.equal(0);
+      });
     });
   });
 
@@ -92,13 +89,17 @@ describe('scrollToIndex', () => {
 
     it('should queue the scroll while the first page is loading', async () => {
       comboBox.opened = true;
+      // Target is in the first page (pageSize=50) so the scroll can settle
+      // as soon as that page lands.
       comboBox.scrollToIndex(30);
       expect(comboBox.__scrollToPendingIndex).to.equal(30);
 
       flushPendingCallbacks();
       await nextFrame();
+      flushComboBox(comboBox);
 
-      expect(comboBox._focusedIndex).to.equal(30);
+      const viewport = getViewportItems(comboBox);
+      expect(viewport.some((item) => item.index === 30 && !(item.item instanceof ComboBoxPlaceholder))).to.be.true;
     });
   });
 });
