@@ -17,6 +17,7 @@ const blacklistedPackages = [
   /^icons/u,
   /^input-container/u,
   /^lit-renderer/u,
+  /^overlay/u,
   /^aura/u,
 ];
 
@@ -40,27 +41,61 @@ function getRelevantPackages() {
   return allPackages.filter((pkg) => !blacklistedPackages.some((blacklistedPackage) => pkg.match(blacklistedPackage)));
 }
 
-function loadAnalysis() {
-  const analysisPath = path.resolve('./analysis.json');
+/**
+ * Loads the custom-elements.json manifest for a specific package.
+ * Returns null only when the manifest file does not exist; other failures
+ * (e.g., corrupt JSON) are rethrown so they fail the build loudly.
+ * @param {string} packageName - The package name (e.g., 'button')
+ * @returns {object|null} - The manifest object, or null if not found
+ */
+function loadCustomElementsManifest(packageName) {
+  const manifestPath = path.resolve(`./packages/${packageName}/custom-elements.json`);
   try {
-    return JSON.parse(fs.readFileSync(analysisPath, 'utf8'));
-  } catch (_) {
-    throw new Error(
-      `Could not read output of the Polymer Analyzer from: ${analysisPath}. Make sure to run the Polymer Analyzer before generating web-types.`,
-    );
+    return JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return null;
+    }
+    throw error;
   }
+}
+
+/**
+ * Extracts custom element class declarations from a CEM manifest.
+ * @param {object} manifest - The custom-elements.json manifest
+ * @returns {object[]} - Array of element declarations with tagName
+ */
+function getElementsFromManifest(manifest) {
+  return manifest.modules.flatMap((module) =>
+    (module.declarations || []).filter((decl) => decl.kind === 'class' && decl.tagName),
+  );
+}
+
+/**
+ * Extracts the type string from a CEM type object or string.
+ * CEM uses `{ text: "boolean" }` format, while older formats use plain strings.
+ * @param {object|string} type - The type object or string
+ * @returns {string} - The type string
+ */
+function getTypeText(type) {
+  if (!type) return '';
+  return typeof type === 'object' ? type.text || '' : type;
 }
 
 /**
  * Maps a type string such as `'boolean | null | undefined'` into an array of type
  * strings, such as `['boolean', 'null', 'undefined']`
- * @param typeString
+ * @param {object|string} type - The type object or string
  * @returns {string[]}
  */
-function mapType(typeString) {
-  const sanitizedTypeString = (typeString || '').replace(/[!()]/gu, '');
+function mapType(type) {
+  const typeString = getTypeText(type);
+  // Closure's `function(X): Y` needs a space between `function` and `X` after
+  // the parens are stripped, so rewrite `(` as a space. `!` (non-null) and `)`
+  // are dropped; consecutive spaces from the rewrite are collapsed.
+  const sanitizedTypeString = typeString.replace(/[!)]/gu, '').replace(/\(/gu, ' ').replace(/ {2,}/gu, ' ');
   const types = sanitizedTypeString.split('|');
-  return types.map((type) => type.trim());
+  return types.map((t) => t.trim());
 }
 
 /**
@@ -84,65 +119,78 @@ function transformDescription(packageJson, description) {
   return description;
 }
 
-function camelize(text) {
-  return text.replace(/-./gu, (x) => x[1].toUpperCase());
+// Primitive types that can be set via HTML attributes
+const primitiveTypePattern =
+  /^(string|number|boolean|null|undefined)(\s*\|\s*(string|number|boolean|null|undefined))*$/iu;
+
+/**
+ * Checks if an attribute is a writable primitive attribute.
+ * In CEM, attributes are already filtered to public ones, and we check for primitive types.
+ * @param {object} attribute - The attribute object
+ * @returns {boolean}
+ */
+function isWritablePrimitiveAttribute(attribute) {
+  return primitiveTypePattern.test(getTypeText(attribute.type));
 }
 
-function isWritablePrimitiveAttribute(elementAnalysis, attribute) {
-  // Attributes do not have metadata, so we need to look at the corresponding
-  // property
-  const propertyName = camelize(attribute.name);
-  const matchingProperty = elementAnalysis.properties.find((property) => property.name === propertyName);
-  // If we can not find the property, just include the attribute rather than exclude
-  if (!matchingProperty) {
-    return true;
-  }
-  const isWritable = !matchingProperty.metadata.polymer.readOnly;
-  const hasPrimitiveType =
-    !matchingProperty.metadata.polymer.attributeType ||
-    ['String', 'Number', 'Boolean'].includes(matchingProperty.metadata.polymer.attributeType);
-
-  return isWritable && hasPrimitiveType;
+/**
+ * Gets public field members from a CEM element declaration, including
+ * readonly ones. CEM already filters to public members based on config.
+ * @param {object} elementDeclaration - The element declaration from CEM
+ * @returns {object[]}
+ */
+function getPublicProperties(elementDeclaration) {
+  const members = elementDeclaration.members || [];
+  // Members without explicit privacy are treated as public (private/protected
+  // are already filtered out by the CEM config).
+  return members.filter(
+    (member) => member.kind === 'field' && member.privacy !== 'private' && member.privacy !== 'protected',
+  );
 }
 
-function getPublicWritableProperties(elementAnalysis) {
-  return elementAnalysis.properties
-    .filter((prop) => prop.privacy === 'public')
-    .filter((prop) => !prop.metadata.polymer.readOnly);
+/**
+ * Same as getPublicProperties but drops readonly members. Used for Lit
+ * bindings, where setting a read-only property is not meaningful.
+ * @param {object} elementDeclaration
+ * @returns {object[]}
+ */
+function getPublicWritableProperties(elementDeclaration) {
+  return getPublicProperties(elementDeclaration).filter((member) => !member.readonly);
 }
 
-function createPlainElementDefinition(packageJson, elementAnalysis) {
-  const attributes = [...elementAnalysis.attributes, ...additionalAttributes]
-    .filter((attribute) => isWritablePrimitiveAttribute(elementAnalysis, attribute))
+function createPlainElementDefinition(packageJson, elementDeclaration) {
+  const elementAttributes = elementDeclaration.attributes || [];
+  const attributes = [...elementAttributes, ...additionalAttributes]
+    .filter((attribute) => isWritablePrimitiveAttribute(attribute))
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((attribute) => ({
       name: attribute.name,
-      description: transformDescription(packageJson, attribute.description),
+      description: transformDescription(packageJson, attribute.description || ''),
       value: {
         type: mapType(attribute.type),
       },
     }));
 
-  const properties = getPublicWritableProperties(elementAnalysis)
+  const properties = getPublicProperties(elementDeclaration)
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((prop) => ({
       name: prop.name,
-      description: transformDescription(packageJson, prop.description),
+      description: transformDescription(packageJson, prop.description || ''),
       value: {
         type: mapType(prop.type),
       },
     }));
 
-  const events = [...elementAnalysis.events]
+  const events = (elementDeclaration.events || [])
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((event) => ({
       name: event.name,
-      description: transformDescription(packageJson, event.description),
+      description: transformDescription(packageJson, event.description || ''),
     }));
 
   return {
-    name: elementAnalysis.tagname,
-    description: transformDescription(packageJson, elementAnalysis.description),
+    name: elementDeclaration.tagName,
+    description: transformDescription(packageJson, elementDeclaration.description || ''),
     attributes,
     js: {
       properties,
@@ -159,61 +207,46 @@ function createPlainWebTypes(packageJson, packageElements) {
     'description-markup': 'markdown',
     contributions: {
       html: {
-        elements: packageElements.map((elementAnalysis) => createPlainElementDefinition(packageJson, elementAnalysis)),
+        elements: packageElements.map((elementDeclaration) =>
+          createPlainElementDefinition(packageJson, elementDeclaration),
+        ),
       },
     },
   };
 }
 
-function createLitElementDefinition(packageJson, elementAnalysis) {
-  const publicProperties = getPublicWritableProperties(elementAnalysis);
-  const booleanAttributes = publicProperties
-    .filter((prop) => prop.type.includes('boolean'))
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map((prop) => ({
-      name: `?${prop.name}`,
-      description: transformDescription(packageJson, prop.description),
-      value: {
-        // Type checking does not work with template tagged literals
-        // Since this Lit binding should use an expression, just declare it as such
-        kind: 'expression',
-      },
-    }));
+function createLitElementDefinition(packageJson, elementDeclaration) {
+  function toLitAttribute(name, description) {
+    return {
+      name,
+      description: transformDescription(packageJson, description || ''),
+      // Type checking does not work with template tagged literals.
+      // Since this Lit binding should use an expression, just declare it as such.
+      value: { kind: 'expression' },
+    };
+  }
 
-  const propertyAttributes = publicProperties
-    .filter((prop) => !prop.type.includes('boolean'))
+  const publicProperties = getPublicWritableProperties(elementDeclaration);
+  const propertyBindings = publicProperties
     .sort((a, b) => a.name.localeCompare(b.name))
-    .map((prop) => ({
-      name: `.${prop.name}`,
-      description: transformDescription(packageJson, prop.description),
-      value: {
-        // Type checking does not work with template tagged literals
-        // Since this Lit binding should use an expression, just declare it as such
-        kind: 'expression',
-      },
-    }));
+    .map((prop) => {
+      const prefix = mapType(prop.type).includes('boolean') ? '?' : '.';
+      return toLitAttribute(`${prefix}${prop.name}`, prop.description);
+    });
 
-  const eventAttributes = [...elementAnalysis.events]
+  const eventBindings = (elementDeclaration.events || [])
     .sort((a, b) => a.name.localeCompare(b.name))
-    .map((event) => ({
-      name: `@${event.name}`,
-      description: transformDescription(packageJson, event.description),
-      value: {
-        // Type checking does not work with template tagged literals
-        // Since this Lit binding should use an expression, just declare it as such
-        kind: 'expression',
-      },
-    }));
+    .map((event) => toLitAttribute(`@${event.name}`, event.description));
 
   return {
-    name: elementAnalysis.tagname,
-    description: transformDescription(packageJson, elementAnalysis.description),
+    name: elementDeclaration.tagName,
+    description: transformDescription(packageJson, elementDeclaration.description || ''),
     // Declare as extension to plain web type, this also means we don't have to
     // repeat the same stuff from the plain web-types.json again
     extension: true,
     // IntelliJ does not understand Lit template syntax, so
     // effectively everything has to be declared as attribute
-    attributes: [...booleanAttributes, ...propertyAttributes, ...eventAttributes],
+    attributes: [...propertyBindings, ...eventBindings],
   };
 }
 
@@ -231,7 +264,9 @@ function createLitWebTypes(packageJson, packageElements) {
     },
     contributions: {
       html: {
-        elements: packageElements.map((elementAnalysis) => createLitElementDefinition(packageJson, elementAnalysis)),
+        elements: packageElements.map((elementDeclaration) =>
+          createLitElementDefinition(packageJson, elementDeclaration),
+        ),
       },
     },
   };
@@ -248,13 +283,16 @@ function createLitWebTypes(packageJson, packageElements) {
  */
 function buildWebTypes() {
   const packages = getRelevantPackages();
-  const analysis = loadAnalysis();
 
   packages.forEach((packageName) => {
+    const manifest = loadCustomElementsManifest(packageName);
+    if (!manifest) {
+      console.warn(`No custom-elements.json found for package: ${packageName}`);
+      return;
+    }
+
     const packageJson = JSON.parse(fs.readFileSync(`./packages/${packageName}/package.json`, 'utf8'));
-    const packageElements = analysis.elements
-      .filter((el) => el.path.startsWith(`packages/${packageName}/`))
-      .filter((el) => el.privacy === 'public');
+    const packageElements = getElementsFromManifest(manifest);
 
     const plainWebTypes = createPlainWebTypes(packageJson, packageElements);
     const plainWebTypesJson = JSON.stringify(plainWebTypes, null, 2);
