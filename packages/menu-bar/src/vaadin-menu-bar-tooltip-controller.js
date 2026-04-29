@@ -24,8 +24,9 @@ export class MenuBarTooltipController extends MenuTooltipController {
     }
 
     if (target.matches('vaadin-menu-bar-item')) {
-      const { children } = this._getItem(target);
-      return children && children.length > 0 ? 'start' : 'end';
+      const item = this._getItem(target);
+      const hasOpenableSubMenu = item.children && item.children.length > 0 && !item.disabled;
+      return hasOpenableSubMenu ? 'start' : 'end';
     }
   }
 }
