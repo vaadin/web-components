@@ -24,6 +24,7 @@ import type { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-pro
 import type { ComboBoxItemsMixinClass } from './vaadin-combo-box-items-mixin.js';
 import type { ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
 import type { ComboBoxDefaultItem } from './vaadin-combo-box-mixin.js';
+import type { ComboBoxScrollToIndexMixinClass } from './vaadin-combo-box-scroll-to-index-mixin.js';
 
 export {
   ComboBoxDataProvider,
@@ -245,6 +246,7 @@ interface ComboBox<TItem = ComboBoxDefaultItem>
     ComboBoxDataProviderMixinClass<TItem>,
     ComboBoxItemsMixinClass<TItem>,
     ComboBoxMixinClass<TItem>,
+    ComboBoxScrollToIndexMixinClass,
     ComboBoxBaseMixinClass,
     ValidateMixinClass,
     PatternMixinClass,

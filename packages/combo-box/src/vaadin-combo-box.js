@@ -23,6 +23,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { comboBoxStyles } from './styles/vaadin-combo-box-base-styles.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
+import { ComboBoxScrollToIndexMixin } from './vaadin-combo-box-scroll-to-index-mixin.js';
 
 /**
  * `<vaadin-combo-box>` is a web component for choosing a value from a filterable list of options
@@ -166,10 +167,13 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  * @mixes PatternMixin
  * @mixes ComboBoxDataProviderMixin
  * @mixes ComboBoxMixin
+ * @mixes ComboBoxScrollToIndexMixin
  */
-class ComboBox extends ComboBoxDataProviderMixin(
-  ComboBoxMixin(
-    PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
+class ComboBox extends ComboBoxScrollToIndexMixin(
+  ComboBoxDataProviderMixin(
+    ComboBoxMixin(
+      PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
+    ),
   ),
 ) {
   static get is() {
