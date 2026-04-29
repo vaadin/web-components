@@ -5,6 +5,7 @@ import '@vaadin/vaadin-lumo-styles/components/grid.css';
 import '@vaadin/vaadin-lumo-styles/components/grid-selection-column.css';
 import '@vaadin/vaadin-lumo-styles/components/grid-sort-column.css';
 import '@vaadin/vaadin-lumo-styles/components/grid-tree-column.css';
+import '../not-animated-styles.js';
 import '../../../vaadin-grid.js';
 import '../../../vaadin-grid-column-group.js';
 import '../../../vaadin-grid-selection-column.js';

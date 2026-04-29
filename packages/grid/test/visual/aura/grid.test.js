@@ -1,6 +1,7 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
+import '../not-animated-styles.js';
 import '../../../vaadin-grid.js';
 import { flushGrid } from '../../helpers.js';
 import { users } from '../users.js';
