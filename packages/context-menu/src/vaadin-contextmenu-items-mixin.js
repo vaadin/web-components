@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 
 /**
@@ -16,6 +17,13 @@ export const ItemsMixin = (superClass) =>
          * @typedef ContextMenuItem
          * @type {object}
          * @property {string} text - Text to be set as the menu item component's textContent
+         * @property {string} tooltip - Text to be set as the menu item's tooltip.
+         * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-context-menu>`.
+         * @property {string} tooltipPosition - Position of the item's tooltip relative to the
+         * item (e.g. `end`, `top`, `bottom-start`). Items with a sub-menu default to `start`
+         * to avoid overlap with the opening sub-menu; all other items, including disabled
+         * ones (whose sub-menus cannot be opened), default to `end`. If the slotted
+         * `<vaadin-tooltip>` has its `position` property set, that value is used instead.
          * @property {string | HTMLElement} component - The component to represent the item.
          * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected
@@ -52,6 +60,18 @@ export const ItemsMixin = (superClass) =>
          *   },
          *   { text: 'Menu Item 3', disabled: true, className: 'last' }
          * ];
+         * ```
+         *
+         * #### Item tooltips
+         *
+         * Menu items can have tooltips that are shown on hover and keyboard
+         * focus. To enable them, add a slotted `<vaadin-tooltip>` element
+         * and set the `tooltip` property on each item that should have one:
+         *
+         * ```html
+         * <vaadin-context-menu>
+         *   <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
+         * </vaadin-context-menu>
          * ```
          *
          * @type {!Array<!ContextMenuItem> | undefined}
@@ -105,6 +125,7 @@ export const ItemsMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
       document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener);
+      this._tooltipController.setTarget(null);
     }
 
     /**
@@ -264,6 +285,31 @@ export const ItemsMixin = (superClass) =>
         }
 
         this.__showSubMenu(event);
+
+        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
+        this._tooltipController.setTarget(itemElement);
+        this._tooltipController.open({ trigger: 'hover' });
+      });
+
+      overlay.addEventListener('mouseleave', (event) => {
+        // Ignore events from the submenus
+        if (event.composedPath().includes(this._subMenu)) {
+          return;
+        }
+
+        this._tooltipController.close();
+      });
+
+      overlay.addEventListener('focusin', (event) => {
+        // Ignore events from the submenus
+        // Ignore non-keyboard focus changes (e.g. clicks).
+        if (event.composedPath().includes(this._subMenu) || !isKeyboardActive()) {
+          return;
+        }
+
+        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
+        this._tooltipController.setTarget(itemElement);
+        this._tooltipController.open({ trigger: 'focus' });
       });
 
       overlay.addEventListener('keydown', (event) => {
@@ -299,6 +345,12 @@ export const ItemsMixin = (superClass) =>
     /** @private */
     __initSubMenu() {
       const subMenu = document.createElement(this.constructor.is);
+
+      // Share the tooltip controller with the sub-menu so the user's
+      // slotted `<vaadin-tooltip>` (which lives on the outer host) is
+      // reused for sub-menu items. Without this, the sub-menu would
+      // create its own controller that finds no slotted tooltip.
+      subMenu._tooltipController = this._tooltipController;
 
       subMenu._modeless = true;
       subMenu.openOn = 'opensubmenu';

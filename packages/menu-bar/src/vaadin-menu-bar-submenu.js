@@ -55,6 +55,13 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
     this.openOn = 'opensubmenu';
   }
 
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._tooltipController = this.parentElement._tooltipController;
+  }
+
   /**
    * Tag name prefix used by overlay, list-box and items.
    * @protected
@@ -86,6 +93,8 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
         <slot name="overlay"></slot>
         <slot name="submenu" slot="submenu"></slot>
       </vaadin-menu-bar-overlay>
+
+      <slot name="tooltip"></slot>
     `;
   }
 

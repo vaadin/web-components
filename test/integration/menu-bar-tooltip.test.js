@@ -421,4 +421,188 @@ describe('menu-bar with tooltip', () => {
       expect(tooltip.textContent).to.equal('');
     });
   });
+
+  describe('sub-menu items', () => {
+    let tooltipOverlay, tooltipContent, subMenu;
+
+    function getSubMenuItems() {
+      return [...subMenu.querySelectorAll('vaadin-menu-bar-item')];
+    }
+
+    beforeEach(async () => {
+      menuBar = fixtureSync(`
+        <vaadin-menu-bar>
+          <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
+        </vaadin-menu-bar>
+      `);
+      menuBar.items = [
+        {
+          text: 'Item 0',
+          children: [
+            { text: 'SubItem 0', tooltip: 'Sub tooltip 0' },
+            { text: 'SubItem 1' },
+            { text: 'SubItem 2', disabled: true, tooltip: 'Disabled sub tooltip' },
+          ],
+        },
+      ];
+      await nextRender();
+      tooltip = menuBar.querySelector('vaadin-tooltip');
+      tooltipOverlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+      tooltipContent = tooltip.querySelector('[slot="overlay"]');
+      buttons = menuBar._buttons;
+      subMenu = menuBar._subMenu;
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('should share the tooltip controller with the sub-menu', () => {
+      expect(subMenu._tooltipController).to.equal(menuBar._tooltipController);
+    });
+
+    it('should show tooltip on sub-menu item hover', async () => {
+      await sendMouseToElement({ type: 'click', element: buttons[0] });
+      await nextRender();
+
+      const items = getSubMenuItems();
+      await sendMouseToElement({ type: 'move', element: items[0] });
+      await nextRender();
+
+      expect(tooltipOverlay.opened).to.be.true;
+      expect(tooltipContent.textContent.trim()).to.equal('Sub tooltip 0');
+    });
+
+    it('should not show tooltip on sub-menu item without a tooltip', async () => {
+      await sendMouseToElement({ type: 'click', element: buttons[0] });
+      await nextRender();
+
+      const items = getSubMenuItems();
+      await sendMouseToElement({ type: 'move', element: items[1] });
+      await nextRender();
+
+      expect(tooltipOverlay.opened).to.be.not.ok;
+    });
+
+    it('should show tooltip on sub-menu item keyboard focus', async () => {
+      buttons[0].focus();
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      expect(tooltipOverlay.opened).to.be.true;
+      expect(tooltipContent.textContent.trim()).to.equal('Sub tooltip 0');
+    });
+
+    it('should hide tooltip when sub-menu closes', async () => {
+      await sendMouseToElement({ type: 'click', element: buttons[0] });
+      await nextRender();
+
+      const items = getSubMenuItems();
+      await sendMouseToElement({ type: 'move', element: items[0] });
+      await nextRender();
+      expect(tooltipOverlay.opened).to.be.true;
+
+      subMenu.close();
+      await nextRender();
+      expect(tooltipOverlay.opened).to.be.not.ok;
+    });
+
+    it('should hide tooltip when mouse leaves the sub-menu list box', async () => {
+      await sendMouseToElement({ type: 'click', element: buttons[0] });
+      await nextRender();
+
+      const items = getSubMenuItems();
+      await sendMouseToElement({ type: 'move', element: items[0] });
+      await nextRender();
+      expect(tooltipOverlay.opened).to.be.true;
+
+      fire(subMenu._listBox, 'mouseleave');
+      await nextRender();
+      expect(tooltipOverlay.opened).to.be.not.ok;
+    });
+
+    it('should default tooltip position to end for sub-menu items without children', async () => {
+      await sendMouseToElement({ type: 'click', element: buttons[0] });
+      await nextRender();
+
+      const items = getSubMenuItems();
+      await sendMouseToElement({ type: 'move', element: items[0] });
+      await nextRender();
+      expect(tooltipOverlay.position).to.equal('end');
+    });
+
+    it('should respect the position set on the tooltip element for sub-menu items', async () => {
+      tooltip.position = 'top';
+
+      await sendMouseToElement({ type: 'click', element: buttons[0] });
+      await nextRender();
+
+      const items = getSubMenuItems();
+      await sendMouseToElement({ type: 'move', element: items[0] });
+      await nextRender();
+      expect(tooltipOverlay.position).to.equal('top');
+    });
+
+    it('should use per-item tooltipPosition for sub-menu items', async () => {
+      menuBar.items = [
+        {
+          text: 'Item 0',
+          children: [{ text: 'SubItem 0', tooltip: 'Sub tooltip 0', tooltipPosition: 'top-start' }],
+        },
+      ];
+      await nextRender();
+      buttons = menuBar._buttons;
+      subMenu = menuBar._subMenu;
+
+      await sendMouseToElement({ type: 'click', element: buttons[0] });
+      await nextRender();
+
+      const items = getSubMenuItems();
+      await sendMouseToElement({ type: 'move', element: items[0] });
+      await nextRender();
+      expect(tooltipOverlay.position).to.equal('top-start');
+    });
+
+    describe('disabled sub-menu item', () => {
+      before(() => {
+        window.Vaadin.featureFlags ??= {};
+        window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
+      });
+
+      after(() => {
+        window.Vaadin.featureFlags.accessibleDisabledMenuItems = false;
+      });
+
+      it('should show tooltip for disabled sub-menu item on hover', async () => {
+        await sendMouseToElement({ type: 'click', element: buttons[0] });
+        await nextRender();
+
+        const items = getSubMenuItems();
+        await sendMouseToElement({ type: 'move', element: items[2] });
+        await nextRender();
+        expect(tooltipOverlay.opened).to.be.true;
+        expect(tooltipContent.textContent.trim()).to.equal('Disabled sub tooltip');
+      });
+
+      it('should default tooltip position to end for a disabled sub-menu item with children', async () => {
+        menuBar.items = [
+          {
+            text: 'Item 0',
+            children: [{ text: 'SubItem 0', tooltip: 'Sub tooltip 0', disabled: true, children: [{ text: 'Nested' }] }],
+          },
+        ];
+        await nextRender();
+        buttons = menuBar._buttons;
+        subMenu = menuBar._subMenu;
+
+        await sendMouseToElement({ type: 'click', element: buttons[0] });
+        await nextRender();
+
+        const items = getSubMenuItems();
+        await sendMouseToElement({ type: 'move', element: items[0] });
+        await nextRender();
+        expect(tooltipOverlay.position).to.equal('end');
+      });
+    });
+  });
 });
