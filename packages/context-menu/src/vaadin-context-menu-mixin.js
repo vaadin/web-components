@@ -7,6 +7,7 @@ import { isElementFocusable, isKeyboardActive } from '@vaadin/a11y-base/src/focu
 import { isAndroid, isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener, deepTargetFind, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+import { ContextMenuTooltipController } from './vaadin-context-menu-tooltip-controller.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
 
 /**
@@ -172,6 +173,11 @@ export const ContextMenuMixin = (superClass) =>
           this._fullscreen = matches;
         }),
       );
+
+      if (!this._tooltipController) {
+        this._tooltipController = new ContextMenuTooltipController(this);
+        this.addController(this._tooltipController);
+      }
     }
 
     /**

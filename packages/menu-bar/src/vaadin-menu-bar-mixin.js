@@ -764,7 +764,7 @@ export const MenuBarMixin = (superClass) =>
           this._tooltipController.open({ trigger: 'focus' });
         }
       } else {
-        this._tooltipController.close();
+        this._tooltipController.close(true);
       }
     }
 
@@ -887,9 +887,11 @@ export const MenuBarMixin = (superClass) =>
         // If the button has no children, keep the sub-menu opened.
         if (button.item.children && (this.openOnHover || this._subMenu.opened)) {
           this.__openSubMenu(button, false);
-        } else {
-          this._tooltipController.open({ trigger: 'hover' });
         }
+      }
+
+      if (!this._subMenu.opened) {
+        this._tooltipController.open({ trigger: 'hover' });
       }
     }
 
@@ -1025,6 +1027,8 @@ export const MenuBarMixin = (superClass) =>
         if (restoreFocus) {
           const focusOptions = { focusVisible: isKeyboardActive() };
           this._focusItem(button, focusOptions, false);
+        } else {
+          this._tooltipController.close(true);
         }
         this._expandedButton = null;
       }

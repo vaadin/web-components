@@ -8,7 +8,7 @@ import { MenuTooltipController } from '@vaadin/component-base/src/menu-tooltip-c
 export class ContextMenuTooltipController extends MenuTooltipController {
   /** @override */
   _getItem(target) {
-    return target.item;
+    return target._item;
   }
 
   /** @override */
