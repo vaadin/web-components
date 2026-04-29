@@ -5,6 +5,7 @@ import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/button.css';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '@vaadin/icon';
+import '../not-animated-styles.js';
 import '../../../vaadin-button.js';
 
 describe('button', () => {
