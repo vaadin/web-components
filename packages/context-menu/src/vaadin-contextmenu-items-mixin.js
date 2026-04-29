@@ -5,7 +5,6 @@
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 
 /**
  * @polymerMixin
@@ -122,23 +121,10 @@ export const ItemsMixin = (superClass) =>
     }
 
     /** @protected */
-    ready() {
-      super.ready();
-
-      // Subclasses may pre-assign `_tooltipController` (e.g. to share
-      // a controller with an outer host) before calling `super.ready()`.
-      if (!this._tooltipController) {
-        this._tooltipController = new TooltipController(this);
-        this._tooltipController.setManual(true);
-        this.addController(this._tooltipController);
-      }
-    }
-
-    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
       document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener);
-      this.__hideTooltip();
+      this._tooltipController.setTarget(null);
     }
 
     /**
@@ -300,11 +286,8 @@ export const ItemsMixin = (superClass) =>
         this.__showSubMenu(event);
 
         const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
-        if (itemElement && itemElement._item.tooltip) {
-          this.__showTooltip(itemElement, true);
-        } else {
-          this.__hideTooltip();
-        }
+        this._tooltipController.setTarget(itemElement);
+        this._tooltipController.open({ trigger: 'hover' });
       });
 
       overlay.addEventListener('mouseleave', (event) => {
@@ -313,7 +296,7 @@ export const ItemsMixin = (superClass) =>
           return;
         }
 
-        this.__hideTooltip();
+        this._tooltipController.setTarget(null);
       });
 
       overlay.addEventListener('focusin', (event) => {
@@ -324,11 +307,8 @@ export const ItemsMixin = (superClass) =>
         }
 
         const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
-        if (itemElement && itemElement._item.tooltip) {
-          this.__showTooltip(itemElement, false);
-        } else {
-          this.__hideTooltip();
-        }
+        this._tooltipController.setTarget(itemElement);
+        this._tooltipController.open({ trigger: 'focus' });
       });
 
       overlay.addEventListener('keydown', (event) => {
@@ -484,30 +464,6 @@ export const ItemsMixin = (superClass) =>
       if (item && item.disabled) {
         subMenu.close();
       }
-    }
-
-    /** @private */
-    __showTooltip(target, isHover) {
-      const tooltip = this._tooltipController.node;
-      if (tooltip && tooltip.isConnected) {
-        tooltip.generator = tooltip.generator || (({ item }) => item && item.tooltip);
-      }
-
-      const item = target._item;
-      const defaultPosition = item.children && item.children.length > 0 && !item.disabled ? 'start' : 'end';
-
-      this._tooltipController.setTarget(target);
-      this._tooltipController.setContext({ item });
-      this._tooltipController.setPosition(item.tooltipPosition || defaultPosition);
-      this._tooltipController.open({ hover: isHover, focus: !isHover });
-    }
-
-    /** @private */
-    __hideTooltip(immediate) {
-      console.warn('HIDE');
-      this._tooltipController.setTarget(null);
-      this._tooltipController.setContext({ item: null });
-      this._tooltipController.close(immediate);
     }
 
     /** @protected */

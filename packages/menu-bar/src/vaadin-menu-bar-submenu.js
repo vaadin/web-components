@@ -57,11 +57,9 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
 
   /** @protected */
   ready() {
-    // Share the parent menu-bar's tooltip controller so that the user's
-    // slotted `<vaadin-tooltip>` is reused for sub-menu items.
-    this._tooltipController = this.parentElement && this.parentElement._tooltipController;
-
     super.ready();
+
+    this._tooltipController = this.parentElement._tooltipController;
   }
 
   /**
