@@ -302,6 +302,23 @@ describe('dashboard layout', () => {
       await nextFrame();
       expect(childElements[0].offsetHeight).to.eql(rowHeight);
     });
+
+    it('should clamp an inline min-height that exceeds the fixed row height', async () => {
+      childElements[0].style.minHeight = `${rowHeight * 2}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(childElements[0].offsetHeight).to.eql(rowHeight);
+    });
+
+    it('should clamp an inline max-height that exceeds the fixed row height', async () => {
+      // Without !important on the cap's max-height, an inline max-height higher than the
+      // cap wins by specificity and lets the child grow with its content past the cell.
+      childElements[0].style.maxHeight = `${rowHeight * 2}px`;
+      childElements[0].style.height = `${rowHeight * 2}px`;
+      setRowHeight(dashboard, rowHeight);
+      await nextFrame();
+      expect(childElements[0].offsetHeight).to.eql(rowHeight);
+    });
   });
 
   describe('column span', () => {

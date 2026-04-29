@@ -18,18 +18,20 @@ import { css, unsafeCSS } from 'lit';
  * because the calc must live on each capped element so `var(--vaadin-dashboard-widget-rowspan)`
  * resolves against that element's own context.
  *
- * When `--vaadin-dashboard-row-height` is unset the calc is invalid, so the variable is
- * the guaranteed-invalid value and both `min-height` and `max-height` fall back to their
- * initial values (`auto` / `none`) — no cap, and inline heights work normally outside
- * the feature.
+ * The cap is `!important` so an inline `min-height`/`max-height` on a widget can't widen
+ * the cell beyond the row height. When `--vaadin-dashboard-row-height` is unset the calc
+ * is invalid, the property becomes invalid at computed value time and falls back to its
+ * initial value (`auto` for `min-height`, `none` for `max-height`) — these initial values
+ * are still applied with `!important`, so an inline `min-height`/`max-height` on a widget
+ * is a no-op even when no fixed row height is configured. See the variable's docs.
  */
 export const widgetFixedHeightDeclarations = unsafeCSS`
     --_widget-fixed-height: calc(
       var(--vaadin-dashboard-widget-rowspan, 1) * var(--vaadin-dashboard-row-height) +
         (var(--vaadin-dashboard-widget-rowspan, 1) - 1) * var(--_gap)
     );
-    min-height: var(--_widget-fixed-height);
-    max-height: var(--_widget-fixed-height);
+    min-height: var(--_widget-fixed-height) !important;
+    max-height: var(--_widget-fixed-height) !important;
 `;
 
 export const dashboardLayoutStyles = css`
