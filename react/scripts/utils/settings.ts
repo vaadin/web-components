@@ -42,6 +42,7 @@ export const eventSettings = new Map<string, EventSettings>([
   ['ComboBoxLight', { remove: ['vaadin-combo-box-dropdown-closed', 'vaadin-combo-box-dropdown-opened'] }],
   ['CrudEdit', { makeUnknown: ['edit'] }],
   ['Grid', { makeUnknown: ['size-changed', 'data-provider-changed'] }],
+  ['GridFilter', { remove: ['filter-changed'] }],
   [
     'GridPro',
     {
