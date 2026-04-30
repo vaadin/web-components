@@ -1003,45 +1003,4 @@ export const CrudMixin = (superClass) =>
         element.removeAttribute('aria-hidden');
       }
     }
-
-    /**
-     * Fired when user wants to edit an existing item. If the default is prevented, then
-     * a new item is not assigned to the form, giving that responsibility to the app, though
-     * dialog is always opened.
-     *
-     * @event edit
-     * @param {Object} detail.item the item to edit
-     */
-
-    /**
-     * Fired when user wants to create a new item.
-     *
-     * @event new
-     */
-
-    /**
-     * Fired when user wants to delete item. If the default is prevented, then
-     * no action is performed, items array is not modified nor dialog closed
-     *
-     * @event delete
-     * @param {Object} detail.item the item to delete
-     */
-
-    /**
-     * Fired when user discards edition. If the default is prevented, then
-     * no action is performed, user is responsible to close dialog and reset
-     * item and grid.
-     *
-     * @event cancel
-     * @param {Object} detail.item the item to delete
-     */
-
-    /**
-     * Fired when user wants to save a new or an existing item. If the default is prevented, then
-     * no action is performed, items array is not modified nor dialog closed
-     *
-     * @event save
-     * @param {Object} detail.item the item to save
-     * @param {Object} detail.new whether the item is a new one
-     */
   };

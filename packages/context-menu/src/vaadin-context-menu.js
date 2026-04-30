@@ -337,14 +337,6 @@ class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(Polyl
 
     return ['top-start', 'top-end', 'top', 'start-bottom', 'end-bottom'].includes(position) ? 'bottom' : 'top';
   }
-
-  /**
-   * Fired when an item is selected when the context menu is populated using the `items` API.
-   *
-   * @event item-selected
-   * @param {Object} detail
-   * @param {Object} detail.value the selected menu item
-   */
 }
 
 defineCustomElement(ContextMenu);

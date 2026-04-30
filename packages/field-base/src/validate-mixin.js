@@ -103,14 +103,6 @@ const ValidateMixinImplementation = (superclass) =>
         this.validate();
       }
     }
-
-    /**
-     * Fired whenever the field is validated.
-     *
-     * @event validated
-     * @param {Object} detail
-     * @param {boolean} detail.valid the result of the validation.
-     */
   };
 
 export const ValidateMixin = dedupeMixin(ValidateMixinImplementation);

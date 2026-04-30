@@ -97,40 +97,6 @@ class Overlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjec
       </div>
     `;
   }
-
-  /**
-   * @event vaadin-overlay-open
-   * Fired after the overlay is opened.
-   */
-
-  /**
-   * @event vaadin-overlay-close
-   * Fired when the opened overlay is about to be closed.
-   * Calling `preventDefault()` on the event cancels the closing.
-   */
-
-  /**
-   * @event vaadin-overlay-closing
-   * Fired when the overlay starts to close.
-   * Closing the overlay can be asynchronous depending on the animation.
-   */
-
-  /**
-   * @event vaadin-overlay-closed
-   * Fired after the overlay is closed.
-   */
-
-  /**
-   * @event vaadin-overlay-escape-press
-   * Fired before the overlay is closed on Escape key press.
-   * Calling `preventDefault()` on the event cancels the closing.
-   */
-
-  /**
-   * @event vaadin-overlay-outside-click
-   * Fired before the overlay is closed on outside click.
-   * Calling `preventDefault()` on the event cancels the closing.
-   */
 }
 
 defineCustomElement(Overlay);

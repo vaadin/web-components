@@ -933,11 +933,4 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       todayMidnight.setDate(today.getDate());
       return todayMidnight;
     }
-
-    /**
-     * Fired when the scroller reaches the target scrolling position.
-     * @event scroll-animation-finished
-     * @param {Number} detail.position new position
-     * @param {Number} detail.oldPosition old position
-     */
   };

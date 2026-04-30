@@ -645,10 +645,4 @@ export const ContextMenuMixin = (superClass) =>
         this.close();
       }
     }
-
-    /**
-     * Fired when the context menu is closed.
-     *
-     * @event closed
-     */
   };

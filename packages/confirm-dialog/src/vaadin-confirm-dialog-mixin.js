@@ -415,10 +415,4 @@ export const ConfirmDialogMixin = (superClass) =>
       this.dispatchEvent(new CustomEvent('reject'));
       this.opened = false;
     }
-
-    /**
-     * Fired when the confirm dialog is closed.
-     *
-     * @event closed
-     */
   };

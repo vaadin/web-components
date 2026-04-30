@@ -497,44 +497,4 @@ export const DragAndDropMixin = (superClass) =>
         'drop-disabled': !!dropDisabled,
       });
     }
-
-    /**
-     * Fired when starting to drag grid rows.
-     *
-     * @event grid-dragstart
-     * @param {Object} originalEvent The native dragstart event
-     * @param {Object} detail
-     * @param {Object} detail.draggedItems the items in the visible viewport that are dragged
-     * @param {Function} detail.setDraggedItemsCount Overrides the default number shown in the drag image on multi row drag.
-     * Parameter is of type number.
-     * @param {Function} detail.setDragData Sets dataTransfer data for the drag operation.
-     * Note that "text" is the only data type supported by all the browsers the grid currently supports (including IE11).
-     * The function takes two parameters:
-     * - type:string The type of the data
-     * - data:string The data
-     */
-
-    /**
-     * Fired when the dragging of the rows ends.
-     *
-     * @event grid-dragend
-     * @param {Object} originalEvent The native dragend event
-     */
-
-    /**
-     * Fired when a drop occurs on top of the grid.
-     *
-     * @event grid-drop
-     * @param {Object} originalEvent The native drop event
-     * @param {Object} detail
-     * @param {Object} detail.dropTargetItem The item of the grid row on which the drop occurred.
-     * @param {string} detail.dropLocation The position at which the drop event took place relative to a row.
-     * Depending on the dropMode value, the drop location can be one of the following
-     * - `on-top`: when the drop occurred on top of the row
-     * - `above`: when the drop occurred above the row
-     * - `below`: when the drop occurred below the row
-     * - `empty`: when the drop occurred over the grid, not relative to any specific row
-     * @param {string} detail.dragData An array of items with the payload as a string representation as the
-     * `data` property and the type of the data as `type` property.
-     */
   };

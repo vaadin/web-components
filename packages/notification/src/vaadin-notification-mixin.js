@@ -443,10 +443,4 @@ export const NotificationMixin = (superClass) =>
         }
       }
     }
-
-    /**
-     * Fired when the notification is closed.
-     *
-     * @event closed
-     */
   };

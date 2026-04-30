@@ -149,16 +149,4 @@ export const DialogResizableMixin = (superClass) =>
       const { width, height, top, left } = getComputedStyle(this.$.overlay.$.overlay);
       return { width, height, top, left };
     }
-
-    /**
-     * Fired when the dialog resize is started.
-     *
-     * @event resize-start
-     */
-
-    /**
-     * Fired when the dialog resize is finished.
-     *
-     * @event resize
-     */
   };

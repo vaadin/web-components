@@ -481,12 +481,4 @@ export const ColumnReorderingMixin = (superClass) =>
         return targetCell._column;
       }
     }
-
-    /**
-     * Fired when the columns in the grid are reordered.
-     *
-     * @event column-reorder
-     * @param {Object} detail
-     * @param {Object} detail.columns the columns in the new order
-     */
   };
