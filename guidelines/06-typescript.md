@@ -87,6 +87,45 @@ declare global {
 export { {Name} };
 ```
 
+## Generic components
+
+Components that operate on data of unknown type (`grid`, `combo-box` etc)
+parameterise the item type. The conventions:
+
+- Export a default item type (`{Name}DefaultItem`) — usually `any`. It's
+  the type used when the consumer doesn't supply one.
+- Mixin function takes `<TItem, T extends Constructor<HTMLElement>>` and
+  threads `TItem` through every returned mixin class and event-map type.
+- The element's class declaration carries the type parameter with a
+  default; a sibling `interface` of the same name extends the mixin
+  classes (also with `<TItem>`). The split is needed because TS can't
+  express both the constructor signature and the mixin extension on a
+  single generic class.
+- `HTMLElementTagNameMap` uses the default item type so plain
+  `document.createElement('vaadin-{name}')` still types correctly.
+
+```ts
+export type {Name}DefaultItem = any;
+
+declare class {Name}<TItem = {Name}DefaultItem> extends HTMLElement {
+  addEventListener<K extends keyof {Name}EventMap<TItem>>(
+    type: K,
+    listener: (this: {Name}<TItem>, ev: {Name}EventMap<TItem>[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+  // removeEventListener with the same shape
+}
+
+interface {Name}<TItem = {Name}DefaultItem>
+  extends ElementMixinClass, ThemableMixinClass, {Name}MixinClass<TItem> {}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'vaadin-{name}': {Name}<{Name}DefaultItem>;
+  }
+}
+```
+
 ## Styles types
 
 ```ts
