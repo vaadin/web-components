@@ -15,27 +15,29 @@
     <script type="module">
       import '@vaadin/context-menu';
       import '@vaadin/radio-group';
+      import '@vaadin/tooltip';
 
       const menu = document.querySelector('vaadin-context-menu');
       menu.items = [
-        { text: 'Menu Item 1' },
+        { text: 'Menu Item 1', tooltip: 'First menu item' },
         { component: 'hr' },
         {
           text: 'Menu Item 2',
+          tooltip: 'Has a sub-menu',
           children: [
             { text: 'Menu Item 2-1' },
             {
               text: 'Menu Item 2-2',
               children: [
                 { text: 'Menu Item 2-2-1' },
-                { text: 'Menu Item 2-2-2', disabled: true },
+                { text: 'Menu Item 2-2-2', disabled: true, tooltip: 'Not available right now' },
                 { component: 'hr' },
                 { text: 'Menu Item 2-2-3' },
               ],
             },
           ],
         },
-        { text: 'Menu Item 3', disabled: true },
+        { text: 'Menu Item 3', disabled: true, tooltip: 'Not available right now' },
       ];
 
       menu.listenOn = menu.querySelector('#target');
@@ -71,6 +73,7 @@
 
     <div style="margin: 200px">
       <vaadin-context-menu>
+        <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
         <div id="target" style="border: 1px solid black; text-align: center; user-select: none">
           <h2>Right click this component</h2>
           <p>(or long touch on mobile)</p>

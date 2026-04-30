@@ -187,6 +187,8 @@ snapshots["context-menu shadow"] =
   >
   </slot>
 </vaadin-context-menu-overlay>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot context-menu shadow */
 
