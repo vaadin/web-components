@@ -90,4 +90,8 @@ describe('context-menu', () => {
   it('overlay', async () => {
     await expect(menu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
+
+  it('shadow', async () => {
+    await expect(menu).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  });
 });
