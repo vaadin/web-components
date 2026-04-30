@@ -793,7 +793,7 @@ export const CrudMixin = (superClass) =>
     __createDataProviderProxy(dataProvider) {
       return (params, callback) => {
         const callbackProxy = (chunk, size) => {
-          if (chunk && chunk[0]) {
+          if (chunk?.[0]) {
             this.__model = chunk[0];
           }
 

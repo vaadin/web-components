@@ -70,9 +70,9 @@ export const LoginOverlayMixin = (superClass) =>
       super.willUpdate(props);
 
       if (props.has('__effectiveI18n') || props.has('title') || props.has('description')) {
-        const header = this.__effectiveI18n && this.__effectiveI18n.header;
-        this.__effectiveTitle = header && header.title != null ? header.title : this.title;
-        this.__effectiveDescription = header && header.description != null ? header.description : this.description;
+        const header = this.__effectiveI18n?.header;
+        this.__effectiveTitle = header?.title != null ? header.title : this.title;
+        this.__effectiveDescription = header?.description != null ? header.description : this.description;
       }
     }
 

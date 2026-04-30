@@ -365,7 +365,7 @@ export const ConfirmDialogMixin = (superClass) =>
 
     /** @private */
     __updateMessageNodes(nodes, message) {
-      if (nodes && nodes.length > 0) {
+      if (nodes?.length > 0) {
         const defaultNode = nodes.find((node) => node === this._messageController.defaultNode);
         if (defaultNode) {
           defaultNode.textContent = message;

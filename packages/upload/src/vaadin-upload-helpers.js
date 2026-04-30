@@ -33,7 +33,7 @@ export function getFilesFromDropEvent(dropEvent) {
     .filter((item) => !!item)
     .filter((item) => typeof item.webkitGetAsEntry === 'function')
     .map((item) => item.webkitGetAsEntry())
-    .some((entry) => !!entry && entry.isDirectory);
+    .some((entry) => !!entry?.isDirectory);
 
   if (!containsFolders) {
     return Promise.resolve(dropEvent.dataTransfer.files ? Array.from(dropEvent.dataTransfer.files) : []);

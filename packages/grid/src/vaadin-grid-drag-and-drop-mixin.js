@@ -286,7 +286,7 @@ export const DragAndDropMixin = (superClass) =>
           }
         }
 
-        if (row && row.hasAttribute('drop-disabled')) {
+        if (row?.hasAttribute('drop-disabled')) {
           this._dropLocation = undefined;
           return;
         }

@@ -290,14 +290,14 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     /** @private */
     __updateCancelButton(cancelButton, i18n) {
       if (cancelButton) {
-        cancelButton.textContent = i18n && i18n.cancel;
+        cancelButton.textContent = i18n?.cancel;
       }
     }
 
     /** @private */
     __updateTodayButton(todayButton, i18n, minDate, maxDate, isDateDisabled) {
       if (todayButton) {
-        todayButton.textContent = i18n && i18n.today;
+        todayButton.textContent = i18n?.today;
         todayButton.disabled = !this._isTodayAllowed(minDate, maxDate, isDateDisabled);
       }
     }
@@ -316,7 +316,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       isDateDisabled,
       enteredDate,
     ) {
-      if (calendars && calendars.length) {
+      if (calendars?.length) {
         calendars.forEach((calendar) => {
           calendar.i18n = i18n;
           calendar.minDate = minDate;
@@ -339,7 +339,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     __updateYears(years, selectedDate, theme) {
-      if (years && years.length) {
+      if (years?.length) {
         years.forEach((year) => {
           year.selectedDate = selectedDate;
 

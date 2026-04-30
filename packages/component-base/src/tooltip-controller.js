@@ -160,7 +160,7 @@ export class TooltipController extends SlotController {
    */
   open(options) {
     const tooltipNode = this.node;
-    if (tooltipNode && tooltipNode.isConnected) {
+    if (tooltipNode?.isConnected) {
       tooltipNode._stateController.open(options);
     }
   }

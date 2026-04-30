@@ -96,7 +96,7 @@ export const GridProEditSelectMixin = (superClass) =>
     }
 
     _optionsChanged(options) {
-      if (options && options.length) {
+      if (options?.length) {
         this.items = options.map((option) => ({
           label: option,
           value: option,

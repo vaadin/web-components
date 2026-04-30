@@ -103,7 +103,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       ['_itemsFocusable', '_footerFocusable', '_headerFocusable'].forEach((prop) => {
         const focusable = this[prop];
         if (value) {
-          const parent = focusable && focusable.parentElement;
+          const parent = focusable?.parentElement;
           if (isCell(focusable)) {
             // Cell itself focusable (default)
             this[prop] = parent;

@@ -413,7 +413,7 @@ export const MenuBarMixin = (superClass) =>
     /** @private */
     __updateSubMenu() {
       const subMenu = this._subMenu;
-      if (subMenu && subMenu.opened) {
+      if (subMenu?.opened) {
         const button = subMenu._positionTarget;
 
         // Close sub-menu if the corresponding button is no longer in the DOM,
@@ -426,7 +426,7 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __i18nChanged(effectiveI18n) {
-      if (effectiveI18n && effectiveI18n.moreOptions !== undefined) {
+      if (effectiveI18n?.moreOptions !== undefined) {
         if (effectiveI18n.moreOptions) {
           this._overflow.setAttribute('aria-label', effectiveI18n.moreOptions);
         } else {
@@ -568,7 +568,7 @@ export const MenuBarMixin = (superClass) =>
       let theme = hostTheme;
 
       // Item theme takes precedence over host theme even if it's empty, as long as it's not undefined or null
-      const itemTheme = item && item.theme;
+      const itemTheme = item?.theme;
       if (itemTheme != null) {
         theme = Array.isArray(itemTheme) ? itemTheme.join(' ') : itemTheme;
       }
@@ -602,7 +602,7 @@ export const MenuBarMixin = (superClass) =>
         html`
           ${items.map((item) => {
             const itemCopy = { ...item };
-            const hasChildren = Boolean(item && item.children);
+            const hasChildren = Boolean(item?.children);
 
             if (itemCopy.component) {
               const component = this.__getComponent(itemCopy);
@@ -921,7 +921,7 @@ export const MenuBarMixin = (superClass) =>
         }
       }
 
-      const items = item && item.children;
+      const items = item?.children;
       if (!items || items.length === 0) {
         this.__fireItemSelected(item);
         return;
@@ -998,7 +998,7 @@ export const MenuBarMixin = (superClass) =>
     /** @private */
     __deactivateButton(restoreFocus) {
       const button = this._expandedButton;
-      if (button && button.hasAttribute('expanded')) {
+      if (button?.hasAttribute('expanded')) {
         this._setExpanded(button, false);
         if (restoreFocus) {
           const focusOptions = { focusVisible: isKeyboardActive() };

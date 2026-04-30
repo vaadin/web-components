@@ -232,7 +232,7 @@ export function deepTargetFind(x, y) {
   // This code path is only taken when native ShadowDOM is used
   // if there is a shadowroot, it may have a node at x/y
   // if there is not a shadowroot, exit the loop
-  while (next && next.shadowRoot && !window.ShadyDOM) {
+  while (next?.shadowRoot && !window.ShadyDOM) {
     // If there is a node at x/y in the shadowroot, look deeper
     const oldNext = next;
     next = next.shadowRoot.elementFromPoint(x, y);
@@ -448,7 +448,7 @@ function _remove(node, evType, handler) {
     for (let i = 0, dep, gd; i < deps.length; i++) {
       dep = deps[i];
       gd = gobj[dep];
-      if (gd && gd[name]) {
+      if (gd?.[name]) {
         gd[name] = (gd[name] || 1) - 1;
         gd._count = (gd._count || 1) - 1;
         if (gd._count === 0) {
@@ -531,7 +531,7 @@ function _fire(target, type, detail) {
   // Forward `preventDefault` in a clean way
   if (ev.defaultPrevented) {
     const preventer = detail.preventer || detail.sourceEvent;
-    if (preventer && preventer.preventDefault) {
+    if (preventer?.preventDefault) {
       preventer.preventDefault();
     }
   }

@@ -62,7 +62,7 @@ export const CrudGridMixin = (superClass) =>
 
     /** @private */
     __onItemsChange(items) {
-      if ((!this.dataProvider || this.dataProvider === this._arrayDataProvider) && !this.include && items && items[0]) {
+      if ((!this.dataProvider || this.dataProvider === this._arrayDataProvider) && !this.include && items?.[0]) {
         this._configure(items[0]);
       }
     }

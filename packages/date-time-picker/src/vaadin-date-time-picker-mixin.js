@@ -469,7 +469,7 @@ export const DateTimePickerMixin = (superClass) =>
       const targetI18n = {};
       props.forEach((prop) => {
         // eslint-disable-next-line no-prototype-builtins
-        if (i18n && i18n.hasOwnProperty(prop)) {
+        if (i18n?.hasOwnProperty(prop)) {
           targetI18n[prop] = i18n[prop];
         }
       });

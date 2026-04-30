@@ -120,7 +120,7 @@ register({
     ev.detail = { x, y, sourceEvent };
     target.dispatchEvent(ev);
     // Forward `preventDefault` in a clean way
-    if (ev.defaultPrevented && sourceEvent && sourceEvent.preventDefault) {
+    if (ev.defaultPrevented && sourceEvent?.preventDefault) {
       sourceEvent.preventDefault();
     }
   },

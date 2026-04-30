@@ -228,7 +228,7 @@ export const InlineEditingMixin = (superClass) =>
             return;
           }
 
-          if (edited && edited.cell === cell) {
+          if (edited?.cell === cell) {
             return;
           }
 
@@ -255,7 +255,7 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @private */
     _isEditColumn(column) {
-      return column && column.localName.toLowerCase() === 'vaadin-grid-pro-edit-column';
+      return column?.localName.toLowerCase() === 'vaadin-grid-pro-edit-column';
     }
 
     /** @private */
@@ -301,7 +301,7 @@ export const InlineEditingMixin = (superClass) =>
           return;
         }
 
-        if (edited && edited.cell === cell && column._getEditorComponent(cell).contains(e.target)) {
+        if (edited?.cell === cell && column._getEditorComponent(cell).contains(e.target)) {
           return;
         }
 
@@ -461,7 +461,7 @@ export const InlineEditingMixin = (superClass) =>
 
       // Do not prevent Tab to allow native input blur and wait for it,
       // unless the keydown event is from the edit cell select overlay.
-      if (e.key === 'Tab' && editor && editor.contains(e.target)) {
+      if (e.key === 'Tab' && editor?.contains(e.target)) {
         const ignore = await new Promise((resolve) => {
           editor.addEventListener(
             'focusout',

@@ -440,7 +440,7 @@ export const AvatarGroupMixin = (superClass) =>
 
     /** @private */
     __i18nItemsChanged(effectiveI18n, items) {
-      if (effectiveI18n && effectiveI18n.activeUsers) {
+      if (effectiveI18n?.activeUsers) {
         const count = Array.isArray(items) ? items.length : 0;
         const field = count === 1 ? 'one' : 'many';
         if (effectiveI18n.activeUsers[field]) {

@@ -501,7 +501,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     __openedOrItemsChanged(opened, items, loading, keepOverlayOpened) {
       // Close the overlay if there are no items to display.
       // See https://github.com/vaadin/vaadin-combo-box/pull/964
-      this._overlayOpened = opened && (keepOverlayOpened || loading || !!(items && items.length));
+      this._overlayOpened = opened && (keepOverlayOpened || loading || !!items?.length);
     }
 
     /**
@@ -714,7 +714,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         return;
       }
 
-      if (items && items.length && this._topGroup && this._topGroup.length) {
+      if (items?.length && this._topGroup?.length) {
         // Filter out items included to the top group.
         const filteredItems = items.filter((item) => this._findIndex(item, this._topGroup, this.itemIdPath) === -1);
 
@@ -815,7 +815,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       if (index !== -1) {
         const lastFilter = this._lastFilter;
         // Do not unselect when manually typing and committing an already selected item.
-        if (lastFilter && lastFilter.toLowerCase() === itemLabel.toLowerCase()) {
+        if (lastFilter?.toLowerCase() === itemLabel.toLowerCase()) {
           this.__clearInternalValue();
           return;
         }

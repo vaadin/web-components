@@ -26,7 +26,7 @@ export class MenuBarTooltipController extends SlotController {
    */
   initCustomNode(tooltipNode) {
     tooltipNode.manual = true;
-    tooltipNode.generator ||= ({ item }) => item && item.tooltip;
+    tooltipNode.generator ||= ({ item }) => item?.tooltip;
   }
 
   /**
@@ -60,7 +60,7 @@ export class MenuBarTooltipController extends SlotController {
    */
   open({ trigger }) {
     const tooltipNode = this.node;
-    if (tooltipNode && tooltipNode.isConnected && tooltipNode.target) {
+    if (tooltipNode?.isConnected && tooltipNode.target) {
       tooltipNode._stateController.open({
         hover: trigger === 'hover',
         focus: trigger === 'focus',
