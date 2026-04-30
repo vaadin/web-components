@@ -25,8 +25,8 @@ Use `notify: true` only for properties the **component itself** mutates and
 that consumers might want to two-way-bind to. Do not fire change events for
 properties that only change in response to user code setting them.
 
-`notify: true` events are picked up by both CEM and Polymer Analyzer
-automatically, so no `@event` JSDoc is needed for them.
+`notify: true` events are picked up by CEM automatically, so no `@fires`
+JSDoc is needed for them.
 
 ## Field events
 
@@ -63,10 +63,6 @@ root boundaries, which can be problematic for low-level interaction events.
 
 ## Documenting events
 
-For events not driven by `notify: true`, you need:
-
-- `@fires {Event} name - …` on the **class** JSDoc — read by CEM.
-- `@event name` inside the **class body** (or mixin body) — read by the
-  Polymer Analyzer; required for the event to appear in `web-types.json`.
-
-See [Documenting](05-documenting.md) for details and examples.
+Events that aren't driven by `notify: true` need a `@fires {Event} name -
+…` line on the class JSDoc so CEM picks them up. See
+[Documenting](05-documenting.md) for the full set of JSDoc tags.

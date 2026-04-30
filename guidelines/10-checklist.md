@@ -72,7 +72,7 @@ not a substitute for reading [Structure](02-structure.md) and the rest.
       custom CSS properties).
 - [ ] Class JSDoc has `@customElement`, `@extends HTMLElement`, `@mixes`,
       `@fires`.
-- [ ] Non-`notify` events have `@event` inside the class or mixin body.
+- [ ] Non-`notify` events have `@fires` lines on the class JSDoc.
 - [ ] `README.md` follows the same shape as a sibling package.
 
 ## Final validation

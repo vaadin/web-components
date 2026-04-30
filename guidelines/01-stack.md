@@ -53,8 +53,8 @@ These workspaces are not published — they support development and testing.
 - **`dev`** — manual-test playground with one `<component>.html` per component
   and a shared `common.js`. Started with `yarn start` and deployed to
   GitHub Pages from `main` by CI.
-- **`api-docs`** — Eleventy 3.x static site built from the root `analysis.json`
-  and per-package `custom-elements.json`. Generated for every release.
+- **`api-docs`** — Eleventy 3.x static site built from the per-package
+  `custom-elements.json` (CEM output). Generated for every release.
 
 For repository commands (`yarn start`, `yarn test`, `yarn test:it`,
 `yarn lint`, …) see `CLAUDE.md` at the repo root.

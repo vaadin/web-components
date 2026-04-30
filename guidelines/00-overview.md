@@ -25,7 +25,7 @@ For repository-level commands (install, start, lint, test) see `CLAUDE.md`.
 | 02  | [Structure](02-structure.md)                   | Package layout, naming, root entrypoints, generated files, license.            |
 | 03  | [Coding conventions](03-coding-conventions.md) | Lit lifecycle, mixins vs controllers.                                          |
 | 04  | [Common packages](04-common-packages.md)       | Shared mixins, controllers, the virtualizer, gestures.                         |
-| 05  | [Documenting](05-documenting.md)               | CEM vs Polymer Analyzer, the JSDoc tags actually used, `vscode-lit-plugin`.    |
+| 05  | [Documenting](05-documenting.md)               | The CEM analyzer, the JSDoc tags actually used, `vscode-lit-plugin`.           |
 | 06  | [TypeScript](06-typescript.md)                 | Why `.d.ts` is hand-authored, mixin types, event maps, `test/typings/`.        |
 | 07  | [DOM](07-dom.md)                               | Shadow parts, `exportparts`, state attributes, slots, the `popover` attribute. |
 | 08  | [Events](08-events.md)                         | `notify: true`, `change` / `unparsable-change`, `CustomEvent` conventions.     |
