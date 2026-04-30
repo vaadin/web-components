@@ -120,16 +120,6 @@ export default [
     plugins: { html },
   },
   {
-    files: ['packages/**/vaadin-*.js'],
-    rules: {
-      // Ban ES2020, ES2021 operators in source component files, as they aren't supported by Polymer analyzer
-      'es-x/no-optional-chaining': 'error',
-      'es-x/no-nullish-coalescing-operators': 'error',
-      'es-x/no-logical-assignment-operators': 'error',
-      'logical-assignment-operators': 'off',
-    },
-  },
-  {
     files: ['packages/*/src/**/*.js'],
     rules: {
       'no-restricted-syntax': [
