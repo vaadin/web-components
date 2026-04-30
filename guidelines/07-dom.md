@@ -118,6 +118,25 @@ firstUpdated() {
 This gives overlays the top-layer rendering and click-outside semantics
 provided by the platform without re-implementing them.
 
+### `theme` attribute propagation
+
+The `theme` attribute applies the host's theme variants to internal
+sub-components in two cases:
+
+- **Slotted overlays** — components like `combo-box`, `date-picker`, and
+  `select` forward `theme` to their internal overlays. This is a leftover
+  from pre-V25 overlay teleportation. The forwarding is preserved, even
+  though overlays are now positioned via the popover API.
+- **Component-generated children** — items rendered by the component
+  itself receive `theme` automatically. Examples: items inside
+  `combo-box` and `context-menu`, buttons inside `menu-bar`.
+
+`theme` does **not** propagate to children that the application supplies.
+For instance, an `accordion-panel` slotted into `accordion`, or a `tab`
+slotted into `tabs`, keeps whatever `theme` the application set on it —
+the parent does not overwrite it. Apply the variant on each child
+explicitly in that case.
+
 ## Slots
 
 ### Internal elements in light DOM
