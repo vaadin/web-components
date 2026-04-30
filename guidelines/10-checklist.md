@@ -1,7 +1,7 @@
 # New-component checklist
 
 Use this when scaffolding a new component. The checklist is a quick scan,
-not a substitute for reading [Structure](02-structure.md) and the rest.
+not a substitute for reading [Component Structure](02-component-structure.md) and the rest.
 
 ## Files
 
@@ -14,7 +14,7 @@ not a substitute for reading [Structure](02-structure.md) and the rest.
 - [ ] `.d.ts` next to every `.js` source file.
 - [ ] `package.json`, `README.md`, `LICENSE` in place.
 - [ ] License header on every `.js` and `.d.ts` source file (Apache or
-      Commercial — see [Structure](02-structure.md)).
+      Commercial — see [Component Structure](02-component-structure.md)).
 
 ## Implementation
 
@@ -48,7 +48,7 @@ not a substitute for reading [Structure](02-structure.md) and the rest.
 ## TypeScript
 
 - [ ] Mixin `.d.ts` returns every constituent mixin class (`Constructor<X>
-      & Constructor<Y> & T`).
+    & Constructor<Y> & T`).
 - [ ] Element `.d.ts` declares event types, an `EventMap`, and overrides
       `addEventListener` / `removeEventListener`.
 - [ ] `HTMLElementTagNameMap` augmented for the new tag name.

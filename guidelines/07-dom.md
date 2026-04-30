@@ -76,19 +76,19 @@ This way `vaadin-tooltip::part(overlay)` still resolves even though
 State is exposed as **reflected boolean attributes** on the host element so
 that user CSS can target them with tag name + attribute selectors.
 
-| Attribute     | Meaning                                                        |
-| ------------- | -------------------------------------------------------------- |
-| `disabled`    | Component is disabled.                                         |
-| `readonly`    | Component is read-only.                                        |
-| `invalid`     | Field failed validation.                                       |
-| `focused`     | Element has focus (any focus).                                 |
-| `focus-ring`  | Element has keyboard focus (use this for outlines).            |
-| `opened`      | Overlay is open.                                               |
-| `active`      | Pointer/key is currently down.                                 |
-| `has-label`   | A label slot has visible content.                              |
-| `has-value`   | A field has a non-empty value.                                 |
-| `has-helper`  | A helper text slot has visible content.                        |
-| `has-tooltip` | The host has a slotted tooltip.                                |
+| Attribute     | Meaning                                             |
+| ------------- | --------------------------------------------------- |
+| `disabled`    | Component is disabled.                              |
+| `readonly`    | Component is read-only.                             |
+| `invalid`     | Field failed validation.                            |
+| `focused`     | Element has focus (any focus).                      |
+| `focus-ring`  | Element has keyboard focus (use this for outlines). |
+| `opened`      | Overlay is open.                                    |
+| `active`      | Pointer/key is currently down.                      |
+| `has-label`   | A label slot has visible content.                   |
+| `has-value`   | A field has a non-empty value.                      |
+| `has-helper`  | A helper text slot has visible content.             |
+| `has-tooltip` | The host has a slotted tooltip.                     |
 
 The `has-*` family is set by mixins / slot controllers when matching slot
 content appears.

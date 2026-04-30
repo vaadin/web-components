@@ -1,6 +1,6 @@
-# Stack
+# Repository
 
-## Runtime stack
+## Foundation
 
 - [**Lit 3**](https://lit.dev) — base class and templating.
 - **TypeScript 6** — type definitions for every public component (see
@@ -27,17 +27,17 @@ field initializers) rather than Polymer-style options.
 Versions are pinned in the root `package.json` and per-package `package.json`
 files — refer to those rather than copying numbers into prose.
 
-## Monorepo
+## Repository structure
 
 The repo is a Lerna + Yarn workspaces monorepo (`lerna.json`, root
 `package.json#workspaces`). Workspaces:
 
-| Workspace            | Purpose                                                                  |
-| -------------------- | ------------------------------------------------------------------------ |
-| `packages/*`         | Public component packages (published to npm under `@vaadin/*`).          |
-| `test/*`             | Private testing infrastructure (not published).                          |
-| `dev`                | Manual-test playground; one HTML page per component.                     |
-| `api-docs`           | Eleventy site that generates per-release API documentation.              |
+| Workspace    | Purpose                                                         |
+| ------------ | --------------------------------------------------------------- |
+| `packages/*` | Public component packages (published to npm under `@vaadin/*`). |
+| `test/*`     | Private testing infrastructure (not published).                 |
+| `dev`        | Manual-test playground; one HTML page per component.            |
+| `api-docs`   | Eleventy site that generates per-release API documentation.     |
 
 ### Private packages
 

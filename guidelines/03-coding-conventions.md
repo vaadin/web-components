@@ -10,9 +10,9 @@ class MyComponent extends MyComponentMixin(
   ElementMixin(
     // Vaadin element registration (public components only)
     ThemableMixin(
-      // Theme registration
+      // Legacy shadow DOM injection (avoid in new components)
       PolylitMixin(
-        // Polymer-compat layer (required)
+        // Polymer-compat layer (required for all components)
         LumoInjectionMixin(
           // Lumo style injection (required)
           LitElement,

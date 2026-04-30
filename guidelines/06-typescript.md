@@ -47,7 +47,7 @@ export declare class {Name}MixinClass {
 }
 ```
 
-## Element types
+## Event types
 
 The element `.d.ts` declares event types, an `EventMap` interface,
 `addEventListener` / `removeEventListener` overrides, and augments
@@ -92,8 +92,8 @@ export { {Name} };
 Components that operate on data of unknown type (`grid`, `combo-box` etc)
 parameterise the item type. The conventions:
 
-- Export a default item type (`{Name}DefaultItem`) — usually `any`. It's
-  the type used when the consumer doesn't supply one.
+- Export a default item type (`{Name}DefaultItem`) — usually a type alias for
+  `any`. It's the type used when the consumer doesn't supply one.
 - Mixin function takes `<TItem, T extends Constructor<HTMLElement>>` and
   threads `TItem` through every returned mixin class and event-map type.
 - The element's class declaration carries the type parameter with a

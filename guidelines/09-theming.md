@@ -1,7 +1,19 @@
 # Theming
 
-Each new component ships **three** sets of styles. They live in three
-different packages and serve three different purposes.
+By default, every Vaadin component ships with **base styles** —
+minimal, functional CSS that gives the component its layout, sizing,
+and state appearance with no opinionated design language. That leaves
+applications free to apply their own look on top.
+
+Two themes ship in this repo:
+
+- **Lumo** — the long-standing Vaadin theme, optimised for business
+  applications.
+- **Aura** — the newer theme, built on top of base styles using modern
+  CSS features.
+
+Each component therefore ends up with three sets of styles, living in
+three different packages and serving three different purposes.
 
 ## The three CSS layers
 

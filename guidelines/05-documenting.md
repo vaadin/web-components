@@ -12,9 +12,8 @@ CEM's output, the per-package `custom-elements.json`, drives three things:
 - The per-package `web-types.json` and `web-types.lit.json`, which give IDE
   autocomplete for plain HTML and Lit 3 binding syntax respectively.
 - The **React wrapper generation** for `@vaadin/react-components` — the
-  React types and components are produced from `web-types.json`, so any
-  property, attribute, or event missing from CEM is also missing from
-  React.
+  React components are produced by the generator script that is based on
+  `web-types.json` and `.d.ts` definitions of web components.
 
 CEM is configured in `custom-elements-manifest.config.js` at the repo
 root; `scripts/split-cem.js` splits the merged manifest per package, and
@@ -25,17 +24,17 @@ also reads JSDoc — that's why `@attr` exists, see below.
 
 ## JSDoc tags actually used
 
-| Tag                       | Where             | Why                                                                                          |
-| ------------------------- | ----------------- | -------------------------------------------------------------------------------------------- |
-| `@customElement {tag}`    | Class JSDoc       | CEM doesn't pick up `defineCustomElement()`; this tells it the element's tag name.           |
-| `@extends HTMLElement`    | Class JSDoc       | Hides LitElement's API from CEM output.                                                      |
-| `@mixes {Name}`           | Class / mixin JSDoc | Tracked by CEM via the `mixesPlugin` configured in `custom-elements-manifest.config.js`.   |
-| `@polymerMixin`           | Mixin declaration | Marks `(superClass) => class extends superClass …` as a mixin so CEM treats it as one.       |
-| `@attr {type} dash-name`  | Property JSDoc    | Maps a camelCase property to its kebab-case attribute (used by `vscode-lit-plugin`).         |
-| `@fires {Event} name`     | Class JSDoc       | Documents an event so it appears in `custom-elements.json` and `web-types.json`.             |
-| `@prop`                   | Class body        | Documents properties **not** declared in `static get properties()`.                          |
-| `@type`                   | Getters           | Documents the type of a getter (e.g. an `i18n` accessor).                                    |
-| `@private` / `@protected` | Class JSDoc       | Marks the whole element as internal — excluded from `custom-elements.json` and `web-types.json`. |
+| Tag                       | Where               | Why                                                                                              |
+| ------------------------- | ------------------- | ------------------------------------------------------------------------------------------------ |
+| `@customElement {tag}`    | Class JSDoc         | CEM doesn't pick up `defineCustomElement()`; this tells it the element's tag name.               |
+| `@extends HTMLElement`    | Class JSDoc         | Hides LitElement's API from CEM output.                                                          |
+| `@mixes {Name}`           | Class / mixin JSDoc | Tracked by CEM via the `mixesPlugin` configured in `custom-elements-manifest.config.js`.         |
+| `@polymerMixin`           | Mixin declaration   | Marks `(superClass) => class extends superClass …` as a mixin so CEM treats it as one.           |
+| `@attr {type} dash-name`  | Property JSDoc      | Maps a camelCase property to its kebab-case attribute (used by `vscode-lit-plugin`).             |
+| `@fires {Event} name`     | Class JSDoc         | Documents an event so it appears in `custom-elements.json` and `web-types.json`.                 |
+| `@prop`                   | Class body          | Documents properties **not** declared in `static get properties()`.                              |
+| `@type`                   | Getters             | Documents the type of a getter (e.g. an `i18n` accessor).                                        |
+| `@private` / `@protected` | Class JSDoc         | Marks the whole element as internal — excluded from `custom-elements.json` and `web-types.json`. |
 
 `notify: true` on a property declaration auto-generates the matching
 `{property}-changed` event in CEM's output — no `@fires` is needed for
@@ -45,7 +44,7 @@ those. See [Events](08-events.md).
 
 Use this canonical shape (every public component already follows it):
 
-```js
+````js
 /**
  * `<vaadin-{name}>` is a [one-sentence description].
  *
@@ -85,7 +84,7 @@ Use this canonical shape (every public component already follows it):
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-```
+````
 
 ## Property JSDoc
 
