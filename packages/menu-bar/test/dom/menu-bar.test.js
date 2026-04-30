@@ -50,4 +50,8 @@ describe('menu-bar', () => {
     await nextRender();
     await expect(menu._subMenu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
+
+  it('shadow', async () => {
+    await expect(menu).shadowDom.to.equalSnapshot();
+  });
 });
