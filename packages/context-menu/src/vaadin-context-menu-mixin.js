@@ -174,6 +174,10 @@ export const ContextMenuMixin = (superClass) =>
         }),
       );
 
+      // Sub-menus inherit the tooltip controller from their parent menu
+      // (assigned before `firstUpdated` runs) to reuse the same slotted
+      // `<vaadin-tooltip>` across nesting levels. Only create a new one
+      // when none was inherited, i.e. on the outer host.
       if (!this._tooltipController) {
         this._tooltipController = new ContextMenuTooltipController(this);
         this.addController(this._tooltipController);

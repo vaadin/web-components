@@ -346,10 +346,9 @@ export const ItemsMixin = (superClass) =>
     __initSubMenu() {
       const subMenu = document.createElement(this.constructor.is);
 
-      // Share the tooltip controller with the sub-menu so the user's
-      // slotted `<vaadin-tooltip>` (which lives on the outer host) is
-      // reused for sub-menu items. Without this, the sub-menu would
-      // create its own controller that finds no slotted tooltip.
+      // The slotted `<vaadin-tooltip>` lives on the outer `<vaadin-context-menu>`
+      // host. Its tooltip controller instance is shared across sub-menus to
+      // reuse the same tooltip element for items at every nesting level.
       subMenu._tooltipController = this._tooltipController;
 
       subMenu._modeless = true;
