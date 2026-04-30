@@ -178,7 +178,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
       this.removeChild(stringTitleElement);
     }
     const ariaLabelledby = this.getAttribute('aria-labelledby');
-    if (ariaLabelledby && ariaLabelledby.startsWith('card-title-')) {
+    if (ariaLabelledby?.startsWith('card-title-')) {
       this.removeAttribute('aria-labelledby');
     }
     if (this.cardTitle) {

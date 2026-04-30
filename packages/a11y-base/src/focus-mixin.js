@@ -63,7 +63,7 @@ const FocusMixinImplementation = (superclass) => {
 
       // Set focus-ring attribute on programmatic focus by default
       // unless explicitly disabled by `{ focusVisible: false }`.
-      if (!(options && options.focusVisible === false)) {
+      if (options?.focusVisible !== false) {
         this.setAttribute('focus-ring', '');
       }
     }

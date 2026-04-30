@@ -27,7 +27,7 @@ let lockCount = 0;
  * @param {?Node} node
  * @return {boolean}
  */
-const isElement = (node) => node && node.nodeType === Node.ELEMENT_NODE;
+const isElement = (node) => node?.nodeType === Node.ELEMENT_NODE;
 
 /**
  * @param  {...unknown} args

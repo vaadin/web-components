@@ -126,7 +126,7 @@ export const ItemsMixin = (superClass) =>
       // If parent item is not focused, do not focus submenu
       if (overlay.parentOverlay) {
         const parent = overlay.parentOverlay._contentRoot.querySelector('[expanded]');
-        if (parent && parent.hasAttribute('focused') && child) {
+        if (parent?.hasAttribute('focused') && child) {
           child.focus();
         } else {
           overlay.$.overlay.focus();
@@ -379,7 +379,7 @@ export const ItemsMixin = (superClass) =>
 
         // Check if the sub-menu was focused before closing it.
         const child = subMenu._overlayElement._contentRoot.firstElementChild;
-        const isSubmenuFocused = child && child.focused;
+        const isSubmenuFocused = child?.focused;
 
         // Mark previously expanded item as collapsed
         if (expandedItem) {
@@ -395,7 +395,7 @@ export const ItemsMixin = (superClass) =>
           return;
         }
 
-        if (children && children.length) {
+        if (children?.length) {
           // Open or update the submenu if the new item has children
           this.__updateExpanded(item, true);
           this.__openSubMenu(subMenu, item);
@@ -410,7 +410,7 @@ export const ItemsMixin = (superClass) =>
 
       // Only reachable with `accessibleDisabledMenuItems` enabled (disabled
       // items otherwise have `pointer-events: none` and never receive mouseover).
-      if (item && item.disabled) {
+      if (item?.disabled) {
         subMenu.close();
       }
     }

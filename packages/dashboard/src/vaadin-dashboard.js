@@ -347,7 +347,7 @@ class Dashboard extends DashboardLayoutMixin(
 
   /** @private */
   __focusWrapperContent(wrapper) {
-    if (wrapper && wrapper.firstElementChild) {
+    if (wrapper?.firstElementChild) {
       wrapper.firstElementChild.focus();
     }
   }

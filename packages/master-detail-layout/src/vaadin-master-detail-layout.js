@@ -530,7 +530,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     const updateSlot = async () => {
-      if (oldDetail && oldDetail.slot === 'detail') {
+      if (oldDetail?.slot === 'detail') {
         oldDetail.remove();
       }
 
@@ -640,7 +640,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     } finally {
       // Skip removal if the slot was reassigned during the transition.
       // The React component does this to let React handle the removal.
-      if (oldDetail && oldDetail.slot === 'detail-outgoing') {
+      if (oldDetail?.slot === 'detail-outgoing') {
         oldDetail.remove();
       }
     }

@@ -248,11 +248,11 @@ export class UserTags extends PolylitMixin(LitElement) {
 
   applyTagsEnd({ added, removed }) {
     removed.forEach((tag) => {
-      if (tag && tag.parentNode === this) {
+      if (tag?.parentNode === this) {
         this.removeChild(tag);
       }
     });
-    added.forEach((tag) => tag && tag.classList.add('show'));
+    added.forEach((tag) => tag?.classList.add('show'));
   }
 
   setUsers(users) {

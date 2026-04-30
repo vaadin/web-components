@@ -417,7 +417,7 @@ export const GridMixin = (superClass) =>
       const slot = document.createElement('slot');
       slot.setAttribute('name', slotName);
 
-      if (column && column._focusButtonMode) {
+      if (column?._focusButtonMode) {
         const div = document.createElement('div');
         div.setAttribute('role', 'button');
         div.setAttribute('tabindex', '-1');
@@ -871,7 +871,7 @@ export const GridMixin = (superClass) =>
     _showTooltip(event) {
       // Check if there is a slotted vaadin-tooltip element.
       const tooltip = this._tooltipController.node;
-      if (tooltip && tooltip.isConnected) {
+      if (tooltip?.isConnected) {
         const target = event.target;
 
         if (!this.__isCellFullyVisible(target)) {

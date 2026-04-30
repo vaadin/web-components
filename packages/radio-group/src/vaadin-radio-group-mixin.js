@@ -79,7 +79,7 @@ export const RadioGroupMixin = (superclass) =>
       this._tooltipController = new TooltipController(this);
       this._tooltipController.addEventListener('tooltip-changed', (event) => {
         const tooltip = event.detail.node;
-        if (tooltip && tooltip.isConnected) {
+        if (tooltip?.isConnected) {
           // Tooltip element has been added to the DOM
           const inputs = this.__radioButtons.map((radio) => radio.inputElement);
           this._tooltipController.setAriaTarget(inputs);

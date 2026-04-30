@@ -283,7 +283,7 @@ class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(Polyl
         .modeless="${this._modeless}"
         .renderer="${this.items ? this.__itemsRenderer : this.renderer}"
         .position="${position}"
-        .positionTarget="${position ? context && context.target : this._positionTarget}"
+        .positionTarget="${position ? context?.target : this._positionTarget}"
         .horizontalAlign="${this.__computeHorizontalAlign(position)}"
         .verticalAlign="${this.__computeVerticalAlign(position)}"
         ?no-horizontal-overlap="${this.__computeNoHorizontalOverlap(position)}"

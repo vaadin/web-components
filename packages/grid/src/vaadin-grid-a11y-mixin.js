@@ -54,7 +54,7 @@ export const A11yMixin = (superClass) =>
 
       // If no header and footer rows while the empty state is active, count as one column
       // Otherwise, use the number of body columns, if present
-      const columnsCount = emptyState ? 1 : (rowsCount && bodyColumns && bodyColumns.length) || 0;
+      const columnsCount = emptyState ? 1 : (rowsCount && bodyColumns?.length) || 0;
       this.$.table.setAttribute('aria-colcount', columnsCount);
 
       this.__a11yUpdateHeaderRows();
@@ -164,7 +164,7 @@ export const A11yMixin = (superClass) =>
         while (cellContent && cellContent.localName !== 'vaadin-grid-cell-content') {
           cellContent = cellContent.parentNode;
         }
-        if (cellContent && cellContent.assignedSlot) {
+        if (cellContent?.assignedSlot) {
           const cell = cellContent.assignedSlot.parentNode;
           cell.setAttribute(
             'aria-sort',

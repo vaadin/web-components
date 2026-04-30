@@ -223,7 +223,7 @@ export class SlotController extends EventTarget {
         });
       }
 
-      if (newNodes && newNodes.length > 0) {
+      if (newNodes?.length > 0) {
         if (this.multiple) {
           // Remove default node if exists
           if (this.defaultNode) {

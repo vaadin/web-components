@@ -38,7 +38,7 @@ export const LabelMixin = (superclass) =>
     /** @protected */
     get _labelId() {
       const node = this._labelNode;
-      return node && node.id;
+      return node?.id;
     }
 
     /** @protected */

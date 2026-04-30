@@ -85,8 +85,8 @@ KeyboardNavigation.prototype.onMouseUp = function (e) {
     const chart = this.chart;
     const target = e.composedPath()[0];
     if (!target || !chart.container.contains(target)) {
-      const curMod = this.modules && this.modules[this.currentModuleIx || 0];
-      if (curMod && curMod.terminate) {
+      const curMod = this.modules?.[this.currentModuleIx || 0];
+      if (curMod?.terminate) {
         curMod.terminate();
       }
       this.currentModuleIx = 0;
@@ -1426,7 +1426,7 @@ export const ChartMixin = (superClass) =>
           default:
             break;
         }
-        if (axes && axes[axisIndex]) {
+        if (axes?.[axisIndex]) {
           const axis = axes[axisIndex];
           const functionToCall = axis[functionName];
           if (functionToCall && typeof functionToCall === 'function') {

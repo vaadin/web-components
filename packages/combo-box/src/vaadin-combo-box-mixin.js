@@ -177,7 +177,7 @@ export const ComboBoxMixin = (superClass) =>
     _openedOrItemsChanged(opened, items, loading, keepOverlayOpened) {
       // Close the overlay if there are no items to display.
       // See https://github.com/vaadin/vaadin-combo-box/pull/964
-      this._overlayOpened = opened && (keepOverlayOpened || loading || !!(items && items.length));
+      this._overlayOpened = opened && (keepOverlayOpened || loading || !!items?.length);
     }
 
     /**
