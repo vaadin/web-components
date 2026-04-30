@@ -5,6 +5,11 @@
  */
 import { ContextMenuTooltipController } from '@vaadin/context-menu/src/vaadin-context-menu-tooltip-controller.js';
 
+/**
+ * Controller for the tooltip slotted into `<vaadin-menu-bar>`. Extends
+ * `ContextMenuTooltipController` to also support menu-bar buttons as
+ * targets, in addition to sub-menu items.
+ */
 export class MenuBarTooltipController extends ContextMenuTooltipController {
   /** @override */
   _getItem(target) {

@@ -5,6 +5,11 @@
  */
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
+/**
+ * Controller for the tooltip slotted into `<vaadin-context-menu>`. Configures
+ * the tooltip in manual mode and drives its target, context, and position
+ * based on the currently hovered or focused item.
+ */
 export class ContextMenuTooltipController extends SlotController {
   constructor(host) {
     super(host, 'tooltip');
