@@ -14,6 +14,7 @@ Core utilities used by every component.
 | `DirMixin`             | `src/dir-mixin.js`              | Mirrors `<html dir>` to the host; exposes `__isRTL` for RTL-specific styles.                        |
 | `ResizeMixin`          | `src/resize-mixin.js`           | ResizeObserver-driven `_onResize()` callback; supports parent-resize observation.                   |
 | `DelegateStateMixin`   | `src/delegate-state-mixin.js`   | Forwards properties and attributes from the host to a `stateTarget` (see below).                    |
+| `SlotStylesMixin`      | `src/slot-styles-mixin.js`      | Injects styles into the outer scope to reach slotted children when `::slotted()` isn't enough.      |
 | `defineCustomElement`  | `src/define.js`                 | Wraps `customElements.define`; logs a warning if the tag is already registered.                     |
 | `SlotController`       | `src/slot-controller.js`        | Observes a named slot; can create a default node when empty.                                        |
 | `TooltipController`    | `src/tooltip-controller.js`     | Wires up a slotted `vaadin-tooltip`.                                                                |
@@ -26,14 +27,16 @@ Core utilities used by every component.
 
 Accessibility primitives.
 
-| Export               | Purpose                                                                           |
-| -------------------- | --------------------------------------------------------------------------------- |
-| `FocusMixin`         | Sets `focused` and `focus-ring` attributes (the latter only for keyboard focus).  |
-| `ActiveMixin`        | Toggles the `active` attribute on pointer-down / activation key.                  |
-| `TabindexMixin`      | Manages `tabindex`; sets `-1` when `disabled`, restores prior value when enabled. |
-| `DisabledMixin`      | Reflects `disabled` and propagates it through delegated state.                    |
-| `KeyboardMixin`      | Centralizes keydown handling; subclasses override `_onKeyDown`.                   |
-| `DelegateFocusMixin` | Forwards focus from the host to an internal slotted focusable element.            |
+| Export                   | Purpose                                                                           |
+| ------------------------ | --------------------------------------------------------------------------------- |
+| `ActiveMixin`            | Toggles the `active` attribute on pointer-down / activation key.                  |
+| `DelegateFocusMixin`     | Forwards focus from the host to an internal slotted focusable element.            |
+| `DisabledMixin`          | Provides `disabled` property and `aria-disabled` attribute logic.                 |
+| `FocusMixin`             | Sets `focused` and `focus-ring` attributes (the latter only for keyboard focus).  |
+| `KeyboardMixin`          | Centralizes keydown handling; subclasses override `_onKeyDown`.                   |
+| `KeyboardDirectionMixin` | Keyboard navigation across child items (vertical or horizontal).                  |
+| `ListMixin`              | Builds on `KeyboardDirectionMixin` to add item selection and `selected` index.    |
+| `TabindexMixin`          | Manages `tabindex`; sets `-1` when `disabled`, restores prior value when enabled. |
 
 ## `@vaadin/field-base`
 
@@ -41,12 +44,12 @@ Mixins for input field components.
 
 | Export                  | Purpose                                                                                      |
 | ----------------------- | -------------------------------------------------------------------------------------------- |
-| `InputMixin`            | Wires `input` element, value, `has-value` attribute.                                         |
-| `InputControlMixin`     | Comprehensive input behavior: `allowedCharPattern`, autoselect, paste/drop validation, ARIA. |
-| `ValidateMixin`         | `invalid` property, `validate()`, `checkValidity()`, `manualValidation`; fires `validated`.  |
-| `InputConstraintsMixin` | Re-validates whenever any of the listed constraint attributes change.                        |
-| `LabelMixin`            | Slotted `label`; reflects `has-label`.                                                       |
 | `FieldMixin`            | Combines label, helper, error-message slots and ARIA wiring.                                 |
+| `InputMixin`            | Manages slotted `input` element, provides `value` property and `has-value` attribute.        |
+| `InputConstraintsMixin` | Based on `ValidateMixin`, re-validates whenever any of the listed constraints change.        |
+| `InputControlMixin`     | Comprehensive input behavior: `allowedCharPattern`, autoselect, paste/drop validation, ARIA. |
+| `LabelMixin`            | Manages slotted `label` element, provides `label` property and `has-label` attribute.        |
+| `ValidateMixin`         | Provides `invalid` and `manualValidation` properties, `validate()` and `checkValidity()`.    |
 
 ### `static get constraints()`
 
