@@ -140,10 +140,4 @@ export const LoginOverlayMixin = (superClass) =>
         document.body.style.pointerEvents = this.$.overlay._previousDocumentPointerEvents;
       }
     }
-
-    /**
-     * Fired when the overlay is closed.
-     *
-     * @event closed
-     */
   };

@@ -746,10 +746,4 @@ export const TooltipMixin = (superClass) =>
       }
       return this.__markdownHelpers;
     }
-
-    /**
-     * Fired when the tooltip text content is changed.
-     *
-     * @event content-changed
-     */
   };

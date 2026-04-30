@@ -165,10 +165,4 @@ export const MessageInputMixin = (superClass) =>
       }
       this._textArea.focus();
     }
-
-    /**
-     * Fired when a new message is submitted with `<vaadin-message-input>`, either
-     * by clicking the "send" button, or pressing the Enter key.
-     * @event submit
-     */
   };

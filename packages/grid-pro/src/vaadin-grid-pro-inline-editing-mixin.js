@@ -589,26 +589,4 @@ export const InlineEditingMixin = (superClass) =>
       const model = this.__getRowModel(cell.__parentRow);
       return column.isCellEditable(model);
     }
-
-    /**
-     * Fired before exiting the cell edit mode, if the value has been changed.
-     * If the default is prevented, value change would not be applied.
-     *
-     * @event item-property-changed
-     * @param {Object} detail
-     * @param {Object} detail.index the row index of the edited cell
-     * @param {Object} detail.item the grid item rendered to the row of the edited cell
-     * @param {Object} detail.path the column path of the edited cell
-     * @param {Object} detail.value the new value of the edited cell
-     */
-
-    /**
-     * Fired when the user starts editing a grid cell.
-     *
-     * @event cell-edit-started
-     * @param {Object} detail
-     * @param {Object} detail.index the row index of the edited cell
-     * @param {Object} detail.item the grid item rendered to the row of the edited cell
-     * @param {Object} detail.path the column path of the edited cell
-     */
   };

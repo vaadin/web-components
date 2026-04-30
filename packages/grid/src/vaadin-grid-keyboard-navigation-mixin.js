@@ -1097,12 +1097,4 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
       return null;
     }
-
-    /**
-     * Fired when a cell is focused with click or keyboard navigation.
-     *
-     * Use context property of @see {@link GridCellFocusEvent} to get detail information about the event.
-     *
-     * @event cell-focus
-     */
   };

@@ -157,33 +157,6 @@ class UploadFile extends UploadFileMixin(ThemableMixin(PolylitMixin(LumoInjectio
       <slot name="progress"></slot>
     `;
   }
-
-  /**
-   * Fired when the retry button is pressed to request retrying the upload
-   * of this file.
-   *
-   * @event file-retry
-   * @param {Object} detail
-   * @param {Object} detail.file file to retry upload of
-   */
-
-  /**
-   * Fired when the start button is pressed to request starting the upload
-   * of this file.
-   *
-   * @event file-start
-   * @param {Object} detail
-   * @param {Object} detail.file file to start upload of
-   */
-
-  /**
-   * Fired when the abort button is pressed to request aborting the upload
-   * of this file.
-   *
-   * @event file-abort
-   * @param {Object} detail
-   * @param {Object} detail.file file to abort upload of
-   */
 }
 
 defineCustomElement(UploadFile);

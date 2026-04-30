@@ -220,12 +220,6 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
       this._menuElement.focus({ focusVisible: isKeyboardActive() });
     }
   }
-
-  /**
-   * Fired when the user commits a value change.
-   *
-   * @event change
-   */
 }
 
 defineCustomElement(Select);

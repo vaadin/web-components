@@ -671,16 +671,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   get __slottedDetailPlaceholder() {
     return this.querySelector(':scope > [slot="detail-placeholder"]');
   }
-
-  /**
-   * @event backdrop-click
-   * Fired when the user clicks the backdrop in the overlay mode.
-   */
-
-  /**
-   * @event detail-escape-press
-   * Fired when the user presses Escape in the detail area.
-   */
 }
 
 defineCustomElement(MasterDetailLayout);

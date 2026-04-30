@@ -1007,10 +1007,4 @@ export const DateTimePickerMixin = (superClass) =>
         }
       }
     }
-
-    /**
-     * Fired when the user commits a value change.
-     *
-     * @event change
-     */
   };

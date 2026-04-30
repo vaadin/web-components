@@ -288,16 +288,4 @@ export const SliderMixin = (superClass) =>
       event.stopPropagation();
       this.__detectAndDispatchChange();
     }
-
-    /**
-     * Fired when the slider value changes during user interaction.
-     *
-     * @event input
-     */
-
-    /**
-     * Fired when the user commits a value change.
-     *
-     * @event change
-     */
   };

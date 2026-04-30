@@ -709,10 +709,4 @@ export const TimePickerMixin = (superClass) =>
       // We use `__commitValueChange` to fire a custom event.
       event.stopPropagation();
     }
-
-    /**
-     * Fired when the user commits a value change.
-     *
-     * @event change
-     */
   };

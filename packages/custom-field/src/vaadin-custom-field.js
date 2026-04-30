@@ -115,12 +115,6 @@ class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolylitMix
       <slot name="tooltip"></slot>
     `;
   }
-
-  /**
-   * Fired when the user commits a value change for any of the internal inputs.
-   *
-   * @event change
-   */
 }
 
 defineCustomElement(CustomField);
