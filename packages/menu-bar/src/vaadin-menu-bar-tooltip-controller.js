@@ -26,7 +26,7 @@ export class MenuBarTooltipController extends SlotController {
    */
   initCustomNode(tooltipNode) {
     tooltipNode.manual = true;
-    tooltipNode.generator = tooltipNode.generator || (({ item }) => item && item.tooltip);
+    tooltipNode.generator ||= ({ item }) => item && item.tooltip;
   }
 
   /**

@@ -23,7 +23,7 @@ export const ThemeDetectionMixin = (superClass) =>
 
       if (this.isConnected) {
         const root = findRoot(this);
-        root.__themeDetector = root.__themeDetector || new ThemeDetector(root);
+        root.__themeDetector ||= new ThemeDetector(root);
         this.__themeDetector = root.__themeDetector;
         this.__themeDetector.addEventListener('theme-changed', this.__applyDetectedTheme);
         this.__applyDetectedTheme();

@@ -337,7 +337,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   __initResizeObserver() {
-    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__onResize());
+    this.__resizeObserver ||= new ResizeObserver(() => this.__onResize());
     this.__resizeObserver.disconnect();
 
     [this, this.$.master, this.$.detail, this.__slottedMaster, this.__slottedDetail].forEach((node) => {
@@ -410,7 +410,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     // the slotted detail content to use as a fallback for the detail column size
     // while the detail content is rendered in an overlay.
     if ((hasDetail || hasDetailPlaceholder) && this.__isDetailAutoSized && detailSize > 0) {
-      this.__detailCachedSize = this.__detailCachedSize || `${Math.ceil(detailSize)}px`;
+      this.__detailCachedSize ||= `${Math.ceil(detailSize)}px`;
     } else {
       this.__detailCachedSize = null;
     }
