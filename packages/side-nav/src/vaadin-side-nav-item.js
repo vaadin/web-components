@@ -349,8 +349,8 @@ class SideNavItem extends SideNavChildrenMixin(
     const parentItem = this.__getParentItem();
     if (parentItem) {
       parentItem.__expandParentItems();
+      parentItem.expanded = true;
     }
-    this.expanded = true;
   }
 
   /** @private */
