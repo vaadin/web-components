@@ -42,7 +42,7 @@ export class ContextMenuTooltipController extends SlotController {
     }
 
     const item = target ? this._getItem(target) : null;
-    if (item && item?.tooltip) {
+    if (item?.tooltip) {
       tooltipNode.target = target;
       tooltipNode.context = { item };
       tooltipNode._position = item.tooltipPosition || this._getDefaultPosition(target);
