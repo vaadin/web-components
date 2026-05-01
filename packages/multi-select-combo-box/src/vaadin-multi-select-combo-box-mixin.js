@@ -7,6 +7,7 @@ import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { ComboBoxDataProviderMixin } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxItemsMixin } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
 import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
+import { ComboBoxScrollToIndexMixin } from '@vaadin/combo-box/src/vaadin-combo-box-scroll-to-index-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
@@ -27,6 +28,7 @@ const DEFAULT_I18N = {
  * @polymerMixin
  * @mixes ComboBoxDataProviderMixin
  * @mixes ComboBoxItemsMixin
+ * @mixes ComboBoxScrollToIndexMixin
  * @mixes I18nMixin
  * @mixes InputControlMixin
  * @mixes ResizeMixin
@@ -34,7 +36,9 @@ const DEFAULT_I18N = {
 export const MultiSelectComboBoxMixin = (superClass) =>
   class MultiSelectComboBoxMixinClass extends I18nMixin(
     DEFAULT_I18N,
-    ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass)))),
+    ComboBoxScrollToIndexMixin(
+      ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass)))),
+    ),
   ) {
     static get properties() {
       return {
@@ -497,7 +501,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     __openedOrItemsChanged(opened, items, loading, keepOverlayOpened) {
       // Close the overlay if there are no items to display.
       // See https://github.com/vaadin/vaadin-combo-box/pull/964
-      this._overlayOpened = opened && (keepOverlayOpened || loading || !!(items && items.length));
+      this._overlayOpened = opened && (keepOverlayOpened || loading || !!items?.length);
     }
 
     /**
@@ -710,7 +714,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         return;
       }
 
-      if (items && items.length && this._topGroup && this._topGroup.length) {
+      if (items?.length && this._topGroup?.length) {
         // Filter out items included to the top group.
         const filteredItems = items.filter((item) => this._findIndex(item, this._topGroup, this.itemIdPath) === -1);
 
@@ -811,7 +815,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       if (index !== -1) {
         const lastFilter = this._lastFilter;
         // Do not unselect when manually typing and committing an already selected item.
-        if (lastFilter && lastFilter.toLowerCase() === itemLabel.toLowerCase()) {
+        if (lastFilter?.toLowerCase() === itemLabel.toLowerCase()) {
           this.__clearInternalValue();
           return;
         }
@@ -1334,10 +1338,4 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // and keep the overlay opened when clicking a chip.
       event.preventDefault();
     }
-
-    /**
-     * Fired when the user sets a custom value.
-     * @event custom-value-set
-     * @param {string} detail the custom value
-     */
   };

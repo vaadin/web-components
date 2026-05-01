@@ -337,7 +337,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   __initResizeObserver() {
-    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__onResize());
+    this.__resizeObserver ||= new ResizeObserver(() => this.__onResize());
     this.__resizeObserver.disconnect();
 
     [this, this.$.master, this.$.detail, this.__slottedMaster, this.__slottedDetail].forEach((node) => {
@@ -410,7 +410,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     // the slotted detail content to use as a fallback for the detail column size
     // while the detail content is rendered in an overlay.
     if ((hasDetail || hasDetailPlaceholder) && this.__isDetailAutoSized && detailSize > 0) {
-      this.__detailCachedSize = this.__detailCachedSize || `${Math.ceil(detailSize)}px`;
+      this.__detailCachedSize ||= `${Math.ceil(detailSize)}px`;
     } else {
       this.__detailCachedSize = null;
     }
@@ -530,7 +530,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     const updateSlot = async () => {
-      if (oldDetail && oldDetail.slot === 'detail') {
+      if (oldDetail?.slot === 'detail') {
         oldDetail.remove();
       }
 
@@ -640,7 +640,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     } finally {
       // Skip removal if the slot was reassigned during the transition.
       // The React component does this to let React handle the removal.
-      if (oldDetail && oldDetail.slot === 'detail-outgoing') {
+      if (oldDetail?.slot === 'detail-outgoing') {
         oldDetail.remove();
       }
     }
@@ -671,16 +671,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   get __slottedDetailPlaceholder() {
     return this.querySelector(':scope > [slot="detail-placeholder"]');
   }
-
-  /**
-   * @event backdrop-click
-   * Fired when the user clicks the backdrop in the overlay mode.
-   */
-
-  /**
-   * @event detail-escape-press
-   * Fired when the user presses Escape in the detail area.
-   */
 }
 
 defineCustomElement(MasterDetailLayout);

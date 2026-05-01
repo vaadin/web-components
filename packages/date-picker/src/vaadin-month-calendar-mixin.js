@@ -244,7 +244,7 @@ export const MonthCalendarMixin = (superClass) =>
     /** @protected */
     __computeShowWeekSeparator(showWeekNumbers, i18n) {
       // Currently only supported for locales that start the week on Monday.
-      return showWeekNumbers && i18n && i18n.firstDayOfWeek === 1;
+      return showWeekNumbers && i18n?.firstDayOfWeek === 1;
     }
 
     /** @protected */

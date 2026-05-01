@@ -766,7 +766,7 @@ export const RichTextEditorMixin = (superClass) =>
         const tabs = '\t'.repeat(level);
         // Add tabs to content
         const firstChild = element.firstChild;
-        if (firstChild && firstChild.nodeType === Node.TEXT_NODE) {
+        if (firstChild?.nodeType === Node.TEXT_NODE) {
           firstChild.textContent = tabs + firstChild.textContent;
         } else if (element.childNodes.length > 0) {
           const tabNode = document.createTextNode(tabs);

@@ -263,10 +263,4 @@ export const CheckboxMixin = (superclass) =>
     _onRequiredIndicatorClick() {
       this._labelNode.click();
     }
-
-    /**
-     * Fired when the checkbox is checked or unchecked by the user.
-     *
-     * @event change
-     */
   };

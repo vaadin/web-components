@@ -189,12 +189,6 @@ class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(PolylitMix
       <slot id="secondary" name="secondary"></slot>
     `;
   }
-
-  /**
-   * Fired after dragging the splitter have ended.
-   *
-   * @event splitter-dragend
-   */
 }
 
 defineCustomElement(SplitLayout);

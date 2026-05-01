@@ -438,16 +438,4 @@ export const DataProviderMixin = (superClass) =>
         this.scrollToIndex(...indexes);
       }
     }
-
-    /**
-     * Fired when the `expandedItems` property changes.
-     *
-     * @event expanded-items-changed
-     */
-
-    /**
-     * Fired when the `loading` property changes.
-     *
-     * @event loading-changed
-     */
   };

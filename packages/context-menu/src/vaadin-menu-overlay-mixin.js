@@ -103,7 +103,7 @@ export const MenuOverlayMixin = (superClass) =>
 
       // Adjust constraints to ensure bottom-aligned applies to sub-menu.
       const parent = this.parentOverlay;
-      if (parent && parent.hasAttribute('bottom-aligned')) {
+      if (parent?.hasAttribute('bottom-aligned')) {
         const parentStyle = getComputedStyle(parent);
         yMax = yMax - parseFloat(parentStyle.bottom) - parseFloat(parentStyle.height);
       }

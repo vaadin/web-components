@@ -24,6 +24,7 @@ import type { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-pro
 import type { ComboBoxItemsMixinClass } from './vaadin-combo-box-items-mixin.js';
 import type { ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
 import type { ComboBoxDefaultItem } from './vaadin-combo-box-mixin.js';
+import type { ComboBoxScrollToIndexMixinClass } from './vaadin-combo-box-scroll-to-index-mixin.js';
 
 export {
   ComboBoxDataProvider,
@@ -225,6 +226,8 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
  * @fires {CustomEvent} selected-item-changed - Fired when the `selectedItem` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
+ * @fires {CustomEvent} vaadin-combo-box-dropdown-opened - Fired after the `vaadin-combo-box-overlay` opens.
+ * @fires {CustomEvent} vaadin-combo-box-dropdown-closed - Fired after the `vaadin-combo-box-overlay` closes.
  */
 declare class ComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
   addEventListener<K extends keyof ComboBoxEventMap<TItem>>(
@@ -245,6 +248,7 @@ interface ComboBox<TItem = ComboBoxDefaultItem>
     ComboBoxDataProviderMixinClass<TItem>,
     ComboBoxItemsMixinClass<TItem>,
     ComboBoxMixinClass<TItem>,
+    ComboBoxScrollToIndexMixinClass,
     ComboBoxBaseMixinClass,
     ValidateMixinClass,
     PatternMixinClass,

@@ -29,7 +29,7 @@ export const ColumnBaseMixin = (superClass) =>
             }
 
             const parent = this.parentNode;
-            if (parent && parent.localName === 'vaadin-grid-column-group') {
+            if (parent?.localName === 'vaadin-grid-column-group') {
               return parent.resizable || false;
             }
             return false;
@@ -563,7 +563,7 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @protected */
     _runRenderer(renderer, cell, model) {
-      const isVisibleBodyCell = model && model.item && !cell.parentElement.hidden;
+      const isVisibleBodyCell = model?.item && !cell.parentElement.hidden;
       const shouldRender = isVisibleBodyCell || renderer === this._headerRenderer || renderer === this._footerRenderer;
       if (!shouldRender) {
         return;

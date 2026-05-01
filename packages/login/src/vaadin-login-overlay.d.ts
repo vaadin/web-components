@@ -107,7 +107,7 @@ export interface LoginOverlayEventMap extends HTMLElementEventMap, LoginOverlayC
  * @fires {CustomEvent} disabled-changed - Fired when the `disabled` property changes.
  * @fires {CustomEvent} error-changed - Fired when the `error` property changes.
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
- * @fires {CustomEvent} login - Fired when a user submits the login.
+ * @fires {CustomEvent} login - Fired when a user submits the login form. The event detail contains `username` and `password`.
  * @fires {CustomEvent} closed - Fired when the overlay is closed.
  */
 declare class LoginOverlay extends LoginFormMixin(LoginOverlayMixin(ElementMixin(ThemableMixin(HTMLElement)))) {

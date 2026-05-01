@@ -350,13 +350,4 @@ export const ListMixin = (superClass) =>
 
       return super._isItemFocusable(item);
     }
-
-    /**
-     * Fired when the selection is changed.
-     * Not fired when used in `multiple` selection mode.
-     *
-     * @event selected-changed
-     * @param {Object} detail
-     * @param {Object} detail.value the index of the item selected in the items array.
-     */
   };

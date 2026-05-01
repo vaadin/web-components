@@ -22,7 +22,7 @@ export function observeMove(element, callback) {
 
   function cleanup() {
     timeout && clearTimeout(timeout);
-    io && io.disconnect();
+    io?.disconnect();
     io = null;
   }
 

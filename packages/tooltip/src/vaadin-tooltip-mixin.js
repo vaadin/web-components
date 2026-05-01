@@ -719,7 +719,7 @@ export const TooltipMixin = (superClass) =>
 
     /** @private */
     __computeAriaTarget(ariaTarget, target) {
-      const isElementNode = (el) => el && el.nodeType === Node.ELEMENT_NODE;
+      const isElementNode = (el) => el?.nodeType === Node.ELEMENT_NODE;
       const isAriaTargetSet = Array.isArray(ariaTarget) ? ariaTarget.some(isElementNode) : ariaTarget;
       return ariaTarget === null || isAriaTargetSet ? ariaTarget : target;
     }
@@ -746,10 +746,4 @@ export const TooltipMixin = (superClass) =>
       }
       return this.__markdownHelpers;
     }
-
-    /**
-     * Fired when the tooltip text content is changed.
-     *
-     * @event content-changed
-     */
   };
