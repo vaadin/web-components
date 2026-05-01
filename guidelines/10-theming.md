@@ -142,12 +142,12 @@ PostCSS (`packages/aura/postcss.config.js`).
 
 ## `:where()` for low specificity
 
-Use `:where()` to give variant rules near-zero specificity so consumer CSS
-can override custom property values without `!important`:
+Use `:where()` to ensure near-zero specificity so consumer CSS can override
+custom CSS property values without `!important`:
 
 ```css
-:where(vaadin-button)[theme~='primary'] {
-  --vaadin-button-background: var(--aura-accent-color);
+vaadin-avatar:where([has-color-index]) {
+  --vaadin-avatar-border-color: var(--aura-accent-border-color);
 }
 ```
 
