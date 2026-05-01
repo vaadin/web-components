@@ -5,16 +5,12 @@
  */
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { BreadcrumbTrailOverlayMixin } from './vaadin-breadcrumb-trail-overlay-mixin.js';
 
 /**
  * An element used internally by `<vaadin-breadcrumb-trail>` for the overflow popup.
  * Not intended to be used separately.
  */
-declare class BreadcrumbTrailOverlay extends BreadcrumbTrailOverlayMixin(
-  PositionMixin(OverlayMixin(ThemableMixin(HTMLElement))),
-) {}
+declare class BreadcrumbTrailOverlay extends PositionMixin(OverlayMixin(HTMLElement)) {}
 
 declare global {
   interface HTMLElementTagNameMap {

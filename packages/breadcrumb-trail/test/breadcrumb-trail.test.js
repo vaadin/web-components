@@ -2,12 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../vaadin-breadcrumb-trail.js';
 import '../vaadin-breadcrumb-item.js';
-import '../vaadin-breadcrumb-trail-overlay.js';
 
-// The breadcrumb trail elements are experimental and only register when the
-// feature flag is enabled. Setting the flag here triggers the deferred
-// `customElements.define` calls registered by `defineCustomElement` during
-// module import, so all three elements become available below.
 window.Vaadin ??= {};
 window.Vaadin.featureFlags ??= {};
 window.Vaadin.featureFlags.breadcrumbTrailComponent = true;

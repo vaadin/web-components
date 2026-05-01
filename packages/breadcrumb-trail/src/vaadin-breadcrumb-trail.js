@@ -3,11 +3,11 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-breadcrumb-trail-overlay.js';
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { breadcrumbTrailStyles } from './styles/vaadin-breadcrumb-trail-base-styles.js';
 
 /**
@@ -22,19 +22,11 @@ import { breadcrumbTrailStyles } from './styles/vaadin-breadcrumb-trail-base-sty
  * </vaadin-breadcrumb-trail>
  * ```
  *
- * This component is experimental and only registers when the
- * `breadcrumbTrailComponent` feature flag is enabled:
- *
- * ```js
- * window.Vaadin.featureFlags.breadcrumbTrailComponent = true;
- * ```
- *
  * @customElement vaadin-breadcrumb-trail
  * @extends HTMLElement
  * @mixes ElementMixin
- * @mixes ThemableMixin
  */
-class BreadcrumbTrail extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class BreadcrumbTrail extends ElementMixin(PolylitMixin(LitElement)) {
   static get is() {
     return 'vaadin-breadcrumb-trail';
   }

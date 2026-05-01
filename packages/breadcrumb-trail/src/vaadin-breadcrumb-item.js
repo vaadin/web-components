@@ -7,7 +7,6 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { breadcrumbItemStyles } from './styles/vaadin-breadcrumb-item-base-styles.js';
 
 /**
@@ -19,15 +18,11 @@ import { breadcrumbItemStyles } from './styles/vaadin-breadcrumb-item-base-style
  * <vaadin-breadcrumb-item path="/docs">Docs</vaadin-breadcrumb-item>
  * ```
  *
- * This component is experimental and only registers when the
- * `breadcrumbTrailComponent` feature flag is enabled.
- *
  * @customElement vaadin-breadcrumb-item
  * @extends HTMLElement
  * @mixes ElementMixin
- * @mixes ThemableMixin
  */
-class BreadcrumbItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
+class BreadcrumbItem extends ElementMixin(PolylitMixin(LitElement)) {
   static get is() {
     return 'vaadin-breadcrumb-item';
   }
