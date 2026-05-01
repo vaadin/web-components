@@ -40,4 +40,11 @@ describe('confirm-dialog', () => {
     element.rejectButtonVisible = true;
     await visualDiff(div, 'cancel-reject');
   });
+
+  it('cancel reject wrap', async () => {
+    element.cancelButtonVisible = true;
+    element.rejectButtonVisible = true;
+    element.style.setProperty('--vaadin-confirm-dialog-max-width', '15rem');
+    await visualDiff(div, 'cancel-reject-wrap');
+  });
 });

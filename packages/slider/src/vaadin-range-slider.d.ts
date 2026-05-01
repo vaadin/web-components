@@ -19,7 +19,7 @@ export type RangeSliderChangeEvent = Event & {
 /**
  * Fired when the slider value changes during user interaction.
  */
-export type RangeSliderInputEvent = Event & {
+export type RangeSliderInputEvent = InputEvent & {
   target: RangeSlider;
 };
 

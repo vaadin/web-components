@@ -28,7 +28,6 @@ export const InlineEditingMixin = (superClass) =>
          */
         enterNextRow: {
           type: Boolean,
-          notify: true, // FIXME(yuriy-fix): needed by Flow counterpart
         },
 
         /**
@@ -41,7 +40,6 @@ export const InlineEditingMixin = (superClass) =>
          */
         singleCellEdit: {
           type: Boolean,
-          notify: true, // FIXME(yuriy-fix): needed by Flow counterpart
         },
 
         /**
@@ -230,7 +228,7 @@ export const InlineEditingMixin = (superClass) =>
             return;
           }
 
-          if (edited && edited.cell === cell) {
+          if (edited?.cell === cell) {
             return;
           }
 
@@ -257,7 +255,7 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @private */
     _isEditColumn(column) {
-      return column && column.localName.toLowerCase() === 'vaadin-grid-pro-edit-column';
+      return column?.localName.toLowerCase() === 'vaadin-grid-pro-edit-column';
     }
 
     /** @private */
@@ -303,7 +301,7 @@ export const InlineEditingMixin = (superClass) =>
           return;
         }
 
-        if (edited && edited.cell === cell && column._getEditorComponent(cell).contains(e.target)) {
+        if (edited?.cell === cell && column._getEditorComponent(cell).contains(e.target)) {
           return;
         }
 
@@ -463,7 +461,7 @@ export const InlineEditingMixin = (superClass) =>
 
       // Do not prevent Tab to allow native input blur and wait for it,
       // unless the keydown event is from the edit cell select overlay.
-      if (e.key === 'Tab' && editor && editor.contains(e.target)) {
+      if (e.key === 'Tab' && editor?.contains(e.target)) {
         const ignore = await new Promise((resolve) => {
           editor.addEventListener(
             'focusout',
@@ -591,26 +589,4 @@ export const InlineEditingMixin = (superClass) =>
       const model = this.__getRowModel(cell.__parentRow);
       return column.isCellEditable(model);
     }
-
-    /**
-     * Fired before exiting the cell edit mode, if the value has been changed.
-     * If the default is prevented, value change would not be applied.
-     *
-     * @event item-property-changed
-     * @param {Object} detail
-     * @param {Object} detail.index the row index of the edited cell
-     * @param {Object} detail.item the grid item rendered to the row of the edited cell
-     * @param {Object} detail.path the column path of the edited cell
-     * @param {Object} detail.value the new value of the edited cell
-     */
-
-    /**
-     * Fired when the user starts editing a grid cell.
-     *
-     * @event cell-edit-started
-     * @param {Object} detail
-     * @param {Object} detail.index the row index of the edited cell
-     * @param {Object} detail.item the grid item rendered to the row of the edited cell
-     * @param {Object} detail.path the column path of the edited cell
-     */
   };

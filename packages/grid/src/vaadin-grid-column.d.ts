@@ -22,9 +22,12 @@ export type GridHeaderFooterRenderer<TItem = GridDefaultItem> = GridMixinHeaderF
  * See [`<vaadin-grid>`](#/elements/vaadin-grid) documentation for instructions on how
  * to configure the `<vaadin-grid-column>`.
  */
-declare class GridColumn<TItem = GridDefaultItem> extends HTMLElement {}
+declare class GridColumn<TItem = GridDefaultItem> extends HTMLElement {
+  hidden: boolean;
+}
 
-interface GridColumn<TItem = GridDefaultItem> extends GridColumnMixin<TItem, GridColumn<TItem>>, HTMLElement {}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface GridColumn<TItem = GridDefaultItem> extends GridColumnMixin<TItem, GridColumn<TItem>> {}
 
 declare global {
   interface HTMLElementTagNameMap {

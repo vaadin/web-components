@@ -23,6 +23,13 @@ export type MenuBarItem<TItemData extends object = object> = {
    */
   tooltip?: string;
   /**
+   * Position of the button's tooltip relative to the button
+   * (e.g. `bottom`, `top-start`). Defaults to `bottom`. If the slotted
+   * `<vaadin-tooltip>` has its `position` property set, that value is
+   * used instead.
+   */
+  tooltipPosition?: string;
+  /**
    * The component to represent the button content.
    * Either a tagName or an element instance. Defaults to "vaadin-menu-bar-item".
    */
@@ -48,6 +55,19 @@ export type MenuBarItem<TItemData extends object = object> = {
 
 export type SubMenuItem<TItemData extends object = object> = {
   text?: string;
+  /**
+   * Text to be set as the menu item's tooltip.
+   * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-menu-bar>`.
+   */
+  tooltip?: string;
+  /**
+   * Position of the item's tooltip relative to the item
+   * (e.g. `end`, `top`, `bottom-start`). Items with a sub-menu default to `start` to
+   * avoid overlap with the opening sub-menu; all other items, including disabled ones
+   * (whose sub-menus cannot be opened), default to `end`. If the slotted
+   * `<vaadin-tooltip>` has its `position` property set, that value is used instead.
+   */
+  tooltipPosition?: string;
   component?: HTMLElement | string;
   disabled?: boolean;
   theme?: string[] | string;
@@ -101,22 +121,37 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
    * ];
    * ```
    *
-   * #### Disabled buttons
+   * #### Disabled items
    *
-   * When disabled, menu bar buttons (root-level items) are rendered
-   * as "dimmed" and prevent all user interactions (mouse and keyboard).
+   * When disabled, menu bar items are rendered as "dimmed".
    *
-   * Since disabled buttons are not focusable and cannot react to hover
-   * events by default, it can cause accessibility issues by making them
-   * entirely invisible to assistive technologies, and prevents the use
-   * of Tooltips to explain why the action is not available. This can be
-   * addressed by enabling the feature flag `accessibleDisabledButtons`,
-   * which makes disabled buttons focusable and hoverable, while still
-   * preventing them from being triggered:
+   * By default, disabled items are not focusable and don't react to hover.
+   * As a result, they are hidden from assistive technologies, and it's not
+   * possible to show a tooltip to explain why they are disabled. This can be
+   * addressed by enabling several feature flags, which makes disabled items
+   * focusable and hoverable, while still preventing them from being activated:
    *
    * ```js
-   * // Set before any menu bar is attached to the DOM.
+   * // Allow focus and hover interactions with disabled menu bar root items (buttons)
    * window.Vaadin.featureFlags.accessibleDisabledButtons = true;
+   *
+   * // Allow focus and hover interactions with disabled menu bar sub-menu items
+   * window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
+   * ```
+   *
+   * Both flags must be set before any menu bar is attached to the DOM.
+   *
+   * #### Item tooltips
+   *
+   * Buttons and sub-menu items can have tooltips that are shown on
+   * hover and keyboard focus. To enable them, add a slotted
+   * `<vaadin-tooltip>` element and set the `tooltip` property on
+   * each item that should have one:
+   *
+   * ```html
+   * <vaadin-menu-bar>
+   *   <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
+   * </vaadin-menu-bar>
    * ```
    */
   items: TItem[];

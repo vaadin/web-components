@@ -59,12 +59,13 @@ export interface MasterDetailLayoutEventMap extends HTMLElementEventMap, MasterD
  *
  * Attribute                 | Description
  * --------------------------|----------------------
- * `expand`                  | Set to `master`, `detail`, or `both`.
+ * `expand-master`           | Set when the master area expands to fill available space.
+ * `expand-detail`           | Set when the detail area expands to fill available space.
  * `orientation`             | Set to `horizontal` or `vertical` depending on the orientation.
  * `has-detail`              | Set when the detail content is provided and visible.
  * `has-detail-placeholder`  | Set when the detail placeholder content is provided.
  * `overlay`                 | Set when columns don't fit and the detail is shown as an overlay.
- * `overlay-containment`     | Set to `layout` or `viewport`.
+ * `overlay-containment`     | Set to `layout` or `page`.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -128,19 +129,30 @@ declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)
   /**
    * Defines the containment of the detail area when the layout is in
    * overlay mode. When set to `layout`, the overlay is confined to the
-   * layout. When set to `viewport`, the overlay is confined to the
+   * layout. When set to `page`, the overlay is confined to the
    * browser's viewport. Defaults to `layout`.
    *
    * @attr {string} overlay-containment
    */
-  overlayContainment: 'layout' | 'viewport';
+  overlayContainment: 'layout' | 'page';
 
   /**
-   * Controls which column(s) expand to fill available space.
-   * Possible values: `'master'`, `'detail'`, `'both'`.
-   * Defaults to `'master'`.
+   * When true, the master area grows to fill the available space.
+   * If `expandDetail` is also true, both areas share the available
+   * space equally.
+   *
+   * @attr {boolean} expand-master
    */
-  expand: 'master' | 'detail' | 'both';
+  expandMaster: boolean;
+
+  /**
+   * When true, the detail area grows to fill the available space.
+   * If `expandMaster` is also true, both areas share the available
+   * space equally.
+   *
+   * @attr {boolean} expand-detail
+   */
+  expandDetail: boolean;
 
   /**
    * When true, the layout does not use animated transitions for the detail area.
@@ -148,6 +160,15 @@ declare class MasterDetailLayout extends ThemableMixin(ElementMixin(HTMLElement)
    * @attr {boolean} no-animation
    */
   noAnimation: boolean;
+
+  /**
+   * When true, the layout forces the detail area to be shown as an overlay,
+   * even if there is enough space for master and detail to be shown next to
+   * each other using the default (split) mode.
+   *
+   * @attr {boolean} force-overlay
+   */
+  forceOverlay: boolean;
 
   /**
    * When `detailSize` is not explicitly set, re-measures the cached intrinsic size of

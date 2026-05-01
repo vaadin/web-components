@@ -35,8 +35,8 @@ describe('ARIA', () => {
     expect(detail.hasAttribute('role')).to.be.false;
   });
 
-  it('should set aria-modal on detail with viewport containment', async () => {
-    layout.overlayContainment = 'viewport';
+  it('should set aria-modal on detail with page containment', async () => {
+    layout.overlayContainment = 'page';
     await onceResized(layout);
     expect(detail.getAttribute('aria-modal')).to.equal('true');
   });
@@ -49,8 +49,8 @@ describe('ARIA', () => {
     expect(master.hasAttribute('inert')).to.be.true;
   });
 
-  it('should not set inert on master with viewport containment', async () => {
-    layout.overlayContainment = 'viewport';
+  it('should not set inert on master with page containment', async () => {
+    layout.overlayContainment = 'page';
     await onceResized(layout);
     expect(master.hasAttribute('inert')).to.be.false;
   });

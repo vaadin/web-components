@@ -14,7 +14,7 @@ describe('master-detail-layout', () => {
   beforeEach(async () => {
     element = fixtureSync(`
       <div style="padding: 30px;">
-        <vaadin-master-detail-layout style="height: 400px;">
+        <vaadin-master-detail-layout style="height: 400px;" expand-master>
           <div>Master content</div>
           <div slot="detail">Detail content</div>
         </vaadin-master-detail-layout>
@@ -44,14 +44,14 @@ describe('master-detail-layout', () => {
       await visualDiff(element, 'drawer-default');
     });
 
-    it('viewport', async () => {
-      mdl.overlayContainment = 'viewport';
+    it('page', async () => {
+      mdl.overlayContainment = 'page';
       await onceResized(mdl);
-      await visualDiff(document.body, 'drawer-viewport');
+      await visualDiff(document.body, 'drawer-page');
     });
 
-    it('inset-drawer', async () => {
-      mdl.setAttribute('theme', 'inset-drawer');
+    it('inset', async () => {
+      mdl.style.setProperty('--aura-master-detail-layout-detail-inset', '0px');
       await visualDiff(element, 'drawer-inset');
     });
   });

@@ -19,6 +19,8 @@ export const cardStyles = css`
     --_subtitle: 0;
     --_title: 0;
     background: var(--vaadin-card-background, var(--vaadin-background-container));
+    --_border-width: var(--vaadin-card-border-width, 0px);
+    border: var(--_border-width) solid var(--vaadin-card-border-color, var(--vaadin-border-color-secondary));
     border-radius: var(--vaadin-card-border-radius, var(--vaadin-radius-m));
     box-shadow: var(--vaadin-card-shadow, none);
     box-sizing: border-box;
@@ -27,17 +29,6 @@ export const cardStyles = css`
     gap: var(--_gap);
     padding: var(--_padding);
     position: relative;
-  }
-
-  /* Could be an inset outline on the host as well, but let's reserve that for a potential focus outline */
-  :host::before {
-    border: var(--vaadin-card-border-width, 0) solid
-      var(--vaadin-card-border-color, var(--vaadin-border-color-secondary));
-    border-radius: inherit;
-    content: '';
-    inset: 0;
-    pointer-events: none;
-    position: absolute;
   }
 
   :host([hidden]) {
@@ -173,9 +164,9 @@ export const cardStyles = css`
 
   [part='media'] {
     align-self: stretch;
-    border-radius: inherit;
     grid-column: 1;
     grid-row: 1 / span calc(var(--_header) + var(--_content) + var(--_footer));
+    overflow: hidden;
   }
 
   [part='header'] {
@@ -209,49 +200,55 @@ export const cardStyles = css`
     vertical-align: middle;
   }
 
-  :host(:is([theme~='cover-media'], [theme~='stretch-media']))
-    ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+  :host(:is([theme~='cover-media'], [theme~='stretch-media'])) [part='media'] {
     aspect-ratio: var(--vaadin-card-media-aspect-ratio, 16/9);
-    height: auto;
-    object-fit: cover;
-    /* Fixes an issue where an icon overflows the card boundaries on Firefox: https://github.com/vaadin/web-components/issues/8641 */
-    overflow: hidden;
     width: 100%;
+
+    ::slotted(:is(img, video, svg, vaadin-icon)) {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media'])) {
     grid-template-columns: repeat(var(--_media), minmax(auto, 0.5fr)) 1fr;
   }
 
-  :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media']))
-    ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+  :host([theme~='horizontal']:is([theme~='cover-media'], [theme~='stretch-media'])) [part='media'] {
     aspect-ratio: auto;
     height: 100%;
   }
 
   :host([theme~='cover-media']) {
-    --_media-width: calc(100% + var(--_padding) * 2);
+    --_media-width: calc(100% + (var(--_padding) + var(--_border-width)) * 2);
   }
 
   :host([theme~='horizontal'][theme~='cover-media']) {
-    --_media-width: calc(100% + var(--_padding));
+    --_media-width: calc(100% + (var(--_padding) + var(--_border-width)));
   }
 
-  :host([theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+  :host([theme~='cover-media']) [part='media'] {
     border-radius: inherit;
     border-end-end-radius: 0;
     border-end-start-radius: 0;
-    margin-inline: calc(var(--_padding) * -1);
-    margin-top: calc(var(--_padding) * -1);
+    margin-inline: calc((var(--_padding) + var(--_border-width)) * -1);
+    margin-top: calc((var(--_padding) + var(--_border-width)) * -1);
     max-width: none;
     width: var(--_media-width);
+
+    ::slotted(:is(img, video, svg, vaadin-icon)) {
+      outline: var(--_border-width) solid var(--vaadin-card-border-color, var(--vaadin-border-color-secondary));
+      outline-offset: calc(var(--_border-width) * -1);
+      border-radius: inherit;
+    }
   }
 
-  :host([theme~='horizontal'][theme~='cover-media']) ::slotted([slot='media']:is(img, video, svg, vaadin-icon)) {
+  :host([theme~='horizontal'][theme~='cover-media']) [part='media'] {
     border-radius: inherit;
     border-end-end-radius: 0;
     border-start-end-radius: 0;
-    height: calc(100% + var(--_padding) * 2);
+    height: calc(100% + (var(--_padding) + var(--_border-width)) * 2);
     margin-inline-end: 0;
   }
 

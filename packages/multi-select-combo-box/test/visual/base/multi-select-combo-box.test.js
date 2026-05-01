@@ -1,5 +1,5 @@
 import { resetMouse, sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextResize } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../common.js';
 import '../../../src/vaadin-multi-select-combo-box.js';
@@ -53,9 +53,10 @@ describe('multi-select-combo-box', () => {
   });
 
   describe('selected items', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       element.style.width = '250px';
       element.selectedItems = ['Apple', 'Banana'];
+      await nextResize(element);
     });
 
     it('default', async () => {

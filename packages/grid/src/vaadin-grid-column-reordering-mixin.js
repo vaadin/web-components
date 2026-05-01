@@ -147,8 +147,8 @@ export const ColumnReorderingMixin = (superClass) =>
       }
 
       // Cancel reordering if there are draggable nodes on the event path following this element
-      const path = e.composedPath && e.composedPath();
-      if (path && path.slice(0, Math.max(0, path.indexOf(this))).some((node) => node.draggable)) {
+      const path = e.composedPath?.();
+      if (path?.slice(0, Math.max(0, path.indexOf(this))).some((node) => node.draggable)) {
         return;
       }
 
@@ -271,7 +271,7 @@ export const ColumnReorderingMixin = (superClass) =>
         }
         // Check if element is the cell of a focus button mode column
         const { parentElement } = element;
-        if (parentElement && parentElement._focusButton === element) {
+        if (parentElement?._focusButton === element) {
           return parentElement;
         }
       }
@@ -335,6 +335,36 @@ export const ColumnReorderingMixin = (superClass) =>
       });
       // Set order numbers to top-level columns
       updateColumnOrders(columnTree[0], this._orderBaseScope, 0);
+    }
+
+    /**
+     * Resets the visual column order so that cells in every row reflect the
+     * current DOM order of `<vaadin-grid-column>` elements.
+     *
+     * Intended to be called by Vaadin Flow's `GridColumnOrderHelper` (via
+     * `executeJs`) to realign cell order with the column DOM order after an
+     * earlier drag reorder, even when the column DOM order itself has not
+     * changed (in which case the `_columnTree` observer does not fire and
+     * `_renderColumnTree` does not re-render the rows).
+     *
+     * @private
+     */
+    _resetColumnOrder() {
+      if (this._columnTree === undefined) {
+        return;
+      }
+
+      // Each `_columnTree[level]` array is already in DOM order. If every
+      // level's `_order` values are monotonically non-decreasing along that
+      // array, cells are already in sync with DOM order and no work is needed.
+      const alreadyInDomOrder = this._columnTree.every((level) =>
+        level.every((column, i) => i === 0 || column._order >= level[i - 1]._order),
+      );
+      if (alreadyInDomOrder) {
+        return;
+      }
+
+      this._columnTree = this._getColumnTree();
     }
 
     /**
@@ -451,12 +481,4 @@ export const ColumnReorderingMixin = (superClass) =>
         return targetCell._column;
       }
     }
-
-    /**
-     * Fired when the columns in the grid are reordered.
-     *
-     * @event column-reorder
-     * @param {Object} detail
-     * @param {Object} detail.columns the columns in the new order
-     */
   };

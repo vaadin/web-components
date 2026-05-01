@@ -103,7 +103,7 @@ export const DetailsBaseMixin = (superClass) =>
       if (summary && contentElements) {
         const node = contentElements[0];
 
-        if (node && node.id) {
+        if (node?.id) {
           summary.setAttribute('aria-controls', node.id);
         } else {
           summary.removeAttribute('aria-controls');

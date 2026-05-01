@@ -105,7 +105,7 @@ export function getFlatIndexByPath(cache, [levelIndex, ...subIndexes], flatIndex
 
   const flatIndexOnLevel = cache.getFlatIndex(levelIndex);
   const subCache = cache.getSubCache(levelIndex);
-  if (subCache && subCache.flatSize > 0 && subIndexes.length) {
+  if (subCache?.flatSize > 0 && subIndexes.length) {
     return getFlatIndexByPath(subCache, subIndexes, flatIndex + flatIndexOnLevel + 1);
   }
   return flatIndex + flatIndexOnLevel;

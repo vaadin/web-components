@@ -17,6 +17,11 @@ export type DateTimePickerChangeEvent = Event & {
 };
 
 /**
+ * Fired when the user commits an unparsable value change and there is no change event.
+ */
+export type DateTimePickerUnparsableChangeEvent = CustomEvent;
+
+/**
  * Fired when the `invalid` property changes.
  */
 export type DateTimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
@@ -33,6 +38,8 @@ export type DateTimePickerValidatedEvent = CustomEvent<{ valid: boolean }>;
 
 export interface DateTimePickerCustomEventMap {
   'invalid-changed': DateTimePickerInvalidChangedEvent;
+
+  'unparsable-change': DateTimePickerUnparsableChangeEvent;
 
   'value-changed': DateTimePickerValueChangedEvent;
 

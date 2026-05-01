@@ -34,17 +34,48 @@ vaadin-tabs,
 vaadin-upload,
 vaadin-upload-file,
 ::part(input-field),
-::part(overlay),
-vaadin-confirm-dialog::part(overlay),
-vaadin-dialog::part(overlay),
-vaadin-login-overlay::part(overlay),
-vaadin-crud-dialog::part(overlay) {
+:where(
+  vaadin-avatar-group,
+  vaadin-combo-box,
+  vaadin-confirm-dialog,
+  vaadin-context-menu,
+  vaadin-crud-dialog,
+  vaadin-date-picker,
+  vaadin-dialog,
+  vaadin-login-overlay,
+  vaadin-menu-bar-submenu,
+  vaadin-multi-select-combo-box,
+  vaadin-notification-card,
+  vaadin-popover,
+  vaadin-rich-text-editor-popup,
+  vaadin-select,
+  vaadin-slider-bubble,
+  vaadin-time-picker,
+  vaadin-tooltip
+)::part(overlay) {
   --aura-surface-opacity: 0.5;
+
+  /* Split signed level into positive and negative branches */
+  --_up: clamp(0, var(--aura-surface-level), 4);
+  --_down: clamp(0, calc(-1 * var(--aura-surface-level)), 4);
+
+  --_u: calc(var(--_up) / 4);
+  --_e-light: clamp(
+    0,
+    calc(4 * var(--_u) - (8 * var(--_u) * var(--_u)) + (6.5 * var(--_u) * var(--_u) * var(--_u))),
+    1
+  );
+  --_e-dark: calc(var(--_down) / 20);
 
   --aura-surface-color-solid: light-dark(
     oklch(
-      from var(--aura-background-color-light) min(1, l + ((1 - l) / 2 + 0.04) * var(--aura-surface-level))
-        clamp(0, c - (c / 3 + (l / 1000)) * var(--aura-surface-level), c) h
+      from var(--aura-background-color-light) clamp(0, calc(l + (1 - l) * var(--_e-light) - l * var(--_e-dark)), 1)
+        clamp(
+          0,
+          calc(c * (1 - 0.5 * var(--_e-light) - 0.15 * var(--aura-surface-level)) * (1 - 0.35 * var(--_e-dark))),
+          0.4
+        )
+        h
     ),
     oklch(
       from var(--aura-background-color-dark)
@@ -71,4 +102,13 @@ vaadin-crud-dialog::part(overlay) {
 .aura-surface-solid {
   --aura-surface-opacity: 1;
   background: var(--aura-surface-color-solid) padding-box;
+}
+
+.aura-accent-surface {
+  background: var(--aura-accent-surface) padding-box;
+}
+
+.aura-accent-surface-solid {
+  background: var(--aura-accent-surface) padding-box;
+  --aura-surface-opacity: 1;
 }

@@ -18,18 +18,9 @@ export const appLayoutStyles = css`
     --vaadin-app-layout-navbar-offset-top: var(--_vaadin-app-layout-navbar-offset-size);
     --vaadin-app-layout-navbar-offset-bottom: var(--_vaadin-app-layout-navbar-offset-size-bottom);
     --vaadin-app-layout-drawer-offset-left: 0px;
-    padding-top: max(var(--vaadin-app-layout-navbar-offset-top), var(--safe-area-inset-top));
-    padding-bottom: max(var(--vaadin-app-layout-navbar-offset-bottom), var(--safe-area-inset-bottom));
-  }
-
-  :host(:dir(ltr)) {
-    padding-left: max(var(--vaadin-app-layout-drawer-offset-left), var(--safe-area-inset-left));
-    padding-right: var(--safe-area-inset-right);
-  }
-
-  :host(:dir(rtl)) {
-    padding-left: var(--safe-area-inset-left);
-    padding-right: max(var(--vaadin-app-layout-drawer-offset-left), var(--safe-area-inset-right));
+    padding-top: var(--vaadin-app-layout-navbar-offset-top);
+    padding-bottom: var(--vaadin-app-layout-navbar-offset-bottom);
+    padding-inline-start: var(--vaadin-app-layout-drawer-offset-left);
   }
 
   :host([hidden]),
@@ -58,6 +49,14 @@ export const appLayoutStyles = css`
   [part~='content'] {
     height: 100%;
     transition: inherit;
+    box-sizing: border-box;
+    padding-top: max(0px, var(--safe-area-inset-top) - var(--vaadin-app-layout-navbar-offset-top));
+    padding-bottom: max(0px, var(--safe-area-inset-bottom) - var(--vaadin-app-layout-navbar-offset-bottom));
+    padding-inline: var(--safe-area-inset-inline-start) var(--safe-area-inset-inline-end);
+  }
+
+  :host([drawer-opened]:not([overlay])) [part~='content'] {
+    padding-inline-start: 0;
   }
 
   @media (pointer: coarse) and (max-width: 800px) and (min-height: 500px) {
@@ -122,6 +121,7 @@ export const appLayoutStyles = css`
     width: var(--_vaadin-app-layout-drawer-width);
     box-sizing: border-box;
     padding-block: var(--safe-area-inset-top) var(--safe-area-inset-bottom);
+    padding-inline-start: var(--safe-area-inset-inline-start);
     outline: none;
     /* The drawer should be inaccessible by the tabbing navigation when it is closed. */
     visibility: hidden;
@@ -130,15 +130,8 @@ export const appLayoutStyles = css`
     background: var(--vaadin-app-layout-drawer-background, transparent);
   }
 
-  [part='drawer']:dir(ltr) {
-    padding-left: var(--safe-area-inset-left);
-  }
-
-  [part='drawer']:dir(rtl) {
-    padding-right: var(--safe-area-inset-right);
-  }
-
-  :host([has-navbar]:not([overlay])) [part='drawer'] {
+  :host([has-navbar]:not([overlay])) [part='drawer'],
+  :host([has-navbar]) [part='content'] {
     --safe-area-inset-top: 0px;
   }
 

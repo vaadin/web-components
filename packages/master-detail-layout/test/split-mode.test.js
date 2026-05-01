@@ -30,7 +30,8 @@ describe('split mode', () => {
 
     describe('expand both', () => {
       beforeEach(() => {
-        layout.expand = 'both';
+        layout.expandMaster = true;
+        layout.expandDetail = true;
       });
 
       it('should expand both columns equally when both sizes are the same', async () => {
@@ -63,7 +64,11 @@ describe('split mode', () => {
       });
     });
 
-    describe('expand master (default)', () => {
+    describe('expand master', () => {
+      beforeEach(() => {
+        layout.expandMaster = true;
+      });
+
       it('should fix detail and expand master to fill the rest', async () => {
         layout.masterSize = '100px';
         layout.detailSize = '200px';
@@ -76,7 +81,7 @@ describe('split mode', () => {
 
     describe('expand detail', () => {
       beforeEach(() => {
-        layout.expand = 'detail';
+        layout.expandDetail = true;
       });
 
       it('should fix master and expand detail to fill the rest', async () => {
@@ -105,7 +110,8 @@ describe('split mode', () => {
 
     describe('expand both', () => {
       beforeEach(() => {
-        layout.expand = 'both';
+        layout.expandMaster = true;
+        layout.expandDetail = true;
       });
 
       it('should expand both rows equally when both sizes are the same', async () => {
@@ -118,7 +124,11 @@ describe('split mode', () => {
       });
     });
 
-    describe('expand master (default)', () => {
+    describe('expand master', () => {
+      beforeEach(() => {
+        layout.expandMaster = true;
+      });
+
       it('should fix detail and expand master to fill the rest', async () => {
         layout.masterSize = '100px';
         layout.detailSize = '200px';
@@ -131,7 +141,7 @@ describe('split mode', () => {
 
     describe('expand detail', () => {
       beforeEach(() => {
-        layout.expand = 'detail';
+        layout.expandDetail = true;
       });
 
       it('should fix master and expand detail to fill the rest', async () => {

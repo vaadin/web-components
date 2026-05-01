@@ -60,7 +60,6 @@ export const GridProEditColumnMixin = (superClass) =>
          */
         editorType: {
           type: String,
-          notify: true, // FIXME(web-padawan): needed by Flow counterpart
           value: 'text',
         },
 

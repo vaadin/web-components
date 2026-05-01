@@ -14,10 +14,12 @@ assertType<ThemableMixinClass>(layout);
 assertType<string | null | undefined>(layout.detailSize);
 assertType<string | null | undefined>(layout.masterSize);
 assertType<string | null | undefined>(layout.overlaySize);
-assertType<'layout' | 'viewport'>(layout.overlayContainment);
-assertType<'master' | 'detail' | 'both'>(layout.expand);
+assertType<'layout' | 'page'>(layout.overlayContainment);
+assertType<boolean>(layout.expandMaster);
+assertType<boolean>(layout.expandDetail);
 assertType<'horizontal' | 'vertical'>(layout.orientation);
 assertType<boolean>(layout.noAnimation);
+assertType<boolean>(layout.forceOverlay);
 
 // Events
 layout.addEventListener('backdrop-click', (event) => {

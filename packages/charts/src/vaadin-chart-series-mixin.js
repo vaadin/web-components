@@ -284,7 +284,7 @@ export const ChartSeriesMixin = (superClass) =>
         return;
       }
 
-      if (series && series.yAxis) {
+      if (series?.yAxis) {
         series.yAxis.update({ [key]: value });
       }
     }

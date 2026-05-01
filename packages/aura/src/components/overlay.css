@@ -2,8 +2,8 @@
 :where(:host) {
   --vaadin-overlay-border-width: 0px;
   --vaadin-overlay-backdrop-background: light-dark(
-    oklch(from var(--aura-background-color-light) calc(l * 0.1) c h / 0.15),
-    hsla(0deg, 0%, 0%, 0.3)
+    oklch(from var(--aura-background-color-light) calc(l * 0.5) min(0.05, c * 4) h / 0.3),
+    oklch(from var(--aura-background-color-dark) calc(l * 0.5) min(0.05, c * 4) h / 0.3)
   );
   --aura-overlay-outline-color: light-dark(
     oklch(from var(--aura-background-color-light) 0.1 c h / max(0.04, 0.03 + 0.04 * var(--aura-contrast-level))),
@@ -25,7 +25,25 @@
   --vaadin-slider-bubble-arrow-size: 6px;
 }
 
-::part(overlay) {
+:where(
+  vaadin-avatar-group,
+  vaadin-combo-box,
+  vaadin-confirm-dialog,
+  vaadin-context-menu,
+  vaadin-crud-dialog,
+  vaadin-date-picker,
+  vaadin-dialog,
+  vaadin-login-overlay,
+  vaadin-menu-bar-submenu,
+  vaadin-multi-select-combo-box,
+  vaadin-notification-card,
+  vaadin-popover,
+  vaadin-rich-text-editor-popup,
+  vaadin-select,
+  vaadin-slider-bubble,
+  vaadin-time-picker,
+  vaadin-tooltip
+)::part(overlay) {
   background: var(--vaadin-overlay-background, var(--aura-surface-color));
   --aura-surface-level: 4;
   --aura-surface-opacity: var(--aura-overlay-surface-opacity);
@@ -34,12 +52,35 @@
   backdrop-filter: var(--aura-overlay-backdrop-filter);
 }
 
+:where(
+  vaadin-combo-box,
+  vaadin-date-picker,
+  vaadin-menu-bar-submenu,
+  vaadin-multi-select-combo-box,
+  vaadin-rich-text-editor-popup,
+  vaadin-time-picker
+) {
+  &[top-aligned]::part(overlay) {
+    margin-top: calc(var(--vaadin-focus-ring-width, 2px) + 1px);
+  }
+
+  &[bottom-aligned]::part(overlay) {
+    margin-bottom: calc(var(--vaadin-focus-ring-width, 2px) + 1px);
+  }
+}
+
 :not(vaadin-tooltip, vaadin-slider-bubble)::part(overlay) {
   font-family: var(--aura-font-family);
   font-size: var(--aura-font-size-m);
   font-weight: var(--aura-font-weight-regular);
   line-height: var(--aura-line-height-m);
   color: var(--vaadin-text-color);
+
+  @container style(--aura-overlay-surface-opacity: 1) {
+    html {
+      --aura-overlay-backdrop-filter: none;
+    }
+  }
 }
 
 vaadin-popover,

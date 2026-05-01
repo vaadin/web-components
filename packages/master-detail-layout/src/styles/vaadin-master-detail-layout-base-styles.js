@@ -17,8 +17,11 @@ export const masterDetailLayoutStyles = css`
     box-sizing: border-box;
     height: 100%;
     position: relative;
-    z-index: 0;
     overflow: clip;
+  }
+
+  :host:not([overlay-containment='page']) {
+    z-index: 0;
   }
 
   :host([dir='rtl']) {
@@ -41,25 +44,35 @@ export const masterDetailLayoutStyles = css`
   /* CSS grid template */
 
   :host {
-    --_master-size: 30rem;
+    --_master-size: min(100%, 30rem);
     --_master-extra: 0px;
     --_detail-size: var(--_detail-cached-size);
     --_detail-extra: 0px;
     --_detail-cached-size: min-content;
+
+    /* prettier-ignore */
+    --_grid-template:
+      [master-start] var(--_master-size) [master-extra] var(--_master-extra)
+      [detail-start] var(--_detail-size) [detail-extra] var(--_detail-extra)
+      [detail-end];
+  }
+
+  :host([force-overlay]) {
+    /* prettier-ignore */
+    --_grid-template:
+      [master-start] var(--_master-size) [master-extra] var(--_master-extra)
+      [detail-start] 0px                 [detail-extra] 0px
+      [detail-end];
   }
 
   :host([orientation='horizontal']) {
-    grid-template-columns:
-      [master-start] var(--_master-size) [master-extra-start] var(--_master-extra)
-      [detail-start] var(--_detail-size) [detail-extra-start] var(--_detail-extra) [detail-end];
+    grid-template-columns: var(--_grid-template);
     grid-template-rows: 100%;
   }
 
   :host([orientation='vertical']) {
     grid-template-columns: 100%;
-    grid-template-rows:
-      [master-start] var(--_master-size) [master-extra-start] var(--_master-extra)
-      [detail-start] var(--_detail-size) [detail-extra-start] var(--_detail-extra) [detail-end];
+    grid-template-rows: var(--_grid-template);
   }
 
   /* CSS grid placement */
@@ -75,7 +88,7 @@ export const masterDetailLayoutStyles = css`
       min-content resolves to 0, making it impossible to measure the detail's intrinsic
       minimum width from JavaScript.
     */
-    --_detail-area: detail-start / detail-extra-start;
+    --_detail-area: detail-start / detail-extra;
   }
 
   :host(:is([has-detail], [has-detail-placeholder]):not([recalculating-detail-size])) {
@@ -104,11 +117,11 @@ export const masterDetailLayoutStyles = css`
 
   /* Expand */
 
-  :host(:is([expand='both'], [expand='master'])) {
+  :host([expand-master]) {
     --_master-extra: 1fr;
   }
 
-  :host(:is([expand='both'], [expand='detail'])) {
+  :host([expand-detail]) {
     --_detail-extra: 1fr;
   }
 
@@ -238,8 +251,22 @@ export const masterDetailLayoutStyles = css`
     max-height: 100%;
   }
 
-  :host([has-detail][overlay][overlay-containment='viewport']) :is(#detail, #detailOutgoing, #backdrop) {
+  :host([has-detail][overlay][overlay-containment='page']) :is(#detail, #detailOutgoing, #backdrop) {
     position: fixed;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-right: env(safe-area-inset-right);
+    --safe-area-inset-top: 0px;
+    --safe-area-inset-bottom: 0px;
+    --safe-area-inset-left: 0px;
+    --safe-area-inset-right: 0px;
+    --safe-area-inset-inline-start: 0px;
+    --safe-area-inset-inline-end: 0px;
+  }
+
+  :host([dir='rtl'][has-detail][overlay][overlay-containment='page']) :is(#detail, #detailOutgoing, #backdrop) {
+    padding-right: 0;
+    padding-left: env(safe-area-inset-left);
   }
 
   /* Transitions */

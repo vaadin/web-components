@@ -41,7 +41,7 @@ export const dashboardLayoutStyles = css`
     gap: var(--_gap);
 
     /* Default min and max column widths */
-    --_default-col-min-width: 25em;
+    --_default-col-min-width: 20em;
     --_default-col-max-width: 1fr;
 
     /* Effective min and max column widths */

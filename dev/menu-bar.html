@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Menu bar</title>
     <script type="module" src="./common.js"></script>
+    <script type="module">
+      window.Vaadin ??= {};
+      window.Vaadin.featureFlags ??= {};
+      window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
+    </script>
   </head>
 
   <body>
@@ -39,8 +44,8 @@
           text: 'View',
           tooltip: 'Options for how to view the content',
           children: [
-            { text: 'Ruler', checked: false },
-            { text: 'Status bar', checked: true },
+            { text: 'Ruler', checked: false, tooltip: 'Show or hide the ruler' },
+            { text: 'Status bar', checked: true, tooltip: 'Show or hide the status bar' },
           ],
         },
         { component: makeComponent('Edit') },
@@ -49,9 +54,10 @@
           children: [
             {
               text: 'On social media',
-              children: [{ text: 'Facebook' }, { text: 'Twitter' }, { text: 'Instagram' }],
+              tooltip: 'Share options',
+              children: [{ text: 'Facebook' }, { text: 'Instagram' }],
             },
-            { text: 'By email', disabled: true },
+            { text: 'By email', tooltip: 'You cannot share by email', disabled: true },
             { component: 'hr' },
             { text: 'Get link' },
           ],

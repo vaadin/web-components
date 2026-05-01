@@ -1,6 +1,6 @@
 {
   "name": "api-docs",
-  "version": "25.2.0-alpha7",
+  "version": "25.2.0-alpha10",
   "private": true,
   "description": "Documentation site for Vaadin web components API",
   "license": "Apache-2.0",
@@ -12,7 +12,7 @@
     "generate": "tsx generate.ts"
   },
   "dependencies": {
-    "@11ty/eleventy": "^3.1.2",
+    "@11ty/eleventy": "^3.1.5",
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
     "markdown-it": "^14.1.1",
     "markdown-it-anchor": "^9.2.0",

@@ -3,7 +3,6 @@ export const snapshots = {};
 
 snapshots["vaadin-master-detail-layout host default"] = 
 `<vaadin-master-detail-layout
-  expand="master"
   has-master=""
   orientation="horizontal"
   overlay-containment="layout"
@@ -17,7 +16,6 @@ snapshots["vaadin-master-detail-layout host default"] =
 
 snapshots["vaadin-master-detail-layout host masterSize"] = 
 `<vaadin-master-detail-layout
-  expand="master"
   has-master=""
   orientation="horizontal"
   overlay-containment="layout"
@@ -32,7 +30,6 @@ snapshots["vaadin-master-detail-layout host masterSize"] =
 
 snapshots["vaadin-master-detail-layout host detailSize"] = 
 `<vaadin-master-detail-layout
-  expand="master"
   has-master=""
   orientation="horizontal"
   overlay-containment="layout"
@@ -47,7 +44,6 @@ snapshots["vaadin-master-detail-layout host detailSize"] =
 
 snapshots["vaadin-master-detail-layout host masterSize and detailSize"] = 
 `<vaadin-master-detail-layout
-  expand="master"
   has-master=""
   orientation="horizontal"
   overlay-containment="layout"
@@ -59,6 +55,34 @@ snapshots["vaadin-master-detail-layout host masterSize and detailSize"] =
 </vaadin-master-detail-layout>
 `;
 /* end snapshot vaadin-master-detail-layout host masterSize and detailSize */
+
+snapshots["vaadin-master-detail-layout host expandMaster"] = 
+`<vaadin-master-detail-layout
+  expand-master=""
+  has-master=""
+  orientation="horizontal"
+  overlay-containment="layout"
+>
+  <div>
+    Master content
+  </div>
+</vaadin-master-detail-layout>
+`;
+/* end snapshot vaadin-master-detail-layout host expandMaster */
+
+snapshots["vaadin-master-detail-layout host expandDetail"] = 
+`<vaadin-master-detail-layout
+  expand-detail=""
+  has-master=""
+  orientation="horizontal"
+  overlay-containment="layout"
+>
+  <div>
+    Master content
+  </div>
+</vaadin-master-detail-layout>
+`;
+/* end snapshot vaadin-master-detail-layout host expandDetail */
 
 snapshots["vaadin-master-detail-layout shadow default"] = 
 `<div
@@ -99,7 +123,6 @@ snapshots["vaadin-master-detail-layout shadow default"] =
 
 snapshots["vaadin-master-detail-layout detail default"] = 
 `<vaadin-master-detail-layout
-  expand="master"
   has-detail=""
   has-master=""
   master-size="300px"
@@ -119,7 +142,6 @@ snapshots["vaadin-master-detail-layout detail default"] =
 
 snapshots["vaadin-master-detail-layout detail overflow"] = 
 `<vaadin-master-detail-layout
-  expand="master"
   has-detail=""
   has-master=""
   master-size="300px"
@@ -139,7 +161,6 @@ snapshots["vaadin-master-detail-layout detail overflow"] =
 
 snapshots["vaadin-master-detail-layout detail hidden"] = 
 `<vaadin-master-detail-layout
-  expand="master"
   has-master=""
   master-size="300px"
   orientation="horizontal"
@@ -161,7 +182,6 @@ snapshots["vaadin-master-detail-layout detail hidden"] =
 
 snapshots["vaadin-master-detail-layout detail removed"] = 
 `<vaadin-master-detail-layout
-  expand="master"
   has-master=""
   master-size="300px"
   orientation="horizontal"
@@ -175,9 +195,29 @@ snapshots["vaadin-master-detail-layout detail removed"] =
 `;
 /* end snapshot vaadin-master-detail-layout detail removed */
 
+snapshots["vaadin-master-detail-layout detail forceOverlay"] = 
+`<vaadin-master-detail-layout
+  force-overlay=""
+  has-detail=""
+  has-master=""
+  master-size="300px"
+  orientation="horizontal"
+  overlay=""
+  overlay-containment="layout"
+  style="--_master-size: 300px;"
+>
+  <div>
+    Master content
+  </div>
+  <div slot="detail">
+    Detail content
+  </div>
+</vaadin-master-detail-layout>
+`;
+/* end snapshot vaadin-master-detail-layout detail forceOverlay */
+
 snapshots["vaadin-master-detail-layout detail placeholder default"] = 
 `<vaadin-master-detail-layout
-  expand="master"
   has-detail-placeholder=""
   has-master=""
   master-size="300px"
@@ -197,7 +237,6 @@ snapshots["vaadin-master-detail-layout detail placeholder default"] =
 
 snapshots["vaadin-master-detail-layout detail placeholder overflow"] = 
 `<vaadin-master-detail-layout
-  expand="master"
   has-detail-placeholder=""
   has-master=""
   master-size="300px"
@@ -217,7 +256,6 @@ snapshots["vaadin-master-detail-layout detail placeholder overflow"] =
 
 snapshots["vaadin-master-detail-layout detail placeholder removed"] = 
 `<vaadin-master-detail-layout
-  expand="master"
   has-master=""
   master-size="300px"
   orientation="horizontal"
@@ -233,21 +271,19 @@ snapshots["vaadin-master-detail-layout detail placeholder removed"] =
 
 snapshots["vaadin-master-detail-layout nested layouts default"] = 
 `<vaadin-master-detail-layout
-  expand="master"
   has-detail=""
   has-master=""
   master-size="100px"
   orientation="horizontal"
   overlay-containment="layout"
   overlay-size="100px"
-  style="--_master-size: 100px; --_overlay-size: 100px; --_detail-cached-size: 501px;"
+  style="--_overlay-size: 100px; --_master-size: 100px; --_detail-cached-size: 501px;"
 >
   <div>
     Master 0
   </div>
   <vaadin-master-detail-layout
     detail-size="400px"
-    expand="master"
     has-detail=""
     has-master=""
     master-size="100px"
@@ -255,13 +291,12 @@ snapshots["vaadin-master-detail-layout nested layouts default"] =
     overlay-containment="layout"
     overlay-size="100px"
     slot="detail"
-    style="--_master-size: 100px; --_detail-size: 400px; --_overlay-size: 100px;"
+    style="--_overlay-size: 100px; --_master-size: 100px; --_detail-size: 400px;"
   >
     <div>
       Master 1
     </div>
     <vaadin-master-detail-layout
-      expand="master"
       has-detail=""
       has-master=""
       master-size="100px"
@@ -269,14 +304,13 @@ snapshots["vaadin-master-detail-layout nested layouts default"] =
       overlay-containment="layout"
       overlay-size="100px"
       slot="detail"
-      style="--_master-size: 100px; --_overlay-size: 100px; --_detail-cached-size: 201px;"
+      style="--_overlay-size: 100px; --_master-size: 100px; --_detail-cached-size: 201px;"
     >
       <div>
         Master 2
       </div>
       <vaadin-master-detail-layout
         detail-size="100px"
-        expand="master"
         has-detail=""
         has-master=""
         master-size="100px"
@@ -300,7 +334,6 @@ snapshots["vaadin-master-detail-layout nested layouts default"] =
 
 snapshots["vaadin-master-detail-layout nested layouts overflow"] = 
 `<vaadin-master-detail-layout
-  expand="master"
   has-detail=""
   has-master=""
   keep-detail-column-offscreen=""
@@ -309,14 +342,13 @@ snapshots["vaadin-master-detail-layout nested layouts overflow"] =
   overlay=""
   overlay-containment="layout"
   overlay-size="100px"
-  style="--_master-size: 100px; --_overlay-size: 100px; width: 200px; --_detail-cached-size: 501px;"
+  style="--_overlay-size: 100px; --_master-size: 100px; width: 200px; --_detail-cached-size: 501px;"
 >
   <div>
     Master 0
   </div>
   <vaadin-master-detail-layout
     detail-size="400px"
-    expand="master"
     has-detail=""
     has-master=""
     keep-detail-column-offscreen=""
@@ -326,13 +358,12 @@ snapshots["vaadin-master-detail-layout nested layouts overflow"] =
     overlay-containment="layout"
     overlay-size="100px"
     slot="detail"
-    style="--_master-size: 100px; --_detail-size: 400px; --_overlay-size: 100px;"
+    style="--_overlay-size: 100px; --_master-size: 100px; --_detail-size: 400px;"
   >
     <div>
       Master 1
     </div>
     <vaadin-master-detail-layout
-      expand="master"
       has-detail=""
       has-master=""
       keep-detail-column-offscreen=""
@@ -342,14 +373,13 @@ snapshots["vaadin-master-detail-layout nested layouts overflow"] =
       overlay-containment="layout"
       overlay-size="100px"
       slot="detail"
-      style="--_master-size: 100px; --_overlay-size: 100px; --_detail-cached-size: 201px;"
+      style="--_overlay-size: 100px; --_master-size: 100px; --_detail-cached-size: 201px;"
     >
       <div>
         Master 2
       </div>
       <vaadin-master-detail-layout
         detail-size="100px"
-        expand="master"
         has-detail=""
         has-master=""
         keep-detail-column-offscreen=""
@@ -372,4 +402,74 @@ snapshots["vaadin-master-detail-layout nested layouts overflow"] =
 </vaadin-master-detail-layout>
 `;
 /* end snapshot vaadin-master-detail-layout nested layouts overflow */
+
+snapshots["vaadin-master-detail-layout nested layouts forceOverlay on child"] = 
+`<vaadin-master-detail-layout
+  has-detail=""
+  has-master=""
+  master-size="100px"
+  orientation="horizontal"
+  overlay-containment="layout"
+  overlay-size="100px"
+  style="--_overlay-size: 100px; --_master-size: 100px; --_detail-cached-size: 101px;"
+>
+  <div>
+    Master 0
+  </div>
+  <vaadin-master-detail-layout
+    detail-size="400px"
+    force-overlay=""
+    has-detail=""
+    has-master=""
+    keep-detail-column-offscreen=""
+    master-size="100px"
+    orientation="horizontal"
+    overlay=""
+    overlay-containment="layout"
+    overlay-size="100px"
+    slot="detail"
+    style="--_overlay-size: 100px; --_master-size: 100px; --_detail-size: 400px;"
+  >
+    <div>
+      Master 1
+    </div>
+    <vaadin-master-detail-layout
+      has-detail=""
+      has-master=""
+      keep-detail-column-offscreen=""
+      master-size="100px"
+      orientation="horizontal"
+      overlay=""
+      overlay-containment="layout"
+      overlay-size="100px"
+      slot="detail"
+      style="--_overlay-size: 100px; --_master-size: 100px; --_detail-cached-size: 201px;"
+    >
+      <div>
+        Master 2
+      </div>
+      <vaadin-master-detail-layout
+        detail-size="100px"
+        has-detail=""
+        has-master=""
+        keep-detail-column-offscreen=""
+        master-size="100px"
+        orientation="horizontal"
+        overlay=""
+        overlay-containment="layout"
+        slot="detail"
+        style="--_master-size: 100px; --_detail-size: 100px;"
+      >
+        <div>
+          Master 3
+        </div>
+        <div slot="detail">
+          Detail
+        </div>
+      </vaadin-master-detail-layout>
+    </vaadin-master-detail-layout>
+  </vaadin-master-detail-layout>
+</vaadin-master-detail-layout>
+`;
+/* end snapshot vaadin-master-detail-layout nested layouts forceOverlay on child */
 

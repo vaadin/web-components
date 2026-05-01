@@ -9,7 +9,6 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { menuBarStyles } from './styles/vaadin-menu-bar-base-styles.js';
@@ -96,23 +95,6 @@ class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoI
       <slot name="tooltip"></slot>
     `;
   }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._tooltipController = new TooltipController(this);
-    this._tooltipController.setManual(true);
-    this.addController(this._tooltipController);
-  }
-
-  /**
-   * Fired when either a submenu item or menu bar button without nested children is clicked.
-   *
-   * @event item-selected
-   * @param {Object} detail
-   * @param {Object} detail.value the selected menu bar item
-   */
 }
 
 defineCustomElement(MenuBar);

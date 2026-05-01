@@ -6,6 +6,8 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!-- This is needed for iOS trigger @media (display-mode: standalone) when launched from the home screen -->
+    <link rel="manifest" href="assets/manifest.webmanifest">
     <title>Aura</title>
     <link rel="stylesheet" href="../packages/aura/aura.css" />
     <link rel="stylesheet" href="./aura/aura-view.css" />
@@ -29,25 +31,85 @@
       import '@vaadin/item';
 
       // Fake navigation: prevent navigation, update 'current' item manually
+      const appLayout = document.querySelector('vaadin-app-layout');
+
+      const findNavItemByViewName = (viewName) =>
+        Array.from(document.querySelectorAll('vaadin-side-nav-item[data-view-name]')).find(
+          (item) => item.dataset.viewName === viewName,
+        );
+
+      const getCurrentViewElement = () => Array.from(appLayout.children).find((el) => !el.hasAttribute('slot'));
+
+      const setCurrentItem = (currentItem) => {
+        document.querySelectorAll('vaadin-side-nav-item').forEach((item) => item.removeAttribute('current'));
+
+        if (currentItem) {
+          currentItem.setAttribute('current', '');
+        }
+      };
+
+      const showView = (viewName) => {
+        if (!viewName) {
+          return;
+        }
+
+        const currentView = getCurrentViewElement();
+        if (currentView?.localName !== viewName) {
+          currentView?.remove();
+          const view = document.createElement(viewName);
+          appLayout.append(view);
+        }
+      };
+
+      const navigateToItem = (item, updateHash = true) => {
+        if (!item) {
+          return;
+        }
+
+        setCurrentItem(item);
+
+        const { viewName } = item.dataset;
+        if (viewName) {
+          showView(viewName);
+
+          if (updateHash && decodeURIComponent(window.location.hash.slice(1)) !== viewName) {
+            window.location.hash = encodeURIComponent(viewName);
+          }
+        }
+      };
+
       document.querySelectorAll('vaadin-side-nav').forEach((nav) => {
         nav.addEventListener('click', (e) => {
           const item = e.target.closest('vaadin-side-nav-item');
           if (item) {
             e.preventDefault();
-            item
-              .closest('vaadin-side-nav')
-              .parentNode.querySelectorAll('vaadin-side-nav-item')
-              .forEach((item) => item.removeAttribute('current'));
-            item.setAttribute('current', '');
-
-            if (item.dataset.viewName) {
-              document.querySelector('vaadin-app-layout > :not([slot])').remove();
-              const view = document.createElement(item.dataset.viewName);
-              document.querySelector('vaadin-app-layout').append(view);
-            }
+            navigateToItem(item);
           }
         });
       });
+
+      window.addEventListener('hashchange', () => {
+        const viewName = decodeURIComponent(window.location.hash.slice(1));
+        const item = findNavItemByViewName(viewName);
+
+        if (item) {
+          navigateToItem(item, false);
+        }
+      });
+
+      const viewNameFromHash = decodeURIComponent(window.location.hash.slice(1));
+      const hashedItem = findNavItemByViewName(viewNameFromHash);
+
+      if (hashedItem) {
+        navigateToItem(hashedItem, false);
+      } else {
+        const currentViewName = getCurrentViewElement()?.localName;
+        const currentItem = findNavItemByViewName(currentViewName);
+
+        if (currentItem) {
+          navigateToItem(currentItem, false);
+        }
+      }
     </script>
   </head>
   <body>
@@ -159,9 +221,7 @@
         </vaadin-button>
       </footer>
 
-      <main style="height: 100%">
-        <dashboard-view></dashboard-view>
-      </main>
+      <dashboard-view></dashboard-view>
     </vaadin-app-layout>
     <aura-theme-editor></aura-theme-editor>
   </body>

@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { setViewport } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import '../src/vaadin-app-layout.js';
 import '../src/vaadin-drawer-toggle.js';
 import { tab } from './helpers.js';
@@ -28,6 +28,7 @@ describe('desktop navigation', () => {
       </div>
     `);
     [layout, outerInput] = wrapper.children;
+    await nextResize(wrapper);
     await nextRender();
     toggle = layout.querySelector('[slot=navbar]');
     drawerInput = layout.querySelector('[slot=drawer] > input');

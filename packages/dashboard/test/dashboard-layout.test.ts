@@ -32,7 +32,7 @@ const defaultMinimumColumnWidth = (() => {
   const div = document.createElement('div');
   document.body.appendChild(div);
   div.style.width = '1rem';
-  const minColWidth = div.offsetWidth * 25;
+  const minColWidth = div.offsetWidth * 20;
   div.remove();
   return minColWidth;
 })();

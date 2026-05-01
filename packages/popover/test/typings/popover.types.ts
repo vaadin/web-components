@@ -37,6 +37,7 @@ assertType<boolean>(popover.modal);
 assertType<boolean>(popover.withBackdrop);
 assertType<boolean>(popover.noCloseOnEsc);
 assertType<boolean>(popover.noCloseOnOutsideClick);
+assertType<boolean>(popover.noTabFocus);
 assertType<number>(popover.focusDelay);
 assertType<number>(popover.hideDelay);
 assertType<number>(popover.hoverDelay);

@@ -43,12 +43,6 @@ export class TooltipController extends SlotController {
   manual: boolean;
 
   /**
-   * When true, the tooltip is opened programmatically.
-   * Only works if `manual` is set to `true`.
-   */
-  opened: boolean;
-
-  /**
    * Position of the tooltip with respect to its target.
    */
   position: TooltipPosition;
@@ -75,11 +69,6 @@ export class TooltipController extends SlotController {
   setManual(manual: boolean): void;
 
   /**
-   * Toggle opened state on the slotted tooltip.
-   */
-  setOpened(opened: boolean): void;
-
-  /**
    * Set default position for the slotted tooltip.
    * This can be overridden by setting the position
    * using corresponding property or attribute.
@@ -96,4 +85,18 @@ export class TooltipController extends SlotController {
    * Set an HTML element to attach the tooltip to.
    */
   setTarget(target: HTMLElement): void;
+
+  /**
+   * Schedule opening the slotted tooltip. Respects the tooltip's
+   * configured `hoverDelay` / `focusDelay` and the shared warm-up state.
+   * No-op when no tooltip is slotted.
+   */
+  open(options?: { hover?: boolean; focus?: boolean; immediate?: boolean }): void;
+
+  /**
+   * Schedule closing the slotted tooltip. Respects the tooltip's
+   * configured `hideDelay` unless `immediate` is true.
+   * No-op when no tooltip is slotted.
+   */
+  close(immediate?: boolean): void;
 }

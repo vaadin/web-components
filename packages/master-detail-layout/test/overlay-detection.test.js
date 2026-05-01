@@ -132,7 +132,7 @@ describe('overlay detection', () => {
       beforeEach(async () => {
         layout = fixtureSync(`
           <vaadin-master-detail-layout
-            expand="master"
+            expand-master
             master-size="300px"
             detail-size="300px"
             orientation="${orientation}"

@@ -206,6 +206,19 @@ declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(ThemePrope
   noCloseOnEsc: boolean;
 
   /**
+   * When true, pressing Tab on the target or a sibling element does not move
+   * focus into the popover's content (including any nested popovers), and
+   * Shift+Tab does not move focus into the popover's last focusable. Focus
+   * still moves out of the popover on Tab / Shift+Tab if it was placed
+   * inside programmatically.
+   *
+   * Has no effect on modal popovers, which use their own focus trap.
+   *
+   * @attr {boolean} no-tab-focus
+   */
+  noTabFocus: boolean;
+
+  /**
    * Popover trigger mode, used to configure how the popover is opened or closed.
    * Could be set to multiple by providing an array, e.g. `trigger = ['hover', 'focus']`.
    *

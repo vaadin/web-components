@@ -46,10 +46,6 @@ const sectionStyles = css`
     grid-column: var(--_section-column);
   }
 
-  :host::before {
-    z-index: 2 !important;
-  }
-
   ::slotted(vaadin-dashboard-widget-wrapper) {
     display: contents;
   }

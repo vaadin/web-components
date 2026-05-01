@@ -336,11 +336,18 @@ export const ListMixin = (superClass) =>
     }
 
     /**
-     * Fired when the selection is changed.
-     * Not fired when used in `multiple` selection mode.
+     * Override method inherited from `KeyboardDirectionMixin` to allow
+     * focusing disabled items that are configured so.
      *
-     * @event selected-changed
-     * @param {Object} detail
-     * @param {Object} detail.value the index of the item selected in the items array.
+     * @param {Element} item
+     * @protected
+     * @override
      */
+    _isItemFocusable(item) {
+      if (item.disabled && item.__shouldAllowFocusWhenDisabled) {
+        return item.__shouldAllowFocusWhenDisabled();
+      }
+
+      return super._isItemFocusable(item);
+    }
   };

@@ -1,7 +1,19 @@
 html {
-  height: 100dvh;
+  height: 100%;
   --vaadin-user-color: var(--aura-accent-color);
   /* TODO how to use a different surface level in dark mode? */
+}
+
+/* 100% doesn't cover the entire screen on standalone iOS mode (home screen app) */
+/* 100vh would work on iOS 18 but not on iOS 17 (too tall in Safari, correct in standalone mode) */
+/* 100lvh is too tall in Safari. 100svh is too short in standalone apps. */
+/* 100dvh doesn't seem to work on first render when launched from home screen (initially like 100svh, then changes to 100lvh when you try to scroll the view) */
+/* So, we use 100% for the regular case (Safari and other browsers), and 100lvh for iOS home screen apps */
+/* TODO this needs be in Flow bootstrap page styles */
+@media all and (display-mode: standalone) {
+  html {
+    height: 100lvh;
+  }
 }
 
 body {

@@ -216,10 +216,4 @@ export const DialogBaseMixin = (superClass) =>
     __sizeChanged(width, height) {
       requestAnimationFrame(() => this.$.overlay.setBounds({ width, height }, false));
     }
-
-    /**
-     * Fired when the dialog is closed.
-     *
-     * @event closed
-     */
   };

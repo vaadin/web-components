@@ -24,7 +24,9 @@ export * from './vaadin-grid-sort-column-mixin.js';
  *
  * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  */
-declare class GridSortColumn<TItem = GridDefaultItem> extends HTMLElement {}
+declare class GridSortColumn<TItem = GridDefaultItem> extends HTMLElement {
+  hidden: boolean;
+}
 
 interface GridSortColumn<TItem = GridDefaultItem>
   extends GridSortColumnMixinClass, GridColumnMixin<TItem, GridColumn<TItem>>, GridColumn<TItem> {

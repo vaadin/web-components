@@ -49,6 +49,11 @@ class MenuBarItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInje
     // because the role is removed when teleporting to button.
     this.setAttribute('role', 'menuitem');
   }
+
+  /** @override */
+  __shouldAllowFocusWhenDisabled() {
+    return window.Vaadin.featureFlags.accessibleDisabledMenuItems;
+  }
 }
 
 defineCustomElement(MenuBarItem);

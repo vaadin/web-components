@@ -106,6 +106,34 @@ export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenu
  *
  * **NOTE:** when the `items` array is defined, the renderer cannot be used.
  *
+ * #### Disabled menu items
+ *
+ * When disabled, menu items are rendered as "dimmed".
+ *
+ * By default, disabled items are not focusable and don't react to hover.
+ * As a result, they are hidden from assistive technologies, and it's not
+ * possible to show a tooltip to explain why they are disabled. This can
+ * be addressed by enabling the feature flag `accessibleDisabledMenuItems`,
+ * which makes disabled items focusable and hoverable, while still
+ * preventing them from being activated:
+ *
+ * ```js
+ * // Set before any context menu is attached to the DOM.
+ * window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
+ * ```
+ *
+ * #### Item tooltips
+ *
+ * Menu items can have tooltips that are shown on hover and keyboard
+ * focus. To enable them, add a slotted `<vaadin-tooltip>` element
+ * and set the `tooltip` property on each item that should have one:
+ *
+ * ```html
+ * <vaadin-context-menu>
+ *   <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
+ * </vaadin-context-menu>
+ * ```
+ *
  * ### Rendering
  *
  * The content of the menu can be populated by using the renderer callback function.

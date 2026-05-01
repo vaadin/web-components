@@ -278,7 +278,7 @@ export const CustomFieldMixin = (superClass) =>
     /** @private */
     __inputsChanged(inputs, oldInputs) {
       if (inputs.length === 0) {
-        if (oldInputs && oldInputs.length > 0) {
+        if (oldInputs?.length > 0) {
           this.__setValue();
         }
         return;

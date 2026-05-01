@@ -125,7 +125,7 @@ export const AccordionPanelMixin = (superClass) =>
           node.setAttribute('aria-labelledby', focusElement.id);
         }
 
-        if (node && node.id) {
+        if (node?.id) {
           focusElement.setAttribute('aria-controls', node.id);
         } else {
           focusElement.removeAttribute('aria-controls');

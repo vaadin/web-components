@@ -42,6 +42,18 @@ describe('vaadin-master-detail-layout', () => {
       await onceResized(layout);
       await expect(layout).dom.to.equalSnapshot();
     });
+
+    it('expandMaster', async () => {
+      layout.expandMaster = true;
+      await onceResized(layout);
+      await expect(layout).dom.to.equalSnapshot();
+    });
+
+    it('expandDetail', async () => {
+      layout.expandDetail = true;
+      await onceResized(layout);
+      await expect(layout).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
@@ -84,6 +96,12 @@ describe('vaadin-master-detail-layout', () => {
 
     it('removed', async () => {
       layout.querySelector('[slot="detail"]').remove();
+      await onceResized(layout);
+      await expect(layout).dom.to.equalSnapshot();
+    });
+
+    it('forceOverlay', async () => {
+      layout.forceOverlay = true;
       await onceResized(layout);
       await expect(layout).dom.to.equalSnapshot();
     });
@@ -159,6 +177,12 @@ describe('vaadin-master-detail-layout', () => {
 
     it('overflow', async () => {
       layout.style.width = '200px';
+      await nextFrame();
+      await expect(layout).dom.to.equalSnapshot();
+    });
+
+    it('forceOverlay on child', async () => {
+      layout.querySelector('vaadin-master-detail-layout').forceOverlay = true;
       await nextFrame();
       await expect(layout).dom.to.equalSnapshot();
     });

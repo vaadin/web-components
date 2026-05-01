@@ -126,12 +126,4 @@ export const ColumnResizingMixin = (superClass) =>
         this._resizeHandler();
       }
     }
-
-    /**
-     * Fired when a column in the grid is resized by the user.
-     *
-     * @event column-resize
-     * @param {Object} detail
-     * @param {Object} detail.resizedColumn the column that was resized
-     */
   };

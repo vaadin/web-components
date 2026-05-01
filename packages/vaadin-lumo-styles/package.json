@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-lumo-styles",
-  "version": "25.2.0-alpha7",
+  "version": "25.2.0-alpha10",
   "publishConfig": {
     "access": "public"
   },
@@ -42,13 +42,13 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/component-base": "25.2.0-alpha7",
-    "@vaadin/icon": "25.2.0-alpha7",
-    "@vaadin/vaadin-themable-mixin": "25.2.0-alpha7"
+    "@vaadin/component-base": "25.2.0-alpha10",
+    "@vaadin/icon": "25.2.0-alpha10",
+    "@vaadin/vaadin-themable-mixin": "25.2.0-alpha10"
   },
   "devDependencies": {
     "cssnano": "^7.1.1",
-    "postcss": "^8.1.0",
+    "postcss": "^8.5.12",
     "postcss-cli": "^11.0.1",
     "postcss-import": "^16.1.1"
   }

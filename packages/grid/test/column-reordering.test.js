@@ -435,6 +435,26 @@ describe('reordering simple grid', () => {
       expect(e.detail.columns.map((column) => column.getAttribute('index'))).to.eql(['2', '1', '3', '4']);
     });
 
+    it('should restore cell order to match column DOM order when _resetColumnOrder is called', () => {
+      // Drag the first column over the last column so cells are reordered to [2, 3, 4, 1]
+      dragOver(headerContent[0], headerContent[3]);
+      flushGrid(grid);
+      expectVisualOrder(grid, [2, 3, 4, 1]);
+
+      // Simulate the Flow component calling _resetColumnOrder to restore the order of cells
+      // to match the DOM order of the <vaadin-grid-column> elements, which hasn't changed.
+      grid._resetColumnOrder();
+      flushGrid(grid);
+      expectVisualOrder(grid, [1, 2, 3, 4]);
+    });
+
+    it('should skip DOM work in _resetColumnOrder when cells already match DOM order', () => {
+      const spy = sinon.spy(grid, '_renderColumnTree');
+      grid._resetColumnOrder();
+      flushGrid(grid);
+      expect(spy.called).to.be.false;
+    });
+
     describe('focus button mode', () => {
       beforeEach(() => {
         grid = fixtureSync(`

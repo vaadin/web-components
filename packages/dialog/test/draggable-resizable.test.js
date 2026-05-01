@@ -849,6 +849,71 @@ describe('nested draggable dialogs', () => {
     expect(Math.floor(childDraggedBounds.top)).to.be.eql(Math.floor(childBounds.top));
     expect(Math.floor(childDraggedBounds.left)).to.be.eql(Math.floor(childBounds.left));
   });
+
+  it('should not bubble "drag-start" event to parent dialog', () => {
+    const spy = sinon.spy();
+    parentDialog.addEventListener('drag-start', spy);
+
+    drag(childHeader, dx, dx);
+
+    expect(spy.called).to.be.false;
+  });
+
+  it('should not bubble "dragged" event to parent dialog', () => {
+    const spy = sinon.spy();
+    parentDialog.addEventListener('dragged', spy);
+
+    drag(childHeader, dx, dx);
+
+    expect(spy.called).to.be.false;
+  });
+});
+
+describe('nested resizable dialogs', () => {
+  let parentDialog, childDialog, childResizer, dx;
+
+  beforeEach(async () => {
+    parentDialog = fixtureSync('<vaadin-dialog resizable opened></vaadin-dialog>');
+    await nextRender();
+
+    parentDialog.renderer = (root) => {
+      if (!root.firstChild) {
+        root.innerHTML = '<div>Parent dialog content</div>';
+
+        childDialog = document.createElement('vaadin-dialog');
+        childDialog.resizable = true;
+        childDialog.renderer = (childRoot) => {
+          childRoot.innerHTML = '<div>Child dialog content</div>';
+        };
+        root.appendChild(childDialog);
+      }
+    };
+    await nextUpdate(parentDialog);
+
+    childDialog.opened = true;
+    await nextRender();
+
+    childResizer = childDialog.$.overlay.$.overlay.querySelector('.se');
+    dx = 30;
+  });
+
+  it('should not bubble "resize-start" event to parent dialog', () => {
+    const spy = sinon.spy();
+    parentDialog.addEventListener('resize-start', spy);
+
+    resize(childResizer, dx, dx);
+
+    expect(spy.called).to.be.false;
+  });
+
+  it('should not bubble "resize" event to parent dialog', () => {
+    const spy = sinon.spy();
+    parentDialog.addEventListener('resize', spy);
+
+    resize(childResizer, dx, dx);
+
+    expect(spy.called).to.be.false;
+  });
 });
 
 describe('touch', () => {

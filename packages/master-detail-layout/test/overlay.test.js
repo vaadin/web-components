@@ -193,7 +193,7 @@ describe('overlay', () => {
     });
   });
 
-  describe('overlayContainment viewport', () => {
+  describe('overlayContainment page', () => {
     ['horizontal', 'vertical'].forEach((orientation) => {
       describe(orientation, () => {
         let layout, detail, backdrop;
@@ -207,7 +207,7 @@ describe('overlay', () => {
               ${orientationAttr}
               master-size="300px"
               detail-size="300px"
-              overlay-containment="viewport"
+              overlay-containment="page"
               style="${sizeStyle}"
             >
               <div>Master</div>

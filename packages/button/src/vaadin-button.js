@@ -77,16 +77,14 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
   static get properties() {
     return {
       /**
-       * When disabled, the button is rendered as "dimmed" and prevents all
-       * user interactions (mouse and keyboard).
+       * When disabled, the button is rendered as "dimmed".
        *
-       * Since disabled buttons are not focusable and cannot react to hover
-       * events by default, it can cause accessibility issues by making them
-       * entirely invisible to assistive technologies, and prevents the use
-       * of Tooltips to explain why the action is not available. This can be
-       * addressed by enabling the feature flag `accessibleDisabledButtons`,
+       * By default, disabled buttons are not focusable and don't react to hover.
+       * As a result, they are hidden from assistive technologies, and it's not
+       * possible to show a tooltip to explain why they are disabled. This can
+       * be addressed by enabling the feature flag `accessibleDisabledButtons`,
        * which makes disabled buttons focusable and hoverable, while still
-       * preventing them from being triggered:
+       * preventing them from being activated:
        *
        * ```js
        * // Set before any button is attached to the DOM.

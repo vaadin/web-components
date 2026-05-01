@@ -12,8 +12,7 @@ const ignoredMembers = ['slotName', 'id'];
 
 // Events to exclude from CEM output:
 // - eventName: false positive from dynamic dispatchEvent calls (e.g., `new CustomEvent(eventName, ...)`)
-// - focus, blur: native events picked up by CEM without @fires annotations, not part of the public API
-const ignoredEvents = ['eventName', 'focus', 'blur'];
+const ignoredEvents = ['eventName'];
 
 const ignoredStaticMembers = [
   'is',

@@ -76,6 +76,10 @@ export const ItemMixin = (superClass) =>
       if (attrValue !== null) {
         this.value = attrValue;
       }
+
+      if (this.__shouldAllowFocusWhenDisabled()) {
+        this.style.setProperty('--_vaadin-item-disabled-pointer-events', 'auto');
+      }
     }
 
     /**
@@ -84,7 +88,7 @@ export const ItemMixin = (superClass) =>
      * @override
      */
     focus(options) {
-      if (this.disabled) {
+      if (this.disabled && !this.__shouldAllowFocusWhenDisabled()) {
         return;
       }
 
@@ -115,7 +119,9 @@ export const ItemMixin = (superClass) =>
 
       if (disabled) {
         this.selected = false;
-        this.blur();
+        if (!this.__shouldAllowFocusWhenDisabled()) {
+          this.blur();
+        }
       }
     }
 
@@ -141,5 +147,16 @@ export const ItemMixin = (superClass) =>
         // so that it doesn't fire the `click` event when the element is disabled.
         this.click();
       }
+    }
+
+    /**
+     * Returns whether the component should be focusable when disabled.
+     * Returns false by default.
+     *
+     * @private
+     * @return {boolean}
+     */
+    __shouldAllowFocusWhenDisabled() {
+      return false;
     }
   };

@@ -65,12 +65,13 @@ import {
  *
  * Attribute                 | Description
  * --------------------------|----------------------
- * `expand`                  | Set to `master`, `detail`, or `both`.
+ * `expand-master`           | Set when the master area expands to fill available space.
+ * `expand-detail`           | Set when the detail area expands to fill available space.
  * `orientation`             | Set to `horizontal` or `vertical` depending on the orientation.
  * `has-detail`              | Set when the detail content is provided and visible.
  * `has-detail-placeholder`  | Set when the detail placeholder content is provided.
  * `overlay`                 | Set when columns don't fit and the detail is shown as an overlay.
- * `overlay-containment`     | Set to `layout` or `viewport`.
+ * `overlay-containment`     | Set to `layout` or `page`.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -120,7 +121,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       detailSize: {
         type: String,
         sync: true,
-        observer: '__detailSizeChanged',
       },
 
       /**
@@ -134,7 +134,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       masterSize: {
         type: String,
         sync: true,
-        observer: '__masterSizeChanged',
       },
 
       /**
@@ -161,13 +160,12 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         value: 'horizontal',
         reflectToAttribute: true,
         sync: true,
-        observer: '__orientationChanged',
       },
 
       /**
        * Defines the containment of the detail area when the layout is in
        * overlay mode. When set to `layout`, the overlay is confined to the
-       * layout. When set to `viewport`, the overlay is confined to the
+       * layout. When set to `page`, the overlay is confined to the
        * browser's viewport. Defaults to `layout`.
        *
        * @attr {string} overlay-containment
@@ -180,13 +178,29 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
       },
 
       /**
-       * Controls which column(s) expand to fill available space.
-       * Possible values: `'master'`, `'detail'`, `'both'`.
-       * Defaults to `'master'`.
+       * When true, the master area grows to fill the available space.
+       * If `expandDetail` is also true, both areas share the available
+       * space equally.
+       *
+       * @attr {boolean} expand-master
        */
-      expand: {
-        type: String,
-        value: 'master',
+      expandMaster: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        sync: true,
+      },
+
+      /**
+       * When true, the detail area grows to fill the available space.
+       * If `expandMaster` is also true, both areas share the available
+       * space equally.
+       *
+       * @attr {boolean} expand-detail
+       */
+      expandDetail: {
+        type: Boolean,
+        value: false,
         reflectToAttribute: true,
         sync: true,
       },
@@ -200,6 +214,20 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         type: Boolean,
         value: false,
         reflectToAttribute: true,
+      },
+
+      /**
+       * When true, the layout forces the detail area to be shown as an overlay,
+       * even if there is enough space for master and detail to be shown next to
+       * each other using the default (split) mode.
+       *
+       * @attr {boolean} force-overlay
+       */
+      forceOverlay: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        sync: true,
       },
 
       /** @private */
@@ -218,8 +246,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @protected */
   render() {
     const isOverlay = this.hasAttribute('has-detail') && this.hasAttribute('overlay');
-    const isViewport = isOverlay && this.overlayContainment === 'viewport';
-    const isLayoutContained = isOverlay && !isViewport;
+    const isPage = isOverlay && this.overlayContainment === 'page';
+    const isLayoutContained = isOverlay && !isPage;
 
     return html`
       <div id="backdrop" part="backdrop" @click="${this.__onBackdropClick}"></div>
@@ -233,7 +261,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
         id="detail"
         part="detail"
         role="${isOverlay ? 'dialog' : nothing}"
-        aria-modal="${isViewport ? 'true' : nothing}"
+        aria-modal="${isPage ? 'true' : nothing}"
         @keydown="${this.__onDetailKeydown}"
       >
         <slot name="detail" @slotchange="${this.__onSlotChange}"></slot>
@@ -270,48 +298,36 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     cancelAnimations(this);
   }
 
-  /** @private */
-  __masterSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('master-size', size, oldSize);
+  /** @protected */
+  updated(props) {
+    super.updated(props);
 
-    if (oldSize != null) {
+    if (props.has('masterSize')) {
+      this.style.setProperty('--_master-size', this.masterSize);
+    }
+
+    if (props.has('detailSize')) {
+      this.style.setProperty('--_detail-size', this.detailSize);
+    }
+
+    if (
+      (props.has('masterSize') && props.get('masterSize') != null) ||
+      (props.has('detailSize') && props.get('detailSize') != null) ||
+      (props.has('orientation') && props.get('orientation') != null) ||
+      (props.has('forceOverlay') && props.get('forceOverlay') != null)
+    ) {
       this.recalculateLayout();
     }
   }
 
   /** @private */
-  __detailSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('detail-size', size, oldSize);
-
-    if (oldSize != null) {
-      this.recalculateLayout();
-    }
+  __overlaySizeChanged(size) {
+    this.style.setProperty('--_overlay-size', size);
   }
 
   /** @private */
-  __orientationChanged(_orientation, oldOrientation) {
-    if (oldOrientation != null) {
-      this.recalculateLayout();
-    }
-  }
-
-  /** @private */
-  __overlaySizeChanged(size, oldSize) {
-    this.__updateStyleProperty('overlay-size', size, oldSize);
-  }
-
-  /** @private */
-  __detailCachedSizeChanged(size, oldSize) {
-    this.__updateStyleProperty('detail-cached-size', size, oldSize);
-  }
-
-  /** @private */
-  __updateStyleProperty(prop, size, oldSize) {
-    if (size) {
-      this.style.setProperty(`--_${prop}`, size);
-    } else if (oldSize) {
-      this.style.removeProperty(`--_${prop}`);
-    }
+  __detailCachedSizeChanged(size) {
+    this.style.setProperty('--_detail-cached-size', size);
   }
 
   /** @private */
@@ -321,7 +337,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   __initResizeObserver() {
-    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__onResize());
+    this.__resizeObserver ||= new ResizeObserver(() => this.__onResize());
     this.__resizeObserver.disconnect();
 
     [this, this.$.master, this.$.detail, this.__slottedMaster, this.__slottedDetail].forEach((node) => {
@@ -367,7 +383,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     const trackSizesProp = isVertical ? 'gridTemplateRows' : 'gridTemplateColumns';
     const trackSizes = parseTrackSizes(computedStyle[trackSizesProp]);
 
-    const hasOverflow = (hasDetail || hasDetailPlaceholder) && detectOverflow(hostSize, trackSizes);
+    const hasOverflow =
+      (hasDetail || hasDetailPlaceholder) && (this.forceOverlay || detectOverflow(hostSize, trackSizes));
     const focusTarget = !hadDetail && hasDetail && hasOverflow ? getFocusableElements(slottedDetail)[0] : null;
 
     return {
@@ -393,7 +410,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     // the slotted detail content to use as a fallback for the detail column size
     // while the detail content is rendered in an overlay.
     if ((hasDetail || hasDetailPlaceholder) && this.__isDetailAutoSized && detailSize > 0) {
-      this.__detailCachedSize = this.__detailCachedSize || `${Math.ceil(detailSize)}px`;
+      this.__detailCachedSize ||= `${Math.ceil(detailSize)}px`;
     } else {
       this.__detailCachedSize = null;
     }
@@ -513,7 +530,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     const updateSlot = async () => {
-      if (oldDetail && oldDetail.slot === 'detail') {
+      if (oldDetail?.slot === 'detail') {
         oldDetail.remove();
       }
 
@@ -623,7 +640,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     } finally {
       // Skip removal if the slot was reassigned during the transition.
       // The React component does this to let React handle the removal.
-      if (oldDetail && oldDetail.slot === 'detail-outgoing') {
+      if (oldDetail?.slot === 'detail-outgoing') {
         oldDetail.remove();
       }
     }
@@ -654,16 +671,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   get __slottedDetailPlaceholder() {
     return this.querySelector(':scope > [slot="detail-placeholder"]');
   }
-
-  /**
-   * @event backdrop-click
-   * Fired when the user clicks the backdrop in the overlay mode.
-   */
-
-  /**
-   * @event detail-escape-press
-   * Fired when the user presses Escape in the detail area.
-   */
 }
 
 defineCustomElement(MasterDetailLayout);

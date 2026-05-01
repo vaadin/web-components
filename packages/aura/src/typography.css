@@ -45,7 +45,7 @@
 :where(:root),
 :where(:host),
 :where([theme]) {
-  --aura-font-size-xs: clamp(0.625rem, round(var(--aura-font-size-m) * 0.75, 0.0625rem), 0.8125rem);
+  --aura-font-size-xs: clamp(0.625rem, round(var(--aura-font-size-m) * 0.85, 0.0625rem), 0.8125rem);
   --aura-font-size-s: round((var(--aura-font-size-m) + var(--aura-font-size-xs)) / 2, 0.0625rem);
   --aura-font-size-m: round(var(--aura-base-font-size) / 16 * 1rem, 0.0625rem);
   --aura-font-size-l: round(var(--aura-font-size-m) * 1.125, 0.0625rem);
