@@ -44,7 +44,7 @@ those. See [Events](08-events.md).
 
 Use this canonical shape (every public component already follows it):
 
-````js
+```js
 /**
  * `<vaadin-{name}>` is a [one-sentence description].
  *
@@ -84,7 +84,7 @@ Use this canonical shape (every public component already follows it):
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-````
+```
 
 ## Property JSDoc
 
