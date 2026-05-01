@@ -62,9 +62,20 @@ absent means `false`. There is no way to set a boolean attribute to
 describe the **non-default state** — the state that's activated when the
 attribute is added.
 
-Examples that follow the rule: `disabled` (default: enabled),
+Standard primitives follow the rule: `disabled` (default: enabled),
 `readonly` (default: editable), `required` (default: optional),
-`hidden` (default: visible). An `enabled` attribute would be backwards.
+`hidden` (default: visible), `opened` (default: closed).
+
+For component-specific properties, a `Visible` or `Hidden` suffix makes
+the non-default state explicit:
+
+- `clearButtonVisible` — default is hidden; the property shows it.
+- `revealButtonHidden` — default is visible; the property hides it.
+
+The `no-` prefix fits properties that disable a default **behaviour** —
+e.g. `noCloseOnEsc`, `noTabFocus`. It's also acceptable for presence
+cases (e.g. `noFilter`, `noSort`) and is preferable to imperative verbs
+like `hideEditColumn`, which read like commands rather than states.
 
 ### Protected API extendability
 
