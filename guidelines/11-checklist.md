@@ -1,7 +1,7 @@
 # New-component checklist
 
 Use this when scaffolding a new component. The checklist is a quick scan,
-not a substitute for reading [Component Structure](02-component-structure.md) and the rest.
+not a substitute for reading [Component Structure](03-component-structure.md) and the rest.
 
 ## Files
 
@@ -14,7 +14,7 @@ not a substitute for reading [Component Structure](02-component-structure.md) an
 - [ ] `.d.ts` next to every `.js` source file.
 - [ ] `package.json`, `README.md`, `LICENSE` in place.
 - [ ] License header on every `.js` and `.d.ts` source file (Apache or
-      Commercial — see [Component Structure](02-component-structure.md)).
+      Commercial — see [Component Structure](03-component-structure.md)).
 
 ## Implementation
 
@@ -77,6 +77,7 @@ not a substitute for reading [Component Structure](02-component-structure.md) an
 
 ## Final validation
 
+- [ ] API and behaviour reviewed against [Design](02-design.md).
 - [ ] `yarn lint` passes.
 - [ ] `yarn lint:types` passes.
 - [ ] `yarn test --group {name}` passes.

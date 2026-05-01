@@ -96,7 +96,7 @@ a Lit template. Used by `combo-box` (item renderer), `grid` (cell renderer),
 
 ## `@vaadin/vaadin-themable-mixin`
 
-Theme infrastructure (covered in [Theming](09-theming.md)):
+Theme infrastructure (covered in [Theming](10-theming.md)):
 
 - **`ThemableMixin`** — registers theme styles and applies them.
 - **`LumoInjectionMixin`** — internal; injects Lumo styles via CSS custom

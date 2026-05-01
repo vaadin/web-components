@@ -4,10 +4,10 @@
 
 - [**Lit 3**](https://lit.dev) — base class and templating.
 - **TypeScript 6** — type definitions for every public component (see
-  [TypeScript](06-typescript.md)).
+  [TypeScript](07-typescript.md)).
 
 Every component is built as a Lit `LitElement`, layered with the Vaadin
-mixins documented in [Common packages](04-common-packages.md). New components
+mixins documented in [Common packages](05-common-packages.md). New components
 use Lit-native features (`static properties`, `firstUpdated`, `updated`,
 field initializers) rather than Polymer-style options.
 

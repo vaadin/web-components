@@ -65,4 +65,4 @@ root boundaries, which can be problematic for low-level interaction events.
 
 Events that aren't driven by `notify: true` need a `@fires {Event} name -
 …` line on the class JSDoc so CEM picks them up. See
-[Documenting](05-documenting.md) for the full set of JSDoc tags.
+[Documenting](06-documenting.md) for the full set of JSDoc tags.

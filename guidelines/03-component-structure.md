@@ -41,7 +41,7 @@ packages/{name}/
 ```
 
 The Lumo and Aura per-component CSS files live in `packages/vaadin-lumo-styles/`
-and `packages/aura/` respectively — see [Theming](09-theming.md).
+and `packages/aura/` respectively — see [Theming](10-theming.md).
 
 ## Root-level entrypoints
 
@@ -92,7 +92,7 @@ hand-edit them.
 | `web-types.json`       | `yarn release:web-types` (`scripts/buildWebtypes.js` reads `custom-elements.json`) | IDE autocomplete for plain HTML; also drives React wrapper generation. |
 | `web-types.lit.json`   | Same as `web-types.json`                                                           | IDE autocomplete for Lit 3 binding syntax.                             |
 
-See [Documenting](05-documenting.md) for the JSDoc tags that drive these.
+See [Documenting](06-documenting.md) for the JSDoc tags that drive these.
 
 ## License
 

@@ -23,7 +23,7 @@ class MyComponent
 ```
 
 Field-like components add field mixins inside the component-specific layer
-(see [Common packages](04-common-packages.md)).
+(see [Common packages](05-common-packages.md)).
 
 `PolylitMixin` and `LumoInjectionMixin` are required for every component.
 `ElementMixin` is required for **public** components only — internal
@@ -125,7 +125,7 @@ Both extract reusable behavior. The rule of thumb:
   class — wire any external state through controller constructor arguments
   or methods instead.
 
-See [Common packages](04-common-packages.md) for the controllers shipped
+See [Common packages](05-common-packages.md) for the controllers shipped
 with the repo. Add a controller via `this.addController(controller)` in
 `firstUpdated()`.
 
@@ -159,7 +159,7 @@ Notes:
   this over Lit's `state: true`).
 - `reflect: true` instead of Polymer's `reflectToAttribute: true`.
 - `notify: true` is provided by `PolylitMixin` and dispatches a
-  `{property}-changed` `CustomEvent` — see [Events](08-events.md).
+  `{property}-changed` `CustomEvent` — see [Events](09-events.md).
 
 For full Lit property options refer to the
 [Lit reactive properties guide](https://lit.dev/docs/components/properties/).

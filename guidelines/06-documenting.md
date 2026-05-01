@@ -38,7 +38,7 @@ also reads JSDoc — that's why `@attr` exists, see below.
 
 `notify: true` on a property declaration auto-generates the matching
 `{property}-changed` event in CEM's output — no `@fires` is needed for
-those. See [Events](08-events.md).
+those. See [Events](09-events.md).
 
 ## Component class JSDoc
 
