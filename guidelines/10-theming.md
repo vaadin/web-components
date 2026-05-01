@@ -151,11 +151,31 @@ can override custom property values without `!important`:
 }
 ```
 
-## Themable mixins
+## Forced colors support
+
+Components must remain usable in forced-colors mode (Windows High
+Contrast Mode and equivalents). The mode replaces author-specified
+backgrounds and colours with system colours, which can strip interactive
+affordances if a component relies on a coloured background alone.
+
+Base styles, Lumo, and Aura use `@media (forced-colors: active)` rules
+where needed, typically to add explicit borders with system colour keywords
+(`ButtonText`, `CanvasText`, `Highlight`) so focus, hover, and disabled states
+remain distinguishable when backgrounds are gone:
+
+```css
+@media (forced-colors: active) {
+  :host([focus-ring]) {
+    outline: 2px solid Highlight;
+  }
+}
+```
+
+## Mixins
 
 | Mixin                 | Status                                  | Purpose                                                              |
 | --------------------- | --------------------------------------- | -------------------------------------------------------------------- |
-| `ThemableMixin`       | Deprecated (new components can skip it) | Legacy shadow DOM style injection mechanism .                        |
+| `ThemableMixin`       | Deprecated (new components can skip it) | Legacy shadow DOM style injection mechanism.                         |
 | `LumoInjectionMixin`  | Required, internal                      | Auto-injects Lumo styles via CSS custom properties; not for add-ons. |
 | `ThemeDetectionMixin` | Public for add-ons                      | Sets `data-application-theme="lumo"` or `"aura"` on the host.        |
 
