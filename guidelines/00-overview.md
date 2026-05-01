@@ -31,4 +31,5 @@ For repository-level commands (install, start, lint, test) see `CLAUDE.md`.
 | 08  | [DOM](08-dom.md)                                 | Designing a component's DOM surface — parts, attributes, slots.            |
 | 09  | [Events](09-events.md)                           | Dispatching and documenting component events.                              |
 | 10  | [Theming](10-theming.md)                         | Authoring base styles and integrating with Lumo and Aura.                  |
-| 11  | [Checklist](11-checklist.md)                     | Final scan before submitting a new component.                              |
+| 11  | [Accessibility](11-a11y.md)                      | Implementing accessible roles, labels, focus, and keyboard support.        |
+| 12  | [Checklist](12-checklist.md)                     | Final scan before submitting a new component.                              |

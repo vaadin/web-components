@@ -6,6 +6,8 @@ not a substitute for reading [Component Structure](03-component-structure.md) an
 ## Design
 
 - [ ] API and behavior reviewed against [Design](02-design.md).
+- [ ] Roles, ARIA wiring, and keyboard navigation reviewed against
+      [Accessibility](11-a11y.md).
 
 ## Files
 
