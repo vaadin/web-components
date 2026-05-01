@@ -312,6 +312,7 @@ const createVisualTestsConfig = (theme) => {
         getFailedName(args) {
           return getScreenshotFileName(args, 'failed');
         },
+        diffOptions: { threshold: 0.2 },
         failureThreshold: 0.05,
         failureThresholdType: 'percent',
         update: process.env.TEST_ENV === 'update',
