@@ -10,13 +10,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { breadcrumbItemStyles } from './styles/vaadin-breadcrumb-item-base-styles.js';
 
 /**
- * `<vaadin-breadcrumb-item>` is a single item in a `<vaadin-breadcrumb-trail>`.
- * When `path` is set, the item renders as a link; otherwise it renders as
- * non-interactive text representing the current page.
- *
- * ```html
- * <vaadin-breadcrumb-item path="/docs">Docs</vaadin-breadcrumb-item>
- * ```
+ * `<vaadin-breadcrumb-item>` is a single item inside a `<vaadin-breadcrumb-trail>`.
  *
  * @customElement vaadin-breadcrumb-item
  * @extends HTMLElement

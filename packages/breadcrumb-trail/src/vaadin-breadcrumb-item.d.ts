@@ -6,9 +6,7 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 /**
- * `<vaadin-breadcrumb-item>` is a single item in a `<vaadin-breadcrumb-trail>`.
- * When `path` is set, the item renders as a link; otherwise it renders as
- * non-interactive text representing the current page.
+ * `<vaadin-breadcrumb-item>` is a single item inside a `<vaadin-breadcrumb-trail>`.
  */
 declare class BreadcrumbItem extends ElementMixin(HTMLElement) {}
 

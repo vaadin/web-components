@@ -6,9 +6,7 @@ A web component that displays the user's location within a hierarchy as a trail 
 
 ```html
 <vaadin-breadcrumb-trail>
-  <vaadin-breadcrumb-item path="/">Home</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item path="/docs">Docs</vaadin-breadcrumb-item>
-  <vaadin-breadcrumb-item>OAuth2</vaadin-breadcrumb-item>
+  <vaadin-breadcrumb-item></vaadin-breadcrumb-item>
 </vaadin-breadcrumb-trail>
 ```
 
