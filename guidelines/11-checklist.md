@@ -3,6 +3,10 @@
 Use this when scaffolding a new component. The checklist is a quick scan,
 not a substitute for reading [Component Structure](03-component-structure.md) and the rest.
 
+## Design
+
+- [ ] API and behavior reviewed against [Design](02-design.md).
+
 ## Files
 
 - [ ] `packages/{name}/` directory created.
@@ -77,7 +81,6 @@ not a substitute for reading [Component Structure](03-component-structure.md) an
 
 ## Final validation
 
-- [ ] API and behavior reviewed against [Design](02-design.md).
 - [ ] `yarn lint` passes.
 - [ ] `yarn lint:types` passes.
 - [ ] `yarn test --group {name}` passes.
