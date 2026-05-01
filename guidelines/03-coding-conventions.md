@@ -5,22 +5,21 @@
 Every component uses the same outer wrappers, in this order:
 
 ```js
-class MyComponent extends MyComponentMixin(
+class MyComponent
   // Component-specific logic
-  ElementMixin(
+  extends MyComponentMixin(
     // Vaadin element registration (public components only)
-    ThemableMixin(
+    ElementMixin(
       // Legacy shadow DOM injection (avoid in new components)
-      PolylitMixin(
+      ThemableMixin(
         // Polymer-compat layer (required for all components)
-        LumoInjectionMixin(
+        PolylitMixin(
           // Lumo style injection (required)
-          LitElement,
+          LumoInjectionMixin(LitElement),
         ),
       ),
     ),
-  ),
-) {}
+  ) {}
 ```
 
 Field-like components add field mixins inside the component-specific layer
