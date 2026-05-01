@@ -4,14 +4,20 @@ These are high-level principles to apply when shaping a new component's
 API and behaviour, before any implementation work begins. Implementation
 mechanics live in the chapters that follow.
 
-## Declarative vs Imperative API
+## Declarative vs Programmatic API
 
-The rule of thumb: if a component has any per-item state, it needs a
-declarative API. If that per-item content is also typically computed at
-runtime in real applications, it additionally needs a programmatic API.
-Components whose children are purely internal (e.g. the button inside
-`<vaadin-button>`) need neither — they only have their own attributes
-and slots.
+The rule of thumb: declarative HTML is the default for components with
+per-item state — accordion, list-box, side-nav, and tabs all expose
+their items as nested elements that the application authors in markup.
+
+A component should choose a programmatic API instead when its DOM
+management forces it: virtualization or nested structures that can't be
+expressed with slots.
+
+When a component exposes both declarative and programmatic APIs, the
+two forms must produce the same rendering and fire the same events — a
+developer should be able to use either of them without changing the
+component's behaviour.
 
 ### Declarative HTML API
 
@@ -34,43 +40,29 @@ and slots.
   DOM in DevTools, as well as to author documentation with code examples
   and implement quick demos.
 
-### Imperative API
+### Programmatic JS API
 
-- Imperative, data-driven API is acceptable for components that manage
+- Programmatic, data-driven API is acceptable for components that manage
   complex DOM structures and generally is recommended in 2 different
   cases:
   - Component uses virtualizer engine to manage reusing DOM nodes.
     Examples: Grid and its derivatives (GridPro, CRUD), ComboBox and
     MultiSelectComboBox, VirtualList.
   - Component uses complex nested structure that would not be possible to
-    implement simply with `<slot>` without moving or modifying the HTML
-    declared by the user, which would be intrusive. Examples: ContextMenu,
-    MenuBar.
-- Combining imperative API with declarative (HTML) API is possible in
+    implement with `<slot>` without moving or modifying the HTML provided
+    by the user, which would be intrusive. Examples: ContextMenu, MenuBar.
+- Combining programmatic API with declarative (HTML) API is possible in
   some cases (example: Select component) but should generally be avoided
   to keep implementation simpler.
-- Imperative API is usually represented by either `items` property
+- Programmatic API is usually represented by either `items` property
   (setting items eagerly) or `dataProvider` property (lazy-loading, used
   by Flow components under the hood).
 - When providing TypeScript types for `items` property, use
   `{ComponentName}ItemData` to avoid naming conflicts as e.g. `SelectItem`
   can be a TS type for `vaadin-select-item`.
-- Components offering imperative API can accept generator-like function
+- Components offering programmatic API can accept generator-like function
   properties to allow applying state based on the item — e.g.
   `itemLabelGenerator` or `itemClassNameGenerator`.
-
-### Combining APIs
-
-When a component exposes both declarative and programmatic APIs, the
-two forms must produce the same rendering and fire the same events — a
-developer should be able to switch between them without changing the
-component's behaviour.
-
-`vaadin-select` is an example: setting the `items` property renders a
-`vaadin-list-box` with `vaadin-item` children, and the same DOM
-structure can be produced via the `renderer` property (or the
-`@vaadin/lit-renderer` directive), or by slotting the list-box and
-items declaratively. All three forms render and behave identically.
 
 ## Naming Conventions
 
