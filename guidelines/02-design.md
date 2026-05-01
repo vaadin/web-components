@@ -1,7 +1,7 @@
 # Design
 
 These are high-level principles to apply when shaping a new component's
-API and behaviour, before any implementation work begins. Implementation
+API and behavior, before any implementation work begins. Implementation
 mechanics live in the chapters that follow.
 
 ## Declarative vs Programmatic API
@@ -17,7 +17,7 @@ expressed with slots.
 When a component exposes both declarative and programmatic APIs, the
 two forms must produce the same rendering and fire the same events — a
 developer should be able to use either of them without changing the
-component's behaviour.
+component's behavior.
 
 ### Declarative HTML API
 
@@ -84,7 +84,7 @@ the non-default state explicit:
 - `clearButtonVisible` — default is hidden; the property shows it.
 - `revealButtonHidden` — default is visible; the property hides it.
 
-The `no-` prefix fits properties that disable a default **behaviour** —
+The `no-` prefix fits properties that disable a default **behavior** —
 e.g. `noCloseOnEsc`, `noTabFocus`. It's also acceptable for presence
 cases (e.g. `noFilter`, `noSort`) and is preferable to imperative verbs
 like `hideEditColumn`, which read like commands rather than states.
@@ -102,7 +102,7 @@ and menu-bar.
 
 ### API ergonomics
 
-Optimise for the common case and let complexity emerge on demand:
+Optimize for the common case and let complexity emerge on demand:
 
 - **Make common cases easy.** The most frequent requirement should
   require the least code; basic usage should not need any configuration.
@@ -131,7 +131,7 @@ component (e.g. `<vaadin-icon>`, `<vaadin-tooltip>`) or reusing an
 existing mixin or controller, prefer that over writing new code. Shared
 primitives already carry the keyboard, theming, and edge-case work that a
 new implementation would have to redo. See
-[Common packages](05-common-packages.md) for the catalogue.
+[Common packages](05-common-packages.md) for the catalog.
 
 ### Ship new components as experimental
 
@@ -142,9 +142,9 @@ The class declares `static experimental = true`; applications opt in via
 changes to an experimental API do not require a deprecation cycle — the
 flag is the contract that says "not yet stable."
 
-## Behaviour principles
+## Behavior principles
 
-### Graceful behaviour before connection
+### Graceful behavior before connection
 
 Calling action methods (`focus()`, `open()`, `scrollToIndex()`, etc.) on
 a component that is not yet in the DOM must silently do nothing — not

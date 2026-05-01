@@ -7,7 +7,7 @@ applications free to apply their own look on top.
 
 Two themes ship in this repo:
 
-- **Lumo** — the long-standing Vaadin theme, optimised for business
+- **Lumo** — the long-standing Vaadin theme, optimized for business
   applications.
 - **Aura** — the newer theme, built on top of base styles using modern
   CSS features.
@@ -155,11 +155,11 @@ vaadin-avatar:where([has-color-index]) {
 
 Components must remain usable in forced-colors mode (Windows High
 Contrast Mode and equivalents). The mode replaces author-specified
-backgrounds and colours with system colours, which can strip interactive
-affordances if a component relies on a coloured background alone.
+backgrounds and colors with system colors, which can strip interactive
+affordances if a component relies on a colored background alone.
 
 Base styles, Lumo, and Aura use `@media (forced-colors: active)` rules
-where needed, typically to add explicit borders with system colour keywords
+where needed, typically to add explicit borders with system color keywords
 (`ButtonText`, `CanvasText`, `Highlight`) so focus, hover, and disabled states
 remain distinguishable when backgrounds are gone:
 

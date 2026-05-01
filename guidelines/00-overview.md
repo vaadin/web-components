@@ -22,7 +22,7 @@ For repository-level commands (install, start, lint, test) see `CLAUDE.md`.
 | #   | File                                             | Topic                                                                      |
 | --- | ------------------------------------------------ | -------------------------------------------------------------------------- |
 | 01  | [Repository](01-repository.md)                   | Looking up the tech stack, test tooling, and workspace layout.             |
-| 02  | [Design](02-design.md)                           | Designing the API and behaviour of a new component before implementation.  |
+| 02  | [Design](02-design.md)                           | Designing the API and behavior of a new component before implementation.   |
 | 03  | [Component Structure](03-component-structure.md) | Scaffolding a new component package.                                       |
 | 04  | [Coding conventions](04-coding-conventions.md)   | Picking the right Lit lifecycle hook; mixin vs controller choices.         |
 | 05  | [Common packages](05-common-packages.md)         | Reusing shared mixins, controllers, and utilities before reinventing them. |

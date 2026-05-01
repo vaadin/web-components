@@ -77,7 +77,7 @@ not a substitute for reading [Component Structure](03-component-structure.md) an
 
 ## Final validation
 
-- [ ] API and behaviour reviewed against [Design](02-design.md).
+- [ ] API and behavior reviewed against [Design](02-design.md).
 - [ ] `yarn lint` passes.
 - [ ] `yarn lint:types` passes.
 - [ ] `yarn test --group {name}` passes.
