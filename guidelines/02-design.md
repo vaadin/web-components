@@ -6,6 +6,13 @@ mechanics live in the chapters that follow.
 
 ## Declarative vs Imperative API
 
+The rule of thumb: if a component has any per-item state, it needs a
+declarative API. If that per-item content is also typically computed at
+runtime in real applications, it additionally needs a programmatic API.
+Components whose children are purely internal (e.g. the button inside
+`<vaadin-button>`) need neither — they only have their own attributes
+and slots.
+
 ### Declarative HTML API
 
 - Whenever possible, Vaadin web components must provide declarative HTML
@@ -51,6 +58,19 @@ mechanics live in the chapters that follow.
 - Components offering imperative API can accept generator-like function
   properties to allow applying state based on the item — e.g.
   `itemLabelGenerator` or `itemClassNameGenerator`.
+
+### Combining APIs
+
+When a component exposes both declarative and programmatic APIs, the
+two forms must produce the same rendering and fire the same events — a
+developer should be able to switch between them without changing the
+component's behaviour.
+
+`vaadin-select` is an example: setting the `items` property renders a
+`vaadin-list-box` with `vaadin-item` children, and the same DOM
+structure can be produced via the `renderer` property (or the
+`@vaadin/lit-renderer` directive), or by slotting the list-box and
+items declaratively. All three forms render and behave identically.
 
 ## Naming Conventions
 
