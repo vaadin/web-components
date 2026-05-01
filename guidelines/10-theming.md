@@ -7,7 +7,7 @@ applications free to apply their own look on top.
 
 Two themes ship in this repo:
 
-- **Lumo** — the long-standing Vaadin theme, optimised for business
+- **Lumo** — the long-standing Vaadin theme, optimized for business
   applications.
 - **Aura** — the newer theme, built on top of base styles using modern
   CSS features.
@@ -142,20 +142,40 @@ PostCSS (`packages/aura/postcss.config.js`).
 
 ## `:where()` for low specificity
 
-Use `:where()` to give variant rules near-zero specificity so consumer CSS
-can override custom property values without `!important`:
+Use `:where()` to ensure near-zero specificity so consumer CSS can override
+custom CSS property values without `!important`:
 
 ```css
-:where(vaadin-button)[theme~='primary'] {
-  --vaadin-button-background: var(--aura-accent-color);
+vaadin-avatar:where([has-color-index]) {
+  --vaadin-avatar-border-color: var(--aura-accent-border-color);
 }
 ```
 
-## Themable mixins
+## Forced colors support
+
+Components must remain usable in forced-colors mode (Windows High
+Contrast Mode and equivalents). The mode replaces author-specified
+backgrounds and colors with system colors, which can strip interactive
+affordances if a component relies on a colored background alone.
+
+Base styles, Lumo, and Aura use `@media (forced-colors: active)` rules
+where needed, typically to add explicit borders with system color keywords
+(`ButtonText`, `CanvasText`, `Highlight`) so focus, hover, and disabled states
+remain distinguishable when backgrounds are gone:
+
+```css
+@media (forced-colors: active) {
+  :host([focus-ring]) {
+    outline: 2px solid Highlight;
+  }
+}
+```
+
+## Mixins
 
 | Mixin                 | Status                                  | Purpose                                                              |
 | --------------------- | --------------------------------------- | -------------------------------------------------------------------- |
-| `ThemableMixin`       | Deprecated (new components can skip it) | Legacy shadow DOM style injection mechanism .                        |
+| `ThemableMixin`       | Deprecated (new components can skip it) | Legacy shadow DOM style injection mechanism.                         |
 | `LumoInjectionMixin`  | Required, internal                      | Auto-injects Lumo styles via CSS custom properties; not for add-ons. |
 | `ThemeDetectionMixin` | Public for add-ons                      | Sets `data-application-theme="lumo"` or `"aura"` on the host.        |
 

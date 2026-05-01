@@ -11,7 +11,7 @@ on the host, and the **slots** it renders content into.
 Shadow parts are part of a component's public API: they are how end-users
 style internals from outside the shadow root. Document every publicly
 stylable part in the class JSDoc as a Markdown table — see
-[Documenting](05-documenting.md).
+[Documenting](06-documenting.md).
 
 ```js
 render() {
