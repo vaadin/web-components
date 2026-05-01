@@ -190,7 +190,10 @@ implementation conventions.
 ### Small viewport support
 
 Text size, line height, and layout must remain usable on small viewports.
-Components do not hard-code minimum sizes; baselines come from the theme.
+Baselines come from the theme, and the defaults can be overridden via
+CSS custom properties. Field-like components are expected to shrink down
+to whatever width still allows their content to fit, including any
+prefix element (icon, etc.), clear button, and toggle button.
 
 ## Minimal clickable area
 
