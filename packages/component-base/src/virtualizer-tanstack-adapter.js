@@ -94,11 +94,11 @@ export class TanStackAdapter {
   }
 
   get adjustedFirstVisibleIndex() {
-    return this.#virtualizer.calculateRange().startIndex;
+    return this.#virtualizer.range.startIndex;
   }
 
   get adjustedLastVisibleIndex() {
-    return this.#virtualizer.calculateRange().endIndex;
+    return this.#virtualizer.range.endIndex;
   }
 
   scrollToIndex(index) {
