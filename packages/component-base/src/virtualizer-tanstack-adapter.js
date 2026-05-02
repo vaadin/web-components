@@ -175,6 +175,7 @@ export class TanStackAdapter {
       if (!item) {
         el.key = null;
         el.hidden = true;
+        el.style.translate = '';
         this.#setElementIndex(el, null);
         this.#resizeObserver.unobserve(el);
         return;
