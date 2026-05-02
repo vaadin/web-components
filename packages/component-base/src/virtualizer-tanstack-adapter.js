@@ -122,14 +122,14 @@ export class TanStackAdapter {
   }
 
   update(startIndex = 0, endIndex = this.size - 1) {
-    this.#elements.forEach((element) => {
-      if (element.hidden) {
+    this.#elements.forEach((el) => {
+      if (el.hidden) {
         return;
       }
 
-      const index = parseInt(element.dataset.index);
+      const index = this.#getElementIndex(el);
       if (startIndex <= index && index <= endIndex) {
-        this.updateElement(element, index);
+        this.updateElement(el, index);
       }
     });
   }
@@ -251,16 +251,18 @@ export class TanStackAdapter {
   }
 
   #getElementIndex(element) {
-    if (element.hasAttribute('data-index')) {
-      return parseInt(element.getAttribute('data-index'));
+    const { indexAttribute } = this.#virtualizer.options;
+    if (element.hasAttribute(indexAttribute)) {
+      return parseInt(element.getAttribute(indexAttribute));
     }
   }
 
   #setElementIndex(element, index) {
+    const { indexAttribute } = this.#virtualizer.options;
     if (index !== null) {
-      element.setAttribute('data-index', index);
+      element.setAttribute(indexAttribute, index);
     } else {
-      element.removeAttribute('data-index');
+      element.removeAttribute(indexAttribute);
     }
   }
 }
