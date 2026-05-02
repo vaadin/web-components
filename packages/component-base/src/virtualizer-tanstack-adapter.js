@@ -134,11 +134,6 @@ export class TanStackAdapter {
     });
   }
 
-  flush() {
-    this.#renderDebouncer?.flush();
-    this.#reorderElementsDebouncer?.flush();
-  }
-
   #scheduleRender() {
     this.#renderDebouncer = Debouncer.debounce(this.#renderDebouncer, microTask, () => this.#render());
   }
@@ -146,16 +141,19 @@ export class TanStackAdapter {
   #render() {
     this.#renderDebouncer?.cancel();
     this.scrollContainer.style.height = `${this.#virtualizer.getTotalSize()}px`;
-    this.#createElementsIfNeeded();
 
-    const updatedElements = this.#renderElements();
-    updatedElements.forEach((element) => this.#measureElement(element));
+    this.#createMissingElements();
+
+    for (const updatedElement of this.#renderElements()) {
+      this.#measureElement(updatedElement);
+    }
 
     this.#updateEstimatedSize();
+
     this.#scheduleReorderElements();
   }
 
-  #createElementsIfNeeded() {
+  #createMissingElements() {
     const missingCount = this.#virtualItems.length - this.#elements.length;
     if (missingCount > 0) {
       this.createElements(missingCount).forEach((el) => {
@@ -187,14 +185,14 @@ export class TanStackAdapter {
       const oldIndex = this.#getElementIndex(el);
       const newIndex = item.index;
 
-      el.hidden = false;
       el.key = item.key;
+      el.hidden = false;
       el.style.translate = `0px ${item.start}px`;
       this.#setElementIndex(el, newIndex);
+      this.#resizeObserver.observe(el);
 
       if (oldIndex !== newIndex) {
         this.updateElement(el, newIndex);
-        this.#resizeObserver.observe(el);
         updatedElements.push(el);
       }
     });
@@ -202,13 +200,13 @@ export class TanStackAdapter {
     return updatedElements;
   }
 
-  #measureElement(element) {
-    const index = this.#getElementIndex(element);
+  #measureElement(el) {
+    const index = this.#getElementIndex(el);
     if (index == null) {
       return;
     }
 
-    const { height } = element.getBoundingClientRect();
+    const { height } = el.getBoundingClientRect();
     this.#virtualizer.resizeItem(index, height);
   }
 
@@ -243,6 +241,11 @@ export class TanStackAdapter {
       const bIndex = this.#getElementIndex(b);
       return aIndex - bIndex;
     });
+  }
+
+  flush() {
+    this.#renderDebouncer?.flush();
+    this.#reorderElementsDebouncer?.flush();
   }
 
   get #virtualItems() {
