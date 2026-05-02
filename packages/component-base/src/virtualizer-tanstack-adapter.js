@@ -10,7 +10,7 @@ import { reorderChildren } from '@vaadin/component-base/src/dom-utils.js';
 
 globalThis.process ||= { env: {} };
 
-function mapElementsToItems(elements, items) {
+function mapElementsToVirtualItems(elements, items) {
   const itemByKey = new Map(items.map((item) => [item.key, item]));
   const elementByKey = new Map(elements.map((el) => [el.key, el]));
 
@@ -26,7 +26,7 @@ function mapElementsToItems(elements, items) {
     ...elements.filter((el) => !sharedKeySet.has(el.key)),
   ];
 
-  return sortedElements.map((el, index) => [el, sortedItems[index]]);
+  return new Map(sortedElements.map((el, index) => [el, sortedItems[index]]));
 }
 
 export class TanStackAdapter {
@@ -169,9 +169,12 @@ export class TanStackAdapter {
   }
 
   #renderElements() {
+    const elementToVirtualItemMap = mapElementsToVirtualItems(this.#elements, this.#virtualItems);
+
     const updatedElements = [];
 
-    mapElementsToItems(this.#elements, this.#virtualItems).forEach(([el, item]) => {
+    this.#elements.forEach((el) => {
+      const item = elementToVirtualItemMap.get(el);
       if (!item) {
         el.key = null;
         el.hidden = true;
