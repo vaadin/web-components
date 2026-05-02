@@ -31,7 +31,7 @@ function mapElementsToVirtualItems(elements, items) {
 
 export class TanStackAdapter {
   #virtualizer;
-  #estimatedSize;
+  #estimatedSize = 60;
   #resizeObserver;
   #renderDebouncer;
   #reorderElementsDebouncer;
@@ -57,7 +57,11 @@ export class TanStackAdapter {
 
     this.#virtualizer = new Virtualizer({
       count: 0,
-      overscan: 4,
+      overscan: 1,
+      initialRect: {
+        width: parseFloat(scrollTargetComputedStyle.width),
+        height: parseFloat(scrollTargetComputedStyle.height),
+      },
       observeElementRect,
       observeElementOffset,
       scrollToFn: elementScroll,
@@ -69,7 +73,7 @@ export class TanStackAdapter {
         }
       },
       estimateSize: () => {
-        return this.#estimatedSize ?? 60;
+        return this.#estimatedSize;
       },
       getScrollElement: () => {
         return this.scrollTarget;
@@ -149,6 +153,7 @@ export class TanStackAdapter {
     }
 
     this.#updateEstimatedSize();
+    this.#updateOverscan();
 
     this.#scheduleReorderElements();
   }
@@ -215,6 +220,14 @@ export class TanStackAdapter {
     if (sizes.length > 0) {
       this.#estimatedSize = sizes.reduce((acc, size) => acc + size, 0) / sizes.length;
     }
+  }
+
+  #updateOverscan() {
+    const { scrollRect } = this.#virtualizer;
+    const visibleCount = Math.ceil(scrollRect.height / this.#estimatedSize);
+    const overscan = Math.max(1, Math.ceil(visibleCount * 0.3));
+
+    this.#virtualizer.setOptions({ ...this.#virtualizer.options, overscan });
   }
 
   #scheduleReorderElements() {
