@@ -92,4 +92,13 @@ export class Virtualizer {
   hostConnected() {
     this.__adapter.hostConnected();
   }
+
+  /**
+   * Notifies the virtualizer about its host element disconnected from the DOM.
+   *
+   * @method hostDisconnected
+   */
+  hostDisconnected() {
+    this.__adapter.hostDisconnected();
+  }
 }
