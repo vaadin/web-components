@@ -31,6 +31,7 @@ function mapElementsToVirtualItems(elements, items) {
 
 export class TanStackAdapter {
   #cleanup;
+  #isVisible;
   #virtualizer;
   #estimatedSize = 60;
   #resizeObserver;
@@ -45,6 +46,7 @@ export class TanStackAdapter {
     this.elementsContainer = elementsContainer || scrollContainer;
     this.reorderElements = reorderElements;
 
+    const scrollTargetRect = this.scrollTarget.getBoundingClientRect();
     const scrollTargetComputedStyle = getComputedStyle(this.scrollTarget);
     const scrollContainerComputedStyle = getComputedStyle(this.scrollContainer);
 
@@ -59,19 +61,12 @@ export class TanStackAdapter {
     this.#virtualizer = new Virtualizer({
       count: 0,
       overscan: 1,
-      initialRect: {
-        width: parseFloat(scrollTargetComputedStyle.width),
-        height: parseFloat(scrollTargetComputedStyle.height),
-      },
+      initialRect: scrollTargetRect,
       observeElementRect,
       observeElementOffset,
       scrollToFn: elementScroll,
       onChange: (_instance, sync) => {
-        if (sync) {
-          this.#render();
-        } else {
-          this.#scheduleRender();
-        }
+        this.#onChange(sync);
       },
       estimateSize: () => {
         return this.#estimatedSize;
@@ -143,6 +138,28 @@ export class TanStackAdapter {
         this.updateElement(el, index);
       }
     });
+  }
+
+  #onChange(sync) {
+    const { scrollRect } = this.#virtualizer;
+
+    const isVisible = scrollRect.width > 0 || scrollRect.height > 0;
+    if (isVisible !== this.#isVisible) {
+      this.#onVisibilityChange(isVisible);
+      this.#isVisible = isVisible;
+    }
+
+    if (sync) {
+      this.#render();
+    } else {
+      this.#scheduleRender();
+    }
+  }
+
+  #onVisibilityChange(isVisible) {
+    if (isVisible) {
+      this.#virtualizer.scrollToOffset(this.#virtualizer.scrollOffset);
+    }
   }
 
   #scheduleRender() {
