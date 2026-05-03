@@ -30,6 +30,7 @@ function mapElementsToVirtualItems(elements, items) {
 }
 
 export class TanStackAdapter {
+  #cleanup;
   #virtualizer;
   #estimatedSize = 60;
   #resizeObserver;
@@ -122,7 +123,13 @@ export class TanStackAdapter {
   }
 
   hostConnected() {
+    this.#cleanup = this.#virtualizer._didMount();
     this.#virtualizer._willUpdate();
+  }
+
+  hostDisconnected() {
+    this.#cleanup?.();
+    this.#resizeObserver.disconnect();
   }
 
   update(startIndex = 0, endIndex = this.size - 1) {
