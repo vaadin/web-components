@@ -249,11 +249,12 @@ export class TanStackAdapter {
   }
 
   #updateOverscan() {
-    const { scrollRect } = this.#virtualizer;
-    const visibleCount = Math.ceil(scrollRect.height / this.#estimatedSize);
-    const overscan = Math.max(1, Math.ceil(visibleCount * 0.2));
+    const { scrollRect, options } = this.#virtualizer;
 
-    this.#virtualizer.setOptions({ ...this.#virtualizer.options, overscan });
+    const visibleCount = Math.ceil(scrollRect.height / this.#estimatedSize);
+    const overscan = Math.max(1, Math.ceil(visibleCount * 0.25));
+
+    this.#virtualizer.setOptions({ ...options, overscan });
   }
 
   #scheduleReorderElements() {
