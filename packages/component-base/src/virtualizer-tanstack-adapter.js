@@ -170,11 +170,8 @@ export class TanStackAdapter {
     this.#renderDebouncer?.cancel();
     this.scrollContainer.style.height = `${this.#virtualizer.getTotalSize()}px`;
 
-    this.#createMissingElements();
-
-    for (const updatedElement of this.#renderElements()) {
-      this.#measureElement(updatedElement);
-    }
+    this.#createElementsIfNeeded();
+    this.#renderElements();
 
     this.#updateEstimatedSize();
     this.#updateOverscan();
@@ -182,7 +179,7 @@ export class TanStackAdapter {
     this.#scheduleReorderElements();
   }
 
-  #createMissingElements() {
+  #createElementsIfNeeded() {
     const missingCount = this.#virtualItems.length - this.#elements.length;
     if (missingCount > 0) {
       this.createElements(missingCount).forEach((el) => {
@@ -226,7 +223,9 @@ export class TanStackAdapter {
       }
     });
 
-    return updatedElements;
+    updatedElements.forEach((el) => {
+      this.#measureElement(el);
+    });
   }
 
   #measureElement(el) {
