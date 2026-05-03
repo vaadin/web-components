@@ -236,6 +236,9 @@ export class TanStackAdapter {
     }
 
     const { height } = el.getBoundingClientRect();
+    if (height === 0) {
+      return;
+    }
     this.#virtualizer.resizeItem(index, height);
   }
 

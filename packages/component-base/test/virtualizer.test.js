@@ -434,12 +434,12 @@ describe('virtualizer', () => {
       expect(elementsContainer.childElementCount).to.be.below(virtualizer.size);
     });
 
-    it('should create more elements if necessary once rendered', () => {
+    it('should create more elements if necessary once rendered', async () => {
       const initialCount = elementsContainer.childElementCount;
 
       render = true;
       virtualizer.update();
-      virtualizer.flush();
+      await nextResize(scrollTarget);
       expect(elementsContainer.childElementCount).to.be.above(initialCount);
     });
   });
