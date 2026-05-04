@@ -194,6 +194,118 @@ describe('text-area', () => {
       expect(textArea.offsetHeight).to.be.above(height);
     });
 
+    describe('subpixel rounding (regression #9141)', () => {
+      // Models Firefox's slack-dependent fractional rounding under
+      // HiDPI / fractional CSS zoom. CI Chromium doesn't naturally
+      // exhibit this — these mocks stand in for the browser's layout
+      // engine, returning what real Firefox returns given the same
+      // DOM state:
+      //   - getComputedStyle(inputField).height returns one of two
+      //     fractional values depending on whether the textarea has an
+      //     explicit height set, modeling the rendered-height
+      //     difference between cycles ending in explicit vs auto.
+      //   - input.scrollHeight is asymmetric only when the input-field
+      //     is at the tight fractional value AND the textarea is in
+      //     auto state, modeling slack-dependent rounding.
+      // Tests assert observable rendered height (host bounding rect)
+      // through the same observation pipeline the user perceives.
+      function mockCapturedStateReplay(input, inputField) {
+        const tightHeight = '63.8px';
+        const looseHeight = '64.9px';
+        const originalGetComputedStyle = window.getComputedStyle;
+        window.getComputedStyle = function getComputedStyle(el, ...args) {
+          const cs = originalGetComputedStyle.call(window, el, ...args);
+          if (el !== inputField) {
+            return cs;
+          }
+          const inputHasExplicitHeight = input.style.height && input.style.height !== 'auto';
+          const mockedHeight = inputHasExplicitHeight ? looseHeight : tightHeight;
+          return new Proxy(cs, {
+            get(target, prop) {
+              if (prop === 'height') {
+                return mockedHeight;
+              }
+              const value = Reflect.get(target, prop, target);
+              return typeof value === 'function' ? value.bind(target) : value;
+            },
+          });
+        };
+        Object.defineProperty(input, 'scrollHeight', {
+          configurable: true,
+          get() {
+            const isAuto = input.style.height === '' || input.style.height === 'auto';
+            const inputFieldPinnedTight = inputField.style.height === tightHeight;
+            if (isAuto && inputFieldPinnedTight) {
+              return this.clientHeight + 1;
+            }
+            return this.clientHeight;
+          },
+        });
+        return () => {
+          window.getComputedStyle = originalGetComputedStyle;
+          delete input.scrollHeight;
+        };
+      }
+
+      async function recordHostRectsOver(host, durationMs) {
+        const samples = [];
+        const start = performance.now();
+        while (performance.now() - start < durationMs) {
+          samples.push(host.getBoundingClientRect().height);
+          await new Promise((resolve) => {
+            requestAnimationFrame(resolve);
+          });
+        }
+        return samples;
+      }
+
+      it('should converge to a stable rendered height after a width perturbation', async () => {
+        textArea.value = 'one\ntwo';
+        await nextUpdate(textArea);
+        await nextResize(textArea);
+
+        const restore = mockCapturedStateReplay(textArea.inputElement, inputField);
+        try {
+          textArea.style.width = '320px';
+          await nextResize(textArea);
+
+          const samples = await recordHostRectsOver(textArea, 200);
+          const distinctLateHeights = new Set(samples.slice(-10));
+          expect(
+            distinctLateHeights.size,
+            `expected stable rendered height in last 10 frames, got values: ${[...distinctLateHeights].join(', ')}`,
+          ).to.equal(1);
+        } finally {
+          restore();
+        }
+      });
+
+      it('should converge to a stable rendered height after value shrinks', async () => {
+        textArea.value = Array(20).fill('line').join('\n');
+        await nextUpdate(textArea);
+        await nextResize(textArea);
+        const grownHeight = textArea.getBoundingClientRect().height;
+
+        const restore = mockCapturedStateReplay(textArea.inputElement, inputField);
+        try {
+          textArea.value = 'short';
+          await nextUpdate(textArea);
+          await nextResize(textArea);
+
+          const samples = await recordHostRectsOver(textArea, 200);
+          const lateSamples = samples.slice(-10);
+          const distinctLateHeights = new Set(lateSamples);
+          expect(
+            distinctLateHeights.size,
+            `expected stable rendered height after shrink, got values: ${[...distinctLateHeights].join(', ')}`,
+          ).to.equal(1);
+          expect(lateSamples[lateSamples.length - 1]).to.be.lessThan(grownHeight);
+        } finally {
+          restore();
+        }
+      });
+    });
+
     it('should update height on show after hidden', async () => {
       const height = textArea.offsetHeight;
       textArea.setAttribute('hidden', '');
