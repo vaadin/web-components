@@ -174,7 +174,7 @@ export const TextAreaMixin = (superClass) =>
 
       // Clear the height of the textarea to allow measuring a reduced scroll height
       input.style.alignSelf = 'flex-start';
-      input.style.height = 'auto';
+      input.style.removeProperty('height');
 
       const inputHeight = input.scrollHeight;
       if (inputHeight > input.clientHeight) {
@@ -185,6 +185,9 @@ export const TextAreaMixin = (superClass) =>
       input.style.removeProperty('max-width');
       input.style.removeProperty('align-self');
       inputField.scrollTop = inputFieldScrollTop;
+      if (input.getAttribute('style') === '') {
+        input.removeAttribute('style');
+      }
 
       // Restore scroll if the brief collapse caused the browser to adjust
       // it. `behavior: 'instant'` bypasses any host-page
