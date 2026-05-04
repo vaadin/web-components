@@ -61,7 +61,7 @@ export const ItemMixin = (superClass) =>
      * @type {string}
      */
     get value() {
-      return this._value !== undefined ? this._value : this.textContent.trim();
+      return this._value ?? this.textContent.trim();
     }
 
     set value(value) {

@@ -121,7 +121,7 @@ function hasLeftMouseButton(ev) {
   // instead we use ev.buttons (bitmask of buttons) or fall back to ev.which (deprecated, 0 for no buttons, 1 for left button)
   if (type === 'mousemove') {
     // Allow undefined for testing events
-    let buttons = ev.buttons === undefined ? 1 : ev.buttons;
+    let buttons = ev.buttons ?? 1;
     if (ev instanceof window.MouseEvent && !MOUSE_HAS_BUTTONS) {
       buttons = MOUSE_WHICH_TO_BUTTONS[ev.which] || 0;
     }
@@ -129,7 +129,7 @@ function hasLeftMouseButton(ev) {
     return Boolean(buttons & 1);
   }
   // Allow undefined for testing events
-  const button = ev.button === undefined ? 0 : ev.button;
+  const button = ev.button ?? 0;
   // Ev.button is 0 in mousedown/mouseup/click for left button activation
   return button === 0;
 }

@@ -119,15 +119,15 @@ export class UploadManager extends EventTarget {
     this.method = options.method || 'POST';
     this.headers = options.headers || {};
     this.timeout = options.timeout || 0;
-    this.maxFiles = options.maxFiles === undefined ? Infinity : options.maxFiles;
-    this.maxFileSize = options.maxFileSize === undefined ? Infinity : options.maxFileSize;
+    this.maxFiles = options.maxFiles ?? Infinity;
+    this.maxFileSize = options.maxFileSize ?? Infinity;
     this.accept = options.accept || '';
-    this.noAuto = options.noAuto === undefined ? false : options.noAuto;
-    this.withCredentials = options.withCredentials === undefined ? false : options.withCredentials;
+    this.noAuto = options.noAuto ?? false;
+    this.withCredentials = options.withCredentials ?? false;
     this.uploadFormat = options.uploadFormat || 'raw';
-    this.maxConcurrentUploads = options.maxConcurrentUploads === undefined ? 3 : options.maxConcurrentUploads;
+    this.maxConcurrentUploads = options.maxConcurrentUploads ?? 3;
     this.formDataName = options.formDataName || 'file';
-    this.disabled = options.disabled === undefined ? false : options.disabled;
+    this.disabled = options.disabled ?? false;
   }
 
   /**
