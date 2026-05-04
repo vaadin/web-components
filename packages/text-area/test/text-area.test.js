@@ -258,6 +258,211 @@ describe('text-area', () => {
       );
     });
 
+    describe('subpixel rounding (regression #9141)', () => {
+      // Chromium in CI does not naturally exhibit the fractional-layout
+      // rounding asymmetry that triggered #9141, so the mocks below
+      // substitute scrollHeight to reproduce the browser-level condition.
+      // Tests drive the textarea through public API and assert on the
+      // host's rendered rect, not on internal CSS state.
+
+      // A constant scrollHeight offset would converge after one writeback.
+      // The real bug fluctuates because each measurement sits in a slightly
+      // different fractional layout, so we alternate offsets to keep the
+      // loop unsettled — this is what the gate must defeat.
+      function mockNaturalHeightFluctuation(input) {
+        let cycle = 0;
+        Object.defineProperty(input, 'scrollHeight', {
+          configurable: true,
+          get() {
+            const sH = input.style.height;
+            if (sH === '' || sH === 'auto') {
+              const offset = cycle % 2 === 0 ? 1 : 2;
+              cycle += 1;
+              return this.clientHeight + offset;
+            }
+            return this.clientHeight;
+          },
+        });
+        return () => {
+          delete input.scrollHeight;
+        };
+      }
+
+      // Models content overflow: scrollHeight is N px above clientHeight
+      // regardless of whether height is explicit or auto.
+      function mockOverflow(input, offset) {
+        Object.defineProperty(input, 'scrollHeight', {
+          configurable: true,
+          get() {
+            return this.clientHeight + offset;
+          },
+        });
+        return () => {
+          delete input.scrollHeight;
+        };
+      }
+
+      async function recordHostRectsOver(host, durationMs) {
+        const samples = [];
+        const start = performance.now();
+        while (performance.now() - start < durationMs) {
+          const r = host.getBoundingClientRect();
+          samples.push({ w: r.width, h: r.height });
+          await new Promise((resolve) => {
+            requestAnimationFrame(resolve);
+          });
+        }
+        return samples;
+      }
+
+      it('should settle to a stable rendered height after a layout perturbation under rounding noise', async () => {
+        // Without the gate, every ResizeObserver tick re-measures and
+        // writes back, never settling. A single legitimate perturbation
+        // must converge within a frame or two.
+
+        textArea.value = 'one\ntwo';
+        await nextUpdate(textArea);
+        await nextResize(textArea);
+
+        const input = textArea.inputElement;
+        const restore = mockNaturalHeightFluctuation(input);
+
+        try {
+          textArea.style.width = '320px';
+          await nextResize(textArea);
+
+          const samples = await recordHostRectsOver(textArea, 200);
+          const lateSamples = samples.slice(-10);
+          const distinctLateHeights = new Set(lateSamples.map((s) => s.h));
+          expect(
+            distinctLateHeights.size,
+            `expected rendered height to be stable in the last 10 frames, got values: ${[...distinctLateHeights].join(', ')}`,
+          ).to.equal(1);
+        } finally {
+          restore();
+        }
+      });
+
+      it('should shrink rendered height when value shortens, even under rounding noise', async () => {
+        // Guards the value-shrink branch of the gate. If it's missing or
+        // scoped too tightly, deletion no longer collapses the textarea.
+
+        textArea.value = Array(20).fill('line').join('\n');
+        await nextUpdate(textArea);
+        await nextResize(textArea);
+        const grownHeight = textArea.getBoundingClientRect().height;
+
+        const input = textArea.inputElement;
+        const restore = mockNaturalHeightFluctuation(input);
+
+        try {
+          textArea.value = 'short';
+          await nextUpdate(textArea);
+          await nextResize(textArea);
+
+          const samples = await recordHostRectsOver(textArea, 200);
+          const lateSamples = samples.slice(-10);
+          const distinctLateHeights = new Set(lateSamples.map((s) => s.h));
+          expect(
+            distinctLateHeights.size,
+            `expected the host's rendered height to be stable after the shrink, got values: ${[...distinctLateHeights].join(', ')}`,
+          ).to.equal(1);
+          expect(lateSamples[lateSamples.length - 1].h).to.be.lessThan(grownHeight);
+        } finally {
+          restore();
+        }
+      });
+
+      it('should grow rendered height to fit content overflow', async () => {
+        // The gate must not block legitimate growth: real content
+        // overflow (scrollHeight > clientHeight) still has to expand
+        // the textarea.
+
+        textArea.value = 'one';
+        await nextUpdate(textArea);
+        await nextResize(textArea);
+        const initialHeight = textArea.getBoundingClientRect().height;
+
+        const input = textArea.inputElement;
+        const restore = mockOverflow(input, 22);
+
+        try {
+          textArea.value = 'one\ntwo\nthree';
+          await nextUpdate(textArea);
+          await nextResize(textArea);
+          const grownHeight = textArea.getBoundingClientRect().height;
+          expect(grownHeight).to.be.greaterThan(initialHeight);
+        } finally {
+          restore();
+        }
+      });
+
+      it('should shrink rendered height when width grows enough that content wraps to fewer lines', async () => {
+        // Guards the width-change branch of the gate. Without it, a
+        // width increase that lets content fit in fewer wrapped lines
+        // leaves the textarea stuck at the previous (taller) explicit
+        // height — the scrollHeight > clientHeight check alone can't
+        // detect that content needs less space than it currently has.
+
+        // Narrow textarea, wide content → many wrapped lines.
+        textArea.style.width = '120px';
+        textArea.value = 'a a a a a a a a a a a a a a a a a a a a a a a a';
+        await nextUpdate(textArea);
+        await nextResize(textArea);
+        const tallHeight = textArea.getBoundingClientRect().height;
+
+        // Widen the textarea so the same content fits in fewer lines.
+        textArea.style.width = '600px';
+        await nextResize(textArea);
+        const shorterHeight = textArea.getBoundingClientRect().height;
+
+        expect(
+          shorterHeight,
+          `expected the textarea to shrink when its width grew (${tallHeight} → ${shorterHeight})`,
+        ).to.be.lessThan(tallHeight);
+      });
+
+      it('should not change rendered width on horizontal subpixel disagreement', async () => {
+        // The horizontal flicker users observed was a downstream effect
+        // of the vertical oscillation toggling the scrollbar. The
+        // auto-sizing logic must never act on scrollWidth/clientWidth
+        // disagreements; guards against a future regression that adds
+        // such a comparison.
+
+        textArea.style.width = '320px';
+        textArea.value = 'one\ntwo';
+        await nextUpdate(textArea);
+        await nextResize(textArea);
+
+        const input = textArea.inputElement;
+        const restoreH = mockNaturalHeightFluctuation(input);
+        Object.defineProperty(input, 'scrollWidth', {
+          configurable: true,
+          get() {
+            return this.clientWidth + 1;
+          },
+        });
+        const restoreW = () => delete input.scrollWidth;
+
+        try {
+          for (const w of ['340px', '360px', '320px']) {
+            textArea.style.width = w;
+            await nextResize(textArea);
+          }
+          const samples = await recordHostRectsOver(textArea, 150);
+          const lateSamples = samples.slice(-10);
+          const distinctWidths = new Set(lateSamples.map((s) => s.w));
+          expect(
+            distinctWidths.size,
+            `expected rendered width to be stable in the last 10 frames, got values: ${[...distinctWidths].join(', ')}`,
+          ).to.equal(1);
+        } finally {
+          restoreH();
+          restoreW();
+        }
+      });
+    });
+
     describe('min / max rows', () => {
       let lineHeight, padding, border;
       let consoleWarn;
