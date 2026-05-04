@@ -428,7 +428,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       const rowGroup = row.parentNode;
       // Body rows have index property, otherwise DOM child index of the row is used.
       if (rowGroup === this.$.items) {
-        return bodyFallbackIndex !== undefined ? bodyFallbackIndex : row.index;
+        return bodyFallbackIndex ?? row.index;
       }
       return [...rowGroup.children].indexOf(row);
     }

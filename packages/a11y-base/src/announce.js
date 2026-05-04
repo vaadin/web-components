@@ -23,7 +23,7 @@ let alertDebouncer;
  */
 export function announce(text, options = {}) {
   const mode = options.mode || 'polite';
-  const timeout = options.timeout === undefined ? 150 : options.timeout;
+  const timeout = options.timeout ?? 150;
 
   if (mode === 'alert') {
     region.removeAttribute('aria-live');
