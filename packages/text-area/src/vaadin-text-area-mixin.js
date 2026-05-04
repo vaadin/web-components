@@ -159,52 +159,41 @@ export const TextAreaMixin = (superClass) =>
         return;
       }
 
-      const scrollTop = inputField.scrollTop;
-      const valueLength = this.value ? this.value.length : 0;
-
-      // Re-measurement is gated: it runs only when the natural rows-driven
-      // height could actually have shrunk relative to the current explicit
-      // height — i.e. when the value got shorter, or when the textarea's
-      // width changed. Without the gate, every ResizeObserver callback
-      // would re-run measurement and feed back the surrounding layout's
-      // subpixel rounding asymmetry, producing a height oscillation on
-      // browsers that render at fractional pixels (#9141).
+      const inputFieldScrollTop = inputField.scrollTop;
       const inputWidth = getComputedStyle(input).width;
-      const valueShrunk = this._oldValueLength > valueLength;
-      const widthChanged = this._lastInputWidth !== undefined && this._lastInputWidth !== inputWidth;
 
-      if (valueShrunk || widthChanged) {
-        const inputFieldHeight = getComputedStyle(inputField).height;
+      // Save page scroll around the brief textarea collapse below.
+      // Pinning the input-field's height (the obvious alternative)
+      // would capture the previous cycle's rendered height and feed it
+      // back into this cycle's scrollHeight measurement, oscillating
+      // under fractional rounding on Firefox (#9141).
+      const pageScrollX = window.scrollX;
+      const pageScrollY = window.scrollY;
 
-        // Temporarily fix the height of the wrapping input field container to prevent changing the browsers scroll
-        // position while resetting the textareas height. If the textarea had a large height, then removing its height
-        // will reset its height to the default of two rows. That might reduce the height of the page, and the
-        // browser might adjust the scroll position before we can restore the measured height of the textarea.
-        inputField.style.height = inputFieldHeight;
+      // Fix the input width so its scrollHeight isn't affected by
+      // the host's disappearing scrollbars.
+      input.style.maxWidth = inputWidth;
 
-        // Fix the input element width so its scroll height isn't affected by host's disappearing scrollbars
-        input.style.maxWidth = inputWidth;
-
-        // Clear the height of the textarea to allow measuring a reduced scroll height
-        input.style.alignSelf = 'flex-start';
-        input.style.height = 'auto';
-      }
-      this._oldValueLength = valueLength;
-      this._lastInputWidth = inputWidth;
+      // Reset to the rows-driven natural height for measurement.
+      input.style.alignSelf = 'flex-start';
+      input.style.height = 'auto';
 
       const inputHeight = input.scrollHeight;
       if (inputHeight > input.clientHeight) {
         input.style.height = `${inputHeight}px`;
       }
 
-      // Restore
       input.style.removeProperty('max-width');
       input.style.removeProperty('align-self');
-      inputField.style.removeProperty('height');
-      inputField.scrollTop = scrollTop;
+      inputField.scrollTop = inputFieldScrollTop;
 
-      // Update max height in case this update was triggered by style changes
-      // affecting line height, paddings or margins.
+      // Restore scroll if the brief collapse caused the browser to adjust it.
+      if (window.scrollX !== pageScrollX || window.scrollY !== pageScrollY) {
+        window.scrollTo({ left: pageScrollX, top: pageScrollY, behavior: 'instant' });
+      }
+
+      // Re-derive max-height in case the trigger was a style change
+      // affecting line-height, padding, or margin.
       this.__updateMaxHeight(this.maxRows);
     }
 

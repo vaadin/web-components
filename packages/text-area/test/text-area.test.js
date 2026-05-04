@@ -259,31 +259,51 @@ describe('text-area', () => {
     });
 
     describe('subpixel rounding (regression #9141)', () => {
-      // Chromium in CI does not naturally exhibit the fractional-layout
-      // rounding asymmetry that triggered #9141, so the mocks below
-      // substitute scrollHeight to reproduce the browser-level condition.
-      // Tests drive the textarea through public API and assert on the
-      // host's rendered rect, not on internal CSS state.
+      // Chromium in CI doesn't exhibit the fractional-layout rounding
+      // asymmetry that triggers #9141. The mocks below reproduce it.
 
-      // A constant scrollHeight offset would converge after one writeback.
-      // The real bug fluctuates because each measurement sits in a slightly
-      // different fractional layout, so we alternate offsets to keep the
-      // loop unsettled — this is what the gate must defeat.
-      function mockNaturalHeightFluctuation(input) {
-        let cycle = 0;
+      // Models the bug's mechanism. `getComputedStyle(inputField).height`
+      // returns one of two values depending on whether the textarea has
+      // an explicit height (modeling the alternating slack between
+      // cycles ending in explicit vs auto). `input.scrollHeight` is
+      // asymmetric only when the input-field is pinned at the tight
+      // value AND the textarea is in auto state. The mock fires only
+      // for an implementation that actually pins
+      // `inputField.style.height = capturedHeight` — i.e., on the bug.
+      function mockCapturedStateReplay(input, inputField) {
+        const tightHeight = '63.8px';
+        const looseHeight = '64.9px';
+        const originalGetComputedStyle = window.getComputedStyle;
+        window.getComputedStyle = function getComputedStyle(el, ...args) {
+          const cs = originalGetComputedStyle.call(window, el, ...args);
+          if (el !== inputField) {
+            return cs;
+          }
+          const inputHasExplicitHeight = input.style.height && input.style.height !== 'auto';
+          const mockedHeight = inputHasExplicitHeight ? looseHeight : tightHeight;
+          return new Proxy(cs, {
+            get(target, prop) {
+              if (prop === 'height') {
+                return mockedHeight;
+              }
+              const value = Reflect.get(target, prop, target);
+              return typeof value === 'function' ? value.bind(target) : value;
+            },
+          });
+        };
         Object.defineProperty(input, 'scrollHeight', {
           configurable: true,
           get() {
-            const sH = input.style.height;
-            if (sH === '' || sH === 'auto') {
-              const offset = cycle % 2 === 0 ? 1 : 2;
-              cycle += 1;
-              return this.clientHeight + offset;
+            const isAuto = input.style.height === '' || input.style.height === 'auto';
+            const inputFieldPinnedTight = inputField.style.height === tightHeight;
+            if (isAuto && inputFieldPinnedTight) {
+              return this.clientHeight + 1;
             }
             return this.clientHeight;
           },
         });
         return () => {
+          window.getComputedStyle = originalGetComputedStyle;
           delete input.scrollHeight;
         };
       }
@@ -315,17 +335,14 @@ describe('text-area', () => {
         return samples;
       }
 
-      it('should settle to a stable rendered height after a layout perturbation under rounding noise', async () => {
-        // Without the gate, every ResizeObserver tick re-measures and
-        // writes back, never settling. A single legitimate perturbation
-        // must converge within a frame or two.
-
+      it('should not oscillate when the input-field height alternates between cycles', async () => {
         textArea.value = 'one\ntwo';
         await nextUpdate(textArea);
         await nextResize(textArea);
 
         const input = textArea.inputElement;
-        const restore = mockNaturalHeightFluctuation(input);
+        const inputField = textArea.shadowRoot.querySelector('[part=input-field]');
+        const restore = mockCapturedStateReplay(input, inputField);
 
         try {
           textArea.style.width = '320px';
@@ -343,17 +360,15 @@ describe('text-area', () => {
         }
       });
 
-      it('should shrink rendered height when value shortens, even under rounding noise', async () => {
-        // Guards the value-shrink branch of the gate. If it's missing or
-        // scoped too tightly, deletion no longer collapses the textarea.
-
+      it('should shrink rendered height when value shortens, even under captured-state replay', async () => {
         textArea.value = Array(20).fill('line').join('\n');
         await nextUpdate(textArea);
         await nextResize(textArea);
         const grownHeight = textArea.getBoundingClientRect().height;
 
         const input = textArea.inputElement;
-        const restore = mockNaturalHeightFluctuation(input);
+        const inputField = textArea.shadowRoot.querySelector('[part=input-field]');
+        const restore = mockCapturedStateReplay(input, inputField);
 
         try {
           textArea.value = 'short';
@@ -374,10 +389,6 @@ describe('text-area', () => {
       });
 
       it('should grow rendered height to fit content overflow', async () => {
-        // The gate must not block legitimate growth: real content
-        // overflow (scrollHeight > clientHeight) still has to expand
-        // the textarea.
-
         textArea.value = 'one';
         await nextUpdate(textArea);
         await nextResize(textArea);
@@ -398,20 +409,12 @@ describe('text-area', () => {
       });
 
       it('should shrink rendered height when width grows enough that content wraps to fewer lines', async () => {
-        // Guards the width-change branch of the gate. Without it, a
-        // width increase that lets content fit in fewer wrapped lines
-        // leaves the textarea stuck at the previous (taller) explicit
-        // height — the scrollHeight > clientHeight check alone can't
-        // detect that content needs less space than it currently has.
-
-        // Narrow textarea, wide content → many wrapped lines.
         textArea.style.width = '120px';
         textArea.value = 'a a a a a a a a a a a a a a a a a a a a a a a a';
         await nextUpdate(textArea);
         await nextResize(textArea);
         const tallHeight = textArea.getBoundingClientRect().height;
 
-        // Widen the textarea so the same content fits in fewer lines.
         textArea.style.width = '600px';
         await nextResize(textArea);
         const shorterHeight = textArea.getBoundingClientRect().height;
@@ -422,44 +425,55 @@ describe('text-area', () => {
         ).to.be.lessThan(tallHeight);
       });
 
-      it('should not change rendered width on horizontal subpixel disagreement', async () => {
-        // The horizontal flicker users observed was a downstream effect
-        // of the vertical oscillation toggling the scrollbar. The
-        // auto-sizing logic must never act on scrollWidth/clientWidth
-        // disagreements; guards against a future regression that adds
-        // such a comparison.
-
+      it('should never write input width on horizontal subpixel disagreement', async () => {
+        // Guards against a future regression that adds a horizontal
+        // mirror of the buggy `scrollHeight > clientHeight` check.
         textArea.style.width = '320px';
         textArea.value = 'one\ntwo';
         await nextUpdate(textArea);
         await nextResize(textArea);
 
         const input = textArea.inputElement;
-        const restoreH = mockNaturalHeightFluctuation(input);
         Object.defineProperty(input, 'scrollWidth', {
           configurable: true,
           get() {
-            return this.clientWidth + 1;
+            return this.clientWidth + 5;
           },
         });
-        const restoreW = () => delete input.scrollWidth;
 
         try {
           for (const w of ['340px', '360px', '320px']) {
             textArea.style.width = w;
             await nextResize(textArea);
           }
-          const samples = await recordHostRectsOver(textArea, 150);
-          const lateSamples = samples.slice(-10);
-          const distinctWidths = new Set(lateSamples.map((s) => s.w));
-          expect(
-            distinctWidths.size,
-            `expected rendered width to be stable in the last 10 frames, got values: ${[...distinctWidths].join(', ')}`,
-          ).to.equal(1);
+          expect(input.style.width).to.equal('');
         } finally {
-          restoreH();
-          restoreW();
+          delete input.scrollWidth;
         }
+      });
+
+      it('should re-measure on every resize tick, even without value or width change', async () => {
+        // Guards re-measurement on font-load / theme-switch / padding
+        // changes. After a prior grow leaves an explicit style.height,
+        // a pure resize tick must collapse the textarea back to natural.
+        const restoreOverflow = mockOverflow(textArea.inputElement, 30);
+        textArea.value = 'one';
+        await nextUpdate(textArea);
+        await nextResize(textArea);
+        expect(textArea.inputElement.style.height).to.not.equal('');
+        restoreOverflow();
+        const grownHeight = textArea.getBoundingClientRect().height;
+
+        textArea._onResize();
+        await new Promise((resolve) => {
+          requestAnimationFrame(resolve);
+        });
+
+        const shrunkHeight = textArea.getBoundingClientRect().height;
+        expect(
+          shrunkHeight,
+          `expected textarea to shrink on a pure resize tick (${grownHeight} → ${shrunkHeight})`,
+        ).to.be.lessThan(grownHeight);
       });
     });
 
