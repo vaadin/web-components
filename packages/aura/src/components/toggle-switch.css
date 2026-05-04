@@ -1,0 +1,59 @@
+:where(:root),
+:where(:host) {
+  --vaadin-toggle-switch-size: round(1lh - 2px, 2px);
+}
+
+vaadin-toggle-switch::part(switch) {
+  transition: background-color 100ms;
+}
+
+vaadin-toggle-switch:not([disabled], [readonly])::part(switch) {
+  background: var(--vaadin-toggle-switch-background, var(--aura-surface-color));
+  --aura-surface-level: 4;
+  box-shadow: var(--aura-shadow-xs);
+  --_shade: color-mix(in srgb, var(--vaadin-border-color-secondary) 50%, transparent);
+  background-image: linear-gradient(
+    light-dark(transparent, var(--_shade)),
+    transparent 33%,
+    transparent 66%,
+    light-dark(var(--_shade), transparent)
+  );
+}
+
+vaadin-toggle-switch:not([checked])::part(switch) {
+  background-clip: padding-box;
+}
+
+vaadin-toggle-switch[checked]:not([readonly], [disabled])::part(switch) {
+  --vaadin-toggle-switch-background: var(--aura-accent-color);
+  --vaadin-toggle-switch-marker-color: var(--aura-accent-contrast-color);
+  --vaadin-toggle-switch-border-color: var(--vaadin-border-color-secondary);
+  box-shadow: var(--aura-shadow-s);
+}
+
+vaadin-toggle-switch::part(thumb) {
+  box-shadow: var(--aura-shadow-xs);
+}
+
+vaadin-toggle-switch:not([readonly], [disabled])::part(switch)::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  transition:
+    opacity 100ms,
+    background-color 100ms;
+}
+
+@media (any-hover: hover) {
+  vaadin-toggle-switch:hover:not([readonly], [disabled], [active])::part(switch)::before {
+    opacity: 0.04;
+  }
+}
+
+vaadin-toggle-switch[active]:not([readonly], [disabled])::part(switch)::before {
+  opacity: 0.1;
+  background: #000;
+}

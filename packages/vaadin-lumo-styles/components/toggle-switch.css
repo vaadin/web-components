@@ -1,0 +1,15 @@
+/**
+ * @license
+ * Copyright (c) 2000 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@import '../src/mixins/checkable-field.css';
+@import '../src/components/toggle-switch.css';
+
+:root,
+:host {
+  --_lumo-vaadin-toggle-switch-inject: 1;
+  --_lumo-vaadin-toggle-switch-inject-modules:
+    lumo_mixins_checkable-field,
+    lumo_components_toggle_switch;
+}

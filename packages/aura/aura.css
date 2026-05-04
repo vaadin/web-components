@@ -14,6 +14,7 @@
 @import './src/components/card.css';
 @import './src/components/charts.css';
 @import './src/components/checkbox-radio.css';
+@import './src/components/toggle-switch.css';
 @import './src/components/confirm-dialog.css';
 @import './src/components/crud.css';
 @import './src/components/date-picker.css';
