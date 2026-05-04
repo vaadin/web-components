@@ -58,6 +58,7 @@ describe('reorder elements', () => {
       ...config,
     });
 
+    virtualizer.hostConnected();
     virtualizer.size = 100;
   }
 
