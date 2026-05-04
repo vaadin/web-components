@@ -163,10 +163,8 @@ export const TextAreaMixin = (superClass) =>
       const inputWidth = getComputedStyle(input).width;
 
       // Save page scroll around the brief textarea collapse below.
-      // Pinning the input-field's height (the obvious alternative)
-      // would capture the previous cycle's rendered height and feed it
-      // back into this cycle's scrollHeight measurement, oscillating
-      // under fractional rounding on Firefox (#9141).
+      // Pinning the input-field's height would capture the previous cycle's rendered height and feed it
+      // back into this cycle's scrollHeight measurement, oscillating under fractional rounding.
       const pageScrollX = window.scrollX;
       const pageScrollY = window.scrollY;
 
@@ -174,7 +172,7 @@ export const TextAreaMixin = (superClass) =>
       // the host's disappearing scrollbars.
       input.style.maxWidth = inputWidth;
 
-      // Reset to the rows-driven natural height for measurement.
+      // Clear the height of the textarea to allow measuring a reduced scroll height
       input.style.alignSelf = 'flex-start';
       input.style.height = 'auto';
 
@@ -183,6 +181,7 @@ export const TextAreaMixin = (superClass) =>
         input.style.height = `${inputHeight}px`;
       }
 
+      // Restore
       input.style.removeProperty('max-width');
       input.style.removeProperty('align-self');
       inputField.scrollTop = inputFieldScrollTop;
