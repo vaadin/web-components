@@ -70,4 +70,3 @@ Use this template:
 | `Part of #`      | One slice of a feature/task that spans multiple PRs or repos. Always add when there's a platform ticket with a PRD. |
 | `Follow-up to #` | Addresses something missed or deferred by a previously merged PR.                                                   |
 | `Related to #`   | Touches the same area as another issue/PR without fixing or implementing it.                                        |
-
