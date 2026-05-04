@@ -192,8 +192,8 @@ export const TextAreaMixin = (superClass) =>
         window.scrollTo({ left: pageScrollX, top: pageScrollY, behavior: 'instant' });
       }
 
-      // Re-derive max-height in case the trigger was a style change
-      // affecting line-height, padding, or margin.
+      // Update max height in case this update was triggered by style changes
+      // affecting line height, paddings or margins.
       this.__updateMaxHeight(this.maxRows);
     }
 
