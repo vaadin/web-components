@@ -16,12 +16,15 @@ export const masterDetailLayoutStyles = css`
     max-width: 100%;
     max-height: 100%;
     position: relative; /* Keep the positioning context stable across all modes */
-    z-index: 0; /* Create a new stacking context, don't let "layout contained" detail element stack outside it */
     overflow: hidden;
   }
 
   :host([hidden]) {
     display: none !important;
+  }
+
+  :host(:not([containment='viewport'])) {
+    z-index: 0; /* Create a new stacking context */
   }
 
   :host([orientation='vertical']) {
