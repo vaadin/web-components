@@ -186,7 +186,10 @@ export const TextAreaMixin = (superClass) =>
       input.style.removeProperty('align-self');
       inputField.scrollTop = inputFieldScrollTop;
 
-      // Restore scroll if the brief collapse caused the browser to adjust it.
+      // Restore scroll if the brief collapse caused the browser to adjust
+      // it. `behavior: 'instant'` bypasses any host-page
+      // `scroll-behavior: smooth` so the restoration is a synchronous jump,
+      // not an animation.
       if (window.scrollX !== pageScrollX || window.scrollY !== pageScrollY) {
         window.scrollTo({ left: pageScrollX, top: pageScrollY, behavior: 'instant' });
       }

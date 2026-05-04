@@ -211,6 +211,10 @@ describe('text-area', () => {
       // Tests assert observable rendered height (host bounding rect)
       // through the same observation pipeline the user perceives.
       function mockCapturedStateReplay(input, inputField) {
+        // Captured from real Firefox at Wayland scale 1.25 +
+        // `html { zoom: 1.1 }`: the input-field's rendered height
+        // alternates between these two fractional values across cycles
+        // ending in explicit vs auto.
         const tightHeight = '63.8px';
         const looseHeight = '64.9px';
         const originalGetComputedStyle = window.getComputedStyle;
