@@ -194,7 +194,8 @@ describe('text-area', () => {
       expect(textArea.offsetHeight).to.be.above(height);
     });
 
-    describe('subpixel rounding (regression #9141)', () => {
+    describe('subpixel rounding', () => {
+      // See https://github.com/vaadin/flow-components/issues/9141
       // Models Firefox's slack-dependent fractional rounding under
       // HiDPI / fractional CSS zoom. CI Chromium doesn't naturally
       // exhibit this — these mocks stand in for the browser's layout
