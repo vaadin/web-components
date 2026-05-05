@@ -1,0 +1,104 @@
+# {ComponentName} Web Component Specification
+
+<!--
+Full implementation specification derived from web-component-api.md, grounded in the actual source code of this repository.
+
+This IS a specification — it includes shadow DOM structure, properties, slots, parts, events, CSS custom properties, and accessibility behavior.
+
+Do NOT include mixin chains. Mixin selection is an implementation detail, not a specification concern. The Reuse and Proposed Adjustments section covers any shared modules the component needs.
+
+Usage examples and API rationale live in web-component-api.md. This spec references them by section number/name where relevant (e.g., "see web-component-api.md §3 Custom separator") rather than duplicating them.
+
+Key design decisions document deviations from web-component-api.md with rationale.
+
+Do NOT include features that no requirement supports.
+DO study existing source code for reusable patterns, naming conventions, and shared modules.
+-->
+
+> This component is experimental. Enable the feature flag before importing:
+> `window.Vaadin.featureFlags.{camelName}Component = true`
+
+## Key Design Decisions
+
+<!--
+One entry per significant choice. For any deviation from web-component-api.md, state what it proposed, what changed, and why (e.g., existing component uses a different name for the same concept, or a shared mixin already provides equivalent functionality in a different shape).
+
+Reference web-component-api.md sections by number/name when discussing the API feature that motivated the decision.
+
+Also document slot design and event naming decisions. Do NOT document mixin selection here — mixins are an implementation detail.
+-->
+
+1. **{Decision}** — {rationale}.
+2. **{Decision}** — {rationale}.
+
+---
+
+## Implementation
+
+### Elements
+
+**`<vaadin-{name}>`** — Container element
+
+Shadow DOM:
+```html
+<!-- Shadow DOM structure -->
+```
+
+| Property | Type | Default | Reflected | Description |
+|---|---|---|---|---|
+| `propertyName` | `type` | `default` | Yes/No | Description |
+
+| Slot | Description |
+|---|---|
+| (default) | Default slot content description |
+
+| Part | Description |
+|---|---|
+
+| Event | Description |
+|---|---|
+
+| CSS Custom Property | Default | Description |
+|---|---|---|
+
+---
+
+**`<vaadin-{name}-item>`** — Child element (if applicable)
+
+Shadow DOM:
+```html
+<!-- Shadow DOM structure -->
+```
+
+| Property | Type | Default | Reflected | Description |
+|---|---|---|---|---|
+| `propertyName` | `type` | `default` | Yes/No | Description |
+
+| Slot | Description |
+|---|---|
+| (default) | Default slot content description |
+
+| Part | Description |
+|---|---|
+
+| Event | Description |
+|---|---|
+
+| CSS Custom Property | Default | Description |
+|---|---|---|
+
+---
+
+## Reuse and Proposed Adjustments to Existing Modules
+
+<!--
+Include this section if the specification reuses or requires changes to code outside the new component's own package — e.g., reusing a shared mixin as-is, extending a shared mixin, adding a hook to a controller, or renaming a pattern for cross-component consistency.
+
+For each entry:
+- Name the file, class or mixin, and whether it is used as-is or needs modification.
+- If modification is needed, describe the specific change.
+- Explain why the new component needs it.
+- List other components that use the same code and could be affected.
+
+Omit this section entirely if no reuse or adjustments are needed.
+-->
