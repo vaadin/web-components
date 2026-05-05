@@ -1,34 +1,34 @@
-# BreadcrumbTrail Flow Component Specification
+# Breadcrumbs Flow Component Specification
 
-> Wraps the experimental web component `<vaadin-breadcrumb-trail>`. Flow users enable it via the `com.vaadin.experimental.breadcrumbTrailComponent` feature flag — defined by a `BreadcrumbTrailFeatureFlagProvider` registered in this module (no Flow core change needed). The flag key matches the `window.Vaadin.featureFlags.breadcrumbTrailComponent` flag on the web-component side, so a single entry in `vaadin-featureflags.properties` controls both sides.
+> Wraps the experimental web component `<vaadin-breadcrumbs>`. Flow users enable it via the `com.vaadin.experimental.breadcrumbsComponent` feature flag — defined by a `BreadcrumbsFeatureFlagProvider` registered in this module (no Flow core change needed). The flag key matches the `window.Vaadin.featureFlags.breadcrumbsComponent` flag on the web-component side, so a single entry in `vaadin-featureflags.properties` controls both sides.
 
 ## Key Design Decisions
 
-1. **`Mode` enum drives ownership.** Following flow-api.md §1 and §9, `BreadcrumbTrail.Mode` is a public nested enum with values `ROUTER` (default) and `MANUAL`. The mode is set at construction (`new BreadcrumbTrail()` / `new BreadcrumbTrail(Mode)`) and can be switched at runtime via `setMode(Mode)`. `add`/`remove`/`removeAll` throw `IllegalStateException` while in `Mode.ROUTER`. `setMode(Mode)` is symmetric: both transitions clear the current children and install the new mode's wiring — `ROUTER → MANUAL` drops router-derived items and unregisters the navigation listener, `MANUAL → ROUTER` drops manually-added items and starts the router listener plus an initial rebuild. See "Mode switching" below for the full contract.
+1. **`Mode` enum drives ownership.** Following flow-api.md §1 and §9, `Breadcrumbs.Mode` is a public nested enum with values `ROUTER` (default) and `MANUAL`. The mode is set at construction (`new Breadcrumbs()` / `new Breadcrumbs(Mode)`) and can be switched at runtime via `setMode(Mode)`. `add`/`remove`/`removeAll` throw `IllegalStateException` while in `Mode.ROUTER`. `setMode(Mode)` is symmetric: both transitions clear the current children and install the new mode's wiring — `ROUTER → MANUAL` drops router-derived items and unregisters the navigation listener, `MANUAL → ROUTER` drops manually-added items and starts the router listener plus an initial rebuild. See "Mode switching" below for the full contract.
 
-2. **`HasComponentsOfType<BreadcrumbItem>` for child management.** Per flow-api.md §1 "Why this shape". Implemented by the type-parameterised children interface from Flow core ([PR #24186](https://github.com/vaadin/flow/pull/24186)). The interface extends `HasElement, HasEnabled` and supplies — as default methods — `add(T...)`, `add(Collection<T>)`, `remove(T...)`, `remove(Collection<T>)`, `removeAll()`, `addComponentAtIndex(int, T)`, `addComponentAsFirst(T)`, `replace(T, T)`, and `bindChildren(Signal<List<S>>, SerializableFunction<S, T>)`. All of these are available on `BreadcrumbTrail` without the component re-implementing them, and all of them must be intercepted by the `Mode.ROUTER` guard (see KDD §1). `HasEnabled` is inherited transitively — it does not need to appear in `BreadcrumbTrail`'s `implements` list.
+2. **`HasComponentsOfType<BreadcrumbsItem>` for child management.** Per flow-api.md §1 "Why this shape". Implemented by the type-parameterised children interface from Flow core ([PR #24186](https://github.com/vaadin/flow/pull/24186)). The interface extends `HasElement, HasEnabled` and supplies — as default methods — `add(T...)`, `add(Collection<T>)`, `remove(T...)`, `remove(Collection<T>)`, `removeAll()`, `addComponentAtIndex(int, T)`, `addComponentAsFirst(T)`, `replace(T, T)`, and `bindChildren(Signal<List<S>>, SerializableFunction<S, T>)`. All of these are available on `Breadcrumbs` without the component re-implementing them, and all of them must be intercepted by the `Mode.ROUTER` guard (see KDD §1). `HasEnabled` is inherited transitively — it does not need to appear in `Breadcrumbs`'s `implements` list.
 
-3. **Router integration via `AfterNavigationListener`.** For `Mode.ROUTER`, the component registers `UI.addAfterNavigationListener(...)` in its attach handler and unregisters in detach. The listener walks the route hierarchy — `@RouteParent` first, then URL-prefix — and calls `updateChildrenInternal(List<BreadcrumbItem>)` to replace the trail. `updateChildrenInternal` sets an internal `boolean routerUpdateInProgress` flag, routes the update through the normal component API (`removeAll()` + `add(...)`), then clears the flag; the `Mode.ROUTER` guard on the public methods skips the throw when the flag is set. This means router-derived items are regular child components — `getChildren()` returns them, serialisation captures them, and the Flow virtual-children mechanism is not involved.
+3. **Router integration via `AfterNavigationListener`.** For `Mode.ROUTER`, the component registers `UI.addAfterNavigationListener(...)` in its attach handler and unregisters in detach. The listener walks the route hierarchy — `@RouteParent` first, then URL-prefix — and calls `updateChildrenInternal(List<BreadcrumbsItem>)` to replace the trail. `updateChildrenInternal` sets an internal `boolean routerUpdateInProgress` flag, routes the update through the normal component API (`removeAll()` + `add(...)`), then clears the flag; the `Mode.ROUTER` guard on the public methods skips the throw when the flag is set. This means router-derived items are regular child components — `getChildren()` returns them, serialisation captures them, and the Flow virtual-children mechanism is not involved.
 
 4. **`@RouteParent` annotation lives in Flow core.** Per flow-api.md §10. `com.vaadin.flow.router.RouteParent` is introduced in Flow core alongside `@Route`, `@RouteAlias`, `@ParentLayout`. The breadcrumb module only consumes it — it neither defines it nor re-exports it. See "Reuse and Proposed Adjustments" for the Flow core dependency.
 
-5. **Route-hierarchy walking is a Flow core feature, not a breadcrumb-specific resolver.** The "given a route class, walk up via `@RouteParent` then URL-prefix fallback" algorithm is useful to any navigation component (back-button helpers, SEO link-graph generators, sitemap renderers), so it lives in Flow core next to `@RouteParent` itself. The breadcrumb consumes it via a public helper — see "Reuse and Proposed Adjustments → Flow core: route-hierarchy walker". The resolver reads only static metadata (`@PageTitle`, `@RouteParent`) and therefore never instantiates ancestor views; the breadcrumb adds the dynamic-title step for the current (already-instantiated) view itself.
+5. **Route-hierarchy walking is a Flow core feature, not a breadcrumb-specific resolver.** The "given a route class, walk up via `@RouteParent` then URL-prefix fallback" algorithm is useful to any navigation component (back-button helpers, SEO link-graph generators, sitemap renderers), so it lives in Flow core next to `@RouteParent` itself. The breadcrumb consumes it via a public helper — see "Reuse and Proposed Adjustments → Flow core: route-hierarchy walker". The resolver reads only static metadata (`@PageTitle`, `@RouteParent`) and therefore never instantiates ancestor views; the breadcrumbs adds the dynamic-title step for the current (already-instantiated) view itself.
 
-6. **No connector needed.** All state is set via standard Element attributes/properties from server-side Java — `setPath` writes the `path` attribute, `setPrefixComponent` uses `SlotUtils.setSlot` for the prefix slot, `setI18n` pushes a JSON object to the `i18n` client property. The web component's overflow behaviour is entirely client-side, and the web component itself only accepts `<vaadin-breadcrumb-item>` light-DOM children (no programmatic `items` data-array property — see web-component-api.md §6 and its Discussion). No connector file under `src/main/resources/META-INF/resources/frontend/`.
+6. **No connector needed.** All state is set via standard Element attributes/properties from server-side Java — `setPath` writes the `path` attribute, `setPrefixComponent` uses `SlotUtils.setSlot` for the prefix slot, `setI18n` pushes a JSON object to the `i18n` client property. The web component's overflow behaviour is entirely client-side, and the web component itself only accepts `<vaadin-breadcrumbs-item>` light-DOM children (no programmatic `items` data-array property — see web-component-api.md §6 and its Discussion). No connector file under `src/main/resources/META-INF/resources/frontend/`.
 
-7. **No events.** Neither `BreadcrumbTrail` nor `BreadcrumbItem` exposes a server-side event (no click listeners, no navigate events — see flow-api.md Discussion "Why no click listener on `BreadcrumbItem`?"). Items render as anchors and the Flow router intercepts clicks at the document level.
+7. **No events.** Neither `Breadcrumbs` nor `BreadcrumbsItem` exposes a server-side event (no click listeners, no navigate events — see flow-api.md Discussion "Why no click listener on `BreadcrumbsItem`?"). Items render as anchors and the Flow router intercepts clicks at the document level.
 
 8. **No `@Synchronize`'d properties.** No client-driven state round-trips to the server. `has-overflow` is a visual state attribute the server does not need to observe.
 
-9. **No theme variants.** Per flow-api.md Discussion "Why no theme variants?" — no `BreadcrumbTrailVariant` enum.
+9. **No theme variants.** Per flow-api.md Discussion "Why no theme variants?" — no `BreadcrumbsVariant` enum.
 
-10. **`BreadcrumbTrailI18n` is a nested static class.** Follows the `SideNavI18n` / `MenuBarI18n` convention — `Serializable`, `@JsonInclude(JsonInclude.Include.NON_NULL)`, fluent setters returning `BreadcrumbTrailI18n`. Serialised with `JacksonUtils.beanToJson` and pushed to the client via `getElement().setPropertyJson("i18n", ...)` in the attach handler (so re-attach re-sets the property for the fresh client-side element).
+10. **`BreadcrumbsI18n` is a nested static class.** Follows the `SideNavI18n` / `MenuBarI18n` convention — `Serializable`, `@JsonInclude(JsonInclude.Include.NON_NULL)`, fluent setters returning `BreadcrumbsI18n`. Serialised with `JacksonUtils.beanToJson` and pushed to the client via `getElement().setPropertyJson("i18n", ...)` in the attach handler (so re-attach re-sets the property for the fresh client-side element).
 
-11. **Package name `com.vaadin.flow.component.breadcrumbtrail`.** Mirrors `com.vaadin.flow.component.sidenav` — the short form that drops internal hyphens.
+11. **Package name `com.vaadin.flow.component.breadcrumbs`.** Mirrors `com.vaadin.flow.component.sidenav` — the short form that drops internal hyphens.
 
-12. **Module `vaadin-breadcrumb-trail-flow-parent`.** Standard parent-child split `vaadin-{name}-flow-parent` / `vaadin-{name}-flow` / `vaadin-{name}-flow-integration-tests` / `vaadin-{name}-testbench`.
+12. **Module `vaadin-breadcrumbs-flow-parent`.** Standard parent-child split `vaadin-{name}-flow-parent` / `vaadin-{name}-flow` / `vaadin-{name}-flow-integration-tests` / `vaadin-{name}-testbench`.
 
-13. **Serialisation.** The `AfterNavigationListener` `Registration` returned from the attach handler is held as a `transient` field and rebuilt in the attach handler on re-attach (Flow may replace the client-side element). `BreadcrumbTrailI18n` implements `Serializable`. `Mode` enum is inherently serialisable. No other non-trivial state.
+13. **Serialisation.** The `AfterNavigationListener` `Registration` returned from the attach handler is held as a `transient` field and rebuilt in the attach handler on re-attach (Flow may replace the client-side element). `BreadcrumbsI18n` implements `Serializable`. `Mode` enum is inherently serialisable. No other non-trivial state.
 
 ---
 
@@ -36,64 +36,64 @@
 
 ```
 flow-components/
-└── vaadin-breadcrumb-trail-flow-parent/
+└── vaadin-breadcrumbs-flow-parent/
     ├── pom.xml
-    ├── vaadin-breadcrumb-trail-flow/
+    ├── vaadin-breadcrumbs-flow/
     │   ├── pom.xml
     │   └── src/
-    │       ├── main/java/com/vaadin/flow/component/breadcrumbtrail/
-    │       │   ├── BreadcrumbTrail.java                # host element, Mode enum, BreadcrumbTrailI18n nested class
-    │       │   ├── BreadcrumbItem.java                 # <vaadin-breadcrumb-item>
-    │       │   ├── BreadcrumbTrailFeatureFlagProvider.java  # defines the Feature constant
+    │       ├── main/java/com/vaadin/flow/component/breadcrumbs/
+    │       │   ├── Breadcrumbs.java                # host element, Mode enum, BreadcrumbsI18n nested class
+    │       │   ├── BreadcrumbsItem.java                 # <vaadin-breadcrumbs-item>
+    │       │   ├── BreadcrumbsFeatureFlagProvider.java  # defines the Feature constant
     │       │   └── ExperimentalFeatureException.java   # local exception with a helpful message
     │       ├── main/resources/
     │       │   └── META-INF/services/
     │       │       └── com.vaadin.experimental.FeatureFlagProvider   # one-line ServiceLoader registration
-    │       └── test/java/com/vaadin/flow/component/breadcrumbtrail/tests/
-    │           ├── BreadcrumbTrailTest.java
-    │           ├── BreadcrumbTrailModeTest.java
-    │           ├── BreadcrumbItemTest.java
-    │           ├── BreadcrumbTrailSerializableTest.java
-    │           ├── BreadcrumbTrailI18nTest.java
+    │       └── test/java/com/vaadin/flow/component/breadcrumbs/tests/
+    │           ├── BreadcrumbsTest.java
+    │           ├── BreadcrumbsModeTest.java
+    │           ├── BreadcrumbsItemTest.java
+    │           ├── BreadcrumbsSerializableTest.java
+    │           ├── BreadcrumbsI18nTest.java
     │           └── FeatureFlagTest.java
-    ├── vaadin-breadcrumb-trail-flow-integration-tests/
+    ├── vaadin-breadcrumbs-flow-integration-tests/
     │   ├── pom.xml
     │   └── src/
-    │       ├── main/java/com/vaadin/flow/component/breadcrumbtrail/tests/
-    │       │   ├── ManualBreadcrumbTrailPage.java     # @Route for Mode.MANUAL
-    │       │   ├── RouterBreadcrumbTrailPage.java     # @Route for Mode.ROUTER
+    │       ├── main/java/com/vaadin/flow/component/breadcrumbs/tests/
+    │       │   ├── ManualBreadcrumbsPage.java     # @Route for Mode.MANUAL
+    │       │   ├── RouterBreadcrumbsPage.java     # @Route for Mode.ROUTER
     │       │   ├── RouteParentPage.java               # @Route with @RouteParent
     │       │   ├── DynamicTitlePage.java              # HasDynamicTitle on current view
-    │       │   └── IconBreadcrumbTrailPage.java       # prefix icons
-    │       └── test/java/com/vaadin/flow/component/breadcrumbtrail/tests/
-    │           ├── ManualBreadcrumbTrailIT.java
-    │           ├── RouterBreadcrumbTrailIT.java
+    │       │   └── IconBreadcrumbsPage.java       # prefix icons
+    │       └── test/java/com/vaadin/flow/component/breadcrumbs/tests/
+    │           ├── ManualBreadcrumbsIT.java
+    │           ├── RouterBreadcrumbsIT.java
     │           ├── RouteParentIT.java
-    │           └── IconBreadcrumbTrailIT.java
-    └── vaadin-breadcrumb-trail-testbench/
+    │           └── IconBreadcrumbsIT.java
+    └── vaadin-breadcrumbs-testbench/
         ├── pom.xml
-        └── src/main/java/com/vaadin/flow/component/breadcrumbtrail/testbench/
-            ├── BreadcrumbTrailElement.java            # @Element("vaadin-breadcrumb-trail")
-            └── BreadcrumbItemElement.java             # @Element("vaadin-breadcrumb-item")
+        └── src/main/java/com/vaadin/flow/component/breadcrumbs/testbench/
+            ├── BreadcrumbsElement.java            # @Element("vaadin-breadcrumbs")
+            └── BreadcrumbsItemElement.java             # @Element("vaadin-breadcrumbs-item")
 ```
 
-Java package: `com.vaadin.flow.component.breadcrumbtrail`.
+Java package: `com.vaadin.flow.component.breadcrumbs`.
 
-Integration-tests module must include `src/main/resources/vaadin-featureflags.properties` enabling `com.vaadin.experimental.breadcrumbTrailComponent=true`, mirroring `vaadin-master-detail-layout-flow-integration-tests`.
+Integration-tests module must include `src/main/resources/vaadin-featureflags.properties` enabling `com.vaadin.experimental.breadcrumbsComponent=true`, mirroring `vaadin-master-detail-layout-flow-integration-tests`.
 
 ---
 
 ## Component Classes
 
-### `BreadcrumbTrail` — container
+### `Breadcrumbs` — container
 
 ```java
-@Tag("vaadin-breadcrumb-trail")
-@NpmPackage(value = "@vaadin/breadcrumb-trail", version = "25.2.0-alpha{N}")
-@JsModule("@vaadin/breadcrumb-trail/src/vaadin-breadcrumb-trail.js")
-public class BreadcrumbTrail extends Component
+@Tag("vaadin-breadcrumbs")
+@NpmPackage(value = "@vaadin/breadcrumbs", version = "25.2.0-alpha{N}")
+@JsModule("@vaadin/breadcrumbs/src/vaadin-breadcrumbs.js")
+public class Breadcrumbs extends Component
         implements HasSize, HasStyle, HasAriaLabel,
-                   HasComponentsOfType<BreadcrumbItem> {
+                   HasComponentsOfType<BreadcrumbsItem> {
 
     public enum Mode {
         ROUTER,
@@ -102,33 +102,33 @@ public class BreadcrumbTrail extends Component
 
     // State
     private Mode mode;
-    private BreadcrumbTrailI18n i18n;
+    private BreadcrumbsI18n i18n;
     private transient Registration navigationRegistration;
 
     // Constructors
-    public BreadcrumbTrail();                       // defaults to Mode.ROUTER
-    public BreadcrumbTrail(Mode mode);
+    public Breadcrumbs();                       // defaults to Mode.ROUTER
+    public Breadcrumbs(Mode mode);
 
     // Mode
     public Mode getMode();
     public void setMode(Mode mode);                 // switching resets the internal state
 
-    // Items — all inherited from HasComponentsOfType<BreadcrumbItem>, each
+    // Items — all inherited from HasComponentsOfType<BreadcrumbsItem>, each
     // overridden to throw IllegalStateException if Mode.ROUTER (unless the
     // internal routerUpdateInProgress flag is set — see KDD §3):
-    //   add(BreadcrumbItem...) / add(Collection<BreadcrumbItem>)
-    //   addComponentAsFirst(BreadcrumbItem)
-    //   addComponentAtIndex(int, BreadcrumbItem)
-    //   remove(BreadcrumbItem...) / remove(Collection<BreadcrumbItem>)
+    //   add(BreadcrumbsItem...) / add(Collection<BreadcrumbsItem>)
+    //   addComponentAsFirst(BreadcrumbsItem)
+    //   addComponentAtIndex(int, BreadcrumbsItem)
+    //   remove(BreadcrumbsItem...) / remove(Collection<BreadcrumbsItem>)
     //   removeAll()
-    //   replace(BreadcrumbItem, BreadcrumbItem)
-    //   bindChildren(Signal<List<S>>, SerializableFunction<S, BreadcrumbItem>)
+    //   replace(BreadcrumbsItem, BreadcrumbsItem)
+    //   bindChildren(Signal<List<S>>, SerializableFunction<S, BreadcrumbsItem>)
     //
     // getChildren() / children stream — always allowed.
 
     // i18n
-    public BreadcrumbTrailI18n getI18n();
-    public void setI18n(BreadcrumbTrailI18n i18n);
+    public BreadcrumbsI18n getI18n();
+    public void setI18n(BreadcrumbsI18n i18n);
 
     // Accessible name — inherited from HasAriaLabel:
     //   setAriaLabel(String)
@@ -141,27 +141,27 @@ public class BreadcrumbTrail extends Component
     protected void onDetach(DetachEvent detachEvent);   // unregisters router listener
 
     // Nested i18n class — see §i18n below
-    public static class BreadcrumbTrailI18n implements Serializable { ... }
+    public static class BreadcrumbsI18n implements Serializable { ... }
 }
 ```
 
 **Implemented mixin interfaces:**
 
 - `HasSize` — covers requirement that the component can be sized by the application (universal API hygiene).
-- `HasStyle` — required for requirement 5 (customise separator via `--vaadin-breadcrumb-trail-separator` CSS custom property) and for `getStyle()` access per `DESIGN_GUIDELINES.md` "Styling lives in CSS, not Java".
+- `HasStyle` — required for requirement 5 (customise separator via `--vaadin-breadcrumbs-separator` CSS custom property) and for `getStyle()` access per `DESIGN_GUIDELINES.md` "Styling lives in CSS, not Java".
 - `HasAriaLabel` — requirement 10 (navigation landmark accessible name). Flow core interface.
-- `HasComponentsOfType<BreadcrumbItem>` — requirement 1, 9 (add/remove/manage items with compile-time type safety). Flow core interface. All inherited mutating methods — `add(T...)` / `add(Collection<T>)` / `remove(T...)` / `remove(Collection<T>)` / `removeAll()` / `addComponentAsFirst(T)` / `addComponentAtIndex(int, T)` / `replace(T, T)` / `bindChildren(Signal<List<S>>, SerializableFunction<S, T>)` — are overridden to throw `IllegalStateException` when `Mode.ROUTER` (unless the internal `routerUpdateInProgress` flag is set).
+- `HasComponentsOfType<BreadcrumbsItem>` — requirement 1, 9 (add/remove/manage items with compile-time type safety). Flow core interface. All inherited mutating methods — `add(T...)` / `add(Collection<T>)` / `remove(T...)` / `remove(Collection<T>)` / `removeAll()` / `addComponentAsFirst(T)` / `addComponentAtIndex(int, T)` / `replace(T, T)` / `bindChildren(Signal<List<S>>, SerializableFunction<S, T>)` — are overridden to throw `IllegalStateException` when `Mode.ROUTER` (unless the internal `routerUpdateInProgress` flag is set).
 
 **@Synchronize'd properties:** none.
 
 **Events:** none.
 
-**Feature-flag check.** `onAttach` calls `BreadcrumbTrail.checkFeatureFlag(attachEvent.getUI())` following the pattern from `MasterDetailLayout.checkFeatureFlag`: throws `ExperimentalFeatureException` when `FeatureFlags.BREADCRUMB_TRAIL_COMPONENT` is disabled.
+**Feature-flag check.** `onAttach` calls `Breadcrumbs.checkFeatureFlag(attachEvent.getUI())` following the pattern from `MasterDetailLayout.checkFeatureFlag`: throws `ExperimentalFeatureException` when `FeatureFlags.BREADCRUMBS_COMPONENT` is disabled.
 
 **Router mode wiring (attach).** The component relies on Flow's existing router and router-utils API; no new per-call mechanism is invented. Two entry points feed the resolver:
 
 - `UI.addAfterNavigationListener(AfterNavigationListener)` — public API on `UI`. The listener receives an `AfterNavigationEvent` whose `getLocation()`, `getActiveChain()`, and `getRouteParameters()` are all public accessors. This catches every navigation for the lifetime of the attachment (including long-lived shell placement).
-- An initial, synchronous rebuild in `onAttach` itself, for the case where the breadcrumb is added to a view that has already finished rendering (so no navigation is pending and the listener has nothing to fire on). Flow core does not currently expose a public "read current navigation state" API at arbitrary times — `UI.getInternals().getActiveViewLocation()` and `UI.getInternals().getActiveRouterTargetsChain()` are the de facto accessors (public methods, but on `UIInternals` which sits in `com.vaadin.flow.component.internal`). See "Reuse and Proposed Adjustments → Flow core dependencies" for the proposal to promote these to a public `Router`/`RouteUtil` entry point.
+- An initial, synchronous rebuild in `onAttach` itself, for the case where the breadcrumbs are added to a view that has already finished rendering (so no navigation is pending and the listener has nothing to fire on). Flow core does not currently expose a public "read current navigation state" API at arbitrary times — `UI.getInternals().getActiveViewLocation()` and `UI.getInternals().getActiveRouterTargetsChain()` are the de facto accessors (public methods, but on `UIInternals` which sits in `com.vaadin.flow.component.internal`). See "Reuse and Proposed Adjustments → Flow core dependencies" for the proposal to promote these to a public `Router`/`RouteUtil` entry point.
 
 ```java
 protected void onAttach(AttachEvent attachEvent) {
@@ -196,18 +196,18 @@ void rebuildFromRouter(Location currentLocation,
                       RouteConfiguration routeConfiguration);
 ```
 
-Both overloads ultimately build the trail via the same private routine (see "How `BreadcrumbTrail` builds the trail" below), which calls the Flow core `RouteHierarchy` walker, wraps the returned ancestor classes into `BreadcrumbItem` instances, and hands the result to `updateChildrenInternal(trail)`. Both guard against stale callbacks: `if (!isAttached()) return;` first.
+Both overloads ultimately build the trail via the same private routine (see "How `Breadcrumbs` builds the trail" below), which calls the Flow core `RouteHierarchy` walker, wraps the returned ancestor classes into `BreadcrumbsItem` instances, and hands the result to `updateChildrenInternal(trail)`. Both guard against stale callbacks: `if (!isAttached()) return;` first.
 
-`updateChildrenInternal(List<BreadcrumbItem> trail)`:
+`updateChildrenInternal(List<BreadcrumbsItem> trail)`:
 
 ```java
 private boolean routerUpdateInProgress;
 
-void updateChildrenInternal(List<BreadcrumbItem> trail) {
+void updateChildrenInternal(List<BreadcrumbsItem> trail) {
     routerUpdateInProgress = true;
     try {
         removeAll();                                  // reaches super.removeAll() via HasComponentsOfType
-        add(trail.toArray(BreadcrumbItem[]::new));    // reaches super.add(T...)
+        add(trail.toArray(BreadcrumbsItem[]::new));    // reaches super.add(T...)
     } finally {
         routerUpdateInProgress = false;
     }
@@ -223,23 +223,23 @@ The public `add` / `addComponentAsFirst` / `addComponentAtIndex` / `remove` / `r
 
 ---
 
-### `BreadcrumbItem` — child element
+### `BreadcrumbsItem` — child element
 
 ```java
-@Tag("vaadin-breadcrumb-item")
-@NpmPackage(value = "@vaadin/breadcrumb-trail", version = "25.2.0-alpha{N}")
-@JsModule("@vaadin/breadcrumb-trail/src/vaadin-breadcrumb-item.js")
-public class BreadcrumbItem extends Component
+@Tag("vaadin-breadcrumbs-item")
+@NpmPackage(value = "@vaadin/breadcrumbs", version = "25.2.0-alpha{N}")
+@JsModule("@vaadin/breadcrumbs/src/vaadin-breadcrumbs-item.js")
+public class BreadcrumbsItem extends Component
         implements HasText, HasEnabled, HasPrefix, HasTooltip {
 
     // Constructors — mirror SideNavItem's overload set
-    public BreadcrumbItem(String text);                                                            // current page (no path)
-    public BreadcrumbItem(String text, String path);
-    public BreadcrumbItem(String text, Class<? extends Component> view);
-    public BreadcrumbItem(String text, Class<? extends Component> view, RouteParameters params);
-    public BreadcrumbItem(String text, String path, Component prefixComponent);
-    public BreadcrumbItem(String text, Class<? extends Component> view, Component prefixComponent);
-    public BreadcrumbItem(String text, Class<? extends Component> view,
+    public BreadcrumbsItem(String text);                                                            // current page (no path)
+    public BreadcrumbsItem(String text, String path);
+    public BreadcrumbsItem(String text, Class<? extends Component> view);
+    public BreadcrumbsItem(String text, Class<? extends Component> view, RouteParameters params);
+    public BreadcrumbsItem(String text, String path, Component prefixComponent);
+    public BreadcrumbsItem(String text, Class<? extends Component> view, Component prefixComponent);
+    public BreadcrumbsItem(String text, Class<? extends Component> view,
                           RouteParameters params, Component prefixComponent);
 
     // Text — inherited from HasText:
@@ -265,14 +265,14 @@ public class BreadcrumbItem extends Component
 
 **Implemented mixin interfaces:**
 
-- `HasText` — the default slot of `<vaadin-breadcrumb-item>` holds the item's text content. `HasText` from Flow core provides `setText(String)` / `getText()` and `bindText(Signal<String>) → SignalBinding<String>` as default methods, so the signal-binding entry point for reactive item text is also available without additional code.
+- `HasText` — the default slot of `<vaadin-breadcrumbs-item>` holds the item's text content. `HasText` from Flow core provides `setText(String)` / `getText()` and `bindText(Signal<String>) → SignalBinding<String>` as default methods, so the signal-binding entry point for reactive item text is also available without additional code.
 - `HasEnabled` — lets the application disable individual items (e.g. an ancestor the user has no permission to visit).
-- `HasPrefix` — requirement 8 (icons). `slot="prefix"` on `<vaadin-breadcrumb-item>`, shared mixin from `vaadin-flow-components-base`.
+- `HasPrefix` — requirement 8 (icons). `slot="prefix"` on `<vaadin-breadcrumbs-item>`, shared mixin from `vaadin-flow-components-base`.
 - `HasTooltip` — useful for long labels that may not fit. Shared mixin.
 
 **No `HasSuffix`** — web-component-api.md explicitly excludes it. If added later on the web-component side, the Flow class adds `HasSuffix` to the `implements` clause; that is strictly additive.
 
-**No click listener** — flow-api.md Discussion "Why no click listener on `BreadcrumbItem`?" The web component renders an anchor; the Flow router intercepts clicks.
+**No click listener** — flow-api.md Discussion "Why no click listener on `BreadcrumbsItem`?" The web component renders an anchor; the Flow router intercepts clicks.
 
 **Path resolution.** `setPath(Class<? extends Component>)` and `setPath(Class, RouteParameters)` mirror `SideNavItem.setPath(...)` exactly: `RouteConfiguration.forRegistry(ComponentUtil.getRouter(this).getRegistry()).getUrl(view, params)` and the resulting string is written to the `path` attribute. Router-agnosticism: Flow wraps the routing resolution, but the anchor `<a href="...">` is still plain HTML — Flow does not intercept clicks at the component level.
 
@@ -286,27 +286,27 @@ public class BreadcrumbItem extends Component
 
 ```java
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public static class BreadcrumbTrailI18n implements Serializable {
+public static class BreadcrumbsI18n implements Serializable {
     private String moreItems;
 
     public String getMoreItems();
-    public BreadcrumbTrailI18n setMoreItems(String moreItems);
+    public BreadcrumbsI18n setMoreItems(String moreItems);
 }
 ```
 
-Exposed on `BreadcrumbTrail` via `setI18n(BreadcrumbTrailI18n)` / `getI18n()`. Serialised via `JacksonUtils.beanToJson(i18n)` and pushed to the client through `getElement().setPropertyJson("i18n", json)` inside the attach handler (so that on re-attach the fresh client element receives the property again). Null `i18n` results in the property not being set, letting the web component's default take over.
+Exposed on `Breadcrumbs` via `setI18n(BreadcrumbsI18n)` / `getI18n()`. Serialised via `JacksonUtils.beanToJson(i18n)` and pushed to the client through `getElement().setPropertyJson("i18n", json)` inside the attach handler (so that on re-attach the fresh client element receives the property again). Null `i18n` results in the property not being set, letting the web component's default take over.
 
 | Field | Type | Default (English) | Web-component `i18n` field | Notes |
 |---|---|---|---|---|
 | `moreItems` | String | `null` (web component default: `""`) | `moreItems` | `aria-label` of the overflow button (see web-component-api.md §4) |
 
-Setter returns `this` so calls can be chained: `new BreadcrumbTrailI18n().setMoreItems("Show hidden items")`.
+Setter returns `this` so calls can be chained: `new BreadcrumbsI18n().setMoreItems("Show hidden items")`.
 
 ---
 
 ## Theme Variants
 
-Not applicable. No `BreadcrumbTrailVariant` enum is introduced. See flow-api.md Discussion "Why no theme variants?"
+Not applicable. No `BreadcrumbsVariant` enum is introduced. See flow-api.md Discussion "Why no theme variants?"
 
 ---
 
@@ -314,9 +314,9 @@ Not applicable. No `BreadcrumbTrailVariant` enum is introduced. See flow-api.md 
 
 **No connector required.** All state is set via Element attributes and properties directly from server-side Java:
 
-- `path` — `setAttribute("path", ...)` on `BreadcrumbItem`
+- `path` — `setAttribute("path", ...)` on `BreadcrumbsItem`
 - `prefix` slot — managed by `HasPrefix` / `SlotUtils.setSlot(this, "prefix", component)`
-- `i18n` — `setPropertyJson("i18n", JacksonUtils.beanToJson(i18n))` on `BreadcrumbTrail`
+- `i18n` — `setPropertyJson("i18n", JacksonUtils.beanToJson(i18n))` on `Breadcrumbs`
 - `aria-label` — `HasAriaLabel` attribute
 - Item set — light-DOM children (component tree), observed client-side by `SlotController`
 
@@ -328,28 +328,28 @@ No JavaScript file under `src/main/resources/META-INF/resources/frontend/`.
 
 The component is experimental and the Flow wrapper is gated by a feature flag defined locally in this module — mirroring the convention used by `Badge`, `Slider`, and the other experimental components in flow-components. No Flow core change is needed.
 
-### `BreadcrumbTrailFeatureFlagProvider`
+### `BreadcrumbsFeatureFlagProvider`
 
 ```java
-package com.vaadin.flow.component.breadcrumbtrail;
+package com.vaadin.flow.component.breadcrumbs;
 
 import java.util.List;
 
 import com.vaadin.experimental.Feature;
 import com.vaadin.experimental.FeatureFlagProvider;
 
-public class BreadcrumbTrailFeatureFlagProvider implements FeatureFlagProvider {
+public class BreadcrumbsFeatureFlagProvider implements FeatureFlagProvider {
 
-    public static final Feature BREADCRUMB_TRAIL_COMPONENT = new Feature(
-            "Breadcrumb Trail component",                                   // title
-            "breadcrumbTrailComponent",                                     // id — matches web-component flag
+    public static final Feature BREADCRUMBS_COMPONENT = new Feature(
+            "Breadcrumbs component",                                   // title
+            "breadcrumbsComponent",                                     // id — matches web-component flag
             "https://github.com/vaadin/platform/issues/{platform-issue-id}", // tracking issue
             true,                                                           // requiresServerRestart
-            "com.vaadin.flow.component.breadcrumbtrail.BreadcrumbTrail");   // primary class owning the flag
+            "com.vaadin.flow.component.breadcrumbs.Breadcrumbs");   // primary class owning the flag
 
     @Override
     public List<Feature> getFeatures() {
-        return List.of(BREADCRUMB_TRAIL_COMPONENT);
+        return List.of(BREADCRUMBS_COMPONENT);
     }
 }
 ```
@@ -359,7 +359,7 @@ public class BreadcrumbTrailFeatureFlagProvider implements FeatureFlagProvider {
 File: `src/main/resources/META-INF/services/com.vaadin.experimental.FeatureFlagProvider`
 
 ```
-com.vaadin.flow.component.breadcrumbtrail.BreadcrumbTrailFeatureFlagProvider
+com.vaadin.flow.component.breadcrumbs.BreadcrumbsFeatureFlagProvider
 ```
 
 Flow's `FeatureFlags` discovers the provider via the standard `java.util.ServiceLoader` mechanism at startup. No build-time code generation.
@@ -367,38 +367,38 @@ Flow's `FeatureFlags` discovers the provider via the standard `java.util.Service
 ### `ExperimentalFeatureException`
 
 ```java
-package com.vaadin.flow.component.breadcrumbtrail;
+package com.vaadin.flow.component.breadcrumbs;
 
 public class ExperimentalFeatureException extends RuntimeException {
     public ExperimentalFeatureException() {
         super("""
-                The Breadcrumb Trail component is currently an experimental feature \
+                The Breadcrumbs component is currently an experimental feature \
                 and needs to be explicitly enabled. The component can be \
                 enabled using Copilot, in the experimental features tab, \
                 or by adding a \
                 `src/main/resources/vaadin-featureflags.properties` file \
                 with the following content: \
-                `com.vaadin.experimental.breadcrumbTrailComponent=true`""");
+                `com.vaadin.experimental.breadcrumbsComponent=true`""");
     }
 }
 ```
 
 ### Attach-time check
 
-`BreadcrumbTrail.onAttach` calls a private `checkFeatureFlag(UI)` that follows the `Badge` / `Slider` / `MasterDetailLayout` pattern exactly:
+`Breadcrumbs.onAttach` calls a private `checkFeatureFlag(UI)` that follows the `Badge` / `Slider` / `MasterDetailLayout` pattern exactly:
 
 ```java
 private void checkFeatureFlag(UI ui) {
     FeatureFlags featureFlags = FeatureFlags
             .get(ui.getSession().getService().getContext());
     if (!featureFlags.isEnabled(
-            BreadcrumbTrailFeatureFlagProvider.BREADCRUMB_TRAIL_COMPONENT)) {
+            BreadcrumbsFeatureFlagProvider.BREADCRUMBS_COMPONENT)) {
         throw new ExperimentalFeatureException();
     }
 }
 ```
 
-Integration-tests module enables the flag at startup with `src/main/resources/vaadin-featureflags.properties` containing `com.vaadin.experimental.breadcrumbTrailComponent=true`. Unit tests use the `@EnableFeatureFlagExtension` JUnit 6 extension or the equivalent fixture used by other experimental-component tests.
+Integration-tests module enables the flag at startup with `src/main/resources/vaadin-featureflags.properties` containing `com.vaadin.experimental.breadcrumbsComponent=true`. Unit tests use the `@EnableFeatureFlagExtension` JUnit 6 extension or the equivalent fixture used by other experimental-component tests.
 
 ---
 
@@ -420,7 +420,7 @@ public @interface RouteParent {
      * {@link Route @Route} class.
      *
      * The parent class should itself be annotated with {@code @Route}. If
-     * it is not, consumers of this annotation (e.g. the breadcrumb
+     * it is not, consumers of this annotation (e.g. the breadcrumbs
      * resolver) fall back to URL-prefix walking for this step.
      */
     Class<? extends Component> value();
@@ -429,19 +429,19 @@ public @interface RouteParent {
 
 The annotation is consumed by a Flow core helper (see "Reuse and Proposed Adjustments → Flow core: route-hierarchy walker") — not by breadcrumb-specific code — so any navigation component can use it.
 
-### How `BreadcrumbTrail` builds the trail
+### How `Breadcrumbs` builds the trail
 
 The breadcrumb does no walking of its own. On each navigation it:
 
 1. Identifies the current route class and the current view instance from `AfterNavigationEvent#getActiveChain()`.
 2. Calls the Flow core walker to get the ancestor chain: `List<Class<? extends Component>> chain = RouteHierarchy.resolveAncestors(currentRoute, routeConfiguration);` (root-first, inclusive of `currentRoute` as the last entry — see the walker's contract in "Reuse and Proposed Adjustments").
-3. For each ancestor class in `chain` except the last, reads its `@PageTitle` and resolves its URL via `RouteConfiguration#getUrl(ancestorClass, RouteParameters.empty())`, producing `new BreadcrumbItem(title, ancestorClass)`.
-4. For the last entry (the current route): uses `HasDynamicTitle#getPageTitle()` on the current view instance if it implements the interface, otherwise reads `@PageTitle` on the class. Constructs `new BreadcrumbItem(title)` with no path — the current item is the non-link.
+3. For each ancestor class in `chain` except the last, reads its `@PageTitle` and resolves its URL via `RouteConfiguration#getUrl(ancestorClass, RouteParameters.empty())`, producing `new BreadcrumbsItem(title, ancestorClass)`.
+4. For the last entry (the current route): uses `HasDynamicTitle#getPageTitle()` on the current view instance if it implements the interface, otherwise reads `@PageTitle` on the class. Constructs `new BreadcrumbsItem(title)` with no path — the current item is the non-link.
 5. Calls `updateChildrenInternal(trail)`.
 
-Everything the breadcrumb contributes — the dynamic-title step for the current view, the wrapping into `BreadcrumbItem` components, the `Mode.ROUTER` guard bypass — is breadcrumb-specific. The hierarchy walking, cycle detection, and `@RouteParent`-versus-URL-prefix fallback live in Flow core.
+Everything the breadcrumbs contributes — the dynamic-title step for the current view, the wrapping into `BreadcrumbsItem` components, the `Mode.ROUTER` guard bypass — is breadcrumb-specific. The hierarchy walking, cycle detection, and `@RouteParent`-versus-URL-prefix fallback live in Flow core.
 
-**Flow APIs used directly by the breadcrumb (all public):**
+**Flow APIs used directly by the breadcrumbs (all public):**
 
 | Purpose | API call |
 |---|---|
@@ -454,25 +454,25 @@ Everything the breadcrumb contributes — the dynamic-title step for the current
 | Read a route class's static title | `routeClass.getAnnotation(PageTitle.class).value()` |
 | Walk the route hierarchy | Flow core walker (see Reuse) |
 
-**Route parameters on ancestors:** the breadcrumb resolves ancestor URLs with `RouteParameters.empty()`, because ancestor routes may have a different parameter set from the current route. Applications that need ancestor labels with live data should use `Mode.MANUAL` and build the trail themselves (flow-api.md §9).
+**Route parameters on ancestors:** the breadcrumbs resolves ancestor URLs with `RouteParameters.empty()`, because ancestor routes may have a different parameter set from the current route. Applications that need ancestor labels with live data should use `Mode.MANUAL` and build the trail themselves (flow-api.md §9).
 
 ---
 
 ## TestBench Elements
 
-### `BreadcrumbTrailElement`
+### `BreadcrumbsElement`
 
 ```java
-@Element("vaadin-breadcrumb-trail")
-public class BreadcrumbTrailElement extends TestBenchElement {
+@Element("vaadin-breadcrumbs")
+public class BreadcrumbsElement extends TestBenchElement {
 
-    public List<BreadcrumbItemElement> getItems();
+    public List<BreadcrumbsItemElement> getItems();
 
-    public BreadcrumbItemElement getCurrentItem();          // the item with the `current` state attribute (last no-path)
+    public BreadcrumbsItemElement getCurrentItem();          // the item with the `current` state attribute (last no-path)
 
-    public BreadcrumbItemElement getItemByText(String text);
+    public BreadcrumbsItemElement getItemByText(String text);
 
-    public BreadcrumbItemElement getItemByPath(String path);
+    public BreadcrumbsItemElement getItemByPath(String path);
 
     public boolean hasOverflow();                           // reads has-overflow attribute
 
@@ -480,17 +480,17 @@ public class BreadcrumbTrailElement extends TestBenchElement {
 
     public void openOverflowOverlay();                       // click overflow button
 
-    public TestBenchElement getOverflowOverlay();           // the <vaadin-breadcrumb-trail-overlay> element
+    public TestBenchElement getOverflowOverlay();           // the <vaadin-breadcrumbs-overlay> element
 
     public List<TestBenchElement> getOverflowItems();       // links inside the open overlay
 }
 ```
 
-### `BreadcrumbItemElement`
+### `BreadcrumbsItemElement`
 
 ```java
-@Element("vaadin-breadcrumb-item")
-public class BreadcrumbItemElement extends TestBenchElement {
+@Element("vaadin-breadcrumbs-item")
+public class BreadcrumbsItemElement extends TestBenchElement {
 
     public String getText();
 
@@ -507,7 +507,7 @@ public class BreadcrumbItemElement extends TestBenchElement {
 }
 ```
 
-Queries use the same pattern as `SideNavElement` / `SideNavItemElement`: `$("vaadin-breadcrumb-item").all()` for items, shadow-DOM CSS for parts and slotted content.
+Queries use the same pattern as `SideNavElement` / `SideNavItemElement`: `$("vaadin-breadcrumbs-item").all()` for items, shadow-DOM CSS for parts and slotted content.
 
 ---
 
@@ -536,10 +536,10 @@ public Signal<RouteParameters>            getCurrentRouteParameters();
 public Signal<Location>                   getCurrentLocation();
 ```
 
-With this primitive in place, the breadcrumb's router mode collapses to a single subscription:
+With this primitive in place, the breadcrumbs' router mode collapses to a single subscription:
 
 ```java
-Signal.effect(breadcrumbTrail,
+Signal.effect(breadcrumbs,
         () -> updateChildrenInternal(resolveTrail(Router.getCurrent().getCurrentNavigation().get())));
 ```
 
@@ -549,7 +549,7 @@ What falls away compared to the current listener-based design:
 - **No `transient navigationRegistration` field** — signals handle lifecycle.
 - **No stale-callback guard** — signal subscriptions stop delivering as soon as the component detaches.
 - **No split between "initial state" and "subsequent events"** — `Signal#get()` always returns current truth, so the "what if the component attaches after the navigation already fired" edge case just works.
-- **No `UIInternals` dependency anywhere in the breadcrumb** — the signal is the public, documented accessor for current navigation state.
+- **No `UIInternals` dependency anywhere in the breadcrumbs** — the signal is the public, documented accessor for current navigation state.
 
 The signal composes beyond breadcrumbs: SideNav's current-item highlighting (today client-side URL matching) could become a server-side `Signal.computed(...)` over `getCurrentLocation`; a back-button's visibility could bind to whether `getCurrentRoute().get()` carries a `@RouteParent`; analytics hooks and page-title manipulators each become one-liners. `AfterNavigationListener` stays — the signal is a reactive overlay, not a replacement for the event API.
 
@@ -591,7 +591,7 @@ public final class RouteHierarchy {
 }
 ```
 
-**Algorithm contract** (implemented in Flow core; the breadcrumb only consumes it):
+**Algorithm contract** (implemented in Flow core; the breadcrumbs only consumes it):
 
 1. Start with `routeClass`; if it has no `@Route` annotation, return an empty list (no hierarchy to walk).
 2. Maintain `Set<Class<? extends Component>> visited`, initialised with `routeClass`.
@@ -599,7 +599,7 @@ public final class RouteHierarchy {
 4. Terminate when no parent is found, when the candidate is already in `visited` (cycle), or when URL-prefix stripping produces an empty URL.
 5. Return the list root-first, inclusive of the original `routeClass` as the last element.
 
-This is additive to Flow core — one new class next to `@RouteParent`, no change to existing router API. Tests for the walker (including cycle handling and parent-without-`@Route` fallback) live with Flow core, not with the breadcrumb module.
+This is additive to Flow core — one new class next to `@RouteParent`, no change to existing router API. Tests for the walker (including cycle handling and parent-without-`@Route` fallback) live with Flow core, not with the breadcrumbs module.
 
 Affects: Flow core. The breadcrumb depends on it for `Mode.ROUTER` but adds no code of its own for hierarchy walking.
 
@@ -609,18 +609,18 @@ Affects: Flow core. The breadcrumb depends on it for `Mode.ROUTER` but adds no c
 
 The annotation will land in Flow core and this module depends on it. Ensure `flow-components-bom` targets a Flow version that includes the `RouteParent` annotation.
 
-Affects: no flow-components module defines this annotation; the breadcrumb module imports `com.vaadin.flow.router.RouteParent` indirectly through the Flow core `RouteHierarchy` walker.
+Affects: no flow-components module defines this annotation; the breadcrumbs module imports `com.vaadin.flow.router.RouteParent` indirectly through the Flow core `RouteHierarchy` walker.
 
 ### `HasComponentsOfType<T>` in Flow core — Dependency
 
-The Flow wrapper uses `com.vaadin.flow.component.HasComponentsOfType<BreadcrumbItem>` from Flow core ([PR #24186](https://github.com/vaadin/flow/pull/24186)). The interface extends `HasElement, HasEnabled` and provides the full child-management surface as default methods — `add(T...)`, `add(Collection<T>)`, `remove(T...)`, `remove(Collection<T>)`, `removeAll()`, `addComponentAtIndex(int, T)`, `addComponentAsFirst(T)`, `replace(T, T)`, and `bindChildren(Signal<List<S>>, SerializableFunction<S, T>)`. `BreadcrumbTrail` overrides each of these mutating methods so it can enforce the `Mode.ROUTER` guard (see KDD §3 for the `routerUpdateInProgress` bypass).
+The Flow wrapper uses `com.vaadin.flow.component.HasComponentsOfType<BreadcrumbsItem>` from Flow core ([PR #24186](https://github.com/vaadin/flow/pull/24186)). The interface extends `HasElement, HasEnabled` and provides the full child-management surface as default methods — `add(T...)`, `add(Collection<T>)`, `remove(T...)`, `remove(Collection<T>)`, `removeAll()`, `addComponentAtIndex(int, T)`, `addComponentAsFirst(T)`, `replace(T, T)`, and `bindChildren(Signal<List<S>>, SerializableFunction<S, T>)`. `Breadcrumbs` overrides each of these mutating methods so it can enforce the `Mode.ROUTER` guard (see KDD §3 for the `routerUpdateInProgress` bypass).
 
 Affects: `flow-components-bom` pom.xml Flow version property — ensure it is raised to the Flow version that includes PR #24186.
 
 ### `vaadin-flow-components-base` — Used as-is
 
-- `HasPrefix` — prefix slot for `BreadcrumbItem`.
-- `HasTooltip` — tooltip support on `BreadcrumbItem`.
+- `HasPrefix` — prefix slot for `BreadcrumbsItem`.
+- `HasTooltip` — tooltip support on `BreadcrumbsItem`.
 
 No modifications.
 
@@ -634,19 +634,19 @@ No modifications.
 
 | Requirement | Addressed in spec section(s) |
 |---|---|
-| 1. Displaying the ancestor trail | Component Classes → `BreadcrumbTrail` (`HasComponentsOfType<BreadcrumbItem>`); `BreadcrumbItem` (constructors with text + path) |
-| 2. Current page indication | `BreadcrumbItem(String text)` (no path) — web component renders as non-link, applies `current` state attribute |
+| 1. Displaying the ancestor trail | Component Classes → `Breadcrumbs` (`HasComponentsOfType<BreadcrumbsItem>`); `BreadcrumbsItem` (constructors with text + path) |
+| 2. Current page indication | `BreadcrumbsItem(String text)` (no path) — web component renders as non-link, applies `current` state attribute |
 | 3. Optionally omitting the current page | No API — application chooses whether to add a no-path final item |
 | 4. Visual separator between items | Web component + theme (no Flow API) |
-| 5. Customizable separator appearance | `HasStyle` → `getStyle().set("--vaadin-breadcrumb-trail-separator", ...)` |
+| 5. Customizable separator appearance | `HasStyle` → `getStyle().set("--vaadin-breadcrumbs-separator", ...)` |
 | 6. Overflow collapse of intermediate items | Web component (no Flow API) |
-| 7. Expanding collapsed items | Web component; `BreadcrumbTrailI18n.moreItems` sets the overflow button's `aria-label` |
-| 8. Items may display icons | `BreadcrumbItem implements HasPrefix` + constructor overloads ending in `Component prefixComponent` |
-| 9. Dynamic trail updates | `HasComponentsOfType<BreadcrumbItem>` `add`/`remove`/`removeAll` in `Mode.MANUAL`; inherited `bindChildren(Signal<List<...>>, factory)` or `Signal.effect(breadcrumbTrail, ...)` for reactive updates |
-| 10. Navigation landmark | `BreadcrumbTrail implements HasAriaLabel` |
+| 7. Expanding collapsed items | Web component; `BreadcrumbsI18n.moreItems` sets the overflow button's `aria-label` |
+| 8. Items may display icons | `BreadcrumbsItem implements HasPrefix` + constructor overloads ending in `Component prefixComponent` |
+| 9. Dynamic trail updates | `HasComponentsOfType<BreadcrumbsItem>` `add`/`remove`/`removeAll` in `Mode.MANUAL`; inherited `bindChildren(Signal<List<...>>, factory)` or `Signal.effect(breadcrumbs, ...)` for reactive updates |
+| 10. Navigation landmark | `Breadcrumbs implements HasAriaLabel` |
 | 11. Current page announced as current | Web component (no Flow API) |
 | 12. Directional separator flips in RTL | Web component + theme (no Flow API) |
-| 13. Flow: Default trail derived from router | `Mode.ROUTER` (default); `onAttach` registers `AfterNavigationListener`; the Flow core `RouteHierarchy.resolveAncestors(...)` walker walks `@RouteParent` + URL prefixes; the breadcrumb adds `@PageTitle` / `HasDynamicTitle` label resolution for the returned classes |
+| 13. Flow: Default trail derived from router | `Mode.ROUTER` (default); `onAttach` registers `AfterNavigationListener`; the Flow core `RouteHierarchy.resolveAncestors(...)` walker walks `@RouteParent` + URL prefixes; the breadcrumbs adds `@PageTitle` / `HasDynamicTitle` label resolution for the returned classes |
 | 14. Flow: Opting out of automatic trail population | `Mode.MANUAL` (via constructor or `setMode`); `add`/`remove`/`removeAll` throw `IllegalStateException` in `Mode.ROUTER` |
 | 15. Flow: Sitemap parent annotation overrides URL-based parent lookup | `@RouteParent` annotation in Flow core; `RouteHierarchy.resolveAncestors` consults it before URL-prefix walking |
 | 16. Flow: Routes can dynamically supply their breadcrumb contribution | Covered via the manual-construction pattern: `Mode.MANUAL` + application-side data loading + `add(...)` (see flow-api.md Discussion "How is requirement 16 … covered without a dedicated API?"). No new Flow API in this iteration — explicitly documented as a possible future addition. |
@@ -659,33 +659,33 @@ Questions raised during spec production, with their resolutions.
 
 **Q: How does `Mode.ROUTER` react to navigation?**
 
-`onAttach` registers `UI.addAfterNavigationListener(event -> rebuildFromRouter(...))` and holds the returned `Registration` in a transient field. `onDetach` unregisters. Each navigation rebuilds the trail by calling the Flow core `RouteHierarchy.resolveAncestors(...)` walker, wrapping each returned class into a `BreadcrumbItem`, and handing the list to an internal `updateChildrenInternal(List<BreadcrumbItem>)` that bypasses the `Mode.ROUTER` guard on `add`/`remove`/`removeAll` — user code cannot reach this path.
+`onAttach` registers `UI.addAfterNavigationListener(event -> rebuildFromRouter(...))` and holds the returned `Registration` in a transient field. `onDetach` unregisters. Each navigation rebuilds the trail by calling the Flow core `RouteHierarchy.resolveAncestors(...)` walker, wrapping each returned class into a `BreadcrumbsItem`, and handing the list to an internal `updateChildrenInternal(List<BreadcrumbsItem>)` that bypasses the `Mode.ROUTER` guard on `add`/`remove`/`removeAll` — user code cannot reach this path.
 
 **Q: What happens if the user calls `setMode(Mode.ROUTER)` on a trail that already has children?**
 
 `setMode` clears the trail and installs the router-derived one — no exception. Both transitions (`ROUTER → MANUAL` and `MANUAL → ROUTER`) discard the existing children and let the new mode's wiring start fresh. Earlier designs considered throwing `IllegalStateException` on `MANUAL → ROUTER` with children, forcing the caller to `removeAll()` first; that was rejected because `setMode` semantically asks "change who owns the trail", which implies the old owner's items are no longer authoritative. Making the caller call `removeAll()` adds no safety — the next line of application code does exactly that — and creates a class of boilerplate-plus-exception traps when a mode switch happens in a handler that doesn't know what state the trail is in. The symmetric auto-clear rule is simpler and matches how `setItems`-shaped APIs behave elsewhere in Flow.
 
-**Q: Is there a way to drive the trail reactively from a `Signal<List<BreadcrumbItem>>`?**
+**Q: Is there a way to drive the trail reactively from a `Signal<List<BreadcrumbsItem>>`?**
 
 Not via a dedicated `bindItems` method. Per flow-api.md Discussion "Why no dedicated `bindItems(Signal<...>)` method?", Flow core's `Signal.effect(component, Runnable)` is sufficient — the effect re-runs whenever observed signals change, and the callback does `removeAll()` + `add(...)`. This keeps the API surface small and lets the `bindItems` decision be revisited after real usage.
 
-**Q: Why `Mode` instead of a `Breadcrumb{Trail,Router}Mode` or similar prefixed enum?**
+**Q: Why `Mode` instead of a prefixed enum like `BreadcrumbsMode` or `BreadcrumbsRouterMode`?**
 
-Nested enum `BreadcrumbTrail.Mode` is the Vaadin convention for short enum types strongly tied to a single component (e.g. `Dialog.Position`, `Notification.Position`). Fully-qualified `BreadcrumbTrail.Mode.MANUAL` and imported `Mode.MANUAL` both read naturally.
+Nested enum `Breadcrumbs.Mode` is the Vaadin convention for short enum types strongly tied to a single component (e.g. `Dialog.Position`, `Notification.Position`). Fully-qualified `Breadcrumbs.Mode.MANUAL` and imported `Mode.MANUAL` both read naturally.
 
-**Q: Why is there no `setTarget(String)` / `setOpenInNewBrowserTab(boolean)` on `BreadcrumbItem`?**
+**Q: Why is there no `setTarget(String)` / `setOpenInNewBrowserTab(boolean)` on `BreadcrumbsItem`?**
 
 An earlier iteration mirrored `SideNavItem` and exposed `setTarget(String)` for setting the anchor's `target` attribute (e.g. `_blank` to open in a new tab). It was removed along with the underlying web-component property. Breadcrumb items are part of a hierarchical navigation trail within the current application — opening an ancestor in a new tab is not a supported interaction and introducing API for it encourages patterns that fight the component's purpose (the user would end up with two tabs for the same hierarchy, neither reflecting the other's state). If a concrete use case emerges later, adding `setTarget` is strictly additive.
 
 **Q: Is per-item reactive text available?**
 
-Yes — `BreadcrumbItem` implements `HasText`, which provides `bindText(Signal<String>) → SignalBinding<String>` as a default method from Flow core. Applications that want per-item reactive text bind a signal to a specific item directly: `item.bindText(textSignal)`. The container-level reactive pattern (`Signal.effect` on the `BreadcrumbTrail`) remains the right choice when the whole trail's shape changes; `bindText` is for the narrower case where an item's text updates without the trail structure changing.
+Yes — `BreadcrumbsItem` implements `HasText`, which provides `bindText(Signal<String>) → SignalBinding<String>` as a default method from Flow core. Applications that want per-item reactive text bind a signal to a specific item directly: `item.bindText(textSignal)`. The container-level reactive pattern (`Signal.effect` on the `Breadcrumbs`) remains the right choice when the whole trail's shape changes; `bindText` is for the narrower case where an item's text updates without the trail structure changing.
 
 **Q: Does the router listener need to guard against the detached-component case?**
 
 Yes — the listener is unregistered in `onDetach`, but a navigation may fire between the detach event and the registration cleanup on another thread. `rebuildFromRouter` guards with `if (!isAttached()) return;` so a stray late callback is a no-op.
 
-**Q: Why does `getI18n()` return the last-set value (or `null`) rather than lazily creating a default `BreadcrumbTrailI18n`?**
+**Q: Why does `getI18n()` return the last-set value (or `null`) rather than lazily creating a default `BreadcrumbsI18n`?**
 
-For consistency with `SideNav.getI18n()`, which returns `null` until `setI18n(...)` is called. Applications that want to tweak a single field build a new instance: `trail.setI18n(new BreadcrumbTrailI18n().setMoreItems("Show hidden items"))`. A lazy-init getter would hide the fact that the i18n object is a JSON payload pushed to the client — making it feel like a reactive bean when it isn't. The current shape also lets `null` mean "use the web component's built-in defaults", which is a meaningful state the lazy-init pattern cannot express.
+For consistency with `SideNav.getI18n()`, which returns `null` until `setI18n(...)` is called. Applications that want to tweak a single field build a new instance: `trail.setI18n(new BreadcrumbsI18n().setMoreItems("Show hidden items"))`. A lazy-init getter would hide the fact that the i18n object is a JSON payload pushed to the client — making it feel like a reactive bean when it isn't. The current shape also lets `null` mean "use the web component's built-in defaults", which is a meaningful state the lazy-init pattern cannot express.
 
