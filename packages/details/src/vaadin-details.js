@@ -64,16 +64,9 @@ class Details extends DetailsBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(L
         display: block;
       }
 
-      :host([hidden]) {
+      :host([hidden]),
+      :host(:not([opened])) [part='content'] {
         display: none !important;
-      }
-
-      [part='content'] {
-        display: none;
-      }
-
-      :host([opened]) [part='content'] {
-        display: block;
       }
     `;
   }

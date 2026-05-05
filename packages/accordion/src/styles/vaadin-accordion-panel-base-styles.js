@@ -10,16 +10,13 @@ export const accordionPanel = css`
     display: block;
   }
 
-  :host([hidden]) {
+  :host([hidden]),
+  :host(:not([opened])) [part='content'] {
     display: none !important;
   }
 
   [part='content'] {
     box-sizing: border-box;
-  }
-
-  :host(:not([opened])) [part='content'] {
-    display: none !important;
   }
 
   :host([focus-ring]) {
