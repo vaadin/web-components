@@ -16,6 +16,7 @@ import {
   setMaximumColumnWidth,
   setMinimumColumnWidth,
   setMinimumRowHeight,
+  setRowHeight,
   setSpacing,
 } from './helpers.js';
 
@@ -290,6 +291,33 @@ describe('dashboard - widget resizing', () => {
       expectLayout(dashboard, [
         [0, 1],
         [2],
+      ]);
+    });
+
+    it('should resize vertically if fixed row height is defined without minimum row height', async () => {
+      setMinimumRowHeight(dashboard);
+      setRowHeight(dashboard, rowHeight);
+      dashboard.items = [{ id: 0 }, { id: 1 }, { id: 2 }];
+      await nextFrame();
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [0, 1],
+        [2],
+      ]);
+
+      fireResizeStart(getElementFromCell(dashboard, 0, 0)!);
+      await nextFrame();
+
+      fireResizeOver(getElementFromCell(dashboard, 1, 0)!, 'bottom');
+      await nextFrame();
+
+      fireResizeEnd(dashboard);
+      await nextFrame();
+
+      // prettier-ignore
+      expectLayout(dashboard, [
+        [0, 1],
+        [0, 2],
       ]);
     });
 

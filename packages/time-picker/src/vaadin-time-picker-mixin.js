@@ -589,7 +589,7 @@ export const TimePickerMixin = (superClass) =>
 
       if (value !== '' && value !== null && !parsedObj) {
         // Value can not be parsed, reset to the old one.
-        this.value = oldValue === undefined ? '' : oldValue;
+        this.value = oldValue ?? '';
       } else if (value !== newValue) {
         // Value can be parsed (e.g. 12 -> 12:00), adjust.
         this.value = newValue;

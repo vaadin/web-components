@@ -135,7 +135,7 @@ export const IconsetMixin = (superClass) =>
     get size() {
       // Use default property value as a fallback here instead of the constructor
       // to not override an instance property in the lazy upgrade scenario below.
-      return this.__size !== undefined ? this.__size : 24;
+      return this.__size ?? 24;
     }
 
     /**

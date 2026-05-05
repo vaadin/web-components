@@ -6,6 +6,8 @@ not a substitute for reading [Component Structure](03-component-structure.md) an
 ## Design
 
 - [ ] API and behavior reviewed against [Design](02-design.md).
+- [ ] Roles, ARIA wiring, and keyboard navigation reviewed against
+      [Accessibility](11-a11y.md).
 
 ## Files
 
@@ -29,8 +31,7 @@ not a substitute for reading [Component Structure](03-component-structure.md) an
 - [ ] `static get properties()` declares every reactive property with a
       JSDoc comment (and `@attr` for camelCase ones).
 - [ ] Defaults set via field initializers, not a `value:` property option.
-- [ ] `firstUpdated()` sets host attributes (e.g. `role`) and attaches
-      controllers.
+- [ ] `ready()` sets host attributes (e.g. `role`) and attaches controllers.
 - [ ] `updated(changed)` reacts to property changes (no Polymer observers).
 - [ ] `defineCustomElement(...)` called at the bottom of the source file.
 
