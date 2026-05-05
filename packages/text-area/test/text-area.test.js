@@ -311,6 +311,43 @@ describe('text-area', () => {
       });
     });
 
+    // See https://github.com/vaadin/web-components/issues/291
+    describe('page scroll preservation', () => {
+      let spacer;
+
+      beforeEach(async () => {
+        textArea.value = Array(60).fill('a line of content').join('\n');
+        await nextUpdate(textArea);
+        await nextResize(textArea);
+
+        spacer = document.createElement('div');
+        spacer.style.height = '200vh';
+        document.body.appendChild(spacer);
+      });
+
+      afterEach(() => {
+        spacer.remove();
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      });
+
+      it('should preserve scroll-y when removing a line near document bottom', async () => {
+        const docMax = document.documentElement.scrollHeight - window.innerHeight;
+        expect(docMax).to.be.greaterThan(0);
+
+        window.scrollTo({ top: docMax - 50, left: 0, behavior: 'instant' });
+        const scrollYBefore = window.scrollY;
+        expect(scrollYBefore).to.be.greaterThan(0);
+
+        // One-line shrink: textarea regrows to a permanently shorter
+        // height, so the browser's auto-restore-on-grow does not
+        // engage and a scrollY jump is observable without the fix.
+        textArea.value = Array(59).fill('a line of content').join('\n');
+        await nextUpdate(textArea);
+
+        expect(window.scrollY).to.equal(scrollYBefore);
+      });
+    });
+
     it('should update height on show after hidden', async () => {
       const height = textArea.offsetHeight;
       textArea.setAttribute('hidden', '');
