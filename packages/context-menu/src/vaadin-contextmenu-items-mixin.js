@@ -374,9 +374,7 @@ export const ItemsMixin = (superClass) =>
 
       // Listen to the forwarded event from sub-menu.
       this.addEventListener('close-all-menus', () => {
-        // Call `close()` on the overlay to close synchronously,
-        // as we can't have `sync: true` on `opened` property.
-        this._overlayElement.close();
+        this.close();
       });
 
       // Listen to the forwarded event from sub-menu.

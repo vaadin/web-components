@@ -36,6 +36,7 @@ export const ContextMenuMixin = (superClass) =>
           value: false,
           notify: true,
           readOnly: true,
+          sync: true,
         },
 
         /**
@@ -144,11 +145,6 @@ export const ContextMenuMixin = (superClass) =>
 
       this.__boundOnScroll = this.__onScroll.bind(this);
       window.addEventListener('scroll', this.__boundOnScroll, true);
-
-      // Restore opened state if overlay was opened when disconnecting
-      if (this.__restoreOpened) {
-        this._setOpened(true);
-      }
     }
 
     /** @protected */
@@ -157,9 +153,13 @@ export const ContextMenuMixin = (superClass) =>
 
       window.removeEventListener('scroll', this.__boundOnScroll, true);
 
-      // Close overlay and memorize opened state
-      this.__restoreOpened = this.opened;
-      this.close();
+      // Defer close so that DOM moves (disconnect followed by reconnect
+      // within the same task) do not close the overlay.
+      setTimeout(() => {
+        if (!this.isConnected) {
+          this.close();
+        }
+      });
     }
 
     /** @protected */
