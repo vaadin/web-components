@@ -137,10 +137,20 @@ new implementation would have to redo. See
 
 Every new component enters the library behind a feature flag and
 graduates to stable only after its API has been validated in real use.
-The class declares `static experimental = true`; applications opt in via
-`window.Vaadin.featureFlags.{camelName}Component = true`. Breaking
-changes to an experimental API do not require a deprecation cycle — the
-flag is the contract that says "not yet stable."
+The class declares a `static get experimental()` getter — returning
+either `true` (the framework derives the flag name `{camelName}Component`
+from the tag) or an explicit flag-name string when the auto-derived
+name doesn't fit:
+
+```js
+static get experimental() {
+  return true;
+}
+```
+
+Applications opt in via `window.Vaadin.featureFlags.{camelName}Component = true`.
+Breaking changes to an experimental API do not require a deprecation
+cycle — the flag is the contract that says "not yet stable."
 
 ## Behavior principles
 
