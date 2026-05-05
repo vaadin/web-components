@@ -39,7 +39,7 @@ breadcrumbs.add(
 Covers requirement(s): 3
 
 ```java
-// All items linkable — no current-page item included in the trail
+// All items linkable — no current-page item included
 Breadcrumbs breadcrumbs = new Breadcrumbs(Mode.MANUAL);
 breadcrumbs.add(
         new BreadcrumbsItem("Home", HomeView.class),
@@ -97,12 +97,12 @@ home.setPrefixComponent(new Icon(VaadinIcon.HOME));
 
 ---
 
-## 5. Dynamic trail updates
+## 5. Dynamic updates
 
 Covers requirement(s): 9
 
 ```java
-// Imperative form — rebuild the trail when the browsed category changes
+// Imperative form — rebuild when the browsed category changes
 Breadcrumbs breadcrumbs = new Breadcrumbs(Mode.MANUAL);
 breadcrumbs.add(
         new BreadcrumbsItem("Home", HomeView.class),
