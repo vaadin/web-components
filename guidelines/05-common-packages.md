@@ -26,18 +26,24 @@ Core utilities used by every component.
 
 ## `@vaadin/a11y-base`
 
-Accessibility primitives.
+Accessibility primitives. See [Accessibility](11-a11y.md) for how these
+fit together.
 
-| Export                   | Purpose                                                                           |
-| ------------------------ | --------------------------------------------------------------------------------- |
-| `ActiveMixin`            | Toggles the `active` attribute on pointer-down / activation key.                  |
-| `DelegateFocusMixin`     | Forwards focus from the host to an internal slotted focusable element.            |
-| `DisabledMixin`          | Provides `disabled` property and `aria-disabled` attribute logic.                 |
-| `FocusMixin`             | Sets `focused` and `focus-ring` attributes (the latter only for keyboard focus).  |
-| `KeyboardMixin`          | Centralizes keydown handling; subclasses override `_onKeyDown`.                   |
-| `KeyboardDirectionMixin` | Keyboard navigation across child items (vertical or horizontal).                  |
-| `ListMixin`              | Builds on `KeyboardDirectionMixin` to add item selection and `selected` index.    |
-| `TabindexMixin`          | Manages `tabindex`; sets `-1` when `disabled`, restores prior value when enabled. |
+| Export                       | Purpose                                                                                                         |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `ActiveMixin`                | Toggles the `active` attribute on pointer-down / activation key.                                                |
+| `DelegateFocusMixin`         | Forwards focus from the host to an internal slotted focusable element.                                          |
+| `DisabledMixin`              | Provides `disabled` property and `aria-disabled` attribute logic.                                               |
+| `FocusMixin`                 | Sets `focused` and `focus-ring` attributes (the latter only for keyboard focus).                                |
+| `KeyboardMixin`              | Centralizes keydown handling; subclasses override `_onKeyDown`.                                                 |
+| `KeyboardDirectionMixin`     | Keyboard navigation across child items (vertical or horizontal).                                                |
+| `ListMixin`                  | Builds on `KeyboardDirectionMixin` to add item selection and `selected` index.                                  |
+| `TabindexMixin`              | Manages `tabindex`; sets `-1` when `disabled`, restores prior value when enabled.                               |
+| `AriaModalController`        | Sets `aria-hidden` on siblings outside an open modal so AT users can't reach background content.                |
+| `FocusTrapController`        | Traps Tab and Shift+Tab inside a modal region.                                                                  |
+| `FocusRestorationController` | Saves the previously-focused element on overlay open and restores it on close.                                  |
+| `FieldAriaController`        | Wires `aria-labelledby` / `aria-describedby` / `aria-required` on form fields. Used internally by `FieldMixin`. |
+| `announce()`                 | Writes a text to a live region (`polite`, `alert`, or `assertive` mode) to trigger screen reader announcements. |
 
 ## `@vaadin/field-base`
 
