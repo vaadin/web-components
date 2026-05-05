@@ -761,7 +761,7 @@ export const MenuBarMixin = (superClass) =>
           this._setTabindex(btn, btn === target);
         });
 
-        if (isKeyboardActive() && !this._expandedButton) {
+        if (!this._subMenu.opened && isKeyboardActive()) {
           this._tooltipController.open({ trigger: 'focus' });
         }
       } else {
