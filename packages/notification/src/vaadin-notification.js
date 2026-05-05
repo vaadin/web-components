@@ -164,12 +164,6 @@ class Notification extends NotificationMixin(ElementMixin(ThemableMixin(PolylitM
       ></vaadin-notification-card>
     `;
   }
-
-  /**
-   * Fired when the notification is closed.
-   *
-   * @event closed
-   */
 }
 
 defineCustomElement(NotificationContainer);

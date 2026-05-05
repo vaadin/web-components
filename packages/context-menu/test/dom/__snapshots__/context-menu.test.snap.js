@@ -171,3 +171,24 @@ snapshots["context-menu overlay"] =
 `;
 /* end snapshot context-menu overlay */
 
+snapshots["context-menu shadow"] = 
+`<slot id="slot">
+</slot>
+<vaadin-context-menu-overlay
+  exportparts="backdrop, overlay, content"
+  id="overlay"
+  popover="manual"
+>
+  <slot name="overlay">
+  </slot>
+  <slot
+    name="submenu"
+    slot="submenu"
+  >
+  </slot>
+</vaadin-context-menu-overlay>
+<slot name="tooltip">
+</slot>
+`;
+/* end snapshot context-menu shadow */
+

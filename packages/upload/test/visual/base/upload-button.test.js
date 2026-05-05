@@ -3,6 +3,7 @@ import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/icon/src/vaadin-icon.js';
 import '@vaadin/icons/vaadin-iconset.js';
+import '../not-animated-styles.js';
 import '../../../src/vaadin-upload-button.js';
 import { UploadManager } from '../../../src/vaadin-upload-manager.js';
 

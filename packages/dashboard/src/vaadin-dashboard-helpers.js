@@ -52,7 +52,7 @@ export function getItemsArrayOfItem(item, items) {
  */
 export function getElementItem(element) {
   const wrapper = element.closest(WRAPPER_LOCAL_NAME);
-  return wrapper && wrapper.__item;
+  return wrapper?.__item;
 }
 
 /**

@@ -51,18 +51,11 @@ class CrudEdit extends Button {
   /** @private */
   __onClick(e) {
     const tr = e.target.parentElement.assignedSlot.parentElement.parentElement;
+    /** @internal to not document it in CEM */
     tr.dispatchEvent(
       new CustomEvent('edit', { detail: { item: tr._item, index: tr.index }, bubbles: true, composed: true }),
     );
   }
-
-  /**
-   * Fired when user on the icon.
-   *
-   * @event edit
-   * @param {Object} detail.item the item to edit
-   * @param {Object} detail.index the index of the item in the data set
-   */
 }
 
 defineCustomElement(CrudEdit);

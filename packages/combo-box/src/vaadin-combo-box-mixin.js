@@ -177,7 +177,7 @@ export const ComboBoxMixin = (superClass) =>
     _openedOrItemsChanged(opened, items, loading, keepOverlayOpened) {
       // Close the overlay if there are no items to display.
       // See https://github.com/vaadin/vaadin-combo-box/pull/964
-      this._overlayOpened = opened && (keepOverlayOpened || loading || !!(items && items.length));
+      this._overlayOpened = opened && (keepOverlayOpened || loading || !!items?.length);
     }
 
     /**
@@ -552,43 +552,4 @@ export const ComboBoxMixin = (superClass) =>
 
       super._handleFocusOut();
     }
-
-    /**
-     * Fired when the value changes.
-     *
-     * @event value-changed
-     * @param {Object} detail
-     * @param {String} detail.value the combobox value
-     */
-
-    /**
-     * Fired when selected item changes.
-     *
-     * @event selected-item-changed
-     * @param {Object} detail
-     * @param {Object|String} detail.value the selected item. Type is the same as the type of `items`.
-     */
-
-    /**
-     * Fired when the user sets a custom value.
-     * @event custom-value-set
-     * @param {String} detail the custom value
-     */
-
-    /**
-     * Fired when the user commits a value change.
-     * @event change
-     */
-
-    /**
-     * Fired after the `vaadin-combo-box-overlay` opens.
-     *
-     * @event vaadin-combo-box-dropdown-opened
-     */
-
-    /**
-     * Fired after the `vaadin-combo-box-overlay` closes.
-     *
-     * @event vaadin-combo-box-dropdown-closed
-     */
   };

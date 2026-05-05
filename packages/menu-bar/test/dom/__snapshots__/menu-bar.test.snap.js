@@ -186,3 +186,20 @@ snapshots["menu-bar overlay"] =
 `;
 /* end snapshot menu-bar overlay */
 
+snapshots["menu-bar shadow"] = 
+`<div
+  part="container"
+  style=""
+>
+  <slot>
+  </slot>
+  <slot name="overflow">
+  </slot>
+</div>
+<slot name="submenu">
+</slot>
+<slot name="tooltip">
+</slot>
+`;
+/* end snapshot menu-bar shadow */
+

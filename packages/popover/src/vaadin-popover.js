@@ -952,12 +952,6 @@ class Popover extends PopoverPositionMixin(
   __hasTrigger(trigger) {
     return Array.isArray(this.trigger) && this.trigger.includes(trigger);
   }
-
-  /**
-   * Fired when the popover is closed.
-   *
-   * @event closed
-   */
 }
 
 defineCustomElement(Popover);

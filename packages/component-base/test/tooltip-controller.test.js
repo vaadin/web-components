@@ -55,14 +55,6 @@ describe('TooltipController', () => {
       expect(tooltip.manual).to.be.false;
     });
 
-    it('should update tooltip opened using controller setOpened method', () => {
-      controller.setOpened(true);
-      expect(tooltip.opened).to.be.true;
-
-      controller.setOpened(false);
-      expect(tooltip.opened).to.be.false;
-    });
-
     it('should update tooltip shouldShow using controller shouldShow method', () => {
       const shouldShow = () => true;
       controller.setShouldShow(shouldShow);
@@ -84,6 +76,25 @@ describe('TooltipController', () => {
       host.appendChild(input);
       controller.setAriaTarget(input);
       expect(tooltip.ariaTarget).to.equal(input);
+    });
+
+    it('should delegate open to the tooltip state controller', () => {
+      tooltip._stateController = { open: sinon.spy(), close: sinon.spy() };
+      controller.open({ hover: true });
+      expect(tooltip._stateController.open).to.be.calledOnceWith({ hover: true });
+    });
+
+    it('should not open the tooltip state controller when the tooltip is disconnected', () => {
+      tooltip._stateController = { open: sinon.spy(), close: sinon.spy() };
+      tooltip.remove();
+      controller.open({ hover: true });
+      expect(tooltip._stateController.open).to.be.not.called;
+    });
+
+    it('should delegate close to the tooltip state controller', () => {
+      tooltip._stateController = { open: sinon.spy(), close: sinon.spy() };
+      controller.close(true);
+      expect(tooltip._stateController.close).to.be.calledOnceWith(true);
     });
   });
 
@@ -137,18 +148,6 @@ describe('TooltipController', () => {
 
       controller.setManual(false);
       expect(tooltip.manual).to.be.false;
-    });
-
-    it('should update lazy tooltip opened using controller setOpened method', async () => {
-      controller.setOpened(true);
-
-      host.appendChild(tooltip);
-      await nextFrame();
-
-      expect(tooltip.opened).to.be.true;
-
-      controller.setOpened(false);
-      expect(tooltip.opened).to.be.false;
     });
 
     it('should update lazy tooltip shouldShow using controller shouldShow method', async () => {
@@ -237,6 +236,14 @@ describe('TooltipController', () => {
       host.appendChild(tooltip);
       await nextFrame();
       expect(host.hasAttribute('has-tooltip')).to.be.false;
+    });
+
+    it('should not throw when calling open before a tooltip is slotted', () => {
+      expect(() => controller.open({ hover: true })).to.not.throw();
+    });
+
+    it('should not throw when calling close before a tooltip is slotted', () => {
+      expect(() => controller.close(true)).to.not.throw();
     });
   });
 });

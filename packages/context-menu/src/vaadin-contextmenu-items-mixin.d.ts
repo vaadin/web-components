@@ -9,6 +9,19 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 
 export type ContextMenuItem<TItemData extends object = object> = {
   text?: string;
+  /**
+   * Text to be set as the menu item's tooltip.
+   * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-context-menu>`.
+   */
+  tooltip?: string;
+  /**
+   * Position of the item's tooltip relative to the item
+   * (e.g. `end`, `top`, `bottom-start`). Items with a sub-menu default to `start` to
+   * avoid overlap with the opening sub-menu; all other items, including disabled ones
+   * (whose sub-menus cannot be opened), default to `end`. If the slotted
+   * `<vaadin-tooltip>` has its `position` property set, that value is used instead.
+   */
+  tooltipPosition?: string;
   component?: HTMLElement | string;
   disabled?: boolean;
   checked?: boolean;
@@ -47,6 +60,18 @@ export declare class ItemsMixinClass<TItem extends ContextMenuItem = ContextMenu
    *   },
    *   { text: 'Menu Item 3', disabled: true, className: 'last' }
    * ];
+   * ```
+   *
+   * #### Item tooltips
+   *
+   * Menu items can have tooltips that are shown on hover and keyboard
+   * focus. To enable them, add a slotted `<vaadin-tooltip>` element
+   * and set the `tooltip` property on each item that should have one:
+   *
+   * ```html
+   * <vaadin-context-menu>
+   *   <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
+   * </vaadin-context-menu>
    * ```
    */
   items: TItem[] | undefined;

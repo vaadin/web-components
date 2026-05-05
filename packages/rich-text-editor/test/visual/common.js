@@ -7,5 +7,10 @@ registerStyles(
     [part='content'] {
       caret-color: transparent;
     }
+
+    /* Disable toolbar button transitions to prevent mid-ramp captures */
+    [part~='toolbar-button'] {
+      transition: none !important;
+    }
   `,
 );

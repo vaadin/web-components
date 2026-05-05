@@ -13,17 +13,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
 
 /**
- * Fired when the `rootHeadingLevel` property changes.
- */
-export type DashboardLayoutRootHeadingLevelChangedEvent = CustomEvent<{ value: number | null }>;
-
-export interface DashboardLayoutCustomEventMap {
-  'dashboard-root-heading-level-changed': DashboardLayoutRootHeadingLevelChangedEvent;
-}
-
-export interface DashboardLayoutEventMap extends HTMLElementEventMap, DashboardLayoutCustomEventMap {}
-
-/**
  * A responsive, grid-based dashboard layout component
  *
  * ```html
@@ -45,6 +34,7 @@ export interface DashboardLayoutEventMap extends HTMLElementEventMap, DashboardL
  * `--vaadin-dashboard-col-min-width`  | minimum column width of the layout
  * `--vaadin-dashboard-col-max-width`  | maximum column width of the layout
  * `--vaadin-dashboard-row-min-height` | minimum row height of the layout
+ * `--vaadin-dashboard-row-height`     | fixed row height of the layout. Must be in length units. Overrides `--vaadin-dashboard-row-min-height` and prevents rows from growing to fit content
  * `--vaadin-dashboard-col-max-count`  | maximum column count of the layout
  * `--vaadin-dashboard-gap`            | gap between child elements. Must be in length units (0 is not allowed, 0px is)
  * `--vaadin-dashboard-padding`        | space around the dashboard's outer edges. Must be in length units (0 is not allowed, 0px is)
@@ -56,22 +46,8 @@ export interface DashboardLayoutEventMap extends HTMLElementEventMap, DashboardL
  * `dense-layout` | Set when the dashboard is in dense mode.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
- *
- * @fires {CustomEvent} dashboard-root-heading-level-changed - Fired when the `rootHeadingLevel` property changes.
  */
-declare class DashboardLayout extends DashboardLayoutMixin(ElementMixin(ThemableMixin(HTMLElement))) {
-  addEventListener<K extends keyof DashboardLayoutEventMap>(
-    type: K,
-    listener: (this: DashboardLayout, ev: DashboardLayoutEventMap[K]) => void,
-    options?: AddEventListenerOptions | boolean,
-  ): void;
-
-  removeEventListener<K extends keyof DashboardLayoutEventMap>(
-    type: K,
-    listener: (this: DashboardLayout, ev: DashboardLayoutEventMap[K]) => void,
-    options?: EventListenerOptions | boolean,
-  ): void;
-}
+declare class DashboardLayout extends DashboardLayoutMixin(ElementMixin(ThemableMixin(HTMLElement))) {}
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -203,7 +203,7 @@ export const AvatarMixin = (superClass) =>
 
     /** @private */
     __i18nChanged(effectiveI18n) {
-      if (effectiveI18n && effectiveI18n.anonymous) {
+      if (effectiveI18n?.anonymous) {
         if (this.__oldAnonymous && this.__tooltipNode && this.__tooltipNode.text === this.__oldAnonymous) {
           this.__setTooltip();
         }

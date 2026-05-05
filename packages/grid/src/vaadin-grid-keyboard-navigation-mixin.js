@@ -103,7 +103,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       ['_itemsFocusable', '_footerFocusable', '_headerFocusable'].forEach((prop) => {
         const focusable = this[prop];
         if (value) {
-          const parent = focusable && focusable.parentElement;
+          const parent = focusable?.parentElement;
           if (isCell(focusable)) {
             // Cell itself focusable (default)
             this[prop] = parent;
@@ -428,7 +428,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       const rowGroup = row.parentNode;
       // Body rows have index property, otherwise DOM child index of the row is used.
       if (rowGroup === this.$.items) {
-        return bodyFallbackIndex !== undefined ? bodyFallbackIndex : row.index;
+        return bodyFallbackIndex ?? row.index;
       }
       return [...rowGroup.children].indexOf(row);
     }
@@ -1097,12 +1097,4 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
       return null;
     }
-
-    /**
-     * Fired when a cell is focused with click or keyboard navigation.
-     *
-     * Use context property of @see {@link GridCellFocusEvent} to get detail information about the event.
-     *
-     * @event cell-focus
-     */
   };

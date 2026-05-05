@@ -96,13 +96,13 @@ export const GridProEditSelectMixin = (superClass) =>
     }
 
     _optionsChanged(options) {
-      if (options && options.length) {
+      if (options?.length) {
         this.items = options.map((option) => ({
           label: option,
           value: option,
         }));
 
-        this._overlayElement = this._overlayElement || this.shadowRoot.querySelector('vaadin-select-overlay');
+        this._overlayElement ||= this.shadowRoot.querySelector('vaadin-select-overlay');
         this._overlayElement.addEventListener('vaadin-overlay-outside-click', () => {
           this._grid._stopEdit();
         });

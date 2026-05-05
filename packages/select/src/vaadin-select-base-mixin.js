@@ -271,7 +271,7 @@ export const SelectBaseMixin = (superClass) =>
           'click',
           (e) => {
             const item = e.composedPath().find((el) => el._hasVaadinItemMixin);
-            this.__dispatchChangePending = Boolean(item && item.value !== undefined && item.value !== this.value);
+            this.__dispatchChangePending = Boolean(item?.value !== undefined && item.value !== this.value);
             this.opened = false;
           },
           true,
@@ -370,7 +370,7 @@ export const SelectBaseMixin = (superClass) =>
           this.opened = true;
         } else if (/[\p{L}\p{Nd}]/u.test(e.key) && e.key.length === 1) {
           const selected = this._menuElement.selected;
-          const currentIdx = selected !== undefined ? selected : -1;
+          const currentIdx = selected ?? -1;
           const newIdx = this._menuElement._searchKey(currentIdx, e.key);
           if (newIdx >= 0) {
             this.__dispatchChangePending = true;

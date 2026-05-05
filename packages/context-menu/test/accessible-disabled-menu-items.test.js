@@ -4,7 +4,7 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-context-menu.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { getMenuItems, getSubMenu, openMenu } from './helpers.js';
+import { activateItem, getMenuItems, getSubMenu, openMenu } from './helpers.js';
 
 describe('accessible disabled menu items', () => {
   let rootMenu, subMenu, target, items;
@@ -91,6 +91,26 @@ describe('accessible disabled menu items', () => {
     subMenu = getSubMenu(rootMenu);
     expect(subMenu.opened).to.be.false;
     expect(items[2].hasAttribute('expanded')).to.be.false;
+  });
+
+  it('should close expanded sibling sub-menu when hovering a disabled item', async () => {
+    rootMenu.close();
+    rootMenu.items = [
+      { text: 'Item 0', children: [{ text: 'SubItem 0' }] },
+      { text: 'Item 1', disabled: true },
+    ];
+    await nextRender();
+    await openMenu(target);
+    items = getMenuItems(rootMenu);
+
+    await openMenu(items[0]);
+    subMenu = getSubMenu(rootMenu);
+    expect(subMenu.opened).to.be.true;
+
+    activateItem(items[1]);
+    await nextRender();
+    expect(subMenu.opened).to.be.false;
+    expect(items[0].hasAttribute('expanded')).to.be.false;
   });
 
   it('should set --_vaadin-item-disabled-pointer-events on disabled item', () => {

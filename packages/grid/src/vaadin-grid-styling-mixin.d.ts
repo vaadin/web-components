@@ -34,7 +34,7 @@ export declare class StylingMixinClass<TItem> {
   cellPartNameGenerator: GridCellPartNameGenerator<TItem> | null | undefined;
 
   /**
-   * Runs the `cellPastNameGenerator` for the visible cells.
+   * Runs the `cellPartNameGenerator` for the visible cells.
    * If the generator depends on varying conditions, you need to
    * call this function manually in order to update the styles when
    * the conditions change.

@@ -250,17 +250,4 @@ export const InputControlMixin = (superclass) =>
         }
       }
     }
-
-    /**
-     * Fired when the user commits a value change.
-     *
-     * @event change
-     */
-
-    /**
-     * Fired when the value is changed by the user: on every typing keystroke,
-     * and the value is cleared using the clear button.
-     *
-     * @event input
-     */
   };

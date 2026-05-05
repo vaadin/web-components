@@ -252,7 +252,7 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  *
  * @fires {CustomEvent} active-item-changed - Fired when the `activeItem` property changes.
  * @fires {CustomEvent} cell-activate - Fired when the cell is activated with click or keyboard.
- * @fires {CustomEvent} cell-focus - Fired when a cell is focused with click or keyboard navigation.
+ * @fires {CustomEvent} cell-focus - Fired when a cell is focused with click or keyboard navigation. Use the `context` property to read event details.
  * @fires {CustomEvent} column-reorder - Fired when the columns in the grid are reordered.
  * @fires {CustomEvent} column-resize - Fired when the grid column resize is finished.
  * @fires {CustomEvent} data-provider-changed - Fired when the `dataProvider` property changes.

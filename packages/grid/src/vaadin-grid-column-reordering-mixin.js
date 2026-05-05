@@ -147,8 +147,8 @@ export const ColumnReorderingMixin = (superClass) =>
       }
 
       // Cancel reordering if there are draggable nodes on the event path following this element
-      const path = e.composedPath && e.composedPath();
-      if (path && path.slice(0, Math.max(0, path.indexOf(this))).some((node) => node.draggable)) {
+      const path = e.composedPath?.();
+      if (path?.slice(0, Math.max(0, path.indexOf(this))).some((node) => node.draggable)) {
         return;
       }
 
@@ -271,7 +271,7 @@ export const ColumnReorderingMixin = (superClass) =>
         }
         // Check if element is the cell of a focus button mode column
         const { parentElement } = element;
-        if (parentElement && parentElement._focusButton === element) {
+        if (parentElement?._focusButton === element) {
           return parentElement;
         }
       }
@@ -481,12 +481,4 @@ export const ColumnReorderingMixin = (superClass) =>
         return targetCell._column;
       }
     }
-
-    /**
-     * Fired when the columns in the grid are reordered.
-     *
-     * @event column-reorder
-     * @param {Object} detail
-     * @param {Object} detail.columns the columns in the new order
-     */
   };

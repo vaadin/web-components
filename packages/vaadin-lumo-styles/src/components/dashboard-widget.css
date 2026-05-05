@@ -4,12 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_dashboard-widget {
-  :host::before {
-    inset: calc(-1 * var(--_widget-border-width));
-    border: var(--_widget-border-width) solid var(--_widget-border-color);
-    border-radius: calc(var(--_widget-border-radius) + var(--_widget-border-width));
-  }
-
   /* Widget states */
 
   :host([editable]) {
@@ -17,19 +11,8 @@
     --_widget-border-width: 1px;
   }
 
-  :host([focused])::before {
-    border-width: var(--_focus-ring-width);
-    border-color: var(--_focus-ring-color);
-  }
-
   :host([selected]) {
     background: var(--lumo-primary-color-10pct);
-  }
-
-  :host([dragging]) {
-    box-shadow: none;
-    background: var(--_drop-target-background-color);
-    border: var(--_drop-target-border);
   }
 
   :host([resizing])::after {

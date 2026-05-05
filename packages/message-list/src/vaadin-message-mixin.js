@@ -183,9 +183,4 @@ export const MessageMixin = (superClass) =>
         }),
       );
     }
-
-    /**
-     * Fired when an attachment is clicked.
-     * @event attachment-click
-     */
   };

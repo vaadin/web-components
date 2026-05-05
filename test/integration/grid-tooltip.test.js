@@ -249,18 +249,6 @@ describe('tooltip', () => {
 
       expect(spy.calledOnce).to.be.false;
     });
-
-    it('should not set tooltip opened if there is no tooltip', async () => {
-      const spy = sinon.spy(grid._tooltipController, 'setOpened');
-
-      tooltip.remove();
-      await nextFrame();
-
-      const cell = getCell(grid, 0);
-      mouseenter(cell);
-
-      expect(spy.calledOnce).to.be.false;
-    });
   });
 
   describe('cell not fully visible', () => {

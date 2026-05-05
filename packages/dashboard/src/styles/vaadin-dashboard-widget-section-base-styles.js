@@ -21,8 +21,11 @@ export const dashboardWidgetAndSectionStyles = css`
     --_widget-shadow: var(--vaadin-dashboard-widget-shadow, 0 0 0 0 transparent);
     --_widget-editable-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
     --_widget-selected-shadow: 0 3px 12px -1px rgba(0, 0, 0, 0.3);
-    --_drop-target-background: var(--vaadin-dashboard-drop-target-background, var(--vaadin-background-container));
-    --_drop-target-border-color: var(--vaadin-dashboard-drop-target-border-color, var(--vaadin-border-color-secondary));
+    --_drop-target-background-color: var(
+      --vaadin-dashboard-drop-target-background-color,
+      var(--vaadin-background-container)
+    );
+    --_drop-target-border: var(--vaadin-dashboard-drop-target-border, 1px dashed var(--vaadin-border-color-secondary));
     --_focus-ring-color: var(--vaadin-focus-ring-color);
     --_focus-ring-width: var(--vaadin-focus-ring-width);
   }
@@ -34,9 +37,9 @@ export const dashboardWidgetAndSectionStyles = css`
   }
 
   :host([dragging]) {
-    box-shadow: none;
-    background: var(--_drop-target-background);
-    border-color: var(--_drop-target-border-color);
+    box-shadow: none !important;
+    background: var(--_drop-target-background-color) !important;
+    border: var(--_drop-target-border) !important;
   }
 
   :host([dragging]) * {

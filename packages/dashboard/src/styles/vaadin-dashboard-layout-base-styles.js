@@ -9,7 +9,30 @@
  * license.
  */
 import '@vaadin/component-base/src/styles/style-props.js';
-import { css } from 'lit';
+import { css, unsafeCSS } from 'lit';
+
+/**
+ * Declarations that pin the host or slotted element to the fixed
+ * `--vaadin-dashboard-row-height` (scaled by `--vaadin-dashboard-widget-rowspan` and the
+ * inter-row `--_gap`). Imported by the widget host and the section's slotted rule
+ * because the calc must live on each capped element so `var(--vaadin-dashboard-widget-rowspan)`
+ * resolves against that element's own context.
+ *
+ * The cap is `!important` so an inline `min-height`/`max-height` on a widget can't widen
+ * the cell beyond the row height. When `--vaadin-dashboard-row-height` is unset the calc
+ * is invalid, the property becomes invalid at computed value time and falls back to its
+ * initial value (`auto` for `min-height`, `none` for `max-height`) — these initial values
+ * are still applied with `!important`, so an inline `min-height`/`max-height` on a widget
+ * is a no-op even when no fixed row height is configured. See the variable's docs.
+ */
+export const widgetFixedHeightDeclarations = unsafeCSS`
+    --_widget-fixed-height: calc(
+      var(--vaadin-dashboard-widget-rowspan, 1) * var(--vaadin-dashboard-row-height) +
+        (var(--vaadin-dashboard-widget-rowspan, 1) - 1) * var(--_gap)
+    );
+    min-height: var(--_widget-fixed-height) !important;
+    max-height: var(--_widget-fixed-height) !important;
+`;
 
 export const dashboardLayoutStyles = css`
   :host {
@@ -56,8 +79,9 @@ export const dashboardLayoutStyles = css`
 
     /* Default row min height */
     --_default-row-min-height: 12em;
-    /* Effective row min height */
-    --_row-min-height: var(--vaadin-dashboard-row-min-height, var(--_default-row-min-height));
+    /* Effective row min height. A fixed row height takes precedence so the parent track also collapses to it. */
+    /* prettier-ignore */
+    --_row-min-height: var(--vaadin-dashboard-row-height, var(--vaadin-dashboard-row-min-height, var(--_default-row-min-height)));
     /* Effective row height */
     --_row-height: minmax(var(--_row-min-height, auto), auto);
 
@@ -82,5 +106,10 @@ export const dashboardLayoutStyles = css`
     /* The grid-row value applied to children */
     --_item-row: span var(--vaadin-dashboard-widget-rowspan, 1);
     grid-row: var(--_item-row);
+  }
+
+  /* Pin slotted children to the fixed row height when one is set. Sections are excluded so they can grow to wrap multiple sub-rows. */
+  ::slotted(:not(vaadin-dashboard-section)) {
+    ${widgetFixedHeightDeclarations};
   }
 `;

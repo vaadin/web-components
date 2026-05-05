@@ -10,6 +10,7 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
+import { widgetFixedHeightDeclarations } from './vaadin-dashboard-layout-base-styles.js';
 import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-widget-section-base-styles.js';
 
 const sectionStyles = css`
@@ -42,12 +43,13 @@ const sectionStyles = css`
     grid-row: var(--_item-row);
   }
 
-  header {
-    grid-column: var(--_section-column);
+  /* Mirror the layout's cap so non-widget children inside a section also stay pinned to the fixed row height. Sections nested inside a section are excluded so they can still grow. */
+  ::slotted(:not(vaadin-dashboard-section)) {
+    ${widgetFixedHeightDeclarations};
   }
 
-  :host::before {
-    z-index: 2 !important;
+  header {
+    grid-column: var(--_section-column);
   }
 
   ::slotted(vaadin-dashboard-widget-wrapper) {

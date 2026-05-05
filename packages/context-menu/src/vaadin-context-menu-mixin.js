@@ -7,6 +7,7 @@ import { isElementFocusable, isKeyboardActive } from '@vaadin/a11y-base/src/focu
 import { isAndroid, isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener, deepTargetFind, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+import { ContextMenuTooltipController } from './vaadin-context-menu-tooltip-controller.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
 
 /**
@@ -172,6 +173,15 @@ export const ContextMenuMixin = (superClass) =>
           this._fullscreen = matches;
         }),
       );
+
+      // Sub-menus inherit the tooltip controller from their parent menu
+      // (assigned before `firstUpdated` runs) to reuse the same slotted
+      // `<vaadin-tooltip>` across nesting levels. Only create a new one
+      // when none was inherited, i.e. on the outer host.
+      if (!this._tooltipController) {
+        this._tooltipController = new ContextMenuTooltipController(this);
+        this.addController(this._tooltipController);
+      }
     }
 
     /**
@@ -645,10 +655,4 @@ export const ContextMenuMixin = (superClass) =>
         this.close();
       }
     }
-
-    /**
-     * Fired when the context menu is closed.
-     *
-     * @event closed
-     */
   };

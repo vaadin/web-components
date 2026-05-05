@@ -524,15 +524,4 @@ export const AppLayoutMixin = (superclass) =>
       this.__resizeObserver.unobserve(element);
       this.__resizeObserver.observe(element);
     }
-
-    /**
-     * App Layout listens to `close-overlay-drawer` on the window level.
-     * A custom event can be dispatched and the App Layout will close the drawer in overlay.
-     *
-     * That can be used, for instance, when a navigation occurs when user clicks in a menu item inside the drawer.
-     *
-     * See `dispatchCloseOverlayDrawerEvent()` helper method.
-     *
-     * @event close-overlay-drawer
-     */
   };

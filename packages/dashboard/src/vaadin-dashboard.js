@@ -79,6 +79,7 @@ const DEFAULT_I18N = getDefaultI18n();
  * `--vaadin-dashboard-col-min-width`  | minimum column width of the dashboard
  * `--vaadin-dashboard-col-max-width`  | maximum column width of the dashboard
  * `--vaadin-dashboard-row-min-height` | minimum row height of the dashboard
+ * `--vaadin-dashboard-row-height`     | fixed row height of the dashboard. Must be in length units. Overrides `--vaadin-dashboard-row-min-height` and prevents rows from growing to fit content
  * `--vaadin-dashboard-col-max-count`  | maximum column count of the dashboard
  * `--vaadin-dashboard-gap`            | gap between child elements. Must be in length units (0 is not allowed, 0px is)
  * `--vaadin-dashboard-padding`        | space around the dashboard's outer edges. Must be in length units (0 is not allowed, 0px is)
@@ -347,7 +348,7 @@ class Dashboard extends DashboardLayoutMixin(
 
   /** @private */
   __focusWrapperContent(wrapper) {
-    if (wrapper && wrapper.firstElementChild) {
+    if (wrapper?.firstElementChild) {
       wrapper.firstElementChild.focus();
     }
   }
@@ -501,48 +502,6 @@ class Dashboard extends DashboardLayoutMixin(
       });
     }
   }
-
-  /**
-   * Fired when an item selected state changed
-   *
-   * @event dashboard-item-selected-changed
-   */
-
-  /**
-   * Fired when an item move mode changed
-   *
-   * @event dashboard-item-move-mode-changed
-   */
-
-  /**
-   * Fired when an item resize mode changed
-   *
-   * @event dashboard-item-resize-mode-changed
-   */
-
-  /**
-   * Fired when an item was moved
-   *
-   * @event dashboard-item-moved
-   */
-
-  /**
-   * Fired when an item was resized
-   *
-   * @event dashboard-item-resized
-   */
-
-  /**
-   * Fired before an item is removed
-   *
-   * @event dashboard-item-before-remove
-   */
-
-  /**
-   * Fired when an item was removed
-   *
-   * @event dashboard-item-removed
-   */
 }
 
 defineCustomElement(Dashboard);

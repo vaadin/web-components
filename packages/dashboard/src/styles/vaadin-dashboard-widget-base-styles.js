@@ -10,6 +10,7 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
+import { widgetFixedHeightDeclarations } from './vaadin-dashboard-layout-base-styles.js';
 import { dashboardWidgetAndSectionStyles } from './vaadin-dashboard-widget-section-base-styles.js';
 
 const widgetStyles = css`
@@ -22,19 +23,10 @@ const widgetStyles = css`
     background: var(--_widget-background);
     border-radius: var(--_widget-border-radius);
     box-shadow: var(--_widget-shadow);
-    border-color: var(--_widget-border-color);
-  }
+    border: var(--_widget-border-width) solid var(--_widget-border-color);
 
-  :host::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-color: inherit;
-    border-width: var(--_widget-border-width);
-    border-style: solid;
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 1;
+    /* Pin to the fixed row height when one is set. The widget host's own definition is needed so widgets nested inside sections in vaadin-dashboard-layout (where the layout-level cap doesn't reach) still get capped. */
+    ${widgetFixedHeightDeclarations};
   }
 
   :host([hidden]) {

@@ -417,7 +417,7 @@ export const GridMixin = (superClass) =>
       const slot = document.createElement('slot');
       slot.setAttribute('name', slotName);
 
-      if (column && column._focusButtonMode) {
+      if (column?._focusButtonMode) {
         const div = document.createElement('div');
         div.setAttribute('role', 'button');
         div.setAttribute('tabindex', '-1');
@@ -871,7 +871,7 @@ export const GridMixin = (superClass) =>
     _showTooltip(event) {
       // Check if there is a slotted vaadin-tooltip element.
       const tooltip = this._tooltipController.node;
-      if (tooltip && tooltip.isConnected) {
+      if (tooltip?.isConnected) {
         const target = event.target;
 
         if (!this.__isCellFullyVisible(target)) {
@@ -882,7 +882,7 @@ export const GridMixin = (superClass) =>
         this._tooltipController.setContext(this.getEventContext(event));
 
         // Trigger opening using the corresponding delay.
-        tooltip._stateController.open({
+        this._tooltipController.open({
           focus: event.type === 'focusin',
           hover: event.type === 'mouseenter',
         });
@@ -918,10 +918,7 @@ export const GridMixin = (superClass) =>
 
     /** @protected */
     _hideTooltip(immediate) {
-      const tooltip = this._tooltipController && this._tooltipController.node;
-      if (tooltip) {
-        tooltip._stateController.close(immediate);
-      }
+      this._tooltipController.close(immediate);
     }
 
     /**

@@ -12,6 +12,7 @@ import type { ComboBoxItemModel } from '@vaadin/combo-box/src/vaadin-combo-box.j
 import type { ComboBoxBaseMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-base-mixin.js';
 import type { ComboBoxDataProviderMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
 import type { ComboBoxItemsMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
+import type { ComboBoxScrollToIndexMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-scroll-to-index-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
@@ -45,6 +46,7 @@ export declare function MultiSelectComboBoxMixin<TItem, T extends Constructor<HT
   Constructor<ComboBoxBaseMixinClass> &
   Constructor<ComboBoxDataProviderMixinClass<TItem>> &
   Constructor<ComboBoxItemsMixinClass<TItem>> &
+  Constructor<ComboBoxScrollToIndexMixinClass> &
   Constructor<DelegateFocusMixinClass> &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &
@@ -77,6 +79,14 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
    * @attr {boolean} auto-expand-vertically
    */
   autoExpandVertically: boolean;
+
+  /**
+   * Set to true to collapse all selected items chips into the overflow
+   * chip when they don't all fit, instead of showing as many as possible.
+   * Has no effect when `autoExpandVertically` is true.
+   * @attr {boolean} collapse-chips
+   */
+  collapseChips: boolean;
 
   /**
    * When true, the user can input a value that is not present in the items list.

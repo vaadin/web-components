@@ -281,7 +281,7 @@ export const TimePickerMixin = (superClass) =>
     /** @private */
     _openedOrItemsChanged(opened, items) {
       // Close the overlay if there are no items to display.
-      this._overlayOpened = opened && !!(items && items.length);
+      this._overlayOpened = opened && !!items?.length;
     }
 
     /**
@@ -458,10 +458,10 @@ export const TimePickerMixin = (superClass) =>
      * @private
      */
     __getMsec(obj) {
-      let result = ((obj && obj.hours) || 0) * 60 * 60 * 1000;
-      result += ((obj && obj.minutes) || 0) * 60 * 1000;
-      result += ((obj && obj.seconds) || 0) * 1000;
-      result += (obj && parseInt(obj.milliseconds)) || 0;
+      let result = (obj?.hours || 0) * 60 * 60 * 1000;
+      result += (obj?.minutes || 0) * 60 * 1000;
+      result += (obj?.seconds || 0) * 1000;
+      result += parseInt(obj?.milliseconds) || 0;
 
       return result;
     }
@@ -471,10 +471,10 @@ export const TimePickerMixin = (superClass) =>
      * @private
      */
     __getSec(obj) {
-      let result = ((obj && obj.hours) || 0) * 60 * 60;
-      result += ((obj && obj.minutes) || 0) * 60;
-      result += (obj && obj.seconds) || 0;
-      result += (obj && obj.milliseconds / 1000) || 0;
+      let result = (obj?.hours || 0) * 60 * 60;
+      result += (obj?.minutes || 0) * 60;
+      result += obj?.seconds || 0;
+      result += (obj?.milliseconds || 0) / 1000;
 
       return result;
     }
@@ -589,7 +589,7 @@ export const TimePickerMixin = (superClass) =>
 
       if (value !== '' && value !== null && !parsedObj) {
         // Value can not be parsed, reset to the old one.
-        this.value = oldValue === undefined ? '' : oldValue;
+        this.value = oldValue ?? '';
       } else if (value !== newValue) {
         // Value can be parsed (e.g. 12 -> 12:00), adjust.
         this.value = newValue;
@@ -709,10 +709,4 @@ export const TimePickerMixin = (superClass) =>
       // We use `__commitValueChange` to fire a custom event.
       event.stopPropagation();
     }
-
-    /**
-     * Fired when the user commits a value change.
-     *
-     * @event change
-     */
   };
