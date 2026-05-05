@@ -230,7 +230,7 @@ The public `add` / `addComponentAsFirst` / `addComponentAtIndex` / `remove` / `r
 @NpmPackage(value = "@vaadin/breadcrumbs", version = "25.2.0-alpha{N}")
 @JsModule("@vaadin/breadcrumbs/src/vaadin-breadcrumbs-item.js")
 public class BreadcrumbsItem extends Component
-        implements HasText, HasEnabled, HasPrefix, HasTooltip {
+        implements HasText, HasEnabled, HasPrefix {
 
     // Constructors — mirror SideNavItem's overload set
     public BreadcrumbsItem(String text);                                                            // current page (no path)
@@ -256,10 +256,6 @@ public class BreadcrumbsItem extends Component
     // Prefix — inherited from HasPrefix:
     //   setPrefixComponent(Component)
     //   getPrefixComponent()
-
-    // Tooltip — inherited from HasTooltip:
-    //   setTooltipText(String)
-    //   getTooltip()
 }
 ```
 
@@ -268,7 +264,6 @@ public class BreadcrumbsItem extends Component
 - `HasText` — the default slot of `<vaadin-breadcrumbs-item>` holds the item's text content. `HasText` from Flow core provides `setText(String)` / `getText()` and `bindText(Signal<String>) → SignalBinding<String>` as default methods, so the signal-binding entry point for reactive item text is also available without additional code.
 - `HasEnabled` — lets the application disable individual items (e.g. an ancestor the user has no permission to visit).
 - `HasPrefix` — requirement 8 (icons). `slot="prefix"` on `<vaadin-breadcrumbs-item>`, shared mixin from `vaadin-flow-components-base`.
-- `HasTooltip` — useful for long labels that may not fit. Shared mixin.
 
 **No `HasSuffix`** — web-component-api.md explicitly excludes it. If added later on the web-component side, the Flow class adds `HasSuffix` to the `implements` clause; that is strictly additive.
 
@@ -620,7 +615,6 @@ Affects: `flow-components-bom` pom.xml Flow version property — ensure it is ra
 ### `vaadin-flow-components-base` — Used as-is
 
 - `HasPrefix` — prefix slot for `BreadcrumbsItem`.
-- `HasTooltip` — tooltip support on `BreadcrumbsItem`.
 
 No modifications.
 
