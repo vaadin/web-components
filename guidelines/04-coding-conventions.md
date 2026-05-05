@@ -74,9 +74,33 @@ interoperating with Polymer-era mixins or observers that must have run first.
 
 ## `updated()` vs `static get observers()`
 
-Prefer `updated(changed)` with `changed.has('foo')`. Polymer-style
-`static get observers()` exists for legacy mixins; do not introduce new ones
-in component code.
+Prefer `updated(changed)` with `changed.has('foo')` for new code:
+
+```js
+updated(changed) {
+  super.updated(changed);
+
+  if (changed.has('disabled')) {
+    this._disabledChanged(this.disabled, changed.get('disabled'));
+  }
+}
+```
+
+Polymer-style `static get observers()` exists for legacy mixins; don't
+introduce new ones in component code.
+
+## Dynamic observers
+
+PolylitMixin's `_createMethodObserver(...)` can be used when an observer
+must skip the initial property value and only fire on subsequent changes
+(e.g. for field validation). Register it inside `ready()`:
+
+```js
+ready() {
+  super.ready();
+  this._createMethodObserver('_checkedChanged(checked)');
+}
+```
 
 ## `willUpdate()` vs computed properties
 
@@ -131,34 +155,50 @@ with the repo. Add a controller via `this.addController(controller)` in
 
 ## Properties
 
-Use Lit's `static properties`. Set defaults with field initializers.
+Declare reactive properties in the `static properties` block. Set defaults
+via the `value:` option, not class-field initializers.
 
 ```js
-class MyComponent extends ... {
-  value = '';
-  count = 0;
+static get properties() {
+  return {
+    /**
+     * Whether the component is disabled.
+     */
+    disabled: {
+      type: Boolean,
+      value: false,
+      reflectToAttribute: true,
+    },
 
-  static get properties() {
-    return {
-      /**
-       * Whether the component is disabled.
-       * @attr {boolean} disabled
-       */
-      disabled: { type: Boolean, reflect: true },
-
-      /** The value of the component. */
-      value: { type: String, notify: true },
-    };
-  }
+    /**
+     * The value of the component.
+     */
+    value: {
+      type: String,
+      value: '',
+      notify: true,
+    },
+  };
 }
 ```
 
-Notes:
+Why Polymer-style options instead of plain Lit:
 
-- `attribute: false` for internal reactive properties (the codebase prefers
-  this over Lit's `state: true`).
-- `reflect: true` instead of Polymer's `reflectToAttribute: true`.
-- `notify: true` is provided by `PolylitMixin` and dispatches a
+- **`value:` not field initializers.** PolylitMixin (in the canonical
+  mixin chain) installs property accessors on the prototype. ES
+  class-field initializers (`value = ''`) shadow those accessors with a
+  same-named instance property, silently breaking reactivity — Lit's
+  dev mode logs a `class-field-shadowing` warning. Set defaults with
+  `value:` in the property declaration instead.
+- **`reflectToAttribute:` not `reflect:`.** PolylitMixin's
+  `createProperty` recognises the Polymer-style option name, and every
+  field-style component in the repo uses it. Match that.
+
+Other notes:
+
+- `attribute: false` for internal reactive properties (the codebase
+  prefers this over Lit's `state: true`).
+- `notify: true` is provided by PolylitMixin and dispatches a
   `{property}-changed` `CustomEvent` — see [Events](09-events.md).
 
 For full Lit property options refer to the
