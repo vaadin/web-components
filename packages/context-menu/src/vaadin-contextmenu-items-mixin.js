@@ -252,6 +252,24 @@ export const ItemsMixin = (superClass) =>
         listBox.setAttribute('theme', this._theme);
       }
 
+      listBox.addEventListener('mouseover', () => {
+        this._tooltipController.setTarget(listBox.hovered);
+        this._tooltipController.open({ trigger: 'hover' });
+      });
+
+      listBox.addEventListener('mouseleave', () => {
+        this._tooltipController.close(true);
+      });
+
+      listBox.addEventListener('focusin', () => {
+        if (!isKeyboardActive()) {
+          return;
+        }
+
+        this._tooltipController.setTarget(listBox.focused);
+        this._tooltipController.open({ trigger: 'focus' });
+      });
+
       listBox.addEventListener('selected-changed', (event) => {
         const { value } = event.detail;
         if (typeof value === 'number') {
@@ -285,31 +303,6 @@ export const ItemsMixin = (superClass) =>
         }
 
         this.__showSubMenu(event);
-
-        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
-        this._tooltipController.setTarget(itemElement);
-        this._tooltipController.open({ trigger: 'hover' });
-      });
-
-      overlay.addEventListener('mouseleave', (event) => {
-        // Ignore events from the submenus
-        if (event.composedPath().includes(this._subMenu)) {
-          return;
-        }
-
-        this._tooltipController.close();
-      });
-
-      overlay.addEventListener('focusin', (event) => {
-        // Ignore events from the submenus
-        // Ignore non-keyboard focus changes (e.g. clicks).
-        if (event.composedPath().includes(this._subMenu) || !isKeyboardActive()) {
-          return;
-        }
-
-        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
-        this._tooltipController.setTarget(itemElement);
-        this._tooltipController.open({ trigger: 'focus' });
       });
 
       overlay.addEventListener('keydown', (event) => {
@@ -350,6 +343,7 @@ export const ItemsMixin = (superClass) =>
       // host. Its tooltip controller instance is shared across sub-menus to
       // reuse the same tooltip element for items at every nesting level.
       subMenu._tooltipController = this._tooltipController;
+      subMenu.__parentMenu = this;
 
       subMenu._modeless = true;
       subMenu.openOn = 'opensubmenu';
@@ -455,6 +449,8 @@ export const ItemsMixin = (superClass) =>
           // Otherwise, focus the overlay part to handle arrow keys.
           this._overlayElement.$.overlay.focus();
         }
+
+        this._tooltipController.bringToFront();
       }
 
       // Only reachable with `accessibleDisabledMenuItems` enabled (disabled
@@ -547,6 +543,12 @@ export const ItemsMixin = (superClass) =>
         component.setAttribute('theme', theme);
       } else {
         component.removeAttribute('theme');
+      }
+    }
+
+    close() {
+      if (!this.__parentMenu) {
+        this._tooltipController.close(true);
       }
     }
   };

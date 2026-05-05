@@ -43,6 +43,10 @@ class ContextMenuListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(L
     };
   }
 
+  get hovered() {
+    return this._getItems().find((item) => item.matches(':hover'));
+  }
+
   /**
    * @return {!HTMLElement}
    * @protected

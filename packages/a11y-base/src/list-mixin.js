@@ -148,7 +148,7 @@ export const ListMixin = (superClass) =>
      * @override
      */
     _getItems() {
-      return this.items;
+      return this.items ?? [];
     }
 
     /** @private */
