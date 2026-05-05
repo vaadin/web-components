@@ -167,14 +167,6 @@ export const ItemsMixin = (superClass) =>
       // Store the reference parent overlay
       subMenuOverlay._setParentOverlay(parent);
 
-      // Restack the tooltip above the sub-menu overlay once it is open.
-      if (!subMenuOverlay.__tooltipBringToFrontAttached) {
-        subMenuOverlay.__tooltipBringToFrontAttached = true;
-        subMenuOverlay.addEventListener('vaadin-overlay-open', () => {
-          this._tooltipController.bringToFront();
-        });
-      }
-
       // Set theme attribute from parent element
       if (parent.hasAttribute('theme')) {
         subMenu.setAttribute('theme', parent.getAttribute('theme'));
@@ -403,6 +395,13 @@ export const ItemsMixin = (superClass) =>
             this.__updateExpanded(expandedItem, false);
           }
         }
+      });
+
+      // Restack the tooltip above the sub-menu overlay once it is open.
+      subMenu.updateComplete.then(() => {
+        subMenu._overlayElement.addEventListener('vaadin-overlay-open', () => {
+          this._tooltipController.bringToFront();
+        });
       });
 
       return subMenu;
