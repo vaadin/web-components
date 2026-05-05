@@ -13,11 +13,15 @@
   :where(:root),
   :where(:host) {
     --aura-app-layout-inset: 0px !important;
-    --aura-app-layout-border-width: 0px;
+  }
+
+  vaadin-app-layout {
+    --_app-layout-border-width: 0px;
   }
 }
 
 vaadin-app-layout {
+  --_app-layout-border-width: var(--aura-app-layout-border-width);
   --_app-layout-radius: clamp(0px, var(--aura-app-layout-radius), var(--aura-app-layout-inset) * 100);
   padding-top: max(var(--aura-app-layout-inset), var(--vaadin-app-layout-navbar-offset-top));
   padding-bottom: max(var(--aura-app-layout-inset), var(--vaadin-app-layout-navbar-offset-bottom));
@@ -67,13 +71,11 @@ vaadin-app-layout::part(content) {
   min-height: 1lh;
   box-sizing: border-box;
   border-radius: var(--_app-layout-radius);
-  border: var(--aura-app-layout-border-width) solid var(--vaadin-border-color-secondary);
-  border-block-width: min(var(--aura-app-layout-inset), var(--aura-app-layout-border-width));
-  border-inline-width: min(var(--aura-app-layout-inset), var(--aura-app-layout-border-width));
+  border: min(var(--aura-app-layout-inset), var(--_app-layout-border-width)) solid var(--vaadin-border-color-secondary);
 }
 
 vaadin-app-layout[has-drawer][drawer-opened]:not([overlay])::part(content) {
-  border-inline-start-width: var(--aura-app-layout-border-width);
+  border-inline-start-width: var(--_app-layout-border-width);
 }
 
 vaadin-app-layout[has-navbar][has-drawer][drawer-opened]:not([overlay])::part(content) {
@@ -81,7 +83,7 @@ vaadin-app-layout[has-navbar][has-drawer][drawer-opened]:not([overlay])::part(co
 }
 
 vaadin-app-layout[has-navbar]::part(content) {
-  border-top-width: var(--aura-app-layout-border-width);
+  border-top-width: var(--_app-layout-border-width);
 }
 
 vaadin-drawer-toggle {
