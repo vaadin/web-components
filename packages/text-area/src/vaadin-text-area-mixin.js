@@ -177,9 +177,6 @@ export const TextAreaMixin = (superClass) =>
 
       // Restore
       inputField.scrollTop = inputFieldScrollTop;
-      if (input.getAttribute('style') === '') {
-        input.removeAttribute('style');
-      }
 
       // Restore scroll if the brief collapse caused the browser to adjust
       // it. `behavior: 'instant'` bypasses any host-page
