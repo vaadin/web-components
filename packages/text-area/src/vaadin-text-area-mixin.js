@@ -162,8 +162,11 @@ export const TextAreaMixin = (superClass) =>
       const inputFieldScrollTop = inputField.scrollTop;
 
       // Save page scroll around the brief textarea collapse below.
-      // Pinning the input-field's height would capture the previous cycle's rendered height and feed it
-      // back into this cycle's scrollHeight measurement, oscillating under fractional rounding.
+      // Without this, the document briefly shrinks while the textarea is reset
+      // to natural height for measurement; the browser clamps `scrollY` to the
+      // new (smaller) max, and after phase 2 grows the textarea back the scroll
+      // position stays clamped — user-visible scroll jump on backspace at end
+      // of a large value (vaadin/web-components#291).
       const pageScrollX = window.scrollX;
       const pageScrollY = window.scrollY;
 
@@ -178,10 +181,9 @@ export const TextAreaMixin = (superClass) =>
       // Restore
       inputField.scrollTop = inputFieldScrollTop;
 
-      // Restore scroll if the brief collapse caused the browser to adjust
-      // it. `behavior: 'instant'` bypasses any host-page
-      // `scroll-behavior: smooth` so the restoration is a synchronous jump,
-      // not an animation.
+      // Restore the page scroll position. `behavior: 'instant'` bypasses any
+      // host-page `scroll-behavior: smooth` so the restoration is a synchronous
+      // jump, not an animation.
       if (window.scrollX !== pageScrollX || window.scrollY !== pageScrollY) {
         window.scrollTo({ left: pageScrollX, top: pageScrollY, behavior: 'instant' });
       }
