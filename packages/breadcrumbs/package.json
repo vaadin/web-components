@@ -1,5 +1,5 @@
 {
-  "name": "@vaadin/breadcrumb-trail",
+  "name": "@vaadin/breadcrumbs",
   "version": "25.2.0-alpha10",
   "publishConfig": {
     "access": "public"
@@ -9,15 +9,15 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",
-    "directory": "packages/breadcrumb-trail"
+    "directory": "packages/breadcrumbs"
   },
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/components",
   "bugs": {
     "url": "https://github.com/vaadin/web-components/issues"
   },
-  "main": "vaadin-breadcrumb-trail.js",
-  "module": "vaadin-breadcrumb-trail.js",
+  "main": "vaadin-breadcrumbs.js",
+  "module": "vaadin-breadcrumbs.js",
   "type": "module",
   "files": [
     "src",
@@ -29,8 +29,8 @@
   ],
   "keywords": [
     "Vaadin",
+    "breadcrumbs",
     "breadcrumb",
-    "breadcrumb-trail",
     "web-components",
     "web-component"
   ],

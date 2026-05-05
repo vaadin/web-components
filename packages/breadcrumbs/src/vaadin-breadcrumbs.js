@@ -3,30 +3,32 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-breadcrumbs-item.js';
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { breadcrumbItemStyles } from './styles/vaadin-breadcrumb-item-base-styles.js';
+import { breadcrumbsStyles } from './styles/vaadin-breadcrumbs-base-styles.js';
 
 /**
- * `<vaadin-breadcrumb-item>` is a single item inside a `<vaadin-breadcrumb-trail>`.
+ * `<vaadin-breadcrumbs>` is a Web Component that displays the user's location
+ * within a hierarchy as a trail of links from the root to the current page.
  *
- * @customElement vaadin-breadcrumb-item
+ * @customElement vaadin-breadcrumbs
  * @extends HTMLElement
  * @mixes ElementMixin
  */
-class BreadcrumbItem extends ElementMixin(PolylitMixin(LitElement)) {
+class Breadcrumbs extends ElementMixin(PolylitMixin(LitElement)) {
   static get is() {
-    return 'vaadin-breadcrumb-item';
+    return 'vaadin-breadcrumbs';
   }
 
   static get styles() {
-    return breadcrumbItemStyles;
+    return breadcrumbsStyles;
   }
 
   static get experimental() {
-    return 'breadcrumbTrailComponent';
+    return 'breadcrumbsComponent';
   }
 
   /** @protected */
@@ -35,6 +37,6 @@ class BreadcrumbItem extends ElementMixin(PolylitMixin(LitElement)) {
   }
 }
 
-defineCustomElement(BreadcrumbItem);
+defineCustomElement(Breadcrumbs);
 
-export { BreadcrumbItem };
+export { Breadcrumbs };

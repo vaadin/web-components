@@ -6,14 +6,15 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 /**
- * `<vaadin-breadcrumb-item>` is a single item inside a `<vaadin-breadcrumb-trail>`.
+ * `<vaadin-breadcrumbs>` is a Web Component that displays the user's location
+ * within a hierarchy as a trail of links from the root to the current page.
  */
-declare class BreadcrumbItem extends ElementMixin(HTMLElement) {}
+declare class Breadcrumbs extends ElementMixin(HTMLElement) {}
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-breadcrumb-item': BreadcrumbItem;
+    'vaadin-breadcrumbs': Breadcrumbs;
   }
 }
 
-export { BreadcrumbItem };
+export { Breadcrumbs };

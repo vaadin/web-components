@@ -5,4 +5,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const breadcrumbItemStyles: CSSResult;
+export const breadcrumbsStyles: CSSResult;

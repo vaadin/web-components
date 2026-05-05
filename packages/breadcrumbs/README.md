@@ -1,13 +1,13 @@
-# @vaadin/breadcrumb-trail
+# @vaadin/breadcrumbs
 
 A web component that displays the user's location within a hierarchy as a trail of links from the root to the current page.
 
-> ⚠️ This component is experimental and the API may change. In order to use it, enable the feature flag by setting `window.Vaadin.featureFlags.breadcrumbTrailComponent = true`.
+> ⚠️ This component is experimental and the API may change. In order to use it, enable the feature flag by setting `window.Vaadin.featureFlags.breadcrumbsComponent = true`.
 
 ```html
-<vaadin-breadcrumb-trail>
-  <vaadin-breadcrumb-item></vaadin-breadcrumb-item>
-</vaadin-breadcrumb-trail>
+<vaadin-breadcrumbs>
+  <vaadin-breadcrumbs-item></vaadin-breadcrumbs-item>
+</vaadin-breadcrumbs>
 ```
 
 ## Installation
@@ -15,13 +15,13 @@ A web component that displays the user's location within a hierarchy as a trail 
 Install the component:
 
 ```sh
-npm i @vaadin/breadcrumb-trail
+npm i @vaadin/breadcrumbs
 ```
 
 Once installed, import the component in your application:
 
 ```js
-import '@vaadin/breadcrumb-trail';
+import '@vaadin/breadcrumbs';
 ```
 
 ## Contributing
