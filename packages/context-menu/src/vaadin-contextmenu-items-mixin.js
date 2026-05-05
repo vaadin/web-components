@@ -167,6 +167,14 @@ export const ItemsMixin = (superClass) =>
       // Store the reference parent overlay
       subMenuOverlay._setParentOverlay(parent);
 
+      // Restack the tooltip above the sub-menu overlay once it is open.
+      if (!subMenuOverlay.__tooltipBringToFrontAttached) {
+        subMenuOverlay.__tooltipBringToFrontAttached = true;
+        subMenuOverlay.addEventListener('vaadin-overlay-open', () => {
+          this._tooltipController.bringToFront();
+        });
+      }
+
       // Set theme attribute from parent element
       if (parent.hasAttribute('theme')) {
         subMenu.setAttribute('theme', parent.getAttribute('theme'));
@@ -252,8 +260,9 @@ export const ItemsMixin = (superClass) =>
         listBox.setAttribute('theme', this._theme);
       }
 
-      listBox.addEventListener('mouseover', () => {
-        this._tooltipController.setTarget(listBox.hovered);
+      listBox.addEventListener('mouseover', (event) => {
+        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
+        this._tooltipController.setTarget(itemElement);
         this._tooltipController.open({ trigger: 'hover' });
       });
 
@@ -261,12 +270,13 @@ export const ItemsMixin = (superClass) =>
         this._tooltipController.close(true);
       });
 
-      listBox.addEventListener('focusin', () => {
+      listBox.addEventListener('focusin', (event) => {
         if (!isKeyboardActive()) {
           return;
         }
 
-        this._tooltipController.setTarget(listBox.focused);
+        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
+        this._tooltipController.setTarget(itemElement);
         this._tooltipController.open({ trigger: 'focus' });
       });
 
@@ -449,8 +459,6 @@ export const ItemsMixin = (superClass) =>
           // Otherwise, focus the overlay part to handle arrow keys.
           this._overlayElement.$.overlay.focus();
         }
-
-        this._tooltipController.bringToFront();
       }
 
       // Only reachable with `accessibleDisabledMenuItems` enabled (disabled
