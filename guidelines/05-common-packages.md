@@ -43,7 +43,7 @@ fit together.
 | `FocusTrapController`        | Traps Tab and Shift+Tab inside a modal region.                                                                  |
 | `FocusRestorationController` | Saves the previously-focused element on overlay open and restores it on close.                                  |
 | `FieldAriaController`        | Wires `aria-labelledby` / `aria-describedby` / `aria-required` on form fields. Used internally by `FieldMixin`. |
-| `announce()`                 | Writes a message to a global polite or alert live region for transient AT announcements.                        |
+| `announce()`                 | Writes a text to a live region (`polite`, `alert`, or `assertive` mode) to trigger screen reader announcements. |
 
 ## `@vaadin/field-base`
 
