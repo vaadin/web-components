@@ -7,6 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { breadcrumbsItemStyles } from './styles/vaadin-breadcrumbs-item-base-styles.js';
 
 /**
@@ -16,7 +17,7 @@ import { breadcrumbsItemStyles } from './styles/vaadin-breadcrumbs-item-base-sty
  * @extends HTMLElement
  * @mixes ElementMixin
  */
-class BreadcrumbsItem extends ElementMixin(PolylitMixin(LitElement)) {
+class BreadcrumbsItem extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
   static get is() {
     return 'vaadin-breadcrumbs-item';
   }

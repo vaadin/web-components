@@ -1,23 +1,23 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '../vaadin-breadcrumbs.js';
+import '../vaadin-breadcrumbs-item.js';
 
 window.Vaadin ??= {};
 window.Vaadin.featureFlags ??= {};
 window.Vaadin.featureFlags.breadcrumbsComponent = true;
 
-describe('vaadin-breadcrumbs', () => {
-  let breadcrumbs;
+describe('vaadin-breadcrumbs-item', () => {
+  let item;
 
   beforeEach(() => {
-    breadcrumbs = fixtureSync('<vaadin-breadcrumbs></vaadin-breadcrumbs>');
+    item = fixtureSync('<vaadin-breadcrumbs-item></vaadin-breadcrumbs-item>');
   });
 
   describe('custom element definition', () => {
     let tagName;
 
     beforeEach(() => {
-      tagName = breadcrumbs.tagName.toLowerCase();
+      tagName = item.tagName.toLowerCase();
     });
 
     it('should be defined in custom element registry', () => {
