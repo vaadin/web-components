@@ -7,7 +7,7 @@
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
 
 /**
- * @typedef {{ ready(): void }} HostInstance
+ * @typedef {import('@vaadin/component-base/src/polylit-mixin.js').PolylitMixinClass} PolylitMixinClass
  */
 
 /**
@@ -16,7 +16,7 @@ import { dedupeMixin } from '@open-wc/dedupe-mixin';
  * for the event handlers is left to the client (a component or another mixin).
  *
  * @polymerMixin
- * @template {new (...args: any[]) => HTMLElement & HostInstance} T
+ * @template {new (...args: any[]) => HTMLElement & PolylitMixinClass} T
  * @param {T} superclass
  */
 const KeyboardMixinImplementation = (superclass) => {

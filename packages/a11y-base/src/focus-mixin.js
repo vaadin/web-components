@@ -8,14 +8,14 @@ import { dedupeMixin } from '@open-wc/dedupe-mixin';
 import { isKeyboardActive } from './focus-utils.js';
 
 /**
- * @typedef {{ ready(): void; disconnectedCallback(): void }} HostInstance
+ * @typedef {import('lit').LitElement & import('@vaadin/component-base/src/polylit-mixin.js').PolylitMixinClass} VaadinElement
  */
 
 /**
  * A mixin to handle `focused` and `focus-ring` attributes based on focus.
  *
  * @polymerMixin
- * @template {new (...args: any[]) => HTMLElement & HostInstance} T
+ * @template {new (...args: any[]) => VaadinElement} T
  * @param {T} superclass
  */
 const FocusMixinImplementation = (superclass) => {

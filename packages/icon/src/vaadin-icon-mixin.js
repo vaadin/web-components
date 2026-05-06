@@ -11,15 +11,9 @@ import { unsafeSvgLiteral } from './vaadin-icon-svg.js';
 /**
  * @typedef {import('./vaadin-icon-svg.js').IconSvgLiteral} IconSvgLiteral
  *
- * @typedef {{
- *   ready(): void;
- *   connectedCallback(): void;
- *   disconnectedCallback(): void;
- *   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void;
- *   addController(controller: import('lit').ReactiveController): void;
- * }} HostInstance
+ * @typedef {import('lit').LitElement & import('@vaadin/component-base/src/polylit-mixin.js').PolylitMixinClass} VaadinElement
  *
- * @typedef {(new (...args: any[]) => HTMLElement & HostInstance) & { readonly observedAttributes: readonly string[] }} HostBaseClass
+ * @typedef {(new (...args: any[]) => VaadinElement) & { readonly observedAttributes: readonly string[] }} HostBaseClass
  */
 
 /** @type {Map<string, Promise<string>>} */

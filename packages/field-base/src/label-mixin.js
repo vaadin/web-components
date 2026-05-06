@@ -7,17 +7,14 @@
 import { LabelController } from './label-controller.js';
 
 /**
- * @typedef {{
- *   ready(): void;
- *   addController(controller: import('lit').ReactiveController): void;
- * }} HostInstance
+ * @typedef {import('lit').LitElement & import('@vaadin/component-base/src/polylit-mixin.js').PolylitMixinClass} VaadinElement
  */
 
 /**
  * A mixin to provide label via corresponding property or named slot.
  *
  * @polymerMixin
- * @template {new (...args: any[]) => HTMLElement & HostInstance} T
+ * @template {new (...args: any[]) => VaadinElement} T
  * @param {T} superclass
  */
 export const LabelMixin = (superclass) =>

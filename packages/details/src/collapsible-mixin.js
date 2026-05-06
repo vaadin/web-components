@@ -7,12 +7,9 @@
 import { ContentController } from './content-controller.js';
 
 /**
- * @typedef {{
- *   ready(): void;
- *   addController(controller: import('lit').ReactiveController): void;
- * }} HostInstance
+ * @typedef {import('lit').LitElement & import('@vaadin/component-base/src/polylit-mixin.js').PolylitMixinClass} VaadinElement
  *
- * @typedef {new (...args: any[]) => HTMLElement & HostInstance} HostBaseClass
+ * @typedef {new (...args: any[]) => VaadinElement} HostBaseClass
  */
 
 /**

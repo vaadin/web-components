@@ -9,7 +9,7 @@ import { DisabledMixin } from './disabled-mixin.js';
 import { KeyboardMixin } from './keyboard-mixin.js';
 
 /**
- * @typedef {{ ready(): void; disconnectedCallback(): void }} HostInstance
+ * @typedef {import('lit').LitElement & import('@vaadin/component-base/src/polylit-mixin.js').PolylitMixinClass} VaadinElement
  */
 
 /**
@@ -24,7 +24,7 @@ import { KeyboardMixin } from './keyboard-mixin.js';
  * @polymerMixin
  * @mixes DisabledMixin
  * @mixes KeyboardMixin
- * @template {new (...args: any[]) => HTMLElement & HostInstance} T
+ * @template {new (...args: any[]) => VaadinElement} T
  * @param {T} superclass
  */
 export const ActiveMixin = (superclass) =>
