@@ -150,7 +150,6 @@ export const ContextMenuMixin = (superClass) =>
       // Restore opened state if overlay was opened when disconnecting
       if (this.__restoreOpened) {
         this._setOpened(true);
-        this.__restoreOpened = false;
       }
     }
 
