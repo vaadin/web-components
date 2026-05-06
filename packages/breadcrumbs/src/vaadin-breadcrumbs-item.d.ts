@@ -8,7 +8,14 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 /**
  * `<vaadin-breadcrumbs-item>` is a single item inside a `<vaadin-breadcrumbs>`.
  */
-declare class BreadcrumbsItem extends ElementMixin(HTMLElement) {}
+declare class BreadcrumbsItem extends ElementMixin(HTMLElement) {
+  /**
+   * The path to navigate to. When set, the item renders as a link
+   * (`<a part="link">`); when unset, it renders as a non-link
+   * (`<span part="nolink">`).
+   */
+  path: string | null | undefined;
+}
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -22,6 +22,19 @@ class BreadcrumbsItem extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitEl
     return 'vaadin-breadcrumbs-item';
   }
 
+  static get properties() {
+    return {
+      /**
+       * The path to navigate to. When set, the item renders as a link
+       * (`<a part="link">`); when unset, it renders as a non-link
+       * (`<span part="nolink">`).
+       */
+      path: {
+        type: String,
+      },
+    };
+  }
+
   static get styles() {
     return breadcrumbsItemStyles;
   }
@@ -32,7 +45,25 @@ class BreadcrumbsItem extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitEl
 
   /** @protected */
   render() {
-    return html``;
+    if (this.path != null) {
+      return html`
+        <a href="${this.path}" part="link">
+          <slot name="prefix"></slot>
+          <span part="label">
+            <slot></slot>
+          </span>
+        </a>
+      `;
+    }
+
+    return html`
+      <span part="nolink">
+        <slot name="prefix"></slot>
+        <span part="label">
+          <slot></slot>
+        </span>
+      </span>
+    `;
   }
 }
 
