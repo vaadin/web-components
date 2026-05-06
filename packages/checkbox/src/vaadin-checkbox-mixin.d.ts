@@ -39,15 +39,6 @@ export declare function CheckboxMixin<T extends Constructor<HTMLElement>>(
 
 export declare class CheckboxMixinClass {
   /**
-   * True if the checkbox is in the indeterminate state which means
-   * it is not possible to say whether it is checked or unchecked.
-   * The state is reset once the user switches the checkbox by hand.
-   *
-   * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
-   */
-  indeterminate: boolean;
-
-  /**
    * The name of the checkbox.
    */
   name: string;
