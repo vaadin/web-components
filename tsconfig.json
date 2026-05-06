@@ -15,5 +15,5 @@
     "allowSyntheticDefaultImports": true,
     "allowJs": true
   },
-  "include": ["packages/**/test", "test", "packages/icon/src"]
+  "include": ["packages/**/test", "test", "packages/icon/src", "packages/details/src"]
 }
