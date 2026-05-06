@@ -15,7 +15,7 @@ export const scrollerStyles = css`
     --vaadin-scroller-overflow-indicator-top-opacity: 0;
     --vaadin-scroller-overflow-indicator-bottom-opacity: 0;
     display: block;
-    overflow: auto;
+    overflow: auto !important;
     outline: none;
     box-sizing: border-box;
     padding: var(--vaadin-scroller-padding-block) var(--vaadin-scroller-padding-inline);
@@ -30,15 +30,15 @@ export const scrollerStyles = css`
   }
 
   :host([scroll-direction='vertical']) {
-    overflow-x: hidden;
+    overflow-x: hidden !important;
   }
 
   :host([scroll-direction='horizontal']) {
-    overflow-y: hidden;
+    overflow-y: hidden !important;
   }
 
   :host([scroll-direction='none']) {
-    overflow: hidden;
+    overflow: hidden !important;
   }
 
   :host::before,
