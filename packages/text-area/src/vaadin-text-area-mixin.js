@@ -158,6 +158,7 @@ export const TextAreaMixin = (superClass) =>
       if (!input || !inputField) {
         return;
       }
+
       const scrollTop = inputField.scrollTop;
 
       const valueLength = this.value ? this.value.length : 0;
@@ -182,6 +183,7 @@ export const TextAreaMixin = (superClass) =>
         input.style.height = 'auto';
       }
       this._oldValueLength = valueLength;
+      this._lastInputWidth = inputWidth;
 
       const inputHeight = input.scrollHeight;
       if (inputHeight > input.clientHeight) {
@@ -194,7 +196,8 @@ export const TextAreaMixin = (superClass) =>
       inputField.style.removeProperty('height');
       inputField.scrollTop = scrollTop;
 
-      this._lastInputWidth = inputWidth;
+      // Update max height in case this update was triggered by style changes
+      // affecting line height, paddings or margins.
       this.__updateMaxHeight(this.maxRows);
     }
 
