@@ -515,25 +515,19 @@ export class IronListAdapter {
 
   /** @private */
   __getFocusedElement(visibleElements = this.__getVisibleElements()) {
-    // Case 1: focus is inside the shadow tree (e.g. a focusable cell with
-    // tabindex). The shadow root's activeElement is the focused descendant,
-    // and Node.contains finds it via tree containment.
-    const result = visibleElements.find(
-      (element) =>
-        element.contains(this.elementsContainer.getRootNode().activeElement) ||
-        element.contains(this.scrollTarget.getRootNode().activeElement),
-    );
-    if (result) {
-      return result;
-    }
-    // Case 2: focus is on light-DOM content slotted across the shadow boundary
-    // (e.g. an `<input>` inside a `vaadin-grid-cell-content`). The shadow
-    // root's activeElement is null because the focused element is outside the
-    // shadow tree, and Node.contains doesn't traverse slot projection.
-    // Walk up from document.activeElement, crossing slot boundaries via
-    // assignedSlot, to locate the projected-into virtualizer row.
-    const visible = new Set(visibleElements);
+    // `document.activeElement` retargets to the outermost shadow host when
+    // focus lives in a nested shadow tree. Walk down through any nested
+    // shadow roots' `activeElement` to reach the actual focused node.
     let node = document.activeElement;
+    while (node?.shadowRoot?.activeElement) {
+      node = node.shadowRoot.activeElement;
+    }
+    // Walk up the flattened tree via `assignedSlot`/`parentNode`/`host`
+    // until a visible row is reached. This handles both focus inside the
+    // row's tree and focus on light-DOM content slotted across a shadow
+    // boundary into a row (e.g. an `<input>` inside a
+    // `vaadin-grid-cell-content`).
+    const visible = new Set(visibleElements);
     while (node) {
       if (visible.has(node)) {
         return node;

@@ -204,11 +204,10 @@ describe('reorder elements', () => {
   });
 
   // Regression tests for vaadin/web-components#11639. When the virtualizer
-  // lives inside a shadow root, `document.activeElement` is the shadow host
-  // (open shadow roots hide their focused descendant from the outside). The
-  // focused row must therefore be located via the shadow root's
-  // `activeElement` or by walking the flattened ancestors of
-  // `document.activeElement` via `assignedSlot` for slotted content.
+  // lives inside a shadow root, the focused row must be located via the
+  // shadow root's `activeElement` (focus inside the shadow tree) or by
+  // walking the flattened ancestors via `assignedSlot` from the scroll
+  // target's root activeElement (focus on slotted light-DOM content).
   describe('focused element detection in shadow tree', () => {
     beforeEach(() => {
       // Remove default scroll target
@@ -268,6 +267,30 @@ describe('reorder elements', () => {
     });
 
     it('should not detach a row whose slotted content has focus on reorder', async () => {
+      // The row that will include the focused cell (should not get detached)
+      const rowContainingFocus = elementsContainer.children[4];
+      // Focus the slotted cell content on the row
+      rowContainingFocus.querySelector('slot').assignedNodes()[0].focus();
+
+      // Scroll and collect the detached elements
+      const detachedElements = await scrollRecycle();
+      // Expect the row containing focus to not have been detached
+      expect(detachedElements).not.to.include(rowContainingFocus);
+    });
+
+    // When the entire virtualizer host is itself nested inside another
+    // shadow root, `document.activeElement` retargets to the outermost
+    // host. The scroll target's root activeElement remains the actual
+    // slotted focused element and must be used as the walk's starting
+    // point.
+    it('should not detach a row whose slotted content has focus when wrapped in an outer shadow', async () => {
+      // Move the virtualizer host into an outer shadow root, keeping the
+      // slotted cell contents (currently in `scrollTarget`'s light DOM)
+      // wrapped inside the outer shadow as well.
+      const outerHost = fixtureSync('<div></div>');
+      const outerShadow = outerHost.attachShadow({ mode: 'open' });
+      outerShadow.appendChild(scrollTarget);
+
       // The row that will include the focused cell (should not get detached)
       const rowContainingFocus = elementsContainer.children[4];
       // Focus the slotted cell content on the row
