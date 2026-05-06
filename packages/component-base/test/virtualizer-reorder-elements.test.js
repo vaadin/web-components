@@ -202,4 +202,104 @@ describe('reorder elements', () => {
       expect(scrollTarget.scrollTop).to.equal(scrollTop);
     });
   });
+
+  // Regression tests for vaadin/web-components#11639. When the virtualizer
+  // lives inside a shadow root, the focused row must be located via the
+  // shadow root's `activeElement` (focus inside the shadow tree) or by
+  // walking the flattened ancestors via `assignedSlot` from the scroll
+  // target's root activeElement (focus on slotted light-DOM content).
+  describe('focused element detection in shadow tree', () => {
+    beforeEach(() => {
+      // Remove default scroll target
+      scrollTarget.remove();
+      clock.restore();
+
+      scrollTarget = fixtureSync('<div style="height: 100px;"></div>');
+      const shadowRoot = scrollTarget.attachShadow({ mode: 'open' });
+      shadowRoot.innerHTML = `
+        <style>:host { display: block; height: 100%; }</style>
+        <div id="scrollTarget" style="height: 100%; overflow: auto;">
+          <div id="container"></div>
+        </div>
+      `;
+
+      virtualizer = new Virtualizer({
+        createElements: (count) =>
+          Array.from(Array(count)).map(() => {
+            const row = document.createElement('div');
+            const slot = document.createElement('slot');
+            slot.name = `cell-${scrollTarget.children.length}`;
+            row.appendChild(slot);
+
+            const cellContent = document.createElement('div');
+            cellContent.slot = slot.name;
+            cellContent.tabIndex = 0;
+            scrollTarget.appendChild(cellContent);
+
+            return row;
+          }),
+        updateElement: (row, index) => {
+          row.index = index;
+          row.id = `row-${index}`;
+          const cellContent = row.querySelector('slot').assignedNodes()[0];
+          cellContent.textContent = index;
+        },
+        scrollTarget: shadowRoot.getElementById('scrollTarget'),
+        scrollContainer: shadowRoot.getElementById('container'),
+        reorderElements: true,
+      });
+      virtualizer.size = 100;
+      elementsContainer = shadowRoot.getElementById('container');
+    });
+
+    it('should not detach a focused row on reorder', async () => {
+      // The row that will receive focus (should not get detached)
+      const rowContainingFocus = elementsContainer.children[4];
+      // Focus the row directly. The row lives inside the shadow tree, so
+      // `document.activeElement` resolves to the shadow host, not the row.
+      rowContainingFocus.tabIndex = 0;
+      rowContainingFocus.focus();
+
+      // Scroll and collect the detached elements
+      const detachedElements = await scrollRecycle();
+      // Expect the focused row to not have been detached
+      expect(detachedElements).not.to.include(rowContainingFocus);
+    });
+
+    it('should not detach a row whose slotted content has focus on reorder', async () => {
+      // The row that will include the focused cell (should not get detached)
+      const rowContainingFocus = elementsContainer.children[4];
+      // Focus the slotted cell content on the row
+      rowContainingFocus.querySelector('slot').assignedNodes()[0].focus();
+
+      // Scroll and collect the detached elements
+      const detachedElements = await scrollRecycle();
+      // Expect the row containing focus to not have been detached
+      expect(detachedElements).not.to.include(rowContainingFocus);
+    });
+
+    // When the entire virtualizer host is itself nested inside another
+    // shadow root, `document.activeElement` retargets to the outermost
+    // host. The scroll target's root activeElement remains the actual
+    // slotted focused element and must be used as the walk's starting
+    // point.
+    it('should not detach a row whose slotted content has focus when wrapped in an outer shadow', async () => {
+      // Move the virtualizer host into an outer shadow root, keeping the
+      // slotted cell contents (currently in `scrollTarget`'s light DOM)
+      // wrapped inside the outer shadow as well.
+      const outerHost = fixtureSync('<div></div>');
+      const outerShadow = outerHost.attachShadow({ mode: 'open' });
+      outerShadow.appendChild(scrollTarget);
+
+      // The row that will include the focused cell (should not get detached)
+      const rowContainingFocus = elementsContainer.children[4];
+      // Focus the slotted cell content on the row
+      rowContainingFocus.querySelector('slot').assignedNodes()[0].focus();
+
+      // Scroll and collect the detached elements
+      const detachedElements = await scrollRecycle();
+      // Expect the row containing focus to not have been detached
+      expect(detachedElements).not.to.include(rowContainingFocus);
+    });
+  });
 });
