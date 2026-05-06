@@ -159,37 +159,47 @@ export const TextAreaMixin = (superClass) =>
         return;
       }
 
-      const inputFieldScrollTop = inputField.scrollTop;
+      const valueLength = this.value ? this.value.length : 0;
+      const inputWidth = getComputedStyle(input).width;
 
-      // Save page scroll around the brief textarea collapse below.
-      // Without this, the document briefly shrinks while the textarea is reset
-      // to natural height for measurement; the browser clamps `scrollY` to the
-      // new (smaller) max, and after phase 2 grows the textarea back the scroll
-      // position stays clamped — user-visible scroll jump on backspace at end
-      // of a large value (vaadin/web-components#291).
-      const pageScrollX = window.scrollX;
-      const pageScrollY = window.scrollY;
-
-      // Clear the height of the textarea to allow measuring a reduced scroll height.
-      input.style.removeProperty('height');
-
-      const inputHeight = input.scrollHeight;
-      if (inputHeight > input.clientHeight) {
-        input.style.height = `${inputHeight}px`;
+      // Grow without collapsing — keeps typing off the measurement path
+      // that would otherwise flash the overlay scrollbar.
+      if (input.scrollHeight > input.clientHeight) {
+        input.style.height = `${input.scrollHeight}px`;
+        this._oldValueLength = valueLength;
+        this._lastInputWidth = inputWidth;
+        this.__updateMaxHeight(this.maxRows);
+        return;
       }
 
-      // Restore
-      inputField.scrollTop = inputFieldScrollTop;
+      // Skip the measurement on subpixel ResizeObserver ticks, which would
+      // otherwise feed phase 2's writeback back into phase 1's pin under
+      // fractional rendering (see #9141).
+      const valueShrunk = this._oldValueLength > valueLength;
+      const widthChanged = this._lastInputWidth !== undefined && this._lastInputWidth !== inputWidth;
+      if (valueShrunk || widthChanged) {
+        // Pin the input-field height so the document doesn't shrink
+        // around the brief collapse (see #291).
+        const inputFieldHeight = getComputedStyle(inputField).height;
+        const inputFieldScrollTop = inputField.scrollTop;
+        inputField.style.height = inputFieldHeight;
+        input.style.maxWidth = inputWidth;
+        input.style.alignSelf = 'flex-start';
+        input.style.height = 'auto';
 
-      // Restore the page scroll position. `behavior: 'instant'` bypasses any
-      // host-page `scroll-behavior: smooth` so the restoration is a synchronous
-      // jump, not an animation.
-      if (window.scrollX !== pageScrollX || window.scrollY !== pageScrollY) {
-        window.scrollTo({ left: pageScrollX, top: pageScrollY, behavior: 'instant' });
+        const inputHeight = input.scrollHeight;
+        if (inputHeight > input.clientHeight) {
+          input.style.height = `${inputHeight}px`;
+        }
+
+        input.style.removeProperty('max-width');
+        input.style.removeProperty('align-self');
+        inputField.style.removeProperty('height');
+        inputField.scrollTop = inputFieldScrollTop;
       }
 
-      // Update max height in case this update was triggered by style changes
-      // affecting line height, paddings or margins.
+      this._oldValueLength = valueLength;
+      this._lastInputWidth = inputWidth;
       this.__updateMaxHeight(this.maxRows);
     }
 
