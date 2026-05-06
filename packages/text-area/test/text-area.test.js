@@ -195,26 +195,11 @@ describe('text-area', () => {
     });
 
     describe('subpixel rounding', () => {
-      // See https://github.com/vaadin/flow-components/issues/9141
-      // Models Firefox's slack-dependent fractional rounding under
-      // HiDPI / fractional CSS zoom. CI Chromium doesn't naturally
-      // exhibit this — these mocks stand in for the browser's layout
-      // engine, returning what real Firefox returns given the same
-      // DOM state:
-      //   - getComputedStyle(inputField).height returns one of two
-      //     fractional values depending on whether the textarea has an
-      //     explicit height set, modeling the rendered-height
-      //     difference between cycles ending in explicit vs auto.
-      //   - input.scrollHeight is asymmetric only when the input-field
-      //     is at the tight fractional value AND the textarea is in
-      //     auto state, modeling slack-dependent rounding.
-      // Tests assert observable rendered height (host bounding rect)
-      // through the same observation pipeline the user perceives.
+      // https://github.com/vaadin/flow-components/issues/9141
+      // Mocks Firefox HiDPI slack-dependent rounding so the bug
+      // reproduces on CI Chromium (where it does not naturally occur).
       function mockCapturedStateReplay(input, inputField) {
-        // Captured from real Firefox at Wayland scale 1.25 +
-        // `html { zoom: 1.1 }`: the input-field's rendered height
-        // alternates between these two fractional values across cycles
-        // ending in explicit vs auto.
+        // Captured from real Firefox at Wayland scale 1.25 + html zoom 1.1.
         const tightHeight = '63.8px';
         const looseHeight = '64.9px';
         const originalGetComputedStyle = window.getComputedStyle;
@@ -276,7 +261,7 @@ describe('text-area', () => {
 
           const samples = await recordHostRectsOver(textArea, 200);
           const distinctLateHeights = new Set(samples.slice(-10));
-          expect(
+          await expect(
             distinctLateHeights.size,
             `expected stable rendered height in last 10 frames, got values: ${[...distinctLateHeights].join(', ')}`,
           ).to.equal(1);
@@ -300,7 +285,7 @@ describe('text-area', () => {
           const samples = await recordHostRectsOver(textArea, 200);
           const lateSamples = samples.slice(-10);
           const distinctLateHeights = new Set(lateSamples);
-          expect(
+          await expect(
             distinctLateHeights.size,
             `expected stable rendered height after shrink, got values: ${[...distinctLateHeights].join(', ')}`,
           ).to.equal(1);
@@ -311,41 +296,48 @@ describe('text-area', () => {
       });
     });
 
-    // See https://github.com/vaadin/web-components/issues/291
-    describe('page scroll preservation', () => {
-      let spacer;
+    it('should not toggle input height attribute on every keystroke', async () => {
+      textArea.style.maxHeight = '100px';
+      textArea.value = Array(20).fill('a long line of content that wraps and overflows').join('\n');
+      await nextUpdate(textArea);
+      await nextResize(textArea);
+      expect(inputField.scrollHeight).to.be.above(inputField.clientHeight);
 
-      beforeEach(async () => {
-        textArea.value = Array(60).fill('a line of content').join('\n');
-        await nextUpdate(textArea);
-        await nextResize(textArea);
-
-        spacer = document.createElement('div');
-        spacer.style.height = '200vh';
-        document.body.appendChild(spacer);
+      const mutations = [];
+      const mo = new MutationObserver((records) => {
+        records.forEach((r) => mutations.push(r.oldValue));
       });
+      mo.observe(native, { attributes: true, attributeOldValue: true, attributeFilter: ['style'] });
 
-      afterEach(() => {
-        spacer.remove();
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-      });
+      setInputValue(textArea, `${native.value}a`);
+      await Promise.resolve();
+      mo.disconnect();
 
-      it('should preserve scroll-y when removing a line near document bottom', async () => {
-        const docMax = document.documentElement.scrollHeight - window.innerHeight;
-        expect(docMax).to.be.greaterThan(0);
+      expect(mutations.length, `style mutations: ${mutations.join(', ')}`).to.be.lte(1);
+    });
 
-        window.scrollTo({ top: docMax - 50, left: 0, behavior: 'instant' });
-        const scrollYBefore = window.scrollY;
-        expect(scrollYBefore).to.be.greaterThan(0);
+    // https://github.com/vaadin/web-components/issues/291
+    // The measurement collapse must not propagate out as a transient
+    // ancestor shrink — any ancestor scrolled near its max would get
+    // clamped, visible as a scroll jump on backspace.
+    it('should not move ancestor scroll position on value-shrink near scroll bottom', async () => {
+      textArea.value = Array(60).fill('a line of content').join('\n');
+      await nextUpdate(textArea);
+      await nextResize(textArea);
 
-        // One-line shrink: textarea regrows to a permanently shorter
-        // height, so the browser's auto-restore-on-grow does not
-        // engage and a scrollY jump is observable without the fix.
-        textArea.value = Array(59).fill('a line of content').join('\n');
-        await nextUpdate(textArea);
+      const scroller = fixtureSync('<div style="height: 240px; overflow: auto;"></div>');
+      scroller.appendChild(textArea);
+      await nextResize(textArea);
 
-        expect(window.scrollY).to.equal(scrollYBefore);
-      });
+      const ancestorMax = scroller.scrollHeight - scroller.clientHeight;
+      scroller.scrollTop = ancestorMax - 30;
+      const scrollTopBefore = scroller.scrollTop;
+      expect(scrollTopBefore).to.be.above(0);
+
+      textArea.value = Array(59).fill('a line of content').join('\n');
+      await nextUpdate(textArea);
+
+      await expect(scroller.scrollTop).to.equal(scrollTopBefore);
     });
 
     it('should update height on show after hidden', async () => {
