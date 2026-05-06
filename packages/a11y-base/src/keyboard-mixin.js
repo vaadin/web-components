@@ -3,7 +3,12 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+// @ts-check -- gradual ts-check pilot, see proto/ts-check
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
+
+/**
+ * @typedef {{ ready(): void }} HostInstance
+ */
 
 /**
  * A mixin that manages keyboard handling.
@@ -11,10 +16,11 @@ import { dedupeMixin } from '@open-wc/dedupe-mixin';
  * for the event handlers is left to the client (a component or another mixin).
  *
  * @polymerMixin
+ * @template {new (...args: any[]) => HTMLElement & HostInstance} T
+ * @param {T} superclass
  */
 const KeyboardMixinImplementation = (superclass) => {
   return class KeyboardMixinClass extends superclass {
-    /** @protected */
     ready() {
       super.ready();
 

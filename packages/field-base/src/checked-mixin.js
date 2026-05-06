@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+// @ts-check -- gradual ts-check pilot, see proto/ts-check
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import { InputMixin } from './input-mixin.js';
@@ -14,6 +15,8 @@ import { InputMixin } from './input-mixin.js';
  * @mixes DelegateStateMixin
  * @mixes DisabledMixin
  * @mixes InputMixin
+ * @template {new (...args: any[]) => HTMLElement} T
+ * @param {T} superclass
  */
 export const CheckedMixin = (superclass) =>
   class CheckedMixinClass extends DelegateStateMixin(DisabledMixin(InputMixin(superclass))) {
@@ -33,7 +36,17 @@ export const CheckedMixin = (superclass) =>
     }
 
     static get delegateProps() {
+      // @ts-expect-error -- delegateProps is a static field added by DelegateStateMixin; not surfaced through the typed mixin chain.
       return [...super.delegateProps, 'checked'];
+    }
+
+    /**
+     * @param {...any} args
+     */
+    constructor(...args) {
+      super(...args);
+      /** @type {boolean} */
+      this.checked = false;
     }
 
     /**
@@ -42,12 +55,15 @@ export const CheckedMixin = (superclass) =>
      * @override
      */
     _onChange(event) {
-      const input = event.target;
+      const input = /** @type {HTMLInputElement} */ (event.target);
 
       this._toggleChecked(input.checked);
     }
 
-    /** @protected */
+    /**
+     * @param {boolean} checked
+     * @protected
+     */
     _toggleChecked(checked) {
       this.checked = checked;
     }

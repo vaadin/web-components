@@ -3,12 +3,19 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+// @ts-check -- gradual ts-check pilot, see proto/ts-check
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
+
+/**
+ * @typedef {{ value?: string }} HostInstance
+ */
 
 /**
  * A mixin to provide required state and validation logic.
  *
  * @polymerMixin
+ * @template {new (...args: any[]) => HTMLElement & HostInstance} T
+ * @param {T} superclass
  */
 const ValidateMixinImplementation = (superclass) =>
   class extends superclass {
@@ -50,6 +57,19 @@ const ValidateMixinImplementation = (superclass) =>
           sync: true,
         },
       };
+    }
+
+    /**
+     * @param {...any} args
+     */
+    constructor(...args) {
+      super(...args);
+      /** @type {boolean} */
+      this.invalid = false;
+      /** @type {boolean} */
+      this.manualValidation = false;
+      /** @type {boolean | undefined} */
+      this.required = undefined;
     }
 
     /**

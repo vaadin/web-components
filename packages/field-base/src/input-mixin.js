@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+// @ts-check -- gradual ts-check pilot, see proto/ts-check
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
 
 /**
@@ -10,6 +11,8 @@ import { dedupeMixin } from '@open-wc/dedupe-mixin';
  * and add input and change event listeners to it.
  *
  * @polymerMixin
+ * @template {new (...args: any[]) => HTMLElement} T
+ * @param {T} superclass
  */
 const InputMixinImplementation = (superclass) => {
   return class InputMixinClass extends superclass {
@@ -22,7 +25,6 @@ const InputMixinImplementation = (superclass) => {
          * using `InputController` that does this automatically.
          *
          * @protected
-         * @type {!HTMLElement}
          */
         inputElement: {
           type: Object,
@@ -53,8 +55,21 @@ const InputMixinImplementation = (superclass) => {
       };
     }
 
-    constructor() {
-      super();
+    /**
+     * @param {...any} args
+     */
+    constructor(...args) {
+      super(...args);
+
+      /** @type {HTMLInputElement | HTMLTextAreaElement | HTMLElement | null | undefined} */
+      this.inputElement = undefined;
+      /** @type {string | undefined} */
+      this.type = undefined;
+      /** @type {string} */
+      this.value = '';
+
+      /** @type {boolean} */
+      this.__userInput = false;
 
       this._boundOnInput = this._onInput.bind(this);
       this._boundOnChange = this._onChange.bind(this);
@@ -86,10 +101,12 @@ const InputMixinImplementation = (superclass) => {
      * The input element's value.
      *
      * @protected
-     * @return {string}
+     * @return {string | undefined}
      */
     get _inputElementValue() {
-      return this.inputElement ? this.inputElement[this._inputElementValueProperty] : undefined;
+      return this.inputElement
+        ? /** @type {Record<string, any>} */ (this.inputElement)[this._inputElementValueProperty]
+        : undefined;
     }
 
     /**
@@ -99,7 +116,7 @@ const InputMixinImplementation = (superclass) => {
      */
     set _inputElementValue(value) {
       if (this.inputElement) {
-        this.inputElement[this._inputElementValueProperty] = value;
+        /** @type {Record<string, any>} */ (this.inputElement)[this._inputElementValueProperty] = value;
       }
     }
 
@@ -140,7 +157,7 @@ const InputMixinImplementation = (superclass) => {
      * programmatically back to the input element value.
      * Override this method to perform additional checks,
      * for example to skip this in certain conditions.
-     * @param {string} value
+     * @param {string | undefined} value
      * @protected
      */
     _forwardInputValue(value) {
@@ -177,7 +194,7 @@ const InputMixinImplementation = (superclass) => {
       // In the case a custom web component is passed as `inputElement`,
       // the actual native input element, on which the event occurred,
       // can be inside shadow trees.
-      const target = event.composedPath()[0];
+      const target = /** @type {HTMLInputElement | HTMLTextAreaElement} */ (event.composedPath()[0]);
       // Ignore fake input events e.g. used by clear button.
       this.__userInput = event.isTrusted;
       this.value = target.value;

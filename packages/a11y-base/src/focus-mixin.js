@@ -3,13 +3,20 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+// @ts-check -- gradual ts-check pilot, see proto/ts-check
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
 import { isKeyboardActive } from './focus-utils.js';
+
+/**
+ * @typedef {{ ready(): void; disconnectedCallback(): void }} HostInstance
+ */
 
 /**
  * A mixin to handle `focused` and `focus-ring` attributes based on focus.
  *
  * @polymerMixin
+ * @template {new (...args: any[]) => HTMLElement & HostInstance} T
+ * @param {T} superclass
  */
 const FocusMixinImplementation = (superclass) => {
   return class FocusMixinClass extends superclass {
@@ -21,7 +28,6 @@ const FocusMixinImplementation = (superclass) => {
       return isKeyboardActive();
     }
 
-    /** @protected */
     ready() {
       this.addEventListener('focusin', (e) => {
         if (this._shouldSetFocus(e)) {
@@ -42,7 +48,6 @@ const FocusMixinImplementation = (superclass) => {
       super.ready();
     }
 
-    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
 
@@ -54,8 +59,7 @@ const FocusMixinImplementation = (superclass) => {
     }
 
     /**
-     * @param {FocusOptions=} options
-     * @protected
+     * @param {FocusOptions & { focusVisible?: boolean }} [options]
      * @override
      */
     focus(options) {

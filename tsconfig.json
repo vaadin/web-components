@@ -15,5 +15,12 @@
     "allowSyntheticDefaultImports": true,
     "allowJs": true
   },
-  "include": ["packages/**/test", "test", "packages/icon/src", "packages/details/src"]
+  "include": [
+    "packages/**/test",
+    "test",
+    "packages/icon/src",
+    "packages/details/src",
+    "packages/a11y-base/src",
+    "packages/field-base/src"
+  ]
 }

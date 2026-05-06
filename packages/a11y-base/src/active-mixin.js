@@ -3,9 +3,14 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+// @ts-check -- gradual ts-check pilot, see proto/ts-check
 import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { DisabledMixin } from './disabled-mixin.js';
 import { KeyboardMixin } from './keyboard-mixin.js';
+
+/**
+ * @typedef {{ ready(): void; disconnectedCallback(): void }} HostInstance
+ */
 
 /**
  * A mixin to toggle the `active` attribute.
@@ -19,6 +24,8 @@ import { KeyboardMixin } from './keyboard-mixin.js';
  * @polymerMixin
  * @mixes DisabledMixin
  * @mixes KeyboardMixin
+ * @template {new (...args: any[]) => HTMLElement & HostInstance} T
+ * @param {T} superclass
  */
 export const ActiveMixin = (superclass) =>
   class ActiveMixinClass extends DisabledMixin(KeyboardMixin(superclass)) {
@@ -35,12 +42,11 @@ export const ActiveMixin = (superclass) =>
       return [' '];
     }
 
-    /** @protected */
     ready() {
       super.ready();
 
       addListener(this, 'down', (event) => {
-        if (this._shouldSetActive(event)) {
+        if (this._shouldSetActive(/** @type {MouseEvent | KeyboardEvent} */ (event))) {
           this._setActive(true);
         }
       });
@@ -50,7 +56,6 @@ export const ActiveMixin = (superclass) =>
       });
     }
 
-    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
 

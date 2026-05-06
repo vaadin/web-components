@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+// @ts-check -- gradual ts-check pilot, see proto/ts-check
 import { DisabledMixin } from './disabled-mixin.js';
 
 /**
@@ -13,6 +14,8 @@ import { DisabledMixin } from './disabled-mixin.js';
  *
  * @polymerMixin
  * @mixes DisabledMixin
+ * @template {new (...args: any[]) => HTMLElement} T
+ * @param {T} superclass
  */
 export const TabindexMixin = (superclass) =>
   class TabindexMixinClass extends DisabledMixin(superclass) {
@@ -42,11 +45,31 @@ export const TabindexMixin = (superclass) =>
     }
 
     /**
+     * @param {...any} args
+     */
+    constructor(...args) {
+      super(...args);
+      // Only initialize properties that haven't been pre-set by Lit's reactive
+      // property machinery (e.g. via a descendant's `static properties.value`).
+      // The else-branches just give TS a type hint for the field.
+      if (this.tabindex === undefined) {
+        /** @type {number | undefined} */
+        this.tabindex = undefined;
+      }
+      if (this._lastTabIndex === undefined) {
+        /** @type {number | undefined} */
+        this._lastTabIndex = undefined;
+      }
+    }
+
+    /**
      * When the element gets disabled, the observer saves the last known tabindex
      * and makes the element not focusable by setting tabindex to -1.
      * As soon as the element gets enabled, the observer restores the last known tabindex
      * so that the element can be focusable again.
      *
+     * @param {boolean} disabled
+     * @param {boolean} oldDisabled
      * @protected
      * @override
      */
@@ -64,7 +87,7 @@ export const TabindexMixin = (superclass) =>
         this.setAttribute('tabindex', '-1');
       } else if (oldDisabled) {
         if (this._lastTabIndex !== undefined) {
-          this.setAttribute('tabindex', this._lastTabIndex);
+          this.setAttribute('tabindex', String(this._lastTabIndex));
         } else {
           this.tabindex = undefined;
         }
@@ -76,6 +99,7 @@ export const TabindexMixin = (superclass) =>
      * the observer reverts tabindex to -1 and rather saves the new tabindex value to apply it later.
      * The new value will be applied as soon as the element becomes enabled.
      *
+     * @param {number} tabindex
      * @protected
      */
     _tabindexChanged(tabindex) {
@@ -95,8 +119,7 @@ export const TabindexMixin = (superclass) =>
      * `tabindex` to -1 does not prevent the element from being
      * programmatically focusable.
      *
-     * @param {FocusOptions=} options
-     * @protected
+     * @param {FocusOptions} [options]
      * @override
      */
     focus(options) {
