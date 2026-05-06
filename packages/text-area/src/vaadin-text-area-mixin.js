@@ -161,42 +161,31 @@ export const TextAreaMixin = (superClass) =>
 
       const valueLength = this.value ? this.value.length : 0;
       const inputWidth = getComputedStyle(input).width;
+      const inputFieldScrollTop = inputField.scrollTop;
 
-      // Grow without collapsing — keeps typing off the measurement path
-      // that would otherwise flash the overlay scrollbar.
-      if (input.scrollHeight > input.clientHeight) {
-        input.style.height = `${input.scrollHeight}px`;
-        this._oldValueLength = valueLength;
-        this._lastInputWidth = inputWidth;
-        this.__updateMaxHeight(this.maxRows);
-        return;
-      }
-
-      // Skip the measurement on subpixel ResizeObserver ticks, which would
-      // otherwise feed phase 2's writeback back into phase 1's pin under
-      // fractional rendering (see #9141).
+      // Pin the input-field height + collapse input so we can measure
+      // the natural content height. Gated to skip noise ticks that
+      // would otherwise feed back into the next cycle's pin under
+      // fractional rendering (see #9141). Pin protects the document
+      // from shrinking around the brief collapse (see #291).
       const valueShrunk = this._oldValueLength > valueLength;
       const widthChanged = this._lastInputWidth !== undefined && this._lastInputWidth !== inputWidth;
       if (valueShrunk || widthChanged) {
-        // Pin the input-field height so the document doesn't shrink
-        // around the brief collapse (see #291).
-        const inputFieldHeight = getComputedStyle(inputField).height;
-        const inputFieldScrollTop = inputField.scrollTop;
-        inputField.style.height = inputFieldHeight;
+        inputField.style.height = getComputedStyle(inputField).height;
         input.style.maxWidth = inputWidth;
         input.style.alignSelf = 'flex-start';
         input.style.height = 'auto';
-
-        const inputHeight = input.scrollHeight;
-        if (inputHeight > input.clientHeight) {
-          input.style.height = `${inputHeight}px`;
-        }
-
-        input.style.removeProperty('max-width');
-        input.style.removeProperty('align-self');
-        inputField.style.removeProperty('height');
-        inputField.scrollTop = inputFieldScrollTop;
       }
+
+      const inputHeight = input.scrollHeight;
+      if (inputHeight > input.clientHeight) {
+        input.style.height = `${inputHeight}px`;
+      }
+
+      input.style.removeProperty('max-width');
+      input.style.removeProperty('align-self');
+      inputField.style.removeProperty('height');
+      inputField.scrollTop = inputFieldScrollTop;
 
       this._oldValueLength = valueLength;
       this._lastInputWidth = inputWidth;
