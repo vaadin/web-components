@@ -3,10 +3,22 @@
  * Copyright (c) 2025 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+// @ts-check -- gradual ts-check pilot, see proto/ts-check
 
+/**
+ * @param {Record<string, any>} target
+ * @param {...Record<string, any>} sources
+ * @returns {Record<string, any>}
+ */
 function deepMerge(target, ...sources) {
+  /** @param {unknown} item */
   const isArray = (item) => Array.isArray(item);
+  /** @param {unknown} item */
   const isObject = (item) => item && typeof item === 'object' && !isArray(item);
+  /**
+   * @param {Record<string, any>} target
+   * @param {Record<string, any>} source
+   */
   const merge = (target, source) => {
     if (isObject(source) && isObject(target)) {
       Object.keys(source).forEach((key) => {
@@ -36,6 +48,10 @@ function deepMerge(target, ...sources) {
  * A mixin that allows to set partial I18N properties.
  *
  * @polymerMixin
+ * @template {Record<string, any>} I18n
+ * @template {new (...args: any[]) => HTMLElement} T
+ * @param {I18n} defaultI18n
+ * @param {T} superClass
  */
 export const I18nMixin = (defaultI18n, superClass) =>
   class I18nMixinClass extends superClass {
@@ -55,8 +71,16 @@ export const I18nMixin = (defaultI18n, superClass) =>
       };
     }
 
-    constructor() {
-      super();
+    /**
+     * @param {...any} args
+     */
+    constructor(...args) {
+      super(...args);
+
+      /** @type {Record<string, any> | undefined} */
+      this.__customI18n = undefined;
+      /** @type {Record<string, any> | undefined} */
+      this.__effectiveI18n = undefined;
 
       this.i18n = deepMerge({}, defaultI18n);
     }
@@ -69,17 +93,20 @@ export const I18nMixin = (defaultI18n, superClass) =>
      * Should be overridden by subclasses to provide a custom JSDoc with the
      * default I18N properties.
      *
-     * @type {Object}
+     * @returns {Record<string, any> | undefined}
      */
     get i18n() {
       return this.__customI18n;
     }
 
+    /**
+     * @param {Record<string, any> | undefined} value
+     */
     set i18n(value) {
       if (value === this.__customI18n) {
         return;
       }
       this.__customI18n = value;
-      this.__effectiveI18n = deepMerge({}, defaultI18n, this.__customI18n);
+      this.__effectiveI18n = deepMerge({}, defaultI18n, this.__customI18n || {});
     }
   };

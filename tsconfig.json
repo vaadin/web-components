@@ -21,6 +21,7 @@
     "packages/icon/src",
     "packages/details/src",
     "packages/a11y-base/src",
-    "packages/field-base/src"
+    "packages/field-base/src",
+    "packages/component-base/src"
   ]
 }

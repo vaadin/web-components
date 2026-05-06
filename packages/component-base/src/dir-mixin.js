@@ -3,12 +3,24 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+// @ts-check -- gradual ts-check pilot, see proto/ts-check
+
+/**
+ * @typedef {import('lit').LitElement & import('./polylit-mixin.js').PolylitMixinClass} VaadinElement
+ */
 
 /**
  * Array of Vaadin custom element classes that have been subscribed to the dir changes.
+ *
+ * @type {HTMLElement[]}
  */
 const directionSubscribers = [];
 
+/**
+ * @param {HTMLElement} element
+ * @param {string | null} documentDir
+ * @param {string | null} [elementDir]
+ */
 function alignDirs(element, documentDir, elementDir = element.getAttribute('dir')) {
   if (documentDir) {
     element.setAttribute('dir', documentDir);
@@ -17,6 +29,9 @@ function alignDirs(element, documentDir, elementDir = element.getAttribute('dir'
   }
 }
 
+/**
+ * @returns {string | null}
+ */
 function getDocumentDir() {
   return document.documentElement.getAttribute('dir');
 }
@@ -35,6 +50,8 @@ directionObserver.observe(document.documentElement, { attributes: true, attribut
  * A mixin to handle `dir` attribute based on the one set on the `<html>` element.
  *
  * @polymerMixin
+ * @template {new (...args: any[]) => VaadinElement} T
+ * @param {T} superClass
  */
 export const DirMixin = (superClass) =>
   class VaadinDirMixin extends superClass {
@@ -48,9 +65,11 @@ export const DirMixin = (superClass) =>
           value: '',
           reflectToAttribute: true,
           converter: {
+            /** @param {string | null} attr */
             fromAttribute: (attr) => {
               return !attr ? '' : attr;
             },
+            /** @param {string} prop */
             toAttribute: (prop) => {
               return prop === '' ? null : prop;
             },
@@ -67,7 +86,17 @@ export const DirMixin = (superClass) =>
       return this.getAttribute('dir') === 'rtl';
     }
 
-    /** @protected */
+    /**
+     * @param {...any} args
+     */
+    constructor(...args) {
+      super(...args);
+      /** @type {string} */
+      this.dir = '';
+      /** @type {boolean | undefined} */
+      this.__restoreSubscription = undefined;
+    }
+
     connectedCallback() {
       super.connectedCallback();
 
@@ -77,7 +106,11 @@ export const DirMixin = (superClass) =>
       }
     }
 
-    /** @protected */
+    /**
+     * @param {string} name
+     * @param {string | null} oldValue
+     * @param {string | null} newValue
+     */
     attributeChangedCallback(name, oldValue, newValue) {
       super.attributeChangedCallback(name, oldValue, newValue);
       if (name !== 'dir') {
@@ -101,30 +134,41 @@ export const DirMixin = (superClass) =>
       }
     }
 
-    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
       this.__restoreSubscription = directionSubscribers.includes(this);
       this.__unsubscribe();
     }
 
-    /** @protected */
+    /**
+     * @param {Element} node
+     * @param {unknown} value
+     * @param {string} attribute
+     * @protected
+     */
     _valueToNodeAttribute(node, value, attribute) {
       // Override default Polymer attribute reflection to match native behavior of HTMLElement.dir property
       // If the property contains an empty string then it should not create an empty attribute
       if (attribute === 'dir' && value === '' && !node.hasAttribute('dir')) {
         return;
       }
+      // @ts-expect-error -- legacy Polymer hook not exposed by the typed mixin chain
       super._valueToNodeAttribute(node, value, attribute);
     }
 
-    /** @protected */
+    /**
+     * @param {string} attribute
+     * @param {string | null} value
+     * @param {unknown} type
+     * @protected
+     */
     _attributeToProperty(attribute, value, type) {
       // Override default Polymer attribute reflection to match native behavior of HTMLElement.dir property
       // If the attribute is removed, then the dir property should contain an empty string instead of null
       if (attribute === 'dir' && !value) {
         this.dir = '';
       } else {
+        // @ts-expect-error -- legacy Polymer hook not exposed by the typed mixin chain
         super._attributeToProperty(attribute, value, type);
       }
     }

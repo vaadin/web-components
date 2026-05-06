@@ -3,8 +3,14 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+// @ts-check -- gradual ts-check pilot, see proto/ts-check
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
 
+/**
+ * @typedef {import('lit').LitElement & import('./polylit-mixin.js').PolylitMixinClass} VaadinElement
+ */
+
+/** @type {WeakMap<DocumentOrShadowRoot, Set<string>>} */
 const stylesMap = new WeakMap();
 
 /**
@@ -13,11 +19,13 @@ const stylesMap = new WeakMap();
  * @return {Set<string>}
  */
 function getRootStyles(root) {
-  if (!stylesMap.has(root)) {
-    stylesMap.set(root, new Set());
+  let rootStyles = stylesMap.get(root);
+  if (!rootStyles) {
+    rootStyles = new Set();
+    stylesMap.set(root, rootStyles);
   }
 
-  return stylesMap.get(root);
+  return rootStyles;
 }
 
 /**
@@ -32,7 +40,7 @@ function insertStyles(styles, root) {
   if (root === document) {
     document.head.appendChild(style);
   } else {
-    root.insertBefore(style, root.firstChild);
+    /** @type {ShadowRoot} */ (root).insertBefore(style, /** @type {ShadowRoot} */ (root).firstChild);
   }
 }
 
@@ -41,18 +49,21 @@ function insertStyles(styles, root) {
  * This is useful e.g. to hide native `<input type="number">` controls.
  *
  * @polymerMixin
+ * @template {new (...args: any[]) => VaadinElement} T
+ * @param {T} superclass
  */
 const SlotStylesMixinImplementation = (superclass) =>
   class SlotStylesMixinClass extends superclass {
     /**
      * List of styles to insert into root.
+     *
+     * @returns {string[]}
      * @protected
      */
     get slotStyles() {
       return [];
     }
 
-    /** @protected */
     connectedCallback() {
       super.connectedCallback();
 
@@ -61,7 +72,7 @@ const SlotStylesMixinImplementation = (superclass) =>
 
     /** @private */
     __applySlotStyles() {
-      const root = this.getRootNode();
+      const root = /** @type {DocumentOrShadowRoot} */ (/** @type {unknown} */ (this.getRootNode()));
       const rootStyles = getRootStyles(root);
 
       this.slotStyles.forEach((styles) => {

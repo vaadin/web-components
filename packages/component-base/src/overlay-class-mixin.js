@@ -3,12 +3,15 @@
  * Copyright (c) 2023 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+// @ts-check -- gradual ts-check pilot, see proto/ts-check
 
 /**
  * A mixin that forwards CSS class names to the internal overlay element
  * by setting the `overlayClass` property or `overlay-class` attribute.
  *
  * @polymerMixin
+ * @template {new (...args: any[]) => HTMLElement} T
+ * @param {T} superclass
  */
 export const OverlayClassMixin = (superclass) =>
   class OverlayClassMixinClass extends superclass {
@@ -43,7 +46,26 @@ export const OverlayClassMixin = (superclass) =>
       return ['__updateOverlayClassNames(overlayClass, _overlayElement)'];
     }
 
-    /** @private */
+    /**
+     * @param {...any} args
+     */
+    constructor(...args) {
+      super(...args);
+      /** @type {string | undefined} */
+      this.overlayClass = undefined;
+      /** @type {HTMLElement | undefined} */
+      this._overlayElement = undefined;
+      /** @type {Set<string> | undefined} */
+      this.__initialClasses = undefined;
+      /** @type {string[] | undefined} */
+      this.__previousClasses = undefined;
+    }
+
+    /**
+     * @param {string | undefined} overlayClass
+     * @param {HTMLElement | undefined} overlayElement
+     * @private
+     */
     __updateOverlayClassNames(overlayClass, overlayElement) {
       if (!overlayElement) {
         return;
@@ -59,10 +81,11 @@ export const OverlayClassMixin = (superclass) =>
       if (!this.__initialClasses) {
         this.__initialClasses = new Set(classList);
       }
+      const initialClasses = this.__initialClasses;
 
       if (Array.isArray(this.__previousClasses)) {
         // Remove old classes that no longer apply
-        const classesToRemove = this.__previousClasses.filter((name) => !this.__initialClasses.has(name));
+        const classesToRemove = this.__previousClasses.filter((name) => !initialClasses.has(name));
         if (classesToRemove.length > 0) {
           classList.remove(...classesToRemove);
         }

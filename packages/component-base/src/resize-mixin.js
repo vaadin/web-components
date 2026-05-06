@@ -3,7 +3,14 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+// @ts-check -- gradual ts-check pilot, see proto/ts-check
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
+
+/**
+ * @typedef {import('lit').LitElement & import('./polylit-mixin.js').PolylitMixinClass} VaadinElement
+ *
+ * @typedef {Element & { resizables?: Set<Resizable>; _onResize?: (rect: DOMRectReadOnly) => void }} Resizable
+ */
 
 const observer = new ResizeObserver((entries) => {
   setTimeout(() => {
@@ -12,13 +19,15 @@ const observer = new ResizeObserver((entries) => {
         return;
       }
 
+      const target = /** @type {Resizable} */ (entry.target);
+
       // Notify child resizables, if any
-      if (entry.target.resizables) {
-        entry.target.resizables.forEach((resizable) => {
-          resizable._onResize(entry.contentRect);
+      if (target.resizables) {
+        target.resizables.forEach((resizable) => {
+          resizable._onResize?.(entry.contentRect);
         });
       } else {
-        entry.target._onResize(entry.contentRect);
+        target._onResize?.(entry.contentRect);
       }
     });
   });
@@ -28,6 +37,8 @@ const observer = new ResizeObserver((entries) => {
  * A mixin that uses a ResizeObserver to listen to host size changes.
  *
  * @polymerMixin
+ * @template {new (...args: any[]) => VaadinElement} T
+ * @param {T} superclass
  */
 const ResizeMixinImplementation = (superclass) =>
   class ResizeMixinClass extends superclass {
@@ -41,25 +52,34 @@ const ResizeMixinImplementation = (superclass) =>
       return false;
     }
 
-    /** @protected */
+    /**
+     * @param {...any} args
+     */
+    constructor(...args) {
+      super(...args);
+      /** @type {Resizable | null} */
+      this.__parent = null;
+    }
+
     connectedCallback() {
       super.connectedCallback();
       observer.observe(this);
 
       if (this._observeParent) {
-        const parent = this.parentNode instanceof ShadowRoot ? this.parentNode.host : this.parentNode;
+        const parent = /** @type {Resizable} */ (
+          this.parentNode instanceof ShadowRoot ? this.parentNode.host : this.parentNode
+        );
 
         if (!parent.resizables) {
           parent.resizables = new Set();
           observer.observe(parent);
         }
 
-        parent.resizables.add(this);
+        parent.resizables.add(/** @type {Resizable} */ (/** @type {unknown} */ (this)));
         this.__parent = parent;
       }
     }
 
-    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
       observer.unobserve(this);
@@ -69,7 +89,7 @@ const ResizeMixinImplementation = (superclass) =>
         const resizables = parent.resizables;
 
         if (resizables) {
-          resizables.delete(this);
+          resizables.delete(/** @type {Resizable} */ (/** @type {unknown} */ (this)));
 
           if (resizables.size === 0) {
             observer.unobserve(parent);
@@ -84,6 +104,7 @@ const ResizeMixinImplementation = (superclass) =>
      * A handler invoked on host resize. By default, it does nothing.
      * Override the method to implement your own behavior.
      *
+     * @param {DOMRectReadOnly} _contentRect
      * @protected
      */
     _onResize(_contentRect) {
