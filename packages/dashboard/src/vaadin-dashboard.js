@@ -266,6 +266,7 @@ class Dashboard extends DashboardLayoutMixin(
     let wrappers = [...hostElement.children].filter((el) => el.localName === WRAPPER_LOCAL_NAME);
 
     const focusedWrapper = wrappers.find((wrapper) => wrapper.querySelector(':focus'));
+    const focusedElement = focusedWrapper && focusedWrapper.querySelector(':focus');
     const focusedWrapperWillBeRemoved = focusedWrapper && !this.__isActiveWrapper(focusedWrapper);
     const wrapperClosestToRemovedFocused =
       focusedWrapperWillBeRemoved && this.__getClosestActiveWrapper(focusedWrapper);
@@ -313,6 +314,10 @@ class Dashboard extends DashboardLayoutMixin(
       if (focusedWrapperWillBeRemoved) {
         // The wrapper containing the focused element was removed. Try to focus the element in the closest wrapper.
         this.__focusWrapperContent(wrapperClosestToRemovedFocused || this.querySelector(WRAPPER_LOCAL_NAME));
+      } else if (focusedElement && !focusedElement.matches(':focus')) {
+        // Firefox loses focus from a slotted element when the <slot> it was projected through is
+        // removed during the shadow re-render, even after re-projection through a different slot.
+        focusedElement.focus();
       }
 
       const focusedItem = this.querySelector(':focus');
