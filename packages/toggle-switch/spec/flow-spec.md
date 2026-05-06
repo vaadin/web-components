@@ -18,7 +18,7 @@
 
 7. **i18n: nested `ToggleSwitchI18n` class with one field — `requiredErrorMessage`.** `Serializable`, fluent setter, no JSON annotations. Stored on the component via `setI18n` / `getI18n`. No client-side property push (the web component has no `i18n` property of its own); the server-side i18n message is read by the default validator. The instance returned by `getI18n()` is the live stored object, but mutations to it after `setI18n(...)` will not re-trigger any validation — applications must call `setI18n(...)` again to apply changes (matches `CheckboxI18n.getI18n` javadoc). Identical to `CheckboxI18n` (`flow-api.md` §6).
 
-8. **Theme variants: `ToggleSwitchVariant` enum with three constants — `LUMO_HELPER_ABOVE_FIELD` (deprecated), `AURA_HELPER_ABOVE_FIELD` (deprecated), `HELPER_ABOVE`.** All three map to the CSS attribute string `"helper-above-field"`. Mirrors `CheckboxVariant` exactly. Implements `ThemeVariant`. (`flow-api.md` §11.)
+8. **Theme variants: `ToggleSwitchVariant` enum with one constant — `HELPER_ABOVE` mapping to the CSS attribute string `"helper-above-field"`.** Implements `ThemeVariant`. The `LUMO_HELPER_ABOVE_FIELD` / `AURA_HELPER_ABOVE_FIELD` aliases that `CheckboxVariant` carries are backward-compatibility shims for code written before that constant was renamed; `ToggleSwitch` is a new component with no prior callers, so it ships with only the canonical name. (`flow-api.md` §11.)
 
 9. **Label slot fallback: `setLabelComponent(Component)` for HTML-in-label.** Same `NativeLabel labelElement` field with `slot="label"` as Checkbox. `setLabel(String)` removes the slotted component and sets the host's `label` property (`null` is normalised to `""`, matching Checkbox); `setLabelComponent(Component)` clears the property and slots the component into the label. Passing a non-null component is required; passing `null` is undefined behavior (Checkbox NPEs on the underlying `add` call — toggle-switch inherits this and does not validate the argument explicitly). (`flow-api.md` §3.)
 
@@ -197,10 +197,6 @@ The class is server-side only — there is no client-side `i18n` property to pus
 
 ```java
 public enum ToggleSwitchVariant implements ThemeVariant {
-    LUMO_HELPER_ABOVE_FIELD("helper-above-field"),
-    /** @deprecated Use {@link #HELPER_ABOVE} instead. */
-    @Deprecated
-    AURA_HELPER_ABOVE_FIELD("helper-above-field"),
     HELPER_ABOVE("helper-above-field");
 
     private final String variant;
@@ -209,7 +205,7 @@ public enum ToggleSwitchVariant implements ThemeVariant {
 }
 ```
 
-Mirrors `CheckboxVariant` exactly. All three constants map to the same CSS attribute value `"helper-above-field"`; the enum exists to give applications a typed surface and to advertise which variants are available. Deprecation policy: when the web component renames or drops the attribute, keep the old constants `@Deprecated` mapped to the same string for one major release, then remove. Same pattern as `ButtonVariant`'s `LUMO_*` / `AURA_*` legacy names (e.g. `LUMO_HELPER_ABOVE_FIELD` itself originated as a Lumo-only variant).
+The enum maps the single canonical `HELPER_ABOVE` constant to the CSS attribute value `"helper-above-field"`. The deprecated `LUMO_HELPER_ABOVE_FIELD` / `AURA_HELPER_ABOVE_FIELD` aliases on `CheckboxVariant` exist to preserve compatibility with code written against earlier Checkbox releases — `ToggleSwitch` has no prior public release, so those legacy names are not introduced. Future deprecation policy: if the web component eventually renames or drops the `helper-above-field` attribute, the old constant is kept `@Deprecated` mapped to the same string for one major release, then removed (same pattern `ButtonVariant` follows when *its* attributes change).
 
 ---
 
