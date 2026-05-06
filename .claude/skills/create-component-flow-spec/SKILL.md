@@ -75,7 +75,7 @@ When studying existing components in step 8, focus on:
 
 5. **i18n classes.** `@JsonInclude(JsonInclude.Include.NON_NULL)`, `implements Serializable`, fluent setters returning the i18n class for chaining. Exposed via `setI18n(XxxI18n)` / `getI18n()` on the main component, serialised with `JacksonUtils.beanToJson(...)` and sent via `Element.setPropertyJson("i18n", ...)`.
 
-6. **Theme variant enums.** `implements ThemeVariant`, `getVariantName()` returning the CSS theme attribute string. Deprecation convention from `ButtonVariant`.
+6. **Theme variant enums.** `implements ThemeVariant`, `getVariantName()` returning the CSS theme attribute string. A new component starts with only the canonical (non-deprecated) constants — see "Don't copy deprecated APIs from sibling components" under API DESIGN PRINCIPLES. The `ButtonVariant`-style deprecation pattern only applies once *this* component has shipped a release that needs to keep an old constant alive.
 
 7. **Children / items API.** `Has{Name}Items` interface with `addItem`, `addItemAtIndex`, `addItemAsFirst`, `getItems`, `remove`, `removeAll`. Or — for data-driven children — `setItems(List<T>)`, `getItems()`, plus optional `MenuManager`-style coordinator when sub-menus are in play.
 
@@ -96,6 +96,7 @@ API DESIGN PRINCIPLES:
 - **Consistency over novelty.** If an existing Flow component solves a similar problem, match its class layout, constructor overloads, event naming, and i18n shape. Deviate only when a requirement or web-API mapping genuinely demands it.
 - **Completeness over minimalism.** Every universal/flow requirement must be covered. Every web-component API surface from `web-component-api.md` must be reachable from Flow (per the coverage check in `flow-api.md`).
 - **Composition over reimplementation.** If a requirement can be fulfilled by implementing a shared interface from `vaadin-flow-components-base`, prefer that over new code.
+- **Don't copy deprecated APIs from sibling components.** When a sibling exposes entries marked `@Deprecated` (theme-variant aliases, deprecated mixin methods, legacy i18n field names), they exist as backward-compatibility shims for code written before a rename or removal in *that* component. A brand-new component has no callers to preserve, so it must start with only the canonical (non-deprecated) form. Concretely: do not carry over `LUMO_*` / `AURA_*` enum aliases from `CheckboxVariant` / `ButtonVariant`; do not implement deprecated mixin methods that have a non-deprecated replacement; do not introduce i18n field aliases. The deprecation pattern from `ButtonVariant` applies later, after this component has shipped a release whose API needs to be preserved on a rename — not on day one.
 - **Serialisation-first.** Every public field type must be `Serializable`. Call this out in Key Design Decisions when a non-trivial field (controller, listener registration, collection) is introduced.
 - **Router-agnostic.** Do NOT embed `RouteConfiguration` calls inside the component. Exposing path setters is fine; driving navigation is the application's job.
 
