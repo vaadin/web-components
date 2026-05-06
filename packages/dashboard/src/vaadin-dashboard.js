@@ -267,7 +267,7 @@ class Dashboard extends DashboardLayoutMixin(
     let wrappers = [...hostElement.children].filter((el) => el.localName === WRAPPER_LOCAL_NAME);
 
     const focusedWrapper = wrappers.find((wrapper) => wrapper.querySelector(':focus'));
-    const focusedElement = focusedWrapper && focusedWrapper.querySelector(':focus');
+    const focusedElement = focusedWrapper?.querySelector(':focus');
     const focusedWrapperWillBeRemoved = focusedWrapper && !this.__isActiveWrapper(focusedWrapper);
     const wrapperClosestToRemovedFocused =
       focusedWrapperWillBeRemoved && this.__getClosestActiveWrapper(focusedWrapper);
