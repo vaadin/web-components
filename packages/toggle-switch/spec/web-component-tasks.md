@@ -91,7 +91,7 @@ Verify `DisabledMixin`'s `disabled` property is reflected on the host and propag
 **Requirements:** 6
 **Depends on:** 3
 
-Declare the `readonly` boolean property (reflectToAttribute) in the mixin; observe its changes with `__readonlyChanged(readonly, inputElement)` and write or remove `aria-readonly` on the inner input accordingly. Add `_onInputClick` that calls `event.preventDefault()` when `readonly`; register the listener via `_addInputListeners` / `_removeInputListeners`. Extend `_shouldSetActive` (from Task 3) to also return `false` when `readonly`. Read-only must keep the host focusable (`tabindex="0"`) and the inner input focusable.
+Declare the `readonly` boolean property (reflectToAttribute) in the mixin. React to changes in `readonly` and `inputElement` from Lit's `updated(changed)` hook — when either changes, call a private `__readonlyChanged(readonly, inputElement)` helper that adds or removes `aria-readonly` on the inner input. Use `updated(changed)` rather than `static get observers()`, per `guidelines/04-coding-conventions.md` which prefers Lit's reactive lifecycle for new components. Add `_onInputClick` that calls `event.preventDefault()` when `readonly`; register the listener via `_addInputListeners` / `_removeInputListeners`. Extend `_shouldSetActive` (from Task 3) to also return `false` when `readonly`. Read-only must keep the host focusable (`tabindex="0"`) and the inner input focusable.
 
 **Tests:**
 - Setting `readonly` reflects the attribute on the host and sets `aria-readonly="true"` on the inner input.

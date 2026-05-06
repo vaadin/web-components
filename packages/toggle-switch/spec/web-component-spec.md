@@ -15,7 +15,7 @@
 
 5. **No `indeterminate` property and no `indeterminate-changed` event.** Per `problem-statement.md` Differentiation, the toggle switch is strictly two-state. This is the only intentional removal from the Checkbox-style API surface; nothing else is dropped.
 
-6. **`readonly` is a component-managed attribute, not a delegated input attribute.** Native `<input type="checkbox">` does not honor `readonly`, so the mixin observes `readonly` changes and writes `aria-readonly` on the input directly while preventing toggling via a click handler that calls `event.preventDefault()`. This is the same approach Checkbox uses. Read-only is reflected on the host so that the `:host([readonly])` styling in §Implementation works.
+6. **`readonly` is a component-managed attribute, not a delegated input attribute.** Native `<input type="checkbox">` does not honor `readonly`, so the mixin reacts to `readonly` and `inputElement` changes in Lit's `updated(changed)` lifecycle hook (per `guidelines/04-coding-conventions.md`, which prefers `updated(changed)` over Polymer-style `static get observers()` for new components) and writes `aria-readonly` on the input directly while preventing toggling via a click handler that calls `event.preventDefault()`. This is the same approach Checkbox uses. Read-only is reflected on the host so that the `:host([readonly])` styling in §Implementation works.
 
 7. **Validation rule: required ⇒ on.** `checkValidity()` returns `!this.required || !!this.checked` — turning the switch on satisfies a required constraint, leaving it off fails. Validation is requested on blur (via `_setFocused(false)` when the document still has focus) and on `_checkedChanged` after the initial value, so a freshly-rendered required switch is not invalid until the user has interacted. Identical to Checkbox.
 
@@ -140,7 +140,7 @@ Inherited reactive state attributes: `active`, `focused`, `focus-ring`, `has-lab
 
 - **Disabled.** Inherited `DisabledMixin` reflects `disabled` on the host and adds `aria-disabled`. `TabindexMixin` sets `tabindex="-1"` on the host while disabled and restores the prior value when re-enabled, so the host (and via delegation the inner input) is removed from the Tab order. Programmatic `checked` writes still propagate; user activation does not. (Requirement 5.)
 
-- **Read-only.** A `readonly` change writes `aria-readonly="true"` on the inner input (native `<input type="checkbox">` does not honor `readonly` itself, so the mapping is component-managed). User activation is suppressed: clicks on the input call `preventDefault()`, and the `active` attribute is not applied. The host stays focusable and Tab-reachable. (Requirement 6.)
+- **Read-only.** Lit's `updated(changed)` hook reacts to changes in `readonly` (or `inputElement`, since the input is created asynchronously by `InputController`) and writes `aria-readonly="true"` on the inner input (native `<input type="checkbox">` does not honor `readonly` itself, so the mapping is component-managed). User activation is suppressed: clicks on the input call `preventDefault()`, and the `active` attribute is not applied. The host stays focusable and Tab-reachable. (Requirement 6.)
 
 - **Required validation.** `checkValidity()` returns `!this.required || !!this.checked`. `aria-required` is forwarded to the inner input via `delegateAttrs`, so screen readers announce the required state. Validation is requested:
   - On blur (when the document still has focus — tab-switching past the window does not trigger validation).
