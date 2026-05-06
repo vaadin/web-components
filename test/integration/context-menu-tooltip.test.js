@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { arrowDownKeyDown, arrowUpKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { arrowDownKeyDown, arrowUpKeyDown, fixtureSync, mousedown, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '@vaadin/context-menu/src/vaadin-context-menu.js';
 import { getMenuItems, getSubMenu } from '@vaadin/context-menu/test/helpers.js';
@@ -39,6 +39,9 @@ describe('context-menu with tooltip', () => {
   afterEach(async () => {
     contextMenu.close();
     await resetMouse();
+    // Reset focus-utils' keyboardActive state (set on keydown, only cleared on
+    // mousedown) so it doesn't leak into subsequent mouse-driven tests.
+    mousedown(document.body);
   });
 
   it('should set manual on the slotted tooltip to true', () => {

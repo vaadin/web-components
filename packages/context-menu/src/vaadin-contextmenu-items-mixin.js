@@ -389,19 +389,15 @@ export const ItemsMixin = (superClass) =>
 
       // Mark parent item as collapsed when closing.
       subMenu.addEventListener('opened-changed', (event) => {
-        if (!event.detail.value) {
+        const opened = event.detail.value;
+        if (opened) {
+          this._tooltipController.bringToFront();
+        } else {
           const expandedItem = this._listBox.querySelector('[expanded]');
           if (expandedItem) {
             this.__updateExpanded(expandedItem, false);
           }
         }
-      });
-
-      // Restack the tooltip above the sub-menu overlay once it is open.
-      subMenu.updateComplete.then(() => {
-        subMenu._overlayElement.addEventListener('vaadin-overlay-open', () => {
-          this._tooltipController.bringToFront();
-        });
       });
 
       return subMenu;
