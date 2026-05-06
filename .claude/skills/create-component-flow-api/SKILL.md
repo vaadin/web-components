@@ -48,7 +48,7 @@ TASK OVERVIEW:
    - **Events:** expose DOM events (e.g. `navigate`) as Java events via `addXxxListener(ComponentEventListener<XxxEvent>)` returning `Registration`. Use `@DomEvent` mapping when the event payload has fields.
    - **Progressive disclosure.** The simplest usage is a no-arg constructor plus one or two typed setter calls. Convenience constructors for the most common scenarios (e.g. `new Button("Save")`, `new Button("Save", clickListener)`).
    - **No bloat.** Every Java method, interface, or class must serve either a requirement or a reachability mapping for a web-component API surface. Do NOT invent API surface that no requirement needs and no web API requires.
-   - **Router-agnostic.** Per `DESIGN_GUIDELINES.md`, the Flow API must not depend on any specific client-side router. Navigation is wired by the application (e.g. via `UI.navigate(...)` or `RouteConfiguration`). The Flow wrapper exposes path/URL setters but does not call a router itself.
+   - **Router-agnostic.** The Flow API must not depend on any specific client-side router. Navigation is wired by the application (e.g. via `UI.navigate(...)` or `RouteConfiguration`). The Flow wrapper exposes path/URL setters but does not call a router itself.
 
 8. Write the output to `packages/{component-name}/spec/flow-api.md`.
 

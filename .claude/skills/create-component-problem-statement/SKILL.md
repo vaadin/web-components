@@ -1,5 +1,5 @@
 ---
-allowed-tools: Web Search(*),Fetch(vaadin.com:*),Fetch(https://mui.com),Fetch(www.carbondesignsystem.com:*),Fetch(https://www.atlassian.design:*),Fetch(ant.design),Fetch(chakra-ui.com:*),Fetch(shoelace.style),Fetch(https://radix-ui.com:*),Fetch(https://react-aria.adobe.com:*),Read,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(git add packages/*/spec/problem-statement.md && git commit *),Bash(git diff packages/*/spec/problem-statement.md),Agent
+allowed-tools: Web Search(*),Fetch(vaadin.com:*),Fetch(https://mui.com),Fetch(www.carbondesignsystem.com:*),Fetch(https://www.atlassian.design:*),Fetch(ant.design),Fetch(chakra-ui.com:*),Fetch(webawesome.com),Fetch(base-ui.com),Fetch(https://radix-ui.com:*),Fetch(https://react-aria.adobe.com:*),Read,Write(packages/:*),Bash(mkdir -p packages/*/spec),Bash(git add packages/*/spec/problem-statement.md && git commit *),Bash(git diff packages/*/spec/problem-statement.md),Agent
 description: Define the core problem and product-level use cases for a Vaadin web component, before researching requirements
 user-invocable: false
 ---

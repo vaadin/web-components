@@ -20,7 +20,7 @@ Do NOT include:
 - Framework-specific code
 - Implementation notes
 - API design suggestions
-- Restatements of universal behavioural rules from DESIGN_GUIDELINES.md (accessible names, customisable labels, focus order matching visual order, RTL support, readable/tappable targets on small viewports). A requirement may touch these concerns only when the component adds a concrete default, a component-specific extension, or a specific interaction pattern that the universal rule does not pin down.
+- Restatements of universal behavioural rules from `guidelines/02-design.md` and `guidelines/11-a11y.md` (accessible names, customisable labels, focus order matching visual order, RTL support, readable/tappable targets on small viewports). A requirement may touch these concerns only when the component adds a concrete default, a component-specific extension, or a specific interaction pattern that the universal rule does not pin down.
 -->
 
 ## 1. <Behavior-focused title>

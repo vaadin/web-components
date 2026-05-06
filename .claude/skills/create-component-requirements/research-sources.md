@@ -7,7 +7,8 @@ External design system libraries to research for component requirements and patt
 - Material UI (MUI) — https://mui.com
 - Ant Design — https://ant.design
 - Chakra UI — https://chakra-ui.com
-- Shoelace — https://shoelace.style
+- Web Awesome — https://webawesome.com
+- Base UI — https://base-ui.com
 - Lion (ING)
 - Adobe Spectrum Web Components — https://react-spectrum.adobe.com
 - Carbon Design System (IBM) — https://www.carbondesignsystem.com

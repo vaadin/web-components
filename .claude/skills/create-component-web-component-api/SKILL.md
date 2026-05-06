@@ -1,5 +1,5 @@
 ---
-allowed-tools: Web Search(*),Fetch(ant.design),Fetch(https://mui.com),Fetch(shoelace.style),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Read(packages/*/spec/*),Read(.claude/skills/create-component-web-component-api/*),Read(.claude/skills/shared/*),Write(packages/:*),Bash(mkdir -p packages/*/spec),mcp__vaadin,Agent
+allowed-tools: Web Search(*),Fetch(ant.design),Fetch(https://mui.com),Fetch(webawesome.com),Fetch(base-ui.com),Fetch(www.carbondesignsystem.com:*),Fetch(vaadin.com:*),Fetch(chakra-ui.com:*),Fetch(https://radix-ui.com:*),Fetch(https://react-spectrum.adobe.com:*),Fetch(https://react-aria.adobe.com:*),Read(packages/*/spec/*),Read(.claude/skills/create-component-web-component-api/*),Read(.claude/skills/shared/*),Write(packages/:*),Bash(mkdir -p packages/*/spec),mcp__vaadin,Agent
 description: Design the developer-facing API for a Vaadin web component based on its requirements, without studying implementation source code
 user-invocable: false
 ---

@@ -7,7 +7,8 @@ External design system libraries to research for component API design patterns.
 - Material UI (MUI) — https://mui.com
 - Ant Design — https://ant.design
 - Chakra UI — https://chakra-ui.com
-- Shoelace — https://shoelace.style
+- Web Awesome — https://webawesome.com
+- Base UI — https://base-ui.com
 - Carbon Design System (IBM) — https://www.carbondesignsystem.com
 - Radix UI — https://radix-ui.com
 - React Aria (Adobe) — https://react-aria.adobe.com

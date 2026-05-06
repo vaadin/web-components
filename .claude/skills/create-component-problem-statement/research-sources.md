@@ -7,7 +7,8 @@ External design system documentation to research for component problem definitio
 - Material UI (MUI) — https://mui.com
 - Ant Design — https://ant.design
 - Chakra UI — https://chakra-ui.com
-- Shoelace — https://shoelace.style
+- Web Awesome — https://webawesome.com
+- Base UI — https://base-ui.com
 - Carbon Design System (IBM) — https://www.carbondesignsystem.com
 - Atlassian Design System — https://www.atlassian.design
 - Radix UI — https://radix-ui.com

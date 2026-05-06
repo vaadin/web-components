@@ -22,15 +22,14 @@ TASK OVERVIEW:
 
 4. Check if `packages/{component-name}/spec/figma-design.md` exists. If present, read it and reference the Figma design in theme styling tasks as visual guidance. If absent, proceed without it — Figma designs are optional.
 
-5. Read the sections of `WEB_COMPONENT_GUIDELINES.md` that matter for task planning. The document is 2362 lines; do not read it end to end. Read these sections directly using offset/limit:
-   - **File Structure (§4)** — drives the file list the scaffolding task must produce
-   - **Component Implementation (§5)** — mixin chains and render patterns that shape Phase 2 tasks
-   - **Styling (§6)** — styling constraints that must appear in task descriptions
-   - **Testing (§9)**, especially the "Avoid vacuous assertions" subsection — every test assertion written into a task must pass this bar
-   - **Accessibility (§14)** — drives the cross-cutting ARIA / keyboard / RTL task
-   - **Checklist (§17, from ~line 2136)** — the completeness reference; every checklist item must be covered by at least one task
+5. Read the chapters in the `guidelines/` folder that matter for task planning:
+   - **`03-component-structure.md`** — drives the file list the scaffolding task must produce
+   - **`04-coding-conventions.md`** — mixin chains, lifecycle hooks, and property patterns that shape Phase 2 tasks
+   - **`10-theming.md`** — styling constraints that must appear in task descriptions
+   - **`11-a11y.md`** — drives the cross-cutting ARIA / keyboard / RTL task
+   - **`12-checklist.md`** — the completeness reference; every checklist item must be covered by at least one task. Test assertions written into tasks must describe observable behavior — every assertion should fail when the behavior regresses
 
-   Skip Installation, Packaging, Theme Comparison appendices, and Notes — they are not relevant to task planning. Open them only if a specific task genuinely needs them.
+   Skip chapters not relevant to task planning (e.g. `06-documenting.md`, `07-typescript.md`); open them only if a specific task genuinely needs them.
 
 6. Parse the spec into implementation units. For each element in the spec, extract:
    - Mixin chain
@@ -46,7 +45,7 @@ TASK OVERVIEW:
 9. Verify coverage:
    - Every requirement number in `requirements.md` must appear in at least one task's Requirements line.
    - Every element, property, slot, part, event, and CSS custom property in `web-component-spec.md` must be addressed by at least one task.
-   - Every item in the `WEB_COMPONENT_GUIDELINES.md` Checklist must be covered by at least one task.
+   - Every item in `guidelines/12-checklist.md` must be covered by at least one task.
 
    If any item is not covered, add it to an existing task or create a new task for it.
 
