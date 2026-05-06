@@ -252,6 +252,26 @@ export const ItemsMixin = (superClass) =>
         listBox.setAttribute('theme', this._theme);
       }
 
+      listBox.addEventListener('mouseover', (event) => {
+        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
+        this._tooltipController.setTarget(itemElement);
+        this._tooltipController.open({ trigger: 'hover' });
+      });
+
+      listBox.addEventListener('mouseleave', () => {
+        this._tooltipController.close(true);
+      });
+
+      listBox.addEventListener('focusin', (event) => {
+        if (!isKeyboardActive()) {
+          return;
+        }
+
+        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
+        this._tooltipController.setTarget(itemElement);
+        this._tooltipController.open({ trigger: 'focus' });
+      });
+
       listBox.addEventListener('selected-changed', (event) => {
         const { value } = event.detail;
         if (typeof value === 'number') {
@@ -285,31 +305,6 @@ export const ItemsMixin = (superClass) =>
         }
 
         this.__showSubMenu(event);
-
-        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
-        this._tooltipController.setTarget(itemElement);
-        this._tooltipController.open({ trigger: 'hover' });
-      });
-
-      overlay.addEventListener('mouseleave', (event) => {
-        // Ignore events from the submenus
-        if (event.composedPath().includes(this._subMenu)) {
-          return;
-        }
-
-        this._tooltipController.close();
-      });
-
-      overlay.addEventListener('focusin', (event) => {
-        // Ignore events from the submenus
-        // Ignore non-keyboard focus changes (e.g. clicks).
-        if (event.composedPath().includes(this._subMenu) || !isKeyboardActive()) {
-          return;
-        }
-
-        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
-        this._tooltipController.setTarget(itemElement);
-        this._tooltipController.open({ trigger: 'focus' });
       });
 
       overlay.addEventListener('keydown', (event) => {
@@ -350,6 +345,7 @@ export const ItemsMixin = (superClass) =>
       // host. Its tooltip controller instance is shared across sub-menus to
       // reuse the same tooltip element for items at every nesting level.
       subMenu._tooltipController = this._tooltipController;
+      subMenu.__parentMenu = this;
 
       subMenu._modeless = true;
       subMenu.openOn = 'opensubmenu';
@@ -393,7 +389,10 @@ export const ItemsMixin = (superClass) =>
 
       // Mark parent item as collapsed when closing.
       subMenu.addEventListener('opened-changed', (event) => {
-        if (!event.detail.value) {
+        const opened = event.detail.value;
+        if (opened) {
+          this._tooltipController.bringToFront();
+        } else {
           const expandedItem = this._listBox.querySelector('[expanded]');
           if (expandedItem) {
             this.__updateExpanded(expandedItem, false);
@@ -547,6 +546,12 @@ export const ItemsMixin = (superClass) =>
         component.setAttribute('theme', theme);
       } else {
         component.removeAttribute('theme');
+      }
+    }
+
+    close() {
+      if (!this.__parentMenu) {
+        this._tooltipController.close(true);
       }
     }
   };

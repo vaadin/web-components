@@ -1,9 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { arrowDownKeyDown, arrowUpKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { arrowDownKeyDown, arrowUpKeyDown, fixtureSync, mousedown, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '@vaadin/context-menu/src/vaadin-context-menu.js';
 import { getMenuItems, getSubMenu } from '@vaadin/context-menu/test/helpers.js';
+import { isLastOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 describe('context-menu with tooltip', () => {
@@ -38,6 +39,9 @@ describe('context-menu with tooltip', () => {
   afterEach(async () => {
     contextMenu.close();
     await resetMouse();
+    // Reset focus-utils' keyboardActive state (set on keydown, only cleared on
+    // mousedown) so it doesn't leak into subsequent mouse-driven tests.
+    mousedown(document.body);
   });
 
   it('should set manual on the slotted tooltip to true', () => {
@@ -161,6 +165,15 @@ describe('context-menu with tooltip', () => {
     await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
     await nextRender();
     expect(tooltipOverlay.position).to.equal('start');
+  });
+
+  it('should stack tooltip above the sub-menu overlay', async () => {
+    contextMenu.items = [{ text: 'Parent', tooltip: 'Parent tooltip', children: [{ text: 'Child 0' }] }];
+    await sendMouseToElement({ type: 'click', element: target });
+    await nextRender();
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
+    await nextRender();
+    expect(isLastOverlay(tooltipOverlay)).to.be.true;
   });
 
   it('should use per-item tooltipPosition over the default', async () => {
