@@ -484,11 +484,19 @@ export class IronListAdapter {
 
   /** @private */
   __getFocusedElement(visibleElements = this.__getVisibleElements()) {
-    return visibleElements.find(
-      (element) =>
-        element.contains(this.elementsContainer.getRootNode().activeElement) ||
-        element.contains(this.scrollTarget.getRootNode().activeElement),
-    );
+    // `document.activeElement` retargets to the outermost shadow host when
+    // focus lives in a nested shadow tree. Descend through nested shadow
+    // roots' `activeElement`s to reach the real focused node, then walk up
+    // the flattened tree (via `assignedSlot`/`parentNode`/`host`) until a
+    // visible row is reached.
+    let node = document.activeElement;
+    while (node?.shadowRoot?.activeElement) {
+      node = node.shadowRoot.activeElement;
+    }
+    while (node && !visibleElements.includes(node)) {
+      node = node.assignedSlot || node.parentNode || node.host;
+    }
+    return node;
   }
 
   /** @private */
