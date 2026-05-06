@@ -158,10 +158,10 @@ export const TextAreaMixin = (superClass) =>
       if (!input || !inputField) {
         return;
       }
+      const scrollTop = inputField.scrollTop;
 
       const valueLength = this.value ? this.value.length : 0;
       const inputWidth = getComputedStyle(input).width;
-      const inputFieldScrollTop = inputField.scrollTop;
 
       // Pin the input-field height + collapse input so we can measure
       // the natural content height. Gated to skip noise ticks that
@@ -176,18 +176,19 @@ export const TextAreaMixin = (superClass) =>
         input.style.alignSelf = 'flex-start';
         input.style.height = 'auto';
       }
+      this._oldValueLength = valueLength;
 
       const inputHeight = input.scrollHeight;
       if (inputHeight > input.clientHeight) {
         input.style.height = `${inputHeight}px`;
       }
 
+      // Restore
       input.style.removeProperty('max-width');
       input.style.removeProperty('align-self');
       inputField.style.removeProperty('height');
-      inputField.scrollTop = inputFieldScrollTop;
+      inputField.scrollTop = scrollTop;
 
-      this._oldValueLength = valueLength;
       this._lastInputWidth = inputWidth;
       this.__updateMaxHeight(this.maxRows);
     }
