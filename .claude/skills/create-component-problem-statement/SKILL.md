@@ -71,4 +71,5 @@ IMPORTANT GUIDELINES:
 - Do NOT list behavioral requirements or implementation-level details. Use cases describe scenarios ("a user wants to..."), not component behaviors ("the component must...").
 - Do NOT describe API design, properties, events, or implementation details.
 - Do NOT include framework-specific information.
+- **Watch for naming collisions.** If the kebab-name is a Java reserved keyword (`switch`, `class`, `enum`, `default`, `for`, `case`, ...) or the ComponentName collides with `java.lang.*` or an existing class in `flow-components`, raise it with the user via `AskUserQuestion` before writing — renaming now is far cheaper than working around it in the Flow track later.
 - The result is ONLY the problem statement document — nothing else.

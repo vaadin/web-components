@@ -38,7 +38,11 @@ TASK OVERVIEW:
 
    Read only class declarations, constructors, and public method signatures. Do NOT read method bodies. The goal is API-level convention absorption.
 
-7. For each requirement (or group of related requirements), write a concrete Java code example showing how a Flow developer would use the component. For each example, include a brief "Why this shape" note explaining the rationale — anchoring it in `flow-components` conventions (e.g., "follows `HasSideNavItems` pattern from `vaadin-side-nav-flow`"). Apply these principles:
+7. **Naming pre-flight (Java-side).** Before writing any code example, verify the FQCN `com.vaadin.flow.component.{kebab-name}.{ComponentName}` compiles. The kebab-name must not be a Java reserved keyword (`switch`, `class`, `enum`, `default`, `for`, `case`, ...), and the ComponentName must not shadow `java.lang.*` or collide with an existing class in `flow-components` (`find ../flow-components -name '{ComponentName}.java' 2>/dev/null`).
+
+   If a collision exists and `problem-statement.md`'s Discussion already records a resolution, reuse it. Otherwise, ask the user via `AskUserQuestion` BEFORE writing examples. Typical options: pluralise or generalise the parent, restructure under an existing parent (e.g. `…component.input.{Name}`), or rename the component upstream (most expensive — re-runs every prior pipeline step). Record the choice in the Discussion section of `flow-api.md`.
+
+8. For each requirement (or group of related requirements), write a concrete Java code example showing how a Flow developer would use the component. For each example, include a brief "Why this shape" note explaining the rationale — anchoring it in `flow-components` conventions (e.g., "follows `HasSideNavItems` pattern from `vaadin-side-nav-flow`"). Apply these principles:
 
    - **Every web-component API must be reachable from Flow.** Cross-check: each attribute/property/slot/event/CSS custom property in `web-component-api.md` either maps to a Flow method, a shared mixin interface, a slot-mirroring API, or an event listener. If something has no Flow counterpart, that is a design decision that needs recording in the "Why this shape" note.
    - **Compose the established shared mixins** instead of redeclaring methods. If an icon goes in `slot="prefix"` on the web component, the Flow class should implement `HasPrefix` from `vaadin-flow-components-base`.
@@ -50,9 +54,9 @@ TASK OVERVIEW:
    - **No bloat.** Every Java method, interface, or class must serve either a requirement or a reachability mapping for a web-component API surface. Do NOT invent API surface that no requirement needs and no web API requires.
    - **Router-agnostic.** The Flow API must not depend on any specific client-side router. Navigation is wired by the application (e.g. via `UI.navigate(...)` or `RouteConfiguration`). The Flow wrapper exposes path/URL setters but does not call a router itself.
 
-8. Write the output to `packages/{component-name}/spec/flow-api.md`.
+9. Write the output to `packages/{component-name}/spec/flow-api.md`.
 
-9. **Review the spec.** Spawn an Agent to review the Flow API document. The agent has no prior context — provide a self-contained prompt containing: the path to the spec file just written (`packages/{component-name}/spec/flow-api.md`), the prerequisite files for cross-reference (`packages/{component-name}/spec/requirements.md`, `packages/{component-name}/spec/web-component-api.md`, and `packages/{component-name}/spec/problem-statement.md`), and an instruction to read `.claude/skills/shared/spec-reviewer-instructions.md` for review instructions. After receiving the reviewer's findings, address each one: fix clear gaps or hygiene issues directly in the spec, present ambiguities or design decisions that need user input via AskUserQuestion, and ignore false positives.
+10. **Review the spec.** Spawn an Agent to review the Flow API document. The agent has no prior context — provide a self-contained prompt containing: the path to the spec file just written (`packages/{component-name}/spec/flow-api.md`), the prerequisite files for cross-reference (`packages/{component-name}/spec/requirements.md`, `packages/{component-name}/spec/web-component-api.md`, and `packages/{component-name}/spec/problem-statement.md`), and an instruction to read `.claude/skills/shared/spec-reviewer-instructions.md` for review instructions. After receiving the reviewer's findings, address each one: fix clear gaps or hygiene issues directly in the spec, present ambiguities or design decisions that need user input via AskUserQuestion, and ignore false positives.
 
 OUTPUT FORMAT:
 
@@ -72,5 +76,6 @@ IMPORTANT GUIDELINES:
 - Do NOT produce a full Flow specification. No connector files, no `@Synchronize` details, no method bodies, no serialisation analysis.
 - Every requirement with `Applies to` in `{universal, flow}` must be covered by at least one code example. Every example must trace to at least one such requirement.
 - Before finalizing, check every code example against the problem statement. If an example shows behavior that is out of scope or belongs to an adjacent component, remove it.
+- The resolution chosen in step 7 must be reflected in every code example, not only in the Discussion section.
 - Do NOT modify `requirements.md`, `web-component-api.md`, or `problem-statement.md`.
 - The result is ONLY the Flow developer API document — nothing else.
