@@ -8,4 +8,6 @@ import { SlotChildObserveController } from '@vaadin/component-base/src/slot-chil
 /**
  * A controller to manage the title element.
  */
-export class TitleController extends SlotChildObserveController {}
+export class TitleController extends SlotChildObserveController {
+  constructor(host: HTMLElement);
+}
