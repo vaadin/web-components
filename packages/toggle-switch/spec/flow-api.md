@@ -1,8 +1,8 @@
-# Switch Flow Developer API
+# Toggle Switch Flow Developer API
 
-Java wrapper for `<vaadin-switch>`. Class: `Switch` in package `com.vaadin.flow.component.switch_` (trailing underscore because `switch` is a reserved Java keyword for the package segment; application code still imports `Switch` directly).
+Java wrapper for `<vaadin-toggle-switch>`. Class: `ToggleSwitch` in package `com.vaadin.flow.component.toggleswitch`.
 
-The Flow class follows the `Checkbox` pattern from `vaadin-checkbox-flow` line-for-line: same base class, same shared mixins (`InputField`, `HasValidationProperties`, `HasAriaLabel`, `HasValidator<Boolean>`, `HasThemeVariant<SwitchVariant>`), same `ClickNotifier` / `Focusable`, same nested `SwitchI18n` for the required-error message. The only intentional difference is the absence of `indeterminate`-related API — switches do not have an indeterminate state per the problem statement.
+The Flow class follows the `Checkbox` pattern from `vaadin-checkbox-flow` line-for-line: same base class, same shared mixins (`InputField`, `HasValidationProperties`, `HasAriaLabel`, `HasValidator<Boolean>`, `HasThemeVariant<ToggleSwitchVariant>`), same `ClickNotifier` / `Focusable`, same nested `ToggleSwitchI18n` for the required-error message. The only intentional difference is the absence of `indeterminate`-related API — toggle switches do not have an indeterminate state per the problem statement.
 
 ---
 
@@ -12,11 +12,11 @@ Covers requirement(s): 1, 4
 
 ```java
 // Default: starts off
-Switch notifications = new Switch("Notifications");
+ToggleSwitch notifications = new ToggleSwitch("Notifications");
 add(notifications);
 
 // Initial state: on
-Switch darkMode = new Switch("Dark mode", true);
+ToggleSwitch darkMode = new ToggleSwitch("Dark mode", true);
 add(darkMode);
 
 // Read / write the current state programmatically
@@ -24,12 +24,12 @@ boolean isOn = notifications.getValue();
 notifications.setValue(true);
 
 // No-arg constructor for late-set label
-Switch s = new Switch();
+ToggleSwitch s = new ToggleSwitch();
 s.setLabel("Auto-save");
 add(s);
 ```
 
-**Why this shape:** Mirrors `Checkbox` from `vaadin-checkbox-flow`. The component extends `AbstractSinglePropertyField<Switch, Boolean>` so the on/off state is the field's `Boolean` value — making it a drop-in `HasValue<Boolean>` for `Binder` and other data-binding code. The `(String label)`, `(boolean initialValue)`, and `(String, boolean)` convenience constructors match the Checkbox set; no separate constructor is needed for "switch role" because the role is exposed automatically by the underlying web component, with no Flow-level switch.
+**Why this shape:** Mirrors `Checkbox` from `vaadin-checkbox-flow`. The component extends `AbstractSinglePropertyField<ToggleSwitch, Boolean>` so the on/off state is the field's `Boolean` value — making it a drop-in `HasValue<Boolean>` for `Binder` and other data-binding code. The `(String label)`, `(boolean initialValue)`, and `(String, boolean)` convenience constructors match the Checkbox set; no separate constructor is needed for "switch role" because the role is exposed automatically by the underlying web component, with no Flow-level switch.
 
 ---
 
@@ -38,7 +38,7 @@ add(s);
 Covers requirement(s): 2
 
 ```java
-Switch dailyDigest = new Switch("Daily digest");
+ToggleSwitch dailyDigest = new ToggleSwitch("Daily digest");
 
 dailyDigest.addValueChangeListener(event -> {
     // event.isFromClient() distinguishes user vs. programmatic updates
@@ -48,7 +48,7 @@ dailyDigest.addValueChangeListener(event -> {
 });
 
 // Convenience constructor: label + listener in one go
-Switch compare = new Switch("Compare with previous period",
+ToggleSwitch compare = new ToggleSwitch("Compare with previous period",
     event -> dashboard.toggleOverlay(event.getValue()));
 add(compare);
 ```
@@ -63,10 +63,10 @@ Covers requirement(s): 3
 
 ```java
 // Plain-text label (most common)
-Switch s = new Switch("Email me when I'm @mentioned");
+ToggleSwitch s = new ToggleSwitch("Email me when I'm @mentioned");
 
 // Replace the label with a custom component when HTML / inline children are needed
-Switch consent = new Switch();
+ToggleSwitch consent = new ToggleSwitch();
 HorizontalLayout label = new HorizontalLayout(
     new Span("Send anonymous usage data — "),
     new Anchor("/privacy", "read our privacy policy"));
@@ -75,7 +75,7 @@ consent.setLabelComponent(label);
 add(consent);
 
 // Label-less switch (e.g. inside a Grid column where the column header is the name)
-Switch active = new Switch();
+ToggleSwitch active = new ToggleSwitch();
 active.setAriaLabel("Active");
 // Or reference an external label by id
 active.setAriaLabelledBy("row-3-active-label");
@@ -90,12 +90,13 @@ active.setAriaLabelledBy("row-3-active-label");
 Covers requirement(s): 5
 
 ```java
-Switch dailyDigest = new Switch("Daily digest");
+ToggleSwitch dailyDigest = new ToggleSwitch("Daily digest");
 dailyDigest.setEnabled(false); // not focusable, not Tab-reachable, no interaction
 
 // Programmatic flips are still allowed and silent (no value-change event from user)
-Switch child = new Switch("Daily digest");
-parentSwitch.addValueChangeListener(e -> {
+ToggleSwitch parent = new ToggleSwitch("Email me on activity");
+ToggleSwitch child = new ToggleSwitch("Daily digest");
+parent.addValueChangeListener(e -> {
     child.setEnabled(e.getValue());
     if (!e.getValue()) {
         child.setValue(false); // programmatic update — listener will see isFromClient=false
@@ -113,13 +114,13 @@ Covers requirement(s): 6
 
 ```java
 // Read-only switch reflecting a plan-locked setting
-Switch retention = new Switch("Audit log retention (90 days)", true);
+ToggleSwitch retention = new ToggleSwitch("Audit log retention (90 days)", true);
 retention.setHelperText("Included on the Business plan.");
 retention.setReadOnly(true);
 add(retention);
 
 // Read-only + required: validation rule "valid if on, invalid if off" still applies
-Switch verified = new Switch("Account verified", true);
+ToggleSwitch verified = new ToggleSwitch("Account verified", true);
 verified.setReadOnly(true);
 verified.setRequiredIndicatorVisible(true);
 ```
@@ -134,19 +135,19 @@ Covers requirement(s): 7, 9
 
 ```java
 // Built-in required validation: turning the switch on satisfies it; off is invalid
-Switch terms = new Switch("I confirm the trip details are correct");
+ToggleSwitch terms = new ToggleSwitch("I confirm the trip details are correct");
 terms.setRequiredIndicatorVisible(true);
 terms.setErrorMessage("You must accept the trip details to continue");
 
 // i18n-supplied default required message (e.g. localized at app level)
-Switch terms2 = new Switch("I accept the booking terms");
+ToggleSwitch terms2 = new ToggleSwitch("I accept the booking terms");
 terms2.setRequiredIndicatorVisible(true);
-terms2.setI18n(new Switch.SwitchI18n()
-    .setRequiredErrorMessage(getTranslation("switch.required")));
+terms2.setI18n(new ToggleSwitch.ToggleSwitchI18n()
+    .setRequiredErrorMessage(getTranslation("toggleSwitch.required")));
 
 // Manual validation: app drives `invalid` and `errorMessage` itself
 // (e.g. for server-returned business-rule violations)
-Switch twoFactor = new Switch("Two-factor authentication required");
+ToggleSwitch twoFactor = new ToggleSwitch("Two-factor authentication required");
 twoFactor.setManualValidation(true);
 
 binder.forField(twoFactor)
@@ -164,7 +165,7 @@ binder.forField(twoFactor)
 binder.validate();
 ```
 
-**Why this shape:** Required-handling via `setRequiredIndicatorVisible` plus a default validator that fails on the empty value (`Boolean.FALSE`) is exactly how `Checkbox` does it — consistent across all binary Vaadin fields. `HasValidationProperties` provides `setErrorMessage` / `setInvalid`. `HasValidator<Boolean>` provides `setManualValidation`; `validate()` itself is `protected` (as on `Checkbox`) — applications that need to drive validation imperatively go through `Binder.validate()`. The nested `SwitchI18n` class mirrors `CheckboxI18n` exactly: one fluent setter for the default required-error message, `Serializable`, retrievable via `getI18n()`. Custom `setErrorMessage(String)` takes priority over the i18n message (matches Checkbox semantics). The empty value of the field is `Boolean.FALSE`, also matching Checkbox — so `Binder` `asRequired()` and Switch's own required validation agree on which state counts as "empty".
+**Why this shape:** Required-handling via `setRequiredIndicatorVisible` plus a default validator that fails on the empty value (`Boolean.FALSE`) is exactly how `Checkbox` does it — consistent across all binary Vaadin fields. `HasValidationProperties` provides `setErrorMessage` / `setInvalid`. `HasValidator<Boolean>` provides `setManualValidation`; `validate()` itself is `protected` (as on `Checkbox`) — applications that need to drive validation imperatively go through `Binder.validate()`. The nested `ToggleSwitchI18n` class mirrors `CheckboxI18n` exactly: one fluent setter for the default required-error message, `Serializable`, retrievable via `getI18n()`. Custom `setErrorMessage(String)` takes priority over the i18n message (matches Checkbox semantics). The empty value of the field is `Boolean.FALSE`, also matching Checkbox — so `Binder` `asRequired()` and the toggle switch's own required validation agree on which state counts as "empty".
 
 ---
 
@@ -173,14 +174,13 @@ binder.validate();
 Covers requirement(s): 8
 
 ```java
-Switch autosave = new Switch("Auto-save");
+ToggleSwitch autosave = new ToggleSwitch("Auto-save");
 autosave.setHelperText("Save changes automatically every 30 seconds");
 add(autosave);
 
 // HTML helper content (links, formatting)
-Switch beta = new Switch("Beta features");
+ToggleSwitch beta = new ToggleSwitch("Beta features");
 beta.setHelperComponent(new Anchor("/beta", "See what's enabled in the beta program"));
-
 ```
 
 **Why this shape:** `setHelperText(String)` and `setHelperComponent(Component)` come from `HasHelper` (transitive via `InputField`) — same surface every Vaadin field already exposes.
@@ -192,7 +192,7 @@ beta.setHelperComponent(new Anchor("/beta", "See what's enabled in the beta prog
 Covers requirement(s): 10
 
 ```java
-Switch active = new Switch("Active");
+ToggleSwitch active = new ToggleSwitch("Active");
 active.setTooltipText("Last delivery: 2 minutes ago");
 
 // Markdown-formatted tooltip
@@ -212,7 +212,7 @@ Covers requirement(s): 11
 
 ```java
 public class TwoFactorForm extends FormLayout {
-    private final Switch twoFactor = new Switch("Two-factor authentication required");
+    private final ToggleSwitch twoFactor = new ToggleSwitch("Two-factor authentication required");
     private final TextField name = new TextField("Name");
     private final Binder<User> binder = new Binder<>(User.class);
 
@@ -241,7 +241,7 @@ public class TwoFactorForm extends FormLayout {
 }
 ```
 
-**Why this shape:** Flow does not use native HTML form submission; the Vaadin equivalent of "name + value submitted on `<form>` submit" is `Binder.bind` for hydration and `writeBean` / `writeBeanIfValid` for save. The cancel/revert path described in Req 11 maps to `Binder.readBean(original)`, which restores values without the `isFromClient` flag set (so the application's user-change handlers don't ricochet, matching Req 2). The field's empty value of `Boolean.FALSE` (see §6) keeps the Switch's required-validation aligned with `asRequired()` if the application uses it.
+**Why this shape:** Flow does not use native HTML form submission; the Vaadin equivalent of "name + value submitted on `<form>` submit" is `Binder.bind` for hydration and `writeBean` / `writeBeanIfValid` for save. The cancel/revert path described in Req 11 maps to `Binder.readBean(original)`, which restores values without the `isFromClient` flag set (so the application's user-change handlers don't ricochet, matching Req 2). The field's empty value of `Boolean.FALSE` (see §6) keeps the toggle switch's required-validation aligned with `asRequired()` if the application uses it.
 
 ---
 
@@ -250,17 +250,17 @@ public class TwoFactorForm extends FormLayout {
 Covers requirement(s): — (reachability mapping for click events and programmatic focus exposed by the web component)
 
 ```java
-Switch s = new Switch("Notifications");
+ToggleSwitch s = new ToggleSwitch("Notifications");
 
 // ClickNotifier — for the rare case the app wants to react to a click regardless
 // of whether the value actually flipped (e.g. analytics)
-s.addClickListener(event -> analytics.event("switch.clicked"));
+s.addClickListener(event -> analytics.event("toggleSwitch.clicked"));
 
 // Focusable — programmatic focus, e.g. when opening a settings dialog
 s.focus();
 ```
 
-**Why this shape:** `ClickNotifier<Switch>` and `Focusable<Switch>` are implemented for parity with Checkbox; experienced Flow developers expect both on every field. They are reachability mappings, not direct requirement coverage — DOM clicks and programmatic focus are real surface the developer might need.
+**Why this shape:** `ClickNotifier<ToggleSwitch>` and `Focusable<ToggleSwitch>` are implemented for parity with Checkbox; experienced Flow developers expect both on every field. They are reachability mappings, not direct requirement coverage — DOM clicks and programmatic focus are real surface the developer might need.
 
 ---
 
@@ -269,15 +269,15 @@ s.focus();
 Covers requirement(s): — (reachability mapping for CSS custom properties / theme variants exposed by the web component)
 
 ```java
-Switch s = new Switch("Compact");
-s.addThemeVariants(SwitchVariant.HELPER_ABOVE);
+ToggleSwitch s = new ToggleSwitch("Compact");
+s.addThemeVariants(ToggleSwitchVariant.HELPER_ABOVE);
 
 // CSS custom properties go through the standard HasStyle surface (transitive via InputField)
-s.getStyle().set("--vaadin-switch-track-width", "32px");
-s.getStyle().set("--vaadin-switch-thumb-color", "var(--lumo-base-color)");
+s.getStyle().set("--vaadin-toggle-switch-track-width", "32px");
+s.getStyle().set("--vaadin-toggle-switch-thumb-color", "var(--lumo-base-color)");
 ```
 
-**Why this shape:** `HasThemeVariant<SwitchVariant>` provides the typed `addThemeVariants(SwitchVariant...)` and `removeThemeVariants(SwitchVariant...)` methods — same shape as `Button.addThemeVariants(ButtonVariant...)`. The `SwitchVariant` enum currently contains only `HELPER_ABOVE` (and the legacy `LUMO_HELPER_ABOVE_FIELD` / `AURA_HELPER_ABOVE_FIELD` deprecation aliases following the `CheckboxVariant` precedent). CSS custom properties are not surfaced as typed Java setters; `getStyle()` from `HasStyle` is the canonical Flow path.
+**Why this shape:** `HasThemeVariant<ToggleSwitchVariant>` provides the typed `addThemeVariants(ToggleSwitchVariant...)` and `removeThemeVariants(ToggleSwitchVariant...)` methods — same shape as `Button.addThemeVariants(ButtonVariant...)`. The `ToggleSwitchVariant` enum currently contains only `HELPER_ABOVE` (and the legacy `LUMO_HELPER_ABOVE_FIELD` / `AURA_HELPER_ABOVE_FIELD` deprecation aliases following the `CheckboxVariant` precedent). CSS custom properties are not surfaced as typed Java setters; `getStyle()` from `HasStyle` is the canonical Flow path.
 
 ---
 
@@ -285,7 +285,7 @@ s.getStyle().set("--vaadin-switch-thumb-color", "var(--lumo-base-color)");
 
 | Web API surface (from `web-component-api.md`) | Flow API | Notes |
 |---|---|---|
-| `<vaadin-switch>` element | `new Switch()` (+ convenience overloads) | constructor |
+| `<vaadin-toggle-switch>` element | `new ToggleSwitch()` (+ convenience overloads) | constructor |
 | `checked` boolean attr/prop | `setValue(Boolean)` / `getValue()` via `HasValue<Boolean>` | maps to the field's value, like `Checkbox` |
 | `change` event | `addValueChangeListener` with `event.isFromClient() == true` | standard Flow mapping; matches Checkbox |
 | `checked-changed` event | covered transparently by Flow's two-way value binding | no public Flow API; framework wiring |
@@ -304,11 +304,11 @@ s.getStyle().set("--vaadin-switch-thumb-color", "var(--lumo-base-color)");
 | `helper-text` attr | `setHelperText(String)` via `HasHelper` (transitive via `InputField`) | — |
 | `slot="helper"` | `setHelperComponent(Component)` via `HasHelper` | — |
 | `slot="tooltip"` | `setTooltipText` / `setTooltipMarkdown` / `getTooltip` via `HasTooltip` | transitive via `InputField` |
-| `name` attribute | superseded by `Binder.forField(switch).bind(...)` (§9) | Flow uses `Binder` + `HasValue`, not native HTML form submission; matches Checkbox (no `setName`) |
+| `name` attribute | superseded by `Binder.forField(toggleSwitch).bind(...)` (§9) | Flow uses `Binder` + `HasValue`, not native HTML form submission; matches Checkbox (no `setName`) |
 | `value` attribute (form-submission default `"on"`) | superseded by the Boolean field value (§1) and Binder (§9) | the field's typed value is the `Boolean` value, not a string submission token |
 | `<form>.reset()` interaction | superseded by `Binder.readBean(original)` (§9) | native-form lifecycle is irrelevant to Flow; Binder handles cancel/revert via its own pristine state |
-| Theme variant `helper-above-field` | `SwitchVariant.HELPER_ABOVE` (+ legacy aliases) via `HasThemeVariant<SwitchVariant>` | matches `CheckboxVariant` |
-| CSS custom properties (`--vaadin-switch-*`) | `getStyle().set(...)` via `HasStyle` | no typed setters; standard Vaadin convention |
+| Theme variant `helper-above-field` | `ToggleSwitchVariant.HELPER_ABOVE` (+ legacy aliases) via `HasThemeVariant<ToggleSwitchVariant>` | matches `CheckboxVariant` |
+| CSS custom properties (`--vaadin-toggle-switch-*`) | `getStyle().set(...)` via `HasStyle` | no typed setters; standard Vaadin convention |
 
 Every web-component API surface is reachable from Flow except the four marked "not exposed in Flow", each of which is intentionally elided and rationale-tagged: native HTML form attributes (`name`, `value`, `<form>.reset()`) are superseded by Vaadin's `Binder` data-binding model, and the `validated` event has no widely used Flow analog (Checkbox has no `addValidatedListener` either).
 
@@ -316,8 +316,7 @@ Every web-component API surface is reachable from Flow except the four marked "n
 
 No questions were posed to the user during the production of this document. Every API choice tracks the existing `Checkbox` Flow class:
 
-- **Class hierarchy** — `extends AbstractSinglePropertyField<Switch, Boolean>` plus the same `implements` list as `Checkbox` (minus indeterminate-related concerns).
+- **Class hierarchy** — `extends AbstractSinglePropertyField<ToggleSwitch, Boolean>` plus the same `implements` list as `Checkbox` (minus indeterminate-related concerns).
 - **Constructors** — same set as `Checkbox`: no-arg, `(String label)`, `(boolean initialValue)`, `(String, boolean)`, `(String, ValueChangeListener)`, `(boolean, ValueChangeListener)`, `(String, boolean, ValueChangeListener)`.
-- **Validation** — same `HasValidationProperties` / `HasValidator<Boolean>` / `setManualValidation` / `validate()` / `SwitchI18n.setRequiredErrorMessage` machinery.
-- **Theming** — `SwitchVariant` enum modeled on `CheckboxVariant`; only `HELPER_ABOVE` for now.
-- **Package name** — `com.vaadin.flow.component.switch_` (trailing underscore) because `switch` is a reserved Java keyword; the class itself is `Switch`. This is the minimum-pain way to keep the externally-typed name "Switch" while staying compilable.
+- **Validation** — same `HasValidationProperties` / `HasValidator<Boolean>` / `setManualValidation` / `validate()` / `ToggleSwitchI18n.setRequiredErrorMessage` machinery.
+- **Theming** — `ToggleSwitchVariant` enum modeled on `CheckboxVariant`; only `HELPER_ABOVE` for now.

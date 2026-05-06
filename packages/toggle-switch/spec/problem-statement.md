@@ -1,16 +1,16 @@
-# Switch Problem Statement
+# Toggle Switch Problem Statement
 
 ## Problem
 
 Business web apps need a binary on/off control whose visual metaphor — a sliding track with a thumb — communicates that it represents the **current state** of a setting, mode, or feature, not a selection to be reviewed and saved. The control should read at a glance as "is this on?" so that users instantly recognize whether a feature is active.
 
-The most common usage is **immediate-effect**: the moment the user flips the switch, the change is persisted or applied to the screen. The component must also slot cleanly into Vaadin's standard field apparatus (label, helper text, error message, required/invalid, disabled/read-only, tooltip) so that the second, less common usage — sitting in a save-on-submit form alongside text fields and other inputs — works without a different control or a different mental model. A single Switch must cover both modes; the application decides which mode applies in a given context.
+The most common usage is **immediate-effect**: the moment the user flips the switch, the change is persisted or applied to the screen. The component must also slot cleanly into Vaadin's standard field apparatus (label, helper text, error message, required/invalid, disabled/read-only, tooltip) so that the second, less common usage — sitting in a save-on-submit form alongside text fields and other inputs — works without a different control or a different mental model. A single Toggle Switch must cover both modes; the application decides which mode applies in a given context.
 
-A separate Switch component is needed (alongside Checkbox) because Vaadin business apps regularly expose settings panels, feature flags, mode toggles, and per-row enable/disable controls where the on/off-state semantics fit poorly with checkbox's "select this option" reading.
+A separate Toggle Switch component is needed (alongside Checkbox) because Vaadin business apps regularly expose settings panels, feature flags, mode toggles, and per-row enable/disable controls where the on/off-state semantics fit poorly with checkbox's "select this option" reading.
 
 ## Target Users
 
-End users of business web applications who interact with the Switch in:
+End users of business web applications who interact with the Toggle Switch in:
 
 - **Personal preference panels** (notification preferences, theme, autosave, accessibility options).
 - **Account, workspace, and tenant settings** (default language, security policies, integrations).
@@ -22,17 +22,17 @@ Developers building these applications need a switch that supports both immediat
 
 ## Differentiation
 
-- **Checkbox.** Checkbox marks a selection — "I want this option", "I agree to these terms", "include this row". It is the right control for picking items in a list, multi-selection in forms, and consent-style binary inputs. Switch represents the **on/off state of a setting** and is the right control for settings that are most naturally read as "is this on?". Both can technically appear in forms; the choice between them is semantic, not structural. Out-of-scope here: indeterminate state — switches do not have one; if a setting has a third "mixed" state (e.g., across multiple selected rows), use a Checkbox.
+- **Checkbox.** Checkbox marks a selection — "I want this option", "I agree to these terms", "include this row". It is the right control for picking items in a list, multi-selection in forms, and consent-style binary inputs. Toggle Switch represents the **on/off state of a setting** and is the right control for settings that are most naturally read as "is this on?". Both can technically appear in forms; the choice between them is semantic, not structural. Out-of-scope here: indeterminate state — switches do not have one; if a setting has a third "mixed" state (e.g., across multiple selected rows), use a Checkbox.
 
-- **Radio Button Group.** Radio buttons select one option from two or more mutually exclusive choices, and the choices are typically peer values with no implicit default off-state (e.g., "Small / Medium / Large"). Switch handles the special two-value case where one value is meaningfully the "off" / disabled / absent state of a feature. If a designer is choosing between a Switch and a 2-option radio group, prefer the Switch when one of the values is "off" and prefer the radio group when both values are equally meaningful labels (e.g., "Imperial / Metric").
+- **Radio Button Group.** Radio buttons select one option from two or more mutually exclusive choices, and the choices are typically peer values with no implicit default off-state (e.g., "Small / Medium / Large"). Toggle Switch handles the special two-value case where one value is meaningfully the "off" / disabled / absent state of a feature. If a designer is choosing between a Toggle Switch and a 2-option radio group, prefer the Toggle Switch when one of the values is "off" and prefer the radio group when both values are equally meaningful labels (e.g., "Imperial / Metric").
 
-- **Button (and Toggle Button).** A button triggers an action whose effect happens once when invoked (Send, Delete, Refresh). A toggle button — sometimes seen in toolbars (Bold, Italic, grid/list view) — reflects a binary mode of an editor or tool palette and lives next to other tool buttons. Switch is for **persistent settings and feature state** rather than tool modes; if the control belongs in a toolbar next to other action icons, it is a toggle button, not a switch.
+- **Button (and Toggle Button).** A button triggers an action whose effect happens once when invoked (Send, Delete, Refresh). A toggle button — sometimes seen in toolbars (Bold, Italic, grid/list view) — reflects a binary mode of an editor or tool palette and lives next to other tool buttons. Toggle Switch is for **persistent settings and feature state** rather than tool modes; if the control belongs in a toolbar next to other action icons, it is a toggle button, not a switch.
 
-- **Select / Combo Box with two options.** A two-option dropdown adds an interaction step (open menu, then choose) and hides the off state until opened. Switch shows both states at a glance and changes state in a single tap or click; prefer Switch for binary settings unless the two values need long, descriptive labels that don't fit a switch.
+- **Select / Combo Box with two options.** A two-option dropdown adds an interaction step (open menu, then choose) and hides the off state until opened. Toggle Switch shows both states at a glance and changes state in a single tap or click; prefer Toggle Switch for binary settings unless the two values need long, descriptive labels that don't fit a switch.
 
-- **Confirmation flows for destructive or expensive toggles.** Out of scope. When flipping the setting is destructive ("Disable two-factor authentication") or expensive ("Pause billing"), the application combines a Switch with a Confirm Dialog or undo affordance at the application level. The Switch component itself does not own destructive-action confirmation.
+- **Confirmation flows for destructive or expensive toggles.** Out of scope. When flipping the setting is destructive ("Disable two-factor authentication") or expensive ("Pause billing"), the application combines a Toggle Switch with a Confirm Dialog or undo affordance at the application level. The Toggle Switch component itself does not own destructive-action confirmation.
 
-- **Sliders, multi-step toggles, segmented controls.** Out of scope. Switch is strictly two-state; ranges and three-or-more discrete options are handled by Slider, Radio Button Group, or Select.
+- **Sliders, multi-step toggles, segmented controls.** Out of scope. Toggle Switch is strictly two-state; ranges and three-or-more discrete options are handled by Slider, Radio Button Group, or Select.
 
 ## Use Cases
 
@@ -60,9 +60,9 @@ _In a SaaS app, the workspace owner is on the Free plan and opens **Compliance s
 
 ## Discussion
 
-**Q: Should the Switch's scope include being used inside a form that requires a Save/Submit button (alongside other fields), or be limited to instant-effect settings only?**
+**Q: Should the Toggle Switch's scope include being used inside a form that requires a Save/Submit button (alongside other fields), or be limited to instant-effect settings only?**
 
-Both. The Switch must work as an immediate-apply settings control AND as a form field that participates in deferred submit, validation, helper/error text, and cancel/revert. Vaadin's prototype already exposes the field-mixin apparatus for this; the problem statement reflects that broader scope. (Classical UX guidance recommending switches always apply immediately is still acknowledged in Differentiation, but is not used to exclude the form-field scenario.)
+Both. The Toggle Switch must work as an immediate-apply settings control AND as a form field that participates in deferred submit, validation, helper/error text, and cancel/revert. Vaadin's prototype already exposes the field-mixin apparatus for this; the problem statement reflects that broader scope. (Classical UX guidance recommending switches always apply immediately is still acknowledged in Differentiation, but is not used to exclude the form-field scenario.)
 
 **Q: Is per-row switching inside data tables / grids (each row has its own switch) a primary use case worth calling out, or should it be treated as just an instance of the core toggle scenario?**
 

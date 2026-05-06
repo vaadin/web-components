@@ -1,6 +1,6 @@
-# Switch Developer API
+# Toggle Switch Developer API
 
-The component is exposed as `<vaadin-switch>`, following the Vaadin convention where the kebab-cased ComponentName becomes the tag (`Switch` → `vaadin-switch`). All examples below are minimal — no extra wiring needed beyond what the snippet shows.
+The component is exposed as `<vaadin-toggle-switch>`, following the Vaadin convention where the kebab-cased ComponentName becomes the tag (`ToggleSwitch` → `vaadin-toggle-switch`). All examples below are minimal — no extra wiring needed beyond what the snippet shows.
 
 ---
 
@@ -10,14 +10,14 @@ Covers requirement(s): 1, 4
 
 ```html
 <!-- Default: starts off, exposes the WAI-ARIA switch role automatically -->
-<vaadin-switch label="Notifications"></vaadin-switch>
+<vaadin-toggle-switch label="Notifications"></vaadin-toggle-switch>
 
 <!-- Initial state: on -->
-<vaadin-switch label="Dark mode" checked></vaadin-switch>
+<vaadin-toggle-switch label="Dark mode" checked></vaadin-toggle-switch>
 
 <!-- Read the current state programmatically -->
 <script>
-  const sw = document.querySelector('vaadin-switch');
+  const sw = document.querySelector('vaadin-toggle-switch');
   console.log(sw.checked); // false
   sw.checked = true;       // turn it on programmatically
 </script>
@@ -32,9 +32,9 @@ Covers requirement(s): 1, 4
 Covers requirement(s): 2
 
 ```html
-<vaadin-switch label="Compare with previous period"></vaadin-switch>
+<vaadin-toggle-switch label="Compare with previous period"></vaadin-toggle-switch>
 <script>
-  const sw = document.querySelector('vaadin-switch');
+  const sw = document.querySelector('vaadin-toggle-switch');
 
   // User-initiated: fires only when the user flips the switch
   sw.addEventListener('change', (e) => {
@@ -62,21 +62,21 @@ Covers requirement(s): 3
 
 ```html
 <!-- Plain-text label (most common) -->
-<vaadin-switch label="Email me when I'm @mentioned"></vaadin-switch>
+<vaadin-toggle-switch label="Email me when I'm @mentioned"></vaadin-toggle-switch>
 
 <!-- HTML content in the label, including inline links -->
-<vaadin-switch>
+<vaadin-toggle-switch>
   <span slot="label">
     Send anonymous usage data — <a href="/privacy">read our privacy policy</a>
   </span>
-</vaadin-switch>
+</vaadin-toggle-switch>
 
 <!-- Label-less switch (e.g. inside a data grid where the column header is the name) -->
-<vaadin-switch accessible-name="Active"></vaadin-switch>
+<vaadin-toggle-switch accessible-name="Active"></vaadin-toggle-switch>
 
 <!-- Or referencing an external label by id -->
 <span id="row-3-active-label" hidden>Webhook 'shipments-prod' active</span>
-<vaadin-switch accessible-name-ref="row-3-active-label"></vaadin-switch>
+<vaadin-toggle-switch accessible-name-ref="row-3-active-label"></vaadin-toggle-switch>
 ```
 
 **Why this shape:** Three label paths cover the three real-world scenarios. The `label` attribute is the lightest option for plain text. `slot="label"` matches Vaadin Checkbox / Radio Button when the application needs HTML inside the label (links, formatting). For the label-less case (per-row tables, toolbars), `accessibleName` and `accessibleNameRef` are the standard Vaadin field-mixin pair, so the switch always has an accessible name even when nothing is visible. Clicking interactive children inside the label (the `<a>`) does not toggle — Req 3 mandates that, no API surface needed.
@@ -90,7 +90,7 @@ Covers requirement(s): 5
 ```html
 <!-- Disabled: not focusable, ignored by Tab, no interaction, omitted from form submission -->
 <form>
-  <vaadin-switch name="dailyDigest" label="Daily digest" disabled></vaadin-switch>
+  <vaadin-toggle-switch name="dailyDigest" label="Daily digest" disabled></vaadin-toggle-switch>
 </form>
 
 <!-- Programmatic toggle of the disabled state in response to a parent setting -->
@@ -116,22 +116,22 @@ Covers requirement(s): 6
 
 ```html
 <!-- Read-only switch reflecting a plan-locked setting -->
-<vaadin-switch
+<vaadin-toggle-switch
   label="Audit log retention (90 days)"
   helper-text="Included on the Business plan."
   checked
   readonly
-></vaadin-switch>
+></vaadin-toggle-switch>
 
 <!-- Read-only + required: validation rule "valid if on, invalid if off" still applies.
      The application is responsible for not pairing read-only-off with required when
      it would block the form. No new API; just the combination of two attributes. -->
-<vaadin-switch
+<vaadin-toggle-switch
   label="Account verified"
   checked
   readonly
   required
-></vaadin-switch>
+></vaadin-toggle-switch>
 ```
 
 **Why this shape:** A boolean `readonly` attribute mirrors Vaadin's other field-mixin components (text-field, checkbox, radio-button). The distinction from `disabled` is intentional and matches the Vaadin convention: read-only stays focusable and Tab-reachable, disabled does not. Unlike a disabled switch, a read-only switch still contributes its current value to form submission — that distinction is implicit in the Vaadin convention and does not require a separate property.
@@ -145,15 +145,15 @@ Covers requirement(s): 7, 9
 ```html
 <!-- Required: built-in indicator and built-in invalid behavior. After a failed
      submit, the switch shows `invalid`; flipping it on clears `invalid` automatically. -->
-<vaadin-switch
+<vaadin-toggle-switch
   label="I confirm the trip details are correct"
   required
   error-message="You must accept the trip details to continue"
-></vaadin-switch>
+></vaadin-toggle-switch>
 
 <!-- Application-driven invalid state (e.g. server-side rejection) -->
 <script>
-  const sw = document.querySelector('vaadin-switch');
+  const sw = document.querySelector('vaadin-toggle-switch');
 
   // Switch off auto-validation; the app is in charge of `invalid` and `errorMessage`.
   sw.manualValidation = true;
@@ -174,7 +174,7 @@ Covers requirement(s): 7, 9
 </script>
 ```
 
-**Why this shape:** `required`, `invalid`, `errorMessage`, `manualValidation`, `validate()`, and the `validated` event are the Vaadin field convention shared by every form field — using the same names here keeps Switch interchangeable with TextField, ComboBox, Checkbox, etc. in form layouts and data-binding code. The required→on-is-valid rule is component-internal and does not surface as separate API; setting `required` is enough. The `manualValidation` flag is what unlocks Req 9's "application-supplied custom error message" use case (server-side validation flows) without fighting the component's own validation pass.
+**Why this shape:** `required`, `invalid`, `errorMessage`, `manualValidation`, `validate()`, and the `validated` event are the Vaadin field convention shared by every form field — using the same names here keeps Toggle Switch interchangeable with TextField, ComboBox, Checkbox, etc. in form layouts and data-binding code. The required→on-is-valid rule is component-internal and does not surface as separate API; setting `required` is enough. The `manualValidation` flag is what unlocks Req 9's "application-supplied custom error message" use case (server-side validation flows) without fighting the component's own validation pass.
 
 ---
 
@@ -183,17 +183,17 @@ Covers requirement(s): 7, 9
 Covers requirement(s): 8
 
 ```html
-<vaadin-switch
+<vaadin-toggle-switch
   label="Auto-save"
   helper-text="Save changes automatically every 30 seconds"
-></vaadin-switch>
+></vaadin-toggle-switch>
 
 <!-- HTML content in helper text -->
-<vaadin-switch label="Beta features">
+<vaadin-toggle-switch label="Beta features">
   <span slot="helper">
     See the <a href="/beta">beta program page</a> for what's enabled.
   </span>
-</vaadin-switch>
+</vaadin-toggle-switch>
 ```
 
 **Why this shape:** The `helper-text` attribute / `slot="helper"` pair is the Vaadin field-mixin convention. Same shape as TextField, Checkbox, and Radio Group — an application that wraps a switch in the same form layout as other fields gets consistent helper-text rendering and ARIA wiring for free.
@@ -206,12 +206,12 @@ Covers requirement(s): 10
 
 ```html
 <!-- Tooltip via slotted vaadin-tooltip — opens on hover and on keyboard focus -->
-<vaadin-switch label="Active">
+<vaadin-toggle-switch label="Active">
   <vaadin-tooltip slot="tooltip" text="Last delivery: 2 minutes ago"></vaadin-tooltip>
-</vaadin-switch>
+</vaadin-toggle-switch>
 ```
 
-**Why this shape:** The `slot="tooltip"` pattern with a child `<vaadin-tooltip>` is the established Vaadin tooltip integration — applies uniformly to all field components. No new API needed on the Switch itself.
+**Why this shape:** The `slot="tooltip"` pattern with a child `<vaadin-tooltip>` is the established Vaadin tooltip integration — applies uniformly to all field components. No new API needed on the Toggle Switch itself.
 
 ---
 
@@ -224,14 +224,14 @@ Covers requirement(s): 11
   <vaadin-text-field name="name" label="Name"></vaadin-text-field>
 
   <!-- Only `name` set: submitted as `subscribe=on` (the WHATWG default) when on -->
-  <vaadin-switch name="subscribe" label="Subscribe to newsletter"></vaadin-switch>
+  <vaadin-toggle-switch name="subscribe" label="Subscribe to newsletter"></vaadin-toggle-switch>
 
   <!-- `name` + custom `value`: submitted as `twoFactor=required` only when on -->
-  <vaadin-switch
+  <vaadin-toggle-switch
     name="twoFactor"
     value="required"
     label="Two-factor authentication required"
-  ></vaadin-switch>
+  ></vaadin-toggle-switch>
 
   <button type="submit">Save</button>
 </form>
@@ -245,7 +245,7 @@ Covers requirement(s): 11
 </script>
 ```
 
-**Why this shape:** Native form participation through `name` and `value` keeps the Switch a drop-in replacement anywhere a `<input type="checkbox">` was used (search params, server-side handlers, Vaadin Flow Binder). `value` defaults to `"on"` per the WHATWG checkbox convention — the first `<vaadin-switch>` example above shows that case explicitly — so a developer who only sets `name` still gets a sensible submission. The form-reset behavior is automatic; the developer does not opt in. A disabled switch is excluded from submission per native HTML behavior; no extra API to express that.
+**Why this shape:** Native form participation through `name` and `value` keeps the Toggle Switch a drop-in replacement anywhere a `<input type="checkbox">` was used (search params, server-side handlers, Vaadin Flow Binder). `value` defaults to `"on"` per the WHATWG checkbox convention — the first `<vaadin-toggle-switch>` example above shows that case explicitly — so a developer who only sets `name` still gets a sensible submission. The form-reset behavior is automatic; the developer does not opt in. A disabled switch is excluded from submission per native HTML behavior; no extra API to express that.
 
 ---
 
@@ -253,7 +253,7 @@ Covers requirement(s): 11
 
 No questions were posed to the user during the production of this document. All API choices follow established Vaadin field-mixin conventions (Checkbox, Radio Button, Text Field) and are fully determined by the requirements:
 
-- **Tag name `<vaadin-switch>`** — derived directly from the ComponentName "Switch" via the standard kebab-name rule, consistent with the user's earlier choice between "Switch" and "ToggleSwitch" (recorded in `problem-statement.md`).
+- **Tag name `<vaadin-toggle-switch>`** — derived from the ComponentName "ToggleSwitch" via the standard kebab-name rule.
 - **`checked` boolean for state** — matches Vaadin Checkbox and native `<input type="checkbox">`.
 - **`change` (user) vs. `checked-changed` (property)** — standard Vaadin two-event split, required by Req 2's user-vs-programmatic distinction.
 - **`label` attribute / `slot="label"` / `accessibleName(Ref)` for the three label paths** — standard Vaadin field-mixin trio.
