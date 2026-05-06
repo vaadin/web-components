@@ -8,4 +8,6 @@ import { SlotChildObserveController } from '@vaadin/component-base/src/slot-chil
 /**
  * A controller to manage the default content slot.
  */
-export class ContentController extends SlotChildObserveController {}
+export class ContentController extends SlotChildObserveController {
+  constructor(host: HTMLElement);
+}

@@ -9,6 +9,8 @@ import { SlotChildObserveController } from '@vaadin/component-base/src/slot-chil
  * A controller that manages the error message node content.
  */
 export class ErrorController extends SlotChildObserveController {
+  constructor(host: HTMLElement);
+
   /**
    * String used for the error message text content.
    */

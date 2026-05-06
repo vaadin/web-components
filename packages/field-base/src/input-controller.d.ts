@@ -8,4 +8,6 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 /**
  * A controller to create and initialize slotted `<input>` element.
  */
-export class InputController extends SlotController {}
+export class InputController extends SlotController {
+  constructor(host: HTMLElement, callback?: (node: HTMLInputElement) => void, options?: { uniqueIdPrefix?: string });
+}
