@@ -161,6 +161,7 @@ export const TextAreaMixin = (superClass) =>
       const scrollTop = inputField.scrollTop;
 
       const valueLength = this.value ? this.value.length : 0;
+      const inputFieldHeight = getComputedStyle(inputField).height;
       const inputWidth = getComputedStyle(input).width;
 
       // Pin the input-field height + collapse input so we can measure
@@ -171,8 +172,12 @@ export const TextAreaMixin = (superClass) =>
       const valueShrunk = this._oldValueLength > valueLength;
       const widthChanged = this._lastInputWidth !== undefined && this._lastInputWidth !== inputWidth;
       if (valueShrunk || widthChanged) {
-        inputField.style.height = getComputedStyle(inputField).height;
+        inputField.style.height = inputFieldHeight;
+
+        // Fix the input element width so its scroll height isn't affected by host's disappearing scrollbars
         input.style.maxWidth = inputWidth;
+
+        // Clear the height of the textarea to allow measuring a reduced scroll height
         input.style.alignSelf = 'flex-start';
         input.style.height = 'auto';
       }
