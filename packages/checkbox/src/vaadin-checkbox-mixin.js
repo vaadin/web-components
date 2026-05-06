@@ -21,20 +21,6 @@ export const CheckboxMixin = (superclass) =>
     static get properties() {
       return {
         /**
-         * True if the checkbox is in the indeterminate state which means
-         * it is not possible to say whether it is checked or unchecked.
-         * The state is reset once the user switches the checkbox by hand.
-         *
-         * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
-         */
-        indeterminate: {
-          type: Boolean,
-          notify: true,
-          value: false,
-          reflectToAttribute: true,
-        },
-
-        /**
          * The name of the checkbox.
          */
         name: {
@@ -58,11 +44,6 @@ export const CheckboxMixin = (superclass) =>
 
     static get observers() {
       return ['__readonlyChanged(readonly, inputElement)'];
-    }
-
-    /** @override */
-    static get delegateProps() {
-      return [...super.delegateProps, 'indeterminate'];
     }
 
     /** @override */
@@ -185,22 +166,6 @@ export const CheckboxMixin = (superclass) =>
       } else {
         inputElement.removeAttribute('aria-readonly');
       }
-    }
-
-    /**
-     * Override method inherited from `CheckedMixin` to reset
-     * `indeterminate` state checkbox is toggled by the user.
-     *
-     * @param {boolean} checked
-     * @protected
-     * @override
-     */
-    _toggleChecked(checked) {
-      if (this.indeterminate) {
-        this.indeterminate = false;
-      }
-
-      super._toggleChecked(checked);
     }
 
     /**

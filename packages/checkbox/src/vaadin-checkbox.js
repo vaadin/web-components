@@ -96,6 +96,30 @@ export class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolylitMi
     return checkboxStyles;
   }
 
+  static get properties() {
+    return {
+      /**
+       * True if the checkbox is in the indeterminate state which means
+       * it is not possible to say whether it is checked or unchecked.
+       * The state is reset once the user switches the checkbox by hand.
+       *
+       * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
+       *
+       */
+      indeterminate: {
+        type: Boolean,
+        notify: true,
+        value: false,
+        reflectToAttribute: true,
+      },
+    };
+  }
+
+  /** @override */
+  static get delegateProps() {
+    return [...super.delegateProps, 'indeterminate'];
+  }
+
   /** @protected */
   render() {
     return html`
@@ -124,6 +148,22 @@ export class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolylitMi
     this._tooltipController = new TooltipController(this);
     this._tooltipController.setAriaTarget(this.inputElement);
     this.addController(this._tooltipController);
+  }
+
+  /**
+   * Override method inherited from `CheckedMixin` to reset
+   * `indeterminate` when the checkbox is toggled by the user.
+   *
+   * @param {boolean} checked
+   * @protected
+   * @override
+   */
+  _toggleChecked(checked) {
+    if (this.indeterminate) {
+      this.indeterminate = false;
+    }
+
+    super._toggleChecked(checked);
   }
 }
 

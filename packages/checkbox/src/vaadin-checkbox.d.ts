@@ -120,6 +120,15 @@ export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEve
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(HTMLElement))) {
+  /**
+   * True if the checkbox is in the indeterminate state which means
+   * it is not possible to say whether it is checked or unchecked.
+   * The state is reset once the user switches the checkbox by hand.
+   *
+   * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
+   */
+  indeterminate: boolean;
+
   addEventListener<K extends keyof CheckboxEventMap>(
     type: K,
     listener: (this: Checkbox, ev: CheckboxEventMap[K]) => void,
