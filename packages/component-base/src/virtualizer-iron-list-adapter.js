@@ -516,25 +516,18 @@ export class IronListAdapter {
   /** @private */
   __getFocusedElement(visibleElements = this.__getVisibleElements()) {
     // `document.activeElement` retargets to the outermost shadow host when
-    // focus lives in a nested shadow tree. Walk down through any nested
-    // shadow roots' `activeElement` to reach the actual focused node.
+    // focus lives in a nested shadow tree. Descend through nested shadow
+    // roots' `activeElement`s to reach the real focused node, then walk up
+    // the flattened tree (via `assignedSlot`/`parentNode`/`host`) until a
+    // visible row is reached.
     let node = document.activeElement;
     while (node?.shadowRoot?.activeElement) {
       node = node.shadowRoot.activeElement;
     }
-    // Walk up the flattened tree via `assignedSlot`/`parentNode`/`host`
-    // until a visible row is reached. This handles both focus inside the
-    // row's tree and focus on light-DOM content slotted across a shadow
-    // boundary into a row (e.g. an `<input>` inside a
-    // `vaadin-grid-cell-content`).
-    const visible = new Set(visibleElements);
-    while (node) {
-      if (visible.has(node)) {
-        return node;
-      }
+    while (node && !visibleElements.includes(node)) {
       node = node.assignedSlot || node.parentNode || node.host;
     }
-    return undefined;
+    return node;
   }
 
   /** @private */
