@@ -9,6 +9,8 @@ import { SlotChildObserveController } from '@vaadin/component-base/src/slot-chil
  * A controller to manage the label element.
  */
 export class LabelController extends SlotChildObserveController {
+  constructor(host: HTMLElement);
+
   /**
    * String used for the label.
    */

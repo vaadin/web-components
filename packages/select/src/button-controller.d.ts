@@ -8,4 +8,6 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 /**
  * A controller to manage the value button element.
  */
-export class ButtonController extends SlotController {}
+export class ButtonController extends SlotController {
+  constructor(host: HTMLElement);
+}
