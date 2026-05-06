@@ -12,7 +12,8 @@
     "skipLibCheck": false,
     "skipDefaultLibCheck": true,
     "allowImportingTsExtensions": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true
   },
-  "include": ["packages/**/test", "test"]
+  "include": ["packages/**/test", "test", "packages/icon/src"]
 }

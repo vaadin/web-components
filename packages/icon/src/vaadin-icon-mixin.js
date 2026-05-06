@@ -3,17 +3,35 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+// @ts-check -- gradual ts-check pilot, see proto/ts-check
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { IconFontSizeMixin } from './vaadin-icon-font-size-mixin.js';
 import { unsafeSvgLiteral } from './vaadin-icon-svg.js';
 
+/**
+ * @typedef {import('./vaadin-icon-svg.js').IconSvgLiteral} IconSvgLiteral
+ *
+ * @typedef {{
+ *   ready(): void;
+ *   connectedCallback(): void;
+ *   disconnectedCallback(): void;
+ *   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void;
+ *   addController(controller: import('lit').ReactiveController): void;
+ * }} HostInstance
+ *
+ * @typedef {(new (...args: any[]) => HTMLElement & HostInstance) & { readonly observedAttributes: readonly string[] }} HostBaseClass
+ */
+
+/** @type {Map<string, Promise<string>>} */
 const srcCache = new Map();
 
-const Iconset = customElements.get('vaadin-iconset');
+const Iconset = /** @type {typeof import('./vaadin-iconset.js').Iconset} */ (customElements.get('vaadin-iconset'));
 
 /**
  * @polymerMixin
  * @mixes IconFontSizeMixin
+ * @template {HostBaseClass} T
+ * @param {T} superClass
  */
 export const IconMixin = (superClass) =>
   class extends IconFontSizeMixin(superClass) {
@@ -161,6 +179,48 @@ export const IconMixin = (superClass) =>
 
     constructor() {
       super();
+      // Type-only declarations: assign each property its existing default so
+      // the setter call is a no-op and Lit's reactive-property observers do
+      // not fire during construction. `value:` defaults from `static
+      // properties` must be mirrored here.
+      /** @type {string | null | undefined} */
+      this.icon = undefined;
+      /** @type {IconSvgLiteral | null | undefined} */
+      this.svg = undefined;
+      /** @type {string | null | undefined} */
+      this.src = undefined;
+      /** @type {string | null | undefined} */
+      this.symbol = undefined;
+      /** @type {string | null | undefined} */
+      this.iconClass = undefined;
+      /** @type {string | null | undefined} */
+      this.char = undefined;
+      /** @type {string | null | undefined} */
+      this.ligature = undefined;
+      /** @type {string | null | undefined} */
+      this.fontFamily = undefined;
+      /** @type {number} */
+      this.size = 24;
+      /** @type {string | null | undefined} */
+      this.__preserveAspectRatio = undefined;
+      /** @type {string | null | undefined} */
+      this.__useRef = undefined;
+      /** @type {string | null | undefined} */
+      this.__viewBox = undefined;
+      /** @type {string | null | undefined} */
+      this.__fill = undefined;
+      /** @type {string | null | undefined} */
+      this.__stroke = undefined;
+      /** @type {string | null | undefined} */
+      this.__strokeWidth = undefined;
+      /** @type {string | null | undefined} */
+      this.__strokeLinecap = undefined;
+      /** @type {string | null | undefined} */
+      this.__strokeLinejoin = undefined;
+      /** @type {string[] | undefined} */
+      this.__addedIconClasses = undefined;
+      /** @type {TooltipController | undefined} */
+      this._tooltipController = undefined;
       this.__fetch = fetch.bind(window);
     }
 
@@ -169,27 +229,27 @@ export const IconMixin = (superClass) =>
       return this.iconClass ? this.iconClass.split(' ') : [];
     }
 
-    /** @protected */
     ready() {
       super.ready();
       this._tooltipController = new TooltipController(this);
       this.addController(this._tooltipController);
     }
 
-    /** @protected */
     connectedCallback() {
       super.connectedCallback();
-      Iconset.attachedIcons.add(this);
+      Iconset.attachedIcons.add(/** @type {import('./vaadin-icon.js').Icon} */ (/** @type {unknown} */ (this)));
     }
 
-    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      Iconset.attachedIcons.delete(this);
+      Iconset.attachedIcons.delete(/** @type {import('./vaadin-icon.js').Icon} */ (/** @type {unknown} */ (this)));
     }
 
     /** @protected */
     _applyIcon() {
+      if (!this.icon) {
+        return;
+      }
       const { preserveAspectRatio, svg, size, viewBox } = Iconset.getIconSvg(this.icon);
       if (viewBox) {
         this.__viewBox = viewBox;
@@ -203,7 +263,10 @@ export const IconMixin = (superClass) =>
       this.svg = svg;
     }
 
-    /** @private */
+    /**
+     * @private
+     * @param {string | null} icon
+     */
     __iconChanged(icon) {
       if (icon) {
         this._applyIcon();
@@ -212,7 +275,11 @@ export const IconMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /**
+     * @private
+     * @param {string | null} src
+     * @param {string | null} symbol
+     */
     async __srcChanged(src, symbol) {
       if (!src) {
         this.svg = null;
@@ -240,11 +307,12 @@ export const IconMixin = (superClass) =>
               }),
             );
           }
-          const svgData = await srcCache.get(src);
-          if (!superClass.__domParser) {
-            superClass.__domParser = new DOMParser();
+          const svgData = /** @type {string} */ (await srcCache.get(src));
+          const sc = /** @type {{ __domParser?: DOMParser }} */ (/** @type {unknown} */ (superClass));
+          if (!sc.__domParser) {
+            sc.__domParser = new DOMParser();
           }
-          const parsedResponse = superClass.__domParser.parseFromString(svgData, 'text/html');
+          const parsedResponse = sc.__domParser.parseFromString(svgData, 'text/html');
           const svgElement = parsedResponse.querySelector('svg');
           if (!svgElement) {
             throw new Error(`SVG element not found on path: ${src}`);
@@ -266,7 +334,12 @@ export const IconMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /**
+     * @private
+     * @param {string | null} iconClass
+     * @param {string | null} char
+     * @param {string | null} ligature
+     */
     __fontChanged(iconClass, char, ligature) {
       this.classList.remove(...(this.__addedIconClasses || []));
       if (iconClass) {
@@ -287,7 +360,11 @@ export const IconMixin = (superClass) =>
       }
     }
 
-    /** @protected */
+    /**
+     * @param {string} name
+     * @param {string | null} oldValue
+     * @param {string | null} newValue
+     */
     attributeChangedCallback(name, oldValue, newValue) {
       super.attributeChangedCallback(name, oldValue, newValue);
 
@@ -297,7 +374,10 @@ export const IconMixin = (superClass) =>
       }
     }
 
-    /** @private */
+    /**
+     * @private
+     * @param {string | null} fontFamily
+     */
     __fontFamilyChanged(fontFamily) {
       this.style.fontFamily = `'${fontFamily}'`;
     }

@@ -14,7 +14,7 @@ declare class Iconset extends IconsetMixin(HTMLElement) {
   /**
    * Set of the `vaadin-icon` instances in the DOM.
    */
-  static attachedIcons(): Set<Icon>;
+  static readonly attachedIcons: Set<Icon>;
 
   /**
    * Returns an instance of the iconset by its name.
