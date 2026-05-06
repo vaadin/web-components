@@ -18,7 +18,7 @@ _A dashboard hydrates the "Compare with previous period" switch from a saved vie
 
 ## 3. Render a clickable label next to the switch
 
-The Toggle Switch must support an optional label rendered as part of the component (not as an external `<label>` the application has to wire up). Clicking the label region must flip the switch with the same effect as clicking the switch graphic. The label's content may include inline interactive elements such as links or buttons; clicks landing on those interactive elements must not flip the switch — they activate the link or button as usual. Clicks on any non-interactive content within the label, including formatting elements like `<strong>`, `<em>`, or `<span>`, do flip the switch. When no label is provided (e.g. switches that take their accessible name from a surrounding column header in a data grid) the switch graphic still toggles on click and on Space.
+The Toggle Switch must support an optional label rendered as part of the component (not as an external `<label>` the application has to wire up). Clicking the label region must flip the switch with the same effect as clicking the switch graphic. The label's content may include an inline anchor (`<a>`); clicks landing on the anchor must not flip the switch — they activate the link as usual. Clicks on any other content within the label — plain text or formatting elements like `<strong>`, `<em>`, or `<span>` — do flip the switch. When no label is provided (e.g. switches that take their accessible name from a surrounding column header in a data grid) the switch graphic still toggles on click and on Space.
 
 _A switch labeled "Send anonymous usage data — read our privacy policy" places the words "privacy policy" inside an `<a>` element. Clicking the surrounding label text flips the switch; clicking the privacy-policy link opens the policy page without changing the switch state. In a separate webhooks table, each row has a switch with no visible label — clicking the switch graphic in row 3 still flips that row's switch._
 
@@ -105,3 +105,7 @@ Out of scope. Applications that need to show pending feedback on a server-bound 
 **Q: Should drag / swipe gesture interaction be in scope?**
 
 Out of scope. The Toggle Switch toggles via single click, label click, and Space-key press only — no thumb-drag interaction. This matches the team consensus from `vaadin/web-components#893` ("not in v1, see if needed") and keeps the interaction model consistent with Vaadin Checkbox. Adding drag support later is non-breaking if a real need emerges.
+
+**Q: Why was button-in-label support removed from requirement 3?**
+
+Placing a `<button>` inside the label slot is not a supported use case for any Vaadin field. Narrowing the click-pass-through rule to anchors only keeps the toggle switch behavior identical to the inherited `CheckboxMixin` rule (which only checks for `<a>`) and avoids inventing a switch-only divergence to support a pattern no application uses.

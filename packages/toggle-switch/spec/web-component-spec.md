@@ -5,33 +5,23 @@
 
 ## Key Design Decisions
 
-1. **Tag and class.** `<vaadin-toggle-switch>` / `class ToggleSwitch` / `ToggleSwitchMixin` per the standard Vaadin naming rule (kebab-case tag, PascalCase class, mixin file `vaadin-toggle-switch-mixin.js`). Matches `web-component-api.md` §intro.
+1. **Tag and class.** `<vaadin-toggle-switch>` / `class ToggleSwitch` per the standard Vaadin naming rule (kebab-case tag, PascalCase class). Matches `web-component-api.md` §intro.
 
-2. **Reuse the `checkable` shared field layout** (`@vaadin/field-base/src/styles/checkable-base-styles.js`) the same way `vaadin-checkbox` and `vaadin-radio-button` do — `checkable('switch', 'toggle-switch')`. The first argument is the shadow part name; the second is the CSS-custom-property prefix. This buys the field's two-column grid (control + label/helper/error stack), the WCAG hit-target sizing for the slotted `<input>`, and the disabled-cursor wiring. No modification to `checkable()` is needed; the existing `(part, propName)` two-argument shape already separates "what the part is called" from "how the CSS variables are namespaced", which is precisely what this component requires.
+2. **Reuse `CheckboxMixin` from `@vaadin/checkbox` directly on the element class.** A toggle switch is a binary input field with the same plumbing requirements as a checkbox: hidden slotted `<input type="checkbox">` managed by `InputController`, `name` and `readonly` properties, required-validation pipeline, helper / error / label / tooltip slots, `LabelledInputController` for the label-for-input wiring, `ActiveMixin` / `DelegateFocusMixin` / `SlotStylesMixin`, and the Safari-tabindex / Tailwind-opacity workarounds. All of that is delivered by `CheckboxMixin` as-is. The toggle switch ships without a dedicated mixin file; the only toggle-specific behavior — overriding `_inputElementChanged` to add `role="switch"` (Decision 4) — lives directly on the element class. `CheckboxMixin` does not declare `indeterminate`; that is checkbox-specific and lives on the `Checkbox` element class.
 
-3. **Suppress the `[part='switch']::after` checkmark pseudo-element added by `checkable()`.** The shared style draws a checkmark mask intended for a checkbox tick. The toggle switch shows its on-state via thumb position and track color, not a glyph, so the local stylesheet sets `content: none` on `[part='switch']::after` and adds a separate `[part='thumb']` element inside the track. No new variant is added to `checkable()` for this — the override is local.
+3. **Reuse the `checkable` shared field layout** (`@vaadin/field-base/src/styles/checkable-base-styles.js`) the same way `vaadin-checkbox` and `vaadin-radio-button` do — `checkable('switch', 'toggle-switch')`. The first argument is the shadow part name; the second is the CSS-custom-property prefix. This buys the field's two-column grid (control + label/helper/error stack), the WCAG hit-target sizing for the slotted `<input>`, and the disabled-cursor wiring.
 
-4. **Internal control: `<input type="checkbox" role="switch">`** delivered via `InputController` (the same controller `vaadin-checkbox` uses), with `role="switch"` applied to the input element. This keeps the field-mixin / form-submission / focus-delegation machinery identical to Checkbox while making screen readers announce the control as a switch (Open UI explainer; MDN switch role; Adrian Roselli's "Switch role support"). See Discussion for the rationale on choosing `<input>` over a `<button role="switch">` foundation.
+4. **Override `_inputElementChanged` to set `role="switch"` on the inner input.** `InputMixin`'s `_inputElementChanged(input, oldInput)` observer fires whenever the inner input is created or replaced. The element overrides it, calls `super._inputElementChanged(input, oldInput)` to keep the inherited add/remove-listener wiring, then sets `input.setAttribute('role', 'switch')`. This is the established Vaadin convention for adding `role` on inner inputs — `vaadin-combo-box` and `vaadin-date-picker` do the same to set `role="combobox"`. AT then announces the control as a switch (Open UI explainer; MDN switch role). See Discussion for the rationale on choosing `<input>` over a `<button role="switch">` foundation.
 
-5. **No `indeterminate` property and no `indeterminate-changed` event.** Per `problem-statement.md` Differentiation, the toggle switch is strictly two-state. This is the only intentional removal from the Checkbox-style API surface; nothing else is dropped.
+5. **Suppress the `[part='switch']::after` checkmark pseudo-element added by `checkable()`.** The shared style draws a checkmark mask intended for a checkbox tick. The toggle switch shows its on-state via thumb position and track color, not a glyph, so the local stylesheet sets `content: none` on `[part='switch']::after` and adds a separate `[part='thumb']` element inside the track.
 
-6. **`readonly` is a component-managed attribute, not a delegated input attribute.** Native `<input type="checkbox">` does not honor `readonly`, so the mixin reacts to `readonly` and `inputElement` changes in Lit's `updated(changed)` lifecycle hook (per `guidelines/04-coding-conventions.md`, which prefers `updated(changed)` over Polymer-style `static get observers()` for new components) and writes `aria-readonly` on the input directly while preventing toggling via a click handler that calls `event.preventDefault()`. This is the same approach Checkbox uses. Read-only is reflected on the host so that the `:host([readonly])` styling in §Implementation works.
+6. **No `indeterminate` property and no `indeterminate-changed` event.** Per `problem-statement.md` Differentiation, the toggle switch is strictly two-state. `Checkbox` declares `indeterminate` on its element class; `ToggleSwitch` does not, so the property is simply absent.
 
-7. **Validation rule: required ⇒ on.** `checkValidity()` returns `!this.required || !!this.checked` — turning the switch on satisfies a required constraint, leaving it off fails. Validation is requested on blur (via `_setFocused(false)` when the document still has focus) and on `_checkedChanged` after the initial value, so a freshly-rendered required switch is not invalid until the user has interacted. Identical to Checkbox.
+7. **No `size` / `loading` / drag-gesture API; no in-track ON/OFF text or icon slot.** All four are out of scope per `requirements.md` Discussion. Sizing flows entirely through `--vaadin-toggle-switch-size` and `--vaadin-toggle-switch-track-width` / `--vaadin-toggle-switch-thumb-size` (themed via Lumo and Aura, overridable per-instance with `getStyle()`).
 
-8. **Tooltip target.** `TooltipController` is wired in `ready()` with `setAriaTarget(this.inputElement)` so `aria-describedby` is set on the focusable input rather than the host — same as Checkbox. The tooltip element is slotted via `slot="tooltip"`.
+8. **CSS custom property prefix `--vaadin-toggle-switch-*`.** Follows the `--vaadin-{component}-{property}` convention from `guidelines/10-theming.md`. The prefix matches the kebab-name even though the shadow part is the shorter `switch` (Decision 3), because applications style by component name. Property set: `size`, `background`, `border-color`, `border-width`, `gap`, `label-color`, `label-font-size`, `label-font-weight`, `label-line-height`, `track-width`, `thumb-size`, `thumb-color`, `thumb-checked-color`. The `track-width` and `thumb-size` derive from `size` by default so authors who only override `size` get a proportionally scaled switch.
 
-9. **No `size` / `loading` / drag-gesture API; no in-track ON/OFF text or icon slot.** All four are out of scope per `requirements.md` Discussion. Sizing flows entirely through `--vaadin-toggle-switch-size` and `--vaadin-toggle-switch-track-width` / `--vaadin-toggle-switch-thumb-size` (themed via Lumo and Aura, overridable per-instance with `getStyle()`).
-
-10. **CSS custom property prefix `--vaadin-toggle-switch-*`.** Follows the `--vaadin-{component}-{property}` convention from `guidelines/10-theming.md`. The prefix matches the kebab-name even though the shadow part is the shorter `switch` (decision 2), because applications style by component name. Property set: `size`, `background`, `border-color`, `border-width`, `gap`, `label-color`, `label-font-size`, `label-font-weight`, `label-line-height`, `track-width`, `thumb-size`, `thumb-color`, `thumb-checked-color`. The `track-width` and `thumb-size` derive from `size` by default so authors who only override `size` get a proportionally scaled switch.
-
-11. **Initial `tabindex="0"` on the host.** Set in the mixin constructor so that pointer activation does not lose focus in Safari (matches Checkbox; see Discussion for the upstream Safari behavior). Focus is then delegated to the inner input by `DelegateFocusMixin` / `InputController`. When the host is disabled, `TabindexMixin` sets `tabindex="-1"` on the host and restores the prior value when re-enabled.
-
-12. **Slotted-input opacity override via `SlotStylesMixin`.** The internal input is hidden visually but kept in the accessibility tree. The mixin injects an outer-scope rule that pins the slotted input to `opacity: 0` so global stylesheets (notably Tailwind preflight) cannot override it; matches Checkbox.
-
-13. **Label-click rule covers interactive descendants generically, not only `<a>`.** Per requirement 3, clicks landing on interactive elements inside the label (links, buttons, anything with `pointer-events` enabled and an activation behavior) must not toggle the switch; clicks on non-interactive label content (`<strong>`, `<em>`, `<span>`, plain text) toggle as usual. This expands beyond Checkbox's `<a>`-only check; see Discussion.
-
-14. **Guideline alignment.** Shadow DOM, parts, and slot conventions follow `guidelines/08-dom.md` (state attributes table; `has-*` family; named slots with property fallback). ARIA wiring and focus delegation follow `guidelines/11-a11y.md` (`role="switch"` on the focusable element; `accessibleName` / `accessibleNameRef` pair on field components; `FieldAriaController` for label/helper/error). Lifecycle and property declarations follow `guidelines/04-coding-conventions.md` (no class-field initializers; `value:` defaults; `reflectToAttribute:` for state).
+9. **Guideline alignment.** Shadow DOM, parts, and slot conventions follow `guidelines/08-dom.md` (state attributes table; `has-*` family; named slots with property fallback). ARIA wiring and focus delegation follow `guidelines/11-a11y.md` (`role="switch"` on the focusable element; `accessibleName` / `accessibleNameRef` pair on field components; `FieldAriaController` for label/helper/error). Lifecycle and property declarations follow `guidelines/04-coding-conventions.md` (no class-field initializers; `value:` defaults; `reflectToAttribute:` for state).
 
 ---
 
@@ -42,7 +32,6 @@
 **`<vaadin-toggle-switch>`** — a binary on/off switch control.
 
 Shadow DOM:
-
 ```html
 <div class="vaadin-toggle-switch-container">
   <div part="switch" aria-hidden="true">
@@ -63,7 +52,7 @@ Shadow DOM:
 <slot name="tooltip"></slot>
 ```
 
-The light-DOM `<input slot="input" type="checkbox" role="switch">` is created and inserted by `InputController` in `ready()`. It receives delegated focus and carries the form-relevant attributes (`name`, `value`, `required`, `invalid` → `aria-invalid`, `disabled`, `readonly` → `aria-readonly`).
+The light-DOM `<input slot="input" type="checkbox" role="switch">` is created and inserted by `InputController`. It receives delegated focus and carries the form-relevant attributes (`name`, `value`, `required`, `invalid` → `aria-invalid`, `disabled`, `readonly` → `aria-readonly`).
 
 | Property | Type | Default | Reflected | Description |
 |---|---|---|---|---|
@@ -87,7 +76,7 @@ Inherited reactive state attributes: `active`, `focused`, `focus-ring`, `has-lab
 | Slot | Description |
 |---|---|
 | `input` | Hidden internal `<input type="checkbox" role="switch">` created by `InputController`. Application code does not slot into this. |
-| `label` | Optional label content. Falls back to the `label` property when empty. May contain interactive children (links, buttons) — clicks on those do not toggle the switch. |
+| `label` | Optional label content. Falls back to the `label` property when empty. May contain an inline `<a>` — clicks on the anchor do not toggle the switch. |
 | `helper` | Optional helper-text content. Falls back to the `helperText` property. |
 | `error-message` | Optional error-message content. Falls back to the `errorMessage` property; only rendered/announced when `invalid`. |
 | `tooltip` | Optional `<vaadin-tooltip>` whose `aria-describedby` target is the inner input. |
@@ -134,30 +123,11 @@ Inherited reactive state attributes: `active`, `focused`, `focus-ring`, `has-lab
 
 ### Internal Behavior
 
-- **Toggling.** A click on the inner input or on `[part='label']` (excluding any interactive descendant of the label — links, buttons, etc.; see Decision 13), or a Space-key press while the inner input is focused, flips `checked`. A click on `[part='required-indicator']` is delegated to the label and also flips `checked`. Each user-initiated flip emits `change`; programmatic assignment of `checked` emits only `checked-changed`. (Requirements 1, 2, 3.)
+- **Inherited from `CheckboxMixin`.** Every behavior in `requirements.md` that the toggle switch shares with a checkbox — toggle on click / Space / label click, `change` event on user interaction (not programmatic), `checked-changed` notify event, `<a>`-in-label suppression of the `active` attribute, disabled refusal of interaction, read-only semantics with `aria-readonly` on the inner input, required validation (`checkValidity()` returns `!required || !!checked`), validation on blur, validation re-trigger on `required` removal, error-message and helper-text slot rendering, `FieldAriaController`-driven `aria-describedby` composition, native-form submission and `<form>.reset()` synchronisation, Safari-tabindex initialisation, Tailwind-opacity override on the slotted input, `_onRequiredIndicatorClick` delegating to the label — comes from `CheckboxMixin` without modification. (Requirements 1, 2, 3, 5, 6, 7, 8, 9, 11.)
 
-- **ARIA switch role.** `InputController` is configured to set `role="switch"` on the inner input immediately after creation. The native checkbox `checked` IDL property continues to drive `aria-checked` for AT, so user toggles, programmatic updates, and `<form>.reset()` all stay in sync without additional wiring. (Requirement 4.)
+- **ARIA switch role.** The element overrides `_inputElementChanged(input, oldInput)` to set `role="switch"` on the inner input after the inherited setup runs. The native checkbox `checked` IDL property continues to drive `aria-checked` for AT, so user toggles, programmatic updates, and `<form>.reset()` all stay in sync without additional wiring. (Requirement 4.)
 
-- **Disabled.** Inherited `DisabledMixin` reflects `disabled` on the host and adds `aria-disabled`. `TabindexMixin` sets `tabindex="-1"` on the host while disabled and restores the prior value when re-enabled, so the host (and via delegation the inner input) is removed from the Tab order. Programmatic `checked` writes still propagate; user activation does not. (Requirement 5.)
-
-- **Read-only.** Lit's `updated(changed)` hook reacts to changes in `readonly` (or `inputElement`, since the input is created asynchronously by `InputController`) and writes `aria-readonly="true"` on the inner input (native `<input type="checkbox">` does not honor `readonly` itself, so the mapping is component-managed). User activation is suppressed: clicks on the input call `preventDefault()`, and the `active` attribute is not applied. The host stays focusable and Tab-reachable. (Requirement 6.)
-
-- **Required validation.** `checkValidity()` returns `!this.required || !!this.checked`. `aria-required` is forwarded to the inner input via `delegateAttrs`, so screen readers announce the required state. Validation is requested:
-  - On blur (when the document still has focus — tab-switching past the window does not trigger validation).
-  - After every `checked` change once the initial value has been processed.
-  - When `required` is removed (so a previously-invalid switch clears).
-
-  When `manualValidation` is true, the component does not auto-validate; the application drives `invalid` and `errorMessage`. `validate()` re-runs validation on demand. (Requirements 7, 9.)
-
-- **Form submission.** The inner input is a real `<input type="checkbox">` in light DOM, so it participates in `<form>` submission and `<form>.reset()` natively: on submit it contributes `name=value` when checked and nothing when unchecked or disabled; on reset it returns to its parsed-attribute `checked` state. The component listens for the input's reset propagation and synchronizes the host's `checked` property accordingly, firing `checked-changed` (so two-way bindings observe the rollback) but not `change`. (Requirements 2, 11.)
-
-- **Field ARIA wiring.** `FieldMixin` (via `FieldAriaController`) sets `aria-labelledby` on the inner input pointing at the label slot, and `aria-describedby` pointing at the helper-text slot, the error-message slot, and the tooltip target — added and removed dynamically as those slots gain or lose content. `accessibleName` writes `aria-label` on the inner input; `accessibleNameRef` writes `aria-labelledby`. The two are mutually exclusive (the implementation picks one source at a time per Vaadin's `HasAriaLabel` convention). (Requirements 3, 8, 9, 10.)
-
-- **Helper text and error message rendering.** When `errorMessage` is set or content is slotted into `slot="error-message"` AND the host is `invalid`, the error-message wrapper is shown and `has-error-message` is reflected on the host. When `invalid` clears, the wrapper is hidden again and `aria-describedby` is updated to drop the error-message ID. The helper text wrapper is shown whenever `helperText` is set or the slot has content (independent of validity), reflected as `has-helper`. (Requirements 8, 9.)
-
-- **Tooltip target.** The slotted `<vaadin-tooltip>` is wired by `TooltipController` with the inner input as its ARIA target, so the tooltip ID is added to the input's `aria-describedby`. The tooltip opens on host hover and on inner-input focus. (Requirement 10.)
-
-- **Initial value.** `value` defaults to `'on'` (HTML spec for `<input type="checkbox">`). `checked` defaults to `false`. `tabindex` is initialized to `0` (Decision 11).
+- **Tooltip target.** `TooltipController` is created in the element's `ready()` (after `super.ready()`) with `setAriaTarget(this.inputElement)`, so the tooltip's `aria-describedby` lands on the focusable input. The element overrides `ready()` purely for this controller; everything else stays in `CheckboxMixin`. (Requirement 10.)
 
 ---
 
@@ -165,16 +135,10 @@ Inherited reactive state attributes: `active`, `focused`, `focus-ring`, `has-lab
 
 All shared modules are reused as-is — no adjustments are required.
 
-- **`@vaadin/field-base/src/styles/checkable-base-styles.js`** — `checkable('switch', 'toggle-switch')` provides the field's two-column grid, label/helper/error layout, and accessible hit-target sizing. The two-argument form (introduced for radio-button: `checkable('radio', 'radio-button')`) already separates the part name from the CSS prefix, so toggle-switch's `switch` / `toggle-switch` mapping needs no API change. Other current consumers: `vaadin-checkbox` (`checkable('checkbox')`), `vaadin-radio-button` (`checkable('radio', 'radio-button')`).
-- **`@vaadin/field-base/src/styles/field-base-styles.js`** — base `field` styles (label/helper/error wrappers and grid placement). Used by every field component.
-- **`@vaadin/field-base/src/checked-mixin.js`** — `CheckedMixin` provides `checked` reactive property + `_toggleChecked` hook + `_addInputListeners` toggle wiring. Used by Checkbox.
-- **`@vaadin/field-base/src/field-mixin.js`** — `FieldMixin` (label/helper/error/required-indicator slots, `errorMessage`, `helperText`, label slot controller, `accessibleName`, `accessibleNameRef`, `aria-labelledby` / `aria-describedby` wiring via `FieldAriaController`). Used by every field.
-- **`@vaadin/field-base/src/input-controller.js`** — `InputController` creates the slotted hidden `<input>` and exposes `inputElement`. Toggle-switch's only customization is calling `input.setAttribute('role', 'switch')` in the callback. Used by Checkbox.
-- **`@vaadin/field-base/src/labelled-input-controller.js`** — `LabelledInputController` wires the host label as a `<label for="…">` for the inner input. Used by Checkbox.
-- **`@vaadin/a11y-base/src/active-mixin.js`** — `ActiveMixin` toggles the `active` attribute. Toggle-switch overrides `_shouldSetActive` to skip readonly, links, and helper/error nodes (same overrides as Checkbox).
-- **`@vaadin/a11y-base/src/delegate-focus-mixin.js`** — `DelegateFocusMixin` forwards `focus()` / `blur()` from the host to the inner input.
-- **`@vaadin/component-base/src/slot-styles-mixin.js`** — `SlotStylesMixin` injects the `opacity: 0` rule on the slotted input.
-- **`@vaadin/component-base/src/tooltip-controller.js`** — `TooltipController` wires the slotted tooltip with `aria-describedby` on the input.
+- **`@vaadin/checkbox/src/vaadin-checkbox-mixin.js`** — `CheckboxMixin` delivers the entire binary-input field plumbing (see Decision 2). It transitively pulls in `ActiveMixin`, `CheckedMixin`, `DelegateFocusMixin`, `FieldMixin`, `SlotStylesMixin`, `InputController`, and `LabelledInputController`. The only customization is the `_inputElementChanged` override on the element class. Other current consumer: `vaadin-checkbox` itself.
+- **`@vaadin/field-base/src/styles/checkable-base-styles.js`** — `checkable('switch', 'toggle-switch')` provides the field's two-column grid, label/helper/error layout, and accessible hit-target sizing. The two-argument form (introduced for radio-button: `checkable('radio', 'radio-button')`) already separates the part name from the CSS prefix. Other consumers: `vaadin-checkbox`, `vaadin-radio-button`.
+- **`@vaadin/field-base/src/styles/field-base-styles.js`** — base `field` styles (label/helper/error wrappers and grid placement). Imported directly by the styles file alongside `checkable`.
+- **`@vaadin/component-base/src/tooltip-controller.js`** — `TooltipController` wires the slotted tooltip with `aria-describedby` on the input. Wired directly in the element's `ready()` (not by `CheckboxMixin`), matching Checkbox's pattern.
 - **`@vaadin/component-base/src/element-mixin.js`** — `ElementMixin` (telemetry / public-component registration; required for public components).
 - **`@vaadin/component-base/src/polylit-mixin.js`** — `PolylitMixin` (Lit + Polymer-compat layer; required by every component).
 - **`@vaadin/vaadin-themable-mixin/{vaadin-themable-mixin,lumo-injection-mixin}.js`** — `ThemableMixin` and `LumoInjectionMixin` (theming; required by every component).
@@ -183,21 +147,17 @@ All shared modules are reused as-is — no adjustments are required.
 
 ## Discussion
 
+**Q: Why does this spec defer most behavioral detail to `CheckboxMixin` instead of restating it?**
+
+`CheckboxMixin` was refactored (in `refactor/checkbox-mixin`) to extract `indeterminate`-related concerns onto the `Checkbox` element class, leaving the mixin as a generic binary-input field plumbing layer. That layer is exactly what the toggle switch needs; restating its behavior here would duplicate a public, tested API. The spec's job becomes naming the toggle-specific deviations (the `role="switch"` override, the `[part='switch']::after` checkmark suppression, the CSS prefix, the absence of `indeterminate`) and pointing readers at `CheckboxMixin` for everything else. Decision 2 makes this explicit; the Internal Behavior section's "Inherited from `CheckboxMixin`" bullet collects the requirements the mixin covers.
+
 **Q: Why was the internal control implemented as `<input type="checkbox" role="switch">` instead of `<button role="switch">`?**
 
-The input-based path reuses the form-association, `aria-required`, `aria-invalid`, `aria-describedby`, and reset wiring that `FieldMixin` + `InputController` already deliver — the same machinery Checkbox is built on. A `<button>` foundation would require re-implementing each of those concerns. The input approach is what the prototype validated; the button approach (advocated by Adrian Roselli's article) was considered but rejected on cost-of-divergence grounds. The visible affordance is identical because `role="switch"` is what AT keys off.
+The input-based path reuses the form-association, `aria-required`, `aria-invalid`, `aria-describedby`, and reset wiring that `FieldMixin` + `InputController` already deliver — the same machinery Checkbox is built on. A `<button>` foundation would require re-implementing each of those concerns. The visible affordance is identical because `role="switch"` is what AT keys off.
 
-**Q: Why was the label-click suppression generalised beyond `<a>`?**
+**Q: Why does `_inputElementChanged` rather than the `InputController` callback set `role="switch"`?**
 
-Checkbox checks only `event.target.localName === 'a'` to decide whether to suppress the active state. Requirement 3 explicitly demands that interactive elements within the label — links and buttons — both pass through to their own activation. Decision 13 widens the exclusion to all interactive descendants. Implementation can detect interactivity via tag name (`a`, `button`, `input`, `select`, `textarea`), `tabindex >= 0`, or a `role` of `button` / `link` — exact mechanism is implementation work.
-
-**Q: Why was the initial host `tabindex` pinned to `0` in the constructor (Decision 11)?**
-
-Pointer activation in Safari moves focus away from the host when the host is not focusable, breaking subsequent keyboard interaction with the switch. Setting `tabindex="0"` upfront keeps the host in the Tab order until `TabindexMixin` overrides it (e.g. on disable). The Checkbox component carries the same workaround (originally landed via vaadin/web-components#6780).
-
-**Q: Why does `SlotStylesMixin` re-inject `opacity: 0` on the slotted input (Decision 12)?**
-
-Tailwind's preflight applies `opacity: 1` to all `input` elements globally, which would un-hide the slotted input. The mixin injects an outer-scope rule pinned to the host's local name (`vaadin-toggle-switch > input[slot='input'] { opacity: 0 }`) so the slotted input stays visually hidden while remaining in the accessibility tree. Same workaround as Checkbox (vaadin/web-components#8881).
+`_inputElementChanged(input, oldInput)` is the established Vaadin pattern for setting input-level attributes from a consumer of the field-base mixins. `vaadin-combo-box` uses it to set `role="combobox"` and `aria-haspopup="dialog"`; `vaadin-date-picker` does the same. Reusing `CheckboxMixin` as-is without exposing a separate "init the input" hook keeps the mixin's surface tight; the override sits on the toggle-switch element class where it composes cleanly with the inherited behavior.
 
 **Q: Why no `accessible-name` precedence rule when both `accessibleName` and `accessibleNameRef` are set?**
 
