@@ -102,10 +102,18 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
   }
 
   /**
-   * Overriding the observer to not add global "contextmenu" listener.
+   * Overriding the observer to not toggle user-select on the host.
    * @override
    */
   _openedChanged() {
+    // Do nothing
+  }
+
+  /**
+   * Overriding the handler to not react to global "contextmenu" events.
+   * @override
+   */
+  __onGlobalContextMenu() {
     // Do nothing
   }
 
