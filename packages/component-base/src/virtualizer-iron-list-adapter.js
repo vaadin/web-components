@@ -515,11 +515,32 @@ export class IronListAdapter {
 
   /** @private */
   __getFocusedElement(visibleElements = this.__getVisibleElements()) {
-    return visibleElements.find(
+    // Case 1: focus is inside the shadow tree (e.g. a focusable cell with
+    // tabindex). The shadow root's activeElement is the focused descendant,
+    // and Node.contains finds it via tree containment.
+    const result = visibleElements.find(
       (element) =>
         element.contains(this.elementsContainer.getRootNode().activeElement) ||
         element.contains(this.scrollTarget.getRootNode().activeElement),
     );
+    if (result) {
+      return result;
+    }
+    // Case 2: focus is on light-DOM content slotted across the shadow boundary
+    // (e.g. an `<input>` inside a `vaadin-grid-cell-content`). The shadow
+    // root's activeElement is null because the focused element is outside the
+    // shadow tree, and Node.contains doesn't traverse slot projection.
+    // Walk up from document.activeElement, crossing slot boundaries via
+    // assignedSlot, to locate the projected-into virtualizer row.
+    const visible = new Set(visibleElements);
+    let node = document.activeElement;
+    while (node) {
+      if (visible.has(node)) {
+        return node;
+      }
+      node = node.assignedSlot || node.parentNode || node.host;
+    }
+    return undefined;
   }
 
   /** @private */

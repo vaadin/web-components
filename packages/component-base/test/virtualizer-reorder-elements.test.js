@@ -202,4 +202,72 @@ describe('reorder elements', () => {
       expect(scrollTarget.scrollTop).to.equal(scrollTop);
     });
   });
+
+  // Regression test for vaadin/web-components#11639. When focusable content
+  // is slotted across a shadow boundary into a virtualizer row (the pattern
+  // vaadin-grid uses with `<vaadin-grid-cell-content>`), the row's shadow
+  // root has `activeElement === null`, so the original `Node.contains`-based
+  // lookup returned `undefined` for the focused row. Iron-list's reorder
+  // then anchored on the wrong element and shuffled the row containing
+  // focus around — which also triggered a silent focus drop in Firefox 148+
+  // during slot reprojection. The fix walks `document.activeElement`'s
+  // flattened ancestors via `assignedSlot` so the correct row is anchored.
+  describe('focused element detection across slot boundary', () => {
+    let host;
+    let slottedVirtualizer;
+    let slottedElementsContainer;
+
+    beforeEach(() => {
+      clock.restore();
+
+      host = fixtureSync('<div style="height: 100px;"></div>');
+      const shadowRoot = host.attachShadow({ mode: 'open' });
+      shadowRoot.innerHTML = `
+        <style>:host { display: block; height: 100%; }</style>
+        <div id="scrollTarget" style="height: 100%; overflow: auto;">
+          <div id="container"></div>
+        </div>
+      `;
+
+      let nextSlotId = 0;
+      slottedVirtualizer = new Virtualizer({
+        createElements: (count) =>
+          Array.from(Array(count)).map(() => {
+            const row = document.createElement('div');
+            const slotName = `cell-${nextSlotId}`;
+            nextSlotId += 1;
+            const slot = document.createElement('slot');
+            slot.name = slotName;
+            row.appendChild(slot);
+
+            const cellContent = document.createElement('div');
+            cellContent.slot = slotName;
+            cellContent.tabIndex = 0;
+            host.appendChild(cellContent);
+
+            row.__cellContent = cellContent;
+            return row;
+          }),
+        updateElement: (row, index) => {
+          row.index = index;
+          row.id = `row-${index}`;
+        },
+        scrollTarget: shadowRoot.getElementById('scrollTarget'),
+        scrollContainer: shadowRoot.getElementById('container'),
+        reorderElements: true,
+      });
+      slottedVirtualizer.size = 100;
+      slottedElementsContainer = shadowRoot.getElementById('container');
+    });
+
+    it('should find the row whose slotted content has focus', () => {
+      const row = slottedElementsContainer.children[1];
+      // Focus the light-DOM content slotted into the row. The shadow root's
+      // `activeElement` is null because the focused element is outside the
+      // shadow tree.
+      row.__cellContent.focus();
+      expect(host.shadowRoot.activeElement).to.be.null;
+      expect(slottedVirtualizer.__adapter.__getFocusedElement()).to.equal(row);
+    });
+  });
 });
