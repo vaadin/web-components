@@ -1,10 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { arrowDownKeyDown, arrowUpKeyDown, fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { arrowDownKeyDown, arrowUpKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '@vaadin/context-menu/src/vaadin-context-menu.js';
-import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { getMenuItems, getSubMenu, openMenu } from '@vaadin/context-menu/test/helpers.js';
+import { getMenuItems, getSubMenu } from '@vaadin/context-menu/test/helpers.js';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 describe('context-menu with tooltip', () => {
@@ -23,7 +22,7 @@ describe('context-menu with tooltip', () => {
         <button id="target"></button>
       </vaadin-context-menu>
     `);
-    contextMenu.openOn = isTouch ? 'click' : 'mouseover';
+    contextMenu.openOn = 'click';
     target = contextMenu.querySelector('#target');
     tooltip = contextMenu.querySelector('vaadin-tooltip');
     tooltipOverlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
@@ -46,51 +45,51 @@ describe('context-menu with tooltip', () => {
   });
 
   it('should show tooltip when hovering an item with a tooltip', async () => {
-    await openMenu(target);
-    const [item0] = getMenuItems(contextMenu);
-    await sendMouseToElement({ type: 'move', element: item0 });
+    await sendMouseToElement({ type: 'click', element: target });
+    await nextRender();
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
     await nextRender();
     expect(tooltipOverlay.opened).to.be.true;
     expect(tooltipContent.textContent.trim()).to.equal('Tooltip 0');
   });
 
   it('should not show tooltip when hovering an item without a tooltip', async () => {
-    await openMenu(target);
-    const [, item1] = getMenuItems(contextMenu);
-    await sendMouseToElement({ type: 'move', element: item1 });
+    await sendMouseToElement({ type: 'click', element: target });
+    await nextRender();
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[1] });
     await nextRender();
     expect(tooltipOverlay.opened).to.be.not.ok;
   });
 
   it('should hide tooltip when hovering from a tooltipped item to a non-tooltipped item', async () => {
-    await openMenu(target);
-    const [item0, item1] = getMenuItems(contextMenu);
+    await sendMouseToElement({ type: 'click', element: target });
+    await nextRender();
 
-    await sendMouseToElement({ type: 'move', element: item0 });
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
     await nextRender();
     expect(tooltipOverlay.opened).to.be.true;
 
-    await sendMouseToElement({ type: 'move', element: item1 });
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[1] });
     await nextRender();
     expect(tooltipOverlay.opened).to.be.not.ok;
   });
 
   it('should hide tooltip when mouse leaves the list box', async () => {
-    await openMenu(target);
-    const [item0] = getMenuItems(contextMenu);
-    await sendMouseToElement({ type: 'move', element: item0 });
+    await sendMouseToElement({ type: 'click', element: target });
+    await nextRender();
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
     await nextRender();
     expect(tooltipOverlay.opened).to.be.true;
 
-    fire(contextMenu._listBox, 'mouseleave');
+    await sendMouse({ type: 'move', position: [0, 0] });
     await nextRender();
     expect(tooltipOverlay.opened).to.be.not.ok;
   });
 
   it('should hide tooltip when the menu closes', async () => {
-    await openMenu(target);
-    const [item0] = getMenuItems(contextMenu);
-    await sendMouseToElement({ type: 'move', element: item0 });
+    await sendMouseToElement({ type: 'click', element: target });
+    await nextRender();
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
     await nextRender();
     expect(tooltipOverlay.opened).to.be.true;
 
@@ -100,7 +99,8 @@ describe('context-menu with tooltip', () => {
   });
 
   it('should show tooltip on keyboard focus', async () => {
-    await openMenu(target);
+    await sendMouseToElement({ type: 'click', element: target });
+    await nextRender();
     const items = getMenuItems(contextMenu);
 
     items[1].focus();
@@ -112,7 +112,8 @@ describe('context-menu with tooltip', () => {
   });
 
   it('should hide tooltip when keyboard focus moves to an item without a tooltip', async () => {
-    await openMenu(target);
+    await sendMouseToElement({ type: 'click', element: target });
+    await nextRender();
     const items = getMenuItems(contextMenu);
 
     items[1].focus();
@@ -127,59 +128,55 @@ describe('context-menu with tooltip', () => {
 
   it('should pass the hovered item to the tooltip generator context', async () => {
     tooltip.generator = ({ item }) => (item ? `custom: ${item.text}` : '');
-    await openMenu(target);
-    const [item0] = getMenuItems(contextMenu);
+    await sendMouseToElement({ type: 'click', element: target });
+    await nextRender();
 
-    await sendMouseToElement({ type: 'move', element: item0 });
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
     await nextRender();
     expect(tooltipContent.textContent.trim()).to.equal('custom: Item 0');
   });
 
   it('should not override a custom tooltip generator', async () => {
     tooltip.generator = () => 'Custom tooltip';
-    await openMenu(target);
-    const [item0] = getMenuItems(contextMenu);
+    await sendMouseToElement({ type: 'click', element: target });
+    await nextRender();
 
-    await sendMouseToElement({ type: 'move', element: item0 });
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
     await nextRender();
     expect(tooltipContent.textContent.trim()).to.equal('Custom tooltip');
   });
 
   it('should default tooltip position to end for items without a sub-menu', async () => {
-    await openMenu(target);
-    const [item0] = getMenuItems(contextMenu);
-    await sendMouseToElement({ type: 'move', element: item0 });
+    await sendMouseToElement({ type: 'click', element: target });
+    await nextRender();
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
     await nextRender();
     expect(tooltipOverlay.position).to.equal('end');
   });
 
   it('should default tooltip position to start for items with a sub-menu', async () => {
     contextMenu.items = [{ text: 'Item 0', tooltip: 'Tooltip 0', children: [{ text: 'Child 0' }] }, { text: 'Item 1' }];
-    contextMenu.requestContentUpdate();
+    await sendMouseToElement({ type: 'click', element: target });
     await nextRender();
-    await openMenu(target);
-    const [item0] = getMenuItems(contextMenu);
-    await sendMouseToElement({ type: 'move', element: item0 });
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
     await nextRender();
     expect(tooltipOverlay.position).to.equal('start');
   });
 
   it('should use per-item tooltipPosition over the default', async () => {
     contextMenu.items = [{ text: 'Item 0', tooltip: 'Tooltip 0', tooltipPosition: 'top-start' }, { text: 'Item 1' }];
-    contextMenu.requestContentUpdate();
+    await sendMouseToElement({ type: 'click', element: target });
     await nextRender();
-    await openMenu(target);
-    const [item0] = getMenuItems(contextMenu);
-    await sendMouseToElement({ type: 'move', element: item0 });
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
     await nextRender();
     expect(tooltipOverlay.position).to.equal('top-start');
   });
 
   it('should respect the position set on the tooltip element over the default', async () => {
     tooltip.position = 'top';
-    await openMenu(target);
-    const [item0] = getMenuItems(contextMenu);
-    await sendMouseToElement({ type: 'move', element: item0 });
+    await sendMouseToElement({ type: 'click', element: target });
+    await nextRender();
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
     await nextRender();
     expect(tooltipOverlay.position).to.equal('top');
   });
@@ -187,11 +184,9 @@ describe('context-menu with tooltip', () => {
   it('should respect the position set on the tooltip element over per-item tooltipPosition', async () => {
     tooltip.position = 'top';
     contextMenu.items = [{ text: 'Item 0', tooltip: 'Tooltip 0', tooltipPosition: 'bottom-end' }];
-    contextMenu.requestContentUpdate();
+    await sendMouseToElement({ type: 'click', element: target });
     await nextRender();
-    await openMenu(target);
-    const [item0] = getMenuItems(contextMenu);
-    await sendMouseToElement({ type: 'move', element: item0 });
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
     await nextRender();
     expect(tooltipOverlay.position).to.equal('top');
   });
@@ -207,11 +202,10 @@ describe('context-menu with tooltip', () => {
     });
 
     it('should show tooltip for disabled item on hover', async () => {
-      await openMenu(target);
-      const items = getMenuItems(contextMenu);
-      const disabledItem = items[2];
+      await sendMouseToElement({ type: 'click', element: target });
+      await nextRender();
 
-      await sendMouseToElement({ type: 'move', element: disabledItem });
+      await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[2] });
       await nextRender();
       expect(tooltipOverlay.opened).to.be.true;
       expect(tooltipContent.textContent.trim()).to.equal('Disabled tooltip');
@@ -222,11 +216,9 @@ describe('context-menu with tooltip', () => {
         { text: 'Item 0', tooltip: 'Tooltip 0', disabled: true, children: [{ text: 'Child 0' }] },
         { text: 'Item 1' },
       ];
-      contextMenu.requestContentUpdate();
+      await sendMouseToElement({ type: 'click', element: target });
       await nextRender();
-      await openMenu(target);
-      const [item0] = getMenuItems(contextMenu);
-      await sendMouseToElement({ type: 'move', element: item0 });
+      await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
       await nextRender();
       expect(tooltipOverlay.position).to.equal('end');
     });
@@ -246,11 +238,10 @@ describe('context-menu with tooltip', () => {
           ],
         },
       ];
-      contextMenu.requestContentUpdate();
+      await sendMouseToElement({ type: 'click', element: target });
       await nextRender();
-      await openMenu(target);
-      const [parent] = getMenuItems(contextMenu);
-      await openMenu(parent);
+      await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
+      await nextRender();
       subMenu = getSubMenu(contextMenu);
     });
 
@@ -259,8 +250,7 @@ describe('context-menu with tooltip', () => {
     });
 
     it('should show tooltip when hovering a sub-menu item with a tooltip', async () => {
-      const [child0] = getMenuItems(subMenu);
-      await sendMouseToElement({ type: 'move', element: child0 });
+      await sendMouseToElement({ type: 'move', element: getMenuItems(subMenu)[0] });
       await nextRender();
 
       expect(tooltipOverlay.opened).to.be.true;
@@ -268,15 +258,13 @@ describe('context-menu with tooltip', () => {
     });
 
     it('should not show tooltip when hovering a sub-menu item without a tooltip', async () => {
-      const [, child1] = getMenuItems(subMenu);
-      await sendMouseToElement({ type: 'move', element: child1 });
+      await sendMouseToElement({ type: 'move', element: getMenuItems(subMenu)[1] });
       await nextRender();
       expect(tooltipOverlay.opened).to.be.not.ok;
     });
 
     it('should use per-item tooltipPosition for sub-menu items', async () => {
-      const items = getMenuItems(subMenu);
-      await sendMouseToElement({ type: 'move', element: items[2] });
+      await sendMouseToElement({ type: 'move', element: getMenuItems(subMenu)[2] });
       await nextRender();
       expect(tooltipOverlay.position).to.equal('top');
     });
