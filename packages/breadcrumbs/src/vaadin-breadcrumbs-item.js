@@ -15,7 +15,7 @@ import { breadcrumbsItemStyles } from './styles/vaadin-breadcrumbs-item-base-sty
  *
  * ### Styling
  *
- * The following shadow DOM parts are exposed for styling:
+ * The following shadow DOM parts are available for styling:
  *
  * Part name | Description
  * ----------|------------------------------------------------------------

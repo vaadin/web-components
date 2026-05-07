@@ -10,7 +10,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  *
  * ### Styling
  *
- * The following shadow DOM parts are exposed for styling:
+ * The following shadow DOM parts are available for styling:
  *
  * Part name | Description
  * ----------|------------------------------------------------------------
