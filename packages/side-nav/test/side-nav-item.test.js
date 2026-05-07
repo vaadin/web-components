@@ -212,15 +212,12 @@ describe('side-nav-item', () => {
     });
 
     it('should not dispatch expanded-changed on nested item without children when becoming current', async () => {
-      const sideNav = fixtureSync(`
-        <vaadin-side-nav>
-          <vaadin-side-nav-item>
-            <vaadin-side-nav-item slot="children" path="/no-match"></vaadin-side-nav-item>
-          </vaadin-side-nav-item>
-        </vaadin-side-nav>
+      const parent = fixtureSync(`
+        <vaadin-side-nav-item>
+          <vaadin-side-nav-item slot="children" path="/no-match"></vaadin-side-nav-item>
+        </vaadin-side-nav-item>
       `);
-      await nextRender();
-      const [parent, leaf] = sideNav.querySelectorAll('vaadin-side-nav-item');
+      const leaf = parent.querySelector('vaadin-side-nav-item');
       const leafSpy = sinon.spy();
       const parentSpy = sinon.spy();
       leaf.addEventListener('expanded-changed', leafSpy);
