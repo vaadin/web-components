@@ -13,10 +13,11 @@ export const datePickerOverlayStyles = css`
     box-sizing: content-box;
     width: var(
       --vaadin-date-picker-overlay-width,
-      calc(
+      round(
         var(--vaadin-date-picker-date-width, 2rem) * 7 +
           var(--vaadin-date-picker-month-padding, var(--vaadin-padding-s)) * 2 +
-          var(--vaadin-date-picker-year-scroller-width, 3rem)
+          var(--vaadin-date-picker-year-scroller-width, 3rem),
+        1px
       )
     );
     cursor: default;
