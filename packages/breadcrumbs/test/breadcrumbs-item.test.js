@@ -87,4 +87,71 @@ describe('vaadin-breadcrumbs-item', () => {
       });
     });
   });
+
+  describe('current attribute', () => {
+    describe('without path', () => {
+      it('should set aria-current="page" on [part="nolink"] when current is set', async () => {
+        item._setCurrent(true);
+        await nextRender();
+
+        const nolink = item.shadowRoot.querySelector('[part="nolink"]');
+        expect(nolink).to.be.ok;
+        expect(nolink.getAttribute('aria-current')).to.equal('page');
+      });
+
+      it('should remove aria-current from [part="nolink"] when current is removed', async () => {
+        item._setCurrent(true);
+        await nextRender();
+
+        item._setCurrent(false);
+        await nextRender();
+
+        const nolink = item.shadowRoot.querySelector('[part="nolink"]');
+        expect(nolink).to.be.ok;
+        expect(nolink.hasAttribute('aria-current')).to.be.false;
+      });
+
+      it('should not set aria-current on [part="nolink"] when current is not set', () => {
+        const nolink = item.shadowRoot.querySelector('[part="nolink"]');
+        expect(nolink).to.be.ok;
+        expect(nolink.hasAttribute('aria-current')).to.be.false;
+      });
+    });
+
+    describe('with path', () => {
+      beforeEach(async () => {
+        item = fixtureSync('<vaadin-breadcrumbs-item path="/foo"></vaadin-breadcrumbs-item>');
+        await nextRender();
+      });
+
+      it('should not render aria-current anywhere in the shadow root when current is set on a linked item', async () => {
+        item._setCurrent(true);
+        await nextRender();
+
+        expect(item.shadowRoot.querySelector('[aria-current]')).to.be.null;
+      });
+    });
+
+    it('should keep aria-current on the nolink branch as path toggles while current is set', async () => {
+      item._setCurrent(true);
+      await nextRender();
+
+      let nolink = item.shadowRoot.querySelector('[part="nolink"]');
+      expect(nolink).to.be.ok;
+      expect(nolink.getAttribute('aria-current')).to.equal('page');
+
+      item.path = '/foo';
+      await nextRender();
+
+      expect(item.shadowRoot.querySelector('[aria-current]')).to.be.null;
+
+      item.path = null;
+      await nextRender();
+
+      nolink = item.shadowRoot.querySelector('[part="nolink"]');
+      expect(nolink).to.be.ok;
+      expect(nolink.getAttribute('aria-current')).to.equal('page');
+      expect(item.shadowRoot.querySelector('[aria-current]')).to.equal(nolink);
+    });
+  });
 });

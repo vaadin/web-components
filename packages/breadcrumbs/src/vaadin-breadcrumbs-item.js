@@ -3,7 +3,7 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, LitElement } from 'lit';
+import { html, LitElement, nothing } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -63,6 +63,7 @@ class PrefixSlotController extends SlotController {
  *
  * Attribute    | Description
  * -------------|-------------
+ * `current`    | Set by the parent `<vaadin-breadcrumbs>` on the last item when it has no `path`.
  * `has-prefix` | Set when the item has content in the prefix slot
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
@@ -86,6 +87,19 @@ class BreadcrumbsItem extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitEl
       path: {
         type: String,
       },
+
+      /**
+       * When true, the item represents the current page. Set by the parent
+       * `<vaadin-breadcrumbs>` on the last item when it has no `path`. The
+       * item reflects this state by applying `aria-current="page"` to its
+       * inner `[part="nolink"]` element.
+       */
+      current: {
+        type: Boolean,
+        value: false,
+        readOnly: true,
+        reflectToAttribute: true,
+      },
     };
   }
 
@@ -102,7 +116,7 @@ class BreadcrumbsItem extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitEl
     return html`
       ${this.path == null
         ? html`
-            <span part="nolink">
+            <span part="nolink" aria-current="${this.current ? 'page' : nothing}">
               <slot name="prefix"></slot>
               <span part="label">
                 <slot></slot>

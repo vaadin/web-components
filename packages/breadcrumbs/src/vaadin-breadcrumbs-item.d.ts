@@ -22,6 +22,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  *
  * Attribute    | Description
  * -------------|-------------
+ * `current`    | Set by the parent `<vaadin-breadcrumbs>` on the last item when it has no `path`.
  * `has-prefix` | Set when the item has content in the prefix slot
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
@@ -33,6 +34,14 @@ declare class BreadcrumbsItem extends ElementMixin(HTMLElement) {
    * (`<span part="nolink">`).
    */
   path: string | null | undefined;
+
+  /**
+   * When true, the item represents the current page. Set by the parent
+   * `<vaadin-breadcrumbs>` on the last item when it has no `path`. The
+   * item reflects this state by applying `aria-current="page"` to its
+   * inner `[part="nolink"]` element.
+   */
+  readonly current: boolean;
 }
 
 declare global {
