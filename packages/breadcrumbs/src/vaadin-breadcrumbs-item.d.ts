@@ -7,6 +7,18 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 /**
  * `<vaadin-breadcrumbs-item>` is a single item inside a `<vaadin-breadcrumbs>`.
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are exposed for styling:
+ *
+ * Part name | Description
+ * ----------|------------------------------------------------------------
+ * `link`    | The interactive `<a>` rendered when `path` is set.
+ * `nolink`  | The non-interactive `<span>` rendered when `path` is unset.
+ * `label`   | Wraps the item's text content, inside `link` or `nolink`.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class BreadcrumbsItem extends ElementMixin(HTMLElement) {
   /**
