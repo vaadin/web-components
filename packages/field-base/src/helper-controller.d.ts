@@ -9,6 +9,8 @@ import { SlotChildObserveController } from '@vaadin/component-base/src/slot-chil
  * A controller that manages the helper node content.
  */
 export class HelperController extends SlotChildObserveController {
+  constructor(host: HTMLElement);
+
   /**
    * String used for the helper text.
    */

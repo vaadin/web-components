@@ -23,6 +23,8 @@ type TooltipPosition =
  * A controller that manages the slotted tooltip element.
  */
 export class TooltipController extends SlotController {
+  constructor(host: HTMLElement);
+
   /**
    * An HTML element for linking with the tooltip overlay
    * via `aria-describedby` attribute used by screen readers.

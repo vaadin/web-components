@@ -66,6 +66,11 @@ export class ContextMenuTooltipController extends SlotController {
     }
   }
 
+  bringToFront() {
+    const tooltipNode = this.node;
+    tooltipNode?._overlayElement?.bringToFront();
+  }
+
   /**
    * @param {boolean} immediate
    */

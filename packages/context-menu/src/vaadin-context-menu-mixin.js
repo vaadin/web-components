@@ -340,6 +340,8 @@ export const ContextMenuMixin = (superClass) =>
      * Closes the overlay.
      */
     close() {
+      super.close();
+
       this._setOpened(false);
     }
 

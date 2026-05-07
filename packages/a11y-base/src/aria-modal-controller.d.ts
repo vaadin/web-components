@@ -21,7 +21,7 @@ export class AriaModalController implements ReactiveController {
    */
   callback: () => HTMLElement | HTMLElement[];
 
-  constructor(node: HTMLElement);
+  constructor(host: HTMLElement, callback?: () => HTMLElement | HTMLElement[]);
 
   /**
    * Make the controller host element modal by trapping focus inside it and hiding
