@@ -19,6 +19,7 @@ export const scrollerStyles = css`
     outline: none;
     box-sizing: border-box;
     padding: var(--vaadin-scroller-padding-block) var(--vaadin-scroller-padding-inline);
+    contain: paint;
   }
 
   :host([focus-ring]) {
