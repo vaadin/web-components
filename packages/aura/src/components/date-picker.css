@@ -4,13 +4,12 @@
   --vaadin-date-picker-month-header-font-weight: var(--aura-font-weight-semibold);
   --vaadin-date-picker-date-selected-background: var(--aura-accent-color);
   --vaadin-date-picker-date-selected-color: var(--aura-accent-contrast-color);
-}
-
-:where(:root),
-:where(:host),
-:where([theme]) {
-  --vaadin-date-picker-date-width: calc(var(--aura-font-size-m) * 2.5);
-  --vaadin-date-picker-year-scroller-width: calc(var(--aura-font-size-m) * 3.5);
+  --vaadin-date-picker-date-width: round(var(--aura-base-font-size) / 16 * 2rem + var(--vaadin-padding-s), 2px);
+  --vaadin-date-picker-date-height: round(var(--aura-base-font-size) / 16 * 2rem + var(--vaadin-padding-s), 2px);
+  --vaadin-date-picker-year-scroller-width: round(
+    var(--aura-base-font-size) / 16 * 3rem + var(--vaadin-padding-s),
+    2px
+  );
 }
 
 vaadin-date-picker-month-scroller,

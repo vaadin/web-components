@@ -22,10 +22,6 @@ export const datePickerOverlayStyles = css`
     cursor: default;
   }
 
-  :host([fullscreen]) {
-    --vaadin-date-picker-date-width: calc(100% / 7);
-  }
-
   :host([fullscreen]) [part='backdrop'] {
     display: block;
   }
