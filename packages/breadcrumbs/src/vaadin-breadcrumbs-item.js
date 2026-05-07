@@ -59,6 +59,12 @@ class PrefixSlotController extends SlotController {
  * `nolink`  | The non-interactive `<span>` rendered when `path` is unset.
  * `label`   | Wraps the item's text content, inside `link` or `nolink`.
  *
+ * The following state attributes are available for styling:
+ *
+ * Attribute    | Description
+ * -------------|-------------
+ * `has-prefix` | Set when the item has content in the prefix slot
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement vaadin-breadcrumbs-item
