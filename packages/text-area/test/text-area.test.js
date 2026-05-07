@@ -294,6 +294,38 @@ describe('text-area', () => {
           restore();
         }
       });
+
+      it('should not flip rendered height by 1px on each keystroke under captured-state replay', async () => {
+        // Each measurement cycle's pin/unpin causes an asymmetric scrollHeight
+        // reading on low-DPR displays. Without damping, every backspace moves
+        // the textarea height by exactly 1px in alternating directions, which
+        // is visible as a flicker on every keystroke even though the content
+        // hasn't structurally changed.
+        // Pad the value with trailing chars so 8 deletions stay within the
+        // last line and keep the wrap structure constant.
+        textArea.value = `one\ntwo\nthree${'x'.repeat(8)}`;
+        await nextUpdate(textArea);
+        await nextResize(textArea);
+
+        const restore = mockCapturedStateReplay(textArea.inputElement, inputField);
+        try {
+          const heights = [];
+          for (let i = 0; i < 8; i++) {
+            textArea.value = textArea.value.slice(0, -1);
+            await nextUpdate(textArea);
+            await nextResize(textArea);
+            heights.push(textArea.getBoundingClientRect().height);
+          }
+          const lateHeights = heights.slice(-5);
+          const distinct = new Set(lateHeights);
+          expect(
+            distinct.size,
+            `expected stable rendered height across late keystrokes, full sequence: ${heights.join(', ')}`,
+          ).to.equal(1);
+        } finally {
+          restore();
+        }
+      });
     });
 
     it('should not toggle input height attribute on every keystroke', async () => {
@@ -337,7 +369,7 @@ describe('text-area', () => {
       textArea.value = Array(59).fill('a line of content').join('\n');
       await nextUpdate(textArea);
 
-      await expect(scroller.scrollTop).to.equal(scrollTopBefore);
+      expect(scroller.scrollTop).to.equal(scrollTopBefore);
     });
 
     it('should update height on show after hidden', async () => {
