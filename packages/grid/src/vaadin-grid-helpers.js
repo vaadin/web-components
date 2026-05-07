@@ -14,7 +14,9 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
  */
 export function getBodyRowCells(row) {
   // If available, return the cached cells. Otherwise, query the cells directly from the row.
-  return row.__cells || Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
+  // Uses class selectors (kept in sync with parts by `updatePart`) — class lookup is faster
+  // than attribute-token matching for this hot query and the selector is shorter.
+  return row.__cells || Array.from(row.querySelectorAll('.cell:not(.details-cell)'));
 }
 
 /**

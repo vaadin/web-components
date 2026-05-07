@@ -75,12 +75,12 @@ describe('column groups', () => {
     });
 
     it('should have empty header', () => {
-      const cells = grid.$.header.querySelectorAll('[part~="cell"]');
+      const cells = grid.$.header.querySelectorAll('.cell');
       expect(cells).not.to.be.empty;
     });
 
     it('should have empty footer', () => {
-      const cells = grid.$.footer.querySelectorAll('[part~="cell"]');
+      const cells = grid.$.footer.querySelectorAll('.cell');
       expect(cells).not.to.be.empty;
     });
 
@@ -366,14 +366,14 @@ describe('column groups', () => {
     });
 
     it('should have cell content wrappers in all header cells', () => {
-      grid.$.header.querySelectorAll('[part~="cell"]').forEach((a) => {
+      grid.$.header.querySelectorAll('.cell').forEach((a) => {
         const content = getCellContent(a);
         expect(content.localName).to.equal('vaadin-grid-cell-content');
       });
     });
 
     it('should have cell content wrappers in all footer cells', () => {
-      grid.$.footer.querySelectorAll('[part~="cell"]').forEach((a) => {
+      grid.$.footer.querySelectorAll('.cell').forEach((a) => {
         const content = getCellContent(a);
         expect(content.localName).to.equal('vaadin-grid-cell-content');
       });

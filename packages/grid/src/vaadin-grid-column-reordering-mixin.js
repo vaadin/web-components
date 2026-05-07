@@ -153,7 +153,7 @@ export const ColumnReorderingMixin = (superClass) =>
       }
 
       const headerCell = this._cellFromPoint(e.detail.x, e.detail.y);
-      if (!headerCell || !headerCell.part.contains('header-cell')) {
+      if (!headerCell || !headerCell.classList.contains('header-cell')) {
         return;
       }
 
@@ -423,7 +423,7 @@ export const ColumnReorderingMixin = (superClass) =>
      * @protected
      */
     _isSwappableByPosition(targetColumn, clientX) {
-      const targetCell = Array.from(this.$.header.querySelectorAll('tr:not([hidden]) [part~="cell"]')).find((cell) =>
+      const targetCell = Array.from(this.$.header.querySelectorAll('tr:not([hidden]) .cell')).find((cell) =>
         targetColumn.contains(cell._column),
       );
       const sourceCellRect = this.$.header

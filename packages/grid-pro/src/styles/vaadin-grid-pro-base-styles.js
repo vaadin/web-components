@@ -13,12 +13,12 @@ import { css } from 'lit';
 import { gridStyles } from '@vaadin/grid/src/styles/vaadin-grid-base-styles.js';
 
 const gridPro = css`
-  [part~='body-cell'] {
+  .body-cell {
     --_highlight-color: color-mix(in srgb, currentColor 5%, transparent);
     --_highlight-color2: color-mix(in srgb, currentColor 10%, transparent);
   }
 
-  [part~='editable-cell'] {
+  .editable-cell {
     display: flex;
     align-items: inherit;
     align-self: stretch;
@@ -29,25 +29,25 @@ const gridPro = css`
   }
 
   /* Show cell focus outline */
-  [part~='cell']:is([part~='editable-cell']:focus, :has([part~='editable-cell']:focus))::after {
+  .cell:is(.editable-cell:focus, :has(.editable-cell:focus))::after {
     content: '';
   }
 
   /* On macOS the editable-cell part is a button inside the body cell. On other platforms the body cell is the editable-cell part. */
 
   @media (any-hover: hover) {
-    .body-cell:is([part~='editable-cell'], :has([part~='editable-cell'])):hover {
+    .body-cell:is(.editable-cell, :has(.editable-cell)):hover {
       --vaadin-grid-cell-background-color: var(--_highlight-color);
     }
   }
 
-  :host([navigating]) .body-cell:is([part~='editable-cell']:focus, :has([part~='editable-cell']:focus)) {
+  :host([navigating]) .body-cell:is(.editable-cell:focus, :has(.editable-cell:focus)) {
     --vaadin-grid-cell-background-color: var(--_highlight-color);
   }
 
   /* Indicate editable cells */
 
-  :host([theme~='highlight-editable-cells']) .body-cell:is([part~='editable-cell'], :has([part~='editable-cell'])) {
+  :host([theme~='highlight-editable-cells']) .body-cell:is(.editable-cell, :has(.editable-cell)) {
     --vaadin-grid-row-highlight-background-color: var(
       --vaadin-grid-pro-editable-cell-background-color,
       var(--_highlight-color)
@@ -56,7 +56,7 @@ const gridPro = css`
 
   /* Indicate read-only cells */
 
-  :host([theme~='highlight-read-only-cells']) .body-cell:not([part~='editable-cell'], :has([part~='editable-cell'])) {
+  :host([theme~='highlight-read-only-cells']) .body-cell:not(.editable-cell, :has(.editable-cell)) {
     --_cell-highlight-background-image: repeating-linear-gradient(
       -45deg,
       transparent,
@@ -70,7 +70,7 @@ const gridPro = css`
   }
 
   /* Loading editor cell styles are used by Flow GridPro */
-  :host([loading-editor]) [part~='focused-cell']::before {
+  :host([loading-editor]) .focused-cell::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -86,7 +86,7 @@ const gridPro = css`
     }
   }
 
-  [part~='updating-cell']::after {
+  .updating-cell::after {
     content: '';
     position: absolute;
     inset: var(--_cell-padding);
@@ -106,8 +106,8 @@ const gridPro = css`
     }
   }
 
-  :host([loading-editor]) [part~='focused-cell'] ::slotted(vaadin-grid-cell-content),
-  [part~='updating-cell'] ::slotted(vaadin-grid-cell-content) {
+  :host([loading-editor]) .focused-cell ::slotted(vaadin-grid-cell-content),
+  .updating-cell ::slotted(vaadin-grid-cell-content) {
     opacity: 0;
     pointer-events: none;
   }

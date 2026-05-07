@@ -224,7 +224,7 @@ export const InlineEditingMixin = (superClass) =>
         if (context.item && this._isEditColumn(column)) {
           const { cell } = this._getGridEventLocation(e);
 
-          if (!cell || cell.getAttribute('part').indexOf('details-cell') > -1) {
+          if (!cell || cell.classList.contains('details-cell')) {
             return;
           }
 
@@ -293,7 +293,7 @@ export const InlineEditingMixin = (superClass) =>
       if (context.item && this._isEditColumn(column)) {
         const { cell } = this._getGridEventLocation(e);
 
-        if (!cell || cell.getAttribute('part').indexOf('details-cell') > -1) {
+        if (!cell || cell.classList.contains('details-cell')) {
           return;
         }
 

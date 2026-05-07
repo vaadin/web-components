@@ -21,7 +21,7 @@ import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
 function getHeaderCell(grid, index = 0) {
-  return grid.$.header.querySelectorAll('[part~="cell"]')[index];
+  return grid.$.header.querySelectorAll('.cell')[index];
 }
 
 describe('tooltip', () => {

@@ -69,7 +69,7 @@ describe('basic features', () => {
   });
 
   it('should change the visibility of cell content in loading rows', () => {
-    const firstRow = grid.shadowRoot.querySelector('#items [part~="row"]');
+    const firstRow = grid.shadowRoot.querySelector('#items .row');
     const cellContent = getBodyCellContent(grid, 0, 0);
 
     expect(window.getComputedStyle(cellContent).visibility).to.eql('visible');
@@ -222,26 +222,26 @@ describe('basic features', () => {
 
   it('should have attribute last on the last body row', () => {
     grid.scrollToIndex(grid.size - 1);
-    const lastRowSlot = grid.shadowRoot.querySelector('[part~="last-row"] slot');
+    const lastRowSlot = grid.shadowRoot.querySelector('.last-row slot');
     expect(lastRowSlot.assignedNodes()[0].textContent).to.equal(String(grid.size - 1));
   });
 
   it('should have attribute last on the last body row after resize', () => {
     grid.size = 2;
-    const lastRowSlot = grid.shadowRoot.querySelector('[part~="last-row"] slot');
+    const lastRowSlot = grid.shadowRoot.querySelector('.last-row slot');
     expect(lastRowSlot.assignedNodes()[0].textContent).to.equal(String(grid.size - 1));
   });
 
   it('should not have attribute last on the previous last body row after resize', () => {
     grid.size = 2;
     grid.size = 3;
-    expect(grid.shadowRoot.querySelectorAll('[part~="last-row"]').length).to.equal(1);
+    expect(grid.shadowRoot.querySelectorAll('.last-row').length).to.equal(1);
   });
 
   it('should not have attribute last on a row when size incresed beyond viewport ', () => {
     grid.size = 2;
     grid.size = 1000;
-    expect(grid.shadowRoot.querySelectorAll('[part~="last-row"]').length).to.equal(0);
+    expect(grid.shadowRoot.querySelectorAll('.last-row').length).to.equal(0);
   });
 
   function getFirstCellRenderCount() {

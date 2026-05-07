@@ -384,7 +384,7 @@ describe('row details', () => {
     it('should have the details cell initially hidden', async () => {
       grid.rowDetailsRenderer = () => {};
       await nextFrame();
-      const detailsCell = bodyRows[0].querySelector('[part~="details-cell"]');
+      const detailsCell = bodyRows[0].querySelector('.details-cell');
       expect(detailsCell.hidden).to.be.true;
     });
 
@@ -392,7 +392,7 @@ describe('row details', () => {
       grid.detailsOpenedItems = [...grid.items];
       grid.rowDetailsRenderer = () => {};
       await nextFrame();
-      const detailsCell = bodyRows[0].querySelector('[part~="details-cell"]');
+      const detailsCell = bodyRows[0].querySelector('.details-cell');
       expect(detailsCell.hidden).to.be.false;
     });
 
@@ -401,7 +401,7 @@ describe('row details', () => {
       await nextFrame();
       grid.detailsOpenedItems = [...grid.items];
       await nextFrame();
-      const detailsCell = bodyRows[0].querySelector('[part~="details-cell"]');
+      const detailsCell = bodyRows[0].querySelector('.details-cell');
       expect(detailsCell.hidden).to.be.false;
     });
 

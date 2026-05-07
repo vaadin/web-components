@@ -9,7 +9,7 @@ describe('lit renderers', () => {
   let grid, column;
 
   function getCell(container, { row, col }) {
-    return container.children[row].querySelectorAll('[part~="cell"]')[col];
+    return container.children[row].querySelectorAll('.cell')[col];
   }
 
   beforeEach(() => {

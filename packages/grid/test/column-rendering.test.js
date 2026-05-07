@@ -397,7 +397,7 @@ import { dragAndDropOver, dragStart, fire, flushGrid, getCellContent, getHeaderC
         };
         await nextFrame();
 
-        const detailsCellId = grid.shadowRoot.querySelector('[part~="details-cell"]').id;
+        const detailsCellId = grid.shadowRoot.querySelector('.details-cell').id;
         expect(getBodyCell(0, getLastVisibleColumnIndex()).getAttribute('aria-controls')).to.equal(detailsCellId);
 
         // Scroll back to the beginning
@@ -693,7 +693,7 @@ import { dragAndDropOver, dragStart, fire, flushGrid, getCellContent, getHeaderC
         );
 
         // Verify no visible cell has the first-column-cell part
-        const firstColumnCells = grid.shadowRoot.querySelectorAll('tr:not([hidden]) td[part~="first-column-cell"]');
+        const firstColumnCells = grid.shadowRoot.querySelectorAll('tr:not([hidden]) td.first-column-cell');
         expect(firstColumnCells).to.be.empty;
       });
     });

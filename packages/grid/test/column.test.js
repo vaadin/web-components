@@ -190,7 +190,7 @@ describe('column', () => {
         grid.detailsOpenedItems = [grid._dataProviderController.rootCache.items[0]];
         column.hidden = true;
         flushGrid(grid);
-        const details = grid.shadowRoot.querySelector('#items [part~="details-cell"]')._content;
+        const details = grid.shadowRoot.querySelector('#items .details-cell')._content;
         expect(details.textContent).to.equal('row-details');
       });
 
