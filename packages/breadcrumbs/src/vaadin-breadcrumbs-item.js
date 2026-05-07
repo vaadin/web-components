@@ -25,14 +25,12 @@ class PrefixSlotController extends SlotController {
   }
 
   /** @protected */
-  initCustomNode(node) {
-    super.initCustomNode(node);
+  initCustomNode(_node) {
     this.__updateHasPrefix();
   }
 
   /** @protected */
-  teardownNode(node) {
-    super.teardownNode(node);
+  teardownNode(_node) {
     this.__updateHasPrefix();
   }
 

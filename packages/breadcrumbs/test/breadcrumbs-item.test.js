@@ -9,8 +9,9 @@ window.Vaadin.featureFlags.breadcrumbsComponent = true;
 describe('vaadin-breadcrumbs-item', () => {
   let item;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     item = fixtureSync('<vaadin-breadcrumbs-item></vaadin-breadcrumbs-item>');
+    await nextRender();
   });
 
   describe('custom element definition', () => {
@@ -31,10 +32,6 @@ describe('vaadin-breadcrumbs-item', () => {
 
   describe('has-prefix re-observing', () => {
     describe('without prefix', () => {
-      beforeEach(async () => {
-        await nextRender();
-      });
-
       it('should set has-prefix when a prefix child is added dynamically', async () => {
         const prefix = document.createElement('span');
         prefix.setAttribute('slot', 'prefix');
