@@ -214,6 +214,11 @@ describe('Transitions', () => {
   describe('animation interruption', () => {
     // These tests enable real animations that can be captured mid-flight.
     const DURATION = 200;
+
+    // A tolerance margin to compensate for possible small animation drift,
+    // because animations run on a separate thread and can progress between
+    // an awaited promise resolving and the next CSS translate read on the
+    // main thread.
     const TOLERANCE = 30;
 
     function getAnimation(element) {
