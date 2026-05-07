@@ -4,7 +4,7 @@
 
 - **Commit:** 1b50b2efa8 (PR #11593)
 - **Date:** pre-existing
-- **Decisions:** Task 1 considered done via existing scaffolding from PR #11593 ("feat: set up initial package structure for breadcrumbs component"). Mixin chains will be completed in subsequent tasks as features are added (`ResizeMixin`/`I18nMixin`/`ThemableMixin` on the container, `ThemableMixin` on the item, `<vaadin-breadcrumbs-overlay>` element).
+- **Decisions:** Task 1 considered done via existing scaffolding from PR #11593 ("feat: set up initial package structure for breadcrumbs component"). Mixin chains will be completed in subsequent tasks as features are added.
 - **Surprises:** —
 - **Spec adjustments:** —
 
