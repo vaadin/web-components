@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-breadcrumbs-item.js';
 
 window.Vaadin ??= {};
@@ -22,6 +22,20 @@ describe('vaadin-breadcrumbs-item', () => {
 
   describe('shadow', () => {
     it('default', async () => {
+      await expect(item).shadowDom.to.equalSnapshot();
+    });
+
+    it('with path', async () => {
+      item.path = '/foo';
+      await nextUpdate(item);
+      await expect(item).shadowDom.to.equalSnapshot();
+    });
+
+    it('path cleared', async () => {
+      item.path = '/foo';
+      await nextUpdate(item);
+      item.path = null;
+      await nextUpdate(item);
       await expect(item).shadowDom.to.equalSnapshot();
     });
   });

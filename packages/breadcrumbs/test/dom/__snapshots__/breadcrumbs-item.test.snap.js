@@ -7,3 +7,42 @@ snapshots["vaadin-breadcrumbs-item host default"] =
 `;
 /* end snapshot vaadin-breadcrumbs-item host default */
 
+snapshots["vaadin-breadcrumbs-item shadow default"] = 
+`<span part="nolink">
+  <slot name="prefix">
+  </slot>
+  <span part="label">
+    <slot>
+    </slot>
+  </span>
+</span>
+`;
+/* end snapshot vaadin-breadcrumbs-item shadow default */
+
+snapshots["vaadin-breadcrumbs-item shadow with path"] = 
+`<a
+  href="/foo"
+  part="link"
+>
+  <slot name="prefix">
+  </slot>
+  <span part="label">
+    <slot>
+    </slot>
+  </span>
+</a>
+`;
+/* end snapshot vaadin-breadcrumbs-item shadow with path */
+
+snapshots["vaadin-breadcrumbs-item shadow path cleared"] = 
+`<span part="nolink">
+  <slot name="prefix">
+  </slot>
+  <span part="label">
+    <slot>
+    </slot>
+  </span>
+</span>
+`;
+/* end snapshot vaadin-breadcrumbs-item shadow path cleared */
+
