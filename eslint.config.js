@@ -132,6 +132,15 @@ export default [
           fileoverview: 'file',
           prop: 'property',
         },
+        // Vaadin's `@fires {CustomEvent} kebab-case-name - description` is what
+        // `custom-elements-manifest` parses; do not touch it. Tell `valid-types`
+        // to allow the bracketed type (JSDoc spec normally rejects it on @fires)
+        // and skip namepath validation (kebab-case isn't a valid JSDoc namepath).
+        structuredTags: {
+          fires: {
+            type: true,
+          },
+        },
       },
     },
     rules: {

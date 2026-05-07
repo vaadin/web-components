@@ -63,13 +63,13 @@ import { OverlayMixin } from './vaadin-overlay-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires opened-changed - Fired when the `opened` property changes.
- * @fires vaadin-overlay-open - Fired after the overlay is opened.
- * @fires vaadin-overlay-close - Fired when the opened overlay is about to be closed. Calling `preventDefault()` on the event cancels the closing.
- * @fires vaadin-overlay-closing - Fired when the overlay starts to close. Closing the overlay can be asynchronous depending on the animation.
- * @fires vaadin-overlay-closed - Fired after the overlay is closed.
- * @fires vaadin-overlay-outside-click - Fired before the overlay is closed on outside click. Calling `preventDefault()` on the event cancels the closing.
- * @fires vaadin-overlay-escape-press - Fired before the overlay is closed on Escape key press. Calling `preventDefault()` on the event cancels the closing.
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} vaadin-overlay-open - Fired after the overlay is opened.
+ * @fires {CustomEvent} vaadin-overlay-close - Fired when the opened overlay is about to be closed. Calling `preventDefault()` on the event cancels the closing.
+ * @fires {CustomEvent} vaadin-overlay-closing - Fired when the overlay starts to close. Closing the overlay can be asynchronous depending on the animation.
+ * @fires {CustomEvent} vaadin-overlay-closed - Fired after the overlay is closed.
+ * @fires {CustomEvent} vaadin-overlay-outside-click - Fired before the overlay is closed on outside click. Calling `preventDefault()` on the event cancels the closing.
+ * @fires {CustomEvent} vaadin-overlay-escape-press - Fired before the overlay is closed on Escape key press. Calling `preventDefault()` on the event cancels the closing.
  *
  * @customElement vaadin-overlay
  * @extends HTMLElement
