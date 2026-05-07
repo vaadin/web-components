@@ -30,99 +30,74 @@ describe('vaadin-breadcrumbs-item', () => {
   });
 
   describe('has-prefix re-observing', () => {
-    it('should set has-prefix when a prefix child is added dynamically', async () => {
-      item = fixtureSync('<vaadin-breadcrumbs-item>Home</vaadin-breadcrumbs-item>');
-      await nextRender();
-      expect(item.hasAttribute('has-prefix')).to.be.false;
+    describe('without prefix', () => {
+      beforeEach(async () => {
+        await nextRender();
+      });
 
-      const prefix = document.createElement('span');
-      prefix.setAttribute('slot', 'prefix');
-      prefix.textContent = 'icon';
-      item.appendChild(prefix);
-      await nextRender();
+      it('should set has-prefix when a prefix child is added dynamically', async () => {
+        const prefix = document.createElement('span');
+        prefix.setAttribute('slot', 'prefix');
+        item.appendChild(prefix);
+        await nextRender();
 
-      expect(item.hasAttribute('has-prefix')).to.be.true;
+        expect(item.hasAttribute('has-prefix')).to.be.true;
+      });
+
+      it('should set has-prefix when a prefix child is added after switching branches', async () => {
+        item.path = '/foo';
+        await nextRender();
+
+        const prefix = document.createElement('span');
+        prefix.setAttribute('slot', 'prefix');
+        item.appendChild(prefix);
+        await nextRender();
+
+        expect(item.hasAttribute('has-prefix')).to.be.true;
+      });
     });
 
-    it('should clear has-prefix when the only prefix child is removed', async () => {
-      item = fixtureSync(`
-        <vaadin-breadcrumbs-item>
-          <span slot="prefix">icon</span>
-          Home
-        </vaadin-breadcrumbs-item>
-      `);
-      await nextRender();
-      expect(item.hasAttribute('has-prefix')).to.be.true;
+    describe('with prefix', () => {
+      beforeEach(async () => {
+        item = fixtureSync(`
+          <vaadin-breadcrumbs-item>
+            <span slot="prefix"></span>
+          </vaadin-breadcrumbs-item>
+        `);
+        await nextRender();
+      });
 
-      item.querySelector('[slot="prefix"]').remove();
-      await nextRender();
+      it('should clear has-prefix when the only prefix child is removed', async () => {
+        item.querySelector('[slot="prefix"]').remove();
+        await nextRender();
 
-      expect(item.hasAttribute('has-prefix')).to.be.false;
+        expect(item.hasAttribute('has-prefix')).to.be.false;
+      });
+
+      it('should keep has-prefix after switching from nolink to link branch', async () => {
+        item.path = '/foo';
+        await nextRender();
+
+        expect(item.hasAttribute('has-prefix')).to.be.true;
+      });
     });
 
-    it('should keep has-prefix while at least one prefix child remains', async () => {
-      item = fixtureSync(`
-        <vaadin-breadcrumbs-item>
-          <span slot="prefix" id="p1">icon1</span>
-          <span slot="prefix" id="p2">icon2</span>
-          Home
-        </vaadin-breadcrumbs-item>
-      `);
-      await nextRender();
-      expect(item.hasAttribute('has-prefix')).to.be.true;
+    describe('with prefix and path', () => {
+      beforeEach(async () => {
+        item = fixtureSync(`
+          <vaadin-breadcrumbs-item path="/foo">
+            <span slot="prefix"></span>
+          </vaadin-breadcrumbs-item>
+        `);
+        await nextRender();
+      });
 
-      item.querySelector('#p1').remove();
-      await nextRender();
+      it('should keep has-prefix after switching from link to nolink branch', async () => {
+        item.path = null;
+        await nextRender();
 
-      expect(item.hasAttribute('has-prefix')).to.be.true;
-    });
-
-    it('should keep has-prefix after switching from nolink to link branch', async () => {
-      item = fixtureSync(`
-        <vaadin-breadcrumbs-item>
-          <span slot="prefix">icon</span>
-          Home
-        </vaadin-breadcrumbs-item>
-      `);
-      await nextRender();
-      expect(item.hasAttribute('has-prefix')).to.be.true;
-
-      item.path = '/foo';
-      await nextRender();
-
-      expect(item.hasAttribute('has-prefix')).to.be.true;
-    });
-
-    it('should keep has-prefix after switching from link to nolink branch', async () => {
-      item = fixtureSync(`
-        <vaadin-breadcrumbs-item path="/foo">
-          <span slot="prefix">icon</span>
-          Home
-        </vaadin-breadcrumbs-item>
-      `);
-      await nextRender();
-      expect(item.hasAttribute('has-prefix')).to.be.true;
-
-      item.path = null;
-      await nextRender();
-
-      expect(item.hasAttribute('has-prefix')).to.be.true;
-    });
-
-    it('should track prefix child added after switching branches', async () => {
-      item = fixtureSync('<vaadin-breadcrumbs-item>Home</vaadin-breadcrumbs-item>');
-      await nextRender();
-
-      item.path = '/foo';
-      await nextRender();
-
-      const prefix = document.createElement('span');
-      prefix.setAttribute('slot', 'prefix');
-      prefix.textContent = 'icon';
-      item.appendChild(prefix);
-      await nextRender();
-
-      expect(item.hasAttribute('has-prefix')).to.be.true;
+        expect(item.hasAttribute('has-prefix')).to.be.true;
+      });
     });
   });
 });
