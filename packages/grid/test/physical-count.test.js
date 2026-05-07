@@ -19,7 +19,7 @@ const styles = css`
     border: 0 !important;
   }
 
-  :host(.small) [part~='cell'] {
+  :host(.small) .cell {
     line-height: 10px;
     padding: 0 !important;
     min-height: 0 !important;

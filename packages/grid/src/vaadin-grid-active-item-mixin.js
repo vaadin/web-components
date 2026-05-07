@@ -14,7 +14,7 @@ import { isElementFocusable } from '@vaadin/a11y-base/src/focus-utils.js';
 export const isFocusable = (target) => {
   return (
     target.offsetParent &&
-    !target.part.contains('body-cell') &&
+    !target.classList.contains('body-cell') &&
     isElementFocusable(target) &&
     getComputedStyle(target).visibility !== 'hidden'
   );
@@ -75,7 +75,7 @@ export const ActiveItemMixin = (superClass) =>
         // No clicked cell available
         !cell ||
         // Cell is a details cell
-        cell.part.contains('details-cell') ||
+        cell.classList.contains('details-cell') ||
         // Cell is the empty state cell
         cell === this.$.emptystatecell ||
         // Cell content is focused

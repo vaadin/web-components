@@ -1150,7 +1150,7 @@ describe('drag and drop', () => {
       // Scroll down so that the drag source cell leaves the viewport
       grid.scrollToIndex(50);
       // Expect no cells with drag-source-row-cell part in the DOM
-      expect(grid.$.items.querySelector('tr:not([hidden]) [part~="drag-source-row-cell"]')).to.be.null;
+      expect(grid.$.items.querySelector('tr:not([hidden]) .drag-source-row-cell')).to.be.null;
 
       grid.scrollToIndex(0);
       expect(getFirstCell(grid).getAttribute('part')).to.contain('drag-source-row-cell');

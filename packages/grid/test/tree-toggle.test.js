@@ -93,7 +93,7 @@ describe('tree toggle', () => {
       });
 
       it('should have toggle shadow part', () => {
-        expect(toggle.shadowRoot.querySelector(`[part~="toggle"]`)).to.not.be.null;
+        expect(toggle.shadowRoot.querySelector(`.toggle`)).to.not.be.null;
       });
     });
   });

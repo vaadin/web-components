@@ -392,7 +392,7 @@ export const ScrollMixin = (superClass) =>
     /** @protected */
     _frozenCellsChanged() {
       this._debouncerCacheElements = Debouncer.debounce(this._debouncerCacheElements, microTask, () => {
-        Array.from(this.shadowRoot.querySelectorAll('[part~="cell"]')).forEach((cell) => {
+        Array.from(this.shadowRoot.querySelectorAll('.cell')).forEach((cell) => {
           cell.style.transform = '';
         });
         this._frozenCells = Array.prototype.slice.call(this.$.table.querySelectorAll('[frozen]'));
@@ -504,18 +504,18 @@ export const ScrollMixin = (superClass) =>
         }
       });
 
-      const focusedRow = this.shadowRoot.querySelector("[part~='row']:focus");
+      const focusedRow = this.shadowRoot.querySelector('.row:focus');
       if (focusedRow) {
         // Update the horizontal scroll position property of the focused row
         this.__updateRowScrollPositionProperty(focusedRow);
       }
 
-      const lastHeaderRow = this.$.header.querySelector("[part~='last-header-row']");
+      const lastHeaderRow = this.$.header.querySelector('.last-header-row');
       if (lastHeaderRow) {
         this.__updateRowScrollPositionProperty(lastHeaderRow);
       }
 
-      const firstFooterRow = this.$.footer.querySelector("[part~='first-footer-row']");
+      const firstFooterRow = this.$.footer.querySelector('.first-footer-row');
       if (firstFooterRow) {
         this.__updateRowScrollPositionProperty(firstFooterRow);
       }

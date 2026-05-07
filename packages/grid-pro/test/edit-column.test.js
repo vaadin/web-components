@@ -936,7 +936,7 @@ describe('edit column', () => {
 
     it('should not throw on details cell click', () => {
       grid.detailsOpenedItems = [grid.items[0]];
-      const detailsCell = rows[0].querySelector('[part~="details-cell"]');
+      const detailsCell = rows[0].querySelector('.details-cell');
 
       const dispatch = () => detailsCell.dispatchEvent(new CustomEvent('mousedown', { bubbles: true, composed: true }));
       expect(dispatch).to.not.throw(Error);

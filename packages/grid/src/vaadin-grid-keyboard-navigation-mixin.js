@@ -17,7 +17,7 @@ function isCell(element) {
 }
 
 function isDetailsCell(element) {
-  return element.matches('[part~="details-cell"]');
+  return element.matches('.details-cell');
 }
 
 /**

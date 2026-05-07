@@ -356,11 +356,11 @@ describe('accessibility', () => {
     describe('row details in use', () => {
       it('should have aria-controls referencing detail cell id on body cells', () => {
         Array.from(grid.$.items.children).forEach((row) => {
-          const detailsCell = row.querySelector('td[part~="details-cell"]');
+          const detailsCell = row.querySelector('td.details-cell');
 
           expect(detailsCell.id).to.be.ok;
           expect(detailsCell.getAttribute('aria-controls')).to.equal(null);
-          expect(uniqueAttrValues(row.querySelectorAll('td:not([part~="details-cell"])'), 'aria-controls')).to.eql([
+          expect(uniqueAttrValues(row.querySelectorAll('td:not(.details-cell)'), 'aria-controls')).to.eql([
             detailsCell.id,
           ]);
         });

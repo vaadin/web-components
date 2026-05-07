@@ -35,16 +35,19 @@ export const ColumnResizingMixin = (superClass) =>
       });
 
       // Disable contextmenu on any resize separator.
-      scroller.addEventListener('contextmenu', (e) => e.target.part.contains('resize-handle') && e.preventDefault());
+      scroller.addEventListener(
+        'contextmenu',
+        (e) => e.target.classList.contains('resize-handle') && e.preventDefault(),
+      );
 
       // Disable native cell focus when resizing
-      scroller.addEventListener('mousedown', (e) => e.target.part.contains('resize-handle') && e.preventDefault());
+      scroller.addEventListener('mousedown', (e) => e.target.classList.contains('resize-handle') && e.preventDefault());
     }
 
     /** @private */
     _onHeaderTrack(e) {
       const handle = e.target;
-      if (handle.part.contains('resize-handle')) {
+      if (handle.classList.contains('resize-handle')) {
         // Ignore track events after multi-touch cancelled resizing
         if (e.detail.state !== 'start' && !this.$.scroller.hasAttribute('column-resizing')) {
           return;
@@ -66,7 +69,7 @@ export const ColumnResizingMixin = (superClass) =>
 
         const isRTL = this.__isRTL;
         const eventX = e.detail.x;
-        const columnRowCells = Array.from(this.$.header.querySelectorAll('[part~="row"]:last-child [part~="cell"]'));
+        const columnRowCells = Array.from(this.$.header.querySelectorAll('.row:last-child .cell'));
         const targetCell = columnRowCells.find((cell) => cell._column === column);
         // Resize the target column
         if (targetCell.offsetWidth) {

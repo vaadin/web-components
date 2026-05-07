@@ -496,7 +496,7 @@ export const ColumnBaseMixin = (superClass) =>
       if (headerCell) {
         [headerCell].concat(this._emptyCells).forEach((cell) => {
           if (cell) {
-            const existingHandle = cell.querySelector('[part~="resize-handle"]');
+            const existingHandle = cell.querySelector('.resize-handle');
             if (existingHandle) {
               cell.removeChild(existingHandle);
             }

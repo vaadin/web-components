@@ -33,6 +33,7 @@ import {
   updateState,
 } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
+import { registerPartTrackingHost, unregisterPartTrackingHost } from './vaadin-grid-part-tracker.js';
 import { ResizeMixin } from './vaadin-grid-resize-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
 import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
@@ -188,6 +189,7 @@ export const GridMixin = (superClass) =>
       super.connectedCallback();
       this.isAttached = true;
       this.__virtualizer.hostConnected();
+      registerPartTrackingHost(this);
     }
 
     /** @protected */
@@ -195,6 +197,7 @@ export const GridMixin = (superClass) =>
       super.disconnectedCallback();
       this.isAttached = false;
       this._hideTooltip(true);
+      unregisterPartTrackingHost(this);
     }
 
     /** @private */

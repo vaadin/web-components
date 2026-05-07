@@ -8,7 +8,7 @@ import { flushGrid } from './helpers.js';
 let grid;
 
 function getHeaderCell(grid, index) {
-  return grid.$.header.querySelectorAll('[part~="cell"]')[index];
+  return grid.$.header.querySelectorAll('.cell')[index];
 }
 
 function getRowCell(rowIndex, cellIndex) {

@@ -5,6 +5,7 @@
  */
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { isPartTargeted } from './vaadin-grid-part-tracker.js';
 
 /**
  * Returns the cells of the given row, excluding the details cell.
@@ -14,7 +15,9 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
  */
 export function getBodyRowCells(row) {
   // If available, return the cached cells. Otherwise, query the cells directly from the row.
-  return row.__cells || Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
+  // Uses class selectors (kept in sync with parts by `updatePart`) so this works even when
+  // part attributes are skipped to avoid the WebKit ::part recalculation cost.
+  return row.__cells || Array.from(row.querySelectorAll('.cell:not(.details-cell)'));
 }
 
 /**
@@ -84,8 +87,19 @@ export function updateState(element, attribute, value) {
  * @param {boolean | string | null | undefined} value
  */
 export function updatePart(element, part, value) {
-  element.classList.toggle(part, value || value === '');
-  element.part.toggle(part, value || value === '');
+  const force = value || value === '';
+  element.classList.toggle(part, force);
+  // Skip the `part` attribute when no loaded stylesheet targets this name via
+  // `::part(name)`. WebKit re-evaluates every `::part` rule against every
+  // element with a part attribute on style invalidation, so unused parts cost
+  // significantly on large grids in Safari (https://bugs.webkit.org/show_bug.cgi?id=309761).
+  // The class is always toggled and is what the grid's own CSS targets.
+  // If the rule is added later, `vaadin-grid-part-tracker` retro-fits the
+  // attribute on existing elements.
+  if (force && !isPartTargeted(part)) {
+    return;
+  }
+  element.part.toggle(part, force);
   element.part.length === 0 && element.removeAttribute('part');
 }
 

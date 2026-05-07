@@ -36,16 +36,16 @@ describe('column resizing', () => {
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
     headerCells = getRowCells(getRows(grid.$.header)[0]);
-    handle = headerCells[0].querySelector('[part~="resize-handle"]');
+    handle = headerCells[0].querySelector('.resize-handle');
     await nextRender();
   });
 
   it('should be resizable', () => {
-    expect(headerCells[0].querySelector('[part~="resize-handle"]')).to.be.ok;
+    expect(headerCells[0].querySelector('.resize-handle')).to.be.ok;
   });
 
   it('should not be resizable', () => {
-    expect(headerCells[1].querySelector('[part~="resize-handle"]')).to.be.not.ok;
+    expect(headerCells[1].querySelector('.resize-handle')).to.be.not.ok;
   });
 
   it('should extend scroll width', () => {
@@ -78,7 +78,7 @@ describe('column resizing', () => {
       column.resizable = true;
       column.frozenToEnd = true;
       flushGrid(grid);
-      handle = headerCells[1].querySelector('[part~="resize-handle"]');
+      handle = headerCells[1].querySelector('.resize-handle');
 
       const options = { node: handle };
       const rect = headerCells[1].getBoundingClientRect();
@@ -146,7 +146,7 @@ describe('column resizing', () => {
       const rect = secondCell.getBoundingClientRect();
       const x = rect.right - 10;
       const y = rect.top + rect.height / 2;
-      expect(getElementFromPoint(grid, x, y)).not.to.equal(secondCell.querySelector('[part~="resize-handle"]'));
+      expect(getElementFromPoint(grid, x, y)).not.to.equal(secondCell.querySelector('.resize-handle'));
       done();
     });
 
@@ -177,7 +177,7 @@ describe('column resizing', () => {
 
     grid._columnTree[0][0].width = '50%';
     grid._columnTree[0][0].flexGrow = 1;
-    fire('track', { state: 'start' }, { node: headerCells[1].querySelector('[part~="resize-handle"]') });
+    fire('track', { state: 'start' }, { node: headerCells[1].querySelector('.resize-handle') });
     expect(grid._columnTree[0][0].width.indexOf('px')).not.to.equal(-1);
     expect(grid._columnTree[0][0].flexGrow).to.equal(0);
   });
@@ -346,7 +346,7 @@ describe('column group resizing', () => {
 
       it('should resize the child column', () => {
         const headerRows = getRows(grid.$.header);
-        const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
+        const handle = getRowCells(headerRows[0])[0].querySelector('.resize-handle');
 
         const cell = getRowCells(headerRows[1])[1];
         const rect = cell.getBoundingClientRect();
@@ -360,7 +360,7 @@ describe('column group resizing', () => {
       it('should resize the last non-hidden child column', () => {
         grid._columnTree[1][1].hidden = true;
         const headerRows = getRows(grid.$.header);
-        const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
+        const handle = getRowCells(headerRows[0])[0].querySelector('.resize-handle');
 
         const cell = getRowCells(headerRows[1])[0];
         const rect = cell.getBoundingClientRect();
@@ -383,7 +383,7 @@ describe('column group resizing', () => {
     flushGrid(grid);
 
     // Get the resize handle from the column group header
-    const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
+    const handle = getRowCells(headerRows[0])[0].querySelector('.resize-handle');
 
     // The visually last column after reorder is column0 (originally first, now second visually)
     // Get the cell that should be resized (the visually rightmost one)
@@ -430,7 +430,7 @@ describe('group inside group', () => {
 
   it('should resize the child groups child column', () => {
     const headerRows = getRows(grid.$.header);
-    const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
+    const handle = getRowCells(headerRows[0])[0].querySelector('.resize-handle');
 
     const cell = getRowCells(headerRows[1])[1];
     const rect = cell.getBoundingClientRect();

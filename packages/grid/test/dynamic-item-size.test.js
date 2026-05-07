@@ -6,16 +6,16 @@ import { css } from 'lit';
 import { flushGrid, getFirstVisibleItem, infiniteDataProvider } from './helpers.js';
 
 const styles = css`
-  [part~='cell']:not([part~='details-cell']) ::slotted(vaadin-grid-cell-content) {
+  .cell:not(.details-cell) ::slotted(vaadin-grid-cell-content) {
     padding: 0 !important;
   }
 
-  [part~='cell'] {
+  .cell {
     padding: 1px;
     line-height: 18px;
   }
 
-  :host(.high) [part~='cell'] {
+  :host(.high) .cell {
     line-height: 100px;
   }
 `;

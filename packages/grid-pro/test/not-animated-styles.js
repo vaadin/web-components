@@ -1,3 +1,4 @@
+import '@vaadin/grid/test/grid-test-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(

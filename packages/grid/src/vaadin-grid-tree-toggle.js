@@ -80,7 +80,7 @@ class GridTreeToggle extends GridTreeToggleMixin(
   render() {
     return html`
       <span id="level-spacer"></span>
-      <span part="toggle"></span>
+      <span part="toggle" class="toggle"></span>
       <slot></slot>
     `;
   }

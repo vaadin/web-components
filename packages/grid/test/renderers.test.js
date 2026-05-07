@@ -6,11 +6,11 @@ import '../src/vaadin-grid.js';
 import { flushGrid, getBodyCellContent, getCell, getContainerCell } from './helpers.js';
 
 function getHeaderCell(grid, index = 0) {
-  return grid.$.header.querySelectorAll('[part~="cell"]')[index];
+  return grid.$.header.querySelectorAll('.cell')[index];
 }
 
 function getFooterCell(grid, index = 0) {
-  return grid.$.footer.querySelectorAll('[part~="cell"]')[index];
+  return grid.$.footer.querySelectorAll('.cell')[index];
 }
 
 describe('renderers', () => {

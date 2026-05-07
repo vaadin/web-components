@@ -36,7 +36,7 @@ export function attributeRenderer(attributeName) {
 }
 
 export const getCell = (grid, index) => {
-  return grid.$.items.querySelectorAll('[part~="cell"]')[index];
+  return grid.$.items.querySelectorAll('.cell')[index];
 };
 
 export const getFirstCell = (grid) => {
@@ -141,11 +141,11 @@ export const getRows = (container) => {
 };
 
 export const getRowCells = (row) => {
-  return Array.from(row.querySelectorAll('[part~="cell"]'));
+  return Array.from(row.querySelectorAll('.cell'));
 };
 
 export const getRowBodyCells = (row) => {
-  return Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"]'));
+  return Array.from(row.querySelectorAll('.cell:not(.details-cell)'));
 };
 
 export const getCellContent = (cell) => {

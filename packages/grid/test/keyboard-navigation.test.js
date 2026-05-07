@@ -839,7 +839,7 @@ describe('keyboard navigation', () => {
       });
 
       function findRowDetailsCell(scope) {
-        return scope.querySelector('[part~="details-cell"]');
+        return scope.querySelector('.details-cell');
       }
 
       it('should not navigate to row details with right arrow', () => {
@@ -1656,7 +1656,7 @@ describe('keyboard navigation', () => {
       focusItem(5);
       grid.scrollToIndex(100);
       flushGrid(grid);
-      expect(grid.$.items.querySelector(':not([hidden]) [part~="focused-cell"')).to.be.null;
+      expect(grid.$.items.querySelector(':not([hidden]) .focused-cell')).to.be.null;
     });
 
     it('should restore the part when focused item is scrolled back to view', () => {
@@ -1680,7 +1680,7 @@ describe('keyboard navigation', () => {
       flushGrid(grid);
       grid.scrollToIndex(0);
       flushGrid(grid);
-      expect(grid.$.items.querySelector(':not([hidden]) [part~="focused-cell"')).to.be.null;
+      expect(grid.$.items.querySelector(':not([hidden]) .focused-cell')).to.be.null;
     });
 
     it('should not remove the part from header cell when scrolling items', () => {
@@ -2280,7 +2280,7 @@ describe('empty state', () => {
 
     await nextFrame();
     expect(getEmptyStateBody().contains(grid.shadowRoot.activeElement)).to.be.true;
-    expect(getEmptyStateBody().querySelector('td[part~="focused-cell"]')).to.be.ok;
+    expect(getEmptyStateBody().querySelector('td.focused-cell')).to.be.ok;
   });
 
   it('should shift tab back to header from empty state body', () => {
@@ -2289,7 +2289,7 @@ describe('empty state', () => {
     shiftTab();
 
     expect(grid.$.header.contains(grid.shadowRoot.activeElement)).to.be.true;
-    expect(getEmptyStateBody().querySelector('td[part~="focused-cell"]')).to.be.null;
+    expect(getEmptyStateBody().querySelector('td.focused-cell')).to.be.null;
   });
 
   it('should enter interaction mode on empty state body', () => {

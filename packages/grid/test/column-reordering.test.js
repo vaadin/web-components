@@ -20,9 +20,9 @@ import {
 } from './helpers.js';
 
 function getVisualCell(section, row, col) {
-  let cell = Array.from(section.querySelectorAll('[part~="cell"]:not([part~="details-cell"])')).pop();
+  let cell = Array.from(section.querySelectorAll('.cell:not(.details-cell)')).pop();
   if (section.id === 'footer') {
-    cell = section.querySelector('[part~="cell"]');
+    cell = section.querySelector('.cell');
   }
   const sectionRect = section.getBoundingClientRect();
   const sectionBorder = parseInt(section.style.borderTopWidth || 0);
@@ -176,7 +176,7 @@ describe('reordering simple grid', () => {
   });
 
   it('should prevent activating column resize while reordering', () => {
-    const resize = getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]');
+    const resize = getCellByCellContent(headerContent[0]).querySelector('.resize-handle');
     dragOver(headerContent[0], resize);
     expect(window.getComputedStyle(resize).pointerEvents).to.equal('none');
   });
@@ -196,7 +196,7 @@ describe('reordering simple grid', () => {
     const e = makeSoloTouchEvent(
       'touchmove',
       { x: 0, y: 0 },
-      getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]'),
+      getCellByCellContent(headerContent[0]).querySelector('.resize-handle'),
     );
     expect(e.defaultPrevented).to.be.false;
   });
@@ -301,7 +301,7 @@ describe('reordering simple grid', () => {
   });
 
   it('should not start reordering on resize handle move', () => {
-    const handle = getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]');
+    const handle = getCellByCellContent(headerContent[0]).querySelector('.resize-handle');
     dragStart(handle);
     expect(grid.hasAttribute('reordering')).to.be.false;
   });
@@ -742,7 +742,7 @@ describe('reordering simple grid', () => {
     });
 
     it('should not start reordering on frozen column resize handle move', () => {
-      const handle = getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]');
+      const handle = getCellByCellContent(headerContent[0]).querySelector('.resize-handle');
       const cell = getCellByCellContent(headerContent[1]);
       dragOver(handle, cell);
       expect(grid.hasAttribute('reordering')).to.be.false;
@@ -780,7 +780,7 @@ describe('reordering simple grid', () => {
     });
 
     it('should not start reordering on frozen column resize handle move', () => {
-      const handle = getCellByCellContent(headerContent[2]).querySelector('[part~="resize-handle"]');
+      const handle = getCellByCellContent(headerContent[2]).querySelector('.resize-handle');
       const cell = getCellByCellContent(headerContent[3]);
       dragOver(handle, cell);
       expect(grid.hasAttribute('reordering')).to.be.false;
