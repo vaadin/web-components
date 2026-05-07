@@ -20,23 +20,20 @@ describe('vaadin-breadcrumbs-item', () => {
     });
 
     it('prefix', async () => {
-      item = fixtureSync(`
-        <vaadin-breadcrumbs-item>
-          <span slot="prefix">icon</span>
-          Home
-        </vaadin-breadcrumbs-item>
-      `);
+      const prefix = document.createElement('span');
+      prefix.setAttribute('slot', 'prefix');
+      prefix.textContent = 'icon';
+      item.appendChild(prefix);
       await nextRender();
       await expect(item).dom.to.equalSnapshot();
     });
 
     it('prefix path', async () => {
-      item = fixtureSync(`
-        <vaadin-breadcrumbs-item path="/foo">
-          <span slot="prefix">icon</span>
-          Home
-        </vaadin-breadcrumbs-item>
-      `);
+      item.path = '/foo';
+      const prefix = document.createElement('span');
+      prefix.setAttribute('slot', 'prefix');
+      prefix.textContent = 'icon';
+      item.appendChild(prefix);
       await nextRender();
       await expect(item).dom.to.equalSnapshot();
     });
