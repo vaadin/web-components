@@ -1,6 +1,7 @@
 :where(:root),
 :where(:host) {
   --vaadin-dialog-title-font-size: var(--aura-font-size-l);
+  --vaadin-dialog-title-line-height: var(--aura-line-height-l);
   --vaadin-dialog-border-width: 0px;
 }
 
