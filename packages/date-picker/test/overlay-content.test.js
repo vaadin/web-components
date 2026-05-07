@@ -8,6 +8,9 @@ async function customizeFixture({ initialPosition, monthScrollerItems, monthScro
   const overlay = fixtureSync(`<vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>`);
   await untilOverlayScrolled(overlay);
   const monthScroller = overlay._monthScroller;
+  // Pin item height to a clean integer pixel value so percentage-based buffer
+  // offsets resolve to whole pixels and revealDate position math stays exact.
+  monthScroller.style.setProperty('--vaadin-infinite-scroller-item-height', '270px');
   monthScroller.style.setProperty('--vaadin-infinite-scroller-buffer-offset', monthScrollerOffset);
   monthScroller.style.height = `${270 * monthScrollerItems}px`;
   overlay.i18n = getDefaultI18n();
@@ -426,8 +429,7 @@ describe('overlay', () => {
       it('should scroll when the month is below the visible area', () => {
         const position = monthScroller.position;
         overlay.revealDate(new Date(2021, 3, 1), false);
-        // FIXME: fails with base styles: "expected -51.04545454545455 to equal -51"
-        expect(monthScroller.position).to.be.closeTo(position + 1, 0.1);
+        expect(monthScroller.position).to.equal(position + 1);
       });
     });
 
@@ -456,8 +458,7 @@ describe('overlay', () => {
       it('should scroll when the month is below the visible area', () => {
         const position = monthScroller.position;
         overlay.revealDate(new Date(2021, 3, 1), false);
-        // FIXME: fails with base styles: "expected -51.45454545454545 to equal -51.4"
-        expect(monthScroller.position).to.be.closeTo(position + 0.6, 0.1 /* The bottom 10% offset is ensured by JS */);
+        expect(monthScroller.position).to.equal(position + 0.6 /* The bottom 10% offset is ensured by JS */);
       });
     });
   });
