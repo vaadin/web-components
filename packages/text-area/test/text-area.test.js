@@ -194,6 +194,184 @@ describe('text-area', () => {
       expect(textArea.offsetHeight).to.be.above(height);
     });
 
+    describe('subpixel rounding', () => {
+      // https://github.com/vaadin/flow-components/issues/9141
+      // Mocks Firefox HiDPI slack-dependent rounding so the bug
+      // reproduces on CI Chromium (where it does not naturally occur).
+      function mockCapturedStateReplay(input, inputField) {
+        // Captured from real Firefox at Wayland scale 1.25 + html zoom 1.1.
+        const tightHeight = '63.8px';
+        const looseHeight = '64.9px';
+        const originalGetComputedStyle = window.getComputedStyle;
+        window.getComputedStyle = function getComputedStyle(el, ...args) {
+          const cs = originalGetComputedStyle.call(window, el, ...args);
+          if (el !== inputField) {
+            return cs;
+          }
+          const inputHasExplicitHeight = input.style.height && input.style.height !== 'auto';
+          const mockedHeight = inputHasExplicitHeight ? looseHeight : tightHeight;
+          return new Proxy(cs, {
+            get(target, prop) {
+              if (prop === 'height') {
+                return mockedHeight;
+              }
+              const value = Reflect.get(target, prop, target);
+              return typeof value === 'function' ? value.bind(target) : value;
+            },
+          });
+        };
+        Object.defineProperty(input, 'scrollHeight', {
+          configurable: true,
+          get() {
+            const isAuto = input.style.height === '' || input.style.height === 'auto';
+            const inputFieldPinnedTight = inputField.style.height === tightHeight;
+            if (isAuto && inputFieldPinnedTight) {
+              return this.clientHeight + 1;
+            }
+            return this.clientHeight;
+          },
+        });
+        return () => {
+          window.getComputedStyle = originalGetComputedStyle;
+          delete input.scrollHeight;
+        };
+      }
+
+      async function recordHostRectsOver(host, durationMs) {
+        const samples = [];
+        const start = performance.now();
+        while (performance.now() - start < durationMs) {
+          samples.push(host.getBoundingClientRect().height);
+          await new Promise((resolve) => {
+            requestAnimationFrame(resolve);
+          });
+        }
+        return samples;
+      }
+
+      it('should converge to a stable rendered height after a width perturbation', async () => {
+        textArea.value = 'one\ntwo';
+        await nextUpdate(textArea);
+        await nextResize(textArea);
+
+        const restore = mockCapturedStateReplay(textArea.inputElement, inputField);
+        try {
+          textArea.style.width = '320px';
+          await nextResize(textArea);
+
+          const samples = await recordHostRectsOver(textArea, 200);
+          const distinctLateHeights = new Set(samples.slice(-10));
+          await expect(
+            distinctLateHeights.size,
+            `expected stable rendered height in last 10 frames, got values: ${[...distinctLateHeights].join(', ')}`,
+          ).to.equal(1);
+        } finally {
+          restore();
+        }
+      });
+
+      it('should converge to a stable rendered height after value shrinks', async () => {
+        textArea.value = Array(20).fill('line').join('\n');
+        await nextUpdate(textArea);
+        await nextResize(textArea);
+        const grownHeight = textArea.getBoundingClientRect().height;
+
+        const restore = mockCapturedStateReplay(textArea.inputElement, inputField);
+        try {
+          textArea.value = 'short';
+          await nextUpdate(textArea);
+          await nextResize(textArea);
+
+          const samples = await recordHostRectsOver(textArea, 200);
+          const lateSamples = samples.slice(-10);
+          const distinctLateHeights = new Set(lateSamples);
+          await expect(
+            distinctLateHeights.size,
+            `expected stable rendered height after shrink, got values: ${[...distinctLateHeights].join(', ')}`,
+          ).to.equal(1);
+          expect(lateSamples[lateSamples.length - 1]).to.be.lessThan(grownHeight);
+        } finally {
+          restore();
+        }
+      });
+
+      it('should not flip rendered height by 1px on each keystroke under captured-state replay', async () => {
+        // Each measurement cycle's pin/unpin causes an asymmetric scrollHeight
+        // reading on low-DPR displays. Without damping, every backspace moves
+        // the textarea height by exactly 1px in alternating directions, which
+        // is visible as a flicker on every keystroke even though the content
+        // hasn't structurally changed.
+        // Pad the value with trailing chars so 8 deletions stay within the
+        // last line and keep the wrap structure constant.
+        textArea.value = `one\ntwo\nthree${'x'.repeat(8)}`;
+        await nextUpdate(textArea);
+        await nextResize(textArea);
+
+        const restore = mockCapturedStateReplay(textArea.inputElement, inputField);
+        try {
+          const heights = [];
+          for (let i = 0; i < 8; i++) {
+            textArea.value = textArea.value.slice(0, -1);
+            await nextUpdate(textArea);
+            await nextResize(textArea);
+            heights.push(textArea.getBoundingClientRect().height);
+          }
+          const lateHeights = heights.slice(-5);
+          const distinct = new Set(lateHeights);
+          expect(
+            distinct.size,
+            `expected stable rendered height across late keystrokes, full sequence: ${heights.join(', ')}`,
+          ).to.equal(1);
+        } finally {
+          restore();
+        }
+      });
+    });
+
+    it('should not toggle input height attribute on every keystroke', async () => {
+      textArea.style.maxHeight = '100px';
+      textArea.value = Array(20).fill('a long line of content that wraps and overflows').join('\n');
+      await nextUpdate(textArea);
+      await nextResize(textArea);
+      expect(inputField.scrollHeight).to.be.above(inputField.clientHeight);
+
+      const mutations = [];
+      const mo = new MutationObserver((records) => {
+        records.forEach((r) => mutations.push(r.oldValue));
+      });
+      mo.observe(native, { attributes: true, attributeOldValue: true, attributeFilter: ['style'] });
+
+      setInputValue(textArea, `${native.value}a`);
+      await Promise.resolve();
+      mo.disconnect();
+
+      expect(mutations.length, `style mutations: ${mutations.join(', ')}`).to.be.lte(1);
+    });
+
+    // https://github.com/vaadin/web-components/issues/291
+    // The measurement collapse must not propagate out as a transient
+    // ancestor shrink — any ancestor scrolled near its max would get
+    // clamped, visible as a scroll jump on backspace.
+    it('should not move ancestor scroll position on value-shrink near scroll bottom', async () => {
+      textArea.value = Array(60).fill('a line of content').join('\n');
+      await nextUpdate(textArea);
+      await nextResize(textArea);
+
+      const scroller = fixtureSync('<div style="height: 240px; overflow: auto;"></div>');
+      scroller.appendChild(textArea);
+      await nextResize(textArea);
+
+      const ancestorMax = scroller.scrollHeight - scroller.clientHeight;
+      scroller.scrollTop = ancestorMax - 30;
+      const scrollTopBefore = scroller.scrollTop;
+      expect(scrollTopBefore).to.be.above(0);
+
+      textArea.value = Array(59).fill('a line of content').join('\n');
+      await nextUpdate(textArea);
+
+      expect(scroller.scrollTop).to.equal(scrollTopBefore);
+    });
+
     it('should update height on show after hidden', async () => {
       const height = textArea.offsetHeight;
       textArea.setAttribute('hidden', '');
