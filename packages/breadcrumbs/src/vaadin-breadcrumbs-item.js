@@ -7,8 +7,45 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { breadcrumbsItemStyles } from './styles/vaadin-breadcrumbs-item-base-styles.js';
+
+/**
+ * A `SlotController` subclass that observes the `prefix` slot and notifies the
+ * host whenever the set of slotted nodes changes, so the host can toggle the
+ * `has-prefix` state attribute. Also exposes `reobserve()` so the host can
+ * re-bind the underlying `SlotObserver` when the slot element is re-created
+ * (the `prefix` slot lives inside the `[part="link"]` / `[part="nolink"]`
+ * branch and is replaced when `path` switches between set and unset).
+ */
+class PrefixSlotController extends SlotController {
+  constructor(host) {
+    super(host, 'prefix', null, { multiple: true, observe: true });
+  }
+
+  /** @protected */
+  initCustomNode(node) {
+    super.initCustomNode(node);
+    this.host._updateHasPrefix();
+  }
+
+  /** @protected */
+  teardownNode(node) {
+    super.teardownNode(node);
+    this.host._updateHasPrefix();
+  }
+
+  reobserve() {
+    if (!this.initialized) {
+      return;
+    }
+    if (this.__slotObserver) {
+      this.__slotObserver.disconnect();
+    }
+    this.observeSlot();
+  }
+}
 
 /**
  * `<vaadin-breadcrumbs-item>` is a single item inside a `<vaadin-breadcrumbs>`.
@@ -76,6 +113,29 @@ class BreadcrumbsItem extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitEl
             </a>
           `}
     `;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._prefixController = new PrefixSlotController(this);
+    this.addController(this._prefixController);
+  }
+
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('path') && this._prefixController) {
+      this._prefixController.reobserve();
+      this._updateHasPrefix();
+    }
+  }
+
+  /** @protected */
+  _updateHasPrefix() {
+    this.toggleAttribute('has-prefix', this._prefixController.nodes.length > 0);
   }
 }
 
