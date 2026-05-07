@@ -46,22 +46,22 @@ class BreadcrumbsItem extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitEl
   /** @protected */
   render() {
     return html`
-      ${this.path != null
+      ${this.path == null
         ? html`
-            <a href="${this.path}" part="link">
-              <slot name="prefix"></slot>
-              <span part="label">
-                <slot></slot>
-              </span>
-            </a>
-          `
-        : html`
             <span part="nolink">
               <slot name="prefix"></slot>
               <span part="label">
                 <slot></slot>
               </span>
             </span>
+          `
+        : html`
+            <a href="${this.path}" part="link">
+              <slot name="prefix"></slot>
+              <span part="label">
+                <slot></slot>
+              </span>
+            </a>
           `}
     `;
   }
