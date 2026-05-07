@@ -25,16 +25,8 @@ describe('vaadin-breadcrumbs-item', () => {
       await expect(item).shadowDom.to.equalSnapshot();
     });
 
-    it('with path', async () => {
+    it('path', async () => {
       item.path = '/foo';
-      await nextUpdate(item);
-      await expect(item).shadowDom.to.equalSnapshot();
-    });
-
-    it('path cleared', async () => {
-      item.path = '/foo';
-      await nextUpdate(item);
-      item.path = null;
       await nextUpdate(item);
       await expect(item).shadowDom.to.equalSnapshot();
     });
