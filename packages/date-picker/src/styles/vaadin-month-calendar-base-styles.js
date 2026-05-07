@@ -92,7 +92,7 @@ export const monthCalendarStyles = css`
     aspect-ratio: 1;
   }
 
-  :where([part~='date']:focus)::after {
+  :where([part~='date']:focus-visible)::after {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
