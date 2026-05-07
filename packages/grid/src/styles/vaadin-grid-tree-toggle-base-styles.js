@@ -60,6 +60,10 @@ export const gridTreeToggleStyles = css`
     rotate: -90deg;
   }
 
+  :host(:not([expanded]):dir(rtl)) [part='toggle']::before {
+    rotate: 90deg;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     [part='toggle']::before {
       transition: var(--_non-focused-row-none, rotate 120ms);
