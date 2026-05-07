@@ -213,6 +213,38 @@ describe('side-nav-item', () => {
       });
     });
 
+    it('should not dispatch expanded-changed when item without children becomes current', async () => {
+      const leaf = fixtureSync(`<vaadin-side-nav-item path="/no-match"></vaadin-side-nav-item>`);
+      await nextRender();
+      const spy = sinon.spy();
+      leaf.addEventListener('expanded-changed', spy);
+      leaf.path = '';
+      await nextRender();
+      expect(leaf.current).to.be.true;
+      expect(leaf.expanded).to.be.false;
+      expect(spy.called).to.be.false;
+    });
+
+    it('should not dispatch expanded-changed on nested item without children when becoming current', async () => {
+      const parent = fixtureSync(`
+        <vaadin-side-nav-item>
+          <vaadin-side-nav-item slot="children" path="/no-match"></vaadin-side-nav-item>
+        </vaadin-side-nav-item>
+      `);
+      const leaf = parent.querySelector('vaadin-side-nav-item');
+      const leafSpy = sinon.spy();
+      const parentSpy = sinon.spy();
+      leaf.addEventListener('expanded-changed', leafSpy);
+      parent.addEventListener('expanded-changed', parentSpy);
+      leaf.path = '';
+      await nextRender();
+      expect(leaf.current).to.be.true;
+      expect(leaf.expanded).to.be.false;
+      expect(leafSpy.called).to.be.false;
+      expect(parent.expanded).to.be.true;
+      expect(parentSpy.calledOnce).to.be.true;
+    });
+
     describe('current item with children', () => {
       beforeEach(async () => {
         item = fixtureSync(`
