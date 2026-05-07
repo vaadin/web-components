@@ -7,6 +7,24 @@ snapshots["vaadin-breadcrumbs-item host default"] =
 `;
 /* end snapshot vaadin-breadcrumbs-item host default */
 
+snapshots["vaadin-breadcrumbs-item host prefix"] = 
+`<vaadin-breadcrumbs-item has-prefix="">
+  <span slot="prefix">
+    icon
+  </span>
+</vaadin-breadcrumbs-item>
+`;
+/* end snapshot vaadin-breadcrumbs-item host prefix */
+
+snapshots["vaadin-breadcrumbs-item host prefix path"] = 
+`<vaadin-breadcrumbs-item has-prefix="">
+  <span slot="prefix">
+    icon
+  </span>
+</vaadin-breadcrumbs-item>
+`;
+/* end snapshot vaadin-breadcrumbs-item host prefix path */
+
 snapshots["vaadin-breadcrumbs-item shadow default"] = 
 `<span part="nolink">
   <slot name="prefix">

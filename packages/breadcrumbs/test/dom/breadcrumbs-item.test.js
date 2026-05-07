@@ -18,6 +18,25 @@ describe('vaadin-breadcrumbs-item', () => {
     it('default', async () => {
       await expect(item).dom.to.equalSnapshot();
     });
+
+    it('prefix', async () => {
+      const prefix = document.createElement('span');
+      prefix.setAttribute('slot', 'prefix');
+      prefix.textContent = 'icon';
+      item.appendChild(prefix);
+      await nextRender();
+      await expect(item).dom.to.equalSnapshot();
+    });
+
+    it('prefix path', async () => {
+      item.path = '/foo';
+      const prefix = document.createElement('span');
+      prefix.setAttribute('slot', 'prefix');
+      prefix.textContent = 'icon';
+      item.appendChild(prefix);
+      await nextRender();
+      await expect(item).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {

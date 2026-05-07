@@ -7,8 +7,44 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { breadcrumbsItemStyles } from './styles/vaadin-breadcrumbs-item-base-styles.js';
+
+/**
+ * A controller handling the prefix slot.
+ */
+class PrefixSlotController extends SlotController {
+  constructor(host) {
+    super(host, 'prefix', null, { multiple: true, observe: true });
+  }
+
+  /** @protected */
+  initCustomNode(_node) {
+    this.__updateHasPrefix();
+  }
+
+  /** @protected */
+  teardownNode(_node) {
+    this.__updateHasPrefix();
+  }
+
+  reobserve() {
+    if (!this.initialized) {
+      return;
+    }
+    if (this.__slotObserver) {
+      this.__slotObserver.disconnect();
+    }
+    this.observeSlot();
+    this.__updateHasPrefix();
+  }
+
+  /** @private */
+  __updateHasPrefix() {
+    this.host.toggleAttribute('has-prefix', this.nodes.length > 0);
+  }
+}
 
 /**
  * `<vaadin-breadcrumbs-item>` is a single item inside a `<vaadin-breadcrumbs>`.
@@ -22,6 +58,12 @@ import { breadcrumbsItemStyles } from './styles/vaadin-breadcrumbs-item-base-sty
  * `link`    | The interactive `<a>` rendered when `path` is set.
  * `nolink`  | The non-interactive `<span>` rendered when `path` is unset.
  * `label`   | Wraps the item's text content, inside `link` or `nolink`.
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute    | Description
+ * -------------|-------------
+ * `has-prefix` | Set when the item has content in the prefix slot
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -76,6 +118,23 @@ class BreadcrumbsItem extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitEl
             </a>
           `}
     `;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._prefixController = new PrefixSlotController(this);
+    this.addController(this._prefixController);
+  }
+
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('path')) {
+      this._prefixController.reobserve();
+    }
   }
 }
 
