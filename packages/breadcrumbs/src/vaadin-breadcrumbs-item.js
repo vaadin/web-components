@@ -12,12 +12,7 @@ import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection
 import { breadcrumbsItemStyles } from './styles/vaadin-breadcrumbs-item-base-styles.js';
 
 /**
- * A `SlotController` subclass that observes the `prefix` slot and toggles the
- * host's `has-prefix` state attribute whenever the set of slotted nodes
- * changes. Also exposes `reobserve()` so the host can re-bind the underlying
- * `SlotObserver` when the slot element is re-created (the `prefix` slot lives
- * inside the `[part="link"]` / `[part="nolink"]` branch and is replaced when
- * `path` switches between set and unset).
+ * A controller handling the prefix slot.
  */
 class PrefixSlotController extends SlotController {
   constructor(host) {
