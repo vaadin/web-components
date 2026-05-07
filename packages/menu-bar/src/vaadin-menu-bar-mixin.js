@@ -685,7 +685,7 @@ export const MenuBarMixin = (superClass) =>
      * to close the submenu for the previously focused button
      * and open another one for the newly focused button.
      *
-     * @param {Element} item
+     * @param {Element} button
      * @param {FocusOptions=} options
      * @param {boolean} navigating
      * @protected

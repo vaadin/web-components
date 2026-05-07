@@ -229,8 +229,8 @@ export class DataProviderController extends EventTarget {
   /**
    * Override to prevent loading of the cache page under certain conditions.
    *
-   * @param {Cache} cache
-   * @param {number} page
+   * @param {Cache} _cache
+   * @param {number} _page
    * @protected
    */
   _shouldLoadCachePage(_cache, _page) {

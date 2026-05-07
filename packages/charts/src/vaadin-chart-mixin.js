@@ -1479,12 +1479,13 @@ export const ChartMixin = (superClass) =>
     }
 
     /**
-     * @private
      * Workaround for https://github.com/highcharts/highcharts/issues/23443
      * Forces a resize in the chart to make it calculate the labels positions
      * correctly in a chart with "organization" series
      *
      * TODO: Remove when the related ticket is fixed
+     *
+     * @private
      */
     __forceResize() {
       const chart = this.configuration;

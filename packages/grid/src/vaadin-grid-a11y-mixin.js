@@ -77,7 +77,6 @@ export const A11yMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
-     * @param {number} index
      * @private
      */
     __a11yUpdateRowRowindex(row) {

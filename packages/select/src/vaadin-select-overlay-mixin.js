@@ -55,7 +55,7 @@ export const SelectOverlayMixin = (superClass) =>
      * Override method inherited from `Overlay` to always close on outside click,
      * in order to avoid problem when using inside of the modeless dialog.
      *
-     * @param {Event} event
+     * @param {Event} _event
      * @returns {boolean}
      * @protected
      */

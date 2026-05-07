@@ -9,13 +9,13 @@
  */
 export class SlotObserver {
   constructor(slot, callback, forceInitial) {
-    /** @type HTMLSlotElement */
+    /** @type {HTMLSlotElement} */
     this.slot = slot;
 
-    /** @type Function */
+    /** @type {Function} */
     this.callback = callback;
 
-    /** @type boolean */
+    /** @type {boolean} */
     this.forceInitial = forceInitial;
 
     /** @type {Node[]} */

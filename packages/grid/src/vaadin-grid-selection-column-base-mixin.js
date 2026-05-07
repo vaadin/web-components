@@ -417,14 +417,14 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /**
      * Override to handle the user selecting an item.
-     * @param {object} item the item to select
+     * @param {object} _item the item to select
      * @protected
      */
     _selectItem(_item) {}
 
     /**
      * Override to handle the user deselecting an item.
-     * @param {object} item the item to deselect
+     * @param {object} _item the item to deselect
      * @protected
      */
     _deselectItem(_item) {}

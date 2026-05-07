@@ -517,7 +517,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    * The transition can be skipped using the `skipTransition` parameter or
    * the `noAnimation` property.
    *
-   * @param element the new detail element, or null to remove the current detail
+   * @param newDetail the new detail element, or null to remove the current detail
    * @param skipTransition whether to skip the transition
    * @returns {Promise<void>}
    * @protected

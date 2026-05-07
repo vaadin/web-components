@@ -178,7 +178,6 @@ export const KeyboardDirectionMixin = (superclass) =>
      *
      * @param {Element} item
      * @param {FocusOptions=} options
-     * @param {boolean} navigating
      * @protected
      */
     _focusItem(item, options) {

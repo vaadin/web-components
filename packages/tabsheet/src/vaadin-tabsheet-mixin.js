@@ -10,8 +10,9 @@ import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 /**
- * @private
  * A controller which observes the <vaadin-tabs> slotted to the tabs slot.
+ *
+ * @private
  */
 class TabsSlotController extends SlotController {
   constructor(host) {

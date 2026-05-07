@@ -269,7 +269,7 @@ export const AppLayoutMixin = (superclass) =>
      * When layout resizes while in the overlay mode, drawer opened state
      * is not changed, but focus trap needs to be removed.
      *
-     * @param {boolean} overlay
+     * @param {boolean} _overlay
      * @param {boolean} oldOverlay
      * @private
      */

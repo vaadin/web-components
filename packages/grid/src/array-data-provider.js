@@ -5,6 +5,12 @@
  */
 
 /**
+ * @typedef {import('./vaadin-grid.js').GridItem} GridItem
+ * @typedef {import('./vaadin-grid.js').GridFilterDefinition} GridFilterDefinition
+ * @typedef {import('./vaadin-grid.js').GridSorterDefinition} GridSorterDefinition
+ */
+
+/**
  * Returns a sub-property of an object
  *
  * @param {string} path dot-separated path to the sub property
