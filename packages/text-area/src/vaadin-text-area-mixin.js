@@ -160,19 +160,19 @@ export const TextAreaMixin = (superClass) =>
       }
 
       const scrollTop = inputField.scrollTop;
+      const previousExplicitHeight = parseFloat(input.style.height);
 
+      // Only clear the height when the content shortens to minimize scrollbar flickering.
       const valueLength = this.value ? this.value.length : 0;
-      const inputFieldHeight = getComputedStyle(inputField).height;
-      const inputWidth = getComputedStyle(input).width;
 
-      // Pin the input-field height + collapse input so we can measure
-      // the natural content height. Gated to skip noise ticks that
-      // would otherwise feed back into the next cycle's pin under
-      // fractional rendering (see #9141). Pin protects the document
-      // from shrinking around the brief collapse (see #291).
-      const valueShrunk = this._oldValueLength > valueLength;
-      const widthChanged = this._lastInputWidth !== undefined && this._lastInputWidth !== inputWidth;
-      if (valueShrunk || widthChanged) {
+      if (this._oldValueLength >= valueLength) {
+        const inputFieldHeight = getComputedStyle(inputField).height;
+        const inputWidth = getComputedStyle(input).width;
+
+        // Temporarily fix the height of the wrapping input field container to prevent changing the browsers scroll
+        // position while resetting the textareas height. If the textarea had a large height, then removing its height
+        // will reset its height to the default of two rows. That might reduce the height of the page, and the
+        // browser might adjust the scroll position before we can restore the measured height of the textarea.
         inputField.style.height = inputFieldHeight;
 
         // Fix the input element width so its scroll height isn't affected by host's disappearing scrollbars
@@ -183,10 +183,16 @@ export const TextAreaMixin = (superClass) =>
         input.style.height = 'auto';
       }
       this._oldValueLength = valueLength;
-      this._lastInputWidth = inputWidth;
 
       const inputHeight = input.scrollHeight;
-      if (inputHeight > input.clientHeight) {
+      // Snap to the previous explicit height when the new measurement is
+      // within 1 CSS pixel of it. The pin/unpin cycle produces a 1 px
+      // asymmetry on low-DPR displays that would otherwise oscillate
+      // visibly on every keystroke; real content changes always move
+      // scrollHeight by at least one line.
+      if (Math.abs(inputHeight - previousExplicitHeight) <= 1) {
+        input.style.height = `${previousExplicitHeight}px`;
+      } else if (inputHeight > input.clientHeight) {
         input.style.height = `${inputHeight}px`;
       }
 
