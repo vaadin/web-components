@@ -18,6 +18,28 @@ describe('vaadin-breadcrumbs-item', () => {
     it('default', async () => {
       await expect(item).dom.to.equalSnapshot();
     });
+
+    it('prefix', async () => {
+      item = fixtureSync(`
+        <vaadin-breadcrumbs-item>
+          <span slot="prefix">icon</span>
+          Home
+        </vaadin-breadcrumbs-item>
+      `);
+      await nextRender();
+      await expect(item).dom.to.equalSnapshot();
+    });
+
+    it('prefix path', async () => {
+      item = fixtureSync(`
+        <vaadin-breadcrumbs-item path="/foo">
+          <span slot="prefix">icon</span>
+          Home
+        </vaadin-breadcrumbs-item>
+      `);
+      await nextRender();
+      await expect(item).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {

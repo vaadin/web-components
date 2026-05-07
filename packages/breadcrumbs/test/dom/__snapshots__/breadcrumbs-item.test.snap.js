@@ -34,3 +34,26 @@ snapshots["vaadin-breadcrumbs-item shadow path"] =
 `;
 /* end snapshot vaadin-breadcrumbs-item shadow path */
 
+snapshots["vaadin-breadcrumbs-item host prefix"] = 
+`<vaadin-breadcrumbs-item has-prefix="">
+  <span slot="prefix">
+    icon
+  </span>
+  Home
+</vaadin-breadcrumbs-item>
+`;
+/* end snapshot vaadin-breadcrumbs-item host prefix */
+
+snapshots["vaadin-breadcrumbs-item host prefix path"] = 
+`<vaadin-breadcrumbs-item
+  has-prefix=""
+  path="/foo"
+>
+  <span slot="prefix">
+    icon
+  </span>
+  Home
+</vaadin-breadcrumbs-item>
+`;
+/* end snapshot vaadin-breadcrumbs-item host prefix path */
+
