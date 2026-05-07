@@ -8,7 +8,7 @@
  * Checks if the argument is a touch event and if so, returns a first touch.
  * Otherwise, if the mouse event was passed, returns it as is.
  * @param {!MouseEvent | !TouchEvent} e
- * @return {!MouseEvent | !Touch}
+ * @returns {!MouseEvent | !Touch}
  * @protected
  */
 export function getMouseOrFirstTouchEvent(e) {
@@ -18,7 +18,7 @@ export function getMouseOrFirstTouchEvent(e) {
 /**
  * Checks whether a mouse or touch event is in window.
  * @param {!MouseEvent | !TouchEvent} e
- * @return {boolean}
+ * @returns {boolean}
  * @protected
  */
 export function eventInWindow(e) {

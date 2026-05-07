@@ -53,6 +53,7 @@
     "eslint-config-vaadin": "^1.0.0-beta.6",
     "eslint-plugin-es-x": "^9.6.0",
     "eslint-plugin-html": "^8.1.4",
+    "eslint-plugin-jsdoc": "^62.9.0",
     "eslint-plugin-no-only-tests": "^3.4.0",
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-simple-import-sort": "^12.1.1",

@@ -244,7 +244,7 @@ export const DialogOverlayMixin = (superClass) =>
 
     /**
      * Retrieves the coordinates of the overlay.
-     * @return {!DialogOverlayBounds}
+     * @returns {!DialogOverlayBounds}
      */
     getBounds() {
       const overlayBounds = this.$.overlay.getBoundingClientRect();

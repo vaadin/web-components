@@ -154,7 +154,7 @@ export const ItemMixin = (superClass) =>
      * Returns false by default.
      *
      * @private
-     * @return {boolean}
+     * @returns {boolean}
      */
     __shouldAllowFocusWhenDisabled() {
       return false;

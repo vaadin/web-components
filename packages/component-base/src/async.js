@@ -9,7 +9,7 @@
  */
 
 /**
- * @fileoverview
+ * @file
  *
  * This module provides a number of strategies for enqueuing asynchronous
  * tasks. Each sub-module provides a standard `run(fn)` interface that returns a
@@ -57,7 +57,7 @@ const timeOut = {
    *
    * @memberof timeOut
    * @param {number=} delay Time to wait before calling callbacks in ms
-   * @return {!AsyncInterface} An async timeout interface
+   * @returns {!AsyncInterface} An async timeout interface
    */
   after(delay) {
     return {
@@ -75,7 +75,7 @@ const timeOut = {
    * @memberof timeOut
    * @param {!Function} fn Callback to run
    * @param {number=} delay Delay in milliseconds
-   * @return {number} Handle used for canceling task
+   * @returns {number} Handle used for canceling task
    */
   run(fn, delay) {
     return window.setTimeout(fn, delay);
@@ -85,7 +85,7 @@ const timeOut = {
    *
    * @memberof timeOut
    * @param {number} handle Handle returned from `run` of callback to cancel
-   * @return {void}
+   * @returns {void}
    */
   cancel(handle) {
     window.clearTimeout(handle);
@@ -105,7 +105,7 @@ const animationFrame = {
    *
    * @memberof animationFrame
    * @param {function(number):void} fn Callback to run
-   * @return {number} Handle used for canceling task
+   * @returns {number} Handle used for canceling task
    */
   run(fn) {
     return window.requestAnimationFrame(fn);
@@ -115,7 +115,7 @@ const animationFrame = {
    *
    * @memberof animationFrame
    * @param {number} handle Handle returned from `run` of callback to cancel
-   * @return {void}
+   * @returns {void}
    */
   cancel(handle) {
     window.cancelAnimationFrame(handle);
@@ -136,7 +136,7 @@ const idlePeriod = {
    *
    * @memberof idlePeriod
    * @param {function(!IdleDeadline):void} fn Callback to run
-   * @return {number} Handle used for canceling task
+   * @returns {number} Handle used for canceling task
    */
   run(fn) {
     return window.requestIdleCallback ? window.requestIdleCallback(fn) : window.setTimeout(fn, 16);
@@ -146,7 +146,7 @@ const idlePeriod = {
    *
    * @memberof idlePeriod
    * @param {number} handle Handle returned from `run` of callback to cancel
-   * @return {void}
+   * @returns {void}
    */
   cancel(handle) {
     if (window.cancelIdleCallback) {
@@ -171,7 +171,7 @@ const microTask = {
    *
    * @memberof microTask
    * @param {!Function=} callback Callback to run
-   * @return {number} Handle used for canceling task
+   * @returns {number} Handle used for canceling task
    */
   run(callback) {
     if (!microtaskScheduled) {
@@ -189,7 +189,7 @@ const microTask = {
    *
    * @memberof microTask
    * @param {number} handle Handle returned from `run` of callback to cancel
-   * @return {void}
+   * @returns {void}
    */
   cancel(handle) {
     const idx = handle - microtaskLastHandle;

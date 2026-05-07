@@ -153,7 +153,7 @@ export const MenuOverlayMixin = (superClass) =>
      *
      * @protected
      * @override
-     * @return {boolean}
+     * @returns {boolean}
      */
     _shouldRestoreFocus() {
       if (this.parentOverlay) {
@@ -172,7 +172,7 @@ export const MenuOverlayMixin = (superClass) =>
      * @protected
      * @override
      * @param {Node} node
-     * @return {boolean}
+     * @returns {boolean}
      */
     _deepContains(node) {
       return this.owner.contains(node);

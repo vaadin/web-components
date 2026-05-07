@@ -93,7 +93,7 @@ export const RadioGroupMixin = (superclass) =>
     /**
      * A collection of the group's radio buttons.
      *
-     * @return {!Array<!RadioButton>}
+     * @returns {!Array<!RadioButton>}
      * @private
      */
     get __radioButtons() {
@@ -103,7 +103,7 @@ export const RadioGroupMixin = (superclass) =>
     /**
      * A currently selected radio button.
      *
-     * @return {!RadioButton | undefined}
+     * @returns {!RadioButton | undefined}
      * @private
      */
     get __selectedRadioButton() {
@@ -111,7 +111,7 @@ export const RadioGroupMixin = (superclass) =>
     }
 
     /**
-     * @return {boolean}
+     * @returns {boolean}
      * @private
      */
     get isHorizontalRTL() {
@@ -147,7 +147,7 @@ export const RadioGroupMixin = (superclass) =>
 
     /**
      * @param {!Array<!Node>} nodes
-     * @return {!Array<!RadioButton>}
+     * @returns {!Array<!RadioButton>}
      * @private
      */
     __filterRadioButtons(nodes) {
@@ -374,7 +374,7 @@ export const RadioGroupMixin = (superclass) =>
      * when focus moves between radio buttons inside the group.
      *
      * @param {!FocusEvent} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldRemoveFocus(event) {

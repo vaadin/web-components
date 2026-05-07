@@ -7,7 +7,7 @@ import { IronListAdapter } from './virtualizer-iron-list-adapter.js';
 
 export class Virtualizer {
   /**
-   * @typedef {Object} VirtualizerConfig
+   * @typedef {object} VirtualizerConfig
    * @property {Function} createElements Function that returns the given number of new elements
    * @property {Function} updateElement Function that updates the element at a specific index
    * @property {HTMLElement} scrollTarget Reference to the scrolling element
@@ -23,7 +23,7 @@ export class Virtualizer {
   /**
    * Gets the index of the first visible item in the viewport.
    *
-   * @return {number}
+   * @returns {number}
    */
   get firstVisibleIndex() {
     return this.__adapter.adjustedFirstVisibleIndex;
@@ -32,7 +32,7 @@ export class Virtualizer {
   /**
    * Gets the index of the last visible item in the viewport.
    *
-   * @return {number}
+   * @returns {number}
    */
   get lastVisibleIndex() {
     return this.__adapter.adjustedLastVisibleIndex;
@@ -40,7 +40,7 @@ export class Virtualizer {
 
   /**
    * The size of the virtualizer
-   * @return {number | undefined} The size of the virtualizer
+   * @returns {number | undefined} The size of the virtualizer
    */
   get size() {
     return this.__adapter.size;
@@ -57,7 +57,7 @@ export class Virtualizer {
   /**
    * Scroll to a specific index in the virtual list
    *
-   * @method scrollToIndex
+   * @function scrollToIndex
    * @param {number} index The index of the item
    */
   scrollToIndex(index) {
@@ -67,7 +67,7 @@ export class Virtualizer {
   /**
    * Requests the virtualizer to re-render the item elements on an index range, if currently in the DOM
    *
-   * @method update
+   * @function update
    * @param {number | undefined} startIndex The start index of the range
    * @param {number | undefined} endIndex The end index of the range
    */
@@ -78,7 +78,7 @@ export class Virtualizer {
   /**
    * Flushes active asynchronous tasks so that the component and the DOM end up in a stable state
    *
-   * @method flush
+   * @function flush
    */
   flush() {
     this.__adapter.flush();
@@ -87,7 +87,7 @@ export class Virtualizer {
   /**
    * Notifies the virtualizer about its host element connected to the DOM.
    *
-   * @method hostConnected
+   * @function hostConnected
    */
   hostConnected() {
     this.__adapter.hostConnected();

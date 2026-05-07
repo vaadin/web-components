@@ -239,7 +239,7 @@ export const ColumnReorderingMixin = (superClass) =>
      * Returns the columns (or column groups) on the specified header level in visual order.
      * By default, the bottom level is used.
      *
-     * @return {!Array<!GridColumn>}
+     * @returns {!Array<!GridColumn>}
      * @protected
      */
     _getColumnsInOrder(headerLevel = this._columnTree.length - 1) {
@@ -249,7 +249,7 @@ export const ColumnReorderingMixin = (superClass) =>
     /**
      * @param {number} x
      * @param {number} y
-     * @return {HTMLElement | undefined}
+     * @returns {HTMLElement | undefined}
      * @protected
      */
     _cellFromPoint(x = 0, y = 0) {
@@ -299,7 +299,7 @@ export const ColumnReorderingMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} cell
-     * @return {!HTMLElement}
+     * @returns {!HTMLElement}
      * @protected
      */
     _updateGhost(cell) {
@@ -401,7 +401,7 @@ export const ColumnReorderingMixin = (superClass) =>
     /**
      * @param {GridColumn | undefined} column1
      * @param {GridColumn | undefined} column2
-     * @return {boolean | undefined}
+     * @returns {boolean | undefined}
      * @protected
      */
     _isSwapAllowed(column1, column2) {
@@ -419,7 +419,7 @@ export const ColumnReorderingMixin = (superClass) =>
     /**
      * @param {!GridColumn} targetColumn
      * @param {number} clientX
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _isSwappableByPosition(targetColumn, clientX) {
@@ -466,7 +466,7 @@ export const ColumnReorderingMixin = (superClass) =>
     /**
      * @param {HTMLElement | undefined} targetCell
      * @param {GridColumn} draggedColumn
-     * @return {GridColumn | undefined}
+     * @returns {GridColumn | undefined}
      * @protected
      */
     _getTargetColumn(targetCell, draggedColumn) {

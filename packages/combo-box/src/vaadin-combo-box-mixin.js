@@ -10,7 +10,7 @@ import { ComboBoxItemsMixin } from './vaadin-combo-box-items-mixin.js';
  * Checks if the value is supported as an item value in this control.
  *
  * @param {unknown} value
- * @return {boolean}
+ * @returns {boolean}
  */
 function isValidValue(value) {
   return value !== undefined && value !== null;
@@ -145,7 +145,7 @@ export const ComboBoxMixin = (superClass) =>
     }
 
     /**
-     * @param {Object} props
+     * @param {object} props
      * @protected
      */
     updated(props) {

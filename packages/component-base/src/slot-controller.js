@@ -16,7 +16,7 @@ export class SlotController extends EventTarget {
    *
    * @param {HTMLElement} host
    * @param {string} prefix
-   * @return {string}
+   * @returns {string}
    * @protected
    */
   static generateId(host, prefix = 'default') {
@@ -94,7 +94,7 @@ export class SlotController extends EventTarget {
 
   /**
    * Create and attach default node using the provided tag name, if any.
-   * @return {Node | undefined}
+   * @returns {Node | undefined}
    * @protected
    */
   attachDefaultNode() {
@@ -124,7 +124,7 @@ export class SlotController extends EventTarget {
 
   /**
    * Return the list of nodes matching the slot managed by the controller.
-   * @return {Node}
+   * @returns {Node}
    */
   getSlotChildren() {
     const { slotName } = this;
@@ -143,7 +143,7 @@ export class SlotController extends EventTarget {
 
   /**
    * Return a reference to the node managed by the controller.
-   * @return {Node}
+   * @returns {Node}
    */
   getSlotChild() {
     return this.getSlotChildren()[0];

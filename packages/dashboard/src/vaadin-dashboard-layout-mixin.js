@@ -92,7 +92,7 @@ export const DashboardLayoutMixin = (superClass) =>
 
     /** @private */
     __rootHeadingLevelChanged(rootHeadingLevel) {
-      /** @internal to not document it in CEM */
+             * @internal
       this.dispatchEvent(
         new CustomEvent('dashboard-root-heading-level-changed', { detail: { value: rootHeadingLevel } }),
       );

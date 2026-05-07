@@ -43,7 +43,7 @@ const InputConstraintsMixinImplementation = (superclass) => {
 
     /**
      * Returns true if the current input value satisfies all constraints (if any).
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkValidity() {
       if (this.inputElement && this._hasValidConstraints(this.constructor.constraints.map((c) => this[c]))) {
@@ -55,7 +55,7 @@ const InputConstraintsMixinImplementation = (superclass) => {
     /**
      * Returns true if some of the provided set of constraints are valid.
      * @param {Array} constraints
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _hasValidConstraints(constraints) {

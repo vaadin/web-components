@@ -14,7 +14,7 @@ export class ContentController extends SlotChildObserveController {
    * the ID prefix for the default slot content.
    *
    * @param {HTMLElement} host
-   * @return {string}
+   * @returns {string}
    * @protected
    * @override
    */

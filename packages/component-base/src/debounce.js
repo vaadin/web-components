@@ -46,7 +46,7 @@ export class Debouncer {
    * @param {Debouncer?} debouncer Debouncer object.
    * @param {!AsyncInterface} asyncModule Object with Async interface
    * @param {function()} callback Callback to run.
-   * @return {!Debouncer} Returns a debouncer object.
+   * @returns {!Debouncer} Returns a debouncer object.
    */
   static debounce(debouncer, asyncModule, callback) {
     if (debouncer instanceof Debouncer) {
@@ -73,7 +73,7 @@ export class Debouncer {
    *
    * @param {!AsyncInterface} asyncModule Object with Async interface.
    * @param {function()} callback Callback to run.
-   * @return {void}
+   * @returns {void}
    */
   setConfig(asyncModule, callback) {
     this._asyncModule = asyncModule;
@@ -88,7 +88,7 @@ export class Debouncer {
   /**
    * Cancels an active debouncer and returns a reference to itself.
    *
-   * @return {void}
+   * @returns {void}
    */
   cancel() {
     if (this.isActive()) {
@@ -104,7 +104,7 @@ export class Debouncer {
   /**
    * Cancels a debouncer's async callback.
    *
-   * @return {void}
+   * @returns {void}
    */
   _cancelAsync() {
     if (this.isActive()) {
@@ -116,7 +116,7 @@ export class Debouncer {
   /**
    * Flushes an active debouncer and returns a reference to itself.
    *
-   * @return {void}
+   * @returns {void}
    */
   flush() {
     if (this.isActive()) {
@@ -128,7 +128,7 @@ export class Debouncer {
   /**
    * Returns true if the debouncer is active.
    *
-   * @return {boolean} True if active.
+   * @returns {boolean} True if active.
    */
   isActive() {
     return this._timer != null;
@@ -139,7 +139,7 @@ export class Debouncer {
  * Adds a `Debouncer` to a list of globally flushable tasks.
  *
  * @param {!Debouncer} debouncer Debouncer to enqueue
- * @return {void}
+ * @returns {void}
  */
 export function enqueueDebouncer(debouncer) {
   debouncerQueue.add(debouncer);
@@ -148,7 +148,7 @@ export function enqueueDebouncer(debouncer) {
 /**
  * Flushes any enqueued debouncers
  *
- * @return {boolean} Returns whether any debouncers were flushed
+ * @returns {boolean} Returns whether any debouncers were flushed
  */
 export function flushDebouncers() {
   const didFlush = Boolean(debouncerQueue.size);

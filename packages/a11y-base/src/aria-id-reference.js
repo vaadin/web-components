@@ -17,7 +17,7 @@ const attributeToTargets = new Map();
  *
  * @param {string} attr the attribute name used as key in the map
  *
- * @return {WeakMap<HTMLElement, Set<string>>} a weak map with the stored values for the elements being controlled by the helper
+ * @returns {WeakMap<HTMLElement, Set<string>>} a weak map with the stored values for the elements being controlled by the helper
  */
 function getAttrMap(attr) {
   if (!attributeToTargets.has(attr)) {
@@ -82,7 +82,7 @@ export function restoreGeneratedAriaIDReference(target, attr) {
 /**
  * Sets a new ID reference for a target element and an ARIA attribute.
  *
- * @typedef {Object} AriaIdReferenceConfig
+ * @typedef {object} AriaIdReferenceConfig
  * @property {string | null | undefined} newId
  * @property {string | null | undefined} oldId
  * @property {boolean | null | undefined} fromUser

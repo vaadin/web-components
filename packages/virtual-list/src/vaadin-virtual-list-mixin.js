@@ -58,7 +58,7 @@ export const VirtualListMixin = (superClass) =>
     /**
      * Gets the index of the first visible item in the viewport.
      *
-     * @return {number}
+     * @returns {number}
      */
     get firstVisibleIndex() {
       return this.__virtualizer.firstVisibleIndex;
@@ -67,7 +67,7 @@ export const VirtualListMixin = (superClass) =>
     /**
      * Gets the index of the last visible item in the viewport.
      *
-     * @return {number}
+     * @returns {number}
      */
     get lastVisibleIndex() {
       return this.__virtualizer.lastVisibleIndex;

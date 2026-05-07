@@ -554,7 +554,7 @@ export const ironList = {
    * Returns the virtual index for a given physical index
    *
    * @param {number} pidx Physical index
-   * @return {number}
+   * @returns {number}
    */
   _computeVidx(pidx) {
     if (pidx >= this._physicalStart) {
@@ -637,7 +637,7 @@ export const ironList = {
    * Scroll to a specific index in the virtual list regardless
    * of the physical items in the DOM tree.
    *
-   * @method scrollToIndex
+   * @function scrollToIndex
    * @param {number} idx The index of the item
    */
   scrollToIndex(idx) {

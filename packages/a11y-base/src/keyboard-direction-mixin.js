@@ -15,7 +15,7 @@ import { KeyboardMixin } from './keyboard-mixin.js';
 export const KeyboardDirectionMixin = (superclass) =>
   class KeyboardDirectionMixinClass extends KeyboardMixin(superclass) {
     /**
-     * @return {Element | null}
+     * @returns {Element | null}
      * @protected
      */
     get focused() {
@@ -23,7 +23,7 @@ export const KeyboardDirectionMixin = (superclass) =>
     }
 
     /**
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     get _vertical() {
@@ -31,7 +31,7 @@ export const KeyboardDirectionMixin = (superclass) =>
     }
 
     /**
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     get _tabNavigation() {
@@ -53,7 +53,7 @@ export const KeyboardDirectionMixin = (superclass) =>
     /**
      * Get the index of a first focusable item, if any.
      *
-     * @return {Element[]}
+     * @returns {Element[]}
      * @protected
      */
     _getFocusableIndex() {
@@ -66,7 +66,7 @@ export const KeyboardDirectionMixin = (superclass) =>
      * By default, it treats all the light DOM children as items.
      * Override this method to provide custom list of elements.
      *
-     * @return {Element[]}
+     * @returns {Element[]}
      * @protected
      */
     _getItems() {
@@ -134,7 +134,7 @@ export const KeyboardDirectionMixin = (superclass) =>
     /**
      * @param {string} key
      * @param {boolean} shiftKey
-     * @return {boolean}
+     * @returns {boolean}
      * @private
      */
     __isPrevKeyPressed(key, shiftKey) {
@@ -148,7 +148,7 @@ export const KeyboardDirectionMixin = (superclass) =>
     /**
      * @param {string} key
      * @param {boolean} shiftKey
-     * @return {boolean}
+     * @returns {boolean}
      * @private
      */
     __isNextKeyPressed(key, shiftKey) {
@@ -195,7 +195,7 @@ export const KeyboardDirectionMixin = (superclass) =>
      * @param {number} index - index of the current item
      * @param {number} increment - numeric increment, can be either 1 or -1
      * @param {Function} condition - function used to check the item
-     * @return {number}
+     * @returns {number}
      * @protected
      */
     _getAvailableIndex(items, index, increment, condition) {
@@ -222,7 +222,7 @@ export const KeyboardDirectionMixin = (superclass) =>
      *
      * @param {Element} item - item to check
      * @param {Function} condition - function used to check the item
-     * @return {number}
+     * @returns {number}
      * @private
      */
     __isMatchingItem(item, condition) {
@@ -234,7 +234,7 @@ export const KeyboardDirectionMixin = (superclass) =>
      * returns true if the item is not disabled.
      *
      * @param {Element} item
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _isItemFocusable(item) {

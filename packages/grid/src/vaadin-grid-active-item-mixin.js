@@ -8,7 +8,7 @@ import { isElementFocusable } from '@vaadin/a11y-base/src/focus-utils.js';
 
 /**
  * @param {!Element} target
- * @return {boolean}
+ * @returns {boolean}
  * @protected
  */
 export const isFocusable = (target) => {
@@ -110,7 +110,7 @@ export const ActiveItemMixin = (superClass) =>
 
     /**
      * @param {!Element} target
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _isFocusable(target) {

@@ -872,7 +872,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      *
      * @param {HTMLElement} row
      * @param {HTMLElement} cell
-     * @return {HTMLElement}
+     * @returns {HTMLElement}
      * @private
      */
     __getFocusable(row, cell) {
@@ -953,7 +953,7 @@ export const KeyboardNavigationMixin = (superClass) =>
     /**
      * @param {HTMLTableSectionElement=} rowGroup
      * @param {number=} rowIndex
-     * @return {!Array<!GridColumn>}
+     * @returns {!Array<!GridColumn>}
      * @protected
      */
     _getColumns(rowGroup, rowIndex) {
@@ -1049,7 +1049,7 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /**
-     * @typedef {Object} GridEventLocation
+     * @typedef {object} GridEventLocation
      * @property {HTMLTableSectionElement | null} section - The table section element that the event occurred in (header, body, or footer), or null if the event did not occur in a section
      * @property {HTMLTableRowElement | null} row - The row element that the event occurred in, or null if the event did not occur in a row
      * @property {HTMLTableCellElement | null} cell - The cell element that the event occurred in, or null if the event did not occur in a cell

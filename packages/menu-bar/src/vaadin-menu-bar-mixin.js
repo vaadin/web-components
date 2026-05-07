@@ -236,7 +236,7 @@ export const MenuBarMixin = (superClass) =>
      * to use expanded button for arrow navigation
      * when the sub-menu is opened and has focus.
      *
-     * @return {Element | null}
+     * @returns {Element | null}
      * @protected
      * @override
      */
@@ -247,7 +247,7 @@ export const MenuBarMixin = (superClass) =>
     /**
      * Override getter from `KeyboardDirectionMixin`.
      *
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      * @override
      */
@@ -258,7 +258,7 @@ export const MenuBarMixin = (superClass) =>
     /**
      * Override getter from `KeyboardDirectionMixin`.
      *
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      * @override
      */
@@ -277,7 +277,7 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
-     * @return {!Array<!HTMLElement>}
+     * @returns {!Array<!HTMLElement>}
      * @protected
      */
     get _buttons() {
@@ -382,7 +382,7 @@ export const MenuBarMixin = (superClass) =>
      * Override method inherited from `KeyboardDirectionMixin`
      * to use the list of menu-bar buttons as items.
      *
-     * @return {Element[]}
+     * @returns {Element[]}
      * @protected
      * @override
      */

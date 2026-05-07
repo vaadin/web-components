@@ -95,7 +95,7 @@ export function getItemContext({ getItemId }, cache, targetItem, level = 0, leve
  * @param {Cache} cache
  * @param {number[]} path
  * @param {number} flatIndex
- * @return {number}
+ * @returns {number}
  */
 export function getFlatIndexByPath(cache, [levelIndex, ...subIndexes], flatIndex = 0) {
   if (levelIndex === Infinity) {

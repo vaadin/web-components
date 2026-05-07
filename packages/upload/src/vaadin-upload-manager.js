@@ -90,10 +90,10 @@ export class UploadManager extends EventTarget {
 
   /**
    * Create an UploadManager instance.
-   * @param {Object} options - Configuration options
+   * @param {object} options - Configuration options
    * @param {string} [options.target=''] - The server URL. The default value is an empty string, which means that _window.location_ will be used.
    * @param {string} [options.method='POST'] - HTTP Method used to send the files. Only POST and PUT are allowed.
-   * @param {Object} [options.headers={}] - Key-Value map to send to the server.
+   * @param {object} [options.headers={}] - Key-Value map to send to the server.
    * @param {number} [options.timeout=0] - Max time in milliseconds for the entire upload process, if exceeded the request will be aborted. Zero means that there is no timeout.
    * @param {number} [options.maxFiles=Infinity] - Limit of files to upload, by default it is unlimited. If the value is set to one, native file browser will prevent selecting multiple files.
    * @param {number} [options.maxFileSize=Infinity] - Specifies the maximum file size in bytes allowed to upload. Notice that it is a client-side constraint, which will be checked before sending the request. Obviously you need to do the same validation in the server-side and be sure that they are aligned.

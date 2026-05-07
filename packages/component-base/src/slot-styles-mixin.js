@@ -10,7 +10,7 @@ const stylesMap = new WeakMap();
 /**
  * Get all the styles inserted into root.
  * @param {DocumentOrShadowRoot} root
- * @return {Set<string>}
+ * @returns {Set<string>}
  */
 function getRootStyles(root) {
   if (!stylesMap.has(root)) {

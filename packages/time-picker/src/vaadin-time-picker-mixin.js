@@ -130,7 +130,7 @@ export const TimePickerMixin = (superClass) =>
     /**
      * Tag name prefix used by `ComboBoxBaseMixin` for scroller and items.
      * @protected
-     * @return {string}
+     * @returns {string}
      */
     get _tagNamePrefix() {
       return 'vaadin-time-picker';
@@ -139,7 +139,7 @@ export const TimePickerMixin = (superClass) =>
     /**
      * Used by `ClearButtonMixin` as a reference to the clear button element.
      * @protected
-     * @return {!HTMLElement}
+     * @returns {!HTMLElement}
      */
     get clearElement() {
       return this.$.clearButton;
@@ -188,7 +188,7 @@ export const TimePickerMixin = (superClass) =>
      * The input element's value when it cannot be parsed as a time, and an empty string otherwise.
      *
      * @private
-     * @return {string}
+     * @returns {string}
      */
     get __unparsableValue() {
       if (this._inputElementValue && !this.__effectiveI18n.parseTime(this._inputElementValue)) {
@@ -244,7 +244,7 @@ export const TimePickerMixin = (superClass) =>
      * Returns true if the current input value satisfies all constraints (if any).
      * You can override this method for custom validations.
      *
-     * @return {boolean} True if the value is valid
+     * @returns {boolean} True if the value is valid
      */
     checkValidity() {
       return !!(
@@ -657,7 +657,7 @@ export const TimePickerMixin = (superClass) =>
      * Returns true if `time` satisfies the `min` and `max` constraints (if any).
      *
      * @param {!TimePickerTime} time Value to check against constraints
-     * @return {boolean} True if `time` satisfies the constraints
+     * @returns {boolean} True if `time` satisfies the constraints
      * @protected
      */
     _timeAllowed(time) {

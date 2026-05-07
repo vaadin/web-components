@@ -9,7 +9,7 @@
  *
  * @param {HTMLElement} element
  * @param {string} direction current direction of the element
- * @return {number} the scrollLeft value.
+ * @returns {number} the scrollLeft value.
  */
 export function getNormalizedScrollLeft(element, direction) {
   const { scrollLeft } = element;

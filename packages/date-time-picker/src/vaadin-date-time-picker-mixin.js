@@ -445,7 +445,7 @@ export const DateTimePickerMixin = (superClass) =>
      * Override method inherited from `FocusMixin` to not remove focused
      * state when focus moves between pickers or to the overlay.
      * @param {FocusEvent} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      * @override
      */
@@ -712,7 +712,7 @@ export const DateTimePickerMixin = (superClass) =>
     /**
      * String (ISO date) to Date object
      * @param {string} str e.g. 'yyyy-mm-dd'
-     * @return {Date | undefined}
+     * @returns {Date | undefined}
      * @private
      */
     __parseDate(str) {
@@ -723,7 +723,7 @@ export const DateTimePickerMixin = (superClass) =>
      * Date object to string (ISO date)
      * @param {Date} date
      * @param {string} defaultValue
-     * @return {string} e.g. 'yyyy-mm-dd' (or defaultValue when date is falsy)
+     * @returns {string} e.g. 'yyyy-mm-dd' (or defaultValue when date is falsy)
      * @private
      */
     __formatDateISO(date, defaultValue) {
@@ -736,7 +736,7 @@ export const DateTimePickerMixin = (superClass) =>
     /**
      * String (ISO date time) to Date object
      * @param {string} str e.g. 'yyyy-mm-ddThh:mm', 'yyyy-mm-ddThh:mm:ss', 'yyyy-mm-ddThh:mm:ss.fff'
-     * @return {Date | undefined}
+     * @returns {Date | undefined}
      * @private
      */
     __parseDateTime(str) {
@@ -768,7 +768,7 @@ export const DateTimePickerMixin = (superClass) =>
     /**
      * Date object to string (ISO date time)
      * @param {Date} date
-     * @return {string} e.g. 'yyyy-mm-ddThh:mm', 'yyyy-mm-ddThh:mm:ss', 'yyyy-mm-ddThh:mm:ss.fff'
+     * @returns {string} e.g. 'yyyy-mm-ddThh:mm', 'yyyy-mm-ddThh:mm:ss', 'yyyy-mm-ddThh:mm:ss.fff'
      *                  (depending on precision defined by "step" property)
      * @private
      */
@@ -784,7 +784,7 @@ export const DateTimePickerMixin = (superClass) =>
     /**
      * Date object to string (ISO time)
      * @param {Date} date
-     * @return {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff' (depending on precision defined by "step" property)
+     * @returns {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff' (depending on precision defined by "step" property)
      * @private
      */
     __dateToIsoTimeString(date) {
@@ -805,7 +805,7 @@ export const DateTimePickerMixin = (superClass) =>
      * Returns true if the current input value satisfies all constraints (if any)
      *
      * You can override the `checkValidity` method for custom validations.
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkValidity() {
       const hasInvalidPickers = this.__pickers.some((picker) => !picker.checkValidity());
@@ -835,7 +835,7 @@ export const DateTimePickerMixin = (superClass) =>
     /**
      * @param {Date} date1
      * @param {Date} date2
-     * @return {boolean}
+     * @returns {boolean}
      * @private
      */
     __dateTimeEquals(date1, date2) {

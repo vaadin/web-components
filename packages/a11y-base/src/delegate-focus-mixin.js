@@ -151,7 +151,7 @@ const DelegateFocusMixinImplementation = (superclass) => {
      */
     _onFocus(event) {
       event.stopPropagation();
-      /** @internal to not document it in CEM */
+             * @internal
       this.dispatchEvent(new Event('focus'));
     }
 
@@ -164,13 +164,13 @@ const DelegateFocusMixinImplementation = (superclass) => {
      */
     _onBlur(event) {
       event.stopPropagation();
-      /** @internal to not document it in CEM */
+             * @internal
       this.dispatchEvent(new Event('blur'));
     }
 
     /**
      * @param {FocusEvent} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      * @override
      */
@@ -180,7 +180,7 @@ const DelegateFocusMixinImplementation = (superclass) => {
 
     /**
      * @param {FocusEvent} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      * @override
      */

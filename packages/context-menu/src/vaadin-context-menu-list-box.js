@@ -44,7 +44,7 @@ class ContextMenuListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(L
   }
 
   /**
-   * @return {!HTMLElement}
+   * @returns {!HTMLElement}
    * @protected
    * @override
    */

@@ -618,7 +618,7 @@ export const SelectBaseMixin = (superClass) =>
     /**
      * Override method inherited from `FocusMixin` to not remove focused
      * state when select is opened and focus moves to list-box.
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      * @override
      */
@@ -645,7 +645,7 @@ export const SelectBaseMixin = (superClass) =>
     /**
      * Returns true if the current value satisfies all constraints (if any)
      *
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkValidity() {
       return !this.required || this.readonly || !!this.value;

@@ -74,7 +74,7 @@ export const CheckboxGroupMixin = (superclass) =>
     /**
      * A collection of the checkboxes.
      *
-     * @return {!Array<!Checkbox>}
+     * @returns {!Array<!Checkbox>}
      * @private
      */
     get __checkboxes() {
@@ -112,7 +112,7 @@ export const CheckboxGroupMixin = (superclass) =>
      * to validate the value array.
      *
      * @override
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkValidity() {
       return !this.required || Boolean(this.value && this.value.length > 0);
@@ -120,7 +120,7 @@ export const CheckboxGroupMixin = (superclass) =>
 
     /**
      * @param {!Array<!Node>} nodes
-     * @return {!Array<!Checkbox>}
+     * @returns {!Array<!Checkbox>}
      * @private
      */
     __filterCheckboxes(nodes) {
@@ -280,7 +280,7 @@ export const CheckboxGroupMixin = (superclass) =>
      * when focus moves between checkboxes inside the group.
      *
      * @param {!FocusEvent} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldRemoveFocus(event) {

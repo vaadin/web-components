@@ -125,7 +125,7 @@ export const OverlayFocusMixin = (superClass) =>
      * on a button outside the overlay while the overlay was open.
      *
      * @protected
-     * @return {boolean}
+     * @returns {boolean}
      */
     _shouldRestoreFocus() {
       const activeElement = getDeepActiveElement();
@@ -137,7 +137,7 @@ export const OverlayFocusMixin = (superClass) =>
      * including those within shadow DOM trees.
      *
      * @param {Node} node
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _deepContains(node) {

@@ -8,7 +8,7 @@
  * Get ISO 8601 week number for the given date.
  *
  * @param {!Date} date
- * @return {number} Week number
+ * @returns {number} Week number
  */
 export function getISOWeekNumber(date) {
   // Ported from Vaadin Framework method com.vaadin.client.DateTimeService.getISOWeekNumber(date)
@@ -40,7 +40,7 @@ export function getISOWeekNumber(date) {
  * Creates a new object with the same date, but sets the hours, minutes, seconds and milliseconds to 0.
  *
  * @param {Date} date in system timezone
- * @return {Date} The same date with time elements set to 0, in UTC timezone.
+ * @returns {Date} The same date with time elements set to 0, in UTC timezone.
  */
 export function normalizeDate(date) {
   const normalizedDate = new Date(date);
@@ -55,7 +55,7 @@ export function normalizeDate(date) {
  * the system time-zone.
  *
  * @param {Date} date in UTC timezone
- * @return {Date} The same date with time elements set to 0, in UTC timezone.
+ * @returns {Date} The same date with time elements set to 0, in UTC timezone.
  */
 export function normalizeUTCDate(date) {
   return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0, 0));
@@ -67,7 +67,7 @@ export function normalizeUTCDate(date) {
  * @param {Date} date1
  * @param {Date} date2
  * @param {function(Date): Date} normalizer
- * @return {boolean} True if the given date objects refer to the same date
+ * @returns {boolean} True if the given date objects refer to the same date
  */
 export function dateEquals(date1, date2, normalizer = normalizeDate) {
   return date1 instanceof Date && date2 instanceof Date && normalizer(date1).getTime() === normalizer(date2).getTime();
@@ -77,7 +77,7 @@ export function dateEquals(date1, date2, normalizer = normalizeDate) {
  * Extracts the basic component parts of a date (day, month and year)
  * to the expected format.
  * @param {!Date} date
- * @return {{day: number, month: number, year: number}}
+ * @returns {{day: number, month: number, year: number}}
  */
 export function extractDateParts(date) {
   return {
@@ -94,7 +94,7 @@ export function extractDateParts(date) {
  * @param {Date} min Range start
  * @param {Date} max Range end
  * @param {function(!DatePickerDate): boolean} isDateDisabled Callback to check if the date is disabled
- * @return {boolean} True if the date is in the range
+ * @returns {boolean} True if the date is in the range
  */
 export function dateAllowed(date, min, max, isDateDisabled) {
   let dateIsDisabled = false;
@@ -111,7 +111,7 @@ export function dateAllowed(date, min, max, isDateDisabled) {
  *
  * @param {!Date} date The date to compare dates with
  * @param {!Array<!Date>} dates Array of date objects
- * @return {!Date} Closest date
+ * @returns {!Date} Closest date
  */
 export function getClosestDate(date, dates) {
   return dates
@@ -135,7 +135,7 @@ export function getClosestDate(date, dates) {
  * Get difference in months between today and given months value.
  *
  * @param {number} months
- * @return {number}
+ * @returns {number}
  */
 export function dateAfterXMonths(months) {
   const today = new Date();
@@ -152,7 +152,7 @@ export function dateAfterXMonths(months) {
  * @param {!number} year Should be in the range of [0, 99]
  * @param {number} month
  * @param {number} day
- * @return {!number} Adjusted year value
+ * @returns {!number} Adjusted year value
  */
 export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
   if (year > 99) {
@@ -176,7 +176,7 @@ export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
  * - ISO 8601 `"YYYY-MM-DD"`
  * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
  * @param {!string} str Date string to parse
- * @return {Date} Parsed date in system timezone
+ * @returns {Date} Parsed date in system timezone
  */
 export function parseDate(str) {
   // Parsing with RegExp to ensure correct format
@@ -201,7 +201,7 @@ export function parseDate(str) {
  * the system time-zone.
  *
  * @param {!string} str Date string to parse
- * @return {Date} Parsed date in UTC timezone
+ * @returns {Date} Parsed date in UTC timezone
  */
 export function parseUTCDate(str) {
   // Parsing with RegExp to ensure correct format

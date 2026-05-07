@@ -149,7 +149,7 @@ export const PasswordFieldMixin = (superClass) =>
      * Override method inherited from `FocusMixin` to mark field as focused
      * when focus moves to the reveal button using Shift Tab.
      * @param {Event} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldSetFocus(event) {
@@ -160,7 +160,7 @@ export const PasswordFieldMixin = (superClass) =>
      * Override method inherited from `FocusMixin` to not hide password
      * when focus moves to the reveal button or back to the input.
      * @param {Event} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldRemoveFocus(event) {

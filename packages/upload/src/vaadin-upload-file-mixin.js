@@ -164,7 +164,7 @@ export const UploadFileMixin = (superClass) =>
      * Override method inherited from `FocusMixin` to mark the file as focused
      * only when the host is focused.
      * @param {Event} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldSetFocus(event) {

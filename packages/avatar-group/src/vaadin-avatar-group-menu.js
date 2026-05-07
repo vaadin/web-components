@@ -43,7 +43,7 @@ class AvatarGroupMenu extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(Lumo
   }
 
   /**
-   * @return {!HTMLElement}
+   * @returns {!HTMLElement}
    * @protected
    * @override
    */

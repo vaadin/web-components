@@ -70,7 +70,7 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
       /**
        * Reference to an UploadManager.
        * When set, dropped files will be automatically added to the manager.
-       * @type {Object | null}
+       * @type {object | null}
        */
       manager: {
         type: Object,

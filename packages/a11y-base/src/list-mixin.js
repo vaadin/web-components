@@ -81,7 +81,7 @@ export const ListMixin = (superClass) =>
     }
 
     /**
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     get _isRTL() {
@@ -89,7 +89,7 @@ export const ListMixin = (superClass) =>
     }
 
     /**
-     * @return {!HTMLElement}
+     * @returns {!HTMLElement}
      * @protected
      */
     get _scrollerElement() {
@@ -99,7 +99,7 @@ export const ListMixin = (superClass) =>
     }
 
     /**
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     get _vertical() {
@@ -143,7 +143,7 @@ export const ListMixin = (superClass) =>
      * Override method inherited from `KeyboardDirectionMixin`
      * to use the stored list of item elements.
      *
-     * @return {Element[]}
+     * @returns {Element[]}
      * @protected
      * @override
      */
@@ -180,7 +180,7 @@ export const ListMixin = (superClass) =>
 
     /**
      * @param {!Array<!Element>} array
-     * @return {!Array<!Element>}
+     * @returns {!Array<!Element>}
      * @protected
      */
     _filterItems(array) {
@@ -206,7 +206,7 @@ export const ListMixin = (superClass) =>
     /**
      * @param {number} currentIdx
      * @param {string} key
-     * @return {number}
+     * @returns {number}
      * @protected
      */
     _searchKey(currentIdx, key) {

@@ -52,7 +52,7 @@ class SliderBubbleOverlay extends PositionMixin(
   /**
    * Override method from `OverlayMixin` to not close on outside click.
    * The bubble overlay `opened` is fully controlled by the slider.
-   * @return {boolean}
+   * @returns {boolean}
    * @protected
    * @override
    */

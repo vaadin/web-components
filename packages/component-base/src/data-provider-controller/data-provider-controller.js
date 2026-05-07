@@ -106,7 +106,7 @@ export class DataProviderController extends EventTarget {
   /**
    * Whether the root cache or any of its decendant caches have pending requests.
    *
-   * @return {boolean}
+   * @returns {boolean}
    */
   isLoading() {
     return this.rootCache.isLoading;
@@ -182,7 +182,7 @@ export class DataProviderController extends EventTarget {
    * Using `Infinity` as an index will point to the last item on the level.
    *
    * @param {number[]} path
-   * @return {number}
+   * @returns {number}
    */
   getFlatIndexByPath(path) {
     return getFlatIndexByPath(this.rootCache, path);

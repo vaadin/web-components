@@ -69,7 +69,7 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
   /**
    * Tag name prefix used by overlay, list-box and items.
    * @protected
-   * @return {string}
+   * @returns {string}
    */
   get _tagNamePrefix() {
     return 'vaadin-menu-bar';
@@ -133,7 +133,7 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
    * sub-menu on the same click event that was used to open it.
    *
    * @param {Event} event
-   * @return {boolean}
+   * @returns {boolean}
    * @protected
    * @override
    */

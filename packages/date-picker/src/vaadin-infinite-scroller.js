@@ -87,7 +87,7 @@ export class InfiniteScroller extends HTMLElement {
   }
 
   /**
-   * @return {boolean}
+   * @returns {boolean}
    */
   get active() {
     return this._activated;
@@ -101,14 +101,14 @@ export class InfiniteScroller extends HTMLElement {
   }
 
   /**
-   * @return {number}
+   * @returns {number}
    */
   get bufferOffset() {
     return this._buffers[0].offsetTop;
   }
 
   /**
-   * @return {number}
+   * @returns {number}
    */
   get itemHeight() {
     if (!this._itemHeightVal) {
@@ -130,7 +130,7 @@ export class InfiniteScroller extends HTMLElement {
   }
 
   /**
-   * @return {number}
+   * @returns {number}
    */
   get position() {
     return (this.$.scroller.scrollTop - this._buffers[0].translateY) / this.itemHeight + this._firstIndex;

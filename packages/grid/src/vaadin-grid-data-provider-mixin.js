@@ -205,7 +205,7 @@ export const DataProviderMixin = (superClass) =>
      * Returns a value that identifies the item. Uses `itemIdPath` if available.
      * Can be customized by overriding.
      * @param {!GridItem} item
-     * @return {!GridItem | !unknown}
+     * @returns {!GridItem | !unknown}
      */
     getItemId(item) {
       return this.itemIdPath ? get(this.itemIdPath, item) : item;
@@ -213,7 +213,7 @@ export const DataProviderMixin = (superClass) =>
 
     /**
      * @param {!GridItem} item
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _isExpanded(item) {
@@ -222,7 +222,7 @@ export const DataProviderMixin = (superClass) =>
 
     /**
      * @param {!GridItem} item
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _hasChildren(item) {
@@ -390,7 +390,7 @@ export const DataProviderMixin = (superClass) =>
     /**
      * @param {!GridItem} item1
      * @param {!GridItem} item2
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _itemsEqual(item1, item2) {

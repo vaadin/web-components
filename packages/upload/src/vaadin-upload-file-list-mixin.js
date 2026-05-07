@@ -72,7 +72,7 @@ export const UploadFileListMixin = (superClass) =>
          * When set, the file list automatically:
          * - Syncs files from the manager
          * - Forwards retry/abort/start/remove events back to the manager
-         * @type {Object | null}
+         * @type {object | null}
          */
         manager: {
           type: Object,

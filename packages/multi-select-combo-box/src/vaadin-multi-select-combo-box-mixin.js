@@ -283,7 +283,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     /**
      * Used by `InputControlMixin` as a reference to the clear button element.
      * @protected
-     * @return {!HTMLElement}
+     * @returns {!HTMLElement}
      */
     get clearElement() {
       return this.$.clearButton;
@@ -308,7 +308,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     /**
      * Tag name prefix used by scroller and items.
      * @protected
-     * @return {string}
+     * @returns {string}
      */
     get _tagNamePrefix() {
       return 'vaadin-multi-select-combo-box';
@@ -384,7 +384,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     /**
      * Returns true if the current input value satisfies all constraints (if any).
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkValidity() {
       return this.required && !this.readonly ? this._hasValue : true;

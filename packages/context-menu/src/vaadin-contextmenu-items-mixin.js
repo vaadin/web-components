@@ -107,7 +107,7 @@ export const ItemsMixin = (superClass) =>
     /**
      * Tag name prefix used by overlay, list-box and items.
      * @protected
-     * @return {string}
+     * @returns {string}
      */
     get _tagNamePrefix() {
       return 'vaadin-context-menu';
@@ -133,7 +133,7 @@ export const ItemsMixin = (superClass) =>
      * Override this method to customize the closing logic.
      *
      * @param {Event} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldCloseOnOutsideClick(event) {
@@ -196,7 +196,7 @@ export const ItemsMixin = (superClass) =>
 
     /**
      * @param {!ContextMenuItem} item
-     * @return {HTMLElement}
+     * @returns {HTMLElement}
      * @private
      */
     __createComponent(item) {

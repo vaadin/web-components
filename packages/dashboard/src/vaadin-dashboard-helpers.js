@@ -16,8 +16,8 @@ export const SYNCHRONIZED_ATTRIBUTES = ['editable', 'dragging', 'first-child', '
 /**
  * Returns true if the given items are equal by reference or by id.
  *
- * @param {Object} a the first item
- * @param {Object} b the second item
+ * @param {object} a the first item
+ * @param {object} b the second item
  */
 export function itemsEqual(a, b) {
   if (a === b) {
@@ -33,9 +33,9 @@ export function itemsEqual(a, b) {
  * Returns the array of items that contains the given item.
  * Might be the dashboard items or the items of a section.
  *
- * @param {Object} item the item element
- * @param {Object[]} items the root level items array
- * @return {Object[]} the items array
+ * @param {object} item the item element
+ * @param {object[]} items the root level items array
+ * @returns {object[]} the items array
  */
 export function getItemsArrayOfItem(item, items) {
   if (items.some((i) => itemsEqual(i, item))) {
@@ -59,7 +59,7 @@ export function getElementItem(element) {
  * Dispatches a custom event to notify about a move operation.
  *
  * @param {HTMLElement} element
- * @param {Number} delta
+ * @param {number} delta
  */
 export function fireMove(element, delta) {
   element.dispatchEvent(
@@ -74,8 +74,8 @@ export function fireMove(element, delta) {
  * Dispatches a custom event to notify about a resize operation.
  *
  * @param {HTMLElement} element
- * @param {Number} colspanDelta
- * @param {Number} rowspanDelta
+ * @param {number} colspanDelta
+ * @param {number} rowspanDelta
  */
 export function fireResize(element, colspanDelta, rowspanDelta) {
   element.dispatchEvent(

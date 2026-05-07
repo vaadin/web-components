@@ -9,7 +9,7 @@ let uniqueId = 0;
 /**
  * Resets the unique id counter.
  *
- * @return {void}
+ * @returns {void}
  */
 export function resetUniqueId() {
   uniqueId = 0;
@@ -18,7 +18,7 @@ export function resetUniqueId() {
 /**
  * Returns a unique integer id.
  *
- * @return {number}
+ * @returns {number}
  */
 export function generateUniqueId() {
   // eslint-disable-next-line no-plusplus

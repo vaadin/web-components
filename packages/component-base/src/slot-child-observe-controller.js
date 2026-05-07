@@ -50,7 +50,7 @@ export class SlotChildObserveController extends SlotController {
    * Override method inherited from `SlotMixin`
    * to set ID attribute on the default node.
    *
-   * @return {Node}
+   * @returns {Node}
    * @protected
    * @override
    */
@@ -132,7 +132,7 @@ export class SlotChildObserveController extends SlotController {
    * or is a defined custom element, or has non-empty text.
    *
    * @param {Node} node
-   * @return {boolean}
+   * @returns {boolean}
    * @private
    */
   __hasContent(node) {

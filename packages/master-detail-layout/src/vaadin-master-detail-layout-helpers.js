@@ -11,7 +11,7 @@ const ANIMATION_ID = 'vaadin-master-detail-layout';
  * animation keyframes and timing.
  *
  * @param {HTMLElement} element
- * @return {{ offset: string, easing: string, duration: number }}
+ * @returns {{ offset: string, easing: string, duration: number }}
  */
 function getAnimationParams(element) {
   const computedStyle = getComputedStyle(element);
@@ -28,7 +28,7 @@ function getAnimationParams(element) {
  * play state.
  *
  * @param {HTMLElement} element
- * @return {Animation | undefined}
+ * @returns {Animation | undefined}
  */
 export function getCurrentAnimation(element) {
   return element
@@ -42,7 +42,7 @@ export function getCurrentAnimation(element) {
  * animation is running.
  *
  * @param {HTMLElement} element
- * @return {number}
+ * @returns {number}
  */
 export function getCurrentAnimationProgress(element) {
   const animation = getCurrentAnimation(element);
@@ -65,7 +65,7 @@ export function getCurrentAnimationProgress(element) {
  * @param {'in' | 'out'} direction
  * @param {Array<'fade' | 'slide'>} effects
  * @param {number} progress starting progress (0–1) for interrupted resumption
- * @return {Promise<void>} resolves when the animation finishes
+ * @returns {Promise<void>} resolves when the animation finishes
  */
 function animate(element, direction, effects, progress) {
   const { offset, easing, duration } = getAnimationParams(element);
@@ -100,7 +100,7 @@ function animate(element, direction, effects, progress) {
  * @param {HTMLElement} element
  * @param {Array<'fade' | 'slide'>} effects
  * @param {number} progress starting progress (0–1) for interrupted resumption
- * @return {Promise<void>} resolves when the animation finishes
+ * @returns {Promise<void>} resolves when the animation finishes
  */
 export function animateIn(element, effects, progress) {
   return animate(element, 'in', effects, progress);
@@ -112,7 +112,7 @@ export function animateIn(element, effects, progress) {
  * @param {HTMLElement} element
  * @param {Array<'fade' | 'slide'>} effects
  * @param {number} progress starting progress (0–1) for interrupted resumption
- * @return {Promise<void>} resolves when the animation finishes
+ * @returns {Promise<void>} resolves when the animation finishes
  */
 export function animateOut(element, effects, progress) {
   return animate(element, 'out', effects, progress);
@@ -137,7 +137,7 @@ export function cancelAnimations(element) {
  * are stripped before parsing.
  *
  * @param {string} gridTemplate computed grid template string (e.g. `"200px [gap] 10px 400px"`)
- * @return {number[]} track sizes in pixels
+ * @returns {number[]} track sizes in pixels
  */
 export function parseTrackSizes(gridTemplate) {
   return gridTemplate
@@ -158,7 +158,7 @@ export function parseTrackSizes(gridTemplate) {
  *
  * @param {number} hostSize the host element's width or height in pixels
  * @param {number[]} trackSizes [masterSize, masterExtra, detailSize] in pixels
- * @return {boolean} `true` if the detail overflows and should be overlaid
+ * @returns {boolean} `true` if the detail overflows and should be overlaid
  */
 export function detectOverflow(hostSize, trackSizes) {
   const [masterSize, masterExtra, detailSize] = trackSizes;

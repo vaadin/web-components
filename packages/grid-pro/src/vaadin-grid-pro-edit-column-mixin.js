@@ -159,7 +159,7 @@ export const GridProEditColumnMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} cell
-     * @return {string}
+     * @returns {string}
      * @protected
      */
     _getEditorTagName(cell) {
@@ -168,7 +168,7 @@ export const GridProEditColumnMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} cell
-     * @return {HTMLElement | null}
+     * @returns {HTMLElement | null}
      * @protected
      */
     _getEditorComponent(cell) {
@@ -209,7 +209,7 @@ export const GridProEditColumnMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} editor
-     * @return {unknown}
+     * @returns {unknown}
      * @protected
      */
     _getEditorValue(editor) {

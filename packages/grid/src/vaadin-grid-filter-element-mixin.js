@@ -68,7 +68,7 @@ export const GridFilterElementMixin = (superClass) =>
       textField.value = value;
 
       this._debouncerFilterChanged = Debouncer.debounce(this._debouncerFilterChanged, timeOut.after(200), () => {
-        /** @internal to not document it in CEM */
+                 * @internal
         this.dispatchEvent(new CustomEvent('filter-changed', { bubbles: true }));
       });
     }

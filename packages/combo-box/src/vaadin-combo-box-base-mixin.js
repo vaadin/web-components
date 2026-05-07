@@ -123,7 +123,7 @@ export const ComboBoxBaseMixin = (superClass) =>
     /**
      * Tag name prefix used by scroller and items.
      * @protected
-     * @return {string}
+     * @returns {string}
      */
     get _tagNamePrefix() {
       return 'vaadin-combo-box';
@@ -772,7 +772,7 @@ export const ComboBoxBaseMixin = (superClass) =>
      * state when focus moves to the overlay.
      *
      * @param {FocusEvent} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      * @override
      */

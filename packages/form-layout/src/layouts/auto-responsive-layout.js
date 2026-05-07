@@ -10,7 +10,7 @@ import { AbstractLayout } from './abstract-layout.js';
  * Check if the node is a line break element.
  *
  * @param {HTMLElement} el
- * @return {boolean}
+ * @returns {boolean}
  */
 function isBreakLine(el) {
   return el.localName === 'br';

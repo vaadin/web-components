@@ -50,7 +50,7 @@ export const TabsMixin = (superClass) =>
     }
 
     /**
-     * @return {number}
+     * @returns {number}
      * @protected
      */
     get _scrollOffset() {
@@ -58,7 +58,7 @@ export const TabsMixin = (superClass) =>
     }
 
     /**
-     * @return {!HTMLElement}
+     * @returns {!HTMLElement}
      * @protected
      * @override
      */

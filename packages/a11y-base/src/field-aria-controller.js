@@ -106,7 +106,7 @@ export class FieldAriaController {
   /**
    * @param {string | null | undefined} label
    * @private
-   * */
+   */
   __setAriaLabelToAttribute(label) {
     if (!this.__target) {
       return;

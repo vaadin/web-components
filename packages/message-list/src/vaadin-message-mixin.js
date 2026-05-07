@@ -144,7 +144,7 @@ export const MessageMixin = (superClass) =>
 
     /**
      * Renders a single attachment.
-     * @param {Object} attachment - The attachment object with name, url, and type properties
+     * @param {object} attachment - The attachment object with name, url, and type properties
      * @private
      */
     __renderAttachment(attachment) {
@@ -173,7 +173,7 @@ export const MessageMixin = (superClass) =>
 
     /**
      * Dispatches an event when an attachment is clicked.
-     * @param {Object} attachment - The attachment that was clicked
+     * @param {object} attachment - The attachment that was clicked
      * @private
      */
     __onAttachmentClick(attachment) {

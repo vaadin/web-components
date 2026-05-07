@@ -64,7 +64,7 @@ class TooltipStateController {
 
   /**
    * Whether closing is currently in progress.
-   * @return {boolean}
+   * @returns {boolean}
    */
   get isClosing() {
     return closing.has(this.host);
@@ -72,7 +72,7 @@ class TooltipStateController {
 
   /**
    * Schedule opening the tooltip.
-   * @param {Object} options
+   * @param {object} options
    */
   open(options = { immediate: false }) {
     const { immediate, hover, focus } = options;

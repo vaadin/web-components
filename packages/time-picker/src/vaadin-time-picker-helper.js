@@ -8,7 +8,7 @@
  * A function to format given `Object` as time string.
  * Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
  * @param {object} time
- * @return {string}
+ * @returns {string}
  */
 export function formatISOTime(time) {
   if (!time) {
@@ -39,7 +39,7 @@ const re = new RegExp(`^${MATCH_HOURS}(?::${MATCH_MINUTES}(?::${MATCH_SECONDS}(?
  * `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
  *
  * @param {string} timeString
- * @return {object | undefined}
+ * @returns {object | undefined}
  */
 export function parseISOTime(timeString) {
   // Parsing with RegExp to ensure correct format
@@ -77,7 +77,7 @@ function getStepSegment(stepValue) {
  *
  * @param {object} timeObject
  * @param {number} step
- * @return {object | undefined}
+ * @returns {object | undefined}
  */
 export function validateTime(timeObject, step) {
   if (timeObject) {

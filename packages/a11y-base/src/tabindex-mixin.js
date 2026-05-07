@@ -110,7 +110,7 @@ export const TabindexMixin = (superclass) =>
      * Returns false by default.
      *
      * @private
-     * @return {boolean}
+     * @returns {boolean}
      */
     __shouldAllowFocusWhenDisabled() {
       return false;

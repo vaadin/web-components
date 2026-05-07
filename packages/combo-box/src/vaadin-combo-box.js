@@ -200,7 +200,7 @@ class ComboBox extends ComboBoxScrollToIndexMixin(
   /**
    * Used by `InputControlMixin` as a reference to the clear button element.
    * @protected
-   * @return {!HTMLElement}
+   * @returns {!HTMLElement}
    */
   get clearElement() {
     return this.$.clearButton;

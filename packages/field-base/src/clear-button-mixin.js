@@ -41,7 +41,7 @@ export const ClearButtonMixin = (superclass) =>
      * It returns the reference to the clear button element.
      *
      * @protected
-     * @return {Element | null | undefined}
+     * @returns {Element | null | undefined}
      */
     get clearElement() {
       console.warn(`Please implement the 'clearElement' property in <${this.localName}>`);
@@ -121,7 +121,7 @@ export const ClearButtonMixin = (superclass) =>
      * in order to avoid blur and change events.
      *
      * @protected
-     * @return {boolean}
+     * @returns {boolean}
      */
     _shouldKeepFocusOnClearMousedown() {
       return isElementFocused(this.inputElement);

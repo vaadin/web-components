@@ -374,7 +374,7 @@ export const AppLayoutMixin = (superclass) =>
     /**
      * Returns a promise that resolves when the drawer opening/closing CSS transition ends.
      *
-     * @return {Promise}
+     * @returns {Promise}
      * @private
      */
     __drawerTransitionComplete() {

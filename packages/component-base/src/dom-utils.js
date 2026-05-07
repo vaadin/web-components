@@ -12,7 +12,7 @@
  * and involves both the light DOM and ancestor shadow DOM trees.
  *
  * @param {Node} node
- * @return {Node[]}
+ * @returns {Node[]}
  */
 export function getAncestorRootNodes(node) {
   const result = [];
@@ -46,7 +46,7 @@ export function getAncestorRootNodes(node) {
  * `<slot>` elements, the expanded flattened list of `assignedElements`.
  *
  * @param {Node} node
- * @return {Element[]}
+ * @returns {Element[]}
  */
 export function getFlattenedElements(node) {
   const result = [];
@@ -67,7 +67,7 @@ export function getFlattenedElements(node) {
  *
  * @param {string} selector The CSS selector to match against
  * @param {Node} node The starting node for the traversal
- * @return {Node | null} The closest matching element, or null if no match is found
+ * @returns {Node | null} The closest matching element, or null if no match is found
  */
 export function getClosestElement(selector, node) {
   if (!node) {
@@ -81,7 +81,7 @@ export function getClosestElement(selector, node) {
  * Takes a string with values separated by space and returns a set the values
  *
  * @param {string} value
- * @return {Set<string>}
+ * @returns {Set<string>}
  */
 export function deserializeAttributeValue(value) {
   if (!value) {
@@ -95,7 +95,7 @@ export function deserializeAttributeValue(value) {
  * Takes a set of string values and returns a string with values separated by space
  *
  * @param {Set<string>} values
- * @return {string}
+ * @returns {string}
  */
 export function serializeAttributeValue(values) {
   return values ? [...values].join(' ') : '';
@@ -136,7 +136,7 @@ export function removeValueFromAttribute(element, attr, value) {
  * Returns true if the given node is an empty text node, false otherwise.
  *
  * @param {Node} node
- * @return {boolean}
+ * @returns {boolean}
  */
 export function isEmptyTextNode(node) {
   return node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '';

@@ -389,7 +389,7 @@ export const DatePickerMixin = (subclass) =>
     /**
      * The input element's value when it cannot be parsed as a date, and an empty string otherwise.
      *
-     * @return {string}
+     * @returns {string}
      * @private
      */
     get __unparsableValue() {
@@ -579,7 +579,7 @@ export const DatePickerMixin = (subclass) =>
      *
      * Override the `checkValidity` method for custom validations.
      *
-     * @return {boolean} True if the value is valid
+     * @returns {boolean} True if the value is valid
      */
     checkValidity() {
       const inputValue = this._inputElementValue;
@@ -602,7 +602,7 @@ export const DatePickerMixin = (subclass) =>
      * and to avoid removing `focus-ring` attribute.
      *
      * @param {!FocusEvent} _event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      * @override
      */
@@ -615,7 +615,7 @@ export const DatePickerMixin = (subclass) =>
      * to not blur on clear button mousedown when opened
      * so that focus remains in the input field.
      *
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      * @override
      */
@@ -634,7 +634,7 @@ export const DatePickerMixin = (subclass) =>
      * - when closing on date click / outside click.
      *
      * @param {FocusEvent} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      * @override
      */

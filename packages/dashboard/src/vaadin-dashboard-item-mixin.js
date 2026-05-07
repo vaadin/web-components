@@ -316,7 +316,7 @@ export const DashboardItemMixin = (superClass) =>
       if (!!selected === !!oldSelected) {
         return;
       }
-      /** @internal to not document it in CEM */
+             * @internal
       this.dispatchEvent(new CustomEvent('item-selected-changed', { bubbles: true, detail: { value: selected } }));
       if (selected) {
         this.__focusTrapController.trapFocus(this.$.focustrap);
@@ -387,7 +387,7 @@ export const DashboardItemMixin = (superClass) =>
       if (!!moveMode === !!oldMoveMode) {
         return;
       }
-      /** @internal to not document it in CEM */
+             * @internal
       this.dispatchEvent(new CustomEvent('item-move-mode-changed', { bubbles: true, detail: { value: moveMode } }));
     }
 
@@ -396,7 +396,7 @@ export const DashboardItemMixin = (superClass) =>
       if (!!resizeMode === !!oldResizeMode) {
         return;
       }
-      /** @internal to not document it in CEM */
+             * @internal
       this.dispatchEvent(new CustomEvent('item-resize-mode-changed', { bubbles: true, detail: { value: resizeMode } }));
     }
 

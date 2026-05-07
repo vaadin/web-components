@@ -97,7 +97,7 @@ export const FieldMixin = (superclass) =>
 
     /**
      * @protected
-     * @return {HTMLElement}
+     * @returns {HTMLElement}
      */
     get _errorNode() {
       return this._errorController.node;
@@ -105,7 +105,7 @@ export const FieldMixin = (superclass) =>
 
     /**
      * @protected
-     * @return {HTMLElement}
+     * @returns {HTMLElement}
      */
     get _helperNode() {
       return this._helperController.node;

@@ -36,7 +36,7 @@ class PopoverOpenedStateController {
 
   /**
    * Whether closing is currently in progress.
-   * @return {boolean}
+   * @returns {boolean}
    */
   get isClosing() {
     return this.__closeTimeout != null;
@@ -62,7 +62,7 @@ class PopoverOpenedStateController {
 
   /**
    * Schedule opening the popover.
-   * @param {Object} options
+   * @param {object} options
    */
   open(options = { immediate: false }) {
     if (this.isClosing) {
@@ -149,7 +149,7 @@ class PopoverOpenedStateController {
 /**
  * Returns true if the popover overlay is the last one in the opened overlays stack, ignoring tooltips.
  * @param {HTMLElement} overlay
- * @return {boolean}
+ * @returns {boolean}
  * @protected
  */
 const isLastOverlay = (overlay) => {

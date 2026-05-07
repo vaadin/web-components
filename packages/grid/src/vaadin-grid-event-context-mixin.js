@@ -29,7 +29,7 @@ export const EventContextMixin = (superClass) =>
      * the event targets the empty part of the grid body.
      *
      * @param {!Event} event
-     * @return {GridEventContext}
+     * @returns {GridEventContext}
      */
     getEventContext(event) {
       const context = {};

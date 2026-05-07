@@ -43,7 +43,7 @@ class SelectListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LumoIn
   }
 
   /**
-   * @return {!HTMLElement}
+   * @returns {!HTMLElement}
    * @protected
    * @override
    */

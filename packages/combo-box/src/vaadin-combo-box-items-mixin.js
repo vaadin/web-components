@@ -11,7 +11,7 @@ import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
  * Checks if the value is supported as an item value in this control.
  *
  * @param {unknown} value
- * @return {boolean}
+ * @returns {boolean}
  */
 function isValidValue(value) {
   return value !== undefined && value !== null;
@@ -23,7 +23,7 @@ function isValidValue(value) {
  *
  * @param {Array<ComboBoxItem | string>} items
  * @param {Function} callback
- * @return {number}
+ * @returns {number}
  */
 function findItemIndex(items, callback) {
   return items.findIndex((item) => {
@@ -119,7 +119,7 @@ export const ComboBoxItemsMixin = (superClass) =>
     }
 
     /**
-     * @param {Object} props
+     * @param {object} props
      * @protected
      */
     updated(props) {

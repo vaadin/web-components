@@ -271,7 +271,7 @@ export const TextAreaMixin = (superClass) =>
 
     /**
      * Returns true if the current textarea value satisfies all constraints (if any).
-     * @return {boolean}
+     * @returns {boolean}
      * @override
      */
     checkValidity() {

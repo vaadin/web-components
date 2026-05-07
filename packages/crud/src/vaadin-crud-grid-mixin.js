@@ -145,7 +145,7 @@ export const CrudGridMixin = (superClass) =>
     /**
      * Parse the camelCase column names into sentence case headers.
      * @param {string} path
-     * @return {string}
+     * @returns {string}
      * @protected
      */
     _generateHeader(path) {
@@ -227,7 +227,7 @@ export const CrudGridMixin = (superClass) =>
      * Creates the column structure for the (sub)object.
      *
      * @param {HTMLElement} parent May be the crud-grid or a column group.
-     * @param {Object} object The object to create the sub-columns for.
+     * @param {object} object The object to create the sub-columns for.
      * @param {string} path The property path from the root item to the object.
      * @param {number} depth The depth of the object in the object hierarchy.
      * @private

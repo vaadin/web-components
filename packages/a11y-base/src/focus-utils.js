@@ -30,7 +30,7 @@ window.addEventListener(
  * Returns the actually focused element by traversing shadow
  * trees recursively to ensure it's the leaf element.
  *
- * @return {Element}
+ * @returns {Element}
  */
 export function getDeepActiveElement() {
   let host = document.activeElement || document.body;
@@ -44,7 +44,7 @@ export function getDeepActiveElement() {
  * Returns true if the window has received a keydown
  * event since the last mousedown event.
  *
- * @return {boolean}
+ * @returns {boolean}
  */
 export function isKeyboardActive() {
   return keyboardActive;
@@ -58,7 +58,7 @@ export function isKeyboardActive() {
  * set directly to or inherited by the element.
  *
  * @param {HTMLElement} element
- * @return {boolean}
+ * @returns {boolean}
  */
 function isElementHiddenDirectly(element) {
   // Check inline style first to save a re-flow.
@@ -84,7 +84,7 @@ function isElementHiddenDirectly(element) {
  *
  * @param {HTMLElement} a
  * @param {HTMLElement} b
- * @return {boolean}
+ * @returns {boolean}
  */
 function hasLowerTabOrder(a, b) {
   // Normalize tabIndexes
@@ -99,7 +99,7 @@ function hasLowerTabOrder(a, b) {
  *
  * @param {HTMLElement[]} left
  * @param {HTMLElement[]} right
- * @return {HTMLElement[]}
+ * @returns {HTMLElement[]}
  */
 function mergeSortByTabIndex(left, right) {
   const result = [];
@@ -118,7 +118,7 @@ function mergeSortByTabIndex(left, right) {
  * Sorts an array of elements by tabindex. Returns a new array.
  *
  * @param {HTMLElement[]} elements
- * @return {HTMLElement[]}
+ * @returns {HTMLElement[]}
  */
 function sortElementsByTabIndex(elements) {
   // Implement a merge sort as Array.prototype.sort does a non-stable sort
@@ -142,7 +142,7 @@ function sortElementsByTabIndex(elements) {
  * - the element has or inherits `visibility: hidden`.
  *
  * @param {HTMLElement} element
- * @return {boolean}
+ * @returns {boolean}
  */
 export function isElementHidden(element) {
   if (element.checkVisibility) {
@@ -181,7 +181,7 @@ export function isElementHidden(element) {
  * http://allyjs.io/data-tables/focusable.html
  *
  * @param {HTMLElement} element
- * @return {boolean}
+ * @returns {boolean}
  */
 export function isElementFocusable(element) {
   // The element cannot be focused if its `tabindex` attribute is set to `-1`.
@@ -202,7 +202,7 @@ export function isElementFocusable(element) {
  * Returns true if the element is focused, false otherwise.
  *
  * @param {HTMLElement} element
- * @return {boolean}
+ * @returns {boolean}
  */
 export function isElementFocused(element) {
   return element.getRootNode().activeElement === element;
@@ -215,7 +215,7 @@ export function isElementFocused(element) {
  * e.g. in Firefox `<div contenteditable>` has `tabIndex = -1`
  *
  * @param {HTMLElement} element
- * @return {number}
+ * @returns {number}
  */
 function normalizeTabIndex(element) {
   if (!isElementFocusable(element)) {
@@ -232,7 +232,7 @@ function normalizeTabIndex(element) {
  *
  * @param {Node} node The starting point for the search; added to `result` if tabbable.
  * @param {HTMLElement[]} result
- * @return {boolean}
+ * @returns {boolean}
  * @private
  */
 function collectFocusableNodes(node, result) {
@@ -269,7 +269,7 @@ function collectFocusableNodes(node, result) {
  * The method traverses nodes in shadow DOM trees too if any.
  *
  * @param {HTMLElement} element
- * @return {HTMLElement[]}
+ * @returns {HTMLElement[]}
  */
 export function getFocusableElements(element) {
   const focusableElements = [];

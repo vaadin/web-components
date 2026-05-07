@@ -174,7 +174,7 @@ export const CustomFieldMixin = (superClass) =>
      * Override method inherited from `FocusMixin` to not remove focused
      * state when focus moves to another input in the custom field.
      * @param {FocusEvent} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldRemoveFocus(event) {
@@ -185,7 +185,7 @@ export const CustomFieldMixin = (superClass) =>
     /**
      * Returns true if the current inputs values satisfy all constraints (if any).
      *
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkValidity() {
       const hasInvalidFields =

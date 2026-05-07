@@ -60,7 +60,7 @@ export const DirMixin = (superClass) =>
     }
 
     /**
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     get __isRTL() {

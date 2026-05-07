@@ -282,7 +282,7 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * @return {!Grid | undefined}
+     * @returns {!Grid | undefined}
      * @protected
      */
     get _grid() {
@@ -293,7 +293,7 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * @return {!Array<!HTMLElement>}
+     * @returns {!Array<!HTMLElement>}
      * @protected
      */
     get _allCells() {
@@ -346,7 +346,7 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * @return {!Grid | undefined}
+     * @returns {!Grid | undefined}
      * @protected
      */
     _findHostGrid() {
@@ -462,7 +462,7 @@ export const ColumnBaseMixin = (superClass) =>
 
     /**
      * @param {string} path
-     * @return {string}
+     * @returns {string}
      * @protected
      */
     _generateHeader(path) {
@@ -759,7 +759,7 @@ export const ColumnBaseMixin = (superClass) =>
      * once an argument is changed to update the property value.
      *
      * @protected
-     * @return {GridHeaderFooterRenderer | undefined}
+     * @returns {GridHeaderFooterRenderer | undefined}
      */
     _computeHeaderRenderer(headerRenderer, header) {
       if (headerRenderer) {
@@ -779,7 +779,7 @@ export const ColumnBaseMixin = (superClass) =>
      * once an argument is changed to update the property value.
      *
      * @protected
-     * @return {GridBodyRenderer | undefined}
+     * @returns {GridBodyRenderer | undefined}
      */
     _computeRenderer(renderer) {
       if (renderer) {
@@ -795,7 +795,7 @@ export const ColumnBaseMixin = (superClass) =>
      * once an argument is changed to update the property value.
      *
      * @protected
-     * @return {GridHeaderFooterRenderer | undefined}
+     * @returns {GridHeaderFooterRenderer | undefined}
      */
     _computeFooterRenderer(footerRenderer) {
       if (footerRenderer) {

@@ -12,7 +12,7 @@ import { adoptStyles } from 'lit';
  * that the user provided using `registerStyles()` function.
  *
  * @param {HTMLElement} component
- * @return {CSSStyleSheet[]}
+ * @returns {CSSStyleSheet[]}
  */
 function getEffectiveStyles(component) {
   const { baseStyles, themeStyles, elementStyles, lumoInjector } = component.constructor;

@@ -849,7 +849,7 @@ export const GridMixin = (superClass) =>
 
     /**
      * @param {!HTMLTableRowElement} row
-     * @return {!GridItemModel}
+     * @returns {!GridItemModel}
      * @protected
      */
     __getRowModel(row) {

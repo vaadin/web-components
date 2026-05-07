@@ -44,7 +44,7 @@ class MenuBarListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LumoI
   }
 
   /**
-   * @return {!HTMLElement}
+   * @returns {!HTMLElement}
    * @protected
    * @override
    */

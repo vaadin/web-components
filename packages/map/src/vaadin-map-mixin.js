@@ -93,7 +93,7 @@ export const MapMixin = (superClass) =>
      * See custom logic in __addMapFocusListeners
      *
      * @param {FocusEvent} _event
-     * @return {boolean}
+     * @returns {boolean}
      * @override
      * @protected
      */

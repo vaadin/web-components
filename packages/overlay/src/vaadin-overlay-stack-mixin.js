@@ -35,7 +35,7 @@ export const hasOnlyNestedOverlays = (overlay) => {
  * Returns true if the overlay is the last one in the opened overlays stack.
  * @param {HTMLElement} overlay
  * @param {function(HTMLElement): boolean} filter
- * @return {boolean}
+ * @returns {boolean}
  * @protected
  */
 export const isLastOverlay = (overlay, filter = (_overlay) => true) => {
@@ -51,7 +51,7 @@ export const OverlayStackMixin = (superClass) =>
     /**
      * Returns true if this is the last one in the opened overlays stack.
      *
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     get _last() {
@@ -61,7 +61,7 @@ export const OverlayStackMixin = (superClass) =>
     /**
      * Returns true if this is overlay is attached.
      *
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     get _isAttached() {

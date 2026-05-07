@@ -3,6 +3,7 @@ import testing from 'eslint-config-vaadin/testing';
 import typescript from 'eslint-config-vaadin/typescript';
 import esX from 'eslint-plugin-es-x';
 import html from 'eslint-plugin-html';
+import jsdoc from 'eslint-plugin-jsdoc';
 import noOnlyTests from 'eslint-plugin-no-only-tests';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import globals from 'globals';
@@ -121,7 +122,38 @@ export default [
   },
   {
     files: ['packages/*/src/**/*.js'],
+    plugins: { jsdoc },
+    settings: {
+      jsdoc: {
+        mode: 'typescript',
+        tagNamePreference: {
+          augments: 'extends',
+          return: 'returns',
+          fileoverview: 'file',
+          prop: 'property',
+        },
+      },
+    },
     rules: {
+      // Tier 1 — bug-catcher rules. See plan
+      // ~/.claude/plans/investigate-enabling-ts-check-for-buzzing-raven.md
+      'jsdoc/valid-types': 'error',
+      'jsdoc/no-undefined-types': 'error',
+      'jsdoc/check-types': 'error',
+      'jsdoc/check-tag-names': [
+        'error',
+        {
+          // Vaadin/Polymer/Lit tags that aren't in the standard JSDoc set.
+          // `customElement` is used by `custom-elements-manifest` tooling.
+          // `method` is sometimes used inside class JSDoc blocks.
+          // `note` shows up in a couple of places as informal commentary.
+          definedTags: ['attr', 'polymerMixin', 'mixes', 'fires', 'internal', 'customElement', 'method', 'note'],
+        },
+      ],
+      'jsdoc/check-param-names': 'error',
+      'jsdoc/no-bad-blocks': 'error',
+      'jsdoc/empty-tags': 'error',
+      'jsdoc/no-multi-asterisks': 'error',
       'no-restricted-syntax': [
         'error',
         {

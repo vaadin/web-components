@@ -62,7 +62,7 @@ export const SelectionMixin = (superClass) =>
 
     /**
      * @param {!GridItem} item
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _isSelected(item) {
@@ -88,7 +88,7 @@ export const SelectionMixin = (superClass) =>
     /**
      * Selects the given item.
      *
-     * @method selectItem
+     * @function selectItem
      * @param {!GridItem} item The item object
      */
     selectItem(item) {
@@ -100,7 +100,7 @@ export const SelectionMixin = (superClass) =>
     /**
      * Deselects the given item if it is already selected.
      *
-     * @method deselect
+     * @function deselect
      * @param {!GridItem} item The item object
      */
     deselectItem(item) {

@@ -69,7 +69,7 @@ export const I18nMixin = (defaultI18n, superClass) =>
      * Should be overridden by subclasses to provide a custom JSDoc with the
      * default I18N properties.
      *
-     * @type {Object}
+     * @type {object}
      */
     get i18n() {
       return this.__customI18n;

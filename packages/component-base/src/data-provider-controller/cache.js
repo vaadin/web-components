@@ -85,7 +85,7 @@ export class Cache {
   /**
    * An item in the parent cache that the current cache is associated with.
    *
-   * @return {object | undefined}
+   * @returns {object | undefined}
    */
   get parentItem() {
     return this.parentCache && this.parentCache.items[this.parentCacheIndex];
@@ -95,7 +95,7 @@ export class Cache {
    * An array of sub-caches sorted in the same order as their associated items
    * appear in the `items` array.
    *
-   * @return {Cache[]}
+   * @returns {Cache[]}
    */
   get subCaches() {
     return Object.values(this.#subCacheByIndex);
@@ -104,7 +104,7 @@ export class Cache {
   /**
    * Whether the cache or any of its descendant caches have pending requests.
    *
-   * @return {boolean}
+   * @returns {boolean}
    */
   get isLoading() {
     if (Object.keys(this.pendingRequests).length > 0) {
@@ -117,7 +117,7 @@ export class Cache {
   /**
    * The total number of items, including items from expanded sub-caches.
    *
-   * @return {number}
+   * @returns {number}
    */
   get flatSize() {
     return this.#flatSize;
@@ -126,7 +126,7 @@ export class Cache {
   /**
    * The number of items.
    *
-   * @return {number}
+   * @returns {number}
    */
   get size() {
     return this.#size;
@@ -200,7 +200,7 @@ export class Cache {
    * in the `items` array.
    *
    * @param {number} index
-   * @return {Cache | undefined}
+   * @returns {Cache | undefined}
    */
   getSubCache(index) {
     return this.#subCacheByIndex[index];
@@ -228,7 +228,7 @@ export class Cache {
    * in the `items` array.
    *
    * @param {number} index
-   * @return {Cache}
+   * @returns {Cache}
    */
   createSubCache(index) {
     const subCache = new Cache(this.context, this.pageSize, 0, this, index);
@@ -241,7 +241,7 @@ export class Cache {
    * of an item in the `items` array.
    *
    * @param {number} index
-   * @return {number}
+   * @returns {number}
    */
   getFlatIndex(index) {
     const clampedIndex = Math.max(0, Math.min(this.size - 1, index));

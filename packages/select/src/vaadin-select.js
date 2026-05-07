@@ -74,7 +74,7 @@ import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
  * in the next renderer call and will be provided with the `root` argument.
  * On first call it will be empty.
  *
- * * Hint: By setting the `label` property of inner vaadin-items you will
+ * Hint: By setting the `label` property of inner vaadin-items you will
  * be able to change the visual representation of the selected value in the input part.
  *
  * ### Styling

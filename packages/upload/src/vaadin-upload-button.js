@@ -91,7 +91,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
        * Reference to an UploadManager.
        * When set, the button will automatically disable when maxFilesReached
        * becomes true on the manager.
-       * @type {Object | null}
+       * @type {object | null}
        */
       manager: {
         type: Object,

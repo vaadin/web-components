@@ -371,7 +371,7 @@ export const CrudMixin = (superClass) =>
 
     /**
      * A reference to all fields inside the [`_form`](#/elements/vaadin-crud#property-_form) element
-     * @return {!Array<!HTMLElement>}
+     * @returns {!Array<!HTMLElement>}
      * @protected
      */
     get _fields() {

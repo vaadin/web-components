@@ -46,7 +46,7 @@ function checkPaths(arrayToCheck, action, items) {
 
 /**
  * @param {unknown} value
- * @return {string}
+ * @returns {string}
  */
 function normalizeEmptyValue(value) {
   if ([undefined, null].indexOf(value) >= 0) {
@@ -60,7 +60,7 @@ function normalizeEmptyValue(value) {
 /**
  * @param {unknown} a
  * @param {unknown} b
- * @return {number}
+ * @returns {number}
  */
 function compare(a, b) {
   a = normalizeEmptyValue(a);
@@ -80,7 +80,7 @@ function compare(a, b) {
  *
  * @param {Array<any>} items
  * @param {Array<GridSorterDefinition>} sortOrders
- * @return {Array<any>}
+ * @returns {Array<any>}
  */
 function multiSort(items, sortOrders) {
   return items.sort((a, b) => {
@@ -102,7 +102,7 @@ function multiSort(items, sortOrders) {
 /**
  * @param {!Array<!GridItem>} items
  * @param {Array<GridFilterDefinition>} filters
- * @return {!Array<!GridItem>}
+ * @returns {!Array<!GridItem>}
  */
 function filter(items, filters) {
   return items.filter((item) => {
@@ -122,7 +122,7 @@ function filter(items, filters) {
  * from the given array as data when requested by the grid.
  *
  * @param {Array<any>} allItems
- * @return {GridDataProvider<any>}
+ * @returns {GridDataProvider<any>}
  */
 export const createArrayDataProvider = (allItems) => {
   return (params, callback) => {

@@ -83,7 +83,7 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(PolylitMix
   }
 
   /**
-   * @return {!HTMLElement}
+   * @returns {!HTMLElement}
    * @protected
    * @override
    */

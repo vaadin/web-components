@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 /**
- * @fileoverview
+ * @file
  *
  * Module for adding listeners to a node for the following normalized
  * cross-platform "gesture" events:
@@ -52,7 +52,7 @@ const MOUSE_HAS_BUTTONS = (function () {
 
 /**
  * @param {string} name Possible mouse event name
- * @return {boolean} true if mouse event, false if not
+ * @returns {boolean} true if mouse event, false if not
  */
 function isMouseEvent(name) {
   return MOUSE_EVENTS.indexOf(name) > -1;
@@ -78,7 +78,7 @@ let supportsPassive = false;
  *
  * @param {string} eventName Event name to determine if `{passive}` option is
  *   needed
- * @return {{passive: boolean} | undefined} Options to use for addEventListener
+ * @returns {{passive: boolean} | undefined} Options to use for addEventListener
  *   and removeEventListener
  */
 function PASSIVE_TOUCH(eventName) {
@@ -109,7 +109,7 @@ const canBeDisabled = {
 
 /**
  * @param {MouseEvent} ev event to test for left mouse button down
- * @return {boolean} has left mouse button down
+ * @returns {boolean} has left mouse button down
  */
 function hasLeftMouseButton(ev) {
   const type = ev.type;
@@ -202,7 +202,7 @@ function untrackDocument(stateObj) {
 /**
  * Returns the composedPath for the given event.
  * @param {Event} event to process
- * @return {!Array<!EventTarget>} Path of the event
+ * @returns {!Array<!EventTarget>} Path of the event
  */
 const getComposedPath =
   window.ShadyDOM && window.ShadyDOM.noPatch
@@ -223,7 +223,7 @@ export const recognizers = [];
  *
  * @param {number} x Horizontal pixel coordinate
  * @param {number} y Vertical pixel coordinate
- * @return {Element} Returns the deepest shadowRoot inclusive element
+ * @returns {Element} Returns the deepest shadowRoot inclusive element
  * found at the screen position given.
  */
 export function deepTargetFind(x, y) {
@@ -252,7 +252,7 @@ export function deepTargetFind(x, y) {
  *
  * @private
  * @param {Event|Touch} ev Event.
- * @return {EventTarget} Returns the event target.
+ * @returns {EventTarget} Returns the event target.
  */
 function _findOriginalTarget(ev) {
   const path = getComposedPath(/** @type {?Event} */ (ev));
@@ -263,7 +263,7 @@ function _findOriginalTarget(ev) {
 /**
  * @private
  * @param {Event} ev Event.
- * @return {void}
+ * @returns {void}
  */
 function _handleNative(ev) {
   const type = ev.type;
@@ -323,7 +323,7 @@ function _handleNative(ev) {
 /**
  * @private
  * @param {TouchEvent} ev Event.
- * @return {void}
+ * @returns {void}
  */
 function _handleTouchAction(ev) {
   const t = ev.changedTouches[0];
@@ -364,7 +364,7 @@ function _handleTouchAction(ev) {
  * @param {!EventTarget} node Node to add listener on
  * @param {string} evType Gesture type: `down`, `up`, `track`, or `tap`
  * @param {!function(!Event):void} handler Event listener function to call
- * @return {boolean} Returns true if a gesture event listener was added.
+ * @returns {boolean} Returns true if a gesture event listener was added.
  */
 export function addListener(node, evType, handler) {
   if (gestures[evType]) {
@@ -381,7 +381,7 @@ export function addListener(node, evType, handler) {
  * @param {string} evType Gesture type: `down`, `up`, `track`, or `tap`
  * @param {!function(!Event):void} handler Event listener function previously passed to
  *  `addListener`.
- * @return {boolean} Returns true if a gesture event listener was removed.
+ * @returns {boolean} Returns true if a gesture event listener was removed.
  */
 export function removeListener(node, evType, handler) {
   if (gestures[evType]) {
@@ -398,7 +398,7 @@ export function removeListener(node, evType, handler) {
  * @param {!EventTarget} node Node on which to add the event.
  * @param {string} evType Event type to add.
  * @param {function(!Event)} handler Event handler function.
- * @return {void}
+ * @returns {void}
  */
 function _add(node, evType, handler) {
   const recognizer = gestures[evType];
@@ -437,7 +437,7 @@ function _add(node, evType, handler) {
  * @param {!EventTarget} node Node on which to remove the event.
  * @param {string} evType Event type to remove.
  * @param {function(!Event): void} handler Event handler function.
- * @return {void}
+ * @returns {void}
  */
 function _remove(node, evType, handler) {
   const recognizer = gestures[evType];
@@ -465,7 +465,7 @@ function _remove(node, evType, handler) {
  * gesture event types.
  *
  * @param {!GestureRecognizer} recog Gesture recognizer descriptor
- * @return {void}
+ * @returns {void}
  */
 export function register(recog) {
   recognizers.push(recog);
@@ -477,7 +477,7 @@ export function register(recog) {
 /**
  * @private
  * @param {string} evName Event name.
- * @return {Object} Returns the gesture for the given event name.
+ * @returns {object} Returns the gesture for the given event name.
  */
 function _findRecognizerByEvent(evName) {
   for (let i = 0, r; i < recognizers.length; i++) {
@@ -500,7 +500,7 @@ function _findRecognizerByEvent(evName) {
  *
  * @param {!EventTarget} node Node to set touch action setting on
  * @param {string} value Touch action value
- * @return {void}
+ * @returns {void}
  */
 export function setTouchAction(node, value) {
   if (HAS_NATIVE_TA && node instanceof HTMLElement) {
@@ -521,8 +521,8 @@ export function setTouchAction(node, value) {
  * @private
  * @param {!EventTarget} target The element on which to fire an event.
  * @param {string} type The type of event to fire.
- * @param {!Object=} detail The detail object to populate on the event.
- * @return {void}
+ * @param {!object=} detail The detail object to populate on the event.
+ * @returns {void}
  */
 function _fire(target, type, detail) {
   const ev = new Event(type, { bubbles: true, cancelable: true, composed: true });
@@ -541,7 +541,7 @@ function _fire(target, type, detail) {
  * Prevents the dispatch and default action of the given event name.
  *
  * @param {string} evName Event name.
- * @return {void}
+ * @returns {void}
  */
 export function prevent(evName) {
   const recognizer = _findRecognizerByEvent(evName);
@@ -566,7 +566,7 @@ register({
 
   /**
    * @this {GestureRecognizer}
-   * @return {void}
+   * @returns {void}
    */
   reset() {
     untrackDocument(this.info);
@@ -575,7 +575,7 @@ register({
   /**
    * @this {GestureRecognizer}
    * @param {MouseEvent} e
-   * @return {void}
+   * @returns {void}
    */
   mousedown(e) {
     if (!hasLeftMouseButton(e)) {
@@ -602,7 +602,7 @@ register({
   /**
    * @this {GestureRecognizer}
    * @param {TouchEvent} e
-   * @return {void}
+   * @returns {void}
    */
   touchstart(e) {
     downupFire('down', _findOriginalTarget(e), e.changedTouches[0], e);
@@ -611,7 +611,7 @@ register({
   /**
    * @this {GestureRecognizer}
    * @param {TouchEvent} e
-   * @return {void}
+   * @returns {void}
    */
   touchend(e) {
     downupFire('up', _findOriginalTarget(e), e.changedTouches[0], e);
@@ -623,7 +623,7 @@ register({
  * @param {EventTarget} target
  * @param {Event|Touch} event
  * @param {Event=} preventer
- * @return {void}
+ * @returns {void}
  */
 function downupFire(type, target, event, preventer) {
   if (!target) {
@@ -670,7 +670,7 @@ register({
 
   /**
    * @this {GestureRecognizer}
-   * @return {void}
+   * @returns {void}
    */
   reset() {
     this.info.state = 'start';
@@ -685,7 +685,7 @@ register({
   /**
    * @this {GestureRecognizer}
    * @param {MouseEvent} e
-   * @return {void}
+   * @returns {void}
    */
   mousedown(e) {
     if (!hasLeftMouseButton(e)) {
@@ -732,7 +732,7 @@ register({
   /**
    * @this {GestureRecognizer}
    * @param {TouchEvent} e
-   * @return {void}
+   * @returns {void}
    */
   touchstart(e) {
     const ct = e.changedTouches[0];
@@ -743,7 +743,7 @@ register({
   /**
    * @this {GestureRecognizer}
    * @param {TouchEvent} e
-   * @return {void}
+   * @returns {void}
    */
   touchmove(e) {
     const t = _findOriginalTarget(e);
@@ -765,7 +765,7 @@ register({
   /**
    * @this {GestureRecognizer}
    * @param {TouchEvent} e
-   * @return {void}
+   * @returns {void}
    */
   touchend(e) {
     const t = _findOriginalTarget(e);
@@ -784,7 +784,7 @@ register({
  * @param {!GestureInfo} info
  * @param {number} x
  * @param {number} y
- * @return {boolean}
+ * @returns {boolean}
  */
 function trackHasMovedEnough(info, x, y) {
   if (info.prevent) {
@@ -802,7 +802,7 @@ function trackHasMovedEnough(info, x, y) {
  * @param {!GestureInfo} info
  * @param {?EventTarget} target
  * @param {Touch} touch
- * @return {void}
+ * @returns {void}
  */
 function trackFire(info, target, touch) {
   if (!target) {
@@ -849,7 +849,7 @@ register({
 
   /**
    * @this {GestureRecognizer}
-   * @return {void}
+   * @returns {void}
    */
   reset() {
     this.info.x = NaN;
@@ -860,7 +860,7 @@ register({
   /**
    * @this {GestureRecognizer}
    * @param {MouseEvent} e
-   * @return {void}
+   * @returns {void}
    */
   mousedown(e) {
     if (hasLeftMouseButton(e)) {
@@ -872,7 +872,7 @@ register({
   /**
    * @this {GestureRecognizer}
    * @param {MouseEvent} e
-   * @return {void}
+   * @returns {void}
    */
   click(e) {
     if (hasLeftMouseButton(e)) {
@@ -883,7 +883,7 @@ register({
   /**
    * @this {GestureRecognizer}
    * @param {TouchEvent} e
-   * @return {void}
+   * @returns {void}
    */
   touchstart(e) {
     const touch = e.changedTouches[0];
@@ -894,7 +894,7 @@ register({
   /**
    * @this {GestureRecognizer}
    * @param {TouchEvent} e
-   * @return {void}
+   * @returns {void}
    */
   touchend(e) {
     trackForward(this.info, e.changedTouches[0], e);
@@ -905,7 +905,7 @@ register({
  * @param {!GestureInfo} info
  * @param {Event | Touch} e
  * @param {Event=} preventer
- * @return {void}
+ * @returns {void}
  */
 function trackForward(info, e, preventer) {
   const dx = Math.abs(e.clientX - info.x);

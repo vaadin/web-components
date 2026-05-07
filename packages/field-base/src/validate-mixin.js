@@ -57,7 +57,7 @@ const ValidateMixinImplementation = (superclass) =>
      *
      * The method fires a `validated` event with the result of the validation.
      *
-     * @return {boolean} True if the value is valid.
+     * @returns {boolean} True if the value is valid.
      */
     validate() {
       const isValid = this.checkValidity();
@@ -69,7 +69,7 @@ const ValidateMixinImplementation = (superclass) =>
     /**
      * Returns true if the field value satisfies all constraints (if any).
      *
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkValidity() {
       return !this.required || !!this.value;
@@ -89,7 +89,7 @@ const ValidateMixinImplementation = (superclass) =>
      * Override this method to define whether the given `invalid` state should be set.
      *
      * @param {boolean} _invalid
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldSetInvalid(_invalid) {

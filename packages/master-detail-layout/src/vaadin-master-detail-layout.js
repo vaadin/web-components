@@ -519,7 +519,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    *
    * @param element the new detail element, or null to remove the current detail
    * @param skipTransition whether to skip the transition
-   * @return {Promise<void>}
+   * @returns {Promise<void>}
    * @protected
    */
   async _setDetail(newDetail, skipTransition) {
@@ -576,7 +576,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
    *
    * @param transitionType
    * @param updateSlot
-   * @return {Promise<void>}
+   * @returns {Promise<void>}
    * @protected
    */
   async _startTransition(transitionType, updateSlot) {

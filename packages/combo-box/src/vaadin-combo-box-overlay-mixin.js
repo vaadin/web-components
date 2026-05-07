@@ -27,7 +27,7 @@ export const ComboBoxOverlayMixin = (superClass) =>
      * to not close on position target click.
      *
      * @param {Event} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldCloseOnOutsideClick(event) {

@@ -90,7 +90,7 @@ export const MessageListMixin = (superClass) =>
      * Handles attachment-click events from child messages and dispatches
      * a new event enriched with the item.
      * @param {CustomEvent} e
-     * @param {Object} item
+     * @param {object} item
      * @private
      */
     __onAttachmentClick(e, item) {
@@ -108,7 +108,7 @@ export const MessageListMixin = (superClass) =>
      * Override method inherited from `KeyboardDirectionMixin`
      * to use the list of message elements as items.
      *
-     * @return {Element[]}
+     * @returns {Element[]}
      * @protected
      * @override
      */

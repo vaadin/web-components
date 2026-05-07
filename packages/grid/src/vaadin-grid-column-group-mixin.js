@@ -327,7 +327,7 @@ export const GridColumnGroupMixin = (superClass) =>
 
     /**
      * @param {!GridColumnGroup} el
-     * @return {!Array<!GridColumn>}
+     * @returns {!Array<!GridColumn>}
      * @protected
      */
     _getChildColumns(el) {
@@ -356,7 +356,7 @@ export const GridColumnGroupMixin = (superClass) =>
 
     /**
      * @param {!Node} node
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _isColumnElement(node) {

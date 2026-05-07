@@ -92,7 +92,7 @@ class PopoverOverlay extends PopoverOverlayMixin(
   /**
    * Override method from `OverlayMixin` to always add outside
    * click listener so that it can be used by modeless popover.
-   * @return {boolean}
+   * @returns {boolean}
    * @protected
    * @override
    */

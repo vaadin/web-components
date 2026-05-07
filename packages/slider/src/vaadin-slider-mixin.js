@@ -179,7 +179,7 @@ export const SliderMixin = (superClass) =>
     }
 
     /**
-     * @return {{ min: number, max: number, step: number}}
+     * @returns {{ min: number, max: number, step: number}}
      * @private
      */
     __getConstraints() {
@@ -192,7 +192,7 @@ export const SliderMixin = (superClass) =>
 
     /**
      * @param {number} value
-     * @return {number}
+     * @returns {number}
      * @private
      */
     __getPercentFromValue(value) {

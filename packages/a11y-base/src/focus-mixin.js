@@ -15,7 +15,7 @@ const FocusMixinImplementation = (superclass) => {
   return class FocusMixinClass extends superclass {
     /**
      * @protected
-     * @return {boolean}
+     * @returns {boolean}
      */
     get _keyboardActive() {
       return isKeyboardActive();
@@ -86,7 +86,7 @@ const FocusMixinImplementation = (superclass) => {
      * Override to define if the field receives focus based on the event.
      *
      * @param {FocusEvent} _event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldSetFocus(_event) {
@@ -97,7 +97,7 @@ const FocusMixinImplementation = (superclass) => {
      * Override to define if the field loses focus based on the event.
      *
      * @param {FocusEvent} _event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldRemoveFocus(_event) {

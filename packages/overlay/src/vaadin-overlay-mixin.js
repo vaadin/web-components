@@ -262,7 +262,7 @@ export const OverlayMixin = (superClass) =>
      * Whether to add global listeners for closing on outside click.
      * By default, listeners are not added for a modeless overlay.
      *
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldAddGlobalListeners() {
@@ -406,7 +406,7 @@ export const OverlayMixin = (superClass) =>
     }
 
     /**
-     * @return {boolean}
+     * @returns {boolean}
      * @private
      */
     _shouldAnimate() {
@@ -529,7 +529,7 @@ export const OverlayMixin = (superClass) =>
      * Override this method to customize the closing logic.
      *
      * @param {Event} _event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldCloseOnOutsideClick(_event) {

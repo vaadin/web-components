@@ -27,7 +27,7 @@ function containsQueryParams(actual, expected) {
  *
  * @param {string} actual The actual URL to match.
  * @param {string} expected The expected URL to match.
- * @param {Object} matchOptions Options for path matching.
+ * @param {object} matchOptions Options for path matching.
  */
 export function matchPaths(actual, expected, matchOptions = { matchNested: false }) {
   const base = document.baseURI;

@@ -132,7 +132,7 @@ function parseStyleSheet(
  * ```
  *
  * @param {CSSStyleSheet[]} styleSheets - An array of CSSStyleSheet objects to parse.
- * @return {{tags: Map<string, string[]>, modules: Map<string, CSSRule[]>}}
+ * @returns {{tags: Map<string, string[]>, modules: Map<string, CSSRule[]>}}
  */
 export function parseStyleSheets(styleSheets) {
   let tags = new Map();

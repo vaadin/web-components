@@ -129,7 +129,7 @@ class SideNav extends SideNavChildrenMixin(
        *
        * Also see the `location` property for updating the highlighted navigation item on route change.
        *
-       * @type {function(Object): boolean | undefined}
+       * @type {function(object): boolean | undefined}
        */
       onNavigate: {
         attribute: false,
@@ -239,7 +239,7 @@ class SideNav extends SideNavChildrenMixin(
 
   /**
    * @param {Event} event
-   * @return {boolean}
+   * @returns {boolean}
    * @protected
    * @override
    */

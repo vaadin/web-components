@@ -56,7 +56,7 @@ export const SelectOverlayMixin = (superClass) =>
      * in order to avoid problem when using inside of the modeless dialog.
      *
      * @param {Event} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldCloseOnOutsideClick(_event) {

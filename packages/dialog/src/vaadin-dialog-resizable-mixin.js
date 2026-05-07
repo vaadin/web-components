@@ -142,7 +142,7 @@ export const DialogResizableMixin = (superClass) =>
     }
 
     /**
-     * @return {!DialogResizeDimensions}
+     * @returns {!DialogResizeDimensions}
      * @protected
      */
     _getResizeDimensions() {

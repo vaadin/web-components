@@ -93,7 +93,7 @@ export const BoardRowMixin = (superClass) =>
      * Parses board-cols from DOM.
      * If there is not enough space in the row drop board cols.
      * @param {!Array<!Node>} nodes array of nodes
-     * @return {!Array<number>} array of boardCols
+     * @returns {!Array<number>} array of boardCols
      * @private
      */
     _parseBoardCols(nodes) {
@@ -127,7 +127,7 @@ export const BoardRowMixin = (superClass) =>
      * Extra items are dropped from DOM.
      * @param {!Array<number>} boardCols array of board-cols for every node
      * @param {!Array<!Node>} nodes array of nodes
-     * @return {!Array<!Node>} filtered array of nodes
+     * @returns {!Array<!Node>} filtered array of nodes
      * @private
      */
     _removeExtraNodesFromDOM(boardCols, nodes) {
@@ -210,7 +210,7 @@ export const BoardRowMixin = (superClass) =>
      * The breakpoints for `small` and `medium` can be given in any unit: `px`, `em`, `in` etc.
      * We need to know them in `px` so that they are comparable with the actual size.
      *
-     * @return {object} object with smallSize and mediumSize number properties, which tells
+     * @returns {object} object with smallSize and mediumSize number properties, which tells
      * where the row should switch rendering size in pixels.
      * @private
      */

@@ -43,7 +43,7 @@ export const IconsetMixin = (superClass) =>
     /**
      * Set of the `vaadin-icon` instances in the DOM.
      *
-     * @return {Set<Icon>}
+     * @returns {Set<Icon>}
      */
     static get attachedIcons() {
       return attachedIcons;
@@ -53,7 +53,7 @@ export const IconsetMixin = (superClass) =>
      * Returns an instance of the iconset by its name.
      *
      * @param {string} name
-     * @return {Iconset}
+     * @returns {Iconset}
      */
     static getIconset(name) {
       return iconsetRegistry[name];
@@ -109,7 +109,7 @@ export const IconsetMixin = (superClass) =>
      *
      * See also [`name`](#/elements/vaadin-icon#property-name) property of `vaadin-icon`.
      *
-     * @return {string}
+     * @returns {string}
      */
     get name() {
       return this.__name;
@@ -130,7 +130,7 @@ export const IconsetMixin = (superClass) =>
      * When using `vaadin-icon`, the size of the iconset will take precedence
      * over the size defined by the user to ensure correct appearance.
      *
-     * @return {number}
+     * @returns {number}
      */
     get size() {
       // Use default property value as a fallback here instead of the constructor

@@ -179,7 +179,7 @@ export const RowDetailsMixin = (superClass) =>
 
     /**
      * @param {!GridItem} item
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _isDetailsOpened(item) {

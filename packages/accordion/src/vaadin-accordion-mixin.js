@@ -56,7 +56,7 @@ export const AccordionMixin = (superClass) =>
      * Override getter from `KeyboardDirectionMixin`
      * to check if the heading element has focus.
      *
-     * @return {Element | null}
+     * @returns {Element | null}
      * @protected
      * @override
      */
@@ -94,7 +94,7 @@ export const AccordionMixin = (superClass) =>
      * Override method inherited from `KeyboardDirectionMixin`
      * to use the stored list of accordion panels as items.
      *
-     * @return {Element[]}
+     * @returns {Element[]}
      * @protected
      * @override
      */
@@ -104,7 +104,7 @@ export const AccordionMixin = (superClass) =>
 
     /**
      * @param {!Array<!Element>} array
-     * @return {!Array<!AccordionPanel>}
+     * @returns {!Array<!AccordionPanel>}
      * @protected
      */
     _filterItems(array) {

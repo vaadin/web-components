@@ -76,7 +76,7 @@ const InputMixinImplementation = (superclass) => {
      * Override this getter if the property is different from the default `value` one.
      *
      * @protected
-     * @return {string}
+     * @returns {string}
      */
     get _inputElementValueProperty() {
       return 'value';
@@ -86,7 +86,7 @@ const InputMixinImplementation = (superclass) => {
      * The input element's value.
      *
      * @protected
-     * @return {string}
+     * @returns {string}
      */
     get _inputElementValue() {
       return this.inputElement ? this.inputElement[this._inputElementValueProperty] : undefined;

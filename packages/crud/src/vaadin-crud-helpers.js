@@ -15,7 +15,7 @@ import { get, set } from '@vaadin/component-base/src/path-utils.js';
  * replacing non-alphanumeric characters with spaces.
  *
  * @param {string} path
- * @return {string}
+ * @returns {string}
  */
 export function capitalize(path) {
   return path
@@ -29,8 +29,8 @@ export function capitalize(path) {
  * Convenience utility for reading a value from a path.
  *
  * @param {string} path
- * @param {Object} obj
- * @return {*}
+ * @param {object} obj
+ * @returns {*}
  */
 export function getProperty(path, obj) {
   return get(path, obj);
@@ -44,7 +44,7 @@ export function getProperty(path, obj) {
  *
  * @param {string} path
  * @param {*} value
- * @param {Object} obj
+ * @param {object} obj
  */
 export function setProperty(path, value, obj) {
   if (obj && path) {

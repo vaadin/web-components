@@ -10,7 +10,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
  * Returns the cells of the given row, excluding the details cell.
  *
  * @param {HTMLTableRowElement} row the table row
- * @return {HTMLTableCellElement[]} array of cells
+ * @returns {HTMLTableCellElement[]} array of cells
  */
 export function getBodyRowCells(row) {
   // If available, return the cached cells. Otherwise, query the cells directly from the row.
@@ -41,7 +41,7 @@ export function iterateRowCells(row, callback) {
 }
 
 /**
- * @param {Array<Object>} columns array of columns to be modified
+ * @param {Array<object>} columns array of columns to be modified
  * @param {number} scope multiplier added to base order for each column
  * @param {number} baseOrder base number used for order
  */
@@ -102,7 +102,7 @@ export function updateCellsPart(cells, part, value) {
 
 /**
  * @param {!HTMLElement} row
- * @param {Object} states
+ * @param {object} states
  */
 export function updateBooleanRowStates(row, states) {
   const cells = getBodyRowCells(row);
@@ -123,7 +123,7 @@ export function updateBooleanRowStates(row, states) {
 
 /**
  * @param {!HTMLElement} row
- * @param {Object} states
+ * @param {object} states
  */
 export function updateStringRowStates(row, states) {
   const cells = getBodyRowCells(row);
@@ -173,7 +173,7 @@ export function updateCellState(cell, attribute, value, part, oldPart) {
 /**
  * Finds the cell containing the tree toggle element
  * @param {!HTMLElement} row
- * @return {HTMLElement | null}
+ * @returns {HTMLElement | null}
  */
 export function findTreeToggleCell(row) {
   return getBodyRowCells(row).find((cell) => cell._content.querySelector('vaadin-grid-tree-toggle'));

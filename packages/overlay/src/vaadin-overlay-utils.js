@@ -12,7 +12,7 @@
  *
  * @param {HTMLElement} element
  * @param {Function} callback
- * @return {Function}
+ * @returns {Function}
  */
 export function observeMove(element, callback) {
   let io = null;

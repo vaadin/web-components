@@ -164,7 +164,7 @@ class DashboardWidget extends DashboardItemMixin(
         value: '',
       },
 
-      /* @private */
+      /** @private */
       __isNestedWidget: {
         type: Boolean,
         value: false,

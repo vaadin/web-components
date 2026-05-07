@@ -133,7 +133,7 @@ export const CheckboxMixin = (superclass) =>
      * or when clicking slotted helper or error message element.
      *
      * @param {Event} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      * @override
      */
@@ -214,7 +214,7 @@ export const CheckboxMixin = (superclass) =>
 
     /**
      * @override
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkValidity() {
       return !this.required || !!this.checked;

@@ -485,7 +485,7 @@ export const ChartMixin = (superClass) =>
       return options;
     }
 
-    /*
+    /**
      * Name of the chart events to add to the configuration and its corresponding event for the chart element
      * @private
      */
@@ -770,7 +770,7 @@ export const ChartMixin = (superClass) =>
      *
      * @param {string} id contains the id that will be searched
      * @param {boolean} isXAxis indicates if it will remove x or y axes. Defaults to `false`.
-     * @return {Axis}
+     * @returns {Axis}
      * @protected
      */
     __getAxis(id, isXAxis) {
@@ -783,9 +783,9 @@ export const ChartMixin = (superClass) =>
     /**
      * Add an axis with given options
      *
-     * @param {Object} options axis options
+     * @param {object} options axis options
      * @param {boolean} isXAxis indicates if axis is X (`true`) or Y (`false`). Defaults to `false`.
-     * @return {!Axis}
+     * @returns {!Axis}
      * @protected
      */
     __addAxis(options, isXAxis) {

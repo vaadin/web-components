@@ -19,7 +19,7 @@ export const DatePickerOverlayMixin = (superClass) =>
      * Needed to ignore date-picker's own input in the mousedown listener below.
      *
      * @param {Event} event
-     * @return {boolean}
+     * @returns {boolean}
      * @protected
      */
     _shouldCloseOnOutsideClick(event) {

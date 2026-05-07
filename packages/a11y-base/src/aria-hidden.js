@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview
+ * @file
  *
  * This module includes JS code copied from the `aria-hidden` package:
  * https://github.com/theKashey/aria-hidden/blob/master/src/index.ts
@@ -25,7 +25,7 @@ let lockCount = 0;
 
 /**
  * @param {?Node} node
- * @return {boolean}
+ * @returns {boolean}
  */
 const isElement = (node) => node?.nodeType === Node.ELEMENT_NODE;
 
@@ -39,7 +39,7 @@ const logError = (...args) => {
 /**
  * @param {HTMLElement} parent
  * @param {Element[]} targets
- * @return {Element[]}
+ * @returns {Element[]}
  */
 const correctTargets = (parent, targets) => {
   if (!isElement(parent)) {
@@ -72,9 +72,9 @@ const correctTargets = (parent, targets) => {
  * Marks everything except given node(or nodes) as aria-hidden
  * @param {Element | Element[]} originalTarget - elements to keep on the page
  * @param {HTMLElement} [parentNode] - top element, defaults to document.body
- * @param {String} [markerName] - a special attribute to mark every node
- * @param {String} [controlAttribute] - html Attribute to control
- * @return {Function}
+ * @param {string} [markerName] - a special attribute to mark every node
+ * @param {string} [controlAttribute] - html Attribute to control
+ * @returns {Function}
  */
 const applyAttributeToOthers = (originalTarget, parentNode, markerName, controlAttribute) => {
   const targets = correctTargets(parentNode, Array.isArray(originalTarget) ? originalTarget : [originalTarget]);
@@ -200,8 +200,8 @@ const applyAttributeToOthers = (originalTarget, parentNode, markerName, controlA
  * Marks everything except given node(or nodes) as aria-hidden
  * @param {Element | Element[]} originalTarget - elements to keep on the page
  * @param {HTMLElement} [parentNode] - top element, defaults to document.body
- * @param {String} [markerName] - a special attribute to mark every node
- * @return {Function} undo command
+ * @param {string} [markerName] - a special attribute to mark every node
+ * @returns {Function} undo command
  */
 export const hideOthers = (originalTarget, parentNode = document.body, markerName = 'data-aria-hidden') => {
   const targets = Array.from(Array.isArray(originalTarget) ? originalTarget : [originalTarget]);
@@ -218,15 +218,15 @@ export const hideOthers = (originalTarget, parentNode = document.body, markerNam
  * Marks everything except given node(or nodes) as inert
  * @param {Element | Element[]} originalTarget - elements to keep on the page
  * @param {HTMLElement} [parentNode] - top element, defaults to document.body
- * @param {String} [markerName] - a special attribute to mark every node
- * @return {Function} undo command
+ * @param {string} [markerName] - a special attribute to mark every node
+ * @returns {Function} undo command
  */
 export const inertOthers = (originalTarget, parentNode = document.body, markerName = 'data-inert-ed') => {
   return applyAttributeToOthers(originalTarget, parentNode, markerName, 'inert');
 };
 
 /**
- * @return if current browser supports inert
+ * @returns if current browser supports inert
  */
 export const supportsInert = 'inert' in HTMLElement.prototype;
 
@@ -234,8 +234,8 @@ export const supportsInert = 'inert' in HTMLElement.prototype;
  * Automatic function to "suppress" DOM elements - _hide_ or _inert_ in the best possible way
  * @param {Element | Element[]} originalTarget - elements to keep on the page
  * @param {HTMLElement} [parentNode] - top element, defaults to document.body
- * @param {String} [markerName] - a special attribute to mark every node
- * @return {Function} undo command
+ * @param {string} [markerName] - a special attribute to mark every node
+ * @returns {Function} undo command
  */
 export const suppressOthers = (originalTarget, parentNode, markerName) =>
   (supportsInert ? inertOthers : hideOthers)(originalTarget, parentNode, markerName);

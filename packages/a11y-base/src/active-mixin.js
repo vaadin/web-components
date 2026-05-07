@@ -29,7 +29,7 @@ export const ActiveMixin = (superclass) =>
      * https://developer.mozilla.org/ru/docs/Web/API/KeyboardEvent/key/Key_Values
      *
      * @protected
-     * @return {!Array<!string>}
+     * @returns {!Array<!string>}
      */
     get _activeKeys() {
       return [' '];

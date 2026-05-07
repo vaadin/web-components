@@ -12,7 +12,7 @@ const instances = [];
  * or null if the element is not inside any active focus trap.
  *
  * @param {HTMLElement} element
- * @return {HTMLElement | null}
+ * @returns {HTMLElement | null}
  */
 export function getActiveTrappingNode(element) {
   // Iterate backwards since instances are ordered outer-to-inner (push/pop)
@@ -53,7 +53,7 @@ export class FocusTrapController {
   /**
    * An array of tab-ordered focusable elements inside the trap node.
    *
-   * @return {HTMLElement[]}
+   * @returns {HTMLElement[]}
    * @private
    */
   get __focusableElements() {
@@ -63,7 +63,7 @@ export class FocusTrapController {
   /**
    * The index of the element inside the trap node that currently has focus.
    *
-   * @return {HTMLElement | undefined}
+   * @returns {HTMLElement | undefined}
    * @private
    */
   get __focusedElementIndex() {

@@ -762,7 +762,7 @@ export class IronListAdapter {
    * For the cases where some items are much larger than the average, the iron list core might not increase item pool.
    * This can lead to the large item not being rendered.
    *
-   * @returns {Number} - Extra item height buffer
+   * @returns {number} - Extra item height buffer
    * @private
    */
   __getItemHeightBuffer() {
