@@ -10,7 +10,11 @@ const DEFAULT_I18N = {
   },
 };
 
-class TestElement extends I18nMixin(DEFAULT_I18N, HTMLElement) {}
+class TestElement extends I18nMixin<typeof HTMLElement, typeof DEFAULT_I18N>(HTMLElement) {
+  static get defaultI18n() {
+    return DEFAULT_I18N;
+  }
+}
 
 const element = new TestElement();
 

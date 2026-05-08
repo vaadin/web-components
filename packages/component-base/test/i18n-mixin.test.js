@@ -12,7 +12,11 @@ const DEFAULT_I18N = {
   qux: ['q', 'u', 'x'],
 };
 
-class I18nMixinLitElement extends I18nMixin(DEFAULT_I18N, PolylitMixin(LitElement)) {
+class I18nMixinLitElement extends I18nMixin(PolylitMixin(LitElement)) {
+  static get defaultI18n() {
+    return DEFAULT_I18N;
+  }
+
   static get is() {
     return 'i18n-mixin-lit-element';
   }
@@ -109,7 +113,11 @@ describe('I18nMixin', () => {
     expect(Object.prototype.hasOwnProperty.call(el, 'i18n')).to.be.true;
 
     // Now define the element — triggers upgrade
-    class LateElement extends I18nMixin(DEFAULT_I18N, PolylitMixin(LitElement)) {
+    class LateElement extends I18nMixin(PolylitMixin(LitElement)) {
+      static get defaultI18n() {
+        return DEFAULT_I18N;
+      }
+
       static get is() {
         return tagName;
       }

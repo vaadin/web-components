@@ -100,7 +100,7 @@ const DEFAULT_I18N = {
  * @polymerMixin
  */
 export const RichTextEditorMixin = (superClass) =>
-  class RichTextEditorMixinClass extends I18nMixin(DEFAULT_I18N, superClass) {
+  class RichTextEditorMixinClass extends I18nMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -243,6 +243,10 @@ export const RichTextEditorMixin = (superClass) =>
 
     static get observers() {
       return ['_valueChanged(value, _editor)', '_disabledChanged(disabled, readonly, _editor)'];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**

@@ -17,7 +17,7 @@ const DEFAULT_I18N = {
  * @mixes I18nMixin
  */
 export const MessageInputMixin = (superClass) =>
-  class MessageInputMixinClass extends I18nMixin(DEFAULT_I18N, superClass) {
+  class MessageInputMixinClass extends I18nMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -58,6 +58,10 @@ export const MessageInputMixin = (superClass) =>
         '__buttonPropsChanged(_button, disabled, __effectiveI18n, value)',
         '__textAreaPropsChanged(_textArea, disabled, __effectiveI18n, value)',
       ];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**

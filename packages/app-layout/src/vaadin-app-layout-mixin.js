@@ -23,7 +23,7 @@ const DEFAULT_I18N = {
  * @mixes I18nMixin
  */
 export const AppLayoutMixin = (superclass) =>
-  class AppLayoutMixinClass extends I18nMixin(DEFAULT_I18N, superclass) {
+  class AppLayoutMixinClass extends I18nMixin(superclass) {
     static get properties() {
       return {
         /**
@@ -87,6 +87,10 @@ export const AppLayoutMixin = (superclass) =>
 
     static get observers() {
       return ['__i18nChanged(__effectiveI18n)'];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**

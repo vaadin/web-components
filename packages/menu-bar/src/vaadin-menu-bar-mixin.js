@@ -66,7 +66,6 @@ const DEFAULT_I18N = {
  */
 export const MenuBarMixin = (superClass) =>
   class MenuBarMixinClass extends I18nMixin(
-    DEFAULT_I18N,
     KeyboardDirectionMixin(ResizeMixin(FocusMixin(DisabledMixin(superClass)))),
   ) {
     static get properties() {
@@ -203,6 +202,10 @@ export const MenuBarMixin = (superClass) =>
           sync: true,
         },
       };
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**

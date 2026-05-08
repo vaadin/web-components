@@ -39,7 +39,7 @@ class ChildrenController extends SlotController {
  * @polymerMixin
  */
 export const SideNavChildrenMixin = (superClass) =>
-  class SideNavChildrenMixin extends I18nMixin(DEFAULT_I18N, superClass) {
+  class SideNavChildrenMixin extends I18nMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -51,6 +51,10 @@ export const SideNavChildrenMixin = (superClass) =>
           value: 0,
         },
       };
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     constructor() {

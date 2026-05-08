@@ -49,7 +49,7 @@ class PickerSlotController extends SlotController {
  * @mixes FocusMixin
  */
 export const DateTimePickerMixin = (superClass) =>
-  class DateTimePickerMixinClass extends I18nMixin(DEFAULT_I18N, FieldMixin(FocusMixin(DisabledMixin(superClass)))) {
+  class DateTimePickerMixinClass extends I18nMixin(FieldMixin(FocusMixin(DisabledMixin(superClass)))) {
     static get properties() {
       return {
         /**
@@ -260,6 +260,10 @@ export const DateTimePickerMixin = (superClass) =>
         '__pickersChanged(__datePicker, __timePicker)',
         '__labelOrAccessibleNameChanged(label, accessibleName, __effectiveI18n, __datePicker, __timePicker)',
       ];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     constructor() {

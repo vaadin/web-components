@@ -26,7 +26,7 @@ const DEFAULT_I18N = {
  * @polymerMixin
  */
 export const LoginMixin = (superClass) =>
-  class LoginMixin extends I18nMixin(DEFAULT_I18N, superClass) {
+  class LoginMixin extends I18nMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -100,6 +100,10 @@ export const LoginMixin = (superClass) =>
           value: false,
         },
       };
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**
