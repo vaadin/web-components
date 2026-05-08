@@ -49,5 +49,18 @@ describe('vaadin-breadcrumbs-item', () => {
       await nextUpdate(item);
       await expect(item).shadowDom.to.equalSnapshot();
     });
+
+    it('current', async () => {
+      item._setCurrent(true);
+      await nextUpdate(item);
+      await expect(item).shadowDom.to.equalSnapshot();
+    });
+
+    it('current path', async () => {
+      item.path = '/foo';
+      item._setCurrent(true);
+      await nextUpdate(item);
+      await expect(item).shadowDom.to.equalSnapshot();
+    });
   });
 });
