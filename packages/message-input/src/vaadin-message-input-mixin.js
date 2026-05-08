@@ -55,7 +55,7 @@ export const MessageInputMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__buttonPropsChanged(_button, disabled, __effectiveI18n)',
+        '__buttonPropsChanged(_button, disabled, __effectiveI18n, value)',
         '__textAreaPropsChanged(_textArea, disabled, __effectiveI18n, value)',
       ];
     }
@@ -133,9 +133,9 @@ export const MessageInputMixin = (superClass) =>
     }
 
     /** @private */
-    __buttonPropsChanged(button, disabled, effectiveI18n) {
+    __buttonPropsChanged(button, disabled, effectiveI18n, value) {
       if (button) {
-        button.disabled = disabled;
+        button.disabled = disabled || !value;
         button.textContent = effectiveI18n.send;
       }
     }

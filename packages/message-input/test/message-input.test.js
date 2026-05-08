@@ -116,14 +116,42 @@ describe('message-input', () => {
     });
   });
 
-  describe('disabled property', () => {
-    it('should be false by default', () => {
+  describe('disabled', () => {
+    it('should set disabled property to false by default', () => {
       expect(messageInput.disabled).to.be.false;
     });
 
-    it('should be reflected to the attribute', () => {
+    it('should reflect disabled property to the attribute', () => {
       messageInput.disabled = true;
       expect(messageInput.getAttribute('disabled')).to.exist;
+    });
+
+    it('should disable the submit button by default with empty value', () => {
+      expect(button.disabled).to.be.true;
+    });
+
+    it('should enable the submit button when non-empty value is set', () => {
+      messageInput.value = 'foo';
+      expect(button.disabled).to.be.false;
+    });
+
+    it('should not enable the submit button when value is set to null', () => {
+      messageInput.value = null;
+      expect(button.disabled).to.be.true;
+    });
+
+    it('should not enable the submit button when value is set while disabled', () => {
+      messageInput.disabled = true;
+      messageInput.value = 'foo';
+      expect(button.disabled).to.be.true;
+    });
+
+    it('should re-enable the submit button with value when disabled set to false', () => {
+      messageInput.disabled = true;
+      messageInput.value = 'foo';
+
+      messageInput.disabled = false;
+      expect(button.disabled).to.be.false;
     });
   });
 
