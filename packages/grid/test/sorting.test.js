@@ -101,6 +101,11 @@ describe('sorting', () => {
 
       expect(clickEvent.defaultPrevented).to.be.true;
     });
+
+    it('should hide the sorter when applying the hidden attribute', () => {
+      sorter.hidden = true;
+      expect(getComputedStyle(sorter).display).to.equal('none');
+    });
   });
 
   describe('DOM operations', () => {
