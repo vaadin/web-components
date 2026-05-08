@@ -62,6 +62,8 @@ not a substitute for reading [Component Structure](03-component-structure.md) an
 
 ## Testing
 
+Author tests following the conventions in [Testing](12-testing.md).
+
 - [ ] Unit tests in `test/{name}.test.{js,ts}` cover registration, default
       property values, property reflection, events, keyboard interactions,
       and disabled state.

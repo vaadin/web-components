@@ -32,4 +32,5 @@ For repository-level commands (install, start, lint, test) see `CLAUDE.md`.
 | 09  | [Events](09-events.md)                           | Dispatching and documenting component events.                              |
 | 10  | [Theming](10-theming.md)                         | Authoring base styles and integrating with Lumo and Aura.                  |
 | 11  | [Accessibility](11-a11y.md)                      | Implementing accessible roles, labels, focus, and keyboard support.        |
-| 12  | [Checklist](12-checklist.md)                     | Final scan before submitting a new component.                              |
+| 12  | [Testing](12-testing.md)                         | Authoring unit, snapshot, visual, and integration tests.                   |
+| 13  | [Checklist](13-checklist.md)                     | Final scan before submitting a new component.                              |
