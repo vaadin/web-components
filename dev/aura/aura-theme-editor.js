@@ -8,6 +8,8 @@ import '@vaadin/accordion';
 import '@vaadin/details';
 import '@vaadin/dialog';
 import '@vaadin/text-area';
+import { html, nothing, render } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import { toHex } from './aura-color-utils.js';
 import { DEFAULT_PRESET_ID, getThemeEditorPresetById, THEME_EDITOR_PRESETS } from './aura-theme-editor-presets.js';
 
@@ -488,60 +490,53 @@ customElements.define(
       if (!strip) {
         return;
       }
-      strip.replaceChildren();
-      for (const preset of [DEFAULT_PRESET, ...THEME_EDITOR_PRESETS]) {
-        strip.append(this.#createPresetCard(preset));
-      }
+
+      const presets = [DEFAULT_PRESET, ...THEME_EDITOR_PRESETS];
+      render(html`${presets.map((preset) => this.#presetCardTemplate(preset))}`, strip);
     }
 
-    #createPresetCard(preset) {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'preset-card aura-surface';
-      button.dataset.presetId = preset.id;
-      button.setAttribute('aria-label', preset.label);
-
+    #presetCardTemplate(preset) {
       const advanced = preset.advanced;
       const colorScheme = advanced?.colorSchemePreset;
       const isDarkPrimary = colorScheme === 'dark' || colorScheme === 'mixed';
       const showsOverlay = Boolean(advanced) && colorScheme !== 'light';
       const contentScheme = colorScheme === 'dark' ? 'dark' : 'light';
+      const thumbnailStyle = styleMap(this.#thumbnailVars(advanced, contentScheme));
 
-      const primary = document.createElement('aura-preset-thumbnail');
-      primary.classList.add('aura-surface', 'aura-accent-color');
-      primary.setAttribute('scheme', isDarkPrimary ? 'dark' : 'light');
-      this.#applyThumbnailVars(primary, advanced, contentScheme);
-      button.append(primary);
-
-      if (showsOverlay) {
-        const overlay = document.createElement('aura-preset-thumbnail');
-        overlay.classList.add('aura-surface', 'aura-accent-color');
-        overlay.toggleAttribute('overlay', true);
-        this.#applyThumbnailVars(overlay, advanced, contentScheme);
-        button.append(overlay);
-      }
-
-      const label = document.createElement('span');
-      label.className = 'label';
-      label.textContent = preset.label;
-      button.append(label);
-
-      return button;
+      return html`
+        <button type="button" class="preset-card aura-surface" data-preset-id=${preset.id} aria-label=${preset.label}>
+          <aura-preset-thumbnail
+            class="aura-surface aura-accent-color"
+            scheme=${isDarkPrimary ? 'dark' : 'light'}
+            style=${thumbnailStyle}
+          ></aura-preset-thumbnail>
+          ${showsOverlay
+            ? html`<aura-preset-thumbnail
+                class="aura-surface aura-accent-color"
+                overlay
+                style=${thumbnailStyle}
+              ></aura-preset-thumbnail>`
+            : nothing}
+          <span class="label">${preset.label}</span>
+        </button>
+      `;
     }
 
-    #applyThumbnailVars(el, advanced, contentScheme) {
+    #thumbnailVars(advanced, contentScheme) {
       const a = advanced ?? {};
-      el.style.setProperty('--aura-content-color-scheme', contentScheme);
-      el.style.setProperty('--aura-accent-color-light', a.accentColorLight ?? 'oklch(0.55 0.2 264)');
-      el.style.setProperty('--aura-accent-color-dark', a.accentColorDark ?? 'oklch(0.55 0.2 264)');
-      el.style.setProperty('--aura-background-color-light', a.backgroundColorLight ?? 'oklch(0.95 0.005 248)');
-      el.style.setProperty('--aura-background-color-dark', a.backgroundColorDark ?? 'oklch(0.2 0.01 260)');
-      el.style.setProperty('--aura-app-layout-inset', a.appLayoutInset ?? '1.5vmin');
-      el.style.setProperty('--aura-base-radius', a.baseRadius ?? '3');
-      el.style.setProperty('--aura-base-size', a.baseSize ?? '16');
-      el.style.setProperty('--aura-base-font-size', a.baseFontSize ?? '14');
-      el.style.setProperty('--aura-contrast-level', a.contrastLevel ?? '1');
-      el.style.setProperty('--aura-surface-level', a.surfaceLevel ?? '1');
+      return {
+        '--aura-content-color-scheme': contentScheme,
+        '--aura-accent-color-light': a.accentColorLight ?? 'oklch(0.55 0.2 264)',
+        '--aura-accent-color-dark': a.accentColorDark ?? 'oklch(0.55 0.2 264)',
+        '--aura-background-color-light': a.backgroundColorLight ?? 'oklch(0.95 0.005 248)',
+        '--aura-background-color-dark': a.backgroundColorDark ?? 'oklch(0.2 0.01 260)',
+        '--aura-app-layout-inset': a.appLayoutInset ?? '1.5vmin',
+        '--aura-base-radius': a.baseRadius ?? '3',
+        '--aura-base-size': a.baseSize ?? '16',
+        '--aura-base-font-size': a.baseFontSize ?? '14',
+        '--aura-contrast-level': a.contrastLevel ?? '1',
+        '--aura-surface-level': a.surfaceLevel ?? '1',
+      };
     }
 
     #applyRuntimePresetRules(rules) {
