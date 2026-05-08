@@ -33,6 +33,7 @@ describe('message-input', () => {
         });
 
         it('disabled', async () => {
+          element.value = 'Hello';
           element.disabled = true;
           await visualDiff(div, `${dir}-disabled`);
         });
