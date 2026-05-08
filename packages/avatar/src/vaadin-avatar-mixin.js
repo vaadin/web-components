@@ -17,7 +17,7 @@ const DEFAULT_I18N = {
  * @mixes FocusMixin
  */
 export const AvatarMixin = (superClass) =>
-  class AvatarMixinClass extends I18nMixin(DEFAULT_I18N, FocusMixin(superClass)) {
+  class AvatarMixinClass extends I18nMixin(FocusMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -88,6 +88,10 @@ export const AvatarMixin = (superClass) =>
         '__i18nChanged(__effectiveI18n)',
         '__tooltipChanged(__tooltipNode, name, abbr)',
       ];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**

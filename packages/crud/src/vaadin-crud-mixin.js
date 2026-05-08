@@ -49,7 +49,7 @@ const DEFAULT_I18N = {
  * @mixes I18nMixin
  */
 export const CrudMixin = (superClass) =>
-  class extends I18nMixin(DEFAULT_I18N, superClass) {
+  class extends I18nMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -302,6 +302,10 @@ export const CrudMixin = (superClass) =>
         '__deleteButtonPropsChanged(_deleteButton, __effectiveI18n, __isNew)',
         '__newButtonPropsChanged(_newButton, __effectiveI18n)',
       ];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**

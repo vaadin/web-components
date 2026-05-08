@@ -110,7 +110,7 @@ const DEFAULT_I18N = getDefaultI18n();
  * @mixes ThemableMixin
  */
 class Dashboard extends DashboardLayoutMixin(
-  I18nMixin(DEFAULT_I18N, ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+  I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-dashboard';
@@ -172,6 +172,10 @@ class Dashboard extends DashboardLayoutMixin(
 
   static get observers() {
     return ['__itemsOrRendererChanged(items, renderer, editable, __effectiveI18n)'];
+  }
+
+  static get defaultI18n() {
+    return DEFAULT_I18N;
   }
 
   /**

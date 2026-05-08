@@ -47,7 +47,7 @@ const DEFAULT_I18N = {
  * @mixes I18nMixin
  */
 export const UploadFileListMixin = (superClass) =>
-  class UploadFileListMixin extends I18nMixin(DEFAULT_I18N, superClass) {
+  class UploadFileListMixin extends I18nMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -84,6 +84,10 @@ export const UploadFileListMixin = (superClass) =>
 
     static get observers() {
       return ['__updateItems(items, __effectiveI18n, disabled, _theme)'];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**

@@ -235,7 +235,7 @@ export interface DashboardI18n {
  * @fires {CustomEvent} dashboard-item-resize-mode-changed - Fired when an item resize mode changed
  */
 declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends DashboardLayoutMixin(
-  I18nMixin({} as DashboardI18n, ElementMixin(ThemableMixin(HTMLElement))),
+  I18nMixin<typeof HTMLElement, DashboardI18n>(ElementMixin(ThemableMixin(HTMLElement))),
 ) {
   /**
    * An array containing the items of the dashboard

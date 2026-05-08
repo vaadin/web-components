@@ -30,7 +30,7 @@ const DEFAULT_I18N = {
  * @mixes ResizeMixin
  */
 export const AvatarGroupMixin = (superClass) =>
-  class AvatarGroupMixinClass extends I18nMixin(DEFAULT_I18N, ResizeMixin(superClass)) {
+  class AvatarGroupMixinClass extends I18nMixin(ResizeMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -99,6 +99,10 @@ export const AvatarGroupMixin = (superClass) =>
           sync: true,
         },
       };
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**

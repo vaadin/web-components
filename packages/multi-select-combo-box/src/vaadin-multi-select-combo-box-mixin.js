@@ -35,7 +35,6 @@ const DEFAULT_I18N = {
  */
 export const MultiSelectComboBoxMixin = (superClass) =>
   class MultiSelectComboBoxMixinClass extends I18nMixin(
-    DEFAULT_I18N,
     ComboBoxScrollToIndexMixin(
       ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass)))),
     ),
@@ -233,6 +232,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         '__updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
         '__updateTopGroup(selectedItemsOnTop, selectedItems, opened)',
       ];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**

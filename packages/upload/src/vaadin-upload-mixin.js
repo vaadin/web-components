@@ -109,7 +109,7 @@ class DropLabelController extends SlotController {
  * @polymerMixin
  */
 export const UploadMixin = (superClass) =>
-  class UploadMixin extends I18nMixin(DEFAULT_I18N, superClass) {
+  class UploadMixin extends I18nMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -373,6 +373,10 @@ export const UploadMixin = (superClass) =>
         '__updateFileList(_fileList, files, __effectiveI18n, disabled, _theme)',
         '__updateMaxFilesReached(maxFiles, files)',
       ];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**

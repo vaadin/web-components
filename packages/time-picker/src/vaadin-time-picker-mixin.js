@@ -30,10 +30,7 @@ const MAX_ALLOWED_TIME = '23:59:59.999';
  * @mixes PatternMixin
  */
 export const TimePickerMixin = (superClass) =>
-  class TimePickerMixinClass extends I18nMixin(
-    timePickerI18nDefaults,
-    PatternMixin(ComboBoxBaseMixin(InputControlMixin(superClass))),
-  ) {
+  class TimePickerMixinClass extends I18nMixin(PatternMixin(ComboBoxBaseMixin(InputControlMixin(superClass)))) {
     static get properties() {
       return {
         /**
@@ -121,6 +118,10 @@ export const TimePickerMixin = (superClass) =>
         '__updateAriaAttributes(_dropdownItems, opened, inputElement)',
         '__updateDropdownItems(__effectiveI18n, min, max, step)',
       ];
+    }
+
+    static get defaultI18n() {
+      return timePickerI18nDefaults;
     }
 
     static get constraints() {
