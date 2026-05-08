@@ -1090,13 +1090,6 @@ customElements.define(
               text-overflow: ellipsis;
             }
 
-            .preset-shuffle .thumbnail {
-              background: transparent;
-              align-items: center;
-              justify-content: center;
-              background: var(--vaadin-background-container);
-            }
-
             vaadin-accordion {
               min-height: 0;
               display: flex;
