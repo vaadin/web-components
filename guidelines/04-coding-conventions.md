@@ -91,16 +91,15 @@ introduce new ones in component code.
 
 ## Dynamic observers
 
-PolylitMixin's `_createMethodObserver(...)` can be used when an observer
-must skip the initial property value and only fire on subsequent changes
-(e.g. for field validation). Register it inside `ready()`:
+PolylitMixin provides two helpers. Both register inside `ready()` and
+skip the initial property value (typical use: field validation):
 
-```js
-ready() {
-  super.ready();
-  this._createMethodObserver('_checkedChanged(checked)');
-}
-```
+- **`_createPropertyObserver(prop, method)`** — single-property
+  observer with access to the previous value
+  (`this[method](newValue, oldValue)`).
+- **`_createMethodObserver(observer)`** — multi-property observer
+  taking a Polymer-style observer string
+  (e.g. `'_rangeChanged(min, max)'`).
 
 ## `willUpdate()` vs computed properties
 
