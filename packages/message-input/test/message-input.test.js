@@ -121,6 +121,16 @@ describe('message-input', () => {
       expect(messageInput.disabled).to.be.false;
     });
 
+    it('should disable the submit button when value is empty', () => {
+      expect(button.disabled).to.be.true;
+
+      messageInput.value = 'foo';
+      expect(button.disabled).to.be.false;
+
+      messageInput.value = '';
+      expect(button.disabled).to.be.true;
+    });
+
     it('should be reflected to the attribute', () => {
       messageInput.disabled = true;
       expect(messageInput.getAttribute('disabled')).to.exist;
