@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -54,9 +53,6 @@ import { DashboardLayoutMixin } from './vaadin-dashboard-layout-mixin.js';
  *
  * @customElement vaadin-dashboard-layout
  * @extends HTMLElement
- * @mixes DashboardLayoutMixin
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 class DashboardLayout extends DashboardLayoutMixin(
   ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),

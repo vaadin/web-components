@@ -8,8 +8,6 @@ import { isKeyboardActive } from './focus-utils.js';
 
 /**
  * A mixin to handle `focused` and `focus-ring` attributes based on focus.
- *
- * @polymerMixin
  */
 const FocusMixinImplementation = (superclass) => {
   return class FocusMixinClass extends superclass {

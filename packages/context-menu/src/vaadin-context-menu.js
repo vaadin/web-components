@@ -246,9 +246,6 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  *
  * @customElement vaadin-context-menu
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ContextMenuMixin
- * @mixes ThemePropertyMixin
  */
 class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(PolylitMixin(LitElement)))) {
   static get is() {

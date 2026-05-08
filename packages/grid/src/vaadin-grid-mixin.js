@@ -42,25 +42,6 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
 
 /**
  * A mixin providing common grid functionality.
- *
- * @polymerMixin
- * @mixes A11yMixin
- * @mixes ActiveItemMixin
- * @mixes ArrayDataProviderMixin
- * @mixes ColumnResizingMixin
- * @mixes DataProviderMixin
- * @mixes DynamicColumnsMixin
- * @mixes FilterMixin
- * @mixes RowDetailsMixin
- * @mixes ScrollMixin
- * @mixes SelectionMixin
- * @mixes SortMixin
- * @mixes KeyboardNavigationMixin
- * @mixes ColumnReorderingMixin
- * @mixes EventContextMixin
- * @mixes StylingMixin
- * @mixes DragAndDropMixin
- * @mixes ResizeMixin
  */
 export const GridMixin = (superClass) =>
   class extends ColumnAutoWidthMixin(

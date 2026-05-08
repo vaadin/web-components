@@ -57,9 +57,6 @@ import { VirtualListMixin } from './vaadin-virtual-list-mixin.js';
  *
  * @customElement vaadin-virtual-list
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
- * @mixes VirtualListMixin
  */
 class VirtualList extends VirtualListMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {

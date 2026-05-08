@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -22,7 +21,6 @@ import { CrudGridMixin } from './vaadin-crud-grid-mixin.js';
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  *
  * @extends Grid
- * @mixes CrudGridMixin
  * @private
  */
 class CrudGrid extends CrudGridMixin(Grid) {

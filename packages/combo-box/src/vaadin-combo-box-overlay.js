@@ -19,10 +19,6 @@ import { ComboBoxOverlayMixin } from './vaadin-combo-box-overlay-mixin.js';
  *
  * @customElement vaadin-combo-box-overlay
  * @extends HTMLElement
- * @mixes ComboBoxOverlayMixin
- * @mixes DirMixin
- * @mixes OverlayMixin
- * @mixes ThemableMixin
  * @private
  */
 export class ComboBoxOverlay extends ComboBoxOverlayMixin(

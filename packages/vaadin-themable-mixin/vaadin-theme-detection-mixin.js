@@ -6,8 +6,6 @@ import { ThemeDetector } from './src/theme-detector.js';
  * Automatically adds a `data-application-theme` attribute to the host
  * element with the name of the detected theme (`lumo` or `aura`), which
  * can be used in component styles to apply theme-specific styling.
- *
- * @polymerMixin
  */
 export const ThemeDetectionMixin = (superClass) =>
   class ThemeDetectionMixinClass extends superClass {

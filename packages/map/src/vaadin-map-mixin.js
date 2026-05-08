@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -14,11 +13,6 @@ import OpenLayersMap from 'ol/Map.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
-/**
- * @polymerMixin
- * @mixes ResizeMixin
- * @mixes FocusMixin
- */
 export const MapMixin = (superClass) =>
   class extends FocusMixin(ResizeMixin(superClass)) {
     constructor() {

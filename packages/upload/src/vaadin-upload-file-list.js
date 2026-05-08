@@ -77,8 +77,6 @@ import { UploadFileListMixin } from './vaadin-upload-file-list-mixin.js';
  *
  * @customElement vaadin-upload-file-list
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes UploadFileListMixin
  */
 class UploadFileList extends UploadFileListMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {

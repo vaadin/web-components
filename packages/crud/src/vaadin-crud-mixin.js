@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -44,9 +43,6 @@ const DEFAULT_I18N = {
 
 /**
  * A mixin providing common crud functionality.
- *
- * @polymerMixin
- * @mixes I18nMixin
  */
 export const CrudMixin = (superClass) =>
   class extends I18nMixin(superClass) {

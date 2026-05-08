@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -96,9 +95,6 @@ const DEFAULT_I18N = {
   remove: 'Remove',
 };
 
-/**
- * @polymerMixin
- */
 export const RichTextEditorMixin = (superClass) =>
   class RichTextEditorMixinClass extends I18nMixin(superClass) {
     static get properties() {

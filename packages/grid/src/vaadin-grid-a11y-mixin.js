@@ -5,9 +5,6 @@
  */
 import { findTreeToggleCell, iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
 
-/**
- * @polymerMixin
- */
 export const A11yMixin = (superClass) =>
   class A11yMixin extends superClass {
     static get properties() {

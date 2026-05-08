@@ -20,9 +20,6 @@ function isDetailsCell(element) {
   return element.matches('[part~="details-cell"]');
 }
 
-/**
- * @polymerMixin
- */
 export const KeyboardNavigationMixin = (superClass) =>
   class KeyboardNavigationMixin extends superClass {
     static get properties() {

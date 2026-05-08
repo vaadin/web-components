@@ -9,10 +9,6 @@ import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
-/**
- * @polymerMixin
- * @mixes KeyboardDirectionMixin
- */
 export const MessageListMixin = (superClass) =>
   class MessageListMixinClass extends KeyboardDirectionMixin(superClass) {
     static get properties() {

@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -152,9 +151,6 @@ import { ChartMixin } from './vaadin-chart-mixin.js';
  *
  * @customElement vaadin-chart
  * @extends HTMLElement
- * @mixes ChartMixin
- * @mixes ThemableMixin
- * @mixes ElementMixin
  */
 class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

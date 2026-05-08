@@ -62,9 +62,6 @@ import { TabsMixin } from './vaadin-tabs-mixin.js';
  *
  * @customElement vaadin-tabs
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes TabsMixin
- * @mixes ThemableMixin
  */
 class Tabs extends TabsMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

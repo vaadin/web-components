@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -103,10 +102,6 @@ KeyboardNavigation.prototype.onMouseUp = function (e) {
 // No data message should be empty by default
 Highcharts.setOptions({ lang: { noData: '' } });
 
-/**
- * @polymerMixin
- * @mixes ResizeMixin
- */
 export const ChartMixin = (superClass) =>
   class extends ResizeMixin(superClass) {
     static get properties() {

@@ -6,10 +6,6 @@
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
-/**
- * @polymerMixin
- * @mixes FocusMixin
- */
 export const UploadFileMixin = (superClass) =>
   class UploadFileMixin extends FocusMixin(superClass) {
     static get properties() {

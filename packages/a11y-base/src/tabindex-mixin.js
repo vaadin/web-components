@@ -10,9 +10,6 @@ import { DisabledMixin } from './disabled-mixin.js';
  *
  * The attribute is set to -1 whenever the user disables the element
  * and restored with the last known value once the element is enabled.
- *
- * @polymerMixin
- * @mixes DisabledMixin
  */
 export const TabindexMixin = (superclass) =>
   class TabindexMixinClass extends DisabledMixin(superclass) {

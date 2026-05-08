@@ -12,10 +12,6 @@ const DEFAULT_I18N = {
   message: 'Message',
 };
 
-/**
- * @polymerMixin
- * @mixes I18nMixin
- */
 export const MessageInputMixin = (superClass) =>
   class MessageInputMixinClass extends I18nMixin(superClass) {
     static get properties() {

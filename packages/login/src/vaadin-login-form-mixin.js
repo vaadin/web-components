@@ -11,10 +11,6 @@ function isCheckbox(field) {
   return (field.inputElement || field).type === 'checkbox';
 }
 
-/**
- * @polymerMixin
- * @mixes LoginMixin
- */
 export const LoginFormMixin = (superClass) =>
   class LoginFormMixin extends LoginMixin(superClass) {
     /** @protected */

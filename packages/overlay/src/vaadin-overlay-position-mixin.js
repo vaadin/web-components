@@ -26,9 +26,6 @@ const targetResizeObserver = new ResizeObserver((entries) => {
   });
 });
 
-/**
- * @polymerMixin
- */
 export const PositionMixin = (superClass) =>
   class PositionMixin extends superClass {
     static get properties() {

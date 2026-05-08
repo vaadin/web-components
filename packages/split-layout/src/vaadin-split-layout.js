@@ -162,9 +162,6 @@ import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
  *
  * @customElement vaadin-split-layout
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes SplitLayoutMixin
- * @mixes ThemableMixin
  */
 class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

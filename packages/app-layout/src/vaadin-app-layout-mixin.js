@@ -18,10 +18,6 @@ const DEFAULT_I18N = {
   drawer: 'Drawer',
 };
 
-/**
- * @polymerMixin
- * @mixes I18nMixin
- */
 export const AppLayoutMixin = (superclass) =>
   class AppLayoutMixinClass extends I18nMixin(superclass) {
     static get properties() {

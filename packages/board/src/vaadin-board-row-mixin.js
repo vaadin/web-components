@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -17,10 +16,6 @@ const CLASSES = {
   LARGE: 'large',
 };
 
-/**
- * @polymerMixin
- * @mixes ResizeMixin
- */
 export const BoardRowMixin = (superClass) =>
   class BoardRowMixinClass extends ResizeMixin(superClass) {
     constructor() {

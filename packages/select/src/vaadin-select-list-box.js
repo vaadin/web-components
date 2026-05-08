@@ -17,9 +17,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * @customElement vaadin-select-list-box
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes ListMixin
- * @mixes ThemableMixin
  * @protected
  */
 class SelectListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {

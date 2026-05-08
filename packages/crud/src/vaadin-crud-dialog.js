@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -25,9 +24,6 @@ import { crudDialogOverlayStyles } from './styles/vaadin-crud-dialog-overlay-bas
  *
  * @customElement vaadin-crud-dialog
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes OverlayMixin
- * @mixes ThemableMixin
  * @private
  */
 class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {

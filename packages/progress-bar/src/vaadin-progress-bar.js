@@ -53,9 +53,6 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  *
  * @customElement vaadin-progress-bar
  * @extends HTMLElement
- * @mixes ProgressMixin
- * @mixes ThemableMixin
- * @mixes ElementMixin
  */
 class ProgressBar extends ProgressMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

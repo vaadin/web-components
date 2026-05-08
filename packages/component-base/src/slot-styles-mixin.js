@@ -39,8 +39,6 @@ function insertStyles(styles, root) {
 /**
  * Mixin to insert styles into the outer scope to handle slotted components.
  * This is useful e.g. to hide native `<input type="number">` controls.
- *
- * @polymerMixin
  */
 const SlotStylesMixinImplementation = (superclass) =>
   class SlotStylesMixinClass extends superclass {

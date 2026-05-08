@@ -23,7 +23,6 @@ import { GridFilterColumnMixin } from './vaadin-grid-filter-column-mixin.js';
  *
  * @customElement vaadin-grid-filter-column
  * @extends GridColumn
- * @mixes GridFilterColumnMixin
  */
 class GridFilterColumn extends GridFilterColumnMixin(GridColumn) {
   static get is() {

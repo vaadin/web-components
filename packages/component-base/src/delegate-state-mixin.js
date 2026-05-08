@@ -7,8 +7,6 @@ import { dedupeMixin } from '@open-wc/dedupe-mixin';
 
 /**
  * A mixin to delegate properties and attributes to a target element.
- *
- * @polymerMixin
  */
 const DelegateStateMixinImplementation = (superclass) => {
   return class DelegateStateMixinClass extends superclass {

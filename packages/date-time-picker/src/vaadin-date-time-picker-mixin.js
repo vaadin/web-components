@@ -42,11 +42,6 @@ class PickerSlotController extends SlotController {
 
 /**
  * A mixin providing common date-time-picker functionality.
- *
- * @polymerMixin
- * @mixes DisabledMixin
- * @mixes FieldMixin
- * @mixes FocusMixin
  */
 export const DateTimePickerMixin = (superClass) =>
   class DateTimePickerMixinClass extends I18nMixin(FieldMixin(FocusMixin(DisabledMixin(superClass)))) {

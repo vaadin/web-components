@@ -18,9 +18,6 @@ import { messageInputButtonStyles } from './styles/vaadin-message-input-button-s
  *
  * @customElement vaadin-message-input-button
  * @extends HTMLElement
- * @mixes ButtonMixin
- * @mixes DirMixin
- * @mixes ThemableMixin
  * @private
  */
 class MessageInputButton extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {

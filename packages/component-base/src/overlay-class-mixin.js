@@ -7,8 +7,6 @@
 /**
  * A mixin that forwards CSS class names to the internal overlay element
  * by setting the `overlayClass` property or `overlay-class` attribute.
- *
- * @polymerMixin
  */
 export const OverlayClassMixin = (superclass) =>
   class OverlayClassMixinClass extends superclass {

@@ -26,9 +26,6 @@ function arrayEquals(arr1, arr2) {
   return true;
 }
 
-/**
- * @polymerMixin
- */
 export const DynamicColumnsMixin = (superClass) =>
   class DynamicColumnsMixin extends superClass {
     static get properties() {

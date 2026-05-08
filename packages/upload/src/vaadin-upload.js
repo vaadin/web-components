@@ -104,9 +104,6 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  *
  * @customElement vaadin-upload
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes ElementMixin
- * @mixes UploadMixin
  */
 class Upload extends UploadMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

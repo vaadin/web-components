@@ -13,13 +13,6 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
 
 /**
  * A mixin providing common radio-button functionality.
- *
- * @polymerMixin
- * @mixes ActiveMixin
- * @mixes CheckedMixin
- * @mixes DelegateFocusMixin
- * @mixes LabelMixin
- * @mixes SlotStylesMixin
  */
 export const RadioButtonMixin = (superclass) =>
   class RadioButtonMixinClass extends SlotStylesMixin(
@@ -29,7 +22,6 @@ export const RadioButtonMixin = (superclass) =>
       return {
         /**
          * The name of the radio button.
-         *
          */
         name: {
           type: String,

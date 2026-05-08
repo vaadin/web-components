@@ -98,9 +98,6 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  *
  * @customElement vaadin-multi-select-combo-box
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
- * @mixes MultiSelectComboBoxMixin
  */
 class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),

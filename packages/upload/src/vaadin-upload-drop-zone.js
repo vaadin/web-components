@@ -49,8 +49,6 @@ import { UploadManager } from './vaadin-upload-manager.js';
  *
  * @customElement vaadin-upload-drop-zone
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {

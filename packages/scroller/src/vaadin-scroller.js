@@ -55,9 +55,6 @@ import { ScrollerMixin } from './vaadin-scroller-mixin.js';
  *
  * @customElement vaadin-scroller
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes ElementMixin
- * @mixes ScrollerMixin
  */
 class Scroller extends ScrollerMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

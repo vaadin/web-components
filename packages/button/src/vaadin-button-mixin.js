@@ -11,11 +11,6 @@ const INTERACTION_EVENTS = ['mousedown', 'mouseup', 'click', 'dblclick', 'keypre
 
 /**
  * A mixin providing common button functionality.
- *
- * @polymerMixin
- * @mixes ActiveMixin
- * @mixes FocusMixin
- * @mixes TabindexMixin
  */
 export const ButtonMixin = (superClass) =>
   class ButtonMixinClass extends ActiveMixin(TabindexMixin(FocusMixin(superClass))) {

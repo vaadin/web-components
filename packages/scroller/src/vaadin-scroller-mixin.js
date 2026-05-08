@@ -5,10 +5,6 @@
  */
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 
-/**
- * @polymerMixin
- * @mixes FocusMixin
- */
 export const ScrollerMixin = (superClass) =>
   class ScrollerMixinClass extends FocusMixin(superClass) {
     static get properties() {

@@ -9,9 +9,6 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 import { updateCellState, updatePart } from './vaadin-grid-helpers.js';
 
-/**
- * @polymerMixin
- */
 export const ColumnBaseMixin = (superClass) =>
   class ColumnBaseMixin extends superClass {
     static get properties() {
@@ -806,11 +803,6 @@ export const ColumnBaseMixin = (superClass) =>
     }
   };
 
-/**
- * @polymerMixin
- * @mixes ColumnBaseMixin
- * @mixes DirMixin
- */
 export const GridColumnMixin = (superClass) =>
   class extends ColumnBaseMixin(DirMixin(superClass)) {
     static get properties() {

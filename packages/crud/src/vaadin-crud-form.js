@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -19,7 +18,6 @@ import { IncludedMixin } from './vaadin-crud-include-mixin.js';
  *
  * @customElement vaadin-crud-form
  * @extends FormLayout
- * @mixes IncludedMixin
  * @private
  */
 class CrudForm extends IncludedMixin(FormLayout) {

@@ -16,12 +16,6 @@ function isValidValue(value) {
   return value !== undefined && value !== null;
 }
 
-/**
- * @polymerMixin
- * @mixes ComboBoxItemsMixin
- * @mixes ValidateMixin
- * @param {function(new:HTMLElement)} superClass
- */
 export const ComboBoxMixin = (superClass) =>
   class ComboBoxMixinClass extends ValidateMixin(ComboBoxItemsMixin(superClass)) {
     static get properties() {

@@ -8,8 +8,6 @@ import { ContentController } from './content-controller.js';
 /**
  * A mixin providing common functionality for making content collapsible,
  * used by `<vaadin-details>` and `<vaadin-accordion-panel>` elements.
- *
- * @polymerMixin
  */
 export const CollapsibleMixin = (superClass) =>
   class CollapsibleMixinClass extends superClass {

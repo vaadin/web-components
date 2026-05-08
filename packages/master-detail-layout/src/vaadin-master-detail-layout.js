@@ -90,8 +90,6 @@ import {
  *
  * @customElement vaadin-master-detail-layout
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes ElementMixin
  */
 class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {

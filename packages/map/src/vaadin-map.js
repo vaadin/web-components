@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -53,9 +52,6 @@ import { MapMixin } from './vaadin-map-mixin.js';
  *
  * @customElement vaadin-map
  * @extends HTMLElement
- * @mixes MapMixin
- * @mixes ThemableMixin
- * @mixes ElementMixin
  */
 class Map extends MapMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

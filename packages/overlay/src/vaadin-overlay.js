@@ -73,9 +73,6 @@ import { OverlayMixin } from './vaadin-overlay-mixin.js';
  *
  * @customElement vaadin-overlay
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes DirMixin
- * @mixes OverlayMixin
  */
 class Overlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

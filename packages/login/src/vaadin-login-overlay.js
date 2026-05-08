@@ -76,10 +76,6 @@ import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
  *
  * @customElement vaadin-login-overlay
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
- * @mixes LoginFormMixin
- * @mixes LoginOverlayMixin
  */
 class LoginOverlay extends LoginFormMixin(LoginOverlayMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {

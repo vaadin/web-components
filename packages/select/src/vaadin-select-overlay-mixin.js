@@ -7,12 +7,6 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 
-/**
- * @polymerMixin
- * @mixes DirMixin
- * @mixes OverlayMixin
- * @mixes PositionMixin
- */
 export const SelectOverlayMixin = (superClass) =>
   class SelectOverlayMixin extends PositionMixin(OverlayMixin(DirMixin(superClass))) {
     static get observers() {

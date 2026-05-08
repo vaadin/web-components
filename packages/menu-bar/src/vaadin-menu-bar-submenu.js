@@ -18,8 +18,6 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  *
  * @customElement vaadin-menu-bar-submenu
  * @extends HTMLElement
- * @mixes ContextMenuMixin
- * @mixes ThemePropertyMixin
  * @protected
  */
 class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(LitElement))) {

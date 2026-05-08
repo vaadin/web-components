@@ -11,8 +11,6 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
 
 /**
  * A mixin providing common notification container functionality.
- *
- * @polymerMixin
  */
 export const NotificationContainerMixin = (superClass) =>
   class extends superClass {
@@ -103,10 +101,6 @@ export const NotificationContainerMixin = (superClass) =>
 
 /**
  * A mixin providing common notification functionality.
- *
- * @polymerMixin
- * @mixes OverlayClassMixin
- * @mixes ThemePropertyMixin
  */
 export const NotificationMixin = (superClass) =>
   class extends ThemePropertyMixin(OverlayClassMixin(superClass)) {

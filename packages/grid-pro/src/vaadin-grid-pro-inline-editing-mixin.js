@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -13,9 +12,6 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { get, set } from '@vaadin/component-base/src/path-utils.js';
 import { iterateRowCells, updatePart } from '@vaadin/grid/src/vaadin-grid-helpers.js';
 
-/**
- * @polymerMixin
- */
 export const InlineEditingMixin = (superClass) =>
   class InlineEditingMixin extends superClass {
     static get properties() {

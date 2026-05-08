@@ -15,7 +15,6 @@ import { multiSelectComboBoxScrollerStyles } from './styles/vaadin-multi-select-
  *
  * @customElement vaadin-multi-select-combo-box-scroller
  * @extends HTMLElement
- * @mixes ComboBoxScrollerMixin
  * @private
  */
 export class MultiSelectComboBoxScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElement)) {

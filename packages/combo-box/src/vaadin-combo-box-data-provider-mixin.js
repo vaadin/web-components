@@ -6,9 +6,6 @@
 import { DataProviderController } from '@vaadin/component-base/src/data-provider-controller/data-provider-controller.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
-/**
- * @polymerMixin
- */
 export const ComboBoxDataProviderMixin = (superClass) =>
   class DataProviderMixin extends superClass {
     static get properties() {

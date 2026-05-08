@@ -6,9 +6,6 @@
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 
-/**
- * @polymerMixin
- */
 export const ItemsMixin = (superClass) =>
   class ItemsMixin extends superClass {
     static get properties() {

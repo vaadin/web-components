@@ -49,10 +49,6 @@ import { MessageListMixin } from './vaadin-message-list-mixin.js';
  *
  * @customElement vaadin-message-list
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes ElementMixin
- * @mixes MessageListMixin
- * @mixes SlotStylesMixin
  */
 class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))) {
   static get is() {

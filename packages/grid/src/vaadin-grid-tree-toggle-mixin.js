@@ -5,9 +5,6 @@
  */
 import { isFocusable } from './vaadin-grid-active-item-mixin.js';
 
-/**
- * @polymerMixin
- */
 export const GridTreeToggleMixin = (superClass) =>
   class extends superClass {
     static get properties() {

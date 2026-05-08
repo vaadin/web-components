@@ -9,10 +9,6 @@ import { TabindexMixin } from './tabindex-mixin.js';
 
 /**
  * A mixin to forward focus to an element in the light DOM.
- *
- * @polymerMixin
- * @mixes FocusMixin
- * @mixes TabindexMixin
  */
 const DelegateFocusMixinImplementation = (superclass) => {
   return class DelegateFocusMixinClass extends FocusMixin(TabindexMixin(superclass)) {

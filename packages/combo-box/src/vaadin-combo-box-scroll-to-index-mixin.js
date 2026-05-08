@@ -5,9 +5,6 @@
  */
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
-/**
- * @polymerMixin
- */
 export const ComboBoxScrollToIndexMixin = (superClass) =>
   class ScrollToIndexMixin extends superClass {
     static get observers() {

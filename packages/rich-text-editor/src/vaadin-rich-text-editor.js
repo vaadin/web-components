@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -118,9 +117,6 @@ import { RichTextEditorMixin } from './vaadin-rich-text-editor-mixin.js';
  *
  * @customElement vaadin-rich-text-editor
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes RichTextEditorMixin
- * @mixes ThemableMixin
  */
 class RichTextEditor extends RichTextEditorMixin(
   ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),

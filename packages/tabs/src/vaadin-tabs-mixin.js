@@ -7,11 +7,6 @@ import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
-/**
- * @polymerMixin
- * @mixes ListMixin
- * @mixes ResizeMixin
- */
 export const TabsMixin = (superClass) =>
   class TabsMixinClass extends ResizeMixin(ListMixin(superClass)) {
     static get properties() {

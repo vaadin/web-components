@@ -26,9 +26,6 @@ import { markdownSlotStyles } from './styles/vaadin-markdown-base-styles.js';
  *
  * @customElement vaadin-markdown
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
- * @mixes SlotStylesMixin
  */
 class Markdown extends SlotStylesMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {
@@ -56,7 +53,6 @@ class Markdown extends SlotStylesMixin(ElementMixin(ThemableMixin(PolylitMixin(L
     return {
       /**
        * The Markdown content.
-       *
        */
       content: {
         type: String,

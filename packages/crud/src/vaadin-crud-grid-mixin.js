@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -13,9 +12,6 @@ import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 
 /**
  * A mixin providing common crud-grid functionality.
- *
- * @polymerMixin
- * @mixes IncludedMixin
  */
 export const CrudGridMixin = (superClass) =>
   class extends IncludedMixin(superClass) {

@@ -10,9 +10,6 @@ import { MediaQueryController } from '@vaadin/component-base/src/media-query-con
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { dateAfterXMonths, dateAllowed, dateEquals, getClosestDate } from './vaadin-date-picker-helper.js';
 
-/**
- * @polymerMixin
- */
 export const DatePickerOverlayContentMixin = (superClass) =>
   class DatePickerOverlayContentMixin extends superClass {
     static get properties() {

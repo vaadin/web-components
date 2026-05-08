@@ -8,9 +8,6 @@ import { DataProviderController } from '@vaadin/component-base/src/data-provider
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 
-/**
- * @polymerMixin
- */
 export const DataProviderMixin = (superClass) =>
   class DataProviderMixin extends superClass {
     static get properties() {

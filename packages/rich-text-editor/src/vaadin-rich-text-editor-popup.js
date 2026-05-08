@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -137,10 +136,6 @@ export { RichTextEditorPopup };
  *
  * @customElement vaadin-rich-text-editor-popup-overlay
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes ThemableMixin
- * @mixes OverlayMixin
- * @mixes PositionMixin
  * @private
  */
 class RichTextEditorPopupOverlay extends PositionMixin(

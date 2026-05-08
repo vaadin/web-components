@@ -5,9 +5,6 @@
  */
 import { createArrayDataProvider } from './array-data-provider.js';
 
-/**
- * @polymerMixin
- */
 export const ArrayDataProviderMixin = (superClass) =>
   class ArrayDataProviderMixin extends superClass {
     static get properties() {

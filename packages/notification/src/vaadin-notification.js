@@ -19,9 +19,6 @@ import { NotificationContainerMixin, NotificationMixin } from './vaadin-notifica
  *
  * @customElement vaadin-notification-container
  * @extends HTMLElement
- * @mixes NotificationContainerMixin
- * @mixes ElementMixin
- * @mixes ThemableMixin
  * @private
  */
 class NotificationContainer extends NotificationContainerMixin(
@@ -60,7 +57,6 @@ class NotificationContainer extends NotificationContainerMixin(
  *
  * @customElement vaadin-notification-card
  * @extends HTMLElement
- * @mixes ThemableMixin
  * @private
  */
 class NotificationCard extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
@@ -139,8 +135,6 @@ class NotificationCard extends ThemableMixin(PolylitMixin(LumoInjectionMixin(Lit
  *
  * @customElement vaadin-notification
  * @extends HTMLElement
- * @mixes NotificationMixin
- * @mixes ElementMixin
  */
 class Notification extends NotificationMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

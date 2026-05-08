@@ -5,9 +5,6 @@
  */
 import { TitleController } from './title-controller.js';
 
-/**
- * @polymerMixin
- */
 export const LoginOverlayMixin = (superClass) =>
   class LoginOverlayMixin extends superClass {
     static get properties() {

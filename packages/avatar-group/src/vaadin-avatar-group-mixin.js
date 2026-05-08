@@ -24,10 +24,6 @@ const DEFAULT_I18N = {
 
 /**
  * A mixin providing common avatar group functionality.
- *
- * @polymerMixin
- * @mixes I18nMixin
- * @mixes ResizeMixin
  */
 export const AvatarGroupMixin = (superClass) =>
   class AvatarGroupMixinClass extends I18nMixin(ResizeMixin(superClass)) {

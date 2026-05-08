@@ -42,10 +42,6 @@ const DEFAULT_I18N = {
   },
 };
 
-/**
- * @polymerMixin
- * @mixes I18nMixin
- */
 export const UploadFileListMixin = (superClass) =>
   class UploadFileListMixin extends I18nMixin(superClass) {
     static get properties() {

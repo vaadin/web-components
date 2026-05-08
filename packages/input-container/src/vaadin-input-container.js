@@ -14,8 +14,6 @@ import { inputContainerStyles } from './styles/vaadin-input-container-base-style
 /**
  * @customElement vaadin-input-container
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes DirMixin
  */
 export class InputContainer extends ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {

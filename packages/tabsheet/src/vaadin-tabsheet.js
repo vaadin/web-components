@@ -68,9 +68,6 @@ import { TabSheetMixin } from './vaadin-tabsheet-mixin.js';
  *
  * @customElement vaadin-tabsheet
  * @extends HTMLElement
- * @mixes TabSheetMixin
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 class TabSheet extends TabSheetMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

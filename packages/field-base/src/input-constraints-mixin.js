@@ -10,11 +10,6 @@ import { ValidateMixin } from './validate-mixin.js';
 
 /**
  * A mixin to combine multiple input validation constraints.
- *
- * @polymerMixin
- * @mixes DelegateStateMixin
- * @mixes InputMixin
- * @mixes ValidateMixin
  */
 const InputConstraintsMixinImplementation = (superclass) => {
   return class InputConstraintsMixinClass extends DelegateStateMixin(ValidateMixin(InputMixin(superclass))) {

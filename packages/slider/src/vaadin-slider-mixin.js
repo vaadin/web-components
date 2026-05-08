@@ -6,11 +6,6 @@
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 
-/**
- * @polymerMixin
- * @mixes DisabledMixin
- * @mixes SlotStylesMixin
- */
 export const SliderMixin = (superClass) =>
   class SliderMixinClass extends SlotStylesMixin(DisabledMixin(superClass)) {
     static get properties() {

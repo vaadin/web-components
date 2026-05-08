@@ -86,9 +86,6 @@ import { NumberFieldMixin } from './vaadin-number-field-mixin.js';
  *
  * @customElement vaadin-number-field
  * @extends HTMLElement
- * @mixes NumberFieldMixin
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

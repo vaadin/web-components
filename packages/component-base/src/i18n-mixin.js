@@ -43,8 +43,6 @@ function deepMerge(target, ...sources) {
  *   return { foo: 'Foo', bar: 'Bar' };
  * }
  * ```
- *
- * @polymerMixin
  */
 export const I18nMixin = (superClass) =>
   class I18nMixinClass extends superClass {

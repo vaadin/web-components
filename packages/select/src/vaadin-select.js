@@ -136,9 +136,6 @@ import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
  *
  * @customElement vaadin-select
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes SelectBaseMixin
- * @mixes ThemableMixin
  */
 class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

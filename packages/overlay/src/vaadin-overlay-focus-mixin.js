@@ -7,9 +7,6 @@ import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restorat
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
 import { getDeepActiveElement, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 
-/**
- * @polymerMixin
- */
 export const OverlayFocusMixin = (superClass) =>
   class OverlayFocusMixin extends superClass {
     static get properties() {

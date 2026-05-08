@@ -26,8 +26,6 @@ const observer = new ResizeObserver((entries) => {
 
 /**
  * A mixin that uses a ResizeObserver to listen to host size changes.
- *
- * @polymerMixin
  */
 const ResizeMixinImplementation = (superclass) =>
   class ResizeMixinClass extends superclass {

@@ -20,9 +20,6 @@ const BAD_INPUT_STRING = 'NaN';
 
 /**
  * A mixin providing common number field functionality.
- *
- * @polymerMixin
- * @mixes InputFieldMixin
  */
 export const NumberFieldMixin = (superClass) =>
   class NumberFieldMixinClass extends InputFieldMixin(superClass) {

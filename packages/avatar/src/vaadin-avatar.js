@@ -56,9 +56,6 @@ import { AvatarMixin } from './vaadin-avatar-mixin.js';
  *
  * @customElement vaadin-avatar
  * @extends HTMLElement
- * @mixes AvatarMixin
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 class Avatar extends AvatarMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

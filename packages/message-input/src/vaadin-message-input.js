@@ -49,9 +49,6 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  *
  * @customElement vaadin-message-input
  * @extends HTMLElement
- * @mixes MessageInputMixin
- * @mixes ThemableMixin
- * @mixes ElementMixin
  */
 class MessageInput extends MessageInputMixin(
   ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),

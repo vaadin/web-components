@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -12,9 +11,6 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 /**
  * A mixin to enable the dashboard layout functionality
- *
- * @polymerMixin
- * @mixes ResizeMixin
  */
 export const DashboardLayoutMixin = (superClass) =>
   class DashboardLayoutMixinClass extends ResizeMixin(superClass) {

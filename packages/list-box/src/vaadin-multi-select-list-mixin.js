@@ -7,9 +7,6 @@ import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 
 /**
  * A mixin for `nav` elements, facilitating multiple selection of childNodes.
- *
- * @polymerMixin
- * @mixes ListMixin
  */
 export const MultiSelectListMixin = (superClass) =>
   class VaadinMultiSelectListMixin extends ListMixin(superClass) {

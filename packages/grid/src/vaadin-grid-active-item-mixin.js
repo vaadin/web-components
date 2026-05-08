@@ -20,9 +20,6 @@ export const isFocusable = (target) => {
   );
 };
 
-/**
- * @polymerMixin
- */
 export const ActiveItemMixin = (superClass) =>
   class ActiveItemMixin extends superClass {
     static get properties() {

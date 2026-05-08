@@ -8,10 +8,6 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
-/**
- * @polymerMixin
- * @mixes FocusMixin
- */
 export const MessageMixin = (superClass) =>
   class MessageMixinClass extends FocusMixin(superClass) {
     static get properties() {
