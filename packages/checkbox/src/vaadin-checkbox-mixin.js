@@ -124,7 +124,7 @@ export const CheckboxMixin = (superclass) =>
       );
       this.addController(new LabelledInputController(this.inputElement, this._labelController));
 
-      this._createMethodObserver('_checkedChanged(checked)');
+      this._createPropertyObserver('checked', '_checkedChanged');
     }
 
     /**
@@ -236,12 +236,10 @@ export const CheckboxMixin = (superclass) =>
     }
 
     /** @private */
-    _checkedChanged(checked) {
-      if (checked || this.__oldChecked) {
+    _checkedChanged(checked, oldChecked) {
+      if (checked || oldChecked) {
         this._requestValidation();
       }
-
-      this.__oldChecked = checked;
     }
 
     /**
