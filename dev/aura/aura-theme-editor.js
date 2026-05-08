@@ -598,7 +598,7 @@ customElements.define(
     #getDefaultColorPresetValue(selector) {
       const control = this.querySelector(selector);
       const presets = Array.isArray(control?.presets) ? control.presets : [];
-      return presets.find((entry) => entry.default)?.value ?? presets[0]?.value ?? null;
+      return presets.find((entry) => entry.isDefault || entry.default)?.value ?? presets[0]?.value ?? null;
     }
 
     #getDefaultSegmentedValue(selector) {
