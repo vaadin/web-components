@@ -12,9 +12,6 @@ import { KeyboardDirectionMixin } from './keyboard-direction-mixin.js';
 
 /**
  * A mixin for list elements, facilitating navigation and selection of items.
- *
- * @polymerMixin
- * @mixes KeyboardDirectionMixin
  */
 export const ListMixin = (superClass) =>
   class ListMixinClass extends KeyboardDirectionMixin(superClass) {

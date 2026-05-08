@@ -5,9 +5,6 @@
  */
 import { addListener } from '@vaadin/component-base/src/gestures.js';
 
-/**
- * @polymerMixin
- */
 export const ColumnResizingMixin = (superClass) =>
   class ColumnResizingMixin extends superClass {
     /** @protected */

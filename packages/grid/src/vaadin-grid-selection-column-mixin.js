@@ -5,10 +5,6 @@
  */
 import { GridSelectionColumnBaseMixin } from './vaadin-grid-selection-column-base-mixin.js';
 
-/**
- * @polymerMixin
- * @mixes GridSelectionColumnBaseMixin
- */
 export const GridSelectionColumnMixin = (superClass) =>
   class extends GridSelectionColumnBaseMixin(superClass) {
     static get properties() {

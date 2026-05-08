@@ -14,13 +14,6 @@ import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { LabelController } from '@vaadin/field-base/src/label-controller.js';
 import { ButtonController } from './button-controller.js';
 
-/**
- * @polymerMixin
- * @mixes DelegateFocusMixin
- * @mixes DelegateStateMixin
- * @mixes FieldMixin
- * @mixes KeyboardMixin
- */
 export const SelectBaseMixin = (superClass) =>
   class SelectBaseMixin extends DelegateFocusMixin(DelegateStateMixin(KeyboardMixin(FieldMixin(superClass)))) {
     static get properties() {

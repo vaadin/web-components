@@ -6,8 +6,6 @@
 
 /**
  * A mixin providing common sorter functionality.
- *
- * @polymerMixin
  */
 export const GridSorterMixin = (superClass) =>
   class GridSorterMixinClass extends superClass {

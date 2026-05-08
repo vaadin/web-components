@@ -13,9 +13,6 @@ const timeouts = {
   UPDATE_CONTENT_VISIBILITY: 100,
 };
 
-/**
- * @polymerMixin
- */
 export const ScrollMixin = (superClass) =>
   class ScrollMixin extends superClass {
     static get properties() {

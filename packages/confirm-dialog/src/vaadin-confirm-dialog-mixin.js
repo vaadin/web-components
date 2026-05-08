@@ -7,10 +7,6 @@ import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { DialogSizeMixin } from '@vaadin/dialog/src/vaadin-dialog-size-mixin.js';
 
-/**
- * @polymerMixin
- * @mixes DialogSizeMixin
- */
 export const ConfirmDialogMixin = (superClass) =>
   class ConfirmDialogMixinClass extends DialogSizeMixin(superClass) {
     static get properties() {

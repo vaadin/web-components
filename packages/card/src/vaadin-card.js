@@ -63,8 +63,6 @@ import { cardStyles } from './styles/vaadin-card-base-styles.js';
  *
  * @customElement vaadin-card
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {

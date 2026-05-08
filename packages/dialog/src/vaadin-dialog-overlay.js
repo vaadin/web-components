@@ -17,9 +17,6 @@ import { DialogOverlayMixin } from './vaadin-dialog-overlay-mixin.js';
  *
  * @customElement vaadin-dialog-overlay
  * @extends HTMLElement
- * @mixes DialogOverlayMixin
- * @mixes DirMixin
- * @mixes ThemableMixin
  * @private
  */
 export class DialogOverlay extends DialogOverlayMixin(

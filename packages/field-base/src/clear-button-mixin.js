@@ -10,10 +10,6 @@ import { InputMixin } from './input-mixin.js';
 
 /**
  * A mixin that manages the clear button.
- *
- * @polymerMixin
- * @mixes InputMixin
- * @mixes KeyboardMixin
  */
 export const ClearButtonMixin = (superclass) =>
   class ClearButtonMixinClass extends InputMixin(KeyboardMixin(superclass)) {

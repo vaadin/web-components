@@ -31,9 +31,6 @@ function initIconsMap(iconset, name) {
   }, {});
 }
 
-/**
- * @polymerMixin
- */
 export const IconsetMixin = (superClass) =>
   class extends superClass {
     static get observedAttributes() {

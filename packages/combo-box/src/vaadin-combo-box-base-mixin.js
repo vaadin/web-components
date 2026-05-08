@@ -12,14 +12,6 @@ import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
-/**
- * @polymerMixin
- * @mixes DisabledMixin
- * @mixes FocusMixin
- * @mixes InputMixin
- * @mixes KeyboardMixin
- * @param {function(new:HTMLElement)} superClass
- */
 export const ComboBoxBaseMixin = (superClass) =>
   class ComboBoxMixinBaseClass extends KeyboardMixin(InputMixin(DisabledMixin(FocusMixin(superClass)))) {
     static get properties() {

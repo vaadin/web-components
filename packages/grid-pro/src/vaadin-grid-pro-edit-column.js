@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -32,7 +31,6 @@ import { GridProEditColumnMixin } from './vaadin-grid-pro-edit-column-mixin.js';
  *
  * @customElement vaadin-grid-pro-edit-column
  * @extends GridColumn
- * @mixes GridProEditColumnMixin
  */
 class GridProEditColumn extends GridProEditColumnMixin(GridColumn) {
   static get is() {

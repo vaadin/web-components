@@ -9,12 +9,6 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { CollapsibleMixin } from './collapsible-mixin.js';
 import { SummaryController } from './summary-controller.js';
 
-/**
- * @polymerMixin
- * @mixes DelegateFocusMixin
- * @mixes DelegateStateMixin
- * @mixes CollapsibleMixin
- */
 export const DetailsBaseMixin = (superClass) =>
   class DetailsBaseMixin extends CollapsibleMixin(DelegateFocusMixin(DelegateStateMixin(superClass))) {
     static get properties() {

@@ -4,16 +4,12 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { get, set } from '@vaadin/component-base/src/path-utils.js';
 
-/**
- * @polymerMixin
- */
 export const GridProEditColumnMixin = (superClass) =>
   class extends superClass {
     static get properties() {

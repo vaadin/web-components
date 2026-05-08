@@ -19,7 +19,6 @@ import { formRowStyles } from './styles/vaadin-form-row-base-styles.js';
  *
  * @customElement vaadin-form-row
  * @extends HTMLElement
- * @mixes ThemableMixin
  */
 class FormRow extends ThemableMixin(PolylitMixin(LitElement)) {
   static get is() {

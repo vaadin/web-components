@@ -98,13 +98,6 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  *
  * @customElement vaadin-dialog
  * @extends HTMLElement
- * @mixes ThemePropertyMixin
- * @mixes ElementMixin
- * @mixes DialogBaseMixin
- * @mixes DialogDraggableMixin
- * @mixes DialogRendererMixin
- * @mixes DialogResizableMixin
- * @mixes DialogSizeMixin
  */
 class Dialog extends DialogSizeMixin(
   DialogDraggableMixin(

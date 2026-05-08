@@ -80,9 +80,6 @@ import { ConfirmDialogMixin } from './vaadin-confirm-dialog-mixin.js';
  *
  * @customElement vaadin-confirm-dialog
  * @extends HTMLElement
- * @mixes ConfirmDialogMixin
- * @mixes ElementMixin
- * @mixes ThemePropertyMixin
  */
 class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(PolylitMixin(LitElement)))) {
   static get is() {

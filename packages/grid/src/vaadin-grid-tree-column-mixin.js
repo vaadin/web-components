@@ -5,9 +5,6 @@
  */
 import { get } from '@vaadin/component-base/src/path-utils.js';
 
-/**
- * @polymerMixin
- */
 export const GridTreeColumnMixin = (superClass) =>
   class extends superClass {
     static get properties() {

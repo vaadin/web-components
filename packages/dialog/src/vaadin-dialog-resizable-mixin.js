@@ -4,9 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
-/**
- * @polymerMixin
- */
 export const DialogResizableMixin = (superClass) =>
   class VaadinDialogResizableMixin extends superClass {
     static get properties() {

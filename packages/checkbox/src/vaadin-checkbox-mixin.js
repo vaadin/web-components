@@ -13,13 +13,6 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
 
 /**
  * A mixin providing common checkbox functionality.
- *
- * @polymerMixin
- * @mixes ActiveMixin
- * @mixes CheckedMixin
- * @mixes DelegateFocusMixin
- * @mixes FieldMixin
- * @mixes SlotStylesMixin
  */
 export const CheckboxMixin = (superclass) =>
   class CheckboxMixinClass extends SlotStylesMixin(
@@ -33,7 +26,6 @@ export const CheckboxMixin = (superclass) =>
          * The state is reset once the user switches the checkbox by hand.
          *
          * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
-         *
          */
         indeterminate: {
           type: Boolean,
@@ -44,7 +36,6 @@ export const CheckboxMixin = (superclass) =>
 
         /**
          * The name of the checkbox.
-         *
          */
         name: {
           type: String,

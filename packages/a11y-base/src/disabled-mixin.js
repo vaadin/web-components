@@ -7,8 +7,6 @@ import { dedupeMixin } from '@open-wc/dedupe-mixin';
 
 /**
  * A mixin to provide disabled property for field components.
- *
- * @polymerMixin
  */
 const DisabledMixinImplementation = (superclass) => {
   return class DisabledMixinClass extends superclass {

@@ -7,10 +7,6 @@ import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { dateAllowed, dateEquals, getISOWeekNumber, normalizeDate } from './vaadin-date-picker-helper.js';
 
-/**
- * @polymerMixin
- * @mixes FocusMixin
- */
 export const MonthCalendarMixin = (superClass) =>
   class MonthCalendarMixinClass extends FocusMixin(superClass) {
     static get properties() {

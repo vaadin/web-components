@@ -24,15 +24,6 @@ const DEFAULT_I18N = {
   total: '{count} items selected',
 };
 
-/**
- * @polymerMixin
- * @mixes ComboBoxDataProviderMixin
- * @mixes ComboBoxItemsMixin
- * @mixes ComboBoxScrollToIndexMixin
- * @mixes I18nMixin
- * @mixes InputControlMixin
- * @mixes ResizeMixin
- */
 export const MultiSelectComboBoxMixin = (superClass) =>
   class MultiSelectComboBoxMixinClass extends I18nMixin(
     ComboBoxScrollToIndexMixin(

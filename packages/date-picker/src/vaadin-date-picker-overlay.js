@@ -18,9 +18,6 @@ import { DatePickerOverlayMixin } from './vaadin-date-picker-overlay-mixin.js';
  *
  * @customElement vaadin-date-picker-overlay
  * @extends HTMLElement
- * @mixes DatePickerOverlayMixin
- * @mixes DirMixin
- * @mixes ThemableMixin
  * @private
  */
 class DatePickerOverlay extends DatePickerOverlayMixin(

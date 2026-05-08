@@ -4,15 +4,11 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
 import { setProperty } from './vaadin-crud-helpers.js';
 
-/**
- * @polymerMixin
- */
 export const IncludedMixin = (superClass) =>
   class IncludedMixin extends superClass {
     static get properties() {

@@ -51,9 +51,6 @@ import { AccordionMixin } from './vaadin-accordion-mixin.js';
  *
  * @customElement vaadin-accordion
  * @extends HTMLElement
- * @mixes AccordionMixin
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 class Accordion extends AccordionMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {

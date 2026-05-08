@@ -6,9 +6,6 @@
 import { OverlayFocusMixin } from '@vaadin/overlay/src/vaadin-overlay-focus-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 
-/**
- * @polymerMixin
- */
 export const MenuOverlayMixin = (superClass) =>
   class MenuOverlayMixin extends OverlayFocusMixin(PositionMixin(superClass)) {
     static get properties() {

@@ -69,9 +69,6 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  *
  * @customElement vaadin-side-nav
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes ElementMixin
- * @mixes SideNavChildrenMixin
  */
 class SideNav extends SideNavChildrenMixin(
   SlotStylesMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
@@ -88,7 +85,6 @@ class SideNav extends SideNavChildrenMixin(
     return {
       /**
        * Whether the side nav is collapsible. When enabled, the toggle icon is shown.
-       *
        */
       collapsible: {
         type: Boolean,
@@ -98,7 +94,6 @@ class SideNav extends SideNavChildrenMixin(
 
       /**
        * Whether the side nav is collapsed. When collapsed, the items are hidden.
-       *
        */
       collapsed: {
         type: Boolean,

@@ -46,8 +46,6 @@ import { verticalLayoutStyles } from './styles/vaadin-vertical-layout-base-style
  *
  * @customElement vaadin-vertical-layout
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes ElementMixin
  */
 class VerticalLayout extends ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {

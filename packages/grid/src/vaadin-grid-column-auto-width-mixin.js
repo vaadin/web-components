@@ -7,8 +7,6 @@ import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 
 /**
  * A mixin providing grid column auto-width functionality.
- *
- * @polymerMixin
  */
 export const ColumnAutoWidthMixin = (superClass) =>
   class extends superClass {

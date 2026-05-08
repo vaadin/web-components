@@ -22,12 +22,6 @@ const MAX_ALLOWED_TIME = '23:59:59.999';
 
 /**
  * A mixin providing common time-picker functionality.
- *
- * @polymerMixin
- * @mixes ComboBoxBaseMixin
- * @mixes I18nMixin
- * @mixes InputControlMixin
- * @mixes PatternMixin
  */
 export const TimePickerMixin = (superClass) =>
   class TimePickerMixinClass extends I18nMixin(PatternMixin(ComboBoxBaseMixin(InputControlMixin(superClass)))) {

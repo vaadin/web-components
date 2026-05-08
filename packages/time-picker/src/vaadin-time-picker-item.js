@@ -35,9 +35,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement vaadin-time-picker-item
- * @mixes ComboBoxItemMixin
- * @mixes ThemableMixin
- * @mixes DirMixin
  * @private
  */
 export class TimePickerItem extends ComboBoxItemMixin(

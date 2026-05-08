@@ -163,13 +163,6 @@ import { ComboBoxScrollToIndexMixin } from './vaadin-combo-box-scroll-to-index-m
  *
  * @customElement vaadin-combo-box
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
- * @mixes InputControlMixin
- * @mixes PatternMixin
- * @mixes ComboBoxDataProviderMixin
- * @mixes ComboBoxMixin
- * @mixes ComboBoxScrollToIndexMixin
  */
 class ComboBox extends ComboBoxScrollToIndexMixin(
   ComboBoxDataProviderMixin(

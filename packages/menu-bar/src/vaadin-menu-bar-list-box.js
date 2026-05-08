@@ -17,9 +17,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * @customElement vaadin-menu-bar-list-box
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes ListMixin
- * @mixes ThemableMixin
  * @protected
  */
 class MenuBarListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {

@@ -49,9 +49,6 @@ import { tabStyles } from './styles/vaadin-tab-base-styles.js';
  *
  * @customElement vaadin-tab
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ItemMixin
- * @mixes ThemableMixin
  */
 class Tab extends ItemMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

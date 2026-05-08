@@ -16,8 +16,6 @@ import { valueButton } from './styles/vaadin-select-value-button-base-styles.js'
  *
  * @customElement vaadin-select-value-button
  * @extends HTMLElement
- * @mixes ButtonMixin
- * @mixes ThemableMixin
  * @protected
  */
 class SelectValueButton extends ButtonMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {

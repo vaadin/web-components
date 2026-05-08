@@ -56,14 +56,6 @@ const DEFAULT_I18N = {
   moreOptions: 'More options',
 };
 
-/**
- * @polymerMixin
- * @mixes DisabledMixin
- * @mixes FocusMixin
- * @mixes I18nMixin
- * @mixes KeyboardDirectionMixin
- * @mixes ResizeMixin
- */
 export const MenuBarMixin = (superClass) =>
   class MenuBarMixinClass extends I18nMixin(
     KeyboardDirectionMixin(ResizeMixin(FocusMixin(DisabledMixin(superClass)))),

@@ -17,9 +17,6 @@ import { passwordFieldButton } from './styles/vaadin-password-field-button-base-
  *
  * @customElement vaadin-password-field-button
  * @extends HTMLElement
- * @mixes ButtonMixin
- * @mixes DirMixin
- * @mixes ThemableMixin
  * @private
  */
 class PasswordFieldButton extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {

@@ -17,7 +17,6 @@ import { breadcrumbsStyles } from './styles/vaadin-breadcrumbs-base-styles.js';
  *
  * @customElement vaadin-breadcrumbs
  * @extends HTMLElement
- * @mixes ElementMixin
  */
 class Breadcrumbs extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
   static get is() {

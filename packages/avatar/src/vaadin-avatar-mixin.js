@@ -12,9 +12,6 @@ const DEFAULT_I18N = {
 
 /**
  * A mixin providing common avatar functionality.
- *
- * @polymerMixin
- * @mixes FocusMixin
  */
 export const AvatarMixin = (superClass) =>
   class AvatarMixinClass extends I18nMixin(FocusMixin(superClass)) {

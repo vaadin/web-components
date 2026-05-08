@@ -8,8 +8,6 @@ import { dedupeMixin } from '@open-wc/dedupe-mixin';
 /**
  * A mixin to store the reference to an input element
  * and add input and change event listeners to it.
- *
- * @polymerMixin
  */
 const InputMixinImplementation = (superclass) => {
   return class InputMixinClass extends superclass {

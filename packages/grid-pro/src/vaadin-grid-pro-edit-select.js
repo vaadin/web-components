@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -17,7 +16,6 @@ import { GridProEditSelectMixin } from './vaadin-grid-pro-edit-select-mixin.js';
  *
  * @customElement vaadin-grid-pro-edit-select
  * @extends Select
- * @mixes GridProEditSelectMixin
  * @private
  */
 class GridProEditSelect extends GridProEditSelectMixin(Select) {

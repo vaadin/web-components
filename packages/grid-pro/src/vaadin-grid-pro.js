@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -15,7 +14,6 @@ import { gridProStyles } from './styles/vaadin-grid-pro-base-styles.js';
 import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
 
 /**
- *
  * `<vaadin-grid-pro>` is a high quality data grid / data table Web Component with extended functionality.
  * It extends `<vaadin-grid>` and adds extra features on top of the basic ones.
  *
@@ -49,7 +47,6 @@ import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
  *
  * @customElement vaadin-grid-pro
  * @extends Grid
- * @mixes InlineEditingMixin
  */
 class GridPro extends SlotStylesMixin(InlineEditingMixin(Grid)) {
   static get is() {

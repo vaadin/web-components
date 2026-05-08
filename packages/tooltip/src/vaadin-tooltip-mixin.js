@@ -216,10 +216,6 @@ class TooltipStateController {
 
 /**
  * A mixin providing common tooltip functionality.
- *
- * @polymerMixin
- * @mixes PopoverPositionMixin
- * @mixes PopoverTargetMixin
  */
 export const TooltipMixin = (superClass) =>
   class TooltipMixinClass extends PopoverPositionMixin(PopoverTargetMixin(superClass)) {

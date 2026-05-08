@@ -6,9 +6,6 @@
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 
-/**
- * @polymerMixin
- */
 export const HorizontalLayoutMixin = (superClass) =>
   class extends superClass {
     /** @protected */

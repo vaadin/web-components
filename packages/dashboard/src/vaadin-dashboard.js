@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -104,10 +103,6 @@ const DEFAULT_I18N = getDefaultI18n();
  *
  * @customElement vaadin-dashboard
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes DashboardLayoutMixin
- * @mixes I18nMixin
- * @mixes ThemableMixin
  */
 class Dashboard extends DashboardLayoutMixin(
   I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),

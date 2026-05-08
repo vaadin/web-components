@@ -6,9 +6,6 @@
 
 let defaultMultiSortPriority = 'prepend';
 
-/**
- * @polymerMixin
- */
 export const SortMixin = (superClass) =>
   class SortMixin extends superClass {
     static get properties() {

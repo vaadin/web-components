@@ -11,7 +11,6 @@ import { IconsetMixin } from './vaadin-iconset-mixin.js';
  *
  * @customElement vaadin-iconset
  * @extends HTMLElement
- * @mixes IconsetMixin
  */
 class Iconset extends IconsetMixin(HTMLElement) {
   static get is() {

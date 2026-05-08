@@ -18,9 +18,6 @@ import { PopoverOverlayMixin } from './vaadin-popover-overlay-mixin.js';
  *
  * @customElement vaadin-popover-overlay
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes PopoverOverlayMixin
- * @mixes ThemableMixin
  * @private
  */
 class PopoverOverlay extends PopoverOverlayMixin(

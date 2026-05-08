@@ -61,9 +61,6 @@ import { GridTreeToggleMixin } from './vaadin-grid-tree-toggle-mixin.js';
  *
  * @customElement vaadin-grid-tree-toggle
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes DirMixin
- * @mixes GridTreeToggleMixin
  */
 class GridTreeToggle extends GridTreeToggleMixin(
   ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),

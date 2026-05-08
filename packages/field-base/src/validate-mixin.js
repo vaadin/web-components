@@ -7,8 +7,6 @@ import { dedupeMixin } from '@open-wc/dedupe-mixin';
 
 /**
  * A mixin to provide required state and validation logic.
- *
- * @polymerMixin
  */
 const ValidateMixinImplementation = (superclass) =>
   class extends superclass {

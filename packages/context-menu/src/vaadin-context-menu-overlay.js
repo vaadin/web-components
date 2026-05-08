@@ -18,10 +18,6 @@ import { MenuOverlayMixin } from './vaadin-menu-overlay-mixin.js';
  *
  * @customElement vaadin-context-menu-overlay
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes MenuOverlayMixin
- * @mixes OverlayMixin
- * @mixes ThemableMixin
  * @protected
  */
 export class ContextMenuOverlay extends MenuOverlayMixin(

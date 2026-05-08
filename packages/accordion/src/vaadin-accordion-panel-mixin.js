@@ -11,11 +11,6 @@ import { SummaryController } from '@vaadin/details/src/summary-controller.js';
 
 /**
  * A mixin providing common accordion panel functionality.
- *
- * @polymerMixin
- * @mixes CollapsibleMixin
- * @mixes DelegateFocusMixin
- * @mixes DelegateStateMixin
  */
 export const AccordionPanelMixin = (superClass) =>
   class AccordionPanelMixinClass extends CollapsibleMixin(DelegateFocusMixin(DelegateStateMixin(superClass))) {

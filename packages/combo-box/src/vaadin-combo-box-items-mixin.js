@@ -35,10 +35,6 @@ function findItemIndex(items, callback) {
   });
 }
 
-/**
- * @polymerMixin
- * @mixes ComboBoxBaseMixin
- */
 export const ComboBoxItemsMixin = (superClass) =>
   class ComboBoxItemsMixinClass extends ComboBoxBaseMixin(superClass) {
     static get properties() {

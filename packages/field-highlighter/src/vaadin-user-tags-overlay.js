@@ -18,10 +18,6 @@ import { userTagsOverlayStyles } from './styles/vaadin-user-tags-overlay-base-st
  *
  * @customElement vaadin-user-tags-overlay
  * @extends HTMLElement
- * @mixes PositionMixin
- * @mixes OverlayMixin
- * @mixes DirMixin
- * @mixes ThemableMixin
  * @private
  */
 class UserTagsOverlay extends PositionMixin(

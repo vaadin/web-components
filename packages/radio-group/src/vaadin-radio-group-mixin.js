@@ -13,12 +13,6 @@ import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 
 /**
  * A mixin providing common radio-group functionality.
- *
- * @polymerMixin
- * @mixes DisabledMixin
- * @mixes FieldMixin
- * @mixes FocusMixin
- * @mixes KeyboardMixin
  */
 export const RadioGroupMixin = (superclass) =>
   class RadioGroupMixinClass extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(superclass)))) {
@@ -35,7 +29,6 @@ export const RadioGroupMixin = (superclass) =>
 
         /**
          * The value of the radio group.
-         *
          */
         value: {
           type: String,
@@ -50,7 +43,6 @@ export const RadioGroupMixin = (superclass) =>
          * The property works similarly to the `disabled` property.
          * While the `disabled` property disables all radio buttons inside the group,
          * the `readonly` property disables only unchecked ones.
-         *
          */
         readonly: {
           type: Boolean,

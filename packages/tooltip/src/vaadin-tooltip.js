@@ -75,9 +75,6 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  *
  * @customElement vaadin-tooltip
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemePropertyMixin
- * @mixes TooltipMixin
  */
 class Tooltip extends TooltipMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(LitElement)))) {
   static get is() {

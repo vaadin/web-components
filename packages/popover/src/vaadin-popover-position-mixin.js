@@ -6,8 +6,6 @@
 
 /**
  * A mixin providing popover position functionality.
- *
- * @polymerMixin
  */
 export const PopoverPositionMixin = (superClass) =>
   class PopoverPositionMixinClass extends superClass {

@@ -70,7 +70,6 @@ class PrefixSlotController extends SlotController {
  *
  * @customElement vaadin-breadcrumbs-item
  * @extends HTMLElement
- * @mixes ElementMixin
  */
 class BreadcrumbsItem extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
   static get is() {

@@ -18,9 +18,6 @@ import { tooltipOverlayStyles } from './styles/vaadin-tooltip-overlay-base-style
  *
  * @customElement vaadin-tooltip-overlay
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes ThemableMixin
- * @mixes PopoverOverlayMixin
  * @private
  */
 class TooltipOverlay extends PopoverOverlayMixin(

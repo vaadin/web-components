@@ -8,9 +8,6 @@ import { KeyboardMixin } from './keyboard-mixin.js';
 
 /**
  * A mixin for navigating items with keyboard.
- *
- * @polymerMixin
- * @mixes KeyboardMixin
  */
 export const KeyboardDirectionMixin = (superclass) =>
   class KeyboardDirectionMixinClass extends KeyboardMixin(superclass) {

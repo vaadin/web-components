@@ -61,7 +61,6 @@ import { PasswordFieldMixin } from './vaadin-password-field-mixin.js';
  *
  * @customElement vaadin-password-field
  * @extends TextField
- * @mixes PasswordFieldMixin
  */
 export class PasswordField extends PasswordFieldMixin(TextField) {
   static get is() {

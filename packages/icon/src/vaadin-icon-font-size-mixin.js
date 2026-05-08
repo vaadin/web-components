@@ -15,8 +15,6 @@ const usesFontIconSizingFallback = needsFontIconSizingFallback();
  * recent versions, but there's an regression in Safari 26, which caused the same issue to happen when the icon is
  * attached to an element with shadow root.
  * The mixin does nothing if the browser supports CSS Container Query units for pseudo elements.
- *
- * @polymerMixin
  */
 export const IconFontSizeMixin = (superclass) =>
   !usesFontIconSizingFallback

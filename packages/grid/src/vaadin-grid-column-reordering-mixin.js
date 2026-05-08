@@ -7,9 +7,6 @@ import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { getBodyRowCells, iterateChildren, updateColumnOrders } from './vaadin-grid-helpers.js';
 
-/**
- * @polymerMixin
- */
 export const ColumnReorderingMixin = (superClass) =>
   class ColumnReorderingMixin extends superClass {
     static get properties() {

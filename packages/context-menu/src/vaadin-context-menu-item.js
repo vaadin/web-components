@@ -17,9 +17,6 @@ import { contextMenuItemStyles } from './styles/vaadin-context-menu-item-base-st
  *
  * @customElement vaadin-context-menu-item
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes ItemMixin
- * @mixes ThemableMixin
  * @protected
  */
 class ContextMenuItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {

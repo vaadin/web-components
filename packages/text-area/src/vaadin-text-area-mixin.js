@@ -10,10 +10,6 @@ import { TextAreaController } from '@vaadin/field-base/src/text-area-controller.
 
 /**
  * A mixin providing common text area functionality.
- *
- * @polymerMixin
- * @mixes InputFieldMixin
- * @mixes ResizeMixin
  */
 export const TextAreaMixin = (superClass) =>
   class TextAreaMixinClass extends ResizeMixin(InputFieldMixin(superClass)) {

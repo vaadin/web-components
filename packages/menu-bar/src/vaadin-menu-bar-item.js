@@ -17,9 +17,6 @@ import { menuBarItemStyles } from './styles/vaadin-menu-bar-item-base-styles.js'
  *
  * @customElement vaadin-menu-bar-item
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes ItemMixin
- * @mixes ThemableMixin
  * @protected
  */
 class MenuBarItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {

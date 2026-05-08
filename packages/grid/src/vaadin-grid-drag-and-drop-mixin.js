@@ -26,9 +26,6 @@ const DropLocation = {
   EMPTY: 'empty',
 };
 
-/**
- * @polymerMixin
- */
 export const DragAndDropMixin = (superClass) =>
   class DragAndDropMixin extends superClass {
     static get properties() {

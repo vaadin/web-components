@@ -67,9 +67,6 @@ import { LoginFormMixin } from './vaadin-login-form-mixin.js';
  *
  * @customElement vaadin-login-form
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
- * @mixes LoginFormMixin
  */
 class LoginForm extends LoginFormMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

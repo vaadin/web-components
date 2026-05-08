@@ -78,10 +78,6 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  *
  * @customElement vaadin-side-nav-item
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes DisabledMixin
- * @mixes ElementMixin
- * @mixes SideNavChildrenMixin
  */
 class SideNavItem extends SideNavChildrenMixin(
   DisabledMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
@@ -111,7 +107,6 @@ class SideNavItem extends SideNavChildrenMixin(
 
       /**
        * Whether to show the child items or not
-       *
        */
       expanded: {
         type: Boolean,
@@ -148,7 +143,6 @@ class SideNavItem extends SideNavChildrenMixin(
        *
        * The state is updated when the item is added to the DOM or when the browser
        * navigates to a new page.
-       *
        */
       current: {
         type: Boolean,

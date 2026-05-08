@@ -78,14 +78,6 @@ export const datePickerI18nDefaults = Object.freeze({
   },
 });
 
-/**
- * @polymerMixin
- * @mixes DelegateFocusMixin
- * @mixes I18nMixin
- * @mixes InputConstraintsMixin
- * @mixes KeyboardMixin
- * @param {function(new:HTMLElement)} subclass
- */
 export const DatePickerMixin = (subclass) =>
   class DatePickerMixinClass extends I18nMixin(DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass)))) {
     static get properties() {

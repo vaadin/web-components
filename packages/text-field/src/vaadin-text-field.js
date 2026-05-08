@@ -84,9 +84,6 @@ import { TextFieldMixin } from './vaadin-text-field-mixin.js';
  *
  * @customElement vaadin-text-field
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
- * @mixes TextFieldMixin
  */
 export class TextField extends TextFieldMixin(
   ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),

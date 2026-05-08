@@ -72,9 +72,6 @@ import { UploadManager } from './vaadin-upload-manager.js';
  *
  * @customElement vaadin-upload-button
  * @extends HTMLElement
- * @mixes ButtonMixin
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

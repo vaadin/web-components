@@ -125,11 +125,6 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  *
  * @customElement vaadin-range-slider
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes FieldMixin
- * @mixes FocusMixin
- * @mixes SliderMixin
- * @mixes ThemableMixin
  */
 class RangeSlider extends FieldMixin(
   SliderMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),

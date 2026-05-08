@@ -209,10 +209,6 @@ const isLastOverlay = (overlay) => {
  *
  * @customElement vaadin-popover
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes PopoverPositionMixin
- * @mixes PopoverTargetMixin
- * @mixes ThemePropertyMixin
  */
 class Popover extends PopoverPositionMixin(
   PopoverTargetMixin(ThemePropertyMixin(ElementMixin(PolylitMixin(LitElement)))),

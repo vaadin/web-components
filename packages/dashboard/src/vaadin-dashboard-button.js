@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -23,9 +22,6 @@ import { dashboardButtonStyles } from './styles/vaadin-dashboard-button-base-sty
  *
  * @customElement vaadin-dashboard-button
  * @extends HTMLElement
- * @mixes ButtonMixin
- * @mixes ElementMixin
- * @mixes ThemableMixin
  * @protected
  */
 class DashboardButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {

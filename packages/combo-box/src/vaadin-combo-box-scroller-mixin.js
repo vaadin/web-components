@@ -8,9 +8,6 @@ import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js'
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
-/**
- * @polymerMixin
- */
 export const ComboBoxScrollerMixin = (superClass) =>
   class ComboBoxScrollerMixin extends superClass {
     static get properties() {

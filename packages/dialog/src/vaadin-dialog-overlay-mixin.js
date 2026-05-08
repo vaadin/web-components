@@ -7,10 +7,6 @@ import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { setOverlayStateAttribute } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
 
-/**
- * @polymerMixin
- * @mixes OverlayMixin
- */
 export const DialogOverlayMixin = (superClass) =>
   class DialogOverlayMixin extends OverlayMixin(superClass) {
     static get properties() {

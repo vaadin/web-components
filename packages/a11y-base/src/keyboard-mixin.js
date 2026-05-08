@@ -9,8 +9,6 @@ import { dedupeMixin } from '@open-wc/dedupe-mixin';
  * A mixin that manages keyboard handling.
  * The mixin subscribes to the keyboard events while an actual implementation
  * for the event handlers is left to the client (a component or another mixin).
- *
- * @polymerMixin
  */
 const KeyboardMixinImplementation = (superclass) => {
   return class KeyboardMixinClass extends superclass {

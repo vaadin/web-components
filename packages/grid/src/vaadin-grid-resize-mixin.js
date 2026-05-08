@@ -6,8 +6,6 @@
 
 /**
  * A mixin to observe size changes of the grid and its main parts.
- *
- * @polymerMixin
  */
 export const ResizeMixin = (superClass) =>
   class extends superClass {

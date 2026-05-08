@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -37,7 +36,6 @@ import { BoardRow } from './vaadin-board-row.js';
  *
  * @customElement vaadin-board
  * @extends HTMLElement
- * @mixes ElementMixin
  * @deprecated `<vaadin-board>` is deprecated and will be removed in Vaadin 26.
  * Consider using `<vaadin-dashboard>` or `<vaadin-dashboard-layout>` as an alternative.
  */

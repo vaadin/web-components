@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -67,9 +66,6 @@ import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
  *
  * @customElement vaadin-dashboard-section
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
- * @mixes DashboardItemMixin
  */
 class DashboardSection extends DashboardItemMixin(
   ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),

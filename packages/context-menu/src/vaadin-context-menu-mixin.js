@@ -10,10 +10,6 @@ import { MediaQueryController } from '@vaadin/component-base/src/media-query-con
 import { ContextMenuTooltipController } from './vaadin-context-menu-tooltip-controller.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
 
-/**
- * @polymerMixin
- * @mixes ItemsMixin
- */
 export const ContextMenuMixin = (superClass) =>
   class ContextMenuMixinClass extends ItemsMixin(superClass) {
     static get properties() {

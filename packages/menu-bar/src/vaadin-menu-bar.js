@@ -69,9 +69,6 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  *
  * @customElement vaadin-menu-bar
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes MenuBarMixin
- * @mixes ThemableMixin
  */
 class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
