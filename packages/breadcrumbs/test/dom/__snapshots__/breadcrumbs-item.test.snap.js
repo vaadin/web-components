@@ -52,3 +52,33 @@ snapshots["vaadin-breadcrumbs-item shadow path"] =
 `;
 /* end snapshot vaadin-breadcrumbs-item shadow path */
 
+snapshots["vaadin-breadcrumbs-item shadow current"] = 
+`<span
+  aria-current="page"
+  part="nolink"
+>
+  <slot name="prefix">
+  </slot>
+  <span part="label">
+    <slot>
+    </slot>
+  </span>
+</span>
+`;
+/* end snapshot vaadin-breadcrumbs-item shadow current */
+
+snapshots["vaadin-breadcrumbs-item shadow current path"] = 
+`<a
+  href="/foo"
+  part="link"
+>
+  <slot name="prefix">
+  </slot>
+  <span part="label">
+    <slot>
+    </slot>
+  </span>
+</a>
+`;
+/* end snapshot vaadin-breadcrumbs-item shadow current path */
+
