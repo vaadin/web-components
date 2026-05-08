@@ -160,7 +160,7 @@
   }
 }
 
-aura-preset-thumbnail {
+aura-preset-thumbnail[style] {
   display: flex;
   aspect-ratio: 16 / 10;
   border-radius: 5px;
