@@ -94,7 +94,7 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
       maxFilesReached: {
         type: Boolean,
         value: false,
-        reflect: true,
+        reflectToAttribute: true,
         attribute: 'max-files-reached',
       },
 
@@ -102,7 +102,7 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
       __dragover: {
         type: Boolean,
         value: false,
-        reflect: true,
+        reflectToAttribute: true,
         attribute: 'dragover',
       },
     };
