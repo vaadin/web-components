@@ -38,3 +38,14 @@
 - **Surprises:** —
 - **Spec adjustments:**
   - `web-component-spec.md`: dropped "and `<form>.reset()` synchronisation" from the "Inherited from `CheckboxMixin`" bullet, and dropped the corresponding "and `<form>.reset()`" mention from the "ARIA switch role" bullet. Added a Discussion entry explaining the gap and pointing at `Binder` (Flow) / a manual `reset` listener as the workaround. `requirements.md` Req 11 still calls for the behavior; satisfying it would require listener wiring upstream in `CheckboxMixin` and is a candidate for a future task.
+
+## Post-Task 3 — Pick up new testing guideline
+
+- **Date:** 2026-05-08
+- **Trigger:** rebased onto `origin/main` to pick up `guidelines/12-testing.md` (the previous `12-checklist.md` moved to `13-checklist.md`).
+- **Decisions:**
+  - The new "don't test mixin / controller internals in components that consume them" rule from `guidelines/12-testing.md` codifies what Task 3 already settled on. No additional spec changes needed for that rule.
+  - Updated `web-component-spec.md` Decision 9 (Guideline alignment) to reference `guidelines/12-testing.md` and added a Discussion entry explaining why Task 3's coverage is intentionally minimal.
+  - Updated `web-component-tasks.md` Task 7's "Spec sections" line to reference both `guidelines/12-testing.md` and the renamed `guidelines/13-checklist.md`.
+- **Follow-up (not done in this session):**
+  - `guidelines/12-testing.md` recommends new tests be written in `.ts`. The committed test files (`packages/toggle-switch/test/toggle-switch.test.js`, `packages/toggle-switch/test/dom/toggle-switch.test.js`) were authored in `.js` before the recommendation landed. Converting them to `.ts` is a small, pure-renaming change worth doing alongside Task 7 (which adds the `test/typings/toggle-switch.types.ts` already in `.ts`) for consistency.

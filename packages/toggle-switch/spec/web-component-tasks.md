@@ -121,7 +121,7 @@ Create `packages/aura/src/components/toggle-switch.css` and import it in `packag
 
 ## Task 7: Integration, snapshots, type tests, dev page
 
-**Spec sections:** All; `guidelines/12-checklist.md`
+**Spec sections:** All; `guidelines/12-testing.md`; `guidelines/13-checklist.md`
 **Requirements:** —
 **Depends on:** 3, 5, 6
 
