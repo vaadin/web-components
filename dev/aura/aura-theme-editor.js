@@ -768,21 +768,12 @@ customElements.define(
         return true;
       }
 
-      const select = control.querySelector('vaadin-select');
-      const value = select?.value ?? '';
-      const match = value.match(/^preset-(\d+)$/u);
-      if (match) {
-        const index = Number(match[1]);
-        const presets = Array.isArray(control.presets) ? control.presets : [];
-        return presets[index]?.isDefault === true;
-      }
-
       const property = control.getAttribute('property')?.trim();
       if (!property) {
         return true;
       }
 
-      return localStorage.getItem(`aura-color-preset:${property}`) == null;
+      return document.documentElement.style.getPropertyValue(property).trim() === '';
     }
 
     #isSegmentedControlAtDefault(selector) {
