@@ -135,7 +135,7 @@ export const MessageInputMixin = (superClass) =>
     /** @private */
     __buttonPropsChanged(button, disabled, effectiveI18n, value) {
       if (button) {
-        button.disabled = disabled || value === '';
+        button.disabled = disabled || !value;
         button.textContent = effectiveI18n.send;
       }
     }
