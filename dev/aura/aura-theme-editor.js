@@ -1,12 +1,15 @@
 import './aura-color-preset-control.js';
 import './aura-font-family-control.js';
 import './aura-number-control.js';
+import './aura-preset-thumbnail.js';
 import './aura-segmented-control.js';
 import './aura-theme-scheme-control.js';
 import '@vaadin/accordion';
 import '@vaadin/details';
 import '@vaadin/dialog';
 import '@vaadin/text-area';
+import { html, nothing, render } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import { toHex } from './aura-color-utils.js';
 import { DEFAULT_PRESET_ID, getThemeEditorPresetById, THEME_EDITOR_PRESETS } from './aura-theme-editor-presets.js';
 
@@ -489,66 +492,51 @@ customElements.define(
       }
 
       const presets = [DEFAULT_PRESET, ...THEME_EDITOR_PRESETS];
+      render(html`${presets.map((preset) => this.#presetCardTemplate(preset))}`, strip);
+    }
 
-      strip.innerHTML = `${presets
-        .map((preset) => {
-          let scheme = 'light';
-          let contentScheme = 'light';
-          if (preset.advanced) {
-            if (preset.advanced.colorSchemePreset.match(/dark|mixed/u)) {
-              scheme = 'dark';
-              if (preset.advanced.colorSchemePreset === 'dark') {
-                contentScheme = 'dark';
-              }
-            } else if (preset.advanced.colorSchemePreset === 'auto') {
-              scheme = 'light';
-              contentScheme = 'light';
-            }
-          }
-          const style = `
-            color-scheme: ${scheme};
-            --aura-content-color-scheme: ${contentScheme};
-            --aura-accent-color-light: ${preset.advanced?.accentColorLight ?? 'oklch(0.55 0.2 264)'};
-            --aura-accent-color-dark: ${preset.advanced?.accentColorDark ?? 'oklch(0.55 0.2 264)'};
-            --aura-background-color-light: ${preset.advanced?.backgroundColorLight ?? 'oklch(0.95 0.005 248)'};
-            --aura-background-color-dark: ${preset.advanced?.backgroundColorDark ?? 'oklch(0.2 0.01 260)'};
-            --aura-app-layout-inset: ${preset.advanced?.appLayoutInset ?? '1.5vmin'};
-            --aura-base-radius: ${preset.advanced?.baseRadius ?? '3'};
-            --aura-base-size: ${preset.advanced?.baseSize ?? '16'};
-            --aura-base-font-size: ${preset.advanced?.baseFontSize ?? '14'};
-            --aura-contrast-level: ${preset.advanced?.contrastLevel ?? '1'};
-            --aura-surface-level: ${preset.advanced?.surfaceLevel ?? '1'};`;
-          return `
-          <button class="preset-card aura-surface" data-preset-id="${preset.id}" type="button">
-            <span class="thumbnail aura-surface aura-accent-color" style="${style}">
-              <span class="shape shape-nav-items"></span>
-              <span class="shape shape-content aura-surface">
-                <span class="shape shape-text"></span>
-                <span class="shape shape-cards">
-                  <span class="shape shape-card aura-surface"></span>
-                  <span class="shape shape-card aura-surface"></span>
-                  <span class="shape shape-card aura-surface"></span>
-                </span>
-                <span class="shape shape-btn"></span>
-              </span>
-            </span>
-            <span class="thumbnail aura-surface aura-accent-color thumbnail-dark" style="${style} color-scheme: dark; ${!preset.advanced || preset.advanced.colorSchemePreset === 'light' ? 'display: none;' : ''}">
-              <span class="shape shape-nav-items"></span>
-              <span class="shape shape-content aura-surface" style="color-scheme: dark;">
-                <span class="shape shape-text"></span>
-                <span class="shape shape-cards">
-                  <span class="shape shape-card aura-surface"></span>
-                  <span class="shape shape-card aura-surface"></span>
-                  <span class="shape shape-card aura-surface"></span>
-                </span>
-                <span class="shape shape-btn"></span>
-              </span>
-            </span>
-            <span class="label">${preset.label}</span>
-          </button>
-        `;
-        })
-        .join('')}`;
+    #presetCardTemplate(preset) {
+      const advanced = preset.advanced;
+      const colorScheme = advanced?.colorSchemePreset;
+      const isDarkPrimary = colorScheme === 'dark' || colorScheme === 'mixed';
+      const showsOverlay = Boolean(advanced) && colorScheme !== 'light';
+      const contentScheme = colorScheme === 'dark' ? 'dark' : 'light';
+      const thumbnailStyle = styleMap(this.#thumbnailVars(advanced, contentScheme));
+
+      return html`
+        <button type="button" class="preset-card aura-surface" data-preset-id=${preset.id} aria-label=${preset.label}>
+          <aura-preset-thumbnail
+            class="aura-surface aura-accent-color"
+            scheme=${isDarkPrimary ? 'dark' : 'light'}
+            style=${thumbnailStyle}
+          ></aura-preset-thumbnail>
+          ${showsOverlay
+            ? html`<aura-preset-thumbnail
+                class="aura-surface aura-accent-color"
+                overlay
+                style=${thumbnailStyle}
+              ></aura-preset-thumbnail>`
+            : nothing}
+          <span class="label">${preset.label}</span>
+        </button>
+      `;
+    }
+
+    #thumbnailVars(advanced, contentScheme) {
+      const a = advanced ?? {};
+      return {
+        '--aura-content-color-scheme': contentScheme,
+        '--aura-accent-color-light': a.accentColorLight ?? 'oklch(0.55 0.2 264)',
+        '--aura-accent-color-dark': a.accentColorDark ?? 'oklch(0.55 0.2 264)',
+        '--aura-background-color-light': a.backgroundColorLight ?? 'oklch(0.95 0.005 248)',
+        '--aura-background-color-dark': a.backgroundColorDark ?? 'oklch(0.2 0.01 260)',
+        '--aura-app-layout-inset': a.appLayoutInset ?? '1.5vmin',
+        '--aura-base-radius': a.baseRadius ?? '3',
+        '--aura-base-size': a.baseSize ?? '16',
+        '--aura-base-font-size': a.baseFontSize ?? '14',
+        '--aura-contrast-level': a.contrastLevel ?? '1',
+        '--aura-surface-level': a.surfaceLevel ?? '1',
+      };
     }
 
     #applyRuntimePresetRules(rules) {
@@ -914,23 +902,6 @@ customElements.define(
               outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
             }
 
-            .preset-card .thumbnail {
-              display: flex;
-              aspect-ratio: 16 / 10;
-              border-radius: 5px;
-              background: var(--aura-app-background);
-              overflow: hidden;
-              gap: min(5px, var(--aura-app-layout-inset));
-              padding: min(5px, var(--aura-app-layout-inset));
-              box-sizing: border-box;
-              grid-row: 1;
-              grid-column: 1;
-            }
-
-            .preset-card .thumbnail-dark {
-              clip-path: polygon(90% -2%, 102% -2%, 102% 102%, -2% 102%, 10% 102%);
-            }
-
             .preset-card::before {
               content: "";
               z-index: 1;
@@ -941,136 +912,6 @@ customElements.define(
               outline: 1px solid var(--vaadin-border-color);
               outline-offset: -1px;
               border-radius: 5px;
-            }
-
-            .preset-card :is(.thumbnail, .shape-content) {
-              /* Copied from Aura color.css */
-              --_bg-alt: light-dark(
-                oklch(
-                  from var(--aura-background-color-light) calc(l + c) min(c, c * 2 - l / 20)
-                    calc(h + 180 * var(--_vaadin-safari-17-deg, 1) * l * c * 4)
-                ),
-                oklch(
-                  from var(--aura-background-color-dark) calc(l + c) min(c, c * 2 - l / 20)
-                    calc(h + 180 * var(--_vaadin-safari-17-deg, 1) * l * c * 4)
-                )
-              );
-              --_bg-accent: radial-gradient(
-                circle at 0% 0%,
-                light-dark(
-                  oklch(from var(--aura-background-color-light) min(1, l + c * 3) min(c, c * 3) h),
-                  oklch(from var(--aura-background-color-dark) min(1, l + c) clamp(0, c * 1.5, 0.4) h)
-                ),
-                transparent 30%
-              );
-              --aura-background-color: light-dark(var(--aura-background-color-light), var(--aura-background-color-dark));
-              --aura-app-background: var(--_bg-accent), radial-gradient(circle at 25% 0% in xyz, var(--aura-background-color) 33%, var(--_bg-alt)) var(--aura-background-color);
-            }
-
-            .preset-card .shape {
-              border-radius: round(var(--aura-base-radius) * 1px / 1.5, 1px);
-            }
-
-            .preset-card .shape-nav-items {
-              width: calc(var(--aura-base-size) * 1px);
-              align-self: start;
-              display: flex;
-              flex-direction: column;
-              padding: round(var(--aura-base-size) * 0.25px, 1px);
-              gap: round(var(--aura-base-size) * 0.25px, 1px);
-
-              &::before,
-              &::after {
-                content: "";
-                width: round(var(--aura-base-font-size) * 0.5px, 1px);
-                height: round(var(--aura-base-font-size) * 0.3px, 1px);
-                border-radius: inherit;
-                background: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
-              }
-
-              &::after {
-                width: 100%;
-                height: round(var(--aura-base-font-size) * 0.2px, 1px);
-                background: var(--aura-neutral);
-                opacity: calc(0.2 + 0.1 * var(--aura-contrast-level));
-                box-shadow: 0 round(var(--aura-base-size) * 0.5px, 1px) 0 0 var(--aura-neutral), 0 round(var(--aura-base-size) * 1px, 1px) 0 0 var(--aura-neutral);
-              }
-            }
-
-            .preset-card .shape-content {
-              flex: 1;
-              align-self: stretch;
-              color-scheme: var(--aura-content-color-scheme);
-              border-radius: clamp(0px, var(--aura-app-layout-inset) * 1000, var(--aura-base-radius) * 1px);
-              display: flex;
-              flex-direction: column;
-              gap: round(var(--aura-base-size) * 0.25px, 1px);
-              padding: round(var(--aura-base-size) * 0.25px, 1px);
-              outline: 1px solid color-mix(in srgb, var(--aura-neutral) calc(7% + 3% * var(--aura-contrast-level)), transparent);
-              background: linear-gradient(var(--aura-surface-color), var(--aura-surface-color)), var(--aura-app-background);
-            }
-
-            .preset-card .shape-text {
-              display: flex;
-              flex-direction: column;
-              gap: round(var(--aura-base-size) * 1px / 6, 1px);
-
-              &::before,
-              &::after {
-                content: "";
-                width: round(var(--aura-base-size) * 1px, 1px);
-                height: round(var(--aura-base-font-size) * 0.25px, 1px);
-                border-radius: inherit;
-                background: light-dark(var(--aura-neutral-light), var(--aura-neutral-dark));
-                opacity: calc(0.3 + 0.1 * var(--aura-contrast-level));
-              }
-
-              &::after {
-                width: 75%;
-                height: round(var(--aura-base-font-size) * 0.15px, 1px);
-                background: var(--aura-neutral);
-                opacity: calc(0.1 + 0.1 * var(--aura-contrast-level));
-              }
-            }
-
-            .preset-card .shape-cards {
-              display: grid;
-              grid-template-columns: repeat(3, 1fr);
-              gap: round(var(--aura-base-size) * 1px / 8, 1px);
-            }
-
-            .preset-card .shape-card {
-              height: round(var(--aura-base-size) * 1.25px, 1px);
-              background: var(--aura-surface-color-solid) padding-box;
-              --aura-surface-level: 1;
-              border: 1px solid color-mix(in srgb, var(--aura-neutral) calc(7% + 3% * var(--aura-contrast-level)), transparent);
-
-              &::before {
-                content: "";
-                display: block;
-                width: 30%;
-                height: round(var(--aura-base-size) * 0.2px, 1px);
-                background: light-dark(var(--aura-neutral-light), var(--aura-neutral-dark));
-                margin: round(var(--aura-base-size) * 1px / 8, 1px);
-                opacity: calc(0.3 + 0.1 * var(--aura-contrast-level));
-              }
-            }
-
-            .preset-card .shape-btn {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              width: calc(var(--aura-base-size) * 1px);
-              height: round(var(--aura-base-size) * 0.5px, 1px);
-              background: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
-
-              &::before {
-                content: "";
-                width: 50%;
-                height: 25%;
-                background: var(--aura-accent-contrast-color);
-                border-radius: inherit;
-              }
             }
 
             .preset-card .label {
