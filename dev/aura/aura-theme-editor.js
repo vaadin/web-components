@@ -845,6 +845,10 @@ customElements.define(
     }
 
     #updateExportButtonState() {
+      if (this._applyingPreset) {
+        return;
+      }
+
       const exportButton = this.querySelector('#exportTheme');
       if (!exportButton) {
         return;
