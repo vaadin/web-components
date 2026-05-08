@@ -98,6 +98,7 @@ const DEFAULT_I18N = {
 
 /**
  * @polymerMixin
+ * @mixes I18nMixin
  */
 export const RichTextEditorMixin = (superClass) =>
   class RichTextEditorMixinClass extends I18nMixin(DEFAULT_I18N, superClass) {

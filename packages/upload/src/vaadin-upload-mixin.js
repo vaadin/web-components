@@ -107,6 +107,7 @@ class DropLabelController extends SlotController {
 
 /**
  * @polymerMixin
+ * @mixes I18nMixin
  */
 export const UploadMixin = (superClass) =>
   class UploadMixin extends I18nMixin(DEFAULT_I18N, superClass) {

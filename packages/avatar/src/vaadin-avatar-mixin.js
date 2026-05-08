@@ -15,6 +15,7 @@ const DEFAULT_I18N = {
  *
  * @polymerMixin
  * @mixes FocusMixin
+ * @mixes I18nMixin
  */
 export const AvatarMixin = (superClass) =>
   class AvatarMixinClass extends I18nMixin(DEFAULT_I18N, FocusMixin(superClass)) {

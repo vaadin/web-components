@@ -22,8 +22,8 @@ const DEFAULT_I18N = {
 };
 
 /**
- * @mixes LoginMixin
  * @polymerMixin
+ * @mixes I18nMixin
  */
 export const LoginMixin = (superClass) =>
   class LoginMixin extends I18nMixin(DEFAULT_I18N, superClass) {

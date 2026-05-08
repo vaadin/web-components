@@ -40,6 +40,7 @@ import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
  * @customElement vaadin-grid-filter
  * @extends HTMLElement
  * @mixes GridFilterElementMixin
+ * @mixes ThemableMixin
  */
 class GridFilter extends GridFilterElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {

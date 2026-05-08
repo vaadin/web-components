@@ -47,6 +47,7 @@ class PickerSlotController extends SlotController {
  * @mixes DisabledMixin
  * @mixes FieldMixin
  * @mixes FocusMixin
+ * @mixes I18nMixin
  */
 export const DateTimePickerMixin = (superClass) =>
   class DateTimePickerMixinClass extends I18nMixin(DEFAULT_I18N, FieldMixin(FocusMixin(DisabledMixin(superClass)))) {

@@ -47,6 +47,7 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * @mixes A11yMixin
  * @mixes ActiveItemMixin
  * @mixes ArrayDataProviderMixin
+ * @mixes ColumnAutoWidthMixin
  * @mixes ColumnResizingMixin
  * @mixes DataProviderMixin
  * @mixes DynamicColumnsMixin
@@ -60,6 +61,7 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * @mixes EventContextMixin
  * @mixes StylingMixin
  * @mixes DragAndDropMixin
+ * @mixes TabindexMixin
  * @mixes ResizeMixin
  */
 export const GridMixin = (superClass) =>

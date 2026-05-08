@@ -141,6 +141,7 @@ class NotificationCard extends ThemableMixin(PolylitMixin(LumoInjectionMixin(Lit
  * @extends HTMLElement
  * @mixes NotificationMixin
  * @mixes ElementMixin
+ * @mixes ThemableMixin
  */
 class Notification extends NotificationMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))) {
   static get is() {

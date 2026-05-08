@@ -50,6 +50,7 @@ import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
  * @customElement vaadin-grid-pro
  * @extends Grid
  * @mixes InlineEditingMixin
+ * @mixes SlotStylesMixin
  */
 class GridPro extends SlotStylesMixin(InlineEditingMixin(Grid)) {
   static get is() {

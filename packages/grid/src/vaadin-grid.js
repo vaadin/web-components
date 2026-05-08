@@ -268,6 +268,7 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * @customElement vaadin-grid
  * @extends HTMLElement
  * @mixes GridMixin
+ * @mixes ElementMixin
  * @mixes ThemableMixin
  */
 class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {

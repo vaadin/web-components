@@ -37,6 +37,7 @@ class ChildrenController extends SlotController {
 
 /**
  * @polymerMixin
+ * @mixes I18nMixin
  */
 export const SideNavChildrenMixin = (superClass) =>
   class SideNavChildrenMixin extends I18nMixin(DEFAULT_I18N, superClass) {
