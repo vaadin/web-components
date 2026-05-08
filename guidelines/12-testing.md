@@ -21,6 +21,8 @@ Typings tests are documented in [TypeScript](07-typescript.md).
   pointer, `clock.restore()` for tests that use fake timers.
 - **Don't test mixin / controller internals** in components that
   consume them. The mixin's own tests already cover that.
+- **Write new tests in `.ts` files**. Unit, visual and snapshot tests
+  for new components should be written in TypeScript.
 
 ## Unit tests
 
