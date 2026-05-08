@@ -112,7 +112,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       maxFilesReached: {
         type: Boolean,
         value: false,
-        reflect: true,
+        reflectToAttribute: true,
         attribute: 'max-files-reached',
       },
     };
