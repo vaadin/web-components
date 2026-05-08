@@ -111,6 +111,21 @@ function randomizeControl(control) {
           composed: true,
         }),
       );
+      return;
+    }
+
+    const values = Array.isArray(control.optionValues) ? control.optionValues : [];
+    if (values.length) {
+      const selected = randomFrom(values);
+      if (selected != null) {
+        vaadinSelect.dispatchEvent(
+          new CustomEvent('value-changed', {
+            detail: { value: selected },
+            bubbles: true,
+            composed: true,
+          }),
+        );
+      }
     }
     return;
   }
