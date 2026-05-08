@@ -203,8 +203,7 @@ Other notes:
 - `readOnly: true` replaces the public setter with a no-op — even
   `host.toggleAttribute(...)` won't update the property because the
   reflected change still hits the no-op. PolylitMixin generates a
-  protected `_set{Name}(value)` accessor; use it from component code
-  and tests instead.
+  protected `_set{Name}(value)` accessor; use it instead.
 
 For full Lit property options refer to the
 [Lit reactive properties guide](https://lit.dev/docs/components/properties/).
