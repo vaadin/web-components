@@ -159,3 +159,165 @@
     background: var(--control-surface);
   }
 }
+
+aura-preset-thumbnail {
+  display: flex;
+  aspect-ratio: 16 / 10;
+  border-radius: 5px;
+  background: var(--aura-app-background);
+  overflow: hidden;
+  gap: min(5px, var(--aura-app-layout-inset));
+  padding: min(5px, var(--aura-app-layout-inset));
+  box-sizing: border-box;
+  grid-row: 1;
+  grid-column: 1;
+}
+
+aura-preset-thumbnail[scheme='dark'] {
+  color-scheme: dark;
+}
+
+aura-preset-thumbnail[overlay] {
+  color-scheme: dark;
+  clip-path: polygon(90% -2%, 102% -2%, 102% 102%, -2% 102%, 10% 102%);
+}
+
+aura-preset-thumbnail,
+aura-preset-thumbnail .shape-content {
+  /* Copied from Aura color.css */
+  --_bg-alt: light-dark(
+    oklch(
+      from var(--aura-background-color-light) calc(l + c) min(c, c * 2 - l / 20)
+        calc(h + 180 * var(--_vaadin-safari-17-deg, 1) * l * c * 4)
+    ),
+    oklch(
+      from var(--aura-background-color-dark) calc(l + c) min(c, c * 2 - l / 20)
+        calc(h + 180 * var(--_vaadin-safari-17-deg, 1) * l * c * 4)
+    )
+  );
+  --_bg-accent: radial-gradient(
+    circle at 0% 0%,
+    light-dark(
+      oklch(from var(--aura-background-color-light) min(1, l + c * 3) min(c, c * 3) h),
+      oklch(from var(--aura-background-color-dark) min(1, l + c) clamp(0, c * 1.5, 0.4) h)
+    ),
+    transparent 30%
+  );
+  --aura-background-color: light-dark(var(--aura-background-color-light), var(--aura-background-color-dark));
+  --aura-app-background:
+    var(--_bg-accent),
+    radial-gradient(circle at 25% 0% in xyz, var(--aura-background-color) 33%, var(--_bg-alt))
+      var(--aura-background-color);
+}
+
+aura-preset-thumbnail .shape {
+  border-radius: round(var(--aura-base-radius) * 1px / 1.5, 1px);
+}
+
+aura-preset-thumbnail .shape-nav-items {
+  width: calc(var(--aura-base-size) * 1px);
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  padding: round(var(--aura-base-size) * 0.25px, 1px);
+  gap: round(var(--aura-base-size) * 0.25px, 1px);
+
+  &::before,
+  &::after {
+    content: '';
+    width: round(var(--aura-base-font-size) * 0.5px, 1px);
+    height: round(var(--aura-base-font-size) * 0.3px, 1px);
+    border-radius: inherit;
+    background: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+  }
+
+  &::after {
+    width: 100%;
+    height: round(var(--aura-base-font-size) * 0.2px, 1px);
+    background: var(--aura-neutral);
+    opacity: calc(0.2 + 0.1 * var(--aura-contrast-level));
+    box-shadow:
+      0 round(var(--aura-base-size) * 0.5px, 1px) 0 0 var(--aura-neutral),
+      0 round(var(--aura-base-size) * 1px, 1px) 0 0 var(--aura-neutral);
+  }
+}
+
+aura-preset-thumbnail .shape-content {
+  flex: 1;
+  align-self: stretch;
+  color-scheme: var(--aura-content-color-scheme);
+  border-radius: clamp(0px, var(--aura-app-layout-inset) * 1000, var(--aura-base-radius) * 1px);
+  display: flex;
+  flex-direction: column;
+  gap: round(var(--aura-base-size) * 0.25px, 1px);
+  padding: round(var(--aura-base-size) * 0.25px, 1px);
+  outline: 1px solid color-mix(in srgb, var(--aura-neutral) calc(7% + 3% * var(--aura-contrast-level)), transparent);
+  background: linear-gradient(var(--aura-surface-color), var(--aura-surface-color)), var(--aura-app-background);
+}
+
+aura-preset-thumbnail[overlay] .shape-content {
+  color-scheme: dark;
+}
+
+aura-preset-thumbnail .shape-text {
+  display: flex;
+  flex-direction: column;
+  gap: round(var(--aura-base-size) * 1px / 6, 1px);
+
+  &::before,
+  &::after {
+    content: '';
+    width: round(var(--aura-base-size) * 1px, 1px);
+    height: round(var(--aura-base-font-size) * 0.25px, 1px);
+    border-radius: inherit;
+    background: light-dark(var(--aura-neutral-light), var(--aura-neutral-dark));
+    opacity: calc(0.3 + 0.1 * var(--aura-contrast-level));
+  }
+
+  &::after {
+    width: 75%;
+    height: round(var(--aura-base-font-size) * 0.15px, 1px);
+    background: var(--aura-neutral);
+    opacity: calc(0.1 + 0.1 * var(--aura-contrast-level));
+  }
+}
+
+aura-preset-thumbnail .shape-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: round(var(--aura-base-size) * 1px / 8, 1px);
+}
+
+aura-preset-thumbnail .shape-card {
+  height: round(var(--aura-base-size) * 1.25px, 1px);
+  background: var(--aura-surface-color-solid) padding-box;
+  --aura-surface-level: 1;
+  border: 1px solid color-mix(in srgb, var(--aura-neutral) calc(7% + 3% * var(--aura-contrast-level)), transparent);
+
+  &::before {
+    content: '';
+    display: block;
+    width: 30%;
+    height: round(var(--aura-base-size) * 0.2px, 1px);
+    background: light-dark(var(--aura-neutral-light), var(--aura-neutral-dark));
+    margin: round(var(--aura-base-size) * 1px / 8, 1px);
+    opacity: calc(0.3 + 0.1 * var(--aura-contrast-level));
+  }
+}
+
+aura-preset-thumbnail .shape-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--aura-base-size) * 1px);
+  height: round(var(--aura-base-size) * 0.5px, 1px);
+  background: light-dark(var(--aura-accent-color-light), var(--aura-accent-color-dark));
+
+  &::before {
+    content: '';
+    width: 50%;
+    height: 25%;
+    background: var(--aura-accent-contrast-color);
+    border-radius: inherit;
+  }
+}
