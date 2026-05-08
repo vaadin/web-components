@@ -109,10 +109,10 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @protected */
-    updated(changedProperties) {
-      super.updated(changedProperties);
+    updated(props) {
+      super.updated(props);
 
-      if (changedProperties.has('isItemSelectable')) {
+      if (props.has('isItemSelectable')) {
         /** @internal to not document it in CEM */
         this.dispatchEvent(new CustomEvent('is-item-selectable-changed'));
       }
