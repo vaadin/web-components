@@ -77,8 +77,7 @@ Author tests following the conventions in [Testing](12-testing.md).
 
 - [ ] Class JSDoc covers the styling tables (parts, state attributes,
       custom CSS properties).
-- [ ] Class JSDoc has `@customElement`, `@extends HTMLElement`, `@mixes`,
-      `@fires`.
+- [ ] Class JSDoc has `@customElement`, `@extends HTMLElement`, `@fires`.
 - [ ] Non-`notify` events have `@fires` lines on the class JSDoc.
 - [ ] `README.md` follows the same shape as a sibling package.
 

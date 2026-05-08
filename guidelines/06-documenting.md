@@ -28,8 +28,6 @@ also reads JSDoc — that's why `@attr` exists, see below.
 | ------------------------- | ------------------- | ------------------------------------------------------------------------------------------------ |
 | `@customElement {tag}`    | Class JSDoc         | CEM doesn't pick up `defineCustomElement()`; this tells it the element's tag name.               |
 | `@extends HTMLElement`    | Class JSDoc         | Hides LitElement's API from CEM output.                                                          |
-| `@mixes {Name}`           | Class / mixin JSDoc | Tracked by CEM via the `mixesPlugin` configured in `custom-elements-manifest.config.js`.         |
-| `@polymerMixin`           | Mixin declaration   | Marks `(superClass) => class extends superClass …` as a mixin so CEM treats it as one.           |
 | `@attr {type} dash-name`  | Property JSDoc      | Maps a camelCase property to its kebab-case attribute (used by `vscode-lit-plugin`).             |
 | `@fires {Event} name`     | Class JSDoc         | Documents an event so it appears in `custom-elements.json` and `web-types.json`.                 |
 | `@prop`                   | Class body          | Documents properties **not** declared in `static get properties()`.                              |
@@ -80,9 +78,6 @@ Use this canonical shape (every public component already follows it):
  *
  * @customElement vaadin-{name}
  * @extends HTMLElement
- * @mixes {Name}Mixin
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 ```
 
