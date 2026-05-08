@@ -26,3 +26,15 @@
     - Inner-input handling (`InputController` slotting the `<input>`, `LabelledInputController` wiring `aria-labelledby`, the slotted-input `opacity: 0` Tailwind workaround) is already tested in `field-base` / `checkbox` packages where the behavior originates. The toggle switch inherits it through `CheckboxMixin` and does not re-test it here.
 - **Surprises:** —
 - **Spec adjustments:** —
+
+## Task 3 — Behavioral verification through CheckboxMixin
+
+- **Commit:** (this commit)
+- **Date:** 2026-05-08
+- **Decisions:**
+  - **Rule: don't duplicate mixin / controller tests in components that consume them.** The mixin's own test suite already covers the behavior. Toggle-switch-specific surface (the `role="switch"` override, the shadow DOM template) is covered by the snapshot tests in `test/dom/`; everything else (toggle, change events, label clicks, disabled, readonly, validation, helper / error / label slots, native-form submission, focus delegation, active attribute) is delivered unchanged by `CheckboxMixin` and exercised by `packages/checkbox/test/checkbox.test.js` and `packages/checkbox/test/validation.test.js`.
+  - As a result, Task 3 produces **no test additions and no source changes**. The unit-test file stays at the Task 1 smoke tests (custom-element registration + `is` getter). The validation.test.js file the test agent had drafted is dropped without committing.
+  - The implementation agent's run surfaced seven concrete tests that proved the rule: five asserted behaviors that aren't actually provided by the inherited mixins (`aria-required` on the input — FieldAriaController omits it for native inputs; host `tabindex="-1"` on disabled — DelegateFocusMixin moves the tabindex to the inner input; `focus-ring` cleared on `focus({ focusVisible: false })` — leaks from earlier `sendKeys` keyboard state; `event.target === host` for `change` — native event bubbles without re-dispatch; error-slot population without `invalid: true` — ErrorController only writes when both are set), and two asserted `<form>.reset()` synchronisation that doesn't exist upstream.
+- **Surprises:** —
+- **Spec adjustments:**
+  - `web-component-spec.md`: dropped "and `<form>.reset()` synchronisation" from the "Inherited from `CheckboxMixin`" bullet, and dropped the corresponding "and `<form>.reset()`" mention from the "ARIA switch role" bullet. Added a Discussion entry explaining the gap and pointing at `Binder` (Flow) / a manual `reset` listener as the workaround. `requirements.md` Req 11 still calls for the behavior; satisfying it would require listener wiring upstream in `CheckboxMixin` and is a candidate for a future task.
