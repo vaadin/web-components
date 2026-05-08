@@ -1,6 +1,9 @@
 import { css, html, LitElement } from 'lit';
 import { addGlobalStyles } from '@vaadin/component-base/src/styles/add-global-styles.js';
 
+// Enable :active styles on iOS
+document.addEventListener('touchstart', () => {}, { passive: true });
+
 addGlobalStyles(
   'dev-common',
   css`
