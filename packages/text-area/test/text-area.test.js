@@ -155,6 +155,31 @@ describe('text-area', () => {
       expect(inputField.scrollTop).to.equal(200);
     });
 
+    it('should maintain scroll top on value shrink', async () => {
+      textArea.style.maxHeight = '100px';
+      const value = Array(400).join('400');
+      setInputValue(textArea, value);
+      await nextUpdate(textArea);
+
+      inputField.scrollTop = 50;
+      setInputValue(textArea, value.slice(0, -1));
+      await nextUpdate(textArea);
+
+      expect(inputField.scrollTop).to.equal(50);
+    });
+
+    it('should match input height to its scroll height when input-field scrolls', async () => {
+      textArea.style.width = '120px';
+      textArea.style.maxHeight = '60px';
+      textArea.value = Array(400).join('400');
+      await nextUpdate(textArea);
+
+      setInputValue(textArea, textArea.value.slice(0, -1));
+      await nextUpdate(textArea);
+
+      expect(parseFloat(native.style.height)).to.equal(native.scrollHeight);
+    });
+
     it('should decrease height automatically', async () => {
       textArea.value = Array(400).join('400');
       await nextUpdate(textArea);
