@@ -25,8 +25,9 @@ Use `notify: true` only for properties the **component itself** mutates and
 that consumers might want to two-way-bind to. Do not fire change events for
 properties that only change in response to user code setting them.
 
-`notify: true` events are picked up by CEM automatically, so no `@fires`
-JSDoc is needed for them.
+CEM does not infer the auto-generated `{property}-changed` event from
+`notify: true` — add a matching `@fires` line on the class JSDoc so the
+event lands in `custom-elements.json` and the React wrappers.
 
 ## Field events
 
@@ -63,6 +64,7 @@ root boundaries, which can be problematic for low-level interaction events.
 
 ## Documenting events
 
-Events that aren't driven by `notify: true` need a `@fires {Event} name -
-…` line on the class JSDoc so CEM picks them up. See
-[Documenting](06-documenting.md) for the full set of JSDoc tags.
+Every event the component dispatches — `notify: true` change events
+included — needs a `@fires {Event} name - …` line on the class JSDoc so
+CEM picks it up. See [Documenting](06-documenting.md) for the full set
+of JSDoc tags.

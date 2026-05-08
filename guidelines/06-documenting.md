@@ -34,9 +34,10 @@ also reads JSDoc — that's why `@attr` exists, see below.
 | `@type`                   | Getters             | Documents the type of a getter (e.g. an `i18n` accessor).                                        |
 | `@private` / `@protected` | Class JSDoc         | Marks the whole element as internal — excluded from `custom-elements.json` and `web-types.json`. |
 
-`notify: true` on a property declaration auto-generates the matching
-`{property}-changed` event in CEM's output — no `@fires` is needed for
-those. See [Events](09-events.md).
+Every event a public component dispatches — including the
+`{property}-changed` events emitted by `notify: true` properties — needs
+its own `@fires` line on the class JSDoc. CEM does not infer events from
+`notify: true`. See [Events](09-events.md).
 
 ## Component class JSDoc
 
