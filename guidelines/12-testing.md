@@ -34,7 +34,8 @@ Location: `packages/{name}/test/{name}.test.{js,ts}`.
   `describe` blocks per feature area, each with its own `beforeEach`.
 - **Always `await nextRender()` after `fixtureSync`** so LitElement has
   finished its first render before assertions run. For subsequent
-  property changes, use `await nextUpdate(element)`.
+  property changes, use `await nextUpdate(element)` - not needed for
+  properties marked as `sync: true` which trigger immediate update.
 - **Use `nextResize(element)` for ResizeObserver-driven logic.** When
   the component reacts to a resize callback (e.g. via `ResizeMixin`),
   awaiting `nextResize(element)` from `@vaadin/testing-helpers` ensures
