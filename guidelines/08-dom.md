@@ -180,3 +180,32 @@ The `test/dom/` folder contains snapshot tests that lock in shadow DOM
 output and the host's reflected state attributes. They cover exactly the
 public surface described above: parts, state attrs, slot wiring. When you
 introduce or rename a part / attribute / slot, expect to update snapshots.
+
+### When to write snapshots vs unit tests
+
+Reach for a **DOM snapshot** when the assertion is "given state X, the
+shadow DOM looks like Y". One snapshot per distinct rendered state covers
+the same ground as a stack of `querySelector` + `getAttribute` assertions,
+and it survives refactors of the rendering details that don't change the
+public DOM surface.
+
+Reach for a **unit test** only when the assertion is on something a
+snapshot of a final state cannot capture:
+
+- Events fired in response to interaction.
+- Keyboard handling and focus movement.
+- Programmatic API behavior (method return values, side effects).
+- Dynamic mutation that is itself the contract — e.g. an attribute set
+  by a slot controller in response to children being added or removed
+  at runtime, where the *transition* matters and not just the final
+  snapshot of either state.
+
+If the only thing a candidate unit test would verify is "after setting
+state X, attribute Y appears on element Z in the shadow DOM", write a
+snapshot of state X instead. Don't pair a unit test with a snapshot that
+already locks in the same fact — pick one.
+
+A rendering-only feature (e.g. "when `current` is set, `aria-current`
+appears on `[part="nolink"]`") is two snapshots: one with the state on,
+one with it off. Toggling-direction tests ("set, then unset") are
+redundant when both end states have snapshots.
