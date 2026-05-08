@@ -79,9 +79,10 @@ class AuraFontFamilyControl extends AuraControl {
     this.#labelEl = this.labelElement;
     this.#resetBtn = this.resetButton;
 
-    this.#select.renderer = (root) => {
-      this.#renderOptions(root);
-    };
+    this.#select.items = this.#opts.map((opt) => ({
+      label: opt.label,
+      value: this.#normalizeToken(opt.value),
+    }));
   }
 
   get optionValues() {
@@ -130,10 +131,6 @@ class AuraFontFamilyControl extends AuraControl {
     // Set label if provided
     if (this.hasAttribute('label')) {
       this.#labelEl.textContent = this.getAttribute('label');
-    }
-
-    if (typeof this.#select.requestContentUpdate === 'function') {
-      this.#select.requestContentUpdate();
     }
 
     this.#initialize();
@@ -212,20 +209,6 @@ class AuraFontFamilyControl extends AuraControl {
   // ----- Helpers ------------------------------------------------------------
   #storageKey() {
     return `aura:font-family:${this.#prop}`;
-  }
-
-  #renderOptions(root) {
-    root.textContent = '';
-    const listBox = document.createElement('vaadin-select-list-box');
-
-    this.#opts.forEach((opt) => {
-      const item = document.createElement('vaadin-select-item');
-      item.value = this.#normalizeToken(opt.value);
-      item.textContent = opt.label;
-      listBox.appendChild(item);
-    });
-
-    root.appendChild(listBox);
   }
 
   #defaultValue() {
