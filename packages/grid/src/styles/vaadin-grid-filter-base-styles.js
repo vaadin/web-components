@@ -11,6 +11,10 @@ export const gridFilterStyles = css`
     max-width: 100%;
   }
 
+  :host([hidden]) {
+    display: none !important;
+  }
+
   ::slotted(*) {
     width: 100%;
     box-sizing: border-box;
