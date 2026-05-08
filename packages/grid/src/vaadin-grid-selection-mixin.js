@@ -42,7 +42,6 @@ export const SelectionMixin = (superClass) =>
          */
         isItemSelectable: {
           type: Function,
-          notify: (() => true)(), // prevent Polymer analyzer from documenting a changed event
         },
 
         /**
@@ -106,6 +105,16 @@ export const SelectionMixin = (superClass) =>
     deselectItem(item) {
       if (this._isSelected(item)) {
         this.selectedItems = this.selectedItems.filter((i) => !this._itemsEqual(i, item));
+      }
+    }
+
+    /** @protected */
+    updated(changedProperties) {
+      super.updated(changedProperties);
+
+      if (changedProperties.has('isItemSelectable')) {
+        /** @internal to not document it in CEM */
+        this.dispatchEvent(new CustomEvent('is-item-selectable-changed'));
       }
     }
 
