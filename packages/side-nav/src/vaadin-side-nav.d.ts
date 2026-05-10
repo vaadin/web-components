@@ -78,6 +78,16 @@ export type NavigateEvent = {
  * `focus-ring` | Set when the label is focused using the keyboard.
  * `focused`    | Set when the label is focused.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                       |
+ * :-----------------------------------------|
+ * | `--vaadin-side-nav-child-indent`        |
+ * | `--vaadin-side-nav-label-color`         |
+ * | `--vaadin-side-nav-label-font-size`     |
+ * | `--vaadin-side-nav-label-font-weight`   |
+ * | `--vaadin-side-nav-label-line-height`   |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} collapsed-changed - Fired when the `collapsed` property changes.
