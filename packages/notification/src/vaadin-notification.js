@@ -121,9 +121,23 @@ class NotificationCard extends ThemableMixin(PolylitMixin(LumoInjectionMixin(Lit
  * The following shadow DOM parts of the `<vaadin-notification-card>` are available for styling:
  *
  * Part name | Description
- * ----------------|----------------
+ * ----------|----------------
  * `overlay` | The notification container
  * `content` | The content of the notification
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                       |
+ * :-----------------------------------------|
+ * | `--vaadin-notification-background`      |
+ * | `--vaadin-notification-border-color`    |
+ * | `--vaadin-notification-border-radius`   |
+ * | `--vaadin-notification-border-width`    |
+ * | `--vaadin-notification-container-gap`   |
+ * | `--vaadin-notification-padding`         |
+ * | `--vaadin-notification-shadow`          |
+ * | `--vaadin-notification-viewport-inset`  |
+ * | `--vaadin-notification-width`           |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
