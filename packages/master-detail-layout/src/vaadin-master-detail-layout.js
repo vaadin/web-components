@@ -611,10 +611,11 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   async __addTransition(updateSlot) {
     await updateSlot();
 
+    const isOverlay = this.hasAttribute('overlay');
     const progress = getCurrentAnimationProgress(this.$.detail);
     await Promise.all([
-      animateIn(this.$.detail, this.hasAttribute('overlay') ? ['slide'] : ['fade', 'slide'], progress),
-      animateIn(this.$.backdrop, ['fade'], this.hasAttribute('overlay') ? progress : 1),
+      animateIn(this.$.detail, isOverlay ? ['slide'] : ['fade', 'slide'], progress),
+      animateIn(this.$.backdrop, ['fade'], isOverlay ? progress : 1),
     ]);
   }
 
@@ -630,10 +631,11 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
       await updateSlot();
 
+      const isOverlay = this.hasAttribute('overlay');
       const progress = getCurrentAnimationProgress(this.$.detail);
       await Promise.all([
-        animateIn(this.$.detail, this.hasAttribute('overlay') ? ['slide'] : ['fade', 'slide'], progress),
-        animateOut(this.$.detailOutgoing, this.hasAttribute('overlay') ? ['slide'] : ['fade', 'slide'], progress),
+        animateIn(this.$.detail, isOverlay ? ['slide'] : ['fade', 'slide'], progress),
+        animateOut(this.$.detailOutgoing, isOverlay ? ['slide'] : ['fade', 'slide'], progress),
       ]);
     } finally {
       // Skip removal if the slot was reassigned during the transition.
@@ -646,10 +648,11 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   async __removeTransition(updateSlot) {
+    const isOverlay = this.hasAttribute('overlay');
     const progress = getCurrentAnimationProgress(this.$.detail);
     await Promise.all([
-      animateOut(this.$.detail, this.hasAttribute('overlay') ? ['slide'] : ['fade', 'slide'], progress),
-      animateOut(this.$.backdrop, ['fade'], this.hasAttribute('overlay') ? progress : 1),
+      animateOut(this.$.detail, isOverlay ? ['slide'] : ['fade', 'slide'], progress),
+      animateOut(this.$.backdrop, ['fade'], isOverlay ? progress : 1),
     ]);
 
     await updateSlot();
