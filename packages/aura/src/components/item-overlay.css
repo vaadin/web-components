@@ -22,10 +22,6 @@ vaadin-select-item:where([role]) {
   font-weight: var(--aura-font-weight-medium);
   -webkit-user-select: none;
   user-select: none;
-  --_highlight-color: light-dark(
-    oklch(from var(--aura-accent-color-light) min(0.9, l) c h / max(0.05, l / 4)),
-    oklch(from var(--aura-accent-color-dark) max(0.6, l) c h / max(0.2, l / 4))
-  );
   padding-inline-start: max(0px, var(--vaadin-padding-inline-container) - var(--aura-item-overlay-padding-inline));
   gap: 0;
 
@@ -49,7 +45,7 @@ vaadin-select-item:where([role]) {
 
   @media (any-hover: hover) {
     &:not([disabled], [aria-disabled='true']):hover {
-      background: var(--_highlight-color);
+      background: var(--_aura-highlight-color);
 
       &[theme~='filled'] {
         background: var(--aura-accent-color);
@@ -64,7 +60,7 @@ vaadin-select-item:where([role]) {
   }
 
   &:not([disabled], [aria-disabled='true']):active {
-    background: var(--_highlight-color);
+    background: var(--_aura-highlight-color);
 
     &[theme~='filled'] {
       background: var(--aura-accent-color);
