@@ -59,6 +59,12 @@ class PrefixSlotController extends SlotController {
  * `nolink`  | The non-interactive `<span>` rendered when `path` is unset.
  * `label`   | Wraps the item's text content, inside `link` or `nolink`.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property              | Description
+ * ---------------------------------|-------------
+ * `--vaadin-breadcrumbs-separator` | The mask-image icon used as the separator after this item. Typically set on the parent `<vaadin-breadcrumbs>` so it cascades to every item.
+ *
  * The following state attributes are available for styling:
  *
  * Attribute    | Description
