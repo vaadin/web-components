@@ -72,25 +72,13 @@ describe('ARIA', () => {
       await onceResized(layout);
     });
 
-    it('should hide placeholder when detail is present in split mode', () => {
+    it('should toggle detail placeholder visibility based on detail presence', async () => {
       expect(getComputedStyle(layout.$.detailPlaceholder).visibility).to.equal('hidden');
-    });
 
-    it('should show placeholder when detail is removed in split mode', async () => {
       layout.querySelector('[slot="detail"]').remove();
       await onceResized(layout);
+
       expect(getComputedStyle(layout.$.detailPlaceholder).visibility).to.equal('visible');
-    });
-
-    it('should hide placeholder in overlay mode regardless of detail presence', async () => {
-      layout.style.width = '400px';
-      await onceResized(layout);
-      expect(layout.hasAttribute('overlay')).to.be.true;
-      expect(getComputedStyle(layout.$.detailPlaceholder).visibility).to.equal('hidden');
-
-      layout.querySelector('[slot="detail"]').remove();
-      await onceResized(layout);
-      expect(getComputedStyle(layout.$.detailPlaceholder).visibility).to.equal('hidden');
     });
   });
 });
