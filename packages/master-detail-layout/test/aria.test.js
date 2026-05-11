@@ -60,4 +60,25 @@ describe('ARIA', () => {
     await onceResized(layout);
     expect(master.hasAttribute('inert')).to.be.false;
   });
+
+  describe('detail placeholder', () => {
+    let placeholder;
+
+    beforeEach(async () => {
+      layout.style.width = '800px';
+      placeholder = document.createElement('div');
+      placeholder.setAttribute('slot', 'detail-placeholder');
+      layout.appendChild(placeholder);
+      await onceResized(layout);
+    });
+
+    it('should toggle detail placeholder visibility based on detail presence', async () => {
+      expect(getComputedStyle(layout.$.detailPlaceholder).visibility).to.equal('hidden');
+
+      layout.querySelector('[slot="detail"]').remove();
+      await onceResized(layout);
+
+      expect(getComputedStyle(layout.$.detailPlaceholder).visibility).to.equal('visible');
+    });
+  });
 });
