@@ -47,18 +47,19 @@ Shadow DOM:
   </div>
   <slot></slot>
 </div>
-<!--
-  When the overflow opens, a `<vaadin-breadcrumbs-overlay>` is rendered as a
-  sibling of `[part="list"]` and the hidden-item links are rendered into the
-  breadcrumbs' light DOM with `slot="overlay"` (see "Overlay management"
-  below). Both are emitted only when `_overlayOpened` is true, so the static
-  shadow DOM contains only the structural list above.
--->
+<vaadin-breadcrumbs-overlay
+  .owner="${this}"
+  .opened="${this._overlayOpened}"
+  .positionTarget="${this._overflowButton}"
+  exportparts="overlay, content: overlay-content"
+>
+  <slot name="overlay"></slot>
+</vaadin-breadcrumbs-overlay>
 ```
 
 The `<div role="list">` is used instead of `<ol>` because (a) `<ol>` accepts only `<li>` children per HTML spec, and the slotted elements are `<vaadin-breadcrumbs-item>`, and (b) `<ol>`/`<ul>` with `list-style: none` has its list role stripped by Safari/VoiceOver, which would suppress "list with N items" announcements. An explicit `role="list"` is immune to both issues.
 
-`<vaadin-breadcrumbs-overlay>` is rendered into the breadcrumbs' shadow DOM only while the overlay is open (see "Overlay management"), matching the convention of `<vaadin-combo-box>`, `<vaadin-avatar-group>`, `<vaadin-menu-bar-submenu>`, and other Vaadin overlay-hosting components. The hidden-item links are written into the breadcrumbs' **light DOM** under `slot="overlay"` and then projected into the overlay's default slot via the named slot mechanism (the `<vaadin-login-form>` `__renderSlottedForm` pattern). This keeps global CSS reachable for the rendered links and avoids a separate `.renderer` callback contract.
+`<vaadin-breadcrumbs-overlay>` is rendered statically in the breadcrumbs' shadow DOM, matching the convention of `<vaadin-combo-box>`, `<vaadin-avatar-group>`, `<vaadin-menu-bar-submenu>`, and other Vaadin overlay-hosting components. The element is always present; `OverlayMixin` hides it via `display: none !important` while `opened` is false. The hidden-item links are written into the breadcrumbs' **light DOM** under `slot="overlay"` and then projected into the overlay's default slot via the named slot mechanism (the `<vaadin-login-form>` `__renderSlottedForm` pattern). This keeps global CSS reachable for the rendered links and avoids a separate `.renderer` callback contract.
 
 | Property | Type | Default | Reflected | Description |
 |---|---|---|---|---|
@@ -89,7 +90,7 @@ Internal behavior:
 
 - **Slot observation and root assignment.** The breadcrumb subclasses `SlotController` and overrides `initNode`/`initCustomNode` to watch the children. When children change, the controller sets `slot="root"` on the first `<vaadin-breadcrumbs-item>` child and removes `slot` from any previous holder. This routes the first item into the named `root` slot in shadow DOM, so the overflow element sits in the DOM between the root and the rest — matching visual order. The same controller pass also re-evaluates overflow detection and `current` state on the last item.
 - **Overflow detection.** On resize (via `ResizeMixin`) and on slot changes, the component measures whether all items fit within the container width. If not, it progressively hides items starting from the one closest to the root (the first default-slot item), setting a `data-overflow-hidden` attribute on each hidden item. If further space is needed, the root item collapses too. The last item (current page) never collapses. Hidden items are listed in the overflow overlay.
-- **Overlay management.** While `_overlayOpened` is `true`, the breadcrumbs' `render()` emits `<vaadin-breadcrumbs-overlay .opened .owner .positionTarget exportparts="overlay, content: overlay-content">` as a sibling of `[part="list"]`, with `.opened` bound to `_overlayOpened`, `.owner` bound to the host, and `.positionTarget` bound to the `[part="overflow-button"]` reference. The hidden-item links themselves are NOT rendered through an `OverlayMixin` `.renderer` callback. Instead, the breadcrumbs overrides `update()` and uses Lit's `render()` to write `<vaadin-breadcrumbs-item slot="overlay" path="...">…</vaadin-breadcrumbs-item>` elements into its own light DOM (the `<vaadin-login-form>` `__renderSlottedForm` pattern in `packages/login/src/vaadin-login-form-mixin.js`). The overlay element's default slot then projects them in. Clicking the overflow button toggles `_overlayOpened`; `OverlayMixin` still handles outside-click, Escape, focus handling, top-layer rendering via the popover API, and stacking. The breadcrumb does not touch positioning or event wiring beyond that.
+- **Overlay management.** The breadcrumbs' `render()` always emits `<vaadin-breadcrumbs-overlay .opened .owner .positionTarget exportparts="overlay, content: overlay-content">` as a sibling of `[part="list"]`, with `.opened` bound to `_overlayOpened`, `.owner` bound to the host, and `.positionTarget` bound to the `[part="overflow-button"]` reference. The overlay element stays in the shadow DOM at all times; `OverlayMixin` hides it via `display: none !important` while `_overlayOpened` is false. The hidden-item links themselves are NOT rendered through an `OverlayMixin` `.renderer` callback. Instead, the breadcrumbs overrides `update()` and uses Lit's `render()` to write `<vaadin-breadcrumbs-item slot="overlay" path="...">…</vaadin-breadcrumbs-item>` elements into its own light DOM (the `<vaadin-login-form>` `__renderSlottedForm` pattern in `packages/login/src/vaadin-login-form-mixin.js`). The overlay element's default slot then projects them in. Clicking the overflow button toggles `_overlayOpened`; `OverlayMixin` still handles outside-click, Escape, focus handling, top-layer rendering via the popover API, and stacking. The breadcrumb does not touch positioning or event wiring beyond that.
 - **Overflow separator.** The overflow element sits in the list flow between the root and the rest, so it needs a separator after it when visible. The container's base styles render a `[part="overflow"]::after` pseudo-element using the same `mask-image` + `currentColor` pattern as `<vaadin-breadcrumbs-item>`, reading the same `--vaadin-breadcrumbs-separator` custom property, and applying the same RTL flip (`transform: scaleX(-1)`). When `has-overflow` is not set, the overflow element is hidden, so the separator is not visible either.
 
 ---
@@ -275,4 +276,4 @@ Two shadow slots with the overflow in shadow DOM between them: `<slot name="root
 
 **Q: Should the overflow panel use `OverlayMixin` or be a plain `<div>` positioned with `position: fixed`?**
 
-`OverlayMixin`, via a dedicated `<vaadin-breadcrumbs-overlay>` element. A hand-rolled fixed-positioned `<div>` in shadow DOM was considered but rejected — it would miss focus trapping, stacking-context handling, top-layer rendering via the popover API, and outside-click/Escape handling, all of which `OverlayMixin` provides for free and which other Vaadin overlays (menu-bar, combo-box, dialog, context-menu) already rely on. `<vaadin-breadcrumbs-overlay>` is rendered directly in the breadcrumbs' shadow DOM with its properties (`owner`, `opened`, `renderer`, `positionTarget`, `exportparts`) bound to the breadcrumbs' state — matching the pattern in `<vaadin-combo-box>`, `<vaadin-avatar-group>`, `<vaadin-menu-bar-submenu>`, and other overlay hosts.
+`OverlayMixin`, via a dedicated `<vaadin-breadcrumbs-overlay>` element. A hand-rolled fixed-positioned `<div>` in shadow DOM was considered but rejected — it would miss focus trapping, stacking-context handling, top-layer rendering via the popover API, and outside-click/Escape handling, all of which `OverlayMixin` provides for free and which other Vaadin overlays (menu-bar, combo-box, dialog, context-menu) already rely on. `<vaadin-breadcrumbs-overlay>` is rendered directly in the breadcrumbs' shadow DOM with its properties (`owner`, `opened`, `positionTarget`, `exportparts`) bound to the breadcrumbs' state — matching the pattern in `<vaadin-combo-box>`, `<vaadin-avatar-group>`, `<vaadin-menu-bar-submenu>`, and other overlay hosts. The `renderer` property is intentionally omitted; hidden-item links are written into the breadcrumbs' light DOM under `slot="overlay"` and projected into the overlay's default slot (see "Overlay management" above).
