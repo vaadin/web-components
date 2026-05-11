@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import '../vaadin-breadcrumbs.js';
 import '../vaadin-breadcrumbs-item.js';
 
 window.Vaadin ??= {};
@@ -104,6 +105,53 @@ describe('vaadin-breadcrumbs-item', () => {
 
         expect(item.hasAttribute('has-prefix')).to.be.true;
       });
+    });
+  });
+
+  describe('RTL separator flip', () => {
+    let breadcrumbs, items;
+
+    beforeEach(async () => {
+      breadcrumbs = fixtureSync(`
+        <vaadin-breadcrumbs>
+          <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item>Current</vaadin-breadcrumbs-item>
+        </vaadin-breadcrumbs>
+      `);
+      await nextRender();
+      items = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item')];
+    });
+
+    describe('in RTL document', () => {
+      before(() => {
+        document.documentElement.setAttribute('dir', 'rtl');
+      });
+
+      after(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      it('should horizontally mirror ::after on items with a visible separator', () => {
+        expect(getComputedStyle(items[0], '::after').transform).to.equal('matrix(-1, 0, 0, 1, 0, 0)');
+      });
+    });
+
+    describe('in LTR document', () => {
+      it('should not mirror ::after on items with a visible separator', () => {
+        expect(getComputedStyle(items[0], '::after').transform).to.equal('none');
+      });
+    });
+
+    it('should not declare physical left/right margins or paddings in the component styles', () => {
+      const collect = (host) =>
+        [...host.shadowRoot.adoptedStyleSheets]
+          .flatMap((sheet) => [...sheet.cssRules])
+          .map((rule) => rule.cssText)
+          .join('\n');
+      const css = `${collect(breadcrumbs)}\n${collect(items[0])}`;
+      expect(css).to.not.match(/\bmargin-(left|right)\s*:/u);
+      expect(css).to.not.match(/\bpadding-(left|right)\s*:/u);
     });
   });
 });

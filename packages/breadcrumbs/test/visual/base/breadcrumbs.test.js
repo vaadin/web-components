@@ -43,4 +43,32 @@ describe('breadcrumbs', () => {
       await visualDiff(div, 'basic');
     });
   });
+
+  describe('RTL', () => {
+    before(() => {
+      document.documentElement.setAttribute('dir', 'rtl');
+    });
+
+    after(() => {
+      document.documentElement.removeAttribute('dir');
+    });
+
+    beforeEach(async () => {
+      fixtureSync(
+        `
+          <vaadin-breadcrumbs>
+            <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+            <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
+            <vaadin-breadcrumbs-item>Current</vaadin-breadcrumbs-item>
+          </vaadin-breadcrumbs>
+        `,
+        div,
+      );
+      await nextRender();
+    });
+
+    it('rtl-basic', async () => {
+      await visualDiff(div, 'rtl-basic');
+    });
+  });
 });
