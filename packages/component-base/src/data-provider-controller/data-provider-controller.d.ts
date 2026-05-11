@@ -3,7 +3,6 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { ReactiveController } from 'lit';
 import type { Cache } from './cache.js';
 import type { getFlatIndexByPath, getFlatIndexContext, getItemContext } from './helpers.js';
 
@@ -23,10 +22,7 @@ export type DataProvider<TItem, TDataProviderParams extends Record<string, unkno
 /**
  * A controller that stores and manages items loaded with a data provider.
  */
-export class DataProviderController<
-  TItem,
-  TDataProviderParams extends Record<string, unknown>,
-> implements ReactiveController {
+export class DataProviderController<TItem, TDataProviderParams extends Record<string, unknown>> extends EventTarget {
   /**
    * The controller host element.
    */
@@ -93,10 +89,6 @@ export class DataProviderController<
    * The total number of items, including items from expanded sub-caches.
    */
   get flatSize(): number;
-
-  hostConnected(): void;
-
-  hostDisconnected(): void;
 
   /**
    * Whether the root cache or any of its decendant caches have pending requests.
