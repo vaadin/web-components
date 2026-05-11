@@ -30,6 +30,25 @@ describe('vaadin-breadcrumbs-item', () => {
     });
   });
 
+  describe('role', () => {
+    describe('default', () => {
+      it('should set role attribute to listitem by default', () => {
+        expect(item.getAttribute('role')).to.equal('listitem');
+      });
+    });
+
+    describe('custom', () => {
+      beforeEach(async () => {
+        item = fixtureSync('<vaadin-breadcrumbs-item role="presentation"></vaadin-breadcrumbs-item>');
+        await nextRender();
+      });
+
+      it('should not override custom role', () => {
+        expect(item.getAttribute('role')).to.equal('presentation');
+      });
+    });
+  });
+
   describe('has-prefix attribute', () => {
     describe('without prefix', () => {
       it('should set has-prefix when a prefix child is added dynamically', async () => {

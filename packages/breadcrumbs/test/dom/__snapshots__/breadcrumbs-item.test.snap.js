@@ -2,13 +2,16 @@
 export const snapshots = {};
 
 snapshots["vaadin-breadcrumbs-item host default"] = 
-`<vaadin-breadcrumbs-item>
+`<vaadin-breadcrumbs-item role="listitem">
 </vaadin-breadcrumbs-item>
 `;
 /* end snapshot vaadin-breadcrumbs-item host default */
 
 snapshots["vaadin-breadcrumbs-item host prefix"] = 
-`<vaadin-breadcrumbs-item has-prefix="">
+`<vaadin-breadcrumbs-item
+  has-prefix=""
+  role="listitem"
+>
   <span slot="prefix">
     icon
   </span>
@@ -17,7 +20,10 @@ snapshots["vaadin-breadcrumbs-item host prefix"] =
 /* end snapshot vaadin-breadcrumbs-item host prefix */
 
 snapshots["vaadin-breadcrumbs-item host prefix path"] = 
-`<vaadin-breadcrumbs-item has-prefix="">
+`<vaadin-breadcrumbs-item
+  has-prefix=""
+  role="listitem"
+>
   <span slot="prefix">
     icon
   </span>

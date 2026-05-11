@@ -111,6 +111,14 @@ class BreadcrumbsItem extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitEl
   }
 
   /** @protected */
+  firstUpdated() {
+    super.firstUpdated();
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'listitem');
+    }
+  }
+
+  /** @protected */
   render() {
     return html`
       ${this.path == null
