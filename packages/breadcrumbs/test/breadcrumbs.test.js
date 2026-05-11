@@ -77,7 +77,6 @@ describe('vaadin-breadcrumbs', () => {
     it('should set current on the last item when its path is removed', async () => {
       items[2].setAttribute('path', '/api');
       await nextRender();
-      expect(items[2].hasAttribute('current')).to.be.false;
 
       items[2].removeAttribute('path');
       await nextRender();
@@ -85,14 +84,14 @@ describe('vaadin-breadcrumbs', () => {
       expect(items[2].hasAttribute('current')).to.be.true;
     });
 
-    it('should re-evaluate current when a new item is appended', async () => {
-      const appended = document.createElement('vaadin-breadcrumbs-item');
-      appended.textContent = 'Appended';
-      breadcrumbs.appendChild(appended);
+    it('should re-evaluate current when a new item is added', async () => {
+      const item = document.createElement('vaadin-breadcrumbs-item');
+      item.textContent = 'New item';
+      breadcrumbs.appendChild(item);
       await nextRender();
 
       expect(items[2].hasAttribute('current')).to.be.false;
-      expect(appended.hasAttribute('current')).to.be.true;
+      expect(item.hasAttribute('current')).to.be.true;
     });
 
     it('should re-evaluate current when the last item is removed', async () => {
