@@ -31,8 +31,8 @@ describe('breadcrumbs', () => {
       await nextRender();
     });
 
-    it('default trail', async () => {
-      await visualDiff(div, 'default-trail');
+    it('basic', async () => {
+      await visualDiff(div, 'basic');
     });
   });
 });
