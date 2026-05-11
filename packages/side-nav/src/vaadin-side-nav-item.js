@@ -72,7 +72,6 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * `has-children` | Set when the element has child items.
  * `has-tooltip`  | Set when the element has a slotted tooltip.
  *
- *
  * The following custom CSS properties are available for styling:
  *
  * Custom CSS property                       |
