@@ -61,7 +61,7 @@ describe('ARIA', () => {
     expect(master.hasAttribute('inert')).to.be.false;
   });
 
-  describe('detail placeholder visibility', () => {
+  describe('detail placeholder', () => {
     let placeholder;
 
     beforeEach(async () => {
