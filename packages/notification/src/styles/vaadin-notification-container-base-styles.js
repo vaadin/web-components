@@ -104,7 +104,7 @@ export const notificationContainerStyles = css`
 
   [region-group] > [region$='center'] {
     left: 50%;
-    translate: -50%;
+    translate: round(-50%, 1px);
   }
 
   [region-group] > [region$='end'] {
