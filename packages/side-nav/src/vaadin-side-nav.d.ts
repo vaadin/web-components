@@ -83,6 +83,7 @@ export type NavigateEvent = {
  * Custom CSS property                       |
  * :-----------------------------------------|
  * | `--vaadin-side-nav-child-indent`        |
+ * | `--vaadin-side-nav-items-gap`           |
  * | `--vaadin-side-nav-label-color`         |
  * | `--vaadin-side-nav-label-font-size`     |
  * | `--vaadin-side-nav-label-font-weight`   |
