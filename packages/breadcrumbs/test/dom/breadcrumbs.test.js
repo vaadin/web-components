@@ -9,20 +9,66 @@ window.Vaadin.featureFlags.breadcrumbsComponent = true;
 describe('vaadin-breadcrumbs', () => {
   let breadcrumbs;
 
-  beforeEach(async () => {
-    breadcrumbs = fixtureSync('<vaadin-breadcrumbs></vaadin-breadcrumbs>');
-    await nextRender();
-  });
+  describe('empty', () => {
+    beforeEach(async () => {
+      breadcrumbs = fixtureSync('<vaadin-breadcrumbs></vaadin-breadcrumbs>');
+      await nextRender();
+    });
 
-  describe('host', () => {
-    it('default', async () => {
-      await expect(breadcrumbs).dom.to.equalSnapshot();
+    describe('host', () => {
+      it('default', async () => {
+        await expect(breadcrumbs).dom.to.equalSnapshot();
+      });
+    });
+
+    describe('shadow', () => {
+      it('default', async () => {
+        await expect(breadcrumbs).shadowDom.to.equalSnapshot();
+      });
     });
   });
 
-  describe('shadow', () => {
-    it('default', async () => {
-      await expect(breadcrumbs).shadowDom.to.equalSnapshot();
+  describe('trail', () => {
+    beforeEach(async () => {
+      breadcrumbs = fixtureSync(`
+        <vaadin-breadcrumbs>
+          <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item>Current</vaadin-breadcrumbs-item>
+        </vaadin-breadcrumbs>
+      `);
+      await nextRender();
+    });
+
+    describe('host', () => {
+      it('trail', async () => {
+        await expect(breadcrumbs).dom.to.equalSnapshot();
+      });
+    });
+
+    describe('shadow', () => {
+      it('trail', async () => {
+        await expect(breadcrumbs).shadowDom.to.equalSnapshot();
+      });
+    });
+  });
+
+  describe('trail all-linked', () => {
+    beforeEach(async () => {
+      breadcrumbs = fixtureSync(`
+        <vaadin-breadcrumbs>
+          <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item path="/docs/api">API</vaadin-breadcrumbs-item>
+        </vaadin-breadcrumbs>
+      `);
+      await nextRender();
+    });
+
+    describe('host', () => {
+      it('trail all-linked', async () => {
+        await expect(breadcrumbs).dom.to.equalSnapshot();
+      });
     });
   });
 });

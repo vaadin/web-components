@@ -34,7 +34,70 @@ class Breadcrumbs extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitElemen
 
   /** @protected */
   render() {
-    return html``;
+    return html`<div role="list" part="list"><slot></slot></div>`;
+  }
+
+  /** @protected */
+  firstUpdated() {
+    super.firstUpdated();
+
+    // By default, if the user hasn't provided a custom role,
+    // the role attribute is set to "navigation".
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'navigation');
+    }
+
+    // Evaluate initial children once.
+    this.__updateCurrent();
+
+    // Observe child list and `path` attribute changes to keep `current` in sync.
+    this.__childObserver = new MutationObserver(() => {
+      this.__updateCurrent();
+    });
+    this.__childObserver.observe(this, {
+      childList: true,
+      subtree: true,
+      attributeFilter: ['path'],
+    });
+  }
+
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.__childObserver) {
+      this.__childObserver.disconnect();
+    }
+  }
+
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+    if (this.__childObserver) {
+      this.__childObserver.observe(this, {
+        childList: true,
+        subtree: true,
+        attributeFilter: ['path'],
+      });
+      this.__updateCurrent();
+    }
+  }
+
+  /**
+   * Re-evaluates which `<vaadin-breadcrumbs-item>` child should carry the
+   * `current` state attribute. The current item is the last child iff its
+   * `path` is `null` or `undefined`.
+   *
+   * @private
+   */
+  __updateCurrent() {
+    const items = [...this.children].filter((child) => child.localName === 'vaadin-breadcrumbs-item');
+    const lastIndex = items.length - 1;
+    items.forEach((item, index) => {
+      const isCurrent = index === lastIndex && item.path == null;
+      if (typeof item._setCurrent === 'function') {
+        item._setCurrent(isCurrent);
+      }
+    });
   }
 }
 
