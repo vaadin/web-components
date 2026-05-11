@@ -102,19 +102,7 @@ The attribute keeps this inflation active when detail first appears with overlay
 | `detail-placeholder` | `has-detail-placeholder` | Shown when no detail and not in overlay                      |
 | `detail-outgoing`    | (internal)               | Used during replace transitions, hosted on `#detailOutgoing` |
 
-Detail placeholder uses `visibility` (not `display`) so it always participates in grid sizing but is fully removed from interaction when hidden:
-
-```css
-#detailPlaceholder {
-  visibility: hidden;
-}
-
-:host([has-detail-placeholder]:not([has-detail], [overlay])) #detailPlaceholder {
-  visibility: visible;
-}
-```
-
-`visibility: hidden` covers all three concerns at once: hidden from the accessibility tree, removed from tab order, and ignores pointer events. The placeholder is included in overflow detection — without it, a layout with only a placeholder would never check for overflow and `keep-detail-column-offscreen` wouldn't apply.
+Detail placeholder uses `visibility` (not `display`) so it always participates in grid sizing but is fully removed from interaction: hidden from the accessibility tree, removed from tab order, and ignores pointer events. The placeholder is included in overflow detection — without it, a layout with only a placeholder would never check for overflow and `keep-detail-column-offscreen` wouldn't apply.
 
 `#detailOutgoing` is a shadow DOM wrapper with `<slot name="detail-outgoing">`. During replace, the outgoing detail element's slot is reassigned from `detail` to `detail-outgoing` (light DOM reassignment preserves user styles). Its width is frozen to the cached detail size so it retains the previous dimensions even when the new detail has a different intrinsic size. It's removed on completion.
 
