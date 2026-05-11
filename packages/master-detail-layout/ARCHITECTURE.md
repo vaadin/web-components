@@ -134,9 +134,11 @@ CSS drives the resting states: `#detail` is translated off-screen and transparen
 
 ### Transition types
 
-- **Add**: update DOM first, then fade + slide detail in from off-screen
-- **Remove**: fade + slide detail out first, then update DOM
+- **Add**: update DOM first, then animate detail in from off-screen
+- **Remove**: animate detail out first, then update DOM
 - **Replace**: move old content to `slot="detail-outgoing"`, update DOM, then animate new in + old out simultaneously. Split-mode replace runs at 0ms (instant swap).
+
+Split mode animates detail with `slide` + `fade`. Overlay mode animates detail with `slide` only and runs the backdrop's `fade` in parallel — fading the detail would let the backdrop bleed through the panel.
 
 The `noAnimation` property (reflected as `no-animation` attribute) skips all animations.
 

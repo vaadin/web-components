@@ -612,10 +612,15 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     await updateSlot();
 
     const progress = getCurrentAnimationProgress(this.$.detail);
-    await Promise.all([
-      animateIn(this.$.detail, ['fade', 'slide'], progress),
-      animateIn(this.$.backdrop, ['fade'], this.hasAttribute('overlay') ? progress : 1),
-    ]);
+
+    if (this.hasAttribute('overlay')) {
+      await Promise.all([
+        animateIn(this.$.detail, ['slide'], progress),
+        animateIn(this.$.backdrop, ['fade'], progress),
+      ]);
+    } else {
+      await animateIn(this.$.detail, ['slide', 'fade'], progress);
+    }
   }
 
   /** @private */
@@ -630,10 +635,12 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
       await updateSlot();
 
+      const isOverlay = this.hasAttribute('overlay');
       const progress = getCurrentAnimationProgress(this.$.detail);
+
       await Promise.all([
-        animateIn(this.$.detail, ['fade', 'slide'], progress),
-        animateOut(this.$.detailOutgoing, ['fade', 'slide'], progress),
+        animateIn(this.$.detail, isOverlay ? ['slide'] : ['slide', 'fade'], progress),
+        animateOut(this.$.detailOutgoing, isOverlay ? ['slide'] : ['slide', 'fade'], progress),
       ]);
     } finally {
       // Skip removal if the slot was reassigned during the transition.
@@ -647,10 +654,15 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @private */
   async __removeTransition(updateSlot) {
     const progress = getCurrentAnimationProgress(this.$.detail);
-    await Promise.all([
-      animateOut(this.$.detail, ['fade', 'slide'], progress),
-      animateOut(this.$.backdrop, ['fade'], this.hasAttribute('overlay') ? progress : 1),
-    ]);
+
+    if (this.hasAttribute('overlay')) {
+      await Promise.all([
+        animateOut(this.$.detail, ['slide'], progress),
+        animateOut(this.$.backdrop, ['fade'], progress),
+      ]);
+    } else {
+      await animateOut(this.$.detail, ['slide', 'fade'], progress);
+    }
 
     await updateSlot();
   }
