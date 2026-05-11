@@ -613,7 +613,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
     const progress = getCurrentAnimationProgress(this.$.detail);
     await Promise.all([
-      animateIn(this.$.detail, ['fade', 'slide'], progress),
+      animateIn(this.$.detail, this.hasAttribute('overlay') ? ['slide'] : ['fade', 'slide'], progress),
       animateIn(this.$.backdrop, ['fade'], this.hasAttribute('overlay') ? progress : 1),
     ]);
   }
@@ -632,8 +632,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
       const progress = getCurrentAnimationProgress(this.$.detail);
       await Promise.all([
-        animateIn(this.$.detail, ['fade', 'slide'], progress),
-        animateOut(this.$.detailOutgoing, ['fade', 'slide'], progress),
+        animateIn(this.$.detail, this.hasAttribute('overlay') ? ['slide'] : ['fade', 'slide'], progress),
+        animateOut(this.$.detailOutgoing, this.hasAttribute('overlay') ? ['slide'] : ['fade', 'slide'], progress),
       ]);
     } finally {
       // Skip removal if the slot was reassigned during the transition.
@@ -648,7 +648,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   async __removeTransition(updateSlot) {
     const progress = getCurrentAnimationProgress(this.$.detail);
     await Promise.all([
-      animateOut(this.$.detail, ['fade', 'slide'], progress),
+      animateOut(this.$.detail, this.hasAttribute('overlay') ? ['slide'] : ['fade', 'slide'], progress),
       animateOut(this.$.backdrop, ['fade'], this.hasAttribute('overlay') ? progress : 1),
     ]);
 
