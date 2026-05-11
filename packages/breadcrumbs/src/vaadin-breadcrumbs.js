@@ -25,16 +25,14 @@ class ItemsSlotController extends SlotController {
 
     // Observes `path` attribute mutations on every slotted item.
     this.__pathObserver = new MutationObserver(() => {
-      host.__updateCurrent();
+      this.__updateCurrent();
     });
   }
 
   /** @protected */
   initAddedNode(node) {
-    if (node.localName === 'vaadin-breadcrumbs-item') {
-      this.__pathObserver.observe(node, { attributeFilter: ['path'] });
-    }
-    this.host.__updateCurrent();
+    this.__observeItem(node);
+    this.__updateCurrent();
   }
 
   /** @protected */
@@ -42,12 +40,24 @@ class ItemsSlotController extends SlotController {
     // MutationObserver has no per-target disconnect; re-observe all remaining
     // items so the removed one is dropped from the observation set.
     this.__pathObserver.disconnect();
-    this.nodes.forEach((item) => {
-      if (item.localName === 'vaadin-breadcrumbs-item') {
-        this.__pathObserver.observe(item, { attributeFilter: ['path'] });
-      }
+    this.nodes.forEach((item) => this.__observeItem(item));
+    this.__updateCurrent();
+  }
+
+  /** @private */
+  __observeItem(node) {
+    if (node.localName === 'vaadin-breadcrumbs-item') {
+      this.__pathObserver.observe(node, { attributeFilter: ['path'] });
+    }
+  }
+
+  /** @private */
+  __updateCurrent() {
+    const lastIndex = this.nodes.length - 1;
+    this.nodes.forEach((item, index) => {
+      const isCurrent = index === lastIndex && item.path == null;
+      item._setCurrent?.(isCurrent);
     });
-    this.host.__updateCurrent();
   }
 }
 
@@ -78,14 +88,6 @@ class Breadcrumbs extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitElemen
   }
 
   /** @protected */
-  ready() {
-    super.ready();
-
-    this._itemsController = new ItemsSlotController(this);
-    this.addController(this._itemsController);
-  }
-
-  /** @protected */
   firstUpdated() {
     super.firstUpdated();
 
@@ -93,23 +95,8 @@ class Breadcrumbs extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitElemen
       this.setAttribute('role', 'navigation');
     }
 
-    this.__updateCurrent();
-  }
-
-  /**
-   * Re-evaluates which `<vaadin-breadcrumbs-item>` child should carry the
-   * `current` state attribute. The current item is the last child iff its
-   * `path` is `null` or `undefined`.
-   *
-   * @private
-   */
-  __updateCurrent() {
-    const items = [...this.children].filter((child) => child.localName === 'vaadin-breadcrumbs-item');
-    const lastIndex = items.length - 1;
-    items.forEach((item, index) => {
-      const isCurrent = index === lastIndex && item.path == null;
-      item._setCurrent?.(isCurrent);
-    });
+    this.__itemsController = new ItemsSlotController(this);
+    this.addController(this.__itemsController);
   }
 }
 
