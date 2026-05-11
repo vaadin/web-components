@@ -16,20 +16,20 @@ export const monthCalendarStyles = css`
     color: var(--vaadin-date-picker-month-header-color, var(--vaadin-text-color));
     font-size: var(--vaadin-date-picker-month-header-font-size, 0.9375rem);
     font-weight: var(--vaadin-date-picker-month-header-font-weight, 500);
-    line-height: inherit;
+    line-height: 1;
     margin-bottom: 0.75rem;
     text-align: center;
   }
 
   table {
-    border-collapse: collapse;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
   }
 
+  thead,
+  tbody,
   tr {
-    display: flex;
-    flex-wrap: wrap;
+    display: contents;
   }
 
   [part~='weekday'] {
@@ -37,7 +37,6 @@ export const monthCalendarStyles = css`
     font-size: var(--vaadin-date-picker-weekday-font-size, 0.75rem);
     font-weight: var(--vaadin-date-picker-weekday-font-weight, 500);
     margin-bottom: 0.375rem;
-    width: var(--vaadin-date-picker-date-width, 2rem);
   }
 
   /* Week numbers are on a separate row, don't reserve space on weekday row. */
@@ -46,10 +45,10 @@ export const monthCalendarStyles = css`
   }
 
   [part~='week-number'] {
+    grid-column: -1 / 1;
     color: var(--vaadin-date-picker-week-number-color, var(--vaadin-text-color-secondary));
     font-size: var(--vaadin-date-picker-week-number-font-size, 0.7rem);
     line-height: 1;
-    width: 100%;
     margin-top: 0.125em;
     margin-bottom: 0.125em;
     gap: 0.25em;
@@ -77,7 +76,6 @@ export const monthCalendarStyles = css`
   [part~='date'] {
     border-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
     position: relative;
-    width: var(--vaadin-date-picker-date-width, 2rem);
     height: var(--vaadin-date-picker-date-height, 2rem);
     cursor: var(--vaadin-clickable-cursor);
     outline: none;
@@ -88,7 +86,7 @@ export const monthCalendarStyles = css`
     content: '';
     position: absolute;
     z-index: -1;
-    height: inherit;
+    height: min(2em, 100%);
     aspect-ratio: 1;
   }
 
