@@ -237,6 +237,7 @@ export const TooltipMixin = (superClass) =>
          */
         context: {
           type: Object,
+          sync: true,
           value: () => {
             return {};
           },
@@ -702,6 +703,8 @@ export const TooltipMixin = (superClass) =>
     async __updateContent() {
       const content = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
 
+      const oldTextContent = this.__contentNode.textContent;
+
       if (this.markdown && content) {
         const helpers = await this.constructor.__importMarkdownHelpers();
         helpers.renderMarkdownToElement(this.__contentNode, content);
@@ -710,7 +713,11 @@ export const TooltipMixin = (superClass) =>
       }
 
       this.$.overlay.toggleAttribute('hidden', this.__contentNode.textContent.trim() === '');
-      this.dispatchEvent(new CustomEvent('content-changed', { detail: { content: this.__contentNode.textContent } }));
+
+      const newTextContent = this.__contentNode.textContent;
+      if (newTextContent !== oldTextContent) {
+        this.dispatchEvent(new CustomEvent('content-changed', { detail: { content: newTextContent } }));
+      }
     }
 
     /** @private */

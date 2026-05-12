@@ -84,9 +84,9 @@ describe('a11y', () => {
         beforeEach(async () => {
           if (prop === 'ariaTarget') {
             target = fixtureSync('<div><input></div>');
-            popover.target = target;
             element = target.firstElementChild;
             target.ariaTarget = element;
+            popover.target = target;
             await nextUpdate(popover);
           } else {
             element = target;
