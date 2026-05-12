@@ -1,0 +1,22 @@
+/**
+ * @license
+ * Copyright (c) 2026 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_breadcrumbs {
+  :host {
+    display: block;
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-m);
+    line-height: var(--lumo-line-height-m);
+    color: var(--lumo-body-text-color);
+  }
+
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  [part='list'] {
+    gap: var(--lumo-space-s);
+  }
+}
