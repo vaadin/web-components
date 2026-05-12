@@ -74,15 +74,11 @@ Code state at this point matches the c4102f0515 amendment: `<vaadin-breadcrumbs>
 
 ## Task 6 — RTL directional flip
 
-- **Commit:** ea02237111
+- **Commit:** c852ec6aaa (PR #11736)
 - **Date:** 2026-05-11
 - **Decisions:**
-  - One CSS rule on `<vaadin-breadcrumbs-item>`: `:host([dir='rtl'])::after { transform: scaleX(-1); }`. `ElementMixin` chains `DirMixin`, which mirrors `<html dir="rtl">` onto the host without component-side code. Test asserts the exact computed `matrix(-1, 0, 0, 1, 0, 0)`.
+  - One CSS rule on `<vaadin-breadcrumbs-item>`: `:host([dir='rtl'])::after { transform: scaleX(-1); }`. `ElementMixin` chains `DirMixin`, which mirrors `<html dir="rtl">` onto the host without component-side code.
   - Followed spec wording (`scaleX(-1)`) over the codebase idiom (`scale: -1` used by `<vaadin-details-summary>` / `<vaadin-side-nav>`). Both compute to the same matrix; keeping the spec's explicit form because the spec is the contract under review.
-  - The logical-property invariant test inspects each shadow root's `adoptedStyleSheets` cssText and asserts no `/\bmargin-(left|right)\s*:/u` or `/\bpadding-(left|right)\s*:/u` substring appears anywhere in the breadcrumbs or item styles. First-pass test only asserted `marginLeft/Right === '0px'` on computed styles — review flagged that as vacuous (passes even if a physical override is explicitly `0`), so it was strengthened to inspect the source CSS directly.
-  - Fixture duplication across the three nested describes in the new `RTL separator flip` block was hoisted into a single outer `beforeEach`; the `before`/`after` `dir` toggles stay scoped to the RTL sub-describe.
-  - Visual test `rtl-basic` added under `test/visual/base/`; reference screenshot captured via `yarn update:base --group breadcrumbs` and committed. Playwright sanity-check at 1280×720 and 480×720 (RTL + forced-colors) all rendered correctly — chevrons mirrored, no baseline misalignment, no clipping.
-- **Surprises:**
-  - The previous "logical-property invariant" test (`marginLeft/Right === '0px'`) was a vacuous assertion: it passes regardless of whether the source uses logical or physical properties, so long as the *computed* result is `0px`. Replaced with a direct regex scan of the cssText, which actually fails if anyone introduces a physical override.
-  - ESLint required the unicode `u` flag (`require-unicode-regexp`) on the new regex literals. Inert for the ASCII pattern but kept to satisfy the rule.
+  - Verification lives in the visual layer only: `rtl-basic` snapshot under `test/visual/base/`, reference captured via `yarn update:base --group breadcrumbs`. An earlier draft added unit tests (computed-`transform` assertion, cssText regex scan for physical margins/paddings) — dropped after PR review (web-padawan) flagged them as the wrong way to test CSS and unnecessary on top of the visual snapshot. Playwright sanity-check at 1280×720 and 480×720 (RTL + forced-colors) confirmed chevrons mirrored without baseline misalignment or clipping.
+- **Surprises:** —
 - **Spec adjustments:** —
