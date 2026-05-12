@@ -84,7 +84,6 @@ Flesh out `vaadin-toggle-switch-base-styles.js` per the spec: import `field` and
 - Visual test: focus-ring state renders the outline ring.
 - Visual test: invalid state matches its baseline.
 - Visual test: under `dir="rtl"`, the checked-state thumb translates to the start of the track (mirrored).
-- Computed style: each of the CSS custom properties listed in the Implementation table produces the expected change when overridden inline on the host (covered by parameterised computed-style assertions, not one test per property).
 
 ---
 
