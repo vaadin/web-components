@@ -71,3 +71,14 @@ Code state at this point matches the c4102f0515 amendment: `<vaadin-breadcrumbs>
   - `display: inline-flex` on the host blockifies `::after`'s computed display to `block` (was `inline-block` under `display: inline`). The separator-visibility test loosened from `display === 'inline-block'` to `display !== 'none'` to match the new layout choice; the companion "should hide" tests still strictly assert `'none'`.
   - Initial implementation used a host-side `MutationObserver({ childList: true, subtree: true, attributeFilter: ['path'] })` covering everything. Review feedback (web-padawan) split this into a `SlotController` for slot membership and a per-controller `MutationObserver` with `attributeFilter: ['path']` only — `subtree` and `childList` are no longer needed because `SlotController` handles add/remove via its `SlotObserver`.
 - **Spec adjustments:** —
+
+## Task 6 — RTL directional flip
+
+- **Commit:** c852ec6aaa (PR #11736)
+- **Date:** 2026-05-11
+- **Decisions:**
+  - One CSS rule on `<vaadin-breadcrumbs-item>`: `:host([dir='rtl'])::after { transform: scaleX(-1); }`. `ElementMixin` chains `DirMixin`, which mirrors `<html dir="rtl">` onto the host without component-side code.
+  - Followed spec wording (`scaleX(-1)`) over the codebase idiom (`scale: -1` used by `<vaadin-details-summary>` / `<vaadin-side-nav>`). Both compute to the same matrix; keeping the spec's explicit form because the spec is the contract under review.
+  - Verification lives in the visual layer only: `rtl-basic` snapshot under `test/visual/base/`, reference captured via `yarn update:base --group breadcrumbs`. An earlier draft added unit tests (computed-`transform` assertion, cssText regex scan for physical margins/paddings) — dropped after PR review (web-padawan) flagged them as the wrong way to test CSS and unnecessary on top of the visual snapshot. Playwright sanity-check at 1280×720 and 480×720 (RTL + forced-colors) confirmed chevrons mirrored without baseline misalignment or clipping.
+- **Surprises:** —
+- **Spec adjustments:** —

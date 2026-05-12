@@ -30,6 +30,10 @@ export const breadcrumbsItemStyles = css`
     display: none;
   }
 
+  :host([dir='rtl'])::after {
+    transform: scaleX(-1);
+  }
+
   @media (forced-colors: active) {
     :host::after {
       background: CanvasText;
