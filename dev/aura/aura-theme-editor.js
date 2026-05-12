@@ -1,4 +1,5 @@
 import './aura-color-preset-control.js';
+import './aura-export-dialog.js';
 import './aura-font-family-control.js';
 import './aura-number-control.js';
 import './aura-preset-thumbnail.js';
@@ -6,8 +7,6 @@ import './aura-segmented-control.js';
 import './aura-theme-scheme-control.js';
 import '@vaadin/accordion';
 import '@vaadin/details';
-import '@vaadin/dialog';
-import '@vaadin/text-area';
 import { html, nothing, render } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { toHex } from './aura-color-utils.js';
@@ -357,132 +356,22 @@ function buildExportCssCode(editorRoot, presetRules = '') {
   return blocks.join('\n\n');
 }
 
-async function copyText(value) {
-  if (navigator.clipboard?.writeText) {
-    await navigator.clipboard.writeText(value);
-    return true;
-  }
-
-  const textarea = document.createElement('textarea');
-  textarea.value = value;
-  textarea.setAttribute('readonly', '');
-  textarea.style.position = 'fixed';
-  textarea.style.top = '-1000px';
-  document.body.append(textarea);
-  textarea.select();
-
-  const copied = document.execCommand('copy');
-  textarea.remove();
-  return copied;
-}
-
 useNavbar(localStorage.getItem('aura-navbar') !== null);
 
 customElements.define(
   'aura-theme-editor',
   class extends HTMLElement {
     _exportDialog;
-    _exportTextArea;
-    _copyButton;
-    _exportValue = '';
     _activePresetRules = '';
     _applyingPreset = false;
 
-    #ensureExportDialog() {
-      if (this._exportDialog) {
-        return this._exportDialog;
-      }
-
-      const dialog = document.createElement('vaadin-dialog');
-      dialog.setAttribute('aria-label', 'Export theme CSS');
-
-      dialog.renderer = (root) => {
-        if (root.firstChild) {
-          return;
-        }
-
-        const textArea = document.createElement('vaadin-text-area');
-        textArea.ariaLabel = 'Copy these styles to your app';
-        textArea.readonly = true;
-        textArea.style.maxWidth = '100%';
-        textArea.style.width = 'min(42rem, 86vw)';
-        textArea.style.maxHeight = '100%';
-        textArea.style.fontFamily = 'monospace';
-        textArea.style.fontSize = '0.8em';
-        textArea.style.lineHeight = '1.3';
-        textArea.value = this._exportValue;
-
-        root.append(textArea);
-
-        this._exportTextArea = textArea;
-      };
-
-      dialog.headerTitle = 'Export Theme CSS';
-
-      dialog.headerRenderer = (root) => {
-        if (root.firstChild) {
-          return;
-        }
-
-        const closeButton = document.createElement('vaadin-button');
-        closeButton.textContent = 'Close';
-        closeButton.setAttribute('theme', 'tertiary');
-        closeButton.addEventListener('click', () => {
-          dialog.opened = false;
-        });
-
-        root.append(closeButton);
-      };
-
-      dialog.footerRenderer = (root) => {
-        if (root.firstChild) {
-          return;
-        }
-
-        const copyButton = document.createElement('vaadin-button');
-        copyButton.textContent = 'Copy';
-        copyButton.setAttribute('theme', 'primary');
-        copyButton.addEventListener('click', async () => {
-          if (!this._exportTextArea) {
-            return;
-          }
-
-          const originalText = copyButton.textContent;
-          try {
-            const copied = await copyText(this._exportTextArea.value);
-            copyButton.textContent = copied ? 'Copied' : 'Copy failed';
-          } catch (_error) {
-            copyButton.textContent = 'Copy failed';
-          }
-
-          setTimeout(() => {
-            copyButton.textContent = originalText;
-          }, 1200);
-        });
-
-        root.append(copyButton);
-        this._copyButton = copyButton;
-      };
-
-      document.body.append(dialog);
-      this._exportDialog = dialog;
-      return dialog;
-    }
-
     #openExportDialog() {
-      const dialog = this.#ensureExportDialog();
-      this._exportValue = buildExportCssCode(this, this._activePresetRules);
-      dialog.requestContentUpdate();
-
-      if (this._exportTextArea) {
-        this._exportTextArea.value = this._exportValue;
+      if (!this._exportDialog) {
+        this._exportDialog = document.createElement('aura-export-dialog');
+        document.body.append(this._exportDialog);
       }
-
-      if (this._copyButton) {
-        this._copyButton.textContent = 'Copy';
-      }
-
-      dialog.opened = true;
+      this._exportDialog.value = buildExportCssCode(this, this._activePresetRules);
+      this._exportDialog.open();
     }
 
     #renderPresetCards() {
@@ -1182,8 +1071,6 @@ customElements.define(
       if (this._exportDialog) {
         this._exportDialog.remove();
         this._exportDialog = null;
-        this._exportTextArea = null;
-        this._copyButton = null;
       }
     }
   },
