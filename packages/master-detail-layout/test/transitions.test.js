@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, isDesktopSafari, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
@@ -213,7 +213,8 @@ describe('Transitions', () => {
 
   describe('animation interruption', () => {
     // These tests enable real animations that can be captured mid-flight.
-    const DURATION = 200;
+    // WebKit needs larger duration to workaround transition flakiness.
+    const DURATION = isDesktopSafari ? 300 : 200;
 
     // A tolerance margin to compensate for possible small animation drift,
     // because animations run on a separate thread and can progress between
