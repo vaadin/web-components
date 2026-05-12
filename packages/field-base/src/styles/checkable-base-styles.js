@@ -37,7 +37,7 @@ export const checkable = (part, propName = part) => css`
   ::slotted(label) {
     font-size: var(--vaadin-${unsafeCSS(propName)}-label-font-size, var(--vaadin-input-field-label-font-size, inherit));
     line-height: var(--vaadin-${unsafeCSS(propName)}-label-line-height, var(--vaadin-input-field-label-line-height, inherit));
-    font-weight: var(--vaadin-${unsafeCSS(propName)}-font-weight, var(--vaadin-input-field-label-font-weight, 500));
+    font-weight: var(--vaadin-${unsafeCSS(propName)}-label-font-weight, var(--vaadin-input-field-label-font-weight, 500));
     color: var(--vaadin-${unsafeCSS(propName)}-label-color, var(--vaadin-input-field-label-color, var(--vaadin-text-color)));
     word-break: break-word;
     cursor: var(--_cursor);
