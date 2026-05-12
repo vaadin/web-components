@@ -9,10 +9,6 @@
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
   }
 
-  :host([hidden]) {
-    display: none !important;
-  }
-
   :host::after {
     color: var(--lumo-contrast-50pct);
   }

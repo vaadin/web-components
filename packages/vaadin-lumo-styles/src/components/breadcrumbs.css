@@ -12,10 +12,6 @@
     color: var(--lumo-body-text-color);
   }
 
-  :host([hidden]) {
-    display: none !important;
-  }
-
   [part='list'] {
     gap: var(--lumo-space-s);
   }

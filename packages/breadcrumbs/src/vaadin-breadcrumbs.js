@@ -73,6 +73,10 @@ class Breadcrumbs extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitElemen
     return 'vaadin-breadcrumbs';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get styles() {
     return breadcrumbsStyles;
   }
