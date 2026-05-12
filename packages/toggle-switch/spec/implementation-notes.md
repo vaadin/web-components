@@ -64,3 +64,13 @@
   - `yarn update:base --group toggle-switch` invokes `scripts/run-docker-visual-tests.sh`, which uses `docker run -it`. Outside a TTY the `-t` flag fails. The implementation agent worked around it by invoking the same docker command with `-i` only (no `-t`); the produced baselines are byte-identical to what an interactive run would have generated.
 - **Spec adjustments:**
   - Initially the test agent authored `test/styles.test.ts` — a parameterised suite that overrode each `--vaadin-toggle-switch-*` custom property on the host and asserted the corresponding computed style on `host` / `[part='switch']` / `[part='thumb']` / `[part='label']`. Per user feedback after the commit, this kind of test was dropped: visual regression tests already cover the styling layer, and computed-style assertions for property pass-through test the CSS engine, not the component. The file was removed; `web-component-tasks.md` Task 4 dropped the "Computed style" test bullet; `web-component-spec.md` Discussion gained an entry explaining the rationale.
+
+## Post-Task 4 — Label baseline alignment fix
+
+- **Date:** 2026-05-12
+- **Trigger:** the dev page rendered the label visibly higher than `dev/checkbox.html` does.
+- **Cause:** the initial `[part='switch']::after { content: none; }` removed the pseudo-element entirely. `checkable()` carries `content: '\\2003' / ''` (em-space) on that `::after` so its first baseline (centred by the flex parent) anchors `:host { align-items: baseline }` to the centre of the track. With the element gone, the flex container's baseline collapsed to its margin-box bottom and the label drifted up.
+- **Decisions:**
+  - Replace `content: none` with `background: none; mask: none;` — keeps the inherited em-space content (and therefore the centred baseline), removes only the visible checkmark paint. The absolutely-positioned `[part='thumb']` already paints on top.
+  - Decision 5 in `web-component-spec.md` rewritten to describe the new state. Added a Discussion entry explaining the baseline-anchor constraint.
+  - 17 base visual baselines regenerated with the corrected alignment.

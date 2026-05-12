@@ -28,9 +28,10 @@ const toggleSwitch = css`
     border-radius: var(--vaadin-toggle-switch-size, 1lh);
   }
 
-  /* Suppress the checkmark glyph drawn by checkable() — toggle switch uses thumb position instead. */
+  /* Hide the checkmark marker */
   [part='switch']::after {
-    content: none;
+    background: none;
+    mask: none;
   }
 
   /* Thumb */
