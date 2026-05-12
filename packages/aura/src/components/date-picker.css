@@ -67,3 +67,36 @@ vaadin-date-picker-year::part(year-separator)::before {
   border-radius: 50%;
   background: var(--vaadin-text-color-disabled);
 }
+
+vaadin-month-calendar::part(today) {
+  font-weight: var(--aura-font-weight-semibold);
+}
+
+vaadin-month-calendar::part(today)::before {
+  content: '';
+  position: absolute;
+  height: 1.75em;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: color-mix(in srgb, currentColor 7%, transparent);
+}
+
+vaadin-month-calendar::part(selected)::before {
+  content: none;
+}
+
+vaadin-month-calendar::part(date):hover::after {
+  background: var(--_aura-highlight-color);
+}
+
+vaadin-month-calendar::part(date disabled):hover::after {
+  background: transparent;
+}
+
+vaadin-month-calendar::part(date selected) {
+  color: var(--aura-accent-contrast-color);
+}
+
+vaadin-month-calendar::part(date selected):hover::after {
+  background: var(--aura-accent-color);
+}
