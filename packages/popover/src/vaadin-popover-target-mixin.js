@@ -32,6 +32,7 @@ export const PopoverTargetMixin = (superClass) =>
          */
         target: {
           type: Object,
+          sync: true,
         },
 
         /** @private */
