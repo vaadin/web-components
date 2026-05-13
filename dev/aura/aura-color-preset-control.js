@@ -170,20 +170,18 @@ class AuraColorPresetControl extends AuraControl {
           ${this.#presets.map(
             (preset) => html`
               <vaadin-select-item .value=${preset.id}>
-                <span style="display: inline-flex; align-items: center; gap: .5rem;">
-                  <span
-                    style=${styleMap({
-                      width: '1lh',
-                      height: '1lh',
-                      borderRadius: '999px',
-                      border: '1px solid color-mix(in srgb, currentColor 25%, transparent)',
-                      boxSizing: 'border-box',
-                      flexShrink: '0',
-                      ...(preset.preview ? { background: preset.preview } : {}),
-                    })}
-                  ></span>
-                  <span>${preset.name}</span>
-                </span>
+                <span
+                  style=${styleMap({
+                    width: '1lh',
+                    height: '1lh',
+                    borderRadius: '999px',
+                    border: '1px solid color-mix(in srgb, currentColor 25%, transparent)',
+                    boxSizing: 'border-box',
+                    flexShrink: '0',
+                    ...(preset.preview ? { background: preset.preview } : {}),
+                  })}
+                ></span>
+                <span>${preset.name}</span>
               </vaadin-select-item>
             `,
           )}
