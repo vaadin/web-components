@@ -7,30 +7,30 @@ class AuraColorControl extends AuraLitControl {
     return 'aura-color-control';
   }
 
-  static properties = {
-    property: { type: String },
-    value: { type: String, state: true },
-  };
+  static get properties() {
+    return {
+      property: {
+        type: String,
+      },
+      label: {
+        type: String,
+      },
+      value: {
+        type: String,
+        state: true,
+      },
+    };
+  }
 
   constructor() {
     super();
     this.property = '--accent-color';
+    this.label = `${this.property.replace(/^--/u, '')} color`;
     this.value = '#000000';
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    if (this.hasAttribute('property')) {
-      this.property = this.getAttribute('property').trim() || '--accent-color';
-    }
-    if (!this.label) {
-      this.label = `${this.property.replace(/^--/u, '')} color`;
-    }
-    this.#initialize();
-  }
-
-  updated(changed) {
-    if (changed.has('property') && changed.get('property') !== undefined && this.isConnected) {
+  willUpdate(props) {
+    if (props.has('property')) {
       this.#initialize();
     }
   }

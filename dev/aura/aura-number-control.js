@@ -6,14 +6,33 @@ class AuraNumberControl extends AuraLitControl {
     return 'aura-number-control';
   }
 
-  static properties = {
-    property: { type: String },
-    min: { type: Number },
-    max: { type: Number },
-    step: { type: Number },
-    defaultValue: { type: Number, attribute: 'default' },
-    value: { type: Number, state: true },
-  };
+  static get properties() {
+    return {
+      property: {
+        type: String,
+      },
+      min: {
+        type: Number,
+      },
+      max: {
+        type: Number,
+      },
+      step: {
+        type: Number,
+      },
+      label: {
+        type: String,
+      },
+      defaultValue: {
+        type: Number,
+        attribute: 'default',
+      },
+      value: {
+        type: String,
+        state: true,
+      },
+    };
+  }
 
   #initialComputed = null;
 
@@ -28,15 +47,11 @@ class AuraNumberControl extends AuraLitControl {
 
   connectedCallback() {
     super.connectedCallback();
-    if (this.hasAttribute('property')) {
-      this.property = this.getAttribute('property').trim() || '--numeric';
-    }
+
     if (this.min > this.max) {
       [this.min, this.max] = [this.max, this.min];
     }
-    if (!this.label) {
-      this.label = this.property;
-    }
+
     this.#initializeValue();
   }
 

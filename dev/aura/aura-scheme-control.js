@@ -12,34 +12,32 @@ class AuraSchemeControl extends AuraLitControl {
     return 'aura-scheme-control';
   }
 
-  static properties = {
-    property: { type: String },
-    value: { type: String, state: true },
-  };
+  static get properties() {
+    return {
+      property: {
+        type: String,
+      },
+      label: {
+        type: String,
+      },
+      value: {
+        type: String,
+        state: true,
+      },
+    };
+  }
 
   constructor() {
     super();
     this.property = '--aura-color-scheme';
+    this.label = 'Color scheme';
     this.value = '';
   }
 
   connectedCallback() {
     super.connectedCallback();
-    if (this.hasAttribute('property')) {
-      this.property = this.getAttribute('property').trim() || '--aura-color-scheme';
-    }
-    if (!this.label) {
-      this.label = 'Color scheme';
-    }
-    this.#initialize();
 
-    // Demo-only: mirror to readout if present on the page.
-    const readout = document.getElementById('scheme-readout');
-    if (readout) {
-      this.addEventListener('value-change', (event) => {
-        readout.textContent = event.detail.value;
-      });
-    }
+    this.#initialize();
   }
 
   renderContent() {
