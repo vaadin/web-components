@@ -1,4 +1,5 @@
 import '@vaadin/icon';
+import { html, nothing, render } from 'lit';
 import { AuraControl } from './aura-abstract-control.js';
 
 class AuraSegmentedControl extends AuraControl {
@@ -201,40 +202,25 @@ class AuraSegmentedControl extends AuraControl {
   }
 
   #renderOptions() {
-    this.#group.innerHTML = '';
     if (!this.#options.length) {
+      render(html``, this.#group);
       return;
     }
 
     this.#group.setAttribute('aria-label', this.#labelText);
 
-    this.#options.forEach((option) => {
-      const input = document.createElement('input');
-      input.type = 'radio';
-      input.name = this.#prop;
-      input.value = option.value;
-      input.checked = option.value === this.#value;
-
-      const label = document.createElement('label');
-      label.title = option.label;
-
-      if (option.icon) {
-        const icon = document.createElement('vaadin-icon');
-        icon.setAttribute('src', option.icon);
-        icon.setAttribute('aria-hidden', 'true');
-        label.append(icon);
-      }
-
-      if (option.label) {
-        const text = document.createElement('span');
-        text.textContent = option.label;
-        label.append(text);
-      }
-
-      label.append(input);
-
-      this.#group.append(label);
-    });
+    render(
+      html`${this.#options.map(
+        (option) => html`
+          <label title=${option.label}>
+            ${option.icon ? html`<vaadin-icon src=${option.icon} aria-hidden="true"></vaadin-icon>` : nothing}
+            ${option.label ? html`<span>${option.label}</span>` : nothing}
+            <input type="radio" name=${this.#prop} .value=${option.value} .checked=${option.value === this.#value} />
+          </label>
+        `,
+      )}`,
+      this.#group,
+    );
   }
 
   #parseOptionsAttribute(value) {
