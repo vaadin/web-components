@@ -145,6 +145,10 @@
     --vaadin-field-default-width: 5em;
   }
 
+  vaadin-select-item {
+    --vaadin-item-gap: 0.5rem;
+  }
+
   vaadin-select-item::part(checkmark) {
     order: 1;
   }
