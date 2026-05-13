@@ -1,3 +1,4 @@
+import { html, render } from 'lit';
 import { AuraControl } from './aura-abstract-control.js';
 
 class AuraThemeSchemeControl extends AuraControl {
@@ -64,20 +65,17 @@ class AuraThemeSchemeControl extends AuraControl {
   }
 
   #renderRadios() {
-    this.#group.innerHTML = '';
-
-    this.#presets.forEach((preset) => {
-      const input = document.createElement('input');
-      input.type = 'radio';
-      input.name = this.#radioName;
-      input.value = preset.id;
-
-      const label = document.createElement('label');
-      label.textContent = preset.label;
-      label.append(input);
-
-      this.#group.append(label);
-    });
+    render(
+      html`${this.#presets.map(
+        (preset) => html`
+          <label>
+            ${preset.label}
+            <input type="radio" name=${this.#radioName} .value=${preset.id} />
+          </label>
+        `,
+      )}`,
+      this.#group,
+    );
   }
 
   #initialize() {
