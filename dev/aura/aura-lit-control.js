@@ -14,8 +14,6 @@ import { html, LitElement } from 'lit';
  *   - `label` / `isLocked` reactive properties (latter reflects to
  *     `data-locked` attribute).
  *   - `toggleLock()` method.
- *   - `labelElement` / `rowElement` / `resetButton` / `lockButton`
- *     getters that query the rendered light-DOM subtree.
  */
 export class AuraLitControl extends LitElement {
   static get properties() {
@@ -66,22 +64,6 @@ export class AuraLitControl extends LitElement {
   toggleLock() {
     this.isLocked = !this.isLocked;
     this.#persistLockState();
-  }
-
-  get labelElement() {
-    return this.querySelector(':scope > .control > .row > label');
-  }
-
-  get rowElement() {
-    return this.querySelector(':scope > .control > .row');
-  }
-
-  get resetButton() {
-    return this.querySelector(':scope > .control > .row > .reset');
-  }
-
-  get lockButton() {
-    return this.querySelector(':scope > .control > .row > .lock');
   }
 
   render() {
