@@ -86,6 +86,10 @@ class BreadcrumbsItem extends FocusMixin(DisabledMixin(ElementMixin(PolylitMixin
     return { ...LitElement.shadowRootOptions, delegatesFocus: true };
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get properties() {
     return {
       /**
