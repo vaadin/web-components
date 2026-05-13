@@ -225,5 +225,14 @@ describe('vaadin-button', () => {
       expect(tooltip).to.be.ok;
       expect(tooltip.getAttribute('text')).to.equal('Press me');
     });
+
+    it('should not set aria-describedby', async () => {
+      const tooltip = button.querySelector('vaadin-tooltip[slot="tooltip"]')! as any;
+      await nextUpdate(tooltip);
+
+      expect(button.hasAttribute('auto-tooltip')).to.be.true;
+      expect(tooltip.ariaTarget).to.equal(null);
+      expect(button.hasAttribute('aria-describedby')).to.be.false;
+    });
   });
 });

@@ -200,6 +200,7 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
     if (!this.__autoTooltip) {
       this.__autoTooltip = document.createElement('vaadin-tooltip');
       this.__autoTooltip.setAttribute('slot', 'tooltip');
+      this.__autoTooltip.ariaTarget = null;
     }
 
     this.__autoTooltip.setAttribute('text', text);

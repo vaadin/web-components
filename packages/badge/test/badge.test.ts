@@ -135,5 +135,14 @@ describe('vaadin-badge', () => {
       expect(tooltip).to.be.ok;
       expect(tooltip.getAttribute('text')).to.equal('New');
     });
+
+    it('should not set aria-describedby', async () => {
+      const tooltip = badge.querySelector('vaadin-tooltip[slot="tooltip"]')! as any;
+      await nextUpdate(tooltip);
+
+      expect(badge.hasAttribute('auto-tooltip')).to.be.true;
+      expect(tooltip.ariaTarget).to.equal(null);
+      expect(badge.hasAttribute('aria-describedby')).to.be.false;
+    });
   });
 });
