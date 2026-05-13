@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement, nothing } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -140,7 +141,11 @@ class BreadcrumbsItem extends FocusMixin(DisabledMixin(ElementMixin(PolylitMixin
             </span>
           `
         : html`
-            <a href="${this.path}" part="link">
+            <a
+              href="${ifDefined(this.disabled ? null : this.path)}"
+              tabindex="${this.disabled ? '-1' : '0'}"
+              part="link"
+            >
               <slot name="prefix"></slot>
               <span part="label">
                 <slot></slot>

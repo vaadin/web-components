@@ -47,6 +47,7 @@ snapshots["vaadin-breadcrumbs-item shadow path"] =
 `<a
   href="/foo"
   part="link"
+  tabindex="0"
 >
   <slot name="prefix">
   </slot>
@@ -77,6 +78,7 @@ snapshots["vaadin-breadcrumbs-item shadow current path"] =
 `<a
   href="/foo"
   part="link"
+  tabindex="0"
 >
   <slot name="prefix">
   </slot>
@@ -97,4 +99,19 @@ snapshots["vaadin-breadcrumbs-item host disabled"] =
 </vaadin-breadcrumbs-item>
 `;
 /* end snapshot vaadin-breadcrumbs-item host disabled */
+
+snapshots["vaadin-breadcrumbs-item shadow disabled path"] = 
+`<a
+  part="link"
+  tabindex="-1"
+>
+  <slot name="prefix">
+  </slot>
+  <span part="label">
+    <slot>
+    </slot>
+  </span>
+</a>
+`;
+/* end snapshot vaadin-breadcrumbs-item shadow disabled path */
 

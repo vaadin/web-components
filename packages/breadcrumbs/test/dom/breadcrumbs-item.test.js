@@ -68,5 +68,12 @@ describe('vaadin-breadcrumbs-item', () => {
       await nextUpdate(item);
       await expect(item).shadowDom.to.equalSnapshot();
     });
+
+    it('disabled path', async () => {
+      item.path = '/foo';
+      item.disabled = true;
+      await nextUpdate(item);
+      await expect(item).shadowDom.to.equalSnapshot();
+    });
   });
 });
