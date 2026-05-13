@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-breadcrumbs-item.js';
 
@@ -41,6 +42,20 @@ describe('vaadin-breadcrumbs-item', () => {
     it('disabled', async () => {
       item.disabled = true;
       await nextUpdate(item);
+      await expect(item).dom.to.equalSnapshot();
+    });
+
+    it('focused', async () => {
+      item.path = '/foo';
+      await nextUpdate(item);
+      item.focus({ focusVisible: false });
+      await expect(item).dom.to.equalSnapshot();
+    });
+
+    it('focus-ring', async () => {
+      item.path = '/foo';
+      await nextUpdate(item);
+      await sendKeys({ press: 'Tab' });
       await expect(item).dom.to.equalSnapshot();
     });
   });

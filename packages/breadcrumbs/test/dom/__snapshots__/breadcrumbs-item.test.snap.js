@@ -115,3 +115,22 @@ snapshots["vaadin-breadcrumbs-item shadow disabled path"] =
 `;
 /* end snapshot vaadin-breadcrumbs-item shadow disabled path */
 
+snapshots["vaadin-breadcrumbs-item host focused"] = 
+`<vaadin-breadcrumbs-item
+  focused=""
+  role="listitem"
+>
+</vaadin-breadcrumbs-item>
+`;
+/* end snapshot vaadin-breadcrumbs-item host focused */
+
+snapshots["vaadin-breadcrumbs-item host focus-ring"] = 
+`<vaadin-breadcrumbs-item
+  focus-ring=""
+  focused=""
+  role="listitem"
+>
+</vaadin-breadcrumbs-item>
+`;
+/* end snapshot vaadin-breadcrumbs-item host focus-ring */
+
