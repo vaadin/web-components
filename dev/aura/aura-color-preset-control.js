@@ -1,4 +1,6 @@
 import '@vaadin/select';
+import { html, render } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import { AuraControl } from './aura-abstract-control.js';
 import { resolveVarColor, toComparableColor } from './aura-color-utils.js';
 
@@ -162,39 +164,31 @@ class AuraColorPresetControl extends AuraControl {
   }
 
   #renderOptions(root) {
-    root.textContent = '';
-    const listBox = document.createElement('vaadin-select-list-box');
-
-    this.#presets.forEach((preset) => {
-      const item = document.createElement('vaadin-select-item');
-      item.value = preset.id;
-
-      const content = document.createElement('span');
-      content.style.display = 'inline-flex';
-      content.style.alignItems = 'center';
-      content.style.gap = '.5rem';
-
-      const swatch = document.createElement('span');
-      swatch.style.width = '1lh';
-      swatch.style.height = '1lh';
-      swatch.style.borderRadius = '999px';
-      swatch.style.border = '1px solid color-mix(in srgb, currentColor 25%, transparent)';
-      swatch.style.boxSizing = 'border-box';
-      swatch.style.flexShrink = '0';
-      const swatchColor = preset.preview;
-      if (swatchColor) {
-        swatch.style.background = swatchColor;
-      }
-
-      const label = document.createElement('span');
-      label.textContent = preset.name;
-
-      content.append(swatch, label);
-      item.appendChild(content);
-      listBox.appendChild(item);
-    });
-
-    root.appendChild(listBox);
+    render(
+      html`
+        <vaadin-select-list-box>
+          ${this.#presets.map(
+            (preset) => html`
+              <vaadin-select-item .value=${preset.id}>
+                <span
+                  style=${styleMap({
+                    width: '1lh',
+                    height: '1lh',
+                    borderRadius: '999px',
+                    border: '1px solid color-mix(in srgb, currentColor 25%, transparent)',
+                    boxSizing: 'border-box',
+                    flexShrink: '0',
+                    ...(preset.preview ? { background: preset.preview } : {}),
+                  })}
+                ></span>
+                <span>${preset.name}</span>
+              </vaadin-select-item>
+            `,
+          )}
+        </vaadin-select-list-box>
+      `,
+      root,
+    );
   }
 
   #initialize() {
