@@ -1,5 +1,6 @@
 import '@vaadin/select';
 import { AuraControl } from './aura-abstract-control.js';
+import { AURA_GOOGLE_FONTS } from './aura-fonts.js';
 
 class AuraFontFamilyControl extends AuraControl {
   static get is() {
@@ -20,53 +21,11 @@ class AuraFontFamilyControl extends AuraControl {
   #opts = [
     { label: 'Instrument Sans (local)', value: "'Instrument Sans', var(--aura-font-family-system)", default: true },
     { label: 'System (local)', value: 'var(--aura-font-family-system)' },
-    {
-      label: 'Inter',
-      value: "'Inter', var(--aura-font-family-system)",
-      importUrl: 'https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap',
-    },
-    {
-      label: 'Roboto',
-      value: "'Roboto', var(--aura-font-family-system)",
-      importUrl: 'https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap',
-    },
-    {
-      label: 'Public Sans',
-      value: "'Public Sans', var(--aura-font-family-system)",
-      importUrl: 'https://fonts.googleapis.com/css2?family=Public+Sans:wght@100..900&display=swap',
-    },
-    {
-      label: 'Geist',
-      value: "'Geist', var(--aura-font-family-system)",
-      importUrl: 'https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap',
-    },
-    {
-      label: 'Manrope',
-      value: "'Manrope', var(--aura-font-family-system)",
-      importUrl: 'https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap',
-    },
-    {
-      label: 'Atkinson Hyperlegible Next',
-      value: "'Atkinson Hyperlegible Next', var(--aura-font-family-system)",
-      importUrl:
-        'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;600;700&display=swap',
-    },
-    {
-      label: 'Geist Mono',
-      value: "'Geist Mono', var(--aura-font-family-system)",
-      importUrl: 'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap',
-    },
-    {
-      label: 'Jetbrains Mono',
-      value: "'JetBrains Mono', var(--aura-font-family-system)",
-      importUrl: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap',
-    },
-    {
-      label: 'Atkinson Hyperlegible Mono',
-      value: "'Atkinson Hyperlegible Mono', var(--aura-font-family-system)",
-      importUrl:
-        'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;500;600;700&display=swap',
-    },
+    ...AURA_GOOGLE_FONTS.map(({ family, importUrl }) => ({
+      label: family,
+      value: `'${family}', var(--aura-font-family-system)`,
+      importUrl,
+    })),
   ];
 
   constructor() {
