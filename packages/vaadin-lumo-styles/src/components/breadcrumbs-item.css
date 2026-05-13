@@ -7,6 +7,9 @@
   :host {
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-m);
+    line-height: var(--lumo-line-height-xs);
   }
 
   :host::after {
@@ -45,10 +48,6 @@
   [part='link']:focus-visible {
     border-radius: var(--lumo-border-radius-m);
     box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
-  }
-
-  :host([disabled]) {
-    pointer-events: none;
   }
 
   :host([disabled]) [part='link'] {

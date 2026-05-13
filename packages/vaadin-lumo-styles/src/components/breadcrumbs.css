@@ -5,10 +5,9 @@
  */
 @media lumo_components_breadcrumbs {
   :host {
-    display: block;
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
-    line-height: var(--lumo-line-height-m);
+    line-height: var(--lumo-line-height-xs);
     color: var(--lumo-body-text-color);
   }
 
