@@ -37,6 +37,12 @@ describe('vaadin-breadcrumbs-item', () => {
       await nextRender();
       await expect(item).dom.to.equalSnapshot();
     });
+
+    it('disabled', async () => {
+      item.disabled = true;
+      await nextUpdate(item);
+      await expect(item).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {

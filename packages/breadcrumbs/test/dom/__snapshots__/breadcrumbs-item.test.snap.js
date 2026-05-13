@@ -88,3 +88,13 @@ snapshots["vaadin-breadcrumbs-item shadow current path"] =
 `;
 /* end snapshot vaadin-breadcrumbs-item shadow current path */
 
+snapshots["vaadin-breadcrumbs-item host disabled"] = 
+`<vaadin-breadcrumbs-item
+  aria-disabled="true"
+  disabled=""
+  role="listitem"
+>
+</vaadin-breadcrumbs-item>
+`;
+/* end snapshot vaadin-breadcrumbs-item host disabled */
+

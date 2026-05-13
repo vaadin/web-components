@@ -16,6 +16,14 @@ export const breadcrumbsItemStyles = css`
     display: none !important;
   }
 
+  :host([disabled]) {
+    pointer-events: none;
+  }
+
+  [part='link']:focus-visible {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+  }
+
   :host::after {
     content: '';
     display: inline-block;
