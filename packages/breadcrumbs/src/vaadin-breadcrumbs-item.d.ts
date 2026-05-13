@@ -3,6 +3,8 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 /**
@@ -23,11 +25,14 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  * Attribute    | Description
  * -------------|-------------
  * `current`    | Set by the parent `<vaadin-breadcrumbs>` on the last item when it has no `path`.
+ * `disabled`   | Set when the item is disabled.
+ * `focus-ring` | Set when the item is focused by the keyboard.
+ * `focused`    | Set when the item is focused.
  * `has-prefix` | Set when the item has content in the prefix slot
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class BreadcrumbsItem extends ElementMixin(HTMLElement) {
+declare class BreadcrumbsItem extends FocusMixin(DisabledMixin(ElementMixin(HTMLElement))) {
   /**
    * The path to navigate to. When set, the item renders as a link
    * (`<a part="link">`); when unset, it renders as a non-link

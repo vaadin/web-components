@@ -4,6 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement, nothing } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
+import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -64,6 +67,9 @@ class PrefixSlotController extends SlotController {
  * Attribute    | Description
  * -------------|-------------
  * `current`    | Set by the parent `<vaadin-breadcrumbs>` on the last item when it has no `path`.
+ * `disabled`   | Set when the item is disabled.
+ * `focus-ring` | Set when the item is focused by the keyboard.
+ * `focused`    | Set when the item is focused.
  * `has-prefix` | Set when the item has content in the prefix slot
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
@@ -71,9 +77,13 @@ class PrefixSlotController extends SlotController {
  * @customElement vaadin-breadcrumbs-item
  * @extends HTMLElement
  */
-class BreadcrumbsItem extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
+class BreadcrumbsItem extends FocusMixin(DisabledMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-breadcrumbs-item';
+  }
+
+  static get shadowRootOptions() {
+    return { ...LitElement.shadowRootOptions, delegatesFocus: true };
   }
 
   static get properties() {
@@ -131,7 +141,11 @@ class BreadcrumbsItem extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitEl
             </span>
           `
         : html`
-            <a href="${this.path}" part="link">
+            <a
+              href="${ifDefined(this.disabled ? null : this.path)}"
+              tabindex="${this.disabled ? '-1' : '0'}"
+              part="link"
+            >
               <slot name="prefix"></slot>
               <span part="label">
                 <slot></slot>
