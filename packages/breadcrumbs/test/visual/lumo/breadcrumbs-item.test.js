@@ -46,19 +46,12 @@ describe('breadcrumbs-item', () => {
 
   describe('current', () => {
     beforeEach(async () => {
-      fixtureSync(
-        `
-          <vaadin-breadcrumbs>
-            <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item>Current</vaadin-breadcrumbs-item>
-          </vaadin-breadcrumbs>
-        `,
-        div,
-      );
+      element = fixtureSync('<vaadin-breadcrumbs-item>Current</vaadin-breadcrumbs-item>', div);
+      element._setCurrent(true);
       await nextRender();
     });
 
-    it('basic', async () => {
+    it('current', async () => {
       await visualDiff(div, 'current');
     });
   });
