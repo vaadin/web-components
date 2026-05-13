@@ -20,9 +20,6 @@ class AuraNumberControl extends AuraLitControl {
       step: {
         type: Number,
       },
-      label: {
-        type: String,
-      },
       defaultValue: {
         type: Number,
         attribute: 'default',

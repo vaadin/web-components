@@ -12,9 +12,6 @@ class AuraColorControl extends AuraLitControl {
       property: {
         type: String,
       },
-      label: {
-        type: String,
-      },
       value: {
         type: String,
         state: true,

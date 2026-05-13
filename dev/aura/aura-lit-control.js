@@ -18,10 +18,18 @@ import { html, LitElement } from 'lit';
  *     getters that query the rendered light-DOM subtree.
  */
 export class AuraLitControl extends LitElement {
-  static properties = {
-    label: { type: String },
-    isLocked: { type: Boolean, reflect: true, attribute: 'data-locked' },
-  };
+  static get properties() {
+    return {
+      label: {
+        type: String,
+      },
+      isLocked: {
+        type: Boolean,
+        reflect: true,
+        attribute: 'data-locked',
+      },
+    };
+  }
 
   constructor() {
     super();
