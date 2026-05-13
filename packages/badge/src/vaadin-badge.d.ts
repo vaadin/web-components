@@ -19,6 +19,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * ---------|-------------
  * (none)   | Default slot for the badge text content
  * `icon`   | Slot for an icon to place before the text
+ * `tooltip` | Slot for a tooltip
  *
  * ### Styling
  *
@@ -37,6 +38,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `has-icon`     | Set when the badge has content in the icon slot
  * `has-content`  | Set when the badge has content in the default slot
  * `has-number`   | Set when the badge has a number value
+ * `has-tooltip`  | Set when the badge has a slotted tooltip
  *
  * The following custom CSS properties are available for styling:
  *
