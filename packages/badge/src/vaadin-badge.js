@@ -175,10 +175,12 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
   __getContentText() {
     const slot = this.shadowRoot.querySelector('slot:not([name])');
     return slot
-      .assignedNodes({ flatten: true })
-      .map((node) => node.textContent)
-      .join('')
-      .trim();
+      ? slot
+          .assignedNodes({ flatten: true })
+          .map((node) => node.textContent)
+          .join('')
+          .trim()
+      : '';
   }
 
   /** @private */

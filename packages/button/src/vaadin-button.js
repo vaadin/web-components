@@ -157,10 +157,12 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
   __getLabelText() {
     const slot = this.shadowRoot.querySelector('slot:not([name])');
     return slot
-      .assignedNodes({ flatten: true })
-      .map((node) => node.textContent)
-      .join('')
-      .trim();
+      ? slot
+          .assignedNodes({ flatten: true })
+          .map((node) => node.textContent)
+          .join('')
+          .trim()
+      : '';
   }
 
   /** @private */
