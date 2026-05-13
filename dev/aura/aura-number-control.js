@@ -89,12 +89,11 @@ class AuraNumberControl extends AuraLitControl {
 
     const computed = this.#getComputedNumber();
     const initial =
-      computed != null
-        ? computed
-        : Number.isFinite(this.defaultValue)
-          ? this.#clamp(this.#snap(this.defaultValue))
-          : this.#clamp(this.#snap((this.min + this.max) / 2));
-    this.#initialComputed = computed ?? initial;
+      computed ??
+      (Number.isFinite(this.defaultValue)
+        ? this.#clamp(this.#snap(this.defaultValue))
+        : this.#clamp(this.#snap((this.min + this.max) / 2)));
+    this.#initialComputed = initial;
     this.#setValue(initial, { persist: 'clear' });
   }
 
