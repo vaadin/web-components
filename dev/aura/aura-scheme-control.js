@@ -1,149 +1,108 @@
-import { AuraControl } from './aura-abstract-control.js';
+import { html } from 'lit';
+import { AuraLitControl } from './aura-lit-control.js';
 
-class AuraSchemeControl extends AuraControl {
+const SCHEME_OPTIONS = [
+  { label: 'Light', value: 'light' },
+  { label: 'Dark', value: 'dark' },
+  { label: 'Auto', value: 'light dark' },
+];
+
+class AuraSchemeControl extends AuraLitControl {
   static get is() {
     return 'aura-scheme-control';
   }
 
-  static get observedAttributes() {
-    return ['property', 'label'];
+  static get properties() {
+    return {
+      property: {
+        type: String,
+      },
+      value: {
+        type: String,
+        state: true,
+      },
+    };
   }
-
-  #prop = '--aura-color-scheme';
-  #group;
-  #reset;
-  #labelEl;
-  #values = ['light', 'dark', 'light dark']; // UI: Light, Dark, Auto
 
   constructor() {
     super();
-    this.initControl({
-      label: 'Color scheme',
-      content: '<div class="segmented" role="radiogroup"></div>',
-    });
-    this.#group = this.querySelector('[role="radiogroup"]');
-    this.#reset = this.resetButton;
-    this.#labelEl = this.labelElement;
-  }
-
-  attributeChangedCallback(name, _old, val) {
-    if (name === 'property') {
-      this.#prop = (val && val.trim()) || this.#prop;
-      if (this.isConnected) this.#initialize();
-    } else if (name === 'label') {
-      this.#labelEl.textContent = val || 'Color scheme';
-    }
+    this.property = '--aura-color-scheme';
+    this.label = 'Color scheme';
+    this.value = '';
   }
 
   connectedCallback() {
-    if (this.hasAttribute('label')) {
-      this.#labelEl.textContent = this.getAttribute('label');
-    }
-    this.#renderRadios();
+    super.connectedCallback();
+
     this.#initialize();
-
-    this.#group.addEventListener('change', (e) => {
-      const target = e.target;
-      if (target && target.name === this.#prop) {
-        const value = target.value;
-        this.#apply(value); // sets var + persists + event
-      }
-    });
-
-    this.#reset.addEventListener('click', () => this.#resetToComputed());
-
-    // Demo-only: mirror to readout
-    const ro = document.getElementById('scheme-readout');
-    this.addEventListener('value-change', (e) => {
-      if (ro) ro.textContent = e.detail.value;
-    });
   }
 
-  // ----- UI setup -----
-  #renderRadios() {
-    // Clear and rebuild radios (Light / Dark / Auto)
-    this.#group.innerHTML = '';
-    const labels = ['Light', 'Dark', 'Auto'];
-    this.#values.forEach((val, idx) => {
-      const input = document.createElement('input');
-      input.type = 'radio';
-      input.name = this.#prop;
-      input.value = val; // "light", "dark", "light dark"
-      const label = document.createElement('label');
-      label.textContent = labels[idx];
-      label.appendChild(input);
-      this.#group.appendChild(label);
-    });
+  renderContent() {
+    return html`
+      <div class="segmented" role="radiogroup">
+        ${SCHEME_OPTIONS.map(
+          (opt) => html`
+            <label>
+              ${opt.label}
+              <input
+                type="radio"
+                name=${this.property}
+                .value=${opt.value}
+                .checked=${this.value === opt.value}
+                @change=${this.#onChange}
+              />
+            </label>
+          `,
+        )}
+      </div>
+    `;
   }
 
-  // ----- Init / Reset -----
-  #initialize() {
-    // 1) localStorage wins if present
-    const stored = localStorage.getItem(this.#storageKey());
-    if (stored && this.#isValid(stored)) {
-      this.#select(stored);
-      this.#setVar(stored); // ensure :root reflects stored
+  onReset() {
+    localStorage.removeItem(this.#storageKey());
+    document.documentElement.style.removeProperty(this.property);
+    const token = getComputedStyle(document.documentElement).getPropertyValue(this.property).trim();
+    const next = this.#isValid(token) ? token : 'normal';
+    this.value = next;
+    this.dispatchEvent(
+      new CustomEvent('value-change', {
+        detail: { property: this.property, value: next, source: 'reset' },
+      }),
+    );
+  }
+
+  #onChange(event) {
+    const next = event.target.value;
+    if (!this.#isValid(next)) {
       return;
     }
-
-    // 2) Else read from computed CSS on :root
-    const computed = getComputedStyle(document.documentElement).getPropertyValue(this.#prop).trim(); // "light" | "dark" | "light dark" | ""
-    const initial = this.#isValid(computed) ? computed : 'normal';
-    this.#select(initial);
-    // Don’t override stylesheet on load; only reflect the choice in UI.
-  }
-
-  #resetToComputed() {
-    // Clear storage and remove inline override
-    localStorage.removeItem(this.#storageKey());
-    document.documentElement.style.removeProperty(this.#prop);
-
-    // Re-read stylesheet-driven value; default to "light dark"
-    const token = getComputedStyle(document.documentElement).getPropertyValue(this.#prop).trim();
-    const value = this.#isValid(token) ? token : 'normal';
-
-    // Update UI (no persist, no inline set)
-    this.#select(value);
-
-    // Notify listeners we’re back to stylesheet value
+    this.value = next;
+    document.documentElement.style.setProperty(this.property, next);
+    localStorage.setItem(this.#storageKey(), next);
     this.dispatchEvent(
       new CustomEvent('value-change', {
-        detail: { property: this.#prop, value, source: 'reset' },
+        detail: { property: this.property, value: next },
       }),
     );
   }
 
-  // ----- Core apply -----
-  #apply(value) {
-    if (!this.#isValid(value)) return;
-    this.#setVar(value);
-    localStorage.setItem(this.#storageKey(), value);
-    this.dispatchEvent(
-      new CustomEvent('value-change', {
-        detail: { property: this.#prop, value },
-      }),
-    );
+  #initialize() {
+    const stored = localStorage.getItem(this.#storageKey());
+    if (stored && this.#isValid(stored)) {
+      this.value = stored;
+      document.documentElement.style.setProperty(this.property, stored);
+      return;
+    }
+    const computed = getComputedStyle(document.documentElement).getPropertyValue(this.property).trim();
+    this.value = this.#isValid(computed) ? computed : 'normal';
   }
 
-  #setVar(value) {
-    document.documentElement.style.setProperty(this.#prop, value);
-  }
-
-  // ----- Helpers -----
   #storageKey() {
-    return `aura:scheme:${this.#prop}`;
+    return `aura:scheme:${this.property}`;
   }
 
   #isValid(v) {
-    return this.#values.includes(String(v).trim());
-  }
-
-  #select(value) {
-    // Set the correct radio as checked
-    const inputs = this.#group.querySelectorAll(`input[name="${this.#prop}"]`);
-    inputs.forEach((i) => {
-      i.checked = i.value === value;
-    });
+    return SCHEME_OPTIONS.some((opt) => opt.value === String(v).trim());
   }
 }
 
