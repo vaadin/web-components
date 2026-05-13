@@ -31,6 +31,8 @@ snapshots["vaadin-badge shadow default"] =
   <slot>
   </slot>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-badge shadow default */
 
@@ -46,6 +48,8 @@ snapshots["vaadin-badge shadow number"] =
   <slot>
   </slot>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-badge shadow number */
 
@@ -69,6 +73,8 @@ snapshots["vaadin-badge shadow dot"] =
   <slot>
   </slot>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-badge shadow dot */
 
@@ -89,6 +95,8 @@ snapshots["vaadin-badge shadow icon-only"] =
   <slot>
   </slot>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-badge shadow icon-only */
 
@@ -109,6 +117,8 @@ snapshots["vaadin-badge shadow number-only"] =
   <slot>
   </slot>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-badge shadow number-only */
 
