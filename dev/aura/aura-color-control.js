@@ -1,96 +1,75 @@
-import { AuraControl } from './aura-abstract-control.js';
+import { html } from 'lit';
 import { normalizeHex, parseLightDark, resolveEffectiveScheme, toHex } from './aura-color-utils.js';
+import { AuraLitControl } from './aura-lit-control.js';
 
-class AuraColorControl extends AuraControl {
+class AuraColorControl extends AuraLitControl {
   static get is() {
     return 'aura-color-control';
   }
 
-  static get observedAttributes() {
-    return ['property', 'label'];
-  }
-
-  #input;
-  #output;
-  #labelEl;
-  #resetBtn;
-  #prop = '--accent-color';
+  static properties = {
+    property: { type: String },
+    value: { type: String, state: true },
+  };
 
   constructor() {
     super();
-    this.initControl({
-      label: 'Color',
-      content: '<input type="color" /><output>#000000</output>',
-    });
-    this.#input = this.querySelector('input[type="color"]');
-    this.#output = this.querySelector('output');
-    this.#labelEl = this.labelElement;
-    this.#resetBtn = this.resetButton;
-  }
-
-  attributeChangedCallback(name, _old, val) {
-    if (name === 'property') {
-      this.#prop = (val && val.trim()) || '--accent-color';
-      if (this.isConnected) this.#initialize();
-    }
-    if (name === 'label') {
-      this.#labelEl.textContent = val || 'Color';
-    }
+    this.property = '--accent-color';
+    this.value = '#000000';
   }
 
   connectedCallback() {
-    if (this.hasAttribute('label')) {
-      this.#labelEl.textContent = this.getAttribute('label');
-    } else {
-      this.#labelEl.textContent = `${this.#prop.replace(/^--/u, '')} color`;
-    }
+    super.connectedCallback();
     if (this.hasAttribute('property')) {
-      this.#prop = this.getAttribute('property').trim();
+      this.property = this.getAttribute('property').trim() || '--accent-color';
+    }
+    if (!this.label) {
+      this.label = `${this.property.replace(/^--/u, '')} color`;
     }
     this.#initialize();
-
-    // User change → set var + persist
-    this.#input.addEventListener('input', () => {
-      const hex = normalizeHex(this.#input.value) || '#000000';
-      this.#setUI(hex);
-      this.#setVar(hex); // set only on user action
-      this.#persist(hex);
-      this.#emit(hex);
-    });
-
-    // Reset → clear storage, remove inline var, UI from computed (no override)
-    this.#resetBtn.addEventListener('click', () => {
-      localStorage.removeItem(this.#storageKey());
-      document.documentElement.style.removeProperty(this.#prop);
-      const computedHex = this.#getComputedHex() || '#000000';
-      this.#setUI(computedHex);
-      this.#emit(computedHex, { source: 'reset' });
-    });
   }
 
-  // ----- Init: storage OR computed ----------------------------------------
+  updated(changed) {
+    if (changed.has('property') && changed.get('property') !== undefined && this.isConnected) {
+      this.#initialize();
+    }
+  }
+
+  renderContent() {
+    return html`
+      <input type="color" .value=${this.value} @input=${this.#onInput} />
+      <output>${this.value}</output>
+    `;
+  }
+
+  onReset() {
+    localStorage.removeItem(this.#storageKey());
+    document.documentElement.style.removeProperty(this.property);
+    const computedHex = this.#getComputedHex() || '#000000';
+    this.value = normalizeHex(computedHex) || '#000000';
+    this.#emit(this.value, { source: 'reset' });
+  }
+
+  #onInput(event) {
+    const hex = normalizeHex(event.target.value) || '#000000';
+    this.value = hex;
+    this.#setVar(hex);
+    this.#persist(hex);
+    this.#emit(hex);
+  }
+
   #initialize() {
-    // From storage → set var + UI
     const stored = localStorage.getItem(this.#storageKey());
     if (stored) {
       const hex = toHex(stored) || this.#getComputedHex() || '#000000';
-      this.#setUI(hex);
-      this.#setVar(hex); // set because it came from storage
-      this.#persist(hex); // normalize storage to hex
-      this.#emit(hex, { source: 'storage' });
+      this.value = normalizeHex(hex) || '#000000';
+      this.#setVar(this.value);
+      this.#persist(this.value);
+      this.#emit(this.value, { source: 'storage' });
       return;
     }
-
-    // From computed CSS → UI only
     const hex = this.#getComputedHex() || '#000000';
-    this.#setUI(hex);
-  }
-
-  // ----- UI helpers --------------------------------------------------------
-  #setUI(hex) {
-    const norm = normalizeHex(hex) || '#000000';
-    this.#input.value = norm;
-    this.#output.textContent = norm;
+    this.value = normalizeHex(hex) || '#000000';
   }
 
   #persist(hex) {
@@ -100,21 +79,21 @@ class AuraColorControl extends AuraControl {
   #emit(hex, extra = {}) {
     this.dispatchEvent(
       new CustomEvent('value-change', {
-        detail: { property: this.#prop, value: normalizeHex(hex), ...extra },
+        detail: { property: this.property, value: normalizeHex(hex), ...extra },
       }),
     );
   }
 
   #setVar(hex) {
-    document.documentElement.style.setProperty(this.#prop, normalizeHex(hex));
+    document.documentElement.style.setProperty(this.property, normalizeHex(hex));
   }
 
   #storageKey() {
-    return `aura-color:${this.#prop}`;
+    return `aura-color:${this.property}`;
   }
 
   #getComputedHex() {
-    const raw = getComputedStyle(document.documentElement).getPropertyValue(this.#prop).trim();
+    const raw = getComputedStyle(document.documentElement).getPropertyValue(this.property).trim();
     if (!raw) return null;
 
     const ld = parseLightDark(raw);
