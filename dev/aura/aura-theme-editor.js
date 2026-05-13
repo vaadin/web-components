@@ -11,6 +11,7 @@ import '@vaadin/text-area';
 import { html, nothing, render } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 import { toHex } from './aura-color-utils.js';
+import { FONT_FAMILY_IMPORTS } from './aura-fonts.js';
 import { DEFAULT_PRESET_ID, getThemeEditorPresetById, THEME_EDITOR_PRESETS } from './aura-theme-editor-presets.js';
 
 const EXTRA_RULES_STORAGE_KEY = 'aura-theme-editor:extra-rules';
@@ -25,20 +26,6 @@ const DEFAULT_PRESET = {
     glow: '#dbe6ff',
   },
 };
-const FONT_FAMILY_IMPORTS = {
-  Inter: 'https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap',
-  Roboto: 'https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap',
-  'Public Sans': 'https://fonts.googleapis.com/css2?family=Public+Sans:wght@100..900&display=swap',
-  Geist: 'https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap',
-  Manrope: 'https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap',
-  'Atkinson Hyperlegible Next':
-    'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;500;600;700&display=swap',
-  'Geist Mono': 'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap',
-  'JetBrains Mono': 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap',
-  'Atkinson Hyperlegible Mono':
-    'https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;500;600;700&display=swap',
-};
-
 const ACCENT_COLOR_LIGHT_PRESETS = [
   { value: '#3266e4', name: 'Default', default: true },
   { value: '#222222', name: 'Neutral' },
