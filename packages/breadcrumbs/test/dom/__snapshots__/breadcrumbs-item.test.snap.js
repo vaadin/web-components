@@ -31,6 +31,35 @@ snapshots["vaadin-breadcrumbs-item host prefix path"] =
 `;
 /* end snapshot vaadin-breadcrumbs-item host prefix path */
 
+snapshots["vaadin-breadcrumbs-item host disabled"] = 
+`<vaadin-breadcrumbs-item
+  aria-disabled="true"
+  disabled=""
+  role="listitem"
+>
+</vaadin-breadcrumbs-item>
+`;
+/* end snapshot vaadin-breadcrumbs-item host disabled */
+
+snapshots["vaadin-breadcrumbs-item host focused"] = 
+`<vaadin-breadcrumbs-item
+  focused=""
+  role="listitem"
+>
+</vaadin-breadcrumbs-item>
+`;
+/* end snapshot vaadin-breadcrumbs-item host focused */
+
+snapshots["vaadin-breadcrumbs-item host focus-ring"] = 
+`<vaadin-breadcrumbs-item
+  focus-ring=""
+  focused=""
+  role="listitem"
+>
+</vaadin-breadcrumbs-item>
+`;
+/* end snapshot vaadin-breadcrumbs-item host focus-ring */
+
 snapshots["vaadin-breadcrumbs-item shadow default"] = 
 `<span part="nolink">
   <slot name="prefix">
@@ -90,16 +119,6 @@ snapshots["vaadin-breadcrumbs-item shadow current path"] =
 `;
 /* end snapshot vaadin-breadcrumbs-item shadow current path */
 
-snapshots["vaadin-breadcrumbs-item host disabled"] = 
-`<vaadin-breadcrumbs-item
-  aria-disabled="true"
-  disabled=""
-  role="listitem"
->
-</vaadin-breadcrumbs-item>
-`;
-/* end snapshot vaadin-breadcrumbs-item host disabled */
-
 snapshots["vaadin-breadcrumbs-item shadow disabled path"] = 
 `<a
   part="link"
@@ -114,23 +133,4 @@ snapshots["vaadin-breadcrumbs-item shadow disabled path"] =
 </a>
 `;
 /* end snapshot vaadin-breadcrumbs-item shadow disabled path */
-
-snapshots["vaadin-breadcrumbs-item host focused"] = 
-`<vaadin-breadcrumbs-item
-  focused=""
-  role="listitem"
->
-</vaadin-breadcrumbs-item>
-`;
-/* end snapshot vaadin-breadcrumbs-item host focused */
-
-snapshots["vaadin-breadcrumbs-item host focus-ring"] = 
-`<vaadin-breadcrumbs-item
-  focus-ring=""
-  focused=""
-  role="listitem"
->
-</vaadin-breadcrumbs-item>
-`;
-/* end snapshot vaadin-breadcrumbs-item host focus-ring */
 
