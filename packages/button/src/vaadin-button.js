@@ -3,7 +3,10 @@
  * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { html, LitElement } from 'lit';
+import { classMap } from 'lit/directives/class-map.js';
+import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -68,7 +71,7 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
   }
 
   static get styles() {
-    return buttonStyles;
+    return [buttonStyles, screenReaderOnly];
   }
 
   static get properties() {
@@ -95,6 +98,16 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
         reflectToAttribute: true,
         sync: true,
       },
+
+      /**
+       * When enabled, hides the label visually and shows it in a tooltip.
+       */
+      autoTooltip: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        sync: true,
+      },
     };
   }
 
@@ -105,16 +118,25 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
         <span part="prefix" aria-hidden="true">
           <slot name="prefix"></slot>
         </span>
-        <span part="label">
-          <slot></slot>
+        <span part="label" class="${classMap({ 'sr-only': this.autoTooltip })}">
+          <slot @slotchange="${this.__updateAutoTooltip}"></slot>
         </span>
         <span part="suffix" aria-hidden="true">
           <slot name="suffix"></slot>
         </span>
 
-        <slot name="tooltip"></slot>
+        <slot name="tooltip" @slotchange="${this.__updateAutoTooltip}"></slot>
       </div>
     `;
+  }
+
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('autoTooltip')) {
+      this.__updateAutoTooltip();
+    }
   }
 
   /** @protected */
@@ -123,11 +145,48 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
+    this.__updateAutoTooltip();
   }
 
   /** @override */
   __shouldAllowFocusWhenDisabled() {
     return window.Vaadin.featureFlags.accessibleDisabledButtons;
+  }
+
+  /** @private */
+  __getLabelText() {
+    const slot = this.shadowRoot.querySelector('slot:not([name])');
+    return slot
+      .assignedNodes({ flatten: true })
+      .map((node) => node.textContent)
+      .join('')
+      .trim();
+  }
+
+  /** @private */
+  __hasCustomTooltip() {
+    return Array.from(this.children).some((node) => node !== this.__autoTooltip && node.slot === 'tooltip');
+  }
+
+  /** @private */
+  __updateAutoTooltip() {
+    const text = this.__getLabelText();
+
+    if (!this.autoTooltip || !text || this.__hasCustomTooltip()) {
+      this.__autoTooltip?.remove();
+      return;
+    }
+
+    if (!this.__autoTooltip) {
+      this.__autoTooltip = document.createElement('vaadin-tooltip');
+      this.__autoTooltip.setAttribute('slot', 'tooltip');
+    }
+
+    this.__autoTooltip.setAttribute('text', text);
+
+    if (!this.__autoTooltip.isConnected) {
+      this.appendChild(this.__autoTooltip);
+    }
   }
 }
 

@@ -58,6 +58,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  */
 declare class Badge extends ElementMixin(ThemableMixin(HTMLElement)) {
   /**
+   * When enabled, hides the content visually and shows it in a tooltip.
+   */
+  autoTooltip: boolean;
+
+  /**
    * The number to display in the badge.
    */
   number: number | null | undefined;

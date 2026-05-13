@@ -116,4 +116,24 @@ describe('vaadin-badge', () => {
       expect(badge.hasAttribute('has-icon')).to.be.false;
     });
   });
+
+  describe('auto-tooltip', () => {
+    beforeEach(async () => {
+      badge = fixtureSync('<vaadin-badge auto-tooltip>New</vaadin-badge>');
+      await nextRender();
+    });
+
+    it('should hide the content visually', () => {
+      const content = badge.shadowRoot!.querySelector('[part="content"]')!;
+
+      expect(content.classList.contains('sr-only')).to.be.true;
+    });
+
+    it('should add a tooltip with content text', () => {
+      const tooltip = badge.querySelector('vaadin-tooltip[slot="tooltip"]')!;
+
+      expect(tooltip).to.be.ok;
+      expect(tooltip.getAttribute('text')).to.equal('New');
+    });
+  });
 });

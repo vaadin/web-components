@@ -36,6 +36,7 @@
   "dependencies": {
     "@vaadin/a11y-base": "25.2.0-alpha12",
     "@vaadin/component-base": "25.2.0-alpha12",
+    "@vaadin/tooltip": "25.2.0-alpha12",
     "@vaadin/vaadin-themable-mixin": "25.2.0-alpha12",
     "lit": "^3.0.0"
   },

@@ -3,6 +3,7 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { html, LitElement } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
@@ -11,6 +12,7 @@ import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { badgeStyles } from './styles/vaadin-badge-base-styles.js';
@@ -93,6 +95,16 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
       number: {
         type: Number,
       },
+
+      /**
+       * When enabled, hides the content visually and shows it in a tooltip.
+       */
+      autoTooltip: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        sync: true,
+      },
     };
   }
 
@@ -108,9 +120,10 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
         <slot name="icon"></slot>
       </div>
       <div part="number" class="${classMap({ 'sr-only': iconOnly || dot })}">${this.number}</div>
-      <div part="content" class="${classMap({ 'sr-only': numberOnly || iconOnly || dot })}">
-        <slot></slot>
+      <div part="content" class="${classMap({ 'sr-only': numberOnly || iconOnly || dot || this.autoTooltip })}">
+        <slot @slotchange="${this.__updateAutoTooltip}"></slot>
       </div>
+      <slot name="tooltip" @slotchange="${this.__updateAutoTooltip}"></slot>
     `;
   }
 
@@ -121,6 +134,24 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
     if (props.has('number')) {
       this.toggleAttribute('has-number', this.number != null);
     }
+  }
+
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('autoTooltip')) {
+      this.__updateAutoTooltip();
+    }
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
+    this.__updateAutoTooltip();
   }
 
   /** @protected */
@@ -136,6 +167,42 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
     this.__iconSlotObserver = new SlotObserver(iconSlot, ({ currentNodes }) => {
       this.toggleAttribute('has-icon', currentNodes.length > 0);
     });
+  }
+
+  /** @private */
+  __getContentText() {
+    const slot = this.shadowRoot.querySelector('slot:not([name])');
+    return slot
+      .assignedNodes({ flatten: true })
+      .map((node) => node.textContent)
+      .join('')
+      .trim();
+  }
+
+  /** @private */
+  __hasCustomTooltip() {
+    return Array.from(this.children).some((node) => node !== this.__autoTooltip && node.slot === 'tooltip');
+  }
+
+  /** @private */
+  __updateAutoTooltip() {
+    const text = this.__getContentText();
+
+    if (!this.autoTooltip || !text || this.__hasCustomTooltip()) {
+      this.__autoTooltip?.remove();
+      return;
+    }
+
+    if (!this.__autoTooltip) {
+      this.__autoTooltip = document.createElement('vaadin-tooltip');
+      this.__autoTooltip.setAttribute('slot', 'tooltip');
+    }
+
+    this.__autoTooltip.setAttribute('text', text);
+
+    if (!this.__autoTooltip.isConnected) {
+      this.appendChild(this.__autoTooltip);
+    }
   }
 }
 

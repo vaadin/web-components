@@ -55,6 +55,11 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  */
 declare class Button extends ButtonMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**
+   * When enabled, hides the label visually and shows it in a tooltip.
+   */
+  autoTooltip: boolean;
+
+  /**
    * When disabled, the button is rendered as "dimmed".
    *
    * By default, disabled buttons are not focusable and don't react to hover.

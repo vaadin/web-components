@@ -206,4 +206,24 @@ describe('vaadin-button', () => {
       expect(document.activeElement).to.equal(lastGlobalFocusable);
     });
   });
+
+  describe('auto-tooltip', () => {
+    beforeEach(async () => {
+      button = fixtureSync('<vaadin-button auto-tooltip>Press me</vaadin-button>');
+      await nextRender();
+    });
+
+    it('should hide the label visually', () => {
+      const label = button.shadowRoot!.querySelector('[part="label"]')!;
+
+      expect(label.classList.contains('sr-only')).to.be.true;
+    });
+
+    it('should add a tooltip with label text', () => {
+      const tooltip = button.querySelector('vaadin-tooltip[slot="tooltip"]')!;
+
+      expect(tooltip).to.be.ok;
+      expect(tooltip.getAttribute('text')).to.equal('Press me');
+    });
+  });
 });
