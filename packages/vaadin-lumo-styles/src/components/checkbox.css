@@ -224,6 +224,10 @@
     left: var(--lumo-space-xs);
   }
 
+  :host([required]) [part='required-indicator']::after {
+    position: static;
+  }
+
   :host(:not([has-label])) [part='required-indicator'] {
     display: none;
   }
