@@ -1,6 +1,5 @@
 import './aura-color-preset-control.js';
 import './aura-font-family-control.js';
-import './aura-number-control.js';
 import './aura-preset-thumbnail.js';
 import './aura-segmented-control.js';
 import './aura-theme-scheme-control.js';
