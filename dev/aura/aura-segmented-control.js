@@ -59,8 +59,7 @@ class AuraSegmentedControl extends AuraLitControl {
   }
 
   willUpdate(changed) {
-    super.willUpdate?.(changed);
-    if (changed.has('property') && this.isConnected) {
+    if (changed.has('property')) {
       this.#initialize();
     }
   }
