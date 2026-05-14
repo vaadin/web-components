@@ -100,3 +100,20 @@ Code state at this point matches the c4102f0515 amendment: `<vaadin-breadcrumbs>
   - Unit tests for `DisabledMixin` integration live in `test/breadcrumbs-item.test.js`: attribute reflection, `aria-disabled`, and `click()` no-op when disabled.
 - **Surprises:** —
 - **Spec adjustments:** —
+
+## Task 8 — Aura theme
+
+- **Commit:** 48728bafb6
+- **Date:** 2026-05-14
+- **Decisions:**
+  - Single CSS file at `packages/aura/src/components/breadcrumbs.css` covering both `<vaadin-breadcrumbs>` and `<vaadin-breadcrumbs-item>`, per the Aura "one file per component" convention in `guidelines/10-theming.md`. Imported from `packages/aura/aura.css` in alphabetical order between `badge.css` and `button.css`. No Lumo-style `lumoInjector` opt-in is needed — Aura is plain CSS imported globally.
+  - Selectors target the elements from outside the shadow DOM via element selectors plus `::part(...)`: `vaadin-breadcrumbs::part(list)`, `vaadin-breadcrumbs-item::part(link)`, `vaadin-breadcrumbs-item::part(nolink)`. The separator is styled via `vaadin-breadcrumbs-item::after { color: var(--vaadin-text-color-secondary); }` — the host's `::after` pseudo-element is the same element targeted by the shadow's `:host::after`, so the outer `color` rule cascades into the shadow's `background: currentColor` correctly. Verified visually.
+  - Token mapping per `figma-design.md` § Aura: font family/size/line-height from `--aura-font-*`; body color from `--vaadin-text-color`; link color from `--aura-accent-text-color`; separator color from `--vaadin-text-color-secondary`; gap from `--vaadin-gap-s`; focus-ring radius from `--vaadin-radius-s`; disabled text from `--vaadin-text-color-disabled`. Hover/active darken the link to `--vaadin-text-color` with underline (matching the side-nav pattern of sliding link color toward the neutral text color on hover).
+  - Focus ring uses base styles' `outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color)`; the Aura layer only adds `border-radius: var(--vaadin-radius-s)` for rounded corners. No `outline: none` + `box-shadow` workaround like Lumo — the outline-based approach matches `upload.css` and other Aura components.
+  - Prefix icon uses logical units (`width: 0.875lh; height: 0.875lh`) instead of a fixed pixel size token, matching Aura idiom and the Figma "14×14 in Aura" binding. Selector is a light-DOM child selector `vaadin-breadcrumbs-item > :is(vaadin-icon, [class*='icon'])[slot='prefix']` since `::slotted(...)` doesn't apply from outside the shadow DOM.
+  - Visual tests split per element, mirroring Lumo (Task 7 precedent): `test/visual/aura/breadcrumbs.test.js` keeps a single `basic` trail snapshot; `test/visual/aura/breadcrumbs-item.test.js` exercises the item with `basic`, `focus-ring`, `disabled`, `current`, `prefix`, and `disabled-prefix`. Hover and active visual diffs deliberately omitted (synthetic `mousedown` cannot trigger native `:active`); font-size unit assertion deliberately omitted (Figma binding + visual snapshot suffice).
+  - The Aura visual config produces both `default/` and `dark/` baselines (driven by the `--dark` flag in `web-test-runner-aura.config.js`); both are committed.
+- **Surprises:**
+  - The hover/active link color is not named in the Figma "Aura" token table — chose `--vaadin-text-color` (the neutral body text color) following the `side-nav.css` pattern of sliding the link color toward neutral on hover. If a dedicated `--aura-accent-text-color-hover` token emerges later, swap to it.
+  - Visual baselines were generated via local Playwright Chromium because Docker is not available in this environment (the `yarn update:aura` / `yarn test:aura` scripts normally route through `scripts/run-docker-visual-tests.sh`). The committed PNGs may not pixel-match what CI's Docker image produces. Re-run `yarn update:aura --group breadcrumbs` and `yarn update:aura:dark --group breadcrumbs` in Docker before opening the PR to refresh baselines if CI flags differences.
+- **Spec adjustments:** —
