@@ -123,9 +123,7 @@ class AuraColorPresetControl extends AuraLitControl {
       .map((entry, index) => {
         if (typeof entry === 'string') {
           const raw = entry.trim();
-          if (!raw) {
-            return null;
-          }
+          if (!raw) return null;
           return {
             id: `preset-${index}`,
             value: raw,
