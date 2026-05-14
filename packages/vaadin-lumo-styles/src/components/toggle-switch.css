@@ -1,0 +1,252 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_components_toggle-switch {
+  :host {
+    color: var(--vaadin-toggle-switch-label-color, var(--lumo-body-text-color));
+    font-size: var(--vaadin-toggle-switch-label-font-size, var(--lumo-font-size-m));
+    --_switch-size: var(--vaadin-toggle-switch-size, calc(var(--lumo-size-m) / 2));
+    --_invalid-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-10pct));
+  }
+
+  [part='label'] {
+    display: flex;
+    position: relative;
+    max-width: max-content;
+  }
+
+  :host([has-label]) ::slotted(label) {
+    padding: var(
+      --vaadin-toggle-switch-label-padding,
+      var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs)
+    );
+  }
+
+  :host([dir='rtl'][has-label]) ::slotted(label) {
+    padding: var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-s);
+  }
+
+  :host([has-label][required]) ::slotted(label) {
+    padding-inline-end: var(--lumo-space-m);
+  }
+
+  /* Track */
+  [part='switch'] {
+    --_input-size: var(--_switch-size);
+    --_thumb-size: var(--vaadin-toggle-switch-thumb-size, calc(var(--_switch-size) - 4px));
+    --_track-width: var(--vaadin-toggle-switch-track-width, calc(var(--_switch-size) * 1.75));
+    --_thumb-offset: calc(var(--_track-width) - var(--_thumb-size) - (var(--_switch-size) - var(--_thumb-size)));
+    box-sizing: border-box;
+    width: var(--_track-width);
+    height: var(--_switch-size);
+    border-radius: var(--_switch-size);
+    background: var(--vaadin-toggle-switch-background, var(--lumo-contrast-20pct));
+  }
+
+  /* Thumb */
+  [part='thumb'] {
+    position: absolute;
+    top: 50%;
+    inset-inline-start: calc((var(--_switch-size) - var(--_thumb-size)) / 2);
+    width: var(--_thumb-size);
+    height: var(--_thumb-size);
+    border-radius: 50%;
+    background: var(--vaadin-toggle-switch-thumb-color, var(--lumo-primary-contrast-color));
+    box-shadow:
+      0 1px 2px 0 rgba(0, 0, 0, 0.1),
+      0 1px 1px 0 rgba(0, 0, 0, 0.06);
+    translate: 0 -50%;
+    transition: translate 0.2s cubic-bezier(0.12, 0.32, 0.54, 2);
+  }
+
+  /* Checked: slide thumb to the opposite end. */
+  :host([checked]) [part='thumb'] {
+    translate: var(--_thumb-offset) -50%;
+  }
+
+  /* RTL mirror */
+  :host([dir='rtl'][checked]) [part='thumb'] {
+    translate: calc(-1 * var(--_thumb-offset)) -50%;
+  }
+
+  /* Checked: primary-color track, transparent border. */
+  :host([checked]) {
+    --vaadin-toggle-switch-background: var(--_selection-color);
+    --vaadin-input-field-border-color: transparent;
+  }
+
+  /* Hover */
+  :host(:not([checked]):not([disabled]):not([readonly]):not([invalid]):hover) [part='switch'] {
+    background: var(--vaadin-toggle-switch-background-hover, var(--lumo-contrast-30pct));
+  }
+
+  /* Disable hover for touch devices */
+  @media (pointer: coarse) {
+    :host(:not([checked]):not([disabled]):not([readonly]):not([invalid]):hover) [part='switch'] {
+      background: var(--vaadin-toggle-switch-background, var(--lumo-contrast-20pct));
+    }
+  }
+
+  /* Active */
+  :host([active]) [part='switch'] {
+    transform: scale(0.95);
+    transition-duration: 0.05s;
+  }
+
+  :host([active]:not([checked])) [part='switch']::before {
+    transition-duration: 0.01s, 0.01s;
+    transform: scale(0);
+    opacity: 0.4;
+  }
+
+  /* Focus ring */
+  :host([focus-ring]) [part='switch'] {
+    box-shadow:
+      0 0 0 1px var(--lumo-base-color),
+      0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color);
+  }
+
+  /* Readonly: keep the off-state fill but mark the track with a dashed
+   * outline to mirror the readonly checkbox affordance. */
+  :host([readonly]:not([checked])) {
+    color: var(--lumo-secondary-text-color);
+  }
+
+  :host([readonly]:not([checked])) [part='switch'] {
+    outline: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-50pct));
+    outline-offset: -1px;
+  }
+
+  /* Readonly + checked: a muted contrast fill so it reads as on, but clearly inert. */
+  :host([readonly][checked]) {
+    --vaadin-toggle-switch-background: var(--lumo-contrast-70pct);
+    --vaadin-input-field-border-color: transparent;
+  }
+
+  /* Disabled */
+  :host([disabled]) {
+    pointer-events: none;
+    --vaadin-input-field-border-color: var(--lumo-contrast-20pct);
+    --vaadin-toggle-switch-background: var(--lumo-contrast-10pct);
+    --vaadin-toggle-switch-thumb-color: var(--lumo-contrast-30pct);
+  }
+
+  :host([disabled]) [part='thumb'] {
+    box-shadow: none;
+  }
+
+  :host([disabled]) ::slotted(label) {
+    color: inherit;
+  }
+
+  :host([disabled]) [part='label'] {
+    color: var(--lumo-disabled-text-color);
+    -webkit-text-fill-color: var(--lumo-disabled-text-color);
+  }
+
+  /* Required indicator */
+  :host([required]) [part='required-indicator'] {
+    position: absolute;
+    top: var(--lumo-space-xs);
+    right: var(--lumo-space-xs);
+  }
+
+  :host([required][dir='rtl']) [part='required-indicator'] {
+    right: auto;
+    left: var(--lumo-space-xs);
+  }
+
+  :host([required]) [part='required-indicator']::after {
+    position: static;
+  }
+
+  :host(:not([has-label])) [part='required-indicator'] {
+    display: none;
+  }
+
+  /* Invalid */
+  :host([invalid]) {
+    --vaadin-input-field-border-color: var(--lumo-error-color);
+    --vaadin-toggle-switch-background: var(--_invalid-background);
+  }
+
+  :host([invalid][focus-ring]) {
+    --_focus-ring-color: var(--lumo-error-color-50pct);
+  }
+
+  /* Error message */
+  [part='error-message'] {
+    margin: 0;
+    padding-inline-start: var(--lumo-space-xs);
+  }
+
+  [part='helper-text'],
+  [part='error-message'] {
+    grid-column: 2;
+  }
+
+  :host(:not([has-helper])) [part='helper-text'],
+  :host(:not([has-error-message])) [part='error-message'] {
+    display: none;
+  }
+
+  :host([has-error-message]) [part='error-message']::before {
+    display: none;
+  }
+
+  :host([has-helper]) [part='helper-text']::after {
+    content: '';
+    display: block;
+    height: 0.4em;
+  }
+
+  /* Helper */
+  [part='helper-text'] {
+    padding-inline-start: var(--lumo-space-xs);
+  }
+
+  :host([has-helper]) [part='helper-text']::before {
+    display: none;
+  }
+
+  :host([has-error-message]) ::slotted(label),
+  :host([has-helper]) ::slotted(label) {
+    padding-bottom: 0;
+  }
+
+  @media (forced-colors: active) {
+    [part='switch'] {
+      background: Canvas !important;
+      border-color: CanvasText !important;
+      outline: 1px solid;
+      outline-offset: -1px;
+    }
+
+    :host([checked]) [part='switch'] {
+      background: SelectedItem !important;
+    }
+
+    [part='thumb'] {
+      background: CanvasText !important;
+    }
+
+    :host([checked]) [part='thumb'] {
+      background: SelectedItemText !important;
+    }
+
+    :host([focused]) [part='switch'] {
+      outline-width: 2px;
+    }
+
+    :host([disabled]) [part='switch'] {
+      outline-color: GrayText;
+      border-color: GrayText !important;
+    }
+
+    :host([disabled]) [part='thumb'] {
+      background: GrayText !important;
+    }
+  }
+}
