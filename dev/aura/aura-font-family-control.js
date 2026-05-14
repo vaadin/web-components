@@ -26,6 +26,11 @@ function normalizeToken(value) {
   return trimmed.replace(/\s*,\s*/gu, ', ').replace(/\s+/gu, ' ');
 }
 
+const FONT_ITEMS = FONT_OPTIONS.map((opt) => ({
+  label: opt.label,
+  value: normalizeToken(opt.value),
+}));
+
 class AuraFontFamilyControl extends AuraLitControl {
   static get is() {
     return 'aura-font-family-control';
@@ -36,20 +41,22 @@ class AuraFontFamilyControl extends AuraLitControl {
       property: {
         type: String,
       },
+      _selectValue: {
+        type: String,
+        state: true,
+      },
     };
   }
-
-  #select;
-  #selectValue = '';
 
   constructor() {
     super();
     this.label = 'Font family';
     this.property = '--aura-font-family';
+    this._selectValue = '';
   }
 
   get optionValues() {
-    return FONT_OPTIONS.map((opt) => normalizeToken(opt.value)).filter(Boolean);
+    return FONT_ITEMS.map((item) => item.value).filter(Boolean);
   }
 
   get defaultValue() {
@@ -57,16 +64,12 @@ class AuraFontFamilyControl extends AuraLitControl {
   }
 
   get value() {
-    return this.#selectValue || this.#defaultValue();
+    return this._selectValue || this.#defaultValue();
   }
 
   set value(token) {
     const normalized = normalizeToken(token);
-    const allowed = this.optionValues;
-    this.#selectValue = allowed.includes(normalized) ? normalized : this.#defaultValue();
-    if (this.#select && this.#select.value !== this.#selectValue) {
-      this.#select.value = this.#selectValue;
-    }
+    this._selectValue = this.optionValues.includes(normalized) ? normalized : this.#defaultValue();
   }
 
   applyValue(token, { source = 'user' } = {}) {
@@ -90,24 +93,16 @@ class AuraFontFamilyControl extends AuraLitControl {
   }
 
   renderContent() {
-    return html`<vaadin-select></vaadin-select>`;
+    return html`
+      <vaadin-select
+        .items=${FONT_ITEMS}
+        .value=${this._selectValue}
+        @value-changed=${this.#onValueChanged}
+      ></vaadin-select>
+    `;
   }
 
   firstUpdated() {
-    this.#select = this.querySelector('vaadin-select');
-    this.#select.items = FONT_OPTIONS.map((opt) => ({
-      label: opt.label,
-      value: normalizeToken(opt.value),
-    }));
-
-    this.#select.addEventListener('value-changed', (event) => {
-      const token = normalizeToken(event.detail.value);
-      if (!token || token === this.#selectValue) {
-        return;
-      }
-      this.applyValue(token, { source: 'user' });
-    });
-
     this.#initialize();
   }
 
@@ -118,6 +113,14 @@ class AuraFontFamilyControl extends AuraLitControl {
     this.#ensureFontImport(this.value);
     this.#emit(this.value, { source: 'reset' });
     this.#updateComputedReadout();
+  }
+
+  #onValueChanged(event) {
+    const token = normalizeToken(event.detail.value);
+    if (!token || token === this._selectValue) {
+      return;
+    }
+    this.applyValue(token, { source: 'user' });
   }
 
   #initialize() {
@@ -132,14 +135,7 @@ class AuraFontFamilyControl extends AuraLitControl {
 
   #selectByComputed() {
     const computed = normalizeToken(getComputedStyle(document.documentElement).getPropertyValue(this.property));
-    let matched = null;
-    for (const opt of FONT_OPTIONS) {
-      const refValue = normalizeToken(opt.value);
-      if (computed && computed === refValue) {
-        matched = refValue;
-        break;
-      }
-    }
+    const matched = this.optionValues.find((value) => value === computed) ?? null;
     this.value = matched ?? this.#defaultValue();
   }
 
