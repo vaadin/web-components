@@ -1,6 +1,7 @@
 import '@vaadin/select';
-import { html, render } from 'lit';
+import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
+import { selectRenderer } from '@vaadin/select/lit.js';
 import { resolveVarColor, toComparableColor } from './aura-color-utils.js';
 import { AuraLitControl } from './aura-lit-control.js';
 
@@ -17,7 +18,6 @@ class AuraColorPresetControl extends AuraLitControl {
     };
   }
 
-  #select;
   #presets = [];
   #selectedId = '';
 
@@ -33,58 +33,29 @@ class AuraColorPresetControl extends AuraLitControl {
 
   set presets(value) {
     this.#presets = this.#normalizePresets(value);
-    this.#refreshOptions();
-    if (this.isConnected && this.#select) {
+    this.requestUpdate();
+    if (this.isConnected && this.hasUpdated) {
       this.#initialize();
     }
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    if (!this.hasAttribute('label')) {
-      this.label = `${this.property.replace(/^--/u, '')} preset`;
-    }
-  }
-
   willUpdate(changed) {
-    super.willUpdate?.(changed);
     if (changed.has('property')) {
-      if (!this.hasAttribute('label')) {
-        this.label = `${this.property.replace(/^--/u, '')} preset`;
-      }
-      if (this.#select) {
-        this.#initialize();
-      }
+      this.#initialize();
     }
   }
 
   renderContent() {
-    return html`<vaadin-select></vaadin-select>`;
+    return html`
+      <vaadin-select
+        .value=${this.#selectedId}
+        ${selectRenderer(this.#renderOptions, this.#presets)}
+        @value-changed=${this.#onSelectValueChanged}
+      ></vaadin-select>
+    `;
   }
 
   firstUpdated() {
-    this.#select = this.querySelector('vaadin-select');
-    this.#select.renderer = (root) => this.#renderOptions(root);
-
-    this.#select.addEventListener('value-changed', (event) => {
-      const value = event.detail.value;
-      if (!value || value === this.#selectedId) {
-        return;
-      }
-
-      const preset = this.#presets.find((entry) => entry.id === value);
-      if (!preset) {
-        return;
-      }
-
-      if (preset.isDefault) {
-        this.#applyDefaultPreset(preset, { source: 'user', emit: true });
-      } else {
-        this.#applyPreset(preset, { source: 'user', persist: true, setVar: true, emit: true });
-      }
-    });
-
-    this.#refreshOptions();
     this.#initialize();
   }
 
@@ -100,6 +71,47 @@ class AuraColorPresetControl extends AuraLitControl {
     const matched = this.#matchComputedPreset();
     this.#setSelection(matched?.id ?? '');
     this.#emit(matched?.value ?? null, matched?.name ?? null, { source: 'reset' });
+  }
+
+  #renderOptions = () => html`
+    <vaadin-select-list-box>
+      ${this.#presets.map(
+        (preset) => html`
+          <vaadin-select-item .value=${preset.id}>
+            <span
+              style=${styleMap({
+                width: '1lh',
+                height: '1lh',
+                borderRadius: '999px',
+                border: '1px solid color-mix(in srgb, currentColor 25%, transparent)',
+                boxSizing: 'border-box',
+                flexShrink: '0',
+                ...(preset.preview ? { background: preset.preview } : {}),
+              })}
+            ></span>
+            <span>${preset.name}</span>
+          </vaadin-select-item>
+        `,
+      )}
+    </vaadin-select-list-box>
+  `;
+
+  #onSelectValueChanged(event) {
+    const value = event.detail.value;
+    if (!value || value === this.#selectedId) {
+      return;
+    }
+
+    const preset = this.#presets.find((entry) => entry.id === value);
+    if (!preset) {
+      return;
+    }
+
+    if (preset.isDefault) {
+      this.#applyDefaultPreset(preset, { source: 'user', emit: true });
+    } else {
+      this.#applyPreset(preset, { source: 'user', persist: true, setVar: true, emit: true });
+    }
   }
 
   #normalizePresets(value) {
@@ -144,54 +156,6 @@ class AuraColorPresetControl extends AuraLitControl {
         };
       })
       .filter(Boolean);
-  }
-
-  #refreshOptions() {
-    if (!this.#select) {
-      return;
-    }
-
-    if (typeof this.#select.requestContentUpdate === 'function') {
-      this.#select.requestContentUpdate();
-    }
-
-    if (this.#presets.length === 0) {
-      this.#setSelection('');
-      return;
-    }
-
-    const hasSelectedPreset = this.#presets.some((entry) => entry.id === this.#selectedId);
-    if (!hasSelectedPreset) {
-      this.#setSelection('');
-    }
-  }
-
-  #renderOptions(root) {
-    render(
-      html`
-        <vaadin-select-list-box>
-          ${this.#presets.map(
-            (preset) => html`
-              <vaadin-select-item .value=${preset.id}>
-                <span
-                  style=${styleMap({
-                    width: '1lh',
-                    height: '1lh',
-                    borderRadius: '999px',
-                    border: '1px solid color-mix(in srgb, currentColor 25%, transparent)',
-                    boxSizing: 'border-box',
-                    flexShrink: '0',
-                    ...(preset.preview ? { background: preset.preview } : {}),
-                  })}
-                ></span>
-                <span>${preset.name}</span>
-              </vaadin-select-item>
-            `,
-          )}
-        </vaadin-select-list-box>
-      `,
-      root,
-    );
   }
 
   #initialize() {
@@ -245,18 +209,11 @@ class AuraColorPresetControl extends AuraLitControl {
     if (opts.emit) {
       this.#emit(null, preset.name, { source: opts.source, cleared: true });
     }
-
-    if (this.#select && typeof this.#select.requestContentUpdate === 'function') {
-      this.#select.requestContentUpdate();
-    }
   }
 
   #setSelection(id) {
-    const next = id || '';
-    this.#selectedId = next;
-    if (this.#select && this.#select.value !== next) {
-      this.#select.value = next;
-    }
+    this.#selectedId = id || '';
+    this.requestUpdate();
   }
 
   #storageKey() {
