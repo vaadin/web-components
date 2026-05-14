@@ -5,6 +5,7 @@
  */
 @import '../src/mixins/field-error-message.css';
 @import '../src/mixins/field-helper.css';
+@import '../src/mixins/field-helper-above.css';
 @import '../src/mixins/field-label.css';
 @import '../src/mixins/field-required.css';
 @import '../src/components/custom-field.css';
@@ -17,5 +18,6 @@
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
     lumo_mixins_field-helper,
+    lumo_mixins_field-helper-above,
     lumo_components_custom-field;
 }
