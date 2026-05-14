@@ -225,14 +225,7 @@
   }
 
   :host([required]) [part='required-indicator']::after {
-    content: var(--vaadin-input-field-required-indicator, var(--lumo-required-field-indicator, '\2022'));
-    transition: opacity 0.2s;
-    color: var(
-      --vaadin-input-field-required-indicator-color,
-      var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color))
-    );
-    width: 1em;
-    text-align: center;
+    position: static;
   }
 
   :host(:not([has-label])) [part='required-indicator'] {
@@ -257,13 +250,6 @@
 
   :host([invalid][focus-ring]) {
     --_focus-ring-color: var(--lumo-error-color-50pct);
-  }
-
-  :host([invalid]) [part='required-indicator']::after {
-    color: var(
-      --vaadin-input-field-required-indicator-color,
-      var(--lumo-required-field-indicator-color, var(--lumo-error-text-color))
-    );
   }
 
   /* Error message */
