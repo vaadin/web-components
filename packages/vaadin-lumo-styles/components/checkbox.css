@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @import '../src/mixins/checkable-field.css';
+@import '../src/mixins/field-helper.css';
 @import '../src/mixins/field-required.css';
 @import '../src/components/checkbox.css';
 
@@ -12,6 +13,7 @@
   --_lumo-vaadin-checkbox-inject: 1;
   --_lumo-vaadin-checkbox-inject-modules:
     lumo_mixins_checkable-field,
+    lumo_mixins_field-helper,
     lumo_mixins_field-required,
     lumo_components_checkbox;
 }
