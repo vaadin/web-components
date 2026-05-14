@@ -15,10 +15,6 @@ const menuOverlayCore = css`
     animation: 0.14s lumo-overlay-dummy-animation;
   }
 
-  [part='overlay'] {
-    will-change: opacity, transform;
-  }
-
   :host([opening]) [part='overlay'] {
     animation: 0.1s lumo-menu-overlay-enter ease-out both;
   }

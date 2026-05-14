@@ -8,7 +8,6 @@
     position: absolute;
     inset: 0;
     padding: 0;
-    will-change: transform;
     font-size: inherit;
     --lumo-text-field-size: 27px;
     /* outline similar to what grid uses */

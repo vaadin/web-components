@@ -12,7 +12,6 @@
     padding: 4px;
     outline: none;
     overflow: visible;
-    will-change: opacity, transform;
   }
 
   [part='content'] {
