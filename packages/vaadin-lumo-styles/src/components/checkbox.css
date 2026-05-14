@@ -7,19 +7,7 @@
   :host {
     color: var(--vaadin-checkbox-label-color, var(--lumo-body-text-color));
     font-size: var(--vaadin-checkbox-label-font-size, var(--lumo-font-size-m));
-    font-family: var(--lumo-font-family);
-    line-height: var(--lumo-line-height-s);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: default;
-    outline: none;
     --_checkbox-size: var(--vaadin-checkbox-size, calc(var(--lumo-size-m) / 2));
-    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
-    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
-    --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
     --_invalid-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-10pct));
     --_disabled-checkmark-color: var(--vaadin-checkbox-disabled-checkmark-color, var(--lumo-contrast-30pct));
   }
@@ -47,14 +35,8 @@
 
   [part='checkbox'] {
     --_input-size: var(--_checkbox-size);
-    margin: var(--lumo-space-xs);
-    position: relative;
     border-radius: var(--vaadin-checkbox-border-radius, var(--lumo-border-radius-s));
     background: var(--vaadin-checkbox-background, var(--lumo-contrast-20pct));
-    transition:
-      transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2),
-      background-color 0.15s;
-    cursor: var(--lumo-clickable-cursor);
     /* Default field border color */
     --_input-border-color: var(--vaadin-input-field-border-color, var(--lumo-contrast-50pct));
   }
@@ -67,21 +49,6 @@
   :host([indeterminate]) [part='checkbox'],
   :host([checked]) [part='checkbox'] {
     background-color: var(--_selection-color);
-  }
-
-  /* Used for activation "halo" */
-  [part='checkbox']::before {
-    pointer-events: none;
-    color: transparent;
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    background-color: inherit;
-    transform: scale(1.4);
-    opacity: 0;
-    transition:
-      transform 0.1s,
-      opacity 0.8s;
   }
 
   /* Checkmark */
