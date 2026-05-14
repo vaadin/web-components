@@ -39,8 +39,8 @@ class AuraColorPresetControl extends AuraLitControl {
     }
   }
 
-  willUpdate(changed) {
-    if (changed.has('property')) {
+  willUpdate(props) {
+    if (props.has('property')) {
       this.#initialize();
     }
   }
