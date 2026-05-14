@@ -220,13 +220,7 @@
 
   /* Error message */
   [part='error-message'] {
-    font-size: var(--vaadin-input-field-error-font-size, var(--lumo-font-size-xs));
-    line-height: var(--lumo-line-height-xs);
-    font-weight: var(--vaadin-input-field-error-font-weight, 400);
-    color: var(--vaadin-input-field-error-color, var(--lumo-error-text-color));
-    will-change: max-height;
-    transition: 0.4s max-height;
-    max-height: 5em;
+    margin: 0;
     padding-inline-start: var(--lumo-space-xs);
   }
 
@@ -240,16 +234,14 @@
     display: none;
   }
 
-  :host([has-error-message]) [part='error-message']::after,
+  :host([has-error-message]) [part='error-message']::before {
+    display: none;
+  }
+
   :host([has-helper]) [part='helper-text']::after {
     content: '';
     display: block;
     height: 0.4em;
-  }
-
-  :host(:not([invalid])) [part='error-message'] {
-    max-height: 0;
-    overflow: hidden;
   }
 
   /* Helper */
