@@ -1,67 +1,30 @@
 import '@vaadin/select';
 import { html, render } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
-import { AuraControl } from './aura-abstract-control.js';
 import { resolveVarColor, toComparableColor } from './aura-color-utils.js';
+import { AuraLitControl } from './aura-lit-control.js';
 
-class AuraColorPresetControl extends AuraControl {
+class AuraColorPresetControl extends AuraLitControl {
   static get is() {
     return 'aura-color-preset-control';
   }
 
-  static get observedAttributes() {
-    return ['property', 'label'];
+  static get properties() {
+    return {
+      property: {
+        type: String,
+      },
+    };
   }
 
-  #prop = '--accent-color';
   #select;
-  #labelEl;
-  #resetBtn;
   #presets = [];
+  #selectedId = '';
 
   constructor() {
     super();
-    this.initControl({
-      label: 'Color preset',
-      content: '<vaadin-select></vaadin-select>',
-      controlPart: 'control',
-    });
-
-    this.#select = this.querySelector('vaadin-select');
-    this.#labelEl = this.labelElement;
-    this.#resetBtn = this.resetButton;
-
-    this.#select.renderer = (root) => {
-      this.#renderOptions(root);
-    };
-
-    this.#select.addEventListener('value-changed', (event) => {
-      const value = event.detail.value;
-      if (!value) return;
-
-      const preset = this.#presets.find((entry) => entry.id === value);
-      if (!preset) return;
-
-      if (preset.isDefault) {
-        this.#applyDefaultPreset(preset, { source: 'user', emit: true });
-      } else {
-        this.#applyPreset(preset, { source: 'user', persist: true, setVar: true, emit: true });
-      }
-    });
-
-    this.#resetBtn.addEventListener('click', () => {
-      const defaultPreset = this.#getDefaultPreset();
-      if (defaultPreset) {
-        this.#applyDefaultPreset(defaultPreset, { source: 'reset', emit: true });
-        return;
-      }
-
-      localStorage.removeItem(this.#storageKey());
-      document.documentElement.style.removeProperty(this.#prop);
-      const matched = this.#matchComputedPreset();
-      this.#setSelection(matched?.id ?? '');
-      this.#emit(matched?.value ?? null, matched?.name ?? null, { source: 'reset' });
-    });
+    this.property = '--accent-color';
+    this.label = 'Color preset';
   }
 
   get presets() {
@@ -71,38 +34,72 @@ class AuraColorPresetControl extends AuraControl {
   set presets(value) {
     this.#presets = this.#normalizePresets(value);
     this.#refreshOptions();
-    if (this.isConnected) {
+    if (this.isConnected && this.#select) {
       this.#initialize();
     }
   }
 
-  attributeChangedCallback(name, _old, value) {
-    if (name === 'property') {
-      this.#prop = value?.trim() || '--accent-color';
-      if (this.isConnected) {
-        this.#initialize();
-      }
-      return;
-    }
-
-    if (name === 'label') {
-      this.#labelEl.textContent = value || 'Color preset';
+  connectedCallback() {
+    super.connectedCallback();
+    if (!this.hasAttribute('label')) {
+      this.label = `${this.property.replace(/^--/u, '')} preset`;
     }
   }
 
-  connectedCallback() {
-    if (this.hasAttribute('property')) {
-      this.#prop = this.getAttribute('property').trim();
+  willUpdate(changed) {
+    super.willUpdate?.(changed);
+    if (changed.has('property')) {
+      if (!this.hasAttribute('label')) {
+        this.label = `${this.property.replace(/^--/u, '')} preset`;
+      }
+      if (this.#select) {
+        this.#initialize();
+      }
     }
+  }
 
-    if (this.hasAttribute('label')) {
-      this.#labelEl.textContent = this.getAttribute('label');
-    } else {
-      this.#labelEl.textContent = `${this.#prop.replace(/^--/u, '')} preset`;
-    }
+  renderContent() {
+    return html`<vaadin-select></vaadin-select>`;
+  }
+
+  firstUpdated() {
+    this.#select = this.querySelector('vaadin-select');
+    this.#select.renderer = (root) => this.#renderOptions(root);
+
+    this.#select.addEventListener('value-changed', (event) => {
+      const value = event.detail.value;
+      if (!value || value === this.#selectedId) {
+        return;
+      }
+
+      const preset = this.#presets.find((entry) => entry.id === value);
+      if (!preset) {
+        return;
+      }
+
+      if (preset.isDefault) {
+        this.#applyDefaultPreset(preset, { source: 'user', emit: true });
+      } else {
+        this.#applyPreset(preset, { source: 'user', persist: true, setVar: true, emit: true });
+      }
+    });
 
     this.#refreshOptions();
     this.#initialize();
+  }
+
+  onReset() {
+    const defaultPreset = this.#getDefaultPreset();
+    if (defaultPreset) {
+      this.#applyDefaultPreset(defaultPreset, { source: 'reset', emit: true });
+      return;
+    }
+
+    localStorage.removeItem(this.#storageKey());
+    document.documentElement.style.removeProperty(this.property);
+    const matched = this.#matchComputedPreset();
+    this.#setSelection(matched?.id ?? '');
+    this.#emit(matched?.value ?? null, matched?.name ?? null, { source: 'reset' });
   }
 
   #normalizePresets(value) {
@@ -114,7 +111,9 @@ class AuraColorPresetControl extends AuraControl {
       .map((entry, index) => {
         if (typeof entry === 'string') {
           const raw = entry.trim();
-          if (!raw) return null;
+          if (!raw) {
+            return null;
+          }
           return {
             id: `preset-${index}`,
             value: raw,
@@ -148,6 +147,10 @@ class AuraColorPresetControl extends AuraControl {
   }
 
   #refreshOptions() {
+    if (!this.#select) {
+      return;
+    }
+
     if (typeof this.#select.requestContentUpdate === 'function') {
       this.#select.requestContentUpdate();
     }
@@ -157,7 +160,7 @@ class AuraColorPresetControl extends AuraControl {
       return;
     }
 
-    const hasSelectedPreset = this.#presets.some((entry) => entry.id === this.#select.value);
+    const hasSelectedPreset = this.#presets.some((entry) => entry.id === this.#selectedId);
     if (!hasSelectedPreset) {
       this.#setSelection('');
     }
@@ -207,7 +210,7 @@ class AuraColorPresetControl extends AuraControl {
           this.#applyPreset(matchedFromStored, { source: 'storage', persist: true, setVar: true, emit: true });
         }
       } else {
-        document.documentElement.style.setProperty(this.#prop, storedValue);
+        document.documentElement.style.setProperty(this.property, storedValue);
         this.#setSelection('');
         this.#emit(storedValue, null, { source: 'storage' });
       }
@@ -222,7 +225,7 @@ class AuraColorPresetControl extends AuraControl {
     this.#setSelection(preset.id);
 
     if (opts.setVar) {
-      document.documentElement.style.setProperty(this.#prop, preset.value);
+      document.documentElement.style.setProperty(this.property, preset.value);
     }
 
     if (opts.persist) {
@@ -237,34 +240,34 @@ class AuraColorPresetControl extends AuraControl {
   #applyDefaultPreset(preset, opts) {
     this.#setSelection(preset.id);
     localStorage.removeItem(this.#storageKey());
-    document.documentElement.style.removeProperty(this.#prop);
+    document.documentElement.style.removeProperty(this.property);
 
     if (opts.emit) {
       this.#emit(null, preset.name, { source: opts.source, cleared: true });
     }
 
-    if (typeof this.#select.requestContentUpdate === 'function') {
+    if (this.#select && typeof this.#select.requestContentUpdate === 'function') {
       this.#select.requestContentUpdate();
     }
   }
 
   #setSelection(id) {
     const next = id || '';
-    if (this.#select.value !== next) {
+    this.#selectedId = next;
+    if (this.#select && this.#select.value !== next) {
       this.#select.value = next;
     }
   }
 
   #storageKey() {
-    return `aura-color-preset:${this.#prop}`;
+    return `aura-color-preset:${this.property}`;
   }
 
   #matchComputedPreset() {
-    const computed = getComputedStyle(document.documentElement).getPropertyValue(this.#prop).trim();
+    const computed = getComputedStyle(document.documentElement).getPropertyValue(this.property).trim();
     if (!computed) {
       return null;
     }
-
     return this.#matchPreset(computed);
   }
 
@@ -306,7 +309,7 @@ class AuraColorPresetControl extends AuraControl {
     this.dispatchEvent(
       new CustomEvent('value-change', {
         detail: {
-          property: this.#prop,
+          property: this.property,
           value,
           name,
           ...extra,
@@ -319,12 +322,10 @@ class AuraColorPresetControl extends AuraControl {
     if (!rawValue) {
       return null;
     }
-
     const resolved = resolveVarColor(rawValue);
     if (resolved) {
       return resolved;
     }
-
     return toComparableColor(rawValue);
   }
 
@@ -333,11 +334,9 @@ class AuraColorPresetControl extends AuraControl {
     if (!token) {
       return null;
     }
-
     if (!/^var\(/u.test(token)) {
       return null;
     }
-
     return token.replace(/\s+/gu, '');
   }
 }
