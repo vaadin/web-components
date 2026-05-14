@@ -174,6 +174,7 @@ class AuraThemeSchemeControl extends AuraLitControl {
     if (raw === 'light' || raw === 'dark' || raw === 'light dark') {
       return raw;
     }
+
     return null;
   }
 

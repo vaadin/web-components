@@ -173,6 +173,7 @@ class AuraSegmentedControl extends AuraLitControl {
     if (!value) {
       return [];
     }
+
     try {
       const parsed = JSON.parse(value);
       return this.#normalizeOptions(parsed);
@@ -186,6 +187,7 @@ class AuraSegmentedControl extends AuraLitControl {
     if (!children.length) {
       return [];
     }
+
     return this.#normalizeOptions(
       children.map((el) => ({
         value: el.getAttribute('value') ?? el.dataset.value,
@@ -200,15 +202,18 @@ class AuraSegmentedControl extends AuraLitControl {
     if (!Array.isArray(options)) {
       return [];
     }
+
     return options
       .map((option) => {
         if (option == null || typeof option !== 'object') {
           return null;
         }
+
         const value = option.value == null ? '' : String(option.value).trim();
         if (!value) {
           return null;
         }
+
         const label = option.label == null ? value : String(option.label);
         const icon = option.icon == null ? undefined : String(option.icon);
         const isDefault = option.default === true || option.default === 'true';
@@ -226,6 +231,7 @@ class AuraSegmentedControl extends AuraLitControl {
     if (!this.#options.length) {
       return null;
     }
+
     const stringValue = String(value ?? '').trim();
     const exact = this.#options.find((option) => option.value === stringValue);
     return exact ? exact.value : null;

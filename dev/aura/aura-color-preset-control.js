@@ -225,6 +225,7 @@ class AuraColorPresetControl extends AuraLitControl {
     if (!computed) {
       return null;
     }
+
     return this.#matchPreset(computed);
   }
 
@@ -279,10 +280,12 @@ class AuraColorPresetControl extends AuraLitControl {
     if (!rawValue) {
       return null;
     }
+
     const resolved = resolveVarColor(rawValue);
     if (resolved) {
       return resolved;
     }
+
     return toComparableColor(rawValue);
   }
 
@@ -291,9 +294,11 @@ class AuraColorPresetControl extends AuraLitControl {
     if (!token) {
       return null;
     }
+
     if (!/^var\(/u.test(token)) {
       return null;
     }
+
     return token.replace(/\s+/gu, '');
   }
 }
