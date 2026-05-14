@@ -6,7 +6,7 @@
 
 1. **Class hierarchy mirrors `Checkbox` line-for-line.** `ToggleSwitch` extends `AbstractSinglePropertyField<ToggleSwitch, Boolean>` with the synchronisable client property `"checked"` and empty value `false`. Same shape as `Checkbox(super("checked", false, false))`. `web-component-api.md` §1's "default-off, on/off boolean state" maps cleanly onto a `HasValue<Boolean>` field.
 
-2. **Implemented mixin interfaces — exactly the Checkbox set, minus indeterminate-related concerns.** `ClickNotifier<ToggleSwitch>`, `Focusable<ToggleSwitch>`, `HasAriaLabel`, `HasValidationProperties`, `HasValidator<Boolean>`, `InputField<AbstractField.ComponentValueChangeEvent<ToggleSwitch, Boolean>, Boolean>`, `HasThemeVariant<ToggleSwitchVariant>`. `InputField` transitively pulls in `HasEnabled`, `HasHelper`, `HasLabel`, `HasSize`, `HasStyle`, `HasTooltip`, `HasValue`. No `setIndeterminate` / `bindIndeterminate` / `isIndeterminate` and no `indeterminate-changed` synchronisation.
+2. **Implemented mixin interfaces — the Checkbox set, minus indeterminate-related concerns and minus `HasThemeVariant`.** `ClickNotifier<ToggleSwitch>`, `Focusable<ToggleSwitch>`, `HasAriaLabel`, `HasValidationProperties`, `HasValidator<Boolean>`, `InputField<AbstractField.ComponentValueChangeEvent<ToggleSwitch, Boolean>, Boolean>`. `InputField` transitively pulls in `HasEnabled`, `HasHelper`, `HasLabel`, `HasSize`, `HasStyle`, `HasTooltip`, `HasValue`. No `setIndeterminate` / `bindIndeterminate` / `isIndeterminate` and no `indeterminate-changed` synchronisation. No `ToggleSwitchVariant` enum — see Discussion.
 
 3. **Package: `com.vaadin.flow.component.toggleswitch`.** No reserved-keyword collision — `toggleswitch` is a valid Java identifier. The kebab-name segment is concatenated without dashes, matching `radiobutton`, `combobox`, `multiselectcombobox`, `datepicker`, etc.
 
@@ -18,19 +18,17 @@
 
 7. **i18n: nested `ToggleSwitchI18n` class with one field — `requiredErrorMessage`.** `Serializable`, fluent setter, no JSON annotations. Stored on the component via `setI18n` / `getI18n`. No client-side property push (the web component has no `i18n` property of its own); the server-side i18n message is read by the default validator. The instance returned by `getI18n()` is the live stored object, but mutations to it after `setI18n(...)` will not re-trigger any validation — applications must call `setI18n(...)` again to apply changes (matches `CheckboxI18n.getI18n` javadoc). Identical to `CheckboxI18n` (`flow-api.md` §6).
 
-8. **Theme variants: `ToggleSwitchVariant` enum with one constant — `HELPER_ABOVE` mapping to the CSS attribute string `"helper-above-field"`.** Implements `ThemeVariant`. The `LUMO_HELPER_ABOVE_FIELD` / `AURA_HELPER_ABOVE_FIELD` aliases that `CheckboxVariant` carries are backward-compatibility shims for code written before that constant was renamed; `ToggleSwitch` is a new component with no prior callers, so it ships with only the canonical name. (`flow-api.md` §11.)
+8. **Label slot fallback: `setLabelComponent(Component)` for HTML-in-label.** Same `NativeLabel labelElement` field with `slot="label"` as Checkbox. `setLabel(String)` removes the slotted component and sets the host's `label` property (`null` is normalised to `""`, matching Checkbox); `setLabelComponent(Component)` clears the property and slots the component into the label. Passing a non-null component is required; passing `null` is undefined behavior (Checkbox NPEs on the underlying `add` call — toggle-switch inherits this and does not validate the argument explicitly). (`flow-api.md` §3.)
 
-9. **Label slot fallback: `setLabelComponent(Component)` for HTML-in-label.** Same `NativeLabel labelElement` field with `slot="label"` as Checkbox. `setLabel(String)` removes the slotted component and sets the host's `label` property (`null` is normalised to `""`, matching Checkbox); `setLabelComponent(Component)` clears the property and slots the component into the label. Passing a non-null component is required; passing `null` is undefined behavior (Checkbox NPEs on the underlying `add` call — toggle-switch inherits this and does not validate the argument explicitly). (`flow-api.md` §3.)
+9. **`HasAriaLabel` is implemented by writing `accessibleName` and `accessibleNameRef` properties on the host element**, not by writing `aria-label` directly — same as Checkbox. The web component's `FieldMixin` is the side that translates these into the inner input's ARIA attributes.
 
-10. **`HasAriaLabel` is implemented by writing `accessibleName` and `accessibleNameRef` properties on the host element**, not by writing `aria-label` directly — same as Checkbox. The web component's `FieldMixin` is the side that translates these into the inner input's ARIA attributes.
+10. **`autofocus` is exposed on the Flow class.** Checkbox has `setAutofocus` / `isAutofocus` — the web component supports `autofocus` natively because the inner input is a real `<input>`. Match Checkbox here even though the web-component API spec did not call it out as a separate section; this is a reachability mapping rather than a new feature.
 
-11. **`autofocus` is exposed on the Flow class.** Checkbox has `setAutofocus` / `isAutofocus` — the web component supports `autofocus` natively because the inner input is a real `<input>`. Match Checkbox here even though the web-component API spec did not call it out as a separate section; this is a reachability mapping rather than a new feature.
+11. **Connector needed: no.** The web component is a single element with all state expressible as Element attributes/properties (`checked`, `disabled`, `readonly`, `required`, `invalid`, `errorMessage`, `helperText`, `label`, `accessibleName`, `accessibleNameRef`, `name`, `value`, `manualValidation`, `i18n` is server-side only). No data-driven items array, no DOM mutations needing client-side recomputation, no drag-and-drop wiring. Pattern-matches Checkbox, which has no connector either.
 
-12. **Connector needed: no.** The web component is a single element with all state expressible as Element attributes/properties (`checked`, `disabled`, `readonly`, `required`, `invalid`, `errorMessage`, `helperText`, `label`, `accessibleName`, `accessibleNameRef`, `name`, `value`, `manualValidation`, `i18n` is server-side only). No data-driven items array, no DOM mutations needing client-side recomputation, no drag-and-drop wiring. Pattern-matches Checkbox, which has no connector either.
+12. **Serialisation.** Every field on the class (`i18n`, `defaultValidator`, `validationController`, `labelElement`) is a `Serializable`-friendly type: the `CheckboxI18n` precedent shows the same `ValidationController<C, V>` and lambda `Validator<Boolean>` setup is safe; `NativeLabel` is a Flow `Component`. No `transient` fields, no custom `readObject` / `writeObject`. A `ToggleSwitchSerializableTest` extends `ClassesSerializableTest` to enforce this — same one-liner pattern as `CheckboxSerializableTest`.
 
-13. **Serialisation.** Every field on the class (`i18n`, `defaultValidator`, `validationController`, `labelElement`) is a `Serializable`-friendly type: the `CheckboxI18n` precedent shows the same `ValidationController<C, V>` and lambda `Validator<Boolean>` setup is safe; `NativeLabel` is a Flow `Component`. No `transient` fields, no custom `readObject` / `writeObject`. A `ToggleSwitchSerializableTest` extends `ClassesSerializableTest` to enforce this — same one-liner pattern as `CheckboxSerializableTest`.
-
-14. **Router-agnostic.** No path/URL setters; the component never calls `RouteConfiguration` or `UI.navigate`. Form integration goes through `Binder` — `flow-api.md` §9 — which is application-driven.
+13. **Router-agnostic.** No path/URL setters; the component never calls `RouteConfiguration` or `UI.navigate`. Form integration goes through `Binder` — `flow-api.md` §9 — which is application-driven.
 
 ---
 
@@ -44,8 +42,7 @@ flow-components/
     │   ├── pom.xml
     │   └── src/
     │       ├── main/java/com/vaadin/flow/component/toggleswitch/
-    │       │   ├── ToggleSwitch.java
-    │       │   └── ToggleSwitchVariant.java
+    │       │   └── ToggleSwitch.java
     │       └── test/java/com/vaadin/flow/component/toggleswitch/tests/
     │           ├── ToggleSwitchUnitTest.java
     │           ├── ToggleSwitchSerializableTest.java
@@ -85,8 +82,7 @@ The IT module includes a minimal `TestAppShell.java` under `com.vaadin.flow.comp
 public class ToggleSwitch extends AbstractSinglePropertyField<ToggleSwitch, Boolean>
         implements ClickNotifier<ToggleSwitch>, Focusable<ToggleSwitch>, HasAriaLabel,
                    HasValidationProperties, HasValidator<Boolean>,
-                   InputField<AbstractField.ComponentValueChangeEvent<ToggleSwitch, Boolean>, Boolean>,
-                   HasThemeVariant<ToggleSwitchVariant> {
+                   InputField<AbstractField.ComponentValueChangeEvent<ToggleSwitch, Boolean>, Boolean> {
 
     private final NativeLabel labelElement;
     private ToggleSwitchI18n i18n;
@@ -164,7 +160,6 @@ public class ToggleSwitch extends AbstractSinglePropertyField<ToggleSwitch, Bool
 | `HasValidationProperties` | `vaadin-flow-components-base` | `setErrorMessage` / `setInvalid` (flow-api.md §6). |
 | `HasValidator<Boolean>` | Flow core | `setManualValidation`, default-validator integration with `Binder` (flow-api.md §6). |
 | `InputField<…, Boolean>` | `vaadin-flow-components-base` | Transitively brings `HasEnabled`, `HasHelper`, `HasLabel`, `HasSize`, `HasStyle`, `HasTooltip`, `HasValue` (flow-api.md §§3, 5, 7, 8, 9). |
-| `HasThemeVariant<ToggleSwitchVariant>` | `vaadin-flow-components-base` | Typed `addThemeVariants` / `removeThemeVariants` (flow-api.md §11). |
 
 Inherited from `AbstractSinglePropertyField`: `getValue` / `setValue` / `addValueChangeListener` / `setReadOnly` / `getEmptyValue` (returns `Boolean.FALSE`). Inherited from `Component`: tag identity, lifecycle, `getElement()`. The `enabled` / `disabled` distinction follows `HasEnabled` (Flow's standard inverted accessor); the package-private `setDisabled(boolean)` mirrors Checkbox's internal helper for tests.
 
@@ -193,28 +188,11 @@ The class is server-side only — there is no client-side `i18n` property to pus
 
 ---
 
-## Theme Variants
-
-```java
-public enum ToggleSwitchVariant implements ThemeVariant {
-    HELPER_ABOVE("helper-above-field");
-
-    private final String variant;
-    ToggleSwitchVariant(String variant) { this.variant = variant; }
-    @Override public String getVariantName() { return variant; }
-}
-```
-
-The enum maps the single canonical `HELPER_ABOVE` constant to the CSS attribute value `"helper-above-field"`. The deprecated `LUMO_HELPER_ABOVE_FIELD` / `AURA_HELPER_ABOVE_FIELD` aliases on `CheckboxVariant` exist to preserve compatibility with code written against earlier Checkbox releases — `ToggleSwitch` has no prior public release, so those legacy names are not introduced. Future deprecation policy: if the web component eventually renames or drops the `helper-above-field` attribute, the old constant is kept `@Deprecated` mapped to the same string for one major release, then removed (same pattern `ButtonVariant` follows when *its* attributes change).
-
----
-
 ## Connector
 
 **No connector needed.** All state is set via Element properties / attributes:
 - `checked`, `disabled`, `readonly`, `required`, `invalid`, `errorMessage`, `helperText`, `label`, `name`, `value`, `manualValidation`, `accessibleName`, `accessibleNameRef`, `autofocus` — direct property writes through Flow's Element API.
 - Tooltip text — handled by `HasTooltip` (uses Vaadin's existing tooltip plumbing).
-- Theme variants — handled by `HasThemeVariant` (toggles `theme` attribute values).
 - i18n's only field (`requiredErrorMessage`) is consumed server-side by the default validator and never pushed to the client.
 
 The component matches Checkbox's connector-less profile because both are single-element fields without per-item client state, drag-and-drop, or DOM mutations requiring client-side recomputation.
@@ -265,7 +243,6 @@ Mirrors `CheckboxElement` (which also implements `HasLabel`, `HasHelper`, `HasVa
 All shared modules are reused as-is — no adjustments are required.
 
 - **`com.vaadin.flow.component.shared.HasValidationProperties`** — provides `setErrorMessage` / `setInvalid`. Used by every field. As-is.
-- **`com.vaadin.flow.component.shared.HasThemeVariant`** + `ThemeVariant` — typed `addThemeVariants` / `removeThemeVariants`. As-is.
 - **`com.vaadin.flow.component.shared.HasTooltip`** (transitive via `InputField`) — the `setTooltipText` / `setTooltipMarkdown` / `getTooltip()` trio. As-is.
 - **`com.vaadin.flow.component.shared.InputField<E, V>`** — transitive bundle of field-mixin interfaces. As-is.
 - **`com.vaadin.flow.component.shared.ValidationUtil#validateRequiredConstraint`** — validation helper for the `required ⇒ on` rule. As-is.
@@ -284,7 +261,7 @@ The `HasValueAndElement.setRequiredIndicatorVisible(boolean)` semantics (a requi
 |---|---|
 | 1. Flip via pointer or keyboard, default off, ARIA switch role | Component Classes → `ToggleSwitch` (constructors, `AbstractSinglePropertyField` defaulting to `false`); web component handles activation and role |
 | 2. Notify only on user-initiated changes | Component Classes → `ToggleSwitch` (inherited `addValueChangeListener` + `event.isFromClient()`); Decision 5 |
-| 3. Clickable label / label component / accessible name | Component Classes → `ToggleSwitch` (`setLabel`, `setLabelComponent`, `setAriaLabel`, `setAriaLabelledBy`); Decisions 9–10 |
+| 3. Clickable label / label component / accessible name | Component Classes → `ToggleSwitch` (`setLabel`, `setLabelComponent`, `setAriaLabel`, `setAriaLabelledBy`); Decisions 8–9 |
 | 4. Announce as a switch with on/off state | Web component handles ARIA; Flow has no surface needed (`flow-api.md` Web API coverage: "covered transparently") |
 | 5. Disabled refuses interaction | Component Classes → `ToggleSwitch` (`HasEnabled.setEnabled` via `InputField`); Decision 2 |
 | 6. Read-only stays focusable and announced | Component Classes → `ToggleSwitch` (`HasValue.setReadOnly` inherited via `AbstractSinglePropertyField`); web component manages the ARIA / form-submission split |
@@ -292,6 +269,14 @@ The `HasValueAndElement.setRequiredIndicatorVisible(boolean)` semantics (a requi
 | 8. Helper text | Component Classes → `ToggleSwitch` (`HasHelper` via `InputField`) |
 | 9. Error message when invalid (custom messages allowed) | Component Classes → `ToggleSwitch` (`HasValidationProperties.setErrorMessage`, `setInvalid`, `setManualValidation`); Decisions 5–7 |
 | 10. Optional tooltip | Component Classes → `ToggleSwitch` (`HasTooltip` via `InputField`) |
-| 11. Native form submission | Decision 12 (no connector); web component participates in `<form>` natively. Flow form integration via `Binder` (`flow-api.md` §9) |
+| 11. Native form submission | Decision 11 (no connector); web component participates in `<form>` natively. Flow form integration via `Binder` (`flow-api.md` §9) |
 
-All eleven requirements are addressed. `flow-api.md`'s 11 sections + Web API coverage check map onto the Component Classes / i18n / Theme Variants / TestBench sections above; no API features are dropped.
+All eleven requirements are addressed. `flow-api.md`'s 11 sections + Web API coverage check map onto the Component Classes / i18n / TestBench sections above; no API features are dropped.
+
+---
+
+## Discussion
+
+**Q: Why is `HasThemeVariant<ToggleSwitchVariant>` not implemented, and why is there no `ToggleSwitchVariant` enum?**
+
+The only candidate Checkbox-style variant is `helper-above-field`, and that theme attribute is [not actually supported by the web component](https://github.com/vaadin/web-components/issues/11750). A `ToggleSwitchVariant` enum with `HELPER_ABOVE` as its only constant would expose a no-op API, so the Flow class omits both the enum and the `HasThemeVariant<…>` interface. If the underlying variant is implemented for the web component in the future, the typed enum and the interface can be added without affecting other public surface — this is purely a deferral, not a permanent design decision.

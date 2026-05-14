@@ -2,7 +2,7 @@
 
 Java wrapper for `<vaadin-toggle-switch>`. Class: `ToggleSwitch` in package `com.vaadin.flow.component.toggleswitch`.
 
-The Flow class follows the `Checkbox` pattern from `vaadin-checkbox-flow` line-for-line: same base class, same shared mixins (`InputField`, `HasValidationProperties`, `HasAriaLabel`, `HasValidator<Boolean>`, `HasThemeVariant<ToggleSwitchVariant>`), same `ClickNotifier` / `Focusable`, same nested `ToggleSwitchI18n` for the required-error message. The only intentional difference is the absence of `indeterminate`-related API — toggle switches do not have an indeterminate state per the problem statement.
+The Flow class follows the `Checkbox` pattern from `vaadin-checkbox-flow` line-for-line: same base class, same shared mixins (`InputField`, `HasValidationProperties`, `HasAriaLabel`, `HasValidator<Boolean>`), same `ClickNotifier` / `Focusable`, same nested `ToggleSwitchI18n` for the required-error message. The intentional differences are (1) no `indeterminate`-related API — toggle switches do not have an indeterminate state per the problem statement — and (2) no `HasThemeVariant` / typed `ToggleSwitchVariant` enum, see Discussion.
 
 ---
 
@@ -264,20 +264,19 @@ s.focus();
 
 ---
 
-## 11. Theme variants and styling
+## 11. Styling
 
-Covers requirement(s): — (reachability mapping for CSS custom properties / theme variants exposed by the web component)
+Covers requirement(s): — (reachability mapping for CSS custom properties exposed by the web component)
 
 ```java
 ToggleSwitch s = new ToggleSwitch("Compact");
-s.addThemeVariants(ToggleSwitchVariant.HELPER_ABOVE);
 
 // CSS custom properties go through the standard HasStyle surface (transitive via InputField)
 s.getStyle().set("--vaadin-toggle-switch-track-width", "32px");
 s.getStyle().set("--vaadin-toggle-switch-thumb-color", "var(--lumo-base-color)");
 ```
 
-**Why this shape:** `HasThemeVariant<ToggleSwitchVariant>` provides the typed `addThemeVariants(ToggleSwitchVariant...)` and `removeThemeVariants(ToggleSwitchVariant...)` methods — same shape as `Button.addThemeVariants(ButtonVariant...)`. The `ToggleSwitchVariant` enum currently contains only `HELPER_ABOVE` (and the legacy `LUMO_HELPER_ABOVE_FIELD` / `AURA_HELPER_ABOVE_FIELD` deprecation aliases following the `CheckboxVariant` precedent). CSS custom properties are not surfaced as typed Java setters; `getStyle()` from `HasStyle` is the canonical Flow path.
+**Why this shape:** CSS custom properties are not surfaced as typed Java setters; `getStyle()` from `HasStyle` is the canonical Flow path. The component does not implement `HasThemeVariant<…>` — see Discussion.
 
 ---
 
@@ -307,7 +306,6 @@ s.getStyle().set("--vaadin-toggle-switch-thumb-color", "var(--lumo-base-color)")
 | `name` attribute | superseded by `Binder.forField(toggleSwitch).bind(...)` (§9) | Flow uses `Binder` + `HasValue`, not native HTML form submission; matches Checkbox (no `setName`) |
 | `value` attribute (form-submission default `"on"`) | superseded by the Boolean field value (§1) and Binder (§9) | the field's typed value is the `Boolean` value, not a string submission token |
 | `<form>.reset()` interaction | superseded by `Binder.readBean(original)` (§9) | native-form lifecycle is irrelevant to Flow; Binder handles cancel/revert via its own pristine state |
-| Theme variant `helper-above-field` | `ToggleSwitchVariant.HELPER_ABOVE` (+ legacy aliases) via `HasThemeVariant<ToggleSwitchVariant>` | matches `CheckboxVariant` |
 | CSS custom properties (`--vaadin-toggle-switch-*`) | `getStyle().set(...)` via `HasStyle` | no typed setters; standard Vaadin convention |
 
 Every web-component API surface is reachable from Flow except the four marked "not exposed in Flow", each of which is intentionally elided and rationale-tagged: native HTML form attributes (`name`, `value`, `<form>.reset()`) are superseded by Vaadin's `Binder` data-binding model, and the `validated` event has no widely used Flow analog (Checkbox has no `addValidatedListener` either).
@@ -316,7 +314,11 @@ Every web-component API surface is reachable from Flow except the four marked "n
 
 No questions were posed to the user during the production of this document. Every API choice tracks the existing `Checkbox` Flow class:
 
-- **Class hierarchy** — `extends AbstractSinglePropertyField<ToggleSwitch, Boolean>` plus the same `implements` list as `Checkbox` (minus indeterminate-related concerns).
+- **Class hierarchy** — `extends AbstractSinglePropertyField<ToggleSwitch, Boolean>` plus the same `implements` list as `Checkbox` (minus indeterminate-related concerns and minus `HasThemeVariant`).
 - **Constructors** — same set as `Checkbox`: no-arg, `(String label)`, `(boolean initialValue)`, `(String, boolean)`, `(String, ValueChangeListener)`, `(boolean, ValueChangeListener)`, `(String, boolean, ValueChangeListener)`.
 - **Validation** — same `HasValidationProperties` / `HasValidator<Boolean>` / `setManualValidation` / `validate()` / `ToggleSwitchI18n.setRequiredErrorMessage` machinery.
-- **Theming** — `ToggleSwitchVariant` enum modeled on `CheckboxVariant`; only `HELPER_ABOVE` for now.
+- **Styling** — CSS custom properties via `HasStyle.getStyle()`; no typed theme-variant enum (see below).
+
+**Q: Why is `HasThemeVariant<ToggleSwitchVariant>` not implemented?**
+
+The only candidate variant for a Checkbox-shaped field is `helper-above-field`. That theme attribute is documented but [not actually supported by the web component](https://github.com/vaadin/web-components/issues/11750), so a `ToggleSwitchVariant` enum with `HELPER_ABOVE` as its only constant would expose a no-op API. The class therefore omits `HasThemeVariant` and ships without a `ToggleSwitchVariant` enum. If the underlying variant is implemented for the web component in the future, the typed Java enum and the `HasThemeVariant<…>` interface can be added without affecting other public surface.
