@@ -6,7 +6,7 @@
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { updatePart } from './vaadin-grid-helpers.js';
+import { updateState } from './vaadin-grid-helpers.js';
 
 function isRow(element) {
   return element?.localName === 'vaadin-grid-row';
@@ -17,7 +17,7 @@ function isCell(element) {
 }
 
 function isDetailsCell(element) {
-  return element.matches('[part~="details-cell"]');
+  return element.matches(':state(details)');
 }
 
 export const KeyboardNavigationMixin = (superClass) =>
@@ -165,11 +165,11 @@ export const KeyboardNavigationMixin = (superClass) =>
     /** @private */
     _focusedCellChanged(focusedCell, oldFocusedCell) {
       if (oldFocusedCell) {
-        updatePart(oldFocusedCell, 'focused-cell', false);
+        updateState(oldFocusedCell, 'focused', false, 'focused-cell');
       }
 
       if (focusedCell) {
-        updatePart(focusedCell, 'focused-cell', true);
+        updateState(focusedCell, 'focused', true, 'focused-cell');
       }
     }
 

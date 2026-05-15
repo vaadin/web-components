@@ -27,8 +27,8 @@ import {
   getBodyRowCells,
   iterateChildren,
   iterateRowCells,
+  updateAttribute,
   updateBooleanRowStates,
-  updateCellsPart,
   updatePart,
   updateState,
 } from './vaadin-grid-helpers.js';
@@ -341,7 +341,7 @@ export const GridMixin = (superClass) =>
         row.setAttribute('role', 'row');
         row.setAttribute('tabindex', '-1');
         updatePart(row, 'row', true);
-        updatePart(row, 'body-row', true);
+        updateState(row, 'body', true, 'body-row');
         if (this._columnTree) {
           this.__initRow(row, this._columnTree[this._columnTree.length - 1], 'body', false, true);
         }
@@ -490,7 +490,7 @@ export const GridMixin = (superClass) =>
               column._cells.push(cell);
             }
             updatePart(cell, 'cell', true);
-            updatePart(cell, 'body-cell', true);
+            updateState(cell, 'body', true, 'body-cell');
             cell.__parentRow = row;
             // Cache the cell reference
             row.__cells.push(cell);
@@ -554,7 +554,7 @@ export const GridMixin = (superClass) =>
               }
             }
             updatePart(cell, 'cell', true);
-            updatePart(cell, `${section}-cell`, true);
+            updateState(cell, section, true, `${section}-cell`);
           }
 
           if (!cell._content.parentElement) {
@@ -705,14 +705,14 @@ export const GridMixin = (superClass) =>
         headerRow.setAttribute('role', 'row');
         headerRow.setAttribute('tabindex', '-1');
         updatePart(headerRow, 'row', true);
-        updatePart(headerRow, 'header-row', true);
+        updateState(headerRow, 'header', true, 'header-row');
         this.$.header.appendChild(headerRow);
 
         const footerRow = document.createElement('vaadin-grid-row');
         footerRow.setAttribute('role', 'row');
         footerRow.setAttribute('tabindex', '-1');
         updatePart(footerRow, 'row', true);
-        updatePart(footerRow, 'footer-row', true);
+        updateState(footerRow, 'footer', true, 'footer-row');
         this.$.footer.appendChild(footerRow);
       }
       while (this.$.header.children.length > columnTree.length) {
@@ -747,12 +747,14 @@ export const GridMixin = (superClass) =>
     __updateHeaderFooterRowParts(section) {
       const visibleRows = [...this.$[section].querySelectorAll('vaadin-grid-row:not([hidden])')];
       [...this.$[section].children].forEach((row) => {
-        updatePart(row, `first-${section}-row`, row === visibleRows.at(0));
-        updatePart(row, `last-${section}-row`, row === visibleRows.at(-1));
+        const isFirst = row === visibleRows.at(0);
+        const isLast = row === visibleRows.at(-1);
+        updateState(row, `first-${section}`, isFirst, `first-${section}-row`);
+        updateState(row, `last-${section}`, isLast, `last-${section}-row`);
 
         getBodyRowCells(row).forEach((cell) => {
-          updatePart(cell, `first-${section}-row-cell`, row === visibleRows.at(0));
-          updatePart(cell, `last-${section}-row-cell`, row === visibleRows.at(-1));
+          updateState(cell, `first-${section}`, isFirst, `first-${section}-row-cell`);
+          updateState(cell, `last-${section}`, isLast, `last-${section}-row-cell`);
         });
       });
     }
@@ -765,11 +767,11 @@ export const GridMixin = (superClass) =>
     __updateRowLoading(row, loading) {
       const cells = getBodyRowCells(row);
 
-      // Row state attribute
-      updateState(row, 'loading', loading);
+      // Keep the attribute on the row for selectors like `[loading]`
+      updateAttribute(row, 'loading', loading);
 
-      // Cells part attribute
-      updateCellsPart(cells, 'loading-row-cell', loading);
+      updateState(row, 'loading', loading, 'loading-row');
+      cells.forEach((cell) => updateState(cell, 'loading', loading, 'loading-row-cell'));
 
       if (loading) {
         // Run style generators for the loading row to have custom names cleared

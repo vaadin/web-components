@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { updatePart } from './vaadin-grid-helpers.js';
+import { updatePart, updateState } from './vaadin-grid-helpers.js';
 
 export const RowDetailsMixin = (superClass) =>
   class RowDetailsMixin extends superClass {
@@ -86,7 +86,7 @@ export const RowDetailsMixin = (superClass) =>
       if (this._columnTree) {
         // Only update the rows if the column tree has already been initialized
         this._getRenderedRows().forEach((row) => {
-          if (!row.querySelector('[part~=details-cell]')) {
+          if (!row.querySelector('vaadin-grid-cell:state(details)')) {
             this.__initRow(row, this._columnTree[this._columnTree.length - 1]);
             this.__updateRow(row);
             return;
@@ -114,7 +114,7 @@ export const RowDetailsMixin = (superClass) =>
      */
     _configureDetailsCell(cell) {
       updatePart(cell, 'cell', true);
-      updatePart(cell, 'details-cell', true);
+      updateState(cell, 'details', true, 'details-cell');
       // Freeze the details cell, so that it does not scroll horizontally
       // with the normal cells. This way it looks less weird.
       cell.toggleAttribute('frozen', true);
@@ -128,7 +128,7 @@ export const RowDetailsMixin = (superClass) =>
      * @protected
      */
     _toggleDetailsCell(row, detailsOpened) {
-      const cell = row.querySelector('[part~="details-cell"]');
+      const cell = row.querySelector('vaadin-grid-cell:state(details)');
       if (!cell) {
         return;
       }
@@ -148,7 +148,7 @@ export const RowDetailsMixin = (superClass) =>
 
     /** @protected */
     _updateDetailsCellHeight(row) {
-      const cell = row.querySelector('[part~="details-cell"]');
+      const cell = row.querySelector('vaadin-grid-cell:state(details)');
       if (!cell) {
         return;
       }

@@ -14,7 +14,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
  */
 export function getBodyRowCells(row) {
   // If available, return the cached cells. Otherwise, query the cells directly from the row.
-  return row.__cells || Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'));
+  return row.__cells || Array.from(row.querySelectorAll('vaadin-grid-cell:not(:state(details))'));
 }
 
 /**
@@ -59,11 +59,13 @@ export function updateColumnOrders(columns, scope, baseOrder) {
 }
 
 /**
+ * Toggles an attribute on the element based on the given value type.
+ *
  * @param {!HTMLElement} element
  * @param {string} attribute
  * @param {boolean | string | null | undefined} value
  */
-export function updateState(element, attribute, value) {
+export function updateAttribute(element, attribute, value) {
   switch (typeof value) {
     case 'boolean':
       element.toggleAttribute(attribute, value);
@@ -79,6 +81,30 @@ export function updateState(element, attribute, value) {
 }
 
 /**
+ * Toggles a CSS class on the element, and a matching custom state on the
+ * element's `ElementInternals` when available. The state name is what gets
+ * exposed via the `:state(...)` pseudo-class, while the class keeps the grid's
+ * internal CSS (which still relies on class selectors) working.
+ *
+ * @param {!HTMLElement} element
+ * @param {string} state
+ * @param {boolean | string | null | undefined} value
+ * @param {string} [className=state] Optional override for the class name.
+ */
+export function updateState(element, state, value, className = state) {
+  const on = !!value || value === '';
+  element.classList.toggle(className, on);
+  const internals = element._internals;
+  if (internals && internals.states) {
+    if (on) {
+      internals.states.add(state);
+    } else {
+      internals.states.delete(state);
+    }
+  }
+}
+
+/**
  * @param {!HTMLElement} element
  * @param {string} part
  * @param {boolean | string | null | undefined} value
@@ -90,17 +116,6 @@ export function updatePart(element, part, value) {
 }
 
 /**
- * @param {HTMLElement[]} cells
- * @param {string} part
- * @param {boolean | string | null | undefined} value
- */
-export function updateCellsPart(cells, part, value) {
-  cells.forEach((cell) => {
-    updatePart(cell, part, value);
-  });
-}
-
-/**
  * @param {!HTMLElement} row
  * @param {Object} states
  */
@@ -108,16 +123,12 @@ export function updateBooleanRowStates(row, states) {
   const cells = getBodyRowCells(row);
 
   Object.entries(states).forEach(([state, value]) => {
-    // Row state attribute
-    updateState(row, state, value);
+    // Keep mirroring the state as an attribute on the row for selectors like
+    // `[loading]`, `[dragstart]`, etc. used by internal CSS.
+    updateAttribute(row, state, value);
 
-    const rowPart = `${state}-row`;
-
-    // Row part attribute
-    updatePart(row, rowPart, value);
-
-    // Cells part attribute
-    updateCellsPart(cells, `${rowPart}-cell`, value);
+    updateState(row, state, value, `${state}-row`);
+    cells.forEach((cell) => updateState(cell, state, value, `${state}-row-cell`));
   });
 }
 
@@ -131,21 +142,18 @@ export function updateStringRowStates(row, states) {
   Object.entries(states).forEach(([state, value]) => {
     const prevValue = row.getAttribute(state);
 
-    // Row state attribute
-    updateState(row, state, value);
+    updateAttribute(row, state, value);
 
-    // remove previous part from row and cells if there was any
     if (prevValue) {
-      const prevRowPart = `${state}-${prevValue}-row`;
-      updatePart(row, prevRowPart, false);
-      updateCellsPart(cells, `${prevRowPart}-cell`, false);
+      const prevState = `${state}-${prevValue}`;
+      updateState(row, prevState, false, `${prevState}-row`);
+      cells.forEach((cell) => updateState(cell, prevState, false, `${prevState}-row-cell`));
     }
 
-    // set new part to rows and cells if there is a value
     if (value) {
-      const rowPart = `${state}-${value}-row`;
-      updatePart(row, rowPart, value);
-      updateCellsPart(cells, `${rowPart}-cell`, value);
+      const newState = `${state}-${value}`;
+      updateState(row, newState, true, `${newState}-row`);
+      cells.forEach((cell) => updateState(cell, newState, true, `${newState}-row-cell`));
     }
   });
 }
@@ -154,20 +162,22 @@ export function updateStringRowStates(row, states) {
  * @param {!HTMLElement} cell
  * @param {string} attribute
  * @param {boolean | string | null | undefined} value
- * @param {string} part
- * @param {?string} oldPart
+ * @param {string} [part]
+ * @param {?string} [oldPart]
  */
 export function updateCellState(cell, attribute, value, part, oldPart) {
-  // Toggle state attribute on the cell
-  updateState(cell, attribute, value);
+  updateAttribute(cell, attribute, value);
 
-  // Remove old part from the attribute
+  const newClass = part || `${attribute}-cell`;
+  // State name = class name with the `-cell` suffix stripped, so e.g.
+  // `focused-cell` becomes the state `focused` and `reorder-dragging-cell`
+  // becomes the state `reorder-dragging`.
+  const newState = newClass.replace(/-cell$/u, '');
   if (oldPart) {
-    updatePart(cell, oldPart, false);
+    const oldState = oldPart.replace(/-cell$/u, '');
+    updateState(cell, oldState, false, oldPart);
   }
-
-  // Add new part to the cell attribute
-  updatePart(cell, part || `${attribute}-cell`, value);
+  updateState(cell, newState, value, newClass);
 }
 
 /**
