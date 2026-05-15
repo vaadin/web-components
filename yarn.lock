@@ -1743,10 +1743,10 @@
     "@sinonjs/commons" "^3.0.1"
     type-detect "^4.1.0"
 
-"@tanstack/virtual-core@^3.13.23":
-  version "3.13.23"
-  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.13.23.tgz#72bcaad8bbf6bd86e0d02776dc7dc968d0aba07b"
-  integrity sha512-zSz2Z2HNyLjCplANTDyl3BcdQJc2k1+yyFoKhNRmCr7V7dY8o8q5m8uFTI1/Pg1kL+Hgrz6u3Xo6eFUB7l66cg==
+"@tanstack/virtual-core@3.14.0":
+  version "3.14.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.14.0.tgz#c8839d0d702b8af47c0e57d4ab72fc3ba8bbf3da"
+  integrity sha512-JLANqGy/D6k4Ujmh8Tr25lGimuOXNiaVyXaCAZS0W+1390sADdGnyUdSWNIfd49gebtIxGMij4IktRVzrdr12Q==
 
 "@tootallnate/quickjs-emscripten@^0.23.0":
   version "0.23.0"

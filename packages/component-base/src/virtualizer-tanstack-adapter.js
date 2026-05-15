@@ -32,6 +32,7 @@ function mapElementsToVirtualItems(elements, items) {
 export class TanStackAdapter {
   #cleanup;
   #isVisible;
+  #resizeRaf;
   #virtualizer;
   #estimatedSize = 60;
   #resizeObserver;
@@ -77,8 +78,22 @@ export class TanStackAdapter {
     });
 
     this.#resizeObserver = new ResizeObserver((entries) => {
-      entries.forEach((entry) => {
-        this.#measureElement(entry.target);
+      cancelAnimationFrame(this.#resizeRaf);
+
+      this.#resizeRaf = requestAnimationFrame(() => {
+        entries.forEach((entry) => {
+          const index = this.#getElementIndex(entry.target);
+          if (index == null) {
+            return;
+          }
+
+          const { height } = entry.contentRect;
+          if (height === 0) {
+            return;
+          }
+
+          this.#virtualizer.resizeItem(index, height);
+        });
       });
     });
   }
@@ -224,21 +239,12 @@ export class TanStackAdapter {
     });
 
     updatedElements.forEach((el) => {
-      this.#measureElement(el);
+      const index = this.#getElementIndex(el);
+      const { height } = el.getBoundingClientRect();
+      if (height > 0) {
+        this.#virtualizer.resizeItem(index, height);
+      }
     });
-  }
-
-  #measureElement(el) {
-    const index = this.#getElementIndex(el);
-    if (index == null) {
-      return;
-    }
-
-    const { height } = el.getBoundingClientRect();
-    if (height === 0) {
-      return;
-    }
-    this.#virtualizer.resizeItem(index, height);
   }
 
   #updateEstimatedSize() {
