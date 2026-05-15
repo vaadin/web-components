@@ -87,7 +87,7 @@ export class TanStackAdapter {
             return;
           }
 
-          const { height } = entry.contentRect;
+          const height = entry.borderBoxSize[0].blockSize;
           if (height === 0) {
             return;
           }
@@ -230,7 +230,7 @@ export class TanStackAdapter {
       el.hidden = false;
       el.style.translate = `0px ${item.start}px`;
       this.#setElementIndex(el, newIndex);
-      this.#resizeObserver.observe(el);
+      this.#resizeObserver.observe(el, { box: 'border-box' });
 
       if (oldIndex !== newIndex) {
         this.updateElement(el, newIndex);
