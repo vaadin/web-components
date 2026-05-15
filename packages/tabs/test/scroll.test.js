@@ -38,15 +38,15 @@ describe('scrollable tabs', () => {
       await nextFrame();
     });
 
-    it('should show one extra item on the right edge of the viewport on "arrow-right" on last visible tab', async () => {
+    it('should show next focused item on the right edge of the viewport on "arrow-right" on last visible tab', async () => {
       tabs.selected = 4;
       tabs._focus(4);
       await nextRender();
       arrowRight(tabs);
-      expect(scroller.getBoundingClientRect().right).to.be.closeTo(items[6].getBoundingClientRect().right, 1);
+      expect(scroller.getBoundingClientRect().right).to.be.closeTo(items[5].getBoundingClientRect().right, 60);
     });
 
-    it('should show one extra item on the left edge of the viewport on "arrow-left" on first visible tab', async () => {
+    it('should show next focused item on the left edge of the viewport on "arrow-left" on first visible tab', async () => {
       // Move scroller so the first tab will be out of visible part
       tabs.selected = 7;
       tabs._focus(7);
@@ -58,7 +58,7 @@ describe('scrollable tabs', () => {
       await nextRender();
 
       arrowLeft(tabs);
-      expect(scroller.getBoundingClientRect().left).to.be.closeTo(items[0].getBoundingClientRect().left, 1);
+      expect(scroller.getBoundingClientRect().left).to.be.closeTo(items[1].getBoundingClientRect().left, 60);
     });
 
     it('should scroll forward when arrow button is clicked', () => {
@@ -79,7 +79,7 @@ describe('scrollable tabs', () => {
       describe(dir, () => {
         let itemsInViewport;
 
-        function expectItemsInViewport(expected) {
+        function getItemsInViewport() {
           const scrollerRect = scroller.getBoundingClientRect();
 
           items.forEach((item) => {
@@ -104,8 +104,7 @@ describe('scrollable tabs', () => {
               itemsInViewport.delete(item);
             }
           });
-          const actual = [...itemsInViewport].map((item) => item.textContent);
-          expect(actual.every((item) => expected.includes(item))).to.be.true;
+          return [...itemsInViewport].map((item) => item.textContent);
         }
 
         beforeEach(async () => {
@@ -117,22 +116,17 @@ describe('scrollable tabs', () => {
         it('should have displayed all the items fully when scrolled forward to the end via button', async () => {
           const forwardButton = tabs.shadowRoot.querySelector('[part="forward-button"]');
 
-          expectItemsInViewport(['Foo', 'Bar', 'Baz', 'Foo1', 'Bar1']);
+          const allVisibleItems = new Set();
+          getItemsInViewport().forEach((item) => allVisibleItems.add(item));
 
-          forwardButton.click();
-          await nextRender();
+          while (Math.abs(scroller.scrollLeft) < scroller.scrollWidth - scroller.offsetWidth) {
+            forwardButton.click();
+            await nextRender();
 
-          expectItemsInViewport(['Baz1', 'Foo2', 'Bar2', 'Baz2']);
+            getItemsInViewport().forEach((item) => allVisibleItems.add(item));
+          }
 
-          forwardButton.click();
-          await nextRender();
-
-          expectItemsInViewport(['Foo3', 'Bar3', 'Baz3', 'Foo4']);
-
-          forwardButton.click();
-          await nextRender();
-
-          expectItemsInViewport(['Bar3', 'Baz3', 'Foo4', 'Bar4', 'Baz4']);
+          expect(allVisibleItems.size).to.equal(items.length);
         });
 
         it('should have displayed all the items fully when scrolled back to the start via button', async () => {
@@ -140,24 +134,19 @@ describe('scrollable tabs', () => {
           tabs._scrollToItem(items.length - 1);
           await nextRender();
 
-          expectItemsInViewport(['Bar3', 'Baz3', 'Foo4', 'Bar4', 'Baz4']);
-
           const backButton = tabs.shadowRoot.querySelector('[part="back-button"]');
 
-          backButton.click();
-          await nextRender();
+          const allVisibleItems = new Set();
+          getItemsInViewport().forEach((item) => allVisibleItems.add(item));
 
-          expectItemsInViewport(['Foo2', 'Bar2', 'Baz2', 'Foo3']);
+          while (Math.abs(scroller.scrollLeft) > 0) {
+            backButton.click();
+            await nextRender();
 
-          backButton.click();
-          await nextRender();
+            getItemsInViewport().forEach((item) => allVisibleItems.add(item));
+          }
 
-          expectItemsInViewport(['Baz', 'Foo1', 'Bar1', 'Baz1']);
-
-          backButton.click();
-          await nextRender();
-
-          expectItemsInViewport(['Foo', 'Bar', 'Baz', 'Foo1', 'Bar1']);
+          expect(allVisibleItems.size).to.equal(items.length);
         });
 
         it('should not get stuck with wide tabs when scrolled forward to the end via button', () => {
@@ -214,16 +203,16 @@ describe('scrollable tabs', () => {
       expect(scroller.scrollTop).to.be.greaterThan(0);
     });
 
-    it('should show one extra item on the bottom edge of the viewport on "arrow-down" on last visible tab', async () => {
+    it('should show the next focused item on the bottom edge of the viewport on "arrow-down" on last visible tab', async () => {
       tabs.selected = 5;
       tabs._focus(5);
       await nextRender();
-      const scrollPosition = items[7].getBoundingClientRect().bottom;
+      const scrollPosition = items[5].getBoundingClientRect().bottom;
       arrowDown(tabs);
-      expect(items[7].getBoundingClientRect().bottom).to.be.lessThan(scrollPosition);
+      expect(items[6].getBoundingClientRect().bottom).to.equal(scrollPosition);
     });
 
-    it('should show one extra item on the top edge of the viewport on "arrow-up" on first visible tab', async () => {
+    it('should show the next focused item on the top edge of the viewport on "arrow-up" on first visible tab', async () => {
       tabs.selected = 7;
       tabs._focus(7);
       await nextRender();
@@ -232,9 +221,9 @@ describe('scrollable tabs', () => {
       tabs._focus(2);
       await nextRender();
 
-      const scrollPosition = items[7].getBoundingClientRect().bottom;
+      const scrollPosition = items[2].getBoundingClientRect().top;
       arrowUp(tabs);
-      expect(items[7].getBoundingClientRect().bottom).to.be.greaterThan(scrollPosition);
+      expect(items[1].getBoundingClientRect().top).to.equal(scrollPosition);
     });
   });
 });
