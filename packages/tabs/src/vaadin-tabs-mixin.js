@@ -149,6 +149,7 @@ export const TabsMixin = (superClass) =>
       }
     }
 
+    /** @protected */
     _startScrollForward(e) {
       if (e.button === 0) {
         this._scrollForward();
@@ -156,6 +157,7 @@ export const TabsMixin = (superClass) =>
       }
     }
 
+    /** @protected */
     _startScrollBack(e) {
       if (e.button === 0) {
         this._scrollBack();
@@ -163,6 +165,7 @@ export const TabsMixin = (superClass) =>
       }
     }
 
+    /** @protected */
     _stopScroll() {
       clearTimeout(this.__scrollTimer);
     }
