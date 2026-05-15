@@ -35,6 +35,13 @@ export const tabsStyles = css`
     display: flex;
     flex-direction: column;
     gap: var(--vaadin-tabs-gap, var(--vaadin-gap-s));
+    animation: enable-smooth-scroll-after-first-render 1s both;
+  }
+
+  @keyframes enable-smooth-scroll-after-first-render {
+    100% {
+      scroll-behavior: smooth;
+    }
   }
 
   :host([orientation='horizontal']) [part='tabs'] {
