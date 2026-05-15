@@ -242,7 +242,7 @@ export const DragAndDropMixin = (superClass) =>
           return;
         }
 
-        let row = e.composedPath().find((node) => node.localName === 'tr');
+        let row = e.composedPath().find((node) => node.localName === 'vaadin-grid-row');
 
         // Update the horizontal scroll position property of the row being dragged over
         this.__updateRowScrollPositionProperty(row);

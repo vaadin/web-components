@@ -524,7 +524,7 @@ export const ScrollMixin = (superClass) =>
      * @private
      */
     __updateRowScrollPositionProperty(row) {
-      if (row instanceof HTMLTableRowElement === false) {
+      if (row?.localName !== 'vaadin-grid-row') {
         return;
       }
       const newValue = `${this.__horizontalScrollPosition}px`;

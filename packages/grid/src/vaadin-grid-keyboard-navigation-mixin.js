@@ -9,11 +9,11 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { updatePart } from './vaadin-grid-helpers.js';
 
 function isRow(element) {
-  return element instanceof HTMLTableRowElement;
+  return element?.localName === 'vaadin-grid-row';
 }
 
 function isCell(element) {
-  return element instanceof HTMLTableCellElement;
+  return element?.localName === 'vaadin-grid-cell';
 }
 
 function isDetailsCell(element) {
@@ -1048,8 +1048,8 @@ export const KeyboardNavigationMixin = (superClass) =>
     /**
      * @typedef {Object} GridEventLocation
      * @property {HTMLTableSectionElement | null} section - The table section element that the event occurred in (header, body, or footer), or null if the event did not occur in a section
-     * @property {HTMLTableRowElement | null} row - The row element that the event occurred in, or null if the event did not occur in a row
-     * @property {HTMLTableCellElement | null} cell - The cell element that the event occurred in, or null if the event did not occur in a cell
+     * @property {HTMLElement | null} row - The row element that the event occurred in, or null if the event did not occur in a row
+     * @property {HTMLElement | null} cell - The cell element that the event occurred in, or null if the event did not occur in a cell
      * @private
      */
     /**

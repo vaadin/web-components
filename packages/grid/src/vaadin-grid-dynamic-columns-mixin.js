@@ -145,7 +145,9 @@ export const DynamicColumnsMixin = (superClass) =>
 
     /** @protected */
     _updateFirstAndLastColumn() {
-      Array.from(this.shadowRoot.querySelectorAll('tr')).forEach((row) => this._updateFirstAndLastColumnForRow(row));
+      Array.from(this.shadowRoot.querySelectorAll('vaadin-grid-row')).forEach((row) =>
+        this._updateFirstAndLastColumnForRow(row),
+      );
     }
 
     /**

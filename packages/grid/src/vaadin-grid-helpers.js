@@ -9,8 +9,8 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 /**
  * Returns the cells of the given row, excluding the details cell.
  *
- * @param {HTMLTableRowElement} row the table row
- * @return {HTMLTableCellElement[]} array of cells
+ * @param {HTMLElement} row the grid row element
+ * @return {HTMLElement[]} array of cells
  */
 export function getBodyRowCells(row) {
   // If available, return the cached cells. Otherwise, query the cells directly from the row.
@@ -30,7 +30,7 @@ export function iterateChildren(container, callback) {
  * present and any other cell that may be physically detached from the row
  * due to lazy column reordering.
  *
- * @param {HTMLTableRowElement} row the table row
+ * @param {HTMLElement} row the grid row element
  * @param {Function} callback function to call on each cell
  */
 export function iterateRowCells(row, callback) {
@@ -90,7 +90,7 @@ export function updatePart(element, part, value) {
 }
 
 /**
- * @param {HTMLTableCellElement[]} cells
+ * @param {HTMLElement[]} cells
  * @param {string} part
  * @param {boolean | string | null | undefined} value
  */

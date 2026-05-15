@@ -282,7 +282,7 @@ export const GridMixin = (superClass) =>
 
     /** @private */
     __getBodyCellCoordinates(cell) {
-      if (this.$.items.contains(cell) && cell.localName === 'td') {
+      if (this.$.items.contains(cell) && cell.localName === 'vaadin-grid-cell') {
         return {
           item: cell.parentElement._item,
           column: cell._column,
@@ -337,7 +337,7 @@ export const GridMixin = (superClass) =>
     _createScrollerRows(count) {
       const rows = [];
       for (let i = 0; i < count; i++) {
-        const row = document.createElement('tr');
+        const row = document.createElement('vaadin-grid-row');
         row.setAttribute('role', 'row');
         row.setAttribute('tabindex', '-1');
         updatePart(row, 'row', true);
@@ -367,16 +367,16 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _createCell(tagName, column) {
+    _createCell(role, column) {
       const contentId = (this._contentIndex = this._contentIndex + 1 || 0);
       const slotName = `vaadin-grid-cell-content-${contentId}`;
 
       const cellContent = document.createElement('vaadin-grid-cell-content');
       cellContent.setAttribute('slot', slotName);
 
-      const cell = document.createElement(tagName);
+      const cell = document.createElement('vaadin-grid-cell');
       cell.id = slotName.replace('-content-', '-');
-      cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
+      cell.setAttribute('role', role);
 
       // For now we only support tooltip on desktop
       if (!isAndroid && !isIOS) {
@@ -450,7 +450,7 @@ export const GridMixin = (superClass) =>
     }
 
     /**
-     * @param {!HTMLTableRowElement} row
+     * @param {!HTMLElement} row
      * @param {!Array<!GridColumn>} columns
      * @param {?string} section
      * @param {boolean} isColumnRow
@@ -483,7 +483,7 @@ export const GridMixin = (superClass) =>
             }
             cell = column._cells.find((cell) => cell._vacant);
             if (!cell) {
-              cell = this._createCell('td', column);
+              cell = this._createCell('gridcell', column);
               if (column._onCellKeyDown) {
                 cell.addEventListener('keydown', column._onCellKeyDown.bind(column));
               }
@@ -509,7 +509,7 @@ export const GridMixin = (superClass) =>
               if (!this._detailsCells) {
                 this._detailsCells = [];
               }
-              const detailsCell = this._detailsCells.find((cell) => cell._vacant) || this._createCell('td');
+              const detailsCell = this._detailsCells.find((cell) => cell._vacant) || this._createCell('gridcell');
               if (this._detailsCells.indexOf(detailsCell) === -1) {
                 this._detailsCells.push(detailsCell);
               }
@@ -530,11 +530,11 @@ export const GridMixin = (superClass) =>
             }
           } else {
             // Header & footer
-            const tagName = section === 'header' ? 'th' : 'td';
+            const cellRole = section === 'header' ? 'columnheader' : 'gridcell';
             if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
               cell = column[`_${section}Cell`];
               if (!cell) {
-                cell = this._createCell(tagName);
+                cell = this._createCell(cellRole);
                 if (column._onCellKeyDown) {
                   cell.addEventListener('keydown', column._onCellKeyDown.bind(column));
                 }
@@ -546,7 +546,7 @@ export const GridMixin = (superClass) =>
               if (!column._emptyCells) {
                 column._emptyCells = [];
               }
-              cell = column._emptyCells.find((cell) => cell._vacant) || this._createCell(tagName);
+              cell = column._emptyCells.find((cell) => cell._vacant) || this._createCell(cellRole);
               cell._column = column;
               row.appendChild(cell);
               if (column._emptyCells.indexOf(cell) === -1) {
@@ -576,7 +576,7 @@ export const GridMixin = (superClass) =>
     }
 
     /**
-     * @param {HTMLTableRowElement} row
+     * @param {HTMLElement} row
      * @protected
      */
     __debounceUpdateHeaderFooterRowVisibility(row) {
@@ -588,7 +588,7 @@ export const GridMixin = (superClass) =>
     }
 
     /**
-     * @param {HTMLTableRowElement} row
+     * @param {HTMLElement} row
      * @protected
      */
     __updateHeaderFooterRowVisibility(row) {
@@ -630,12 +630,12 @@ export const GridMixin = (superClass) =>
       }
 
       if (row.parentElement === this.$.header) {
-        this.$.table.toggleAttribute('has-header', this.$.header.querySelector('tr:not([hidden])'));
+        this.$.table.toggleAttribute('has-header', this.$.header.querySelector('vaadin-grid-row:not([hidden])'));
         this.__updateHeaderFooterRowParts('header');
       }
 
       if (row.parentElement === this.$.footer) {
-        this.$.table.toggleAttribute('has-footer', this.$.footer.querySelector('tr:not([hidden])'));
+        this.$.table.toggleAttribute('has-footer', this.$.footer.querySelector('vaadin-grid-row:not([hidden])'));
         this.__updateHeaderFooterRowParts('footer');
       }
 
@@ -701,14 +701,14 @@ export const GridMixin = (superClass) =>
       });
 
       while (this.$.header.children.length < columnTree.length) {
-        const headerRow = document.createElement('tr');
+        const headerRow = document.createElement('vaadin-grid-row');
         headerRow.setAttribute('role', 'row');
         headerRow.setAttribute('tabindex', '-1');
         updatePart(headerRow, 'row', true);
         updatePart(headerRow, 'header-row', true);
         this.$.header.appendChild(headerRow);
 
-        const footerRow = document.createElement('tr');
+        const footerRow = document.createElement('vaadin-grid-row');
         footerRow.setAttribute('role', 'row');
         footerRow.setAttribute('tabindex', '-1');
         updatePart(footerRow, 'row', true);
@@ -745,7 +745,7 @@ export const GridMixin = (superClass) =>
 
     /** @private */
     __updateHeaderFooterRowParts(section) {
-      const visibleRows = [...this.$[section].querySelectorAll('tr:not([hidden])')];
+      const visibleRows = [...this.$[section].querySelectorAll('vaadin-grid-row:not([hidden])')];
       [...this.$[section].children].forEach((row) => {
         updatePart(row, `first-${section}-row`, row === visibleRows.at(0));
         updatePart(row, `last-${section}-row`, row === visibleRows.at(-1));
@@ -829,7 +829,7 @@ export const GridMixin = (superClass) =>
     }
 
     /**
-     * @param {!HTMLTableRowElement} row
+     * @param {!HTMLElement} row
      * @return {!GridItemModel}
      * @protected
      */

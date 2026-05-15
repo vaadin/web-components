@@ -420,11 +420,11 @@ export const ColumnReorderingMixin = (superClass) =>
      * @protected
      */
     _isSwappableByPosition(targetColumn, clientX) {
-      const targetCell = Array.from(this.$.header.querySelectorAll('tr:not([hidden]) [part~="cell"]')).find((cell) =>
-        targetColumn.contains(cell._column),
-      );
+      const targetCell = Array.from(
+        this.$.header.querySelectorAll('vaadin-grid-row:not([hidden]) [part~="cell"]'),
+      ).find((cell) => targetColumn.contains(cell._column));
       const sourceCellRect = this.$.header
-        .querySelector('tr:not([hidden]) [reorder-status=dragging]')
+        .querySelector('vaadin-grid-row:not([hidden]) [reorder-status=dragging]')
         .getBoundingClientRect();
       const targetRect = targetCell.getBoundingClientRect();
       if (targetRect.left > sourceCellRect.left) {
