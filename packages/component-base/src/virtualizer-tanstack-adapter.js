@@ -34,7 +34,7 @@ export class TanStackAdapter {
   #isVisible;
   #resizeRaf;
   #virtualizer;
-  #estimatedSize = 60;
+  #estimatedSize = 200;
   #resizeObserver;
   #renderDebouncer;
   #reorderElementsDebouncer;
