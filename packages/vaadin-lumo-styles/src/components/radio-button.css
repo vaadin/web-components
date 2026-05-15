@@ -21,7 +21,6 @@
     --_input-size: var(--_radio-button-size);
     border-radius: 50%;
     background: var(--vaadin-radio-button-background, var(--lumo-contrast-20pct));
-    will-change: transform;
     /* Default field border color */
     --_input-border-color: var(--vaadin-input-field-border-color, var(--lumo-contrast-50pct));
   }
@@ -40,7 +39,6 @@
     left: 50%;
     transform: translate(-50%, -50%) scale(0);
     transition: 0.25s transform;
-    will-change: transform;
     background-clip: content-box;
   }
 

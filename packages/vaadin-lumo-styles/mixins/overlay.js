@@ -42,7 +42,6 @@ const overlay = css`
   [part='backdrop'] {
     background-color: var(--lumo-shade-20pct);
     animation: 0.2s lumo-overlay-backdrop-enter both;
-    will-change: opacity;
   }
 
   @keyframes lumo-overlay-backdrop-enter {
