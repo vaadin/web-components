@@ -68,6 +68,8 @@ export const tabsStyles = css`
     align-items: center;
     justify-content: center;
     -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
     touch-action: manipulation;
   }
 

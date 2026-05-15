@@ -97,92 +97,74 @@ export const TabsMixin = (superClass) =>
       this._updateOverflow();
     }
 
-    /** @protected */
-    _scrollForward() {
-      // Calculations here are performed in order to optimize the loop that checks item visibility.
-      const forwardButtonVisibleWidth = this._getNavigationButtonVisibleWidth('forward-button');
-      const backButtonVisibleWidth = this._getNavigationButtonVisibleWidth('back-button');
-      const scrollerRect = this._scrollerElement.getBoundingClientRect();
-      const itemToScrollTo = [...this.items]
-        .reverse()
-        .find((item) => this._isItemVisible(item, forwardButtonVisibleWidth, backButtonVisibleWidth, scrollerRect));
-      const itemRect = itemToScrollTo.getBoundingClientRect();
-      // This hard-coded number accounts for the width of the mask that covers a part of the visible items.
-      // A CSS variable can be introduced to get rid of this value.
-      const overflowIndicatorCompensation = 20;
-      const totalCompensation =
-        overflowIndicatorCompensation + this.shadowRoot.querySelector('[part="back-button"]').clientWidth;
-      let scrollOffset;
-      if (this.__isRTL) {
-        const scrollerRightEdge = scrollerRect.right - totalCompensation;
-        scrollOffset = itemRect.right - scrollerRightEdge;
-      } else {
-        const scrollerLeftEdge = scrollerRect.left + totalCompensation;
-        scrollOffset = itemRect.left - scrollerLeftEdge;
-      }
-      // It is possible that a scroll offset is calculated to be between 0 and 1. In this case, this offset
-      // can be rounded down to zero, rendering the button useless. It is also possible that the offset is
-      // calculated such that it results in scrolling backwards for a wide tab or edge cases. This is a
-      // workaround for such cases.
-      if (-this.__direction * scrollOffset < 1) {
-        scrollOffset = -this.__direction * (this._scrollOffset - totalCompensation);
-      }
-      this._scroll(scrollOffset);
-    }
-
-    /** @protected */
-    _scrollBack() {
-      // Calculations here are performed in order to optimize the loop that checks item visibility.
-      const forwardButtonVisibleWidth = this._getNavigationButtonVisibleWidth('forward-button');
-      const backButtonVisibleWidth = this._getNavigationButtonVisibleWidth('back-button');
-      const scrollerRect = this._scrollerElement.getBoundingClientRect();
-      const itemToScrollTo = this.items.find((item) =>
-        this._isItemVisible(item, forwardButtonVisibleWidth, backButtonVisibleWidth, scrollerRect),
-      );
-      const itemRect = itemToScrollTo.getBoundingClientRect();
-      // This hard-coded number accounts for the width of the mask that covers a part of the visible items.
-      // A CSS variable can be introduced to get rid of this value.
-      const overflowIndicatorCompensation = 20;
-      const totalCompensation =
-        overflowIndicatorCompensation + this.shadowRoot.querySelector('[part="forward-button"]').clientWidth;
-      let scrollOffset;
-      if (this.__isRTL) {
-        const scrollerLeftEdge = scrollerRect.left + totalCompensation;
-        scrollOffset = itemRect.left - scrollerLeftEdge;
-      } else {
-        const scrollerRightEdge = scrollerRect.right - totalCompensation;
-        scrollOffset = itemRect.right - scrollerRightEdge;
-      }
-      // It is possible that a scroll offset is calculated to be between 0 and 1. In this case, this offset
-      // can be rounded down to zero, rendering the button useless. It is also possible that the offset is
-      // calculated such that it results in scrolling forward for a wide tab or edge cases. This is a
-      // workaround for such cases.
-      if (this.__direction * scrollOffset < 1) {
-        scrollOffset = this.__direction * (this._scrollOffset - totalCompensation);
-      }
-      this._scroll(scrollOffset);
-    }
-
-    /** @private */
-    _isItemVisible(item, forwardButtonVisibleWidth, backButtonVisibleWidth, scrollerRect) {
-      if (this._vertical) {
-        throw new Error('Visibility check is only supported for horizontal tabs.');
-      }
-      const buttonOnTheRightWidth = this.__isRTL ? backButtonVisibleWidth : forwardButtonVisibleWidth;
-      const buttonOnTheLeftWidth = this.__isRTL ? forwardButtonVisibleWidth : backButtonVisibleWidth;
-      const scrollerRightEdge = scrollerRect.right - buttonOnTheRightWidth;
-      const scrollerLeftEdge = scrollerRect.left + buttonOnTheLeftWidth;
+    _scrollToItem(idx) {
+      const item = this.items[idx];
       const itemRect = item.getBoundingClientRect();
-      return scrollerRightEdge > Math.floor(itemRect.left) && scrollerLeftEdge < Math.ceil(itemRect.right);
+      const scrollerRect = this._scrollerElement.getBoundingClientRect();
+
+      // This hard-coded number accounts for the width of the mask that covers a part of the visible items.
+      // A CSS variable can be introduced to get rid of this value.
+      const overflowIndicatorCompensation = this._vertical ? 10 : 20;
+
+      if (this._vertical) {
+        if (itemRect.bottom > scrollerRect.bottom - overflowIndicatorCompensation) {
+          this._scrollerElement.scrollTop =
+            item.offsetTop - (scrollerRect.height - itemRect.height) + overflowIndicatorCompensation;
+        }
+        if (itemRect.top < scrollerRect.top + overflowIndicatorCompensation) {
+          this._scrollerElement.scrollTop = item.offsetTop - overflowIndicatorCompensation;
+        }
+      } else {
+        const backButtonWidth = this.shadowRoot.querySelector(`[part="back-button"]`).offsetWidth;
+        const forwardButtonWidth = this.shadowRoot.querySelector(`[part="forward-button"]`).offsetWidth;
+
+        if (itemRect.right > scrollerRect.right - forwardButtonWidth - overflowIndicatorCompensation) {
+          this._scrollerElement.scrollLeft =
+            item.offsetLeft -
+            (scrollerRect.width - itemRect.width) +
+            forwardButtonWidth +
+            overflowIndicatorCompensation;
+        }
+        if (itemRect.left < scrollerRect.left + backButtonWidth + overflowIndicatorCompensation) {
+          this._scrollerElement.scrollLeft = item.offsetLeft - backButtonWidth - overflowIndicatorCompensation;
+        }
+      }
     }
 
-    /** @private */
-    _getNavigationButtonVisibleWidth(buttonPartName) {
-      const navigationButton = this.shadowRoot.querySelector(`[part="${buttonPartName}"]`);
-      if (window.getComputedStyle(navigationButton).opacity === '0') {
-        return 0;
+    /** @protected */
+    _scrollForward(e) {
+      // Allow setInterval loop to trigger scroll (e is undefine in that case)
+      // Allow programmatic click events to trigger scroll (__scrollTimer is undefine in that case)
+      if (e === undefined || this.__scrollTimer === undefined) {
+        this._scroll(this.__direction * (this._scrollOffset / 2) * -1);
       }
-      return navigationButton.clientWidth;
+    }
+
+    /** @protected */
+    _scrollBack(e) {
+      // Allow setInterval loop to trigger scroll (e is undefine in that case)
+      // Allow programmatic click events to trigger scroll (__scrollTimer is undefine in that case)
+      if (e === undefined || this.__scrollTimer === undefined) {
+        this._scroll(this.__direction * (this._scrollOffset / 2));
+      }
+    }
+
+    _startScrollForward(e) {
+      if (e.button === 0) {
+        this._scrollForward();
+        this.__scrollTimer = setInterval(this._scrollForward.bind(this), 300);
+      }
+    }
+
+    _startScrollBack(e) {
+      if (e.button === 0) {
+        this._scrollBack();
+        this.__scrollTimer = setInterval(this._scrollBack.bind(this), 300);
+      }
+    }
+
+    _stopScroll() {
+      clearTimeout(this.__scrollTimer);
     }
 
     /** @private */
