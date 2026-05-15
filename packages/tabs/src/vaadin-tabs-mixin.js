@@ -70,6 +70,7 @@ export const TabsMixin = (superClass) =>
     ready() {
       super.ready();
 
+      this._updateOverflow();
       this._scrollerElement.addEventListener('scroll', () => this._updateOverflow());
 
       this.setAttribute('role', 'tablist');
