@@ -440,6 +440,7 @@ describe('virtualizer', () => {
       render = true;
       virtualizer.update();
       await nextResize(scrollTarget);
+      await nextFrame();
       expect(elementsContainer.childElementCount).to.be.above(initialCount);
     });
   });
