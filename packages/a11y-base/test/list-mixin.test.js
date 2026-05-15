@@ -649,7 +649,7 @@ describe('ListMixin', () => {
 
         expect(list._scrollerElement.scrollLeft).to.be.equal(0);
 
-        list._scrollToItem(1);
+        list._scrollToItem(2);
         expect(list._scrollerElement.scrollLeft).to.be.greaterThan(0);
       });
 
@@ -659,7 +659,7 @@ describe('ListMixin', () => {
 
         expect(list._scrollerElement.scrollTop).to.be.equal(0);
 
-        list._scrollToItem(1);
+        list._scrollToItem(2);
         expect(list._scrollerElement.scrollTop).to.be.greaterThan(0);
       });
     });
@@ -671,18 +671,21 @@ describe('ListMixin', () => {
       });
 
       describe('LTR scroll', () => {
-        it('should scroll in advance when reaching right most visible item', () => {
+        it('should scroll next item into viewport when navigating with arrow right', () => {
           list._focus(0);
           arrowRight(list);
+          arrowRight(list);
 
-          const itemRectRight = list.items[2].getBoundingClientRect().right;
+          // Third item is disabled, so focus skips to the fourth item
+          const itemRectRight = list.items[3].getBoundingClientRect().right;
           const listRectRight = list.getBoundingClientRect().right;
 
           expect(listRectRight).to.be.closeTo(itemRectRight, 1);
         });
 
-        it('should scroll in advance when reaching left most visible item', () => {
+        it('should scroll previous item into viewport when navigating with arrow left', () => {
           list._focus(3);
+          arrowLeft(list);
           arrowLeft(list);
 
           const itemRectLeft = list.items[0].getBoundingClientRect().left;
@@ -698,18 +701,21 @@ describe('ListMixin', () => {
           await nextUpdate(list);
         });
 
-        it('should scroll in advance when reaching left most visible item', () => {
+        it('should scroll next item into viewport when navigating with arrow left', () => {
           list._focus(0);
           arrowLeft(list);
+          arrowLeft(list);
 
-          const itemRectLeft = list.items[2].getBoundingClientRect().left;
+          // Third item is disabled, so focus skips to the fourth item
+          const itemRectLeft = list.items[3].getBoundingClientRect().left;
           const listRectLeft = list.getBoundingClientRect().left;
 
           expect(listRectLeft).to.be.closeTo(itemRectLeft, 1);
         });
 
-        it('should scroll in advance when reaching right most visible item', () => {
+        it('should scroll previous item into viewport when navigating with arrow right', () => {
           list._focus(3);
+          arrowRight(list);
           arrowRight(list);
 
           const itemRectRight = list.items[0].getBoundingClientRect().right;
