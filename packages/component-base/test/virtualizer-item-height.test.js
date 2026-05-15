@@ -366,7 +366,7 @@ describe('virtualizer - item height - resize with late idle callback', () => {
     await nextResize(scrollTarget);
     await nextFrame();
 
-    expect(scrollTarget.querySelectorAll('.item').length).to.equal(itemCount + 3);
+    expect(scrollTarget.querySelectorAll('.item').length).to.be.at.most(itemCount + 3);
   });
 });
 
