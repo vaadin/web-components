@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { arrowDown, arrowLeft, arrowRight, arrowUp, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import './tabs-test-styles.js';
 import '../src/vaadin-tabs.js';
 
@@ -73,6 +74,45 @@ describe('scrollable tabs', () => {
       const btn = tabs.shadowRoot.querySelector('[part="back-button"]');
       btn.click();
       expect(scroller.scrollLeft).to.be.equal(0);
+    });
+
+    describe('press and hold', () => {
+      let clock, btn;
+
+      beforeEach(() => {
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
+        btn = tabs.shadowRoot.querySelector('[part="forward-button"]');
+      });
+
+      afterEach(() => {
+        clock.restore();
+      });
+
+      it('should scroll continuously while forward button is pressed', () => {
+        btn.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
+        const firstScroll = scroller.scrollLeft;
+        expect(firstScroll).to.be.greaterThan(0);
+
+        clock.tick(300);
+        expect(scroller.scrollLeft).to.be.greaterThan(firstScroll);
+      });
+
+      it('should stop scrolling on pointerup', () => {
+        btn.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
+        const firstScroll = scroller.scrollLeft;
+
+        btn.dispatchEvent(new PointerEvent('pointerup'));
+        clock.tick(300);
+        expect(scroller.scrollLeft).to.be.equal(firstScroll);
+      });
+
+      it('should not double scroll on click that follows pointerdown', () => {
+        btn.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
+        const firstScroll = scroller.scrollLeft;
+
+        btn.dispatchEvent(new MouseEvent('click'));
+        expect(scroller.scrollLeft).to.be.equal(firstScroll);
+      });
     });
 
     ['ltr', 'rtl'].forEach((dir) => {
