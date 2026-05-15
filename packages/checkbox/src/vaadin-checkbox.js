@@ -51,20 +51,30 @@ import { CheckboxMixin } from './vaadin-checkbox-mixin.js';
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                      |
- * :----------------------------------------|
- * | `--vaadin-checkbox-background`         |
- * | `--vaadin-checkbox-border-color`       |
- * | `--vaadin-checkbox-border-radius`      |
- * | `--vaadin-checkbox-border-width`       |
- * | `--vaadin-checkbox-gap`                |
- * | `--vaadin-checkbox-label-color`        |
- * | `--vaadin-checkbox-label-font-size`    |
- * | `--vaadin-checkbox-label-font-weight`  |
- * | `--vaadin-checkbox-label-line-height`  |
- * | `--vaadin-checkbox-marker-color`       |
- * | `--vaadin-checkbox-marker-size`        |
- * | `--vaadin-checkbox-size`               |
+ * Custom CSS property                                |
+ * :--------------------------------------------------|
+ * | `--vaadin-checkbox-background`                   |
+ * | `--vaadin-checkbox-border-color`                 |
+ * | `--vaadin-checkbox-border-radius`                |
+ * | `--vaadin-checkbox-border-width`                 |
+ * | `--vaadin-checkbox-gap`                          |
+ * | `--vaadin-checkbox-label-color`                  |
+ * | `--vaadin-checkbox-label-font-size`              |
+ * | `--vaadin-checkbox-label-font-weight`            |
+ * | `--vaadin-checkbox-label-line-height`            |
+ * | `--vaadin-checkbox-marker-color`                 |
+ * | `--vaadin-checkbox-marker-size`                  |
+ * | `--vaadin-checkbox-size`                         |
+ * | `--vaadin-input-field-error-color`               |
+ * | `--vaadin-input-field-error-font-size`           |
+ * | `--vaadin-input-field-error-font-weight`         |
+ * | `--vaadin-input-field-error-line-height`         |
+ * | `--vaadin-input-field-helper-color`              |
+ * | `--vaadin-input-field-helper-font-size`          |
+ * | `--vaadin-input-field-helper-font-weight`        |
+ * | `--vaadin-input-field-helper-line-height`        |
+ * | `--vaadin-input-field-required-indicator`        |
+ * | `--vaadin-input-field-required-indicator-color`  |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
