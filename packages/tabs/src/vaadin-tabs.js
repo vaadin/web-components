@@ -77,7 +77,7 @@ class Tabs extends TabsMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
     return html`
       <div @click="${this._scrollBack}" part="back-button" aria-hidden="true"></div>
 
-      <div id="scroll" part="tabs">
+      <div id="scroll" part="tabs" tabindex="-1">
         <slot></slot>
       </div>
 
