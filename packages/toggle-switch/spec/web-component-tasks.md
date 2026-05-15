@@ -124,11 +124,19 @@ Create `packages/aura/src/components/toggle-switch.css` and import it in `packag
 **Requirements:** —
 **Depends on:** 3, 5, 6
 
-Finalise the package: extend `dev/toggle-switch.html` to exercise every variant covered in tests (default, checked, disabled, disabled+checked, readonly, readonly+checked, required, invalid+errorMessage, with-helperText, with-tooltip, label-with-link, in-form, RTL block) so the dev page can be used for manual visual review in both themes. Author DOM snapshot tests at `test/dom/toggle-switch.test.js` covering the default attached state, the checked state, the disabled state, the readonly state, and the invalid state — locking in the host's reflected attributes plus the shadow DOM structure. Author `test/typings/toggle-switch.types.ts` asserting the public type surface: `ToggleSwitch` element, `ToggleSwitchChangeEvent`, `ToggleSwitchCheckedChangedEvent`, `ToggleSwitchInvalidChangedEvent`, `ToggleSwitchValidatedEvent`, the `ToggleSwitchEventMap`, the `HTMLElementTagNameMap` augmentation, and `CheckboxMixinClass` inheritance (the class is assignable to `CheckboxMixinClass`). Complete the class-level JSDoc in `vaadin-toggle-switch.js` with the styling tables (parts, state attributes, custom CSS properties) and `@fires` lines for `change`, `checked-changed`, `invalid-changed`, `validated`. Run the full validation suite.
+Finalise the package: keep `dev/toggle-switch.html` as the minimal single-example dev page used for spec authoring and smoke-checks, and create `dev/playground/toggle-switch.html` covering every variant exercised in tests (default, checked, disabled, disabled+checked, readonly, readonly+checked, required, invalid+errorMessage, with-helperText, with-tooltip, label-with-link) — the playground page is the manual visual review surface in both themes. Author DOM snapshot tests at `test/dom/toggle-switch.test.js` covering the default attached state, the checked state, the disabled state, the readonly state, and the invalid state — locking in the host's reflected attributes plus the shadow DOM structure. Author `test/typings/toggle-switch.types.ts` asserting the public type surface: `ToggleSwitch` element, `ToggleSwitchChangeEvent`, `ToggleSwitchCheckedChangedEvent`, `ToggleSwitchInvalidChangedEvent`, `ToggleSwitchValidatedEvent`, the `ToggleSwitchEventMap`, the `HTMLElementTagNameMap` augmentation, and `CheckboxMixinClass` inheritance (the class is assignable to `CheckboxMixinClass`). Complete the class-level JSDoc in `vaadin-toggle-switch.js` with the styling tables (parts, state attributes, custom CSS properties) and `@fires` lines for `change`, `checked-changed`, `invalid-changed`, `validated`. Run the full validation suite.
 
 **Tests:**
 - DOM snapshot: default attached state matches the captured snapshot.
 - DOM snapshot: each of (checked, disabled, readonly, invalid+errorMessage) matches its snapshot.
 - TypeScript type test passes `yarn lint:types`: `ToggleSwitch` event-listener overloads accept the typed events, `HTMLElementTagNameMap['vaadin-toggle-switch']` resolves to `ToggleSwitch`, the element is assignable to `CheckboxMixinClass`, and assigning a non-event to a typed listener fails compilation.
 - `yarn lint`, `yarn test --group toggle-switch`, `yarn test:snapshots --group toggle-switch`, `yarn test:base --group toggle-switch`, `yarn test:lumo --group toggle-switch`, `yarn test:aura --group toggle-switch` all pass.
-- The dev page renders every variant in both Lumo and Aura themes when toggling the dev shell's theme switcher.
+- The playground page renders every variant in both Lumo and Aura themes when toggling the dev shell's theme switcher.
+
+---
+
+## Discussion
+
+**Q: Why is the dev-page coverage split between `dev/toggle-switch.html` and `dev/playground/toggle-switch.html`?**
+
+The repo convention is to keep `dev/{component}.html` as a minimal single-example page used for spec authoring, smoke-checks, and quick local repro, while `dev/playground/{component}.html` carries the multi-section variant grid used for manual visual review across themes. Existing components (e.g. `dev/checkbox.html` vs. `dev/playground/checkbox.html`) follow this split. The toggle-switch follows the same convention rather than overloading the minimal page with every state.

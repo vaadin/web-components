@@ -27,6 +27,129 @@ snapshots["vaadin-toggle-switch host default"] =
 `;
 /* end snapshot vaadin-toggle-switch host default */
 
+snapshots["vaadin-toggle-switch host checked"] = 
+`<vaadin-toggle-switch
+  checked=""
+  has-value=""
+>
+  <label
+    for="input-vaadin-toggle-switch-3"
+    id="label-vaadin-toggle-switch-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-toggle-switch-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    id="input-vaadin-toggle-switch-3"
+    role="switch"
+    slot="input"
+    tabindex="0"
+    type="checkbox"
+    value="on"
+  >
+</vaadin-toggle-switch>
+`;
+/* end snapshot vaadin-toggle-switch host checked */
+
+snapshots["vaadin-toggle-switch host disabled"] = 
+`<vaadin-toggle-switch
+  aria-disabled="true"
+  disabled=""
+  has-value=""
+>
+  <label
+    for="input-vaadin-toggle-switch-3"
+    id="label-vaadin-toggle-switch-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-toggle-switch-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    disabled=""
+    id="input-vaadin-toggle-switch-3"
+    role="switch"
+    slot="input"
+    tabindex="-1"
+    type="checkbox"
+    value="on"
+  >
+</vaadin-toggle-switch>
+`;
+/* end snapshot vaadin-toggle-switch host disabled */
+
+snapshots["vaadin-toggle-switch host readonly"] = 
+`<vaadin-toggle-switch
+  has-value=""
+  readonly=""
+>
+  <label
+    for="input-vaadin-toggle-switch-3"
+    id="label-vaadin-toggle-switch-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-toggle-switch-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-readonly="true"
+    id="input-vaadin-toggle-switch-3"
+    role="switch"
+    slot="input"
+    tabindex="0"
+    type="checkbox"
+    value="on"
+  >
+</vaadin-toggle-switch>
+`;
+/* end snapshot vaadin-toggle-switch host readonly */
+
+snapshots["vaadin-toggle-switch host invalid"] = 
+`<vaadin-toggle-switch
+  has-error-message=""
+  has-value=""
+  invalid=""
+>
+  <label
+    for="input-vaadin-toggle-switch-3"
+    id="label-vaadin-toggle-switch-0"
+    slot="label"
+  >
+  </label>
+  <div
+    id="error-message-vaadin-toggle-switch-2"
+    slot="error-message"
+  >
+    Error
+  </div>
+  <input
+    aria-describedby="error-message-vaadin-toggle-switch-2"
+    aria-invalid="true"
+    id="input-vaadin-toggle-switch-3"
+    invalid=""
+    role="switch"
+    slot="input"
+    tabindex="0"
+    type="checkbox"
+    value="on"
+  >
+</vaadin-toggle-switch>
+`;
+/* end snapshot vaadin-toggle-switch host invalid */
+
 snapshots["vaadin-toggle-switch shadow default"] = 
 `<div class="vaadin-toggle-switch-container">
   <div

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toggle Switch</title>
+    <script type="module" src="../common.js"></script>
+
+    <script type="module">
+      // Enable feature flag
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.toggleSwitchComponent = true;
+
+      import '@vaadin/toggle-switch';
+      import '@vaadin/tooltip';
+    </script>
+  </head>
+
+  <body>
+    <section class="section">
+      <h2 class="heading">Label &amp; State</h2>
+      <vaadin-toggle-switch label="Notifications"></vaadin-toggle-switch>
+      <vaadin-toggle-switch label="Dark mode" checked></vaadin-toggle-switch>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Disabled</h2>
+      <vaadin-toggle-switch label="Daily digest" disabled></vaadin-toggle-switch>
+      <vaadin-toggle-switch label="Beta features" disabled checked></vaadin-toggle-switch>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Read-only</h2>
+      <vaadin-toggle-switch label="Audit log retention" readonly></vaadin-toggle-switch>
+      <vaadin-toggle-switch label="Account verified" readonly checked></vaadin-toggle-switch>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Required</h2>
+      <vaadin-toggle-switch label="I confirm the trip details are correct" required></vaadin-toggle-switch>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Invalid with error message</h2>
+      <vaadin-toggle-switch
+        label="Accept the terms"
+        required
+        invalid
+        error-message="You must accept the terms to continue"
+      ></vaadin-toggle-switch>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Helper text</h2>
+      <vaadin-toggle-switch
+        label="Auto-save"
+        helper-text="Save changes automatically every 30 seconds"
+      ></vaadin-toggle-switch>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">With tooltip</h2>
+      <vaadin-toggle-switch label="Active">
+        <vaadin-tooltip slot="tooltip" text="Last delivery: 2 minutes ago"></vaadin-tooltip>
+      </vaadin-toggle-switch>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Label with link</h2>
+      <vaadin-toggle-switch>
+        <span slot="label">
+          Send anonymous usage data — <a href="https://vaadin.com/privacy">read our privacy policy</a>
+        </span>
+      </vaadin-toggle-switch>
+    </section>
+
+  </body>
+</html>

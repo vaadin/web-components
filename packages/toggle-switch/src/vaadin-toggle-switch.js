@@ -16,6 +16,75 @@ import { toggleSwitchStyles } from './styles/vaadin-toggle-switch-base-styles.js
 /**
  * `<vaadin-toggle-switch>` is a binary on/off switch input field.
  *
+ * ```html
+ * <vaadin-toggle-switch label="Notifications"></vaadin-toggle-switch>
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name            | Description
+ * ---------------------|-------------
+ * `switch`             | The track element that holds the thumb
+ * `thumb`              | The circular thumb element inside the track
+ * `label`              | The slotted label element wrapper
+ * `helper-text`        | The slotted helper text element wrapper
+ * `error-message`      | The slotted error message element wrapper
+ * `required-indicator` | The `required` state indicator element
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute            | Description
+ * ---------------------|-------------
+ * `active`             | Set when the toggle switch is activated with mouse, touch or the keyboard.
+ * `checked`            | Set when the toggle switch is checked.
+ * `disabled`           | Set when the toggle switch is disabled.
+ * `readonly`           | Set when the toggle switch is readonly.
+ * `focus-ring`         | Set when the toggle switch is focused using the keyboard.
+ * `focused`            | Set when the toggle switch is focused.
+ * `required`           | Set when the toggle switch is required.
+ * `invalid`            | Set when the toggle switch is invalid.
+ * `has-label`          | Set when the toggle switch has a label.
+ * `has-helper`         | Set when the toggle switch has helper text.
+ * `has-error-message`  | Set when the toggle switch has an error message.
+ * `has-tooltip`        | Set when the toggle switch has a slotted tooltip.
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                                |
+ * :--------------------------------------------------|
+ * | `--vaadin-toggle-switch-size`                    |
+ * | `--vaadin-toggle-switch-track-width`             |
+ * | `--vaadin-toggle-switch-thumb-size`              |
+ * | `--vaadin-toggle-switch-background`              |
+ * | `--vaadin-toggle-switch-border-color`            |
+ * | `--vaadin-toggle-switch-border-width`            |
+ * | `--vaadin-toggle-switch-gap`                     |
+ * | `--vaadin-toggle-switch-thumb-color`             |
+ * | `--vaadin-toggle-switch-thumb-checked-color`     |
+ * | `--vaadin-toggle-switch-label-color`             |
+ * | `--vaadin-toggle-switch-label-font-size`         |
+ * | `--vaadin-toggle-switch-label-font-weight`       |
+ * | `--vaadin-toggle-switch-label-line-height`       |
+ * | `--vaadin-input-field-error-color`               |
+ * | `--vaadin-input-field-error-font-size`           |
+ * | `--vaadin-input-field-error-font-weight`         |
+ * | `--vaadin-input-field-error-line-height`         |
+ * | `--vaadin-input-field-helper-color`              |
+ * | `--vaadin-input-field-helper-font-size`          |
+ * | `--vaadin-input-field-helper-font-weight`        |
+ * | `--vaadin-input-field-helper-line-height`        |
+ * | `--vaadin-input-field-required-indicator`        |
+ * | `--vaadin-input-field-required-indicator-color`  |
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
+ * @fires {Event} change - Fired when the user flips the switch.
+ * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
+ *
  * @customElement vaadin-toggle-switch
  * @extends HTMLElement
  */
