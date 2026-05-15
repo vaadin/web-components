@@ -12,3 +12,17 @@
 - **Surprises:** —
 - **Spec adjustments:**
   - Task 1 in `web-component-tasks.md` rewritten to drop `CheckboxMixin` from the class chain (was adding it during scaffolding and forcing a non-empty `render()`); Task 2 now owns the mixin swap together with the full shadow DOM template.
+
+## Task 2 — Element class wiring — shadow DOM, `role="switch"`, tooltip
+
+- **Commit:** (this commit)
+- **Date:** 2026-05-07
+- **Decisions:**
+  - `_inputElementChanged(input, oldInput)` is the canonical hook for setting `role="switch"` on the inner input — same pattern `vaadin-combo-box` and `vaadin-date-picker` use to set `role="combobox"`. Calls `super._inputElementChanged(input, oldInput)` first so `CheckboxMixin`'s inherited add/remove-listener wiring still runs, then guards on `if (input)` before calling `setAttribute`.
+  - `ready()` wires `TooltipController` with `setAriaTarget(this.inputElement)`, identical to `Checkbox.ready()`. The tooltip's id is added to the inner input's `aria-describedby`, so screen-reader users hear the tooltip text when the input is focused.
+  - Test surface uses snapshots + the shared tooltip integration test rather than per-feature unit tests:
+    - Shadow DOM parts (`switch`, `thumb`, `label`, `helper-text`, `error-message`, `required-indicator`, `tooltip` slot) and the inner input's `role="switch"` / `type="checkbox"` / `slot="input"` are locked in by `test/dom/toggle-switch.test.js` via `host` and `shadow` snapshots. Asserting these as individual unit tests would duplicate what the snapshot already pins.
+    - Tooltip behavior (`has-tooltip` attribute, tooltip target, `aria-describedby` composition on the inner input, hover/leave wiring) is exercised by `test/integration/component-tooltip.test.js` which already iterates over every Vaadin field and applies the same set of tooltip assertions to each. Adding `ToggleSwitch.is` with `ariaTargetSelector: 'input'` to that array is enough — no toggle-switch-local tooltip test needed.
+    - Inner-input handling (`InputController` slotting the `<input>`, `LabelledInputController` wiring `aria-labelledby`, the slotted-input `opacity: 0` Tailwind workaround) is already tested in `field-base` / `checkbox` packages where the behavior originates. The toggle switch inherits it through `CheckboxMixin` and does not re-test it here.
+- **Surprises:** —
+- **Spec adjustments:** —

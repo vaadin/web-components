@@ -26,8 +26,13 @@ import { Tab } from '@vaadin/tabs/src/vaadin-tab.js';
 import { TextArea } from '@vaadin/text-area/src/vaadin-text-area.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 import { TimePicker } from '@vaadin/time-picker/src/vaadin-time-picker.js';
+import { ToggleSwitch } from '@vaadin/toggle-switch/src/vaadin-toggle-switch.js';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
+
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.toggleSwitchComponent = true;
 
 before(() => {
   Tooltip.setDefaultFocusDelay(0);
@@ -109,6 +114,7 @@ before(() => {
     ariaTargetSelector: 'input',
     applyShouldNotShowCondition: (timePicker) => timePicker.click(),
   },
+  { tagName: ToggleSwitch.is, ariaTargetSelector: 'input' },
 ].forEach(({ tagName, targetSelector, position, applyShouldNotShowCondition, ariaTargetSelector, children = '' }) => {
   describe(`${tagName} with a slotted tooltip`, () => {
     let element, tooltip, tooltipOverlay;
