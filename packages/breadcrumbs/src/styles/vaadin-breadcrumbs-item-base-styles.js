@@ -9,7 +9,7 @@ import { css } from 'lit';
 export const breadcrumbsItemStyles = css`
   :host {
     display: inline-flex;
-    align-items: baseline;
+    align-items: center;
   }
 
   :host([hidden]) {
