@@ -100,3 +100,29 @@ Code state at this point matches the c4102f0515 amendment: `<vaadin-breadcrumbs>
   - Unit tests for `DisabledMixin` integration live in `test/breadcrumbs-item.test.js`: attribute reflection, `aria-disabled`, and `click()` no-op when disabled.
 - **Surprises:** —
 - **Spec adjustments:** —
+
+## Task 8 — Aura theme
+
+- **Commit:** 48728bafb6
+- **Date:** 2026-05-14
+- **Decisions:**
+  - Single CSS file at `packages/aura/src/components/breadcrumbs.css` covering both `<vaadin-breadcrumbs>` and `<vaadin-breadcrumbs-item>`, per the Aura "one file per component" convention in `guidelines/10-theming.md`. Imported from `packages/aura/aura.css` in alphabetical order between `badge.css` and `button.css`. No Lumo-style `lumoInjector` opt-in is needed — Aura is plain CSS imported globally.
+  - Aura-only declarations remain in the file: the accent link color (`--aura-accent-text-color`) with `text-decoration: none` and `transition: color 80ms`; `[part='nolink'] { color: inherit }` to keep nolink from picking up the accent color; current-page `font-weight: var(--aura-font-weight-medium)`; hover/active link color sliding to `--vaadin-text-color` with underline; and the prefix-icon sizing rule. Everything that reads from generic `--vaadin-*` tokens (host body color, `[part='list']` gap, separator `::after` color, `[current] [part='nolink']` color, focus-visible `border-radius`, disabled link color) lives in base styles — see the [Base styles refactor](#base-styles-refactor-post-task-8) section below.
+  - Selectors target the elements from outside the shadow DOM via element selectors plus `::part(...)`: `vaadin-breadcrumbs-item::part(link)`, `vaadin-breadcrumbs-item::part(nolink)`, `vaadin-breadcrumbs-item[current]::part(nolink)`. Hover/active variants use `::part(link):hover` and `::part(link):active`.
+  - Prefix icon uses logical units (`width: 0.875lh; height: 0.875lh`) instead of a fixed pixel size token, matching Aura idiom and the Figma "14×14 in Aura" binding. Selector is a light-DOM child selector `vaadin-breadcrumbs-item > :is(vaadin-icon, [class*='icon'])[slot='prefix']` since `::slotted(...)` doesn't apply from outside the shadow DOM.
+  - Visual tests split per element, mirroring Lumo (Task 7 precedent): `test/visual/aura/breadcrumbs.test.js` keeps a single `basic` trail snapshot; `test/visual/aura/breadcrumbs-item.test.js` exercises the item with `basic`, `focus-ring`, `disabled`, `current`, `prefix`, and `disabled-prefix`. Hover and active visual diffs deliberately omitted (synthetic `mousedown` cannot trigger native `:active`); font-size unit assertion deliberately omitted (Figma binding + visual snapshot suffice).
+  - The Aura visual config produces both `default/` and `dark/` baselines (driven by the `--dark` flag in `web-test-runner-aura.config.js`); both are committed.
+- **Surprises:**
+  - The hover/active link color is not named in the Figma "Aura" token table — chose `--vaadin-text-color` (the neutral body text color) following the `side-nav.css` pattern of sliding the link color toward neutral on hover. If a dedicated `--aura-accent-text-color-hover` token emerges later, swap to it.
+  - Visual baselines were generated via local Playwright Chromium because Docker is not available in this environment (the `yarn update:aura` / `yarn test:aura` scripts normally route through `scripts/run-docker-visual-tests.sh`). The committed PNGs may not pixel-match what CI's Docker image produces. Re-run `yarn update:aura --group breadcrumbs` and `yarn update:aura:dark --group breadcrumbs` in Docker before opening the PR to refresh baselines if CI flags differences.
+- **Spec adjustments:** —
+
+## Base styles refactor (post-Task 8)
+
+Three follow-up PRs landed on `main` while the Aura PR (#11758) was in review, in this order:
+
+- **#11767** — fix in `vaadin-themable-mixin/src/css-utils.js`: `getEffectiveStyles()` now places the Lumo-injected stylesheet **after** the component's static styles in `adoptedStyleSheets` for components that use `LumoInjectionMixin` without `ThemableMixin`. The previous order made base styles win the cascade against Lumo for equal-specificity rules, which is the opposite of the function's documented contract. Breadcrumbs is the only existing combination that hit this path. A new `without ThemableMixin` describe block in `lumo-injection-mixin.test.js` covers the regression.
+- **#11768** — Lumo `[part='list']` gap reduced to match base styles' default. This was needed only because `cbbfb25861` (below) changed the base gap from `0.25em` to `var(--vaadin-gap-xs)` (6px), and the Lumo override had been visually inert before #11767 so its previous value was never exercised.
+- **#11765** — base styles (`vaadin-breadcrumbs-base-styles.js`, `vaadin-breadcrumbs-item-base-styles.js`) now provide reasonable defaults from `--vaadin-*` tokens for: host body color, `[part='list']` gap, separator `::after` color, `[current] [part='nolink']` color, focus-visible `border-radius`, and disabled link color. Each theme keeps the rule only when its token differs from the base token. Aura now keeps only the Aura-specific overrides (see Task 8 Decisions); Lumo retains its own equivalents in `breadcrumbs-item.css` since `--lumo-*` tokens diverge from the base. A new `test/visual/base/breadcrumbs-item.test.js` adds `focus-ring` and `disabled` snapshots for the base layer, joining the existing trail-level `basic` and `rtl-basic`.
+
+The reviewer's original "extract to base styles" suggestions on the Aura PR drove this work. After the three PRs above merged, the Aura PR was rebased on top of `main` and its Aura CSS pared down to Aura-specific declarations only.

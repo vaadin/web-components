@@ -11,28 +11,23 @@ window.Vaadin.featureFlags.breadcrumbsComponent = true;
 describe('breadcrumbs', () => {
   let div;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     div = document.createElement('div');
     div.style.padding = '10px';
+    fixtureSync(
+      `
+        <vaadin-breadcrumbs>
+          <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item>Current</vaadin-breadcrumbs-item>
+        </vaadin-breadcrumbs>
+      `,
+      div,
+    );
+    await nextRender();
   });
 
-  describe('default', () => {
-    beforeEach(async () => {
-      fixtureSync(
-        `
-          <vaadin-breadcrumbs>
-            <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item>Current</vaadin-breadcrumbs-item>
-          </vaadin-breadcrumbs>
-        `,
-        div,
-      );
-      await nextRender();
-    });
-
-    it('basic', async () => {
-      await visualDiff(div, 'basic');
-    });
+  it('basic', async () => {
+    await visualDiff(div, 'basic');
   });
 });

@@ -1,0 +1,31 @@
+vaadin-breadcrumbs-item::part(link) {
+  color: var(--aura-accent-text-color);
+  text-decoration: none;
+  transition: color 80ms;
+}
+
+vaadin-breadcrumbs-item::part(nolink) {
+  color: inherit;
+}
+
+vaadin-breadcrumbs-item[current]::part(nolink) {
+  font-weight: var(--aura-font-weight-medium);
+}
+
+@media (any-hover: hover) {
+  vaadin-breadcrumbs-item::part(link):hover {
+    color: var(--vaadin-text-color);
+    text-decoration: underline;
+  }
+}
+
+vaadin-breadcrumbs-item::part(link):active {
+  color: var(--vaadin-text-color);
+  text-decoration: underline;
+}
+
+vaadin-breadcrumbs-item > :is(vaadin-icon, [class*='icon'])[slot='prefix'] {
+  width: 0.875lh;
+  height: 0.875lh;
+  color: inherit;
+}
