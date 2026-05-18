@@ -20,7 +20,16 @@ export const breadcrumbsItemStyles = css`
     pointer-events: none;
   }
 
+  :host([disabled]) [part='link'] {
+    color: var(--vaadin-text-color-disabled);
+  }
+
+  :host([current]) [part='nolink'] {
+    color: var(--vaadin-text-color);
+  }
+
   [part='link']:focus-visible {
+    border-radius: var(--vaadin-radius-s);
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 
@@ -29,6 +38,7 @@ export const breadcrumbsItemStyles = css`
     display: inline-block;
     width: 1em;
     height: 1em;
+    color: var(--vaadin-text-color-secondary);
     background: currentColor;
     mask: var(--vaadin-breadcrumbs-separator, var(--_vaadin-icon-chevron-right)) center / contain no-repeat;
   }
