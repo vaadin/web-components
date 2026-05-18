@@ -10,9 +10,14 @@ export const breadcrumbsItemStyles = css`
   :host {
     display: inline-flex;
     align-items: center;
+    flex-shrink: 0;
   }
 
   :host([hidden]) {
+    display: none !important;
+  }
+
+  :host([data-overflow-hidden]) {
     display: none !important;
   }
 
