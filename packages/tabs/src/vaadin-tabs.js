@@ -90,7 +90,7 @@ class Tabs extends TabsMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
       </div>
 
       <div
-        @pointerdown=${this._startScrollForward}
+        @pointerdown="${this._startScrollForward}"
         @pointerup="${this._stopScroll}"
         @pointerleave="${this._stopScroll}"
         @pointercancel="${this._stopScroll}"
