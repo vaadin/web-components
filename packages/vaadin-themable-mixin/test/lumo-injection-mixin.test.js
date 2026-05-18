@@ -124,6 +124,39 @@ class TestQux extends LumoInjectionMixin(LitElement) {
 
 customElements.define(TestQux.is, TestQux);
 
+class TestQuxNoBase extends LumoInjectionMixin(LitElement) {
+  static get is() {
+    return 'test-qux-no-base';
+  }
+
+  static get version() {
+    return '1.0.0';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: inline-block;
+      }
+
+      [part='content'] {
+        transition: background-color 1ms linear;
+        color: black;
+        background-color: yellow;
+        padding: 10px;
+      }
+    `;
+  }
+
+  // Uses LumoInjectionMixin's default lumoInjector: includeBaseStyles is false.
+
+  render() {
+    return html`<div part="content">Content</div>`;
+  }
+}
+
+customElements.define(TestQuxNoBase.is, TestQuxNoBase);
+
 const TEST_QUX_STYLES = `
   html, :host {
     --_lumo-test-qux-inject: 1;
@@ -132,6 +165,21 @@ const TEST_QUX_STYLES = `
 
   @media lumo_qux {
     [part='content'] {
+      color: red;
+      background-color: green;
+    }
+  }
+`;
+
+const TEST_QUX_NO_BASE_STYLES = `
+  html, :host {
+    --_lumo-test-qux-no-base-inject: 1;
+    --_lumo-test-qux-no-base-inject-modules: lumo_qux-no-base;
+  }
+
+  @media lumo_qux-no-base {
+    [part='content'] {
+      transition: background-color 1ms linear;
       color: red;
       background-color: green;
     }
@@ -725,6 +773,45 @@ describe('Lumo injection', () => {
 
       await contentTransition();
       assertBaseStyle();
+    });
+  });
+
+  describe('without ThemableMixin and includeBaseStyles=false', () => {
+    beforeEach(async () => {
+      element = fixtureSync('<test-qux-no-base></test-qux-no-base>');
+      await nextRender();
+      content = element.shadowRoot.querySelector('[part="content"]');
+    });
+
+    afterEach(() => {
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
+    });
+
+    it('should drop element static styles when injected styles are present', async () => {
+      // Before injection: element static styles apply.
+      assertBaseStyle();
+      expect(getComputedStyle(content).paddingTop).to.equal('10px');
+
+      const style = document.createElement('style');
+      style.textContent = TEST_QUX_NO_BASE_STYLES;
+      document.head.appendChild(style);
+
+      await contentTransition();
+
+      // After injection: only the Lumo stylesheet applies — padding from base styles is gone.
+      assertInjectedStyle();
+      expect(getComputedStyle(content).paddingTop).to.equal('0px');
+
+      style.remove();
+
+      await contentTransition();
+
+      // After removal: element static styles re-apply.
+      assertBaseStyle();
+      expect(getComputedStyle(content).paddingTop).to.equal('10px');
     });
   });
 });
