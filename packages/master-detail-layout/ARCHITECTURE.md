@@ -158,6 +158,8 @@ z-index: 4 — #detail
 
 `#detail` above `#detailOutgoing` works correctly: split-mode replace is instant so z-order doesn't matter, and overlay-mode replace has the incoming sliding over the outgoing.
 
+The host sets `isolation: isolate` so these internal z-indices stay contained in MDL's own stacking context — otherwise `#detail` (z-4) would compete with an ancestor's overlays (e.g. `vaadin-app-layout`'s backdrop at z-2). The exception is `overlay-containment='page'`, where the detail uses `position: fixed` and must escape MDL's stacking context to layer above the page.
+
 ## Testing
 
 - **`onceResized(layout)`** (`test/helpers.js`): `nextResize()` + `nextRender()` — waits for ResizeObserver + rAF write phase

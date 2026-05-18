@@ -21,7 +21,7 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host:not([overlay-containment='page']) {
-    z-index: 0;
+    isolation: isolate;
   }
 
   :host([dir='rtl']) {
