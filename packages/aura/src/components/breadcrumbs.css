@@ -1,7 +1,4 @@
 vaadin-breadcrumbs {
-  font-family: var(--aura-font-family);
-  font-size: var(--aura-font-size-m);
-  line-height: var(--aura-line-height-m);
   color: var(--vaadin-text-color);
 }
 
