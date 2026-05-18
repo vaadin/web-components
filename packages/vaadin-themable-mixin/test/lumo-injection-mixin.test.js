@@ -90,6 +90,54 @@ class TestCustomLumoInjectorTagName extends TestFoo {
 
 customElements.define(TestCustomLumoInjectorTagName.is, TestCustomLumoInjectorTagName);
 
+class TestQux extends LumoInjectionMixin(LitElement) {
+  static get is() {
+    return 'test-qux';
+  }
+
+  static get version() {
+    return '1.0.0';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: inline-block;
+      }
+
+      [part='content'] {
+        transition: background-color 1ms linear;
+        color: black;
+        background-color: yellow;
+      }
+    `;
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
+  render() {
+    return html`<div part="content">Content</div>`;
+  }
+}
+
+customElements.define(TestQux.is, TestQux);
+
+const TEST_QUX_STYLES = `
+  html, :host {
+    --_lumo-test-qux-inject: 1;
+    --_lumo-test-qux-inject-modules: lumo_qux;
+  }
+
+  @media lumo_qux {
+    [part='content'] {
+      color: red;
+      background-color: green;
+    }
+  }
+`;
+
 const TEST_FOO_STYLES = `
   html, :host {
     --_lumo-test-foo-inject: 1;
@@ -648,6 +696,35 @@ describe('Lumo injection', () => {
       await contentTransition();
 
       assertThemeStyle();
+    });
+  });
+
+  describe('without ThemableMixin', () => {
+    beforeEach(async () => {
+      element = fixtureSync('<test-qux></test-qux>');
+      await nextRender();
+      content = element.shadowRoot.querySelector('[part="content"]');
+    });
+
+    afterEach(() => {
+      document.__lumoInjector?.disconnect();
+      document.__lumoInjector = undefined;
+      document.__cssPropertyObserver?.disconnect();
+      document.__cssPropertyObserver = undefined;
+    });
+
+    it('should apply injected styles after element static styles', async () => {
+      const style = document.createElement('style');
+      style.textContent = TEST_QUX_STYLES;
+      document.head.appendChild(style);
+
+      await contentTransition();
+      assertInjectedStyle();
+
+      style.remove();
+
+      await contentTransition();
+      assertBaseStyle();
     });
   });
 });
