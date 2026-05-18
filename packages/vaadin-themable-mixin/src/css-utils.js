@@ -22,7 +22,7 @@ function getEffectiveStyles(component) {
     return [...(lumoInjector.includeBaseStyles ? baseStyles : []), lumoStyleSheet, ...themeStyles];
   }
 
-  return [lumoStyleSheet, ...elementStyles].filter(Boolean);
+  return [...elementStyles, lumoStyleSheet].filter(Boolean);
 }
 
 /**
