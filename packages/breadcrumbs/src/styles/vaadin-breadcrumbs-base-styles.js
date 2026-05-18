@@ -9,6 +9,7 @@ import { css } from 'lit';
 export const breadcrumbsStyles = css`
   :host {
     display: block;
+    color: var(--vaadin-text-color);
   }
 
   :host([hidden]) {
@@ -19,6 +20,6 @@ export const breadcrumbsStyles = css`
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.25em;
+    gap: var(--vaadin-gap-xs);
   }
 `;
