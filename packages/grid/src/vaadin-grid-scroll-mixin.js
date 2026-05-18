@@ -507,12 +507,12 @@ export const ScrollMixin = (superClass) =>
         this.__updateRowScrollPositionProperty(focusedRow);
       }
 
-      const lastHeaderRow = this.$.header.querySelector('vaadin-grid-row:state(last-header)');
+      const lastHeaderRow = this.$.header.querySelector('vaadin-grid-row:state(last-header-row)');
       if (lastHeaderRow) {
         this.__updateRowScrollPositionProperty(lastHeaderRow);
       }
 
-      const firstFooterRow = this.$.footer.querySelector('vaadin-grid-row:state(first-footer)');
+      const firstFooterRow = this.$.footer.querySelector('vaadin-grid-row:state(first-footer-row)');
       if (firstFooterRow) {
         this.__updateRowScrollPositionProperty(firstFooterRow);
       }

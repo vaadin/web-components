@@ -86,7 +86,7 @@ export const RowDetailsMixin = (superClass) =>
       if (this._columnTree) {
         // Only update the rows if the column tree has already been initialized
         this._getRenderedRows().forEach((row) => {
-          if (!row.querySelector('vaadin-grid-cell:state(details)')) {
+          if (!row.querySelector('vaadin-grid-cell:state(details-cell)')) {
             this.__initRow(row, this._columnTree[this._columnTree.length - 1]);
             this.__updateRow(row);
             return;
@@ -114,7 +114,7 @@ export const RowDetailsMixin = (superClass) =>
      */
     _configureDetailsCell(cell) {
       updatePart(cell, 'cell', true);
-      updateState(cell, 'details', true, 'details-cell');
+      updateState(cell, 'details-cell', true);
       // Freeze the details cell, so that it does not scroll horizontally
       // with the normal cells. This way it looks less weird.
       cell.toggleAttribute('frozen', true);
@@ -128,7 +128,7 @@ export const RowDetailsMixin = (superClass) =>
      * @protected
      */
     _toggleDetailsCell(row, detailsOpened) {
-      const cell = row.querySelector('vaadin-grid-cell:state(details)');
+      const cell = row.querySelector('vaadin-grid-cell:state(details-cell)');
       if (!cell) {
         return;
       }
@@ -148,7 +148,7 @@ export const RowDetailsMixin = (superClass) =>
 
     /** @protected */
     _updateDetailsCellHeight(row) {
-      const cell = row.querySelector('vaadin-grid-cell:state(details)');
+      const cell = row.querySelector('vaadin-grid-cell:state(details-cell)');
       if (!cell) {
         return;
       }

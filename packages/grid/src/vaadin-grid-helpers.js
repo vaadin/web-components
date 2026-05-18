@@ -81,19 +81,18 @@ export function updateAttribute(element, attribute, value) {
 }
 
 /**
- * Toggles a CSS class on the element, and a matching custom state on the
- * element's `ElementInternals` when available. The state name is what gets
- * exposed via the `:state(...)` pseudo-class, while the class keeps the grid's
- * internal CSS (which still relies on class selectors) working.
+ * Toggles a custom state on the element's `ElementInternals` when available,
+ * and a CSS class with the same name. The state is what gets exposed via the
+ * `:state(...)` pseudo-class, while the class keeps the grid's internal CSS
+ * (which still relies on class selectors) working.
  *
  * @param {!HTMLElement} element
  * @param {string} state
  * @param {boolean | string | null | undefined} value
- * @param {string} [className=state] Optional override for the class name.
  */
-export function updateState(element, state, value, className = state) {
+export function updateState(element, state, value) {
   const on = !!value || value === '';
-  element.classList.toggle(className, on);
+  element.classList.toggle(state, on);
   const internals = element._internals;
   if (internals && internals.states) {
     if (on) {
@@ -127,8 +126,8 @@ export function updateBooleanRowStates(row, states) {
     // `[loading]`, `[dragstart]`, etc. used by internal CSS.
     updateAttribute(row, state, value);
 
-    updateState(row, state, value, `${state}-row`);
-    cells.forEach((cell) => updateState(cell, state, value, `${state}-row-cell`));
+    updateState(row, `${state}-row`, value);
+    cells.forEach((cell) => updateState(cell, `${state}-row-cell`, value));
   });
 }
 
@@ -146,14 +145,14 @@ export function updateStringRowStates(row, states) {
 
     if (prevValue) {
       const prevState = `${state}-${prevValue}`;
-      updateState(row, prevState, false, `${prevState}-row`);
-      cells.forEach((cell) => updateState(cell, prevState, false, `${prevState}-row-cell`));
+      updateState(row, `${prevState}-row`, false);
+      cells.forEach((cell) => updateState(cell, `${prevState}-row-cell`, false));
     }
 
     if (value) {
       const newState = `${state}-${value}`;
-      updateState(row, newState, true, `${newState}-row`);
-      cells.forEach((cell) => updateState(cell, newState, true, `${newState}-row-cell`));
+      updateState(row, `${newState}-row`, true);
+      cells.forEach((cell) => updateState(cell, `${newState}-row-cell`, true));
     }
   });
 }
@@ -168,16 +167,10 @@ export function updateStringRowStates(row, states) {
 export function updateCellState(cell, attribute, value, part, oldPart) {
   updateAttribute(cell, attribute, value);
 
-  const newClass = part || `${attribute}-cell`;
-  // State name = class name with the `-cell` suffix stripped, so e.g.
-  // `focused-cell` becomes the state `focused` and `reorder-dragging-cell`
-  // becomes the state `reorder-dragging`.
-  const newState = newClass.replace(/-cell$/u, '');
   if (oldPart) {
-    const oldState = oldPart.replace(/-cell$/u, '');
-    updateState(cell, oldState, false, oldPart);
+    updateState(cell, oldPart, false);
   }
-  updateState(cell, newState, value, newClass);
+  updateState(cell, part || `${attribute}-cell`, value);
 }
 
 /**

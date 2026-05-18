@@ -17,7 +17,7 @@ function isCell(element) {
 }
 
 function isDetailsCell(element) {
-  return element.matches(':state(details)');
+  return element.matches(':state(details-cell)');
 }
 
 export const KeyboardNavigationMixin = (superClass) =>
@@ -165,11 +165,11 @@ export const KeyboardNavigationMixin = (superClass) =>
     /** @private */
     _focusedCellChanged(focusedCell, oldFocusedCell) {
       if (oldFocusedCell) {
-        updateState(oldFocusedCell, 'focused', false, 'focused-cell');
+        updateState(oldFocusedCell, 'focused-cell', false);
       }
 
       if (focusedCell) {
-        updateState(focusedCell, 'focused', true, 'focused-cell');
+        updateState(focusedCell, 'focused-cell', true);
       }
     }
 
