@@ -1,7 +1,7 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../common.js';
+import '../not-animated-styles.css';
 import '../../../src/vaadin-toggle-switch.js';
 import type { ToggleSwitch } from '../../../src/vaadin-toggle-switch.js';
 

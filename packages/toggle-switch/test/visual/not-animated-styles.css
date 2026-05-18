@@ -1,0 +1,7 @@
+vaadin-toggle-switch::part(switch),
+vaadin-toggle-switch::part(switch)::before,
+vaadin-toggle-switch::part(thumb),
+vaadin-toggle-switch::part(helper-text),
+vaadin-toggle-switch::part(error-message) {
+  transition: none !important;
+}
