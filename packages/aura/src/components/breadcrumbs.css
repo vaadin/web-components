@@ -1,15 +1,3 @@
-vaadin-breadcrumbs {
-  color: var(--vaadin-text-color);
-}
-
-vaadin-breadcrumbs::part(list) {
-  gap: var(--vaadin-gap-s);
-}
-
-vaadin-breadcrumbs-item::after {
-  color: var(--vaadin-text-color-secondary);
-}
-
 vaadin-breadcrumbs-item::part(link) {
   color: var(--aura-accent-text-color);
   text-decoration: none;
@@ -21,7 +9,6 @@ vaadin-breadcrumbs-item::part(nolink) {
 }
 
 vaadin-breadcrumbs-item[current]::part(nolink) {
-  color: var(--vaadin-text-color);
   font-weight: var(--aura-font-weight-medium);
 }
 
@@ -35,14 +22,6 @@ vaadin-breadcrumbs-item[current]::part(nolink) {
 vaadin-breadcrumbs-item::part(link):active {
   color: var(--vaadin-text-color);
   text-decoration: underline;
-}
-
-vaadin-breadcrumbs-item::part(link):focus-visible {
-  border-radius: var(--vaadin-radius-s);
-}
-
-vaadin-breadcrumbs-item[disabled]::part(link) {
-  color: var(--vaadin-text-color-disabled);
 }
 
 vaadin-breadcrumbs-item > :is(vaadin-icon, [class*='icon'])[slot='prefix'] {
