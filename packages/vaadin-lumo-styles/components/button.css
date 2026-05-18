@@ -10,3 +10,172 @@
   --_lumo-vaadin-button-inject: 1;
   --_lumo-vaadin-button-inject-modules: lumo_components_button;
 }
+
+/*
+Base styles for the .lumo-button class, which lets a plain element (typically <a>)
+look like a vaadin-button. The corresponding rules for vaadin-button itself live
+inside its shadow root via the @media lumo_components_button block. See issue #1803.
+*/
+.lumo-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  position: relative;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  --_button-size: var(
+    --vaadin-button-height,
+    var(--lumo-size-m)
+  );
+  --_lumo-button-background: var(
+    --vaadin-button-background,
+    var(--lumo-contrast-5pct)
+  );
+  --_lumo-button-text-color: var(
+    --vaadin-button-text-color,
+    var(--lumo-primary-text-color)
+  );
+  --_lumo-button-primary-background: var(
+    --vaadin-button-primary-background,
+    var(--lumo-primary-color)
+  );
+  --_lumo-button-primary-text-color: var(
+    --vaadin-button-primary-text-color,
+    var(--lumo-primary-contrast-color)
+  );
+  min-width: var(
+    --vaadin-button-min-width,
+    calc(var(--_button-size) * 2)
+  );
+  height: var(--_button-size);
+  padding: var(
+    --vaadin-button-padding,
+    0
+      calc(
+        var(--_button-size) / 3 +
+          var(--lumo-border-radius-m) /
+          2
+      )
+  );
+  margin: var(
+    --vaadin-button-margin,
+    var(--lumo-space-xs) 0
+  );
+  font-family: var(--lumo-font-family);
+  font-size: var(
+    --vaadin-button-font-size,
+    var(--lumo-font-size-m)
+  );
+  font-weight: var(
+    --vaadin-button-font-weight,
+    500
+  );
+  color: var(--_lumo-button-text-color);
+  background: var(
+    --_lumo-button-background
+  );
+  border: var(
+    --vaadin-button-border,
+    none
+  );
+  border-radius: var(
+    --vaadin-button-border-radius,
+    var(--lumo-border-radius-m)
+  );
+  cursor: var(--lumo-clickable-cursor);
+}
+
+.lumo-button::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background-color: currentColor;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 100ms;
+}
+
+.lumo-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0
+    var(--vaadin-focus-ring-width, 2px)
+    var(
+      --vaadin-focus-ring-color,
+      var(--lumo-primary-color-50pct)
+    );
+}
+
+@media (any-hover: hover) {
+  .lumo-button:hover::before {
+    opacity: 0.02;
+  }
+
+  .lumo-button[theme~='primary']:hover::before {
+    opacity: 0.05;
+  }
+}
+
+.lumo-button:active::before {
+  opacity: 0.05;
+  transition-duration: 0s;
+}
+
+.lumo-button[theme~='primary'] {
+  background: var(
+    --_lumo-button-primary-background
+  );
+  border: var(
+    --vaadin-button-primary-border,
+    none
+  );
+  color: var(
+    --_lumo-button-primary-text-color
+  );
+  font-weight: var(
+    --vaadin-button-primary-font-weight,
+    600
+  );
+  min-width: calc(
+    var(--_button-size) * 2.5
+  );
+}
+
+.lumo-button[theme~='primary']::before {
+  background-color: black;
+}
+
+.lumo-button[theme~='primary']:active::before {
+  opacity: 0.1;
+}
+
+.lumo-button[theme~='tertiary'] {
+  background: var(
+    --vaadin-button-tertiary-background,
+    transparent
+  );
+  border: var(
+    --vaadin-button-tertiary-border,
+    none
+  );
+  color: var(
+    --vaadin-button-tertiary-text-color,
+    var(--lumo-primary-text-color)
+  );
+  font-weight: var(
+    --vaadin-button-tertiary-font-weight,
+    500
+  );
+  min-width: 0;
+  padding: var(
+    --vaadin-button-tertiary-padding,
+    0 calc(var(--_button-size) / 6)
+  );
+}
