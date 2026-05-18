@@ -10,7 +10,6 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { toggleSwitchStyles } from './styles/vaadin-toggle-switch-base-styles.js';
 
 /**
@@ -88,9 +87,7 @@ import { toggleSwitchStyles } from './styles/vaadin-toggle-switch-base-styles.js
  * @customElement vaadin-toggle-switch
  * @extends HTMLElement
  */
-export class ToggleSwitch extends CheckboxMixin(
-  ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
-) {
+export class ToggleSwitch extends CheckboxMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-toggle-switch';
   }

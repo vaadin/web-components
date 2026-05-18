@@ -10,7 +10,6 @@ import type { CheckedMixinClass } from '@vaadin/field-base/src/checked-mixin.js'
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
-import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type {
   ToggleSwitch,
   ToggleSwitchChangeEvent,
@@ -46,7 +45,6 @@ assertType<FieldMixinClass>(toggleSwitch);
 assertType<FocusMixinClass>(toggleSwitch);
 assertType<KeyboardMixinClass>(toggleSwitch);
 assertType<LabelMixinClass>(toggleSwitch);
-assertType<ThemableMixinClass>(toggleSwitch);
 assertType<ValidateMixinClass>(toggleSwitch);
 
 // Events

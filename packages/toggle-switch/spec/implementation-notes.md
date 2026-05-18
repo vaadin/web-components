@@ -147,3 +147,16 @@
   - `yarn update:snapshots` (the in-place flag) does not prune orphan snapshot blocks when `it` blocks are deleted — the snapshot file kept the old 4 `shadow > {state}` blocks after the test bodies were removed. `rm test/dom/__snapshots__/toggle-switch.test.snap.js` followed by `yarn test:snapshots --update --group toggle-switch` produces a clean file.
   - The implementation agent generated `packages/toggle-switch/test/visual/aura/screenshots/default/` Aura baselines while running the validation suite. Per Task 6's dark-only decision, those are not committed; they stay untracked.
 - **Spec adjustments:** —
+
+## Post-Task 7 — Drop `ThemableMixin` from class chain
+
+- **Commit:** (this commit)
+- **Date:** 2026-05-18
+- **Decisions:**
+  - `ThemableMixin` removed from the class chain in both `src/vaadin-toggle-switch.js` and `src/vaadin-toggle-switch.d.ts`. The final chain is `CheckboxMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))`. The component does not expose a `theme` attribute and does not register theme-scoped CSS via `registerStyles()`; Lumo styles ship through `LumoInjectionMixin`, Aura styles ship document-side via `::part()`. Neither path reads `ThemableMixin`'s style registry.
+  - `assertType<ThemableMixinClass>(toggleSwitch)` and the matching import dropped from `test/typings/toggle-switch.types.ts`. The mixin assertion count goes from 12 to 11.
+  - `@vaadin/vaadin-themable-mixin` stays in `package.json` runtime dependencies — `LumoInjectionMixin` is exported from the same package.
+- **Surprises:** —
+- **Spec adjustments:**
+  - `web-component-spec.md`: import bullet for `@vaadin/vaadin-themable-mixin` rewritten to list `LumoInjectionMixin` only; Discussion entry added.
+  - `web-component-tasks.md`: Task 1 and Task 2 chain references updated to drop `ThemableMixin`; Discussion entry added.

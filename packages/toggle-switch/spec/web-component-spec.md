@@ -141,7 +141,7 @@ All shared modules are reused as-is — no adjustments are required.
 - **`@vaadin/component-base/src/tooltip-controller.js`** — `TooltipController` wires the slotted tooltip with `aria-describedby` on the input. Wired directly in the element's `ready()` (not by `CheckboxMixin`), matching Checkbox's pattern.
 - **`@vaadin/component-base/src/element-mixin.js`** — `ElementMixin` (telemetry / public-component registration; required for public components).
 - **`@vaadin/component-base/src/polylit-mixin.js`** — `PolylitMixin` (Lit + Polymer-compat layer; required by every component).
-- **`@vaadin/vaadin-themable-mixin/{vaadin-themable-mixin,lumo-injection-mixin}.js`** — `ThemableMixin` and `LumoInjectionMixin` (theming; required by every component).
+- **`@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js`** — `LumoInjectionMixin` (Lumo style injection). The toggle switch's class chain omits `ThemableMixin`; see Discussion.
 
 ---
 
@@ -178,3 +178,7 @@ Computed-style assertions that override a custom property and read back the resu
 **Q: Why does the checkmark suppression on `[part='switch']::after` blank `background` and `mask` instead of setting `content: none`?**
 
 `checkable()` sets `:host { align-items: baseline }` on the grid, and the `::after` pseudo-element it adds carries `content: '\2003' / ''` (an em-space). Centred by the flex parent on `[part='switch']`, that em-space supplies the flex container's first baseline at roughly the vertical centre of the track — the anchor `align-items: baseline` uses to line up the label's text baseline. Setting `content: none` removes the pseudo-element entirely and collapses the flex container's baseline to its margin-box bottom, which visually shifts the label upward relative to the track. Clearing only `background` and `mask` keeps the em-space content (and therefore the centred baseline) intact while removing the visible checkmark; the absolutely-positioned `[part='thumb']` provides the on-state affordance on top.
+
+**Q: Why was `ThemableMixin` dropped from the class chain?**
+
+The toggle switch does not expose a `theme` attribute API and does not register theme-scoped CSS via `registerStyles()`. Lumo styles arrive through `LumoInjectionMixin` (which reads `--_lumo-vaadin-toggle-switch-inject` markers from the document); Aura styles are applied document-side via `::part()` selectors imported through `aura.css`. Neither path goes through `ThemableMixin`'s style registry, so keeping the mixin in the chain added nothing the component actually uses. The visual-test animation-disable CSS (`test/visual/not-animated-styles.css`) follows the same document-side `::part()` pattern as Aura.

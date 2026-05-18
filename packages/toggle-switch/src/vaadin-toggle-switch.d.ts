@@ -5,7 +5,6 @@
  */
 import { CheckboxMixin } from '@vaadin/checkbox/src/vaadin-checkbox-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
  * Fired when the user flips the switch.
@@ -113,7 +112,7 @@ export interface ToggleSwitchEventMap extends HTMLElementEventMap, ToggleSwitchC
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
-declare class ToggleSwitch extends CheckboxMixin(ElementMixin(ThemableMixin(HTMLElement))) {
+declare class ToggleSwitch extends CheckboxMixin(ElementMixin(HTMLElement)) {
   addEventListener<K extends keyof ToggleSwitchEventMap>(
     type: K,
     listener: (this: ToggleSwitch, ev: ToggleSwitchEventMap[K]) => void,
