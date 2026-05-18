@@ -124,7 +124,7 @@ export const KeyboardDirectionMixin = (superclass) =>
 
       if (idx >= 0) {
         event.preventDefault();
-        this._focus(idx, { focusVisible: true }, true);
+        this._focus(idx, { focusVisible: true, preventScroll: true }, true);
       }
     }
 

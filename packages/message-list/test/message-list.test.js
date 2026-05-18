@@ -476,6 +476,17 @@ describe('message-list', () => {
       arrowRight(messageElements[1]);
       expect(messageElements[1].hasAttribute('focused')).to.be.true;
     });
+
+    it('should scroll focused message into view on keyboard navigation', () => {
+      messageList.style.height = '50px';
+      messageElements[0].focus();
+      expect(messageList.scrollTop).to.equal(0);
+
+      arrowDown(messageElements[0]);
+      arrowDown(messageElements[1]);
+      arrowDown(messageElements[2]);
+      expect(messageList.scrollTop).to.be.greaterThan(0);
+    });
   });
 
   describe('a11y', () => {

@@ -112,6 +112,21 @@ export const MessageListMixin = (superClass) =>
       return this._messages;
     }
 
+    /**
+     * Override method inherited from `KeyboardDirectionMixin`
+     * to scroll the focused message into view, since the mixin
+     * itself focuses items with `preventScroll: true`.
+     *
+     * @protected
+     * @override
+     */
+    _focusItem(item, options, navigating) {
+      super._focusItem(item, options, navigating);
+      if (item && navigating) {
+        item.scrollIntoView({ block: 'nearest' });
+      }
+    }
+
     /** @private */
     _itemsChanged(newVal, oldVal) {
       const items = newVal || [];

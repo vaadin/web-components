@@ -282,40 +282,19 @@ export const ListMixin = (superClass) =>
       });
       this._setFocusable(idx);
       this._scrollToItem(idx);
-      super._focus(idx, options);
+      super._focus(idx, options ?? { preventScroll: true });
     }
 
     /**
-     * Scroll the container to have the next item by the edge of the viewport.
+     * Scroll the container to have the item visible.
      * @param {number} idx
      * @protected
      */
     _scrollToItem(idx) {
-      const item = this.items[idx];
-      if (!item) {
-        return;
+      const item = this._getItems()[idx];
+      if (item) {
+        item.scrollIntoView({ block: 'nearest', inline: 'nearest' });
       }
-
-      const props = this._vertical ? ['top', 'bottom'] : this._isRTL ? ['right', 'left'] : ['left', 'right'];
-
-      const scrollerRect = this._scrollerElement.getBoundingClientRect();
-      const nextItemRect = (this.items[idx + 1] || item).getBoundingClientRect();
-      const prevItemRect = (this.items[idx - 1] || item).getBoundingClientRect();
-
-      let scrollDistance = 0;
-      if (
-        (!this._isRTL && nextItemRect[props[1]] >= scrollerRect[props[1]]) ||
-        (this._isRTL && nextItemRect[props[1]] <= scrollerRect[props[1]])
-      ) {
-        scrollDistance = nextItemRect[props[1]] - scrollerRect[props[1]];
-      } else if (
-        (!this._isRTL && prevItemRect[props[0]] <= scrollerRect[props[0]]) ||
-        (this._isRTL && prevItemRect[props[0]] >= scrollerRect[props[0]])
-      ) {
-        scrollDistance = prevItemRect[props[0]] - scrollerRect[props[0]];
-      }
-
-      this._scroll(scrollDistance);
     }
 
     /**

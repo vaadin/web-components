@@ -190,6 +190,12 @@ describe('KeyboardDirectionMixin', () => {
       });
     });
 
+    it('should focus next element with preventScroll on arrow keydown', () => {
+      const spy = sinon.spy(items[1], 'focus');
+      arrowRightKeyDown(items[0]);
+      expect(spy.firstCall.args[0]).to.deep.include({ preventScroll: true });
+    });
+
     describe('hidden items', () => {
       it('should skip element hidden using attribute', () => {
         items[1].setAttribute('hidden', '');
