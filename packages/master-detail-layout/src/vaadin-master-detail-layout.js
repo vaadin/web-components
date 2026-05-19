@@ -237,10 +237,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     };
   }
 
-  static get experimental() {
-    return true;
-  }
-
   /** @protected */
   render() {
     const isOverlay = this.hasAttribute('has-detail') && this.hasAttribute('overlay');

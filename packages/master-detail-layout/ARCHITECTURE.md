@@ -166,4 +166,3 @@ The host sets `isolation: isolate` so these internal z-indices stay contained in
 - **`waitForAnimationProgress(element, offset)`**: waits until an animation is running on the element with translate strictly between 0 and offset (genuinely mid-flight, not at either endpoint's CSS resting state)
 - **Split mode sizing**: measure part elements directly (not `gridTemplateColumns`, which has 4 columns)
 - **Vertical tests**: integrated into each test file under `describe('vertical')` suites
-- **Feature flag**: `window.Vaadin.featureFlags.masterDetailLayoutComponent = true` required before import

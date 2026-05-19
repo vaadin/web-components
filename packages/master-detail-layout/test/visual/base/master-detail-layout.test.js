@@ -3,10 +3,6 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../src/vaadin-master-detail-layout.js';
 import { onceResized } from '../../helpers.js';
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
-
 describe('master-detail-layout', () => {
   let div, mdl;
 

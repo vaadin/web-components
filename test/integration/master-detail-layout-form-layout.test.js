@@ -3,10 +3,6 @@ import '@vaadin/form-layout';
 import '@vaadin/master-detail-layout';
 import { assertFormLayoutGrid } from '@vaadin/form-layout/test/helpers.js';
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
-
 describe('form-layout in master-detail-layout', () => {
   let mdl;
 

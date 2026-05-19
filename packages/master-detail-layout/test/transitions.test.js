@@ -6,10 +6,6 @@ import './helpers/master-content.js';
 import './helpers/detail-content.js';
 import { onceResized } from './helpers.js';
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
-
 describe('Transitions', () => {
   let layout;
 
