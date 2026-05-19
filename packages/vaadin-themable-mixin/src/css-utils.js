@@ -23,7 +23,7 @@ function getEffectiveStyles(component) {
     return [...base, lumoStyleSheet, ...(themeStyles ?? [])];
   }
 
-  return [...elementStyles];
+  return elementStyles;
 }
 
 /**
