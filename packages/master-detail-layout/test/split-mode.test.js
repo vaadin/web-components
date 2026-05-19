@@ -3,10 +3,6 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import '../src/vaadin-master-detail-layout.js';
 import { onceResized } from './helpers.js';
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
-
 function getPartSizes(layout, dimension) {
   const master = layout.shadowRoot.querySelector('[part="master"]');
   const detail = layout.shadowRoot.querySelector('[part="detail"]');

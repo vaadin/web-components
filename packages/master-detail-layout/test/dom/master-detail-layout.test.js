@@ -3,10 +3,6 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../../src/vaadin-master-detail-layout.js';
 import { onceResized } from '../helpers.js';
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
-
 describe('vaadin-master-detail-layout', () => {
   let layout;
 
