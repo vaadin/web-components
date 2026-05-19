@@ -56,6 +56,8 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
       __hasOverflow: {
         type: Boolean,
         value: false,
+        reflectToAttribute: true,
+        attribute: 'has-overflow',
       },
     };
   }
@@ -86,11 +88,6 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
 
   set i18n(value) {
     super.i18n = value;
-  }
-
-  /** @protected */
-  get _observeParent() {
-    return true;
   }
 
   /** @protected */

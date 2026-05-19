@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-breadcrumbs.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 window.Vaadin ??= {};
 window.Vaadin.featureFlags ??= {};
@@ -198,345 +199,245 @@ describe('vaadin-breadcrumbs', () => {
     });
   });
 
-  describe('overflow detection', () => {
-    let wrapper, items;
+  describe('overflow', () => {
+    let items, button, overlay;
 
     beforeEach(async () => {
-      wrapper = fixtureSync(`
-        <div style="width: 800px;">
-          <vaadin-breadcrumbs>
-            <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/docs">Documents</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/docs/projects">Projects</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/docs/projects/2026">2026</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/docs/projects/2026/q1">Quarter Reports</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item>Summary report</vaadin-breadcrumbs-item>
-          </vaadin-breadcrumbs>
-        </div>
+      breadcrumbs = fixtureSync(`
+        <vaadin-breadcrumbs style="max-width: 800px;">
+          <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item path="/docs">Documents</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item path="/docs/projects">Projects</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item path="/docs/projects/2026">2026</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item path="/docs/projects/2026/q1">Quarter Reports</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item>Summary report</vaadin-breadcrumbs-item>
+        </vaadin-breadcrumbs>
       `);
-      breadcrumbs = wrapper.querySelector('vaadin-breadcrumbs');
       await nextRender();
       items = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item')];
-    });
-
-    it('should not set has-overflow when all items fit', () => {
-      expect(breadcrumbs.hasAttribute('has-overflow')).to.be.false;
-    });
-
-    it('should not move any item to the overlay when all items fit', () => {
-      items.forEach((item) => {
-        expect(item.slot).to.not.equal('overlay');
-      });
-    });
-
-    it('should keep [part="overflow"] hidden when all items fit', () => {
-      const overflow = breadcrumbs.shadowRoot.querySelector('[part="overflow"]');
-      expect(overflow.hasAttribute('hidden')).to.be.true;
-    });
-
-    it('should set has-overflow when items no longer fit', async () => {
-      wrapper.style.width = '300px';
-      await nextResize(breadcrumbs);
-
-      expect(breadcrumbs.hasAttribute('has-overflow')).to.be.true;
-    });
-
-    it('should unset hidden on [part="overflow"] when items no longer fit', async () => {
-      wrapper.style.width = '300px';
-      await nextResize(breadcrumbs);
-
-      const overflow = breadcrumbs.shadowRoot.querySelector('[part="overflow"]');
-      expect(overflow.hasAttribute('hidden')).to.be.false;
-    });
-
-    it('should move the first default-slot item to the overlay first (not the root)', async () => {
-      wrapper.style.width = '500px';
-      await nextResize(breadcrumbs);
-
-      // Items are: [root, default0, default1, default2, default3, last]
-      expect(items[0].slot).to.equal('root');
-      expect(items[1].slot).to.equal('overlay');
-      expect(items[items.length - 1].slot).to.not.equal('overlay');
-    });
-
-    it('should move additional default-slot items to the overlay closest-to-root first as container shrinks', async () => {
-      wrapper.style.width = '500px';
-      await nextResize(breadcrumbs);
-      const hiddenAfterFirstShrink = items.filter((item) => item.slot === 'overlay').length;
-
-      wrapper.style.width = '250px';
-      await nextResize(breadcrumbs);
-      const hiddenAfterSecondShrink = items.filter((item) => item.slot === 'overlay').length;
-
-      expect(hiddenAfterSecondShrink).to.be.greaterThan(hiddenAfterFirstShrink);
-
-      // Verify closest-to-root first ordering: if item N is in the overlay, item N-1 (closer to root) must also be in
-      // the overlay, for indices in the default-slot range (1..length-2).
-      for (let i = 2; i < items.length - 1; i += 1) {
-        if (items[i].slot === 'overlay') {
-          expect(items[i - 1].slot).to.equal('overlay');
-        }
-      }
-    });
-
-    it('should move the root item to the overlay when only the current item still fits', async () => {
-      wrapper.style.width = '80px';
-      await nextResize(breadcrumbs);
-
-      expect(items[0].slot).to.equal('overlay');
-    });
-
-    it('should never move the last item to the overlay regardless of width', async () => {
-      wrapper.style.width = '20px';
-      await nextResize(breadcrumbs);
-
-      expect(items[items.length - 1].slot).to.not.equal('overlay');
-    });
-
-    it('should restore items from the overlay when the container widens again', async () => {
-      wrapper.style.width = '250px';
-      await nextResize(breadcrumbs);
-
-      wrapper.style.width = '800px';
-      await nextResize(breadcrumbs);
-
-      items.forEach((item, index) => {
-        const expected = index === 0 ? 'root' : '';
-        expect(item.slot).to.equal(expected);
-      });
-      expect(breadcrumbs.hasAttribute('has-overflow')).to.be.false;
-    });
-
-    it('should re-run detection when an item is added to a fitting trail', async () => {
-      // Pre-condition: trail fits.
-      expect(breadcrumbs.hasAttribute('has-overflow')).to.be.false;
-
-      // Add many wide items so detection has to collapse some.
-      for (let i = 0; i < 6; i += 1) {
-        const item = document.createElement('vaadin-breadcrumbs-item');
-        item.path = `/extra/${i}`;
-        item.textContent = `Extra long item label ${i}`;
-        breadcrumbs.insertBefore(item, breadcrumbs.lastElementChild);
-      }
-      wrapper.style.width = '300px';
-      await nextResize(breadcrumbs);
-
-      expect(breadcrumbs.hasAttribute('has-overflow')).to.be.true;
-    });
-  });
-
-  describe('overflow separator', () => {
-    let wrapper;
-
-    beforeEach(async () => {
-      wrapper = fixtureSync(`
-        <div style="width: 300px;">
-          <vaadin-breadcrumbs>
-            <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/a">A really wide label A</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/a/b">Another wide label B</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/a/b/c">Yet another wide label C</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item>Current page</vaadin-breadcrumbs-item>
-          </vaadin-breadcrumbs>
-        </div>
-      `);
-      breadcrumbs = wrapper.querySelector('vaadin-breadcrumbs');
-      await nextRender();
-      await nextResize(breadcrumbs);
-    });
-
-    it('should render a visible ::after separator on [part="overflow"] when has-overflow is set', () => {
-      const overflow = breadcrumbs.shadowRoot.querySelector('[part="overflow"]');
-      expect(breadcrumbs.hasAttribute('has-overflow')).to.be.true;
-      expect(getComputedStyle(overflow, '::after').display).to.not.equal('none');
-    });
-
-    it('should use mask-image on the overflow ::after separator', () => {
-      const overflow = breadcrumbs.shadowRoot.querySelector('[part="overflow"]');
-      const mask = getComputedStyle(overflow, '::after').maskImage;
-      expect(mask).to.not.equal('none');
-      expect(mask).to.be.a('string');
-    });
-
-    it('should flip the overflow ::after separator in RTL', async () => {
-      document.documentElement.setAttribute('dir', 'rtl');
-      await nextRender();
-
-      const overflow = breadcrumbs.shadowRoot.querySelector('[part="overflow"]');
-      const transform = getComputedStyle(overflow, '::after').transform;
-      // matrix(-1, 0, 0, 1, 0, 0) corresponds to scaleX(-1)
-      expect(transform).to.contain('matrix(-1');
-
-      document.documentElement.removeAttribute('dir');
-    });
-  });
-
-  describe('overflow button interaction', () => {
-    let wrapper, button, overlay;
-
-    beforeEach(async () => {
-      wrapper = fixtureSync(`
-        <div style="width: 200px;">
-          <vaadin-breadcrumbs>
-            <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/a">Sub area A</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/a/b">Sub area B</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/a/b/c">Sub area C</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item>Current page</vaadin-breadcrumbs-item>
-          </vaadin-breadcrumbs>
-        </div>
-      `);
-      breadcrumbs = wrapper.querySelector('vaadin-breadcrumbs');
-      await nextRender();
-      await nextResize(breadcrumbs);
-
       button = breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]');
       overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
     });
 
-    it('should open the overlay when the overflow button is clicked', async () => {
-      button.click();
-      await oneEvent(overlay, 'vaadin-overlay-open');
+    describe('detection', () => {
+      it('should set has-overflow when items no longer fit', async () => {
+        breadcrumbs.style.maxWidth = '300px';
+        await nextResize(breadcrumbs);
 
-      expect(overlay.opened).to.be.true;
-    });
+        expect(breadcrumbs.hasAttribute('has-overflow')).to.be.true;
+      });
 
-    it('should reflect opened state to aria-expanded on the overflow button', async () => {
-      button.click();
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      it('should unset hidden on [part="overflow"] when items no longer fit', async () => {
+        breadcrumbs.style.maxWidth = '300px';
+        await nextResize(breadcrumbs);
 
-      expect(button.getAttribute('aria-expanded')).to.equal('true');
-    });
+        const overflow = breadcrumbs.shadowRoot.querySelector('[part="overflow"]');
+        expect(overflow.hasAttribute('hidden')).to.be.false;
+      });
 
-    it('should close the overlay on subsequent overflow button click', async () => {
-      button.click();
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      it('should move the first default-slot item to the overlay first', async () => {
+        breadcrumbs.style.maxWidth = '500px';
+        await nextResize(breadcrumbs);
 
-      button.click();
-      await nextRender();
+        expect(items[1].slot).to.equal('overlay');
+      });
 
-      expect(overlay.opened).to.be.false;
-      expect(button.getAttribute('aria-expanded')).to.equal('false');
-    });
+      it('should keep the root in the trail before all default items collapse', async () => {
+        breadcrumbs.style.maxWidth = '500px';
+        await nextResize(breadcrumbs);
 
-    it('should close the overlay on Escape key press', async () => {
-      button.click();
-      await oneEvent(overlay, 'vaadin-overlay-open');
+        expect(items[0].slot).to.equal('root');
+      });
 
-      await sendKeys({ press: 'Escape' });
-      await nextRender();
+      it('should never move the last item to the overlay', async () => {
+        breadcrumbs.style.maxWidth = '20px';
+        await nextResize(breadcrumbs);
 
-      expect(overlay.opened).to.be.false;
-    });
+        expect(items[items.length - 1].slot).to.not.equal('overlay');
+      });
 
-    it('should return focus to the overflow button when overlay is closed via Escape', async () => {
-      button.focus();
-      button.click();
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      it('should move additional items as the container shrinks', async () => {
+        breadcrumbs.style.maxWidth = '500px';
+        await nextResize(breadcrumbs);
+        const firstShrinkHidden = items.filter((item) => item.slot === 'overlay').length;
 
-      await sendKeys({ press: 'Escape' });
-      await nextRender();
+        breadcrumbs.style.maxWidth = '250px';
+        await nextResize(breadcrumbs);
+        const secondShrinkHidden = items.filter((item) => item.slot === 'overlay').length;
 
-      expect(breadcrumbs.shadowRoot.activeElement).to.equal(button);
-    });
+        expect(secondShrinkHidden).to.be.greaterThan(firstShrinkHidden);
+      });
 
-    it('should close the overlay on outside click', async () => {
-      button.click();
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      it('should move default-slot items closest-to-root first', async () => {
+        breadcrumbs.style.maxWidth = '250px';
+        await nextResize(breadcrumbs);
 
-      document.body.click();
-      await nextRender();
+        for (let i = 2; i < items.length - 1; i += 1) {
+          if (items[i].slot === 'overlay') {
+            expect(items[i - 1].slot).to.equal('overlay');
+          }
+        }
+      });
 
-      expect(overlay.opened).to.be.false;
-    });
+      it('should move the root to the overlay when only the current item still fits', async () => {
+        breadcrumbs.style.maxWidth = '80px';
+        await nextResize(breadcrumbs);
 
-    it('should open the overlay when Enter is pressed on the focused overflow button', async () => {
-      button.focus();
-      await sendKeys({ press: 'Enter' });
-      await nextRender();
+        expect(items[0].slot).to.equal('overlay');
+      });
 
-      expect(overlay.opened).to.be.true;
-    });
+      it('should restore items to the trail when the container widens again', async () => {
+        breadcrumbs.style.maxWidth = '250px';
+        await nextResize(breadcrumbs);
 
-    it('should open the overlay when Space is pressed on the focused overflow button', async () => {
-      button.focus();
-      await sendKeys({ press: 'Space' });
-      await nextRender();
+        breadcrumbs.style.maxWidth = '800px';
+        await nextResize(breadcrumbs);
 
-      expect(overlay.opened).to.be.true;
-    });
+        expect(items.every((item) => item.slot !== 'overlay')).to.be.true;
+      });
 
-    it('should move focus to the first link in the overlay after opening via Enter', async () => {
-      button.focus();
-      await sendKeys({ press: 'Enter' });
-      await nextRender();
+      it('should clear has-overflow when the container widens enough', async () => {
+        breadcrumbs.style.maxWidth = '250px';
+        await nextResize(breadcrumbs);
 
-      const slottedItems = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]')];
-      expect(slottedItems.length).to.be.greaterThan(0);
-      const firstLink = slottedItems[0].shadowRoot.querySelector('[part="link"]');
-      expect(firstLink).to.be.ok;
+        breadcrumbs.style.maxWidth = '800px';
+        await nextResize(breadcrumbs);
 
-      // Focus is delegated through the breadcrumbs-item host (delegatesFocus: true).
-      const active = document.activeElement;
-      expect(active === slottedItems[0] || slottedItems[0].contains(active) || active === firstLink).to.be.true;
-    });
+        expect(breadcrumbs.hasAttribute('has-overflow')).to.be.false;
+      });
 
-    it('should move focus to the first link in the overlay after opening via Space', async () => {
-      button.focus();
-      await sendKeys({ press: 'Space' });
-      await nextRender();
+      it('should re-run detection when an item is added', async () => {
+        for (let i = 0; i < 6; i += 1) {
+          const item = document.createElement('vaadin-breadcrumbs-item');
+          item.path = `/extra/${i}`;
+          item.textContent = `Extra long item label ${i}`;
+          breadcrumbs.insertBefore(item, breadcrumbs.lastElementChild);
+        }
+        breadcrumbs.style.maxWidth = '300px';
+        await nextResize(breadcrumbs);
 
-      const slottedItems = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]')];
-      expect(slottedItems.length).to.be.greaterThan(0);
-      const active = document.activeElement;
-      expect(active === slottedItems[0] || slottedItems[0].contains(active)).to.be.true;
-    });
-  });
+        expect(breadcrumbs.hasAttribute('has-overflow')).to.be.true;
+      });
 
-  describe('overlay projection', () => {
-    let wrapper;
+      it('should re-evaluate slotted overlay items when the container widens', async () => {
+        breadcrumbs.style.maxWidth = '200px';
+        await nextResize(breadcrumbs);
+        const initialCount = breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]').length;
 
-    beforeEach(async () => {
-      wrapper = fixtureSync(`
-        <div style="width: 200px;">
-          <vaadin-breadcrumbs>
-            <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/a">Alpha</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/a/b">Beta</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/a/b/c">Gamma label here</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item>Current page label</vaadin-breadcrumbs-item>
-          </vaadin-breadcrumbs>
-        </div>
-      `);
-      breadcrumbs = wrapper.querySelector('vaadin-breadcrumbs');
-      await nextRender();
-      await nextResize(breadcrumbs);
-    });
+        breadcrumbs.style.maxWidth = '400px';
+        await nextResize(breadcrumbs);
+        const widerCount = breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]').length;
 
-    it('should project items with slot="overlay" into the overlay default slot', async () => {
-      const button = breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]');
-      const overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
-      button.click();
-      await oneEvent(overlay, 'vaadin-overlay-open');
-
-      const slotted = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]')];
-      const content = overlay.shadowRoot.querySelector('[part="content"]');
-      const defaultSlot = content.querySelector('slot:not([name])');
-      const assigned = defaultSlot.assignedElements({ flatten: true });
-      expect(slotted.length).to.be.greaterThan(0);
-      slotted.forEach((item) => {
-        expect(assigned).to.include(item);
+        expect(widerCount).to.not.equal(initialCount);
       });
     });
 
-    it('should update the slot="overlay" items as the container widens', async () => {
-      const initialCount = breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]').length;
+    describe('overlay', () => {
+      it('should set overlay owner to the breadcrumbs element', () => {
+        expect(overlay.owner).to.equal(breadcrumbs);
+      });
 
-      wrapper.style.width = '400px';
-      await nextResize(breadcrumbs);
+      it('should set overlay positionTarget to the overflow button', () => {
+        expect(overlay.positionTarget).to.equal(button);
+      });
+    });
 
-      const widerCount = breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]').length;
-      expect(widerCount).to.not.equal(initialCount);
+    describe('opening', () => {
+      beforeEach(async () => {
+        breadcrumbs.style.maxWidth = '200px';
+        await nextResize(breadcrumbs);
+      });
+
+      it('should toggle overlay opened on button click', async () => {
+        button.click();
+        await nextRender();
+
+        expect(overlay.opened).to.be.true;
+
+        button.click();
+        await nextRender();
+
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should update aria-expanded attribute on the overflow button', async () => {
+        button.click();
+        await nextRender();
+
+        expect(button.getAttribute('aria-expanded')).to.equal('true');
+
+        button.click();
+        await nextRender();
+
+        expect(button.getAttribute('aria-expanded')).to.equal('false');
+      });
+
+      it('should open the overlay when Enter is pressed', async () => {
+        button.focus();
+        await sendKeys({ press: 'Enter' });
+        await nextRender();
+
+        expect(overlay.opened).to.be.true;
+      });
+
+      it('should open the overlay when Space is pressed', async () => {
+        button.focus();
+        await sendKeys({ press: 'Space' });
+        await nextRender();
+
+        expect(overlay.opened).to.be.true;
+      });
+
+      it('should move focus to the first overlay item after opening via Enter', async () => {
+        button.focus();
+        await sendKeys({ press: 'Enter' });
+        await nextRender();
+
+        const firstItem = breadcrumbs.querySelector('vaadin-breadcrumbs-item[slot="overlay"]');
+        const firstLink = firstItem.shadowRoot.querySelector('[part="link"]');
+        expect(getDeepActiveElement()).to.equal(firstLink);
+      });
+
+      it('should move focus to the first overlay item after opening via Space', async () => {
+        button.focus();
+        await sendKeys({ press: 'Space' });
+        await nextRender();
+
+        const firstItem = breadcrumbs.querySelector('vaadin-breadcrumbs-item[slot="overlay"]');
+        const firstLink = firstItem.shadowRoot.querySelector('[part="link"]');
+        expect(getDeepActiveElement()).to.equal(firstLink);
+      });
+
+      it('should close the overlay on Escape key press', async () => {
+        button.click();
+        await oneEvent(overlay, 'vaadin-overlay-open');
+
+        await sendKeys({ press: 'Escape' });
+        await nextRender();
+
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should return focus to the overflow button when closed via Escape', async () => {
+        button.focus();
+        button.click();
+        await oneEvent(overlay, 'vaadin-overlay-open');
+
+        await sendKeys({ press: 'Escape' });
+        await nextRender();
+
+        expect(breadcrumbs.shadowRoot.activeElement).to.equal(button);
+      });
+
+      it('should close the overlay on outside click', async () => {
+        button.click();
+        await oneEvent(overlay, 'vaadin-overlay-open');
+
+        document.body.click();
+        await nextRender();
+
+        expect(overlay.opened).to.be.false;
+      });
     });
   });
 });
