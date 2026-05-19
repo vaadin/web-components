@@ -1,51 +1,62 @@
 import '@vaadin/select';
-import { AuraControl } from './aura-abstract-control.js';
+import { html } from 'lit';
 import { AURA_GOOGLE_FONTS } from './aura-fonts.js';
+import { AuraLitControl } from './aura-lit-control.js';
 
-class AuraFontFamilyControl extends AuraControl {
+const FONT_OPTIONS = [
+  { label: 'Instrument Sans (local)', value: "'Instrument Sans', var(--aura-font-family-system)", default: true },
+  { label: 'System (local)', value: 'var(--aura-font-family-system)' },
+  ...AURA_GOOGLE_FONTS.map(({ family, importUrl }) => ({
+    label: family,
+    value: `'${family}', var(--aura-font-family-system)`,
+    importUrl,
+  })),
+];
+
+const FONT_LINK_ID = 'aura-font-family-runtime-import';
+
+function normalizeToken(value) {
+  if (value == null) {
+    return null;
+  }
+  const trimmed = String(value).trim();
+  if (!trimmed) {
+    return null;
+  }
+  return trimmed.replace(/\s*,\s*/gu, ', ').replace(/\s+/gu, ' ');
+}
+
+const FONT_ITEMS = FONT_OPTIONS.map((opt) => ({
+  label: opt.label,
+  value: normalizeToken(opt.value),
+}));
+
+class AuraFontFamilyControl extends AuraLitControl {
   static get is() {
     return 'aura-font-family-control';
   }
 
-  static get observedAttributes() {
-    return ['property', 'label'];
+  static get properties() {
+    return {
+      property: {
+        type: String,
+      },
+      _selectValue: {
+        type: String,
+        state: true,
+      },
+    };
   }
-
-  #prop = '--aura-font-family';
-  #fontLinkId = 'aura-font-family-runtime-import';
-  #select;
-  #labelEl;
-  #resetBtn;
-
-  // UI options with font stack values and optional Google Fonts imports.
-  #opts = [
-    { label: 'Instrument Sans (local)', value: "'Instrument Sans', var(--aura-font-family-system)", default: true },
-    { label: 'System (local)', value: 'var(--aura-font-family-system)' },
-    ...AURA_GOOGLE_FONTS.map(({ family, importUrl }) => ({
-      label: family,
-      value: `'${family}', var(--aura-font-family-system)`,
-      importUrl,
-    })),
-  ];
 
   constructor() {
     super();
-    this.initControl({
-      label: 'Font family',
-      content: '<vaadin-select></vaadin-select>',
-    });
-    this.#select = this.querySelector('vaadin-select');
-    this.#labelEl = this.labelElement;
-    this.#resetBtn = this.resetButton;
-
-    this.#select.items = this.#opts.map((opt) => ({
-      label: opt.label,
-      value: this.#normalizeToken(opt.value),
-    }));
+    this.label = 'Font family';
+    this.property = '--aura-font-family';
+    this._selectValue = '';
   }
 
   get optionValues() {
-    return this.#opts.map((opt) => this.#normalizeToken(opt.value)).filter(Boolean);
+    return FONT_ITEMS.map((item) => item.value).filter(Boolean);
   }
 
   get defaultValue() {
@@ -53,20 +64,19 @@ class AuraFontFamilyControl extends AuraControl {
   }
 
   get value() {
-    return this.#normalizeToken(this.#select?.value) || this.#defaultValue();
+    return this._selectValue || this.#defaultValue();
   }
 
   set value(token) {
-    const normalized = this.#normalizeToken(token);
-    const allowed = this.optionValues;
-    this.#select.value = allowed.includes(normalized) ? normalized : this.#defaultValue();
+    const normalized = normalizeToken(token);
+    this._selectValue = this.optionValues.includes(normalized) ? normalized : this.#defaultValue();
   }
 
   applyValue(token, { source = 'user' } = {}) {
     this.value = token;
     const selected = this.value;
     if (selected === this.#defaultValue()) {
-      document.documentElement.style.removeProperty(this.#prop);
+      document.documentElement.style.removeProperty(this.property);
       localStorage.removeItem(this.#storageKey());
       this.#ensureFontImport(selected);
     } else {
@@ -77,107 +87,89 @@ class AuraFontFamilyControl extends AuraControl {
     this.#updateComputedReadout();
   }
 
-  attributeChangedCallback(name, _old, val) {
-    if (name === 'property') {
-      this.#prop = (val && val.trim()) || this.#prop;
-      if (this.isConnected) this.#initialize();
-    } else if (name === 'label') {
-      this.#labelEl.textContent = val || 'Font family';
-    }
-  }
-
   connectedCallback() {
-    // Set label if provided
-    if (this.hasAttribute('label')) {
-      this.#labelEl.textContent = this.getAttribute('label');
-    }
-
-    this.#initialize();
-
-    // User change → set var + persist
-    this.#select.addEventListener('value-changed', (event) => {
-      const token = this.#normalizeToken(event.detail.value);
-      if (!token) return;
-      this.applyValue(token, { source: 'user' });
-    });
-
-    // Reset → clear storage, remove inline override, reselect by stylesheet
-    this.#resetBtn.addEventListener('click', () => {
-      localStorage.removeItem(this.#storageKey());
-      document.documentElement.style.removeProperty(this.#prop);
-      this.#selectByComputed(); // UI only
-      this.#ensureFontImport(this.value);
-      this.#emit(this.value, { source: 'reset' });
-      this.#updateComputedReadout();
-    });
-
+    super.connectedCallback();
     this.#updateComputedReadout();
   }
 
-  // ----- Initialization -----------------------------------------------------
+  renderContent() {
+    return html`
+      <vaadin-select
+        .items=${FONT_ITEMS}
+        .value=${this._selectValue}
+        @value-changed=${this.#onValueChanged}
+      ></vaadin-select>
+    `;
+  }
+
+  firstUpdated() {
+    this.#initialize();
+  }
+
+  onReset() {
+    localStorage.removeItem(this.#storageKey());
+    document.documentElement.style.removeProperty(this.property);
+    this.#selectByComputed();
+    this.#ensureFontImport(this.value);
+    this.#emit(this.value, { source: 'reset' });
+    this.#updateComputedReadout();
+  }
+
+  #onValueChanged(event) {
+    const token = normalizeToken(event.detail.value);
+    if (!token || token === this._selectValue) {
+      return;
+    }
+    this.applyValue(token, { source: 'user' });
+  }
+
   #initialize() {
-    // 1) If stored, apply it (override + UI)
     const stored = localStorage.getItem(this.#storageKey());
     if (stored) {
-      const token = this.#normalizeToken(stored) || this.#defaultValue();
+      const token = normalizeToken(stored) || this.#defaultValue();
       this.applyValue(token, { source: 'storage' });
       return;
     }
-
-    // 2) Otherwise, select based on stylesheet-computed value (UI only)
     this.#selectByComputed();
   }
 
   #selectByComputed() {
-    const computed = this.#normalizeToken(getComputedStyle(document.documentElement).getPropertyValue(this.#prop));
-    // Try matching against current values and old var(--...) tokens.
-    let matched = null;
-
-    for (const opt of this.#opts) {
-      const refValue = this.#normalizeToken(opt.value);
-      if (computed && computed === refValue) {
-        matched = refValue;
-        break;
-      }
-    }
-
+    const computed = normalizeToken(getComputedStyle(document.documentElement).getPropertyValue(this.property));
+    const matched = this.optionValues.find((value) => value === computed) ?? null;
     this.value = matched ?? this.#defaultValue();
   }
 
-  // ----- Actions ------------------------------------------------------------
   #setVar(token) {
-    const normalized = this.#normalizeToken(token) || this.#defaultValue();
-    document.documentElement.style.setProperty(this.#prop, normalized);
+    const normalized = normalizeToken(token) || this.#defaultValue();
+    document.documentElement.style.setProperty(this.property, normalized);
     this.#ensureFontImport(normalized);
   }
 
   #persist(token) {
-    localStorage.setItem(this.#storageKey(), this.#normalizeToken(token));
+    localStorage.setItem(this.#storageKey(), normalizeToken(token));
   }
 
   #emit(token, extra = {}) {
-    const label =
-      this.#opts.find((o) => this.#normalizeToken(o.value) === this.#normalizeToken(token))?.label ?? 'Custom';
+    const label = FONT_OPTIONS.find((o) => normalizeToken(o.value) === normalizeToken(token))?.label ?? 'Custom';
     this.dispatchEvent(
       new CustomEvent('value-change', {
-        detail: { property: this.#prop, token, label, ...extra },
+        detail: { property: this.property, token, label, ...extra },
       }),
     );
   }
 
-  // ----- Helpers ------------------------------------------------------------
   #storageKey() {
-    return `aura:font-family:${this.#prop}`;
+    return `aura:font-family:${this.property}`;
   }
 
   #defaultValue() {
-    return this.#normalizeToken(this.#opts.find((opt) => opt.default)?.value || this.#opts[0]?.value);
+    return normalizeToken(FONT_OPTIONS.find((opt) => opt.default)?.value || FONT_OPTIONS[0]?.value);
   }
 
   #ensureFontImport(token) {
-    const option = this.#opts.find((opt) => this.#normalizeToken(opt.value) === this.#normalizeToken(token));
+    const option = FONT_OPTIONS.find((opt) => normalizeToken(opt.value) === normalizeToken(token));
     const url = option?.importUrl || null;
-    let link = document.getElementById(this.#fontLinkId);
+    let link = document.getElementById(FONT_LINK_ID);
 
     if (!url) {
       link?.remove();
@@ -186,7 +178,7 @@ class AuraFontFamilyControl extends AuraControl {
 
     if (!link) {
       link = document.createElement('link');
-      link.id = this.#fontLinkId;
+      link.id = FONT_LINK_ID;
       link.rel = 'stylesheet';
       document.head.append(link);
     }
@@ -196,21 +188,13 @@ class AuraFontFamilyControl extends AuraControl {
     }
   }
 
-  #normalizeToken(s) {
-    // Trim, collapse internal whitespace, standardize commas. Return null for empty.
-    if (s == null) return null;
-    const t = String(s).trim();
-    if (!t) return null;
-    return t
-      .replace(/\s*,\s*/gu, ', ') // normalize comma spacing
-      .replace(/\s+/gu, ' ');
-  }
-
   #updateComputedReadout() {
-    const ro = document.getElementById('ff-readout');
-    if (!ro) return;
-    const v = getComputedStyle(document.documentElement).getPropertyValue(this.#prop).trim();
-    ro.textContent = v || '(unset)';
+    const readout = document.getElementById('ff-readout');
+    if (!readout) {
+      return;
+    }
+    const value = getComputedStyle(document.documentElement).getPropertyValue(this.property).trim();
+    readout.textContent = value || '(unset)';
   }
 }
 
