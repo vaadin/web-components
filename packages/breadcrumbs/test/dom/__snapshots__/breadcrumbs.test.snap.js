@@ -9,6 +9,7 @@ snapshots["vaadin-breadcrumbs empty host default"] =
 
 snapshots["vaadin-breadcrumbs empty shadow default"] = 
 `<div
+  id="list"
   part="list"
   role="list"
 >
@@ -23,6 +24,7 @@ snapshots["vaadin-breadcrumbs empty shadow default"] =
       aria-expanded="false"
       aria-haspopup="true"
       aria-label="More items"
+      id="overflow"
       part="overflow-button"
       type="button"
     >
@@ -33,7 +35,9 @@ snapshots["vaadin-breadcrumbs empty shadow default"] =
 </div>
 <vaadin-breadcrumbs-overlay
   exportparts="overlay, content: overlay-content"
+  id="overlay"
   popover="manual"
+  restore-focus-on-close=""
 >
   <slot name="overlay">
   </slot>
@@ -93,6 +97,7 @@ snapshots["vaadin-breadcrumbs items host with current"] =
 
 snapshots["vaadin-breadcrumbs empty shadow i18n"] = 
 `<div
+  id="list"
   part="list"
   role="list"
 >
@@ -107,6 +112,7 @@ snapshots["vaadin-breadcrumbs empty shadow i18n"] =
       aria-expanded="false"
       aria-haspopup="true"
       aria-label="Show hidden items"
+      id="overflow"
       part="overflow-button"
       type="button"
     >
@@ -117,7 +123,9 @@ snapshots["vaadin-breadcrumbs empty shadow i18n"] =
 </div>
 <vaadin-breadcrumbs-overlay
   exportparts="overlay, content: overlay-content"
+  id="overlay"
   popover="manual"
+  restore-focus-on-close=""
 >
   <slot name="overlay">
   </slot>

@@ -17,10 +17,6 @@ export const breadcrumbsItemStyles = css`
     display: none !important;
   }
 
-  :host([data-overflow-hidden]) {
-    display: none !important;
-  }
-
   :host([disabled]) {
     pointer-events: none;
   }

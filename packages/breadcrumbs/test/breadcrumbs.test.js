@@ -223,9 +223,9 @@ describe('vaadin-breadcrumbs', () => {
       expect(breadcrumbs.hasAttribute('has-overflow')).to.be.false;
     });
 
-    it('should not set data-overflow-hidden on any item when all items fit', () => {
+    it('should not move any item to the overlay when all items fit', () => {
       items.forEach((item) => {
-        expect(item.hasAttribute('data-overflow-hidden')).to.be.false;
+        expect(item.slot).to.not.equal('overlay');
       });
     });
 
@@ -249,59 +249,60 @@ describe('vaadin-breadcrumbs', () => {
       expect(overflow.hasAttribute('hidden')).to.be.false;
     });
 
-    it('should set data-overflow-hidden on the first default-slot item first (not on root)', async () => {
+    it('should move the first default-slot item to the overlay first (not the root)', async () => {
       wrapper.style.width = '500px';
       await nextResize(breadcrumbs);
 
       // Items are: [root, default0, default1, default2, default3, last]
-      expect(items[0].hasAttribute('data-overflow-hidden')).to.be.false;
-      expect(items[1].hasAttribute('data-overflow-hidden')).to.be.true;
-      expect(items[items.length - 1].hasAttribute('data-overflow-hidden')).to.be.false;
+      expect(items[0].slot).to.equal('root');
+      expect(items[1].slot).to.equal('overlay');
+      expect(items[items.length - 1].slot).to.not.equal('overlay');
     });
 
-    it('should hide additional default-slot items closest-to-root first as container shrinks', async () => {
+    it('should move additional default-slot items to the overlay closest-to-root first as container shrinks', async () => {
       wrapper.style.width = '500px';
       await nextResize(breadcrumbs);
-      const hiddenAfterFirstShrink = items.filter((item) => item.hasAttribute('data-overflow-hidden')).length;
+      const hiddenAfterFirstShrink = items.filter((item) => item.slot === 'overlay').length;
 
       wrapper.style.width = '250px';
       await nextResize(breadcrumbs);
-      const hiddenAfterSecondShrink = items.filter((item) => item.hasAttribute('data-overflow-hidden')).length;
+      const hiddenAfterSecondShrink = items.filter((item) => item.slot === 'overlay').length;
 
       expect(hiddenAfterSecondShrink).to.be.greaterThan(hiddenAfterFirstShrink);
 
-      // Verify closest-to-root first ordering: if item N is hidden, item N-1 (closer to root) must also be hidden,
-      // for indices in the default-slot range (1..length-2).
+      // Verify closest-to-root first ordering: if item N is in the overlay, item N-1 (closer to root) must also be in
+      // the overlay, for indices in the default-slot range (1..length-2).
       for (let i = 2; i < items.length - 1; i += 1) {
-        if (items[i].hasAttribute('data-overflow-hidden')) {
-          expect(items[i - 1].hasAttribute('data-overflow-hidden')).to.be.true;
+        if (items[i].slot === 'overlay') {
+          expect(items[i - 1].slot).to.equal('overlay');
         }
       }
     });
 
-    it('should hide the root item when only the current item still fits', async () => {
+    it('should move the root item to the overlay when only the current item still fits', async () => {
       wrapper.style.width = '80px';
       await nextResize(breadcrumbs);
 
-      expect(items[0].hasAttribute('data-overflow-hidden')).to.be.true;
+      expect(items[0].slot).to.equal('overlay');
     });
 
-    it('should never set data-overflow-hidden on the last item regardless of width', async () => {
+    it('should never move the last item to the overlay regardless of width', async () => {
       wrapper.style.width = '20px';
       await nextResize(breadcrumbs);
 
-      expect(items[items.length - 1].hasAttribute('data-overflow-hidden')).to.be.false;
+      expect(items[items.length - 1].slot).to.not.equal('overlay');
     });
 
-    it('should restore items in reverse order when the container widens again', async () => {
+    it('should restore items from the overlay when the container widens again', async () => {
       wrapper.style.width = '250px';
       await nextResize(breadcrumbs);
 
       wrapper.style.width = '800px';
       await nextResize(breadcrumbs);
 
-      items.forEach((item) => {
-        expect(item.hasAttribute('data-overflow-hidden')).to.be.false;
+      items.forEach((item, index) => {
+        const expected = index === 0 ? 'root' : '';
+        expect(item.slot).to.equal(expected);
       });
       expect(breadcrumbs.hasAttribute('has-overflow')).to.be.false;
     });
@@ -494,7 +495,7 @@ describe('vaadin-breadcrumbs', () => {
     });
   });
 
-  describe('light DOM rendering of hidden items', () => {
+  describe('overlay projection', () => {
     let wrapper;
 
     beforeEach(async () => {
@@ -514,29 +515,7 @@ describe('vaadin-breadcrumbs', () => {
       await nextResize(breadcrumbs);
     });
 
-    it('should render a slotted vaadin-breadcrumbs-item per hidden item in light DOM', () => {
-      const allItems = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item')];
-      const hidden = allItems.filter((item) => item.hasAttribute('data-overflow-hidden'));
-      const slotted = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]')];
-
-      expect(slotted.length).to.equal(hidden.length);
-      expect(slotted.length).to.be.greaterThan(0);
-    });
-
-    it('should give each slotted overlay item a path matching the hidden item', () => {
-      const allItems = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item')];
-      const hidden = allItems.filter((item) => item.hasAttribute('data-overflow-hidden') && !item.hasAttribute('slot'));
-      // Filter the slotted overlay items so we exclude the original ones.
-      const slotted = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]')];
-
-      const hiddenPaths = hidden.map((i) => i.getAttribute('path')).filter(Boolean);
-      const slottedPaths = slotted.map((i) => i.getAttribute('path'));
-      hiddenPaths.forEach((p) => {
-        expect(slottedPaths).to.include(p);
-      });
-    });
-
-    it('should project slotted overlay items into the overlay default slot', async () => {
+    it('should project items with slot="overlay" into the overlay default slot', async () => {
       const button = breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]');
       const overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
       button.click();
@@ -545,14 +524,14 @@ describe('vaadin-breadcrumbs', () => {
       const slotted = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]')];
       const content = overlay.shadowRoot.querySelector('[part="content"]');
       const defaultSlot = content.querySelector('slot:not([name])');
-      expect(defaultSlot).to.be.ok;
       const assigned = defaultSlot.assignedElements({ flatten: true });
+      expect(slotted.length).to.be.greaterThan(0);
       slotted.forEach((item) => {
         expect(assigned).to.include(item);
       });
     });
 
-    it('should re-render the slotted overlay items when the hidden set changes', async () => {
+    it('should update the slot="overlay" items as the container widens', async () => {
       const initialCount = breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]').length;
 
       wrapper.style.width = '400px';

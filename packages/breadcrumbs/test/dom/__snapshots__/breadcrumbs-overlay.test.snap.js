@@ -33,26 +33,6 @@ snapshots["vaadin-breadcrumbs-overlay opened host"] =
     Home
   </vaadin-breadcrumbs-item>
   <vaadin-breadcrumbs-item
-    data-overflow-hidden=""
-    path="/a"
-    role="listitem"
-  >
-    Alpha section
-  </vaadin-breadcrumbs-item>
-  <vaadin-breadcrumbs-item
-    data-overflow-hidden=""
-    path="/a/b"
-    role="listitem"
-  >
-    Beta section
-  </vaadin-breadcrumbs-item>
-  <vaadin-breadcrumbs-item
-    current=""
-    role="listitem"
-  >
-    Current page
-  </vaadin-breadcrumbs-item>
-  <vaadin-breadcrumbs-item
     focus-ring=""
     focused=""
     path="/a"
@@ -67,6 +47,12 @@ snapshots["vaadin-breadcrumbs-overlay opened host"] =
     slot="overlay"
   >
     Beta section
+  </vaadin-breadcrumbs-item>
+  <vaadin-breadcrumbs-item
+    current=""
+    role="listitem"
+  >
+    Current page
   </vaadin-breadcrumbs-item>
 </vaadin-breadcrumbs>
 `;
