@@ -18,11 +18,12 @@ function getEffectiveStyles(component) {
   const { baseStyles, themeStyles, elementStyles, lumoInjector } = component.constructor;
   const lumoStyleSheet = component.__lumoStyleSheet;
 
-  if (lumoStyleSheet && (baseStyles || themeStyles)) {
-    return [...(lumoInjector.includeBaseStyles ? baseStyles : []), lumoStyleSheet, ...themeStyles];
+  if (lumoStyleSheet) {
+    const base = lumoInjector.includeBaseStyles ? (baseStyles ?? elementStyles) : [];
+    return [...base, lumoStyleSheet, ...(themeStyles ?? [])];
   }
 
-  return [...elementStyles, lumoStyleSheet].filter(Boolean);
+  return elementStyles;
 }
 
 /**
