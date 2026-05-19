@@ -81,10 +81,6 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
     return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
-  static get experimental() {
-    return true;
-  }
-
   static get properties() {
     return {
       /**
