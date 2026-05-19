@@ -25,9 +25,6 @@ const DEFAULT_I18N = {
  *
  * @customElement vaadin-breadcrumbs
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes I18nMixin
- * @mixes ResizeMixin
  */
 class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

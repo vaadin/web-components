@@ -9,9 +9,8 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { overlayStyles } from '@vaadin/overlay/src/styles/vaadin-overlay-base-styles.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
+import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
-import { breadcrumbsOverlayStyles } from './styles/vaadin-breadcrumbs-overlay-base-styles.js';
-import { BreadcrumbsOverlayMixin } from './vaadin-breadcrumbs-overlay-mixin.js';
 
 /**
  * An element used internally by `<vaadin-breadcrumbs>`. Not intended to be used separately.
@@ -20,15 +19,13 @@ import { BreadcrumbsOverlayMixin } from './vaadin-breadcrumbs-overlay-mixin.js';
  * @extends HTMLElement
  * @private
  */
-class BreadcrumbsOverlay extends BreadcrumbsOverlayMixin(
-  OverlayMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
-) {
+class BreadcrumbsOverlay extends PositionMixin(OverlayMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-breadcrumbs-overlay';
   }
 
   static get styles() {
-    return [overlayStyles, breadcrumbsOverlayStyles];
+    return overlayStyles;
   }
 
   /** @protected */
@@ -40,6 +37,37 @@ class BreadcrumbsOverlay extends BreadcrumbsOverlayMixin(
         </div>
       </div>
     `;
+  }
+
+  /**
+   * Override the method inherited from `OverlayMixin` to keep the
+   * overlay open when the overflow button (the position target) is
+   * clicked. The breadcrumbs container handles toggling instead.
+   *
+   * @param {Event} event
+   * @return {boolean}
+   * @protected
+   */
+  _shouldCloseOnOutsideClick(event) {
+    const eventPath = event.composedPath();
+    return !eventPath.includes(this.positionTarget) && !eventPath.includes(this);
+  }
+
+  /**
+   * Override the content root inherited from `OverlayFocusMixin` to
+   * point at the breadcrumbs owner. The overlay items are rendered
+   * into the breadcrumbs' own light DOM with `slot="overlay"`, then
+   * forwarded into the overlay through a nested slot, so the actual
+   * focused element on overlay open lives under the owner — not under
+   * the overlay element itself. Using the owner as `_contentRoot`
+   * lets `_shouldRestoreFocus()` correctly recognize focus inside the
+   * overlay's items and restore focus to the overflow button on close.
+   *
+   * @protected
+   * @override
+   */
+  get _contentRoot() {
+    return this.owner || this;
   }
 }
 
