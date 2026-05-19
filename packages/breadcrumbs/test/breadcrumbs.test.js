@@ -453,7 +453,7 @@ describe('vaadin-breadcrumbs', () => {
     it('should open the overlay when Enter is pressed on the focused overflow button', async () => {
       button.focus();
       await sendKeys({ press: 'Enter' });
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      await nextRender();
 
       expect(overlay.opened).to.be.true;
     });
@@ -461,7 +461,7 @@ describe('vaadin-breadcrumbs', () => {
     it('should open the overlay when Space is pressed on the focused overflow button', async () => {
       button.focus();
       await sendKeys({ press: 'Space' });
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      await nextRender();
 
       expect(overlay.opened).to.be.true;
     });
@@ -469,7 +469,6 @@ describe('vaadin-breadcrumbs', () => {
     it('should move focus to the first link in the overlay after opening via Enter', async () => {
       button.focus();
       await sendKeys({ press: 'Enter' });
-      await oneEvent(overlay, 'vaadin-overlay-open');
       await nextRender();
 
       const slottedItems = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]')];
@@ -485,7 +484,6 @@ describe('vaadin-breadcrumbs', () => {
     it('should move focus to the first link in the overlay after opening via Space', async () => {
       button.focus();
       await sendKeys({ press: 'Space' });
-      await oneEvent(overlay, 'vaadin-overlay-open');
       await nextRender();
 
       const slottedItems = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]')];
