@@ -12,9 +12,32 @@ snapshots["vaadin-breadcrumbs empty shadow default"] =
   part="list"
   role="list"
 >
+  <slot name="root">
+  </slot>
+  <div
+    hidden=""
+    part="overflow"
+    role="listitem"
+  >
+    <button
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="More items"
+      part="overflow-button"
+      type="button"
+    >
+    </button>
+  </div>
   <slot>
   </slot>
 </div>
+<vaadin-breadcrumbs-overlay
+  exportparts="overlay, content: overlay-content"
+  popover="manual"
+>
+  <slot name="overlay">
+  </slot>
+</vaadin-breadcrumbs-overlay>
 `;
 /* end snapshot vaadin-breadcrumbs empty shadow default */
 
@@ -23,6 +46,7 @@ snapshots["vaadin-breadcrumbs items host all linked"] =
   <vaadin-breadcrumbs-item
     path="/"
     role="listitem"
+    slot="root"
   >
     Home
   </vaadin-breadcrumbs-item>
@@ -47,6 +71,7 @@ snapshots["vaadin-breadcrumbs items host with current"] =
   <vaadin-breadcrumbs-item
     path="/"
     role="listitem"
+    slot="root"
   >
     Home
   </vaadin-breadcrumbs-item>
@@ -65,4 +90,38 @@ snapshots["vaadin-breadcrumbs items host with current"] =
 </vaadin-breadcrumbs>
 `;
 /* end snapshot vaadin-breadcrumbs items host with current */
+
+snapshots["vaadin-breadcrumbs empty shadow i18n"] = 
+`<div
+  part="list"
+  role="list"
+>
+  <slot name="root">
+  </slot>
+  <div
+    hidden=""
+    part="overflow"
+    role="listitem"
+  >
+    <button
+      aria-expanded="false"
+      aria-haspopup="true"
+      aria-label="Show hidden items"
+      part="overflow-button"
+      type="button"
+    >
+    </button>
+  </div>
+  <slot>
+  </slot>
+</div>
+<vaadin-breadcrumbs-overlay
+  exportparts="overlay, content: overlay-content"
+  popover="manual"
+>
+  <slot name="overlay">
+  </slot>
+</vaadin-breadcrumbs-overlay>
+`;
+/* end snapshot vaadin-breadcrumbs empty shadow i18n */
 

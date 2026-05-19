@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender, nextResize, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-breadcrumbs.js';
 
 window.Vaadin ??= {};
@@ -181,82 +181,7 @@ describe('vaadin-breadcrumbs', () => {
     });
   });
 
-  describe('shadow DOM structure', () => {
-    beforeEach(async () => {
-      breadcrumbs = fixtureSync(`
-        <vaadin-breadcrumbs>
-          <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
-          <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
-          <vaadin-breadcrumbs-item>Current</vaadin-breadcrumbs-item>
-        </vaadin-breadcrumbs>
-      `);
-      await nextRender();
-    });
-
-    it('should render a [part="overflow"] element with role="listitem"', () => {
-      const overflow = breadcrumbs.shadowRoot.querySelector('[part="overflow"]');
-      expect(overflow).to.be.ok;
-      expect(overflow.getAttribute('role')).to.equal('listitem');
-    });
-
-    it('should render a [part="overflow-button"] inside the overflow element', () => {
-      const overflow = breadcrumbs.shadowRoot.querySelector('[part="overflow"]');
-      const button = overflow.querySelector('[part="overflow-button"]');
-      expect(button).to.be.ok;
-      expect(button.localName).to.equal('button');
-    });
-
-    it('should set aria-haspopup="true" on the overflow button', () => {
-      const button = breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]');
-      expect(button.getAttribute('aria-haspopup')).to.equal('true');
-    });
-
-    it('should set aria-expanded="false" on the overflow button by default', () => {
-      const button = breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]');
-      expect(button.getAttribute('aria-expanded')).to.equal('false');
-    });
-
-    it('should render a slot named "root" inside [part="list"]', () => {
-      const list = breadcrumbs.shadowRoot.querySelector('[part="list"]');
-      const rootSlot = list.querySelector('slot[name="root"]');
-      expect(rootSlot).to.be.ok;
-    });
-
-    it('should render a default slot inside [part="list"] after the overflow element', () => {
-      const list = breadcrumbs.shadowRoot.querySelector('[part="list"]');
-      const defaultSlot = [...list.querySelectorAll('slot')].find((slot) => !slot.hasAttribute('name'));
-      expect(defaultSlot).to.be.ok;
-
-      const overflow = list.querySelector('[part="overflow"]');
-      expect(overflow.compareDocumentPosition(defaultSlot) & Node.DOCUMENT_POSITION_FOLLOWING).to.be.greaterThan(0);
-    });
-
-    it('should render the overflow element between the root slot and the default slot', () => {
-      const list = breadcrumbs.shadowRoot.querySelector('[part="list"]');
-      const rootSlot = list.querySelector('slot[name="root"]');
-      const overflow = list.querySelector('[part="overflow"]');
-      const defaultSlot = [...list.querySelectorAll('slot')].find((slot) => !slot.hasAttribute('name'));
-
-      expect(rootSlot.compareDocumentPosition(overflow) & Node.DOCUMENT_POSITION_FOLLOWING).to.be.greaterThan(0);
-      expect(overflow.compareDocumentPosition(defaultSlot) & Node.DOCUMENT_POSITION_FOLLOWING).to.be.greaterThan(0);
-    });
-
-    it('should render a vaadin-breadcrumbs-overlay sibling of [part="list"]', () => {
-      const overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
-      expect(overlay).to.be.ok;
-    });
-
-    it('should expose exportparts for overlay and overlay-content on the overlay', () => {
-      const overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
-      const exportParts = overlay.getAttribute('exportparts');
-      expect(exportParts).to.match(/\boverlay\b/u);
-      expect(exportParts).to.match(/content:\s*overlay-content/u);
-    });
-  });
-
   describe('i18n', () => {
-    let button;
-
     beforeEach(async () => {
       breadcrumbs = fixtureSync(`
         <vaadin-breadcrumbs>
@@ -265,24 +190,11 @@ describe('vaadin-breadcrumbs', () => {
         </vaadin-breadcrumbs>
       `);
       await nextRender();
-      button = breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]');
     });
 
-    it('should default i18n.moreItems to an empty string', () => {
+    it('should default i18n.moreItems to "More items"', () => {
       expect(breadcrumbs.i18n).to.be.an('object');
-      expect(breadcrumbs.i18n.moreItems).to.equal('');
-    });
-
-    it('should set aria-label of the overflow button to i18n.moreItems by default', () => {
-      const label = button.getAttribute('aria-label');
-      expect(label == null || label === '').to.be.true;
-    });
-
-    it('should update the overflow button aria-label when i18n.moreItems changes', async () => {
-      breadcrumbs.i18n = { moreItems: 'Show hidden items' };
-      await nextUpdate(breadcrumbs);
-
-      expect(button.getAttribute('aria-label')).to.equal('Show hidden items');
+      expect(breadcrumbs.i18n.moreItems).to.equal('More items');
     });
   });
 

@@ -25,6 +25,12 @@ describe('vaadin-breadcrumbs', () => {
       it('default', async () => {
         await expect(breadcrumbs).shadowDom.to.equalSnapshot();
       });
+
+      it('i18n', async () => {
+        breadcrumbs.i18n = { moreItems: 'Show hidden items' };
+        await nextRender();
+        await expect(breadcrumbs).shadowDom.to.equalSnapshot();
+      });
     });
   });
 

@@ -5,7 +5,7 @@
  */
 import './vaadin-breadcrumbs-item.js';
 import './vaadin-breadcrumbs-overlay.js';
-import { html, LitElement, nothing, render } from 'lit';
+import { html, LitElement, render } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
@@ -16,7 +16,7 @@ import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection
 import { breadcrumbsStyles } from './styles/vaadin-breadcrumbs-base-styles.js';
 
 const DEFAULT_I18N = {
-  moreItems: '',
+  moreItems: 'More items',
 };
 
 /**
@@ -84,7 +84,7 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
    * ```
    * {
    *   // Accessible label of the overflow button revealing collapsed items.
-   *   moreItems: ''
+   *   moreItems: 'More items'
    * }
    * ```
    *
@@ -110,7 +110,6 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
 
   /** @protected */
   render() {
-    const moreItems = this.__effectiveI18n?.moreItems;
     return html`
       <div role="list" part="list">
         <slot name="root"></slot>
@@ -120,7 +119,7 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
             part="overflow-button"
             aria-haspopup="true"
             aria-expanded="${this._overlayOpened ? 'true' : 'false'}"
-            aria-label="${moreItems ? moreItems : nothing}"
+            aria-label="${this.__effectiveI18n?.moreItems}"
             @click="${this.__onOverflowButtonClick}"
           ></button>
         </div>
