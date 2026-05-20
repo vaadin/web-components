@@ -113,6 +113,7 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
         id="overlay"
         .opened="${this._overlayOpened}"
         .owner="${this}"
+        no-vertical-overlap
         restore-focus-on-close
         exportparts="overlay, content: overlay-content"
         @opened-changed="${this.__onOverlayOpenedChanged}"

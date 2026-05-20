@@ -31,6 +31,14 @@ class BreadcrumbsOverlay extends PositionMixin(OverlayMixin(DirMixin(PolylitMixi
         [part='content'] {
           padding: var(--vaadin-item-overlay-padding, 4px);
         }
+
+        :host([top-aligned]) [part='overlay'] {
+          margin-top: var(--_offset, 0);
+        }
+
+        :host([bottom-aligned]) [part='overlay'] {
+          margin-bottom: var(--_offset, 0);
+        }
       `,
     ];
   }
@@ -61,20 +69,14 @@ class BreadcrumbsOverlay extends PositionMixin(OverlayMixin(DirMixin(PolylitMixi
   }
 
   /**
-   * Override the content root inherited from `OverlayFocusMixin` to
-   * point at the breadcrumbs owner. The overlay items are rendered
-   * into the breadcrumbs' own light DOM with `slot="overlay"`, then
-   * forwarded into the overlay through a nested slot, so the actual
-   * focused element on overlay open lives under the owner — not under
-   * the overlay element itself. Using the owner as `_contentRoot`
-   * lets `_shouldRestoreFocus()` correctly recognize focus inside the
-   * overlay's items and restore focus to the overflow button on close.
+   * Override getter inherited from `OverlayMixin` to use breadcrumbs
+   * as the content root, so that overlay focus restoration works.
    *
    * @protected
    * @override
    */
   get _contentRoot() {
-    return this.owner || this;
+    return this.owner;
   }
 }
 

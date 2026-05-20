@@ -36,6 +36,7 @@ snapshots["vaadin-breadcrumbs empty shadow default"] =
 <vaadin-breadcrumbs-overlay
   exportparts="overlay, content: overlay-content"
   id="overlay"
+  no-vertical-overlap=""
   popover="manual"
   restore-focus-on-close=""
 >
@@ -124,6 +125,7 @@ snapshots["vaadin-breadcrumbs empty shadow i18n"] =
 <vaadin-breadcrumbs-overlay
   exportparts="overlay, content: overlay-content"
   id="overlay"
+  no-vertical-overlap=""
   popover="manual"
   restore-focus-on-close=""
 >
