@@ -56,6 +56,7 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
       __hasOverflow: {
         type: Boolean,
         value: false,
+        sync: true,
         reflectToAttribute: true,
         attribute: 'has-overflow',
       },
@@ -194,32 +195,49 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
   }
 
   /**
-   * Measure whether the trail fits and progressively move items to
-   * `slot="overlay"` closest-to-root first. The last item never collapses.
+   * Measure whether the trail fits and move items to `slot="overlay"`
+   * closest-to-root first. The last item never collapses.
+   *
+   * Two forced reflows total: one for the fit check, one for the position
+   * batch. Writing `__hasOverflow` flushes the `[part="overflow"]` binding
+   * synchronously (the property is `sync: true`), so the overflow button's
+   * `hidden` state always matches what `scrollWidth` measures.
    *
    * @private
    */
   __updateOverflow() {
     const items = this.__getItems();
     this.__restoreSlots(items);
-    this.__hasOverflow = false;
 
     if (items.length <= 1) {
+      this.__hasOverflow = false;
       return;
     }
 
-    const list = this.$.list;
-    if (list.scrollWidth <= list.clientWidth) {
+    // Phase 1: assume no overflow, check if items fit naturally.
+    this.__hasOverflow = false;
+    if (this.$.list.scrollWidth <= this.$.list.clientWidth) {
       return;
     }
 
-    // Reveal the overflow button and move items to the overlay one by one
-    // from closest-to-root first (indexes 1..length-2), then the root.
+    // Phase 2: reveal the overflow button, then read every position at once.
+    // The loop below is pure arithmetic + writes — no further forced reflows.
     this.__hasOverflow = true;
+    const listRect = this.$.list.getBoundingClientRect();
+    const rects = items.map((item) => item.getBoundingClientRect());
 
+    // How far the last item extends past the list. Float-precision delta
+    // avoids the integer rounding mismatch that `scrollWidth - clientWidth`
+    // introduces in Firefox. Either edge can overflow: right in LTR, left
+    // in RTL.
+    const lastRect = rects[rects.length - 1];
+    const excessWidth = Math.max(0, lastRect.right - listRect.right, listRect.left - lastRect.left);
+
+    // Collapsing items[1..i] shifts the trail by `|rects[i+1] - rects[1]|`
+    // (Math.abs covers RTL). Stop as soon as the shift covers the excessWidth.
     for (let i = 1; i < items.length - 1; i += 1) {
       items[i].setAttribute('slot', 'overlay');
-      if (list.scrollWidth <= list.clientWidth) {
+      if (Math.abs(rects[i + 1].left - rects[1].left) >= excessWidth) {
         return;
       }
     }
