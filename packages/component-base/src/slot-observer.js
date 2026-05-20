@@ -119,7 +119,7 @@ export class SlotObserver {
     currentPerSlot.forEach((nodes, slot) => {
       const stored = storedPerSlot.get(slot) || [];
       // Skip slots whose membership changed: nodes entered or left the slot.
-      if (stored.length !== nodes.length || stored.some((node) => !nodes.includes(node))) {
+      if (new Set(stored).difference(new Set(nodes)).size > 0) {
         return;
       }
       stored.forEach((node, storedIndex) => {
