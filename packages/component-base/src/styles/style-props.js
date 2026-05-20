@@ -22,9 +22,7 @@ import { addGlobalStyles } from './add-global-styles.js';
     name: propertyName,
     syntax: '<color>',
     inherits: true,
-    // Use this initial value so the color stays visible when the property
-    // is set to an invalid value to make debugging a bit easier.
-    initialValue: 'light-dark(black, white)',
+    initialValue: 'transparent',
   });
 });
 
