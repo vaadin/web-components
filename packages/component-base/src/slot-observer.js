@@ -5,12 +5,26 @@
  */
 
 /**
- * A helper for observing slot changes.
+ * A helper for observing slot or shadow-root changes.
+ *
+ * When `target` is an `HTMLSlotElement`, the observer listens for `slotchange`
+ * on the slot itself and diffs `target.assignedNodes({ flatten: true })`.
+ *
+ * When `target` is a `ShadowRoot` (or any element that contains `<slot>`
+ * descendants), the observer listens for `slotchange` events bubbling up to
+ * the target and diffs the **union** of `assignedNodes({ flatten: true })`
+ * across every descendant `<slot>`. Cross-slot reassignment of the same node
+ * does not change the union and therefore fires no callback.
+ *
+ * Note: in target mode the observer relies on `slotchange` events. Removing
+ * a `<slot>` element itself from the target does not fire `slotchange`, so
+ * such structural changes to the shadow tree are not observed; trigger
+ * `flush()` manually if the shadow tree's slot set is changed at runtime.
  */
 export class SlotObserver {
-  constructor(slot, callback, forceInitial) {
-    /** @type {HTMLSlotElement} */
-    this.slot = slot;
+  constructor(target, callback, forceInitial) {
+    /** @type {HTMLSlotElement | Element | DocumentFragment} */
+    this.target = target;
 
     /** @type {Function} */
     this.callback = callback;
@@ -20,6 +34,12 @@ export class SlotObserver {
 
     /** @type {Node[]} */
     this._storedNodes = [];
+
+    /** @type {Map<HTMLSlotElement, Node[]>} */
+    this._storedPerSlot = new Map();
+
+    /** @type {boolean} */
+    this._isSlot = target instanceof HTMLSlotElement;
 
     this._connected = false;
     this._scheduled = false;
@@ -38,7 +58,7 @@ export class SlotObserver {
    * an observer that has been deactivated via the `disconnect` method.
    */
   connect() {
-    this.slot.addEventListener('slotchange', this._boundSchedule);
+    this.target.addEventListener('slotchange', this._boundSchedule);
     this._connected = true;
   }
 
@@ -48,7 +68,7 @@ export class SlotObserver {
    * may be subsequently called to reactivate the observer.
    */
   disconnect() {
-    this.slot.removeEventListener('slotchange', this._boundSchedule);
+    this.target.removeEventListener('slotchange', this._boundSchedule);
     this._connected = false;
   }
 
@@ -77,27 +97,54 @@ export class SlotObserver {
   }
 
   /** @private */
-  _processNodes() {
-    const currentNodes = this.slot.assignedNodes({ flatten: true });
+  _collectNodes() {
+    const slots = this._isSlot ? [this.target] : this.target.querySelectorAll('slot');
+    const perSlot = new Map();
+    const currentNodes = [];
+    slots.forEach((slot) => {
+      const nodes = slot.assignedNodes({ flatten: true });
+      perSlot.set(slot, nodes);
+      nodes.forEach((node) => {
+        if (!currentNodes.includes(node)) {
+          currentNodes.push(node);
+        }
+      });
+    });
+    return { currentNodes, perSlot };
+  }
 
-    let addedNodes = [];
-    const removedNodes = [];
+  /**
+   * Collect moved nodes reordered within its current slot,
+   * but not those that are assigned to different slot.
+   *
+   * @private
+   */
+  _collectMovedNodes(perSlot) {
     const movedNodes = [];
 
-    if (currentNodes.length) {
-      addedNodes = currentNodes.filter((node) => !this._storedNodes.includes(node));
-    }
-
-    if (this._storedNodes.length) {
-      this._storedNodes.forEach((node, index) => {
-        const idx = currentNodes.indexOf(node);
-        if (idx === -1) {
-          removedNodes.push(node);
-        } else if (idx !== index) {
+    perSlot.forEach((nodes, slot) => {
+      const stored = this._storedPerSlot.get(slot) || [];
+      // Skip slots whose membership changed: nodes entered or left the slot.
+      if (stored.length !== nodes.length || stored.some((node) => !nodes.includes(node))) {
+        return;
+      }
+      stored.forEach((node, storedIndex) => {
+        if (nodes.indexOf(node) !== storedIndex) {
           movedNodes.push(node);
         }
       });
-    }
+    });
+
+    return movedNodes;
+  }
+
+  /** @private */
+  _processNodes() {
+    const { currentNodes, perSlot } = this._collectNodes();
+
+    const addedNodes = currentNodes.filter((node) => !this._storedNodes.includes(node));
+    const removedNodes = this._storedNodes.filter((node) => !currentNodes.includes(node));
+    const movedNodes = this._collectMovedNodes(perSlot);
 
     // By default, callback is not invoked if there is no child nodes in the slot.
     // Use `forceInitial` flag if needed to also invoke it for the initial state.
@@ -110,5 +157,6 @@ export class SlotObserver {
     }
 
     this._storedNodes = currentNodes;
+    this._storedPerSlot = perSlot;
   }
 }
