@@ -15,11 +15,6 @@
  * the target and diffs the union of `assignedNodes({ flatten: true })` across
  * every descendant `<slot>`. Cross-slot reassignment of the same node does
  * not change the union and therefore fires no callback.
- *
- * Note: in target mode the observer relies on `slotchange` events. Removing
- * a `<slot>` element itself from the target does not fire `slotchange`, so
- * such structural changes to the shadow tree are not observed; trigger
- * `flush()` manually if the shadow tree's slot set is changed at runtime.
  */
 export class SlotObserver {
   constructor(
