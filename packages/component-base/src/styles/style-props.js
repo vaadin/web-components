@@ -22,8 +22,6 @@ import { addGlobalStyles } from './add-global-styles.js';
     name: propertyName,
     syntax: '<color>',
     inherits: true,
-    // Use initial value without light-dark() syntax so that registering
-    // does not throw in earlier Safari 17 minors which don't support it.
     initialValue: 'transparent',
   });
 });
