@@ -5,12 +5,20 @@
  */
 
 /**
- * A helper for observing slot changes.
+ * A helper for observing slot or shadow-root changes.
+ *
+ * When `target` is an `HTMLSlotElement`, the observer listens for `slotchange`
+ * on the slot itself and diffs `target.assignedNodes({ flatten: true })`.
+ *
+ * When `target` is a `ShadowRoot`, the observer listens for `slotchange` events
+ * bubbling to it and diffs the **union** of `assignedNodes({ flatten: true })`
+ * across every descendant `<slot>`. Cross-slot reassignment of the same node
+ * does not change the union and therefore fires no callback.
  */
 export class SlotObserver {
-  constructor(slot, callback, forceInitial) {
-    /** @type {HTMLSlotElement} */
-    this.slot = slot;
+  constructor(target, callback, forceInitial) {
+    /** @type {HTMLSlotElement | DocumentFragment} */
+    this.target = target;
 
     /** @type {Function} */
     this.callback = callback;
@@ -20,6 +28,9 @@ export class SlotObserver {
 
     /** @type {Node[]} */
     this._storedNodes = [];
+
+    /** @type {boolean} */
+    this._isSlot = target instanceof HTMLSlotElement;
 
     this._connected = false;
     this._scheduled = false;
@@ -38,7 +49,7 @@ export class SlotObserver {
    * an observer that has been deactivated via the `disconnect` method.
    */
   connect() {
-    this.slot.addEventListener('slotchange', this._boundSchedule);
+    this.target.addEventListener('slotchange', this._boundSchedule);
     this._connected = true;
   }
 
@@ -48,7 +59,7 @@ export class SlotObserver {
    * may be subsequently called to reactivate the observer.
    */
   disconnect() {
-    this.slot.removeEventListener('slotchange', this._boundSchedule);
+    this.target.removeEventListener('slotchange', this._boundSchedule);
     this._connected = false;
   }
 
@@ -77,27 +88,56 @@ export class SlotObserver {
   }
 
   /** @private */
-  _processNodes() {
-    const currentNodes = this.slot.assignedNodes({ flatten: true });
+  _collectNodes() {
+    const slots = this._isSlot ? [this.target] : [...this.target.querySelectorAll('slot')];
+    return [...new Set(slots.flatMap((slot) => slot.assignedNodes({ flatten: true })))];
+  }
 
-    let addedNodes = [];
-    const removedNodes = [];
+  /** @private */
+  _groupNodesBySlot(nodes) {
+    const map = new Map();
+    nodes.forEach((node) => {
+      const slot = node.assignedSlot;
+      map.set(slot, map.get(slot) ?? []);
+      map.get(slot).push(node);
+    });
+    return map;
+  }
+
+  /**
+   * Collect moved nodes reordered within its current slot,
+   * but not those that are assigned to different slot.
+   *
+   * @private
+   */
+  _collectMovedNodes(currentNodes) {
+    const currentPerSlot = this._groupNodesBySlot(currentNodes);
+    const storedPerSlot = this._groupNodesBySlot(this._storedNodes);
     const movedNodes = [];
 
-    if (currentNodes.length) {
-      addedNodes = currentNodes.filter((node) => !this._storedNodes.includes(node));
-    }
-
-    if (this._storedNodes.length) {
-      this._storedNodes.forEach((node, index) => {
-        const idx = currentNodes.indexOf(node);
-        if (idx === -1) {
-          removedNodes.push(node);
-        } else if (idx !== index) {
+    currentPerSlot.forEach((nodes, slot) => {
+      const stored = storedPerSlot.get(slot) || [];
+      // Skip slots whose membership changed: nodes entered or left the slot.
+      if (new Set(stored).difference(new Set(nodes)).size > 0) {
+        return;
+      }
+      stored.forEach((node, storedIndex) => {
+        if (nodes.indexOf(node) !== storedIndex) {
           movedNodes.push(node);
         }
       });
-    }
+    });
+
+    return movedNodes;
+  }
+
+  /** @private */
+  _processNodes() {
+    const currentNodes = this._collectNodes();
+
+    const addedNodes = currentNodes.filter((node) => !this._storedNodes.includes(node));
+    const removedNodes = this._storedNodes.filter((node) => !currentNodes.includes(node));
+    const movedNodes = this._collectMovedNodes(currentNodes);
 
     // By default, callback is not invoked if there is no child nodes in the slot.
     // Use `forceInitial` flag if needed to also invoke it for the initial state.

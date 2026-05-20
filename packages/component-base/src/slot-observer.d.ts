@@ -5,14 +5,24 @@
  */
 
 /**
- * A helper for observing slot changes.
+ * A helper for observing slot or shadow-root changes.
+ *
+ * When `target` is an `HTMLSlotElement`, the observer listens for `slotchange`
+ * on the slot itself and diffs `target.assignedNodes({ flatten: true })`.
+ *
+ * When `target` is a `ShadowRoot`, the observer listens for `slotchange` events
+ * bubbling to it and diffs the **union** of `assignedNodes({ flatten: true })`
+ * every descendant `<slot>`. Cross-slot reassignment of the same node does
+ * not change the union and therefore fires no callback.
  */
 export class SlotObserver {
   constructor(
-    slot: HTMLSlotElement,
+    target: HTMLSlotElement | DocumentFragment,
     callback: (info: { addedNodes: Node[]; currentNodes: Node[]; movedNodes: Node[]; removedNodes: Node[] }) => void,
     forceInitial?: boolean,
   );
+
+  readonly target: HTMLSlotElement | DocumentFragment;
 
   /**
    * Activates an observer. This method is automatically called when
