@@ -35,9 +35,6 @@ export class SlotObserver {
     /** @type {Node[]} */
     this._storedNodes = [];
 
-    /** @type {Map<HTMLSlotElement, Node[]>} */
-    this._storedPerSlot = new Map();
-
     /** @type {boolean} */
     this._isSlot = target instanceof HTMLSlotElement;
 
@@ -99,7 +96,20 @@ export class SlotObserver {
   /** @private */
   _collectNodes() {
     const slots = this._isSlot ? [this.target] : [...this.target.querySelectorAll('slot')];
-    return new Map(slots.map((slot) => [slot, slot.assignedNodes({ flatten: true })]));
+    return [...new Set(slots.flatMap((slot) => slot.assignedNodes({ flatten: true })))];
+  }
+
+  /** @private */
+  _groupNodesBySlot(nodes) {
+    const map = new Map();
+    nodes.forEach((node) => {
+      const slot = node.assignedSlot;
+      if (!map.has(slot)) {
+        map.set(slot, []);
+      }
+      map.get(slot).push(node);
+    });
+    return map;
   }
 
   /**
@@ -108,11 +118,13 @@ export class SlotObserver {
    *
    * @private
    */
-  _collectMovedNodes(perSlot) {
+  _collectMovedNodes(currentNodes) {
+    const currentPerSlot = this._groupNodesBySlot(currentNodes);
+    const storedPerSlot = this._groupNodesBySlot(this._storedNodes);
     const movedNodes = [];
 
-    perSlot.forEach((nodes, slot) => {
-      const stored = this._storedPerSlot.get(slot) || [];
+    currentPerSlot.forEach((nodes, slot) => {
+      const stored = storedPerSlot.get(slot) || [];
       // Skip slots whose membership changed: nodes entered or left the slot.
       if (stored.length !== nodes.length || stored.some((node) => !nodes.includes(node))) {
         return;
@@ -129,12 +141,11 @@ export class SlotObserver {
 
   /** @private */
   _processNodes() {
-    const perSlot = this._collectNodes();
-    const currentNodes = [...new Set([...perSlot.values()].flat())];
+    const currentNodes = this._collectNodes();
 
     const addedNodes = currentNodes.filter((node) => !this._storedNodes.includes(node));
     const removedNodes = this._storedNodes.filter((node) => !currentNodes.includes(node));
-    const movedNodes = this._collectMovedNodes(perSlot);
+    const movedNodes = this._collectMovedNodes(currentNodes);
 
     // By default, callback is not invoked if there is no child nodes in the slot.
     // Use `forceInitial` flag if needed to also invoke it for the initial state.
@@ -147,6 +158,5 @@ export class SlotObserver {
     }
 
     this._storedNodes = currentNodes;
-    this._storedPerSlot = perSlot;
   }
 }
