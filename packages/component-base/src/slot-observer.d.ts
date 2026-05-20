@@ -23,7 +23,7 @@
  */
 export class SlotObserver {
   constructor(
-    target: HTMLSlotElement | Element | DocumentFragment,
+    target: HTMLSlotElement | DocumentFragment,
     callback: (info: { addedNodes: Node[]; currentNodes: Node[]; movedNodes: Node[]; removedNodes: Node[] }) => void,
     forceInitial?: boolean,
   );
