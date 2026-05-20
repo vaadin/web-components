@@ -100,17 +100,10 @@ export class SlotObserver {
   _collectNodes() {
     const slots = this._isSlot ? [this.target] : this.target.querySelectorAll('slot');
     const perSlot = new Map();
-    const currentNodes = [];
     slots.forEach((slot) => {
-      const nodes = slot.assignedNodes({ flatten: true });
-      perSlot.set(slot, nodes);
-      nodes.forEach((node) => {
-        if (!currentNodes.includes(node)) {
-          currentNodes.push(node);
-        }
-      });
+      perSlot.set(slot, slot.assignedNodes({ flatten: true }));
     });
-    return { currentNodes, perSlot };
+    return perSlot;
   }
 
   /**
@@ -140,7 +133,8 @@ export class SlotObserver {
 
   /** @private */
   _processNodes() {
-    const { currentNodes, perSlot } = this._collectNodes();
+    const perSlot = this._collectNodes();
+    const currentNodes = [...new Set([...perSlot.values()].flat())];
 
     const addedNodes = currentNodes.filter((node) => !this._storedNodes.includes(node));
     const removedNodes = this._storedNodes.filter((node) => !currentNodes.includes(node));
