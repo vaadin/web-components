@@ -5,7 +5,7 @@
 
 ## Key Design Decisions
 
-1. **Two custom elements: `<vaadin-breadcrumbs>` and `<vaadin-breadcrumbs-item>`** — Follows the same container-plus-items shape as `<vaadin-side-nav>` / `<vaadin-side-nav-item>`. Items are light DOM children of the container, observed via a `SlotController`. Enables the declarative HTML API required by DESIGN_GUIDELINES.md.
+1. **Two custom elements: `<vaadin-breadcrumbs>` and `<vaadin-breadcrumbs-item>`** — Follows the same container-plus-items shape as `<vaadin-side-nav>` / `<vaadin-side-nav-item>`. Items are light DOM children of the container, observed via a shadow-root-level `SlotObserver`. Enables the declarative HTML API required by guidelines/02-design.md.
 
 2. **`path` attribute on items renders an `<a>` element in shadow DOM** — Matches `<vaadin-side-nav-item>`'s pattern: `path` maps to the `href` attribute of an internal `<a>`. When `path` is absent, the item renders a `<span>` instead. The rendered `<a>` is a plain link — router-agnostic per DESIGN_GUIDELINES.md. (See web-component-api.md §1.)
 
@@ -88,7 +88,7 @@ The overflow overlay's outer panel and its inner wrapper live on `<vaadin-breadc
 
 Internal behavior:
 
-- **Slot observation and root assignment.** The breadcrumb subclasses `SlotController` and overrides `initNode`/`initCustomNode` to watch the children. When children change, the controller sets `slot="root"` on the first `<vaadin-breadcrumbs-item>` child and removes `slot` from any previous holder. This routes the first item into the named `root` slot in shadow DOM, so the overflow element sits in the DOM between the root and the rest — matching visual order. The same controller pass also re-evaluates overflow detection and `current` state on the last item.
+- **Slot observation and root assignment.** A single `SlotObserver` targets the shadow root and diffs the union of all descendant `<slot>` assignments. When children change, the callback sets `slot="root"` on the first `<vaadin-breadcrumbs-item>` child and removes `slot` from any previous holder. This routes the first item into the named `root` slot in shadow DOM, so the overflow element sits in the DOM between the root and the rest — matching visual order. The same callback re-evaluates overflow detection and `current` state on the last item. The observer's union diff naturally ignores cross-slot reassignment (e.g. moving an item to `slot="overlay"`), so internal slot mutations don't loop back into the handler.
 - **Overflow detection.** On resize (via `ResizeMixin`) and on slot changes, the component measures whether all items fit within the container width. If not, it progressively hides items starting from the one closest to the root (the first default-slot item), setting a `data-overflow-hidden` attribute on each hidden item. If further space is needed, the root item collapses too. The last item (current page) never collapses. Hidden items are listed in the overflow overlay.
 - **Overlay management.** The breadcrumbs' `render()` always emits `<vaadin-breadcrumbs-overlay .opened .owner .positionTarget exportparts="overlay, content: overlay-content">` as a sibling of `[part="list"]`, with `.opened` bound to `_overlayOpened`, `.owner` bound to the host, and `.positionTarget` bound to the `[part="overflow-button"]` reference. The overlay element stays in the shadow DOM at all times; `OverlayMixin` hides it via `display: none !important` while `_overlayOpened` is false. The hidden-item links themselves are NOT rendered through an `OverlayMixin` `.renderer` callback. Instead, the breadcrumbs overrides `update()` and uses Lit's `render()` to write `<vaadin-breadcrumbs-item slot="overlay" path="...">…</vaadin-breadcrumbs-item>` elements into its own light DOM (the `<vaadin-login-form>` `__renderSlottedForm` pattern in `packages/login/src/vaadin-login-form-mixin.js`). The overlay element's default slot then projects them in. Clicking the overflow button toggles `_overlayOpened`; `OverlayMixin` still handles outside-click, Escape, focus handling, top-layer rendering via the popover API, and stacking. The breadcrumb does not touch positioning or event wiring beyond that.
 - **Overflow separator.** The overflow element sits in the list flow between the root and the rest, so it needs a separator after it when visible. The container's base styles render a `[part="overflow"]::after` pseudo-element using the same `mask-image` + `currentColor` pattern as `<vaadin-breadcrumbs-item>`, reading the same `--vaadin-breadcrumbs-separator` custom property, and applying the same RTL flip (`transform: scaleX(-1)`). When `has-overflow` is not set, the overflow element is hidden, so the separator is not visible either.
@@ -204,9 +204,9 @@ Provides the `i18n` property with a `moreItems` key for localizing the overflow 
 
 Provides `_onResize()` callbacks when the host element's size changes. The breadcrumb container overrides this to trigger overflow detection.
 
-### `packages/component-base/src/slot-controller.js` — Used as-is (extended)
+### `packages/component-base/src/slot-observer.js` — Used as-is
 
-The breadcrumb container subclasses `SlotController` and overrides `initNode`/`initCustomNode` to react when `<vaadin-breadcrumbs-item>` children are added or removed.
+The breadcrumb container instantiates a `SlotObserver` targeting its shadow root to react when `<vaadin-breadcrumbs-item>` children are added or removed across any of its slots.
 
 ### `packages/overlay/src/vaadin-overlay-mixin.js` — Used as-is
 
@@ -260,7 +260,11 @@ No. Vaadin components generally avoid the term "dropdown" — menu-bar, select, 
 
 **Q: Should `SlotChildObserveController` be used to observe item children?**
 
-No. `SlotChildObserveController` bundles two concerns the breadcrumbs does not need: observing `id`-attribute mutations for ARIA references (useful to field components) and firing a generic "content changed" event. For breadcrumbs' needs — reacting when items are added or removed — subclassing `SlotController` and overriding `initNode`/`initCustomNode` is sufficient and keeps the dependency surface minimal.
+No. `SlotChildObserveController` bundles two concerns the breadcrumbs does not need: observing `id`-attribute mutations for ARIA references (useful to field components) and firing a generic "content changed" event. For breadcrumbs' needs — reacting when items are added or removed across multiple shadow-root slots, without looping on the component's own cross-slot reassignment — a single `SlotObserver` targeting the shadow root is sufficient and keeps the dependency surface minimal.
+
+**Q: Why a `SlotObserver` targeting the shadow root rather than a `SlotController`?**
+
+Two reasons. (1) Multiple slots: the container fans items across `slot="root"`, the default slot, and (via the overlay slotting trick) `slot="overlay"`. A shadow-root-level observer covers all three with one listener instead of one per slot. (2) Cross-slot loop suppression: overflow management itself sets `slot="root"` and `slot="overlay"` on items, which a per-slot listener would see as add+remove events and re-enter the handler. `SlotObserver`'s union diff sees those reassignments as no-ops and stays silent. `SlotController` solves slot membership and per-node init/teardown, but it doesn't help with either of those.
 
 **Q: Should the shadow DOM wrap content in `<nav>` and each item in `<li>`?**
 
@@ -272,7 +276,7 @@ A generic element with explicit `role="list"`. Two reasons: (a) HTML `<ol>` acce
 
 **Q: How is the overflow element positioned so it appears visually between the root and the rest of the items?**
 
-Two shadow slots with the overflow in shadow DOM between them: `<slot name="root"></slot>`, then `<div part="overflow">`, then `<slot></slot>`. The component's `SlotController` assigns `slot="root"` to the first `<vaadin-breadcrumbs-item>` child automatically — the application doesn't set it. This keeps DOM order aligned with visual order `[root] [overflow] [rest…]`, satisfying the "focus order matches visual order" rule. The alternative considered — inserting the overflow as a light-DOM sibling between items — was rejected because it would add a component-authored element to the user's light DOM, changing `breadcrumb.children.length` and conflicting with the "light DOM is the application's territory" principle.
+Two shadow slots with the overflow in shadow DOM between them: `<slot name="root"></slot>`, then `<div part="overflow">`, then `<slot></slot>`. The component's `SlotObserver` callback assigns `slot="root"` to the first `<vaadin-breadcrumbs-item>` child automatically — the application doesn't set it. This keeps DOM order aligned with visual order `[root] [overflow] [rest…]`, satisfying the "focus order matches visual order" rule. The alternative considered — inserting the overflow as a light-DOM sibling between items — was rejected because it would add a component-authored element to the user's light DOM, changing `breadcrumb.children.length` and conflicting with the "light DOM is the application's territory" principle.
 
 **Q: Should the overflow panel use `OverlayMixin` or be a plain `<div>` positioned with `position: fixed`?**
 
