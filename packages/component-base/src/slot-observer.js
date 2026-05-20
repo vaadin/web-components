@@ -99,9 +99,7 @@ export class SlotObserver {
     const map = new Map();
     nodes.forEach((node) => {
       const slot = node.assignedSlot;
-      if (!map.has(slot)) {
-        map.set(slot, []);
-      }
+      map.set(slot, map.get(slot) ?? []);
       map.get(slot).push(node);
     });
     return map;
