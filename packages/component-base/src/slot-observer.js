@@ -23,7 +23,7 @@
  */
 export class SlotObserver {
   constructor(target, callback, forceInitial) {
-    /** @type {HTMLSlotElement | Element | DocumentFragment} */
+    /** @type {HTMLSlotElement | DocumentFragment} */
     this.target = target;
 
     /** @type {Function} */
