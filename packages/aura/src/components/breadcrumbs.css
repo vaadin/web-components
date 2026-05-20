@@ -32,3 +32,16 @@ vaadin-breadcrumbs-item > :is(vaadin-icon, [class*='icon'])[slot='prefix'] {
   height: 0.875lh;
   color: inherit;
 }
+
+vaadin-breadcrumbs-item[slot='overlay']::part(link),
+vaadin-breadcrumbs-item[slot='overlay']::part(nolink) {
+  color: var(--vaadin-text-color);
+}
+
+@media (any-hover: hover) {
+  vaadin-breadcrumbs-item[slot='overlay']::part(link):hover {
+    background: var(--_aura-highlight-color);
+    color: var(--vaadin-text-color);
+    text-decoration: none;
+  }
+}

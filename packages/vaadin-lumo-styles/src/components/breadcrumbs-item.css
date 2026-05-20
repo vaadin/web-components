@@ -59,4 +59,21 @@
     height: var(--lumo-icon-size-s);
     color: inherit;
   }
+
+  :host([slot='overlay']) [part='link'],
+  :host([slot='overlay']) [part='nolink'] {
+    color: var(--lumo-body-text-color);
+  }
+
+  :host([slot='overlay']) [part='link']:focus-visible {
+    border-radius: var(--lumo-border-radius-m);
+  }
+
+  @media (any-hover: hover) {
+    :host([slot='overlay']) [part='link']:hover {
+      background-color: var(--lumo-contrast-5pct);
+      color: var(--lumo-primary-text-color);
+      text-decoration: none;
+    }
+  }
 }

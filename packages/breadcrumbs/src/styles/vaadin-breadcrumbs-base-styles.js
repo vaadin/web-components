@@ -23,6 +23,8 @@ export const breadcrumbsStyles = css`
     gap: var(--vaadin-gap-xs);
     min-width: 0;
     overflow: hidden;
+    /* Room for items' focus outline, otherwise clipped by overflow: hidden. */
+    padding: var(--vaadin-focus-ring-width);
   }
 
   [part='overflow'] {
@@ -32,7 +34,7 @@ export const breadcrumbsStyles = css`
   }
 
   [part='overflow'][hidden] {
-    display: none;
+    display: none !important;
   }
 
   [part='overflow-button'] {

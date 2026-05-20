@@ -32,6 +32,7 @@ export const breadcrumbsItemStyles = css`
   [part='link']:focus-visible {
     border-radius: var(--vaadin-radius-s);
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: 0;
   }
 
   :host::after {
@@ -51,6 +52,27 @@ export const breadcrumbsItemStyles = css`
 
   :host([dir='rtl'])::after {
     transform: scaleX(-1);
+  }
+
+  /* Overlay context: link/nolink fills the full row so the entire padded
+     area is clickable and the focus ring wraps the full target. */
+  :host([slot='overlay']) {
+    display: flex;
+  }
+
+  :host([slot='overlay']) [part='link'],
+  :host([slot='overlay']) [part='nolink'] {
+    flex: 1;
+    padding: var(--vaadin-item-overlay-padding, 4px var(--vaadin-padding-inline-container));
+    border-radius: var(--vaadin-radius-m);
+  }
+
+  :host([slot='overlay']) [part='link']:focus-visible {
+    border-radius: var(--vaadin-radius-m);
+  }
+
+  :host([slot='overlay'])::after {
+    display: none;
   }
 
   @media (forced-colors: active) {

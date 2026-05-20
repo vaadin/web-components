@@ -3,7 +3,7 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, LitElement } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -25,7 +25,14 @@ class BreadcrumbsOverlay extends PositionMixin(OverlayMixin(DirMixin(PolylitMixi
   }
 
   static get styles() {
-    return overlayStyles;
+    return [
+      overlayStyles,
+      css`
+        [part='content'] {
+          padding: var(--vaadin-item-overlay-padding, 4px);
+        }
+      `,
+    ];
   }
 
   /** @protected */
