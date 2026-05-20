@@ -266,6 +266,7 @@ describe('SlotObserver', () => {
       div.setAttribute('slot', 'a');
       host.appendChild(div);
 
+      // Wait for slotchange and subsequent observer microtask
       await Promise.resolve();
       await Promise.resolve();
 
@@ -283,6 +284,7 @@ describe('SlotObserver', () => {
       const div = host.querySelector('[slot="b"]');
       div.remove();
 
+      // Wait for slotchange and subsequent observer microtask
       await Promise.resolve();
       await Promise.resolve();
 
@@ -300,6 +302,7 @@ describe('SlotObserver', () => {
       const aNodes = host.querySelectorAll('[slot="a"]');
       host.insertBefore(aNodes[1], aNodes[0]);
 
+      // Wait for slotchange and subsequent observer microtask
       await Promise.resolve();
       await Promise.resolve();
 
@@ -320,6 +323,7 @@ describe('SlotObserver', () => {
       const moving = host.querySelector('[slot="a"]');
       moving.setAttribute('slot', 'b');
 
+      // Wait for slotchange and subsequent observer microtask
       await Promise.resolve();
       await Promise.resolve();
 
@@ -336,6 +340,7 @@ describe('SlotObserver', () => {
       const text = document.createTextNode('hello');
       host.appendChild(text);
 
+      // Wait for slotchange and subsequent observer microtask
       await Promise.resolve();
       await Promise.resolve();
 
