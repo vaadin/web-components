@@ -10,9 +10,8 @@
  * When `target` is an `HTMLSlotElement`, the observer listens for `slotchange`
  * on the slot itself and diffs `target.assignedNodes({ flatten: true })`.
  *
- * When `target` is a `ShadowRoot` (or any element that contains `<slot>`
- * descendants), the observer listens for `slotchange` events bubbling up to
- * the target and diffs the union of `assignedNodes({ flatten: true })` across
+ * When `target` is a `ShadowRoot`, the observer listens for `slotchange` events
+ * bubbling to it and diffs the **union** of `assignedNodes({ flatten: true })`
  * every descendant `<slot>`. Cross-slot reassignment of the same node does
  * not change the union and therefore fires no callback.
  */
