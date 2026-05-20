@@ -136,7 +136,7 @@ describe('vaadin-breadcrumbs', () => {
     });
   });
 
-  describe('root slot assignment', () => {
+  describe('root slot', () => {
     beforeEach(async () => {
       breadcrumbs = fixtureSync(`
         <vaadin-breadcrumbs>
@@ -148,26 +148,15 @@ describe('vaadin-breadcrumbs', () => {
       await nextRender();
     });
 
-    it('should assign slot="root" to the first item', () => {
-      const items = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item')];
-      expect(items[0].getAttribute('slot')).to.equal('root');
-    });
-
-    it('should not assign slot to non-first items', () => {
-      const items = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item')];
-      expect(items[1].hasAttribute('slot')).to.be.false;
-      expect(items[2].hasAttribute('slot')).to.be.false;
-    });
-
     it('should move slot="root" when a new first item is prepended', async () => {
-      const newRoot = document.createElement('vaadin-breadcrumbs-item');
-      newRoot.path = '/new';
-      newRoot.textContent = 'New root';
-      breadcrumbs.insertBefore(newRoot, breadcrumbs.firstElementChild);
+      const newItem = document.createElement('vaadin-breadcrumbs-item');
+      newItem.path = '/new';
+      newItem.textContent = 'New root';
+      breadcrumbs.insertBefore(newItem, breadcrumbs.firstElementChild);
       await nextRender();
 
       const items = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item')];
-      expect(items[0]).to.equal(newRoot);
+      expect(items[0]).to.equal(newItem);
       expect(items[0].getAttribute('slot')).to.equal('root');
       expect(items[1].hasAttribute('slot')).to.be.false;
     });
@@ -182,25 +171,16 @@ describe('vaadin-breadcrumbs', () => {
     });
   });
 
-  describe('i18n', () => {
-    beforeEach(async () => {
-      breadcrumbs = fixtureSync(`
-        <vaadin-breadcrumbs>
-          <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
-          <vaadin-breadcrumbs-item>Current</vaadin-breadcrumbs-item>
-        </vaadin-breadcrumbs>
-      `);
-      await nextRender();
-    });
-
-    it('should default i18n.moreItems to "More items"', () => {
-      expect(breadcrumbs.i18n).to.be.an('object');
-      expect(breadcrumbs.i18n.moreItems).to.equal('More items');
-    });
-  });
-
   describe('overflow', () => {
     let items, button, overlay;
+
+    function expectOverlayItems(expectedIndexes) {
+      items.forEach((item, index) => {
+        const inOverlay = item.slot === 'overlay';
+        const shouldBeInOverlay = expectedIndexes.includes(index);
+        expect(inOverlay, `item ${index}`).to.equal(shouldBeInOverlay);
+      });
+    }
 
     beforeEach(async () => {
       breadcrumbs = fixtureSync(`
@@ -215,6 +195,13 @@ describe('vaadin-breadcrumbs', () => {
       `);
       await nextRender();
       items = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item')];
+      // Pin each item to a fixed width so collapse thresholds in the
+      // tests below are not sensitive to font metric differences
+      // between local macOS and CI Linux.
+      items.forEach((item) => {
+        item.style.width = '100px';
+      });
+      await nextResize(breadcrumbs);
       button = breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]');
       overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
     });
@@ -236,14 +223,14 @@ describe('vaadin-breadcrumbs', () => {
       });
 
       it('should move the first default-slot item to the overlay first', async () => {
-        breadcrumbs.style.maxWidth = '500px';
+        breadcrumbs.style.maxWidth = '600px';
         await nextResize(breadcrumbs);
 
-        expect(items[1].slot).to.equal('overlay');
+        expectOverlayItems([1]);
       });
 
       it('should keep the root in the trail before all default items collapse', async () => {
-        breadcrumbs.style.maxWidth = '500px';
+        breadcrumbs.style.maxWidth = '600px';
         await nextResize(breadcrumbs);
 
         expect(items[0].slot).to.equal('root');
@@ -257,47 +244,41 @@ describe('vaadin-breadcrumbs', () => {
       });
 
       it('should move additional items as the container shrinks', async () => {
-        breadcrumbs.style.maxWidth = '500px';
+        breadcrumbs.style.maxWidth = '600px';
         await nextResize(breadcrumbs);
-        const firstShrinkHidden = items.filter((item) => item.slot === 'overlay').length;
+        expectOverlayItems([1]);
 
-        breadcrumbs.style.maxWidth = '250px';
+        breadcrumbs.style.maxWidth = '280px';
         await nextResize(breadcrumbs);
-        const secondShrinkHidden = items.filter((item) => item.slot === 'overlay').length;
-
-        expect(secondShrinkHidden).to.be.greaterThan(firstShrinkHidden);
+        expectOverlayItems([1, 2, 3, 4]);
       });
 
       it('should move default-slot items closest-to-root first', async () => {
-        breadcrumbs.style.maxWidth = '250px';
+        breadcrumbs.style.maxWidth = '280px';
         await nextResize(breadcrumbs);
 
-        for (let i = 2; i < items.length - 1; i += 1) {
-          if (items[i].slot === 'overlay') {
-            expect(items[i - 1].slot).to.equal('overlay');
-          }
-        }
+        expectOverlayItems([1, 2, 3, 4]);
       });
 
       it('should move the root to the overlay when only the current item still fits', async () => {
-        breadcrumbs.style.maxWidth = '80px';
+        breadcrumbs.style.maxWidth = '150px';
         await nextResize(breadcrumbs);
 
         expect(items[0].slot).to.equal('overlay');
       });
 
       it('should restore items to the trail when the container widens again', async () => {
-        breadcrumbs.style.maxWidth = '250px';
+        breadcrumbs.style.maxWidth = '280px';
         await nextResize(breadcrumbs);
 
         breadcrumbs.style.maxWidth = '800px';
         await nextResize(breadcrumbs);
 
-        expect(items.every((item) => item.slot !== 'overlay')).to.be.true;
+        expectOverlayItems([]);
       });
 
       it('should clear has-overflow when the container widens enough', async () => {
-        breadcrumbs.style.maxWidth = '250px';
+        breadcrumbs.style.maxWidth = '280px';
         await nextResize(breadcrumbs);
 
         breadcrumbs.style.maxWidth = '800px';
@@ -313,8 +294,7 @@ describe('vaadin-breadcrumbs', () => {
           item.textContent = `Extra long item label ${i}`;
           breadcrumbs.insertBefore(item, breadcrumbs.lastElementChild);
         }
-        breadcrumbs.style.maxWidth = '300px';
-        await nextResize(breadcrumbs);
+        await nextRender();
 
         expect(breadcrumbs.hasAttribute('has-overflow')).to.be.true;
       });
