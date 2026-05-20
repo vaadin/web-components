@@ -23,7 +23,7 @@ export class SlotObserver {
     forceInitial?: boolean,
   );
 
-  readonly target: HTMLSlotElement | Element | DocumentFragment;
+  readonly target: HTMLSlotElement | DocumentFragment;
 
   /**
    * Activates an observer. This method is automatically called when
