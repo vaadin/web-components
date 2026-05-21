@@ -5,6 +5,7 @@ import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/button.css';
 import '@vaadin/vaadin-lumo-styles/components/notification.css';
 import '@vaadin/button';
+import '../../not-animated-styles.js';
 import '../../../vaadin-notification.js';
 
 describe('notification', () => {

@@ -5,7 +5,7 @@ index a4b5d0d..a255418 100644
 @@ -5,6 +5,19 @@ let i = 0;
  const elements = {};
  window.__WTR_VISUAL_REGRESSION__ = elements;
- 
+
 +function getAllAnimations(root) {
 +  const animations = root.getAnimations({ subtree: true });
 +  const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, {
@@ -25,7 +25,7 @@ index a4b5d0d..a255418 100644
 @@ -22,6 +35,16 @@ export async function visualDiff(element, name) {
      throw new Error('You must provide a name to diff');
    }
- 
+
 +  // Finish all animations on the page including those in shadow doms
 +  // so screenshots capture the final state.
 +  getAllAnimations(document).forEach((animation) => {
