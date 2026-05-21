@@ -20,7 +20,6 @@
     color: var(--lumo-primary-text-color);
     text-decoration: none;
     cursor: var(--lumo-clickable-cursor);
-    outline: none;
     transition: color 140ms;
   }
 
@@ -47,7 +46,7 @@
 
   [part='link']:focus-visible {
     border-radius: var(--lumo-border-radius-m);
-    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
   }
 
   :host([disabled]) [part='link'] {
