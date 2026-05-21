@@ -54,8 +54,6 @@ export const breadcrumbsItemStyles = css`
     transform: scaleX(-1);
   }
 
-  /* Overlay context: link/nolink fills the full row so the entire padded
-     area is clickable and the focus ring wraps the full target. */
   :host([slot='overlay']) {
     display: flex;
   }
