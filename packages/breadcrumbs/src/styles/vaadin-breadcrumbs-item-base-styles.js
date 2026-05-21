@@ -65,10 +65,17 @@ export const breadcrumbsItemStyles = css`
     flex: 1;
     padding: var(--vaadin-item-overlay-padding, 4px var(--vaadin-padding-inline-container));
     border-radius: var(--vaadin-radius-m);
+    color: var(--vaadin-text-color);
   }
 
   :host([slot='overlay']) [part='link']:focus-visible {
     border-radius: var(--vaadin-radius-m);
+  }
+
+  @media (any-hover: hover) {
+    :host([slot='overlay']) [part='link']:hover {
+      text-decoration: none;
+    }
   }
 
   :host([slot='overlay'])::after {
