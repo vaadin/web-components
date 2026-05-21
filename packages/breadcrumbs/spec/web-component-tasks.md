@@ -38,7 +38,7 @@ larger — rather than splitting into landing-with-no-effect intermediate steps.
 **Requirements:** —
 **Depends on:** —
 
-Create the `packages/breadcrumbs/` package with `package.json`, `LICENSE`, `README.md`, and the public entry files `vaadin-breadcrumbs.js`/`.d.ts` and `vaadin-breadcrumbs-item.js`/`.d.ts`. Under `src/`, create the implementation files for the three elements `<vaadin-breadcrumbs>`, `<vaadin-breadcrumbs-item>`, and `<vaadin-breadcrumbs-overlay>` (each with the correct mixin chain per the spec — `ResizeMixin`+`I18nMixin`+`ElementMixin` for the container, `OverlayMixin`+`PositionMixin`+`DirMixin` plus a new `BreadcrumbsOverlayMixin` for the overlay; `ThemableMixin` is intentionally excluded — it is deprecated for new components per the in-repo guidelines), `static get is`, `static get experimental` returning `'breadcrumbsComponent'`, and an empty `render()`. Create `src/styles/` with empty base-styles files for each element (structural CSS only), and a minimal `dev/breadcrumbs.html` that imports the entry and renders one default trail. Include a basic smoke test asserting both elements register and produce a shadow root behind the experimental flag.
+Create the `packages/breadcrumbs/` package with `package.json`, `LICENSE`, `README.md`, and the public entry files `vaadin-breadcrumbs.js`/`.d.ts` and `vaadin-breadcrumbs-item.js`/`.d.ts`. Under `src/`, create the implementation files for the three elements `<vaadin-breadcrumbs>`, `<vaadin-breadcrumbs-item>`, and `<vaadin-breadcrumbs-overlay>` (each with the correct mixin chain per the spec — `ResizeMixin`+`I18nMixin`+`ElementMixin` for the container; `OverlayMixin`+`PositionMixin`+`DirMixin` over `PolylitMixin`+`LumoInjectionMixin` for the overlay, with `_shouldCloseOnOutsideClick` and `_contentRoot` inlined on the class; `ThemableMixin` is intentionally excluded — it is deprecated for new components per the in-repo guidelines), `static get is`, `static get experimental` returning `'breadcrumbsComponent'`, and an empty `render()`. Create `src/styles/` with base-styles files for the container and the item, and a minimal `dev/breadcrumbs.html` that imports the entry and renders one default trail. Include a basic smoke test asserting both elements register and produce a shadow root behind the experimental flag.
 
 **Tests:**
 - `customElements.get('vaadin-breadcrumbs')` returns a constructor after the entry is imported with the experimental flag enabled
@@ -215,34 +215,34 @@ This task is large because none of its components — overflow detection, overfl
 
 Extend the host-side observer from Task 5 to also assign `slot="root"` to the first `<vaadin-breadcrumbs-item>` child and clear `slot` from any previous holder. Resolve `_overflowButton` once in `firstUpdated()` (not as a lazy getter that returns `null` on first read).
 
-**`<vaadin-breadcrumbs-overlay>` element:** Create `packages/breadcrumbs/src/vaadin-breadcrumbs-overlay.js`/`.d.ts`, `vaadin-breadcrumbs-overlay-mixin.js`/`.d.ts`, and an empty `src/styles/vaadin-breadcrumbs-overlay-base-styles.js`/`.d.ts`. Mixin chain: `OverlayMixin` + `PositionMixin` + `DirMixin` + `BreadcrumbsOverlayMixin` over `PolylitMixin` + `LumoInjectionMixin`. Shadow DOM: `<div part="overlay"><div part="content" role="list"><slot></slot></div></div>`. The overlay does NOT implement `_rendererRoot` or any `.renderer` plumbing — items live in the breadcrumbs' light DOM (see below) and project through the overlay's default slot.
+**`<vaadin-breadcrumbs-overlay>` element:** Create `packages/breadcrumbs/src/vaadin-breadcrumbs-overlay.js`/`.d.ts`. Mixin chain: `OverlayMixin` + `PositionMixin` + `DirMixin` over `PolylitMixin` + `LumoInjectionMixin`. Inline two overlay-specific members on the class: `_shouldCloseOnOutsideClick` (keeps the overlay open when the position target is clicked — the breadcrumbs container handles toggling) and a `_contentRoot` getter that returns `this.owner` (so `OverlayFocusMixin` recognizes focus inside the owner-slotted items). Overlay-only CSS — `[part='content']` padding and the `:host([top-aligned])` / `:host([bottom-aligned])` margin offsets — lives in a small `css` block on the class itself, alongside the imported `overlayStyles`. Shadow DOM: `<div part="overlay"><div part="content" role="list"><slot></slot></div></div>`. The overlay does NOT implement `_rendererRoot` or any `.renderer` plumbing — items live in the breadcrumbs' light DOM (see below) and project through the overlay's default slot.
 
 **Container behavior:**
-- Add `ResizeMixin` and `I18nMixin` to the breadcrumbs mixin chain. Default `i18n` is `{ moreItems: '' }`. Bind `i18n.moreItems` to the overflow button's `aria-label`.
-- Override `_onResize()` and re-run on the host-side observer's pass: measure whether all items fit. If not, set `data-overflow-hidden` on items closest-to-root first (the first default-slot item, then the next, then eventually the root item). Never collapse the last item. Reflect `has-overflow` on the host. Toggle `[part="overflow"]`'s `hidden` attribute accordingly. Hide collapsed items with `:host([data-overflow-hidden]) { display: none }` on the item.
+- Add `ResizeMixin` and `I18nMixin` to the breadcrumbs mixin chain. Default `i18n` is `{ moreItems: 'More items' }`. Bind `i18n.moreItems` to the overflow button's `aria-label`.
+- Override `_onResize()` and re-run on the host-side observer's pass: measure whether all items fit. If not, reassign `slot="overlay"` on items closest-to-root first (the first default-slot item, then the next, then eventually the root item). Never collapse the last item. Reflect `has-overflow` on the host. Toggle `[part="overflow"]`'s `hidden` attribute accordingly. Collapsed items disappear from the trail automatically because they are projected through the overlay's named slot instead.
 - Toggle `_overlayOpened` on overflow-button click; reflect to the button's `aria-expanded`. Pressing Enter or Space on the focused overflow button opens the overlay and moves focus to the first link.
-- Override `update()` and call `lit.render(html\`<vaadin-breadcrumbs-item slot="overlay" path="…">…</vaadin-breadcrumbs-item>…\`, this, { host: this })` to write the hidden items into the breadcrumbs' own light DOM (the `__renderSlottedForm` pattern in `packages/login/src/vaadin-login-form-mixin.js`). The overlay's default slot projects them in.
+- The same physical `<vaadin-breadcrumbs-item>` element renders in either the trail or the overlay depending on its `slot` attribute. Items collapsed by the overflow algorithm stay in the breadcrumbs' light DOM with `slot="overlay"`; the overlay's default slot projects them in.
 - Add `[part="overflow"]::after` to the breadcrumbs base styles using the same `mask-image` + `currentColor` pattern as the item separator, with the same `--vaadin-breadcrumbs-separator` custom property and the same RTL flip from Task 6. Visible whenever `[part="overflow"]` is visible.
 - Extend Task 7's Lumo CSS and Task 8's Aura CSS with overflow-button and overlay styling per `figma-design.md`.
 
 **ARIA:** `[part="overflow"]` carries `role="listitem"`; the overlay's `[part="content"]` carries `role="list"`; overflow button carries `aria-haspopup="true"` and `aria-expanded` reflecting state; rendered overlay items keep their item-level `role="listitem"`.
 
 **Tests:**
-- A trail that fits has no `has-overflow` attribute, no `data-overflow-hidden` on any item, and `[part="overflow"]` remains `hidden`
-- Shrinking the container so one item no longer fits sets `has-overflow`, sets `data-overflow-hidden` on the first default-slot item (closest to root, not the root itself), and unsets `hidden` on `[part="overflow"]`
-- Continuing to shrink hides additional default-slot items in order, always closest-to-root first
-- Shrinking past the point where only the root and current item fit hides the root too (sets `data-overflow-hidden` on the item with `slot="root"`)
-- The last item never gets `data-overflow-hidden` regardless of width
+- A trail that fits has no `has-overflow` attribute, no item carries `slot="overlay"`, and `[part="overflow"]` remains `hidden`
+- Shrinking the container so one item no longer fits sets `has-overflow`, reassigns `slot="overlay"` on the first default-slot item (closest to root, not the root itself), and unsets `hidden` on `[part="overflow"]`
+- Continuing to shrink moves additional default-slot items into `slot="overlay"` in order, always closest-to-root first
+- Shrinking past the point where only the root and current item fit also moves the root to `slot="overlay"`
+- The last item never carries `slot="overlay"` regardless of width
 - Widening reverses: items become visible again in reverse order until `has-overflow` is removed
 - Adding an item to a fitting trail re-runs detection
 - The first `<vaadin-breadcrumbs-item>` carries `slot="root"`; prepending or removing the first item moves it correctly
-- Default `i18n` has `moreItems` equal to `''`; setting `breadcrumbs.i18n = { moreItems: 'Show hidden items' }` updates the overflow button's `aria-label`
+- Default `i18n` has `moreItems` equal to `'More items'`; setting `breadcrumbs.i18n = { moreItems: 'Show hidden items' }` updates the overflow button's `aria-label`
 - Clicking the overflow button while `_overlayOpened` is `false` opens the overlay (sets `aria-expanded="true"`); clicking again closes it
 - Pressing `Escape` while the overlay is open closes it (delegated to `OverlayMixin`) and returns focus to the overflow button
 - Clicking outside the overlay closes it
 - Pressing Enter or Space on the focused overflow button opens the overlay and moves focus to the first link
-- When the overlay opens with two items hidden, the breadcrumbs' light DOM contains exactly two `<vaadin-breadcrumbs-item slot="overlay">` elements with corresponding `path` and label values, projected into the overlay's default slot
-- Mutating the hidden-items set re-runs `update()` and produces a fresh slotted set
+- When the overlay opens with two items hidden, the breadcrumbs' light DOM contains exactly two `<vaadin-breadcrumbs-item>` elements with `slot="overlay"`, projected into the overlay's default slot
+- Resizing the container so a different set of items overflows reassigns `slot="overlay"` on the matching elements and restores the original slot on items that no longer need to collapse
 - `[part="overflow"]::after` is visible when `has-overflow` is set, with chevron-right `mask-image` and `transform: scaleX(-1)` in RTL
 - The overflow button and overlay carry `role="listitem"` and `role="list"` respectively
 - Visual: overflow trail in base styles renders the overflow button between root and rest with separators on both sides
