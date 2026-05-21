@@ -33,11 +33,11 @@ class BreadcrumbsOverlay extends PositionMixin(OverlayMixin(DirMixin(PolylitMixi
         }
 
         :host([top-aligned]) [part='overlay'] {
-          margin-top: var(--_offset, 0);
+          margin-top: var(--_offset, 4px);
         }
 
         :host([bottom-aligned]) [part='overlay'] {
-          margin-bottom: var(--_offset, 0);
+          margin-bottom: var(--_offset, 4px);
         }
       `,
     ];
