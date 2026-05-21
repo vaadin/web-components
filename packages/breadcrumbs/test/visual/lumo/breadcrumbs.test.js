@@ -1,4 +1,5 @@
-import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
+import { sendKeys } from '@vaadin/test-runner-commands';
+import { fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/breadcrumbs.css';
@@ -35,13 +36,18 @@ describe('breadcrumbs', () => {
     it('basic', async () => {
       await visualDiff(div, 'basic');
     });
+
+    it('item-focus', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'item-focus');
+    });
   });
 
   describe('overflow', () => {
     let breadcrumbs;
 
     beforeEach(async () => {
-      div.style.width = '220px';
+      div.style.width = '250px';
       fixtureSync(
         `
           <vaadin-breadcrumbs>
@@ -61,6 +67,20 @@ describe('breadcrumbs', () => {
 
     it('overflow', async () => {
       await visualDiff(div, 'overflow');
+    });
+
+    it('overflow-focus', async () => {
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'overflow-focus');
+    });
+
+    it('overflow-opened', async () => {
+      div.style.height = '150px';
+      const overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
+      breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]').click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      await visualDiff(div, 'overflow-opened');
     });
   });
 });
