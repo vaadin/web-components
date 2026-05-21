@@ -2,7 +2,6 @@ import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/dialog.css';
-import '../../not-animated-styles.js';
 import '../../../vaadin-dialog.js';
 import { createRenderer } from '../../helpers.js';
 

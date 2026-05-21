@@ -1,3 +1,44 @@
+diff --git a/node_modules/@web/test-runner-visual-regression/browser/commands.mjs b/node_modules/@web/test-runner-visual-regression/browser/commands.mjs
+index a4b5d0d..a255418 100644
+--- a/node_modules/@web/test-runner-visual-regression/browser/commands.mjs
++++ b/node_modules/@web/test-runner-visual-regression/browser/commands.mjs
+@@ -5,6 +5,19 @@ let i = 0;
+ const elements = {};
+ window.__WTR_VISUAL_REGRESSION__ = elements;
+ 
++function getAllAnimations(root) {
++  const animations = root.getAnimations({ subtree: true });
++  const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT, {
++    acceptNode: (node) => (node.shadowRoot ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP),
++  });
++  let node = walker.nextNode();
++  while (node) {
++    animations.push(...getAllAnimations(node.shadowRoot));
++    node = walker.nextNode();
++  }
++  return animations;
++}
++
+ export async function visualDiff(element, name) {
+   if (!(element instanceof Node)) {
+     throw new Error('Element to diff must be a Node.');
+@@ -22,6 +35,16 @@ export async function visualDiff(element, name) {
+     throw new Error('You must provide a name to diff');
+   }
+ 
++  // Finish all animations on the page including those in shadow doms
++  // so screenshots capture the final state.
++  getAllAnimations(document).forEach((animation) => {
++    try {
++      animation.finish();
++    } catch {
++      // Ignore animations that cannot be finished (e.g. infinite).
++    }
++  });
++
+   i += 1;
+   elements[i] = element;
+   try {
 diff --git a/node_modules/@web/test-runner-visual-regression/dist/visualDiffCommand.js b/node_modules/@web/test-runner-visual-regression/dist/visualDiffCommand.js
 index 08b4d27..423aa5a 100644
 --- a/node_modules/@web/test-runner-visual-regression/dist/visualDiffCommand.js

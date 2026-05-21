@@ -1,7 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
-import '../../chart-not-animated-styles.js';
 import '../../../vaadin-chart.js';
 
 describe('chart', () => {

@@ -2,7 +2,6 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
-import '../../not-animated-styles.js';
 import '../../../vaadin-grid-pro.js';
 import '../../../vaadin-grid-pro-edit-column.js';
 import { users } from '../users.js';

@@ -4,7 +4,6 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/avatar.css';
 import '@vaadin/vaadin-lumo-styles/components/tooltip.css';
-import '@vaadin/tooltip/test/not-animated-styles.js';
 import '../../../vaadin-avatar.js';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 

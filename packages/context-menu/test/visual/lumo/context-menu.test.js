@@ -7,7 +7,6 @@ import '@vaadin/vaadin-lumo-styles/components/list-box.css';
 import '@vaadin/vaadin-lumo-styles/components/context-menu.css';
 import '@vaadin/list-box';
 import '@vaadin/item';
-import '../../not-animated-styles.js';
 import '../../../vaadin-context-menu.js';
 import { openSubMenus } from '../../helpers.js';
 

@@ -7,7 +7,6 @@ import '@vaadin/vaadin-lumo-styles/components/list-box.css';
 import '@vaadin/vaadin-lumo-styles/components/select.css';
 import '@vaadin/item';
 import '@vaadin/list-box';
-import '../../not-animated-styles.js';
 import '../common.js';
 import '../../../vaadin-select.js';
 
