@@ -73,7 +73,7 @@ export const breadcrumbsItemStyles = css`
   }
 
   @media (any-hover: hover) {
-    :host([slot='overlay']) [part='link']:hover {
+    :host([slot='overlay']) [part='link'] {
       text-decoration: none;
     }
   }
