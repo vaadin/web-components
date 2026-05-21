@@ -16,7 +16,9 @@ registerStyles(
   css`
     :host,
     :host::before,
-    :host::after {
+    :host::after,
+    [part='link'],
+    [part='nolink'] {
       transition: none !important;
     }
   `,
