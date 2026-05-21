@@ -7,7 +7,7 @@
 
 1. **Two custom elements: `<vaadin-breadcrumbs>` and `<vaadin-breadcrumbs-item>`** — Follows the same container-plus-items shape as `<vaadin-side-nav>` / `<vaadin-side-nav-item>`. Items are light DOM children of the container, observed via a shadow-root-level `SlotObserver`. Enables the declarative HTML API required by guidelines/02-design.md.
 
-2. **`path` attribute on items renders an `<a>` element in shadow DOM** — Matches `<vaadin-side-nav-item>`'s pattern: `path` maps to the `href` attribute of an internal `<a>`. When `path` is absent, the item renders a `<span>` instead. The rendered `<a>` is a plain link — router-agnostic per DESIGN_GUIDELINES.md. (See web-component-api.md §1.)
+2. **`path` attribute on items renders an `<a>` element in shadow DOM** — Matches `<vaadin-side-nav-item>`'s pattern: `path` maps to the `href` attribute of an internal `<a>`. When `path` is absent, the item renders a `<span>` instead. The rendered `<a>` is a plain link — router-agnostic. (See web-component-api.md §1.)
 
 3. **Current page is the last item without `path`** — No explicit `current` boolean property. The container detects that the last slotted item has no `path` and applies `aria-current="page"` and the `current` state attribute to it. This differs from `<vaadin-side-nav-item>`, which has a `current` property driven by URL matching — breadcrumbs don't do path matching. (See web-component-api.md §1, §8.)
 
@@ -19,7 +19,7 @@
 
 7. **Navigation landmark via `role="navigation"` on the host** — `<vaadin-breadcrumbs>` sets `role="navigation"` on itself rather than wrapping its shadow DOM around an inner `<nav>`. The application supplies the accessible name via `aria-label` directly on the host. No default label is provided. (See web-component-api.md §7.)
 
-8. **List item semantics via `role="listitem"` on the host** — `<vaadin-breadcrumbs-item>` sets `role="listitem"` on itself rather than wrapping its shadow DOM around an inner `<li>`. This keeps both components free of redundant semantic wrappers, consistent with the design rule in DESIGN_GUIDELINES.md.
+8. **List item semantics via `role="listitem"` on the host** — `<vaadin-breadcrumbs-item>` sets `role="listitem"` on itself rather than wrapping its shadow DOM around an inner `<li>`. This keeps both components free of redundant semantic wrappers, consistent with the design rule in guidelines/11-a11y.md.
 
 9. **No `suffix` slot on items** — Only a `prefix` slot is provided, matching the known use case (icons). (See web-component-api.md Discussion.)
 
@@ -31,7 +31,7 @@
 
 **`<vaadin-breadcrumbs>`** — Container element
 
-The host carries `role="navigation"`. Items are distributed across two slots so the overflow element can sit in the DOM between the root item and the rest — ensuring DOM order matches the visual order `[root] [overflow] [rest…]` per DESIGN_GUIDELINES.
+The host carries `role="navigation"`. Items are distributed across two slots so the overflow element can sit in the DOM between the root item and the rest — ensuring DOM order matches the visual order `[root] [overflow] [rest…]` per guidelines/11-a11y.md.
 
 Shadow DOM:
 ```html
@@ -268,7 +268,7 @@ Two reasons. (1) Multiple slots: the container fans items across `slot="root"`, 
 
 **Q: Should the shadow DOM wrap content in `<nav>` and each item in `<li>`?**
 
-No. Per the "Use `role` on the host instead of a semantic wrapper inside it" rule in DESIGN_GUIDELINES.md, `<vaadin-breadcrumbs>` carries `role="navigation"` on the host and `<vaadin-breadcrumbs-item>` carries `role="listitem"` on the host. The inner list wrapper in the container is retained as a genuine exception — a single element cannot carry both the `navigation` and `list` roles, so the list semantics live on an inner element.
+No. Per the "Use `role` on the host instead of a semantic wrapper inside it" rule in guidelines/11-a11y.md, `<vaadin-breadcrumbs>` carries `role="navigation"` on the host and `<vaadin-breadcrumbs-item>` carries `role="listitem"` on the host. The inner list wrapper in the container is retained as a genuine exception — a single element cannot carry both the `navigation` and `list` roles, so the list semantics live on an inner element.
 
 **Q: Should the list wrapper be `<ol>` or a generic element with `role="list"`?**
 
@@ -276,7 +276,7 @@ A generic element with explicit `role="list"`. Two reasons: (a) HTML `<ol>` acce
 
 **Q: How is the overflow element positioned so it appears visually between the root and the rest of the items?**
 
-Two shadow slots with the overflow in shadow DOM between them: `<slot name="root"></slot>`, then `<div part="overflow">`, then `<slot></slot>`. The component's `SlotObserver` callback assigns `slot="root"` to the first `<vaadin-breadcrumbs-item>` child automatically — the application doesn't set it. This keeps DOM order aligned with visual order `[root] [overflow] [rest…]`, satisfying the "focus order matches visual order" rule. The alternative considered — inserting the overflow as a light-DOM sibling between items — was rejected because it would add a component-authored element to the user's light DOM, changing `breadcrumb.children.length` and conflicting with the "light DOM is the application's territory" principle.
+Two shadow slots with the overflow in shadow DOM between them: `<slot name="root"></slot>`, then `<div part="overflow">`, then `<slot></slot>`. The component's `SlotObserver` callback assigns `slot="root"` to the first `<vaadin-breadcrumbs-item>` child automatically — the application doesn't set it. This keeps DOM order aligned with visual order `[root] [overflow] [rest…]`, satisfying the "DOM order matches visual order" rule from guidelines/11-a11y.md. The alternative considered — inserting the overflow as a light-DOM sibling between items — was rejected because it would add a component-authored element to the user's light DOM, changing `breadcrumb.children.length` and conflicting with the "light DOM is the application's territory" principle.
 
 **Q: Should the overflow panel use `OverlayMixin` or be a plain `<div>` positioned with `position: fixed`?**
 
