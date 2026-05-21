@@ -73,7 +73,6 @@
     :host([slot='overlay']) [part='link']:hover {
       background-color: var(--lumo-contrast-5pct);
       color: var(--lumo-primary-text-color);
-      text-decoration: none;
     }
   }
 }
