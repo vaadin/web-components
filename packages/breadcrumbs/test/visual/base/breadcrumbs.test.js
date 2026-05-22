@@ -1,4 +1,5 @@
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { sendKeys } from '@vaadin/test-runner-commands';
+import { fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.css';
 import '../../../src/vaadin-breadcrumbs.js';
@@ -42,6 +43,11 @@ describe('breadcrumbs', () => {
     it('basic', async () => {
       await visualDiff(div, 'basic');
     });
+
+    it('item-focus', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'item-focus');
+    });
   });
 
   describe('RTL', () => {
@@ -69,6 +75,47 @@ describe('breadcrumbs', () => {
 
     it('rtl-basic', async () => {
       await visualDiff(div, 'rtl-basic');
+    });
+  });
+
+  describe('overflow', () => {
+    let breadcrumbs;
+
+    beforeEach(async () => {
+      div.style.width = '220px';
+      fixtureSync(
+        `
+          <vaadin-breadcrumbs>
+            <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+            <vaadin-breadcrumbs-item path="/docs">Documents</vaadin-breadcrumbs-item>
+            <vaadin-breadcrumbs-item path="/docs/projects">Projects</vaadin-breadcrumbs-item>
+            <vaadin-breadcrumbs-item path="/docs/projects/2026">2026</vaadin-breadcrumbs-item>
+            <vaadin-breadcrumbs-item>Summary report</vaadin-breadcrumbs-item>
+          </vaadin-breadcrumbs>
+        `,
+        div,
+      );
+      breadcrumbs = div.querySelector('vaadin-breadcrumbs');
+      await nextRender();
+      await nextResize(breadcrumbs);
+    });
+
+    it('overflow', async () => {
+      await visualDiff(div, 'overflow');
+    });
+
+    it('overflow-focus', async () => {
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'overflow-focus');
+    });
+
+    it('overflow-opened', async () => {
+      div.style.height = '150px';
+      const overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
+      breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]').click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      await visualDiff(div, 'overflow-opened');
     });
   });
 });

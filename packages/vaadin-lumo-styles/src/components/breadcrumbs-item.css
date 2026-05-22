@@ -20,7 +20,6 @@
     color: var(--lumo-primary-text-color);
     text-decoration: none;
     cursor: var(--lumo-clickable-cursor);
-    outline: none;
     transition: color 140ms;
   }
 
@@ -38,6 +37,10 @@
       color: var(--lumo-primary-color);
       text-decoration: underline;
     }
+
+    :host([slot='overlay']) [part='link']:hover {
+      background-color: var(--lumo-primary-color-10pct);
+    }
   }
 
   [part='link']:active {
@@ -47,7 +50,7 @@
 
   [part='link']:focus-visible {
     border-radius: var(--lumo-border-radius-m);
-    box-shadow: 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
   }
 
   :host([disabled]) [part='link'] {
@@ -58,5 +61,14 @@
     width: var(--lumo-icon-size-s);
     height: var(--lumo-icon-size-s);
     color: inherit;
+  }
+
+  :host([slot='overlay']) [part='link'],
+  :host([slot='overlay']) [part='nolink'] {
+    color: var(--lumo-body-text-color);
+  }
+
+  :host([slot='overlay']) [part='link']:focus-visible {
+    border-radius: var(--lumo-border-radius-m);
   }
 }

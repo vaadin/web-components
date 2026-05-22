@@ -16,13 +16,17 @@ vaadin-breadcrumbs-item[current]::part(nolink) {
 }
 
 @media (any-hover: hover) {
-  vaadin-breadcrumbs-item::part(link):hover {
+  vaadin-breadcrumbs-item:not([slot='overlay'])::part(link):hover {
     color: var(--vaadin-text-color);
     text-decoration: underline;
   }
+
+  vaadin-breadcrumbs-item[slot='overlay']::part(link):hover {
+    background: var(--_aura-highlight-color);
+  }
 }
 
-vaadin-breadcrumbs-item::part(link):active {
+vaadin-breadcrumbs-item:not([slot='overlay'])::part(link):active {
   color: var(--vaadin-text-color);
   text-decoration: underline;
 }

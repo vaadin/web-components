@@ -13,5 +13,11 @@
 
   [part='list'] {
     gap: var(--lumo-space-xs);
+    padding: var(--vaadin-focus-ring-width, 2px);
+  }
+
+  [part='overflow-button']:focus-visible {
+    border-radius: var(--lumo-border-radius-m);
+    outline: var(--vaadin-focus-ring-width, 2px) solid var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
   }
 }
