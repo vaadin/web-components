@@ -7,10 +7,6 @@ import '../common.js';
 import '../../../vaadin-range-slider.js';
 import type { RangeSlider } from '../../../vaadin-range-slider.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.sliderComponent = true;
-
 describe('range-slider', () => {
   let div: HTMLDivElement;
   let element: RangeSlider;

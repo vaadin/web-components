@@ -5,10 +5,6 @@ import sinon from 'sinon';
 import '../vaadin-range-slider.js';
 import type { RangeSlider } from '../vaadin-range-slider.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.sliderComponent = true;
-
 describe('vaadin-range-slider - keyboard input', () => {
   let slider: RangeSlider;
   let inputs: HTMLInputElement[];

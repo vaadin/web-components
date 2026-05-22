@@ -5,10 +5,6 @@ import sinon from 'sinon';
 import '../vaadin-slider.js';
 import type { Slider } from '../vaadin-slider.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.sliderComponent = true;
-
 describe('vaadin-slider - keyboard input', () => {
   let slider: Slider;
   let input: HTMLInputElement;

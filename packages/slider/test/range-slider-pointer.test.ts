@@ -6,10 +6,6 @@ import '../vaadin-range-slider.js';
 import type { SliderBubble } from '../src/vaadin-slider-bubble.js';
 import type { RangeSlider } from '../vaadin-range-slider.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.sliderComponent = true;
-
 // Pointer tests randomly fail in Firefox
 (isFirefox ? describe.skip : describe)('vaadin-range-slider - pointer', () => {
   let slider: RangeSlider;

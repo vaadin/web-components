@@ -156,10 +156,6 @@ class Slider extends FieldMixin(
     ];
   }
 
-  static get experimental() {
-    return 'sliderComponent';
-  }
-
   static get lumoInjector() {
     return { ...super.lumoInjector, includeBaseStyles: true };
   }
