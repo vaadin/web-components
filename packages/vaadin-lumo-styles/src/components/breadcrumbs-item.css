@@ -37,6 +37,11 @@
       color: var(--lumo-primary-color);
       text-decoration: underline;
     }
+
+    :host([slot='overlay']) [part='link']:hover {
+      background-color: var(--lumo-contrast-5pct);
+      color: var(--lumo-primary-text-color);
+    }
   }
 
   [part='link']:active {
@@ -66,12 +71,5 @@
 
   :host([slot='overlay']) [part='link']:focus-visible {
     border-radius: var(--lumo-border-radius-m);
-  }
-
-  @media (any-hover: hover) {
-    :host([slot='overlay']) [part='link']:hover {
-      background-color: var(--lumo-contrast-5pct);
-      color: var(--lumo-primary-text-color);
-    }
   }
 }
