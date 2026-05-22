@@ -1,7 +1,3 @@
-vaadin-date-time-picker[focused] input {
-  caret-color: transparent;
-}
-
 vaadin-date-time-picker::part(label),
 vaadin-date-time-picker::part(field-button),
 vaadin-date-time-picker::part(helper-text),
