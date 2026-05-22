@@ -110,36 +110,6 @@ snapshots["vaadin-breadcrumbs items host all linked"] =
 `;
 /* end snapshot vaadin-breadcrumbs items host all linked */
 
-snapshots["vaadin-breadcrumbs items host overflow"] = 
-`<vaadin-breadcrumbs
-  has-overflow=""
-  role="navigation"
-  style="max-width: 80px;"
->
-  <vaadin-breadcrumbs-item
-    path="/"
-    role="listitem"
-    slot="overlay"
-  >
-    Home
-  </vaadin-breadcrumbs-item>
-  <vaadin-breadcrumbs-item
-    path="/docs"
-    role="listitem"
-    slot="overlay"
-  >
-    Docs
-  </vaadin-breadcrumbs-item>
-  <vaadin-breadcrumbs-item
-    path="/docs/api"
-    role="listitem"
-  >
-    API
-  </vaadin-breadcrumbs-item>
-</vaadin-breadcrumbs>
-`;
-/* end snapshot vaadin-breadcrumbs items host overflow */
-
 snapshots["vaadin-breadcrumbs items host with current"] = 
 `<vaadin-breadcrumbs role="navigation">
   <vaadin-breadcrumbs-item
@@ -165,7 +135,37 @@ snapshots["vaadin-breadcrumbs items host with current"] =
 `;
 /* end snapshot vaadin-breadcrumbs items host with current */
 
-snapshots["vaadin-breadcrumbs items shadow overflow"] = 
+snapshots["vaadin-breadcrumbs overflow host"] = 
+`<vaadin-breadcrumbs
+  has-overflow=""
+  role="navigation"
+  style="max-width: 140px"
+>
+  <vaadin-breadcrumbs-item
+    path="/"
+    role="listitem"
+    slot="root"
+  >
+    Home
+  </vaadin-breadcrumbs-item>
+  <vaadin-breadcrumbs-item
+    path="/docs"
+    role="listitem"
+    slot="overlay"
+  >
+    Docs
+  </vaadin-breadcrumbs-item>
+  <vaadin-breadcrumbs-item
+    path="/docs/api"
+    role="listitem"
+  >
+    API
+  </vaadin-breadcrumbs-item>
+</vaadin-breadcrumbs>
+`;
+/* end snapshot vaadin-breadcrumbs overflow host */
+
+snapshots["vaadin-breadcrumbs overflow shadow"] = 
 `<div
   id="list"
   part="list"
@@ -201,5 +201,56 @@ snapshots["vaadin-breadcrumbs items shadow overflow"] =
   </slot>
 </vaadin-breadcrumbs-overlay>
 `;
-/* end snapshot vaadin-breadcrumbs items shadow overflow */
+/* end snapshot vaadin-breadcrumbs overflow shadow */
+
+snapshots["vaadin-breadcrumbs overflow overlay shadow"] = 
+`<div
+  id="overlay"
+  part="overlay"
+>
+  <div
+    id="content"
+    part="content"
+    role="list"
+  >
+    <slot>
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-breadcrumbs overflow overlay shadow */
+
+snapshots["vaadin-breadcrumbs overflow opened"] = 
+`<vaadin-breadcrumbs
+  has-overflow=""
+  role="navigation"
+  start-aligned=""
+  style="max-width: 140px"
+  top-aligned=""
+>
+  <vaadin-breadcrumbs-item
+    path="/"
+    role="listitem"
+    slot="root"
+  >
+    Home
+  </vaadin-breadcrumbs-item>
+  <vaadin-breadcrumbs-item
+    focus-ring=""
+    focused=""
+    path="/docs"
+    role="listitem"
+    slot="overlay"
+  >
+    Docs
+  </vaadin-breadcrumbs-item>
+  <vaadin-breadcrumbs-item
+    path="/docs/api"
+    role="listitem"
+  >
+    API
+  </vaadin-breadcrumbs-item>
+</vaadin-breadcrumbs>
+`;
+/* end snapshot vaadin-breadcrumbs overflow opened */
 

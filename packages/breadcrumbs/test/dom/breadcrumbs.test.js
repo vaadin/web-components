@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import '../../src/vaadin-breadcrumbs.js';
 
 window.Vaadin ??= {};
@@ -51,25 +51,46 @@ describe('vaadin-breadcrumbs', () => {
         await expect(breadcrumbs).dom.to.equalSnapshot();
       });
 
-      it('overflow', async () => {
-        breadcrumbs.style.maxWidth = '80px';
-        await nextResize(breadcrumbs);
-        await expect(breadcrumbs).dom.to.equalSnapshot();
-      });
-
       it('with current', async () => {
         breadcrumbs.querySelector('vaadin-breadcrumbs-item:last-child').removeAttribute('path');
         await nextRender();
         await expect(breadcrumbs).dom.to.equalSnapshot();
       });
     });
+  });
 
-    describe('shadow', () => {
-      it('overflow', async () => {
-        breadcrumbs.style.maxWidth = '80px';
-        await nextResize(breadcrumbs);
-        await expect(breadcrumbs).shadowDom.to.equalSnapshot();
-      });
+  describe('overflow', () => {
+    let overlay;
+
+    beforeEach(async () => {
+      breadcrumbs = fixtureSync(`
+        <vaadin-breadcrumbs style="max-width: 140px">
+          <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
+          <vaadin-breadcrumbs-item path="/docs/api">API</vaadin-breadcrumbs-item>
+        </vaadin-breadcrumbs>
+      `);
+      await nextRender();
+      await nextResize(breadcrumbs);
+      overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
+    });
+
+    it('host', async () => {
+      await expect(breadcrumbs).dom.to.equalSnapshot();
+    });
+
+    it('shadow', async () => {
+      await expect(breadcrumbs).shadowDom.to.equalSnapshot();
+    });
+
+    it('overlay shadow', async () => {
+      await expect(overlay).shadowDom.to.equalSnapshot();
+    });
+
+    it('opened', async () => {
+      breadcrumbs.$.overflow.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      await expect(breadcrumbs).dom.to.equalSnapshot();
     });
   });
 });
