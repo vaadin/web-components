@@ -2,7 +2,6 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.js';
-import '../common.js';
 import '@vaadin/aura/aura.css';
 import '@vaadin/text-field';
 import '../../../src/vaadin-field-highlighter.js';

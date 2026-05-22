@@ -3,7 +3,6 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.js';
 import '@vaadin/aura/aura.css';
-import '../common.js';
 import '../../../vaadin-range-slider.js';
 import type { RangeSlider } from '../../../vaadin-range-slider.js';
 

@@ -2,7 +2,6 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.js';
-import '../common.js';
 import '../../../src/vaadin-radio-button.js';
 
 describe('radio-button', () => {

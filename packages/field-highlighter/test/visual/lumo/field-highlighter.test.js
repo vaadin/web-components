@@ -12,7 +12,6 @@ import '@vaadin/vaadin-lumo-styles/components/item.css';
 import '@vaadin/vaadin-lumo-styles/components/radio-group.css';
 import '@vaadin/vaadin-lumo-styles/components/text-area.css';
 import '@vaadin/vaadin-lumo-styles/components/text-field.css';
-import '../common.js';
 import '@vaadin/checkbox';
 import '@vaadin/checkbox-group';
 import '@vaadin/date-time-picker';

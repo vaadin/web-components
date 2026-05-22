@@ -4,7 +4,6 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.js';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/radio-group.css';
-import '../common.js';
 import '../../../vaadin-radio-group.js';
 
 describe('radio-group', () => {

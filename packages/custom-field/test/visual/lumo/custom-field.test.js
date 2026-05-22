@@ -14,7 +14,6 @@ import '@vaadin/vaadin-lumo-styles/components/text-area.css';
 import '@vaadin/vaadin-lumo-styles/components/text-field.css';
 import '@vaadin/vaadin-lumo-styles/components/time-picker.css';
 import '@vaadin/vaadin-lumo-styles/components/custom-field.css';
-import '../common.js';
 import '@vaadin/combo-box';
 import '@vaadin/date-picker';
 import '@vaadin/email-field';

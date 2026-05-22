@@ -3,7 +3,6 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.js';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/rich-text-editor.css';
-import '../common.js';
 import '../../../vaadin-rich-text-editor.js';
 
 describe('rich-text-editor', () => {

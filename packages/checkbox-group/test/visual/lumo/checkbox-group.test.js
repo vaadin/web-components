@@ -4,7 +4,6 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.js';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/checkbox-group.css';
-import '../common.js';
 import '../../../vaadin-checkbox-group.js';
 
 describe('checkbox-group', () => {

@@ -5,7 +5,6 @@ import '../not-animated-styles.js';
 import '@vaadin/vaadin-lumo-styles/src/global/index.css';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/checkbox.css';
-import '../common.js';
 import '../../../vaadin-checkbox.js';
 
 describe('checkbox', () => {
