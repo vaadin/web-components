@@ -1,7 +1,5 @@
-vaadin-time-picker-overlay[opening],
-vaadin-time-picker-overlay[closing],
-vaadin-time-picker-overlay[opening]::part(overlay),
-vaadin-time-picker-overlay[closing]::part(overlay) {
+vaadin-time-picker[opening]::part(overlay),
+vaadin-time-picker[closing]::part(overlay) {
   animation: none !important;
   transition: none !important;
 }

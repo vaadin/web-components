@@ -1,13 +1,11 @@
-vaadin-combo-box-overlay[opening],
-vaadin-combo-box-overlay[closing],
-vaadin-combo-box-overlay[opening]::part(overlay),
-vaadin-combo-box-overlay[closing]::part(overlay) {
+vaadin-combo-box[opening]::part(overlay),
+vaadin-combo-box[closing]::part(overlay) {
   animation: none !important;
   transition: none !important;
 }
 
 /* Stop loader animation */
-vaadin-combo-box-overlay[loading]::part(loader) {
+vaadin-combo-box[loading]::part(loader) {
   animation: none;
   opacity: 1;
 }

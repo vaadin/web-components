@@ -1,7 +1,4 @@
-vaadin-crud-dialog-overlay[opening],
-vaadin-crud-dialog-overlay[closing],
-vaadin-crud-dialog-overlay[opening]::part(overlay),
-vaadin-crud-dialog-overlay[closing]::part(overlay),
-vaadin-crud-dialog-overlay::part(backdrop) {
+vaadin-crud::part(overlay),
+vaadin-crud::part(backdrop) {
   animation: none !important;
 }

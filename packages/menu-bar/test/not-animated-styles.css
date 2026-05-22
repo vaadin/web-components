@@ -1,7 +1,5 @@
-vaadin-menu-bar-overlay[opening],
-vaadin-menu-bar-overlay[closing],
-vaadin-menu-bar-overlay[opening]::part(overlay),
-vaadin-menu-bar-overlay[closing]::part(overlay) {
+vaadin-menu-bar-submenu[opening]::part(overlay),
+vaadin-menu-bar-submenu[closing]::part(overlay) {
   animation: none !important;
 }
 

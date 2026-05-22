@@ -1,6 +1,4 @@
-vaadin-context-menu-overlay[opening],
-vaadin-context-menu-overlay[closing],
-vaadin-context-menu-overlay[opening]::part(overlay),
-vaadin-context-menu-overlay[closing]::part(overlay) {
+vaadin-context-menu[opening]::part(overlay),
+vaadin-context-menu[closing]::part(overlay) {
   animation: none !important;
 }
