@@ -4,10 +4,6 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../src/vaadin-range-slider.js';
 import type { RangeSlider } from '../../../src/vaadin-range-slider.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.sliderComponent = true;
-
 describe('range-slider', () => {
   let div: HTMLDivElement;
   let element: RangeSlider;
