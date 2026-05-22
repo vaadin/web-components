@@ -133,9 +133,6 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
       this.setAttribute('role', 'navigation');
     }
 
-    // Wire the overlay to the overflow button. These references are stable
-    // for the lifetime of the component, so they are set imperatively
-    // rather than bound through the template.
     this.$.overlay.positionTarget = this.$.overflow;
     this.$.overlay.restoreFocusNode = this.$.overflow;
 
