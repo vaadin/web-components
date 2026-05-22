@@ -125,6 +125,7 @@ The outer wrapper carries `part="link"` when the item is interactive and `part="
 | Property | Type | Default | Reflected | Description |
 |---|---|---|---|---|
 | `path` | `string \| null \| undefined` | `undefined` | No | The URL to navigate to. When set, the item renders as an `<a>` link. When absent, the item renders as a non-interactive `<span>`. |
+| `disabled` | `boolean` | `false` | Yes (`disabled`) | Provided by `DisabledMixin`. When `true`, the item renders without an `href`, carries `tabindex="-1"`, sets `aria-disabled="true"`, and suppresses programmatic `click()`. |
 
 | Slot | Description |
 |---|---|
@@ -141,6 +142,9 @@ The outer wrapper carries `part="link"` when the item is interactive and `part="
 |---|---|
 | `current` | Set by the parent `<vaadin-breadcrumbs>` on the last item when it has no `path`. |
 | `has-prefix` | Set when the `prefix` slot has content. |
+| `disabled` | Reflected from the `disabled` property by `DisabledMixin`. Themes target it as `vaadin-breadcrumbs-item[disabled]`. |
+| `focused` | Set by `FocusMixin` while the item (or any element inside it) has focus. |
+| `focus-ring` | Set by `FocusMixin` when the item received focus from the keyboard. Use this — not `:focus` — to style the focus indicator so it does not appear on mouse-driven focus. |
 
 Internal behavior:
 
@@ -225,6 +229,10 @@ The breadcrumb container instantiates a `SlotObserver` targeting its shadow root
 ## Discussion
 
 Decisions made during specification review, with their reasoning.
+
+**Q: Why does `<vaadin-breadcrumbs-item>` expose `disabled` plus `focused` / `focus-ring` state attributes?**
+
+Items are interactive links, so they participate in the same disability + focus contract as every other interactive Vaadin component. `DisabledMixin` and `FocusMixin` are the project's standard primitives for that contract — pulling them in keeps the item's behavior (no `href`, `tabindex="-1"`, `aria-disabled="true"`, suppressed programmatic clicks; `focused` while focus is inside; `focus-ring` only when focus arrived via keyboard) identical to the rest of the library and avoids re-implementing the same state machine. Themes get to style disabled and keyboard-focus states without re-asserting browser focus semantics; applications get a property and an attribute that already work the way Vaadin developers expect.
 
 **Q: Why is there no programmatic `items` property?**
 
