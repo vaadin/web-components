@@ -175,7 +175,7 @@ Covers requirement(s): 11
 
 **Q: Should the breadcrumb item's link destination attribute be named `href` or `path`?**
 
-`path` — consistent with Vaadin Side Nav and the DESIGN_GUIDELINES breadcrumb example. Although `href` is the standard HTML attribute, `path` keeps Vaadin navigation components consistent.
+`path` — consistent with Vaadin Side Nav. Although `href` is the standard HTML attribute, `path` keeps Vaadin navigation components consistent.
 
 **Q: How should the separator be customizable?**
 
