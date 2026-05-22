@@ -207,28 +207,28 @@ describe('vaadin-breadcrumbs', () => {
     });
 
     describe('detection', () => {
-      it('should move the first default-slot item to the overlay first', async () => {
+      it('should collapse the closest-to-root item first', async () => {
         breadcrumbs.style.maxWidth = '600px';
         await nextResize(breadcrumbs);
 
         expectOverlayItems([1]);
       });
 
-      it('should keep the root in the trail before all default items collapse', async () => {
+      it('should keep the root in the trail until last', async () => {
         breadcrumbs.style.maxWidth = '600px';
         await nextResize(breadcrumbs);
 
         expect(items[0].slot).to.equal('root');
       });
 
-      it('should never move the last item to the overlay', async () => {
+      it('should never collapse the last item', async () => {
         breadcrumbs.style.maxWidth = '20px';
         await nextResize(breadcrumbs);
 
-        expect(items[items.length - 1].slot).to.not.equal('overlay');
+        expect(items.at(-1).slot).to.not.equal('overlay');
       });
 
-      it('should move additional items as the container shrinks', async () => {
+      it('should collapse more items as the container shrinks', async () => {
         breadcrumbs.style.maxWidth = '600px';
         await nextResize(breadcrumbs);
         expectOverlayItems([1]);
@@ -238,21 +238,14 @@ describe('vaadin-breadcrumbs', () => {
         expectOverlayItems([1, 2, 3, 4]);
       });
 
-      it('should move default-slot items closest-to-root first', async () => {
-        breadcrumbs.style.maxWidth = '280px';
-        await nextResize(breadcrumbs);
-
-        expectOverlayItems([1, 2, 3, 4]);
-      });
-
-      it('should move the root to the overlay when only the current item still fits', async () => {
+      it('should collapse the root when only the last item fits', async () => {
         breadcrumbs.style.maxWidth = '150px';
         await nextResize(breadcrumbs);
 
         expect(items[0].slot).to.equal('overlay');
       });
 
-      it('should restore items to the trail when the container widens again', async () => {
+      it('should restore items when the container widens', async () => {
         breadcrumbs.style.maxWidth = '280px';
         await nextResize(breadcrumbs);
 
@@ -262,7 +255,7 @@ describe('vaadin-breadcrumbs', () => {
         expectOverlayItems([]);
       });
 
-      it('should clear has-overflow when the container widens enough', async () => {
+      it('should clear has-overflow when items fit again', async () => {
         breadcrumbs.style.maxWidth = '280px';
         await nextResize(breadcrumbs);
 
@@ -272,7 +265,7 @@ describe('vaadin-breadcrumbs', () => {
         expect(breadcrumbs.hasAttribute('has-overflow')).to.be.false;
       });
 
-      it('should re-run detection when an item is added', async () => {
+      it('should re-run detection when items are added', async () => {
         for (let i = 0; i < 6; i += 1) {
           const item = document.createElement('vaadin-breadcrumbs-item');
           item.path = `/extra/${i}`;
@@ -282,18 +275,6 @@ describe('vaadin-breadcrumbs', () => {
         await nextRender();
 
         expect(breadcrumbs.hasAttribute('has-overflow')).to.be.true;
-      });
-
-      it('should re-evaluate slotted overlay items when the container widens', async () => {
-        breadcrumbs.style.maxWidth = '200px';
-        await nextResize(breadcrumbs);
-        const initialCount = breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]').length;
-
-        breadcrumbs.style.maxWidth = '400px';
-        await nextResize(breadcrumbs);
-        const widerCount = breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]').length;
-
-        expect(widerCount).to.not.equal(initialCount);
       });
     });
 
