@@ -185,12 +185,10 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
   __restoreSlots(items) {
     items.forEach((item, index) => {
       const expected = index === 0 ? 'root' : null;
-      if (item.getAttribute('slot') !== expected) {
-        if (expected === null) {
-          item.removeAttribute('slot');
-        } else {
-          item.setAttribute('slot', expected);
-        }
+      if (expected === null) {
+        item.removeAttribute('slot');
+      } else {
+        item.setAttribute('slot', expected);
       }
     });
   }
