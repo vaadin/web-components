@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, focusout, nextRender, nextUpdate, oneEvent, outsideClick, tab } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
+import './not-animated-styles.css';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { Popover } from '../src/vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';

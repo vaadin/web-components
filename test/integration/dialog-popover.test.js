@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
+import './not-animated-styles.css';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { Popover } from '@vaadin/popover/src/vaadin-popover.js';

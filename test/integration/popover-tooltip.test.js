@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
+import './not-animated-styles.css';
 import '@vaadin/popover/src/vaadin-popover.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { mouseenter, mouseleave } from '@vaadin/popover/test/helpers';

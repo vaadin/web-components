@@ -13,7 +13,7 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
+import './not-animated-styles.css';
 import '../src/vaadin-tooltip.js';
 import '@vaadin/overlay/vaadin-overlay.js';
 import { html, render } from 'lit';

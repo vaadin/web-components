@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
+import './not-animated-styles.css';
 import '@vaadin/checkbox/src/vaadin-checkbox.js';
 import '@vaadin/combo-box/src/vaadin-combo-box.js';
 import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';

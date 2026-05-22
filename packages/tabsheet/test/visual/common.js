@@ -1,4 +1,4 @@
-import '@vaadin/tabs/test/visual/not-animated-styles.js';
+import '@vaadin/tabs/test/visual/not-animated-styles.css';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /* Stop loader animation */

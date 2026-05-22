@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
+import './not-animated-styles.css';
 import '../src/vaadin-context-menu.js';
 
 describe('position', () => {

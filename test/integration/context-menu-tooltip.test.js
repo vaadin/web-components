@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { arrowDownKeyDown, arrowUpKeyDown, fixtureSync, mousedown, nextRender } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
+import './not-animated-styles.css';
 import '@vaadin/context-menu/src/vaadin-context-menu.js';
 import { getMenuItems, getSubMenu } from '@vaadin/context-menu/test/helpers.js';
 import { isLastOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';

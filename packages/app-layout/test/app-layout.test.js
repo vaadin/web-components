@@ -10,7 +10,7 @@ import {
   oneEvent,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
+import './not-animated-styles.css';
 import '../src/vaadin-app-layout.js';
 import '../src/vaadin-drawer-toggle.js';
 

@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
+import './not-animated-styles.css';
 import './position-styles.js';
 import '../src/vaadin-tooltip.js';
 

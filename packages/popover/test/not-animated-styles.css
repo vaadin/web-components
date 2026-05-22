@@ -1,0 +1,6 @@
+vaadin-popover-overlay[opening],
+vaadin-popover-overlay[closing],
+vaadin-popover-overlay[opening]::part(overlay),
+vaadin-popover-overlay[closing]::part(overlay) {
+  animation: none !important;
+}

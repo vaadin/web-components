@@ -13,7 +13,7 @@ import {
   oneEvent,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
+import './not-animated-styles.css';
 import '../src/vaadin-select.js';
 import '@vaadin/item/src/vaadin-item.js';
 import '@vaadin/list-box/src/vaadin-list-box.js';

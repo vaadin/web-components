@@ -1,0 +1,7 @@
+vaadin-tab,
+vaadin-tab::before,
+vaadin-tab::after,
+vaadin-tabs::part(forward-button),
+vaadin-tabs::part(back-button) {
+  transition: none !important;
+}

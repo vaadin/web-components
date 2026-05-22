@@ -1,0 +1,7 @@
+vaadin-dialog-overlay[opening],
+vaadin-dialog-overlay[closing],
+vaadin-dialog-overlay[opening]::part(overlay),
+vaadin-dialog-overlay[closing]::part(overlay),
+vaadin-dialog-overlay::part(backdrop) {
+  animation: none !important;
+}

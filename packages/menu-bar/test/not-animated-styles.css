@@ -1,0 +1,12 @@
+vaadin-menu-bar-overlay[opening],
+vaadin-menu-bar-overlay[closing],
+vaadin-menu-bar-overlay[opening]::part(overlay),
+vaadin-menu-bar-overlay[closing]::part(overlay) {
+  animation: none !important;
+}
+
+vaadin-menu-bar-button,
+vaadin-menu-bar-button::before,
+vaadin-menu-bar-button::after {
+  transition: none !important;
+}

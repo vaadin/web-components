@@ -12,7 +12,7 @@ import {
   oneEvent,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
+import './not-animated-styles.css';
 import '../src/vaadin-grid-pro.js';
 import '../src/vaadin-grid-pro-edit-column.js';
 import {

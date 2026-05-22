@@ -1,0 +1,7 @@
+vaadin-confirm-dialog-overlay[opening],
+vaadin-confirm-dialog-overlay[closing],
+vaadin-confirm-dialog-overlay[opening]::part(overlay),
+vaadin-confirm-dialog-overlay[closing]::part(overlay),
+vaadin-confirm-dialog-overlay::part(backdrop) {
+  animation: none !important;
+}

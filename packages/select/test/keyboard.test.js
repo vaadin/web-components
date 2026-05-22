@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, keyboardEventFor, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
+import './not-animated-styles.css';
 import '../src/vaadin-select.js';
 
 describe('keyboard', () => {

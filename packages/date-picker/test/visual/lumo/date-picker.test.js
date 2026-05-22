@@ -3,7 +3,7 @@ import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/date-picker.css';
-import '../../not-animated-styles.js';
+import '../../not-animated-styles.css';
 import '../common.js';
 import '../../../vaadin-date-picker.js';
 import { untilOverlayRendered } from '../../helpers.js';

@@ -1,0 +1,6 @@
+vaadin-date-picker-overlay[opening],
+vaadin-date-picker-overlay[closing],
+vaadin-date-picker-overlay[opening]::part(overlay),
+vaadin-date-picker-overlay[closing]::part(overlay) {
+  animation: none !important;
+}

@@ -6,7 +6,7 @@ import '@vaadin/vaadin-lumo-styles/components/icon.css';
 import '@vaadin/vaadin-lumo-styles/components/menu-bar.css';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '@vaadin/icon';
-import '../../not-animated-styles.js';
+import '../../not-animated-styles.css';
 import '../../../vaadin-menu-bar.js';
 
 describe('menu-bar', () => {

@@ -12,7 +12,7 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
+import './not-animated-styles.css';
 import '@vaadin/menu-bar/test/menu-bar-test-styles.js';
 import '@vaadin/menu-bar/src/vaadin-menu-bar.js';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
