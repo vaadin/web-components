@@ -3,7 +3,6 @@ import { fixtureSync, mousedown, nextResize } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/multi-select-combo-box.css';
-import '../common.js';
 import '../../not-animated-styles.css';
 import '../../../vaadin-multi-select-combo-box.js';
 

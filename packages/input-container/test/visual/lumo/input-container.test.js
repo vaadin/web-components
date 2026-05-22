@@ -4,7 +4,7 @@ import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/src/global/index.css';
 import '@vaadin/vaadin-lumo-styles/components/input-container.css';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
-import '../common.js';
+import '../not-animated-styles.css';
 import '@vaadin/icon';
 import '../../../vaadin-input-container.js';
 

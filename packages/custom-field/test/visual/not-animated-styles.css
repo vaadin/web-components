@@ -1,0 +1,15 @@
+/* Disable animation */
+:where(vaadin-custom-field, vaadin-date-picker, vaadin-number-field, vaadin-text-field)::part(label),
+:where(vaadin-custom-field, vaadin-date-picker, vaadin-number-field, vaadin-text-field)::part(field-button),
+:where(vaadin-custom-field, vaadin-date-picker, vaadin-number-field, vaadin-text-field)::part(helper-text),
+:where(vaadin-custom-field, vaadin-date-picker, vaadin-number-field, vaadin-text-field)::part(input-field),
+:where(vaadin-custom-field, vaadin-date-picker, vaadin-number-field, vaadin-text-field)::part(error-message),
+:where(vaadin-custom-field, vaadin-date-picker, vaadin-number-field, vaadin-text-field)::part(required-indicator),
+:where(vaadin-custom-field, vaadin-date-picker, vaadin-number-field, vaadin-text-field) input:placeholder-shown {
+  &,
+  &::before,
+  &::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

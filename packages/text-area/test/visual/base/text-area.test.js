@@ -1,7 +1,7 @@
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../common.js';
+import '../not-animated-styles.css';
 import '../../../src/vaadin-text-area.js';
 
 describe('text-area', () => {

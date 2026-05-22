@@ -1,6 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../common.js';
+import '../not-animated-styles.css';
 import '@vaadin/aura/aura.css';
 import '../../../vaadin-input-container.js';
 

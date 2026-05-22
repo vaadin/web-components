@@ -1,8 +1,8 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
-import '../common.js';
 import '../../../vaadin-date-picker.js';
+import '../../not-animated-styles.css';
 
 describe('date-picker', () => {
   let div, element;

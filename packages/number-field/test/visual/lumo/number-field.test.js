@@ -1,7 +1,7 @@
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/text-field/test/visual/common.js';
+import '@vaadin/text-field/test/visual/not-animated-styles.css';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/number-field.css';
 import '../../../vaadin-number-field.js';

@@ -3,4 +3,27 @@ vaadin-time-picker-overlay[closing],
 vaadin-time-picker-overlay[opening]::part(overlay),
 vaadin-time-picker-overlay[closing]::part(overlay) {
   animation: none !important;
+  transition: none !important;
+}
+
+/* Hide caret */
+vaadin-time-picker[focused] input,
+vaadin-time-picker[opened] input {
+  caret-color: transparent;
+}
+
+/* Disable animation */
+vaadin-time-picker::part(label),
+vaadin-time-picker::part(field-button),
+vaadin-time-picker::part(helper-text),
+vaadin-time-picker::part(input-field),
+vaadin-time-picker::part(error-message),
+vaadin-time-picker::part(required-indicator),
+vaadin-time-picker input:placeholder-shown {
+  &,
+  &::before,
+  &::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

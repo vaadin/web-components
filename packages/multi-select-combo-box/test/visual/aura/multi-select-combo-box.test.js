@@ -1,8 +1,8 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
-import '../common.js';
 import '../../../vaadin-multi-select-combo-box.js';
+import '../../not-animated-styles.css';
 
 describe('multi-select-combo-box', () => {
   let div, element;

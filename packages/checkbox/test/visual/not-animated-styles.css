@@ -1,0 +1,13 @@
+/* Disable animation */
+vaadin-checkbox::part(label),
+vaadin-checkbox::part(checkbox),
+vaadin-checkbox::part(helper-text),
+vaadin-checkbox::part(error-message),
+vaadin-checkbox::part(required-indicator) {
+  &,
+  &::before,
+  &::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

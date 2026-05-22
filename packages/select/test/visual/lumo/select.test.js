@@ -8,7 +8,6 @@ import '@vaadin/vaadin-lumo-styles/components/select.css';
 import '@vaadin/item';
 import '@vaadin/list-box';
 import '../../not-animated-styles.css';
-import '../common.js';
 import '../../../vaadin-select.js';
 
 describe('select', () => {

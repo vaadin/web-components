@@ -1,7 +1,8 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
-import '../common.js';
+import '@vaadin/checkbox/test/visual/not-animated-styles.css';
+import '../not-animated-styles.css';
 import '../../../vaadin-checkbox-group.js';
 
 describe('checkbox-group', () => {

@@ -1,0 +1,12 @@
+/* Disable animation */
+vaadin-input-container,
+vaadin-input-container::before,
+vaadin-input-container::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Hide caret */
+vaadin-input-container input {
+  caret-color: transparent;
+}

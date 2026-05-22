@@ -1,0 +1,20 @@
+/* Hide caret */
+vaadin-date-time-picker[focused] input {
+  caret-color: transparent;
+}
+
+/* Disable animation */
+vaadin-date-time-picker::part(label),
+vaadin-date-time-picker::part(field-button),
+vaadin-date-time-picker::part(helper-text),
+vaadin-date-time-picker::part(input-field),
+vaadin-date-time-picker::part(error-message),
+vaadin-date-time-picker::part(required-indicator),
+vaadin-date-time-picker input:placeholder-shown {
+  &,
+  &::before,
+  &::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

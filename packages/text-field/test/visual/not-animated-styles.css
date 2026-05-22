@@ -1,0 +1,34 @@
+/* Hide caret */
+:where(vaadin-text-field, vaadin-email-field, vaadin-integer-field, vaadin-number-field, vaadin-password-field)[focused]
+  input {
+  caret-color: transparent;
+}
+
+/* Disable animation */
+:where(vaadin-text-field, vaadin-email-field, vaadin-integer-field, vaadin-number-field, vaadin-password-field)::part(
+  label
+),
+:where(vaadin-text-field, vaadin-email-field, vaadin-integer-field, vaadin-number-field, vaadin-password-field)::part(
+  field-button
+),
+:where(vaadin-text-field, vaadin-email-field, vaadin-integer-field, vaadin-number-field, vaadin-password-field)::part(
+  helper-text
+),
+:where(vaadin-text-field, vaadin-email-field, vaadin-integer-field, vaadin-number-field, vaadin-password-field)::part(
+  input-field
+),
+:where(vaadin-text-field, vaadin-email-field, vaadin-integer-field, vaadin-number-field, vaadin-password-field)::part(
+  error-message
+),
+:where(vaadin-text-field, vaadin-email-field, vaadin-integer-field, vaadin-number-field, vaadin-password-field)::part(
+  required-indicator
+),
+:where(vaadin-text-field, vaadin-email-field, vaadin-integer-field, vaadin-number-field, vaadin-password-field)
+  input:placeholder-shown {
+  &,
+  &::before,
+  &::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

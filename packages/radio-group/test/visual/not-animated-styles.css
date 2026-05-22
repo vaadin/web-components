@@ -1,0 +1,13 @@
+/* Disable animation */
+vaadin-radio-group::part(label),
+vaadin-radio-group::part(helper-text),
+vaadin-radio-group::part(error-message),
+vaadin-radio-group::part(required-indicator),
+vaadin-radio-button::part(radio) {
+  &,
+  &::before,
+  &::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

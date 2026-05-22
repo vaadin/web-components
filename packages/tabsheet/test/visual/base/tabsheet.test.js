@@ -1,7 +1,8 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../common.js';
+import '@vaadin/tabs/test/visual/not-animated-styles.css';
+import '../not-animated-styles.css';
 import '../../../src/vaadin-tabsheet.js';
 
 describe('tabsheet', () => {

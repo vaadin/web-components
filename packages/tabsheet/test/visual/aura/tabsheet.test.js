@@ -1,6 +1,7 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../common.js';
+import '@vaadin/tabs/test/visual/not-animated-styles.css';
+import '../not-animated-styles.css';
 import '@vaadin/aura/aura.css';
 import '../../../vaadin-tabsheet.js';
 

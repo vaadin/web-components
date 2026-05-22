@@ -4,3 +4,30 @@ vaadin-date-picker-overlay[opening]::part(overlay),
 vaadin-date-picker-overlay[closing]::part(overlay) {
   animation: none !important;
 }
+
+/* Hide caret */
+vaadin-date-picker[focused] input,
+vaadin-date-picker[opened] input {
+  caret-color: transparent;
+}
+
+/* Disable animation */
+vaadin-date-picker::part(label),
+vaadin-date-picker::part(field-button),
+vaadin-date-picker::part(helper-text),
+vaadin-date-picker::part(input-field),
+vaadin-date-picker::part(error-message),
+vaadin-date-picker::part(required-indicator),
+vaadin-date-picker input:placeholder-shown {
+  &,
+  &::before,
+  &::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Stop focused day animation */
+vaadin-month-calendar::part(focused)::before {
+  animation: none !important;
+}
