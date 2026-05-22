@@ -171,6 +171,37 @@ Covers requirement(s): 11
 
 ---
 
+## 9. Disabling an item
+
+```html
+<vaadin-breadcrumbs>
+  <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+  <vaadin-breadcrumbs-item path="/private" disabled>Restricted area</vaadin-breadcrumbs-item>
+  <vaadin-breadcrumbs-item>Settings</vaadin-breadcrumbs-item>
+</vaadin-breadcrumbs>
+```
+
+```js
+breadcrumbs.querySelector('vaadin-breadcrumbs-item[path="/private"]').disabled = true;
+```
+
+**Why this shape:** Some ancestors are present in the hierarchy but not navigable for the current user (no permission, intentionally non-routed, etc.). `disabled` makes the item visually dim, removes its `href`, sets `aria-disabled="true"`, takes it out of the tab cycle (`tabindex="-1"`), and suppresses programmatic `click()` — exactly the contract every other interactive Vaadin component exposes through `DisabledMixin`. Themes can target the state with `vaadin-breadcrumbs-item[disabled]`.
+
+---
+
+## 10. Styling keyboard focus
+
+```css
+vaadin-breadcrumbs-item[focus-ring]::part(link) {
+  outline: 2px solid var(--brand-focus-color);
+  outline-offset: 2px;
+}
+```
+
+**Why this shape:** Item links carry `focused` while focus is inside them and `focus-ring` only when focus arrived via the keyboard (provided by `FocusMixin`). Themes style the keyboard-focus indicator against `[focus-ring]` rather than `:focus` so that mouse-driven focus does not paint an outline, matching the behavior of every other focusable Vaadin component.
+
+---
+
 ## Discussion
 
 **Q: Should the breadcrumb item's link destination attribute be named `href` or `path`?**
@@ -184,6 +215,14 @@ CSS `mask-image` pattern — matching how the select toggle button, combo-box dr
 **Q: Should breadcrumb items support a `suffix` slot?**
 
 No. We considered it but decided not to add it before we have a real use case for it. The `prefix` slot covers the known use case (icons). A `suffix` slot can be added later if a concrete need arises.
+
+**Q: Why does `<vaadin-breadcrumbs-item>` need an explicit `disabled` API?**
+
+A non-navigable ancestor (no permission, intentional dead-end, removed page) still belongs in the trail for context, but should not invite a click. Reusing the library-wide `DisabledMixin` contract gives the item every behavior developers already expect of a disabled control — dropped `href`, `aria-disabled="true"`, `tabindex="-1"`, suppressed programmatic `click()` — and gives themes a single attribute (`[disabled]`) to style against. Omitting `path` instead would render plain text but couldn't express "this *would* be a link, except it's currently turned off"; `disabled` does.
+
+**Q: Why expose `focused` / `focus-ring` rather than letting themes use `:focus` directly?**
+
+`:focus` lights up for both mouse and keyboard interaction; the resulting outline on a mouse click reads as a visual bug to most users. `FocusMixin` separates the two — `focused` is on whenever any descendant has focus (useful for container-level styling) and `focus-ring` is on only when focus arrived via keyboard — so theme authors can paint a clear keyboard-focus indicator without leaking it into mouse interactions. The pattern is consistent across the rest of the library, so authors writing themes for multiple Vaadin components only learn it once.
 
 **Q: Where should the separator CSS custom property override be applied?**
 
