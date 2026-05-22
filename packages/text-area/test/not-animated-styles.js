@@ -4,13 +4,15 @@ registerStyles(
   '*',
   css`
     :host,
-    *,
-    *::before,
-    *::after,
-    ::slotted(*) {
-      animation: none !important;
-      transition: none !important;
-      caret-color: transparent !important;
+    * {
+      &,
+      &::before,
+      &::after,
+      ::slotted(*) {
+        animation: none !important;
+        transition: none !important;
+        caret-color: transparent !important;
+      }
     }
   `,
 );
