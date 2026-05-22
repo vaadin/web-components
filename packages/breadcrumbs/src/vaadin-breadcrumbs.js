@@ -199,10 +199,10 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
    * Measure whether the trail fits and move items to `slot="overlay"`
    * closest-to-root first. The last item never collapses.
    *
-   * Two forced reflows total: one for the fit check, one for the position
-   * batch. Writing `__hasOverflow` flushes the `[part="overflow"]` binding
-   * synchronously (the property is `sync: true`), so the overflow button's
-   * `hidden` state always matches what `scrollWidth` measures.
+   * Single forced reflow: `__hasOverflow` is set to `true` up front so the
+   * `[part="overflow"]` binding commits synchronously (the property is
+   * `sync: true`); one batch of rect reads then determines whether the
+   * overflow button is actually needed and, if so, which items to collapse.
    *
    * @private
    */
@@ -215,22 +215,27 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
       return;
     }
 
-    // Phase 1: assume no overflow, check if items fit naturally.
-    this.__hasOverflow = false;
-    if (this.$.list.scrollWidth <= this.$.list.clientWidth) {
+    // Optimistically reveal the overflow button so its width contributes
+    // to the layout before we measure.
+    this.__hasOverflow = true;
+
+    const list = this.$.list;
+    const overflowRect = list.querySelector('[part="overflow"]').getBoundingClientRect();
+    const listRect = list.getBoundingClientRect();
+    const rects = items.map((item) => item.getBoundingClientRect());
+    const gap = parseFloat(getComputedStyle(list).gap) || 0;
+
+    // Width the trail would take with the overflow button hidden: subtract
+    // the button's own width plus one of its surrounding gaps from the
+    // current scrollWidth.
+    if (list.scrollWidth - overflowRect.width - gap <= list.clientWidth) {
+      this.__hasOverflow = false;
       return;
     }
 
-    // Phase 2: reveal the overflow button, then read every position at once.
-    // The loop below is pure arithmetic + writes — no further forced reflows.
-    this.__hasOverflow = true;
-    const listRect = this.$.list.getBoundingClientRect();
-    const rects = items.map((item) => item.getBoundingClientRect());
-
-    // How far the last item extends past the list. Float-precision delta
-    // avoids the integer rounding mismatch that `scrollWidth - clientWidth`
-    // introduces in Firefox. Either edge can overflow: right in LTR, left
-    // in RTL.
+    // Items don't fit even without the button. How far the last item
+    // extends past the list — either edge can overflow (right in LTR,
+    // left in RTL).
     const lastRect = rects[rects.length - 1];
     const excessWidth = Math.max(0, lastRect.right - listRect.right, listRect.left - lastRect.left);
 
