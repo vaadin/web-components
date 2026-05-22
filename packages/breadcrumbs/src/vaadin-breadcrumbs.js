@@ -140,18 +140,13 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
     this.$.overlay.restoreFocusNode = this.$.overflow;
 
     // Re-evaluate items on add / remove via a single shadow-root-level observer.
-    // The observer's union diff suppresses callbacks for cross-slot reassignment
-    // between `root`, default, and `overlay` slots, so overflow updates don't
-    // loop back into the handler.
     this.__slotObserver = new SlotObserver(this.shadowRoot, () => {
       this.__updateItems();
       this.__updateOverflow();
     });
     this.__slotObserver.flush();
 
-    // `path` mutations don't add / remove items or change `slot="root"`
-    // (that depends on index, not path), so this observer only refreshes the
-    // `current` state on the last item — no overflow re-measurement needed.
+    // Observe `path` attribute changes on items to modify the `current` state.
     this.__pathObserver = new MutationObserver(() => this.__updateItems());
     this.__pathObserver.observe(this, {
       attributes: true,
@@ -166,8 +161,7 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
   }
 
   /**
-   * Mark the last item as the current page (it has no `path` and so renders
-   * as plain text). Pure state refresh — no layout work.
+   * Mark the last item without `path` as the current page.
    *
    * @private
    */
