@@ -1,4 +1,3 @@
-/* Disable animation */
 vaadin-checkbox-group::part(label),
 vaadin-checkbox-group::part(helper-text),
 vaadin-checkbox-group::part(error-message),

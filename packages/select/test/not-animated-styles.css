@@ -3,7 +3,6 @@ vaadin-select[closing]::part(overlay) {
   animation: none !important;
 }
 
-/* Disable animation */
 vaadin-select::part(label),
 vaadin-select::part(field-button),
 vaadin-select::part(helper-text),

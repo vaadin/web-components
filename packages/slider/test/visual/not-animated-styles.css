@@ -1,4 +1,3 @@
-/* Disable animation */
 vaadin-slider,
 vaadin-range-slider {
   &::part(label),

@@ -1,4 +1,3 @@
-/* Disable animation */
 vaadin-radio-group::part(label),
 vaadin-radio-group::part(helper-text),
 vaadin-radio-group::part(error-message),

@@ -1,15 +1,13 @@
-vaadin-date-picker[opening]::part(overlay),
-vaadin-date-picker[closing]::part(overlay) {
-  animation: none !important;
-}
-
-/* Hide caret */
 vaadin-date-picker[focused] input,
 vaadin-date-picker[opened] input {
   caret-color: transparent;
 }
 
-/* Disable animation */
+vaadin-date-picker[opening]::part(overlay),
+vaadin-date-picker[closing]::part(overlay) {
+  animation: none !important;
+}
+
 vaadin-date-picker::part(label),
 vaadin-date-picker::part(field-button),
 vaadin-date-picker::part(helper-text),

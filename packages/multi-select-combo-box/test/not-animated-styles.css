@@ -1,21 +1,18 @@
+vaadin-multi-select-combo-box input {
+  caret-color: transparent;
+}
+
 vaadin-multi-select-combo-box[opening]::part(overlay),
 vaadin-multi-select-combo-box[closing]::part(overlay) {
   animation: none !important;
   transition: none !important;
 }
 
-/* Stop loader animation */
 vaadin-multi-select-combo-box[loading]::part(loader) {
   animation: none;
   opacity: 1;
 }
 
-/* Hide caret */
-vaadin-multi-select-combo-box input {
-  caret-color: transparent;
-}
-
-/* Disable animation */
 vaadin-multi-select-combo-box::part(label),
 vaadin-multi-select-combo-box::part(field-button),
 vaadin-multi-select-combo-box::part(helper-text),

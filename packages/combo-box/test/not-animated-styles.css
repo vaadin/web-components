@@ -1,22 +1,19 @@
+vaadin-combo-box[focused] input,
+vaadin-combo-box[opened] input {
+  caret-color: transparent;
+}
+
 vaadin-combo-box[opening]::part(overlay),
 vaadin-combo-box[closing]::part(overlay) {
   animation: none !important;
   transition: none !important;
 }
 
-/* Stop loader animation */
 vaadin-combo-box[loading]::part(loader) {
   animation: none;
   opacity: 1;
 }
 
-/* Hide caret */
-vaadin-combo-box[focused] input,
-vaadin-combo-box[opened] input {
-  caret-color: transparent;
-}
-
-/* Disable animation */
 vaadin-combo-box::part(label),
 vaadin-combo-box::part(field-button),
 vaadin-combo-box::part(helper-text),
