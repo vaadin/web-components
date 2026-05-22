@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
-import './not-animated-styles.css';
 import '@vaadin/accordion/src/vaadin-accordion.js';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 

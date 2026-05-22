@@ -1,7 +1,0 @@
-/* Disable animations for all overlays */
-[opening],
-[closing],
-[opening]::part(overlay),
-[closing]::part(overlay) {
-  animation: none !important;
-}

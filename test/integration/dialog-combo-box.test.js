@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextUpdate, oneEvent, outsideClick } from '@vaadin/testing-helpers';
-import './not-animated-styles.css';
 import '@vaadin/combo-box';
 import '@vaadin/dialog';
 

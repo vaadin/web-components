@@ -1,6 +1,5 @@
 import { setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
-import './not-animated-styles.css';
 import '@vaadin/form-layout/src/vaadin-form-layout.js';
 import '@vaadin/form-layout/src/vaadin-form-item.js';
 import '@vaadin/dialog/src/vaadin-dialog.js';
