@@ -239,7 +239,8 @@ Extend the host-side observer from Task 5 to also assign `slot="root"` to the fi
 - Default `i18n` has `moreItems` equal to `'More items'`; setting `breadcrumbs.i18n = { moreItems: 'Show hidden items' }` updates the overflow button's `aria-label`
 - Clicking the overflow button while `__overlayOpened` is `false` opens the overlay (sets `aria-expanded="true"`); clicking again closes it
 - Pressing `Escape` while the overlay is open closes it (delegated to `OverlayMixin`) and returns focus to the overflow button
-- Pressing `Tab` or `Shift+Tab` while an overlay item is focused closes the overlay
+- Pressing `Tab` while an overlay item is focused closes the overlay and moves focus to the next focusable trail item
+- Pressing `Shift+Tab` while an overlay item is focused closes the overlay and moves focus to the previous focusable trail item
 - Clicking outside the overlay closes it
 - Pressing Enter or Space on the focused overflow button opens the overlay and moves focus to the first link
 - When the overlay opens with two items hidden, the breadcrumbs' light DOM contains exactly two `<vaadin-breadcrumbs-item>` elements with `slot="overlay"`, projected into the overlay's default slot

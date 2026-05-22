@@ -374,6 +374,34 @@ describe('vaadin-breadcrumbs', () => {
         expect(overlay.opened).to.be.false;
       });
 
+      it('should focus next trail item when closed on Tab', async () => {
+        breadcrumbs.style.maxWidth = '600px';
+        await nextResize(breadcrumbs);
+
+        button.click();
+        await oneEvent(overlay, 'vaadin-overlay-open');
+
+        await sendKeys({ press: 'Tab' });
+        await nextRender();
+
+        const nextLink = items[2].shadowRoot.querySelector('[part="link"]');
+        expect(getDeepActiveElement()).to.equal(nextLink);
+      });
+
+      it('should focus previous trail item when closed on Shift+Tab', async () => {
+        breadcrumbs.style.maxWidth = '600px';
+        await nextResize(breadcrumbs);
+
+        button.click();
+        await oneEvent(overlay, 'vaadin-overlay-open');
+
+        await sendKeys({ press: 'Shift+Tab' });
+        await nextRender();
+
+        const prevLink = items[0].shadowRoot.querySelector('[part="link"]');
+        expect(getDeepActiveElement()).to.equal(prevLink);
+      });
+
       it('should return focus to the overflow button when closed via Escape', async () => {
         button.focus();
         button.click();

@@ -182,7 +182,7 @@ Internal behavior:
 - **Keyboard interaction within the open overlay.**
   - **Focus on open** — when the overlay opens (via overflow-button click, Enter, or Space), the breadcrumbs container moves focus to the first slotted overlay item's link so keyboard users land directly inside the popup.
   - **Arrow keys** — Up/Down arrows move focus between adjacent links inside the open overlay (Home/End jump to first/last). The overlay reads as a menu visually, so menu-style keyboard navigation is the primary way to traverse its items.
-  - **Tab / Shift+Tab** — closes the overlay and lets focus continue along the document tab order.
+  - **Tab / Shift+Tab** — closes the overlay. `restore-focus-on-close` returns focus to the overflow button, from which the native Tab / Shift+Tab traversal then moves focus to the next / previous focusable trail item in document order.
   - **Escape** — closes the overlay and returns focus to the overflow button.
 
 ---
