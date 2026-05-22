@@ -105,6 +105,91 @@ describe('__focusIndex', () => {
     });
   });
 
+  describe('variable-height items', () => {
+    const SIZE = 200;
+    // Long wrapping label every 5th item — rows are taller than average,
+    // so an index-counting heuristic (target = index - visibleCount + 1)
+    // overshoots and the target lands partly or fully below the viewport.
+    const LONG_LABEL = 'Long label that wraps to two or three lines making the row taller than its neighbors';
+    const items = Array.from({ length: SIZE }, (_, i) => (i % 5 === 0 ? `${LONG_LABEL} ${i}` : `item ${i}`));
+
+    function getScrollerRect() {
+      return comboBox._scroller.getBoundingClientRect();
+    }
+
+    function findRenderedItem(index) {
+      return [...comboBox._scroller.children].find((el) => !el.hidden && el.index === index);
+    }
+
+    beforeEach(async () => {
+      comboBox = fixtureSync(`
+        <vaadin-combo-box
+          style="--vaadin-combo-box-overlay-max-height: 400px"
+        ></vaadin-combo-box>
+      `);
+      await nextRender();
+      comboBox.items = items;
+    });
+
+    it('should fully reveal target below the viewport with variable heights', async () => {
+      comboBox.opened = true;
+      flushComboBox(comboBox);
+
+      const targetIndex = 30;
+      comboBox.scrollToIndex(targetIndex);
+      flushComboBox(comboBox);
+      await nextFrame();
+
+      const target = findRenderedItem(targetIndex);
+      expect(target, 'target item is rendered').to.exist;
+      const targetRect = target.getBoundingClientRect();
+      const scrollerRect = getScrollerRect();
+      expect(Math.round(targetRect.bottom)).to.be.at.most(Math.round(scrollerRect.bottom) + 1);
+      expect(Math.round(targetRect.top)).to.be.at.least(Math.round(scrollerRect.top) - 1);
+    });
+
+    it('should fully reveal target above the viewport with variable heights', async () => {
+      comboBox.opened = true;
+      flushComboBox(comboBox);
+
+      // Pre-scroll well past the target, then jump back to a low index.
+      comboBox.scrollToIndex(150);
+      flushComboBox(comboBox);
+      await nextFrame();
+
+      const targetIndex = 5;
+      comboBox.scrollToIndex(targetIndex);
+      flushComboBox(comboBox);
+      await nextFrame();
+
+      const target = findRenderedItem(targetIndex);
+      expect(target, 'target item is rendered').to.exist;
+      const targetRect = target.getBoundingClientRect();
+      const scrollerRect = getScrollerRect();
+      expect(Math.round(targetRect.top)).to.be.at.least(Math.round(scrollerRect.top) - 1);
+      expect(Math.round(targetRect.bottom)).to.be.at.most(Math.round(scrollerRect.bottom) + 1);
+    });
+
+    it('should not shift the viewport when target is already visible', async () => {
+      comboBox.opened = true;
+      flushComboBox(comboBox);
+      await nextFrame();
+
+      const firstVisible = comboBox._scroller.__virtualizer.firstVisibleIndex;
+      const lastVisible = comboBox._scroller.__virtualizer.lastVisibleIndex;
+      const targetIndex = firstVisible + Math.floor((lastVisible - firstVisible) / 2);
+
+      const scrollTopBefore = comboBox._scroller.scrollTop;
+      comboBox.scrollToIndex(targetIndex);
+      flushComboBox(comboBox);
+      await nextFrame();
+
+      // The "within viewport" branch must not shift the viewport visibly —
+      // otherwise arrow-key navigation would jerk on every step.
+      expect(Math.abs(comboBox._scroller.scrollTop - scrollTopBefore)).to.be.below(2);
+    });
+  });
+
   describe('data provider', () => {
     const SIZE = 500;
     const PAGE_SIZE = 50;

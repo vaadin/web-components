@@ -52,10 +52,45 @@ export const ComboBoxFocusIndexMixin = (superClass) =>
 
       delete this.__pendingFocusIndex;
       requestAnimationFrame(() => {
-        if (this.isConnected) {
-          this._updateActiveDescendant(index);
+        if (!this.isConnected) {
+          return;
         }
+        this._updateActiveDescendant(index);
+        this.__correctScrollPosition(index);
       });
+    }
+
+    /**
+     * After `_focusedIndex` triggered the scroller's `scrollIntoView`, the
+     * row may still extend past the viewport when items above (or below)
+     * have variable heights — iron-list's index-counting heuristic in
+     * `scrollIntoView` counts items, not pixels, so taller-than-average
+     * neighbors push the target outside the viewport. Measure the target's
+     * actual rect after iron-list has settled and nudge `scrollTop` until
+     * the row fits.
+     *
+     * @private
+     */
+    __correctScrollPosition(index) {
+      const scroller = this._scroller;
+      if (!scroller || !this._overlayOpened) {
+        return;
+      }
+      const target = [...scroller.children].find((el) => !el.hidden && el.index === index);
+      if (!target) {
+        return;
+      }
+      const targetRect = target.getBoundingClientRect();
+      const scrollerRect = scroller.getBoundingClientRect();
+      const bottomOvershoot = targetRect.bottom - scrollerRect.bottom + scroller._viewportTotalPaddingBottom;
+      if (bottomOvershoot > 0) {
+        scroller.scrollTop += bottomOvershoot;
+        return;
+      }
+      const topUndershoot = scrollerRect.top - targetRect.top;
+      if (topUndershoot > 0) {
+        scroller.scrollTop -= topUndershoot;
+      }
     }
 
     /** @private */
