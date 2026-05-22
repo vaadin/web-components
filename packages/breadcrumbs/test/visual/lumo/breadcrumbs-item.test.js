@@ -4,7 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/breadcrumbs.css';
 import '@vaadin/vaadin-lumo-styles/components/icon.css';
-import '../not-animated-styles.js';
+import '../../not-animated-styles.js';
 import '../../../src/vaadin-breadcrumbs-item.js';
 import '@vaadin/icon';
 import '@vaadin/icons';

@@ -1,7 +1,7 @@
 import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../not-animated-styles.js';
+import '../../not-animated-styles.js';
 import '../../../src/vaadin-split-layout.js';
 
 describe('split-layout', () => {

@@ -1,7 +1,7 @@
 import { resetMouse } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../not-animated-styles.js';
+import '../../not-animated-styles.js';
 import '@vaadin/aura/aura.css';
 import '../../../vaadin-split-layout.js';
 

@@ -1,6 +1,6 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../not-animated-styles.js';
+import '../../not-animated-styles.js';
 import '../../../src/vaadin-virtual-list.js';
 
 describe('virtual-list', () => {
