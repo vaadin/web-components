@@ -207,21 +207,6 @@ describe('vaadin-breadcrumbs', () => {
     });
 
     describe('detection', () => {
-      it('should set has-overflow when items no longer fit', async () => {
-        breadcrumbs.style.maxWidth = '300px';
-        await nextResize(breadcrumbs);
-
-        expect(breadcrumbs.hasAttribute('has-overflow')).to.be.true;
-      });
-
-      it('should unset hidden on [part="overflow"] when items no longer fit', async () => {
-        breadcrumbs.style.maxWidth = '300px';
-        await nextResize(breadcrumbs);
-
-        const overflow = breadcrumbs.shadowRoot.querySelector('[part="overflow"]');
-        expect(overflow.hasAttribute('hidden')).to.be.false;
-      });
-
       it('should move the first default-slot item to the overlay first', async () => {
         breadcrumbs.style.maxWidth = '600px';
         await nextResize(breadcrumbs);

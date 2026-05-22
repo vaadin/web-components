@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
 import '../../src/vaadin-breadcrumbs.js';
 
 window.Vaadin ??= {};
@@ -51,10 +51,24 @@ describe('vaadin-breadcrumbs', () => {
         await expect(breadcrumbs).dom.to.equalSnapshot();
       });
 
+      it('overflow', async () => {
+        breadcrumbs.style.maxWidth = '80px';
+        await nextResize(breadcrumbs);
+        await expect(breadcrumbs).dom.to.equalSnapshot();
+      });
+
       it('with current', async () => {
         breadcrumbs.querySelector('vaadin-breadcrumbs-item:last-child').removeAttribute('path');
         await nextRender();
         await expect(breadcrumbs).dom.to.equalSnapshot();
+      });
+    });
+
+    describe('shadow', () => {
+      it('overflow', async () => {
+        breadcrumbs.style.maxWidth = '80px';
+        await nextResize(breadcrumbs);
+        await expect(breadcrumbs).shadowDom.to.equalSnapshot();
       });
     });
   });
