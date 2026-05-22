@@ -7,20 +7,17 @@ window.Vaadin.featureFlags ??= {};
 window.Vaadin.featureFlags.breadcrumbsComponent = true;
 
 describe('vaadin-breadcrumbs-overlay', () => {
-  let wrapper, breadcrumbs, overlay;
+  let breadcrumbs, overlay;
 
   beforeEach(async () => {
-    wrapper = fixtureSync(`
-      <div style="width: 200px;">
-        <vaadin-breadcrumbs>
-          <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
-          <vaadin-breadcrumbs-item path="/a">Alpha section</vaadin-breadcrumbs-item>
-          <vaadin-breadcrumbs-item path="/a/b">Beta section</vaadin-breadcrumbs-item>
-          <vaadin-breadcrumbs-item>Current page</vaadin-breadcrumbs-item>
-        </vaadin-breadcrumbs>
-      </div>
+    breadcrumbs = fixtureSync(`
+      <vaadin-breadcrumbs style="max-width: 200px">
+        <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/a">Alpha section</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/a/b">Beta section</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item>Current page</vaadin-breadcrumbs-item>
+      </vaadin-breadcrumbs>
     `);
-    breadcrumbs = wrapper.querySelector('vaadin-breadcrumbs');
     await nextRender();
     await nextResize(breadcrumbs);
     overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');

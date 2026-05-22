@@ -23,6 +23,7 @@ snapshots["vaadin-breadcrumbs-overlay opened host"] =
   has-overflow=""
   role="navigation"
   start-aligned=""
+  style="max-width: 200px"
   top-aligned=""
 >
   <vaadin-breadcrumbs-item
