@@ -101,5 +101,41 @@ describe('scrollToIndex', () => {
       const viewport = getViewportItems(comboBox);
       expect(viewport.some((item) => item.index === 30 && !(item.item instanceof ComboBoxPlaceholder))).to.be.true;
     });
+
+    it('should preserve focused index when a sibling page loads (object items)', async () => {
+      // Object items without `itemValuePath` set — `_getItemValue` falls back
+      // to `item.toString()` ("[object Object]"), so the value-lookup focus
+      // preservation in `__setDropdownItems` collapses across all object items.
+      // Without the same-reference short-circuit, a sibling page-load after
+      // scrollToIndex would reset `_focusedIndex` to 0.
+      const objectItems = Array.from({ length: SIZE }, (_, i) => ({ key: `k${i}`, label: `Item ${i}` }));
+      const objectDataProvider = (params, callback) => {
+        pendingCallbacks.push(() => {
+          const slice = objectItems.slice(params.page * params.pageSize, (params.page + 1) * params.pageSize);
+          callback(slice, SIZE);
+        });
+      };
+
+      comboBox.itemLabelPath = 'label';
+      comboBox.itemIdPath = 'key';
+      comboBox.dataProvider = objectDataProvider;
+      comboBox.opened = true;
+
+      flushPendingCallbacks();
+      await nextFrame();
+      flushComboBox(comboBox);
+
+      comboBox.scrollToIndex(30);
+      flushComboBox(comboBox);
+      await nextFrame();
+      expect(comboBox._focusedIndex).to.equal(30);
+
+      comboBox.__dataProviderController.ensureFlatIndexLoaded(300);
+      flushPendingCallbacks();
+      await nextFrame();
+      flushComboBox(comboBox);
+
+      expect(comboBox._focusedIndex).to.equal(30);
+    });
   });
 });

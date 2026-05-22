@@ -205,6 +205,46 @@ describe('scrollToIndex', () => {
       expect(viewport.some((item) => item.index === 300 && !(item.item instanceof ComboBoxPlaceholder))).to.be.true;
     });
 
+    it('should preserve focused index when a sibling page loads (object items)', async () => {
+      // Object items without `itemValuePath` set — `_getItemValue` falls back
+      // to `item.toString()` ("[object Object]"), so the value-lookup focus
+      // preservation in `_setDropdownItems` collapses across all object items.
+      // Without the same-reference short-circuit, a sibling page-load after
+      // scrollToIndex would reset `_focusedIndex` to 0.
+      const objectItems = Array.from({ length: SIZE }, (_, i) => ({ key: `k${i}`, label: `Item ${i}` }));
+      const objectDataProvider = (params, callback) => {
+        pendingCallbacks.push(() => {
+          const slice = objectItems.slice(params.page * params.pageSize, (params.page + 1) * params.pageSize);
+          callback(slice, SIZE);
+        });
+      };
+
+      comboBox.itemLabelPath = 'label';
+      comboBox.itemIdPath = 'key';
+      comboBox.dataProvider = objectDataProvider;
+      comboBox.opened = true;
+
+      // Drain the first page so index 30 is loaded.
+      flushPendingCallbacks();
+      await nextFrame();
+      flushComboBox(comboBox);
+
+      comboBox.scrollToIndex(30);
+      flushComboBox(comboBox);
+      await nextFrame();
+      expect(comboBox._focusedIndex).to.equal(30);
+
+      // Trigger a sibling page-load. `__onDataProviderPageLoaded` will call
+      // `_setDropdownItems` with a fresh array reference, but the item at
+      // index 30 is unchanged, so focus must stick.
+      comboBox.__dataProviderController.ensureFlatIndexLoaded(300);
+      flushPendingCallbacks();
+      await nextFrame();
+      flushComboBox(comboBox);
+
+      expect(comboBox._focusedIndex).to.equal(30);
+    });
+
     it('should render real content (not placeholders) at the top on reopen after a scroll', async () => {
       // Open, drain page 0, scroll to a far index, drain its page, then close.
       comboBox.opened = true;

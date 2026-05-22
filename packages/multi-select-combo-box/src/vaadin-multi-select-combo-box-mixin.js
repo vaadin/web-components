@@ -729,6 +729,16 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // when the user types in a filter query.
       const focusedItem = oldItems ? oldItems[this._focusedIndex] : null;
 
+      // Preserve `_focusedIndex` when the same item reference still occupies it
+      // in the new array. The dataProvider page-load path replaces the items
+      // array reference (`[...rootCache.items]`) but reuses item references at
+      // unchanged indices, so this short-circuits the value-lookup fallback
+      // below which can collapse to "[object Object]" === "[object Object]"
+      // for object items without `itemValuePath` set.
+      if (this._focusedIndex >= 0 && oldItems && oldItems[this._focusedIndex] === newItems[this._focusedIndex]) {
+        return;
+      }
+
       // Try to first set focus on the item that had been focused before `newItems` were updated
       // if it is still present in the `newItems` array. Otherwise, set the focused index
       // depending on the selected item or the filter query.
