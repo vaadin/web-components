@@ -1,10 +1,15 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
-  'vaadin-overlay',
+  '*',
   css`
-    [part='backdrop'] {
+    :host,
+    *,
+    *::before,
+    *::after {
       animation: none !important;
+      transition: none !important;
+      caret-color: transparent !important;
     }
   `,
 );

@@ -1,6 +1,7 @@
 import { nextResize } from '@vaadin/testing-helpers';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../not-animated-styles.js';
 import '../../../src/vaadin-form-layout.js';
 import '../../../src/vaadin-form-item.js';
 import '../../../src/vaadin-form-row.js';

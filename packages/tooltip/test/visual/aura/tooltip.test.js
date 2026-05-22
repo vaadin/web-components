@@ -1,5 +1,6 @@
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../../not-animated-styles.js';
 import '@vaadin/aura/aura.css';
 import { Tooltip } from '../../../vaadin-tooltip.js';
 import { mouseenter } from '../../helpers.js';

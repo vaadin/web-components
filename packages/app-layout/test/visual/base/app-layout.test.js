@@ -1,5 +1,6 @@
 import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../../not-animated-styles.js';
 import '../../../src/vaadin-app-layout.js';
 import '../../../src/vaadin-drawer-toggle.js';
 

@@ -1,12 +1,15 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
-  'vaadin-upload-button',
+  '*',
   css`
     :host,
-    :host::before,
-    :host::after {
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
       transition: none !important;
+      caret-color: transparent !important;
     }
   `,
 );

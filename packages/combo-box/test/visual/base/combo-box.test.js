@@ -1,6 +1,7 @@
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../../not-animated-styles.js';
 import '../common.js';
 import '../../../src/vaadin-combo-box.js';
 

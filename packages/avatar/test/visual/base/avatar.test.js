@@ -1,6 +1,7 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../not-animated-styles.js';
 import '../../../src/vaadin-avatar.js';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 

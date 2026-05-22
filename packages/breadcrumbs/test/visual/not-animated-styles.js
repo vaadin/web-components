@@ -1,25 +1,15 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
-  'vaadin-breadcrumbs',
+  '*',
   css`
     :host,
-    :host::before,
-    :host::after {
+    *,
+    *::before,
+    *::after {
+      animation: none !important;
       transition: none !important;
-    }
-  `,
-);
-
-registerStyles(
-  'vaadin-breadcrumbs-item',
-  css`
-    :host,
-    :host::before,
-    :host::after,
-    [part='link'],
-    [part='nolink'] {
-      transition: none !important;
+      caret-color: transparent !important;
     }
   `,
 );

@@ -1,5 +1,6 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../not-animated-styles.js';
 import '../../../src/vaadin-grid.js';
 import '../../../src/vaadin-grid-column-group.js';
 import '../../../src/vaadin-grid-selection-column.js';

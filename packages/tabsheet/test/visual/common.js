@@ -1,12 +1,11 @@
-import '@vaadin/tabs/test/visual/not-animated-styles.js';
+import '../not-animated-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-/* Stop loader animation */
+/* Keep loader visible when animation is disabled */
 registerStyles(
   'vaadin-tabsheet',
   css`
     :host([loading]) [part='loader'] {
-      animation: none;
       opacity: 1;
     }
   `,
