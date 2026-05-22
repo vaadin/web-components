@@ -1,4 +1,7 @@
-vaadin-user-tags-overlay::part(overlay) {
+vaadin-user-tags-overlay[opening],
+vaadin-user-tags-overlay[closing],
+vaadin-user-tags-overlay[opening]::part(overlay),
+vaadin-user-tags-overlay[closing]::part(overlay) {
   animation: none !important;
 }
 

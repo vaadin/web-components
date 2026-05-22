@@ -1,3 +1,4 @@
-vaadin-popover::part(overlay) {
+vaadin-popover[opening]::part(overlay),
+vaadin-popover[closing]::part(overlay) {
   animation: none !important;
 }

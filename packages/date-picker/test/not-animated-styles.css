@@ -1,10 +1,12 @@
-vaadin-date-picker::part(overlay) {
+vaadin-date-picker[opening]::part(overlay),
+vaadin-date-picker[closing]::part(overlay) {
   animation: none !important;
 }
 
 /* Hide caret */
-vaadin-date-picker input {
-  caret-color: transparent !important;
+vaadin-date-picker[focused] input,
+vaadin-date-picker[opened] input {
+  caret-color: transparent;
 }
 
 /* Disable animation */

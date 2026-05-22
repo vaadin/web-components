@@ -1,3 +1,4 @@
-vaadin-notification-card {
+vaadin-notification-card[opening],
+vaadin-notification-card[closing] {
   animation: none !important;
 }
