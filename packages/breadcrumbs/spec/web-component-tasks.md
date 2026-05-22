@@ -192,7 +192,7 @@ Create `packages/aura/src/components/breadcrumbs.css` with the Aura token bindin
 **Requirements:** 6, 7
 **Depends on:** 5, 7, 8
 
-**User value:** When the trail no longer fits the available width, items collapse closest-to-root first into an overflow button (`…`). Clicking the button opens an overlay that lists the hidden items as plain links; outside-click and Escape close it. Fully styled in base, Lumo, and Aura. Pressing Enter/Space on the overflow button opens the overlay. Keyboard arrow-key navigation inside the open overlay is left to Task 10.
+**User value:** When the trail no longer fits the available width, items collapse closest-to-root first into an overflow button (`…`). Clicking the button opens an overlay that lists the hidden items as plain links; outside-click, Escape, and Tab close it. Fully styled in base, Lumo, and Aura. Pressing Enter/Space on the overflow button opens the overlay. Keyboard arrow-key navigation inside the open overlay is left to Task 10.
 
 This task is large because none of its components — overflow detection, overflow button, the overlay element, light-DOM rendering, `i18n`, the overflow separator, base + Lumo + Aura styling — is independently useful. Implement them together in a single PR.
 
@@ -239,6 +239,7 @@ Extend the host-side observer from Task 5 to also assign `slot="root"` to the fi
 - Default `i18n` has `moreItems` equal to `'More items'`; setting `breadcrumbs.i18n = { moreItems: 'Show hidden items' }` updates the overflow button's `aria-label`
 - Clicking the overflow button while `__overlayOpened` is `false` opens the overlay (sets `aria-expanded="true"`); clicking again closes it
 - Pressing `Escape` while the overlay is open closes it (delegated to `OverlayMixin`) and returns focus to the overflow button
+- Pressing `Tab` or `Shift+Tab` while an overlay item is focused closes the overlay
 - Clicking outside the overlay closes it
 - Pressing Enter or Space on the focused overflow button opens the overlay and moves focus to the first link
 - When the overlay opens with two items hidden, the breadcrumbs' light DOM contains exactly two `<vaadin-breadcrumbs-item>` elements with `slot="overlay"`, projected into the overlay's default slot
@@ -257,16 +258,15 @@ Extend the host-side observer from Task 5 to also assign `slot="root"` to the fi
 **Requirements:** 7
 **Depends on:** 9
 
-**User value:** Keyboard users can traverse the open overlay with arrow keys (and Home/End) for menu-style navigation, in addition to the standard Tab cycle.
+**User value:** Keyboard users can traverse the open overlay with arrow keys (and Home/End) for menu-style navigation.
 
-Implement `ArrowDown`/`ArrowUp` to move focus between adjacent links in the open overlay, `Home`/`End` to jump to first/last. `Tab` continues document order (focus is not trapped — already behavior in Task 9). `Escape` closing and Enter/Space-on-button opening also already land in Task 9.
+Implement `ArrowDown`/`ArrowUp` to move focus between adjacent links in the open overlay, `Home`/`End` to jump to first/last. `Tab`/`Shift+Tab` closing the overlay, `Escape` closing, and Enter/Space-on-button opening all land in Task 9.
 
 **Tests:**
 - Focusing the first link inside the open overlay and pressing `ArrowDown` moves focus to the next link
 - Pressing `ArrowUp` from the second link moves focus to the first
 - `ArrowDown` from the last link wraps to the first (or stays — pick the convention used in `<vaadin-context-menu>` / `<vaadin-menu-bar>` and assert it)
 - `Home` from any item focuses the first link; `End` focuses the last
-- Pressing `Tab` inside the overlay moves focus to the next focusable element in document order (focus is not trapped)
 
 ---
 

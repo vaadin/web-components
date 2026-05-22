@@ -49,7 +49,7 @@ Shadow DOM:
 </div>
 <vaadin-breadcrumbs-overlay
   .owner="${this}"
-  .opened="${this._overlayOpened}"
+  .opened="${this.__overlayOpened}"
   no-vertical-overlap
   restore-focus-on-close
   exportparts="overlay, content: overlay-content"
@@ -181,7 +181,7 @@ Internal behavior:
 - **Positioning relative to the overflow button.** Driven by the `positionTarget` property from `PositionMixin`, matching the convention used by `<vaadin-combo-box-overlay>` and `<vaadin-avatar-group-overlay>`.
 - **Keyboard interaction within the open overlay.** Items are reachable via two parallel mechanisms:
   - **Tab order** — links are part of the document tab cycle, so users navigating the page with Tab traverse them in DOM order. This matches every other anchor on the page and is the path screen-reader users naturally take.
-  - **Arrow keys** — Up/Down arrows move focus between adjacent links inside the open overlay (Home/End jump to first/last). The overlay reads as a menu visually, so menu-style keyboard navigation is supported alongside tabbing. Pressing `Tab` while an item is focused continues the document tab cycle (does not trap focus inside the overlay); `Escape` closes the overlay and returns focus to the overflow button.
+  - **Arrow keys** — Up/Down arrows move focus between adjacent links inside the open overlay (Home/End jump to first/last). The overlay reads as a menu visually, so menu-style keyboard navigation is supported alongside tabbing. Pressing `Tab` (or `Shift+Tab`) while an item is focused closes the overlay and lets focus continue in the document tab cycle; `Escape` closes the overlay and returns focus to the overflow button.
 
 ---
 
@@ -245,7 +245,11 @@ Distinct part names match the two cases the item can be in (interactive anchor v
 
 **Q: Why does the overflow overlay support both arrow keys and Tab?**
 
-The overlay reads visually as a menu, so users coming from menu-bar / context-menu expect Up/Down arrow keys to move between entries. At the same time, it is a list of plain anchors, and screen-reader users (plus power users navigating the page entirely with Tab) expect to traverse those anchors via the standard tab cycle. Supporting both — Tab as the primary, document-level focus mechanism, arrow keys as a menu-style convenience — covers both audiences without forcing one to adopt the other's interaction model. Escape closes the overlay regardless of how focus arrived.
+The overlay reads visually as a menu, so users coming from menu-bar / context-menu expect Up/Down arrow keys to move between entries. At the same time, it is a list of plain anchors, and screen-reader users (plus power users navigating the page entirely with Tab) expect to leave the overlay via the standard tab cycle. Supporting both — Tab as the document-level focus mechanism, arrow keys as a menu-style convenience — covers both audiences without forcing one to adopt the other's interaction model. Tab and Shift+Tab close the overlay and let focus continue along the document tab order; Escape closes the overlay regardless of how focus arrived.
+
+**Q: Why does Tab close the overflow overlay?**
+
+For consistency with the other Vaadin overlay-with-overflow component, `<vaadin-avatar-group>`, whose overflow menu also closes on Tab and Shift+Tab. The overflow overlay is a transient popup anchored to a trigger button; keeping it open while focus has already moved past the trigger creates an orphaned popup whose contents no longer match where the user is in the document. Closing on Tab matches the dismiss-on-blur behavior users expect from any popover, and `restore-focus-on-close` returns focus to the overflow button when needed so the trail's tab order remains predictable.
 
 **Q: Should `<vaadin-breadcrumbs-item>` expose a `target` property?**
 

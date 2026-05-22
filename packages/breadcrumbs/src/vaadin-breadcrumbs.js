@@ -118,6 +118,7 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
         exportparts="overlay, content: overlay-content"
         @opened-changed="${this.__onOverlayOpenedChanged}"
         @vaadin-overlay-open="${this.__onOverlayOpen}"
+        @keydown="${this.__onOverlayKeyDown}"
       >
         <slot name="overlay"></slot>
       </vaadin-breadcrumbs-overlay>
@@ -274,6 +275,13 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
     const firstItem = this.querySelector('vaadin-breadcrumbs-item[slot="overlay"]');
     if (firstItem) {
       firstItem.focus();
+    }
+  }
+
+  /** @private */
+  __onOverlayKeyDown(event) {
+    if (event.key === 'Tab') {
+      this.__overlayOpened = false;
     }
   }
 }

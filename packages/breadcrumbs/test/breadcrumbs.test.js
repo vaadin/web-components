@@ -364,6 +364,16 @@ describe('vaadin-breadcrumbs', () => {
         expect(overlay.opened).to.be.false;
       });
 
+      it('should close the overlay on Tab key press', async () => {
+        button.click();
+        await oneEvent(overlay, 'vaadin-overlay-open');
+
+        await sendKeys({ press: 'Tab' });
+        await nextRender();
+
+        expect(overlay.opened).to.be.false;
+      });
+
       it('should return focus to the overflow button when closed via Escape', async () => {
         button.focus();
         button.click();
