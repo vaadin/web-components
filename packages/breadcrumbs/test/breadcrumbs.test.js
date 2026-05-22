@@ -353,11 +353,18 @@ describe('vaadin-breadcrumbs', () => {
         const firstLink = firstItem.shadowRoot.querySelector('[part="link"]');
         expect(getDeepActiveElement()).to.equal(firstLink);
       });
+    });
 
-      it('should close the overlay on Escape key press', async () => {
+    describe('closing', () => {
+      beforeEach(async () => {
+        breadcrumbs.style.maxWidth = '600px';
+        await nextResize(breadcrumbs);
+
         button.click();
         await oneEvent(overlay, 'vaadin-overlay-open');
+      });
 
+      it('should close the overlay on Escape key press', async () => {
         await sendKeys({ press: 'Escape' });
         await nextRender();
 
@@ -365,9 +372,6 @@ describe('vaadin-breadcrumbs', () => {
       });
 
       it('should close the overlay on Tab key press', async () => {
-        button.click();
-        await oneEvent(overlay, 'vaadin-overlay-open');
-
         await sendKeys({ press: 'Tab' });
         await nextRender();
 
@@ -375,12 +379,6 @@ describe('vaadin-breadcrumbs', () => {
       });
 
       it('should focus next trail item when closed on Tab', async () => {
-        breadcrumbs.style.maxWidth = '600px';
-        await nextResize(breadcrumbs);
-
-        button.click();
-        await oneEvent(overlay, 'vaadin-overlay-open');
-
         await sendKeys({ press: 'Tab' });
         await nextRender();
 
@@ -389,12 +387,6 @@ describe('vaadin-breadcrumbs', () => {
       });
 
       it('should focus previous trail item when closed on Shift+Tab', async () => {
-        breadcrumbs.style.maxWidth = '600px';
-        await nextResize(breadcrumbs);
-
-        button.click();
-        await oneEvent(overlay, 'vaadin-overlay-open');
-
         await sendKeys({ press: 'Shift+Tab' });
         await nextRender();
 
@@ -403,10 +395,6 @@ describe('vaadin-breadcrumbs', () => {
       });
 
       it('should return focus to the overflow button when closed via Escape', async () => {
-        button.focus();
-        button.click();
-        await oneEvent(overlay, 'vaadin-overlay-open');
-
         await sendKeys({ press: 'Escape' });
         await nextRender();
 
@@ -414,9 +402,6 @@ describe('vaadin-breadcrumbs', () => {
       });
 
       it('should close the overlay on outside click', async () => {
-        button.click();
-        await oneEvent(overlay, 'vaadin-overlay-open');
-
         document.body.click();
         await nextRender();
 
