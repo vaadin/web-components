@@ -4,8 +4,8 @@ vaadin-integer-field,
 vaadin-number-field,
 vaadin-password-field {
   /* Hide caret */
-  &[focused] input {
-    caret-color: transparent;
+  & input {
+    caret-color: transparent !important;
   }
 
   /* Disable animation */

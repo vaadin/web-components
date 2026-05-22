@@ -1,17 +1,16 @@
-vaadin-multi-select-combo-box[opening]::part(overlay),
-vaadin-multi-select-combo-box[closing]::part(overlay) {
+vaadin-multi-select-combo-box::part(overlay) {
   animation: none !important;
   transition: none !important;
 }
 
 /* Stop loader animation */
-vaadin-multi-select-combo-box[loading]::part(loader) {
-  animation: none;
-  opacity: 1;
+vaadin-multi-select-combo-box::part(loader) {
+  animation: none !important;
+  opacity: 1 !important;
 }
 
 /* Hide caret */
-vaadin-multi-select-combo-box[focused] input {
+vaadin-multi-select-combo-box input {
   caret-color: transparent !important;
 }
 

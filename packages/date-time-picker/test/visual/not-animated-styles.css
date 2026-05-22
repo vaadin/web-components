@@ -1,6 +1,6 @@
 /* Hide caret */
-vaadin-date-time-picker[focused] input {
-  caret-color: transparent;
+vaadin-date-time-picker input {
+  caret-color: transparent !important;
 }
 
 /* Disable animation */

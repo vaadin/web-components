@@ -1,4 +1,4 @@
-vaadin-app-layout:not([no-anim]) {
+vaadin-app-layout {
   --vaadin-app-layout-transition-duration: 0s;
-  transition-property: none;
+  transition-property: none !important;
 }

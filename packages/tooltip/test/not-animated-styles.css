@@ -1,4 +1,3 @@
-vaadin-tooltip[opening]::part(overlay),
-vaadin-tooltip[closing]::part(overlay) {
+vaadin-tooltip::part(overlay) {
   animation: none !important;
 }

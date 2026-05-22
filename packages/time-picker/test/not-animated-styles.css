@@ -1,13 +1,11 @@
-vaadin-time-picker[opening]::part(overlay),
-vaadin-time-picker[closing]::part(overlay) {
+vaadin-time-picker::part(overlay) {
   animation: none !important;
   transition: none !important;
 }
 
 /* Hide caret */
-vaadin-time-picker[focused] input,
-vaadin-time-picker[opened] input {
-  caret-color: transparent;
+vaadin-time-picker input {
+  caret-color: transparent !important;
 }
 
 /* Disable animation */

@@ -1,5 +1,4 @@
-vaadin-select[opening]::part(overlay),
-vaadin-select[closing]::part(overlay) {
+vaadin-select::part(overlay) {
   animation: none !important;
 }
 
