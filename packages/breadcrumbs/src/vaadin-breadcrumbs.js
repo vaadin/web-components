@@ -46,7 +46,7 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
   static get properties() {
     return {
       /** @private */
-      _overlayOpened: {
+      __overlayOpened: {
         type: Boolean,
         value: false,
         sync: true,
@@ -102,7 +102,7 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
             type="button"
             part="overflow-button"
             aria-haspopup="true"
-            aria-expanded="${this._overlayOpened ? 'true' : 'false'}"
+            aria-expanded="${this.__overlayOpened ? 'true' : 'false'}"
             aria-label="${this.__effectiveI18n?.moreItems}"
             @click="${this.__onOverflowButtonClick}"
           ></button>
@@ -111,7 +111,7 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
       </div>
       <vaadin-breadcrumbs-overlay
         id="overlay"
-        .opened="${this._overlayOpened}"
+        .opened="${this.__overlayOpened}"
         .owner="${this}"
         no-vertical-overlap
         restore-focus-on-close
@@ -262,12 +262,12 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
   /** @private */
   __onOverflowButtonClick(event) {
     event.stopPropagation();
-    this._overlayOpened = !this._overlayOpened;
+    this.__overlayOpened = !this.__overlayOpened;
   }
 
   /** @private */
   __onOverlayOpenedChanged(event) {
-    this._overlayOpened = event.detail.value;
+    this.__overlayOpened = event.detail.value;
   }
 
   /** @private */

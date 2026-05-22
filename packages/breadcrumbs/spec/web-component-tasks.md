@@ -206,7 +206,7 @@ This task is large because none of its components — overflow detection, overfl
   <slot></slot>
 </div>
 <vaadin-breadcrumbs-overlay
-  .opened="${this._overlayOpened}"
+  .opened="${this.__overlayOpened}"
   .owner="${this}"
   .positionTarget="${this._overflowButton}"
   exportparts="overlay, content: overlay-content"
@@ -220,7 +220,7 @@ Extend the host-side observer from Task 5 to also assign `slot="root"` to the fi
 **Container behavior:**
 - Add `ResizeMixin` and `I18nMixin` to the breadcrumbs mixin chain. Default `i18n` is `{ moreItems: 'More items' }`. Bind `i18n.moreItems` to the overflow button's `aria-label`.
 - Override `_onResize()` and re-run on the host-side observer's pass: measure whether all items fit. If not, reassign `slot="overlay"` on items closest-to-root first (the first default-slot item, then the next, then eventually the root item). Never collapse the last item. Reflect `has-overflow` on the host. Toggle `[part="overflow"]`'s `hidden` attribute accordingly. Collapsed items disappear from the trail automatically because they are projected through the overlay's named slot instead.
-- Toggle `_overlayOpened` on overflow-button click; reflect to the button's `aria-expanded`. Pressing Enter or Space on the focused overflow button opens the overlay and moves focus to the first link.
+- Toggle `__overlayOpened` on overflow-button click; reflect to the button's `aria-expanded`. Pressing Enter or Space on the focused overflow button opens the overlay and moves focus to the first link.
 - The same physical `<vaadin-breadcrumbs-item>` element renders in either the trail or the overlay depending on its `slot` attribute. Items collapsed by the overflow algorithm stay in the breadcrumbs' light DOM with `slot="overlay"`; the overlay's default slot projects them in.
 - Add `[part="overflow"]::after` to the breadcrumbs base styles using the same `mask-image` + `currentColor` pattern as the item separator, with the same `--vaadin-breadcrumbs-separator` custom property and the same RTL flip from Task 6. Visible whenever `[part="overflow"]` is visible.
 - Extend Task 7's Lumo CSS and Task 8's Aura CSS with overflow-button and overlay styling per `figma-design.md`.
@@ -237,7 +237,7 @@ Extend the host-side observer from Task 5 to also assign `slot="root"` to the fi
 - Adding an item to a fitting trail re-runs detection
 - The first `<vaadin-breadcrumbs-item>` carries `slot="root"`; prepending or removing the first item moves it correctly
 - Default `i18n` has `moreItems` equal to `'More items'`; setting `breadcrumbs.i18n = { moreItems: 'Show hidden items' }` updates the overflow button's `aria-label`
-- Clicking the overflow button while `_overlayOpened` is `false` opens the overlay (sets `aria-expanded="true"`); clicking again closes it
+- Clicking the overflow button while `__overlayOpened` is `false` opens the overlay (sets `aria-expanded="true"`); clicking again closes it
 - Pressing `Escape` while the overlay is open closes it (delegated to `OverlayMixin`) and returns focus to the overflow button
 - Clicking outside the overlay closes it
 - Pressing Enter or Space on the focused overflow button opens the overlay and moves focus to the first link
