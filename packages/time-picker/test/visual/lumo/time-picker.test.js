@@ -3,8 +3,8 @@ import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/time-picker.css';
-import '../../../vaadin-time-picker.js';
 import '../../not-animated-styles.css';
+import '../../../vaadin-time-picker.js';
 
 describe('time-picker', () => {
   let div, element;

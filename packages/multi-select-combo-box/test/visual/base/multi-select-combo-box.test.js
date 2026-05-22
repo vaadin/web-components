@@ -1,8 +1,8 @@
 import { resetMouse, sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextResize } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../src/vaadin-multi-select-combo-box.js';
 import '../../not-animated-styles.css';
+import '../../../src/vaadin-multi-select-combo-box.js';
 
 describe('multi-select-combo-box', () => {
   let div, element;

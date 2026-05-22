@@ -2,8 +2,8 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
-import '../../../vaadin-select.js';
 import '../../not-animated-styles.css';
+import '../../../vaadin-select.js';
 
 describe('select', () => {
   let div, element;
