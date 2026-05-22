@@ -236,7 +236,7 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
     // Items don't fit even without the button. How far the last item
     // extends past the list — either edge can overflow (right in LTR,
     // left in RTL).
-    const lastRect = rects[rects.length - 1];
+    const lastRect = rects.at(-1);
     const excessWidth = Math.max(0, lastRect.right - listRect.right, listRect.left - lastRect.left);
 
     // Collapsing items[1..i] shifts the trail by `|rects[i+1] - rects[1]|`
