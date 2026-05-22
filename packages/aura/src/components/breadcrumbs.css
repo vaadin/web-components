@@ -1,7 +1,10 @@
 vaadin-breadcrumbs-item::part(link) {
-  color: var(--aura-accent-text-color);
   text-decoration: none;
   transition: color 80ms;
+}
+
+vaadin-breadcrumbs-item:not([disabled])::part(link) {
+  color: var(--aura-accent-text-color);
 }
 
 vaadin-breadcrumbs-item::part(nolink) {
