@@ -9,7 +9,7 @@ import '@vaadin/time-picker/test/not-animated-styles.css';
 import '@vaadin/radio-group/test/visual/not-animated-styles.css';
 import '@vaadin/checkbox-group/test/visual/not-animated-styles.css';
 import '@vaadin/checkbox/test/visual/not-animated-styles.css';
-import '../not-animated-styles.css';
+import '../not-animated-styles.js';
 import '@vaadin/checkbox/src/vaadin-checkbox.js';
 import '@vaadin/checkbox-group/src/vaadin-checkbox-group.js';
 import '@vaadin/date-time-picker/src/vaadin-date-time-picker.js';

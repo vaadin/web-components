@@ -9,7 +9,7 @@ import '@vaadin/time-picker/test/not-animated-styles.css';
 import '@vaadin/radio-group/test/visual/not-animated-styles.css';
 import '@vaadin/checkbox-group/test/visual/not-animated-styles.css';
 import '@vaadin/checkbox/test/visual/not-animated-styles.css';
-import '../not-animated-styles.css';
+import '../not-animated-styles.js';
 import '@vaadin/aura/aura.css';
 import '@vaadin/text-field';
 import '../../../src/vaadin-field-highlighter.js';
