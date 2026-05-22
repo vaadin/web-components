@@ -6,7 +6,8 @@ registerStyles(
     :host,
     *,
     *::before,
-    *::after {
+    *::after,
+    ::slotted(*) {
       animation: none !important;
       transition: none !important;
       caret-color: transparent !important;
