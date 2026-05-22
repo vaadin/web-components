@@ -1,0 +1,6 @@
+vaadin-breadcrumbs,
+vaadin-breadcrumbs-item,
+vaadin-breadcrumbs-item::part(link),
+vaadin-breadcrumbs-item::part(nolink) {
+  transition: none !important;
+}
