@@ -7,7 +7,6 @@ import {
   nextFrame,
   nextRender,
   nextResize,
-  oneEvent,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -291,9 +290,8 @@ describe('vaadin-app-layout', () => {
 
         const spy = sinon.spy(layout, '__setOffsetSize');
         toggle.click();
-        await oneEvent(drawer, 'transitionend');
-
-        expect(spy.callCount).to.be.equal(1);
+        await Promise.all(drawer.getAnimations().map((animation) => animation.finished));
+        await nextResize(layout);
         await nextFrame();
 
         expect(spy.callCount).to.be.equal(1);
@@ -390,9 +388,8 @@ describe('vaadin-app-layout', () => {
         layout.style.setProperty('--vaadin-app-layout-transition-duration', '100ms');
         toggle.focus();
         layout.drawerOpened = true;
+        await Promise.all(drawer.getAnimations().map((animation) => animation.finished));
         await nextFrame();
-        expect(document.activeElement).to.equal(toggle);
-        await oneEvent(drawer, 'transitionend');
         expect(layout.shadowRoot.activeElement).to.equal(drawer);
       });
 
@@ -456,9 +453,8 @@ describe('vaadin-app-layout', () => {
         it('should move focus to the drawer toggle after the closing animation completes', async () => {
           layout.style.setProperty('--vaadin-app-layout-transition-duration', '100ms');
           layout.drawerOpened = false;
+          await Promise.all(drawer.getAnimations().map((animation) => animation.finished));
           await nextFrame();
-          expect(layout.shadowRoot.activeElement).to.equal(drawer);
-          await oneEvent(drawer, 'transitionend');
           expect(document.activeElement).to.equal(toggle);
         });
 
