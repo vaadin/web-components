@@ -188,7 +188,7 @@ Create `packages/aura/src/components/breadcrumbs.css` with the Aura token bindin
 
 ## Task 9: Overflow behavior end-to-end
 
-**Spec sections:** `<vaadin-breadcrumbs>` Shadow DOM (overflow placeholder + `slot="root"` / default slot split), parts (`overflow`, `overflow-button`), `i18n` property, state attribute `has-overflow`, Internal behavior → Slot observation and root assignment / Overflow detection / Overlay management / Overflow separator, all of `<vaadin-breadcrumbs-overlay>`, Key Design Decisions 3 and 6, Reuse → `vaadin-login-form-mixin`
+**Spec sections:** `<vaadin-breadcrumbs>` Shadow DOM (overflow placeholder + `slot="root"` / default slot split), parts (`overflow`, `overflow-button`), `i18n` property, state attribute `has-overflow`, Internal behavior → Slot observation and root assignment / Overflow detection / Overlay management / Overflow separator, all of `<vaadin-breadcrumbs-overlay>`, Key Design Decisions 3 and 6, Reuse → `ResizeMixin`, `SlotObserver`, `OverlayMixin`, `PositionMixin`
 **Requirements:** 6, 7
 **Depends on:** 5, 7, 8
 
