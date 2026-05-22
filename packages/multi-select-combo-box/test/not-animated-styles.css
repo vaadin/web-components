@@ -11,9 +11,8 @@ vaadin-multi-select-combo-box[loading]::part(loader) {
 }
 
 /* Hide caret */
-vaadin-multi-select-combo-box[focused]:not([has-value]) input:focus,
-vaadin-multi-select-combo-box[focused][has-value] input:focus {
-  caret-color: transparent !important;
+vaadin-multi-select-combo-box input {
+  caret-color: transparent;
 }
 
 /* Disable animation */
