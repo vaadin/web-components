@@ -26,6 +26,7 @@ describe('virtualizer - overscroll', () => {
       scrollContainer,
     });
 
+    virtualizer.hostConnected();
     virtualizer.size = 100;
   });
 
@@ -64,6 +65,7 @@ describe('virtualizer - scrollbar scrolling', () => {
       scrollTarget,
       scrollContainer,
     });
+    virtualizer.hostConnected();
   });
 
   it('should have an item at the bottom of the viewport after scrolling up', async () => {

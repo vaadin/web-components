@@ -249,6 +249,7 @@ describe('reorder elements', () => {
         scrollContainer: shadowRoot.getElementById('container'),
         reorderElements: true,
       });
+      virtualizer.hostConnected();
       virtualizer.size = 100;
       elementsContainer = shadowRoot.getElementById('container');
     });

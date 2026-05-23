@@ -34,6 +34,7 @@ describe('unlimited size', () => {
       scrollContainer,
     });
 
+    virtualizer.hostConnected();
     virtualizer.size = 1000000;
   });
 
