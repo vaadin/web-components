@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { elementScroll, observeElementOffset, observeElementRect, Virtualizer } from '@tanstack/virtual-core';
-import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
+import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { reorderChildren } from '@vaadin/component-base/src/dom-utils.js';
 
@@ -37,7 +37,6 @@ export class TanStackAdapter {
   #estimatedSize = 200;
   #resizeObserver;
   #renderDebouncer;
-  #reorderElementsDebouncer;
 
   constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer, reorderElements }) {
     this.createElements = createElements;
@@ -187,23 +186,27 @@ export class TanStackAdapter {
 
     this.#createElementsIfNeeded();
     this.#renderElements();
+    this.#reorderElements();
 
+    this.#updateOverscrollBehavior();
     this.#updateEstimatedSize();
     this.#updateOverscan();
-
-    this.#scheduleReorderElements();
   }
 
   #createElementsIfNeeded() {
     const missingCount = this.#virtualItems.length - this.#elements.length;
     if (missingCount > 0) {
+      const fragment = document.createDocumentFragment();
+
       this.createElements(missingCount).forEach((el) => {
         el.hidden = true;
         el.style.top = '0';
         el.style.left = '0';
         el.style.position = 'absolute';
-        this.elementsContainer.appendChild(el);
+        fragment.appendChild(el);
       });
+
+      this.elementsContainer.appendChild(fragment);
     }
   }
 
@@ -247,8 +250,16 @@ export class TanStackAdapter {
     });
   }
 
+  #updateOverscrollBehavior() {
+    const { isScrolling } = this.#virtualizer;
+
+    this.scrollTarget.style.overscrollBehavior = isScrolling ? 'none' : null;
+  }
+
   #updateEstimatedSize() {
-    const sizes = [...this.#virtualizer.itemSizeCache.values()];
+    const { itemSizeCache } = this.#virtualizer;
+
+    const sizes = [...itemSizeCache.values()];
     if (sizes.length > 0) {
       this.#estimatedSize = sizes.reduce((acc, size) => acc + size, 0) / sizes.length;
     }
@@ -263,17 +274,12 @@ export class TanStackAdapter {
     this.#virtualizer.setOptions({ ...options, overscan });
   }
 
-  #scheduleReorderElements() {
-    if (!this.reorderElements) {
+  #reorderElements() {
+    const { isScrolling } = this.#virtualizer;
+    if (isScrolling) {
       return;
     }
 
-    this.#reorderElementsDebouncer = Debouncer.debounce(this.#reorderElementsDebouncer, timeOut.after(500), () => {
-      this.#reorderElements();
-    });
-  }
-
-  #reorderElements() {
     // Remove hidden elements from the DOM
     // TODO: Do we need this?
     this.#elements.forEach((el) => {
@@ -291,7 +297,6 @@ export class TanStackAdapter {
 
   flush() {
     this.#renderDebouncer?.flush();
-    this.#reorderElementsDebouncer?.flush();
   }
 
   get #virtualItems() {
