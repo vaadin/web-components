@@ -32,6 +32,7 @@ describe('update range', () => {
     });
 
     state = 0;
+    virtualizer.hostConnected();
     virtualizer.size = 2;
 
     firstElement = elementsContainer.querySelector('#item-0');

@@ -25,6 +25,7 @@ describe('virtualizer - variable row height', () => {
       scrollContainer,
     });
 
+    virtualizer.hostConnected();
     virtualizer.size = 100;
   });
 
