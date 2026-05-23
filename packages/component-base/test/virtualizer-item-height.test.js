@@ -47,6 +47,7 @@ describe('virtualizer - item height', () => {
       scrollContainer,
     });
 
+    virtualizer.hostConnected();
     virtualizer.size = 10000;
   });
 
@@ -136,6 +137,7 @@ describe('virtualizer - item height - sub-pixel', () => {
       scrollContainer,
     });
 
+    virtualizer.hostConnected();
     virtualizer.size = 1;
   });
 
@@ -217,6 +219,8 @@ describe('virtualizer - item height - initial render', () => {
       scrollTarget,
       scrollContainer,
     });
+
+    virtualizer.hostConnected();
   });
 
   describe('large item height', () => {
@@ -338,6 +342,7 @@ describe('virtualizer - item height - resize with late idle callback', () => {
       scrollTarget,
       scrollContainer: scrollTarget.firstElementChild,
     });
+    virtualizer.hostConnected();
     virtualizer.size = 1000;
 
     await nextResize(scrollTarget);
@@ -396,6 +401,7 @@ describe('virtualizer - item height - lazy rendering', () => {
       scrollContainer,
     });
 
+    virtualizer.hostConnected();
     virtualizer.size = 1000;
   });
 
@@ -558,6 +564,7 @@ describe('virtualizer - item padding', () => {
       scrollTarget,
       scrollContainer: scrollTarget.firstElementChild,
     });
+    virtualizer.hostConnected();
     virtualizer.size = 2;
     await nextResize(scrollTarget);
     await nextFrame();
@@ -594,6 +601,7 @@ describe('virtualizer - item height - placeholders are disabled', () => {
       __disableHeightPlaceholder: true,
     });
 
+    virtualizer.hostConnected();
     virtualizer.size = 1;
   });
 
@@ -640,6 +648,7 @@ describe('virtualizer - item height - self-resizing items', () => {
       scrollContainer,
     });
 
+    virtualizer.hostConnected();
     virtualizer.size = 100;
   });
 
