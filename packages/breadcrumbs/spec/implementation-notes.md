@@ -161,3 +161,15 @@ Task 9 needed two properties the controller-based setup did not provide: a singl
   - Spec gap: Lumo/Aura overflow-button and overlay styling not added — `figma-design.md` does not exist yet, so the visual contract is missing. Tracked separately; will land alongside Step 5 (figma design) or as a follow-up commit.
   - Non-blocking: `__onOverlayOpen` explicitly focuses the first item, which may duplicate `OverlayMixin._trapFocus()`'s built-in initial focus. Could be removed if the explicit-focus tests still pass without it. Left in for now to keep focus behaviour deterministic.
   - Non-blocking: synchronous overflow measurement may under-count the overflow button's width during the collapse loop because `[part="overflow"]`'s `hidden` attribute lags Lit's render tick. A boundary-width test would catch this; not observed in the current visual snapshots.
+
+## Task 10 — Keyboard navigation in the overflow overlay
+
+- **Commit:** d4b250fef7
+- **Date:** 2026-05-22
+- **Decisions:**
+  - Arrow / Home / End handling extends the existing `__onOverlayKeyDown` rather than composing `KeyboardDirectionMixin`. The mixin's `isElementFocused(item)` membership test would fail here because `delegatesFocus: true` on `<vaadin-breadcrumbs-item>` makes the item itself the host-level `activeElement`, but the mixin also assumes orientation / Tab roving / `_focused`-attribute semantics that don't apply to a transient overlay; the inline branch is ~25 lines and stays focused.
+  - Focused-item resolution uses `isElementFocused` from `@vaadin/a11y-base/src/focus-utils.js`. `delegatesFocus: true` on the item element bubbles the focused element up to the item at the host level, so `getRootNode().activeElement === item` is true whenever the inner link has focus.
+  - Wrap-around at both ends mirrors `<vaadin-context-menu-list-box>` and `<vaadin-menu-bar>` (both compose `KeyboardDirectionMixin._getAvailableIndex`). Documented inline as a code comment in `__onOverlayKeyDown`; no spec change.
+  - Tests added under a new `describe('navigation', …)` block at `max-width: 200px` (5 items collapse to overlay). Each test starts from a known focused link — relying on the Task 9 focus-on-open invariant — and asserts focus moves to the expected sibling.
+- **Surprises:** —
+- **Spec adjustments:** —
