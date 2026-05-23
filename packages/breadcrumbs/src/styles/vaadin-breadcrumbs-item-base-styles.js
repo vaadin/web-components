@@ -63,6 +63,9 @@ export const breadcrumbsItemStyles = css`
     flex: 1;
     padding: var(--vaadin-item-overlay-padding, 4px var(--vaadin-padding-inline-container));
     border-radius: var(--vaadin-radius-m);
+  }
+
+  :host([slot='overlay']:not([disabled])) [part='link'] {
     color: var(--vaadin-text-color);
   }
 
