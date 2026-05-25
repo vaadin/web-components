@@ -9,10 +9,6 @@ import '../not-animated-styles.js';
 import '../../../vaadin-upload-button.js';
 import { UploadManager } from '../../../src/vaadin-upload-manager.js';
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.modularUpload = true;
-
 describe('upload-button', () => {
   let div, element;
 
