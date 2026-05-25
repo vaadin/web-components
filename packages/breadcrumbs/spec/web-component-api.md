@@ -185,7 +185,7 @@ Covers requirement(s): 11
 breadcrumbs.querySelector('vaadin-breadcrumbs-item[path="/private"]').disabled = true;
 ```
 
-**Why this shape:** Some ancestors are present in the hierarchy but not navigable for the current user (no permission, intentionally non-routed, etc.). `disabled` makes the item visually dim, removes its `href`, sets `aria-disabled="true"`, takes it out of the tab cycle (`tabindex="-1"`), and suppresses programmatic `click()` — exactly the contract every other interactive Vaadin component exposes through `DisabledMixin`. Themes can target the state with `vaadin-breadcrumbs-item[disabled]`.
+**Why this shape:** Some ancestors are present in the hierarchy but not navigable for the current user (no permission, intentionally non-routed, etc.). `disabled` makes the item visually dim, removes the link's `href`, sets `aria-disabled="true"` on the host, takes the inner link out of the tab cycle (`tabindex="-1"`), and suppresses programmatic `click()` — exactly the contract every other interactive Vaadin component exposes through `DisabledMixin`. Themes can target the state with `vaadin-breadcrumbs-item[disabled]`.
 
 ---
 
@@ -218,7 +218,7 @@ No. We considered it but decided not to add it before we have a real use case fo
 
 **Q: Why does `<vaadin-breadcrumbs-item>` need an explicit `disabled` API?**
 
-A non-navigable ancestor (no permission, intentional dead-end, removed page) still belongs in the trail for context, but should not invite a click. Reusing the library-wide `DisabledMixin` contract gives the item every behavior developers already expect of a disabled control — dropped `href`, `aria-disabled="true"`, `tabindex="-1"`, suppressed programmatic `click()` — and gives themes a single attribute (`[disabled]`) to style against. Omitting `path` instead would render plain text but couldn't express "this *would* be a link, except it's currently turned off"; `disabled` does.
+A non-navigable ancestor (no permission, intentional dead-end, removed page) still belongs in the trail for context, but should not invite a click. Reusing the library-wide `DisabledMixin` contract gives the item every behavior developers already expect of a disabled control — dropped `href` on the inner link, `aria-disabled="true"` on the host, `tabindex="-1"` on the inner link, suppressed programmatic `click()` — and gives themes a single attribute (`[disabled]`) to style against. Omitting `path` instead would render plain text but couldn't express "this *would* be a link, except it's currently turned off"; `disabled` does.
 
 **Q: Why expose `focused` / `focus-ring` rather than letting themes use `:focus` directly?**
 

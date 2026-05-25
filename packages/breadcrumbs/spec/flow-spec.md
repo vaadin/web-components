@@ -293,7 +293,7 @@ Exposed on `Breadcrumbs` via `setI18n(BreadcrumbsI18n)` / `getI18n()`. Serialise
 
 | Field | Type | Default (English) | Web-component `i18n` field | Notes |
 |---|---|---|---|---|
-| `moreItems` | String | `null` (web component default: `""`) | `moreItems` | `aria-label` of the overflow button (see web-component-api.md §4) |
+| `moreItems` | String | `null` (web component default: `"More items"`) | `moreItems` | `aria-label` of the overflow button (see web-component-api.md §4) |
 
 Setter returns `this` so calls can be chained: `new BreadcrumbsI18n().setMoreItems("Show hidden items")`.
 
