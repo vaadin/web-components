@@ -5,11 +5,6 @@ import '@vaadin/vaadin-lumo-styles/components/upload.css';
 import '../../../vaadin-upload-file-list.js';
 import { freezeLoaderAnimation, waitForRendered } from '../common.js';
 
-// Enable the feature flag so the theme propagates to upload-file children
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.modularUpload = true;
-
 describe('upload-file-list-thumbnails', () => {
   let div, element;
 
