@@ -8,3 +8,7 @@ vaadin-breadcrumbs-item::part(link),
 vaadin-breadcrumbs-item::part(nolink) {
   transition: none !important;
 }
+
+vaadin-breadcrumbs::part(overlay) {
+  animation: none !important;
+}
