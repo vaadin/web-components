@@ -294,3 +294,27 @@ Extend `dev/breadcrumbs.html` so every variant in `figma-design.md` is exercised
 - A11y: separator pseudo-elements have no `content` and are not announced
 - A11y: overlay's `[part="content"]` carries `role="list"`; slotted items carry `role="listitem"`
 - The dev page renders one of every variant from `figma-design.md` without console errors
+
+---
+
+## Task 12: Documentation pass
+
+**Spec sections:** All
+**Requirements:** —
+**Depends on:** 11
+
+**User value:** Developers consuming the component get a complete reference directly from the source — IDE hover, generated docs, and `custom-elements.json` all describe the public surface (usage, parts, state attributes, CSS custom properties, events) without anyone needing to read the spec.
+
+Bring the class-level JSDoc on each `*.js` and `*.d.ts` entry up to the standard set by `<vaadin-side-nav>` and `<vaadin-card>`. The JSDoc must include:
+
+- **Usage example.** A short HTML snippet showing minimal initialization, placed in a fenced ` ```html ` block.
+- **Styling section.** Three sub-blocks: shadow DOM parts (as a `Part name | Description` table), state attributes (`Attribute | Description`), and custom CSS properties (single-column `Property` list — no `Description` column, since the property names follow the `--vaadin-breadcrumbs-*` convention and are self-describing). Each entry matches its counterpart in the corresponding spec table in `web-component-spec.md`. The styling section is for IDE hover and human-readable docs — it does not feed `custom-elements.json`.
+- **Events.** Explicit `@fires` lines for every event the component dispatches that is part of the public surface. The analyzer picks `@fires` up and emits the event into `custom-elements.json`. If the component dispatches no public events, the section is omitted (do not add an empty `@fires`).
+
+Run `yarn lint` and `yarn lint:types` to confirm the JSDoc still parses, and inspect `custom-elements.json` to confirm any new `@fires` annotations land in the events list.
+
+**Tests:**
+- `packages/breadcrumbs/src/vaadin-breadcrumbs.js` class JSDoc contains an HTML usage example, a parts table, a state-attributes table, a custom-properties table, and `@fires` lines covering every public event (or no `@fires` if there are none — verified by grepping `dispatchEvent` against `@fires` in the class JSDoc)
+- `packages/breadcrumbs/src/vaadin-breadcrumbs-item.js` class JSDoc contains the same four sections (or events section omitted if the item dispatches no public events)
+- `packages/breadcrumbs/src/vaadin-breadcrumbs.d.ts` and `vaadin-breadcrumbs-item.d.ts` carry equivalent JSDoc on the declared classes
+- `custom-elements.json` lists every public event documented in the spec; missing entries cause this task to fail
