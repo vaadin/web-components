@@ -36,8 +36,8 @@ describe('overflow', () => {
       </vaadin-breadcrumbs>
     `);
     await nextRender();
-    items = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item')];
     await nextResize(breadcrumbs);
+    items = [...breadcrumbs.querySelectorAll('vaadin-breadcrumbs-item')];
     button = breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]');
     overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
   });
