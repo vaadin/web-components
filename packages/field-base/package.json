@@ -41,7 +41,7 @@
     "@vaadin/input-container": "25.2.0-beta1",
     "@vaadin/test-runner-commands": "25.2.0-beta1",
     "@vaadin/testing-helpers": "^2.0.0",
-    "sinon": "^21.0.2"
+    "sinon": "^22.0.0"
   },
   "customElements": "custom-elements.json"
 }
