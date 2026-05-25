@@ -663,4 +663,91 @@ describe('keyboard', () => {
       expect(keydownEvent.defaultPrevented).to.be.false;
     });
   });
+
+  describe('focused row visibility', () => {
+    // Long-enough label that wraps to multiple lines under the default combo
+    // overlay width — every 5th item makes the row taller than its neighbors
+    // so `scrollIntoView`'s index-math heuristic overshoots and the focused
+    // row lands outside the viewport without the rect-based correction.
+    const LONG_LABEL = 'Long label that wraps to two or three lines making this row taller than its neighbors';
+    const SIZE = 100;
+
+    function buildItems(size = SIZE) {
+      return Array.from({ length: size }, (_, i) => (i % 5 === 0 ? `${LONG_LABEL} ${i}` : `item ${i}`));
+    }
+
+    function getScrollerRect() {
+      return comboBox._scroller.getBoundingClientRect();
+    }
+
+    function getFocusedItem() {
+      return [...comboBox._scroller.children].find((el) => !el.hidden && el.index === comboBox._focusedIndex);
+    }
+
+    function expectFocusedItemInsideViewport(comboBox) {
+      const focused = getFocusedItem();
+      expect(focused, 'focused item is rendered').to.exist;
+      const focusedRect = focused.getBoundingClientRect();
+      const scrollerRect = getScrollerRect();
+      const padding = comboBox._scroller._viewportTotalPaddingBottom;
+      expect(Math.round(focusedRect.top)).to.be.at.least(Math.round(scrollerRect.top) - 1);
+      expect(Math.round(focusedRect.bottom)).to.be.at.most(Math.round(scrollerRect.bottom) + padding + 1);
+    }
+
+    it('should keep target inside the viewport when stepping into a tall row', async () => {
+      comboBox.style.setProperty('--vaadin-combo-box-overlay-max-height', '400px');
+      comboBox.items = buildItems();
+      comboBox.opened = true;
+      await nextRender();
+
+      // Step past several tall rows; the bug surfaces on transitions where a
+      // tall row enters/leaves the viewport.
+      for (let i = 0; i < 25; i++) {
+        arrowDownKeyDown(input);
+        await nextFrame();
+        await nextFrame();
+        expectFocusedItemInsideViewport(comboBox);
+      }
+    });
+
+    it('should keep target inside the viewport with dataProvider across a page boundary', async () => {
+      const dpSize = 500;
+      const PAGE_SIZE = 50;
+      const items = buildItems(dpSize);
+      const pendingCallbacks = [];
+      comboBox.style.setProperty('--vaadin-combo-box-overlay-max-height', '400px');
+      // Outer beforeEach assigned `comboBox.items = ['foo', 'bar', 'baz']`;
+      // clear it before switching to a dataProvider — they can't coexist.
+      comboBox.items = undefined;
+      comboBox.pageSize = PAGE_SIZE;
+      comboBox.dataProvider = (params, callback) => {
+        pendingCallbacks.push(() => {
+          const slice = items.slice(params.page * params.pageSize, (params.page + 1) * params.pageSize);
+          callback(slice, dpSize);
+        });
+      };
+      comboBox.opened = true;
+      await nextRender();
+      // Drain whatever pages the initial open requested.
+      while (pendingCallbacks.length) {
+        pendingCallbacks.shift()();
+      }
+      await nextFrame();
+
+      // Walk past index 49 → 50 (first page boundary). Drain any new page
+      // loads triggered by the scroll so the focused row resolves to a real
+      // item before we assert. Regression guard for #4046's "every pageSize
+      // items, focus drifts off" pattern.
+      for (let i = 0; i <= 55; i++) {
+        arrowDownKeyDown(input);
+        await nextFrame();
+        while (pendingCallbacks.length) {
+          pendingCallbacks.shift()();
+        }
+        await nextFrame();
+        await nextFrame();
+        expectFocusedItemInsideViewport(comboBox);
+      }
+    });
+  });
 });

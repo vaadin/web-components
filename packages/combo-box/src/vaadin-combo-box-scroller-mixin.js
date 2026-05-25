@@ -192,18 +192,23 @@ export const ComboBoxScrollerMixin = (superClass) =>
       }
       this.__virtualizer.scrollToIndex(Math.max(0, targetIndex));
 
-      // Sometimes the item is partly below the bottom edge, detect and adjust.
-      const lastPhysicalItem = [...this.children].find(
-        (el) => !el.hidden && el.index === this.__virtualizer.lastVisibleIndex,
-      );
-      if (!lastPhysicalItem || index !== lastPhysicalItem.index) {
+      // iron-list re-estimates physical positions after each `scrollTop`
+      // write (and debounces some of that work), so the rendered rects only
+      // settle after a flush. Flushing here lets the rect-based correction
+      // below run on the final positions instead of stale ones.
+      this.__virtualizer.flush();
+
+      const target = [...this.children].find((el) => !el.hidden && el.index === index);
+      if (!target) {
         return;
       }
-      const lastPhysicalItemRect = lastPhysicalItem.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
       const scrollerRect = this.getBoundingClientRect();
-      const scrollTopAdjust = lastPhysicalItemRect.bottom - scrollerRect.bottom + this._viewportTotalPaddingBottom;
-      if (scrollTopAdjust > 0) {
-        this.scrollTop += scrollTopAdjust;
+      const targetBottom = targetRect.bottom + this._viewportTotalPaddingBottom;
+      if (targetBottom > scrollerRect.bottom) {
+        this.scrollTop += targetBottom - scrollerRect.bottom;
+      } else if (targetRect.top < scrollerRect.top) {
+        this.scrollTop -= scrollerRect.top - targetRect.top;
       }
     }
 
