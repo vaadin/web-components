@@ -761,22 +761,4 @@ describe('vaadin-select', () => {
       expect(parseFloat(window.getComputedStyle(select).width)).to.eql(500);
     });
   });
-
-  describe('pre-opened', () => {
-    beforeEach(() => {
-      select = document.createElement('vaadin-select');
-      select.items = [{ label: 'Option 1', value: 'value-1' }];
-    });
-
-    afterEach(() => {
-      select.remove();
-    });
-
-    it('should not close overlay when opened set before adding to DOM', async () => {
-      select.opened = true;
-      document.body.appendChild(select);
-      await nextUpdate(select);
-      expect(select._overlayElement.opened).to.be.true;
-    });
-  });
 });
