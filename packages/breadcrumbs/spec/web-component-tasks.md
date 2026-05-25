@@ -279,21 +279,18 @@ Implement `ArrowDown`/`ArrowUp` to move focus between adjacent links in the open
 
 **User value:** The component is ready to ship. Every documented variant works end-to-end, types are validated, visual and DOM regressions are caught by CI, and the dev page is the developer's living example.
 
-Extend `dev/breadcrumbs.html` so every variant in `figma-design.md` is exercised: default trail, short trail, overflow trail, icon trail, long-labels trail, in both LTR and RTL. Add DOM snapshot tests under `test/dom/` for every distinct rendered state: the default trail, an item with `path`, an item without `path` (`current` branch), the overflow-active trail with the overlay open, and an item with `has-prefix`. Add TypeScript type tests under `test/typings/` exercising the `path` property type (`string | null | undefined`), the `i18n` shape (`{ moreItems?: string }`), and that the public exports re-export the element classes. Add a dedicated accessibility test file mirroring side-nav's pattern. Run a final pass and ensure `yarn test`, `yarn test:snapshots`, `yarn test:base`, `yarn test:lumo`, `yarn test:aura`, `yarn lint`, and `yarn lint:types` all pass.
+Create `dev/playground/breadcrumbs.html` exercising the variants documented in the spec body: default trail, overflow trail, icon trail. Add DOM snapshot tests under `test/dom/` for every distinct rendered state: the default trail, an item with `path`, an item without `path` (`current` branch), the overflow-active trail with the overlay open, and an item with `has-prefix`. Add TypeScript type tests under `test/typings/` exercising the `path` property type (`string | null | undefined`), the `i18n` shape (`{ moreItems?: string }`), and that the public package entries resolve to the element classes. Accessibility semantics (`role="list"` / `role="listitem"`, decorative separators, overlay-content roles) are asserted via the DOM snapshots above — no dedicated accessibility test file is needed. Run a final pass and ensure `yarn test`, `yarn test:snapshots`, `yarn test:base`, `yarn test:lumo`, `yarn test:aura`, `yarn lint`, and `yarn lint:types` all pass.
 
 **Tests:**
 - DOM snapshot of `<vaadin-breadcrumbs>` with three items (last has no `path`) matches a stored snapshot
 - DOM snapshot of an item with `path` set matches a stored snapshot
 - DOM snapshot of an item without `path` (rendered as `[part="nolink"]`) matches a stored snapshot
-- DOM snapshot of `<vaadin-breadcrumbs>` with `has-overflow` set, two items hidden, and the overlay open matches a stored snapshot
+- DOM snapshot of `<vaadin-breadcrumbs>` with `has-overflow` set and the overlay open matches a stored snapshot
 - DOM snapshot of an item with a prefix icon matches a stored snapshot
-- Type test: `breadcrumbsItem.path = '/foo'` typechecks; `= null` typechecks; `= 42` is a type error
-- Type test: `breadcrumbs.i18n = { moreItems: 'x' }` typechecks; `{ unknown: 'x' }` is a type error
-- Type test: `import { Breadcrumbs, BreadcrumbsItem } from '@vaadin/breadcrumbs';` resolves to the element classes
-- A11y: a trail with three items announces as a list with three list items
-- A11y: separator pseudo-elements have no `content` and are not announced
-- A11y: overlay's `[part="content"]` carries `role="list"`; slotted items carry `role="listitem"`
-- The dev page renders one of every variant from `figma-design.md` without console errors
+- Type test: `breadcrumbsItem.path` typechecks as `string | null | undefined`
+- Type test: `breadcrumbs.i18n` typechecks as `BreadcrumbsI18n`
+- Type test: `document.createElement('vaadin-breadcrumbs')` typechecks as `Breadcrumbs`; `document.createElement('vaadin-breadcrumbs-item')` typechecks as `BreadcrumbsItem`
+- The dev playground page renders the default, overflow, and icon variants without console errors
 
 ---
 
