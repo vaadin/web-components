@@ -15,3 +15,7 @@ vaadin-range-slider {
     }
   }
 }
+
+vaadin-slider-bubble::part(overlay) {
+  animation: none !important;
+}
