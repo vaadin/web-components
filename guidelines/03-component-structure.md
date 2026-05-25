@@ -151,7 +151,7 @@ carry a short header comment:
     "@vaadin/chai-plugins": "25.2.0-alpha0",
     "@vaadin/test-runner-commands": "25.2.0-alpha0",
     "@vaadin/testing-helpers": "^2.0.0",
-    "sinon": "^21.0.0"
+    "sinon": "^22.0.0"
   },
   "customElements": "custom-elements.json",
   "web-types": ["web-types.json", "web-types.lit.json"]
