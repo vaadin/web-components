@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/text-field/test/visual/not-animated-styles.css';
+import '../not-animated-styles.css';
 import '../../../src/vaadin-login-overlay.js';
 
 describe('login-overlay', () => {
