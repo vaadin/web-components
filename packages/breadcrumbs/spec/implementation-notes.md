@@ -201,3 +201,17 @@ Task 9 needed two properties the controller-based setup did not provide: a singl
 - **Spec adjustments:** `web-component-tasks.md` Task 11 wording updated: dev-page reference now points at `dev/playground/breadcrumbs.html` with three variants (default, overflow, icon — no RTL); the import-resolution bullet was reworded to assert the tag-map identity (`document.createElement(...)` typechecks as the element class) since the typings tests use relative `../../src/` imports per repo convention rather than the bare-specifier `@vaadin/breadcrumbs` form; "two items hidden" qualifier dropped from the overflow-open snapshot bullet; the three a11y test bullets and the "dedicated accessibility test file" instruction were dropped because their assertions are covered by the DOM snapshot tests above; the `path` / `i18n` typings bullets were trimmed to positive-shape assertions only (no `@ts-expect-error`) to match the rest of the repo's typings tests. `figma-design.md` is still absent — the playground variants are derived from the spec body's variant enumeration instead.
 - **Deferred concerns:**
   - Visual test suites (`yarn test:base`/`:lumo`/`:aura`) require a TTY-attached Docker container and could not be exercised from this sandbox — should be run manually before merge.
+
+## Task 12 — Documentation pass
+
+- **Commit:** 6b94bd04d9
+- **Date:** 2026-05-25
+- **Decisions:**
+  - Added class-level JSDoc to `vaadin-breadcrumbs.js` / `vaadin-breadcrumbs.d.ts` and `vaadin-breadcrumbs-item.js` / `vaadin-breadcrumbs-item.d.ts`: HTML usage example, parts table, state-attributes table, and (container only) custom CSS properties block. Mirror between `.js` and `.d.ts` so IDE hover works on both sides.
+  - **No `@fires` lines.** `grep -rn dispatchEvent packages/breadcrumbs/src/` is empty — the component has no public events. The CEM `events` array stays empty for both elements.
+  - **No JSDoc on `vaadin-breadcrumbs-overlay.js`.** It is `@private` and not part of the public surface.
+  - **Item state-attribute descriptions stay framework-neutral.** Initial draft mentioned `DisabledMixin` / `FocusMixin` as the source of the `disabled` / `focused` / `focus-ring` attributes; reverted to the pre-Task-12 wording (`Set when the item is disabled.` / `Set when the item is focused.` / `Set when the item is focused by the keyboard.`) so the public-facing docs don't leak implementation details.
+  - **Custom CSS properties block uses a bullet list, not a single-column table.** Initial draft used a one-column markdown table; the header / data row column counts didn't match, which TypeDoc and IDE markdown renderers render incorrectly. A bullet list (`- \`--vaadin-breadcrumbs-separator\``) renders cleanly everywhere and matches Task 12's spec wording ("single-column `Property` list — no `Description` column").
+  - The test agent step was skipped — Task 12's "Tests" bullets are content-checklist items about JSDoc presence, not runtime behavior assertions, and the repo has no precedent for meta-tests that grep source files for documentation strings.
+- **Surprises:** —
+- **Spec adjustments:** —

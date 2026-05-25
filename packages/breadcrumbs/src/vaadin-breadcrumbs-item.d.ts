@@ -10,6 +10,10 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 /**
  * `<vaadin-breadcrumbs-item>` is a single item inside a `<vaadin-breadcrumbs>`.
  *
+ * ```html
+ * <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
+ * ```
+ *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:

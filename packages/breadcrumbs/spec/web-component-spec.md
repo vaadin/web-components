@@ -74,7 +74,7 @@ The `<div role="list">` is used instead of `<ol>` because (a) `<ol>` accepts onl
 | Part | Description |
 |---|---|
 | `list` | The element with `role="list"` wrapping all items. |
-| `overflow` | The listitem element containing the overflow button. |
+| `overflow` | The element wrapping the overflow button. |
 | `overflow-button` | The button that reveals collapsed items. |
 
 The overflow overlay's outer panel and its inner wrapper live on `<vaadin-breadcrumbs-overlay>` and are re-exported on the breadcrumbs host through `exportparts="overlay, content: overlay-content"` — the overlay's `content` part is renamed to `overlay-content` on export so it does not collide with anything else themes might expect on the breadcrumbs. Themes target them as `vaadin-breadcrumbs::part(overlay)` and `vaadin-breadcrumbs::part(overlay-content)`. The `<vaadin-breadcrumbs-overlay>` element itself is an internal implementation detail and is not part of the theming contract.
