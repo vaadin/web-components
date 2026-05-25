@@ -7,3 +7,7 @@ vaadin-rich-text-editor::part(content) {
 vaadin-rich-text-editor::part(toolbar-button) {
   transition: none !important;
 }
+
+vaadin-rich-text-editor-popup-popup::part(overlay) {
+  animation: none !important;
+}
