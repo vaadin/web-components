@@ -126,7 +126,7 @@ The outer wrapper carries `part="link"` when the item is interactive and `part="
 | Property | Type | Default | Reflected | Description |
 |---|---|---|---|---|
 | `path` | `string \| null \| undefined` | `undefined` | No | The URL to navigate to. When set, the item renders as an `<a>` link. When absent, the item renders as a non-interactive `<span>`. |
-| `disabled` | `boolean` | `false` | Yes (`disabled`) | Provided by `DisabledMixin`. When `true`, the item renders without an `href`, carries `tabindex="-1"`, sets `aria-disabled="true"`, and suppresses programmatic `click()`. |
+| `disabled` | `boolean` | `false` | Yes (`disabled`) | Provided by `DisabledMixin`. When `true`, the item renders without an `href`, carries `tabindex="-1"`, sets `aria-disabled="true"` on the host, and suppresses programmatic `click()`. |
 
 | Slot | Description |
 |---|---|
@@ -231,7 +231,7 @@ Decisions made during specification review, with their reasoning.
 
 **Q: Why does `<vaadin-breadcrumbs-item>` expose `disabled` plus `focused` / `focus-ring` state attributes?**
 
-Items are interactive links, so they participate in the same disability + focus contract as every other interactive Vaadin component. `DisabledMixin` and `FocusMixin` are the project's standard primitives for that contract — pulling them in keeps the item's behavior (no `href`, `tabindex="-1"`, `aria-disabled="true"`, suppressed programmatic clicks; `focused` while focus is inside; `focus-ring` only when focus arrived via keyboard) identical to the rest of the library and avoids re-implementing the same state machine. Themes get to style disabled and keyboard-focus states without re-asserting browser focus semantics; applications get a property and an attribute that already work the way Vaadin developers expect.
+Items are interactive links, so they participate in the same disability + focus contract as every other interactive Vaadin component. `DisabledMixin` and `FocusMixin` are the project's standard primitives for that contract — pulling them in keeps the item's behavior (no `href`, `tabindex="-1"` on the inner link, `aria-disabled="true"` on the host, suppressed programmatic clicks; `focused` while focus is inside; `focus-ring` only when focus arrived via keyboard) identical to the rest of the library and avoids re-implementing the same state machine. Themes get to style disabled and keyboard-focus states without re-asserting browser focus semantics; applications get a property and an attribute that already work the way Vaadin developers expect.
 
 **Q: Why is there no programmatic `items` property?**
 
@@ -263,7 +263,7 @@ For consistency with the other Vaadin overlay-with-overflow component, `<vaadin-
 
 **Q: Why does arrow-key navigation skip disabled overlay items?**
 
-Arrow / Home / End navigation in the overflow overlay is implemented via `KeyboardDirectionMixin` from `@vaadin/a11y-base`, the same primitive that powers `<vaadin-context-menu-list-box>`, `<vaadin-menu-bar>`, and `<vaadin-accordion>`. The mixin's `_isItemFocusable(item)` defaults to `!item.hasAttribute('disabled')` and is honored by both the per-keystroke lookup and the open-time first-focus path, so disabled items are skipped uniformly. The alternative — letting focus land on a disabled item — would conflict with the item's own `tabindex="-1"`, `aria-disabled="true"`, and suppressed click contract, and would diverge from the menu-style navigation users encounter everywhere else in the library.
+Arrow / Home / End navigation in the overflow overlay is implemented via `KeyboardDirectionMixin` from `@vaadin/a11y-base`, the same primitive that powers `<vaadin-context-menu-list-box>`, `<vaadin-menu-bar>`, and `<vaadin-accordion>`. The mixin's `_isItemFocusable(item)` defaults to `!item.hasAttribute('disabled')` and is honored by both the per-keystroke lookup and the open-time first-focus path, so disabled items are skipped uniformly. The alternative — letting focus land on a disabled item — would conflict with the inner link's `tabindex="-1"`, the host's `aria-disabled="true"`, and the suppressed click contract, and would diverge from the menu-style navigation users encounter everywhere else in the library.
 
 **Q: Why does `breadcrumbs.focus()` target the root item, with the overflow button as a fallback?**
 
