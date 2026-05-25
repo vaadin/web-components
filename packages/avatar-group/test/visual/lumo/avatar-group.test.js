@@ -3,6 +3,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/avatar.css';
 import '@vaadin/vaadin-lumo-styles/components/avatar-group.css';
+import '../not-animated-styles.css';
 import '../../../vaadin-avatar-group.js';
 
 describe('avatar-group', () => {
