@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
+import '../not-animated-styles.css';
 import '../../../vaadin-avatar-group.js';
 
 describe('avatar-group', () => {
