@@ -53,8 +53,7 @@ describe('breadcrumbs', () => {
           <vaadin-breadcrumbs>
             <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
             <vaadin-breadcrumbs-item path="/docs">Documents</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/docs/projects">Projects</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/docs/projects/2026">2026</vaadin-breadcrumbs-item>
+            <vaadin-breadcrumbs-item path="/docs/projects" disabled>Projects</vaadin-breadcrumbs-item>
             <vaadin-breadcrumbs-item>Summary report</vaadin-breadcrumbs-item>
           </vaadin-breadcrumbs>
         `,
@@ -78,7 +77,9 @@ describe('breadcrumbs', () => {
     it('overflow-opened', async () => {
       div.style.height = '150px';
       const overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
-      breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]').click();
+      const button = breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]');
+      button.focus();
+      await sendKeys({ press: 'Enter' });
       await oneEvent(overlay, 'vaadin-overlay-open');
       await visualDiff(div, 'overflow-opened');
     });
