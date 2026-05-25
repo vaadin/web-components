@@ -1,0 +1,30 @@
+vaadin-combo-box[focused] input,
+vaadin-combo-box[opened] input {
+  caret-color: transparent;
+}
+
+vaadin-combo-box[opening]::part(overlay),
+vaadin-combo-box[closing]::part(overlay) {
+  animation: none !important;
+  transition: none !important;
+}
+
+vaadin-combo-box[loading]::part(loader) {
+  animation: none;
+  opacity: 1;
+}
+
+vaadin-combo-box::part(label),
+vaadin-combo-box::part(field-button),
+vaadin-combo-box::part(helper-text),
+vaadin-combo-box::part(input-field),
+vaadin-combo-box::part(error-message),
+vaadin-combo-box::part(required-indicator),
+vaadin-combo-box input:placeholder-shown {
+  &,
+  &::before,
+  &::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

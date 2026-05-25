@@ -1,7 +1,8 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../common.js';
+import '@vaadin/checkbox/test/visual/not-animated-styles.css';
+import '../not-animated-styles.css';
 import '../../../src/vaadin-checkbox-group.js';
 
 describe('checkbox-group', () => {

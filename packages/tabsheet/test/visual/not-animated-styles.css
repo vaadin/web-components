@@ -1,0 +1,5 @@
+/* Stop loader animation */
+vaadin-tabsheet[loading]::part(loader) {
+  animation: none;
+  opacity: 1;
+}

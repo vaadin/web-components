@@ -3,7 +3,7 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/slider.css';
-import '../common.js';
+import '../not-animated-styles.css';
 import '../../../vaadin-slider.js';
 import type { Slider } from '../../../vaadin-slider.js';
 

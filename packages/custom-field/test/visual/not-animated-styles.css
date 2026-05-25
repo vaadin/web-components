@@ -1,0 +1,19 @@
+vaadin-custom-field,
+vaadin-date-picker,
+vaadin-number-field,
+vaadin-text-field {
+  &::part(label),
+  &::part(field-button),
+  &::part(helper-text),
+  &::part(input-field),
+  &::part(error-message),
+  &::part(required-indicator),
+  & input:placeholder-shown {
+    &,
+    &::before,
+    &::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}

@@ -1,0 +1,11 @@
+vaadin-side-nav,
+vaadin-side-nav::before,
+vaadin-side-nav::after,
+vaadin-side-nav-item,
+vaadin-side-nav-item::before,
+vaadin-side-nav-item::after,
+vaadin-side-nav-item::part(toggle-button),
+vaadin-side-nav-item::part(toggle-button)::before,
+vaadin-side-nav-item::part(toggle-button)::after {
+  transition: none !important;
+}

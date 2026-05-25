@@ -1,7 +1,15 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../common.js';
+import '@vaadin/text-field/test/visual/not-animated-styles.css';
+import '@vaadin/text-area/test/visual/not-animated-styles.css';
+import '@vaadin/date-time-picker/test/visual/not-animated-styles.css';
+import '@vaadin/date-picker/test/not-animated-styles.css';
+import '@vaadin/time-picker/test/not-animated-styles.css';
+import '@vaadin/radio-group/test/visual/not-animated-styles.css';
+import '@vaadin/checkbox-group/test/visual/not-animated-styles.css';
+import '@vaadin/checkbox/test/visual/not-animated-styles.css';
+import '../not-animated-styles.js';
 import '@vaadin/aura/aura.css';
 import '@vaadin/text-field';
 import '../../../src/vaadin-field-highlighter.js';

@@ -11,7 +11,6 @@ import {
   oneEvent,
   outsideClick,
 } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
 import { Popover } from '../src/vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';
 

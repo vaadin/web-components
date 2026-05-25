@@ -1,0 +1,24 @@
+vaadin-text-field,
+vaadin-email-field,
+vaadin-integer-field,
+vaadin-number-field,
+vaadin-password-field {
+  &[focused] input {
+    caret-color: transparent;
+  }
+
+  &::part(label),
+  &::part(field-button),
+  &::part(helper-text),
+  &::part(input-field),
+  &::part(error-message),
+  &::part(required-indicator),
+  & input:placeholder-shown {
+    &,
+    &::before,
+    &::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}

@@ -1,0 +1,5 @@
+vaadin-upload-button,
+vaadin-upload-button::before,
+vaadin-upload-button::after {
+  transition: none !important;
+}

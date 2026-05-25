@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
 import '../src/vaadin-select.js';
 import { html, nothing, render } from 'lit';
 import { selectRenderer } from '../lit.js';

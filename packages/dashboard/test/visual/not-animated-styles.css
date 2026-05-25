@@ -1,0 +1,7 @@
+vaadin-dashboard-widget,
+vaadin-dashboard-section,
+vaadin-dashboard-widget::part(content),
+vaadin-dashboard-widget::part(button),
+vaadin-dashboard-section::part(button) {
+  transition: none !important;
+}

@@ -101,5 +101,6 @@ export default {
     },
     esbuildPlugin({ ts: true }),
     enforceThemePlugin(theme),
+    cssImportPlugin(),
   ],
 };

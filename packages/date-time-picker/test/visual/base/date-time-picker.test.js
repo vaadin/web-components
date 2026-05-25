@@ -1,6 +1,8 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../common.js';
+import '@vaadin/date-picker/test/not-animated-styles.css';
+import '@vaadin/time-picker/test/not-animated-styles.css';
+import '../not-animated-styles.css';
 import '../../../src/vaadin-date-time-picker.js';
 
 describe('date-time-picker', () => {
