@@ -240,4 +240,74 @@ describe('overflow', () => {
       expect(overlay.opened).to.be.false;
     });
   });
+
+  describe('navigation', () => {
+    let overlayItems;
+
+    beforeEach(async () => {
+      // Collapse all items to the overlay
+      breadcrumbs.style.maxWidth = '200px';
+      await nextResize(breadcrumbs);
+
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      overlayItems = items.filter((item) => item.slot === 'overlay');
+    });
+
+    it('should move focus to the next link on ArrowDown', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      expectFocusedItem(overlayItems[1]);
+    });
+
+    it('should move focus to the previous link on ArrowUp', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      await sendKeys({ press: 'ArrowUp' });
+      await nextRender();
+
+      expectFocusedItem(overlayItems[0]);
+    });
+
+    it('should focus the first link on ArrowDown when the last one is focused', async () => {
+      for (let i = 0; i < overlayItems.length - 1; i += 1) {
+        await sendKeys({ press: 'ArrowDown' });
+        await nextRender();
+      }
+
+      expectFocusedItem(overlayItems.at(-1));
+
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      expectFocusedItem(overlayItems[0]);
+    });
+
+    it('should focus the last link on ArrowUp when the first one is focused', async () => {
+      await sendKeys({ press: 'ArrowUp' });
+      await nextRender();
+
+      expectFocusedItem(overlayItems.at(-1));
+    });
+
+    it('should focus the last link on End', async () => {
+      await sendKeys({ press: 'End' });
+      await nextRender();
+
+      expectFocusedItem(overlayItems.at(-1));
+    });
+
+    it('should focus the first link on Home', async () => {
+      await sendKeys({ press: 'End' });
+      await nextRender();
+
+      await sendKeys({ press: 'Home' });
+      await nextRender();
+
+      expectFocusedItem(overlayItems[0]);
+    });
+  });
 });

@@ -6,6 +6,7 @@
 import './vaadin-breadcrumbs-item.js';
 import './vaadin-breadcrumbs-overlay.js';
 import { html, LitElement } from 'lit';
+import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
@@ -276,7 +277,41 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
   __onOverlayKeyDown(event) {
     if (event.key === 'Tab') {
       this.__overlayOpened = false;
+      return;
     }
+
+    const { key } = event;
+    if (key !== 'ArrowDown' && key !== 'ArrowUp' && key !== 'Home' && key !== 'End') {
+      return;
+    }
+
+    const overlayItems = [...this.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]')];
+    if (overlayItems.length === 0) {
+      return;
+    }
+
+    event.preventDefault();
+
+    // `delegatesFocus: true` on the item element means the item is reported
+    // as the focused element at the host level when its inner link has focus.
+    const currentIndex = overlayItems.findIndex((item) => isElementFocused(item));
+
+    // ArrowDown / ArrowUp wrap at both ends to match the menu-style navigation
+    // used by `<vaadin-context-menu-list-box>` and `<vaadin-menu-bar>` (both
+    // composed over `KeyboardDirectionMixin`).
+    const lastIndex = overlayItems.length - 1;
+    let nextIndex = currentIndex;
+    if (key === 'ArrowDown') {
+      nextIndex = currentIndex >= lastIndex ? 0 : currentIndex + 1;
+    } else if (key === 'ArrowUp') {
+      nextIndex = currentIndex <= 0 ? lastIndex : currentIndex - 1;
+    } else if (key === 'Home') {
+      nextIndex = 0;
+    } else if (key === 'End') {
+      nextIndex = lastIndex;
+    }
+
+    overlayItems[nextIndex].focus();
   }
 }
 
