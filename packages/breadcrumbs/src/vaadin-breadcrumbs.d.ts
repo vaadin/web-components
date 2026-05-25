@@ -3,6 +3,7 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import type { KeyboardDirectionMixinClass } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
@@ -17,7 +18,7 @@ export interface BreadcrumbsI18n {
  */
 declare class Breadcrumbs extends ElementMixin(HTMLElement) {}
 
-interface Breadcrumbs extends I18nMixinClass<BreadcrumbsI18n>, ResizeMixinClass {}
+interface Breadcrumbs extends I18nMixinClass<BreadcrumbsI18n>, KeyboardDirectionMixinClass, ResizeMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {

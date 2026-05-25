@@ -184,8 +184,8 @@ Internal behavior:
 - **Close on outside click and Escape.** Provided by `OverlayMixin`. The breadcrumb does not re-implement either.
 - **Positioning relative to the overflow button.** Driven by the `positionTarget` property from `PositionMixin`, matching the convention used by `<vaadin-combo-box-overlay>` and `<vaadin-avatar-group-overlay>`.
 - **Keyboard interaction within the open overlay.**
-  - **Focus on open** — when the overlay opens (via overflow-button click, Enter, or Space), the breadcrumbs container moves focus to the first slotted overlay item's link so keyboard users land directly inside the popup.
-  - **Arrow keys** — Up/Down arrows move focus between adjacent links inside the open overlay (Home/End jump to first/last). The overlay reads as a menu visually, so menu-style keyboard navigation is the primary way to traverse its items.
+  - **Focus on open** — when the overlay opens (via overflow-button click, Enter, or Space), the breadcrumbs container moves focus to the first non-disabled slotted overlay item's link so keyboard users land directly inside the popup.
+  - **Arrow keys** — Up/Down arrows move focus between adjacent links inside the open overlay (Home/End jump to first/last). Disabled items are skipped — arrow keys, Home, and End land on the nearest non-disabled item in the requested direction. The overlay reads as a menu visually, so menu-style keyboard navigation is the primary way to traverse its items.
   - **Tab / Shift+Tab** — closes the overlay. `restore-focus-on-close` returns focus to the overflow button, from which the native Tab / Shift+Tab traversal then moves focus to the next / previous focusable trail item in document order.
   - **Escape** — closes the overlay and returns focus to the overflow button.
 
@@ -260,6 +260,14 @@ The overlay reads visually as a menu, so users coming from menu-bar / context-me
 **Q: Why does Tab close the overflow overlay?**
 
 For consistency with the other Vaadin overlay-with-overflow component, `<vaadin-avatar-group>`, whose overflow menu also closes on Tab and Shift+Tab. The overflow overlay is a transient popup anchored to a trigger button; keeping it open while focus has already moved past the trigger creates an orphaned popup whose contents no longer match where the user is in the document. Closing on Tab matches the dismiss-on-blur behavior users expect from any popover, and `restore-focus-on-close` returns focus to the overflow button when needed so the trail's tab order remains predictable.
+
+**Q: Why does arrow-key navigation skip disabled overlay items?**
+
+Arrow / Home / End navigation in the overflow overlay is implemented via `KeyboardDirectionMixin` from `@vaadin/a11y-base`, the same primitive that powers `<vaadin-context-menu-list-box>`, `<vaadin-menu-bar>`, and `<vaadin-accordion>`. The mixin's `_isItemFocusable(item)` defaults to `!item.hasAttribute('disabled')` and is honored by both the per-keystroke lookup and the open-time first-focus path, so disabled items are skipped uniformly. The alternative — letting focus land on a disabled item — would conflict with the item's own `tabindex="-1"`, `aria-disabled="true"`, and suppressed click contract, and would diverge from the menu-style navigation users encounter everywhere else in the library.
+
+**Q: Why does `breadcrumbs.focus()` target the root item, with the overflow button as a fallback?**
+
+The root is the trail's natural entry point — applications that programmatically focus the component expect focus to land at the start of the trail. When the root is unavailable (its `disabled` attribute is set, or overflow has collapsed it into the overlay so it is no longer rendered in the trail), the next visible focusable element belonging to the breadcrumbs is the overflow button — focusing that gives keyboard users an unambiguous handle on the navigation without quietly no-op'ing or jumping into the collapsed overlay. The mixin's default `focus()` would walk into the first slotted overlay item, which is not the right entry surface for a navigation landmark.
 
 **Q: Should `<vaadin-breadcrumbs-item>` expose a `target` property?**
 

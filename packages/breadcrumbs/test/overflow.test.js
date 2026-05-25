@@ -240,4 +240,166 @@ describe('overflow', () => {
       expect(overlay.opened).to.be.false;
     });
   });
+
+  describe('navigation', () => {
+    let overlayItems;
+
+    beforeEach(async () => {
+      // Collapse all items to the overlay
+      breadcrumbs.style.maxWidth = '200px';
+      await nextResize(breadcrumbs);
+
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      overlayItems = items.filter((item) => item.slot === 'overlay');
+    });
+
+    it('should move focus to the next link on ArrowDown', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      expectFocusedItem(overlayItems[1]);
+    });
+
+    it('should move focus to the previous link on ArrowUp', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      await sendKeys({ press: 'ArrowUp' });
+      await nextRender();
+
+      expectFocusedItem(overlayItems[0]);
+    });
+
+    it('should focus the first link on ArrowDown when the last one is focused', async () => {
+      for (let i = 0; i < overlayItems.length - 1; i += 1) {
+        await sendKeys({ press: 'ArrowDown' });
+        await nextRender();
+      }
+
+      expectFocusedItem(overlayItems.at(-1));
+
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      expectFocusedItem(overlayItems[0]);
+    });
+
+    it('should focus the last link on ArrowUp when the first one is focused', async () => {
+      await sendKeys({ press: 'ArrowUp' });
+      await nextRender();
+
+      expectFocusedItem(overlayItems.at(-1));
+    });
+
+    it('should focus the last link on End', async () => {
+      await sendKeys({ press: 'End' });
+      await nextRender();
+
+      expectFocusedItem(overlayItems.at(-1));
+    });
+
+    it('should focus the first link on Home', async () => {
+      await sendKeys({ press: 'End' });
+      await nextRender();
+
+      await sendKeys({ press: 'Home' });
+      await nextRender();
+
+      expectFocusedItem(overlayItems[0]);
+    });
+  });
+
+  describe('disabled items', () => {
+    beforeEach(async () => {
+      // Collapse all items to the overlay
+      breadcrumbs.style.maxWidth = '200px';
+      await nextResize(breadcrumbs);
+    });
+
+    it('should skip a disabled item on ArrowDown', async () => {
+      items[1].disabled = true;
+
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      expectFocusedItem(items[2]);
+    });
+
+    it('should skip a disabled item on ArrowUp', async () => {
+      items[3].disabled = true;
+
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      await sendKeys({ press: 'End' });
+      await nextRender();
+
+      await sendKeys({ press: 'ArrowUp' });
+      await nextRender();
+
+      expectFocusedItem(items[2]);
+    });
+
+    it('should focus the previous focusable item on End when last is disabled', async () => {
+      items[4].disabled = true;
+
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      await sendKeys({ press: 'End' });
+      await nextRender();
+
+      expectFocusedItem(items[3]);
+    });
+
+    it('should focus the next focusable item on Home when first is disabled', async () => {
+      items[0].disabled = true;
+
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      await sendKeys({ press: 'End' });
+      await nextRender();
+
+      await sendKeys({ press: 'Home' });
+      await nextRender();
+
+      expectFocusedItem(items[1]);
+    });
+
+    it('should focus the first non-disabled overlay item on open', async () => {
+      items[0].disabled = true;
+
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      expectFocusedItem(items[1]);
+    });
+  });
+
+  describe('focus()', () => {
+    it('should focus the overflow button when the root item is disabled', async () => {
+      breadcrumbs.style.maxWidth = '600px';
+      await nextResize(breadcrumbs);
+      items[0].disabled = true;
+
+      breadcrumbs.focus();
+
+      expect(breadcrumbs.shadowRoot.activeElement).to.equal(button);
+    });
+
+    it('should focus the overflow button when the root item is collapsed', async () => {
+      breadcrumbs.style.maxWidth = '200px';
+      await nextResize(breadcrumbs);
+
+      breadcrumbs.focus();
+
+      expect(breadcrumbs.shadowRoot.activeElement).to.equal(button);
+    });
+  });
 });
