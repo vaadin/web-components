@@ -11,7 +11,6 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.css';
 import '../src/vaadin-tooltip.js';
 import { resetGlobalTooltipState } from '../src/vaadin-tooltip-mixin.js';
 import { mouseenter, mouseleave } from './helpers.js';

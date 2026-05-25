@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import '../not-animated-styles.css';
 import '../../src/vaadin-context-menu.js';
 import { openSubMenus } from '../helpers.js';
 
