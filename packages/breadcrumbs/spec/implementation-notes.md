@@ -173,3 +173,16 @@ Task 9 needed two properties the controller-based setup did not provide: a singl
   - Tests added under a new `describe('navigation', …)` block at `max-width: 200px` (5 items collapse to overlay). Each test starts from a known focused link — relying on the Task 9 focus-on-open invariant — and asserts focus moves to the expected sibling.
 - **Surprises:** —
 - **Spec adjustments:** —
+
+## Task 10 follow-up — Adopt `KeyboardDirectionMixin`, skip disabled overlay items
+
+- **Date:** 2026-05-22
+- **Decisions:**
+  - Replaced the ~25-line inline `__onOverlayKeyDown` handler with `KeyboardDirectionMixin` from `@vaadin/a11y-base`. The original "mixin is not a fit" rationale (above) turned out to be wrong: `KeyboardDirectionMixin`'s default `focused` getter uses `isElementFocused(item)`, which returns `true` when `delegatesFocus: true` routes the inner link's focus up to the item itself. No override of `focused` is needed. `_vertical` defaults to `true` (we want ArrowUp/Down) and `_tabNavigation` defaults to `false` (we don't want roving tabindex on Tab), so neither needs overriding either.
+  - Three overrides on `<vaadin-breadcrumbs>`: (1) `_getItems()` returns only `slot="overlay"` items so arrow nav stays inside the overlay; (2) `_onKeyDown(event)` short-circuits unless `this.__overlayOpened` is truthy, with a Tab branch that closes the overlay before delegating to `super` — explicit state check is preferred over the mixin's `focused` getter so the guard does not depend on which descendant element currently owns focus; (3) `focus(options)` targets the root item, falling back to the overflow button when the root is disabled or collapsed into the overlay — so `breadcrumbs.focus()` lands on a visible focusable element instead of the mixin's default "first overlay item".
+  - The legacy private helper that returned all light-DOM `<vaadin-breadcrumbs-item>` children was renamed from `__getItems` → `__getAllItems` to disambiguate from the mixin's `_getItems` override (used only for arrow-nav).
+  - The template's `@keydown="${this.__onOverlayKeyDown}"` binding on `<vaadin-breadcrumbs-overlay>` was removed — `KeyboardMixin` attaches the listener on the host instead, and the events still bubble up from slotted overlay items.
+  - `__onOverlayOpen` now uses the mixin's `_getAvailableIndex(items, 0, 1, null)` + `_focus(idx)` to land on the first non-disabled overlay item. If every collapsed item is disabled, no focus is moved.
+  - Five new disabled-skip tests landed under `describe('navigation with disabled items', …)`: ArrowDown/ArrowUp over a disabled middle item, Home/End when the boundary item is disabled, and open-time focus when the first overlay item is disabled.
+- **Surprises:** —
+- **Spec adjustments:** Spec body keyboard section updated to mention disabled-item skipping in arrow / Home / End navigation and the "first non-disabled" semantics of open-time focus. New Discussion entry `Q: Why does arrow-key navigation skip disabled overlay items?` added to `web-component-spec.md`.

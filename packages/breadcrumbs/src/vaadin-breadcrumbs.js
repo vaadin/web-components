@@ -6,7 +6,7 @@
 import './vaadin-breadcrumbs-item.js';
 import './vaadin-breadcrumbs-overlay.js';
 import { html, LitElement } from 'lit';
-import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
@@ -27,7 +27,9 @@ const DEFAULT_I18N = {
  * @customElement vaadin-breadcrumbs
  * @extends HTMLElement
  */
-class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+class Breadcrumbs extends KeyboardDirectionMixin(
+  ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+) {
   static get is() {
     return 'vaadin-breadcrumbs';
   }
@@ -119,7 +121,6 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
         exportparts="overlay, content: overlay-content"
         @opened-changed="${this.__onOverlayOpenedChanged}"
         @vaadin-overlay-open="${this.__onOverlayOpen}"
-        @keydown="${this.__onOverlayKeyDown}"
       >
         <slot name="overlay"></slot>
       </vaadin-breadcrumbs-overlay>
@@ -154,7 +155,7 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
   }
 
   /** @private */
-  __getItems() {
+  __getAllItems() {
     return [...this.children].filter((node) => node.localName === 'vaadin-breadcrumbs-item');
   }
 
@@ -164,7 +165,7 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
    * @private
    */
   __updateItems() {
-    const items = this.__getItems();
+    const items = this.__getAllItems();
     const lastIndex = items.length - 1;
     items.forEach((item, index) => {
       const isCurrent = index === lastIndex && item.path == null;
@@ -201,7 +202,7 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
    * @private
    */
   __updateOverflow() {
-    const items = this.__getItems();
+    const items = this.__getAllItems();
     this.__restoreSlots(items);
 
     if (items.length <= 1) {
@@ -266,52 +267,67 @@ class Breadcrumbs extends ResizeMixin(I18nMixin(ElementMixin(PolylitMixin(LumoIn
 
   /** @private */
   __onOverlayOpen() {
-    // Move focus to the first slotted overlay item's link, if any.
-    const firstItem = this.querySelector('vaadin-breadcrumbs-item[slot="overlay"]');
-    if (firstItem) {
-      firstItem.focus();
+    // Focus first non-disabled overlay item
+    const idx = this._getFocusableIndex();
+    if (idx >= 0) {
+      this._focus(idx);
     }
   }
 
-  /** @private */
-  __onOverlayKeyDown(event) {
+  /**
+   * Override the method inherited from `KeyboardDirectionMixin` to
+   * close on Tab and implement arrow key navigation in the overlay.
+   *
+   * @param {KeyboardEvent} event
+   * @protected
+   * @override
+   */
+  _onKeyDown(event) {
+    if (!this.__overlayOpened) {
+      return;
+    }
+
     if (event.key === 'Tab') {
       this.__overlayOpened = false;
       return;
     }
 
-    const { key } = event;
-    if (key !== 'ArrowDown' && key !== 'ArrowUp' && key !== 'Home' && key !== 'End') {
+    super._onKeyDown(event);
+  }
+
+  /**
+   * Override method inherited from `KeyboardDirectionMixin`
+   * to only use overlay items for the arrow key navigation.
+   *
+   * @return {Element[]}
+   * @protected
+   * @override
+   */
+  _getItems() {
+    return [...this.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]')];
+  }
+
+  /**
+   * Override the method inherited from `KeyboardDirectionMixin` to make
+   * `breadcrumbs.focus()` lands on the root item. When the root item is
+   * disabled or collapsed to overlay, focus the overflow button instead.
+   *
+   * @param {FocusOptions=} options
+   * @protected
+   * @override
+   */
+  focus(options) {
+    const rootItem = this.querySelector('vaadin-breadcrumbs-item');
+    if (!rootItem) {
       return;
     }
 
-    const overlayItems = [...this.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]')];
-    if (overlayItems.length === 0) {
+    if (rootItem.disabled || rootItem.slot === 'overlay') {
+      this.$.overflow.focus(options);
       return;
     }
 
-    event.preventDefault();
-
-    // `delegatesFocus: true` on the item element means the item is reported
-    // as the focused element at the host level when its inner link has focus.
-    const currentIndex = overlayItems.findIndex((item) => isElementFocused(item));
-
-    // ArrowDown / ArrowUp wrap at both ends to match the menu-style navigation
-    // used by `<vaadin-context-menu-list-box>` and `<vaadin-menu-bar>` (both
-    // composed over `KeyboardDirectionMixin`).
-    const lastIndex = overlayItems.length - 1;
-    let nextIndex = currentIndex;
-    if (key === 'ArrowDown') {
-      nextIndex = currentIndex >= lastIndex ? 0 : currentIndex + 1;
-    } else if (key === 'ArrowUp') {
-      nextIndex = currentIndex <= 0 ? lastIndex : currentIndex - 1;
-    } else if (key === 'Home') {
-      nextIndex = 0;
-    } else if (key === 'End') {
-      nextIndex = lastIndex;
-    }
-
-    overlayItems[nextIndex].focus();
+    rootItem.focus(options);
   }
 }
 
