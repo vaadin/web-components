@@ -1,0 +1,347 @@
+# Breadcrumbs Flow Implementation Tasks
+
+<!--
+Ordered implementation tasks derived from flow-spec.md. Each task is a self-contained unit of work following test-driven development: define tests first, then implement to make them pass. Each task results in a merge-ready branch in the flow-components repository.
+
+Primary input: packages/breadcrumbs/spec/flow-spec.md
+API context: packages/breadcrumbs/spec/flow-api.md
+Traceability: packages/breadcrumbs/spec/requirements.md (universal + flow)
+
+Tasks are pointers into the spec, not a second copy of it. The spec sections field tells the implementer where to find the full details. Do not restate class declarations, method tables, or `@Synchronize` lists here.
+
+External Flow core dependencies (not implemented by these tasks):
+- `com.vaadin.flow.component.HasComponentsOfType<T>` — Flow core PR #24186 (required by Task 4)
+- `com.vaadin.flow.router.RouteParent` annotation — Flow core (required by Task 6 + Task 10)
+- `com.vaadin.flow.router.RouteHierarchy.resolveAncestors(...)` walker — Flow core (required by Task 6)
+The Flow-version bump in `flow-components-bom` is part of Task 1.
+
+Do NOT reorder tasks without verifying the dependency graph.
+Do NOT add tasks for features not in the spec.
+-->
+
+## Spec References
+
+- [flow-spec.md](flow-spec.md)
+- [flow-api.md](flow-api.md)
+- [requirements.md](requirements.md) — universal + flow (requirements 13–16 are Flow-specific)
+- [web-component-api.md](web-component-api.md) — web component API being wrapped
+- [web-component-spec.md](web-component-spec.md) — web component spec
+
+---
+
+## Task 1: Scaffold `vaadin-breadcrumbs-flow-parent` module with feature-flag plumbing
+
+**Spec sections:** Module / Package Layout, Feature Flag, Reuse and Proposed Adjustments → HasComponentsOfType, RouteParent, RouteHierarchy
+**Requirements:** —
+**Depends on:** —
+
+Create the three sub-modules (`-flow`, `-flow-integration-tests`, `-testbench`) with `pom.xml` wiring, empty class shells matching the annotations and `implements` clauses from the spec (empty bodies — Mode enum, constructors, `setI18n`, child-management overrides land in later tasks), and the full feature-flag plumbing (`BreadcrumbsFeatureFlagProvider`, ServiceLoader registration, `ExperimentalFeatureException`, `onAttach` check). Bump the Flow version in `flow-components-bom/pom.xml` to a release that includes Flow core PR #24186 (`HasComponentsOfType<T>`), the `@RouteParent` annotation, and `RouteHierarchy.resolveAncestors(...)`. The IT module enables the feature flag via `src/main/resources/vaadin-featureflags.properties`. The smoke test instantiates `Breadcrumbs` (which currently does nothing in its body) and the `SerializableTest` round-trips it.
+
+**Files:**
+- `vaadin-breadcrumbs-flow-parent/pom.xml` (create)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/pom.xml` (create)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/Breadcrumbs.java` (create — `@Tag` + `@NpmPackage` + `@JsModule`, `extends Component` + the four `implements` interfaces from the spec, empty body apart from `onAttach` calling `checkFeatureFlag`)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/BreadcrumbsItem.java` (create — annotations + `implements HasText, HasEnabled, HasPrefix`, empty body)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/BreadcrumbsFeatureFlagProvider.java` (create — verbatim from flow-spec.md Feature Flag section)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/ExperimentalFeatureException.java` (create — verbatim from spec)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/resources/META-INF/services/com.vaadin.experimental.FeatureFlagProvider` (create — one line)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsTest.java` (create — smoke test only)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsSerializableTest.java` (create)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/FeatureFlagTest.java` (create — asserts `ExperimentalFeatureException` is thrown when the flag is disabled, and not thrown when enabled)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/pom.xml` (create)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/resources/vaadin-featureflags.properties` (create — single line `com.vaadin.experimental.breadcrumbsComponent=true`)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench/pom.xml` (create)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench/src/main/java/com/vaadin/flow/component/breadcrumbs/testbench/BreadcrumbsElement.java` (create — `@Element("vaadin-breadcrumbs")`, empty body)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench/src/main/java/com/vaadin/flow/component/breadcrumbs/testbench/BreadcrumbsItemElement.java` (create — `@Element("vaadin-breadcrumbs-item")`, empty body)
+- `pom.xml` (modify — add `vaadin-breadcrumbs-flow-parent` module)
+- `flow-components-bom/pom.xml` (modify — bump Flow version to a release that ships PR #24186 + `@RouteParent` + `RouteHierarchy`; add the new module if the BOM aggregates modules)
+
+**Tests:**
+- [ ] `new Breadcrumbs()` returns a non-null instance whose element tag is `vaadin-breadcrumbs`
+- [ ] `new BreadcrumbsItem("Home")` returns a non-null instance whose element tag is `vaadin-breadcrumbs-item`
+- [ ] `BreadcrumbsSerializableTest` round-trips a `new Breadcrumbs()` through Java serialisation without throwing
+- [ ] `FeatureFlagTest` asserts `ExperimentalFeatureException` is thrown on attach when `breadcrumbsComponent` is disabled, and not thrown when enabled
+- [ ] ServiceLoader discovers `BreadcrumbsFeatureFlagProvider` and the feature is registered with id `breadcrumbsComponent`
+
+**Acceptance criteria:**
+- [ ] `mvn clean install -DskipTests -pl vaadin-breadcrumbs-flow-parent -am` succeeds
+- [ ] `mvn spotless:apply` and `mvn checkstyle:check` on the new module both clean
+- [ ] All new tests pass; existing tests still pass
+
+---
+
+## Task 2: `BreadcrumbsItem` — constructors, text, path, prefix
+
+**Spec sections:** Component Classes → `BreadcrumbsItem`
+**Requirements:** 1, 2, 8
+**Depends on:** 1
+
+Implement all seven `BreadcrumbsItem` constructors (mirroring `SideNavItem`'s overload set), the `path` accessors with the three setter overloads, and verify the inherited `HasText` / `HasEnabled` / `HasPrefix` surface works. `setPath(Class<? extends Component>)` and `setPath(Class, RouteParameters)` resolve via `RouteConfiguration.forRegistry(ComponentUtil.getRouter(this).getRegistry()).getUrl(view, params)` exactly like `SideNavItem`. No events, no `@Synchronize`'d properties.
+
+**Files:**
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/BreadcrumbsItem.java` (modify)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsItemTest.java` (create)
+
+**Tests:**
+- [ ] `new BreadcrumbsItem("Home")` sets the element's text content to "Home" and does not set the `path` attribute
+- [ ] `new BreadcrumbsItem("Docs", "/docs")` sets the element's `path` attribute to `/docs`
+- [ ] `setPath(String)` reflects to the `path` attribute; `setPath(null)` removes it
+- [ ] `setPath(Class<? extends Component>)` writes the URL produced by `RouteConfiguration#getUrl(viewClass, RouteParameters.empty())` to the `path` attribute
+- [ ] `setPath(Class<? extends Component>, RouteParameters)` writes the parameterised URL to the `path` attribute
+- [ ] `new BreadcrumbsItem("Home", HomeView.class, homeIcon)` sets the prefix slot to `homeIcon` and the path attribute to the view's URL
+- [ ] `setPrefixComponent(component)` then `getPrefixComponent()` returns the same component
+- [ ] `setEnabled(false)` reflects the `disabled` attribute on the host
+
+**Acceptance criteria:**
+- [ ] All new tests pass; existing tests still pass
+- [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
+
+---
+
+## Task 3: `Breadcrumbs` — `Mode` enum, constructors, mode switching
+
+**Spec sections:** Key Design Decisions §1 + §13, Component Classes → `Breadcrumbs` (constructors, `getMode`/`setMode`, mode-switching contract)
+**Requirements:** 14
+**Depends on:** 1
+
+Add the public nested `Mode` enum (`ROUTER`, `MANUAL`) and the two constructors (`Breadcrumbs()` → defaults to `Mode.ROUTER`, `Breadcrumbs(Mode)`). Implement `getMode()` and `setMode(Mode)` with the symmetric clear-and-rewire contract from the spec: both transitions discard existing children, `ROUTER → MANUAL` also unregisters the navigation listener (if registered later in Task 6), `MANUAL → ROUTER` triggers an initial trail build. The `add`/`remove`/`removeAll` guard methods do not exist yet — they land in Task 4. The router listener wiring lands in Task 6; at this point `setMode(ROUTER)` only flips the internal flag and clears children.
+
+**Files:**
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/Breadcrumbs.java` (modify)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsModeTest.java` (create)
+
+**Tests:**
+- [ ] `new Breadcrumbs().getMode()` returns `Mode.ROUTER`
+- [ ] `new Breadcrumbs(Mode.MANUAL).getMode()` returns `Mode.MANUAL`
+- [ ] `setMode(Mode.MANUAL)` on a router-mode instance clears `getChildren()` to an empty stream
+- [ ] `setMode(Mode.ROUTER)` on a manual-mode instance with children clears `getChildren()` to an empty stream
+- [ ] `setMode` with the current mode value is a no-op (children unchanged)
+
+**Acceptance criteria:**
+- [ ] All new tests pass; existing tests still pass
+- [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
+
+---
+
+## Task 4: `Breadcrumbs` — `HasComponentsOfType<BreadcrumbsItem>` with `Mode.ROUTER` guard
+
+**Spec sections:** Key Design Decisions §2 + §3, Component Classes → `Breadcrumbs` (items section + `routerUpdateInProgress` bypass + `updateChildrenInternal`)
+**Requirements:** 1, 9, 14
+**Depends on:** 2, 3
+
+Add `implements HasComponentsOfType<BreadcrumbsItem>` to `Breadcrumbs`. Override every mutating default method — `add(T...)`, `add(Collection<T>)`, `remove(T...)`, `remove(Collection<T>)`, `removeAll()`, `addComponentAsFirst(T)`, `addComponentAtIndex(int, T)`, `replace(T, T)`, `bindChildren(Signal<List<S>>, SerializableFunction<S, T>)` — so each one throws `IllegalStateException` when `mode == Mode.ROUTER && !routerUpdateInProgress`, otherwise delegates to `HasComponentsOfType.super.<method>(...)`. Add the private `routerUpdateInProgress` flag and the `updateChildrenInternal(List<BreadcrumbsItem>)` helper that sets the flag, calls `removeAll() + add(...)`, and clears the flag in a `finally`. `getChildren()` reads remain unguarded.
+
+**Files:**
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/Breadcrumbs.java` (modify)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsTest.java` (modify — add the guard tests next to the existing smoke test)
+
+**Tests:**
+- [ ] `Mode.MANUAL` allows `add(item)`, `remove(item)`, `removeAll()`, `replace(a, b)`, `addComponentAsFirst(item)`, `addComponentAtIndex(0, item)` without throwing
+- [ ] `Mode.ROUTER` throws `IllegalStateException` from `add(item)`, `remove(item)`, `removeAll()`, `replace(a, b)`, `addComponentAsFirst(item)`, `addComponentAtIndex(0, item)`, and `bindChildren(...)`
+- [ ] `getChildren()` works in both modes regardless of any guard
+- [ ] `updateChildrenInternal(List.of(itemA, itemB))` from `Mode.ROUTER` replaces children with exactly `[itemA, itemB]` and leaves `routerUpdateInProgress` `false` afterwards
+- [ ] `Mode.MANUAL` → `Mode.ROUTER` transition via `setMode` clears manually-added children without throwing
+
+**Acceptance criteria:**
+- [ ] All new tests pass; existing tests still pass
+- [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
+
+---
+
+## Task 5: `Breadcrumbs` — `BreadcrumbsI18n` + `setI18n` / `getI18n`
+
+**Spec sections:** Key Design Decisions §10, Component Classes → `Breadcrumbs` (i18n field), i18n
+**Requirements:** 7
+**Depends on:** 3
+
+Add the nested static `BreadcrumbsI18n` class — `Serializable`, `@JsonInclude(JsonInclude.Include.NON_NULL)`, single `moreItems` field with fluent setter returning `this`. Add `getI18n()` / `setI18n(BreadcrumbsI18n)` on `Breadcrumbs`: `setI18n` stores the instance and pushes `JacksonUtils.beanToJson(i18n)` to the client via `getElement().setPropertyJson("i18n", json)`. Re-push in `onAttach` so a fresh client-side element receives the property after re-attach. `null` clears the stored instance and unsets the client property, letting the web component's default take over. `getI18n()` returns the last-set instance (or `null`) — no lazy-init.
+
+**Files:**
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/Breadcrumbs.java` (modify)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsI18nTest.java` (create)
+
+**Tests:**
+- [ ] `new BreadcrumbsI18n().setMoreItems("Show hidden items").getMoreItems()` returns "Show hidden items"
+- [ ] `BreadcrumbsI18n` serialises to JSON with `NON_NULL` inclusion — a default instance produces `{}`, not `{"moreItems":null}`
+- [ ] `BreadcrumbsI18n` round-trips through Java serialisation
+- [ ] `getI18n()` returns `null` before `setI18n` is called
+- [ ] `setI18n(new BreadcrumbsI18n().setMoreItems("X"))` pushes a JSON object to the `i18n` element property whose `moreItems` field is `"X"`
+- [ ] `setI18n(null)` clears the client `i18n` property
+- [ ] Re-attaching the component re-pushes the last-set `i18n` value
+
+**Acceptance criteria:**
+- [ ] All new tests pass; existing tests still pass
+- [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
+
+---
+
+## Task 6: `Breadcrumbs` — `Mode.ROUTER` listener wiring + router trail builder
+
+**Spec sections:** Key Design Decisions §3 + §5, Component Classes → `Breadcrumbs` (Router mode wiring, `rebuildFromRouter`), `@RouteParent` Annotation → How `Breadcrumbs` builds the trail
+**Requirements:** 13, 15
+**Depends on:** 4
+
+Register `UI#addAfterNavigationListener(this::rebuildFromRouter)` in `onAttach` when `mode == Mode.ROUTER`, hold the returned `Registration` in a `transient navigationRegistration` field, and unregister in `onDetach`. Add both `rebuildFromRouter` overloads (event-driven + direct-state for initial attach reading `UIInternals.getActiveViewLocation()` / `getActiveRouterTargetsChain()`); both guard with `if (!isAttached()) return;` and delegate to a private builder that calls `RouteHierarchy.resolveAncestors(currentRoute, routeConfiguration)` from Flow core, wraps every ancestor class except the last as `new BreadcrumbsItem(title, ancestorClass)` (title from `@PageTitle`), wraps the last entry as `new BreadcrumbsItem(title)` with no path (title from `HasDynamicTitle#getPageTitle()` on the active view instance if present, otherwise its class `@PageTitle`), and hands the list to `updateChildrenInternal`. Also wire `Mode.MANUAL → Mode.ROUTER` transitions in `setMode` to register the listener and trigger an initial `rebuildFromRouter` if currently attached.
+
+**Files:**
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/Breadcrumbs.java` (modify)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsModeTest.java` (modify — extend the existing test class with router-listener cases using stubbed `RouteConfiguration` / mocked `UI`)
+
+**Tests:**
+- [ ] Attaching a `Mode.ROUTER` `Breadcrumbs` to a stub UI registers exactly one `AfterNavigationListener`
+- [ ] Detaching the same instance unregisters the listener
+- [ ] Firing an `AfterNavigationEvent` for a route chain `[Home, Customers, Acme]` produces three `BreadcrumbsItem` children whose text matches each route's `@PageTitle` and whose paths match `RouteConfiguration#getUrl(routeClass, RouteParameters.empty())` except for the last item, which has no `path`
+- [ ] A current view that implements `HasDynamicTitle` has its `getPageTitle()` used for the last item's text in preference to its class `@PageTitle`
+- [ ] Late callbacks fired after detach are no-ops (the listener guard `if (!isAttached()) return;` holds)
+- [ ] `setMode(Mode.ROUTER)` on an attached manual-mode instance registers a listener and triggers an initial `rebuildFromRouter`
+- [ ] `setMode(Mode.MANUAL)` on an attached router-mode instance unregisters the listener and clears the trail
+
+**Acceptance criteria:**
+- [ ] All new tests pass; existing tests still pass
+- [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
+
+---
+
+## Task 7: TestBench element classes
+
+**Spec sections:** TestBench Elements (both classes)
+**Requirements:** —
+**Depends on:** 1
+
+Implement `BreadcrumbsElement` and `BreadcrumbsItemElement` per the spec — every public method listed there must be present. Queries follow the `SideNavElement` / `SideNavItemElement` pattern: `$("vaadin-breadcrumbs-item").all()` for items, shadow-DOM CSS via `$(TestBenchElement.class).attribute("part", ...)` for parts, slotted-content queries via the standard `getPropertyElement(...)`. The actual IT exercise of these methods lands in Tasks 8–11.
+
+**Files:**
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench/src/main/java/com/vaadin/flow/component/breadcrumbs/testbench/BreadcrumbsElement.java` (modify)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench/src/main/java/com/vaadin/flow/component/breadcrumbs/testbench/BreadcrumbsItemElement.java` (modify)
+
+**Tests:**
+- [ ] The testbench module compiles cleanly when added as a dependency of the `-flow-integration-tests` module
+- [ ] (Verification of behaviour deferred to the integration-test tasks — `BreadcrumbsElement#getItems()` returns the slotted items in document order; `getCurrentItem()` returns the item with the `current` state attribute; `getItemByPath` returns the matching item or `null`; `hasOverflow()` reads the `has-overflow` host attribute; `openOverflowOverlay()` clicks the overflow button and waits for `vaadin-overlay-open`; `BreadcrumbsItemElement#isCurrent` / `hasPrefix` / `getPath` / `getText` / `click` all read or interact with the expected attributes / shadow elements)
+
+**Acceptance criteria:**
+- [ ] `mvn clean install -DskipTests -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench` succeeds
+- [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
+
+---
+
+## Task 8: Manual-mode integration test view + IT
+
+**Spec sections:** Module / Package Layout (integration-tests file list), Component Classes → `Breadcrumbs` (`Mode.MANUAL`)
+**Requirements:** 1, 9, 14
+**Depends on:** 4, 7
+
+Add a Flow view `ManualBreadcrumbsPage` that constructs `new Breadcrumbs(Mode.MANUAL)`, adds three items declaratively (one with a path-class, one with a string path, one with no path representing the current page), and exposes test affordances for the IT (`@Id` buttons to add / remove items at runtime to exercise reactive updates). The IT class `ManualBreadcrumbsIT` opens the view, uses `BreadcrumbsElement` + `BreadcrumbsItemElement` to assert the rendered trail, then exercises an add and a remove to confirm `Mode.MANUAL` reactive updates flow to the DOM.
+
+**Files:**
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/ManualBreadcrumbsPage.java` (create)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/ManualBreadcrumbsIT.java` (create)
+
+**Tests:**
+- [ ] Initial render: `getItems()` returns three items whose `getText()` values match the seeded labels
+- [ ] The last item's `isCurrent()` returns `true`, the others return `false`
+- [ ] The last item's `getPath()` is empty / null; the others return their assigned paths
+- [ ] Clicking the "add item" affordance inserts a new item into the trail, observable via `BreadcrumbsElement#getItems()`
+- [ ] Clicking the "remove item" affordance removes the matching item
+
+**Acceptance criteria:**
+- [ ] `mvn verify -am -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests -Dit.test='ManualBreadcrumbsIT*' -DskipUnitTests` passes
+- [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
+
+---
+
+## Task 9: Router-mode integration test view + IT
+
+**Spec sections:** Key Design Decisions §3 + §5, Component Classes → `Breadcrumbs` (Router mode wiring), `@RouteParent` Annotation → How `Breadcrumbs` builds the trail
+**Requirements:** 13
+**Depends on:** 6, 7
+
+Add a small route hierarchy of four `@Route`'d views, each with a `@PageTitle` (and one with `HasDynamicTitle` to cover the dynamic-title path) and `add(new Breadcrumbs())` in its constructor — defaulting to `Mode.ROUTER`. Navigate from the IT, assert the trail matches the route hierarchy, and verify the current item's text reflects `HasDynamicTitle` when the view implements it.
+
+**Files:**
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/RouterBreadcrumbsPage.java` (create — root + intermediate + leaf views in the same file)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/DynamicTitlePage.java` (create — leaf view implementing `HasDynamicTitle`)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/RouterBreadcrumbsIT.java` (create)
+
+**Tests:**
+- [ ] Navigating to the root view renders a one-item trail showing the root's `@PageTitle`
+- [ ] Navigating to a leaf view renders a trail of all matched ancestors plus the leaf, in root-first order, each labeled by its `@PageTitle`
+- [ ] Navigating to a view implementing `HasDynamicTitle` shows the dynamic title on the last item, not the class `@PageTitle`
+- [ ] Each ancestor item's `getPath()` resolves to a URL the IT can navigate to and successfully load
+- [ ] The last item's `isCurrent()` returns `true` and `getPath()` is empty / null
+
+**Acceptance criteria:**
+- [ ] `mvn verify -am -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests -Dit.test='RouterBreadcrumbsIT*' -DskipUnitTests` passes
+- [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
+
+---
+
+## Task 10: `@RouteParent` integration test view + IT
+
+**Spec sections:** Key Design Decisions §4 + §5, `@RouteParent` Annotation → How `Breadcrumbs` builds the trail
+**Requirements:** 15
+**Depends on:** 6, 7
+
+Add a view `RouteParentPage` whose `@Route` URL would, under URL-prefix walking, resolve to one parent — but which carries `@RouteParent(OtherView.class)` to declare a different conceptual parent. The IT navigates to the view and asserts that the rendered trail walks through the declared parent, not the URL-derived one. This task verifies the Flow core `RouteHierarchy` walker's `@RouteParent`-first behaviour end-to-end through the breadcrumbs.
+
+**Files:**
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/RouteParentPage.java` (create — declared-parent view + the conceptual parent it points to)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/RouteParentIT.java` (create)
+
+**Tests:**
+- [ ] Navigating to the `@RouteParent`-annotated view renders the declared parent in the trail, not the URL-prefix parent
+- [ ] Each ancestor item's `getPath()` is navigable
+- [ ] The walker does not duplicate items when the declared parent and the URL-prefix parent would resolve to the same class
+
+**Acceptance criteria:**
+- [ ] `mvn verify -am -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests -Dit.test='RouteParentIT*' -DskipUnitTests` passes
+- [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
+
+---
+
+## Task 11: Icon (prefix-component) integration test view + IT
+
+**Spec sections:** Component Classes → `BreadcrumbsItem` (constructors ending in `Component prefixComponent`)
+**Requirements:** 8
+**Depends on:** 2, 7
+
+Add a view `IconBreadcrumbsPage` that constructs items via the prefix-component constructor overloads — at minimum: a home icon on the root, a folder icon on an intermediate item, and a current-page item without prefix. The IT asserts via `BreadcrumbsItemElement#hasPrefix()` and `getPrefixSlotContent()` that the prefix slot is wired and the icons render.
+
+**Files:**
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/IconBreadcrumbsPage.java` (create)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/IconBreadcrumbsIT.java` (create)
+
+**Tests:**
+- [ ] Items constructed with a prefix component carry `has-prefix` on their host element
+- [ ] The current-page item (constructed without prefix) does not carry `has-prefix`
+- [ ] `BreadcrumbsItemElement#getPrefixSlotContent()` resolves to the icon element passed to the constructor
+
+**Acceptance criteria:**
+- [ ] `mvn verify -am -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests -Dit.test='IconBreadcrumbsIT*' -DskipUnitTests` passes
+- [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
+
+---
+
+## Task 12: Final validation
+
+**Spec sections:** All
+**Requirements:** —
+**Depends on:** 5, 8, 9, 10, 11
+
+Final clean-up and validation pass before the module is merge-ready. Run formatting / static analysis / unit tests / integration tests across the whole new module, and update repo-level documentation: add the new module to `flow-components/README.md`'s component list if the project convention requires it, and confirm `flow-components-bom` references the new artefact if the BOM aggregates modules. Verify that no `dispatchEvent` was added on the Flow side (the spec lists zero events; the test agent's earlier feature-flag test already covers attach-time enforcement).
+
+**Files:**
+- `flow-components/README.md` (modify if convention requires component listing)
+- `flow-components-bom/pom.xml` (modify if BOM aggregates module artefacts)
+- All files touched by Tasks 1–11 (validation only — no edits expected)
+
+**Tests:**
+- [ ] `mvn test -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow` — full unit test suite passes
+- [ ] `mvn verify -am -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests -DskipUnitTests` — full IT suite passes
+- [ ] `mvn spotless:apply` clean (no formatting changes required)
+- [ ] `mvn checkstyle:check` clean
+
+**Acceptance criteria:**
+- [ ] All unit tests pass
+- [ ] All integration tests pass
+- [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean across the whole new module
+- [ ] Documentation references (README, BOM) are accurate
