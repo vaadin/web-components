@@ -137,5 +137,32 @@ describe('scrollToIndex', () => {
 
       expect(comboBox._focusedIndex).to.equal(30);
     });
+
+    it('should move focused index to the new position when items are rearranged (itemIdPath)', async () => {
+      // When `itemIdPath` is set, focus-preservation should locate the focused
+      // item by id anywhere in the new array, so focus follows the item if it
+      // moves.
+      const objectItems = Array.from({ length: 100 }, (_, i) => ({ key: `k${i}`, label: `Item ${i}` }));
+      comboBox.dataProvider = undefined;
+      comboBox.itemLabelPath = 'label';
+      comboBox.itemIdPath = 'key';
+      comboBox.items = objectItems;
+      comboBox.opened = true;
+      flushComboBox(comboBox);
+
+      comboBox.scrollToIndex(30);
+      flushComboBox(comboBox);
+      await nextFrame();
+      expect(comboBox._focusedIndex).to.equal(30);
+
+      const reordered = [...objectItems];
+      const [focused] = reordered.splice(30, 1);
+      reordered.splice(50, 0, focused);
+      comboBox.items = reordered;
+      flushComboBox(comboBox);
+      await nextFrame();
+
+      expect(comboBox._focusedIndex).to.equal(50);
+    });
   });
 });

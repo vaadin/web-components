@@ -5,6 +5,7 @@
  */
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { ComboBoxItemsMixin } from './vaadin-combo-box-items-mixin.js';
+import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
  * Checks if the value is supported as an item value in this control.
@@ -518,14 +519,29 @@ export const ComboBoxMixin = (superClass) =>
         this.selectedItem = newItems[valueIndex];
       }
 
-      // Preserve `_focusedIndex` when the same item reference still occupies it
-      // in the new array. The dataProvider page-load path replaces the items
-      // array reference (`[...rootCache.items]`) but reuses item references at
-      // unchanged indices, so this short-circuits the value-lookup fallback
-      // below which can collapse to "[object Object]" === "[object Object]"
-      // for object items without `itemValuePath` set.
-      if (this._focusedIndex >= 0 && oldItems && oldItems[this._focusedIndex] === newItems[this._focusedIndex]) {
-        return;
+      // Preserve `_focusedIndex` across dataProvider page mutations.
+      // First, when `itemIdPath` is set, locate the focused item by id
+      // anywhere in the new array — this also covers cases where the
+      // item moves to a different position. Otherwise (no `itemIdPath`,
+      // or the focused entry is a placeholder with no id), fall back to
+      // reference equality at the same index, which handles the
+      // page-load path where `[...rootCache.items]` replaces the array
+      // reference but reuses item refs (placeholder refs included).
+      if (this._focusedIndex >= 0 && focusedItem) {
+        if (this.itemIdPath && !(focusedItem instanceof ComboBoxPlaceholder)) {
+          const focusedId = focusedItem[this.itemIdPath];
+          if (focusedId !== undefined) {
+            const newIndex = newItems.findIndex(
+              (item) => item && !(item instanceof ComboBoxPlaceholder) && item[this.itemIdPath] === focusedId,
+            );
+            if (newIndex >= 0) {
+              this._focusedIndex = newIndex;
+              return;
+            }
+          }
+        } else if (oldItems && oldItems[this._focusedIndex] === newItems[this._focusedIndex]) {
+          return;
+        }
       }
 
       // Try to first set focus on the item that had been focused before `newItems` were updated
