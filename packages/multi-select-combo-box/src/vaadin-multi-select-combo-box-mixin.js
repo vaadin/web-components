@@ -729,29 +729,19 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // when the user types in a filter query.
       const focusedItem = oldItems ? oldItems[this._focusedIndex] : null;
 
-      // Preserve `_focusedIndex` across dataProvider page mutations.
-      // First, when `itemIdPath` is set, locate the focused item by id
-      // anywhere in the new array — this also covers cases where the
-      // item moves to a different position. Otherwise (no `itemIdPath`,
-      // or the focused entry is a placeholder with no id), fall back to
-      // reference equality at the same index, which handles the
-      // page-load path where `[...rootCache.items]` replaces the array
-      // reference but reuses item refs (placeholder refs included).
-      if (this._focusedIndex >= 0 && focusedItem) {
-        if (this.itemIdPath && !(focusedItem instanceof ComboBoxPlaceholder)) {
-          const focusedId = focusedItem[this.itemIdPath];
-          if (focusedId !== undefined) {
-            const newIndex = newItems.findIndex(
-              (item) => item && !(item instanceof ComboBoxPlaceholder) && item[this.itemIdPath] === focusedId,
-            );
-            if (newIndex >= 0) {
-              this._focusedIndex = newIndex;
-              return;
-            }
-          }
-        } else if (oldItems && oldItems[this._focusedIndex] === newItems[this._focusedIndex]) {
-          return;
-        }
+      // The dataProvider page-load path can re-push `__setDropdownItems`
+      // while `oldItems[focusedIndex]` and `newItems[focusedIndex]` are
+      // both placeholders (e.g. the Flow connector mid-scroll). The
+      // value-lookup fallback below collapses to `"[object Object]"`
+      // for placeholders and drops `_focusedIndex`; short-circuit to
+      // preserve focus until a follow-up call with a real item resolves
+      // the position properly.
+      if (
+        oldItems &&
+        oldItems[this._focusedIndex] instanceof ComboBoxPlaceholder &&
+        newItems[this._focusedIndex] instanceof ComboBoxPlaceholder
+      ) {
+        return;
       }
 
       // Try to first set focus on the item that had been focused before `newItems` were updated

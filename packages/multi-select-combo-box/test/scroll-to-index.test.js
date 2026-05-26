@@ -102,67 +102,26 @@ describe('scrollToIndex', () => {
       expect(viewport.some((item) => item.index === 30 && !(item.item instanceof ComboBoxPlaceholder))).to.be.true;
     });
 
-    it('should preserve focused index when a sibling page loads (object items)', async () => {
-      // Object items without `itemValuePath` set — `_getItemValue` falls back
-      // to `item.toString()` ("[object Object]"), so the value-lookup focus
-      // preservation in `__setDropdownItems` collapses across all object items.
-      // Without the same-reference short-circuit, a sibling page-load after
-      // scrollToIndex would reset `_focusedIndex` to 0.
-      const objectItems = Array.from({ length: SIZE }, (_, i) => ({ key: `k${i}`, label: `Item ${i}` }));
-      const objectDataProvider = (params, callback) => {
-        pendingCallbacks.push(() => {
-          const slice = objectItems.slice(params.page * params.pageSize, (params.page + 1) * params.pageSize);
-          callback(slice, SIZE);
-        });
-      };
-
-      comboBox.itemLabelPath = 'label';
-      comboBox.itemIdPath = 'key';
-      comboBox.dataProvider = objectDataProvider;
+    it('should preserve focused index when both items at focusedIndex are placeholders', async () => {
+      // The Flow connector reaches a state mid-scroll where both
+      // `oldItems[focusedIndex]` and `newItems[focusedIndex]` are
+      // `ComboBoxPlaceholder` instances. The value-lookup fallback
+      // collapses placeholders via toString and resets `_focusedIndex`;
+      // the placeholder-instanceof short-circuit prevents that until a
+      // follow-up `__setDropdownItems` lands a real item.
       comboBox.opened = true;
-
       flushPendingCallbacks();
       await nextFrame();
       flushComboBox(comboBox);
 
-      comboBox.scrollToIndex(30);
-      flushComboBox(comboBox);
-      await nextFrame();
-      expect(comboBox._focusedIndex).to.equal(30);
+      expect(comboBox._dropdownItems[200]).to.be.instanceof(ComboBoxPlaceholder);
 
-      comboBox.__dataProviderController.ensureFlatIndexLoaded(300);
-      flushPendingCallbacks();
-      await nextFrame();
-      flushComboBox(comboBox);
+      comboBox._focusedIndex = 200;
 
-      expect(comboBox._focusedIndex).to.equal(30);
-    });
+      const repushed = comboBox._dropdownItems.map((item, i) => (i === 200 ? new ComboBoxPlaceholder() : item));
+      comboBox.filteredItems = repushed;
 
-    it('should move focused index to the new position when items are rearranged (itemIdPath)', async () => {
-      // When `itemIdPath` is set, focus-preservation should locate the focused
-      // item by id anywhere in the new array, so focus follows the item if it
-      // moves.
-      const objectItems = Array.from({ length: 100 }, (_, i) => ({ key: `k${i}`, label: `Item ${i}` }));
-      comboBox.dataProvider = undefined;
-      comboBox.itemLabelPath = 'label';
-      comboBox.itemIdPath = 'key';
-      comboBox.items = objectItems;
-      comboBox.opened = true;
-      flushComboBox(comboBox);
-
-      comboBox.scrollToIndex(30);
-      flushComboBox(comboBox);
-      await nextFrame();
-      expect(comboBox._focusedIndex).to.equal(30);
-
-      const reordered = [...objectItems];
-      const [focused] = reordered.splice(30, 1);
-      reordered.splice(50, 0, focused);
-      comboBox.items = reordered;
-      flushComboBox(comboBox);
-      await nextFrame();
-
-      expect(comboBox._focusedIndex).to.equal(50);
+      expect(comboBox._focusedIndex).to.equal(200);
     });
   });
 });
