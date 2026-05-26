@@ -523,7 +523,11 @@ export const ComboBoxMixin = (superClass) =>
       // same index are placeholders (e.g. the Flow connector mid-scroll
       // re-pushing `_setDropdownItems`), preserve `_focusedIndex` until
       // a follow-up call lands a real item at that position.
-      if (focusedItem instanceof ComboBoxPlaceholder && newItems[this._focusedIndex] instanceof ComboBoxPlaceholder) {
+      if (
+        oldItems &&
+        oldItems[this._focusedIndex] instanceof ComboBoxPlaceholder &&
+        newItems[this._focusedIndex] instanceof ComboBoxPlaceholder
+      ) {
         return;
       }
 
