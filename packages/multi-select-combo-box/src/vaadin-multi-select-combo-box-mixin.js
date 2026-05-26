@@ -729,18 +729,11 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // when the user types in a filter query.
       const focusedItem = oldItems ? oldItems[this._focusedIndex] : null;
 
-      // The dataProvider page-load path can re-push `__setDropdownItems`
-      // while `oldItems[focusedIndex]` and `newItems[focusedIndex]` are
-      // both placeholders (e.g. the Flow connector mid-scroll). The
-      // value-lookup fallback below collapses to `"[object Object]"`
-      // for placeholders and drops `_focusedIndex`; short-circuit to
-      // preserve focus until a follow-up call with a real item resolves
-      // the position properly.
-      if (
-        oldItems &&
-        oldItems[this._focusedIndex] instanceof ComboBoxPlaceholder &&
-        newItems[this._focusedIndex] instanceof ComboBoxPlaceholder
-      ) {
+      // When both the previously-focused entry and the new entry at the
+      // same index are placeholders (e.g. the Flow connector mid-scroll
+      // re-pushing `__setDropdownItems`), preserve `_focusedIndex` until
+      // a follow-up call lands a real item at that position.
+      if (focusedItem instanceof ComboBoxPlaceholder && newItems[this._focusedIndex] instanceof ComboBoxPlaceholder) {
         return;
       }
 
