@@ -10,44 +10,9 @@ import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { breadcrumbsItemStyles } from './styles/vaadin-breadcrumbs-item-base-styles.js';
-
-/**
- * A controller handling the prefix slot.
- */
-class PrefixSlotController extends SlotController {
-  constructor(host) {
-    super(host, 'prefix', null, { multiple: true, observe: true });
-  }
-
-  /** @protected */
-  initCustomNode(_node) {
-    this.__updateHasPrefix();
-  }
-
-  /** @protected */
-  teardownNode(_node) {
-    this.__updateHasPrefix();
-  }
-
-  reobserve() {
-    if (!this.initialized) {
-      return;
-    }
-    if (this.__slotObserver) {
-      this.__slotObserver.disconnect();
-    }
-    this.observeSlot();
-    this.__updateHasPrefix();
-  }
-
-  /** @private */
-  __updateHasPrefix() {
-    this.host.toggleAttribute('has-prefix', this.nodes.length > 0);
-  }
-}
 
 /**
  * `<vaadin-breadcrumbs-item>` is a single item inside a `<vaadin-breadcrumbs>`.
@@ -167,17 +132,10 @@ class BreadcrumbsItem extends FocusMixin(DisabledMixin(ElementMixin(PolylitMixin
   ready() {
     super.ready();
 
-    this._prefixController = new PrefixSlotController(this);
-    this.addController(this._prefixController);
-  }
-
-  /** @protected */
-  updated(props) {
-    super.updated(props);
-
-    if (props.has('path')) {
-      this._prefixController.reobserve();
-    }
+    this.__slotObserver = new SlotObserver(this.shadowRoot, () => {
+      this.toggleAttribute('has-prefix', !!this.querySelector('[slot="prefix"]'));
+    });
+    this.__slotObserver.flush();
   }
 }
 
