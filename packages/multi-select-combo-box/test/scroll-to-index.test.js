@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { arrowUpKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-multi-select-combo-box.js';
 import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
 import { flushComboBox, getViewportItems } from './helpers.js';
@@ -103,25 +103,21 @@ describe('scrollToIndex', () => {
     });
 
     it('should preserve focused index when both items at focusedIndex are placeholders', async () => {
-      // The Flow connector reaches a state mid-scroll where both
-      // `oldItems[focusedIndex]` and `newItems[focusedIndex]` are
-      // `ComboBoxPlaceholder` instances. The value-lookup fallback
-      // collapses placeholders via toString and resets `_focusedIndex`;
-      // the placeholder-instanceof short-circuit prevents that until a
-      // follow-up `__setDropdownItems` lands a real item.
       comboBox.opened = true;
       flushPendingCallbacks();
       await nextFrame();
       flushComboBox(comboBox);
 
-      expect(comboBox._dropdownItems[200]).to.be.instanceof(ComboBoxPlaceholder);
+      arrowUpKeyDown(comboBox.inputElement);
+      const lastIndex = comboBox._dropdownItems.length - 1;
+      expect(comboBox._focusedIndex).to.equal(lastIndex);
+      expect(comboBox._dropdownItems[lastIndex]).to.be.instanceof(ComboBoxPlaceholder);
 
-      comboBox._focusedIndex = 200;
+      comboBox.filteredItems = comboBox._dropdownItems.map((item, i) =>
+        i === lastIndex ? new ComboBoxPlaceholder() : item,
+      );
 
-      const repushed = comboBox._dropdownItems.map((item, i) => (i === 200 ? new ComboBoxPlaceholder() : item));
-      comboBox.filteredItems = repushed;
-
-      expect(comboBox._focusedIndex).to.equal(200);
+      expect(comboBox._focusedIndex).to.equal(lastIndex);
     });
   });
 });

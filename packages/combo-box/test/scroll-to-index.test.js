@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { arrowUpKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-combo-box.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import { flushComboBox, getViewportItems, makeItems } from './helpers.js';
@@ -206,34 +206,26 @@ describe('scrollToIndex', () => {
     });
 
     it('should preserve focused index when both items at focusedIndex are placeholders', async () => {
-      // The Flow connector reaches a state mid-scroll where both
-      // `oldItems[focusedIndex]` and `newItems[focusedIndex]` are
-      // `ComboBoxPlaceholder` instances. The value-lookup fallback
-      // collapses placeholders via toString and resets `_focusedIndex`;
-      // the placeholder-instanceof short-circuit prevents that until a
-      // follow-up `_setDropdownItems` lands a real item.
       comboBox.opened = true;
-      // Drain page 0 so the controller knows the total size and the
-      // remaining slots get populated with placeholders.
       flushPendingCallbacks();
       await nextFrame();
       flushComboBox(comboBox);
 
-      // Index 200 sits on an unloaded page → placeholder slot.
-      expect(comboBox._dropdownItems[200]).to.be.instanceof(ComboBoxPlaceholder);
+      // Arrow-Up wraps focus to the last index — a placeholder slot,
+      // because only page 0 has been drained.
+      arrowUpKeyDown(comboBox.inputElement);
+      const lastIndex = comboBox._dropdownItems.length - 1;
+      expect(comboBox._focusedIndex).to.equal(lastIndex);
+      expect(comboBox._dropdownItems[lastIndex]).to.be.instanceof(ComboBoxPlaceholder);
 
-      // Simulate the post-scroll state where focused points at a
-      // placeholder slot (Flow's connector sets focus while the
-      // underlying item is still a placeholder).
-      comboBox._focusedIndex = 200;
+      // Re-push items with a fresh placeholder at the focused slot —
+      // the placeholder-instanceof short-circuit in `_setDropdownItems`
+      // must preserve focus.
+      comboBox.filteredItems = comboBox._dropdownItems.map((item, i) =>
+        i === lastIndex ? new ComboBoxPlaceholder() : item,
+      );
 
-      // Re-push items with a different placeholder instance at the same
-      // position — the connector creates fresh placeholders when it
-      // rebuilds the cache.
-      const repushed = comboBox._dropdownItems.map((item, i) => (i === 200 ? new ComboBoxPlaceholder() : item));
-      comboBox.filteredItems = repushed;
-
-      expect(comboBox._focusedIndex).to.equal(200);
+      expect(comboBox._focusedIndex).to.equal(lastIndex);
     });
 
     it('should render real content (not placeholders) at the top on reopen after a scroll', async () => {
