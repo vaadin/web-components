@@ -218,12 +218,9 @@ describe('scrollToIndex', () => {
       expect(comboBox._focusedIndex).to.equal(lastIndex);
       expect(comboBox._dropdownItems[lastIndex]).to.be.instanceof(ComboBoxPlaceholder);
 
-      // Re-push items with a fresh placeholder at the focused slot —
-      // the placeholder-instanceof short-circuit in `_setDropdownItems`
-      // must preserve focus.
-      comboBox.filteredItems = comboBox._dropdownItems.map((item, i) =>
-        i === lastIndex ? new ComboBoxPlaceholder() : item,
-      );
+      // Clearing the cache should preserve the focused index,
+      // even though it is still a placeholder after the clear.
+      comboBox.clearCache();
 
       expect(comboBox._focusedIndex).to.equal(lastIndex);
     });
