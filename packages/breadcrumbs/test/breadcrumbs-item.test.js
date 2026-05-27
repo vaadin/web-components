@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../vaadin-breadcrumbs-item.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 window.Vaadin ??= {};
 window.Vaadin.featureFlags ??= {};
@@ -46,6 +47,40 @@ describe('vaadin-breadcrumbs-item', () => {
       it('should not override custom role', () => {
         expect(item.getAttribute('role')).to.equal('presentation');
       });
+    });
+  });
+
+  describe('focus', () => {
+    let link;
+
+    beforeEach(async () => {
+      item.path = '/path';
+      await nextUpdate(item);
+      link = item.shadowRoot.querySelector('a');
+    });
+
+    it('should focus the link on focus() by default', () => {
+      item.focus();
+      expect(getDeepActiveElement()).to.equal(link);
+    });
+
+    it('should not focus the link on focus() when disabled', async () => {
+      item.disabled = true;
+      await nextUpdate(item);
+      item.focus();
+      expect(getDeepActiveElement()).to.not.equal(link);
+    });
+
+    it('should set focused attribute on link focus by default', () => {
+      link.focus();
+      expect(item.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should not set focused attribute on link focus when disabled', async () => {
+      item.disabled = true;
+      await nextUpdate(item);
+      link.focus();
+      expect(item.hasAttribute('focused')).to.be.false;
     });
   });
 
