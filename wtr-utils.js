@@ -1,15 +1,12 @@
 import { esbuildPlugin } from '@web/dev-server-esbuild';
 import { playwrightLauncher } from '@web/test-runner-playwright';
 import { visualRegressionPlugin } from '@web/test-runner-visual-regression/plugin';
-import dotenv from 'dotenv';
 import { globSync } from 'glob';
 import minimist from 'minimist';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { cssImportPlugin } from './web-dev-server.config.js';
-
-dotenv.config();
 
 const argv = minimist(process.argv.slice(2));
 
