@@ -3,8 +3,6 @@
  * Copyright (c) 2015 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
-
 export const ComboBoxScrollToIndexMixin = (superClass) =>
   class ScrollToIndexMixin extends superClass {
     static get observers() {
@@ -30,31 +28,33 @@ export const ComboBoxScrollToIndexMixin = (superClass) =>
         return;
       }
 
-      if (!this._overlayOpened || this.loading) {
+      // Defer until the dropdown is open and the items array has been
+      // populated. `_onOpened` and `__onDataProviderPageLoaded` re-fire
+      // the queued call once those conditions hold.
+      if (!this._overlayOpened || !this._dropdownItems || this._dropdownItems.length === 0) {
         this.__scrollToPendingIndex = index;
         return;
       }
 
-      if (!this._dropdownItems || index >= this._dropdownItems.length) {
+      if (index >= this._dropdownItems.length) {
         return;
       }
 
-      if (this._dropdownItems[index] instanceof ComboBoxPlaceholder) {
-        // The target item is on a page that has not been loaded yet. Request
-        // the page directly and queue the focus-index update for after the
-        // page loads (see `__onDataProviderPageLoaded` →
-        // `__scrollToPendingIndexIfNeeded`). Relying on `_scrollIntoView` to
-        // trigger the page load via the visible-placeholder `index-requested`
-        // chain is unreliable on reopen with cached data: the virtualizer
-        // has just been torn down by closing the overlay and its scroll API
-        // is a no-op while it rebuilds physical items.
+      // Move the viewport and set the focused row. Rendering rows
+      // around `index` lets placeholder rows fire `index-requested`,
+      // which loads any missing pages via the data-provider chain.
+      this._scrollIntoView(index);
+      this._focusedIndex = index;
+
+      // A page-load may have kicked in during the scroll (placeholder
+      // rows in the new viewport requested their pages). Re-fire after
+      // the page lands so the viewport can settle around real items.
+      if (this.loading) {
         this.__scrollToPendingIndex = index;
-        this.__dataProviderController.ensureFlatIndexLoaded(index);
         return;
       }
 
       delete this.__scrollToPendingIndex;
-      this._focusedIndex = index;
       requestAnimationFrame(() => {
         if (this.isConnected) {
           this._updateActiveDescendant(index);
