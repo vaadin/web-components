@@ -1,12 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fire, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import './position-styles.js';
-import '../src/vaadin-tooltip.js';
+import { Tooltip } from '../src/vaadin-tooltip.js';
 
 describe('position', () => {
   let tooltip, target, overlay;
-
-  const Tooltip = customElements.get('vaadin-tooltip');
 
   before(() => {
     Tooltip.setDefaultFocusDelay(0);

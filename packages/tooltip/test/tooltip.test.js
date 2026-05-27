@@ -13,13 +13,11 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-tooltip.js';
 import '@vaadin/overlay/vaadin-overlay.js';
+import { Tooltip } from '../src/vaadin-tooltip.js';
 import { mouseenter, mouseleave, waitForIntersectionObserver } from './helpers.js';
 
 describe('vaadin-tooltip', () => {
-  const Tooltip = customElements.get('vaadin-tooltip');
-
   before(() => {
     Tooltip.setDefaultFocusDelay(0);
     Tooltip.setDefaultHoverDelay(0);
