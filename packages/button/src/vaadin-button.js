@@ -56,6 +56,7 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  * | `--vaadin-button-margin`         |
  * | `--vaadin-button-padding`        |
  * | `--vaadin-button-text-color`     |
+ * | `--vaadin-button-white-space`    |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
