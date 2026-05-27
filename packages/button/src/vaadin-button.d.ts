@@ -33,6 +33,7 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  * `focus-ring`   | Set when the button is focused using the keyboard
  * `focused`      | Set when the button is focused
  * `has-tooltip`  | Set when the button has a slotted tooltip
+ * `auto-tooltip` | Set when the button mirrors its label into an auto-generated tooltip
  *
  * The following custom CSS properties are available for styling:
  *
@@ -70,6 +71,14 @@ declare class Button extends ButtonMixin(ElementMixin(ThemableMixin(HTMLElement)
    * ```
    */
   disabled: boolean;
+
+  /**
+   * When enabled, the button's label text is visually hidden and mirrored
+   * into an automatically created tooltip shown on hover and focus. A custom
+   * slotted tooltip, if present, takes precedence over the auto tooltip.
+   * @attr {boolean} auto-tooltip
+   */
+  autoTooltip: boolean;
 }
 
 declare global {

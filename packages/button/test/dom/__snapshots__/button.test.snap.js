@@ -103,3 +103,28 @@ snapshots["vaadin-button shadow default"] =
 `;
 /* end snapshot vaadin-button shadow default */
 
+snapshots["vaadin-button host auto-tooltip"] = 
+`<vaadin-button
+  auto-tooltip=""
+  has-tooltip=""
+  role="button"
+  tabindex="0"
+>
+  Confirm
+  <vaadin-tooltip
+    modeless=""
+    slot="tooltip"
+    text="Confirm"
+  >
+    <div
+      id="vaadin-tooltip-0"
+      role="tooltip"
+      slot="overlay"
+    >
+      Confirm
+    </div>
+  </vaadin-tooltip>
+</vaadin-button>
+`;
+/* end snapshot vaadin-button host auto-tooltip */
+

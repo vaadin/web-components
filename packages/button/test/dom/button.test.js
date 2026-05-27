@@ -1,7 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import '../../src/vaadin-button.js';
+import '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 describe('vaadin-button', () => {
   let button;
@@ -18,6 +19,12 @@ describe('vaadin-button', () => {
     it('disabled', async () => {
       button.tabIndex = 1;
       button.disabled = true;
+      await expect(button).dom.to.equalSnapshot();
+    });
+
+    it('auto-tooltip', async () => {
+      button.autoTooltip = true;
+      await nextFrame();
       await expect(button).dom.to.equalSnapshot();
     });
 

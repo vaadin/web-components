@@ -3,11 +3,12 @@
  * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/tooltip';
 import { html, LitElement } from 'lit';
+import { AutoTooltipController } from '@vaadin/component-base/src/auto-tooltip-controller.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { buttonStyles } from './styles/vaadin-button-base-styles.js';
@@ -39,6 +40,7 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  * `focus-ring`   | Set when the button is focused using the keyboard
  * `focused`      | Set when the button is focused
  * `has-tooltip`  | Set when the button has a slotted tooltip
+ * `auto-tooltip` | Set when the button mirrors its label into an auto-generated tooltip
  *
  * The following custom CSS properties are available for styling:
  *
@@ -95,6 +97,21 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
         reflectToAttribute: true,
         sync: true,
       },
+
+      /**
+       * When enabled, the button's label text is visually hidden and mirrored
+       * into an automatically created tooltip shown on hover and focus. A custom
+       * slotted tooltip, if present, takes precedence over the auto tooltip.
+       *
+       * @attr {boolean} auto-tooltip
+       */
+      autoTooltip: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        sync: true,
+        observer: '_autoTooltipChanged',
+      },
     };
   }
 
@@ -121,8 +138,16 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
   ready() {
     super.ready();
 
-    this._tooltipController = new TooltipController(this);
+    this._tooltipController = new AutoTooltipController(this);
     this.addController(this._tooltipController);
+    this._tooltipController.setEnabled(this.autoTooltip);
+  }
+
+  /** @private */
+  _autoTooltipChanged(autoTooltip) {
+    if (this._tooltipController) {
+      this._tooltipController.setEnabled(autoTooltip);
+    }
   }
 
   /** @override */

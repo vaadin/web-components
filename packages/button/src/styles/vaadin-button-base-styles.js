@@ -50,6 +50,19 @@ export const buttonStyles = css`
     display: inline-flex;
   }
 
+  :host([auto-tooltip]) [part='label'] {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+    clip: rect(1px, 1px, 1px, 1px) !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+  }
+
   :host(:is([focus-ring], :focus-visible)) {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: 1px;

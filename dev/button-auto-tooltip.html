@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Button auto tooltip</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+      import '@vaadin/tooltip';
+
+      const toggle = document.querySelector('#toggle');
+      const toggled = document.querySelector('#toggled');
+      toggle.addEventListener('change', () => {
+        toggled.autoTooltip = toggle.checked;
+      });
+    </script>
+  </head>
+
+  <body>
+    <p>Icon-only button with auto tooltip mirroring the label:</p>
+    <vaadin-button auto-tooltip>
+      <vaadin-icon icon="vaadin:edit" slot="prefix"></vaadin-icon>
+      Edit
+    </vaadin-button>
+
+    <p>Auto tooltip with a custom slotted tooltip (custom wins):</p>
+    <vaadin-button auto-tooltip>
+      Save
+      <vaadin-tooltip slot="tooltip" text="Custom tooltip text"></vaadin-tooltip>
+    </vaadin-button>
+
+    <p>Toggle auto tooltip with a checkbox:</p>
+    <label><input id="toggle" type="checkbox" /> autoTooltip</label>
+    <vaadin-button id="toggled">Delete</vaadin-button>
+  </body>
+</html>
