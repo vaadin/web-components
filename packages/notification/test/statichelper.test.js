@@ -1,9 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, nextFrame } from '@vaadin/testing-helpers';
-import '../src/vaadin-notification.js';
 import { html } from 'lit';
-
-const Notification = customElements.get('vaadin-notification');
+import { Notification } from '../src/vaadin-notification.js';
 
 describe('static helpers', () => {
   it('show should show a text notification', async () => {

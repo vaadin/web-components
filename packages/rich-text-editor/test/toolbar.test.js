@@ -16,6 +16,7 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-rich-text-editor.js';
+import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { createImage } from './helpers.js';
 
 describe('toolbar controls', () => {
@@ -634,7 +635,6 @@ describe('toolbar controls', () => {
   });
 
   describe('tooltip', () => {
-    const Tooltip = customElements.get('vaadin-tooltip');
     let tooltip, overlay;
 
     before(() => {
