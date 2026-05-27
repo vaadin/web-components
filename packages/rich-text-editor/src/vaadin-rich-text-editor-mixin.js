@@ -429,9 +429,9 @@ export const RichTextEditorMixin = (superClass) =>
       // Set up tooltip to show when hovering or focusing toolbar buttons
       this._tooltip = document.createElement('vaadin-tooltip');
       this._tooltip.slot = 'tooltip';
-      // Set ariaTarget to null, as toolbar buttons already have aria-label,
-      // and also cannot be linked with the tooltip being in the light DOM
-      this._tooltip.ariaTarget = null;
+      // Toolbar buttons already have aria-label and cannot be linked with the
+      // tooltip in the light DOM, so disable ARIA linking entirely.
+      this._tooltip.ariaLinkMode = 'none';
       this.append(this._tooltip);
 
       const buttons = this.shadowRoot.querySelectorAll('[part~="toolbar-button"]');
