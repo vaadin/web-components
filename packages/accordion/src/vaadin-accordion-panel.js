@@ -49,6 +49,10 @@ class AccordionPanel extends AccordionPanelMixin(ThemableMixin(PolylitMixin(Lumo
     return accordionPanel;
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   /** @protected */
   render() {
     return html`
