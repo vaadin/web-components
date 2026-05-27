@@ -137,6 +137,29 @@ class BreadcrumbsItem extends FocusMixin(DisabledMixin(ElementMixin(PolylitMixin
     });
     this.__slotObserver.flush();
   }
+
+  /**
+   * @param {FocusOptions=} options
+   * @protected
+   * @override
+   */
+  focus(options) {
+    if (!this.disabled) {
+      super.focus(options);
+    }
+  }
+
+  /**
+   * Override method inherited from `FocusMixin`
+   * to not set `focused` attribute when disabled.
+   *
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _shouldSetFocus() {
+    return !this.disabled;
+  }
 }
 
 defineCustomElement(BreadcrumbsItem);

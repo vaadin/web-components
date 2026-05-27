@@ -17,10 +17,6 @@ export const breadcrumbsItemStyles = css`
     display: none !important;
   }
 
-  :host([disabled]) {
-    pointer-events: none;
-  }
-
   :host([disabled]) [part='link'] {
     color: var(--vaadin-text-color-disabled);
   }
