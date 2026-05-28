@@ -14,15 +14,6 @@
     --_lumo-list-box-item-padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius-m) / 4);
   }
 
-  :host([right-aligned]),
-  :host([end-aligned]) {
-    align-items: flex-end;
-  }
-
-  :host([bottom-aligned]) {
-    justify-content: flex-end;
-  }
-
   [part='overlay'] {
     border: none;
     outline: none;
@@ -32,31 +23,5 @@
     inset: 0 0 var(--vaadin-overlay-viewport-bottom, 0) 0 !important;
     align-items: stretch;
     justify-content: flex-end;
-  }
-
-  @media (forced-colors: active) {
-    [part='overlay'] {
-      outline: 3px solid !important;
-    }
-  }
-
-  :host([position^='top'][top-aligned]) [part='overlay'],
-  :host([position^='bottom'][top-aligned]) [part='overlay'] {
-    margin-top: var(--vaadin-context-menu-offset-top, var(--_default-offset));
-  }
-
-  :host([position^='top'][bottom-aligned]) [part='overlay'],
-  :host([position^='bottom'][bottom-aligned]) [part='overlay'] {
-    margin-bottom: var(--vaadin-context-menu-offset-bottom, var(--_default-offset));
-  }
-
-  :host([position^='start'][start-aligned]) [part='overlay'],
-  :host([position^='end'][start-aligned]) [part='overlay'] {
-    margin-inline-start: var(--vaadin-context-menu-offset-start, var(--_default-offset));
-  }
-
-  :host([position^='start'][end-aligned]) [part='overlay'],
-  :host([position^='end'][end-aligned]) [part='overlay'] {
-    margin-inline-end: var(--vaadin-context-menu-offset-end, var(--_default-offset));
   }
 }
