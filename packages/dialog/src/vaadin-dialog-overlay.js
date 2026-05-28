@@ -30,6 +30,10 @@ export class DialogOverlay extends DialogOverlayMixin(
     return dialogOverlayStyles;
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   /**
    * Override method from OverlayFocusMixin to use owner as focus trap root
    * @protected

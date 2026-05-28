@@ -102,6 +102,7 @@
   }
 
   [part='overlay'] {
+    border: none;
     border-radius: var(--lumo-border-radius-l);
     box-shadow:
       0 0 0 1px var(--lumo-shade-5pct),
@@ -114,6 +115,11 @@
 
   :host(:is([has-header], [has-title])) [part='header'] + [part='content'] {
     padding-top: 0;
+  }
+
+  /* Override base styles padding */
+  :host([has-footer]) [part='content'] {
+    padding-bottom: var(--lumo-space-l);
   }
 
   /* No padding */
