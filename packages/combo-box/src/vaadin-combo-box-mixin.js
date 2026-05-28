@@ -5,6 +5,7 @@
  */
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { ComboBoxItemsMixin } from './vaadin-combo-box-items-mixin.js';
+import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
  * Checks if the value is supported as an item value in this control.
@@ -516,6 +517,18 @@ export const ComboBoxMixin = (superClass) =>
       const valueIndex = this.__getItemIndexByValue(newItems, this.value);
       if ((this.selectedItem === null || this.selectedItem === undefined) && valueIndex >= 0) {
         this.selectedItem = newItems[valueIndex];
+      }
+
+      // When both the previously-focused entry and the new entry at the
+      // same index are placeholders (e.g. the Flow connector mid-scroll
+      // re-pushing `_setDropdownItems`), preserve `_focusedIndex` until
+      // a follow-up call lands a real item at that position.
+      if (
+        oldItems &&
+        oldItems[this._focusedIndex] instanceof ComboBoxPlaceholder &&
+        newItems[this._focusedIndex] instanceof ComboBoxPlaceholder
+      ) {
+        return;
       }
 
       // Try to first set focus on the item that had been focused before `newItems` were updated

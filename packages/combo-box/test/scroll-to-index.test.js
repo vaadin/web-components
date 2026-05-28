@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { arrowUpKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-combo-box.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import { flushComboBox, getViewportItems, makeItems } from './helpers.js';
@@ -203,6 +203,26 @@ describe('scrollToIndex', () => {
 
       const viewport = getViewportItems(comboBox);
       expect(viewport.some((item) => item.index === 300 && !(item.item instanceof ComboBoxPlaceholder))).to.be.true;
+    });
+
+    it('should preserve focused index when both items at focusedIndex are placeholders', async () => {
+      comboBox.opened = true;
+      flushPendingCallbacks();
+      await nextFrame();
+      flushComboBox(comboBox);
+
+      // Arrow-Up wraps focus to the last index — a placeholder slot,
+      // because only page 0 has been drained.
+      arrowUpKeyDown(comboBox.inputElement);
+      const lastIndex = comboBox._dropdownItems.length - 1;
+      expect(comboBox._focusedIndex).to.equal(lastIndex);
+      expect(comboBox._dropdownItems[lastIndex]).to.be.instanceof(ComboBoxPlaceholder);
+
+      // Clearing the cache should preserve the focused index,
+      // even though it is still a placeholder after the clear.
+      comboBox.clearCache();
+
+      expect(comboBox._focusedIndex).to.equal(lastIndex);
     });
 
     it('should render real content (not placeholders) at the top on reopen after a scroll', async () => {
