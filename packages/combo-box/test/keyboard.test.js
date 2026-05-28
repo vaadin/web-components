@@ -665,10 +665,9 @@ describe('keyboard', () => {
   });
 
   describe('focused row visibility', () => {
-    // Long-enough label that wraps to multiple lines under the default combo
-    // overlay width — every 5th item makes the row taller than its neighbors
-    // so `scrollIntoView`'s index-math heuristic overshoots and the focused
-    // row lands outside the viewport without the rect-based correction.
+    // Long wrapping label every 5th item makes those rows taller than the
+    // rest, so the index-based positioning in `scrollIntoView` can place
+    // the focused row outside the viewport without the rect-based correction.
     const LONG_LABEL = 'Long label that wraps to two or three lines making this row taller than its neighbors';
     const SIZE = 100;
 

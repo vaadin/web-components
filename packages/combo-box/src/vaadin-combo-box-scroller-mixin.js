@@ -192,10 +192,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
       }
       this.__virtualizer.scrollToIndex(Math.max(0, targetIndex));
 
-      // iron-list re-estimates physical positions after each `scrollTop`
-      // write (and debounces some of that work), so the rendered rects only
-      // settle after a flush. Flushing here lets the rect-based correction
-      // below run on the final positions instead of stale ones.
+      // Flush so the rect-based correction below runs on settled positions.
       this.__virtualizer.flush();
 
       const target = [...this.children].find((el) => !el.hidden && el.index === index);

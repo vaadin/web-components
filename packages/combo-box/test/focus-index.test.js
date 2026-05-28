@@ -107,9 +107,9 @@ describe('__focusIndex', () => {
 
   describe('variable-height items', () => {
     const SIZE = 200;
-    // Long wrapping label every 5th item — rows are taller than average,
-    // so an index-counting heuristic (target = index - visibleCount + 1)
-    // overshoots and the target lands partly or fully below the viewport.
+    // Long wrapping label every 5th item makes those rows taller than
+    // the rest, so the index-based positioning in `scrollIntoView` can
+    // place the target outside the viewport.
     const LONG_LABEL = 'Long label that wraps to two or three lines making the row taller than its neighbors';
     const items = Array.from({ length: SIZE }, (_, i) => (i % 5 === 0 ? `${LONG_LABEL} ${i}` : `item ${i}`));
 
@@ -136,12 +136,11 @@ describe('__focusIndex', () => {
       flushComboBox(comboBox);
 
       const targetIndex = 30;
-      comboBox.scrollToIndex(targetIndex);
+      comboBox.__focusIndex(targetIndex);
       flushComboBox(comboBox);
       await nextFrame();
 
       const target = findRenderedItem(targetIndex);
-      expect(target, 'target item is rendered').to.exist;
       const targetRect = target.getBoundingClientRect();
       const scrollerRect = getScrollerRect();
       expect(Math.round(targetRect.bottom)).to.be.at.most(Math.round(scrollerRect.bottom) + 1);
@@ -153,17 +152,16 @@ describe('__focusIndex', () => {
       flushComboBox(comboBox);
 
       // Pre-scroll well past the target, then jump back to a low index.
-      comboBox.scrollToIndex(150);
+      comboBox.__focusIndex(150);
       flushComboBox(comboBox);
       await nextFrame();
 
       const targetIndex = 5;
-      comboBox.scrollToIndex(targetIndex);
+      comboBox.__focusIndex(targetIndex);
       flushComboBox(comboBox);
       await nextFrame();
 
       const target = findRenderedItem(targetIndex);
-      expect(target, 'target item is rendered').to.exist;
       const targetRect = target.getBoundingClientRect();
       const scrollerRect = getScrollerRect();
       expect(Math.round(targetRect.top)).to.be.at.least(Math.round(scrollerRect.top) - 1);
@@ -180,12 +178,11 @@ describe('__focusIndex', () => {
       const targetIndex = firstVisible + Math.floor((lastVisible - firstVisible) / 2);
 
       const scrollTopBefore = comboBox._scroller.scrollTop;
-      comboBox.scrollToIndex(targetIndex);
+      comboBox.__focusIndex(targetIndex);
       flushComboBox(comboBox);
       await nextFrame();
 
-      // The "within viewport" branch must not shift the viewport visibly —
-      // otherwise arrow-key navigation would jerk on every step.
+      // Scrolling to an already-visible item should not shift the viewport.
       expect(Math.abs(comboBox._scroller.scrollTop - scrollTopBefore)).to.be.below(2);
     });
   });
