@@ -5,9 +5,9 @@
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { ComboBoxDataProviderMixin } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
+import { ComboBoxFocusIndexMixin } from '@vaadin/combo-box/src/vaadin-combo-box-focus-index-mixin.js';
 import { ComboBoxItemsMixin } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
 import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
-import { ComboBoxScrollToIndexMixin } from '@vaadin/combo-box/src/vaadin-combo-box-scroll-to-index-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
@@ -26,9 +26,7 @@ const DEFAULT_I18N = {
 
 export const MultiSelectComboBoxMixin = (superClass) =>
   class MultiSelectComboBoxMixinClass extends I18nMixin(
-    ComboBoxScrollToIndexMixin(
-      ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass)))),
-    ),
+    ComboBoxFocusIndexMixin(ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass))))),
   ) {
     static get properties() {
       return {

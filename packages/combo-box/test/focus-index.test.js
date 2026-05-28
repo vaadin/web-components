@@ -4,7 +4,7 @@ import '../src/vaadin-combo-box.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import { flushComboBox, getViewportItems, makeItems } from './helpers.js';
 
-describe('scrollToIndex', () => {
+describe('__focusIndex', () => {
   let comboBox;
 
   describe('items array', () => {
@@ -22,7 +22,7 @@ describe('scrollToIndex', () => {
 
     it('should scroll to the item at the given index when opened', () => {
       comboBox.opened = true;
-      comboBox.scrollToIndex(100);
+      comboBox.__focusIndex(100);
       flushComboBox(comboBox);
       const viewport = getViewportItems(comboBox);
       expect(viewport.map((item) => item.index)).to.include(100);
@@ -30,13 +30,13 @@ describe('scrollToIndex', () => {
 
     it('should set the focused index to the given index', () => {
       comboBox.opened = true;
-      comboBox.scrollToIndex(100);
+      comboBox.__focusIndex(100);
       expect(comboBox._focusedIndex).to.equal(100);
     });
 
     it('should queue the scroll when called before opening', async () => {
-      comboBox.scrollToIndex(100);
-      expect(comboBox.__scrollToPendingIndex).to.equal(100);
+      comboBox.__focusIndex(100);
+      expect(comboBox.__pendingFocusIndex).to.equal(100);
 
       comboBox.opened = true;
       await nextFrame();
@@ -48,7 +48,7 @@ describe('scrollToIndex', () => {
 
     it('should update aria-activedescendant after scrolling', async () => {
       comboBox.opened = true;
-      comboBox.scrollToIndex(100);
+      comboBox.__focusIndex(100);
       flushComboBox(comboBox);
       await nextFrame();
       const activeId = comboBox.inputElement.getAttribute('aria-activedescendant');
@@ -58,7 +58,7 @@ describe('scrollToIndex', () => {
     });
 
     it('should clear pending scroll when filter changes', () => {
-      comboBox.scrollToIndex(100);
+      comboBox.__focusIndex(100);
       comboBox.filter = 'item 1';
       comboBox.opened = true;
       flushComboBox(comboBox);
@@ -69,7 +69,7 @@ describe('scrollToIndex', () => {
     [-1, Number.NaN, '100', SIZE + 50].forEach((invalidIndex) => {
       it(`should ignore invalid index: ${String(invalidIndex)}`, () => {
         comboBox.opened = true;
-        comboBox.scrollToIndex(invalidIndex);
+        comboBox.__focusIndex(invalidIndex);
         flushComboBox(comboBox);
         expect(getViewportItems(comboBox)[0].index).to.equal(0);
       });
@@ -77,8 +77,8 @@ describe('scrollToIndex', () => {
 
     it('should override a previous scroll call', () => {
       comboBox.opened = true;
-      comboBox.scrollToIndex(50);
-      comboBox.scrollToIndex(150);
+      comboBox.__focusIndex(50);
+      comboBox.__focusIndex(150);
       flushComboBox(comboBox);
       const viewport = getViewportItems(comboBox);
       expect(viewport.map((item) => item.index)).to.include(150);
@@ -88,12 +88,12 @@ describe('scrollToIndex', () => {
       comboBox.opened = true;
       comboBox._scrollIntoView(SIZE - 1);
       flushComboBox(comboBox);
-      comboBox.scrollToIndex(0);
+      comboBox.__focusIndex(0);
       flushComboBox(comboBox);
       expect(getViewportItems(comboBox)[0].index).to.equal(0);
     });
 
-    it('should not auto-scroll on open when scrollToIndex was never called', () => {
+    it('should not auto-scroll on open when __focusIndex was never called', () => {
       comboBox.selectedItem = comboBox.items[100];
 
       comboBox.opened = true;
@@ -139,8 +139,8 @@ describe('scrollToIndex', () => {
       comboBox.opened = true;
       // Target is in the first page (pageSize=50) so the scroll can settle
       // as soon as that page lands.
-      comboBox.scrollToIndex(30);
-      expect(comboBox.__scrollToPendingIndex).to.equal(30);
+      comboBox.__focusIndex(30);
+      expect(comboBox.__pendingFocusIndex).to.equal(30);
 
       flushPendingCallbacks();
       await nextFrame();
@@ -155,7 +155,7 @@ describe('scrollToIndex', () => {
       flushPendingCallbacks();
       await nextFrame();
 
-      comboBox.scrollToIndex(300);
+      comboBox.__focusIndex(300);
       flushComboBox(comboBox);
       await nextFrame();
       // Drain the page request so the items around index 300 become real.
@@ -168,11 +168,11 @@ describe('scrollToIndex', () => {
     });
 
     it('should clear pending scroll when filter changes', () => {
-      comboBox.scrollToIndex(300);
-      expect(comboBox.__scrollToPendingIndex).to.equal(300);
+      comboBox.__focusIndex(300);
+      expect(comboBox.__pendingFocusIndex).to.equal(300);
 
       comboBox.filter = 'item 1';
-      expect(comboBox.__scrollToPendingIndex).to.be.undefined;
+      expect(comboBox.__pendingFocusIndex).to.be.undefined;
     });
 
     it('should scroll to an unloaded index on reopen with cached first page', async () => {
@@ -185,10 +185,10 @@ describe('scrollToIndex', () => {
 
       // Queue a scroll to a far index whose page is NOT cached. Reopening
       // hits the page-0 cache so `loading` never flips to true — the only
-      // signal that index 300 was requested has to come from `scrollToIndex`
+      // signal that index 300 was requested has to come from `__focusIndex`
       // itself, via its placeholder branch.
-      comboBox.scrollToIndex(300);
-      expect(comboBox.__scrollToPendingIndex).to.equal(300);
+      comboBox.__focusIndex(300);
+      expect(comboBox.__pendingFocusIndex).to.equal(300);
 
       comboBox.opened = true;
       await nextFrame();
@@ -230,7 +230,7 @@ describe('scrollToIndex', () => {
       comboBox.opened = true;
       flushPendingCallbacks();
       await nextFrame();
-      comboBox.scrollToIndex(300);
+      comboBox.__focusIndex(300);
       flushComboBox(comboBox);
       await nextFrame();
       flushPendingCallbacks();

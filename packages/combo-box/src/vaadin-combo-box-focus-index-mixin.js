@@ -3,27 +3,23 @@
  * Copyright (c) 2015 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-export const ComboBoxScrollToIndexMixin = (superClass) =>
-  class ScrollToIndexMixin extends superClass {
+export const ComboBoxFocusIndexMixin = (superClass) =>
+  class FocusIndexMixin extends superClass {
     static get observers() {
-      return ['__clearPendingScrollOnFilter(filter)'];
+      return ['__clearPendingFocusOnFilter(filter)'];
     }
 
     /**
      * Scrolls the dropdown to the item at the given index and sets it as the
-     * focused (highlighted) item. Safe to call before the dropdown is opened
-     * or while the data provider is loading: the call is queued and executed
-     * once the overlay is open and not loading.
+     * focused (highlighted) item. Closing the dropdown without an explicit
+     * selection change (e.g. via outside click or blur) will commit the
+     * focused item as `selectedItem` — callers focusing an index other than
+     * the current selection should be aware of this side effect.
      *
-     * Because this sets the focused item, closing the dropdown without an
-     * explicit selection change (e.g. via outside click or blur) will commit
-     * the focused item as `selectedItem`. In the typical use case (scroll to
-     * the currently selected item) this is a no-op; callers scrolling to a
-     * different index should be aware of this behavior.
-     *
-     * @param {number} index Index of the item to scroll to
+     * @private
+     * @param {number} index
      */
-    scrollToIndex(index) {
+    __focusIndex(index) {
       if (typeof index !== 'number' || Number.isNaN(index) || index < 0) {
         return;
       }
@@ -32,7 +28,7 @@ export const ComboBoxScrollToIndexMixin = (superClass) =>
       // populated. `_onOpened` and `__onDataProviderPageLoaded` re-fire
       // the queued call once those conditions hold.
       if (!this._overlayOpened || !this._dropdownItems || this._dropdownItems.length === 0) {
-        this.__scrollToPendingIndex = index;
+        this.__pendingFocusIndex = index;
         return;
       }
 
@@ -50,11 +46,11 @@ export const ComboBoxScrollToIndexMixin = (superClass) =>
       // rows in the new viewport requested their pages). Re-fire after
       // the page lands so the viewport can settle around real items.
       if (this.loading) {
-        this.__scrollToPendingIndex = index;
+        this.__pendingFocusIndex = index;
         return;
       }
 
-      delete this.__scrollToPendingIndex;
+      delete this.__pendingFocusIndex;
       requestAnimationFrame(() => {
         if (this.isConnected) {
           this._updateActiveDescendant(index);
@@ -63,38 +59,38 @@ export const ComboBoxScrollToIndexMixin = (superClass) =>
     }
 
     /** @private */
-    __scrollToPendingIndexIfNeeded() {
-      if (this.__scrollToPendingIndex !== undefined && !this.loading) {
-        this.scrollToIndex(this.__scrollToPendingIndex);
+    __focusPendingIndexIfNeeded() {
+      if (this.__pendingFocusIndex !== undefined && !this.loading) {
+        this.__focusIndex(this.__pendingFocusIndex);
       }
     }
 
     /** @private */
-    __clearPendingScrollOnFilter() {
-      delete this.__scrollToPendingIndex;
+    __clearPendingFocusOnFilter() {
+      delete this.__pendingFocusIndex;
     }
 
     /**
      * Override method from `ComboBoxBaseMixin` to flush any pending
-     * `scrollToIndex` call after the overlay opens.
+     * `__focusIndex` call after the overlay opens.
      *
      * @protected
      * @override
      */
     _onOpened() {
       super._onOpened();
-      this.__scrollToPendingIndexIfNeeded();
+      this.__focusPendingIndexIfNeeded();
     }
 
     /**
      * Override method from `ComboBoxDataProviderMixin` to flush any pending
-     * `scrollToIndex` call after a data-provider page lands.
+     * `__focusIndex` call after a data-provider page lands.
      *
      * @private
      * @override
      */
     __onDataProviderPageLoaded() {
       super.__onDataProviderPageLoaded();
-      this.__scrollToPendingIndexIfNeeded();
+      this.__focusPendingIndexIfNeeded();
     }
   };
