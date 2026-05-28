@@ -47,7 +47,8 @@ export const buttonStyles = css`
   }
 
   [part='label'] {
-    display: inline-flex;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   :host(:is([focus-ring], :focus-visible)) {
