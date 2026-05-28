@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { setViewport } from '@vaadin/test-runner-commands';
-import { sendKeys } from '@vaadin/test-runner-commands';
+import { sendKeys, setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-crud.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
