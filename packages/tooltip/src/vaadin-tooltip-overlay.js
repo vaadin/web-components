@@ -31,6 +31,10 @@ class TooltipOverlay extends PopoverOverlayMixin(
     return [overlayStyles, tooltipOverlayStyles];
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   /** @protected */
   render() {
     return html`
