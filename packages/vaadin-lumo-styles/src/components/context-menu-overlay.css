@@ -24,6 +24,7 @@
   }
 
   [part='overlay'] {
+    border: none;
     outline: none;
   }
 

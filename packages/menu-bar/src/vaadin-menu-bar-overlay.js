@@ -31,6 +31,10 @@ export class MenuBarOverlay extends MenuOverlayMixin(
     return menuBarOverlayStyles;
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   /** @protected */
   render() {
     return html`
