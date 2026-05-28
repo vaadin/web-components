@@ -1,5 +1,4 @@
-import { nextResize } from '@vaadin/testing-helpers';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextResize } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../src/vaadin-form-layout.js';
 import '../../../src/vaadin-form-item.js';
