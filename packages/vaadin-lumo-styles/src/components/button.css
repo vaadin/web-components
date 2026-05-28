@@ -82,7 +82,7 @@ Note, to make it work, the form fields should have the same "::before" pseudo-el
   }
 
   [part='label'] {
-    white-space: var(--vaadin-button-white-space, nowrap);
+    white-space: var(--vaadin-button-label-wrap, nowrap);
     overflow: hidden;
     text-overflow: ellipsis;
     padding: calc(var(--lumo-button-size) / 6) 0;
