@@ -76,6 +76,10 @@ class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolylitMixin(L
     return accordionHeading;
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get properties() {
     return {
       /**
