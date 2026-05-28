@@ -17,19 +17,17 @@ export const breadcrumbsItemStyles = css`
     display: none !important;
   }
 
-  :host([disabled]) [part='link'] {
-    color: var(--vaadin-text-color-disabled);
-  }
-
-  :host([current]) [part='nolink'] {
+  :host([current]) {
     color: var(--vaadin-text-color);
+    font-weight: bolder;
   }
 
   [part='link'],
   [part='nolink'] {
     display: inline-flex;
+    gap: var(--vaadin-breadcrumbs-item-gap, var(--vaadin-gap-xs));
     align-items: baseline;
-    border-radius: var(--vaadin-radius-m);
+    border-radius: var(--vaadin-breadcrumbs-item-border-radius, var(--vaadin-radius-m));
     padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
     flex: 1;
   }
@@ -39,15 +37,17 @@ export const breadcrumbsItemStyles = css`
   }
 
   [part='link'] {
+    text-decoration: none;
     outline: none;
-  }
+    -webkit-tap-highlight-color: transparent;
 
-  [part='link']:any-link {
-    color: var(--vaadin-breadcrumbs-link-color, LinkText);
-  }
+    &:any-link {
+      color: var(--vaadin-breadcrumbs-link-color, LinkText);
+    }
 
-  [part='link']:focus-visible {
-    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    &:focus-visible {
+      outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    }
   }
 
   :host::after {
@@ -57,8 +57,9 @@ export const breadcrumbsItemStyles = css`
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
     background: currentColor;
-    mask: var(--vaadin-breadcrumbs-separator, var(--_vaadin-icon-chevron-right)) center / 90% no-repeat;
-    margin-inline-start: var(--vaadin-gap-xs);
+    mask: var(--vaadin-breadcrumbs-separator-icon, var(--_vaadin-icon-chevron-right)) center /
+      var(--vaadin-breadcrumbs-separator-icon-size, 90%) no-repeat;
+    margin-inline-start: var(--vaadin-breadcrumbs-gap, var(--vaadin-gap-xs));
     opacity: 0.75;
   }
 
@@ -68,11 +69,25 @@ export const breadcrumbsItemStyles = css`
   }
 
   :host([dir='rtl'])::after {
-    transform: scaleX(-1);
+    scale: -1;
   }
 
   :host([slot='overlay']) {
     display: flex;
+
+    [part='link'] {
+      border-radius: var(--vaadin-radius-s);
+    }
+  }
+
+  :host([slot='overlay'][disabled]),
+  :host([slot='overlay']:not([path])) {
+    color: var(--vaadin-text-color-secondary);
+  }
+
+  :host([slot='overlay'][focus-ring]) [part='link'] {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
   :host([slot='overlay'])::after {

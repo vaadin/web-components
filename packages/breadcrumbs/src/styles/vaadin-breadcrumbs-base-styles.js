@@ -12,6 +12,9 @@ export const breadcrumbsStyles = css`
     width: 100%;
     min-width: 0;
     color: var(--vaadin-breadcrumbs-text-color, var(--vaadin-text-color-secondary));
+    font-size: var(--vaadin-breadcrumbs-font-size, 1em);
+    line-height: var(--vaadin-breadcrumbs-line-height, inherit);
+    font-weight: var(--vaadin-breadcrumbs-font-weight, 400);
   }
 
   :host([hidden]) {
@@ -22,7 +25,7 @@ export const breadcrumbsStyles = css`
     display: flex;
     flex-wrap: nowrap;
     align-items: baseline;
-    gap: var(--vaadin-gap-xs);
+    gap: var(--vaadin-breadcrumbs-gap, var(--vaadin-gap-xs));
     min-width: 0;
     max-width: 100%;
   }
@@ -42,7 +45,7 @@ export const breadcrumbsStyles = css`
     background: transparent;
     color: inherit;
     border: none;
-    border-radius: var(--vaadin-radius-m);
+    border-radius: var(--vaadin-breadcrumbs-item-border-radius, var(--vaadin-radius-m));
     --_padding: var(--vaadin-padding-block-container);
     /* Ensure minimum click target (WCAG) */
     padding: max(var(--_padding), (24px - 1lh) / 2);
@@ -52,6 +55,7 @@ export const breadcrumbsStyles = css`
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    -webkit-tap-highlight-color: transparent;
   }
 
   [part='overflow-button']::before {
@@ -76,23 +80,25 @@ export const breadcrumbsStyles = css`
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
     background: currentColor;
-    mask: var(--vaadin-breadcrumbs-separator, var(--_vaadin-icon-chevron-right)) center / 90% no-repeat;
-    margin-inline-start: var(--vaadin-gap-xs);
+    mask: var(--vaadin-breadcrumbs-separator-icon, var(--_vaadin-icon-chevron-right)) center /
+      var(--vaadin-breadcrumbs-separator-icon-size, 90%) no-repeat;
+    margin-inline-start: var(--vaadin-breadcrumbs-gap, var(--vaadin-gap-xs));
     opacity: 0.75;
   }
 
   :host([dir='rtl']) [part='overflow']::after {
-    transform: scaleX(-1);
+    scale: -1;
   }
 
   :host([theme~='slash']) {
-    --vaadin-breadcrumbs-separator: var(--_vaadin-icon-slash);
+    --vaadin-breadcrumbs-separator-icon: var(--_vaadin-icon-slash);
+    --vaadin-breadcrumbs-separator-icon-size: 100%;
   }
 
   @media (forced-colors: active) {
     [part='overflow-button']::before,
     [part='overflow']::after {
-      background: CanvasText;
+      background: CanvasText !important;
     }
   }
 `;

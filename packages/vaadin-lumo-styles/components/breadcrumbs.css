@@ -19,6 +19,8 @@
     lumo_mixins_overlay,
     lumo_mixins_menu-overlay-core,
     lumo_components_breadcrumbs-overlay;
+
+  --vaadin-breadcrumbs-link-color: 'inherit';
 }
 
 :where(:root),

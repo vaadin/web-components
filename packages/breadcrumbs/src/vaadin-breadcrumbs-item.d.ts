@@ -34,6 +34,11 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  * `focused`    | Set when the item is focused.
  * `has-prefix` | Set when the item has content in the prefix slot
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * - `--vaadin-breadcrumbs-item-border-radius`
+ * - `--vaadin-breadcrumbs-item-gap`
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class BreadcrumbsItem extends FocusMixin(DisabledMixin(ElementMixin(HTMLElement))) {

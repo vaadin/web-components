@@ -17,6 +17,15 @@
       import '@vaadin/icon';
       import '@vaadin/icons';
       import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
+      import { Notification } from '@vaadin/notification';
+
+      document.addEventListener('click', (e) => {
+        const link = e.composedPath().find((el) => el.localName === 'a');
+        if (link && link.href) {
+          e.preventDefault();
+          Notification.show(e.target.path, { duration: 1000 });
+        }
+      });
     </script>
   </head>
 
@@ -25,8 +34,8 @@
       <h2 class="heading">Default trail</h2>
       <vaadin-breadcrumbs>
         <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
-        <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
-        <vaadin-breadcrumbs-item path="/docs/components">Components</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item>Docs</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/docs/components" disabled>Components</vaadin-breadcrumbs-item>
         <vaadin-breadcrumbs-item>Breadcrumbs</vaadin-breadcrumbs-item>
       </vaadin-breadcrumbs>
     </section>
@@ -44,6 +53,7 @@
 
     <section class="section">
       <h2 class="heading">Icon trail</h2>
+      <p>No "current" item.</p>
       <vaadin-breadcrumbs>
         <vaadin-breadcrumbs-item path="/">
           <vaadin-icon slot="prefix" icon="vaadin:home"></vaadin-icon>
@@ -53,10 +63,36 @@
           <vaadin-icon slot="prefix" icon="vaadin:folder"></vaadin-icon>
           Files
         </vaadin-breadcrumbs-item>
-        <vaadin-breadcrumbs-item>
-          <vaadin-icon slot="prefix" icon="vaadin:file"></vaadin-icon>
-          Report.pdf
+        <vaadin-breadcrumbs-item path="/files/reports">
+          <vaadin-icon slot="prefix" icon="vaadin:folder"></vaadin-icon>
+          Reports
         </vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/files/reports/June.pdf">
+          <vaadin-icon slot="prefix" icon="vaadin:file"></vaadin-icon>
+          June.pdf
+        </vaadin-breadcrumbs-item>
+      </vaadin-breadcrumbs>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Slash variant</h2>
+      <vaadin-breadcrumbs style="max-width: 320px;" theme="slash">
+        <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/docs/components">Components</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/docs/components/button">Button</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item>Styling</vaadin-breadcrumbs-item>
+      </vaadin-breadcrumbs>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Accent/Primary variant (Aura/Lumo)</h2>
+      <vaadin-breadcrumbs theme="accent primary">
+        <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item>Docs</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/docs/components" disabled>Components</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/docs/components/button">Button</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item>Styling</vaadin-breadcrumbs-item>
       </vaadin-breadcrumbs>
     </section>
   </body>
