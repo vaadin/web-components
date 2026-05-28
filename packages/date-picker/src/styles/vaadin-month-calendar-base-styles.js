@@ -81,6 +81,10 @@ export const monthCalendarStyles = css`
     outline: none;
   }
 
+  [part~='date']:empty {
+    pointer-events: none !important;
+  }
+
   [part~='date']::after {
     border-radius: inherit;
     content: '';
