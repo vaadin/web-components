@@ -52,11 +52,11 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  * | `--vaadin-button-font-weight`    |
  * | `--vaadin-button-gap`            |
  * | `--vaadin-button-height`         |
+ * | `--vaadin-button-label-wrap`     |
  * | `--vaadin-button-line-height`    |
  * | `--vaadin-button-margin`         |
  * | `--vaadin-button-padding`        |
  * | `--vaadin-button-text-color`     |
- * | `--vaadin-button-white-space`    |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
