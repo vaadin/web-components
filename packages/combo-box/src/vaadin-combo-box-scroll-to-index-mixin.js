@@ -36,7 +36,7 @@ export const ComboBoxScrollToIndexMixin = (superClass) =>
         return;
       }
 
-      if (index >= this._dropdownItems.length) {
+      if (index >= this.size - 1) {
         return;
       }
 
