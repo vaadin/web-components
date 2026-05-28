@@ -58,6 +58,10 @@ Use this template:
 - Bugs: describe the issue and how to reproduce it.
 - Implementation decisions: explain only the non-obvious ones.
 - Use only well-established abbreviations (e.g. DOM, PR, API).
+- Use plain, common English. Most Vaadin readers are non-native English speakers, so avoid advanced or uncommon vocabulary.
+  - Avoid: "gated", "predicated", "obviate", "subsume", "short-circuit", "surface" (as a verb or noun for "expose" / "API").
+  - Prefer: "only runs when", "based on", "remove the need for", "include", "skip" or "exit early", "API" or "expose".
+  - Technical terms (API names, identifiers, library names) should stay exact. Only the surrounding prose needs to be plain.
 
 ### Relation mapping
 
