@@ -1,0 +1,192 @@
+:where(:root),
+:where(:host) {
+  --_lumo-button-size: var(--lumo-size-m);
+  --vaadin-button-height: var(--_lumo-button-size);
+  --vaadin-button-padding: 0 calc(var(--_lumo-button-size) / 3 + var(--lumo-border-radius-m) / 2);
+  --vaadin-button-margin: var(--lumo-space-xs) 0;
+  --vaadin-button-background: var(--lumo-contrast-5pct);
+  --vaadin-button-text-color: var(--lumo-primary-text-color);
+  --vaadin-button-border-width: 0px;
+}
+
+:where(vaadin-button) {
+  position: relative;
+  min-width: var(--vaadin-button-min-width, calc(var(--_lumo-button-size) * 2));
+  outline-offset: 0;
+  --vaadin-button-gap: 0 0.25em;
+
+  /* Vars defined on :root resolve --_lumo-button-size there; recompute them for size variants */
+  &:is([theme~='small'], [theme~='large']) {
+    --vaadin-button-height: var(--_lumo-button-size);
+    --vaadin-button-padding: 0 calc(var(--_lumo-button-size) / 3 + var(--lumo-border-radius-m) / 2);
+  }
+
+  &[theme~='small'] {
+    --_lumo-button-size: var(--lumo-size-s);
+    --vaadin-button-font-size: var(--lumo-font-size-s);
+  }
+
+  &[theme~='large'] {
+    --_lumo-button-size: var(--lumo-size-l);
+    --vaadin-button-font-size: var(--lumo-font-size-l);
+  }
+
+  &[theme~='primary'] {
+    --vaadin-button-background: var(--vaadin-button-primary-background, var(--lumo-primary-color));
+    --vaadin-button-text-color: var(--vaadin-button-primary-text-color, var(--lumo-primary-contrast-color));
+    --vaadin-button-font-weight: 600;
+    min-width: calc(var(--_lumo-button-size) * 2.5);
+    outline-offset: 1px;
+  }
+
+  &:is([theme~='tertiary'], [theme~='tertiary-inline']) {
+    --vaadin-button-background: transparent;
+    min-width: 0;
+  }
+
+  &[theme~='tertiary'] {
+    --vaadin-button-padding: 0 calc(var(--_lumo-button-size) / 6);
+  }
+
+  &[theme~='tertiary-inline'] {
+    --vaadin-button-padding: 0;
+    --vaadin-button-margin: 0;
+    --vaadin-button-height: auto;
+    --vaadin-button-font-size: inherit;
+    --vaadin-button-line-height: inherit;
+  }
+
+  &[theme~='icon']:not([theme~='tertiary-inline']) {
+    min-width: var(--_lumo-button-size);
+    --vaadin-button-padding: 0 calc(var(--_lumo-button-size) / 4);
+  }
+
+  &[theme~='icon'] {
+    --vaadin-button-gap: 0px;
+  }
+
+  /* Pull icons into the padding, as the legacy prefix/suffix part margins did */
+  & > [slot='prefix'] {
+    margin-inline-start: -0.25em;
+  }
+
+  & > [slot='suffix'] {
+    margin-inline-end: -0.25em;
+  }
+
+  &[theme~='icon'] > :is([slot='prefix'], [slot='suffix']) {
+    margin-inline: 0;
+  }
+
+  &[theme~='success'] {
+    --vaadin-button-text-color: var(--lumo-success-text-color);
+  }
+
+  &[theme~='success'][theme~='primary'] {
+    --vaadin-button-background: var(--lumo-success-color);
+    --vaadin-button-text-color: var(--lumo-success-contrast-color);
+  }
+
+  &[theme~='warning'] {
+    --vaadin-button-text-color: var(--lumo-warning-text-color);
+  }
+
+  &[theme~='warning'][theme~='primary'] {
+    --vaadin-button-background: var(--lumo-warning-color);
+    --vaadin-button-text-color: var(--lumo-warning-contrast-color);
+  }
+
+  &[theme~='error'] {
+    --vaadin-button-text-color: var(--lumo-error-text-color);
+  }
+
+  &[theme~='error'][theme~='primary'] {
+    --vaadin-button-background: var(--lumo-error-color);
+    --vaadin-button-text-color: var(--lumo-error-contrast-color);
+  }
+
+  &[theme~='contrast'] {
+    --vaadin-button-text-color: var(--lumo-contrast);
+  }
+
+  &[theme~='contrast'][theme~='primary'] {
+    --vaadin-button-background: var(--lumo-contrast);
+    --vaadin-button-text-color: var(--lumo-base-color);
+  }
+
+  &[disabled] {
+    opacity: 1;
+    --vaadin-button-text-color: var(--lumo-disabled-text-color);
+  }
+
+  &[disabled][theme~='primary'] {
+    --vaadin-button-background: var(--lumo-contrast-30pct);
+    --vaadin-button-text-color: var(--lumo-base-color);
+  }
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-color: currentColor;
+    border-radius: inherit;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &::before {
+    transition: opacity 100ms;
+  }
+
+  &::after {
+    transition:
+      opacity 1.4s,
+      transform 0.1s;
+    filter: blur(8px);
+  }
+
+  &:is([disabled], [theme~='tertiary-inline'])::before,
+  &:is([disabled], [theme~='tertiary-inline'])::after {
+    display: none;
+  }
+
+  @media (any-hover: hover) {
+    &:hover:not([disabled])::before {
+      opacity: 0.02;
+    }
+
+    &[theme~='primary']:hover:not([disabled])::before {
+      opacity: 0.05;
+    }
+  }
+
+  &[active]:not([disabled])::before {
+    opacity: 0.05;
+    transition-duration: 0s;
+  }
+
+  &[active]:not([disabled])::after {
+    opacity: 0.1;
+    transition-duration: 0s, 0s;
+    transform: scale(0);
+  }
+
+  &[theme~='primary'][active]:not([disabled])::before {
+    opacity: 0.1;
+  }
+
+  &[theme~='primary'][active]:not([disabled])::after {
+    opacity: 0.2;
+  }
+
+  &[theme~='primary']::before,
+  &[theme~='primary']::after {
+    background-color: black;
+  }
+
+  & > vaadin-icon[icon^='vaadin:'] {
+    padding: 0.25em;
+  }
+}
