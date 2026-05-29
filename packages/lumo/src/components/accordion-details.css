@@ -1,0 +1,101 @@
+:where(:root),
+:where(:host) {
+  --vaadin-details-summary-padding: var(--lumo-space-s) 0;
+  --vaadin-details-summary-text-color: var(--lumo-secondary-text-color);
+  --vaadin-details-summary-border-radius: var(--lumo-border-radius-m);
+  --vaadin-details-summary-gap: var(--lumo-space-xs);
+
+  --vaadin-accordion-heading-padding: var(--lumo-space-s) 0;
+  --vaadin-accordion-heading-text-color: var(--lumo-secondary-text-color);
+  --vaadin-accordion-heading-border-radius: var(--lumo-border-radius-m);
+  --vaadin-accordion-heading-gap: var(--lumo-space-xs);
+}
+
+:where(vaadin-details) {
+  margin: var(--lumo-space-xs) 0;
+}
+
+:where(vaadin-details-summary, vaadin-accordion-heading) {
+  line-height: var(--lumo-line-height-xs);
+  outline-offset: 0;
+}
+
+:where(vaadin-details-summary, vaadin-accordion-heading)::part(toggle) {
+  margin-inline-start: calc(var(--lumo-space-xs) * -1);
+}
+
+:where(vaadin-details-summary, vaadin-accordion-heading)[disabled] {
+  opacity: 1;
+}
+
+:where(vaadin-details-summary, vaadin-accordion-heading)[disabled],
+:where(vaadin-details-summary, vaadin-accordion-heading)[disabled]::part(toggle) {
+  color: var(--lumo-disabled-text-color);
+}
+
+:is(vaadin-details, vaadin-accordion-panel):not([theme~='no-padding'])::part(content) {
+  padding: var(--lumo-space-xs) 0 var(--lumo-space-s);
+}
+
+@media (hover: hover) {
+  :is(vaadin-details-summary, vaadin-accordion-heading):hover:not([disabled]),
+  :is(vaadin-details-summary, vaadin-accordion-heading):hover:not([disabled])::part(toggle) {
+    color: var(--lumo-contrast-80pct);
+  }
+}
+
+/* Filled */
+:where(vaadin-accordion-panel:not(:last-child, [theme~='filled'])) {
+  border-bottom: 1px solid var(--lumo-contrast-10pct);
+}
+
+:where(vaadin-accordion-panel[theme~='filled']:not(:last-child)) {
+  margin-bottom: 2px;
+}
+
+:where(vaadin-details, vaadin-accordion-panel)[theme~='filled'] {
+  background-color: var(--lumo-contrast-5pct);
+  border-radius: var(--lumo-border-radius-m);
+  --vaadin-details-summary-padding: var(--lumo-space-s) calc(var(--lumo-space-s) + var(--lumo-space-xs) / 2);
+  --vaadin-accordion-heading-padding: var(--lumo-space-s) calc(var(--lumo-space-s) + var(--lumo-space-xs) / 2);
+}
+
+:is(vaadin-details, vaadin-accordion-panel)[theme~='filled']:not([theme~='no-padding'])::part(content) {
+  padding-inline: var(--lumo-space-m);
+}
+
+/* Small */
+:where(vaadin-details, vaadin-accordion-panel)[theme~='small'] {
+  --vaadin-details-summary-padding: var(--lumo-space-xs) 0;
+  --vaadin-details-summary-gap: calc(var(--lumo-space-xs) / 2);
+  --vaadin-accordion-heading-padding: var(--lumo-space-xs) 0;
+  --vaadin-accordion-heading-gap: calc(var(--lumo-space-xs) / 2);
+}
+
+:where(vaadin-details, vaadin-accordion-panel)[theme~='small']::part(content) {
+  font-size: var(--lumo-font-size-s);
+}
+
+:where(vaadin-details, vaadin-accordion-panel)[theme~='small'][theme~='filled'] {
+  --vaadin-details-summary-padding: var(--lumo-space-xs) var(--lumo-space-s);
+  --vaadin-accordion-heading-padding: var(--lumo-space-xs) var(--lumo-space-s);
+}
+
+/* Reverse */
+:is(vaadin-details-summary, vaadin-accordion-heading)[theme~='reverse']::part(content) {
+  width: 100%;
+}
+
+:is(vaadin-details-summary, vaadin-accordion-heading)[theme~='reverse']::part(toggle) {
+  order: 1;
+  margin-inline-start: auto;
+}
+
+/* Filled reverse */
+:is(vaadin-details-summary, vaadin-accordion-heading)[theme~='reverse'][theme~='filled'] {
+  padding-inline-start: 0;
+}
+
+:is(vaadin-details-summary, vaadin-accordion-heading)[theme~='reverse'][theme~='filled']::part(content) {
+  padding-inline-start: var(--lumo-space-m);
+}
