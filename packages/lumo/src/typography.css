@@ -1,0 +1,136 @@
+:where(:root),
+:where(:host) {
+  --lumo-font-family-system:
+    -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol';
+
+  --lumo-font-family: var(--lumo-font-family-system);
+  --vaadin-icon-baseline-font-family: var(--aura-font-family);
+
+  --lumo-font-weight-regular: 400;
+  --lumo-font-weight-medium: 500;
+  --lumo-font-weight-semibold: 600;
+}
+
+:where(:root),
+:where(:host),
+:where([theme]) {
+  /* Font sizes */
+  --lumo-font-size-xxs: 0.75rem;
+  --lumo-font-size-xs: 0.8125rem;
+  --lumo-font-size-s: 0.875rem;
+  --lumo-font-size-m: 1rem;
+  --lumo-font-size-l: 1.125rem;
+  --lumo-font-size-xl: 1.375rem;
+  --lumo-font-size-xxl: 1.75rem;
+  --lumo-font-size-xxxl: 2.5rem;
+
+  /* Line heights */
+  --lumo-line-height-xs: 1.25;
+  --lumo-line-height-s: 1.375;
+  --lumo-line-height-m: 1.625;
+}
+
+:where(body),
+:where(:host) {
+  font-family: var(--lumo-font-family);
+  font-size: var(--lumo-font-size-m);
+  line-height: var(--lumo-line-height-m);
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-weight: var(--lumo-font-weight-regular);
+
+  /* Set to auto to disable grayscale/anti-aliased font smoothing (and use default sub-pixel anti-aliasing) */
+  -webkit-font-smoothing: var(--lumo-font-smoothing, antialiased);
+  -moz-osx-font-smoothing: var(--lumo-font-smoothing, grayscale);
+
+  /* We assume apps are built with responsive layouting in mind */
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+small {
+  font-size: var(--lumo-font-size-s);
+  line-height: var(--lumo-line-height-s);
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  font-weight: 600;
+  line-height: var(--lumo-line-height-xs);
+  color: var(--lumo-header-text-color);
+  margin-block: 0;
+}
+
+:where(h1) {
+  font-size: var(--lumo-font-size-xxxl);
+}
+
+:where(h2) {
+  font-size: var(--lumo-font-size-xxl);
+}
+
+:where(h3) {
+  font-size: var(--lumo-font-size-xl);
+}
+
+:where(h4) {
+  font-size: var(--lumo-font-size-l);
+}
+
+:where(h5) {
+  font-size: var(--lumo-font-size-m);
+}
+
+:where(h6) {
+  font-size: var(--lumo-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+:where(p, blockquote) {
+  margin-top: 0.5em;
+  margin-bottom: 0.75em;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:where(:any-link) {
+  color: var(--lumo-primary-text-color);
+}
+
+a:where(:any-link):hover {
+  text-decoration: underline;
+}
+
+a:not(:any-link) {
+  color: var(--lumo-disabled-text-color);
+}
+
+hr {
+  display: block;
+  align-self: stretch;
+  height: 1px;
+  border: 0;
+  padding: 0;
+  margin: var(--lumo-space-s) calc(var(--lumo-border-radius-m) / 2);
+  background-color: var(--lumo-contrast-10pct);
+}
+
+:where(b, strong) {
+  font-weight: 600;
+}
+
+:where(code, pre) {
+  border-radius: var(--lumo-border-radius-m);
+}
+
+pre code {
+  background: transparent;
+}
+
+:where(blockquote) {
+  border-inline-start: 2px solid var(--lumo-contrast-30pct);
+  color: var(--lumo-secondary-text-color);
+}
