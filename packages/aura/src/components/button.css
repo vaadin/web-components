@@ -45,12 +45,14 @@ Buttons that place an icon in the default slot are assumed to be icon-only butto
 }
 
 /* Decrease padding when an icon is placed in the prefix or suffix slot */
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button)[theme~='tertiary'],
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button):has(
   > [slot='prefix']:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar)
 ) {
   padding-inline-start: var(--vaadin-padding-s);
 }
 
+:is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button)[theme~='tertiary'],
 :is(vaadin-button, vaadin-upload-button, vaadin-menu-bar-button):has(
   > [slot='suffix']:is(vaadin-icon, svg, i[class*='fa-'], vaadin-avatar)
 ),
