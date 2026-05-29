@@ -55,6 +55,10 @@ export function enforceThemePlugin(defaultTheme) {
         body = body.replace('<html', `<html data-theme="${theme}"`);
       }
 
+      if (theme.startsWith('wip')) {
+        body = body.replace('</title>', '</title><link rel="stylesheet" href="/packages/lumo/lumo.css" />');
+      }
+
       if (theme.startsWith('lumo')) {
         body = body.replace(
           '</title>',
