@@ -883,6 +883,7 @@ customElements.define(
               textarea {
                 font-family: monospace;
                 white-space: pre;
+                overflow-x: auto;
               }
             }
 
