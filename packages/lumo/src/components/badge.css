@@ -1,0 +1,61 @@
+:where(:root),
+:where(:host) {
+  --vaadin-badge-background: var(--lumo-primary-color-10pct);
+  --vaadin-badge-text-color: var(--lumo-primary-text-color);
+  --vaadin-badge-font-size: var(--lumo-font-size-s);
+  --vaadin-badge-line-height: var(--lumo-line-height-m);
+  --vaadin-badge-border-color: transparent;
+}
+
+:where(vaadin-badge) {
+  border-width: var(--vaadin-badge-border-width, 0);
+}
+
+:where(vaadin-badge)[theme~='success'] {
+  --vaadin-badge-background: var(--lumo-success-color-10pct);
+  --vaadin-badge-text-color: var(--lumo-success-text-color);
+}
+
+:where(vaadin-badge)[theme~='error'] {
+  --vaadin-badge-background: var(--lumo-error-color-10pct);
+  --vaadin-badge-text-color: var(--lumo-error-text-color);
+}
+
+:where(vaadin-badge)[theme~='warning'] {
+  --vaadin-badge-background: var(--lumo-warning-color-10pct);
+  --vaadin-badge-text-color: var(--lumo-warning-text-color);
+}
+
+:where(vaadin-badge)[theme~='neutral'] {
+  --vaadin-badge-background: var(--lumo-contrast-5pct);
+  --vaadin-badge-text-color: var(--lumo-contrast-80pct);
+}
+
+:where(vaadin-badge)[theme~='small'] {
+  --vaadin-badge-font-size: var(--lumo-font-size-xxs);
+}
+
+:where(vaadin-badge):is([theme~='filled'], [theme~='dot']) {
+  background: var(--lumo-primary-color);
+  color: var(--lumo-primary-contrast-color);
+}
+
+:where(vaadin-badge):is([theme~='filled'], [theme~='dot'])[theme~='success'] {
+  background: var(--lumo-success-color);
+  color: var(--lumo-success-contrast-color);
+}
+
+:where(vaadin-badge):is([theme~='filled'], [theme~='dot'])[theme~='error'] {
+  background: var(--lumo-error-color);
+  color: var(--lumo-error-contrast-color);
+}
+
+:where(vaadin-badge):is([theme~='filled'], [theme~='dot'])[theme~='warning'] {
+  background: var(--lumo-warning-color);
+  color: var(--lumo-warning-contrast-color);
+}
+
+:where(vaadin-badge):is([theme~='filled'], [theme~='dot'])[theme~='neutral'] {
+  background: var(--lumo-contrast);
+  color: var(--lumo-base-color);
+}
