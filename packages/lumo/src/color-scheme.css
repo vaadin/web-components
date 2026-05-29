@@ -1,0 +1,6 @@
+:where(:root),
+:where(:host) {
+  color: var(--lumo-body-text-color);
+  background-color: var(--lumo-base-color);
+  color-scheme: light;
+}
