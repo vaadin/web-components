@@ -1,0 +1,31 @@
+:where(:root),
+:where(:host) {
+  --vaadin-confirm-dialog-min-width: 28em;
+  --vaadin-confirm-dialog-max-width: 28em;
+}
+
+:where(vaadin-confirm-dialog)::part(header) {
+  margin-inline-start: calc(var(--vaadin-dialog-padding) - var(--lumo-space-m));
+}
+
+:where(vaadin-confirm-dialog)::part(content) {
+  padding-bottom: var(--vaadin-dialog-padding);
+}
+
+:where(vaadin-confirm-dialog)::part(cancel-button) {
+  flex-grow: 1;
+}
+
+@media (max-width: 360px) {
+  :where(vaadin-confirm-dialog)::part(footer) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    padding: var(--lumo-space-s) var(--lumo-space-l);
+    gap: var(--lumo-space-s);
+  }
+
+  :where(vaadin-confirm-dialog) > [slot$='button'] {
+    width: 100%;
+    margin: 0;
+  }
+}
