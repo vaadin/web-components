@@ -23,6 +23,7 @@
     "start": "web-dev-server --node-resolve --open /dev",
     "start:aura": "web-dev-server --node-resolve --open /dev --theme=aura",
     "start:lumo": "web-dev-server --node-resolve --open /dev --theme=lumo",
+    "start:wip": "web-dev-server --node-resolve --open /dev --theme=wip",
     "test": "web-test-runner",
     "test:aura": "./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js",
     "test:aura:dark": "./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js --dark",
