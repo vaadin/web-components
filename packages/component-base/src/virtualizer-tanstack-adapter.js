@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { elementScroll, observeElementOffset, observeElementRect, Virtualizer } from '@tanstack/virtual-core';
-import { microTask } from '@vaadin/component-base/src/async.js';
+import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { reorderChildren } from '@vaadin/component-base/src/dom-utils.js';
 
@@ -37,6 +37,7 @@ export class TanStackAdapter {
   #estimatedSize = 200;
   #resizeObserver;
   #renderDebouncer;
+  #reorderElementsDebouncer;
 
   constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer, reorderElements }) {
     this.createElements = createElements;
@@ -116,7 +117,7 @@ export class TanStackAdapter {
     while (this.#virtualizer.scrollState) {
       this.#virtualizer.scrollOffset = this.scrollTarget.scrollTop;
       this.#render();
-      this.flush();
+      this.#renderDebouncer?.flush();
       this.#virtualizer.reconcileScroll();
     }
   }
@@ -180,7 +181,7 @@ export class TanStackAdapter {
 
     this.#createElementsIfNeeded();
     this.#renderElements();
-    this.#reorderElements();
+    this.#scheduleReorderElements();
   }
 
   #measureElement(element, entry) {
@@ -274,12 +275,17 @@ export class TanStackAdapter {
     this.#virtualizer.setOptions({ ...options, overscan });
   }
 
-  #reorderElements() {
-    const { isScrolling } = this.#virtualizer;
-    if (!this.reorderElements || isScrolling) {
+  #scheduleReorderElements() {
+    if (!this.reorderElements) {
       return;
     }
 
+    this.#reorderElementsDebouncer = Debouncer.debounce(this.#reorderElementsDebouncer, timeOut.after(500), () => {
+      this.#reorderElements();
+    });
+  }
+
+  #reorderElements() {
     // Remove hidden elements from the DOM
     // TODO: Do we need this?
     this.#elements.forEach((el) => {
@@ -297,6 +303,7 @@ export class TanStackAdapter {
 
   flush() {
     this.#renderDebouncer?.flush();
+    this.#reorderElementsDebouncer?.flush();
   }
 
   get #virtualItems() {
