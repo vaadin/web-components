@@ -111,6 +111,7 @@ class ThemeSwitcher extends LitElement {
     return html`
       <button ?active=${this.currentTheme.startsWith('base')} @click=${() => this.switchTheme('base')}>Base</button>
       <button ?active=${this.currentTheme.startsWith('lumo')} @click=${() => this.switchTheme('lumo')}>Lumo</button>
+      <button ?active=${this.currentTheme.startsWith('wip')} @click=${() => this.switchTheme('wip')}>Lumo (WIP)</button>
       <button ?active=${this.currentTheme.startsWith('aura')} @click=${() => this.switchTheme('aura')}>Aura</button>
       <button
         @click=${() => this.toggleColorScheme()}
