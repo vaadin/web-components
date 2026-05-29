@@ -7,3 +7,6 @@
 
 @import './src/components/accordion-details.css';
 @import './src/components/badge.css';
+@import './src/components/overlay.css';
+@import './src/components/popover.css';
+@import './src/components/tooltip.css';

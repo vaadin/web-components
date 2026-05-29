@@ -1,0 +1,5 @@
+:where(:root),
+:where(:host) {
+  --vaadin-popover-padding: var(--lumo-space-xs) var(--lumo-space-s);
+  --vaadin-popover-arrow-size: 0.75rem;
+}
