@@ -1,0 +1,14 @@
+:where(:root),
+:where(:host) {
+  --vaadin-overlay-viewport-inset: var(--lumo-space-m);
+  --vaadin-overlay-backdrop-background: var(--lumo-shade-20pct);
+  --vaadin-overlay-border-width: 0px;
+  --vaadin-overlay-shadow: 0 0 0 1px var(--lumo-shade-5pct), var(--lumo-box-shadow-m);
+  --vaadin-overlay-background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+  --vaadin-overlay-text-color: var(--lumo-body-text-color);
+}
+
+:where(vaadin-popover)::part(overlay) {
+  font-family: var(--lumo-font-family);
+  line-height: var(--lumo-line-height-m);
+}
