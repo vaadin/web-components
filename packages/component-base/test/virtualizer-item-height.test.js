@@ -62,7 +62,7 @@ describe('virtualizer - item height', () => {
     expect(item1.getBoundingClientRect().top - item0.getBoundingClientRect().top).to.equal(200);
   });
 
-  it('should resize the elements once the content updates', async () => {
+  it('should reposition items once their content updates', async () => {
     const item0 = elementsContainer.querySelector(`#item-0`);
     const item1 = elementsContainer.querySelector(`#item-1`);
     // Wait for the content to update
