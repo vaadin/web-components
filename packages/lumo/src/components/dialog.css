@@ -9,7 +9,7 @@
   --vaadin-dialog-toolbar-gap: var(--lumo-space-xs) var(--lumo-space-s);
 }
 
-:where(vaadin-dialog)::part(header) {
+:where(vaadin-dialog, vaadin-confirm-dialog)::part(header) {
   padding: var(--lumo-space-m);
 }
 
@@ -21,7 +21,7 @@
   cursor: move;
 }
 
-:where(vaadin-dialog)::part(footer) {
+:where(vaadin-dialog, vaadin-confirm-dialog)::part(footer) {
   padding: var(--lumo-space-s) var(--lumo-space-m);
   background-color: var(--lumo-contrast-5pct);
   line-height: var(--lumo-line-height-s);
