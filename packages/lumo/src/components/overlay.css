@@ -8,7 +8,7 @@
   --vaadin-overlay-text-color: var(--lumo-body-text-color);
 }
 
-:where(vaadin-popover)::part(overlay) {
+:where(vaadin-dialog, vaadin-popover)::part(overlay) {
   font-family: var(--lumo-font-family);
   line-height: var(--lumo-line-height-m);
 }
