@@ -1,0 +1,201 @@
+:where(:root),
+:where(:host) {
+  --vaadin-badge-background: var(--lumo-primary-color-10pct);
+  --vaadin-badge-text-color: var(--lumo-primary-text-color);
+  --vaadin-badge-font-size: var(--lumo-font-size-s);
+  --vaadin-badge-line-height: var(--lumo-line-height-m);
+  /* Lumo badges show no border, but keep the base's 1px so the size math (height,
+     min-width, negative margin) stays consistent and --vaadin-badge-border-color
+     still draws a border when set. */
+  --vaadin-badge-border-color: transparent;
+}
+
+:where(vaadin-badge)[theme~='success'] {
+  --vaadin-badge-background: var(--lumo-success-color-10pct);
+  --vaadin-badge-text-color: var(--lumo-success-text-color);
+}
+
+:where(vaadin-badge)[theme~='error'] {
+  --vaadin-badge-background: var(--lumo-error-color-10pct);
+  --vaadin-badge-text-color: var(--lumo-error-text-color);
+}
+
+:where(vaadin-badge)[theme~='warning'] {
+  --vaadin-badge-background: var(--lumo-warning-color-10pct);
+  --vaadin-badge-text-color: var(--lumo-warning-text-color);
+}
+
+:where(vaadin-badge)[theme~='neutral'] {
+  --vaadin-badge-background: var(--lumo-contrast-5pct);
+  --vaadin-badge-text-color: var(--lumo-contrast-80pct);
+}
+
+:where(vaadin-badge)[theme~='small'] {
+  --vaadin-badge-font-size: var(--lumo-font-size-xxs);
+}
+
+:where(vaadin-badge):is([theme~='filled'], [theme~='dot']) {
+  background: var(--lumo-primary-color);
+  color: var(--lumo-primary-contrast-color);
+}
+
+:where(vaadin-badge):is([theme~='filled'], [theme~='dot'])[theme~='success'] {
+  background: var(--lumo-success-color);
+  color: var(--lumo-success-contrast-color);
+}
+
+:where(vaadin-badge):is([theme~='filled'], [theme~='dot'])[theme~='error'] {
+  background: var(--lumo-error-color);
+  color: var(--lumo-error-contrast-color);
+}
+
+:where(vaadin-badge):is([theme~='filled'], [theme~='dot'])[theme~='warning'] {
+  background: var(--lumo-warning-color);
+  color: var(--lumo-warning-contrast-color);
+}
+
+:where(vaadin-badge):is([theme~='filled'], [theme~='dot'])[theme~='neutral'] {
+  background: var(--lumo-contrast);
+  color: var(--lumo-base-color);
+}
+
+/* Lumo also styles the `theme="badge"` convention on any plain element (a span, an
+   anchor, a vaadin-icon). Those elements have no base styles behind them, so unlike
+   vaadin-badge above they need the full appearance spelled out here rather than vars. */
+[theme~='badge'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0.4em calc(0.5em + var(--lumo-border-radius-s) / 4);
+  color: var(--lumo-primary-text-color);
+  background-color: var(--lumo-primary-color-10pct);
+  border-radius: var(--lumo-border-radius-s);
+  font-size: var(--lumo-font-size-s);
+  line-height: 1;
+  font-weight: 500;
+  text-transform: initial;
+  letter-spacing: initial;
+  min-width: calc(var(--lumo-line-height-xs) * 1em + 0.45em);
+  flex-shrink: 0;
+}
+
+/* Keeps the text vertically centered regardless of content */
+[theme~='badge']::before {
+  display: inline-block;
+  content: '\2003';
+  width: 0;
+}
+
+[theme~='badge'][theme~='small'] {
+  font-size: var(--lumo-font-size-xxs);
+  line-height: 1;
+}
+
+[theme~='badge'][theme~='success'] {
+  color: var(--lumo-success-text-color);
+  background-color: var(--lumo-success-color-10pct);
+}
+
+[theme~='badge'][theme~='error'] {
+  color: var(--lumo-error-text-color);
+  background-color: var(--lumo-error-color-10pct);
+}
+
+[theme~='badge'][theme~='warning'] {
+  color: var(--lumo-warning-text-color);
+  background-color: var(--lumo-warning-color-10pct);
+}
+
+[theme~='badge'][theme~='contrast'] {
+  color: var(--lumo-contrast-80pct);
+  background-color: var(--lumo-contrast-5pct);
+}
+
+[theme~='badge'][theme~='primary'] {
+  color: var(--lumo-primary-contrast-color);
+  background-color: var(--lumo-primary-color);
+}
+
+[theme~='badge'][theme~='success'][theme~='primary'] {
+  color: var(--lumo-success-contrast-color);
+  background-color: var(--lumo-success-color);
+}
+
+[theme~='badge'][theme~='error'][theme~='primary'] {
+  color: var(--lumo-error-contrast-color);
+  background-color: var(--lumo-error-color);
+}
+
+[theme~='badge'][theme~='warning'][theme~='primary'] {
+  color: var(--lumo-warning-contrast-color);
+  background-color: var(--lumo-warning-color);
+}
+
+[theme~='badge'][theme~='contrast'][theme~='primary'] {
+  color: var(--lumo-base-color);
+  background-color: var(--lumo-contrast);
+}
+
+[theme~='badge'][href]:hover {
+  text-decoration: none;
+}
+
+/* Slotted icons are pulled into the badge's padding */
+[theme~='badge'] > vaadin-icon {
+  margin-block: -0.25em;
+}
+
+[theme~='badge'] > vaadin-icon:first-child {
+  margin-inline-start: -0.375em;
+}
+
+[theme~='badge'] > vaadin-icon:last-child {
+  margin-inline-end: -0.375em;
+}
+
+vaadin-icon[theme~='badge'][icon] {
+  min-width: 0;
+  padding: 0;
+  font-size: 1rem;
+  --vaadin-icon-size: var(--lumo-icon-size-m);
+}
+
+vaadin-icon[theme~='badge'][icon][theme~='small'] {
+  --vaadin-icon-size: var(--lumo-icon-size-s);
+}
+
+/* An empty badge renders as a plain dot */
+[theme~='badge']:not([icon]):empty {
+  min-width: 0;
+  width: 1em;
+  height: 1em;
+  padding: 0;
+  border-radius: 50%;
+  background-color: var(--lumo-primary-color);
+}
+
+[theme~='badge'][theme~='small']:not([icon]):empty {
+  width: 0.75em;
+  height: 0.75em;
+}
+
+[theme~='badge'][theme~='contrast']:not([icon]):empty {
+  background-color: var(--lumo-contrast);
+}
+
+[theme~='badge'][theme~='success']:not([icon]):empty {
+  background-color: var(--lumo-success-color);
+}
+
+[theme~='badge'][theme~='error']:not([icon]):empty {
+  background-color: var(--lumo-error-color);
+}
+
+[theme~='badge'][theme~='warning']:not([icon]):empty {
+  background-color: var(--lumo-warning-color);
+}
+
+[theme~='badge'][theme~='pill'] {
+  --lumo-border-radius-s: 1em;
+}
