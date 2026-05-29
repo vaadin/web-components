@@ -56,16 +56,18 @@ describe('virtualizer - item height', () => {
     virtualizer.flush();
   });
 
-  it('should have the initial placeholder height', () => {
-    const firstItem = elementsContainer.querySelector(`#item-0`);
-    expect(firstItem.offsetHeight).to.equal(200);
+  it('should position items with initial placeholder height', () => {
+    const item0 = elementsContainer.querySelector(`#item-0`);
+    const item1 = elementsContainer.querySelector(`#item-1`);
+    expect(item1.getBoundingClientRect().top - item0.getBoundingClientRect().top).to.equal(200);
   });
 
   it('should resize the elements once the content updates', async () => {
-    const firstItem = elementsContainer.querySelector(`#item-0`);
+    const item0 = elementsContainer.querySelector(`#item-0`);
+    const item1 = elementsContainer.querySelector(`#item-1`);
     // Wait for the content to update
     await aTimeout(100);
-    expect(firstItem.offsetHeight).to.equal(EVEN_ITEM_HEIGHT);
+    expect(item1.getBoundingClientRect().top).to.equal(item0.getBoundingClientRect().bottom);
   });
 
   it('should adjust the placeholder height', async () => {
@@ -74,11 +76,13 @@ describe('virtualizer - item height', () => {
     // Scroll down
     virtualizer.scrollToIndex(100);
 
-    const item = elementsContainer.querySelector(`#item-100`);
-    // The item content should not yet have been updated so it uses the placeholder height
-    // which should be an average of the previous n items heights.
-    expect(item.offsetHeight).to.be.above(EVEN_ITEM_HEIGHT);
-    expect(item.offsetHeight).to.be.below(ODD_ITEM_HEIGHT);
+    const item100 = elementsContainer.querySelector(`#item-100`);
+    const item101 = elementsContainer.querySelector(`#item-101`);
+    // The item content should not yet have been updated so it is positioned using the
+    // placeholder height, which should be an average of the previous n items heights.
+    const placeholderHeight = item101.getBoundingClientRect().top - item100.getBoundingClientRect().top;
+    expect(placeholderHeight).to.be.above(EVEN_ITEM_HEIGHT);
+    expect(placeholderHeight).to.be.below(ODD_ITEM_HEIGHT);
   });
 
   it('should clear the temporary placeholder padding from the item', async () => {
