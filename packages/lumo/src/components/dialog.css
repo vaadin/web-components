@@ -1,0 +1,32 @@
+:where(:root),
+:where(:host) {
+  --vaadin-dialog-background: var(--lumo-base-color);
+  --vaadin-dialog-padding: var(--lumo-space-l);
+  --vaadin-dialog-title-color: var(--lumo-header-text-color);
+  --vaadin-dialog-shadow: 0 0 0 1px var(--lumo-shade-5pct), var(--lumo-box-shadow-xl);
+  --vaadin-dialog-title-font-size: var(--lumo-font-size-xl);
+  --vaadin-dialog-title-line-height: var(--lumo-line-height-xs);
+  --vaadin-dialog-toolbar-gap: var(--lumo-space-xs) var(--lumo-space-s);
+}
+
+:where(vaadin-dialog)::part(header) {
+  padding: var(--lumo-space-m);
+}
+
+:where(vaadin-dialog)::part(title) {
+  margin-inline-start: calc(var(--vaadin-dialog-padding) - var(--lumo-space-m));
+}
+
+:where(vaadin-dialog)[resizable]::part(title) {
+  cursor: move;
+}
+
+:where(vaadin-dialog)::part(footer) {
+  padding: var(--lumo-space-s) var(--lumo-space-m);
+  background-color: var(--lumo-contrast-5pct);
+  line-height: var(--lumo-line-height-s);
+}
+
+:where(vaadin-dialog[has-footer])::part(content) {
+  padding-bottom: var(--vaadin-dialog-padding);
+}
