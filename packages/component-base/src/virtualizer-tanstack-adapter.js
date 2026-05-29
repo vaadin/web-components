@@ -81,17 +81,7 @@ export class TanStackAdapter {
 
       this.#resizeRaf = requestAnimationFrame(() => {
         entries.forEach((entry) => {
-          const index = this.#getElementIndex(entry.target);
-          if (index == null) {
-            return;
-          }
-
-          const height = entry.borderBoxSize[0].blockSize;
-          if (height === 0) {
-            return;
-          }
-
-          this.#virtualizer.resizeItem(index, height);
+          this.#measureElement(entry.target, entry);
         });
       });
     });
@@ -163,6 +153,10 @@ export class TanStackAdapter {
       this.#isVisible = isVisible;
     }
 
+    this.#updateOverscrollBehavior();
+    this.#updateEstimatedSize();
+    this.#updateOverscan();
+
     if (sync) {
       this.#render();
     } else {
@@ -187,10 +181,20 @@ export class TanStackAdapter {
     this.#createElementsIfNeeded();
     this.#renderElements();
     this.#reorderElements();
+  }
 
-    this.#updateOverscrollBehavior();
-    this.#updateEstimatedSize();
-    this.#updateOverscan();
+  #measureElement(element, entry) {
+    const index = this.#getElementIndex(element);
+    if (index == null) {
+      return;
+    }
+
+    const height = entry?.borderBoxSize[0].blockSize ?? element.getBoundingClientRect().height;
+    if (height === 0) {
+      return;
+    }
+
+    this.#virtualizer.resizeItem(index, height);
   }
 
   #createElementsIfNeeded() {
@@ -242,11 +246,7 @@ export class TanStackAdapter {
     });
 
     updatedElements.forEach((el) => {
-      const index = this.#getElementIndex(el);
-      const { height } = el.getBoundingClientRect();
-      if (height > 0) {
-        this.#virtualizer.resizeItem(index, height);
-      }
+      this.#measureElement(el);
     });
   }
 
@@ -276,7 +276,7 @@ export class TanStackAdapter {
 
   #reorderElements() {
     const { isScrolling } = this.#virtualizer;
-    if (isScrolling) {
+    if (!this.reorderElements || isScrolling) {
       return;
     }
 
