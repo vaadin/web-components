@@ -4,3 +4,5 @@
 @import './src/spacing.css';
 @import './src/shadow.css';
 @import './src/typography.css';
+
+@import './src/components/accordion-details.css';
