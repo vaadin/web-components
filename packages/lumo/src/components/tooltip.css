@@ -1,0 +1,9 @@
+:where(:root),
+:where(:host) {
+  --vaadin-tooltip-padding: var(--lumo-space-xs) var(--lumo-space-s);
+  --vaadin-tooltip-font-size: var(--lumo-font-size-xs);
+  --vaadin-tooltip-line-height: var(--lumo-line-height-s);
+  --vaadin-tooltip-shadow: 0 0 0 1px var(--lumo-shade-5pct), var(--lumo-box-shadow-m);
+  --vaadin-tooltip-background: var(--lumo-base-color)
+    linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+}
