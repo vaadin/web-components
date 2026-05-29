@@ -30,12 +30,24 @@ export const tabsStyles = css`
 
   [part='tabs'] {
     flex: 1;
-    overflow: auto;
-    overscroll-behavior: contain;
     display: flex;
     flex-direction: column;
     gap: var(--vaadin-tabs-gap, var(--vaadin-gap-s));
     animation: enable-smooth-scroll-after-first-render 1s both;
+    width: 100%;
+    height: 100%;
+  }
+
+  :host([overflow]) [part='tabs'] {
+    overflow: auto;
+  }
+
+  :host([overflow][orientation='horizontal']) [part='tabs'] {
+    overscroll-behavior: contain auto;
+  }
+
+  :host([overflow][orientation='vertical']) [part='tabs'] {
+    overscroll-behavior: auto contain;
   }
 
   @keyframes enable-smooth-scroll-after-first-render {
