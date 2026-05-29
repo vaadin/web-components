@@ -9,24 +9,22 @@
   --vaadin-dialog-toolbar-gap: var(--lumo-space-xs) var(--lumo-space-s);
 }
 
-:where(vaadin-dialog) {
-  &::part(header) {
-    padding: var(--lumo-space-m);
-  }
+:where(vaadin-dialog, vaadin-confirm-dialog)::part(header) {
+  padding: var(--lumo-space-m);
+}
 
-  &::part(title) {
-    margin-inline-start: calc(var(--vaadin-dialog-padding) - var(--lumo-space-m));
-  }
+:where(vaadin-dialog)::part(title) {
+  margin-inline-start: calc(var(--vaadin-dialog-padding) - var(--lumo-space-m));
+}
 
-  &[resizable]::part(title) {
-    cursor: move;
-  }
+:where(vaadin-dialog)[resizable]::part(title) {
+  cursor: move;
+}
 
-  &::part(footer) {
-    padding: var(--lumo-space-s) var(--lumo-space-m);
-    background-color: var(--lumo-contrast-5pct);
-    line-height: var(--lumo-line-height-s);
-  }
+:where(vaadin-dialog, vaadin-confirm-dialog)::part(footer) {
+  padding: var(--lumo-space-s) var(--lumo-space-m);
+  background-color: var(--lumo-contrast-5pct);
+  line-height: var(--lumo-line-height-s);
 }
 
 :where(vaadin-dialog[has-footer])::part(content) {
