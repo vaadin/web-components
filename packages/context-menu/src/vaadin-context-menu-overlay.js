@@ -46,6 +46,10 @@ export class ContextMenuOverlay extends MenuOverlayMixin(
     return contextMenuOverlayStyles;
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   /**
    * @protected
    * @override
