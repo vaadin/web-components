@@ -29,10 +29,10 @@ const ruleFunction = () => {
 
       const sourceText = input.css.substring(decl.source.start.offset, decl.source.end.offset + 1);
 
-      // Check if this looks like a unicode escape pattern in the source
-      // Pattern: content: '\XXXX' where XXXX is hex digits
-      // This would indicate a SINGLE backslash in JavaScript source (wrong)
-      const singleBackslashPattern = /content:\s*['"]\\[0-9a-fA-F]{4}['"]/u;
+      // Check for a single backslash in JS/TS source (wrong) – double backslash is correct.
+      // The source pattern is: content: '\XXXX' where XXXX is hex digits
+      // This regex matches a single backslash in JavaScript string literal: '\2003' -> in source it's \\2003
+      const singleBackslashPattern = /content:\s*['"]\\(?!\\)[0-9a-fA-F]{4}['"]/u;
 
       if (!singleBackslashPattern.test(sourceText)) {
         return;
