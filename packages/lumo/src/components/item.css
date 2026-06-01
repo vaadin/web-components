@@ -5,7 +5,7 @@
   --vaadin-item-checkmark-color: var(--lumo-primary-text-color);
 }
 
-:where(vaadin-item, vaadin-context-menu-item) {
+:where(vaadin-item, vaadin-context-menu-item, vaadin-avatar-group-menu-item) {
   min-height: var(--lumo-size-m);
   line-height: var(--lumo-line-height-xs);
 }
@@ -15,16 +15,23 @@
 }
 
 @media (any-hover: hover) {
-  :where(vaadin-item, vaadin-context-menu-item):hover:not([disabled]) {
+  :where(vaadin-item, vaadin-context-menu-item, vaadin-avatar-group-menu-item):hover:not([disabled]) {
     background-color: var(--lumo-primary-color-10pct);
   }
 }
 
-:where(vaadin-item, vaadin-context-menu-item)[disabled] {
+:where(vaadin-item, vaadin-context-menu-item, vaadin-avatar-group-menu-item)[disabled] {
   opacity: 1;
   color: var(--lumo-disabled-text-color);
 }
 
 :where(vaadin-context-menu-item)[expanded] {
   background-color: var(--lumo-primary-color-10pct);
+}
+
+:where(vaadin-avatar-group-menu-item) {
+  padding: var(--lumo-space-xs);
+  padding-inline-end: var(--lumo-space-m);
+  --vaadin-avatar-size: var(--lumo-size-xs);
+  --vaadin-item-gap: var(--lumo-space-s);
 }
