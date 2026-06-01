@@ -1,0 +1,4 @@
+:where(:root),
+:where(:host) {
+  --vaadin-divider-color: var(--lumo-contrast-10pct);
+}
