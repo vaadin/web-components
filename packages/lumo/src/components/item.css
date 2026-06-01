@@ -1,0 +1,26 @@
+:where(:root),
+:where(:host) {
+  --vaadin-item-gap: var(--lumo-space-xs);
+  --vaadin-item-padding: var(--lumo-space-s) var(--lumo-space-xs);
+  --vaadin-item-checkmark-color: var(--lumo-primary-text-color);
+}
+
+:where(vaadin-item) {
+  min-height: var(--lumo-size-m);
+  line-height: var(--lumo-line-height-xs);
+}
+
+:where(vaadin-item)::part(checkmark) {
+  --vaadin-icon-visual-size: 80%;
+}
+
+@media (any-hover: hover) {
+  :where(vaadin-item):hover:not([disabled]) {
+    background-color: var(--lumo-primary-color-10pct);
+  }
+}
+
+:where(vaadin-item)[disabled] {
+  opacity: 1;
+  color: var(--lumo-disabled-text-color);
+}
