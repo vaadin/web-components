@@ -1,0 +1,37 @@
+:where(:root),
+:where(:host) {
+  --vaadin-avatar-size: var(--lumo-size-m);
+  --vaadin-avatar-font-weight: 500;
+}
+
+:where(vaadin-avatar)[theme~='xsmall'] {
+  --vaadin-avatar-size: var(--lumo-size-xs);
+}
+
+:where(vaadin-avatar)[theme~='small'] {
+  --vaadin-avatar-size: var(--lumo-size-s);
+}
+
+:where(vaadin-avatar)[theme~='large'] {
+  --vaadin-avatar-size: var(--lumo-size-l);
+}
+
+:where(vaadin-avatar)[theme~='xlarge'] {
+  --vaadin-avatar-size: var(--lumo-size-xl);
+}
+
+:where(vaadin-avatar)::part(abbr) {
+  font-size: 2.4375em;
+}
+
+:where(vaadin-avatar)[theme~='xsmall']::part(abbr) {
+  font-size: 3em;
+}
+
+:where(vaadin-avatar)[theme~='large']::part(abbr) {
+  font-size: 2.375em;
+}
+
+:where(vaadin-avatar)[theme~='xlarge']::part(abbr) {
+  font-size: 2.5em;
+}
