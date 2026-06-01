@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { arrowUpKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { arrowDownKeyDown, arrowUpKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-combo-box.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import { flushComboBox, getViewportItems, makeItems } from './helpers.js';
@@ -49,6 +49,22 @@ describe('__focusIndex', () => {
       const targetCenter = targetRect.top + targetRect.height / 2;
       const scrollerCenter = scrollerRect.top + scrollerRect.height / 2;
       expect(targetCenter).to.be.closeTo(scrollerCenter, targetRect.height / 2 + 1);
+    });
+
+    it('should not shift the viewport when arrow-navigating among visible items', async () => {
+      comboBox.opened = true;
+      comboBox.__focusIndex(100);
+      flushComboBox(comboBox);
+      await nextFrame();
+
+      // Centering leaves the scroll position unaligned. Arrow navigation among
+      // already-visible rows must move only the focus ring, not the viewport.
+      const scrollTopBefore = comboBox._scroller.scrollTop;
+      arrowDownKeyDown(comboBox.inputElement);
+      await nextFrame();
+
+      expect(comboBox._focusedIndex).to.equal(101);
+      expect(comboBox._scroller.scrollTop).to.be.closeTo(scrollTopBefore, 1);
     });
 
     it('should queue the scroll when called before opening', async () => {

@@ -179,6 +179,22 @@ export const ComboBoxScrollerMixin = (superClass) =>
         return;
       }
 
+      // If the target row is already fully visible, leave the scroll untouched.
+      // Re-running scrollToIndex would snap an unaligned scrollTop to a row
+      // boundary — a visible jump when only the focus ring should move (arrow
+      // navigation, clicks). Centering always repositions, so it skips this.
+      const renderedTarget = [...this.children].find((el) => !el.hidden && el.index === index);
+      if (!alignToCenter && renderedTarget) {
+        const targetRect = renderedTarget.getBoundingClientRect();
+        const scrollerRect = this.getBoundingClientRect();
+        if (
+          targetRect.top >= scrollerRect.top &&
+          targetRect.bottom + this._viewportTotalPaddingBottom <= scrollerRect.bottom
+        ) {
+          return;
+        }
+      }
+
       // When centering, scrolling straight to the target index renders it and
       // puts it at the top of the scroller; the rect-based correction below
       // then moves it to the middle. No index recalculation is needed.
