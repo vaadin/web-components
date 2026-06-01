@@ -1,0 +1,24 @@
+:where(vaadin-context-menu)::part(backdrop) {
+  background: var(--vaadin-overlay-backdrop-background);
+}
+
+@media (max-width: 450px), (max-height: 450px) {
+  :where(vaadin-context-menu)::part(overlay) {
+    max-height: 50vh;
+    width: 100vw;
+    border-radius: 0;
+    box-shadow: var(--lumo-box-shadow-xl);
+  }
+
+  :where(vaadin-context-menu)::part(content) {
+    padding: 30px var(--lumo-space-m);
+    max-height: inherit;
+    box-sizing: border-box;
+    overflow: auto;
+    mask-image: linear-gradient(transparent, #000 40px, #000 calc(100% - 40px), transparent);
+  }
+
+  :where(vaadin-context-menu)::part(backdrop) {
+    display: block;
+  }
+}
