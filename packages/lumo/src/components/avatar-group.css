@@ -1,0 +1,23 @@
+:where(vaadin-avatar-group)[theme~='xsmall'] {
+  --vaadin-avatar-size: var(--lumo-size-xs);
+  --vaadin-avatar-group-overlap: 4px;
+  --vaadin-avatar-group-gap: 2px;
+}
+
+:where(vaadin-avatar-group)[theme~='small'] {
+  --vaadin-avatar-size: var(--lumo-size-s);
+  --vaadin-avatar-group-overlap: 6px;
+  --vaadin-avatar-group-gap: 2px;
+}
+
+:where(vaadin-avatar-group)[theme~='large'] {
+  --vaadin-avatar-size: var(--lumo-size-l);
+  --vaadin-avatar-group-overlap: 10px;
+  --vaadin-avatar-group-gap: 3px;
+}
+
+:where(vaadin-avatar-group)[theme~='xlarge'] {
+  --vaadin-avatar-size: var(--lumo-size-xl);
+  --vaadin-avatar-group-overlap: 12px;
+  --vaadin-avatar-group-gap: 3px;
+}
