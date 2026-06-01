@@ -5,7 +5,7 @@
   --vaadin-item-checkmark-color: var(--lumo-primary-text-color);
 }
 
-:where(vaadin-item) {
+:where(vaadin-item, vaadin-context-menu-item) {
   min-height: var(--lumo-size-m);
   line-height: var(--lumo-line-height-xs);
 
@@ -23,4 +23,8 @@
     opacity: 1;
     color: var(--lumo-disabled-text-color);
   }
+}
+
+:where(vaadin-context-menu-item)[expanded] {
+  background-color: var(--lumo-primary-color-10pct);
 }
