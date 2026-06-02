@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-breadcrumbs.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
@@ -186,6 +186,34 @@ describe('overflow', () => {
 
       const firstItem = breadcrumbs.querySelector('vaadin-breadcrumbs-item[slot="overlay"]');
       expectFocusedItem(firstItem);
+    });
+
+    it('should not set focus-ring on the first overlay item when opening via mouse', async () => {
+      mousedown(button);
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const firstItem = breadcrumbs.querySelector('vaadin-breadcrumbs-item[slot="overlay"]');
+      expectFocusedItem(firstItem);
+      expect(firstItem.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should set focus-ring on the first overlay item when opening via Enter', async () => {
+      button.focus();
+      await sendKeys({ press: 'Enter' });
+      await nextRender();
+
+      const firstItem = breadcrumbs.querySelector('vaadin-breadcrumbs-item[slot="overlay"]');
+      expect(firstItem.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should set focus-ring on the first overlay item when opening via Space', async () => {
+      button.focus();
+      await sendKeys({ press: 'Space' });
+      await nextRender();
+
+      const firstItem = breadcrumbs.querySelector('vaadin-breadcrumbs-item[slot="overlay"]');
+      expect(firstItem.hasAttribute('focus-ring')).to.be.true;
     });
   });
 

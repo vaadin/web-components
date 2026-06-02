@@ -6,6 +6,7 @@
 import './vaadin-breadcrumbs-item.js';
 import './vaadin-breadcrumbs-overlay.js';
 import { html, LitElement } from 'lit';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -302,7 +303,7 @@ class Breadcrumbs extends KeyboardDirectionMixin(
     // Focus first non-disabled overlay item
     const idx = this._getFocusableIndex();
     if (idx >= 0) {
-      this._focus(idx);
+      this._focus(idx, { focusVisible: isKeyboardActive() });
     }
   }
 
