@@ -36,8 +36,10 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  *
  * The following custom CSS properties are available for styling:
  *
- * - `--vaadin-breadcrumbs-item-border-radius`
- * - `--vaadin-breadcrumbs-item-gap`
+ * Custom CSS property                          |
+ * :--------------------------------------------|
+ * | `--vaadin-breadcrumbs-item-border-radius`  |
+ * | `--vaadin-breadcrumbs-item-gap`            |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
