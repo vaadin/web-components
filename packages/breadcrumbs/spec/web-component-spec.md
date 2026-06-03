@@ -96,6 +96,7 @@ Internal behavior:
 - **Overflow separator.** The overflow element sits in the list flow between the root and the rest, so it needs a separator after it when visible. Its `[part="overflow"]::after` pseudo-element reuses the same separator recipe as `<vaadin-breadcrumbs-item>` (see "Separator rendering"), so the overflow element visually matches peer items. When `has-overflow` is not set, the overflow element is hidden, so its separator is not visible either.
 - **Width-constrained list flow.** The host carries `width: 100%; min-width: 0`, and `[part="list"]` is a `display: flex; flex-wrap: nowrap` container with `min-width: 0; max-width: 100%`. The list stretches to its parent's width and shrinks below its natural content width, which is how overflow detection knows when items no longer fit. Nothing relies on `overflow: hidden`, so focus outlines on items render without being cropped by the list edge.
 - **Overflow-button click target.** `[part="overflow-button"]` uses a `padding: max(var(--vaadin-padding-block-container), (24px - 1lh) / 2)` formula paired with the matching negative `margin`, so the click target is at least 24×24 px (WCAG 2.5.8) without changing the button's visual size.
+- **Baseline alignment.** The host and `[part="list"]` use `align-items: baseline`; `[part="overflow"]` inherits the baseline alignment. When an item's text wraps onto multiple lines, prefix icons and adjacent items stay aligned to the first line's baseline rather than the box center, keeping the trail readable when the available width is tight. Icon pseudo-elements (the separator on each item and on `[part="overflow"]`, plus the overflow button's `::before`) are sized to `1lh` so they fill the line height; separators mask their icon at `90%` of the box and carry `opacity: 0.75` to keep the chevron visually subordinate to text, the overflow-button icon uses `opacity: 0.8` for the same reason.
 
 ---
 
@@ -313,6 +314,10 @@ The `…` glyph depends on the rendered font and locale — some fonts render it
 **Q: Why doesn't `[part="list"]` use `overflow: hidden` to clip overflowing items?**
 
 Clipping items with `overflow: hidden` cropped their focus outlines too, so the list needed a `padding: var(--vaadin-focus-ring-width)` workaround that shifted the trail visually and made flex-item width math harder to reason about. The current setup constrains the list with `min-width: 0; max-width: 100%` and lets overflow detection trigger before items would visually escape the parent's width. Focus outlines render without being cropped because the list no longer clips its descendants.
+
+**Q: Why are breadcrumbs items aligned by baseline rather than centered?**
+
+When an item's text wraps onto multiple lines (very narrow viewport, long current-page title), aligning by box center pushes single-line siblings down to match the wrapped item's center and breaks the visual baseline of the trail. Baseline alignment keeps the first line of every item aligned, so prefix icons and adjacent text always sit on the same horizontal line. Icon pseudo-elements (chevron separator, ellipsis overflow icon) are sized to `1lh` and inset at `90%` of the box so they fill the line height without dominating the text visually.
 
 **Q: Why does each item carry a padding-based click target paired with a negative `margin-inline`?**
 

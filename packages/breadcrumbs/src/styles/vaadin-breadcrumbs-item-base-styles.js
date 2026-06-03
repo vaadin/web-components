@@ -9,7 +9,7 @@ import { css } from 'lit';
 export const breadcrumbsItemStyles = css`
   :host {
     display: inline-flex;
-    align-items: center;
+    align-items: baseline;
     flex-shrink: 0;
   }
 
@@ -27,6 +27,9 @@ export const breadcrumbsItemStyles = css`
 
   [part='link'],
   [part='nolink'] {
+    display: flex;
+    gap: var(--vaadin-gap-xs);
+    align-items: baseline;
     border-radius: var(--vaadin-radius-m);
     padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
     flex: 1;
@@ -45,13 +48,15 @@ export const breadcrumbsItemStyles = css`
   }
 
   :host::after {
-    content: '';
+    content: '\\e2003' / '';
     display: inline-block;
-    width: 1em;
-    height: 1em;
+    width: 1lh;
+    height: 1lh;
     color: var(--vaadin-text-color-secondary);
     background: currentColor;
-    mask: var(--vaadin-breadcrumbs-separator, var(--_vaadin-icon-chevron-right)) center / contain no-repeat;
+    mask: var(--vaadin-breadcrumbs-separator, var(--_vaadin-icon-chevron-right)) center / 90% no-repeat;
+    margin-inline-start: var(--vaadin-gap-xs);
+    opacity: 0.75;
   }
 
   :host(:last-of-type)::after,

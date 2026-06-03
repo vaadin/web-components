@@ -21,7 +21,7 @@ export const breadcrumbsStyles = css`
   [part='list'] {
     display: flex;
     flex-wrap: nowrap;
-    align-items: center;
+    align-items: baseline;
     gap: var(--vaadin-gap-xs);
     min-width: 0;
     max-width: 100%;
@@ -29,7 +29,7 @@ export const breadcrumbsStyles = css`
 
   [part='overflow'] {
     display: inline-flex;
-    align-items: center;
+    align-items: inherit;
     flex-shrink: 0;
   }
 
@@ -49,7 +49,6 @@ export const breadcrumbsStyles = css`
     margin: min(var(--_padding), (24px - 1lh) / -2);
     font: inherit;
     cursor: var(--vaadin-clickable-cursor);
-    line-height: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -58,10 +57,11 @@ export const breadcrumbsStyles = css`
   [part='overflow-button']::before {
     content: '\\e2003' / '';
     display: inline-block;
-    width: 1em;
-    height: 1em;
+    width: 1lh;
+    height: 1lh;
     background: currentColor;
     mask: var(--vaadin-breadcrumbs-overflow-icon, var(--_vaadin-icon-ellipsis)) center / contain no-repeat;
+    opacity: 0.8;
   }
 
   [part='overflow-button']:focus-visible {
@@ -69,14 +69,15 @@ export const breadcrumbsStyles = css`
   }
 
   [part='overflow']::after {
-    content: '';
+    content: '\\e2003' / '';
     display: inline-block;
-    width: 1em;
-    height: 1em;
+    width: 1lh;
+    height: 1lh;
     color: var(--vaadin-text-color-secondary);
     background: currentColor;
-    mask: var(--vaadin-breadcrumbs-separator, var(--_vaadin-icon-chevron-right)) center / contain no-repeat;
+    mask: var(--vaadin-breadcrumbs-separator, var(--_vaadin-icon-chevron-right)) center / 90% no-repeat;
     margin-inline-start: var(--vaadin-gap-xs);
+    opacity: 0.75;
   }
 
   :host([dir='rtl']) [part='overflow']::after {
