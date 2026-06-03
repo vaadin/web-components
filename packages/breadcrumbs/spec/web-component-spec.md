@@ -85,6 +85,7 @@ The overflow overlay's outer panel and its inner wrapper live on `<vaadin-breadc
 
 | CSS Custom Property | Default | Description |
 |---|---|---|
+| `--vaadin-breadcrumbs-overflow-icon` | `var(--_vaadin-icon-ellipsis)` | The mask-image icon used inside the overflow button. |
 | `--vaadin-breadcrumbs-separator` | `var(--_vaadin-icon-chevron-right)` | The mask-image icon used as the separator between items. Set on `<vaadin-breadcrumbs>` to change the separator for all items. |
 
 Internal behavior:
@@ -304,3 +305,7 @@ Two shadow slots with the overflow in shadow DOM between them: `<slot name="root
 **Q: Why does `i18n.moreItems` default to `'More items'` rather than an empty string?**
 
 The `aria-label` on the overflow button must always be present — screen readers announce the button as just "button" otherwise. Defaulting to an empty string leaves the application responsible for setting a meaningful label before the component is reachable to assistive tech, which is a setup step that's easy to miss. Providing `'More items'` as the default matches the convention for other Vaadin components with auto-generated control labels (Menu Bar, Combo Box clear button) and keeps the unlabeled state out of reach. Applications still localize via `i18n = { moreItems: '…' }` exactly as before.
+
+**Q: Why does the overflow button render its ellipsis icon via `mask-image` instead of the `…` character?**
+
+The `…` glyph depends on the rendered font and locale — some fonts render it as three full-width dots, others as a compact ellipsis, none of which line up visually with the chevron separator. The mask-image route uses the same SVG icon system as the separator, so both icons share size, color, and alignment rules. It also gives theme authors a single override hook (`--vaadin-breadcrumbs-overflow-icon`) parallel to the separator's, so swapping the ellipsis for a different pictogram is a one-line theme rule.

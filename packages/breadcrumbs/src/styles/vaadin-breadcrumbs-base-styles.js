@@ -53,7 +53,12 @@ export const breadcrumbsStyles = css`
   }
 
   [part='overflow-button']::before {
-    content: '…';
+    content: '\\e2003' / '';
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background: currentColor;
+    mask: var(--vaadin-breadcrumbs-overflow-icon, var(--_vaadin-icon-ellipsis)) center / contain no-repeat;
   }
 
   [part='overflow-button']:focus-visible {
@@ -77,6 +82,7 @@ export const breadcrumbsStyles = css`
   }
 
   @media (forced-colors: active) {
+    [part='overflow-button']::before,
     [part='overflow']::after {
       background: CanvasText;
     }
