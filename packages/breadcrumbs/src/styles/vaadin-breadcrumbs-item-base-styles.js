@@ -25,10 +25,23 @@ export const breadcrumbsItemStyles = css`
     color: var(--vaadin-text-color);
   }
 
+  [part='link'],
+  [part='nolink'] {
+    border-radius: var(--vaadin-radius-m);
+    padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
+    flex: 1;
+  }
+
+  :host(:not([slot='overlay'])) :is([part='link'], [part='nolink']) {
+    margin-inline: calc(var(--vaadin-padding-inline-container) * -1);
+  }
+
+  [part='link'] {
+    outline: none;
+  }
+
   [part='link']:focus-visible {
-    border-radius: var(--vaadin-radius-s);
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    outline-offset: 0;
   }
 
   :host::after {
@@ -54,29 +67,18 @@ export const breadcrumbsItemStyles = css`
     display: flex;
   }
 
-  :host([slot='overlay']) [part='link'],
-  :host([slot='overlay']) [part='nolink'] {
-    flex: 1;
-    padding: var(--vaadin-item-overlay-padding, 4px var(--vaadin-padding-inline-container));
-    border-radius: var(--vaadin-radius-m);
-  }
-
   :host([slot='overlay']:not([disabled])) [part='link'] {
     color: var(--vaadin-text-color);
   }
 
-  :host([slot='overlay']) [part='link']:focus-visible {
-    border-radius: var(--vaadin-radius-m);
+  :host([slot='overlay'])::after {
+    display: none;
   }
 
   @media (any-hover: hover) {
     :host([slot='overlay']) [part='link'] {
       text-decoration: none;
     }
-  }
-
-  :host([slot='overlay'])::after {
-    display: none;
   }
 
   @media (forced-colors: active) {
