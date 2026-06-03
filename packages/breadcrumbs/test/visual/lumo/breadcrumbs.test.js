@@ -47,7 +47,7 @@ describe('breadcrumbs', () => {
     let breadcrumbs;
 
     beforeEach(async () => {
-      div.style.width = '250px';
+      div.style.width = '280px';
       fixtureSync(
         `
           <vaadin-breadcrumbs>
