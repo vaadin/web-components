@@ -4,6 +4,8 @@ Use this when the bug is reported against an older line than the current checkou
 
 Both repos name maintenance branches `<major>.<minor>` (e.g. `24.10`, `25.1`). The branch for "up to 24.10.x" is `24.10`.
 
+**Pick the newest line that still reproduces — not necessarily the exact reported minor.** A bug filed against, say, `24.5` almost always still reproduces up the `24.x` line, and a newer branch (e.g. `24.10`) builds cleanly with a modern JDK whereas the oldest branches (≲ 24.6) fail to compile under Java 17/21 (old `maven-compiler-plugin`; see [flow-component.md](flow-component.md)). Start at the latest line of the reported major and only drop to an older minor if the bug does not reproduce there (then you have also learned the upper bound). For Flow this means trying `24.10` before `24.5`.
+
 ## Which repo to switch
 
 - **Flow bug** → switch only `<FLOW_ROOT>`. Its integration tests resolve the `@vaadin/*` web components from npm at the version pinned on that branch, so the local web-components checkout is not involved.
