@@ -61,10 +61,13 @@ Resume only once the user confirms it is installed.
    - If the affected range is **within** the current line, reproduce against the current checkout (the default).
    - If the report says the bug is fixed in a newer line, or the affected range is **below** the current checkout (e.g. "up to 24.10.1, fixed in 25.x" while you are on 25.x), do **not** settle for a negative run on the current line. Switch to the matching maintenance branch and validate that it really reproduces there — follow [references/version-specific.md](references/version-specific.md). A claim is only "version-specific" once you have seen it reproduce on the old branch.
 4. **Identify the flavor** (web vs. Flow) from the repo, the code example language (`.html`/JS vs. `.java`), and the component involved.
+5. **Confirm the intended behavior**, then form a hypothesis:
+   - Check what the component is *supposed* to do (component docs, the `src/` API, or existing tests) — not just what the reporter expected. The reporter can be wrong; if the code works as designed, the verdict is "works as designed — likely misuse", which is as valuable as a confirmed bug.
+   - Write a one-line hypothesis you will test: **"The bug is X, triggered by Y, observable as Z."** Z is the exact failure signal you will look for in the browser (a wrong attribute, a console error, a missing update, a mis-sized region).
 
 ## Phase 2 — Build the reproduction
 
-Prefer the reporter's code example verbatim. Reduce it to the minimum that still shows the bug — strip unrelated fields, layouts, and data. If there is no example, construct the smallest one from the description.
+Build the smallest view that exercises your hypothesis. Prefer the reporter's code example as the starting point; include only what the hypothesis needs (the real minimization happens in Phase 3, once it reproduces). If there is no example, construct one from the description and the trigger Y.
 
 Name the reproduction after the issue so nothing existing is clobbered:
 - Web: `dev/repro-<issue>.html` (or `dev/repro-bug.html` when there is no issue number).
@@ -94,14 +97,16 @@ Never overwrite an existing `dev/*.html` page or an existing View.
    # see where the relevant elements actually live
    playwright-cli --raw eval "() => document.querySelector('vaadin-<component>').shadowRoot.innerHTML.replace(/\s+/g,' ').slice(0,800)"
    ```
-   Prefer the component's own state (a public/observed property, an `abbr`/badge text, `getComputedStyle(...).display`, `offsetWidth > 0`) over the bare `hidden` attribute when deciding what is visible.
-4. Decide the verdict from what you actually saw — the DOM snapshot, console output, or screenshot — not from the issue text. Compare observed behavior against the reporter's expected behavior.
+   Prefer the component's own state (a public/observed property, an `abbr`/badge text, `getComputedStyle(...).display`, `offsetWidth > 0`) over the bare `hidden` attribute when deciding what is visible. Look specifically for the failure signal Z from your hypothesis.
+4. **Iterate before concluding "not reproduced".** A single naive attempt missing the bug is common — the trigger is often precise (an exact drag gesture, an attach/detach cycle, a specific property combination, a timing). On a miss, refine the view against your hypothesis — add the missing trigger, match the version/property combination, follow a comment that narrows it — and retry. Restart the server after Java changes (web pages hot-reload). Keep a short log of what you tried; it goes in the report's Notes if it ultimately does not reproduce. Only call it not-reproduced after a genuine effort.
+5. **Minimize, then re-verify.** Once it reproduces, strip the view to the smallest case that *still* reproduces — remove every component, property, listener, style, and data item not required for the failure. Re-run the reproduction after each meaningful removal (restart the server as needed) to confirm Z still shows. The end state should be a view a maintainer reads in seconds. This minimized view is what gets shared in Phase 6.
+6. Decide the verdict from what you actually saw — the DOM snapshot, console output, or screenshot — not from the issue text. Compare observed behavior against the **intended** behavior from Phase 1: a confirmed bug (differs from intended), works-as-designed/misuse (matches intended, reporter expectation was wrong), or not reproduced.
 
 ## Phase 4 — Report
 
 Copy [assets/summary-template.md](assets/summary-template.md) to `<repo-root>/repro-<issue>-summary.md` and fill it in. It is committed alongside the scaffold in Phase 6, so others get a self-documenting branch. Cover:
-- **Verdict**: reproduced / not reproduced / partially reproduced.
-- **Branch**: the `repro/<issue>` branch you will push (Phase 6) and the repo it goes to.
+- **Verdict**: reproduced / not reproduced / partially reproduced / works as designed (likely misuse).
+- **Branch**: the `repro/<issue>` branch you will push (Phase 6) and the repo it goes to. Only a confirmed reproduction gets a pushed branch and an issue comment; a works-as-designed/misuse or not-reproduced result is reported (with your iteration log) but not pushed.
 - **Environment**: repo, version/branch, theme, browser. If asked "is it fixed on main?", state the answer here.
 - **Observed behavior**: what actually happened (cite the snapshot / console / screenshot).
 - **Expected behavior**: from the issue or description.
