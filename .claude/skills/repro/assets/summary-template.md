@@ -1,12 +1,9 @@
-# Reproduction: <component> — <short title> (#<issue>)
-
 <!-- Edit any field. This file is committed on the `repro/<issue>` branch and posted as the issue comment. -->
 
 > [!WARNING]
 > **Automated reproduction — produced by the Claude Code `repro` skill. Needs human verification.**
 > The steps, verdict, and root-cause pointer below were generated automatically and must be confirmed by a human before being treated as authoritative.
 
-- **Issue:** https://github.com/vaadin/<repo>/issues/<issue>
 - **Verdict:** reproduced | not reproduced | partially reproduced | works as designed (likely misuse) | duplicate of #N
 - **Hypothesis tested:** The bug is <X>, triggered by <Y>, observable as <Z>.
 - **Branch:** `repro/<issue>` — pushed to `vaadin/<repo>`
