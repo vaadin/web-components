@@ -7,7 +7,8 @@
 > The steps, verdict, and root-cause pointer below were generated automatically and must be confirmed by a human before being treated as authoritative.
 
 - **Issue:** https://github.com/vaadin/<repo>/issues/<issue>
-- **Verdict:** reproduced | not reproduced | partially reproduced
+- **Verdict:** reproduced | not reproduced | partially reproduced | works as designed (likely misuse)
+- **Hypothesis tested:** The bug is <X>, triggered by <Y>, observable as <Z>.
 - **Branch:** `repro/<issue>` — pushed to `vaadin/<repo>`
 - **Reproduced on:** <repo> @ <version or branch>
 - **Present on main?:** yes (still broken) | no (fixed in <line>) | n/a
