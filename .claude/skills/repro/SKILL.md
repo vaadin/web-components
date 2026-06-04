@@ -53,6 +53,7 @@ Resume only once the user confirms it is installed.
      ```
    - **Keep `--jq` expressions simple — no nested double quotes.** A double-quoted `--jq` string inside a double-quoted shell command breaks (e.g. `"\(.x) \([.labels[].name]|join(\", \"))"` fails to parse). Build strings with `+` and only single quotes around the whole `--jq` arg, or drop `--jq` and let `gh` print the JSON, then read fields separately (`--json labels --jq '.labels[].name'`).
    - Read the description and comments for a code example, reproduction steps, and the expected vs. actual behavior.
+   - **A "could not reproduce" / "works for me" comment does NOT cancel the attempt.** Always build and run the reproduction yourself — such comments are common and frequently wrong (the commenter used a different version, theme, browser, data set, or missed the precise trigger). Treat them as extra signal: mine them for what was tried so you can vary it (different version/branch per Phase 1.3, exact gesture, larger data set) and aim to succeed where they failed. Only after your own genuine effort (Phase 3 iteration) may you report not-reproduced — and then note the conflicting comment and exactly what you tried.
 2. **If `$0` is plain text**: search for an existing issue before building anything.
    - `gh search issues "<keywords>" --repo vaadin/web-components --repo vaadin/flow-components --state all`
    - If you find a matching issue, switch to the issue-URL flow above. If not, work from the text alone.
