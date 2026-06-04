@@ -55,7 +55,7 @@ Resume only once the user confirms it is installed.
    - Read the description and comments for a code example, reproduction steps, and the expected vs. actual behavior.
    - **A "could not reproduce" / "works for me" comment does NOT cancel the attempt.** Always build and run the reproduction yourself — such comments are common and frequently wrong (the commenter used a different version, theme, browser, data set, or missed the precise trigger). Treat them as extra signal: mine them for what was tried so you can vary it (different version/branch per Phase 1.3, exact gesture, larger data set) and aim to succeed where they failed. Only after your own genuine effort (Phase 3 iteration) may you report not-reproduced — and then note the conflicting comment and exactly what you tried.
 2. **If `$0` is plain text**: search for an existing issue before building anything.
-   - `gh search issues "<keywords>" --repo vaadin/web-components --repo vaadin/flow-components --state all`
+   - `gh search issues "<keywords>" --repo vaadin/web-components --repo vaadin/flow-components` (omit `--state` to cover all states; `gh search issues` rejects `--state all`)
    - If you find a matching issue, switch to the issue-URL flow above. If not, work from the text alone.
 3. **Identify the affected version** if stated (e.g. `24.10`). Note it in the summary, then decide where to reproduce:
    - Check the current checkout's line — Flow: `<flow.version>` in `<FLOW_ROOT>/pom.xml`; Web: `version` in `<WC_ROOT>/packages/<component>/package.json`.
@@ -65,9 +65,9 @@ Resume only once the user confirms it is installed.
 5. **Confirm the intended behavior**, then form a hypothesis:
    - Check what the component is *supposed* to do (component docs, the `src/` API, or existing tests) — not just what the reporter expected. The reporter can be wrong; if the code works as designed, the verdict is "works as designed — likely misuse", which is as valuable as a confirmed bug.
    - Write a one-line hypothesis you will test: **"The bug is X, triggered by Y, observable as Z."** Z is the exact failure signal you will look for in the browser (a wrong attribute, a console error, a missing update, a mis-sized region).
-6. **Look for a duplicate.** Search **open and closed** issues in the same repo for the same component plus the distinctive symptom — an exception class + line, a unique error string, or the specific trigger:
+6. **Look for a duplicate.** Search **open and closed** issues in the same repo for the same component plus the distinctive symptom — an exception class + line, a unique error string, or the specific trigger. Omit `--state` so it covers all states — `gh search issues` rejects `--state all` (it only accepts `open`/`closed`):
    ```bash
-   gh search issues "<component> <distinctive token>" --repo vaadin/<repo> --state all
+   gh search issues "<component> <distinctive token>" --repo vaadin/<repo>
    ```
    Note any strong candidate now; you confirm it is genuinely the same bug after reproducing (Phase 5) — same root cause, stack trace, and trigger, not just a similar title. A confirmed match makes the verdict **"duplicate of #N"** and drives the close-as-duplicate suggestion in Phase 6. A frequent shape: the issue reproduces and a prior issue with the identical stack trace is already **closed/fixed**, so the older open one should be closed as a duplicate.
 
