@@ -70,14 +70,16 @@ This pom edit is part of the scaffold. When the bug reproduces it is **committed
 
 ## 2. Run the integration-test server
 
-First run compiles the frontend and is slow. Start in the background, from `<FLOW_ROOT>`:
+First run compiles the frontend and is slow. Start in the background, from `<FLOW_ROOT>`, **with `CI=true`**:
 
 ```bash
-cd "<FLOW_ROOT>" && mvn package jetty:run -Dvaadin.pnpm.enable -Dvaadin.frontend.hotdeploy=true -am -B -q -DskipTests \
+cd "<FLOW_ROOT>" && CI=true mvn package jetty:run -Dvaadin.pnpm.enable -Dvaadin.frontend.hotdeploy=true -am -B -q -DskipTests \
   -pl vaadin-<component>-flow-parent/vaadin-<component>-flow-integration-tests
 ```
 
-- Poll the background task output for `Frontend compiled successfully` before opening the browser — do not guess with `sleep`.
+- **`CI=true` is required in this headless (no-TTY) environment.** Without it, pnpm aborts when it needs to purge `node_modules` (`ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY`) — the HTTP port still comes up but dev mode never initializes, so the page is a blank spinner that looks deceptively like a real bug.
+- **Watch for build failure, not just success.** Poll the background task output for `Frontend compiled successfully` (do not guess with `sleep`) — but the wait loop must also break on failure markers, or it hangs forever on a broken build. Watch for: `Frontend compiled successfully|Started ServerConnector|BUILD FAILURE|ERR_PNPM|Dependency ERROR|does not exist|Address already in use`. A listening port 8080 is **not** proof of readiness — confirm `Frontend compiled successfully` actually appeared.
+- **`ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION`** can fail the install on bleeding-edge lines (e.g. `main`/`*-SNAPSHOT`) whose `@vaadin/*` nightly npm packages are < 24h old and trip pnpm's `minimum-release-age` supply-chain guard. `CI=true` does not fix this. When it happens, reproduce on the latest released maintenance branch instead (often the correct move anyway — see [version-specific.md](version-specific.md) — since the issue usually names a released version), or ask the user for the local override.
 - If port 8080 is already in use, stop and ask the user whether to kill the process holding it.
 - The server does **not** hot-reload Java changes — restart it after editing the View.
 
