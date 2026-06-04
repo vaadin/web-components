@@ -170,6 +170,11 @@ Committing the IT-pom edit and the summary on this branch is what makes it self-
    ```
    `-F body=@<file>` reads the body from the file. After posting, capture the returned comment `html_url` and include it in your chat reply. Only post when the bug reproduced; never post a comment for a non-reproduction unless the user asks.
    - **Video in the comment:** `gh api` cannot upload an inline video attachment — GitHub only renders a video player for files uploaded through its attachment service, which the comments API does not expose. So the comment links the `.webm` on the branch (downloadable), and the demo plays inline only if a human drags the file into the comment. Since posting is human-approved anyway, surface the local `.webm` path(s) in your chat reply so the approver can drag-drop them for inline playback when they post.
+6. **Label the issue `ai repro`** — only after the comment was actually posted (step 5). The `ai repro` label already exists in both `vaadin/web-components` and `vaadin/flow-components`, so it marks issues that carry an automated reproduction for easy filtering:
+   ```bash
+   gh issue edit <issue> --repo vaadin/<repo> --add-label "ai repro"
+   ```
+   Skip this if the comment was not posted (bug not reproduced, or the user declined posting) — the label tracks posted automated reproductions, not local-only runs.
 
 ## Cleanup
 
