@@ -122,6 +122,7 @@ Never overwrite an existing `dev/*.html` page or an existing View.
    }
    ```
    Keep each clip short (≈10–20s), one symptom per clip (or use chapters). The `.webm` becomes part of the shared artifact (committed in Phase 6) and is referenced in the report. Skip only for non-visual bugs where a clip adds nothing.
+   - **For menu/overlay components, perform the action with the overlay open so the visual state (or its absence) is on screen.** A take that triggers the bug while the menu/dropdown/popover is closed hides the symptom — you film only side effects (a label), not the component. E.g. a menu-bar shortcut that fails to toggle a checkable item: open the submenu and press the shortcut with it open (UI-scoped shortcuts fire regardless of open state) so the viewer watches the checkmark *not* change, then contrast with a mouse click that does toggle it.
 
 ## Phase 4 — Report
 
