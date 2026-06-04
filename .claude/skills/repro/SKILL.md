@@ -83,7 +83,7 @@ Never overwrite an existing `dev/*.html` page or an existing View.
 
 1. Start the server (see the flavor reference) in the **background**, and wait until it is actually ready before driving the browser:
    - Web: web-dev-server is ready almost immediately; poll `curl -sf http://localhost:8000/dev/repro-<issue>.html`.
-   - Flow: poll the background task output for `Frontend compiled successfully` (compilation takes a while on first run).
+   - Flow: run jetty with `CI=true` (see [references/flow-component.md](references/flow-component.md)) and poll the background task output for `Frontend compiled successfully` (compilation takes a while on first run). The wait must **also** break on failure markers (`BUILD FAILURE|ERR_PNPM|Dependency ERROR|does not exist|Address already in use`) or it hangs forever on a broken build — and a listening port 8080 alone is not readiness.
 2. Drive the browser with the `playwright-cli` skill — open the page, `snapshot`, perform the reproduction steps, and observe:
    ```bash
    playwright-cli open http://localhost:8000/dev/repro-<issue>.html   # web
