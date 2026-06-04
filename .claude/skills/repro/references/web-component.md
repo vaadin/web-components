@@ -39,7 +39,6 @@ Notes:
     import '@vaadin/<component>';
   </script>
   ```
-- For Pro components, the package may need a license; if the dev server complains, note it in the summary.
 
 ## 2. Run the dev server
 
