@@ -65,6 +65,11 @@ Resume only once the user confirms it is installed.
 5. **Confirm the intended behavior**, then form a hypothesis:
    - Check what the component is *supposed* to do (component docs, the `src/` API, or existing tests) — not just what the reporter expected. The reporter can be wrong; if the code works as designed, the verdict is "works as designed — likely misuse", which is as valuable as a confirmed bug.
    - Write a one-line hypothesis you will test: **"The bug is X, triggered by Y, observable as Z."** Z is the exact failure signal you will look for in the browser (a wrong attribute, a console error, a missing update, a mis-sized region).
+6. **Look for a duplicate.** Search **open and closed** issues in the same repo for the same component plus the distinctive symptom — an exception class + line, a unique error string, or the specific trigger:
+   ```bash
+   gh search issues "<component> <distinctive token>" --repo vaadin/<repo> --state all
+   ```
+   Note any strong candidate now; you confirm it is genuinely the same bug after reproducing (Phase 5) — same root cause, stack trace, and trigger, not just a similar title. A confirmed match makes the verdict **"duplicate of #N"** and drives the close-as-duplicate suggestion in Phase 6. A frequent shape: the issue reproduces and a prior issue with the identical stack trace is already **closed/fixed**, so the older open one should be closed as a duplicate.
 
 ## Phase 2 — Build the reproduction
 
@@ -121,7 +126,7 @@ Never overwrite an existing `dev/*.html` page or an existing View.
 ## Phase 4 — Report
 
 Copy [assets/summary-template.md](assets/summary-template.md) to `<repo-root>/repro-<issue>-summary.md` and fill it in. It is committed alongside the scaffold in Phase 6, so others get a self-documenting branch. Cover:
-- **Verdict**: reproduced / not reproduced / partially reproduced / works as designed (likely misuse).
+- **Verdict**: reproduced / not reproduced / partially reproduced / works as designed (likely misuse) / duplicate of #N.
 - **Branch**: the `repro/<issue>` branch you will push (Phase 6) and the repo it goes to. Only a confirmed reproduction gets a pushed branch and an issue comment; a works-as-designed/misuse or not-reproduced result is reported (with your iteration log) but not pushed.
 - **Environment**: repo, version/branch, theme, browser. If asked "is it fixed on main?", state the answer here.
 - **Observed behavior**: what actually happened (cite the snapshot / console / screenshot).
@@ -129,6 +134,7 @@ Copy [assets/summary-template.md](assets/summary-template.md) to `<repo-root>/re
 - **Steps to reproduce**: numbered, minimal.
 - **Reproduction**: embed the minimal markup/View source inline (a fenced code block) and name the route/scaffold.
 - **Demo video(s)**: path(s) to the recorded `.webm` (one per symptom), committed on the branch in Phase 6.
+- **Duplicate** (if any): the issue this duplicates (#N) and the evidence it is the same bug — identical stack trace, root cause, and trigger, not just a similar title. If that issue is already closed/fixed, say so and recommend closing this one as a duplicate.
 - **Root cause**: filled after Phase 5.
 
 Also give this summary in your chat reply, and always include the pushed branch name so the user can share it. If the bug does **not** reproduce, say so plainly and note likely reasons (already fixed on `main`, version-specific, missing context) — do not force a positive result.
@@ -175,6 +181,11 @@ Committing the IT-pom edit and the summary on this branch is what makes it self-
    gh issue edit <issue> --repo vaadin/<repo> --add-label "ai repro"
    ```
    Skip this if the comment was not posted (bug not reproduced, or the user declined posting) — the label tracks posted automated reproductions, not local-only runs.
+7. **If it is a duplicate, suggest closing it as a duplicate — do not close it yourself.** When the verdict is "duplicate of #N", the posted comment should state the duplication and recommend closing this issue as a duplicate of #N (link both, and note if #N is already fixed). Closing is the maintainer's call: surface the recommendation in your chat reply and offer the command rather than running it — and only run it on explicit user approval, the same gate as posting:
+   ```bash
+   gh issue close <issue> --repo vaadin/<repo> --reason "not planned" --comment "Duplicate of #N"
+   ```
+   Never auto-close. Prefer recommending it in the comment and letting a maintainer act.
 
 ## Cleanup
 

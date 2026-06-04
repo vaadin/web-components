@@ -7,7 +7,7 @@
 > The steps, verdict, and root-cause pointer below were generated automatically and must be confirmed by a human before being treated as authoritative.
 
 - **Issue:** https://github.com/vaadin/<repo>/issues/<issue>
-- **Verdict:** reproduced | not reproduced | partially reproduced | works as designed (likely misuse)
+- **Verdict:** reproduced | not reproduced | partially reproduced | works as designed (likely misuse) | duplicate of #N
 - **Hypothesis tested:** The bug is <X>, triggered by <Y>, observable as <Z>.
 - **Branch:** `repro/<issue>` — pushed to `vaadin/<repo>`
 - **Reproduced on:** <repo> @ <version or branch>
@@ -43,6 +43,11 @@ How to run: start the server (`yarn start` for web / `mvn … jetty:run` for Flo
 ## Root cause (suspected)
 
 `<file_path:line>` — <short explanation of the problematic area>.
+
+## Duplicate
+
+<!-- Include only if this duplicates another issue; otherwise delete this section. -->
+Same bug as **#N** (<open/closed; fixed in … if known>): identical stack trace, root cause, and trigger. <One line on why they match.> Recommend closing this issue as a duplicate of #N.
 
 ## Notes
 
