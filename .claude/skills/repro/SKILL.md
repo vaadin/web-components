@@ -103,6 +103,20 @@ Never overwrite an existing `dev/*.html` page or an existing View.
    - **Cross-flavor fallback (last, not first).** If a `flow-components` issue still will not reproduce as a Flow `View` after genuine iteration, and the suspected root cause is in the shared web component, *then* try a web-component `dev/*.html` reproduction. Do this only after the Flow attempt has failed — never skip the Flow attempt because the web one is faster. Record both attempts in the report. (The reverse — a web-components issue that only manifests through Flow — is rare; pursue it only with a concrete reason.)
 5. **Minimize, then re-verify.** Once it reproduces, strip the view to the smallest case that *still* reproduces — remove every component, property, listener, style, and data item not required for the failure. Re-run the reproduction after each meaningful removal (restart the server as needed) to confirm Z still shows. The end state should be a view a maintainer reads in seconds. This minimized view is what gets shared in Phase 6.
 6. Decide the verdict from what you actually saw — the DOM snapshot, console output, or screenshot — not from the issue text. Compare observed behavior against the **intended** behavior from Phase 1: a confirmed bug (differs from intended), works-as-designed/misuse (matches intended, reporter expectation was wrong), or not reproduced.
+7. **Record a demo video — when the bug is visible on screen (most UI bugs).** A short clip of the failure is the most convincing artifact for maintainers (e.g. a combo-box overlay whose spinner never stops). Re-run the *minimized* reproduction as a polished take with the `playwright-cli` screencast hero-script approach (see the `playwright-cli` skill's video-recording reference) — write a small JS script and run it with `playwright-cli run-code --filename <script>.js`:
+   ```js
+   async page => {
+     await page.screencast.start({ path: '/tmp/repro-<issue>-<symptom>.webm', size: { width: 1000, height: 700 } });
+     await page.goto('http://localhost:<port>/<route>');
+     await page.screencast.showChapter('<what this shows>', { description: '<the bug>', duration: 1800 });
+     // perform the minimal steps; pressSequentially(text, { delay: 60 }) for natural typing,
+     // waitForTimeout(...) pauses so the failure is watchable
+     // annotate the failure: showOverlay(html, { duration }) to box/label the stuck spinner or wrong value
+     await page.waitForTimeout(4000);            // hold on the failure state
+     await page.screencast.stop();
+   }
+   ```
+   Keep each clip short (≈10–20s), one symptom per clip (or use chapters). The `.webm` becomes part of the shared artifact (committed in Phase 6) and is referenced in the report. Skip only for non-visual bugs where a clip adds nothing.
 
 ## Phase 4 — Report
 
@@ -114,6 +128,7 @@ Copy [assets/summary-template.md](assets/summary-template.md) to `<repo-root>/re
 - **Expected behavior**: from the issue or description.
 - **Steps to reproduce**: numbered, minimal.
 - **Reproduction**: embed the minimal markup/View source inline (a fenced code block) and name the route/scaffold.
+- **Demo video(s)**: path(s) to the recorded `.webm` (one per symptom), committed on the branch in Phase 6.
 - **Root cause**: filled after Phase 5.
 
 Also give this summary in your chat reply, and always include the pushed branch name so the user can share it. If the bug does **not** reproduce, say so plainly and note likely reasons (already fixed on `main`, version-specific, missing context) — do not force a positive result.
@@ -135,10 +150,10 @@ When the bug **reproduced**, push a branch so others can run it. Do this in the 
    ```bash
    git -C <ROOT> checkout -b repro/<issue>
    ```
-3. Stage **only** the files you created/edited — the scaffold, the summary, and (Flow) any IT-pom dependency you added. Never `git add -A`:
+3. Stage **only** the files you created/edited — the scaffold, the summary, any demo `*.webm` you recorded, and (Flow) any IT-pom dependency you added. Never `git add -A`. Copy the videos from `/tmp` into the repo first so they can be committed:
    ```bash
-   git -C <ROOT> add dev/repro-<issue>.html repro-<issue>-summary.md                 # web
-   git -C <ROOT> add <…>/Repro<issue>View.java <…>/integration-tests/pom.xml repro-<issue>-summary.md   # flow
+   git -C <ROOT> add dev/repro-<issue>.html repro-<issue>-summary.md repro-<issue>-*.webm                       # web
+   git -C <ROOT> add <…>/Repro<issue>View.java <…>/integration-tests/pom.xml repro-<issue>-summary.md repro-<issue>-*.webm   # flow
    git -C <ROOT> commit -m "test: reproduce #<issue> (<component>)"
    ```
 4. Push and set upstream:
@@ -154,6 +169,7 @@ Committing the IT-pom edit and the summary on this branch is what makes it self-
    gh api repos/vaadin/<repo>/issues/<issue>/comments -F body=@repro-<issue>-summary.md
    ```
    `-F body=@<file>` reads the body from the file. After posting, capture the returned comment `html_url` and include it in your chat reply. Only post when the bug reproduced; never post a comment for a non-reproduction unless the user asks.
+   - **Video in the comment:** `gh api` cannot upload an inline video attachment — GitHub only renders a video player for files uploaded through its attachment service, which the comments API does not expose. So the comment links the `.webm` on the branch (downloadable), and the demo plays inline only if a human drags the file into the comment. Since posting is human-approved anyway, surface the local `.webm` path(s) in your chat reply so the approver can drag-drop them for inline playback when they post.
 
 ## Cleanup
 
