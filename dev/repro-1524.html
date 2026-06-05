@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #1524 — grid drop areas shrink near drop-disabled rows</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/grid';
+      import '@vaadin/grid/vaadin-grid-column.js';
+
+      // Reproduces https://github.com/vaadin/web-components/issues/1524
+      // Grid with dropMode="between"; dropping is disallowed on the "Main" row.
+      // The drop area for the row right after a disallowed row shrinks to half height.
+      const grid = document.getElementById('grid');
+      grid.items = [
+        { name: 'Alpha' },
+        { name: 'Main' }, // drop disallowed here
+        { name: 'Beta' },
+        { name: 'Gamma' },
+      ];
+      grid.rowsDraggable = true;
+      grid.dropMode = 'between';
+      grid.dropFilter = (model) => model.item.name !== 'Main';
+    </script>
+  </head>
+
+  <body>
+    <h3>Issue #1524 — drop disallowed on "Main"</h3>
+    <vaadin-grid id="grid" style="height: 240px">
+      <vaadin-grid-column path="name" header="Name"></vaadin-grid-column>
+    </vaadin-grid>
+  </body>
+</html>
