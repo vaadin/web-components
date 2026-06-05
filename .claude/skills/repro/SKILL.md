@@ -1,6 +1,6 @@
 ---
 name: repro
-description: Reproduce a bug in Vaadin web components or Flow components from a GitHub issue link or a plain-text description. Fetches the issue, builds a minimal reproduction (a dev/*.html page for web components, or an integration-test View for Flow components), runs it, drives the browser with playwright-cli to confirm the bug, points at the likely root cause, pushes a shareable repro/<issue> branch, and (after confirmation) posts a verification-pending summary comment on the issue.
+description: Reproduce a bug in Vaadin web components or Flow components from a GitHub issue link or a plain-text description. Fetches the issue, builds a minimal reproduction (a dev/*.html page for web components, or an integration-test View for Flow components), runs it, drives the browser with playwright-cli to confirm the bug, points at the likely root cause, pushes a shareable repro/<issue> branch, and (after confirmation) posts a verification-pending summary comment on the issue — or, when the input was a description with no existing issue, files a new one.
 argument-hint: <issue-url | bug description>
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(gh:*), Bash(yarn:*), Bash(mvn:*), Bash(playwright-cli:*), Bash(npx:*), Bash(git:*), Bash(curl:*)
 ---
@@ -147,7 +147,7 @@ When the bug **reproduced**, push a branch from the repo holding the scaffold (`
    git -C <ROOT> commit -m "test: reproduce #<issue> (<component>)"
    ```
 4. Push: `git -C <ROOT> push -u origin repro/<issue>`. If the remote branch exists, use a suffix (`repro/<issue>-2`) rather than force-pushing. Capture the branch name and URL for the summary and chat reply.
-5. **Post the summary as a comment.** Keep the `> [!WARNING]` disclaimer (from the template) first, and make the **Branch** line link the pushed branch. **This posts to a public upstream issue — show the rendered comment and get explicit confirmation before posting** (skip if declined). Post via file input:
+5. **Post the summary as a comment on the existing issue.** (If the input was a description and Phase 1.2/1.7 found no existing or duplicate issue, there is nothing to comment on — skip to Phase 7 and file one instead.) Keep the `> [!WARNING]` disclaimer (from the template) first, and make the **Branch** line link the pushed branch. **This posts to a public upstream issue — show the rendered comment and get explicit confirmation before posting** (skip if declined). Post via file input:
    ```bash
    gh api repos/vaadin/<repo>/issues/<issue>/comments -F body=@repro-<issue>-summary.md
    ```
@@ -160,6 +160,26 @@ When the bug **reproduced**, push a branch from the repo holding the scaffold (`
    ```bash
    gh issue close <issue> --repo vaadin/<repo> --reason "not planned" --comment "Duplicate of #N"
    ```
+
+## Phase 7 — File a new issue (no existing issue)
+
+Only when **all** hold: the input was a bug description (not an issue URL), the bug **reproduced**, and Phase 1.2/1.7 found no existing or duplicate issue. Otherwise skip — an existing issue gets a comment (Phase 6), a duplicate gets a close suggestion, a non-reproduction is only reported. Push the reproduction branch first (Phase 6 steps 1–4) so the new issue can link it.
+
+1. **Target repo**: the flavor's repo — `vaadin/web-components` (web) or `vaadin/flow-components` (Flow).
+2. **Write the issue** to `repro-<slug>-issue.md`, matching the repo's bug-report template (read `.github/ISSUE_TEMPLATE/`). Reuse the Phase 4 summary, reshaped to the template's sections (description, expected vs. actual, steps, reproduction, environment). Keep the `> [!WARNING]` automated-reproduction disclaimer first and link the pushed `repro/…` branch. Add a concise title: `<component>: <symptom>`.
+3. **Resolve the component label** — confirm the exact name exists:
+   ```bash
+   gh label list --repo vaadin/<repo> --search "vaadin-<component>"
+   ```
+   Use the exact match (e.g. `vaadin-grid`); if none exists, omit it and say so in your reply.
+4. **Get approval, then create.** This opens a public issue — show the rendered title, body, target repo, and labels, and create only on explicit confirmation (skip if declined):
+   ```bash
+   gh issue create --repo vaadin/<repo> \
+     --title "<component>: <symptom>" \
+     --body-file repro-<slug>-issue.md \
+     --label "bug" --label "ai repro" --label "vaadin-<component>"
+   ```
+   Capture the printed issue URL for your reply. As with comments, `gh` can't inline the video — surface the local `.webm` path so the approver can drag it into the new issue.
 
 ## Cleanup
 
