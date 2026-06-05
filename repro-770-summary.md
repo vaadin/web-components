@@ -6,7 +6,7 @@
 
 - **Verdict:** reproduced
 - **Hypothesis tested:** The bug is that all-but-the-first checkbox ends up unchecked, triggered by programmatically appending several pre-checked `vaadin-checkbox` elements to a `vaadin-checkbox-group`, observable as a group `value` of only the first checkbox's value.
-- **Branch:** `repro/770` — pushed to `vaadin/web-components`
+- **Branch:** [`repro/770`](https://github.com/vaadin/web-components/tree/repro/770) — pushed to `vaadin/web-components`
 - **Reproduced on:** web-components @ `25.2.0-beta1` (current `main`)
 - **Present on main?:** yes (still broken) — the original report was Polymer-era; it persists in the current Lit-based implementation.
 - **Theme / Browser:** base / Chromium (Playwright)
@@ -24,6 +24,8 @@ After appending four pre-checked checkboxes (`new`, `processing`, `shipped`, `de
 ```
 
 No relevant console errors (only a favicon 404 and the Lit dev-mode warning).
+
+![Only the first checkbox stays checked](https://raw.githubusercontent.com/vaadin/web-components/d9146f0ccbfca709fd1a6eaf85b1c27e52e8ee57/repro-770.png)
 
 ## Expected behavior
 
