@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #1488 — grid scroll chaining</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/grid/all-imports';
+
+      const outer = document.querySelector('#outer');
+      outer.items = Array.from({ length: 50 }, (_, i) => ({ name: 'Row ' + i }));
+
+      // Row details render another scrollable grid (the issue's scenario).
+      outer.rowDetailsRenderer = (root) => {
+        if (root.firstChild) return;
+        const inner = document.createElement('vaadin-grid');
+        inner.id = 'inner';
+        inner.style.height = '150px';
+        inner.items = Array.from({ length: 50 }, (_, i) => ({ name: 'Detail ' + i }));
+        const col = document.createElement('vaadin-grid-column');
+        col.path = 'name';
+        col.header = 'Detail';
+        inner.appendChild(col);
+        root.appendChild(inner);
+      };
+
+      // Open the first row's details so the inner grid is visible at the top.
+      outer.detailsOpenedItems = [outer.items[0]];
+    </script>
+  </head>
+  <body>
+    <p class="heading">#1488 — scroll chaining from a nested detail grid to the outer grid</p>
+    <p>Scroll the inner (detail) grid to its end, then keep scrolling: does the outer grid start scrolling?</p>
+    <vaadin-grid id="outer" style="height: 300px">
+      <vaadin-grid-column path="name" header="Row"></vaadin-grid-column>
+    </vaadin-grid>
+  </body>
+</html>
