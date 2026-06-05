@@ -28,7 +28,7 @@ Minimal template:
 ```
 
 Notes:
-- Look at an existing `dev/<component>.html` for the correct tag names, slots, and attributes — and copy from it rather than recalling markup. Confirm the component actually exists as `packages/<name>` with a `vaadin-<name>` element before using it; do not substitute a remembered theme/styling idiom for a real element (e.g. a badge is the `<vaadin-badge>` element, not a `<span theme="badge">`). This is the Phase 1.5 resolution step — get it wrong and the whole reproduction tests the wrong artifact.
+- Copy tag names, slots, and attributes from an existing `dev/<component>.html` rather than recalling them. Confirm the component exists as `packages/<name>` with a `vaadin-<name>` element before using it (the Phase 1.5 resolution step) — a wrong guess tests the wrong artifact.
 - If the bug needs scripting (events, programmatic API), add it in the module `<script>` after the import. Give elements `id`s so playwright-cli can target them.
 - **Feature-flagged components** (newer components not yet enabled by default) must enable the flag *before* importing — copy the pattern from `dev/breadcrumbs.html`:
   ```html
