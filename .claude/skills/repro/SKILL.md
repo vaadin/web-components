@@ -95,7 +95,11 @@ Follow [references/web-component.md](references/web-component.md) or [references
    - **Cross-flavor fallback (last resort).** If a `flow-components` issue won't reproduce as a Flow View after genuine iteration and the root cause is clearly in the shared web component, then try a `dev/*.html` reproduction. Record both attempts.
 5. **Minimize, then re-verify.** Strip to the smallest case that still reproduces, re-running after each removal. This minimized view is what you share in Phase 6.
 6. **Decide the verdict from what you saw** — the snapshot, console, or screenshot, not the issue text: confirmed bug, works-as-designed/misuse, or not reproduced.
-7. **Record a demo video for on-screen bugs.** Screencast needs Playwright's ffmpeg (`npx playwright install ffmpeg`; a `screencast.start: Executable doesn't exist … ffmpeg` error means it's missing). If a take errors `Screencast is already started`, `playwright-cli close` then `open`. Run the minimized repro as a polished take with `playwright-cli run-code --filename <script>.js`:
+7. **Capture a demo artifact for on-screen bugs.**
+   - **Static failure** (shows in one frame — wrong size, clipped/overflowing content, wrong color or state): a **screenshot** is enough (`playwright-cli screenshot --filename=/tmp/repro-<issue>.png`). It embeds inline in the comment/issue (Phase 6 step 5).
+   - **Motion or interaction failure** (a stuck spinner, an animation, a gesture/timing sequence): record a **video** — it can't embed inline, only linked with a manual drag-drop for playback.
+
+   For a video: screencast needs Playwright's ffmpeg (`npx playwright install ffmpeg`; a `screencast.start: Executable doesn't exist … ffmpeg` error means it's missing). If a take errors `Screencast is already started`, `playwright-cli close` then `open`. Run the minimized repro as a polished take with `playwright-cli run-code --filename <script>.js`:
    ```js
    async page => {
      await page.screencast.start({ path: '/tmp/repro-<issue>-<symptom>.webm', size: { width: 1000, height: 700 } });
@@ -107,7 +111,7 @@ Follow [references/web-component.md](references/web-component.md) or [references
      await page.screencast.stop();
    }
    ```
-   Keep clips short (≈10–20s), one symptom each. Commit the `.webm` in Phase 6 and reference it in the report. For menu/overlay components, perform the action with the overlay open so the symptom is on screen, not just its side effects.
+   Keep clips short (≈10–20s), one symptom each. For menu/overlay components, perform the action with the overlay open so the symptom is on screen, not just its side effects. Commit the screenshot/`.webm` in Phase 6 and reference it in the report.
 
 ## Phase 4 — Report
 
@@ -120,7 +124,7 @@ Copy [assets/summary-template.md](assets/summary-template.md) to `<repo-root>/re
 - **Expected behavior**: from the issue or description.
 - **Steps to reproduce**: numbered, minimal.
 - **Reproduction**: the minimal markup/View inline (fenced) plus the route/scaffold name.
-- **Demo video(s)**: path(s) to the `.webm` (one per symptom).
+- **Screenshot / demo video(s)**: a screenshot for a static bug (embedded inline) or a `.webm` per symptom for a motion bug.
 - **Duplicate** (if any): the issue this duplicates and the evidence (same stack trace, root cause, trigger). If that issue is closed/fixed, recommend closing this one as a duplicate.
 - **Root cause**: filled after Phase 5.
 
@@ -140,10 +144,10 @@ When the bug **reproduced**, push a branch from the repo holding the scaffold (`
 
 1. Note the starting branch: `git -C <ROOT> rev-parse --abbrev-ref HEAD`.
 2. Branch from the current HEAD (the exact state you reproduced on, e.g. a maintenance branch): `git -C <ROOT> checkout -b repro/<issue>`.
-3. Stage **only** the files you created/edited — scaffold, summary, demo `*.webm` (copy from `/tmp` first), and any Flow IT-pom dependency. Never `git add -A`. These edits stay on the branch (don't revert them) so it's runnable by others:
+3. Stage **only** the files you created/edited — scaffold, summary, demo screenshot/`*.webm` (copy from `/tmp` first), and any Flow IT-pom dependency. Never `git add -A`. These edits stay on the branch (don't revert them) so it's runnable by others — and committing the screenshot is what lets you embed it inline (step 5):
    ```bash
-   git -C <ROOT> add dev/repro-<issue>.html repro-<issue>-summary.md repro-<issue>-*.webm                       # web
-   git -C <ROOT> add <…>/Repro<issue>View.java <…>/integration-tests/pom.xml repro-<issue>-summary.md repro-<issue>-*.webm   # flow
+   git -C <ROOT> add dev/repro-<issue>.html repro-<issue>-summary.md repro-<issue>.png repro-<issue>-*.webm                       # web
+   git -C <ROOT> add <…>/Repro<issue>View.java <…>/integration-tests/pom.xml repro-<issue>-summary.md repro-<issue>.png repro-<issue>-*.webm   # flow
    git -C <ROOT> commit -m "test: reproduce #<issue> (<component>)"
    ```
 4. Push: `git -C <ROOT> push -u origin repro/<issue>`. If the remote branch exists, use a suffix (`repro/<issue>-2`) rather than force-pushing. Capture the branch name and URL for the summary and chat reply.
@@ -151,7 +155,13 @@ When the bug **reproduced**, push a branch from the repo holding the scaffold (`
    ```bash
    gh api repos/vaadin/<repo>/issues/<issue>/comments -F body=@repro-<issue>-summary.md
    ```
-   Capture the returned `html_url`. Post only when the bug reproduced. `gh api` can't upload an inline video — the comment links the `.webm` on the branch, and it plays inline only if a human drags the file in; surface the local `.webm` path(s) in your reply so the approver can drag-drop them.
+   Capture the returned `html_url`. Post only when the bug reproduced.
+   - **Static bug → embed the screenshot inline.** Reference the screenshot you committed in step 3 by **commit SHA** (a slashed branch name breaks raw URLs) so it renders with no manual step — add to the summary before posting:
+     ```markdown
+     ![<caption>](https://raw.githubusercontent.com/vaadin/<repo>/<commit-sha>/repro-<issue>.png)
+     ```
+     where `<commit-sha>` is `git -C <ROOT> rev-parse HEAD`.
+   - **Video → manual.** `gh api` can't upload an inline video and GitHub won't render a committed `.webm` as a player; the comment links it on the branch, and surface the local path so the approver can drag-drop it for playback.
 6. **Label `ai repro`** — only after the comment was posted (the label exists in both repos):
    ```bash
    gh issue edit <issue> --repo vaadin/<repo> --add-label "ai repro"
@@ -166,7 +176,7 @@ When the bug **reproduced**, push a branch from the repo holding the scaffold (`
 Only when **all** hold: the input was a bug description (not an issue URL), the bug **reproduced**, and Phase 1.2/1.7 found no existing or duplicate issue. Otherwise skip — an existing issue gets a comment (Phase 6), a duplicate gets a close suggestion, a non-reproduction is only reported. Push the reproduction branch first (Phase 6 steps 1–4) so the new issue can link it.
 
 1. **Target repo**: the flavor's repo — `vaadin/web-components` (web) or `vaadin/flow-components` (Flow).
-2. **Write the issue** to `repro-<slug>-issue.md`, matching the repo's bug-report template (read `.github/ISSUE_TEMPLATE/`). Reuse the Phase 4 summary, reshaped to the template's sections (description, expected vs. actual, steps, reproduction, environment). Keep the `> [!WARNING]` automated-reproduction disclaimer first and link the pushed `repro/…` branch. Add a concise title: `<component>: <symptom>`.
+2. **Write the issue** to `repro-<slug>-issue.md`, matching the repo's bug-report template (read `.github/ISSUE_TEMPLATE/`). Reuse the Phase 4 summary, reshaped to the template's sections (description, expected vs. actual, steps, reproduction, environment). Keep the `> [!WARNING]` automated-reproduction disclaimer first and link the pushed `repro/…` branch. For a **static** bug, embed the screenshot inline via its raw URL by commit SHA, exactly as in Phase 6 step 5 (a video stays a manual drag-drop). Add a concise title: `<component>: <symptom>`.
 3. **Resolve the component label** — confirm the exact name exists:
    ```bash
    gh label list --repo vaadin/<repo> --search "vaadin-<component>"
