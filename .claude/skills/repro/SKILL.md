@@ -137,7 +137,20 @@ Once reproduced, search the source for the problem area:
 - Web: `packages/<component>/src/` (and shared mixins in `packages/*-base/`, `packages/component-base/`).
 - Flow: `vaadin-<component>-flow-parent/vaadin-<component>-flow/src/main/java/`.
 
-Name the file(s) and the likely cause (`file_path:line`). Don't fix the bug unless asked — the goal is a confirmed reproduction and a root-cause pointer.
+Point at the likely cause as a **GitHub permalink pinned to a commit SHA**, not a bare `file:line` (which drifts and doesn't render). A permalink on its own line renders as an inline code snippet in the comment/issue. Anchor it to the upstream commit you reproduced on (your branch leaves `src/` untouched, so line numbers match):
+
+```bash
+git -C <ROOT> rev-parse HEAD          # SHA to anchor the permalink (pushed in Phase 6)
+git -C <ROOT> blame -L <start>,<end> -- <path>   # optional: who/when last touched the lines
+```
+
+Put the permalink (on its own line) in the report's Root cause field instead of `<path>:<lines>`:
+
+```
+https://github.com/vaadin/<repo>/blob/<SHA>/<path>#L<start>-L<end>
+```
+
+Don't fix the bug unless asked — the goal is a confirmed reproduction and a root-cause pointer.
 
 ## Phase 6 — Share the reproduction branch
 
