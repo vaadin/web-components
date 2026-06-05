@@ -10,6 +10,7 @@
     color: var(--vaadin-badge-text-color, var(--lumo-primary-text-color));
     font-family: var(--vaadin-badge-font-family, var(--lumo-font-family));
     font-size: var(--vaadin-badge-font-size, var(--lumo-font-size-s));
+    line-height: var(--vaadin-badge-line-height, var(--lumo-line-height-m));
   }
 
   :host([theme~='small']) {
