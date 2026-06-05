@@ -86,6 +86,7 @@ Follow [references/web-component.md](references/web-component.md) or [references
    playwright-cli screenshot --filename=/tmp/repro-<issue>.png   # for visual bugs
    playwright-cli close
    ```
+   Ignore dev-environment noise in the console — a favicon 404 and the Lit dev-mode warning always appear under `yarn start` and belong to no bug. Don't cite them in the report; if nothing else appears, just say the console is clean.
 3. **Inspect the real DOM before asserting.** Components render into shadow DOM and slot into light DOM; "hidden" is rarely a `hidden` attribute — it may be a slot, a `part`, `display: none`, or a property. Don't guess a selector; dump the structure once, then build the check from what you see:
    ```bash
    playwright-cli --raw eval "() => document.querySelector('vaadin-<component>').shadowRoot.innerHTML.replace(/\s+/g,' ').slice(0,800)"
@@ -120,7 +121,7 @@ Copy [assets/summary-template.md](assets/summary-template.md) to `<repo-root>/re
 - **Verdict**: reproduced / not reproduced / partially reproduced / works as designed (likely misuse) / duplicate of #N.
 - **Branch**: the `repro/<issue>` branch and repo. Only a confirmed reproduction gets a pushed branch and a comment; other verdicts are reported (with the iteration log) but not pushed.
 - **Environment**: repo, version/branch, theme, browser. If asked "is it fixed on main?", answer here.
-- **Observed behavior**: what happened (cite the snapshot / console / screenshot).
+- **Observed behavior**: what happened (cite the snapshot / console / screenshot). Cite only bug-relevant console output — never dev-server noise (favicon 404, Lit dev-mode warning).
 - **Expected behavior**: from the issue or description.
 - **Steps to reproduce**: numbered, minimal.
 - **Reproduction**: the minimal markup/View inline (fenced) plus the route/scaffold name.
