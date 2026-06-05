@@ -40,7 +40,7 @@ How to run: start the server (`yarn start` for web / `mvn … jetty:run` for Flo
 
 ## Root cause (suspected)
 
-<short explanation of the problematic area>. Permalink (on its own line so GitHub renders the lines inline):
+<short explanation of the problematic area>:
 
 https://github.com/vaadin/<repo>/blob/<sha>/<path>#L<start>-L<end>
 
