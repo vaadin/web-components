@@ -10,7 +10,8 @@
 - **Reproduced on:** <repo> @ <version or branch>
 - **Present on main?:** yes (still broken) | no (fixed in <line>) | n/a
 - **Theme / Browser:** <theme> / <browser>
-- **Demo video:** `repro-<issue>-<symptom>.webm` (on the branch; drag into the comment for inline playback)
+- **Screenshot** (static bug): `![<caption>](https://raw.githubusercontent.com/vaadin/<repo>/<commit-sha>/repro-<issue>.png)` — embeds inline.
+- **Demo video** (motion bug): `repro-<issue>-<symptom>.webm` (on the branch; drag into the comment for inline playback)
 
 ## Observed behavior
 
