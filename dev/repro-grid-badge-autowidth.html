@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grid auto-width with vaadin-badge</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <p class="heading">Grid auto-width with &lt;vaadin-badge&gt;</p>
+    <p>
+      Every column uses <code>auto-width</code>. The first renders the status as a real
+      <code>&lt;vaadin-badge&gt;</code>; the last renders the same text plainly as a control. If auto-width does not
+      account for the badge, the badge column is sized too narrow and the badge is clipped.
+    </p>
+
+    <vaadin-grid id="grid">
+      <vaadin-grid-column id="badgeCol" auto-width flex-grow="0" header="Status (badge)"></vaadin-grid-column>
+      <vaadin-grid-column id="numCol" auto-width flex-grow="0" header="Count (number badge)"></vaadin-grid-column>
+      <vaadin-grid-column id="textCol" auto-width flex-grow="0" header="Status (plain text)"></vaadin-grid-column>
+    </vaadin-grid>
+
+    <script type="module">
+      import '@vaadin/grid/all-imports';
+      import '@vaadin/badge';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+
+      const items = [
+        { name: 'Order 1', status: 'Confirmed', theme: 'success', count: 3 },
+        { name: 'Order 2', status: 'Pending approval', theme: 'warning', count: 12 },
+        { name: 'Order 3', status: 'Shipped to customer', theme: '', count: 1 },
+        { name: 'Order 4', status: 'Cancelled by administrator', theme: 'error', count: 123 },
+      ];
+
+      const grid = document.querySelector('#grid');
+      grid.items = items;
+
+      document.querySelector('#badgeCol').renderer = (root, _column, model) => {
+        root.innerHTML = `<vaadin-badge theme="${model.item.theme}">${model.item.status}</vaadin-badge>`;
+      };
+
+      document.querySelector('#numCol').renderer = (root, _column, model) => {
+        root.innerHTML = `<vaadin-badge number="${model.item.count}"></vaadin-badge>`;
+      };
+
+      document.querySelector('#textCol').renderer = (root, _column, model) => {
+        root.textContent = model.item.status;
+      };
+    </script>
+  </body>
+</html>
