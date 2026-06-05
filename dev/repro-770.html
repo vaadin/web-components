@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #770 — checkbox-group only first item stays checked</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/checkbox';
+      import '@vaadin/checkbox-group';
+
+      const orderStatus = ['new', 'processing', 'shipped', 'delivered'];
+
+      // Reproduces https://github.com/vaadin/web-components/issues/770
+      // Programmatically create checkboxes, all pre-checked, then append to the group.
+      const group = document.getElementById('group');
+      for (const stat of orderStatus) {
+        const checkbox = document.createElement('vaadin-checkbox');
+        checkbox.label = stat;
+        checkbox.checked = true;
+        checkbox.setAttribute('value', stat);
+        group.append(checkbox);
+      }
+    </script>
+  </head>
+
+  <body>
+    <h3>Issue #770 — all pre-checked, appended programmatically</h3>
+    <vaadin-checkbox-group id="group" label="Order status"></vaadin-checkbox-group>
+  </body>
+</html>
