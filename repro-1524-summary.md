@@ -64,7 +64,7 @@ How to run: `yarn start`, then open the route below.
 
 The strip overlaid on the grid colors each cursor-Y pixel by its active drop zone (green = drop above, blue = drop below, red = no drop). "Main" is fully red, and the green zone above "Beta" is half-height compared with the full Beta↔Gamma gap below it.
 
-![Drop-zone bands: disabled "Main" row is fully dead and adjacent zones are halved](https://raw.githubusercontent.com/vaadin/web-components/COMMIT_SHA/repro-1524.png)
+![Drop-zone bands: disabled "Main" row is fully dead and adjacent zones are halved](https://raw.githubusercontent.com/vaadin/web-components/3c412dee5f93812e249c0ebc031db562818da5ed/repro-1524.png)
 
 ## Root cause (suspected)
 
