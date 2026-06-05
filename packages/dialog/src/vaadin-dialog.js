@@ -70,22 +70,24 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                      |
- * :----------------------------------------|
- * |`--vaadin-dialog-background`            |
- * |`--vaadin-dialog-border-color`          |
- * |`--vaadin-dialog-border-radius`         |
- * |`--vaadin-dialog-border-width`          |
- * |`--vaadin-dialog-max-width`             |
- * |`--vaadin-dialog-min-width`             |
- * |`--vaadin-dialog-padding`               |
- * |`--vaadin-dialog-shadow`                |
- * |`--vaadin-dialog-text-color`            |
- * |`--vaadin-dialog-title-color`           |
- * |`--vaadin-dialog-title-font-size`       |
- * |`--vaadin-dialog-title-font-weight`     |
- * |`--vaadin-dialog-title-line-height`     |
- * |`--vaadin-overlay-backdrop-background`  |
+ * Custom CSS property                          |
+ * :--------------------------------------------|
+ * |`--vaadin-dialog-background`                |
+ * |`--vaadin-dialog-border-color`              |
+ * |`--vaadin-dialog-border-radius`             |
+ * |`--vaadin-dialog-border-width`              |
+ * |`--vaadin-dialog-max-width`                 |
+ * |`--vaadin-dialog-min-width`                 |
+ * |`--vaadin-dialog-overflow-indicator-color`  |
+ * |`--vaadin-dialog-overflow-indicator-height` |
+ * |`--vaadin-dialog-padding`                   |
+ * |`--vaadin-dialog-shadow`                    |
+ * |`--vaadin-dialog-text-color`                |
+ * |`--vaadin-dialog-title-color`               |
+ * |`--vaadin-dialog-title-font-size`           |
+ * |`--vaadin-dialog-title-font-weight`         |
+ * |`--vaadin-dialog-title-line-height`         |
+ * |`--vaadin-overlay-backdrop-background`      |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

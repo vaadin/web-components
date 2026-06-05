@@ -22,6 +22,8 @@ export const dialogOverlayBase = css`
 
   :host {
     cursor: default;
+    --_overflow-indicator-height: var(--vaadin-dialog-overflow-indicator-height, 1px);
+    --_overflow-indicator-color: var(--vaadin-dialog-overflow-indicator-color, var(--vaadin-border-color-secondary));
   }
 
   [part='overlay']:focus-visible {
@@ -113,6 +115,38 @@ export const dialogOverlayBase = css`
   :host(:not([has-title])) [part='title'],
   :host(:not([has-footer])) [part='footer'] {
     display: none !important;
+  }
+
+  [part='header'],
+  [part='footer'] {
+    position: relative;
+
+    &::after {
+      content: '';
+      opacity: 0;
+      position: absolute;
+      pointer-events: none;
+      height: var(--_overflow-indicator-height);
+      top: 100%;
+      inset-inline: 0;
+      background: linear-gradient(
+        var(--_overflow-indicator-dir, to bottom),
+        var(--_overflow-indicator-color),
+        var(--_overflow-indicator-color) 1px,
+        transparent
+      );
+    }
+  }
+
+  [part='footer']::after {
+    top: auto;
+    bottom: 100%;
+    --_overflow-indicator-dir: to top;
+  }
+
+  :host([overflow~='top']) [part='header']::after,
+  :host([overflow~='bottom']) [part='footer']::after {
+    opacity: 1;
   }
 `;
 
