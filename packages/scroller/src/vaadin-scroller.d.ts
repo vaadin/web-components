@@ -40,10 +40,12 @@ import { ScrollerMixin } from './vaadin-scroller-mixin.js';
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                | Description
- * -----------------------------------|-------------
- * `--vaadin-scroller-padding-block`  | The CSS padding applied to top and bottom edges
- * `--vaadin-scroller-padding-inline` | The CSS padding applied to left and right edges
+ * Custom CSS property                            |
+ * :----------------------------------------------|
+ * `--vaadin-scroller-overflow-indicator-color`   |
+ * `--vaadin-scroller-overflow-indicator-height`  |
+ * `--vaadin-scroller-padding-block`              |
+ * `--vaadin-scroller-padding-inline`             |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */

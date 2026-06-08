@@ -48,10 +48,12 @@ import { VirtualListMixin } from './vaadin-virtual-list-mixin.js';
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                    | Description
- * ---------------------------------------|-------------
- * `--vaadin-virtual-list-padding-block`  | The CSS padding applied to top and bottom edges
- * `--vaadin-virtual-list-padding-inline` | The CSS padding applied to left and right edges
+ * Custom CSS property                                |
+ * :--------------------------------------------------|
+ * `--vaadin-virtual-list-overflow-indicator-color`   |
+ * `--vaadin-virtual-list-overflow-indicator-height`  |
+ * `--vaadin-virtual-list-padding-block`              |
+ * `--vaadin-virtual-list-padding-inline`             |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
