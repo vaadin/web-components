@@ -11,6 +11,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { DialogOverflowController } from '@vaadin/dialog/src/vaadin-dialog-overflow-controller.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -70,6 +71,10 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
    */
   ready() {
     super.ready();
+
+    // Detect overflow of the content part and toggle the `overflow` attribute
+    this.__overflowController = new DialogOverflowController(this);
+    this.addController(this.__overflowController);
 
     // CRUD has header and footer but does not use renderers
     this.setAttribute('has-header', '');
