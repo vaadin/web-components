@@ -236,8 +236,6 @@ snapshots["vaadin-breadcrumbs overflow opened"] =
     Home
   </vaadin-breadcrumbs-item>
   <vaadin-breadcrumbs-item
-    focus-ring=""
-    focused=""
     path="/docs"
     role="listitem"
     slot="overlay"
