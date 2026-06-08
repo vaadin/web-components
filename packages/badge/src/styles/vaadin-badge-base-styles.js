@@ -15,10 +15,10 @@ export const badgeStyles = css`
     box-sizing: border-box;
     gap: var(--vaadin-badge-gap, 0.25em);
     padding: var(--vaadin-badge-padding, 0 calc(0.5lh - 0.25em));
-    font-family: var(--vaadin-badge-font-family, inherit);
     font-size: var(--vaadin-badge-font-size, 0.875rem);
+    font-family: var(--vaadin-badge-font-family, inherit);
     font-weight: var(--vaadin-badge-font-weight, 500);
-    line-height: var(--vaadin-badge-line-height, round(1em * 1.5, 0.125rem));
+    line-height: var(--vaadin-badge-line-height, 1lh);
     color: var(--vaadin-badge-text-color, var(--vaadin-text-color));
     background: var(--vaadin-badge-background, transparent);
     border: var(--vaadin-badge-border-width, 1px) solid var(--vaadin-badge-border-color, var(--vaadin-border-color));
@@ -27,8 +27,10 @@ export const badgeStyles = css`
     white-space: nowrap;
     --vaadin-icon-size: 1em;
     /* prevent from stretching */
-    height: calc(1lh + var(--vaadin-badge-border-width, 1px) * 2);
+    height: round(1lh + var(--vaadin-badge-border-width, 1px) * 2, 0.125rem);
     flex: none;
+    /* Only reserve 1lh of space (treat border as an outline) */
+    margin: calc(var(--vaadin-badge-border-width, 1px) * -1);
   }
 
   :host([hidden]) {
@@ -66,6 +68,7 @@ export const badgeStyles = css`
     width: round(0.5em, 0.125rem);
     height: round(0.5em, 0.125rem);
     padding: 0;
+    margin: 0;
   }
 
   @media (forced-colors: active) {
