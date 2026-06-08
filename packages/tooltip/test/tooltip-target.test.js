@@ -144,15 +144,12 @@ describe('tooltip target', () => {
   });
 
   describe('ariaLinkMode', () => {
-    let target, ariaTarget;
+    let target;
 
     beforeEach(() => {
       target = document.createElement('div');
       target.textContent = 'Target';
       document.body.appendChild(target);
-
-      ariaTarget = document.createElement('input');
-      target.appendChild(ariaTarget);
     });
 
     afterEach(() => {
@@ -214,13 +211,16 @@ describe('tooltip target', () => {
       expect(target.getAttribute('aria-describedby')).to.equal(contentNode.id);
     });
 
-    it('should swap attribute across an ariaTarget array', async () => {
+    it('should update attribute for all target elements when using ariaTarget array', async () => {
+      const ariaTarget = document.createElement('input');
       const ariaTarget2 = document.createElement('button');
-      target.appendChild(ariaTarget2);
+
+      target.append(ariaTarget, ariaTarget2);
 
       tooltip.target = target;
       tooltip.ariaTarget = [ariaTarget, ariaTarget2];
       await nextUpdate(tooltip);
+
       expect(ariaTarget.getAttribute('aria-describedby')).to.equal(contentNode.id);
       expect(ariaTarget2.getAttribute('aria-describedby')).to.equal(contentNode.id);
 
