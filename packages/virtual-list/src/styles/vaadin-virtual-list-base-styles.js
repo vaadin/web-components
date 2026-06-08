@@ -20,7 +20,11 @@ export const virtualListStyles = css`
     align-self: stretch;
     box-sizing: border-box;
     padding: 0;
-    --_indicator-height: var(--vaadin-virtual-list-overflow-indicator-height, 1px);
+    --_overflow-indicator-height: var(--vaadin-virtual-list-overflow-indicator-height, 1px);
+    --_overflow-indicator-color: var(
+      --vaadin-virtual-list-overflow-indicator-color,
+      var(--vaadin-border-color-secondary)
+    );
   }
 
   :host([hidden]) {
@@ -45,16 +49,22 @@ export const virtualListStyles = css`
     z-index: 9999;
     pointer-events: none;
     box-sizing: border-box;
-    height: var(--_indicator-height);
-    background: var(--vaadin-border-color-secondary);
+    height: var(--_overflow-indicator-height);
+    background: linear-gradient(
+      var(--_overflow-indicator-dir, to bottom),
+      var(--_overflow-indicator-color),
+      var(--_overflow-indicator-color) 1px,
+      transparent
+    );
   }
 
   :host::before {
-    margin-bottom: calc(var(--vaadin-virtual-list-padding-block) - var(--_indicator-height));
+    margin-bottom: calc(var(--vaadin-virtual-list-padding-block) - var(--_overflow-indicator-height));
   }
 
   :host::after {
-    margin-top: calc(var(--vaadin-virtual-list-padding-block) - var(--_indicator-height));
+    margin-top: calc(var(--vaadin-virtual-list-padding-block) - var(--_overflow-indicator-height));
+    --_overflow-indicator-dir: to top;
   }
 
   :host([overflow~='top'])::before {
