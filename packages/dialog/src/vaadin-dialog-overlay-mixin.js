@@ -4,11 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
-import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { setOverlayStateAttribute } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
+import { DialogOverlayBaseMixin } from './vaadin-dialog-overlay-base-mixin.js';
 
 export const DialogOverlayMixin = (superClass) =>
-  class DialogOverlayMixin extends OverlayMixin(superClass) {
+  class DialogOverlayMixin extends DialogOverlayBaseMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -78,25 +78,6 @@ export const DialogOverlayMixin = (superClass) =>
     ready() {
       super.ready();
 
-      // Update overflow attribute on resize
-      this.__resizeObserver = new ResizeObserver(() => {
-        requestAnimationFrame(() => {
-          this.__adjustPosition();
-          this.__updateOverflow();
-        });
-      });
-      this.__resizeObserver.observe(this.$.resizerContainer);
-
-      // Update overflow attribute on scroll
-      this.$.content.addEventListener('scroll', () => {
-        this.__updateOverflow();
-      });
-
-      // Update overflow attribute on content change
-      this.shadowRoot.addEventListener('slotchange', () => {
-        this.__updateOverflow();
-      });
-
       // Observe header-content and footer slots for dynamic content
       const headerSlot = this.shadowRoot.querySelector('slot[name="header-content"]');
       this.__headerSlotObserver = new SlotObserver(headerSlot, ({ currentNodes }) => {
@@ -111,6 +92,17 @@ export const DialogOverlayMixin = (superClass) =>
       });
 
       this.__handleWindowResize = this.__handleWindowResize.bind(this);
+    }
+
+    /**
+     * Override method from `DialogOverlayBaseMixin` to also adjust the position
+     * of the overlay if `keepInViewport` is true.
+     * @protected
+     * @override
+     */
+    _onOverlayResize() {
+      this.__adjustPosition();
+      super._onOverlayResize();
     }
 
     updated(props) {
@@ -259,28 +251,6 @@ export const DialogOverlayMixin = (superClass) =>
     setBounds(bounds, absolute = true) {
       super.setBounds(bounds, absolute);
       this.__adjustPosition();
-    }
-
-    /** @private */
-    __updateOverflow() {
-      let overflow = '';
-
-      const content = this.$.content;
-
-      if (content.scrollTop > 0) {
-        overflow += ' top';
-      }
-
-      if (content.scrollTop < content.scrollHeight - content.clientHeight) {
-        overflow += ' bottom';
-      }
-
-      const value = overflow.trim();
-      if (value.length > 0 && this.getAttribute('overflow') !== value) {
-        setOverlayStateAttribute(this, 'overflow', value);
-      } else if (value.length === 0 && this.hasAttribute('overflow')) {
-        setOverlayStateAttribute(this, 'overflow', null);
-      }
     }
 
     /** @private */
