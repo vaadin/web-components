@@ -44,7 +44,10 @@ export interface BreadcrumbsI18n {
  *
  * The following custom CSS properties are available for styling:
  *
- * - `--vaadin-breadcrumbs-separator`
+ * Custom CSS property                      |
+ * :----------------------------------------|
+ * | `--vaadin-breadcrumbs-overflow-icon`   |
+ * | `--vaadin-breadcrumbs-separator`       |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
