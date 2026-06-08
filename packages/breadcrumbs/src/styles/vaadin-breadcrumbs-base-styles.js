@@ -9,6 +9,8 @@ import { css } from 'lit';
 export const breadcrumbsStyles = css`
   :host {
     display: block;
+    width: 100%;
+    min-width: 0;
     color: var(--vaadin-text-color);
   }
 
@@ -22,9 +24,7 @@ export const breadcrumbsStyles = css`
     align-items: center;
     gap: var(--vaadin-gap-xs);
     min-width: 0;
-    overflow: hidden;
-    /* Room for items' focus outline, otherwise clipped by overflow: hidden. */
-    padding: var(--vaadin-focus-ring-width);
+    max-width: 100%;
   }
 
   [part='overflow'] {
@@ -42,8 +42,11 @@ export const breadcrumbsStyles = css`
     background: transparent;
     color: inherit;
     border: none;
-    padding: 0;
-    margin: 0;
+    border-radius: var(--vaadin-radius-m);
+    --_padding: var(--vaadin-padding-block-container);
+    /* Ensure minimum click target (WCAG) */
+    padding: max(var(--_padding), (24px - 1lh) / 2);
+    margin: min(var(--_padding), (24px - 1lh) / -2);
     font: inherit;
     cursor: var(--vaadin-clickable-cursor);
     line-height: 1;
@@ -62,7 +65,6 @@ export const breadcrumbsStyles = css`
   }
 
   [part='overflow-button']:focus-visible {
-    border-radius: var(--vaadin-radius-s);
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 
