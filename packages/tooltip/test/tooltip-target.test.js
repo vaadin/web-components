@@ -143,6 +143,111 @@ describe('tooltip target', () => {
     });
   });
 
+  describe('ariaLinkMode', () => {
+    let target;
+
+    beforeEach(() => {
+      target = document.createElement('div');
+      target.textContent = 'Target';
+      document.body.appendChild(target);
+    });
+
+    afterEach(() => {
+      document.body.removeChild(target);
+    });
+
+    it('should be set to aria-describedby by default', () => {
+      expect(tooltip.ariaLinkMode).to.equal('aria-describedby');
+    });
+
+    it('should apply aria-labelledby when set before the target', async () => {
+      tooltip.ariaLinkMode = 'aria-labelledby';
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      expect(target.getAttribute('aria-labelledby')).to.equal(contentNode.id);
+      expect(target.hasAttribute('aria-describedby')).to.be.false;
+    });
+
+    it('should not set any ARIA attribute when set to none before the target', async () => {
+      tooltip.ariaLinkMode = 'none';
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      expect(target.hasAttribute('aria-describedby')).to.be.false;
+      expect(target.hasAttribute('aria-labelledby')).to.be.false;
+    });
+
+    it('should update ARIA attributes when set to aria-labelledby', async () => {
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      tooltip.ariaLinkMode = 'aria-labelledby';
+      await nextUpdate(tooltip);
+
+      expect(target.hasAttribute('aria-describedby')).to.be.false;
+      expect(target.getAttribute('aria-labelledby')).to.equal(contentNode.id);
+    });
+
+    it('should remove ARIA attribute when set to none', async () => {
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      tooltip.ariaLinkMode = 'none';
+      await nextUpdate(tooltip);
+
+      expect(target.hasAttribute('aria-describedby')).to.be.false;
+      expect(target.hasAttribute('aria-labelledby')).to.be.false;
+    });
+
+    it('should restore attribute when setting from none back to describedby', async () => {
+      tooltip.ariaLinkMode = 'none';
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      tooltip.ariaLinkMode = 'aria-describedby';
+      await nextUpdate(tooltip);
+
+      expect(target.getAttribute('aria-describedby')).to.equal(contentNode.id);
+    });
+
+    it('should update attribute for all target elements when using ariaTarget array', async () => {
+      const ariaTarget = document.createElement('input');
+      const ariaTarget2 = document.createElement('button');
+
+      target.append(ariaTarget, ariaTarget2);
+
+      tooltip.target = target;
+      tooltip.ariaTarget = [ariaTarget, ariaTarget2];
+      await nextUpdate(tooltip);
+
+      expect(ariaTarget.getAttribute('aria-describedby')).to.equal(contentNode.id);
+      expect(ariaTarget2.getAttribute('aria-describedby')).to.equal(contentNode.id);
+
+      tooltip.ariaLinkMode = 'aria-labelledby';
+      await nextUpdate(tooltip);
+
+      expect(ariaTarget.hasAttribute('aria-describedby')).to.be.false;
+      expect(ariaTarget2.hasAttribute('aria-describedby')).to.be.false;
+      expect(ariaTarget.getAttribute('aria-labelledby')).to.equal(contentNode.id);
+      expect(ariaTarget2.getAttribute('aria-labelledby')).to.equal(contentNode.id);
+    });
+
+    it('should preserve a pre-existing ARIA attribute value when changing mode', async () => {
+      target.setAttribute('aria-describedby', 'foo');
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+      expect(target.getAttribute('aria-describedby')).to.contain('foo');
+      expect(target.getAttribute('aria-describedby')).to.contain(contentNode.id);
+
+      tooltip.ariaLinkMode = 'aria-labelledby';
+      await nextUpdate(tooltip);
+
+      expect(target.getAttribute('aria-describedby')).to.equal('foo');
+      expect(target.getAttribute('aria-labelledby')).to.equal(contentNode.id);
+    });
+  });
+
   describe('for', () => {
     let target;
 
