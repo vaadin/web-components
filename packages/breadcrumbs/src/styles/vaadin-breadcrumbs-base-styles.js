@@ -56,9 +56,10 @@ export const breadcrumbsStyles = css`
 
   [part='overflow-button']::before {
     content: '\\e2003' / '';
-    display: inline-block;
-    width: 1lh;
-    height: 1lh;
+    display: inline-flex;
+    align-items: center;
+    width: var(--vaadin-icon-size, 1lh);
+    height: var(--vaadin-icon-size, 1lh);
     background: currentColor;
     mask: var(--vaadin-breadcrumbs-overflow-icon, var(--_vaadin-icon-ellipsis)) center / contain no-repeat;
     opacity: 0.8;
@@ -70,10 +71,10 @@ export const breadcrumbsStyles = css`
 
   [part='overflow']::after {
     content: '\\e2003' / '';
-    display: inline-block;
-    width: 1lh;
-    height: 1lh;
-    color: var(--vaadin-text-color-secondary);
+    display: inline-flex;
+    align-items: center;
+    width: var(--vaadin-icon-size, 1lh);
+    height: var(--vaadin-icon-size, 1lh);
     background: currentColor;
     mask: var(--vaadin-breadcrumbs-separator, var(--_vaadin-icon-chevron-right)) center / 90% no-repeat;
     margin-inline-start: var(--vaadin-gap-xs);

@@ -27,8 +27,7 @@ export const breadcrumbsItemStyles = css`
 
   [part='link'],
   [part='nolink'] {
-    display: flex;
-    gap: var(--vaadin-gap-xs);
+    display: inline-flex;
     align-items: baseline;
     border-radius: var(--vaadin-radius-m);
     padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
@@ -49,10 +48,10 @@ export const breadcrumbsItemStyles = css`
 
   :host::after {
     content: '\\e2003' / '';
-    display: inline-block;
-    width: 1lh;
-    height: 1lh;
-    color: var(--vaadin-text-color-secondary);
+    display: inline-flex;
+    align-items: center;
+    width: var(--vaadin-icon-size, 1lh);
+    height: var(--vaadin-icon-size, 1lh);
     background: currentColor;
     mask: var(--vaadin-breadcrumbs-separator, var(--_vaadin-icon-chevron-right)) center / 90% no-repeat;
     margin-inline-start: var(--vaadin-gap-xs);
