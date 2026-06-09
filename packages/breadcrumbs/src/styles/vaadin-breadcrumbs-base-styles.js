@@ -11,7 +11,7 @@ export const breadcrumbsStyles = css`
     display: block;
     width: 100%;
     min-width: 0;
-    color: var(--vaadin-text-color);
+    color: var(--vaadin-breadcrumbs-text-color, var(--vaadin-text-color-secondary));
   }
 
   :host([hidden]) {

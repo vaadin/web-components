@@ -55,8 +55,10 @@ const DEFAULT_I18N = {
  *
  * Custom CSS property                      |
  * :----------------------------------------|
+ * | `--vaadin-breadcrumbs-link-color`      |
  * | `--vaadin-breadcrumbs-overflow-icon`   |
  * | `--vaadin-breadcrumbs-separator`       |
+ * | `--vaadin-breadcrumbs-text-color`      |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

@@ -1,10 +1,15 @@
+:where(:root),
+:where(:host) {
+  --vaadin-breadcrumbs-link-color: 'inherit';
+}
+
+vaadin-breadcrumbs[theme~='accent'] {
+  --vaadin-breadcrumbs-link-color: var(--aura-accent-text-color);
+}
+
 vaadin-breadcrumbs-item::part(link) {
   text-decoration: none;
   transition: color 80ms;
-}
-
-vaadin-breadcrumbs-item:not([disabled])::part(link) {
-  color: var(--aura-accent-text-color);
 }
 
 vaadin-breadcrumbs-item::part(nolink) {

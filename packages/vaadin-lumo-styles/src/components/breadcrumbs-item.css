@@ -17,7 +17,6 @@
   }
 
   [part='link'] {
-    color: var(--lumo-primary-text-color);
     text-decoration: none;
     cursor: var(--lumo-clickable-cursor);
     transition: color 140ms;

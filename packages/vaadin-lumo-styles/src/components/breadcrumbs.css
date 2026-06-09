@@ -11,6 +11,10 @@
     color: var(--lumo-body-text-color);
   }
 
+  :host([theme~='primary']) {
+    --vaadin-breadcrumbs-link-color: var(--lumo-primary-text-color);
+  }
+
   [part='list'] {
     gap: var(--lumo-space-xs);
     padding: var(--vaadin-focus-ring-width, 2px);
