@@ -6,11 +6,8 @@
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { setOverlayStateAttribute } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
+import { DialogOverflowController } from './vaadin-dialog-overflow-controller.js';
 
-/**
- * @polymerMixin
- * @mixes OverlayMixin
- */
 export const DialogOverlayMixin = (superClass) =>
   class DialogOverlayMixin extends OverlayMixin(superClass) {
     static get properties() {
@@ -82,36 +79,29 @@ export const DialogOverlayMixin = (superClass) =>
     ready() {
       super.ready();
 
-      // Update overflow attribute on resize
+      // Detect overflow of the content part and toggle the `overflow` attribute
+      this.__overflowController = new DialogOverflowController(this);
+      this.addController(this.__overflowController);
+
+      // Adjust the position on resize to keep the overlay within the viewport
       this.__resizeObserver = new ResizeObserver(() => {
         requestAnimationFrame(() => {
           this.__adjustPosition();
-          this.__updateOverflow();
         });
       });
       this.__resizeObserver.observe(this.$.resizerContainer);
-
-      // Update overflow attribute on scroll
-      this.$.content.addEventListener('scroll', () => {
-        this.__updateOverflow();
-      });
-
-      // Update overflow attribute on content change
-      this.shadowRoot.addEventListener('slotchange', () => {
-        this.__updateOverflow();
-      });
 
       // Observe header-content and footer slots for dynamic content
       const headerSlot = this.shadowRoot.querySelector('slot[name="header-content"]');
       this.__headerSlotObserver = new SlotObserver(headerSlot, ({ currentNodes }) => {
         setOverlayStateAttribute(this, 'has-header', currentNodes.length > 0);
-        this.__updateOverflow();
+        this.__overflowController.update();
       });
 
       const footerSlot = this.shadowRoot.querySelector('slot[name="footer"]');
       this.__footerSlotObserver = new SlotObserver(footerSlot, ({ currentNodes }) => {
         setOverlayStateAttribute(this, 'has-footer', currentNodes.length > 0);
-        this.__updateOverflow();
+        this.__overflowController.update();
       });
 
       this.__handleWindowResize = this.__handleWindowResize.bind(this);
@@ -239,7 +229,9 @@ export const DialogOverlayMixin = (superClass) =>
 
       this._headerTitleRenderer();
 
-      this.__updateOverflow();
+      // May run via observers before the controller is set up in `ready()`;
+      // the initial overflow state is then detected by the resize observer.
+      this.__overflowController?.update();
     }
 
     /**
@@ -263,28 +255,6 @@ export const DialogOverlayMixin = (superClass) =>
     setBounds(bounds, absolute = true) {
       super.setBounds(bounds, absolute);
       this.__adjustPosition();
-    }
-
-    /** @private */
-    __updateOverflow() {
-      let overflow = '';
-
-      const content = this.$.content;
-
-      if (content.scrollTop > 0) {
-        overflow += ' top';
-      }
-
-      if (content.scrollTop < content.scrollHeight - content.clientHeight) {
-        overflow += ' bottom';
-      }
-
-      const value = overflow.trim();
-      if (value.length > 0 && this.getAttribute('overflow') !== value) {
-        setOverlayStateAttribute(this, 'overflow', value);
-      } else if (value.length === 0 && this.hasAttribute('overflow')) {
-        setOverlayStateAttribute(this, 'overflow', null);
-      }
     }
 
     /** @private */

@@ -10,9 +10,6 @@ import { ColumnObserver, updateColumnOrders } from './vaadin-grid-helpers.js';
 
 /**
  * A mixin providing common vaadin-grid-column-group functionality.
- *
- * @polymerMixin
- * @mixes ColumnBaseMixin
  */
 export const GridColumnGroupMixin = (superClass) =>
   class extends ColumnBaseMixin(superClass) {

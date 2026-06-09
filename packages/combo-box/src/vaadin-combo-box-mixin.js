@@ -5,6 +5,7 @@
  */
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { ComboBoxItemsMixin } from './vaadin-combo-box-items-mixin.js';
+import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
  * Checks if the value is supported as an item value in this control.
@@ -16,12 +17,6 @@ function isValidValue(value) {
   return value !== undefined && value !== null;
 }
 
-/**
- * @polymerMixin
- * @mixes ComboBoxItemsMixin
- * @mixes ValidateMixin
- * @param {function(new:HTMLElement)} superClass
- */
 export const ComboBoxMixin = (superClass) =>
   class ComboBoxMixinClass extends ValidateMixin(ComboBoxItemsMixin(superClass)) {
     static get properties() {
@@ -177,7 +172,7 @@ export const ComboBoxMixin = (superClass) =>
     _openedOrItemsChanged(opened, items, loading, keepOverlayOpened) {
       // Close the overlay if there are no items to display.
       // See https://github.com/vaadin/vaadin-combo-box/pull/964
-      this._overlayOpened = opened && (keepOverlayOpened || loading || !!(items && items.length));
+      this._overlayOpened = opened && (keepOverlayOpened || loading || !!items?.length);
     }
 
     /**
@@ -524,6 +519,18 @@ export const ComboBoxMixin = (superClass) =>
         this.selectedItem = newItems[valueIndex];
       }
 
+      // When both the previously-focused entry and the new entry at the
+      // same index are placeholders (e.g. the Flow connector mid-scroll
+      // re-pushing `_setDropdownItems`), preserve `_focusedIndex` until
+      // a follow-up call lands a real item at that position.
+      if (
+        oldItems &&
+        oldItems[this._focusedIndex] instanceof ComboBoxPlaceholder &&
+        newItems[this._focusedIndex] instanceof ComboBoxPlaceholder
+      ) {
+        return;
+      }
+
       // Try to first set focus on the item that had been focused before `newItems` were updated
       // if it is still present in the `newItems` array. Otherwise, set the focused index
       // depending on the selected item or the filter query.
@@ -552,43 +559,4 @@ export const ComboBoxMixin = (superClass) =>
 
       super._handleFocusOut();
     }
-
-    /**
-     * Fired when the value changes.
-     *
-     * @event value-changed
-     * @param {Object} detail
-     * @param {String} detail.value the combobox value
-     */
-
-    /**
-     * Fired when selected item changes.
-     *
-     * @event selected-item-changed
-     * @param {Object} detail
-     * @param {Object|String} detail.value the selected item. Type is the same as the type of `items`.
-     */
-
-    /**
-     * Fired when the user sets a custom value.
-     * @event custom-value-set
-     * @param {String} detail the custom value
-     */
-
-    /**
-     * Fired when the user commits a value change.
-     * @event change
-     */
-
-    /**
-     * Fired after the `vaadin-combo-box-overlay` opens.
-     *
-     * @event vaadin-combo-box-dropdown-opened
-     */
-
-    /**
-     * Fired after the `vaadin-combo-box-overlay` closes.
-     *
-     * @event vaadin-combo-box-dropdown-closed
-     */
   };

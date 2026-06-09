@@ -4,10 +4,6 @@ import '@vaadin/aura/aura.css';
 import '../../../vaadin-master-detail-layout.js';
 import { onceResized } from '../../helpers.js';
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
-
 describe('master-detail-layout', () => {
   let element, mdl;
 

@@ -4,13 +4,12 @@
   --vaadin-date-picker-month-header-font-weight: var(--aura-font-weight-semibold);
   --vaadin-date-picker-date-selected-background: var(--aura-accent-color);
   --vaadin-date-picker-date-selected-color: var(--aura-accent-contrast-color);
-}
-
-:where(:root),
-:where(:host),
-:where([theme]) {
-  --vaadin-date-picker-date-width: calc(var(--aura-font-size-m) * 2.5);
-  --vaadin-date-picker-year-scroller-width: calc(var(--aura-font-size-m) * 3.5);
+  --vaadin-date-picker-date-width: round(var(--aura-base-font-size) / 16 * 2rem + var(--vaadin-padding-s), 2px);
+  --vaadin-date-picker-date-height: round(var(--aura-base-font-size) / 16 * 2rem + var(--vaadin-padding-s), 2px);
+  --vaadin-date-picker-year-scroller-width: round(
+    var(--aura-base-font-size) / 16 * 3rem + var(--vaadin-padding-s),
+    2px
+  );
 }
 
 vaadin-date-picker-month-scroller,
@@ -67,4 +66,37 @@ vaadin-date-picker-year::part(year-separator)::before {
   height: 3px;
   border-radius: 50%;
   background: var(--vaadin-text-color-disabled);
+}
+
+vaadin-month-calendar::part(today) {
+  font-weight: var(--aura-font-weight-semibold);
+}
+
+vaadin-month-calendar::part(today)::before {
+  content: '';
+  position: absolute;
+  height: 1.75em;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: color-mix(in srgb, currentColor 7%, transparent);
+}
+
+vaadin-month-calendar::part(selected)::before {
+  content: none;
+}
+
+vaadin-month-calendar::part(date):hover::after {
+  background: var(--_aura-highlight-color);
+}
+
+vaadin-month-calendar::part(date disabled):hover::after {
+  background: transparent;
+}
+
+vaadin-month-calendar::part(date selected) {
+  color: var(--aura-accent-contrast-color);
+}
+
+vaadin-month-calendar::part(date selected):hover::after {
+  background: var(--aura-accent-color);
 }

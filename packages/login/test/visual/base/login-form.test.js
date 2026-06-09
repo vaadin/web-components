@@ -1,6 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/text-field/test/visual/common.js';
+import '@vaadin/text-field/test/visual/not-animated-styles.css';
 import '../../../src/vaadin-login-form.js';
 
 describe('login-form', () => {

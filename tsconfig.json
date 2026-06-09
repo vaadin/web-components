@@ -14,5 +14,5 @@
     "allowImportingTsExtensions": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["packages/**/test", "test"]
+  "include": ["packages/**/*.ts", "test"]
 }

@@ -53,9 +53,6 @@ import { detailsSummary } from './styles/vaadin-details-summary-base-styles.js';
  *
  * @customElement vaadin-details-summary
  * @extends HTMLElement
- * @mixes ButtonMixin
- * @mixes DirMixin
- * @mixes ThemableMixin
  */
 class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
@@ -64,6 +61,10 @@ class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(Lum
 
   static get styles() {
     return detailsSummary();
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get properties() {

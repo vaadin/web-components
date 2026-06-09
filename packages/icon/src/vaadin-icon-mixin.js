@@ -11,10 +11,6 @@ const srcCache = new Map();
 
 const Iconset = customElements.get('vaadin-iconset');
 
-/**
- * @polymerMixin
- * @mixes IconFontSizeMixin
- */
 export const IconMixin = (superClass) =>
   class extends IconFontSizeMixin(superClass) {
     static get properties() {
@@ -53,7 +49,6 @@ export const IconMixin = (superClass) =>
          *   inside the SVG referenced by the path. Note that the file needs to follow the same-origin policy.
          * - a string in the format `data:image/svg+xml,<svg>...</svg>`. You may need to use the `encodeURIComponent`
          *   function for the SVG content passed
-         *
          */
         src: {
           type: String,
@@ -63,7 +58,6 @@ export const IconMixin = (superClass) =>
         /**
          * The symbol identifier that references an ID of an element contained in the SVG element assigned to the
          * `src` property
-         *
          */
         symbol: {
           type: String,
@@ -87,7 +81,6 @@ export const IconMixin = (superClass) =>
          * A hexadecimal code point that specifies a glyph from an icon font.
          *
          * Example: "e001"
-         *
          */
         char: {
           type: String,
@@ -98,7 +91,6 @@ export const IconMixin = (superClass) =>
          * A ligature name that specifies an icon from an icon font with support for ligatures.
          *
          * Example: "home".
-         *
          */
         ligature: {
           type: String,

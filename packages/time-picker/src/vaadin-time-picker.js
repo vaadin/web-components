@@ -105,9 +105,6 @@ import { TimePickerMixin } from './vaadin-time-picker-mixin.js';
  *
  * @customElement vaadin-time-picker
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
- * @mixes TimePickerMixin
  */
 class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

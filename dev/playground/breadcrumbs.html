@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Breadcrumbs</title>
+    <script type="module" src="../common.js"></script>
+
+    <script type="module">
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.breadcrumbsComponent = true;
+    </script>
+    <script type="module">
+      import '@vaadin/breadcrumbs';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+      import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
+    </script>
+  </head>
+
+  <body>
+    <section class="section">
+      <h2 class="heading">Default trail</h2>
+      <vaadin-breadcrumbs>
+        <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/docs/components">Components</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item>Breadcrumbs</vaadin-breadcrumbs-item>
+      </vaadin-breadcrumbs>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Overflow trail</h2>
+      <vaadin-breadcrumbs style="max-width: 320px;">
+        <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/docs/components">Components</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/docs/components/button">Button</vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item>Styling</vaadin-breadcrumbs-item>
+      </vaadin-breadcrumbs>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Icon trail</h2>
+      <vaadin-breadcrumbs>
+        <vaadin-breadcrumbs-item path="/">
+          <vaadin-icon slot="prefix" icon="vaadin:home"></vaadin-icon>
+          Home
+        </vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item path="/files">
+          <vaadin-icon slot="prefix" icon="vaadin:folder"></vaadin-icon>
+          Files
+        </vaadin-breadcrumbs-item>
+        <vaadin-breadcrumbs-item>
+          <vaadin-icon slot="prefix" icon="vaadin:file"></vaadin-icon>
+          Report.pdf
+        </vaadin-breadcrumbs-item>
+      </vaadin-breadcrumbs>
+    </section>
+  </body>
+</html>

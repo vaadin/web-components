@@ -10,9 +10,6 @@ import { MediaQueryController } from '@vaadin/component-base/src/media-query-con
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { dateAfterXMonths, dateAllowed, dateEquals, getClosestDate } from './vaadin-date-picker-helper.js';
 
-/**
- * @polymerMixin
- */
 export const DatePickerOverlayContentMixin = (superClass) =>
   class DatePickerOverlayContentMixin extends superClass {
     static get properties() {
@@ -290,14 +287,14 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     /** @private */
     __updateCancelButton(cancelButton, i18n) {
       if (cancelButton) {
-        cancelButton.textContent = i18n && i18n.cancel;
+        cancelButton.textContent = i18n?.cancel;
       }
     }
 
     /** @private */
     __updateTodayButton(todayButton, i18n, minDate, maxDate, isDateDisabled) {
       if (todayButton) {
-        todayButton.textContent = i18n && i18n.today;
+        todayButton.textContent = i18n?.today;
         todayButton.disabled = !this._isTodayAllowed(minDate, maxDate, isDateDisabled);
       }
     }
@@ -316,7 +313,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       isDateDisabled,
       enteredDate,
     ) {
-      if (calendars && calendars.length) {
+      if (calendars?.length) {
         calendars.forEach((calendar) => {
           calendar.i18n = i18n;
           calendar.minDate = minDate;
@@ -339,7 +336,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     __updateYears(years, selectedDate, theme) {
-      if (years && years.length) {
+      if (years?.length) {
         years.forEach((year) => {
           year.selectedDate = selectedDate;
 
@@ -933,11 +930,4 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       todayMidnight.setDate(today.getDate());
       return todayMidnight;
     }
-
-    /**
-     * Fired when the scroller reaches the target scrolling position.
-     * @event scroll-animation-finished
-     * @param {Number} detail.position new position
-     * @param {Number} detail.oldPosition old position
-     */
   };

@@ -7,9 +7,6 @@ import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
-/**
- * @polymerMixin
- */
 export const GridFilterElementMixin = (superClass) =>
   class extends superClass {
     static get properties() {
@@ -68,6 +65,7 @@ export const GridFilterElementMixin = (superClass) =>
       textField.value = value;
 
       this._debouncerFilterChanged = Debouncer.debounce(this._debouncerFilterChanged, timeOut.after(200), () => {
+        /** @internal to not document it in CEM */
         this.dispatchEvent(new CustomEvent('filter-changed', { bubbles: true }));
       });
     }

@@ -8,10 +8,6 @@ import { AutoResponsiveLayout } from './layouts/auto-responsive-layout.js';
 import { ResponsiveStepsLayout } from './layouts/responsive-steps-layout.js';
 import { formLayoutSlotStyles } from './styles/vaadin-form-layout-base-styles.js';
 
-/**
- * @polymerMixin
- * @mixes SlotStylesMixin
- */
 export const FormLayoutMixin = (superClass) =>
   class extends SlotStylesMixin(superClass) {
     static get properties() {

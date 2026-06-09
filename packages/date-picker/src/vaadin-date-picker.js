@@ -152,10 +152,6 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  *
  * @customElement vaadin-date-picker
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
- * @mixes InputControlMixin
- * @mixes DatePickerMixin
  */
 class DatePicker extends DatePickerMixin(
   InputControlMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
@@ -285,7 +281,7 @@ class DatePicker extends DatePickerMixin(
   _onVaadinOverlayClose(e) {
     // Prevent closing the overlay on label element click
     const event = e.detail.sourceEvent;
-    if (event && event.composedPath().includes(this) && !event.composedPath().includes(this._overlayElement)) {
+    if (event?.composedPath().includes(this) && !event.composedPath().includes(this._overlayElement)) {
       e.preventDefault();
     }
   }

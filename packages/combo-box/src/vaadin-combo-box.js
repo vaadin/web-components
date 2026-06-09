@@ -22,6 +22,7 @@ import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { comboBoxStyles } from './styles/vaadin-combo-box-base-styles.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
+import { ComboBoxFocusIndexMixin } from './vaadin-combo-box-focus-index-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
 
 /**
@@ -157,19 +158,17 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  * @fires {CustomEvent} selected-item-changed - Fired when the `selectedItem` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
+ * @fires {CustomEvent} vaadin-combo-box-dropdown-opened - Fired after the `vaadin-combo-box-overlay` opens.
+ * @fires {CustomEvent} vaadin-combo-box-dropdown-closed - Fired after the `vaadin-combo-box-overlay` closes.
  *
  * @customElement vaadin-combo-box
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
- * @mixes InputControlMixin
- * @mixes PatternMixin
- * @mixes ComboBoxDataProviderMixin
- * @mixes ComboBoxMixin
  */
-class ComboBox extends ComboBoxDataProviderMixin(
-  ComboBoxMixin(
-    PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
+class ComboBox extends ComboBoxFocusIndexMixin(
+  ComboBoxDataProviderMixin(
+    ComboBoxMixin(
+      PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
+    ),
   ),
 ) {
   static get is() {

@@ -4,15 +4,11 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
 import { deepMerge } from './helpers.js';
 
-/**
- * @polymerMixin
- */
 export const ChartSeriesMixin = (superClass) =>
   class extends superClass {
     static get properties() {
@@ -284,7 +280,7 @@ export const ChartSeriesMixin = (superClass) =>
         return;
       }
 
-      if (series && series.yAxis) {
+      if (series?.yAxis) {
         series.yAxis.update({ [key]: value });
       }
     }

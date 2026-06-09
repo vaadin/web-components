@@ -42,12 +42,8 @@ const DEFAULT_I18N = {
   },
 };
 
-/**
- * @polymerMixin
- * @mixes I18nMixin
- */
 export const UploadFileListMixin = (superClass) =>
-  class UploadFileListMixin extends I18nMixin(DEFAULT_I18N, superClass) {
+  class UploadFileListMixin extends I18nMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -84,6 +80,10 @@ export const UploadFileListMixin = (superClass) =>
 
     static get observers() {
       return ['__updateItems(items, __effectiveI18n, disabled, _theme)'];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**
@@ -405,11 +405,7 @@ export const UploadFileListMixin = (superClass) =>
                   .status="${file.status}"
                   .uploading="${file.uploading}"
                   .i18n="${i18n}"
-                  theme="${ifDefined(
-                    window.Vaadin.featureFlags.modularUpload || window.Vaadin.featureFlags.aiComponents
-                      ? this._theme
-                      : undefined,
-                  )}"
+                  theme="${ifDefined(this._theme)}"
                 ></vaadin-upload-file>
               </li>
             `,

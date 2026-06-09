@@ -6,9 +6,6 @@
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
 
-/**
- * @polymerMixin
- */
 export const DialogDraggableMixin = (superClass) =>
   class VaadinDialogDraggableMixin extends superClass {
     static get properties() {
@@ -22,7 +19,6 @@ export const DialogDraggableMixin = (superClass) =>
          * If you want a child element to be draggable
          * but still have its children non-draggable (by default), mark it with
          * "`draggable-leaf-only`" class name.
-         *
          */
         draggable: {
           type: Boolean,
@@ -139,16 +135,4 @@ export const DialogDraggableMixin = (superClass) =>
       window.removeEventListener('mousemove', this._drag);
       window.removeEventListener('touchmove', this._drag);
     }
-
-    /**
-     * Fired when the dialog drag is started.
-     *
-     * @event drag-start
-     */
-
-    /**
-     * Fired when the dialog drag is finished.
-     *
-     * @event dragged
-     */
   };

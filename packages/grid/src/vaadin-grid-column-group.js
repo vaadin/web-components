@@ -40,7 +40,6 @@ export * from './vaadin-grid-column-group-mixin.js';
  *
  * @customElement vaadin-grid-column-group
  * @extends HTMLElement
- * @mixes GridColumnGroupMixin
  */
 class GridColumnGroup extends GridColumnGroupMixin(PolylitMixin(LitElement)) {
   static get is() {

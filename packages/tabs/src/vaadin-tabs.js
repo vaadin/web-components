@@ -62,9 +62,6 @@ import { TabsMixin } from './vaadin-tabs-mixin.js';
  *
  * @customElement vaadin-tabs
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes TabsMixin
- * @mixes ThemableMixin
  */
 class Tabs extends TabsMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
@@ -78,13 +75,29 @@ class Tabs extends TabsMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
   /** @protected */
   render() {
     return html`
-      <div @click="${this._scrollBack}" part="back-button" aria-hidden="true"></div>
+      <div
+        @pointerdown="${this._startScrollBack}"
+        @pointerup="${this._stopScroll}"
+        @pointerleave="${this._stopScroll}"
+        @pointercancel="${this._stopScroll}"
+        @click="${this._scrollBack}"
+        part="back-button"
+        aria-hidden="true"
+      ></div>
 
-      <div id="scroll" part="tabs">
+      <div id="scroll" part="tabs" tabindex="-1">
         <slot></slot>
       </div>
 
-      <div @click="${this._scrollForward}" part="forward-button" aria-hidden="true"></div>
+      <div
+        @pointerdown="${this._startScrollForward}"
+        @pointerup="${this._stopScroll}"
+        @pointerleave="${this._stopScroll}"
+        @pointercancel="${this._stopScroll}"
+        @click="${this._scrollForward}"
+        part="forward-button"
+        aria-hidden="true"
+      ></div>
     `;
   }
 }

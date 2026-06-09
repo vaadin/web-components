@@ -18,10 +18,6 @@ import { menuBarOverlayStyles } from './styles/vaadin-menu-bar-overlay-base-styl
  *
  * @customElement vaadin-menu-bar-overlay
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes MenuOverlayMixin
- * @mixes OverlayMixin
- * @mixes ThemableMixin
  * @protected
  */
 export class MenuBarOverlay extends MenuOverlayMixin(
@@ -33,6 +29,10 @@ export class MenuBarOverlay extends MenuOverlayMixin(
 
   static get styles() {
     return menuBarOverlayStyles;
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

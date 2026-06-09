@@ -3,13 +3,12 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { ReactiveController } from 'lit';
 
 /**
  * A controller for handling modal state on the elements with `dialog` and `alertdialog` role.
  * See https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-modal
  */
-export class AriaModalController implements ReactiveController {
+export class AriaModalController {
   /**
    * The controller host element.
    */
@@ -21,7 +20,7 @@ export class AriaModalController implements ReactiveController {
    */
   callback: () => HTMLElement | HTMLElement[];
 
-  constructor(node: HTMLElement);
+  constructor(host: HTMLElement, callback?: () => HTMLElement | HTMLElement[]);
 
   /**
    * Make the controller host element modal by trapping focus inside it and hiding

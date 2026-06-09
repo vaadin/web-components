@@ -62,9 +62,6 @@ import { accordionHeading } from './styles/vaadin-accordion-heading-base-styles.
  *
  * @customElement vaadin-accordion-heading
  * @extends HTMLElement
- * @mixes ActiveMixin
- * @mixes DirMixin
- * @mixes ThemableMixin
  */
 class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
@@ -77,6 +74,10 @@ class AccordionHeading extends ActiveMixin(DirMixin(ThemableMixin(PolylitMixin(L
 
   static get styles() {
     return accordionHeading;
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   static get properties() {

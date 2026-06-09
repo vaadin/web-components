@@ -6,10 +6,6 @@ import '../../../src/vaadin-badge.js';
 import type { Icon } from '@vaadin/icon';
 import type { Badge } from '../../../src/vaadin-badge.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.badgeComponent = true;
-
 describe('badge', () => {
   let div: HTMLDivElement;
   let element: Badge;

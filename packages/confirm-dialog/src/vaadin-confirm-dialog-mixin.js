@@ -7,10 +7,6 @@ import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { DialogSizeMixin } from '@vaadin/dialog/src/vaadin-dialog-size-mixin.js';
 
-/**
- * @polymerMixin
- * @mixes DialogSizeMixin
- */
 export const ConfirmDialogMixin = (superClass) =>
   class ConfirmDialogMixinClass extends DialogSizeMixin(superClass) {
     static get properties() {
@@ -365,7 +361,7 @@ export const ConfirmDialogMixin = (superClass) =>
 
     /** @private */
     __updateMessageNodes(nodes, message) {
-      if (nodes && nodes.length > 0) {
+      if (nodes?.length > 0) {
         const defaultNode = nodes.find((node) => node === this._messageController.defaultNode);
         if (defaultNode) {
           defaultNode.textContent = message;
@@ -415,10 +411,4 @@ export const ConfirmDialogMixin = (superClass) =>
       this.dispatchEvent(new CustomEvent('reject'));
       this.opened = false;
     }
-
-    /**
-     * Fired when the confirm dialog is closed.
-     *
-     * @event closed
-     */
   };

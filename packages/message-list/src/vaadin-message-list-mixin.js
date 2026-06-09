@@ -9,10 +9,6 @@ import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
-/**
- * @polymerMixin
- * @mixes KeyboardDirectionMixin
- */
 export const MessageListMixin = (superClass) =>
   class MessageListMixinClass extends KeyboardDirectionMixin(superClass) {
     static get properties() {
@@ -114,6 +110,21 @@ export const MessageListMixin = (superClass) =>
      */
     _getItems() {
       return this._messages;
+    }
+
+    /**
+     * Override method inherited from `KeyboardDirectionMixin`
+     * to scroll the focused message into view, since the mixin
+     * itself focuses items with `preventScroll: true`.
+     *
+     * @protected
+     * @override
+     */
+    _focusItem(item, options, navigating) {
+      super._focusItem(item, options, navigating);
+      if (item && navigating) {
+        item.scrollIntoView({ block: 'nearest' });
+      }
     }
 
     /** @private */
@@ -235,9 +246,4 @@ export const MessageListMixin = (superClass) =>
     __announceChanged(announceMessages) {
       this.ariaLive = announceMessages ? 'polite' : null;
     }
-
-    /**
-     * Fired when an attachment is clicked.
-     * @event attachment-click
-     */
   };

@@ -29,12 +29,6 @@ const defaultFormatValue = (inputValues) => {
   return inputValues.join('\t');
 };
 
-/**
- * @polymerMixin
- * @mixes FieldMixin
- * @mixes FocusMixin
- * @mixes KeyboardMixin
- */
 export const CustomFieldMixin = (superClass) =>
   class CustomFieldMixin extends FieldMixin(FocusMixin(KeyboardMixin(superClass))) {
     static get properties() {
@@ -278,7 +272,7 @@ export const CustomFieldMixin = (superClass) =>
     /** @private */
     __inputsChanged(inputs, oldInputs) {
       if (inputs.length === 0) {
-        if (oldInputs && oldInputs.length > 0) {
+        if (oldInputs?.length > 0) {
           this.__setValue();
         }
         return;

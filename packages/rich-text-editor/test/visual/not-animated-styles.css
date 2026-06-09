@@ -1,0 +1,13 @@
+/* Hide caret */
+vaadin-rich-text-editor::part(content) {
+  caret-color: transparent;
+}
+
+/* Disable toolbar button transitions to prevent mid-ramp captures */
+vaadin-rich-text-editor::part(toolbar-button) {
+  transition: none !important;
+}
+
+vaadin-rich-text-editor-popup-popup::part(overlay) {
+  animation: none !important;
+}

@@ -5,6 +5,7 @@
  */
 @import '../src/mixins/field-error-message.css';
 @import '../src/mixins/field-helper.css';
+@import '../src/mixins/field-helper-above.css';
 @import '../src/mixins/field-label.css';
 @import '../src/mixins/field-required.css';
 @import '../src/mixins/overlay.css';
@@ -20,6 +21,7 @@
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
     lumo_mixins_field-helper,
+    lumo_mixins_field-helper-above,
     lumo_mixins_slider,
     lumo_components_range-slider;
 

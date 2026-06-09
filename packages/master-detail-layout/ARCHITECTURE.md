@@ -102,21 +102,7 @@ The attribute keeps this inflation active when detail first appears with overlay
 | `detail-placeholder` | `has-detail-placeholder` | Shown when no detail and not in overlay                      |
 | `detail-outgoing`    | (internal)               | Used during replace transitions, hosted on `#detailOutgoing` |
 
-Detail placeholder uses `opacity` + `pointer-events` (not `display`) so it always participates in grid sizing but can't intercept clicks when hidden:
-
-```css
-#detailPlaceholder {
-  opacity: 0;
-  pointer-events: none;
-}
-
-:host([has-detail-placeholder]:not([has-detail], [overlay])) #detailPlaceholder {
-  opacity: 1;
-  pointer-events: auto;
-}
-```
-
-The placeholder is included in overflow detection. Without it, a layout with only a placeholder would never check for overflow and `keep-detail-column-offscreen` wouldn't apply.
+`#detailPlaceholder` uses `visibility` (not `display`) so it always participates in grid sizing but is fully removed from interaction: hidden from the accessibility tree, removed from tab order, and ignores pointer events. The placeholder is included in overflow detection — without it, a layout with only a placeholder would never check for overflow and `keep-detail-column-offscreen` wouldn't apply.
 
 `#detailOutgoing` is a shadow DOM wrapper with `<slot name="detail-outgoing">`. During replace, the outgoing detail element's slot is reassigned from `detail` to `detail-outgoing` (light DOM reassignment preserves user styles). Its width is frozen to the cached detail size so it retains the previous dimensions even when the new detail has a different intrinsic size. It's removed on completion.
 
@@ -134,9 +120,11 @@ CSS drives the resting states: `#detail` is translated off-screen and transparen
 
 ### Transition types
 
-- **Add**: update DOM first, then fade + slide detail in from off-screen
-- **Remove**: fade + slide detail out first, then update DOM
+- **Add**: update DOM first, then animate detail in from off-screen
+- **Remove**: animate detail out first, then update DOM
 - **Replace**: move old content to `slot="detail-outgoing"`, update DOM, then animate new in + old out simultaneously. Split-mode replace runs at 0ms (instant swap).
+
+Split mode animates detail with `slide` + `fade`. Overlay mode animates detail with `slide` only and runs the backdrop's `fade` in parallel — fading the detail would let the backdrop bleed through the panel.
 
 The `noAnimation` property (reflected as `no-animation` attribute) skips all animations.
 
@@ -170,10 +158,11 @@ z-index: 4 — #detail
 
 `#detail` above `#detailOutgoing` works correctly: split-mode replace is instant so z-order doesn't matter, and overlay-mode replace has the incoming sliding over the outgoing.
 
+The host sets `isolation: isolate` so these internal z-indices stay contained in MDL's own stacking context — otherwise `#detail` (z-4) would compete with an ancestor's overlays (e.g. `vaadin-app-layout`'s backdrop at z-2). The exception is `overlay-containment='page'`, where the detail uses `position: fixed` and must escape MDL's stacking context to layer above the page.
+
 ## Testing
 
 - **`onceResized(layout)`** (`test/helpers.js`): `nextResize()` + `nextRender()` — waits for ResizeObserver + rAF write phase
 - **`waitForAnimationProgress(element, offset)`**: waits until an animation is running on the element with translate strictly between 0 and offset (genuinely mid-flight, not at either endpoint's CSS resting state)
 - **Split mode sizing**: measure part elements directly (not `gridTemplateColumns`, which has 4 columns)
 - **Vertical tests**: integrated into each test file under `describe('vertical')` suites
-- **Feature flag**: `window.Vaadin.featureFlags.masterDetailLayoutComponent = true` required before import

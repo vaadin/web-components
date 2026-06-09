@@ -1,7 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
-import '../common.js';
+import '../not-animated-styles.css';
 import '../../../vaadin-radio-group.js';
 
 describe('radio-group', () => {

@@ -42,14 +42,9 @@ class PickerSlotController extends SlotController {
 
 /**
  * A mixin providing common date-time-picker functionality.
- *
- * @polymerMixin
- * @mixes DisabledMixin
- * @mixes FieldMixin
- * @mixes FocusMixin
  */
 export const DateTimePickerMixin = (superClass) =>
-  class DateTimePickerMixinClass extends I18nMixin(DEFAULT_I18N, FieldMixin(FocusMixin(DisabledMixin(superClass)))) {
+  class DateTimePickerMixinClass extends I18nMixin(FieldMixin(FocusMixin(DisabledMixin(superClass)))) {
     static get properties() {
       return {
         /**
@@ -262,6 +257,10 @@ export const DateTimePickerMixin = (superClass) =>
       ];
     }
 
+    static get defaultI18n() {
+      return DEFAULT_I18N;
+    }
+
     constructor() {
       super();
       // Default value for "min" and "max" properties of vaadin-date-picker (for removing constraint)
@@ -469,7 +468,7 @@ export const DateTimePickerMixin = (superClass) =>
       const targetI18n = {};
       props.forEach((prop) => {
         // eslint-disable-next-line no-prototype-builtins
-        if (i18n && i18n.hasOwnProperty(prop)) {
+        if (i18n?.hasOwnProperty(prop)) {
           targetI18n[prop] = i18n[prop];
         }
       });
@@ -1007,10 +1006,4 @@ export const DateTimePickerMixin = (superClass) =>
         }
       }
     }
-
-    /**
-     * Fired when the user commits a value change.
-     *
-     * @event change
-     */
   };

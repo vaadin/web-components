@@ -1,8 +1,9 @@
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { sendKeys } from '@vaadin/test-runner-commands';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/rich-text-editor.css';
-import '../common.js';
+import '../not-animated-styles.css';
 import '../../../vaadin-rich-text-editor.js';
 
 describe('rich-text-editor', () => {
@@ -163,17 +164,22 @@ describe('rich-text-editor', () => {
   });
 
   describe('controls', () => {
-    it('background popup', async () => {
+    let buttons;
+
+    beforeEach(() => {
       element.style.minHeight = '200px';
-      element.shadowRoot.querySelector('[part~="toolbar-button-background"]').click();
-      await oneEvent(element.querySelector('[slot="background-popup"]').$.overlay, 'vaadin-overlay-open');
+      buttons = element.shadowRoot.querySelectorAll('[part~="toolbar-group-style"] button');
+    });
+
+    it('background popup', async () => {
+      buttons[1].focus();
+      await sendKeys({ press: 'Enter' });
       return visualDiff(div, 'background-popup');
     });
 
     it('color popup', async () => {
-      element.style.minHeight = '200px';
-      element.shadowRoot.querySelector('[part~="toolbar-button-color"]').click();
-      await oneEvent(element.querySelector('[slot="color-popup"]').$.overlay, 'vaadin-overlay-open');
+      buttons[0].focus();
+      await sendKeys({ press: 'Enter' });
       return visualDiff(div, 'color-popup');
     });
   });

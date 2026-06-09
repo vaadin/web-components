@@ -3,10 +3,6 @@ import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../src/vaadin-badge.js';
 import type { Badge } from '../src/vaadin-badge.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.badgeComponent = true;
-
 describe('vaadin-badge', () => {
   let badge: Badge;
 

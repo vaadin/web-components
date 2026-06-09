@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
-import './not-animated-styles.js';
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/overlay/src/vaadin-overlay.js';
 import '@vaadin/radio-group/src/vaadin-radio-group.js';

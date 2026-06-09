@@ -18,8 +18,6 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  *
  * @customElement vaadin-menu-bar-submenu
  * @extends HTMLElement
- * @mixes ContextMenuMixin
- * @mixes ThemePropertyMixin
  * @protected
  */
 class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(LitElement))) {
@@ -53,6 +51,17 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
     super();
 
     this.openOn = 'opensubmenu';
+  }
+
+  /** @protected */
+  firstUpdated(props) {
+    // Tooltip lives on the parent `<vaadin-menu-bar>`. Reuse its controller
+    // so the same tooltip element serves items at every nesting level.
+    // Assigned before `super.firstUpdated()` so `ContextMenuMixin` skips
+    // creating its own controller (we don't render a tooltip slot).
+    this._tooltipController = this.parentElement._tooltipController;
+
+    super.firstUpdated(props);
   }
 
   /**
@@ -90,10 +99,18 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
   }
 
   /**
-   * Overriding the observer to not add global "contextmenu" listener.
+   * Overriding the observer to not toggle user-select on the host.
    * @override
    */
   _openedChanged() {
+    // Do nothing
+  }
+
+  /**
+   * Overriding the handler to not react to global "contextmenu" events.
+   * @override
+   */
+  __onGlobalContextMenu() {
     // Do nothing
   }
 

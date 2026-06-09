@@ -3,7 +3,8 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/tabsheet.css';
-import '@vaadin/tabs/test/visual/not-animated-styles.js';
+import '@vaadin/tabs/test/visual/not-animated-styles.css';
+import '../not-animated-styles.css';
 import '../../../vaadin-tabsheet.js';
 
 describe('tabsheet', () => {

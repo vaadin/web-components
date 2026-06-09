@@ -34,7 +34,6 @@ import { GridSelectionColumnMixin } from './vaadin-grid-selection-column-mixin.j
  *
  * @customElement vaadin-grid-selection-column
  * @extends GridColumn
- * @mixes GridSelectionColumnMixin
  */
 class GridSelectionColumn extends GridSelectionColumnMixin(GridColumn) {
   static get is() {

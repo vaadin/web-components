@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -186,20 +185,17 @@ import { CrudMixin } from './vaadin-crud-mixin.js';
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} editor-opened-changed - Fired when the `editorOpened` property changes.
- * @fires {CustomEvent} edited-item-changed - Fired when `editedItem` property changes.
+ * @fires {CustomEvent} edited-item-changed - Fired when the `editedItem` property changes.
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} size-changed - Fired when the `size` property changes.
  * @fires {CustomEvent} new - Fired when user wants to create a new item.
- * @fires {CustomEvent} edit - Fired when user wants to edit an existing item.
- * @fires {CustomEvent} delete - Fired when user wants to delete item.
- * @fires {CustomEvent} save - Fired when user wants to save a new or an existing item.
- * @fires {CustomEvent} cancel - Fired when user discards edition.
+ * @fires {CustomEvent} edit - Fired when user wants to edit an existing item. If the default is prevented, a new item is not assigned to the form, but the dialog is still opened.
+ * @fires {CustomEvent} delete - Fired when user wants to delete item. If the default is prevented, no action is performed: the items array is not modified and the dialog is not closed.
+ * @fires {CustomEvent} save - Fired when user wants to save a new or an existing item. If the default is prevented, no action is performed: the items array is not modified and the dialog is not closed.
+ * @fires {CustomEvent} cancel - Fired when user discards edition. If the default is prevented, no action is performed; the listener is responsible for closing the dialog and resetting the item and grid.
  *
  * @customElement vaadin-crud
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
- * @mixes CrudMixin
  */
 class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

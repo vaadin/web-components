@@ -28,8 +28,6 @@ export function findRoot(element) {
 
 /**
  * Mixin for internal use only. Do not use it in custom components.
- *
- * @polymerMixin
  */
 export const LumoInjectionMixin = (superClass) =>
   class LumoInjectionMixinClass extends superClass {

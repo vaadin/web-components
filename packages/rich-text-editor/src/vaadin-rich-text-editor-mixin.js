@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -96,11 +95,8 @@ const DEFAULT_I18N = {
   remove: 'Remove',
 };
 
-/**
- * @polymerMixin
- */
 export const RichTextEditorMixin = (superClass) =>
-  class RichTextEditorMixinClass extends I18nMixin(DEFAULT_I18N, superClass) {
+  class RichTextEditorMixinClass extends I18nMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -243,6 +239,10 @@ export const RichTextEditorMixin = (superClass) =>
 
     static get observers() {
       return ['_valueChanged(value, _editor)', '_disabledChanged(disabled, readonly, _editor)'];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**
@@ -429,9 +429,9 @@ export const RichTextEditorMixin = (superClass) =>
       // Set up tooltip to show when hovering or focusing toolbar buttons
       this._tooltip = document.createElement('vaadin-tooltip');
       this._tooltip.slot = 'tooltip';
-      // Set ariaTarget to null, as toolbar buttons already have aria-label,
-      // and also cannot be linked with the tooltip being in the light DOM
-      this._tooltip.ariaTarget = null;
+      // Toolbar buttons already have aria-label and cannot be linked with the
+      // tooltip in the light DOM, so disable ARIA linking entirely.
+      this._tooltip.ariaLinkMode = 'none';
       this.append(this._tooltip);
 
       const buttons = this.shadowRoot.querySelectorAll('[part~="toolbar-button"]');
@@ -766,7 +766,7 @@ export const RichTextEditorMixin = (superClass) =>
         const tabs = '\t'.repeat(level);
         // Add tabs to content
         const firstChild = element.firstChild;
-        if (firstChild && firstChild.nodeType === Node.TEXT_NODE) {
+        if (firstChild?.nodeType === Node.TEXT_NODE) {
           firstChild.textContent = tabs + firstChild.textContent;
         } else if (element.childNodes.length > 0) {
           const tabNode = document.createTextNode(tabs);

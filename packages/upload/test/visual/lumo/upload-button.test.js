@@ -5,12 +5,9 @@ import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/upload-button.css';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '@vaadin/icon';
+import '../not-animated-styles.css';
 import '../../../vaadin-upload-button.js';
 import { UploadManager } from '../../../src/vaadin-upload-manager.js';
-
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.modularUpload = true;
 
 describe('upload-button', () => {
   let div, element;

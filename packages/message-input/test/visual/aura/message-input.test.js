@@ -27,6 +27,11 @@ describe('message-input', () => {
           await visualDiff(div, `${dir}-basic`);
         });
 
+        it('value', async () => {
+          element.value = 'Hello';
+          await visualDiff(div, `${dir}-value`);
+        });
+
         it('icon-button', async () => {
           element.setAttribute('theme', 'icon-button');
           await visualDiff(div, `${dir}-icon-button`);

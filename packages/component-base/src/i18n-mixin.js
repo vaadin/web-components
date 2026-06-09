@@ -35,9 +35,16 @@ function deepMerge(target, ...sources) {
 /**
  * A mixin that allows to set partial I18N properties.
  *
- * @polymerMixin
+ * Subclasses provide their default values by overriding the
+ * `defaultI18n` static getter:
+ *
+ * ```js
+ * static get defaultI18n() {
+ *   return { foo: 'Foo', bar: 'Bar' };
+ * }
+ * ```
  */
-export const I18nMixin = (defaultI18n, superClass) =>
+export const I18nMixin = (superClass) =>
   class I18nMixinClass extends superClass {
     static get properties() {
       return {
@@ -55,10 +62,20 @@ export const I18nMixin = (defaultI18n, superClass) =>
       };
     }
 
+    /**
+     * Default I18N values. Must be overridden by subclasses with actual defaults.
+     *
+     * @protected
+     * @return {Object}
+     */
+    static get defaultI18n() {
+      return {};
+    }
+
     constructor() {
       super();
 
-      this.i18n = deepMerge({}, defaultI18n);
+      this.i18n = deepMerge({}, this.constructor.defaultI18n);
     }
 
     /**
@@ -80,6 +97,6 @@ export const I18nMixin = (defaultI18n, superClass) =>
         return;
       }
       this.__customI18n = value;
-      this.__effectiveI18n = deepMerge({}, defaultI18n, this.__customI18n);
+      this.__effectiveI18n = deepMerge({}, this.constructor.defaultI18n, this.__customI18n);
     }
   };

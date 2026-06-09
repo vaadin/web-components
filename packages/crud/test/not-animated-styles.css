@@ -1,0 +1,4 @@
+vaadin-crud::part(overlay),
+vaadin-crud::part(backdrop) {
+  animation: none !important;
+}

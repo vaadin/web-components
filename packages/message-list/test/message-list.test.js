@@ -15,11 +15,6 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.messageListAttachments = true;
-
 import '../src/vaadin-message-list.js';
 
 describe('message-list', () => {
@@ -475,6 +470,17 @@ describe('message-list', () => {
       arrowDown(messageElements[0]);
       arrowRight(messageElements[1]);
       expect(messageElements[1].hasAttribute('focused')).to.be.true;
+    });
+
+    it('should scroll focused message into view on keyboard navigation', () => {
+      messageList.style.height = '50px';
+      messageElements[0].focus();
+      expect(messageList.scrollTop).to.equal(0);
+
+      arrowDown(messageElements[0]);
+      arrowDown(messageElements[1]);
+      arrowDown(messageElements[2]);
+      expect(messageList.scrollTop).to.be.greaterThan(0);
     });
   });
 

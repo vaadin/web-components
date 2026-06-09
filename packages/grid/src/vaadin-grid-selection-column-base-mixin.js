@@ -15,8 +15,6 @@ import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures
  * Web component-specific selection state updates must be implemented in the
  * `<vaadin-grid-selection-column>` itself, by overriding the protected methods
  * provided by this mixin.
- *
- * @polymerMixin
  */
 export const GridSelectionColumnBaseMixin = (superClass) =>
   class GridSelectionColumnBaseMixin extends superClass {

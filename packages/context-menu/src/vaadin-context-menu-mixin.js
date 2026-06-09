@@ -7,12 +7,9 @@ import { isElementFocusable, isKeyboardActive } from '@vaadin/a11y-base/src/focu
 import { isAndroid, isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener, deepTargetFind, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+import { ContextMenuTooltipController } from './vaadin-context-menu-tooltip-controller.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
 
-/**
- * @polymerMixin
- * @mixes ItemsMixin
- */
 export const ContextMenuMixin = (superClass) =>
   class ContextMenuMixinClass extends ItemsMixin(superClass) {
     static get properties() {
@@ -35,6 +32,7 @@ export const ContextMenuMixin = (superClass) =>
           value: false,
           notify: true,
           readOnly: true,
+          sync: true,
         },
 
         /**
@@ -134,7 +132,7 @@ export const ContextMenuMixin = (superClass) =>
       this._boundOpen = this.open.bind(this);
       this._boundClose = this.close.bind(this);
       this._boundPreventDefault = this._preventDefault.bind(this);
-      this._boundOnGlobalContextMenu = this._onGlobalContextMenu.bind(this);
+      this.__onGlobalContextMenu = this.__onGlobalContextMenu.bind(this);
     }
 
     /** @protected */
@@ -143,6 +141,7 @@ export const ContextMenuMixin = (superClass) =>
 
       this.__boundOnScroll = this.__onScroll.bind(this);
       window.addEventListener('scroll', this.__boundOnScroll, true);
+      document.documentElement.addEventListener('contextmenu', this.__onGlobalContextMenu, true);
 
       // Restore opened state if overlay was opened when disconnecting
       if (this.__restoreOpened) {
@@ -155,10 +154,16 @@ export const ContextMenuMixin = (superClass) =>
       super.disconnectedCallback();
 
       window.removeEventListener('scroll', this.__boundOnScroll, true);
+      document.documentElement.removeEventListener('contextmenu', this.__onGlobalContextMenu, true);
 
-      // Close overlay and memorize opened state
+      // Memorize opened state and defer close so that DOM moves (disconnect
+      // followed by reconnect within the same task) do not close the overlay.
       this.__restoreOpened = this.opened;
-      this.close();
+      setTimeout(() => {
+        if (!this.isConnected) {
+          this.close();
+        }
+      });
     }
 
     /** @protected */
@@ -172,6 +177,15 @@ export const ContextMenuMixin = (superClass) =>
           this._fullscreen = matches;
         }),
       );
+
+      // Sub-menus inherit the tooltip controller from their parent menu
+      // (assigned before `firstUpdated` runs) to reuse the same slotted
+      // `<vaadin-tooltip>` across nesting levels. Only create a new one
+      // when none was inherited, i.e. on the outer host.
+      if (!this._tooltipController) {
+        this._tooltipController = new ContextMenuTooltipController(this);
+        this.addController(this._tooltipController);
+      }
     }
 
     /**
@@ -280,13 +294,7 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     /** @private */
-    _openedChanged(opened, oldOpened) {
-      if (opened) {
-        document.documentElement.addEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
-      } else if (oldOpened) {
-        document.documentElement.removeEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
-      }
-
+    _openedChanged(opened) {
       this.__setListenOnUserSelect(opened);
     }
 
@@ -328,6 +336,8 @@ export const ContextMenuMixin = (superClass) =>
      * Closes the overlay.
      */
     close() {
+      super.close();
+
       this._setOpened(false);
     }
 
@@ -620,7 +630,10 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     /** @private */
-    _onGlobalContextMenu(e) {
+    __onGlobalContextMenu(e) {
+      if (!this.opened) {
+        return;
+      }
       if (!e.shiftKey) {
         const isTouchDevice = isAndroid || isIOS;
         if (!isTouchDevice) {
@@ -645,10 +658,4 @@ export const ContextMenuMixin = (superClass) =>
         this.close();
       }
     }
-
-    /**
-     * Fired when the context menu is closed.
-     *
-     * @event closed
-     */
   };

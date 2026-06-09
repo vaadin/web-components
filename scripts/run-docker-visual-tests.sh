@@ -66,15 +66,17 @@ fi
 
 # Run Docker:
 # - --rm: Remove container after exit
-# - -i: Enables input in --watch mode
-# - -t: Enables colored and interactive output in --watch mode
+# - -i -t: Enable input + colored interactive output for --watch mode (only when
+#   stdin is a TTY — skipped under CI, Claude Code, etc. where -t would fail)
 # - --ipc=host: Recommended for Chromium to avoid shared memory crashes
 # - -v $(pwd):/work: Mount repository source into container
 # - -v $VOL:/work/node_modules: Use a named volume for node_modules (overlays host's)
 # - PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1: Use pre-installed browsers from the image
+TTY_FLAGS=()
+[ -t 0 ] && TTY_FLAGS+=("-i" "-t")
+
 docker run --rm --ipc=host \
-  -i \
-  -t \
+  "${TTY_FLAGS[@]}" \
   -v "$(pwd)":/work \
   -v "${NODE_MODULES_VOLUME}":/work/node_modules \
   "${GIT_MOUNTS[@]}" \

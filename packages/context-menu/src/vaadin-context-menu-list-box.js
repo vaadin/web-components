@@ -17,9 +17,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * @customElement vaadin-context-menu-list-box
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes ListMixin
- * @mixes ThemableMixin
  * @protected
  */
 class ContextMenuListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {

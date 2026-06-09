@@ -18,10 +18,6 @@ import { timePickerOverlayStyles } from './styles/vaadin-time-picker-overlay-bas
  * An element used internally by `<vaadin-time-picker>`. Not intended to be used separately.
  *
  * @extends HTMLElement
- * @mixes ComboBoxOverlayMixin
- * @mixes DirMixin
- * @mixes OverlayMixin
- * @mixes ThemableMixin
  * @private
  */
 export class TimePickerOverlay extends ComboBoxOverlayMixin(

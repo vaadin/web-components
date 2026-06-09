@@ -9,13 +9,6 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 
-/**
- * @polymerMixin
- * @mixes DisabledMixin
- * @mixes FocusMixin
- * @mixes InputMixin
- * @mixes SlotStylesMixin
- */
 export const PasswordFieldMixin = (superClass) =>
   class PasswordFieldMixinClass extends SlotStylesMixin(DisabledMixin(FocusMixin(InputMixin(superClass)))) {
     static get properties() {

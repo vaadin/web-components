@@ -10,10 +10,6 @@ import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
  * A mixin providing `focused`, `focus-ring`, `active`, `disabled` and `selected`.
  *
  * `focused`, `active` and `focus-ring` are set as only as attributes.
- *
- * @polymerMixin
- * @mixes ActiveMixin
- * @mixes FocusMixin
  */
 export const ItemMixin = (superClass) =>
   class VaadinItemMixin extends ActiveMixin(FocusMixin(superClass)) {
@@ -61,7 +57,7 @@ export const ItemMixin = (superClass) =>
      * @type {string}
      */
     get value() {
-      return this._value !== undefined ? this._value : this.textContent.trim();
+      return this._value ?? this.textContent.trim();
     }
 
     set value(value) {

@@ -4,14 +4,10 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
 
-/**
- * @polymerMixin
- */
 export const GridProEditSelectMixin = (superClass) =>
   class extends superClass {
     static get properties() {
@@ -96,13 +92,13 @@ export const GridProEditSelectMixin = (superClass) =>
     }
 
     _optionsChanged(options) {
-      if (options && options.length) {
+      if (options?.length) {
         this.items = options.map((option) => ({
           label: option,
           value: option,
         }));
 
-        this._overlayElement = this._overlayElement || this.shadowRoot.querySelector('vaadin-select-overlay');
+        this._overlayElement ||= this.shadowRoot.querySelector('vaadin-select-overlay');
         this._overlayElement.addEventListener('vaadin-overlay-outside-click', () => {
           this._grid._stopEdit();
         });

@@ -4,7 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/src/global/index.css';
 import '@vaadin/vaadin-lumo-styles/components/text-field.css';
-import '../common.js';
+import '../not-animated-styles.css';
 import '../../../vaadin-text-field.js';
 
 describe('text-field', () => {

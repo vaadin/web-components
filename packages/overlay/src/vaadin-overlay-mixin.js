@@ -8,11 +8,6 @@ import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
 import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
 import { setOverlayStateAttribute } from './vaadin-overlay-utils.js';
 
-/**
- * @polymerMixin
- * @mixes OverlayFocusMixin
- * @mixes OverlayStackMixin
- */
 export const OverlayMixin = (superClass) =>
   class OverlayMixin extends OverlayFocusMixin(OverlayStackMixin(superClass)) {
     static get properties() {

@@ -4,10 +4,6 @@ import '../../src/vaadin-slider.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import type { Slider } from '../../src/vaadin-slider.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.sliderComponent = true;
-
 describe('vaadin-slider', () => {
   let slider: Slider;
 

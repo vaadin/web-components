@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
 import '@vaadin/date-picker/src/vaadin-date-picker.js';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import { open, untilOverlayScrolled } from '@vaadin/date-picker/test/helpers.js';

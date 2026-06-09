@@ -13,7 +13,7 @@ export const buttonStyles = css`
     justify-content: center;
     text-align: center;
     gap: var(--vaadin-button-gap, 0 var(--vaadin-gap-s));
-    white-space: nowrap;
+    white-space: var(--vaadin-button-label-wrap, normal);
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
     user-select: none;
@@ -47,7 +47,8 @@ export const buttonStyles = css`
   }
 
   [part='label'] {
-    display: inline-flex;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   :host(:is([focus-ring], :focus-visible)) {

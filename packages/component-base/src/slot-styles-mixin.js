@@ -39,38 +39,36 @@ function insertStyles(styles, root) {
 /**
  * Mixin to insert styles into the outer scope to handle slotted components.
  * This is useful e.g. to hide native `<input type="number">` controls.
- *
- * @polymerMixin
  */
-export const SlotStylesMixin = dedupeMixin(
-  (superclass) =>
-    class SlotStylesMixinClass extends superclass {
-      /**
-       * List of styles to insert into root.
-       * @protected
-       */
-      get slotStyles() {
-        return [];
-      }
+const SlotStylesMixinImplementation = (superclass) =>
+  class SlotStylesMixinClass extends superclass {
+    /**
+     * List of styles to insert into root.
+     * @protected
+     */
+    get slotStyles() {
+      return [];
+    }
 
-      /** @protected */
-      connectedCallback() {
-        super.connectedCallback();
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
 
-        this.__applySlotStyles();
-      }
+      this.__applySlotStyles();
+    }
 
-      /** @private */
-      __applySlotStyles() {
-        const root = this.getRootNode();
-        const rootStyles = getRootStyles(root);
+    /** @private */
+    __applySlotStyles() {
+      const root = this.getRootNode();
+      const rootStyles = getRootStyles(root);
 
-        this.slotStyles.forEach((styles) => {
-          if (!rootStyles.has(styles)) {
-            insertStyles(styles, root);
-            rootStyles.add(styles);
-          }
-        });
-      }
-    },
-);
+      this.slotStyles.forEach((styles) => {
+        if (!rootStyles.has(styles)) {
+          insertStyles(styles, root);
+          rootStyles.add(styles);
+        }
+      });
+    }
+  };
+
+export const SlotStylesMixin = dedupeMixin(SlotStylesMixinImplementation);

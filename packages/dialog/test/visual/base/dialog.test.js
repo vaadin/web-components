@@ -1,6 +1,6 @@
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../not-animated-styles.js';
+import '../../not-animated-styles.css';
 import '../../../src/vaadin-dialog.js';
 import { createRenderer } from '../../helpers.js';
 
@@ -128,6 +128,47 @@ describe('dialog', () => {
 
       await nextUpdate(element);
       await visualDiff(div, 'title-slotted-header');
+    });
+  });
+
+  describe('overflow indicators', () => {
+    let content;
+
+    async function scrollContent(scrollTop) {
+      content.scrollTop = scrollTop;
+      await oneEvent(content, 'scroll');
+    }
+
+    beforeEach(async () => {
+      element.headerTitle = 'Title';
+      element.footerRenderer = createRenderer('Footer');
+      element.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+        const div = document.createElement('div');
+        div.style.height = '800px';
+        div.textContent = 'Tall content';
+        root.appendChild(div);
+      };
+
+      element.height = '300px';
+      await nextRender();
+      content = element.$.overlay.$.content;
+    });
+
+    it('overflow bottom', async () => {
+      await visualDiff(div, 'overflow-bottom');
+    });
+
+    it('overflow top and bottom', async () => {
+      await scrollContent(content.scrollHeight / 2);
+      await visualDiff(div, 'overflow-both');
+    });
+
+    it('overflow top', async () => {
+      await scrollContent(content.scrollHeight - content.clientHeight);
+      await visualDiff(div, 'overflow-top');
     });
   });
 });

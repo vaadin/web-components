@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2018 - 2026 Vaadin Ltd.
+ * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { ComboBoxDefaultItem, ComboBoxItemMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-item-mixin.js';

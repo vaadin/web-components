@@ -16,8 +16,6 @@ import { userTagStyles } from './styles/vaadin-user-tag-base-styles.js';
  *
  * @customElement vaadin-user-tag
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes ThemableMixin
  * @private
  */
 export class UserTag extends ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {

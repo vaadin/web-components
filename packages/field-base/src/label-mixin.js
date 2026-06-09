@@ -7,8 +7,6 @@ import { LabelController } from './label-controller.js';
 
 /**
  * A mixin to provide label via corresponding property or named slot.
- *
- * @polymerMixin
  */
 export const LabelMixin = (superclass) =>
   class LabelMixinClass extends superclass {
@@ -38,7 +36,7 @@ export const LabelMixin = (superclass) =>
     /** @protected */
     get _labelId() {
       const node = this._labelNode;
-      return node && node.id;
+      return node?.id;
     }
 
     /** @protected */

@@ -11,26 +11,12 @@
   --aura-background-color-light: oklch(0.95 0.005 248);
   --aura-background-color-dark: oklch(0.2 0.01 260);
 
-  --_bg-alt: light-dark(
-    oklch(
-      from var(--aura-background-color-light) calc(l + c) min(c, c * 2 - l / 20)
-        calc(h + 180 * var(--_vaadin-safari-17-deg, 1) * l * c * 4)
-    ),
-    oklch(
-      from var(--aura-background-color-dark) calc(l + c) min(c, c * 2 - l / 20)
-        calc(h + 180 * var(--_vaadin-safari-17-deg, 1) * l * c * 4)
-    )
-  );
-
-  --_bg-accent: radial-gradient(
-    circle at 0% 0%,
-    light-dark(
-      oklch(from var(--aura-background-color-light) min(1, l + c * 3) min(c, c * 3) h),
-      oklch(from var(--aura-background-color-dark) min(1, l + c) clamp(0, c * 1.5, 0.4) h)
-    ),
-    transparent 30%
-  );
   --aura-app-background: var(--aura-background-color);
+
+  --_aura-highlight-color: light-dark(
+    oklch(from var(--aura-accent-color-light) min(0.9, l) c h / max(0.05, l / 4)),
+    oklch(from var(--aura-accent-color-dark) max(0.6, l) c h / max(0.2, l / 4))
+  );
 
   --vaadin-focus-ring-color: light-dark(
     oklch(from var(--aura-accent-color-light) min(l, 0.62) c h),
@@ -46,6 +32,25 @@
 @supports (color: hsl(0 0 0)) {
   @scope (:root) {
     :where(:scope) {
+      --_bg-alt: light-dark(
+        oklch(
+          from var(--aura-background-color-light) calc(l + c) min(c, c * 2 - l / 20)
+            calc(h + 180 * var(--_vaadin-safari-17-deg, 1) * l * c * 4)
+        ),
+        oklch(
+          from var(--aura-background-color-dark) calc(l + c) min(c, c * 2 - l / 20)
+            calc(h + 180 * var(--_vaadin-safari-17-deg, 1) * l * c * 4)
+        )
+      );
+
+      --_bg-accent: radial-gradient(
+        circle at 0% 0%,
+        light-dark(
+          oklch(from var(--aura-background-color-light) min(1, l + c * 3) min(c, c * 3) h),
+          oklch(from var(--aura-background-color-dark) min(1, l + c) clamp(0, c * 1.5, 0.4) h)
+        ),
+        transparent 30%
+      );
       --aura-app-background:
         var(--_bg-accent),
         radial-gradient(circle at 25% 0% in xyz, var(--aura-background-color) 33%, var(--_bg-alt))
@@ -78,6 +83,8 @@ vaadin-side-nav-item::part(content),
 vaadin-tab,
 vaadin-upload-file,
 :where(
+  .aura-accent-surface,
+  .aura-accent-surface-solid,
   .aura-accent-color,
   .aura-accent-neutral,
   .aura-accent-red,

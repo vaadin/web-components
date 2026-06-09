@@ -10,4 +10,6 @@
  */
 import type { CSSResult } from 'lit';
 
+export const widgetFixedHeightDeclarations: CSSResult;
+
 export const dashboardLayoutStyles: CSSResult;

@@ -49,9 +49,6 @@ import { DetailsBaseMixin } from './vaadin-details-base-mixin.js';
  *
  * @customElement vaadin-details
  * @extends HTMLElement
- * @mixes DetailsBaseMixin
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 class Details extends DetailsBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
@@ -64,16 +61,9 @@ class Details extends DetailsBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(L
         display: block;
       }
 
-      :host([hidden]) {
+      :host([hidden]),
+      :host(:not([opened])) [part='content'] {
         display: none !important;
-      }
-
-      [part='content'] {
-        display: none;
-      }
-
-      :host([opened]) [part='content'] {
-        display: block;
       }
     `;
   }

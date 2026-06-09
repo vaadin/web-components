@@ -5,10 +5,6 @@ import '../src/vaadin-master-detail-layout.js';
 import { css, html, LitElement } from 'lit';
 import { onceResized } from './helpers.js';
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
-
 describe('detail auto size', () => {
   let layout;
 

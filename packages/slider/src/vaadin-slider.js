@@ -120,11 +120,6 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  *
  * @customElement vaadin-slider
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes FieldMixin
- * @mixes FocusMixin
- * @mixes SliderMixin
- * @mixes ThemableMixin
  */
 class Slider extends FieldMixin(
   SliderMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
@@ -159,10 +154,6 @@ class Slider extends FieldMixin(
         }
       `,
     ];
-  }
-
-  static get experimental() {
-    return 'sliderComponent';
   }
 
   static get lumoInjector() {

@@ -7,8 +7,6 @@ import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 
 /**
  * A mixin providing grid column auto-width functionality.
- *
- * @polymerMixin
  */
 export const ColumnAutoWidthMixin = (superClass) =>
   class extends superClass {
@@ -145,8 +143,7 @@ export const ColumnAutoWidthMixin = (superClass) =>
         }
       });
 
-      this.__hasHadRenderedRowsForColumnWidthCalculation =
-        this.__hasHadRenderedRowsForColumnWidthCalculation || this._getRenderedRows().length > 0;
+      this.__hasHadRenderedRowsForColumnWidthCalculation ||= this._getRenderedRows().length > 0;
 
       this.__intrinsicWidthCache = new Map();
       // Cache the viewport rows to avoid unnecessary reflows while measuring the column widths

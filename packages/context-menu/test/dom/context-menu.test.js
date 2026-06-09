@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
-import '../not-animated-styles.js';
 import '../../src/vaadin-context-menu.js';
 import { openSubMenus } from '../helpers.js';
 
@@ -89,5 +88,9 @@ describe('context-menu', () => {
 
   it('overlay', async () => {
     await expect(menu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  });
+
+  it('shadow', async () => {
+    await expect(menu).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
   });
 });

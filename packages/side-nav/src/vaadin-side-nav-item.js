@@ -72,16 +72,27 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * `has-children` | Set when the element has child items.
  * `has-tooltip`  | Set when the element has a slotted tooltip.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                       |
+ * :-----------------------------------------|
+ * | `--vaadin-side-nav-item-background`     |
+ * | `--vaadin-side-nav-item-border-color`   |
+ * | `--vaadin-side-nav-item-border-radius`  |
+ * | `--vaadin-side-nav-item-border-width`   |
+ * | `--vaadin-side-nav-item-font-size`      |
+ * | `--vaadin-side-nav-item-font-weight`    |
+ * | `--vaadin-side-nav-item-gap`            |
+ * | `--vaadin-side-nav-item-line-height`    |
+ * | `--vaadin-side-nav-item-padding`        |
+ * | `--vaadin-side-nav-item-text-color`     |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  *
  * @customElement vaadin-side-nav-item
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes DisabledMixin
- * @mixes ElementMixin
- * @mixes SideNavChildrenMixin
  */
 class SideNavItem extends SideNavChildrenMixin(
   DisabledMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
@@ -111,7 +122,6 @@ class SideNavItem extends SideNavChildrenMixin(
 
       /**
        * Whether to show the child items or not
-       *
        */
       expanded: {
         type: Boolean,
@@ -148,7 +158,6 @@ class SideNavItem extends SideNavChildrenMixin(
        *
        * The state is updated when the item is added to the DOM or when the browser
        * navigates to a new page.
-       *
        */
       current: {
         type: Boolean,
@@ -342,15 +351,15 @@ class SideNavItem extends SideNavChildrenMixin(
   /** @private */
   __expandParentItems() {
     const sideNav = this.closest('vaadin-side-nav');
-    if (sideNav && sideNav.noAutoExpand) {
+    if (sideNav?.noAutoExpand) {
       return;
     }
 
     const parentItem = this.__getParentItem();
     if (parentItem) {
       parentItem.__expandParentItems();
+      parentItem.expanded = true;
     }
-    this.expanded = true;
   }
 
   /** @private */

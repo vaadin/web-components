@@ -6,7 +6,6 @@ of steps to perform when creating a new major or minor version branch of the mon
 - [Getting started](#getting-started)
 - [Linting](#linting)
 - [Testing](#testing)
-  - [Environment variables](#environment-variables)
   - [Unit tests](#unit-tests)
   - [Visual tests](#visual-tests)
   - [Snapshot tests](#snapshot-tests)
@@ -61,18 +60,6 @@ yarn lint:types
 ```
 
 ## Testing
-
-### Environment variables
-
-Setup the environment variables needed by the scripts below, by copying the `.env.dist` template file to `.env`:
-
-```
-cp .env.dist .env
-```
-
-and then configure the individual variable values in the newly created `.env` file.
-
-Not all variables are necessary for all scripts, individual sections below will note which variables are required to run a command.
 
 ### Unit tests
 

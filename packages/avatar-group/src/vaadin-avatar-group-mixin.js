@@ -24,13 +24,9 @@ const DEFAULT_I18N = {
 
 /**
  * A mixin providing common avatar group functionality.
- *
- * @polymerMixin
- * @mixes I18nMixin
- * @mixes ResizeMixin
  */
 export const AvatarGroupMixin = (superClass) =>
-  class AvatarGroupMixinClass extends I18nMixin(DEFAULT_I18N, ResizeMixin(superClass)) {
+  class AvatarGroupMixinClass extends I18nMixin(ResizeMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -99,6 +95,10 @@ export const AvatarGroupMixin = (superClass) =>
           sync: true,
         },
       };
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**
@@ -440,7 +440,7 @@ export const AvatarGroupMixin = (superClass) =>
 
     /** @private */
     __i18nItemsChanged(effectiveI18n, items) {
-      if (effectiveI18n && effectiveI18n.activeUsers) {
+      if (effectiveI18n?.activeUsers) {
         const count = Array.isArray(items) ? items.length : 0;
         const field = count === 1 ? 'one' : 'many';
         if (effectiveI18n.activeUsers[field]) {

@@ -63,8 +63,6 @@ import { cardStyles } from './styles/vaadin-card-base-styles.js';
  *
  * @customElement vaadin-card
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
@@ -178,7 +176,7 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
       this.removeChild(stringTitleElement);
     }
     const ariaLabelledby = this.getAttribute('aria-labelledby');
-    if (ariaLabelledby && ariaLabelledby.startsWith('card-title-')) {
+    if (ariaLabelledby?.startsWith('card-title-')) {
       this.removeAttribute('aria-labelledby');
     }
     if (this.cardTitle) {

@@ -12,7 +12,7 @@ export const appLayoutStyles = css`
     box-sizing: border-box;
     height: 100%;
     --vaadin-app-layout-transition-duration: 0s;
-    transition: padding var(--vaadin-app-layout-transition-duration);
+    transition: padding var(--vaadin-app-layout-transition-duration) cubic-bezier(0.78, 0, 0.22, 1);
     --_vaadin-app-layout-drawer-width: var(--vaadin-app-layout-drawer-width, auto);
     --vaadin-app-layout-touch-optimized: false;
     --vaadin-app-layout-navbar-offset-top: var(--_vaadin-app-layout-navbar-offset-size);
@@ -30,7 +30,7 @@ export const appLayoutStyles = css`
 
   @media (prefers-reduced-motion: no-preference) {
     :host(:not([no-anim])) {
-      --vaadin-app-layout-transition-duration: 200ms;
+      --vaadin-app-layout-transition-duration: 300ms;
     }
   }
 
@@ -71,7 +71,8 @@ export const appLayoutStyles = css`
     align-items: center;
     top: 0;
     inset-inline: 0;
-    transition: inset-inline-start var(--vaadin-app-layout-transition-duration);
+    transition: inherit;
+    transition-property: inset-inline-start;
     padding-top: max(var(--vaadin-app-layout-navbar-padding-top, var(--vaadin-padding-s)), var(--safe-area-inset-top));
     padding-bottom: var(--vaadin-app-layout-navbar-padding-bottom, var(--vaadin-padding-s));
     padding-inline-start: max(
@@ -113,10 +114,9 @@ export const appLayoutStyles = css`
     top: var(--vaadin-app-layout-navbar-offset-top, 0);
     bottom: var(--vaadin-app-layout-navbar-offset-bottom, var(--vaadin-viewport-offset-bottom, 0));
     inset-inline: var(--vaadin-app-layout-navbar-offset-left, 0) auto;
-    transition:
-      transform var(--vaadin-app-layout-transition-duration),
-      visibility var(--vaadin-app-layout-transition-duration);
-    transform: translateX(-100%);
+    transition: inherit;
+    transition-property: transform, visibility;
+    transform: translateX(calc(-100% - 20px));
     max-width: 90%;
     width: var(--_vaadin-app-layout-drawer-width);
     box-sizing: border-box;
@@ -155,7 +155,7 @@ export const appLayoutStyles = css`
     position: fixed;
     inset: 0;
     pointer-events: none;
-    transition: opacity var(--vaadin-app-layout-transition-duration);
+    transition: opacity var(--vaadin-app-layout-transition-duration) linear;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -177,7 +177,7 @@ export const appLayoutStyles = css`
   }
 
   :host([dir='rtl']) [part='drawer'] {
-    transform: translateX(100%);
+    transform: translateX(calc(100% + 20px));
   }
 
   :host([dir='rtl'][drawer-opened]) [part='drawer'] {

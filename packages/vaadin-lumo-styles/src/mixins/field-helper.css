@@ -32,31 +32,4 @@
     color: var(--lumo-disabled-text-color);
     -webkit-text-fill-color: var(--lumo-disabled-text-color);
   }
-
-  :host([has-helper][theme~='helper-above-field']) [part='helper-text']::before {
-    display: none;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='helper-text']::after {
-    content: '';
-    display: block;
-    height: var(--_helper-spacing);
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='label'] {
-    order: 0;
-    padding-bottom: var(--_helper-spacing);
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='helper-text'] {
-    order: 1;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='label'] + * {
-    order: 2;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='error-message'] {
-    order: 3;
-  }
 }

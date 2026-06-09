@@ -4,7 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/grid-pro.css';
 import '@vaadin/vaadin-lumo-styles/components/grid-pro-edit-column.css';
-import '../../not-animated-styles.js';
+import '../../not-animated-styles.css';
 import '../../../vaadin-grid-pro.js';
 import '../../../vaadin-grid-pro-edit-column.js';
 import { getContainerCell } from '../../helpers.js';

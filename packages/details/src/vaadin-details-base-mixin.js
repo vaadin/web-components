@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * Copyright (c) 2019 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
@@ -9,12 +9,6 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { CollapsibleMixin } from './collapsible-mixin.js';
 import { SummaryController } from './summary-controller.js';
 
-/**
- * @polymerMixin
- * @mixes DelegateFocusMixin
- * @mixes DelegateStateMixin
- * @mixes CollapsibleMixin
- */
 export const DetailsBaseMixin = (superClass) =>
   class DetailsBaseMixin extends CollapsibleMixin(DelegateFocusMixin(DelegateStateMixin(superClass))) {
     static get properties() {
@@ -103,7 +97,7 @@ export const DetailsBaseMixin = (superClass) =>
       if (summary && contentElements) {
         const node = contentElements[0];
 
-        if (node && node.id) {
+        if (node?.id) {
           summary.setAttribute('aria-controls', node.id);
         } else {
           summary.removeAttribute('aria-controls');

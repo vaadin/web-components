@@ -3,8 +3,7 @@ import { fixtureSync, mousedown, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/combo-box.css';
-import '../common.js';
-import '../../not-animated-styles.js';
+import '../../not-animated-styles.css';
 import '../../../vaadin-combo-box.js';
 
 describe('combo-box', () => {

@@ -16,7 +16,7 @@ import {
 
 describe('sorting', () => {
   describe('sorter', () => {
-    let sorter, title, button, orderIndicator;
+    let sorter, title, button;
 
     beforeEach(async () => {
       sorter = fixtureSync(`
@@ -27,7 +27,6 @@ describe('sorting', () => {
       button = sorter.querySelector('button');
       title = sorter.querySelector('.title');
       await nextFrame();
-      orderIndicator = sorter.shadowRoot.querySelector('[part="order"]');
     });
 
     it('should have default direction', () => {
@@ -80,26 +79,15 @@ describe('sorting', () => {
       expect(shiftClickEvent.detail.shiftClick).to.be.true;
     });
 
-    it('should show order indicator', () => {
-      expect(orderIndicator.innerText).to.equal('');
-      sorter._order = 0;
-      expect(orderIndicator.innerText).to.equal('1');
-      sorter._order = 4;
-      expect(orderIndicator.innerText).to.equal('5');
-    });
-
-    it('should show direction indicator', () => {
-      expect(sorter.getAttribute('direction')).to.equal(null);
-      sorter.direction = 'asc';
-      expect(sorter.getAttribute('direction')).to.equal('asc');
-      sorter.direction = 'desc';
-      expect(sorter.getAttribute('direction')).to.equal('desc');
-    });
-
     it('should prevent default on click', () => {
       const clickEvent = click(sorter);
 
       expect(clickEvent.defaultPrevented).to.be.true;
+    });
+
+    it('should hide the sorter when applying the hidden attribute', () => {
+      sorter.hidden = true;
+      expect(getComputedStyle(sorter).display).to.equal('none');
     });
   });
 

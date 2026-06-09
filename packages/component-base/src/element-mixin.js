@@ -31,10 +31,6 @@ let statsJob;
 
 const registered = new Set();
 
-/**
- * @polymerMixin
- * @mixes DirMixin
- */
 export const ElementMixin = (superClass) =>
   class VaadinElementMixin extends DirMixin(superClass) {
     /** @protected */

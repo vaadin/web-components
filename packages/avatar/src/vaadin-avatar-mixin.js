@@ -12,12 +12,9 @@ const DEFAULT_I18N = {
 
 /**
  * A mixin providing common avatar functionality.
- *
- * @polymerMixin
- * @mixes FocusMixin
  */
 export const AvatarMixin = (superClass) =>
-  class AvatarMixinClass extends I18nMixin(DEFAULT_I18N, FocusMixin(superClass)) {
+  class AvatarMixinClass extends I18nMixin(FocusMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -88,6 +85,10 @@ export const AvatarMixin = (superClass) =>
         '__i18nChanged(__effectiveI18n)',
         '__tooltipChanged(__tooltipNode, name, abbr)',
       ];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**
@@ -203,7 +204,7 @@ export const AvatarMixin = (superClass) =>
 
     /** @private */
     __i18nChanged(effectiveI18n) {
-      if (effectiveI18n && effectiveI18n.anonymous) {
+      if (effectiveI18n?.anonymous) {
         if (this.__oldAnonymous && this.__tooltipNode && this.__tooltipNode.text === this.__oldAnonymous) {
           this.__setTooltip();
         }

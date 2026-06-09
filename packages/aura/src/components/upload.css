@@ -31,11 +31,11 @@ vaadin-upload::part(primary-buttons) {
 }
 
 vaadin-upload:not([nodrop]) vaadin-button[slot='add-button'] {
-  flex: 1;
+  flex-grow: 1;
 }
 
 vaadin-upload::part(drop-label) {
-  flex: 100;
+  flex-grow: 1000;
   padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);
   min-width: fit-content;
   margin-inline-start: calc(var(--vaadin-upload-padding) * -1);

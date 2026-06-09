@@ -67,5 +67,9 @@ vaadin-card[theme~='footer-end']::part(footer) {
 }
 
 vaadin-grid::part(active-nav-item) {
-  --vaadin-grid-row-highlight-background-color: var(--aura-accent-surface);
+  --vaadin-grid-row-highlight-background-color: var(--_aura-highlight-color);
+}
+
+vaadin-grid::part(active-nav-item first-column-cell) {
+  box-shadow: inset 3px 0 0 0 var(--aura-accent-color);
 }

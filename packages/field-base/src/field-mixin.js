@@ -11,10 +11,6 @@ import { ValidateMixin } from './validate-mixin.js';
 
 /**
  * A mixin to provide common field logic: label, error message and helper text.
- *
- * @polymerMixin
- * @mixes LabelMixin
- * @mixes ValidateMixin
  */
 export const FieldMixin = (superclass) =>
   class FieldMixinClass extends ValidateMixin(LabelMixin(superclass)) {
@@ -200,7 +196,7 @@ export const FieldMixin = (superclass) =>
         // Otherwise assistive technologies would announce the error, even if we hide it.
         if (invalid) {
           const node = this._errorNode;
-          this._fieldAriaController.setErrorId(node && node.id);
+          this._fieldAriaController.setErrorId(node?.id);
         } else {
           this._fieldAriaController.setErrorId(null);
         }

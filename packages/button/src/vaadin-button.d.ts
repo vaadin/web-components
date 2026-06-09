@@ -46,6 +46,7 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  * | `--vaadin-button-font-weight`    |
  * | `--vaadin-button-gap`            |
  * | `--vaadin-button-height`         |
+ * | `--vaadin-button-label-wrap`     |
  * | `--vaadin-button-line-height`    |
  * | `--vaadin-button-margin`         |
  * | `--vaadin-button-padding`        |

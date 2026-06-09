@@ -11,11 +11,6 @@ import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 
 /**
  * A mixin providing common checkbox-group functionality.
- *
- * @polymerMixin
- * @mixes DisabledMixin
- * @mixes FieldMixin
- * @mixes FocusMixin
  */
 export const CheckboxGroupMixin = (superclass) =>
   class CheckboxGroupMixinClass extends FieldMixin(FocusMixin(DisabledMixin(superclass))) {
@@ -60,7 +55,7 @@ export const CheckboxGroupMixin = (superclass) =>
       this._tooltipController = new TooltipController(this);
       this._tooltipController.addEventListener('tooltip-changed', (event) => {
         const tooltip = event.detail.node;
-        if (tooltip && tooltip.isConnected) {
+        if (tooltip?.isConnected) {
           // Tooltip element has been added to the DOM
           const inputs = this.__checkboxes.map((checkbox) => checkbox.inputElement);
           this._tooltipController.setAriaTarget(inputs);
@@ -250,14 +245,14 @@ export const CheckboxGroupMixin = (superclass) =>
      */
     __valueChanged(value, oldValue) {
       // Setting initial value to empty array, skip validation
-      if (value && value.length === 0 && oldValue === undefined) {
+      if (value?.length === 0 && oldValue === undefined) {
         return;
       }
 
-      this.toggleAttribute('has-value', value && value.length > 0);
+      this.toggleAttribute('has-value', value?.length > 0);
 
       this.__checkboxes.forEach((checkbox) => {
-        checkbox.checked = value && value.includes(checkbox.value);
+        checkbox.checked = value?.includes(checkbox.value);
       });
 
       if (oldValue !== undefined) {

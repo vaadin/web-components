@@ -4,9 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
-/**
- * @polymerMixin
- */
 export const DialogResizableMixin = (superClass) =>
   class VaadinDialogResizableMixin extends superClass {
     static get properties() {
@@ -149,16 +146,4 @@ export const DialogResizableMixin = (superClass) =>
       const { width, height, top, left } = getComputedStyle(this.$.overlay.$.overlay);
       return { width, height, top, left };
     }
-
-    /**
-     * Fired when the dialog resize is started.
-     *
-     * @event resize-start
-     */
-
-    /**
-     * Fired when the dialog resize is finished.
-     *
-     * @event resize
-     */
   };

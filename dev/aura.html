@@ -14,10 +14,8 @@
     <link rel="stylesheet" href="./aura/aura-extras.css" />
     <link rel="stylesheet" href="./aura/aura-control.css" />
     <script type="module">
-      window.Vaadin ||= {};
-      window.Vaadin.featureFlags ||= {};
-      window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
-      window.Vaadin.featureFlags.badgeComponent = true;
+      // Enable :active styles on iOS
+      document.addEventListener('touchstart', () => {}, { passive: true });
     </script>
     <script type="module">
       import './aura/aura-theme-editor.js';
@@ -216,7 +214,7 @@
 
       <footer slot="drawer" class="aura-view-footer">
         <vaadin-button theme="tertiary">
-          <vaadin-avatar abbr="J" style="--vaadin-avatar-size: 1.25lh" slot="prefix" theme="filled"></vaadin-avatar>
+          <vaadin-avatar abbr="J" slot="prefix" theme="xsmall filled"></vaadin-avatar>
           <span>John Smith</span>
         </vaadin-button>
       </footer>

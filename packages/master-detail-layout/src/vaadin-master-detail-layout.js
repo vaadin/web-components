@@ -90,8 +90,6 @@ import {
  *
  * @customElement vaadin-master-detail-layout
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes ElementMixin
  */
 class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
   static get is() {
@@ -239,10 +237,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     };
   }
 
-  static get experimental() {
-    return true;
-  }
-
   /** @protected */
   render() {
     const isOverlay = this.hasAttribute('has-detail') && this.hasAttribute('overlay');
@@ -337,7 +331,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   __initResizeObserver() {
-    this.__resizeObserver = this.__resizeObserver || new ResizeObserver(() => this.__onResize());
+    this.__resizeObserver ||= new ResizeObserver(() => this.__onResize());
     this.__resizeObserver.disconnect();
 
     [this, this.$.master, this.$.detail, this.__slottedMaster, this.__slottedDetail].forEach((node) => {
@@ -410,7 +404,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     // the slotted detail content to use as a fallback for the detail column size
     // while the detail content is rendered in an overlay.
     if ((hasDetail || hasDetailPlaceholder) && this.__isDetailAutoSized && detailSize > 0) {
-      this.__detailCachedSize = this.__detailCachedSize || `${Math.ceil(detailSize)}px`;
+      this.__detailCachedSize ||= `${Math.ceil(detailSize)}px`;
     } else {
       this.__detailCachedSize = null;
     }
@@ -530,7 +524,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     }
 
     const updateSlot = async () => {
-      if (oldDetail && oldDetail.slot === 'detail') {
+      if (oldDetail?.slot === 'detail') {
         oldDetail.remove();
       }
 
@@ -614,10 +608,15 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
     await updateSlot();
 
     const progress = getCurrentAnimationProgress(this.$.detail);
-    await Promise.all([
-      animateIn(this.$.detail, ['fade', 'slide'], progress),
-      animateIn(this.$.backdrop, ['fade'], this.hasAttribute('overlay') ? progress : 1),
-    ]);
+
+    if (this.hasAttribute('overlay')) {
+      await Promise.all([
+        animateIn(this.$.detail, ['slide'], progress),
+        animateIn(this.$.backdrop, ['fade'], progress),
+      ]);
+    } else {
+      await animateIn(this.$.detail, ['slide', 'fade'], progress);
+    }
   }
 
   /** @private */
@@ -632,15 +631,17 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
       await updateSlot();
 
+      const isOverlay = this.hasAttribute('overlay');
       const progress = getCurrentAnimationProgress(this.$.detail);
+
       await Promise.all([
-        animateIn(this.$.detail, ['fade', 'slide'], progress),
-        animateOut(this.$.detailOutgoing, ['fade', 'slide'], progress),
+        animateIn(this.$.detail, isOverlay ? ['slide'] : ['slide', 'fade'], progress),
+        animateOut(this.$.detailOutgoing, isOverlay ? ['slide'] : ['slide', 'fade'], progress),
       ]);
     } finally {
       // Skip removal if the slot was reassigned during the transition.
       // The React component does this to let React handle the removal.
-      if (oldDetail && oldDetail.slot === 'detail-outgoing') {
+      if (oldDetail?.slot === 'detail-outgoing') {
         oldDetail.remove();
       }
     }
@@ -649,10 +650,15 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   /** @private */
   async __removeTransition(updateSlot) {
     const progress = getCurrentAnimationProgress(this.$.detail);
-    await Promise.all([
-      animateOut(this.$.detail, ['fade', 'slide'], progress),
-      animateOut(this.$.backdrop, ['fade'], this.hasAttribute('overlay') ? progress : 1),
-    ]);
+
+    if (this.hasAttribute('overlay')) {
+      await Promise.all([
+        animateOut(this.$.detail, ['slide'], progress),
+        animateOut(this.$.backdrop, ['fade'], progress),
+      ]);
+    } else {
+      await animateOut(this.$.detail, ['slide', 'fade'], progress);
+    }
 
     await updateSlot();
   }
@@ -671,16 +677,6 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   get __slottedDetailPlaceholder() {
     return this.querySelector(':scope > [slot="detail-placeholder"]');
   }
-
-  /**
-   * @event backdrop-click
-   * Fired when the user clicks the backdrop in the overlay mode.
-   */
-
-  /**
-   * @event detail-escape-press
-   * Fired when the user presses Escape in the detail area.
-   */
 }
 
 defineCustomElement(MasterDetailLayout);

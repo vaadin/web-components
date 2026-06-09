@@ -14,7 +14,6 @@ import { timePickerScrollerStyles } from './styles/vaadin-time-picker-scroller-b
  *
  * @customElement vaadin-time-picker-scroller
  * @extends HTMLElement
- * @mixes ComboBoxScrollerMixin
  * @private
  */
 export class TimePickerScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElement)) {

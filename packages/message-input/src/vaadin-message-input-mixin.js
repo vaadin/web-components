@@ -12,12 +12,8 @@ const DEFAULT_I18N = {
   message: 'Message',
 };
 
-/**
- * @polymerMixin
- * @mixes I18nMixin
- */
 export const MessageInputMixin = (superClass) =>
-  class MessageInputMixinClass extends I18nMixin(DEFAULT_I18N, superClass) {
+  class MessageInputMixinClass extends I18nMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -55,9 +51,13 @@ export const MessageInputMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__buttonPropsChanged(_button, disabled, __effectiveI18n)',
+        '__buttonPropsChanged(_button, disabled, __effectiveI18n, value)',
         '__textAreaPropsChanged(_textArea, disabled, __effectiveI18n, value)',
       ];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**
@@ -133,9 +133,9 @@ export const MessageInputMixin = (superClass) =>
     }
 
     /** @private */
-    __buttonPropsChanged(button, disabled, effectiveI18n) {
+    __buttonPropsChanged(button, disabled, effectiveI18n, value) {
       if (button) {
-        button.disabled = disabled;
+        button.disabled = disabled || !value;
         button.textContent = effectiveI18n.send;
       }
     }
@@ -165,10 +165,4 @@ export const MessageInputMixin = (superClass) =>
       }
       this._textArea.focus();
     }
-
-    /**
-     * Fired when a new message is submitted with `<vaadin-message-input>`, either
-     * by clicking the "send" button, or pressing the Enter key.
-     * @event submit
-     */
   };

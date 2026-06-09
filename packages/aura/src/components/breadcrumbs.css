@@ -1,0 +1,38 @@
+vaadin-breadcrumbs-item::part(link) {
+  text-decoration: none;
+  transition: color 80ms;
+}
+
+vaadin-breadcrumbs-item:not([disabled])::part(link) {
+  color: var(--aura-accent-text-color);
+}
+
+vaadin-breadcrumbs-item::part(nolink) {
+  color: inherit;
+}
+
+vaadin-breadcrumbs-item[current]::part(nolink) {
+  font-weight: var(--aura-font-weight-medium);
+}
+
+@media (any-hover: hover) {
+  vaadin-breadcrumbs-item:not([slot='overlay'])::part(link):hover {
+    color: var(--vaadin-text-color);
+    text-decoration: underline;
+  }
+
+  vaadin-breadcrumbs-item[slot='overlay']::part(link):hover {
+    background: var(--_aura-highlight-color);
+  }
+}
+
+vaadin-breadcrumbs-item:not([slot='overlay'])::part(link):active {
+  color: var(--vaadin-text-color);
+  text-decoration: underline;
+}
+
+vaadin-breadcrumbs-item > :is(vaadin-icon, [class*='icon'])[slot='prefix'] {
+  width: 0.875lh;
+  height: 0.875lh;
+  color: inherit;
+}

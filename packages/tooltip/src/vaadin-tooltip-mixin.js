@@ -216,22 +216,35 @@ class TooltipStateController {
 
 /**
  * A mixin providing common tooltip functionality.
- *
- * @polymerMixin
- * @mixes PopoverPositionMixin
- * @mixes PopoverTargetMixin
  */
 export const TooltipMixin = (superClass) =>
   class TooltipMixinClass extends PopoverPositionMixin(PopoverTargetMixin(superClass)) {
     static get properties() {
       return {
         /**
-         * Element used to link with the `aria-describedby`
-         * attribute. Supports array of multiple elements.
+         * Element used to link with the ARIA attribute controlled by the
+         * `ariaLinkMode` property. Supports array of multiple elements.
          * When not set, defaults to `target`.
          */
         ariaTarget: {
           type: Object,
+        },
+
+        /**
+         * Controls which ARIA attribute is used to link the target element(s)
+         * with the tooltip content. Supported values:
+         *
+         * - `aria-describedby` - links the tooltip as a description.
+         * - `aria-labelledby` - links the tooltip as an accessible name.
+         * - `none` - does not add any ARIA linking attribute.
+         *
+         * Defaults to `aria-describedby`.
+         *
+         * @attr {string} aria-link-mode
+         */
+        ariaLinkMode: {
+          type: String,
+          value: 'aria-describedby',
         },
 
         /**
@@ -241,6 +254,7 @@ export const TooltipMixin = (superClass) =>
          */
         context: {
           type: Object,
+          sync: true,
           value: () => {
             return {};
           },
@@ -349,7 +363,6 @@ export const TooltipMixin = (superClass) =>
         _effectiveAriaTarget: {
           type: Object,
           computed: '__computeAriaTarget(ariaTarget, target)',
-          observer: '__effectiveAriaTargetChanged',
         },
 
         /** @private */
@@ -462,6 +475,16 @@ export const TooltipMixin = (superClass) =>
 
       if (props.has('text') || props.has('generator') || props.has('context') || props.has('markdown')) {
         this.__updateContent();
+      }
+
+      const ariaTargetChanged = props.has('_effectiveAriaTarget');
+      const ariaLinkChanged = props.has('ariaLinkMode');
+
+      if (ariaTargetChanged || ariaLinkChanged) {
+        const oldTarget = ariaTargetChanged ? props.get('_effectiveAriaTarget') : this._effectiveAriaTarget;
+        const oldMode = ariaLinkChanged ? props.get('ariaLinkMode') : this.ariaLinkMode;
+
+        this.__updateAriaAttributes(oldTarget, oldMode);
       }
     }
 
@@ -706,6 +729,8 @@ export const TooltipMixin = (superClass) =>
     async __updateContent() {
       const content = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
 
+      const oldTextContent = this.__contentNode.textContent;
+
       if (this.markdown && content) {
         const helpers = await this.constructor.__importMarkdownHelpers();
         helpers.renderMarkdownToElement(this.__contentNode, content);
@@ -714,27 +739,35 @@ export const TooltipMixin = (superClass) =>
       }
 
       this.$.overlay.toggleAttribute('hidden', this.__contentNode.textContent.trim() === '');
-      this.dispatchEvent(new CustomEvent('content-changed', { detail: { content: this.__contentNode.textContent } }));
+
+      const newTextContent = this.__contentNode.textContent;
+      if (newTextContent !== oldTextContent) {
+        this.dispatchEvent(new CustomEvent('content-changed', { detail: { content: newTextContent } }));
+      }
     }
 
     /** @private */
     __computeAriaTarget(ariaTarget, target) {
-      const isElementNode = (el) => el && el.nodeType === Node.ELEMENT_NODE;
+      const isElementNode = (el) => el?.nodeType === Node.ELEMENT_NODE;
       const isAriaTargetSet = Array.isArray(ariaTarget) ? ariaTarget.some(isElementNode) : ariaTarget;
       return ariaTarget === null || isAriaTargetSet ? ariaTarget : target;
     }
 
     /** @private */
-    __effectiveAriaTargetChanged(ariaTarget, oldAriaTarget) {
-      if (oldAriaTarget) {
-        [oldAriaTarget].flat().forEach((target) => {
-          removeValueFromAttribute(target, 'aria-describedby', this._uniqueId);
+    __updateAriaAttributes(oldTarget, oldMode) {
+      // Remove the previously applied attribute from the previous target(s).
+      if (oldTarget && oldMode && oldMode !== 'none') {
+        [oldTarget].flat().forEach((target) => {
+          removeValueFromAttribute(target, oldMode, this._uniqueId);
         });
       }
 
-      if (ariaTarget) {
-        [ariaTarget].flat().forEach((target) => {
-          addValueToAttribute(target, 'aria-describedby', this._uniqueId);
+      // Apply the current attribute to the current target(s).
+      const target = this._effectiveAriaTarget;
+      const mode = this.ariaLinkMode;
+      if (target && mode && mode !== 'none') {
+        [target].flat().forEach((el) => {
+          addValueToAttribute(el, mode, this._uniqueId);
         });
       }
     }
@@ -746,10 +779,4 @@ export const TooltipMixin = (superClass) =>
       }
       return this.__markdownHelpers;
     }
-
-    /**
-     * Fired when the tooltip text content is changed.
-     *
-     * @event content-changed
-     */
   };

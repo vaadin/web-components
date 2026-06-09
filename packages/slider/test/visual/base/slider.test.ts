@@ -4,10 +4,6 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../src/vaadin-slider.js';
 import type { Slider } from '../../../src/vaadin-slider.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.sliderComponent = true;
-
 describe('slider', () => {
   let div: HTMLDivElement;
   let element: Slider;

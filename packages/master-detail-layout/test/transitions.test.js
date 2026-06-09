@@ -1,14 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, isDesktopSafari, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
-import { nextFrames, onceResized } from './helpers.js';
-
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.masterDetailLayoutComponent = true;
+import { onceResized } from './helpers.js';
 
 describe('Transitions', () => {
   let layout;
@@ -213,7 +209,32 @@ describe('Transitions', () => {
 
   describe('animation interruption', () => {
     // These tests enable real animations that can be captured mid-flight.
-    const DURATION = 200;
+    // WebKit needs larger duration to workaround transition flakiness.
+    const DURATION = isDesktopSafari ? 300 : 200;
+
+    // A tolerance margin to compensate for possible small animation drift,
+    // because animations run on a separate thread and can progress between
+    // an awaited promise resolving and the next CSS translate read on the
+    // main thread.
+    const TOLERANCE = 30;
+
+    function getAnimation(element) {
+      return element.getAnimations()[0];
+    }
+
+    function getCSSTranslate(element) {
+      return parseFloat(getComputedStyle(element).translate);
+    }
+
+    async function waitUntil(condition, timeout) {
+      const start = performance.now();
+
+      while (!condition()) {
+        if (performance.now() - start <= timeout) {
+          await aTimeout(0);
+        }
+      }
+    }
 
     beforeEach(async () => {
       layout.masterSize = '300px';
@@ -226,51 +247,67 @@ describe('Transitions', () => {
     });
 
     it('should start remove transition from interrupted add position', async () => {
-      // Add detail
+      // Start the add animation
       layout._setDetail(document.createElement('detail-content'));
-      await nextFrames(8);
-      const detailTranslate = parseFloat(getComputedStyle(layout.$.detail).translate);
-      expect(detailTranslate).to.be.greaterThan(0).and.lessThan(200);
+      await aTimeout(0);
+      await waitUntil(() => getCSSTranslate(layout.$.detail) < 100, DURATION);
 
-      // Interrupt with removing detail
+      // Capture the translate position in the middle
+      const capturedTranslate = getCSSTranslate(layout.$.detail);
+      expect(capturedTranslate).to.be.within(100 - TOLERANCE, 100);
+
+      // Interrupt the animation by removing the detail
       layout._setDetail(null);
-      await nextFrames(2);
-      const detailTranslateAfter = parseFloat(getComputedStyle(layout.$.detail).translate);
-      expect(detailTranslateAfter).to.be.greaterThan(detailTranslate).and.lessThan(200);
+      await aTimeout(0);
+      await getAnimation(layout.$.detail).ready;
+
+      // Detail should start sliding right from the captured position
+      expect(getCSSTranslate(layout.$.detail)).to.be.within(capturedTranslate, capturedTranslate + TOLERANCE);
     });
 
     it('should start add transition from interrupted remove position', async () => {
+      // Add initial detail
       layout._setDetail(document.createElement('detail-content'), false);
+      await aTimeout(0);
 
-      // Remove detail
+      // Start the remove animation
       layout._setDetail(null);
-      await nextFrames(8);
-      const detailTranslate = parseFloat(getComputedStyle(layout.$.detail).translate);
-      expect(detailTranslate).to.be.greaterThan(0).and.lessThan(200);
+      await aTimeout(0);
+      await waitUntil(() => getCSSTranslate(layout.$.detail) > 100, DURATION);
 
-      // Interrupt with adding detail
+      // Capture the translate position in the middle
+      const capturedTranslate = getCSSTranslate(layout.$.detail);
+      expect(capturedTranslate).to.be.within(100, 100 + TOLERANCE);
+
+      // Interrupt the animation by adding a new detail
       layout._setDetail(document.createElement('detail-content'));
-      await nextFrames(2);
-      const detailTranslateAfter = parseFloat(getComputedStyle(layout.$.detail).translate);
-      expect(detailTranslateAfter).to.be.greaterThan(0).and.lessThan(detailTranslate);
+      await aTimeout(0);
+      await getAnimation(layout.$.detail).ready;
+
+      // Detail should start sliding left from the captured position
+      expect(getCSSTranslate(layout.$.detail)).to.be.within(capturedTranslate - TOLERANCE, capturedTranslate);
     });
 
-    it('should position outgoing element at interrupted add position during replace', async () => {
-      // Add detail
+    it('should start replace transition from interrupted add position', async () => {
+      // Start the add animation
       layout._setDetail(document.createElement('detail-content'));
-      await nextFrames(8);
-      const detailTranslate = parseFloat(getComputedStyle(layout.$.detail).translate);
-      expect(detailTranslate).to.be.greaterThan(0).and.lessThan(200);
+      await aTimeout(0);
+      await waitUntil(() => getCSSTranslate(layout.$.detail) < 100, DURATION);
 
-      // Interrupt with replacing detail
+      // Capture the translate position in the middle
+      const capturedTranslate = getCSSTranslate(layout.$.detail);
+      expect(capturedTranslate).to.be.within(100 - TOLERANCE, 100);
+
+      // Interrupt the animation by replacing the detail
       layout._setDetail(document.createElement('detail-content'));
-      await nextFrames(2);
+      await aTimeout(0);
+      await getAnimation(layout.$.detail).ready;
 
-      const detailTranslateAfter = parseFloat(getComputedStyle(layout.$.detail).translate);
-      expect(detailTranslateAfter).to.be.greaterThan(0).and.lessThan(detailTranslate);
+      // New detail should start sliding left from the captured position
+      expect(getCSSTranslate(layout.$.detail)).to.be.within(capturedTranslate - TOLERANCE, capturedTranslate);
 
-      const detailOutgoingTranslateAfter = parseFloat(getComputedStyle(layout.$.detailOutgoing).translate);
-      expect(detailOutgoingTranslateAfter).to.be.greaterThan(detailTranslate).and.lessThan(200);
+      // Old detail should start sliding right from the captured position
+      expect(getCSSTranslate(layout.$.detailOutgoing)).to.be.within(capturedTranslate, capturedTranslate + TOLERANCE);
     });
 
     it('should complete transition immediately when no animation is running', async () => {
@@ -289,10 +326,10 @@ describe('Transitions', () => {
 
       // Rapid sequence: add → remove → add
       const p1 = layout._startTransition('add', cb1);
-      await nextFrames();
+      await nextFrame();
 
       const p2 = layout._startTransition('remove', cb2);
-      await nextFrames();
+      await nextFrame();
 
       const p3 = layout._startTransition('add', cb3);
 

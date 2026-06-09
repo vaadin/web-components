@@ -5,9 +5,6 @@
  */
 import { updatePart } from './vaadin-grid-helpers.js';
 
-/**
- * @polymerMixin
- */
 export const RowDetailsMixin = (superClass) =>
   class RowDetailsMixin extends superClass {
     static get properties() {

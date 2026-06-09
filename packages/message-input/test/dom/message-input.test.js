@@ -16,6 +16,11 @@ describe('vaadin-message-input', () => {
     await expect(input).dom.to.equalSnapshot();
   });
 
+  it('value', async () => {
+    input.value = 'value';
+    await expect(input).dom.to.equalSnapshot();
+  });
+
   it('disabled', async () => {
     input.disabled = true;
     await expect(input).dom.to.equalSnapshot();

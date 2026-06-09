@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -79,6 +78,7 @@ const DEFAULT_I18N = getDefaultI18n();
  * `--vaadin-dashboard-col-min-width`  | minimum column width of the dashboard
  * `--vaadin-dashboard-col-max-width`  | maximum column width of the dashboard
  * `--vaadin-dashboard-row-min-height` | minimum row height of the dashboard
+ * `--vaadin-dashboard-row-height`     | fixed row height of the dashboard. Must be in length units. Overrides `--vaadin-dashboard-row-min-height` and prevents rows from growing to fit content
  * `--vaadin-dashboard-col-max-count`  | maximum column count of the dashboard
  * `--vaadin-dashboard-gap`            | gap between child elements. Must be in length units (0 is not allowed, 0px is)
  * `--vaadin-dashboard-padding`        | space around the dashboard's outer edges. Must be in length units (0 is not allowed, 0px is)
@@ -103,13 +103,9 @@ const DEFAULT_I18N = getDefaultI18n();
  *
  * @customElement vaadin-dashboard
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes DashboardLayoutMixin
- * @mixes I18nMixin
- * @mixes ThemableMixin
  */
 class Dashboard extends DashboardLayoutMixin(
-  I18nMixin(DEFAULT_I18N, ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+  I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
     return 'vaadin-dashboard';
@@ -171,6 +167,10 @@ class Dashboard extends DashboardLayoutMixin(
 
   static get observers() {
     return ['__itemsOrRendererChanged(items, renderer, editable, __effectiveI18n)'];
+  }
+
+  static get defaultI18n() {
+    return DEFAULT_I18N;
   }
 
   /**
@@ -266,6 +266,7 @@ class Dashboard extends DashboardLayoutMixin(
     let wrappers = [...hostElement.children].filter((el) => el.localName === WRAPPER_LOCAL_NAME);
 
     const focusedWrapper = wrappers.find((wrapper) => wrapper.querySelector(':focus'));
+    const focusedElement = focusedWrapper?.querySelector(':focus');
     const focusedWrapperWillBeRemoved = focusedWrapper && !this.__isActiveWrapper(focusedWrapper);
     const wrapperClosestToRemovedFocused =
       focusedWrapperWillBeRemoved && this.__getClosestActiveWrapper(focusedWrapper);
@@ -313,6 +314,10 @@ class Dashboard extends DashboardLayoutMixin(
       if (focusedWrapperWillBeRemoved) {
         // The wrapper containing the focused element was removed. Try to focus the element in the closest wrapper.
         this.__focusWrapperContent(wrapperClosestToRemovedFocused || this.querySelector(WRAPPER_LOCAL_NAME));
+      } else if (focusedElement && !focusedElement.matches(':focus')) {
+        // Firefox loses focus from a slotted element when the <slot> it was projected through is
+        // removed during the shadow re-render, even after re-projection through a different slot.
+        focusedElement.focus();
       }
 
       const focusedItem = this.querySelector(':focus');
@@ -347,7 +352,7 @@ class Dashboard extends DashboardLayoutMixin(
 
   /** @private */
   __focusWrapperContent(wrapper) {
-    if (wrapper && wrapper.firstElementChild) {
+    if (wrapper?.firstElementChild) {
       wrapper.firstElementChild.focus();
     }
   }
@@ -501,48 +506,6 @@ class Dashboard extends DashboardLayoutMixin(
       });
     }
   }
-
-  /**
-   * Fired when an item selected state changed
-   *
-   * @event dashboard-item-selected-changed
-   */
-
-  /**
-   * Fired when an item move mode changed
-   *
-   * @event dashboard-item-move-mode-changed
-   */
-
-  /**
-   * Fired when an item resize mode changed
-   *
-   * @event dashboard-item-resize-mode-changed
-   */
-
-  /**
-   * Fired when an item was moved
-   *
-   * @event dashboard-item-moved
-   */
-
-  /**
-   * Fired when an item was resized
-   *
-   * @event dashboard-item-resized
-   */
-
-  /**
-   * Fired before an item is removed
-   *
-   * @event dashboard-item-before-remove
-   */
-
-  /**
-   * Fired when an item was removed
-   *
-   * @event dashboard-item-removed
-   */
 }
 
 defineCustomElement(Dashboard);

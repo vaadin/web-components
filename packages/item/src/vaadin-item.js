@@ -63,9 +63,6 @@ import { ItemMixin } from './vaadin-item-mixin.js';
  * @prop {string} label - String that can be set to visually represent the selected item in `vaadin-select`.
  * @customElement vaadin-item
  * @extends HTMLElement
- * @mixes ItemMixin
- * @mixes ThemableMixin
- * @mixes DirMixin
  */
 class Item extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

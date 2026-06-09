@@ -17,9 +17,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * @customElement vaadin-select-item
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes ItemMixin
- * @mixes ThemableMixin
  * @protected
  */
 class SelectItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {

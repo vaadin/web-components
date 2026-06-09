@@ -18,10 +18,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * @customElement vaadin-avatar-group-overlay
  * @extends HTMLElement
- * @mixes PositionMixin
- * @mixes OverlayMixin
- * @mixes DirMixin
- * @mixes ThemableMixin
  * @private
  */
 class AvatarGroupOverlay extends PositionMixin(

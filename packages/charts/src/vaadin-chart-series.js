@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -58,7 +57,6 @@ import { ChartSeriesMixin } from './vaadin-chart-series-mixin.js';
  *
  * @customElement vaadin-chart-series
  * @extends HTMLElement
- * @mixes ChartSeriesMixin
  */
 class ChartSeries extends ChartSeriesMixin(PolylitMixin(LitElement)) {
   static get is() {

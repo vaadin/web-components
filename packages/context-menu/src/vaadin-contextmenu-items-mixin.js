@@ -3,11 +3,9 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 
-/**
- * @polymerMixin
- */
 export const ItemsMixin = (superClass) =>
   class ItemsMixin extends superClass {
     static get properties() {
@@ -16,6 +14,13 @@ export const ItemsMixin = (superClass) =>
          * @typedef ContextMenuItem
          * @type {object}
          * @property {string} text - Text to be set as the menu item component's textContent
+         * @property {string} tooltip - Text to be set as the menu item's tooltip.
+         * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-context-menu>`.
+         * @property {string} tooltipPosition - Position of the item's tooltip relative to the
+         * item (e.g. `end`, `top`, `bottom-start`). Items with a sub-menu default to `start`
+         * to avoid overlap with the opening sub-menu; all other items, including disabled
+         * ones (whose sub-menus cannot be opened), default to `end`. If the slotted
+         * `<vaadin-tooltip>` has its `position` property set, that value is used instead.
          * @property {string | HTMLElement} component - The component to represent the item.
          * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
          * @property {boolean} disabled - If true, the item is disabled and cannot be selected
@@ -52,6 +57,18 @@ export const ItemsMixin = (superClass) =>
          *   },
          *   { text: 'Menu Item 3', disabled: true, className: 'last' }
          * ];
+         * ```
+         *
+         * #### Item tooltips
+         *
+         * Menu items can have tooltips that are shown on hover and keyboard
+         * focus. To enable them, add a slotted `<vaadin-tooltip>` element
+         * and set the `tooltip` property on each item that should have one:
+         *
+         * ```html
+         * <vaadin-context-menu>
+         *   <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
+         * </vaadin-context-menu>
          * ```
          *
          * @type {!Array<!ContextMenuItem> | undefined}
@@ -105,6 +122,7 @@ export const ItemsMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
       document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener);
+      this._tooltipController.setTarget(null);
     }
 
     /**
@@ -126,7 +144,7 @@ export const ItemsMixin = (superClass) =>
       // If parent item is not focused, do not focus submenu
       if (overlay.parentOverlay) {
         const parent = overlay.parentOverlay._contentRoot.querySelector('[expanded]');
-        if (parent && parent.hasAttribute('focused') && child) {
+        if (parent?.hasAttribute('focused') && child) {
           child.focus();
         } else {
           overlay.$.overlay.focus();
@@ -231,6 +249,26 @@ export const ItemsMixin = (superClass) =>
         listBox.setAttribute('theme', this._theme);
       }
 
+      listBox.addEventListener('mouseover', (event) => {
+        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
+        this._tooltipController.setTarget(itemElement);
+        this._tooltipController.open({ trigger: 'hover' });
+      });
+
+      listBox.addEventListener('mouseleave', () => {
+        this._tooltipController.close(true);
+      });
+
+      listBox.addEventListener('focusin', (event) => {
+        if (!isKeyboardActive()) {
+          return;
+        }
+
+        const itemElement = event.target.closest(`${this._tagNamePrefix}-item`);
+        this._tooltipController.setTarget(itemElement);
+        this._tooltipController.open({ trigger: 'focus' });
+      });
+
       listBox.addEventListener('selected-changed', (event) => {
         const { value } = event.detail;
         if (typeof value === 'number') {
@@ -300,6 +338,12 @@ export const ItemsMixin = (superClass) =>
     __initSubMenu() {
       const subMenu = document.createElement(this.constructor.is);
 
+      // The slotted `<vaadin-tooltip>` lives on the outer `<vaadin-context-menu>`
+      // host. Its tooltip controller instance is shared across sub-menus to
+      // reuse the same tooltip element for items at every nesting level.
+      subMenu._tooltipController = this._tooltipController;
+      subMenu.__parentMenu = this;
+
       subMenu._modeless = true;
       subMenu.openOn = 'opensubmenu';
 
@@ -323,9 +367,7 @@ export const ItemsMixin = (superClass) =>
 
       // Listen to the forwarded event from sub-menu.
       this.addEventListener('close-all-menus', () => {
-        // Call `close()` on the overlay to close synchronously,
-        // as we can't have `sync: true` on `opened` property.
-        this._overlayElement.close();
+        this.close();
       });
 
       // Listen to the forwarded event from sub-menu.
@@ -344,7 +386,10 @@ export const ItemsMixin = (superClass) =>
 
       // Mark parent item as collapsed when closing.
       subMenu.addEventListener('opened-changed', (event) => {
-        if (!event.detail.value) {
+        const opened = event.detail.value;
+        if (opened) {
+          this._tooltipController.bringToFront();
+        } else {
           const expandedItem = this._listBox.querySelector('[expanded]');
           if (expandedItem) {
             this.__updateExpanded(expandedItem, false);
@@ -379,7 +424,7 @@ export const ItemsMixin = (superClass) =>
 
         // Check if the sub-menu was focused before closing it.
         const child = subMenu._overlayElement._contentRoot.firstElementChild;
-        const isSubmenuFocused = child && child.focused;
+        const isSubmenuFocused = child?.focused;
 
         // Mark previously expanded item as collapsed
         if (expandedItem) {
@@ -395,7 +440,7 @@ export const ItemsMixin = (superClass) =>
           return;
         }
 
-        if (children && children.length) {
+        if (children?.length) {
           // Open or update the submenu if the new item has children
           this.__updateExpanded(item, true);
           this.__openSubMenu(subMenu, item);
@@ -410,7 +455,7 @@ export const ItemsMixin = (superClass) =>
 
       // Only reachable with `accessibleDisabledMenuItems` enabled (disabled
       // items otherwise have `pointer-events: none` and never receive mouseover).
-      if (item && item.disabled) {
+      if (item?.disabled) {
         subMenu.close();
       }
     }
@@ -498,6 +543,12 @@ export const ItemsMixin = (superClass) =>
         component.setAttribute('theme', theme);
       } else {
         component.removeAttribute('theme');
+      }
+    }
+
+    close() {
+      if (!this.__parentMenu) {
+        this._tooltipController.close(true);
       }
     }
   };

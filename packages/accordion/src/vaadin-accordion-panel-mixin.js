@@ -11,11 +11,6 @@ import { SummaryController } from '@vaadin/details/src/summary-controller.js';
 
 /**
  * A mixin providing common accordion panel functionality.
- *
- * @polymerMixin
- * @mixes CollapsibleMixin
- * @mixes DelegateFocusMixin
- * @mixes DelegateStateMixin
  */
 export const AccordionPanelMixin = (superClass) =>
   class AccordionPanelMixinClass extends CollapsibleMixin(DelegateFocusMixin(DelegateStateMixin(superClass))) {
@@ -125,7 +120,7 @@ export const AccordionPanelMixin = (superClass) =>
           node.setAttribute('aria-labelledby', focusElement.id);
         }
 
-        if (node && node.id) {
+        if (node?.id) {
           focusElement.setAttribute('aria-controls', node.id);
         } else {
           focusElement.removeAttribute('aria-controls');

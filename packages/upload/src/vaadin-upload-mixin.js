@@ -105,11 +105,8 @@ class DropLabelController extends SlotController {
   }
 }
 
-/**
- * @polymerMixin
- */
 export const UploadMixin = (superClass) =>
-  class UploadMixin extends I18nMixin(DEFAULT_I18N, superClass) {
+  class UploadMixin extends I18nMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -375,6 +372,10 @@ export const UploadMixin = (superClass) =>
       ];
     }
 
+    static get defaultI18n() {
+      return DEFAULT_I18N;
+    }
+
     /**
      * The object used to localize this component. To change the default
      * localization, replace this with an object that provides all properties, or
@@ -580,12 +581,7 @@ export const UploadMixin = (superClass) =>
         list.items = [...files];
         list.i18n = effectiveI18n;
         list.disabled = disabled;
-        if (
-          window.Vaadin &&
-          window.Vaadin.featureFlags &&
-          (window.Vaadin.featureFlags.modularUpload || window.Vaadin.featureFlags.aiComponents) &&
-          this._theme
-        ) {
+        if (this._theme) {
           list.setAttribute('theme', this._theme);
         } else {
           list.removeAttribute('theme');

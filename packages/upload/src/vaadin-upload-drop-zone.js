@@ -49,8 +49,6 @@ import { UploadManager } from './vaadin-upload-manager.js';
  *
  * @customElement vaadin-upload-drop-zone
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
@@ -94,7 +92,7 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
       maxFilesReached: {
         type: Boolean,
         value: false,
-        reflect: true,
+        reflectToAttribute: true,
         attribute: 'max-files-reached',
       },
 
@@ -102,7 +100,7 @@ class UploadDropZone extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
       __dragover: {
         type: Boolean,
         value: false,
-        reflect: true,
+        reflectToAttribute: true,
         attribute: 'dragover',
       },
     };

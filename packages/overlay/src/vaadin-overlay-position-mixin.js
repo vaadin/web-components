@@ -26,9 +26,6 @@ const targetResizeObserver = new ResizeObserver((entries) => {
   });
 });
 
-/**
- * @polymerMixin
- */
 export const PositionMixin = (superClass) =>
   class PositionMixin extends superClass {
     static get properties() {
@@ -144,6 +141,12 @@ export const PositionMixin = (superClass) =>
 
       if (props.has('positionTarget')) {
         const oldTarget = props.get('positionTarget');
+
+        // Invalidate the cached content size so the next `_updatePosition` call
+        // measures the overlay against the new target instead of carrying over
+        // a larger size from the previous one.
+        this.__oldContentWidth = undefined;
+        this.__oldContentHeight = undefined;
 
         // 1. When position target is removed, always reset position settings
         // 2. When position target is set, reset if overlay was opened before

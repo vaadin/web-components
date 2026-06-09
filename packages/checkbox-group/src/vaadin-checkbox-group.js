@@ -78,9 +78,6 @@ import { CheckboxGroupMixin } from './vaadin-checkbox-group-mixin.js';
  *
  * @customElement vaadin-checkbox-group
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes ElementMixin
- * @mixes CheckboxGroupMixin
  */
 class CheckboxGroup extends CheckboxGroupMixin(
   ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),

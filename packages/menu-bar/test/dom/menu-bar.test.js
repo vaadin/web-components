@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextResize } from '@vaadin/testing-helpers';
-import '../not-animated-styles.js';
 import '../../src/vaadin-menu-bar.js';
 
 describe('menu-bar', () => {
@@ -49,5 +48,9 @@ describe('menu-bar', () => {
     menu._buttons[1].click();
     await nextRender();
     await expect(menu._subMenu._overlayElement).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+  });
+
+  it('shadow', async () => {
+    await expect(menu).shadowDom.to.equalSnapshot();
   });
 });

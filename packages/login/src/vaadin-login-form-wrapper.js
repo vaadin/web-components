@@ -14,7 +14,6 @@ import { loginFormWrapperStyles } from './styles/vaadin-login-form-wrapper-base-
  * An element used internally by `<vaadin-login-form>`. Not intended to be used separately.
  *
  * @extends HTMLElement
- * @mixes ThemableMixin
  * @private
  */
 class LoginFormWrapper extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {

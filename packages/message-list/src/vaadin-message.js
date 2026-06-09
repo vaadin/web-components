@@ -85,9 +85,6 @@ import { MessageMixin } from './vaadin-message-mixin.js';
  *
  * @customElement vaadin-message
  * @extends HTMLElement
- * @mixes MessageMixin
- * @mixes ThemableMixin
- * @mixes ElementMixin
  */
 class Message extends MessageMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

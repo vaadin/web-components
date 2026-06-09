@@ -9,11 +9,6 @@ import { InputMixin } from './input-mixin.js';
 
 /**
  * A mixin to manage the checked state.
- *
- * @polymerMixin
- * @mixes DelegateStateMixin
- * @mixes DisabledMixin
- * @mixes InputMixin
  */
 export const CheckedMixin = (superclass) =>
   class CheckedMixinClass extends DelegateStateMixin(DisabledMixin(InputMixin(superclass))) {

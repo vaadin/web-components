@@ -8,9 +8,6 @@ import { DataProviderController } from '@vaadin/component-base/src/data-provider
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 
-/**
- * @polymerMixin
- */
 export const DataProviderMixin = (superClass) =>
   class DataProviderMixin extends superClass {
     static get properties() {
@@ -438,16 +435,4 @@ export const DataProviderMixin = (superClass) =>
         this.scrollToIndex(...indexes);
       }
     }
-
-    /**
-     * Fired when the `expandedItems` property changes.
-     *
-     * @event expanded-items-changed
-     */
-
-    /**
-     * Fired when the `loading` property changes.
-     *
-     * @event loading-changed
-     */
   };

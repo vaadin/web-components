@@ -7,9 +7,6 @@ import { isChrome, isSafari } from '@vaadin/component-base/src/browser-utils.js'
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 
-/**
- * @polymerMixin
- */
 export const VirtualListMixin = (superClass) =>
   class VirtualListMixinClass extends superClass {
     static get properties() {

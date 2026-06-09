@@ -2,13 +2,9 @@ import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/tes
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
-import '../common.js';
+import '../not-animated-styles.css';
 import '../../../vaadin-slider.js';
 import type { Slider } from '../../../vaadin-slider.js';
-
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.sliderComponent = true;
 
 describe('slider', () => {
   let div: HTMLDivElement;

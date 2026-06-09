@@ -63,15 +63,23 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * `focus-ring` | Set when the label is focused using the keyboard.
  * `focused`    | Set when the label is focused.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                       |
+ * :-----------------------------------------|
+ * | `--vaadin-side-nav-child-indent`        |
+ * | `--vaadin-side-nav-items-gap`           |
+ * | `--vaadin-side-nav-label-color`         |
+ * | `--vaadin-side-nav-label-font-size`     |
+ * | `--vaadin-side-nav-label-font-weight`   |
+ * | `--vaadin-side-nav-label-line-height`   |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} collapsed-changed - Fired when the `collapsed` property changes.
  *
  * @customElement vaadin-side-nav
  * @extends HTMLElement
- * @mixes ThemableMixin
- * @mixes ElementMixin
- * @mixes SideNavChildrenMixin
  */
 class SideNav extends SideNavChildrenMixin(
   SlotStylesMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
@@ -88,7 +96,6 @@ class SideNav extends SideNavChildrenMixin(
     return {
       /**
        * Whether the side nav is collapsible. When enabled, the toggle icon is shown.
-       *
        */
       collapsible: {
         type: Boolean,
@@ -98,7 +105,6 @@ class SideNav extends SideNavChildrenMixin(
 
       /**
        * Whether the side nav is collapsed. When collapsed, the items are hidden.
-       *
        */
       collapsed: {
         type: Boolean,

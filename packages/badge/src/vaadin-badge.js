@@ -67,8 +67,6 @@ import { badgeStyles } from './styles/vaadin-badge-base-styles.js';
  *
  * @customElement vaadin-badge
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
@@ -81,10 +79,6 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
 
   static get lumoInjector() {
     return { ...super.lumoInjector, includeBaseStyles: true };
-  }
-
-  static get experimental() {
-    return true;
   }
 
   static get properties() {

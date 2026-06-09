@@ -8,9 +8,6 @@ import { KeyboardMixin } from './keyboard-mixin.js';
 
 /**
  * A mixin for navigating items with keyboard.
- *
- * @polymerMixin
- * @mixes KeyboardMixin
  */
 export const KeyboardDirectionMixin = (superclass) =>
   class KeyboardDirectionMixinClass extends KeyboardMixin(superclass) {
@@ -127,7 +124,7 @@ export const KeyboardDirectionMixin = (superclass) =>
 
       if (idx >= 0) {
         event.preventDefault();
-        this._focus(idx, { focusVisible: true }, true);
+        this._focus(idx, { focusVisible: true, preventScroll: true }, true);
       }
     }
 

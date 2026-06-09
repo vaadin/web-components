@@ -15,10 +15,6 @@ import { KeyboardMixin } from './keyboard-mixin.js';
  *
  * The attribute is removed as soon as the element is deactivated
  * by the pointer or by releasing the activation key.
- *
- * @polymerMixin
- * @mixes DisabledMixin
- * @mixes KeyboardMixin
  */
 export const ActiveMixin = (superclass) =>
   class ActiveMixinClass extends DisabledMixin(KeyboardMixin(superclass)) {

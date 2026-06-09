@@ -69,9 +69,6 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  *
  * @customElement vaadin-menu-bar
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes MenuBarMixin
- * @mixes ThemableMixin
  */
 class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
@@ -95,14 +92,6 @@ class MenuBar extends MenuBarMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoI
       <slot name="tooltip"></slot>
     `;
   }
-
-  /**
-   * Fired when either a submenu item or menu bar button without nested children is clicked.
-   *
-   * @event item-selected
-   * @param {Object} detail
-   * @param {Object} detail.value the selected menu bar item
-   */
 }
 
 defineCustomElement(MenuBar);

@@ -72,9 +72,6 @@ import { UploadManager } from './vaadin-upload-manager.js';
  *
  * @customElement vaadin-upload-button
  * @extends HTMLElement
- * @mixes ButtonMixin
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
@@ -112,7 +109,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       maxFilesReached: {
         type: Boolean,
         value: false,
-        reflect: true,
+        reflectToAttribute: true,
         attribute: 'max-files-reached',
       },
     };

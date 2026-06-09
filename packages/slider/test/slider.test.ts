@@ -4,10 +4,6 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../vaadin-slider.js';
 import type { Slider } from '../vaadin-slider.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.sliderComponent = true;
-
 describe('vaadin-slider', () => {
   let slider: Slider;
 

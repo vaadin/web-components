@@ -11,15 +11,12 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
-import '../src/vaadin-tooltip.js';
+import { Tooltip } from '../src/vaadin-tooltip.js';
 import { resetGlobalTooltipState } from '../src/vaadin-tooltip-mixin.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
 describe('timers', () => {
   let clock;
-
-  const Tooltip = customElements.get('vaadin-tooltip');
 
   // Used as a fallback delay
   const DEFAULT_DELAY = 500;

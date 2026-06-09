@@ -1,0 +1,33 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+@media lumo_mixins_field-helper-above {
+  :host([has-helper][theme~='helper-above-field']) [part='helper-text']::before {
+    display: none;
+  }
+
+  :host([has-helper][theme~='helper-above-field']) [part='helper-text']::after {
+    content: '';
+    display: block;
+    height: var(--_helper-spacing);
+  }
+
+  :host([has-helper][theme~='helper-above-field']) [part='label'] {
+    order: 0;
+    padding-bottom: var(--_helper-spacing);
+  }
+
+  :host([has-helper][theme~='helper-above-field']) [part='helper-text'] {
+    order: 1;
+  }
+
+  :host([has-helper][theme~='helper-above-field']) [part='label'] + * {
+    order: 2;
+  }
+
+  :host([has-helper][theme~='helper-above-field']) [part='error-message'] {
+    order: 3;
+  }
+}

@@ -21,25 +21,8 @@ const DEFAULT_I18N = {
   },
 };
 
-/**
- * @mixes LoginMixin
- * @polymerMixin
- */
 export const LoginMixin = (superClass) =>
-  class LoginMixin extends I18nMixin(DEFAULT_I18N, superClass) {
-    /**
-     * Fired when user clicks on the "Forgot password" button.
-     *
-     * @event forgot-password
-     */
-
-    /**
-     * Fired when an user submits the login.
-     * The event contains `username` and `password` values in the `detail` property.
-     *
-     * @event login
-     */
-
+  class LoginMixin extends I18nMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -113,6 +96,10 @@ export const LoginMixin = (superClass) =>
           value: false,
         },
       };
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**

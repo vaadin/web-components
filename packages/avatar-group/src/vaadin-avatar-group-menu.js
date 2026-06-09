@@ -17,9 +17,6 @@ import { avatarGroupMenuStyles } from './styles/vaadin-avatar-group-menu-base-st
  *
  * @customElement vaadin-avatar-group-menu
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes ListMixin
- * @mixes ThemableMixin
  * @protected
  */
 class AvatarGroupMenu extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {

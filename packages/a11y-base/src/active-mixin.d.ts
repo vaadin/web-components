@@ -32,7 +32,7 @@ export declare class ActiveMixinClass {
   /**
    * Override to define if the component needs to be activated.
    */
-  protected _shouldSetFocus(event: KeyboardEvent | MouseEvent): boolean;
+  protected _shouldSetActive(event: KeyboardEvent | MouseEvent): boolean;
 
   /**
    * Toggles the `active` attribute on the element.

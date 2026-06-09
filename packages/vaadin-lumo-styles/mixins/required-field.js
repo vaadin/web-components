@@ -86,7 +86,6 @@ const requiredField = css`
     line-height: var(--lumo-line-height-xs);
     font-weight: var(--vaadin-input-field-error-font-weight, 400);
     color: var(--vaadin-input-field-error-color, var(--lumo-error-text-color));
-    will-change: max-height;
     transition: 0.4s max-height;
     max-height: 5em;
   }

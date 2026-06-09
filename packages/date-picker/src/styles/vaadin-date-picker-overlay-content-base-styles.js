@@ -50,13 +50,18 @@ export const overlayContentStyles = css`
   }
 
   ::slotted([slot='months']) {
-    --vaadin-infinite-scroller-item-height: calc(
-      16.5rem + var(--_vaadin-date-picker-week-numbers-visible, 0) *
-        (var(--vaadin-date-picker-week-number-font-size, 0.7rem) * 1.25 * 6)
+    --vaadin-infinite-scroller-item-height: round(
+      var(--vaadin-date-picker-month-header-font-size, 0.9375rem) + 0.75rem +
+        var(--vaadin-date-picker-date-height, 2rem) * 7 + var(--_vaadin-date-picker-week-numbers-visible, 0) *
+        (
+          var(--vaadin-date-picker-week-number-font-size, 0.7rem) * 6.25 +
+            var(--vaadin-date-picker-month-padding, var(--vaadin-padding-s)) * 3
+        ),
+      1px
     );
   }
 
-  :host([desktop]) ::slotted([slot='months']) {
+  :host(:not([fullscreen])) ::slotted([slot='months']) {
     border-bottom: 1px solid var(--vaadin-border-color-secondary);
   }
 

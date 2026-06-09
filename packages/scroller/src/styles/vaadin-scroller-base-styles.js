@@ -8,17 +8,19 @@ import { css } from 'lit';
 
 export const scrollerStyles = css`
   :host {
-    --_indicator-height: var(--vaadin-scroller-overflow-indicator-height, 1px);
+    --_overflow-indicator-height: var(--vaadin-scroller-overflow-indicator-height, 1px);
+    --_overflow-indicator-color: var(--vaadin-scroller-overflow-indicator-color, var(--vaadin-border-color-secondary));
     /* Don't let these properties inherit */
     --vaadin-scroller-padding-block: 0px;
     --vaadin-scroller-padding-inline: 0px;
     --vaadin-scroller-overflow-indicator-top-opacity: 0;
     --vaadin-scroller-overflow-indicator-bottom-opacity: 0;
     display: block;
-    overflow: auto;
+    overflow: auto !important;
     outline: none;
     box-sizing: border-box;
     padding: var(--vaadin-scroller-padding-block) var(--vaadin-scroller-padding-inline);
+    contain: paint;
   }
 
   :host([focus-ring]) {
@@ -30,15 +32,15 @@ export const scrollerStyles = css`
   }
 
   :host([scroll-direction='vertical']) {
-    overflow-x: hidden;
+    overflow-x: hidden !important;
   }
 
   :host([scroll-direction='horizontal']) {
-    overflow-y: hidden;
+    overflow-y: hidden !important;
   }
 
   :host([scroll-direction='none']) {
-    overflow: hidden;
+    overflow: hidden !important;
   }
 
   :host::before,
@@ -51,21 +53,27 @@ export const scrollerStyles = css`
     z-index: 9999;
     pointer-events: none;
     box-sizing: border-box;
-    height: var(--_indicator-height);
+    height: var(--_overflow-indicator-height);
     margin-inline: calc(var(--vaadin-scroller-padding-inline) * -1);
-    background: var(--vaadin-border-color-secondary);
+    background: linear-gradient(
+      var(--_overflow-indicator-dir, to bottom),
+      var(--_overflow-indicator-color),
+      var(--_overflow-indicator-color) 1px,
+      transparent
+    );
   }
 
   :host::before {
     top: 0;
-    margin-bottom: calc(var(--_indicator-height) * -1);
+    margin-bottom: calc(var(--_overflow-indicator-height) * -1);
     translate: 0 calc(var(--vaadin-scroller-padding-block) * -1);
   }
 
   :host::after {
     bottom: 0;
-    margin-top: calc(var(--_indicator-height) * -1);
+    margin-top: calc(var(--_overflow-indicator-height) * -1);
     translate: 0 calc(var(--vaadin-scroller-padding-block) * 1);
+    --_overflow-indicator-dir: to top;
   }
 
   :host([overflow~='top'])::before {

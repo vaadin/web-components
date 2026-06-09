@@ -9,9 +9,6 @@ import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 
 /**
  * A mixin providing common accordion functionality.
- *
- * @polymerMixin
- * @mixes KeyboardDirectionMixin
  */
 export const AccordionMixin = (superClass) =>
   class AccordionMixinClass extends KeyboardDirectionMixin(superClass) {

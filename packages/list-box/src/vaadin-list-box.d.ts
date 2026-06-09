@@ -13,12 +13,12 @@ import { MultiSelectListMixin } from './vaadin-multi-select-list-mixin.js';
 export type ListBoxItemsChangedEvent = CustomEvent<{ value: Element[] }>;
 
 /**
- * Fired when the `selected` property changes.
+ * Fired when the `selected` property changes. Not fired in multiple selection mode.
  */
 export type ListBoxSelectedChangedEvent = CustomEvent<{ value: number }>;
 
 /**
- * Fired when the `selectedValues` property changes.
+ * Fired when the `selectedValues` property changes. Not fired in single selection mode.
  */
 export type ListBoxSelectedValuesChangedEvent = CustomEvent<{ value: number[] }>;
 
@@ -61,8 +61,8 @@ export interface ListBoxEventMap extends HTMLElementEventMap, ListBoxCustomEvent
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
- * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
- * @fires {CustomEvent} selected-values-changed - Fired when the `selectedValues` property changes.
+ * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes. Not fired in multiple selection mode.
+ * @fires {CustomEvent} selected-values-changed - Fired when the `selectedValues` property changes. Not fired in single selection mode.
  */
 declare class ListBox extends MultiSelectListMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   focused: Element | null;

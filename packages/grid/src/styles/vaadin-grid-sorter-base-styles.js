@@ -18,6 +18,10 @@ export const gridSorterStyles = css`
     -webkit-tap-highlight-color: transparent;
   }
 
+  :host([hidden]) {
+    display: none !important;
+  }
+
   [part='content'] {
     flex: 1 1 auto;
     overflow: hidden;

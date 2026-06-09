@@ -96,7 +96,6 @@
     pointer-events: auto;
     background-color: var(--lumo-shade-20pct);
     animation: 0.2s lumo-overlay-backdrop-enter both;
-    will-change: opacity;
   }
 
   [part='content'] {

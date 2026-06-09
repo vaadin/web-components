@@ -39,8 +39,6 @@ import { AccordionPanelMixin } from './vaadin-accordion-panel-mixin.js';
  *
  * @customElement vaadin-accordion-panel
  * @extends HTMLElement
- * @mixes AccordionPanelMixin
- * @mixes ThemableMixin
  */
 class AccordionPanel extends AccordionPanelMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
@@ -49,6 +47,10 @@ class AccordionPanel extends AccordionPanelMixin(ThemableMixin(PolylitMixin(Lumo
 
   static get styles() {
     return accordionPanel;
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /** @protected */

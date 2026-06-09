@@ -4,9 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-/**
- * @polymerMixin
- */
 export const SelectionMixin = (superClass) =>
   class SelectionMixin extends superClass {
     static get properties() {
@@ -42,7 +39,6 @@ export const SelectionMixin = (superClass) =>
          */
         isItemSelectable: {
           type: Function,
-          notify: (() => true)(), // prevent Polymer analyzer from documenting a changed event
         },
 
         /**
@@ -109,6 +105,16 @@ export const SelectionMixin = (superClass) =>
       }
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('isItemSelectable')) {
+        /** @internal to not document it in CEM */
+        this.dispatchEvent(new CustomEvent('is-item-selectable-changed'));
+      }
+    }
+
     /** @private */
     __selectedItemsChanged() {
       this._getRenderedRows().forEach((row) => {
@@ -131,20 +137,4 @@ export const SelectionMixin = (superClass) =>
 
       return selectedKeys;
     }
-
-    /**
-     * Fired when the `selectedItems` property changes.
-     *
-     * @event selected-items-changed
-     */
-
-    /**
-     * Fired when the user selects or deselects an item through the selection column.
-     *
-     * @event item-toggle
-     * @param {Object} detail
-     * @param {GridItem} detail.item the item that was selected or deselected
-     * @param {boolean} detail.selected true if the item was selected
-     * @param {boolean} detail.shiftKey true if the shift key was pressed
-     */
   };

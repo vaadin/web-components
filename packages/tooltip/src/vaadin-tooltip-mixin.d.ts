@@ -18,11 +18,25 @@ export declare function TooltipMixin<T extends Constructor<HTMLElement>>(
 
 export declare class TooltipMixinClass {
   /**
-   * Element used to link with the `aria-describedby`
-   * attribute. Supports array of multiple elements.
+   * Element used to link with the ARIA attribute controlled by the
+   * `ariaLinkMode` property. Supports array of multiple elements.
    * When not set, defaults to `target`.
    */
   ariaTarget: HTMLElement | HTMLElement[] | null | undefined;
+
+  /**
+   * Controls which ARIA attribute is used to link the target element(s)
+   * with the tooltip content. Supported values:
+   *
+   * - `aria-describedby` - links the tooltip as a description.
+   * - `aria-labelledby` - links the tooltip as an accessible name.
+   * - `none` - does not add any ARIA linking attribute.
+   *
+   * Defaults to `aria-describedby`.
+   *
+   * @attr {string} aria-link-mode
+   */
+  ariaLinkMode: 'aria-describedby' | 'aria-labelledby' | 'none';
 
   /**
    * Object with properties passed to `generator` and

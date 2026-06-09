@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -125,7 +124,7 @@ import { ChartMixin } from './vaadin-chart-mixin.js';
  * @fires {CustomEvent} chart-drilldown - Fired when drilldown point is clicked.
  * @fires {CustomEvent} chart-drillup - Fired when drilling up from a drilldown series.
  * @fires {CustomEvent} chart-drillupall - Fired after all the drilldown series has been drilled up.
- * @fires {CustomEvent} chart-redraw - Fired after the chart redraw.
+ * @fires {CustomEvent} chart-redraw - Fired when the chart is redrawn: after `Chart.configuration.redraw()`, or after an axis, series, or point is modified with the `redraw` option set to true.
  * @fires {CustomEvent} chart-selection - Fired when an area of the chart has been selected.
  * @fires {CustomEvent} chart-end-resize - Fired when the chart finishes resizing.
  * @fires {CustomEvent} series-after-animate - Fired when the series has finished its initial animation.
@@ -152,9 +151,6 @@ import { ChartMixin } from './vaadin-chart-mixin.js';
  *
  * @customElement vaadin-chart
  * @extends HTMLElement
- * @mixes ChartMixin
- * @mixes ThemableMixin
- * @mixes ElementMixin
  */
 class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

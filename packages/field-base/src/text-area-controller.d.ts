@@ -8,4 +8,6 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 /**
  * A controller to create and initialize slotted `<textarea>` element.
  */
-export class TextAreaController extends SlotController {}
+export class TextAreaController extends SlotController {
+  constructor(host: HTMLElement, callback?: (node: HTMLTextAreaElement) => void);
+}

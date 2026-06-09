@@ -77,9 +77,6 @@ import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
  *
  * @customElement vaadin-custom-field
  * @extends HTMLElement
- * @mixes CustomFieldMixin
- * @mixes ElementMixin
- * @mixes ThemableMixin
  */
 class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
@@ -115,12 +112,6 @@ class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolylitMix
       <slot name="tooltip"></slot>
     `;
   }
-
-  /**
-   * Fired when the user commits a value change for any of the internal inputs.
-   *
-   * @event change
-   */
 }
 
 defineCustomElement(CustomField);

@@ -120,7 +120,7 @@ export class FieldHighlighterController {
   }
 
   removeUser(user) {
-    if (user && user.id !== undefined) {
+    if (user?.id !== undefined) {
       let index;
       for (let i = 0; i < this.users.length; i++) {
         if (this.users[i].id === user.id) {

@@ -8,10 +8,6 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
-/**
- * @polymerMixin
- * @mixes FocusMixin
- */
 export const MessageMixin = (superClass) =>
   class MessageMixinClass extends FocusMixin(superClass) {
     static get properties() {
@@ -122,16 +118,6 @@ export const MessageMixin = (superClass) =>
      * @private
      */
     __renderAttachments() {
-      if (
-        !(
-          window.Vaadin &&
-          window.Vaadin.featureFlags &&
-          (window.Vaadin.featureFlags.messageListAttachments || window.Vaadin.featureFlags.aiComponents)
-        )
-      ) {
-        return '';
-      }
-
       const attachments = this.attachments;
       if (!attachments || attachments.length === 0) {
         return '';
@@ -183,9 +169,4 @@ export const MessageMixin = (superClass) =>
         }),
       );
     }
-
-    /**
-     * Fired when an attachment is clicked.
-     * @event attachment-click
-     */
   };

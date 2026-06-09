@@ -1,7 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
-import '../common.js';
+import '../../not-animated-styles.css';
 import '../../../vaadin-date-picker.js';
 
 describe('date-picker', () => {
@@ -40,14 +40,30 @@ describe('date-picker', () => {
       div.style.width = `${element.$.overlay.$.overlay.offsetWidth}px`;
     }
 
-    it('default', async () => {
+    beforeEach(() => {
       element.value = '2000-01-01';
+    });
+
+    it('default', async () => {
       openOverlay();
       await visualDiff(div, 'opened');
     });
 
+    it('disabled date', async () => {
+      element.isDateDisabled = (date) => {
+        // Exclude weekends
+        const checkDate = new Date(0, 0);
+        checkDate.setFullYear(date.year);
+        checkDate.setMonth(date.month);
+        checkDate.setDate(date.day);
+        return checkDate.getDay() === 0 || checkDate.getDay() === 6;
+      };
+
+      openOverlay();
+      await visualDiff(div, 'disabled-date');
+    });
+
     it('week numbers', async () => {
-      element.value = '2000-01-01';
       element.showWeekNumbers = true;
       element.i18n = { firstDayOfWeek: 1 };
       openOverlay();
@@ -55,7 +71,6 @@ describe('date-picker', () => {
     });
 
     it('fullscreen', async () => {
-      element.value = '2000-01-01';
       element._fullscreen = true;
       await openOverlay();
       await visualDiff(element._overlayContent, 'fullscreen');

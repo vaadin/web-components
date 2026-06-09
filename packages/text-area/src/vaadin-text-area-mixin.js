@@ -10,10 +10,6 @@ import { TextAreaController } from '@vaadin/field-base/src/text-area-controller.
 
 /**
  * A mixin providing common text area functionality.
- *
- * @polymerMixin
- * @mixes InputFieldMixin
- * @mixes ResizeMixin
  */
 export const TextAreaMixin = (superClass) =>
   class TextAreaMixinClass extends ResizeMixin(InputFieldMixin(superClass)) {
@@ -160,6 +156,7 @@ export const TextAreaMixin = (superClass) =>
       }
 
       const scrollTop = inputField.scrollTop;
+      const previousExplicitHeight = parseFloat(input.style.height);
 
       // Only clear the height when the content shortens to minimize scrollbar flickering.
       const valueLength = this.value ? this.value.length : 0;
@@ -184,7 +181,14 @@ export const TextAreaMixin = (superClass) =>
       this._oldValueLength = valueLength;
 
       const inputHeight = input.scrollHeight;
-      if (inputHeight > input.clientHeight) {
+      // Snap to the previous explicit height when the new measurement is
+      // within 1 CSS pixel of it. The pin/unpin cycle produces a 1 px
+      // asymmetry on low-DPR displays that would otherwise oscillate
+      // visibly on every keystroke; real content changes always move
+      // scrollHeight by at least one line.
+      if (Math.abs(inputHeight - previousExplicitHeight) <= 1) {
+        input.style.height = `${previousExplicitHeight}px`;
+      } else if (inputHeight > input.clientHeight) {
         input.style.height = `${inputHeight}px`;
       }
 

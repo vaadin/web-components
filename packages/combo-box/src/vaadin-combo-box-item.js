@@ -35,9 +35,6 @@ import { ComboBoxItemMixin } from './vaadin-combo-box-item-mixin.js';
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement vaadin-combo-box-item
- * @mixes ComboBoxItemMixin
- * @mixes ThemableMixin
- * @mixes DirMixin
  * @private
  */
 export class ComboBoxItem extends ComboBoxItemMixin(

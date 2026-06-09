@@ -1,7 +1,7 @@
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../not-animated-styles.js';
+import '../../not-animated-styles.css';
 import '../../../src/vaadin-grid-pro.js';
 import '../../../src/vaadin-grid-pro-edit-column.js';
 import { getContainerCell } from '../../helpers.js';

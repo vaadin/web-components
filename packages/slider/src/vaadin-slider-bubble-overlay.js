@@ -18,10 +18,6 @@ import { sliderBubbleOverlayStyles } from './styles/vaadin-slider-bubble-overlay
  *
  * @customElement vaadin-slider-bubble-overlay
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes OverlayMixin
- * @mixes PositionMixin
- * @mixes ThemableMixin
  * @private
  */
 class SliderBubbleOverlay extends PositionMixin(

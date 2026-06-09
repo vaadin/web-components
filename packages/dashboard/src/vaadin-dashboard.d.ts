@@ -211,6 +211,7 @@ export interface DashboardI18n {
  * `--vaadin-dashboard-col-min-width`  | minimum column width of the dashboard
  * `--vaadin-dashboard-col-max-width`  | maximum column width of the dashboard
  * `--vaadin-dashboard-row-min-height` | minimum row height of the dashboard
+ * `--vaadin-dashboard-row-height`     | fixed row height of the dashboard. Must be in length units. Overrides `--vaadin-dashboard-row-min-height` and prevents rows from growing to fit content
  * `--vaadin-dashboard-col-max-count`  | maximum column count of the dashboard
  * `--vaadin-dashboard-gap`            | gap between child elements. Must be in length units (0 is not allowed, 0px is)
  * `--vaadin-dashboard-padding`        | space around the dashboard's outer edges. Must be in length units (0 is not allowed, 0px is)
@@ -234,7 +235,7 @@ export interface DashboardI18n {
  * @fires {CustomEvent} dashboard-item-resize-mode-changed - Fired when an item resize mode changed
  */
 declare class Dashboard<TItem extends DashboardItem = DashboardItem> extends DashboardLayoutMixin(
-  I18nMixin({} as DashboardI18n, ElementMixin(ThemableMixin(HTMLElement))),
+  I18nMixin<typeof HTMLElement, DashboardI18n>(ElementMixin(ThemableMixin(HTMLElement))),
 ) {
   /**
    * An array containing the items of the dashboard

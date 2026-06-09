@@ -18,12 +18,8 @@ const DEFAULT_I18N = {
   drawer: 'Drawer',
 };
 
-/**
- * @polymerMixin
- * @mixes I18nMixin
- */
 export const AppLayoutMixin = (superclass) =>
-  class AppLayoutMixinClass extends I18nMixin(DEFAULT_I18N, superclass) {
+  class AppLayoutMixinClass extends I18nMixin(superclass) {
     static get properties() {
       return {
         /**
@@ -87,6 +83,10 @@ export const AppLayoutMixin = (superclass) =>
 
     static get observers() {
       return ['__i18nChanged(__effectiveI18n)'];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**
@@ -524,15 +524,4 @@ export const AppLayoutMixin = (superclass) =>
       this.__resizeObserver.unobserve(element);
       this.__resizeObserver.observe(element);
     }
-
-    /**
-     * App Layout listens to `close-overlay-drawer` on the window level.
-     * A custom event can be dispatched and the App Layout will close the drawer in overlay.
-     *
-     * That can be used, for instance, when a navigation occurs when user clicks in a menu item inside the drawer.
-     *
-     * See `dispatchCloseOverlayDrawerEvent()` helper method.
-     *
-     * @event close-overlay-drawer
-     */
   };

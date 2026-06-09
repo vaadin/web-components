@@ -5,9 +5,6 @@
  */
 import { addListener } from '@vaadin/component-base/src/gestures.js';
 
-/**
- * @polymerMixin
- */
 export const SplitLayoutMixin = (superClass) =>
   class SplitLayoutMixin extends superClass {
     static get properties() {

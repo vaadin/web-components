@@ -15,8 +15,6 @@ import { fieldOutlineStyles } from './styles/vaadin-field-outline-base-styles.js
  * An element used internally by `<vaadin-field-highlighter>`. Not intended to be used separately.
  *
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes ThemableMixin
  * @private
  */
 export class FieldOutline extends ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {

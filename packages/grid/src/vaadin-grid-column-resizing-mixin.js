@@ -5,9 +5,6 @@
  */
 import { addListener } from '@vaadin/component-base/src/gestures.js';
 
-/**
- * @polymerMixin
- */
 export const ColumnResizingMixin = (superClass) =>
   class ColumnResizingMixin extends superClass {
     /** @protected */
@@ -126,12 +123,4 @@ export const ColumnResizingMixin = (superClass) =>
         this._resizeHandler();
       }
     }
-
-    /**
-     * Fired when a column in the grid is resized by the user.
-     *
-     * @event column-resize
-     * @param {Object} detail
-     * @param {Object} detail.resizedColumn the column that was resized
-     */
   };

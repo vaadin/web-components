@@ -8,8 +8,6 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
 /**
  * A mixin providing popover target functionality.
- *
- * @polymerMixin
  */
 export const PopoverTargetMixin = (superClass) =>
   class PopoverTargetMixinClass extends superClass {
@@ -34,6 +32,7 @@ export const PopoverTargetMixin = (superClass) =>
          */
         target: {
           type: Object,
+          sync: true,
         },
 
         /** @private */

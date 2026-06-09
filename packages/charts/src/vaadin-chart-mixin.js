@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -85,8 +84,8 @@ KeyboardNavigation.prototype.onMouseUp = function (e) {
     const chart = this.chart;
     const target = e.composedPath()[0];
     if (!target || !chart.container.contains(target)) {
-      const curMod = this.modules && this.modules[this.currentModuleIx || 0];
-      if (curMod && curMod.terminate) {
+      const curMod = this.modules?.[this.currentModuleIx || 0];
+      if (curMod?.terminate) {
         curMod.terminate();
       }
       this.currentModuleIx = 0;
@@ -103,10 +102,6 @@ KeyboardNavigation.prototype.onMouseUp = function (e) {
 // No data message should be empty by default
 Highcharts.setOptions({ lang: { noData: '' } });
 
-/**
- * @polymerMixin
- * @mixes ResizeMixin
- */
 export const ChartMixin = (superClass) =>
   class extends ResizeMixin(superClass) {
     static get properties() {
@@ -491,109 +486,18 @@ export const ChartMixin = (superClass) =>
      */
     get __chartEventNames() {
       return {
-        /**
-         * Fired when a new series is added.
-         * @event chart-add-series
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} chart Chart object where the event was sent from
-         */
         addSeries: 'chart-add-series',
-
-        /**
-         * Fired after a chart is exported.
-         * @event chart-after-export
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} chart Chart object where the event was sent from
-         */
         afterExport: 'chart-after-export',
-
-        /**
-         * Fired after a chart is printed.
-         * @event chart-after-print
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} chart Chart object where the event was sent from
-         */
         afterPrint: 'chart-after-print',
-
-        /**
-         * Fired before a chart is exported.
-         * @event chart-before-export
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} chart Chart object where the event was sent from
-         */
         beforeExport: 'chart-before-export',
-
-        /**
-         * Fired before a chart is printed.
-         * @event chart-before-print
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} chart Chart object where the event was sent from
-         */
         beforePrint: 'chart-before-print',
-
-        /**
-         * Fired when clicking on the plot background.
-         * @event chart-click
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} chart Chart object where the event was sent from
-         */
         click: 'chart-click',
-
-        /**
-         * Fired when drilldown point is clicked.
-         * @event chart-drilldown
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} chart Chart object where the event was sent from
-         */
         drilldown: 'chart-drilldown',
-
-        /**
-         * Fired when drilling up from a drilldown series.
-         * @event chart-drillup
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} chart Chart object where the event was sent from
-         */
         drillup: 'chart-drillup',
-
-        /**
-         * Fired after all the series has been drilled up if chart has multiple drilldown series.
-         * @event chart-drillupall
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} chart Chart object where the event was sent from
-         */
         drillupall: 'chart-drillupall',
-
-        /**
-         * Fired when the chart is finished loading.
-         * @event chart-load
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} chart Chart object where the event was sent from
-         */
         load: 'chart-load',
-
-        /**
-         * Fired when the chart is redraw. Can be called after a `Chart.configuration.redraw()`
-         * or after an axis, series or point is modified with the `redraw` option set to `true`.
-         * @event chart-redraw
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} chart Chart object where the event was sent from
-         */
         redraw: 'chart-redraw',
-
-        /**
-         * Fired when an area of the chart has been selected.
-         * @event chart-selection
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} chart Chart object where the event was sent from
-         */
         selection: 'chart-selection',
-
-        /**
-         * Fired when the chart finishes resizing.
-         * @event chart-end-resize
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} chart Chart object where the event was sent from
-         */
         endResize: 'chart-end-resize',
       };
     }
@@ -604,67 +508,12 @@ export const ChartMixin = (superClass) =>
      */
     get __seriesEventNames() {
       return {
-        /**
-         * Fired when the series has finished its initial animation.
-         * @event series-after-animate
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} series Series object where the event was sent from
-         */
         afterAnimate: 'series-after-animate',
-
-        /**
-         * Fired when the checkbox next to the series' name in the legend is clicked.
-         * @event series-checkbox-click
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} series Series object where the event was sent from
-         */
         checkboxClick: 'series-checkbox-click',
-
-        /**
-         * Fired when the series is clicked.
-         * @event series-click
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} series Series object where the event was sent from
-         */
         click: 'series-click',
-
-        /**
-         * Fired when the series is hidden after chart generation time.
-         * @event series-hide
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} series Series object where the event was sent from
-         */
         hide: 'series-hide',
-
-        /**
-         * Fired when the legend item belonging to the series is clicked.
-         * @event series-legend-item-click
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} series Series object where the event was sent from
-         */
-
-        /**
-         * Fired when the mouses leave the graph.
-         * @event series-mouse-out
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} series Series object where the event was sent from
-         */
         mouseOut: 'series-mouse-out',
-
-        /**
-         * Fired when the mouse enters the graph.
-         * @event series-mouse-over
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} series Series object where the event was sent from
-         */
         mouseOver: 'series-mouse-over',
-
-        /**
-         * Fired when the series is show after chart generation time.
-         * @event series-show
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} series Series object where the event was sent from
-         */
         show: 'series-show',
       };
     }
@@ -675,91 +524,15 @@ export const ChartMixin = (superClass) =>
      */
     get __pointEventNames() {
       return {
-        /**
-         * Fired when the point is clicked.
-         * @event point-click
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} point Point object where the event was sent from
-         */
         click: 'point-click',
-
-        /**
-         * Fired when the legend item belonging to the point is clicked.
-         * @event point-legend-item-click
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} point Point object where the event was sent from
-         */
-
-        /**
-         * Fired when the mouse leaves the area close to the point.
-         * @event point-mouse-out
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} point Point object where the event was sent from
-         */
         mouseOut: 'point-mouse-out',
-
-        /**
-         * Fired when the mouse enters the area close to the point.
-         * @event point-mouse-over
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} point Point object where the event was sent from
-         */
         mouseOver: 'point-mouse-over',
-
-        /**
-         * Fired when the point is removed from the series.
-         * @event point-remove
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} point Point object where the event was sent from
-         */
         remove: 'point-remove',
-
-        /**
-         * Fired when the point is selected either programmatically or by clicking on the point.
-         * @event point-select
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} point Point object where the event was sent from
-         */
         select: 'point-select',
-
-        /**
-         * Fired when the point is unselected either programmatically or by clicking on the point
-         * @event point-unselect
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} point Point object where the event was sent from
-         */
         unselect: 'point-unselect',
-
-        /**
-         * Fired when the point is updated programmatically through `.updateConfiguration()` method.
-         * @event point-update
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} point Point object where the event was sent from
-         */
         update: 'point-update',
-
-        /**
-         * Fired when starting to drag a point.
-         * @event point-drag-start
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} point Point object where the event was sent from
-         */
         dragStart: 'point-drag-start',
-
-        /**
-         * Fired when the point is dropped.
-         * @event point-drop
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} point Point object where the event was sent from
-         */
         drop: 'point-drop',
-
-        /**
-         * Fired while dragging a point.
-         * @event point-drag
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} point Point object where the event was sent from
-         */
         drag: 'point-drag',
       };
     }
@@ -767,12 +540,6 @@ export const ChartMixin = (superClass) =>
     /** @private */
     get __xAxesEventNames() {
       return {
-        /**
-         * Fired when the minimum and maximum is set for the x axis.
-         * @event xaxes-extremes-set
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} axis Point object where the event was sent from
-         */
         afterSetExtremes: 'xaxes-extremes-set',
       };
     }
@@ -780,12 +547,6 @@ export const ChartMixin = (superClass) =>
     /** @private */
     get __yAxesEventNames() {
       return {
-        /**
-         * Fired when the minimum and maximum is set for the y axis.
-         * @event yaxes-extremes-set
-         * @param {Object} detail.originalEvent object with details about the event sent
-         * @param {Object} axis Point object where the event was sent from
-         */
         afterSetExtremes: 'yaxes-extremes-set',
       };
     }
@@ -1660,7 +1421,7 @@ export const ChartMixin = (superClass) =>
           default:
             break;
         }
-        if (axes && axes[axisIndex]) {
+        if (axes?.[axisIndex]) {
           const axis = axes[axisIndex];
           const functionToCall = axis[functionName];
           if (functionToCall && typeof functionToCall === 'function') {

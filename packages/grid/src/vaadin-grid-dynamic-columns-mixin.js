@@ -26,9 +26,6 @@ function arrayEquals(arr1, arr2) {
   return true;
 }
 
-/**
- * @polymerMixin
- */
 export const DynamicColumnsMixin = (superClass) =>
   class DynamicColumnsMixin extends superClass {
     static get properties() {
@@ -112,7 +109,7 @@ export const DynamicColumnsMixin = (superClass) =>
       this._observer = new ColumnObserver(this, (_addedColumns, removedColumns) => {
         const allRemovedCells = removedColumns.flatMap((c) => c._allCells);
         const filterNotConnected = (element) =>
-          allRemovedCells.filter((cell) => cell && cell._content.contains(element)).length;
+          allRemovedCells.filter((cell) => cell?._content.contains(element)).length;
 
         this.__removeSorters(this._sorters.filter(filterNotConnected));
         this.__removeFilters(this._filters.filter(filterNotConnected));

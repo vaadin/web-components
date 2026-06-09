@@ -33,8 +33,6 @@ directionObserver.observe(document.documentElement, { attributes: true, attribut
 
 /**
  * A mixin to handle `dir` attribute based on the one set on the `<html>` element.
- *
- * @polymerMixin
  */
 export const DirMixin = (superClass) =>
   class VaadinDirMixin extends superClass {

@@ -1,0 +1,4 @@
+vaadin-login-overlay::part(overlay),
+vaadin-login-overlay::part(backdrop) {
+  animation: none !important;
+}

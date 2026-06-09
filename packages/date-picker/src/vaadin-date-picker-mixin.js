@@ -78,19 +78,8 @@ export const datePickerI18nDefaults = Object.freeze({
   },
 });
 
-/**
- * @polymerMixin
- * @mixes DelegateFocusMixin
- * @mixes I18nMixin
- * @mixes InputConstraintsMixin
- * @mixes KeyboardMixin
- * @param {function(new:HTMLElement)} subclass
- */
 export const DatePickerMixin = (subclass) =>
-  class DatePickerMixinClass extends I18nMixin(
-    datePickerI18nDefaults,
-    DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass))),
-  ) {
+  class DatePickerMixinClass extends I18nMixin(DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass)))) {
     static get properties() {
       return {
         /**
@@ -276,6 +265,10 @@ export const DatePickerMixin = (subclass) =>
         '__updateOverlayContentTheme(_overlayContent, _theme)',
         '__updateOverlayContentFullScreen(_overlayContent, _fullscreen)',
       ];
+    }
+
+    static get defaultI18n() {
+      return datePickerI18nDefaults;
     }
 
     static get constraints() {
@@ -1219,22 +1212,4 @@ export const DatePickerMixin = (subclass) =>
     __computeMinOrMaxDate(dateString) {
       return parseDate(dateString);
     }
-
-    /**
-     * Fired when the user commits a value change.
-     *
-     * @event change
-     */
-
-    /**
-     * Fired when `value` property value changes.
-     *
-     * @event value-changed
-     */
-
-    /**
-     * Fired when `opened` property value changes.
-     *
-     * @event opened-changed
-     */
   };

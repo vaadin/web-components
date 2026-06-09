@@ -80,9 +80,6 @@ import { ConfirmDialogMixin } from './vaadin-confirm-dialog-mixin.js';
  *
  * @customElement vaadin-confirm-dialog
  * @extends HTMLElement
- * @mixes ConfirmDialogMixin
- * @mixes ElementMixin
- * @mixes ThemePropertyMixin
  */
 class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(PolylitMixin(LitElement)))) {
   static get is() {
@@ -143,21 +140,6 @@ class ConfirmDialog extends ConfirmDialogMixin(ElementMixin(ThemePropertyMixin(P
   _onOpenedChanged(event) {
     this.opened = event.detail.value;
   }
-
-  /**
-   * @event confirm
-   * fired when Confirm button was pressed.
-   */
-
-  /**
-   * @event cancel
-   * fired when Cancel button or Escape key was pressed.
-   */
-
-  /**
-   * @event reject
-   * fired when Reject button was pressed.
-   */
 }
 
 defineCustomElement(ConfirmDialog);

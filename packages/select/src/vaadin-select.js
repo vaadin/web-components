@@ -136,9 +136,6 @@ import { SelectBaseMixin } from './vaadin-select-base-mixin.js';
  *
  * @customElement vaadin-select
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes SelectBaseMixin
- * @mixes ThemableMixin
  */
 class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
@@ -220,12 +217,6 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
       this._menuElement.focus({ focusVisible: isKeyboardActive() });
     }
   }
-
-  /**
-   * Fired when the user commits a value change.
-   *
-   * @event change
-   */
 }
 
 defineCustomElement(Select);

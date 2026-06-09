@@ -6,10 +6,6 @@
 import { isElementFocusable } from '@vaadin/a11y-base/src/focus-utils.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 
-/**
- * @polymerMixin
- * @mixes PositionMixin
- */
 export const ComboBoxOverlayMixin = (superClass) =>
   class ComboBoxOverlayMixin extends PositionMixin(superClass) {
     static get observers() {

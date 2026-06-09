@@ -511,6 +511,28 @@ describe('position mixin', () => {
       expect(parent.hasAttribute('end-aligned')).to.be.true;
     });
 
+    it('should re-evaluate alignment when positionTarget changes after content shrinks', () => {
+      // Make the content wide enough to force a flip at a target position
+      // where the narrow content would still fit.
+      overlayContent.style.width = '200px';
+      const wideFlipThreshold = document.documentElement.clientWidth - 200 - margin;
+      target.style.left = `${wideFlipThreshold + 3}px`;
+      updatePosition();
+      expect(overlay.hasAttribute('end-aligned')).to.be.true;
+
+      // Shrink the content so the same target position fits without a flip.
+      overlayContent.style.width = '50px';
+
+      // Switch to a fresh target at the same position. The cached content
+      // size from the previous target must not carry over.
+      const newTarget = target.cloneNode(true);
+      target.parentElement.appendChild(newTarget);
+      overlay.positionTarget = newTarget;
+
+      expect(overlay.hasAttribute('start-aligned')).to.be.true;
+      expect(overlay.hasAttribute('end-aligned')).to.be.false;
+    });
+
     describe('no overlap', () => {
       beforeEach(() => {
         overlay.noHorizontalOverlap = true;

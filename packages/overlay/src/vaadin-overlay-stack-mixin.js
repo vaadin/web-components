@@ -43,9 +43,6 @@ export const isLastOverlay = (overlay, filter = (_overlay) => true) => {
   return overlay === filteredOverlays.pop();
 };
 
-/**
- * @polymerMixin
- */
 export const OverlayStackMixin = (superClass) =>
   class OverlayStackMixin extends superClass {
     /**

@@ -162,9 +162,6 @@ import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
  *
  * @customElement vaadin-split-layout
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes SplitLayoutMixin
- * @mixes ThemableMixin
  */
 class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
@@ -189,12 +186,6 @@ class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(PolylitMix
       <slot id="secondary" name="secondary"></slot>
     `;
   }
-
-  /**
-   * Fired after dragging the splitter have ended.
-   *
-   * @event splitter-dragend
-   */
 }
 
 defineCustomElement(SplitLayout);

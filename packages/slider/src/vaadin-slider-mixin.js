@@ -6,11 +6,6 @@
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 
-/**
- * @polymerMixin
- * @mixes DisabledMixin
- * @mixes SlotStylesMixin
- */
 export const SliderMixin = (superClass) =>
   class SliderMixinClass extends SlotStylesMixin(DisabledMixin(superClass)) {
     static get properties() {
@@ -153,8 +148,8 @@ export const SliderMixin = (superClass) =>
     __updateValue(value, index, fullValue = this.__value) {
       const { min, max, step } = this.__getConstraints();
 
-      const minValue = fullValue[index - 1] !== undefined ? fullValue[index - 1] : min;
-      const maxValue = fullValue[index + 1] !== undefined ? fullValue[index + 1] : max;
+      const minValue = fullValue[index - 1] ?? min;
+      const maxValue = fullValue[index + 1] ?? max;
 
       const safeValue = Math.min(Math.max(value, minValue), maxValue);
 
@@ -184,9 +179,9 @@ export const SliderMixin = (superClass) =>
      */
     __getConstraints() {
       return {
-        min: this.min !== undefined ? this.min : 0,
-        max: this.max !== undefined ? this.max : 100,
-        step: this.step !== undefined ? this.step : 1,
+        min: this.min ?? 0,
+        max: this.max ?? 100,
+        step: this.step ?? 1,
       };
     }
 
@@ -288,16 +283,4 @@ export const SliderMixin = (superClass) =>
       event.stopPropagation();
       this.__detectAndDispatchChange();
     }
-
-    /**
-     * Fired when the slider value changes during user interaction.
-     *
-     * @event input
-     */
-
-    /**
-     * Fired when the user commits a value change.
-     *
-     * @event change
-     */
   };

@@ -1,49 +1,35 @@
 import '@vaadin/icon';
-import { AuraControl } from './aura-abstract-control.js';
+import { html, nothing } from 'lit';
+import { AuraLitControl } from './aura-lit-control.js';
 
-class AuraSegmentedControl extends AuraControl {
+class AuraSegmentedControl extends AuraLitControl {
   static get is() {
     return 'aura-segmented-control';
   }
 
-  static get observedAttributes() {
-    return ['property', 'label', 'options'];
+  static get properties() {
+    return {
+      property: {
+        type: String,
+      },
+    };
   }
 
-  #prop = '--segmented';
-  #labelText = 'Segmented value';
   #value = '';
   #options = [];
-  #group;
-  #labelEl;
-  #reset;
 
   constructor() {
     super();
-    this.initControl({
-      label: 'Segmented value',
-      content: '<div class="segmented" role="radiogroup"></div>',
-    });
-
-    this.#group = this.querySelector('[role="radiogroup"]');
-    this.#labelEl = this.labelElement;
-    this.#reset = this.resetButton;
+    this.label = 'Segmented value';
+    this.property = '--segmented';
   }
 
-  get property() {
-    return this.#prop;
+  get value() {
+    return this.#value;
   }
 
-  set property(value) {
-    this.setAttribute('property', value ?? '--segmented');
-  }
-
-  get label() {
-    return this.#labelText;
-  }
-
-  set label(value) {
-    this.setAttribute('label', value ?? 'Segmented value');
+  set value(rawValue) {
+    this.#applyValue(rawValue);
   }
 
   get options() {
@@ -51,9 +37,8 @@ class AuraSegmentedControl extends AuraControl {
   }
 
   set options(value) {
-    const normalized = this.#normalizeOptions(value);
-    this.#options = normalized;
-    this.#renderOptions();
+    this.#options = this.#normalizeOptions(value);
+    this.requestUpdate();
     if (this.isConnected) {
       this.#initialize();
     } else {
@@ -61,52 +46,8 @@ class AuraSegmentedControl extends AuraControl {
     }
   }
 
-  get value() {
-    return this.#value;
-  }
-
-  set value(value) {
-    this.#applyValue(value);
-  }
-
-  attributeChangedCallback(name, _old, val) {
-    switch (name) {
-      case 'property':
-        this.#prop = (val && val.trim()) || '--segmented';
-        if (this.isConnected) {
-          this.#renderOptions();
-          this.#initialize();
-        }
-        break;
-      case 'label':
-        this.#labelText = val || 'Segmented value';
-        this.#labelEl.textContent = this.#labelText;
-        break;
-      case 'options':
-        // If options are provided as JSON, they override any child option markup.
-        this.#options = this.#parseOptionsAttribute(val);
-        if (this.isConnected) {
-          this.#renderOptions();
-          this.#initialize();
-        }
-        break;
-      default:
-        break;
-    }
-  }
-
   connectedCallback() {
-    if (this.hasAttribute('property')) {
-      this.#prop = this.getAttribute('property').trim();
-    }
-
-    if (this.hasAttribute('label')) {
-      this.#labelText = this.getAttribute('label');
-    } else {
-      this.#labelText = this.#prop;
-    }
-
-    this.#labelEl.textContent = this.#labelText;
+    super.connectedCallback();
 
     if (this.hasAttribute('options')) {
       this.#options = this.#parseOptionsAttribute(this.getAttribute('options'));
@@ -114,22 +55,87 @@ class AuraSegmentedControl extends AuraControl {
       this.#options = this.#parseChildOptions();
     }
 
-    this.#renderOptions();
     this.#initialize();
-
-    this.#group.addEventListener('change', (event) => {
-      const target = event.target;
-      if (!(target instanceof HTMLInputElement) || target.name !== this.#prop) {
-        return;
-      }
-      this.#applyValue(target.value);
-    });
-
-    this.#reset.addEventListener('click', () => this.#resetToComputed());
   }
 
-  #storageKey() {
-    return `aura-segmented:${this.#prop}`;
+  willUpdate(props) {
+    if (props.has('property')) {
+      this.#initialize();
+    }
+  }
+
+  renderContent() {
+    if (!this.#options.length) {
+      return nothing;
+    }
+    return html`
+      <div class="segmented" role="radiogroup" aria-label=${this.label}>
+        ${this.#options.map(
+          (option) => html`
+            <label title=${option.label}>
+              ${option.icon ? html`<vaadin-icon src=${option.icon} aria-hidden="true"></vaadin-icon>` : nothing}
+              ${option.label ? html`<span>${option.label}</span>` : nothing}
+              <input
+                type="radio"
+                name=${this.property}
+                .value=${option.value}
+                .checked=${option.value === this.#value}
+                @change=${this.#onChange}
+              />
+            </label>
+          `,
+        )}
+      </div>
+    `;
+  }
+
+  onReset() {
+    localStorage.removeItem(this.#storageKey());
+    document.documentElement.style.removeProperty(this.property);
+
+    const computed = getComputedStyle(document.documentElement).getPropertyValue(this.property).trim();
+    const value = this.#coerceValue(computed) ?? this.#defaultValue();
+
+    this.#syncSelection(value);
+    this.dispatchEvent(
+      new CustomEvent('value-change', {
+        detail: { property: this.property, value, source: 'reset' },
+      }),
+    );
+  }
+
+  #onChange(event) {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement)) {
+      return;
+    }
+    this.#applyValue(target.value);
+  }
+
+  #applyValue(rawValue) {
+    const normalized = this.#coerceValue(rawValue);
+    if (normalized == null) {
+      return;
+    }
+
+    this.#syncSelection(normalized);
+    if (normalized === this.#defaultValue()) {
+      document.documentElement.style.removeProperty(this.property);
+      localStorage.removeItem(this.#storageKey());
+    } else {
+      document.documentElement.style.setProperty(this.property, normalized);
+      localStorage.setItem(this.#storageKey(), normalized);
+    }
+    this.dispatchEvent(
+      new CustomEvent('value-change', {
+        detail: { property: this.property, value: normalized },
+      }),
+    );
+  }
+
+  #syncSelection(value) {
+    this.#value = value == null ? '' : String(value);
+    this.requestUpdate();
   }
 
   #initialize() {
@@ -142,12 +148,12 @@ class AuraSegmentedControl extends AuraControl {
       const normalized = this.#coerceValue(stored);
       if (normalized != null) {
         this.#syncSelection(normalized);
-        document.documentElement.style.setProperty(this.#prop, normalized);
+        document.documentElement.style.setProperty(this.property, normalized);
         return;
       }
     }
 
-    const computed = getComputedStyle(document.documentElement).getPropertyValue(this.#prop).trim();
+    const computed = getComputedStyle(document.documentElement).getPropertyValue(this.property).trim();
     const fallback = this.#coerceValue(computed);
     if (fallback != null) {
       this.#syncSelection(fallback);
@@ -161,80 +167,6 @@ class AuraSegmentedControl extends AuraControl {
     }
 
     this.#syncSelection(null);
-  }
-
-  #applyValue(rawValue) {
-    const normalized = this.#coerceValue(rawValue);
-    if (normalized == null) {
-      return;
-    }
-
-    this.#syncSelection(normalized);
-    if (normalized === this.#defaultValue()) {
-      // Default option means no explicit override: fall back to stylesheet value.
-      document.documentElement.style.removeProperty(this.#prop);
-      localStorage.removeItem(this.#storageKey());
-    } else {
-      document.documentElement.style.setProperty(this.#prop, normalized);
-      localStorage.setItem(this.#storageKey(), normalized);
-    }
-    this.dispatchEvent(new CustomEvent('value-change', { detail: { property: this.#prop, value: normalized } }));
-  }
-
-  #resetToComputed() {
-    localStorage.removeItem(this.#storageKey());
-    document.documentElement.style.removeProperty(this.#prop);
-
-    const computed = getComputedStyle(document.documentElement).getPropertyValue(this.#prop).trim();
-    const value = this.#coerceValue(computed) ?? this.#defaultValue();
-
-    this.#syncSelection(value);
-    this.dispatchEvent(new CustomEvent('value-change', { detail: { property: this.#prop, value, source: 'reset' } }));
-  }
-
-  #syncSelection(value) {
-    this.#value = value == null ? '' : String(value);
-
-    this.#group.querySelectorAll('input[type="radio"]').forEach((input) => {
-      input.checked = input.value === this.#value;
-    });
-  }
-
-  #renderOptions() {
-    this.#group.innerHTML = '';
-    if (!this.#options.length) {
-      return;
-    }
-
-    this.#group.setAttribute('aria-label', this.#labelText);
-
-    this.#options.forEach((option) => {
-      const input = document.createElement('input');
-      input.type = 'radio';
-      input.name = this.#prop;
-      input.value = option.value;
-      input.checked = option.value === this.#value;
-
-      const label = document.createElement('label');
-      label.title = option.label;
-
-      if (option.icon) {
-        const icon = document.createElement('vaadin-icon');
-        icon.setAttribute('src', option.icon);
-        icon.setAttribute('aria-hidden', 'true');
-        label.append(icon);
-      }
-
-      if (option.label) {
-        const text = document.createElement('span');
-        text.textContent = option.label;
-        label.append(text);
-      }
-
-      label.append(input);
-
-      this.#group.append(label);
-    });
   }
 
   #parseOptionsAttribute(value) {
@@ -303,6 +235,10 @@ class AuraSegmentedControl extends AuraControl {
     const stringValue = String(value ?? '').trim();
     const exact = this.#options.find((option) => option.value === stringValue);
     return exact ? exact.value : null;
+  }
+
+  #storageKey() {
+    return `aura-segmented:${this.property}`;
   }
 }
 

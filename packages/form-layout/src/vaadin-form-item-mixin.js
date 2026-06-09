@@ -7,9 +7,6 @@ import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 
-/**
- * @polymerMixin
- */
 export const FormItemMixin = (superClass) =>
   class extends superClass {
     constructor() {

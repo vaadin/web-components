@@ -298,10 +298,6 @@ function getThemes(tagName) {
   return themeRegistry.filter((theme) => theme.moduleId === defaultModuleName);
 }
 
-/**
- * @polymerMixin
- * @mixes ThemePropertyMixin
- */
 export const ThemableMixin = (superClass) =>
   class VaadinThemableMixin extends ThemePropertyMixin(superClass) {
     constructor() {

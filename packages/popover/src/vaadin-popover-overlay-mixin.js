@@ -8,10 +8,6 @@ import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin
 
 /**
  * A mixin providing common popover overlay functionality.
- *
- * @polymerMixin
- * @mixes PositionMixin
- * @mixes OverlayMixin
  */
 export const PopoverOverlayMixin = (superClass) =>
   class PopoverOverlayMixinClass extends PositionMixin(OverlayMixin(superClass)) {

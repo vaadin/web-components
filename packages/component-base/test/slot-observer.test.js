@@ -220,4 +220,133 @@ describe('SlotObserver', () => {
 
     expect(spy).to.be.not.called;
   });
+
+  describe('target mode', () => {
+    let target;
+
+    beforeEach(() => {
+      host = document.createElement('div');
+      host.attachShadow({ mode: 'open' });
+      host.shadowRoot.innerHTML = '<slot name="a"></slot><slot></slot><slot name="b"></slot>';
+      document.body.appendChild(host);
+      host.innerHTML = `
+        <div slot="a">a1</div>
+        <div slot="a">a2</div>
+        <div>default text</div>
+        <div slot="b">b1</div>
+      `;
+      target = host.shadowRoot;
+    });
+
+    afterEach(() => {
+      host.remove();
+    });
+
+    it('should run callback for the union of all slot nodes asynchronously', async () => {
+      spy = sinon.spy();
+      observer = new SlotObserver(target, spy);
+
+      await Promise.resolve();
+
+      const { addedNodes, currentNodes } = spy.firstCall.args[0];
+      expect(addedNodes).to.have.lengthOf(currentNodes.length);
+      const namedChildren = [...host.children];
+      namedChildren.forEach((child) => {
+        expect(currentNodes).to.include(child);
+      });
+    });
+
+    it('should run callback asynchronously after node is added to a named slot', async () => {
+      spy = sinon.spy();
+      observer = new SlotObserver(target, spy);
+      await Promise.resolve();
+      spy.resetHistory();
+
+      const div = document.createElement('div');
+      div.setAttribute('slot', 'a');
+      host.appendChild(div);
+
+      // Wait for slotchange and subsequent observer microtask
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(spy.calledOnce).to.be.true;
+      const { addedNodes } = spy.firstCall.args[0];
+      expect(addedNodes).to.deep.equal([div]);
+    });
+
+    it('should run callback asynchronously after node is removed from a named slot', async () => {
+      spy = sinon.spy();
+      observer = new SlotObserver(target, spy);
+      await Promise.resolve();
+      spy.resetHistory();
+
+      const div = host.querySelector('[slot="b"]');
+      div.remove();
+
+      // Wait for slotchange and subsequent observer microtask
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(spy.calledOnce).to.be.true;
+      const { removedNodes } = spy.firstCall.args[0];
+      expect(removedNodes).to.deep.equal([div]);
+    });
+
+    it('should report movedNodes for within-slot reorder', async () => {
+      spy = sinon.spy();
+      observer = new SlotObserver(target, spy);
+      await Promise.resolve();
+      spy.resetHistory();
+
+      const aNodes = host.querySelectorAll('[slot="a"]');
+      host.insertBefore(aNodes[1], aNodes[0]);
+
+      // Wait for slotchange and subsequent observer microtask
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(spy.calledOnce).to.be.true;
+      const { addedNodes, removedNodes, movedNodes } = spy.firstCall.args[0];
+      expect(addedNodes).to.be.empty;
+      expect(removedNodes).to.be.empty;
+      expect(movedNodes).to.include(aNodes[0]);
+      expect(movedNodes).to.include(aNodes[1]);
+    });
+
+    it('should not run callback on cross-slot reassignment', async () => {
+      spy = sinon.spy();
+      observer = new SlotObserver(target, spy);
+      await Promise.resolve();
+      spy.resetHistory();
+
+      const moving = host.querySelector('[slot="a"]');
+      moving.setAttribute('slot', 'b');
+
+      // Wait for slotchange and subsequent observer microtask
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(spy.called).to.be.false;
+    });
+
+    it('should run callback when a text node is added to the default slot', async () => {
+      host.innerHTML = '';
+      spy = sinon.spy();
+      observer = new SlotObserver(target, spy, true);
+      await Promise.resolve();
+      spy.resetHistory();
+
+      const text = document.createTextNode('hello');
+      host.appendChild(text);
+
+      // Wait for slotchange and subsequent observer microtask
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(spy.calledOnce).to.be.true;
+      const { addedNodes } = spy.firstCall.args[0];
+      expect(addedNodes).to.deep.equal([text]);
+    });
+  });
 });

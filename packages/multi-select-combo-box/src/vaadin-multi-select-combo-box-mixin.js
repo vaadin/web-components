@@ -5,6 +5,7 @@
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { ComboBoxDataProviderMixin } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
+import { ComboBoxFocusIndexMixin } from '@vaadin/combo-box/src/vaadin-combo-box-focus-index-mixin.js';
 import { ComboBoxItemsMixin } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
 import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
@@ -23,18 +24,9 @@ const DEFAULT_I18N = {
   total: '{count} items selected',
 };
 
-/**
- * @polymerMixin
- * @mixes ComboBoxDataProviderMixin
- * @mixes ComboBoxItemsMixin
- * @mixes I18nMixin
- * @mixes InputControlMixin
- * @mixes ResizeMixin
- */
 export const MultiSelectComboBoxMixin = (superClass) =>
   class MultiSelectComboBoxMixinClass extends I18nMixin(
-    DEFAULT_I18N,
-    ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass)))),
+    ComboBoxFocusIndexMixin(ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass))))),
   ) {
     static get properties() {
       return {
@@ -229,6 +221,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         '__updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
         '__updateTopGroup(selectedItemsOnTop, selectedItems, opened)',
       ];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**
@@ -497,7 +493,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     __openedOrItemsChanged(opened, items, loading, keepOverlayOpened) {
       // Close the overlay if there are no items to display.
       // See https://github.com/vaadin/vaadin-combo-box/pull/964
-      this._overlayOpened = opened && (keepOverlayOpened || loading || !!(items && items.length));
+      this._overlayOpened = opened && (keepOverlayOpened || loading || !!items?.length);
     }
 
     /**
@@ -710,7 +706,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         return;
       }
 
-      if (items && items.length && this._topGroup && this._topGroup.length) {
+      if (items?.length && this._topGroup?.length) {
         // Filter out items included to the top group.
         const filteredItems = items.filter((item) => this._findIndex(item, this._topGroup, this.itemIdPath) === -1);
 
@@ -730,6 +726,18 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // in the case when more filtered items are loading but it is reset
       // when the user types in a filter query.
       const focusedItem = oldItems ? oldItems[this._focusedIndex] : null;
+
+      // When both the previously-focused entry and the new entry at the
+      // same index are placeholders (e.g. the Flow connector mid-scroll
+      // re-pushing `__setDropdownItems`), preserve `_focusedIndex` until
+      // a follow-up call lands a real item at that position.
+      if (
+        oldItems &&
+        oldItems[this._focusedIndex] instanceof ComboBoxPlaceholder &&
+        newItems[this._focusedIndex] instanceof ComboBoxPlaceholder
+      ) {
+        return;
+      }
 
       // Try to first set focus on the item that had been focused before `newItems` were updated
       // if it is still present in the `newItems` array. Otherwise, set the focused index
@@ -811,7 +819,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       if (index !== -1) {
         const lastFilter = this._lastFilter;
         // Do not unselect when manually typing and committing an already selected item.
-        if (lastFilter && lastFilter.toLowerCase() === itemLabel.toLowerCase()) {
+        if (lastFilter?.toLowerCase() === itemLabel.toLowerCase()) {
           this.__clearInternalValue();
           return;
         }
@@ -1334,10 +1342,4 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // and keep the overlay opened when clicking a chip.
       event.preventDefault();
     }
-
-    /**
-     * Fired when the user sets a custom value.
-     * @event custom-value-set
-     * @param {string} detail the custom value
-     */
   };

@@ -2,7 +2,7 @@ import { arrowDown, fixtureSync, nextRender, nextResize, oneEvent } from '@vaadi
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '@vaadin/icon';
-import '../../not-animated-styles.js';
+import '../../not-animated-styles.css';
 import '../../../src/vaadin-menu-bar.js';
 
 describe('menu-bar', () => {

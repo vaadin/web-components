@@ -21,7 +21,7 @@ export const masterDetailLayoutStyles = css`
   }
 
   :host:not([overlay-containment='page']) {
-    z-index: 0;
+    isolation: isolate;
   }
 
   :host([dir='rtl']) {
@@ -183,13 +183,11 @@ export const masterDetailLayoutStyles = css`
 
   #detailPlaceholder {
     z-index: 1;
-    opacity: 0;
-    pointer-events: none;
+    visibility: hidden;
   }
 
   :host([has-detail-placeholder]:not([has-detail], [overlay])) #detailPlaceholder {
-    opacity: 1;
-    pointer-events: auto;
+    visibility: visible;
   }
 
   :is(#detail, #detailPlaceholder, #detailOutgoing) {

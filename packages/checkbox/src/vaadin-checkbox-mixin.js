@@ -13,13 +13,6 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
 
 /**
  * A mixin providing common checkbox functionality.
- *
- * @polymerMixin
- * @mixes ActiveMixin
- * @mixes CheckedMixin
- * @mixes DelegateFocusMixin
- * @mixes FieldMixin
- * @mixes SlotStylesMixin
  */
 export const CheckboxMixin = (superclass) =>
   class CheckboxMixinClass extends SlotStylesMixin(
@@ -33,7 +26,6 @@ export const CheckboxMixin = (superclass) =>
          * The state is reset once the user switches the checkbox by hand.
          *
          * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
-         *
          */
         indeterminate: {
           type: Boolean,
@@ -44,7 +36,6 @@ export const CheckboxMixin = (superclass) =>
 
         /**
          * The name of the checkbox.
-         *
          */
         name: {
           type: String,
@@ -124,7 +115,7 @@ export const CheckboxMixin = (superclass) =>
       );
       this.addController(new LabelledInputController(this.inputElement, this._labelController));
 
-      this._createMethodObserver('_checkedChanged(checked)');
+      this._createPropertyObserver('checked', '_checkedChanged');
     }
 
     /**
@@ -236,12 +227,10 @@ export const CheckboxMixin = (superclass) =>
     }
 
     /** @private */
-    _checkedChanged(checked) {
-      if (checked || this.__oldChecked) {
+    _checkedChanged(checked, oldChecked) {
+      if (checked || oldChecked) {
         this._requestValidation();
       }
-
-      this.__oldChecked = checked;
     }
 
     /**
@@ -263,10 +252,4 @@ export const CheckboxMixin = (superclass) =>
     _onRequiredIndicatorClick() {
       this._labelNode.click();
     }
-
-    /**
-     * Fired when the checkbox is checked or unchecked by the user.
-     *
-     * @event change
-     */
   };

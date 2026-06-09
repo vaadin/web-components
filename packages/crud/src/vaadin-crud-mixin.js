@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -44,12 +43,9 @@ const DEFAULT_I18N = {
 
 /**
  * A mixin providing common crud functionality.
- *
- * @polymerMixin
- * @mixes I18nMixin
  */
 export const CrudMixin = (superClass) =>
-  class extends I18nMixin(DEFAULT_I18N, superClass) {
+  class extends I18nMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -302,6 +298,10 @@ export const CrudMixin = (superClass) =>
         '__deleteButtonPropsChanged(_deleteButton, __effectiveI18n, __isNew)',
         '__newButtonPropsChanged(_newButton, __effectiveI18n)',
       ];
+    }
+
+    static get defaultI18n() {
+      return DEFAULT_I18N;
     }
 
     /**
@@ -793,7 +793,7 @@ export const CrudMixin = (superClass) =>
     __createDataProviderProxy(dataProvider) {
       return (params, callback) => {
         const callbackProxy = (chunk, size) => {
-          if (chunk && chunk[0]) {
+          if (chunk?.[0]) {
             this.__model = chunk[0];
           }
 
@@ -1003,45 +1003,4 @@ export const CrudMixin = (superClass) =>
         element.removeAttribute('aria-hidden');
       }
     }
-
-    /**
-     * Fired when user wants to edit an existing item. If the default is prevented, then
-     * a new item is not assigned to the form, giving that responsibility to the app, though
-     * dialog is always opened.
-     *
-     * @event edit
-     * @param {Object} detail.item the item to edit
-     */
-
-    /**
-     * Fired when user wants to create a new item.
-     *
-     * @event new
-     */
-
-    /**
-     * Fired when user wants to delete item. If the default is prevented, then
-     * no action is performed, items array is not modified nor dialog closed
-     *
-     * @event delete
-     * @param {Object} detail.item the item to delete
-     */
-
-    /**
-     * Fired when user discards edition. If the default is prevented, then
-     * no action is performed, user is responsible to close dialog and reset
-     * item and grid.
-     *
-     * @event cancel
-     * @param {Object} detail.item the item to delete
-     */
-
-    /**
-     * Fired when user wants to save a new or an existing item. If the default is prevented, then
-     * no action is performed, items array is not modified nor dialog closed
-     *
-     * @event save
-     * @param {Object} detail.item the item to save
-     * @param {Object} detail.new whether the item is a new one
-     */
   };

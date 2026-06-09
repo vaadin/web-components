@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -40,9 +39,6 @@ export function getDefaultI18n() {
 
 /**
  * Shared functionality between widgets and sections
- *
- * @polymerMixin
- * @mixes ResizeMixin
  */
 export const DashboardItemMixin = (superClass) =>
   class DashboardItemMixinClass extends ResizeMixin(superClass) {

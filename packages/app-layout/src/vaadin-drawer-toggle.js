@@ -57,9 +57,6 @@ import { drawerToggle } from './styles/vaadin-drawer-toggle-base-styles.js';
  *
  * @customElement vaadin-drawer-toggle
  * @extends HTMLElement
- * @mixes ButtonMixin
- * @mixes DirMixin
- * @mixes ThemableMixin
  */
 class DrawerToggle extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

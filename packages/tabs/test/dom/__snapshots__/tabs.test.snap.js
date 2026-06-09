@@ -10,6 +10,7 @@ snapshots["vaadin-tabs default"] =
 <div
   id="scroll"
   part="tabs"
+  tabindex="-1"
 >
   <slot>
   </slot>

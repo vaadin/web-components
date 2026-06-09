@@ -1,173 +1,145 @@
-import { AuraControl } from './aura-abstract-control.js';
+import { html } from 'lit';
+import { AuraLitControl } from './aura-lit-control.js';
 
-class AuraNumberControl extends AuraControl {
+class AuraNumberControl extends AuraLitControl {
   static get is() {
     return 'aura-number-control';
   }
 
-  static get observedAttributes() {
-    return ['property', 'min', 'max', 'step', 'label'];
+  static get properties() {
+    return {
+      property: {
+        type: String,
+      },
+      min: {
+        type: Number,
+      },
+      max: {
+        type: Number,
+      },
+      step: {
+        type: Number,
+      },
+      defaultValue: {
+        type: Number,
+        attribute: 'default',
+      },
+      value: {
+        type: String,
+        state: true,
+      },
+    };
   }
 
-  #labelEl;
-  #input;
-  #output;
-  #resetBtn;
-  #prop = '--numeric';
-  #min = 0;
-  #max = 100;
-  #step = 1;
-  #default;
   #initialComputed = null;
 
   constructor() {
     super();
-    this.initControl({
-      label: 'Numeric value',
-      content: '<input type="range" /><output>0</output>',
-    });
-    this.#labelEl = this.labelElement;
-    this.#input = this.querySelector('input[type="range"]');
-    this.#output = this.querySelector('output');
-    this.#resetBtn = this.resetButton;
-  }
-
-  attributeChangedCallback(name, _old, val) {
-    switch (name) {
-      case 'property':
-        this.#prop = val?.trim() || '--numeric';
-        break;
-      case 'min':
-        this.#min = this.#toNumber(val, 0);
-        break;
-      case 'max':
-        this.#max = this.#toNumber(val, 100);
-        break;
-      case 'step':
-        this.#step = this.#toNumber(val, 1);
-        break;
-      case 'default':
-        this.#default = this.#toNumber(val, -1);
-        break;
-      case 'label':
-        this.#labelEl.textContent = val || 'Numeric value';
-        break;
-      default:
-        break;
-    }
-    // if (this.isConnected) this.#configureAndInit();
+    this.property = '--numeric';
+    this.min = 0;
+    this.max = 100;
+    this.step = 1;
+    this.value = 0;
   }
 
   connectedCallback() {
-    // Defaults from attributes if present
-    if (this.hasAttribute('property')) this.#prop = this.getAttribute('property').trim();
-    if (this.hasAttribute('min')) this.#min = this.#toNumber(this.getAttribute('min'), this.#min);
-    if (this.hasAttribute('max')) this.#max = this.#toNumber(this.getAttribute('max'), this.#max);
-    if (this.hasAttribute('step')) this.#step = this.#toNumber(this.getAttribute('step'), this.#step);
-    if (this.hasAttribute('default')) this.#default = this.#toNumber(this.getAttribute('default'), this.#default);
-    if (this.hasAttribute('label')) {
-      this.#labelEl.textContent = this.getAttribute('label');
-    } else {
-      this.#labelEl.textContent = this.#prop;
+    super.connectedCallback();
+
+    if (this.min > this.max) {
+      [this.min, this.max] = [this.max, this.min];
     }
 
-    this.#configureAndInit();
-
-    this.#input.addEventListener('input', () => {
-      const v = Number(this.#input.value);
-      this.#setValue(v);
-    });
-
-    this.#resetBtn.addEventListener('click', () => {
-      if (this.#initialComputed != null) {
-        this.#setValue(this.#initialComputed, { persist: null });
-      } else {
-        this.#initializeValue(); // recompute fallback
-      }
-    });
-  }
-
-  // ----- Internals -----
-
-  #configureAndInit() {
-    // Ensure min <= max; swap if needed
-    if (this.#min > this.#max) [this.#min, this.#max] = [this.#max, this.#min];
-    // Configure input element
-    this.#input.min = String(this.#min);
-    this.#input.max = String(this.#max);
-    this.#input.step = String(this.#step > 0 ? this.#step : 1);
-    this.#input.value = String(this.#default > 0 ? this.#default : undefined);
-    // Initialize value from storage or computed
     this.#initializeValue();
   }
 
-  #storageKey() {
-    return `aura-number:${this.#prop}`;
+  renderContent() {
+    return html`
+      <input
+        type="range"
+        min=${this.min}
+        max=${this.max}
+        step=${this.step > 0 ? this.step : 1}
+        .value=${String(this.value)}
+        @input=${this.#onInput}
+      />
+      <output>${this.value}</output>
+    `;
+  }
+
+  onReset() {
+    if (this.#initialComputed != null) {
+      this.#setValue(this.#initialComputed, { persist: 'clear' });
+    } else {
+      this.#initializeValue();
+    }
+  }
+
+  #onInput(event) {
+    this.#setValue(Number(event.target.value));
   }
 
   #initializeValue() {
-    // 1) Try localStorage
     const stored = localStorage.getItem(this.#storageKey());
     if (stored != null && stored !== '') {
       const num = this.#clamp(this.#snap(Number(stored)));
-      this.#initialComputed = this.#getComputedNumber(); // track for reset
+      this.#initialComputed = this.#getComputedNumber();
       this.#setValue(num, { persist: false });
       return;
     }
 
-    // 2) Fallback to computed style
     const computed = this.#getComputedNumber();
-    const initial = computed != null ? computed : this.#clamp(this.#snap((this.#min + this.#max) / 2));
-    this.#initialComputed = computed ?? initial;
-    this.#setValue(initial, { persist: null });
+    const initial =
+      computed ??
+      (Number.isFinite(this.defaultValue)
+        ? this.#clamp(this.#snap(this.defaultValue))
+        : this.#clamp(this.#snap((this.min + this.max) / 2)));
+    this.#initialComputed = initial;
+    this.#setValue(initial, { persist: 'clear' });
+  }
+
+  #setValue(v, opts = { persist: true }) {
+    const value = this.#clamp(this.#snap(Number(v)));
+    this.value = value;
+    document.documentElement.style.setProperty(this.property, String(value));
+    if (opts.persist === true) {
+      localStorage.setItem(this.#storageKey(), String(value));
+    } else if (opts.persist === 'clear') {
+      document.documentElement.style.removeProperty(this.property);
+      localStorage.removeItem(this.#storageKey());
+    }
+    this.dispatchEvent(new CustomEvent('value-change', { detail: { property: this.property, value } }));
+  }
+
+  #storageKey() {
+    return `aura-number:${this.property}`;
   }
 
   #getComputedNumber() {
-    // Read computed value for the property on :root and parseFloat
-    const raw = getComputedStyle(document.documentElement).getPropertyValue(this.#prop).trim();
+    const raw = getComputedStyle(document.documentElement).getPropertyValue(this.property).trim();
     if (!raw) return null;
     const n = parseFloat(raw);
     return Number.isFinite(n) ? this.#clamp(this.#snap(n)) : null;
   }
 
   #clamp(v) {
-    return Math.min(this.#max, Math.max(this.#min, v));
+    return Math.min(this.max, Math.max(this.min, v));
   }
 
   #snap(v) {
-    // Snap to the nearest multiple of step from min
-    const step = this.#step > 0 ? this.#step : 1;
-    const k = Math.round((v - this.#min) / step);
-    const snapped = this.#min + k * step;
-    // Avoid floating point noise
+    const step = this.step > 0 ? this.step : 1;
+    const k = Math.round((v - this.min) / step);
+    const snapped = this.min + k * step;
     const decimals = this.#decimals(step);
     return Number(snapped.toFixed(decimals));
   }
 
   #decimals(n) {
     const s = String(n);
-    if (s.includes('e-')) return parseInt(s.split('e-')[1], 10) || 0;
+    if (s.includes('e-')) {
+      return parseInt(s.split('e-')[1], 10) || 0;
+    }
     const i = s.indexOf('.');
     return i === -1 ? 0 : s.length - i - 1;
-  }
-
-  #toNumber(val, fallback) {
-    const n = Number(val);
-    return Number.isFinite(n) ? n : fallback;
-  }
-
-  #setValue(v, opts = { persist: true }) {
-    const value = this.#clamp(this.#snap(Number(v)));
-    this.#input.value = String(value);
-    this.#output.textContent = String(value);
-    document.documentElement.style.setProperty(this.#prop, String(value));
-    if (opts.persist) {
-      localStorage.setItem(this.#storageKey(), String(value));
-    } else if (opts.persist === null) {
-      document.documentElement.style.removeProperty(this.#prop);
-      localStorage.removeItem(this.#storageKey());
-    }
-    this.dispatchEvent(new CustomEvent('value-change', { detail: { property: this.#prop, value } }));
   }
 }
 

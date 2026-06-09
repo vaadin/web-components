@@ -124,6 +124,11 @@ describe('filter', () => {
     filter.focus();
     expect(spy.calledOnce).to.be.true;
   });
+
+  it('should hide the filter when applying the hidden attribute', () => {
+    filter.hidden = true;
+    expect(getComputedStyle(filter).display).to.equal('none');
+  });
 });
 
 function gridFiltersFixture() {

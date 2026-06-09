@@ -18,10 +18,6 @@ import { MenuOverlayMixin } from './vaadin-menu-overlay-mixin.js';
  *
  * @customElement vaadin-context-menu-overlay
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes MenuOverlayMixin
- * @mixes OverlayMixin
- * @mixes ThemableMixin
  * @protected
  */
 export class ContextMenuOverlay extends MenuOverlayMixin(
@@ -48,6 +44,10 @@ export class ContextMenuOverlay extends MenuOverlayMixin(
 
   static get styles() {
     return contextMenuOverlayStyles;
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
   /**

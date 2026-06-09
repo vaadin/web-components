@@ -3,13 +3,9 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/slider.css';
-import '../common.js';
+import '../not-animated-styles.css';
 import '../../../vaadin-slider.js';
 import type { Slider } from '../../../vaadin-slider.js';
-
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.sliderComponent = true;
 
 describe('slider', () => {
   let div: HTMLDivElement;

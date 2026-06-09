@@ -70,10 +70,6 @@ class TabsSlotController extends SlotController {
   }
 }
 
-/**
- * @polymerMixin
- * @mixes DelegateStateMixin
- */
 export const TabSheetMixin = (superClass) =>
   class extends DelegateStateMixin(superClass) {
     static get properties() {

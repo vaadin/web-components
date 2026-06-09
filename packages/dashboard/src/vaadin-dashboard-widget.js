@@ -4,7 +4,6 @@
  *
  * This program is available under Vaadin Commercial License and Service Terms.
  *
- *
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
@@ -16,8 +15,7 @@ import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dashboardWidgetStyles } from './styles/vaadin-dashboard-widget-base-styles.js';
 import { findAncestorInstance, SYNCHRONIZED_ATTRIBUTES, WRAPPER_LOCAL_NAME } from './vaadin-dashboard-helpers.js';
-import { DashboardItemMixin } from './vaadin-dashboard-item-mixin.js';
-import { getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
+import { DashboardItemMixin, getDefaultI18n } from './vaadin-dashboard-item-mixin.js';
 import { DashboardSection } from './vaadin-dashboard-section.js';
 
 /**
@@ -101,9 +99,6 @@ import { DashboardSection } from './vaadin-dashboard-section.js';
  *
  * @customElement vaadin-dashboard-widget
  * @extends HTMLElement
- * @mixes ElementMixin
- * @mixes ThemableMixin
- * @mixes DashboardItemMixin
  */
 class DashboardWidget extends DashboardItemMixin(
   ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),

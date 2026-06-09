@@ -11,8 +11,6 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
 
 /**
  * A mixin providing common notification container functionality.
- *
- * @polymerMixin
  */
 export const NotificationContainerMixin = (superClass) =>
   class extends superClass {
@@ -94,7 +92,7 @@ export const NotificationContainerMixin = (superClass) =>
       // Notifications are a separate overlay mechanism from vaadin-overlay, and
       // interacting with them should not close modal overlays
       const sourceEvent = event.detail.sourceEvent;
-      const isFromNotification = sourceEvent && sourceEvent.composedPath().indexOf(this) >= 0;
+      const isFromNotification = sourceEvent?.composedPath().indexOf(this) >= 0;
       if (isFromNotification) {
         event.preventDefault();
       }
@@ -103,10 +101,6 @@ export const NotificationContainerMixin = (superClass) =>
 
 /**
  * A mixin providing common notification functionality.
- *
- * @polymerMixin
- * @mixes OverlayClassMixin
- * @mixes ThemePropertyMixin
  */
 export const NotificationMixin = (superClass) =>
   class extends ThemePropertyMixin(OverlayClassMixin(superClass)) {
@@ -216,16 +210,16 @@ export const NotificationMixin = (superClass) =>
       if (options && Number.isFinite(options.duration)) {
         notification.duration = options.duration;
       }
-      if (options && options.position) {
+      if (options?.position) {
         notification.position = options.position;
       }
-      if (options && options.assertive) {
+      if (options?.assertive) {
         notification.assertive = options.assertive;
       }
-      if (options && options.theme) {
+      if (options?.theme) {
         notification.setAttribute('theme', options.theme);
       }
-      if (options && options.className) {
+      if (options?.className) {
         notification.overlayClass = options.className;
       }
       notification.renderer = renderer;
@@ -443,10 +437,4 @@ export const NotificationMixin = (superClass) =>
         }
       }
     }
-
-    /**
-     * Fired when the notification is closed.
-     *
-     * @event closed
-     */
   };

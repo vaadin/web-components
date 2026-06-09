@@ -42,25 +42,6 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
 
 /**
  * A mixin providing common grid functionality.
- *
- * @polymerMixin
- * @mixes A11yMixin
- * @mixes ActiveItemMixin
- * @mixes ArrayDataProviderMixin
- * @mixes ColumnResizingMixin
- * @mixes DataProviderMixin
- * @mixes DynamicColumnsMixin
- * @mixes FilterMixin
- * @mixes RowDetailsMixin
- * @mixes ScrollMixin
- * @mixes SelectionMixin
- * @mixes SortMixin
- * @mixes KeyboardNavigationMixin
- * @mixes ColumnReorderingMixin
- * @mixes EventContextMixin
- * @mixes StylingMixin
- * @mixes DragAndDropMixin
- * @mixes ResizeMixin
  */
 export const GridMixin = (superClass) =>
   class extends ColumnAutoWidthMixin(
@@ -417,7 +398,7 @@ export const GridMixin = (superClass) =>
       const slot = document.createElement('slot');
       slot.setAttribute('name', slotName);
 
-      if (column && column._focusButtonMode) {
+      if (column?._focusButtonMode) {
         const div = document.createElement('div');
         div.setAttribute('role', 'button');
         div.setAttribute('tabindex', '-1');
@@ -871,7 +852,7 @@ export const GridMixin = (superClass) =>
     _showTooltip(event) {
       // Check if there is a slotted vaadin-tooltip element.
       const tooltip = this._tooltipController.node;
-      if (tooltip && tooltip.isConnected) {
+      if (tooltip?.isConnected) {
         const target = event.target;
 
         if (!this.__isCellFullyVisible(target)) {

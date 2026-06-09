@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './not-animated-styles.js';
 import { AccordionPanel } from '@vaadin/accordion/src/vaadin-accordion-panel.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
 import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
