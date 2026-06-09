@@ -58,7 +58,7 @@ Shadow DOM:
 </vaadin-breadcrumbs-overlay>
 ```
 
-The `<div role="list">` is used instead of `<ol>` because (a) `<ol>` accepts only `<li>` children per HTML spec, and the slotted elements are `<vaadin-breadcrumbs-item>`, and (b) `<ol>`/`<ul>` with `list-style: none` has its list role stripped by Safari/VoiceOver, which would suppress "list with N items" announcements. An explicit `role="list"` is immune to both issues.
+The `<div role="list">` is used instead of `<ol>` because `<ol>` only accepts `<li>` children and Safari/VoiceOver strips the list role under `list-style: none` (see Discussion).
 
 `<vaadin-breadcrumbs-overlay>` is rendered statically in the breadcrumbs' shadow DOM, matching the convention of `<vaadin-combo-box>`, `<vaadin-avatar-group>`, `<vaadin-menu-bar-submenu>`, and other Vaadin overlay-hosting components. See "Overlay management" below for its lifecycle and how collapsed items reach it.
 
@@ -77,7 +77,7 @@ The `<div role="list">` is used instead of `<ol>` because (a) `<ol>` accepts onl
 | `overflow` | The element wrapping the overflow button. |
 | `overflow-button` | The button that reveals collapsed items. |
 
-The overflow overlay's outer panel and its inner wrapper live on `<vaadin-breadcrumbs-overlay>` and are re-exported on the breadcrumbs host through `exportparts="overlay, content: overlay-content"` — the overlay's `content` part is renamed to `overlay-content` on export so it does not collide with anything else themes might expect on the breadcrumbs. Themes target them as `vaadin-breadcrumbs::part(overlay)` and `vaadin-breadcrumbs::part(overlay-content)`. The `<vaadin-breadcrumbs-overlay>` element itself is an internal implementation detail and is not part of the theming contract.
+The overflow overlay's outer panel and inner wrapper are re-exported on the breadcrumbs host via `exportparts="overlay, content: overlay-content"`, so themes target them as `vaadin-breadcrumbs::part(overlay)` and `vaadin-breadcrumbs::part(overlay-content)` (the `content` part is renamed to avoid ambiguity — see Discussion). The `<vaadin-breadcrumbs-overlay>` element itself is internal and not part of the theming contract.
 
 | State attribute | Description |
 |---|---|
@@ -94,9 +94,9 @@ Internal behavior:
 - **Overflow detection.** On resize (via `ResizeMixin`) and on slot changes, the component measures whether all items fit within the container width. If not, it progressively collapses items starting from the one closest to the root (the first default-slot item) by reassigning `slot="overlay"` on each. If further space is needed, the root item collapses too. The last item (current page) never collapses.
 - **Overlay management.** The breadcrumbs' `render()` always emits `<vaadin-breadcrumbs-overlay .opened .owner no-vertical-overlap restore-focus-on-close exportparts="overlay, content: overlay-content">` as a sibling of `[part="list"]`, with `.opened` bound to `__overlayOpened` and `.owner` bound to the host. `positionTarget` and `restoreFocusNode` are set imperatively from `firstUpdated()` to the `[part="overflow-button"]` element. `no-vertical-overlap` keeps the overlay strictly above or below the overflow button (never overlapping it) so the trail stays visible while the overlay is open. Collapsed items carry `slot="overlay"` (assigned by `__updateOverflow()`) and remain in the breadcrumbs' light DOM; the overlay's default slot projects them in, so the same physical element renders in either the trail or the overlay, never both. Clicking the overflow button toggles `__overlayOpened`. Everything else — keeping the overlay hidden while closed, outside-click and Escape closing, focus restoration to the overflow button (via `restore-focus-on-close`), top-layer rendering, and stacking — comes from `OverlayMixin`; the breadcrumb does not touch positioning or event wiring beyond the bindings above.
 - **Overflow separator.** The overflow element sits in the list flow between the root and the rest, so it needs a separator after it when visible. Its `[part="overflow"]::after` pseudo-element reuses the same separator recipe as `<vaadin-breadcrumbs-item>` (see "Separator rendering"), so the overflow element visually matches peer items. When `has-overflow` is not set, the overflow element is hidden, so its separator is not visible either.
-- **Width-constrained list flow.** The host carries `width: 100%; min-width: 0`, and `[part="list"]` is a `display: flex; flex-wrap: nowrap` container with `min-width: 0; max-width: 100%`. The list stretches to its parent's width and shrinks below its natural content width, which is how overflow detection knows when items no longer fit. Nothing relies on `overflow: hidden`, so focus outlines on items render without being cropped by the list edge.
+- **Width-constrained list flow.** The host carries `width: 100%; min-width: 0`, and `[part="list"]` is a `display: flex; flex-wrap: nowrap` container with `min-width: 0; max-width: 100%`. The list stretches to its parent's width and shrinks below its natural content width, which is how overflow detection knows when items no longer fit. It does not clip with `overflow: hidden` (see Discussion).
 - **Overflow-button click target.** `[part="overflow-button"]` uses a `padding: max(var(--vaadin-padding-block-container), (24px - 1lh) / 2)` formula paired with the matching negative `margin`, so the click target is at least 24×24 px (WCAG 2.5.8) without changing the button's visual size.
-- **Baseline alignment.** The host and `[part="list"]` use `align-items: baseline`; `[part="overflow"]` inherits the baseline alignment. When an item's text wraps onto multiple lines, prefix icons and adjacent items stay aligned to the first line's baseline rather than the box center, keeping the trail readable when the available width is tight. Icon pseudo-elements (the separator on each item and on `[part="overflow"]`, plus the overflow button's `::before`) are sized to `1lh` so they fill the line height; separators mask their icon at `90%` of the box and carry `opacity: 0.75` to keep the chevron visually subordinate to text, the overflow-button icon uses `opacity: 0.8` for the same reason.
+- **Baseline alignment.** The host and `[part="list"]` use `align-items: baseline`; `[part="overflow"]` inherits it, so when an item's text wraps onto multiple lines, prefix icons and adjacent items stay aligned to the first line's baseline rather than the box center (see Discussion). Icon pseudo-elements (the separator on each item and on `[part="overflow"]`, plus the overflow button's `::before`) are sized to `1lh` so they fill the line height; separators mask their icon at `90%` of the box and carry `opacity: 0.75` to keep the chevron visually subordinate to text, and the overflow-button icon uses `opacity: 0.8` for the same reason.
 
 ---
 
@@ -157,7 +157,7 @@ Internal behavior:
 - **Separator rendering.** A `:host::after` pseudo-element renders the separator, following the button-base-styles pattern: `background: currentColor` masked by `mask-image: var(--vaadin-breadcrumbs-separator)`, flipped with `transform: scaleX(-1)` in RTL. The separator is hidden on the last item (`:host(:last-of-type)::after { display: none }`) and on any item with the `current` attribute. The container reuses this same recipe for the overflow element's separator (see "Overflow separator").
 - **`aria-current="page"`.** When the parent sets the `current` state attribute on the host, the inner `<span part="nolink">` element gets `aria-current="page"`.
 - **Prefix slot.** A `SlotController` observes the `prefix` slot and toggles `has-prefix` on the host for styling.
-- **Padding-based click target.** Each item's `[part="link"]` / `[part="nolink"]` carries `padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)`. Trail items get a negative `margin-inline` (applied via `:host(:not([slot='overlay']))`) that cancels the inline padding for layout, so the visual edges stay at the text and only the click target / focus outline grow. Overlay items skip the negative-margin compensator, giving them a row-shaped click target that the overlay's hover/focus background can fill.
+- **Padding-based click target.** Each item's `[part="link"]` / `[part="nolink"]` carries `padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)`. Trail items get a negative `margin-inline` (applied via `:host(:not([slot='overlay']))`) that cancels the inline padding for layout; overlay items skip the compensator (see Discussion).
 
 ---
 
@@ -179,7 +179,7 @@ The element exposes no public properties or slots of its own — it inherits eve
 | Part | Description |
 |---|---|
 | `overlay` | The outer panel. Inherited `OverlayMixin` part naming. Re-exported on the breadcrumbs host as `overlay` via `exportparts`. |
-| `content` | The inner wrapper holding the overlay content. Carries `role="list"` so the slotted `<vaadin-breadcrumbs-item>` elements (each `role="listitem"`) form a valid ARIA list. Inherited `OverlayMixin` part naming. Re-exported on the breadcrumbs host as **`overlay-content`** via `exportparts="content: overlay-content"`, so theme authors targeting the breadcrumbs' host write `vaadin-breadcrumbs::part(overlay-content)` and there is no ambiguity with the breadcrumbs' own parts. |
+| `content` | The inner wrapper holding the overlay content. Carries `role="list"` so the slotted `<vaadin-breadcrumbs-item>` elements (each `role="listitem"`) form a valid ARIA list. Inherited `OverlayMixin` part naming. Re-exported on the breadcrumbs host as **`overlay-content`** via `exportparts="content: overlay-content"` (see Discussion for the rename). |
 
 Internal behavior:
 
@@ -243,13 +243,9 @@ An earlier revision exposed an `items` data array (`{ text, path }[]`) on `<vaad
 
 So global page CSS can style the links *and* `<vaadin-breadcrumbs-overlay>` stays free of rendering plumbing. Anything written into the overlay's shadow `[part="content"]` is unreachable from page-level stylesheets, which would force users into `::part` workarounds. Driving the content through `OverlayMixin`'s callback-style `.renderer` adds an indirection — the breadcrumb would have to construct elements imperatively against an external root, the overlay would have to override `_rendererRoot`, and a no-op `.renderer` placeholder leaks into early commits. Reassigning `slot="overlay"` on the existing item element instead keeps each item as a single physical DOM node — it renders in the trail or in the overlay depending on its slot — and the overlay element never needs to know about the rendering shape at all.
 
-**Q: Why expose the `overlay` and `content` parts on the breadcrumbs host rather than on `<vaadin-breadcrumbs-overlay>`?**
+**Q: Why are the overlay parts re-exported on the breadcrumbs host, with `content` renamed to `overlay-content`?**
 
-`<vaadin-breadcrumbs-overlay>` is an internal element — applications and theme authors should not need to know it exists. Re-exporting its parts via `exportparts="overlay, content"` lets themes target `vaadin-breadcrumbs::part(overlay)` directly, which keeps the theming surface inside the public element name and avoids leaking the overlay's identity into stylesheet selectors.
-
-**Q: Why is the overlay's `content` part re-exported as `overlay-content` on the breadcrumbs host?**
-
-`OverlayMixin` names the outer panel `overlay` and the inner wrapper `content`. Re-exporting both names verbatim onto `<vaadin-breadcrumbs>` would expose `vaadin-breadcrumbs::part(content)` to theme authors — and "content" reads as if it should refer to the visible trail of items, not to the inner wrapper of the overflow popup that only appears when items collapse. To avoid that misreading, the overlay element re-exports `content` as `overlay-content` on the breadcrumbs host (`exportparts="overlay, content: overlay-content"`). The overlay's `overlay` part keeps its name on the host because there is no comparable ambiguity. Inside `<vaadin-breadcrumbs-overlay>` itself the part is still called `content`, matching every other Vaadin overlay; the rename is a host-side disambiguation only.
+`<vaadin-breadcrumbs-overlay>` is an internal element — applications and theme authors should not need to know it exists. Re-exporting its parts via `exportparts` lets themes target `vaadin-breadcrumbs::part(overlay)` directly, which keeps the theming surface inside the public element name and avoids leaking the overlay's identity into stylesheet selectors. The `overlay` part keeps its name, but `content` is renamed to `overlay-content`: `OverlayMixin` names the inner wrapper `content`, and `vaadin-breadcrumbs::part(content)` would read as if it referred to the visible trail of items rather than to the inner wrapper of the overflow popup that only appears when items collapse. Inside `<vaadin-breadcrumbs-overlay>` itself the part is still called `content`, matching every other Vaadin overlay; the rename is a host-side disambiguation only.
 
 **Q: Why does the non-link rendering carry `part="nolink"` rather than reusing `part="link"`?**
 
@@ -321,7 +317,7 @@ Clipping items with `overflow: hidden` cropped their focus outlines too, so the 
 
 **Q: Why are breadcrumbs items aligned by baseline rather than centered?**
 
-When an item's text wraps onto multiple lines (very narrow viewport, long current-page title), aligning by box center pushes single-line siblings down to match the wrapped item's center and breaks the visual baseline of the trail. Baseline alignment keeps the first line of every item aligned, so prefix icons and adjacent text always sit on the same horizontal line. Icon pseudo-elements (chevron separator, ellipsis overflow icon) are sized to `1lh` and inset at `90%` of the box so they fill the line height without dominating the text visually.
+When an item's text wraps onto multiple lines (very narrow viewport, long current-page title), aligning by box center pushes single-line siblings down to match the wrapped item's center and breaks the visual baseline of the trail. Baseline alignment keeps the first line of every item aligned, so prefix icons and adjacent text always sit on the same horizontal line. The icon pseudo-elements are sized to fill the line height without dominating the text visually (see "Baseline alignment" for the exact sizing).
 
 **Q: Why does each item carry a padding-based click target paired with a negative `margin-inline`?**
 
