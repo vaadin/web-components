@@ -195,9 +195,9 @@ export const ComboBoxScrollerMixin = (superClass) =>
         }
       }
 
-      // When centering, scrolling straight to the target index renders it and
-      // puts it at the top of the scroller; the rect-based correction below
-      // then moves it to the middle. No index recalculation is needed.
+      // When centering, scrolling straight to the target index renders it (the
+      // native `scrollIntoView({ block: 'center' })` below then centers it), so
+      // no index recalculation is needed.
       let targetIndex = index;
 
       if (!alignToCenter) {
@@ -223,17 +223,15 @@ export const ComboBoxScrollerMixin = (superClass) =>
       if (!target) {
         return;
       }
-      const targetRect = target.getBoundingClientRect();
-      const scrollerRect = this.getBoundingClientRect();
       if (alignToCenter) {
-        // Center the target in the viewport. Clamp to 0 at the top; the browser
-        // clamps to the maximum scroll position at the bottom, so near the start
-        // and end the item sits as close to center as the list allows.
-        const targetCenter = targetRect.top + targetRect.height / 2;
-        const scrollerCenter = scrollerRect.top + scrollerRect.height / 2;
-        this.scrollTop = Math.max(0, this.scrollTop + (targetCenter - scrollerCenter));
+        // Center the now-rendered row in the viewport. The browser clamps near
+        // the list start and end, placing the row as close to center as the
+        // list allows.
+        target.scrollIntoView({ block: 'center' });
         return;
       }
+      const targetRect = target.getBoundingClientRect();
+      const scrollerRect = this.getBoundingClientRect();
       const targetBottom = targetRect.bottom + this._viewportTotalPaddingBottom;
       if (targetBottom > scrollerRect.bottom) {
         this.scrollTop += targetBottom - scrollerRect.bottom;
