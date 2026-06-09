@@ -39,7 +39,7 @@
     "@vaadin/vaadin-lumo-styles": "~24.10.3",
     "@vaadin/vaadin-material-styles": "~24.10.3",
     "@vaadin/vaadin-themable-mixin": "~24.10.3",
-    "dompurify": "^3.2.5",
+    "dompurify": "^3.4.8",
     "lit": "^3.0.0",
     "marked": "^15.0.11"
   },
