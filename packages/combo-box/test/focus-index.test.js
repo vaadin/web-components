@@ -7,6 +7,19 @@ import { flushComboBox, getViewportItems, makeItems } from './helpers.js';
 describe('__focusIndex', () => {
   let comboBox;
 
+  // Asserts the target row is fully visible and centered in the scroller viewport.
+  function expectCenteredInViewport(index) {
+    const scroller = comboBox._scroller;
+    const target = [...scroller.children].find((el) => !el.hidden && el.index === index);
+    const targetRect = target.getBoundingClientRect();
+    const scrollerRect = scroller.getBoundingClientRect();
+    expect(targetRect.top).to.be.at.least(scrollerRect.top - 1);
+    expect(targetRect.bottom).to.be.at.most(scrollerRect.bottom + 1);
+    const targetCenter = targetRect.top + targetRect.height / 2;
+    const scrollerCenter = scrollerRect.top + scrollerRect.height / 2;
+    expect(targetCenter).to.be.closeTo(scrollerCenter, 2.5);
+  }
+
   describe('items array', () => {
     const SIZE = 200;
 
@@ -40,15 +53,7 @@ describe('__focusIndex', () => {
       flushComboBox(comboBox);
       await nextFrame();
 
-      const findItem = (index) => [...comboBox._scroller.children].find((el) => !el.hidden && el.index === index);
-      const scrollerRect = comboBox._scroller.getBoundingClientRect();
-      const targetRect = findItem(100).getBoundingClientRect();
-      // The target is fully visible and centered in the viewport.
-      expect(targetRect.top).to.be.at.least(scrollerRect.top - 1);
-      expect(targetRect.bottom).to.be.at.most(scrollerRect.bottom + 1);
-      const targetCenter = targetRect.top + targetRect.height / 2;
-      const scrollerCenter = scrollerRect.top + scrollerRect.height / 2;
-      expect(targetCenter).to.be.closeTo(scrollerCenter, targetRect.height / 2 + 1);
+      expectCenteredInViewport(100);
     });
 
     it('should not shift the viewport when arrow-navigating among visible items', async () => {
@@ -152,17 +157,6 @@ describe('__focusIndex', () => {
 
     function findRenderedItem(index) {
       return [...comboBox._scroller.children].find((el) => !el.hidden && el.index === index);
-    }
-
-    // Asserts the target is fully visible and centered in the viewport.
-    function expectCenteredInViewport(index) {
-      const scrollerRect = getScrollerRect();
-      const targetRect = findRenderedItem(index).getBoundingClientRect();
-      expect(targetRect.top).to.be.at.least(scrollerRect.top - 1);
-      expect(targetRect.bottom).to.be.at.most(scrollerRect.bottom + 1);
-      const targetCenter = targetRect.top + targetRect.height / 2;
-      const scrollerCenter = scrollerRect.top + scrollerRect.height / 2;
-      expect(targetCenter).to.be.closeTo(scrollerCenter, 2.5);
     }
 
     beforeEach(async () => {
