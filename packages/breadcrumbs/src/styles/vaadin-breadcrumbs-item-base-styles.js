@@ -42,6 +42,10 @@ export const breadcrumbsItemStyles = css`
     outline: none;
   }
 
+  [part='link']:any-link {
+    color: var(--vaadin-breadcrumbs-link-color, LinkText);
+  }
+
   [part='link']:focus-visible {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }

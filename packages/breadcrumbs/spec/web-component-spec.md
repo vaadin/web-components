@@ -89,8 +89,10 @@ The overflow overlay's outer panel and inner wrapper are re-exported on the brea
 
 | CSS Custom Property | Default | Description |
 |---|---|---|
+| `--vaadin-breadcrumbs-link-color` | `LinkText` | Color of `[part='link']` items (links with `path`). See Discussion for how themes use this knob. |
 | `--vaadin-breadcrumbs-overflow-icon` | `var(--_vaadin-icon-ellipsis)` | The mask-image icon used inside the overflow button. |
 | `--vaadin-breadcrumbs-separator` | `var(--_vaadin-icon-chevron-right)` | The mask-image icon used as the separator between items. Set on `<vaadin-breadcrumbs>` to change the separator for all items. |
+| `--vaadin-breadcrumbs-text-color` | `var(--vaadin-text-color-secondary)` | Text color of `<vaadin-breadcrumbs>`, inherited by non-link items. |
 
 Internal behavior:
 
@@ -332,3 +334,7 @@ The inline padding gives the link a hit area noticeably larger than the visible 
 **Q: Why does base styles ship a `theme="slash"` separator variant rather than leaving it to each theme?**
 
 The slash is the second common breadcrumb separator convention after the chevron, and the mask-image recipe makes the variant trivial — `theme="slash"` rebinds `--vaadin-breadcrumbs-separator` to the bundled `--_vaadin-icon-slash` token. Shipping it in base means applications written without a Vaadin theme still get the variant for free, and Lumo / Aura themes do not have to re-implement the same selector.
+
+**Q: Why does base styles default `--vaadin-breadcrumbs-link-color` to `LinkText` while Lumo and Aura override it to `'inherit'` and ship an opt-in variant?**
+
+Base styles retain the distinction between links and non-link items via the browser's default link text color (`LinkText`), so an unthemed trail honours the platform-level "this text is interactive" affordance. Lumo and Aura make the opinionated decision to change that default so links visually merge with body text, and offer a separate variant — `theme="primary"` on Lumo, `theme="accent"` on Aura — that restores a distinct link color. The expectation is that most use cases have all trail items as links (best practice), in which case the merged look reads as one block of text and the link affordance surfaces on hover / focus only; when some items are not interactive, the opt-in variants add a bit of visual separation so the user can tell links from plain text without interacting. The themes set the knob to the string `'inherit'` (quoted) rather than the `inherit` keyword: an unquoted `inherit` is a CSS-wide value that makes the custom property itself inherit from the parent (where the property is unset), so `var()` would fall back to `LinkText` and the merged look would never apply. The quoted string substitutes into `color: var(...)` as an invalid `<color>`, which triggers the cascade's invalid-value fallback to the inherited body color — the merged look we want.
