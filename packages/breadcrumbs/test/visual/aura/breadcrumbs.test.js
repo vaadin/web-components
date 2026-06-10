@@ -18,8 +18,10 @@ describe('breadcrumbs', () => {
   });
 
   describe('default', () => {
+    let breadcrumbs;
+
     beforeEach(async () => {
-      fixtureSync(
+      breadcrumbs = fixtureSync(
         `
           <vaadin-breadcrumbs>
             <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
@@ -39,6 +41,11 @@ describe('breadcrumbs', () => {
     it('item-focus', async () => {
       await sendKeys({ press: 'Tab' });
       await visualDiff(div, 'item-focus');
+    });
+
+    it('accent', async () => {
+      breadcrumbs.setAttribute('theme', 'accent');
+      await visualDiff(div, 'theme-accent');
     });
   });
 
@@ -81,30 +88,6 @@ describe('breadcrumbs', () => {
       await sendKeys({ press: 'Enter' });
       await oneEvent(overlay, 'vaadin-overlay-open');
       await visualDiff(div, 'overflow-opened');
-    });
-  });
-
-  describe('theme', () => {
-    let breadcrumbs;
-
-    beforeEach(async () => {
-      fixtureSync(
-        `
-          <vaadin-breadcrumbs>
-            <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
-            <vaadin-breadcrumbs-item>Current</vaadin-breadcrumbs-item>
-          </vaadin-breadcrumbs>
-        `,
-        div,
-      );
-      breadcrumbs = div.querySelector('vaadin-breadcrumbs');
-      await nextRender();
-    });
-
-    it('accent', async () => {
-      breadcrumbs.setAttribute('theme', 'accent');
-      await visualDiff(div, 'theme-accent');
     });
   });
 });
