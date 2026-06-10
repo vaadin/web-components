@@ -85,6 +85,10 @@ export const breadcrumbsStyles = css`
     transform: scaleX(-1);
   }
 
+  :host([theme~='slash']) {
+    --vaadin-breadcrumbs-separator: var(--_vaadin-icon-slash);
+  }
+
   @media (forced-colors: active) {
     [part='overflow-button']::before,
     [part='overflow']::after {

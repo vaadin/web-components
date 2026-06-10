@@ -83,6 +83,10 @@ The overflow overlay's outer panel and inner wrapper are re-exported on the brea
 |---|---|
 | `has-overflow` | Set when one or more items are collapsed into the overflow overlay. |
 
+| Theme | Description |
+|---|---|
+| `slash` | Renders a slash (`/`) instead of the default chevron between items. Set via `theme="slash"` on `<vaadin-breadcrumbs>`. |
+
 | CSS Custom Property | Default | Description |
 |---|---|---|
 | `--vaadin-breadcrumbs-overflow-icon` | `var(--_vaadin-icon-ellipsis)` | The mask-image icon used inside the overflow button. |
@@ -197,13 +201,15 @@ Internal behavior:
 
 ### `packages/component-base/src/styles/style-props.js` — Modification needed
 
-Add a `--_vaadin-icon-chevron-right` icon definition alongside the existing `--_vaadin-icon-chevron-down`:
+Add two icon definitions to the shared icon set:
+
+- `--_vaadin-icon-chevron-right` — the default separator icon. The breadcrumb separator defaults to a right-pointing chevron, which did not exist in the shared icon set.
+- `--_vaadin-icon-slash` — the icon bound to `--vaadin-breadcrumbs-separator` by the `theme="slash"` variant (see "Theme" table on the container).
 
 ```css
 --_vaadin-icon-chevron-right: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>');
+--_vaadin-icon-slash: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><rect x="13.7812" y="4.22583" width="1.5" height="16" rx="0.75" transform="rotate(20 13.7812 4.22583)" fill="currentColor"/></svg>');
 ```
-
-The breadcrumb separator defaults to a right-pointing chevron. This icon does not exist in the shared icon set.
 
 ### `packages/component-base/src/i18n-mixin.js` — Used as-is
 
@@ -322,3 +328,7 @@ When an item's text wraps onto multiple lines (very narrow viewport, long curren
 **Q: Why does each item carry a padding-based click target paired with a negative `margin-inline`?**
 
 The inline padding gives the link a hit area noticeably larger than the visible text, matching the WCAG 2.5.8 minimum target size and aligning with how trail items render an offset focus outline. The negative `margin-inline` exactly cancels the inline padding for layout, so the visual width and the trail's gaps look the same as a no-padding rendering — the trail still reads as text first, while clicks within the larger hit area still register. Overlay items skip the negative-margin compensator because they need the visual padding (their hover/focus background fills the row).
+
+**Q: Why does base styles ship a `theme="slash"` separator variant rather than leaving it to each theme?**
+
+The slash is the second common breadcrumb separator convention after the chevron, and the mask-image recipe makes the variant trivial — `theme="slash"` rebinds `--vaadin-breadcrumbs-separator` to the bundled `--_vaadin-icon-slash` token. Shipping it in base means applications written without a Vaadin theme still get the variant for free, and Lumo / Aura themes do not have to re-implement the same selector.
