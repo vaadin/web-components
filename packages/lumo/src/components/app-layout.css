@@ -1,0 +1,53 @@
+:where(:root),
+:where(:host) {
+  --vaadin-app-layout-drawer-width: 16em;
+  --vaadin-app-layout-navbar-background: var(--lumo-base-color);
+  --vaadin-app-layout-drawer-background: var(--lumo-base-color);
+  --vaadin-app-layout-navbar-gap: 0px;
+  --vaadin-app-layout-navbar-padding-top: 0px;
+  --vaadin-app-layout-navbar-padding-bottom: 0px;
+  --vaadin-app-layout-navbar-padding-inline-start: 0px;
+  --vaadin-app-layout-navbar-padding-inline-end: 0px;
+}
+
+/* Aligned with the app-layout drawer overlay breakpoint */
+@media (max-width: 800px), (max-height: 600px) {
+  :where(:root),
+  :where(:host) {
+    --vaadin-app-layout-drawer-width: 20em;
+  }
+}
+
+:where(vaadin-app-layout)::part(navbar) {
+  min-height: var(--lumo-size-xl);
+  border-bottom: 1px solid var(--lumo-contrast-10pct);
+  background-clip: padding-box;
+}
+
+:where(vaadin-app-layout)::part(navbar-bottom) {
+  border-bottom: none;
+  border-top: 1px solid var(--lumo-contrast-10pct);
+}
+
+:where(vaadin-app-layout[primary-section='navbar'])::part(navbar) {
+  border: none;
+  background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+}
+
+:where(vaadin-app-layout)::part(drawer) {
+  border-inline-end: 1px solid var(--lumo-contrast-10pct);
+  background-clip: padding-box;
+}
+
+:where(vaadin-app-layout[primary-section='drawer']:not([overlay]))::part(drawer) {
+  background-image: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
+}
+
+:where(vaadin-app-layout[overlay])::part(drawer) {
+  border-inline-end: none;
+  box-shadow: var(--lumo-box-shadow-s);
+}
+
+:where(vaadin-app-layout) > :is(h2, h3, h4) {
+  margin-block: var(--lumo-space-xs);
+}
