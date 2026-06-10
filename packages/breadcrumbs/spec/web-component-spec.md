@@ -201,13 +201,15 @@ Internal behavior:
 
 ### `packages/component-base/src/styles/style-props.js` — Modification needed
 
-Add a `--_vaadin-icon-chevron-right` icon definition alongside the existing `--_vaadin-icon-chevron-down`:
+Add two icon definitions to the shared icon set:
+
+- `--_vaadin-icon-chevron-right` — the default separator icon. The breadcrumb separator defaults to a right-pointing chevron, which did not exist in the shared icon set.
+- `--_vaadin-icon-slash` — the icon bound to `--vaadin-breadcrumbs-separator` by the `theme="slash"` variant (see "Theme" table on the container).
 
 ```css
 --_vaadin-icon-chevron-right: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>');
+--_vaadin-icon-slash: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"><rect x="13.7812" y="4.22583" width="1.5" height="16" rx="0.75" transform="rotate(20 13.7812 4.22583)" fill="currentColor"/></svg>');
 ```
-
-The breadcrumb separator defaults to a right-pointing chevron. This icon does not exist in the shared icon set.
 
 ### `packages/component-base/src/i18n-mixin.js` — Used as-is
 
