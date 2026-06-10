@@ -1,0 +1,32 @@
+:where(:root),
+:where(:host) {
+  --vaadin-card-border-radius: var(--lumo-border-radius-l);
+  --vaadin-card-border-color: var(--lumo-contrast-20pct);
+  --vaadin-card-padding: var(--lumo-space-m);
+  --vaadin-card-gap: var(--lumo-space-m);
+  --vaadin-card-title-color: var(--lumo-header-text-color);
+  --vaadin-card-title-font-size: var(--lumo-font-size-l);
+  --vaadin-card-title-font-weight: 600;
+  --vaadin-card-title-line-height: var(--lumo-line-height-xs);
+  --vaadin-card-subtitle-font-size: var(--lumo-font-size-m);
+  --vaadin-card-subtitle-line-height: var(--lumo-line-height-xs);
+}
+
+:where(vaadin-card)[theme~='stretch-media']:not([theme~='cover-media'])::part(media) {
+  border-radius: var(--lumo-border-radius-m);
+}
+
+:where(vaadin-card)[theme~='outlined'] {
+  --vaadin-card-background: var(--lumo-base-color);
+}
+
+:where(vaadin-card)[theme~='elevated'] {
+  --vaadin-card-background: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct)) var(--lumo-base-color);
+  --vaadin-card-shadow: var(--lumo-box-shadow-xs);
+  --vaadin-card-border-width: 1px;
+  --vaadin-card-border-color: light-dark(transparent, var(--lumo-contrast-5pct));
+}
+
+:where(vaadin-card)[theme~='elevated'][theme~='outlined'] {
+  --vaadin-card-border-color: light-dark(var(--lumo-contrast-30pct), var(--lumo-contrast-20pct));
+}
