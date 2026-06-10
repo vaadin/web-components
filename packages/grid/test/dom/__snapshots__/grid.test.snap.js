@@ -776,7 +776,6 @@ snapshots["vaadin-grid basic shadow details opened"] =
 snapshots["vaadin-grid basic shadow hidden column"] = 
 `<div
   id="scroller"
-  scrolling=""
   style=""
 >
   <table
@@ -965,7 +964,6 @@ snapshots["vaadin-grid basic shadow hidden column"] =
 snapshots["vaadin-grid basic shadow hidden column selected"] = 
 `<div
   id="scroller"
-  scrolling=""
   style=""
 >
   <table
@@ -1155,7 +1153,6 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
 snapshots["vaadin-grid basic shadow with footer"] = 
 `<div
   id="scroller"
-  scrolling=""
   style=""
 >
   <table

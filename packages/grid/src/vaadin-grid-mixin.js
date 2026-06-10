@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
-import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
+import { microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
@@ -360,13 +360,6 @@ export const GridMixin = (superClass) =>
         });
       }
 
-      this.__afterCreateScrollerRowsDebouncer = Debouncer.debounce(
-        this.__afterCreateScrollerRowsDebouncer,
-        animationFrame,
-        () => {
-          this._afterScroll();
-        },
-      );
       return rows;
     }
 
