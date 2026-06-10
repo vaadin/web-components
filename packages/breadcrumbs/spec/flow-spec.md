@@ -20,9 +20,9 @@
 
 8. **No `@Synchronize`'d properties.** No client-driven state round-trips to the server. `has-overflow` is a visual state attribute the server does not need to observe.
 
-9. **No theme variants.** Per flow-api.md Discussion "Why no theme variants?" — no `BreadcrumbsVariant` enum.
+9. **Theme variants via `HasThemeVariant<BreadcrumbsVariant>`.** Per guidelines/09-theming.md. `Breadcrumbs` implements `HasThemeVariant<BreadcrumbsVariant>`; the `BreadcrumbsVariant` enum currently carries `SLASH` for the web component's `theme="slash"` separator variant. See "Theme Variants" for the enum and inherited API, and the Discussion ("Why does `Breadcrumbs` expose theme variants?") for the rationale.
 
-10. **`BreadcrumbsI18n` is a nested static class.** Follows the `SideNavI18n` / `MenuBarI18n` convention — `Serializable`, `@JsonInclude(JsonInclude.Include.NON_NULL)`, fluent setters returning `BreadcrumbsI18n`. Serialised with `JacksonUtils.beanToJson` and pushed to the client via `getElement().setPropertyJson("i18n", ...)` in the attach handler (so re-attach re-sets the property for the fresh client-side element).
+10. **`BreadcrumbsI18n` is a nested static class.** Follows the `SideNavI18n` / `MenuBarI18n` convention — `Serializable`, `@JsonInclude(JsonInclude.Include.NON_NULL)`, fluent setters returning `BreadcrumbsI18n`. Serialised with `JacksonUtils.beanToJson` and pushed to the client via `getElement().setPropertyJson("i18n", ...)` in the attach handler (so re-attach re-sets the property for the fresh client-side element). `setI18n` rejects `null` (`Objects.requireNonNull`) — see the i18n section.
 
 11. **Package name `com.vaadin.flow.component.breadcrumbs`.** Mirrors `com.vaadin.flow.component.sidenav` — the short form that drops internal hyphens.
 
@@ -44,6 +44,7 @@ flow-components/
     │       ├── main/java/com/vaadin/flow/component/breadcrumbs/
     │       │   ├── Breadcrumbs.java                # host element, Mode enum, BreadcrumbsI18n nested class
     │       │   ├── BreadcrumbsItem.java                 # <vaadin-breadcrumbs-item>
+    │       │   ├── BreadcrumbsVariant.java              # ThemeVariant enum (SLASH; planned LUMO_PRIMARY, AURA_ACCENT)
     │       │   ├── BreadcrumbsFeatureFlagProvider.java  # defines the Feature constant
     │       │   └── ExperimentalFeatureException.java   # local exception with a helpful message
     │       ├── main/resources/
@@ -53,6 +54,7 @@ flow-components/
     │           ├── BreadcrumbsTest.java
     │           ├── BreadcrumbsModeTest.java
     │           ├── BreadcrumbsItemTest.java
+    │           ├── BreadcrumbsVariantTest.java
     │           ├── BreadcrumbsSerializableTest.java
     │           ├── BreadcrumbsI18nTest.java
     │           └── FeatureFlagTest.java
@@ -93,6 +95,7 @@ Integration-tests module must include `src/main/resources/vaadin-featureflags.pr
 @JsModule("@vaadin/breadcrumbs/src/vaadin-breadcrumbs.js")
 public class Breadcrumbs extends Component
         implements HasSize, HasStyle, HasAriaLabel,
+                   HasThemeVariant<BreadcrumbsVariant>,
                    HasComponentsOfType<BreadcrumbsItem> {
 
     public enum Mode {
@@ -150,6 +153,7 @@ public class Breadcrumbs extends Component
 - `HasSize` — covers requirement that the component can be sized by the application (universal API hygiene).
 - `HasStyle` — required for requirement 5 (customise separator via `--vaadin-breadcrumbs-separator` CSS custom property) and for `getStyle()` access per `DESIGN_GUIDELINES.md` "Styling lives in CSS, not Java".
 - `HasAriaLabel` — requirement 10 (navigation landmark accessible name). Flow core interface.
+- `HasThemeVariant<BreadcrumbsVariant>` — requirement 5 plus general theming. Shared interface from `vaadin-flow-components-base`. See "Theme Variants" for the variant enum and the inherited method surface.
 - `HasComponentsOfType<BreadcrumbsItem>` — requirement 1, 9 (add/remove/manage items with compile-time type safety). Flow core interface. All inherited mutating methods — `add(T...)` / `add(Collection<T>)` / `remove(T...)` / `remove(Collection<T>)` / `removeAll()` / `addComponentAsFirst(T)` / `addComponentAtIndex(int, T)` / `replace(T, T)` / `bindChildren(Signal<List<S>>, SerializableFunction<S, T>)` — are overridden to throw `IllegalStateException` when `Mode.ROUTER` (unless the internal `routerUpdateInProgress` flag is set).
 
 **@Synchronize'd properties:** none.
@@ -289,7 +293,7 @@ public static class BreadcrumbsI18n implements Serializable {
 }
 ```
 
-Exposed on `Breadcrumbs` via `setI18n(BreadcrumbsI18n)` / `getI18n()`. Serialised via `JacksonUtils.beanToJson(i18n)` and pushed to the client through `getElement().setPropertyJson("i18n", json)` inside the attach handler (so that on re-attach the fresh client element receives the property again). Null `i18n` results in the property not being set, letting the web component's default take over.
+Exposed on `Breadcrumbs` via `setI18n(BreadcrumbsI18n)` / `getI18n()`. Serialised via `JacksonUtils.beanToJson(i18n)` and pushed to the client through `getElement().setPropertyJson("i18n", json)` inside the attach handler (so that on re-attach the fresh client element receives the property again). `setI18n` rejects `null` with `Objects.requireNonNull("The i18n properties object should not be null")`, per guidelines/10-i18n-and-a11y.md. Before `setI18n` is first called, `getI18n()` returns `null` and no `i18n` property is pushed, so the web component uses its built-in defaults.
 
 | Field | Type | Default (English) | Web-component `i18n` field | Notes |
 |---|---|---|---|---|
@@ -301,7 +305,34 @@ Setter returns `this` so calls can be chained: `new BreadcrumbsI18n().setMoreIte
 
 ## Theme Variants
 
-Not applicable. No `BreadcrumbsVariant` enum is introduced. See flow-api.md Discussion "Why no theme variants?"
+`Breadcrumbs` implements `HasThemeVariant<BreadcrumbsVariant>` (from `vaadin-flow-components-base`), exposing the typed `addThemeVariants` / `removeThemeVariants` / `setThemeVariants` / `setThemeVariant` / `bindThemeVariant` / `bindThemeVariants` surface. The component writes none of these — every method is a default on the shared interface, so declaring the type parameter is the whole implementation.
+
+`BreadcrumbsVariant` is a `ThemeVariant` enum whose `getVariantName()` returns the exact `theme` token the web component accepts (guidelines/09-theming.md), following the `SideNavVariant` shape:
+
+```java
+public enum BreadcrumbsVariant implements ThemeVariant {
+    SLASH("slash");
+
+    private final String variant;
+
+    BreadcrumbsVariant(String variant) {
+        this.variant = variant;
+    }
+
+    @Override
+    public String getVariantName() {
+        return variant;
+    }
+}
+```
+
+| Enum value | `theme` token | Web component support |
+|---|---|---|
+| `SLASH` | `slash` | Ships in base styles — renders a `/` separator instead of the chevron (web-component-spec.md "Theme" table). |
+
+`LUMO_PRIMARY` (`primary`) and `AURA_ACCENT` (`accent`) are planned: each is added to the enum once the Lumo and Aura themes ship the matching `theme` token. Until then the enum carries only `SLASH`, so every value maps to a token the web component actually honours, as guidelines/09-theming.md requires.
+
+A `BreadcrumbsVariantTest` maps each enum value to its expected token (guidelines/12-testing.md).
 
 ---
 
@@ -632,7 +663,7 @@ No modifications.
 | 2. Current page indication | `BreadcrumbsItem(String text)` (no path) — web component renders as non-link, applies `current` state attribute |
 | 3. Optionally omitting the current page | No API — application chooses whether to add a no-path final item |
 | 4. Visual separator between items | Web component + theme (no Flow API) |
-| 5. Customizable separator appearance | `HasStyle` → `getStyle().set("--vaadin-breadcrumbs-separator", ...)` |
+| 5. Customizable separator appearance | `HasStyle` → `getStyle().set("--vaadin-breadcrumbs-separator", ...)`; `HasThemeVariant<BreadcrumbsVariant>` → `addThemeVariants(BreadcrumbsVariant.SLASH)` for the bundled slash separator |
 | 6. Overflow collapse of intermediate items | Web component (no Flow API) |
 | 7. Expanding collapsed items | Web component; `BreadcrumbsI18n.moreItems` sets the overflow button's `aria-label` |
 | 8. Items may display icons | `BreadcrumbsItem implements HasPrefix` + constructor overloads ending in `Component prefixComponent` |
@@ -681,5 +712,13 @@ Yes — the listener is unregistered in `onDetach`, but a navigation may fire be
 
 **Q: Why does `getI18n()` return the last-set value (or `null`) rather than lazily creating a default `BreadcrumbsI18n`?**
 
-For consistency with `SideNav.getI18n()`, which returns `null` until `setI18n(...)` is called. Applications that want to tweak a single field build a new instance: `trail.setI18n(new BreadcrumbsI18n().setMoreItems("Show hidden items"))`. A lazy-init getter would hide the fact that the i18n object is a JSON payload pushed to the client — making it feel like a reactive bean when it isn't. The current shape also lets `null` mean "use the web component's built-in defaults", which is a meaningful state the lazy-init pattern cannot express.
+For consistency with `SideNav.getI18n()`, which returns `null` until `setI18n(...)` is called. Applications that want to tweak a single field build a new instance: `trail.setI18n(new BreadcrumbsI18n().setMoreItems("Show hidden items"))`. A lazy-init getter would hide the fact that the i18n object is a JSON payload pushed to the client — making it feel like a reactive bean when it isn't. The `null` return value also expresses the unset state — before any `setI18n` call the web component falls back to its built-in defaults — which a lazy-init getter that eagerly creates a non-default object cannot represent.
+
+**Q: Why does `setI18n` reject `null` rather than treating it as a reset?**
+
+guidelines/10-i18n-and-a11y.md prescribes `Objects.requireNonNull` in `setI18n`, and every other Vaadin component with an i18n object follows it — accepting `null` would diverge from that shared contract. A `null`-as-reset path would also be redundant: the web-component defaults are already the unset state (see the previous entry), not something to reach by clearing a set value. If an explicit "reset to defaults" need emerges, a named method reads more clearly than overloading `null`. Rejecting `null` at the call site turns a likely mistake into an immediate, well-located failure.
+
+**Q: Why does `Breadcrumbs` expose theme variants?**
+
+The web component ships a `theme="slash"` separator variant in its base styles (web-component-spec.md "Theme" table), so the Flow wrapper exposes it the standard way rather than inventing a setter — see "Theme Variants" for the enum and inherited API. An earlier revision exposed no variants because the web component had none; the slash variant changed that. Because `HasThemeVariant` lives in `vaadin-flow-components-base` and needs no unreleased Flow core API, this work can land ahead of the router-related tasks (flow-tasks.md Task 3).
 
