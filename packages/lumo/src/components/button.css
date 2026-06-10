@@ -101,8 +101,8 @@
   --vaadin-button-text-color: var(--lumo-base-color);
 }
 
-:where(vaadin-button)::before,
-:where(vaadin-button)::after {
+:where(vaadin-button, vaadin-drawer-toggle)::before,
+:where(vaadin-button, vaadin-drawer-toggle)::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -113,24 +113,24 @@
   pointer-events: none;
 }
 
-:where(vaadin-button)::before {
+:where(vaadin-button, vaadin-drawer-toggle)::before {
   transition: opacity 100ms;
 }
 
-:where(vaadin-button)::after {
+:where(vaadin-button, vaadin-drawer-toggle)::after {
   transition:
     opacity 1.4s,
     transform 0.1s;
   filter: blur(8px);
 }
 
-:where(vaadin-button):is([disabled], [theme~='tertiary-inline'])::before,
-:where(vaadin-button):is([disabled], [theme~='tertiary-inline'])::after {
+:where(vaadin-button, vaadin-drawer-toggle):is([disabled], [theme~='tertiary-inline'])::before,
+:where(vaadin-button, vaadin-drawer-toggle):is([disabled], [theme~='tertiary-inline'])::after {
   display: none;
 }
 
 @media (any-hover: hover) {
-  :where(vaadin-button):hover:not([disabled])::before {
+  :where(vaadin-button, vaadin-drawer-toggle):hover:not([disabled])::before {
     opacity: 0.02;
   }
 
@@ -139,12 +139,12 @@
   }
 }
 
-:where(vaadin-button)[active]:not([disabled])::before {
+:where(vaadin-button, vaadin-drawer-toggle)[active]:not([disabled])::before {
   opacity: 0.05;
   transition-duration: 0s;
 }
 
-:where(vaadin-button)[active]:not([disabled])::after {
+:where(vaadin-button, vaadin-drawer-toggle)[active]:not([disabled])::after {
   opacity: 0.1;
   transition-duration: 0s, 0s;
   transform: scale(0);
