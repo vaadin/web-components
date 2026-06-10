@@ -123,7 +123,9 @@
     --vaadin-button-background: var(--lumo-contrast-30pct);
     --vaadin-button-text-color: var(--lumo-base-color);
   }
+}
 
+:where(vaadin-button, vaadin-drawer-toggle) {
   &::before,
   &::after {
     content: '';
@@ -151,42 +153,42 @@
   &:is([disabled], [theme~='tertiary-inline'])::after {
     display: none;
   }
+}
 
-  @media (any-hover: hover) {
-    &:hover:not([disabled])::before {
-      opacity: 0.02;
-    }
-
-    &[theme~='primary']:hover:not([disabled])::before {
-      opacity: 0.05;
-    }
+@media (any-hover: hover) {
+  :where(vaadin-button, vaadin-drawer-toggle):hover:not([disabled])::before {
+    opacity: 0.02;
   }
 
-  &[active]:not([disabled])::before {
+  :where(vaadin-button)[theme~='primary']:hover:not([disabled])::before {
     opacity: 0.05;
-    transition-duration: 0s;
   }
+}
 
-  &[active]:not([disabled])::after {
-    opacity: 0.1;
-    transition-duration: 0s, 0s;
-    transform: scale(0);
-  }
+:where(vaadin-button, vaadin-drawer-toggle)[active]:not([disabled])::before {
+  opacity: 0.05;
+  transition-duration: 0s;
+}
 
-  &[theme~='primary'][active]:not([disabled])::before {
-    opacity: 0.1;
-  }
+:where(vaadin-button, vaadin-drawer-toggle)[active]:not([disabled])::after {
+  opacity: 0.1;
+  transition-duration: 0s, 0s;
+  transform: scale(0);
+}
 
-  &[theme~='primary'][active]:not([disabled])::after {
-    opacity: 0.2;
-  }
+:where(vaadin-button)[theme~='primary'][active]:not([disabled])::before {
+  opacity: 0.1;
+}
 
-  &[theme~='primary']::before,
-  &[theme~='primary']::after {
-    background-color: black;
-  }
+:where(vaadin-button)[theme~='primary'][active]:not([disabled])::after {
+  opacity: 0.2;
+}
 
-  & > vaadin-icon[icon^='vaadin:'] {
-    padding: 0.25em;
-  }
+:where(vaadin-button)[theme~='primary']::before,
+:where(vaadin-button)[theme~='primary']::after {
+  background-color: black;
+}
+
+:where(vaadin-button) > vaadin-icon[icon^='vaadin:'] {
+  padding: 0.25em;
 }
