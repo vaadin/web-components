@@ -105,16 +105,21 @@ export const sliderStyles = css`
     grid-row: 1;
     grid-column: track-start / track-end;
     appearance: none;
-    width: 100%;
-    height: 100%;
+    width: calc(100% + max(0px, 24px - var(--_thumb-width)));
+    height: var(--_thumb-height);
     font: inherit;
     margin: 0;
+    margin-inline: calc(min(0px, var(--_thumb-width) - 24px) / 2);
     background: transparent;
     outline: 0;
     -webkit-tap-highlight-color: transparent;
     cursor: inherit;
     touch-action: none;
     z-index: 999;
+
+    @media (pointer: coarse) {
+      pointer-events: none;
+    }
   }
 
   [part='marks'] {
