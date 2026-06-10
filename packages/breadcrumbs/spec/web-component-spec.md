@@ -101,7 +101,7 @@ All variants are set via `theme="…"` on `<vaadin-breadcrumbs>`. See the Discus
 | `--vaadin-breadcrumbs-overflow-icon` | `var(--_vaadin-icon-ellipsis)` | Mask-image icon for the overflow button's `::before` pseudo-element. |
 | `--vaadin-breadcrumbs-separator-icon` | `var(--_vaadin-icon-chevron-right)` | Mask-image icon for the separator between items. |
 | `--vaadin-breadcrumbs-separator-icon-size` | `90%` | Size of the separator icon within its `1lh × 1lh` pseudo-element box. |
-| `--vaadin-breadcrumbs-text-color` | `var(--vaadin-text-color-secondary)` | Text color of non-link items (no-path, disabled, current). |
+| `--vaadin-breadcrumbs-text-color` | `var(--vaadin-text-color-secondary)` | Base text color of the trail, set on the host. Non-link items inherit it; links override it via `--vaadin-breadcrumbs-link-color`. |
 
 Internal behavior:
 
@@ -111,7 +111,7 @@ Internal behavior:
 - **Overflow separator.** The overflow element sits in the list flow between the root and the rest, so it needs a separator after it when visible. Its `[part="overflow"]::after` pseudo-element reuses the same separator recipe as `<vaadin-breadcrumbs-item>` (see "Separator rendering"), so the overflow element visually matches peer items. When `has-overflow` is not set, the overflow element is hidden, so its separator is not visible either.
 - **Width-constrained list flow.** The host carries `width: 100%; min-width: 0`, and `[part="list"]` is a `display: flex; flex-wrap: nowrap` container with `min-width: 0; max-width: 100%`. The list stretches to its parent's width and shrinks below its natural content width, which is how overflow detection knows when items no longer fit. It does not clip with `overflow: hidden` (see Discussion).
 - **Overflow-button click target.** `[part="overflow-button"]` uses a `padding: max(var(--vaadin-padding-block-container), (24px - 1lh) / 2)` formula paired with the matching negative `margin`, so the click target is at least 24×24 px (WCAG 2.5.8) without changing the button's visual size.
-- **Baseline alignment.** The host and `[part="list"]` use `align-items: baseline`; `[part="overflow"]` inherits it, so when an item's text wraps onto multiple lines, prefix icons and adjacent items stay aligned to the first line's baseline rather than the box center (see Discussion). Icon pseudo-elements (the separator on each item and on `[part="overflow"]`, plus the overflow button's `::before`) are sized to `1lh` so they fill the line height; separators mask their icon at `var(--vaadin-breadcrumbs-separator-icon-size, 90%)` of the box and carry `opacity: 0.75` to keep the chevron visually subordinate to text, and the overflow-button icon uses `opacity: 0.8` for the same reason.
+- **Baseline alignment.** The host and `[part="list"]` use `align-items: baseline`; `[part="overflow"]` inherits it, so when an item's text wraps onto multiple lines, prefix icons and adjacent items stay aligned to the first line's baseline rather than the box center (see Discussion). Icon pseudo-elements (the separator on each item and on `[part="overflow"]`, plus the overflow button's `::before`) are sized to `1lh` so they fill the line height; separators mask their icon at `var(--vaadin-breadcrumbs-separator-icon-size, 90%)` of the box and carry `opacity: 0.75` to keep the chevron visually subordinate to text, and the overflow-button icon uses `opacity: 0.8` for the same reason. Under `@media (forced-colors: active)` these icon pseudo-elements switch their background to `CanvasText` so the separator and ellipsis stay visible in high-contrast mode.
 
 ---
 
@@ -168,7 +168,7 @@ The outer wrapper carries `part="link"` when the item is interactive and `part="
 
 | CSS Custom Property | Default | Description |
 |---|---|---|
-| `--vaadin-breadcrumbs-item-border-radius` | `var(--vaadin-radius-m)` | Border radius of the inner `[part="link"]` / `[part="nolink"]` wrapper. Also applied to the container's overflow button. |
+| `--vaadin-breadcrumbs-item-border-radius` | `var(--vaadin-radius-m)` | Border radius of the inner `[part="link"]` / `[part="nolink"]` wrapper of trail items. Also applied to the container's overflow button. Overlay items use `--vaadin-radius-s` instead (see "Overlay item rendering"). |
 | `--vaadin-breadcrumbs-item-gap` | `var(--vaadin-gap-xs)` | Gap between the prefix slot and the label inside an item. |
 
 Internal behavior:
@@ -178,6 +178,8 @@ Internal behavior:
 - **`aria-current="page"`.** When the parent sets the `current` state attribute on the host, the inner `<span part="nolink">` element gets `aria-current="page"`.
 - **Prefix slot.** A `SlotController` observes the `prefix` slot and toggles `has-prefix` on the host for styling.
 - **Padding-based click target.** Each item's `[part="link"]` / `[part="nolink"]` carries `padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)`. Trail items get a negative `margin-inline` (applied via `:host(:not([slot='overlay']))`) that cancels the inline padding for layout; overlay items skip the compensator (see Discussion).
+- **Current item styling.** `:host([current])` renders in `--vaadin-text-color` at `font-weight: bolder` (one step heavier than the surrounding trail weight, `--vaadin-breadcrumbs-font-weight`), giving the current page visual emphasis without a dedicated part.
+- **Overlay item rendering.** When an item carries `slot="overlay"` (collapsed into the overflow overlay — see the container's "Overlay management"), its base styling differs from the trail: `[part="link"]` uses `--vaadin-radius-s` for the border radius, enabled links render in `--vaadin-text-color` while disabled or no-`path` items use `--vaadin-text-color-secondary`, the trailing separator `::after` is hidden, and keyboard focus draws an inset focus ring (`outline-offset` negative) keyed on `:host([slot="overlay"][focus-ring])` so the outline sits inside the row-shaped hit area (see Discussion).
 
 ---
 
@@ -220,7 +222,7 @@ Internal behavior:
 Add two icon definitions to the shared icon set:
 
 - `--_vaadin-icon-chevron-right` — the default separator icon. The breadcrumb separator defaults to a right-pointing chevron, which did not exist in the shared icon set.
-- `--_vaadin-icon-slash` — the icon bound to `--vaadin-breadcrumbs-separator` by the `theme="slash"` variant (see "Theme" table on the container).
+- `--_vaadin-icon-slash` — the icon bound to `--vaadin-breadcrumbs-separator-icon` by the `theme="slash"` variant (see "Theme" table on the container).
 
 ```css
 --_vaadin-icon-chevron-right: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>');
