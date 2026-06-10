@@ -178,7 +178,7 @@ class RangeSlider extends FieldMixin(
 
         ::slotted(input:last-of-type) {
           clip-path: inset(
-            0 0 0
+            min(0px, (var(--_thumb-height) - 24px) / 2) 0 min(0px, (var(--_thumb-height) - 24px) / 2)
               clamp(
                 0%,
                 var(--_thumb-width) / 2 + var(--start-value) * var(--_track-width) +
@@ -190,14 +190,14 @@ class RangeSlider extends FieldMixin(
 
         :host([dir='rtl']) ::slotted(input:last-of-type) {
           clip-path: inset(
-            0
+            min(0px, (var(--_thumb-height) - 24px) / 2)
               clamp(
                 0%,
                 var(--_thumb-width) / 2 + var(--start-value) * var(--_track-width) +
                   (var(--end-value) - var(--start-value)) * var(--_track-width) / 2,
                 100%
               )
-              0 0
+              min(0px, (var(--_thumb-height) - 24px) / 2) 0
           );
         }
       `,
