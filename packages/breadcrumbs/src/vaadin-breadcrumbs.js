@@ -57,13 +57,13 @@ const DEFAULT_I18N = {
  * :--------------------------------------------|
  * | `--vaadin-breadcrumbs-font-size`           |
  * | `--vaadin-breadcrumbs-font-weight`         |
- * | `--vaadin-breadcrumbs-line-height`         |
- * | `--vaadin-breadcrumbs-text-color`          |
- * | `--vaadin-breadcrumbs-link-color`          |
  * | `--vaadin-breadcrumbs-gap`                 |
+ * | `--vaadin-breadcrumbs-line-height`         |
+ * | `--vaadin-breadcrumbs-link-color`          |
  * | `--vaadin-breadcrumbs-overflow-icon`       |
  * | `--vaadin-breadcrumbs-separator-icon`      |
  * | `--vaadin-breadcrumbs-separator-icon-size` |
+ * | `--vaadin-breadcrumbs-text-color`          |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

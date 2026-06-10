@@ -95,13 +95,13 @@ All variants are set via `theme="…"` on `<vaadin-breadcrumbs>`. See the Discus
 |---|---|---|
 | `--vaadin-breadcrumbs-font-size` | `1em` | Font size of the trail. |
 | `--vaadin-breadcrumbs-font-weight` | `400` | Font weight of trail items. |
-| `--vaadin-breadcrumbs-line-height` | `inherit` | Line height of trail items. |
-| `--vaadin-breadcrumbs-text-color` | `var(--vaadin-text-color-secondary)` | Text color of non-link items (no-path, disabled, current). |
-| `--vaadin-breadcrumbs-link-color` | `LinkText` | Color of `[part="link"]:any-link` items. |
 | `--vaadin-breadcrumbs-gap` | `var(--vaadin-gap-xs)` | Inline gap between consecutive items and between an item and its trailing separator. |
+| `--vaadin-breadcrumbs-line-height` | `inherit` | Line height of trail items. |
+| `--vaadin-breadcrumbs-link-color` | `LinkText` | Color of `[part="link"]:any-link` items. |
 | `--vaadin-breadcrumbs-overflow-icon` | `var(--_vaadin-icon-ellipsis)` | Mask-image icon for the overflow button's `::before` pseudo-element. |
 | `--vaadin-breadcrumbs-separator-icon` | `var(--_vaadin-icon-chevron-right)` | Mask-image icon for the separator between items. |
 | `--vaadin-breadcrumbs-separator-icon-size` | `90%` | Size of the separator icon within its `1lh × 1lh` pseudo-element box. |
+| `--vaadin-breadcrumbs-text-color` | `var(--vaadin-text-color-secondary)` | Text color of non-link items (no-path, disabled, current). |
 
 Internal behavior:
 
