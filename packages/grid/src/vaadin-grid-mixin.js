@@ -233,8 +233,12 @@ export const GridMixin = (superClass) =>
       setTouchAction(this.$.scroller, '');
 
       this.__virtualizer = new Virtualizer({
-        createElements: this._createScrollerRows.bind(this),
-        updateElement: this._updateScrollerItem.bind(this),
+        createElements: (count) => {
+          return this.__createVirtualizerElements(count);
+        },
+        updateElement: (el, index) => {
+          this.__updateVirtualizerElement(el, index);
+        },
         scrollContainer: this.$.items,
         scrollTarget: this.$.table,
         reorderElements: true,
@@ -334,7 +338,7 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _createScrollerRows(count) {
+    __createVirtualizerElements(count) {
       const rows = [];
       for (let i = 0; i < count; i++) {
         const row = document.createElement('tr');
@@ -645,7 +649,7 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _updateScrollerItem(row, index) {
+    __updateVirtualizerElement(row, index) {
       this._preventScrollerRotatingCellFocus(row, index);
 
       if (!this._columnTree) {
