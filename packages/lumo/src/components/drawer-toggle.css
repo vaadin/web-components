@@ -1,0 +1,13 @@
+:where(vaadin-drawer-toggle) {
+  position: relative;
+  width: var(--lumo-size-l);
+  --vaadin-button-height: var(--lumo-size-l);
+  --vaadin-button-padding: 0px;
+  --vaadin-button-margin: 0 var(--lumo-space-s);
+  --vaadin-button-background: transparent;
+  --vaadin-icon-size: var(--lumo-icon-size-m);
+}
+
+:where(vaadin-drawer-toggle)[slot~='navbar'] {
+  --vaadin-button-text-color: var(--lumo-secondary-text-color);
+}
