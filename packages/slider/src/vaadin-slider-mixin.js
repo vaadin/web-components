@@ -85,18 +85,21 @@ export const SliderMixin = (superClass) =>
 
           ${tag} > input::-webkit-slider-thumb {
             appearance: none;
-            width: var(--_thumb-width);
-            height: 100%;
+            width: max(24px, var(--_thumb-width));
+            height: max(24px, var(--_thumb-height));
+            margin-block: calc((var(--_thumb-height) - 24px) / 2);
             /* iOS needs these */
             background: transparent;
             box-shadow: none;
+            pointer-events: auto;
           }
 
           ${tag} > input::-moz-range-thumb {
             border: 0;
             background: transparent;
-            width: var(--_thumb-width);
-            height: 100%;
+            width: max(24px, var(--_thumb-width));
+            height: max(24px, var(--_thumb-height));
+            pointer-events: auto;
           }
 
           ${tag}:not([readonly]) > input::-webkit-slider-thumb {
