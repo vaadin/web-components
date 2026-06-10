@@ -11,11 +11,7 @@ Tasks are pointers into the spec, not a second copy of it. The spec sections fie
 
 External Flow core dependencies (not implemented by these tasks):
 - `com.vaadin.flow.component.HasComponentsOfType<T>` — Flow core (available; implemented in Task 1, guarded in Task 6)
-- `com.vaadin.flow.router.RouteParent` annotation — Flow core (required by Task 7 + Task 11)
-- `com.vaadin.flow.router.RouteHierarchy.resolveAncestors(...)` walker — Flow core (required by Task 7)
-The Flow-version bump in `flow-components-bom` is part of Task 7 — the first task that needs an unreleased Flow core API. Tasks 1–6 build against the current baseline Flow version.
-
-Ordering rationale: Tasks 1–6 depend only on released Flow APIs, so they can proceed while `@RouteParent` / `RouteHierarchy` are still in flight. The Flow-core-gated work (Task 7 router wiring) and the integration tests that exercise it (Tasks 10, 11) come after.
+- `@RouteParent`, `RouteConfiguration#getRouteHierarchy(...)`, and instance-free titles — Flow core (required by Task 7 + Task 11)
 
 Do NOT reorder tasks without verifying the dependency graph.
 Do NOT add tasks for features not in the spec.
@@ -37,7 +33,7 @@ Do NOT add tasks for features not in the spec.
 **Requirements:** —
 **Depends on:** —
 
-Create the three sub-modules (`-flow`, `-flow-integration-tests`, `-testbench`) with `pom.xml` wiring, empty class shells matching the annotations and `implements` clauses from the spec (empty bodies — Mode enum, constructors, `setI18n`, the theme-variant surface, and the `Mode.ROUTER` guard land in later tasks), and the full feature-flag plumbing (`BreadcrumbsFeatureFlagProvider`, ServiceLoader registration, `ExperimentalFeatureException`, `onAttach` check). At this point `Breadcrumbs` implements `HasSize, HasStyle, HasAriaLabel, HasComponentsOfType<BreadcrumbsItem>` — the child-management methods come as inherited defaults, with the `Mode.ROUTER` guard added in Task 6 — and gains `HasThemeVariant<BreadcrumbsVariant>` in Task 3. The module builds against the current baseline Flow version — no version bump yet. The IT module enables the feature flag via `src/main/resources/vaadin-featureflags.properties`. The smoke test instantiates `Breadcrumbs` (which currently does nothing in its body) and the `SerializableTest` round-trips it.
+Create the three sub-modules (`-flow`, `-flow-integration-tests`, `-testbench`) with `pom.xml` wiring, empty class shells matching the annotations and `implements` clauses from the spec (empty bodies — Mode enum, constructors, `setI18n`, the theme-variant surface, and the `Mode.ROUTER` guard land in later tasks), and the full feature-flag plumbing (`BreadcrumbsFeatureFlagProvider`, ServiceLoader registration, `ExperimentalFeatureException`, `onAttach` check). At this point `Breadcrumbs` implements `HasSize, HasStyle, HasAriaLabel, HasComponentsOfType<BreadcrumbsItem>` — the child-management methods come as inherited defaults, with the `Mode.ROUTER` guard added in Task 6 — and gains `HasThemeVariant<BreadcrumbsVariant>` in Task 3. The IT module enables the feature flag via `src/main/resources/vaadin-featureflags.properties`. The smoke test instantiates `Breadcrumbs` (which currently does nothing in its body) and the `SerializableTest` round-trips it.
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/pom.xml` (create)
@@ -56,7 +52,7 @@ Create the three sub-modules (`-flow`, `-flow-integration-tests`, `-testbench`) 
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench/src/main/java/com/vaadin/flow/component/breadcrumbs/testbench/BreadcrumbsElement.java` (create — `@Element("vaadin-breadcrumbs")`, empty body)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench/src/main/java/com/vaadin/flow/component/breadcrumbs/testbench/BreadcrumbsItemElement.java` (create — `@Element("vaadin-breadcrumbs-item")`, empty body)
 - `pom.xml` (modify — add `vaadin-breadcrumbs-flow-parent` module)
-- `flow-components-bom/pom.xml` (modify — add the new module if the BOM aggregates modules; no Flow version bump yet — that lands in Task 7)
+- `flow-components-bom/pom.xml` (modify — add the new module if the BOM aggregates modules)
 
 **Tests:**
 - [ ] `new Breadcrumbs()` returns a non-null instance whose element tag is `vaadin-breadcrumbs`
@@ -106,7 +102,7 @@ Implement all seven `BreadcrumbsItem` constructors (mirroring `SideNavItem`'s ov
 **Requirements:** 5
 **Depends on:** 1
 
-Add the `BreadcrumbsVariant` enum implementing `ThemeVariant` with `SLASH("slash")`, `LUMO_PRIMARY("primary")`, and `AURA_ACCENT("accent")` (the web component's `theme="slash"` base separator plus the Lumo / Aura link-color variants), following the `SideNavVariant` shape. Add `implements HasThemeVariant<BreadcrumbsVariant>` to `Breadcrumbs`; every variant method (`addThemeVariants` / `removeThemeVariants` / `setThemeVariants` / `setThemeVariant` / `bindThemeVariant` / `bindThemeVariants`) comes from the shared interface as a default — the component adds no code beyond the type parameter. `HasThemeVariant` and `ThemeVariant` are in `vaadin-flow-components-base` (already on the classpath via `HasPrefix`), so this task does not need the Flow core bump. Each enum value maps to a `theme` token the web component actually honours (guidelines/09-theming.md).
+Add the `BreadcrumbsVariant` enum implementing `ThemeVariant` with `SLASH("slash")`, `LUMO_PRIMARY("primary")`, and `AURA_ACCENT("accent")` (the web component's `theme="slash"` base separator plus the Lumo / Aura link-color variants), following the `SideNavVariant` shape. Add `implements HasThemeVariant<BreadcrumbsVariant>` to `Breadcrumbs`; every variant method (`addThemeVariants` / `removeThemeVariants` / `setThemeVariants` / `setThemeVariant` / `bindThemeVariant` / `bindThemeVariants`) comes from the shared interface as a default — the component adds no code beyond the type parameter. `HasThemeVariant` and `ThemeVariant` are in `vaadin-flow-components-base` (already on the classpath via `HasPrefix`). Each enum value maps to a `theme` token the web component actually honours (guidelines/09-theming.md).
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/BreadcrumbsVariant.java` (create)
@@ -205,15 +201,14 @@ Guard the inherited `HasComponentsOfType<BreadcrumbsItem>` child-management meth
 
 ## Task 7: `Breadcrumbs` — `Mode.ROUTER` listener wiring + router trail builder
 
-**Spec sections:** Key Design Decisions §3 + §5, Component Classes → `Breadcrumbs` (Router mode wiring, `rebuildFromRouter`), `@RouteParent` Annotation → How `Breadcrumbs` builds the trail, Reuse and Proposed Adjustments → RouteParent, RouteHierarchy
+**Spec sections:** Key Design Decisions §3 + §5, Component Classes → `Breadcrumbs` (Router mode wiring, `rebuildFromRouter`), `@RouteParent` Annotation → How `Breadcrumbs` builds the trail, Reuse and Proposed Adjustments → Flow core: route hierarchy and titles
 **Requirements:** 13, 15
 **Depends on:** 6
 
-Bump the Flow version in `flow-components-bom/pom.xml` to a release that includes `com.vaadin.flow.router.RouteParent` and `RouteHierarchy.resolveAncestors(...)`. Register `UI#addAfterNavigationListener(this::rebuildFromRouter)` in `onAttach` when `mode == Mode.ROUTER`, hold the returned `Registration` in a `transient navigationRegistration` field, and unregister in `onDetach`. Add both `rebuildFromRouter` overloads (event-driven + direct-state for initial attach reading `UIInternals.getActiveViewLocation()` / `getActiveRouterTargetsChain()`); both guard with `if (!isAttached()) return;` and delegate to a private builder that calls `RouteHierarchy.resolveAncestors(currentRoute, routeConfiguration)` from Flow core, wraps every ancestor class except the last as `new BreadcrumbsItem(title, ancestorClass)` (title from `@PageTitle`), wraps the last entry as `new BreadcrumbsItem(title)` with no path (title from `HasDynamicTitle#getPageTitle()` on the active view instance if present, otherwise its class `@PageTitle`), and hands the list to `updateChildrenInternal`. Also wire `Mode.MANUAL → Mode.ROUTER` transitions in `setMode` to register the listener and trigger an initial `rebuildFromRouter` if currently attached.
+Register `UI#addAfterNavigationListener(this::rebuildFromRouter)` in `onAttach` when `mode == Mode.ROUTER`, hold the returned `Registration` in a `transient navigationRegistration` field, and unregister in `onDetach`. Add both `rebuildFromRouter` overloads (event-driven + direct-state for initial attach reading `UIInternals.getActiveViewLocation()` / `getActiveRouterTargetsChain()`); both guard with `if (!isAttached()) return;` and delegate to a private builder that calls `routeConfiguration.getRouteHierarchy(currentTarget, parameters)` for the root → current trail of `RouteParentReference`s, wraps every reference except the last as `new BreadcrumbsItem(title, target, parameters)` (label from instance-free title resolution), wraps the last entry as `new BreadcrumbsItem(title)` with no path (label from the current view's live `HasDynamicTitle#getPageTitle()` if present, otherwise instance-free resolution), and hands the list to `updateChildrenInternal`. Also wire `Mode.MANUAL → Mode.ROUTER` transitions in `setMode` to register the listener and trigger an initial `rebuildFromRouter` if currently attached.
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/Breadcrumbs.java` (modify)
-- `flow-components-bom/pom.xml` (modify — bump Flow version to a release that ships `@RouteParent` and `RouteHierarchy`)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsModeTest.java` (modify — extend the existing test class with router-listener cases using stubbed `RouteConfiguration` / mocked `UI`)
 
 **Tests:**
@@ -255,15 +250,18 @@ Implement `BreadcrumbsElement` and `BreadcrumbsItemElement` per the spec — eve
 
 ## Task 9: Manual-mode integration test view + IT
 
-**Spec sections:** Module / Package Layout (integration-tests file list), Component Classes → `Breadcrumbs` (`Mode.MANUAL`)
-**Requirements:** 1, 9, 14
+**Spec sections:** Module / Package Layout (integration-tests file list), Component Classes → `Breadcrumbs` (`Mode.MANUAL`), Coverage (req 16 row)
+**Requirements:** 1, 9, 14, 16
 **Depends on:** 6, 8
 
 Add a Flow view `ManualBreadcrumbsPage` that constructs `new Breadcrumbs(Mode.MANUAL)`, adds three items declaratively (one with a path-class, one with a string path, one with no path representing the current page), and exposes test affordances for the IT (`@Id` buttons to add / remove items at runtime to exercise reactive updates). The IT class `ManualBreadcrumbsIT` opens the view, uses `BreadcrumbsElement` + `BreadcrumbsItemElement` to assert the rendered trail, then exercises an add and a remove to confirm `Mode.MANUAL` reactive updates flow to the DOM.
 
+This task also covers requirement 16 (routes dynamically supplying their breadcrumbs contribution). Add a second `Mode.MANUAL` scenario — a view that simulates loading domain data and builds a trail containing a data-derived ancestor that has **no backing `@Route`** plus a data-derived current-page label (e.g. `Home › Customers › Enterprise › Acme Corp`, where `Enterprise` is the loaded customer's segment and `Acme Corp` is the loaded customer name). This is the part of req 16 that `Mode.ROUTER` cannot express — `getRouteHierarchy` only yields items for matched routes — so the manual-construction path is what satisfies it. The dynamic current-view label half of req 16 is already exercised by Task 10's `HasDynamicTitle` case.
+
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/ManualBreadcrumbsPage.java` (create)
-- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/ManualBreadcrumbsIT.java` (create)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/DataDrivenBreadcrumbsPage.java` (create — `Mode.MANUAL` view that builds a trail from simulated loaded data, covering req 16)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/ManualBreadcrumbsIT.java` (create — asserts both the static manual trail and the data-driven req-16 trail)
 
 **Tests:**
 - [ ] Initial render: `getItems()` returns three items whose `getText()` values match the seeded labels
@@ -271,6 +269,7 @@ Add a Flow view `ManualBreadcrumbsPage` that constructs `new Breadcrumbs(Mode.MA
 - [ ] The last item's `getPath()` is empty / null; the others return their assigned paths
 - [ ] Clicking the "add item" affordance inserts a new item into the trail, observable via `BreadcrumbsElement#getItems()`
 - [ ] Clicking the "remove item" affordance removes the matching item
+- [ ] (req 16) The data-driven view renders a trail whose labels match the loaded data in order — including a data-derived ancestor with no backing `@Route` (e.g. `Enterprise`) and a data-derived current-page label (e.g. `Acme Corp`)
 
 **Acceptance criteria:**
 - [ ] `mvn verify -am -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests -Dit.test='ManualBreadcrumbsIT*' -DskipUnitTests` passes
@@ -310,7 +309,7 @@ Add a small route hierarchy of four `@Route`'d views, each with a `@PageTitle` (
 **Requirements:** 15
 **Depends on:** 7, 8
 
-Add a view `RouteParentPage` whose `@Route` URL would, under URL-prefix walking, resolve to one parent — but which carries `@RouteParent(OtherView.class)` to declare a different conceptual parent. The IT navigates to the view and asserts that the rendered trail walks through the declared parent, not the URL-derived one. This task verifies the Flow core `RouteHierarchy` walker's `@RouteParent`-first behaviour end-to-end through the breadcrumbs.
+Add a view `RouteParentPage` whose `@Route` URL would, under URL-prefix walking, resolve to one parent — but which carries `@RouteParent(OtherView.class)` to declare a different conceptual parent. The IT navigates to the view and asserts that the rendered trail walks through the declared parent, not the URL-derived one. This task verifies `RouteConfiguration#getRouteHierarchy`'s `@RouteParent`-first behaviour end-to-end through the breadcrumbs.
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/RouteParentPage.java` (create — declared-parent view + the conceptual parent it points to)

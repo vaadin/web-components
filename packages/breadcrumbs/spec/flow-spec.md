@@ -8,11 +8,11 @@
 
 2. **`HasComponentsOfType<BreadcrumbsItem>` for child management.** Per flow-api.md §1 "Why this shape". The Flow core interface extends `HasElement, HasEnabled` and supplies the full child-management surface as default methods (see the class skeleton in "Component Classes"), all of which must be intercepted by the `Mode.ROUTER` guard (see KDD §1). `HasEnabled` is inherited transitively — it does not need to appear in `Breadcrumbs`'s `implements` list.
 
-3. **Router integration via `AfterNavigationListener`.** For `Mode.ROUTER`, the component registers `UI.addAfterNavigationListener(...)` in its attach handler and unregisters in detach. The listener walks the route hierarchy — `@RouteParent` first, then URL-prefix — and calls `updateChildrenInternal(List<BreadcrumbsItem>)` to replace the trail. `updateChildrenInternal` sets an internal `boolean routerUpdateInProgress` flag, routes the update through the normal component API (`removeAll()` + `add(...)`), then clears the flag; the `Mode.ROUTER` guard on the public methods skips the throw when the flag is set.
+3. **Router integration via `AfterNavigationListener`.** For `Mode.ROUTER`, the component registers `UI.addAfterNavigationListener(...)` in its attach handler and unregisters in detach. The listener resolves the route hierarchy via `RouteConfiguration#getRouteHierarchy` and calls `updateChildrenInternal(List<BreadcrumbsItem>)` to replace the trail. `updateChildrenInternal` sets an internal `boolean routerUpdateInProgress` flag, routes the update through the normal component API (`removeAll()` + `add(...)`), then clears the flag; the `Mode.ROUTER` guard on the public methods skips the throw when the flag is set.
 
-4. **`@RouteParent` annotation lives in Flow core.** Per flow-api.md §10. `com.vaadin.flow.router.RouteParent` is introduced in Flow core alongside `@Route`, `@RouteAlias`, `@ParentLayout`. The breadcrumb module only consumes it — it neither defines it nor re-exports it. See "Reuse and Proposed Adjustments" for the Flow core dependency.
+4. **`@RouteParent` comes from Flow core.** Per flow-api.md §10. The annotation declares a route's logical parent (static `value()` or dynamic `resolver()`); the breadcrumb module only consumes it. See "Reuse and Proposed Adjustments" for the Flow core dependency.
 
-5. **Route-hierarchy walking is a Flow core feature, not a breadcrumb-specific resolver.** The "given a route class, walk up via `@RouteParent` then URL-prefix fallback" algorithm is useful to any navigation component (back-button helpers, SEO link-graph generators, sitemap renderers), so it lives in Flow core next to `@RouteParent` itself. The breadcrumb consumes it via a public helper — see "Reuse and Proposed Adjustments → Flow core: route-hierarchy walker". The resolver reads only static metadata (`@PageTitle`, `@RouteParent`) and therefore never instantiates ancestor views; the breadcrumbs adds the dynamic-title step for the current (already-instantiated) view itself.
+5. **Route-hierarchy walking is a Flow core feature, not a breadcrumb-specific resolver.** The breadcrumb consumes the public `RouteConfiguration#getRouteHierarchy(...)`, which walks `@RouteParent` (then URL-prefix) up to the root. Flow core also resolves route titles without an instance (static `@PageTitle` or a `PageTitleGenerator`), so ancestor labels never require instantiating their views; the breadcrumbs still prefers the live `HasDynamicTitle` of the current (already-instantiated) view for the last item. See "Reuse and Proposed Adjustments → Flow core: route hierarchy and titles".
 
 6. **No connector needed.** All state is set via standard Element attributes/properties from server-side Java — `setPath` writes the `path` attribute, `setPrefixComponent` uses `SlotUtils.setSlot` for the prefix slot, `setI18n` pushes a JSON object to the `i18n` client property. The web component's overflow behaviour is entirely client-side, and the web component itself only accepts `<vaadin-breadcrumbs-item>` light-DOM children (no programmatic `items` data-array property — see web-component-api.md §6 and its Discussion). No connector file under `src/main/resources/META-INF/resources/frontend/`.
 
@@ -200,7 +200,7 @@ void rebuildFromRouter(Location currentLocation,
                       RouteConfiguration routeConfiguration);
 ```
 
-Both overloads ultimately build the trail via the same private routine (see "How `Breadcrumbs` builds the trail" below), which calls the Flow core `RouteHierarchy` walker, wraps the returned ancestor classes into `BreadcrumbsItem` instances, and hands the result to `updateChildrenInternal(trail)`. Both guard against stale callbacks: `if (!isAttached()) return;` first.
+Both overloads ultimately build the trail via the same private routine (see "How `Breadcrumbs` builds the trail" below), which calls `RouteConfiguration#getRouteHierarchy`, wraps the returned route references into `BreadcrumbsItem` instances, and hands the result to `updateChildrenInternal(trail)`. Both guard against stale callbacks: `if (!isAttached()) return;` first.
 
 `updateChildrenInternal(List<BreadcrumbsItem> trail)`:
 
@@ -434,57 +434,34 @@ Integration-tests module enables the flag at startup with `src/main/resources/va
 
 ## `@RouteParent` Annotation
 
-`com.vaadin.flow.router.RouteParent` is introduced in Flow core (see "Reuse and Proposed Adjustments → Flow core dependencies"). The breadcrumb module only reads it — it does not redefine or re-export it.
-
-Expected shape in Flow core:
-
-```java
-package com.vaadin.flow.router;
-
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface RouteParent {
-    /**
-     * The view class that is the conceptual parent of the annotated
-     * {@link Route @Route} class.
-     *
-     * The parent class should itself be annotated with {@code @Route}. If
-     * it is not, consumers of this annotation (e.g. the breadcrumbs
-     * resolver) fall back to URL-prefix walking for this step.
-     */
-    Class<? extends Component> value();
-}
-```
-
-The annotation is consumed by a Flow core helper (see "Reuse and Proposed Adjustments → Flow core: route-hierarchy walker") — not by breadcrumb-specific code — so any navigation component can use it.
+`com.vaadin.flow.router.RouteParent` is provided by Flow core. It declares a route's logical parent — statically via `value()` or dynamically via a `resolver()` — independent of the layout chain; when absent, `getRouteHierarchy` falls back to URL-prefix walking. The breadcrumb module only reads it through `RouteConfiguration#getRouteHierarchy`; it neither defines nor re-exports it.
 
 ### How `Breadcrumbs` builds the trail
 
 The breadcrumb does no walking of its own. On each navigation it:
 
-1. Identifies the current route class and the current view instance from `AfterNavigationEvent#getActiveChain()`.
-2. Calls the Flow core walker to get the ancestor chain: `List<Class<? extends Component>> chain = RouteHierarchy.resolveAncestors(currentRoute, routeConfiguration);` (root-first, inclusive of `currentRoute` as the last entry — see the walker's contract in "Reuse and Proposed Adjustments").
-3. For each ancestor class in `chain` except the last, reads its `@PageTitle` and resolves its URL via `RouteConfiguration#getUrl(ancestorClass, RouteParameters.empty())`, producing `new BreadcrumbsItem(title, ancestorClass)`.
-4. For the last entry (the current route): uses `HasDynamicTitle#getPageTitle()` on the current view instance if it implements the interface, otherwise reads `@PageTitle` on the class. Constructs `new BreadcrumbsItem(title)` with no path — the current item is the non-link.
+1. Identifies the current route target and its `RouteParameters` from `AfterNavigationEvent#getActiveChain()` / `#getRouteParameters()`.
+2. Calls `routeConfiguration.getRouteHierarchy(currentTarget, parameters)` to get the trail as a `List<RouteParentReference>`, ordered root → current and cycle-guarded. Each reference carries the route target and the `RouteParameters` to resolve it with.
+3. For each reference except the last, resolves the label from the route's title metadata (instance-free — static `@PageTitle` or a `PageTitleGenerator`) and the URL via `RouteConfiguration#getUrl(target, parameters)`, producing `new BreadcrumbsItem(title, target, parameters)`.
+4. For the last reference (the current route): prefers the live `HasDynamicTitle#getPageTitle()` of the already-instantiated current view, falling back to the same instance-free resolution. Constructs `new BreadcrumbsItem(title)` with no path — the current item is the non-link.
 5. Calls `updateChildrenInternal(trail)`.
 
-Everything the breadcrumbs contributes — the dynamic-title step for the current view, the wrapping into `BreadcrumbsItem` components, the `Mode.ROUTER` guard bypass — is breadcrumb-specific. The hierarchy walking, cycle detection, and `@RouteParent`-versus-URL-prefix fallback live in Flow core.
+Everything the breadcrumbs contributes — preferring the current view's live title, wrapping into `BreadcrumbsItem` components, the `Mode.ROUTER` guard bypass — is breadcrumb-specific. The hierarchy walking, cycle detection, `@RouteParent`/URL-prefix resolution, and instance-free title resolution live in Flow core.
 
-**Flow APIs used directly by the breadcrumbs (all public):**
+**Flow APIs used directly by the breadcrumbs:**
 
 | Purpose | API call |
 |---|---|
 | Current active chain at navigation time | `AfterNavigationEvent#getActiveChain()` |
 | Current route params at navigation time | `AfterNavigationEvent#getRouteParameters()` |
 | Current location at navigation time | `AfterNavigationEvent#getLocation()` |
+| Walk the route hierarchy | `RouteConfiguration#getRouteHierarchy(Class, RouteParameters)` |
 | Resolve `Class<? extends Component>` → URL | `RouteConfiguration#getUrl(Class, RouteParameters)` |
 | Obtain the registry-scoped config | `RouteConfiguration.forRegistry(ComponentUtil.getRouter(this).getRegistry())` |
-| Read the current view's dynamic title | `HasDynamicTitle#getPageTitle()` on the view instance |
-| Read a route class's static title | `routeClass.getAnnotation(PageTitle.class).value()` |
-| Walk the route hierarchy | Flow core walker (see Reuse) |
+| Resolve an ancestor's title without an instance | Flow core instance-free title resolution (`@PageTitle` / `PageTitleGenerator`) |
+| Read the current view's live title | `HasDynamicTitle#getPageTitle()` on the view instance |
 
-**Route parameters on ancestors:** the breadcrumbs resolves ancestor URLs with `RouteParameters.empty()`, because ancestor routes may have a different parameter set from the current route. Applications that need ancestor labels with live data should use `Mode.MANUAL` and build the trail themselves (flow-api.md §9).
+**Route parameters on ancestors:** `getRouteHierarchy` returns each ancestor with the `RouteParameters` narrowed to its own route template, so the breadcrumbs resolves ancestor labels and URLs with those parameters. Applications that need ancestor labels derived from data beyond the route metadata use `Mode.MANUAL` and build the trail themselves (flow-api.md §9).
 
 ---
 
@@ -587,59 +564,17 @@ Until the signal ships, the resolver calls `UIInternals` directly and accepts th
 
 Affects: Flow core. Fits the broader direction of making Flow state reactive-first (alongside `ValueSignal`, `Signal.effect`, `HasComponentsOfType.bindChildren`).
 
-### Flow core: route-hierarchy walker — Proposed
+### Flow core: route hierarchy and titles — Dependency
 
-`@RouteParent` is generic routing metadata, so the code that reads it and walks the route hierarchy is generic too. Rather than ship breadcrumb-specific resolver logic that any future navigation component would have to duplicate, the walker lands in Flow core alongside `@RouteParent`.
+`Mode.ROUTER` builds on the following Flow core APIs, which the breadcrumb consumes but does not implement:
 
-Expected shape (names indicative; exact placement is a Flow-core decision):
+- `@RouteParent` (static `value()` or dynamic `resolver()`) — declares a route's logical parent, independent of the layout chain.
+- `RouteConfiguration#getRouteHierarchy(target, params)` — returns the trail as a cycle-guarded `List<RouteParentReference>`, root → current, resolving `@RouteParent` then URL-prefix; `getRouteParent(...)` resolves a single level.
+- Instance-free titles — `@PageTitle` (now with an optional `generator`) and `PageTitleGenerator` resolve a route's label without creating the view, so ancestor labels need no instances.
 
-```java
-// in com.vaadin.flow.router
-public final class RouteHierarchy {
+The breadcrumb adds only the `Mode.ROUTER` glue (listener wiring, wrapping references into `BreadcrumbsItem`, the guard bypass).
 
-    /**
-     * Returns the chain of route classes from the root down to and
-     * including {@code routeClass}, using {@code @RouteParent} when
-     * present and falling back to URL-prefix walking otherwise. Cycles
-     * are detected and truncated.
-     *
-     * @return a root-first list; the last element is always
-     *         {@code routeClass} when it is routable.
-     */
-    public static List<Class<? extends Component>> resolveAncestors(
-            Class<? extends Component> routeClass,
-            RouteConfiguration routeConfiguration);
-
-    /**
-     * Returns the immediate parent of {@code routeClass}, or empty if
-     * no parent can be resolved. Reads {@code @RouteParent} first, then
-     * URL-prefix walks.
-     */
-    public static Optional<Class<? extends Component>> resolveParent(
-            Class<? extends Component> routeClass,
-            RouteConfiguration routeConfiguration);
-}
-```
-
-**Algorithm contract** (implemented in Flow core; the breadcrumbs only consumes it):
-
-1. Start with `routeClass`; if it has no `@Route` annotation, return an empty list (no hierarchy to walk).
-2. Maintain `Set<Class<? extends Component>> visited`, initialised with `routeClass`.
-3. At each step: read `@RouteParent` from the current class. If present and its value has `@Route`, jump there. Otherwise (annotation absent, or target is not a `@Route`), strip the last `/`-separated segment from the current class's URL (resolved via `RouteConfiguration#getUrl`) and call `RouteConfiguration#getRoute(strippedUrl)`; use that as the parent if present.
-4. Terminate when no parent is found, when the candidate is already in `visited` (cycle), or when URL-prefix stripping produces an empty URL.
-5. Return the list root-first, inclusive of the original `routeClass` as the last element.
-
-This is additive to Flow core — one new class next to `@RouteParent`, no change to existing router API. Tests for the walker (including cycle handling and parent-without-`@Route` fallback) live with Flow core, not with the breadcrumbs module.
-
-Affects: Flow core. The breadcrumb depends on it for `Mode.ROUTER` but adds no code of its own for hierarchy walking.
-
-### `com.vaadin.flow.router.RouteParent` — Flow core dependency
-
-`@RouteParent` is not tied to breadcrumb rendering — per flow-api.md Discussion "Why `@RouteParent` rather than a breadcrumb-specific name?", the annotation belongs in `com.vaadin.flow.router` alongside `@Route`, `@RouteAlias`, `@ParentLayout`. This lets any future navigation component (back-helpers, parent-link renderers, SEO link-graph utilities) consume the same declaration.
-
-The annotation will land in Flow core and this module depends on it. Ensure `flow-components-bom` targets a Flow version that includes the `RouteParent` annotation.
-
-Affects: no flow-components module defines this annotation; the breadcrumbs module imports `com.vaadin.flow.router.RouteParent` indirectly through the Flow core `RouteHierarchy` walker.
+Affects: Flow core — no flow-components module defines any of this. `RouteConfiguration#getRouteHierarchy` / `getUrl` are public; instance-free title resolution may go through an internal helper until a public entry point lands.
 
 ### `HasComponentsOfType<T>` in Flow core — Dependency
 
@@ -673,9 +608,9 @@ No modifications.
 | 10. Navigation landmark | `Breadcrumbs implements HasAriaLabel` |
 | 11. Current page announced as current | Web component (no Flow API) |
 | 12. Directional separator flips in RTL | Web component + theme (no Flow API) |
-| 13. Flow: Default trail derived from router | `Mode.ROUTER` (default); `onAttach` registers `AfterNavigationListener`; the Flow core `RouteHierarchy.resolveAncestors(...)` walker walks `@RouteParent` + URL prefixes; the breadcrumbs adds `@PageTitle` / `HasDynamicTitle` label resolution for the returned classes |
+| 13. Flow: Default trail derived from router | `Mode.ROUTER` (default); `onAttach` registers `AfterNavigationListener`; `RouteConfiguration#getRouteHierarchy(...)` walks `@RouteParent` + URL prefixes; labels come from instance-free titles, with the current view's live `HasDynamicTitle` for the last item |
 | 14. Flow: Opting out of automatic trail population | `Mode.MANUAL` (via constructor or `setMode`); `add`/`remove`/`removeAll` throw `IllegalStateException` in `Mode.ROUTER` |
-| 15. Flow: Sitemap parent annotation overrides URL-based parent lookup | `@RouteParent` annotation in Flow core; `RouteHierarchy.resolveAncestors` consults it before URL-prefix walking |
+| 15. Flow: Sitemap parent annotation overrides URL-based parent lookup | `@RouteParent`; `RouteConfiguration#getRouteHierarchy` consults it before URL-prefix walking |
 | 16. Flow: Routes can dynamically supply their breadcrumb contribution | Covered via the manual-construction pattern: `Mode.MANUAL` + application-side data loading + `add(...)` (see flow-api.md Discussion "How is requirement 16 … covered without a dedicated API?"). No new Flow API in this iteration — explicitly documented as a possible future addition. |
 
 ---
@@ -686,7 +621,11 @@ Questions raised during spec production, with their resolutions.
 
 **Q: How does `Mode.ROUTER` react to navigation?**
 
-`onAttach` registers `UI.addAfterNavigationListener(event -> rebuildFromRouter(...))` and holds the returned `Registration` in a transient field. `onDetach` unregisters. Each navigation rebuilds the trail by calling the Flow core `RouteHierarchy.resolveAncestors(...)` walker, wrapping each returned class into a `BreadcrumbsItem`, and handing the list to an internal `updateChildrenInternal(List<BreadcrumbsItem>)` that bypasses the `Mode.ROUTER` guard on `add`/`remove`/`removeAll` — user code cannot reach this path.
+`onAttach` registers `UI.addAfterNavigationListener(event -> rebuildFromRouter(...))` and holds the returned `Registration` in a transient field. `onDetach` unregisters. Each navigation rebuilds the trail by calling `RouteConfiguration#getRouteHierarchy(...)`, wrapping each returned route reference into a `BreadcrumbsItem`, and handing the list to an internal `updateChildrenInternal(List<BreadcrumbsItem>)` that bypasses the `Mode.ROUTER` guard on `add`/`remove`/`removeAll` — user code cannot reach this path.
+
+**Q: Why does the trail build on `RouteConfiguration#getRouteHierarchy` rather than a breadcrumb-specific walker?**
+
+Hierarchy walking, cycle handling, `@RouteParent` resolution, and instance-free titles are generic routing concerns provided by Flow core. Consuming `RouteConfiguration#getRouteHierarchy` keeps the breadcrumb free of duplicated walking logic; the component keeps only the `Mode.ROUTER` glue. See "Reuse and Proposed Adjustments → Flow core: route hierarchy and titles".
 
 **Q: What happens if the user calls `setMode(Mode.ROUTER)` on a trail that already has children?**
 
@@ -722,5 +661,4 @@ guidelines/10-i18n-and-a11y.md prescribes `Objects.requireNonNull` in `setI18n`,
 
 **Q: Why does `Breadcrumbs` expose theme variants?**
 
-The web component ships theme variants — `theme="slash"` in base styles, `theme="primary"` in Lumo, and `theme="accent"` in Aura (web-component-spec.md "Theme" table) — so the Flow wrapper exposes them the standard way rather than inventing setters. `BreadcrumbsVariant` mirrors the shipped tokens (`SLASH`, `LUMO_PRIMARY`, `AURA_ACCENT`), since guidelines/09-theming.md requires each `getVariantName()` to match a real `theme` token. An earlier revision exposed no variants because the web component had none; the slash variant changed that. Because `HasThemeVariant` lives in `vaadin-flow-components-base` and needs no unreleased Flow core API, this work can land ahead of the router-related tasks (flow-tasks.md Task 3).
-
+The web component ships theme variants — `theme="slash"` in base styles, `theme="primary"` in Lumo, and `theme="accent"` in Aura (web-component-spec.md "Theme" table) — so the Flow wrapper exposes them the standard way rather than inventing setters. `BreadcrumbsVariant` mirrors the shipped tokens (`SLASH`, `LUMO_PRIMARY`, `AURA_ACCENT`), since guidelines/09-theming.md requires each `getVariantName()` to match a real `theme` token. An earlier revision exposed no variants because the web component had none; the slash variant changed that.
