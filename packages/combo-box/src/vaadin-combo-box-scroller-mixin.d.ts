@@ -70,10 +70,13 @@ export declare class ComboBoxScrollerMixinClass<TItem, TOwner> {
   requestContentUpdate(): void;
 
   /**
-   * Scrolls an item at given index into view and adjusts `scrollTop`
-   * so that the element gets fully visible on Arrow Down key press.
+   * Scrolls an item at given index into view. By default the item is made
+   * fully visible at the bottom of the viewport (the behavior wanted on
+   * Arrow Down key press). When `alignToCenter` is `true`, the item is placed
+   * in the middle of the viewport instead, as close to center as the list
+   * allows near its start and end.
    */
-  scrollIntoView(index: number): void;
+  scrollIntoView(index: number, alignToCenter?: boolean): void;
 
   protected _isItemSelected(item: TItem, selectedItem: TItem, itemIdPath: string | null | undefined): void;
 

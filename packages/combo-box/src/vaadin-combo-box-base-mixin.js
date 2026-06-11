@@ -696,11 +696,11 @@ export const ComboBoxBaseMixin = (superClass) =>
     }
 
     /** @protected */
-    _scrollIntoView(index) {
+    _scrollIntoView(index, alignToCenter = false) {
       if (!this._scroller) {
         return;
       }
-      this._scroller.scrollIntoView(index);
+      this._scroller.scrollIntoView(index, alignToCenter);
     }
 
     /** @private */

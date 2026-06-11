@@ -166,29 +166,53 @@ export const ComboBoxScrollerMixin = (superClass) =>
     }
 
     /**
-     * Scrolls an item at given index into view and adjusts `scrollTop`
-     * so that the element gets fully visible on Arrow Down key press.
+     * Scrolls an item at given index into view. By default the item is made
+     * fully visible at the bottom of the viewport (the behavior wanted on
+     * Arrow Down key press). When `alignToCenter` is `true`, the item is placed
+     * in the middle of the viewport instead, as close to center as the list
+     * allows near its start and end.
      * @param {number} index
+     * @param {boolean} [alignToCenter=false]
      */
-    scrollIntoView(index) {
+    scrollIntoView(index, alignToCenter = false) {
       if (!this.__virtualizer || !(this.opened && index >= 0)) {
         return;
       }
 
-      const visibleItemsCount = this._visibleItemsCount();
+      // If the target row is already fully visible, leave the scroll untouched.
+      // Re-running scrollToIndex would snap an unaligned scrollTop to a row
+      // boundary — a visible jump when only the focus ring should move (arrow
+      // navigation, clicks). Centering always repositions, so it skips this.
+      const renderedTarget = [...this.children].find((el) => !el.hidden && el.index === index);
+      if (!alignToCenter && renderedTarget) {
+        const targetRect = renderedTarget.getBoundingClientRect();
+        const scrollerRect = this.getBoundingClientRect();
+        if (
+          targetRect.top >= scrollerRect.top &&
+          targetRect.bottom + this._viewportTotalPaddingBottom <= scrollerRect.bottom
+        ) {
+          return;
+        }
+      }
 
+      // When centering, scrolling straight to the target index renders it (the
+      // native `scrollIntoView({ block: 'center' })` below then centers it), so
+      // no index recalculation is needed.
       let targetIndex = index;
 
-      if (index > this.__virtualizer.lastVisibleIndex - 1) {
-        // Index is below the bottom, scrolling down. Make the item appear at the bottom.
-        // First scroll to target (will be at the top of the scroller) to make sure it's rendered.
-        this.__virtualizer.scrollToIndex(index);
-        // Then calculate the index for the following scroll (to get the target to bottom of the scroller).
-        targetIndex = index - visibleItemsCount + 1;
-      } else if (index > this.__virtualizer.firstVisibleIndex) {
-        // The item is already visible, scrolling is unnecessary per se. But we need to trigger iron-list to set
-        // the correct scrollTop on the scrollTarget. Scrolling to firstVisibleIndex.
-        targetIndex = this.__virtualizer.firstVisibleIndex;
+      if (!alignToCenter) {
+        const visibleItemsCount = this._visibleItemsCount();
+        if (index > this.__virtualizer.lastVisibleIndex - 1) {
+          // Index is below the bottom, scrolling down. Make the item appear at the bottom.
+          // First scroll to target (will be at the top of the scroller) to make sure it's rendered.
+          this.__virtualizer.scrollToIndex(index);
+          // Then calculate the index for the following scroll (to get the target to bottom of the scroller).
+          targetIndex = index - visibleItemsCount + 1;
+        } else if (index > this.__virtualizer.firstVisibleIndex) {
+          // The item is already visible, scrolling is unnecessary per se. But we need to trigger iron-list to set
+          // the correct scrollTop on the scrollTarget. Scrolling to firstVisibleIndex.
+          targetIndex = this.__virtualizer.firstVisibleIndex;
+        }
       }
       this.__virtualizer.scrollToIndex(Math.max(0, targetIndex));
 
@@ -197,6 +221,13 @@ export const ComboBoxScrollerMixin = (superClass) =>
 
       const target = [...this.children].find((el) => !el.hidden && el.index === index);
       if (!target) {
+        return;
+      }
+      if (alignToCenter) {
+        // Center the now-rendered row in the viewport. The browser clamps near
+        // the list start and end, placing the row as close to center as the
+        // list allows.
+        target.scrollIntoView({ block: 'center' });
         return;
       }
       const targetRect = target.getBoundingClientRect();
