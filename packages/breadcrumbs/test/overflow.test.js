@@ -436,7 +436,7 @@ describe('overflow', () => {
       await nextResize(breadcrumbs);
     });
 
-    it('should skip the first path-less item on first ArrowDown', async () => {
+    it('should skip the first item without path on first ArrowDown', async () => {
       items[0].path = null;
 
       button.focus();
@@ -449,7 +449,7 @@ describe('overflow', () => {
       expectFocusedItem(items[1]);
     });
 
-    it('should skip the last path-less item on first ArrowUp', async () => {
+    it('should skip the last item without path on first ArrowUp', async () => {
       items[4].path = null;
 
       button.focus();
@@ -462,7 +462,7 @@ describe('overflow', () => {
       expectFocusedItem(items[3]);
     });
 
-    it('should skip a path-less item on subsequent ArrowDown', async () => {
+    it('should skip item without path on subsequent ArrowDown', async () => {
       items[1].path = null;
 
       button.focus();
@@ -478,7 +478,7 @@ describe('overflow', () => {
       expectFocusedItem(items[2]);
     });
 
-    it('should skip a path-less item on subsequent ArrowUp', async () => {
+    it('should skip item without path on subsequent ArrowUp', async () => {
       items[3].path = null;
 
       button.focus();
@@ -494,7 +494,7 @@ describe('overflow', () => {
       expectFocusedItem(items[2]);
     });
 
-    it('should focus the previous focusable item on End when last is path-less', async () => {
+    it('should focus the previous focusable item on End when last has no path', async () => {
       items[4].path = null;
 
       button.focus();
@@ -507,7 +507,7 @@ describe('overflow', () => {
       expectFocusedItem(items[3]);
     });
 
-    it('should focus the next focusable item on Home when first is path-less', async () => {
+    it('should focus the next focusable item on Home when first has no path', async () => {
       items[0].path = null;
 
       button.focus();
