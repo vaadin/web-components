@@ -62,7 +62,6 @@ const DEFAULT_I18N = {
  * | `--vaadin-breadcrumbs-link-color`          |
  * | `--vaadin-breadcrumbs-overflow-icon`       |
  * | `--vaadin-breadcrumbs-separator-icon`      |
- * | `--vaadin-breadcrumbs-separator-icon-size` |
  * | `--vaadin-breadcrumbs-text-color`          |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.

@@ -65,7 +65,8 @@ export const breadcrumbsStyles = css`
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
     background: currentColor;
-    mask: var(--vaadin-breadcrumbs-overflow-icon, var(--_vaadin-icon-ellipsis)) center / contain no-repeat;
+    mask: var(--vaadin-breadcrumbs-overflow-icon, var(--_vaadin-icon-ellipsis)) center /
+      var(--vaadin-icon-visual-size, 100%) no-repeat;
     opacity: 0.8;
   }
 
@@ -81,7 +82,7 @@ export const breadcrumbsStyles = css`
     height: var(--vaadin-icon-size, 1lh);
     background: currentColor;
     mask: var(--vaadin-breadcrumbs-separator-icon, var(--_vaadin-icon-chevron-right)) center /
-      var(--vaadin-breadcrumbs-separator-icon-size, 90%) no-repeat;
+      var(--vaadin-icon-visual-size, 100%) no-repeat;
     margin-inline-start: var(--vaadin-breadcrumbs-gap, var(--vaadin-gap-xs));
     opacity: 0.75;
   }
@@ -90,9 +91,13 @@ export const breadcrumbsStyles = css`
     scale: -1;
   }
 
+  :host(:where(:not([theme~='slash']))) [part='overflow']::after,
+  :host(:where(:not([theme~='slash']))) ::slotted(vaadin-breadcrumbs-item)::after {
+    --vaadin-icon-visual-size: 90%;
+  }
+
   :host([theme~='slash']) {
     --vaadin-breadcrumbs-separator-icon: var(--_vaadin-icon-slash);
-    --vaadin-breadcrumbs-separator-icon-size: 100%;
   }
 
   @media (forced-colors: active) {

@@ -27,4 +27,9 @@
   [part='overflow-button']:active {
     color: var(--lumo-header-text-color);
   }
+
+  :host [part='overflow']::after,
+  :host ::slotted(vaadin-breadcrumbs-item)::after {
+    --vaadin-icon-visual-size: 75%;
+  }
 }

@@ -58,7 +58,7 @@ export const breadcrumbsItemStyles = css`
     height: var(--vaadin-icon-size, 1lh);
     background: currentColor;
     mask: var(--vaadin-breadcrumbs-separator-icon, var(--_vaadin-icon-chevron-right)) center /
-      var(--vaadin-breadcrumbs-separator-icon-size, 90%) no-repeat;
+      var(--vaadin-icon-visual-size, 100%) no-repeat;
     margin-inline-start: var(--vaadin-breadcrumbs-gap, var(--vaadin-gap-xs));
     opacity: 0.75;
   }
