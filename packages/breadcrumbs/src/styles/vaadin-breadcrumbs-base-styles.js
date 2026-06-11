@@ -48,8 +48,8 @@ export const breadcrumbsStyles = css`
     border-radius: var(--vaadin-breadcrumbs-item-border-radius, var(--vaadin-radius-m));
     --_padding: var(--vaadin-padding-block-container);
     /* Ensure minimum click target (WCAG) */
-    padding: max(var(--_padding), (24px - 1lh) / 2);
-    margin: min(var(--_padding), (24px - 1lh) / -2);
+    padding: max(var(--_padding), round((24px - 1lh) / 2, 1px));
+    margin: min(var(--_padding), round((24px - 1lh) / -2, 1px));
     font: inherit;
     cursor: var(--vaadin-clickable-cursor);
     display: inline-flex;
