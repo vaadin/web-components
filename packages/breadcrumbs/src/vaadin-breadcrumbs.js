@@ -356,6 +356,20 @@ class Breadcrumbs extends KeyboardDirectionMixin(
   }
 
   /**
+   * Override the method inherited from `KeyboardDirectionMixin` to also
+   * skip overlay items that have no `path` and therefore render as a
+   * non-interactive `<span>` instead of a focusable link.
+   *
+   * @param {Element} item
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _isItemFocusable(item) {
+    return super._isItemFocusable(item) && item.path != null;
+  }
+
+  /**
    * Override the method inherited from `KeyboardDirectionMixin` to make
    * `breadcrumbs.focus()` lands on the root item. When the root item is
    * disabled or collapsed to overlay, focus the overflow button instead.

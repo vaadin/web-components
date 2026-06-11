@@ -196,8 +196,8 @@ Internal behavior:
 - **Light-DOM projection via `slot="overlay"`.** Rather than an `OverlayMixin` `.renderer` callback or a `_rendererRoot` override, collapsed items are projected through the overlay's default slot while staying in the breadcrumbs' light DOM (see "Overlay management" above). This keeps `<vaadin-breadcrumbs-overlay>` free of rendering plumbing and lets global page CSS reach the links.
 - **Inherited overlay behavior.** Top-layer rendering, outside-click and Escape closing, focus restoration, and stacking all come from `OverlayMixin`; positioning relative to the overflow button is driven by the `positionTarget` property from `PositionMixin`, matching `<vaadin-combo-box-overlay>` and `<vaadin-avatar-group-overlay>`. None of these are re-implemented here.
 - **Keyboard interaction within the open overlay.**
-  - **Focus on open** — focus stays on the overflow button when the overlay opens (via overflow-button click, Enter, or Space). The first ArrowDown / ArrowUp keypress while the overlay is open moves focus into the overlay: ArrowDown lands on the first non-disabled overlay item, ArrowUp lands on the last non-disabled overlay item.
-  - **Arrow keys** — once focus is inside the overlay, Up/Down arrows move focus between adjacent links (Home/End jump to first/last). Disabled items are skipped — arrow keys, Home, and End land on the nearest non-disabled item in the requested direction. The overlay reads as a menu visually, so menu-style keyboard navigation is the primary way to traverse its items.
+  - **Focus on open** — focus stays on the overflow button when the overlay opens (via overflow-button click, Enter, or Space). The first ArrowDown / ArrowUp keypress while the overlay is open moves focus into the overlay: ArrowDown lands on the first focusable overlay item, ArrowUp lands on the last focusable overlay item. Disabled items and items without a `path` are not focusable.
+  - **Arrow keys** — once focus is inside the overlay, Up/Down arrows move focus between adjacent links (Home/End jump to first/last). Non-focusable items — disabled items and items without a `path` — are skipped: arrow keys, Home, and End land on the nearest focusable item in the requested direction. The overlay reads as a menu visually, so menu-style keyboard navigation is the primary way to traverse its items.
   - **Tab / Shift+Tab** — closes the overlay. `restore-focus-on-close` returns focus to the overflow button, from which the native Tab / Shift+Tab traversal then moves focus to the next / previous focusable trail item in document order.
   - **Escape** — closes the overlay and returns focus to the overflow button.
 
@@ -274,6 +274,10 @@ For consistency with the other Vaadin overlay-with-overflow component, `<vaadin-
 **Q: Why does arrow-key navigation skip disabled overlay items?**
 
 Arrow / Home / End navigation in the overflow overlay is implemented via `KeyboardDirectionMixin` from `@vaadin/a11y-base`, the same primitive that powers `<vaadin-context-menu-list-box>`, `<vaadin-menu-bar>`, and `<vaadin-accordion>`. The mixin's `_isItemFocusable(item)` defaults to `!item.hasAttribute('disabled')` and is honored by every focus-moving keystroke, so disabled items are skipped uniformly. The alternative — letting focus land on a disabled item — would conflict with the inner link's `tabindex="-1"`, the host's `aria-disabled="true"`, and the suppressed click contract, and would diverge from the menu-style navigation users encounter everywhere else in the library.
+
+**Q: Why does arrow-key navigation also skip overlay items without a `path`?**
+
+An item without a `path` renders as a `<span part="nolink">` rather than an `<a part="link">` — there is no focusable element inside it. Letting the arrow keys land on such an item would either trap focus on a non-interactive node or silently no-op the keystroke, both of which break the menu-style navigation contract. `<vaadin-breadcrumbs>` therefore overrides `_isItemFocusable` to treat items where `path == null` as non-focusable, so arrow / Home / End navigation skips them the same way it skips disabled items.
 
 **Q: Why does the overflow overlay not move focus to the first item when it opens?**
 
