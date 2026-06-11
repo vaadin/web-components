@@ -10,12 +10,12 @@ Traceability: packages/breadcrumbs/spec/requirements.md (universal + flow)
 Tasks are pointers into the spec, not a second copy of it. The spec sections field tells the implementer where to find the full details. Do not restate class declarations, method tables, or `@Synchronize` lists here.
 
 External Flow core dependencies (not implemented by these tasks):
-- `com.vaadin.flow.component.HasComponentsOfType<T>` — Flow core PR #24186 (required by Task 6)
+- `com.vaadin.flow.component.HasComponentsOfType<T>` — Flow core (available; implemented in Task 1, guarded in Task 6)
 - `com.vaadin.flow.router.RouteParent` annotation — Flow core (required by Task 7 + Task 11)
 - `com.vaadin.flow.router.RouteHierarchy.resolveAncestors(...)` walker — Flow core (required by Task 7)
-The Flow-version bump in `flow-components-bom` is part of Task 6 — the first task that needs an unreleased Flow core API. Tasks 1–5 build against the current baseline Flow version.
+The Flow-version bump in `flow-components-bom` is part of Task 7 — the first task that needs an unreleased Flow core API. Tasks 1–6 build against the current baseline Flow version.
 
-Ordering rationale: Tasks 3–5 (theme variants, i18n, mode) depend only on already-released Flow APIs, so they can proceed while PR #24186 / `@RouteParent` / `RouteHierarchy` are still in flight. The Flow-core-gated work (Task 6 guard, Task 7 router wiring) and the integration tests that exercise it (Tasks 10, 11) come after.
+Ordering rationale: Tasks 1–6 depend only on released Flow APIs, so they can proceed while `@RouteParent` / `RouteHierarchy` are still in flight. The Flow-core-gated work (Task 7 router wiring) and the integration tests that exercise it (Tasks 10, 11) come after.
 
 Do NOT reorder tasks without verifying the dependency graph.
 Do NOT add tasks for features not in the spec.
@@ -37,12 +37,12 @@ Do NOT add tasks for features not in the spec.
 **Requirements:** —
 **Depends on:** —
 
-Create the three sub-modules (`-flow`, `-flow-integration-tests`, `-testbench`) with `pom.xml` wiring, empty class shells matching the annotations and `implements` clauses from the spec (empty bodies — Mode enum, constructors, `setI18n`, the theme-variant and child-management surface land in later tasks), and the full feature-flag plumbing (`BreadcrumbsFeatureFlagProvider`, ServiceLoader registration, `ExperimentalFeatureException`, `onAttach` check). At this point `Breadcrumbs` implements only `HasSize, HasStyle, HasAriaLabel`; it gains `HasThemeVariant<BreadcrumbsVariant>` in Task 3 and `HasComponentsOfType<BreadcrumbsItem>` in Task 6 (when the Flow core dependency is bumped). The module builds against the current baseline Flow version — no version bump yet. The IT module enables the feature flag via `src/main/resources/vaadin-featureflags.properties`. The smoke test instantiates `Breadcrumbs` (which currently does nothing in its body) and the `SerializableTest` round-trips it.
+Create the three sub-modules (`-flow`, `-flow-integration-tests`, `-testbench`) with `pom.xml` wiring, empty class shells matching the annotations and `implements` clauses from the spec (empty bodies — Mode enum, constructors, `setI18n`, the theme-variant surface, and the `Mode.ROUTER` guard land in later tasks), and the full feature-flag plumbing (`BreadcrumbsFeatureFlagProvider`, ServiceLoader registration, `ExperimentalFeatureException`, `onAttach` check). At this point `Breadcrumbs` implements `HasSize, HasStyle, HasAriaLabel, HasComponentsOfType<BreadcrumbsItem>` — the child-management methods come as inherited defaults, with the `Mode.ROUTER` guard added in Task 6 — and gains `HasThemeVariant<BreadcrumbsVariant>` in Task 3. The module builds against the current baseline Flow version — no version bump yet. The IT module enables the feature flag via `src/main/resources/vaadin-featureflags.properties`. The smoke test instantiates `Breadcrumbs` (which currently does nothing in its body) and the `SerializableTest` round-trips it.
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/pom.xml` (create)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/pom.xml` (create)
-- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/Breadcrumbs.java` (create — `@Tag` + `@NpmPackage` + `@JsModule`, `extends Component` + `implements HasSize, HasStyle, HasAriaLabel`, empty body apart from `onAttach` calling `checkFeatureFlag`)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/Breadcrumbs.java` (create — `@Tag` + `@NpmPackage` + `@JsModule`, `extends Component` + `implements HasSize, HasStyle, HasAriaLabel, HasComponentsOfType<BreadcrumbsItem>`, empty body apart from `onAttach` calling `checkFeatureFlag`)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/BreadcrumbsItem.java` (create — annotations + `implements HasText, HasEnabled, HasPrefix`, empty body)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/BreadcrumbsFeatureFlagProvider.java` (create — verbatim from flow-spec.md Feature Flag section)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/ExperimentalFeatureException.java` (create — verbatim from spec)
@@ -56,7 +56,7 @@ Create the three sub-modules (`-flow`, `-flow-integration-tests`, `-testbench`) 
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench/src/main/java/com/vaadin/flow/component/breadcrumbs/testbench/BreadcrumbsElement.java` (create — `@Element("vaadin-breadcrumbs")`, empty body)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench/src/main/java/com/vaadin/flow/component/breadcrumbs/testbench/BreadcrumbsItemElement.java` (create — `@Element("vaadin-breadcrumbs-item")`, empty body)
 - `pom.xml` (modify — add `vaadin-breadcrumbs-flow-parent` module)
-- `flow-components-bom/pom.xml` (modify — add the new module if the BOM aggregates modules; no Flow version bump yet — that lands in Task 6)
+- `flow-components-bom/pom.xml` (modify — add the new module if the BOM aggregates modules; no Flow version bump yet — that lands in Task 7)
 
 **Tests:**
 - [ ] `new Breadcrumbs()` returns a non-null instance whose element tag is `vaadin-breadcrumbs`
@@ -159,7 +159,7 @@ Add the nested static `BreadcrumbsI18n` class — `Serializable`, `@JsonInclude(
 **Requirements:** 14
 **Depends on:** 1
 
-Add the public nested `Mode` enum (`ROUTER`, `MANUAL`) and the two constructors (`Breadcrumbs()` → defaults to `Mode.ROUTER`, `Breadcrumbs(Mode)`). Implement `getMode()` and `setMode(Mode)` with the symmetric clear-and-rewire contract from the spec: both transitions discard existing children, `ROUTER → MANUAL` also unregisters the navigation listener (if registered later in Task 7), `MANUAL → ROUTER` triggers an initial trail build. The `add`/`remove`/`removeAll` guard methods do not exist yet — they land in Task 6. The router listener wiring lands in Task 7; at this point `setMode(ROUTER)` only flips the internal flag and clears children.
+Add the public nested `Mode` enum (`ROUTER`, `MANUAL`) and the two constructors (`Breadcrumbs()` → defaults to `Mode.ROUTER`, `Breadcrumbs(Mode)`). Implement `getMode()` and `setMode(Mode)` with the symmetric clear-and-rewire contract from the spec: both transitions discard existing children, `ROUTER → MANUAL` also unregisters the navigation listener (if registered later in Task 7), `MANUAL → ROUTER` triggers an initial trail build. The `Mode.ROUTER` guard on `add`/`remove`/`removeAll` does not exist yet — it lands in Task 6 (the inherited methods themselves are available from Task 1). The router listener wiring lands in Task 7; at this point `setMode(ROUTER)` only flips the internal flag and clears children.
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/Breadcrumbs.java` (modify)
@@ -178,17 +178,16 @@ Add the public nested `Mode` enum (`ROUTER`, `MANUAL`) and the two constructors 
 
 ---
 
-## Task 6: `Breadcrumbs` — `HasComponentsOfType<BreadcrumbsItem>` with `Mode.ROUTER` guard
+## Task 6: `Breadcrumbs` — `Mode.ROUTER` guard on child management
 
 **Spec sections:** Key Design Decisions §2 + §3, Component Classes → `Breadcrumbs` (items section + `routerUpdateInProgress` bypass + `updateChildrenInternal`), Reuse and Proposed Adjustments → HasComponentsOfType
 **Requirements:** 1, 9, 14
 **Depends on:** 2, 5
 
-First task that needs an unreleased Flow core API. Bump the Flow version in `flow-components-bom/pom.xml` to a release that includes Flow core PR #24186 (`HasComponentsOfType<T>`). Add `implements HasComponentsOfType<BreadcrumbsItem>` to `Breadcrumbs`. Override every mutating default method — `add(T...)`, `add(Collection<T>)`, `remove(T...)`, `remove(Collection<T>)`, `removeAll()`, `addComponentAsFirst(T)`, `addComponentAtIndex(int, T)`, `replace(T, T)`, `bindChildren(Signal<List<S>>, SerializableFunction<S, T>)` — so each one throws `IllegalStateException` when `mode == Mode.ROUTER && !routerUpdateInProgress`, otherwise delegates to `HasComponentsOfType.super.<method>(...)`. Add the private `routerUpdateInProgress` flag and the `updateChildrenInternal(List<BreadcrumbsItem>)` helper that sets the flag, calls `removeAll() + add(...)`, and clears the flag in a `finally`. `getChildren()` reads remain unguarded.
+Guard the inherited `HasComponentsOfType<BreadcrumbsItem>` child-management methods (the interface is on `Breadcrumbs` from Task 1). Override every mutating default method — `add(T...)`, `add(Collection<T>)`, `remove(T...)`, `remove(Collection<T>)`, `removeAll()`, `addComponentAsFirst(T)`, `addComponentAtIndex(int, T)`, `replace(T, T)`, `bindChildren(Signal<List<S>>, SerializableFunction<S, T>)` — so each one throws `IllegalStateException` when `mode == Mode.ROUTER && !routerUpdateInProgress`, otherwise delegates to `HasComponentsOfType.super.<method>(...)`. Add the private `routerUpdateInProgress` flag and the `updateChildrenInternal(List<BreadcrumbsItem>)` helper that sets the flag, calls `removeAll() + add(...)`, and clears the flag in a `finally`. `getChildren()` reads remain unguarded.
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/Breadcrumbs.java` (modify)
-- `flow-components-bom/pom.xml` (modify — bump Flow version to a release that ships PR #24186)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsTest.java` (modify — add the guard tests next to the existing smoke test)
 
 **Tests:**
@@ -210,11 +209,11 @@ First task that needs an unreleased Flow core API. Bump the Flow version in `flo
 **Requirements:** 13, 15
 **Depends on:** 6
 
-Requires the Flow version bumped in Task 6 to also include `com.vaadin.flow.router.RouteParent` and `RouteHierarchy.resolveAncestors(...)`; if those ship in a later Flow release than PR #24186, bump `flow-components-bom` again here. Register `UI#addAfterNavigationListener(this::rebuildFromRouter)` in `onAttach` when `mode == Mode.ROUTER`, hold the returned `Registration` in a `transient navigationRegistration` field, and unregister in `onDetach`. Add both `rebuildFromRouter` overloads (event-driven + direct-state for initial attach reading `UIInternals.getActiveViewLocation()` / `getActiveRouterTargetsChain()`); both guard with `if (!isAttached()) return;` and delegate to a private builder that calls `RouteHierarchy.resolveAncestors(currentRoute, routeConfiguration)` from Flow core, wraps every ancestor class except the last as `new BreadcrumbsItem(title, ancestorClass)` (title from `@PageTitle`), wraps the last entry as `new BreadcrumbsItem(title)` with no path (title from `HasDynamicTitle#getPageTitle()` on the active view instance if present, otherwise its class `@PageTitle`), and hands the list to `updateChildrenInternal`. Also wire `Mode.MANUAL → Mode.ROUTER` transitions in `setMode` to register the listener and trigger an initial `rebuildFromRouter` if currently attached.
+Bump the Flow version in `flow-components-bom/pom.xml` to a release that includes `com.vaadin.flow.router.RouteParent` and `RouteHierarchy.resolveAncestors(...)`. Register `UI#addAfterNavigationListener(this::rebuildFromRouter)` in `onAttach` when `mode == Mode.ROUTER`, hold the returned `Registration` in a `transient navigationRegistration` field, and unregister in `onDetach`. Add both `rebuildFromRouter` overloads (event-driven + direct-state for initial attach reading `UIInternals.getActiveViewLocation()` / `getActiveRouterTargetsChain()`); both guard with `if (!isAttached()) return;` and delegate to a private builder that calls `RouteHierarchy.resolveAncestors(currentRoute, routeConfiguration)` from Flow core, wraps every ancestor class except the last as `new BreadcrumbsItem(title, ancestorClass)` (title from `@PageTitle`), wraps the last entry as `new BreadcrumbsItem(title)` with no path (title from `HasDynamicTitle#getPageTitle()` on the active view instance if present, otherwise its class `@PageTitle`), and hands the list to `updateChildrenInternal`. Also wire `Mode.MANUAL → Mode.ROUTER` transitions in `setMode` to register the listener and trigger an initial `rebuildFromRouter` if currently attached.
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/Breadcrumbs.java` (modify)
-- `flow-components-bom/pom.xml` (modify only if `@RouteParent` / `RouteHierarchy` require a later Flow release than Task 6's bump)
+- `flow-components-bom/pom.xml` (modify — bump Flow version to a release that ships `@RouteParent` and `RouteHierarchy`)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsModeTest.java` (modify — extend the existing test class with router-listener cases using stubbed `RouteConfiguration` / mocked `UI`)
 
 **Tests:**
