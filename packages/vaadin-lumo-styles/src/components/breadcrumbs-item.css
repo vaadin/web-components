@@ -62,7 +62,6 @@
     color: inherit;
   }
 
-  :host([slot='overlay']:not([disabled])) [part='link'],
   :host([slot='overlay']) [part='nolink'] {
     color: var(--lumo-body-text-color);
   }

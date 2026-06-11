@@ -83,6 +83,7 @@ describe('breadcrumbs', () => {
 
     it('primary', async () => {
       div.style.height = '150px';
+      breadcrumbs.setAttribute('theme', 'primary');
       breadcrumbs.$.overflow.focus();
       await sendKeys({ press: 'Enter' });
       await oneEvent(overlay, 'vaadin-overlay-open');
