@@ -22,7 +22,7 @@
 
 9. **Theme variants via `HasThemeVariant<BreadcrumbsVariant>`.** Per guidelines/09-theming.md. `Breadcrumbs` implements `HasThemeVariant<BreadcrumbsVariant>`; the `BreadcrumbsVariant` enum carries `SLASH` (base-styles separator), `LUMO_PRIMARY` (Lumo), and `AURA_ACCENT` (Aura). See "Theme Variants" for the enum and inherited API, and the Discussion ("Why does `Breadcrumbs` expose theme variants?") for the rationale.
 
-10. **`BreadcrumbsI18n` is a nested static class.** Follows the `SideNavI18n` / `MenuBarI18n` convention — `Serializable`, `@JsonInclude(JsonInclude.Include.NON_NULL)`, fluent setters returning `BreadcrumbsI18n`. Serialised with `JacksonUtils.beanToJson` and pushed to the client via `getElement().setPropertyJson("i18n", ...)` in the attach handler (so re-attach re-sets the property for the fresh client-side element). `setI18n` rejects `null` (`Objects.requireNonNull`) — see the i18n section.
+10. **`BreadcrumbsI18n` is a nested static class.** Follows the `SideNavI18n` / `MenuBarI18n` convention. See the i18n section for the serialisation, attach-time push, and non-null `setI18n` contract.
 
 11. **Package name `com.vaadin.flow.component.breadcrumbs`.** Mirrors `com.vaadin.flow.component.sidenav` — the short form that drops internal hyphens.
 
@@ -618,10 +618,6 @@ No modifications.
 ## Discussion
 
 Questions raised during spec production, with their resolutions.
-
-**Q: How does `Mode.ROUTER` react to navigation?**
-
-`onAttach` registers `UI.addAfterNavigationListener(event -> rebuildFromRouter(...))` and holds the returned `Registration` in a transient field. `onDetach` unregisters. Each navigation rebuilds the trail by calling `RouteConfiguration#getRouteHierarchy(...)`, wrapping each returned route reference into a `BreadcrumbsItem`, and handing the list to an internal `updateChildrenInternal(List<BreadcrumbsItem>)` that bypasses the `Mode.ROUTER` guard on `add`/`remove`/`removeAll` — user code cannot reach this path.
 
 **Q: Why does the trail build on `RouteConfiguration#getRouteHierarchy` rather than a breadcrumb-specific walker?**
 

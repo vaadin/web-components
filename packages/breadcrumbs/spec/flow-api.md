@@ -140,7 +140,7 @@ Signal.effect(breadcrumbs, () -> {
 current.set(nextCategory);
 ```
 
-**Why this shape:** In `Mode.MANUAL`, imperative updates use the standard component-tree primitives `add(...)`, `remove(...)`, `removeAll()` inherited from `HasComponentsOfType<BreadcrumbsItem>` — the same API a Flow developer uses for any container, with the generic parameter ensuring only `BreadcrumbsItem` instances can be passed. Reactive updates use `Signal.effect(component, Runnable)`, Flow core's primitive for running a callback whenever the observed signals change; the effect is the right granularity here because the trail is rebuilt as a tree operation (`removeAll` + `add`), not a single property set. This avoids inventing a component-specific `bindItems` surface when the generic effect primitive already covers the case. The web component itself accepts only `<vaadin-breadcrumbs-item>` light-DOM children (no parallel `items` data-array property — see web-component-api.md §6), so the Flow wrapper has nothing else to map.
+**Why this shape:** In `Mode.MANUAL`, imperative updates use the standard component-tree primitives `add(...)`, `remove(...)`, `removeAll()` inherited from `HasComponentsOfType<BreadcrumbsItem>` — the same API a Flow developer uses for any container, with the generic parameter ensuring only `BreadcrumbsItem` instances can be passed. Reactive updates use `Signal.effect(component, Runnable)`, Flow core's primitive for running a callback whenever the observed signals change; the effect is the right granularity here because the trail is rebuilt as a tree operation (`removeAll` + `add`), not a single property set. This avoids inventing a component-specific `bindItems` surface when the generic effect primitive already covers the case.
 
 ---
 
