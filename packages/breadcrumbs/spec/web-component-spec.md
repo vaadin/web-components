@@ -83,9 +83,13 @@ The overflow overlay's outer panel and inner wrapper are re-exported on the brea
 |---|---|
 | `has-overflow` | Set when one or more items are collapsed into the overflow overlay. |
 
-| Theme | Description |
-|---|---|
-| `slash` | Renders a slash (`/`) instead of the default chevron between items. Set via `theme="slash"` on `<vaadin-breadcrumbs>`. |
+| Theme | Defined in | Description |
+|---|---|---|
+| `slash` | Base styles | Renders a slash (`/`) instead of the default chevron between items. |
+| `primary` | Lumo | Restores a distinct link color (`--lumo-primary-text-color`) so links stand out from non-link items. |
+| `accent` | Aura | Restores a distinct link color (`--aura-accent-text-color`) so links stand out from non-link items. |
+
+All variants are set via `theme="…"` on `<vaadin-breadcrumbs>`. See the Discussion entry on `--vaadin-breadcrumbs-link-color` for why Lumo and Aura ship the `primary` / `accent` variants.
 
 | CSS Custom Property | Default | Description |
 |---|---|---|

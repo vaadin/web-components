@@ -55,7 +55,16 @@ vaadin-breadcrumbs {
 }
 ```
 
-**Why this shape:** The separator is rendered as a `::after` pseudo-element on each item using `mask-image`, matching the pattern used across Vaadin components (select's toggle button, combo-box's dropdown arrow, clear buttons). The pseudo-element has `background: currentColor` shaped by `mask-image: var(--vaadin-breadcrumbs-separator)`. Applications override the separator by setting the CSS custom property on the item. The theme handles flipping the separator direction in RTL contexts. This keeps the HTML clean — separators are purely visual, styled through CSS, not DOM content.
+```html
+<!-- Or switch to the bundled slash separator via the theme attribute -->
+<vaadin-breadcrumbs theme="slash">
+  <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+  <vaadin-breadcrumbs-item path="/products">Products</vaadin-breadcrumbs-item>
+  <vaadin-breadcrumbs-item>Laptops</vaadin-breadcrumbs-item>
+</vaadin-breadcrumbs>
+```
+
+**Why this shape:** The separator is rendered as a `::after` pseudo-element on each item using `mask-image`, matching the pattern used across Vaadin components (select's toggle button, combo-box's dropdown arrow, clear buttons). The pseudo-element has `background: currentColor` shaped by `mask-image: var(--vaadin-breadcrumbs-separator)`. Applications override the separator by setting the CSS custom property on the item. For the common slash separator, base styles ship a `theme="slash"` variant (see Discussion). The theme handles flipping the separator direction in RTL contexts. This keeps the HTML clean — separators are purely visual, styled through CSS, not DOM content.
 
 ---
 
@@ -231,6 +240,10 @@ On `vaadin-breadcrumbs` (the parent), not on individual items. The property casc
 **Q: Should the separator `mask-image` reference the SVG directly or via a CSS custom property?**
 
 Via a CSS custom property (`--vaadin-breadcrumbs-separator`). The base styles set `mask-image: var(--vaadin-breadcrumbs-separator)` on the `::after` pseudo-element, and applications override the custom property to change the icon. This matches how other Vaadin components handle icon customization.
+
+**Q: Why offer a `theme="slash"` variant when the separator is already customizable via CSS?**
+
+The slash is the second most common breadcrumb separator after the chevron, and the `mask-image` recipe makes the variant trivial — `theme="slash"` rebinds `--vaadin-breadcrumbs-separator` to a bundled slash icon. Shipping it in base styles means applications get the slash separator without writing their own CSS or embedding an SVG, and Lumo / Aura do not have to re-implement the same selector. Arbitrary separators still go through the custom property; the variant just covers the common case.
 
 **Q: Why is there no programmatic `items` property?**
 
