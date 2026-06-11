@@ -1,6 +1,7 @@
 vaadin-breadcrumbs,
 vaadin-breadcrumbs::before,
 vaadin-breadcrumbs::after,
+vaadin-breadcrumbs::part(overflow-button),
 vaadin-breadcrumbs-item,
 vaadin-breadcrumbs-item::before,
 vaadin-breadcrumbs-item::after,
