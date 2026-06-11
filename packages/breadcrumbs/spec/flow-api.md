@@ -259,7 +259,7 @@ public class EditOrderView extends Div { ... }
 // (instead of Home › Orders › Edit › Edit Order implied by the URL segments)
 ```
 
-**Why this shape:** A class-level annotation `@RouteParent(Class<? extends Component>)` declares a view's parent in the application's route hierarchy, overriding URL-prefix walking. It is deliberately named in route-hierarchy terms rather than breadcrumb-specific terms — the relationship it expresses ("this route's conceptual parent is that route") is independent of breadcrumb rendering and can be consumed by any navigation component that needs to traverse the hierarchy. An annotation (vs a method on a new interface) is the right shape for this because the information is static and known at compile time — mirroring how `@Route`, `@RouteAlias`, and `@PageTitle` are themselves annotations. Walking continues from the declared parent using the same rules, so chains of `@RouteParent` compose naturally. The annotation lives alongside the other Flow route metadata on the view class.
+**Why this shape:** `@RouteParent(Class<? extends Component>)` declares a view's parent in the route hierarchy, overriding URL-prefix walking. Chains of `@RouteParent` compose naturally, and the annotation sits on the view class alongside the other route metadata (`@Route`, `@PageTitle`). The annotation is provided by Flow core, which also supports a dynamic `resolver()` for parents that depend on route parameters.
 
 ---
 
@@ -333,11 +333,11 @@ Flow core's `Signal.effect(component, Runnable)` already provides the primitive 
 
 **Q: What happens if `@RouteParent` forms a cycle or points at a class without `@Route`?**
 
-These are implementation concerns the spec (`create-component-flow-spec`) will resolve — the expected behaviour is that cycles are detected and truncated, and a parent class without `@Route` is treated as if the annotation were absent (fall back to URL-prefix walking). The API surface here is only the annotation itself; the resolution algorithm belongs to the specification.
+Flow core handles both: `RouteConfiguration#getRouteHierarchy` is cycle-guarded (it stops when a target repeats), and a parent that cannot be resolved from `@RouteParent` falls back to URL-prefix walking. The breadcrumb relies on that behaviour rather than implementing its own.
 
 **Q: Why `@RouteParent` rather than a breadcrumb-specific name?**
 
-The annotation expresses a route-hierarchy relationship — "the conceptual parent of this route is that route" — which is not inherently tied to breadcrumb rendering. Naming it `@RouteParent` (vs. `@BreadcrumbsParent` or `@BreadcrumbsRouteParent`) keeps the declaration reusable: any future navigation component that needs to walk the route hierarchy (e.g. a back-navigation helper, an SEO link-graph generator, a parent-link utility) can consume the same annotation without the name implying it belongs to Breadcrumbs alone. The `@Route*` prefix also groups it naturally with the existing routing annotations (`@Route`, `@RouteAlias`) in Flow core, so developers find it where they look for route metadata. This avoids coupling application-level hierarchy metadata to a specific presentation component — the view author declares a routing fact, not a breadcrumb hint.
+The name is Flow core's: the annotation expresses a generic route relationship, not a breadcrumb hint, so it is not named after this component.
 
 **Q: Why is `BreadcrumbsI18n` a class rather than a single setter for `moreItems`?**
 
