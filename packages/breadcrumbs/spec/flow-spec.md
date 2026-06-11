@@ -6,9 +6,9 @@
 
 1. **`Mode` enum drives ownership.** Following flow-api.md §1 and §9, `Breadcrumbs.Mode` is a public nested enum with values `ROUTER` (default) and `MANUAL`. The mode is set at construction (`new Breadcrumbs()` / `new Breadcrumbs(Mode)`) and can be switched at runtime via `setMode(Mode)`. `add`/`remove`/`removeAll` throw `IllegalStateException` while in `Mode.ROUTER`. `setMode(Mode)` is symmetric: both transitions clear the current children and install the new mode's wiring — `ROUTER → MANUAL` drops router-derived items and unregisters the navigation listener, `MANUAL → ROUTER` drops manually-added items and starts the router listener plus an initial rebuild. See "Mode switching" below for the full contract.
 
-2. **`HasComponentsOfType<BreadcrumbsItem>` for child management.** Per flow-api.md §1 "Why this shape". Implemented by the type-parameterised children interface from Flow core. The interface extends `HasElement, HasEnabled` and supplies — as default methods — `add(T...)`, `add(Collection<T>)`, `remove(T...)`, `remove(Collection<T>)`, `removeAll()`, `addComponentAtIndex(int, T)`, `addComponentAsFirst(T)`, `replace(T, T)`, and `bindChildren(Signal<List<S>>, SerializableFunction<S, T>)`. All of these are available on `Breadcrumbs` without the component re-implementing them, and all of them must be intercepted by the `Mode.ROUTER` guard (see KDD §1). `HasEnabled` is inherited transitively — it does not need to appear in `Breadcrumbs`'s `implements` list.
+2. **`HasComponentsOfType<BreadcrumbsItem>` for child management.** Per flow-api.md §1 "Why this shape". The Flow core interface extends `HasElement, HasEnabled` and supplies the full child-management surface as default methods (see the class skeleton in "Component Classes"), all of which must be intercepted by the `Mode.ROUTER` guard (see KDD §1). `HasEnabled` is inherited transitively — it does not need to appear in `Breadcrumbs`'s `implements` list.
 
-3. **Router integration via `AfterNavigationListener`.** For `Mode.ROUTER`, the component registers `UI.addAfterNavigationListener(...)` in its attach handler and unregisters in detach. The listener walks the route hierarchy — `@RouteParent` first, then URL-prefix — and calls `updateChildrenInternal(List<BreadcrumbsItem>)` to replace the trail. `updateChildrenInternal` sets an internal `boolean routerUpdateInProgress` flag, routes the update through the normal component API (`removeAll()` + `add(...)`), then clears the flag; the `Mode.ROUTER` guard on the public methods skips the throw when the flag is set. This means router-derived items are regular child components — `getChildren()` returns them, serialisation captures them, and the Flow virtual-children mechanism is not involved.
+3. **Router integration via `AfterNavigationListener`.** For `Mode.ROUTER`, the component registers `UI.addAfterNavigationListener(...)` in its attach handler and unregisters in detach. The listener walks the route hierarchy — `@RouteParent` first, then URL-prefix — and calls `updateChildrenInternal(List<BreadcrumbsItem>)` to replace the trail. `updateChildrenInternal` sets an internal `boolean routerUpdateInProgress` flag, routes the update through the normal component API (`removeAll()` + `add(...)`), then clears the flag; the `Mode.ROUTER` guard on the public methods skips the throw when the flag is set.
 
 4. **`@RouteParent` annotation lives in Flow core.** Per flow-api.md §10. `com.vaadin.flow.router.RouteParent` is introduced in Flow core alongside `@Route`, `@RouteAlias`, `@ParentLayout`. The breadcrumb module only consumes it — it neither defines it nor re-exports it. See "Reuse and Proposed Adjustments" for the Flow core dependency.
 
@@ -154,7 +154,7 @@ public class Breadcrumbs extends Component
 - `HasStyle` — required for requirement 5 (customise separator via `--vaadin-breadcrumbs-separator` CSS custom property) and for `getStyle()` access per `DESIGN_GUIDELINES.md` "Styling lives in CSS, not Java".
 - `HasAriaLabel` — requirement 10 (navigation landmark accessible name). Flow core interface.
 - `HasThemeVariant<BreadcrumbsVariant>` — requirement 5 plus general theming. Shared interface from `vaadin-flow-components-base`. See "Theme Variants" for the variant enum and the inherited method surface.
-- `HasComponentsOfType<BreadcrumbsItem>` — requirement 1, 9 (add/remove/manage items with compile-time type safety). Flow core interface. All inherited mutating methods — `add(T...)` / `add(Collection<T>)` / `remove(T...)` / `remove(Collection<T>)` / `removeAll()` / `addComponentAsFirst(T)` / `addComponentAtIndex(int, T)` / `replace(T, T)` / `bindChildren(Signal<List<S>>, SerializableFunction<S, T>)` — are overridden to throw `IllegalStateException` when `Mode.ROUTER` (unless the internal `routerUpdateInProgress` flag is set).
+- `HasComponentsOfType<BreadcrumbsItem>` — requirement 1, 9 (add/remove/manage items with compile-time type safety). Flow core interface. All inherited mutating methods (see the class skeleton above) are overridden to throw `IllegalStateException` when `Mode.ROUTER` (unless the internal `routerUpdateInProgress` flag is set).
 
 **@Synchronize'd properties:** none.
 
@@ -218,7 +218,7 @@ void updateChildrenInternal(List<BreadcrumbsItem> trail) {
 }
 ```
 
-The public `add` / `addComponentAsFirst` / `addComponentAtIndex` / `remove` / `removeAll` / `replace` / `bindChildren` overrides check `mode == Mode.ROUTER && !routerUpdateInProgress` and throw `IllegalStateException` if so. This means router-derived items are regular logical children — `getChildren()` returns them, serialisation captures them, no virtual-children machinery is involved.
+The overridden mutating methods check `mode == Mode.ROUTER && !routerUpdateInProgress` and throw `IllegalStateException` if so. This means router-derived items are regular logical children — `getChildren()` returns them, serialisation captures them, no virtual-children machinery is involved.
 
 **Mode switching.** `setMode(Mode newMode)`:
 - If already equal, no-op.
@@ -643,9 +643,7 @@ Affects: no flow-components module defines this annotation; the breadcrumbs modu
 
 ### `HasComponentsOfType<T>` in Flow core — Dependency
 
-The Flow wrapper uses `com.vaadin.flow.component.HasComponentsOfType<BreadcrumbsItem>` from Flow core. The interface extends `HasElement, HasEnabled` and provides the full child-management surface as default methods — `add(T...)`, `add(Collection<T>)`, `remove(T...)`, `remove(Collection<T>)`, `removeAll()`, `addComponentAtIndex(int, T)`, `addComponentAsFirst(T)`, `replace(T, T)`, and `bindChildren(Signal<List<S>>, SerializableFunction<S, T>)`. `Breadcrumbs` overrides each of these mutating methods so it can enforce the `Mode.ROUTER` guard (see KDD §3 for the `routerUpdateInProgress` bypass).
-
-Affects: none — `HasComponentsOfType` is available in the Flow version that `flow-components-bom` targets.
+The Flow wrapper uses `com.vaadin.flow.component.HasComponentsOfType<BreadcrumbsItem>` from Flow core, which provides the full child-management surface as default methods (see the class skeleton in "Component Classes"). `Breadcrumbs` overrides each mutating method to enforce the `Mode.ROUTER` guard (see KDD §3 for the `routerUpdateInProgress` bypass).
 
 ### `vaadin-flow-components-base` — Used as-is
 
