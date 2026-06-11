@@ -47,9 +47,10 @@ describe('breadcrumbs', () => {
     let breadcrumbs, overlay;
 
     beforeEach(async () => {
+      div.style.width = '280px';
       breadcrumbs = fixtureSync(
         `
-          <vaadin-breadcrumbs style="max-width: 280px">
+          <vaadin-breadcrumbs>
             <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
             <vaadin-breadcrumbs-item path="/docs">Documents</vaadin-breadcrumbs-item>
             <vaadin-breadcrumbs-item path="/docs/projects" disabled>Projects</vaadin-breadcrumbs-item>
