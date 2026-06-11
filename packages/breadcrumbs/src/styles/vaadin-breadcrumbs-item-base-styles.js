@@ -75,10 +75,6 @@ export const breadcrumbsItemStyles = css`
     display: flex;
   }
 
-  :host([slot='overlay']:not([disabled])) [part='link'] {
-    color: var(--vaadin-text-color);
-  }
-
   :host([slot='overlay'])::after {
     display: none;
   }

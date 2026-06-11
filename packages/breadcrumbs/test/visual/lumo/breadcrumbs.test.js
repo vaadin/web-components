@@ -19,10 +19,8 @@ describe('breadcrumbs', () => {
   });
 
   describe('default', () => {
-    let breadcrumbs;
-
     beforeEach(async () => {
-      breadcrumbs = fixtureSync(
+      fixtureSync(
         `
           <vaadin-breadcrumbs>
             <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
@@ -42,11 +40,6 @@ describe('breadcrumbs', () => {
     it('item-focus', async () => {
       await sendKeys({ press: 'Tab' });
       await visualDiff(div, 'item-focus');
-    });
-
-    it('primary', async () => {
-      breadcrumbs.setAttribute('theme', 'primary');
-      await visualDiff(div, 'theme-primary');
     });
   });
 
@@ -89,6 +82,17 @@ describe('breadcrumbs', () => {
       await sendKeys({ press: 'Enter' });
       await oneEvent(overlay, 'vaadin-overlay-open');
       await visualDiff(div, 'overflow-opened');
+    });
+
+    it('primary', async () => {
+      div.style.height = '150px';
+      breadcrumbs.setAttribute('theme', 'primary');
+      const overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
+      const button = breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]');
+      button.focus();
+      await sendKeys({ press: 'Enter' });
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      await visualDiff(div, 'theme-primary');
     });
   });
 });
