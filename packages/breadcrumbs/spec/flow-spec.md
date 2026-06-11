@@ -151,7 +151,7 @@ public class Breadcrumbs extends Component
 **Implemented mixin interfaces:**
 
 - `HasSize` — covers requirement that the component can be sized by the application (universal API hygiene).
-- `HasStyle` — required for requirement 5 (customise separator via `--vaadin-breadcrumbs-separator` CSS custom property) and for `getStyle()` access per `DESIGN_GUIDELINES.md` "Styling lives in CSS, not Java".
+- `HasStyle` — required for requirement 5 (customise separator via `--vaadin-breadcrumbs-separator` CSS custom property) and for `getStyle()` access (guidelines/04-mixins.md); styling lives in CSS, not Java.
 - `HasAriaLabel` — requirement 10 (navigation landmark accessible name). Flow core interface.
 - `HasThemeVariant<BreadcrumbsVariant>` — requirement 5 plus general theming. Shared interface from `vaadin-flow-components-base`. See "Theme Variants" for the variant enum and the inherited method surface.
 - `HasComponentsOfType<BreadcrumbsItem>` — requirement 1, 9 (add/remove/manage items with compile-time type safety). Flow core interface. All inherited mutating methods (see the class skeleton above) are overridden to throw `IllegalStateException` when `Mode.ROUTER` (unless the internal `routerUpdateInProgress` flag is set).

@@ -34,7 +34,7 @@ breadcrumbs.add(
 
 In `MANUAL` mode, `Breadcrumbs` is a standard Flow container — it implements `HasComponentsOfType<BreadcrumbsItem>` and accepts items through the inherited `add` / `addComponentAsFirst` / `addComponentAtIndex` / `remove` / `removeAll` methods, with compile-time enforcement that only `BreadcrumbsItem` instances can be added. The web component itself accepts only `<vaadin-breadcrumbs-item>` light-DOM children (no parallel programmatic items property — see web-component-api.md §6), so the Flow component-tree model maps directly to the underlying DOM.
 
-`BreadcrumbsItem` offers the same constructor overloads as `SideNavItem`: `(label)` for the current page (no path), `(label, String path)` for hand-managed paths, `(label, Class<? extends Component> view)` as the type-safe primary form required by `DESIGN_GUIDELINES.md` "Integrate with Flow Router", and `(label, Class<? extends Component> view, RouteParameters routeParameters)` for parameterised routes. Each path-taking overload also has a prefix-component variant ending in `Component prefixComponent` (see section 4). The "current" distinction needs no extra API — an item without a path is the current item, matching the web component's declarative convention.
+`BreadcrumbsItem` offers the same constructor overloads as `SideNavItem`: `(label)` for the current page (no path), `(label, String path)` for hand-managed paths, `(label, Class<? extends Component> view)` as the type-safe primary form required by guidelines/02-design.md "Integrate with Flow Router", and `(label, Class<? extends Component> view, RouteParameters routeParameters)` for parameterised routes. Each path-taking overload also has a prefix-component variant ending in `Component prefixComponent` (see section 4). The "current" distinction needs no extra API — an item without a path is the current item, matching the web component's declarative convention.
 
 ---
 
@@ -286,7 +286,7 @@ breadcrumbs.addThemeVariants(BreadcrumbsVariant.SLASH); // "/" separator instead
 |---|---|---|
 | `<vaadin-breadcrumbs>` element | `new Breadcrumbs()` | constructor; `HasSize`, `HasStyle`, `HasAriaLabel`, `HasComponentsOfType<BreadcrumbsItem>` |
 | `<vaadin-breadcrumbs-item>` child | `HasComponentsOfType<BreadcrumbsItem>#add(BreadcrumbsItem...)`, `addComponentAsFirst(BreadcrumbsItem)`, `addComponentAtIndex(int, BreadcrumbsItem)`, `remove(BreadcrumbsItem...)`, `removeAll()` | standard component-tree management, typed to `BreadcrumbsItem` at compile time; no component-specific `setItems`/`addItem` |
-| `path` attribute on item | `BreadcrumbsItem#setPath(String)` / `setPath(Class<? extends Component>)` / `setPath(Class, RouteParameters)` / constructor overloads | type-safe primary form per `DESIGN_GUIDELINES.md` "Integrate with Flow Router" |
+| `path` attribute on item | `BreadcrumbsItem#setPath(String)` / `setPath(Class<? extends Component>)` / `setPath(Class, RouteParameters)` / constructor overloads | type-safe primary form per guidelines/02-design.md "Integrate with Flow Router" |
 | last-item-without-path → current item | implicit — construct with `new BreadcrumbsItem(String label)` (no path) | no dedicated current flag |
 | `aria-current="page"` on current item | — (set automatically by the web component) | no Flow API needed |
 | `slot="prefix"` on item | `BreadcrumbsItem implements HasPrefix` → `setPrefixComponent(Component)` | shared mixin from `vaadin-flow-components-base` |
@@ -295,7 +295,7 @@ breadcrumbs.addThemeVariants(BreadcrumbsVariant.SLASH); // "/" separator instead
 | `i18n.moreItems` | `BreadcrumbsI18n#setMoreItems(String)` / `getMoreItems()` | overflow button accessible label |
 | `<nav>` landmark rendering | — (automatic in web component) | no Flow API needed |
 | `aria-label` on the host | `Breadcrumbs implements HasAriaLabel` | `setAriaLabel(String)` / `getAriaLabel()` from Flow core |
-| `--vaadin-breadcrumbs-separator` CSS custom property | `Breadcrumbs#getStyle().set("--vaadin-breadcrumbs-separator", ...)` via `HasStyle` | per `DESIGN_GUIDELINES.md` "Styling lives in CSS, not Java" — no dedicated Java setter |
+| `--vaadin-breadcrumbs-separator` CSS custom property | `Breadcrumbs#getStyle().set("--vaadin-breadcrumbs-separator", ...)` via `HasStyle` | styling lives in CSS, not Java — no dedicated Java setter |
 | RTL separator flipping | — (handled in CSS when `dir="rtl"`) | inherited from the application / `HasStyle` |
 | `theme` variants (`slash`, `primary`, `accent`; web-component-spec.md "Theme") | `Breadcrumbs implements HasThemeVariant<BreadcrumbsVariant>` → `addThemeVariants(BreadcrumbsVariant.…)` | typed theme variants; `getVariantName()` returns the `theme` token |
 | Flow: auto-populate from router | `Breadcrumbs.Mode` enum (`ROUTER`, `MANUAL`); `new Breadcrumbs()` / `new Breadcrumbs(Mode)`; `setMode(Mode)` / `getMode()` | default `ROUTER`; `add`/`remove`/`removeAll` throw `IllegalStateException` while in `ROUTER` mode |
@@ -317,7 +317,7 @@ It is covered by manual construction: the application loads the data it needs in
 
 **Q: Why is there no section for the separator (reqs 4, 5, 12)?**
 
-Separator presence (req 4), customisation (req 5), and RTL flipping (req 12) are all handled entirely by the web component and the theme — there is no Flow-specific Java API to demonstrate. Per `DESIGN_GUIDELINES.md` "Styling lives in CSS, not Java", visual customisations like the separator icon are exposed as CSS custom properties on the host, not as Java setters: applications use `HasStyle#getStyle().set("--vaadin-breadcrumbs-separator", ...)` or a theme stylesheet. A dedicated "here's how to call `getStyle()`" section would duplicate generic Flow knowledge without adding Breadcrumbs-specific value, so these requirements are documented solely in the Web API coverage table (the `--vaadin-breadcrumbs-separator` row and the RTL row).
+Separator presence (req 4), customisation (req 5), and RTL flipping (req 12) are all handled entirely by the web component and the theme — there is no Flow-specific Java API to demonstrate. Visual customisations like the separator icon are exposed as CSS custom properties on the host, not as Java setters: applications use `HasStyle#getStyle().set("--vaadin-breadcrumbs-separator", ...)` or a theme stylesheet. A dedicated "here's how to call `getStyle()`" section would duplicate generic Flow knowledge without adding Breadcrumbs-specific value, so these requirements are documented solely in the Web API coverage table (the `--vaadin-breadcrumbs-separator` row and the RTL row).
 
 **Q: Why no click listener on `BreadcrumbsItem`?**
 
