@@ -20,7 +20,7 @@
 
 8. **No `@Synchronize`'d properties.** No client-driven state round-trips to the server. `has-overflow` is a visual state attribute the server does not need to observe.
 
-9. **Theme variants via `HasThemeVariant<BreadcrumbsVariant>`.** Per guidelines/09-theming.md. `Breadcrumbs` implements `HasThemeVariant<BreadcrumbsVariant>`; the `BreadcrumbsVariant` enum currently carries `SLASH` for the web component's `theme="slash"` separator variant. See "Theme Variants" for the enum and inherited API, and the Discussion ("Why does `Breadcrumbs` expose theme variants?") for the rationale.
+9. **Theme variants via `HasThemeVariant<BreadcrumbsVariant>`.** Per guidelines/09-theming.md. `Breadcrumbs` implements `HasThemeVariant<BreadcrumbsVariant>`; the `BreadcrumbsVariant` enum carries `SLASH` (base-styles separator), `LUMO_PRIMARY` (Lumo), and `AURA_ACCENT` (Aura). See "Theme Variants" for the enum and inherited API, and the Discussion ("Why does `Breadcrumbs` expose theme variants?") for the rationale.
 
 10. **`BreadcrumbsI18n` is a nested static class.** Follows the `SideNavI18n` / `MenuBarI18n` convention — `Serializable`, `@JsonInclude(JsonInclude.Include.NON_NULL)`, fluent setters returning `BreadcrumbsI18n`. Serialised with `JacksonUtils.beanToJson` and pushed to the client via `getElement().setPropertyJson("i18n", ...)` in the attach handler (so re-attach re-sets the property for the fresh client-side element). `setI18n` rejects `null` (`Objects.requireNonNull`) — see the i18n section.
 
@@ -44,7 +44,7 @@ flow-components/
     │       ├── main/java/com/vaadin/flow/component/breadcrumbs/
     │       │   ├── Breadcrumbs.java                # host element, Mode enum, BreadcrumbsI18n nested class
     │       │   ├── BreadcrumbsItem.java                 # <vaadin-breadcrumbs-item>
-    │       │   ├── BreadcrumbsVariant.java              # ThemeVariant enum (SLASH; planned LUMO_PRIMARY, AURA_ACCENT)
+    │       │   ├── BreadcrumbsVariant.java              # ThemeVariant enum (SLASH, LUMO_PRIMARY, AURA_ACCENT)
     │       │   ├── BreadcrumbsFeatureFlagProvider.java  # defines the Feature constant
     │       │   └── ExperimentalFeatureException.java   # local exception with a helpful message
     │       ├── main/resources/
@@ -311,7 +311,9 @@ Setter returns `this` so calls can be chained: `new BreadcrumbsI18n().setMoreIte
 
 ```java
 public enum BreadcrumbsVariant implements ThemeVariant {
-    SLASH("slash");
+    SLASH("slash"),
+    LUMO_PRIMARY("primary"),
+    AURA_ACCENT("accent");
 
     private final String variant;
 
@@ -329,8 +331,10 @@ public enum BreadcrumbsVariant implements ThemeVariant {
 | Enum value | `theme` token | Web component support |
 |---|---|---|
 | `SLASH` | `slash` | Ships in base styles — renders a `/` separator instead of the chevron (web-component-spec.md "Theme" table). |
+| `LUMO_PRIMARY` | `primary` | Lumo variant — restores a distinct link color (web-component-spec.md "Theme" table). |
+| `AURA_ACCENT` | `accent` | Aura variant — restores a distinct link color (web-component-spec.md "Theme" table). |
 
-`LUMO_PRIMARY` (`primary`) and `AURA_ACCENT` (`accent`) are planned: each is added to the enum once the Lumo and Aura themes ship the matching `theme` token. Until then the enum carries only `SLASH`, so every value maps to a token the web component actually honours, as guidelines/09-theming.md requires.
+Every value maps to a `theme` token the web component actually honours, as guidelines/09-theming.md requires.
 
 A `BreadcrumbsVariantTest` maps each enum value to its expected token (guidelines/12-testing.md).
 
@@ -720,5 +724,5 @@ guidelines/10-i18n-and-a11y.md prescribes `Objects.requireNonNull` in `setI18n`,
 
 **Q: Why does `Breadcrumbs` expose theme variants?**
 
-The web component ships a `theme="slash"` separator variant in its base styles (web-component-spec.md "Theme" table), so the Flow wrapper exposes it the standard way rather than inventing a setter — see "Theme Variants" for the enum and inherited API. An earlier revision exposed no variants because the web component had none; the slash variant changed that. Because `HasThemeVariant` lives in `vaadin-flow-components-base` and needs no unreleased Flow core API, this work can land ahead of the router-related tasks (flow-tasks.md Task 3).
+The web component ships theme variants — `theme="slash"` in base styles, `theme="primary"` in Lumo, and `theme="accent"` in Aura (web-component-spec.md "Theme" table) — so the Flow wrapper exposes them the standard way rather than inventing setters. `BreadcrumbsVariant` mirrors the shipped tokens (`SLASH`, `LUMO_PRIMARY`, `AURA_ACCENT`), since guidelines/09-theming.md requires each `getVariantName()` to match a real `theme` token. An earlier revision exposed no variants because the web component had none; the slash variant changed that. Because `HasThemeVariant` lives in `vaadin-flow-components-base` and needs no unreleased Flow core API, this work can land ahead of the router-related tasks (flow-tasks.md Task 3).
 

@@ -272,7 +272,7 @@ Breadcrumbs breadcrumbs = new Breadcrumbs(Mode.MANUAL);
 breadcrumbs.addThemeVariants(BreadcrumbsVariant.SLASH); // "/" separator instead of the chevron
 ```
 
-**Why this shape:** The web component ships a `theme="slash"` separator variant, exposed through the standard `HasThemeVariant<BreadcrumbsVariant>` surface (guidelines/09-theming.md) rather than a bespoke setter — the same pattern as every other themable Vaadin component, so `addThemeVariants` / `setThemeVariants` / `bindThemeVariant` come for free. `BreadcrumbsVariant.SLASH.getVariantName()` returns the exact `slash` token. `LUMO_PRIMARY` and `AURA_ACCENT` are planned enum values for upcoming Lumo / Aura theme tokens; adding them later is strictly additive.
+**Why this shape:** The web component ships a `theme="slash"` separator variant, exposed through the standard `HasThemeVariant<BreadcrumbsVariant>` surface (guidelines/09-theming.md) rather than a bespoke setter — the same pattern as every other themable Vaadin component, so `addThemeVariants` / `setThemeVariants` / `bindThemeVariant` come for free. `BreadcrumbsVariant.SLASH.getVariantName()` returns the exact `slash` token; `LUMO_PRIMARY` and `AURA_ACCENT` map to the Lumo `primary` and Aura `accent` link-color variants.
 
 ---
 
@@ -293,7 +293,7 @@ breadcrumbs.addThemeVariants(BreadcrumbsVariant.SLASH); // "/" separator instead
 | `aria-label` on the host | `Breadcrumbs implements HasAriaLabel` | `setAriaLabel(String)` / `getAriaLabel()` from Flow core |
 | `--vaadin-breadcrumbs-separator` CSS custom property | `Breadcrumbs#getStyle().set("--vaadin-breadcrumbs-separator", ...)` via `HasStyle` | per `DESIGN_GUIDELINES.md` "Styling lives in CSS, not Java" — no dedicated Java setter |
 | RTL separator flipping | — (handled in CSS when `dir="rtl"`) | inherited from the application / `HasStyle` |
-| `theme="slash"` (web-component-spec.md "Theme") | `Breadcrumbs implements HasThemeVariant<BreadcrumbsVariant>` → `addThemeVariants(BreadcrumbsVariant.SLASH)` | typed theme variants; `getVariantName()` returns the `theme` token |
+| `theme` variants (`slash`, `primary`, `accent`; web-component-spec.md "Theme") | `Breadcrumbs implements HasThemeVariant<BreadcrumbsVariant>` → `addThemeVariants(BreadcrumbsVariant.…)` | typed theme variants; `getVariantName()` returns the `theme` token |
 | Flow: auto-populate from router | `Breadcrumbs.Mode` enum (`ROUTER`, `MANUAL`); `new Breadcrumbs()` / `new Breadcrumbs(Mode)`; `setMode(Mode)` / `getMode()` | default `ROUTER`; `add`/`remove`/`removeAll` throw `IllegalStateException` while in `ROUTER` mode |
 | Flow: route-parent override | `@RouteParent(Class<? extends Component>)` | class-level annotation on `@Route` views |
 

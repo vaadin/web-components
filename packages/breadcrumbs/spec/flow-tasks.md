@@ -106,7 +106,7 @@ Implement all seven `BreadcrumbsItem` constructors (mirroring `SideNavItem`'s ov
 **Requirements:** 5
 **Depends on:** 1
 
-Add the `BreadcrumbsVariant` enum implementing `ThemeVariant` with `SLASH("slash")` (the web component's `theme="slash"` separator variant), following the `SideNavVariant` shape. Add `implements HasThemeVariant<BreadcrumbsVariant>` to `Breadcrumbs`; every variant method (`addThemeVariants` / `removeThemeVariants` / `setThemeVariants` / `setThemeVariant` / `bindThemeVariant` / `bindThemeVariants`) comes from the shared interface as a default — the component adds no code beyond the type parameter. `HasThemeVariant` and `ThemeVariant` are in `vaadin-flow-components-base` (already on the classpath via `HasPrefix`), so this task does not need the Flow core bump. `LUMO_PRIMARY` / `AURA_ACCENT` are documented as planned in the spec and are not added until the corresponding web-component theme tokens ship — keep the enum to tokens the web component actually honours (guidelines/09-theming.md).
+Add the `BreadcrumbsVariant` enum implementing `ThemeVariant` with `SLASH("slash")`, `LUMO_PRIMARY("primary")`, and `AURA_ACCENT("accent")` (the web component's `theme="slash"` base separator plus the Lumo / Aura link-color variants), following the `SideNavVariant` shape. Add `implements HasThemeVariant<BreadcrumbsVariant>` to `Breadcrumbs`; every variant method (`addThemeVariants` / `removeThemeVariants` / `setThemeVariants` / `setThemeVariant` / `bindThemeVariant` / `bindThemeVariants`) comes from the shared interface as a default — the component adds no code beyond the type parameter. `HasThemeVariant` and `ThemeVariant` are in `vaadin-flow-components-base` (already on the classpath via `HasPrefix`), so this task does not need the Flow core bump. Each enum value maps to a `theme` token the web component actually honours (guidelines/09-theming.md).
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/BreadcrumbsVariant.java` (create)
@@ -114,7 +114,7 @@ Add the `BreadcrumbsVariant` enum implementing `ThemeVariant` with `SLASH("slash
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsVariantTest.java` (create — enum→token mapping per guidelines/09-theming.md)
 
 **Tests:**
-- [ ] `BreadcrumbsVariant.SLASH.getVariantName()` returns `"slash"`
+- [ ] `BreadcrumbsVariant.SLASH.getVariantName()` returns `"slash"`, `LUMO_PRIMARY` returns `"primary"`, `AURA_ACCENT` returns `"accent"`
 - [ ] `BreadcrumbsVariantTest` maps every enum value to its expected `theme` token
 - [ ] `addThemeVariants(BreadcrumbsVariant.SLASH)` adds `slash` to the host `theme` attribute
 - [ ] `removeThemeVariants(BreadcrumbsVariant.SLASH)` removes it
