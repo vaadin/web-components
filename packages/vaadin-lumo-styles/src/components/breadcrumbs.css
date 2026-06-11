@@ -6,22 +6,30 @@
 @media lumo_components_breadcrumbs {
   :host {
     font-family: var(--lumo-font-family);
-    font-size: var(--lumo-font-size-m);
-    line-height: var(--lumo-line-height-xs);
-    color: var(--lumo-body-text-color);
+    font-size: var(--vaadin-breadcrumbs-font-size, var(--lumo-font-size-m));
+    line-height: var(--vaadin-breadcrumbs-line-height, var(--lumo-line-height-m));
   }
 
   :host([theme~='primary']) {
     --vaadin-breadcrumbs-link-color: var(--lumo-primary-text-color);
   }
 
-  [part='list'] {
-    gap: var(--lumo-space-xs);
-    padding: var(--vaadin-focus-ring-width, 2px);
+  [part='overflow-button']:focus-visible {
+    outline: var(--vaadin-focus-ring-width, 2px) solid var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
   }
 
-  [part='overflow-button']:focus-visible {
-    border-radius: var(--lumo-border-radius-m);
-    outline: var(--vaadin-focus-ring-width, 2px) solid var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+  @media (any-hover: hover) {
+    [part='overflow-button']:hover {
+      color: var(--lumo-body-text-color);
+    }
+  }
+
+  [part='overflow-button']:active {
+    color: var(--lumo-header-text-color);
+  }
+
+  :host [part='overflow']::after,
+  :host ::slotted(vaadin-breadcrumbs-item)::after {
+    --vaadin-icon-visual-size: 75%;
   }
 }

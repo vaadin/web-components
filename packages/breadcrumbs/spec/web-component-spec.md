@@ -13,7 +13,7 @@
 
 4. **Declarative items only — no programmatic `items` property.** Items are always `<vaadin-breadcrumbs-item>` light-DOM children of the container. Unlike `<vaadin-menu-bar>` (where nested sub-menus make a declarative API impractical, see [#925](https://github.com/vaadin/web-components/issues/925)) the breadcrumbs' flat structure is straightforward to express declaratively, so a parallel `items` array would be redundant.
 
-5. **Separator via `mask-image` CSS on an `::after` pseudo-element** — Every element in the list flow renders a separator: `<vaadin-breadcrumbs-item>` via `:host::after` (item base styles) and `[part="overflow"]` via `::after` (container base styles). Both share one recipe — the `mask-image` pattern from button-base-styles, driven by the `--vaadin-breadcrumbs-separator` custom property, which defaults to `--_vaadin-icon-chevron-right`. See "Separator rendering" for the full recipe. (See web-component-api.md §3.)
+5. **Separator via `mask-image` CSS on an `::after` pseudo-element** — Every element in the list flow renders a separator: `<vaadin-breadcrumbs-item>` via `:host::after` (item base styles) and `[part="overflow"]` via `::after` (container base styles). Both share one recipe — the `mask-image` pattern from button-base-styles, driven by the `--vaadin-breadcrumbs-separator-icon` custom property, which defaults to `--_vaadin-icon-chevron-right`. See "Separator rendering" for the full recipe. (See web-component-api.md §3.)
 
 6. **Progressive overflow collapse using `ResizeMixin`** — The container uses `ResizeMixin` to detect when items don't fit. Items collapse from closest-to-root first, replacing collapsed items with an overflow button (`…`). The overflow button opens a dedicated `<vaadin-breadcrumbs-overlay>` element (extending `OverlayMixin`) that lists the hidden items, reusing the shared overlay infrastructure rather than a hand-rolled panel (see Discussion). The `i18n` property (via `I18nMixin`) allows localizing the overflow button's `aria-label`. (See web-component-api.md §4.)
 
@@ -93,10 +93,14 @@ All variants are set via `theme="…"` on `<vaadin-breadcrumbs>`. See the Discus
 
 | CSS Custom Property | Default | Description |
 |---|---|---|
-| `--vaadin-breadcrumbs-link-color` | `LinkText` | Color of `[part='link']` items (links with `path`). See Discussion for how themes use this knob. |
-| `--vaadin-breadcrumbs-overflow-icon` | `var(--_vaadin-icon-ellipsis)` | The mask-image icon used inside the overflow button. |
-| `--vaadin-breadcrumbs-separator` | `var(--_vaadin-icon-chevron-right)` | The mask-image icon used as the separator between items. Set on `<vaadin-breadcrumbs>` to change the separator for all items. |
-| `--vaadin-breadcrumbs-text-color` | `var(--vaadin-text-color-secondary)` | Text color of `<vaadin-breadcrumbs>`, inherited by non-link items. |
+| `--vaadin-breadcrumbs-font-size` | `1em` | Font size of the trail. |
+| `--vaadin-breadcrumbs-font-weight` | `400` | Font weight of trail items. |
+| `--vaadin-breadcrumbs-gap` | `var(--vaadin-gap-xs)` | Inline gap between consecutive items and between an item and its trailing separator. |
+| `--vaadin-breadcrumbs-line-height` | `inherit` | Line height of trail items. |
+| `--vaadin-breadcrumbs-link-color` | `LinkText` | Color of `[part="link"]:any-link` items. |
+| `--vaadin-breadcrumbs-overflow-icon` | `var(--_vaadin-icon-ellipsis)` | Mask-image icon for the overflow button's `::before` pseudo-element. |
+| `--vaadin-breadcrumbs-separator-icon` | `var(--_vaadin-icon-chevron-right)` | Mask-image icon for the separator between items. |
+| `--vaadin-breadcrumbs-text-color` | `var(--vaadin-text-color-secondary)` | Base text color of the trail, set on the host. Non-link items inherit it; links override it via `--vaadin-breadcrumbs-link-color`. |
 
 Internal behavior:
 
@@ -106,7 +110,7 @@ Internal behavior:
 - **Overflow separator.** The overflow element sits in the list flow between the root and the rest, so it needs a separator after it when visible. Its `[part="overflow"]::after` pseudo-element reuses the same separator recipe as `<vaadin-breadcrumbs-item>` (see "Separator rendering"), so the overflow element visually matches peer items. When `has-overflow` is not set, the overflow element is hidden, so its separator is not visible either.
 - **Width-constrained list flow.** The host carries `width: 100%; min-width: 0`, and `[part="list"]` is a `display: flex; flex-wrap: nowrap` container with `min-width: 0; max-width: 100%`. The list stretches to its parent's width and shrinks below its natural content width, which is how overflow detection knows when items no longer fit. It does not clip with `overflow: hidden` (see Discussion).
 - **Overflow-button click target.** `[part="overflow-button"]` uses a `padding: max(var(--vaadin-padding-block-container), (24px - 1lh) / 2)` formula paired with the matching negative `margin`, so the click target is at least 24×24 px (WCAG 2.5.8) without changing the button's visual size.
-- **Baseline alignment.** The host and `[part="list"]` use `align-items: baseline`; `[part="overflow"]` inherits it, so when an item's text wraps onto multiple lines, prefix icons and adjacent items stay aligned to the first line's baseline rather than the box center (see Discussion). Icon pseudo-elements (the separator on each item and on `[part="overflow"]`, plus the overflow button's `::before`) are sized to `1lh` so they fill the line height; separators mask their icon at `90%` of the box and carry `opacity: 0.75` to keep the chevron visually subordinate to text, and the overflow-button icon uses `opacity: 0.8` for the same reason.
+- **Baseline alignment.** The host and `[part="list"]` use `align-items: baseline`; `[part="overflow"]` inherits it, so when an item's text wraps onto multiple lines, prefix icons and adjacent items stay aligned to the first line's baseline rather than the box center (see Discussion). Icon pseudo-elements (the separator on each item and on `[part="overflow"]`, plus the overflow button's `::before`) are sized to `1lh` so they fill the line height; separators mask their icon at `var(--vaadin-icon-visual-size, 100%)` of the box — base styles set `--vaadin-icon-visual-size: 90%` on the chevron separators while the `slash` variant leaves the value at its `100%` default — and carry `opacity: 0.75` to keep the icon visually subordinate to text. The overflow-button icon uses `opacity: 0.8` for the same reason. Under `@media (forced-colors: active)` these icon pseudo-elements switch their background to `CanvasText` so the separator and ellipsis stay visible in high-contrast mode.
 
 ---
 
@@ -161,13 +165,20 @@ The outer wrapper carries `part="link"` when the item is interactive and `part="
 | `focused` | Set by `FocusMixin` while the item (or any element inside it) has focus. |
 | `focus-ring` | Set by `FocusMixin` when the item received focus from the keyboard. Use this — not `:focus` — to style the focus indicator so it does not appear on mouse-driven focus. |
 
+| CSS Custom Property | Default | Description |
+|---|---|---|
+| `--vaadin-breadcrumbs-item-border-radius` | `var(--vaadin-radius-m)` | Border radius of the inner `[part="link"]` / `[part="nolink"]` wrapper of trail items. Also applied to the container's overflow button. Overlay items use `--vaadin-radius-s` instead (see "Overlay item rendering"). |
+| `--vaadin-breadcrumbs-item-gap` | `var(--vaadin-gap-xs)` | Gap between the prefix slot and the label inside an item. |
+
 Internal behavior:
 
 - **Link rendering.** When `path` is set, renders `<a href="${path}" part="link">`, matching the approach in `<vaadin-side-nav-item>`. When `path` is not set, renders `<span part="nolink">`. The `<a>` is a plain HTML link — no router integration, no click interception. SPA routers intercept link clicks at the document level.
-- **Separator rendering.** A `:host::after` pseudo-element renders the separator, following the button-base-styles pattern: `background: currentColor` masked by `mask-image: var(--vaadin-breadcrumbs-separator)`, flipped with `transform: scaleX(-1)` in RTL. The separator is hidden on the last item (`:host(:last-of-type)::after { display: none }`) and on any item with the `current` attribute. The container reuses this same recipe for the overflow element's separator (see "Overflow separator").
+- **Separator rendering.** A `:host::after` pseudo-element renders the separator, following the button-base-styles pattern: `background: currentColor` masked by `mask-image: var(--vaadin-breadcrumbs-separator-icon)`, flipped with `scale: -1` in RTL. The separator is hidden on the last item (`:host(:last-of-type)::after { display: none }`) and on any item with the `current` attribute. The container reuses this same recipe for the overflow element's separator (see "Overflow separator").
 - **`aria-current="page"`.** When the parent sets the `current` state attribute on the host, the inner `<span part="nolink">` element gets `aria-current="page"`.
 - **Prefix slot.** A `SlotController` observes the `prefix` slot and toggles `has-prefix` on the host for styling.
 - **Padding-based click target.** Each item's `[part="link"]` / `[part="nolink"]` carries `padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)`. Trail items get a negative `margin-inline` (applied via `:host(:not([slot='overlay']))`) that cancels the inline padding for layout; overlay items skip the compensator (see Discussion).
+- **Current item styling.** `:host([current])` renders in `--vaadin-text-color` at `font-weight: bolder` (one step heavier than the surrounding trail weight, `--vaadin-breadcrumbs-font-weight`), giving the current page visual emphasis without a dedicated part.
+- **Overlay item rendering.** When an item carries `slot="overlay"` (collapsed into the overflow overlay — see the container's "Overlay management"), its base styling differs from the trail: `[part="link"]` uses `--vaadin-radius-s` for the border radius, enabled links resolve via the trail's standard `--vaadin-breadcrumbs-link-color` knob (so theme variants like Lumo `primary` and Aura `accent` color overlay links the same way they color trail links), disabled or no-`path` items use `--vaadin-text-color-secondary`, the trailing separator `::after` is hidden, and keyboard focus draws an inset focus ring (`outline-offset` negative) keyed on `:host([slot="overlay"][focus-ring])` so the outline sits inside the row-shaped hit area (see Discussion).
 
 ---
 
@@ -210,7 +221,7 @@ Internal behavior:
 Add two icon definitions to the shared icon set:
 
 - `--_vaadin-icon-chevron-right` — the default separator icon. The breadcrumb separator defaults to a right-pointing chevron, which did not exist in the shared icon set.
-- `--_vaadin-icon-slash` — the icon bound to `--vaadin-breadcrumbs-separator` by the `theme="slash"` variant (see "Theme" table on the container).
+- `--_vaadin-icon-slash` — the icon bound to `--vaadin-breadcrumbs-separator-icon` by the `theme="slash"` variant (see "Theme" table on the container).
 
 ```css
 --_vaadin-icon-chevron-right: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>');
@@ -341,7 +352,15 @@ The inline padding gives the link a hit area noticeably larger than the visible 
 
 **Q: Why does base styles ship a `theme="slash"` separator variant rather than leaving it to each theme?**
 
-The slash is the second common breadcrumb separator convention after the chevron, and the mask-image recipe makes the variant trivial — `theme="slash"` rebinds `--vaadin-breadcrumbs-separator` to the bundled `--_vaadin-icon-slash` token. Shipping it in base means applications written without a Vaadin theme still get the variant for free, and Lumo / Aura themes do not have to re-implement the same selector.
+The slash is the second common breadcrumb separator convention after the chevron, and the mask-image recipe makes the variant trivial — `theme="slash"` rebinds `--vaadin-breadcrumbs-separator-icon` to the bundled `--_vaadin-icon-slash` token. Base styles set `--vaadin-icon-visual-size: 90%` only on the chevron separators, so the slash variant inherits the standard `100%` default — exactly the scale its narrower glyph needs. Shipping it in base means applications written without a Vaadin theme still get the variant for free, and Lumo / Aura themes do not have to re-implement the same selector.
+
+**Q: Why does the spec expose eight container-level CSS custom properties plus two item-level ones?**
+
+The token set lets theme authors customise typography (size / weight / line-height), color (text / link), spacing (gap, item gap), border radius, and the two mask-image icons (separator + overflow) without writing shadow-piercing CSS selectors — every visual concern that varies between themes or applications has a single named hook. The `-icon` suffix on `--vaadin-breadcrumbs-separator-icon` and `--vaadin-breadcrumbs-overflow-icon` makes the "this is a mask-image URL, not a string or color" contract obvious at the call site, and the shared `--vaadin-icon-visual-size` property — set internally on the chevron separators and left at its `100%` default for the slash variant — lets themes adjust the mask scale inside the `1lh × 1lh` pseudo-element box without redeclaring the icon. Item-scoped tokens live on `<vaadin-breadcrumbs-item>` (the inner wrapper's border radius and the prefix–label gap) so the container owns trail-wide concerns and the item owns its own padding box.
+
+**Q: Why does the trail default to `--vaadin-text-color-secondary` rather than the primary text color?**
+
+Breadcrumbs are a navigation aid, not body content — they tell the user where they are within an application, and rendering them at the same visual weight as page content would compete with what the user came to read. Defaulting `--vaadin-breadcrumbs-text-color` to `--vaadin-text-color-secondary` keeps the trail readable but visually subordinate to the page heading and main content, matching how every shipped Vaadin theme already treats supporting navigation chrome. Applications that want the trail at full strength can set the token to `var(--vaadin-text-color)` on the breadcrumbs host with a single declaration.
 
 **Q: Why does base styles default `--vaadin-breadcrumbs-link-color` to `LinkText` while Lumo and Aura override it to `'inherit'` and ship an opt-in variant?**
 
