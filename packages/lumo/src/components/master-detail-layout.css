@@ -1,0 +1,4 @@
+:where(:root),
+:where(:host) {
+  --vaadin-master-detail-layout-detail-shadow: 0 0 0 1px var(--lumo-shade-5pct), var(--lumo-box-shadow-m);
+}
