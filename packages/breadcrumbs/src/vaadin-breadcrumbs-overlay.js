@@ -69,6 +69,19 @@ class BreadcrumbsOverlay extends PositionMixin(OverlayMixin(DirMixin(PolylitMixi
   }
 
   /**
+   * Override the method inherited from `OverlayMixin` to always add the
+   * outside-click and Escape listeners so the modeless overlay can still
+   * close on outside click and on Escape.
+   *
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _shouldAddGlobalListeners() {
+    return true;
+  }
+
+  /**
    * Override getter inherited from `OverlayMixin` to use breadcrumbs
    * as the content root, so that overlay focus restoration works.
    *

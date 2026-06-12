@@ -158,6 +158,7 @@ class Breadcrumbs extends KeyboardDirectionMixin(
         id="overlay"
         .opened="${this.__overlayOpened}"
         .owner="${this}"
+        modeless
         no-vertical-overlap
         restore-focus-on-close
         exportparts="overlay, content: overlay-content"
