@@ -1,0 +1,26 @@
+/* Borderless by default; the bordered theme opts in to the box */
+:where(vaadin-tabsheet) {
+  border: 0;
+  border-radius: 0;
+}
+
+:where(vaadin-tabsheet)[theme~='bordered'] {
+  border: 1px solid var(--lumo-contrast-20pct);
+  border-radius: var(--lumo-border-radius-l);
+}
+
+:where(vaadin-tabsheet)::part(tabs-container) {
+  padding: var(--lumo-space-xs) var(--lumo-space-s);
+  box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
+}
+
+:where(vaadin-tabsheet)::part(content) {
+  --vaadin-scroller-padding-block: var(--lumo-space-s);
+  --vaadin-scroller-padding-inline: var(--lumo-space-m);
+}
+
+/* Slotted tabs sit flush inside the tabs-container; drop their own underline (the container provides it) */
+:where(vaadin-tabsheet) > vaadin-tabs[slot='tabs'] {
+  box-shadow: none;
+  margin: calc(var(--lumo-space-xs) * -1) calc(var(--lumo-space-s) * -1);
+}
