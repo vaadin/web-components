@@ -59,7 +59,7 @@ export const breadcrumbsStyles = css`
   }
 
   [part='overflow-button']::before {
-    content: '\\e2003' / '';
+    content: '\\2003' / '';
     display: inline-flex;
     align-items: center;
     width: var(--vaadin-icon-size, 1lh);
@@ -75,7 +75,7 @@ export const breadcrumbsStyles = css`
   }
 
   [part='overflow']::after {
-    content: '\\e2003' / '';
+    content: '\\2003' / '';
     display: inline-flex;
     align-items: center;
     width: var(--vaadin-icon-size, 1lh);

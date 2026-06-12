@@ -51,7 +51,7 @@ export const breadcrumbsItemStyles = css`
   }
 
   :host::after {
-    content: '\\e2003' / '';
+    content: '\\2003' / '';
     display: inline-flex;
     align-items: center;
     width: var(--vaadin-icon-size, 1lh);
