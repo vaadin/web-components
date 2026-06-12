@@ -151,7 +151,7 @@ public class Breadcrumbs extends Component
 **Implemented mixin interfaces:**
 
 - `HasSize` — covers requirement that the component can be sized by the application (universal API hygiene).
-- `HasStyle` — required for requirement 5 (customise separator via `--vaadin-breadcrumbs-separator` CSS custom property) and for `getStyle()` access per `DESIGN_GUIDELINES.md` "Styling lives in CSS, not Java".
+- `HasStyle` — covers requirement that the component can be styled by the application (universal API hygiene).
 - `HasAriaLabel` — requirement 10 (navigation landmark accessible name). Flow core interface.
 - `HasThemeVariant<BreadcrumbsVariant>` — requirement 5 plus general theming. Shared interface from `vaadin-flow-components-base`. See "Theme Variants" for the variant enum and the inherited method surface.
 - `HasComponentsOfType<BreadcrumbsItem>` — requirement 1, 9 (add/remove/manage items with compile-time type safety). Flow core interface. All inherited mutating methods (see the class skeleton above) are overridden to throw `IllegalStateException` when `Mode.ROUTER` (unless the internal `routerUpdateInProgress` flag is set).
@@ -553,7 +553,7 @@ No modifications.
 | 2. Current page indication | `BreadcrumbsItem(String text)` (no path) — web component renders as non-link, applies `current` state attribute |
 | 3. Optionally omitting the current page | No API — application chooses whether to add a no-path final item |
 | 4. Visual separator between items | Web component + theme (no Flow API) |
-| 5. Customizable separator appearance | `HasStyle` → `getStyle().set("--vaadin-breadcrumbs-separator", ...)`; `HasThemeVariant<BreadcrumbsVariant>` → `addThemeVariants(BreadcrumbsVariant.SLASH)` for the bundled slash separator |
+| 5. Customizable separator appearance | `HasThemeVariant<BreadcrumbsVariant>` → `addThemeVariants(BreadcrumbsVariant.SLASH)` for the bundled slash separator |
 | 6. Overflow collapse of intermediate items | Web component (no Flow API) |
 | 7. Expanding collapsed items | Web component; `BreadcrumbsI18n.moreItems` sets the overflow button's `aria-label` |
 | 8. Items may display icons | `BreadcrumbsItem implements HasPrefix` + constructor overloads ending in `Component prefixComponent` |
