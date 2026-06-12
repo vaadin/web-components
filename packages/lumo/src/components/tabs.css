@@ -1,0 +1,197 @@
+:where(:root),
+:where(:host) {
+  --vaadin-tabs-gap: 0px;
+}
+
+/* ----- Tabs container ----- */
+
+:where(vaadin-tabs):not([orientation='vertical']) {
+  min-height: var(--lumo-size-l);
+  box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
+}
+
+:where(vaadin-tabs)[orientation='vertical'] {
+  box-shadow: -1px 0 0 0 var(--lumo-contrast-10pct);
+}
+
+:where(vaadin-tabs)[dir='rtl'][orientation='vertical'] {
+  box-shadow: 1px 0 0 0 var(--lumo-contrast-10pct);
+}
+
+:where(vaadin-tabs)[theme~='small']:not([orientation='vertical']) {
+  min-height: var(--lumo-size-m);
+}
+
+:where(vaadin-tabs)[theme~='small'] > vaadin-tab {
+  --vaadin-tab-font-size: var(--lumo-font-size-s);
+}
+
+/* Minimal: no container line, no selection marker (inherited by the slotted tabs) */
+:where(vaadin-tabs)[theme~='minimal'] {
+  box-shadow: none;
+  --_lumo-tab-marker-display: none;
+}
+
+/* Centered */
+:where(vaadin-tabs)[theme~='centered'][orientation='horizontal'] > vaadin-tab:first-of-type {
+  margin-inline-start: auto;
+}
+
+:where(vaadin-tabs)[theme~='centered'][orientation='horizontal'] > vaadin-tab:last-of-type {
+  margin-inline-end: auto;
+}
+
+/* Equal-width tabs */
+:where(vaadin-tabs)[theme~='equal-width-tabs'] {
+  flex: auto;
+}
+
+:where(vaadin-tabs)[theme~='equal-width-tabs'] > vaadin-tab {
+  flex: 1 0 0%;
+}
+
+/* Scroll buttons (base provides the SVG chevrons; Lumo only tints them) */
+:where(vaadin-tabs)::part(back-button),
+:where(vaadin-tabs)::part(forward-button) {
+  color: var(--lumo-tertiary-text-color);
+}
+
+/* Overflow fade mask: opaque stops by default, transparent on the overflowing edge */
+:where(vaadin-tabs)::part(tabs) {
+  --_lumo-tabs-mask-fade: 2em;
+  mask-image: linear-gradient(
+    var(--_lumo-tabs-mask-dir, to right),
+    var(--_lumo-tabs-mask-start, #000) var(--_lumo-tabs-mask-fade),
+    #000 calc(var(--_lumo-tabs-mask-fade) * 2),
+    #000 calc(100% - var(--_lumo-tabs-mask-fade) * 2),
+    var(--_lumo-tabs-mask-end, #000) calc(100% - var(--_lumo-tabs-mask-fade))
+  );
+}
+
+:where(vaadin-tabs)[dir='rtl']::part(tabs) {
+  --_lumo-tabs-mask-dir: to left;
+}
+
+:where(vaadin-tabs)[orientation='vertical']::part(tabs) {
+  --_lumo-tabs-mask-dir: to bottom;
+  --_lumo-tabs-mask-fade: 1em;
+}
+
+:where(vaadin-tabs)[overflow~='start'] {
+  --_lumo-tabs-mask-start: transparent;
+}
+
+:where(vaadin-tabs)[overflow~='end'] {
+  --_lumo-tabs-mask-end: transparent;
+}
+
+/* ----- Tab ----- */
+
+:where(vaadin-tab) {
+  min-width: var(--lumo-size-m);
+  line-height: var(--lumo-line-height-xs);
+  --vaadin-tab-padding: 0.5rem 0.75rem;
+  transition:
+    0.15s color,
+    0.2s transform;
+  --_lumo-tab-selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
+  --_lumo-tab-selection-text: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
+}
+
+:where(vaadin-tab)[orientation='vertical'] {
+  --vaadin-tab-padding: 0.25rem 1rem;
+  min-height: var(--lumo-size-m);
+  min-width: 0;
+}
+
+/* Color states */
+:where(vaadin-tab):is(:hover, [focus-ring]) {
+  --vaadin-tab-text-color: var(--lumo-body-text-color);
+}
+
+/* Neutralize the base selected-pill background; show selection via the marker + primary text */
+:where(vaadin-tab)[selected] {
+  --vaadin-tab-background: transparent;
+  --vaadin-tab-text-color: var(--_lumo-tab-selection-text);
+}
+
+:where(vaadin-tab)[active]:not([selected]) {
+  --vaadin-tab-text-color: var(--_lumo-tab-selection-text);
+}
+
+:where(vaadin-tab)[disabled] {
+  opacity: 1;
+  --vaadin-tab-text-color: var(--lumo-disabled-text-color);
+}
+
+/* Selection marker */
+:where(vaadin-tab)::before,
+:where(vaadin-tab)::after {
+  content: '';
+  position: absolute;
+  display: var(--_lumo-tab-marker-display, block);
+  bottom: 0;
+  left: 50%;
+  width: var(--lumo-size-s);
+  height: 2px;
+  background-color: var(--lumo-contrast-60pct);
+  border-radius: var(--lumo-border-radius-s) var(--lumo-border-radius-s) 0 0;
+  transform: translateX(-50%) scale(0);
+  transform-origin: 50% 100%;
+  transition: 0.14s transform cubic-bezier(0.12, 0.32, 0.54, 1);
+}
+
+:where(vaadin-tab)::after {
+  box-shadow: 0 0 0 4px var(--_lumo-tab-selection-color);
+  opacity: 0.15;
+  transition:
+    0.15s 0.02s transform,
+    0.8s 0.17s opacity;
+}
+
+:where(vaadin-tab)[selected]::before,
+:where(vaadin-tab)[selected]::after {
+  background-color: var(--_lumo-tab-selection-color);
+  transform: translateX(-50%) scale(1);
+  transition-timing-function: cubic-bezier(0.12, 0.32, 0.54, 1.5);
+}
+
+:where(vaadin-tab)[selected]:not([active])::after {
+  opacity: 0;
+}
+
+/* Vertical marker */
+:where(vaadin-tab)[orientation='vertical']::before,
+:where(vaadin-tab)[orientation='vertical']::after {
+  left: 0;
+  bottom: 50%;
+  width: 2px;
+  height: var(--lumo-size-xs);
+  border-radius: 0 var(--lumo-border-radius-s) var(--lumo-border-radius-s) 0;
+  transform: translateY(50%) scale(0);
+  transform-origin: 100% 50%;
+}
+
+:where(vaadin-tab)[orientation='vertical'][selected]::before,
+:where(vaadin-tab)[orientation='vertical'][selected]::after {
+  transform: translateY(50%) scale(1);
+}
+
+:where(vaadin-tab)[dir='rtl'][orientation='vertical']::before,
+:where(vaadin-tab)[dir='rtl'][orientation='vertical']::after {
+  left: auto;
+  right: 0;
+  border-radius: var(--lumo-border-radius-s) 0 0 var(--lumo-border-radius-s);
+  transform-origin: 0% 50%;
+}
+
+/* Icon-on-top */
+:where(vaadin-tab)[theme~='icon-on-top'] {
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Slotted icons */
+:where(vaadin-tab) > vaadin-icon[icon^='vaadin:'] {
+  padding: 0.25rem;
+}
