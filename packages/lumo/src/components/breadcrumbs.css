@@ -1,0 +1,54 @@
+:where(:root),
+:where(:host) {
+  --vaadin-breadcrumbs-link-color: 'inherit';
+}
+
+:where(vaadin-breadcrumbs)[theme~='primary'] {
+  --vaadin-breadcrumbs-link-color: var(--lumo-primary-text-color);
+}
+
+/* Separator chevron size */
+:where(vaadin-breadcrumbs)::part(overflow)::after,
+:where(vaadin-breadcrumbs-item)::after {
+  --vaadin-icon-visual-size: 75%;
+}
+
+/* Overflow button */
+@media (any-hover: hover) {
+  :where(vaadin-breadcrumbs)::part(overflow-button):hover {
+    color: var(--lumo-body-text-color);
+  }
+}
+
+:where(vaadin-breadcrumbs)::part(overflow-button):active {
+  color: var(--lumo-header-text-color);
+}
+
+/* Item */
+:where(vaadin-breadcrumbs-item)[current] {
+  font-weight: 500;
+}
+
+:where(vaadin-breadcrumbs-item)::part(link) {
+  transition: color 140ms;
+}
+
+@media (any-hover: hover) {
+  :where(vaadin-breadcrumbs-item):not([disabled], [slot='overlay'])::part(link):hover {
+    color: var(--lumo-body-text-color);
+  }
+
+  :where(vaadin-breadcrumbs-item)[slot='overlay']:not([disabled])::part(link):hover {
+    background-color: var(--lumo-primary-color-10pct);
+  }
+}
+
+:where(vaadin-breadcrumbs-item):not([disabled], [slot='overlay'])::part(link):active {
+  color: var(--lumo-header-text-color);
+}
+
+/* Prefix icon */
+:where(vaadin-breadcrumbs-item) > [slot='prefix']:is(vaadin-icon, [class*='icon']) {
+  width: var(--lumo-icon-size-s);
+  height: var(--lumo-icon-size-s);
+}
