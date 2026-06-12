@@ -165,7 +165,7 @@ public class Breadcrumbs extends Component
 **Router mode wiring (attach).** The component relies on Flow's existing router and router-utils API; no new per-call mechanism is invented. Two entry points feed the resolver:
 
 - `UI.addAfterNavigationListener(AfterNavigationListener)` — public API on `UI`. The listener receives an `AfterNavigationEvent` whose `getLocation()`, `getActiveChain()`, and `getRouteParameters()` are all public accessors. This catches every navigation for the lifetime of the attachment (including long-lived shell placement).
-- An initial, synchronous rebuild in `onAttach` itself, for the case where the breadcrumbs are added to a view that has already finished rendering (so no navigation is pending and the listener has nothing to fire on). Flow core does not currently expose a public "read current navigation state" API at arbitrary times — `UI.getInternals().getActiveViewLocation()` and `UI.getInternals().getActiveRouterTargetsChain()` are the de facto accessors (public methods, but on `UIInternals` which sits in `com.vaadin.flow.component.internal`). See "Reuse and Proposed Adjustments → Flow core dependencies" for the proposal to promote these to a public `Router`/`RouteUtil` entry point.
+- An initial, synchronous rebuild in `onAttach` itself, for the case where the breadcrumbs are added to a view that has already finished rendering (so no navigation is pending and the listener has nothing to fire on). The current navigation state is read with `ui.routerStateSignal().peek()` — `RouterState` carries the current `Location`, `RouteParameters`, active chain, and navigation target class. See "Reuse and Proposed Adjustments → Flow core: `UI.routerStateSignal()`".
 
 ```java
 protected void onAttach(AttachEvent attachEvent) {
@@ -177,13 +177,7 @@ protected void onAttach(AttachEvent attachEvent) {
         navigationRegistration = ui.addAfterNavigationListener(this::rebuildFromRouter);
 
         // Initial population: read current navigation state from the UI.
-        // Today this goes through UIInternals; see the Proposed Adjustments
-        // section for the preferred public-API landing.
-        UIInternals internals = ui.getInternals();
-        rebuildFromRouter(internals.getActiveViewLocation(),
-                          internals.getActiveRouterTargetsChain(),
-                          RouteConfiguration.forRegistry(
-                                  ComponentUtil.getRouter(this).getRegistry()));
+        rebuildFromRouter(ui.routerStateSignal().peek());
     }
 }
 ```
@@ -195,9 +189,7 @@ protected void onAttach(AttachEvent attachEvent) {
 void rebuildFromRouter(AfterNavigationEvent event);
 
 // Overload 2 — direct state (initial attach)
-void rebuildFromRouter(Location currentLocation,
-                      List<HasElement> activeChain,
-                      RouteConfiguration routeConfiguration);
+void rebuildFromRouter(RouterState state);
 ```
 
 Both overloads ultimately build the trail via the same private routine (see "How `Breadcrumbs` builds the trail" below), which calls `RouteConfiguration#getRouteHierarchy`, wraps the returned route references into `BreadcrumbsItem` instances, and hands the result to `updateChildrenInternal(trail)`. Both guard against stale callbacks: `if (!isAttached()) return;` first.
@@ -456,6 +448,7 @@ Everything the breadcrumbs contributes — preferring the current view's live ti
 | Current route params at navigation time | `AfterNavigationEvent#getRouteParameters()` |
 | Current location at navigation time | `AfterNavigationEvent#getLocation()` |
 | Walk the route hierarchy | `RouteConfiguration#getRouteHierarchy(Class, RouteParameters)` |
+| Current navigation state at attach time | `UI#routerStateSignal()`, read with `Signal#peek()` |
 | Resolve `Class<? extends Component>` → URL | `RouteConfiguration#getUrl(Class, RouteParameters)` |
 | Obtain the registry-scoped config | `RouteConfiguration.forRegistry(ComponentUtil.getRouter(this).getRegistry())` |
 | Resolve an ancestor's title without an instance | Flow core instance-free title resolution (`@PageTitle` / `PageTitleGenerator`) |
@@ -520,49 +513,9 @@ Queries use the same pattern as `SideNavElement` / `SideNavItemElement`: `$("vaa
 
 ## Reuse and Proposed Adjustments to Existing Modules
 
-### Flow core: a `Signal<NavigationState>` for the current route — Proposed
+### Flow core: `UI.routerStateSignal()` — Used as-is
 
-The resolver's initial-attach path needs to read the active location and active router-targets chain without a pending `AfterNavigationEvent`. Today this goes through `UIInternals.getActiveViewLocation()` and `UIInternals.getActiveRouterTargetsChain()` — both public methods on a type that sits in `com.vaadin.flow.component.internal`. The `internal` package suffix signals "not part of the stable public API".
-
-Rather than promote these two accessors to a public facade, the preferred landing is a **reactive signal** exposing the UI's current navigation state:
-
-```java
-// in com.vaadin.flow.router.Router (or on UI directly):
-public Signal<NavigationState> getCurrentNavigation();
-
-// where NavigationState carries the same data the resolver needs:
-public record NavigationState(
-        Class<? extends Component> routeClass,
-        Component viewInstance,                // for HasDynamicTitle
-        RouteParameters routeParameters,
-        Location location) {}
-
-// finer-grained variants, so consumers rerun only on relevant changes:
-public Signal<Class<? extends Component>> getCurrentRoute();
-public Signal<RouteParameters>            getCurrentRouteParameters();
-public Signal<Location>                   getCurrentLocation();
-```
-
-With this primitive in place, the breadcrumbs' router mode collapses to a single subscription:
-
-```java
-Signal.effect(breadcrumbs,
-        () -> updateChildrenInternal(resolveTrail(Router.getCurrent().getCurrentNavigation().get())));
-```
-
-What falls away compared to the current listener-based design:
-
-- **No `addAfterNavigationListener` / `Registration` lifecycle** — `Signal.effect(component, Runnable)` is already bound to the component's attach/detach; auto-unsubscribes on detach, re-subscribes on re-attach.
-- **No `transient navigationRegistration` field** — signals handle lifecycle.
-- **No stale-callback guard** — signal subscriptions stop delivering as soon as the component detaches.
-- **No split between "initial state" and "subsequent events"** — `Signal#get()` always returns current truth, so the "what if the component attaches after the navigation already fired" edge case just works.
-- **No `UIInternals` dependency anywhere in the breadcrumbs** — the signal is the public, documented accessor for current navigation state.
-
-The signal composes beyond breadcrumbs: SideNav's current-item highlighting (today client-side URL matching) could become a server-side `Signal.computed(...)` over `getCurrentLocation`; a back-button's visibility could bind to whether `getCurrentRoute().get()` carries a `@RouteParent`; analytics hooks and page-title manipulators each become one-liners. `AfterNavigationListener` stays — the signal is a reactive overlay, not a replacement for the event API.
-
-Until the signal ships, the resolver calls `UIInternals` directly and accepts the compatibility risk. Those accessors have been stable across many Vaadin releases, and any flow-components code depending on them would need to migrate in the same release as the signal lands anyway.
-
-Affects: Flow core. Fits the broader direction of making Flow state reactive-first (alongside `ValueSignal`, `Signal.effect`, `HasComponentsOfType.bindChildren`).
+`UI.routerStateSignal()` exposes a read-only `Signal<RouterState>`; `RouterState` carries the current `Location`, `RouteParameters`, active chain, and navigation target class, and is updated atomically alongside `AfterNavigationEvent` dispatch, so listeners and signal consumers observe the same state. The breadcrumbs reads it with `Signal#peek()` in `onAttach` for the initial trail build — covering the attach-after-navigation case via public API only. No modification needed.
 
 ### Flow core: route hierarchy and titles — Dependency
 
@@ -650,6 +603,10 @@ Yes — `BreadcrumbsItem` implements `HasText`, which provides `bindText(Signal<
 **Q: Does the router listener need to guard against the detached-component case?**
 
 Yes — the listener is unregistered in `onDetach`, but a navigation may fire between the detach event and the registration cleanup on another thread. `rebuildFromRouter` guards with `if (!isAttached()) return;` so a stray late callback is a no-op.
+
+**Q: Why does the initial trail build read `UI.routerStateSignal()` instead of waiting for a navigation event?**
+
+When the breadcrumbs attaches to a view that has already finished rendering, no `AfterNavigationEvent` is pending, so the listener alone would leave the trail empty until the next navigation. `UI.routerStateSignal()` is the public accessor for the current navigation state — its `RouterState` value carries the `Location`, `RouteParameters`, active chain, and navigation target class, and it is updated atomically alongside `AfterNavigationEvent` dispatch, so the two entry points always agree. The initial build reads it with `Signal#peek()` (a plain, non-reactive read) because the `AfterNavigationListener` already covers subsequent navigations — subscribing reactively as well would rebuild the trail twice per navigation.
 
 **Q: Why does `getI18n()` return the last-set value (or `null`) rather than lazily creating a default `BreadcrumbsI18n`?**
 
