@@ -22,7 +22,7 @@
 
 9. **Theme variants via `HasThemeVariant<BreadcrumbsVariant>`.** Per guidelines/09-theming.md. `Breadcrumbs` implements `HasThemeVariant<BreadcrumbsVariant>`; the `BreadcrumbsVariant` enum carries `SLASH` (base-styles separator), `LUMO_PRIMARY` (Lumo), and `AURA_ACCENT` (Aura). See "Theme Variants" for the enum and inherited API, and the Discussion ("Why does `Breadcrumbs` expose theme variants?") for the rationale.
 
-10. **`BreadcrumbsI18n` is a nested static class.** Follows the `SideNavI18n` / `MenuBarI18n` convention — `Serializable`, `@JsonInclude(JsonInclude.Include.NON_NULL)`, fluent setters returning `BreadcrumbsI18n`. Serialised with `JacksonUtils.beanToJson` and pushed to the client via `getElement().setPropertyJson("i18n", ...)` in the attach handler (so re-attach re-sets the property for the fresh client-side element). `setI18n` rejects `null` (`Objects.requireNonNull`) — see the i18n section.
+10. **`BreadcrumbsI18n` is a nested static class.** Follows the `SideNavI18n` / `MenuBarI18n` convention. See the i18n section for the serialisation and non-null `setI18n` contract.
 
 11. **Package name `com.vaadin.flow.component.breadcrumbs`.** Mirrors `com.vaadin.flow.component.sidenav` — the short form that drops internal hyphens.
 
@@ -139,7 +139,7 @@ public class Breadcrumbs extends Component
 
     // Lifecycle
     @Override
-    protected void onAttach(AttachEvent attachEvent);   // checks feature flag; re-pushes i18n; wires router listener if ROUTER
+    protected void onAttach(AttachEvent attachEvent);   // checks feature flag; wires router listener if ROUTER
     @Override
     protected void onDetach(DetachEvent detachEvent);   // unregisters router listener
 
@@ -293,7 +293,7 @@ public static class BreadcrumbsI18n implements Serializable {
 }
 ```
 
-Exposed on `Breadcrumbs` via `setI18n(BreadcrumbsI18n)` / `getI18n()`. Serialised via `JacksonUtils.beanToJson(i18n)` and pushed to the client through `getElement().setPropertyJson("i18n", json)` inside the attach handler (so that on re-attach the fresh client element receives the property again). `setI18n` rejects `null` with `Objects.requireNonNull("The i18n properties object should not be null")`, per guidelines/10-i18n-and-a11y.md. Before `setI18n` is first called, `getI18n()` returns `null` and no `i18n` property is pushed, so the web component uses its built-in defaults.
+Exposed on `Breadcrumbs` via `setI18n(BreadcrumbsI18n)` / `getI18n()`. Serialised via `JacksonUtils.beanToJson(i18n)` and pushed to the client through `getElement().setPropertyJson("i18n", json)`. `setI18n` rejects `null` with `Objects.requireNonNull("The i18n properties object should not be null")`, per guidelines/10-i18n-and-a11y.md. Before `setI18n` is first called, `getI18n()` returns `null` and no `i18n` property is pushed, so the web component uses its built-in defaults.
 
 | Field | Type | Default (English) | Web-component `i18n` field | Notes |
 |---|---|---|---|---|
