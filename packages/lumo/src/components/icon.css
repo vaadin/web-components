@@ -1,0 +1,4 @@
+:where(vaadin-icon) {
+  width: var(--vaadin-icon-size, var(--lumo-icon-size-m));
+  height: var(--vaadin-icon-size, var(--lumo-icon-size-m));
+}
