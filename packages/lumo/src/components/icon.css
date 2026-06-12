@@ -1,0 +1,9 @@
+/* Set the size as a variable rather than width/height. The base already applies
+   `width/height: var(--vaadin-icon-size, 1lh)` inside the icon's own shadow root, which
+   is the innermost context and therefore still loses to a host component's
+   `::slotted(vaadin-icon)` sizing (e.g. the card cover media icon). A width/height rule
+   here would come from the document — the outermost context — and would win over those. */
+:where(:root),
+:where(:host) {
+  --vaadin-icon-size: var(--lumo-icon-size-m);
+}
