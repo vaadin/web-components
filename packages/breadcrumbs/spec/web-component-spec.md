@@ -247,7 +247,7 @@ The breadcrumb container instantiates a `SlotObserver` targeting its shadow root
 
 ### `packages/overlay/src/vaadin-overlay-mixin.js` — Used as-is
 
-`<vaadin-breadcrumbs-overlay>` extends `OverlayMixin` for the overflow overlay's `opened` / `owner` state and inherited behavior (see "Overlay management"). The `renderer` property is intentionally left unbound. No modification needed.
+`<vaadin-breadcrumbs-overlay>` extends `OverlayMixin` for the overflow overlay's lifecycle and inherited behavior (see "Overlay management"). The `renderer` property is intentionally left unbound. No modification needed.
 
 ### `packages/overlay/src/vaadin-overlay-position-mixin.js` (`PositionMixin`) — Used as-is
 
