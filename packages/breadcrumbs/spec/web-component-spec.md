@@ -210,7 +210,7 @@ The element exposes no public properties or slots of its own — it inherits eve
 
 Internal behavior:
 
-- **Light-DOM projection via `slot="overlay"`.** Collapsed items are projected through the overlay's default slot while staying in the breadcrumbs' light DOM (see "Overlay management" above), so the element needs no rendering plumbing and global page CSS can reach the links (see Discussion).
+- **Light-DOM projection via `slot="overlay"`.** Collapsed items are projected through the overlay's default slot while staying in the breadcrumbs' light DOM (see "Overlay management" above), so the element needs no rendering plumbing and global page CSS can reach the items (see Discussion).
 - **Keyboard interaction within the open overlay.**
   - **Focus on open** — focus stays on the overflow button when the overlay opens (via overflow-button click, Enter, or Space). The first ArrowDown / ArrowUp keypress while the overlay is open moves focus into the overlay: ArrowDown lands on the first focusable overlay item, ArrowUp lands on the last focusable overlay item. Disabled items and items without a `path` are not focusable.
   - **Arrow keys** — once focus is inside the overlay, Up/Down arrows move focus between adjacent links (Home/End jump to first/last). Non-focusable items — disabled items and items without a `path` — are skipped: arrow keys, Home, and End land on the nearest focusable item in the requested direction. The overlay reads as a menu visually, so menu-style keyboard navigation is the primary way to traverse its items.
@@ -269,7 +269,7 @@ An earlier revision exposed an `items` data array (`{ text, path }[]`) on `<vaad
 
 **Q: Why are the overflow items projected via `slot="overlay"` rather than rendered through an `OverlayMixin` `.renderer`?**
 
-Two reasons: global page CSS can reach the links, and `<vaadin-breadcrumbs-overlay>` stays free of rendering plumbing. An `OverlayMixin` `.renderer` callback renders into the overlay's own root, so the breadcrumb would build the items imperatively and the overlay would have to customize `_rendererRoot` to host them. Reassigning `slot="overlay"` on the existing item keeps it a single light-DOM node that renders in the trail or the overlay depending on its slot, so page CSS still reaches it and the overlay never needs to know the rendering shape.
+Two reasons: global page CSS can reach the items, and `<vaadin-breadcrumbs-overlay>` stays free of rendering plumbing. An `OverlayMixin` `.renderer` callback renders into the overlay's own root, so the breadcrumb would build the items imperatively and the overlay would have to customize `_rendererRoot` to host them. Reassigning `slot="overlay"` on the existing item keeps it a single light-DOM node that renders in the trail or the overlay depending on its slot, so page CSS still reaches it and the overlay never needs to know the rendering shape.
 
 **Q: Why are the overlay parts re-exported on the breadcrumbs host, with `content` renamed to `overlay-content`?**
 
