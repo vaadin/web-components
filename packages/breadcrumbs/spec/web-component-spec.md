@@ -31,7 +31,7 @@
 
 **`<vaadin-breadcrumbs>`** — Container element
 
-The host carries `role="navigation"`. Items are distributed across two slots so the overflow element can sit in the DOM between the root item and the rest — ensuring DOM order matches the visual order `[root] [overflow] [rest…]` per guidelines/11-a11y.md.
+The host carries `role="navigation"`. Items are distributed across two slots — `root` and the default slot — so the overflow element can sit in the DOM between the root item and the rest (see Discussion for why DOM order must match visual order).
 
 Shadow DOM:
 ```html
@@ -68,7 +68,7 @@ The `<div role="list">` is used instead of `<ol>` because `<ol>` only accepts `<
 
 | Slot | Description |
 |---|---|
-| `root` | The first `<vaadin-breadcrumbs-item>` in the trail. The container assigns `slot="root"` to the first item automatically — the application does not set it. |
+| `root` | The first `<vaadin-breadcrumbs-item>` in the trail, assigned automatically (see "Slot observation and root assignment"). |
 | (default) | All remaining `<vaadin-breadcrumbs-item>` elements in the trail. |
 
 | Part | Description |
@@ -104,7 +104,12 @@ All variants are set via `theme="…"` on `<vaadin-breadcrumbs>`. See the Discus
 
 Internal behavior:
 
-- **Slot observation and root assignment.** A single `SlotObserver` targets the shadow root and diffs the union of all descendant `<slot>` assignments. When children change, the callback sets `slot="root"` on the first `<vaadin-breadcrumbs-item>` child and removes `slot` from any previous holder. This routes the first item into the named `root` slot in shadow DOM, so the overflow element sits in the DOM between the root and the rest — matching visual order. The same callback re-evaluates overflow detection and `current` state on the last item. The observer's union diff naturally ignores cross-slot reassignment (e.g. moving an item to `slot="overlay"`), so internal slot mutations don't loop back into the handler.
+- **Slot observation and root assignment.**
+  - A single `SlotObserver` on the shadow root reacts when items are added or removed across its slots.
+  - When children change, the callback sets `slot="root"` on the first `<vaadin-breadcrumbs-item>` child.
+  - Moving the first item to the `root` slot places the overflow element between the root and the rest in the DOM — see Discussion for the visual-order rationale.
+  - The same callback re-evaluates overflow detection and `current` state on the last item.
+  - The observer naturally ignores cross-slot reassignment when moving an item to `slot="overlay"`.
 - **Overflow detection.** On resize (via `ResizeMixin`) and on slot changes, the component measures whether all items fit within the container width. If not, it progressively collapses items starting from the one closest to the root (the first default-slot item) by reassigning `slot="overlay"` on each. If further space is needed, the root item collapses too. The last item (current page) never collapses.
 - **Overlay management.**
   - The breadcrumbs' `render()` always emits the `<vaadin-breadcrumbs-overlay>` element shown in the Shadow DOM template above.
@@ -331,7 +336,7 @@ A generic element with explicit `role="list"`. Two reasons: (a) HTML `<ol>` acce
 
 **Q: How is the overflow element positioned so it appears visually between the root and the rest of the items?**
 
-Two shadow slots with the overflow in shadow DOM between them: `<slot name="root"></slot>`, then `<div part="overflow">`, then `<slot></slot>`. The component's `SlotObserver` callback assigns `slot="root"` to the first `<vaadin-breadcrumbs-item>` child automatically — the application doesn't set it. This keeps DOM order aligned with visual order `[root] [overflow] [rest…]`, satisfying the "DOM order matches visual order" rule from guidelines/11-a11y.md. The alternative considered — inserting the overflow as a light-DOM sibling between items — was rejected because it would add a component-authored element to the user's light DOM, changing `breadcrumb.children.length` and conflicting with the "light DOM is the application's territory" principle.
+Two shadow slots with the overflow in shadow DOM between them: `<slot name="root"></slot>`, then `<div part="overflow">`, then `<slot></slot>`. The first item is routed into the `root` slot (see "Slot observation and root assignment"), keeping DOM order aligned with visual order `[root] [overflow] [rest…]`, satisfying the "DOM order matches visual order" rule from guidelines/11-a11y.md. The alternative considered — inserting the overflow as a light-DOM sibling between items — was rejected because it would add a component-authored element to the user's light DOM, changing `breadcrumb.children.length` and conflicting with the "light DOM is the application's territory" principle.
 
 **Q: Should the overflow panel use `OverlayMixin` or be a plain `<div>` positioned with `position: fixed`?**
 
