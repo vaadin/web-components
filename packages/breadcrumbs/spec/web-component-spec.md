@@ -333,7 +333,7 @@ Two shadow slots with the overflow in shadow DOM between them: `<slot name="root
 
 **Q: Should the overflow panel use `OverlayMixin` or be a plain `<div>` positioned with `position: fixed`?**
 
-`OverlayMixin`, via a dedicated `<vaadin-breadcrumbs-overlay>` element. A hand-rolled fixed-positioned `<div>` in shadow DOM was considered but rejected — it would miss stacking-context handling, top-layer rendering via the popover API, focus restoration, and outside-click/Escape handling, all of which `OverlayMixin` provides for free and which other Vaadin overlays (menu-bar, combo-box, dialog, context-menu) already rely on. See "Overlay management" for how the breadcrumbs drives it.
+`OverlayMixin`, via a dedicated `<vaadin-breadcrumbs-overlay>` element. It provides stacking-context handling, top-layer rendering via the popover API, focus restoration, and outside-click/Escape handling for free — the same foundation other Vaadin overlays (menu-bar, combo-box, dialog, context-menu) rely on. See "Overlay management" for how the breadcrumbs drives it.
 
 **Q: Why does `i18n.moreItems` default to `'More items'` rather than an empty string?**
 
