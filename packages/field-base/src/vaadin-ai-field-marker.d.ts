@@ -5,6 +5,27 @@
  */
 
 /**
+ * Application-wide default texts for {@link AiFieldMarker}, settable via
+ * {@link AiFieldMarker.setDefaults}.
+ */
+export interface AiFieldMarkerDefaults {
+  /**
+   * The message shown in the popover explaining the AI fill.
+   */
+  message?: string;
+
+  /**
+   * The label of the revert control.
+   */
+  revertText?: string;
+
+  /**
+   * The accessible label of the badge button and the popover dialog.
+   */
+  badgeLabel?: string;
+}
+
+/**
  * Options accepted by {@link AiFieldMarker.mark}.
  */
 export interface AiFieldMarkerOptions {
@@ -73,7 +94,18 @@ declare class AiFieldMarker extends HTMLElement {
   badgeLabel: string;
 
   /**
-   * Marks the given field as AI-filled.
+   * Sets the texts used by every subsequently marked field, so an application
+   * can localize them once instead of passing options to each `mark` call.
+   * Only the provided keys change; per-call `mark` options still take
+   * precedence. Does not retroactively update already-marked fields.
+   *
+   * @param defaults the default texts to set
+   */
+  static setDefaults(defaults: AiFieldMarkerDefaults): void;
+
+  /**
+   * Marks the given field as AI-filled. Texts default to those set via
+   * `setDefaults`; `options` overrides them for this field only.
    *
    * @param field the field to mark
    * @param options optional content overrides
