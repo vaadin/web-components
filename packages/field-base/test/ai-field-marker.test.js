@@ -52,8 +52,24 @@ describe('ai field marker', () => {
       expect(button.localName).to.equal('button');
     });
 
-    it('should describe the field input for screen readers', () => {
-      expect(field.inputElement.getAttribute('aria-description')).to.equal(DEFAULT_MESSAGE);
+    it('should describe the field input for screen readers via aria-describedby', () => {
+      const ids = (field.inputElement.getAttribute('aria-describedby') || '').split(' ');
+      const descId = ids.find((id) => id.startsWith('ai-field-marker-'));
+      expect(descId, 'aria-describedby should reference the AI description node').to.be.ok;
+      const descNode = field.querySelector(`#${descId}`);
+      expect(descNode).to.exist;
+      expect(descNode.textContent).to.equal(DEFAULT_MESSAGE);
+    });
+
+    it('should render the description node via an injected slot', () => {
+      const descId = (field.inputElement.getAttribute('aria-describedby') || '')
+        .split(' ')
+        .find((id) => id.startsWith('ai-field-marker-'));
+      const descNode = field.querySelector(`#${descId}`);
+      // assignedSlot is non-null only when the node is matched to a slot and
+      // therefore rendered (not left as unslotted, unrendered light DOM).
+      expect(descNode.assignedSlot).to.exist;
+      expect(descNode.assignedSlot.name).to.equal('ai-field-marker-description');
     });
 
     it('should be idempotent', () => {
@@ -89,10 +105,20 @@ describe('ai field marker', () => {
       );
     });
 
-    it('should not override an application-provided aria-description', () => {
-      field.inputElement.setAttribute('aria-description', 'app provided');
-      AiFieldMarker.mark(field);
-      expect(field.inputElement.getAttribute('aria-description')).to.equal('app provided');
+    it('should keep the field helper description alongside the AI description', async () => {
+      const helperField = fixtureSync(
+        `<vaadin-text-field label="Name" helper-text="Keep it short"></vaadin-text-field>`,
+      );
+      await nextRender();
+      const helperIds = helperField.inputElement.getAttribute('aria-describedby').split(' ');
+
+      AiFieldMarker.mark(helperField);
+      const ids = helperField.inputElement.getAttribute('aria-describedby').split(' ');
+
+      // Every original (helper) id is preserved...
+      helperIds.forEach((id) => expect(ids).to.include(id));
+      // ...and the AI description id is appended.
+      expect(ids.some((id) => id.startsWith('ai-field-marker-'))).to.be.true;
     });
   });
 
@@ -167,9 +193,15 @@ describe('ai field marker', () => {
       expect(field.shadowRoot.querySelector('style[data-ai-field-marker]')).to.not.exist;
     });
 
-    it('should remove the aria-description from the input', () => {
+    it('should remove the AI description from aria-describedby and the DOM', () => {
+      const ids = (field.inputElement.getAttribute('aria-describedby') || '').split(' ');
+      const descId = ids.find((id) => id.startsWith('ai-field-marker-'));
+
       AiFieldMarker.unmark(field);
-      expect(field.inputElement.hasAttribute('aria-description')).to.be.false;
+
+      const after = field.inputElement.getAttribute('aria-describedby') || '';
+      expect(after).to.not.contain('ai-field-marker-');
+      expect(field.querySelector(`#${descId}`)).to.not.exist;
     });
 
     it('should be a no-op for an unmarked field', () => {
