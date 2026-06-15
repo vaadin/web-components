@@ -34,6 +34,10 @@ const POPOVER_TRIGGER = ['click'];
 // description node referenced by the input's aria-describedby.
 const DESCRIPTION_SLOT = 'ai-field-marker-description';
 
+// Name of the slot used to forward custom popover content. Set it on a field
+// child (`slot="ai-field-marker-popover-content"`) to place content in the popover.
+const POPOVER_CONTENT_SLOT = 'ai-field-marker-popover-content';
+
 /**
  * Per-field marker bookkeeping, keyed by the field so `mark()` is idempotent
  * and `unmark()` can fully clean up.
@@ -48,6 +52,11 @@ const markers = new WeakMap();
  * Not intended to be used as a standalone tag; use the static
  * `AiFieldMarker.mark()` / `AiFieldMarker.unmark()` API (also reachable from
  * Flow via `customElements.get('vaadin-ai-field-marker')`).
+ *
+ * Custom popover content can be supplied by slotting an element on the FIELD
+ * with `slot="ai-field-marker-popover-content"`; the marker forwards it into the
+ * popover. This is the integration point for frameworks (e.g. Flow) that render
+ * content as server-side elements in the field's light DOM.
  *
  * @fires {CustomEvent} ai-field-revert - Fired from the field element when the user activates the revert control. The host restores the value.
  *
@@ -114,7 +123,7 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
         <div part="content">
           <p part="message">${this.message}</p>
           ${this.additionalContent ? html`<div part="additional-content">${this.additionalContent}</div>` : null}
-          <slot></slot>
+          <slot name="${POPOVER_CONTENT_SLOT}"></slot>
           <div part="actions">
             <button type="button" part="revert-button" @click="${this._onRevert}">${this.revertText}</button>
           </div>
@@ -198,6 +207,17 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
       const marker = document.createElement(AiFieldMarker.is);
       marker._field = field;
       field.shadowRoot.appendChild(marker);
+
+      // Forward custom popover content from the field's light DOM into the
+      // popover. The content (e.g. a Flow component) is slotted on the FIELD —
+      // the only element a server-side framework controls — as
+      // `slot="ai-field-marker-popover-content"`. This nested slot, a light child
+      // of the marker, captures those field children and re-projects them into
+      // the marker's own slot inside the popover.
+      const contentSlot = document.createElement('slot');
+      contentSlot.setAttribute('name', POPOVER_CONTENT_SLOT);
+      contentSlot.setAttribute('slot', POPOVER_CONTENT_SLOT);
+      marker.appendChild(contentSlot);
 
       // Add a hidden description node in the field's light DOM (so its id
       // resolves in the input's scope) and append its id to the input's

@@ -168,6 +168,33 @@ describe('ai field marker', () => {
     });
   });
 
+  describe('custom popover content', () => {
+    it('should forward field popover content into the popover content slot', async () => {
+      const custom = document.createElement('div');
+      custom.textContent = 'Custom content';
+      custom.slot = 'ai-field-marker-popover-content';
+      field.appendChild(custom);
+
+      const marker = AiFieldMarker.mark(field);
+      await nextRender();
+
+      // Step 1: the field child is assigned to the marker's forwarding slot,
+      // which lives in the field's shadow tree as a light child of the marker.
+      const forwardingSlot = custom.assignedSlot;
+      expect(forwardingSlot, 'field content should be slotted').to.exist;
+      expect(forwardingSlot.localName).to.equal('slot');
+      expect(forwardingSlot.getAttribute('name')).to.equal('ai-field-marker-popover-content');
+      expect(forwardingSlot.parentNode).to.equal(marker);
+
+      // Step 2: the forwarding slot is itself assigned to the popover-content
+      // slot inside the marker's shadow (so the content reaches the popover).
+      const popoverSlot = forwardingSlot.assignedSlot;
+      expect(popoverSlot, 'forwarding slot should reach the popover slot').to.exist;
+      expect(popoverSlot.getAttribute('name')).to.equal('ai-field-marker-popover-content');
+      expect(popoverSlot.getRootNode()).to.equal(marker.shadowRoot);
+    });
+  });
+
   describe('revert', () => {
     let marker;
     let revertButton;
