@@ -8,7 +8,9 @@ import { html, LitElement } from 'lit';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { aiFieldMarkerHostStyles, aiFieldMarkerStyles } from './styles/vaadin-ai-field-marker-base-styles.js';
@@ -18,6 +20,10 @@ const DEFAULT_REVERT_TEXT = 'Revert';
 const DEFAULT_BADGE_LABEL = 'Filled in by AI';
 
 const POPOVER_TRIGGER = ['click'];
+
+// Name of the slot injected into the field's shadow root to render the hidden
+// description node referenced by the input's aria-describedby.
+const DESCRIPTION_SLOT = 'ai-field-marker-description';
 
 /**
  * Per-field marker bookkeeping, keyed by the field so `mark()` is idempotent
@@ -160,7 +166,34 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
       marker._field = field;
       field.shadowRoot.appendChild(marker);
 
-      entry = { marker, style, hadInlinePosition };
+      // Add a hidden description node in the field's light DOM (so its id
+      // resolves in the input's scope) and append its id to the input's
+      // aria-describedby. Appending — rather than using aria-description, which
+      // a screen reader ignores when aria-describedby is present — lets the
+      // field's own helper/error description and the AI note both get read.
+      const input = field.inputElement || field.focusElement;
+      let descNode = null;
+      let descSlot = null;
+      if (input) {
+        // Inject a slot so the description is actually rendered (assigned to a
+        // slot) rather than left as unslotted, unrendered light DOM. The slot
+        // must live in the FIELD's shadow root — not the marker's — because the
+        // node has to stay in the field's light DOM for the input's
+        // aria-describedby id to resolve in the same scope.
+        descSlot = document.createElement('slot');
+        descSlot.setAttribute('name', DESCRIPTION_SLOT);
+        field.shadowRoot.appendChild(descSlot);
+
+        descNode = document.createElement('span');
+        descNode.id = `ai-field-marker-${generateUniqueId()}`;
+        descNode.slot = DESCRIPTION_SLOT;
+        descNode.style.cssText =
+          'position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;';
+        field.appendChild(descNode);
+        addValueToAttribute(input, 'aria-describedby', descNode.id);
+      }
+
+      entry = { marker, style, hadInlinePosition, input, descNode, descSlot };
       markers.set(field, entry);
     }
 
@@ -190,13 +223,9 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
     const { label } = field;
     announce(label ? `${label}: ${message}` : message);
 
-    // Associate the explanation with the field's focusable input so screen
-    // readers convey it when the field itself is focused. Best-effort and
-    // guarded so an application-provided description is left untouched.
-    const input = field.inputElement || field.focusElement;
-    if (input && !input.hasAttribute('aria-description')) {
-      input.setAttribute('aria-description', message);
-      entry.input = input;
+    // Keep the hidden field description in sync with the current message.
+    if (entry.descNode) {
+      entry.descNode.textContent = message;
     }
 
     return marker;
@@ -214,12 +243,18 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
       return;
     }
 
-    const { marker, style, input, hadInlinePosition } = entry;
+    const { marker, style, input, descNode, descSlot, hadInlinePosition } = entry;
 
     field.toggleAttribute('has-ai-marker', false);
 
-    if (input) {
-      input.removeAttribute('aria-description');
+    if (input && descNode) {
+      removeValueFromAttribute(input, 'aria-describedby', descNode.id);
+    }
+    if (descNode) {
+      descNode.remove();
+    }
+    if (descSlot) {
+      descSlot.remove();
     }
 
     marker.remove();
