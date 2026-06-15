@@ -32,6 +32,16 @@
       fields.forEach((field, index) => {
         previousValues.set(field, '');
 
+        // Demonstrate custom popover content: slot a rich element on the FIELD
+        // (this is how a server-side framework like Flow would inject content).
+        if (index === 2) {
+          const link = document.createElement('a');
+          link.href = '#';
+          link.textContent = 'Why was this filled in?';
+          link.slot = 'ai-field-marker-popover-content';
+          field.appendChild(link);
+        }
+
         // Mimic an AI fill, then mark the field.
         window.requestAnimationFrame(() => {
           AiFieldMarker.mark(field, {

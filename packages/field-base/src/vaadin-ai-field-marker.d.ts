@@ -71,6 +71,11 @@ declare global {
  *
  * Not intended to be used as a standalone tag; use the static `mark()` /
  * `unmark()` API.
+ *
+ * Custom popover content can be supplied by slotting an element on the FIELD
+ * with `slot="ai-field-marker-popover-content"`; the marker forwards it into the
+ * popover. This is the integration point for frameworks (e.g. Flow) that render
+ * content as server-side elements in the field's light DOM.
  */
 declare class AiFieldMarker extends HTMLElement {
   /**
