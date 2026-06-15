@@ -19,6 +19,15 @@ const DEFAULT_MESSAGE = 'This value was filled in by an AI based on the input yo
 const DEFAULT_REVERT_TEXT = 'Revert';
 const DEFAULT_BADGE_LABEL = 'Filled in by AI';
 
+// Application-configurable defaults applied to every marked field, so the
+// texts can be localized once via AiFieldMarker.setDefaults() instead of being
+// passed to each mark() call. Per-call options still take precedence.
+const defaults = {
+  message: DEFAULT_MESSAGE,
+  revertText: DEFAULT_REVERT_TEXT,
+  badgeLabel: DEFAULT_BADGE_LABEL,
+};
+
 const POPOVER_TRIGGER = ['click'];
 
 // Name of the slot injected into the field's shadow root to render the hidden
@@ -133,10 +142,34 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
   }
 
   /**
+   * Sets the texts used by every subsequently marked field, so an application
+   * can localize them once instead of passing options to each {@link mark}
+   * call. Only the provided keys change; per-call {@link mark} options still
+   * take precedence over these defaults. Does not retroactively update fields
+   * that are already marked.
+   *
+   * @param {{ message?: string, revertText?: string, badgeLabel?: string }} newDefaults
+   */
+  static setDefaults(newDefaults = {}) {
+    if (newDefaults.message != null) {
+      defaults.message = newDefaults.message;
+    }
+    if (newDefaults.revertText != null) {
+      defaults.revertText = newDefaults.revertText;
+    }
+    if (newDefaults.badgeLabel != null) {
+      defaults.badgeLabel = newDefaults.badgeLabel;
+    }
+  }
+
+  /**
    * Marks the given field as AI-filled: injects the highlight + badge + popover
    * into the field's shadow root, announces the change to screen readers, and
    * associates the explanation with the field's input. Idempotent — repeated
    * calls reuse the existing marker and only refresh its content.
+   *
+   * Texts default to those set via {@link setDefaults} (English out of the
+   * box); pass `options` to override them for this field only.
    *
    * @param {HTMLElement} field the field to mark
    * @param {{ message?: string, additionalContent?: string, revertText?: string, badgeLabel?: string }} [options]
@@ -199,17 +232,12 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
 
     const { marker } = entry;
 
-    if (options.message != null) {
-      marker.message = options.message;
-    }
+    // Per-call options win over the application-configured defaults.
+    marker.message = options.message ?? defaults.message;
+    marker.revertText = options.revertText ?? defaults.revertText;
+    marker.badgeLabel = options.badgeLabel ?? defaults.badgeLabel;
     if (options.additionalContent != null) {
       marker.additionalContent = options.additionalContent;
-    }
-    if (options.revertText != null) {
-      marker.revertText = options.revertText;
-    }
-    if (options.badgeLabel != null) {
-      marker.badgeLabel = options.badgeLabel;
     }
 
     // Capture the AI-filled value so the revert event can carry it.

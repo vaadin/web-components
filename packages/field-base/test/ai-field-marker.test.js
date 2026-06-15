@@ -122,6 +122,52 @@ describe('ai field marker', () => {
     });
   });
 
+  describe('setDefaults', () => {
+    afterEach(() => {
+      // Restore built-in defaults so global state does not leak between tests.
+      AiFieldMarker.setDefaults({ message: DEFAULT_MESSAGE, revertText: 'Revert', badgeLabel: 'Filled in by AI' });
+    });
+
+    it('should apply globally configured texts to subsequently marked fields', async () => {
+      AiFieldMarker.setDefaults({
+        message: 'Tämä arvo on tekoälyn täyttämä',
+        revertText: 'Kumoa',
+        badgeLabel: 'Tekoälyn täyttämä',
+      });
+
+      const marker = AiFieldMarker.mark(field);
+      await nextRender();
+
+      expect(marker.shadowRoot.querySelector('[part="message"]').textContent).to.equal(
+        'Tämä arvo on tekoälyn täyttämä',
+      );
+      expect(marker.shadowRoot.querySelector('[part="revert-button"]').textContent).to.equal('Kumoa');
+      expect(marker.shadowRoot.querySelector('[part="badge"]').getAttribute('aria-label')).to.equal(
+        'Tekoälyn täyttämä',
+      );
+    });
+
+    it('should let per-field options override the global defaults', async () => {
+      AiFieldMarker.setDefaults({ message: 'Global default' });
+
+      const marker = AiFieldMarker.mark(field, { message: 'Per-field override' });
+      await nextRender();
+
+      expect(marker.shadowRoot.querySelector('[part="message"]').textContent).to.equal('Per-field override');
+    });
+
+    it('should only change the provided keys', async () => {
+      AiFieldMarker.setDefaults({ message: 'Only message changed' });
+
+      const marker = AiFieldMarker.mark(field);
+      await nextRender();
+
+      expect(marker.shadowRoot.querySelector('[part="message"]').textContent).to.equal('Only message changed');
+      // revertText was not configured, so it stays the built-in default.
+      expect(marker.shadowRoot.querySelector('[part="revert-button"]').textContent).to.equal('Revert');
+    });
+  });
+
   describe('revert', () => {
     let marker;
     let revertButton;
