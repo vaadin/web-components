@@ -4,11 +4,16 @@
 
 ## Key Design Decisions
 
-1. **`Mode` enum drives ownership.** Following flow-api.md §1 and §9, `Breadcrumbs.Mode` is a public nested enum with values `ROUTER` (default) and `MANUAL`. The mode is set at construction (`new Breadcrumbs()` / `new Breadcrumbs(Mode)`) and can be switched at runtime via `setMode(Mode)`. `add`/`remove`/`removeAll` throw `IllegalStateException` while in `Mode.ROUTER`. `setMode(Mode)` is symmetric: both transitions clear the current children and install the new mode's wiring — `ROUTER → MANUAL` drops router-derived items and unregisters the navigation listener, `MANUAL → ROUTER` drops manually-added items and starts the router listener plus an initial rebuild. See "Mode switching" below for the full contract.
+1. **`Mode` enum drives ownership.**
+
+- `Breadcrumbs.Mode` is a public nested enum with values `ROUTER` (default) and `MANUAL` (see flow-api.md §1 and §9).
+- The mode is set at construction (`new Breadcrumbs()` / `new Breadcrumbs(Mode)`) and can be switched at runtime via `setMode(Mode)`.
+- `add`/`remove`/`removeAll` throw `IllegalStateException` while in `Mode.ROUTER`.
+- `setMode(Mode)` clears the current children and installs the new mode's handling (see "Mode switching").
 
 2. **`HasComponentsOfType<BreadcrumbsItem>` for child management.** Per flow-api.md §1 "Why this shape". The Flow core interface extends `HasElement, HasEnabled` and supplies the full child-management surface as default methods (see the class skeleton in "Component Classes"), all of which must be intercepted by the `Mode.ROUTER` guard (see KDD §1). `HasEnabled` is inherited transitively — it does not need to appear in `Breadcrumbs`'s `implements` list.
 
-3. **Router integration via `AfterNavigationListener`.** For `Mode.ROUTER`, the component registers `UI.addAfterNavigationListener(...)` in its attach handler and unregisters in detach. The listener resolves the route hierarchy via `RouteConfiguration#getRouteHierarchy` and calls `updateChildrenInternal(List<BreadcrumbsItem>)` to replace the trail. `updateChildrenInternal` sets an internal `boolean routerUpdateInProgress` flag, routes the update through the normal component API (`removeAll()` + `add(...)`), then clears the flag; the `Mode.ROUTER` guard on the public methods skips the throw when the flag is set.
+3. **Router integration via `AfterNavigationListener`.** For `Mode.ROUTER`, the component registers `UI.addAfterNavigationListener(...)` in its attach handler and unregisters in detach. The listener resolves the route hierarchy via `RouteConfiguration#getRouteHierarchy` and calls `updateChildrenInternal(List<BreadcrumbsItem>)` to replace the trail. `updateChildrenInternal` sets an internal `boolean internalChildUpdate` flag, routes the update through the normal component API (`removeAll()` + `add(...)`), then clears the flag; the `Mode.ROUTER` guard on the public methods skips the throw when the flag is set.
 
 4. **`@RouteParent` comes from Flow core.** Per flow-api.md §10. The annotation declares a route's logical parent (static `value()` or dynamic `resolver()`); the breadcrumb module only consumes it. See "Reuse and Proposed Adjustments" for the Flow core dependency.
 
@@ -118,7 +123,7 @@ public class Breadcrumbs extends Component
 
     // Items — all inherited from HasComponentsOfType<BreadcrumbsItem>, each
     // overridden to throw IllegalStateException if Mode.ROUTER (unless the
-    // internal routerUpdateInProgress flag is set — see KDD §3):
+    // internal internalChildUpdate flag is set — see KDD §3):
     //   add(BreadcrumbsItem...) / add(Collection<BreadcrumbsItem>)
     //   addComponentAsFirst(BreadcrumbsItem)
     //   addComponentAtIndex(int, BreadcrumbsItem)
@@ -154,7 +159,7 @@ public class Breadcrumbs extends Component
 - `HasStyle` — covers requirement that the component can be styled by the application (universal API hygiene).
 - `HasAriaLabel` — requirement 10 (navigation landmark accessible name). Flow core interface.
 - `HasThemeVariant<BreadcrumbsVariant>` — requirement 5 plus general theming. Shared interface from `vaadin-flow-components-base`. See "Theme Variants" for the variant enum and the inherited method surface.
-- `HasComponentsOfType<BreadcrumbsItem>` — requirement 1, 9 (add/remove/manage items with compile-time type safety). Flow core interface. All inherited mutating methods (see the class skeleton above) are overridden to throw `IllegalStateException` when `Mode.ROUTER` (unless the internal `routerUpdateInProgress` flag is set).
+- `HasComponentsOfType<BreadcrumbsItem>` — requirement 1, 9 (add/remove/manage items with compile-time type safety). Flow core interface. All inherited mutating methods (see the class skeleton above) are overridden to throw `IllegalStateException` when `Mode.ROUTER` (unless the internal `internalChildUpdate` flag is set).
 
 **@Synchronize'd properties:** none.
 
@@ -197,25 +202,28 @@ Both overloads ultimately build the trail via the same private routine (see "How
 `updateChildrenInternal(List<BreadcrumbsItem> trail)`:
 
 ```java
-private boolean routerUpdateInProgress;
+private boolean internalChildUpdate;
 
 void updateChildrenInternal(List<BreadcrumbsItem> trail) {
-    routerUpdateInProgress = true;
+    internalChildUpdate = true;
     try {
         removeAll();                                  // reaches super.removeAll() via HasComponentsOfType
         add(trail.toArray(BreadcrumbsItem[]::new));    // reaches super.add(T...)
     } finally {
-        routerUpdateInProgress = false;
+        internalChildUpdate = false;
     }
 }
 ```
 
-The overridden mutating methods check `mode == Mode.ROUTER && !routerUpdateInProgress` and throw `IllegalStateException` if so. This means router-derived items are regular logical children — `getChildren()` returns them, serialisation captures them, no virtual-children machinery is involved.
+The overridden mutating methods check `mode == Mode.ROUTER && !internalChildUpdate` and throw `IllegalStateException` if so. This means router-derived items are regular logical children — `getChildren()` returns them, serialisation captures them, no virtual-children machinery is involved.
 
-**Mode switching.** `setMode(Mode newMode)`:
-- If already equal, no-op.
-- On transition `ROUTER → MANUAL`: clear any router-derived items via `updateChildrenInternal(List.of())`, unregister the navigation listener. Subsequent `add(...)` calls are the application's responsibility.
-- On transition `MANUAL → ROUTER`: clear any manually-added items via `updateChildrenInternal(List.of())` (same bypass — the children are replaced by the router-derived trail anyway). Register the navigation listener if attached and trigger an initial `rebuildFromRouter`; if not attached, registration happens in the next `onAttach`.
+**Mode switching.** `setMode(Mode newMode)` implements the KDD §1 summary with these mechanics:
+
+- If `newMode` equals the current mode, it is a no-op.
+- If a `bindChildren` children binding is active, it throws `IllegalStateException` (see Discussion).
+- Otherwise both transitions clear the children through `updateChildrenInternal(List.of())`
+- `ROUTER → MANUAL` drops router-derived items and unregisters the navigation listener.
+- `MANUAL → ROUTER` drops manually-added items and starts the router listener plus an initial rebuild.
 
 ---
 
@@ -531,7 +539,7 @@ Affects: Flow core — no flow-components module defines any of this. `RouteConf
 
 ### `HasComponentsOfType<T>` in Flow core — Dependency
 
-The Flow wrapper uses `com.vaadin.flow.component.HasComponentsOfType<BreadcrumbsItem>` from Flow core, which provides the full child-management surface as default methods (see the class skeleton in "Component Classes"). `Breadcrumbs` overrides each mutating method to enforce the `Mode.ROUTER` guard (see KDD §3 for the `routerUpdateInProgress` bypass).
+The Flow wrapper uses `com.vaadin.flow.component.HasComponentsOfType<BreadcrumbsItem>` from Flow core, which provides the full child-management surface as default methods (see the class skeleton in "Component Classes"). `Breadcrumbs` overrides each mutating method to enforce the `Mode.ROUTER` guard (see KDD §3 for the `internalChildUpdate` bypass).
 
 ### `vaadin-flow-components-base` — Used as-is
 
@@ -582,7 +590,11 @@ Hierarchy walking, cycle handling, `@RouteParent` resolution, and instance-free 
 
 **Q: What happens if the user calls `setMode(Mode.ROUTER)` on a trail that already has children?**
 
-`setMode` clears the trail and installs the router-derived one — no exception. Both transitions (`ROUTER → MANUAL` and `MANUAL → ROUTER`) discard the existing children and let the new mode's wiring start fresh. Earlier designs considered throwing `IllegalStateException` on `MANUAL → ROUTER` with children, forcing the caller to `removeAll()` first; that was rejected because `setMode` semantically asks "change who owns the trail", which implies the old owner's items are no longer authoritative. Making the caller call `removeAll()` adds no safety — the next line of application code does exactly that — and creates a class of boilerplate-plus-exception traps when a mode switch happens in a handler that doesn't know what state the trail is in. The symmetric auto-clear rule is simpler and matches how `setItems`-shaped APIs behave elsewhere in Flow.
+As specified under "Mode switching", `setMode` clears the existing children and installs the new mode's trail rather than throwing (the active-`bindChildren` case is the sole exception). Earlier designs considered throwing `IllegalStateException` on `MANUAL → ROUTER` with children, forcing the caller to `removeAll()` first; that was rejected because `setMode` semantically asks "change who owns the trail", which implies the old owner's items are no longer authoritative. Making the caller call `removeAll()` adds no safety — the next line of application code does exactly that — and creates a class of boilerplate-plus-exception traps when a mode switch happens in a handler that doesn't know what state the trail is in. The symmetric auto-clear rule is simpler and matches how `setItems`-shaped APIs behave elsewhere in Flow.
+
+**Q: Why does `setMode` throw when a `bindChildren` binding is active?**
+
+A `bindChildren` binding takes over the children reactively, and Flow does not allow handing bound children back to manual or component-controlled population. So unlike plain children — which `setMode` simply clears — an active binding cannot be silently dropped. The active-binding state is read from the element's binding feature rather than tracked in a separate field, so it stays in sync with the actual binding.
 
 **Q: Is there a way to drive the trail reactively from a `Signal<List<BreadcrumbsItem>>`?**
 
