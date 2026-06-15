@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI field marker</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+
+  <body>
+    <section class="section" style="max-width: 320px">
+      <h2 class="heading">AI-filled fields</h2>
+      <vaadin-text-field label="Field One" value="Mumbo jumbo"></vaadin-text-field>
+      <vaadin-text-field
+        label="Another Field"
+        value="123455"
+        helper-text="Keep it short, just one value"
+      ></vaadin-text-field>
+      <vaadin-text-field label="The Last Field" value="ABC-DEF-123"></vaadin-text-field>
+    </section>
+
+    <script type="module">
+      import '@vaadin/text-field';
+      import { AiFieldMarker } from '@vaadin/field-base/src/vaadin-ai-field-marker.js';
+
+      const fields = [...document.querySelectorAll('vaadin-text-field')];
+
+      // Remember the value before the "AI fill" so the revert handler can restore it.
+      const previousValues = new WeakMap();
+
+      fields.forEach((field, index) => {
+        previousValues.set(field, '');
+
+        // Mimic an AI fill, then mark the field.
+        window.requestAnimationFrame(() => {
+          AiFieldMarker.mark(field, {
+            additionalContent: index === 1 ? 'Extracted from the uploaded document.' : '',
+          });
+        });
+
+        // The marker fires this from the field; the host restores the value.
+        field.addEventListener('ai-field-revert', () => {
+          field.value = previousValues.get(field) ?? '';
+          AiFieldMarker.unmark(field);
+        });
+      });
+    </script>
+  </body>
+</html>
