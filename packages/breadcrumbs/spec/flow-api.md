@@ -81,7 +81,7 @@ breadcrumbs.add(
 breadcrumbs.setI18n(new BreadcrumbsI18n().setMoreItems("Show hidden items"));
 ```
 
-**Why this shape:** Overflow collapse and the expansion menu opened by the overflow indicator (req 7) are handled entirely inside the web component — the collapsed items reappear as menu rows sourced from the same `BreadcrumbsItem` components the container already holds, so no Flow-side surface is needed to wire them up. The only Flow-visible concern is the overflow indicator's accessible label, localised via a nested `BreadcrumbsI18n` class following the `SideNavI18n` / `MenuBarI18n` convention: `Serializable`, `@JsonInclude(JsonInclude.Include.NON_NULL)`, fluent setters. Exposed via `setI18n(BreadcrumbsI18n)` / `getI18n()` on `Breadcrumbs`.
+**Why this shape:** Overflow collapse and the expansion menu opened by the overflow indicator (req 7) are handled entirely inside the web component — the collapsed items reappear as menu rows sourced from the same `BreadcrumbsItem` components the container already holds, so no Flow-side surface is needed to wire them up. The only Flow-visible concern is the overflow indicator's accessible label, localised via a nested `BreadcrumbsI18n` class following the `SideNavI18n` / `MenuBarI18n` convention, exposed via `setI18n(BreadcrumbsI18n)` / `getI18n()` on `Breadcrumbs` (see flow-spec.md "i18n" for the class shape).
 
 ---
 
@@ -298,7 +298,7 @@ breadcrumbs.addThemeVariants(BreadcrumbsVariant.SLASH); // "/" separator instead
 | `aria-current="page"` on current item | — (set automatically by the web component) | no Flow API needed |
 | `slot="prefix"` on item | `BreadcrumbsItem implements HasPrefix` → `setPrefixComponent(Component)` | shared mixin from `vaadin-flow-components-base` |
 | Programmatic items data array | — (no such property on the web component, see web-component-api.md §6) | not applicable; Flow manages items as a tree of `BreadcrumbsItem` components via `HasComponentsOfType<BreadcrumbsItem>` |
-| `i18n` JS property | `Breadcrumbs#setI18n(BreadcrumbsI18n)` / `getI18n()` | nested class; `Serializable`, `@JsonInclude(NON_NULL)`, fluent setters |
+| `i18n` JS property | `Breadcrumbs#setI18n(BreadcrumbsI18n)` / `getI18n()` | nested i18n class (see flow-spec.md "i18n") |
 | `i18n.moreItems` | `BreadcrumbsI18n#setMoreItems(String)` / `getMoreItems()` | overflow button accessible label |
 | `<nav>` landmark rendering | — (automatic in web component) | no Flow API needed |
 | `aria-label` on the host | `Breadcrumbs implements HasAriaLabel` | `setAriaLabel(String)` / `getAriaLabel()` from Flow core |
