@@ -35,6 +35,7 @@
     "@vaadin/a11y-base": "25.3.0-alpha8",
     "@vaadin/component-base": "25.3.0-alpha8",
     "@vaadin/popover": "25.3.0-alpha8",
+    "@vaadin/tooltip": "25.3.0-alpha8",
     "@vaadin/vaadin-themable-mixin": "25.3.0-alpha8",
     "lit": "^3.0.0"
   },
