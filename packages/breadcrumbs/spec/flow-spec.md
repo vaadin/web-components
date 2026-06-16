@@ -4,12 +4,7 @@
 
 ## Key Design Decisions
 
-1. **`Mode` enum drives ownership.**
-
-- `Breadcrumbs.Mode` is a public nested enum with values `ROUTER` (default) and `MANUAL` (see flow-api.md §1 and §9).
-- The mode is set at construction (`new Breadcrumbs()` / `new Breadcrumbs(Mode)`) and can be switched at runtime via `setMode(Mode)`.
-- `add`/`remove`/`removeAll` throw `IllegalStateException` while in `Mode.ROUTER`.
-- `setMode(Mode)` clears the current children and installs the new mode's handling (see "Mode switching").
+1. **`Mode` enum drives ownership.** `Breadcrumbs.Mode` is a public nested enum (`ROUTER` default, `MANUAL`); flow-api.md §9 defines the developer contract — construction, `setMode`, and the `IllegalStateException` guard on `add`/`remove`/`removeAll` in `Mode.ROUTER`. This spec covers enforcement: `setMode(Mode)` clears the current children and re-wires the mode (see "Mode switching"); the guard bypasses internal updates via `internalChildUpdate` (see KDD §3).
 
 2. **`HasComponentsOfType<BreadcrumbsItem>` for child management.** Per flow-api.md §1 "Why this shape". The Flow core interface extends `HasElement, HasEnabled` and supplies the full child-management surface as default methods (see the class skeleton in "Component Classes"), all of which must be intercepted by the `Mode.ROUTER` guard (see KDD §1). `HasEnabled` is inherited transitively — it does not need to appear in `Breadcrumbs`'s `implements` list.
 

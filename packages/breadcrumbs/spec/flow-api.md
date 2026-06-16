@@ -32,12 +32,7 @@ breadcrumbs.add(
 
 **Why this shape:**
 
-- `Breadcrumbs` has an explicit `Mode` that determines who owns the trail.
-- The nested enum `Breadcrumbs.Mode` has two values:
-  - `ROUTER` (default — auto-populated from Flow routing metadata, see section 8)
-  - `MANUAL` (the application manages the items).
-- The mode is chosen at construction — `new Breadcrumbs()` defaults to `ROUTER`, `new Breadcrumbs(Mode.MANUAL)` is explicit.
-- Adding or removing children while in `ROUTER` mode throws `IllegalStateException`, so the two models never silently mix.
+- `Breadcrumbs` has an explicit `Mode` — `ROUTER` (default, auto-populated from routing metadata, see section 8) or `MANUAL` (the application manages the items); this section uses `MANUAL`. Section 9 defines the full mode contract (construction, `setMode`, and the `ROUTER` guard).
 - In `MANUAL` mode, `Breadcrumbs` is a standard Flow container implementing `HasComponentsOfType<BreadcrumbsItem>`, whose inherited typed container methods accept only `BreadcrumbsItem` instances at compile time (flow-spec.md "Component Classes" lists the full method set).
 - The web component itself accepts only `<vaadin-breadcrumbs-item>` light-DOM children, so the Flow component-tree model maps directly to the underlying DOM.
 - `BreadcrumbsItem` mirrors `SideNavItem`'s constructor overloads — a no-path form (current page), string-path and route-class forms (the route-class form is the type-safe primary one, per guidelines/02-design.md "Integrate with Flow Router"), and a parameterised form, each with a prefix-component variant (see section 4); flow-spec.md "Component Classes" lists the signatures.
