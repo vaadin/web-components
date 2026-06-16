@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/popover/src/vaadin-popover.js';
+import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { html, LitElement } from 'lit';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -11,13 +12,12 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { aiFieldMarkerHostStyles, aiFieldMarkerStyles } from './styles/vaadin-ai-field-marker-base-styles.js';
 
-const DEFAULT_MESSAGE = 'This value was filled in by an AI based on the input you provided';
+const DEFAULT_MESSAGE = 'This field value was modified by AI.';
 const DEFAULT_REVERT_TEXT = 'Revert';
-const DEFAULT_BADGE_LABEL = 'Filled in by AI';
+const DEFAULT_BADGE_LABEL = 'AI-provided value';
+const DEFAULT_BADGE_TOOLTIP = 'Field value modified by AI.\nClick for details';
 
 // Application-configurable defaults applied to every marked field, so the
 // texts can be localized once via AiFieldMarker.setDefaults() instead of being
@@ -26,17 +26,18 @@ const defaults = {
   message: DEFAULT_MESSAGE,
   revertText: DEFAULT_REVERT_TEXT,
   badgeLabel: DEFAULT_BADGE_LABEL,
+  badgeTooltip: DEFAULT_BADGE_TOOLTIP,
 };
 
 const POPOVER_TRIGGER = ['click'];
 
-// Name of the slot injected into the field's shadow root to render the hidden
-// description node referenced by the input's aria-describedby.
-const DESCRIPTION_SLOT = 'ai-field-marker-description';
+const MARKER_SLOT = 'ai-field-marker';
 
-// Name of the slot used to forward custom popover content. Set it on a field
-// child (`slot="ai-field-marker-popover-content"`) to place content in the popover.
-const POPOVER_CONTENT_SLOT = 'ai-field-marker-popover-content';
+const markerStyles = new CSSStyleSheet();
+markerStyles.replaceSync(aiFieldMarkerStyles);
+
+const markerHostStyles = new CSSStyleSheet();
+markerHostStyles.replaceSync(aiFieldMarkerHostStyles);
 
 /**
  * Per-field marker bookkeeping, keyed by the field so `mark()` is idempotent
@@ -64,13 +65,9 @@ const markers = new WeakMap();
  * @extends HTMLElement
  * @private
  */
-export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
+export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
   static get is() {
     return 'vaadin-ai-field-marker';
-  }
-
-  static get styles() {
-    return aiFieldMarkerStyles;
   }
 
   static get properties() {
@@ -106,35 +103,48 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
         type: String,
         value: DEFAULT_BADGE_LABEL,
       },
+
+      /**
+       * The tooltip text of the badge button.
+       */
+      badgeTooltip: {
+        type: String,
+        value: DEFAULT_BADGE_TOOLTIP,
+      },
     };
   }
 
   /** @protected */
   render() {
+    const id = generateUniqueId();
     return html`
-      <button id="badge" part="badge" type="button" aria-label="${this.badgeLabel}">AI</button>
+      <button id="vaadin-ai-marker-${id}" part="badge" type="button" aria-label="${this.badgeLabel}">AI</button>
+      <vaadin-tooltip for="vaadin-ai-marker-${id}" text="${this.badgeTooltip}"></vaadin-tooltip>
       <vaadin-popover
-        for="badge"
+        for="vaadin-ai-marker-${id}"
         role="dialog"
         accessible-name="${this.badgeLabel}"
         .trigger="${POPOVER_TRIGGER}"
         autofocus
+        theme="arrow"
+        position="end-top"
       >
-        <div part="content">
-          <p part="message">${this.message}</p>
-          ${this.additionalContent ? html`<div part="additional-content">${this.additionalContent}</div>` : null}
-          <slot name="${POPOVER_CONTENT_SLOT}"></slot>
-          <div part="actions">
-            <button type="button" part="revert-button" @click="${this._onRevert}">${this.revertText}</button>
-          </div>
+        <p part="message">${this.message}</p>
+        ${this.additionalContent ? html`<div part="additional-content">${this.additionalContent}</div>` : null}
+        <div part="actions">
+          <button type="button" part="revert-button" @click="${this._onRevert}">${this.revertText}</button>
         </div>
       </vaadin-popover>
     `;
   }
 
+  createRenderRoot() {
+    return this;
+  }
+
   /** @private */
   _onRevert() {
-    const popover = this.shadowRoot.querySelector('vaadin-popover');
+    const popover = this.querySelector('vaadin-popover');
     if (popover) {
       popover.opened = false;
     }
@@ -157,7 +167,7 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
    * take precedence over these defaults. Does not retroactively update fields
    * that are already marked.
    *
-   * @param {{ message?: string, revertText?: string, badgeLabel?: string }} newDefaults
+   * @param {{ message?: string, revertText?: string, badgeLabel?: string, badgeTooltip?: string }} newDefaults
    */
   static setDefaults(newDefaults = {}) {
     if (newDefaults.message != null) {
@@ -168,6 +178,9 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
     }
     if (newDefaults.badgeLabel != null) {
       defaults.badgeLabel = newDefaults.badgeLabel;
+    }
+    if (newDefaults.badgeTooltip != null) {
+      defaults.badgeTooltip = newDefaults.badgeTooltip;
     }
   }
 
@@ -181,7 +194,7 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
    * box); pass `options` to override them for this field only.
    *
    * @param {HTMLElement} field the field to mark
-   * @param {{ message?: string, additionalContent?: string, revertText?: string, badgeLabel?: string }} [options]
+   * @param {{ message?: string, additionalContent?: string, revertText?: string, badgeLabel?: string, badgeTooltip?: string }} [options]
    * @return {AiFieldMarker | null} the marker instance, or `null` when the field has no shadow root
    */
   static mark(field, options = {}) {
@@ -189,35 +202,26 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
       return null;
     }
 
+    if (!field.getRootNode().adoptedStyleSheets.includes(markerStyles)) {
+      field.getRootNode().adoptedStyleSheets.push(markerStyles);
+    }
+
+    if (!field.shadowRoot.adoptedStyleSheets.includes(markerHostStyles)) {
+      field.shadowRoot.adoptedStyleSheets.push(markerHostStyles);
+    }
+
     let entry = markers.get(field);
     if (!entry) {
-      // Establish a positioning context for the absolutely-positioned marker,
-      // unless the field already sets one inline.
-      const hadInlinePosition = Boolean(field.style.position);
-      if (!hadInlinePosition) {
-        field.style.position = 'relative';
-      }
+      // Create a new slot for the marker element inside the field's own shadow root.
+      const markerSlot = document.createElement('slot');
+      markerSlot.setAttribute('name', MARKER_SLOT);
+      field.shadowRoot.appendChild(markerSlot);
 
-      // Inject the host highlight styles into the field's own shadow root.
-      const style = document.createElement('style');
-      style.setAttribute('data-ai-field-marker', '');
-      style.textContent = aiFieldMarkerHostStyles.cssText;
-      field.shadowRoot.appendChild(style);
-
+      // Create the marker element and place it in the marker slot.
       const marker = document.createElement(AiFieldMarker.is);
       marker._field = field;
-      field.shadowRoot.appendChild(marker);
-
-      // Forward custom popover content from the field's light DOM into the
-      // popover. The content (e.g. a Flow component) is slotted on the FIELD —
-      // the only element a server-side framework controls — as
-      // `slot="ai-field-marker-popover-content"`. This nested slot, a light child
-      // of the marker, captures those field children and re-projects them into
-      // the marker's own slot inside the popover.
-      const contentSlot = document.createElement('slot');
-      contentSlot.setAttribute('name', POPOVER_CONTENT_SLOT);
-      contentSlot.setAttribute('slot', POPOVER_CONTENT_SLOT);
-      marker.appendChild(contentSlot);
+      marker.slot = MARKER_SLOT;
+      field.appendChild(marker);
 
       // Add a hidden description node in the field's light DOM (so its id
       // resolves in the input's scope) and append its id to the input's
@@ -226,27 +230,16 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
       // field's own helper/error description and the AI note both get read.
       const input = field.inputElement || field.focusElement;
       let descNode = null;
-      let descSlot = null;
       if (input) {
-        // Inject a slot so the description is actually rendered (assigned to a
-        // slot) rather than left as unslotted, unrendered light DOM. The slot
-        // must live in the FIELD's shadow root — not the marker's — because the
-        // node has to stay in the field's light DOM for the input's
-        // aria-describedby id to resolve in the same scope.
-        descSlot = document.createElement('slot');
-        descSlot.setAttribute('name', DESCRIPTION_SLOT);
-        field.shadowRoot.appendChild(descSlot);
-
         descNode = document.createElement('span');
         descNode.id = `ai-field-marker-${generateUniqueId()}`;
-        descNode.slot = DESCRIPTION_SLOT;
         descNode.style.cssText =
           'position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;';
-        field.appendChild(descNode);
+        marker.appendChild(descNode);
         addValueToAttribute(input, 'aria-describedby', descNode.id);
       }
 
-      entry = { marker, style, hadInlinePosition, input, descNode, descSlot };
+      entry = { marker, input, markerSlot, descNode };
       markers.set(field, entry);
     }
 
@@ -256,15 +249,13 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
     marker.message = options.message ?? defaults.message;
     marker.revertText = options.revertText ?? defaults.revertText;
     marker.badgeLabel = options.badgeLabel ?? defaults.badgeLabel;
+    marker.badgeTooltip = options.badgeTooltip ?? defaults.badgeTooltip;
     if (options.additionalContent != null) {
       marker.additionalContent = options.additionalContent;
     }
 
     // Capture the AI-filled value so the revert event can carry it.
     marker._capturedValue = 'value' in field ? field.value : undefined;
-
-    // Activate the injected host highlight.
-    field.toggleAttribute('has-ai-marker', true);
 
     // Announce to screen readers that the field was filled by AI.
     const { message } = marker;
@@ -286,31 +277,31 @@ export class AiFieldMarker extends ThemableMixin(DirMixin(PolylitMixin(LumoInjec
    * @param {HTMLElement} field the field to clear
    */
   static unmark(field) {
+    // TODO workaround to make the CSS animation available
+    if (!field.getRootNode().adoptedStyleSheets.includes(markerStyles)) {
+      field.getRootNode().adoptedStyleSheets.push(markerStyles);
+    }
+
+    if (!field.shadowRoot.adoptedStyleSheets.includes(markerHostStyles)) {
+      field.shadowRoot.adoptedStyleSheets.push(markerHostStyles);
+    }
+
     const entry = field && markers.get(field);
     if (!entry) {
       return;
     }
 
-    const { marker, style, input, descNode, descSlot, hadInlinePosition } = entry;
-
-    field.toggleAttribute('has-ai-marker', false);
+    const { marker, input, descNode, markerSlot } = entry;
 
     if (input && descNode) {
       removeValueFromAttribute(input, 'aria-describedby', descNode.id);
     }
-    if (descNode) {
-      descNode.remove();
-    }
-    if (descSlot) {
-      descSlot.remove();
+
+    if (markerSlot) {
+      markerSlot.remove();
     }
 
     marker.remove();
-    style.remove();
-
-    if (!hadInlinePosition) {
-      field.style.position = '';
-    }
 
     markers.delete(field);
   }

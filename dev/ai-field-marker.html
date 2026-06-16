@@ -9,50 +9,100 @@
   </head>
 
   <body>
-    <section class="section" style="max-width: 320px">
+    <section class="section">
       <h2 class="heading">AI-filled fields</h2>
-      <vaadin-text-field label="Field One" value="Mumbo jumbo"></vaadin-text-field>
-      <vaadin-text-field
-        label="Another Field"
-        value="123455"
-        helper-text="Keep it short, just one value"
-      ></vaadin-text-field>
-      <vaadin-text-field label="The Last Field" value="ABC-DEF-123"></vaadin-text-field>
+      <vaadin-button id="simulate">Simulate Form Filling</vaadin-button>
+      <vaadin-form-layout>
+        <vaadin-text-field label="Field One" value="Mumbo jumbo"></vaadin-text-field>
+        <vaadin-text-field
+          label="Another Field"
+          value="123455"
+          helper-text="Keep it short, just one value"
+        ></vaadin-text-field>
+        <vaadin-text-field label="The Last Field" value="ABC-DEF-123"></vaadin-text-field>
+        <vaadin-radio-group label="Options">
+          <vaadin-radio-button value="one" label="Option one"></vaadin-radio-button>
+          <vaadin-radio-button value="two" label="Option two"></vaadin-radio-button>
+          <vaadin-radio-button value="three" label="Option three"></vaadin-radio-button>
+        </vaadin-radio-group>
+        <vaadin-text-area label="Notes"></vaadin-text-area>
+      </vaadin-form-layout>
     </section>
 
     <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/form-layout';
+      import '@vaadin/text-area';
       import '@vaadin/text-field';
+      import '@vaadin/radio-group';
       import { AiFieldMarker } from '@vaadin/field-base/src/vaadin-ai-field-marker.js';
 
-      const fields = [...document.querySelectorAll('vaadin-text-field')];
+      const fields = [...document.querySelectorAll('vaadin-form-layout > *')];
 
       // Remember the value before the "AI fill" so the revert handler can restore it.
       const previousValues = new WeakMap();
 
-      fields.forEach((field, index) => {
-        previousValues.set(field, '');
+      // The marker fires this from the field; the host restores the value.
+      fields.forEach((field) => {
+        previousValues.set(field, field.value);
 
-        // Demonstrate custom popover content: slot a rich element on the FIELD
-        // (this is how a server-side framework like Flow would inject content).
-        if (index === 2) {
-          const link = document.createElement('a');
-          link.href = '#';
-          link.textContent = 'Why was this filled in?';
-          link.slot = 'ai-field-marker-popover-content';
-          field.appendChild(link);
-        }
-
-        // Mimic an AI fill, then mark the field.
-        window.requestAnimationFrame(() => {
-          AiFieldMarker.mark(field, {
-            additionalContent: index === 1 ? 'Extracted from the uploaded document.' : '',
-          });
-        });
-
-        // The marker fires this from the field; the host restores the value.
         field.addEventListener('ai-field-revert', () => {
           field.value = previousValues.get(field) ?? '';
           AiFieldMarker.unmark(field);
+        });
+
+        field.addEventListener('input', () => {
+          AiFieldMarker.unmark(field);
+        });
+
+        field.addEventListener('change', () => {
+          previousValues.set(field, field.value);
+        });
+      });
+
+      document.querySelector('#simulate').addEventListener('click', async () => {
+        fields.forEach((field, index) => {
+          AiFieldMarker.unmark(field);
+          field.value = previousValues.get(field) ?? '';
+          field.readonly = true;
+          field.classList.add('ai-working');
+        });
+
+        fields.forEach((field, index) => {
+          // Mimic an AI fill, then mark the field.
+          window.setTimeout(() => {
+            field.classList.remove('ai-working');
+
+            AiFieldMarker.mark(field, {
+              additionalContent: index === 1 ? 'Extracted from the uploaded document.' : '',
+            });
+
+            // Demonstrate custom popover content: slot a rich element on the FIELD
+            // (this is how a server-side framework like Flow would inject content).
+            if (index === 2) {
+              const link = field.querySelector('vaadin-ai-field-marker > vaadin-popover > a') ?? document.createElement('a');
+              link.href = '#';
+              link.textContent = 'Why was this filled in?';
+              field.querySelector('vaadin-ai-field-marker > vaadin-popover').appendChild(link);
+            }
+
+            // TODO listen for animationend event for a specific animation name instead of this fixed timeout
+            setTimeout(() => {
+              if (field.localName === 'vaadin-radio-group') {
+                const items = field.querySelectorAll('vaadin-radio-button');
+                field.value = items[Math.floor(items.length * Math.random())].value;
+              } else {
+                field.value = 'AI value';
+              }
+              field.readonly = false;
+            }, 500);
+          }, 5000 * Math.random());
+
+          // The marker fires this from the field; the host restores the value.
+          field.addEventListener('ai-field-revert', () => {
+            field.value = previousValues.get(field) ?? '';
+            AiFieldMarker.unmark(field);
+          });
         });
       });
     </script>
