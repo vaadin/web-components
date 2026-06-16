@@ -338,7 +338,7 @@ Flow core's `Signal.effect(component, Runnable)` already provides the primitive 
 
 **Q: What happens if `@RouteParent` forms a cycle or points at a class without `@Route`?**
 
-Flow core handles both: `RouteConfiguration#getRouteHierarchy` is cycle-guarded (it stops when a target repeats), and a parent that cannot be resolved from `@RouteParent` falls back to URL-prefix walking. The breadcrumb relies on that behaviour rather than implementing its own.
+Flow core handles both — `getRouteHierarchy` is cycle-guarded and falls back to URL-prefix walking when `@RouteParent` is absent. The breadcrumb relies on that rather than implementing its own; see flow-spec.md "How `Breadcrumbs` builds the trail".
 
 **Q: Why `@RouteParent` rather than a breadcrumb-specific name?**
 
