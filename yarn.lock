@@ -10832,11 +10832,6 @@ strnum@^1.0.5:
   resolved "https://registry.yarnpkg.com/strnum/-/strnum-1.0.5.tgz#5c4e829fe15ad4ff0d20c3db5ac97b73c9b072db"
   integrity sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==
 
-style-observer@^0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/style-observer/-/style-observer-0.0.8.tgz#5ff099563323215f62a729cc3b1c7ffe8bacc43e"
-  integrity sha512-UaIPn33Sx4BJ+goia51Q++VFWoplWK1995VdxQYzwwbFa+FUNLKlG+aiIdG2Vw7VyzIUBi8tqu8mTyg0Ppu6Yg==
-
 stylelint-config-vaadin@^1.0.0-alpha.2:
   version "1.0.0-alpha.2"
   resolved "https://registry.yarnpkg.com/stylelint-config-vaadin/-/stylelint-config-vaadin-1.0.0-alpha.2.tgz#995372f0d31b8b941c8320414cbeb9f2737e616c"
