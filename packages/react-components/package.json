@@ -33,6 +33,7 @@
     "@vaadin/avatar": "25.2.0-rc1",
     "@vaadin/avatar-group": "25.2.0-rc1",
     "@vaadin/badge": "25.2.0-rc1",
+    "@vaadin/breadcrumbs": "25.2.0-rc1",
     "@vaadin/button": "25.2.0-rc1",
     "@vaadin/card": "25.2.0-rc1",
     "@vaadin/checkbox": "25.2.0-rc1",
@@ -150,6 +151,14 @@
     "./Badge.js": {
       "types": "./Badge.d.ts",
       "default": "./Badge.js"
+    },
+    "./Breadcrumbs.js": {
+      "types": "./Breadcrumbs.d.ts",
+      "default": "./Breadcrumbs.js"
+    },
+    "./BreadcrumbsItem.js": {
+      "types": "./BreadcrumbsItem.d.ts",
+      "default": "./BreadcrumbsItem.js"
     },
     "./Button.js": {
       "types": "./Button.d.ts",
@@ -438,6 +447,8 @@
     "./Avatar": "./Avatar.js",
     "./AvatarGroup": "./AvatarGroup.js",
     "./Badge": "./Badge.js",
+    "./Breadcrumbs": "./Breadcrumbs.js",
+    "./BreadcrumbsItem": "./BreadcrumbsItem.js",
     "./Button": "./Button.js",
     "./Card": "./Card.js",
     "./Checkbox": "./Checkbox.js",
