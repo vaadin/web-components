@@ -4,12 +4,7 @@
 
 ## Key Design Decisions
 
-1. **`Mode` enum drives ownership.**
-
-- `Breadcrumbs.Mode` is a public nested enum with values `ROUTER` (default) and `MANUAL` (see flow-api.md §1 and §9).
-- The mode is set at construction (`new Breadcrumbs()` / `new Breadcrumbs(Mode)`) and can be switched at runtime via `setMode(Mode)`.
-- `add`/`remove`/`removeAll` throw `IllegalStateException` while in `Mode.ROUTER`.
-- `setMode(Mode)` clears the current children and installs the new mode's handling (see "Mode switching").
+1. **`Mode` enum drives ownership.** `Breadcrumbs.Mode` is a public nested enum (`ROUTER` default, `MANUAL`); flow-api.md §9 defines the developer contract — construction, `setMode`, and the `IllegalStateException` guard on `add`/`remove`/`removeAll` in `Mode.ROUTER`. This spec covers enforcement: `setMode(Mode)` clears the current children and re-wires the mode (see "Mode switching"); the guard bypasses internal updates via `internalChildUpdate` (see KDD §3).
 
 2. **`HasComponentsOfType<BreadcrumbsItem>` for child management.** Per flow-api.md §1 "Why this shape". The Flow core interface extends `HasElement, HasEnabled` and supplies the full child-management surface as default methods (see the class skeleton in "Component Classes"), all of which must be intercepted by the `Mode.ROUTER` guard (see KDD §1). `HasEnabled` is inherited transitively — it does not need to appear in `Breadcrumbs`'s `implements` list.
 
@@ -630,7 +625,7 @@ guidelines/10-i18n-and-a11y.md prescribes `Objects.requireNonNull` in `setI18n`,
 
 **Q: Why does `Breadcrumbs` expose theme variants?**
 
-The web component ships theme variants — `theme="slash"` in base styles, `theme="primary"` in Lumo, and `theme="accent"` in Aura (web-component-spec.md "Theme" table) — so the Flow wrapper exposes them the standard way rather than inventing setters. `BreadcrumbsVariant` mirrors the shipped tokens (`SLASH`, `LUMO_PRIMARY`, `AURA_ACCENT`), since guidelines/09-theming.md requires each `getVariantName()` to match a real `theme` token. An earlier revision exposed no variants because the web component had none; the slash variant changed that.
+See flow-api.md Discussion "Why expose theme variants?" — the web component ships the `slash` separator variant, so the wrapper exposes it through the standard `HasThemeVariant` surface rather than inventing setters. The enum and its `theme`-token mapping are specified in "Theme Variants" above.
 
 **Q: Why are query parameters applied only to the current item's title?**
 
