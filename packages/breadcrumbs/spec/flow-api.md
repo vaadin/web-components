@@ -38,7 +38,7 @@ breadcrumbs.add(
   - `MANUAL` (the application manages the items).
 - The mode is chosen at construction — `new Breadcrumbs()` defaults to `ROUTER`, `new Breadcrumbs(Mode.MANUAL)` is explicit.
 - Adding or removing children while in `ROUTER` mode throws `IllegalStateException`, so the two models never silently mix.
-- In `MANUAL` mode, `Breadcrumbs` is a standard Flow container — it implements `HasComponentsOfType<BreadcrumbsItem>` and accepts items through the inherited `add(BreadcrumbsItem...)` / `addComponentAsFirst(BreadcrumbsItem)` / `addComponentAtIndex(int, BreadcrumbsItem)` / `remove(BreadcrumbsItem...)` / `removeAll()` methods, with compile-time enforcement that only `BreadcrumbsItem` instances can be added.
+- In `MANUAL` mode, `Breadcrumbs` is a standard Flow container implementing `HasComponentsOfType<BreadcrumbsItem>`, whose inherited typed container methods accept only `BreadcrumbsItem` instances at compile time (flow-spec.md "Component Classes" lists the full method set).
 - The web component itself accepts only `<vaadin-breadcrumbs-item>` light-DOM children, so the Flow component-tree model maps directly to the underlying DOM.
 - `BreadcrumbsItem` offers the same constructor overloads as `SideNavItem`:
   - `(label)` for the current page (no path),
@@ -297,7 +297,7 @@ breadcrumbs.addThemeVariants(BreadcrumbsVariant.SLASH); // "/" separator instead
 | Web API surface (from web-component-api.md) | Flow API | Notes |
 |---|---|---|
 | `<vaadin-breadcrumbs>` element | `new Breadcrumbs()` | constructor; `HasSize`, `HasStyle`, `HasAriaLabel`, `HasComponentsOfType<BreadcrumbsItem>` |
-| `<vaadin-breadcrumbs-item>` child | `HasComponentsOfType<BreadcrumbsItem>#add(BreadcrumbsItem...)`, `addComponentAsFirst(BreadcrumbsItem)`, `addComponentAtIndex(int, BreadcrumbsItem)`, `remove(BreadcrumbsItem...)`, `removeAll()` | standard component-tree management, typed to `BreadcrumbsItem` at compile time; no component-specific `setItems`/`addItem` |
+| `<vaadin-breadcrumbs-item>` child | `HasComponentsOfType<BreadcrumbsItem>` container methods | standard component-tree management, typed to `BreadcrumbsItem` at compile time; no component-specific `setItems`/`addItem` |
 | `path` attribute on item | `BreadcrumbsItem#setPath(String)` / `setPath(Class<? extends Component>)` / `setPath(Class, RouteParameters)` / constructor overloads | type-safe primary form per `DESIGN_GUIDELINES.md` "Integrate with Flow Router" |
 | last-item-without-path → current item | implicit — construct with `new BreadcrumbsItem(String label)` (no path) | no dedicated current flag |
 | `aria-current="page"` on current item | — (set automatically by the web component) | no Flow API needed |
@@ -340,7 +340,7 @@ The web component now ships a `theme="slash"` separator variant (web-component-s
 
 **Q: Why use `HasComponentsOfType<BreadcrumbsItem>` rather than a bespoke `setItems(BreadcrumbsItem...)` / `addItem(BreadcrumbsItem...)` API?**
 
-Breadcrumbs is a container of items — in Flow terms, a component that holds child components. Expressing that through the standard `HasComponentsOfType<T>` interface from Flow core keeps the API consistent with every other typed Flow container, gives developers `add`, `addComponentAsFirst`, `addComponentAtIndex`, `remove`, and `removeAll` for free, and avoids inventing yet another bespoke item-collection surface. The generic parameter `BreadcrumbsItem` gives compile-time enforcement that only `BreadcrumbsItem` instances can be added, so developers get type safety without the component needing to reject foreign children at runtime. The web component itself only accepts `<vaadin-breadcrumbs-item>` light-DOM children (no parallel data-array `items` property), so the Flow wrapper's component-tree model is a one-to-one fit.
+Breadcrumbs is a container of items — in Flow terms, a component that holds child components. Expressing that through the standard `HasComponentsOfType<T>` interface from Flow core keeps the API consistent with every other typed Flow container, gives developers the standard typed container methods for free, and avoids inventing yet another bespoke item-collection surface. The generic parameter `BreadcrumbsItem` gives compile-time enforcement that only `BreadcrumbsItem` instances can be added, so developers get type safety without the component needing to reject foreign children at runtime. The web component itself only accepts `<vaadin-breadcrumbs-item>` light-DOM children (no parallel data-array `items` property), so the Flow wrapper's component-tree model is a one-to-one fit.
 
 **Q: Why no dedicated `bindItems(Signal<...>)` method?**
 
