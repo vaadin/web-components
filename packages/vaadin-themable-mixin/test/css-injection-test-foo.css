@@ -1,9 +1,0 @@
-html, :host {
-  --test-foo-css-inject: 1;
-}
-
-@media test-foo {
-  [part='content'] {
-    background-color: green;
-  }
-}
