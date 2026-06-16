@@ -31,7 +31,7 @@
 
 **`<vaadin-breadcrumbs>`** — Container element
 
-The host carries `role="navigation"`. Items are distributed across two slots so the overflow element can sit in the DOM between the root item and the rest — ensuring DOM order matches the visual order `[root] [overflow] [rest…]` per guidelines/11-a11y.md.
+The host carries `role="navigation"`. Items are distributed across two slots — `root` and the default slot — so the overflow element can sit in the DOM between the root item and the rest (see Discussion for why DOM order must match visual order).
 
 Shadow DOM:
 ```html
@@ -68,7 +68,7 @@ The `<div role="list">` is used instead of `<ol>` because `<ol>` only accepts `<
 
 | Slot | Description |
 |---|---|
-| `root` | The first `<vaadin-breadcrumbs-item>` in the trail. The container assigns `slot="root"` to the first item automatically — the application does not set it. |
+| `root` | The first `<vaadin-breadcrumbs-item>` in the trail, assigned automatically (see "Slot observation and root assignment"). |
 | (default) | All remaining `<vaadin-breadcrumbs-item>` elements in the trail. |
 
 | Part | Description |
@@ -104,7 +104,11 @@ All variants are set via `theme="…"` on `<vaadin-breadcrumbs>`. See the Discus
 
 Internal behavior:
 
-- **Slot observation and root assignment.** A single `SlotObserver` targets the shadow root and diffs the union of all descendant `<slot>` assignments. When children change, the callback sets `slot="root"` on the first `<vaadin-breadcrumbs-item>` child and removes `slot` from any previous holder. This routes the first item into the named `root` slot in shadow DOM, so the overflow element sits in the DOM between the root and the rest — matching visual order. The same callback re-evaluates overflow detection and `current` state on the last item. The observer's union diff naturally ignores cross-slot reassignment (e.g. moving an item to `slot="overlay"`), so internal slot mutations don't loop back into the handler.
+- **Slot observation and root assignment.**
+  - A single `SlotObserver` on the shadow root reacts when items are added or removed across its slots.
+  - When children change, the callback sets `slot="root"` on the first `<vaadin-breadcrumbs-item>` child.
+  - The same callback re-evaluates overflow detection and `current` state on the last item.
+  - The observer naturally ignores cross-slot reassignment when moving an item to `slot="overlay"`.
 - **Overflow detection.** On resize (via `ResizeMixin`) and on slot changes, the component measures whether all items fit within the container width. If not, it progressively collapses items starting from the one closest to the root (the first default-slot item) by reassigning `slot="overlay"` on each. If further space is needed, the root item collapses too. The last item (current page) never collapses.
 - **Overlay management.**
   - The breadcrumbs' `render()` always emits the `<vaadin-breadcrumbs-overlay>` element shown in the Shadow DOM template above.
@@ -113,7 +117,7 @@ Internal behavior:
   - `no-vertical-overlap` keeps the overlay strictly above or below the overflow button so the trail stays visible while the overlay is open.
   - Collapsed items carry `slot="overlay"` and remain in the breadcrumbs' light DOM; the overlay's default slot projects them in, so the same physical element renders in either the trail or the overlay, never both.
   - Everything else — outside-click and Escape closing, focus restoration to the overflow button, top-layer rendering, and stacking — comes from `OverlayMixin`.
-- **Overflow separator.** The overflow element sits in the list flow between the root and the rest, so it needs a separator after it when visible. Its `[part="overflow"]::after` pseudo-element reuses the same separator recipe as `<vaadin-breadcrumbs-item>` (see "Separator rendering"), so the overflow element visually matches peer items. When `has-overflow` is not set, the overflow element is hidden, so its separator is not visible either.
+- **Overflow separator.** The overflow element is visually part of the list flow (see Discussion), so it needs a separator after it when visible. Its `[part="overflow"]::after` pseudo-element reuses the same separator recipe as `<vaadin-breadcrumbs-item>` (see "Separator rendering"), so the overflow element visually matches peer items. When `has-overflow` is not set, the overflow element is hidden, so its separator is not visible either.
 - **Width-constrained list flow.** The host carries `width: 100%; min-width: 0`, and `[part="list"]` is a `display: flex; flex-wrap: nowrap` container with `min-width: 0; max-width: 100%`. The list stretches to its parent's width and shrinks below its natural content width, which is how overflow detection knows when items no longer fit. It does not clip with `overflow: hidden` (see Discussion).
 - **Overflow-button click target.** `[part="overflow-button"]` carries `padding: var(--vaadin-padding-block-container)` paired with a matching negative `margin` so the visual width is unchanged, and `min-width: 24px; min-height: 24px` with `box-sizing: border-box` enforces a 24×24 px click target (WCAG 2.5.8) on every line-height.
 - **Baseline alignment.** The host and `[part="list"]` use `align-items: baseline`; `[part="overflow"]` inherits it, so when an item's text wraps onto multiple lines, prefix icons and adjacent items stay aligned to the first line's baseline rather than the box center (see Discussion). Icon pseudo-elements (the separator on each item and on `[part="overflow"]`, plus the overflow button's `::before`) are sized to `1lh` so they fill the line height; separators mask their icon at `var(--vaadin-icon-visual-size, 100%)` of the box — base styles set `--vaadin-icon-visual-size: 90%` on the chevron separators while the `slash` variant leaves the value at its `100%` default — and carry `opacity: 0.75` to keep the icon visually subordinate to text. The overflow-button icon uses `opacity: 0.8` for the same reason. Under `@media (forced-colors: active)` these icon pseudo-elements switch their background to `CanvasText` so the separator and ellipsis stay visible in high-contrast mode.
@@ -331,7 +335,7 @@ A generic element with explicit `role="list"`. Two reasons: (a) HTML `<ol>` acce
 
 **Q: How is the overflow element positioned so it appears visually between the root and the rest of the items?**
 
-Two shadow slots with the overflow in shadow DOM between them: `<slot name="root"></slot>`, then `<div part="overflow">`, then `<slot></slot>`. The component's `SlotObserver` callback assigns `slot="root"` to the first `<vaadin-breadcrumbs-item>` child automatically — the application doesn't set it. This keeps DOM order aligned with visual order `[root] [overflow] [rest…]`, satisfying the "DOM order matches visual order" rule from guidelines/11-a11y.md. The alternative considered — inserting the overflow as a light-DOM sibling between items — was rejected because it would add a component-authored element to the user's light DOM, changing `breadcrumb.children.length` and conflicting with the "light DOM is the application's territory" principle.
+Two shadow slots with the overflow in shadow DOM between them: `<slot name="root"></slot>`, then `<div part="overflow">`, then `<slot></slot>`. The first item is routed into the `root` slot (see "Slot observation and root assignment"), keeping DOM order aligned with visual order `[root] [overflow] [rest…]`, satisfying the "DOM order matches visual order" rule from guidelines/11-a11y.md. The alternative considered — inserting the overflow as a light-DOM sibling between items — was rejected because it would add a component-authored element to the user's light DOM, changing `breadcrumb.children.length` and conflicting with the "light DOM is the application's territory" principle.
 
 **Q: Should the overflow panel use `OverlayMixin` or be a plain `<div>` positioned with `position: fixed`?**
 
