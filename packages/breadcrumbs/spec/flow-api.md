@@ -40,12 +40,7 @@ breadcrumbs.add(
 - Adding or removing children while in `ROUTER` mode throws `IllegalStateException`, so the two models never silently mix.
 - In `MANUAL` mode, `Breadcrumbs` is a standard Flow container implementing `HasComponentsOfType<BreadcrumbsItem>`, whose inherited typed container methods accept only `BreadcrumbsItem` instances at compile time (flow-spec.md "Component Classes" lists the full method set).
 - The web component itself accepts only `<vaadin-breadcrumbs-item>` light-DOM children, so the Flow component-tree model maps directly to the underlying DOM.
-- `BreadcrumbsItem` offers the same constructor overloads as `SideNavItem`:
-  - `(label)` for the current page (no path),
-  - `(label, String path)` for hand-managed paths,
-  - `(label, Class<? extends Component> view)` as the type-safe primary form required by `DESIGN_GUIDELINES.md` "Integrate with Flow Router",
-  - `(label, Class<? extends Component> view, RouteParameters routeParameters)` for parameterised routes.
-- Each path-taking overload also has a prefix-component variant ending in `Component prefixComponent` (see section 4).
+- `BreadcrumbsItem` mirrors `SideNavItem`'s constructor overloads — a no-path form (current page), string-path and route-class forms (the route-class form is the type-safe primary one, per guidelines/02-design.md "Integrate with Flow Router"), and a parameterised form, each with a prefix-component variant (see section 4); flow-spec.md "Component Classes" lists the signatures.
 - The "current" distinction needs no extra API — an item without a path is the current item, matching the web component's declarative convention.
 
 ---
