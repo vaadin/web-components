@@ -625,7 +625,7 @@ guidelines/10-i18n-and-a11y.md prescribes `Objects.requireNonNull` in `setI18n`,
 
 **Q: Why does `Breadcrumbs` expose theme variants?**
 
-The web component ships theme variants — `theme="slash"` in base styles, `theme="primary"` in Lumo, and `theme="accent"` in Aura (web-component-spec.md "Theme" table) — so the Flow wrapper exposes them the standard way rather than inventing setters. `BreadcrumbsVariant` mirrors the shipped tokens (`SLASH`, `LUMO_PRIMARY`, `AURA_ACCENT`), since guidelines/09-theming.md requires each `getVariantName()` to match a real `theme` token. An earlier revision exposed no variants because the web component had none; the slash variant changed that.
+See flow-api.md Discussion "Why expose theme variants?" — the web component ships the `slash` separator variant, so the wrapper exposes it through the standard `HasThemeVariant` surface rather than inventing setters. The enum and its `theme`-token mapping are specified in "Theme Variants" above.
 
 **Q: Why are query parameters applied only to the current item's title?**
 
