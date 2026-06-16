@@ -288,7 +288,7 @@ breadcrumbs.addThemeVariants(BreadcrumbsVariant.SLASH); // "/" separator instead
 |---|---|---|
 | `<vaadin-breadcrumbs>` element | `new Breadcrumbs()` | constructor; `HasSize`, `HasStyle`, `HasAriaLabel`, `HasComponentsOfType<BreadcrumbsItem>` |
 | `<vaadin-breadcrumbs-item>` child | `HasComponentsOfType<BreadcrumbsItem>` container methods | standard component-tree management, typed to `BreadcrumbsItem` at compile time; no component-specific `setItems`/`addItem` |
-| `path` attribute on item | `BreadcrumbsItem#setPath(String)` / `setPath(Class<? extends Component>)` / `setPath(Class, RouteParameters)` / constructor overloads | type-safe primary form per `DESIGN_GUIDELINES.md` "Integrate with Flow Router" |
+| `path` attribute on item | `BreadcrumbsItem#setPath(...)` overloads + constructors | route-class form is the type-safe primary one, per guidelines/02-design.md "Integrate with Flow Router" |
 | last-item-without-path → current item | implicit — construct with `new BreadcrumbsItem(String label)` (no path) | no dedicated current flag |
 | `aria-current="page"` on current item | — (set automatically by the web component) | no Flow API needed |
 | `slot="prefix"` on item | `BreadcrumbsItem implements HasPrefix` → `setPrefixComponent(Component)` | shared mixin from `vaadin-flow-components-base` |
@@ -299,7 +299,7 @@ breadcrumbs.addThemeVariants(BreadcrumbsVariant.SLASH); // "/" separator instead
 | `aria-label` on the host | `Breadcrumbs implements HasAriaLabel` | `setAriaLabel(String)` / `getAriaLabel()` from Flow core |
 | RTL separator flipping | — (handled in CSS when `dir="rtl"`) | inherited from the application / `HasStyle` |
 | `theme` variants (`slash`, `primary`, `accent`; web-component-spec.md "Theme") | `Breadcrumbs implements HasThemeVariant<BreadcrumbsVariant>` → `addThemeVariants(BreadcrumbsVariant.…)` | typed theme variants; `getVariantName()` returns the `theme` token |
-| Flow: auto-populate from router | `Breadcrumbs.Mode` enum (`ROUTER`, `MANUAL`); `new Breadcrumbs()` / `new Breadcrumbs(Mode)`; `setMode(Mode)` / `getMode()` | default `ROUTER`; `add`/`remove`/`removeAll` throw `IllegalStateException` while in `ROUTER` mode |
+| Flow: auto-populate from router | `Breadcrumbs.Mode` (`ROUTER` default / `MANUAL`); see §8–§9 | `add`/`remove`/`removeAll` throw `IllegalStateException` in `ROUTER` mode |
 | Flow: route-parent override | `@RouteParent(Class<? extends Component>)` | class-level annotation on `@Route` views |
 
 ## Discussion
