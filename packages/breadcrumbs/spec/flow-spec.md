@@ -462,7 +462,7 @@ Everything the breadcrumbs contributes — preferring the current view's live ti
 | Resolve an ancestor's title without an instance | Flow core instance-free title resolution (`@PageTitle` / `PageTitleGenerator`) |
 | Read the current view's live title | `HasDynamicTitle#getPageTitle()` on the view instance |
 
-**Route parameters on ancestors:** `getRouteHierarchy` returns each ancestor with the `RouteParameters` narrowed to its own route template, so the breadcrumbs resolves ancestor labels and URLs with those parameters. Applications that need ancestor labels derived from data beyond the route metadata use `Mode.MANUAL` and build the trail themselves (flow-api.md §9).
+**Route and query parameters:** `getRouteHierarchy` returns each ancestor with the `RouteParameters` narrowed to its own route template, so the breadcrumbs resolves ancestor labels and URLs with those parameters. The current navigation's query parameters (`AfterNavigationEvent#getLocation()#getQueryParameters()`) are applied only when resolving the current (last) item's title; ancestor titles and links are resolved without query parameters (see Discussion). Applications that need ancestor labels derived from data beyond the route metadata use `Mode.MANUAL` and build the trail themselves (flow-api.md §9).
 
 ---
 
@@ -631,3 +631,7 @@ guidelines/10-i18n-and-a11y.md prescribes `Objects.requireNonNull` in `setI18n`,
 **Q: Why does `Breadcrumbs` expose theme variants?**
 
 The web component ships theme variants — `theme="slash"` in base styles, `theme="primary"` in Lumo, and `theme="accent"` in Aura (web-component-spec.md "Theme" table) — so the Flow wrapper exposes them the standard way rather than inventing setters. `BreadcrumbsVariant` mirrors the shipped tokens (`SLASH`, `LUMO_PRIMARY`, `AURA_ACCENT`), since guidelines/09-theming.md requires each `getVariantName()` to match a real `theme` token. An earlier revision exposed no variants because the web component had none; the slash variant changed that.
+
+**Q: Why are query parameters applied only to the current item's title?**
+
+Query parameters describe the current navigation as a whole, not an individual route level, and ancestor links never carry them (`getUrl` builds ancestor paths from route parameters only). An instance-free title for the current route (a `@PageTitle` generator or `PageTitleGenerator`) can legitimately depend on query parameters — e.g. a legacy `products?product=5` URL whose title is data-driven — so the current (last) item resolves its title with the navigation's query parameters, while ancestors resolve titles with none. The current item has no path, so query parameters only ever affect its text, never a link target.
