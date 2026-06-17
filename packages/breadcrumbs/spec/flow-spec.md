@@ -241,7 +241,7 @@ public class BreadcrumbsItem extends Component
     public BreadcrumbsItem(String text, Class<? extends Component> view,
                           RouteParameters params, Component prefixComponent);
 
-    // Text — inherited from HasText:
+    // Text — HasText methods, overridden (see Discussion):
     //   setText(String)
     //   getText()
     //   bindText(Signal<String>) — returns SignalBinding<String>
@@ -260,7 +260,7 @@ public class BreadcrumbsItem extends Component
 
 **Implemented mixin interfaces:**
 
-- `HasText` — the default slot of `<vaadin-breadcrumbs-item>` holds the item's text content. `HasText` from Flow core provides `setText(String)` / `getText()` and `bindText(Signal<String>) → SignalBinding<String>` as default methods, so the signal-binding entry point for reactive item text is also available without additional code.
+- `HasText` — the default slot of `<vaadin-breadcrumbs-item>` holds the item's text content. The text methods are overridden so setting or binding the text preserves the prefix component (see Discussion).
 - `HasEnabled` — lets the application disable individual items (e.g. an ancestor the user has no permission to visit).
 - `HasPrefix` — requirement 8 (icons). `slot="prefix"` on `<vaadin-breadcrumbs-item>`, shared mixin from `vaadin-flow-components-base`.
 
@@ -605,7 +605,7 @@ An earlier iteration mirrored `SideNavItem` and exposed `setTarget(String)` for 
 
 **Q: Is per-item reactive text available?**
 
-Yes — `BreadcrumbsItem` implements `HasText`, which provides `bindText(Signal<String>) → SignalBinding<String>` as a default method from Flow core. Applications that want per-item reactive text bind a signal to a specific item directly: `item.bindText(textSignal)`. The container-level reactive pattern (`Signal.effect` on the `Breadcrumbs`) remains the right choice when the whole trail's shape changes; `bindText` is for the narrower case where an item's text updates without the trail structure changing.
+Yes — `BreadcrumbsItem` implements `HasText` and exposes `bindText(Signal<String>) → SignalBinding<String>`. Applications that want per-item reactive text bind a signal to a specific item directly: `item.bindText(textSignal)`. The container-level reactive pattern (`Signal.effect` on the `Breadcrumbs`) remains the right choice when the whole trail's shape changes; `bindText` is for the narrower case where an item's text updates without the trail structure changing.
 
 **Q: Does the router listener need to guard against the detached-component case?**
 
@@ -630,3 +630,7 @@ See flow-api.md Discussion "Why expose theme variants?" — the web component sh
 **Q: Why are query parameters applied only to the current item's title?**
 
 Query parameters describe the current navigation as a whole, not an individual route level, and ancestor links never carry them (`getUrl` builds ancestor paths from route parameters only). An instance-free title for the current route (a `@PageTitle` generator or `PageTitleGenerator`) can legitimately depend on query parameters — e.g. a legacy `products?product=5` URL whose title is data-driven — so the current (last) item resolves its title with the navigation's query parameters, while ancestors resolve titles with none. The current item has no path, so query parameters only ever affect its text, never a link target.
+
+**Q: Why does `BreadcrumbsItem` override the `HasText` methods instead of inheriting them?**
+
+The default `HasText#setText` replaces all of the element's content, which would drop the prefix component (e.g. an icon) whenever the text is set. `setText(String)` / `getText()` / `bindText(Signal<String>) → SignalBinding<String>` are overridden to hold the text in a dedicated text node (managed via `SignalPropertySupport`, matching `Button` and `Badge`), so updating the text only touches that node and leaves the prefix in place. Routing through `SignalPropertySupport` also keeps the imperative and reactive paths consistent: `setText` throws once a `bindText` binding is active.
