@@ -232,7 +232,7 @@ Register `UI#addAfterNavigationListener(this::rebuildFromRouter)` in `onAttach` 
 **Requirements:** —
 **Depends on:** 1
 
-Implement `BreadcrumbsElement` and `BreadcrumbsItemElement` per the spec — every public method listed there must be present. Queries follow the `SideNavElement` / `SideNavItemElement` pattern: `$("vaadin-breadcrumbs-item").all()` for items, shadow-DOM CSS via `$(TestBenchElement.class).attribute("part", ...)` for parts, slotted-content queries via the standard `getPropertyElement(...)`. The actual IT exercise of these methods lands in Tasks 9–12.
+Implement `BreadcrumbsElement` and `BreadcrumbsItemElement` per the spec. `BreadcrumbsElement` exposes `getItems()`, `getCurrentItem()`, `getItemByText(String)`, and `getItemByPath(String)`. `BreadcrumbsItemElement` exposes `getText()`, `getPath()`, `isCurrent()`, `hasPrefix()`, `getPrefixComponent()`, and `navigate()`. Queries follow the `SideNavElement` / `SideNavItemElement` pattern: `$(BreadcrumbsItemElement.class).all()` for items, `getDomAttribute(...)` / `hasAttribute(...)` for path and state attributes, and a `slot="prefix"` element query for the prefix component. `navigate()` clicks the shadow-DOM anchor via `executeScript` (the Chrome driver cannot click shadow-DOM elements directly). The actual IT exercise of these methods lands in Tasks 9–12.
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench/src/main/java/com/vaadin/flow/component/breadcrumbs/testbench/BreadcrumbsElement.java` (modify)
@@ -240,7 +240,7 @@ Implement `BreadcrumbsElement` and `BreadcrumbsItemElement` per the spec — eve
 
 **Tests:**
 - [ ] The testbench module compiles cleanly when added as a dependency of the `-flow-integration-tests` module
-- [ ] (Verification of behaviour deferred to the integration-test tasks — `BreadcrumbsElement#getItems()` returns the slotted items in document order; `getCurrentItem()` returns the item with the `current` state attribute; `getItemByPath` returns the matching item or `null`; `hasOverflow()` reads the `has-overflow` host attribute; `openOverflowOverlay()` clicks the overflow button and waits for `vaadin-overlay-open`; `BreadcrumbsItemElement#isCurrent` / `hasPrefix` / `getPath` / `getText` / `click` all read or interact with the expected attributes / shadow elements)
+- [ ] (Verification of behaviour deferred to the integration-test tasks — `BreadcrumbsElement#getItems()` returns the slotted items in document order; `getCurrentItem()` returns the item with the `current` state attribute; `getItemByText` / `getItemByPath` return the matching item or `null`; `BreadcrumbsItemElement#isCurrent` / `hasPrefix` / `getPath` / `getText` / `getPrefixComponent` / `navigate` all read or interact with the expected attributes / shadow elements)
 
 **Acceptance criteria:**
 - [ ] `mvn clean install -DskipTests -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench` succeeds
@@ -332,7 +332,7 @@ Add a view `RouteParentPage` whose `@Route` URL would, under URL-prefix walking,
 **Requirements:** 8
 **Depends on:** 2, 8
 
-Add a view `IconBreadcrumbsPage` that constructs items via the prefix-component constructor overloads — at minimum: a home icon on the root, a folder icon on an intermediate item, and a current-page item without prefix. The IT asserts via `BreadcrumbsItemElement#hasPrefix()` and `getPrefixSlotContent()` that the prefix slot is wired and the icons render.
+Add a view `IconBreadcrumbsPage` that constructs items via the prefix-component constructor overloads — at minimum: a home icon on the root, a folder icon on an intermediate item, and a current-page item without prefix. The IT asserts via `BreadcrumbsItemElement#hasPrefix()` and `getPrefixComponent()` that the prefix slot is wired and the icons render.
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/IconBreadcrumbsPage.java` (create)
@@ -341,7 +341,7 @@ Add a view `IconBreadcrumbsPage` that constructs items via the prefix-component 
 **Tests:**
 - [ ] Items constructed with a prefix component carry `has-prefix` on their host element
 - [ ] The current-page item (constructed without prefix) does not carry `has-prefix`
-- [ ] `BreadcrumbsItemElement#getPrefixSlotContent()` resolves to the icon element passed to the constructor
+- [ ] `BreadcrumbsItemElement#getPrefixComponent()` resolves to the icon element passed to the constructor
 
 **Acceptance criteria:**
 - [ ] `mvn verify -am -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests -Dit.test='IconBreadcrumbsIT*' -DskipUnitTests` passes

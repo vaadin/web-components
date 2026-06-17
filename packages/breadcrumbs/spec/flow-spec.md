@@ -480,16 +480,6 @@ public class BreadcrumbsElement extends TestBenchElement {
     public BreadcrumbsItemElement getItemByText(String text);
 
     public BreadcrumbsItemElement getItemByPath(String path);
-
-    public boolean hasOverflow();                           // reads has-overflow attribute
-
-    public TestBenchElement getOverflowButton();            // shadow-DOM part="overflow-button"
-
-    public void openOverflowOverlay();                       // click overflow button
-
-    public TestBenchElement getOverflowOverlay();           // the <vaadin-breadcrumbs-overlay> element
-
-    public List<TestBenchElement> getOverflowItems();       // links inside the open overlay
 }
 ```
 
@@ -499,22 +489,22 @@ public class BreadcrumbsElement extends TestBenchElement {
 @Element("vaadin-breadcrumbs-item")
 public class BreadcrumbsItemElement extends TestBenchElement {
 
-    public String getText();
+    @Override
+    public String getText();                                // reads `textContent`
 
-    public String getPath();
+    public String getPath();                                // reads the `path` DOM attribute
 
     public boolean isCurrent();                             // reads `current` state attribute
 
     public boolean hasPrefix();                             // reads `has-prefix` state attribute
 
-    public TestBenchElement getPrefixSlotContent();
+    public TestBenchElement getPrefixComponent();           // the element slotted into slot="prefix"
 
-    @Override
-    public void click();                                    // clicks the anchor in shadow DOM
+    public void navigate();                                 // activates the shadow-DOM anchor
 }
 ```
 
-Queries use the same pattern as `SideNavElement` / `SideNavItemElement`: `$("vaadin-breadcrumbs-item").all()` for items, shadow-DOM CSS for parts and slotted content.
+Queries use the same pattern as `SideNavElement` / `SideNavItemElement`: `$(BreadcrumbsItemElement.class).all()` for items, `getDomAttribute(...)` / `hasAttribute(...)` for path and state attributes, and a `slot="prefix"` element query for the prefix component. `navigate()` clicks the shadow-DOM anchor via `executeScript`, since the Chrome driver cannot click shadow-DOM elements directly.
 
 ---
 
@@ -642,3 +632,7 @@ The default `HasText#setText` replaces all of the element's content, which would
 **Q: Why does `setPath(String)` validate the URL scheme, and why is there a separate `setUnsafePath`?**
 
 A `path` becomes the `href` of an anchor the browser follows, so a `javascript:` (or other non-allow-listed) scheme is a cross-site scripting (XSS) vector when the value comes from untrusted input. `setPath(String)` and the `String path` constructors reject such schemes at the setter, the same defense `SideNavItem.setPath` applies via Flow core's `UrlUtil.isSafeUrl`. `setUnsafePath(String)` is the explicit escape hatch for trusted, hard-coded URLs that must use a scheme outside the allow-list — making the bypass a named, greppable call rather than a silent flag. The `Class`-based overloads need no validation because router-generated URLs are never attacker-controlled.
+
+**Q: Why does the TestBench API expose no overflow helpers, and why `navigate()` instead of overriding `click()`?**
+
+The TestBench elements cover the breadcrumb's server-driven surface — items, their text, path, current/prefix state, and link activation — which is what Flow integration tests assert. Overflow collapse is purely client-side behavior with no Flow API behind it, so it is exercised by the web component's own tests rather than duplicated as TestBench helpers; the IT tasks have no overflow scenario. `navigate()` is a distinct method rather than an override of `TestBenchElement#click()` because activating the link goes through the shadow-DOM anchor via `executeScript` (the Chrome driver cannot click shadow-DOM elements directly), and a current item has no anchor — naming it `navigate()` signals that it follows a link rather than clicking the host element.
