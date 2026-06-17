@@ -144,6 +144,15 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
 
   /** @private */
   _onRevert() {
+    // Return focus to the field before closing the popover. The popover targets
+    // the badge for focus restoration, but `unmark()` removes the badge on
+    // revert, which would drop focus to the body. Moving focus to the field
+    // first makes the overlay skip its own restore — it only restores while
+    // focus is still inside the overlay (see OverlayFocusMixin._shouldRestoreFocus).
+    if (this._field) {
+      this._field.focus();
+    }
+
     const popover = this.querySelector('vaadin-popover');
     if (popover) {
       popover.opened = false;
