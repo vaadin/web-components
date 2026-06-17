@@ -232,6 +232,7 @@ public class BreadcrumbsItem extends Component
         implements HasText, HasEnabled, HasPrefix {
 
     // Constructors — mirror SideNavItem's overload set
+    // The String path overloads validate the URL scheme (throw IllegalArgumentException — see "Path validation").
     public BreadcrumbsItem(String text);                                                            // current page (no path)
     public BreadcrumbsItem(String text, String path);
     public BreadcrumbsItem(String text, Class<? extends Component> view);
@@ -248,7 +249,8 @@ public class BreadcrumbsItem extends Component
 
     // Path
     public String getPath();
-    public void setPath(String path);
+    public void setPath(String path);              // validates the URL scheme
+    public void setUnsafePath(String path);         // sets the path without scheme validation
     public void setPath(Class<? extends Component> view);
     public void setPath(Class<? extends Component> view, RouteParameters parameters);
 
@@ -269,6 +271,8 @@ public class BreadcrumbsItem extends Component
 **No click listener** — flow-api.md Discussion "Why no click listener on `BreadcrumbsItem`?" The web component renders an anchor; the Flow router intercepts clicks.
 
 **Path resolution.** `setPath(Class<? extends Component>)` and `setPath(Class, RouteParameters)` mirror `SideNavItem.setPath(...)` exactly: `RouteConfiguration.forRegistry(ComponentUtil.getRouter(this).getRegistry()).getUrl(view, params)` and the resulting string is written to the `path` attribute. Router-agnosticism: Flow wraps the routing resolution, but the anchor `<a href="...">` is still plain HTML — Flow does not intercept clicks at the component level.
+
+**Path validation.** `setPath(String)` and the constructors that take a `String path` throw `IllegalArgumentException` when the path's URL scheme is not on Flow's safe-scheme allow-list. `setUnsafePath(String)` writes the same `path` attribute but skips validation, for trusted hard-coded URLs. The `Class<? extends Component>` overloads resolve to router URLs and are not validated. See the Discussion entry "Why does `setPath(String)` validate the URL scheme…" for the rationale and shared mechanism.
 
 **No @Synchronize'd properties.** `path` is server-driven.
 
@@ -634,3 +638,7 @@ Query parameters describe the current navigation as a whole, not an individual r
 **Q: Why does `BreadcrumbsItem` override the `HasText` methods instead of inheriting them?**
 
 The default `HasText#setText` replaces all of the element's content, which would drop the prefix component (e.g. an icon) whenever the text is set. `setText(String)` / `getText()` / `bindText(Signal<String>) → SignalBinding<String>` are overridden to hold the text in a dedicated text node (managed via `SignalPropertySupport`, matching `Button` and `Badge`), so updating the text only touches that node and leaves the prefix in place. Routing through `SignalPropertySupport` also keeps the imperative and reactive paths consistent: `setText` throws once a `bindText` binding is active.
+
+**Q: Why does `setPath(String)` validate the URL scheme, and why is there a separate `setUnsafePath`?**
+
+A `path` becomes the `href` of an anchor the browser follows, so a `javascript:` (or other non-allow-listed) scheme is a cross-site scripting (XSS) vector when the value comes from untrusted input. `setPath(String)` and the `String path` constructors reject such schemes at the setter, the same defense `SideNavItem.setPath` applies via Flow core's `UrlUtil.isSafeUrl`. `setUnsafePath(String)` is the explicit escape hatch for trusted, hard-coded URLs that must use a scheme outside the allow-list — making the bypass a named, greppable call rather than a silent flag. The `Class`-based overloads need no validation because router-generated URLs are never attacker-controlled.
