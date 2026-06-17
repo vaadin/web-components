@@ -60,15 +60,20 @@ flow-components/
     │           └── FeatureFlagTest.java
     ├── vaadin-breadcrumbs-flow-integration-tests/
     │   ├── pom.xml
+    │   ├── vite.config.ts                              # copied from an existing IT module
     │   └── src/
+    │       ├── main/java/com/vaadin/flow/component/app/
+    │       │   └── TestAppShell.java                   # AppShellConfigurator (Lumo), copied from an existing IT module
     │       ├── main/java/com/vaadin/flow/component/breadcrumbs/tests/
     │       │   ├── ManualBreadcrumbsPage.java     # @Route for Mode.MANUAL
+    │       │   ├── DataDrivenBreadcrumbsPage.java      # @Route for a data-driven Mode.MANUAL trail (req 16)
     │       │   ├── RouterBreadcrumbsPage.java     # @Route for Mode.ROUTER
     │       │   ├── RouteParentPage.java               # @Route with @RouteParent
     │       │   ├── DynamicTitlePage.java              # HasDynamicTitle on current view
     │       │   └── IconBreadcrumbsPage.java       # prefix icons
     │       └── test/java/com/vaadin/flow/component/breadcrumbs/tests/
     │           ├── ManualBreadcrumbsIT.java
+    │           ├── DataDrivenBreadcrumbsIT.java
     │           ├── RouterBreadcrumbsIT.java
     │           ├── RouteParentIT.java
     │           └── IconBreadcrumbsIT.java
@@ -81,7 +86,7 @@ flow-components/
 
 Java package: `com.vaadin.flow.component.breadcrumbs`.
 
-Integration-tests module must include `src/main/resources/vaadin-featureflags.properties` enabling `com.vaadin.experimental.breadcrumbsComponent=true`, mirroring `vaadin-master-detail-layout-flow-integration-tests`.
+Integration-tests module must include `src/main/resources/vaadin-featureflags.properties` enabling `com.vaadin.experimental.breadcrumbsComponent=true`, mirroring `vaadin-master-detail-layout-flow-integration-tests`. Its `vite.config.ts` (frontend build config) and `TestAppShell` (an `AppShellConfigurator` applying the Lumo stylesheet) are copied unchanged from an existing integration-tests module.
 
 ---
 

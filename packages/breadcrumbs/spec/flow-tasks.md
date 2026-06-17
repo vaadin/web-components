@@ -33,7 +33,7 @@ Do NOT add tasks for features not in the spec.
 **Requirements:** —
 **Depends on:** —
 
-Create the three sub-modules (`-flow`, `-flow-integration-tests`, `-testbench`) with `pom.xml` wiring, empty class shells matching the annotations and `implements` clauses from the spec (empty bodies — Mode enum, constructors, `setI18n`, the theme-variant surface, and the `Mode.ROUTER` guard land in later tasks), and the full feature-flag plumbing (`BreadcrumbsFeatureFlagProvider`, ServiceLoader registration, `ExperimentalFeatureException`, `onAttach` check). At this point `Breadcrumbs` implements `HasSize, HasStyle, HasAriaLabel, HasComponentsOfType<BreadcrumbsItem>` — the child-management methods come as inherited defaults, with the `Mode.ROUTER` guard added in Task 6 — and gains `HasThemeVariant<BreadcrumbsVariant>` in Task 3. The IT module enables the feature flag via `src/main/resources/vaadin-featureflags.properties`. The smoke test instantiates `Breadcrumbs` (which currently does nothing in its body) and the `SerializableTest` round-trips it.
+Create the three sub-modules (`-flow`, `-flow-integration-tests`, `-testbench`) with `pom.xml` wiring, empty class shells matching the annotations and `implements` clauses from the spec (empty bodies — Mode enum, constructors, `setI18n`, the theme-variant surface, and the `Mode.ROUTER` guard land in later tasks), and the full feature-flag plumbing (`BreadcrumbsFeatureFlagProvider`, ServiceLoader registration, `ExperimentalFeatureException`, `onAttach` check). At this point `Breadcrumbs` implements `HasSize, HasStyle, HasAriaLabel, HasComponentsOfType<BreadcrumbsItem>` — the child-management methods come as inherited defaults, with the `Mode.ROUTER` guard added in Task 6 — and gains `HasThemeVariant<BreadcrumbsVariant>` in Task 3. The IT module enables the feature flag via `src/main/resources/vaadin-featureflags.properties`, and its `vite.config.ts` and `TestAppShell` are copied unchanged from an existing component's integration-tests module. The smoke test instantiates `Breadcrumbs` (which currently does nothing in its body) and the `SerializableTest` round-trips it.
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/pom.xml` (create)
@@ -48,6 +48,8 @@ Create the three sub-modules (`-flow`, `-flow-integration-tests`, `-testbench`) 
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/FeatureFlagTest.java` (create — asserts `ExperimentalFeatureException` is thrown when the flag is disabled, and not thrown when enabled)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/pom.xml` (create)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/resources/vaadin-featureflags.properties` (create — single line `com.vaadin.experimental.breadcrumbsComponent=true`)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/vite.config.ts` (create — copy from an existing component's integration-tests module)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/app/TestAppShell.java` (create — copy from an existing component's integration-tests module)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench/pom.xml` (create)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench/src/main/java/com/vaadin/flow/component/breadcrumbs/testbench/BreadcrumbsElement.java` (create — `@Element("vaadin-breadcrumbs")`, empty body)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-testbench/src/main/java/com/vaadin/flow/component/breadcrumbs/testbench/BreadcrumbsItemElement.java` (create — `@Element("vaadin-breadcrumbs-item")`, empty body)
@@ -261,7 +263,8 @@ This task also covers requirement 16 (routes dynamically supplying their breadcr
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/ManualBreadcrumbsPage.java` (create)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/DataDrivenBreadcrumbsPage.java` (create — `Mode.MANUAL` view that builds a trail from simulated loaded data, covering req 16)
-- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/ManualBreadcrumbsIT.java` (create — asserts both the static manual trail and the data-driven req-16 trail)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/ManualBreadcrumbsIT.java` (create — asserts the static manual trail and reactive add/remove)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/DataDrivenBreadcrumbsIT.java` (create — asserts the data-driven req-16 trail)
 
 **Tests:**
 - [ ] Initial render: `getItems()` returns three items whose `getText()` values match the seeded labels
@@ -272,7 +275,7 @@ This task also covers requirement 16 (routes dynamically supplying their breadcr
 - [ ] (req 16) The data-driven view renders a trail whose labels match the loaded data in order — including a data-derived ancestor with no backing `@Route` (e.g. `Enterprise`) and a data-derived current-page label (e.g. `Acme Corp`)
 
 **Acceptance criteria:**
-- [ ] `mvn verify -am -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests -Dit.test='ManualBreadcrumbsIT*' -DskipUnitTests` passes
+- [ ] `mvn verify -am -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests -Dit.test='ManualBreadcrumbsIT,DataDrivenBreadcrumbsIT' -DskipUnitTests` passes
 - [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
 
 ---
