@@ -258,13 +258,11 @@ Implement `BreadcrumbsElement` and `BreadcrumbsItemElement` per the spec — eve
 
 Add a Flow view `ManualBreadcrumbsPage` that constructs `new Breadcrumbs(Mode.MANUAL)`, adds three items declaratively (one with a path-class, one with a string path, one with no path representing the current page), and exposes test affordances for the IT (`@Id` buttons to add / remove items at runtime to exercise reactive updates). The IT class `ManualBreadcrumbsIT` opens the view, uses `BreadcrumbsElement` + `BreadcrumbsItemElement` to assert the rendered trail, then exercises an add and a remove to confirm `Mode.MANUAL` reactive updates flow to the DOM.
 
-This task also covers requirement 16 (routes dynamically supplying their breadcrumbs contribution). Add a second `Mode.MANUAL` scenario — a view that simulates loading domain data and builds a trail containing a data-derived ancestor that has **no backing `@Route`** plus a data-derived current-page label (e.g. `Home › Customers › Enterprise › Acme Corp`, where `Enterprise` is the loaded customer's segment and `Acme Corp` is the loaded customer name). This is the part of req 16 that `Mode.ROUTER` cannot express — `getRouteHierarchy` only yields items for matched routes — so the manual-construction path is what satisfies it. The dynamic current-view label half of req 16 is already exercised by Task 10's `HasDynamicTitle` case.
+This task also covers requirement 16 (routes dynamically supplying their breadcrumb contribution). `ManualBreadcrumbsPage` builds the trail from plain `BreadcrumbsItem`s with application-supplied labels and paths, so an application can derive any ancestor or current-page label from runtime data — including ancestors with no backing `@Route`, which `Mode.ROUTER` cannot express since `getRouteHierarchy` only yields items for matched routes. The dynamic current-view label half of req 16 is exercised by Task 10's `HasDynamicTitle` case.
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/ManualBreadcrumbsPage.java` (create)
-- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/DataDrivenBreadcrumbsPage.java` (create — `Mode.MANUAL` view that builds a trail from simulated loaded data, covering req 16)
-- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/ManualBreadcrumbsIT.java` (create — asserts the static manual trail and reactive add/remove)
-- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/DataDrivenBreadcrumbsIT.java` (create — asserts the data-driven req-16 trail)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/ManualBreadcrumbsIT.java` (create — asserts the manual trail, reactive add/remove, and item navigation)
 
 **Tests:**
 - [ ] Initial render: `getItems()` returns three items whose `getText()` values match the seeded labels
@@ -272,10 +270,10 @@ This task also covers requirement 16 (routes dynamically supplying their breadcr
 - [ ] The last item's `getPath()` is empty / null; the others return their assigned paths
 - [ ] Clicking the "add item" affordance inserts a new item into the trail, observable via `BreadcrumbsElement#getItems()`
 - [ ] Clicking the "remove item" affordance removes the matching item
-- [ ] (req 16) The data-driven view renders a trail whose labels match the loaded data in order — including a data-derived ancestor with no backing `@Route` (e.g. `Enterprise`) and a data-derived current-page label (e.g. `Acme Corp`)
+- [ ] Activating a linked item via `BreadcrumbsItemElement#navigate()` navigates to that item's path
 
 **Acceptance criteria:**
-- [ ] `mvn verify -am -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests -Dit.test='ManualBreadcrumbsIT,DataDrivenBreadcrumbsIT' -DskipUnitTests` passes
+- [ ] `mvn verify -am -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests -Dit.test='ManualBreadcrumbsIT*' -DskipUnitTests` passes
 - [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
 
 ---
