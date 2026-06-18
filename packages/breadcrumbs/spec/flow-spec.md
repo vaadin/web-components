@@ -54,7 +54,7 @@ flow-components/
     │           ├── BreadcrumbsTest.java
     │           ├── BreadcrumbsModeTest.java
     │           ├── BreadcrumbsItemTest.java
-    │           ├── BreadcrumbsVariantTest.java
+    │           ├── BreadcrumbsItemSignalTest.java
     │           ├── BreadcrumbsSerializableTest.java
     │           ├── BreadcrumbsI18nTest.java
     │           └── FeatureFlagTest.java
@@ -335,7 +335,7 @@ public enum BreadcrumbsVariant implements ThemeVariant {
 
 Every value maps to a `theme` token the web component actually honours, as guidelines/09-theming.md requires.
 
-A `BreadcrumbsVariantTest` maps each enum value to its expected token (guidelines/12-testing.md).
+`BreadcrumbsTest` asserts that `Breadcrumbs` implements `HasThemeVariant` (guidelines/12-testing.md).
 
 ---
 
