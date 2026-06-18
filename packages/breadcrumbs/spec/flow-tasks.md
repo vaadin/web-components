@@ -74,11 +74,12 @@ Create the three sub-modules (`-flow`, `-flow-integration-tests`, `-testbench`) 
 **Requirements:** 1, 2, 8
 **Depends on:** 1
 
-Implement all seven `BreadcrumbsItem` constructors (mirroring `SideNavItem`'s overload set), the `path` accessors with the three setter overloads, and verify the inherited `HasText` / `HasEnabled` / `HasPrefix` surface works. `setPath(Class<? extends Component>)` and `setPath(Class, RouteParameters)` resolve via `RouteConfiguration.forRegistry(ComponentUtil.getRouter(this).getRegistry()).getUrl(view, params)` exactly like `SideNavItem`. No events, no `@Synchronize`'d properties.
+Implement all seven `BreadcrumbsItem` constructors (mirroring `SideNavItem`'s overload set), the `path` accessors with the three setter overloads, and verify the `HasText` / `HasEnabled` / `HasPrefix` surface works. `setPath(Class<? extends Component>)` and `setPath(Class, RouteParameters)` resolve via `RouteConfiguration.forRegistry(ComponentUtil.getRouter(this).getRegistry()).getUrl(view, params)` exactly like `SideNavItem`. A `BreadcrumbsItemSignalTest` covers `bindText` (the binding updates the text; `setText` throws while it is active). No events, no `@Synchronize`'d properties.
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/BreadcrumbsItem.java` (modify)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsItemTest.java` (create)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsItemSignalTest.java` (create — `bindText` signal binding)
 
 **Tests:**
 - [ ] `new BreadcrumbsItem("Home")` sets the element's text content to "Home" and does not set the `path` attribute
@@ -89,6 +90,7 @@ Implement all seven `BreadcrumbsItem` constructors (mirroring `SideNavItem`'s ov
 - [ ] `new BreadcrumbsItem("Home", HomeView.class, homeIcon)` sets the prefix slot to `homeIcon` and the path attribute to the view's URL
 - [ ] `setPrefixComponent(component)` then `getPrefixComponent()` returns the same component
 - [ ] `setEnabled(false)` reflects the `disabled` attribute on the host
+- [ ] `bindText(signal)` binds the item's text reactively; `setText` throws while the binding is active
 
 **Acceptance criteria:**
 - [ ] All new tests pass; existing tests still pass
@@ -107,11 +109,11 @@ Add the `BreadcrumbsVariant` enum implementing `ThemeVariant` with `SLASH("slash
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/BreadcrumbsVariant.java` (create)
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/main/java/com/vaadin/flow/component/breadcrumbs/Breadcrumbs.java` (modify — add `HasThemeVariant<BreadcrumbsVariant>` to the `implements` clause)
-- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsVariantTest.java` (create — enum→token mapping per guidelines/09-theming.md)
+- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/BreadcrumbsTest.java` (modify — assert `Breadcrumbs` implements `HasThemeVariant`)
 
 **Tests:**
 - [ ] `BreadcrumbsVariant.SLASH.getVariantName()` returns `"slash"`, `LUMO_PRIMARY` returns `"primary"`, `AURA_ACCENT` returns `"accent"`
-- [ ] `BreadcrumbsVariantTest` maps every enum value to its expected `theme` token
+- [ ] `BreadcrumbsTest` asserts `Breadcrumbs` implements `HasThemeVariant`
 - [ ] `addThemeVariants(BreadcrumbsVariant.SLASH)` adds `slash` to the host `theme` attribute
 - [ ] `removeThemeVariants(BreadcrumbsVariant.SLASH)` removes it
 - [ ] `setThemeVariants(BreadcrumbsVariant.SLASH)` replaces any previously set theme tokens
