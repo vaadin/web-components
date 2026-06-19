@@ -65,16 +65,9 @@ flow-components/
     │       ├── main/java/com/vaadin/flow/component/app/
     │       │   └── TestAppShell.java                   # AppShellConfigurator (Lumo), copied from an existing IT module
     │       ├── main/java/com/vaadin/flow/component/breadcrumbs/tests/
-    │       │   ├── ManualBreadcrumbsPage.java     # @Route for Mode.MANUAL
-    │       │   ├── RouterBreadcrumbsPage.java     # @Route for Mode.ROUTER
-    │       │   ├── RouteParentPage.java               # @Route with @RouteParent
-    │       │   ├── DynamicTitlePage.java              # HasDynamicTitle on current view
-    │       │   └── IconBreadcrumbsPage.java       # prefix icons
+    │       │   └── ManualBreadcrumbsPage.java     # @Route for Mode.MANUAL
     │       └── test/java/com/vaadin/flow/component/breadcrumbs/tests/
-    │           ├── ManualBreadcrumbsIT.java
-    │           ├── RouterBreadcrumbsIT.java
-    │           ├── RouteParentIT.java
-    │           └── IconBreadcrumbsIT.java
+    │           └── ManualBreadcrumbsIT.java
     └── vaadin-breadcrumbs-testbench/
         ├── pom.xml
         └── src/main/java/com/vaadin/flow/component/breadcrumbs/testbench/

@@ -11,7 +11,7 @@ Tasks are pointers into the spec, not a second copy of it. The spec sections fie
 
 External Flow core dependencies (not implemented by these tasks):
 - `com.vaadin.flow.component.HasComponentsOfType<T>` — Flow core (available; implemented in Task 1, guarded in Task 6)
-- `@RouteParent`, `RouteConfiguration#getRouteHierarchy(...)`, and instance-free titles — Flow core (required by Task 7 + Task 11)
+- `@RouteParent`, `RouteConfiguration#getRouteHierarchy(...)`, and instance-free titles — Flow core (required by Task 7)
 
 Do NOT reorder tasks without verifying the dependency graph.
 Do NOT add tasks for features not in the spec.
@@ -260,7 +260,7 @@ Implement `BreadcrumbsElement` and `BreadcrumbsItemElement` per the spec. `Bread
 
 Add a Flow view `ManualBreadcrumbsPage` that constructs `new Breadcrumbs(Mode.MANUAL)`, adds three items declaratively (one with a path-class, one with a string path, one with no path representing the current page), and exposes test affordances for the IT (`@Id` buttons to add / remove items at runtime to exercise reactive updates). The IT class `ManualBreadcrumbsIT` opens the view, uses `BreadcrumbsElement` + `BreadcrumbsItemElement` to assert the rendered trail, then exercises an add and a remove to confirm `Mode.MANUAL` reactive updates flow to the DOM.
 
-This task also covers requirement 16 (routes dynamically supplying their breadcrumb contribution). `ManualBreadcrumbsPage` builds the trail from plain `BreadcrumbsItem`s with application-supplied labels and paths, so an application can derive any ancestor or current-page label from runtime data — including ancestors with no backing `@Route`, which `Mode.ROUTER` cannot express since `getRouteHierarchy` only yields items for matched routes. The dynamic current-view label half of req 16 is exercised by Task 10's `HasDynamicTitle` case.
+This task also covers requirement 16 (routes dynamically supplying their breadcrumb contribution). `ManualBreadcrumbsPage` builds the trail from plain `BreadcrumbsItem`s with application-supplied labels and paths, so an application can derive any ancestor or current-page label from runtime data — including ancestors with no backing `@Route`, which `Mode.ROUTER` cannot express since `getRouteHierarchy` only yields items for matched routes. The dynamic current-view label half of req 16 is exercised by the `Mode.ROUTER` unit tests' `HasDynamicTitle` case.
 
 **Files:**
 - `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/ManualBreadcrumbsPage.java` (create)
@@ -280,90 +280,18 @@ This task also covers requirement 16 (routes dynamically supplying their breadcr
 
 ---
 
-## Task 10: Router-mode integration test view + IT
-
-**Spec sections:** Key Design Decisions §3 + §5, Component Classes → `Breadcrumbs` (Router mode wiring), `@RouteParent` Annotation → How `Breadcrumbs` builds the trail
-**Requirements:** 13
-**Depends on:** 7, 8
-
-Add a small route hierarchy of four `@Route`'d views, each with a `@PageTitle` (and one with `HasDynamicTitle` to cover the dynamic-title path) and `add(new Breadcrumbs())` in its constructor — defaulting to `Mode.ROUTER`. Navigate from the IT, assert the trail matches the route hierarchy, and verify the current item's text reflects `HasDynamicTitle` when the view implements it.
-
-**Files:**
-- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/RouterBreadcrumbsPage.java` (create — root + intermediate + leaf views in the same file)
-- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/DynamicTitlePage.java` (create — leaf view implementing `HasDynamicTitle`)
-- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/RouterBreadcrumbsIT.java` (create)
-
-**Tests:**
-- [ ] Navigating to the root view renders a one-item trail showing the root's `@PageTitle`
-- [ ] Navigating to a leaf view renders a trail of all matched ancestors plus the leaf, in root-first order, each labeled by its `@PageTitle`
-- [ ] Navigating to a view implementing `HasDynamicTitle` shows the dynamic title on the last item, not the class `@PageTitle`
-- [ ] Each ancestor item's `getPath()` resolves to a URL the IT can navigate to and successfully load
-- [ ] The last item's `isCurrent()` returns `true` and `getPath()` is empty / null
-
-**Acceptance criteria:**
-- [ ] `mvn verify -am -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests -Dit.test='RouterBreadcrumbsIT*' -DskipUnitTests` passes
-- [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
-
----
-
-## Task 11: `@RouteParent` integration test view + IT
-
-**Spec sections:** Key Design Decisions §4 + §5, `@RouteParent` Annotation → How `Breadcrumbs` builds the trail
-**Requirements:** 15
-**Depends on:** 7, 8
-
-Add a view `RouteParentPage` whose `@Route` URL would, under URL-prefix walking, resolve to one parent — but which carries `@RouteParent(OtherView.class)` to declare a different conceptual parent. The IT navigates to the view and asserts that the rendered trail walks through the declared parent, not the URL-derived one. This task verifies `RouteConfiguration#getRouteHierarchy`'s `@RouteParent`-first behaviour end-to-end through the breadcrumbs.
-
-**Files:**
-- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/RouteParentPage.java` (create — declared-parent view + the conceptual parent it points to)
-- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/RouteParentIT.java` (create)
-
-**Tests:**
-- [ ] Navigating to the `@RouteParent`-annotated view renders the declared parent in the trail, not the URL-prefix parent
-- [ ] Each ancestor item's `getPath()` is navigable
-- [ ] The walker does not duplicate items when the declared parent and the URL-prefix parent would resolve to the same class
-
-**Acceptance criteria:**
-- [ ] `mvn verify -am -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests -Dit.test='RouteParentIT*' -DskipUnitTests` passes
-- [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
-
----
-
-## Task 12: Icon (prefix-component) integration test view + IT
-
-**Spec sections:** Component Classes → `BreadcrumbsItem` (constructors ending in `Component prefixComponent`)
-**Requirements:** 8
-**Depends on:** 2, 8
-
-Add a view `IconBreadcrumbsPage` that constructs items via the prefix-component constructor overloads — at minimum: a home icon on the root, a folder icon on an intermediate item, and a current-page item without prefix. The IT asserts via `BreadcrumbsItemElement#hasPrefix()` and `getPrefixComponent()` that the prefix slot is wired and the icons render.
-
-**Files:**
-- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/main/java/com/vaadin/flow/component/breadcrumbs/tests/IconBreadcrumbsPage.java` (create)
-- `vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests/src/test/java/com/vaadin/flow/component/breadcrumbs/tests/IconBreadcrumbsIT.java` (create)
-
-**Tests:**
-- [ ] Items constructed with a prefix component carry `has-prefix` on their host element
-- [ ] The current-page item (constructed without prefix) does not carry `has-prefix`
-- [ ] `BreadcrumbsItemElement#getPrefixComponent()` resolves to the icon element passed to the constructor
-
-**Acceptance criteria:**
-- [ ] `mvn verify -am -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow-integration-tests -Dit.test='IconBreadcrumbsIT*' -DskipUnitTests` passes
-- [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean
-
----
-
-## Task 13: Final validation
+## Task 10: Final validation
 
 **Spec sections:** All
 **Requirements:** —
-**Depends on:** 3, 4, 9, 10, 11, 12
+**Depends on:** 3, 4, 9
 
 Final clean-up and validation pass before the module is merge-ready. Run formatting / static analysis / unit tests / integration tests across the whole new module, and update repo-level documentation: add the new module to `flow-components/README.md`'s component list if the project convention requires it, and confirm `flow-components-bom` references the new artefact if the BOM aggregates modules. Verify that no `dispatchEvent` was added on the Flow side (the spec lists zero events; the test agent's earlier feature-flag test already covers attach-time enforcement).
 
 **Files:**
 - `flow-components/README.md` (modify if convention requires component listing)
 - `flow-components-bom/pom.xml` (modify if BOM aggregates module artefacts)
-- All files touched by Tasks 1–12 (validation only — no edits expected)
+- All files touched by Tasks 1–9 (validation only — no edits expected)
 
 **Tests:**
 - [ ] `mvn test -pl vaadin-breadcrumbs-flow-parent/vaadin-breadcrumbs-flow` — full unit test suite passes
@@ -376,3 +304,16 @@ Final clean-up and validation pass before the module is merge-ready. Run formatt
 - [ ] All integration tests pass
 - [ ] `mvn spotless:apply` and `mvn checkstyle:check` clean across the whole new module
 - [ ] Documentation references (README, BOM) are accurate
+
+---
+
+## Discussion
+
+**Q: Why is there only one integration test (manual mode), and no router-mode, `@RouteParent`, or prefix-component ITs?**
+
+Integration tests are scoped to verifying that the component renders and the TestBench API works end-to-end; the manual-mode IT (Task 9) covers that, exercising the trail, reactive add/remove, and item navigation. The feature behavior behind the other candidate ITs is already covered by unit tests, and none of it changes the server/client integration the IT would re-exercise:
+
+- `Mode.ROUTER` trail building — `AfterNavigationListener` wiring, `RouteConfiguration#getRouteHierarchy` walking, `@RouteParent` resolution, and `HasDynamicTitle` precedence — is covered by the `Breadcrumbs` unit tests (Task 7), and router mode renders the same `<vaadin-breadcrumbs-item>` DOM through the same path as manual mode.
+- The prefix component (`setPrefixComponent` / `has-prefix`) is covered by `BreadcrumbsItemTest`; the matching TestBench methods (`hasPrefix()` / `getPrefixComponent()`) are thin attribute / slot reads of the same kind the manual IT already exercises, and comparable components (e.g. Side Nav) ship prefix support without a dedicated IT.
+
+Requirements 8, 13, and 15 stay covered by the unit tests.
