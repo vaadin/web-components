@@ -136,27 +136,35 @@ export declare const {name}Styles: CSSResult;
 
 ## Typings tests
 
-Each package has `test/typings/{name}.types.ts`, type-checked by `tsc
---noEmit` from `yarn lint:types`. Their job is to lock in the public type
-surface — that mixin classes show up on the element, that events have the
-expected `detail` shape, and that property types are right.
+Each package has `test/typings/{name}.types.ts`, type-checked by `tsc --noEmit`
+from `yarn lint:types`. Their job is to lock in the public type surface — that
+mixin classes show up on the element, that events have the expected `detail`
+shape, and that property types are right.
 
 ```ts
 import '../../vaadin-{name}.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { {Name}MixinClass } from '../../src/vaadin-{name}-mixin.js';
+import type { {Name}I18n, {Name}ValueChangedEvent } from '../../src/vaadin-{name}.js';
 
 const assertType = <TExpected>(value: TExpected) => value;
 const element = document.createElement('vaadin-{name}');
 
+// Properties
 assertType<string>(element.value);
+assertType<{Name}I18n>(element.i18n);
+
+// Methods
+assertType<() => boolean>(element.checkValidity);
+assertType<() => boolean>(element.validate);
+
+// Mixins
 assertType<ElementMixinClass>(element);
-assertType<ThemableMixinClass>(element);
 assertType<{Name}MixinClass>(element);
 
+// Events
 element.addEventListener('value-changed', (event) => {
-  assertType<CustomEvent>(event);
+  assertType<{Name}ValueChangedEvent>(event);
   assertType<string>(event.detail.value);
 });
 ```
