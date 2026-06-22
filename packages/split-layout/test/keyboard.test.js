@@ -18,11 +18,6 @@ describe('keyboard', () => {
   }
 
   ['horizontal', 'vertical'].forEach((orientation) => {
-    const vertical = orientation === 'vertical';
-    // Keys that grow / shrink the primary content element in this orientation.
-    const growKey = vertical ? 'ArrowDown' : 'ArrowRight';
-    const shrinkKey = vertical ? 'ArrowUp' : 'ArrowLeft';
-
     describe(orientation, () => {
       beforeEach(async () => {
         // Empty content so both panes have equal intrinsic size (flex-basis: auto).
@@ -40,44 +35,50 @@ describe('keyboard', () => {
         splitter.focus();
       });
 
-      it('should set the separator role and value attributes', () => {
-        expect(splitter.getAttribute('role')).to.equal('separator');
+      it('should set the slider role and value attributes', () => {
+        expect(splitter.getAttribute('role')).to.equal('slider');
         expect(splitter.getAttribute('tabindex')).to.equal('0');
         expect(splitter.getAttribute('aria-valuemin')).to.equal('0');
         expect(splitter.getAttribute('aria-valuemax')).to.equal('100');
         expect(splitter.getAttribute('aria-valuenow')).to.equal('50');
+        expect(splitter.getAttribute('aria-valuetext')).to.equal('50%');
       });
 
-      it('should set aria-orientation to the axis of motion', () => {
-        expect(splitter.getAttribute('aria-orientation')).to.equal(vertical ? 'horizontal' : 'vertical');
+      it('should not set aria-orientation', () => {
+        expect(splitter.hasAttribute('aria-orientation')).to.be.false;
       });
 
-      it('should grow the primary element on the grow key', async () => {
+      it('should grow the primary element on Arrow Down', async () => {
         const before = size(first, orientation);
-        await sendKeys({ press: growKey });
+        await sendKeys({ press: 'ArrowDown' });
         expect(size(first, orientation)).to.be.closeTo(before + 16, 1);
       });
 
-      it('should shrink the primary element on the shrink key', async () => {
+      it('should grow the primary element on Arrow Right', async () => {
         const before = size(first, orientation);
-        await sendKeys({ press: shrinkKey });
+        await sendKeys({ press: 'ArrowRight' });
+        expect(size(first, orientation)).to.be.closeTo(before + 16, 1);
+      });
+
+      it('should shrink the primary element on Arrow Up', async () => {
+        const before = size(first, orientation);
+        await sendKeys({ press: 'ArrowUp' });
         expect(size(first, orientation)).to.be.closeTo(before - 16, 1);
       });
 
-      it('should ignore arrow keys on the cross axis', async () => {
+      it('should shrink the primary element on Arrow Left', async () => {
         const before = size(first, orientation);
-        await sendKeys({ press: vertical ? 'ArrowRight' : 'ArrowDown' });
-        await sendKeys({ press: vertical ? 'ArrowLeft' : 'ArrowUp' });
-        expect(size(first, orientation)).to.equal(before);
+        await sendKeys({ press: 'ArrowLeft' });
+        expect(size(first, orientation)).to.be.closeTo(before - 16, 1);
       });
 
       it('should resize by 10% of the available size on Page keys', async () => {
         const step = available() * 0.1;
         const before = size(first, orientation);
-        await sendKeys({ press: 'PageUp' });
+        await sendKeys({ press: 'PageDown' });
         expect(size(first, orientation)).to.be.closeTo(before + step, 1);
-        await sendKeys({ press: 'PageDown' });
-        await sendKeys({ press: 'PageDown' });
+        await sendKeys({ press: 'PageUp' });
+        await sendKeys({ press: 'PageUp' });
         expect(size(first, orientation)).to.be.closeTo(before - step, 1);
       });
 
@@ -85,41 +86,43 @@ describe('keyboard', () => {
         await sendKeys({ press: 'Home' });
         expect(size(first, orientation)).to.equal(0);
         expect(splitter.getAttribute('aria-valuenow')).to.equal('0');
+        expect(splitter.getAttribute('aria-valuetext')).to.equal('0%');
       });
 
       it('should collapse the secondary element on End', async () => {
         await sendKeys({ press: 'End' });
         expect(size(second, orientation)).to.equal(0);
         expect(splitter.getAttribute('aria-valuenow')).to.equal('100');
+        expect(splitter.getAttribute('aria-valuetext')).to.equal('100%');
       });
 
       it('should not overshoot when accumulating past the boundaries', async () => {
         for (let i = 0; i < 30; i++) {
-          await sendKeys({ press: growKey });
+          await sendKeys({ press: 'ArrowDown' });
         }
         expect(size(second, orientation)).to.equal(0);
         expect(splitter.getAttribute('aria-valuenow')).to.equal('100');
 
         // Reversing one step immediately moves off the boundary.
-        await sendKeys({ press: shrinkKey });
+        await sendKeys({ press: 'ArrowUp' });
         expect(size(first, orientation)).to.be.below(available());
         expect(Number(splitter.getAttribute('aria-valuenow'))).to.be.below(100);
       });
 
       it('should respect the CSS max size limit', async () => {
-        first.style[vertical ? 'maxHeight' : 'maxWidth'] = '120px';
+        first.style[orientation === 'vertical' ? 'maxHeight' : 'maxWidth'] = '120px';
         for (let i = 0; i < 10; i++) {
-          await sendKeys({ press: growKey });
+          await sendKeys({ press: 'ArrowDown' });
         }
         expect(size(first, orientation)).to.be.closeTo(120, 1);
 
         // Reversing works immediately even after clamping.
-        await sendKeys({ press: shrinkKey });
+        await sendKeys({ press: 'ArrowUp' });
         expect(size(first, orientation)).to.be.below(120);
       });
 
       it('should update aria-valuenow after resizing', async () => {
-        await sendKeys({ press: growKey });
+        await sendKeys({ press: 'ArrowDown' });
         const expected = Math.round((size(first, orientation) / available()) * 100);
         expect(splitter.getAttribute('aria-valuenow')).to.equal(`${expected}`);
       });
@@ -127,9 +130,9 @@ describe('keyboard', () => {
       it('should dispatch a single splitter-dragend after a burst of presses', async () => {
         const spy = sinon.spy();
         splitLayout.addEventListener('splitter-dragend', spy);
-        await sendKeys({ press: growKey });
-        await sendKeys({ press: growKey });
-        await sendKeys({ press: growKey });
+        await sendKeys({ press: 'ArrowDown' });
+        await sendKeys({ press: 'ArrowDown' });
+        await sendKeys({ press: 'ArrowDown' });
         await aTimeout(250);
         expect(spy.calledOnce).to.be.true;
       });
@@ -159,6 +162,15 @@ describe('keyboard', () => {
       await sendKeys({ press: 'ArrowLeft' });
       expect(size(first, 'horizontal')).to.be.closeTo(before + 16, 1);
     });
+
+    it('should not invert vertical arrow keys', async () => {
+      const before = size(first, 'horizontal');
+      await sendKeys({ press: 'ArrowUp' });
+      expect(size(first, 'horizontal')).to.be.closeTo(before - 16, 1);
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'ArrowDown' });
+      expect(size(first, 'horizontal')).to.be.closeTo(before + 16, 1);
+    });
   });
 
   describe('runtime orientation change', () => {
@@ -173,11 +185,11 @@ describe('keyboard', () => {
       splitter = splitLayout.$.splitter;
     });
 
-    it('should flip aria-orientation and recompute aria-valuenow', async () => {
-      expect(splitter.getAttribute('aria-orientation')).to.equal('vertical');
+    it('should recompute aria-valuenow after orientation change', async () => {
+      expect(splitter.hasAttribute('aria-orientation')).to.be.false;
       splitLayout.orientation = 'vertical';
       await nextFrame();
-      expect(splitter.getAttribute('aria-orientation')).to.equal('horizontal');
+      expect(splitter.hasAttribute('aria-orientation')).to.be.false;
       expect(splitter.getAttribute('aria-valuenow')).to.equal('50');
     });
   });
@@ -253,7 +265,7 @@ describe('keyboard', () => {
     });
 
     it('should keep role and tabindex but not resize', async () => {
-      expect(splitter.getAttribute('role')).to.equal('separator');
+      expect(splitter.getAttribute('role')).to.equal('slider');
       expect(splitter.getAttribute('tabindex')).to.equal('0');
       const first = splitLayout.querySelector('#first');
       const before = first.getBoundingClientRect().width;

@@ -118,44 +118,34 @@ export const SplitLayoutMixin = (superClass) =>
      */
     _onKeyDown(event) {
       if (event.composedPath()[0] !== this.$.splitter || !this._primaryChild || !this._secondaryChild) {
+        super._onKeyDown(event);
         return;
       }
 
-      const vertical = this.orientation === 'vertical';
       const { container, primary } = this.__getSizes();
       const pageStep = container * PAGE_STEP;
       let newPrimary = primary;
 
+      // Keys move the splitter in their visual direction: Down / Right grow the
+      // primary content element, Up / Left shrink it. RTL flips Left / Right only.
       switch (event.key) {
-        case 'ArrowRight':
-          if (vertical) {
-            return;
-          }
-          newPrimary += this.__isRTL ? -ARROW_STEP : ARROW_STEP;
-          break;
-        case 'ArrowLeft':
-          if (vertical) {
-            return;
-          }
-          newPrimary += this.__isRTL ? ARROW_STEP : -ARROW_STEP;
-          break;
         case 'ArrowDown':
-          if (!vertical) {
-            return;
-          }
-          newPrimary += ARROW_STEP;
+          newPrimary = primary + ARROW_STEP;
           break;
         case 'ArrowUp':
-          if (!vertical) {
-            return;
-          }
-          newPrimary -= ARROW_STEP;
+          newPrimary = primary - ARROW_STEP;
           break;
-        case 'PageUp':
-          newPrimary += pageStep;
+        case 'ArrowRight':
+          newPrimary = primary + (this.__isRTL ? -ARROW_STEP : ARROW_STEP);
+          break;
+        case 'ArrowLeft':
+          newPrimary = primary + (this.__isRTL ? ARROW_STEP : -ARROW_STEP);
           break;
         case 'PageDown':
-          newPrimary -= pageStep;
+          newPrimary = primary + pageStep;
+          break;
+        case 'PageUp':
+          newPrimary = primary - pageStep;
           break;
         case 'Home':
           newPrimary = 0;
@@ -164,6 +154,7 @@ export const SplitLayoutMixin = (superClass) =>
           newPrimary = container;
           break;
         default:
+          super._onKeyDown(event);
           return;
       }
 

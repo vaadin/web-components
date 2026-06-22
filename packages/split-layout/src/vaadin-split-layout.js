@@ -165,12 +165,17 @@ import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
  *
  * The splitter is focusable and can be moved with the keyboard:
  *
+ * The splitter behaves like a slider whose value is the primary content element
+ * size. All arrow keys work in both orientations:
+ *
  * Key                         | Action
  * ----------------------------|--------------
- * `Arrow Right` / `Arrow Left`| Move a horizontal splitter (resizes by a small step)
- * `Arrow Down` / `Arrow Up`   | Move a vertical splitter (resizes by a small step)
- * `Page Up` / `Page Down`     | Resize by a larger step (10% of the available size)
+ * `Arrow Up` / `Arrow Right`  | Grow the primary content element by a small step
+ * `Arrow Down` / `Arrow Left` | Shrink the primary content element by a small step
+ * `Page Up` / `Page Down`     | Grow / shrink by a larger step (10% of the available size)
  * `Home` / `End`              | Collapse the primary / secondary content element
+ *
+ * In right-to-left layouts, `Arrow Left` and `Arrow Right` are inverted.
  *
  * @fires {Event} splitter-dragend - Fired after resizing the splitter via pointer or keyboard has ended.
  *
@@ -199,13 +204,13 @@ class SplitLayout extends SplitLayoutMixin(
       <div
         part="splitter"
         id="splitter"
-        role="separator"
+        role="slider"
         tabindex="0"
-        aria-label="Resize"
+        aria-label="Resize separator"
         aria-valuemin="0"
         aria-valuemax="100"
         aria-valuenow="${ifDefined(this.__valueNow)}"
-        aria-orientation="${this.orientation === 'vertical' ? 'horizontal' : 'vertical'}"
+        aria-valuetext="${ifDefined(this.__valueNow === undefined ? undefined : `${this.__valueNow}%`)}"
         @focusin="${this.__updateValueNow}"
       >
         <div part="handle"></div>

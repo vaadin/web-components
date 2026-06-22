@@ -14,13 +14,12 @@ snapshots["vaadin-split-layout shadow"] =
 >
 </slot>
 <div
-  aria-label="Resize"
-  aria-orientation="vertical"
+  aria-label="Resize separator"
   aria-valuemax="100"
   aria-valuemin="0"
   id="splitter"
   part="splitter"
-  role="separator"
+  role="slider"
   style="touch-action: none;"
   tabindex="0"
 >
