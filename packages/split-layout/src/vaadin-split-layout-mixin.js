@@ -60,8 +60,8 @@ export const SplitLayoutMixin = (superClass) =>
 
       const splitter = this.$.splitter;
       addListener(splitter, 'track', this._onHandleTrack.bind(this));
-      addListener(splitter, 'down', this._setPointerEventsNone.bind(this));
-      addListener(splitter, 'up', this._restorePointerEvents.bind(this));
+      addListener(splitter, 'down', this.__onSplitterDown.bind(this));
+      addListener(splitter, 'up', this.__onSplitterUp.bind(this));
     }
 
     /** @protected */
@@ -256,7 +256,7 @@ export const SplitLayoutMixin = (superClass) =>
     }
 
     /** @private */
-    _setPointerEventsNone(event) {
+    __onSplitterDown(event) {
       if (!this._primaryChild || !this._secondaryChild) {
         return;
       }
@@ -269,7 +269,9 @@ export const SplitLayoutMixin = (superClass) =>
     }
 
     /** @private */
-    _restorePointerEvents() {
+    __onSplitterUp() {
+      this.$.splitter.focus({ preventScroll: true });
+
       if (!this._primaryChild || !this._secondaryChild) {
         return;
       }

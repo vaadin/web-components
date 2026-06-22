@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-split-layout.js';
@@ -237,6 +237,35 @@ describe('keyboard', () => {
       const before = first.getBoundingClientRect().width;
       await sendKeys({ press: 'ArrowRight' });
       expect(first.getBoundingClientRect().width).to.equal(before);
+    });
+  });
+
+  describe('pointer focus', () => {
+    beforeEach(async () => {
+      splitLayout = fixtureSync(`
+        <vaadin-split-layout style="width: ${initialSize}px; height: ${initialSize}px;">
+          <div id="first"></div>
+          <div id="second"></div>
+        </vaadin-split-layout>
+      `);
+      await nextRender();
+      splitter = splitLayout.$.splitter;
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('should focus the splitter when clicked', async () => {
+      expect(splitLayout.hasAttribute('focused')).to.be.false;
+      await sendMouseToElement({ type: 'click', element: splitter });
+      expect(document.activeElement).to.equal(splitLayout);
+      expect(splitLayout.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should not set focus-ring when clicked', async () => {
+      await sendMouseToElement({ type: 'click', element: splitter });
+      expect(splitLayout.hasAttribute('focus-ring')).to.be.false;
     });
   });
 });
