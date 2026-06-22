@@ -66,6 +66,11 @@ export const splitLayoutStyles = css`
     height: var(--_splitter-size);
   }
 
+  :host([focus-ring]) [part='splitter'] {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: 1px;
+  }
+
   [part='handle'] {
     background: var(--vaadin-split-layout-handle-background, var(--vaadin-text-color-secondary));
     border-radius: var(--vaadin-radius-m);

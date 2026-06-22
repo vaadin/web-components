@@ -4,6 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -158,12 +161,25 @@ import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires {Event} splitter-dragend - Fired after dragging the splitter have ended.
+ * ### Keyboard Interaction
+ *
+ * The splitter is focusable and can be moved with the keyboard:
+ *
+ * Key                         | Action
+ * ----------------------------|--------------
+ * `Arrow Right` / `Arrow Left`| Move a horizontal splitter (resizes by a small step)
+ * `Arrow Down` / `Arrow Up`   | Move a vertical splitter (resizes by a small step)
+ * `Page Up` / `Page Down`     | Resize by a larger step (10% of the available size)
+ * `Home` / `End`              | Collapse the primary / secondary content element
+ *
+ * @fires {Event} splitter-dragend - Fired after resizing the splitter via pointer or keyboard has ended.
  *
  * @customElement vaadin-split-layout
  * @extends HTMLElement
  */
-class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+class SplitLayout extends SplitLayoutMixin(
+  FocusMixin(KeyboardMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
+) {
   static get is() {
     return 'vaadin-split-layout';
   }
@@ -180,7 +196,18 @@ class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(PolylitMix
   render() {
     return html`
       <slot id="primary" name="primary"></slot>
-      <div part="splitter" id="splitter">
+      <div
+        part="splitter"
+        id="splitter"
+        role="separator"
+        tabindex="0"
+        aria-label="Resize"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="${ifDefined(this.__valueNow)}"
+        aria-orientation="${this.orientation === 'vertical' ? 'horizontal' : 'vertical'}"
+        @focusin="${this.__updateValueNow}"
+      >
         <div part="handle"></div>
       </div>
       <slot id="secondary" name="secondary"></slot>

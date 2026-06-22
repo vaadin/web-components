@@ -3,6 +3,8 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
@@ -159,9 +161,22 @@ export interface SplitLayoutEventMap extends HTMLElementEventMap, SplitLayoutCus
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires {Event} splitter-dragend - Fired after dragging the splitter have ended.
+ * ### Keyboard Interaction
+ *
+ * The splitter is focusable and can be moved with the keyboard:
+ *
+ * Key                         | Action
+ * ----------------------------|--------------
+ * `Arrow Right` / `Arrow Left`| Move a horizontal splitter (resizes by a small step)
+ * `Arrow Down` / `Arrow Up`   | Move a vertical splitter (resizes by a small step)
+ * `Page Up` / `Page Down`     | Resize by a larger step (10% of the available size)
+ * `Home` / `End`              | Collapse the primary / secondary content element
+ *
+ * @fires {Event} splitter-dragend - Fired after resizing the splitter via pointer or keyboard has ended.
  */
-declare class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(HTMLElement))) {
+declare class SplitLayout extends SplitLayoutMixin(
+  FocusMixin(KeyboardMixin(ElementMixin(ThemableMixin(HTMLElement)))),
+) {
   addEventListener<K extends keyof SplitLayoutEventMap>(
     type: K,
     listener: (this: SplitLayout, ev: SplitLayoutEventMap[K]) => void,

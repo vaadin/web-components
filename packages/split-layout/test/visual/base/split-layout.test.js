@@ -25,6 +25,11 @@ describe('split-layout', () => {
         await visualDiff(element, orientation);
       });
 
+      it(`${orientation} focused`, async () => {
+        element.setAttribute('focus-ring', '');
+        await visualDiff(element, `${orientation}-focus-ring`);
+      });
+
       it(`${orientation} small`, async () => {
         element.setAttribute('theme', 'small');
         await visualDiff(element, `${orientation}-small`);
