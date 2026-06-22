@@ -48,7 +48,7 @@ const hasAllParam = process.argv.includes('--all');
  * Check if lockfile has changed.
  */
 const isLockfileChanged = () => {
-  const log = execSync('git diff --name-only origin/main HEAD').toString(); // NOSONAR
+  const log = execSync('git diff --name-only origin/25.2 HEAD').toString(); // NOSONAR
   return log.split('\n').some((line) => line.includes('yarn.lock'));
 };
 
@@ -57,7 +57,7 @@ const isLockfileChanged = () => {
  */
 const getChangedPackages = () => {
   const pathToLerna = path.normalize('./node_modules/.bin/lerna');
-  const output = execSync(`${pathToLerna} la --since origin/main --json --loglevel silent`); // NOSONAR
+  const output = execSync(`${pathToLerna} la --since origin/25.2 --json --loglevel silent`); // NOSONAR
   return JSON.parse(output.toString()).map((project) => project.name.replace('@vaadin/', ''));
 };
 
