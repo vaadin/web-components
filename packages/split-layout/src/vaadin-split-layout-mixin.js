@@ -83,6 +83,17 @@ export const SplitLayoutMixin = (superClass) =>
     }
 
     /**
+     * @param {FocusOptions=} options
+     * @protected
+     * @override
+     */
+    focus(options) {
+      this.$?.splitter?.focus(options);
+
+      super.focus(options);
+    }
+
+    /**
      * Override method inherited from `FocusMixin`
      * to only handle events from the splitter.
      *

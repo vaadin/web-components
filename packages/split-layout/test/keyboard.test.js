@@ -3,6 +3,7 @@ import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-co
 import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-split-layout.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 const initialSize = 200;
 
@@ -16,6 +17,57 @@ describe('keyboard', () => {
   function available() {
     return size(splitLayout, splitLayout.orientation) - size(splitter, splitLayout.orientation);
   }
+
+  describe('focus', () => {
+    beforeEach(async () => {
+      splitLayout = fixtureSync(`
+        <vaadin-split-layout style="width: ${initialSize}px; height: ${initialSize}px;">
+          <div id="first"></div>
+          <div id="second"><input></div>
+        </vaadin-split-layout>
+      `);
+      await nextRender();
+      splitter = splitLayout.$.splitter;
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('should focus the splitter on click', async () => {
+      await sendMouseToElement({ type: 'click', element: splitter });
+      expect(getDeepActiveElement()).to.equal(splitter);
+      expect(splitLayout.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should not set focus-ring when focused using pointer', async () => {
+      await sendMouseToElement({ type: 'click', element: splitter });
+      expect(splitLayout.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should set focus-ring when focused using keyboard', async () => {
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement).to.equal(splitLayout);
+      expect(splitLayout.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should not set focused when a content element is focused', async () => {
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      expect(splitLayout.hasAttribute('focused')).to.be.false;
+      expect(splitLayout.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should focus the splitter on programmatic focus', () => {
+      splitLayout.focus();
+      expect(getDeepActiveElement()).to.equal(splitter);
+    });
+
+    it('should not throw when calling `focus()` before adding to the DOM', () => {
+      const focus = () => document.createElement('vaadin-split-layout').focus();
+      expect(focus()).to.not.throw;
+    });
+  });
 
   ['horizontal', 'vertical'].forEach((orientation) => {
     describe(orientation, () => {
@@ -166,30 +218,6 @@ describe('keyboard', () => {
     });
   });
 
-  describe('focus ring', () => {
-    beforeEach(async () => {
-      splitLayout = fixtureSync(`
-        <vaadin-split-layout style="width: ${initialSize}px; height: ${initialSize}px;">
-          <div id="first"></div>
-          <div id="second"><input></div>
-        </vaadin-split-layout>
-      `);
-      await nextRender();
-    });
-
-    it('should set focus-ring when the splitter is focused with the keyboard', async () => {
-      await sendKeys({ press: 'Tab' });
-      expect(document.activeElement).to.equal(splitLayout);
-      expect(splitLayout.hasAttribute('focus-ring')).to.be.true;
-    });
-
-    it('should not set focus-ring when a content element is focused', async () => {
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ press: 'Tab' });
-      expect(splitLayout.hasAttribute('focus-ring')).to.be.false;
-    });
-  });
-
   describe('nested layouts', () => {
     let outer, inner, outerFirst, innerSplitter;
 
@@ -237,35 +265,6 @@ describe('keyboard', () => {
       const before = first.getBoundingClientRect().width;
       await sendKeys({ press: 'ArrowRight' });
       expect(first.getBoundingClientRect().width).to.equal(before);
-    });
-  });
-
-  describe('pointer focus', () => {
-    beforeEach(async () => {
-      splitLayout = fixtureSync(`
-        <vaadin-split-layout style="width: ${initialSize}px; height: ${initialSize}px;">
-          <div id="first"></div>
-          <div id="second"></div>
-        </vaadin-split-layout>
-      `);
-      await nextRender();
-      splitter = splitLayout.$.splitter;
-    });
-
-    afterEach(async () => {
-      await resetMouse();
-    });
-
-    it('should focus the splitter when clicked', async () => {
-      expect(splitLayout.hasAttribute('focused')).to.be.false;
-      await sendMouseToElement({ type: 'click', element: splitter });
-      expect(document.activeElement).to.equal(splitLayout);
-      expect(splitLayout.hasAttribute('focused')).to.be.true;
-    });
-
-    it('should not set focus-ring when clicked', async () => {
-      await sendMouseToElement({ type: 'click', element: splitter });
-      expect(splitLayout.hasAttribute('focus-ring')).to.be.false;
     });
   });
 });
