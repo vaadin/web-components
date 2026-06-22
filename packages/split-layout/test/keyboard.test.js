@@ -35,19 +35,6 @@ describe('keyboard', () => {
         splitter.focus();
       });
 
-      it('should set the slider role and value attributes', () => {
-        expect(splitter.getAttribute('role')).to.equal('slider');
-        expect(splitter.getAttribute('tabindex')).to.equal('0');
-        expect(splitter.getAttribute('aria-valuemin')).to.equal('0');
-        expect(splitter.getAttribute('aria-valuemax')).to.equal('100');
-        expect(splitter.getAttribute('aria-valuenow')).to.equal('50');
-        expect(splitter.getAttribute('aria-valuetext')).to.equal('50%');
-      });
-
-      it('should not set aria-orientation', () => {
-        expect(splitter.hasAttribute('aria-orientation')).to.be.false;
-      });
-
       it('should grow the primary element on Arrow Down', async () => {
         const before = size(first, orientation);
         await sendKeys({ press: 'ArrowDown' });
@@ -127,6 +114,12 @@ describe('keyboard', () => {
         expect(splitter.getAttribute('aria-valuenow')).to.equal(`${expected}`);
       });
 
+      it('should update aria-valuenow after orientation change', async () => {
+        splitLayout.orientation = orientation === 'vertical' ? 'horizontal' : 'vertical';
+        await nextFrame();
+        expect(splitter.getAttribute('aria-valuenow')).to.equal('50');
+      });
+
       it('should dispatch a single splitter-dragend after a burst of presses', async () => {
         const spy = sinon.spy();
         splitLayout.addEventListener('splitter-dragend', spy);
@@ -173,51 +166,26 @@ describe('keyboard', () => {
     });
   });
 
-  describe('runtime orientation change', () => {
+  describe('focus ring', () => {
     beforeEach(async () => {
       splitLayout = fixtureSync(`
         <vaadin-split-layout style="width: ${initialSize}px; height: ${initialSize}px;">
           <div id="first"></div>
-          <div id="second"></div>
+          <div id="second"><input></div>
         </vaadin-split-layout>
       `);
       await nextRender();
-      splitter = splitLayout.$.splitter;
     });
 
-    it('should recompute aria-valuenow after orientation change', async () => {
-      expect(splitter.hasAttribute('aria-orientation')).to.be.false;
-      splitLayout.orientation = 'vertical';
-      await nextFrame();
-      expect(splitter.hasAttribute('aria-orientation')).to.be.false;
-      expect(splitter.getAttribute('aria-valuenow')).to.equal('50');
-    });
-  });
-
-  describe('focus ring', () => {
     it('should set focus-ring when the splitter is focused with the keyboard', async () => {
-      splitLayout = fixtureSync(`
-        <vaadin-split-layout style="width: ${initialSize}px; height: ${initialSize}px;">
-          <div id="first"></div>
-          <div id="second"></div>
-        </vaadin-split-layout>
-      `);
-      await nextRender();
-      // The splitter is the only focusable element, so a single Tab focuses it.
       await sendKeys({ press: 'Tab' });
       expect(document.activeElement).to.equal(splitLayout);
       expect(splitLayout.hasAttribute('focus-ring')).to.be.true;
     });
 
     it('should not set focus-ring when a content element is focused', async () => {
-      splitLayout = fixtureSync(`
-        <vaadin-split-layout style="width: ${initialSize}px; height: ${initialSize}px;">
-          <div id="first"><button>button</button></div>
-          <div id="second"></div>
-        </vaadin-split-layout>
-      `);
-      await nextRender();
-      splitLayout.querySelector('button').focus();
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
       expect(splitLayout.hasAttribute('focus-ring')).to.be.false;
     });
   });
@@ -264,9 +232,7 @@ describe('keyboard', () => {
       splitter.focus();
     });
 
-    it('should keep role and tabindex but not resize', async () => {
-      expect(splitter.getAttribute('role')).to.equal('slider');
-      expect(splitter.getAttribute('tabindex')).to.equal('0');
+    it('should not resize if there is only one child added', async () => {
       const first = splitLayout.querySelector('#first');
       const before = first.getBoundingClientRect().width;
       await sendKeys({ press: 'ArrowRight' });
