@@ -183,4 +183,16 @@ describe('rich-text-editor', () => {
       return visualDiff(div, 'color-popup');
     });
   });
+
+  describe('variants', () => {
+    it('compact', async () => {
+      element.setAttribute('theme', 'compact');
+      await visualDiff(div, 'theme-compact');
+    });
+
+    it('no-border', async () => {
+      element.setAttribute('theme', 'no-border');
+      await visualDiff(div, 'theme-no-border');
+    });
+  });
 });
