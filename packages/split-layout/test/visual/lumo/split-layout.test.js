@@ -1,3 +1,4 @@
+import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
@@ -7,23 +8,46 @@ import '../../../vaadin-split-layout.js';
 describe('split-layout', () => {
   let element;
 
-  describe('basic', () => {
-    beforeEach(() => {
-      element = fixtureSync(`
-        <vaadin-split-layout style="width: 200px; height: 100px">
-          <div></div>
-          <div></div>
-        </vaadin-split-layout>
-      `);
-    });
+  ['horizontal', 'vertical'].forEach((orientation) => {
+    describe(orientation, () => {
+      beforeEach(() => {
+        element = fixtureSync(`
+          <vaadin-split-layout orientation="${orientation}" style="width: 200px; height: 100px">
+            <div></div>
+            <div></div>
+          </vaadin-split-layout>
+        `);
+      });
 
-    it('horizontal', async () => {
-      await visualDiff(element, 'horizontal');
-    });
+      afterEach(async () => {
+        await resetMouse();
+      });
 
-    it('vertical', async () => {
-      element.orientation = 'vertical';
-      await visualDiff(element, 'vertical');
+      it('default', async () => {
+        await visualDiff(element, orientation);
+      });
+
+      it('small', async () => {
+        element.setAttribute('theme', 'small');
+        await visualDiff(element, `${orientation}-small`);
+      });
+
+      it('small hover', async () => {
+        element.setAttribute('theme', 'small');
+        await sendMouseToElement({ type: 'move', element: element.$.splitter });
+        await visualDiff(element, `${orientation}-small-hover`);
+      });
+
+      it('minimal', async () => {
+        element.setAttribute('theme', 'minimal');
+        await visualDiff(element, `${orientation}-minimal`);
+      });
+
+      it('minimal hover', async () => {
+        element.setAttribute('theme', 'minimal');
+        await sendMouseToElement({ type: 'move', element: element.$.splitter });
+        await visualDiff(element, `${orientation}-minimal-hover`);
+      });
     });
   });
 
