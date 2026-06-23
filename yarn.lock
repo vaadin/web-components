@@ -7149,10 +7149,10 @@ markdown-it@^14.2.0:
     punycode.js "^2.3.1"
     uc.micro "^2.1.0"
 
-marked@^16.0.0:
-  version "16.4.0"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-16.4.0.tgz#b0c22707a3add380827a75437131801cd54bf425"
-  integrity sha512-CTPAcRBq57cn3R8n3hwc2REddc28hjR7RzDXQ+lXLmMJYqn20BaI2cGw6QjgZGIgVfp2Wdfw4aMzgNteQ6qJgQ==
+marked@^18.0.5:
+  version "18.0.5"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-18.0.5.tgz#c229c0ac6ad1e275ae8e5037c6168f76d2f42e61"
+  integrity sha512-S6GcvALHg6K4ohtu4E7x0a1AqhAjp6cV8KhLSyN9qVapnzJkusVBxZRcIU9AeYsbe6P1hKDusSbEOzGyyuce6w==
 
 marky@^1.2.2:
   version "1.2.5"
