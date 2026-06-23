@@ -23,27 +23,27 @@ describe('split-layout', () => {
         await resetMouse();
       });
 
-      it(orientation, async () => {
+      it('default', async () => {
         await visualDiff(element, orientation);
       });
 
-      it(`${orientation} small`, async () => {
+      it('small', async () => {
         element.setAttribute('theme', 'small');
         await visualDiff(element, `${orientation}-small`);
       });
 
-      it(`${orientation} small hover`, async () => {
+      it('small hover', async () => {
         element.setAttribute('theme', 'small');
         await sendMouseToElement({ type: 'move', element: element.$.splitter });
         await visualDiff(element, `${orientation}-small-hover`);
       });
 
-      it(`${orientation} minimal`, async () => {
+      it('minimal', async () => {
         element.setAttribute('theme', 'minimal');
         await visualDiff(element, `${orientation}-minimal`);
       });
 
-      it(`${orientation} minimal hover`, async () => {
+      it('minimal hover', async () => {
         element.setAttribute('theme', 'minimal');
         await sendMouseToElement({ type: 'move', element: element.$.splitter });
         await visualDiff(element, `${orientation}-minimal-hover`);
