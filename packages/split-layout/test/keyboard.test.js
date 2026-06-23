@@ -8,6 +8,8 @@ import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 describe('keyboard', () => {
   let splitLayout, splitter, first, second;
 
+  const ARROW_STEP = 16;
+
   function getSize(el, orientation) {
     return el.getBoundingClientRect()[orientation === 'vertical' ? 'height' : 'width'];
   }
@@ -88,22 +90,22 @@ describe('keyboard', () => {
 
       it('should grow the primary element on Arrow Down', async () => {
         await sendKeys({ press: 'ArrowDown' });
-        expect(getSize(first, orientation)).to.be.closeTo(size + 16, 1);
+        expect(getSize(first, orientation)).to.be.closeTo(size + ARROW_STEP, 1);
       });
 
       it('should grow the primary element on Arrow Right', async () => {
         await sendKeys({ press: 'ArrowRight' });
-        expect(getSize(first, orientation)).to.be.closeTo(size + 16, 1);
+        expect(getSize(first, orientation)).to.be.closeTo(size + ARROW_STEP, 1);
       });
 
       it('should shrink the primary element on Arrow Up', async () => {
         await sendKeys({ press: 'ArrowUp' });
-        expect(getSize(first, orientation)).to.be.closeTo(size - 16, 1);
+        expect(getSize(first, orientation)).to.be.closeTo(size - ARROW_STEP, 1);
       });
 
       it('should shrink the primary element on Arrow Left', async () => {
         await sendKeys({ press: 'ArrowLeft' });
-        expect(getSize(first, orientation)).to.be.closeTo(size - 16, 1);
+        expect(getSize(first, orientation)).to.be.closeTo(size - ARROW_STEP, 1);
       });
 
       it('should grow the primary by 10% of the available size on Page Down', async () => {
@@ -213,22 +215,22 @@ describe('keyboard', () => {
 
     it('should shrink the primary element on ArrowRight', async () => {
       await sendKeys({ press: 'ArrowRight' });
-      expect(getSize(first, 'horizontal')).to.be.closeTo(size - 16, 1);
+      expect(getSize(first, 'horizontal')).to.be.closeTo(size - ARROW_STEP, 1);
     });
 
     it('should grow the primary element on ArrowLeft', async () => {
       await sendKeys({ press: 'ArrowLeft' });
-      expect(getSize(first, 'horizontal')).to.be.closeTo(size + 16, 1);
+      expect(getSize(first, 'horizontal')).to.be.closeTo(size + ARROW_STEP, 1);
     });
 
     it('should grow the primary element on ArrowDown', async () => {
       await sendKeys({ press: 'ArrowDown' });
-      expect(getSize(first, 'horizontal')).to.be.closeTo(size + 16, 1);
+      expect(getSize(first, 'horizontal')).to.be.closeTo(size + ARROW_STEP, 1);
     });
 
     it('should shrink the primary element on ArrowUp', async () => {
       await sendKeys({ press: 'ArrowUp' });
-      expect(getSize(first, 'horizontal')).to.be.closeTo(size - 16, 1);
+      expect(getSize(first, 'horizontal')).to.be.closeTo(size - ARROW_STEP, 1);
     });
   });
 
@@ -258,7 +260,7 @@ describe('keyboard', () => {
       const innerBefore = innerFirst.getBoundingClientRect().width;
       await sendKeys({ press: 'ArrowRight' });
       expect(outerFirst.getBoundingClientRect().width).to.be.closeTo(outerBefore, 1);
-      expect(innerFirst.getBoundingClientRect().width).to.be.closeTo(innerBefore + 16, 1);
+      expect(innerFirst.getBoundingClientRect().width).to.be.closeTo(innerBefore + ARROW_STEP, 1);
     });
   });
 

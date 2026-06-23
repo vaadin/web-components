@@ -9,6 +9,7 @@ import { addListener } from '@vaadin/component-base/src/gestures.js';
 
 // Step in pixels used for resizing with the arrow keys.
 const ARROW_STEP = 16;
+
 // Fraction of the available size used for resizing with the Page Up / Page Down keys.
 const PAGE_STEP = 0.1;
 
