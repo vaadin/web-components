@@ -44,6 +44,7 @@ export const splitLayoutStyles = css`
     display: flex;
     align-items: center;
     justify-content: center;
+    outline: none;
   }
 
   [part='splitter']::after {
@@ -64,6 +65,11 @@ export const splitLayoutStyles = css`
   :host([orientation='vertical']) > [part='splitter'] {
     cursor: ns-resize;
     height: var(--_splitter-size);
+  }
+
+  :host([focus-ring]) [part='splitter'] {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: 1px;
   }
 
   [part='handle'] {
