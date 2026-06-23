@@ -14,9 +14,14 @@ snapshots["vaadin-split-layout shadow"] =
 >
 </slot>
 <div
+  aria-label="Resize separator"
+  aria-valuemax="100"
+  aria-valuemin="0"
   id="splitter"
   part="splitter"
+  role="slider"
   style="touch-action: none;"
+  tabindex="0"
 >
   <div part="handle">
   </div>
@@ -28,4 +33,31 @@ snapshots["vaadin-split-layout shadow"] =
 </slot>
 `;
 /* end snapshot vaadin-split-layout shadow */
+
+snapshots["vaadin-split-layout i18n"] = 
+`<slot
+  id="primary"
+  name="primary"
+>
+</slot>
+<div
+  aria-label="separator"
+  aria-valuemax="100"
+  aria-valuemin="0"
+  id="splitter"
+  part="splitter"
+  role="slider"
+  style="touch-action: none;"
+  tabindex="0"
+>
+  <div part="handle">
+  </div>
+</div>
+<slot
+  id="secondary"
+  name="secondary"
+>
+</slot>
+`;
+/* end snapshot vaadin-split-layout i18n */
 

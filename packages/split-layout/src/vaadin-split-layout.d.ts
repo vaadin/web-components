@@ -3,9 +3,16 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
+
+export interface SplitLayoutI18n {
+  separator?: string;
+}
 
 export interface SplitLayoutCustomEventMap {
   'splitter-dragend': Event;
@@ -147,6 +154,13 @@ export interface SplitLayoutEventMap extends HTMLElementEventMap, SplitLayoutCus
  * `splitter` | Split element
  * `handle`   | The handle of the splitter
  *
+ * The following state attributes are available for styling:
+ *
+ * Attribute      | Description
+ * ---------------|------------
+ * `focus-ring`   | Set when the splitter is focused using the keyboard
+ * `focused`      | Set when the splitter is focused
+ *
  * The following custom CSS properties are available for styling:
  *
  * Custom CSS property                            |
@@ -159,9 +173,38 @@ export interface SplitLayoutEventMap extends HTMLElementEventMap, SplitLayoutCus
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires {Event} splitter-dragend - Fired after dragging the splitter have ended.
+ * ### Keyboard Interaction
+ *
+ * The splitter is focusable and can be moved with the keyboard:
+ *
+ * Key                          | Action
+ * -----------------------------|--------------
+ * `Arrow Down` / `Arrow Right` | Grow the primary content element by a small step
+ * `Arrow Up` / `Arrow Left`    | Shrink the primary content element by a small step
+ * `Page Up` / `Page Down`      | Grow / shrink by a larger step (10% of the available size)
+ * `Home` / `End`               | Collapse the primary / secondary content element
+ *
+ * @fires {Event} splitter-dragend - Fired after resizing the splitter via pointer or keyboard has ended.
  */
-declare class SplitLayout extends SplitLayoutMixin(ElementMixin(ThemableMixin(HTMLElement))) {
+declare class SplitLayout extends SplitLayoutMixin(
+  FocusMixin(KeyboardMixin(ElementMixin(ThemableMixin(I18nMixin<typeof HTMLElement, SplitLayoutI18n>(HTMLElement))))),
+) {
+  /**
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
+   *
+   * The object has the following JSON structure and default values:
+   *
+   * ```
+   * {
+   *   // Accessible label of the resize separator.
+   *   separator: 'Resize separator'
+   * }
+   * ```
+   */
+  i18n: SplitLayoutI18n;
+
   addEventListener<K extends keyof SplitLayoutEventMap>(
     type: K,
     listener: (this: SplitLayout, ev: SplitLayoutEventMap[K]) => void,
