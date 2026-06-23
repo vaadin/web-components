@@ -9,11 +9,16 @@ import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { splitLayoutStyles } from './styles/vaadin-split-layout-base-styles.js';
 import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
+
+const DEFAULT_I18N = {
+  separator: 'Resize separator',
+};
 
 /**
  * `<vaadin-split-layout>` is a Web Component implementing a split layout for two
@@ -165,9 +170,6 @@ import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
  *
  * The splitter is focusable and can be moved with the keyboard:
  *
- * The splitter behaves like a slider whose value is the primary content element
- * size. All arrow keys work in both orientations:
- *
  * Key                         | Action
  * ----------------------------|--------------
  * `Arrow Up` / `Arrow Right`  | Grow the primary content element by a small step
@@ -175,15 +177,13 @@ import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
  * `Page Up` / `Page Down`     | Grow / shrink by a larger step (10% of the available size)
  * `Home` / `End`              | Collapse the primary / secondary content element
  *
- * In right-to-left layouts, `Arrow Left` and `Arrow Right` are inverted.
- *
  * @fires {Event} splitter-dragend - Fired after resizing the splitter via pointer or keyboard has ended.
  *
  * @customElement vaadin-split-layout
  * @extends HTMLElement
  */
 class SplitLayout extends SplitLayoutMixin(
-  FocusMixin(KeyboardMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))),
+  I18nMixin(FocusMixin(KeyboardMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))))),
 ) {
   static get is() {
     return 'vaadin-split-layout';
@@ -197,6 +197,34 @@ class SplitLayout extends SplitLayoutMixin(
     return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
+  static get defaultI18n() {
+    return DEFAULT_I18N;
+  }
+
+  /**
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
+   *
+   * The object has the following JSON structure and default values:
+   *
+   * ```
+   * {
+   *   // Accessible label of the resize separator.
+   *   separator: 'Resize separator'
+   * }
+   * ```
+   *
+   * @return {!Object}
+   */
+  get i18n() {
+    return super.i18n;
+  }
+
+  set i18n(value) {
+    super.i18n = value;
+  }
+
   /** @protected */
   render() {
     return html`
@@ -206,7 +234,7 @@ class SplitLayout extends SplitLayoutMixin(
         id="splitter"
         role="slider"
         tabindex="0"
-        aria-label="Resize separator"
+        aria-label="${this.__effectiveI18n.separator}"
         aria-valuemin="0"
         aria-valuemax="100"
         aria-valuenow="${ifDefined(this.__valueNow)}"

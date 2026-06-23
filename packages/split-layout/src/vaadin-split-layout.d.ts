@@ -6,8 +6,13 @@
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
+
+export interface SplitLayoutI18n {
+  separator?: string;
+}
 
 export interface SplitLayoutCustomEventMap {
   'splitter-dragend': Event;
@@ -175,8 +180,24 @@ export interface SplitLayoutEventMap extends HTMLElementEventMap, SplitLayoutCus
  * @fires {Event} splitter-dragend - Fired after resizing the splitter via pointer or keyboard has ended.
  */
 declare class SplitLayout extends SplitLayoutMixin(
-  FocusMixin(KeyboardMixin(ElementMixin(ThemableMixin(HTMLElement)))),
+  FocusMixin(KeyboardMixin(ElementMixin(ThemableMixin(I18nMixin<typeof HTMLElement, SplitLayoutI18n>(HTMLElement))))),
 ) {
+  /**
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
+   *
+   * The object has the following JSON structure and default values:
+   *
+   * ```
+   * {
+   *   // Accessible label of the resize separator.
+   *   separator: 'Resize separator'
+   * }
+   * ```
+   */
+  i18n: SplitLayoutI18n;
+
   addEventListener<K extends keyof SplitLayoutEventMap>(
     type: K,
     listener: (this: SplitLayout, ev: SplitLayoutEventMap[K]) => void,
