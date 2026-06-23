@@ -5,23 +5,21 @@ import sinon from 'sinon';
 import '../src/vaadin-split-layout.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
-const initialSize = 200;
-
 describe('keyboard', () => {
   let splitLayout, splitter, first, second;
 
-  function size(el, orientation) {
+  function getSize(el, orientation) {
     return el.getBoundingClientRect()[orientation === 'vertical' ? 'height' : 'width'];
   }
 
-  function available() {
-    return size(splitLayout, splitLayout.orientation) - size(splitter, splitLayout.orientation);
+  function getAvailableSize() {
+    return getSize(splitLayout, splitLayout.orientation) - getSize(splitter, splitLayout.orientation);
   }
 
   describe('focus', () => {
     beforeEach(async () => {
       splitLayout = fixtureSync(`
-        <vaadin-split-layout style="width: ${initialSize}px; height: ${initialSize}px;">
+        <vaadin-split-layout style="width: 200px; height: 200px;">
           <div id="first"></div>
           <div id="second"><input></div>
         </vaadin-split-layout>
@@ -71,80 +69,92 @@ describe('keyboard', () => {
 
   ['horizontal', 'vertical'].forEach((orientation) => {
     describe(orientation, () => {
+      let size;
+
       beforeEach(async () => {
-        // Empty content so both panes have equal intrinsic size (flex-basis: auto).
         splitLayout = fixtureSync(`
-          <vaadin-split-layout style="width: ${initialSize}px; height: ${initialSize}px;">
+          <vaadin-split-layout orientation="${orientation}" style="width: 200px; height: 200px;">
             <div id="first"></div>
             <div id="second"></div>
           </vaadin-split-layout>
         `);
-        splitLayout.orientation = orientation;
         await nextRender();
         splitter = splitLayout.$.splitter;
         first = splitLayout.querySelector('#first');
         second = splitLayout.querySelector('#second');
+        size = getSize(first, orientation);
         splitter.focus();
       });
 
       it('should grow the primary element on Arrow Down', async () => {
-        const before = size(first, orientation);
         await sendKeys({ press: 'ArrowDown' });
-        expect(size(first, orientation)).to.be.closeTo(before + 16, 1);
+        expect(getSize(first, orientation)).to.be.closeTo(size + 16, 1);
       });
 
       it('should grow the primary element on Arrow Right', async () => {
-        const before = size(first, orientation);
         await sendKeys({ press: 'ArrowRight' });
-        expect(size(first, orientation)).to.be.closeTo(before + 16, 1);
+        expect(getSize(first, orientation)).to.be.closeTo(size + 16, 1);
       });
 
       it('should shrink the primary element on Arrow Up', async () => {
-        const before = size(first, orientation);
         await sendKeys({ press: 'ArrowUp' });
-        expect(size(first, orientation)).to.be.closeTo(before - 16, 1);
+        expect(getSize(first, orientation)).to.be.closeTo(size - 16, 1);
       });
 
       it('should shrink the primary element on Arrow Left', async () => {
-        const before = size(first, orientation);
         await sendKeys({ press: 'ArrowLeft' });
-        expect(size(first, orientation)).to.be.closeTo(before - 16, 1);
+        expect(getSize(first, orientation)).to.be.closeTo(size - 16, 1);
       });
 
-      it('should resize by 10% of the available size on Page keys', async () => {
-        const step = available() * 0.1;
-        const before = size(first, orientation);
+      it('should grow the primary by 10% of the available size on Page Down', async () => {
+        const step = getAvailableSize() * 0.1;
         await sendKeys({ press: 'PageDown' });
-        expect(size(first, orientation)).to.be.closeTo(before + step, 1);
+        expect(getSize(first, orientation)).to.be.closeTo(size + step, 1);
+      });
+
+      it('should shrink the primary element by 10% of the available size on Page Up', async () => {
+        const step = getAvailableSize() * 0.1;
         await sendKeys({ press: 'PageUp' });
-        await sendKeys({ press: 'PageUp' });
-        expect(size(first, orientation)).to.be.closeTo(before - step, 1);
+        expect(getSize(first, orientation)).to.be.closeTo(size - step, 1);
       });
 
       it('should collapse the primary element on Home', async () => {
         await sendKeys({ press: 'Home' });
-        expect(size(first, orientation)).to.equal(0);
+        expect(getSize(first, orientation)).to.equal(0);
         expect(splitter.getAttribute('aria-valuenow')).to.equal('0');
         expect(splitter.getAttribute('aria-valuetext')).to.equal('0%');
       });
 
       it('should collapse the secondary element on End', async () => {
         await sendKeys({ press: 'End' });
-        expect(size(second, orientation)).to.equal(0);
+        expect(getSize(second, orientation)).to.equal(0);
         expect(splitter.getAttribute('aria-valuenow')).to.equal('100');
         expect(splitter.getAttribute('aria-valuetext')).to.equal('100%');
       });
 
-      it('should not overshoot when accumulating past the boundaries', async () => {
-        for (let i = 0; i < 30; i++) {
-          await sendKeys({ press: 'ArrowDown' });
+      it('should not change size when primary element is fully collapsed', async () => {
+        for (let i = 0; i < 8; i++) {
+          await sendKeys({ press: 'PageUp' });
         }
-        expect(size(second, orientation)).to.equal(0);
+        expect(getSize(first, orientation)).to.equal(0);
+        expect(getSize(second, orientation)).to.equal(getAvailableSize());
+        expect(splitter.getAttribute('aria-valuenow')).to.equal('0');
+
+        await sendKeys({ press: 'ArrowDown' });
+        expect(getSize(second, orientation)).to.be.below(getAvailableSize());
+        expect(Number(splitter.getAttribute('aria-valuenow'))).to.be.above(0);
+      });
+
+      it('should not change size when secondary element is fully collapsed', async () => {
+        for (let i = 0; i < 8; i++) {
+          await sendKeys({ press: 'PageDown' });
+        }
+        expect(getSize(first, orientation)).to.equal(getAvailableSize());
+        expect(getSize(second, orientation)).to.equal(0);
         expect(splitter.getAttribute('aria-valuenow')).to.equal('100');
 
-        // Reversing one step immediately moves off the boundary.
         await sendKeys({ press: 'ArrowUp' });
-        expect(size(first, orientation)).to.be.below(available());
+        expect(getSize(first, orientation)).to.be.below(getAvailableSize());
         expect(Number(splitter.getAttribute('aria-valuenow'))).to.be.below(100);
       });
 
@@ -153,16 +163,15 @@ describe('keyboard', () => {
         for (let i = 0; i < 10; i++) {
           await sendKeys({ press: 'ArrowDown' });
         }
-        expect(size(first, orientation)).to.be.closeTo(120, 1);
+        expect(getSize(first, orientation)).to.be.closeTo(120, 1);
 
-        // Reversing works immediately even after clamping.
         await sendKeys({ press: 'ArrowUp' });
-        expect(size(first, orientation)).to.be.below(120);
+        expect(getSize(first, orientation)).to.be.below(120);
       });
 
-      it('should update aria-valuenow after resizing', async () => {
+      it('should update aria-valuenow after moving the splitter', async () => {
         await sendKeys({ press: 'ArrowDown' });
-        const expected = Math.round((size(first, orientation) / available()) * 100);
+        const expected = Math.round((getSize(first, orientation) / getAvailableSize()) * 100);
         expect(splitter.getAttribute('aria-valuenow')).to.equal(`${expected}`);
       });
 
@@ -172,22 +181,24 @@ describe('keyboard', () => {
         expect(splitter.getAttribute('aria-valuenow')).to.equal('50');
       });
 
-      it('should dispatch a single splitter-dragend after a burst of presses', async () => {
+      it('should dispatch single splitter-dragend event on subsequent key presses', async () => {
         const spy = sinon.spy();
         splitLayout.addEventListener('splitter-dragend', spy);
         await sendKeys({ press: 'ArrowDown' });
         await sendKeys({ press: 'ArrowDown' });
         await sendKeys({ press: 'ArrowDown' });
-        await aTimeout(250);
+        await aTimeout(200);
         expect(spy.calledOnce).to.be.true;
       });
     });
   });
 
   describe('RTL', () => {
+    let size;
+
     beforeEach(async () => {
       splitLayout = fixtureSync(`
-        <vaadin-split-layout dir="rtl" style="width: ${initialSize}px; height: ${initialSize}px;">
+        <vaadin-split-layout dir="rtl" style="width: 200px; height: 200px;">
           <div id="first">first</div>
           <div id="second">second</div>
         </vaadin-split-layout>
@@ -196,25 +207,28 @@ describe('keyboard', () => {
       splitter = splitLayout.$.splitter;
       first = splitLayout.querySelector('#first');
       second = splitLayout.querySelector('#second');
+      size = getSize(first, 'horizontal');
       splitter.focus();
     });
 
-    it('should invert horizontal arrow keys', async () => {
-      const before = size(first, 'horizontal');
+    it('should shrink the primary element on ArrowRight', async () => {
       await sendKeys({ press: 'ArrowRight' });
-      expect(size(first, 'horizontal')).to.be.closeTo(before - 16, 1);
-      await sendKeys({ press: 'ArrowLeft' });
-      await sendKeys({ press: 'ArrowLeft' });
-      expect(size(first, 'horizontal')).to.be.closeTo(before + 16, 1);
+      expect(getSize(first, 'horizontal')).to.be.closeTo(size - 16, 1);
     });
 
-    it('should not invert vertical arrow keys', async () => {
-      const before = size(first, 'horizontal');
+    it('should grow the primary element on ArrowLeft', async () => {
+      await sendKeys({ press: 'ArrowLeft' });
+      expect(getSize(first, 'horizontal')).to.be.closeTo(size + 16, 1);
+    });
+
+    it('should grow the primary element on ArrowDown', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      expect(getSize(first, 'horizontal')).to.be.closeTo(size + 16, 1);
+    });
+
+    it('should shrink the primary element on ArrowUp', async () => {
       await sendKeys({ press: 'ArrowUp' });
-      expect(size(first, 'horizontal')).to.be.closeTo(before - 16, 1);
-      await sendKeys({ press: 'ArrowDown' });
-      await sendKeys({ press: 'ArrowDown' });
-      expect(size(first, 'horizontal')).to.be.closeTo(before + 16, 1);
+      expect(getSize(first, 'horizontal')).to.be.closeTo(size - 16, 1);
     });
   });
 
@@ -251,7 +265,7 @@ describe('keyboard', () => {
   describe('single child', () => {
     beforeEach(async () => {
       splitLayout = fixtureSync(`
-        <vaadin-split-layout style="width: ${initialSize}px; height: ${initialSize}px;">
+        <vaadin-split-layout style="width: 200px; height: 200px;">
           <div id="first">first</div>
         </vaadin-split-layout>
       `);
@@ -262,9 +276,9 @@ describe('keyboard', () => {
 
     it('should not resize if there is only one child added', async () => {
       const first = splitLayout.querySelector('#first');
-      const before = first.getBoundingClientRect().width;
+      const size = first.getBoundingClientRect().width;
       await sendKeys({ press: 'ArrowRight' });
-      expect(first.getBoundingClientRect().width).to.equal(before);
+      expect(first.getBoundingClientRect().width).to.equal(size);
     });
   });
 });
