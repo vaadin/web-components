@@ -88,3 +88,34 @@ describe('grid i18n selectRow {0} from row-header column (prototype)', () => {
     expect(checkbox.accessibleName).to.equal('Markera rad John, Doe');
   });
 });
+
+describe('grid i18n filter (prototype)', () => {
+  let grid;
+
+  beforeEach(async () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-filter-column path="name" header="Name"></vaadin-grid-filter-column>
+      </vaadin-grid>
+    `);
+    grid.items = [{ name: 'John' }];
+    flushGrid(grid);
+    await nextFrame();
+  });
+
+  it('should keep the visible label as the accessible name (no filterColumn override)', () => {
+    const filter = grid.querySelector('vaadin-grid-filter');
+    const field = filter.querySelector('vaadin-text-field');
+    expect(field.label).to.equal('Name');
+    // Field has a visible label, so filterColumn is not applied.
+    expect(field.accessibleName == null || field.accessibleName === '').to.be.true;
+  });
+
+  it('should forward explicit filter accessibleName to the inner text field', async () => {
+    const filter = grid.querySelector('vaadin-grid-filter');
+    filter.accessibleName = 'Filter by Name';
+    await nextFrame();
+    const field = filter.querySelector('vaadin-text-field');
+    expect(field.accessibleName).to.equal('Filter by Name');
+  });
+});

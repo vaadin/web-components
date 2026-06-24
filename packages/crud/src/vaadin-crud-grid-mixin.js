@@ -195,8 +195,10 @@ export const CrudGridMixin = (superClass) =>
             // Filtering is enabled in this crud-grid, create the filter element
             const filter = document.createElement('vaadin-grid-filter');
             filter.setAttribute('path', path);
-            // TODO: Localize aria labels
-            filter.setAttribute('aria-label', `Filter by ${label}`);
+            // The filter field has no visible label, so it derives its accessible
+            // name from the grid's i18n.filterColumn template and the header text.
+            filter.__filterColumnLabel = this.__effectiveI18n?.filterColumn;
+            filter.__headerText = label;
             filter.style.display = 'flex';
 
             const textField = window.document.createElement('vaadin-text-field');

@@ -25,9 +25,21 @@ export const A11yMixin = (superClass) =>
     /** @private */
     __a11yI18nChanged(_effectiveI18n) {
       // Re-run renderers so selection checkboxes pick up the new labels, and
-      // re-distribute the sorter label template to every sorter.
+      // re-distribute the sorter and filter label templates.
       this.requestContentUpdate();
       this.__a11yUpdateSorters();
+      this.__a11yUpdateFilters();
+    }
+
+    /** @private */
+    __a11yUpdateFilters() {
+      const filterColumnLabel = this.__effectiveI18n?.filterColumn;
+      Array.from(this.querySelectorAll('vaadin-grid-filter')).forEach((filter) => {
+        // Distribute the filter label template so the filter can format its own
+        // accessible name. Label-less filters (e.g. CRUD) apply it; declarative
+        // filter columns with a visible label ignore it.
+        filter.__filterColumnLabel = filterColumnLabel;
+      });
     }
 
     /** @private */

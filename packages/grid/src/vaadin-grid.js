@@ -297,6 +297,10 @@ class Grid extends GridMixin(I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       // `{0}` is replaced with the column header text. Sort direction is announced
       // by the browser from `aria-sort` and is not part of this string.
       sortColumn: 'Sort by {0}',
+      // Accessible name applied to label-less `<vaadin-grid-filter>` fields.
+      // `{0}` is replaced with the column header text. Filter fields that have a
+      // visible label keep that label as their accessible name.
+      filterColumn: 'Filter by {0}',
     };
   }
 
@@ -312,6 +316,7 @@ class Grid extends GridMixin(I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(L
    *   selectAll: 'Select all',
    *   selectRow: 'Select row {0}',
    *   sortColumn: 'Sort by {0}',
+   *   filterColumn: 'Filter by {0}',
    * }
    * ```
    *
