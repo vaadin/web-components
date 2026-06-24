@@ -7,6 +7,20 @@ import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
 /**
+ * Formats an i18n label template by substituting `{0}`, `{1}`, ... placeholders
+ * with the given arguments, then trims surrounding whitespace. A missing
+ * argument substitutes an empty string, so e.g. `formatLabel('Sort by {0}', '')`
+ * yields `'Sort by'`.
+ *
+ * @param {string} template the label template
+ * @param {...*} args the substitution arguments
+ * @return {string}
+ */
+export function formatLabel(template, ...args) {
+  return (template || '').replace(/\{(\d+)\}/gu, (_match, index) => args[index] ?? '').trim();
+}
+
+/**
  * Returns the cells of the given row, excluding the details cell.
  *
  * @param {HTMLTableRowElement} row the table row

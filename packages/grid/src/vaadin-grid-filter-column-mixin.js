@@ -51,7 +51,11 @@ export const GridFilterColumnMixin = (superClass) =>
 
       filter.path = this.path;
 
-      textField.label = this.__getHeader(this.header, this.path);
+      const header = this.__getHeader(this.header, this.path);
+      textField.label = header;
+      // Supply the header text used as `{0}` of the grid's `filterColumn`
+      // template. The filter pulls the template itself via the i18n context.
+      filter.__headerText = header;
     }
 
     /**

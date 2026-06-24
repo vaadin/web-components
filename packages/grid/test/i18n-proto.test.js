@@ -1,0 +1,128 @@
+import { expect } from '@vaadin/chai-plugins';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import './grid-test-styles.js';
+import '../all-imports.js';
+import { flushGrid, getBodyCellContent, getHeaderCellContent } from './helpers.js';
+
+describe('grid i18n (prototype)', () => {
+  let grid;
+
+  beforeEach(async () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-selection-column></vaadin-grid-selection-column>
+        <vaadin-grid-sort-column path="name" header="Name"></vaadin-grid-sort-column>
+      </vaadin-grid>
+    `);
+    grid.items = [{ name: 'John' }, { name: 'Jane' }];
+    flushGrid(grid);
+    await nextFrame();
+  });
+
+  it('should expose default i18n', () => {
+    expect(grid.i18n.selectAll).to.equal('Select all');
+    expect(grid.i18n.selectRow).to.equal('Select row {0}');
+    expect(grid.i18n.sortColumn).to.equal('Sort by {0}');
+  });
+
+  it('should label the sorter from i18n.sortColumn + header text', () => {
+    const sorter = grid.querySelector('vaadin-grid-sorter');
+    expect(sorter.getAttribute('aria-label')).to.equal('Sort by Name');
+  });
+
+  it('should relabel the sorter when i18n.sortColumn changes', async () => {
+    grid.i18n = { ...grid.i18n, sortColumn: 'Sortera enligt {0}' };
+    await nextFrame();
+    const sorter = grid.querySelector('vaadin-grid-sorter');
+    expect(sorter.getAttribute('aria-label')).to.equal('Sortera enligt Name');
+  });
+
+  it('should let explicit sorter accessibleName override i18n', async () => {
+    const sorter = grid.querySelector('vaadin-grid-sorter');
+    sorter.accessibleName = 'Custom';
+    await nextFrame();
+    expect(sorter.getAttribute('aria-label')).to.equal('Custom');
+  });
+
+  it('should label select-all checkbox from i18n.selectAll', async () => {
+    grid.i18n = { ...grid.i18n, selectAll: 'Markera alla' };
+    await nextFrame();
+    const checkbox = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-checkbox');
+    expect(checkbox.accessibleName).to.equal('Markera alla');
+  });
+
+  it('should label select-row checkbox from i18n.selectRow (trimmed, no row-header column)', async () => {
+    grid.i18n = { ...grid.i18n, selectRow: 'Markera rad {0}' };
+    await nextFrame();
+    const checkbox = getBodyCellContent(grid, 0, 0).querySelector('vaadin-checkbox');
+    expect(checkbox.accessibleName).to.equal('Markera rad');
+  });
+});
+
+describe('grid i18n selectRow {0} from row-header column (prototype)', () => {
+  let grid;
+
+  beforeEach(async () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-selection-column></vaadin-grid-selection-column>
+        <vaadin-grid-column path="firstName" row-header></vaadin-grid-column>
+        <vaadin-grid-column path="lastName" row-header></vaadin-grid-column>
+        <vaadin-grid-column path="role"></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+    grid.items = [{ firstName: 'John', lastName: 'Doe', role: 'admin' }];
+    flushGrid(grid);
+    await nextFrame();
+  });
+
+  it('should fill {0} with the row-header columns values for the row', () => {
+    const checkbox = getBodyCellContent(grid, 0, 0).querySelector('vaadin-checkbox');
+    expect(checkbox.accessibleName).to.equal('Select row John, Doe');
+  });
+
+  it('should update {0} when the selectRow template changes', async () => {
+    grid.i18n = { ...grid.i18n, selectRow: 'Markera rad {0}' };
+    await nextFrame();
+    const checkbox = getBodyCellContent(grid, 0, 0).querySelector('vaadin-checkbox');
+    expect(checkbox.accessibleName).to.equal('Markera rad John, Doe');
+  });
+});
+
+describe('grid i18n filter (prototype)', () => {
+  let grid;
+
+  beforeEach(async () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-filter-column path="name" header="Name"></vaadin-grid-filter-column>
+      </vaadin-grid>
+    `);
+    grid.items = [{ name: 'John' }];
+    flushGrid(grid);
+    await nextFrame();
+  });
+
+  it('should apply filterColumn as the accessible name while keeping the visible label', () => {
+    const filter = grid.querySelector('vaadin-grid-filter');
+    const field = filter.querySelector('vaadin-text-field');
+    // Visible label is preserved; the accessible name embeds it (WCAG 2.5.3).
+    expect(field.label).to.equal('Name');
+    expect(field.accessibleName).to.equal('Filter by Name');
+  });
+
+  it('should relabel when filterColumn changes', async () => {
+    grid.i18n = { ...grid.i18n, filterColumn: 'Filtrera enligt {0}' };
+    await nextFrame();
+    const field = grid.querySelector('vaadin-grid-filter').querySelector('vaadin-text-field');
+    expect(field.accessibleName).to.equal('Filtrera enligt Name');
+  });
+
+  it('should let explicit filter accessibleName override filterColumn', async () => {
+    const filter = grid.querySelector('vaadin-grid-filter');
+    filter.accessibleName = 'Custom';
+    await nextFrame();
+    const field = filter.querySelector('vaadin-text-field');
+    expect(field.accessibleName).to.equal('Custom');
+  });
+});

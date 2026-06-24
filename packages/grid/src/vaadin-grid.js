@@ -4,14 +4,17 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-grid-column.js';
+import { ContextProvider } from '@lit/context';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { gridStyles } from './styles/vaadin-grid-base-styles.js';
+import { gridI18nContext } from './vaadin-grid-i18n-context.js';
 import { GridMixin } from './vaadin-grid-mixin.js';
 
 /**
@@ -268,13 +271,77 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * @customElement vaadin-grid
  * @extends HTMLElement
  */
-class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+class Grid extends GridMixin(I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))))) {
   static get is() {
     return 'vaadin-grid';
   }
 
   static get styles() {
     return gridStyles;
+  }
+
+  /**
+   * Default values for the i18n strings used to label accessibility elements
+   * (aria-labels) that the grid renders. The labels are not visible texts.
+   *
+   * @protected
+   * @override
+   */
+  static get defaultI18n() {
+    return {
+      // Accessible name for the "select all" checkbox in a selection column header.
+      selectAll: 'Select all',
+      // Accessible name for the "select row" checkbox in a selection column cell.
+      // `{0}` is replaced with the row's row-header text when available; the
+      // result is trimmed, so a row without row-header text yields "Select row".
+      selectRow: 'Select row {0}',
+      // Accessible name applied to every `<vaadin-grid-sorter>` the grid contains.
+      // `{0}` is replaced with the column header text. Sort direction is announced
+      // by the browser from `aria-sort` and is not part of this string.
+      sortColumn: 'Sort by {0}',
+      // Accessible name applied to every `<vaadin-grid-filter>` field.
+      // `{0}` is replaced with the column header text. The accessible name takes
+      // precedence over a visible label, which it embeds (WCAG 2.5.3).
+      filterColumn: 'Filter by {0}',
+    };
+  }
+
+  constructor() {
+    super();
+
+    // Provide the effective i18n object to descendant accessibility elements
+    // (the sorter and the filter), which subscribe via a `ContextConsumer`.
+    // `super()` has run I18nMixin's constructor, so `__effectiveI18n` exists.
+    this.__i18nProvider = new ContextProvider(this, {
+      context: gridI18nContext,
+      initialValue: this.__effectiveI18n,
+    });
+  }
+
+  /**
+   * The object used to localize accessibility strings (aria-labels) rendered by
+   * the grid. To change the default localization, replace this with an object
+   * that provides all properties, or just the individual properties you want to
+   * change.
+   *
+   * The object has the following structure and default values:
+   * ```
+   * {
+   *   selectAll: 'Select all',
+   *   selectRow: 'Select row {0}',
+   *   sortColumn: 'Sort by {0}',
+   *   filterColumn: 'Filter by {0}',
+   * }
+   * ```
+   *
+   * @return {!GridI18n}
+   */
+  get i18n() {
+    return super.i18n;
+  }
+
+  set i18n(value) {
+    super.i18n = value;
   }
 
   /** @protected */

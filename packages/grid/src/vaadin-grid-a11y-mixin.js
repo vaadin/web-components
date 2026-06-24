@@ -19,7 +19,16 @@ export const A11yMixin = (superClass) =>
       };
     }
     static get observers() {
-      return ['__a11yUpdateGridSize(size, _columnTree, __emptyState)'];
+      return ['__a11yUpdateGridSize(size, _columnTree, __emptyState)', '__a11yI18nChanged(__effectiveI18n)'];
+    }
+
+    /** @private */
+    __a11yI18nChanged(effectiveI18n) {
+      // Update the context value so subscribed sorters and filters re-format
+      // their labels, and re-run renderers so selection checkboxes (which read
+      // the grid i18n directly, not via context) pick up the new labels.
+      this.__i18nProvider.setValue(effectiveI18n);
+      this.requestContentUpdate();
     }
 
     /** @private */

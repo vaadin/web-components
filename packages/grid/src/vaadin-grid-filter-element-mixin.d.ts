@@ -22,6 +22,15 @@ export declare function GridFilterElementMixin<T extends Constructor<HTMLElement
 
 declare class GridFilterElementMixinClass {
   /**
+   * Accessible name (aria-label) for the filter. When set, it is forwarded to
+   * the slotted text field's `accessibleName` (the focusable input), overriding
+   * the label derived from the grid's `i18n.filterColumn`.
+   *
+   * @attr {string} accessible-name
+   */
+  accessibleName: string | null | undefined;
+
+  /**
    * JS Path of the property in the item used for filtering the data.
    */
   path: string | null | undefined;

@@ -186,16 +186,18 @@ export const CrudGridMixin = (superClass) =>
             // sort column (in case a filter isn't used at all) => add the sort indicator
             const sorter = document.createElement('vaadin-grid-sorter');
             sorter.setAttribute('path', path);
-            // TODO: Localize aria labels
-            sorter.setAttribute('aria-label', `Sort by ${label}`);
+            // The sorter derives its aria-label ("Sort by ...") from the grid's
+            // i18n.sortColumn template and its text content, pulled via context.
             sorter.textContent = label;
             root.appendChild(sorter);
           } else if (!this.noFilter) {
             // Filtering is enabled in this crud-grid, create the filter element
             const filter = document.createElement('vaadin-grid-filter');
             filter.setAttribute('path', path);
-            // TODO: Localize aria labels
-            filter.setAttribute('aria-label', `Filter by ${label}`);
+            // The filter field has no visible label, so it derives its accessible
+            // name from the grid's i18n.filterColumn template (pulled via context)
+            // and the header text supplied here.
+            filter.__headerText = label;
             filter.style.display = 'flex';
 
             const textField = window.document.createElement('vaadin-text-field');
