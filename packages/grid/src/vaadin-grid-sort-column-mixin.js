@@ -56,6 +56,9 @@ export const GridSortColumnMixin = (superClass) =>
       sorter.__rendererDirection = this.direction;
       sorter.direction = this.direction;
       sorter.textContent = this.__getHeader(this.header, this.path);
+      // Push the sort label template so the sorter labels itself from the first
+      // render (the grid's a11y update also pushes it on later i18n changes).
+      sorter.__sortColumnLabel = this._grid?.__effectiveI18n?.sortColumn;
     }
 
     /**

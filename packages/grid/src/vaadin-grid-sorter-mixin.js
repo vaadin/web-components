@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { formatLabel } from './vaadin-grid-helpers.js';
 
 /**
  * A mixin providing common sorter functionality.
@@ -11,6 +12,18 @@ export const GridSorterMixin = (superClass) =>
   class GridSorterMixinClass extends superClass {
     static get properties() {
       return {
+        /**
+         * The `i18n.sortColumn` template (e.g. `'Sort by {0}'`) pushed by the
+         * parent grid. The sorter formats it with its text content to build the
+         * aria-label.
+         *
+         * @private
+         */
+        __sortColumnLabel: {
+          type: String,
+          sync: true,
+        },
+
         /**
          * JS Path of the property in the item used for sorting the data.
          */
@@ -44,13 +57,40 @@ export const GridSorterMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_pathOrDirectionChanged(path, direction)'];
+      return ['_pathOrDirectionChanged(path, direction)', '__updateAriaLabel(__sortColumnLabel)'];
     }
 
     /** @protected */
     ready() {
       super.ready();
       this.addEventListener('click', this._onClick.bind(this));
+
+      // The sorter's text content (the column header) is slotted and set
+      // imperatively by the grid / connector, sometimes after the sorter is
+      // created. Re-format the aria-label whenever the slotted content changes.
+      const slot = this.shadowRoot.querySelector('slot');
+      if (slot) {
+        slot.addEventListener('slotchange', () => this.__updateAriaLabel(this.__sortColumnLabel));
+      }
+    }
+
+    /**
+     * Resolves the sorter's aria-label from the grid's `sortColumn` template
+     * formatted with the header text, or removes it when unavailable.
+     *
+     * @private
+     */
+    __updateAriaLabel(sortColumnLabel) {
+      let label;
+      if (sortColumnLabel) {
+        label = formatLabel(sortColumnLabel, this.textContent.trim());
+      }
+
+      if (label) {
+        this.setAttribute('aria-label', label);
+      } else {
+        this.removeAttribute('aria-label');
+      }
     }
 
     /** @protected */

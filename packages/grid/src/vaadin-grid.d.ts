@@ -5,6 +5,7 @@
  */
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { GridEventMap, GridMixinClass } from './vaadin-grid-mixin.js';
@@ -12,6 +13,25 @@ import type { GridEventMap, GridMixinClass } from './vaadin-grid-mixin.js';
 export * from './vaadin-grid-mixin.js';
 
 export type GridDefaultItem = any;
+
+/**
+ * The i18n object used to localize accessibility strings (aria-labels) rendered
+ * by the grid. The strings are not visible texts.
+ */
+export interface GridI18n {
+  /** Accessible name for the "select all" checkbox in a selection column header. */
+  selectAll?: string;
+  /**
+   * Accessible name for the "select row" checkbox in a selection column cell.
+   * `{0}` is replaced with the row's row-header text when available.
+   */
+  selectRow?: string;
+  /**
+   * Accessible name applied to every sorter the grid contains. `{0}` is replaced
+   * with the column header text.
+   */
+  sortColumn?: string;
+}
 
 /**
  * `<vaadin-grid>` is a free, high quality data grid / data table Web Component. The content of the
@@ -279,7 +299,13 @@ declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
 }
 
 interface Grid<TItem = GridDefaultItem>
-  extends DisabledMixinClass, ElementMixinClass, ThemableMixinClass, ThemePropertyMixinClass, GridMixinClass<TItem> {}
+  extends
+    DisabledMixinClass,
+    ElementMixinClass,
+    I18nMixinClass<GridI18n>,
+    ThemableMixinClass,
+    ThemePropertyMixinClass,
+    GridMixinClass<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {
