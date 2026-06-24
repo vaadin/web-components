@@ -91,6 +91,47 @@ describe('sorting', () => {
     });
   });
 
+  describe('aria-label', () => {
+    let sorter;
+
+    beforeEach(async () => {
+      sorter = fixtureSync('<vaadin-grid-sorter path="path">Name</vaadin-grid-sorter>');
+      await nextFrame();
+    });
+
+    it('should set accessibleNamePrefix to "Sort by" by default', () => {
+      expect(sorter.accessibleNamePrefix).to.equal('Sort by');
+    });
+
+    it('should build the aria-label from the prefix and text content', () => {
+      expect(sorter.getAttribute('aria-label')).to.equal('Sort by Name');
+    });
+
+    it('should update the aria-label when the prefix changes', async () => {
+      sorter.accessibleNamePrefix = 'Sort using';
+      await nextFrame();
+      expect(sorter.getAttribute('aria-label')).to.equal('Sort using Name');
+    });
+
+    it('should update the aria-label when the text content changes', async () => {
+      sorter.textContent = 'First name';
+      await nextFrame();
+      expect(sorter.getAttribute('aria-label')).to.equal('Sort by First name');
+    });
+
+    it('should remove the aria-label when the text content is cleared', async () => {
+      sorter.textContent = '';
+      await nextFrame();
+      expect(sorter.hasAttribute('aria-label')).to.be.false;
+    });
+
+    it('should remove the aria-label when the prefix is cleared', async () => {
+      sorter.accessibleNamePrefix = '';
+      await nextFrame();
+      expect(sorter.hasAttribute('aria-label')).to.be.false;
+    });
+  });
+
   describe('DOM operations', () => {
     let grid, columns, sorters;
 

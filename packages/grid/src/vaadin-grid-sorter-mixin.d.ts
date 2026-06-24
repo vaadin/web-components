@@ -31,6 +31,14 @@ export declare function GridSorterMixin<T extends Constructor<HTMLElement>>(
 
 declare class GridSorterMixinClass {
   /**
+   * The prefix used for the sorter accessible name (aria-label),
+   * prepended to the text content. Defaults to "Sort by".
+   *
+   * @attr {string} accessible-name-prefix
+   */
+  accessibleNamePrefix: string;
+
+  /**
    * JS Path of the property in the item used for sorting the data.
    */
   path: string | null | undefined;

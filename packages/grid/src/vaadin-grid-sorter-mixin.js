@@ -12,6 +12,18 @@ export const GridSorterMixin = (superClass) =>
     static get properties() {
       return {
         /**
+         * The prefix used for the sorter accessible name (aria-label),
+         * prepended to the text content. Defaults to "Sort by".
+         *
+         * @attr {string} accessible-name-prefix
+         */
+        accessibleNamePrefix: {
+          type: String,
+          value: 'Sort by',
+          sync: true,
+        },
+
+        /**
          * JS Path of the property in the item used for sorting the data.
          */
         path: {
@@ -51,6 +63,15 @@ export const GridSorterMixin = (superClass) =>
     ready() {
       super.ready();
       this.addEventListener('click', this._onClick.bind(this));
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('accessibleNamePrefix')) {
+        this.__updateAriaLabel();
+      }
     }
 
     /** @protected */
@@ -125,6 +146,18 @@ export const GridSorterMixin = (superClass) =>
         this.direction = null;
       } else {
         this.direction = 'asc';
+      }
+    }
+
+    /** @private */
+    __updateAriaLabel() {
+      const prefix = this.accessibleNamePrefix;
+      const headerText = this.textContent.trim();
+
+      if (prefix && headerText) {
+        this.setAttribute('aria-label', `${prefix} ${headerText}`);
+      } else {
+        this.removeAttribute('aria-label');
       }
     }
   };
