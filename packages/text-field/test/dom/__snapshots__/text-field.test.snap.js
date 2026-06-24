@@ -350,3 +350,27 @@ snapshots["vaadin-text-field shadow theme"] =
 `;
 /* end snapshot vaadin-text-field shadow theme */
 
+snapshots["vaadin-text-field host inputMode"] = 
+`<vaadin-text-field>
+  <label
+    for="input-vaadin-text-field-3"
+    id="label-vaadin-text-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-text-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    id="input-vaadin-text-field-3"
+    inputmode="numeric"
+    slot="input"
+    type="text"
+  >
+</vaadin-text-field>
+`;
+/* end snapshot vaadin-text-field host inputMode */
+

@@ -34,6 +34,12 @@ describe('vaadin-text-field', () => {
       await aTimeout(0);
       await expect(field).dom.to.equalSnapshot();
     });
+
+    it('inputMode', async () => {
+      field.inputMode = 'numeric';
+      await nextUpdate(field);
+      await expect(field).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
