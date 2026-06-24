@@ -4,6 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+import { formatLabel } from './vaadin-grid-helpers.js';
+
 /**
  * A mixin providing common sorter functionality.
  */
@@ -11,6 +13,28 @@ export const GridSorterMixin = (superClass) =>
   class GridSorterMixinClass extends superClass {
     static get properties() {
       return {
+        /**
+         * Accessible name (aria-label) for the sorter. When set, it overrides the
+         * label derived from the grid's `i18n.sortColumn` template. Used to label
+         * a standalone sorter that has no parent grid.
+         *
+         * @attr {string} accessible-name
+         */
+        accessibleName: {
+          type: String,
+        },
+
+        /**
+         * The `i18n.sortColumn` template distributed by the parent grid, e.g.
+         * `'Sort by {0}'`. Combined with the sorter's text content to form the
+         * aria-label.
+         *
+         * @private
+         */
+        __sortColumnLabel: {
+          type: String,
+        },
+
         /**
          * JS Path of the property in the item used for sorting the data.
          */
@@ -44,13 +68,44 @@ export const GridSorterMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_pathOrDirectionChanged(path, direction)'];
+      return ['_pathOrDirectionChanged(path, direction)', '__updateAriaLabel(accessibleName, __sortColumnLabel)'];
     }
 
     /** @protected */
     ready() {
       super.ready();
       this.addEventListener('click', this._onClick.bind(this));
+
+      // The sorter's text content (the column header) is slotted and set
+      // imperatively by the grid / connector, sometimes after the sorter is
+      // created. Re-format the aria-label whenever the slotted content changes.
+      const slot = this.shadowRoot.querySelector('slot');
+      if (slot) {
+        slot.addEventListener('slotchange', () => this.__updateAriaLabel(this.accessibleName, this.__sortColumnLabel));
+      }
+    }
+
+    /**
+     * Resolves the sorter's aria-label using the precedence:
+     * 1. explicit `accessibleName`,
+     * 2. the grid-distributed `sortColumn` template formatted with the header text,
+     * 3. none (attribute removed).
+     *
+     * @private
+     */
+    __updateAriaLabel(accessibleName, sortColumnLabel) {
+      let label;
+      if (accessibleName) {
+        label = accessibleName;
+      } else if (sortColumnLabel) {
+        label = formatLabel(sortColumnLabel, this.textContent.trim());
+      }
+
+      if (label) {
+        this.setAttribute('aria-label', label);
+      } else {
+        this.removeAttribute('aria-label');
+      }
     }
 
     /** @protected */

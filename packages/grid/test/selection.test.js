@@ -270,7 +270,7 @@ describe('multi selection column', () => {
   });
 
   it('should set aria-label on the checkbox input element', () => {
-    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select Row');
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select row');
   });
 
   it('should select item when checkbox is checked', async () => {
@@ -394,7 +394,7 @@ describe('multi selection column', () => {
   });
 
   it('should set aria-label on the select all checkbox input element', () => {
-    expect(selectAllCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select All');
+    expect(selectAllCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select all');
   });
 
   it('should set selectAll when header checkbox is clicked', async () => {

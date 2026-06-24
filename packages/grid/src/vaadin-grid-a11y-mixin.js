@@ -19,7 +19,15 @@ export const A11yMixin = (superClass) =>
       };
     }
     static get observers() {
-      return ['__a11yUpdateGridSize(size, _columnTree, __emptyState)'];
+      return ['__a11yUpdateGridSize(size, _columnTree, __emptyState)', '__a11yI18nChanged(__effectiveI18n)'];
+    }
+
+    /** @private */
+    __a11yI18nChanged(_effectiveI18n) {
+      // Re-run renderers so selection checkboxes pick up the new labels, and
+      // re-distribute the sorter label template to every sorter.
+      this.requestContentUpdate();
+      this.__a11yUpdateSorters();
     }
 
     /** @private */
@@ -156,7 +164,12 @@ export const A11yMixin = (superClass) =>
 
     /** @private */
     __a11yUpdateSorters() {
+      const sortColumnLabel = this.__effectiveI18n?.sortColumn;
       Array.from(this.querySelectorAll('vaadin-grid-sorter')).forEach((sorter) => {
+        // Distribute the sort label template so the sorter can format its own
+        // aria-label from the template and its header text.
+        sorter.__sortColumnLabel = sortColumnLabel;
+
         let cellContent = sorter.parentNode;
         while (cellContent && cellContent.localName !== 'vaadin-grid-cell-content') {
           cellContent = cellContent.parentNode;

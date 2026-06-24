@@ -31,6 +31,15 @@ export declare function GridSorterMixin<T extends Constructor<HTMLElement>>(
 
 declare class GridSorterMixinClass {
   /**
+   * Accessible name (aria-label) for the sorter. When set, it overrides the
+   * label derived from the grid's `i18n.sortColumn` template. Used to label a
+   * standalone sorter that has no parent grid.
+   *
+   * @attr {string} accessible-name
+   */
+  accessibleName: string | null | undefined;
+
+  /**
    * JS Path of the property in the item used for sorting the data.
    */
   path: string | null | undefined;

@@ -56,6 +56,10 @@ export const GridSortColumnMixin = (superClass) =>
       sorter.__rendererDirection = this.direction;
       sorter.direction = this.direction;
       sorter.textContent = this.__getHeader(this.header, this.path);
+      // Distribute the sort label template together with the header text. The
+      // header renderer re-runs on i18n change (via the grid's content update),
+      // so this keeps the sorter's aria-label correct from the first render.
+      sorter.__sortColumnLabel = this._grid?.__effectiveI18n?.sortColumn;
     }
 
     /**

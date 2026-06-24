@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
+import { formatLabel } from './vaadin-grid-helpers.js';
 
 /**
  * A mixin that provides basic functionality for the
@@ -150,11 +151,12 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       let checkbox = root.firstElementChild;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
-        checkbox.accessibleName = 'Select All';
         checkbox.classList.add('vaadin-grid-select-all-checkbox');
         checkbox.addEventListener('change', this.__onSelectAllCheckboxChange);
         root.appendChild(checkbox);
       }
+
+      checkbox.accessibleName = formatLabel(this._grid?.__effectiveI18n?.selectAll);
 
       const checked = this.__isChecked(this.selectAll, this._indeterminate);
       checkbox.checked = checked;
@@ -171,7 +173,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       let checkbox = root.firstElementChild;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
-        checkbox.accessibleName = 'Select Row';
         checkbox.addEventListener('change', this.__onSelectRowCheckboxChange);
         root.appendChild(checkbox);
         addListener(root, 'track', this.__onCellTrack);
@@ -179,6 +180,11 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         root.addEventListener('mousedown', this.__onCellMouseDown);
         root.addEventListener('click', this.__onCellClick);
       }
+
+      // PROTOTYPE: `{0}` is the row-header text, which is not yet reachable from
+      // the body-cell renderer (see findings). For now it resolves to empty,
+      // so the label trims to e.g. "Select row".
+      checkbox.accessibleName = formatLabel(this._grid?.__effectiveI18n?.selectRow, this.__getRowHeaderText(item));
 
       checkbox.__item = item;
       checkbox.checked = selected;
@@ -188,6 +194,21 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
       const isHidden = !isSelectable && !selected;
       checkbox.style.visibility = isHidden ? 'hidden' : '';
+    }
+
+    /**
+     * Returns the row-header text for the given item, used as the `{0}`
+     * parameter of the `selectRow` label so screen readers can announce which
+     * row a checkbox selects.
+     *
+     * PROTOTYPE STUB: the row-header cell text is not yet reachable here (the
+     * renderer only receives `item`/`selected`, not the rendered row-header
+     * cells). Returns empty for now; see findings for the plumbing options.
+     *
+     * @private
+     */
+    __getRowHeaderText(_item) {
+      return '';
     }
 
     /**
