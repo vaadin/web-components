@@ -51,10 +51,40 @@ describe('grid i18n (prototype)', () => {
     expect(checkbox.accessibleName).to.equal('Markera alla');
   });
 
-  it('should label select-row checkbox from i18n.selectRow (trimmed, no row-header text)', async () => {
+  it('should label select-row checkbox from i18n.selectRow (trimmed, no row-header column)', async () => {
     grid.i18n = { ...grid.i18n, selectRow: 'Markera rad {0}' };
     await nextFrame();
     const checkbox = getBodyCellContent(grid, 0, 0).querySelector('vaadin-checkbox');
     expect(checkbox.accessibleName).to.equal('Markera rad');
+  });
+});
+
+describe('grid i18n selectRow {0} from row-header column (prototype)', () => {
+  let grid;
+
+  beforeEach(async () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-selection-column></vaadin-grid-selection-column>
+        <vaadin-grid-column path="firstName" row-header></vaadin-grid-column>
+        <vaadin-grid-column path="lastName" row-header></vaadin-grid-column>
+        <vaadin-grid-column path="role"></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+    grid.items = [{ firstName: 'John', lastName: 'Doe', role: 'admin' }];
+    flushGrid(grid);
+    await nextFrame();
+  });
+
+  it('should fill {0} with the row-header columns values for the row', () => {
+    const checkbox = getBodyCellContent(grid, 0, 0).querySelector('vaadin-checkbox');
+    expect(checkbox.accessibleName).to.equal('Select row John, Doe');
+  });
+
+  it('should update {0} when the selectRow template changes', async () => {
+    grid.i18n = { ...grid.i18n, selectRow: 'Markera rad {0}' };
+    await nextFrame();
+    const checkbox = getBodyCellContent(grid, 0, 0).querySelector('vaadin-checkbox');
+    expect(checkbox.accessibleName).to.equal('Markera rad John, Doe');
   });
 });

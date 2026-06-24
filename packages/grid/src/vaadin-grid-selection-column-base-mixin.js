@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
+import { get } from '@vaadin/component-base/src/path-utils.js';
 import { formatLabel } from './vaadin-grid-helpers.js';
 
 /**
@@ -181,9 +182,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         root.addEventListener('click', this.__onCellClick);
       }
 
-      // PROTOTYPE: `{0}` is the row-header text, which is not yet reachable from
-      // the body-cell renderer (see findings). For now it resolves to empty,
-      // so the label trims to e.g. "Select row".
+      // `{0}` is the row-header text, derived from the row-header column(s) so
+      // screen readers can announce which row a checkbox selects.
       checkbox.accessibleName = formatLabel(this._grid?.__effectiveI18n?.selectRow, this.__getRowHeaderText(item));
 
       checkbox.__item = item;
@@ -201,14 +201,27 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      * parameter of the `selectRow` label so screen readers can announce which
      * row a checkbox selects.
      *
-     * PROTOTYPE STUB: the row-header cell text is not yet reachable here (the
-     * renderer only receives `item`/`selected`, not the rendered row-header
-     * cells). Returns empty for now; see findings for the plumbing options.
+     * The text is derived from the leaf columns marked with `rowHeader` that
+     * have a `path`: their values for this item are read directly and joined.
+     * Columns that use a custom renderer instead of a `path` are skipped, since
+     * their rendered text is not available here. Returns an empty string when
+     * no row-header column provides a value.
      *
      * @private
      */
-    __getRowHeaderText(_item) {
-      return '';
+    __getRowHeaderText(item) {
+      const grid = this._grid;
+      const columnTree = grid && grid._columnTree;
+      if (!columnTree || !item) {
+        return '';
+      }
+
+      const leafColumns = columnTree[columnTree.length - 1] || [];
+      return leafColumns
+        .filter((column) => column.rowHeader && column.path)
+        .map((column) => get(column.path, item))
+        .filter((value) => value != null && value !== '')
+        .join(', ');
     }
 
     /**
