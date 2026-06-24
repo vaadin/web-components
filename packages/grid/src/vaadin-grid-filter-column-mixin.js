@@ -51,7 +51,12 @@ export const GridFilterColumnMixin = (superClass) =>
 
       filter.path = this.path;
 
-      textField.label = this.__getHeader(this.header, this.path);
+      const header = this.__getHeader(this.header, this.path);
+      textField.label = header;
+      // Distribute the header text and the grid's filter label template so the
+      // filter can format its accessible name ("Filter by {header}").
+      filter.__headerText = header;
+      filter.__filterColumnLabel = this._grid?.__effectiveI18n?.filterColumn;
     }
 
     /**

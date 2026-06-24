@@ -35,9 +35,8 @@ export const A11yMixin = (superClass) =>
     __a11yUpdateFilters() {
       const filterColumnLabel = this.__effectiveI18n?.filterColumn;
       Array.from(this.querySelectorAll('vaadin-grid-filter')).forEach((filter) => {
-        // Distribute the filter label template so the filter can format its own
-        // accessible name. Label-less filters (e.g. CRUD) apply it; declarative
-        // filter columns with a visible label ignore it.
+        // Distribute the filter label template so each filter can format its own
+        // accessible name from the template and its header text.
         filter.__filterColumnLabel = filterColumnLabel;
       });
     }

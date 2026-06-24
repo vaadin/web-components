@@ -297,9 +297,9 @@ class Grid extends GridMixin(I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       // `{0}` is replaced with the column header text. Sort direction is announced
       // by the browser from `aria-sort` and is not part of this string.
       sortColumn: 'Sort by {0}',
-      // Accessible name applied to label-less `<vaadin-grid-filter>` fields.
-      // `{0}` is replaced with the column header text. Filter fields that have a
-      // visible label keep that label as their accessible name.
+      // Accessible name applied to every `<vaadin-grid-filter>` field.
+      // `{0}` is replaced with the column header text. The accessible name takes
+      // precedence over a visible label, which it embeds (WCAG 2.5.3).
       filterColumn: 'Filter by {0}',
     };
   }

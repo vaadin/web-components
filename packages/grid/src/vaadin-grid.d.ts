@@ -32,8 +32,8 @@ export interface GridI18n {
    */
   sortColumn?: string;
   /**
-   * Accessible name applied to label-less filter fields. `{0}` is replaced with
-   * the column header text.
+   * Accessible name applied to filter fields. `{0}` is replaced with the column
+   * header text.
    */
   filterColumn?: string;
 }

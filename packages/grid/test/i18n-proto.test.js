@@ -103,19 +103,26 @@ describe('grid i18n filter (prototype)', () => {
     await nextFrame();
   });
 
-  it('should keep the visible label as the accessible name (no filterColumn override)', () => {
+  it('should apply filterColumn as the accessible name while keeping the visible label', () => {
     const filter = grid.querySelector('vaadin-grid-filter');
     const field = filter.querySelector('vaadin-text-field');
+    // Visible label is preserved; the accessible name embeds it (WCAG 2.5.3).
     expect(field.label).to.equal('Name');
-    // Field has a visible label, so filterColumn is not applied.
-    expect(field.accessibleName == null || field.accessibleName === '').to.be.true;
+    expect(field.accessibleName).to.equal('Filter by Name');
   });
 
-  it('should forward explicit filter accessibleName to the inner text field', async () => {
+  it('should relabel when filterColumn changes', async () => {
+    grid.i18n = { ...grid.i18n, filterColumn: 'Filtrera enligt {0}' };
+    await nextFrame();
+    const field = grid.querySelector('vaadin-grid-filter').querySelector('vaadin-text-field');
+    expect(field.accessibleName).to.equal('Filtrera enligt Name');
+  });
+
+  it('should let explicit filter accessibleName override filterColumn', async () => {
     const filter = grid.querySelector('vaadin-grid-filter');
-    filter.accessibleName = 'Filter by Name';
+    filter.accessibleName = 'Custom';
     await nextFrame();
     const field = filter.querySelector('vaadin-text-field');
-    expect(field.accessibleName).to.equal('Filter by Name');
+    expect(field.accessibleName).to.equal('Custom');
   });
 });

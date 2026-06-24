@@ -53,7 +53,8 @@ export const GridFilterElementMixin = (superClass) =>
 
         /**
          * The column header text used as the `{0}` parameter of
-         * `__filterColumnLabel`. Provided by label-less consumers (e.g. CRUD).
+         * `__filterColumnLabel`. Provided by the consumer that creates the
+         * filter (the declarative filter column or CRUD).
          *
          * @private
          */
@@ -80,9 +81,12 @@ export const GridFilterElementMixin = (superClass) =>
      * Forwards the resolved accessible name to the slotted text field (the
      * focusable input), using the precedence:
      * 1. explicit `accessibleName`,
-     * 2. `filterColumn` formatted with the header text, but only when the field
-     *    has no visible `label` of its own,
-     * 3. otherwise leave the field's own `label` as its accessible name.
+     * 2. `filterColumn` formatted with the header text.
+     *
+     * The accessible name is applied whether or not the field has a visible
+     * `label`: an `aria-label` takes precedence over the `<label>` for the
+     * accessible name, and since the template embeds the header text the visible
+     * label stays contained in the accessible name (WCAG 2.5.3).
      *
      * @private
      */
@@ -94,7 +98,7 @@ export const GridFilterElementMixin = (superClass) =>
       let label;
       if (accessibleName) {
         label = accessibleName;
-      } else if (!textField.label && filterColumnLabel && headerText) {
+      } else if (filterColumnLabel && headerText) {
         label = formatLabel(filterColumnLabel, headerText);
       }
 
