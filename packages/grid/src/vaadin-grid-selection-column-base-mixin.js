@@ -21,6 +21,43 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     static get properties() {
       return {
         /**
+         * The accessible name (aria-label) for the Select All checkbox in the
+         * header cell. Defaults to "Select All".
+         *
+         * @attr {string} accessible-name-select-all
+         */
+        accessibleNameSelectAll: {
+          type: String,
+          value: 'Select All',
+          sync: true,
+        },
+
+        /**
+         * The default accessible name (aria-label) for the Select Row checkbox
+         * in each body cell. Used when `selectRowAccessibleNameGenerator` is
+         * unset or returns `null` for a row. Defaults to "Select Row".
+         *
+         * @attr {string} accessible-name-select-row
+         */
+        accessibleNameSelectRow: {
+          type: String,
+          value: 'Select Row',
+          sync: true,
+        },
+
+        /**
+         * A function that returns the accessible name (aria-label) for the
+         * Select Row checkbox of a given item. When it returns a non-null
+         * value, that value is used as the checkbox accessible name; otherwise
+         * the checkbox falls back to `accessibleNameSelectRow`.
+         *
+         * @type {(item: !GridItem) => string}
+         */
+        selectRowAccessibleNameGenerator: {
+          type: Function,
+        },
+
+        /**
          * Width of the cells for this column.
          */
         width: {
@@ -101,8 +138,15 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, selectAll, _indeterminate, _selectAllHidden)',
+        '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, selectAll, _indeterminate, _selectAllHidden, accessibleNameSelectAll)',
+        '__selectRowAccessibleNameChanged(accessibleNameSelectRow, selectRowAccessibleNameGenerator)',
       ];
+    }
+
+    /** @private */
+    __selectRowAccessibleNameChanged() {
+      // Re-render body cells so existing Select Row checkboxes pick up the new name.
+      this._grid?.requestContentUpdate();
     }
 
     constructor() {
@@ -150,11 +194,12 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       let checkbox = root.firstElementChild;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
-        checkbox.accessibleName = 'Select All';
         checkbox.classList.add('vaadin-grid-select-all-checkbox');
         checkbox.addEventListener('change', this.__onSelectAllCheckboxChange);
         root.appendChild(checkbox);
       }
+
+      checkbox.accessibleName = this.accessibleNameSelectAll;
 
       const checked = this.__isChecked(this.selectAll, this._indeterminate);
       checkbox.checked = checked;
@@ -171,7 +216,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       let checkbox = root.firstElementChild;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
-        checkbox.accessibleName = 'Select Row';
         checkbox.addEventListener('change', this.__onSelectRowCheckboxChange);
         root.appendChild(checkbox);
         addListener(root, 'track', this.__onCellTrack);
@@ -180,6 +224,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         root.addEventListener('click', this.__onCellClick);
       }
 
+      const generatedName = this.selectRowAccessibleNameGenerator?.(item);
+      checkbox.accessibleName = generatedName ?? this.accessibleNameSelectRow;
       checkbox.__item = item;
       checkbox.checked = selected;
 

@@ -273,6 +273,40 @@ describe('multi selection column', () => {
     expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select Row');
   });
 
+  it('should update the body checkbox aria-label when accessibleNameSelectRow is set', async () => {
+    selectionColumn.accessibleNameSelectRow = 'Select item';
+    await nextRender();
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select item');
+  });
+
+  it('should use the per-row name from selectRowAccessibleNameGenerator', async () => {
+    selectionColumn.selectRowAccessibleNameGenerator = (item) => `Select ${item}`;
+    await nextRender();
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select foo');
+  });
+
+  it('should fall back to accessibleNameSelectRow when the generator returns null', async () => {
+    selectionColumn.selectRowAccessibleNameGenerator = () => null;
+    await nextRender();
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select Row');
+  });
+
+  it('should re-render body rows when selectRowAccessibleNameGenerator changes', async () => {
+    selectionColumn.selectRowAccessibleNameGenerator = (item) => `Select ${item}`;
+    await nextRender();
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select foo');
+
+    selectionColumn.selectRowAccessibleNameGenerator = (item) => `Select ${item}!`;
+    await nextRender();
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select foo!');
+  });
+
+  it('should not affect the select all checkbox aria-label with a generator set', async () => {
+    selectionColumn.selectRowAccessibleNameGenerator = (item) => `Select ${item}`;
+    await nextRender();
+    expect(selectAllCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select All');
+  });
+
   it('should select item when checkbox is checked', async () => {
     firstBodyCheckbox.click();
     await nextFrame();
@@ -395,6 +429,12 @@ describe('multi selection column', () => {
 
   it('should set aria-label on the select all checkbox input element', () => {
     expect(selectAllCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select All');
+  });
+
+  it('should update the select all checkbox aria-label when accessibleNameSelectAll is set', async () => {
+    selectionColumn.accessibleNameSelectAll = 'Select everything';
+    await nextRender();
+    expect(selectAllCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select everything');
   });
 
   it('should set selectAll when header checkbox is clicked', async () => {

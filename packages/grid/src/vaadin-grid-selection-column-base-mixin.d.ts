@@ -22,6 +22,31 @@ export declare function GridSelectionColumnBaseMixin<TItem, T extends Constructo
  */
 export declare class GridSelectionColumnBaseMixinClass<TItem> {
   /**
+   * The accessible name (aria-label) for the Select All checkbox in the
+   * header cell. Defaults to "Select All".
+   *
+   * @attr {string} accessible-name-select-all
+   */
+  accessibleNameSelectAll: string;
+
+  /**
+   * The default accessible name (aria-label) for the Select Row checkbox in
+   * each body cell. Used when `selectRowAccessibleNameGenerator` is unset or
+   * returns `null` for a row. Defaults to "Select Row".
+   *
+   * @attr {string} accessible-name-select-row
+   */
+  accessibleNameSelectRow: string;
+
+  /**
+   * A function that returns the accessible name (aria-label) for the Select
+   * Row checkbox of a given item. When it returns a non-null value, that value
+   * is used as the checkbox accessible name; otherwise the checkbox falls back
+   * to `accessibleNameSelectRow`.
+   */
+  selectRowAccessibleNameGenerator: (item: TItem) => string;
+
+  /**
    * When true, all the items are selected.
    * @attr {boolean} select-all
    */
