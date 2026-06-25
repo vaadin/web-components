@@ -16,6 +16,10 @@ const base = css`
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    background: var(--vaadin-rich-text-editor-background, var(--vaadin-background-color));
+    border: var(--vaadin-input-field-border-width, 1px) solid
+      var(--vaadin-input-field-border-color, var(--vaadin-border-color));
+    border-radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
   }
 
   :host([hidden]) {
@@ -35,13 +39,8 @@ const base = css`
     display: flex;
     flex: auto;
     flex-direction: column;
-    max-height: inherit;
-    min-height: inherit;
-    background: var(--vaadin-rich-text-editor-background, var(--vaadin-background-color));
-    border: var(--vaadin-input-field-border-width, 1px) solid
-      var(--vaadin-input-field-border-color, var(--vaadin-border-color));
-    border-radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
-    outline-offset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
+    min-height: 0;
+    border-radius: inherit;
     contain: paint;
   }
 
