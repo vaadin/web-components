@@ -35,11 +35,22 @@ export const TextFieldMixin = (superClass) =>
         pattern: {
           type: String,
         },
+
+        /**
+         * A hint to the browser about the type of virtual keyboard to display
+         * when the user interacts with the field on a mobile device.
+         * List of available options at:
+         * https://developer.mozilla.org/en/docs/Web/HTML/Global_attributes/inputmode
+         */
+        inputMode: {
+          type: String,
+          attribute: 'inputmode',
+        },
       };
     }
 
     static get delegateAttrs() {
-      return [...super.delegateAttrs, 'maxlength', 'minlength', 'pattern'];
+      return [...super.delegateAttrs, 'maxlength', 'minlength', 'pattern', 'inputMode'];
     }
 
     static get constraints() {

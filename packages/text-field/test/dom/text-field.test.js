@@ -34,6 +34,18 @@ describe('vaadin-text-field', () => {
       await aTimeout(0);
       await expect(field).dom.to.equalSnapshot();
     });
+
+    it('inputMode property', async () => {
+      field.inputMode = 'search';
+      await nextUpdate(field);
+      await expect(field).dom.to.equalSnapshot();
+    });
+
+    it('inputmode attribute', async () => {
+      field.setAttribute('inputmode', 'search');
+      await nextUpdate(field);
+      await expect(field).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {

@@ -57,4 +57,12 @@ export declare class TextFieldMixinClass {
    * The pattern must match the entire value, not just some subset.
    */
   pattern: string;
+
+  /**
+   * A hint to the browser about the type of virtual keyboard to display
+   * when the user interacts with the field on a mobile device.
+   * List of available options at:
+   * https://developer.mozilla.org/en/docs/Web/HTML/Global_attributes/inputmode
+   */
+  inputMode: string;
 }
