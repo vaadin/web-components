@@ -35,8 +35,14 @@ describe('vaadin-text-field', () => {
       await expect(field).dom.to.equalSnapshot();
     });
 
-    it('inputMode', async () => {
-      field.inputMode = 'numeric';
+    it('inputMode property', async () => {
+      field.inputMode = 'search';
+      await nextUpdate(field);
+      await expect(field).dom.to.equalSnapshot();
+    });
+
+    it('inputmode attribute', async () => {
+      field.setAttribute('inputmode', 'search');
       await nextUpdate(field);
       await expect(field).dom.to.equalSnapshot();
     });

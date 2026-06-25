@@ -44,16 +44,13 @@ export const TextFieldMixin = (superClass) =>
          */
         inputMode: {
           type: String,
+          attribute: 'inputmode',
         },
       };
     }
 
     static get delegateAttrs() {
-      return [...super.delegateAttrs, 'maxlength', 'minlength', 'pattern'];
-    }
-
-    static get delegateProps() {
-      return [...super.delegateProps, 'inputMode'];
+      return [...super.delegateAttrs, 'maxlength', 'minlength', 'pattern', 'inputMode'];
     }
 
     static get constraints() {
