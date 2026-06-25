@@ -1,0 +1,94 @@
+:where(:root),
+:where(:host) {
+  --vaadin-rich-text-editor-toolbar-padding: calc(var(--lumo-space-s) - 1px) var(--lumo-space-xs);
+  --vaadin-rich-text-editor-toolbar-gap: 0px;
+  --vaadin-rich-text-editor-toolbar-button-background: transparent;
+  --vaadin-rich-text-editor-toolbar-button-text-color: var(--lumo-contrast-60pct);
+  --vaadin-rich-text-editor-toolbar-button-padding: 0px;
+  --vaadin-rich-text-editor-toolbar-button-border-width: 0px;
+  --vaadin-rich-text-editor-content-padding: var(--lumo-space-s) var(--lumo-space-m);
+
+  /* Color popup */
+  --vaadin-rich-text-editor-overlay-padding: var(--lumo-space-xs);
+  --vaadin-rich-text-editor-overlay-gap: var(--lumo-space-xs);
+  --vaadin-rich-text-editor-overlay-color-option-border-radius: 0;
+  --vaadin-rich-text-editor-overlay-color-option-width: 1.25rem;
+  --vaadin-rich-text-editor-overlay-color-option-height: 1.25rem;
+}
+
+:where(vaadin-rich-text-editor) {
+  min-height: calc(var(--lumo-size-m) * 8);
+  border-radius: 0;
+  border-color: var(--lumo-contrast-20pct);
+  --vaadin-icon-visual-size: 80%;
+}
+
+:where(vaadin-rich-text-editor)[theme~='no-border'] {
+  border: 0;
+  --vaadin-rich-text-editor-toolbar-padding: var(--lumo-space-s) var(--lumo-space-xs);
+}
+
+/* Divider between toolbar and content */
+:where(vaadin-rich-text-editor):not([theme~='no-border'], [readonly])::part(content) {
+  border-top: 1px solid var(--lumo-contrast-20pct);
+}
+
+/* Toolbar buttons: fixed square targets with a centered icon */
+:where(vaadin-rich-text-editor)::part(toolbar-button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--lumo-size-m);
+  height: var(--lumo-size-m);
+  margin: 2px 1px;
+  transition:
+    background-color 100ms,
+    color 100ms;
+}
+
+:where(vaadin-rich-text-editor)::part(toolbar-group) {
+  margin: 0 calc(var(--lumo-space-l) / 2 - 1px);
+}
+
+@media (any-hover: hover) {
+  :where(vaadin-rich-text-editor)::part(toolbar-button):hover {
+    --vaadin-rich-text-editor-toolbar-button-background: var(--lumo-contrast-5pct);
+    --vaadin-rich-text-editor-toolbar-button-text-color: var(--lumo-contrast-80pct);
+  }
+}
+
+:where(vaadin-rich-text-editor)::part(toolbar-button):active {
+  --vaadin-rich-text-editor-toolbar-button-background: var(--lumo-contrast-10pct);
+  --vaadin-rich-text-editor-toolbar-button-text-color: var(--lumo-contrast-90pct);
+}
+
+/* Pressed wins over hover/active */
+:where(vaadin-rich-text-editor)::part(toolbar-button-pressed),
+:where(vaadin-rich-text-editor)::part(toolbar-button-pressed):hover,
+:where(vaadin-rich-text-editor)::part(toolbar-button-pressed):active {
+  --vaadin-rich-text-editor-toolbar-button-background: var(--vaadin-selection-color, var(--lumo-primary-color));
+  --vaadin-rich-text-editor-toolbar-button-text-color: var(--lumo-primary-contrast-color);
+}
+
+/* Compact */
+:where(vaadin-rich-text-editor)[theme~='compact'] {
+  min-height: calc(var(--lumo-size-m) * 6);
+  --vaadin-rich-text-editor-toolbar-padding: var(--lumo-space-xs) 0;
+}
+
+:where(vaadin-rich-text-editor)[theme~='compact'][theme~='no-border'] {
+  --vaadin-rich-text-editor-toolbar-padding: calc(var(--lumo-space-xs) + 1px) 0;
+}
+
+:where(vaadin-rich-text-editor)[theme~='compact']::part(toolbar-button) {
+  width: var(--lumo-size-s);
+  height: var(--lumo-size-s);
+}
+
+:where(vaadin-rich-text-editor)[theme~='compact']::part(toolbar-group) {
+  margin: 0 calc(var(--lumo-space-m) / 2 - 1px);
+}
+
+:where(vaadin-rich-text-editor-popup)::part(overlay) {
+  margin-block: var(--lumo-space-xs);
+}
