@@ -133,6 +133,8 @@ export class TanStackAdapter {
   }
 
   update(startIndex = 0, endIndex = this.size - 1) {
+    const updatedElements = [];
+
     this.#elements.forEach((el) => {
       if (el.hidden) {
         return;
@@ -141,7 +143,15 @@ export class TanStackAdapter {
       const index = this.#getElementIndex(el);
       if (startIndex <= index && index <= endIndex) {
         this.updateElement(el, index);
+        updatedElements.push(el);
       }
+    });
+
+    // Re-measure synchronously so size changes are reflected immediately
+    // instead of waiting for the async ResizeObserver, which fires after the
+    // next animation frame and would leave positioning stale for a frame.
+    updatedElements.forEach((el) => {
+      this.#measureElement(el);
     });
   }
 
