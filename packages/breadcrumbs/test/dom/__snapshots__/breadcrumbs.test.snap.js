@@ -139,7 +139,7 @@ snapshots["vaadin-breadcrumbs overflow host"] =
 `<vaadin-breadcrumbs
   has-overflow=""
   role="navigation"
-  style="max-width: 140px"
+  style="max-width: 160px"
 >
   <vaadin-breadcrumbs-item
     path="/"
@@ -225,7 +225,7 @@ snapshots["vaadin-breadcrumbs overflow opened"] =
   has-overflow=""
   role="navigation"
   start-aligned=""
-  style="max-width: 140px"
+  style="max-width: 160px"
   top-aligned=""
 >
   <vaadin-breadcrumbs-item
@@ -236,8 +236,6 @@ snapshots["vaadin-breadcrumbs overflow opened"] =
     Home
   </vaadin-breadcrumbs-item>
   <vaadin-breadcrumbs-item
-    focus-ring=""
-    focused=""
     path="/docs"
     role="listitem"
     slot="overlay"

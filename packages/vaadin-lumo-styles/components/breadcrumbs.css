@@ -20,3 +20,8 @@
     lumo_mixins_menu-overlay-core,
     lumo_components_breadcrumbs-overlay;
 }
+
+:where(:root),
+:where(:host) {
+  --vaadin-breadcrumbs-link-color: 'inherit';
+}

@@ -36,11 +36,14 @@ export const ComboBoxFocusIndexMixin = (superClass) =>
         return;
       }
 
-      // Move the viewport and set the focused row. Rendering rows
-      // around `index` lets placeholder rows fire `index-requested`,
-      // which loads any missing pages via the data-provider chain.
-      this._scrollIntoView(index);
+      // Set the focused row first: this synchronously runs the scroller's
+      // `__focusedIndexChanged` observer, which scrolls the row into view
+      // (bottom-aligned). Then scroll again to center it so the final position
+      // wins. Rendering rows around `index` also lets placeholder rows fire
+      // `index-requested`, loading any missing pages via the data-provider
+      // chain.
       this._focusedIndex = index;
+      this._scrollIntoView(index, true);
 
       // A page-load may have kicked in during the scroll (placeholder
       // rows in the new viewport requested their pages). Re-fire after

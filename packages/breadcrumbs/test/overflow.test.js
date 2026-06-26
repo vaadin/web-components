@@ -170,22 +170,28 @@ describe('overflow', () => {
       expect(overlay.opened).to.be.true;
     });
 
-    it('should move focus to the first overlay item after opening via Enter', async () => {
+    it('should keep focus on the overflow button after opening via click', async () => {
+      button.focus();
+      button.click();
+      await nextRender();
+
+      expect(breadcrumbs.shadowRoot.activeElement).to.equal(button);
+    });
+
+    it('should keep focus on the overflow button after opening via Enter', async () => {
       button.focus();
       await sendKeys({ press: 'Enter' });
       await nextRender();
 
-      const firstItem = breadcrumbs.querySelector('vaadin-breadcrumbs-item[slot="overlay"]');
-      expectFocusedItem(firstItem);
+      expect(breadcrumbs.shadowRoot.activeElement).to.equal(button);
     });
 
-    it('should move focus to the first overlay item after opening via Space', async () => {
+    it('should keep focus on the overflow button after opening via Space', async () => {
       button.focus();
       await sendKeys({ press: 'Space' });
       await nextRender();
 
-      const firstItem = breadcrumbs.querySelector('vaadin-breadcrumbs-item[slot="overlay"]');
-      expectFocusedItem(firstItem);
+      expect(breadcrumbs.shadowRoot.activeElement).to.equal(button);
     });
   });
 
@@ -194,6 +200,7 @@ describe('overflow', () => {
       breadcrumbs.style.maxWidth = '600px';
       await nextResize(breadcrumbs);
 
+      button.focus();
       button.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -249,20 +256,41 @@ describe('overflow', () => {
       breadcrumbs.style.maxWidth = '200px';
       await nextResize(breadcrumbs);
 
+      button.focus();
       button.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
       overlayItems = items.filter((item) => item.slot === 'overlay');
     });
 
-    it('should move focus to the next link on ArrowDown', async () => {
+    it('should move focus to the first link on first ArrowDown', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      expectFocusedItem(overlayItems[0]);
+    });
+
+    it('should move focus to the last link on first ArrowUp', async () => {
+      await sendKeys({ press: 'ArrowUp' });
+      await nextRender();
+
+      expectFocusedItem(overlayItems.at(-1));
+    });
+
+    it('should move focus to the next link on subsequent ArrowDown', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
       await sendKeys({ press: 'ArrowDown' });
       await nextRender();
 
       expectFocusedItem(overlayItems[1]);
     });
 
-    it('should move focus to the previous link on ArrowUp', async () => {
+    it('should move focus to the previous link on subsequent ArrowUp', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
       await sendKeys({ press: 'ArrowDown' });
       await nextRender();
 
@@ -273,9 +301,11 @@ describe('overflow', () => {
     });
 
     it('should focus the first link on ArrowDown when the last one is focused', async () => {
-      for (let i = 0; i < overlayItems.length - 1; i += 1) {
+      // First ArrowDown lands on the first item; subsequent ArrowDowns step to the last.
+      for (const item of overlayItems) {
         await sendKeys({ press: 'ArrowDown' });
         await nextRender();
+        expectFocusedItem(item);
       }
 
       expectFocusedItem(overlayItems.at(-1));
@@ -284,13 +314,6 @@ describe('overflow', () => {
       await nextRender();
 
       expectFocusedItem(overlayItems[0]);
-    });
-
-    it('should focus the last link on ArrowUp when the first one is focused', async () => {
-      await sendKeys({ press: 'ArrowUp' });
-      await nextRender();
-
-      expectFocusedItem(overlayItems.at(-1));
     });
 
     it('should focus the last link on End', async () => {
@@ -318,11 +341,41 @@ describe('overflow', () => {
       await nextResize(breadcrumbs);
     });
 
-    it('should skip a disabled item on ArrowDown', async () => {
-      items[1].disabled = true;
+    it('should skip the first disabled item on first ArrowDown', async () => {
+      items[0].disabled = true;
 
+      button.focus();
       button.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
+
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      expectFocusedItem(items[1]);
+    });
+
+    it('should skip the last disabled item on first ArrowUp', async () => {
+      items[4].disabled = true;
+
+      button.focus();
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      await sendKeys({ press: 'ArrowUp' });
+      await nextRender();
+
+      expectFocusedItem(items[3]);
+    });
+
+    it('should skip a disabled item on subsequent ArrowDown', async () => {
+      items[1].disabled = true;
+
+      button.focus();
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
 
       await sendKeys({ press: 'ArrowDown' });
       await nextRender();
@@ -330,9 +383,10 @@ describe('overflow', () => {
       expectFocusedItem(items[2]);
     });
 
-    it('should skip a disabled item on ArrowUp', async () => {
+    it('should skip a disabled item on subsequent ArrowUp', async () => {
       items[3].disabled = true;
 
+      button.focus();
       button.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
@@ -348,6 +402,7 @@ describe('overflow', () => {
     it('should focus the previous focusable item on End when last is disabled', async () => {
       items[4].disabled = true;
 
+      button.focus();
       button.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
@@ -360,6 +415,7 @@ describe('overflow', () => {
     it('should focus the next focusable item on Home when first is disabled', async () => {
       items[0].disabled = true;
 
+      button.focus();
       button.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
 
@@ -371,12 +427,98 @@ describe('overflow', () => {
 
       expectFocusedItem(items[1]);
     });
+  });
 
-    it('should focus the first non-disabled overlay item on open', async () => {
-      items[0].disabled = true;
+  describe('non-link items', () => {
+    beforeEach(async () => {
+      // Collapse all items to the overlay
+      breadcrumbs.style.maxWidth = '200px';
+      await nextResize(breadcrumbs);
+    });
 
+    it('should skip the first item without path on first ArrowDown', async () => {
+      items[0].path = null;
+
+      button.focus();
       button.click();
       await oneEvent(overlay, 'vaadin-overlay-open');
+
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      expectFocusedItem(items[1]);
+    });
+
+    it('should skip the last item without path on first ArrowUp', async () => {
+      items[4].path = null;
+
+      button.focus();
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      await sendKeys({ press: 'ArrowUp' });
+      await nextRender();
+
+      expectFocusedItem(items[3]);
+    });
+
+    it('should skip item without path on subsequent ArrowDown', async () => {
+      items[1].path = null;
+
+      button.focus();
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+
+      expectFocusedItem(items[2]);
+    });
+
+    it('should skip item without path on subsequent ArrowUp', async () => {
+      items[3].path = null;
+
+      button.focus();
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      await sendKeys({ press: 'End' });
+      await nextRender();
+
+      await sendKeys({ press: 'ArrowUp' });
+      await nextRender();
+
+      expectFocusedItem(items[2]);
+    });
+
+    it('should focus the previous focusable item on End when last has no path', async () => {
+      items[4].path = null;
+
+      button.focus();
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      await sendKeys({ press: 'End' });
+      await nextRender();
+
+      expectFocusedItem(items[3]);
+    });
+
+    it('should focus the next focusable item on Home when first has no path', async () => {
+      items[0].path = null;
+
+      button.focus();
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      await sendKeys({ press: 'End' });
+      await nextRender();
+
+      await sendKeys({ press: 'Home' });
+      await nextRender();
 
       expectFocusedItem(items[1]);
     });

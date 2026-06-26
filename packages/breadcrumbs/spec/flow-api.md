@@ -30,7 +30,13 @@ breadcrumbs.add(
         new BreadcrumbsItem("External", "https://example.com/docs"));
 ```
 
-**Why this shape:** `Breadcrumbs` has an explicit `Mode` that determines who owns the trail. The nested enum `Breadcrumbs.Mode` has two values: `ROUTER` (default — auto-populated from Flow routing metadata, see section 8) and `MANUAL` (the application manages the items). The mode is chosen at construction — `new Breadcrumbs()` defaults to `ROUTER`, `new Breadcrumbs(Mode.MANUAL)` is explicit. Adding or removing children while in `ROUTER` mode throws `IllegalStateException`, so the two models never silently mix. In `MANUAL` mode, `Breadcrumbs` is a standard Flow container — it implements `HasComponentsOfType<BreadcrumbsItem>` and accepts items through the inherited `add(BreadcrumbsItem...)` / `addComponentAsFirst(BreadcrumbsItem)` / `addComponentAtIndex(int, BreadcrumbsItem)` / `remove(BreadcrumbsItem...)` / `removeAll()` methods, with compile-time enforcement that only `BreadcrumbsItem` instances can be added. The web component itself accepts only `<vaadin-breadcrumbs-item>` light-DOM children (no parallel programmatic items property — see web-component-api.md §6), so the Flow component-tree model maps directly to the underlying DOM. `BreadcrumbsItem` offers the same constructor overloads as `SideNavItem`: `(label)` for the current page (no path), `(label, String path)` for hand-managed paths, `(label, Class<? extends Component> view)` as the type-safe primary form required by `DESIGN_GUIDELINES.md` "Integrate with Flow Router", and `(label, Class<? extends Component> view, RouteParameters routeParameters)` for parameterised routes. Each path-taking overload also has a prefix-component variant ending in `Component prefixComponent` (see section 4). The "current" distinction needs no extra API — an item without a path is the current item, matching the web component's declarative convention.
+**Why this shape:**
+
+- `Breadcrumbs` has an explicit `Mode` — `ROUTER` (default, auto-populated from routing metadata, see section 8) or `MANUAL` (the application manages the items); this section uses `MANUAL`. Section 9 defines the full mode contract (construction, `setMode`, and the `ROUTER` guard).
+- In `MANUAL` mode, `Breadcrumbs` is a standard Flow container implementing `HasComponentsOfType<BreadcrumbsItem>`, whose inherited typed container methods accept only `BreadcrumbsItem` instances at compile time (flow-spec.md "Component Classes" lists the full method set).
+- The web component itself accepts only `<vaadin-breadcrumbs-item>` light-DOM children, so the Flow component-tree model maps directly to the underlying DOM.
+- `BreadcrumbsItem` mirrors `SideNavItem`'s constructor overloads — a no-path form (current page), string-path and route-class forms (the route-class form is the type-safe primary one, per guidelines/02-design.md "Integrate with Flow Router"), and a parameterised form, each with a prefix-component variant (see section 4); flow-spec.md "Component Classes" lists the signatures.
+- The "current" distinction needs no extra API — an item without a path is the current item, matching the web component's declarative convention.
 
 ---
 
@@ -70,7 +76,7 @@ breadcrumbs.add(
 breadcrumbs.setI18n(new BreadcrumbsI18n().setMoreItems("Show hidden items"));
 ```
 
-**Why this shape:** Overflow collapse and the expansion menu opened by the overflow indicator (req 7) are handled entirely inside the web component — the collapsed items reappear as menu rows sourced from the same `BreadcrumbsItem` components the container already holds, so no Flow-side surface is needed to wire them up. The only Flow-visible concern is the overflow indicator's accessible label, localised via a nested `BreadcrumbsI18n` class following the `SideNavI18n` / `MenuBarI18n` convention: `Serializable`, `@JsonInclude(JsonInclude.Include.NON_NULL)`, fluent setters. Exposed via `setI18n(BreadcrumbsI18n)` / `getI18n()` on `Breadcrumbs`.
+**Why this shape:** Overflow collapse and the expansion menu opened by the overflow indicator (req 7) are handled entirely inside the web component — the collapsed items reappear as menu rows sourced from the same `BreadcrumbsItem` components the container already holds, so no Flow-side surface is needed to wire them up. The only Flow-visible concern is the overflow indicator's accessible label, localised via a nested `BreadcrumbsI18n` class following the `SideNavI18n` / `MenuBarI18n` convention, exposed via `setI18n(BreadcrumbsI18n)` / `getI18n()` on `Breadcrumbs` (see flow-spec.md "i18n" for the class shape).
 
 ---
 
@@ -259,7 +265,20 @@ public class EditOrderView extends Div { ... }
 // (instead of Home › Orders › Edit › Edit Order implied by the URL segments)
 ```
 
-**Why this shape:** A class-level annotation `@RouteParent(Class<? extends Component>)` declares a view's parent in the application's route hierarchy, overriding URL-prefix walking. It is deliberately named in route-hierarchy terms rather than breadcrumb-specific terms — the relationship it expresses ("this route's conceptual parent is that route") is independent of breadcrumb rendering and can be consumed by any navigation component that needs to traverse the hierarchy. An annotation (vs a method on a new interface) is the right shape for this because the information is static and known at compile time — mirroring how `@Route`, `@RouteAlias`, and `@PageTitle` are themselves annotations. Walking continues from the declared parent using the same rules, so chains of `@RouteParent` compose naturally. The annotation lives alongside the other Flow route metadata on the view class.
+**Why this shape:** `@RouteParent(Class<? extends Component>)` declares a view's parent in the route hierarchy, overriding URL-prefix walking. Chains of `@RouteParent` compose naturally, and the annotation sits on the view class alongside the other route metadata (`@Route`, `@PageTitle`). The annotation is provided by Flow core, which also supports a dynamic `resolver()` for parents that depend on route parameters.
+
+---
+
+## 11. Theme variants
+
+Covers requirement(s): 5
+
+```java
+Breadcrumbs breadcrumbs = new Breadcrumbs(Mode.MANUAL);
+breadcrumbs.addThemeVariants(BreadcrumbsVariant.SLASH); // "/" separator instead of the chevron
+```
+
+**Why this shape:** The web component ships a `theme="slash"` separator variant, exposed through the standard `HasThemeVariant<BreadcrumbsVariant>` surface (guidelines/09-theming.md) rather than a bespoke setter — the same pattern as every other themable Vaadin component, so `addThemeVariants` / `setThemeVariants` / `bindThemeVariant` come for free. `BreadcrumbsVariant.SLASH.getVariantName()` returns the exact `slash` token; `LUMO_PRIMARY` and `AURA_ACCENT` map to the Lumo `primary` and Aura `accent` link-color variants.
 
 ---
 
@@ -268,19 +287,19 @@ public class EditOrderView extends Div { ... }
 | Web API surface (from web-component-api.md) | Flow API | Notes |
 |---|---|---|
 | `<vaadin-breadcrumbs>` element | `new Breadcrumbs()` | constructor; `HasSize`, `HasStyle`, `HasAriaLabel`, `HasComponentsOfType<BreadcrumbsItem>` |
-| `<vaadin-breadcrumbs-item>` child | `HasComponentsOfType<BreadcrumbsItem>#add(BreadcrumbsItem...)`, `addComponentAsFirst(BreadcrumbsItem)`, `addComponentAtIndex(int, BreadcrumbsItem)`, `remove(BreadcrumbsItem...)`, `removeAll()` | standard component-tree management, typed to `BreadcrumbsItem` at compile time; no component-specific `setItems`/`addItem` |
-| `path` attribute on item | `BreadcrumbsItem#setPath(String)` / `setPath(Class<? extends Component>)` / `setPath(Class, RouteParameters)` / constructor overloads | type-safe primary form per `DESIGN_GUIDELINES.md` "Integrate with Flow Router" |
+| `<vaadin-breadcrumbs-item>` child | `HasComponentsOfType<BreadcrumbsItem>` container methods | standard component-tree management, typed to `BreadcrumbsItem` at compile time; no component-specific `setItems`/`addItem` |
+| `path` attribute on item | `BreadcrumbsItem#setPath(...)` overloads + constructors | route-class form is the type-safe primary one, per guidelines/02-design.md "Integrate with Flow Router" |
 | last-item-without-path → current item | implicit — construct with `new BreadcrumbsItem(String label)` (no path) | no dedicated current flag |
 | `aria-current="page"` on current item | — (set automatically by the web component) | no Flow API needed |
 | `slot="prefix"` on item | `BreadcrumbsItem implements HasPrefix` → `setPrefixComponent(Component)` | shared mixin from `vaadin-flow-components-base` |
 | Programmatic items data array | — (no such property on the web component, see web-component-api.md §6) | not applicable; Flow manages items as a tree of `BreadcrumbsItem` components via `HasComponentsOfType<BreadcrumbsItem>` |
-| `i18n` JS property | `Breadcrumbs#setI18n(BreadcrumbsI18n)` / `getI18n()` | nested class; `Serializable`, `@JsonInclude(NON_NULL)`, fluent setters |
+| `i18n` JS property | `Breadcrumbs#setI18n(BreadcrumbsI18n)` / `getI18n()` | nested i18n class (see flow-spec.md "i18n") |
 | `i18n.moreItems` | `BreadcrumbsI18n#setMoreItems(String)` / `getMoreItems()` | overflow button accessible label |
 | `<nav>` landmark rendering | — (automatic in web component) | no Flow API needed |
 | `aria-label` on the host | `Breadcrumbs implements HasAriaLabel` | `setAriaLabel(String)` / `getAriaLabel()` from Flow core |
-| `--vaadin-breadcrumbs-separator` CSS custom property | `Breadcrumbs#getStyle().set("--vaadin-breadcrumbs-separator", ...)` via `HasStyle` | per `DESIGN_GUIDELINES.md` "Styling lives in CSS, not Java" — no dedicated Java setter |
 | RTL separator flipping | — (handled in CSS when `dir="rtl"`) | inherited from the application / `HasStyle` |
-| Flow: auto-populate from router | `Breadcrumbs.Mode` enum (`ROUTER`, `MANUAL`); `new Breadcrumbs()` / `new Breadcrumbs(Mode)`; `setMode(Mode)` / `getMode()` | default `ROUTER`; `add`/`remove`/`removeAll` throw `IllegalStateException` while in `ROUTER` mode |
+| `theme` variants (`slash`, `primary`, `accent`; web-component-spec.md "Theme") | `Breadcrumbs implements HasThemeVariant<BreadcrumbsVariant>` → `addThemeVariants(BreadcrumbsVariant.…)` | typed theme variants; `getVariantName()` returns the `theme` token |
+| Flow: auto-populate from router | `Breadcrumbs.Mode` (`ROUTER` default / `MANUAL`); see §8–§9 | `add`/`remove`/`removeAll` throw `IllegalStateException` in `ROUTER` mode |
 | Flow: route-parent override | `@RouteParent(Class<? extends Component>)` | class-level annotation on `@Route` views |
 
 ## Discussion
@@ -299,19 +318,19 @@ It is covered by manual construction: the application loads the data it needs in
 
 **Q: Why is there no section for the separator (reqs 4, 5, 12)?**
 
-Separator presence (req 4), customisation (req 5), and RTL flipping (req 12) are all handled entirely by the web component and the theme — there is no Flow-specific Java API to demonstrate. Per `DESIGN_GUIDELINES.md` "Styling lives in CSS, not Java", visual customisations like the separator icon are exposed as CSS custom properties on the host, not as Java setters: applications use `HasStyle#getStyle().set("--vaadin-breadcrumbs-separator", ...)` or a theme stylesheet. A dedicated "here's how to call `getStyle()`" section would duplicate generic Flow knowledge without adding Breadcrumbs-specific value, so these requirements are documented solely in the Web API coverage table (the `--vaadin-breadcrumbs-separator` row and the RTL row).
+Separator presence (req 4), customisation (req 5), and RTL flipping (req 12) are all handled entirely by the web component and the theme — there is no Flow-specific Java API to demonstrate.
 
 **Q: Why no click listener on `BreadcrumbsItem`?**
 
 Items render as plain anchors (`<a href>`) under the hood. With `setPath(Class<? extends Component>)`, Flow's router intercepts the click and navigates without full page reload. With `setPath(String)`, the browser follows the href. Neither path requires a Flow-level listener, and adding one would invite developers to implement navigation twice (once as a listener, once as a route). `SideNavItem` follows the same philosophy — no `addClickListener`.
 
-**Q: Why no theme variants?**
+**Q: Why expose theme variants?**
 
-web-component-api.md does not expose any theme variants for Breadcrumbs — the component has a single canonical appearance with theme-layer differences only (Lumo vs Aura). No `BreadcrumbsVariant` enum is added because there is nothing for it to contain. One can be introduced later if variants emerge.
+The web component now ships a `theme="slash"` separator variant (web-component-spec.md "Theme" table), so `Breadcrumbs` exposes it the standard way — see section 11 for the `BreadcrumbsVariant` enum and usage. An earlier revision added no variants because the web component had none; the slash variant changed that.
 
 **Q: Why use `HasComponentsOfType<BreadcrumbsItem>` rather than a bespoke `setItems(BreadcrumbsItem...)` / `addItem(BreadcrumbsItem...)` API?**
 
-Breadcrumbs is a container of items — in Flow terms, a component that holds child components. Expressing that through the standard `HasComponentsOfType<T>` interface from Flow core keeps the API consistent with every other typed Flow container, gives developers `add`, `addComponentAsFirst`, `addComponentAtIndex`, `remove`, and `removeAll` for free, and avoids inventing yet another bespoke item-collection surface. The generic parameter `BreadcrumbsItem` gives compile-time enforcement that only `BreadcrumbsItem` instances can be added, so developers get type safety without the component needing to reject foreign children at runtime. The web component itself only accepts `<vaadin-breadcrumbs-item>` light-DOM children (no parallel data-array `items` property), so the Flow wrapper's component-tree model is a one-to-one fit.
+Breadcrumbs is a container of items — in Flow terms, a component that holds child components. Expressing that through the standard `HasComponentsOfType<T>` interface from Flow core keeps the API consistent with every other typed Flow container, gives developers the standard typed container methods for free, and avoids inventing yet another bespoke item-collection surface. The generic parameter `BreadcrumbsItem` gives compile-time enforcement that only `BreadcrumbsItem` instances can be added, so developers get type safety without the component needing to reject foreign children at runtime. The web component itself only accepts `<vaadin-breadcrumbs-item>` light-DOM children (no parallel data-array `items` property), so the Flow wrapper's component-tree model is a one-to-one fit.
 
 **Q: Why no dedicated `bindItems(Signal<...>)` method?**
 
@@ -319,11 +338,11 @@ Flow core's `Signal.effect(component, Runnable)` already provides the primitive 
 
 **Q: What happens if `@RouteParent` forms a cycle or points at a class without `@Route`?**
 
-These are implementation concerns the spec (`create-component-flow-spec`) will resolve — the expected behaviour is that cycles are detected and truncated, and a parent class without `@Route` is treated as if the annotation were absent (fall back to URL-prefix walking). The API surface here is only the annotation itself; the resolution algorithm belongs to the specification.
+Flow core handles both — `getRouteHierarchy` is cycle-guarded and falls back to URL-prefix walking when `@RouteParent` is absent. The breadcrumb relies on that rather than implementing its own; see flow-spec.md "How `Breadcrumbs` builds the trail".
 
 **Q: Why `@RouteParent` rather than a breadcrumb-specific name?**
 
-The annotation expresses a route-hierarchy relationship — "the conceptual parent of this route is that route" — which is not inherently tied to breadcrumb rendering. Naming it `@RouteParent` (vs. `@BreadcrumbsParent` or `@BreadcrumbsRouteParent`) keeps the declaration reusable: any future navigation component that needs to walk the route hierarchy (e.g. a back-navigation helper, an SEO link-graph generator, a parent-link utility) can consume the same annotation without the name implying it belongs to Breadcrumbs alone. The `@Route*` prefix also groups it naturally with the existing routing annotations (`@Route`, `@RouteAlias`) in Flow core, so developers find it where they look for route metadata. This avoids coupling application-level hierarchy metadata to a specific presentation component — the view author declares a routing fact, not a breadcrumb hint.
+The name is Flow core's: the annotation expresses a generic route relationship, not a breadcrumb hint, so it is not named after this component.
 
 **Q: Why is `BreadcrumbsI18n` a class rather than a single setter for `moreItems`?**
 

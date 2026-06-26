@@ -82,7 +82,7 @@ describe('breadcrumbs', () => {
     let breadcrumbs;
 
     beforeEach(async () => {
-      div.style.width = '220px';
+      div.style.width = '250px';
       fixtureSync(
         `
           <vaadin-breadcrumbs>
@@ -117,6 +117,30 @@ describe('breadcrumbs', () => {
       await sendKeys({ press: 'Enter' });
       await oneEvent(overlay, 'vaadin-overlay-open');
       await visualDiff(div, 'overflow-opened');
+    });
+  });
+
+  describe('theme', () => {
+    let breadcrumbs;
+
+    beforeEach(async () => {
+      fixtureSync(
+        `
+          <vaadin-breadcrumbs>
+            <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
+            <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
+            <vaadin-breadcrumbs-item>Current</vaadin-breadcrumbs-item>
+          </vaadin-breadcrumbs>
+        `,
+        div,
+      );
+      breadcrumbs = div.querySelector('vaadin-breadcrumbs');
+      await nextRender();
+    });
+
+    it('slash', async () => {
+      breadcrumbs.setAttribute('theme', 'slash');
+      await visualDiff(div, 'theme-slash');
     });
   });
 });

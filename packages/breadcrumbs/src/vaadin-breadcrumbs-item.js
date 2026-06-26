@@ -41,6 +41,13 @@ import { breadcrumbsItemStyles } from './styles/vaadin-breadcrumbs-item-base-sty
  * `focused`    | Set when the item is focused.
  * `has-prefix` | Set when the item has content in the prefix slot
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                          |
+ * :--------------------------------------------|
+ * | `--vaadin-breadcrumbs-item-border-radius`  |
+ * | `--vaadin-breadcrumbs-item-gap`            |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement vaadin-breadcrumbs-item

@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
-import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
+import { microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
@@ -233,8 +233,12 @@ export const GridMixin = (superClass) =>
       setTouchAction(this.$.scroller, '');
 
       this.__virtualizer = new Virtualizer({
-        createElements: this._createScrollerRows.bind(this),
-        updateElement: this._updateScrollerItem.bind(this),
+        createElements: (count) => {
+          return this.__createVirtualizerElements(count);
+        },
+        updateElement: (el, index) => {
+          this.__updateVirtualizerElement(el, index);
+        },
         scrollContainer: this.$.items,
         scrollTarget: this.$.table,
         reorderElements: true,
@@ -334,7 +338,7 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _createScrollerRows(count) {
+    __createVirtualizerElements(count) {
       const rows = [];
       for (let i = 0; i < count; i++) {
         const row = document.createElement('tr');
@@ -356,13 +360,6 @@ export const GridMixin = (superClass) =>
         });
       }
 
-      this.__afterCreateScrollerRowsDebouncer = Debouncer.debounce(
-        this.__afterCreateScrollerRowsDebouncer,
-        animationFrame,
-        () => {
-          this._afterScroll();
-        },
-      );
       return rows;
     }
 
@@ -645,7 +642,7 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _updateScrollerItem(row, index) {
+    __updateVirtualizerElement(row, index) {
       this._preventScrollerRotatingCellFocus(row, index);
 
       if (!this._columnTree) {

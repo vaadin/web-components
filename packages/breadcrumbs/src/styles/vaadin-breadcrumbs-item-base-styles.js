@@ -9,7 +9,7 @@ import { css } from 'lit';
 export const breadcrumbsItemStyles = css`
   :host {
     display: inline-flex;
-    align-items: center;
+    align-items: baseline;
     flex-shrink: 0;
   }
 
@@ -17,28 +17,50 @@ export const breadcrumbsItemStyles = css`
     display: none !important;
   }
 
-  :host([disabled]) [part='link'] {
-    color: var(--vaadin-text-color-disabled);
-  }
-
-  :host([current]) [part='nolink'] {
+  :host([current]) {
     color: var(--vaadin-text-color);
+    font-weight: bolder;
   }
 
-  [part='link']:focus-visible {
-    border-radius: var(--vaadin-radius-s);
-    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    outline-offset: 0;
+  [part='link'],
+  [part='nolink'] {
+    display: inline-flex;
+    gap: var(--vaadin-breadcrumbs-item-gap, var(--vaadin-gap-xs));
+    align-items: baseline;
+    border-radius: var(--vaadin-breadcrumbs-item-border-radius, var(--vaadin-radius-m));
+    padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
+    flex: 1;
+  }
+
+  :host(:not([slot='overlay'])) :is([part='link'], [part='nolink']) {
+    margin-inline: calc(var(--vaadin-padding-inline-container) * -1);
+  }
+
+  [part='link'] {
+    text-decoration: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+
+    &:any-link {
+      color: var(--vaadin-breadcrumbs-link-color, LinkText);
+    }
+
+    &:focus-visible {
+      outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    }
   }
 
   :host::after {
-    content: '';
-    display: inline-block;
-    width: 1em;
-    height: 1em;
-    color: var(--vaadin-text-color-secondary);
+    content: '\\2003' / '';
+    display: inline-flex;
+    align-items: center;
+    width: var(--vaadin-icon-size, 1lh);
+    height: var(--vaadin-icon-size, 1lh);
     background: currentColor;
-    mask: var(--vaadin-breadcrumbs-separator, var(--_vaadin-icon-chevron-right)) center / contain no-repeat;
+    mask: var(--vaadin-breadcrumbs-separator-icon, var(--_vaadin-icon-chevron-right)) center /
+      var(--vaadin-icon-visual-size, 100%) no-repeat;
+    margin-inline-start: var(--vaadin-breadcrumbs-gap, var(--vaadin-gap-xs));
+    opacity: 0.75;
   }
 
   :host(:last-of-type)::after,
@@ -47,36 +69,35 @@ export const breadcrumbsItemStyles = css`
   }
 
   :host([dir='rtl'])::after {
-    transform: scaleX(-1);
+    scale: -1;
   }
 
   :host([slot='overlay']) {
     display: flex;
+
+    [part='link'] {
+      border-radius: var(--vaadin-radius-s);
+    }
   }
 
-  :host([slot='overlay']) [part='link'],
-  :host([slot='overlay']) [part='nolink'] {
-    flex: 1;
-    padding: var(--vaadin-item-overlay-padding, 4px var(--vaadin-padding-inline-container));
-    border-radius: var(--vaadin-radius-m);
+  :host([slot='overlay'][disabled]),
+  :host([slot='overlay']:not([path])) {
+    color: var(--vaadin-text-color-secondary);
   }
 
-  :host([slot='overlay']:not([disabled])) [part='link'] {
-    color: var(--vaadin-text-color);
+  :host([slot='overlay'][focus-ring]) [part='link'] {
+    outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
-  :host([slot='overlay']) [part='link']:focus-visible {
-    border-radius: var(--vaadin-radius-m);
+  :host([slot='overlay'])::after {
+    display: none;
   }
 
   @media (any-hover: hover) {
     :host([slot='overlay']) [part='link'] {
       text-decoration: none;
     }
-  }
-
-  :host([slot='overlay'])::after {
-    display: none;
   }
 
   @media (forced-colors: active) {

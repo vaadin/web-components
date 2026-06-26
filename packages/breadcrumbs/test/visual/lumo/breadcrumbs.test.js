@@ -44,11 +44,11 @@ describe('breadcrumbs', () => {
   });
 
   describe('overflow', () => {
-    let breadcrumbs;
+    let breadcrumbs, overlay;
 
     beforeEach(async () => {
-      div.style.width = '250px';
-      fixtureSync(
+      div.style.width = '280px';
+      breadcrumbs = fixtureSync(
         `
           <vaadin-breadcrumbs>
             <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
@@ -59,9 +59,9 @@ describe('breadcrumbs', () => {
         `,
         div,
       );
-      breadcrumbs = div.querySelector('vaadin-breadcrumbs');
       await nextRender();
       await nextResize(breadcrumbs);
+      overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
     });
 
     it('overflow', async () => {
@@ -76,12 +76,19 @@ describe('breadcrumbs', () => {
 
     it('overflow-opened', async () => {
       div.style.height = '150px';
-      const overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
-      const button = breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]');
-      button.focus();
+      breadcrumbs.$.overflow.focus();
       await sendKeys({ press: 'Enter' });
       await oneEvent(overlay, 'vaadin-overlay-open');
       await visualDiff(div, 'overflow-opened');
+    });
+
+    it('primary', async () => {
+      div.style.height = '150px';
+      breadcrumbs.setAttribute('theme', 'primary');
+      breadcrumbs.$.overflow.focus();
+      await sendKeys({ press: 'Enter' });
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      await visualDiff(div, 'theme-primary');
     });
   });
 });

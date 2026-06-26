@@ -1,38 +1,49 @@
-vaadin-breadcrumbs-item::part(link) {
-  text-decoration: none;
-  transition: color 80ms;
+:where(:root),
+:where(:host) {
+  --vaadin-breadcrumbs-font-weight: var(--aura-font-weight-medium);
+  --vaadin-breadcrumbs-link-color: 'inherit';
 }
 
-vaadin-breadcrumbs-item:not([disabled])::part(link) {
-  color: var(--aura-accent-text-color);
+vaadin-breadcrumbs[theme~='accent'] {
+  --vaadin-breadcrumbs-link-color: var(--aura-accent-text-color);
 }
 
-vaadin-breadcrumbs-item::part(nolink) {
-  color: inherit;
+vaadin-breadcrumbs-item:not([slot='overlay'])::part(link),
+vaadin-breadcrumbs::part(overflow-button) {
+  transition:
+    color 80ms,
+    background-color 80ms;
 }
 
-vaadin-breadcrumbs-item[current]::part(nolink) {
-  font-weight: var(--aura-font-weight-medium);
+vaadin-breadcrumbs-item[current] {
+  font-weight: var(--aura-font-weight-semibold);
 }
 
 @media (any-hover: hover) {
-  vaadin-breadcrumbs-item:not([slot='overlay'])::part(link):hover {
+  vaadin-breadcrumbs-item:not([slot='overlay'], [disabled])::part(link):hover,
+  vaadin-breadcrumbs::part(overflow-button):hover {
     color: var(--vaadin-text-color);
-    text-decoration: underline;
   }
 
-  vaadin-breadcrumbs-item[slot='overlay']::part(link):hover {
+  vaadin-breadcrumbs-item[slot='overlay']:not([disabled])::part(link):hover {
     background: var(--_aura-highlight-color);
   }
 }
 
-vaadin-breadcrumbs-item:not([slot='overlay'])::part(link):active {
-  color: var(--vaadin-text-color);
-  text-decoration: underline;
+vaadin-breadcrumbs-item[slot='overlay']::part(link) {
+  --vaadin-breadcrumbs-item-border-radius: var(--vaadin-item-border-radius);
+  font-weight: var(--aura-font-weight-medium);
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-vaadin-breadcrumbs-item > :is(vaadin-icon, [class*='icon'])[slot='prefix'] {
-  width: 0.875lh;
-  height: 0.875lh;
-  color: inherit;
+vaadin-breadcrumbs-item:not([disabled], [slot='overlay'])::part(link):active,
+vaadin-breadcrumbs::part(overflow-button):active
+/* TODO need a part or state to target the overflow-button when it's expanded */ {
+  background: var(--vaadin-background-container-strong);
+  color: var(--vaadin-text-color);
+}
+
+vaadin-breadcrumbs-item[slot='overlay']:not([disabled])::part(link):active {
+  background: var(--_aura-highlight-color);
 }

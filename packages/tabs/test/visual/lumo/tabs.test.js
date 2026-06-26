@@ -127,6 +127,31 @@ describe('tabs', () => {
     });
   });
 
+  describe('variants', () => {
+    beforeEach(() => {
+      element = fixtureSync(
+        `
+          <vaadin-tabs>
+            <vaadin-tab>Foo</vaadin-tab>
+            <vaadin-tab>Bar</vaadin-tab>
+            <vaadin-tab>Baz</vaadin-tab>
+          </vaadin-tabs>
+        `,
+        div,
+      );
+    });
+
+    it('small', async () => {
+      element.setAttribute('theme', 'small');
+      await visualDiff(div, 'theme-small');
+    });
+
+    it('minimal', async () => {
+      element.setAttribute('theme', 'minimal');
+      await visualDiff(div, 'theme-minimal');
+    });
+  });
+
   describe('scroll', () => {
     ['horizontal', 'vertical'].forEach((orientation) => {
       describe(orientation, () => {
@@ -140,7 +165,7 @@ describe('tabs', () => {
 
           element = fixtureSync(
             `
-              <vaadin-tabs style="overflow: hidden">
+              <vaadin-tabs orientation="${orientation}" selected="8">
                 <vaadin-tab>Tab-00</vaadin-tab>
                 <vaadin-tab>Tab-01</vaadin-tab>
                 <vaadin-tab>Tab-02</vaadin-tab>
@@ -175,11 +200,16 @@ describe('tabs', () => {
               document.documentElement.removeAttribute('dir');
             });
 
-            it('selected', async () => {
-              element.orientation = orientation;
-              element.selected = 8;
+            it('scroll', async () => {
               await visualDiff(div, `${dir}-${orientation}-scroll`);
             });
+
+            if (orientation === 'horizontal') {
+              it('hide-scroll-buttons', async () => {
+                element.setAttribute('theme', 'hide-scroll-buttons');
+                await visualDiff(div, `${dir}-${orientation}-hide-scroll-buttons`);
+              });
+            }
           });
         });
       });

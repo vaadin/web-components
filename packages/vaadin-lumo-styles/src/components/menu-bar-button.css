@@ -15,32 +15,27 @@
     width: 100%;
   }
 
-  /* NOTE(web-padawan): avoid using shorthand padding property for IE11 */
   [part='label'] ::slotted(vaadin-menu-bar-item) {
     justify-content: center;
     background-color: transparent;
     height: var(--lumo-button-size);
     margin: 0 calc((var(--lumo-size-m) / 3 + var(--lumo-border-radius-m) / 2) * -1);
-    padding-left: calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius-m) / 2);
-    padding-right: calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius-m) / 2);
+    padding-inline: calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius-m) / 2);
   }
 
   :host([theme~='small']) [part='label'] ::slotted(vaadin-menu-bar-item) {
     min-height: var(--lumo-size-s);
     margin: 0 calc((var(--lumo-size-s) / 3 + var(--lumo-border-radius-m) / 2) * -1);
-    padding-left: calc(var(--lumo-size-s) / 3 + var(--lumo-border-radius-m) / 2);
-    padding-right: calc(var(--lumo-size-s) / 3 + var(--lumo-border-radius-m) / 2);
+    padding-inline: calc(var(--lumo-size-s) / 3 + var(--lumo-border-radius-m) / 2);
   }
 
   :host([theme~='tertiary']) [part='label'] ::slotted(vaadin-menu-bar-item) {
     margin: 0 calc((var(--lumo-button-size) / 6) * -1);
-    padding-left: calc(var(--lumo-button-size) / 6);
-    padding-right: calc(var(--lumo-button-size) / 6);
+    padding-inline: calc(var(--lumo-button-size) / 6);
   }
 
   :host([theme~='tertiary-inline']) {
-    margin-top: calc(var(--lumo-space-xs) / 2);
-    margin-bottom: calc(var(--lumo-space-xs) / 2);
+    margin-block: calc(var(--lumo-space-xs) / 2);
     margin-right: calc(var(--lumo-space-xs) / 2);
   }
 
@@ -69,8 +64,7 @@
   :host([slot='overflow']) {
     min-width: var(--lumo-button-size);
     margin-inline-end: 0;
-    padding-left: calc(var(--lumo-button-size) / 4);
-    padding-right: calc(var(--lumo-button-size) / 4);
+    padding-inline: calc(var(--lumo-button-size) / 4);
   }
 
   :host([slot='overflow']) ::slotted(*) {

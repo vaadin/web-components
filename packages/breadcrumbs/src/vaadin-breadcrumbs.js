@@ -6,6 +6,7 @@
 import './vaadin-breadcrumbs-item.js';
 import './vaadin-breadcrumbs-overlay.js';
 import { html, LitElement } from 'lit';
+import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -52,7 +53,16 @@ const DEFAULT_I18N = {
  *
  * The following custom CSS properties are available for styling:
  *
- * - `--vaadin-breadcrumbs-separator`
+ * Custom CSS property                          |
+ * :--------------------------------------------|
+ * | `--vaadin-breadcrumbs-font-size`           |
+ * | `--vaadin-breadcrumbs-font-weight`         |
+ * | `--vaadin-breadcrumbs-gap`                 |
+ * | `--vaadin-breadcrumbs-line-height`         |
+ * | `--vaadin-breadcrumbs-link-color`          |
+ * | `--vaadin-breadcrumbs-overflow-icon`       |
+ * | `--vaadin-breadcrumbs-separator-icon`      |
+ * | `--vaadin-breadcrumbs-text-color`          |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -152,7 +162,6 @@ class Breadcrumbs extends KeyboardDirectionMixin(
         restore-focus-on-close
         exportparts="overlay, content: overlay-content"
         @opened-changed="${this.__onOverlayOpenedChanged}"
-        @vaadin-overlay-open="${this.__onOverlayOpen}"
       >
         <slot name="overlay"></slot>
       </vaadin-breadcrumbs-overlay>
@@ -297,15 +306,6 @@ class Breadcrumbs extends KeyboardDirectionMixin(
     this.__overlayOpened = event.detail.value;
   }
 
-  /** @private */
-  __onOverlayOpen() {
-    // Focus first non-disabled overlay item
-    const idx = this._getFocusableIndex();
-    if (idx >= 0) {
-      this._focus(idx);
-    }
-  }
-
   /**
    * Override the method inherited from `KeyboardDirectionMixin` to
    * close on Tab and implement arrow key navigation in the overlay.
@@ -324,6 +324,26 @@ class Breadcrumbs extends KeyboardDirectionMixin(
       return;
     }
 
+    // If focus is not in the overlay after opening, focus the overlay item
+    // on ArrowDown / ArrowUp. Focus first / last item depending on the key.
+    if (!this.focused && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
+      const items = this._getItems();
+      const isDown = event.key === 'ArrowDown';
+
+      const idx = this._getAvailableIndex(
+        items,
+        isDown ? 0 : items.length - 1,
+        isDown ? 1 : -1,
+        (item) => !isElementHidden(item),
+      );
+
+      if (idx >= 0) {
+        event.preventDefault();
+        this._focus(idx);
+      }
+      return;
+    }
+
     super._onKeyDown(event);
   }
 
@@ -337,6 +357,20 @@ class Breadcrumbs extends KeyboardDirectionMixin(
    */
   _getItems() {
     return [...this.querySelectorAll('vaadin-breadcrumbs-item[slot="overlay"]')];
+  }
+
+  /**
+   * Override the method inherited from `KeyboardDirectionMixin` to also
+   * skip overlay items that have no `path` and therefore render as a
+   * non-interactive `<span>` instead of a focusable link.
+   *
+   * @param {Element} item
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _isItemFocusable(item) {
+    return super._isItemFocusable(item) && item.path != null;
   }
 
   /**

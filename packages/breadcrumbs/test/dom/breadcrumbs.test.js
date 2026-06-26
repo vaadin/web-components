@@ -64,7 +64,7 @@ describe('vaadin-breadcrumbs', () => {
 
     beforeEach(async () => {
       breadcrumbs = fixtureSync(`
-        <vaadin-breadcrumbs style="max-width: 140px">
+        <vaadin-breadcrumbs style="max-width: 160px">
           <vaadin-breadcrumbs-item path="/">Home</vaadin-breadcrumbs-item>
           <vaadin-breadcrumbs-item path="/docs">Docs</vaadin-breadcrumbs-item>
           <vaadin-breadcrumbs-item path="/docs/api">API</vaadin-breadcrumbs-item>

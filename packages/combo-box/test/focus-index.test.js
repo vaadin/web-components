@@ -1,11 +1,24 @@
 import { expect } from '@vaadin/chai-plugins';
-import { arrowUpKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { arrowDownKeyDown, arrowUpKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-combo-box.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import { flushComboBox, getViewportItems, makeItems } from './helpers.js';
 
 describe('__focusIndex', () => {
   let comboBox;
+
+  // Asserts the target row is fully visible and centered in the scroller viewport.
+  function expectCenteredInViewport(index) {
+    const scroller = comboBox._scroller;
+    const target = [...scroller.children].find((el) => !el.hidden && el.index === index);
+    const targetRect = target.getBoundingClientRect();
+    const scrollerRect = scroller.getBoundingClientRect();
+    expect(targetRect.top).to.be.at.least(scrollerRect.top - 1);
+    expect(targetRect.bottom).to.be.at.most(scrollerRect.bottom + 1);
+    const targetCenter = targetRect.top + targetRect.height / 2;
+    const scrollerCenter = scrollerRect.top + scrollerRect.height / 2;
+    expect(targetCenter).to.be.closeTo(scrollerCenter, 2.5);
+  }
 
   describe('items array', () => {
     const SIZE = 200;
@@ -32,6 +45,31 @@ describe('__focusIndex', () => {
       comboBox.opened = true;
       comboBox.__focusIndex(100);
       expect(comboBox._focusedIndex).to.equal(100);
+    });
+
+    it('should place the target in the middle of the viewport when opened', async () => {
+      comboBox.opened = true;
+      comboBox.__focusIndex(100);
+      flushComboBox(comboBox);
+      await nextFrame();
+
+      expectCenteredInViewport(100);
+    });
+
+    it('should not shift the viewport when arrow-navigating among visible items', async () => {
+      comboBox.opened = true;
+      comboBox.__focusIndex(100);
+      flushComboBox(comboBox);
+      await nextFrame();
+
+      // Centering leaves the scroll position unaligned. Arrow navigation among
+      // already-visible rows must move only the focus ring, not the viewport.
+      const scrollTopBefore = comboBox._scroller.scrollTop;
+      arrowDownKeyDown(comboBox.inputElement);
+      await nextFrame();
+
+      expect(comboBox._focusedIndex).to.equal(101);
+      expect(comboBox._scroller.scrollTop).to.be.closeTo(scrollTopBefore, 1);
     });
 
     it('should queue the scroll when called before opening', async () => {
@@ -131,7 +169,7 @@ describe('__focusIndex', () => {
       comboBox.items = items;
     });
 
-    it('should fully reveal target below the viewport with variable heights', async () => {
+    it('should center a target below the viewport with variable heights', async () => {
       comboBox.opened = true;
       flushComboBox(comboBox);
 
@@ -140,35 +178,27 @@ describe('__focusIndex', () => {
       flushComboBox(comboBox);
       await nextFrame();
 
-      const target = findRenderedItem(targetIndex);
-      const targetRect = target.getBoundingClientRect();
-      const scrollerRect = getScrollerRect();
-      expect(Math.round(targetRect.bottom)).to.be.at.most(Math.round(scrollerRect.bottom) + 1);
-      expect(Math.round(targetRect.top)).to.be.at.least(Math.round(scrollerRect.top) - 1);
+      expectCenteredInViewport(targetIndex);
     });
 
-    it('should fully reveal target above the viewport with variable heights', async () => {
+    it('should center a target above the viewport with variable heights', async () => {
       comboBox.opened = true;
       flushComboBox(comboBox);
 
-      // Pre-scroll well past the target, then jump back to a low index.
+      // Pre-scroll well past the target, then jump back to a centerable index.
       comboBox.__focusIndex(150);
       flushComboBox(comboBox);
       await nextFrame();
 
-      const targetIndex = 5;
+      const targetIndex = 30;
       comboBox.__focusIndex(targetIndex);
       flushComboBox(comboBox);
       await nextFrame();
 
-      const target = findRenderedItem(targetIndex);
-      const targetRect = target.getBoundingClientRect();
-      const scrollerRect = getScrollerRect();
-      expect(Math.round(targetRect.top)).to.be.at.least(Math.round(scrollerRect.top) - 1);
-      expect(Math.round(targetRect.bottom)).to.be.at.most(Math.round(scrollerRect.bottom) + 1);
+      expectCenteredInViewport(targetIndex);
     });
 
-    it('should not shift the viewport when target is already visible', async () => {
+    it('should re-center an already-visible target with variable heights', async () => {
       comboBox.opened = true;
       flushComboBox(comboBox);
       await nextFrame();
@@ -177,13 +207,30 @@ describe('__focusIndex', () => {
       const lastVisible = comboBox._scroller.__virtualizer.lastVisibleIndex;
       const targetIndex = firstVisible + Math.floor((lastVisible - firstVisible) / 2);
 
-      const scrollTopBefore = comboBox._scroller.scrollTop;
       comboBox.__focusIndex(targetIndex);
       flushComboBox(comboBox);
       await nextFrame();
 
-      // Scrolling to an already-visible item should not shift the viewport.
-      expect(Math.abs(comboBox._scroller.scrollTop - scrollTopBefore)).to.be.below(2);
+      expectCenteredInViewport(targetIndex);
+    });
+
+    it('should clamp to the top for a near-start target that cannot be centered', async () => {
+      comboBox.opened = true;
+      flushComboBox(comboBox);
+      await nextFrame();
+
+      const targetIndex = 2;
+      comboBox.__focusIndex(targetIndex);
+      flushComboBox(comboBox);
+      await nextFrame();
+
+      // Not enough rows above to center; the list stays scrolled to the top
+      // and the target is fully visible.
+      expect(comboBox._scroller.scrollTop).to.be.closeTo(0, 1);
+      const scrollerRect = getScrollerRect();
+      const targetRect = findRenderedItem(targetIndex).getBoundingClientRect();
+      expect(targetRect.top).to.be.at.least(scrollerRect.top - 1);
+      expect(targetRect.bottom).to.be.at.most(scrollerRect.bottom + 1);
     });
   });
 

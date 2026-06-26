@@ -8,67 +8,39 @@
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     font-family: var(--lumo-font-family);
-    font-size: var(--lumo-font-size-m);
-    line-height: var(--lumo-line-height-xs);
-  }
-
-  :host::after {
-    color: var(--lumo-contrast-50pct);
+    font-size: var(--vaadin-breadcrumbs-font-size, var(--lumo-font-size-m));
+    line-height: var(--vaadin-breadcrumbs-line-height, var(--lumo-line-height-m));
   }
 
   [part='link'] {
-    color: var(--lumo-primary-text-color);
-    text-decoration: none;
-    cursor: var(--lumo-clickable-cursor);
     transition: color 140ms;
   }
 
-  [part='nolink'] {
-    color: inherit;
-  }
-
-  :host([current]) [part='nolink'] {
-    color: var(--lumo-body-text-color);
+  :host([current]) {
     font-weight: 500;
   }
 
   @media (any-hover: hover) {
-    [part='link']:hover {
-      color: var(--lumo-primary-color);
-      text-decoration: underline;
+    :host(:not([disabled], [slot='overlay'])) [part='link']:hover {
+      color: var(--lumo-body-text-color);
     }
 
-    :host([slot='overlay']) [part='link']:hover {
+    :host([slot='overlay']:not([disabled])) [part='link']:hover {
       background-color: var(--lumo-primary-color-10pct);
     }
   }
 
-  [part='link']:active {
-    color: var(--lumo-primary-color);
-    text-decoration: underline;
+  :host(:not([disabled], [slot='overlay'])) [part='link']:active {
+    color: var(--lumo-header-text-color);
   }
 
-  [part='link']:focus-visible {
-    border-radius: var(--lumo-border-radius-m);
+  [part='link']:focus-visible,
+  :host([slot='overlay'][focus-ring]) [part='link'] {
     outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
-  }
-
-  :host([disabled]) [part='link'] {
-    color: var(--lumo-disabled-text-color);
   }
 
   slot[name='prefix']::slotted(:is(vaadin-icon, [class*='icon'])) {
     width: var(--lumo-icon-size-s);
     height: var(--lumo-icon-size-s);
-    color: inherit;
-  }
-
-  :host([slot='overlay']:not([disabled])) [part='link'],
-  :host([slot='overlay']) [part='nolink'] {
-    color: var(--lumo-body-text-color);
-  }
-
-  :host([slot='overlay']) [part='link']:focus-visible {
-    border-radius: var(--lumo-border-radius-m);
   }
 }
