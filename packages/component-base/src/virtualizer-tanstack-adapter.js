@@ -3,17 +3,22 @@
  * Copyright (c) 2000 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { elementScroll, observeElementOffset, observeElementRect, Virtualizer } from '@tanstack/virtual-core';
+import {
+  defaultRangeExtractor,
+  elementScroll,
+  observeElementOffset,
+  observeElementRect,
+  Virtualizer,
+} from '@tanstack/virtual-core';
 import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getBorderBoxBlockSize, reorderChildren } from '@vaadin/component-base/src/dom-utils.js';
 
 globalThis.process ||= { env: {} };
 
-// Mirrors the iron-list adapter's `_maxPages`: the pool keeps roughly one
-// viewport of items plus a buffer above and below, so the list can recycle
-// while scrolling without leaving empty space.
-const MAX_PAGES = 1.3;
+const OVERSCAN_RATIO = 0.25;
+
+const DEFAULT_ESTIMATED_SIZE = 200;
 
 /**
  * Pairs each element with a virtual item, reusing the element that already
@@ -45,7 +50,6 @@ export class TanStackAdapter {
   #isVisible;
   #resizeRaf;
   #virtualizer;
-  #estimatedSize = 200;
   #resizeObserver;
   #renderDebouncer;
   #reorderElementsDebouncer;
@@ -80,15 +84,6 @@ export class TanStackAdapter {
 
     this.#virtualizer = new Virtualizer({
       count: 0,
-      rangeExtractor: ({ startIndex, count }) => {
-        // Render a fixed-size pool of items, like iron-list, instead of padding
-        // the visible range with overscan. TanStack's default overscan is
-        // symmetric and clamped at the top, so it renders fewer items near the
-        // start of the list. A fixed pool keeps the count stable everywhere.
-        const poolSize = Math.min(count, this.#getPoolSize());
-        const start = Math.min(startIndex, count - poolSize);
-        return Array.from({ length: poolSize }, (_, i) => start + i);
-      },
       initialRect: scrollTargetRect,
       observeElementRect,
       observeElementOffset,
@@ -97,7 +92,10 @@ export class TanStackAdapter {
         this.#onChange(sync);
       },
       estimateSize: () => {
-        return this.#estimatedSize;
+        return this.#averageSize;
+      },
+      rangeExtractor: (range) => {
+        return defaultRangeExtractor({ ...range, overscan: this.#overscan });
       },
       getScrollElement: () => {
         return this.scrollTarget;
@@ -187,8 +185,6 @@ export class TanStackAdapter {
       this.#onVisibilityChange(isVisible);
       this.#isVisible = isVisible;
     }
-
-    this.#updateEstimatedSize();
 
     if (sync) {
       this.#render();
@@ -285,24 +281,6 @@ export class TanStackAdapter {
     });
   }
 
-  #updateEstimatedSize() {
-    const { itemSizeCache } = this.#virtualizer;
-
-    const sizes = [...itemSizeCache.values()];
-    if (sizes.length > 0) {
-      this.#estimatedSize = sizes.reduce((acc, size) => acc + size, 0) / sizes.length;
-    }
-  }
-
-  #getPoolSize() {
-    const { scrollRect } = this.#virtualizer;
-
-    // The optimal physical size keeps a viewport of items plus a buffer above
-    // and below, matching the iron-list adapter's `_optPhysicalSize`.
-    const optPhysicalSize = scrollRect.height * MAX_PAGES;
-    return Math.max(1, Math.ceil(optPhysicalSize / this.#estimatedSize));
-  }
-
   #scheduleReorderElements() {
     if (!this.reorderElements) {
       return;
@@ -332,6 +310,19 @@ export class TanStackAdapter {
   flush() {
     this.#renderDebouncer?.flush();
     this.#reorderElementsDebouncer?.flush();
+  }
+
+  get #averageSize() {
+    const sizes = [...this.#virtualizer.itemSizeCache.values()];
+    if (sizes.length === 0) {
+      return DEFAULT_ESTIMATED_SIZE;
+    }
+    return sizes.reduce((acc, size) => acc + size, 0) / sizes.length;
+  }
+
+  get #overscan() {
+    const averageVisibleCount = Math.ceil(this.#virtualizer.scrollRect.height / this.#averageSize);
+    return Math.max(1, Math.ceil(averageVisibleCount * OVERSCAN_RATIO));
   }
 
   get #virtualItems() {
