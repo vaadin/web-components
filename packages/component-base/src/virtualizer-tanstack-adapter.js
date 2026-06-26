@@ -188,7 +188,6 @@ export class TanStackAdapter {
       this.#isVisible = isVisible;
     }
 
-    this.#updateOverscrollBehavior();
     this.#updateEstimatedSize();
 
     if (sync) {
@@ -210,7 +209,14 @@ export class TanStackAdapter {
 
   #render() {
     this.#renderDebouncer?.cancel();
+
     this.scrollContainer.style.height = `${this.#virtualizer.getTotalSize()}px`;
+
+    if (this.#virtualizer.isScrolling) {
+      this.scrollTarget.style.overscrollBehavior = 'none';
+    } else {
+      this.scrollTarget.style.overscrollBehavior = null;
+    }
 
     this.#createElementsIfNeeded();
     this.#renderElements();
@@ -277,12 +283,6 @@ export class TanStackAdapter {
     updatedElements.forEach((el) => {
       this.#measureElement(el);
     });
-  }
-
-  #updateOverscrollBehavior() {
-    const { isScrolling } = this.#virtualizer;
-
-    this.scrollTarget.style.overscrollBehavior = isScrolling ? 'none' : null;
   }
 
   #updateEstimatedSize() {
