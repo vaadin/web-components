@@ -61,3 +61,8 @@ export function isEmptyTextNode(node: Node): boolean;
  * relative to its neighbors.
  */
 export function reorderElements(container: Element, comparator: (a: Element, b: Element) => number): void;
+
+/**
+ * Returns the border-box block size (height) of the given element in CSS pixels.
+ */
+export function getBorderBoxBlockSize(element: Element): number;

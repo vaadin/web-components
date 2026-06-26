@@ -6,24 +6,9 @@
 import { elementScroll, observeElementOffset, observeElementRect, Virtualizer } from '@tanstack/virtual-core';
 import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { reorderChildren } from '@vaadin/component-base/src/dom-utils.js';
+import { getBorderBoxBlockSize, reorderChildren } from '@vaadin/component-base/src/dom-utils.js';
 
 globalThis.process ||= { env: {} };
-
-function getBorderBoxHeight(element) {
-  const computedStyle = getComputedStyle(element);
-
-  let height = parseFloat(computedStyle.height) || 0;
-
-  if (computedStyle.boxSizing !== 'border-box') {
-    height += parseFloat(computedStyle.paddingTop) || 0;
-    height += parseFloat(computedStyle.paddingBottom) || 0;
-    height += parseFloat(computedStyle.borderTopWidth) || 0;
-    height += parseFloat(computedStyle.borderBottomWidth) || 0;
-  }
-
-  return height;
-}
 
 function mapElementsToVirtualItems(elements, items) {
   const itemByKey = new Map(items.map((item) => [item.key, item]));
@@ -212,7 +197,7 @@ export class TanStackAdapter {
       return;
     }
 
-    const height = Math.ceil(entry ? entry.borderBoxSize[0].blockSize : getBorderBoxHeight(element));
+    const height = Math.ceil(entry ? entry.borderBoxSize[0].blockSize : getBorderBoxBlockSize(element));
     if (height > 0) {
       this.#virtualizer.resizeItem(index, height);
     }
