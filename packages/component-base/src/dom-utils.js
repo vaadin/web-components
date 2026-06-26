@@ -178,3 +178,24 @@ export function reorderChildren(container, comparator) {
     }
   }
 }
+
+/**
+ * Returns the border-box block size (height) of the given element in CSS pixels.
+ *
+ * @param {Element} element
+ * @return {number}
+ */
+export function getBorderBoxBlockSize(element) {
+  const computedStyle = getComputedStyle(element);
+
+  let height = parseFloat(computedStyle.height) || 0;
+
+  if (computedStyle.boxSizing !== 'border-box') {
+    height += parseFloat(computedStyle.paddingTop) || 0;
+    height += parseFloat(computedStyle.paddingBottom) || 0;
+    height += parseFloat(computedStyle.borderTopWidth) || 0;
+    height += parseFloat(computedStyle.borderBottomWidth) || 0;
+  }
+
+  return height;
+}
