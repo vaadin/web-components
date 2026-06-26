@@ -167,7 +167,7 @@ export class TanStackAdapter {
         return;
       }
 
-      const index = this.#getElementIndex(el);
+      const index = parseInt(el.dataset.index);
       if (startIndex <= index && index <= endIndex) {
         this.updateElement(el, index);
         updatedElements.push(el);
@@ -218,11 +218,11 @@ export class TanStackAdapter {
   }
 
   #measureElement(element, entry) {
-    const index = this.#getElementIndex(element);
-    if (index == null) {
+    if (element.hidden) {
       return;
     }
 
+    const index = parseInt(element.dataset.index);
     const height = Math.ceil(entry ? entry.borderBoxSize[0].blockSize : getBorderBoxBlockSize(element));
     if (height > 0) {
       this.#virtualizer.resizeItem(index, height);
@@ -254,18 +254,18 @@ export class TanStackAdapter {
         el.key = null;
         el.hidden = true;
         el.style.translate = '';
-        this.#setElementIndex(el, null);
+        delete el.dataset.index;
         this.#resizeObserver.unobserve(el);
         return;
       }
 
-      const oldIndex = this.#getElementIndex(el);
+      const oldIndex = parseInt(el.dataset.index);
       const newIndex = item.index;
 
       el.key = item.key;
       el.hidden = false;
+      el.dataset.index = newIndex;
       el.style.translate = `0px ${item.start}px`;
-      this.#setElementIndex(el, newIndex);
       this.#resizeObserver.observe(el, { box: 'border-box' });
 
       if (oldIndex !== newIndex) {
@@ -323,8 +323,8 @@ export class TanStackAdapter {
     });
 
     reorderChildren(this.elementsContainer, (a, b) => {
-      const aIndex = this.#getElementIndex(a);
-      const bIndex = this.#getElementIndex(b);
+      const aIndex = parseInt(a.dataset.index);
+      const bIndex = parseInt(b.dataset.index);
       return aIndex - bIndex;
     });
   }
@@ -340,21 +340,5 @@ export class TanStackAdapter {
 
   get #elements() {
     return [...this.elementsContainer.children];
-  }
-
-  #getElementIndex(element) {
-    const { indexAttribute } = this.#virtualizer.options;
-    if (element.hasAttribute(indexAttribute)) {
-      return parseInt(element.getAttribute(indexAttribute));
-    }
-  }
-
-  #setElementIndex(element, index) {
-    const { indexAttribute } = this.#virtualizer.options;
-    if (index !== null) {
-      element.setAttribute(indexAttribute, index);
-    } else {
-      element.removeAttribute(indexAttribute);
-    }
   }
 }
