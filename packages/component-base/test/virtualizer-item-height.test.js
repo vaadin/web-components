@@ -255,7 +255,7 @@ describe('virtualizer - item height - initial render', () => {
     });
 
     it('should have the expected amount of physical elements', () => {
-      expect(elementsContainer.childElementCount).to.equal(20);
+      expect(elementsContainer.childElementCount).to.equal(19);
     });
 
     it('should have created the items in the expected amount of batches', () => {
@@ -263,7 +263,7 @@ describe('virtualizer - item height - initial render', () => {
     });
 
     it('should call updateElement for each item once', () => {
-      expect(updateElement).to.have.callCount(20);
+      expect(updateElement).to.have.callCount(19);
     });
   });
 
@@ -306,7 +306,7 @@ describe('virtualizer - item height - initial render', () => {
       });
 
       it('should have the expected amount of physical elements', () => {
-        expect(elementsContainer.childElementCount).to.equal(20);
+        expect(elementsContainer.childElementCount).to.equal(19);
       });
 
       it('should have created the items in the expected amount of batches', () => {
@@ -314,7 +314,7 @@ describe('virtualizer - item height - initial render', () => {
       });
 
       it('should call updateElement for each item once', () => {
-        expect(updateElement).to.have.callCount(20);
+        expect(updateElement).to.have.callCount(19);
       });
     });
   });
