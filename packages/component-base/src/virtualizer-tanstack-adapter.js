@@ -162,9 +162,6 @@ export class TanStackAdapter {
       }
     });
 
-    // Re-measure synchronously so size changes are reflected immediately
-    // instead of waiting for the async ResizeObserver, which fires after the
-    // next animation frame and would leave positioning stale for a frame.
     updatedElements.forEach((el) => {
       this.#measureElement(el);
     });
