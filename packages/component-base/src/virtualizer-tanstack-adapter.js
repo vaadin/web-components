@@ -10,7 +10,13 @@ import { getBorderBoxBlockSize, reorderChildren } from '@vaadin/component-base/s
 
 globalThis.process ||= { env: {} };
 
-function mapElementsToVirtualItems(elements, items) {
+/**
+ * Pairs each element with a virtual item, reusing the element that already
+ * renders an item with the same key. Returns an array of [element, item] pairs:
+ * leftover elements are recycled for leftover items in order, and any element
+ * with no item left is paired with undefined.
+ */
+function reconcileByKey(elements, items) {
   const itemByKey = new Map(items.map((item) => [item.key, item]));
   const elementByKey = new Map(elements.map((el) => [el.key, el]));
 
@@ -26,7 +32,7 @@ function mapElementsToVirtualItems(elements, items) {
     ...elements.filter((el) => !sharedKeySet.has(el.key)),
   ];
 
-  return new Map(sortedElements.map((el, index) => [el, sortedItems[index]]));
+  return sortedElements.map((el, index) => [el, sortedItems[index]]);
 }
 
 export class TanStackAdapter {
@@ -42,9 +48,17 @@ export class TanStackAdapter {
   constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer, reorderElements }) {
     this.createElements = createElements;
     this.updateElement = updateElement;
+
+    /** @type {HTMLElement} */
     this.scrollTarget = scrollTarget;
+
+    /** @type {HTMLElement} */
     this.scrollContainer = scrollContainer;
+
+    /** @type {HTMLElement} */
     this.elementsContainer = elementsContainer || scrollContainer;
+
+    /** @type {boolean} */
     this.reorderElements = reorderElements;
 
     const scrollTargetRect = this.scrollTarget.getBoundingClientRect();
@@ -221,12 +235,9 @@ export class TanStackAdapter {
   }
 
   #renderElements() {
-    const elementToVirtualItemMap = mapElementsToVirtualItems(this.#elements, this.#virtualItems);
-
     const updatedElements = [];
 
-    this.#elements.forEach((el) => {
-      const item = elementToVirtualItemMap.get(el);
+    reconcileByKey(this.#elements, this.#virtualItems).forEach(([el, item]) => {
       if (!item) {
         el.key = null;
         el.hidden = true;
