@@ -10,6 +10,11 @@ import { getBorderBoxBlockSize, reorderChildren } from '@vaadin/component-base/s
 
 globalThis.process ||= { env: {} };
 
+// Mirrors the iron-list adapter's `_maxPages`: the pool keeps roughly one
+// viewport of items plus a buffer above and below, so the list can recycle
+// while scrolling without leaving empty space.
+const MAX_PAGES = 1.3;
+
 /**
  * Pairs each element with a virtual item, reusing the element that already
  * renders an item with the same key. Returns an array of [element, item] pairs:
@@ -75,7 +80,15 @@ export class TanStackAdapter {
 
     this.#virtualizer = new Virtualizer({
       count: 0,
-      overscan: 1,
+      rangeExtractor: ({ startIndex, count }) => {
+        // Render a fixed-size pool of items, like iron-list, instead of padding
+        // the visible range with overscan. TanStack's default overscan is
+        // symmetric and clamped at the top, so it renders fewer items near the
+        // start of the list. A fixed pool keeps the count stable everywhere.
+        const poolSize = Math.min(count, this.#getPoolSize());
+        const start = Math.min(startIndex, count - poolSize);
+        return Array.from({ length: poolSize }, (_, i) => start + i);
+      },
       initialRect: scrollTargetRect,
       observeElementRect,
       observeElementOffset,
@@ -177,7 +190,6 @@ export class TanStackAdapter {
 
     this.#updateOverscrollBehavior();
     this.#updateEstimatedSize();
-    this.#updateOverscan();
 
     if (sync) {
       this.#render();
@@ -282,13 +294,13 @@ export class TanStackAdapter {
     }
   }
 
-  #updateOverscan() {
-    const { scrollRect, options } = this.#virtualizer;
+  #getPoolSize() {
+    const { scrollRect } = this.#virtualizer;
 
-    const visibleCount = Math.ceil(scrollRect.height / this.#estimatedSize);
-    const overscan = Math.max(1, Math.ceil(visibleCount * 0.25));
-
-    this.#virtualizer.setOptions({ ...options, overscan });
+    // The optimal physical size keeps a viewport of items plus a buffer above
+    // and below, matching the iron-list adapter's `_optPhysicalSize`.
+    const optPhysicalSize = scrollRect.height * MAX_PAGES;
+    return Math.max(1, Math.ceil(optPhysicalSize / this.#estimatedSize));
   }
 
   #scheduleReorderElements() {
