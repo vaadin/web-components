@@ -46,12 +46,25 @@ function reconcileByKey(elements, items) {
 }
 
 export class TanStackAdapter {
+  /** @type {Function} */
   #cleanup;
+
+  /** @type {boolean} */
   #isVisible;
+
+  /** @type {number} */
   #resizeRaf;
+
+  /** @type {Virtualizer} */
   #virtualizer;
+
+  /** @type {ResizeObserver} */
   #resizeObserver;
+
+  /** @type {Debouncer} */
   #renderDebouncer;
+
+  /** @type {Debouncer} */
   #reorderElementsDebouncer;
 
   constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer, reorderElements }) {
