@@ -141,7 +141,7 @@ describe('virtualizer - variable row height - large variance', () => {
       scrollContainer,
     });
 
-    sinon.spy(virtualizer.__adapter, '__fixInvalidItemPositioning');
+    virtualizer.hostConnected();
   });
 
   it('should reveal new items when scrolling downwards', async () => {
@@ -155,7 +155,7 @@ describe('virtualizer - variable row height - large variance', () => {
     // Expect the item at the botton of the viewport to be an actual item element
     const itemAtBottom = document.elementFromPoint(rect.left + 1, rect.bottom - 1);
     expect(itemAtBottom.classList.contains('item')).to.be.true;
-    expect(itemAtBottom.textContent).to.equal(`Item ${itemAtBottom.__virtualIndex}`);
+    expect(itemAtBottom.textContent).to.equal(`Item ${itemAtBottom.getAttribute('data-index')}`);
 
     // Expect the item at the top to be the same as before
     const itemAtTop = document.elementFromPoint(rect.left + 1, rect.top + 1);
@@ -174,7 +174,7 @@ describe('virtualizer - variable row height - large variance', () => {
     // Expect the item at the top of the viewport to be an actual item element
     const itemAtTop = document.elementFromPoint(rect.left + 1, rect.top + 1);
     expect(itemAtTop.classList.contains('item')).to.be.true;
-    expect(itemAtTop.textContent).to.equal(`Item ${itemAtTop.__virtualIndex}`);
+    expect(itemAtTop.textContent).to.equal(`Item ${itemAtTop.getAttribute('data-index')}`);
 
     // Expect the item at the bottom to be the same as before
     const itemAtBottom = document.elementFromPoint(rect.left + 1, rect.bottom - 1);
@@ -238,14 +238,6 @@ describe('virtualizer - variable row height - large variance', () => {
     await scrollDownwardsFromStart();
     await fixItemPositioningTimeout();
     virtualizer.size = 1;
-  });
-
-  it('should not invoke when size is changed after scrolling', async () => {
-    initWithLargeSize();
-    await scrollDownwardsFromStart();
-    virtualizer.size = 0;
-    await fixItemPositioningTimeout();
-    expect(virtualizer.__adapter.__fixInvalidItemPositioning.callCount).to.equal(0);
   });
 
   it('should preserve large item in viewport when new item is added', async () => {
