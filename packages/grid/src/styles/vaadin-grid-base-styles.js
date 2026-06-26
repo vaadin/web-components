@@ -87,10 +87,6 @@ export const gridStyles = css`
     z-index: 0;
   }
 
-  [no-scrollbars]:is([safari], [firefox]) #table {
-    overflow: hidden;
-  }
-
   #header,
   #footer {
     display: block;

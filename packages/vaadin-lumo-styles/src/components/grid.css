@@ -204,11 +204,6 @@
     z-index: 2;
   }
 
-  [no-scrollbars][safari] #table,
-  [no-scrollbars][firefox] #table {
-    overflow: hidden;
-  }
-
   /* Empty state */
 
   #scroller:not([empty-state]) #emptystatebody,
