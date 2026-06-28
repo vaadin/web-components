@@ -149,13 +149,13 @@ describe('vaadin-dialog', () => {
       it('should not have focus-trap when no-focus-trap is true', async () => {
         dialog.noFocusTrap = true;
         await nextUpdate(dialog);
-        expect(overlay.hasAttribute('focus-trap')).to.be.false;
+        expect(overlay.hasAttribute('focus-trap')).to.equal(false);
       });
 
       it('should not have focus-trap when modeless is true', async () => {
         dialog.modeless = true;
         await nextUpdate(dialog);
-        expect(overlay.hasAttribute('focus-trap')).to.be.false;
+        expect(overlay.hasAttribute('focus-trap')).to.equal(false);
       });
     });
 
