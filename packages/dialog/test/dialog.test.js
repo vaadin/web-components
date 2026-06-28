@@ -151,6 +151,12 @@ describe('vaadin-dialog', () => {
         await nextUpdate(dialog);
         expect(overlay.hasAttribute('focus-trap')).to.be.false;
       });
+
+      it('should not have focus-trap when modeless is true', async () => {
+        dialog.modeless = true;
+        await nextUpdate(dialog);
+        expect(overlay.hasAttribute('focus-trap')).to.be.false;
+      });
     });
 
     describe('removing and adding to the DOM', () => {

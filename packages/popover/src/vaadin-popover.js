@@ -6,6 +6,7 @@
 import './vaadin-popover-overlay.js';
 import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -904,6 +905,29 @@ class Popover extends PopoverPositionMixin(
     if (this.autofocus && !this.modal) {
       this.focus();
     }
+
+    if (!this.autofocus && !this.modal) {
+      const announcement = this.__getAnnouncementText();
+      if (announcement) {
+        announce(announcement);
+      }
+    }
+  }
+
+  /** @private */
+  __getAnnouncementText() {
+    const label = this.getAttribute('aria-label') || this.accessibleName;
+    if (label) {
+      return label.trim();
+    }
+
+    const labelId = this.getAttribute('aria-labelledby') || this.accessibleNameRef;
+    const labelledBy = labelId && document.getElementById(labelId);
+    if (labelledBy?.textContent) {
+      return labelledBy.textContent.trim();
+    }
+
+    return this.textContent.trim();
   }
 
   /** @private */

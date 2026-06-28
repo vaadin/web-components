@@ -1,6 +1,15 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, focusout, nextRender, nextUpdate, oneEvent, outsideClick, tab } from '@vaadin/testing-helpers';
+import {
+  aTimeout,
+  fixtureSync,
+  focusout,
+  nextRender,
+  nextUpdate,
+  oneEvent,
+  outsideClick,
+  tab,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { Popover } from '../src/vaadin-popover.js';
@@ -134,6 +143,25 @@ describe('a11y', () => {
           popover.opened = true;
           await oneEvent(overlay, 'vaadin-overlay-open');
           expect(element.getAttribute('aria-controls')).to.equal(popover.id);
+        });
+
+        it(`should announce the popover text when opened for the ${prop}`, async () => {
+          popover.textContent = 'Popover details';
+          popover.opened = true;
+          await oneEvent(overlay, 'vaadin-overlay-open');
+          await aTimeout(200);
+
+          expect(document.querySelector('[aria-live]').textContent).to.equal('Popover details');
+        });
+
+        it(`should announce the accessible name when opened for the ${prop}`, async () => {
+          popover.accessibleName = 'Popover label';
+          popover.textContent = 'Popover details';
+          popover.opened = true;
+          await oneEvent(overlay, 'vaadin-overlay-open');
+          await aTimeout(200);
+
+          expect(document.querySelector('[aria-live]').textContent).to.equal('Popover label');
         });
 
         it(`should remove aria-controls attribute from the ${prop} when closed`, async () => {
