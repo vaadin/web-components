@@ -221,6 +221,12 @@ describe('basic', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
+    it('should fire change on clear with Esc when clear button is visible', async () => {
+      comboBox.clearButtonVisible = true;
+      await sendKeys({ press: 'Escape' });
+      expect(spy.calledOnce).to.be.true;
+    });
+
     it('should fire change when chip is removed', () => {
       const chip = comboBox.querySelector('[slot="chip"]');
       chip.shadowRoot.querySelector('[part="remove-button"]').click();

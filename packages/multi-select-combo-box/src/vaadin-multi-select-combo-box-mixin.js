@@ -1063,7 +1063,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
       if (this.clearButtonVisible && !this.opened && this.selectedItems && this.selectedItems.length) {
         event.stopPropagation();
-        this.selectedItems = [];
+        this._onClearAction();
       }
 
       super._onEscape(event);
