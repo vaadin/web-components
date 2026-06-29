@@ -931,9 +931,7 @@ export const GridMixin = (superClass) =>
 
     /** @protected */
     __updateVisibleRows(start, end) {
-      if (this.__virtualizer) {
-        this.__virtualizer.update(start, end);
-      }
+      this.__virtualizer?.update(start, end);
     }
 
     /** @private */
