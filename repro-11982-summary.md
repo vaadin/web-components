@@ -4,14 +4,14 @@
 > **Automated reproduction — produced by the Claude Code `repro` skill. Needs human verification.**
 > The steps, verdict, and root-cause pointer below were generated automatically and must be confirmed by a human before being treated as authoritative.
 
-- **Verdict:** reproduced (the unwanted collapse) — the issue itself is a feature request (allow disabling collapse)
+- **Verdict:** reproduced (the unwanted collapse described in the issue)
 - **Hypothesis tested:** The bug is a single icon-only menu-bar item collapsing into the overflow menu, triggered by the item's rendered width fractionally exceeding the container (sub-pixel rounding at a non-default browser zoom), observable as the overflow ellipsis button becoming visible and holding the only item — a nested "ellipsis inside ellipsis".
-- **Branch:** `repro/11982` — pushed to `vaadin/web-components`
+- **Branch:** [`repro/11982`](https://github.com/vaadin/web-components/tree/repro/11982) — pushed to `vaadin/web-components`
 - **Reproduced on:** web-components @ `repro/11982` (current `main` line, menu-bar `25.3.0-alpha0`)
 - **Present on main?:** yes (still broken)
 - **Theme / Browser:** Base / Chromium (Playwright)
 
-![menu-bar collapses its only item into the overflow ellipsis; opening it reveals the original item nested one level deeper](SCREENSHOT_URL)
+![menu-bar collapses its only item into the overflow ellipsis; opening it reveals the original item nested one level deeper](https://raw.githubusercontent.com/vaadin/web-components/f92df47dd10e450e6e251931ac51605b35a11a61/repro-11982.png)
 
 ## Observed behavior
 
@@ -27,7 +27,7 @@ This matches the reporter's screenshots: an overflow ellipsis button that contai
 
 ## Expected behavior
 
-The single item should stay visible — it visually fits. More generally (the feature request), there should be a way to disable the auto-collapse behavior, since "in some cases it's better to overflow by a pixel than to collapse down".
+The single item should stay visible — it visually fits, overflowing by less than a pixel.
 
 ## Steps to reproduce
 
@@ -67,12 +67,10 @@ How to run: start the server (`yarn start`) and open the route below.
 
 ## Root cause (suspected)
 
-The overflow check compares **integer-rounded** `offsetWidth` against `scrollWidth`. When the container's true width is fractionally just below the content's true width, `offsetWidth` rounds down and `scrollWidth` rounds up, so the check fires for a sub-pixel overflow that is not visible — collapsing the only item. There is also no public option to disable the collapse, which is the actual request in this issue.
+The overflow check compares **integer-rounded** `offsetWidth` against `scrollWidth`. When the container's true width is fractionally just below the content's true width, `offsetWidth` rounds down and `scrollWidth` rounds up, so the check fires for a sub-pixel overflow that is not visible — collapsing the only item.
 
-ROOTCAUSE_URL
+https://github.com/vaadin/web-components/blob/f92df47dd10e450e6e251931ac51605b35a11a61/packages/menu-bar/src/vaadin-menu-bar-mixin.js#L502-L504
 
 ## Notes
 
-- The issue is primarily a **feature request** (add a way to disable collapse). This reproduction confirms the underlying trigger the maintainer asked to investigate: a single item collapsing despite visually fitting, especially at non-default zoom.
 - `min-width: max-content` (the reporter's CSS workaround) avoids it at 100% zoom because the host then never reports a width below the content; the sub-pixel mismatch can still appear when a surrounding layout constrains the width at non-default zoom.
-- `web-padawan` suggested a dedicated single-item `MenuButton` component as a cleaner long-term solution, which the reporter preferred.
