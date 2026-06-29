@@ -228,8 +228,6 @@ export const VirtualListMixin = (superClass) =>
      * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
      */
     requestContentUpdate() {
-      if (this.__virtualizer) {
-        this.__virtualizer.update();
-      }
+      this.__virtualizer?.update();
     }
   };
