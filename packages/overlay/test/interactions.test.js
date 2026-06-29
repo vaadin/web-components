@@ -61,6 +61,28 @@ describe('interactions', () => {
       expect(overlay.opened).to.be.true;
     });
 
+    it('should prevent default on the Escape keydown event when closing', () => {
+      const spy = sinon.spy();
+      document.addEventListener('keydown', spy, { once: true });
+
+      escKeyDown(document.body);
+
+      expect(overlay.opened).to.be.false;
+      expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
+    });
+
+    it('should not prevent default on the Escape keydown event if overlay-escape-press is cancelled', () => {
+      overlay.addEventListener('vaadin-overlay-escape-press', (e) => e.preventDefault());
+
+      const spy = sinon.spy();
+      document.addEventListener('keydown', spy, { once: true });
+
+      escKeyDown(document.body);
+
+      expect(overlay.opened).to.be.true;
+      expect(spy.firstCall.args[0].defaultPrevented).to.be.false;
+    });
+
     it('should not close on Esc if the keydown event was prevented', () => {
       overlay.addEventListener('keydown', (e) => e.preventDefault());
 
