@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro 11982 — menu-bar collapses single item with space available</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+
+  <body style="padding: 20px">
+    <h3>Single icon-only menu-bar item — collapses into overflow with space available</h3>
+
+    <!-- A single top-level ellipsis-icon dropdown button. The button visually fits
+         (it overflows the container by only ~0.3px, sub-pixel, invisible). But the
+         overflow check compares integer-rounded offsetWidth(65) < scrollWidth(66),
+         so it wrongly collapses the only item into the overflow ellipsis — producing
+         a nested "ellipsis inside ellipsis". The fractional width that triggers the
+         rounding mismatch is created here with a non-default browser zoom (1.1), the
+         exact condition the reporter describes. -->
+    <div style="zoom: 1.1; border: 1px solid #ccc; display: inline-block">
+      <vaadin-menu-bar id="bar" style="width: 61.35px"></vaadin-menu-bar>
+    </div>
+
+    <p>
+      <button id="measure">Measure</button>
+      <span id="out"></span>
+    </p>
+
+    <script type="module">
+      import '@vaadin/menu-bar';
+      import '@vaadin/icon';
+      import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
+
+      function makeIcon(img) {
+        const item = document.createElement('vaadin-menu-bar-item');
+        const icon = document.createElement('vaadin-icon');
+        icon.setAttribute('icon', img);
+        icon.style.width = '16px';
+        icon.style.height = '16px';
+        item.appendChild(icon);
+        return item;
+      }
+
+      const bar = document.querySelector('#bar');
+      bar.items = [
+        {
+          component: makeIcon('lumo:ellipsis-v'),
+          children: [{ text: 'Download report' }, { text: 'Download error report' }],
+        },
+      ];
+
+      document.querySelector('#measure').addEventListener('click', () => {
+        const container = bar.shadowRoot.querySelector('[part="container"]');
+        const overflow = bar.shadowRoot.querySelector('[part="overflow-button"]');
+        const overflowHidden = overflow.hasAttribute('hidden');
+        const overflowCount = (overflow.item && overflow.item.children && overflow.item.children.length) || 0;
+        document.querySelector('#out').textContent =
+          `container.offsetWidth=${container.offsetWidth} scrollWidth=${container.scrollWidth} | ` +
+          `overflow visible=${!overflowHidden} overflowItemCount=${overflowCount}`;
+      });
+    </script>
+  </body>
+</html>
