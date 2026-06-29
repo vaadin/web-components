@@ -618,4 +618,29 @@ describe('overflow', () => {
       expect(spy.set.callCount).to.equal(2);
     });
   });
+
+  describe('sub-pixel rounding', () => {
+    let menu, container, overflow;
+
+    beforeEach(async () => {
+      menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
+      menu.items = [{ text: 'Item 1' }];
+      await nextRender();
+      container = menu._container;
+      overflow = menu._overflow;
+    });
+
+    it('should not collapse a button that overflows by less than 1px', async () => {
+      // Override the metrics to mimic the 1px sub-pixel rounding.
+      const width = menu._buttons[0].offsetWidth;
+      Object.defineProperty(container, 'offsetWidth', { configurable: true, get: () => width - 1 });
+      Object.defineProperty(container, 'scrollWidth', { configurable: true, get: () => width });
+
+      // Update items to trigger overflow detection
+      menu.items = [...menu.items];
+      await nextRender();
+
+      expect(overflow.item.children.length).to.equal(0);
+    });
+  });
 });

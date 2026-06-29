@@ -501,7 +501,9 @@ export const MenuBarMixin = (superClass) =>
       // and causing a cascading collapse where every button appears to overflow.
       container.style.minWidth = `${container.offsetWidth}px`;
 
-      if (container.offsetWidth < container.scrollWidth) {
+      // Allow 1px tolerance before collapsing to avoid unexpected overflow
+      // due to sub-pixel rounding, e.g. with a non-default browser zoom.
+      if (container.scrollWidth - container.offsetWidth > 1) {
         this._hasOverflow = true;
 
         const isRTL = this.__isRTL;
@@ -514,8 +516,8 @@ export const MenuBarMixin = (superClass) =>
 
           // If this button isn't overflowing, then the rest aren't either
           if (
-            (!isRTL && btnLeft + lastButton.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
-            (isRTL && btnLeft >= overflow.offsetWidth)
+            (!isRTL && btnLeft + lastButton.offsetWidth - (container.offsetWidth - overflow.offsetWidth) <= 1) ||
+            (isRTL && btnLeft >= overflow.offsetWidth - 1)
           ) {
             break;
           }
