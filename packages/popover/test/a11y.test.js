@@ -130,19 +130,17 @@ describe('a11y', () => {
           expect(element.getAttribute('aria-expanded')).to.equal('true');
         });
 
-        it(`should set aria-controls attribute on the ${prop} when opened`, async () => {
-          popover.opened = true;
-          await oneEvent(overlay, 'vaadin-overlay-open');
+        it(`should set aria-controls attribute on the ${prop} by default`, () => {
           expect(element.getAttribute('aria-controls')).to.equal(popover.id);
         });
 
-        it(`should remove aria-controls attribute from the ${prop} when closed`, async () => {
+        it(`should keep aria-controls attribute on the ${prop} when closed`, async () => {
           popover.opened = true;
           await oneEvent(overlay, 'vaadin-overlay-open');
 
           popover.opened = false;
           await nextUpdate(popover);
-          expect(element.hasAttribute('aria-controls')).to.be.false;
+          expect(element.getAttribute('aria-controls')).to.equal(popover.id);
         });
 
         it(`should remove aria-haspopup attribute from ${prop} when target is cleared`, async () => {
