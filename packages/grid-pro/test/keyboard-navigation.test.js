@@ -387,10 +387,7 @@ describe('keyboard navigation', () => {
     });
   });
 
-  // TODO: skipped because clearing a loading row's item leaves the row without
-  // an item while data reloads, so starting an edit on it crashes on a null
-  // editor. Re-enable once the edit start is deferred until the item loads.
-  describe.skip('clearCache on item-property-changed', () => {
+  describe('clearCache on item-property-changed', () => {
     let grid;
 
     beforeEach(async () => {
@@ -443,7 +440,8 @@ describe('keyboard navigation', () => {
       // Normal behavior should call it once or twice at most
       expect(stopEditSpy.callCount).to.be.lessThan(5);
 
-      // Verify the second cell is now in edit mode
+      // The next cell's row is loading after clearCache, so the edit is
+      // deferred and resumes once the item loads
       const secondCell = getContainerCell(grid.$.items, 0, 1);
       expect(getCellEditor(secondCell)).to.be.ok;
     });

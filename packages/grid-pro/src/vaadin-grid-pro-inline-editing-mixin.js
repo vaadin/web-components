@@ -188,7 +188,7 @@ export const InlineEditingMixin = (superClass) =>
     _disabledChanged(disabled, oldDisabled) {
       super._disabledChanged(disabled, oldDisabled);
 
-      if (disabled && this.__edited) {
+      if (disabled) {
         this._stopEdit(true);
       }
     }
@@ -330,6 +330,9 @@ export const InlineEditingMixin = (superClass) =>
       if (this.__edited && !this.__edited.cell.isConnected) {
         this._stopEdit(true, false);
       }
+      if (this.__pendingEdit && !this.__pendingEdit.cell.isConnected) {
+        this.__pendingEdit = null;
+      }
     }
 
     /** @private */
@@ -357,8 +360,20 @@ export const InlineEditingMixin = (superClass) =>
     _startEdit(cell, column) {
       const isCellEditable = this._isCellEditable(cell);
 
+      // A new edit request supersedes any previously deferred one.
+      this.__pendingEdit = null;
+
       // TODO: remove `_editingDisabled` after Flow counterpart is updated.
       if (this.disabled || this._editingDisabled || !isCellEditable) {
+        return;
+      }
+
+      // A loading row has no item yet, so the editor can't be rendered against
+      // it. Defer the edit and resume it from `__updateRow` once the item has
+      // loaded. This can happen when committing an edit triggers clearCache()
+      // and the next cell's row is still loading.
+      if (cell.__parentRow.hasAttribute('loading')) {
+        this.__pendingEdit = { cell, column };
         return;
       }
       // Cancel debouncer enqueued on focusout
@@ -391,6 +406,9 @@ export const InlineEditingMixin = (superClass) =>
      * @protected
      */
     _stopEdit(shouldCancel, shouldRestoreFocus) {
+      // Stopping supersedes a deferred edit start.
+      this.__pendingEdit = null;
+
       if (!this.__edited) {
         return;
       }
@@ -552,6 +570,16 @@ export const InlineEditingMixin = (superClass) =>
         }
       }
       super.__updateRow(row, item);
+
+      // Resume an edit that was deferred while the row was loading, now that
+      // the row has an item again.
+      if (this.__pendingEdit && item) {
+        const { cell, column } = this.__pendingEdit;
+        if (cell.__parentRow === row && this._isCellEditable(cell)) {
+          this.__pendingEdit = null;
+          this._startEdit(cell, column);
+        }
+      }
     }
 
     /**
