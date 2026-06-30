@@ -80,6 +80,10 @@ export const markdownSlotStyles = css`
         border-radius: var(--vaadin-radius-m);
         color: light-dark(var(--vaadin-background-color), var(--vaadin-text-color));
         padding: var(--vaadin-padding-m);
+
+        code {
+          font-weight: 500;
+        }
       }
 
       hr {
