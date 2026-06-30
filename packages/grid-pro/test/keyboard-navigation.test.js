@@ -440,7 +440,8 @@ describe('keyboard navigation', () => {
       // Normal behavior should call it once or twice at most
       expect(stopEditSpy.callCount).to.be.lessThan(5);
 
-      // Verify the second cell is now in edit mode
+      // The next cell's row is loading after clearCache, so the edit is
+      // deferred and resumes once the item loads
       const secondCell = getContainerCell(grid.$.items, 0, 1);
       expect(getCellEditor(secondCell)).to.be.ok;
     });

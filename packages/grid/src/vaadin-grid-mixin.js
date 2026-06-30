@@ -773,18 +773,18 @@ export const GridMixin = (superClass) =>
      * @private
      */
     __updateRow(row) {
+      row._item = this.__getRowItem(row);
+
       this.__a11yUpdateRowRowindex(row);
       this.__updateRowOrderParts(row);
 
-      const item = this.__getRowItem(row);
-      if (item) {
+      if (row._item) {
         this.__updateRowLoading(row, false);
       } else {
         this.__updateRowLoading(row, true);
         return;
       }
 
-      row._item = item;
       const model = this.__getRowModel(row);
 
       this._toggleDetailsCell(row, model.detailsOpened);
