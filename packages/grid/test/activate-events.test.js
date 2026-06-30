@@ -62,4 +62,51 @@ describe('activate events', () => {
       expect(spy.called).to.be.false;
     });
   });
+
+  describe('row-activate', () => {
+    let spy;
+
+    beforeEach(() => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      column = grid.firstElementChild;
+      grid.items = [{ foo: 'bar' }, { foo: 'baz' }];
+      column.renderer = (root, _owner, model) => {
+        root.textContent = `${model.index} ${model.item.foo}`;
+      };
+      flushGrid(grid);
+
+      spy = sinon.spy();
+      grid.addEventListener('row-activate', spy);
+    });
+
+    // Focus the first body cell, then press left arrow to enter row focus mode,
+    // where the row itself is focused instead of a cell.
+    function enterRowFocusMode() {
+      getCell(grid, 0).focus();
+      keyDownOn(grid.shadowRoot.activeElement, 37, [], 'ArrowLeft');
+    }
+
+    (isIOS ? it.skip : it)('should fire a `row-activate` event with correct model on space', () => {
+      enterRowFocusMode();
+      keyDownOn(grid.shadowRoot.activeElement, 32, [], ' ');
+      expect(spy.calledOnce).to.be.true;
+
+      const e = spy.firstCall.args[0];
+      expect(e.detail.model.index).to.eql(0);
+      expect(e.detail.model.item).to.be.ok;
+    });
+
+    (isIOS ? it.skip : it)('should not fire a `cell-activate` event on space in row focus mode', () => {
+      const cellSpy = sinon.spy();
+      grid.addEventListener('cell-activate', cellSpy);
+
+      enterRowFocusMode();
+      keyDownOn(grid.shadowRoot.activeElement, 32, [], ' ');
+      expect(cellSpy.called).to.be.false;
+    });
+  });
 });
