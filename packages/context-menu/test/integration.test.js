@@ -1,25 +1,26 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, click, fixtureSync, isIOS, makeSoloTouchEvent, nextRender } from '@vaadin/testing-helpers';
+import { click, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import '../src/vaadin-context-menu.js';
 
 describe('integration', () => {
-  let wrapper, menu, button, overlay;
+  let menu, button, overlay;
 
   beforeEach(async () => {
-    wrapper = fixtureSync(`
-      <div>
-        <vaadin-context-menu></vaadin-context-menu>
-        <button style="margin: 20px">Show context menu</button>
-      </div>
-    `);
+    menu = fixtureSync('<vaadin-context-menu></vaadin-context-menu>');
     await nextRender();
-    [menu, button] = wrapper.children;
+    const wrapper = menu.parentElement;
+    wrapper.attachShadow({ mode: 'open' });
+    wrapper.shadowRoot.innerHTML = `
+      <slot></slot>
+      <button style="margin: 20px">Show context menu</button>
+    `;
     menu.renderer = (root) => {
       root.textContent = 'foo';
     };
-    button.addEventListener('click', (e) => {
+    wrapper.addEventListener('click', (e) => {
       menu.open(e);
     });
+    button = wrapper.shadowRoot.querySelector('button');
     overlay = menu._overlayElement;
   });
 
@@ -28,12 +29,21 @@ describe('integration', () => {
     expect(menu.opened).to.eql(true);
   });
 
-  (isIOS ? it.skip : it)('should open context menu below button', async () => {
-    makeSoloTouchEvent('click', { y: 0, x: 0 }, button);
-    await aTimeout(100);
+  it('should position overlay against the target on keyboard open', async () => {
+    // Emulate keyboard-triggered click that reports clientX/clientY as 0
+    click(button, { x: 0, y: 0 });
+    await oneEvent(overlay, 'vaadin-overlay-open');
     const buttonRect = button.getBoundingClientRect();
     const overlayRect = overlay.getBoundingClientRect();
     expect(overlayRect.left).to.be.closeTo(buttonRect.left, 0.1);
-    expect(overlayRect.top).to.be.closeTo(buttonRect.top + buttonRect.height, 0.1);
+    expect(overlayRect.top).to.be.closeTo(buttonRect.bottom, 0.1);
+  });
+
+  it('should position overlay at the pointer on mouse open', async () => {
+    click(button, { x: 100, y: 100 });
+    await oneEvent(overlay, 'vaadin-overlay-open');
+    const overlayRect = overlay.getBoundingClientRect();
+    expect(overlayRect.left).to.be.closeTo(100, 0.1);
+    expect(overlayRect.top).to.be.closeTo(100, 0.1);
   });
 });
