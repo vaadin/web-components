@@ -273,6 +273,21 @@ describe('multi selection column', () => {
     expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select Row');
   });
 
+  it('should use the value from the generator as the row accessible name', async () => {
+    selectionColumn.selectRowAccessibleNameGenerator = (item) => `Select row ${item}`;
+    await nextRender();
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.equal('Select row foo');
+  });
+
+  it('should re-render rows when the generator changes', async () => {
+    selectionColumn.selectRowAccessibleNameGenerator = (item) => `Select row ${item}`;
+    await nextRender();
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.equal('Select row foo');
+    selectionColumn.selectRowAccessibleNameGenerator = (item) => `Pick ${item}`;
+    await nextRender();
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.equal('Pick foo');
+  });
+
   it('should select item when checkbox is checked', async () => {
     firstBodyCheckbox.click();
     await nextFrame();
@@ -395,6 +410,12 @@ describe('multi selection column', () => {
 
   it('should set aria-label on the select all checkbox input element', () => {
     expect(selectAllCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select All');
+  });
+
+  it('should update aria-label on the select all checkbox based on selectAllAccessibleName', async () => {
+    selectionColumn.selectAllAccessibleName = 'Select All Items';
+    await nextRender();
+    expect(selectAllCheckbox.inputElement.getAttribute('aria-label')).to.equal('Select All Items');
   });
 
   it('should set selectAll when header checkbox is clicked', async () => {
