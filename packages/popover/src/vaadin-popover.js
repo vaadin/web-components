@@ -685,11 +685,8 @@ class Popover extends PopoverPositionMixin(
 
       effectiveTarget.setAttribute('aria-expanded', opened ? 'true' : 'false');
 
-      if (opened) {
-        effectiveTarget.setAttribute('aria-controls', this.id);
-      } else {
-        effectiveTarget.removeAttribute('aria-controls');
-      }
+      // Always set aria-controls to make VoiceOver + Chrome announce it.
+      effectiveTarget.setAttribute('aria-controls', this.id);
 
       this.__oldTarget = target;
     }
