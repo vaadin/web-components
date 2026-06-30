@@ -3,7 +3,7 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-grid.js';
-import { getBodyCellContent } from './helpers.js';
+import { flushGrid, getBodyCellContent } from './helpers.js';
 
 describe('activate events', () => {
   let grid, column;
@@ -19,6 +19,7 @@ describe('activate events', () => {
       root.textContent = `${model.index} ${model.item.name}`;
     };
     grid.items = [{ name: 'Item 0' }, { name: 'Item 1' }];
+    flushGrid(grid);
     // Focus grid
     await sendKeys({ press: 'Tab' });
   });
