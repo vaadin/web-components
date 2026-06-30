@@ -78,6 +78,32 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
           sync: true,
         },
 
+        /**
+         * The accessible name (aria-label) for the Select All checkbox in the
+         * header cell. Defaults to "Select All".
+         *
+         * @attr {string} select-all-accessible-name
+         */
+        selectAllAccessibleName: {
+          type: String,
+          value: 'Select All',
+          sync: true,
+        },
+
+        /**
+         * A function that receives an item and returns the accessible name
+         * (aria-label) for the checkbox rendered in the corresponding row.
+         * Defaults to a function that returns "Select Row".
+         *
+         * @type {(item: !GridItem) => string}
+         */
+        selectRowAccessibleNameGenerator: {
+          type: Object,
+          value: () => {
+            return (_item) => 'Select Row';
+          },
+        },
+
         /** @protected */
         _indeterminate: {
           type: Boolean,
@@ -101,8 +127,28 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, selectAll, _indeterminate, _selectAllHidden)',
+        '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, selectAll, _indeterminate, _selectAllHidden, selectAllAccessibleName)',
       ];
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('selectRowAccessibleNameGenerator')) {
+        this._grid?.requestContentUpdate?.();
+      }
+    }
+
+    /**
+     * Returns the Select Row checkbox accessible name for the given item from
+     * `selectRowAccessibleNameGenerator`.
+     *
+     * @private
+     */
+    __getSelectRowAccessibleName(item) {
+      const generator = this.selectRowAccessibleNameGenerator;
+      return typeof generator === 'function' ? generator(item) : '';
     }
 
     constructor() {
@@ -150,11 +196,12 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       let checkbox = root.firstElementChild;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
-        checkbox.accessibleName = 'Select All';
         checkbox.classList.add('vaadin-grid-select-all-checkbox');
         checkbox.addEventListener('change', this.__onSelectAllCheckboxChange);
         root.appendChild(checkbox);
       }
+
+      checkbox.accessibleName = this.selectAllAccessibleName;
 
       const checked = this.__isChecked(this.selectAll, this._indeterminate);
       checkbox.checked = checked;
@@ -171,7 +218,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       let checkbox = root.firstElementChild;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
-        checkbox.accessibleName = 'Select Row';
         checkbox.addEventListener('change', this.__onSelectRowCheckboxChange);
         root.appendChild(checkbox);
         addListener(root, 'track', this.__onCellTrack);
@@ -180,6 +226,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         root.addEventListener('click', this.__onCellClick);
       }
 
+      checkbox.accessibleName = this.__getSelectRowAccessibleName(item);
       checkbox.__item = item;
       checkbox.checked = selected;
 

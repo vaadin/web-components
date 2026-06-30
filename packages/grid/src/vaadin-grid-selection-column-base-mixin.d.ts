@@ -40,6 +40,21 @@ export declare class GridSelectionColumnBaseMixinClass<TItem> {
   dragSelect: boolean;
 
   /**
+   * The accessible name (aria-label) for the Select All checkbox in the
+   * header cell. Defaults to "Select All".
+   *
+   * @attr {string} select-all-accessible-name
+   */
+  selectAllAccessibleName: string;
+
+  /**
+   * A function that receives an item and returns the accessible name
+   * (aria-label) for the checkbox rendered in the corresponding row.
+   * Defaults to a function that returns "Select Row".
+   */
+  selectRowAccessibleNameGenerator: (item: TItem) => string;
+
+  /**
    * Indicates whether the shift key is currently pressed.
    */
   protected _shiftKeyDown: boolean;
