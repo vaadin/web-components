@@ -10,13 +10,12 @@ snapshots["vaadin-card host default"] =
 snapshots["vaadin-card host card-title"] = 
 `<vaadin-card
   _t=""
-  aria-labelledby="card-title-0"
+  aria-labelledby="card-title-vaadin-card-1"
   role="region"
 >
   <div
     aria-level="2"
-    card-string-title=""
-    id="card-title-0"
+    id="card-title-vaadin-card-1"
     role="heading"
     slot="title"
   >

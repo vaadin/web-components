@@ -28,12 +28,12 @@ describe('vaadin-card', () => {
 
   describe('title', () => {
     function getStringTitleElement() {
-      return card.querySelector('[slot="title"][card-string-title]') as HTMLElement;
+      return card.querySelector('[slot="title"][role="heading"]') as HTMLElement;
     }
 
     function getCustomTitleElement() {
       return Array.from(card.querySelectorAll('[slot="title"]')).find((el) => {
-        return !el.hasAttribute('card-string-title');
+        return el.getAttribute('role') !== 'heading';
       });
     }
 
