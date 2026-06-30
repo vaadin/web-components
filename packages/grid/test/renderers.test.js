@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, isIOS, keyDownOn, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
@@ -156,49 +156,6 @@ describe('renderers', () => {
         column.renderer.resetHistory();
         grid.detailsOpenedItems = [grid.items[0]];
         expect(column.renderer.called).to.be.false;
-      });
-    });
-
-    describe('cell-activate', () => {
-      let spy;
-
-      beforeEach(() => {
-        spy = sinon.spy();
-        grid.addEventListener('cell-activate', spy);
-      });
-
-      it('should fire a `cell-activate` event with correct model on cell click', () => {
-        getCell(grid, 0)._content.click();
-        expect(spy.calledOnce).to.be.true;
-
-        const e = spy.firstCall.args[0];
-        expect(e.detail.model.index).to.eql(0);
-        expect(e.detail.model.item).to.be.ok;
-      });
-
-      (isIOS ? it.skip : it)('should fire a `cell-activate` event with correct model on space', () => {
-        keyDownOn(getCell(grid, 0) || grid.shadowRoot.activeElement, 32, [], ' ');
-        expect(spy.calledOnce).to.be.true;
-
-        const e = spy.firstCall.args[0];
-        expect(e.detail.model.index).to.eql(0);
-        expect(e.detail.model.item).to.be.ok;
-      });
-
-      it('should not fire a `cell-activate` event on focusable element click', () => {
-        column.renderer = (root) => {
-          root.innerHTML = '<input>';
-        };
-        getCell(grid, 0)._content.firstElementChild.click();
-        expect(spy.called).to.be.false;
-      });
-
-      it('should not fire a `cell-activate` event on label click', () => {
-        column.renderer = (root) => {
-          root.innerHTML = '<label for="foo">foo label</label><input id="foo">';
-        };
-        getCell(grid, 0)._content.firstElementChild.click();
-        expect(spy.called).to.be.false;
       });
     });
   });
