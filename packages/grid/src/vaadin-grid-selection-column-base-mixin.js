@@ -146,7 +146,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      *
      * @private
      */
-    __getSelectRowAccessibleName(item) {
+    __generateSelectRowAccessibleName(item) {
       const generator = this.selectRowAccessibleNameGenerator;
       return typeof generator === 'function' ? generator(item) : '';
     }
@@ -226,7 +226,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         root.addEventListener('click', this.__onCellClick);
       }
 
-      checkbox.accessibleName = this.__getSelectRowAccessibleName(item);
+      checkbox.accessibleName = this.__generateSelectRowAccessibleName(item);
       checkbox.__item = item;
       checkbox.checked = selected;
 
