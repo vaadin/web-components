@@ -56,6 +56,9 @@ const DEFAULT_I18N = {
   moreOptions: 'More options',
 };
 
+// Sub-pixel differences below this are treated as a fit, not overflow (#11982).
+const SUBPIXEL_TOLERANCE_PX = 1;
+
 export const MenuBarMixin = (superClass) =>
   class MenuBarMixinClass extends I18nMixin(
     KeyboardDirectionMixin(ResizeMixin(FocusMixin(DisabledMixin(superClass)))),
@@ -496,43 +499,85 @@ export const MenuBarMixin = (superClass) =>
 
       // Prevent the container from shrinking while buttons are being hidden.
       // The host has min-width: 0 so it can shrink inside flex/grid layouts.
-      // Without this lock, hiding a button reduces the host width, which
-      // shrinks the container (width: 100%), shifting all button positions
-      // and causing a cascading collapse where every button appears to overflow.
       container.style.minWidth = `${container.offsetWidth}px`;
 
-      if (container.offsetWidth < container.scrollWidth) {
-        this._hasOverflow = true;
+      // getBoundingClientRect() gives fractional positions, unlike offsetWidth/
+      // scrollWidth which round independently and can cause unexpected collapse.
+      // Left/right edges (not a width sum) absorb gaps and negative margins
+      // automatically and stay correct in RTL with no separate branch.
+      const containerRect = container.getBoundingClientRect();
+      const buttonRects = buttons.map((b) => b.getBoundingClientRect());
 
-        const isRTL = this.__isRTL;
-        const containerLeft = container.offsetLeft;
+      // Extent spanned by all buttons, left-most to right-most edge.
+      const usedLeft = Math.min(...buttonRects.map((r) => r.left));
+      const usedRight = Math.max(...buttonRects.map((r) => r.right));
 
-        const remaining = [...buttons];
-        while (remaining.length) {
-          const lastButton = remaining[remaining.length - 1];
-          const btnLeft = lastButton.offsetLeft - containerLeft;
-
-          // If this button isn't overflowing, then the rest aren't either
-          if (
-            (!isRTL && btnLeft + lastButton.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
-            (isRTL && btnLeft >= overflow.offsetWidth)
-          ) {
-            break;
-          }
-
-          const btn = this.reverseCollapse ? remaining.shift() : remaining.pop();
-
-          // Save width for buttons with component
-          btn.style.width = getComputedStyle(btn).width;
-          btn.style.visibility = 'hidden';
-          btn.style.position = 'absolute';
-        }
-
-        const items = buttons.filter((b) => !remaining.includes(b)).map((b) => b.item);
-        this.__updateOverflow(items);
+      // Do not overflow for sub-pixel rounding cases below the 1px threshold.
+      if (usedRight - usedLeft - containerRect.width < SUBPIXEL_TOLERANCE_PX) {
+        container.style.minWidth = '';
+        return;
       }
 
+      // The overflow button always renders last and nothing reorders it, so
+      // revealing it here can't shift the rects already captured above.
+      this._hasOverflow = true;
+      const overflowRect = overflow.getBoundingClientRect();
+
+      // Width left for the other buttons once the overflow button is shown.
+      const availableSpace = containerRect.width - overflowRect.width;
+
+      const overflowButtons = this.__collectOverflowButtons(buttons, buttonRects, availableSpace);
+
+      // Apply all hides in a single write pass.
+      overflowButtons.forEach((btn) => {
+        // Save width for buttons with component
+        btn.style.width = getComputedStyle(btn).width;
+        btn.style.visibility = 'hidden';
+        btn.style.position = 'absolute';
+      });
+
+      // buttons.filter (not overflowButtons directly) restores original DOM
+      // order: overflowButtons is built from one end inward, so its order is
+      // reversed relative to buttons whenever reverseCollapse is false.
+      const overflowSet = new Set(overflowButtons);
+      const items = buttons.filter((b) => overflowSet.has(b)).map((b) => b.item);
+      this.__updateOverflow(items);
+
       container.style.minWidth = '';
+    }
+
+    /**
+     * Collect the buttons that must move into the overflow menu so the
+     * remaining ones fit within `availableSpace`, using only the already
+     * captured `buttonRects` (no further DOM reads).
+     * @private
+     */
+    __collectOverflowButtons(buttons, buttonRects, availableSpace) {
+      const overflowButtons = [];
+      let lo = 0;
+      let hi = buttons.length - 1;
+
+      const visibleExtent = () => {
+        let left = Infinity;
+        let right = -Infinity;
+        for (let i = lo; i <= hi; i += 1) {
+          left = Math.min(left, buttonRects[i].left);
+          right = Math.max(right, buttonRects[i].right);
+        }
+        return right - left;
+      };
+
+      while (lo <= hi && visibleExtent() - availableSpace >= SUBPIXEL_TOLERANCE_PX) {
+        if (this.reverseCollapse) {
+          overflowButtons.push(buttons[lo]);
+          lo += 1;
+        } else {
+          overflowButtons.push(buttons[hi]);
+          hi -= 1;
+        }
+      }
+
+      return overflowButtons;
     }
 
     /** @private */
