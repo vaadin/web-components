@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Layout</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.viewLayoutComponent = true;
+      await import('@vaadin/view-layout');
+      await import('@vaadin/button');
+    </script>
+  </head>
+
+  <body>
+    <section class="section">
+      <h2 class="heading">Header title (string)</h2>
+      <div style="height: 300px; width: 100%; border: 1px solid #ccc">
+        <vaadin-view-layout header-title="Bookings">
+          <p>Content goes here. The title above is rendered from the <code>header-title</code> property.</p>
+        </vaadin-view-layout>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Full slot composition</h2>
+      <div style="height: 300px; width: 100%; border: 1px solid #ccc">
+        <vaadin-view-layout>
+          <vaadin-button slot="header-prefix" theme="tertiary" aria-label="Back">&larr;</vaadin-button>
+          <h2 slot="title">Booking Details</h2>
+          <vaadin-button slot="header-suffix" theme="tertiary">Edit</vaadin-button>
+
+          <div>
+            <p>Scrollable content.</p>
+            <p style="height: 400px; background: #f0f0f0">Tall block to force scrolling.</p>
+            <p>End of content.</p>
+          </div>
+
+          <div slot="footer">
+            <vaadin-button>Cancel</vaadin-button>
+            <vaadin-button theme="primary">Save</vaadin-button>
+          </div>
+        </vaadin-view-layout>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Header override (title slot hidden)</h2>
+      <div style="height: 300px; width: 100%; border: 1px solid #ccc">
+        <vaadin-view-layout header-title="This title is hidden by the header override">
+          <vaadin-button slot="header-prefix" theme="tertiary" aria-label="Back">&larr;</vaadin-button>
+          <div slot="header"><strong>Custom header content</strong> replacing the title area</div>
+          <vaadin-button slot="header-suffix" theme="tertiary">Edit</vaadin-button>
+
+          <p
+            >When a <code>slot="header"</code> child is present, the host gets <code>has-header</code> and the title
+            slot is hidden.</p
+          >
+        </vaadin-view-layout>
+      </div>
+    </section>
+  </body>
+</html>
