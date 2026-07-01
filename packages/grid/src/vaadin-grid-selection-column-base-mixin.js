@@ -131,26 +131,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       ];
     }
 
-    /** @protected */
-    updated(props) {
-      super.updated(props);
-
-      if (props.has('selectRowAccessibleNameGenerator')) {
-        this._grid?.requestContentUpdate?.();
-      }
-    }
-
-    /**
-     * Returns the Select Row checkbox accessible name for the given item from
-     * `selectRowAccessibleNameGenerator`.
-     *
-     * @private
-     */
-    __generateSelectRowAccessibleName(item) {
-      const generator = this.selectRowAccessibleNameGenerator;
-      return typeof generator === 'function' ? generator(item) : '';
-    }
-
     constructor() {
       super();
       this.__onCellTrack = this.__onCellTrack.bind(this);
@@ -184,6 +164,15 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         this._grid.removeEventListener('mousedown', this.__onGridInteraction);
         this._grid.removeEventListener('active-item-changed', this.__onActiveItemChanged);
         this._grid.removeEventListener('touchstart', this.__onTouchStart);
+      }
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('selectRowAccessibleNameGenerator')) {
+        this._grid?.requestContentUpdate?.();
       }
     }
 
@@ -235,6 +224,12 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
       const isHidden = !isSelectable && !selected;
       checkbox.style.visibility = isHidden ? 'hidden' : '';
+    }
+
+    /** @private */
+    __generateSelectRowAccessibleName(item) {
+      const generator = this.selectRowAccessibleNameGenerator;
+      return typeof generator === 'function' ? generator(item) : '';
     }
 
     /**
