@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro 11982 (grid column) — menu-bar collapses single item with space available</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+
+  <body style="padding: 20px">
+    <h3>Single icon-only menu-bar item inside a narrow grid action column</h3>
+    <p>
+      Realistic host instead of an isolated div: each row below is its own small
+      <code>vaadin-grid</code> with a <code>flex-grow="0"</code> action column, styled like the
+      "action column" pattern from
+      <a href="https://github.com/vaadin/docs/commit/870dd424ab6fbd6f9f425ec59cb2c5be9f673250"
+        >vaadin/docs#2309</a
+      >, rendering a single icon-only menu-bar item.
+    </p>
+    <p>
+      The exact pixel width where this collapses is font/icon-rendering-dependent — it differs
+      between macOS, Windows and headless Linux Chromium, so a hardcoded width tuned on one
+      machine does not reliably reproduce on another. This page instead
+      <strong>self-calibrates on load</strong>: it renders one throwaway, unconstrained menu-bar
+      to measure this exact button's needed column width on <em>your</em> browser right now, then
+      builds 4 action columns a fraction of a pixel narrower than that — a real, sub-pixel
+      overflow the item should never collapse over.
+    </p>
+    <p>
+      <strong>Note:</strong> which of the 4 rows show the bug, and at which zoom level, varies by
+      machine — the same font-rendering differences that make a hardcoded width unreliable also
+      mean the exact collapse boundary shifts relative to any calibration. On unpatched code, one
+      or more rows may already show the bug at 100% zoom with no zooming needed at all; on others
+      it may only appear once you zoom in or out a few percent. There is no single width/zoom
+      combination guaranteed to reproduce it identically on every OS — that inconsistency is itself
+      the bug (integer-rounding two independently-rounded values means the false-collapse boundary
+      depends on exactly where the sub-pixel geometry happens to land, which differs by renderer).
+    </p>
+    <p>
+      <strong>To reproduce manually:</strong> click Measure first, at whatever zoom the page
+      loaded with. If any row is already outlined in red, that is the bug on unpatched code. If
+      none are, zoom the actual browser page — Ctrl/Cmd <code>+</code>/<code>-</code>,
+      Ctrl/Cmd+scroll, or on Windows, Settings → System → Display → Scale — a step at a time in
+      either direction, clicking Measure after each step, until one flips. A collapsed row shows
+      its single item nested inside its own overflow ellipsis (click it: it opens a submenu whose
+      only item is the same ellipsis button). On fixed code, none of the 4 rows should ever
+      collapse, at any zoom. <strong>Each row is a separate 2-column grid</strong>, not one grid
+      with many columns — cramming many fixed columns into a single grid row was tried first and
+      shifted the danger band unpredictably narrow; separate grids reproduce the same layout math
+      this bug actually depends on.
+    </p>
+
+    <p>Measured needed action column width on this browser: <code id="natural-width"></code>px</p>
+
+    <div id="rows"></div>
+
+    <p>
+      <button id="measure">Measure</button> (also re-measures automatically on resize/zoom)
+    </p>
+    <pre id="out" style="background: #f5f5f5; padding: 8px; overflow-x: auto"></pre>
+  </body>
+
+  <script type="module">
+    import '@vaadin/grid';
+    import '@vaadin/grid/vaadin-grid-column.js';
+    import '@vaadin/menu-bar';
+    import '@vaadin/icon';
+    import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
+
+    function makeSingleItemMenuBar() {
+      const bar = document.createElement('vaadin-menu-bar');
+      bar.theme = 'tertiary';
+      const item = document.createElement('vaadin-menu-bar-item');
+      const icon = document.createElement('vaadin-icon');
+      icon.setAttribute('icon', 'lumo:ellipsis-v');
+      icon.style.width = '16px';
+      icon.style.height = '16px';
+      item.appendChild(icon);
+      bar.items = [
+        {
+          component: item,
+          children: [{ text: 'Download report' }, { text: 'Download error report' }],
+        },
+      ];
+      return bar;
+    }
+
+    // Measure, on the current machine/browser, the exact grid action column
+    // width this button needs to just barely fit — anchored to real numbers
+    // instead of a value tuned on a different OS's font/icon rendering.
+    // Rendered inside a real (generously wide) grid cell, not a bare div, so
+    // the cell's own padding on this theme is captured too.
+    async function measureNeededColumnWidth() {
+      const probe = document.createElement('vaadin-grid');
+      probe.style.cssText = 'position: absolute; visibility: hidden; width: 300px; height: 54px';
+      probe.items = [{ name: 'Report' }];
+      document.body.appendChild(probe);
+
+      const nameColumn = document.createElement('vaadin-grid-column');
+      nameColumn.path = 'name';
+      nameColumn.flexGrow = 1;
+      probe.appendChild(nameColumn);
+
+      const actionColumn = document.createElement('vaadin-grid-column');
+      actionColumn.width = '200px'; // generous, so the button never collapses here
+      actionColumn.flexGrow = 0;
+      let bar;
+      actionColumn.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+        bar = makeSingleItemMenuBar();
+        bar.style.width = '100%';
+        root.appendChild(bar);
+      };
+      probe.appendChild(actionColumn);
+
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      // bar.parentElement is <vaadin-grid-cell-content>, slotted into the
+      // grid's shadow-DOM cell — it fills the cell's full width, so its own
+      // rect stands in for the cell's (closest('.cell') can't cross the
+      // shadow boundary from the light-DOM side).
+      const cellWidth = bar.parentElement.getBoundingClientRect().width;
+      const cellPadding = cellWidth - bar._container.getBoundingClientRect().width;
+      // Not container.scrollWidth: with nothing overflowing, scrollWidth
+      // reports the container's own (generously wide) rendered width, not
+      // the button's true minimum need. The button itself doesn't stretch.
+      const overflow = bar._overflow;
+      const mainBtn = bar._buttons.find((b) => b !== overflow);
+      const neededContentWidth = mainBtn.getBoundingClientRect().width;
+      probe.remove();
+      return neededContentWidth + cellPadding;
+    }
+
+    const neededColumnWidth = await measureNeededColumnWidth();
+    // Negative deltas: the column is slightly narrower than needed, by less
+    // than 1px, so the item should still fit (not collapse). Found by
+    // sweeping in Playwright to land in the sub-pixel-overflow band, not by
+    // guessing — see the "self-calibrates" note above.
+    const WIDTHS = [-1.1, -0.9, -0.7, -0.5].map((delta) => +(neededColumnWidth + delta).toFixed(2));
+    document.querySelector('#natural-width').textContent = neededColumnWidth.toFixed(3);
+
+    const rowsContainer = document.querySelector('#rows');
+
+    WIDTHS.forEach((width) => {
+      const label = document.createElement('div');
+      label.textContent = `${width}px:`;
+      label.style.cssText = 'font-family: monospace; margin-top: 4px';
+
+      const grid = document.createElement('vaadin-grid');
+      grid.dataset.colWidth = width;
+      grid.style.width = '300px';
+      grid.style.height = '54px';
+      grid.items = [{ name: 'Report' }];
+
+      const nameColumn = document.createElement('vaadin-grid-column');
+      nameColumn.path = 'name';
+      nameColumn.flexGrow = 1;
+      grid.appendChild(nameColumn);
+
+      const actionColumn = document.createElement('vaadin-grid-column');
+      actionColumn.width = `${width}px`;
+      actionColumn.flexGrow = 0;
+      actionColumn.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+        const bar = makeSingleItemMenuBar();
+        bar.dataset.colWidth = width;
+        bar.style.width = '100%';
+        root.appendChild(bar);
+      };
+      grid.appendChild(actionColumn);
+
+      rowsContainer.appendChild(label);
+      rowsContainer.appendChild(grid);
+    });
+
+    function measure() {
+      const bars = [...document.querySelectorAll('vaadin-menu-bar')];
+      const lines = bars.map((bar) => {
+        const overflow = bar._overflow;
+        const mainBtn = bar._buttons.find((b) => b !== overflow);
+        if (!mainBtn) {
+          return null;
+        }
+        const collapsed = getComputedStyle(mainBtn).visibility === 'hidden';
+        bar.style.outline = collapsed ? '2px solid red' : '';
+        return `${bar.dataset.colWidth}px: offsetWidth=${bar._container.offsetWidth} scrollWidth=${bar._container.scrollWidth} ${collapsed ? '❌ COLLAPSED (bug)' : '✅ fits'}`;
+      });
+      document.querySelector('#out').textContent = lines.filter(Boolean).join('\n');
+    }
+
+    document.querySelector('#measure').addEventListener('click', measure);
+    window.addEventListener('resize', measure);
+    requestAnimationFrame(() => requestAnimationFrame(measure));
+  </script>
+</html>
