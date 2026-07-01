@@ -3,17 +3,18 @@
  * Copyright (c) 2000 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { registerStyleProperty } from '@vaadin/component-base/src/styles/css-register-property.js';
 import { CSSPropertyObserver } from './css-property-observer.js';
 
 // Register CSS custom properties for observing theme changes
-CSS.registerProperty({
+registerStyleProperty({
   name: '--vaadin-aura-theme',
   syntax: '<number>',
   inherits: true,
   initialValue: '0',
 });
 
-CSS.registerProperty({
+registerStyleProperty({
   name: '--vaadin-lumo-theme',
   syntax: '<number>',
   inherits: true,
