@@ -342,16 +342,12 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     /**
-     * Returns the composed path of the event. Falls back to
-     * the path stored at dispatch time, or the event target.
+     * Returns the composed path of the event. By default, it uses the path stored
+     * at dispatch time (needed for Flow connector that opens menu asynchronously).
      * @private
      */
     __getComposedPath(e) {
-      const path = e.composedPath();
-      if (path.length > 0) {
-        return path;
-      }
-      return e.__composedPath || e.detail?.sourceEvent?.__composedPath || (e.target ? [e.target] : []);
+      return e.__composedPath ?? e.detail?.sourceEvent?.__composedPath ?? e.composedPath();
     }
 
     /** @private */
