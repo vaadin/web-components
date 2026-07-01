@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { click, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import '../src/vaadin-context-menu.js';
 
 describe('integration', () => {
@@ -45,5 +45,33 @@ describe('integration', () => {
     const overlayRect = overlay.getBoundingClientRect();
     expect(overlayRect.left).to.be.closeTo(100, 0.1);
     expect(overlayRect.top).to.be.closeTo(100, 0.1);
+  });
+});
+
+describe('deferred open', () => {
+  let menu, button;
+
+  beforeEach(async () => {
+    const wrapper = fixtureSync(`
+      <div>
+        <vaadin-context-menu></vaadin-context-menu>
+        <div id="target">Target</div>
+      </div>
+    `);
+    [menu, button] = wrapper.children;
+    menu.renderer = (root) => {
+      root.textContent = 'foo';
+    };
+    await nextRender();
+  });
+
+  it('should open with an event used after it finished dispatching', async () => {
+    // The Flow connector stores the event and opens the menu later, so `open()`
+    // runs once the event finished dispatching and its composed path is empty.
+    const event = click(button, { x: 0, y: 0 });
+    await aTimeout(0);
+    menu.open(event);
+    await nextRender();
+    expect(menu.opened).to.be.true;
   });
 });
