@@ -55,6 +55,16 @@ describe('integration', () => {
   });
 
   describe('deferred open', () => {
+    // The Flow connector stores the event and opens the menu later, so open()
+    // runs once the event finished dispatching and its composed path is empty.
+    it('should open with an event used after it finished dispatching', async () => {
+      const event = click(target, { x: 0, y: 0 });
+      await aTimeout(0);
+      menu.open(event);
+      await nextRender();
+      expect(menu.opened).to.be.true;
+    });
+
     it('should position against the deep target from the stored composed path', async () => {
       // Captured at dispatch time by the gesture / Flow connector
       wrapper.addEventListener('click', (e) => {

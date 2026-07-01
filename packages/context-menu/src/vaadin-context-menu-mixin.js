@@ -568,7 +568,7 @@ export const ContextMenuMixin = (superClass) =>
 
         if (position === 0) {
           // Native keyboard event
-          const target = this.__getComposedPath(event)[0];
+          const target = this.__getComposedPath(event)[0] || event.target;
           const rect = target.getBoundingClientRect();
           return coord === 'x' ? rect.left : rect.top + rect.height;
         }
