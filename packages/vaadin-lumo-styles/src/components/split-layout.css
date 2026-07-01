@@ -46,7 +46,8 @@
     opacity: 0;
   }
 
-  :host([theme~='minimal']) > [part='splitter']:is(:hover, :active) > [part='handle'] {
+  :host([theme~='minimal']) > [part='splitter']:is(:hover, :active) > [part='handle'],
+  :host([theme~='minimal'][focus-ring]) > [part='splitter'] > [part='handle'] {
     opacity: 1;
   }
 

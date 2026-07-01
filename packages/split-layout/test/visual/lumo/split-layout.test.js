@@ -43,6 +43,12 @@ describe('split-layout', () => {
         await visualDiff(element, `${orientation}-small-hover`);
       });
 
+      it('small focus', async () => {
+        element.setAttribute('theme', 'small');
+        element.setAttribute('focus-ring', '');
+        await visualDiff(element, `${orientation}-small-focus`);
+      });
+
       it('minimal', async () => {
         element.setAttribute('theme', 'minimal');
         await visualDiff(element, `${orientation}-minimal`);
@@ -52,6 +58,12 @@ describe('split-layout', () => {
         element.setAttribute('theme', 'minimal');
         await sendMouseToElement({ type: 'move', element: element.$.splitter });
         await visualDiff(element, `${orientation}-minimal-hover`);
+      });
+
+      it('minimal focus', async () => {
+        element.setAttribute('theme', 'minimal');
+        element.setAttribute('focus-ring', '');
+        await visualDiff(element, `${orientation}-minimal-focus`);
       });
     });
   });
