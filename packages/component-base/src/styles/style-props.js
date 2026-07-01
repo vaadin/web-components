@@ -5,6 +5,7 @@
  */
 import { css } from 'lit';
 import { addGlobalStyles } from './add-global-styles.js';
+import { registerStyleProperty } from './css-register-property.js';
 
 // NOTE: Base color CSS custom properties are explicitly registered as `<color>`
 // here to avoid performance issues in Aura. Aura overrides these properties with
@@ -18,7 +19,7 @@ import { addGlobalStyles } from './add-global-styles.js';
   '--vaadin-border-color-secondary',
   '--vaadin-background-color',
 ].forEach((propertyName) => {
-  CSS.registerProperty({
+  registerStyleProperty({
     name: propertyName,
     syntax: '<color>',
     inherits: true,
