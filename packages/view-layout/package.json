@@ -1,0 +1,42 @@
+{
+  "name": "@vaadin/view-layout",
+  "version": "25.3.0-alpha1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "vaadin-view-layout",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/view-layout"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-view-layout.js",
+  "module": "vaadin-view-layout.js",
+  "type": "module",
+  "files": [
+    "src",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
+  "keywords": [
+    "Vaadin",
+    "view-layout",
+    "web-components",
+    "web-component"
+  ],
+  "dependencies": {
+    "@vaadin/component-base": "25.3.0-alpha1",
+    "@vaadin/scroller": "25.3.0-alpha1",
+    "@vaadin/vaadin-themable-mixin": "25.3.0-alpha1",
+    "lit": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vaadin/button": "25.3.0-alpha1"
+  }
+}
