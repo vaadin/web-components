@@ -33,8 +33,30 @@ export const formItemStyles = css`
     font-size: var(--vaadin-form-item-label-font-size, inherit);
     font-weight: var(--vaadin-form-item-label-font-weight, 500);
     line-height: var(--vaadin-form-item-label-line-height, inherit);
+    position: relative;
     width: var(--_form-item-labels-aside, var(--_label-width, 8em));
     word-break: break-word;
+    box-sizing: border-box;
+  }
+
+  :host([required]) [part='label'] {
+    padding-inline-end: 1em;
+  }
+
+  [part='required-indicator'] {
+    display: inline-block;
+    position: absolute;
+    width: 1em;
+    text-align: center;
+    color: var(--vaadin-input-field-required-indicator-color, var(--vaadin-text-color-secondary));
+  }
+
+  [part='required-indicator']::after {
+    content: var(--vaadin-input-field-required-indicator, '*');
+  }
+
+  :host(:not([required])) [part='required-indicator'] {
+    display: none;
   }
 
   #spacing {
