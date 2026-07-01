@@ -331,13 +331,28 @@ export const ContextMenuMixin = (superClass) =>
       this._setOpened(false);
     }
 
+    /**
+     * Returns the composed path of the event. By default, it uses the path stored
+     * at dispatch time (needed for Flow connector that opens menu asynchronously).
+     * @private
+     */
+    __getComposedPath(e) {
+      if (e.__composedPath) {
+        return e.__composedPath;
+      }
+      if (e.detail && e.detail.sourceEvent && e.detail.sourceEvent.__composedPath) {
+        return e.detail.sourceEvent.__composedPath;
+      }
+      return e.composedPath();
+    }
+
     /** @private */
     _contextTarget(e) {
       if (this.selector) {
         const targets = this.listenOn.querySelectorAll(this.selector);
 
         return Array.prototype.filter.call(targets, (el) => {
-          return e.composedPath().indexOf(el) > -1;
+          return this.__getComposedPath(e).indexOf(el) > -1;
         })[0];
       } else if (this.listenOn && this.listenOn !== this && this.position) {
         // If listenOn has been set on a different element than the context menu root, then use listenOn as the target.
@@ -352,7 +367,7 @@ export const ContextMenuMixin = (superClass) =>
      */
     open(e) {
       // Ignore events from the overlay
-      if (this._overlayElement && e.composedPath().includes(this._overlayElement)) {
+      if (this._overlayElement && this.__getComposedPath(e).includes(this._overlayElement)) {
         return;
       }
 
@@ -549,7 +564,7 @@ export const ContextMenuMixin = (superClass) =>
 
         if (position === 0) {
           // Native keyboard event
-          const target = event.composedPath()[0];
+          const target = this.__getComposedPath(event)[0] || event.target;
           const rect = target.getBoundingClientRect();
           return coord === 'x' ? rect.left : rect.top + rect.height;
         }
