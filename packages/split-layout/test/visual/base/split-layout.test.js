@@ -40,6 +40,12 @@ describe('split-layout', () => {
         await sendMouseToElement({ type: 'move', element: element.$.splitter });
         await visualDiff(element, `${orientation}-small-hover`);
       });
+
+      it(`${orientation} small focus`, async () => {
+        element.setAttribute('theme', 'small');
+        element.setAttribute('focus-ring', '');
+        await visualDiff(element, `${orientation}-small-focus`);
+      });
     });
   });
 

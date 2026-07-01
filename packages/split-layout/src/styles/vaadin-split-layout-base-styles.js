@@ -110,7 +110,8 @@ export const splitLayoutStyles = css`
     opacity: 0;
   }
 
-  :host([theme~='small']) [part='splitter']:active [part='handle'] {
+  :host([theme~='small']) [part='splitter']:active [part='handle'],
+  :host([theme~='small'][focus-ring]) [part='splitter'] [part='handle'] {
     opacity: 1;
   }
 
