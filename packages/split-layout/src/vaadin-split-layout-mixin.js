@@ -3,7 +3,15 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { timeOut } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
+
+// Step in pixels used for resizing with the arrow keys.
+const ARROW_STEP = 16;
+
+// Fraction of the available size used for resizing with the Page Up / Page Down keys.
+const PAGE_STEP = 0.1;
 
 export const SplitLayoutMixin = (superClass) =>
   class SplitLayoutMixin extends superClass {
@@ -23,6 +31,14 @@ export const SplitLayoutMixin = (superClass) =>
 
         /** @private */
         _previousSecondaryPointerEvents: String,
+
+        /**
+         * The primary content element size as a percentage.
+         * @private
+         */
+        __valueNow: {
+          type: Number,
+        },
       };
     }
 
@@ -38,14 +54,151 @@ export const SplitLayoutMixin = (superClass) =>
         });
 
         this._processChildren();
+        this.__updateValueNow();
       });
 
       this.__observer.observe(this, { childList: true });
 
       const splitter = this.$.splitter;
       addListener(splitter, 'track', this._onHandleTrack.bind(this));
-      addListener(splitter, 'down', this._setPointerEventsNone.bind(this));
-      addListener(splitter, 'up', this._restorePointerEvents.bind(this));
+      addListener(splitter, 'down', this.__onSplitterDown.bind(this));
+      addListener(splitter, 'up', this.__onSplitterUp.bind(this));
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('orientation')) {
+        this.__updateValueNow();
+      }
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      this.__dragEndDebouncer?.cancel();
+    }
+
+    /**
+     * @param {FocusOptions=} options
+     * @protected
+     * @override
+     */
+    focus(options) {
+      this.$?.splitter?.focus(options);
+
+      super.focus(options);
+    }
+
+    /**
+     * Override method inherited from `FocusMixin`
+     * to only handle events from the splitter.
+     *
+     * @param {FocusEvent} event
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldSetFocus(event) {
+      return event.composedPath()[0] === this.$.splitter;
+    }
+
+    /**
+     * Override method inherited from `FocusMixin`
+     * to only handle events from the splitter.
+     *
+     * @param {FocusEvent} event
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldRemoveFocus(event) {
+      return event.relatedTarget !== this.$.splitter;
+    }
+
+    /**
+     * Override method inherited from `KeyboardMixin` to resize the layout when
+     * the splitter is focused and an arrow, page or home/end key is pressed.
+     *
+     * @param {KeyboardEvent} event
+     * @protected
+     * @override
+     */
+    _onKeyDown(event) {
+      if (event.composedPath()[0] !== this.$.splitter || !this._primaryChild || !this._secondaryChild) {
+        return;
+      }
+
+      const { container, primary } = this.__getSizes();
+      let newPrimary = primary;
+
+      switch (event.key) {
+        case 'ArrowDown':
+          newPrimary = primary + ARROW_STEP;
+          break;
+        case 'ArrowUp':
+          newPrimary = primary - ARROW_STEP;
+          break;
+        case 'ArrowRight':
+          newPrimary = primary + (this.__isRTL ? -ARROW_STEP : ARROW_STEP);
+          break;
+        case 'ArrowLeft':
+          newPrimary = primary + (this.__isRTL ? ARROW_STEP : -ARROW_STEP);
+          break;
+        case 'PageDown':
+          newPrimary = primary + container * PAGE_STEP;
+          break;
+        case 'PageUp':
+          newPrimary = primary - container * PAGE_STEP;
+          break;
+        case 'Home':
+          newPrimary = 0;
+          break;
+        case 'End':
+          newPrimary = container;
+          break;
+        default:
+          return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      this._setFlexBasis(this._primaryChild, newPrimary, container);
+      this._setFlexBasis(this._secondaryChild, container - newPrimary, container);
+      this.__updateValueNow();
+
+      this.__dragEndDebouncer = Debouncer.debounce(this.__dragEndDebouncer, timeOut.after(200), () => {
+        this.dispatchEvent(new CustomEvent('splitter-dragend'));
+      });
+    }
+
+    /**
+     * Returns the available container size and the current content element sizes
+     * in pixels, measured along the resize axis. Sizes are read from the rendered
+     * layout on every call so that CSS min/max limits are always respected.
+     *
+     * @return {{ container: number, primary: number, secondary: number }}
+     * @private
+     */
+    __getSizes() {
+      const size = this.orientation === 'vertical' ? 'height' : 'width';
+      return {
+        container: this.getBoundingClientRect()[size] - this.$.splitter.getBoundingClientRect()[size],
+        primary: this._primaryChild.getBoundingClientRect()[size],
+        secondary: this._secondaryChild.getBoundingClientRect()[size],
+      };
+    }
+
+    /** @private */
+    __updateValueNow() {
+      if (!this._primaryChild || !this._secondaryChild) {
+        return;
+      }
+      const { container, primary } = this.__getSizes();
+      this.__valueNow = container > 0 ? Math.round((primary / container) * 100) : 0;
     }
 
     /** @private */
@@ -108,7 +261,7 @@ export const SplitLayoutMixin = (superClass) =>
     }
 
     /** @private */
-    _setPointerEventsNone(event) {
+    __onSplitterDown(event) {
       if (!this._primaryChild || !this._secondaryChild) {
         return;
       }
@@ -121,7 +274,9 @@ export const SplitLayoutMixin = (superClass) =>
     }
 
     /** @private */
-    _restorePointerEvents() {
+    __onSplitterUp() {
+      this.$.splitter.focus({ preventScroll: true });
+
       if (!this._primaryChild || !this._secondaryChild) {
         return;
       }
@@ -135,13 +290,8 @@ export const SplitLayoutMixin = (superClass) =>
         return;
       }
 
-      const size = this.orientation === 'vertical' ? 'height' : 'width';
       if (event.detail.state === 'start') {
-        this._startSize = {
-          container: this.getBoundingClientRect()[size] - this.$.splitter.getBoundingClientRect()[size],
-          primary: this._primaryChild.getBoundingClientRect()[size],
-          secondary: this._secondaryChild.getBoundingClientRect()[size],
-        };
+        this._startSize = this.__getSizes();
 
         return;
       }
@@ -152,6 +302,7 @@ export const SplitLayoutMixin = (superClass) =>
 
       this._setFlexBasis(this._primaryChild, this._startSize.primary + dirDistance, this._startSize.container);
       this._setFlexBasis(this._secondaryChild, this._startSize.secondary - dirDistance, this._startSize.container);
+      this.__updateValueNow();
 
       if (event.detail.state === 'end') {
         this.dispatchEvent(new CustomEvent('splitter-dragend'));

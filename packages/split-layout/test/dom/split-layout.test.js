@@ -17,4 +17,10 @@ describe('vaadin-split-layout', () => {
   it('shadow', async () => {
     await expect(layout).shadowDom.to.equalSnapshot();
   });
+
+  it('i18n', async () => {
+    layout.i18n = { separator: 'separator' };
+    await nextRender();
+    await expect(layout).shadowDom.to.equalSnapshot();
+  });
 });

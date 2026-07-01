@@ -25,6 +25,11 @@ describe('split-layout', () => {
         await visualDiff(element, orientation);
       });
 
+      it(`${orientation} focus-ring`, async () => {
+        element.setAttribute('focus-ring', '');
+        await visualDiff(element, `${orientation}-focus-ring`);
+      });
+
       it(`${orientation} small`, async () => {
         element.setAttribute('theme', 'small');
         await visualDiff(element, `${orientation}-small`);
@@ -34,6 +39,12 @@ describe('split-layout', () => {
         element.setAttribute('theme', 'small');
         await sendMouseToElement({ type: 'move', element: element.$.splitter });
         await visualDiff(element, `${orientation}-small-hover`);
+      });
+
+      it(`${orientation} small focus`, async () => {
+        element.setAttribute('theme', 'small');
+        element.setAttribute('focus-ring', '');
+        await visualDiff(element, `${orientation}-small-focus`);
       });
     });
   });
