@@ -2,68 +2,85 @@
 
 ## Problem
 
-Business web apps need a binary on/off control whose visual metaphor — a sliding track with a thumb — communicates that it represents the **current state** of a setting, mode, or feature, not a selection to be reviewed and saved. The control should read at a glance as "is this on?" so that users instantly recognize whether a feature is active.
+Business web apps need a simple on/off control.
 
-The most common usage is **immediate-effect**: the moment the user flips the switch, the change is persisted or applied to the screen. The component must also slot cleanly into Vaadin's standard field apparatus (label, helper text, error message, required/invalid, disabled/read-only, tooltip) so that the second, less common usage — sitting in a save-on-submit form alongside text fields and other inputs — works without a different control or a different mental model. A single Switch must cover both modes; the application decides which mode applies in a given context.
+- Anatomy: sliding track with a thumb and a text label.
+- Visual meaning: to indicate "is this on?" for a single setting.
 
-A separate Switch component is needed (alongside Checkbox) because Vaadin business apps regularly expose settings panels, feature flags, mode toggles, and per-row enable/disable controls where the on/off-state semantics fit poorly with checkbox's "select this option" reading.
+The setting controlled by the switch can be applied in 2 ways:
+
+1. Instant: toggling the switch takes effect immediately.
+2. Save on submit: switch used in a form, together with other fields and a Save button.
+
+Switch must support both modes. The app decides which mode to use.
+
+## Why a separate component from Checkbox
+
+Checkbox and Switch mean different things:
+
+- Checkbox says "select this option" — pick an item, agree to terms, include a row.
+- Switch says "this setting is on or off" — a feature, mode, or state.
+
+Using a Checkbox for "on/off" settings is sub-optimal.
 
 ## Target Users
 
-End users of business web applications who interact with the Switch in:
+End users expect to use a switch for:
 
-- **Personal preference panels** (notification preferences, theme, autosave, accessibility options).
-- **Account, workspace, and tenant settings** (default language, security policies, integrations).
-- **Per-feature and per-flag admin UIs** (turning capabilities on or off for the workspace, role, or environment).
-- **Dashboards and analytical views** (comparing periods, toggling overlays, switching presentational modes).
-- **Per-row enable/disable in tables and lists** (activating a user account, publishing an article, enabling a webhook).
-
-Developers building these applications need a switch that supports both immediate-effect usage (the most common) and the occasional case where a switch sits in a save-on-submit form alongside text fields and other inputs, without two different components and two mental models.
+- Personal preference panels (notifications, theme, autosave).
+- Account and workspace settings (language, policies, integrations).
+- Admin UIs for features and flags (turn a capability on or off).
+- Per-row enable/disable in tables (activate a user, publish an article).
 
 ## Differentiation
 
-- **Checkbox.** Checkbox marks a selection — "I want this option", "I agree to these terms", "include this row". It is the right control for picking items in a list, multi-selection in forms, and consent-style binary inputs. Switch represents the **on/off state of a setting** and is the right control for settings that are most naturally read as "is this on?". Both can technically appear in forms; the choice between them is semantic, not structural. Out-of-scope here: indeterminate state — switches do not have one; if a setting has a third "mixed" state (e.g., across multiple selected rows), use a Checkbox.
+- **Checkbox.** Marks a selection ("I want this", "include this row"). Switch shows the on/off state of a setting. Switch has no indeterminate state; if a setting has a third "mixed" state (e.g. across many selected rows), use a Checkbox.
 
-- **Radio Button Group.** Radio buttons select one option from two or more mutually exclusive choices, and the choices are typically peer values with no implicit default off-state (e.g., "Small / Medium / Large"). Switch handles the special two-value case where one value is meaningfully the "off" / disabled / absent state of a feature. If a designer is choosing between a Switch and a 2-option radio group, prefer the Switch when one of the values is "off" and prefer the radio group when both values are equally meaningful labels (e.g., "Imperial / Metric").
+- **Radio Button Group.** Picks one of two or more equal options ("Small / Medium / Large"). Use a Switch when one value is clearly the "off" state of a feature. Use a 2-option radio group when both values are equal labels ("Imperial / Metric").
 
-- **Button (and Toggle Button).** A button triggers an action whose effect happens once when invoked (Send, Delete, Refresh). A toggle button — sometimes seen in toolbars (Bold, Italic, grid/list view) — reflects a binary mode of an editor or tool palette and lives next to other tool buttons. Switch is for **persistent settings and feature state** rather than tool modes; if the control belongs in a toolbar next to other action icons, it is a toggle button, not a switch.
+- **Toggle Button.** A toggle button reflects a tool mode in a toolbar (Bold, Italic, grid/list view). Switch is for persistent settings and feature state, not tool modes. If it belongs in a toolbar next to action icons, it is a toggle button.
 
-- **Select / Combo Box with two options.** A two-option dropdown adds an interaction step (open menu, then choose) and hides the off state until opened. Switch shows both states at a glance and changes state in a single tap or click; prefer Switch for binary settings unless the two values need long, descriptive labels that don't fit a switch.
+- **Select / Combo Box with two options.** A dropdown hides the off state and needs an extra click to open. Switch shows both states at once and toggles in one click. Prefer a dropdown only when the two values need long labels.
 
-- **Confirmation flows for destructive or expensive toggles.** Out of scope. When flipping the setting is destructive ("Disable two-factor authentication") or expensive ("Pause billing"), the application combines a Switch with a Confirm Dialog or undo affordance at the application level. The Switch component itself does not own destructive-action confirmation.
-
-- **Sliders, multi-step toggles, segmented controls.** Out of scope. Switch is strictly two-state; ranges and three-or-more discrete options are handled by Slider, Radio Button Group, or Select.
+- **Sliders, multi-step toggles.** Out of scope. Switch is strictly two-state. Ranges and three-or-more options use Slider, Radio Button Group, or Select.
 
 ## Use Cases
 
-A user wants to flip a single binary setting and have the change take effect immediately, without finding a Save button. The switch sits in a settings panel where each row's flip is independently persisted; the same pattern applies inside data tables where each row carries its own switch (e.g., enable/disable per item).
+**Flip one setting and have it apply immediately.**
 
-_In a project-management app, a team member opens "Notification preferences" and turns on **Email me when I'm @mentioned**. As soon as they flip the switch the preference is persisted to their profile — there is no Save button on the panel — and the next time someone @-mentions them, the email arrives. They flip a second switch, **Daily digest**, off; that change is also persisted instantly. They close the dialog without further action._
-
----
-
-A user wants to set a binary preference inside a form that is committed all-at-once with a Save / Submit button, where the switch participates in the same dirty-state, validation, and cancel/revert flow as the form's other fields. The switch's value should not apply to the system until the form is saved; if the user cancels, the switch reverts. The switch should look and align with the surrounding fields and support helper text, error messages, and required indicators consistently with them.
-
-_In an HR admin tool, an admin opens an **Edit user** dialog. The dialog has fields for "Job title", "Department", "Manager" — and, alongside them, a switch labeled **Two-factor authentication required**. The admin flips the switch on, edits the job title, and clicks Save. The form validates: if validation fails, the switch shows an invalid state with an error message ("Required", or a server-returned message). If validation passes, all changes are applied together. If the admin clicks Cancel instead, the switch reverts to its original state along with the rest of the form._
+_In a project app, a user opens "Notification preferences" and turns on "Email me when I'm @mentioned". The preference saves at once — there is no Save button. They turn "Daily digest" off; that saves too. The same pattern works per-row inside data tables._
 
 ---
 
-A user wants to flip between two presentational modes of a screen and see the layout or data update immediately, without applying any backend change.
+**Set a switch inside a form that saves all at once.**
 
-_A financial reporting dashboard has a switch labeled **Compare with previous period** in its toolbar. With the switch off, every chart on the page shows the current quarter only. The user flips the switch on and each chart re-renders to overlay the previous quarter as a dotted line, with delta percentages added to the KPI tiles. The user flips the switch back off and the previous-period overlay disappears. No data is sent to the server; the switch state lives only in the dashboard's view._
+- The switch can be marked as dirty, validated and reset together with a form.
+- Its value applies only when the form is saved; clicking Cancel reverts it.
+- It supports required indicator, helper text, and error message, same as other fields.
+
+_In an HR tool, an admin opens "Edit user". Next to "Job title" and "Department" is a switch "Two-factor authentication required". The admin flips it on, edits the title, and clicks Save; all changes apply together. If the switch is required and left off, submit fails and it shows an error. Cancel reverts it._
 
 ---
 
-A user wants to see the current on/off state of a setting they cannot change themselves, in a way that is visually distinguishable from a normal interactive switch and that explains why the setting is locked. The switch must remain focusable and announced to screen readers so the locked state is reachable by keyboard and assistive tech.
+**Flip between two view modes and see the screen update, with no backend change.**
 
-_In a SaaS app, the workspace owner is on the Free plan and opens **Compliance settings**. They see a switch labeled **Audit log retention (90 days)** in the on position, marked read-only, with helper text "Included on the Business plan." The switch announces its state to a screen reader and is reachable by keyboard; clicking or pressing space does not change it._
+_A reporting dashboard has a switch "Compare with previous period" in its toolbar. Off: charts show this quarter only. On: each chart overlays last quarter and the KPI tiles gain deltas. Off again: the overlay disappears. Nothing is sent to the server._
+
+---
+
+**See a setting you cannot change, and understand why.**
+
+- The switch looks different from a normal one.
+- It stays focusable and announced, so keyboard and screen-reader users can reach it.
+
+_On the Free plan, a workspace owner opens "Compliance settings" and sees "Audit log retention (90 days)" on and read-only, with helper text "Included on the Business plan." A screen reader announces its state; clicking or pressing Space does nothing._
 
 ## Discussion
 
 **Q: Should the Switch's scope include being used inside a form that requires a Save/Submit button (alongside other fields), or be limited to instant-effect settings only?**
 
-Both. The Switch must work as an immediate-apply settings control AND as a form field that participates in deferred submit, validation, helper/error text, and cancel/revert. Vaadin's prototype already exposes the field-mixin apparatus for this; the problem statement reflects that broader scope. (Classical UX guidance recommending switches always apply immediately is still acknowledged in Differentiation, but is not used to exclude the form-field scenario.)
+Both. The Switch works as an immediate-apply settings control AND as a form field with deferred submit, validation, helper/error text, and cancel/revert. Classic UX guidance says switches should always apply immediately, but that does not exclude the form case.
 
 **Q: Is per-row switching inside data tables / grids (each row has its own switch) a primary use case worth calling out, or should it be treated as just an instance of the core toggle scenario?**
 
-Treat it as part of the core scenario. The interaction is the same as toggling a single setting; per-row context does not change the user's needs or constraints, so it does not need its own use case. The core use case mentions the table pattern in passing.
+Treat it as part of the core scenario. Per-row toggling is the same as toggling a single setting, so it needs no separate use case. The core use case mentions the table pattern in passing.
