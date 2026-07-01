@@ -32,7 +32,7 @@ describe('integration', () => {
 
     it('should open context menu on .open(e)', () => {
       click(target);
-      expect(menu.opened).to.eql(true);
+      expect(menu.opened).to.be.true;
     });
 
     it('should position overlay against the target on keyboard open', async () => {
