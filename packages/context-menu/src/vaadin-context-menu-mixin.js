@@ -337,7 +337,13 @@ export const ContextMenuMixin = (superClass) =>
      * @private
      */
     __getComposedPath(e) {
-      return e.__composedPath ?? e.detail?.sourceEvent?.__composedPath ?? e.composedPath();
+      if (e.__composedPath) {
+        return e.__composedPath;
+      }
+      if (e.detail && e.detail.sourceEvent && e.detail.sourceEvent.__composedPath) {
+        return e.detail.sourceEvent.__composedPath;
+      }
+      return e.composedPath();
     }
 
     /** @private */
