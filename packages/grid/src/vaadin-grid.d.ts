@@ -282,6 +282,28 @@ export interface GridI18n {
  * @fires {CustomEvent} item-toggle - Fired when the user selects or deselects an item through the selection column.
  */
 declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
+  /**
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
+   *
+   * The object has the following JSON structure and default values:
+   *
+   * ```js
+   * {
+   *   // Accessible name (aria-label) for the select all checkbox in the
+   *   // selection column header cell.
+   *   selectAllCheckboxAriaLabel: 'Select All',
+   *   // Accessible name (aria-label) for the select row checkbox in each
+   *   // selection column body cell. The `{0}` placeholder is replaced with the
+   *   // text content of the row's row-header cell, or the 1-based row index
+   *   // when there is no row-header column.
+   *   selectRowCheckboxAriaLabel: 'Select Row {0}',
+   * }
+   * ```
+   */
+  i18n: GridI18n;
+
   addEventListener<K extends keyof GridEventMap<TItem>>(
     type: K,
     listener: (this: Grid<TItem>, ev: GridEventMap<TItem>[K]) => void,
