@@ -194,7 +194,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     /**
      * Sets the Select Row checkbox accessible name based on the grid i18n.
      * The `{0}` placeholder is replaced with the row header cell text content
-     * or row index the if there is no row header column or it's cell is empty.
+     * or row index if there is no row header column or it's cell is empty.
      *
      * @private
      */
