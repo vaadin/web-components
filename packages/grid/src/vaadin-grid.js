@@ -301,8 +301,7 @@ class Grid extends GridMixin(I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(L
    *   selectAll: 'Select All',
    *   // Accessible name (aria-label) for the select row checkbox in each
    *   // selection column body cell. The `{rowHeader}` placeholder is replaced with the
-   *   // text content of the row's row-header cell, or the 1-based row index
-   *   // when there is no row-header column.
+   *   // row header cell text content or row index if there is no row header column.
    *   selectRow: 'Select Row {rowHeader}',
    * }
    * ```
