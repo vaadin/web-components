@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is the Vaadin Web Components monorepo - a collection of high-quality, accessible web components built with Lit and designed for business web applications. The repository contains both Apache-licensed core components and commercially-licensed Pro components.
+This is the Vaadin Web Components monorepo - a collection of web components built with Lit. The repository contains both Apache-licensed core components and commercially-licensed Pro components.
 
 ### Monorepo Structure
 
@@ -17,6 +17,27 @@ This is the Vaadin Web Components monorepo - a collection of high-quality, acces
 - `packages/vaadin-themable-mixin/`: Theming infrastructure
 - `test/integration/`: Cross-component integration tests
 - `dev/`: Development playground with component examples for manual testing
+
+See [01-repository.md](guidelines/01-repository.md) for the full setup.
+
+## Component development guidelines
+
+Before designing, scaffolding, or changing a component, read the relevant chapter in `guidelines/`. These are the authoritative reference; CLAUDE.md only covers repo-level orientation and commands.
+
+| When you're...                                     | Read                                                              |
+| -------------------------------------------------- | ----------------------------------------------------------------- |
+| Doing anything component-related (start here)      | [guidelines/00-overview.md](guidelines/00-overview.md)            |
+| Designing a new component's API/behavior           | [02-design.md](guidelines/02-design.md)                           |
+| Scaffolding a package                              | [03-component-structure.md](guidelines/03-component-structure.md) |
+| Choosing Lit lifecycle hooks, mixin vs. controller | [04-coding-conventions.md](guidelines/04-coding-conventions.md)   |
+| Reusing shared mixins, controllers, utilities      | [05-common-packages.md](guidelines/05-common-packages.md)         |
+| Writing JSDoc / API docs                           | [06-documenting.md](guidelines/06-documenting.md)                 |
+| Authoring TypeScript `.d.ts`                       | [07-typescript.md](guidelines/07-typescript.md)                   |
+| Designing DOM surface (parts, attributes, slots)   | [08-dom.md](guidelines/08-dom.md)                                 |
+| Dispatching events                                 | [09-events.md](guidelines/09-events.md)                           |
+| Theming (base styles, Lumo, Aura)                  | [10-theming.md](guidelines/10-theming.md)                         |
+| Implementing accessibility, keyboard support       | [11-a11y.md](guidelines/11-a11y.md)                               |
+| Writing unit, snapshot, visual, integration tests  | [12-testing.md](guidelines/12-testing.md)                         |
 
 ### Component Package Structure
 
@@ -34,19 +55,14 @@ packages/button/
 ### Component Architecture
 
 All components follow a consistent pattern:
+
 - Use LitElement as the base class
 - Use mixins for shared functionality (ElementMixin, ThemableMixin, etc.)
 - Have TypeScript definitions alongside JavaScript implementations
 - Include comprehensive test suites (unit, visual, integration)
 - Support both Lumo and Aura themes
 
-### Notable Mixins
-
-- `ElementMixin`: Core Vaadin functionality
-- `ThemableMixin`: Theme registration and style injection
-- `FocusMixin`: Focus and focus-ring state management
-- `ButtonMixin`, `FieldMixin`, etc.: Component-specific shared behavior
-- `PolylitMixin`: Bridge between Polymer and Lit APIs
+See [04-coding-conventions.md](guidelines/04-coding-conventions.md) and [05-common-packages.md](guidelines/05-common-packages.md).
 
 ### Testing Strategy
 
