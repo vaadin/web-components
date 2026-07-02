@@ -12,7 +12,7 @@
 - **Theme / Browser:** Lumo / Chromium (Playwright)
 - **Screenshot** (static bug): the red strip is the `e` edge resize handle; at 400% zoom it fully covers the right-edge scrollbar.
 
-![Resize handle covering the scrollbar at 400% zoom](https://raw.githubusercontent.com/vaadin/web-components/edcfc8d6235040479016e13b380d3ee1226a3dda/repro-8584.png)
+![Resize handle covering the scrollbar at 400% zoom](https://raw.githubusercontent.com/vaadin/web-components/4b32a3b1e5/repro-8584.png)
 
 ## Observed behavior
 
