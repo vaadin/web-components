@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
 import { getLumoInjectorPropName, LumoInjector } from './src/lumo-injector.js';
 
 /**
@@ -48,7 +49,7 @@ export const LumoInjectionMixin = (superClass) =>
         // so that changing it to 1 would inject styles to instances
         // Use `inherits: true` so that property defined on `<html>`
         // would apply to components instances within shadow roots
-        CSS.registerProperty({
+        registerCSSProperty({
           name: propName,
           syntax: '<number>',
           inherits: true,
