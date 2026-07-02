@@ -5,8 +5,7 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
-import { registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
-import { addGlobalStyles } from '@vaadin/component-base/src/styles/add-global-styles.js';
+import { addGlobalStyles, registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
 
 registerCSSProperty({
   name: '--_min-width-labels-aside',
