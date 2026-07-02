@@ -13,7 +13,7 @@
  *
  * @param {PropertyDefinition} definition
  */
-export function registerStyleProperty(definition) {
+export function registerCSSProperty(definition) {
   try {
     CSS.registerProperty(definition);
   } catch (e) {

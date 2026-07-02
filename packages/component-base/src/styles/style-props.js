@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
+import { registerCSSProperty } from '../css-utils.js';
 import { addGlobalStyles } from './add-global-styles.js';
-import { registerStyleProperty } from './css-register-property.js';
 
 // NOTE: Base color CSS custom properties are explicitly registered as `<color>`
 // here to avoid performance issues in Aura. Aura overrides these properties with
@@ -19,7 +19,7 @@ import { registerStyleProperty } from './css-register-property.js';
   '--vaadin-border-color-secondary',
   '--vaadin-background-color',
 ].forEach((propertyName) => {
-  registerStyleProperty({
+  registerCSSProperty({
     name: propertyName,
     syntax: '<color>',
     inherits: true,

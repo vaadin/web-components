@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import sinon from 'sinon';
-import { registerStyleProperty } from '../src/styles/css-register-property.js';
+import { registerCSSProperty } from '../src/css-utils.js';
 
-describe('registerStyleProperty', () => {
+describe('registerCSSProperty', () => {
   let warn;
   let counter = 0;
 
@@ -23,7 +23,7 @@ describe('registerStyleProperty', () => {
 
   it('should register a property once without warning', () => {
     const name = uniqueName();
-    registerStyleProperty({ name, syntax: '<number>', inherits: false, initialValue: '0' });
+    registerCSSProperty({ name, syntax: '<number>', inherits: false, initialValue: '0' });
 
     expect(warn.called).to.be.false;
   });
@@ -32,22 +32,22 @@ describe('registerStyleProperty', () => {
     const name = uniqueName();
     const definition = { name, syntax: '<number>', inherits: false, initialValue: '0' };
 
-    registerStyleProperty(definition);
-    expect(() => registerStyleProperty(definition)).to.not.throw();
+    registerCSSProperty(definition);
+    expect(() => registerCSSProperty(definition)).to.not.throw();
   });
 
   it('should warn when the same property is registered twice', () => {
     const name = uniqueName();
     const definition = { name, syntax: '<number>', inherits: false, initialValue: '0' };
 
-    registerStyleProperty(definition);
-    registerStyleProperty(definition);
+    registerCSSProperty(definition);
+    registerCSSProperty(definition);
 
     expect(warn.calledOnce).to.be.true;
     expect(warn.firstCall.args[0]).to.include(name);
   });
 
   it('should rethrow errors other than InvalidModificationError', () => {
-    expect(() => registerStyleProperty({ name: uniqueName(), syntax: '<not-a-syntax>' })).to.throw();
+    expect(() => registerCSSProperty({ name: uniqueName(), syntax: '<not-a-syntax>' })).to.throw();
   });
 });
