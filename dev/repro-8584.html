@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro 8584 — resizable dialog scrollbar</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+
+  <body>
+    <vaadin-button>Open dialog</vaadin-button>
+
+    <script type="module">
+      import '@vaadin/dialog';
+      import '@vaadin/button';
+
+      const dialog = document.createElement('vaadin-dialog');
+      dialog.headerTitle = 'Resizable dialog';
+      dialog.resizable = true;
+      dialog.draggable = true;
+      document.body.appendChild(dialog);
+
+      dialog.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+        const container = document.createElement('div');
+        container.style.width = '20em';
+        // Lots of content so the content part scrolls vertically
+        for (let i = 0; i < 40; i++) {
+          const p = document.createElement('p');
+          p.textContent =
+            i +
+            ': Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio laborum optio quo perferendis unde.';
+          container.appendChild(p);
+        }
+        root.appendChild(container);
+      };
+
+      const btn = document.querySelector('vaadin-button');
+      btn.addEventListener('click', () => {
+        dialog.opened = true;
+      });
+    </script>
+  </body>
+</html>
