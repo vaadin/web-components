@@ -186,8 +186,6 @@ export const CrudGridMixin = (superClass) =>
             // sort column (in case a filter isn't used at all) => add the sort indicator
             const sorter = document.createElement('vaadin-grid-sorter');
             sorter.setAttribute('path', path);
-            // TODO: Localize aria labels
-            sorter.setAttribute('aria-label', `Sort by ${label}`);
             sorter.textContent = label;
             root.appendChild(sorter);
           } else if (!this.noFilter) {

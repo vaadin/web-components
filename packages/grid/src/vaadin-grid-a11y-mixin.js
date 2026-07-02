@@ -26,6 +26,8 @@ export const A11yMixin = (superClass) =>
     __a11yI18nChanged() {
       // Update selection column checkboxes accessible name.
       this.requestContentUpdate();
+      // Update sorters accessible name.
+      this.__a11yUpdateSorters();
     }
 
     /** @private */
@@ -163,6 +165,8 @@ export const A11yMixin = (superClass) =>
     /** @private */
     __a11yUpdateSorters() {
       Array.from(this.querySelectorAll('vaadin-grid-sorter')).forEach((sorter) => {
+        sorter._updateAccessibleName?.();
+
         const cell = getClosestCell(sorter);
         if (cell) {
           cell.setAttribute(

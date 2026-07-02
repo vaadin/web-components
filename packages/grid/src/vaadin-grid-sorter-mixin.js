@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { getClosestCell } from './vaadin-grid-helpers.js';
 
 /**
  * A mixin providing common sorter functionality.
@@ -51,6 +52,8 @@ export const GridSorterMixin = (superClass) =>
     ready() {
       super.ready();
       this.addEventListener('click', this._onClick.bind(this));
+
+      this._updateAccessibleName();
     }
 
     /** @protected */
@@ -78,6 +81,23 @@ export const GridSorterMixin = (superClass) =>
     /** @private */
     _pathOrDirectionChanged() {
       this.__dispatchSorterChangedEvenIfPossible();
+    }
+
+    /**
+     * Updates the sorter accessible name based on the grid i18n.
+     *
+     * @protected
+     */
+    _updateAccessibleName() {
+      // `_grid` is only assigned once the sorter becomes activated.
+      // Resolve the grid from the parent cell column as a fallback.
+      const grid = this._grid || getClosestCell(this)?._column?._grid;
+      const ariaLabel = grid?.__effectiveI18n?.sorter?.replace('{column}', this.textContent.trim());
+      if (ariaLabel) {
+        this.setAttribute('aria-label', ariaLabel);
+      } else {
+        this.removeAttribute('aria-label');
+      }
     }
 
     /** @private */
