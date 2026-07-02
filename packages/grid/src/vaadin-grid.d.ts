@@ -5,6 +5,7 @@
  */
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { GridEventMap, GridMixinClass } from './vaadin-grid-mixin.js';
@@ -12,6 +13,22 @@ import type { GridEventMap, GridMixinClass } from './vaadin-grid-mixin.js';
 export * from './vaadin-grid-mixin.js';
 
 export type GridDefaultItem = any;
+
+export interface GridI18n {
+  /**
+   * The accessible name (aria-label) for the Select All checkbox in the
+   * selection column header cell.
+   */
+  selectAllCheckboxAriaLabel?: string;
+
+  /**
+   * The accessible name (aria-label) template for the Select Row checkbox in
+   * each selection column body cell. The `{0}` placeholder is replaced with
+   * the text content of the row's row-header cell, or the 1-based row index
+   * when there is no row-header column.
+   */
+  selectRowCheckboxAriaLabel?: string;
+}
 
 /**
  * `<vaadin-grid>` is a free, high quality data grid / data table Web Component. The content of the
@@ -279,7 +296,13 @@ declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
 }
 
 interface Grid<TItem = GridDefaultItem>
-  extends DisabledMixinClass, ElementMixinClass, ThemableMixinClass, ThemePropertyMixinClass, GridMixinClass<TItem> {}
+  extends
+    DisabledMixinClass,
+    ElementMixinClass,
+    I18nMixinClass<GridI18n>,
+    ThemableMixinClass,
+    ThemePropertyMixinClass,
+    GridMixinClass<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {

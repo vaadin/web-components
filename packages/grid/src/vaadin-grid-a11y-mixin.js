@@ -19,7 +19,14 @@ export const A11yMixin = (superClass) =>
       };
     }
     static get observers() {
-      return ['__a11yUpdateGridSize(size, _columnTree, __emptyState)'];
+      return ['__a11yUpdateGridSize(size, _columnTree, __emptyState)', '__a11yI18nChanged(__effectiveI18n)'];
+    }
+
+    /** @private */
+    __a11yI18nChanged() {
+      // Re-run renderers so the selection column checkboxes, which read the
+      // grid's effective i18n, pick up the updated accessible names.
+      this.requestContentUpdate();
     }
 
     /** @private */

@@ -269,8 +269,23 @@ describe('multi selection column', () => {
     expect(firstBodyCheckbox.checked).to.be.false;
   });
 
-  it('should set aria-label on the checkbox input element', () => {
-    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select Row');
+  it('should set aria-label on the checkbox input element using row index', async () => {
+    // No row header column defined, so the {0} placeholder falls back to the
+    // 1-based row index.
+    await nextRender();
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select Row 1');
+  });
+
+  it('should re-render rows when the i18n select row template changes', async () => {
+    grid.i18n = { selectRowCheckboxAriaLabel: 'Pick {0}' };
+    await nextRender();
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.equal('Pick 1');
+  });
+
+  it('should use an i18n template without the placeholder as is', async () => {
+    grid.i18n = { selectRowCheckboxAriaLabel: 'Select item' };
+    await nextRender();
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.equal('Select item');
   });
 
   it('should select item when checkbox is checked', async () => {
@@ -395,6 +410,12 @@ describe('multi selection column', () => {
 
   it('should set aria-label on the select all checkbox input element', () => {
     expect(selectAllCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select All');
+  });
+
+  it('should update aria-label on the select all checkbox based on i18n', async () => {
+    grid.i18n = { selectAllCheckboxAriaLabel: 'Select All Items' };
+    await nextRender();
+    expect(selectAllCheckbox.inputElement.getAttribute('aria-label')).to.equal('Select All Items');
   });
 
   it('should set selectAll when header checkbox is clicked', async () => {
@@ -1252,6 +1273,51 @@ describe('multi selection column', () => {
         document.getSelection().selectAllChildren(row2CellContent1);
         expect(document.getSelection().toString()).to.be.not.empty;
       });
+    });
+  });
+});
+
+describe('select row accessible name', () => {
+  let grid;
+
+  function getBodyCheckbox(rowIndex) {
+    return getBodyCellContent(grid, rowIndex, 0).firstElementChild;
+  }
+
+  describe('with row header', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+      <vaadin-grid style="width: 300px; height: 300px;">
+        <vaadin-grid-selection-column></vaadin-grid-selection-column>
+        <vaadin-grid-column path="name" row-header></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+      grid.items = [{ name: 'John' }, { name: 'Jane' }];
+      flushGrid(grid);
+      await nextRender();
+    });
+
+    it('should use the row header cell text for the placeholder', () => {
+      expect(getBodyCheckbox(0).accessibleName).to.equal('Select Row John');
+      expect(getBodyCheckbox(1).accessibleName).to.equal('Select Row Jane');
+    });
+  });
+
+  describe('empty row header', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+      <vaadin-grid style="width: 300px; height: 300px;">
+        <vaadin-grid-selection-column></vaadin-grid-selection-column>
+        <vaadin-grid-column row-header></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+      grid.items = [{ name: 'John' }];
+      flushGrid(grid);
+      await nextRender();
+    });
+
+    it('should fall back to the row index when the row header cell has no text', () => {
+      expect(getBodyCheckbox(0).accessibleName).to.equal('Select Row 1');
     });
   });
 });

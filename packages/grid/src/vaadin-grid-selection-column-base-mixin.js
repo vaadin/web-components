@@ -150,11 +150,12 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       let checkbox = root.firstElementChild;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
-        checkbox.accessibleName = 'Select All';
         checkbox.classList.add('vaadin-grid-select-all-checkbox');
         checkbox.addEventListener('change', this.__onSelectAllCheckboxChange);
         root.appendChild(checkbox);
       }
+
+      checkbox.accessibleName = this._grid?.__effectiveI18n?.selectAllCheckboxAriaLabel;
 
       const checked = this.__isChecked(this.selectAll, this._indeterminate);
       checkbox.checked = checked;
@@ -171,7 +172,6 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       let checkbox = root.firstElementChild;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
-        checkbox.accessibleName = 'Select Row';
         checkbox.addEventListener('change', this.__onSelectRowCheckboxChange);
         root.appendChild(checkbox);
         addListener(root, 'track', this.__onCellTrack);
@@ -180,6 +180,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         root.addEventListener('click', this.__onCellClick);
       }
 
+      this.__updateSelectRowAccessibleName(checkbox, root);
       checkbox.__item = item;
       checkbox.checked = selected;
 
@@ -188,6 +189,34 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
       const isHidden = !isSelectable && !selected;
       checkbox.style.visibility = isHidden ? 'hidden' : '';
+    }
+
+    /**
+     * Sets the Select Row checkbox accessible name based on the grid i18n.
+     * The `{0}` placeholder is replaced with the row header cell text content
+     * or row index the if there is no row header column or it's cell is empty.
+     *
+     * @private
+     */
+    __updateSelectRowAccessibleName(checkbox, root) {
+      const ariaLabel = this._grid?.__effectiveI18n?.selectRowCheckboxAriaLabel;
+      if (!ariaLabel || !ariaLabel.includes('{0}')) {
+        checkbox.accessibleName = ariaLabel;
+        return;
+      }
+
+      // Defer reading the row header cell text until all cell renderers of
+      // the row have run in the current task, as the selection column may
+      // render before the row header column.
+      queueMicrotask(() => {
+        const row = root.assignedSlot?.parentNode?.parentNode;
+        if (!checkbox.isConnected || !row) {
+          return;
+        }
+        const rowHeaderContent = [...row.children].find((cell) => cell._column?.rowHeader)?._content;
+        const value = rowHeaderContent?.textContent.trim() || String(row.index + 1);
+        checkbox.accessibleName = ariaLabel.replace('{0}', value);
+      });
     }
 
     /**
