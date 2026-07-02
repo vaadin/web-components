@@ -1,5 +1,5 @@
 import { css, html, LitElement } from 'lit';
-import { addGlobalStyles } from '@vaadin/component-base/src/styles/add-global-styles.js';
+import { addGlobalStyles } from '@vaadin/component-base/src/css-utils.js';
 
 addGlobalStyles(
   'dev-common',
