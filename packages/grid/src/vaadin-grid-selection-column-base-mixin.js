@@ -209,12 +209,12 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       // the row have run in the current task, as the selection column may
       // render before the row header column.
       queueMicrotask(() => {
-        const row = root.assignedSlot?.parentNode?.parentNode;
+        const row = root.assignedSlot?.parentElement?.__parentRow;
         if (!checkbox.isConnected || !row) {
           return;
         }
-        const rowHeaderContent = [...row.children].find((cell) => cell._column?.rowHeader)?._content;
-        const value = rowHeaderContent?.textContent.trim() || String(row.index + 1);
+        const rowHeaderCell = row.__cells.find((cell) => cell._column?.rowHeader);
+        const value = rowHeaderCell?._content?.textContent.trim() || String(row.index + 1);
         checkbox.accessibleName = ariaLabel.replace('{0}', value);
       });
     }
