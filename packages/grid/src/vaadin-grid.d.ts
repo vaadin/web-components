@@ -7,8 +7,10 @@ import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import type { GridColumnToggleMixinClass } from './vaadin-grid-column-toggle-mixin.js';
 import type { GridEventMap, GridMixinClass } from './vaadin-grid-mixin.js';
 
+export * from './vaadin-grid-column-toggle-mixin.js';
 export * from './vaadin-grid-mixin.js';
 
 export type GridDefaultItem = any;
@@ -263,6 +265,7 @@ export type GridDefaultItem = any;
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  * @fires {CustomEvent} size-changed - Fired when the `size` property changes.
  * @fires {CustomEvent} item-toggle - Fired when the user selects or deselects an item through the selection column.
+ * @fires {CustomEvent} column-visibility-changed - Fired when the user shows or hides a column through the column toggle menu.
  */
 declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
   addEventListener<K extends keyof GridEventMap<TItem>>(
@@ -279,7 +282,13 @@ declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
 }
 
 interface Grid<TItem = GridDefaultItem>
-  extends DisabledMixinClass, ElementMixinClass, ThemableMixinClass, ThemePropertyMixinClass, GridMixinClass<TItem> {}
+  extends
+    DisabledMixinClass,
+    ElementMixinClass,
+    GridColumnToggleMixinClass,
+    ThemableMixinClass,
+    ThemePropertyMixinClass,
+    GridMixinClass<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {

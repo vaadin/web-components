@@ -38,7 +38,27 @@ snapshots["vaadin-grid basic host default"] =
 /* end snapshot vaadin-grid basic host default */
 
 snapshots["vaadin-grid basic shadow default"] = 
-`<div
+`<vaadin-context-menu
+  hidden=""
+  id="columnToggle"
+  open-on="click"
+>
+  <button
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-label="Show or hide columns"
+    part="column-toggle-button"
+    title="Show or hide columns"
+    type="button"
+  >
+    <span
+      aria-hidden="true"
+      part="column-toggle-icon"
+    >
+    </span>
+  </button>
+</vaadin-context-menu>
+<div
   id="scroller"
   style=""
 >
@@ -283,7 +303,27 @@ snapshots["vaadin-grid basic shadow default"] =
 /* end snapshot vaadin-grid basic shadow default */
 
 snapshots["vaadin-grid basic shadow selected"] = 
-`<div
+`<vaadin-context-menu
+  hidden=""
+  id="columnToggle"
+  open-on="click"
+>
+  <button
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-label="Show or hide columns"
+    part="column-toggle-button"
+    title="Show or hide columns"
+    type="button"
+  >
+    <span
+      aria-hidden="true"
+      part="column-toggle-icon"
+    >
+    </span>
+  </button>
+</vaadin-context-menu>
+<div
   id="scroller"
   style=""
 >
@@ -529,7 +569,27 @@ snapshots["vaadin-grid basic shadow selected"] =
 /* end snapshot vaadin-grid basic shadow selected */
 
 snapshots["vaadin-grid basic shadow details opened"] = 
-`<div
+`<vaadin-context-menu
+  hidden=""
+  id="columnToggle"
+  open-on="click"
+>
+  <button
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-label="Show or hide columns"
+    part="column-toggle-button"
+    title="Show or hide columns"
+    type="button"
+  >
+    <span
+      aria-hidden="true"
+      part="column-toggle-icon"
+    >
+    </span>
+  </button>
+</vaadin-context-menu>
+<div
   id="scroller"
   style=""
 >
@@ -774,7 +834,27 @@ snapshots["vaadin-grid basic shadow details opened"] =
 /* end snapshot vaadin-grid basic shadow details opened */
 
 snapshots["vaadin-grid basic shadow hidden column"] = 
-`<div
+`<vaadin-context-menu
+  hidden=""
+  id="columnToggle"
+  open-on="click"
+>
+  <button
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-label="Show or hide columns"
+    part="column-toggle-button"
+    title="Show or hide columns"
+    type="button"
+  >
+    <span
+      aria-hidden="true"
+      part="column-toggle-icon"
+    >
+    </span>
+  </button>
+</vaadin-context-menu>
+<div
   id="scroller"
   style=""
 >
@@ -962,7 +1042,27 @@ snapshots["vaadin-grid basic shadow hidden column"] =
 /* end snapshot vaadin-grid basic shadow hidden column */
 
 snapshots["vaadin-grid basic shadow hidden column selected"] = 
-`<div
+`<vaadin-context-menu
+  hidden=""
+  id="columnToggle"
+  open-on="click"
+>
+  <button
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-label="Show or hide columns"
+    part="column-toggle-button"
+    title="Show or hide columns"
+    type="button"
+  >
+    <span
+      aria-hidden="true"
+      part="column-toggle-icon"
+    >
+    </span>
+  </button>
+</vaadin-context-menu>
+<div
   id="scroller"
   style=""
 >
@@ -1151,7 +1251,27 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
 /* end snapshot vaadin-grid basic shadow hidden column selected */
 
 snapshots["vaadin-grid basic shadow with footer"] = 
-`<div
+`<vaadin-context-menu
+  hidden=""
+  id="columnToggle"
+  open-on="click"
+>
+  <button
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-label="Show or hide columns"
+    part="column-toggle-button"
+    title="Show or hide columns"
+    type="button"
+  >
+    <span
+      aria-hidden="true"
+      part="column-toggle-icon"
+    >
+    </span>
+  </button>
+</vaadin-context-menu>
+<div
   id="scroller"
   style=""
 >
@@ -1396,7 +1516,27 @@ snapshots["vaadin-grid basic shadow with footer"] =
 /* end snapshot vaadin-grid basic shadow with footer */
 
 snapshots["vaadin-grid column groups default"] = 
-`<div
+`<vaadin-context-menu
+  hidden=""
+  id="columnToggle"
+  open-on="click"
+>
+  <button
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-label="Show or hide columns"
+    part="column-toggle-button"
+    title="Show or hide columns"
+    type="button"
+  >
+    <span
+      aria-hidden="true"
+      part="column-toggle-icon"
+    >
+    </span>
+  </button>
+</vaadin-context-menu>
+<div
   id="scroller"
   style=""
 >

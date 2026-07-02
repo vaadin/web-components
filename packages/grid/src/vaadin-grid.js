@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-grid-column.js';
+import '@vaadin/context-menu/src/vaadin-context-menu.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -12,6 +13,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { gridStyles } from './styles/vaadin-grid-base-styles.js';
+import { GridColumnToggleMixin } from './vaadin-grid-column-toggle-mixin.js';
 import { GridMixin } from './vaadin-grid-mixin.js';
 
 /**
@@ -217,6 +219,8 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * `resize-handle`            | Handle for resizing the columns
  * `empty-state`              | The container for the content to be displayed when there are no body rows to show
  * `reorder-ghost`            | Ghost element of the header cell being dragged
+ * `column-toggle-button`     | The button in the grid's top corner that opens the column toggle menu. Only shown while the grid has hideable columns.
+ * `column-toggle-icon`       | The icon shown inside the column toggle button
  *
  * The following state attributes are available for styling:
  *
@@ -264,11 +268,14 @@ import { GridMixin } from './vaadin-grid-mixin.js';
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  * @fires {CustomEvent} size-changed - Fired when the `size` property changes.
  * @fires {CustomEvent} item-toggle - Fired when the user selects or deselects an item through the selection column.
+ * @fires {CustomEvent} column-visibility-changed - Fired when the user shows or hides a column through the column toggle menu.
  *
  * @customElement vaadin-grid
  * @extends HTMLElement
  */
-class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+class Grid extends GridColumnToggleMixin(
+  GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+) {
   static get is() {
     return 'vaadin-grid';
   }
@@ -280,6 +287,27 @@ class Grid extends GridMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
   /** @protected */
   render() {
     return html`
+      <vaadin-context-menu
+        id="columnToggle"
+        open-on="click"
+        ?hidden="${this._columnToggleItems.length === 0}"
+        .items="${this._columnToggleItems}"
+        @item-selected="${this._onColumnToggleItemSelected}"
+        @opened-changed="${this._onColumnToggleOpenedChanged}"
+      >
+        <button
+          part="column-toggle-button"
+          type="button"
+          aria-haspopup="true"
+          aria-expanded="${this._columnToggleOpened ? 'true' : 'false'}"
+          aria-label="Show or hide columns"
+          title="Show or hide columns"
+          @click="${this._onColumnToggleButtonClick}"
+        >
+          <span part="column-toggle-icon" aria-hidden="true"></span>
+        </button>
+      </vaadin-context-menu>
+
       <div
         id="scroller"
         ?safari="${this._safari}"

@@ -732,4 +732,71 @@
       outline-offset: -1px;
     }
   }
+
+  /*
+   * The column toggle: a button overlaying the grid's top (inline-end) corner
+   * that opens a menu for showing and hiding the hideable columns. Lumo
+   * replaces the base styles, so the positioning and hidden handling are
+   * re-declared here, not only the visual styles.
+   */
+  #columnToggle {
+    position: absolute;
+    inset-block-start: var(--lumo-space-xs);
+    inset-inline-end: var(--lumo-space-xs);
+    z-index: 4;
+  }
+
+  #columnToggle[hidden] {
+    display: none !important;
+  }
+
+  [part='column-toggle-button'] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: var(--lumo-size-m);
+    height: var(--lumo-size-m);
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    color: var(--lumo-contrast-60pct);
+    background-color: transparent;
+    border: none;
+    border-radius: var(--lumo-border-radius-m);
+    cursor: var(--lumo-clickable-cursor);
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  [part='column-toggle-icon'] {
+    display: inline-block;
+    flex: none;
+    width: var(--lumo-icon-size-m);
+    height: var(--lumo-icon-size-m);
+    background: currentColor;
+    mask-image: var(--_vaadin-icon-eye);
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+  }
+
+  @media (any-hover: hover) {
+    [part='column-toggle-button']:hover {
+      color: var(--lumo-body-text-color);
+      background-color: var(--lumo-contrast-5pct);
+    }
+  }
+
+  [part='column-toggle-button']:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+  }
+
+  @media (forced-colors: active) {
+    [part='column-toggle-icon'] {
+      background: CanvasText;
+    }
+  }
 }

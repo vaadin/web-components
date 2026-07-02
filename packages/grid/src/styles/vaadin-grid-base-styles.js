@@ -681,4 +681,65 @@ export const gridStyles = css`
   #sizer .cell::before {
     content: '-';
   }
+
+  /* Column toggle styles */
+
+  /*
+   * A button overlaying the grid's top (inline-end) corner that opens a menu
+   * for showing and hiding the hideable columns. The hidden attribute is set
+   * while the grid has no hideable columns.
+   */
+  #columnToggle {
+    position: absolute;
+    inset-block-start: var(--vaadin-padding-s);
+    inset-inline-end: var(--vaadin-padding-s);
+    z-index: 4;
+  }
+
+  #columnToggle[hidden] {
+    display: none !important;
+  }
+
+  [part='column-toggle-button'] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 1lh;
+    height: 1lh;
+    margin: 0;
+    padding: var(--vaadin-padding-s);
+    font: inherit;
+    color: var(--vaadin-text-color);
+    background: transparent;
+    border: none;
+    border-radius: var(--vaadin-radius-m);
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  [part='column-toggle-icon'] {
+    display: inline-block;
+    flex: none;
+    width: 1lh;
+    height: 1lh;
+    background: currentColor;
+    mask-image: var(--_vaadin-icon-eye);
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+  }
+
+  [part='column-toggle-button']:focus-visible {
+    outline: 2px solid var(--vaadin-focus-ring-color, currentColor);
+    outline-offset: 1px;
+  }
+
+  @media (forced-colors: active) {
+    [part='column-toggle-icon'] {
+      background: CanvasText;
+    }
+  }
 `;

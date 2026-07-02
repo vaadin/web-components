@@ -24,6 +24,7 @@ export type GridHeaderFooterRenderer<TItem = GridDefaultItem> = GridMixinHeaderF
  */
 declare class GridColumn<TItem = GridDefaultItem> extends HTMLElement {
   hidden: boolean;
+  hideable: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

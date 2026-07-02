@@ -65,6 +65,22 @@ export declare class ColumnBaseMixinClass<TItem, Column extends ColumnBaseMixinC
   hidden: boolean;
 
   /**
+   * When `true`, the column is included in the grid's column toggle
+   * menu, so the user can show and hide it through the toggle button in
+   * the grid's top corner. The button is only shown while the grid has
+   * at least one hideable column. Columns are not hideable by default.
+   *
+   * This flag does not change the column's `hidden` state on its own; a
+   * column that is not hideable keeps whatever visibility it already has.
+   *
+   * The value is reflected to the `hideable` attribute, and changing it
+   * fires a `hideable-changed` event, so the column toggle updates
+   * automatically no matter whether the flag is set as a property or as
+   * an attribute.
+   */
+  hideable: boolean;
+
+  /**
    * Text content to display in the header cell of the column.
    */
   header: string | null | undefined;

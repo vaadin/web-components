@@ -11,6 +11,7 @@ import type { ArrayDataProviderMixinClass } from './vaadin-grid-array-data-provi
 import type { GridBodyRenderer, GridColumn, GridHeaderFooterRenderer } from './vaadin-grid-column.js';
 import type { ColumnAutoWidthMixinClass } from './vaadin-grid-column-auto-width-mixin.js';
 import type { ColumnReorderingMixinClass } from './vaadin-grid-column-reordering-mixin.js';
+import type { GridColumnVisibilityChangedEvent } from './vaadin-grid-column-toggle-mixin.js';
 import type {
   DataProviderMixinClass,
   GridDataProvider,
@@ -143,6 +144,8 @@ export interface GridCustomEventMap<TItem> {
   'column-reorder': GridColumnReorderEvent<TItem>;
 
   'column-resize': GridColumnResizeEvent<TItem>;
+
+  'column-visibility-changed': GridColumnVisibilityChangedEvent<TItem>;
 
   'data-provider-changed': GridDataProviderChangedEvent<TItem>;
 

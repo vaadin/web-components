@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grid column toggle</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <script type="module">
+      import '@vaadin/grid/all-imports';
+
+      const grid = document.querySelector('vaadin-grid');
+      grid.items = [...Array(50)].map((_, i) => ({
+        first: `First ${i}`,
+        last: `Last ${i}`,
+        email: `user${i}@example.com`,
+        role: i % 2 ? 'Admin' : 'User',
+      }));
+
+      grid.addEventListener('column-visibility-changed', (e) => {
+        console.log('column-visibility-changed', e.detail.column.path, 'hidden:', e.detail.hidden);
+      });
+    </script>
+
+    <!--
+      Marking columns as hideable makes the column toggle button appear in the
+      grid's top corner automatically. The email column is not hideable, so it
+      is not listed in the menu.
+    -->
+    <vaadin-grid>
+      <vaadin-grid-selection-column></vaadin-grid-selection-column>
+      <vaadin-grid-column-group header="Name">
+        <vaadin-grid-column path="first" header="First name" hideable></vaadin-grid-column>
+        <vaadin-grid-column path="last" header="Last name" hideable></vaadin-grid-column>
+      </vaadin-grid-column-group>
+      <vaadin-grid-column path="email" header="Email"></vaadin-grid-column>
+      <vaadin-grid-column path="role" header="Role" hideable></vaadin-grid-column>
+    </vaadin-grid>
+  </body>
+</html>

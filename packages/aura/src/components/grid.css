@@ -15,6 +15,12 @@ vaadin-grid-sorter::part(indicators) {
   transition: color 120ms;
 }
 
+:is(vaadin-grid, vaadin-crud-grid, vaadin-grid-pro)::part(column-toggle-button) {
+  transition:
+    background-color 120ms,
+    border-color 120ms;
+}
+
 :is(vaadin-grid, vaadin-crud, vaadin-grid-pro)[theme~='column-borders'] {
   --vaadin-grid-column-border-width: 1px;
 }
