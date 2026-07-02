@@ -19,7 +19,7 @@
 import '@vaadin/component-base/src/styles/style-props.js';
 import '@vaadin/component-base/src/styles/user-colors.js';
 import { css, unsafeCSS } from 'lit';
-import { addGlobalStyles } from '@vaadin/component-base/src/styles/add-global-styles.js';
+import { addGlobalStyles } from '@vaadin/component-base/src/css-utils.js';
 
 /* Tooltip styles, to support `"tooltip": { "outside": true }` config option */
 // postcss-lit-disable-next-line
