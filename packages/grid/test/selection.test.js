@@ -270,14 +270,14 @@ describe('multi selection column', () => {
   });
 
   it('should set aria-label on the checkbox input element using row index', async () => {
-    // No row header column defined, so the {0} placeholder falls back to the
+    // No row header column defined, so the {rowHeader} placeholder falls back to the
     // 1-based row index.
     await nextRender();
     expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select Row 1');
   });
 
   it('should re-render rows when the i18n select row template changes', async () => {
-    grid.i18n = { selectRow: 'Pick {0}' };
+    grid.i18n = { selectRow: 'Pick {rowHeader}' };
     await nextRender();
     expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.equal('Pick 1');
   });

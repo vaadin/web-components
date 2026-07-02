@@ -193,14 +193,14 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     /**
      * Sets the Select Row checkbox accessible name based on the grid i18n.
-     * The `{0}` placeholder is replaced with the row header cell text content
+     * The `{rowHeader}` placeholder is replaced with the row header cell text content
      * or row index if there is no row header column or it's cell is empty.
      *
      * @private
      */
     __updateSelectRowAccessibleName(checkbox, root) {
       const ariaLabel = this._grid?.__effectiveI18n?.selectRow;
-      if (!ariaLabel || !ariaLabel.includes('{0}')) {
+      if (!ariaLabel || !ariaLabel.includes('{rowHeader}')) {
         checkbox.accessibleName = ariaLabel;
         return;
       }
@@ -215,7 +215,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         }
         const rowHeaderCell = row.__cells.find((cell) => cell._column?.rowHeader);
         const value = rowHeaderCell?._content?.textContent.trim() || String(row.index + 1);
-        checkbox.accessibleName = ariaLabel.replace('{0}', value);
+        checkbox.accessibleName = ariaLabel.replace('{rowHeader}', value);
       });
     }
 

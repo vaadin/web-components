@@ -23,7 +23,7 @@ export interface GridI18n {
 
   /**
    * The accessible name (aria-label) template for the Select Row checkbox in
-   * each selection column body cell. The `{0}` placeholder is replaced with
+   * each selection column body cell. The `{rowHeader}` placeholder is replaced with
    * the text content of the row's row-header cell, or the 1-based row index
    * when there is no row-header column.
    */
@@ -295,10 +295,10 @@ declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
    *   // selection column header cell.
    *   selectAll: 'Select All',
    *   // Accessible name (aria-label) for the select row checkbox in each
-   *   // selection column body cell. The `{0}` placeholder is replaced with the
+   *   // selection column body cell. The `{rowHeader}` placeholder is replaced with the
    *   // text content of the row's row-header cell, or the 1-based row index
    *   // when there is no row-header column.
-   *   selectRow: 'Select Row {0}',
+   *   selectRow: 'Select Row {rowHeader}',
    * }
    * ```
    */
