@@ -16,8 +16,8 @@ import { gridStyles } from './styles/vaadin-grid-base-styles.js';
 import { GridMixin } from './vaadin-grid-mixin.js';
 
 const DEFAULT_I18N = {
-  selectAllCheckboxAriaLabel: 'Select All',
-  selectRowCheckboxAriaLabel: 'Select Row {0}',
+  selectAll: 'Select All',
+  selectRow: 'Select Row {0}',
 };
 
 /**
@@ -298,12 +298,12 @@ class Grid extends GridMixin(I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(L
    * {
    *   // Accessible name (aria-label) for the select all checkbox in the
    *   // selection column header cell.
-   *   selectAllCheckboxAriaLabel: 'Select All',
+   *   selectAll: 'Select All',
    *   // Accessible name (aria-label) for the select row checkbox in each
    *   // selection column body cell. The `{0}` placeholder is replaced with the
    *   // text content of the row's row-header cell, or the 1-based row index
    *   // when there is no row-header column.
-   *   selectRowCheckboxAriaLabel: 'Select Row {0}',
+   *   selectRow: 'Select Row {0}',
    * }
    * ```
    *

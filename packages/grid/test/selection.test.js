@@ -277,13 +277,13 @@ describe('multi selection column', () => {
   });
 
   it('should re-render rows when the i18n select row template changes', async () => {
-    grid.i18n = { selectRowCheckboxAriaLabel: 'Pick {0}' };
+    grid.i18n = { selectRow: 'Pick {0}' };
     await nextRender();
     expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.equal('Pick 1');
   });
 
   it('should use an i18n template without the placeholder as is', async () => {
-    grid.i18n = { selectRowCheckboxAriaLabel: 'Select item' };
+    grid.i18n = { selectRow: 'Select item' };
     await nextRender();
     expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.equal('Select item');
   });
@@ -413,7 +413,7 @@ describe('multi selection column', () => {
   });
 
   it('should update aria-label on the select all checkbox based on i18n', async () => {
-    grid.i18n = { selectAllCheckboxAriaLabel: 'Select All Items' };
+    grid.i18n = { selectAll: 'Select All Items' };
     await nextRender();
     expect(selectAllCheckbox.inputElement.getAttribute('aria-label')).to.equal('Select All Items');
   });

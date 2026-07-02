@@ -155,7 +155,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         root.appendChild(checkbox);
       }
 
-      checkbox.accessibleName = this._grid?.__effectiveI18n?.selectAllCheckboxAriaLabel;
+      checkbox.accessibleName = this._grid?.__effectiveI18n?.selectAll;
 
       const checked = this.__isChecked(this.selectAll, this._indeterminate);
       checkbox.checked = checked;
@@ -199,7 +199,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
      * @private
      */
     __updateSelectRowAccessibleName(checkbox, root) {
-      const ariaLabel = this._grid?.__effectiveI18n?.selectRowCheckboxAriaLabel;
+      const ariaLabel = this._grid?.__effectiveI18n?.selectRow;
       if (!ariaLabel || !ariaLabel.includes('{0}')) {
         checkbox.accessibleName = ariaLabel;
         return;
