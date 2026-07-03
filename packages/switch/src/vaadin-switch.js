@@ -107,6 +107,10 @@ class Switch extends CheckboxMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(
     return switchStyles;
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   /** @protected */
   render() {
     return html`
