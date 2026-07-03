@@ -1,0 +1,148 @@
+:where(:root),
+:where(:host) {
+  --vaadin-notification-border-width: 0px;
+  --vaadin-notification-padding: var(--lumo-space-wide-l);
+  --vaadin-notification-shadow: 0 0 0 1px var(--lumo-contrast-10pct), var(--lumo-box-shadow-l);
+}
+
+:where(vaadin-notification-card)::part(content) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+:where(vaadin-notification-card) > vaadin-button {
+  flex: none;
+  margin: 0 calc(var(--lumo-space-s) * -1) 0 var(--lumo-space-m);
+}
+
+/* Primary / Info */
+:where(vaadin-notification-card):is([theme~='primary'], [theme~='info'], .v-info.v-primary) {
+  --vaadin-notification-background: var(--lumo-primary-color);
+  --vaadin-notification-shadow: var(--lumo-box-shadow-l);
+  --vaadin-focus-ring-color: var(--lumo-primary-contrast-color);
+  --vaadin-button-background: var(--lumo-shade-20pct);
+  --vaadin-button-text-color: var(--lumo-primary-contrast-color);
+  --vaadin-button-primary-background: var(--lumo-primary-contrast-color);
+  --vaadin-button-primary-text-color: var(--lumo-primary-text-color);
+}
+
+:where(vaadin-notification-card):is([theme~='primary'], [theme~='info'], .v-info.v-primary)::part(overlay) {
+  color: var(--lumo-primary-contrast-color);
+}
+
+/* Contrast */
+:where(vaadin-notification-card):is([theme~='contrast'], .v-primary) {
+  --vaadin-notification-background: var(--lumo-contrast);
+  --vaadin-notification-shadow: var(--lumo-box-shadow-l);
+  --vaadin-focus-ring-color: var(--lumo-base-color);
+  --vaadin-button-background: var(--lumo-contrast-20pct);
+  --vaadin-button-text-color: var(--lumo-base-color);
+  --vaadin-button-primary-background: var(--lumo-base-color);
+  --vaadin-button-primary-text-color: var(--lumo-contrast);
+}
+
+:where(vaadin-notification-card):is([theme~='contrast'], .v-primary)::part(overlay) {
+  color: var(--lumo-base-color);
+}
+
+/* Success */
+:where(vaadin-notification-card):is([theme~='success'], .v-success.v-primary) {
+  --vaadin-notification-background: var(--lumo-success-color);
+  --vaadin-notification-shadow: var(--lumo-box-shadow-l);
+  --vaadin-focus-ring-color: var(--lumo-success-contrast-color);
+  --vaadin-button-background: var(--lumo-shade-20pct);
+  --vaadin-button-text-color: var(--lumo-success-contrast-color);
+  --vaadin-button-primary-background: var(--lumo-success-contrast-color);
+  --vaadin-button-primary-text-color: var(--lumo-success-text-color);
+}
+
+:where(vaadin-notification-card):is([theme~='success'], .v-success.v-primary)::part(overlay) {
+  color: var(--lumo-success-contrast-color);
+}
+
+/* Error */
+:where(vaadin-notification-card):is([theme~='error'], .v-error.v-primary) {
+  --vaadin-notification-background: var(--lumo-error-color);
+  --vaadin-notification-shadow: var(--lumo-box-shadow-l);
+  --vaadin-focus-ring-color: var(--lumo-error-contrast-color);
+  --vaadin-button-background: var(--lumo-shade-20pct);
+  --vaadin-button-text-color: var(--lumo-error-contrast-color);
+  --vaadin-button-primary-background: var(--lumo-error-contrast-color);
+  --vaadin-button-primary-text-color: var(--lumo-error-text-color);
+}
+
+:where(vaadin-notification-card):is([theme~='error'], .v-error.v-primary)::part(overlay) {
+  color: var(--lumo-error-contrast-color);
+}
+
+/* Warning (needs an inset ring against the light background) */
+:where(vaadin-notification-card):is([theme~='warning'], .v-warning.v-primary) {
+  --vaadin-notification-background: var(--lumo-warning-color);
+  --vaadin-notification-shadow: inset 0 0 0 1px var(--lumo-contrast-20pct), var(--lumo-box-shadow-l);
+  --vaadin-focus-ring-color: var(--lumo-warning-contrast-color);
+  --vaadin-button-background: var(--lumo-shade-20pct);
+  --vaadin-button-text-color: var(--lumo-warning-contrast-color);
+  --vaadin-button-primary-background: var(--lumo-shade-50pct);
+  --vaadin-button-primary-text-color: var(--lumo-primary-contrast-color);
+}
+
+:where(vaadin-notification-card):is([theme~='warning'], .v-warning.v-primary)::part(overlay) {
+  color: var(--lumo-warning-contrast-color);
+}
+
+/* Info */
+:where(vaadin-notification-card).v-info {
+  --vaadin-notification-background: linear-gradient(var(--lumo-primary-color-10pct), var(--lumo-primary-color-10pct))
+    var(--lumo-base-color);
+  --vaadin-button-background: var(--lumo-primary-color-10pct);
+  --vaadin-button-text-color: var(--lumo-primary-text-color);
+  --vaadin-button-primary-background: var(--lumo-primary-color);
+  --vaadin-button-primary-text-color: var(--lumo-primary-contrast-color);
+}
+
+:where(vaadin-notification-card).v-info::part(overlay) {
+  color: var(--lumo-primary-text-color);
+}
+
+/* Success */
+:where(vaadin-notification-card).v-success {
+  --vaadin-notification-background: linear-gradient(var(--lumo-success-color-10pct), var(--lumo-success-color-10pct))
+    var(--lumo-base-color);
+  --vaadin-button-background: var(--lumo-success-color-10pct);
+  --vaadin-button-text-color: var(--lumo-success-text-color);
+  --vaadin-button-primary-background: var(--lumo-success-color);
+  --vaadin-button-primary-text-color: var(--lumo-success-contrast-color);
+}
+
+:where(vaadin-notification-card).v-success::part(overlay) {
+  color: var(--lumo-success-text-color);
+}
+
+/* Error */
+:where(vaadin-notification-card).v-error {
+  --vaadin-notification-background: linear-gradient(var(--lumo-error-color-10pct), var(--lumo-error-color-10pct))
+    var(--lumo-base-color);
+  --vaadin-button-background: var(--lumo-error-color-10pct);
+  --vaadin-button-text-color: var(--lumo-error-text-color);
+  --vaadin-button-primary-background: var(--lumo-error-color);
+  --vaadin-button-primary-text-color: var(--lumo-error-contrast-color);
+}
+
+:where(vaadin-notification-card).v-error::part(overlay) {
+  color: var(--lumo-error-text-color);
+}
+
+/* Warning */
+:where(vaadin-notification-card).v-warning {
+  --vaadin-notification-background: linear-gradient(var(--lumo-warning-color-10pct), var(--lumo-warning-color-10pct))
+    var(--lumo-base-color);
+  --vaadin-button-background: var(--lumo-warning-color-10pct);
+  --vaadin-button-text-color: var(--lumo-warning-text-color);
+  --vaadin-button-primary-background: var(--lumo-warning-color);
+  --vaadin-button-primary-text-color: var(--lumo-warning-contrast-color);
+}
+
+:where(vaadin-notification-card).v-warning::part(overlay) {
+  color: var(--lumo-warning-text-color);
+}
