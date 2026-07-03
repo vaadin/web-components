@@ -21,12 +21,17 @@ import { NumberField } from '@vaadin/number-field/src/vaadin-number-field.js';
 import { PasswordField } from '@vaadin/password-field/src/vaadin-password-field.js';
 import { RadioGroup } from '@vaadin/radio-group/src/vaadin-radio-group.js';
 import { Select } from '@vaadin/select/src/vaadin-select.js';
+import { Switch } from '@vaadin/switch/src/vaadin-switch.js';
 import { Tab } from '@vaadin/tabs/src/vaadin-tab.js';
 import { TextArea } from '@vaadin/text-area/src/vaadin-text-area.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 import { TimePicker } from '@vaadin/time-picker/src/vaadin-time-picker.js';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
+
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.switchComponent = true;
 
 before(() => {
   Tooltip.setDefaultFocusDelay(0);
@@ -99,6 +104,7 @@ before(() => {
     `,
   },
   { tagName: Select.is, position: 'top', ariaTargetSelector: 'vaadin-select-value-button' },
+  { tagName: Switch.is, ariaTargetSelector: 'input' },
   { tagName: Tab.is },
   { tagName: TextArea.is, position: 'top', ariaTargetSelector: 'textarea' },
   { tagName: TextField.is, position: 'top', ariaTargetSelector: 'input' },
