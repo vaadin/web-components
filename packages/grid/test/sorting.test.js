@@ -826,23 +826,23 @@ describe('sorting', () => {
       sorter = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
     });
 
-    it('should apply the default i18n template to the sorter', () => {
+    it('should set sorter aria-label based on grid i18n by default', () => {
       expect(sorter.getAttribute('aria-label')).to.equal('Sort by First name');
     });
 
-    it('should update the accessible name when the column header changes', async () => {
+    it('should update sorter aria-label when column header changes', async () => {
       sortColumn.header = 'Last name';
       await nextFrame();
       expect(sorter.getAttribute('aria-label')).to.equal('Sort by Last name');
     });
 
-    it('should update the accessible name when i18n changes', async () => {
+    it('should update sorter aria-label when grid i18n changes', async () => {
       grid.i18n = { sorter: 'Sort using {column}' };
       await nextFrame();
       expect(sorter.getAttribute('aria-label')).to.equal('Sort using First name');
     });
 
-    it('should apply an i18n template without a placeholder as is', async () => {
+    it('should apply grid i18n without the placeholder as is', async () => {
       grid.i18n = { sorter: 'Sort column' };
       await nextFrame();
       expect(sorter.getAttribute('aria-label')).to.equal('Sort column');
@@ -870,17 +870,17 @@ describe('sorting', () => {
       sorter = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
     });
 
-    it('should derive the accessible name from the grid i18n autonomously', () => {
+    it('should set sorter aria-label based on grid i18n by default', () => {
       expect(sorter.getAttribute('aria-label')).to.equal('Sort by First name');
     });
 
-    it('should update the accessible name when the sorter text content changes', async () => {
+    it('should update sorter aria-label when text content changes', async () => {
       sorter.textContent = 'Last name';
       await nextFrame();
       expect(sorter.getAttribute('aria-label')).to.equal('Sort by Last name');
     });
 
-    it('should update the accessible name when i18n changes', async () => {
+    it('should update sorter aria-label when grid i18n changes', async () => {
       grid.i18n = { sorter: 'Sort using {column}' };
       await nextFrame();
       expect(sorter.getAttribute('aria-label')).to.equal('Sort using First name');
