@@ -28,12 +28,12 @@ describe('vaadin-card', () => {
 
   describe('title', () => {
     function getStringTitleElement() {
-      return card.querySelector('[slot="title"][card-string-title]') as HTMLElement;
+      return card.querySelector('[slot="title"][role="heading"]') as HTMLElement;
     }
 
     function getCustomTitleElement() {
       return Array.from(card.querySelectorAll('[slot="title"]')).find((el) => {
-        return !el.hasAttribute('card-string-title');
+        return el.getAttribute('role') !== 'heading';
       });
     }
 
@@ -76,6 +76,13 @@ describe('vaadin-card', () => {
     it('should clear string title when empty string title is set', async () => {
       card.cardTitle = 'Some title';
       await nextRender();
+      card.cardTitle = '';
+      await nextRender();
+      expect(getStringTitleElement()).to.not.exist;
+    });
+
+    it('should not throw when clearing string title before it is rendered', async () => {
+      card.cardTitle = 'Some title';
       card.cardTitle = '';
       await nextRender();
       expect(getStringTitleElement()).to.not.exist;
