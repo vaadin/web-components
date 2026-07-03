@@ -51,31 +51,31 @@ import { switchStyles } from './styles/vaadin-switch-base-styles.js';
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                              |
- * :------------------------------------------------|
- * | `--vaadin-switch-size`                         |
- * | `--vaadin-switch-track-width`                  |
- * | `--vaadin-switch-thumb-size`                   |
- * | `--vaadin-switch-background`                   |
- * | `--vaadin-switch-border-color`                 |
- * | `--vaadin-switch-border-width`                 |
- * | `--vaadin-switch-gap`                          |
- * | `--vaadin-switch-thumb-color`                  |
- * | `--vaadin-switch-thumb-checked-color`          |
- * | `--vaadin-switch-label-color`                  |
- * | `--vaadin-switch-label-font-size`              |
- * | `--vaadin-switch-label-font-weight`            |
- * | `--vaadin-switch-label-line-height`            |
- * | `--vaadin-input-field-error-color`             |
- * | `--vaadin-input-field-error-font-size`         |
- * | `--vaadin-input-field-error-font-weight`       |
- * | `--vaadin-input-field-error-line-height`       |
- * | `--vaadin-input-field-helper-color`            |
- * | `--vaadin-input-field-helper-font-size`        |
- * | `--vaadin-input-field-helper-font-weight`      |
- * | `--vaadin-input-field-helper-line-height`      |
- * | `--vaadin-input-field-required-indicator`      |
- * | `--vaadin-input-field-required-indicator-color`|
+ * Custom CSS property                                |
+ * :--------------------------------------------------|
+ * | `--vaadin-input-field-error-color`               |
+ * | `--vaadin-input-field-error-font-size`           |
+ * | `--vaadin-input-field-error-font-weight`         |
+ * | `--vaadin-input-field-error-line-height`         |
+ * | `--vaadin-input-field-helper-color`              |
+ * | `--vaadin-input-field-helper-font-size`          |
+ * | `--vaadin-input-field-helper-font-weight`        |
+ * | `--vaadin-input-field-helper-line-height`        |
+ * | `--vaadin-input-field-required-indicator`        |
+ * | `--vaadin-input-field-required-indicator-color`  |
+ * | `--vaadin-switch-background`                     |
+ * | `--vaadin-switch-border-color`                   |
+ * | `--vaadin-switch-border-width`                   |
+ * | `--vaadin-switch-gap`                            |
+ * | `--vaadin-switch-label-color`                    |
+ * | `--vaadin-switch-label-font-size`                |
+ * | `--vaadin-switch-label-font-weight`              |
+ * | `--vaadin-switch-label-line-height`              |
+ * | `--vaadin-switch-size`                           |
+ * | `--vaadin-switch-thumb-color`                    |
+ * | `--vaadin-switch-thumb-checked-color`            |
+ * | `--vaadin-switch-thumb-size`                     |
+ * | `--vaadin-switch-track-width`                    |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
