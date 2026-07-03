@@ -1,5 +1,6 @@
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import type {
   GridColumnGroup,
@@ -49,6 +50,7 @@ import type {
   GridEventContext,
   GridExpandedItemsChangedEvent,
   GridFilterDefinition,
+  GridI18n,
   GridItemModel,
   GridItemToggleEvent,
   GridLoadingChangedEvent,
@@ -73,6 +75,7 @@ assertType<Grid>(genericGrid);
 const narrowedGrid = genericGrid as Grid<TestGridItem>;
 assertType<DisabledMixinClass>(narrowedGrid);
 assertType<ElementMixinClass>(narrowedGrid);
+assertType<I18nMixinClass<GridI18n>>(narrowedGrid);
 assertType<ThemableMixinClass>(narrowedGrid);
 assertType<ActiveItemMixinClass<TestGridItem>>(narrowedGrid);
 assertType<ArrayDataProviderMixinClass<TestGridItem>>(narrowedGrid);
@@ -180,6 +183,8 @@ assertType<boolean>(narrowedGrid.columnReorderingAllowed);
 assertType<TestGridItem[]>(narrowedGrid.selectedItems);
 assertType<TestGridItem[]>(narrowedGrid.detailsOpenedItems);
 assertType<TestGridItem[]>(narrowedGrid.expandedItems);
+
+assertType<GridI18n>(narrowedGrid.i18n);
 
 assertType<(arg0: TestGridItem) => TestGridItem | unknown>(narrowedGrid.getItemId);
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.expandItem);

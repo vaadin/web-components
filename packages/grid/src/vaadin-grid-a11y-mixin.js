@@ -19,7 +19,13 @@ export const A11yMixin = (superClass) =>
       };
     }
     static get observers() {
-      return ['__a11yUpdateGridSize(size, _columnTree, __emptyState)'];
+      return ['__a11yUpdateGridSize(size, _columnTree, __emptyState)', '__a11yI18nChanged(__effectiveI18n)'];
+    }
+
+    /** @private */
+    __a11yI18nChanged() {
+      // Update selection column checkboxes accessible name.
+      this.requestContentUpdate();
     }
 
     /** @private */
