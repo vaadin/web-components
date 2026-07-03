@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { findTreeToggleCell, iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
+import { findTreeToggleCell, getClosestCell, iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
 
 export const A11yMixin = (superClass) =>
   class A11yMixin extends superClass {
@@ -163,12 +163,8 @@ export const A11yMixin = (superClass) =>
     /** @private */
     __a11yUpdateSorters() {
       Array.from(this.querySelectorAll('vaadin-grid-sorter')).forEach((sorter) => {
-        let cellContent = sorter.parentNode;
-        while (cellContent && cellContent.localName !== 'vaadin-grid-cell-content') {
-          cellContent = cellContent.parentNode;
-        }
-        if (cellContent?.assignedSlot) {
-          const cell = cellContent.assignedSlot.parentNode;
+        const cell = getClosestCell(sorter);
+        if (cell) {
           cell.setAttribute(
             'aria-sort',
             {

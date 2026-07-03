@@ -5,6 +5,19 @@
  */
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
+
+/**
+ * Returns the grid cell that contains the given node, or `undefined` if the
+ * node is not inside a cell's content.
+ *
+ * @param {Node} node
+ * @return {HTMLElement | undefined}
+ */
+export function getClosestCell(node) {
+  const content = getClosestElement('vaadin-grid-cell-content', node);
+  return content?.assignedSlot?.parentElement;
+}
 
 /**
  * Returns the cells of the given row, excluding the details cell.

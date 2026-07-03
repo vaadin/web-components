@@ -7,7 +7,6 @@ import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { isAndroid, isChrome, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 import { setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -25,6 +24,7 @@ import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
 import {
   getBodyRowCells,
+  getClosestCell,
   iterateChildren,
   iterateRowCells,
   updateBooleanRowStates,
@@ -204,13 +204,7 @@ export const GridMixin = (superClass) =>
 
     /** @protected */
     _getRowContainingNode(node) {
-      const content = getClosestElement('vaadin-grid-cell-content', node);
-      if (!content) {
-        return;
-      }
-
-      const cell = content.assignedSlot.parentElement;
-      return cell.parentElement;
+      return getClosestCell(node)?.parentElement;
     }
 
     /** @protected */
