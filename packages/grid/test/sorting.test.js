@@ -810,7 +810,7 @@ describe('sorting', () => {
     });
   });
 
-  describe('sorter accessible name from i18n', () => {
+  describe('sort-column accessible name', () => {
     let grid, sortColumn, sorter;
 
     beforeEach(async () => {
@@ -837,9 +837,9 @@ describe('sorting', () => {
     });
 
     it('should update the accessible name when i18n changes', async () => {
-      grid.i18n = { sorter: 'Sortieren nach {column}' };
+      grid.i18n = { sorter: 'Sort using {column}' };
       await nextFrame();
-      expect(sorter.getAttribute('aria-label')).to.equal('Sortieren nach First name');
+      expect(sorter.getAttribute('aria-label')).to.equal('Sort using First name');
     });
 
     it('should apply an i18n template without a placeholder as is', async () => {
@@ -849,7 +849,7 @@ describe('sorting', () => {
     });
   });
 
-  describe('sorter accessible name without sort-column', () => {
+  describe('sorter accessible name', () => {
     let grid, column, sorter;
 
     beforeEach(async () => {
@@ -859,8 +859,6 @@ describe('sorting', () => {
         </vaadin-grid>
       `);
       column = grid.querySelector('vaadin-grid-column');
-      // Create the sorter manually, as the Flow connector does, instead of
-      // relying on vaadin-grid-sort-column.
       column.headerRenderer = (root) => {
         if (!root.firstChild) {
           root.innerHTML = '<vaadin-grid-sorter path="first">First name</vaadin-grid-sorter>';
@@ -883,9 +881,9 @@ describe('sorting', () => {
     });
 
     it('should update the accessible name when i18n changes', async () => {
-      grid.i18n = { sorter: 'Sortieren nach {column}' };
+      grid.i18n = { sorter: 'Sort using {column}' };
       await nextFrame();
-      expect(sorter.getAttribute('aria-label')).to.equal('Sortieren nach First name');
+      expect(sorter.getAttribute('aria-label')).to.equal('Sort using First name');
     });
   });
 });
