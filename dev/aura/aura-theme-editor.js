@@ -385,13 +385,15 @@ customElements.define(
             scheme=${isDarkPrimary ? 'dark' : 'light'}
             style=${thumbnailStyle}
           ></aura-preset-thumbnail>
-          ${showsOverlay
-            ? html`<aura-preset-thumbnail
-                class="aura-surface aura-accent-color"
-                overlay
-                style=${thumbnailStyle}
-              ></aura-preset-thumbnail>`
-            : nothing}
+          ${
+            showsOverlay
+              ? html`<aura-preset-thumbnail
+                  class="aura-surface aura-accent-color"
+                  overlay
+                  style=${thumbnailStyle}
+                ></aura-preset-thumbnail>`
+              : nothing
+          }
           <span class="label">${preset.label}</span>
         </button>
       `;

@@ -202,7 +202,13 @@
     <h3 class="heading">Surface Colors</h3>
     <section class="section">
       <aura-number-control property="--surface-level" label="Surface Level" min="-2" max="6"></aura-number-control>
-      <aura-number-control property="--surface-opacity" label="Surface Opacity" min="0" max="1" step="0.1"></aura-number-control>
+      <aura-number-control
+        property="--surface-opacity"
+        label="Surface Opacity"
+        min="0"
+        max="1"
+        step="0.1"
+      ></aura-number-control>
       <vaadin-checkbox label="Show Transparency" id="surface-pattern"></vaadin-checkbox>
     </section>
     <section class="section surfaces">

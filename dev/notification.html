@@ -205,7 +205,7 @@
       }
 
       #position vaadin-select-item::part(content)::before {
-        content: "";
+        content: '';
         width: 28px;
         height: 20px;
         border-radius: 4px;
@@ -213,8 +213,8 @@
         border: 1px solid var(--vaadin-border-color-secondary);
       }
 
-      #position vaadin-select-item:not([value="all"], [value="random"])::part(content)::after {
-        content: "";
+      #position vaadin-select-item:not([value='all'], [value='random'])::part(content)::after {
+        content: '';
         position: absolute;
         width: 10px;
         height: 4px;
@@ -224,51 +224,67 @@
         border-radius: 3px;
       }
 
-      #position vaadin-select-item[value^="bottom"]::part(content)::after {
+      #position vaadin-select-item[value^='bottom']::part(content)::after {
         top: auto;
         bottom: 2px;
       }
 
-      #position vaadin-select-item:is([value$="center"], [value="middle"])::part(content)::after {
+      #position vaadin-select-item:is([value$='center'], [value='middle'])::part(content)::after {
         margin-left: 10px;
       }
 
-      #position vaadin-select-item[value$="end"]::part(content)::after {
+      #position vaadin-select-item[value$='end']::part(content)::after {
         margin-left: 18px;
       }
 
-      #position vaadin-select-item[value$="stretch"]::part(content)::after {
+      #position vaadin-select-item[value$='stretch']::part(content)::after {
         width: 26px;
         height: 3px;
       }
 
-      #position vaadin-select-item[value="middle"]::part(content)::after {
+      #position vaadin-select-item[value='middle']::part(content)::after {
         top: 9px;
       }
 
-      #position vaadin-select-item[value="random"]::part(content)::after {
+      #position vaadin-select-item[value='random']::part(content)::after {
         position: absolute;
-        content: "?";
+        content: '?';
         color: var(--vaadin-text-color-secondary);
         font-weight: 600;
         width: 30px;
         text-align: center;
       }
 
-      #position vaadin-select-item[value="all"]::part(content)::before {
+      #position vaadin-select-item[value='all']::part(content)::before {
         background: var(--vaadin-text-color-secondary);
       }
 
-      #position vaadin-select-item[value="all"]::part(content)::after {
-        content: "";
+      #position vaadin-select-item[value='all']::part(content)::after {
+        content: '';
         position: absolute;
         top: 0;
         width: 30px;
         height: 16px;
         border-radius: 3px;
         border-block: 3px solid var(--vaadin-border-color);
-        background: repeating-linear-gradient(transparent 3px, currentColor 3px, currentColor 4px, transparent 4px, transparent 8px) border-box,
-        repeating-linear-gradient(-0.25turn, transparent 10px, currentColor 10px, currentColor 11px, transparent 11px, transparent 21px) content-box;
+        background:
+          repeating-linear-gradient(
+              transparent 3px,
+              currentColor 3px,
+              currentColor 4px,
+              transparent 4px,
+              transparent 8px
+            )
+            border-box,
+          repeating-linear-gradient(
+              -0.25turn,
+              transparent 10px,
+              currentColor 10px,
+              currentColor 11px,
+              transparent 11px,
+              transparent 21px
+            )
+            content-box;
         color: var(--vaadin-background-color);
       }
 
@@ -276,7 +292,7 @@
         width: 7em;
       }
 
-      html[data-theme^="base"] #style {
+      html[data-theme^='base'] #style {
         display: none;
       }
 
@@ -284,15 +300,15 @@
         width: 8em;
       }
 
-      #style vaadin-select-item:not([value="random"])::part(content)::before {
-        content: "";
+      #style vaadin-select-item:not([value='random'])::part(content)::before {
+        content: '';
         background: var(--aura-accent-color, currentColor);
         width: 0.5em;
         height: 0.5em;
         border-radius: 50%;
       }
 
-      #style vaadin-select-item[value=""]::part(content)::before {
+      #style vaadin-select-item[value='']::part(content)::before {
         --aura-accent-color: var(--aura-neutral);
         color: var(--lumo-contrast-50pct);
       }
