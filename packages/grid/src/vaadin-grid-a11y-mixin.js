@@ -165,7 +165,7 @@ export const A11yMixin = (superClass) =>
     /** @private */
     __a11yUpdateSorters() {
       Array.from(this.querySelectorAll('vaadin-grid-sorter')).forEach((sorter) => {
-        sorter._updateAccessibleName?.();
+        sorter.__updateAccessibleName?.();
 
         const cell = getClosestCell(sorter);
         if (cell) {

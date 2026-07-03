@@ -53,7 +53,7 @@ export const GridSorterMixin = (superClass) =>
       super.ready();
       this.addEventListener('click', this._onClick.bind(this));
 
-      this._updateAccessibleName();
+      this.__updateAccessibleName();
     }
 
     /** @protected */
@@ -86,9 +86,9 @@ export const GridSorterMixin = (superClass) =>
     /**
      * Updates the sorter accessible name based on the grid i18n.
      *
-     * @protected
+     * @private
      */
-    _updateAccessibleName() {
+    __updateAccessibleName() {
       // `_grid` is only assigned once the sorter becomes activated.
       // Resolve the grid from the parent cell column as a fallback.
       const grid = this._grid || getClosestCell(this)?.getRootNode().host;
