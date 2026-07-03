@@ -223,55 +223,59 @@ class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
           </div>
         </div>
 
-        ${!this._dialogMode
-          ? html`
-              <div
-                part="editor"
-                id="editor"
-                role="group"
-                aria-labelledby="header"
-                tabindex="0"
-                ?hidden="${!this.editorOpened}"
-              >
-                <div part="scroller" id="scroller">
-                  <div part="header" id="header">
-                    <slot name="header"></slot>
+        ${
+          !this._dialogMode
+            ? html`
+                <div
+                  part="editor"
+                  id="editor"
+                  role="group"
+                  aria-labelledby="header"
+                  tabindex="0"
+                  ?hidden="${!this.editorOpened}"
+                >
+                  <div part="scroller" id="scroller">
+                    <div part="header" id="header">
+                      <slot name="header"></slot>
+                    </div>
+                    <slot name="form"></slot>
                   </div>
-                  <slot name="form"></slot>
-                </div>
 
-                <div part="footer" role="toolbar">
-                  <slot name="save-button"></slot>
-                  <slot name="cancel-button"></slot>
-                  <slot name="delete-button"></slot>
+                  <div part="footer" role="toolbar">
+                    <slot name="save-button"></slot>
+                    <slot name="cancel-button"></slot>
+                    <slot name="delete-button"></slot>
+                  </div>
                 </div>
-              </div>
-            `
-          : nothing}
+              `
+            : nothing
+        }
       </div>
 
-      ${this._dialogMode
-        ? html`
-            <vaadin-crud-dialog
-              id="dialog"
-              aria-label="${ifDefined(this.__dialogAriaLabel)}"
-              theme="${ifDefined(this._theme)}"
-              exportparts="backdrop, overlay, header, content, footer"
-              .crudElement="${this}"
-              .opened="${this.editorOpened}"
-              .fullscreen="${this._fullscreen}"
-              .noCloseOnOutsideClick="${this.__isDirty}"
-              .noCloseOnEsc="${this.__isDirty}"
-              @cancel="${this.__cancel}"
-            >
-              <slot name="header" slot="header"></slot>
-              <slot name="form" slot="form"></slot>
-              <slot name="save-button" slot="save-button"></slot>
-              <slot name="cancel-button" slot="cancel-button"></slot>
-              <slot name="delete-button" slot="delete-button"></slot>
-            </vaadin-crud-dialog>
-          `
-        : nothing}
+      ${
+        this._dialogMode
+          ? html`
+              <vaadin-crud-dialog
+                id="dialog"
+                aria-label="${ifDefined(this.__dialogAriaLabel)}"
+                theme="${ifDefined(this._theme)}"
+                exportparts="backdrop, overlay, header, content, footer"
+                .crudElement="${this}"
+                .opened="${this.editorOpened}"
+                .fullscreen="${this._fullscreen}"
+                .noCloseOnOutsideClick="${this.__isDirty}"
+                .noCloseOnEsc="${this.__isDirty}"
+                @cancel="${this.__cancel}"
+              >
+                <slot name="header" slot="header"></slot>
+                <slot name="form" slot="form"></slot>
+                <slot name="save-button" slot="save-button"></slot>
+                <slot name="cancel-button" slot="cancel-button"></slot>
+                <slot name="delete-button" slot="delete-button"></slot>
+              </vaadin-crud-dialog>
+            `
+          : nothing
+      }
 
       <slot name="confirm-cancel"></slot>
 

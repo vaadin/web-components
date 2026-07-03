@@ -111,27 +111,29 @@ class BreadcrumbsItem extends FocusMixin(DisabledMixin(ElementMixin(PolylitMixin
   /** @protected */
   render() {
     return html`
-      ${this.path == null
-        ? html`
-            <span part="nolink" aria-current="${this.current ? 'page' : nothing}">
-              <slot name="prefix"></slot>
-              <span part="label">
-                <slot></slot>
+      ${
+        this.path == null
+          ? html`
+              <span part="nolink" aria-current="${this.current ? 'page' : nothing}">
+                <slot name="prefix"></slot>
+                <span part="label">
+                  <slot></slot>
+                </span>
               </span>
-            </span>
-          `
-        : html`
-            <a
-              href="${ifDefined(this.disabled ? null : this.path)}"
-              tabindex="${this.disabled ? '-1' : '0'}"
-              part="link"
-            >
-              <slot name="prefix"></slot>
-              <span part="label">
-                <slot></slot>
-              </span>
-            </a>
-          `}
+            `
+          : html`
+              <a
+                href="${ifDefined(this.disabled ? null : this.path)}"
+                tabindex="${this.disabled ? '-1' : '0'}"
+                part="link"
+              >
+                <slot name="prefix"></slot>
+                <span part="label">
+                  <slot></slot>
+                </span>
+              </a>
+            `
+      }
     `;
   }
 

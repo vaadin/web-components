@@ -255,7 +255,7 @@ describe('ThemableMixin - post-finalize styles', () => {
     );
 
     const childTagName = uniqueTagName();
-    class Child extends (customElements.get(parentTagName)!) {
+    class Child extends customElements.get(parentTagName)! {
       static is = childTagName;
     }
     customElements.define(childTagName, Child);

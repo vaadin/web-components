@@ -185,9 +185,9 @@ export const MessageListMixin = (superClass) =>
                 @focusin="${this._onMessageFocusIn}"
                 @attachment-click="${(e) => this.__onAttachmentClick(e, item)}"
                 style="${ifDefined(loadingMarkdown ? 'visibility: hidden' : undefined)}"
-                >${this.markdown
-                  ? html`<vaadin-markdown .content=${item.text}></vaadin-markdown>`
-                  : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
+                >${
+                  this.markdown ? html`<vaadin-markdown .content=${item.text}></vaadin-markdown>` : item.text
+                }<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
             `,
           )}
