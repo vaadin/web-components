@@ -270,8 +270,6 @@ describe('multi selection column', () => {
   });
 
   it('should set aria-label on the checkbox input element using row index', async () => {
-    // No row header column defined, so the {rowHeader} placeholder falls back to the
-    // 1-based row index.
     await nextRender();
     expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select Row 1');
   });
@@ -1287,11 +1285,11 @@ describe('select row accessible name', () => {
   describe('with row header', () => {
     beforeEach(async () => {
       grid = fixtureSync(`
-      <vaadin-grid style="width: 300px; height: 300px;">
-        <vaadin-grid-selection-column></vaadin-grid-selection-column>
-        <vaadin-grid-column path="name" row-header></vaadin-grid-column>
-      </vaadin-grid>
-    `);
+        <vaadin-grid style="width: 300px; height: 300px;">
+          <vaadin-grid-selection-column></vaadin-grid-selection-column>
+          <vaadin-grid-column path="name" row-header></vaadin-grid-column>
+        </vaadin-grid>
+      `);
       grid.items = [{ name: 'John' }, { name: 'Jane' }];
       flushGrid(grid);
       await nextRender();
@@ -1306,11 +1304,11 @@ describe('select row accessible name', () => {
   describe('empty row header', () => {
     beforeEach(async () => {
       grid = fixtureSync(`
-      <vaadin-grid style="width: 300px; height: 300px;">
-        <vaadin-grid-selection-column></vaadin-grid-selection-column>
-        <vaadin-grid-column row-header></vaadin-grid-column>
-      </vaadin-grid>
-    `);
+        <vaadin-grid style="width: 300px; height: 300px;">
+          <vaadin-grid-selection-column></vaadin-grid-selection-column>
+          <vaadin-grid-column row-header></vaadin-grid-column>
+        </vaadin-grid>
+      `);
       grid.items = [{ name: 'John' }];
       flushGrid(grid);
       await nextRender();

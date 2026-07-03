@@ -24,8 +24,7 @@ export const A11yMixin = (superClass) =>
 
     /** @private */
     __a11yI18nChanged() {
-      // Re-run renderers so the selection column checkboxes, which read the
-      // grid's effective i18n, pick up the updated accessible names.
+      // Update selection column checkboxes accessible name.
       this.requestContentUpdate();
     }
 
