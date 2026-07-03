@@ -130,4 +130,24 @@ describe('dialog', () => {
       await visualDiff(div, 'title-slotted-header');
     });
   });
+
+  describe('content overflow', () => {
+    beforeEach(async () => {
+      element.$.overlay.style.maxWidth = '200px';
+      element.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+        const div = document.createElement('div');
+        div.style.width = '400px';
+        div.textContent = 'Content that is wider than the dialog';
+        root.appendChild(div);
+      };
+      await nextRender();
+    });
+
+    it('content-overflow', async () => {
+      await visualDiff(div, 'content-overflow');
+    });
+  });
 });
