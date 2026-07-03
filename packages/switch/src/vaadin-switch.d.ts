@@ -7,7 +7,7 @@ import { CheckboxMixin } from '@vaadin/checkbox/src/vaadin-checkbox-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 /**
- * Fired when the user flips the switch.
+ * Fired when the switch is toggled by the user.
  */
 export type SwitchChangeEvent = Event & {
   target: Switch;
@@ -105,7 +105,7 @@ export interface SwitchEventMap extends HTMLElementEventMap, SwitchCustomEventMa
  * | `--vaadin-switch-thumb-size`                     |
  * | `--vaadin-switch-track-width`                    |
  *
- * @fires {Event} change - Fired when the user flips the switch.
+ * @fires {Event} change - Fired when the switch is toggled by the user.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.

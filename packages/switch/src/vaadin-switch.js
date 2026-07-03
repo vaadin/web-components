@@ -79,7 +79,7 @@ import { switchStyles } from './styles/vaadin-switch-base-styles.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * @fires {Event} change - Fired when the user flips the switch.
+ * @fires {Event} change - Fired when the switch is toggled by the user.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
