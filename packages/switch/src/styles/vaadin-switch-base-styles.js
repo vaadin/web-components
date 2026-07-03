@@ -53,19 +53,16 @@ const switchControl = css`
     translate: calc(-1 * var(--_thumb-offset)) -50%;
   }
 
+  /* Read-only: mute the thumb and the checked-track fill to the border color and keep
+     a solid border. The dashed treatment is reserved for the focus ring (checkable()),
+     matching vaadin-slider. */
   :host([readonly]) {
-    --vaadin-switch-background: transparent;
     --vaadin-switch-border-color: var(--vaadin-border-color);
-    --_border-style: dashed;
+    --vaadin-switch-thumb-color: var(--vaadin-border-color);
   }
 
   :host([readonly][checked]) {
-    --vaadin-switch-background: var(--vaadin-background-container-strong);
-    --vaadin-switch-border-color: var(--vaadin-border-color);
-  }
-
-  :host([readonly][checked]) [part='thumb'] {
-    background: var(--vaadin-switch-thumb-color, var(--vaadin-text-color));
+    --vaadin-switch-background: var(--vaadin-border-color);
   }
 
   :host([disabled]) [part='thumb'] {
