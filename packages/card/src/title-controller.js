@@ -32,7 +32,7 @@ export class TitleController extends SlotChildObserveController {
       // Create or restore the default title node.
       this.restoreDefaultNode();
       this.updateDefaultNode(this.node);
-    } else if (this.node === this.defaultNode) {
+    } else if (this.node && this.node === this.defaultNode) {
       // Clearing the string title removes the generated node.
       this.node.remove();
     }

@@ -81,6 +81,13 @@ describe('vaadin-card', () => {
       expect(getStringTitleElement()).to.not.exist;
     });
 
+    it('should not throw when clearing string title before it is rendered', async () => {
+      card.cardTitle = 'Some title';
+      card.cardTitle = '';
+      await nextRender();
+      expect(getStringTitleElement()).to.not.exist;
+    });
+
     it('should clear custom title element when string title is set', async () => {
       const customTitleElement = fixtureSync('<span slot="title">Custom title element</span>');
       card.appendChild(customTitleElement);
