@@ -85,4 +85,19 @@ describe('dialog', () => {
     await nextUpdate(element);
     await visualDiff(div, 'content-no-padding-theme');
   });
+
+  it('content-overflow', async () => {
+    element.$.overlay.style.maxWidth = '200px';
+    element.renderer = (root) => {
+      if (root.firstChild) {
+        return;
+      }
+      const div = document.createElement('div');
+      div.style.width = '400px';
+      div.textContent = 'Content that is wider than the dialog';
+      root.appendChild(div);
+    };
+    await nextRender();
+    await visualDiff(div, 'content-overflow');
+  });
 });
