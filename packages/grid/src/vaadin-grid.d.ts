@@ -27,6 +27,12 @@ export interface GridI18n {
    * the row header cell text content or row index if there is no row header column.
    */
   selectRow?: string;
+
+  /**
+   * Accessible name (aria-label) for the grid sorters. The `{column}`
+   * placeholder is replaced with the sorter text content.
+   */
+  sorter?: string;
 }
 
 /**
@@ -297,6 +303,9 @@ declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
    *   // selection column body cell. The `{rowHeader}` placeholder is replaced with the
    *   // row header cell text content or row index if there is no row header column.
    *   selectRow: 'Select Row {rowHeader}',
+   *   // Accessible name (aria-label) for the grid sorters. The `{column}`
+   *   // placeholder is replaced with the sorter text content.
+   *   sorter: 'Sort by {column}',
    * }
    * ```
    */

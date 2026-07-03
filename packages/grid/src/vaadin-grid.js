@@ -18,6 +18,7 @@ import { GridMixin } from './vaadin-grid-mixin.js';
 const DEFAULT_I18N = {
   selectAll: 'Select All',
   selectRow: 'Select Row {rowHeader}',
+  sorter: 'Sort by {column}',
 };
 
 /**
@@ -303,6 +304,9 @@ class Grid extends GridMixin(I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(L
    *   // selection column body cell. The `{rowHeader}` placeholder is replaced with the
    *   // row header cell text content or row index if there is no row header column.
    *   selectRow: 'Select Row {rowHeader}',
+   *   // Accessible name (aria-label) for the grid sorters. The `{column}`
+   *   // placeholder is replaced with the sorter text content.
+   *   sorter: 'Sort by {column}',
    * }
    * ```
    *
