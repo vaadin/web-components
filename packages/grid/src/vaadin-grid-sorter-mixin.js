@@ -91,8 +91,12 @@ export const GridSorterMixin = (superClass) =>
     _updateAccessibleName() {
       // `_grid` is only assigned once the sorter becomes activated.
       // Resolve the grid from the parent cell column as a fallback.
-      const grid = this._grid || getClosestCell(this)?._column?._grid;
-      const ariaLabel = grid?.__effectiveI18n?.sorter?.replace('{column}', this.textContent.trim());
+      const grid = this._grid || getClosestCell(this)?.getRootNode().host;
+      if (!grid) {
+        return;
+      }
+
+      const ariaLabel = grid.__effectiveI18n.sorter?.replace('{column}', this.textContent.trim());
       if (ariaLabel) {
         this.setAttribute('aria-label', ariaLabel);
       } else {
