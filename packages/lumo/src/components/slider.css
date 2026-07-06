@@ -1,0 +1,86 @@
+:where(:root),
+:where(:host) {
+  --vaadin-slider-track-background: var(--lumo-contrast-30pct);
+  --vaadin-slider-track-border-radius: var(--lumo-border-radius-s);
+  --vaadin-slider-track-height: calc(var(--lumo-size-l) / 10);
+  /* Painted over the base color so translucent fill colors stay opaque */
+  --vaadin-slider-fill-background: linear-gradient(var(--lumo-primary-color), var(--lumo-primary-color))
+    var(--lumo-base-color);
+  --vaadin-slider-thumb-width: calc(var(--lumo-size-m) / 2);
+  --vaadin-slider-thumb-height: calc(var(--lumo-size-m) / 2);
+  --vaadin-slider-thumb-background: var(--lumo-base-color);
+  --vaadin-slider-thumb-border-width: 3px;
+  --vaadin-slider-thumb-border-color: var(--lumo-primary-color);
+  --vaadin-slider-marks-color: var(--lumo-body-text-color);
+  --vaadin-slider-marks-font-size: var(--lumo-font-size-xs);
+}
+
+/* The bubble needs no rules here: --vaadin-slider-bubble-* values cascade
+   through --vaadin-tooltip-* (tooltip.css) and --vaadin-overlay-* (overlay.css). */
+
+:where(vaadin-slider, vaadin-range-slider) {
+  padding: var(--lumo-space-xs) 0;
+  /* Also feeds the baseline guide margin in the base field grid */
+  --vaadin-field-baseline-input-height: var(--lumo-size-s);
+}
+
+/* Replace the base text-input height simulation with a fixed controls height */
+:where(vaadin-slider, vaadin-range-slider)::before {
+  height: var(--lumo-size-s);
+  padding: 0;
+  border: 0;
+}
+
+/* Minimum height of the controls row (track and thumb stay centered) */
+:where(vaadin-slider, vaadin-range-slider) > input {
+  min-height: var(--lumo-size-s);
+}
+
+/* Remove the input-field border and padding the base adds to the controls row of a labeled field */
+:where(vaadin-slider, vaadin-range-slider)[has-label] {
+  --vaadin-input-field-border-width: 0px;
+  --vaadin-padding-block-container: 0px;
+}
+
+/* Field part spacing: the field.css paddings and spacers replace the base grid margins */
+:where(vaadin-slider, vaadin-range-slider)::part(label) {
+  margin-bottom: 0;
+}
+
+:where(vaadin-slider, vaadin-range-slider)::part(helper-text) {
+  margin: 0;
+}
+
+:where(vaadin-slider, vaadin-range-slider)::part(marks) {
+  line-height: var(--lumo-line-height-xs);
+}
+
+:where(vaadin-slider, vaadin-range-slider)[readonly] {
+  --vaadin-slider-fill-background: linear-gradient(var(--lumo-contrast-70pct), var(--lumo-contrast-70pct))
+    var(--lumo-base-color);
+  --vaadin-slider-thumb-border-color: var(--lumo-contrast-70pct);
+}
+
+:where(vaadin-slider, vaadin-range-slider)[disabled] {
+  pointer-events: none;
+  --vaadin-slider-track-background: var(--lumo-contrast-10pct);
+  --vaadin-slider-fill-background: linear-gradient(var(--lumo-contrast-30pct), var(--lumo-contrast-30pct))
+    var(--lumo-base-color);
+  --vaadin-slider-thumb-background: var(--lumo-base-color);
+  --vaadin-slider-thumb-border-color: var(--lumo-contrast-30pct);
+}
+
+/* Fill the thumb while it is dragged or keyboard-focused */
+:where(vaadin-slider):not([readonly]):is([active], [focus-ring])::part(thumb),
+:where(vaadin-range-slider):not([readonly]):is([start-active], [focus-ring][start-focused])::part(thumb-start),
+:where(vaadin-range-slider):not([readonly]):is([end-active], [focus-ring][end-focused])::part(thumb-end) {
+  background: var(--vaadin-slider-fill-background);
+}
+
+/* Lumo focus ring sits flush against the thumb and stays solid in readonly */
+:where(vaadin-slider)[focus-ring]::part(thumb),
+:where(vaadin-range-slider)[focus-ring][start-focused]::part(thumb-start),
+:where(vaadin-range-slider)[focus-ring][end-focused]::part(thumb-end) {
+  outline-offset: 0;
+  outline-style: solid;
+}
