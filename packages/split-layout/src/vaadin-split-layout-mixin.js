@@ -265,10 +265,8 @@ export const SplitLayoutMixin = (superClass) =>
 
     /** @private */
     __onSplitterDown(event) {
-      // Reset the drag flag and clear the focus-ring on pointer interaction, so
-      // that clicking the splitter does not show the keyboard focus ring.
+      // Reset the drag flag on every new pointer interaction.
       this.__dragged = false;
-      this.toggleAttribute('focus-ring', false);
 
       if (!this._primaryChild || !this._secondaryChild) {
         return;

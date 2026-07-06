@@ -60,6 +60,13 @@ describe('keyboard', () => {
       expect(splitLayout.hasAttribute('focused')).to.be.false;
     });
 
+    it('should preserve focus-ring while dragging after keyboard focus', async () => {
+      await sendKeys({ press: 'Tab' });
+      expect(splitLayout.hasAttribute('focus-ring')).to.be.true;
+      track(splitter, 30, 0);
+      expect(splitLayout.hasAttribute('focus-ring')).to.be.true;
+    });
+
     it('should set focus-ring when focused using keyboard', async () => {
       await sendKeys({ press: 'Tab' });
       expect(document.activeElement).to.equal(splitLayout);
