@@ -166,6 +166,9 @@ export const SplitLayoutMixin = (superClass) =>
       event.preventDefault();
       event.stopPropagation();
 
+      // Force focus-ring if focused earlier with a pointer
+      this.toggleAttribute('focus-ring', true);
+
       this._setFlexBasis(this._primaryChild, newPrimary, container);
       this._setFlexBasis(this._secondaryChild, container - newPrimary, container);
       this.__updateValueNow();
@@ -262,6 +265,11 @@ export const SplitLayoutMixin = (superClass) =>
 
     /** @private */
     __onSplitterDown(event) {
+      // Reset the drag flag and clear the focus-ring on pointer interaction, so
+      // that clicking the splitter does not show the keyboard focus ring.
+      this.__dragged = false;
+      this.toggleAttribute('focus-ring', false);
+
       if (!this._primaryChild || !this._secondaryChild) {
         return;
       }
@@ -275,7 +283,11 @@ export const SplitLayoutMixin = (superClass) =>
 
     /** @private */
     __onSplitterUp() {
-      this.$.splitter.focus({ preventScroll: true });
+      // Focus the splitter on a plain click so it can be moved with the keyboard,
+      // but not after a drag, to avoid moving focus away from where the user was.
+      if (!this.__dragged) {
+        this.$.splitter.focus({ preventScroll: true });
+      }
 
       if (!this._primaryChild || !this._secondaryChild) {
         return;
@@ -291,6 +303,7 @@ export const SplitLayoutMixin = (superClass) =>
       }
 
       if (event.detail.state === 'start') {
+        this.__dragged = true;
         this._startSize = this.__getSizes();
 
         return;

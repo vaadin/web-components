@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender, track } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-split-layout.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -43,6 +43,21 @@ describe('keyboard', () => {
     it('should not set focus-ring when focused using pointer', async () => {
       await sendMouseToElement({ type: 'click', element: splitter });
       expect(splitLayout.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should set focus-ring when using arrow keys after pointer focus', async () => {
+      await sendMouseToElement({ type: 'click', element: splitter });
+      expect(splitLayout.hasAttribute('focus-ring')).to.be.false;
+      await sendKeys({ press: 'ArrowDown' });
+      expect(splitLayout.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should not move focus to the splitter when dragging', () => {
+      const input = splitLayout.querySelector('input');
+      input.focus();
+      track(splitter, 30, 0);
+      expect(getDeepActiveElement()).to.equal(input);
+      expect(splitLayout.hasAttribute('focused')).to.be.false;
     });
 
     it('should set focus-ring when focused using keyboard', async () => {
