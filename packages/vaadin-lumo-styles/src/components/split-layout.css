@@ -15,7 +15,7 @@
     transition: 0.1s background-color;
   }
 
-  :host([focus-ring]) [part='splitter'] {
+  :host([focus-ring]) [part='splitter']::after {
     outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
   }
 

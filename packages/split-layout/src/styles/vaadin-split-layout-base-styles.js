@@ -36,7 +36,8 @@ export const splitLayoutStyles = css`
     --_splitter-target-size: var(--vaadin-split-layout-splitter-target-size, 8px);
     --_handle-size: var(--vaadin-split-layout-handle-size, 4px);
     --_handle-target-size: var(--vaadin-split-layout-handle-target-size, 32px);
-    background: var(--vaadin-split-layout-splitter-background, var(--vaadin-background-container-strong));
+    --_splitter-background: var(--vaadin-split-layout-splitter-background, var(--vaadin-background-container-strong));
+    background: var(--_splitter-background);
     flex: none;
     position: relative;
     z-index: 1;
@@ -51,13 +52,14 @@ export const splitLayoutStyles = css`
     content: '';
     inset: 0 calc((var(--_splitter-target-size) - var(--_splitter-size)) / -2);
     position: absolute;
+    z-index: -1;
   }
 
   :host([orientation='vertical']) [part='splitter']::after {
     inset: calc((var(--_splitter-target-size) - var(--_splitter-size)) / -2) 0;
   }
 
-  :host(:not([orientation='vertical'])) > [part='splitter'] {
+  :host([orientation='horizontal']) > [part='splitter'] {
     cursor: ew-resize;
     width: var(--_splitter-size);
   }
@@ -67,9 +69,16 @@ export const splitLayoutStyles = css`
     height: var(--_splitter-size);
   }
 
-  :host([focus-ring]) [part='splitter'] {
+  :host([focus-ring]) [part='splitter']::after {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    outline-offset: 1px;
+  }
+
+  :host([orientation='horizontal'][focus-ring]) [part='splitter']::after {
+    inset-block: var(--vaadin-focus-ring-width, 2px);
+  }
+
+  :host([orientation='vertical'][focus-ring]) [part='splitter']::after {
+    inset-inline: var(--vaadin-focus-ring-width, 2px);
   }
 
   [part='handle'] {
@@ -104,6 +113,15 @@ export const splitLayoutStyles = css`
     --vaadin-split-layout-splitter-size: 1px;
     --vaadin-split-layout-splitter-target-size: 5px;
     --vaadin-split-layout-handle-size: 3px;
+  }
+
+  :host([theme~='small'][focus-ring]) > [part='splitter'] {
+    background: transparent;
+
+    &::after {
+      background: linear-gradient(var(--_splitter-background), var(--_splitter-background))
+        var(--vaadin-background-color);
+    }
   }
 
   :host([theme~='small']) [part='splitter'] [part='handle'] {
