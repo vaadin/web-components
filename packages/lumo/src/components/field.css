@@ -1,0 +1,97 @@
+/* Shared Lumo styles for the field mixin parts: label, helper text, error message,
+   required indicator (ported from the legacy field-* mixins). Widen the selector
+   lists as more field components are ported. */
+:where(:root),
+:where(:host) {
+  --vaadin-input-field-label-color: var(--lumo-secondary-text-color);
+  --vaadin-input-field-label-font-size: var(--lumo-font-size-s);
+  --vaadin-input-field-label-line-height: 1;
+  --vaadin-input-field-helper-font-size: var(--lumo-font-size-xs);
+  --vaadin-input-field-helper-line-height: var(--lumo-line-height-xs);
+  --vaadin-input-field-error-color: var(--lumo-error-text-color);
+  --vaadin-input-field-error-font-size: var(--lumo-font-size-xs);
+  --vaadin-input-field-error-line-height: var(--lumo-line-height-xs);
+  --vaadin-input-field-required-indicator: '\2022';
+  --vaadin-input-field-required-indicator-color: var(--lumo-primary-text-color);
+}
+
+:where(vaadin-slider, vaadin-range-slider)[has-label] {
+  padding-top: var(--lumo-space-m);
+}
+
+:where(vaadin-slider, vaadin-range-slider)::part(label) {
+  max-width: 100%;
+  padding-inline: calc(var(--lumo-border-radius-m) / 4) 1em;
+  /* Workaround for diacritics being cut off: top padding compensated by a negative margin */
+  padding-top: 0.25em;
+  margin-top: -0.25em;
+  padding-bottom: 0.5em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: color 0.2s;
+}
+
+:where(vaadin-slider, vaadin-range-slider)[focused]:not([readonly])::part(label) {
+  color: var(--vaadin-input-field-focused-label-color, var(--lumo-primary-text-color));
+}
+
+@media (any-hover: hover) {
+  :where(vaadin-slider, vaadin-range-slider):hover:not([readonly], [focused])::part(label) {
+    color: var(--vaadin-input-field-hovered-label-color, var(--lumo-body-text-color));
+  }
+
+  :where(vaadin-slider, vaadin-range-slider):hover:not([readonly])::part(helper-text) {
+    color: var(--lumo-body-text-color);
+  }
+}
+
+/* Pin the indicator to the label edge (the label reserves 1em end padding) */
+:where(vaadin-slider, vaadin-range-slider)::part(required-indicator) {
+  inset-inline-end: 0;
+}
+
+:where(vaadin-slider, vaadin-range-slider)[invalid] {
+  --vaadin-input-field-required-indicator-color: var(--lumo-error-text-color);
+}
+
+:where(vaadin-slider, vaadin-range-slider)::part(helper-text) {
+  margin-inline-start: calc(var(--lumo-border-radius-m) / 4);
+  transition: color 0.2s;
+}
+
+:where(vaadin-slider, vaadin-range-slider)[has-helper]::part(helper-text)::before {
+  content: '';
+  display: block;
+  height: var(--vaadin-input-field-helper-spacing, 0.4em);
+}
+
+:where(vaadin-slider, vaadin-range-slider)[disabled]::part(helper-text) {
+  color: var(--lumo-disabled-text-color);
+}
+
+/* Lumo has no error icon; remove the base warn icon entirely. The error-message
+   keeps its base display (flex when shown, none otherwise), so an empty field
+   adds no height. The top gap comes from a margin instead of a flex-item spacer. */
+:where(vaadin-slider, vaadin-range-slider)::part(error-message) {
+  margin-top: 0.4em;
+  margin-inline-start: calc(var(--lumo-border-radius-m) / 4);
+}
+
+:where(vaadin-slider, vaadin-range-slider)::part(error-message)::before {
+  content: none;
+}
+
+:where(vaadin-slider, vaadin-range-slider)[has-helper][theme~='helper-above-field']::part(label) {
+  padding-bottom: var(--vaadin-input-field-helper-spacing, 0.4em);
+}
+
+:where(vaadin-slider, vaadin-range-slider)[has-helper][theme~='helper-above-field']::part(helper-text)::before {
+  display: none;
+}
+
+:where(vaadin-slider, vaadin-range-slider)[has-helper][theme~='helper-above-field']::part(helper-text)::after {
+  content: '';
+  display: block;
+  height: var(--vaadin-input-field-helper-spacing, 0.4em);
+}
