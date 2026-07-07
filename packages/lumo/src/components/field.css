@@ -15,7 +15,7 @@
   --vaadin-input-field-required-indicator-color: var(--lumo-primary-text-color);
 }
 
-:where(vaadin-slider, vaadin-range-slider) {
+:where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group) {
   &[has-label] {
     padding-top: var(--lumo-space-m);
   }
@@ -27,6 +27,8 @@
     padding-top: 0.25em;
     margin-top: -0.25em;
     padding-bottom: 0.5em;
+    /* Label→input spacing comes from padding-bottom; drop the base grid margin */
+    margin-bottom: 0;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
