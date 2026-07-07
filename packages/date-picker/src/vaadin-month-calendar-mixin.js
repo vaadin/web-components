@@ -87,6 +87,28 @@ export const MonthCalendarMixin = (superClass) =>
           value: () => false,
         },
 
+        /**
+         * The shared controller that resolves and caches the dates disabled by the date-picker's
+         * `disabledDatesProvider`. Set by the overlay content; used to look up the disabled state
+         * of this month's dates.
+         * @type {object | undefined}
+         * @private
+         */
+        disabledDatesController: {
+          type: Object,
+          attribute: false,
+        },
+
+        /**
+         * Bumped by the overlay content whenever the controller's cache or loading state changes,
+         * to trigger a re-render of this month.
+         * @private
+         */
+        __disabledDatesVersion: {
+          type: Number,
+          attribute: false,
+        },
+
         enteredDate: {
           type: Date,
         },
@@ -97,10 +119,32 @@ export const MonthCalendarMixin = (superClass) =>
           computed: '__computeDisabled(month, minDate, maxDate)',
         },
 
+        /**
+         * Set of `year-month-day` keys for the dates disabled by the provider. Shared with the
+         * controller, so it grows as more months are resolved.
+         * @private
+         */
+        __disabledDatesSet: {
+          type: Object,
+          value: () => new Set(),
+          attribute: false,
+        },
+
+        /**
+         * True while the provider result for the currently displayed month is still pending.
+         * @private
+         */
+        __loadingDisabledDates: {
+          type: Boolean,
+          value: false,
+          attribute: false,
+        },
+
         /** @protected */
         _days: {
           type: Array,
-          computed: '__computeDays(month, i18n, minDate, maxDate, isDateDisabled)',
+          computed:
+            '__computeDays(month, i18n, minDate, maxDate, isDateDisabled, __disabledDatesSet, __loadingDisabledDates)',
         },
 
         /** @protected */
@@ -122,7 +166,11 @@ export const MonthCalendarMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__focusedDateChanged(focusedDate, _days)', '_showWeekNumbersChanged(showWeekNumbers, i18n)'];
+      return [
+        '__focusedDateChanged(focusedDate, _days)',
+        '_showWeekNumbersChanged(showWeekNumbers, i18n)',
+        '__updateDisabledDates(month, disabledDatesController, __disabledDatesVersion)',
+      ];
     }
 
     get focusableDateElement() {
@@ -345,6 +393,10 @@ export const MonthCalendarMixin = (superClass) =>
         result.push('disabled');
       }
 
+      if (date && this.__loadingDisabledDates) {
+        result.push('pending');
+      }
+
       if (dateEquals(date, focusedDate) && (hasFocus || dateEquals(date, enteredDate))) {
         result.push('focused');
       }
@@ -378,9 +430,45 @@ export const MonthCalendarMixin = (superClass) =>
       return String(this.__isDaySelected(date, selectedDate));
     }
 
+    /**
+     * Consults `disabledDatesProvider` for the currently displayed month and stores the result.
+     * For an async (Promise) result, the month is marked as loading until it resolves; stale
+     * responses (month or provider changed meanwhile) are ignored.
+     * @private
+     */
+    __updateDisabledDates(month, disabledDatesController) {
+      if (month === undefined || !disabledDatesController || !disabledDatesController.provider) {
+        this.__loadingDisabledDates = false;
+        if (this.__disabledDatesSet.size > 0) {
+          this.__disabledDatesSet = new Set();
+        }
+        return;
+      }
+
+      // Read-only: the overlay drives loading for the whole visible range. Here we just reflect
+      // the controller's current cached state for this month.
+      this.__loadingDisabledDates = !disabledDatesController.isMonthLoaded(month);
+      this.__disabledDatesSet = disabledDatesController.disabledDates;
+    }
+
+    /** @private */
+    __disabledDateKey(year, month, day) {
+      return `${year}-${month}-${day}`;
+    }
+
     /** @private */
     __isDayDisabled(date, minDate, maxDate, isDateDisabled) {
-      return !dateAllowed(date, minDate, maxDate, isDateDisabled);
+      if (!dateAllowed(date, minDate, maxDate, isDateDisabled)) {
+        return true;
+      }
+      if (date && this.disabledDatesController && this.disabledDatesController.provider) {
+        // While the provider result for this month is pending, the whole month is non-selectable.
+        if (this.__loadingDisabledDates) {
+          return true;
+        }
+        return this.__disabledDatesSet.has(this.__disabledDateKey(date.getFullYear(), date.getMonth(), date.getDate()));
+      }
+      return false;
     }
 
     /** @private */

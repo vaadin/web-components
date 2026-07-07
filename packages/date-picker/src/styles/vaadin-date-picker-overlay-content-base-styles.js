@@ -5,8 +5,10 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
+import { loaderStyles } from '@vaadin/component-base/src/styles/loader-styles.js';
 
 export const overlayContentStyles = [
+  loaderStyles,
   css`
     :host {
       display: grid;
@@ -18,6 +20,7 @@ export const overlayContentStyles = [
       height: 100%;
       outline: none;
       overflow: hidden;
+      position: relative;
     }
 
     :host([desktop]) {
@@ -51,6 +54,16 @@ export const overlayContentStyles = [
 
     [hidden] {
       display: none !important;
+    }
+
+    /* Loading spinner shown while the disabled dates provider resolves. Positioned over the month
+       scroller (which paints its own transformed layers, so grid stacking is not enough). */
+    [part='loader'] {
+      position: absolute;
+      z-index: 1;
+      inset-block-start: var(--vaadin-date-picker-month-header-font-size, 0.9375rem);
+      inset-inline: 0;
+      margin-inline: auto;
     }
 
     ::slotted([slot='months']) {

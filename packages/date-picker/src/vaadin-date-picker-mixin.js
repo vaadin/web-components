@@ -209,6 +209,31 @@ export const DatePickerMixin = (subclass) =>
         },
 
         /**
+         * A batch function that is consulted for a range of dates that the calendar is about
+         * to render. It receives a `DatePickerDateRange` object (`{ start, end }` of
+         * `DatePickerDate`) and returns, or resolves with, an array of `DatePickerDate` objects
+         * that should be disabled within that range.
+         *
+         * Unlike `isDateDisabled`, which is called once per date, this function is called for a
+         * range of dates at a time, and again as the calendar renders further dates. The size of
+         * the range is decided by the calendar and may span multiple months. It may return a
+         * `Promise`, in which case the affected dates render in a non-selectable pending state
+         * until it resolves.
+         *
+         * Dates disabled by this function are combined with `min`, `max` and `isDateDisabled`:
+         * a date is disabled if it is out of the min/max range, or `isDateDisabled` returns
+         * `true`, or it is included in this function's result.
+         *
+         * Keep a stable reference to the function. Assigning a new function resets the internal
+         * cache and re-fetches every visible range.
+         *
+         * @type {function(DatePickerDateRange): Array<DatePickerDate> | Promise<Array<DatePickerDate>> | undefined}
+         */
+        disabledDatesProvider: {
+          type: Function,
+        },
+
+        /**
          * The earliest date that can be selected. All earlier dates will be disabled.
          * @type {Date | undefined}
          * @protected
@@ -261,7 +286,7 @@ export const DatePickerMixin = (subclass) =>
       return [
         '_selectedDateChanged(_selectedDate, __effectiveI18n)',
         '_focusedDateChanged(_focusedDate, __effectiveI18n)',
-        '__updateOverlayContent(_overlayContent, __effectiveI18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers, isDateDisabled, __enteredDate)',
+        '__updateOverlayContent(_overlayContent, __effectiveI18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers, isDateDisabled, disabledDatesProvider, __enteredDate)',
         '__updateOverlayContentTheme(_overlayContent, _theme)',
         '__updateOverlayContentFullScreen(_overlayContent, _fullscreen)',
       ];
@@ -578,7 +603,9 @@ export const DatePickerMixin = (subclass) =>
       const inputValue = this._inputElementValue;
       const inputValid = !inputValue || (!!this._selectedDate && inputValue === this.__formatDate(this._selectedDate));
       const isDateValid =
-        !this._selectedDate || dateAllowed(this._selectedDate, this._minDate, this._maxDate, this.isDateDisabled);
+        !this._selectedDate ||
+        (dateAllowed(this._selectedDate, this._minDate, this._maxDate, this.isDateDisabled) &&
+          !this.__isDateDisabledByProvider(this._selectedDate));
 
       let inputValidity = true;
       if (this.inputElement && this.inputElement.checkValidity) {
@@ -586,6 +613,20 @@ export const DatePickerMixin = (subclass) =>
       }
 
       return inputValid && isDateValid && inputValidity;
+    }
+
+    /**
+     * Returns true if the given date is known to be disabled by `disabledDatesProvider`. The
+     * result comes from the overlay's cache of already-loaded ranges, so this only reports a
+     * disabled date once the range containing it has been loaded (typically while the overlay is
+     * or was open). When the async provider is used, server-side validation is expected to
+     * enforce disabled dates independently.
+     * @private
+     */
+    __isDateDisabledByProvider(date) {
+      return (
+        !!this.disabledDatesProvider && !!this._overlayContent && this._overlayContent.__isDisabledByProvider(date)
+      );
     }
 
     /**
@@ -842,6 +883,7 @@ export const DatePickerMixin = (subclass) =>
       selectedDate,
       showWeekNumbers,
       isDateDisabled,
+      disabledDatesProvider,
       enteredDate,
     ) {
       if (overlayContent) {
@@ -853,6 +895,7 @@ export const DatePickerMixin = (subclass) =>
         overlayContent.selectedDate = selectedDate;
         overlayContent.showWeekNumbers = showWeekNumbers;
         overlayContent.isDateDisabled = isDateDisabled;
+        overlayContent.disabledDatesProvider = disabledDatesProvider;
         overlayContent.enteredDate = enteredDate;
       }
     }

@@ -116,6 +116,14 @@ describe('date-picker', () => {
           await visualDiff(div, `${dir}-dropdown`);
         });
 
+        it('disabled dates loading', async () => {
+          element.value = '2000-01-01';
+          // A never-resolving provider keeps the calendar in the loading state.
+          element.disabledDatesProvider = () => new Promise(() => {});
+          await openOverlay();
+          await visualDiff(div, `${dir}-disabled-dates-loading`);
+        });
+
         it('week numbers', async () => {
           element.value = '2000-01-01';
           element.showWeekNumbers = true;

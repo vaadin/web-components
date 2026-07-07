@@ -27,3 +27,8 @@ vaadin-date-picker input:placeholder-shown {
 vaadin-month-calendar::part(focused)::before {
   animation: none !important;
 }
+
+/* Show the loading spinner immediately instead of fading it in */
+vaadin-date-picker-overlay-content::part(loader) {
+  animation: none !important;
+}

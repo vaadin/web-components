@@ -1,0 +1,143 @@
+import { expect } from '@vaadin/chai-plugins';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
+import '../src/vaadin-date-picker.js';
+import { open } from './helpers.js';
+
+describe('disabledDatesProvider integration', () => {
+  let datePicker, today, year, month;
+
+  function getMonthCalendar(y, m) {
+    return [...datePicker._overlayContent.querySelectorAll('vaadin-month-calendar')].find(
+      (calendar) => calendar.month && calendar.month.getFullYear() === y && calendar.month.getMonth() === m,
+    );
+  }
+
+  function getCell(calendar, day) {
+    return [...calendar.shadowRoot.querySelectorAll('[part~="date"]:not(:empty)')].find(
+      (cell) => cell.date.getDate() === day,
+    );
+  }
+
+  function isDisabled(cell) {
+    return cell.hasAttribute('disabled') && cell.part.contains('disabled');
+  }
+
+  // A provider that disables the 15th of every month in the requested range.
+  function disableFifteenth({ start, end }) {
+    const disabled = [];
+    const first = new Date(start.year, start.month, start.day);
+    const last = new Date(end.year, end.month, end.day);
+    const days = Math.round((last - first) / (24 * 60 * 60 * 1000));
+    for (let i = 0; i <= days; i++) {
+      const date = new Date(first.getFullYear(), first.getMonth(), first.getDate() + i);
+      if (date.getDate() === 15) {
+        disabled.push({ year: date.getFullYear(), month: date.getMonth(), day: date.getDate() });
+      }
+    }
+    return disabled;
+  }
+
+  beforeEach(() => {
+    datePicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
+    today = new Date();
+    year = today.getFullYear();
+    month = today.getMonth();
+  });
+
+  describe('synchronous provider', () => {
+    beforeEach(async () => {
+      datePicker.disabledDatesProvider = disableFifteenth;
+      await open(datePicker);
+    });
+
+    it('should mark only the provided dates as disabled', () => {
+      const calendar = getMonthCalendar(year, month);
+      expect(isDisabled(getCell(calendar, 15))).to.be.true;
+      expect(isDisabled(getCell(calendar, 16))).to.be.false;
+    });
+
+    it('should not show the loading spinner for a synchronous result', () => {
+      expect(datePicker._overlayContent.hasAttribute('loading')).to.be.false;
+    });
+  });
+
+  describe('asynchronous provider', () => {
+    let provider, resolveProvider;
+
+    beforeEach(async () => {
+      provider = sinon.stub().callsFake(
+        () =>
+          new Promise((resolve) => {
+            resolveProvider = resolve;
+          }),
+      );
+      datePicker.disabledDatesProvider = provider;
+      await open(datePicker);
+    });
+
+    it('should consult the provider for a range wider than a single month', () => {
+      const { start, end } = provider.firstCall.args[0];
+      const months = (end.year - start.year) * 12 + (end.month - start.month);
+      expect(months).to.be.greaterThan(1);
+    });
+
+    it('should show the loading spinner and mark the calendar busy while pending', () => {
+      expect(datePicker._overlayContent.hasAttribute('loading')).to.be.true;
+      expect(datePicker._overlayContent.getAttribute('aria-busy')).to.equal('true');
+      const loader = datePicker._overlayContent.shadowRoot.querySelector('[part="loader"]');
+      expect(loader).to.exist;
+      expect(getComputedStyle(loader).display).to.not.equal('none');
+    });
+
+    it('should hide the spinner and mark the provided dates disabled after resolving', async () => {
+      resolveProvider(disableFifteenth(provider.firstCall.args[0]));
+      await nextRender();
+      await nextRender();
+
+      expect(datePicker._overlayContent.hasAttribute('loading')).to.be.false;
+      expect(datePicker._overlayContent.hasAttribute('aria-busy')).to.be.false;
+      const calendar = getMonthCalendar(year, month);
+      expect(isDisabled(getCell(calendar, 15))).to.be.true;
+      expect(isDisabled(getCell(calendar, 16))).to.be.false;
+    });
+
+    it('should not re-consult the provider for already loaded months', async () => {
+      resolveProvider([]);
+      await nextRender();
+      provider.resetHistory();
+
+      // Re-trigger a load for the same visible months (scroll loading is debounced).
+      datePicker._overlayContent._onMonthScroll();
+      datePicker._overlayContent._loadDisabledDatesDebouncer?.flush();
+      await nextRender();
+
+      expect(provider).to.not.be.called;
+    });
+
+    it('should load disabled dates when navigating to another month (e.g. via the year scroller)', async () => {
+      resolveProvider(disableFifteenth(provider.firstCall.args[0]));
+      await nextRender();
+      provider.resetHistory();
+
+      // Navigate far ahead without scrolling — the same code path a year click uses.
+      const target = new Date(year + 3, month, 1);
+      datePicker._overlayContent.scrollToDate(target, false);
+      datePicker._overlayContent._loadDisabledDatesDebouncer?.flush();
+      await nextRender();
+
+      expect(provider).to.be.called;
+      const { start, end } = provider.lastCall.args[0];
+      const targetIndex = target.getFullYear() * 12 + target.getMonth();
+      expect(start.year * 12 + start.month).to.be.at.most(targetIndex);
+      expect(end.year * 12 + end.month).to.be.at.least(targetIndex);
+
+      resolveProvider(disableFifteenth(provider.lastCall.args[0]));
+      await nextRender();
+      await nextRender();
+
+      const calendar = getMonthCalendar(target.getFullYear(), target.getMonth());
+      expect(isDisabled(getCell(calendar, 15))).to.be.true;
+    });
+  });
+});

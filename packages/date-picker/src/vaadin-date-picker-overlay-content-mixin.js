@@ -9,6 +9,7 @@ import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { dateAfterXMonths, dateAllowed, dateEquals, getClosestDate } from './vaadin-date-picker-helper.js';
+import { DisabledDatesController } from './vaadin-disabled-dates-controller.js';
 
 export const DatePickerOverlayContentMixin = (superClass) =>
   class DatePickerOverlayContentMixin extends superClass {
@@ -106,6 +107,37 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           type: Function,
         },
 
+        /**
+         * A batch function that is consulted for a range of dates the calendar is about to render
+         * and returns, or resolves with, an array of `DatePickerDate` objects to disable.
+         *
+         * @type {function(DatePickerDateRange): Array<DatePickerDate> | Promise<Array<DatePickerDate>> | undefined}
+         */
+        disabledDatesProvider: {
+          type: Function,
+        },
+
+        /**
+         * Reflected while the disabled dates provider is resolving, so the overlay can show a
+         * loading spinner.
+         */
+        loading: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
+         * Bumped whenever the disabled dates controller's cache or loading state changes, to
+         * re-run `__updateCalendars` and push the new state to the rendered months.
+         * @private
+         */
+        _disabledDatesVersion: {
+          type: Number,
+          value: 0,
+          attribute: false,
+        },
+
         enteredDate: {
           type: Date,
           sync: true,
@@ -138,9 +170,11 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme, isDateDisabled, enteredDate)',
+        '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme, isDateDisabled, _disabledDatesVersion, enteredDate)',
+        '__disabledDatesProviderChanged(disabledDatesProvider)',
+        '__loadingChanged(loading)',
         '__updateCancelButton(_cancelButton, i18n)',
-        '__updateTodayButton(_todayButton, i18n, minDate, maxDate, isDateDisabled)',
+        '__updateTodayButton(_todayButton, i18n, minDate, maxDate, isDateDisabled, _disabledDatesVersion)',
         '__updateYears(years, selectedDate, _theme)',
       ];
     }
@@ -163,6 +197,13 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @protected */
     _initControllers() {
+      this._disabledDatesController = new DisabledDatesController(this, () => {
+        this.loading = this._disabledDatesController.loading;
+        this._disabledDatesVersion += 1;
+      });
+      this.addController(this._disabledDatesController);
+      this._disabledDatesController.setProvider(this.disabledDatesProvider);
+
       this.addController(
         new MediaQueryController(this._desktopMediaQuery, (matches) => {
           this._desktopMode = matches;
@@ -299,6 +340,17 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       }
     }
 
+    /** @private */
+    __loadingChanged(loading) {
+      // Mark the calendar region as busy while a provider request is in flight so assistive
+      // technology knows the disabled dates are still updating.
+      if (loading) {
+        this.setAttribute('aria-busy', 'true');
+      } else {
+        this.removeAttribute('aria-busy');
+      }
+    }
+
     // eslint-disable-next-line @typescript-eslint/max-params
     __updateCalendars(
       calendars,
@@ -311,6 +363,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       ignoreTaps,
       theme,
       isDateDisabled,
+      disabledDatesVersion,
       enteredDate,
     ) {
       if (calendars?.length) {
@@ -319,6 +372,8 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           calendar.minDate = minDate;
           calendar.maxDate = maxDate;
           calendar.isDateDisabled = isDateDisabled;
+          calendar.disabledDatesController = this._disabledDatesController;
+          calendar.__disabledDatesVersion = disabledDatesVersion;
           calendar.focusedDate = focusedDate;
           calendar.selectedDate = selectedDate;
           calendar.showWeekNumbers = showWeekNumbers;
@@ -331,7 +386,46 @@ export const DatePickerOverlayContentMixin = (superClass) =>
             calendar.removeAttribute('theme');
           }
         });
+
+        this.__ensureVisibleDisabledDatesLoaded();
       }
+    }
+
+    /**
+     * Asks the disabled dates controller to load the range of months currently rendered by the
+     * scroller. The controller expands the range with a prefetch buffer and skips months that are
+     * already loaded or in flight, so one request covers the whole visible range.
+     * @private
+     */
+    __ensureVisibleDisabledDatesLoaded() {
+      const controller = this._disabledDatesController;
+      if (!controller || !controller.provider || !this.calendars || this.calendars.length === 0) {
+        return;
+      }
+      const indexes = this.calendars
+        .map((calendar) => calendar.month)
+        .filter(Boolean)
+        .map((month) => month.getFullYear() * 12 + month.getMonth());
+      if (indexes.length === 0) {
+        return;
+      }
+      const min = Math.min(...indexes);
+      const max = Math.max(...indexes);
+      controller.ensureRangeLoaded(
+        new Date(Math.floor(min / 12), min % 12, 1),
+        new Date(Math.floor(max / 12), max % 12, 1),
+      );
+    }
+
+    /**
+     * Debounced variant used on scroll, so a continuous scroll only triggers one load once it
+     * settles instead of a request per intermediate position.
+     * @private
+     */
+    __scheduleVisibleDisabledDatesLoad() {
+      this._loadDisabledDatesDebouncer = Debouncer.debounce(this._loadDisabledDatesDebouncer, timeOut.after(200), () =>
+        this.__ensureVisibleDisabledDatesLoaded(),
+      );
     }
 
     /** @private */
@@ -355,6 +449,17 @@ export const DatePickerOverlayContentMixin = (superClass) =>
      */
     _selectDate(dateToSelect) {
       if (!this._dateAllowed(dateToSelect)) {
+        return false;
+      }
+      // Block dates disabled by the provider, or in a month whose provider result has not loaded
+      // yet, so they cannot be selected via keyboard or the today button either.
+      const controller = this._disabledDatesController;
+      if (
+        dateToSelect &&
+        controller &&
+        controller.provider &&
+        (controller.isDateDisabled(dateToSelect) || !controller.isMonthLoaded(dateToSelect))
+      ) {
         return false;
       }
       this.selectedDate = dateToSelect;
@@ -452,12 +557,17 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       const monthPosition = this._monthScroller.position;
       this._visibleMonthIndex = Math.floor(monthPosition);
       this._yearScroller.position = (monthPosition + this._originDate.getMonth()) / 12;
+      // Called from every navigation path (month scroll, year click, reveal), so this is the
+      // single place to keep the disabled dates loaded for the newly visible months. Debounced
+      // so a continuous scroll only triggers one load once it settles.
+      this.__scheduleVisibleDisabledDatesLoad();
     }
 
     /** @private */
     _repositionMonthScroller() {
       this._monthScroller.position = this._yearScroller.position * 12 - this._originDate.getMonth();
       this._visibleMonthIndex = Math.floor(this._monthScroller.position);
+      this.__scheduleVisibleDisabledDatesLoad();
     }
 
     /** @private */
@@ -917,8 +1027,39 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @private */
+    __disabledDatesProviderChanged(disabledDatesProvider) {
+      if (this._disabledDatesController) {
+        this._disabledDatesController.setProvider(disabledDatesProvider);
+      }
+    }
+
+    /**
+     * Returns true if the given date is known to be disabled by `disabledDatesProvider`. Only
+     * reports dates in an already-resolved month; dates in a not-yet-loaded month are treated as
+     * not disabled here (server-side validation covers them in Flow).
+     * @private
+     */
+    __isDisabledByProvider(date) {
+      return (
+        !!date &&
+        !!this._disabledDatesController &&
+        !!this._disabledDatesController.provider &&
+        this._disabledDatesController.isDateDisabled(date)
+      );
+    }
+
+    /** @private */
     _isTodayAllowed(min, max, isDateDisabled) {
-      return this._dateAllowed(this._getTodayMidnight(), min, max, isDateDisabled);
+      const today = this._getTodayMidnight();
+      if (!this._dateAllowed(today, min, max, isDateDisabled)) {
+        return false;
+      }
+      // Today is not selectable while it is disabled by the provider or its month is still loading.
+      const controller = this._disabledDatesController;
+      if (controller && controller.provider && (controller.isDateDisabled(today) || !controller.isMonthLoaded(today))) {
+        return false;
+      }
+      return true;
     }
 
     /** @private */

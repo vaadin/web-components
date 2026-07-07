@@ -29,5 +29,31 @@
       picker.isDateDisabled = isDateDisabled;
       picker.min = '2023-11-01';
     </script>
+
+    <h3>Disabled dates provider</h3>
+    <p>
+      Mondays and the 20th of each month are disabled. They are loaded asynchronously (a spinner is
+      shown while loading) via <code>disabledDatesProvider</code>. Results are cached and prefetched
+      around the visible months, so scrolling back and forth does not re-fetch.
+    </p>
+    <vaadin-date-picker id="disabled-dates-provider" label="Reservation date"></vaadin-date-picker>
+
+    <script type="module">
+      document.querySelector('#disabled-dates-provider').disabledDatesProvider = ({ start, end }) =>
+        new Promise((resolve) => {
+          setTimeout(() => {
+            const disabled = [];
+            const date = new Date(start.year, start.month, start.day);
+            const last = new Date(end.year, end.month, end.day);
+            while (date <= last) {
+              if (date.getDay() === 1 || date.getDate() === 20) {
+                disabled.push({ year: date.getFullYear(), month: date.getMonth(), day: date.getDate() });
+              }
+              date.setDate(date.getDate() + 1);
+            }
+            resolve(disabled);
+          }, 600);
+        });
+    </script>
   </body>
 </html>

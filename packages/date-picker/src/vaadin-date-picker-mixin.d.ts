@@ -18,6 +18,17 @@ export interface DatePickerDate {
   year: number;
 }
 
+export interface DatePickerDateRange {
+  /**
+   * The first date of the range (inclusive).
+   */
+  start: DatePickerDate;
+  /**
+   * The last date of the range (inclusive).
+   */
+  end: DatePickerDate;
+}
+
 export interface DatePickerI18n {
   /**
    * An array with the full names of months starting
@@ -235,6 +246,23 @@ export declare class DatePickerMixinClass {
    * boolean.
    */
   isDateDisabled: (date: DatePickerDate) => boolean;
+
+  /**
+   * A batch function that is consulted for a range of dates that the calendar is about to
+   * render. It receives a `DatePickerDateRange` object and returns, or resolves with, an array
+   * of `DatePickerDate` objects that should be disabled within that range.
+   *
+   * Unlike `isDateDisabled`, which is called once per date, this function is called for a range
+   * of dates at a time, and again as the calendar renders further dates. The size of the range
+   * is decided by the calendar and may span multiple months. It may return a `Promise`, in which
+   * case the affected dates render in a non-selectable pending state until it resolves.
+   *
+   * Dates disabled by this function are combined with `min`, `max` and `isDateDisabled`.
+   *
+   * Keep a stable reference to the function. Assigning a new function resets the internal cache
+   * and re-fetches every visible range.
+   */
+  disabledDatesProvider: (range: DatePickerDateRange) => DatePickerDate[] | Promise<DatePickerDate[]>;
 
   /**
    * Opens the dropdown.

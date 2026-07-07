@@ -206,6 +206,18 @@ function getTimePicker(dateTimePicker) {
       expect(datePicker.showWeekNumbers).to.be.true;
     });
 
+    it('should propagate isDateDisabled to date picker', () => {
+      const isDateDisabled = (date) => date.day === 1;
+      dateTimePicker.isDateDisabled = isDateDisabled;
+      expect(datePicker.isDateDisabled).to.equal(isDateDisabled);
+    });
+
+    it('should propagate disabledDatesProvider to date picker', () => {
+      const disabledDatesProvider = () => [];
+      dateTimePicker.disabledDatesProvider = disabledDatesProvider;
+      expect(datePicker.disabledDatesProvider).to.equal(disabledDatesProvider);
+    });
+
     it('should propagate invalid to date and time pickers', async () => {
       dateTimePicker.invalid = true;
       await nextFrame();

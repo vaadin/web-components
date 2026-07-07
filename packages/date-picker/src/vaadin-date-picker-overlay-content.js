@@ -43,6 +43,8 @@ class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
       <slot name="months"></slot>
       <slot name="years"></slot>
 
+      <div part="loader" aria-hidden="true"></div>
+
       <div role="toolbar" part="toolbar">
         <slot name="today-button"></slot>
         <div
