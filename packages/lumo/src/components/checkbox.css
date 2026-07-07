@@ -1,0 +1,81 @@
+:where(:root),
+:where(:host) {
+  --vaadin-checkbox-size: calc(var(--lumo-size-m) / 2);
+  /* Lumo checkbox is a filled box with no border (readonly re-enables it) */
+  --vaadin-checkbox-border-width: 0px;
+  --vaadin-checkbox-background: var(--lumo-contrast-20pct);
+  --vaadin-checkbox-marker-color: var(--lumo-primary-contrast-color);
+  /* The box-to-label gap comes from the box margin plus the label's leading
+     padding, so the grid column gap is collapsed. */
+  --vaadin-checkbox-gap: 0px;
+  --vaadin-checkbox-label-color: var(--lumo-body-text-color);
+  --vaadin-checkbox-label-font-size: var(--lumo-font-size-m);
+  --vaadin-checkbox-label-line-height: var(--lumo-line-height-s);
+  --vaadin-checkbox-label-font-weight: 400;
+}
+
+/* Label spacing: pad the slotted <label> (not the label part) — block padding for
+   the row height, a small leading gap to the box and a larger trailing gap. The
+   label is a block so its block padding counts toward the row height (an inline
+   label would ignore it); block-level keeps the inline content flowing normally,
+   so whitespace around nested elements (e.g. links) is preserved. */
+:where(vaadin-checkbox)[has-label] > label {
+  display: block;
+  padding-block: var(--lumo-space-xs);
+  padding-inline: var(--lumo-space-xs) var(--lumo-space-s);
+}
+
+/* Animate the hover tint and the active press. The margin gives the box the
+   same inset breathing room as original Lumo. */
+:where(vaadin-checkbox)::part(checkbox) {
+  margin: var(--lumo-space-xs);
+  transition:
+    transform 0.1s,
+    background-color 0.1s;
+}
+
+@media (any-hover: hover) {
+  :where(vaadin-checkbox):not([checked], [indeterminate], [disabled], [readonly], [invalid]):hover::part(checkbox) {
+    --vaadin-checkbox-background: var(--lumo-contrast-30pct);
+  }
+}
+
+/* Invalid: error-tinted fill + error focus ring */
+:where(vaadin-checkbox)[invalid] {
+  --vaadin-checkbox-background: var(--lumo-error-color-10pct);
+  --vaadin-focus-ring-color: var(--lumo-error-color-50pct);
+}
+
+/* Checked / indeterminate: primary fill (source order beats the invalid tint) */
+:where(vaadin-checkbox):is([checked], [indeterminate]) {
+  --vaadin-checkbox-background: var(--lumo-primary-color);
+}
+
+/* Active press effect */
+:where(vaadin-checkbox)[active]::part(checkbox) {
+  transform: scale(0.9);
+  transition-duration: 0.05s;
+}
+
+:where(vaadin-checkbox)[active]:is([checked], [indeterminate])::part(checkbox) {
+  transform: scale(1.1);
+}
+
+/* Disabled */
+:where(vaadin-checkbox)[disabled] {
+  --vaadin-checkbox-background: var(--lumo-contrast-10pct);
+  --vaadin-checkbox-marker-color: var(--lumo-contrast-30pct);
+}
+
+/* Readonly: dashed outline box; re-enable the border removed for the filled look */
+:where(vaadin-checkbox)[readonly] {
+  --vaadin-checkbox-background: transparent;
+  --vaadin-checkbox-border-width: 1px;
+  --vaadin-checkbox-border-color: var(--lumo-contrast-50pct);
+}
+
+:where(vaadin-checkbox)[readonly]:is([checked], [indeterminate]) {
+  --vaadin-checkbox-background: var(--lumo-contrast-70pct);
+  --vaadin-checkbox-border-width: 0px;
+  --vaadin-checkbox-marker-color: var(--lumo-primary-contrast-color);
+}
