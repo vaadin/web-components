@@ -1,0 +1,29 @@
+:where(vaadin-checkbox-group) {
+  padding: var(--lumo-space-xs) 0;
+  /* Guide one checkbox row tall, as legacy Lumo */
+  --vaadin-field-baseline-input-height: var(--lumo-size-s);
+
+  &::before {
+    box-sizing: border-box;
+    height: var(--lumo-size-s);
+    padding: 0;
+    border: 0;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Lumo defaults groups to horizontal (row wrap); vertical is the opt-in variant
+     (base defaults the other way). Spacing between options comes from each
+     checkbox's own margin, so the group adds no gap. */
+  &::part(group-field) {
+    flex-flow: row wrap;
+    gap: 0;
+    /* Drop the input-field padding and border the base adds to align options with field text */
+    padding-block: 0;
+    border-block-width: 0;
+  }
+
+  &[theme~='vertical']::part(group-field) {
+    flex-flow: column;
+  }
+}
