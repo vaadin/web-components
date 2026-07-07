@@ -119,7 +119,6 @@ export class DataProviderController extends EventTarget {
    */
   setPageSize(pageSize) {
     this.pageSize = pageSize;
-    this.clearCache();
   }
 
   /**
@@ -129,7 +128,6 @@ export class DataProviderController extends EventTarget {
    */
   setDataProvider(dataProvider) {
     this.dataProvider = dataProvider;
-    this.clearCache();
   }
 
   /**
