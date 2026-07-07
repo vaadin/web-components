@@ -1,0 +1,69 @@
+:where(:root),
+:where(:host) {
+  --vaadin-radio-button-size: calc(var(--lumo-size-m) / 2);
+  /* Lumo radio is a filled circle with no border (readonly re-enables it) */
+  --vaadin-radio-button-border-width: 0px;
+  --vaadin-radio-button-background: var(--lumo-contrast-20pct);
+  --vaadin-radio-button-marker-color: var(--lumo-primary-contrast-color);
+  --vaadin-radio-button-marker-size: 6px;
+  --vaadin-radio-button-gap: var(--lumo-space-xs);
+  --vaadin-radio-button-label-color: var(--lumo-body-text-color);
+  --vaadin-radio-button-label-font-size: var(--lumo-font-size-m);
+  --vaadin-radio-button-label-line-height: var(--lumo-line-height-s);
+  --vaadin-radio-button-label-font-weight: 400;
+}
+
+/* Restore Lumo's label padding for the row height and click target. Radio-button
+   has no label-part wrapper; the slotted <label> is a grid item directly, so pad
+   it. The dot-to-label gap comes from --vaadin-radio-button-gap (input-covered). */
+:where(vaadin-radio-button) > [slot='label'] {
+  padding-block: var(--lumo-space-xs);
+  padding-inline: 0 var(--lumo-space-s);
+}
+
+/* Animate the hover tint and the active press; the margin matches Lumo's inset */
+:where(vaadin-radio-button)::part(radio) {
+  margin: var(--lumo-space-xs);
+  transition:
+    transform 0.1s,
+    background-color 0.1s;
+}
+
+@media (any-hover: hover) {
+  :where(vaadin-radio-button):not([checked], [disabled]):hover::part(radio) {
+    --vaadin-radio-button-background: var(--lumo-contrast-30pct);
+  }
+}
+
+/* Checked: primary fill */
+:where(vaadin-radio-button)[checked] {
+  --vaadin-radio-button-background: var(--lumo-primary-color);
+}
+
+/* Active press effect */
+:where(vaadin-radio-button)[active]::part(radio) {
+  transform: scale(0.9);
+  transition-duration: 0.05s;
+}
+
+:where(vaadin-radio-button)[active][checked]::part(radio) {
+  transform: scale(1.1);
+}
+
+/* Disabled */
+:where(vaadin-radio-button)[disabled] {
+  --vaadin-radio-button-background: var(--lumo-contrast-10pct);
+  --vaadin-radio-button-marker-color: var(--lumo-contrast-30pct);
+}
+
+/* Readonly radios keep the normal filled look in Lumo (legacy had no distinct
+   readonly style). Neutralize the base group's readonly transparent/dashed treatment. */
+:where(vaadin-radio-group)[readonly] > vaadin-radio-button {
+  --vaadin-radio-button-background: var(--lumo-contrast-20pct);
+  --vaadin-radio-button-border-width: 0px;
+  --vaadin-radio-button-marker-color: var(--lumo-primary-contrast-color);
+}
+
+:where(vaadin-radio-group)[readonly] > vaadin-radio-button[checked] {
+  --vaadin-radio-button-background: var(--lumo-primary-color);
+}
