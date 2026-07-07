@@ -157,4 +157,47 @@ describe('disabledDatesProvider integration', () => {
       expect(isDisabled(getCell(calendar, 15))).to.be.true;
     });
   });
+
+  // The overlay is never opened here: validation must consult the provider on its own, otherwise a
+  // value typed with auto-open disabled, or set programmatically, would be accepted even though the
+  // provider disables it.
+  describe('validation without opening the overlay', () => {
+    it('should invalidate a disabled value with a synchronous provider', () => {
+      datePicker.disabledDatesProvider = disableFifteenth;
+      datePicker.value = '2020-01-15';
+      expect(datePicker._overlayContent).to.be.not.ok;
+      expect(datePicker.validate()).to.be.false;
+      expect(datePicker.invalid).to.be.true;
+    });
+
+    it('should keep an enabled value valid with a synchronous provider', () => {
+      datePicker.disabledDatesProvider = disableFifteenth;
+      datePicker.value = '2020-01-16';
+      expect(datePicker.validate()).to.be.true;
+      expect(datePicker.invalid).to.be.false;
+    });
+
+    it('should invalidate a disabled value once an asynchronous provider resolves', async () => {
+      let resolveProvider;
+      const provider = sinon.stub().callsFake(
+        () =>
+          new Promise((resolve) => {
+            resolveProvider = resolve;
+          }),
+      );
+      datePicker.disabledDatesProvider = provider;
+      datePicker.value = '2020-01-15';
+
+      // The provider has not answered yet, so the value is treated as valid for now.
+      expect(datePicker.validate()).to.be.true;
+      expect(provider).to.be.called;
+
+      resolveProvider(disableFifteenth(provider.firstCall.args[0]));
+      await untilRendered(() => datePicker.invalid);
+
+      expect(datePicker._overlayContent).to.be.not.ok;
+      expect(datePicker.invalid).to.be.true;
+      expect(datePicker.checkValidity()).to.be.false;
+    });
+  });
 });
