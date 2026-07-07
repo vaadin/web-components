@@ -675,6 +675,40 @@ export const DatePickerMixin = (subclass) =>
         this.__awaitingProviderValidation = false;
         this._requestValidation();
       }
+
+      this.__adjustInitialFocusForProvider();
+    }
+
+    /**
+     * Moves the overlay's initial focus off a date the provider turns out to disable, once the
+     * provider has answered for that month. Only touches the auto-picked initial date and only
+     * while the user has not navigated away, so disabled dates the user focuses on purpose (which
+     * stay keyboard-focusable) are left alone.
+     * @private
+     */
+    __adjustInitialFocusForProvider() {
+      const content = this._overlayContent;
+      const controller = this._disabledDatesController;
+      const initial = this.__initialFocusDate;
+      if (!content || !initial || !controller.provider) {
+        return;
+      }
+      // The user has moved focus; stop trying to adjust the initial date.
+      if (!dateEquals(content.focusedDate, initial)) {
+        this.__initialFocusDate = null;
+        return;
+      }
+      // Wait until the provider has answered for the initial month.
+      if (!controller.isMonthLoaded(initial)) {
+        return;
+      }
+      this.__initialFocusDate = null;
+      if (controller.isDateDisabled(initial)) {
+        const closest = content.__closestSelectableDate(initial);
+        if (closest) {
+          content.focusDate(closest);
+        }
+      }
     }
 
     /**
@@ -999,6 +1033,12 @@ export const DatePickerMixin = (subclass) =>
       content.focusedDate = scrollFocusDate;
       this._ignoreFocusedDateChange = false;
 
+      // When opening without a selected value, remember the auto-picked initial date so it can be
+      // moved off a provider-disabled date once the provider answers (see __onDisabledDatesChanged).
+      // A date the user selected themselves is left in place even if the provider disables it.
+      this.__initialFocusDate = this._selectedDate ? null : scrollFocusDate;
+      this.__adjustInitialFocusForProvider();
+
       window.addEventListener('scroll', this._boundOnScroll, true);
 
       if (this._focusOverlayOnOpen) {
@@ -1062,6 +1102,8 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayClosed() {
+      this.__initialFocusDate = null;
+
       // Reset `aria-hidden` state.
       if (this.__showOthers) {
         this.__showOthers();

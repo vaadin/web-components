@@ -200,4 +200,55 @@ describe('disabledDatesProvider integration', () => {
       expect(datePicker.checkValidity()).to.be.false;
     });
   });
+
+  describe('initial focus', () => {
+    beforeEach(() => {
+      datePicker.disabledDatesProvider = disableFifteenth;
+    });
+
+    it('should move initial focus off a provider-disabled date once the provider resolves', async () => {
+      datePicker.initialPosition = '2020-01-15';
+      await open(datePicker);
+      const content = datePicker._overlayContent;
+
+      await untilRendered(() => content.focusedDate && content.focusedDate.getDate() !== 15);
+
+      // The 15th is disabled, so focus moves to the closest selectable date, the 16th.
+      expect(content.focusedDate.getFullYear()).to.equal(2020);
+      expect(content.focusedDate.getMonth()).to.equal(0);
+      expect(content.focusedDate.getDate()).to.equal(16);
+    });
+
+    it('should keep initial focus on an enabled initial position', async () => {
+      datePicker.initialPosition = '2020-01-10';
+      await open(datePicker);
+      const content = datePicker._overlayContent;
+
+      await untilRendered(() => content._disabledDatesController.isMonthLoaded(new Date(2020, 0, 10)));
+
+      expect(content.focusedDate.getDate()).to.equal(10);
+    });
+
+    it('should not move focus the user has navigated to a disabled date', async () => {
+      let resolveProvider;
+      const provider = sinon.stub().callsFake(
+        () =>
+          new Promise((resolve) => {
+            resolveProvider = resolve;
+          }),
+      );
+      datePicker.disabledDatesProvider = provider;
+      datePicker.initialPosition = '2020-01-10';
+      await open(datePicker);
+      const content = datePicker._overlayContent;
+
+      // User navigates to the 15th (disabled but focusable) before the provider resolves.
+      content.focusedDate = new Date(2020, 0, 15);
+      resolveProvider(disableFifteenth(provider.firstCall.args[0]));
+      await untilRendered(() => content._disabledDatesController.isMonthLoaded(new Date(2020, 0, 15)));
+
+      // Focus stays on the user's chosen date; disabled dates remain keyboard-focusable.
+      expect(content.focusedDate.getDate()).to.equal(15);
+    });
+  });
 });
