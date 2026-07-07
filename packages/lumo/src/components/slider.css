@@ -42,10 +42,6 @@
   }
 
   /* Field part spacing: the field.css paddings and spacers replace the base grid margins */
-  &::part(label) {
-    margin-bottom: 0;
-  }
-
   &::part(helper-text) {
     margin: 0;
   }
