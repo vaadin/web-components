@@ -15,6 +15,7 @@ snapshots["vaadin-split-layout shadow"] =
 </slot>
 <div
   aria-label="Resize separator"
+  aria-orientation="horizontal"
   aria-valuemax="100"
   aria-valuemin="0"
   id="splitter"
@@ -42,6 +43,7 @@ snapshots["vaadin-split-layout i18n"] =
 </slot>
 <div
   aria-label="separator"
+  aria-orientation="horizontal"
   aria-valuemax="100"
   aria-valuemin="0"
   id="splitter"

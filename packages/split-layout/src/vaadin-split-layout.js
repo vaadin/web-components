@@ -246,6 +246,7 @@ class SplitLayout extends SplitLayoutMixin(
         aria-valuemax="100"
         aria-valuenow="${ifDefined(this.__valueNow)}"
         aria-valuetext="${ifDefined(this.__valueNow === undefined ? undefined : `${this.__valueNow}%`)}"
+        aria-orientation="${this.orientation === 'vertical' ? 'vertical' : 'horizontal'}"
         @focusin="${this.__updateValueNow}"
       >
         <div part="handle"></div>
