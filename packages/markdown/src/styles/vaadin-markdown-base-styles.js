@@ -73,6 +73,9 @@ export const markdownSlotStyles = css`
         font-size: 0.9em;
         line-height: 1.25;
         font-weight: 500;
+        background-color: var(--vaadin-background-container);
+        border-radius: var(--vaadin-radius-s);
+        padding: 0.125em 0.25em;
       }
 
       pre {
@@ -83,6 +86,8 @@ export const markdownSlotStyles = css`
 
         code {
           font-weight: 500;
+          background: none;
+          padding: 0;
         }
       }
 
