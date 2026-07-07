@@ -14,4 +14,8 @@
   hr {
     margin-block: revert-layer;
   }
+
+  code {
+    background-color: var(--lumo-contrast-10pct);
+  }
 }
