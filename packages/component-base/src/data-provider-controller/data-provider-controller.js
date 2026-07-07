@@ -30,13 +30,6 @@ export class DataProviderController extends EventTarget {
   dataProviderParams;
 
   /**
-   * A number of items to display per page.
-   *
-   * @type {number}
-   */
-  pageSize;
-
-  /**
    * A callback that returns whether the given item is expanded.
    *
    * @type {(item: unknown) => boolean}
@@ -78,14 +71,13 @@ export class DataProviderController extends EventTarget {
   ) {
     super();
     this.host = host;
-    this.pageSize = pageSize;
     this.getItemId = getItemId;
     this.isExpanded = isExpanded;
     this.placeholder = placeholder;
     this.isPlaceholder = isPlaceholder;
     this.dataProvider = dataProvider;
     this.dataProviderParams = dataProviderParams;
-    this.rootCache = this.#createRootCache(size);
+    this.rootCache = this.#createRootCache(pageSize, size);
   }
 
   /**
@@ -93,6 +85,13 @@ export class DataProviderController extends EventTarget {
    */
   get flatSize() {
     return this.rootCache.flatSize;
+  }
+
+  /**
+   * The number of items per page in the root cache.
+   */
+  get pageSize() {
+    return this.rootCache.pageSize;
   }
 
   /** @private */
@@ -113,12 +112,12 @@ export class DataProviderController extends EventTarget {
   }
 
   /**
-   * Sets the page size and clears the cache.
+   * Sets the number of items per page in the root cache and any of its descendants.
    *
    * @param {number} pageSize
    */
   setPageSize(pageSize) {
-    this.pageSize = pageSize;
+    this.rootCache.pageSize = pageSize;
   }
 
   /**
@@ -141,7 +140,7 @@ export class DataProviderController extends EventTarget {
    * Clears the cache.
    */
   clearCache() {
-    this.rootCache = this.#createRootCache(this.rootCache.size);
+    this.rootCache = this.#createRootCache(this.rootCache.pageSize, this.rootCache.size);
   }
 
   /**
@@ -236,8 +235,8 @@ export class DataProviderController extends EventTarget {
   }
 
   /** @private */
-  #createRootCache(size) {
-    return new Cache(this.#cacheContext, this.pageSize, size);
+  #createRootCache(pageSize, size) {
+    return new Cache(this.#cacheContext, pageSize, size);
   }
 
   /** @private */
@@ -248,7 +247,7 @@ export class DataProviderController extends EventTarget {
 
     let params = {
       page,
-      pageSize: this.pageSize,
+      pageSize: cache.pageSize,
       parentItem: cache.parentItem,
     };
 
