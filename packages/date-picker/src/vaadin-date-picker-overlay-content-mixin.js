@@ -390,7 +390,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
      */
     __ensureVisibleDisabledDatesLoaded() {
       const controller = this._disabledDatesController;
-      if (!controller || !controller.provider || !this.calendars || this.calendars.length === 0) {
+      if (!controller?.provider || !this.calendars || this.calendars.length === 0) {
         return;
       }
       const indexes = this.calendars
@@ -447,8 +447,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       const controller = this._disabledDatesController;
       if (
         dateToSelect &&
-        controller &&
-        controller.provider &&
+        controller?.provider &&
         (controller.isDateDisabled(dateToSelect) || !controller.isMonthLoaded(dateToSelect))
       ) {
         return false;
@@ -942,7 +941,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     __closestSelectableDate(date) {
       const controller = this._disabledDatesController;
       const isSelectable = (candidate) =>
-        this._dateAllowed(candidate) && !(controller && controller.provider && controller.isDateDisabled(candidate));
+        this._dateAllowed(candidate) && !(controller?.provider && controller.isDateDisabled(candidate));
 
       if (isSelectable(date)) {
         return date;
@@ -1052,7 +1051,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       }
       // Today is not selectable while it is disabled by the provider or its month is still loading.
       const controller = this._disabledDatesController;
-      if (controller && controller.provider && (controller.isDateDisabled(today) || !controller.isMonthLoaded(today))) {
+      if (controller?.provider && (controller.isDateDisabled(today) || !controller.isMonthLoaded(today))) {
         return false;
       }
       return true;

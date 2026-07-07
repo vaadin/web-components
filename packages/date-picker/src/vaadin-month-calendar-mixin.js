@@ -437,7 +437,7 @@ export const MonthCalendarMixin = (superClass) =>
      * @private
      */
     __updateDisabledDates(month, disabledDatesController) {
-      if (month === undefined || !disabledDatesController || !disabledDatesController.provider) {
+      if (month === undefined || !disabledDatesController?.provider) {
         this.__loadingDisabledDates = false;
         if (this.__disabledDatesSet.size > 0) {
           this.__disabledDatesSet = new Set();
@@ -461,7 +461,7 @@ export const MonthCalendarMixin = (superClass) =>
       if (!dateAllowed(date, minDate, maxDate, isDateDisabled)) {
         return true;
       }
-      if (date && this.disabledDatesController && this.disabledDatesController.provider) {
+      if (date && this.disabledDatesController?.provider) {
         // While the provider result for this month is pending, the whole month is non-selectable.
         if (this.__loadingDisabledDates) {
           return true;

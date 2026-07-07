@@ -654,7 +654,7 @@ export const DatePickerMixin = (subclass) =>
      */
     __ensureSelectedDateLoaded() {
       const controller = this._disabledDatesController;
-      if (controller && controller.provider && this._selectedDate && !controller.isMonthLoaded(this._selectedDate)) {
+      if (controller?.provider && this._selectedDate && !controller.isMonthLoaded(this._selectedDate)) {
         this.__awaitingProviderValidation = true;
         controller.ensureRangeLoaded(this._selectedDate, this._selectedDate);
       }

@@ -54,8 +54,6 @@ export class DisabledDatesController {
     this.__requestId = 0;
   }
 
-  hostConnected() {}
-
   hostDisconnected() {
     // Invalidate in-flight requests so their late results don't touch a
     // detached host, and drop the pending (loading) state. The resolved cache
@@ -160,8 +158,8 @@ export class DisabledDatesController {
   __groupConsecutiveMonths(months) {
     const groups = [];
     months.forEach((month) => {
-      const group = groups[groups.length - 1];
-      const previous = group && group[group.length - 1];
+      const group = groups.at(-1);
+      const previous = group?.at(-1);
       if (previous && monthKey(addMonths(previous, 1)) === monthKey(month)) {
         group.push(month);
       } else {
