@@ -1,0 +1,15 @@
+:where(vaadin-checkbox-group) {
+  padding: var(--lumo-space-xs) 0;
+}
+
+/* Lumo defaults groups to horizontal (row wrap); vertical is the opt-in variant
+   (base defaults the other way). Spacing between options comes from each
+   checkbox's own margin, so the group adds no gap. */
+:where(vaadin-checkbox-group)::part(group-field) {
+  flex-flow: row wrap;
+  gap: 0;
+}
+
+:where(vaadin-checkbox-group)[theme~='vertical']::part(group-field) {
+  flex-flow: column;
+}
