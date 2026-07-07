@@ -1,4 +1,4 @@
-:where(vaadin-checkbox-group) {
+:where(vaadin-checkbox-group, vaadin-radio-group) {
   padding: var(--lumo-space-xs) 0;
   /* Guide one checkbox row tall, as legacy Lumo */
   --vaadin-field-baseline-input-height: var(--lumo-size-s);
