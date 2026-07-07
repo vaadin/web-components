@@ -181,6 +181,31 @@ export const DateTimePickerMixin = (superClass) =>
         },
 
         /**
+         * A function to be used to determine whether the user can select a given date.
+         * Receives a `DatePickerDate` object of the date to be selected and should return a
+         * boolean.
+         *
+         * @type {function(DatePickerDate): boolean | undefined}
+         */
+        isDateDisabled: {
+          type: Function,
+          sync: true,
+        },
+
+        /**
+         * A batch function that is consulted for a range of dates that the calendar is about to
+         * render. It receives a `DatePickerDateRange` object and returns, or resolves with, an
+         * array of `DatePickerDate` objects that should be disabled within that range. See
+         * `disabledDatesProvider` on the date-picker for details.
+         *
+         * @type {function(DatePickerDateRange): Array<DatePickerDate> | Promise<Array<DatePickerDate>> | undefined}
+         */
+        disabledDatesProvider: {
+          type: Function,
+          sync: true,
+        },
+
+        /**
          * Set to true to prevent the overlays from opening automatically.
          * @attr {boolean} auto-open-disabled
          */
@@ -245,6 +270,8 @@ export const DateTimePickerMixin = (superClass) =>
         '__stepChanged(step, __timePicker)',
         '__initialPositionChanged(initialPosition, __datePicker)',
         '__showWeekNumbersChanged(showWeekNumbers, __datePicker)',
+        '__isDateDisabledChanged(isDateDisabled, __datePicker)',
+        '__disabledDatesProviderChanged(disabledDatesProvider, __datePicker)',
         '__requiredChanged(required, __datePicker, __timePicker)',
         '__invalidChanged(invalid, __datePicker, __timePicker)',
         '__disabledChanged(disabled, __datePicker, __timePicker)',
@@ -652,6 +679,20 @@ export const DateTimePickerMixin = (superClass) =>
     __initialPositionChanged(initialPosition, datePicker) {
       if (datePicker) {
         datePicker.initialPosition = initialPosition;
+      }
+    }
+
+    /** @private */
+    __isDateDisabledChanged(isDateDisabled, datePicker) {
+      if (datePicker) {
+        datePicker.isDateDisabled = isDateDisabled;
+      }
+    }
+
+    /** @private */
+    __disabledDatesProviderChanged(disabledDatesProvider, datePicker) {
+      if (datePicker) {
+        datePicker.disabledDatesProvider = disabledDatesProvider;
       }
     }
 
