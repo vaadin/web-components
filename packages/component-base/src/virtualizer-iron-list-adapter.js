@@ -222,6 +222,7 @@ export class IronListAdapter {
     flush();
 
     let newPhysicalSize = 0;
+    let newRawPhysicalSize = 0;
     let oldPhysicalSize = 0;
     const prevAvgCount = this._physicalAverageCount;
     const prevPhysicalAvg = this._physicalAverage;
@@ -230,7 +231,8 @@ export class IronListAdapter {
     this._iterateItems((pidx, vidx) => {
       oldPhysicalSize += this._physicalSizes[pidx];
       const elementOldPhysicalSize = this._physicalSizes[pidx];
-      this._physicalSizes[pidx] = Math.ceil(this.__getBorderBoxHeight(this._physicalItems[pidx]));
+      const borderBoxHeight = this.__getBorderBoxHeight(this._physicalItems[pidx]);
+      this._physicalSizes[pidx] = Math.ceil(borderBoxHeight);
 
       if (this._physicalSizes[pidx] !== elementOldPhysicalSize) {
         // Physical size changed, but resize observer may not catch it if the original size is restored quickly.
@@ -240,15 +242,25 @@ export class IronListAdapter {
       }
 
       newPhysicalSize += this._physicalSizes[pidx];
-      this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
+      if (this._physicalSizes[pidx]) {
+        // Accumulate the raw (non-ceiled) height for the average.
+        newRawPhysicalSize += borderBoxHeight;
+        this._physicalAverageCount += 1;
+      }
     }, itemSet);
 
     this._physicalSize = this._physicalSize + newPhysicalSize - oldPhysicalSize;
 
     // Update the average if it measured something.
     if (this._physicalAverageCount !== prevAvgCount) {
+      // Average the raw (non-ceiled) heights. Averaging the ceiled per-row
+      // sizes rounds every fractional row up, and scrollToIndex multiplies that
+      // bias by the target index, scrolling past the target row on fractional
+      // row heights. The average stays an integer so item positions derived
+      // from it stay on whole pixels.
+      // See https://github.com/vaadin/flow-components/issues/9665
       this._physicalAverage = Math.round(
-        (prevPhysicalAvg * prevAvgCount + newPhysicalSize) / this._physicalAverageCount,
+        (prevPhysicalAvg * prevAvgCount + newRawPhysicalSize) / this._physicalAverageCount,
       );
     }
   }
