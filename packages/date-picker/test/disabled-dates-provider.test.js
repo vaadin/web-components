@@ -23,6 +23,15 @@ describe('disabledDatesProvider integration', () => {
     return cell.hasAttribute('disabled') && cell.part.contains('disabled');
   }
 
+  // Waits (bounded) until the predicate holds, to absorb the multi-step reactive chain that runs
+  // after a provider resolves (resolve -> version bump -> calendars re-render), which can span
+  // more than one render on slower browsers.
+  async function untilRendered(predicate) {
+    for (let i = 0; i < 50 && !predicate(); i++) {
+      await nextRender();
+    }
+  }
+
   // A provider that disables the 15th of every month in the requested range.
   function disableFifteenth({ start, end }) {
     const disabled = [];
@@ -92,8 +101,12 @@ describe('disabledDatesProvider integration', () => {
 
     it('should hide the spinner and mark the provided dates disabled after resolving', async () => {
       resolveProvider(disableFifteenth(provider.firstCall.args[0]));
-      await nextRender();
-      await nextRender();
+      // The 16th is disabled (pending) while loading and becomes enabled once resolved.
+      await untilRendered(() => {
+        const calendar = getMonthCalendar(year, month);
+        const cell = calendar && getCell(calendar, 16);
+        return cell && !isDisabled(cell);
+      });
 
       expect(datePicker._overlayContent.hasAttribute('loading')).to.be.false;
       expect(datePicker._overlayContent.hasAttribute('aria-busy')).to.be.false;
@@ -133,8 +146,12 @@ describe('disabledDatesProvider integration', () => {
       expect(end.year * 12 + end.month).to.be.at.least(targetIndex);
 
       resolveProvider(disableFifteenth(provider.lastCall.args[0]));
-      await nextRender();
-      await nextRender();
+      // Wait until the target month resolves (its 16th, disabled while pending, becomes enabled).
+      await untilRendered(() => {
+        const calendar = getMonthCalendar(target.getFullYear(), target.getMonth());
+        const cell = calendar && getCell(calendar, 16);
+        return cell && !isDisabled(cell);
+      });
 
       const calendar = getMonthCalendar(target.getFullYear(), target.getMonth());
       expect(isDisabled(getCell(calendar, 15))).to.be.true;
