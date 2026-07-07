@@ -21,6 +21,7 @@ import {
   getClosestDate,
   parseDate,
 } from './vaadin-date-picker-helper.js';
+import { DisabledDatesController } from './vaadin-disabled-dates-controller.js';
 
 export const datePickerI18nDefaults = Object.freeze({
   monthNames: [
@@ -287,6 +288,7 @@ export const DatePickerMixin = (subclass) =>
         '_selectedDateChanged(_selectedDate, __effectiveI18n)',
         '_focusedDateChanged(_focusedDate, __effectiveI18n)',
         '__updateOverlayContent(_overlayContent, __effectiveI18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers, isDateDisabled, disabledDatesProvider, __enteredDate)',
+        '__disabledDatesProviderChanged(disabledDatesProvider)',
         '__updateOverlayContentTheme(_overlayContent, _theme)',
         '__updateOverlayContentFullScreen(_overlayContent, _fullscreen)',
       ];
@@ -462,6 +464,13 @@ export const DatePickerMixin = (subclass) =>
 
       this.addController(new VirtualKeyboardController(this));
 
+      // Owns the cache of dates resolved by `disabledDatesProvider`. It lives on the date-picker
+      // rather than the overlay content so validation works even when the overlay is never opened.
+      // The open overlay reads the same controller to render months and show the loading spinner.
+      this._disabledDatesController = new DisabledDatesController(this, () => this.__onDisabledDatesChanged());
+      this.addController(this._disabledDatesController);
+      this._disabledDatesController.setProvider(this.disabledDatesProvider);
+
       this._overlayElement = this.$.overlay;
     }
 
@@ -617,16 +626,55 @@ export const DatePickerMixin = (subclass) =>
 
     /**
      * Returns true if the given date is known to be disabled by `disabledDatesProvider`. The
-     * result comes from the overlay's cache of already-loaded ranges, so this only reports a
-     * disabled date once the range containing it has been loaded (typically while the overlay is
-     * or was open). When the async provider is used, server-side validation is expected to
-     * enforce disabled dates independently.
+     * result comes from the controller's cache of already-loaded ranges. The month containing a
+     * selected date is loaded on demand (see `_selectedDateChanged`), so a value typed while the
+     * overlay is closed is re-validated once the provider answers (see `__onDisabledDatesChanged`).
+     * Until then the date is treated as allowed, matching the overlay's rendering.
      * @private
      */
     __isDateDisabledByProvider(date) {
-      return (
-        !!this.disabledDatesProvider && !!this._overlayContent && this._overlayContent.__isDisabledByProvider(date)
-      );
+      const controller = this._disabledDatesController;
+      return !!controller && !!controller.provider && controller.isDateDisabled(date);
+    }
+
+    /** @private */
+    __disabledDatesProviderChanged(disabledDatesProvider) {
+      // The controller is created in `ready()`; `setProvider` is called there for the initial value.
+      if (this._disabledDatesController) {
+        this._disabledDatesController.setProvider(disabledDatesProvider);
+        this.__ensureSelectedDateLoaded();
+      }
+    }
+
+    /**
+     * Asks the controller to resolve the month containing the selected date, so that a value set
+     * or typed while the overlay is closed can be validated against the provider without opening
+     * the overlay. When the month resolves, `__onDisabledDatesChanged` re-runs validation.
+     * @private
+     */
+    __ensureSelectedDateLoaded() {
+      const controller = this._disabledDatesController;
+      if (controller && controller.provider && this._selectedDate && !controller.isMonthLoaded(this._selectedDate)) {
+        this.__awaitingProviderValidation = true;
+        controller.ensureRangeLoaded(this._selectedDate, this._selectedDate);
+      }
+    }
+
+    /** @private */
+    __onDisabledDatesChanged() {
+      const controller = this._disabledDatesController;
+      // Push the new loading and cache state to the open overlay so it re-renders the months and
+      // updates the spinner. When the overlay is closed there is nothing to update.
+      if (this._overlayContent) {
+        this._overlayContent.loading = controller.loading;
+        this._overlayContent._disabledDatesVersion += 1;
+      }
+      // Re-validate once the month containing the selected value has resolved, so a value typed
+      // while the picker was closed (autoOpenDisabled) is rejected as soon as the provider answers.
+      if (this.__awaitingProviderValidation && this._selectedDate && controller.isMonthLoaded(this._selectedDate)) {
+        this.__awaitingProviderValidation = false;
+        this._requestValidation();
+      }
     }
 
     /**
@@ -812,6 +860,10 @@ export const DatePickerMixin = (subclass) =>
         this._applyInputValue(selectedDate);
       }
 
+      // Preload the provider's answer for the selected month so the value can be validated even
+      // when the overlay is never opened.
+      this.__ensureSelectedDateLoaded();
+
       this.value = this._formatISO(selectedDate);
       this._ignoreFocusedDateChange = true;
       this._focusedDate = selectedDate;
@@ -887,6 +939,9 @@ export const DatePickerMixin = (subclass) =>
       enteredDate,
     ) {
       if (overlayContent) {
+        // Share the date-picker's controller so the overlay renders from the same cache that
+        // validation uses. Assigned before the other properties, which trigger `__updateCalendars`.
+        overlayContent._disabledDatesController = this._disabledDatesController;
         overlayContent.i18n = effectiveI18n;
         overlayContent.label = label;
         overlayContent.minDate = minDate;

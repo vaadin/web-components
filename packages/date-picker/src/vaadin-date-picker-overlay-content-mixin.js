@@ -9,7 +9,6 @@ import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { dateAfterXMonths, dateAllowed, dateEquals, getClosestDate } from './vaadin-date-picker-helper.js';
-import { DisabledDatesController } from './vaadin-disabled-dates-controller.js';
 
 export const DatePickerOverlayContentMixin = (superClass) =>
   class DatePickerOverlayContentMixin extends superClass {
@@ -171,7 +170,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     static get observers() {
       return [
         '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme, isDateDisabled, _disabledDatesVersion, enteredDate)',
-        '__disabledDatesProviderChanged(disabledDatesProvider)',
         '__loadingChanged(loading)',
         '__updateCancelButton(_cancelButton, i18n)',
         '__updateTodayButton(_todayButton, i18n, minDate, maxDate, isDateDisabled, _disabledDatesVersion)',
@@ -197,13 +195,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @protected */
     _initControllers() {
-      this._disabledDatesController = new DisabledDatesController(this, () => {
-        this.loading = this._disabledDatesController.loading;
-        this._disabledDatesVersion += 1;
-      });
-      this.addController(this._disabledDatesController);
-      this._disabledDatesController.setProvider(this.disabledDatesProvider);
-
       this.addController(
         new MediaQueryController(this._desktopMediaQuery, (matches) => {
           this._desktopMode = matches;
@@ -1024,28 +1015,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     /** @private */
     _dateAllowed(date, min = this.minDate, max = this.maxDate, isDateDisabled = this.isDateDisabled) {
       return dateAllowed(date, min, max, isDateDisabled);
-    }
-
-    /** @private */
-    __disabledDatesProviderChanged(disabledDatesProvider) {
-      if (this._disabledDatesController) {
-        this._disabledDatesController.setProvider(disabledDatesProvider);
-      }
-    }
-
-    /**
-     * Returns true if the given date is known to be disabled by `disabledDatesProvider`. Only
-     * reports dates in an already-resolved month; dates in a not-yet-loaded month are treated as
-     * not disabled here (server-side validation covers them in Flow).
-     * @private
-     */
-    __isDisabledByProvider(date) {
-      return (
-        !!date &&
-        !!this._disabledDatesController &&
-        !!this._disabledDatesController.provider &&
-        this._disabledDatesController.isDateDisabled(date)
-      );
     }
 
     /** @private */
