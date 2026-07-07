@@ -41,13 +41,14 @@
         new Promise((resolve) => {
           setTimeout(() => {
             const disabled = [];
-            const date = new Date(start.year, start.month, start.day);
+            const first = new Date(start.year, start.month, start.day);
             const last = new Date(end.year, end.month, end.day);
-            while (date <= last) {
+            const days = Math.round((last - first) / (24 * 60 * 60 * 1000));
+            for (let i = 0; i <= days; i++) {
+              const date = new Date(first.getFullYear(), first.getMonth(), first.getDate() + i);
               if (date.getDate() === 20) {
                 disabled.push({ year: date.getFullYear(), month: date.getMonth(), day: date.getDate() });
               }
-              date.setDate(date.getDate() + 1);
             }
             resolve(disabled);
           }, 600);
