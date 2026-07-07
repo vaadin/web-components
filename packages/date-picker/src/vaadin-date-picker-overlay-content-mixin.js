@@ -932,6 +932,33 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       this.focusDate(getClosestDate(focus, [this.minDate, this.maxDate]));
     }
 
+    /**
+     * Returns the nearest date to the given one that can actually be selected: inside min/max, not
+     * disabled by `isDateDisabled`, and not disabled by a resolved `disabledDatesProvider`. Scans a
+     * year in both directions and returns `undefined` if none is found, so the caller can leave the
+     * focus untouched.
+     * @private
+     */
+    __closestSelectableDate(date) {
+      const controller = this._disabledDatesController;
+      const isSelectable = (candidate) =>
+        this._dateAllowed(candidate) && !(controller && controller.provider && controller.isDateDisabled(candidate));
+
+      if (isSelectable(date)) {
+        return date;
+      }
+      for (let offset = 1; offset <= 366; offset++) {
+        for (const direction of [1, -1]) {
+          const candidate = new Date(date);
+          candidate.setDate(candidate.getDate() + offset * direction);
+          if (isSelectable(candidate)) {
+            return candidate;
+          }
+        }
+      }
+      return undefined;
+    }
+
     /** @private */
     _focusAllowedDate(dateToFocus, diff, keepMonth) {
       // For this check we do consider the isDateDisabled function because disabled dates are allowed to be focused, just not outside min/max
