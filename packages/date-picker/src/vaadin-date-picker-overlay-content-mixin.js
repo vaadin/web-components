@@ -118,8 +118,8 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         },
 
         /**
-         * Reflected while the disabled dates provider is resolving, so the overlay can show a
-         * loading spinner.
+         * Reflected while data is being loaded, so the overlay can show a loading spinner.
+         * Currently set while the disabled dates provider is resolving.
          */
         loading: {
           type: Boolean,
@@ -342,8 +342,8 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     __loadingChanged(loading) {
-      // Mark the calendar region as busy while a provider request is in flight so assistive
-      // technology knows the disabled dates are still updating.
+      // Mark the calendar region as busy while data is being loaded so assistive technology knows
+      // the content is still updating.
       if (loading) {
         this.setAttribute('aria-busy', 'true');
       } else {

@@ -56,8 +56,9 @@ export const overlayContentStyles = [
       display: none !important;
     }
 
-    /* Loading spinner shown while the disabled dates provider resolves. Positioned over the month
-       scroller (which paints its own transformed layers, so grid stacking is not enough). */
+    /* Loading spinner shown while data is being loaded (currently while the disabled dates provider
+       resolves). Positioned over the month scroller, which paints its own transformed layers, so
+       grid stacking is not enough. */
     [part='loader'] {
       position: absolute;
       z-index: 1;

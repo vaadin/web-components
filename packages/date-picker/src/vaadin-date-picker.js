@@ -92,7 +92,7 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * ----------------------|--------------------
  * `years-toggle-button` | Fullscreen mode years scroller toggle
  * `toolbar`             | Toolbar with slotted buttons
- * `loader`              | Loading spinner shown while the disabled dates provider is resolving
+ * `loader`              | Loading spinner shown while data is being loaded, for example while the disabled dates provider resolves
  *
  * The following state attributes are available on the `<vaadin-date-picker-overlay-content>` element:
  *
@@ -101,7 +101,7 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * `desktop`       | Set when the overlay content is in desktop mode
  * `fullscreen`    | Set when the overlay content is in fullscreen mode
  * `years-visible` | Set when the year scroller is visible in fullscreen mode
- * `loading`       | Set while the disabled dates provider is resolving
+ * `loading`       | Set while data is being loaded, for example while the disabled dates provider resolves
  *
  * In order to style the month calendar, use `<vaadin-month-calendar>` shadow DOM parts:
  *
