@@ -7,11 +7,7 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
-import type {
-  DatePickerDate,
-  DatePickerDateRange,
-  DatePickerI18n,
-} from '@vaadin/date-picker/src/vaadin-date-picker.js';
+import type { DatePickerI18n } from '@vaadin/date-picker/src/vaadin-date-picker.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
@@ -130,21 +126,6 @@ export declare class DateTimePickerMixinClass {
    * @attr {boolean} show-week-numbers
    */
   showWeekNumbers: boolean | null | undefined;
-
-  /**
-   * A function to be used to determine whether the user can select a given date.
-   * Receives a `DatePickerDate` object of the date to be selected and should return a
-   * boolean.
-   */
-  isDateDisabled: (date: DatePickerDate) => boolean;
-
-  /**
-   * A batch function that is consulted for a range of dates that the calendar is about to
-   * render. It receives a `DatePickerDateRange` object and returns, or resolves with, an array
-   * of `DatePickerDate` objects that should be disabled within that range. See
-   * `disabledDatesProvider` on the date-picker for details.
-   */
-  disabledDatesProvider: (range: DatePickerDateRange) => DatePickerDate[] | Promise<DatePickerDate[]>;
 
   /**
    * Set to true to prevent the overlays from opening automatically.

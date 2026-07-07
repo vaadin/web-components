@@ -20,39 +20,5 @@
     >
       <vaadin-tooltip slot="tooltip" text="You will have a personal discount"></vaadin-tooltip>
     </vaadin-date-time-picker>
-
-    <h3>Disabled dates</h3>
-    <p>
-      Weekends are disabled via <code>isDateDisabled</code>, and the 20th of each month is disabled
-      asynchronously via <code>disabledDatesProvider</code> (a spinner is shown while loading). Both
-      are forwarded to the date part.
-    </p>
-    <vaadin-date-time-picker id="disabled-dates" label="Reservation"></vaadin-date-time-picker>
-
-    <script type="module">
-      const picker = document.querySelector('#disabled-dates');
-
-      picker.isDateDisabled = (date) => {
-        const checkDate = new Date(date.year, date.month, date.day);
-        return checkDate.getDay() === 0 || checkDate.getDay() === 6;
-      };
-
-      picker.disabledDatesProvider = ({ start, end }) =>
-        new Promise((resolve) => {
-          setTimeout(() => {
-            const disabled = [];
-            const first = new Date(start.year, start.month, start.day);
-            const last = new Date(end.year, end.month, end.day);
-            const days = Math.round((last - first) / (24 * 60 * 60 * 1000));
-            for (let i = 0; i <= days; i++) {
-              const date = new Date(first.getFullYear(), first.getMonth(), first.getDate() + i);
-              if (date.getDate() === 20) {
-                disabled.push({ year: date.getFullYear(), month: date.getMonth(), day: date.getDate() });
-              }
-            }
-            resolve(disabled);
-          }, 600);
-        });
-    </script>
   </body>
 </html>
