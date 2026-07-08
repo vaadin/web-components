@@ -194,24 +194,6 @@ describe('vaadin-app-layout', () => {
       await nextFrame();
     }
 
-    function backdropCenter() {
-      const rect = backdrop.getBoundingClientRect();
-      return { x: Math.round(rect.left + rect.width / 2), y: Math.round(rect.top + rect.height / 2) };
-    }
-
-    // Dispatches a click at the given viewport position, mimicking the iOS ghost click.
-    function clickAt(x, y) {
-      const event = new MouseEvent('click', {
-        bubbles: true,
-        cancelable: true,
-        composed: true,
-        clientX: x,
-        clientY: y,
-      });
-      (document.elementFromPoint(x, y) || document.body).dispatchEvent(event);
-      return event;
-    }
-
     describe('desktop layout', () => {
       beforeEach(async () => {
         await fixtureLayout('desktop');
@@ -451,16 +433,15 @@ describe('vaadin-app-layout', () => {
           expect(event.defaultPrevented).to.be.true;
         });
 
-        it('should not swallow the ghost click when not running as a standalone app', () => {
-          const { x, y } = backdropCenter();
-          makeSoloTouchEvent('touchend', { x, y }, backdrop);
-          const event = clickAt(x, y);
-          expect(event.defaultPrevented).to.be.false;
+        it('should not make the backdrop hit-testable after touchend when not standalone', () => {
+          makeSoloTouchEvent('touchend', null, backdrop);
+          expect(backdrop.style.pointerEvents).to.equal('');
         });
 
         // On iOS home screen (standalone) apps, `preventDefault()` on `touchend`
-        // does not suppress the synthesized "ghost" click, which would otherwise
-        // reach the element behind the backdrop.
+        // does not suppress the synthesized "ghost" click. Keeping the invisible
+        // backdrop hit-testable makes the ghost click land on the backdrop instead
+        // of the element behind it.
         describe('standalone (iOS home screen)', () => {
           let standaloneDescriptor;
 
@@ -477,39 +458,21 @@ describe('vaadin-app-layout', () => {
             }
           });
 
-          it('should swallow the ghost click at the tap position', () => {
-            const { x, y } = backdropCenter();
-            makeSoloTouchEvent('touchend', { x, y }, backdrop);
-            const event = clickAt(x, y);
-            expect(event.defaultPrevented).to.be.true;
+          it('should keep the backdrop hit-testable after touchend', () => {
+            makeSoloTouchEvent('touchend', null, backdrop);
+            expect(backdrop.style.pointerEvents).to.equal('auto');
           });
 
-          it('should not swallow a click at a different position', () => {
-            const { x, y } = backdropCenter();
-            makeSoloTouchEvent('touchend', { x, y }, backdrop);
-            const event = clickAt(x + 100, y + 100);
-            expect(event.defaultPrevented).to.be.false;
-          });
-
-          it('should swallow only a single ghost click', () => {
-            const { x, y } = backdropCenter();
-            makeSoloTouchEvent('touchend', { x, y }, backdrop);
-            expect(clickAt(x, y).defaultPrevented).to.be.true;
-            expect(clickAt(x, y).defaultPrevented).to.be.false;
-          });
-
-          it('should stop swallowing the ghost click after the timeout', async () => {
-            const { x, y } = backdropCenter();
-            makeSoloTouchEvent('touchend', { x, y }, backdrop);
+          it('should stop keeping the backdrop hit-testable after the timeout', async () => {
+            makeSoloTouchEvent('touchend', null, backdrop);
             await aTimeout(500);
-            expect(clickAt(x, y).defaultPrevented).to.be.false;
+            expect(backdrop.style.pointerEvents).to.equal('');
           });
 
-          it('should stop swallowing the ghost click after the layout is disconnected', () => {
-            const { x, y } = backdropCenter();
-            makeSoloTouchEvent('touchend', { x, y }, backdrop);
-            layout.remove();
-            expect(clickAt(x, y).defaultPrevented).to.be.false;
+          it('should stop keeping the backdrop hit-testable after a click', () => {
+            makeSoloTouchEvent('touchend', null, backdrop);
+            backdrop.click();
+            expect(backdrop.style.pointerEvents).to.equal('');
           });
         });
 
