@@ -60,4 +60,16 @@ npx lerna version "$VERSION" --exact --force-publish --no-push --no-git-tag-vers
 yarn release
 
 # 5. Publish all public packages and move the feature dist-tag to this build.
-npx lerna publish from-package --dist-tag "$TAG" --yes
+#
+# Testing the publish without touching npmjs:
+#   DRY_RUN=1        -> npm publish --dry-run per package (shows tarballs, no upload)
+#   NPM_REGISTRY=... -> real publish against another registry, e.g. a local
+#                       Verdaccio (npx verdaccio, then NPM_REGISTRY=http://localhost:4873)
+if [ -n "${DRY_RUN:-}" ]; then
+  echo "DRY_RUN: previewing publish of $VERSION (dist-tag: $TAG), nothing is uploaded"
+  npx lerna exec --no-private -- npm publish --dry-run --tag "$TAG"
+elif [ -n "${NPM_REGISTRY:-}" ]; then
+  npx lerna publish from-package --dist-tag "$TAG" --yes --registry "$NPM_REGISTRY"
+else
+  npx lerna publish from-package --dist-tag "$TAG" --yes
+fi
