@@ -18,6 +18,11 @@ const DEFAULT_I18N = {
   drawer: 'Drawer',
 };
 
+// The synthesized "ghost" click on iOS standalone apps is dispatched shortly
+// after `touchend` and at the same position as the touch (see `_onBackdropTouchend`).
+const GHOST_CLICK_TIMEOUT = 400;
+const GHOST_CLICK_TOLERANCE = 25;
+
 export const AppLayoutMixin = (superclass) =>
   class AppLayoutMixinClass extends I18nMixin(superclass) {
     static get properties() {
@@ -169,8 +174,9 @@ export const AppLayoutMixin = (superclass) =>
       super.disconnectedCallback();
       this.__resizeObserver.disconnect();
       this.removeEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
-      window.removeEventListener('close-overlay-drawer', this.__drawerToggleClickListener);
+      window.removeEventListener('close-overlay-drawer', this.__closeOverlayDrawerListener);
       window.removeEventListener('keydown', this.__onDrawerKeyDown);
+      this.__cancelSwallowGhostClick();
     }
 
     /** @private */
@@ -458,7 +464,53 @@ export const AppLayoutMixin = (superclass) =>
       // on clickable element behind the backdrop
       event.preventDefault();
 
+      // On iOS home screen (standalone) apps, `preventDefault()` on `touchend`
+      // does not reliably suppress the synthesized "ghost" click. Since closing
+      // the drawer makes the backdrop stop capturing pointer events, that click
+      // would otherwise reach the element behind the backdrop. As a fallback,
+      // swallow the upcoming ghost click at the tap position. This only runs in
+      // standalone mode, where the issue occurs, so that regular clicks (mouse,
+      // keyboard, touch) elsewhere are never affected.
+      if (navigator.standalone) {
+        const touch = event.changedTouches[0];
+        this.__swallowGhostClick(touch.clientX, touch.clientY);
+      }
+
       this._close();
+    }
+
+    /** @private */
+    __swallowGhostClick(x, y) {
+      this.__cancelSwallowGhostClick();
+
+      const listener = (event) => {
+        // Only suppress a click at the tap position, so that a real click
+        // elsewhere (including keyboard-triggered clicks, which report a zero
+        // position) is left untouched.
+        if (
+          Math.abs(event.clientX - x) <= GHOST_CLICK_TOLERANCE &&
+          Math.abs(event.clientY - y) <= GHOST_CLICK_TOLERANCE
+        ) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          this.__cancelSwallowGhostClick();
+        }
+      };
+
+      this.__swallowGhostClickListener = listener;
+      document.addEventListener('click', listener, { capture: true });
+      // The ghost click arrives shortly after `touchend`. Stop listening after a
+      // short delay so that an unrelated later click is not affected.
+      this.__swallowGhostClickTimeout = setTimeout(() => this.__cancelSwallowGhostClick(), GHOST_CLICK_TIMEOUT);
+    }
+
+    /** @private */
+    __cancelSwallowGhostClick() {
+      if (this.__swallowGhostClickListener) {
+        document.removeEventListener('click', this.__swallowGhostClickListener, { capture: true });
+        this.__swallowGhostClickListener = null;
+      }
+      clearTimeout(this.__swallowGhostClickTimeout);
     }
 
     /** @protected */

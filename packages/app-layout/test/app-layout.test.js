@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import {
+  aTimeout,
   esc,
   fixtureSync,
   makeSoloTouchEvent,
@@ -191,6 +192,24 @@ describe('vaadin-app-layout', () => {
       // Wait for the initial resize observer callback
       await nextResize(layout);
       await nextFrame();
+    }
+
+    function backdropCenter() {
+      const rect = backdrop.getBoundingClientRect();
+      return { x: Math.round(rect.left + rect.width / 2), y: Math.round(rect.top + rect.height / 2) };
+    }
+
+    // Dispatches a click at the given viewport position, mimicking the iOS ghost click.
+    function clickAt(x, y) {
+      const event = new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        composed: true,
+        clientX: x,
+        clientY: y,
+      });
+      (document.elementFromPoint(x, y) || document.body).dispatchEvent(event);
+      return event;
     }
 
     describe('desktop layout', () => {
@@ -430,6 +449,68 @@ describe('vaadin-app-layout', () => {
         it('should prevent touchend event on backdrop', () => {
           const event = makeSoloTouchEvent('touchend', null, backdrop);
           expect(event.defaultPrevented).to.be.true;
+        });
+
+        it('should not swallow the ghost click when not running as a standalone app', () => {
+          const { x, y } = backdropCenter();
+          makeSoloTouchEvent('touchend', { x, y }, backdrop);
+          const event = clickAt(x, y);
+          expect(event.defaultPrevented).to.be.false;
+        });
+
+        // On iOS home screen (standalone) apps, `preventDefault()` on `touchend`
+        // does not suppress the synthesized "ghost" click, which would otherwise
+        // reach the element behind the backdrop.
+        describe('standalone (iOS home screen)', () => {
+          let standaloneDescriptor;
+
+          beforeEach(() => {
+            standaloneDescriptor = Object.getOwnPropertyDescriptor(navigator, 'standalone');
+            Object.defineProperty(navigator, 'standalone', { configurable: true, value: true });
+          });
+
+          afterEach(() => {
+            if (standaloneDescriptor) {
+              Object.defineProperty(navigator, 'standalone', standaloneDescriptor);
+            } else {
+              delete navigator.standalone;
+            }
+          });
+
+          it('should swallow the ghost click at the tap position', () => {
+            const { x, y } = backdropCenter();
+            makeSoloTouchEvent('touchend', { x, y }, backdrop);
+            const event = clickAt(x, y);
+            expect(event.defaultPrevented).to.be.true;
+          });
+
+          it('should not swallow a click at a different position', () => {
+            const { x, y } = backdropCenter();
+            makeSoloTouchEvent('touchend', { x, y }, backdrop);
+            const event = clickAt(x + 100, y + 100);
+            expect(event.defaultPrevented).to.be.false;
+          });
+
+          it('should swallow only a single ghost click', () => {
+            const { x, y } = backdropCenter();
+            makeSoloTouchEvent('touchend', { x, y }, backdrop);
+            expect(clickAt(x, y).defaultPrevented).to.be.true;
+            expect(clickAt(x, y).defaultPrevented).to.be.false;
+          });
+
+          it('should stop swallowing the ghost click after the timeout', async () => {
+            const { x, y } = backdropCenter();
+            makeSoloTouchEvent('touchend', { x, y }, backdrop);
+            await aTimeout(500);
+            expect(clickAt(x, y).defaultPrevented).to.be.false;
+          });
+
+          it('should stop swallowing the ghost click after the layout is disconnected', () => {
+            const { x, y } = backdropCenter();
+            makeSoloTouchEvent('touchend', { x, y }, backdrop);
+            layout.remove();
+            expect(clickAt(x, y).defaultPrevented).to.be.false;
+          });
         });
 
         it('should close the drawer when calling helper method', () => {
