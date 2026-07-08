@@ -2294,13 +2294,6 @@
     split2 "^4.2.0"
     wait-port "^1.1.0"
 
-"@web/browser-logs@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@web/browser-logs/-/browser-logs-0.4.0.tgz#8c4adddac46be02dff1a605312132053b3737d0a"
-  integrity sha512-/EBiDAUCJ2DzZhaFxTPRIznEPeafdLbXShIL6aTu7x73x7ZoxSDv7DGuTsh2rWNMUa4+AKli4UORrpyv6QBOiA==
-  dependencies:
-    errorstacks "^2.2.0"
-
 "@web/browser-logs@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@web/browser-logs/-/browser-logs-1.0.0.tgz#57e3a4dc4ede3f7eac84b412d7c6e33d64f6c8b3"
@@ -2312,30 +2305,6 @@
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@web/config-loader/-/config-loader-1.0.0.tgz#1b47b2070f1a607ce1c56cea6ead3b00c04da465"
   integrity sha512-qRz0XX0skqymolAJGP7PwefKDkgxZXufb+G+Gj0xioOS6TseMgGvJ6JmB5+4ZWaQFVk5Oie1zerpG7GKMtdxpw==
-
-"@web/dev-server-core@^0.7.0":
-  version "0.7.5"
-  resolved "https://registry.yarnpkg.com/@web/dev-server-core/-/dev-server-core-0.7.5.tgz#b283d46eb2c0384e848311ec9da25d06bbbc47df"
-  integrity sha512-Da65zsiN6iZPMRuj4Oa6YPwvsmZmo5gtPWhW2lx3GTUf5CAEapjVpZVlUXnKPL7M7zRuk72jSsIl8lo+XpTCtw==
-  dependencies:
-    "@types/koa" "^2.11.6"
-    "@types/ws" "^7.4.0"
-    "@web/parse5-utils" "^2.1.0"
-    chokidar "^4.0.1"
-    clone "^2.1.2"
-    es-module-lexer "^1.0.0"
-    get-stream "^6.0.0"
-    is-stream "^2.0.0"
-    isbinaryfile "^5.0.0"
-    koa "^2.13.0"
-    koa-etag "^4.0.0"
-    koa-send "^5.0.1"
-    koa-static "^5.0.0"
-    lru-cache "^8.0.4"
-    mime-types "^2.1.27"
-    parse5 "^6.0.1"
-    picomatch "^2.2.2"
-    ws "^7.5.10"
 
 "@web/dev-server-core@^1.0.0":
   version "1.0.0"
@@ -2404,7 +2373,7 @@
     open "^8.0.2"
     portfinder "^1.0.32"
 
-"@web/parse5-utils@^2.0.0", "@web/parse5-utils@^2.1.0":
+"@web/parse5-utils@^2.0.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@web/parse5-utils/-/parse5-utils-2.1.0.tgz#3d33aca62c66773492f2fba89d23a45f8b57ba4a"
   integrity sha512-GzfK5disEJ6wEjoPwx8AVNwUe9gYIiwc+x//QYxYDAFKUp4Xb1OJAGLc2l2gVrSQmtPGLKrTRcW90Hv4pEq1qA==
@@ -2447,38 +2416,6 @@
   dependencies:
     "@web/test-runner-core" "^1.0.0"
     mkdirp "^1.0.4"
-
-"@web/test-runner-core@^0.13.0":
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/@web/test-runner-core/-/test-runner-core-0.13.1.tgz#0a7ec30a1d33aac57e5b04dea754fe35ef89f690"
-  integrity sha512-2hESALx/UFsAzK+ApWXAkFp2eCmwcs2yj1v4YjwV8F38sQumJ40P3px3BMjFwkOYDORtQOicW0RUeSw1g3BMLA==
-  dependencies:
-    "@babel/code-frame" "^7.12.11"
-    "@types/babel__code-frame" "^7.0.2"
-    "@types/co-body" "^6.1.0"
-    "@types/convert-source-map" "^2.0.0"
-    "@types/debounce" "^1.2.0"
-    "@types/istanbul-lib-coverage" "^2.0.3"
-    "@types/istanbul-reports" "^3.0.0"
-    "@web/browser-logs" "^0.4.0"
-    "@web/dev-server-core" "^0.7.0"
-    chokidar "^3.4.3"
-    cli-cursor "^3.1.0"
-    co-body "^6.1.0"
-    convert-source-map "^2.0.0"
-    debounce "^1.2.0"
-    dependency-graph "^0.11.0"
-    globby "^11.0.1"
-    ip "^2.0.1"
-    istanbul-lib-coverage "^3.0.0"
-    istanbul-lib-report "^3.0.1"
-    istanbul-reports "^3.0.2"
-    log-update "^4.0.0"
-    nanocolors "^0.2.1"
-    nanoid "^3.1.25"
-    open "^8.0.2"
-    picomatch "^2.2.2"
-    source-map "^0.7.3"
 
 "@web/test-runner-core@^1.0.0":
   version "1.0.0"
@@ -2539,12 +2476,12 @@
     "@web/test-runner-coverage-v8" "^1.0.0"
     playwright "^1.53.0"
 
-"@web/test-runner-saucelabs@^0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@web/test-runner-saucelabs/-/test-runner-saucelabs-0.13.0.tgz#66b50d4cf6ca29163e8c67e0d6a0b5863ac69172"
-  integrity sha512-RHVDIFVaiOoxydigx1S4wrA20wjjLF9IAxlT7HxYHxO1qx1UIuWLabd6jEGlxluC0xFhuBJLm+zFj8zMEXJNyg==
+"@web/test-runner-saucelabs@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@web/test-runner-saucelabs/-/test-runner-saucelabs-1.0.0.tgz#94ac642334543d5ce7a62d3804c2c42cacb79e28"
+  integrity sha512-9BR75McBSaGvahJgGDusGtd9x7k+IyLgaAZi1msKhOhP9KnHRYUO6bQtB2GFBSOyZSiYMNb8w25ehladsDnM6Q==
   dependencies:
-    "@web/test-runner-webdriver" "^0.9.0"
+    "@web/test-runner-webdriver" "^1.0.0"
     internal-ip "^6.2.0"
     nanoid "^3.1.25"
     saucelabs "^9.0.0"
@@ -2565,12 +2502,12 @@
     pixelmatch "^5.2.1"
     pngjs "^7.0.0"
 
-"@web/test-runner-webdriver@^0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@web/test-runner-webdriver/-/test-runner-webdriver-0.9.0.tgz#18fb3299ddc258a2782028de19f21ee4c27895c5"
-  integrity sha512-G2io6ph0v/sX0U/DEgh/EUHsLsq8/Gs/uUw8N7rcUaXSdIFCUbxlwzx/qZv2ZKY52q84oYUyeOhViNZ2OqYl6Q==
+"@web/test-runner-webdriver@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@web/test-runner-webdriver/-/test-runner-webdriver-1.0.0.tgz#65657696016894b04f2d9d71186472965fdbb32d"
+  integrity sha512-mt1mKnlo7OqsHCb/XPloyosqyRyejp3vZNSl1huJLD++6/jbXS1Gby10m6WhnyGx43B+vvAAxwKOcT/par5dEA==
   dependencies:
-    "@web/test-runner-core" "^0.13.0"
+    "@web/test-runner-core" "^1.0.0"
     webdriverio "^9.0.0"
 
 "@web/test-runner@^1.0.0":
@@ -3601,7 +3538,7 @@ cheerio@^1.0.0-rc.10, cheerio@^1.0.0-rc.12:
     undici "^6.19.5"
     whatwg-mimetype "^4.0.0"
 
-chokidar@^3.4.3, chokidar@^3.5.3:
+chokidar@^3.5.3:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.6.0.tgz#197c6cc669ef2a8dc5e7b4d97ee4e092c3eb0d5b"
   integrity sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==
@@ -4753,7 +4690,7 @@ error-ex@^1.3.1:
   dependencies:
     is-arrayish "^0.2.1"
 
-errorstacks@^2.2.0, errorstacks@^2.4.1:
+errorstacks@^2.4.1:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/errorstacks/-/errorstacks-2.4.2.tgz#19cc65d0d049abbd7fc3a5fd2a01054609ae0647"
   integrity sha512-aQAkABfX+AsCxWtvh1KGIDkTiYyABsTtZkBb8cd9FWxNnEdrcFEsTxUfi9sc0Jc1mgHC2kW3UtJVadqSuMm/uQ==
@@ -6747,11 +6684,6 @@ ip-regex@^4.0.0:
   resolved "https://registry.yarnpkg.com/ip-regex/-/ip-regex-4.3.0.tgz#687275ab0f57fa76978ff8f4dddc8a23d5990db5"
   integrity sha512-B9ZWJxHHOHUhUjCPrMpLD4xEq35bUTClHM1S6CBU5ixQnkZmwipwgc96vAd7AAGM9TGHvJR+Uss+/Ak6UphK+Q==
 
-ip@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/ip/-/ip-2.0.1.tgz#e8f3595d33a3ea66490204234b77636965307105"
-  integrity sha512-lJUL9imLTNi1ZfXT+DU6rBBdbiKGBuay9B6xGSPVjUeQwaH1RIGqef8RZkUtHioLmSNpPR5M4HVKJGm1j8FWVQ==
-
 ipaddr.js@^1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.9.1.tgz#bff38543eeb8984825079ff3a2a8e6cbd46781b3"
@@ -7391,7 +7323,7 @@ koa-static@^5.0.0:
     debug "^3.1.0"
     koa-send "^5.0.0"
 
-koa@^2.13.0, koa@^2.16.1:
+koa@^2.16.1:
   version "2.16.4"
   resolved "https://registry.yarnpkg.com/koa/-/koa-2.16.4.tgz#303b996f5c3f2a3bb771c7db5e4303ee05f2265f"
   integrity sha512-3An0GCLDSR34tsCO4H8Tef8Pp2ngtaZDAZnsWJYelqXUK5wyiHvGItgK/xcSkmHLSTn1Jcho1mRQs2ehRzvKKw==
@@ -9451,7 +9383,7 @@ picocolors@^1.0.0, picocolors@^1.0.1, picocolors@^1.1.0, picocolors@^1.1.1:
   resolved "https://registry.yarnpkg.com/picocolors/-/picocolors-1.1.1.tgz#3d321af3eab939b083c8f929a1d12cda81c26b6b"
   integrity sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==
 
-picomatch@^2.0.4, picomatch@^2.2.1, picomatch@^2.2.2, picomatch@^2.3.1, picomatch@^2.3.2:
+picomatch@^2.0.4, picomatch@^2.2.1, picomatch@^2.3.1, picomatch@^2.3.2:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.2.tgz#5a942915e26b372dc0f0e6753149a16e6b1c5601"
   integrity sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==
