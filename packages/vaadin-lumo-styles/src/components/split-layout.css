@@ -5,12 +5,18 @@
  */
 @media lumo_components_split-layout {
   [part='splitter'] {
+    --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+    --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     --_splitter-size: var(--vaadin-split-layout-splitter-size, var(--lumo-space-s));
     --_splitter-target-size: var(--vaadin-split-layout-splitter-target-size, var(--lumo-space-s));
     --_handle-size: var(--vaadin-split-layout-handle-size, var(--lumo-space-xs));
     --_handle-target-size: var(--vaadin-split-layout-handle-target-size, var(--lumo-size-m));
     background: var(--vaadin-split-layout-splitter-background, var(--lumo-contrast-5pct));
     transition: 0.1s background-color;
+  }
+
+  :host([focus-ring]) [part='splitter']::after {
+    outline: var(--_focus-ring-width) solid var(--_focus-ring-color);
   }
 
   [part='handle'] {
@@ -40,7 +46,8 @@
     opacity: 0;
   }
 
-  :host([theme~='minimal']) > [part='splitter']:is(:hover, :active) > [part='handle'] {
+  :host([theme~='minimal']) > [part='splitter']:is(:hover, :active) > [part='handle'],
+  :host([theme~='minimal'][focus-ring]) > [part='splitter'] > [part='handle'] {
     opacity: 1;
   }
 
