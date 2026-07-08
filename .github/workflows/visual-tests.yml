@@ -42,7 +42,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@v4
         with:
           timeout_minutes: 20
           retry_wait_seconds: 60
@@ -86,7 +86,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@v4
         with:
           timeout_minutes: 20
           retry_wait_seconds: 60
@@ -131,7 +131,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests (default)
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@v4
         with:
           timeout_minutes: 20
           retry_wait_seconds: 60
@@ -139,7 +139,7 @@ jobs:
           command: yarn test --config web-test-runner-aura.config.js
 
       - name: Visual tests (dark)
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@v4
         with:
           timeout_minutes: 20
           retry_wait_seconds: 60
