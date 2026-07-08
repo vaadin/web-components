@@ -17,7 +17,7 @@ import { switchStyles } from './styles/vaadin-switch-base-styles.js';
  * <vaadin-switch label="Notifications"></vaadin-switch>
  * ```
  *
- * @customElement
+ * @customElement vaadin-switch
  * @extends HTMLElement
  */
 class Switch extends ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
