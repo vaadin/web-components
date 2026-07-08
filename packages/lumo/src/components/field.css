@@ -15,7 +15,7 @@
   --vaadin-input-field-required-indicator-color: var(--lumo-primary-text-color);
 }
 
-:where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group) {
+:where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group, vaadin-text-field) {
   &[has-label] {
     padding-top: var(--lumo-space-m);
   }
@@ -47,11 +47,6 @@
     &:hover:not([readonly])::part(helper-text) {
       color: var(--lumo-body-text-color);
     }
-  }
-
-  /* Pin the indicator to the label edge (the label reserves 1em end padding) */
-  &::part(required-indicator) {
-    inset-inline-end: 0;
   }
 
   &[invalid] {
