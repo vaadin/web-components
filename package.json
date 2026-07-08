@@ -48,7 +48,7 @@
     "@web/dev-server-esbuild": "^2.0.0",
     "@web/test-runner": "^1.0.0",
     "@web/test-runner-playwright": "^1.0.0",
-    "@web/test-runner-saucelabs": "^0.13.0",
+    "@web/test-runner-saucelabs": "^1.0.0",
     "@web/test-runner-visual-regression": "^1.0.0",
     "dotenv": "^16.5.0",
     "eslint": "^9.39.2",
