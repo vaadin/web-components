@@ -53,7 +53,7 @@ export npm_config_bump="$VERSION"
 node scripts/updateVersion.js
 
 # 3. Bump every package version and their interdependencies in lockstep.
-#    No commit, tag or push - this is a throwaway CI-only version bump.
+#    No tag or push - just rewrite the versions on disk.
 npx lerna version "$VERSION" --exact --force-publish --no-push --no-git-tag-version --yes
 
 # 4. Build the release artifacts (themes, custom elements manifest, web-types).
@@ -68,8 +68,15 @@ yarn release
 if [ -n "${DRY_RUN:-}" ]; then
   echo "DRY_RUN: previewing publish of $VERSION (dist-tag: $TAG), nothing is uploaded"
   npx lerna exec --no-private -- npm publish --dry-run --tag "$TAG"
-elif [ -n "${NPM_REGISTRY:-}" ]; then
-  npx lerna publish from-package --dist-tag "$TAG" --yes --registry "$NPM_REGISTRY"
 else
-  npx lerna publish from-package --dist-tag "$TAG" --yes
+  # `lerna publish from-package` refuses to run on a dirty tree, so commit the
+  # version bump. This commit is throwaway - never pushed, the CI checkout is
+  # discarded afterwards - so it just satisfies the clean-tree check.
+  git -c user.email=ci@vaadin.com -c user.name="Vaadin CI" commit -am "chore: feature snapshot $VERSION"
+
+  if [ -n "${NPM_REGISTRY:-}" ]; then
+    npx lerna publish from-package --dist-tag "$TAG" --yes --registry "$NPM_REGISTRY"
+  else
+    npx lerna publish from-package --dist-tag "$TAG" --yes
+  fi
 fi
