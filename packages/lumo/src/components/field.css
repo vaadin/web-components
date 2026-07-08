@@ -1,6 +1,6 @@
 /* Shared Lumo styles for the field mixin parts: label, helper text, error message,
-   required indicator (ported from the legacy field-* mixins). Widen the selector
-   lists as more field components are ported. */
+   required indicator (ported from the legacy field-* mixins). Widen the shared
+   selector list below as more field components are ported. */
 :where(:root),
 :where(:host) {
   --vaadin-input-field-label-color: var(--lumo-secondary-text-color);
@@ -15,123 +15,83 @@
   --vaadin-input-field-required-indicator-color: var(--lumo-primary-text-color);
 }
 
-:where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group, vaadin-text-field)[has-label] {
-  padding-top: var(--lumo-space-m);
-}
-
-:where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group, vaadin-text-field)::part(label) {
-  max-width: 100%;
-  padding-inline: calc(var(--lumo-border-radius-m) / 4) 1em;
-  /* Workaround for diacritics being cut off: top padding compensated by a negative margin */
-  padding-top: 0.25em;
-  margin-top: -0.25em;
-  padding-bottom: 0.5em;
-  /* Label→input spacing comes from padding-bottom; drop the base grid margin */
-  margin-bottom: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  transition: color 0.2s;
-}
-
-:where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group, vaadin-text-field)[focused]:not(
-    [readonly]
-  )::part(label) {
-  color: var(--vaadin-input-field-focused-label-color, var(--lumo-primary-text-color));
-}
-
-@media (any-hover: hover) {
-  :where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group, vaadin-text-field):hover:not(
-      [readonly],
-      [focused]
-    )::part(label) {
-    color: var(--vaadin-input-field-hovered-label-color, var(--lumo-body-text-color));
+:where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group, vaadin-text-field) {
+  &[has-label] {
+    padding-top: var(--lumo-space-m);
   }
 
-  :where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group, vaadin-text-field):hover:not(
-      [readonly]
-    )::part(helper-text) {
-    color: var(--lumo-body-text-color);
+  &::part(label) {
+    max-width: 100%;
+    padding-inline: calc(var(--lumo-border-radius-m) / 4) 1em;
+    /* Workaround for diacritics being cut off: top padding compensated by a negative margin */
+    padding-top: 0.25em;
+    margin-top: -0.25em;
+    padding-bottom: 0.5em;
+    /* Label→input spacing comes from padding-bottom; drop the base grid margin */
+    margin-bottom: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition: color 0.2s;
   }
-}
 
-:where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group, vaadin-text-field)[invalid] {
-  --vaadin-input-field-required-indicator-color: var(--lumo-error-text-color);
-}
+  &[focused]:not([readonly])::part(label) {
+    color: var(--vaadin-input-field-focused-label-color, var(--lumo-primary-text-color));
+  }
 
-:where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group, vaadin-text-field)::part(
-  helper-text
-) {
-  margin-inline-start: calc(var(--lumo-border-radius-m) / 4);
-  transition: color 0.2s;
-}
+  &[invalid] {
+    --vaadin-input-field-required-indicator-color: var(--lumo-error-text-color);
+  }
 
-:where(
-    vaadin-slider,
-    vaadin-range-slider,
-    vaadin-checkbox-group,
-    vaadin-radio-group,
-    vaadin-text-field
-  )[has-helper]::part(helper-text)::before {
-  content: '';
-  display: block;
-  height: var(--vaadin-input-field-helper-spacing, 0.4em);
-}
+  &::part(helper-text) {
+    margin-inline-start: calc(var(--lumo-border-radius-m) / 4);
+    transition: color 0.2s;
+  }
 
-:where(
-    vaadin-slider,
-    vaadin-range-slider,
-    vaadin-checkbox-group,
-    vaadin-radio-group,
-    vaadin-text-field
-  )[disabled]::part(helper-text) {
-  color: var(--lumo-disabled-text-color);
-}
+  &[has-helper]::part(helper-text)::before {
+    content: '';
+    display: block;
+    height: var(--vaadin-input-field-helper-spacing, 0.4em);
+  }
 
-/* Lumo has no error icon; remove the base warn icon entirely. The error-message
-   keeps its base display (flex when shown, none otherwise), so an empty field
-   adds no height. The top gap comes from a margin instead of a flex-item spacer. */
-:where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group, vaadin-text-field)::part(
-  error-message
-) {
-  margin-top: 0.4em;
-  margin-inline-start: calc(var(--lumo-border-radius-m) / 4);
-}
+  &[disabled]::part(helper-text) {
+    color: var(--lumo-disabled-text-color);
+  }
 
-:where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group, vaadin-text-field)::part(
-    error-message
-  )::before {
-  content: none;
-}
+  @media (any-hover: hover) {
+    &:hover:not([readonly], [focused])::part(label) {
+      color: var(--vaadin-input-field-hovered-label-color, var(--lumo-body-text-color));
+    }
 
-:where(
-    vaadin-slider,
-    vaadin-range-slider,
-    vaadin-checkbox-group,
-    vaadin-radio-group,
-    vaadin-text-field
-  )[has-helper][theme~='helper-above-field']::part(label) {
-  padding-bottom: var(--vaadin-input-field-helper-spacing, 0.4em);
-}
+    &:hover:not([readonly])::part(helper-text) {
+      color: var(--lumo-body-text-color);
+    }
+  }
 
-:where(
-    vaadin-slider,
-    vaadin-range-slider,
-    vaadin-checkbox-group,
-    vaadin-radio-group,
-    vaadin-text-field
-  )[has-helper][theme~='helper-above-field']::part(helper-text)::before {
-  display: none;
-}
+  /* Lumo has no error icon; remove the base warn icon entirely. The error-message
+     keeps its base display (flex when shown, none otherwise), so an empty field
+     adds no height. The top gap comes from a margin instead of a flex-item spacer. */
+  &::part(error-message) {
+    margin-top: 0.4em;
+    margin-inline-start: calc(var(--lumo-border-radius-m) / 4);
+  }
 
-:where(
-    vaadin-slider,
-    vaadin-range-slider,
-    vaadin-checkbox-group,
-    vaadin-radio-group,
-    vaadin-text-field
-  )[has-helper][theme~='helper-above-field']::part(helper-text)::after {
-  content: '';
-  display: block;
-  height: var(--vaadin-input-field-helper-spacing, 0.4em);
+  &::part(error-message)::before {
+    content: none;
+  }
+
+  /* Helper above the field */
+  &[has-helper][theme~='helper-above-field']::part(label) {
+    padding-bottom: var(--vaadin-input-field-helper-spacing, 0.4em);
+  }
+
+  &[has-helper][theme~='helper-above-field']::part(helper-text)::before {
+    display: none;
+  }
+
+  &[has-helper][theme~='helper-above-field']::part(helper-text)::after {
+    content: '';
+    display: block;
+    height: var(--vaadin-input-field-helper-spacing, 0.4em);
+  }
 }
