@@ -45,6 +45,21 @@ VERSION="${BASE}-dev.${HASH}"
 
 echo "Publishing feature snapshot $VERSION (dist-tag: $TAG)"
 
+# 0. Preflight: for a real npmjs publish, fail fast and clearly if we are not
+#    authenticated, instead of bumping and building for minutes only to hit a
+#    misleading "E404 Not found" from npm (its response for missing/invalid auth).
+#    Skipped for DRY_RUN and for a custom registry (e.g. an anonymous Verdaccio).
+if [ -z "${DRY_RUN:-}" ] && [ -z "${NPM_REGISTRY:-}" ]; then
+  if ! WHOAMI=$(npm whoami 2>/dev/null); then
+    echo "Error: not authenticated to npm (npm whoami failed)." >&2
+    echo "Provide a token with publish access to the @vaadin scope in ~/.npmrc:" >&2
+    echo "  //registry.npmjs.org/:_authToken=<token>" >&2
+    echo "Use an automation token if the account enforces 2FA on publish." >&2
+    exit 1
+  fi
+  echo "Authenticated to npm as: $WHOAMI"
+fi
+
 # 1. Install with the committed versions so the lockfile stays consistent.
 yarn install --frozen-lockfile
 
