@@ -27,14 +27,6 @@ export declare class DisabledDatesController implements ReactiveController {
    */
   readonly loading: boolean;
 
-  /**
-   * The set of disabled date keys (`year-month-day`, month 0-based). The same
-   * set instance is shared and grows as months resolve.
-   */
-  readonly disabledDates: Set<string>;
-
-  hostConnected(): void;
-
   hostDisconnected(): void;
 
   /**
@@ -58,6 +50,13 @@ export declare class DisabledDatesController implements ReactiveController {
    * dates in an already-resolved month.
    */
   isDateDisabled(date: Date): boolean;
+
+  /**
+   * Whether the given date cannot be selected yet: it is disabled by the
+   * provider, or its month has not been resolved. Returns `false` when no
+   * provider is set.
+   */
+  isDateBlocked(date: Date): boolean;
 
   /**
    * Ensures the provider has been consulted for the inclusive range between the

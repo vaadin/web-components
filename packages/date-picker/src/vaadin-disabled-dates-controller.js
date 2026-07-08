@@ -114,12 +114,15 @@ export class DisabledDatesController {
   }
 
   /**
-   * Returns the set of disabled date keys (`year-month-day`, month 0-based).
-   * The same set instance is shared and grows as months resolve.
-   * @return {Set<string>}
+   * Whether the given date cannot be selected yet: it is disabled by the
+   * provider, or its month has not been resolved so its state is still unknown.
+   * Returns `false` when no provider is set. Used to block selection and to
+   * render dates as non-selectable while their month is loading.
+   * @param {Date} date
+   * @return {boolean}
    */
-  get disabledDates() {
-    return this.__disabledDates;
+  isDateBlocked(date) {
+    return !!this.provider && !!date && (this.isDateDisabled(date) || !this.isMonthLoaded(date));
   }
 
   /**

@@ -444,12 +444,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       }
       // Block dates disabled by the provider, or in a month whose provider result has not loaded
       // yet, so they cannot be selected via keyboard or the today button either.
-      const controller = this._disabledDatesController;
-      if (
-        dateToSelect &&
-        controller?.provider &&
-        (controller.isDateDisabled(dateToSelect) || !controller.isMonthLoaded(dateToSelect))
-      ) {
+      if (this._disabledDatesController?.isDateBlocked(dateToSelect)) {
         return false;
       }
       this.selectedDate = dateToSelect;
@@ -1050,11 +1045,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         return false;
       }
       // Today is not selectable while it is disabled by the provider or its month is still loading.
-      const controller = this._disabledDatesController;
-      if (controller?.provider && (controller.isDateDisabled(today) || !controller.isMonthLoaded(today))) {
-        return false;
-      }
-      return true;
+      return !this._disabledDatesController?.isDateBlocked(today);
     }
 
     /** @private */

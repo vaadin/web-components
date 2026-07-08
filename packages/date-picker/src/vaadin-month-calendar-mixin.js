@@ -119,32 +119,11 @@ export const MonthCalendarMixin = (superClass) =>
           computed: '__computeDisabled(month, minDate, maxDate)',
         },
 
-        /**
-         * Set of `year-month-day` keys for the dates disabled by the provider. Shared with the
-         * controller, so it grows as more months are resolved.
-         * @private
-         */
-        __disabledDatesSet: {
-          type: Object,
-          value: () => new Set(),
-          attribute: false,
-        },
-
-        /**
-         * True while the provider result for the currently displayed month is still pending.
-         * @private
-         */
-        __loadingDisabledDates: {
-          type: Boolean,
-          value: false,
-          attribute: false,
-        },
-
         /** @protected */
         _days: {
           type: Array,
           computed:
-            '__computeDays(month, i18n, minDate, maxDate, isDateDisabled, __disabledDatesSet, __loadingDisabledDates)',
+            '__computeDays(month, i18n, minDate, maxDate, isDateDisabled, disabledDatesController, __disabledDatesVersion)',
         },
 
         /** @protected */
@@ -166,11 +145,7 @@ export const MonthCalendarMixin = (superClass) =>
     }
 
     static get observers() {
-      return [
-        '__focusedDateChanged(focusedDate, _days)',
-        '_showWeekNumbersChanged(showWeekNumbers, i18n)',
-        '__updateDisabledDates(month, disabledDatesController, __disabledDatesVersion)',
-      ];
+      return ['__focusedDateChanged(focusedDate, _days)', '_showWeekNumbersChanged(showWeekNumbers, i18n)'];
     }
 
     get focusableDateElement() {
@@ -393,7 +368,7 @@ export const MonthCalendarMixin = (superClass) =>
         result.push('disabled');
       }
 
-      if (date && this.__loadingDisabledDates) {
+      if (date && this.__isMonthLoading()) {
         result.push('pending');
       }
 
@@ -431,29 +406,13 @@ export const MonthCalendarMixin = (superClass) =>
     }
 
     /**
-     * Consults `disabledDatesProvider` for the currently displayed month and stores the result.
-     * For an async (Promise) result, the month is marked as loading until it resolves; stale
-     * responses (month or provider changed meanwhile) are ignored.
+     * Whether the provider result for the currently displayed month is still pending. The overlay
+     * drives loading for the whole visible range; here we only reflect the controller's state.
      * @private
      */
-    __updateDisabledDates(month, disabledDatesController) {
-      if (month === undefined || !disabledDatesController?.provider) {
-        this.__loadingDisabledDates = false;
-        if (this.__disabledDatesSet.size > 0) {
-          this.__disabledDatesSet = new Set();
-        }
-        return;
-      }
-
-      // Read-only: the overlay drives loading for the whole visible range. Here we just reflect
-      // the controller's current cached state for this month.
-      this.__loadingDisabledDates = !disabledDatesController.isMonthLoaded(month);
-      this.__disabledDatesSet = disabledDatesController.disabledDates;
-    }
-
-    /** @private */
-    __disabledDateKey(year, month, day) {
-      return `${year}-${month}-${day}`;
+    __isMonthLoading() {
+      const controller = this.disabledDatesController;
+      return !!controller?.provider && this.month !== undefined && !controller.isMonthLoaded(this.month);
     }
 
     /** @private */
@@ -461,14 +420,9 @@ export const MonthCalendarMixin = (superClass) =>
       if (!dateAllowed(date, minDate, maxDate, isDateDisabled)) {
         return true;
       }
-      if (date && this.disabledDatesController?.provider) {
-        // While the provider result for this month is pending, the whole month is non-selectable.
-        if (this.__loadingDisabledDates) {
-          return true;
-        }
-        return this.__disabledDatesSet.has(this.__disabledDateKey(date.getFullYear(), date.getMonth(), date.getDate()));
-      }
-      return false;
+      // A date is blocked while its month is pending (whole month non-selectable) or once the
+      // resolved provider result marks it disabled.
+      return !!this.disabledDatesController?.isDateBlocked(date);
     }
 
     /** @private */
