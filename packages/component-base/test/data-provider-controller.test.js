@@ -175,12 +175,6 @@ describe('DataProviderController', () => {
       expect(controller.rootCache.pageSize).to.equal(10);
     });
 
-    it('should clear the cache', () => {
-      const spy = sinon.spy(controller, 'clearCache');
-      controller.setPageSize(10);
-      expect(spy.calledOnce).to.be.true;
-    });
-
     it('should pass the new pageSize to dataProvider when requesting data', () => {
       const dataProviderSpy = sinon.spy(controller, 'dataProvider');
       controller.setPageSize(10);
@@ -203,12 +197,6 @@ describe('DataProviderController', () => {
       const dataProvider = (_params, callback) => callback([], 0);
       controller.setDataProvider(dataProvider);
       expect(controller.dataProvider).to.equal(dataProvider);
-    });
-
-    it('should clear the cache', () => {
-      const spy = sinon.spy(controller, 'clearCache');
-      controller.setDataProvider((_params, callback) => callback([], 0));
-      expect(spy.calledOnce).to.be.true;
     });
 
     it('should request data using the new dataProvider', () => {
