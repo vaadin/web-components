@@ -209,6 +209,32 @@ export const DatePickerMixin = (subclass) =>
         },
 
         /**
+         * Dates that cannot be selected, in ISO 8601 format (the same date
+         * formats as `value`, `min`, and `max`). A new array must be assigned to
+         * trigger an update; mutating the existing array in place has no effect.
+         *
+         * @type {string[]}
+         */
+        disabledDates: {
+          type: Array,
+          value: () => [],
+          sync: true,
+        },
+
+        /**
+         * Days of week that cannot be selected. 0 = Sunday … 6 = Saturday (the
+         * same convention as `i18n.firstDayOfWeek`). A new array must be assigned
+         * to trigger an update; mutating the existing array in place has no effect.
+         *
+         * @type {number[]}
+         */
+        disabledWeekdays: {
+          type: Array,
+          value: () => [],
+          sync: true,
+        },
+
+        /**
          * The earliest date that can be selected. All earlier dates will be disabled.
          * @type {Date | undefined}
          * @protected
@@ -226,6 +252,16 @@ export const DatePickerMixin = (subclass) =>
         _maxDate: {
           type: Date,
           computed: '__computeMinOrMaxDate(max)',
+        },
+
+        /**
+         * Set of disabled dates in ISO 8601 format, derived from `disabledDates`.
+         * @type {Set<string>}
+         * @private
+         */
+        __disabledDatesSet: {
+          type: Object,
+          computed: '__computeDisabledDatesSet(disabledDates)',
         },
 
         /** @private */
@@ -261,7 +297,7 @@ export const DatePickerMixin = (subclass) =>
       return [
         '_selectedDateChanged(_selectedDate, __effectiveI18n)',
         '_focusedDateChanged(_focusedDate, __effectiveI18n)',
-        '__updateOverlayContent(_overlayContent, __effectiveI18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers, isDateDisabled, __enteredDate)',
+        '__updateOverlayContent(_overlayContent, __effectiveI18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers, isDateDisabled, __disabledDatesSet, disabledWeekdays, __enteredDate)',
         '__updateOverlayContentTheme(_overlayContent, _theme)',
         '__updateOverlayContentFullScreen(_overlayContent, _fullscreen)',
       ];
@@ -578,7 +614,15 @@ export const DatePickerMixin = (subclass) =>
       const inputValue = this._inputElementValue;
       const inputValid = !inputValue || (!!this._selectedDate && inputValue === this.__formatDate(this._selectedDate));
       const isDateValid =
-        !this._selectedDate || dateAllowed(this._selectedDate, this._minDate, this._maxDate, this.isDateDisabled);
+        !this._selectedDate ||
+        dateAllowed(
+          this._selectedDate,
+          this._minDate,
+          this._maxDate,
+          this.isDateDisabled,
+          this.__disabledDatesSet,
+          this.disabledWeekdays,
+        );
 
       let inputValidity = true;
       if (this.inputElement && this.inputElement.checkValidity) {
@@ -842,6 +886,8 @@ export const DatePickerMixin = (subclass) =>
       selectedDate,
       showWeekNumbers,
       isDateDisabled,
+      disabledDatesSet,
+      disabledWeekdays,
       enteredDate,
     ) {
       if (overlayContent) {
@@ -853,6 +899,8 @@ export const DatePickerMixin = (subclass) =>
         overlayContent.selectedDate = selectedDate;
         overlayContent.showWeekNumbers = showWeekNumbers;
         overlayContent.isDateDisabled = isDateDisabled;
+        overlayContent.disabledDatesSet = disabledDatesSet;
+        overlayContent.disabledWeekdays = disabledWeekdays;
         overlayContent.enteredDate = enteredDate;
       }
     }
@@ -927,7 +975,15 @@ export const DatePickerMixin = (subclass) =>
       const initialPosition =
         this._selectedDate || this._overlayContent.initialPosition || parsedInitialPosition || new Date();
 
-      return parsedInitialPosition || dateAllowed(initialPosition, this._minDate, this._maxDate, this.isDateDisabled)
+      return parsedInitialPosition ||
+        dateAllowed(
+          initialPosition,
+          this._minDate,
+          this._maxDate,
+          this.isDateDisabled,
+          this.__disabledDatesSet,
+          this.disabledWeekdays,
+        )
         ? initialPosition
         : this._minDate || this._maxDate
           ? getClosestDate(initialPosition, [this._minDate, this._maxDate])
@@ -1211,5 +1267,18 @@ export const DatePickerMixin = (subclass) =>
     /** @private */
     __computeMinOrMaxDate(dateString) {
       return parseDate(dateString);
+    }
+
+    /** @private */
+    __computeDisabledDatesSet(disabledDates) {
+      const disabledDatesSet = new Set();
+      (disabledDates || []).forEach((entry) => {
+        const date = parseDate(entry);
+        // Invalid entries are silently skipped, consistent with min/max parsing.
+        if (date) {
+          disabledDatesSet.add(formatISODate(date));
+        }
+      });
+      return disabledDatesSet;
     }
   };

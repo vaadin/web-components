@@ -70,11 +70,20 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LumoIn
                         this.minDate,
                         this.maxDate,
                         this.isDateDisabled,
+                        this.disabledDatesSet,
+                        this.disabledWeekdays,
                         this.enteredDate,
                         this.__hasFocus,
                       )}"
                       .date="${date}"
-                      ?disabled="${this.__isDayDisabled(date, this.minDate, this.maxDate, this.isDateDisabled)}"
+                      ?disabled="${this.__isDayDisabled(
+                        date,
+                        this.minDate,
+                        this.maxDate,
+                        this.isDateDisabled,
+                        this.disabledDatesSet,
+                        this.disabledWeekdays,
+                      )}"
                       tabindex="${this.__computeDayTabIndex(date, this.focusedDate)}"
                       aria-selected="${this.__computeDayAriaSelected(date, this.selectedDate)}"
                       aria-disabled="${this.__computeDayAriaDisabled(
@@ -82,6 +91,8 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LumoIn
                         this.minDate,
                         this.maxDate,
                         this.isDateDisabled,
+                        this.disabledDatesSet,
+                        this.disabledWeekdays,
                       )}"
                       aria-label="${this.__computeDayAriaLabel(date)}"
                       >${this._getDate(date)}</td

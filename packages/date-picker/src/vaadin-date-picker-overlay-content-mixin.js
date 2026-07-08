@@ -106,6 +106,22 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           type: Function,
         },
 
+        /**
+         * Set of dates that cannot be selected, in ISO 8601 format.
+         * @type {Set<string> | undefined}
+         */
+        disabledDatesSet: {
+          type: Object,
+        },
+
+        /**
+         * Days of week that cannot be selected. 0 = Sunday … 6 = Saturday.
+         * @type {number[] | undefined}
+         */
+        disabledWeekdays: {
+          type: Array,
+        },
+
         enteredDate: {
           type: Date,
           sync: true,
@@ -138,9 +154,9 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme, isDateDisabled, enteredDate)',
+        '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme, isDateDisabled, disabledDatesSet, disabledWeekdays, enteredDate)',
         '__updateCancelButton(_cancelButton, i18n)',
-        '__updateTodayButton(_todayButton, i18n, minDate, maxDate, isDateDisabled)',
+        '__updateTodayButton(_todayButton, i18n, minDate, maxDate, isDateDisabled, disabledDatesSet, disabledWeekdays)',
         '__updateYears(years, selectedDate, _theme)',
       ];
     }
@@ -292,10 +308,17 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @private */
-    __updateTodayButton(todayButton, i18n, minDate, maxDate, isDateDisabled) {
+    // eslint-disable-next-line @typescript-eslint/max-params
+    __updateTodayButton(todayButton, i18n, minDate, maxDate, isDateDisabled, disabledDatesSet, disabledWeekdays) {
       if (todayButton) {
         todayButton.textContent = i18n?.today;
-        todayButton.disabled = !this._isTodayAllowed(minDate, maxDate, isDateDisabled);
+        todayButton.disabled = !this._isTodayAllowed(
+          minDate,
+          maxDate,
+          isDateDisabled,
+          disabledDatesSet,
+          disabledWeekdays,
+        );
       }
     }
 
@@ -311,6 +334,8 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       ignoreTaps,
       theme,
       isDateDisabled,
+      disabledDatesSet,
+      disabledWeekdays,
       enteredDate,
     ) {
       if (calendars?.length) {
@@ -319,6 +344,8 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           calendar.minDate = minDate;
           calendar.maxDate = maxDate;
           calendar.isDateDisabled = isDateDisabled;
+          calendar.disabledDatesSet = disabledDatesSet;
+          calendar.disabledWeekdays = disabledWeekdays;
           calendar.focusedDate = focusedDate;
           calendar.selectedDate = selectedDate;
           calendar.showWeekNumbers = showWeekNumbers;
@@ -833,8 +860,10 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     _focusAllowedDate(dateToFocus, diff, keepMonth) {
-      // For this check we do consider the isDateDisabled function because disabled dates are allowed to be focused, just not outside min/max
-      if (this._dateAllowed(dateToFocus, undefined, undefined, () => false)) {
+      // Only the min/max range restricts focusability. Unavailable in-range dates
+      // (isDateDisabled, disabledDates, disabledWeekdays) are allowed to be focused,
+      // just not committed, so those inputs are intentionally omitted here.
+      if (dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
         this.focusDate(dateToFocus, keepMonth);
       } else if (this._dateAllowed(this.focusedDate)) {
         // Move to min or max date
@@ -912,13 +941,21 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @private */
-    _dateAllowed(date, min = this.minDate, max = this.maxDate, isDateDisabled = this.isDateDisabled) {
-      return dateAllowed(date, min, max, isDateDisabled);
+    // eslint-disable-next-line @typescript-eslint/max-params
+    _dateAllowed(
+      date,
+      min = this.minDate,
+      max = this.maxDate,
+      isDateDisabled = this.isDateDisabled,
+      disabledDatesSet = this.disabledDatesSet,
+      disabledWeekdays = this.disabledWeekdays,
+    ) {
+      return dateAllowed(date, min, max, isDateDisabled, disabledDatesSet, disabledWeekdays);
     }
 
     /** @private */
-    _isTodayAllowed(min, max, isDateDisabled) {
-      return this._dateAllowed(this._getTodayMidnight(), min, max, isDateDisabled);
+    _isTodayAllowed(min, max, isDateDisabled, disabledDatesSet, disabledWeekdays) {
+      return this._dateAllowed(this._getTodayMidnight(), min, max, isDateDisabled, disabledDatesSet, disabledWeekdays);
     }
 
     /** @private */

@@ -237,6 +237,30 @@ export declare class DatePickerMixinClass {
   isDateDisabled: (date: DatePickerDate) => boolean;
 
   /**
+   * Dates that cannot be selected, in ISO 8601 format (the same date formats as
+   * `value`, `min`, and `max`). A date is unavailable when it is out of the
+   * `[min, max]` range, or rejected by `isDateDisabled`, or listed in
+   * `disabledDates`, or its weekday is listed in `disabledWeekdays`.
+   *
+   * Unavailable dates that are within the `[min, max]` range remain focusable
+   * with the keyboard, but cannot be selected.
+   *
+   * Note: a new array must be assigned to trigger an update. Mutating the
+   * existing array in place has no effect.
+   */
+  disabledDates: string[];
+
+  /**
+   * Days of week that cannot be selected. 0 = Sunday … 6 = Saturday (the same
+   * convention as `i18n.firstDayOfWeek`). Combined with `disabledDates`,
+   * `isDateDisabled`, and `min`/`max` as described in `disabledDates`.
+   *
+   * Note: a new array must be assigned to trigger an update. Mutating the
+   * existing array in place has no effect.
+   */
+  disabledWeekdays: number[];
+
+  /**
    * Opens the dropdown.
    */
   open(): void;

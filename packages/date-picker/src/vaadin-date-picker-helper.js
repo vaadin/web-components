@@ -88,25 +88,6 @@ export function extractDateParts(date) {
 }
 
 /**
- * Check if the given date is in the range of allowed dates.
- *
- * @param {!Date} date The date to check
- * @param {Date} min Range start
- * @param {Date} max Range end
- * @param {function(!DatePickerDate): boolean} isDateDisabled Callback to check if the date is disabled
- * @return {boolean} True if the date is in the range
- */
-export function dateAllowed(date, min, max, isDateDisabled) {
-  let dateIsDisabled = false;
-  if (typeof isDateDisabled === 'function' && !!date) {
-    const dateToCheck = extractDateParts(date);
-    dateIsDisabled = isDateDisabled(dateToCheck);
-  }
-
-  return (!min || date >= min) && (!max || date <= max) && !dateIsDisabled;
-}
-
-/**
  * Get closest date from array of dates.
  *
  * @param {!Date} date The date to compare dates with
@@ -277,4 +258,33 @@ export function formatUTCISODate(date) {
     month: date.getUTCMonth(),
     day: date.getUTCDate(),
   });
+}
+
+/**
+ * Check if the given date is in the range of allowed dates.
+ *
+ * @param {!Date} date The date to check
+ * @param {Date} min Range start
+ * @param {Date} max Range end
+ * @param {function(!DatePickerDate): boolean} isDateDisabled Callback to check if the date is disabled
+ * @param {Set<string>} disabledDatesSet Set of disabled dates in ISO 8601 format
+ * @param {number[]} disabledWeekdays Disabled days of week (0 = Sunday … 6 = Saturday)
+ * @return {boolean} True if the date is in the range
+ */
+// eslint-disable-next-line @typescript-eslint/max-params
+export function dateAllowed(date, min, max, isDateDisabled, disabledDatesSet, disabledWeekdays) {
+  let dateIsDisabled = false;
+  if (date) {
+    if (typeof isDateDisabled === 'function') {
+      dateIsDisabled = isDateDisabled(extractDateParts(date));
+    }
+    if (!dateIsDisabled && disabledDatesSet) {
+      dateIsDisabled = disabledDatesSet.has(formatISODate(date));
+    }
+    if (!dateIsDisabled && Array.isArray(disabledWeekdays)) {
+      dateIsDisabled = disabledWeekdays.includes(date.getDay());
+    }
+  }
+
+  return (!min || date >= min) && (!max || date <= max) && !dateIsDisabled;
 }

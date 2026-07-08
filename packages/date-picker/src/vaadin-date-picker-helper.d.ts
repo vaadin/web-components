@@ -24,11 +24,14 @@ declare function dateEquals(date1: Date | null, date2: Date | null): boolean;
  *
  * @returns True if the date is in the range
  */
+// eslint-disable-next-line @typescript-eslint/max-params
 declare function dateAllowed(
   date: Date,
   min: Date | null,
   max: Date | null,
   isDateDisabled: (date: DatePickerDate) => boolean | null,
+  disabledDatesSet?: Set<string>,
+  disabledWeekdays?: number[],
 ): boolean;
 
 /**

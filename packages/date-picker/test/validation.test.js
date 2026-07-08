@@ -174,6 +174,24 @@ describe('validation', () => {
       expect(selectResult).to.be.equal(false);
     });
 
+    it('should be invalid when a typed date is listed in disabledDates', async () => {
+      datePicker.disabledDates = ['2016-07-15'];
+      setInputValue(datePicker, '7/15/2016');
+      enter(datePicker.inputElement);
+      await nextUpdate(datePicker);
+      expect(datePicker.value).to.equal('2016-07-15');
+      expect(datePicker.invalid).to.be.true;
+    });
+
+    it('should be invalid when a typed date matches disabledWeekdays', async () => {
+      datePicker.disabledWeekdays = [0, 6];
+      setInputValue(datePicker, '7/4/2026'); // Saturday
+      enter(datePicker.inputElement);
+      await nextUpdate(datePicker);
+      expect(datePicker.value).to.equal('2026-07-04');
+      expect(datePicker.invalid).to.be.true;
+    });
+
     it('should fire a validated event on validation success', () => {
       const validatedSpy = sinon.spy();
       datePicker.addEventListener('validated', validatedSpy);

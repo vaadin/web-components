@@ -87,6 +87,22 @@ export const MonthCalendarMixin = (superClass) =>
           value: () => false,
         },
 
+        /**
+         * Set of dates that cannot be selected, in ISO 8601 format.
+         * @type {Set<string> | undefined}
+         */
+        disabledDatesSet: {
+          type: Object,
+        },
+
+        /**
+         * Days of week that cannot be selected. 0 = Sunday … 6 = Saturday.
+         * @type {number[] | undefined}
+         */
+        disabledWeekdays: {
+          type: Array,
+        },
+
         enteredDate: {
           type: Date,
         },
@@ -100,7 +116,7 @@ export const MonthCalendarMixin = (superClass) =>
         /** @protected */
         _days: {
           type: Array,
-          computed: '__computeDays(month, i18n, minDate, maxDate, isDateDisabled)',
+          computed: '__computeDays(month, i18n, minDate, maxDate, isDateDisabled, disabledDatesSet, disabledWeekdays)',
         },
 
         /** @protected */
@@ -338,10 +354,21 @@ export const MonthCalendarMixin = (superClass) =>
     }
 
     // eslint-disable-next-line @typescript-eslint/max-params
-    __computeDatePart(date, focusedDate, selectedDate, minDate, maxDate, isDateDisabled, enteredDate, hasFocus) {
+    __computeDatePart(
+      date,
+      focusedDate,
+      selectedDate,
+      minDate,
+      maxDate,
+      isDateDisabled,
+      disabledDatesSet,
+      disabledWeekdays,
+      enteredDate,
+      hasFocus,
+    ) {
       const result = ['date'];
 
-      if (this.__isDayDisabled(date, minDate, maxDate, isDateDisabled)) {
+      if (this.__isDayDisabled(date, minDate, maxDate, isDateDisabled, disabledDatesSet, disabledWeekdays)) {
         result.push('disabled');
       }
 
@@ -379,17 +406,26 @@ export const MonthCalendarMixin = (superClass) =>
     }
 
     /** @private */
-    __isDayDisabled(date, minDate, maxDate, isDateDisabled) {
-      return !dateAllowed(date, minDate, maxDate, isDateDisabled);
+    // eslint-disable-next-line @typescript-eslint/max-params
+    __isDayDisabled(date, minDate, maxDate, isDateDisabled, disabledDatesSet, disabledWeekdays) {
+      return !dateAllowed(date, minDate, maxDate, isDateDisabled, disabledDatesSet, disabledWeekdays);
     }
 
     /** @private */
-    __computeDayAriaDisabled(date, min, max, isDateDisabled) {
-      if (date === undefined || (min === undefined && max === undefined && isDateDisabled === undefined)) {
+    // eslint-disable-next-line @typescript-eslint/max-params
+    __computeDayAriaDisabled(date, min, max, isDateDisabled, disabledDatesSet, disabledWeekdays) {
+      if (
+        date === undefined ||
+        (min === undefined &&
+          max === undefined &&
+          isDateDisabled === undefined &&
+          disabledDatesSet === undefined &&
+          disabledWeekdays === undefined)
+      ) {
         return 'false';
       }
 
-      return String(this.__isDayDisabled(date, min, max, isDateDisabled));
+      return String(this.__isDayDisabled(date, min, max, isDateDisabled, disabledDatesSet, disabledWeekdays));
     }
 
     /** @private */

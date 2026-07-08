@@ -162,6 +162,31 @@ describe('vaadin-month-calendar', () => {
     expect(monthCalendar.selectedDate).to.be.undefined;
   });
 
+  it('should mark a date in disabledDatesSet as disabled', async () => {
+    monthCalendar.disabledDatesSet = new Set(['2016-02-09']);
+    await nextFrame();
+    const date9 = getDateCells(monthCalendar).find((dateElement) => dateElement.date.getDate() === 9);
+    expect(date9.hasAttribute('disabled')).to.be.true;
+    expect(date9.getAttribute('aria-disabled')).to.equal('true');
+  });
+
+  it('should not update value on a disabledDatesSet date tap', async () => {
+    monthCalendar.disabledDatesSet = new Set(['2016-02-09']);
+    await nextFrame();
+    const date9 = getDateCells(monthCalendar).find((dateElement) => dateElement.date.getDate() === 9);
+    tap(date9);
+    expect(monthCalendar.selectedDate).to.be.undefined;
+  });
+
+  it('should mark matching weekdays as disabled', async () => {
+    monthCalendar.disabledWeekdays = [0, 6];
+    await nextFrame();
+    getDateCells(monthCalendar).forEach((cell) => {
+      const isWeekend = cell.date.getDay() === 0 || cell.date.getDay() === 6;
+      expect(cell.hasAttribute('disabled')).to.equal(isWeekend);
+    });
+  });
+
   describe('i18n', () => {
     beforeEach(async () => {
       monthCalendar.i18n = {

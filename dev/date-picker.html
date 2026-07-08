@@ -12,6 +12,10 @@
       <vaadin-tooltip slot="tooltip" text="Counted as first day"></vaadin-tooltip>
     </vaadin-date-picker>
 
+    <h3>Declarative disabled dates</h3>
+    <vaadin-date-picker id="disabled-dates" label="Disabled dates"></vaadin-date-picker>
+    <vaadin-date-picker id="disabled-weekdays" label="Disabled weekends"></vaadin-date-picker>
+
     <script type="module">
       import '@vaadin/date-picker';
       import '@vaadin/tooltip';
@@ -28,6 +32,16 @@
       const picker = document.querySelector('vaadin-date-picker');
       picker.isDateDisabled = isDateDisabled;
       picker.min = '2023-11-01';
+
+      // Fixed set of disabled dates, in ISO 8601 format.
+      const disabledDatesPicker = document.querySelector('#disabled-dates');
+      disabledDatesPicker.disabledDates = ['2023-11-15', '2023-11-23', '2023-12-25'];
+      disabledDatesPicker.initialPosition = '2023-11-01';
+
+      // Disable weekends (0 = Sunday, 6 = Saturday).
+      const disabledWeekdaysPicker = document.querySelector('#disabled-weekdays');
+      disabledWeekdaysPicker.disabledWeekdays = [0, 6];
+      disabledWeekdaysPicker.initialPosition = '2023-11-01';
     </script>
   </body>
 </html>
