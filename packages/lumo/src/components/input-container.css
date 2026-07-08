@@ -1,0 +1,105 @@
+/* Lumo's filled input paradigm: a contrast-10pct fill with no border and an
+   animated hover/activation highlight drawn by ::after (the base input-container
+   has no ::after and renders an outlined input). Restores the classic Lumo look
+   over the base. Widen the shared selector list below as more field components
+   are ported. */
+:where(vaadin-text-field) {
+  padding: var(--lumo-space-xs) 0;
+  --vaadin-input-field-button-text-color: var(--lumo-contrast-60pct);
+  /* Set the field padding at the host scope so the base baseline guide (:host::before)
+     uses the same value as the input-field — otherwise it falls back to the default
+     block padding and inflates the field height when there is no label. */
+  --vaadin-input-field-padding: 0 calc(0.375em + var(--vaadin-radius-m) / 4 - 1px);
+
+  &::part(input-field) {
+    position: relative;
+    min-height: var(--lumo-size-m);
+    --vaadin-input-field-background: var(--lumo-contrast-10pct);
+    --vaadin-input-field-border-width: 0px;
+    --vaadin-input-field-value-font-weight: 500;
+    /* Tighten spacing between the value and the field buttons (base gap-s is too wide) */
+    --vaadin-input-field-gap: 0px;
+  }
+
+  /* Hover / activation highlight (base has no ::after) */
+  &::part(input-field)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: var(--lumo-contrast-50pct);
+    opacity: 0;
+    transition:
+      transform 0.15s,
+      opacity 0.2s;
+    transform-origin: 100% 0;
+  }
+
+  /* Collapse the highlight on (non-keyboard) focus, matching legacy */
+  &[focused]:not([focus-ring], [readonly])::part(input-field)::after {
+    transform: scaleX(0);
+    transition-duration: 0.15s, 1s;
+  }
+
+  /* Field button icon sizing (matches Aura): field buttons at 90%, clear button smaller */
+  &::part(field-button) {
+    --vaadin-icon-visual-size: 90%;
+  }
+
+  &::part(clear-button) {
+    --vaadin-icon-visual-size: 75%;
+  }
+
+  /* Readonly: transparent fill with a dashed outline drawn by ::after */
+  &[readonly]::part(input-field) {
+    --vaadin-input-field-background: transparent;
+  }
+
+  &[readonly]::part(input-field)::after {
+    opacity: 1;
+    background: transparent;
+    border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-30pct));
+  }
+
+  /* Disabled: lighter fill */
+  &[disabled]::part(input-field) {
+    --vaadin-input-field-background: var(--lumo-contrast-5pct);
+  }
+
+  /* Invalid: error-tinted fill and red focus ring */
+  &[invalid]::part(input-field) {
+    --vaadin-input-field-background: var(--lumo-error-color-10pct);
+    --vaadin-focus-ring-color: var(--lumo-error-color-50pct);
+  }
+
+  /* Slotted prefix/suffix icons (icon.css already sizes them to icon-size-m) */
+  & > vaadin-icon {
+    color: var(--lumo-contrast-60pct);
+  }
+
+  /* Small theme */
+  &[theme~='small'] {
+    font-size: var(--lumo-font-size-s);
+    --vaadin-input-field-label-font-size: var(--lumo-font-size-xs);
+    --vaadin-input-field-error-font-size: var(--lumo-font-size-xxs);
+  }
+
+  &[theme~='small']::part(input-field) {
+    min-height: var(--lumo-size-s);
+  }
+
+  @media (any-hover: hover) {
+    &:hover:not([readonly], [focused], [disabled])::part(input-field)::after {
+      opacity: var(--vaadin-input-field-hover-highlight-opacity, 0.1);
+    }
+
+    &:not([readonly], [disabled])::part(field-button):hover {
+      --vaadin-input-field-button-text-color: var(--lumo-contrast-90pct);
+    }
+
+    &[invalid]:hover:not([readonly], [focused], [disabled])::part(input-field)::after {
+      background: var(--lumo-error-color-50pct);
+    }
+  }
+}
