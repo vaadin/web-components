@@ -22,16 +22,23 @@ export type MenuBarItem<TItemData extends object = object> = Omit<_MenuBarItem<T
   children?: Array<SubMenuItem<TItemData>>;
 };
 
-export type MenuBarItemSelectedEvent<TItem extends MenuBarItem = MenuBarItem> = CustomEvent<{ value: MenuBarItem<TItem> }>;
+export type MenuBarItemSelectedEvent<TItem extends MenuBarItem = MenuBarItem> = CustomEvent<{
+  value: MenuBarItem<TItem>;
+}>;
 
-export type MenuBarProps<TItem extends MenuBarItem = MenuBarItem> = Partial<Omit<_MenuBarProps, 'items' | 'onItemSelected'>> &
+export type MenuBarProps<TItem extends MenuBarItem = MenuBarItem> = Partial<
+  Omit<_MenuBarProps, 'items' | 'onItemSelected'>
+> &
   Readonly<{
     items?: Array<TItem>;
 
     onItemSelected?: (event: MenuBarItemSelectedEvent<TItem>) => void;
   }>;
 
-function MenuBar<TItem extends MenuBarItem = MenuBarItem>(props: MenuBarProps<TItem>, ref: ForwardedRef<MenuBarElement>): ReactElement | null {
+function MenuBar<TItem extends MenuBarItem = MenuBarItem>(
+  props: MenuBarProps<TItem>,
+  ref: ForwardedRef<MenuBarElement>,
+): ReactElement | null {
   const [itemPortals, webComponentItems] = mapItemsWithComponents(props.items, 'vaadin-menu-bar-item');
 
   const onItemSelected = props.onItemSelected;

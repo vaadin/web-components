@@ -121,7 +121,6 @@ export default function ContextMenuPage() {
         }
       `}</style>
       <div style={{ display: 'grid', gridTemplateRows: 'auto auto', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-
         {/* Demo component section */}
         <div style={{ gridColumn: '1 / -1' }}>
           <h1>ContextMenu</h1>

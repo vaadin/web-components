@@ -19,7 +19,11 @@ function Master({ children }: MasterProps) {
 }
 
 function DetailPlaceholder({ children }: DetailPlaceholderProps) {
-  return <div slot="detail-placeholder" style={{ height: '100%' }}>{children}</div>;
+  return (
+    <div slot="detail-placeholder" style={{ height: '100%' }}>
+      {children}
+    </div>
+  );
 }
 
 /**
@@ -88,36 +92,38 @@ function Detail({ children }: DetailProps) {
 
       // _startTransition calls the callback synchronously for add/replace,
       // and asynchronously for remove.
-      layout._startTransition(transitionType, async () => {
-        if (transitionType === 'replace' && currentDetailsRef.current) {
-          // For replace, _startTransition moved the current div to the
-          // detail-outgoing slot for the outgoing animation. Clone it so the
-          // WC can animate the clone out, then hide the React-managed original
-          // so the WC's post-animation cleanup won't remove it from the DOM.
-          const clone = currentDetailsRef.current.cloneNode(true) as HTMLElement;
-          clone.setAttribute('slot', 'detail-outgoing');
-          layout.appendChild(clone);
-          currentDetailsRef.current.setAttribute('slot', 'detail-hidden');
-        } else if (currentDetailsRef.current) {
-          currentDetailsRef.current.setAttribute('slot', 'detail-hidden');
-        }
-        if (nextDetailsRef.current) {
-          nextDetailsRef.current.style.display = '';
-          const hasNext = nextDetailsRef.current.childElementCount > 0;
-          nextDetailsRef.current.setAttribute('slot', hasNext ? 'detail' : 'detail-hidden');
-        }
+      layout
+        ._startTransition(transitionType, async () => {
+          if (transitionType === 'replace' && currentDetailsRef.current) {
+            // For replace, _startTransition moved the current div to the
+            // detail-outgoing slot for the outgoing animation. Clone it so the
+            // WC can animate the clone out, then hide the React-managed original
+            // so the WC's post-animation cleanup won't remove it from the DOM.
+            const clone = currentDetailsRef.current.cloneNode(true) as HTMLElement;
+            clone.setAttribute('slot', 'detail-outgoing');
+            layout.appendChild(clone);
+            currentDetailsRef.current.setAttribute('slot', 'detail-hidden');
+          } else if (currentDetailsRef.current) {
+            currentDetailsRef.current.setAttribute('slot', 'detail-hidden');
+          }
+          if (nextDetailsRef.current) {
+            nextDetailsRef.current.style.display = '';
+            const hasNext = nextDetailsRef.current.childElementCount > 0;
+            nextDetailsRef.current.setAttribute('slot', hasNext ? 'detail' : 'detail-hidden');
+          }
 
-        // Wait for Lit elements to render
-        await Promise.resolve();
+          // Wait for Lit elements to render
+          await Promise.resolve();
 
-        // Recompute layout state with the new DOM
-        layout.recalculateLayout();
-      }).then(() => {
-        // Animation finished — sync React state to match DOM reality
-        setCurrentChildren(children);
-        currentDetailsKey.current = nextDetailsKey;
-        setState('idle');
-      });
+          // Recompute layout state with the new DOM
+          layout.recalculateLayout();
+        })
+        .then(() => {
+          // Animation finished — sync React state to match DOM reality
+          setCurrentChildren(children);
+          currentDetailsKey.current = nextDetailsKey;
+          setState('idle');
+        });
     }
   }, [state, currentChildren]);
 
@@ -150,7 +156,12 @@ function validateChildren(children: React.ReactNode) {
   React.Children.forEach(children, (child) => {
     // Ignore non-React elements
     // We especially want to ignore text nodes to allow for whitespace resulting from formatting
-    if (React.isValidElement(child) && child.type !== Master && child.type !== Detail && child.type !== DetailPlaceholder) {
+    if (
+      React.isValidElement(child) &&
+      child.type !== Master &&
+      child.type !== Detail &&
+      child.type !== DetailPlaceholder
+    ) {
       throw new Error(
         'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master>, <MasterDetailLayout.Detail>, and <MasterDetailLayout.DetailPlaceholder> components are allowed. Check the component docs for proper usage.',
       );

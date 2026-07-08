@@ -28,13 +28,7 @@ export type Pattern =
  * via the `patternProperty` "^/(html|css|js)/[^/\n\r]+$".
  */
 export type NameConverter =
-  | 'as-is'
-  | 'PascalCase'
-  | 'camelCase'
-  | 'lowercase'
-  | 'UPPERCASE'
-  | 'kebab-case'
-  | 'snake_case';
+  'as-is' | 'PascalCase' | 'camelCase' | 'lowercase' | 'UPPERCASE' | 'kebab-case' | 'snake_case';
 /**
  * This interface was referenced by `undefined`'s JSON-Schema definition
  * via the `patternProperty` "^/(html|css|js)/[^/\n\r]+$".
