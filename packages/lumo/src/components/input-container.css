@@ -1,0 +1,122 @@
+/* Lumo's filled input paradigm: a contrast-10pct fill with no border and an
+   animated hover/activation highlight drawn by ::after (the base input-container
+   has no ::after and renders an outlined input). Restores the classic Lumo look
+   over the base. Widen the shared selector list below as more field components
+   are ported. */
+:where(vaadin-text-field) {
+  padding: var(--lumo-space-xs) 0;
+  --vaadin-input-field-button-text-color: var(--lumo-contrast-60pct);
+  /* Set the field padding at the host scope so the base baseline guide (:host::before)
+     uses the same value as the input-field — otherwise it falls back to the default
+     block padding and inflates the field height when there is no label. */
+  --vaadin-input-field-padding: 0 calc(0.375em + var(--vaadin-radius-m) / 4 - 1px);
+  /* Lumo defaults for the documented input-field vars, resolved on the host so a value set
+     on the field or inherited from the page wins. The input-field part reads them. */
+  --_lumo-input-field-background: var(--vaadin-input-field-background, var(--lumo-contrast-10pct));
+  --_lumo-input-field-border-width: var(--vaadin-input-field-border-width, 0px);
+  --_lumo-input-field-value-font-weight: var(--vaadin-input-field-value-font-weight, 500);
+  --_lumo-input-field-gap: var(--vaadin-input-field-gap, 0px);
+
+  &::part(input-field) {
+    position: relative;
+    min-height: var(--vaadin-input-field-height, var(--lumo-size-m));
+    --vaadin-input-field-background: var(--_lumo-input-field-background);
+    --vaadin-input-field-border-width: var(--_lumo-input-field-border-width);
+    --vaadin-input-field-value-font-weight: var(--_lumo-input-field-value-font-weight);
+    --vaadin-input-field-gap: var(--_lumo-input-field-gap);
+  }
+
+  /* Hover / activation highlight (base has no ::after) */
+  &::part(input-field)::after {
+    content: '';
+    position: absolute;
+    /* Cover the border too, as the legacy box-shadow border did */
+    inset: calc(var(--_lumo-input-field-border-width) * -1);
+    border-radius: inherit;
+    pointer-events: none;
+    background: var(--lumo-contrast-50pct);
+    opacity: 0;
+    transition:
+      transform 0.15s,
+      opacity 0.2s;
+    transform-origin: 100% 0;
+  }
+
+  /* Collapse the highlight on (non-keyboard) focus, matching legacy */
+  &[focused]:not([focus-ring], [readonly])::part(input-field)::after {
+    transform: scaleX(0);
+    transition-duration: 0.15s, 1s;
+  }
+
+  /* Field button icon sizing (matches Aura): field buttons at 90%, clear button smaller */
+  &::part(field-button) {
+    --vaadin-icon-visual-size: 90%;
+  }
+
+  &::part(clear-button) {
+    --vaadin-icon-visual-size: 75%;
+  }
+
+  /* State fills. Readonly and disabled win over invalid, as in legacy. */
+  &[invalid] {
+    --_lumo-input-field-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-10pct));
+  }
+
+  /* Readonly: transparent fill with a dashed outline drawn by ::after */
+  &[readonly] {
+    --_lumo-input-field-background: transparent;
+    /* Hide the base dashed border, the ::after draws the outline */
+    --vaadin-input-field-border-color: transparent;
+  }
+
+  &[readonly]::part(input-field)::after {
+    opacity: 1;
+    background: transparent;
+    border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-30pct));
+  }
+
+  /* Disabled: lighter fill */
+  &[disabled] {
+    --_lumo-input-field-background: var(--vaadin-input-field-disabled-background, var(--lumo-contrast-5pct));
+  }
+
+  /* Invalid: error-tinted fill and red focus ring */
+  &[invalid]::part(input-field) {
+    --vaadin-focus-ring-color: var(--lumo-error-color-50pct);
+  }
+
+  /* Slotted prefix/suffix icons (icon.css already sizes them to icon-size-m) */
+  & > vaadin-icon {
+    color: var(--lumo-contrast-60pct);
+  }
+
+  /* Vaadin icons use a 16px grid and look too big at the Lumo icon size */
+  & > vaadin-icon[icon^='vaadin:'] {
+    padding: 0.25em;
+  }
+
+  /* Small theme */
+  &[theme~='small'] {
+    font-size: var(--lumo-font-size-s);
+    --vaadin-input-field-label-font-size: var(--lumo-font-size-xs);
+    --vaadin-input-field-error-font-size: var(--lumo-font-size-xxs);
+  }
+
+  &[theme~='small']::part(input-field) {
+    min-height: var(--vaadin-input-field-height, var(--lumo-size-s));
+  }
+
+  @media (any-hover: hover) {
+    &:hover:not([readonly], [focused], [disabled])::part(input-field)::after {
+      opacity: var(--vaadin-input-field-hover-highlight-opacity, 0.1);
+    }
+
+    &:not([readonly], [disabled])::part(field-button):hover {
+      --vaadin-input-field-button-text-color: var(--lumo-contrast-90pct);
+    }
+
+    &[invalid]:hover:not([readonly], [focused], [disabled])::part(input-field)::after {
+      background: var(--lumo-error-color-50pct);
+    }
+  }
+}
