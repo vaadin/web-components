@@ -16,13 +16,6 @@ export class Cache {
   context;
 
   /**
-   * The number of items to display per page.
-   *
-   * @type {number}
-   */
-  pageSize;
-
-  /**
    * An array of cached items.
    *
    * @type {object[]}
@@ -49,6 +42,14 @@ export class Cache {
    * @private
    */
   #subCacheByIndex = {};
+
+  /**
+   * The number of items per page.
+   *
+   * @type {number}
+   * @private
+   */
+  #pageSize;
 
   /**
    * The number of items.
@@ -121,6 +122,29 @@ export class Cache {
    */
   get flatSize() {
     return this.#flatSize;
+  }
+
+  /**
+   * The number of items per page.
+   *
+   * @return {number}
+   */
+  get pageSize() {
+    return this.#pageSize;
+  }
+
+  /**
+   * Sets the number of items per page for this cache and its descendants.
+   * Changing the page size discards all pending page requests.
+   *
+   * @param {number} pageSize
+   */
+  set pageSize(pageSize) {
+    this.#pageSize = pageSize;
+    this.pendingRequests = {};
+    this.subCaches.forEach((subCache) => {
+      subCache.pageSize = pageSize;
+    });
   }
 
   /**

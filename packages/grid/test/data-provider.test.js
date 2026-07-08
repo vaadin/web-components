@@ -665,12 +665,21 @@ describe('data provider', () => {
 });
 
 describe('attached', () => {
-  it('should have rows when attached and shown after cache is cleared on hidden grid', async () => {
-    const grid = document.createElement('vaadin-grid');
+  let grid;
+
+  beforeEach(() => {
+    grid = document.createElement('vaadin-grid');
+
     const col = document.createElement('vaadin-grid-column');
     col.setAttribute('path', 'item');
     grid.appendChild(col);
+  });
 
+  afterEach(() => {
+    grid.remove();
+  });
+
+  it('should have rows when attached and shown after cache is cleared on hidden grid', async () => {
     grid.size = 1;
     grid.dataProvider = function (_params, callback) {
       callback([{ item: 'A' }]);
@@ -684,9 +693,16 @@ describe('attached', () => {
     grid.clearCache();
     grid.removeAttribute('style');
     expect(getCellContent(getFirstVisibleItem(grid)).textContent).to.equal('A');
+  });
 
-    // Grid should be removed after test as was attached to body.
-    document.body.removeChild(grid);
+  it('should preserve items added directly to cache before attaching', async () => {
+    grid.size = 1;
+    grid.dataProvider = (_params, callback) => callback([]);
+    grid._dataProviderController.rootCache.items[0] = { item: 'A' };
+    grid._hasData = true;
+    document.body.appendChild(grid);
+    await aTimeout(0);
+    expect(getCellContent(getFirstVisibleItem(grid)).textContent).to.equal('A');
   });
 });
 
