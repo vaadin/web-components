@@ -115,16 +115,22 @@ describe('reorder elements', () => {
     expect(elementsInOrder()).to.be.true;
   });
 
-  it('should not reorder while mouse down', () => {
-    mousedown(elementsContainer);
+  it('should not reorder while mouse down on scroll target', () => {
+    mousedown(scrollTarget);
     scrollRecycle();
     expect(elementsInOrder()).to.be.false;
   });
 
-  it('should reorder once mousedown is released', () => {
-    mousedown(elementsContainer);
+  it('should reorder once mousedown on scroll target is released', () => {
+    mousedown(scrollTarget);
     scrollRecycle();
-    mouseup(elementsContainer);
+    mouseup(scrollTarget);
+    expect(elementsInOrder()).to.be.true;
+  });
+
+  it('should reorder while mouse down on child element', () => {
+    mousedown(elementsContainer.children[0]);
+    scrollRecycle();
     expect(elementsInOrder()).to.be.true;
   });
 
