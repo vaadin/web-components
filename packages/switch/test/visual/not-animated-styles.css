@@ -1,6 +1,6 @@
 vaadin-switch::part(switch),
 vaadin-switch::part(switch)::before,
-vaadin-switch::part(thumb),
+vaadin-switch::part(marker),
 vaadin-switch::part(helper-text),
 vaadin-switch::part(error-message) {
   transition: none !important;
