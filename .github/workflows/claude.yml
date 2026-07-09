@@ -72,7 +72,7 @@ jobs:
 
       - name: Run Claude Code
         id: claude
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@37b464ce72700f7b2c5ff8d2db7fa7b15df792f5 # v1.0.169
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           # Setting a custom prompt would switch the action into agent mode
