@@ -545,7 +545,7 @@ describe('multi selection column', () => {
   it('should use custom i18n for the screen-reader-only label when select all is hidden', async () => {
     grid.items = undefined;
     grid.dataProvider = infiniteDataProvider;
-    grid.i18n = { selectAllEmpty: 'X' };
+    grid.i18n = { selectAllUnavailable: 'X' };
     await nextFrame();
 
     expect(getSelectAllEmptyLabel().textContent).to.equal('X');
