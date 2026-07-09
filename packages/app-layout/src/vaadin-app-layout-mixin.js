@@ -169,7 +169,7 @@ export const AppLayoutMixin = (superclass) =>
       super.disconnectedCallback();
       this.__resizeObserver.disconnect();
       this.removeEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
-      window.removeEventListener('close-overlay-drawer', this.__drawerToggleClickListener);
+      window.removeEventListener('close-overlay-drawer', this.__closeOverlayDrawerListener);
       window.removeEventListener('keydown', this.__onDrawerKeyDown);
     }
 
