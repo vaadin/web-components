@@ -437,10 +437,7 @@ describe('vaadin-app-layout', () => {
           expect(backdrop.style.pointerEvents).to.equal('');
         });
 
-        // On iOS home screen (standalone) apps, `preventDefault()` on `touchend`
-        // does not suppress the synthesized "ghost" click. Keeping the invisible
-        // backdrop hit-testable makes the ghost click land on the backdrop instead
-        // of the element behind it.
+        // The backdrop is kept hit-testable for a while to catch the ghost click.
         describe('standalone (iOS home screen)', () => {
           let standaloneDescriptor, clock;
 
