@@ -1,0 +1,57 @@
+:where(:root),
+:where(:host) {
+  --vaadin-switch-border-width: 0px;
+  --vaadin-switch-width: round(2.6em, 2px);
+  --vaadin-switch-marker-border-radius: calc(var(--vaadin-radius-m) / 2);
+  --vaadin-switch-marker-width: round(1.4em, 2px);
+  --vaadin-switch-marker-height: round(1.25em - 4px, 2px);
+  --vaadin-switch-marker-color: #fff;
+  --vaadin-switch-marker-scale: 1;
+  --vaadin-switch-icon-size: 70% 90%;
+}
+
+vaadin-switch {
+  --vaadin-switch-background: light-dark(var(--vaadin-text-color-secondary), var(--vaadin-border-color));
+  --vaadin-switch-icon-color: var(--vaadin-switch-background);
+
+  &:not([disabled], [readonly]) {
+    &::part(marker) {
+      box-shadow:
+        var(--aura-shadow-s),
+        0 2px 2px 0 light-dark(transparent, var(--aura-shadow-color));
+    }
+
+    &[active] {
+      --vaadin-switch-marker-scale: 0.9;
+    }
+  }
+
+  &[checked] {
+    --vaadin-switch-background: var(--aura-accent-color);
+    --vaadin-switch-marker-color: var(--aura-accent-contrast-color);
+  }
+
+  &[disabled] {
+    --vaadin-switch-background: color-mix(
+      in srgb,
+      light-dark(var(--vaadin-text-color-secondary), var(--vaadin-text-color-secondary)) 15%,
+      transparent
+    );
+    --vaadin-switch-marker-color: hsla(0deg, 0%, 100%, 0.5);
+
+    &[checked] {
+      --vaadin-switch-background: color-mix(in srgb, var(--aura-accent-color) 20%, transparent);
+    }
+  }
+
+  &[readonly] {
+    --vaadin-switch-background: var(--vaadin-text-color-disabled);
+    --vaadin-switch-marker-color: color-mix(in srgb, #fff 75%, transparent);
+    --vaadin-switch-icon-color: var(--vaadin-switch-background);
+
+    &[checked] {
+      --vaadin-switch-background: color-mix(in srgb, var(--aura-accent-color) 75%, var(--vaadin-background-color));
+      --vaadin-switch-marker-color: color-mix(in srgb, var(--aura-accent-contrast-color) 85%, transparent);
+    }
+  }
+}
