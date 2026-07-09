@@ -15,7 +15,14 @@
   --vaadin-input-field-required-indicator-color: var(--lumo-primary-text-color);
 }
 
-:where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group, vaadin-text-field) {
+:where(
+  vaadin-slider,
+  vaadin-range-slider,
+  vaadin-checkbox-group,
+  vaadin-radio-group,
+  vaadin-text-field,
+  vaadin-password-field
+) {
   &[has-label] {
     padding-top: var(--lumo-space-m);
   }
