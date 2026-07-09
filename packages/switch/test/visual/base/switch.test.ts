@@ -124,7 +124,27 @@ describe('switch', () => {
             await visualDiff(div, `${dir}-checked`);
           });
         }
+
+        it('reverse', async () => {
+          element.setAttribute('theme', 'reverse');
+          await visualDiff(div, `${dir}-theme-reverse`);
+        });
       });
+    });
+  });
+
+  describe('icon', () => {
+    beforeEach(() => {
+      element.setAttribute('theme', 'icon');
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'theme-icon-default');
+    });
+
+    it('checked', async () => {
+      element.checked = true;
+      await visualDiff(div, 'theme-icon-checked');
     });
   });
 });
