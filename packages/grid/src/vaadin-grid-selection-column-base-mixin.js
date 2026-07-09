@@ -163,10 +163,21 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       checkbox.indeterminate = this._indeterminate;
       checkbox.style.visibility = this._selectAllHidden ? 'hidden' : '';
 
-      if (this._selectAllHidden) {
-        this._headerCell.setAttribute('aria-label', selectAllEmpty);
-      } else {
-        this._headerCell.removeAttribute('aria-label');
+      // When the Select All checkbox is hidden, the header cell would otherwise
+      // be announced as empty. Render a screen-reader-only label into the cell
+      // (which is in the grid's shadow root, so the `.sr-only` class applies) so
+      // that screen readers announce the `selectAllEmpty` text, including during
+      // table navigation where an `aria-label` on the cell is not read.
+      let label = this._headerCell.querySelector(':scope > .sr-only');
+      if (this._selectAllHidden && selectAllEmpty) {
+        if (!label) {
+          label = document.createElement('span');
+          label.classList.add('sr-only');
+          this._headerCell.appendChild(label);
+        }
+        label.textContent = selectAllEmpty;
+      } else if (label) {
+        label.remove();
       }
     }
 
