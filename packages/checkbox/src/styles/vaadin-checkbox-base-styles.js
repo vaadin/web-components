@@ -20,13 +20,6 @@ const checkbox = css`
     filter: var(--vaadin-checkbox-checkmark-color, var(--_filter));
   }
 
-  :host([readonly]) {
-    --vaadin-checkbox-background: transparent;
-    --vaadin-checkbox-border-color: var(--vaadin-border-color);
-    --vaadin-checkbox-marker-color: var(--vaadin-text-color);
-    --_border-style: dashed;
-  }
-
   :host([indeterminate]) [part='checkbox']::after {
     mask-image: var(--_vaadin-icon-minus);
   }
