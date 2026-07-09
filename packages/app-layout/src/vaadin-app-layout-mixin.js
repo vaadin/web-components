@@ -465,7 +465,9 @@ export const AppLayoutMixin = (superclass) =>
     }
 
     /** @private */
-    _onBackdropClick() {
+    _onBackdropClick(event) {
+      // End the ghost click window on the first click (see `_onBackdropTouchend`).
+      event.currentTarget.style.removeProperty('pointer-events');
       this._close();
     }
 
@@ -474,6 +476,18 @@ export const AppLayoutMixin = (superclass) =>
       // Prevent the click event from being fired
       // on clickable element behind the backdrop
       event.preventDefault();
+
+      // On iOS home screen (standalone) apps, `preventDefault()` on `touchend`
+      // does not reliably suppress the synthesized "ghost" click, which occurs
+      // on medium-length taps only. Keep the invisible backdrop hit-testable for
+      // a short while after closing, so that if a ghost click occurs it lands on
+      // the backdrop instead of the element behind it.
+      if (navigator.standalone) {
+        const backdrop = event.currentTarget;
+        backdrop.style.pointerEvents = 'auto';
+        // The ghost click arrives shortly after `touchend`.
+        setTimeout(() => backdrop.style.removeProperty('pointer-events'), 400);
+      }
 
       this._close();
     }
