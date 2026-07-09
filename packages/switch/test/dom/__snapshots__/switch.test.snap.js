@@ -156,7 +156,7 @@ snapshots["vaadin-switch shadow default"] =
     aria-hidden="true"
     part="switch"
   >
-    <div part="thumb">
+    <div part="marker">
     </div>
   </div>
   <slot name="input">
