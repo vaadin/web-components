@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Switch</title>
+    <script type="module" src="../common.js"></script>
+    <script type="module">
+      // Enable feature flag
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.switchComponent = true;
+
+      import '@vaadin/switch';
+    </script>
+  </head>
+
+  <body>
+    <section class="section">
+      <h2 class="heading">Default Variant</h2>
+      <div style="display: grid; gap: 0.5em">
+        Enabled
+        <vaadin-switch label="Setting"></vaadin-switch>
+        <vaadin-switch label="Setting" checked></vaadin-switch>
+      </div>
+      <div style="display: grid; gap: 0.5em">
+        Disabled
+        <vaadin-switch label="Setting" disabled></vaadin-switch>
+        <vaadin-switch label="Setting" checked disabled></vaadin-switch>
+      </div>
+      <div style="display: grid; gap: 0.5em">
+        Read-Only
+        <vaadin-switch label="Setting" readonly></vaadin-switch>
+        <vaadin-switch label="Setting" checked readonly></vaadin-switch>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Icon Variant</h2>
+      <div style="display: grid; gap: 0.5em">
+        Enabled
+        <vaadin-switch label="Setting" theme="icon"></vaadin-switch>
+        <vaadin-switch label="Setting" theme="icon" checked></vaadin-switch>
+      </div>
+      <div style="display: grid; gap: 0.5em">
+        Disabled
+        <vaadin-switch label="Setting" theme="icon" disabled></vaadin-switch>
+        <vaadin-switch label="Setting" theme="icon" checked disabled></vaadin-switch>
+      </div>
+      <div style="display: grid; gap: 0.5em">
+        Read-Only
+        <vaadin-switch label="Setting" theme="icon" readonly></vaadin-switch>
+        <vaadin-switch label="Setting" theme="icon" checked readonly></vaadin-switch>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Bells &amp; Whistles</h2>
+      <vaadin-switch
+        label="Notifications, and a really, really long label"
+        helper-text="Enable to receive notifications about important things"
+        error-message="Permission denied"
+        invalid
+        required
+        style="resize: horizontal; overflow: hidden; padding: 3px"
+      ></vaadin-switch>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Reverse Variant</h2>
+      <vaadin-switch label="Setting" theme="reverse" checked></vaadin-switch>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Custom Styles</h2>
+      <vaadin-switch label="Setting" class="custom" theme="icon" checked></vaadin-switch>
+    </section>
+
+    <style>
+      .custom {
+        --vaadin-switch-width: 36px;
+        --vaadin-switch-height: 12px;
+        --vaadin-switch-marker-width: 28px;
+        --vaadin-switch-marker-height: 20px;
+        --vaadin-switch-border-width: 0px;
+        --vaadin-switch-border-radius: 8px;
+        --vaadin-switch-marker-border-radius: 16px;
+        --vaadin-switch-background: var(--vaadin-border-color);
+        --vaadin-switch-marker-border-color: var(--vaadin-border-color);
+        --vaadin-switch-marker-color: var(--vaadin-background-color);
+      }
+    </style>
+  </body>
+</html>

@@ -264,9 +264,11 @@ const createVisualTestsConfig = (theme) => {
   if (theme === 'base') {
     visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles');
   } else if (theme === 'aura') {
-    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles' && dir !== 'field-base');
+    visualPackages = getAllVisualPackages().filter(
+      (dir) => dir !== 'vaadin-lumo-styles' && dir !== 'field-base' && dir !== 'switch',
+    );
   } else {
-    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'field-base');
+    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'field-base' && dir !== 'switch');
   }
 
   const packages = getTestPackages(visualPackages);

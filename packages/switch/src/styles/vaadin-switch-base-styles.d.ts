@@ -5,4 +5,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const switchStyles: CSSResult;
+export const switchStyles: CSSResult[];

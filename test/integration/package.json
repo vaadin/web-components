@@ -40,6 +40,7 @@
     "@vaadin/select": "25.3.0-alpha3",
     "@vaadin/side-nav": "25.3.0-alpha3",
     "@vaadin/split-layout": "25.3.0-alpha3",
+    "@vaadin/switch": "25.3.0-alpha3",
     "@vaadin/tabs": "25.3.0-alpha3",
     "@vaadin/test-runner-commands": "25.3.0-alpha3",
     "@vaadin/testing-helpers": "^2.0.0",
