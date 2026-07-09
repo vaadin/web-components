@@ -25,8 +25,8 @@ import { switchStyles } from './styles/vaadin-switch-base-styles.js';
  *
  * Part name            | Description
  * ---------------------|-------------
- * `switch`             | The track element that holds the thumb.
- * `thumb`              | The circular thumb element inside the track.
+ * `switch`             | The track element that holds the marker.
+ * `marker`             | The marker element inside the track.
  * `label`              | The slotted label element wrapper.
  * `helper-text`        | The slotted helper text element wrapper.
  * `error-message`      | The slotted error message element wrapper.
@@ -65,17 +65,24 @@ import { switchStyles } from './styles/vaadin-switch-base-styles.js';
  * | `--vaadin-input-field-required-indicator-color`  |
  * | `--vaadin-switch-background`                     |
  * | `--vaadin-switch-border-color`                   |
+ * | `--vaadin-switch-border-radius`                  |
  * | `--vaadin-switch-border-width`                   |
  * | `--vaadin-switch-gap`                            |
+ * | `--vaadin-switch-height`                         |
+ * | `--vaadin-switch-width`                          |
+ * | `--vaadin-switch-icon-color`                     |
+ * | `--vaadin-switch-icon-size`                      |
  * | `--vaadin-switch-label-color`                    |
  * | `--vaadin-switch-label-font-size`                |
  * | `--vaadin-switch-label-font-weight`              |
  * | `--vaadin-switch-label-line-height`              |
- * | `--vaadin-switch-size`                           |
- * | `--vaadin-switch-thumb-color`                    |
- * | `--vaadin-switch-thumb-checked-color`            |
- * | `--vaadin-switch-thumb-size`                     |
- * | `--vaadin-switch-track-width`                    |
+ * | `--vaadin-switch-marker-border-color`            |
+ * | `--vaadin-switch-marker-border-radius`           |
+ * | `--vaadin-switch-marker-border-width`            |
+ * | `--vaadin-switch-marker-color`                   |
+ * | `--vaadin-switch-marker-height`                  |
+ * | `--vaadin-switch-marker-scale`                   |
+ * | `--vaadin-switch-marker-width`                   |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -105,7 +112,7 @@ class Switch extends CheckboxMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(
     return html`
       <div class="vaadin-switch-container">
         <div part="switch" aria-hidden="true">
-          <div part="thumb"></div>
+          <div part="marker"></div>
         </div>
         <slot name="input"></slot>
         <div part="label">

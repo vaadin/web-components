@@ -53,8 +53,8 @@ export interface SwitchEventMap extends HTMLElementEventMap, SwitchCustomEventMa
  *
  * Part name            | Description
  * ---------------------|-------------
- * `switch`             | The track element that holds the thumb.
- * `thumb`              | The circular thumb element inside the track.
+ * `switch`             | The track element that holds the marker.
+ * `marker`             | The marker element inside the track.
  * `label`              | The slotted label element wrapper.
  * `helper-text`        | The slotted helper text element wrapper.
  * `error-message`      | The slotted error message element wrapper.
@@ -93,17 +93,24 @@ export interface SwitchEventMap extends HTMLElementEventMap, SwitchCustomEventMa
  * | `--vaadin-input-field-required-indicator-color`  |
  * | `--vaadin-switch-background`                     |
  * | `--vaadin-switch-border-color`                   |
+ * | `--vaadin-switch-border-radius`                  |
  * | `--vaadin-switch-border-width`                   |
  * | `--vaadin-switch-gap`                            |
+ * | `--vaadin-switch-height`                         |
+ * | `--vaadin-switch-width`                          |
+ * | `--vaadin-switch-icon-color`                     |
+ * | `--vaadin-switch-icon-size`                      |
  * | `--vaadin-switch-label-color`                    |
  * | `--vaadin-switch-label-font-size`                |
  * | `--vaadin-switch-label-font-weight`              |
  * | `--vaadin-switch-label-line-height`              |
- * | `--vaadin-switch-size`                           |
- * | `--vaadin-switch-thumb-color`                    |
- * | `--vaadin-switch-thumb-checked-color`            |
- * | `--vaadin-switch-thumb-size`                     |
- * | `--vaadin-switch-track-width`                    |
+ * | `--vaadin-switch-marker-border-color`            |
+ * | `--vaadin-switch-marker-border-radius`           |
+ * | `--vaadin-switch-marker-border-width`            |
+ * | `--vaadin-switch-marker-color`                   |
+ * | `--vaadin-switch-marker-height`                  |
+ * | `--vaadin-switch-marker-scale`                   |
+ * | `--vaadin-switch-marker-width`                   |
  *
  * @fires {Event} change - Fired when the switch is toggled by the user.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
