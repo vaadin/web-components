@@ -3,7 +3,7 @@
    has no ::after and renders an outlined input). Restores the classic Lumo look
    over the base. Widen the shared selector list below as more field components
    are ported. */
-:where(vaadin-text-field) {
+:where(vaadin-text-field, vaadin-password-field) {
   padding: var(--lumo-space-xs) 0;
   --vaadin-input-field-button-text-color: var(--lumo-contrast-60pct);
   /* Set the field padding at the host scope so the base baseline guide (:host::before)
@@ -102,4 +102,13 @@
       background: var(--lumo-error-color-50pct);
     }
   }
+}
+
+/* The reveal button is a full vaadin-button. Size it to its icon (button.css sets
+   a fixed height that would top-align the icon under display:block) and drop the
+   standalone-button margin, so the base field-button padding keeps the
+   reveal-button part square and centered in the field. */
+:where(vaadin-password-field) > vaadin-password-field-button {
+  --vaadin-button-height: auto;
+  --vaadin-button-margin: 0;
 }
