@@ -39,14 +39,14 @@ export declare function CheckboxMixin<T extends Constructor<HTMLElement>>(
 
 export declare class CheckboxMixinClass {
   /**
-   * The name of the checkbox.
+   * The name of the control, which is submitted with the form data.
    */
   name: string;
 
   /**
-   * When true, the user cannot modify the value of the checkbox.
+   * When true, the user cannot modify the value of the control.
    * The difference between `disabled` and `readonly` is that the
-   * read-only checkbox remains focusable, is announced by screen
+   * read-only element remains focusable, is announced by screen
    * readers and its value can be submitted as part of the form.
    */
   readonly: boolean;
