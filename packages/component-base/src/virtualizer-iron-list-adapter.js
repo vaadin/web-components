@@ -77,7 +77,12 @@ export class IronListAdapter {
     if (this.reorderElements) {
       // Reordering the physical elements cancels the user's grab of the scroll bar handle on Safari.
       // Need to defer reordering until the user lets go of the scroll bar handle.
-      this.scrollTarget.addEventListener('mousedown', () => {
+      this.scrollTarget.addEventListener('mousedown', (event) => {
+        // Only handle clicks on the scroll target itself
+        if (event.target !== this.scrollTarget) {
+          return;
+        }
+
         this.__mouseDown = true;
       });
       this.scrollTarget.addEventListener('mouseup', () => {
