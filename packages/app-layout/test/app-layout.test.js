@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import {
-  aTimeout,
   esc,
   fixtureSync,
   makeSoloTouchEvent,
@@ -443,14 +442,16 @@ describe('vaadin-app-layout', () => {
         // backdrop hit-testable makes the ghost click land on the backdrop instead
         // of the element behind it.
         describe('standalone (iOS home screen)', () => {
-          let standaloneDescriptor;
+          let standaloneDescriptor, clock;
 
           beforeEach(() => {
             standaloneDescriptor = Object.getOwnPropertyDescriptor(navigator, 'standalone');
             Object.defineProperty(navigator, 'standalone', { configurable: true, value: true });
+            clock = sinon.useFakeTimers();
           });
 
           afterEach(() => {
+            clock.restore();
             if (standaloneDescriptor) {
               Object.defineProperty(navigator, 'standalone', standaloneDescriptor);
             } else {
@@ -463,9 +464,9 @@ describe('vaadin-app-layout', () => {
             expect(backdrop.style.pointerEvents).to.equal('auto');
           });
 
-          it('should stop keeping the backdrop hit-testable after the timeout', async () => {
+          it('should stop keeping the backdrop hit-testable after the timeout', () => {
             makeSoloTouchEvent('touchend', null, backdrop);
-            await aTimeout(500);
+            clock.tick(500);
             expect(backdrop.style.pointerEvents).to.equal('');
           });
 
