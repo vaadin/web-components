@@ -224,6 +224,7 @@ const createSnapshotTestsConfig = (config) => {
 
   return {
     ...config,
+    concurrency: 1,
     nodeResolve: true,
     groups,
     testRunnerHtml: getTestRunnerHtml(),
