@@ -505,6 +505,48 @@ describe('multi selection column', () => {
     expect(selectAllCheckbox.checkVisibility({ visibilityProperty: true })).to.be.true;
   });
 
+  it('should set aria-label on the header cell when select all is hidden due to data provider', async () => {
+    grid.items = undefined;
+    grid.dataProvider = infiniteDataProvider;
+    await nextFrame();
+
+    expect(selectionColumn._headerCell.getAttribute('aria-label')).to.equal('Select All unavailable');
+  });
+
+  it('should set aria-label on the header cell when select all is hidden due to conditional selection', async () => {
+    grid.isItemSelectable = () => true;
+    await nextFrame();
+
+    expect(selectionColumn._headerCell.getAttribute('aria-label')).to.equal('Select All unavailable');
+  });
+
+  it('should not set aria-label on the header cell when select all is visible', () => {
+    expect(selectionColumn._headerCell.hasAttribute('aria-label')).to.be.false;
+  });
+
+  it('should remove aria-label from the header cell when select all becomes visible again', async () => {
+    grid.items = undefined;
+    grid.dataProvider = infiniteDataProvider;
+    await nextFrame();
+
+    expect(selectionColumn._headerCell.hasAttribute('aria-label')).to.be.true;
+
+    grid.dataProvider = undefined;
+    grid.items = ['foo'];
+    await nextFrame();
+
+    expect(selectionColumn._headerCell.hasAttribute('aria-label')).to.be.false;
+  });
+
+  it('should use custom i18n for the header cell aria-label when select all is hidden', async () => {
+    grid.items = undefined;
+    grid.dataProvider = infiniteDataProvider;
+    grid.i18n = { selectAllEmpty: 'X' };
+    await nextFrame();
+
+    expect(selectionColumn._headerCell.getAttribute('aria-label')).to.equal('X');
+  });
+
   it('should be possible to override the body renderer', () => {
     const secondCell = getCellContent(getRowCells(rows[0])[1]);
 

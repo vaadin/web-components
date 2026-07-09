@@ -155,12 +155,19 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         root.appendChild(checkbox);
       }
 
-      checkbox.accessibleName = this._grid?.__effectiveI18n?.selectAll;
+      const { selectAll, selectAllEmpty } = this._grid.__effectiveI18n;
+      checkbox.accessibleName = selectAll;
 
       const checked = this.__isChecked(this.selectAll, this._indeterminate);
       checkbox.checked = checked;
       checkbox.indeterminate = this._indeterminate;
       checkbox.style.visibility = this._selectAllHidden ? 'hidden' : '';
+
+      if (this._selectAllHidden) {
+        this._headerCell.setAttribute('aria-label', selectAllEmpty);
+      } else {
+        this._headerCell.removeAttribute('aria-label');
+      }
     }
 
     /**

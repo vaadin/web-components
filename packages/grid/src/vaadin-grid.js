@@ -17,6 +17,7 @@ import { GridMixin } from './vaadin-grid-mixin.js';
 
 const DEFAULT_I18N = {
   selectAll: 'Select All',
+  selectAllEmpty: 'Select All unavailable',
   selectRow: 'Select Row {rowHeader}',
   sorter: 'Sort by {column}',
 };
@@ -300,6 +301,9 @@ class Grid extends GridMixin(I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(L
    *   // Accessible name (aria-label) for the select all checkbox in the
    *   // selection column header cell.
    *   selectAll: 'Select All',
+   *   // Accessible name (aria-label) for the selection column header cell when
+   *   // the Select All checkbox is hidden (data provider or conditional selection).
+   *   selectAllEmpty: 'Select All unavailable',
    *   // Accessible name (aria-label) for the select row checkbox in each
    *   // selection column body cell. The `{rowHeader}` placeholder is replaced with the
    *   // row header cell text content or row index if there is no row header column.
