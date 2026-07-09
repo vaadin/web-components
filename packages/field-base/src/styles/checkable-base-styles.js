@@ -18,10 +18,6 @@ export const checkable = (part, propName = part) => css`
     --_cursor: var(--vaadin-clickable-cursor);
   }
 
-  :host([disabled]) {
-    --_cursor: var(--vaadin-disabled-cursor);
-  }
-
   :host(:not([has-label])) {
     column-gap: 0;
   }
@@ -109,10 +105,24 @@ export const checkable = (part, propName = part) => css`
     --vaadin-${unsafeCSS(propName)}-border-color: transparent;
   }
 
+  :host([readonly]) {
+    --vaadin-${unsafeCSS(part)}-background: transparent;
+    --vaadin-${unsafeCSS(part)}-border-color: var(--vaadin-border-color);
+    --vaadin-${unsafeCSS(part)}-marker-color: var(--vaadin-text-color);
+    --_border-style: dashed;
+    --_cursor: var(--vaadin-disabled-cursor);
+
+    [part='label'],
+    ::slotted(label) {
+      cursor: default;
+    }
+  }
+
   :host([disabled]) {
     --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-input-field-disabled-background, var(--vaadin-background-container-strong));
     --vaadin-${unsafeCSS(propName)}-border-color: transparent;
     --vaadin-${unsafeCSS(propName)}-marker-color: var(--vaadin-text-color-disabled);
+    --_cursor: var(--vaadin-disabled-cursor);
   }
 
   /* Focus ring */
