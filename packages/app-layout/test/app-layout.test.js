@@ -431,6 +431,12 @@ describe('vaadin-app-layout', () => {
           expect(layout.drawerOpened).to.be.false;
         });
 
+        it('should not react to the custom event after being disconnected', () => {
+          layout.remove();
+          window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
+          expect(layout.drawerOpened).to.be.true;
+        });
+
         it('should close the drawer on navigation event', () => {
           window.dispatchEvent(new CustomEvent('vaadin-router-location-changed'));
           expect(layout.drawerOpened).to.be.false;
