@@ -22,6 +22,13 @@ export interface GridI18n {
   selectAll?: string;
 
   /**
+   * The accessible name announced for the selection column header cell when the
+   * Select All checkbox is hidden (e.g. a data provider is used or conditional
+   * selection is enabled), rendered as a screen-reader-only label in the cell.
+   */
+  selectAllUnavailable?: string;
+
+  /**
    * The accessible name (aria-label) template for the Select Row checkbox in
    * each selection column body cell. The `{rowHeader}` placeholder is replaced with
    * the row header cell text content or row index if there is no row header column.
@@ -299,6 +306,9 @@ declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
    *   // Accessible name (aria-label) for the select all checkbox in the
    *   // selection column header cell.
    *   selectAll: 'Select All',
+   *   // Screen-reader-only label announced for the selection column header cell
+   *   // when the Select All checkbox is hidden (data provider or conditional selection).
+   *   selectAllUnavailable: 'Select All unavailable',
    *   // Accessible name (aria-label) for the select row checkbox in each
    *   // selection column body cell. The `{rowHeader}` placeholder is replaced with the
    *   // row header cell text content or row index if there is no row header column.
