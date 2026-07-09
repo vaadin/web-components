@@ -18,10 +18,6 @@ const DEFAULT_I18N = {
   drawer: 'Drawer',
 };
 
-// The synthesized "ghost" click on iOS standalone apps is dispatched shortly
-// after `touchend` (see `_onBackdropTouchend`).
-const GHOST_CLICK_TIMEOUT = 400;
-
 export const AppLayoutMixin = (superclass) =>
   class AppLayoutMixinClass extends I18nMixin(superclass) {
     static get properties() {
@@ -472,7 +468,8 @@ export const AppLayoutMixin = (superclass) =>
       if (navigator.standalone) {
         const backdrop = event.currentTarget;
         backdrop.style.pointerEvents = 'auto';
-        setTimeout(() => backdrop.style.removeProperty('pointer-events'), GHOST_CLICK_TIMEOUT);
+        // The ghost click arrives shortly after `touchend`.
+        setTimeout(() => backdrop.style.removeProperty('pointer-events'), 400);
       }
 
       this._close();
