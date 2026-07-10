@@ -524,6 +524,27 @@ describe('overflow', () => {
     });
   });
 
+  describe('font-size', () => {
+    beforeEach(async () => {
+      breadcrumbs.style.setProperty('--vaadin-breadcrumbs-font-size', '12px');
+
+      // Collapse all items to the overlay
+      breadcrumbs.style.maxWidth = '200px';
+      await nextResize(breadcrumbs);
+
+      button.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+    });
+
+    it('should apply --vaadin-breadcrumbs-font-size to overlay items', () => {
+      const overlayItems = items.filter((item) => item.slot === 'overlay');
+      expect(overlayItems).to.not.be.empty;
+      overlayItems.forEach((item) => {
+        expect(getComputedStyle(item).fontSize).to.equal('12px');
+      });
+    });
+  });
+
   describe('focus()', () => {
     it('should focus the overflow button when the root item is disabled', async () => {
       breadcrumbs.style.maxWidth = '600px';
