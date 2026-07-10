@@ -21,7 +21,8 @@
   vaadin-checkbox-group,
   vaadin-radio-group,
   vaadin-text-field,
-  vaadin-password-field
+  vaadin-password-field,
+  vaadin-email-field
 ) {
   &[has-label] {
     padding-top: var(--lumo-space-m);
