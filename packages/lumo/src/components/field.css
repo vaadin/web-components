@@ -25,7 +25,8 @@
   vaadin-email-field,
   vaadin-number-field,
   vaadin-integer-field,
-  vaadin-text-area
+  vaadin-text-area,
+  vaadin-combo-box
 ) {
   &[has-label] {
     padding-top: var(--lumo-space-m);
