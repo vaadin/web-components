@@ -20,7 +20,7 @@ function getEffectiveStyles(component) {
 
   if (lumoStyleSheet) {
     const base = lumoInjector.includeBaseStyles ? (baseStyles ?? elementStyles) : [];
-    return [...base, lumoStyleSheet, ...(themeStyles ?? [])];
+    return [lumoStyleSheet, ...(themeStyles ?? []), ...base];
   }
 
   return elementStyles;
