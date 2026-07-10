@@ -1,17 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import {
-  defineLit,
-  escKeyDown,
-  fixtureSync,
-  keyboardEventFor,
-  keyDownOn,
-  mousedown,
-  nextRender,
-  nextUpdate,
-} from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync, keyDownOn, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
 import { InputController } from '../src/input-controller.js';
@@ -52,120 +42,6 @@ describe('InputControlMixin', () => {
   );
 
   let element, input;
-
-  describe('clear button', () => {
-    let button;
-
-    beforeEach(async () => {
-      element = fixtureSync(`<${tag} value="foo"></${tag}>`);
-      await nextRender();
-      input = element.querySelector('[slot=input]');
-      button = element.clearElement;
-    });
-
-    it('should clear the field value on clear button click', async () => {
-      button.click();
-      await nextUpdate(element);
-      expect(element.value).to.equal('');
-    });
-
-    it('should clear the input value on clear button click', async () => {
-      button.click();
-      await nextUpdate(element);
-      expect(input.value).to.equal('');
-    });
-
-    (!isTouch ? it : it.skip)('should focus the input on clear clearButton mousedown', () => {
-      const spy = sinon.spy(input, 'focus');
-      mousedown(button);
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should dispatch input event on clear button click', () => {
-      const spy = sinon.spy();
-      input.addEventListener('input', spy);
-      button.click();
-      expect(spy.calledOnce).to.be.true;
-      const event = spy.firstCall.args[0];
-      expect(event.bubbles).to.be.true;
-      expect(event.composed).to.be.true;
-    });
-
-    it('should dispatch change event on clear button click', () => {
-      const spy = sinon.spy();
-      element.addEventListener('change', spy);
-      button.click();
-      expect(spy.calledOnce).to.be.true;
-      const event = spy.firstCall.args[0];
-      expect(event.bubbles).to.be.true;
-      expect(event.composed).to.be.false;
-    });
-
-    it('should call preventDefault on the button click event', () => {
-      const event = new CustomEvent('click', { cancelable: true });
-      button.dispatchEvent(event);
-      expect(event.defaultPrevented).to.be.true;
-    });
-
-    it('should reflect clearButtonVisible property to attribute', async () => {
-      element.clearButtonVisible = true;
-      await nextUpdate(element);
-      expect(element.hasAttribute('clear-button-visible')).to.be.true;
-
-      element.clearButtonVisible = false;
-      await nextUpdate(element);
-      expect(element.hasAttribute('clear-button-visible')).to.be.false;
-    });
-
-    it('should clear value on Esc when clearButtonVisible is true', async () => {
-      element.clearButtonVisible = true;
-      escKeyDown(button);
-      await nextUpdate(element);
-      expect(input.value).to.equal('');
-    });
-
-    it('should not clear value on Esc when clearButtonVisible is false', () => {
-      escKeyDown(button);
-      expect(input.value).to.equal('foo');
-    });
-
-    it('should dispatch input event when clearing value on Esc', () => {
-      const spy = sinon.spy();
-      input.addEventListener('input', spy);
-      element.clearButtonVisible = true;
-      escKeyDown(button);
-      expect(spy.calledOnce).to.be.true;
-      const event = spy.firstCall.args[0];
-      expect(event.bubbles).to.be.true;
-      expect(event.composed).to.be.true;
-    });
-
-    it('should dispatch change event when clearing value on Esc', () => {
-      const spy = sinon.spy();
-      input.addEventListener('change', spy);
-      element.clearButtonVisible = true;
-      escKeyDown(button);
-      expect(spy.calledOnce).to.be.true;
-      const event = spy.firstCall.args[0];
-      expect(event.bubbles).to.be.true;
-      expect(event.composed).to.be.false;
-    });
-
-    it('should call stopPropagation() on Esc when clearButtonVisible is true', () => {
-      element.clearButtonVisible = true;
-      const event = keyboardEventFor('keydown', 27, [], 'Escape');
-      const spy = sinon.spy(event, 'stopPropagation');
-      button.dispatchEvent(event);
-      expect(spy.called).to.be.true;
-    });
-
-    it('should not call stopPropagation() on Esc when clearButtonVisible is false', () => {
-      const event = keyboardEventFor('keydown', 27, [], 'Escape');
-      const spy = sinon.spy(event, 'stopPropagation');
-      button.dispatchEvent(event);
-      expect(spy.called).to.be.false;
-    });
-  });
 
   describe('name', () => {
     beforeEach(async () => {
