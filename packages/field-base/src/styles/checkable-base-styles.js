@@ -156,6 +156,32 @@ export const checkable = (part, propName = part) => css`
     opacity: 0;
   }
 
+
+
+  /* Reverse variant */
+  :host([theme~='reverse']) {
+    grid-template-columns: 1fr auto;
+
+    &::before {
+      display: none;
+    }
+
+    [part='label'],
+    [part='helper-text'],
+    [part='error-message'] {
+      grid-column: 1;
+    }
+
+    [part='${unsafeCSS(part)}'],
+    ::slotted(input) {
+      grid-column: 2;
+    }
+
+    ::slotted(input) {
+      margin-inline: calc(min(0px, (24px - 100%) / -2) - var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s))) 0 !important;
+    }
+  }
+
   @media (forced-colors: active) {
     :host(:is([checked], [indeterminate])) {
       --vaadin-${unsafeCSS(propName)}-border-color: CanvasText !important;

@@ -133,28 +133,6 @@ const switchControl = css`
     --vaadin-switch-marker-color: var(--vaadin-background-color);
   }
 
-  /* Reverse variant */
-  :host([theme~='reverse']) {
-    &::before {
-      display: none;
-    }
-
-    [part='label'],
-    [part='helper-text'],
-    [part='error-message'] {
-      grid-column: 1;
-    }
-
-    [part='switch'],
-    ::slotted(input) {
-      grid-column: 2;
-    }
-
-    ::slotted(input) {
-      margin-inline: calc(min(0px, (24px - 100%) / -2) - var(--vaadin-switch-gap, var(--vaadin-gap-s))) 0 !important;
-    }
-  }
-
   /* Icon variant */
   :host([theme~='icon']) [part='marker']::before {
     background: currentColor;
