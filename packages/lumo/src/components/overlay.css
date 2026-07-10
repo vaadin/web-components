@@ -8,7 +8,14 @@
   --vaadin-overlay-text-color: var(--lumo-body-text-color);
 }
 
-:where(vaadin-breadcrumbs, vaadin-combo-box, vaadin-confirm-dialog, vaadin-dialog, vaadin-popover)::part(overlay) {
+:where(
+  vaadin-breadcrumbs,
+  vaadin-combo-box,
+  vaadin-confirm-dialog,
+  vaadin-dialog,
+  vaadin-popover,
+  vaadin-time-picker
+)::part(overlay) {
   font-family: var(--lumo-font-family);
   line-height: var(--lumo-line-height-m);
 }

@@ -10,7 +10,8 @@
   vaadin-number-field,
   vaadin-integer-field,
   vaadin-text-area,
-  vaadin-combo-box
+  vaadin-combo-box,
+  vaadin-time-picker
 ) {
   padding: var(--lumo-space-xs) 0;
   --vaadin-input-field-button-text-color: var(--lumo-contrast-60pct);
