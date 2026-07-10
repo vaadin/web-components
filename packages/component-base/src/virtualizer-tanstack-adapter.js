@@ -52,6 +52,9 @@ export class TanStackAdapter {
   /** @type {boolean} */
   #isVisible;
 
+  /** @type {boolean} */
+  #mouseDown;
+
   /** @type {number} */
   #resizeRaf;
 
@@ -124,6 +127,23 @@ export class TanStackAdapter {
         });
       });
     });
+
+    if (this.reorderElements) {
+      // Reordering the physical elements cancels the user's grab of the scroll bar handle on Safari.
+      // Need to defer reordering until the user lets go of the scroll bar handle.
+      // Related: https://github.com/vaadin/web-components/issues/12099
+      this.scrollTarget.addEventListener('mousedown', (event) => {
+        if (event.target !== this.scrollTarget) {
+          return;
+        }
+        this.#mouseDown = true;
+      });
+
+      this.scrollTarget.addEventListener('mouseup', () => {
+        this.#mouseDown = false;
+        this.flush();
+      });
+    }
   }
 
   get size() {
@@ -300,19 +320,16 @@ export class TanStackAdapter {
     }
 
     this.#reorderElementsDebouncer = Debouncer.debounce(this.#reorderElementsDebouncer, timeOut.after(500), () => {
+      if (this.#mouseDown) {
+        this.#scheduleReorderElements();
+        return;
+      }
+
       this.#reorderElements();
     });
   }
 
   #reorderElements() {
-    // Remove hidden elements from the DOM
-    // TODO: Do we need this?
-    this.#elements.forEach((el) => {
-      if (el.hidden) {
-        el.remove();
-      }
-    });
-
     reorderChildren(this.elementsContainer, (a, b) => {
       const aIndex = parseInt(a.dataset.index);
       const bIndex = parseInt(b.dataset.index);
