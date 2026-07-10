@@ -1,3 +1,17 @@
+/* Register a property so that the color is evaluated and cached at the scope where the property is set,
+instead of computing light-dark() only at the scope where the property value is used/referenced. */
+@property --_aura-mdl-page-contained-backdrop {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+
+:where(:root),
+:where(:host) {
+  /* This caches the value of --vaadin-overlay-backdrop-background based on the color-scheme of the root/host element */
+  --_aura-mdl-page-contained-backdrop: var(--vaadin-overlay-backdrop-background);
+}
+
 vaadin-master-detail-layout::part(detail) {
   background: var(--vaadin-master-detail-layout-detail-background, var(--aura-surface-color) padding-box);
 }
@@ -30,4 +44,8 @@ vaadin-master-detail-layout > vaadin-master-detail-layout,
 vaadin-master-detail-layout:not([overlay])::part(detail) {
   border-start-end-radius: var(--_app-layout-radius);
   border-end-end-radius: var(--_app-layout-radius);
+}
+
+vaadin-master-detail-layout[overlay-containment='page'] {
+  --vaadin-overlay-backdrop-background: var(--_aura-mdl-page-contained-backdrop);
 }
