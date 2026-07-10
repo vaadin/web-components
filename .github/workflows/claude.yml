@@ -48,6 +48,7 @@ jobs:
         with:
           ref: ${{ github.event.repository.default_branch }}
           fetch-depth: 1
+          persist-credentials: false
 
       - name: Stage action infra
         # Copy the action infra out of the repo *before* the PR branch is checked
