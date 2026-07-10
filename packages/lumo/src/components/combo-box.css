@@ -1,0 +1,32 @@
+/* combo-box is a filled input: the fill/label/helper/error/toggle/clear styles
+   come from input-container.css and field.css, its dropdown items from item.css,
+   and the overlay background/shadow/font from overlay.css — all widened to include
+   vaadin-combo-box / vaadin-combo-box-item. The base already covers the toggle
+   icon mask, the opened pointer-events, the readonly toggle, the item focus ring
+   and the selected checkmark display. */
+:where(vaadin-combo-box-item) {
+  transition: background-color 100ms;
+}
+
+/* Small gap between the input field and the dropdown (top/bottom-aligned reflect
+   to the host via setOverlayStateAttribute). */
+:where(vaadin-combo-box[top-aligned])::part(overlay) {
+  margin-top: var(--lumo-space-xs);
+}
+
+:where(vaadin-combo-box[bottom-aligned])::part(overlay) {
+  margin-bottom: var(--lumo-space-xs);
+}
+
+/* Loader: restore Lumo's two-tone spinner (the base uses a mask-based single-color
+   spinner) and position it at the top end of the overlay. */
+:where(vaadin-combo-box)::part(loader) {
+  --vaadin-spinner-size: var(--lumo-icon-size-s);
+  top: var(--lumo-space-s);
+  inset-inline: auto var(--lumo-space-s);
+  inset-block-end: auto;
+  margin: 0;
+  border-color: var(--lumo-primary-color-10pct) var(--lumo-primary-color-10pct) var(--lumo-primary-color)
+    var(--lumo-primary-color);
+  mask-image: none;
+}
