@@ -14,7 +14,8 @@
   vaadin-confirm-dialog,
   vaadin-dialog,
   vaadin-popover,
-  vaadin-time-picker
+  vaadin-time-picker,
+  vaadin-select
 )::part(overlay) {
   font-family: var(--lumo-font-family);
   line-height: var(--lumo-line-height-m);
