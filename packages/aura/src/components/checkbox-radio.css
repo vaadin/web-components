@@ -51,7 +51,8 @@ vaadin-radio-button[checked]:not([readonly], [disabled])::part(radio) {
 }
 
 vaadin-checkbox:not([readonly], [disabled])::part(checkbox)::before,
-vaadin-radio-button:not([disabled])::part(radio)::before {
+vaadin-radio-button:not([disabled])::part(radio)::before,
+vaadin-switch:not([readonly], [disabled])::part(switch)::before {
   content: '';
   position: absolute;
   inset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
@@ -63,15 +64,21 @@ vaadin-radio-button:not([disabled])::part(radio)::before {
     background-color 100ms;
 }
 
+vaadin-switch:not([disabled])::part(switch)::before {
+  inset: 0;
+}
+
 @media (any-hover: hover) {
   vaadin-checkbox:hover:not([readonly], [disabled], [active])::part(checkbox)::before,
-  vaadin-radio-button:hover:not([disabled], [active])::part(radio)::before {
+  vaadin-radio-button:hover:not([disabled], [active])::part(radio)::before,
+  vaadin-switch:hover:not([readonly], [disabled], [active])::part(switch)::before {
     opacity: 0.04;
   }
 }
 
 vaadin-checkbox[active]:not([readonly], [disabled])::part(checkbox)::before,
-vaadin-radio-button[active]:not([disabled])::part(radio)::before {
+vaadin-radio-button[active]:not([disabled])::part(radio)::before,
+vaadin-switch[active]:not([readonly], [disabled])::part(switch)::before {
   opacity: 0.1;
   background: #000;
 }
