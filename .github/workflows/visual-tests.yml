@@ -22,7 +22,7 @@ jobs:
       options: --ipc=host
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
@@ -66,7 +66,7 @@ jobs:
       options: --ipc=host
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
@@ -111,7 +111,7 @@ jobs:
       options: --ipc=host
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
