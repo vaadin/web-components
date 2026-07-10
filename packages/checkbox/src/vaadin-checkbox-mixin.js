@@ -77,12 +77,18 @@ export const CheckboxMixin = (superclass) =>
 
       this._boundOnInputClick = this._onInputClick.bind(this);
 
-      // Set the string "on" as the default value for the checkbox following the HTML specification:
-      // https://html.spec.whatwg.org/multipage/input.html#dom-input-value-default-on
+      /**
+       * Set the string "on" as the default value for the checkbox following the HTML specification:
+       * https://html.spec.whatwg.org/multipage/input.html#dom-input-value-default-on
+       * @internal to not document it in CEM
+       */
       this.value = 'on';
 
-      // Set tabindex to 0 by default to not lose focus on click in Safari
-      // See https://github.com/vaadin/web-components/pull/6780
+      /**
+       * Set tabindex to 0 by default to not lose focus on click in Safari
+       * See https://github.com/vaadin/web-components/pull/6780
+       * @internal to not document it in CEM
+       */
       this.tabindex = 0;
     }
 
