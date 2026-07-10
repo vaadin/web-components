@@ -1,0 +1,30 @@
+/* select is a filled input: the fill/label/helper/error/toggle styles come from
+   input-container.css and field.css, its dropdown items from item.css, and the
+   overlay background/shadow/font from overlay.css — all widened to include
+   vaadin-select / vaadin-select-item. The base already covers the toggle icon
+   mask, opened pointer-events, readonly toggle, focus ring and text alignment.
+   Only the value button weight and the selected-item checkmark are unique. */
+
+/* The selected value keeps Lumo's medium weight (base leaves it at 400). */
+:where(vaadin-select-value-button) {
+  font-weight: var(--vaadin-input-field-value-font-weight, 500);
+}
+
+/* Readonly dims the selected value to the secondary color (the value button
+   inherits its color from the input container). */
+:where(vaadin-select[readonly]) {
+  --vaadin-input-field-value-color: var(--lumo-secondary-text-color);
+}
+
+/* Highlight the toggle button when hovering anywhere over the field. */
+@media (any-hover: hover) {
+  :where(vaadin-select):hover:not([readonly], [disabled])::part(toggle-button) {
+    --vaadin-input-field-button-text-color: var(--lumo-contrast-80pct);
+  }
+}
+
+/* Show the checkmark on the selected item (base enables it per overlay, and the
+   select overlay base does not). */
+:where(vaadin-select)::part(overlay) {
+  --vaadin-item-checkmark-display: block;
+}
