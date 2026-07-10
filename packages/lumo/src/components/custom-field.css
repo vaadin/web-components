@@ -1,0 +1,12 @@
+/* custom-field reuses the shared field label/helper/error styles (widened into
+   field.css). Its only unique rule: the child fields carry their own top spacing,
+   so the label sits closer to them than a standalone field's label — reduce the
+   label padding-bottom by space-xs. The whitespace theme opts back into the full
+   standalone spacing. */
+:where(vaadin-custom-field)[has-label]::part(label) {
+  padding-bottom: calc(0.5em - var(--lumo-space-xs));
+}
+
+:where(vaadin-custom-field)[theme~='whitespace'][has-label]::part(label) {
+  padding-bottom: 0.5em;
+}
