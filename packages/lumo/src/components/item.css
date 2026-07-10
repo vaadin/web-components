@@ -10,13 +10,16 @@
   vaadin-context-menu-item,
   vaadin-avatar-group-menu-item,
   vaadin-combo-box-item,
-  vaadin-time-picker-item
+  vaadin-time-picker-item,
+  vaadin-select-item
 ) {
   min-height: var(--lumo-size-m);
   line-height: var(--lumo-line-height-xs);
 }
 
-:where(vaadin-item, vaadin-context-menu-item, vaadin-combo-box-item, vaadin-time-picker-item)::part(checkmark) {
+:where(vaadin-item, vaadin-context-menu-item, vaadin-combo-box-item, vaadin-time-picker-item, vaadin-select-item)::part(
+  checkmark
+) {
   --vaadin-icon-visual-size: 80%;
 }
 
@@ -26,7 +29,8 @@
       vaadin-context-menu-item,
       vaadin-avatar-group-menu-item,
       vaadin-combo-box-item,
-      vaadin-time-picker-item
+      vaadin-time-picker-item,
+      vaadin-select-item
     ):hover:not([disabled]) {
     background-color: var(--lumo-primary-color-10pct);
   }
@@ -37,7 +41,8 @@
   vaadin-context-menu-item,
   vaadin-avatar-group-menu-item,
   vaadin-combo-box-item,
-  vaadin-time-picker-item
+  vaadin-time-picker-item,
+  vaadin-select-item
 )[disabled] {
   opacity: 1;
   color: var(--lumo-disabled-text-color);

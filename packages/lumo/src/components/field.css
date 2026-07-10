@@ -27,7 +27,8 @@
   vaadin-integer-field,
   vaadin-text-area,
   vaadin-combo-box,
-  vaadin-time-picker
+  vaadin-time-picker,
+  vaadin-select
 ) {
   &[has-label] {
     padding-top: var(--lumo-space-m);
