@@ -303,7 +303,7 @@ const createVisualTestsConfig = (theme) => {
     },
     browsers: [browser],
     plugins: [
-      esbuildPlugin({ ts: true }),
+      esbuildPlugin({ ts: true, target: 'esnext' }),
       visualRegressionPlugin({
         baseDir: 'packages',
         getBaselineName(args) {
