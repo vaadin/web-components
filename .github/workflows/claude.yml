@@ -1,0 +1,102 @@
+name: Claude Code
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+
+env:
+  # Pin the Playwright MCP server version for reproducible runs. The MCP drives
+  # the runner's preinstalled Chrome (--browser chrome), so no browser download
+  # is needed. Bump this to upgrade the server.
+  PLAYWRIGHT_MCP_VERSION: '0.0.77'
+
+jobs:
+  claude:
+    # Skip workflow if the comment does not tag claude or the author is not a
+    # maintainer. Having this check here ensures that this scenario does not
+    # even start a runner.
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude') &&
+        contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude') &&
+        contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude') &&
+        contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.review.author_association))
+    runs-on: ubuntu-latest
+    permissions:
+      # Required by actions/checkout
+      contents: read
+      # Required by anthropics/claude-code-action to generate a short-lived
+      # app token (contents/pull_requests/issues: write) that is revoked at the
+      # end of the run. Thus, there should be no need to grant additional write
+      # permissions to the workflow itself.
+      id-token: write
+      # Required by github_ci MCP server, which uses the workflow token instead
+      # of the short-lived app token
+      actions: read
+    steps:
+      - name: Checkout repository
+        # Pin to the default branch: pull_request_review_comment/review events
+        # would otherwise check out the PR merge ref (only issue_comment defaults
+        # to the default branch). Kept as the first checkout so the trusted action
+        # infra staged below comes from the default branch, never the PR branch.
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 1
+
+      - name: Stage action infra
+        # Copy the action infra out of the repo *before* the PR branch is checked
+        # out, so the PR-branch checkout can't remove or modify these files
+        # (branches may predate them). Referenced by absolute path in later steps.
+        run: |
+          cp .github/claude/summary.js "${{ runner.temp }}/summary.js"
+          cp .github/claude/prompt.js "${{ runner.temp }}/prompt.js"
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      - name: Build Claude prompt
+        id: prompt
+        run: node "${{ runner.temp }}/prompt.js"
+
+      - name: Run Claude Code
+        id: claude
+        uses: anthropics/claude-code-action@37b464ce72700f7b2c5ff8d2db7fa7b15df792f5 # v1.0.169
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Setting a custom prompt would switch the action into agent mode
+          # track_progress forces tag mode back
+          track_progress: true
+          prompt: ${{ steps.prompt.outputs.prompt }}
+          additional_permissions: |
+            actions: read
+          claude_args: |
+            --mcp-config '{"mcpServers":{"playwright":{"command":"npx","args":["@playwright/mcp@${{ env.PLAYWRIGHT_MCP_VERSION }}","--headless","--isolated","--browser","chrome"]}}}'
+            --allowedTools "mcp__playwright,Bash(yarn test:*),Bash(yarn lint:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(git show:*),Bash(git branch:*),Bash(git add:*),Bash(git commit:*),Bash(git checkout:*),Bash(git restore:*),Bash(git stash:*),Bash(cd:*),Bash(ls:*),Bash(cat:*),Bash(find:*),Bash(grep:*),Bash(rg:*),Bash(head:*),Bash(tail:*),Bash(sed:*),Bash(wc:*),Bash(echo:*)"
+
+      - name: Summarize Claude session
+        if: always() && steps.claude.outputs.execution_file != ''
+        run: node "${{ runner.temp }}/summary.js" "${{ steps.claude.outputs.execution_file }}"
+
+      - name: Upload Claude execution log
+        # The execution_file is the full stream-json trace: every tool_use with
+        # its input and every tool_result. Off by default because on a public
+        # repo the artifact is world-readable; set the CLAUDE_DEBUG repository
+        # variable to 'true' to capture it when debugging a run.
+        if: always() && vars.CLAUDE_DEBUG == 'true' && steps.claude.outputs.execution_file != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-execution-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ steps.claude.outputs.execution_file }}
+          retention-days: 7
