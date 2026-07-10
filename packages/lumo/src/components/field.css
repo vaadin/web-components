@@ -23,7 +23,8 @@
   vaadin-text-field,
   vaadin-password-field,
   vaadin-email-field,
-  vaadin-number-field
+  vaadin-number-field,
+  vaadin-integer-field
 ) {
   &[has-label] {
     padding-top: var(--lumo-space-m);
