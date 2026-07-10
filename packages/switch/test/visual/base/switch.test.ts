@@ -127,6 +127,7 @@ describe('switch', () => {
 
         it('reverse', async () => {
           element.setAttribute('theme', 'reverse');
+          element.style.setProperty('width', '10em');
           await visualDiff(div, `${dir}-theme-reverse`);
         });
       });
