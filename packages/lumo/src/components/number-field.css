@@ -1,0 +1,11 @@
+/* The filled input paradigm (fill, hover highlight, clear button, invalid, small
+   theme) comes from input-container.css and the label/helper/error styles from
+   field.css — number-field is widened into both selector lists. Only the step
+   button specifics live here. */
+
+/* With step buttons the base centers the value; align-right keeps it right-aligned.
+   text-align: right is intentional here (matches the base align-right theme, which
+   is a physical alignment, not a logical one). */
+:where(vaadin-number-field)[step-buttons-visible][theme~='align-right'] > input {
+  text-align: right;
+}
