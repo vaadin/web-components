@@ -156,8 +156,6 @@ export const checkable = (part, propName = part) => css`
     opacity: 0;
   }
 
-
-
   /* Reverse variant */
   :host([theme~='reverse']) {
     grid-template-columns: 1fr auto;
