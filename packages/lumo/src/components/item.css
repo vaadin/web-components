@@ -5,22 +5,24 @@
   --vaadin-item-checkmark-color: var(--lumo-primary-text-color);
 }
 
-:where(vaadin-item, vaadin-context-menu-item, vaadin-avatar-group-menu-item) {
+:where(vaadin-item, vaadin-context-menu-item, vaadin-avatar-group-menu-item, vaadin-combo-box-item) {
   min-height: var(--lumo-size-m);
   line-height: var(--lumo-line-height-xs);
 }
 
-:where(vaadin-item, vaadin-context-menu-item)::part(checkmark) {
+:where(vaadin-item, vaadin-context-menu-item, vaadin-combo-box-item)::part(checkmark) {
   --vaadin-icon-visual-size: 80%;
 }
 
 @media (any-hover: hover) {
-  :where(vaadin-item, vaadin-context-menu-item, vaadin-avatar-group-menu-item):hover:not([disabled]) {
+  :where(vaadin-item, vaadin-context-menu-item, vaadin-avatar-group-menu-item, vaadin-combo-box-item):hover:not(
+      [disabled]
+    ) {
     background-color: var(--lumo-primary-color-10pct);
   }
 }
 
-:where(vaadin-item, vaadin-context-menu-item, vaadin-avatar-group-menu-item)[disabled] {
+:where(vaadin-item, vaadin-context-menu-item, vaadin-avatar-group-menu-item, vaadin-combo-box-item)[disabled] {
   opacity: 1;
   color: var(--lumo-disabled-text-color);
 }
