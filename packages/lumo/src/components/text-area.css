@@ -1,0 +1,45 @@
+/* The filled input paradigm (fill, invalid, disabled, small theme) comes from
+   input-container.css and the label/helper/error styles from field.css —
+   text-area is widened into both selector lists. Because the textarea scrolls,
+   the absolute ::after highlight can't track the content, so it is disabled here
+   and hover is driven by the background instead. */
+
+:where(vaadin-text-area)::part(input-field) {
+  /* Vertical padding matches the flex-centered single-line fields (input-container
+     sets 0 vertical padding); keep the shared horizontal padding. */
+  --vaadin-input-field-padding: calc((var(--lumo-size-m) - 1em * var(--lumo-line-height-s)) / 2)
+    calc(0.375em + var(--vaadin-radius-m) / 4 - 1px);
+  line-height: var(--lumo-line-height-s);
+  transition: background-color 0.1s;
+}
+
+/* Disable the highlight ::after (it can't follow scrolled content) */
+:where(vaadin-text-area)::part(input-field)::after {
+  display: none;
+}
+
+/* Readonly: a real dashed border (the ::after dashed border would scroll away) */
+:where(vaadin-text-area)[readonly]::part(input-field) {
+  border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-30pct));
+}
+
+:where(vaadin-text-area)[theme~='small']::part(input-field) {
+  --vaadin-input-field-padding: calc((var(--lumo-size-s) - 1em * var(--lumo-line-height-s)) / 2)
+    calc(0.375em + var(--vaadin-radius-m) / 4 - 1px);
+}
+
+@media (any-hover: hover) {
+  :where(vaadin-text-area):hover:not([readonly], [focused], [disabled], [invalid])::part(input-field) {
+    --vaadin-input-field-background: var(--lumo-contrast-20pct);
+  }
+}
+
+@media (pointer: coarse) {
+  :where(vaadin-text-area):hover:not([readonly], [focused], [disabled], [invalid])::part(input-field) {
+    --vaadin-input-field-background: var(--lumo-contrast-10pct);
+  }
+
+  :where(vaadin-text-area):active:not([readonly], [focused], [disabled])::part(input-field) {
+    --vaadin-input-field-background: var(--lumo-contrast-20pct);
+  }
+}
