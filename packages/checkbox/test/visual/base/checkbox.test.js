@@ -135,8 +135,13 @@ describe('checkbox', () => {
 
         it('reverse', async () => {
           element.setAttribute('theme', 'reverse');
-          element.style.setProperty('width', '10em');
           await visualDiff(div, `${dir}-theme-reverse`);
+        });
+
+        it('reverse width', async () => {
+          element.setAttribute('theme', 'reverse');
+          element.style.width = '10em';
+          await visualDiff(div, `${dir}-theme-reverse-width`);
         });
       });
     });
