@@ -77,8 +77,9 @@ describe('breadcrumbs', () => {
     it('overflow-opened', async () => {
       div.style.height = '150px';
       breadcrumbs.$.overflow.focus();
+      const opened = oneEvent(overlay, 'vaadin-overlay-open');
       await sendKeys({ press: 'Enter' });
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      await opened;
       await visualDiff(div, 'overflow-opened');
     });
 
@@ -86,8 +87,9 @@ describe('breadcrumbs', () => {
       div.style.height = '150px';
       breadcrumbs.setAttribute('theme', 'primary');
       breadcrumbs.$.overflow.focus();
+      const opened = oneEvent(overlay, 'vaadin-overlay-open');
       await sendKeys({ press: 'Enter' });
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      await opened;
       await visualDiff(div, 'theme-primary');
     });
   });
