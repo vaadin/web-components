@@ -11,6 +11,9 @@ export const breadcrumbsItemStyles = css`
     display: inline-flex;
     align-items: baseline;
     flex-shrink: 0;
+    /* Set explicitly so overlay items, which are slotted outside the
+       breadcrumbs font-size inheritance chain, use the same variable. */
+    font-size: var(--vaadin-breadcrumbs-font-size, 1em);
   }
 
   :host([hidden]) {
