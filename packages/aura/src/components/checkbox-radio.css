@@ -1,8 +1,8 @@
 :where(:root),
 :where(:host) {
   --vaadin-radio-button-marker-size: 6px;
-  --vaadin-checkbox-size: round(1lh - 2px, 2px);
-  --vaadin-radio-button-size: round(1lh - 2px, 2px);
+  --vaadin-checkbox-size: round(1.25em, 2px);
+  --vaadin-radio-button-size: round(1.25em, 2px);
 }
 
 vaadin-checkbox::part(checkbox),
