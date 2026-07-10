@@ -12,7 +12,7 @@
 
 vaadin-switch {
   --vaadin-switch-background: light-dark(var(--vaadin-text-color-secondary), var(--vaadin-border-color));
-  --vaadin-switch-icon-color: var(--vaadin-switch-background);
+  --vaadin-switch-icon-color: light-dark(var(--vaadin-switch-background), var(--vaadin-background-color));
 
   &:not([disabled], [readonly]) {
     &::part(marker) {
@@ -29,29 +29,35 @@ vaadin-switch {
   &[checked] {
     --vaadin-switch-background: var(--aura-accent-color);
     --vaadin-switch-marker-color: var(--aura-accent-contrast-color);
+    --vaadin-switch-icon-color: var(--vaadin-switch-background);
   }
 
   &[disabled] {
-    --vaadin-switch-background: color-mix(
-      in srgb,
-      light-dark(var(--vaadin-text-color-secondary), var(--vaadin-text-color-secondary)) 15%,
-      transparent
-    );
+    --vaadin-switch-background: color-mix(in srgb, var(--vaadin-text-color-secondary) 15%, transparent);
     --vaadin-switch-marker-color: hsla(0deg, 0%, 100%, 0.5);
+    --vaadin-switch-icon-color: light-dark(
+      var(--vaadin-switch-background),
+      color-mix(in srgb, var(--vaadin-background-color), transparent)
+    );
 
     &[checked] {
       --vaadin-switch-background: color-mix(in srgb, var(--aura-accent-color) 20%, transparent);
+      --vaadin-switch-icon-color: light-dark(
+        var(--vaadin-switch-background),
+        color-mix(in srgb, var(--aura-accent-color), var(--vaadin-background-color))
+      );
     }
   }
 
   &[readonly] {
     --vaadin-switch-background: var(--vaadin-text-color-disabled);
-    --vaadin-switch-marker-color: color-mix(in srgb, #fff 75%, transparent);
-    --vaadin-switch-icon-color: var(--vaadin-switch-background);
+    --vaadin-switch-marker-color: color-mix(in srgb, #fff 70%, transparent);
+    --vaadin-switch-icon-color: light-dark(var(--vaadin-switch-background), var(--vaadin-background-color));
 
     &[checked] {
-      --vaadin-switch-background: color-mix(in srgb, var(--aura-accent-color) 75%, var(--vaadin-background-color));
+      --vaadin-switch-background: color-mix(in srgb, var(--aura-accent-color) 70%, var(--vaadin-background-color));
       --vaadin-switch-marker-color: color-mix(in srgb, var(--aura-accent-contrast-color) 85%, transparent);
+      --vaadin-switch-icon-color: var(--vaadin-switch-background);
     }
   }
 }
