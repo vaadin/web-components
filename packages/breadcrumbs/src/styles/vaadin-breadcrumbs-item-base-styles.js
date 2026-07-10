@@ -11,6 +11,7 @@ export const breadcrumbsItemStyles = css`
     display: inline-flex;
     align-items: baseline;
     flex-shrink: 0;
+    font-size: var(--vaadin-breadcrumbs-font-size, 1em);
   }
 
   :host([hidden]) {
