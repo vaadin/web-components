@@ -3,18 +3,19 @@
    and the overlay background/shadow/font from overlay.css — all widened to include
    vaadin-combo-box / vaadin-combo-box-item. The base already covers the toggle
    icon mask, the opened pointer-events, the readonly toggle, the item focus ring
-   and the selected checkmark display. */
-:where(vaadin-combo-box-item) {
+   and the selected checkmark display. The item hover transition is shared with
+   time-picker, whose items reuse the combo-box-item base styles. */
+:where(vaadin-combo-box-item, vaadin-time-picker-item) {
   transition: background-color 100ms;
 }
 
 /* Small gap between the input field and the dropdown (top/bottom-aligned reflect
-   to the host via setOverlayStateAttribute). */
-:where(vaadin-combo-box[top-aligned])::part(overlay) {
+   to the host via setOverlayStateAttribute). Shared with time-picker. */
+:where(vaadin-combo-box, vaadin-time-picker)[top-aligned]::part(overlay) {
   margin-top: var(--lumo-space-xs);
 }
 
-:where(vaadin-combo-box[bottom-aligned])::part(overlay) {
+:where(vaadin-combo-box, vaadin-time-picker)[bottom-aligned]::part(overlay) {
   margin-bottom: var(--lumo-space-xs);
 }
 
