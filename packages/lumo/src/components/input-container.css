@@ -3,7 +3,7 @@
    has no ::after and renders an outlined input). Restores the classic Lumo look
    over the base. Widen the shared selector list below as more field components
    are ported. */
-:where(vaadin-text-field, vaadin-password-field, vaadin-email-field) {
+:where(vaadin-text-field, vaadin-password-field, vaadin-email-field, vaadin-number-field) {
   padding: var(--lumo-space-xs) 0;
   --vaadin-input-field-button-text-color: var(--lumo-contrast-60pct);
   /* Set the field padding at the host scope so the base baseline guide (:host::before)
