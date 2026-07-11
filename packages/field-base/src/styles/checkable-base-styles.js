@@ -91,8 +91,8 @@ export const checkable = (part, propName = part) => css`
     box-sizing: border-box;
     --_color: var(--vaadin-${unsafeCSS(propName)}-marker-color, var(--vaadin-${unsafeCSS(propName)}-background, var(--vaadin-background-color)));
     color: var(--_color);
-    height: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
-    width: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
+    height: var(--vaadin-${unsafeCSS(propName)}-size, round(1.125em, 2px));
+    width: var(--vaadin-${unsafeCSS(propName)}-size, round(1.125em, 2px));
     position: relative;
     cursor: var(--_cursor);
     display: flex;
