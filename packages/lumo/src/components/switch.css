@@ -1,0 +1,109 @@
+/* Lumo switch: a filled pill track (contrast off, primary on) with a white marker
+   knob that carries a subtle shadow. The base provides the track/marker mechanism,
+   the checked translate, the icon variant and the focus ring; this sets the Lumo
+   tokens and per-state colors. */
+:where(vaadin-switch) {
+  --vaadin-switch-marker-color: var(--lumo-tint);
+  --vaadin-switch-icon-color: var(--lumo-shade-60pct);
+  --vaadin-switch-marker-scale: 1;
+  --vaadin-switch-label-color: var(--lumo-body-text-color);
+  --vaadin-switch-label-font-size: var(--lumo-font-size-m);
+  --vaadin-switch-label-font-weight: 400;
+}
+
+/* Track fill and (no) border, except readonly — which keeps the base's transparent
+   fill and dashed border (the light-DOM host var would otherwise win over the
+   base :host([readonly]) rule via outer-context precedence). */
+:where(vaadin-switch):not([readonly]) {
+  --vaadin-switch-background: light-dark(var(--lumo-contrast-50pct), var(--lumo-contrast-40pct));
+  --vaadin-switch-border-color: transparent;
+}
+
+/* Give the 16px track a 4px inset (matches the checkbox/radio breathing room) */
+:where(vaadin-switch)::part(switch) {
+  margin: var(--lumo-space-xs);
+}
+
+/* The white knob gets a subtle shadow, except when disabled or readonly */
+:where(vaadin-switch):not([disabled], [readonly])::part(marker) {
+  box-shadow: var(--lumo-box-shadow-xs);
+}
+
+/* Checked: primary track */
+:where(vaadin-switch)[checked] {
+  --vaadin-switch-background: var(--lumo-primary-color);
+  --vaadin-switch-marker-color: var(--lumo-primary-contrast-color);
+  --vaadin-switch-icon-color: var(--lumo-primary-color);
+}
+
+/* Readonly */
+:where(vaadin-switch)[readonly] {
+  --vaadin-switch-marker-color: var(--lumo-contrast-70pct);
+  --vaadin-switch-marker-scale: 0.8;
+}
+
+:where(vaadin-switch)[readonly][checked] {
+  --vaadin-switch-background: var(--lumo-primary-color-50pct);
+  --vaadin-switch-marker-color: var(--lumo-primary-contrast-color);
+  --vaadin-switch-icon-color: var(--lumo-primary-color);
+}
+
+/* Disabled */
+:where(vaadin-switch)[disabled] {
+  --vaadin-switch-background: var(--lumo-contrast-10pct);
+  --vaadin-switch-marker-color: var(--lumo-tint-30pct);
+  --vaadin-switch-border-color: transparent;
+  --vaadin-switch-icon-color: var(--lumo-shade-10pct);
+}
+
+:where(vaadin-switch)[disabled][checked] {
+  --vaadin-switch-background: var(--lumo-primary-color-10pct);
+  --vaadin-switch-marker-color: var(--lumo-tint-30pct);
+  --vaadin-switch-icon-color: color-mix(in srgb, var(--lumo-primary-color) 10%, var(--lumo-base-color) 50%);
+}
+
+/* Invalid: error-tinted track, red focus ring and red required indicator
+   (after checked so it wins) */
+:where(vaadin-switch)[invalid] {
+  --vaadin-switch-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-50pct));
+  --vaadin-focus-ring-color: var(--lumo-error-color-50pct);
+  --vaadin-input-field-required-indicator-color: var(--lumo-error-text-color);
+}
+
+/* Active press */
+:where(vaadin-switch)[active]::part(switch) {
+  transform: scale(0.95);
+  transition-duration: 0.05s;
+}
+
+/* Label spacing: pad the slotted <label> (not the label part) — block padding for
+   the row height, a small leading gap to the switch and a larger trailing gap. */
+:where(vaadin-switch)[has-label] > label {
+  padding-block: var(--lumo-space-xs);
+  padding-inline: var(--lumo-space-xs) var(--lumo-space-s);
+}
+
+/* Helper text and error message (switch is not part of the shared field list) */
+:where(vaadin-switch)::part(helper-text) {
+  padding-inline-start: var(--lumo-space-xs);
+  margin-top: 0;
+}
+
+:where(vaadin-switch)[has-helper]::part(helper-text)::before {
+  display: none;
+}
+
+:where(vaadin-switch)[has-helper]::part(helper-text)::after {
+  content: '';
+  display: block;
+  height: 0.4em;
+}
+
+:where(vaadin-switch)::part(error-message) {
+  padding-inline-start: var(--lumo-space-xs);
+  margin: 0;
+}
+
+:where(vaadin-switch)::part(error-message)::before {
+  content: none;
+}
