@@ -150,23 +150,25 @@ describe('virtualizer - item height - sub-pixel', () => {
     expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
   });
 
-  it('should measure height correctly if some transform is applied to virtualizer', () => {
+  it('should measure height correctly if some transform is applied to virtualizer', async () => {
     elementsContainer.style.transform = 'scale(0.5)';
 
-    virtualizer.scrollToIndex(0);
+    await nextResize(elementsContainer);
+    await nextFrame();
 
     let containerHeight = elementsContainer.offsetHeight;
     expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
 
     elementsContainer.style.transform = 'scale(1.5)';
 
-    virtualizer.scrollToIndex(0);
+    await nextResize(elementsContainer);
+    await nextFrame();
 
     containerHeight = elementsContainer.offsetHeight;
     expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
   });
 
-  it('should measure item height when box-sizing content-box is used', () => {
+  it('should measure item height when box-sizing content-box is used', async () => {
     const firstItem = elementsContainer.querySelector('#item-0');
 
     firstItem.style.boxSizing = 'content-box';
@@ -174,13 +176,14 @@ describe('virtualizer - item height - sub-pixel', () => {
     firstItem.style.borderTop = '4px solid red';
     firstItem.style.borderBottom = '5px solid red';
 
-    virtualizer.scrollToIndex(0);
+    await nextResize(elementsContainer);
+    await nextFrame();
 
     const containerHeight = elementsContainer.offsetHeight;
     expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT + 3 + 4 + 5));
   });
 
-  it('should measure item height when box-sizing border-box is used', () => {
+  it('should measure item height when box-sizing border-box is used', async () => {
     const firstItem = elementsContainer.querySelector('#item-0');
 
     firstItem.style.boxSizing = 'border-box';
@@ -188,7 +191,8 @@ describe('virtualizer - item height - sub-pixel', () => {
     firstItem.style.borderTop = '4px solid red';
     firstItem.style.borderBottom = '5px solid red';
 
-    virtualizer.scrollToIndex(0);
+    await nextResize(elementsContainer);
+    await nextFrame();
 
     const containerHeight = elementsContainer.offsetHeight;
     expect(containerHeight).to.equal(Math.ceil(ITEM_HEIGHT));
