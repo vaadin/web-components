@@ -13,9 +13,9 @@
 :host {
   --_lumo-vaadin-checkbox-inject: 1;
   --_lumo-vaadin-checkbox-inject-modules:
-    lumo_mixins_checkable-field,
     lumo_mixins_field-helper,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
+    lumo_mixins_checkable-field,
     lumo_components_checkbox;
 }

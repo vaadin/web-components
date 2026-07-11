@@ -90,6 +90,10 @@
       opacity 0.8s;
   }
 
+  [part='helper-text'] {
+    margin: 0;
+  }
+
   /* visually hidden */
   ::slotted(input) {
     cursor: inherit;
