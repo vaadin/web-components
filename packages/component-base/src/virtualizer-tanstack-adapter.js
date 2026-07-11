@@ -10,7 +10,7 @@ import {
   observeElementRect,
   Virtualizer,
 } from '@tanstack/virtual-core';
-import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
+import { animationFrame, microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getBorderBoxBlockSize, reorderChildren } from '@vaadin/component-base/src/dom-utils.js';
 
@@ -54,9 +54,6 @@ export class TanStackAdapter {
 
   /** @type {boolean} */
   #mouseDown;
-
-  /** @type {number} */
-  #resizeRaf;
 
   /** @type {Virtualizer} */
   #virtualizer;
@@ -119,13 +116,16 @@ export class TanStackAdapter {
     });
 
     this.#resizeObserver = new ResizeObserver((entries) => {
-      cancelAnimationFrame(this.#resizeRaf);
-
-      this.#resizeRaf = requestAnimationFrame(() => {
-        entries.forEach((entry) => {
-          this.#measureElement(entry.target, entry);
-        });
+      entries.forEach((entry) => {
+        this.#measureElement(entry.target, entry);
       });
+
+      // Rendering in the same frame would re-trigger the observer and cause
+      // a "ResizeObserver loop" error. Push the render to the next frame.
+      if (this.#renderDebouncer?.isActive()) {
+        this.#renderDebouncer.cancel();
+        this.#renderDebouncer = Debouncer.debounce(this.#renderDebouncer, animationFrame, () => this.#render());
+      }
     });
 
     if (this.reorderElements) {
@@ -222,7 +222,7 @@ export class TanStackAdapter {
     if (sync) {
       this.#render();
     } else {
-      this.#scheduleRender();
+      this.#renderDebouncer = Debouncer.debounce(this.#renderDebouncer, microTask, () => this.#render());
     }
   }
 
@@ -230,10 +230,6 @@ export class TanStackAdapter {
     if (isVisible) {
       this.#virtualizer.scrollToOffset(this.#virtualizer.scrollOffset);
     }
-  }
-
-  #scheduleRender() {
-    this.#renderDebouncer = Debouncer.debounce(this.#renderDebouncer, microTask, () => this.#render());
   }
 
   #render() {
