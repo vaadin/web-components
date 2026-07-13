@@ -9,6 +9,7 @@ import {
   focusout,
   nextRender,
   nextUpdate,
+  oneEvent,
   outsideClick,
   tabKeyDown,
   tap,
@@ -105,6 +106,48 @@ describe('interactions', () => {
 
       focusout(input);
       expect(input.value).to.be.empty;
+    });
+
+    it('should not select item when clicked during closing animation', async () => {
+      const style = document.createElement('style');
+      style.textContent = `
+        :host([closing]) {
+          animation: 200ms closing-animation;
+        }
+
+        :host([closing]) [part='overlay'] {
+          animation: 200ms overlay-closing-animation;
+        }
+
+        @keyframes closing-animation {
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes overlay-closing-animation {
+          to {
+            opacity: 0;
+          }
+        }
+      `;
+      overlay.shadowRoot.appendChild(style);
+
+      const item = getFirstItem(comboBox);
+      expect(item).to.exist;
+
+      comboBox.close();
+      expect(overlay.hasAttribute('closing')).to.be.true;
+
+      await sendMouseToElement({ type: 'click', element: item });
+
+      expect(comboBox.selectedItem).to.be.null;
+      expect(comboBox.value).to.be.empty;
+
+      await oneEvent(overlay, 'vaadin-overlay-closed');
+
+      expect(comboBox.selectedItem).to.be.null;
+      expect(comboBox.value).to.be.empty;
     });
   });
 
