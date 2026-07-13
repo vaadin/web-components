@@ -1,14 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { DisabledDatesController } from '../src/vaadin-disabled-dates-controller.js';
+import { DateMetadataController } from '../src/vaadin-date-metadata-controller.js';
 
-describe('DisabledDatesController', () => {
+describe('DateMetadataController', () => {
   let controller, onChange;
 
   beforeEach(() => {
     onChange = sinon.spy();
-    controller = new DisabledDatesController({}, onChange);
+    controller = new DateMetadataController({}, onChange);
   });
 
   it('should call the provider once for a range covering the prefetch window', () => {
@@ -26,13 +26,28 @@ describe('DisabledDatesController', () => {
   });
 
   it('should mark the requested months as loaded and expose disabled dates', () => {
-    controller.setProvider(() => [{ year: 2023, month: 2, day: 15 }]);
+    controller.setProvider(() => [{ year: 2023, month: 2, day: 15, disabled: true }]);
     controller.ensureRangeLoaded(new Date(2023, 2, 1), new Date(2023, 2, 1));
 
     expect(controller.isMonthLoaded(new Date(2023, 2, 1))).to.be.true;
     expect(controller.isDateDisabled(new Date(2023, 2, 15))).to.be.true;
     expect(controller.isDateDisabled(new Date(2023, 2, 16))).to.be.false;
     expect(controller.loading).to.be.false;
+  });
+
+  it('should expose arbitrary metadata for a date', () => {
+    controller.setProvider(() => [
+      { year: 2023, month: 2, day: 10, part: 'busy' },
+      { year: 2023, month: 2, day: 15, disabled: true },
+    ]);
+    controller.ensureRangeLoaded(new Date(2023, 2, 1), new Date(2023, 2, 1));
+
+    expect(controller.getMetadata(new Date(2023, 2, 10))).to.include({ part: 'busy' });
+    expect(controller.getMetadata(new Date(2023, 2, 15))).to.include({ disabled: true });
+    // A date with metadata but no `disabled` flag is not disabled.
+    expect(controller.isDateDisabled(new Date(2023, 2, 10))).to.be.false;
+    // A date without any metadata returns undefined.
+    expect(controller.getMetadata(new Date(2023, 2, 11))).to.be.undefined;
   });
 
   it('should not call the provider again for months within the loaded window (scrolling back and forth)', () => {
@@ -95,7 +110,7 @@ describe('DisabledDatesController', () => {
       expect(controller.loading).to.be.true;
       expect(controller.isMonthLoaded(new Date(2023, 2, 1))).to.be.false;
 
-      resolveProvider([{ year: 2023, month: 2, day: 15 }]);
+      resolveProvider([{ year: 2023, month: 2, day: 15, disabled: true }]);
       await aTimeout(0);
 
       expect(controller.loading).to.be.false;
@@ -116,7 +131,7 @@ describe('DisabledDatesController', () => {
   });
 
   it('should clear the cache when the provider changes', () => {
-    controller.setProvider(() => [{ year: 2023, month: 2, day: 15 }]);
+    controller.setProvider(() => [{ year: 2023, month: 2, day: 15, disabled: true }]);
     controller.ensureRangeLoaded(new Date(2023, 2, 1), new Date(2023, 2, 1));
     expect(controller.isDateDisabled(new Date(2023, 2, 15))).to.be.true;
 
@@ -137,7 +152,7 @@ describe('DisabledDatesController', () => {
 
     // Provider changes (reset) before the first request resolves.
     controller.setProvider(() => []);
-    resolveStale([{ year: 2023, month: 2, day: 15 }]);
+    resolveStale([{ year: 2023, month: 2, day: 15, disabled: true }]);
     await aTimeout(0);
 
     expect(controller.isDateDisabled(new Date(2023, 2, 15))).to.be.false;

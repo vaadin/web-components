@@ -97,7 +97,7 @@ describe('date-picker', () => {
           it('disabled dates loading', async () => {
             element.value = '2000-01-01';
             // A never-resolving provider keeps the calendar in the loading state.
-            element.disabledDatesProvider = () => new Promise(() => {});
+            element.dateMetadataProvider = () => new Promise(() => {});
             openOverlay();
             await untilOverlayRendered(element);
             await visualDiff(div, `${dir}-disabled-dates-loading`);

@@ -33,22 +33,25 @@ function addMonths(date, months) {
 }
 
 /**
- * A reactive controller that resolves the dates disabled by the date-picker's
- * `disabledDatesProvider`. It calls the provider once for a range of months
- * (never one date at a time), caches the resolved months so scrolling back and
- * forth does not re-fetch them, and prefetches a buffer of months around the
- * requested range. While any request is in flight, {@link #loading} is `true`
- * so the overlay can show a spinner.
+ * A reactive controller that resolves the metadata (disabled state, custom part
+ * names, ...) for the dates shown by the date-picker's `dateMetadataProvider`.
+ * It calls the provider once for a range of months (never one date at a time),
+ * caches the resolved months so scrolling back and forth does not re-fetch them,
+ * and prefetches a buffer of months around the requested range. While any
+ * request is in flight, {@link #loading} is `true` so the overlay can show a
+ * spinner.
  *
  * The provider may return an array synchronously or a `Promise`, so results
- * from a server (Flow) or a remote availability service can be awaited.
+ * from a server (Flow) or a remote availability service can be awaited. Each
+ * returned entry is a `DatePickerDate` extended with metadata fields, e.g.
+ * `{ year, month, day, disabled: true, part: 'busy' }`.
  */
-export class DisabledDatesController {
+export class DateMetadataController {
   constructor(host, onChange) {
     this.host = host;
     this.__onChange = onChange;
     this.provider = null;
-    this.__disabledDates = new Set();
+    this.__metadata = new Map();
     this.__loadedMonths = new Set();
     this.__pendingMonths = new Set();
     this.__requestId = 0;
@@ -87,7 +90,7 @@ export class DisabledDatesController {
 
   /** Clears the cache and invalidates any in-flight requests. */
   reset() {
-    this.__disabledDates = new Set();
+    this.__metadata = new Map();
     this.__loadedMonths = new Set();
     this.__pendingMonths = new Set();
     this.__requestId += 1;
@@ -104,13 +107,23 @@ export class DisabledDatesController {
   }
 
   /**
+   * The metadata resolved for the given date, or `undefined` when the date has
+   * no metadata or its month has not been resolved yet.
+   * @param {Date} date
+   * @return {object | undefined}
+   */
+  getMetadata(date) {
+    return date ? this.__metadata.get(dateKey(date)) : undefined;
+  }
+
+  /**
    * Whether the given date is disabled by the provider. Only returns `true` for
    * dates in an already-resolved month.
    * @param {Date} date
    * @return {boolean}
    */
   isDateDisabled(date) {
-    return !!date && this.__disabledDates.has(dateKey(date));
+    return !!this.getMetadata(date)?.disabled;
   }
 
   /**
@@ -209,16 +222,16 @@ export class DisabledDatesController {
   }
 
   /** @private */
-  __resolveGroup(months, dates, requestId) {
+  __resolveGroup(months, entries, requestId) {
     // Ignore results from before the last reset (e.g. provider changed).
     if (requestId !== this.__requestId) {
       return;
     }
 
-    if (Array.isArray(dates)) {
-      dates.forEach((date) => {
-        if (date) {
-          this.__disabledDates.add(`${date.year}-${date.month}-${date.day}`);
+    if (Array.isArray(entries)) {
+      entries.forEach((entry) => {
+        if (entry) {
+          this.__metadata.set(`${entry.year}-${entry.month}-${entry.day}`, entry);
         }
       });
     }

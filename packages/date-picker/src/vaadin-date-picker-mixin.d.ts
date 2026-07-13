@@ -29,6 +29,23 @@ export interface DatePickerDateRange {
   end: DatePickerDate;
 }
 
+/**
+ * Metadata resolved on demand for a single date by `dateMetadataProvider`. Extends
+ * `DatePickerDate` with the date's metadata. Extra fields can be added and used by the
+ * synchronous generators (e.g. `isDateDisabled`) as context.
+ */
+export interface DatePickerDateMetadata extends DatePickerDate {
+  /**
+   * Whether the date cannot be selected.
+   */
+  disabled?: boolean;
+  /**
+   * Custom part name(s) added to the date cell's `part` attribute, so a theme can style the
+   * date via `::part()`. Either a single name or several separated by spaces.
+   */
+  part?: string;
+}
+
 export interface DatePickerI18n {
   /**
    * An array with the full names of months starting
@@ -248,21 +265,24 @@ export declare class DatePickerMixinClass {
   isDateDisabled: (date: DatePickerDate) => boolean;
 
   /**
-   * A batch function that is consulted for a range of dates that the calendar is about to
-   * render. It receives a `DatePickerDateRange` object and returns, or resolves with, an array
-   * of `DatePickerDate` objects that should be disabled within that range.
+   * A batch function that fetches metadata for a range of dates the calendar is about to render.
+   * It receives a `DatePickerDateRange` object and returns, or resolves with, an array of
+   * `DatePickerDateMetadata` objects (a `DatePickerDate` extended with metadata such as
+   * `disabled` and custom `part` names) for the dates that have metadata within that range.
    *
    * Unlike `isDateDisabled`, which is called once per date, this function is called for a range
    * of dates at a time, and again as the calendar renders further dates. The size of the range
    * is decided by the calendar and may span multiple months. It may return a `Promise`, in which
    * case the affected dates render in a non-selectable pending state until it resolves.
    *
-   * Dates disabled by this function are combined with `min`, `max` and `isDateDisabled`.
+   * `disabled` from the metadata is combined with `min`, `max` and `isDateDisabled`: a date is
+   * disabled if it is out of range, or `isDateDisabled` returns `true`, or its metadata marks it
+   * disabled. `part` names are added to the date cell so a theme can style it via `::part()`.
    *
    * Keep a stable reference to the function. Assigning a new function resets the internal cache
    * and re-fetches every visible range.
    */
-  disabledDatesProvider: (range: DatePickerDateRange) => DatePickerDate[] | Promise<DatePickerDate[]>;
+  dateMetadataProvider: (range: DatePickerDateRange) => DatePickerDateMetadata[] | Promise<DatePickerDateMetadata[]>;
 
   /**
    * Opens the dropdown.

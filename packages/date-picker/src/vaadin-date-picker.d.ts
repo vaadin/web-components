@@ -7,7 +7,12 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
-export { DatePickerDate, DatePickerDateRange, DatePickerI18n } from './vaadin-date-picker-mixin.js';
+export {
+  DatePickerDate,
+  DatePickerDateMetadata,
+  DatePickerDateRange,
+  DatePickerI18n,
+} from './vaadin-date-picker-mixin.js';
 
 /**
  * Fired when the user commits a value change.

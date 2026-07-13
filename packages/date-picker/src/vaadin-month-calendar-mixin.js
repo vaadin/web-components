@@ -89,12 +89,12 @@ export const MonthCalendarMixin = (superClass) =>
 
         /**
          * The shared controller that resolves and caches the dates disabled by the date-picker's
-         * `disabledDatesProvider`. Set by the overlay content; used to look up the disabled state
+         * `dateMetadataProvider`. Set by the overlay content; used to look up the disabled state
          * of this month's dates.
          * @type {object | undefined}
          * @private
          */
-        disabledDatesController: {
+        dateMetadataController: {
           type: Object,
           attribute: false,
         },
@@ -104,7 +104,7 @@ export const MonthCalendarMixin = (superClass) =>
          * to trigger a re-render of this month.
          * @private
          */
-        __disabledDatesVersion: {
+        __dateMetadataVersion: {
           type: Number,
           attribute: false,
         },
@@ -123,7 +123,7 @@ export const MonthCalendarMixin = (superClass) =>
         _days: {
           type: Array,
           computed:
-            '__computeDays(month, i18n, minDate, maxDate, isDateDisabled, disabledDatesController, __disabledDatesVersion)',
+            '__computeDays(month, i18n, minDate, maxDate, isDateDisabled, dateMetadataController, __dateMetadataVersion)',
         },
 
         /** @protected */
@@ -392,6 +392,13 @@ export const MonthCalendarMixin = (superClass) =>
         result.push('future');
       }
 
+      // Custom part names supplied per date by `dateMetadataProvider`, so a theme can style
+      // specific dates (e.g. mark a date as busy or almost fully booked) via `::part()`.
+      const part = date && this.dateMetadataController?.getMetadata(date)?.part;
+      if (part) {
+        result.push(...(Array.isArray(part) ? part : String(part).split(' ')).filter(Boolean));
+      }
+
       return result.join(' ');
     }
 
@@ -411,7 +418,7 @@ export const MonthCalendarMixin = (superClass) =>
      * @private
      */
     __isMonthLoading() {
-      const controller = this.disabledDatesController;
+      const controller = this.dateMetadataController;
       return !!controller?.provider && this.month !== undefined && !controller.isMonthLoaded(this.month);
     }
 
@@ -422,7 +429,7 @@ export const MonthCalendarMixin = (superClass) =>
       }
       // A date is blocked while its month is pending (whole month non-selectable) or once the
       // resolved provider result marks it disabled.
-      return !!this.disabledDatesController?.isDateBlocked(date);
+      return !!this.dateMetadataController?.isDateBlocked(date);
     }
 
     /** @private */

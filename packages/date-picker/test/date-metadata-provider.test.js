@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import { open } from './helpers.js';
 
-describe('disabledDatesProvider integration', () => {
+describe('dateMetadataProvider integration', () => {
   let datePicker, today, year, month;
 
   function getMonthCalendar(y, m) {
@@ -21,6 +21,10 @@ describe('disabledDatesProvider integration', () => {
 
   function isDisabled(cell) {
     return cell.hasAttribute('disabled') && cell.part.contains('disabled');
+  }
+
+  function hasPart(cell, part) {
+    return cell.part.contains(part);
   }
 
   // Waits (bounded) until the predicate holds, to absorb the multi-step reactive chain that runs
@@ -41,10 +45,25 @@ describe('disabledDatesProvider integration', () => {
     for (let i = 0; i <= days; i++) {
       const date = new Date(first.getFullYear(), first.getMonth(), first.getDate() + i);
       if (date.getDate() === 15) {
-        disabled.push({ year: date.getFullYear(), month: date.getMonth(), day: date.getDate() });
+        disabled.push({ year: date.getFullYear(), month: date.getMonth(), day: date.getDate(), disabled: true });
       }
     }
     return disabled;
+  }
+
+  // A provider that tags the 10th of every month with a custom `busy` part name.
+  function busyTenth({ start, end }) {
+    const metadata = [];
+    const first = new Date(start.year, start.month, start.day);
+    const last = new Date(end.year, end.month, end.day);
+    const days = Math.round((last - first) / (24 * 60 * 60 * 1000));
+    for (let i = 0; i <= days; i++) {
+      const date = new Date(first.getFullYear(), first.getMonth(), first.getDate() + i);
+      if (date.getDate() === 10) {
+        metadata.push({ year: date.getFullYear(), month: date.getMonth(), day: date.getDate(), part: 'busy' });
+      }
+    }
+    return metadata;
   }
 
   beforeEach(() => {
@@ -56,7 +75,7 @@ describe('disabledDatesProvider integration', () => {
 
   describe('synchronous provider', () => {
     beforeEach(async () => {
-      datePicker.disabledDatesProvider = disableFifteenth;
+      datePicker.dateMetadataProvider = disableFifteenth;
       await open(datePicker);
     });
 
@@ -81,7 +100,7 @@ describe('disabledDatesProvider integration', () => {
             resolveProvider = resolve;
           }),
       );
-      datePicker.disabledDatesProvider = provider;
+      datePicker.dateMetadataProvider = provider;
       await open(datePicker);
     });
 
@@ -122,7 +141,7 @@ describe('disabledDatesProvider integration', () => {
 
       // Re-trigger a load for the same visible months (scroll loading is debounced).
       datePicker._overlayContent._onMonthScroll();
-      datePicker._overlayContent._loadDisabledDatesDebouncer?.flush();
+      datePicker._overlayContent._loadDateMetadataDebouncer?.flush();
       await nextRender();
 
       expect(provider).to.not.be.called;
@@ -136,7 +155,7 @@ describe('disabledDatesProvider integration', () => {
       // Navigate far ahead without scrolling — the same code path a year click uses.
       const target = new Date(year + 3, month, 1);
       datePicker._overlayContent.scrollToDate(target, false);
-      datePicker._overlayContent._loadDisabledDatesDebouncer?.flush();
+      datePicker._overlayContent._loadDateMetadataDebouncer?.flush();
       await nextRender();
 
       expect(provider).to.be.called;
@@ -163,7 +182,7 @@ describe('disabledDatesProvider integration', () => {
   // provider disables it.
   describe('validation without opening the overlay', () => {
     it('should invalidate a disabled value with a synchronous provider', () => {
-      datePicker.disabledDatesProvider = disableFifteenth;
+      datePicker.dateMetadataProvider = disableFifteenth;
       datePicker.value = '2020-01-15';
       expect(datePicker._overlayContent).to.be.not.ok;
       expect(datePicker.validate()).to.be.false;
@@ -171,7 +190,7 @@ describe('disabledDatesProvider integration', () => {
     });
 
     it('should keep an enabled value valid with a synchronous provider', () => {
-      datePicker.disabledDatesProvider = disableFifteenth;
+      datePicker.dateMetadataProvider = disableFifteenth;
       datePicker.value = '2020-01-16';
       expect(datePicker.validate()).to.be.true;
       expect(datePicker.invalid).to.be.false;
@@ -185,7 +204,7 @@ describe('disabledDatesProvider integration', () => {
             resolveProvider = resolve;
           }),
       );
-      datePicker.disabledDatesProvider = provider;
+      datePicker.dateMetadataProvider = provider;
       datePicker.value = '2020-01-15';
 
       // The provider has not answered yet, so the value is treated as valid for now.
@@ -203,7 +222,7 @@ describe('disabledDatesProvider integration', () => {
 
   describe('initial focus', () => {
     beforeEach(() => {
-      datePicker.disabledDatesProvider = disableFifteenth;
+      datePicker.dateMetadataProvider = disableFifteenth;
     });
 
     it('should move initial focus off a provider-disabled date once the provider resolves', async () => {
@@ -224,7 +243,7 @@ describe('disabledDatesProvider integration', () => {
       await open(datePicker);
       const content = datePicker._overlayContent;
 
-      await untilRendered(() => content._disabledDatesController.isMonthLoaded(new Date(2020, 0, 10)));
+      await untilRendered(() => content._dateMetadataController.isMonthLoaded(new Date(2020, 0, 10)));
 
       expect(content.focusedDate.getDate()).to.equal(10);
     });
@@ -237,7 +256,7 @@ describe('disabledDatesProvider integration', () => {
             resolveProvider = resolve;
           }),
       );
-      datePicker.disabledDatesProvider = provider;
+      datePicker.dateMetadataProvider = provider;
       datePicker.initialPosition = '2020-01-10';
       await open(datePicker);
       const content = datePicker._overlayContent;
@@ -245,10 +264,58 @@ describe('disabledDatesProvider integration', () => {
       // User navigates to the 15th (disabled but focusable) before the provider resolves.
       content.focusedDate = new Date(2020, 0, 15);
       resolveProvider(disableFifteenth(provider.firstCall.args[0]));
-      await untilRendered(() => content._disabledDatesController.isMonthLoaded(new Date(2020, 0, 15)));
+      await untilRendered(() => content._dateMetadataController.isMonthLoaded(new Date(2020, 0, 15)));
 
       // Focus stays on the user's chosen date; disabled dates remain keyboard-focusable.
       expect(content.focusedDate.getDate()).to.equal(15);
+    });
+  });
+
+  describe('custom part names', () => {
+    it('should add the metadata part name to the matching date cells', async () => {
+      datePicker.dateMetadataProvider = busyTenth;
+      await open(datePicker);
+
+      const calendar = getMonthCalendar(year, month);
+      expect(hasPart(getCell(calendar, 10), 'busy')).to.be.true;
+      expect(hasPart(getCell(calendar, 11), 'busy')).to.be.false;
+    });
+
+    it('should not disable a date that only carries a part name', async () => {
+      datePicker.dateMetadataProvider = busyTenth;
+      await open(datePicker);
+
+      const calendar = getMonthCalendar(year, month);
+      expect(isDisabled(getCell(calendar, 10))).to.be.false;
+    });
+
+    it('should apply both disabled and part metadata on the same date', async () => {
+      datePicker.dateMetadataProvider = () => [{ year, month, day: 12, disabled: true, part: 'busy' }];
+      await open(datePicker);
+
+      const cell = getCell(getMonthCalendar(year, month), 12);
+      expect(isDisabled(cell)).to.be.true;
+      expect(hasPart(cell, 'busy')).to.be.true;
+    });
+
+    it('should add the part name after an async provider resolves', async () => {
+      let resolveProvider;
+      const provider = sinon.stub().callsFake(
+        () =>
+          new Promise((resolve) => {
+            resolveProvider = resolve;
+          }),
+      );
+      datePicker.dateMetadataProvider = provider;
+      await open(datePicker);
+
+      // While pending, the part is not there yet.
+      expect(hasPart(getCell(getMonthCalendar(year, month), 10), 'busy')).to.be.false;
+
+      resolveProvider(busyTenth(provider.firstCall.args[0]));
+      await untilRendered(() => hasPart(getCell(getMonthCalendar(year, month), 10), 'busy'));
+
+      expect(hasPart(getCell(getMonthCalendar(year, month), 10), 'busy')).to.be.true;
     });
   });
 });
