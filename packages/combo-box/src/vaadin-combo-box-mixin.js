@@ -160,10 +160,10 @@ export const ComboBoxMixin = (superClass) =>
           getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
       }
 
-      const isClosing = this._overlayElement?.hasAttribute('closing');
+      const isClosing = this.hasAttribute('closing');
 
       this._scroller.setProperties({
-        items: opened || isClosing ? items || [] : [],
+        items: opened || isClosing ? items : [],
         opened,
         focusedIndex,
         theme,

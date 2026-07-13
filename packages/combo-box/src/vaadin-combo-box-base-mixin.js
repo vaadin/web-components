@@ -713,7 +713,7 @@ export const ComboBoxBaseMixin = (superClass) =>
       // Stop this private event from leaking outside.
       e.stopPropagation();
 
-      if (this._overlayElement?.hasAttribute('closing')) {
+      if (this.hasAttribute('closing')) {
         return;
       }
 
