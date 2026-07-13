@@ -387,32 +387,32 @@ describe('virtualizer', () => {
     expect(initialCount).not.to.be.above(expectedCount);
   });
 
-  it('should preserve scroll position when moving within DOM and changing visibility', async () => {
+  it('should restore scroll position after unhiding', async () => {
     scrollTarget.scrollTop = 100;
     await oneEvent(scrollTarget, 'scroll');
 
     scrollTarget.hidden = true;
     await nextResize(scrollTarget);
-
-    const wrapper = fixtureSync('<div></div>');
-    wrapper.appendChild(scrollTarget);
+    await nextFrame();
 
     scrollTarget.hidden = false;
     await nextResize(scrollTarget);
+    await nextFrame();
 
     expect(scrollTarget.scrollTop).to.equal(100);
   });
 
-  it('should restore scroll position on hostConnected after moving within DOM', async () => {
+  it('should restore scroll position after moving within DOM', async () => {
     scrollTarget.scrollTop = 100;
     await oneEvent(scrollTarget, 'scroll');
-    await nextResize(scrollTarget);
 
     const wrapper = fixtureSync('<div></div>');
     wrapper.appendChild(scrollTarget);
     virtualizer.hostDisconnected();
     virtualizer.hostConnected();
     await nextResize(scrollTarget);
+    await nextFrame();
+
     expect(scrollTarget.scrollTop).to.equal(100);
   });
 
