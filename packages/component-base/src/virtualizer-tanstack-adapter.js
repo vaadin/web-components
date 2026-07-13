@@ -50,6 +50,9 @@ export class TanStackAdapter {
   #cleanup;
 
   /** @type {boolean} */
+  #isVisible;
+
+  /** @type {boolean} */
   #mouseDown;
 
   /** @type {Virtualizer} */
@@ -208,10 +211,32 @@ export class TanStackAdapter {
   }
 
   #onChange(sync) {
+    const { scrollRect } = this.#virtualizer;
+
+    const isVisible = scrollRect.width > 0 || scrollRect.height > 0;
+    if (isVisible !== this.#isVisible) {
+      this.#isVisible = isVisible;
+
+      if (isVisible) {
+        // The browser resets scrollTop to 0 when the scroll target is moved
+        // in the DOM. If that happens while the scroll target is hidden,
+        // the position can't be restored right away since a hidden element
+        // ignores scrollTop writes, so restore it once visible again.
+        this.#restoreScrollPosition();
+      }
+    }
+
     if (sync) {
       this.#render();
     } else {
       this.#renderDebouncer = Debouncer.debounce(this.#renderDebouncer, microTask, () => this.#render());
+    }
+  }
+
+  #restoreScrollPosition() {
+    const scrollOffset = this.#virtualizer.getScrollOffset();
+    if (this.scrollTarget.scrollTop !== scrollOffset) {
+      this.#virtualizer.scrollToOffset(scrollOffset);
     }
   }
 

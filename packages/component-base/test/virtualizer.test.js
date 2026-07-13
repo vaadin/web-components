@@ -416,6 +416,28 @@ describe('virtualizer', () => {
     expect(scrollTarget.scrollTop).to.equal(100);
   });
 
+  it('should restore scroll position after moving within DOM while hidden', async () => {
+    scrollTarget.scrollTop = 100;
+    await oneEvent(scrollTarget, 'scroll');
+
+    scrollTarget.hidden = true;
+    await nextResize(scrollTarget);
+    await nextFrame();
+
+    const wrapper = fixtureSync('<div></div>');
+    wrapper.appendChild(scrollTarget);
+    virtualizer.hostDisconnected();
+    virtualizer.hostConnected();
+    await nextResize(scrollTarget);
+    await nextFrame();
+
+    scrollTarget.hidden = false;
+    await nextResize(scrollTarget);
+    await nextFrame();
+
+    expect(scrollTarget.scrollTop).to.equal(100);
+  });
+
   describe('lazy rendering', () => {
     let render = false;
 
