@@ -481,8 +481,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
       }
 
+      const isClosing = this.hasAttribute('closing');
+
       this._scroller.setProperties({
-        items: opened ? items : [],
+        items: opened || isClosing ? items : [],
         opened,
         focusedIndex,
         theme,
@@ -1313,6 +1315,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      */
     _overlaySelectedItemChanged(event) {
       event.stopPropagation();
+
+      if (this.hasAttribute('closing')) {
+        return;
+      }
 
       // Do not un-select on click when readonly
       if (this.readonly) {
