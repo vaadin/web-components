@@ -523,6 +523,26 @@ export const DatePickerMixin = (subclass) =>
       this.$.overlay.close();
     }
 
+    /**
+     * Clears the cached date metadata and reloads it from `dateMetadataProvider`. Call this when
+     * the data behind the provider has changed (for example a date became booked) so the calendar
+     * reflects it, without having to replace the provider function.
+     *
+     * The visible range is reloaded when the overlay is open, and the selected value is
+     * re-validated once its month resolves.
+     */
+    clearCache() {
+      const controller = this._dateMetadataController;
+      if (!controller) {
+        return;
+      }
+      // Drops the cache and notifies, which re-renders the open overlay in the pending state and
+      // reloads its visible range (via __updateCalendars). Also reload the selected month so a
+      // value can be re-validated even while the overlay is closed.
+      controller.reset();
+      this.__ensureSelectedDateLoaded();
+    }
+
     /** @private */
     __ensureContent() {
       if (this._overlayContent) {

@@ -318,4 +318,75 @@ describe('dateMetadataProvider integration', () => {
       expect(hasPart(getCell(getMonthCalendar(year, month), 10), 'busy')).to.be.true;
     });
   });
+
+  describe('clearCache', () => {
+    // A provider that disables the day currently held in `disabledDay`, so the "server data" can
+    // be changed between calls.
+    let disabledDay;
+    function disableDay({ start, end }) {
+      const list = [];
+      const first = new Date(start.year, start.month, start.day);
+      const last = new Date(end.year, end.month, end.day);
+      const days = Math.round((last - first) / (24 * 60 * 60 * 1000));
+      for (let i = 0; i <= days; i++) {
+        const date = new Date(first.getFullYear(), first.getMonth(), first.getDate() + i);
+        if (date.getDate() === disabledDay) {
+          list.push({ year: date.getFullYear(), month: date.getMonth(), day: date.getDate(), disabled: true });
+        }
+      }
+      return list;
+    }
+
+    it('should re-fetch the visible range and reflect changed metadata', async () => {
+      disabledDay = 15;
+      datePicker.dateMetadataProvider = disableDay;
+      await open(datePicker);
+      expect(isDisabled(getCell(getMonthCalendar(year, month), 15))).to.be.true;
+      expect(isDisabled(getCell(getMonthCalendar(year, month), 16))).to.be.false;
+
+      // The availability changes on the server: the 16th is now disabled instead of the 15th.
+      disabledDay = 16;
+      datePicker.clearCache();
+      await untilRendered(() => {
+        const cell = getCell(getMonthCalendar(year, month), 16);
+        return cell && isDisabled(cell);
+      });
+
+      expect(isDisabled(getCell(getMonthCalendar(year, month), 16))).to.be.true;
+      expect(isDisabled(getCell(getMonthCalendar(year, month), 15))).to.be.false;
+    });
+
+    it('should re-consult the provider (cache is dropped)', async () => {
+      disabledDay = 15;
+      const provider = sinon.spy(disableDay);
+      datePicker.dateMetadataProvider = provider;
+      await open(datePicker);
+      provider.resetHistory();
+
+      datePicker.clearCache();
+      await nextRender();
+
+      expect(provider).to.be.called;
+    });
+
+    it('should re-validate the selected value against refreshed metadata without opening the overlay', () => {
+      let disabled = [];
+      datePicker.dateMetadataProvider = () => disabled;
+      datePicker.value = '2020-01-15';
+      expect(datePicker.validate()).to.be.true;
+      expect(datePicker.invalid).to.be.false;
+
+      // The 15th becomes booked; refresh the cache.
+      disabled = [{ year: 2020, month: 0, day: 15, disabled: true }];
+      datePicker.clearCache();
+
+      expect(datePicker._overlayContent).to.be.not.ok;
+      expect(datePicker.invalid).to.be.true;
+      expect(datePicker.checkValidity()).to.be.false;
+    });
+
+    it('should not throw when no provider is set', () => {
+      expect(() => datePicker.clearCache()).to.not.throw();
+    });
+  });
 });

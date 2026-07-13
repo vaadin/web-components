@@ -293,4 +293,11 @@ export declare class DatePickerMixinClass {
    * Closes the dropdown.
    */
   close(): void;
+
+  /**
+   * Clears the cached date metadata and reloads it from `dateMetadataProvider`. Call this when the
+   * data behind the provider has changed (for example a date became booked) so the calendar
+   * reflects it, without having to replace the provider function.
+   */
+  clearCache(): void;
 }

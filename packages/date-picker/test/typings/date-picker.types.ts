@@ -63,6 +63,7 @@ assertType<() => boolean>(datePicker.checkValidity);
 assertType<() => boolean>(datePicker.validate);
 assertType<() => void>(datePicker.close);
 assertType<() => void>(datePicker.open);
+assertType<() => void>(datePicker.clearCache);
 assertType<string | undefined>(datePicker.max);
 assertType<string | undefined>(datePicker.min);
 assertType<(date: DatePickerDate) => boolean | undefined>(datePicker.isDateDisabled);
