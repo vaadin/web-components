@@ -279,8 +279,13 @@ export declare class DatePickerMixinClass {
    * disabled if it is out of range, or `isDateDisabled` returns `true`, or its metadata marks it
    * disabled. `part` names are added to the date cell so a theme can style it via `::part()`.
    *
+   * Both `disabled` and `part` are returned by this one function, rather than by separate
+   * generators, so a single backend query (for example in Flow) can answer both at once instead
+   * of being split into two passes over the same data.
+   *
    * Keep a stable reference to the function. Assigning a new function resets the internal cache
-   * and re-fetches every visible range.
+   * and re-fetches every visible range. To reload after the underlying data changes while keeping
+   * the same function, call `clearCache()`.
    */
   dateMetadataProvider: (range: DatePickerDateRange) => DatePickerDateMetadata[] | Promise<DatePickerDateMetadata[]>;
 

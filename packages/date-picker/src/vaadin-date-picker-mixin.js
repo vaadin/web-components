@@ -228,8 +228,13 @@ export const DatePickerMixin = (subclass) =>
          * metadata marks it disabled. `part` names are added to the date cell's `part` attribute so
          * a theme can style specific dates via `::part()`.
          *
+         * Both `disabled` and `part` are returned by this one function, rather than by separate
+         * generators, so a single backend query (for example in Flow) can answer both at once
+         * instead of being split into two passes over the same data.
+         *
          * Keep a stable reference to the function. Assigning a new function resets the internal
-         * cache and re-fetches every visible range.
+         * cache and re-fetches every visible range. To reload after the underlying data changes
+         * while keeping the same function, call `clearCache()`.
          *
          * @type {function(DatePickerDateRange): Array<DatePickerDateMetadata> | Promise<Array<DatePickerDateMetadata>> | undefined}
          */
