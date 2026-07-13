@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, keyboardEventFor, nextRender } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { fixtureSync, keyboardEventFor, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
 import { getAllItems, getDataProvider, getFirstItem } from './helpers.js';
@@ -202,6 +202,44 @@ describe('selecting items', () => {
       expect(comboBox.opened).to.be.true;
       expect(comboBox.filter).to.equal('an');
       expect(inputElement.value).to.equal('an');
+    });
+
+    it('should not select item when clicked during closing animation', async () => {
+      const overlay = comboBox.$.overlay;
+      const style = document.createElement('style');
+      style.textContent = `
+        :host([closing]) {
+          animation: 200ms closing-animation;
+        }
+
+        :host([closing]) [part='overlay'] {
+          animation: 200ms overlay-closing-animation;
+        }
+
+        @keyframes closing-animation {
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes overlay-closing-animation {
+          to {
+            opacity: 0;
+          }
+        }
+      `;
+      overlay.shadowRoot.appendChild(style);
+
+      await sendKeys({ down: 'ArrowDown' });
+      const item = getFirstItem(comboBox);
+      comboBox.close();
+      await sendMouseToElement({ type: 'click', element: item });
+
+      expect(comboBox.selectedItems).to.deep.equal([]);
+
+      await oneEvent(overlay, 'vaadin-overlay-closed');
+
+      expect(comboBox.selectedItems).to.deep.equal([]);
     });
   });
 
