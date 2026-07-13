@@ -50,9 +50,6 @@ export class TanStackAdapter {
   #cleanup;
 
   /** @type {boolean} */
-  #isVisible;
-
-  /** @type {boolean} */
   #mouseDown;
 
   /** @type {Virtualizer} */
@@ -211,24 +208,10 @@ export class TanStackAdapter {
   }
 
   #onChange(sync) {
-    const { scrollRect } = this.#virtualizer;
-
-    const isVisible = scrollRect.width > 0 || scrollRect.height > 0;
-    if (isVisible !== this.#isVisible) {
-      this.#onVisibilityChange(isVisible);
-      this.#isVisible = isVisible;
-    }
-
     if (sync) {
       this.#render();
     } else {
       this.#renderDebouncer = Debouncer.debounce(this.#renderDebouncer, microTask, () => this.#render());
-    }
-  }
-
-  #onVisibilityChange(isVisible) {
-    if (isVisible) {
-      this.#virtualizer.scrollToOffset(this.#virtualizer.scrollOffset);
     }
   }
 
