@@ -3,13 +3,13 @@
 ## 1. Flip between on and off via pointer or keyboard
 
 - Switch toggles on:
-  - A primary-button click on the graphic (track or thumb).
+  - A primary-button click on the graphic (track or marker).
   - A click on the label.
   - A Space press while focused.
 - The new state shows immediately, without waiting for app acknowledgement.
 - Defaults to off when the app supplies no value.
 
-_A user clicks the "Email me when I'm @mentioned" row; the thumb slides over and the track changes color at once. Tabbing to the next switch and pressing Space flips it too._
+_A user clicks the "Email me when I'm @mentioned" row; the marker slides over and the track changes color at once. Tabbing to the next switch and pressing Space flips it too._
 
 ---
 
@@ -127,9 +127,9 @@ Vaadin's validation and data-binding mechanism is Flow's Binder, not native `<fo
 
 Both web component and Flow. All requirements are universal; none is tagged Flow- or web-only because each behaves identically through both APIs.
 
-**Q: Should on-track state indicators inside the switch (visible "ON" / "OFF" text or check / X icons inside the track) be in scope?**
+**Q: Does the switch show an on/off icon, or only track color and marker position?**
 
-Out of scope. On/off is shown by track color and thumb position only — consistent with Vaadin's visual style (Checkbox places no text or icons in its tick area either). Material 3, Ant, and Carbon offer in-track icons; we deliberately do not, to keep the visual quiet and theme-token-driven.
+By default it stays quiet: on/off is shown through marker position and track color only, consistent with Vaadin's visual style. An opt-in `icon` theme variant additionally renders a checkmark inside the marker when on and a cross when off, for cases that need a stronger at-a-glance affordance.
 
 **Q: Should the Switch expose a loading / pending state (e.g. while an async toggle persists to the server)?**
 
@@ -137,4 +137,4 @@ Out of scope. Apps needing pending feedback on a server-bound toggle can use exi
 
 **Q: Should drag / swipe gesture interaction be in scope?**
 
-Out of scope. The Switch toggles via click, label click, and Space only — no thumb drag. This matches the team consensus in `vaadin/web-components#893` ("not in v1, see if needed") and keeps the interaction consistent with Vaadin Checkbox. Adding drag later is non-breaking if a real need emerges.
+Out of scope. The Switch toggles via click, label click, and Space only — no marker drag. This matches the team consensus in `vaadin/web-components#893` ("not in v1, see if needed") and keeps the interaction consistent with Vaadin Checkbox. Adding drag later is non-breaking if a real need emerges.
