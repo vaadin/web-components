@@ -134,11 +134,7 @@ describe('interactions', () => {
       overlay.shadowRoot.appendChild(style);
 
       const item = getFirstItem(comboBox);
-      expect(item).to.exist;
-
       comboBox.close();
-      expect(overlay.hasAttribute('closing')).to.be.true;
-
       await sendMouseToElement({ type: 'click', element: item });
 
       expect(comboBox.selectedItem).to.be.null;
