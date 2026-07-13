@@ -453,3 +453,98 @@ describe('overlay with zero-duration animation', () => {
     });
   });
 });
+
+function getAnimation(element, name) {
+  return element.getAnimations().find((animation) => animation.animationName === name);
+}
+
+describe('animation properties', () => {
+  let overlay;
+
+  beforeEach(async () => {
+    overlay = createOverlay('overlay content');
+    overlay.style.setProperty('--vaadin-overlay-animation-duration', '10s');
+    await nextRender();
+  });
+
+  afterEach(() => {
+    overlay._flushAnimation('opening');
+    overlay._flushAnimation('closing');
+    overlay.opened = false;
+  });
+
+  it('should set opening and closing attributes when animation duration is not 0s', () => {
+    overlay.opened = true;
+    expect(overlay.hasAttribute('opening')).to.be.true;
+
+    overlay._flushAnimation('opening');
+    overlay.opened = false;
+    expect(overlay.hasAttribute('closing')).to.be.true;
+  });
+
+  it('should use animation duration and delay for opening and closing animations', () => {
+    overlay.style.setProperty('--vaadin-overlay-animation-delay', '2s');
+
+    overlay.opened = true;
+    let timing = getAnimation(overlay.$.overlay, '--fade').effect.getTiming();
+    expect(timing.duration).to.equal(10000);
+    expect(timing.delay).to.equal(2000);
+
+    overlay._flushAnimation('opening');
+    overlay.opened = false;
+    timing = getAnimation(overlay.$.overlay, '--fade').effect.getTiming();
+    expect(timing.duration).to.equal(10000);
+    expect(timing.delay).to.equal(2000);
+  });
+
+  it('should use animation timing function for opening and closing animations', () => {
+    overlay.style.setProperty('--vaadin-overlay-animation-timing-function', 'linear');
+
+    overlay.opened = true;
+    expect(getAnimation(overlay.$.overlay, '--fade').effect.getTiming().easing).to.equal('linear');
+
+    overlay._flushAnimation('opening');
+    overlay.opened = false;
+    expect(getAnimation(overlay.$.overlay, '--fade').effect.getTiming().easing).to.equal('linear');
+  });
+
+  it('should use closed and opened opacity for the fade animation', () => {
+    overlay.style.setProperty('--vaadin-overlay-opacity-closed', '0.25');
+    overlay.style.setProperty('--vaadin-overlay-opacity-opened', '0.75');
+
+    overlay.opened = true;
+    const keyframes = getAnimation(overlay.$.overlay, '--fade').effect.getKeyframes();
+    expect(keyframes[0].opacity).to.equal('0.25');
+    expect(keyframes[1].opacity).to.equal('0.75');
+  });
+
+  it('should use closed and opened translate for the transform animation', () => {
+    overlay.style.setProperty('--vaadin-overlay-translate-closed', '10px 20px');
+    overlay.style.setProperty('--vaadin-overlay-translate-opened', '30px 40px');
+
+    overlay.opened = true;
+    const keyframes = getAnimation(overlay.$.overlay, '--transform').effect.getKeyframes();
+    expect(keyframes[0].translate).to.equal('10px 20px');
+    expect(keyframes[1].translate).to.equal('30px 40px');
+  });
+
+  it('should use closed and opened scale for the transform animation', () => {
+    overlay.style.setProperty('--vaadin-overlay-scale-closed', '0.5');
+    overlay.style.setProperty('--vaadin-overlay-scale-opened', '1.5');
+
+    overlay.opened = true;
+    const keyframes = getAnimation(overlay.$.overlay, '--transform').effect.getKeyframes();
+    expect(keyframes[0].scale).to.equal('0.5');
+    expect(keyframes[1].scale).to.equal('1.5');
+  });
+
+  it('should use closed and opened transform for the transform animation', () => {
+    overlay.style.setProperty('--vaadin-overlay-transform-closed', 'rotate(10deg)');
+    overlay.style.setProperty('--vaadin-overlay-transform-opened', 'rotate(20deg)');
+
+    overlay.opened = true;
+    const keyframes = getAnimation(overlay.$.overlay, '--transform').effect.getKeyframes();
+    expect(keyframes[0].transform).to.equal('rotate(10deg)');
+    expect(keyframes[1].transform).to.equal('rotate(20deg)');
+  });
+});
