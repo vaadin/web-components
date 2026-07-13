@@ -16,6 +16,7 @@ export const radioGroupStyles = [
       --vaadin-radio-button-border-color: var(--vaadin-border-color);
       --vaadin-radio-button-marker-color: var(--vaadin-text-color);
       --_border-style: dashed;
+      --_cursor: var(--vaadin-disabled-cursor);
     }
   `,
 ];

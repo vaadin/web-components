@@ -132,6 +132,17 @@ describe('checkbox', () => {
           element.helperText = 'Helper text';
           await visualDiff(div, `${dir}-helper-text`);
         });
+
+        it('reverse', async () => {
+          element.setAttribute('theme', 'reverse');
+          await visualDiff(div, `${dir}-theme-reverse`);
+        });
+
+        it('reverse width', async () => {
+          element.setAttribute('theme', 'reverse');
+          element.style.width = '10em';
+          await visualDiff(div, `${dir}-theme-reverse-width`);
+        });
       });
     });
   });

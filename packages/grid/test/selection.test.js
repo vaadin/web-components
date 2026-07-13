@@ -505,6 +505,52 @@ describe('multi selection column', () => {
     expect(selectAllCheckbox.checkVisibility({ visibilityProperty: true })).to.be.true;
   });
 
+  function getSelectAllEmptyLabel() {
+    return selectionColumn._headerCell.querySelector(':scope > .sr-only');
+  }
+
+  it('should render a screen-reader-only label in the header cell when select all is hidden due to data provider', async () => {
+    grid.items = undefined;
+    grid.dataProvider = infiniteDataProvider;
+    await nextFrame();
+
+    expect(getSelectAllEmptyLabel().textContent).to.equal('Select All unavailable');
+  });
+
+  it('should render a screen-reader-only label in the header cell when select all is hidden due to conditional selection', async () => {
+    grid.isItemSelectable = () => true;
+    await nextFrame();
+
+    expect(getSelectAllEmptyLabel().textContent).to.equal('Select All unavailable');
+  });
+
+  it('should not render the screen-reader-only label when select all is visible', () => {
+    expect(getSelectAllEmptyLabel()).to.be.null;
+  });
+
+  it('should remove the screen-reader-only label when select all becomes visible again', async () => {
+    grid.items = undefined;
+    grid.dataProvider = infiniteDataProvider;
+    await nextFrame();
+
+    expect(getSelectAllEmptyLabel()).to.exist;
+
+    grid.dataProvider = undefined;
+    grid.items = ['foo'];
+    await nextFrame();
+
+    expect(getSelectAllEmptyLabel()).to.be.null;
+  });
+
+  it('should use custom i18n for the screen-reader-only label when select all is hidden', async () => {
+    grid.items = undefined;
+    grid.dataProvider = infiniteDataProvider;
+    grid.i18n = { selectAllUnavailable: 'X' };
+    await nextFrame();
+
+    expect(getSelectAllEmptyLabel().textContent).to.equal('X');
+  });
+
   it('should be possible to override the body renderer', () => {
     const secondCell = getCellContent(getRowCells(rows[0])[1]);
 

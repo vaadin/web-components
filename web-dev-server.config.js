@@ -99,7 +99,7 @@ export default {
         }
       },
     },
-    esbuildPlugin({ ts: true }),
+    esbuildPlugin({ ts: true, target: 'esnext' }),
     enforceThemePlugin(theme),
     cssImportPlugin(),
   ],

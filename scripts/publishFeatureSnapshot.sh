@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Must run from the repo root: the paths below (lerna.json, scripts/, yarn
 # workspaces) are all relative to it.
-if [ ! -f lerna.json ] || [ ! -f scripts/updateVersion.js ]; then
+if [[ ! -f lerna.json || ! -f scripts/updateVersion.js ]]; then
   echo "Error: run this script from the repository root (lerna.json not found here)." >&2
   exit 1
 fi
@@ -24,7 +24,7 @@ fi
 #    or: ./scripts/publishFeatureSnapshot.sh disable-dates
 
 FEATURE="${1:-${FEATURENAME:-}}"
-if [ -z "$FEATURE" ]; then
+if [[ -z "$FEATURE" ]]; then
   echo "Usage: $0 <feature-name>   (or set FEATURENAME)" >&2
   exit 1
 fi
@@ -32,7 +32,7 @@ fi
 # dist-tag: feature name normalized to what npm accepts as a tag, with a `dev-`
 # prefix so it clearly reads as an unstable build, not a stable release.
 NAME=$(echo "$FEATURE" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9-]+/-/g; s/^-+//; s/-+$//')
-if [ -z "$NAME" ]; then
+if [[ -z "$NAME" ]]; then
   echo "Feature name '$FEATURE' has no usable characters" >&2
   exit 1
 fi
@@ -52,8 +52,8 @@ echo "Publishing feature snapshot $VERSION (dist-tag: $TAG)"
 #    to disk. Otherwise fall back to an existing login (e.g. local `npm login`).
 #    Fail fast here: bad auth otherwise surfaces only as a misleading
 #    "E404 Not found" after minutes of bumping and building.
-if [ -z "${DRY_RUN:-}" ] && [ -z "${NPM_REGISTRY:-}" ]; then
-  if [ -n "${NPM_TOKEN:-}" ]; then
+if [[ -z "${DRY_RUN:-}" && -z "${NPM_REGISTRY:-}" ]]; then
+  if [[ -n "${NPM_TOKEN:-}" ]]; then
     cat > ~/.npmrc <<'EOF'
 registry=https://registry.npmjs.org/
 //registry.npmjs.org/:_authToken=${NPM_TOKEN}
@@ -88,7 +88,7 @@ yarn release
 #   DRY_RUN=1        -> npm publish --dry-run per package (shows tarballs, no upload)
 #   NPM_REGISTRY=... -> real publish against another registry, e.g. a local
 #                       Verdaccio (npx verdaccio, then NPM_REGISTRY=http://localhost:4873)
-if [ -n "${DRY_RUN:-}" ]; then
+if [[ -n "${DRY_RUN:-}" ]]; then
   echo "DRY_RUN: previewing publish of $VERSION (dist-tag: $TAG), nothing is uploaded"
   npx lerna exec --no-private -- npm publish --dry-run --tag "$TAG"
 else
@@ -97,7 +97,7 @@ else
   # discarded afterwards - so it just satisfies the clean-tree check.
   git -c user.email=ci@vaadin.com -c user.name="Vaadin CI" commit -am "chore: feature snapshot $VERSION"
 
-  if [ -n "${NPM_REGISTRY:-}" ]; then
+  if [[ -n "${NPM_REGISTRY:-}" ]]; then
     npx lerna publish from-package --dist-tag "$TAG" --yes --registry "$NPM_REGISTRY"
   else
     npx lerna publish from-package --dist-tag "$TAG" --yes

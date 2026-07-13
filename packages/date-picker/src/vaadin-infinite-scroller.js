@@ -20,6 +20,8 @@ template.innerHTML = `
       position: relative;
       height: 100%;
       overflow: auto;
+      /* Prevent browser scroll anchoring from overriding the virtual scroll position. */
+      overflow-anchor: none;
       outline: none;
       overflow-x: hidden;
       scrollbar-width: none;

@@ -155,12 +155,28 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         root.appendChild(checkbox);
       }
 
-      checkbox.accessibleName = this._grid?.__effectiveI18n?.selectAll;
+      const { selectAll, selectAllUnavailable } = this._grid.__effectiveI18n;
+      checkbox.accessibleName = selectAll;
 
       const checked = this.__isChecked(this.selectAll, this._indeterminate);
       checkbox.checked = checked;
       checkbox.indeterminate = this._indeterminate;
       checkbox.style.visibility = this._selectAllHidden ? 'hidden' : '';
+
+      // When the Select All checkbox is hidden, the header cell would otherwise
+      // be announced as blank. Render a screen-reader-only label into the cell
+      // so that screen readers announce the `selectAllUnavailable` text.
+      let label = this._headerCell.querySelector(':scope > .sr-only');
+      if (this._selectAllHidden && selectAllUnavailable) {
+        if (!label) {
+          label = document.createElement('span');
+          label.classList.add('sr-only');
+          this._headerCell.appendChild(label);
+        }
+        label.textContent = selectAllUnavailable;
+      } else if (label) {
+        label.remove();
+      }
     }
 
     /**

@@ -22,7 +22,7 @@ jobs:
       options: --ipc=host
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
@@ -42,12 +42,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 20
-          retry_wait_seconds: 60
-          max_attempts: 3
-          command: yarn test --config web-test-runner-base.config.js
+        run: yarn test --config web-test-runner-base.config.js
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
@@ -66,7 +61,7 @@ jobs:
       options: --ipc=host
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
@@ -86,12 +81,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 20
-          retry_wait_seconds: 60
-          max_attempts: 3
-          command: yarn test --config web-test-runner-lumo.config.js
+        run: yarn test --config web-test-runner-lumo.config.js
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
@@ -111,7 +101,7 @@ jobs:
       options: --ipc=host
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
@@ -131,20 +121,10 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests (default)
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 20
-          retry_wait_seconds: 60
-          max_attempts: 3
-          command: yarn test --config web-test-runner-aura.config.js
+        run: yarn test --config web-test-runner-aura.config.js
 
       - name: Visual tests (dark)
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 20
-          retry_wait_seconds: 60
-          max_attempts: 3
-          command: yarn test --config web-test-runner-aura.config.js --dark
+        run: yarn test --config web-test-runner-aura.config.js --dark
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}

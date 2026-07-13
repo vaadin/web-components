@@ -1,6 +1,6 @@
 {
   "name": "api-docs",
-  "version": "25.3.0-alpha3",
+  "version": "25.3.0-alpha4",
   "private": true,
   "description": "Documentation site for Vaadin web components API",
   "license": "Apache-2.0",
@@ -17,6 +17,6 @@
     "markdown-it": "^14.2.0",
     "markdown-it-anchor": "^9.2.0",
     "node-html-parser": "^7.0.1",
-    "tsx": "^4.21.0"
+    "tsx": "^4.23.0"
   }
 }

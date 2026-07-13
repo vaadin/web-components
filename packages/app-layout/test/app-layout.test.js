@@ -432,6 +432,48 @@ describe('vaadin-app-layout', () => {
           expect(event.defaultPrevented).to.be.true;
         });
 
+        it('should not make the backdrop hit-testable after touchend when not standalone', () => {
+          makeSoloTouchEvent('touchend', null, backdrop);
+          expect(backdrop.style.pointerEvents).to.equal('');
+        });
+
+        // The backdrop is kept hit-testable for a while to catch the ghost click.
+        describe('standalone (iOS home screen)', () => {
+          let standaloneDescriptor, clock;
+
+          beforeEach(() => {
+            standaloneDescriptor = Object.getOwnPropertyDescriptor(navigator, 'standalone');
+            Object.defineProperty(navigator, 'standalone', { configurable: true, value: true });
+            clock = sinon.useFakeTimers();
+          });
+
+          afterEach(() => {
+            clock.restore();
+            if (standaloneDescriptor) {
+              Object.defineProperty(navigator, 'standalone', standaloneDescriptor);
+            } else {
+              delete navigator.standalone;
+            }
+          });
+
+          it('should keep the backdrop hit-testable after touchend', () => {
+            makeSoloTouchEvent('touchend', null, backdrop);
+            expect(backdrop.style.pointerEvents).to.equal('auto');
+          });
+
+          it('should stop keeping the backdrop hit-testable after the timeout', () => {
+            makeSoloTouchEvent('touchend', null, backdrop);
+            clock.tick(500);
+            expect(backdrop.style.pointerEvents).to.equal('');
+          });
+
+          it('should stop keeping the backdrop hit-testable after a click', () => {
+            makeSoloTouchEvent('touchend', null, backdrop);
+            backdrop.click();
+            expect(backdrop.style.pointerEvents).to.equal('');
+          });
+        });
+
         it('should close the drawer when calling helper method', () => {
           layout.constructor.dispatchCloseOverlayDrawerEvent();
           expect(layout.drawerOpened).to.be.false;
@@ -440,6 +482,12 @@ describe('vaadin-app-layout', () => {
         it('should close the drawer when dispatching custom event', () => {
           window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
           expect(layout.drawerOpened).to.be.false;
+        });
+
+        it('should not react to the custom event after being disconnected', () => {
+          layout.remove();
+          window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
+          expect(layout.drawerOpened).to.be.true;
         });
 
         it('should close the drawer on navigation event', () => {

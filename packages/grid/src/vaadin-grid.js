@@ -6,6 +6,7 @@
 import './vaadin-grid-column.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
@@ -17,6 +18,7 @@ import { GridMixin } from './vaadin-grid-mixin.js';
 
 const DEFAULT_I18N = {
   selectAll: 'Select All',
+  selectAllUnavailable: 'Select All unavailable',
   selectRow: 'Select Row {rowHeader}',
   sorter: 'Sort by {column}',
 };
@@ -281,7 +283,7 @@ class Grid extends GridMixin(I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   }
 
   static get styles() {
-    return gridStyles;
+    return [gridStyles, screenReaderOnly];
   }
 
   static get defaultI18n() {
@@ -300,6 +302,9 @@ class Grid extends GridMixin(I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(L
    *   // Accessible name (aria-label) for the select all checkbox in the
    *   // selection column header cell.
    *   selectAll: 'Select All',
+   *   // Screen-reader-only label announced for the selection column header cell
+   *   // when the Select All checkbox is hidden (data provider or conditional selection).
+   *   selectAllUnavailable: 'Select All unavailable',
    *   // Accessible name (aria-label) for the select row checkbox in each
    *   // selection column body cell. The `{rowHeader}` placeholder is replaced with the
    *   // row header cell text content or row index if there is no row header column.

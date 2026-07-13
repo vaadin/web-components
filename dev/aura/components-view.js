@@ -21,11 +21,16 @@ import '@vaadin/rich-text-editor';
 import '@vaadin/select';
 import '@vaadin/scroller';
 import '@vaadin/side-nav';
+import '@vaadin/switch';
 import '@vaadin/tabs';
 import '@vaadin/text-field';
 import '@vaadin/vertical-layout';
 import { html, render } from 'lit';
 import { Notification } from '@vaadin/notification';
+
+window.Vaadin ||= {};
+window.Vaadin.featureFlags ||= {};
+window.Vaadin.featureFlags.switchComponent = true;
 
 const generateItems = (count) => {
   return Array.from({ length: count }, (_, i) => ({
@@ -482,6 +487,14 @@ customElements.define(
 
                   <div class="aura-surface component">
                     <vaadin-button id="open-confirm-dialog">Open Dialog</vaadin-button>
+                  </div>
+
+                  <div class="aura-surface component">
+                    <vaadin-switch
+                      label="Notifications"
+                      helper-text="Enable to receive push notifications"
+                      checked
+                    ></vaadin-switch>
                   </div>
 
                   <div class="aura-surface component wide">

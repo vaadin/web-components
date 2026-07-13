@@ -130,10 +130,10 @@ vaadin-upload-file,
     color-mix(in srgb, var(--_border-color-base) max(8%, 7% + 3% * var(--aura-contrast-level)), transparent)
   );
   --aura-accent-contrast-color-light: oklch(
-    from var(--aura-accent-color-light) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1)
+    from var(--aura-accent-color-light) clamp(0.26, (0.62 - l) * 1000, 1) min(clamp(0, (l - 0.62) * 1000, 0.05), c) h
   );
   --aura-accent-contrast-color-dark: oklch(
-    from var(--aura-accent-color-dark) clamp(0, (0.62 - l) * 1000, 1) 0 0 / clamp(0.8, (0.62 - l) * 1000, 1)
+    from var(--aura-accent-color-dark) clamp(0.26, (0.62 - l) * 1000, 1) min(clamp(0, (l - 0.62) * 1000, 0.05), c) h
   );
   --aura-accent-text-color-light: oklch(
     from var(--aura-accent-color-light) min(0.55, 0.35 - 0.05 * var(--aura-contrast-level) + c) calc(c * 0.9) h

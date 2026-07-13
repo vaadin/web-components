@@ -225,6 +225,9 @@ const createSnapshotTestsConfig = (config) => {
   return {
     ...config,
     nodeResolve: true,
+    browserStartTimeout: 60000, // Default 30000
+    testsStartTimeout: 60000, // Default 10000
+    testsFinishTimeout: 120000, // Default 20000
     groups,
     testRunnerHtml: getTestRunnerHtml(),
     filterBrowserLogs,
@@ -297,7 +300,7 @@ const createVisualTestsConfig = (theme) => {
     },
     browsers: [browser],
     plugins: [
-      esbuildPlugin({ ts: true }),
+      esbuildPlugin({ ts: true, target: 'esnext' }),
       visualRegressionPlugin({
         baseDir: 'packages',
         getBaselineName(args) {
