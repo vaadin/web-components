@@ -299,7 +299,7 @@ describe('scroll to index', () => {
       }
 
       function getFirstVisibleItemId() {
-        return getFirstVisibleItem(grid)._item.name;
+        return getFirstVisibleItem(grid)._item?.name;
       }
 
       beforeEach(async () => {

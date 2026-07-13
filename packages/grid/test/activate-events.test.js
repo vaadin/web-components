@@ -41,6 +41,16 @@ describe('activate events', () => {
       expect(e.detail.model.item).to.be.ok;
     });
 
+    it('should fire with undefined item on loading cell click', () => {
+      grid.dataProvider = () => {};
+      getBodyCellContent(grid, 0, 0).click();
+      expect(spy).to.be.calledOnce;
+
+      const e = spy.firstCall.args[0];
+      expect(e.detail.model.index).to.equal(0);
+      expect(e.detail.model.item).to.be.undefined;
+    });
+
     it('should fire on cell Space', async () => {
       await sendKeys({ press: 'Space' });
       expect(spy).to.be.calledOnce;
@@ -89,6 +99,17 @@ describe('activate events', () => {
       const e = spy.firstCall.args[0];
       expect(e.detail.model.index).to.equal(0);
       expect(e.detail.model.item).to.be.ok;
+    });
+
+    it('should fire with undefined item on loading row Space', async () => {
+      grid.dataProvider = () => {};
+      await sendKeys({ press: 'ArrowLeft' });
+      await sendKeys({ press: 'Space' });
+      expect(spy).to.be.calledOnce;
+
+      const e = spy.firstCall.args[0];
+      expect(e.detail.model.index).to.equal(0);
+      expect(e.detail.model.item).to.be.undefined;
     });
 
     it('should not fire on cell Space', async () => {
