@@ -141,19 +141,6 @@ export const A11yMixin = (superClass) =>
     }
 
     /**
-     * @param {!HTMLElement} row
-     * @param {!HTMLElement} detailsCell
-     * @private
-     */
-    __a11ySetRowDetailsCell(row, detailsCell) {
-      iterateRowCells(row, (cell) => {
-        if (cell !== detailsCell) {
-          cell.setAttribute('aria-controls', detailsCell.id);
-        }
-      });
-    }
-
-    /**
      * @param {!HTMLElement} cell
      * @param {number} colspan
      * @private

@@ -32,7 +32,7 @@ describe('styling', () => {
       const cell = getContainerCell(grid.$.items, row, col);
       let actualPart = cell.getAttribute('part');
       // Remove "loading-row-cell" since initialCellPart doesn't include it and it's irrelevant for the test
-      actualPart = actualPart.replace('loading-row-cell', '').trim();
+      actualPart = actualPart.replace('loading-row-cell', '').replace(/\s+/gu, ' ').trim();
       const customParts = expectedParts.length ? ` ${expectedParts.join(' ')}` : '';
 
       if (row === 0 && col === 0) {

@@ -123,25 +123,7 @@ export const ColumnBaseMixin = (superClass) =>
         /**
          * @protected
          */
-        _lastFrozen: {
-          type: Boolean,
-          value: false,
-          sync: true,
-        },
-
-        /**
-         * @protected
-         */
         _bodyContentHidden: {
-          type: Boolean,
-          value: false,
-          sync: true,
-        },
-
-        /**
-         * @protected
-         */
-        _firstFrozenToEnd: {
           type: Boolean,
           value: false,
           sync: true,
@@ -158,12 +140,6 @@ export const ColumnBaseMixin = (superClass) =>
           type: Boolean,
           sync: true,
         },
-
-        /**
-         * @type {Array<!HTMLElement>}
-         * @protected
-         */
-        _emptyCells: Array,
 
         /** @private */
         _headerCell: {
@@ -265,8 +241,6 @@ export const ColumnBaseMixin = (superClass) =>
         '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells)',
         '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells)',
         '_textAlignChanged(textAlign, _cells, _headerCell, _footerCell)',
-        '_lastFrozenChanged(_lastFrozen)',
-        '_firstFrozenToEndChanged(_firstFrozenToEnd)',
         '_onRendererOrBindingChanged(_renderer, _cells, _bodyContentHidden, path)',
         '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header)',
         '_onFooterRendererOrBindingChanged(_footerRenderer, _footerCell)',
@@ -290,16 +264,28 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
+     * The header and footer section cells of the column, derived from the DOM.
+     * Besides the column's own header and footer cell, this includes the
+     * "empty" filler cells rendered for the column on the other level rows.
+     *
+     * @return {!Array<!HTMLElement>}
+     * @private
+     */
+    get __headerFooterCells() {
+      if (!this._grid) {
+        return [];
+      }
+      return [...this._grid.$.header.children, ...this._grid.$.footer.children]
+        .flatMap((row) => [...row.children])
+        .filter((cell) => cell._column === this);
+    }
+
+    /**
      * @return {!Array<!HTMLElement>}
      * @protected
      */
     get _allCells() {
-      return []
-        .concat(this._cells || [])
-        .concat(this._emptyCells || [])
-        .concat(this._headerCell)
-        .concat(this._footerCell)
-        .filter((cell) => cell);
+      return [].concat(this._cells || []).concat(this.__headerFooterCells);
     }
 
     /** @protected */
@@ -390,9 +376,10 @@ export const ColumnBaseMixin = (superClass) =>
         this.parentElement._columnPropChanged('frozen', frozen);
       }
 
-      this._allCells.forEach((cell) => {
-        updateCellState(cell, 'frozen', frozen);
-      });
+      // The frozen cell states are computed by the row templates
+      if (this._grid && this._grid._requestRenderColumnTree) {
+        this._grid._requestRenderColumnTree();
+      }
 
       if (this._grid && this._grid._frozenCellsChanged) {
         this._grid._frozenCellsChanged();
@@ -405,44 +392,13 @@ export const ColumnBaseMixin = (superClass) =>
         this.parentElement._columnPropChanged('frozenToEnd', frozenToEnd);
       }
 
-      this._allCells.forEach((cell) => {
-        // Skip sizer cells to keep correct scrollWidth.
-        if (this._grid && cell.parentElement === this._grid.$.sizer) {
-          return;
-        }
-
-        updateCellState(cell, 'frozen-to-end', frozenToEnd);
-      });
+      // The frozen cell states are computed by the row templates
+      if (this._grid && this._grid._requestRenderColumnTree) {
+        this._grid._requestRenderColumnTree();
+      }
 
       if (this._grid && this._grid._frozenCellsChanged) {
         this._grid._frozenCellsChanged();
-      }
-    }
-
-    /** @private */
-    _lastFrozenChanged(lastFrozen) {
-      this._allCells.forEach((cell) => {
-        updateCellState(cell, 'last-frozen', lastFrozen);
-      });
-
-      if (this.parentElement && this.parentElement._columnPropChanged) {
-        this.parentElement._lastFrozen = lastFrozen;
-      }
-    }
-
-    /** @private */
-    _firstFrozenToEndChanged(firstFrozenToEnd) {
-      this._allCells.forEach((cell) => {
-        // Skip sizer cells to keep correct scrollWidth.
-        if (this._grid && cell.parentElement === this._grid.$.sizer) {
-          return;
-        }
-
-        updateCellState(cell, 'first-frozen-to-end', firstFrozenToEnd);
-      });
-
-      if (this.parentElement && this.parentElement._columnPropChanged) {
-        this.parentElement._firstFrozenToEnd = firstFrozenToEnd;
       }
     }
 

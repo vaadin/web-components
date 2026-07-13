@@ -5,7 +5,7 @@
  */
 import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { ColumnObserver, getBodyRowCells, updateCellState } from './vaadin-grid-helpers.js';
+import { ColumnObserver } from './vaadin-grid-helpers.js';
 
 function arrayEquals(arr1, arr2) {
   if (!arr1 || !arr2 || arr1.length !== arr2.length) {
@@ -140,22 +140,6 @@ export const DynamicColumnsMixin = (superClass) =>
         if (element && !customElements.get(elementName)) {
           console.warn(`Make sure you have imported the required module for <${elementName}> element.`);
         }
-      });
-    }
-
-    /** @protected */
-    _updateFirstAndLastColumn() {
-      Array.from(this.shadowRoot.querySelectorAll('tr')).forEach((row) => this._updateFirstAndLastColumnForRow(row));
-    }
-
-    /**
-     * @param {!HTMLElement} row
-     * @protected
-     */
-    _updateFirstAndLastColumnForRow(row) {
-      getBodyRowCells(row).forEach((cell, cellIndex, cells) => {
-        updateCellState(cell, 'first-column', cellIndex === 0);
-        updateCellState(cell, 'last-column', cellIndex === cells.length - 1);
       });
     }
 

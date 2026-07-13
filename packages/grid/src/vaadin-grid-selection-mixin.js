@@ -122,7 +122,7 @@ export const SelectionMixin = (superClass) =>
           row.hasAttribute('selected') !== this._isSelected(row._item) ||
           row.hasAttribute('nonselectable') !== !this.__isItemSelectable(row._item)
         ) {
-          this.__updateRow(row);
+          this.__renderBodyRow(row);
         }
       });
     }

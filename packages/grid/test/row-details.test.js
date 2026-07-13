@@ -46,11 +46,13 @@ describe('row details', () => {
     grid.rowDetailsRenderer = simpleDetailsRenderer;
     grid.querySelector('vaadin-grid-column').renderer = indexRenderer;
 
-    const spy = sinon.spy(grid, '__initRow');
+    const spy = sinon.spy(grid, '__renderBodyRow');
     grid.size = 1;
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
-    expect(spy.callCount).to.be.below(5);
+    const firstRow = getRows(grid.$.items)[0];
+    const renderCount = spy.getCalls().filter((call) => call.args[0] === firstRow).length;
+    expect(renderCount).to.be.below(5);
   });
 
   describe('simple', () => {

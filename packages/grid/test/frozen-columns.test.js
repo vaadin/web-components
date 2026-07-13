@@ -60,12 +60,12 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
     after(() => document.documentElement.removeAttribute('dir'));
 
     it('should have last frozen only when there are frozen columns', () => {
-      expect(columns[0]._lastFrozen).to.be.true;
+      expect(grid.shadowRoot.querySelectorAll('[last-frozen]').length).to.be.above(0);
 
       columns[0].frozen = false;
       flushGrid(grid);
 
-      expect(columns[0]._lastFrozen).to.be.false;
+      expect(grid.shadowRoot.querySelectorAll('[last-frozen]').length).to.equal(0);
     });
 
     it('should update frozen columns once on init', () => {
@@ -176,9 +176,10 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           grid._columnTree[0][2].hidden = true;
 
           flushGrid(grid);
-          expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
-          expect(cells[1].hasAttribute('last-frozen')).to.be.true;
-          expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
+          const visibleCells = getRowCells(getRows(containerElement)[0]);
+          expect(visibleCells.length).to.equal(2);
+          expect(visibleCells[0].hasAttribute('last-frozen')).not.to.be.true;
+          expect(visibleCells[1].hasAttribute('last-frozen')).to.be.true;
         });
       });
     });
@@ -198,12 +199,12 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
     });
 
     it('should have first frozen to end only when there are frozen columns', () => {
-      expect(columns[2]._firstFrozenToEnd).to.be.true;
+      expect(grid.shadowRoot.querySelectorAll('[first-frozen-to-end]').length).to.be.above(0);
 
       columns[2].frozenToEnd = false;
       flushGrid(grid);
 
-      expect(columns[2]._firstFrozenToEnd).to.be.false;
+      expect(grid.shadowRoot.querySelectorAll('[first-frozen-to-end]').length).to.equal(0);
     });
 
     it('should not set frozen-to-end on sizer cells', () => {
@@ -336,9 +337,10 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           grid._columnTree[0][0].hidden = true;
 
           flushGrid(grid);
-          expect(cells[0].hasAttribute('first-frozen-to-end')).not.to.be.true;
-          expect(cells[1].hasAttribute('first-frozen-to-end')).to.be.true;
-          expect(cells[2].hasAttribute('first-frozen-to-end')).not.to.be.true;
+          const visibleCells = getRowCells(getRows(containerElement)[0]);
+          expect(visibleCells.length).to.equal(2);
+          expect(visibleCells[0].hasAttribute('first-frozen-to-end')).to.be.true;
+          expect(visibleCells[1].hasAttribute('first-frozen-to-end')).not.to.be.true;
         });
 
         it('should stay frozen to end when resize results in total width less than the grid', async () => {

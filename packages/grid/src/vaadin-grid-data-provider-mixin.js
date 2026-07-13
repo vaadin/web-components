@@ -300,7 +300,7 @@ export const DataProviderMixin = (superClass) =>
         this._shouldLoadAllRenderedRowsAfterPageLoad = false;
 
         this._getRenderedRows().forEach((row) => {
-          this.__updateRow(row);
+          this.__renderBodyRow(row);
 
           if (shouldLoadAllRenderedRowsAfterPageLoad) {
             this.__ensureRowItem(row);

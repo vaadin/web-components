@@ -5,6 +5,7 @@ export const flushGrid = (grid) => {
   grid._observer.flush();
 
   [
+    grid.__renderColumnTreeDebouncer,
     grid.__clearCacheDebouncer,
     grid.__updateColumnTreeDebouncer,
     grid._debounceScrolling,

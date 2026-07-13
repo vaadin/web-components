@@ -238,6 +238,7 @@ describe('column groups', () => {
       const col = grid.querySelector('vaadin-grid-column');
       col.frozen = false;
       col.frozenToEnd = true;
+      flushGrid(grid);
       expect(getHeaderCell(0, 0).hasAttribute('frozen-to-end')).to.be.true;
       expect(getHeaderCell(1, 0).hasAttribute('frozen-to-end')).to.be.true;
     });
@@ -246,6 +247,7 @@ describe('column groups', () => {
       const group = grid.querySelector('vaadin-grid-column-group');
       group.frozen = false;
       group.frozenToEnd = true;
+      flushGrid(grid);
       expect(getHeaderCell(0, 1).hasAttribute('frozen-to-end')).to.be.true;
       expect(getHeaderCell(1, 1).hasAttribute('frozen-to-end')).to.be.true;
       expect(getHeaderCell(1, 2).hasAttribute('frozen-to-end')).to.be.true;
@@ -255,6 +257,7 @@ describe('column groups', () => {
       const col = grid.querySelector('vaadin-grid-column');
       col.frozen = false;
       col.frozenToEnd = true;
+      flushGrid(grid);
       expect(getHeaderCell(0, 0).getAttribute('part')).to.contain('frozen-to-end-cell');
       expect(getHeaderCell(1, 0).getAttribute('part')).to.contain('frozen-to-end-cell');
     });

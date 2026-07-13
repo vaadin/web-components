@@ -389,6 +389,9 @@ export const ScrollMixin = (superClass) =>
     /** @protected */
     _frozenCellsChanged() {
       this._debouncerCacheElements = Debouncer.debounce(this._debouncerCacheElements, microTask, () => {
+        // Apply a possibly pending column tree render before caching the frozen cells
+        this.__renderColumnTreeDebouncer?.flush();
+
         Array.from(this.shadowRoot.querySelectorAll('[part~="cell"]')).forEach((cell) => {
           cell.style.transform = '';
         });
@@ -412,38 +415,8 @@ export const ScrollMixin = (superClass) =>
         return;
       }
 
-      const columnsRow = this._columnTree[this._columnTree.length - 1].slice(0);
-      columnsRow.sort((a, b) => {
-        return a._order - b._order;
-      });
-
-      let lastFrozen;
-      let firstFrozenToEnd;
-
-      // Use for loop to only iterate columns once
-      for (let i = 0; i < columnsRow.length; i++) {
-        const col = columnsRow[i];
-
-        col._lastFrozen = false;
-        col._firstFrozenToEnd = false;
-
-        if (firstFrozenToEnd === undefined && col.frozenToEnd && !col.hidden) {
-          firstFrozenToEnd = i;
-        }
-
-        if (col.frozen && !col.hidden) {
-          lastFrozen = i;
-        }
-      }
-
-      if (lastFrozen !== undefined) {
-        columnsRow[lastFrozen]._lastFrozen = true;
-      }
-
-      if (firstFrozenToEnd !== undefined) {
-        columnsRow[firstFrozenToEnd]._firstFrozenToEnd = true;
-      }
-
+      // The "last frozen" and "first frozen to end" cell states are computed
+      // declaratively by the row templates.
       this.__updateColumnsBodyContentHidden();
     }
 

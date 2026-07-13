@@ -3,8 +3,6 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { updatePart } from './vaadin-grid-helpers.js';
-
 export const RowDetailsMixin = (superClass) =>
   class RowDetailsMixin extends superClass {
     static get properties() {
@@ -86,14 +84,8 @@ export const RowDetailsMixin = (superClass) =>
       if (this._columnTree) {
         // Only update the rows if the column tree has already been initialized
         this._getRenderedRows().forEach((row) => {
-          if (!row.querySelector('[part~=details-cell]')) {
-            this.__initRow(row, this._columnTree[this._columnTree.length - 1]);
-            this.__updateRow(row);
-            return;
-          }
-
-          if (row.hasAttribute('details-opened')) {
-            this.__updateRow(row);
+          if (!row.querySelector('[part~=details-cell]') || row.hasAttribute('details-opened')) {
+            this.__renderBodyRow(row);
           }
         });
       }
@@ -103,47 +95,9 @@ export const RowDetailsMixin = (superClass) =>
     _detailsOpenedItemsChanged(_detailsOpenedItems, rowDetailsRenderer) {
       this._getRenderedRows().forEach((row) => {
         if (row.hasAttribute('details-opened') !== !!(rowDetailsRenderer && this._isDetailsOpened(row._item))) {
-          this.__updateRow(row);
+          this.__renderBodyRow(row);
         }
       });
-    }
-
-    /**
-     * @param {!HTMLElement} cell
-     * @protected
-     */
-    _configureDetailsCell(cell) {
-      updatePart(cell, 'cell', true);
-      updatePart(cell, 'details-cell', true);
-      // Freeze the details cell, so that it does not scroll horizontally
-      // with the normal cells. This way it looks less weird.
-      cell.toggleAttribute('frozen', true);
-
-      this._detailsCellResizeObserver.observe(cell);
-    }
-
-    /**
-     * @param {!HTMLElement} row
-     * @param {boolean} detailsOpened
-     * @protected
-     */
-    _toggleDetailsCell(row, detailsOpened) {
-      const cell = row.querySelector('[part~="details-cell"]');
-      if (!cell) {
-        return;
-      }
-
-      cell.hidden = !detailsOpened;
-
-      if (cell.hidden) {
-        return;
-      }
-
-      // Assigns a renderer when the details cell is opened.
-      // The details cell content is rendered later in the `__updateRow` method.
-      if (this.rowDetailsRenderer) {
-        cell._renderer = this.rowDetailsRenderer;
-      }
     }
 
     /** @protected */

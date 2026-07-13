@@ -488,6 +488,7 @@ export class IronListAdapter {
     const updatedElements = [];
     this._iterateItems((pidx, vidx) => {
       const el = this._physicalItems[pidx];
+      this.__resizeObserver.observe(el, { box: 'border-box' });
       el.hidden = vidx >= this.size;
       if (!el.hidden) {
         el.__virtualIndex = vidx + (this._vidxOffset || 0);

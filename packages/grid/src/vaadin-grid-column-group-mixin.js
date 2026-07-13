@@ -104,18 +104,8 @@ export const GridColumnGroupMixin = (superClass) =>
       }
 
       // Don't unfreeze the frozen group because of a non-frozen child
-      if (path === 'lastFrozen' && !this._lastFrozen) {
-        this._lastFrozen = value;
-      }
-
-      // Don't unfreeze the frozen group because of a non-frozen child
       if (path === 'frozenToEnd' && !this.frozenToEnd) {
         this.frozenToEnd = value;
-      }
-
-      // Don't unfreeze the frozen group because of a non-frozen child
-      if (path === 'firstFrozenToEnd' && !this._firstFrozenToEnd) {
-        this._firstFrozenToEnd = value;
       }
     }
 
