@@ -153,11 +153,16 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * `week-number`         | Week number element
  * `date`                | Date element
  * `disabled`            | Disabled date element
+ * `pending`             | Date element in a month whose date metadata provider result is still loading
  * `focused`             | Focused date element
  * `selected`            | Selected date element
  * `today`               | Date element corresponding to the current day
  * `past`                | Date element corresponding to the date in the past
  * `future`              | Date element corresponding to the date in the future
+ *
+ * Custom part names returned per date by `dateMetadataProvider` (the `part` metadata field) are
+ * also added to the matching date elements, so specific dates can be styled with
+ * `vaadin-month-calendar::part(<name>)`.
  *
  * In order to style year scroller elements, use `<vaadin-date-picker-year>` shadow DOM parts:
  *
