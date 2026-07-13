@@ -212,6 +212,12 @@ export const ComboBoxBaseMixin = (superClass) =>
         this._overlayOpened = e.detail.value;
       });
 
+      // Finish close lifecycle only after the overlay closing animation completes.
+      overlay.addEventListener('vaadin-overlay-closed', () => {
+        this._scroller.items = [];
+        this._onOverlayClosed();
+      });
+
       this._overlayElement = overlay;
     }
 
@@ -258,7 +264,6 @@ export const ComboBoxBaseMixin = (superClass) =>
         this._onOpened();
       } else if (wasOpened && this._hasDropdownItems) {
         this.close();
-        this._onOverlayClosed();
       }
     }
 
@@ -707,6 +712,10 @@ export const ComboBoxBaseMixin = (superClass) =>
     _overlaySelectedItemChanged(e) {
       // Stop this private event from leaking outside.
       e.stopPropagation();
+
+      if (this.hasAttribute('closing')) {
+        return;
+      }
 
       if (e.detail.item instanceof ComboBoxPlaceholder) {
         // Placeholder items should not be selectable.
