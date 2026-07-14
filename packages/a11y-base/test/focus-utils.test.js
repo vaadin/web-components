@@ -63,12 +63,6 @@ describe('focus-utils', () => {
         element.setAttribute('disabled', '');
         expect(isElementFocusable(element)).to.be.false;
       });
-
-      it(`should return false for <${tagName}> with [tabindex] = -1`, () => {
-        const element = document.createElement(tagName);
-        element.setAttribute('tabindex', '-1');
-        expect(isElementFocusable(element)).to.be.false;
-      });
     });
 
     ['a', 'area'].forEach((tagName) => {
@@ -82,24 +76,11 @@ describe('focus-utils', () => {
         element.href = '#';
         expect(isElementFocusable(element)).to.be.true;
       });
-
-      it(`should return false for <${tagName}> with [href] and [tabindex] = -1`, () => {
-        const element = document.createElement(tagName);
-        element.href = '#';
-        element.setAttribute('tabindex', '-1');
-        expect(isElementFocusable(element)).to.be.false;
-      });
     });
 
     it('should return true for <iframe> by default', () => {
       const element = document.createElement('iframe');
       expect(isElementFocusable(element)).to.be.true;
-    });
-
-    it('should return false for <iframe> with [tabindex] = -1', () => {
-      const element = document.createElement('iframe');
-      element.setAttribute('tabindex', '-1');
-      expect(isElementFocusable(element)).to.be.false;
     });
 
     it('should return false for <div> by default', () => {
@@ -113,17 +94,22 @@ describe('focus-utils', () => {
       expect(isElementFocusable(element)).to.be.true;
     });
 
+    it('should return true for <div> with [tabindex] = 1', () => {
+      const element = document.createElement('div');
+      element.setAttribute('tabindex', '1');
+      expect(isElementFocusable(element)).to.be.true;
+    });
+
+    it('should return true for <div> with [tabindex] = -1', () => {
+      const element = document.createElement('div');
+      element.setAttribute('tabindex', '-1');
+      expect(isElementFocusable(element)).to.be.true;
+    });
+
     it('should return true for <div> with [contenteditable]', () => {
       const element = document.createElement('div');
       element.setAttribute('contenteditable', '');
       expect(isElementFocusable(element)).to.be.true;
-    });
-
-    it('should return false for <div> with [contenteditable] and [tabindex] = -1', () => {
-      const element = document.createElement('div');
-      element.setAttribute('contenteditable', '');
-      element.setAttribute('tabindex', '-1');
-      expect(isElementFocusable(element)).to.be.false;
     });
   });
 

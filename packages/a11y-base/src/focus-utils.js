@@ -165,7 +165,8 @@ export function isElementHidden(element) {
 }
 
 /**
- * Returns true if the element is focusable, otherwise false.
+ * Returns true if the element is focusable, i.e. can be focused with a
+ * mouse click or a `focus()` call, otherwise false.
  *
  * The list of focusable elements is taken from http://stackoverflow.com/a/1600194/4228703.
  * However, there isn't a definite list, it's up to the browser.
@@ -184,11 +185,6 @@ export function isElementHidden(element) {
  * @return {boolean}
  */
 export function isElementFocusable(element) {
-  // The element cannot be focused if its `tabindex` attribute is set to `-1`.
-  if (element.matches('[tabindex="-1"]')) {
-    return false;
-  }
-
   // Elements that cannot be focused if they have a `disabled` attribute.
   if (element.matches('input, select, textarea, button, object')) {
     return element.matches(':not([disabled])');

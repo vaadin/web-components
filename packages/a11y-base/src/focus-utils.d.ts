@@ -26,7 +26,8 @@ export declare function isKeyboardActive(): boolean;
 export declare function isElementHidden(element: HTMLElement): boolean;
 
 /**
- * Returns true if the element is focusable, otherwise false.
+ * Returns true if the element is focusable, i.e. can be focused with a
+ * mouse click or a `focus()` call, otherwise false.
  *
  * The list of focusable elements is taken from http://stackoverflow.com/a/1600194/4228703.
  * However, there isn't a definite list, it's up to the browser.
