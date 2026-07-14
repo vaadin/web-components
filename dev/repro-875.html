@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #875 — grid-pro combo-box editor on touch</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <p>
+      Repro #875: open the "Title" cell editor (combo-box). On a touch device, touch-scrolling the open overlay
+      used to collapse the overlay and clear the cell value. Same for the "Time" (time-picker) column.
+    </p>
+    <vaadin-grid-pro single-cell-edit edit-on-click style="height: 300px">
+      <vaadin-grid-pro-edit-column path="name.first" header="First"></vaadin-grid-pro-edit-column>
+      <vaadin-grid-pro-edit-column id="titleCol" path="title" header="Title (combo-box)"></vaadin-grid-pro-edit-column>
+      <vaadin-grid-pro-edit-column id="timeCol" path="time" header="Time (time-picker)"></vaadin-grid-pro-edit-column>
+    </vaadin-grid-pro>
+
+    <script type="module">
+      import '@vaadin/grid-pro';
+      import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
+      import '@vaadin/combo-box';
+      import '@vaadin/time-picker';
+
+      const titles = ['mr', 'mrs', 'ms', 'dr', 'prof', 'sir', 'lady', 'count', 'duke', 'baron', 'lord', 'miss'];
+
+      const grid = document.querySelector('vaadin-grid-pro');
+      grid.items = Array.from({ length: 25 }, (_, i) => ({
+        name: { first: `Person ${i}` },
+        title: titles[i % titles.length],
+        time: `${String(8 + (i % 10)).padStart(2, '0')}:00`,
+      }));
+
+      // Custom combo-box editor (mirrors the "Custom Edit Mode Renderer" grid-pro demo).
+      const titleCol = document.querySelector('#titleCol');
+      titleCol.editModeRenderer = (root, _column, model) => {
+        let combo = root.firstElementChild;
+        if (!combo) {
+          combo = document.createElement('vaadin-combo-box');
+          combo.id = 'editor-combo';
+          combo.items = titles;
+          root.appendChild(combo);
+        }
+        combo.value = model.item.title;
+      };
+
+      // Custom time-picker editor.
+      const timeCol = document.querySelector('#timeCol');
+      timeCol.editModeRenderer = (root, _column, model) => {
+        let tp = root.firstElementChild;
+        if (!tp) {
+          tp = document.createElement('vaadin-time-picker');
+          tp.id = 'editor-time';
+          root.appendChild(tp);
+        }
+        tp.value = model.item.time;
+      };
+    </script>
+  </body>
+</html>
