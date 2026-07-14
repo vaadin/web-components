@@ -188,7 +188,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
         .positionTarget="${this._inputContainer}"
         .opened="${this.opened}"
         .withBackdrop="${this._phone}"
-        .renderer="${this.renderer || this.__defaultRenderer}"
+        .renderer="${this.__slottedListBox ? undefined : this.renderer || this.__defaultRenderer}"
         ?phone="${this._phone}"
         theme="${ifDefined(this._theme)}"
         ?no-vertical-overlap="${this.noVerticalOverlap}"
@@ -196,7 +196,7 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
         @opened-changed="${this._onOpenedChanged}"
         @vaadin-overlay-open="${this._onOverlayOpen}"
       >
-        <slot name="overlay"></slot>
+        <slot name="overlay" @slotchange="${this.__onOverlaySlotChange}"></slot>
       </vaadin-select-overlay>
 
       <slot name="tooltip"></slot>

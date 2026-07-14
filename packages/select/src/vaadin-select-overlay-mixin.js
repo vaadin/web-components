@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { getFlattenedElements } from '@vaadin/component-base/src/dom-utils.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 
@@ -70,7 +71,9 @@ export const SelectOverlayMixin = (superClass) =>
 
     /** @protected */
     _getMenuElement() {
-      return Array.from(this._rendererRoot.children).find((el) => el.localName !== 'style');
+      const slot = this.owner.shadowRoot.querySelector('slot[name="overlay"]');
+      // The list-box is either slotted directly or rendered into the renderer root.
+      return getFlattenedElements(slot).find((el) => el._hasVaadinListMixin);
     }
 
     /** @private */
