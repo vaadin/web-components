@@ -63,7 +63,9 @@ export const SelectBaseMixin = (superClass) =>
          *
          * - `root` The internal container DOM element. Append your content to it.
          * - `select` The reference to the `<vaadin-select>` element.
+         *
          * @type {!SelectRenderer | undefined}
+         * @deprecated Use a slotted `<vaadin-select-list-box>` or the `items` property instead
          */
         renderer: {
           type: Object,
