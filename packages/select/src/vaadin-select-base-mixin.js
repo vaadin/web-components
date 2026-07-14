@@ -37,7 +37,7 @@ export const SelectBaseMixin = (superClass) =>
          * Note: each item is rendered by default as the internal `<vaadin-select-item>` that is an extension of `<vaadin-item>`.
          * To render the item with a custom component, provide a tag name by the `component` property.
          *
-         * @type {!Array<!SelectItem>}
+         * @type {!Array<!SelectItemData>}
          */
         items: {
           type: Array,
@@ -231,8 +231,8 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     /**
-     * @param {SelectItem[] | undefined | null} newItems
-     * @param {SelectItem[] | undefined | null} oldItems
+     * @param {SelectItemData[] | undefined | null} newItems
+     * @param {SelectItemData[] | undefined | null} oldItems
      * @private
      */
     __itemsChanged(newItems, oldItems) {
@@ -467,7 +467,7 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     /**
-     * @param {!SelectItem} item
+     * @param {!SelectItemData} item
      * @private
      */
     __createItemElement(item) {
