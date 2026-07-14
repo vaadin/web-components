@@ -18,6 +18,15 @@ export const ListMixin = (superClass) =>
     static get properties() {
       return {
         /**
+         * Used for mixin detection because `instanceof` does not work with mixins.
+         * e.g. `<vaadin-select>` uses the `element._hasVaadinListMixin` condition
+         * to detect a slotted list-box.
+         */
+        _hasVaadinListMixin: {
+          value: true,
+        },
+
+        /**
          * If true, the user cannot interact with this element.
          * When the element is disabled, the selected item is
          * not updated when `selected` property is changed.

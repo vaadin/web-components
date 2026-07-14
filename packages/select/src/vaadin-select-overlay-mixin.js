@@ -70,7 +70,24 @@ export const SelectOverlayMixin = (superClass) =>
 
     /** @protected */
     _getMenuElement() {
-      return Array.from(this._rendererRoot.children).find((el) => el.localName !== 'style');
+      const slot = this.owner.shadowRoot.querySelector('slot[name="overlay"]');
+      const assigned = slot ? slot.assignedElements() : [];
+
+      // A directly-slotted list-box takes precedence over the renderer root.
+      const slottedListBox = assigned.find((el) => el._hasVaadinListMixin);
+      if (slottedListBox) {
+        return slottedListBox;
+      }
+
+      // Otherwise, look for a list-box rendered inside the renderer root.
+      for (const el of assigned) {
+        const child = Array.from(el.children).find((c) => c._hasVaadinListMixin);
+        if (child) {
+          return child;
+        }
+      }
+
+      return undefined;
     }
 
     /** @private */

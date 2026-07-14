@@ -138,6 +138,18 @@ export const SelectBaseMixin = (superClass) =>
 
         /** @private */
         _items: Object,
+
+        /**
+         * Set to true when a `<vaadin-select-list-box>` is slotted directly
+         * into the overlay slot. When set, the slotted list-box is used as
+         * the menu element instead of the `renderer` or `items`.
+         * @private
+         */
+        __hasSlottedListBox: {
+          type: Boolean,
+          value: false,
+          sync: true,
+        },
       };
     }
 
@@ -238,6 +250,39 @@ export const SelectBaseMixin = (superClass) =>
     __itemsChanged(newItems, oldItems) {
       if (newItems || oldItems) {
         this.requestContentUpdate();
+      }
+    }
+
+    /**
+     * Detects a `<vaadin-select-list-box>` slotted directly into the overlay
+     * slot and uses it as the menu element, bypassing the `renderer` and `items`.
+     *
+     * @param {!Event} e
+     * @private
+     */
+    __onOverlaySlotChange(e) {
+      const rendererRoot = this._overlayElement && this._overlayElement.__savedRoot;
+      const slottedListBox = e.target.assignedElements().find((el) => el._hasVaadinListMixin && el !== rendererRoot);
+
+      const hadSlottedListBox = this.__hasSlottedListBox;
+      this.__hasSlottedListBox = Boolean(slottedListBox);
+
+      if (slottedListBox) {
+        // Slotted list-box takes precedence over the `renderer` and `items`.
+        if ((this.items?.length || this.renderer) && !this.__slottedListBoxWarned) {
+          this.__slottedListBoxWarned = true;
+          console.warn(
+            'WARNING: Both a slotted <vaadin-select-list-box> and the "items" property (or a "renderer") ' +
+              'are set on <vaadin-select>. The slotted list-box takes precedence.',
+          );
+        }
+
+        this._assignMenuElement(slottedListBox);
+        this._updateSelectedItem(this.value, slottedListBox.items);
+      } else if (hadSlottedListBox) {
+        // Switched away from a slotted list-box: reset the guard so that a
+        // subsequently rendered menu element gets wired up correctly.
+        this.__lastMenuElement = null;
       }
     }
 
@@ -651,6 +696,11 @@ export const SelectBaseMixin = (superClass) =>
      * @private
      */
     __defaultRenderer(root, _select) {
+      if (this.__hasSlottedListBox) {
+        root.textContent = '';
+        return;
+      }
+
       if (!this.items || this.items.length === 0) {
         root.textContent = '';
         return;
