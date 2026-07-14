@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { getFlattenedElements } from '@vaadin/component-base/src/dom-utils.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 
@@ -22,12 +21,14 @@ export const SelectOverlayMixin = (superClass) =>
     }
 
     /**
-     * Override method from OverlayFocusMixin to use slotted div as content root.
+     * Override method from OverlayFocusMixin to use the content root that
+     * actually holds the focused item, so focus is restored on close.
+     *
      * @protected
      * @override
      */
     get _contentRoot() {
-      return this._rendererRoot;
+      return this.owner.__slottedListBox || this._rendererRoot;
     }
 
     /**
@@ -72,8 +73,11 @@ export const SelectOverlayMixin = (superClass) =>
     /** @protected */
     _getMenuElement() {
       const slot = this.owner.shadowRoot.querySelector('slot[name="overlay"]');
-      // The list-box is either slotted directly or rendered into the renderer root.
-      return getFlattenedElements(slot).find((el) => el._hasVaadinListMixin);
+      const assigned = slot.assignedElements();
+      return (
+        assigned.find((el) => el._hasVaadinListMixin) ||
+        assigned.flatMap((el) => [...el.children]).find((el) => el._hasVaadinListMixin)
+      );
     }
 
     /** @private */

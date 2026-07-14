@@ -1,11 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { sendKeys } from '@vaadin/test-runner-commands';
+import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-select.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 
 describe('slotted list-box', () => {
-  let select, listBox, valueButton;
+  let select, overlay, listBox, valueButton;
 
   beforeEach(async () => {
     select = fixtureSync(`
@@ -18,6 +20,7 @@ describe('slotted list-box', () => {
       </vaadin-select>
     `);
     await nextRender();
+    overlay = select.shadowRoot.querySelector('vaadin-select-overlay');
     listBox = select.querySelector('vaadin-select-list-box');
     valueButton = select.querySelector('vaadin-select-value-button');
   });
@@ -55,6 +58,39 @@ describe('slotted list-box', () => {
     listBox.removeChild(listBox.items[0]);
     await nextRender();
     expect(select._items).to.have.lengthOf(3);
+  });
+
+  it('should clear the selected index when the selected item is removed', async () => {
+    expect(listBox.selected).to.equal(1);
+
+    listBox.removeChild(listBox.items[1]);
+    await nextRender();
+
+    expect(listBox.selected).to.not.exist;
+  });
+
+  it('should restore focus to the value button on close', async () => {
+    select.focus();
+    select.opened = true;
+    await oneEvent(overlay, 'vaadin-overlay-open');
+
+    await sendKeys({ press: 'Escape' });
+    await nextRender();
+
+    expect(getDeepActiveElement()).to.equal(valueButton);
+  });
+
+  it('should clear the menu element and items when the slotted list-box is removed', async () => {
+    select.removeChild(listBox);
+    await nextRender();
+
+    expect(select._menuElement).to.be.null;
+    expect(select._items).to.be.null;
+
+    // Do not apply matching value after removing.
+    select.value = 'baz';
+    await nextUpdate(select);
+    expect(valueButton.textContent.trim()).to.not.equal('Baz');
   });
 });
 

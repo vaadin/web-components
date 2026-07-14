@@ -222,10 +222,9 @@ export const SelectBaseMixin = (superClass) =>
           }
 
           this._assignMenuElement(slottedListBox);
-          this._updateSelectedItem(this.value, slottedListBox.items);
         } else if (props.get('__slottedListBox')) {
-          // Switched away from a slotted list-box: reset the guard so that a
-          // subsequently rendered menu element gets wired up correctly.
+          this._menuElement = null;
+          this._items = null;
           this.__lastMenuElement = null;
         }
       }
