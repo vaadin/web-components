@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, LitElement, nothing } from 'lit';
-import { getFocusableElements, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getTabbableElements, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -379,7 +379,7 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
     const hasOverflow =
       (hasDetail || hasDetailPlaceholder) && (this.forceOverlay || detectOverflow(hostSize, trackSizes));
-    const focusTarget = !hadDetail && hasDetail && hasOverflow ? getFocusableElements(slottedDetail)[0] : null;
+    const focusTarget = !hadDetail && hasDetail && hasOverflow ? getTabbableElements(slottedDetail)[0] : null;
 
     return {
       hasMaster,

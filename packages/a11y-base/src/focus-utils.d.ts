@@ -54,4 +54,4 @@ export declare function isElementFocused(element: HTMLElement): boolean;
  *
  * The method traverses nodes in shadow DOM trees too if any.
  */
-export declare function getFocusableElements(element: HTMLElement): HTMLElement[];
+export declare function getTabbableElements(element: HTMLElement): HTMLElement[];

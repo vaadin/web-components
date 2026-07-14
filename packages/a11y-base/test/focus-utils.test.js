@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { defineCE, fixtureSync, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
 import {
   getDeepActiveElement,
-  getFocusableElements,
+  getTabbableElements,
   isElementFocusable,
   isElementFocused,
   isElementHidden,
@@ -127,7 +127,7 @@ describe('focus-utils', () => {
     });
   });
 
-  describe('getFocusableElements', () => {
+  describe('getTabbableElements', () => {
     customElements.define(
       'custom-element',
       class extends HTMLElement {
@@ -164,7 +164,7 @@ describe('focus-utils', () => {
         </div>
       `);
 
-      const focusableElements = getFocusableElements(root);
+      const focusableElements = getTabbableElements(root);
       expect(focusableElements.map((element) => element.id)).to.deep.equal([
         'element-4',
         'element-3',
@@ -185,7 +185,7 @@ describe('focus-utils', () => {
         </div>
       `);
 
-      const focusableElements = getFocusableElements(ancestor.querySelector('#root'));
+      const focusableElements = getTabbableElements(ancestor.querySelector('#root'));
       expect(focusableElements).to.have.lengthOf(1);
       expect(focusableElements[0].id).to.equal('root');
     });

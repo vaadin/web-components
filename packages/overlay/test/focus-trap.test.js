@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import '../src/vaadin-overlay.js';
-import { getFocusableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getTabbableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('focus-trap', () => {
   let overlay, overlayPart, focusableElements;
@@ -29,7 +29,7 @@ describe('focus-trap', () => {
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
       overlayPart = overlay.$.overlay;
-      focusableElements = getFocusableElements(overlayPart);
+      focusableElements = getTabbableElements(overlayPart);
     });
 
     afterEach(() => {
@@ -86,7 +86,7 @@ describe('focus-trap', () => {
       overlay.focusTrap = true;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
-      focusableElements = getFocusableElements(overlayPart);
+      focusableElements = getTabbableElements(overlayPart);
       expect(focusableElements[0]).to.equal(overlayPart);
       expect(getFocusedElementIndex()).to.equal(0);
     });
@@ -95,7 +95,7 @@ describe('focus-trap', () => {
       overlay.focusTrap = false;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
-      focusableElements = getFocusableElements(overlayPart);
+      focusableElements = getTabbableElements(overlayPart);
       expect(getFocusedElementIndex()).to.equal(-1);
     });
 
@@ -104,7 +104,7 @@ describe('focus-trap', () => {
       overlay.focusTrap = true;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
-      focusableElements = getFocusableElements(overlayPart);
+      focusableElements = getTabbableElements(overlayPart);
       expect(getFocusedElementIndex()).to.equal(-1);
     });
   });
@@ -129,7 +129,7 @@ describe('focus-trap', () => {
       };
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
-      focusableElements = getFocusableElements(overlay.$.overlay);
+      focusableElements = getTabbableElements(overlay.$.overlay);
       nested = overlay.querySelector('vaadin-overlay');
     });
 

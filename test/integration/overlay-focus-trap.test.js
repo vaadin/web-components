@@ -4,7 +4,7 @@ import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/overlay/src/vaadin-overlay.js';
 import '@vaadin/radio-group/src/vaadin-radio-group.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
-import { getFocusableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getTabbableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('focus-trap', () => {
   let overlay, focusableElements;
@@ -33,7 +33,7 @@ describe('focus-trap', () => {
       overlay.requestContentUpdate();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
-      focusableElements = getFocusableElements(overlay.$.overlay);
+      focusableElements = getTabbableElements(overlay.$.overlay);
     });
 
     afterEach(() => {
@@ -91,7 +91,7 @@ describe('focus-trap', () => {
     it('should properly detect multiple focusable elements inside shadow DOM', async () => {
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
-      focusableElements = getFocusableElements(overlay.$.overlay);
+      focusableElements = getTabbableElements(overlay.$.overlay);
       expect(focusableElements.length).to.equal(4);
       const div = overlay.querySelector('div');
       expect(focusableElements[1]).to.equal(div.shadowRoot.querySelector('input'));
@@ -101,7 +101,7 @@ describe('focus-trap', () => {
     it('should not focus the overlay part if the content is already focused', async () => {
       overlay.opened = true;
       // Needs to happen after opened and before focus-trap loop is executed
-      focusableElements = getFocusableElements(overlay.$.overlay);
+      focusableElements = getTabbableElements(overlay.$.overlay);
       focusableElements[1].focus();
       await oneEvent(overlay, 'vaadin-overlay-open');
       expect(getFocusedElementIndex()).not.to.equal(0);
@@ -110,7 +110,7 @@ describe('focus-trap', () => {
     it('should focus first element with tabIndex=1', async () => {
       // It's an arguable behavior, probably overlay should be focused instead
       overlay.opened = true;
-      focusableElements = getFocusableElements(overlay.$.overlay);
+      focusableElements = getTabbableElements(overlay.$.overlay);
       focusableElements[1].tabIndex = 1;
       await oneEvent(overlay, 'vaadin-overlay-open');
       const idx = getFocusedElementIndex();
@@ -120,7 +120,7 @@ describe('focus-trap', () => {
     it('should focus focusable elements in shadow DOM on Tab and Shift Tab', async () => {
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
-      focusableElements = getFocusableElements(overlay.$.overlay);
+      focusableElements = getTabbableElements(overlay.$.overlay);
 
       // Tab
       for (let i = 0; i < focusableElements.length; i++) {
