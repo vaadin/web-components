@@ -5,7 +5,7 @@
  */
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
-import { isAndroid, isChrome, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { isAndroid, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
@@ -402,34 +402,6 @@ export const GridMixin = (superClass) =>
       }
 
       cell._content = cellContent;
-
-      // With native Shadow DOM, mousedown on slotted element does not focus
-      // focusable slot wrapper, that is why cells are not focused with
-      // mousedown. Workaround: listen for mousedown and focus manually.
-      cellContent.addEventListener('mousedown', () => {
-        if (isChrome) {
-          // Chrome bug: focusing before mouseup prevents text selection, see http://crbug.com/771903
-          const mouseUpListener = (event) => {
-            // If focus is on element within the cell content - respect it, do not change
-            const contentContainsFocusedElement = cellContent.contains(this.getRootNode().activeElement);
-            // Only focus if mouse is released on cell content itself
-            const mouseUpWithinCell = event.composedPath().includes(cellContent);
-            if (!contentContainsFocusedElement && mouseUpWithinCell) {
-              cell.focus({ preventScroll: true });
-            }
-            document.removeEventListener('mouseup', mouseUpListener, true);
-          };
-          document.addEventListener('mouseup', mouseUpListener, true);
-        } else {
-          // Focus on mouseup, on the other hand, removes selection on Safari.
-          // Watch out sync focus removal issue, only async focus works here.
-          setTimeout(() => {
-            if (!cellContent.contains(this.getRootNode().activeElement)) {
-              cell.focus({ preventScroll: true });
-            }
-          });
-        }
-      });
 
       return cell;
     }

@@ -606,7 +606,12 @@ export const ContextMenuMixin = (superClass) =>
       });
     }
 
-    /** @private */
+    /**
+     * Mimics the native focus on mousedown: walks up the flat tree from the
+     * target and focuses the closest focusable element, including elements
+     * with `tabindex="-1"` which are focusable by mouse (e.g. grid cells).
+     * @private
+     */
     __focusClosestFocusable(target) {
       let currentElement = target;
       while (currentElement) {
@@ -614,7 +619,8 @@ export const ContextMenuMixin = (superClass) =>
           currentElement.focus();
           return;
         }
-        currentElement = currentElement.parentNode || currentElement.host;
+        // Use assignedSlot to cross shadow DOM boundaries for slotted content
+        currentElement = currentElement.assignedSlot || currentElement.parentNode || currentElement.host;
       }
     }
 
@@ -628,10 +634,8 @@ export const ContextMenuMixin = (superClass) =>
       if (target) {
         // Need to run asynchronously to avoid timing issues with the Lit-based context menu
         queueMicrotask(() => {
-          // Dispatch mousedown and mouseup to the target (grid cell focus depends on it)
-          target.dispatchEvent(this.__createMouseEvent('mousedown', x, y));
-          target.dispatchEvent(this.__createMouseEvent('mouseup', x, y));
-          // Manually try to focus the closest focusable of the target
+          // Focus the target as the native mousedown preceding a real
+          // contextmenu event would do
           this.__focusClosestFocusable(target);
           // Dispatch a contextmenu event to the target
           target.dispatchEvent(this.__createMouseEvent('contextmenu', x, y));

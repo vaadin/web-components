@@ -1,11 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import {
   aTimeout,
   down as mouseDown,
   fixtureSync,
   focusin,
-  isChrome,
   isDesktopSafari,
   keyboardEventFor,
   keyDownOn,
@@ -1727,21 +1726,22 @@ describe('keyboard navigation', () => {
       grid.removeEventListener('cell-focus', spy);
     });
 
-    // Separate test suite for Chrome, where we use a workaround to dispatch
-    // cell-focus on mouse up
-    (isChrome ? describe : describe.skip)('chrome', () => {
-      it('should dispatch cell-focus on mouse up on cell content', () => {
+    describe('mouse', () => {
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('should dispatch cell-focus on cell content mousedown', async () => {
         const spy = sinon.spy();
         grid.addEventListener('cell-focus', spy);
 
-        // Mouse down and release on cell content element
         const cell = getRowFirstCell(0);
-        mouseDown(cell._content);
-        mouseUp(cell._content);
+        await sendMouseToElement({ type: 'move', element: cell._content });
+        await sendMouse({ type: 'down' });
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should dispatch cell-focus on mouse up on cell content when grid is in shadow DOM', () => {
+      it('should dispatch cell-focus on cell content mousedown when grid is in shadow DOM', async () => {
         const spy = sinon.spy();
         grid.addEventListener('cell-focus', spy);
 
@@ -1750,36 +1750,26 @@ describe('keyboard navigation', () => {
         document.body.appendChild(container);
         container.attachShadow({ mode: 'open' });
         container.shadowRoot.appendChild(grid);
+        await nextFrame();
 
-        // Mouse down and release on cell content element
         const cell = getRowFirstCell(0);
-        mouseDown(cell._content);
-        mouseUp(cell._content);
+        await sendMouseToElement({ type: 'move', element: cell._content });
+        await sendMouse({ type: 'down' });
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should dispatch cell-focus on mouse up within cell content', () => {
+      it('should dispatch cell-focus on cell content child mousedown', async () => {
         const spy = sinon.spy();
         grid.addEventListener('cell-focus', spy);
 
-        // Mouse down and release on cell content child
         const cell = getRowFirstCell(0);
-        const contentSpan = document.createElement('span');
-        cell._content.appendChild(contentSpan);
+        const span = document.createElement('span');
+        span.textContent = 'span';
+        cell._content.appendChild(span);
 
-        mouseDown(contentSpan);
-        mouseUp(contentSpan);
+        await sendMouseToElement({ type: 'move', element: span });
+        await sendMouse({ type: 'down' });
         expect(spy.calledOnce).to.be.true;
-      });
-
-      // Regression test for https://github.com/vaadin/flow-components/issues/2863
-      it('should not dispatch cell-focus on mouse up outside of cell', () => {
-        const spy = sinon.spy();
-        grid.addEventListener('cell-focus', spy);
-
-        mouseDown(getRowFirstCell(0)._content);
-        mouseUp(document.body);
-        expect(spy.calledOnce).to.be.false;
       });
     });
   });
