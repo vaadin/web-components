@@ -13,11 +13,25 @@ import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * An element used internally by `<vaadin-select>`. Not intended to be used separately.
+ * `<vaadin-select-list-box>` is a Web Component for grouping `<vaadin-select-item>`
+ * elements to be slotted into the `<vaadin-select>` overlay.
+ *
+ * ```html
+ * <vaadin-select>
+ *   <vaadin-select-list-box slot="overlay">
+ *     <vaadin-select-item value="foo">Foo</vaadin-select-item>
+ *     <vaadin-select-item value="bar">Bar</vaadin-select-item>
+ *   </vaadin-select-list-box>
+ * </vaadin-select>
+ * ```
+ *
+ * It has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box), and
+ * should be preferred over it for defining the options of `<vaadin-select>`.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement vaadin-select-list-box
  * @extends HTMLElement
- * @protected
  */
 class SelectListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

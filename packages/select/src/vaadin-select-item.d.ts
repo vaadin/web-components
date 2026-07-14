@@ -8,7 +8,11 @@ import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * An element used internally by `<vaadin-select>`. Not intended to be used separately.
+ * `<vaadin-select-item>` is a Web Component providing layout for items in the
+ * `<vaadin-select-list-box>` that is slotted into the `<vaadin-select>` overlay.
+ *
+ * It has the same API as `<vaadin-item>`, and should be preferred over it for
+ * items placed directly inside `<vaadin-select>`.
  */
 declare class SelectItem extends ItemMixin(DirMixin(ThemableMixin(HTMLElement))) {}
 
