@@ -79,6 +79,7 @@
     "@vaadin/side-nav": "25.3.0-alpha4",
     "@vaadin/slider": "25.3.0-alpha4",
     "@vaadin/split-layout": "25.3.0-alpha4",
+    "@vaadin/switch": "25.3.0-alpha4",
     "@vaadin/tabs": "25.3.0-alpha4",
     "@vaadin/tabsheet": "25.3.0-alpha4",
     "@vaadin/text-area": "25.3.0-alpha4",
@@ -388,6 +389,10 @@
       "types": "./SplitLayout.d.ts",
       "default": "./SplitLayout.js"
     },
+    "./Switch.js": {
+      "types": "./Switch.d.ts",
+      "default": "./Switch.js"
+    },
     "./Tab.js": {
       "types": "./Tab.d.ts",
       "default": "./Tab.js"
@@ -506,6 +511,7 @@
     "./SideNavItem": "./SideNavItem.js",
     "./Slider": "./Slider.js",
     "./SplitLayout": "./SplitLayout.js",
+    "./Switch": "./Switch.js",
     "./Tab": "./Tab.js",
     "./Tabs": "./Tabs.js",
     "./TabSheet": "./TabSheet.js",
