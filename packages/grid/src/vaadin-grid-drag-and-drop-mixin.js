@@ -481,11 +481,23 @@ export const DragAndDropMixin = (superClass) =>
       const dragDisabled = !this.rowsDraggable || loading || (this.dragFilter && !this.dragFilter(model));
       const dropDisabled = !this.dropMode || loading || (this.dropFilter && !this.dropFilter(model));
 
+      // Chromium computes an empty accessible name for cells whose content
+      // element has the `draggable` attribute when the accessibility tree is
+      // built (https://issues.chromium.org/issues/534049472,
+      // https://github.com/vaadin/web-components/issues/11726). Blink maps
+      // `draggable="true"` to the `-webkit-user-drag: element` and
+      // `user-select: none` styles, and the accessible-name bug is keyed to the
+      // attribute, not the styles. So on Chromium, mark the draggable cell
+      // content with the `draggable-source` attribute, which applies the
+      // equivalent styles from the grid styles, instead of the `draggable`
+      // attribute. This can be removed once the Chromium issue is fixed.
+      const draggableAttribute = isChrome ? 'draggable-source' : 'draggable';
+
       iterateRowCells(row, (cell) => {
         if (dragDisabled) {
-          cell._content.removeAttribute('draggable');
+          cell._content.removeAttribute(draggableAttribute);
         } else {
-          cell._content.setAttribute('draggable', true);
+          cell._content.setAttribute(draggableAttribute, true);
         }
       });
 

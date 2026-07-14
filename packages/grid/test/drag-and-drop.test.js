@@ -4,7 +4,9 @@ import { aTimeout, fixtureSync, listenOnce, nextFrame, nextResize } from '@vaadi
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
+import { isChrome } from '@vaadin/component-base/src/browser-utils.js';
 import {
+  cellDraggableAttribute,
   dragAndDropOver,
   flushGrid,
   getBodyCellContent,
@@ -25,7 +27,7 @@ describe('drag and drop', () => {
   const getDraggable = (grid, rowIndex = 0) => {
     const row = Array.from(grid.$.items.children).find((row) => row.index === rowIndex);
     const cellContent = row.querySelector('slot').assignedNodes()[0];
-    return [row, cellContent].find((node) => node.getAttribute('draggable') === 'true');
+    return [row, cellContent].find((node) => node.getAttribute(cellDraggableAttribute) === 'true');
   };
 
   const fireDragStart = (draggable = getDraggable(grid)) => {
@@ -152,6 +154,46 @@ describe('drag and drop', () => {
     it('should not be draggable', () => {
       grid.rowsDraggable = false;
       expect(getDraggable(grid)).not.to.be.ok;
+    });
+
+    // Regression tests for https://github.com/vaadin/web-components/issues/11726:
+    // the `draggable` attribute empties a cell's accessible name on Chromium, so
+    // there the grid marks draggable content with `draggable-source` (+ the
+    // styles `draggable` would apply) instead. The accessible name itself can't
+    // be computed in the test environment, so these assert the mechanism that
+    // preserves it: no `draggable` attribute, plus the equivalent user-drag and
+    // user-select styles. The native drag source (the content element) is
+    // unchanged.
+    describe('accessible name workaround (#11726)', () => {
+      const getContent = (row = 0) => getBodyCellContent(grid, row, 0);
+
+      (isChrome ? it : it.skip)('should not set the draggable attribute on Chromium', () => {
+        expect(getContent().hasAttribute('draggable')).to.be.false;
+      });
+
+      (isChrome ? it : it.skip)('should mark draggable content with draggable-source styles on Chromium', () => {
+        expect(getContent().getAttribute('draggable-source')).to.equal('true');
+        const style = getComputedStyle(getContent());
+        expect(style.webkitUserDrag).to.equal('element');
+        expect(style.userSelect).to.equal('none');
+      });
+
+      (isChrome ? it.skip : it)('should set the draggable attribute on other browsers', () => {
+        expect(getContent().getAttribute('draggable')).to.equal('true');
+      });
+
+      it('should unset the drag marker when rowsDraggable is disabled', () => {
+        grid.rowsDraggable = false;
+        flushGrid(grid);
+        expect(getContent().hasAttribute(cellDraggableAttribute)).to.be.false;
+      });
+
+      it('should not set the drag marker on rows excluded by dragFilter', () => {
+        grid.dragFilter = (model) => model.index !== 0;
+        flushGrid(grid);
+        expect(getContent(0).hasAttribute(cellDraggableAttribute)).to.be.false;
+        expect(getContent(1).getAttribute(cellDraggableAttribute)).to.equal('true');
+      });
     });
 
     describe('dragstart', () => {
