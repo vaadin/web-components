@@ -597,6 +597,13 @@ export const gridStyles = css`
     outline-offset: calc(var(--vaadin-grid-border-width, 1px) * -1);
   }
 
+  /* Styles applied to draggable cell content; see _filterDragAndDrop in vaadin-grid-drag-and-drop-mixin.js. */
+  ::slotted(vaadin-grid-cell-content[draggable-source]) {
+    -webkit-user-drag: element;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
   .row[dragover] {
     z-index: 100 !important;
   }
