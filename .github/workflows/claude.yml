@@ -54,8 +54,5 @@ jobs:
         with:
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
           extra-allowed-tools: |
-            Bash(yarn test:*)
-            Bash(yarn update:*)
-            Bash(yarn start:*)
-            Bash(yarn lint:*)
+            Bash(yarn:*)
           upload-execution-log: ${{ vars.CLAUDE_DEBUG }}
