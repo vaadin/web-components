@@ -30,8 +30,7 @@ jobs:
     # PRs skips drafts, chore PRs, and known bots. The pre-filter allows
     # CONTRIBUTOR because on pull_request events the author_association of a
     # private org member is reported as CONTRIBUTOR; the org-membership API call
-    # in the job is what actually confirms access (and keeps fork PRs out, which
-    # would fail on missing secrets anyway).
+    # in the job is what actually confirms access.
     if: |
       (github.event_name == 'issue_comment' &&
        github.event.issue.pull_request &&
