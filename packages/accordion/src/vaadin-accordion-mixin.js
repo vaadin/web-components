@@ -27,6 +27,20 @@ export const AccordionMixin = (superClass) =>
         },
 
         /**
+         * The ARIA heading level, used to set the `aria-level` attribute
+         * on the `<vaadin-accordion-heading>` element of each panel.
+         *
+         * By default, no `aria-level` is set and the headings are announced by
+         * screen readers using their default level. Set this property to expose
+         * the headings at the level that matches the surrounding page structure.
+         *
+         * @attr {number} heading-level
+         */
+        headingLevel: {
+          type: Number,
+        },
+
+        /**
          * The list of `<vaadin-accordion-panel>` child elements.
          * It is populated from the elements passed to the light DOM,
          * and updated dynamically when adding or removing panels.
@@ -87,6 +101,15 @@ export const AccordionMixin = (superClass) =>
       });
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('items') || props.has('headingLevel')) {
+        this.__updateHeadingLevel();
+      }
+    }
+
     /**
      * Override method inherited from `KeyboardDirectionMixin`
      * to use the stored list of accordion panels as items.
@@ -106,6 +129,21 @@ export const AccordionMixin = (superClass) =>
      */
     _filterItems(array) {
       return array.filter((el) => el instanceof customElements.get('vaadin-accordion-panel'));
+    }
+
+    /** @private */
+    __updateHeadingLevel() {
+      const { headingLevel } = this;
+
+      (this.items || []).forEach((item) => {
+        const heading = item.focusElement;
+
+        if (headingLevel != null) {
+          heading.setAttribute('aria-level', headingLevel);
+        } else {
+          heading.removeAttribute('aria-level');
+        }
+      });
     }
 
     /** @private */

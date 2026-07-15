@@ -334,4 +334,34 @@ describe('vaadin-accordion', () => {
       expect(heading.hasAttribute('aria-controls')).to.be.false;
     });
   });
+
+  describe('heading level', () => {
+    beforeEach(async () => {
+      accordion.headingLevel = 3;
+      await nextUpdate(accordion);
+    });
+
+    it('should set aria-level on all headings when headingLevel is set', () => {
+      accordion.items.forEach((_, idx) => {
+        expect(getHeading(idx).getAttribute('aria-level')).to.equal('3');
+      });
+    });
+
+    it('should remove aria-level from all headings when headingLevel is set to null', async () => {
+      accordion.headingLevel = null;
+      await nextUpdate(accordion);
+      accordion.items.forEach((_, idx) => {
+        expect(getHeading(idx).hasAttribute('aria-level')).to.be.false;
+      });
+    });
+
+    it('should set aria-level on the heading of a panel added lazily', async () => {
+      const panel = document.createElement('vaadin-accordion-panel');
+      panel.summary = 'Lazy panel';
+      accordion.appendChild(panel);
+      await nextRender();
+
+      expect(panel.focusElement.getAttribute('aria-level')).to.equal('3');
+    });
+  });
 });
