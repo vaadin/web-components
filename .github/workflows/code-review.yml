@@ -24,10 +24,14 @@ env:
   PR_NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
 
 jobs:
-  review:
-    # Comment trigger: collaborators only. Auto trigger on opened PRs skips
-    # drafts, chore PRs, known bots, and non-collaborators (also keeps fork
-    # PRs out, which would fail on missing secrets anyway).
+  check:
+    # Eligibility is a cheap `if` pre-filter plus an authoritative org-membership
+    # check in the job. Comment trigger: org members only. Auto trigger on opened
+    # PRs skips drafts, chore PRs, and known bots. The pre-filter allows
+    # CONTRIBUTOR because on pull_request events the author_association of a
+    # private org member is reported as CONTRIBUTOR; the org-membership API call
+    # in the job is what actually confirms access (and keeps fork PRs out, which
+    # would fail on missing secrets anyway).
     if: |
       (github.event_name == 'issue_comment' &&
        github.event.issue.pull_request &&
@@ -36,9 +40,37 @@ jobs:
       (github.event_name == 'pull_request' &&
        github.event.pull_request.draft == false &&
        !contains(fromJSON('["dependabot[bot]", "vaadin-bot"]'), github.event.pull_request.user.login) &&
-       contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.pull_request.author_association) &&
+       contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR", "CONTRIBUTOR"]'), github.event.pull_request.author_association) &&
        !startsWith(github.event.pull_request.title, 'chore:') &&
        !startsWith(github.event.pull_request.title, 'chore('))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      eligible: ${{ steps.access.outputs.eligible }}
+    steps:
+      - name: Check org membership
+        id: access
+        env:
+          GH_TOKEN: ${{ secrets.VAADIN_REVIEW_BOT || github.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          if [ "$EVENT_NAME" = "issue_comment" ]; then
+            author="$COMMENT_AUTHOR"
+          else
+            author="$PR_AUTHOR"
+          fi
+          if gh api "orgs/${{ github.repository_owner }}/members/$author" --silent; then
+            echo "eligible=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "eligible=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  review:
+    needs: check
+    if: needs.check.outputs.eligible == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
