@@ -244,6 +244,13 @@ export const GridMixin = (superClass) =>
         // otherwise be triggered by this logic because it reads the row height
         // right after updating the rows' content.
         __disableHeightPlaceholder: true,
+        // The virtualizer amortizes scroller height updates to avoid reflows while
+        // scrolling. In `allRowsVisible` mode the grid has no scrolling and its
+        // height must track the content exactly, so tell the virtualizer to always
+        // apply the scroller height. Otherwise the items container can be left at a
+        // stale, too-small height and clip rows when the grid grows (e.g. when
+        // expanding a tree grid from a small size).
+        __alwaysUpdateScrollerSize: () => this.allRowsVisible,
       });
 
       this._tooltipController = new TooltipController(this);
