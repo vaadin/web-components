@@ -1,4 +1,8 @@
 import sinon from 'sinon';
+import { isChrome } from '@vaadin/component-base/src/browser-utils.js';
+
+// Draggable cell content uses a browser-specific attribute; see _filterDragAndDrop.
+export const cellDraggableAttribute = isChrome ? 'draggable-source' : 'draggable';
 
 export const flushGrid = (grid) => {
   grid._observer.flush();

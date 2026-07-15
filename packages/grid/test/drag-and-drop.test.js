@@ -4,7 +4,15 @@ import { aTimeout, fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
-import { flushGrid, getBodyCellContent, getFirstCell, getRowBodyCells, getRows } from './helpers.js';
+import { isChrome } from '@vaadin/component-base/src/browser-utils.js';
+import {
+  cellDraggableAttribute,
+  flushGrid,
+  getBodyCellContent,
+  getFirstCell,
+  getRowBodyCells,
+  getRows,
+} from './helpers.js';
 
 describe('drag and drop', () => {
   let grid, dragData;
@@ -17,7 +25,7 @@ describe('drag and drop', () => {
   const getDraggable = (grid, rowIndex = 0) => {
     const row = Array.from(grid.$.items.children).find((row) => row.index === rowIndex);
     const cellContent = row.querySelector('slot').assignedNodes()[0];
-    return [row, cellContent].find((node) => node.getAttribute('draggable') === 'true');
+    return [row, cellContent].find((node) => node.getAttribute(cellDraggableAttribute) === 'true');
   };
 
   const fireDragStart = (draggable = getDraggable(grid)) => {
@@ -144,6 +152,39 @@ describe('drag and drop', () => {
     it('should not be draggable', () => {
       grid.rowsDraggable = false;
       expect(getDraggable(grid)).not.to.be.ok;
+    });
+
+    // See https://github.com/vaadin/web-components/issues/11726
+    describe('accessible name workaround', () => {
+      const getContent = (row = 0) => getBodyCellContent(grid, row, 0);
+
+      (isChrome ? it : it.skip)('should not set the draggable attribute on Chromium', () => {
+        expect(getContent().hasAttribute('draggable')).to.be.false;
+      });
+
+      (isChrome ? it : it.skip)('should mark draggable content with draggable-source styles on Chromium', () => {
+        expect(getContent().getAttribute('draggable-source')).to.equal('true');
+        const style = getComputedStyle(getContent());
+        expect(style.webkitUserDrag).to.equal('element');
+        expect(style.userSelect).to.equal('none');
+      });
+
+      (isChrome ? it.skip : it)('should set the draggable attribute on other browsers', () => {
+        expect(getContent().getAttribute('draggable')).to.equal('true');
+      });
+
+      it('should unset the drag marker when rowsDraggable is disabled', () => {
+        grid.rowsDraggable = false;
+        flushGrid(grid);
+        expect(getContent().hasAttribute(cellDraggableAttribute)).to.be.false;
+      });
+
+      it('should not set the drag marker on rows excluded by dragFilter', () => {
+        grid.dragFilter = (model) => model.index !== 0;
+        flushGrid(grid);
+        expect(getContent(0).hasAttribute(cellDraggableAttribute)).to.be.false;
+        expect(getContent(1).getAttribute(cellDraggableAttribute)).to.equal('true');
+      });
     });
 
     describe('dragstart', () => {

@@ -244,6 +244,13 @@ export const gridStyles = css`
     user-select: none;
   }
 
+  /* Styles applied to draggable cell content; see _filterDragAndDrop in vaadin-grid-drag-and-drop-mixin.js. */
+  ::slotted(vaadin-grid-cell-content[draggable-source]) {
+    -webkit-user-drag: element;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
   /* Resizing styles */
   [part~='resize-handle'] {
     position: absolute;
