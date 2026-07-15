@@ -115,12 +115,14 @@ export const CheckboxMixin = (superclass) =>
      * @override
      */
     _shouldSetActive(event) {
-      const { target } = event;
+      const [target] = event.composedPath();
 
-      if (
-        this.readonly ||
-        !(target === this.inputElement || (this._labelNode.contains(target) && !target.closest('a')))
-      ) {
+      const togglesChecked =
+        target === this.inputElement ||
+        target.part.contains('required-indicator') ||
+        (this._labelNode.contains(target) && !target.closest('a'));
+
+      if (this.readonly || !togglesChecked) {
         return false;
       }
 
