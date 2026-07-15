@@ -53,16 +53,9 @@ jobs:
         id: access
         env:
           GH_TOKEN: ${{ secrets.VAADIN_REVIEW_BOT || github.token }}
-          EVENT_NAME: ${{ github.event_name }}
-          COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
-          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          AUTHOR: ${{ github.event.comment.user.login || github.event.pull_request.user.login }}
         run: |
-          if [ "$EVENT_NAME" = "issue_comment" ]; then
-            author="$COMMENT_AUTHOR"
-          else
-            author="$PR_AUTHOR"
-          fi
-          if gh api "orgs/${{ github.repository_owner }}/members/$author" --silent; then
+          if gh api "orgs/${{ github.repository_owner }}/members/$AUTHOR" --silent; then
             echo "eligible=true" >> "$GITHUB_OUTPUT"
           else
             echo "eligible=false" >> "$GITHUB_OUTPUT"
