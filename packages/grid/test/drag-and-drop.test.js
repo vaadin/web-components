@@ -156,15 +156,8 @@ describe('drag and drop', () => {
       expect(getDraggable(grid)).not.to.be.ok;
     });
 
-    // Regression tests for https://github.com/vaadin/web-components/issues/11726:
-    // the `draggable` attribute empties a cell's accessible name on Chromium, so
-    // there the grid marks draggable content with `draggable-source` (+ the
-    // styles `draggable` would apply) instead. The accessible name itself can't
-    // be computed in the test environment, so these assert the mechanism that
-    // preserves it: no `draggable` attribute, plus the equivalent user-drag and
-    // user-select styles. The native drag source (the content element) is
-    // unchanged.
-    describe('accessible name workaround (#11726)', () => {
+    // See https://github.com/vaadin/web-components/issues/11726
+    describe('accessible name workaround', () => {
       const getContent = (row = 0) => getBodyCellContent(grid, row, 0);
 
       (isChrome ? it : it.skip)('should not set the draggable attribute on Chromium', () => {

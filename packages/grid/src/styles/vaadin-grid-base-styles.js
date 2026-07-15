@@ -597,12 +597,7 @@ export const gridStyles = css`
     outline-offset: calc(var(--vaadin-grid-border-width, 1px) * -1);
   }
 
-  /*
-   * Chromium a11y workaround: draggable cell content is marked with the
-   * draggable-source attribute instead of the draggable attribute, which would
-   * empty the cell's accessible name. These are the styles that draggable would
-   * apply. See _filterDragAndDrop in vaadin-grid-drag-and-drop-mixin.js.
-   */
+  /* Styles applied to draggable cell content; see _filterDragAndDrop in vaadin-grid-drag-and-drop-mixin.js. */
   ::slotted(vaadin-grid-cell-content[draggable-source]) {
     -webkit-user-drag: element;
     -webkit-user-select: none;

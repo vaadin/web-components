@@ -1,10 +1,7 @@
 import sinon from 'sinon';
 import { isChrome } from '@vaadin/component-base/src/browser-utils.js';
 
-// The grid marks draggable cell content with `draggable-source` on Chromium
-// instead of `draggable` to avoid an accessible-name bug (see _filterDragAndDrop
-// in vaadin-grid-drag-and-drop-mixin.js). Tests must query the attribute that is
-// actually used on the current browser.
+// Draggable cell content uses a browser-specific attribute; see _filterDragAndDrop.
 export const cellDraggableAttribute = isChrome ? 'draggable-source' : 'draggable';
 
 export const flushGrid = (grid) => {
