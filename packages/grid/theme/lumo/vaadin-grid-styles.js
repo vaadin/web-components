@@ -97,7 +97,6 @@ registerStyles(
     }
 
     /* Drag and Drop styles */
-
     :host([dragover])::after {
       content: '';
       position: absolute;
