@@ -222,6 +222,16 @@ describe('checkbox', () => {
         mousedown(checkbox.querySelector('[slot="error-message"]'));
         expect(checkbox.hasAttribute('active')).to.be.false;
       });
+
+      it('should not set active attribute when clicking empty space next to the label', () => {
+        mousedown(checkbox.shadowRoot.querySelector('[part="label"]'));
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
+
+      it('should not set active attribute when clicking empty space below the checkbox', () => {
+        mousedown(checkbox);
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
     });
 
     describe('change event', () => {

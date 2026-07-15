@@ -37,7 +37,6 @@ export const checkable = (part, propName = part) => css`
     color: var(--vaadin-${unsafeCSS(propName)}-label-color, var(--vaadin-input-field-label-color, var(--vaadin-text-color)));
     word-break: break-word;
     cursor: var(--_cursor);
-    /* TODO clicking the label part doesn't toggle the checked state, even though it triggers the active state */
   }
 
   [part='${unsafeCSS(part)}'],
