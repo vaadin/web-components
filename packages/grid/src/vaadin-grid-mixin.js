@@ -237,6 +237,16 @@ export const GridMixin = (superClass) =>
         __disableHeightPlaceholder: true,
       });
 
+      // The virtualizer amortizes scroller height updates to avoid reflows while
+      // scrolling. In `allRowsVisible` mode the grid has no scrolling and its
+      // height must track the content exactly, so always apply the scroller
+      // height in that mode. Otherwise the items container can be left at a
+      // stale, too-small height and clip rows when the grid grows (e.g. when
+      // expanding a tree grid from a small size).
+      const adapter = this.__virtualizer.__adapter;
+      const updateScrollerSize = adapter._updateScrollerSize.bind(adapter);
+      adapter._updateScrollerSize = (forceUpdate) => updateScrollerSize(forceUpdate || this.allRowsVisible);
+
       this._tooltipController = new TooltipController(this);
       this.addController(this._tooltipController);
       this._tooltipController.setManual(true);
