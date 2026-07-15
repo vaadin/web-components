@@ -100,3 +100,21 @@ vaadin-month-calendar::part(date selected) {
 vaadin-month-calendar::part(date selected):hover::after {
   background: var(--aura-accent-color);
 }
+
+@media (max-width: 450px) {
+  vaadin-date-picker {
+    --vaadin-overlay-opacity-closed: 1;
+    --vaadin-overlay-translate-closed: 0% 110%;
+    --vaadin-overlay-translate-opened: 0%;
+
+    &[opening],
+    &[closing] {
+      --vaadin-overlay-animation-duration: 300ms;
+      --vaadin-overlay-animation-timing-function: cubic-bezier(0.78, 0, 0.22, 1);
+    }
+
+    &[closing] {
+      --vaadin-overlay-animation-delay: 100ms;
+    }
+  }
+}

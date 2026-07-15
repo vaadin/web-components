@@ -129,3 +129,18 @@ vaadin-select[theme~='filled'] > [slot='overlay'] [role='option']:not([disabled]
   margin-inline: calc(var(--vaadin-gap-xs) + var(--vaadin-padding-inline-container));
   border-color: var(--vaadin-border-color);
 }
+
+vaadin-combo-box,
+vaadin-multi-select-combo-box,
+vaadin-date-picker,
+vaadin-time-picker,
+vaadin-select,
+vaadin-menu-bar,
+vaadin-context-menu,
+vaadin-popover {
+  &[closing] {
+    --vaadin-overlay-animation-duration: 100ms;
+    --vaadin-overlay-animation-delay: 60ms;
+    --vaadin-overlay-animation-timing-function: ease-in;
+  }
+}
