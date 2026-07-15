@@ -22,6 +22,19 @@ export declare class AccordionMixinClass {
   opened: number | null;
 
   /**
+   * The ARIA heading level applied to every panel heading, used to set
+   * the `aria-level` attribute on the `<vaadin-accordion-heading>` element
+   * of each panel.
+   *
+   * By default, no `aria-level` is set and the headings are announced by
+   * screen readers using their default level. Set this property to expose
+   * the headings at the level that matches the surrounding page structure.
+   *
+   * @attr {number} heading-level
+   */
+  headingLevel: number | null | undefined;
+
+  /**
    * The list of `<vaadin-accordion-panel>` child elements.
    * It is populated from the elements passed to the light DOM,
    * and updated dynamically when adding or removing panels.
