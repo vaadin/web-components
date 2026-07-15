@@ -48,7 +48,7 @@
     "@web/test-runner": "^1.0.0",
     "@web/test-runner-playwright": "^1.0.0",
     "@web/test-runner-visual-regression": "^1.0.0",
-    "eslint": "^9.39.2",
+    "eslint": "^9.39.5",
     "eslint-config-vaadin": "^1.0.0-beta.6",
     "eslint-plugin-es-x": "^9.6.0",
     "eslint-plugin-html": "^8.1.4",
