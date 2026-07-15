@@ -158,6 +158,15 @@ export const GridMixin = (superClass) =>
       return lastVisibleItem ? lastVisibleItem.index : undefined;
     }
 
+    constructor() {
+      super();
+
+      this.__onCellMouseEnter = this.__onCellMouseEnter.bind(this);
+      this.__onCellMouseLeave = this.__onCellMouseLeave.bind(this);
+      this.__onCellMouseDown = this.__onCellMouseDown.bind(this);
+      this.__onCellKeyDown = this.__onCellKeyDown.bind(this);
+    }
+
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
@@ -352,6 +361,36 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
+    __onCellKeyDown(event) {
+      const cell = event.currentTarget;
+      cell._column?.__onCellKeyDown?.(event);
+    }
+
+    /** @private */
+    __onCellMouseEnter(event) {
+      // For now we only support tooltip on desktop
+      if (!isAndroid && !isIOS && !this.$.scroller.hasAttribute('scrolling')) {
+        this._showTooltip(event);
+      }
+    }
+
+    /** @private */
+    __onCellMouseLeave() {
+      // For now we only support tooltip on desktop
+      if (!isAndroid && !isIOS) {
+        this._hideTooltip();
+      }
+    }
+
+    /** @private */
+    __onCellMouseDown() {
+      // For now we only support tooltip on desktop
+      if (!isAndroid && !isIOS) {
+        this._hideTooltip(true);
+      }
+    }
+
+    /** @private */
     _createCell(tagName, column) {
       const contentId = (this._contentIndex = this._contentIndex + 1 || 0);
       const slotName = `vaadin-grid-cell-content-${contentId}`;
@@ -363,22 +402,10 @@ export const GridMixin = (superClass) =>
       cell.id = slotName.replace('-content-', '-');
       cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
 
-      // For now we only support tooltip on desktop
-      if (!isAndroid && !isIOS) {
-        cell.addEventListener('mouseenter', (event) => {
-          if (!this.$.scroller.hasAttribute('scrolling')) {
-            this._showTooltip(event);
-          }
-        });
-
-        cell.addEventListener('mouseleave', () => {
-          this._hideTooltip();
-        });
-
-        cell.addEventListener('mousedown', () => {
-          this._hideTooltip(true);
-        });
-      }
+      cell.addEventListener('mouseenter', this.__onCellMouseEnter);
+      cell.addEventListener('mouseleave', this.__onCellMouseLeave);
+      cell.addEventListener('mousedown', this.__onCellMouseDown);
+      cell.addEventListener('keydown', this.__onCellKeyDown);
 
       const slot = document.createElement('slot');
       slot.setAttribute('name', slotName);
@@ -441,9 +468,6 @@ export const GridMixin = (superClass) =>
             cell = column._cells.find((cell) => cell._vacant);
             if (!cell) {
               cell = this._createCell('td', column);
-              if (column._onCellKeyDown) {
-                cell.addEventListener('keydown', column._onCellKeyDown.bind(column));
-              }
               column._cells.push(cell);
             }
             updatePart(cell, 'cell', true);
@@ -492,9 +516,6 @@ export const GridMixin = (superClass) =>
               cell = column[`_${section}Cell`];
               if (!cell) {
                 cell = this._createCell(tagName);
-                if (column._onCellKeyDown) {
-                  cell.addEventListener('keydown', column._onCellKeyDown.bind(column));
-                }
               }
               cell._column = column;
               row.appendChild(cell);

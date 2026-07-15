@@ -338,7 +338,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _onCellKeyDown(e) {
+    __onCellKeyDown(e) {
       const target = e.composedPath()[0];
       // Toggle on Space without having to enter interaction mode first
       if (e.keyCode !== 32) {
