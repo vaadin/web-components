@@ -407,8 +407,12 @@ export const OverlayMixin = (superClass) =>
     _shouldAnimate() {
       const style = getComputedStyle(this);
       const name = style.getPropertyValue('animation-name');
+      const hasDuration = style
+        .getPropertyValue('animation-duration')
+        .split(',')
+        .some((duration) => parseFloat(duration) > 0);
       const hidden = style.getPropertyValue('display') === 'none';
-      return !hidden && name && name !== 'none';
+      return !hidden && name && name !== 'none' && hasDuration;
     }
 
     /**
