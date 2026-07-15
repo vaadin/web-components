@@ -24,6 +24,16 @@ export const AccordionPanelMixin = (superClass) =>
           type: String,
           observer: '_summaryChanged',
         },
+
+        /**
+         * The ARIA heading level for the panel heading, propagated from the
+         * `headingLevel` property of the parent `<vaadin-accordion>`.
+         *
+         * @protected
+         */
+        _headingLevel: {
+          type: Number,
+        },
       };
     }
 
@@ -32,7 +42,7 @@ export const AccordionPanelMixin = (superClass) =>
     }
 
     static get delegateProps() {
-      return ['disabled', 'opened', '_theme'];
+      return ['disabled', 'opened', '_theme', '_headingLevel'];
     }
 
     constructor() {
@@ -88,6 +98,11 @@ export const AccordionPanelMixin = (superClass) =>
 
       if (name === '_theme') {
         this._delegateAttribute('theme', value);
+        return;
+      }
+
+      if (name === '_headingLevel') {
+        this._delegateAttribute('aria-level', value);
         return;
       }
 

@@ -133,16 +133,11 @@ export const AccordionMixin = (superClass) =>
 
     /** @private */
     __updateHeadingLevel() {
-      const { headingLevel } = this;
-
+      // Propagate the level to each panel, which applies it to its heading.
+      // The panel re-applies the level whenever its heading is recreated,
+      // so no attribute is set here directly.
       (this.items || []).forEach((item) => {
-        const heading = item.focusElement;
-
-        if (headingLevel != null) {
-          heading.setAttribute('aria-level', headingLevel);
-        } else {
-          heading.removeAttribute('aria-level');
-        }
+        item._headingLevel = this.headingLevel;
       });
     }
 
