@@ -201,11 +201,6 @@ export class IronListAdapter {
     }
   }
 
-  /** @override */
-  _updateScrollerSize(forceUpdate) {
-    super._updateScrollerSize(forceUpdate || !!this.__alwaysUpdateScrollerSize?.());
-  }
-
   hostConnected() {
     // Restore scroll position, which is reset when host is removed from DOM,
     // since virtualizer doesn't re-render when adding it to the DOM again.
@@ -226,6 +221,11 @@ export class IronListAdapter {
     });
 
     this.__afterElementsUpdated(updatedElements);
+  }
+
+  /** @override */
+  _updateScrollerSize(forceUpdate) {
+    super._updateScrollerSize(forceUpdate || !!this.__alwaysUpdateScrollerSize?.());
   }
 
   /**
