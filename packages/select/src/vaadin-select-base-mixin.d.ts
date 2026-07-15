@@ -13,7 +13,7 @@ import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegat
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
-import type { SelectItem, SelectRenderer } from './vaadin-select.js';
+import type { SelectItemData, SelectRenderer } from './vaadin-select.js';
 
 export declare function SelectBaseMixin<T extends Constructor<HTMLElement>>(
   base: T,
@@ -49,7 +49,7 @@ export declare class SelectBaseMixinClass {
    * Note: each item is rendered by default as the internal `<vaadin-select-item>` that is an extension of `<vaadin-item>`.
    * To render the item with a custom component, provide a tag name by the `component` property.
    */
-  items: SelectItem[] | null | undefined;
+  items: SelectItemData[] | null | undefined;
 
   /**
    * Set when the select is open
