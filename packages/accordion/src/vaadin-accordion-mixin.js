@@ -27,9 +27,8 @@ export const AccordionMixin = (superClass) =>
         },
 
         /**
-         * The ARIA heading level applied to every panel heading, used to set
-         * the `aria-level` attribute on the `<vaadin-accordion-heading>` element
-         * of each panel.
+         * The ARIA heading level, used to set the `aria-level` attribute
+         * on the `<vaadin-accordion-heading>` element of each panel.
          *
          * By default, no `aria-level` is set and the headings are announced by
          * screen readers using their default level. Set this property to expose
