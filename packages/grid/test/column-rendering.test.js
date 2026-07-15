@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, keyDownOn, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import Sinon from 'sinon';
 import '../all-imports.js';
-import { flushGrid, getCellContent, getHeaderCellContent } from './helpers.js';
+import { cellDraggableAttribute, flushGrid, getCellContent, getHeaderCellContent } from './helpers.js';
 
 ['ltr', 'rtl'].forEach((dir) => {
   describe(`lazy column rendering - ${dir}`, () => {
@@ -419,12 +419,12 @@ import { flushGrid, getCellContent, getHeaderCellContent } from './helpers.js';
         grid.rowsDraggable = true;
         await nextFrame();
 
-        expect(getBodyCellContent(getLastVisibleColumnIndex()).getAttribute('draggable')).to.equal('true');
+        expect(getBodyCellContent(getLastVisibleColumnIndex()).getAttribute(cellDraggableAttribute)).to.equal('true');
 
         // Scroll back to the beginning
         await scrollHorizontally(-grid.$.table.scrollWidth);
         // Expect the cell that was previously not visible to have the draggable attribute
-        expect(getBodyCellContent(0).getAttribute('draggable')).to.equal('true');
+        expect(getBodyCellContent(0).getAttribute(cellDraggableAttribute)).to.equal('true');
       });
 
       it('should not create excess cells for a row', async () => {
