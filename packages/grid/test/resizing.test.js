@@ -339,9 +339,6 @@ describe('all rows visible', () => {
         };
         cb([item], 1);
       };
-      // Let the grid fully render and settle at its initial (single-row) size
-      // before expanding, so the deep expand has to grow the grid from a small
-      // viewport.
       flushGrid(grid);
     });
 
