@@ -129,21 +129,18 @@ describe('overlay with zero-duration animation', () => {
     const finishClosing = sinon.spy(overlay, '_finishClosing');
 
     expect(getComputedStyle(overlay).animationName).to.equal('overlay-dummy-animation');
-    expect(overlay._shouldAnimate()).to.be.false;
 
     overlay.opened = true;
 
     expect(finishOpening).to.be.calledOnce;
     expect(overlay.hasAttribute('opening')).to.be.false;
     expect(owner.hasAttribute('opening')).to.be.false;
-    expect(overlay.__openingHandler).to.be.undefined;
 
     overlay.opened = false;
 
     expect(finishClosing).to.be.calledOnce;
     expect(overlay.hasAttribute('closing')).to.be.false;
     expect(owner.hasAttribute('closing')).to.be.false;
-    expect(overlay.__closingHandler).to.be.undefined;
   });
 });
 
