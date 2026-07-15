@@ -5,6 +5,9 @@
 @import './src/size.css';
 @import './src/surface.css';
 @import './src/typography.css';
+@import './src/components/overlay.css';
+@import './src/components/item-overlay.css';
+@import './src/components/input-container.css';
 
 @import './src/components/accordion-details.css';
 @import './src/components/app-layout.css';
@@ -21,8 +24,6 @@
 @import './src/components/dashboard.css';
 @import './src/components/dialog.css';
 @import './src/components/grid.css';
-@import './src/components/input-container.css';
-@import './src/components/item-overlay.css';
 @import './src/components/login.css';
 @import './src/components/markdown.css';
 @import './src/components/master-detail-layout.css';
@@ -31,7 +32,6 @@
 @import './src/components/message-list.css';
 @import './src/components/multi-select-combo-box.css';
 @import './src/components/notification.css';
-@import './src/components/overlay.css';
 @import './src/components/popover.css';
 @import './src/components/progress-bar.css';
 @import './src/components/rich-text-editor.css';
