@@ -22,6 +22,7 @@ export class IronListAdapter {
     reorderElements,
     elementsContainer,
     __disableHeightPlaceholder,
+    __alwaysUpdateScrollerSize,
   }) {
     this.isAttached = true;
     this._vidxOffset = 0;
@@ -36,6 +37,12 @@ export class IronListAdapter {
     // (see __afterElementsUpdated) for components that always render virtual
     // elements with a non-zero height. Not for public use.
     this.__disableHeightPlaceholder = __disableHeightPlaceholder ?? false;
+
+    // Internal option: a predicate that, when it returns true, makes the scroller
+    // height always be applied instead of amortized (see `_updateScrollerSize`).
+    // Used by components whose height tracks the content exactly (e.g. the grid's
+    // `allRowsVisible` mode). Not for public use.
+    this.__alwaysUpdateScrollerSize = __alwaysUpdateScrollerSize;
 
     // Iron-list uses this value to determine how many pages of elements to render
     this._maxPages = 1.3;
@@ -216,6 +223,11 @@ export class IronListAdapter {
     });
 
     this.__afterElementsUpdated(updatedElements);
+  }
+
+  /** @override */
+  _updateScrollerSize(forceUpdate) {
+    super._updateScrollerSize(forceUpdate || !!this.__alwaysUpdateScrollerSize?.());
   }
 
   /**
