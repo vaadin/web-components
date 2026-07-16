@@ -5,11 +5,11 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { ContextMenuRenderer } from './vaadin-context-menu.js';
-import type { ContextMenuItem, ItemsMixinClass } from './vaadin-contextmenu-items-mixin.js';
+import type { ContextMenuItemData, ItemsMixinClass } from './vaadin-contextmenu-items-mixin.js';
 
 export declare function ContextMenuMixin<
   T extends Constructor<HTMLElement>,
-  TItem extends ContextMenuItem = ContextMenuItem,
+  TItem extends ContextMenuItemData = ContextMenuItemData,
 >(base: T): Constructor<ContextMenuMixinClass> & Constructor<ItemsMixinClass<TItem>> & T;
 
 export declare class ContextMenuMixinClass {
@@ -83,5 +83,5 @@ export declare class ContextMenuMixinClass {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export declare interface ContextMenuMixinClass<
-  TItem extends ContextMenuItem = ContextMenuItem,
+  TItem extends ContextMenuItemData = ContextMenuItemData,
 > extends ItemsMixinClass<TItem> {}

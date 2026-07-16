@@ -13,11 +13,42 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { contextMenuItemStyles } from './styles/vaadin-context-menu-item-base-styles.js';
 
 /**
- * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
+ * `<vaadin-context-menu-item>` is a Web Component for creating `<vaadin-context-menu>` items.
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name    | Description
+ * -------------|----------------
+ * `checkmark`  | The graphical checkmark shown for a checked item
+ * `content`    | The element that wraps the slot
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute    | Description
+ * -------------|-------------
+ * `active`     | Set when the item is pressed down, either with mouse, touch or the keyboard.
+ * `disabled`   | Set when the item is disabled.
+ * `focus-ring` | Set when the item is focused using the keyboard.
+ * `focused`    | Set when the item is focused.
+ * `expanded`   | Set when the item has a sub-menu and it is opened.
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                |
+ * :----------------------------------|
+ * | `--vaadin-item-border-radius`    |
+ * | `--vaadin-item-checkmark-color`  |
+ * | `--vaadin-item-gap`              |
+ * | `--vaadin-item-height`           |
+ * | `--vaadin-item-padding`          |
+ * | `--vaadin-item-text-align`       |
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @customElement vaadin-context-menu-item
  * @extends HTMLElement
- * @protected
  */
 class ContextMenuItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {

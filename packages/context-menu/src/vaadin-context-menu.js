@@ -243,10 +243,10 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  *
  * ### Internal components
  *
- * When using `items` API the following internal components are themable:
+ * In addition to `<vaadin-context-menu>` itself, the following internal components are themable:
  *
- * - `<vaadin-context-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
- * - `<vaadin-context-menu-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
+ * - [`<vaadin-context-menu-item>`](#/elements/vaadin-context-menu-item) - an item element.
+ * - [`<vaadin-context-menu-list-box>`](#/elements/vaadin-context-menu-list-box) - a list-box element.
  *
  * The `<vaadin-context-menu-item>` sub-menu elements have the following additional state attributes
  * on top of the built-in `<vaadin-item>` state attributes:

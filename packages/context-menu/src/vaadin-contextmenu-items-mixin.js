@@ -11,7 +11,7 @@ export const ItemsMixin = (superClass) =>
     static get properties() {
       return {
         /**
-         * @typedef ContextMenuItem
+         * @typedef ContextMenuItemData
          * @type {object}
          * @property {string} text - Text to be set as the menu item component's textContent
          * @property {string} tooltip - Text to be set as the menu item's tooltip.
@@ -28,7 +28,7 @@ export const ItemsMixin = (superClass) =>
          * @property {boolean} keepOpen - If true, the menu will not be closed on item selection
          * @property {string} className - A space-delimited list of CSS class names to be set on the menu item component.
          * @property {string | string[]} theme - If set, sets the given theme(s) as an attribute to the menu item component, overriding any theme set on the context menu.
-         * @property {ContextMenuItem[]} children - Array of child menu items
+         * @property {ContextMenuItemData[]} children - Array of child menu items
          */
 
         /**
@@ -71,7 +71,7 @@ export const ItemsMixin = (superClass) =>
          * </vaadin-context-menu>
          * ```
          *
-         * @type {!Array<!ContextMenuItem> | undefined}
+         * @type {!Array<!ContextMenuItemData> | undefined}
          */
         items: {
           type: Array,
@@ -192,7 +192,7 @@ export const ItemsMixin = (superClass) =>
     }
 
     /**
-     * @param {!ContextMenuItem} item
+     * @param {!ContextMenuItemData} item
      * @return {HTMLElement}
      * @private
      */
