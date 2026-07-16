@@ -12,7 +12,7 @@
 - **Reproduced on:** vaadin/web-components @ main (`@vaadin/crud` 25.3.0-alpha4)
 - **Present on main?:** yes (still broken)
 - **Theme / Browser:** base styles / Chromium (Playwright)
-- **Screenshot** (static bug): `![editor still open after prevented save, yet items[0].stuff.first is already Modified](https://raw.githubusercontent.com/vaadin/web-components/COMMIT_SHA/repro-1155.png)`
+- **Screenshot** (static bug): `![editor still open after prevented save, yet items[0].stuff.first is already Modified](https://raw.githubusercontent.com/vaadin/web-components/47b9cb3b0e8f7c73e0607910c5ef46fee3865226/repro-1155.png)`
 
 ## Observed behavior
 
