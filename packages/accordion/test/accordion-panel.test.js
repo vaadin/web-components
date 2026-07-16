@@ -184,6 +184,36 @@ describe('vaadin-accordion-panel', () => {
     });
   });
 
+  describe('without summary', () => {
+    let heading;
+
+    beforeEach(async () => {
+      panel = fixtureSync(`
+        <vaadin-accordion-panel>
+          <div>Content</div>
+        </vaadin-accordion-panel>
+      `);
+      await nextRender();
+      heading = panel.querySelector('vaadin-accordion-heading');
+    });
+
+    it('should create a default heading', () => {
+      expect(heading).to.be.instanceOf(customElements.get('vaadin-accordion-heading'));
+    });
+
+    it('should set the default heading as the focus element', () => {
+      expect(panel.focusElement).to.equal(heading);
+    });
+
+    it('should toggle opened state on default heading click', () => {
+      heading.click();
+      expect(panel.opened).to.be.true;
+
+      heading.click();
+      expect(panel.opened).to.be.false;
+    });
+  });
+
   describe('link', () => {
     let link;
 
