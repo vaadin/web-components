@@ -503,7 +503,7 @@ export const ColumnBaseMixin = (superClass) =>
         return;
       }
 
-      this._grid.__renderHeaderFooter?.();
+      this._grid.__scheduleRenderHeaderFooter?.();
     }
 
     /** @private */
