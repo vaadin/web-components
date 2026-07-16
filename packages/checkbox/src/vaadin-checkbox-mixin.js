@@ -125,9 +125,8 @@ export const CheckboxMixin = (superclass) =>
     }
 
     /**
-     * Override method inherited from `ActiveMixin` to prevent setting `active`
-     * attribute when readonly, or when clicking a link placed inside the label,
-     * or when clicking slotted helper or error message element.
+     * Override method inherited from `ActiveMixin` to only set the `active`
+     * attribute for clicks that actually toggle the checked state.
      *
      * @param {Event} event
      * @return {boolean}
@@ -135,12 +134,14 @@ export const CheckboxMixin = (superclass) =>
      * @override
      */
     _shouldSetActive(event) {
-      if (
-        this.readonly ||
-        event.target.localName === 'a' ||
-        event.target === this._helperNode ||
-        event.target === this._errorNode
-      ) {
+      const [target] = event.composedPath();
+
+      const togglesChecked =
+        target === this.inputElement ||
+        target.part.contains('required-indicator') ||
+        (this._labelNode.contains(target) && !target.closest('a'));
+
+      if (this.readonly || !togglesChecked) {
         return false;
       }
 
