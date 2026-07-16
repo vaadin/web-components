@@ -139,8 +139,8 @@ export type DialogEventMap = DialogCustomEventMap & HTMLElementEventMap;
  * Attribute        | Description
  * -----------------|--------------------------------------------
  * `has-title`      | Set when the element has a title
- * `has-header`     | Set when the element has header renderer
- * `has-footer`     | Set when the element has footer renderer
+ * `has-header`     | Set when the element has header content
+ * `has-footer`     | Set when the element has footer content
  * `overflow`       | Set to `top`, `bottom`, none or both
  *
  * The following custom CSS properties are available for styling:
