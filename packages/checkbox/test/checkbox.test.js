@@ -222,6 +222,21 @@ describe('checkbox', () => {
         mousedown(checkbox.querySelector('[slot="error-message"]'));
         expect(checkbox.hasAttribute('active')).to.be.false;
       });
+
+      it('should set active attribute on required indicator mousedown', () => {
+        mousedown(checkbox.shadowRoot.querySelector('[part="required-indicator"]'));
+        expect(checkbox.hasAttribute('active')).to.be.true;
+      });
+
+      it('should not set active attribute when clicking empty space next to the label', () => {
+        mousedown(checkbox.shadowRoot.querySelector('[part="label"]'));
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
+
+      it('should not set active attribute when clicking empty space below the checkbox', () => {
+        mousedown(checkbox);
+        expect(checkbox.hasAttribute('active')).to.be.false;
+      });
     });
 
     describe('change event', () => {
