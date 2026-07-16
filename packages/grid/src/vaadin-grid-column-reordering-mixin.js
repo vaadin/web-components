@@ -203,9 +203,10 @@ export const ColumnReorderingMixin = (superClass) =>
         for (let i = startIndex; i !== endIndex; i += direction) {
           this._swapColumnOrders(this._draggedColumn, levelColumnsInOrder[i + direction]);
         }
+
+        this.__renderHeaderFooter();
       }
 
-      this.__renderHeaderFooter();
       this._updateGhostPosition(e.detail.x, this._touchDevice ? e.detail.y - 50 : e.detail.y);
       this._lastDragClientX = e.detail.x;
     }
