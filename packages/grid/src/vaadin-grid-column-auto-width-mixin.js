@@ -137,7 +137,7 @@ export const ColumnAutoWidthMixin = (superClass) =>
     _recalculateColumnWidths() {
       // Flush to make sure DOM is up-to-date when measuring the column widths
       this.__virtualizer.flush();
-      this.__renderHeaderFooter();
+      this.__renderHeaderFooterDebouncer?.flush();
 
       this.__hasHadRenderedRowsForColumnWidthCalculation ||= this._getRenderedRows().length > 0;
 
