@@ -4,37 +4,46 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, nothing, render } from 'lit';
-import { AsyncDirective, directive } from 'lit/async-directive.js';
 import { cache } from 'lit/directives/cache.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { cellContent } from './directives/cell-content-directive.js';
 
-/**
- * A directive that manages the `<vaadin-grid-cell-content>` element for a cell.
- */
-class CellContentDirective extends AsyncDirective {
-  #cell;
-
-  update(part, [grid, slotName]) {
-    this.#cell = part.parentNode;
-    this.#cell._content ??= document.createElement('vaadin-grid-cell-content');
-    this.#cell._content.slot = slotName;
-
-    const { isConnected } = this.#cell._content;
-    if (!isConnected) {
-      grid.appendChild(this.#cell._content);
-    }
-
-    return html`<slot name="${slotName}"></slot>`;
-  }
-
-  disconnected() {
-    this.#cell._content?.remove();
-  }
+function isEmptyCell(column, level, columnTree) {
+  const isColumnRow = level === columnTree.length - 1;
+  return !isColumnRow && column.localName !== 'vaadin-grid-column-group';
 }
 
-const cellContent = directive(CellContentDirective);
+function isHeaderRowVisible(columns, level, columnTree) {
+  return columns.some((column) => {
+    if (column.hidden || isEmptyCell(column, level, columnTree)) {
+      return false;
+    }
+
+    if (column.headerRenderer) {
+      // The column has a header renderer -> row should be visible
+      return true;
+    }
+
+    if (column.header === null) {
+      // The column header is explicitly set to null -> doesn't block hiding the row
+      return false;
+    }
+
+    return column.path || column.header !== undefined;
+  });
+}
+
+function isFooterRowVisible(columns, level, columnTree) {
+  return columns.some((column) => {
+    if (column.hidden || isEmptyCell(column, level, columnTree)) {
+      return false;
+    }
+
+    return column.footerRenderer;
+  });
+}
 
 /**
  * A mixin providing rendering of rows based on the column tree.
@@ -64,21 +73,21 @@ export const ColumnRenderingMixin = (superClass) =>
     }
 
     #renderHeader(columnTree) {
-      render(
-        repeat(columnTree, (columns, level) => this.#renderHeaderRow(columns, level)),
-        this.$.header,
-        { host: this },
-      );
+      render(columnTree.map(this.#renderHeaderRow), this.$.header, { host: this });
 
       this.$.table.toggleAttribute('has-header', !!this.$.header.querySelector('tr:not([hidden])'));
       this.__updateHeaderFooterRowParts('header');
     }
 
-    #renderHeaderRow(columns, level) {
-      const isRowVisible = this.#isHeaderRowVisible(columns, level);
-
+    #renderHeaderRow = (columns, level, columnTree) => {
       return html`
-        <tr role="row" part="row header-row" class="row header-row" tabindex="-1" ?hidden=${!isRowVisible}>
+        <tr
+          role="row"
+          part="row header-row"
+          class="row header-row"
+          tabindex="-1"
+          ?hidden=${!isHeaderRowVisible(columns, level, columnTree)}
+        >
           ${repeat(
             columns,
             (column) => column._id,
@@ -110,24 +119,24 @@ export const ColumnRenderingMixin = (superClass) =>
           )}
         </tr>
       `;
-    }
+    };
 
     #renderFooter(columnTree) {
-      render(
-        repeat(columnTree.toReversed(), (columns, level) => this.#renderFooterRow(columns, level)),
-        this.$.footer,
-        { host: this },
-      );
+      render(columnTree.map(this.#renderFooterRow).toReversed(), this.$.footer, { host: this });
 
       this.$.table.toggleAttribute('has-footer', !!this.$.footer.querySelector('tr:not([hidden])'));
       this.__updateHeaderFooterRowParts('footer');
     }
 
-    #renderFooterRow(columns, level) {
-      const isRowVisible = this.#isFooterRowVisible(columns, level);
-
+    #renderFooterRow = (columns, level, columnTree) => {
       return html`
-        <tr role="row" part="row footer-row" class="row footer-row" tabindex="-1" ?hidden=${!isRowVisible}>
+        <tr
+          role="row"
+          part="row footer-row"
+          class="row footer-row"
+          tabindex="-1"
+          ?hidden=${!isFooterRowVisible(columns, level, columnTree)}
+        >
           ${repeat(
             columns,
             (column) => column._id,
@@ -158,37 +167,5 @@ export const ColumnRenderingMixin = (superClass) =>
           )}
         </tr>
       `;
-    }
-
-    #isHeaderRowVisible(columns, level) {
-      const isColumnRow = level === this._columnTree.length - 1;
-
-      return columns.some((column) => {
-        const isEmptyCell = !isColumnRow && column.localName !== 'vaadin-grid-column-group';
-        if (isEmptyCell || column.hidden) {
-          return false;
-        }
-
-        if (column.header === null) {
-          // The column header is explicilty set to null -> row should be hidden
-          return false;
-        }
-
-        return column.headerRenderer || column.path || column.header !== undefined;
-      });
-    }
-
-    #isFooterRowVisible(columns, level) {
-      // Footer rows are rendered in reverse order, so the column row is the first one
-      const isColumnRow = level === 0;
-
-      return columns.some((column) => {
-        const isEmptyCell = !isColumnRow && column.localName !== 'vaadin-grid-column-group';
-        if (isEmptyCell || column.hidden) {
-          return false;
-        }
-
-        return column.footerRenderer;
-      });
-    }
+    };
   };

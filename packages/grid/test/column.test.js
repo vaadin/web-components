@@ -353,6 +353,16 @@ describe('column', () => {
         expect(grid.$.header.children[0].hidden).to.be.ok;
       });
 
+      it('should not hide the header row with null header and header renderer', () => {
+        emptyColumn.headerRenderer = (root) => {
+          root.textContent = 'foo';
+        };
+        emptyColumn.header = null;
+        grid.removeChild(grid.querySelector('vaadin-grid-column-group'));
+        flushGrid(grid);
+        expect(grid.$.header.children[0].hidden).not.to.be.ok;
+      });
+
       it('should produce an empty header cell', () => {
         emptyColumn.path = 'foo';
         emptyColumn.header = '';
