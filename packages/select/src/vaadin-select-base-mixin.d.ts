@@ -62,6 +62,8 @@ export declare class SelectBaseMixinClass {
    *
    * - `root` The internal container DOM element. Append your content to it.
    * - `select` The reference to the `<vaadin-select>` element.
+   *
+   * @deprecated Use a slotted `<vaadin-select-list-box>` or the `items` property instead
    */
   renderer: SelectRenderer | undefined;
 

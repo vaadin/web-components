@@ -95,7 +95,26 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  *
  * ### Rendering
  *
- * Alternatively, the content of the select can be populated by using the renderer callback function.
+ * Alternatively, the content of the select can be populated by using a slotted `<vaadin-select-list-box>`
+ * with `<vaadin-select-item>` children:
+ *
+ * ```html
+ * <vaadin-select>
+ *   <vaadin-select-list-box slot="overlay">
+ *     <vaadin-select-item value="recent">Most recent first</vaadin-select-item>
+ *     <vaadin-select-item value="rating-asc">Rating: low to high</vaadin-select-item>
+ *     <vaadin-select-item value="rating-desc">Rating: high to low</vaadin-select-item>
+ *   </vaadin-select-list-box>
+ * </vaadin-select>
+ * ```
+ *
+ * * Hint: By setting the `label` property of inner vaadin-items you will
+ * be able to change the visual representation of the selected value in the input part.
+ *
+ * #### Renderer (deprecated)
+ *
+ * The content of the select can also be populated by using the renderer callback function, although
+ * this approach is deprecated in favor of the `items` property or a slotted `<vaadin-select-list-box>`.
  *
  * The renderer function provides `root`, `select` arguments.
  * Generate DOM content, append it to the `root` element and control the state
@@ -122,9 +141,6 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  * DOM generated during the renderer call can be reused
  * in the next renderer call and will be provided with the `root` argument.
  * On first call it will be empty.
- *
- * * Hint: By setting the `label` property of inner vaadin-items you will
- * be able to change the visual representation of the selected value in the input part.
  *
  * ### Styling
  *
