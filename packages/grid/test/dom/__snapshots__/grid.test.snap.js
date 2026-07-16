@@ -1600,7 +1600,7 @@ snapshots["vaadin-grid column groups default"] =
           style="width: 100px; flex-grow: 1;"
           tabindex="0"
         >
-          <slot name="vaadin-grid-footer-cell-content-0-15">
+          <slot name="vaadin-grid-footer-cell-content-1-15">
           </slot>
         </td>
         <td
@@ -1611,7 +1611,7 @@ snapshots["vaadin-grid column groups default"] =
           style="width: 100px; flex-grow: 1;"
           tabindex="-1"
         >
-          <slot name="vaadin-grid-footer-cell-content-0-16">
+          <slot name="vaadin-grid-footer-cell-content-1-16">
           </slot>
         </td>
       </tr>
@@ -1634,7 +1634,7 @@ snapshots["vaadin-grid column groups default"] =
           style="width: calc(200px); flex-grow: 2;"
           tabindex="-1"
         >
-          <slot name="vaadin-grid-footer-cell-content-1-14">
+          <slot name="vaadin-grid-footer-cell-content-0-14">
           </slot>
         </td>
       </tr>
@@ -1741,7 +1741,7 @@ snapshots["vaadin-grid column groups with footer"] =
       style="width: 100px; flex-grow: 1;"
       tabindex="0"
     >
-      <slot name="vaadin-grid-footer-cell-content-0-21">
+      <slot name="vaadin-grid-footer-cell-content-1-21">
       </slot>
     </td>
     <td
@@ -1752,7 +1752,7 @@ snapshots["vaadin-grid column groups with footer"] =
       style="width: 100px; flex-grow: 1;"
       tabindex="-1"
     >
-      <slot name="vaadin-grid-footer-cell-content-0-22">
+      <slot name="vaadin-grid-footer-cell-content-1-22">
       </slot>
     </td>
   </tr>
@@ -1774,7 +1774,7 @@ snapshots["vaadin-grid column groups with footer"] =
       style="width: calc(200px); flex-grow: 2;"
       tabindex="-1"
     >
-      <slot name="vaadin-grid-footer-cell-content-1-20">
+      <slot name="vaadin-grid-footer-cell-content-0-20">
       </slot>
     </td>
   </tr>
