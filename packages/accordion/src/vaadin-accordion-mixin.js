@@ -106,7 +106,9 @@ export const AccordionMixin = (superClass) =>
       super.updated(props);
 
       if (props.has('items') || props.has('headingLevel')) {
-        this.__updateHeadingLevel();
+        (this.items || []).forEach((item) => {
+          item._headingLevel = this.headingLevel;
+        });
       }
     }
 
@@ -129,16 +131,6 @@ export const AccordionMixin = (superClass) =>
      */
     _filterItems(array) {
       return array.filter((el) => el instanceof customElements.get('vaadin-accordion-panel'));
-    }
-
-    /** @private */
-    __updateHeadingLevel() {
-      // Propagate the level to each panel, which applies it to its heading.
-      // The panel re-applies the level whenever its heading is recreated,
-      // so no attribute is set here directly.
-      (this.items || []).forEach((item) => {
-        item._headingLevel = this.headingLevel;
-      });
     }
 
     /** @private */
