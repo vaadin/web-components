@@ -348,19 +348,17 @@ export const GridMixin = (superClass) =>
     __createVirtualizerElements(count) {
       const rows = [];
       for (let i = 0; i < count; i++) {
-        const row = document.createElement('tr');
-        row.setAttribute('role', 'row');
-        row.setAttribute('tabindex', '-1');
-        updatePart(row, 'row', true);
-        updatePart(row, 'body-row', true);
+        const rowFragment = this.__createBodyRow();
+
         if (this._columnTree) {
-          this.__initRow(row, this._columnTree[this._columnTree.length - 1], 'body', true);
+          this.__initRow(rowFragment.firstElementChild, this._columnTree.at(-1), 'body', true);
         }
-        rows.push(row);
+
+        rows.push(rowFragment);
       }
 
       if (this._columnTree) {
-        this._columnTree[this._columnTree.length - 1].forEach((c) => {
+        this._columnTree.at(-1).forEach((c) => {
           if (c.isConnected && c._cells) {
             c._cells = [...c._cells];
           }
@@ -542,7 +540,7 @@ export const GridMixin = (superClass) =>
         return;
       }
 
-      row.index = index;
+      this.__renderBodyRow(row.parentElement, row.__endMarker, index);
       this.__ensureRowItem(row);
       this.__ensureRowHierarchy(row);
       this.__updateRow(row);

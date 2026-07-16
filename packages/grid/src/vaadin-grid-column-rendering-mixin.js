@@ -51,6 +51,27 @@ function isFooterRowVisible(columns, level, columnTree) {
 export const ColumnRenderingMixin = (superClass) =>
   class ColumnRenderingMixin extends superClass {
     /** @private */
+    __createBodyRow() {
+      const fragment = document.createDocumentFragment();
+      fragment.appendChild(document.createComment(' vaadin-grid-row-start '));
+      fragment.appendChild(document.createComment(' vaadin-grid-row-end '));
+      this.__renderBodyRow(fragment, fragment.lastChild);
+      return fragment;
+    }
+
+    /** @private */
+    __renderBodyRow(container, renderBefore, index) {
+      return render(this.#renderBodyRow(index), container, {
+        renderBefore,
+        host: this,
+      });
+    }
+
+    #renderBodyRow = (index) => {
+      return html`<tr role="row" tabindex="-1" part="row body-row" class="row body-row" .index="${index}"></tr>`;
+    };
+
+    /** @private */
     __scheduleRenderHeaderFooter() {
       this.__renderHeaderFooterDebouncer = Debouncer.debounce(this.__renderHeaderFooterDebouncer, microTask, () => {
         this.__renderHeaderFooter();
