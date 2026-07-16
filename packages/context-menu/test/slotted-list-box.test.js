@@ -40,7 +40,7 @@ describe('slotted list-box', () => {
 
   it('should use the slotted list-box as the menu content on open', async () => {
     await openMenu();
-    expect(overlay._menuListBox).to.equal(listBox);
+    expect(menu._menuListBox).to.equal(listBox);
     expect(listBox.items).to.have.lengthOf(3);
   });
 
@@ -68,6 +68,11 @@ describe('slotted list-box', () => {
     escKeyDown(getDeepActiveElement());
     await nextRender();
     expect(menu.opened).to.be.false;
+  });
+
+  it('should not throw on requestContentUpdate with a slotted list-box', async () => {
+    await openMenu();
+    expect(() => menu.requestContentUpdate()).to.not.throw();
   });
 });
 
@@ -100,7 +105,34 @@ describe('slotted list-box with items', () => {
     expect(warnSpy.callCount).to.equal(1);
   });
 
-  it('should keep the slotted list-box and preserve closeOn when items is set later', async () => {
+  it('should restore closeOn when items is set before the slotted list-box is detected', async () => {
+    const menu = fixtureSync(`
+      <vaadin-context-menu>
+        <button id="target"></button>
+        <vaadin-context-menu-list-box slot="overlay">
+          <vaadin-context-menu-item>Edit</vaadin-context-menu-item>
+          <vaadin-context-menu-item>Delete</vaadin-context-menu-item>
+        </vaadin-context-menu-list-box>
+      </vaadin-context-menu>
+    `);
+    // `items` is applied synchronously, before the async slotchange sets the
+    // slotted list-box, so the observer first clears the default closeOn.
+    menu.items = [{ text: 'Ignored' }];
+    await nextRender();
+
+    expect(menu.closeOn).to.equal('click');
+
+    // Clicking a slotted item still closes the menu.
+    const overlay = menu._overlayElement;
+    const listBox = menu.querySelector('vaadin-context-menu-list-box');
+    fire(menu.querySelector('#target'), 'vaadin-contextmenu');
+    await oneEvent(overlay, 'vaadin-overlay-open');
+    listBox.items[0].click();
+    await nextRender();
+    expect(menu.opened).to.be.false;
+  });
+
+  it('should throw when both items and renderer are set', async () => {
     const menu = fixtureSync(`
       <vaadin-context-menu>
         <button id="target"></button>
@@ -111,11 +143,9 @@ describe('slotted list-box with items', () => {
     `);
     await nextRender();
 
-    menu.items = [{ text: 'Ignored' }];
-    menu.renderer = () => {};
-    await nextRender();
-
-    expect(menu._overlayElement.renderer).to.be.undefined;
-    expect(menu.closeOn).to.equal('click');
+    expect(() => {
+      menu.items = [{ text: 'Ignored' }];
+      menu.renderer = () => {};
+    }).to.throw('The items API cannot be used together with a renderer');
   });
 });

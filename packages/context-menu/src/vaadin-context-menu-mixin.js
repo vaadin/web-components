@@ -331,25 +331,25 @@ export const ContextMenuMixin = (superClass) =>
 
     /** @private */
     _contentSourceChanged(renderer, items, slottedListBox) {
-      // A slotted list-box takes precedence over the `renderer` and `items`.
-      if (slottedListBox) {
-        if (items || renderer) {
-          issueWarning(
-            'WARNING: Both a slotted <vaadin-context-menu-list-box> and the "items" / "renderer"' +
-              ' property are set on <vaadin-context-menu>. The slotted list-box takes precedence.',
-          );
-        }
-        return;
+      if (items && renderer) {
+        throw new Error('The items API cannot be used together with a renderer');
       }
 
-      if (items) {
-        if (renderer) {
-          throw new Error('The items API cannot be used together with a renderer');
-        }
+      // A slotted list-box takes precedence over the `renderer` and `items`.
+      if (slottedListBox && (items || renderer)) {
+        issueWarning(
+          'WARNING: Both a slotted <vaadin-context-menu-list-box> and the "items" / "renderer"' +
+            ' property are set on <vaadin-context-menu>. The slotted list-box takes precedence.',
+        );
+      }
 
-        if (this.closeOn === 'click') {
-          this.closeOn = '';
-        }
+      // The items API manages closing via item selection, so the default
+      // click-to-close is disabled while items property is used. If the
+      // slotted list-box is provided instead, restore the default value.
+      if (items && !slottedListBox && this.closeOn === 'click') {
+        this.closeOn = '';
+      } else if (slottedListBox && items && this.closeOn === '') {
+        this.closeOn = 'click';
       }
     }
 
@@ -433,8 +433,8 @@ export const ContextMenuMixin = (superClass) =>
 
     /** @private */
     __preserveMenuState() {
-      const listBox = this.__getListBox();
-      if (listBox) {
+      const listBox = this._menuListBox;
+      if (listBox && Array.isArray(listBox.items)) {
         this.__focusedIndex = listBox.items.indexOf(listBox.focused);
 
         if (this._subMenu && this._subMenu.opened) {
@@ -449,7 +449,7 @@ export const ContextMenuMixin = (superClass) =>
       const subMenuIndex = this.__subMenuIndex;
       const selectedIndex = this.__selectedIndex;
 
-      const listBox = this.__getListBox();
+      const listBox = this._menuListBox;
 
       if (listBox) {
         // Initialize menu items synchronously
