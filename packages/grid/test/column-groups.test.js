@@ -328,6 +328,7 @@ describe('column groups', () => {
         group.footerRenderer = attributeRenderer('footer');
       });
 
+      sinon.spy(grid, '__renderHeaderFooter');
       sinon.spy(grid, '_updateColumnTree');
       grid.dataProvider = infiniteDataProvider;
       flushGrid(grid);
@@ -335,7 +336,12 @@ describe('column groups', () => {
       await nextResize(grid);
     });
 
-    it('should update column tree once', () => {
+    it('should not update header and footer rows too many times', () => {
+      // One from _updateColumnTree, another one from column observers
+      expect(grid.__renderHeaderFooter.callCount).to.equal(2);
+    });
+
+    it('should not update column tree too many times', () => {
       expect(grid._updateColumnTree.callCount).to.equal(1);
     });
 
