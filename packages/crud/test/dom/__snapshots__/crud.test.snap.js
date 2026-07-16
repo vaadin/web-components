@@ -188,17 +188,17 @@ snapshots["vaadin-crud host default"] =
     </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-header-cell-content-1-4">
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-0-1">
+    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-1-1">
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-0-3">
-    </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-0-4">
-    </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-1-0">
-    </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-1-2">
+    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-1-3">
     </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-1-4">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-0-0">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-0-2">
+    </vaadin-grid-cell-content>
+    <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-0-4">
     </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-cell-content-0">
     </vaadin-grid-cell-content>
