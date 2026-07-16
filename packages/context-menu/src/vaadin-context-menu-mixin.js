@@ -81,6 +81,8 @@ export const ContextMenuMixin = (superClass) =>
          * - `context` The object with the menu context, contains:
          *   - `context.target`  the target of the menu opening event,
          *   - `context.detail` the menu opening event detail.
+         *
+         * @deprecated Use a slotted `<vaadin-context-menu-list-box>` or the `items` property instead.
          * @type {ContextMenuRenderer | undefined}
          */
         renderer: {

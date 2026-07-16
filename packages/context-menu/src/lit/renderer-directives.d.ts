@@ -49,6 +49,7 @@ export class ContextMenuRendererDirective extends LitRendererDirective<ContextMe
  * ></vaadin-context-menu>`
  * ```
  *
+ * @deprecated Use a slotted `<vaadin-context-menu-list-box>` or the `items` property instead.
  * @param renderer the renderer callback that returns a Lit template.
  * @param dependencies a single dependency or an array of dependencies
  *                     which trigger a re-render when changed.

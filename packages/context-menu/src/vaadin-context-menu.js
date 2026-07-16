@@ -102,6 +102,9 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  *
  * ### Rendering
  *
+ * **Deprecated:** use a slotted `<vaadin-context-menu-list-box>` or the `items`
+ * property instead.
+ *
  * The content of the menu can be populated by using the renderer callback function.
  *
  * The renderer function provides `root`, `contextMenu`, `model` arguments when applicable.
