@@ -140,7 +140,7 @@ export const ItemsMixin = (superClass) =>
     /** @protected */
     __forwardFocus() {
       const overlay = this._overlayElement;
-      const child = overlay._contentRoot.firstElementChild;
+      const child = overlay._menuListBox;
       // If parent item is not focused, do not focus submenu
       if (overlay.parentOverlay) {
         const parent = overlay.parentOverlay._contentRoot.querySelector('[expanded]');
@@ -462,7 +462,9 @@ export const ItemsMixin = (superClass) =>
 
     /** @protected */
     __getListBox() {
-      return this._overlayElement._contentRoot.querySelector(`${this._tagNamePrefix}-list-box`);
+      return (
+        this.__slottedListBox || this._overlayElement._contentRoot.querySelector(`${this._tagNamePrefix}-list-box`)
+      );
     }
 
     /**

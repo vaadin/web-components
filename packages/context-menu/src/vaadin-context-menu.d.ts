@@ -134,6 +134,24 @@ export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenu
  * </vaadin-context-menu>
  * ```
  *
+ * ### Slotted list-box
+ *
+ * The content of the menu can also be populated by slotting a root-level
+ * `<vaadin-context-menu-list-box>` into the `overlay` slot:
+ *
+ * ```html
+ * <vaadin-context-menu>
+ *   <vaadin-context-menu-list-box slot="overlay">
+ *     <vaadin-context-menu-item>Edit</vaadin-context-menu-item>
+ *     <vaadin-context-menu-item>Delete</vaadin-context-menu-item>
+ *   </vaadin-context-menu-list-box>
+ * </vaadin-context-menu>
+ * ```
+ *
+ * A slotted list-box supports a single root-level menu only; for nested
+ * sub-menus, use the `items` property. When a list-box is slotted, it takes
+ * precedence over the `items` and `renderer`.
+ *
  * ### Rendering
  *
  * The content of the menu can be populated by using the renderer callback function.
