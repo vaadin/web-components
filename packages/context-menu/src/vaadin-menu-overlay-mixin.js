@@ -43,6 +43,17 @@ export const MenuOverlayMixin = (superClass) =>
     }
 
     /**
+     * The list-box holding the menu items: either one slotted directly into the
+     * overlay slot, or the one created inside the renderer root by the `items`
+     * or `renderer` path.
+     * @protected
+     * @return {HTMLElement | null | undefined}
+     */
+    get _menuListBox() {
+      return this.owner.__slottedListBox || this._contentRoot.firstElementChild;
+    }
+
+    /**
      * Override method from OverlayMixin to use slotted div as the renderer root.
      * @protected
      * @override
@@ -67,7 +78,7 @@ export const MenuOverlayMixin = (superClass) =>
 
       this.addEventListener('keydown', (e) => {
         if (!e.defaultPrevented && e.composedPath()[0] === this.$.overlay && [38, 40].indexOf(e.keyCode) > -1) {
-          const child = this._contentRoot.firstElementChild;
+          const child = this._menuListBox;
           if (child && Array.isArray(child.items) && child.items.length) {
             e.preventDefault();
             if (e.keyCode === 38) {

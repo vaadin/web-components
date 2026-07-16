@@ -7,6 +7,7 @@ import { isElementFocusable, isKeyboardActive } from '@vaadin/a11y-base/src/focu
 import { isAndroid, isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener, deepTargetFind, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { ContextMenuTooltipController } from './vaadin-context-menu-tooltip-controller.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
 
@@ -88,6 +89,17 @@ export const ContextMenuMixin = (superClass) =>
         },
 
         /**
+         * The `<vaadin-context-menu-list-box>` slotted directly into the overlay slot,
+         * if any. When set, it is used as the menu content instead of the `renderer`
+         * or `items`.
+         * @private
+         */
+        __slottedListBox: {
+          type: Object,
+          sync: true,
+        },
+
+        /**
          * When true, the menu overlay is modeless.
          * @protected
          */
@@ -121,7 +133,7 @@ export const ContextMenuMixin = (superClass) =>
     static get observers() {
       return [
         '_targetOrOpenOnChanged(listenOn, openOn)',
-        '_rendererChanged(renderer, items)',
+        '_contentSourceChanged(renderer, items, __slottedListBox)',
         '_fullscreenChanged(_fullscreen)',
       ];
     }
@@ -320,7 +332,18 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     /** @private */
-    _rendererChanged(renderer, items) {
+    _contentSourceChanged(renderer, items, slottedListBox) {
+      // A slotted list-box takes precedence over the `renderer` and `items`.
+      if (slottedListBox) {
+        if (items || renderer) {
+          issueWarning(
+            'WARNING: Both a slotted <vaadin-context-menu-list-box> and the "items" / "renderer"' +
+              ' property are set on <vaadin-context-menu>. The slotted list-box takes precedence.',
+          );
+        }
+        return;
+      }
+
       if (items) {
         if (renderer) {
           throw new Error('The items API cannot be used together with a renderer');
@@ -330,6 +353,17 @@ export const ContextMenuMixin = (superClass) =>
           this.closeOn = '';
         }
       }
+    }
+
+    /**
+     * Detects a `<vaadin-context-menu-list-box>` slotted directly into the overlay
+     * slot. When set, it is used as the menu content, bypassing the `renderer` and `items`.
+     *
+     * @param {!Event} e
+     * @private
+     */
+    __onOverlaySlotChange(e) {
+      this.__slottedListBox = e.target.assignedElements().find((el) => el._hasVaadinListMixin);
     }
 
     /**
@@ -421,7 +455,7 @@ export const ContextMenuMixin = (superClass) =>
 
       if (listBox) {
         // Initialize menu items synchronously
-        listBox._observer.flush();
+        listBox._observer?.flush();
 
         if (subMenuIndex > -1) {
           const itemToOpen = listBox.items[subMenuIndex];

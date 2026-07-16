@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Context Menu</title>
+    <script type="module" src="../common.js"></script>
+  </head>
+
+  <body>
+    <div style="margin: 100px">
+      <vaadin-context-menu id="renderer">
+        <div style="border: 1px solid black; text-align: center; user-select: none">
+          <h2>Right click for a renderer list-box menu</h2>
+        </div>
+      </vaadin-context-menu>
+    </div>
+
+    <div style="margin: 100px">
+      <vaadin-context-menu id="slotted">
+        <vaadin-context-menu-list-box slot="overlay">
+          <vaadin-context-menu-item>Edit</vaadin-context-menu-item>
+          <vaadin-context-menu-item>Duplicate</vaadin-context-menu-item>
+          <vaadin-context-menu-item>Delete</vaadin-context-menu-item>
+        </vaadin-context-menu-list-box>
+        <div style="border: 1px solid black; text-align: center; user-select: none">
+          <h2>Right click for a slotted list-box menu</h2>
+        </div>
+      </vaadin-context-menu>
+    </div>
+
+    <script type="module">
+      import '@vaadin/context-menu';
+      import { html, render } from 'lit';
+
+      const menu = document.querySelector('#renderer');
+      menu.renderer = (root) => {
+        render(
+          html`
+            <vaadin-context-menu-list-box>
+              <vaadin-context-menu-item>Edit</vaadin-context-menu-item>
+              <vaadin-context-menu-item>Duplicate</vaadin-context-menu-item>
+              <vaadin-context-menu-item>Delete</vaadin-context-menu-item>
+            </vaadin-context-menu-list-box>
+          `,
+          root,
+        );
+      };
+    </script>
+  </body>
+</html>
