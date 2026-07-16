@@ -363,5 +363,28 @@ describe('vaadin-accordion', () => {
 
       expect(panel.focusElement.getAttribute('aria-level')).to.equal('3');
     });
+
+    it('should set aria-level on the heading created lazily from summary', async () => {
+      const panel = document.createElement('vaadin-accordion-panel');
+      accordion.appendChild(panel);
+      await nextRender();
+
+      panel.summary = 'Lazy summary';
+      await nextRender();
+
+      expect(panel.focusElement.getAttribute('aria-level')).to.equal('3');
+    });
+
+    it('should set aria-level on the heading replacing the existing one', async () => {
+      const panel = accordion.items[0];
+      panel.querySelector('vaadin-accordion-heading').remove();
+
+      const heading = document.createElement('vaadin-accordion-heading');
+      heading.setAttribute('slot', 'summary');
+      panel.appendChild(heading);
+      await nextRender();
+
+      expect(heading.getAttribute('aria-level')).to.equal('3');
+    });
   });
 });

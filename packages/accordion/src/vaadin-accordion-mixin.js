@@ -106,7 +106,9 @@ export const AccordionMixin = (superClass) =>
       super.updated(props);
 
       if (props.has('items') || props.has('headingLevel')) {
-        this.__updateHeadingLevel();
+        (this.items || []).forEach((item) => {
+          item._headingLevel = this.headingLevel;
+        });
       }
     }
 
@@ -129,21 +131,6 @@ export const AccordionMixin = (superClass) =>
      */
     _filterItems(array) {
       return array.filter((el) => el instanceof customElements.get('vaadin-accordion-panel'));
-    }
-
-    /** @private */
-    __updateHeadingLevel() {
-      const { headingLevel } = this;
-
-      (this.items || []).forEach((item) => {
-        const heading = item.focusElement;
-
-        if (headingLevel != null) {
-          heading.setAttribute('aria-level', headingLevel);
-        } else {
-          heading.removeAttribute('aria-level');
-        }
-      });
     }
 
     /** @private */
