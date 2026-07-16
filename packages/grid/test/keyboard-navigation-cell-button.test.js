@@ -98,6 +98,6 @@ describe('keyboard navigation - focus button mode', () => {
 
   it('should not create a focusable div with role="button" inside the header cell', () => {
     const headerCell = getHeaderCell(grid, 0);
-    expect(headerCell.firstChild.localName).to.equal('slot');
+    expect(headerCell.firstElementChild.localName).to.equal('slot');
   });
 });

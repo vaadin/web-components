@@ -328,17 +328,11 @@ describe('column groups', () => {
         group.footerRenderer = attributeRenderer('footer');
       });
 
-      sinon.spy(grid, '__updateHeaderFooterRowVisibility');
       sinon.spy(grid, '_updateColumnTree');
       grid.dataProvider = infiniteDataProvider;
       flushGrid(grid);
 
       await nextResize(grid);
-    });
-
-    it('should update header and footer rows visibility once', () => {
-      // 6 header and footer rows are created
-      expect(grid.__updateHeaderFooterRowVisibility.callCount).to.equal(6);
     });
 
     it('should update column tree once', () => {
