@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro 1155 — CRUD nested property modified on save with preventDefault</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/crud';
+
+      const crud = document.querySelector('vaadin-crud');
+      // Item with a nested (deep) property.
+      crud.items = [{ foo: 'bar', stuff: { first: 'first', second: 'second' } }];
+
+      // save handler that prevents default -> CRUD must NOT modify the original item.
+      window.__prevent = true;
+      crud.addEventListener('save', (e) => {
+        if (window.__prevent) {
+          e.preventDefault();
+        }
+      });
+
+      window.__crud = crud;
+      window.__readNested = () => crud.items[0].stuff.first;
+    </script>
+    <style>
+      #log {
+        position: fixed;
+        bottom: 8px;
+        left: 8px;
+        font-family: monospace;
+        font-size: 13px;
+        background: #fff;
+        border: 1px solid #ccc;
+        padding: 6px 10px;
+        z-index: 100000;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="log">items[0].stuff.first = <b id="val">first</b></div>
+    <vaadin-crud style="height: 75vh"></vaadin-crud>
+  </body>
+</html>
