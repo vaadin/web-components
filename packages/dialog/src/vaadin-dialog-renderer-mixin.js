@@ -15,6 +15,7 @@ export const DialogRendererMixin = (superClass) =>
          * - `root` The root container DOM element. Append your content to it.
          * - `dialog` The reference to the `<vaadin-dialog>` element.
          * @type {DialogRenderer | undefined}
+         * @deprecated Add content elements as children of the dialog instead
          */
         renderer: {
           type: Object,
@@ -47,6 +48,7 @@ export const DialogRendererMixin = (superClass) =>
          *
          * When `headerRenderer` is set, the attribute `has-header` is set on the dialog.
          * @type {DialogRenderer | undefined}
+         * @deprecated Add header content as children of the dialog using `slot="header-content"` instead
          */
         headerRenderer: {
           type: Object,
@@ -61,6 +63,7 @@ export const DialogRendererMixin = (superClass) =>
          *
          * When `footerRenderer` is set, the attribute `has-footer` is set on the dialog.
          * @type {DialogRenderer | undefined}
+         * @deprecated Add footer content as children of the dialog using `slot="footer"` instead
          */
         footerRenderer: {
           type: Object,

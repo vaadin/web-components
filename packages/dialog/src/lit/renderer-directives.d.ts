@@ -69,6 +69,7 @@ export class DialogFooterRendererDirective extends AbstractDialogRendererDirecti
  * @param renderer the renderer callback that returns a Lit template.
  * @param dependencies a single dependency or an array of dependencies
  *                     which trigger a re-render when changed.
+ * @deprecated Add content elements as children of the dialog instead
  */
 export declare function dialogRenderer(
   renderer: DialogLitRenderer,
@@ -100,6 +101,7 @@ export declare function dialogRenderer(
  * @param renderer the renderer callback.
  * @param dependencies a single dependency or an array of dependencies
  *                     which trigger a re-render when changed.
+ * @deprecated Add header content as children of the dialog using `slot="header-content"` instead
  */
 export declare function dialogHeaderRenderer(
   renderer: DialogLitRenderer,
@@ -131,6 +133,7 @@ export declare function dialogHeaderRenderer(
  * @param renderer the renderer callback.
  * @param dependencies a single dependency or an array of dependencies
  *                     which trigger a re-render when changed.
+ * @deprecated Add footer content as children of the dialog using `slot="footer"` instead
  */
 export declare function dialogFooterRenderer(
   renderer: DialogLitRenderer,
