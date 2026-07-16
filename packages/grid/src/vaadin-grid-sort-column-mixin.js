@@ -46,16 +46,25 @@ export const GridSortColumnMixin = (superClass) =>
      */
     _defaultHeaderRenderer(root, _column) {
       let sorter = root.firstElementChild;
-      if (!sorter) {
+      const isNewSorter = !sorter;
+      if (isNewSorter) {
         sorter = document.createElement('vaadin-grid-sorter');
         sorter.addEventListener('direction-changed', this.__boundOnDirectionChanged);
-        root.appendChild(sorter);
       }
 
       sorter.path = this.path;
       sorter.__rendererDirection = this.direction;
       sorter.direction = this.direction;
       sorter.textContent = this.__getHeader(this.header, this.path);
+
+      // Append the sorter only after its direction has been set. If the cell
+      // content is already connected (as with the declarative header rendering),
+      // appending an unconfigured sorter makes it notify its default `null`
+      // direction before `__rendererDirection` is set, which would reset the
+      // column's direction. See __onDirectionChanged.
+      if (isNewSorter) {
+        root.appendChild(sorter);
+      }
     }
 
     /**
