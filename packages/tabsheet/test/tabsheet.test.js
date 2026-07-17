@@ -259,10 +259,22 @@ describe('tabsheet', () => {
       expect(tabsheet.hasAttribute('loading')).to.be.false;
     });
 
-    it('should not change height when entering loading state', () => {
-      const height = tabsheet.offsetHeight;
+    it('should preserve content height when entering loading state', async () => {
+      const content = tabsheet.shadowRoot.querySelector('[part="content"]');
+      const contentHeight = content.offsetHeight;
       newTab.click();
-      expect(tabsheet.offsetHeight).to.equal(height);
+      await nextFrame();
+      expect(content.offsetHeight).to.be.at.least(contentHeight);
+    });
+
+    it('should release content height when leaving loading state', async () => {
+      const content = tabsheet.shadowRoot.querySelector('[part="content"]');
+      newTab.click();
+      await nextFrame();
+      expect(content.style.minHeight).to.not.equal('');
+      tabsheet.appendChild(newPanel);
+      await nextFrame();
+      expect(content.style.minHeight).to.equal('');
     });
 
     it('should allow changing height when leaving loading state', async () => {
