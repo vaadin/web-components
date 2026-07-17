@@ -477,6 +477,30 @@ describe('column groups', () => {
       expect(columns[0].hidden).to.be.true;
       expect(columns[1].hidden).not.to.be.true;
     });
+
+    it('should update header row visibility when toggling group hidden state', () => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column-group header="Group">
+            <vaadin-grid-column></vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </vaadin-grid>
+      `);
+      flushGrid(grid);
+
+      const group = grid.querySelector('vaadin-grid-column-group');
+
+      group.hidden = true;
+      flushGrid(grid);
+      expect(getRows(grid.$.header)[0].hidden).to.be.true;
+      expect(grid.$.table.hasAttribute('has-header')).to.be.false;
+
+      group.hidden = false;
+      flushGrid(grid);
+      expect(getRows(grid.$.header)[0].hidden).to.be.false;
+      expect(grid.$.table.hasAttribute('has-header')).to.be.true;
+    });
   });
 
   describe('Large nested groups', () => {
