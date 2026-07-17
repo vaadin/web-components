@@ -1,0 +1,60 @@
+/* side-nav is a token-driven navigation tree. The base provides the layout,
+   hierarchy indentation, toggle icon + rotation and the focus ring; this restores
+   Lumo's colors, spacing and hover/active states via the documented vars. */
+:where(:root),
+:where(:host) {
+  /* Lumo stacks the items with no gap; each item carries its own rounded fill */
+  --vaadin-side-nav-items-gap: 0px;
+  --vaadin-side-nav-child-indent: var(--lumo-space-l);
+  --vaadin-side-nav-item-gap: var(--lumo-space-xs);
+  --vaadin-side-nav-item-padding: var(--lumo-space-s);
+  --vaadin-side-nav-item-text-color: var(--lumo-body-text-color);
+  --vaadin-side-nav-item-line-height: var(--lumo-line-height-xs);
+  --vaadin-side-nav-label-line-height: var(--lumo-line-height-xs);
+}
+
+/* Current item: primary tint. Set on the content part because the base assigns
+   these vars directly on [part='content'] for [current], so a host-level override
+   would be shadowed by the content's own value. */
+:where(vaadin-side-nav-item)[current]::part(content) {
+  --vaadin-side-nav-item-background: var(--lumo-primary-color-10pct);
+  --vaadin-side-nav-item-text-color: var(--lumo-primary-text-color);
+}
+
+/* Toggle button tinted like the secondary content */
+:where(vaadin-side-nav, vaadin-side-nav-item)::part(toggle-button) {
+  color: var(--lumo-contrast-60pct);
+}
+
+/* Prefix icons follow the secondary tint, the disabled and current colors */
+:where(vaadin-side-nav-item) > :is(vaadin-icon, [class*='icon'])[slot='prefix'] {
+  color: var(--lumo-contrast-60pct);
+}
+
+:where(vaadin-side-nav-item)[disabled] > :is(vaadin-icon, [class*='icon'])[slot='prefix'] {
+  color: var(--lumo-disabled-text-color);
+}
+
+:where(vaadin-side-nav-item)[current] > :is(vaadin-icon, [class*='icon'])[slot='prefix'] {
+  color: inherit;
+}
+
+@media (any-hover: hover) {
+  :where(vaadin-side-nav-item):not([disabled], [current])::part(content):hover {
+    --vaadin-side-nav-item-text-color: var(--lumo-header-text-color);
+  }
+
+  :where(vaadin-side-nav, vaadin-side-nav-item)::part(toggle-button):hover {
+    color: var(--lumo-body-text-color);
+  }
+
+  :where(vaadin-side-nav)::part(label):hover {
+    --vaadin-side-nav-label-color: var(--lumo-body-text-color);
+  }
+}
+
+/* Active press */
+:where(vaadin-side-nav-item):not([disabled], [current])::part(content):active {
+  --vaadin-side-nav-item-background: var(--lumo-contrast-5pct);
+  --vaadin-side-nav-item-text-color: var(--lumo-header-text-color);
+}
