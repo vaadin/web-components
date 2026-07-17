@@ -508,14 +508,15 @@ describe('column', () => {
       let content;
 
       beforeEach(() => {
-        if (sectionName === 'header') {
-          content = getHeaderCellContent(grid, 1, 0);
-        }
-        if (sectionName === 'footer') {
-          content = getContainerCellContent(grid.$.footer, 0, 0);
-        }
-        if (sectionName === 'body') {
-          content = getBodyCellContent(grid, 0, 0);
+        switch (sectionName) {
+          case 'header':
+            content = getHeaderCellContent(grid, 1, 0);
+            break;
+          case 'footer':
+            content = getContainerCellContent(grid.$.footer, 0, 0);
+            break;
+          default:
+            content = getBodyCellContent(grid, 0, 0);
         }
       });
 
