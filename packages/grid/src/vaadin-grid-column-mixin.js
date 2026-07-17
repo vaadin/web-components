@@ -326,7 +326,7 @@ export const ColumnBaseMixin = (superClass) =>
           return;
         }
 
-        this._allCells.forEach((cell) => {
+        this._cells?.forEach((cell) => {
           if (!cell._content.parentNode) {
             this._grid.appendChild(cell._content);
           }
@@ -345,7 +345,7 @@ export const ColumnBaseMixin = (superClass) =>
           return;
         }
 
-        this._allCells.forEach((cell) => {
+        this._cells?.forEach((cell) => {
           if (cell._content.parentNode) {
             cell._content.parentNode.removeChild(cell._content);
           }
