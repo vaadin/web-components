@@ -504,31 +504,27 @@ describe('column', () => {
   });
 
   describe('cell content attach and detach', () => {
-    it('should remove header cell content from the grid when column is removed', async () => {
-      const content = getHeaderCellContent(grid, 1, 0);
+    ['header', 'body', 'footer'].forEach((sectionName) => {
+      let content;
 
-      column.remove();
-      await nextFrame();
+      beforeEach(() => {
+        if (sectionName === 'header') {
+          content = getHeaderCellContent(grid, 1, 0);
+        }
+        if (sectionName === 'footer') {
+          content = getContainerCellContent(grid.$.footer, 0, 0);
+        }
+        if (sectionName === 'body') {
+          content = getBodyCellContent(grid, 0, 0);
+        }
+      });
 
-      expect(content.parentElement).to.be.null;
-    });
+      it(`should remove ${sectionName} cell content from the grid when column is removed`, async () => {
+        column.remove();
+        await nextFrame();
 
-    it('should remove footer cell content from the grid when column is removed', async () => {
-      const content = getContainerCellContent(grid.$.footer, 0, 0);
-
-      column.remove();
-      await nextFrame();
-
-      expect(content.parentElement).to.be.null;
-    });
-
-    it('should remove body cell content from the grid when column is removed', async () => {
-      const content = getBodyCellContent(grid, 0, 0);
-
-      column.remove();
-      await nextFrame();
-
-      expect(content.parentElement).to.be.null;
+        expect(content.parentElement).to.be.null;
+      });
     });
 
     it('should render cell content when column is added back', async () => {
