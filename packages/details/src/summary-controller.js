@@ -14,6 +14,21 @@ export class SummaryController extends SlotChildObserveController {
   }
 
   /**
+   * Override method inherited from `SlotController` to notify the host about
+   * the default empty summary element created during initialization.
+   *
+   * @protected
+   * @override
+   */
+  initSingle() {
+    super.initSingle();
+
+    if (this.node && this.node === this.defaultNode) {
+      this.__notifyChange(this.node);
+    }
+  }
+
+  /**
    * Set summary based on corresponding host property.
    *
    * @param {string} summary
