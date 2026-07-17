@@ -47,6 +47,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @prop {string} label - String that can be set to visually represent the selected item in `vaadin-select`.
  * @customElement vaadin-select-item
  * @extends HTMLElement
  */
@@ -75,22 +76,6 @@ class SelectItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjec
         reflectToAttribute: true,
       },
     };
-  }
-
-  constructor() {
-    super();
-
-    /**
-     * Submittable string value. The default value is the trimmed text content of the element.
-     * @type {string}
-     */
-    this.value;
-
-    /**
-     * String that can be set to visually represent the selected item in `vaadin-select`.
-     * @type {string}
-     */
-    this.label;
   }
 
   /** @protected */
