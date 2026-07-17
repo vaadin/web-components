@@ -55,7 +55,6 @@ class TabsSlotController extends SlotController {
     this.tabs = tabs;
     tabs.addEventListener('items-changed', this.__tabsItemsChangedListener);
     tabs.addEventListener('selected-changed', this.__tabsSelectedChangedListener);
-    this.host.__tabs = tabs;
     this.host.stateTarget = tabs;
     this.__tabsItemsChangedListener();
   }
@@ -64,7 +63,6 @@ class TabsSlotController extends SlotController {
     this.tabs = null;
     tabs.removeEventListener('items-changed', this.__tabsItemsChangedListener);
     tabs.removeEventListener('selected-changed', this.__tabsSelectedChangedListener);
-    this.host.__tabs = null;
     this.host._setItems([]);
     this.host.stateTarget = undefined;
   }
@@ -93,14 +91,6 @@ export const TabSheetMixin = (superClass) =>
           value: 0,
           type: Number,
           notify: true,
-        },
-
-        /**
-         * The slotted <vaadin-tabs> element.
-         */
-        __tabs: {
-          type: Object,
-          value: () => [],
         },
 
         /**
