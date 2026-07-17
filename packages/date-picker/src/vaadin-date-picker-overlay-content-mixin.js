@@ -138,7 +138,8 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme, isDateDisabled, enteredDate)',
+        '__updateCalendarsConfig(calendars, i18n, minDate, maxDate, showWeekNumbers, isDateDisabled, _theme)',
+        '__updateCalendarsState(calendars, selectedDate, focusedDate, enteredDate, _ignoreTaps)',
         '__updateCancelButton(_cancelButton, i18n)',
         '__updateTodayButton(_todayButton, i18n, minDate, maxDate, isDateDisabled)',
         '__updateYears(years, selectedDate, _theme)',
@@ -299,37 +300,36 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       }
     }
 
+    // Config that changes rarely (locale, allowed range, week numbers, theme).
+    // Split from the interaction state below so a keyboard/selection update does
+    // not re-assign every config property on every calendar.
     // eslint-disable-next-line @typescript-eslint/max-params
-    __updateCalendars(
-      calendars,
-      i18n,
-      minDate,
-      maxDate,
-      selectedDate,
-      focusedDate,
-      showWeekNumbers,
-      ignoreTaps,
-      theme,
-      isDateDisabled,
-      enteredDate,
-    ) {
+    __updateCalendarsConfig(calendars, i18n, minDate, maxDate, showWeekNumbers, isDateDisabled, theme) {
       if (calendars?.length) {
         calendars.forEach((calendar) => {
           calendar.i18n = i18n;
           calendar.minDate = minDate;
           calendar.maxDate = maxDate;
           calendar.isDateDisabled = isDateDisabled;
-          calendar.focusedDate = focusedDate;
-          calendar.selectedDate = selectedDate;
           calendar.showWeekNumbers = showWeekNumbers;
-          calendar.ignoreTaps = ignoreTaps;
-          calendar.enteredDate = enteredDate;
 
           if (theme) {
             calendar.setAttribute('theme', theme);
           } else {
             calendar.removeAttribute('theme');
           }
+        });
+      }
+    }
+
+    // Interaction state that changes often (focus, selection, entered date, taps).
+    __updateCalendarsState(calendars, selectedDate, focusedDate, enteredDate, ignoreTaps) {
+      if (calendars?.length) {
+        calendars.forEach((calendar) => {
+          calendar.focusedDate = focusedDate;
+          calendar.selectedDate = selectedDate;
+          calendar.enteredDate = enteredDate;
+          calendar.ignoreTaps = ignoreTaps;
         });
       }
     }
