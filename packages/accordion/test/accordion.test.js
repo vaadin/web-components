@@ -276,6 +276,17 @@ describe('vaadin-accordion', () => {
         arrowDownKeyDown(input);
         expect(spy.called).to.be.false;
       });
+
+      it('should focus a panel without a heading when navigating onto it', async () => {
+        const panel = document.createElement('vaadin-accordion-panel');
+        accordion.insertBefore(panel, accordion.items[1]);
+        accordion._observer.flush();
+        await nextRender();
+        accordion.items[2].focus();
+        heading = getHeading(2);
+        arrowUpKeyDown(heading);
+        expect(accordion.items[1].hasAttribute('focused')).to.be.true;
+      });
     });
 
     describe('keydown event', () => {
