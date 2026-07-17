@@ -42,7 +42,17 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class SelectItem extends ItemMixin(DirMixin(ThemableMixin(HTMLElement))) {}
+declare class SelectItem extends ItemMixin(DirMixin(ThemableMixin(HTMLElement))) {
+  /**
+   * Submittable string value. The default value is the trimmed text content of the element.
+   */
+  value: string;
+
+  /**
+   * String that can be set to visually represent the selected item in `vaadin-select`.
+   */
+  label: string | undefined;
+}
 
 declare global {
   interface HTMLElementTagNameMap {

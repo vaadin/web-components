@@ -77,6 +77,22 @@ class SelectItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjec
     };
   }
 
+  constructor() {
+    super();
+
+    /**
+     * Submittable string value. The default value is the trimmed text content of the element.
+     * @type {string}
+     */
+    this.value;
+
+    /**
+     * String that can be set to visually represent the selected item in `vaadin-select`.
+     * @type {string}
+     */
+    this.label;
+  }
+
   /** @protected */
   render() {
     return html`
