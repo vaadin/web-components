@@ -107,7 +107,10 @@ assertType<ItemMixinClass>(option);
 assertType<DirMixinClass>(option);
 assertType<ThemableMixinClass>(option);
 
-// Item
+assertType<string>(option.value);
+assertType<string | undefined>(option.label);
+
+// List box
 const listBox = document.createElement('vaadin-select-list-box');
 
 assertType<SelectListBox>(listBox);
