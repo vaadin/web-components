@@ -17,8 +17,7 @@ class CellContentDirective extends AsyncDirective {
     this.#cell._content ??= document.createElement('vaadin-grid-cell-content');
     this.#cell._content.slot = slotName;
 
-    const { isConnected } = this.#cell._content;
-    if (!isConnected) {
+    if (!grid.contains(this.#cell._content)) {
       grid.appendChild(this.#cell._content);
     }
 
