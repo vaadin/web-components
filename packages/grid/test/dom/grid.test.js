@@ -101,4 +101,40 @@ describe('vaadin-grid', () => {
       await expect(grid.$.footer).dom.to.equalSnapshot();
     });
   });
+
+  describe('hidden column group', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column-group hidden>
+            <vaadin-grid-column></vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </vaadin-grid>
+      `);
+      grid.items = users.slice(0, 2);
+      await nextFrame();
+    });
+
+    it('with group header', async () => {
+      grid.querySelector('vaadin-grid-column-group').header = 'Group';
+      await nextFrame();
+      await expect(grid).shadowDom.to.equalSnapshot();
+    });
+
+    it('with group and column header', async () => {
+      grid.querySelector('vaadin-grid-column').header = 'Col';
+      grid.querySelector('vaadin-grid-column-group').header = 'Group';
+      await nextFrame();
+      await expect(grid).shadowDom.to.equalSnapshot();
+    });
+
+    it('with group footer', async () => {
+      grid.querySelector('vaadin-grid-column-group').footerRenderer = (root) => {
+        root.textContent = 'Footer';
+      };
+      await nextFrame();
+      await expect(grid).shadowDom.to.equalSnapshot();
+    });
+  });
 });
