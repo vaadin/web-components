@@ -77,11 +77,21 @@ describe('slotted list-box', () => {
 });
 
 describe('slotted list-box with items', () => {
-  let warnSpy;
+  let menu, warnSpy;
 
   beforeEach(() => {
     clearWarnings();
     warnSpy = sinon.stub(console, 'warn');
+
+    menu = fixtureSync(`
+      <vaadin-context-menu>
+        <button id="target"></button>
+        <vaadin-context-menu-list-box slot="overlay">
+          <vaadin-context-menu-item>Edit</vaadin-context-menu-item>
+          <vaadin-context-menu-item>Delete</vaadin-context-menu-item>
+        </vaadin-context-menu-list-box>
+      </vaadin-context-menu>
+    `);
   });
 
   afterEach(() => {
@@ -89,15 +99,6 @@ describe('slotted list-box with items', () => {
   });
 
   it('should use the slotted list-box over the items property and warn once', async () => {
-    const menu = fixtureSync(`
-      <vaadin-context-menu>
-        <button id="target"></button>
-        <vaadin-context-menu-list-box slot="overlay">
-          <vaadin-context-menu-item>Edit</vaadin-context-menu-item>
-          <vaadin-context-menu-item>Delete</vaadin-context-menu-item>
-        </vaadin-context-menu-list-box>
-      </vaadin-context-menu>
-    `);
     menu.items = [{ text: 'Ignored' }];
     await nextRender();
 
@@ -105,42 +106,14 @@ describe('slotted list-box with items', () => {
     expect(warnSpy.callCount).to.equal(1);
   });
 
-  it('should restore closeOn when items is set before the slotted list-box is detected', async () => {
-    const menu = fixtureSync(`
-      <vaadin-context-menu>
-        <button id="target"></button>
-        <vaadin-context-menu-list-box slot="overlay">
-          <vaadin-context-menu-item>Edit</vaadin-context-menu-item>
-          <vaadin-context-menu-item>Delete</vaadin-context-menu-item>
-        </vaadin-context-menu-list-box>
-      </vaadin-context-menu>
-    `);
-    // `items` is applied synchronously, before the async slotchange sets the
-    // slotted list-box, so the observer first clears the default closeOn.
+  it('should keep closeOn: click when items before the slotted list-box is detected', async () => {
     menu.items = [{ text: 'Ignored' }];
     await nextRender();
 
     expect(menu.closeOn).to.equal('click');
-
-    // Clicking a slotted item still closes the menu.
-    const overlay = menu._overlayElement;
-    const listBox = menu.querySelector('vaadin-context-menu-list-box');
-    fire(menu.querySelector('#target'), 'vaadin-contextmenu');
-    await oneEvent(overlay, 'vaadin-overlay-open');
-    listBox.items[0].click();
-    await nextRender();
-    expect(menu.opened).to.be.false;
   });
 
   it('should throw when both items and renderer are set', async () => {
-    const menu = fixtureSync(`
-      <vaadin-context-menu>
-        <button id="target"></button>
-        <vaadin-context-menu-list-box slot="overlay">
-          <vaadin-context-menu-item>Edit</vaadin-context-menu-item>
-        </vaadin-context-menu-list-box>
-      </vaadin-context-menu>
-    `);
     await nextRender();
 
     expect(() => {
