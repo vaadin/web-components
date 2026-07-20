@@ -7,7 +7,6 @@ import { isElementFocusable, isKeyboardActive } from '@vaadin/a11y-base/src/focu
 import { isAndroid, isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener, deepTargetFind, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
-import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { ContextMenuTooltipController } from './vaadin-context-menu-tooltip-controller.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
 
@@ -331,25 +330,19 @@ export const ContextMenuMixin = (superClass) =>
 
     /** @private */
     _contentSourceChanged(renderer, items, slottedListBox) {
-      if (items && renderer) {
-        throw new Error('The items API cannot be used together with a renderer');
-      }
-
-      // A slotted list-box takes precedence over the `renderer` and `items`.
-      if (slottedListBox && (items || renderer)) {
-        issueWarning(
-          'WARNING: Both a slotted <vaadin-context-menu-list-box> and the "items" / "renderer"' +
-            ' property are set on <vaadin-context-menu>. The slotted list-box takes precedence.',
+      // The `items`, `renderer`, and a slotted `<vaadin-context-menu-list-box>`
+      // are mutually exclusive ways of defining the menu content.
+      const contentSources = [items, renderer, slottedListBox].filter(Boolean);
+      if (contentSources.length > 1) {
+        throw new Error(
+          'The "items", "renderer", and slotted "<vaadin-context-menu-list-box>" cannot be used together.',
         );
       }
 
-      // The items API manages closing via item selection, so the default
-      // click-to-close is disabled while items property is used. If the
-      // slotted list-box is provided instead, restore the default value.
-      if (items && !slottedListBox && this.closeOn === 'click') {
+      // The items API closes the menu on item selection, so the default
+      // click-to-close behavior is disabled while the items property is used.
+      if (items && this.closeOn === 'click') {
         this.closeOn = '';
-      } else if (slottedListBox && items && this.closeOn === '') {
-        this.closeOn = 'click';
       }
     }
 

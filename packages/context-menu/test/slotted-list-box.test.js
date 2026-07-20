@@ -1,9 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { arrowDownKeyDown, escKeyDown, fire, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
 import '../src/vaadin-context-menu.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 
 describe('slotted list-box', () => {
   let menu, target, overlay, listBox;
@@ -76,13 +74,10 @@ describe('slotted list-box', () => {
   });
 });
 
-describe('slotted list-box with items', () => {
-  let menu, warnSpy;
+describe('slotted list-box with items or renderer', () => {
+  let menu;
 
-  beforeEach(() => {
-    clearWarnings();
-    warnSpy = sinon.stub(console, 'warn');
-
+  beforeEach(async () => {
     menu = fixtureSync(`
       <vaadin-context-menu>
         <button id="target"></button>
@@ -92,33 +87,19 @@ describe('slotted list-box with items', () => {
         </vaadin-context-menu-list-box>
       </vaadin-context-menu>
     `);
-  });
-
-  afterEach(() => {
-    warnSpy.restore();
-  });
-
-  it('should use the slotted list-box over the items property and warn once', async () => {
-    menu.items = [{ text: 'Ignored' }];
+    // Wait for the slotted list-box to be detected.
     await nextRender();
-
-    expect(menu._overlayElement.renderer).to.be.undefined;
-    expect(warnSpy.callCount).to.equal(1);
   });
 
-  it('should keep closeOn: click when items before the slotted list-box is detected', async () => {
-    menu.items = [{ text: 'Ignored' }];
-    await nextRender();
-
-    expect(menu.closeOn).to.equal('click');
-  });
-
-  it('should throw when both items and renderer are set', async () => {
-    await nextRender();
-
+  it('should throw when the items property is also set', () => {
     expect(() => {
       menu.items = [{ text: 'Ignored' }];
+    }).to.throw();
+  });
+
+  it('should throw when the renderer property is also set', () => {
+    expect(() => {
       menu.renderer = () => {};
-    }).to.throw('The items API cannot be used together with a renderer');
+    }).to.throw();
   });
 });

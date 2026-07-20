@@ -97,8 +97,8 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  * ```
  *
  * A slotted list-box supports a single root-level menu only; for nested
- * sub-menus, use the `items` property. When a list-box is slotted, it takes
- * precedence over the `items` and `renderer`.
+ * sub-menus, use the `items` property. A slotted list-box cannot be combined
+ * with the `items` or `renderer` API.
  *
  * ### Rendering
  *
