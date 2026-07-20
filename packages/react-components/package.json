@@ -373,6 +373,14 @@
       "types": "./Select.d.ts",
       "default": "./Select.js"
     },
+    "./SelectItem.js": {
+      "types": "./SelectItem.d.ts",
+      "default": "./SelectItem.js"
+    },
+    "./SelectListBox.js": {
+      "types": "./SelectListBox.d.ts",
+      "default": "./SelectListBox.js"
+    },
     "./SideNav.js": {
       "types": "./SideNav.d.ts",
       "default": "./SideNav.js"
@@ -507,6 +515,8 @@
     "./RangeSlider": "./RangeSlider.js",
     "./Scroller": "./Scroller.js",
     "./Select": "./Select.js",
+    "./SelectItem": "./SelectItem.js",
+    "./SelectListBox": "./SelectListBox.js",
     "./SideNav": "./SideNav.js",
     "./SideNavItem": "./SideNavItem.js",
     "./Slider": "./Slider.js",

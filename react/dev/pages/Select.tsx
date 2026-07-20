@@ -1,12 +1,12 @@
 import { Select } from '../../packages/react-components/src/Select.js';
-import type { SelectItem } from '../../packages/react-components/src/Select.js';
+import type { SelectItemData } from '../../packages/react-components/src/Select.js';
 import { ListBox } from '../../packages/react-components/src/ListBox.js';
 import { Item } from '../../packages/react-components/src/Item.js';
 import { Tooltip } from '../../packages/react-components/src/Tooltip.js';
 import { useEffect, useState } from 'react';
 import type { SelectInvalidChangedEvent, SelectValidatedEvent } from '@vaadin/select';
 
-const items: SelectItem[] = [
+const items: SelectItemData[] = [
   { label: 'Option 1', value: 'opt1' },
   { label: 'Option 2', value: 'opt2' },
   { component: 'hr' },
