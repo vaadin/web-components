@@ -427,7 +427,7 @@ export const ContextMenuMixin = (superClass) =>
     /** @private */
     __preserveMenuState() {
       const listBox = this._menuListBox;
-      if (listBox && Array.isArray(listBox.items)) {
+      if (listBox) {
         this.__focusedIndex = listBox.items.indexOf(listBox.focused);
 
         if (this._subMenu && this._subMenu.opened) {
