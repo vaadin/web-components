@@ -128,11 +128,7 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     static get observers() {
-      return [
-        '_targetOrOpenOnChanged(listenOn, openOn)',
-        '_contentSourceChanged(renderer, items, __slottedListBox)',
-        '_fullscreenChanged(_fullscreen)',
-      ];
+      return ['_targetOrOpenOnChanged(listenOn, openOn)', '_fullscreenChanged(_fullscreen)'];
     }
 
     constructor() {
@@ -194,6 +190,28 @@ export const ContextMenuMixin = (superClass) =>
       if (!this._tooltipController) {
         this._tooltipController = new ContextMenuTooltipController(this);
         this.addController(this._tooltipController);
+      }
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('renderer') || props.has('items') || props.has('__slottedListBox')) {
+        // The `items`, `renderer`, and a slotted `<vaadin-context-menu-list-box>`
+        // are mutually exclusive ways of defining the menu content.
+        const contentSources = [this.items, this.renderer, this.__slottedListBox].filter(Boolean);
+        if (contentSources.length > 1) {
+          throw new Error(
+            'The "items", "renderer", and slotted "<vaadin-context-menu-list-box>" cannot be used together.',
+          );
+        }
+
+        // The items API closes the menu on item selection, so the default
+        // click-to-close behavior is disabled while the items property is used.
+        if (this.items && this.closeOn === 'click') {
+          this.closeOn = '';
+        }
       }
     }
 
@@ -326,24 +344,6 @@ export const ContextMenuMixin = (superClass) =>
 
       // Restore focused item, update sub-menu if needed
       this.__restoreMenuState();
-    }
-
-    /** @private */
-    _contentSourceChanged(renderer, items, slottedListBox) {
-      // The `items`, `renderer`, and a slotted `<vaadin-context-menu-list-box>`
-      // are mutually exclusive ways of defining the menu content.
-      const contentSources = [items, renderer, slottedListBox].filter(Boolean);
-      if (contentSources.length > 1) {
-        throw new Error(
-          'The "items", "renderer", and slotted "<vaadin-context-menu-list-box>" cannot be used together.',
-        );
-      }
-
-      // The items API closes the menu on item selection, so the default
-      // click-to-close behavior is disabled while the items property is used.
-      if (items && this.closeOn === 'click') {
-        this.closeOn = '';
-      }
     }
 
     /**
