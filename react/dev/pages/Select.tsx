@@ -1,7 +1,7 @@
 import { Select } from '../../packages/react-components/src/Select.js';
 import type { SelectItemData } from '../../packages/react-components/src/Select.js';
-import { ListBox } from '../../packages/react-components/src/ListBox.js';
-import { Item } from '../../packages/react-components/src/Item.js';
+import { SelectItem } from '../../packages/react-components/src/SelectItem.js';
+import { SelectListBox } from '../../packages/react-components/src/SelectListBox.js';
 import { Tooltip } from '../../packages/react-components/src/Tooltip.js';
 import { useEffect, useState } from 'react';
 import type { SelectInvalidChangedEvent, SelectValidatedEvent } from '@vaadin/select';
@@ -116,9 +116,9 @@ export default function SelectPage() {
           ) : null}
           {useTooltip ? <Tooltip slot="tooltip" text="This is a tooltip" /> : null}
           {useCustomRenderer ? (
-            <ListBox>
+            <SelectListBox>
               {peopleForCustomRendering.map((person) => (
-                <Item
+                <SelectItem
                   value={person.id}
                   key={person.id}
                   label={useItemLabelInCustomRenderer ? `${person.firstName} ${person.lastName}` : undefined}
@@ -146,9 +146,9 @@ export default function SelectPage() {
                       </div>
                     </div>
                   </div>
-                </Item>
+                </SelectItem>
               ))}
-            </ListBox>
+            </SelectListBox>
           ) : null}
         </Select>
 

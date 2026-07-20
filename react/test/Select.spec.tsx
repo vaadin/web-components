@@ -2,9 +2,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import type { ReactElement } from 'react';
-import { ListBox } from '../packages/react-components/src/ListBox.js';
-import { Item } from '../packages/react-components/src/Item.js';
 import { Select, SelectElement } from '../packages/react-components/src/Select.js';
+import { SelectItem } from '../packages/react-components/src/SelectItem.js';
+import { SelectListBox } from '../packages/react-components/src/SelectListBox.js';
 import { findByQuerySelector } from './utils/findByQuerySelector.js';
 
 describe('Select', () => {
@@ -15,10 +15,10 @@ describe('Select', () => {
 
   function Renderer(): ReactElement {
     return (
-      <ListBox>
-        <Item value="foo">Foo</Item>
-        <Item value="bar">Bar</Item>
-      </ListBox>
+      <SelectListBox>
+        <SelectItem value="foo">Foo</SelectItem>
+        <SelectItem value="bar">Bar</SelectItem>
+      </SelectListBox>
     );
   }
 
@@ -33,10 +33,10 @@ describe('Select', () => {
     await user.click(valueButton);
 
     await vi.waitFor(() => {
-      const listBox = select.querySelector('vaadin-list-box, vaadin-select-list-box');
+      const listBox = select.querySelector('vaadin-select-list-box');
       expect(listBox).to.exist;
 
-      const items = listBox!.querySelectorAll('vaadin-item, vaadin-select-item');
+      const items = listBox!.querySelectorAll('vaadin-select-item');
       expect(items[0]).to.have.text('Foo');
       expect(items[1]).to.have.text('Bar');
     });
@@ -64,11 +64,11 @@ describe('Select', () => {
   describe('renderer', () => {
     function NewRenderer() {
       return (
-        <ListBox>
-          <Item value="foo">Foo</Item>
-          <Item value="bar">Bar</Item>
-          <Item value="baz">Baz</Item>
-        </ListBox>
+        <SelectListBox>
+          <SelectItem value="foo">Foo</SelectItem>
+          <SelectItem value="bar">Bar</SelectItem>
+          <SelectItem value="baz">Baz</SelectItem>
+        </SelectListBox>
       );
     }
 
@@ -135,10 +135,10 @@ describe('Select', () => {
     it('should render the element with slot if children component is set', async () => {
       await render(
         <Select>
-          <ListBox>
-            <Item value="foo">Foo</Item>
-            <Item value="bar">Bar</Item>
-          </ListBox>
+          <SelectListBox>
+            <SelectItem value="foo">Foo</SelectItem>
+            <SelectItem value="bar">Bar</SelectItem>
+          </SelectListBox>
           <div slot="prefix">Value:</div>
         </Select>,
       );
