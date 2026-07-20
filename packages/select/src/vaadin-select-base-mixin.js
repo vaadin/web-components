@@ -272,8 +272,6 @@ export const SelectBaseMixin = (superClass) =>
      */
     __onOverlaySlotChange(e) {
       const slottedListBox = e.target.assignedElements().find((el) => el._hasVaadinListMixin);
-      // A slotted list-box and the `items` / `renderer` API are mutually
-      // exclusive ways of defining the content, so combining them is not allowed.
       if (slottedListBox && (this.items?.length || this.renderer)) {
         throw new Error(
           'A slotted <vaadin-select-list-box> cannot be used together with the "items" or "renderer" property.',
