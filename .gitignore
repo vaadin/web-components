@@ -44,3 +44,8 @@ tsconfig.build.tsbuildinfo
 # API docs generated files
 api-docs/dist
 api-docs/content/elements
+
+# Stryker mutation testing (proto)
+.stryker-tmp/
+reports/mutation/
+stryker.log
