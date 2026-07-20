@@ -41,7 +41,6 @@ export const SelectBaseMixin = (superClass) =>
          */
         items: {
           type: Array,
-          observer: '__itemsChanged',
         },
 
         /**
@@ -219,6 +218,10 @@ export const SelectBaseMixin = (superClass) =>
         }
       }
 
+      if (props.has('items')) {
+        this._overlayElement.requestContentUpdate();
+      }
+
       if (props.has('__slottedListBox')) {
         const slottedListBox = this.__slottedListBox;
         if (slottedListBox) {
@@ -236,6 +239,8 @@ export const SelectBaseMixin = (superClass) =>
      * While performing the update, it invokes the renderer passed in the `renderer` property.
      *
      * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+     *
+     * @deprecated This method is deprecated and will be removed in Vaadin 26
      */
     requestContentUpdate() {
       if (!this._overlayElement) {
@@ -257,17 +262,6 @@ export const SelectBaseMixin = (superClass) =>
 
       if (required === false) {
         this._requestValidation();
-      }
-    }
-
-    /**
-     * @param {SelectItemData[] | undefined | null} newItems
-     * @param {SelectItemData[] | undefined | null} oldItems
-     * @private
-     */
-    __itemsChanged(newItems, oldItems) {
-      if (newItems || oldItems) {
-        this.requestContentUpdate();
       }
     }
 
