@@ -211,6 +211,14 @@ export const SelectBaseMixin = (superClass) =>
         this.toggleAttribute('phone', this._phone);
       }
 
+      if (props.has('items') || props.has('renderer') || props.has('__slottedListBox')) {
+        if (this.__slottedListBox && (this.items?.length || this.renderer)) {
+          throw new Error(
+            'A slotted <vaadin-select-list-box> cannot be used together with the "items" or "renderer" property.',
+          );
+        }
+      }
+
       if (props.has('__slottedListBox')) {
         const slottedListBox = this.__slottedListBox;
         if (slottedListBox) {
@@ -271,13 +279,7 @@ export const SelectBaseMixin = (superClass) =>
      * @private
      */
     __onOverlaySlotChange(e) {
-      const slottedListBox = e.target.assignedElements().find((el) => el._hasVaadinListMixin);
-      if (slottedListBox && (this.items?.length || this.renderer)) {
-        throw new Error(
-          'A slotted <vaadin-select-list-box> cannot be used together with the "items" or "renderer" property.',
-        );
-      }
-      this.__slottedListBox = slottedListBox;
+      this.__slottedListBox = e.target.assignedElements().find((el) => el._hasVaadinListMixin);
     }
 
     /**

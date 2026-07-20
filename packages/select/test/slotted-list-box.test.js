@@ -115,7 +115,7 @@ describe('lazy list-box', () => {
 });
 
 describe('slotted list-box with items or renderer', () => {
-  let select, slot;
+  let select;
 
   beforeEach(async () => {
     select = fixtureSync(`
@@ -128,18 +128,17 @@ describe('slotted list-box with items or renderer', () => {
     `);
     // Let the slotted list-box be detected before combining it with items/renderer.
     await nextRender();
-    slot = select.shadowRoot.querySelector('slot[name="overlay"]');
   });
 
   it('should throw when the items property is also set', () => {
     select.items = [{ label: 'Ignored', value: 'ignored' }];
-    expect(() => select.__onOverlaySlotChange({ target: slot })).to.throw();
+    expect(() => select.performUpdate()).to.throw();
   });
 
   it('should throw when the renderer property is also set', () => {
     select.renderer = (root) => {
       root.textContent = 'Renderer';
     };
-    expect(() => select.__onOverlaySlotChange({ target: slot })).to.throw();
+    expect(() => select.performUpdate()).to.throw();
   });
 });
