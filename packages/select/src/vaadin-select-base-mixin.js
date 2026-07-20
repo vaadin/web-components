@@ -693,11 +693,6 @@ export const SelectBaseMixin = (superClass) =>
      * @private
      */
     __defaultRenderer(root, _select) {
-      if (this.__slottedListBox) {
-        root.textContent = '';
-        return;
-      }
-
       if (!this.items || this.items.length === 0) {
         root.textContent = '';
         return;
