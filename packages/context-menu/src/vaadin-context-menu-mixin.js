@@ -347,17 +347,6 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     /**
-     * Detects a `<vaadin-context-menu-list-box>` slotted directly into the overlay
-     * slot (instead of the default one rendered into slotted `div` element).
-     *
-     * @param {!Event} e
-     * @private
-     */
-    __onOverlaySlotChange(e) {
-      this.__slottedListBox = e.target.assignedElements().find((el) => el._hasVaadinListMixin);
-    }
-
-    /**
      * Closes the overlay.
      */
     close() {
@@ -481,6 +470,17 @@ export const ContextMenuMixin = (superClass) =>
       if (item) {
         item.focus({ focusVisible: isKeyboardActive() });
       }
+    }
+
+    /**
+     * Detects a `<vaadin-context-menu-list-box>` slotted directly into the overlay
+     * slot (instead of the default one rendered into slotted `div` element).
+     *
+     * @param {!Event} e
+     * @private
+     */
+    __onOverlaySlotChange(e) {
+      this.__slottedListBox = e.target.assignedElements().find((el) => el._hasVaadinListMixin);
     }
 
     /** @private */
