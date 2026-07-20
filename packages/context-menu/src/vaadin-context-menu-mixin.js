@@ -198,8 +198,6 @@ export const ContextMenuMixin = (superClass) =>
       super.updated(props);
 
       if (props.has('renderer') || props.has('items') || props.has('__slottedListBox')) {
-        // The `items`, `renderer`, and a slotted `<vaadin-context-menu-list-box>`
-        // are mutually exclusive ways of defining the menu content.
         const contentSources = [this.items, this.renderer, this.__slottedListBox].filter(Boolean);
         if (contentSources.length > 1) {
           throw new Error(
@@ -207,8 +205,7 @@ export const ContextMenuMixin = (superClass) =>
           );
         }
 
-        // The items API closes the menu on item selection, so the default
-        // click-to-close behavior is disabled while the items property is used.
+        // With items property, menu closes on item selection or items-outside-click.
         if (this.items && this.closeOn === 'click') {
           this.closeOn = '';
         }
