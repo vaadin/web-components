@@ -12,7 +12,12 @@ import type { MenuBarItem } from '../../src/vaadin-menu-bar-item.js';
 import type { MenuBarListBox } from '../../src/vaadin-menu-bar-list-box.js';
 import type { MenuBarI18n, MenuBarMixinClass, SubMenuItem } from '../../src/vaadin-menu-bar-mixin.js';
 import type { MenuBarSubmenu } from '../../src/vaadin-menu-bar-submenu.js';
-import type { MenuBar, MenuBarItem as MenuItem, MenuBarItemSelectedEvent } from '../../vaadin-menu-bar.js';
+import type {
+  MenuBar,
+  MenuBarItem as DeprecatedMenuItem,
+  MenuBarItemData,
+  MenuBarItemSelectedEvent,
+} from '../../vaadin-menu-bar.js';
 
 const menu = document.createElement('vaadin-menu-bar');
 
@@ -20,7 +25,7 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 
 assertType<boolean | null | undefined>(menu.openOnHover);
 assertType<boolean | null | undefined>(menu.tabNavigation);
-assertType<MenuItem[]>(menu.items);
+assertType<MenuBarItemData[]>(menu.items);
 
 assertType<ResizeMixinClass>(menu);
 assertType<FocusMixinClass>(menu);
@@ -31,7 +36,7 @@ assertType<ThemePropertyMixinClass>(menu);
 
 menu.addEventListener('item-selected', (event) => {
   assertType<MenuBarItemSelectedEvent>(event);
-  assertType<MenuItem>(event.detail.value);
+  assertType<MenuBarItemData>(event.detail.value);
 });
 
 const menuItem = menu.items[0];
@@ -41,8 +46,12 @@ assertType<string | undefined>(menuItem.tooltipPosition);
 assertType<string | undefined>(menuItem.text);
 assertType<boolean | undefined>(menuItem.disabled);
 assertType<string[] | string | undefined>(menuItem.theme);
-assertType<MenuItem[] | undefined>(menuItem.children);
+assertType<MenuBarItemData[] | undefined>(menuItem.children);
 assertType<HTMLElement | string | undefined>(menuItem.component);
+
+// Deprecated `MenuBarItem` type alias still resolves to `MenuBarItemData`.
+const deprecatedMenuItem: DeprecatedMenuItem = menuItem;
+assertType<MenuBarItemData>(deprecatedMenuItem);
 
 // Sub-menu item properties
 const subMenuItem: SubMenuItem = {};
@@ -59,7 +68,7 @@ interface ItemData {
   value: string;
 }
 
-const narrowedMenu = menu as MenuBar<MenuItem<ItemData>>;
+const narrowedMenu = menu as MenuBar<MenuBarItemData<ItemData>>;
 
 assertType<ItemData>(narrowedMenu.items[0]);
 assertType<ItemData>(narrowedMenu.items[0].children![0]);

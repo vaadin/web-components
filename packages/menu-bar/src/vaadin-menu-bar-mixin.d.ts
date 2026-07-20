@@ -12,7 +12,7 @@ import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import type { MenuBarButton } from './vaadin-menu-bar-button.js';
 
-export type MenuBarItem<TItemData extends object = object> = {
+export type MenuBarItemData<TItemData extends object = object> = {
   /**
    * Text to be set as the menu button component's textContent.
    */
@@ -53,6 +53,11 @@ export type MenuBarItem<TItemData extends object = object> = {
   className?: string;
 } & TItemData;
 
+/**
+ * @deprecated Use `MenuBarItemData` instead.
+ */
+export type MenuBarItem<TItemData extends object = object> = MenuBarItemData<TItemData>;
+
 export type SubMenuItem<TItemData extends object = object> = {
   text?: string;
   /**
@@ -80,7 +85,10 @@ export interface MenuBarI18n {
   moreOptions?: string;
 }
 
-export declare function MenuBarMixin<T extends Constructor<HTMLElement>, TItem extends MenuBarItem = MenuBarItem>(
+export declare function MenuBarMixin<
+  T extends Constructor<HTMLElement>,
+  TItem extends MenuBarItemData = MenuBarItemData,
+>(
   base: T,
 ): Constructor<DisabledMixinClass> &
   Constructor<FocusMixinClass> &
@@ -91,7 +99,7 @@ export declare function MenuBarMixin<T extends Constructor<HTMLElement>, TItem e
   Constructor<ResizeMixinClass> &
   T;
 
-export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> {
+export declare class MenuBarMixinClass<TItem extends MenuBarItemData = MenuBarItemData> {
   /**
    * Defines a hierarchical structure, where root level items represent menu bar buttons,
    * and `children` property configures a submenu with items to be opened below

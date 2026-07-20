@@ -6,20 +6,20 @@
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { MenuBarItem, MenuBarMixinClass } from './vaadin-menu-bar-mixin.js';
+import type { MenuBarItemData, MenuBarMixinClass } from './vaadin-menu-bar-mixin.js';
 
-export { MenuBarItem, MenuBarI18n, SubMenuItem } from './vaadin-menu-bar-mixin.js';
+export { MenuBarItem, MenuBarItemData, MenuBarI18n, SubMenuItem } from './vaadin-menu-bar-mixin.js';
 
 /**
  * Fired when a submenu item or menu bar button without children is clicked.
  */
-export type MenuBarItemSelectedEvent<TItem extends MenuBarItem = MenuBarItem> = CustomEvent<{ value: TItem }>;
+export type MenuBarItemSelectedEvent<TItem extends MenuBarItemData = MenuBarItemData> = CustomEvent<{ value: TItem }>;
 
-export interface MenuBarCustomEventMap<TItem extends MenuBarItem = MenuBarItem> {
+export interface MenuBarCustomEventMap<TItem extends MenuBarItemData = MenuBarItemData> {
   'item-selected': MenuBarItemSelectedEvent<TItem>;
 }
 
-export interface MenuBarEventMap<TItem extends MenuBarItem = MenuBarItem>
+export interface MenuBarEventMap<TItem extends MenuBarItemData = MenuBarItemData>
   extends HTMLElementEventMap, MenuBarCustomEventMap<TItem> {}
 
 /**
@@ -75,7 +75,7 @@ export interface MenuBarEventMap<TItem extends MenuBarItem = MenuBarItem>
  *
  * @fires {CustomEvent} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  */
-declare class MenuBar<TItem extends MenuBarItem = MenuBarItem> extends HTMLElement {
+declare class MenuBar<TItem extends MenuBarItemData = MenuBarItemData> extends HTMLElement {
   addEventListener<K extends keyof MenuBarEventMap<TItem>>(
     type: K,
     listener: (this: MenuBar<TItem>, ev: MenuBarEventMap<TItem>[K]) => void,
@@ -89,7 +89,7 @@ declare class MenuBar<TItem extends MenuBarItem = MenuBarItem> extends HTMLEleme
   ): void;
 }
 
-interface MenuBar<TItem extends MenuBarItem = MenuBarItem>
+interface MenuBar<TItem extends MenuBarItemData = MenuBarItemData>
   extends MenuBarMixinClass<TItem>, DisabledMixinClass, ElementMixinClass, ThemableMixinClass {}
 
 declare global {

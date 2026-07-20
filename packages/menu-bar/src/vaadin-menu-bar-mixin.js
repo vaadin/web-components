@@ -63,7 +63,7 @@ export const MenuBarMixin = (superClass) =>
     static get properties() {
       return {
         /**
-         * @typedef MenuBarItem
+         * @typedef MenuBarItemData
          * @type {object}
          * @property {string} text - Text to be set as the menu button component's textContent.
          * @property {string} tooltip - Text to be set as the menu button's tooltip.
@@ -158,7 +158,7 @@ export const MenuBarMixin = (superClass) =>
          * </vaadin-menu-bar>
          * ```
          *
-         * @type {!Array<!MenuBarItem>}
+         * @type {!Array<!MenuBarItemData>}
          */
         items: {
           type: Array,
