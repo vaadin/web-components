@@ -10,7 +10,6 @@ import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mi
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { LabelController } from '@vaadin/field-base/src/label-controller.js';
 import { ButtonController } from './button-controller.js';
@@ -212,17 +211,17 @@ export const SelectBaseMixin = (superClass) =>
         this.toggleAttribute('phone', this._phone);
       }
 
+      if (props.has('items') || props.has('renderer') || props.has('__slottedListBox')) {
+        if (this.__slottedListBox && (this.items?.length || this.renderer)) {
+          throw new Error(
+            'A slotted <vaadin-select-list-box> cannot be used together with the "items" or "renderer" property.',
+          );
+        }
+      }
+
       if (props.has('__slottedListBox')) {
         const slottedListBox = this.__slottedListBox;
         if (slottedListBox) {
-          // Slotted list-box takes precedence over the `renderer` and `items`.
-          if (this.items?.length || this.renderer) {
-            issueWarning(
-              'WARNING: Both a slotted <vaadin-select-list-box> and the "items" / "renderer"' +
-                ' property are set on <vaadin-select>. The slotted list-box takes precedence.',
-            );
-          }
-
           this._assignMenuElement(slottedListBox);
         } else if (props.get('__slottedListBox')) {
           this._menuElement = null;
@@ -693,11 +692,6 @@ export const SelectBaseMixin = (superClass) =>
      * @private
      */
     __defaultRenderer(root, _select) {
-      if (this.__slottedListBox) {
-        root.textContent = '';
-        return;
-      }
-
       if (!this.items || this.items.length === 0) {
         root.textContent = '';
         return;

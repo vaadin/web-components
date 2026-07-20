@@ -1,10 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
 import '../src/vaadin-select.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 
 describe('slotted list-box', () => {
   let select, overlay, listBox, valueButton;
@@ -116,12 +114,10 @@ describe('lazy list-box', () => {
   });
 });
 
-describe('slotted list-box with items and renderer', () => {
-  let select, listBox, warnSpy;
+describe('slotted list-box with items or renderer', () => {
+  let select;
 
-  beforeEach(() => {
-    clearWarnings();
-    warnSpy = sinon.stub(console, 'warn');
+  beforeEach(async () => {
     select = fixtureSync(`
       <vaadin-select>
         <vaadin-select-list-box slot="overlay">
@@ -130,29 +126,19 @@ describe('slotted list-box with items and renderer', () => {
         </vaadin-select-list-box>
       </vaadin-select>
     `);
-    listBox = select.querySelector('vaadin-select-list-box');
-  });
-
-  afterEach(() => {
-    warnSpy.restore();
-  });
-
-  it('should use the slotted list-box over the items property and warn once', async () => {
-    select.items = [{ label: 'Ignored', value: 'ignored' }];
+    // Let the slotted list-box be detected before combining it with items/renderer.
     await nextRender();
-
-    expect(select._menuElement).to.equal(listBox);
-    expect(listBox.items).to.have.lengthOf(2);
-    expect(warnSpy.callCount).to.equal(1);
   });
 
-  it('should use the slotted list-box over the renderer and warn once', async () => {
+  it('should throw when the items property is also set', () => {
+    select.items = [{ label: 'Ignored', value: 'ignored' }];
+    expect(() => select.performUpdate()).to.throw();
+  });
+
+  it('should throw when the renderer property is also set', () => {
     select.renderer = (root) => {
       root.textContent = 'Renderer';
     };
-    await nextRender();
-
-    expect(select._menuElement).to.equal(listBox);
-    expect(warnSpy.callCount).to.equal(1);
+    expect(() => select.performUpdate()).to.throw();
   });
 });
