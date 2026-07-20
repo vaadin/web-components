@@ -30,6 +30,8 @@
     "test:firefox": "yarn test --config web-test-runner-firefox.config.js",
     "test:it": "yarn test --config web-test-runner-it.config.js",
     "test:lumo": "./scripts/run-docker-visual-tests.sh test --config web-test-runner-lumo.config.js",
+    "test:mutation": "stryker run",
+    "test:mutation:diff": "node scripts/stryker-diff.mjs",
     "test:snapshots": "yarn test --config web-test-runner-snapshots.config.js",
     "test:webkit": "yarn test --config web-test-runner-webkit.config.js",
     "update:aura": "TEST_ENV=update ./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js",
@@ -40,6 +42,7 @@
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",
+    "@stryker-mutator/core": "^9.6.1",
     "@types/mocha": "^10.0.7",
     "@ungap/structured-clone": "^1.3.0",
     "@vaadin/testing-helpers": "^2.0.0",
