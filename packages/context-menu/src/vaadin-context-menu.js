@@ -82,6 +82,23 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  * </vaadin-context-menu>
  * ```
  *
+ * ### Slotted list-box
+ *
+ * The content of the menu can also be populated by providing a custom
+ * `<vaadin-context-menu-list-box>` with the `overlay` slot:
+ *
+ * ```html
+ * <vaadin-context-menu>
+ *   <vaadin-context-menu-list-box slot="overlay">
+ *     <vaadin-context-menu-item>Edit</vaadin-context-menu-item>
+ *     <vaadin-context-menu-item>Delete</vaadin-context-menu-item>
+ *   </vaadin-context-menu-list-box>
+ * </vaadin-context-menu>
+ * ```
+ *
+ * **Note:** slotted list-box supports a single root-level menu only and
+ * cannot be combined with the `items` or `renderer` API.
+ *
  * ### Rendering
  *
  * The content of the menu can be populated by using the renderer callback function.
@@ -290,7 +307,7 @@ class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(Polyl
         .opened="${this.opened}"
         .model="${context}"
         .modeless="${this._modeless}"
-        .renderer="${this.items ? this.__itemsRenderer : this.renderer}"
+        .renderer="${this.__slottedListBox ? undefined : this.items ? this.__itemsRenderer : this.renderer}"
         .position="${position}"
         .positionTarget="${position ? context?.target : this._positionTarget}"
         .horizontalAlign="${this.__computeHorizontalAlign(position)}"
@@ -305,7 +322,7 @@ class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(Polyl
         @vaadin-overlay-open="${this._onVaadinOverlayOpen}"
         @vaadin-overlay-closed="${this._onVaadinOverlayClosed}"
       >
-        <slot name="overlay"></slot>
+        <slot name="overlay" @slotchange="${this.__onOverlaySlotChange}"></slot>
         <slot name="submenu" slot="submenu"></slot>
       </vaadin-context-menu-overlay>
 

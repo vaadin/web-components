@@ -88,6 +88,15 @@ export const ContextMenuMixin = (superClass) =>
         },
 
         /**
+         * The `<vaadin-context-menu-list-box>` slotted directly into the overlay slot.
+         * @private
+         */
+        __slottedListBox: {
+          type: Object,
+          sync: true,
+        },
+
+        /**
          * When true, the menu overlay is modeless.
          * @protected
          */
@@ -119,11 +128,7 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     static get observers() {
-      return [
-        '_targetOrOpenOnChanged(listenOn, openOn)',
-        '_rendererChanged(renderer, items)',
-        '_fullscreenChanged(_fullscreen)',
-      ];
+      return ['_targetOrOpenOnChanged(listenOn, openOn)', '_fullscreenChanged(_fullscreen)'];
     }
 
     constructor() {
@@ -185,6 +190,25 @@ export const ContextMenuMixin = (superClass) =>
       if (!this._tooltipController) {
         this._tooltipController = new ContextMenuTooltipController(this);
         this.addController(this._tooltipController);
+      }
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('renderer') || props.has('items') || props.has('__slottedListBox')) {
+        const contentSources = [this.items, this.renderer, this.__slottedListBox].filter(Boolean);
+        if (contentSources.length > 1) {
+          throw new Error(
+            'The "items", "renderer", and slotted "<vaadin-context-menu-list-box>" cannot be used together.',
+          );
+        }
+
+        // With items property, menu closes on item selection or items-outside-click.
+        if (this.items && this.closeOn === 'click') {
+          this.closeOn = '';
+        }
       }
     }
 
@@ -319,19 +343,6 @@ export const ContextMenuMixin = (superClass) =>
       this.__restoreMenuState();
     }
 
-    /** @private */
-    _rendererChanged(renderer, items) {
-      if (items) {
-        if (renderer) {
-          throw new Error('The items API cannot be used together with a renderer');
-        }
-
-        if (this.closeOn === 'click') {
-          this.closeOn = '';
-        }
-      }
-    }
-
     /**
      * Closes the overlay.
      */
@@ -401,7 +412,7 @@ export const ContextMenuMixin = (superClass) =>
 
     /** @private */
     __preserveMenuState() {
-      const listBox = this.__getListBox();
+      const listBox = this._menuListBox;
       if (listBox) {
         this.__focusedIndex = listBox.items.indexOf(listBox.focused);
 
@@ -417,11 +428,11 @@ export const ContextMenuMixin = (superClass) =>
       const subMenuIndex = this.__subMenuIndex;
       const selectedIndex = this.__selectedIndex;
 
-      const listBox = this.__getListBox();
+      const listBox = this._menuListBox;
 
       if (listBox) {
         // Initialize menu items synchronously
-        listBox._observer.flush();
+        listBox._observer?.flush();
 
         if (subMenuIndex > -1) {
           const itemToOpen = listBox.items[subMenuIndex];
@@ -456,6 +467,17 @@ export const ContextMenuMixin = (superClass) =>
       if (item) {
         item.focus({ focusVisible: isKeyboardActive() });
       }
+    }
+
+    /**
+     * Detects a `<vaadin-context-menu-list-box>` slotted directly into the overlay
+     * slot (instead of the default one rendered into slotted `div` element).
+     *
+     * @param {!Event} e
+     * @private
+     */
+    __onOverlaySlotChange(e) {
+      this.__slottedListBox = e.target.assignedElements().find((el) => el._hasVaadinListMixin);
     }
 
     /** @private */

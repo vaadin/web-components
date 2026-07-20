@@ -67,7 +67,7 @@ export const MenuOverlayMixin = (superClass) =>
 
       this.addEventListener('keydown', (e) => {
         if (!e.defaultPrevented && e.composedPath()[0] === this.$.overlay && [38, 40].indexOf(e.keyCode) > -1) {
-          const child = this._contentRoot.firstElementChild;
+          const child = this.owner._menuListBox ?? this._contentRoot.firstElementChild;
           if (child && Array.isArray(child.items) && child.items.length) {
             e.preventDefault();
             if (e.keyCode === 38) {

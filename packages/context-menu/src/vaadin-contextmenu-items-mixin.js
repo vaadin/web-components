@@ -140,7 +140,7 @@ export const ItemsMixin = (superClass) =>
     /** @protected */
     __forwardFocus() {
       const overlay = this._overlayElement;
-      const child = overlay._contentRoot.firstElementChild;
+      const child = this._menuListBox ?? overlay._contentRoot.firstElementChild;
       // If parent item is not focused, do not focus submenu
       if (overlay.parentOverlay) {
         const parent = overlay.parentOverlay._contentRoot.querySelector('[expanded]');
@@ -460,9 +460,17 @@ export const ItemsMixin = (superClass) =>
       }
     }
 
-    /** @protected */
-    __getListBox() {
-      return this._overlayElement._contentRoot.querySelector(`${this._tagNamePrefix}-list-box`);
+    /**
+     * The list-box holding the menu items: either one slotted directly into the
+     * overlay slot, or the one created inside the renderer root by the `items`
+     * path.
+     * @protected
+     * @return {HTMLElement | null | undefined}
+     */
+    get _menuListBox() {
+      return (
+        this.__slottedListBox ?? this._overlayElement._contentRoot.querySelector(`${this._tagNamePrefix}-list-box`)
+      );
     }
 
     /**
