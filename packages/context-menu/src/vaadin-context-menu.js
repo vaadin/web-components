@@ -84,8 +84,8 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  *
  * ### Slotted list-box
  *
- * The content of the menu can also be populated by slotting a root-level
- * `<vaadin-context-menu-list-box>` into the `overlay` slot:
+ * The content of the menu can also be populated by providing a custom
+ * `<vaadin-context-menu-list-box>` with the `overlay` slot:
  *
  * ```html
  * <vaadin-context-menu>
@@ -96,9 +96,8 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  * </vaadin-context-menu>
  * ```
  *
- * A slotted list-box supports a single root-level menu only; for nested
- * sub-menus, use the `items` property. A slotted list-box cannot be combined
- * with the `items` or `renderer` API.
+ * **Note:** slotted list-box supports a single root-level menu only and
+ * cannot be combined with the `items` or `renderer` API.
  *
  * ### Rendering
  *
