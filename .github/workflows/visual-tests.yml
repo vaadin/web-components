@@ -15,7 +15,6 @@ jobs:
   base:
     name: Base
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'vaadin'
     container:
       image: mcr.microsoft.com/playwright:v1.61.0-noble
       options: --ipc=host
@@ -53,7 +52,6 @@ jobs:
   lumo:
     name: Lumo
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'vaadin'
     container:
       image: mcr.microsoft.com/playwright:v1.61.0-noble
       options: --ipc=host
@@ -92,7 +90,6 @@ jobs:
   aura:
     name: Aura
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'vaadin'
     container:
       image: mcr.microsoft.com/playwright:v1.61.0-noble
       options: --ipc=host
