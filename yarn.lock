@@ -2426,10 +2426,10 @@
     chrome-launcher "^0.15.0"
     puppeteer-core "^24.0.0"
 
-"@web/test-runner-commands@^0.9.0", "@web/test-runner-commands@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@web/test-runner-commands/-/test-runner-commands-1.0.0.tgz#6a7fd692c85c7257def8d18e869a1a1fc76ad3eb"
-  integrity sha512-8wXJkwvWWCc6GTPsdjbEN141kz+4MQPFjsId47hoibkY3FhkgeKJUm+cnwMYCIXHuWA0e7V+L2fmH087UPrXXQ==
+"@web/test-runner-commands@^0.9.0", "@web/test-runner-commands@^1.0.0", "@web/test-runner-commands@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@web/test-runner-commands/-/test-runner-commands-1.0.1.tgz#d50bb821be7c69c5b5b629b9306118dd8c87f050"
+  integrity sha512-rvAvHJKlNzh5Tv8L2wGjnNX/hSkPmQx5eyKqeyExEvA7A2pVXiNYFstJzUGCD52TlAJSPF3BtW1yOwpf6vG7Eg==
   dependencies:
     "@web/test-runner-core" "^1.0.0"
     mkdirp "^1.0.4"
@@ -2505,15 +2505,15 @@
     webdriver "^9.0.0"
     webdriverio "^9.0.0"
 
-"@web/test-runner-visual-regression@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@web/test-runner-visual-regression/-/test-runner-visual-regression-1.0.0.tgz#78c6aa098954d6380b80182f7164ac89014e8bcf"
-  integrity sha512-ia4tJ6O4JzZuYNc/Z1h80J4/Wzp6IASprkTPBoHjmClubmRkAb27D4xwz5A1N4Gaw7GXgGhbPGwr8JYXV8VxVw==
+"@web/test-runner-visual-regression@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@web/test-runner-visual-regression/-/test-runner-visual-regression-1.0.1.tgz#09f8307a81b418fd15f080fa24f2cc04696375c8"
+  integrity sha512-x+/ZxR9Cf1vfAQ1f7qWTfEVryOOebhCexG1dDPLOOalBA8oAsZpprEa5Sp5uimZDne1YO3yqnSXEWeE1bNM2Kw==
   dependencies:
     "@types/mkdirp" "^1.0.1"
     "@types/pixelmatch" "^5.2.2"
     "@types/pngjs" "^6.0.0"
-    "@web/test-runner-commands" "^1.0.0"
+    "@web/test-runner-commands" "^1.0.1"
     "@web/test-runner-core" "^1.0.0"
     mkdirp "^1.0.4"
     pixelmatch "^5.2.1"
