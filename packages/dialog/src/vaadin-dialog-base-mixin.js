@@ -198,10 +198,24 @@ export const DialogBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _bringOverlayToFront() {
-      if (this.modeless) {
-        this._overlayElement.bringToFront();
+    _bringOverlayToFront(event) {
+      if (!this.modeless) {
+        return;
       }
+      const overlay = this._overlayElement;
+      // Only bring the dialog to the front when the interaction targets the dialog
+      // itself, not a nested overlay shown inside it (e.g. a combo-box, date-picker,
+      // or a nested dialog). The mousedown bubbles up from a nested overlay to this
+      // handler, so without this check the dialog would move in front of its own
+      // open overlay. The first attached overlay in the event path is the innermost
+      // one the interaction actually happened in.
+      if (event) {
+        const innermostOverlay = event.composedPath().find((node) => node._isAttached);
+        if (innermostOverlay && innermostOverlay !== overlay) {
+          return;
+        }
+      }
+      overlay.bringToFront();
     }
 
     /** @private */

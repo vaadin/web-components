@@ -69,10 +69,9 @@ export const OverlayStackMixin = (superClass) =>
      * Brings the overlay as visually the frontmost one.
      */
     bringToFront() {
-      // If the overlay is the last one, or if all other overlays shown above
-      // are nested overlays (e.g. date-picker inside a dialog), do not call
-      // `showPopover()` unnecessarily to avoid scroll position being reset.
-      if (isLastOverlay(this) || hasOnlyNestedOverlays(this)) {
+      // Stacking order follows interaction order only, independent of nesting.
+      // Do not call `showPopover()` if the overlay is already the last one.
+      if (isLastOverlay(this)) {
         return;
       }
 

@@ -869,6 +869,59 @@ describe('nested draggable dialogs', () => {
   });
 });
 
+describe('nested modeless draggable dialogs', () => {
+  let parentDialog, childDialog, parentHeader, childHeader;
+
+  beforeEach(async () => {
+    parentDialog = fixtureSync('<vaadin-dialog modeless draggable opened></vaadin-dialog>');
+    await nextRender();
+
+    parentDialog.headerTitle = 'Parent Dialog';
+    parentDialog.renderer = (root) => {
+      if (!root.firstChild) {
+        root.innerHTML = '<div>Parent dialog content</div>';
+
+        childDialog = document.createElement('vaadin-dialog');
+        childDialog.modeless = true;
+        childDialog.draggable = true;
+        childDialog.headerTitle = 'Child Dialog';
+        childDialog.renderer = (childRoot) => {
+          childRoot.innerHTML = '<div>Child dialog content</div>';
+        };
+        root.appendChild(childDialog);
+      }
+    };
+    await nextUpdate(parentDialog);
+
+    childDialog.opened = true;
+    await nextRender();
+
+    parentHeader = parentDialog.$.overlay.headerTitleElement;
+    childHeader = childDialog.$.overlay.headerTitleElement;
+  });
+
+  it('should bring the parent dialog to front over the child when dragging the parent', () => {
+    expect(childDialog.$.overlay._last).to.be.true;
+
+    dispatchMouseEvent(parentHeader, 'mousedown');
+
+    expect(parentDialog.$.overlay._last).to.be.true;
+    expect(childDialog.$.overlay._last).to.be.false;
+  });
+
+  it('should not bring the parent dialog to front when interacting with the child', () => {
+    // Bring the parent to the front first.
+    dispatchMouseEvent(parentHeader, 'mousedown');
+    expect(parentDialog.$.overlay._last).to.be.true;
+
+    // Interacting with the child brings the child to the front, not the parent.
+    dispatchMouseEvent(childHeader, 'mousedown');
+
+    expect(childDialog.$.overlay._last).to.be.true;
+    expect(parentDialog.$.overlay._last).to.be.false;
+  });
+});
+
 describe('nested resizable dialogs', () => {
   let parentDialog, childDialog, childResizer, dx;
 
