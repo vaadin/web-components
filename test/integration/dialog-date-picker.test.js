@@ -1,28 +1,23 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/date-picker/src/vaadin-date-picker.js';
-import '@vaadin/dialog/src/vaadin-dialog.js';
+import '@vaadin/date-picker';
+import '@vaadin/dialog';
 import { open, untilOverlayScrolled } from '@vaadin/date-picker/test/helpers.js';
 
 describe('date-picker in dialog', () => {
   let dialog, datePicker;
 
   beforeEach(async () => {
-    dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
-    dialog.renderer = (root) => {
-      root.innerHTML = '<vaadin-date-picker></vaadin-date-picker>';
-    };
+    dialog = fixtureSync(`
+      <vaadin-dialog>
+        <vaadin-date-picker></vaadin-date-picker>
+      </vaadin-dialog>
+    `);
     dialog.opened = true;
-    await nextFrame();
+    await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
     datePicker = dialog.querySelector('vaadin-date-picker');
-  });
-
-  afterEach(async () => {
-    datePicker.opened = false;
-    dialog.opened = false;
-    await nextFrame();
   });
 
   describe('modal', () => {
@@ -115,6 +110,25 @@ describe('date-picker in dialog', () => {
 
       expect(datePicker.opened).to.be.false;
       expect(dialog.opened).to.be.true;
+    });
+  });
+
+  describe('modeless', () => {
+    beforeEach(async () => {
+      dialog.modeless = true;
+      await nextUpdate(dialog);
+
+      await open(datePicker);
+      await nextRender();
+    });
+
+    it('should keep the date-picker overlay on top of dialog on input mousedown', () => {
+      expect(datePicker.$.overlay._last).to.be.true;
+
+      mousedown(datePicker.inputElement);
+
+      expect(datePicker.$.overlay._last).to.be.true;
+      expect(dialog.$.overlay._last).to.be.false;
     });
   });
 });

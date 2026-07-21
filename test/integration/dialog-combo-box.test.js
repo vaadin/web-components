@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextUpdate, oneEvent, outsideClick } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextRender, nextUpdate, oneEvent, outsideClick } from '@vaadin/testing-helpers';
 import '@vaadin/combo-box';
 import '@vaadin/dialog';
 
@@ -8,11 +8,12 @@ describe('combo-box in dialog', () => {
   let dialog, comboBox;
 
   beforeEach(async () => {
-    dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+    dialog = fixtureSync(`
+      <vaadin-dialog>
+        <vaadin-combo-box></vaadin-combo-box>
+      </vaadin-dialog>
+    `);
     await nextUpdate(dialog);
-    dialog.renderer = (root) => {
-      root.innerHTML = '<vaadin-combo-box></vaadin-combo-box>';
-    };
     dialog.opened = true;
     await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
     comboBox = dialog.querySelector('vaadin-combo-box');
@@ -20,7 +21,7 @@ describe('combo-box in dialog', () => {
     comboBox.inputElement.focus();
   });
 
-  describe('opened', () => {
+  describe('default', () => {
     beforeEach(async () => {
       comboBox.open();
       await nextUpdate(comboBox);
@@ -67,6 +68,25 @@ describe('combo-box in dialog', () => {
       await sendKeys({ press: 'Escape' });
 
       expect(dialog.opened).to.be.false;
+    });
+  });
+
+  describe('modeless', () => {
+    beforeEach(async () => {
+      dialog.modeless = true;
+      await nextUpdate(dialog);
+
+      comboBox.open();
+      await nextRender();
+    });
+
+    it('should keep the combo-box overlay on top of dialog on input mousedown', () => {
+      expect(comboBox.$.overlay._last).to.be.true;
+
+      mousedown(comboBox.inputElement);
+
+      expect(comboBox.$.overlay._last).to.be.true;
+      expect(dialog.$.overlay._last).to.be.false;
     });
   });
 });
