@@ -43,6 +43,27 @@ export const isLastOverlay = (overlay, filter = (_overlay) => true) => {
   return overlay === filteredOverlays.pop();
 };
 
+/**
+ * Returns true if the given event path targets an overlay nested inside the
+ * given overlay, or the position target such a nested overlay is anchored to.
+ * Used to avoid bringing an overlay (e.g. a modeless dialog) in front of its
+ * own open overlays: a combo-box or date-picker anchored to a field inside it,
+ * a popover, or a nested dialog being interacted with. The interaction bubbles
+ * up to the containing overlay, so this tells its handler to leave the stacking
+ * order alone.
+ * @param {HTMLElement} overlay
+ * @param {EventTarget[]} path
+ * @return {boolean}
+ * @protected
+ */
+export const isInteractingWithNestedOverlay = (overlay, path) => {
+  const instances = getAttachedInstances();
+  const above = instances.slice(instances.indexOf(overlay) + 1);
+  return above.some(
+    (el) => overlay._deepContains(el) && (path.includes(el) || (el.positionTarget && path.includes(el.positionTarget))),
+  );
+};
+
 export const OverlayStackMixin = (superClass) =>
   class OverlayStackMixin extends superClass {
     /**

@@ -3,6 +3,7 @@
  * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isInteractingWithNestedOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 
 export const DialogBaseMixin = (superClass) =>
   class DialogBaseMixin extends superClass {
@@ -203,17 +204,13 @@ export const DialogBaseMixin = (superClass) =>
         return;
       }
       const overlay = this._overlayElement;
-      // Only bring the dialog to the front when the interaction targets the dialog
-      // itself, not a nested overlay shown inside it (e.g. a combo-box, date-picker,
-      // or a nested dialog). The mousedown bubbles up from a nested overlay to this
-      // handler, so without this check the dialog would move in front of its own
-      // open overlay. The first attached overlay in the event path is the innermost
-      // one the interaction actually happened in.
-      if (event) {
-        const innermostOverlay = event.composedPath().find((node) => node._isAttached);
-        if (innermostOverlay && innermostOverlay !== overlay) {
-          return;
-        }
+      // Bring the dialog to the front on interaction, unless the interaction targets
+      // a nested overlay shown inside it (e.g. a combo-box, date-picker, popover, or
+      // a nested dialog) or the field such an overlay is anchored to. The mousedown
+      // bubbles up from the nested overlay to this handler, so without this check the
+      // dialog would move in front of its own open overlay.
+      if (event && isInteractingWithNestedOverlay(overlay, event.composedPath())) {
+        return;
       }
       overlay.bringToFront();
     }
