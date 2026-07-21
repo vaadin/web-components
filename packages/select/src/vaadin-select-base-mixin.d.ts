@@ -112,6 +112,8 @@ export declare class SelectBaseMixinClass {
    * While performing the update, it invokes the renderer passed in the `renderer` property.
    *
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   *
+   * @deprecated This method is deprecated and will be removed in Vaadin 26
    */
   requestContentUpdate(): void;
 }
