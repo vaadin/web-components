@@ -4,7 +4,167 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/component-base/src/styles/style-props.js';
-import { css } from 'lit';
+import { css, unsafeCSS } from 'lit';
+import { registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
+
+['--vaadin-overlay-animation-duration', '--vaadin-overlay-animation-delay'].forEach((propertyName) => {
+  registerCSSProperty({
+    name: propertyName,
+    syntax: '<time>',
+    inherits: false,
+    initialValue: '0s',
+  });
+});
+
+registerCSSProperty({
+  name: '--vaadin-overlay-animation-timing-function',
+  syntax: '*',
+  inherits: false,
+  initialValue: 'ease',
+});
+
+registerCSSProperty({
+  name: '--vaadin-overlay-opacity-closed',
+  syntax: '<number>',
+  inherits: false,
+  initialValue: '0',
+});
+
+registerCSSProperty({
+  name: '--vaadin-overlay-opacity-opened',
+  syntax: '<number>',
+  inherits: false,
+  initialValue: '1',
+});
+
+registerCSSProperty({
+  name: '--vaadin-overlay-translate-closed',
+  syntax: '<length>+ | <percentage>+',
+  inherits: false,
+  initialValue: '0',
+});
+
+registerCSSProperty({
+  name: '--vaadin-overlay-translate-opened',
+  syntax: '<length>+ | <percentage>+',
+  inherits: false,
+  initialValue: '0',
+});
+
+registerCSSProperty({
+  name: '--vaadin-overlay-scale-closed',
+  syntax: '<number> | <percentage>',
+  inherits: false,
+  initialValue: '1',
+});
+
+registerCSSProperty({
+  name: '--vaadin-overlay-scale-opened',
+  syntax: '<number> | <percentage>',
+  inherits: false,
+  initialValue: '1',
+});
+
+registerCSSProperty({
+  name: '--vaadin-overlay-transform-closed',
+  syntax: '*',
+  inherits: false,
+});
+
+registerCSSProperty({
+  name: '--vaadin-overlay-transform-opened',
+  syntax: '*',
+  inherits: false,
+});
+
+export const overlayAnimationProperties = `
+  --vaadin-overlay-animation-duration: inherit;
+  --vaadin-overlay-animation-delay: inherit;
+  --vaadin-overlay-animation-timing-function: inherit;
+  --vaadin-overlay-opacity-closed: inherit;
+  --vaadin-overlay-opacity-opened: inherit;
+  --vaadin-overlay-translate-closed: inherit;
+  --vaadin-overlay-translate-opened: inherit;
+  --vaadin-overlay-scale-closed: inherit;
+  --vaadin-overlay-scale-opened: inherit;
+  --vaadin-overlay-transform-closed: inherit;
+  --vaadin-overlay-transform-opened: inherit;
+`;
+
+/* Reusable animation styles for overlay enter and exit */
+export const overlayAnimationStyles = css`
+  :host,
+  [part='overlay'],
+  [part='backdrop'] {
+    ${unsafeCSS(overlayAnimationProperties)}
+  }
+
+  :host(:where([opening], [closing])) {
+    /*
+    The host is inspected for an animation, to determine whether or not an animation is
+    applied for opening or closing. This empty keyframe animation is used for that,
+    while the real visible animation happens on the "overlay" and "backdrop" parts.
+    */
+    animation-name: --no-op;
+    animation-duration: var(--vaadin-overlay-animation-duration);
+    animation-delay: var(--vaadin-overlay-animation-delay);
+  }
+
+  /* Prevent pointer interaction on overlay content while the closing animation runs */
+  :host(:where([closing])) [part='overlay'],
+  :host(:where([closing])) ::slotted(*) {
+    pointer-events: none !important;
+  }
+
+  :host(:where([opening], [closing])) :is([part='overlay'], [part='backdrop']) {
+    animation-name: --fade, --transform;
+    animation-duration: var(--vaadin-overlay-animation-duration);
+    animation-timing-function: var(--vaadin-overlay-animation-timing-function);
+    animation-delay: var(--vaadin-overlay-animation-delay);
+    animation-fill-mode: both;
+
+    @media (prefers-reduced-motion) {
+      animation-name: --fade;
+    }
+  }
+
+  :host(:where([opening], [closing])) [part='backdrop'] {
+    animation-name: --fade;
+    animation-timing-function: linear;
+    --vaadin-overlay-opacity-closed: 0;
+  }
+
+  :host(:where([closing])) :is([part='overlay'], [part='backdrop']) {
+    animation-direction: reverse;
+  }
+
+  @keyframes --no-op {
+  }
+
+  @keyframes --transform {
+    0% {
+      transform: var(--vaadin-overlay-transform-closed);
+      translate: var(--vaadin-overlay-translate-closed);
+      scale: var(--vaadin-overlay-scale-closed);
+    }
+
+    100% {
+      transform: var(--vaadin-overlay-transform-opened);
+      translate: var(--vaadin-overlay-translate-opened);
+      scale: var(--vaadin-overlay-scale-opened);
+    }
+  }
+
+  @keyframes --fade {
+    0% {
+      opacity: var(--vaadin-overlay-opacity-closed);
+    }
+
+    100% {
+      opacity: var(--vaadin-overlay-opacity-opened);
+    }
+  }
+`;
 
 export const overlayStyles = css`
   :host {
@@ -102,4 +262,6 @@ export const overlayStyles = css`
       border: 3px solid !important;
     }
   }
+
+  ${overlayAnimationStyles}
 `;

@@ -1,4 +1,6 @@
 vaadin-notification-card[opening],
 vaadin-notification-card[closing] {
   animation: none !important;
+  --vaadin-overlay-animation-duration: 0s !important;
+  --vaadin-overlay-animation-delay: 0s !important;
 }
