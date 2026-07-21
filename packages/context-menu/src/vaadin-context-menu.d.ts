@@ -293,19 +293,12 @@ export interface ContextMenuEventMap<TItem extends ContextMenuItemData = Context
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * ### Internal components
+ * ### Related components
  *
- * In addition to `<vaadin-context-menu>` itself, the following internal components are themable:
+ * In addition to `<vaadin-context-menu>` itself, the following components are themable:
  *
  * - [`<vaadin-context-menu-item>`](#/elements/vaadin-context-menu-item) - an item element.
  * - [`<vaadin-context-menu-list-box>`](#/elements/vaadin-context-menu-list-box) - a list-box element.
- *
- * The `<vaadin-context-menu-item>` sub-menu elements have the following additional state attributes
- * on top of the built-in `<vaadin-item>` state attributes:
- *
- * Attribute  | Description
- * ---------- |-------------
- * `expanded` | Expanded parent item.
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
