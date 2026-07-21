@@ -20,6 +20,12 @@ describe('pattern fill', () => {
     return chartContainer.querySelector(`.highcharts-legend-item.highcharts-color-${colorIndex}`);
   }
 
+  function getPatternStyleText() {
+    // The bridge appends its rules to a <style> on the element shadow root, not the chart container.
+    const styleEl = chart.shadowRoot.querySelector('style[data-vaadin-pattern-fill]');
+    return styleEl ? styleEl.textContent : '';
+  }
+
   describe('series pattern color', () => {
     beforeEach(async () => {
       chart = fixtureSync('<vaadin-chart type="column"></vaadin-chart>');
@@ -39,6 +45,10 @@ describe('pattern fill', () => {
 
     it('should render a pattern element in the chart defs', () => {
       expect(getDefsPatterns()).to.have.lengthOf(1);
+    });
+
+    it('should inject a pattern CSS rule into the shadow-root style element', () => {
+      expect(getPatternStyleText()).to.contain('vaadin-pattern-');
     });
 
     it('should not set a fill attribute on the points (styled via CSS rule)', () => {
@@ -99,7 +109,7 @@ describe('pattern fill', () => {
     it('should not create bridge defs or an injected stylesheet', () => {
       const ids = getDefsPatterns().map((pattern) => pattern.getAttribute('id'));
       expect(ids.some((id) => id.startsWith('vaadin-pattern-'))).to.be.false;
-      expect(chart.__patternSheet).to.not.exist;
+      expect(getPatternStyleText()).to.not.contain('vaadin-pattern-');
     });
 
     it('should keep the native fill on the points', () => {
@@ -133,14 +143,14 @@ describe('pattern fill', () => {
       expect(getDefsPatterns()).to.have.lengthOf(1);
     });
 
-    it('should use the fill-attribute fallback only on the configured point', () => {
+    it('should use the inline-style fallback only on the configured point', () => {
       const patternId = getDefsPatterns()[0].getAttribute('id');
       const points = getSeriesPoints();
-      // The differing point falls back to the fill attribute since a class-level
+      // The differing point falls back to an inline fill style since a class-level
       // rule cannot distinguish points sharing the same color index.
-      expect(points[1].getAttribute('fill')).to.contain(`#${patternId}`);
-      expect(points[0].getAttribute('fill') || '').to.not.contain('url(');
-      expect(points[2].getAttribute('fill') || '').to.not.contain('url(');
+      expect(points[1].style.fill).to.contain(`#${patternId}`);
+      expect(points[0].style.fill || '').to.not.contain('url(');
+      expect(points[2].style.fill || '').to.not.contain('url(');
     });
 
     it('should render the fallback point with the pattern fill', () => {
@@ -235,7 +245,7 @@ describe('pattern fill', () => {
     });
 
     it('should not inject any pattern CSS rules', () => {
-      expect(chart.__patternSheet).to.not.exist;
+      expect(getPatternStyleText()).to.not.contain('vaadin-pattern-');
     });
 
     it('should keep the theme color on points', () => {
@@ -426,6 +436,102 @@ describe('pattern fill', () => {
       expect(patternsAfter).to.have.lengthOf(1);
       expect(patternsAfter[0].getAttribute('id')).to.equal(idBefore);
       expect(patternsAfter[0]).to.equal(patternBefore);
+    });
+  });
+
+  describe('non-patterned marker outline', () => {
+    // Regression: removing the color-N :not([fill^='url(']) guard must not let the series
+    // color win over the marker outline rule (both are now specificity 0,1,0, so source
+    // order decides and the later .highcharts-markers rule must win).
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart type="scatter"></vaadin-chart>');
+      chart.style.setProperty('--vaadin-charts-background', 'rgb(11, 22, 33)');
+      chart.style.setProperty('--vaadin-charts-color-0', 'rgb(200, 100, 50)');
+      chart.updateConfiguration({
+        series: [{ data: [5, 8, 3, 6] }],
+      });
+      await oneEvent(chart, 'chart-redraw');
+      chartContainer = chart.$.chart;
+    });
+
+    it('should keep the background outline on markers, not the series color', () => {
+      const markers = chartContainer.querySelector('.highcharts-markers');
+      expect(markers).to.exist;
+      const stroke = getComputedStyle(markers).stroke;
+      expect(stroke).to.equal('rgb(11, 22, 33)');
+      expect(stroke).to.not.equal('rgb(200, 100, 50)');
+    });
+  });
+
+  describe('removing all patterns', () => {
+    // Regression: the stale-fill clear pass must run for every point even when no
+    // patterns remain, so a point never keeps an inline url() fill pointing at a
+    // destroyed def.
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart type="column"></vaadin-chart>');
+      chart.style.setProperty('--vaadin-charts-color-0', 'rgb(0, 128, 255)');
+      chart.updateConfiguration({
+        series: [
+          {
+            data: [
+              5,
+              { y: 8, color: { pattern: { path: PATTERN_PATH, width: 10, height: 10, color: '#0000ff' } } },
+              3,
+              6,
+            ],
+          },
+        ],
+      });
+      await oneEvent(chart, 'chart-redraw');
+      chartContainer = chart.$.chart;
+    });
+
+    it('should clear the inline pattern fill and revert to the series color', async () => {
+      expect(getSeriesPoints()[1].style.fill).to.contain('url(');
+
+      // Override the point color with a solid value so no pattern remains (Highcharts
+      // merges point options, so a plain number would keep the old pattern color).
+      const redraw = oneEvent(chart, 'chart-redraw');
+      chart.updateConfiguration({ series: [{ data: [5, { y: 8, color: '#008000' }, 3, 6] }] });
+      await redraw;
+
+      getSeriesPoints().forEach((point) => {
+        expect(point.style.fill || '').to.not.contain('url(');
+        const fill = getComputedStyle(point).fill;
+        expect(fill).to.not.contain('url(');
+        expect(fill).to.equal('rgb(0, 128, 255)');
+      });
+      expect(getDefsPatterns()).to.have.lengthOf(0);
+    });
+  });
+
+  describe('distinct pattern ids', () => {
+    // Regression: two different pattern configs must hash to distinct ids (the old signed
+    // hash could collide once a negative value's hex digit was string-replaced).
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart type="column"></vaadin-chart>');
+      chart.updateConfiguration({
+        series: [
+          {
+            data: [5, 8, 3, 6],
+            color: { pattern: { path: PATTERN_PATH, width: 10, height: 10, color: '#ff0000' } },
+          },
+          {
+            data: [4, 2, 7, 1],
+            color: { pattern: { path: 'M 0 0 L 5 5', width: 8, height: 8, color: '#00ff00' } },
+          },
+        ],
+      });
+      await oneEvent(chart, 'chart-redraw');
+      chartContainer = chart.$.chart;
+    });
+
+    it('should generate two distinct vaadin-pattern ids', () => {
+      const ids = getDefsPatterns()
+        .map((pattern) => pattern.getAttribute('id'))
+        .filter((id) => id.startsWith('vaadin-pattern-'));
+      expect(ids).to.have.lengthOf(2);
+      expect(ids[0]).to.not.equal(ids[1]);
     });
   });
 });

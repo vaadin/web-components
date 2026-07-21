@@ -19,9 +19,9 @@ import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
  * 1. Creates the `<pattern>` def (deduped by content hash) and styles its path, which
  *    the pattern-fill module skips in styled mode.
  * 2. Injects one CSS rule per series color index (`.highcharts-color-N { fill: url }`)
- *    into a constructable stylesheet on the chart's `adoptedStyleSheets`. That single
- *    rule also covers the legend symbol and tooltip swatch, and survives the export copy.
- * 3. Uses a per-point `fill` attribute only when a point's own pattern differs from its
+ *    into a `<style>` element appended to the chart's shadow root. That single rule also
+ *    covers the legend symbol and tooltip swatch, and survives the export copy.
+ * 3. Uses a per-point inline `fill` style only when a point's own pattern differs from its
  *    series pattern (a class-level rule can't target one point in a series).
  *
  * Non-styled mode renders patterns natively, so the bridge does nothing there (the
@@ -39,8 +39,8 @@ export class PatternFillBridge {
   /** @type {Set<string>} */
   #patternIds = new Set();
 
-  /** @type {CSSStyleSheet | undefined} */
-  #patternSheet;
+  /** @type {HTMLStyleElement | undefined} */
+  #patternStyle;
 
   /**
    * @param {object} configuration the Highcharts chart instance
@@ -66,24 +66,33 @@ export class PatternFillBridge {
       return;
     }
 
-    // Bail out when there are no patterns and none were created on a previous render.
     const hasPatterns = chart.series.some(
       (series) =>
         this.#isPatternColor(series.options && series.options.color) ||
         series.points.some((point) => this.#isPatternColor(point.options && point.options.color)),
     );
-    if (!hasPatterns && this.#patternIds.size === 0 && !this.#patternSheet) {
+
+    // Bail out only when there is genuinely nothing to do: no patterns now and none
+    // created on a previous render (nothing stale to clear).
+    if (!hasPatterns && this.#patternIds.size === 0 && !this.#patternStyle) {
       return;
     }
 
     const usedIds = new Set();
-    // colorIndex -> pattern id, for series that carry a single series-wide pattern.
+    // colorIndex -> pattern id, for series that carry a single series-wide pattern. The
+    // injected rule keys on `.highcharts-color-N`: two patterned series that share a
+    // color index (more than 10 patterned series, or an explicit duplicate `colorIndex`)
+    // therefore render the same pattern. This is what also lets one rule cover the legend
+    // symbol and tooltip swatch, so it is an accepted limitation.
     const colorIndexRules = new Map();
 
-    if (hasPatterns) {
-      chart.series.forEach((series) => {
+    // Always visit every point so a stale inline pattern fill is cleared even when all
+    // patterns were removed (its def is about to be destroyed). Pattern defs and rules
+    // are only (re)created when patterns are present.
+    chart.series.forEach((series) => {
+      let seriesPatternId;
+      if (hasPatterns) {
         const seriesColorOptions = series.options && series.options.color;
-        let seriesPatternId;
         if (this.#isPatternColor(seriesColorOptions)) {
           const colorIndex = this.#resolveColorIndex(series.colorIndex);
           seriesPatternId = this.#ensurePatternDef(seriesColorOptions, colorIndex);
@@ -92,18 +101,28 @@ export class PatternFillBridge {
             colorIndexRules.set(colorIndex, seriesPatternId);
           }
         }
+      }
 
-        series.points.forEach((point) => {
-          const id = this.#applyPointPatternFill(point, seriesPatternId);
-          if (id) {
-            usedIds.add(id);
-          }
-        });
+      series.points.forEach((point) => {
+        const id = this.#applyPointPatternFill(point, seriesPatternId);
+        if (id) {
+          usedIds.add(id);
+        }
       });
-    }
+    });
 
     this.#rebuildPatternSheet(colorIndexRules);
     this.#cleanupPatternDefs(usedIds);
+  }
+
+  /**
+   * Removes the injected `<style>` element and all pattern defs created by this bridge.
+   * Called on chart teardown so no orphaned nodes or defs survive a disconnect.
+   */
+  destroy() {
+    this.#patternStyle?.remove();
+    this.#patternStyle = undefined;
+    this.#cleanupPatternDefs(new Set());
   }
 
   /**
@@ -165,10 +184,10 @@ export class PatternFillBridge {
 
   /**
    * When a point's own pattern differs from its series pattern, a class-level rule can't
-   * target it, so set the `fill` attribute directly (the base-style `:not([fill^='url('])`
-   * exclusion keeps the theme rule off it). Otherwise clear any stale attribute so the
-   * injected colorIndex rule applies.
-   * @return {string | undefined} the def id when the point sets its own fill attribute
+   * target it, so set the `fill` inline style directly (an inline style beats the theme
+   * `.highcharts-color-N` fill regardless of specificity). Otherwise clear any stale
+   * inline fill so the injected colorIndex rule (or theme color) applies.
+   * @return {string | undefined} the def id when the point sets its own inline fill
    */
   #applyPointPatternFill(point, seriesPatternId) {
     const graphic = point.graphic && point.graphic.element;
@@ -180,47 +199,45 @@ export class PatternFillBridge {
       if (id && id !== seriesPatternId) {
         if (graphic) {
           const url = this.#configuration.renderer.url || '';
-          graphic.setAttribute('fill', `url(${url}#${id})`);
+          graphic.style.fill = `url(${url}#${id})`;
         }
         return id;
       }
     }
 
-    if (graphic) {
-      const fill = graphic.getAttribute('fill');
-      if (fill && fill.startsWith('url(')) {
-        graphic.removeAttribute('fill');
-      }
+    if (graphic && graphic.style.fill.startsWith('url(')) {
+      graphic.style.removeProperty('fill');
     }
     return undefined;
   }
 
   /**
-   * Rebuilds the adopted stylesheet mapping each patterned color index to its fill.
-   * Rebuilding wholesale via `replaceSync` drops rules for indexes that lost their
-   * pattern. The selector omits `:where()` so its specificity (0,3,0) beats the base
-   * theme rule (0,2,0); its `:not([fill^='url('])` guard spares per-point fills.
+   * Rebuilds the injected `<style>` element mapping each patterned color index to its
+   * fill. Rebuilding wholesale drops rules for indexes that lost their pattern. The
+   * selector omits `:where()` so its specificity (0,3,0) beats the base theme rule
+   * (0,2,0) regardless of source order. A `<style>` DOM child is used (not a
+   * constructable sheet on `adoptedStyleSheets`), because the LumoInjectionMixin replaces
+   * `adoptedStyleSheets` wholesale on theme switch, which would drop a constructable
+   * sheet; a `<style>` child survives.
    */
   #rebuildPatternSheet(colorIndexRules) {
-    if (colorIndexRules.size === 0 && !this.#patternSheet) {
+    if (colorIndexRules.size === 0 && !this.#patternStyle) {
       return;
     }
 
-    if (!this.#patternSheet) {
-      this.#patternSheet = new CSSStyleSheet();
+    if (!this.#patternStyle) {
+      this.#patternStyle = document.createElement('style');
+      this.#patternStyle.setAttribute('data-vaadin-pattern-fill', '');
     }
-    if (!this.#shadowRoot.adoptedStyleSheets.includes(this.#patternSheet)) {
-      this.#shadowRoot.adoptedStyleSheets = [...this.#shadowRoot.adoptedStyleSheets, this.#patternSheet];
+    if (this.#patternStyle.parentNode !== this.#shadowRoot) {
+      this.#shadowRoot.appendChild(this.#patternStyle);
     }
 
     const url = this.#configuration.renderer.url || '';
     const cssText = [...colorIndexRules.entries()]
-      .map(
-        ([colorIndex, id]) =>
-          `[styled-mode] .highcharts-color-${colorIndex}:not([fill^='url(']) { fill: url(${url}#${id}); }`,
-      )
+      .map(([colorIndex, id]) => `[styled-mode] .highcharts-color-${colorIndex} { fill: url(${url}#${id}); }`)
       .join('\n');
-    this.#patternSheet.replaceSync(cssText);
+    this.#patternStyle.textContent = cssText;
   }
 
   /**
@@ -280,6 +297,6 @@ export class PatternFillBridge {
       hash = (hash << 5) - hash + str.charCodeAt(i);
       hash &= hash;
     }
-    return hash.toString(16).replace('-', '1');
+    return (hash >>> 0).toString(16);
   }
 }

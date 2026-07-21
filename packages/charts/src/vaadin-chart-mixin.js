@@ -745,6 +745,8 @@ export const ChartMixin = (superClass) =>
         }
 
         if (this.configuration) {
+          this.__patternFillBridge?.destroy();
+          this.__patternFillBridge = undefined;
           this.configuration.destroy();
           this.configuration = undefined;
 

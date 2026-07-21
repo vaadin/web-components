@@ -356,54 +356,52 @@ export const chartStyles = css`
   /* Series options */
 
   /* Default colors */
-  /* The :not([fill^='url(']) exclusion keeps the theme color off elements with a
-     pattern fill attribute (the pattern bridge's per-point fallback, and user url() fills). */
-  :where([styled-mode]) .highcharts-color-0:not([fill^='url(']) {
+  :where([styled-mode]) .highcharts-color-0 {
     fill: var(--_color-0);
     stroke: var(--_color-0);
   }
 
-  :where([styled-mode]) .highcharts-color-1:not([fill^='url(']) {
+  :where([styled-mode]) .highcharts-color-1 {
     fill: var(--_color-1);
     stroke: var(--_color-1);
   }
 
-  :where([styled-mode]) .highcharts-color-2:not([fill^='url(']) {
+  :where([styled-mode]) .highcharts-color-2 {
     fill: var(--_color-2);
     stroke: var(--_color-2);
   }
 
-  :where([styled-mode]) .highcharts-color-3:not([fill^='url(']) {
+  :where([styled-mode]) .highcharts-color-3 {
     fill: var(--_color-3);
     stroke: var(--_color-3);
   }
 
-  :where([styled-mode]) .highcharts-color-4:not([fill^='url(']) {
+  :where([styled-mode]) .highcharts-color-4 {
     fill: var(--_color-4);
     stroke: var(--_color-4);
   }
 
-  :where([styled-mode]) .highcharts-color-5:not([fill^='url(']) {
+  :where([styled-mode]) .highcharts-color-5 {
     fill: var(--_color-5);
     stroke: var(--_color-5);
   }
 
-  :where([styled-mode]) .highcharts-color-6:not([fill^='url(']) {
+  :where([styled-mode]) .highcharts-color-6 {
     fill: var(--_color-6);
     stroke: var(--_color-6);
   }
 
-  :where([styled-mode]) .highcharts-color-7:not([fill^='url(']) {
+  :where([styled-mode]) .highcharts-color-7 {
     fill: var(--_color-7);
     stroke: var(--_color-7);
   }
 
-  :where([styled-mode]) .highcharts-color-8:not([fill^='url(']) {
+  :where([styled-mode]) .highcharts-color-8 {
     fill: var(--_color-8);
     stroke: var(--_color-8);
   }
 
-  :where([styled-mode]) .highcharts-color-9:not([fill^='url(']) {
+  :where([styled-mode]) .highcharts-color-9 {
     fill: var(--_color-9);
     stroke: var(--_color-9);
   }
@@ -514,9 +512,7 @@ export const chartStyles = css`
     fill: var(--highcharts-neutral-color-80, var(--_data-label));
   }
 
-  /* Needs the same guard: without it the color-N rules above (also connectors carry
-     .highcharts-color-N) outrank this and fill the connector with the series color. */
-  :where([styled-mode]) .highcharts-data-label-connector:not([fill^='url(']) {
+  :where([styled-mode]) .highcharts-data-label-connector {
     fill: none;
   }
 

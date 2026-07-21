@@ -71,6 +71,15 @@ export function prepareExport(chart) {
       });
     }
 
+    // The pattern-fill bridge injects its rules into a top-level `<style>` child instead
+    // of `adoptedStyleSheets`, so copy those too. Use `:scope >` to skip Highcharts' own
+    // nested `<svg><defs><style>`.
+    chart.shadowRoot.querySelectorAll(':scope > style').forEach((styleEl) => {
+      if (styleEl.sheet) {
+        effectiveCss += `${[...styleEl.sheet.cssRules].map((rule) => rule.cssText).join('\n')}\n`;
+      }
+    });
+
     // Strip off host selectors that target individual instances
     effectiveCss = effectiveCss.replace(/:host\(.+?\)/gu, (match) => {
       const selector = match.substr(6, match.length - 7);
