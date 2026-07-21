@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, mousedown, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/date-picker';
 import '@vaadin/dialog';
@@ -18,6 +18,12 @@ describe('date-picker in dialog', () => {
     dialog.opened = true;
     await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
     datePicker = dialog.querySelector('vaadin-date-picker');
+  });
+
+  afterEach(async () => {
+    datePicker.opened = false;
+    dialog.opened = false;
+    await nextFrame();
   });
 
   describe('modal', () => {
