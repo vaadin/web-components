@@ -36,17 +36,11 @@ export class PatternFillBridge {
   /** @type {ShadowRoot} */
   #shadowRoot;
 
-  /** @type {Set<string>} */
+  /** @type {Set<string>} ids of defs this bridge created (also gates one-time styling) */
   #patternIds = new Set();
-
-  /** @type {Set<string>} ids whose def path has already been styled (styling is immutable) */
-  #styledIds = new Set();
 
   /** @type {HTMLStyleElement | undefined} */
   #patternStyle;
-
-  /** @type {string | undefined} last CSS written to the style element, to skip re-parsing */
-  #lastCssText;
 
   /**
    * @param {object} configuration the Highcharts chart instance
@@ -128,9 +122,7 @@ export class PatternFillBridge {
   destroy() {
     this.#patternStyle?.remove();
     this.#patternStyle = undefined;
-    this.#lastCssText = undefined;
     this.#cleanupPatternDefs(new Set());
-    this.#styledIds.clear();
   }
 
   /**
@@ -170,16 +162,16 @@ export class PatternFillBridge {
     const id =
       pattern.id || `vaadin-pattern-${this.#hashPattern({ ...this.#stripInternalKeys(pattern), color: patternColor })}`;
 
-    // No-op if the id already exists.
-    chart.renderer.addPattern({ ...pattern, id });
+    // Create and style the def once. `#patternIds` both tracks the def for
+    // membership-based cleanup and gates this block: while an id is tracked its def
+    // exists, so later renders skip it entirely (addPattern would be a no-op and the
+    // path styling is immutable).
+    if (!this.#patternIds.has(id)) {
+      chart.renderer.addPattern({ ...pattern, id });
+      this.#patternIds.add(id);
 
-    // Track bridge-created ids (incl. explicit `pattern.id`) for membership-based cleanup.
-    this.#patternIds.add(id);
-
-    // Module skips the path's stroke/fill in styled mode; apply inline (presentation
-    // attributes don't resolve CSS variables, inline styles do). The def persists across
-    // redraws, so style it once per id — skip the query and writes on later renders.
-    if (!this.#styledIds.has(id)) {
+      // Module skips the path's stroke/fill in styled mode; apply inline (presentation
+      // attributes don't resolve CSS variables, inline styles do).
       const patternElement = chart.renderer.patternElements && chart.renderer.patternElements[id];
       const pathElement = patternElement && patternElement.element.querySelector('path');
       if (pathElement) {
@@ -188,7 +180,6 @@ export class PatternFillBridge {
         pathElement.style.strokeWidth = String(pathOptions.strokeWidth != null ? pathOptions.strokeWidth : 2);
         pathElement.style.fill = pathOptions.fill || 'none';
       }
-      this.#styledIds.add(id);
     }
 
     return id;
@@ -206,7 +197,7 @@ export class PatternFillBridge {
     const pointColorOptions = point.options && point.options.color;
 
     if (this.#isPatternColor(pointColorOptions)) {
-      const colorIndex = this.#resolveColorIndex(point.colorIndex != null ? point.colorIndex : point.series.colorIndex);
+      const colorIndex = this.#resolveColorIndex(Highcharts.pick(point.colorIndex, point.series.colorIndex));
       const id = this.#ensurePatternDef(pointColorOptions, colorIndex);
       if (id && id !== seriesPatternId) {
         if (graphic) {
@@ -233,7 +224,16 @@ export class PatternFillBridge {
    * sheet; a `<style>` child survives.
    */
   #rebuildPatternSheet(colorIndexRules) {
-    if (colorIndexRules.size === 0 && !this.#patternStyle) {
+    const url = this.#configuration.renderer.url || '';
+    const cssText = [...colorIndexRules.entries()]
+      .map(([colorIndex, id]) => `[styled-mode] .highcharts-color-${colorIndex} { fill: url(${url}#${id}); }`)
+      .join('\n');
+
+    if (!cssText) {
+      // No pattern rules: drop the `<style>` so the cheap bail-out in `apply()` fires
+      // again on later renders once all patterns are gone.
+      this.#patternStyle?.remove();
+      this.#patternStyle = undefined;
       return;
     }
 
@@ -244,16 +244,9 @@ export class PatternFillBridge {
     if (this.#patternStyle.parentNode !== this.#shadowRoot) {
       this.#shadowRoot.appendChild(this.#patternStyle);
     }
-
-    const url = this.#configuration.renderer.url || '';
-    const cssText = [...colorIndexRules.entries()]
-      .map(([colorIndex, id]) => `[styled-mode] .highcharts-color-${colorIndex} { fill: url(${url}#${id}); }`)
-      .join('\n');
-    // Skip the write (and its CSS re-parse) when the rules are unchanged, e.g. on a
-    // hover/zoom/resize redraw where the pattern config is identical to the last render.
-    if (cssText !== this.#lastCssText) {
+    // Only write when changed — a write re-parses the CSS, reading `textContent` does not.
+    if (cssText !== this.#patternStyle.textContent) {
       this.#patternStyle.textContent = cssText;
-      this.#lastCssText = cssText;
     }
   }
 
@@ -281,8 +274,6 @@ export class PatternFillBridge {
         Highcharts.erase(renderer.defIds, id);
       }
       this.#patternIds.delete(id);
-      // Forget the styling flag so a def later recreated with this id is re-styled.
-      this.#styledIds.delete(id);
     });
   }
 

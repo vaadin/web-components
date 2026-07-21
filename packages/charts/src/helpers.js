@@ -63,20 +63,21 @@ export function prepareExport(chart) {
   // the 'after print' event.
   if (!chart.tempBodyStyle) {
     let effectiveCss = '';
+    const cssFromSheet = (sheet) => `${[...sheet.cssRules].map((rule) => rule.cssText).join('\n')}\n`;
 
     // LitElement uses `adoptedStyleSheets` for adding styles
     if (chart.shadowRoot.adoptedStyleSheets) {
       chart.shadowRoot.adoptedStyleSheets.forEach((sheet) => {
-        effectiveCss += `${[...sheet.cssRules].map((rule) => rule.cssText).join('\n')}\n`;
+        effectiveCss += cssFromSheet(sheet);
       });
     }
 
-    // The pattern-fill bridge injects its rules into a top-level `<style>` child instead
-    // of `adoptedStyleSheets`, so copy those too. Use `:scope >` to skip Highcharts' own
-    // nested `<svg><defs><style>`.
+    // Also copy any top-level `<style>` children (e.g. injected by a feature bridge),
+    // which are not in `adoptedStyleSheets`. `:scope >` skips Highcharts' own nested
+    // `<svg><defs><style>`.
     chart.shadowRoot.querySelectorAll(':scope > style').forEach((styleEl) => {
       if (styleEl.sheet) {
-        effectiveCss += `${[...styleEl.sheet.cssRules].map((rule) => rule.cssText).join('\n')}\n`;
+        effectiveCss += cssFromSheet(styleEl.sheet);
       }
     });
 

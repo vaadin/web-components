@@ -26,10 +26,16 @@ describe('pattern fill', () => {
     return styleEl ? styleEl.textContent : '';
   }
 
+  async function createChart(config, type = 'column') {
+    chart = fixtureSync(`<vaadin-chart type="${type}"></vaadin-chart>`);
+    chart.updateConfiguration(config);
+    await oneEvent(chart, 'chart-redraw');
+    chartContainer = chart.$.chart;
+  }
+
   describe('series pattern color', () => {
     beforeEach(async () => {
-      chart = fixtureSync('<vaadin-chart type="column"></vaadin-chart>');
-      chart.updateConfiguration({
+      await createChart({
         series: [
           {
             data: [5, 8, 3, 6],
@@ -39,8 +45,6 @@ describe('pattern fill', () => {
           },
         ],
       });
-      await oneEvent(chart, 'chart-redraw');
-      chartContainer = chart.$.chart;
     });
 
     it('should render a pattern element in the chart defs', () => {
@@ -83,8 +87,7 @@ describe('pattern fill', () => {
     // In non-styled mode Highcharts' own pattern-fill module renders patterns
     // natively; the Vaadin styled-mode bridge must stay out of the way.
     beforeEach(async () => {
-      chart = fixtureSync('<vaadin-chart type="column"></vaadin-chart>');
-      chart.updateConfiguration({
+      await createChart({
         chart: { styledMode: false },
         series: [
           {
@@ -95,8 +98,6 @@ describe('pattern fill', () => {
           },
         ],
       });
-      await oneEvent(chart, 'chart-redraw');
-      chartContainer = chart.$.chart;
     });
 
     it('should render the pattern natively (highcharts-pattern def)', () => {
@@ -122,8 +123,7 @@ describe('pattern fill', () => {
 
   describe('per-point pattern color', () => {
     beforeEach(async () => {
-      chart = fixtureSync('<vaadin-chart type="column"></vaadin-chart>');
-      chart.updateConfiguration({
+      await createChart({
         series: [
           {
             data: [
@@ -135,8 +135,6 @@ describe('pattern fill', () => {
           },
         ],
       });
-      await oneEvent(chart, 'chart-redraw');
-      chartContainer = chart.$.chart;
     });
 
     it('should render a pattern only for the point that defines it', () => {
@@ -196,8 +194,7 @@ describe('pattern fill', () => {
 
   describe('updateConfiguration', () => {
     beforeEach(async () => {
-      chart = fixtureSync('<vaadin-chart type="column"></vaadin-chart>');
-      chart.updateConfiguration({
+      await createChart({
         series: [
           {
             data: [5, 8, 3, 6],
@@ -207,8 +204,6 @@ describe('pattern fill', () => {
           },
         ],
       });
-      await oneEvent(chart, 'chart-redraw');
-      chartContainer = chart.$.chart;
     });
 
     it('should update the pattern without leaking defs', async () => {
@@ -251,12 +246,9 @@ describe('pattern fill', () => {
 
   describe('without patterns', () => {
     beforeEach(async () => {
-      chart = fixtureSync('<vaadin-chart type="column"></vaadin-chart>');
-      chart.updateConfiguration({
+      await createChart({
         series: [{ data: [5, 8, 3, 6] }],
       });
-      await oneEvent(chart, 'chart-redraw');
-      chartContainer = chart.$.chart;
     });
 
     it('should not create any pattern defs', () => {
@@ -276,8 +268,7 @@ describe('pattern fill', () => {
 
   describe('multiple series with different patterns', () => {
     beforeEach(async () => {
-      chart = fixtureSync('<vaadin-chart type="column"></vaadin-chart>');
-      chart.updateConfiguration({
+      await createChart({
         series: [
           {
             data: [5, 8, 3, 6],
@@ -293,8 +284,6 @@ describe('pattern fill', () => {
           },
         ],
       });
-      await oneEvent(chart, 'chart-redraw');
-      chartContainer = chart.$.chart;
     });
 
     it('should render exactly two distinct pattern defs', () => {
@@ -315,8 +304,7 @@ describe('pattern fill', () => {
 
   describe('removing a series', () => {
     beforeEach(async () => {
-      chart = fixtureSync('<vaadin-chart type="column"></vaadin-chart>');
-      chart.updateConfiguration({
+      await createChart({
         series: [
           {
             data: [5, 8, 3, 6],
@@ -332,8 +320,6 @@ describe('pattern fill', () => {
           },
         ],
       });
-      await oneEvent(chart, 'chart-redraw');
-      chartContainer = chart.$.chart;
     });
 
     it('should remove the def of a removed series with an explicit pattern id', async () => {
@@ -351,8 +337,7 @@ describe('pattern fill', () => {
 
   describe('patternIndex', () => {
     beforeEach(async () => {
-      chart = fixtureSync('<vaadin-chart type="column"></vaadin-chart>');
-      chart.updateConfiguration({
+      await createChart({
         series: [
           {
             data: [5, 8, 3, 6],
@@ -360,8 +345,6 @@ describe('pattern fill', () => {
           },
         ],
       });
-      await oneEvent(chart, 'chart-redraw');
-      chartContainer = chart.$.chart;
     });
 
     it('should render a def for a built-in pattern index', () => {
@@ -428,8 +411,7 @@ describe('pattern fill', () => {
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
 
     beforeEach(async () => {
-      chart = fixtureSync('<vaadin-chart type="column"></vaadin-chart>');
-      chart.updateConfiguration({
+      await createChart({
         series: [
           {
             data: [5, 8, 3, 6],
@@ -439,8 +421,6 @@ describe('pattern fill', () => {
           },
         ],
       });
-      await oneEvent(chart, 'chart-redraw');
-      chartContainer = chart.$.chart;
     });
 
     it('should keep the same def across a resize', async () => {
@@ -528,8 +508,7 @@ describe('pattern fill', () => {
     // Regression: two different pattern configs must hash to distinct ids (the old signed
     // hash could collide once a negative value's hex digit was string-replaced).
     beforeEach(async () => {
-      chart = fixtureSync('<vaadin-chart type="column"></vaadin-chart>');
-      chart.updateConfiguration({
+      await createChart({
         series: [
           {
             data: [5, 8, 3, 6],
@@ -541,8 +520,6 @@ describe('pattern fill', () => {
           },
         ],
       });
-      await oneEvent(chart, 'chart-redraw');
-      chartContainer = chart.$.chart;
     });
 
     it('should generate two distinct vaadin-pattern ids', () => {
