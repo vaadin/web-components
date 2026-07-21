@@ -7,7 +7,7 @@ import './vaadin-context-menu-item.js';
 import './vaadin-context-menu-list-box.js';
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
-export type ContextMenuItem<TItemData extends object = object> = {
+export type ContextMenuItemData<TItemData extends object = object> = {
   text?: string;
   /**
    * Text to be set as the menu item's tooltip.
@@ -28,12 +28,17 @@ export type ContextMenuItem<TItemData extends object = object> = {
   keepOpen?: boolean;
   theme?: string[] | string;
   className?: string;
-  children?: Array<ContextMenuItem<TItemData>>;
+  children?: Array<ContextMenuItemData<TItemData>>;
 } & TItemData;
+
+/**
+ * @deprecated Use `ContextMenuItemData` instead.
+ */
+export type ContextMenuItem<TItemData extends object = object> = ContextMenuItemData<TItemData>;
 
 export declare function ItemsMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<ItemsMixinClass> & T;
 
-export declare class ItemsMixinClass<TItem extends ContextMenuItem = ContextMenuItem> {
+export declare class ItemsMixinClass<TItem extends ContextMenuItemData = ContextMenuItemData> {
   /**
    * Defines a (hierarchical) menu structure for the component.
    * If a menu item has a non-empty `children` set, a sub-menu with the child items is opened

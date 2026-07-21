@@ -6,9 +6,9 @@
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { ContextMenuMixinClass } from './vaadin-context-menu-mixin.js';
-import type { ContextMenuItem } from './vaadin-contextmenu-items-mixin.js';
+import type { ContextMenuItem, ContextMenuItemData } from './vaadin-contextmenu-items-mixin.js';
 
-export { ContextMenuItem };
+export { ContextMenuItem, ContextMenuItemData };
 
 export type ContextMenuPosition =
   | 'bottom-end'
@@ -43,7 +43,7 @@ export type ContextMenuOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 /**
  * Fired when an item is selected when the context menu is populated using the `items` API.
  */
-export type ContextMenuItemSelectedEvent<TItem extends ContextMenuItem = ContextMenuItem> = CustomEvent<{
+export type ContextMenuItemSelectedEvent<TItem extends ContextMenuItemData = ContextMenuItemData> = CustomEvent<{
   value: TItem;
 }>;
 
@@ -52,7 +52,7 @@ export type ContextMenuItemSelectedEvent<TItem extends ContextMenuItem = Context
  */
 export type ContextMenuClosedEvent = CustomEvent;
 
-export interface ContextMenuCustomEventMap<TItem extends ContextMenuItem = ContextMenuItem> {
+export interface ContextMenuCustomEventMap<TItem extends ContextMenuItemData = ContextMenuItemData> {
   'opened-changed': ContextMenuOpenedChangedEvent;
 
   'item-selected': ContextMenuItemSelectedEvent<TItem>;
@@ -64,7 +64,7 @@ export interface ContextMenuCustomEventMap<TItem extends ContextMenuItem = Conte
   closed: ContextMenuClosedEvent;
 }
 
-export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenuItem>
+export interface ContextMenuEventMap<TItem extends ContextMenuItemData = ContextMenuItemData>
   extends HTMLElementEventMap, ContextMenuCustomEventMap<TItem> {}
 
 /**
@@ -293,19 +293,12 @@ export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenu
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
- * ### Internal components
+ * ### Related components
  *
- * When using `items` API the following internal components are themable:
+ * In addition to `<vaadin-context-menu>` itself, the following components are themable:
  *
- * - `<vaadin-context-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
- * - `<vaadin-context-menu-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
- *
- * The `<vaadin-context-menu-item>` sub-menu elements have the following additional state attributes
- * on top of the built-in `<vaadin-item>` state attributes:
- *
- * Attribute  | Description
- * ---------- |-------------
- * `expanded` | Expanded parent item.
+ * - [`<vaadin-context-menu-item>`](#/elements/vaadin-context-menu-item) - an item element.
+ * - [`<vaadin-context-menu-list-box>`](#/elements/vaadin-context-menu-list-box) - a list-box element.
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
@@ -313,7 +306,7 @@ export interface ContextMenuEventMap<TItem extends ContextMenuItem = ContextMenu
  * @fires {CustomEvent} close-all-menus - Fired when all menus should close, e.g., after pressing Tab or on submenu close.
  * @fires {CustomEvent} items-outside-click - Fired when a click happens outside any open sub-menus.
  */
-declare class ContextMenu<TItem extends ContextMenuItem = ContextMenuItem> extends HTMLElement {
+declare class ContextMenu<TItem extends ContextMenuItemData = ContextMenuItemData> extends HTMLElement {
   /**
    * Position of the overlay with respect to the target.
    * Supported values: null, `top-start`, `top`, `top-end`,
@@ -335,7 +328,7 @@ declare class ContextMenu<TItem extends ContextMenuItem = ContextMenuItem> exten
   ): void;
 }
 
-interface ContextMenu<TItem extends ContextMenuItem = ContextMenuItem>
+interface ContextMenu<TItem extends ContextMenuItemData = ContextMenuItemData>
   extends ContextMenuMixinClass<TItem>, ElementMixinClass, ThemePropertyMixinClass {}
 
 declare global {
