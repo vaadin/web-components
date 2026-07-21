@@ -209,11 +209,11 @@ describe('selecting items', () => {
       const style = document.createElement('style');
       style.textContent = `
         :host([closing]) {
-          animation: 200ms closing-animation;
+          animation: 200ms closing-animation !important;
         }
 
         :host([closing]) [part='overlay'] {
-          animation: 200ms overlay-closing-animation;
+          animation: 200ms overlay-closing-animation !important;
         }
 
         @keyframes closing-animation {
