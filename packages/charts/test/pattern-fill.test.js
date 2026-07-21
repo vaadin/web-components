@@ -228,6 +228,25 @@ describe('pattern fill', () => {
       expect(getComputedStyle(patterns[0].querySelector('path')).stroke).to.equal('rgb(0, 255, 0)');
       expect(getComputedStyle(getSeriesPoints()[0]).fill).to.contain(patterns[0].getAttribute('id'));
     });
+
+    it('should re-style a def re-added with the same pattern after removal', async () => {
+      // Remove the pattern (destroys the def, forgetting its styled/cssText caches)...
+      chart.updateConfiguration({ series: [{ color: '#123456' }] });
+      await oneEvent(chart, 'chart-redraw');
+      expect(getDefsPatterns()).to.have.lengthOf(0);
+
+      // ...then re-add the identical pattern: the recreated def must be re-styled and
+      // the CSS rule re-written (guards the styled-id / cssText caches).
+      chart.updateConfiguration({
+        series: [{ color: { pattern: { path: PATTERN_PATH, width: 10, height: 10, color: '#ff0000' } } }],
+      });
+      await oneEvent(chart, 'chart-redraw');
+
+      const patterns = getDefsPatterns();
+      expect(patterns).to.have.lengthOf(1);
+      expect(getComputedStyle(patterns[0].querySelector('path')).stroke).to.equal('rgb(255, 0, 0)');
+      expect(getComputedStyle(getSeriesPoints()[0]).fill).to.contain(patterns[0].getAttribute('id'));
+    });
   });
 
   describe('without patterns', () => {
