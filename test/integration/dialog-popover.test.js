@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { Popover } from '@vaadin/popover/src/vaadin-popover.js';
@@ -84,6 +84,56 @@ describe('popover in dialog', () => {
         expect(dialog.opened).to.be.true;
       });
     });
+  });
+});
+
+describe('popover stacking in modeless dialog', () => {
+  let dialog, content;
+
+  beforeEach(async () => {
+    // `no-close-on-outside-click` keeps the popover open on interaction, so the
+    // assertion is purely for testing stacking order
+    dialog = fixtureSync(`
+      <vaadin-dialog modeless header-title="Title" top="50px" left="50px" height="300px">
+        <button id="target">Open popover</button>
+        <vaadin-popover for="target" position="bottom-start" no-close-on-outside-click>
+          <div id="popover-content" style="width: 200px; height: 120px">Popover content</div>
+        </vaadin-popover>
+      </vaadin-dialog>
+    `);
+    dialog.opened = true;
+    await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
+
+    const popover = dialog.querySelector('vaadin-popover');
+    content = dialog.querySelector('#popover-content');
+    popover.opened = true;
+    await oneEvent(popover._overlayElement, 'vaadin-overlay-open');
+  });
+
+  afterEach(async () => {
+    dialog.opened = false;
+    await nextFrame();
+  });
+
+  it('should keep the popover rendered on top of the dialog on dialog header mousedown', () => {
+    const rect = content.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+
+    // Guard: the sampled point must lie over the dialog
+    const dialogRect = dialog.$.overlay.$.overlay.getBoundingClientRect();
+    expect(x).to.be.within(dialogRect.left, dialogRect.right);
+    expect(y).to.be.within(dialogRect.top, dialogRect.bottom);
+
+    // Verify popover is rendered on top of the dialog to begin with.
+    // `elementFromPoint` reflects the actual rendered stacking order.
+    expect(content.contains(document.elementFromPoint(x, y))).to.be.true;
+
+    // Interacting with the dialog's own chrome must not bring the dialog in
+    // front of its own open nested popover.
+    mousedown(dialog.$.overlay.shadowRoot.querySelector('[part="title"]'));
+
+    expect(content.contains(document.elementFromPoint(x, y))).to.be.true;
   });
 });
 
