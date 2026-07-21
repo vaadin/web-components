@@ -14,12 +14,22 @@ const attachedInstances = new Set();
 const getAttachedInstances = () => [...attachedInstances].filter((el) => !el.hasAttribute('closing'));
 
 /**
+ * Returns overlays shown on top of the given overlay.
+ * @private
+ */
+const getInstancesOnTop = (overlay) => {
+  const instances = getAttachedInstances();
+  const index = instances.indexOf(overlay);
+  // The overlay is not in the visible stack (e.g. mid-close), so nothing is "on top" of it.
+  return index === -1 ? [] : instances.slice(index + 1);
+};
+
+/**
  * Returns true if all the instances on top of the overlay are nested overlays.
  * @private
  */
 export const hasOnlyNestedOverlays = (overlay) => {
-  const instances = getAttachedInstances();
-  const next = instances[instances.indexOf(overlay) + 1];
+  const next = getInstancesOnTop(overlay)[0];
   if (!next) {
     return true;
   }
@@ -41,6 +51,30 @@ export const hasOnlyNestedOverlays = (overlay) => {
 export const isLastOverlay = (overlay, filter = (_overlay) => true) => {
   const filteredOverlays = getAttachedInstances().filter(filter);
   return overlay === filteredOverlays.pop();
+};
+
+/**
+ * Returns true if the event originates from one of the following:
+ * - nested overlay inside the given overlay (e.g. nested dialogs),
+ * - owner of a nested overlay (e.g. combo-box inside of dialog),
+ * - position target of a nested overlay (e.g. popover target).
+ *
+ * @param {HTMLElement} overlay
+ * @param {Event} event
+ * @return {boolean}
+ * @protected
+ */
+export const isNestedOverlayEvent = (overlay, event) => {
+  const path = event.composedPath();
+  const instances = getInstancesOnTop(overlay);
+
+  return instances.some(
+    (el) =>
+      (path.includes(el) ||
+        (el.owner && path.includes(el.owner)) ||
+        (el.positionTarget && path.includes(el.positionTarget))) &&
+      overlay._deepContains(el),
+  );
 };
 
 export const OverlayStackMixin = (superClass) =>
@@ -69,10 +103,9 @@ export const OverlayStackMixin = (superClass) =>
      * Brings the overlay as visually the frontmost one.
      */
     bringToFront() {
-      // If the overlay is the last one, or if all other overlays shown above
-      // are nested overlays (e.g. date-picker inside a dialog), do not call
-      // `showPopover()` unnecessarily to avoid scroll position being reset.
-      if (isLastOverlay(this) || hasOnlyNestedOverlays(this)) {
+      // Stacking order follows interaction order only, independent of nesting.
+      // Do not call `showPopover()` if the overlay is already the last one.
+      if (isLastOverlay(this)) {
         return;
       }
 
