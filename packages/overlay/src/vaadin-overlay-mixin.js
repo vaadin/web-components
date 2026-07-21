@@ -359,6 +359,9 @@ export const OverlayMixin = (superClass) =>
 
         this.__scheduledOpen = requestAnimationFrame(() => {
           setTimeout(() => {
+            if (this.autoFocus) {
+              this._focusFirstTabbable();
+            }
             this._trapFocus();
 
             // Dispatch the event on the overlay. Not using composed, as propagating the event through shadow roots
@@ -574,7 +577,7 @@ export const OverlayMixin = (superClass) =>
       }
 
       // Only close modeless overlay on Esc press when it contains focus
-      if (!this._shouldAddGlobalListeners() && !event.composedPath().includes(this._focusTrapRoot)) {
+      if (!this._shouldAddGlobalListeners() && !event.composedPath().includes(this._focusRoot)) {
         return;
       }
 

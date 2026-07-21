@@ -12,6 +12,10 @@
     <vaadin-dialog></vaadin-dialog>
 
     <vaadin-button>Open dialog 1</vaadin-button>
+    <vaadin-button id="open-modeless">Open modeless dialog</vaadin-button>
+    <vaadin-button id="open-modeless-no-focus-trap">Open modeless dialog (no-focus-trap)</vaadin-button>
+    <vaadin-button id="open-modeless-no-auto-focus">Open modeless dialog (no-auto-focus)</vaadin-button>
+    <input placeholder="Page input (for testing Tab and Esc)" />
 
     <script type="module">
       import '@vaadin/dialog';
@@ -105,6 +109,55 @@
       const btnOpen1 = document.querySelector('vaadin-button');
       btnOpen1.addEventListener('click', () => {
         dialog1.opened = true;
+      });
+
+      // Modeless dialogs
+      function createModelessDialog(title, { noFocusTrap = false, noAutoFocus = false } = {}) {
+        const dialog = document.createElement('vaadin-dialog');
+        dialog.headerTitle = title;
+        dialog.modeless = true;
+        dialog.draggable = true;
+        dialog.noFocusTrap = noFocusTrap;
+        dialog.noAutoFocus = noAutoFocus;
+
+        dialog.renderer = (root) => {
+          if (root.firstChild) {
+            return;
+          }
+
+          const input = document.createElement('input');
+          input.placeholder = 'Dialog input';
+
+          const btnClose = document.createElement('vaadin-button');
+          btnClose.textContent = 'Close';
+          btnClose.addEventListener('click', () => {
+            dialog.opened = false;
+          });
+
+          root.append(input, btnClose);
+        };
+
+        document.body.appendChild(dialog);
+        return dialog;
+      }
+
+      const modelessDialog = createModelessDialog('Modeless dialog');
+      document.querySelector('#open-modeless').addEventListener('click', () => {
+        modelessDialog.opened = true;
+      });
+
+      const modelessNoFocusTrapDialog = createModelessDialog('Modeless dialog (no-focus-trap)', {
+        noFocusTrap: true,
+      });
+      document.querySelector('#open-modeless-no-focus-trap').addEventListener('click', () => {
+        modelessNoFocusTrapDialog.opened = true;
+      });
+
+      const modelessNoAutoFocusDialog = createModelessDialog('Modeless dialog (no-auto-focus)', {
+        noAutoFocus: true,
+      });
+      document.querySelector('#open-modeless-no-auto-focus').addEventListener('click', () => {
+        modelessNoAutoFocusDialog.opened = true;
       });
     </script>
   </body>

@@ -33,10 +33,22 @@ export declare class DialogBaseMixinClass {
   modeless: boolean;
 
   /**
-   * Set to true to disable focus trapping.
+   * Set to true to disable moving focus into the dialog on open,
+   * and trapping focus inside it. By default, a modal dialog moves
+   * focus in and traps it, while a modeless dialog only moves focus
+   * in without trapping it.
    * @attr {boolean} no-focus-trap
    */
   noFocusTrap: boolean;
+
+  /**
+   * Set to true to disable moving focus into the dialog when it is
+   * opened in modeless mode. In modal mode, the focus trap still
+   * moves focus into the dialog, so `noFocusTrap` also needs to be
+   * set to disable auto focus.
+   * @attr {boolean} no-auto-focus
+   */
+  noAutoFocus: boolean;
 
   /**
    * The `role` attribute value to be set on the dialog. Defaults to "dialog".

@@ -5,7 +5,13 @@
  */
 import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
-import { getDeepActiveElement, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import {
+  getDeepActiveElement,
+  getTabbableElements,
+  isElementFocused,
+  isElementHidden,
+  isKeyboardActive,
+} from '@vaadin/a11y-base/src/focus-utils.js';
 
 export const OverlayFocusMixin = (superClass) =>
   class OverlayFocusMixin extends superClass {
@@ -13,10 +19,22 @@ export const OverlayFocusMixin = (superClass) =>
       return {
         /**
          * When true, opening the overlay moves focus to the first focusable child,
-         * or to the overlay part with tabindex if there are no focusable children.
+         * or to the overlay part with tabindex if there are no focusable children,
+         * and prevents focus from leaving the overlay with Tab / Shift+Tab.
          * @attr {boolean} focus-trap
          */
         focusTrap: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * When true, opening the overlay moves focus to the first focusable child,
+         * or to the overlay part with tabindex if there are no focusable children.
+         * Unlike `focusTrap`, this does not prevent focus from leaving the overlay.
+         * @attr {boolean} auto-focus
+         */
+        autoFocus: {
           type: Boolean,
           value: false,
         },
@@ -66,11 +84,11 @@ export const OverlayFocusMixin = (superClass) =>
     }
 
     /**
-     * Override to specify another element used as a focus trap root,
+     * Override to specify another element used as a focus root,
      * e.g. the overlay's owner element, rather than overlay part.
      * @protected
      */
-    get _focusTrapRoot() {
+    get _focusRoot() {
       return this.$.overlay;
     }
 
@@ -80,9 +98,7 @@ export const OverlayFocusMixin = (superClass) =>
      * @protected
      */
     _resetFocus() {
-      if (this.focusTrap) {
-        this.__focusTrapController.releaseFocus();
-      }
+      this._releaseFocus();
 
       if (this.restoreFocusOnClose && this._shouldRestoreFocus()) {
         const focusVisible = isKeyboardActive();
@@ -103,13 +119,42 @@ export const OverlayFocusMixin = (superClass) =>
     }
 
     /**
+     * Move focus to the first tabbable child, or to the overlay part with
+     * tabindex if there are no tabbable children. Does nothing if focus is
+     * already inside the overlay, or if the overlay is hidden.
+     *
+     * @protected
+     */
+    _focusFirstTabbable() {
+      if (isElementHidden(this._focusRoot)) {
+        return;
+      }
+
+      const tabbables = getTabbableElements(this._focusRoot);
+      if (tabbables.length > 0 && !tabbables.some(isElementFocused)) {
+        tabbables[0].focus({ focusVisible: isKeyboardActive() });
+      }
+    }
+
+    /**
      * Trap focus within the overlay after opening has completed.
      *
      * @protected
      */
     _trapFocus() {
-      if (this.focusTrap && !isElementHidden(this._focusTrapRoot)) {
-        this.__focusTrapController.trapFocus(this._focusTrapRoot);
+      if (this.focusTrap && !isElementHidden(this._focusRoot)) {
+        this.__focusTrapController.trapFocus(this._focusRoot);
+      }
+    }
+
+    /**
+     * Release the focus trap if it was previously set.
+     *
+     * @protected
+     */
+    _releaseFocus() {
+      if (this.focusTrap) {
+        this.__focusTrapController.releaseFocus();
       }
     }
 
