@@ -27,7 +27,6 @@ import 'highcharts/es-modules/masters/modules/xrange.src.js';
 import 'highcharts/es-modules/masters/modules/bullet.src.js';
 import 'highcharts/es-modules/masters/modules/gantt.src.js';
 import 'highcharts/es-modules/masters/modules/draggable-points.src.js';
-import 'highcharts/es-modules/masters/modules/pattern-fill.src.js';
 import KeyboardNavigation from 'highcharts/es-modules/Accessibility/KeyboardNavigation.js';
 import HTMLUtilities from 'highcharts/es-modules/Accessibility/Utils/HTMLUtilities.js';
 import Pointer from 'highcharts/es-modules/Core/Pointer.js';
@@ -36,6 +35,7 @@ import { get } from '@vaadin/component-base/src/path-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { cleanupExport, deepMerge, inflateFunctions, prepareExport } from './helpers.js';
+import { PatternFillBridge } from './vaadin-chart-pattern-fill.js';
 
 ['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
   /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
@@ -721,268 +721,14 @@ export const ChartMixin = (superClass) =>
         this.configuration = Highcharts.chart(this.$.chart, options);
       }
 
-      // Re-apply on every render; teardown rides on `configuration.destroy()`. The
-      // listener misses the first (synchronous) render, so also apply once now.
-      Highcharts.addEvent(this.configuration, 'render', () => this.__applyPatternFills());
-      this.__applyPatternFills();
+      // Bridge Highcharts pattern-fill into styled mode; re-applied on every render.
+      // Teardown rides on `configuration.destroy()`; the listener misses the first
+      // (synchronous) render, so also apply once now.
+      this.__patternFillBridge = new PatternFillBridge(this.configuration, this.shadowRoot);
+      Highcharts.addEvent(this.configuration, 'render', () => this.__patternFillBridge.apply());
+      this.__patternFillBridge.apply();
 
       this.__forceResize();
-    }
-
-    /**
-     * Renders `color: { pattern }` / `color: { patternIndex }` in styled mode, where
-     * Highcharts' own pattern-fill handler never fires (fills come from CSS classes).
-     * Per render: create the `<pattern>` def (deduped by content hash) and style its path,
-     * then inject one CSS rule per series color index (`.highcharts-color-N { fill: url }`),
-     * which also covers the legend symbol and tooltip swatch and survives the export copy.
-     * A point whose own pattern differs from its series falls back to a `fill` attribute.
-     *
-     * Known limitation: server-side `exportChart` renders a fresh chart this hook never
-     * runs on, so server SVGs lack these patterns (follow-up).
-     * @private
-     */
-    __applyPatternFills() {
-      const chart = this.configuration;
-      if (!chart || !chart.renderer) {
-        return;
-      }
-
-      // Styled mode only: non-styled mode renders patterns natively, and running the
-      // bridge there would strip that fill. `styledMode` is fixed at construction.
-      if (!this.__styledMode) {
-        return;
-      }
-
-      this.__shimPatternIds ||= new Set();
-
-      // Bail out when there are no patterns and none were created on a previous render.
-      const hasPatterns = chart.series.some(
-        (series) =>
-          this.__isPatternColor(series.options && series.options.color) ||
-          series.points.some((point) => this.__isPatternColor(point.options && point.options.color)),
-      );
-      if (!hasPatterns && this.__shimPatternIds.size === 0 && !this.__patternSheet) {
-        return;
-      }
-
-      const usedIds = new Set();
-      // colorIndex -> pattern id, for series that carry a single series-wide pattern.
-      const colorIndexRules = new Map();
-
-      if (hasPatterns) {
-        chart.series.forEach((series) => {
-          const seriesColorOptions = series.options && series.options.color;
-          let seriesPatternId;
-          if (this.__isPatternColor(seriesColorOptions)) {
-            const colorIndex = this.__resolveColorIndex(series.colorIndex);
-            seriesPatternId = this.__ensurePatternDef(seriesColorOptions, colorIndex);
-            if (seriesPatternId) {
-              usedIds.add(seriesPatternId);
-              colorIndexRules.set(colorIndex, seriesPatternId);
-            }
-          }
-
-          series.points.forEach((point) => {
-            const id = this.__applyPointPatternFill(point, seriesPatternId);
-            if (id) {
-              usedIds.add(id);
-            }
-          });
-        });
-      }
-
-      this.__rebuildPatternSheet(colorIndexRules);
-      this.__cleanupPatternDefs(usedIds);
-    }
-
-    /**
-     * Whether a color option is a pattern (`{ pattern }` or `{ patternIndex }`).
-     * @private
-     * @return {boolean}
-     */
-    __isPatternColor(color) {
-      return Highcharts.isObject(color) && (!!color.pattern || typeof color.patternIndex === 'number');
-    }
-
-    /**
-     * Color index, defaulting to `0` so patterns never resolve `var(--_color-undefined)`.
-     * @private
-     * @return {number}
-     */
-    __resolveColorIndex(colorIndex) {
-      return Highcharts.pick(colorIndex, 0);
-    }
-
-    /**
-     * Creates (or reuses) the `<pattern>` def for a pattern color option and applies the
-     * path styling the pattern-fill module skips in styled mode. Returns the def id.
-     * @private
-     * @return {string | undefined}
-     */
-    __ensurePatternDef(colorOptions, colorIndex) {
-      let pattern = colorOptions.pattern;
-      if (typeof colorOptions.patternIndex === 'number') {
-        pattern = Highcharts.patterns && Highcharts.patterns[colorOptions.patternIndex];
-      }
-      if (!pattern) {
-        return undefined;
-      }
-
-      const chart = this.configuration;
-      // Fall back to the series' theme color when the pattern sets no explicit color.
-      const patternColor = pattern.color || `var(--_color-${colorIndex})`;
-
-      const id =
-        pattern.id ||
-        `vaadin-pattern-${this.__hashPattern({ ...this.__stripInternalKeys(pattern), color: patternColor })}`;
-
-      // No-op if the id already exists.
-      chart.renderer.addPattern({ ...pattern, id });
-
-      // Track bridge-created ids (incl. explicit `pattern.id`) for membership-based cleanup.
-      this.__shimPatternIds.add(id);
-
-      // Module skips the path's stroke/fill in styled mode; apply inline (presentation
-      // attributes don't resolve CSS variables, inline styles do).
-      const patternElement = chart.renderer.patternElements && chart.renderer.patternElements[id];
-      const pathElement = patternElement && patternElement.element.querySelector('path');
-      if (pathElement) {
-        const pathOptions = typeof pattern.path === 'object' && pattern.path !== null ? pattern.path : {};
-        pathElement.style.stroke = pathOptions.stroke || patternColor;
-        pathElement.style.strokeWidth = String(pathOptions.strokeWidth != null ? pathOptions.strokeWidth : 2);
-        pathElement.style.fill = pathOptions.fill || 'none';
-      }
-
-      return id;
-    }
-
-    /**
-     * Per-point fallback: when a point's own pattern differs from its series pattern, a
-     * class-level rule can't target it, so set the `fill` attribute directly (the base-style
-     * `:not([fill^='url('])` exclusion keeps the theme rule off it). Otherwise clear any
-     * stale fallback attribute so the injected colorIndex rule applies.
-     * @private
-     * @return {string | undefined} the def id when the point uses the fallback
-     */
-    __applyPointPatternFill(point, seriesPatternId) {
-      const graphic = point.graphic && point.graphic.element;
-      const pointColorOptions = point.options && point.options.color;
-
-      if (this.__isPatternColor(pointColorOptions)) {
-        const colorIndex = this.__resolveColorIndex(
-          point.colorIndex != null ? point.colorIndex : point.series.colorIndex,
-        );
-        const id = this.__ensurePatternDef(pointColorOptions, colorIndex);
-        if (id && id !== seriesPatternId) {
-          if (graphic) {
-            const url = this.configuration.renderer.url || '';
-            graphic.setAttribute('fill', `url(${url}#${id})`);
-          }
-          return id;
-        }
-      }
-
-      // Not a fallback point: drop any stale `url(...)` fill so the colorIndex rule applies.
-      if (graphic) {
-        const fill = graphic.getAttribute('fill');
-        if (fill && fill.startsWith('url(')) {
-          graphic.removeAttribute('fill');
-        }
-      }
-      return undefined;
-    }
-
-    /**
-     * Rebuilds the adopted stylesheet mapping each patterned color index to its fill.
-     * Rebuilding wholesale via `replaceSync` drops rules for indexes that lost their
-     * pattern. The selector omits `:where()` so its specificity (0,3,0) beats the base
-     * theme rule (0,2,0); its `:not([fill^='url('])` guard spares per-point fallback fills.
-     * @private
-     */
-    __rebuildPatternSheet(colorIndexRules) {
-      if (colorIndexRules.size === 0 && !this.__patternSheet) {
-        return;
-      }
-
-      if (!this.__patternSheet) {
-        this.__patternSheet = new CSSStyleSheet();
-      }
-      if (!this.shadowRoot.adoptedStyleSheets.includes(this.__patternSheet)) {
-        this.shadowRoot.adoptedStyleSheets = [...this.shadowRoot.adoptedStyleSheets, this.__patternSheet];
-      }
-
-      const url = this.configuration.renderer.url || '';
-      const cssText = [...colorIndexRules.entries()]
-        .map(
-          ([colorIndex, id]) =>
-            `[styled-mode] .highcharts-color-${colorIndex}:not([fill^='url(']) { fill: url(${url}#${id}); }`,
-        )
-        .join('\n');
-      this.__patternSheet.replaceSync(cssText);
-    }
-
-    /**
-     * Removes `<pattern>` defs created by this shim that are no longer referenced,
-     * to avoid leaking or duplicating defs across updates and redraws.
-     * @private
-     */
-    __cleanupPatternDefs(usedIds) {
-      const shimIds = this.__shimPatternIds;
-      if (!shimIds || shimIds.size === 0) {
-        return;
-      }
-
-      const { renderer } = this.configuration;
-      const patternElements = renderer.patternElements || {};
-      // Remove by membership so Highcharts' own `highcharts-pattern-*` defs are untouched.
-      shimIds.forEach((id) => {
-        if (usedIds.has(id)) {
-          return;
-        }
-        if (patternElements[id]) {
-          patternElements[id].destroy();
-          delete patternElements[id];
-        }
-        if (renderer.defIds) {
-          Highcharts.erase(renderer.defIds, id);
-        }
-        shimIds.delete(id);
-      });
-    }
-
-    /**
-     * Shallow copy without Highcharts' internal `_`-prefixed keys (e.g. `_width`/`_height`),
-     * which it writes onto image patterns between renders. Stripping them keeps the hashed
-     * id stable across redraws so the def isn't needlessly recreated.
-     * @private
-     * @return {Object}
-     */
-    __stripInternalKeys(pattern) {
-      const result = {};
-      Object.keys(pattern).forEach((key) => {
-        if (key[0] !== '_') {
-          result[key] = pattern[key];
-        }
-      });
-      return result;
-    }
-
-    /**
-     * Computes a stable hash from a pattern config, used to build a deduplicated pattern id.
-     * The id only needs to be stable across redraws and unique among this chart's own
-     * patterns (it is always prefixed `vaadin-pattern-`, so it never has to match
-     * Highcharts' native ids), so a single deterministic pass is sufficient.
-     * @private
-     * @return {string}
-     */
-    __hashPattern(pattern) {
-      const str = JSON.stringify(pattern);
-      let hash = 0;
-      for (let i = 0; i < str.length; i++) {
-        hash = (hash << 5) - hash + str.charCodeAt(i);
-        hash &= hash;
-      }
-      return hash.toString(16).replace('-', '1');
     }
 
     /** @protected */
