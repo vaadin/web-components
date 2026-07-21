@@ -712,6 +712,10 @@ export const ChartMixin = (superClass) =>
     /** @private */
     __initChart(options) {
       this.__initEventsListeners(options);
+      // Discard any previous bridge before re-creating the chart. The reset re-init path
+      // reaches here with the old chart still live, so this removes its injected `<style>`
+      // and defs instead of orphaning them.
+      this.__patternFillBridge?.destroy();
       this.__styledMode = options.chart.styledMode;
       if (options.chart.type === 'gantt') {
         this.configuration = Highcharts.ganttChart(this.$.chart, options);
@@ -722,8 +726,8 @@ export const ChartMixin = (superClass) =>
       }
 
       // Bridge Highcharts pattern-fill into styled mode; re-applied on every render.
-      // Teardown rides on `configuration.destroy()`; the listener misses the first
-      // (synchronous) render, so also apply once now.
+      // It is destroyed on re-init (above) and on disconnect; the listener misses the
+      // first (synchronous) render, so also apply once now.
       this.__patternFillBridge = new PatternFillBridge(this.configuration, this.shadowRoot);
       Highcharts.addEvent(this.configuration, 'render', () => this.__patternFillBridge.apply());
       this.__patternFillBridge.apply();
