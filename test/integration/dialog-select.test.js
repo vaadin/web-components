@@ -44,4 +44,11 @@ describe('select in dialog', () => {
     expect(select.$.overlay._last).to.be.true;
     expect(dialog.$.overlay._last).to.be.false;
   });
+
+  it('should keep the select overlay on top of dialog on label mousedown', () => {
+    mousedown(select._labelNode);
+
+    expect(select.$.overlay._last).to.be.true;
+    expect(dialog.$.overlay._last).to.be.false;
+  });
 });

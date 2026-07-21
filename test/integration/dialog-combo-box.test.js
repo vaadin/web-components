@@ -81,9 +81,14 @@ describe('combo-box in dialog', () => {
     });
 
     it('should keep the combo-box overlay on top of dialog on input mousedown', () => {
-      expect(comboBox.$.overlay._last).to.be.true;
-
       mousedown(comboBox.inputElement);
+
+      expect(comboBox.$.overlay._last).to.be.true;
+      expect(dialog.$.overlay._last).to.be.false;
+    });
+
+    it('should keep the combo-box overlay on top of dialog on label mousedown', () => {
+      mousedown(comboBox._labelNode);
 
       expect(comboBox.$.overlay._last).to.be.true;
       expect(dialog.$.overlay._last).to.be.false;

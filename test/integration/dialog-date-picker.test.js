@@ -123,9 +123,14 @@ describe('date-picker in dialog', () => {
     });
 
     it('should keep the date-picker overlay on top of dialog on input mousedown', () => {
-      expect(datePicker.$.overlay._last).to.be.true;
-
       mousedown(datePicker.inputElement);
+
+      expect(datePicker.$.overlay._last).to.be.true;
+      expect(dialog.$.overlay._last).to.be.false;
+    });
+
+    it('should keep the date-picker overlay on top of dialog on label mousedown', () => {
+      mousedown(datePicker._labelNode);
 
       expect(datePicker.$.overlay._last).to.be.true;
       expect(dialog.$.overlay._last).to.be.false;
