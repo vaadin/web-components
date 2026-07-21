@@ -4,6 +4,10 @@ import { fixtureSync, nextUpdate, oneEvent, outsideClick } from '@vaadin/testing
 import '@vaadin/combo-box';
 import '@vaadin/dialog';
 
+function dispatchMouseEvent(target, type) {
+  target.dispatchEvent(new MouseEvent(type, { view: window, bubbles: true, cancelable: true, composed: true }));
+}
+
 describe('combo-box in dialog', () => {
   let dialog, comboBox;
 
@@ -68,5 +72,35 @@ describe('combo-box in dialog', () => {
 
       expect(dialog.opened).to.be.false;
     });
+  });
+});
+
+describe('combo-box in modeless dialog', () => {
+  let dialog, comboBox;
+
+  beforeEach(async () => {
+    dialog = fixtureSync('<vaadin-dialog modeless></vaadin-dialog>');
+    await nextUpdate(dialog);
+    dialog.renderer = (root) => {
+      root.innerHTML = '<vaadin-combo-box></vaadin-combo-box>';
+    };
+    dialog.opened = true;
+    await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
+    comboBox = dialog.querySelector('vaadin-combo-box');
+    comboBox.items = ['foo', 'bar'];
+    comboBox.open();
+    await nextUpdate(comboBox);
+  });
+
+  it('should keep the combo-box overlay on top when interacting with it', () => {
+    // The open combo-box overlay is the front-most overlay in the stack.
+    expect(comboBox.$.overlay._last).to.be.true;
+
+    // A mousedown inside the combo-box overlay bubbles up to the modeless dialog
+    // overlay, but must not bring the dialog in front of its own open overlay.
+    dispatchMouseEvent(comboBox.$.overlay, 'mousedown');
+
+    expect(comboBox.$.overlay._last).to.be.true;
+    expect(dialog.$.overlay._last).to.be.false;
   });
 });

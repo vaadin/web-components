@@ -4,6 +4,10 @@ import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import '@vaadin/select/src/vaadin-select.js';
 
+function dispatchMouseEvent(target, type) {
+  target.dispatchEvent(new MouseEvent(type, { view: window, bubbles: true, cancelable: true, composed: true }));
+}
+
 describe('select in dialog', () => {
   let dialog, select;
 
@@ -39,5 +43,20 @@ describe('select in dialog', () => {
     await sendMouseToElement({ type: 'click', element: title });
 
     expect(select.opened).to.be.false;
+  });
+
+  it('should keep the select overlay on top when interacting with it', async () => {
+    select.opened = true;
+    await nextRender();
+
+    // The open select overlay is the front-most overlay in the stack.
+    expect(select._overlayElement._last).to.be.true;
+
+    // A mousedown inside the select overlay bubbles up to the modeless dialog
+    // overlay, but must not bring the dialog in front of its own open overlay.
+    dispatchMouseEvent(select._overlayElement, 'mousedown');
+
+    expect(select._overlayElement._last).to.be.true;
+    expect(dialog.$.overlay._last).to.be.false;
   });
 });
