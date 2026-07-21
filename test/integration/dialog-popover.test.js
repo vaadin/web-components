@@ -94,7 +94,7 @@ describe('popover stacking in modeless dialog', () => {
     // `no-close-on-outside-click` keeps the popover open on interaction, so the
     // assertion is purely for testing stacking order
     dialog = fixtureSync(`
-      <vaadin-dialog modeless header-title="Title" top="50px" left="50px" height="300px">
+      <vaadin-dialog modeless header-title="Title" top="50px" left="50px" width="400px" height="300px">
         <button id="target">Open popover</button>
         <vaadin-popover for="target" position="bottom-start" no-close-on-outside-click>
           <div id="popover-content" style="width: 200px; height: 120px">Popover content</div>
