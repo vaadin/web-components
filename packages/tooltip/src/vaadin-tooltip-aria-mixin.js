@@ -16,9 +16,6 @@ import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component
  */
 export const TooltipAriaMixin = (superClass) =>
   class TooltipAriaMixinClass extends superClass {
-    // Added references are tracked so that they can be removed exactly as
-    // they were added: by the time `disconnectedCallback` runs, the tooltip
-    // root has already changed, so the references cannot be recomputed.
     #ariaReferences = [];
 
     static get properties() {
@@ -64,13 +61,13 @@ export const TooltipAriaMixin = (superClass) =>
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
-      this.#updateAriaReferences();
+      this.#addAriaReferences();
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      this.#updateAriaReferences();
+      this.#removeAriaReferences();
     }
 
     /** @protected */
@@ -82,32 +79,42 @@ export const TooltipAriaMixin = (superClass) =>
       }
     }
 
-    #updateAriaReferences() {
-      this.#ariaReferences.forEach(({ target, mode, content, byReference }) => {
-        if (byReference) {
-          removeAriaElementReference(target, mode, content);
-        } else {
-          removeValueFromAttribute(target, mode, content.id);
-        }
-      });
-      this.#ariaReferences = [];
-
-      const target = this._effectiveAriaTarget;
+    #addAriaReferences() {
       const mode = this.ariaLinkMode;
-      const content = this.__contentNode;
-      if (!this.isConnected || !content || !target || !mode || mode === 'none') {
+      const targets = this._effectiveAriaTarget;
+      const contentNode = this.__contentNode;
+      if (!contentNode || !targets || !mode || mode === 'none') {
         return;
       }
 
-      [target].flat().forEach((el) => {
-        const byReference = el.getRootNode() !== this.getRootNode();
+      [targets].flat().forEach((target) => {
+        const byReference = target.getRootNode() !== this.getRootNode();
         if (byReference) {
-          addAriaElementReference(el, mode, content);
+          addAriaElementReference(target, mode, contentNode);
         } else {
-          addValueToAttribute(el, mode, content.id);
+          addValueToAttribute(target, mode, contentNode.id);
         }
-        this.#ariaReferences.push({ target: el, mode, content, byReference });
+
+        this.#ariaReferences.push({ target, mode, byReference });
       });
+    }
+
+    #removeAriaReferences() {
+      const contentNode = this.__contentNode;
+
+      this.#ariaReferences.forEach(({ target, mode, byReference }) => {
+        if (byReference) {
+          removeAriaElementReference(target, mode, contentNode);
+        } else {
+          removeValueFromAttribute(target, mode, contentNode.id);
+        }
+      });
+      this.#ariaReferences = [];
+    }
+
+    #updateAriaReferences() {
+      this.#removeAriaReferences();
+      this.#addAriaReferences();
     }
 
     /** @private */
