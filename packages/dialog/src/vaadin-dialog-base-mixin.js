@@ -198,10 +198,11 @@ export const DialogBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _bringOverlayToFront() {
-      if (this.modeless) {
-        this._overlayElement.bringToFront();
+    _bringOverlayToFront(event) {
+      if (!this.modeless) {
+        return;
       }
+      this._overlayElement.bringToFront(event);
     }
 
     /** @private */
