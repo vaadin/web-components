@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './draggable-resizable-styles.js';
 import '../src/vaadin-dialog.js';
@@ -782,28 +782,22 @@ describe('nested draggable dialogs', () => {
   }
 
   beforeEach(async () => {
-    parentDialog = fixtureSync('<vaadin-dialog draggable opened></vaadin-dialog>');
+    parentDialog = fixtureSync(`
+      <vaadin-dialog modeless draggable header-title="Parent">
+        <div>Parent dialog content</div>
+        <vaadin-dialog modeless draggable header-title="Child">
+          <div>Child dialog content</div>
+        </vaadin-dialog>
+      </vaadin-dialog>
+    `);
     await nextRender();
-
-    parentDialog.headerTitle = 'Parent Dialog';
-    parentDialog.renderer = (root) => {
-      if (!root.firstChild) {
-        root.innerHTML = '<div>Parent dialog content</div>';
-
-        childDialog = document.createElement('vaadin-dialog');
-        childDialog.draggable = true;
-        childDialog.headerTitle = 'Child Dialog';
-        childDialog.renderer = (childRoot) => {
-          childRoot.innerHTML = '<div>Child dialog content</div>';
-        };
-        root.appendChild(childDialog);
-      }
-    };
-    await nextUpdate(parentDialog);
+    childDialog = parentDialog.querySelector('vaadin-dialog');
+    parentDialog.opened = true;
+    await oneEvent(parentDialog.$.overlay, 'vaadin-overlay-open');
 
     // Open the child dialog
     childDialog.opened = true;
-    await nextRender();
+    await oneEvent(childDialog.$.overlay, 'vaadin-overlay-open');
 
     parentContainer = parentDialog.$.overlay.$.resizerContainer;
     childContainer = childDialog.$.overlay.$.resizerContainer;
@@ -866,6 +860,27 @@ describe('nested draggable dialogs', () => {
     drag(childHeader, dx, dx);
 
     expect(spy.called).to.be.false;
+  });
+
+  it('should bring the parent dialog to front over the child when dragging the parent', () => {
+    expect(childDialog.$.overlay._last).to.be.true;
+
+    drag(parentHeader, dx, dx);
+
+    expect(parentDialog.$.overlay._last).to.be.true;
+    expect(childDialog.$.overlay._last).to.be.false;
+  });
+
+  it('should not bring the parent dialog to front when interacting with the child', () => {
+    // Bring the parent to the front first.
+    dispatchMouseEvent(parentHeader, 'mousedown');
+    expect(parentDialog.$.overlay._last).to.be.true;
+
+    // Interacting with the child brings the child to the front, not the parent.
+    dispatchMouseEvent(childHeader, 'mousedown');
+
+    expect(childDialog.$.overlay._last).to.be.true;
+    expect(parentDialog.$.overlay._last).to.be.false;
   });
 });
 

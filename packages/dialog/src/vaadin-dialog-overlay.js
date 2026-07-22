@@ -7,6 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { getOverlaysOnTop, isNestedOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dialogOverlayStyles } from './styles/vaadin-dialog-overlay-base-styles.js';
@@ -57,6 +58,29 @@ export class DialogOverlay extends DialogOverlayMixin(
         </section>
       </div>
     `;
+  }
+
+  /**
+   * @param {Event} event
+   * @protected
+   * @override
+   */
+  bringToFront(event) {
+    if (event instanceof Event) {
+      const path = event.composedPath();
+
+      // Do not bring overlay to front if this method is called
+      // on event that originates from a nested dialog content.
+      const isNestedDialogEvent = getOverlaysOnTop(this).some(
+        (overlay) => path.includes(overlay) && isNestedOverlay(this, overlay) && overlay instanceof DialogOverlay,
+      );
+
+      if (isNestedDialogEvent) {
+        return;
+      }
+    }
+
+    super.bringToFront();
   }
 }
 
