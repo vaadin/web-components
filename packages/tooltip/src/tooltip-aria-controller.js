@@ -10,11 +10,20 @@ import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component
  * using the `aria-describedby` or `aria-labelledby` attribute.
  */
 export class TooltipAriaController {
+  #content;
   #mode;
   #targets;
 
-  constructor(host) {
-    this.host = host;
+  /**
+   * Sets the tooltip content element to link the target elements to,
+   * relinking them using the new element's `id`.
+   *
+   * @param {HTMLElement | null | undefined} content
+   */
+  setContent(content) {
+    this.#removeLinks();
+    this.#content = content;
+    this.#addLinks();
   }
 
   /**
@@ -42,22 +51,22 @@ export class TooltipAriaController {
   }
 
   #addLinks() {
-    if (!this.#mode || this.#mode === 'none') {
+    if (!this.#content || !this.#mode || this.#mode === 'none') {
       return;
     }
 
     this.#targets?.forEach((target) => {
-      addValueToAttribute(target, this.#mode, this.host._uniqueId);
+      addValueToAttribute(target, this.#mode, this.#content.id);
     });
   }
 
   #removeLinks() {
-    if (!this.#mode || this.#mode === 'none') {
+    if (!this.#content || !this.#mode || this.#mode === 'none') {
       return;
     }
 
     this.#targets?.forEach((target) => {
-      removeValueFromAttribute(target, this.#mode, this.host._uniqueId);
+      removeValueFromAttribute(target, this.#mode, this.#content.id);
     });
   }
 }

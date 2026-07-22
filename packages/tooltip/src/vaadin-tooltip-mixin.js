@@ -430,7 +430,7 @@ export const TooltipMixin = (superClass) =>
       );
 
       this._stateController = new TooltipStateController(this);
-      this.__ariaController = new TooltipAriaController(this);
+      this.__ariaController = new TooltipAriaController();
     }
 
     /** @protected */
@@ -465,6 +465,7 @@ export const TooltipMixin = (superClass) =>
           element.id = this._uniqueId;
           element.setAttribute('role', 'tooltip');
           this.__contentNode = element;
+          this.__ariaController.setContent(element);
         },
       });
       this.addController(this.__contentController);
