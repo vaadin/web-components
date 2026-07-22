@@ -68,8 +68,8 @@ export class PatternFillBridge {
 
     const hasPatterns = chart.series.some(
       (series) =>
-        this.#isPatternColor(series.options && series.options.color) ||
-        series.points.some((point) => this.#isPatternColor(point.options && point.options.color)),
+        this.#isPatternColor(series.options?.color) ||
+        series.points.some((point) => this.#isPatternColor(point.options?.color)),
     );
 
     // Bail out only when there is genuinely nothing to do: no patterns now and none
@@ -92,7 +92,7 @@ export class PatternFillBridge {
     chart.series.forEach((series) => {
       let seriesPatternId;
       if (hasPatterns) {
-        const seriesColorOptions = series.options && series.options.color;
+        const seriesColorOptions = series.options?.color;
         if (this.#isPatternColor(seriesColorOptions)) {
           const colorIndex = this.#resolveColorIndex(series.colorIndex);
           seriesPatternId = this.#ensurePatternDef(seriesColorOptions, colorIndex);
@@ -149,7 +149,7 @@ export class PatternFillBridge {
   #ensurePatternDef(colorOptions, colorIndex) {
     let pattern = colorOptions.pattern;
     if (typeof colorOptions.patternIndex === 'number') {
-      pattern = Highcharts.patterns && Highcharts.patterns[colorOptions.patternIndex];
+      pattern = Highcharts.patterns?.[colorOptions.patternIndex];
     }
     if (!pattern) {
       return undefined;
@@ -172,8 +172,8 @@ export class PatternFillBridge {
 
       // Module skips the path's stroke/fill in styled mode; apply inline (presentation
       // attributes don't resolve CSS variables, inline styles do).
-      const patternElement = chart.renderer.patternElements && chart.renderer.patternElements[id];
-      const pathElement = patternElement && patternElement.element.querySelector('path');
+      const patternElement = chart.renderer.patternElements?.[id];
+      const pathElement = patternElement?.element.querySelector('path');
       if (pathElement) {
         const pathOptions = typeof pattern.path === 'object' && pattern.path !== null ? pattern.path : {};
         pathElement.style.stroke = pathOptions.stroke || patternColor;
@@ -193,8 +193,8 @@ export class PatternFillBridge {
    * @return {string | undefined} the def id when the point sets its own inline fill
    */
   #applyPointPatternFill(point, seriesPatternId) {
-    const graphic = point.graphic && point.graphic.element;
-    const pointColorOptions = point.options && point.options.color;
+    const graphic = point.graphic?.element;
+    const pointColorOptions = point.options?.color;
 
     if (this.#isPatternColor(pointColorOptions)) {
       const colorIndex = this.#resolveColorIndex(Highcharts.pick(point.colorIndex, point.series.colorIndex));
@@ -208,7 +208,7 @@ export class PatternFillBridge {
       }
     }
 
-    if (graphic && graphic.style.fill.startsWith('url(')) {
+    if (graphic?.style.fill.startsWith('url(')) {
       graphic.style.removeProperty('fill');
     }
     return undefined;
@@ -239,7 +239,7 @@ export class PatternFillBridge {
 
     if (!this.#patternStyle) {
       this.#patternStyle = document.createElement('style');
-      this.#patternStyle.setAttribute('data-vaadin-pattern-fill', '');
+      this.#patternStyle.dataset.vaadinPatternFill = '';
     }
     if (this.#patternStyle.parentNode !== this.#shadowRoot) {
       this.#shadowRoot.appendChild(this.#patternStyle);
@@ -286,7 +286,7 @@ export class PatternFillBridge {
   #stripInternalKeys(pattern) {
     const result = {};
     Object.keys(pattern).forEach((key) => {
-      if (key[0] !== '_') {
+      if (!key.startsWith('_')) {
         result[key] = pattern[key];
       }
     });
