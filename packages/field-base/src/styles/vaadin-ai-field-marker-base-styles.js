@@ -67,7 +67,7 @@ export const aiFieldMarkerStyles = css`
     }
   }
 
-  .ai-working,
+  [ai-working],
   :has(> vaadin-ai-field-marker)::part(input-field),
   :has(> vaadin-ai-field-marker)::part(group-field) {
     mask-image: linear-gradient(
@@ -83,7 +83,7 @@ export const aiFieldMarkerStyles = css`
       --ai-marker-remove-mask 0s 1s forwards;
   }
 
-  .ai-working {
+  [ai-working] {
     animation: --ai-marker-slide 1s ease-in-out infinite;
   }
 

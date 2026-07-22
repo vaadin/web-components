@@ -46,13 +46,40 @@ markerHostStyles.replaceSync(aiFieldMarkerHostStyles);
 const markers = new WeakMap();
 
 /**
+ * Fields currently in the "AI is working" state, mapped to the elements whose
+ * client-side `readonly` state `startWorking()` overrode — the field itself
+ * and, for a `vaadin-custom-field`, its inputs — so `stopWorking()` can
+ * restore it.
+ */
+const workingFields = new WeakMap();
+
+/**
+ * Adopts the marker stylesheets into the field's root node and shadow root,
+ * so the badge, popover and working-shimmer styles apply to the field.
+ *
+ * @param {HTMLElement} field
+ */
+function adoptMarkerStyles(field) {
+  if (!field.getRootNode().adoptedStyleSheets.includes(markerStyles)) {
+    field.getRootNode().adoptedStyleSheets.push(markerStyles);
+  }
+
+  if (!field.shadowRoot.adoptedStyleSheets.includes(markerHostStyles)) {
+    field.shadowRoot.adoptedStyleSheets.push(markerHostStyles);
+  }
+}
+
+/**
  * An element used to annotate a field as AI-filled. It injects itself into the
  * field's shadow root, draws an "AI" badge anchored to the field, and offers a
  * popover that explains the AI fill and lets the user revert the value.
  *
  * Not intended to be used as a standalone tag; use the static
  * `AiFieldMarker.mark()` / `AiFieldMarker.unmark()` API (also reachable from
- * Flow via `customElements.get('vaadin-ai-field-marker')`).
+ * Flow via `customElements.get('vaadin-ai-field-marker')`). While an AI fill
+ * is in progress, `AiFieldMarker.startWorking()` / `AiFieldMarker.stopWorking()`
+ * toggle an "AI is working" shimmer on the field along with a client-side
+ * read-only guard.
  *
  * Custom popover content can be supplied by slotting an element on the FIELD
  * with `slot="ai-field-marker-popover-content"`; the marker forwards it into the
@@ -211,13 +238,7 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
       return null;
     }
 
-    if (!field.getRootNode().adoptedStyleSheets.includes(markerStyles)) {
-      field.getRootNode().adoptedStyleSheets.push(markerStyles);
-    }
-
-    if (!field.shadowRoot.adoptedStyleSheets.includes(markerHostStyles)) {
-      field.shadowRoot.adoptedStyleSheets.push(markerHostStyles);
-    }
+    adoptMarkerStyles(field);
 
     let entry = markers.get(field);
     if (!entry) {
@@ -286,15 +307,6 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
    * @param {HTMLElement} field the field to clear
    */
   static unmark(field) {
-    // TODO workaround to make the CSS animation available
-    if (!field.getRootNode().adoptedStyleSheets.includes(markerStyles)) {
-      field.getRootNode().adoptedStyleSheets.push(markerStyles);
-    }
-
-    if (!field.shadowRoot.adoptedStyleSheets.includes(markerHostStyles)) {
-      field.shadowRoot.adoptedStyleSheets.push(markerHostStyles);
-    }
-
     const entry = field && markers.get(field);
     if (!entry) {
       return;
@@ -313,6 +325,58 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
     marker.remove();
 
     markers.delete(field);
+  }
+
+  /**
+   * Marks the field as being worked on by an AI: shows the "AI is working"
+   * shimmer and makes the field read-only on the client so the user cannot
+   * edit a value the AI is about to overwrite. Only the client-side
+   * `readonly` state is touched; {@link AiFieldMarker.stopWorking} restores
+   * it. Idempotent — repeated calls keep the state captured by the first
+   * call. A no-op when the field has no shadow root.
+   *
+   * @param {HTMLElement} field the field the AI is working on
+   */
+  static startWorking(field) {
+    if (!field || !field.shadowRoot || workingFields.has(field)) {
+      return;
+    }
+
+    adoptMarkerStyles(field);
+
+    // vaadin-custom-field does not propagate `readonly` to its inputs, so
+    // they are locked (and restored) individually alongside the field.
+    const locked = [field, ...(field.localName === 'vaadin-custom-field' ? (field.inputs ?? []) : [])];
+    workingFields.set(
+      field,
+      locked.map((element) => ({ element, readonly: element.readonly })),
+    );
+
+    field.setAttribute('ai-working', '');
+    locked.forEach((element) => {
+      element.readonly = true;
+    });
+  }
+
+  /**
+   * Clears the "AI is working" state set by {@link AiFieldMarker.startWorking}:
+   * removes the shimmer and restores the field's previous client-side
+   * read-only state. A no-op when the field is not in the working state.
+   *
+   * @param {HTMLElement} field the field to release
+   */
+  static stopWorking(field) {
+    const entry = field && workingFields.get(field);
+    if (!entry) {
+      return;
+    }
+
+    field.removeAttribute('ai-working');
+    entry.forEach(({ element, readonly }) => {
+      element.readonly = readonly;
+    });
+
+    workingFields.delete(field);
   }
 }
 

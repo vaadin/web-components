@@ -141,6 +141,27 @@ declare class AiFieldMarker extends HTMLElement {
    * @param field the field to clear
    */
   static unmark(field: HTMLElement): void;
+
+  /**
+   * Marks the field as being worked on by an AI: shows the "AI is working"
+   * shimmer and makes the field read-only on the client so the user cannot
+   * edit a value the AI is about to overwrite. Only the client-side
+   * `readonly` state is touched; `stopWorking` restores it. Idempotent — a
+   * no-op when the field is already in the working state or has no shadow
+   * root.
+   *
+   * @param field the field the AI is working on
+   */
+  static startWorking(field: HTMLElement): void;
+
+  /**
+   * Clears the "AI is working" state set by `startWorking`: removes the
+   * shimmer and restores the field's previous client-side read-only state.
+   * A no-op when the field is not in the working state.
+   *
+   * @param field the field to release
+   */
+  static stopWorking(field: HTMLElement): void;
 }
 
 declare global {
