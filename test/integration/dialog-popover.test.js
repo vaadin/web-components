@@ -96,7 +96,7 @@ describe('popover in dialog', () => {
 });
 
 describe('popover stacking in modeless dialog', () => {
-  let dialog, content;
+  let dialog, popover, content;
 
   beforeEach(async () => {
     dialog = fixtureSync(`
@@ -110,7 +110,7 @@ describe('popover stacking in modeless dialog', () => {
     dialog.opened = true;
     await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
 
-    const popover = dialog.querySelector('vaadin-popover');
+    popover = dialog.querySelector('vaadin-popover');
     content = dialog.querySelector('#popover-content');
     popover.opened = true;
     await oneEvent(popover._overlayElement, 'vaadin-overlay-open');
@@ -136,34 +136,13 @@ describe('popover stacking in modeless dialog', () => {
 
     expect(content.contains(document.elementFromPoint(x, y))).to.be.true;
   });
-});
 
-describe('target-less popover stacking in modeless dialog', () => {
-  let dialog, popover;
+  it('should keep a target-less popover on top of the dialog on dialog header mousedown', async () => {
+    // A popover without a target is centered, so it may not overlap the dialog;
+    // assert stacking order directly instead of using `elementFromPoint`.
+    popover.target = null;
+    await nextUpdate(popover);
 
-  beforeEach(async () => {
-    dialog = fixtureSync(`
-      <vaadin-dialog modeless header-title="Title" top="50px" left="50px">
-        <vaadin-popover no-close-on-outside-click>
-          <div>Popover content</div>
-        </vaadin-popover>
-      </vaadin-dialog>
-    `);
-    dialog.opened = true;
-    await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
-
-    popover = dialog.querySelector('vaadin-popover');
-    popover.opened = true;
-    await oneEvent(popover._overlayElement, 'vaadin-overlay-open');
-  });
-
-  afterEach(async () => {
-    dialog.opened = false;
-    await nextFrame();
-  });
-
-  it('should keep a target-less popover on top of the dialog on dialog header mousedown', () => {
-    // A popover without a target opens centered; it is still shown on top of the dialog.
     expect(popover._overlayElement._last).to.be.true;
 
     mousedown(dialog.$.overlay.shadowRoot.querySelector('[part="title"]'));
