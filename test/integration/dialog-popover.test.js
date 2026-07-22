@@ -1,6 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, mousedown, nextFrame, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import {
+  fixtureSync,
+  middleOfNode,
+  mousedown,
+  nextFrame,
+  nextRender,
+  nextUpdate,
+  oneEvent,
+} from '@vaadin/testing-helpers';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { Popover } from '@vaadin/popover/src/vaadin-popover.js';
@@ -91,8 +99,6 @@ describe('popover stacking in modeless dialog', () => {
   let dialog, content;
 
   beforeEach(async () => {
-    // `no-close-on-outside-click` keeps the popover open on interaction, so the
-    // assertion is purely for testing stacking order
     dialog = fixtureSync(`
       <vaadin-dialog modeless header-title="Title" top="50px" left="50px" width="400px" height="300px">
         <button id="target">Open popover</button>
@@ -116,11 +122,8 @@ describe('popover stacking in modeless dialog', () => {
   });
 
   it('should keep the popover rendered on top of the dialog on dialog header mousedown', () => {
-    const rect = content.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
+    const { x, y } = middleOfNode(content);
 
-    // Guard: the sampled point must lie over the dialog
     const dialogRect = dialog.$.overlay.$.overlay.getBoundingClientRect();
     expect(x).to.be.within(dialogRect.left, dialogRect.right);
     expect(y).to.be.within(dialogRect.top, dialogRect.bottom);
@@ -129,8 +132,6 @@ describe('popover stacking in modeless dialog', () => {
     // `elementFromPoint` reflects the actual rendered stacking order.
     expect(content.contains(document.elementFromPoint(x, y))).to.be.true;
 
-    // Interacting with the dialog's own chrome must not bring the dialog in
-    // front of its own open nested popover.
     mousedown(dialog.$.overlay.shadowRoot.querySelector('[part="title"]'));
 
     expect(content.contains(document.elementFromPoint(x, y))).to.be.true;
