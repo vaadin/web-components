@@ -17,6 +17,7 @@ export declare class OverlayStackMixinClass {
 
   /**
    * Brings the overlay as visually the frontmost one.
+   * Returns true if the stacking order was changed.
    */
-  bringToFront(): void;
+  bringToFront(): boolean;
 }

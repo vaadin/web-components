@@ -71,10 +71,12 @@ export const OverlayStackMixin = (superClass) =>
 
     /**
      * Brings the overlay as visually the frontmost one.
+     *
+     * @return {boolean} true if the stacking order was changed
      */
     bringToFront() {
       if (isLastOverlay(this)) {
-        return;
+        return false;
       }
 
       const overlays = getOverlaysOnTop(this);
@@ -84,7 +86,7 @@ export const OverlayStackMixin = (superClass) =>
       // If the only overlays on top are nested positioned overlays, this overlay is already
       // effectively frontmost. Skip to avoid resetting scroll position via `showPopover()`.
       if (nestedOverlays.length === overlays.length) {
-        return;
+        return false;
       }
 
       [this, ...nestedOverlays].forEach((overlay) => {
@@ -95,6 +97,8 @@ export const OverlayStackMixin = (superClass) =>
         overlay._removeAttachedInstance();
         overlay._appendAttachedInstance();
       });
+
+      return true;
     }
 
     /** @protected */

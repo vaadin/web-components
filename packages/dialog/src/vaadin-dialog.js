@@ -115,6 +115,7 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * @fires {CustomEvent} dragged - Fired when the dialog drag is finished.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the dialog is closed.
+ * @fires {CustomEvent} brought-to-front - Fired when the dialog is brought to the front of the overlay stack.
  *
  * @customElement vaadin-dialog
  * @extends HTMLElement

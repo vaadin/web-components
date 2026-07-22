@@ -59,10 +59,17 @@ export type DialogDraggedEvent = CustomEvent<DialogPosition>;
  */
 export type DialogClosedEvent = CustomEvent;
 
+/**
+ * Fired when the dialog is brought to the front of the overlay stack.
+ */
+export type DialogBroughtToFrontEvent = CustomEvent;
+
 export interface DialogCustomEventMap {
   'opened-changed': DialogOpenedChangedEvent;
 
   closed: DialogClosedEvent;
+
+  'brought-to-front': DialogBroughtToFrontEvent;
 
   'resize-start': DialogResizeStartEvent;
 
@@ -172,6 +179,7 @@ export type DialogEventMap = DialogCustomEventMap & HTMLElementEventMap;
  * @fires {CustomEvent} dragged - Fired when the dialog drag is finished.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the dialog is closed.
+ * @fires {CustomEvent} brought-to-front - Fired when the dialog is brought to the front of the overlay stack.
  */
 declare class Dialog extends DialogSizeMixin(
   DialogDraggableMixin(

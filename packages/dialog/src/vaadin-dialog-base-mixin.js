@@ -197,6 +197,16 @@ export const DialogBaseMixin = (superClass) =>
       }
     }
 
+    /**
+     * Brings the dialog to the front of the overlay stack. Nested overlays
+     * positioned against content inside the dialog (e.g. a popover) are kept
+     * on top of it. If the stacking order is changed as a result, the
+     * `brought-to-front` event is fired.
+     */
+    bringToFront() {
+      this._overlayElement.bringToFront();
+    }
+
     /** @private */
     _bringOverlayToFront(event) {
       if (!this.modeless) {

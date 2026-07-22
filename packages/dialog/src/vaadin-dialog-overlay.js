@@ -59,6 +59,7 @@ export class DialogOverlay extends DialogOverlayMixin(
 
   /**
    * @param {Event} event
+   * @return {boolean} true if the stacking order was changed
    * @protected
    * @override
    */
@@ -73,11 +74,17 @@ export class DialogOverlay extends DialogOverlayMixin(
       );
 
       if (isNestedDialogEvent) {
-        return;
+        return false;
       }
     }
 
-    super.bringToFront();
+    const broughtToFront = super.bringToFront();
+    if (broughtToFront) {
+      // Notify the dialog so that e.g. nested dialogs shown on top of it
+      // can be brought to front again to restore their stacking order.
+      this.owner.dispatchEvent(new CustomEvent('brought-to-front'));
+    }
+    return broughtToFront;
   }
 }
 
