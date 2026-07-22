@@ -4,11 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { PopoverPositionMixin } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from '@vaadin/popover/src/vaadin-popover-target-mixin.js';
+import { TooltipAriaMixin } from './vaadin-tooltip-aria-mixin.js';
 
 const DEFAULT_DELAY = 500;
 
@@ -218,35 +218,9 @@ class TooltipStateController {
  * A mixin providing common tooltip functionality.
  */
 export const TooltipMixin = (superClass) =>
-  class TooltipMixinClass extends PopoverPositionMixin(PopoverTargetMixin(superClass)) {
+  class TooltipMixinClass extends TooltipAriaMixin(PopoverPositionMixin(PopoverTargetMixin(superClass))) {
     static get properties() {
       return {
-        /**
-         * Element used to link with the ARIA attribute controlled by the
-         * `ariaLinkMode` property. Supports array of multiple elements.
-         * When not set, defaults to `target`.
-         */
-        ariaTarget: {
-          type: Object,
-        },
-
-        /**
-         * Controls which ARIA attribute is used to link the target element(s)
-         * with the tooltip content. Supported values:
-         *
-         * - `aria-describedby` - links the tooltip as a description.
-         * - `aria-labelledby` - links the tooltip as an accessible name.
-         * - `none` - does not add any ARIA linking attribute.
-         *
-         * Defaults to `aria-describedby`.
-         *
-         * @attr {string} aria-link-mode
-         */
-        ariaLinkMode: {
-          type: String,
-          value: 'aria-describedby',
-        },
-
         /**
          * Object with properties passed to `generator` and
          * `shouldShow` functions for generating tooltip text
@@ -353,16 +327,6 @@ export const TooltipMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
-        },
-
-        /**
-         * Element used to link with the `aria-describedby`
-         * attribute. When not set, defaults to `target`.
-         * @protected
-         */
-        _effectiveAriaTarget: {
-          type: Object,
-          computed: '__computeAriaTarget(ariaTarget, target)',
         },
 
         /** @private */
@@ -475,16 +439,6 @@ export const TooltipMixin = (superClass) =>
 
       if (props.has('text') || props.has('generator') || props.has('context') || props.has('markdown')) {
         this.__updateContent();
-      }
-
-      const ariaTargetChanged = props.has('_effectiveAriaTarget');
-      const ariaLinkChanged = props.has('ariaLinkMode');
-
-      if (ariaTargetChanged || ariaLinkChanged) {
-        const oldTarget = ariaTargetChanged ? props.get('_effectiveAriaTarget') : this._effectiveAriaTarget;
-        const oldMode = ariaLinkChanged ? props.get('ariaLinkMode') : this.ariaLinkMode;
-
-        this.__updateAriaAttributes(oldTarget, oldMode);
       }
     }
 
@@ -743,32 +697,6 @@ export const TooltipMixin = (superClass) =>
       const newTextContent = this.__contentNode.textContent;
       if (newTextContent !== oldTextContent) {
         this.dispatchEvent(new CustomEvent('content-changed', { detail: { content: newTextContent } }));
-      }
-    }
-
-    /** @private */
-    __computeAriaTarget(ariaTarget, target) {
-      const isElementNode = (el) => el?.nodeType === Node.ELEMENT_NODE;
-      const isAriaTargetSet = Array.isArray(ariaTarget) ? ariaTarget.some(isElementNode) : ariaTarget;
-      return ariaTarget === null || isAriaTargetSet ? ariaTarget : target;
-    }
-
-    /** @private */
-    __updateAriaAttributes(oldTarget, oldMode) {
-      // Remove the previously applied attribute from the previous target(s).
-      if (oldTarget && oldMode && oldMode !== 'none') {
-        [oldTarget].flat().forEach((target) => {
-          removeValueFromAttribute(target, oldMode, this._uniqueId);
-        });
-      }
-
-      // Apply the current attribute to the current target(s).
-      const target = this._effectiveAriaTarget;
-      const mode = this.ariaLinkMode;
-      if (target && mode && mode !== 'none') {
-        [target].flat().forEach((el) => {
-          addValueToAttribute(el, mode, this._uniqueId);
-        });
       }
     }
 
