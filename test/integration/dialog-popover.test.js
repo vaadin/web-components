@@ -138,6 +138,41 @@ describe('popover stacking in modeless dialog', () => {
   });
 });
 
+describe('target-less popover stacking in modeless dialog', () => {
+  let dialog, popover;
+
+  beforeEach(async () => {
+    dialog = fixtureSync(`
+      <vaadin-dialog modeless header-title="Title" top="50px" left="50px">
+        <vaadin-popover no-close-on-outside-click>
+          <div>Popover content</div>
+        </vaadin-popover>
+      </vaadin-dialog>
+    `);
+    dialog.opened = true;
+    await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
+
+    popover = dialog.querySelector('vaadin-popover');
+    popover.opened = true;
+    await oneEvent(popover._overlayElement, 'vaadin-overlay-open');
+  });
+
+  afterEach(async () => {
+    dialog.opened = false;
+    await nextFrame();
+  });
+
+  it('should keep a target-less popover on top of the dialog on dialog header mousedown', () => {
+    // A popover without a target opens centered; it is still shown on top of the dialog.
+    expect(popover._overlayElement._last).to.be.true;
+
+    mousedown(dialog.$.overlay.shadowRoot.querySelector('[part="title"]'));
+
+    expect(popover._overlayElement._last).to.be.true;
+    expect(dialog.$.overlay._last).to.be.false;
+  });
+});
+
 describe('dialog in popover', () => {
   let popover, target, button, dialog;
 

@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isNestedOverlayEvent } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 
 export const DialogBaseMixin = (superClass) =>
   class DialogBaseMixin extends superClass {
@@ -203,13 +202,7 @@ export const DialogBaseMixin = (superClass) =>
       if (!this.modeless) {
         return;
       }
-      const overlay = this._overlayElement;
-      // Bring the dialog to the front on interaction, unless the event comes from the
-      // nested overlay (e.g. combo-box / popover) or the corresponding position target.
-      if (isNestedOverlayEvent(overlay, event)) {
-        return;
-      }
-      overlay.bringToFront();
+      this._overlayElement.bringToFront(event);
     }
 
     /** @private */

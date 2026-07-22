@@ -15,31 +15,25 @@ const getAttachedInstances = () => [...attachedInstances].filter((el) => !el.has
 
 /**
  * Returns overlays shown on top of the given overlay.
- * @private
+ * @param {HTMLElement} overlay
+ * @return {HTMLElement[]}
+ * @protected
  */
-const getInstancesOnTop = (overlay) => {
+export const getOverlaysOnTop = (overlay) => {
   const instances = getAttachedInstances();
   const index = instances.indexOf(overlay);
-  // The overlay is not in the visible stack (e.g. mid-close), so nothing is "on top" of it.
+  // The overlay is not in the visible stack (closing), so nothing is "on top" of it.
   return index === -1 ? [] : instances.slice(index + 1);
 };
 
 /**
- * Returns true if all the instances on top of the overlay are nested overlays.
- * @private
+ * Returns true if the given overlay is a child of a parent overlay.
+ * @param {HTMLElement} parent
+ * @param {HTMLElement} overlay
+ * @return {boolean}
+ * @protected
  */
-export const hasOnlyNestedOverlays = (overlay) => {
-  const next = getInstancesOnTop(overlay)[0];
-  if (!next) {
-    return true;
-  }
-
-  if (!overlay._deepContains(next)) {
-    return false;
-  }
-
-  return hasOnlyNestedOverlays(next);
-};
+export const isNestedOverlay = (parent, overlay) => parent._deepContains(overlay);
 
 /**
  * Returns true if the overlay is the last one in the opened overlays stack.
@@ -51,30 +45,6 @@ export const hasOnlyNestedOverlays = (overlay) => {
 export const isLastOverlay = (overlay, filter = (_overlay) => true) => {
   const filteredOverlays = getAttachedInstances().filter(filter);
   return overlay === filteredOverlays.pop();
-};
-
-/**
- * Returns true if the event originates from one of the following:
- * - nested overlay inside the given overlay (e.g. nested dialogs),
- * - owner of a nested overlay (e.g. combo-box inside of dialog),
- * - position target of a nested overlay (e.g. popover target).
- *
- * @param {HTMLElement} overlay
- * @param {Event} event
- * @return {boolean}
- * @protected
- */
-export const isNestedOverlayEvent = (overlay, event) => {
-  const path = event.composedPath();
-  const instances = getInstancesOnTop(overlay);
-
-  return instances.some(
-    (el) =>
-      (path.includes(el) ||
-        (el.owner && path.includes(el.owner)) ||
-        (el.positionTarget && path.includes(el.positionTarget))) &&
-      overlay._deepContains(el),
-  );
 };
 
 export const OverlayStackMixin = (superClass) =>
@@ -103,21 +73,28 @@ export const OverlayStackMixin = (superClass) =>
      * Brings the overlay as visually the frontmost one.
      */
     bringToFront() {
-      // Stacking order follows interaction order only, independent of nesting.
-      // Do not call `showPopover()` if the overlay is already the last one.
       if (isLastOverlay(this)) {
         return;
       }
 
-      // Update stacking order of native popover-based overlays
-      if (this.matches(':popover-open')) {
-        this.hidePopover();
-        this.showPopover();
+      const overlays = getOverlaysOnTop(this);
+      // Nested positioned overlays anchored must stay visually on top.
+      const nestedOverlays = overlays.filter((el) => el._hasOverlayPositionMixin && isNestedOverlay(this, el));
+
+      // If the only overlays on top are nested positioned overlays, this overlay is already
+      // effectively frontmost. Skip to avoid resetting scroll position via `showPopover()`.
+      if (nestedOverlays.length === overlays.length) {
+        return;
       }
 
-      // Update order of attached instances
-      this._removeAttachedInstance();
-      this._appendAttachedInstance();
+      [this, ...nestedOverlays].forEach((overlay) => {
+        if (overlay.matches(':popover-open')) {
+          overlay.hidePopover();
+          overlay.showPopover();
+        }
+        overlay._removeAttachedInstance();
+        overlay._appendAttachedInstance();
+      });
     }
 
     /** @protected */
