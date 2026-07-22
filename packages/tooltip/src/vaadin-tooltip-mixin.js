@@ -4,11 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { PopoverPositionMixin } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from '@vaadin/popover/src/vaadin-popover-target-mixin.js';
+import { TooltipAriaController } from './tooltip-aria-controller.js';
 
 const DEFAULT_DELAY = 500;
 
@@ -430,6 +430,7 @@ export const TooltipMixin = (superClass) =>
       );
 
       this._stateController = new TooltipStateController(this);
+      this.__ariaController = new TooltipAriaController(this);
     }
 
     /** @protected */
@@ -477,14 +478,12 @@ export const TooltipMixin = (superClass) =>
         this.__updateContent();
       }
 
-      const ariaTargetChanged = props.has('_effectiveAriaTarget');
-      const ariaLinkChanged = props.has('ariaLinkMode');
+      if (props.has('_effectiveAriaTarget')) {
+        this.__ariaController.setTarget(this._effectiveAriaTarget);
+      }
 
-      if (ariaTargetChanged || ariaLinkChanged) {
-        const oldTarget = ariaTargetChanged ? props.get('_effectiveAriaTarget') : this._effectiveAriaTarget;
-        const oldMode = ariaLinkChanged ? props.get('ariaLinkMode') : this.ariaLinkMode;
-
-        this.__updateAriaAttributes(oldTarget, oldMode);
+      if (props.has('ariaLinkMode')) {
+        this.__ariaController.setMode(this.ariaLinkMode);
       }
     }
 
@@ -751,25 +750,6 @@ export const TooltipMixin = (superClass) =>
       const isElementNode = (el) => el?.nodeType === Node.ELEMENT_NODE;
       const isAriaTargetSet = Array.isArray(ariaTarget) ? ariaTarget.some(isElementNode) : ariaTarget;
       return ariaTarget === null || isAriaTargetSet ? ariaTarget : target;
-    }
-
-    /** @private */
-    __updateAriaAttributes(oldTarget, oldMode) {
-      // Remove the previously applied attribute from the previous target(s).
-      if (oldTarget && oldMode && oldMode !== 'none') {
-        [oldTarget].flat().forEach((target) => {
-          removeValueFromAttribute(target, oldMode, this._uniqueId);
-        });
-      }
-
-      // Apply the current attribute to the current target(s).
-      const target = this._effectiveAriaTarget;
-      const mode = this.ariaLinkMode;
-      if (target && mode && mode !== 'none') {
-        [target].flat().forEach((el) => {
-          addValueToAttribute(el, mode, this._uniqueId);
-        });
-      }
     }
 
     /** @private **/
