@@ -61,17 +61,16 @@
       });
 
       document.querySelector('#simulate').addEventListener('click', async () => {
-        fields.forEach((field, index) => {
+        fields.forEach((field) => {
           AiFieldMarker.unmark(field);
           field.value = previousValues.get(field) ?? '';
-          field.readonly = true;
-          field.classList.add('ai-working');
+          AiFieldMarker.startWorking(field);
         });
 
         fields.forEach((field, index) => {
           // Mimic an AI fill, then mark the field.
           window.setTimeout(() => {
-            field.classList.remove('ai-working');
+            AiFieldMarker.stopWorking(field);
 
             AiFieldMarker.mark(field, {
               additionalContent: index === 1 ? 'Extracted from the uploaded document.' : '',
@@ -80,7 +79,8 @@
             // Demonstrate custom popover content: slot a rich element on the FIELD
             // (this is how a server-side framework like Flow would inject content).
             if (index === 2) {
-              const link = field.querySelector('vaadin-ai-field-marker > vaadin-popover > a') ?? document.createElement('a');
+              const link =
+                field.querySelector('vaadin-ai-field-marker > vaadin-popover > a') ?? document.createElement('a');
               link.href = '#';
               link.textContent = 'Why was this filled in?';
               field.querySelector('vaadin-ai-field-marker > vaadin-popover').appendChild(link);
@@ -94,7 +94,6 @@
               } else {
                 field.value = 'AI value';
               }
-              field.readonly = false;
             }, 500);
           }, 5000 * Math.random());
 

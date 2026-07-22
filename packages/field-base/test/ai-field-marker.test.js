@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import '@vaadin/custom-field/src/vaadin-custom-field.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import { AiFieldMarker } from '../src/vaadin-ai-field-marker.js';
 
@@ -297,6 +298,99 @@ describe('ai field marker', () => {
     it('should be a no-op for an unmarked field', () => {
       const other = fixtureSync(`<vaadin-text-field></vaadin-text-field>`);
       expect(() => AiFieldMarker.unmark(other)).to.not.throw();
+    });
+  });
+
+  describe('working state', () => {
+    describe('startWorking', () => {
+      beforeEach(() => {
+        AiFieldMarker.startWorking(field);
+      });
+
+      it('should set the ai-working attribute on the field', () => {
+        expect(field.hasAttribute('ai-working')).to.be.true;
+      });
+
+      it('should make the field read-only on the client', () => {
+        expect(field.readonly).to.be.true;
+      });
+
+      it('should not change the field value', () => {
+        expect(field.value).to.equal('AI value');
+      });
+
+      it('should be idempotent', () => {
+        AiFieldMarker.startWorking(field);
+
+        AiFieldMarker.stopWorking(field);
+        expect(field.hasAttribute('ai-working')).to.be.false;
+        expect(field.readonly).to.be.false;
+      });
+
+      it('should be a no-op for a field without a shadow root', () => {
+        const input = document.createElement('input');
+        expect(() => AiFieldMarker.startWorking(input)).to.not.throw();
+        expect(input.hasAttribute('ai-working')).to.be.false;
+      });
+    });
+
+    describe('stopWorking', () => {
+      beforeEach(() => {
+        AiFieldMarker.startWorking(field);
+        AiFieldMarker.stopWorking(field);
+      });
+
+      it('should remove the ai-working attribute', () => {
+        expect(field.hasAttribute('ai-working')).to.be.false;
+      });
+
+      it('should restore the client read-only state', () => {
+        expect(field.readonly).to.be.false;
+      });
+
+      it('should keep a read-only state that was set before startWorking', () => {
+        field.readonly = true;
+
+        AiFieldMarker.startWorking(field);
+        AiFieldMarker.stopWorking(field);
+
+        expect(field.readonly).to.be.true;
+      });
+
+      it('should be a no-op for a field not in the working state', () => {
+        const other = fixtureSync(`<vaadin-text-field></vaadin-text-field>`);
+        expect(() => AiFieldMarker.stopWorking(other)).to.not.throw();
+      });
+    });
+
+    describe('custom field', () => {
+      let customField;
+      let inputs;
+
+      beforeEach(async () => {
+        // vaadin-custom-field does not propagate readonly to its inputs, so
+        // the working state must lock and restore them individually.
+        customField = fixtureSync(`
+          <vaadin-custom-field label="License plate">
+            <vaadin-text-field></vaadin-text-field>
+            <vaadin-text-field readonly></vaadin-text-field>
+          </vaadin-custom-field>
+        `);
+        await nextRender();
+        inputs = customField.inputs;
+      });
+
+      it('should make the inputs read-only on startWorking', () => {
+        AiFieldMarker.startWorking(customField);
+        expect(inputs.every((input) => input.readonly)).to.be.true;
+      });
+
+      it('should restore each input read-only state on stopWorking', () => {
+        AiFieldMarker.startWorking(customField);
+        AiFieldMarker.stopWorking(customField);
+        expect(inputs[0].readonly).to.be.false;
+        expect(inputs[1].readonly).to.be.true;
+      });
     });
   });
 });

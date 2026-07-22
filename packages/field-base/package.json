@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@vaadin/chai-plugins": "25.3.0-alpha6",
+    "@vaadin/custom-field": "25.3.0-alpha6",
     "@vaadin/input-container": "25.3.0-alpha6",
     "@vaadin/test-runner-commands": "25.3.0-alpha6",
     "@vaadin/testing-helpers": "^2.0.0",
