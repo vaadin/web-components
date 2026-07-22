@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { getActiveTrappingNode } from '@vaadin/a11y-base/src/focus-trap-controller.js';
-import { getDeepActiveElement, getFocusableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement, getTabbableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 /**
  * Controller that routes Tab and Shift+Tab when a non-modal popover is opened.
@@ -158,7 +158,7 @@ export class PopoverFocusController {
    * @private
    */
   __getLastPopoverFocusable() {
-    const lastContent = getFocusableElements(this.host._overlayElement.$.content).pop();
+    const lastContent = getTabbableElements(this.host._overlayElement.$.content).pop();
     return lastContent || this.host;
   }
 
@@ -171,7 +171,7 @@ export class PopoverFocusController {
   __getScopeFocusables() {
     const host = this.host;
     const scope = getActiveTrappingNode(host) || document.body;
-    return getFocusableElements(scope).filter((el) => el === host || !host.contains(el));
+    return getTabbableElements(scope).filter((el) => el === host || !host.contains(el));
   }
 
   /**

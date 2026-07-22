@@ -8,10 +8,10 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { cardStyles } from './styles/vaadin-card-base-styles.js';
+import { TitleController } from './title-controller.js';
 
 /**
  * `<vaadin-card>` is a versatile container for grouping related content and actions.
@@ -86,7 +86,6 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
        */
       cardTitle: {
         type: String,
-        observer: '__cardTitleChanged',
       },
 
       /**
@@ -97,7 +96,6 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
       titleHeadingLevel: {
         type: Number,
         reflectToAttribute: true,
-        observer: '__titleHeadingLevelChanged',
       },
     };
   }
@@ -139,7 +137,24 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
   /** @protected */
   firstUpdated() {
     super.firstUpdated();
+
+    this.__titleController = new TitleController(this);
+    this.addController(this.__titleController);
+
     this._onSlotChange();
+  }
+
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('cardTitle')) {
+      this.__titleController.setTitle(this.cardTitle);
+    }
+
+    if (props.has('titleHeadingLevel')) {
+      this.__titleController.setLevel(this.titleHeadingLevel);
+    }
   }
 
   /** @private */
@@ -158,85 +173,12 @@ class Card extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(Li
     this.toggleAttribute('_hs', this.querySelector(':scope > [slot="header-suffix"]'));
     this.toggleAttribute('_c', this.__hasContent());
     this.toggleAttribute('_f', this.querySelector(':scope > [slot="footer"]'));
-    if (this.__getCustomTitleElement()) {
-      this.__clearStringTitle();
-    }
   }
 
   /** @private */
   __hasContent() {
     const slot = this.shadowRoot.querySelector('slot:not([name])');
     return slot.assignedNodes({ flatten: true }).filter((node) => !isEmptyTextNode(node)).length > 0;
-  }
-
-  /** @private */
-  __clearStringTitle() {
-    const stringTitleElement = this.__getStringTitleElement();
-    if (stringTitleElement) {
-      this.removeChild(stringTitleElement);
-    }
-    const ariaLabelledby = this.getAttribute('aria-labelledby');
-    if (ariaLabelledby?.startsWith('card-title-')) {
-      this.removeAttribute('aria-labelledby');
-    }
-    if (this.cardTitle) {
-      this.cardTitle = '';
-    }
-  }
-
-  /** @private */
-  __getCustomTitleElement() {
-    return Array.from(this.querySelectorAll('[slot="title"]')).find((el) => {
-      return !el.hasAttribute('card-string-title');
-    });
-  }
-
-  /** @private */
-  __cardTitleChanged(title) {
-    if (!title) {
-      this.__clearStringTitle();
-      return;
-    }
-    const customTitleElement = this.__getCustomTitleElement();
-    if (customTitleElement) {
-      this.removeChild(customTitleElement);
-    }
-    let stringTitleElement = this.__getStringTitleElement();
-    if (!stringTitleElement) {
-      stringTitleElement = this.__createStringTitleElement();
-      this.appendChild(stringTitleElement);
-      this.setAttribute('aria-labelledby', stringTitleElement.id);
-    }
-    stringTitleElement.textContent = title;
-  }
-
-  /** @private */
-  __createStringTitleElement() {
-    const stringTitleElement = document.createElement('div');
-    stringTitleElement.setAttribute('slot', 'title');
-    stringTitleElement.setAttribute('role', 'heading');
-    this.__setTitleHeadingLevel(stringTitleElement, this.titleHeadingLevel);
-    stringTitleElement.setAttribute('card-string-title', '');
-    stringTitleElement.id = `card-title-${generateUniqueId()}`;
-    return stringTitleElement;
-  }
-
-  /** @private */
-  __titleHeadingLevelChanged(titleHeadingLevel) {
-    const stringTitleElement = this.__getStringTitleElement();
-    if (stringTitleElement) {
-      this.__setTitleHeadingLevel(stringTitleElement, titleHeadingLevel);
-    }
-  }
-
-  /** @private */
-  __setTitleHeadingLevel(stringTitleElement, titleHeadingLevel) {
-    stringTitleElement.setAttribute('aria-level', titleHeadingLevel || 2);
-  }
-
-  /** @private */
-  __getStringTitleElement() {
-    return this.querySelector('[slot="title"][card-string-title]');
   }
 
   /**

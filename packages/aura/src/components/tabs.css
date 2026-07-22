@@ -8,7 +8,6 @@
 }
 
 vaadin-tabs {
-  contain: paint;
   --aura-surface-level: -0.5;
   --aura-surface-opacity: 0.3;
   background: var(--vaadin-tabs-background, var(--vaadin-background-container));
@@ -17,8 +16,11 @@ vaadin-tabs {
 vaadin-tabs::part(tabs) {
   padding: 3px;
   margin: -3px;
-  --_mask-fade-start: 0.5lh;
-  --_mask-fade-size: 2lh;
+}
+
+vaadin-tabs[overflow]::part(tabs) {
+  --_mask-fade-start: var(--vaadin-tabs-padding);
+  --_mask-fade-size: 20px;
   mask-image: linear-gradient(
     var(--_mask-dir, to right),
     var(--_mask-start, black) var(--_mask-fade-start),

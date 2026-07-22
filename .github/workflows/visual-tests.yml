@@ -13,16 +13,14 @@ env:
 
 jobs:
   base:
-    environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Base
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'vaadin'
     container:
-      image: mcr.microsoft.com/playwright:v1.60.0-noble
+      image: mcr.microsoft.com/playwright:v1.61.0-noble
       options: --ipc=host
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
@@ -42,12 +40,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 20
-          retry_wait_seconds: 60
-          max_attempts: 3
-          command: yarn test --config web-test-runner-base.config.js
+        run: yarn test --config web-test-runner-base.config.js
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
@@ -57,16 +50,14 @@ jobs:
             packages/*/test/visual/base/screenshots/*/failed/*.png
 
   lumo:
-    environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Lumo
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'vaadin'
     container:
-      image: mcr.microsoft.com/playwright:v1.60.0-noble
+      image: mcr.microsoft.com/playwright:v1.61.0-noble
       options: --ipc=host
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
@@ -86,12 +77,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 20
-          retry_wait_seconds: 60
-          max_attempts: 3
-          command: yarn test --config web-test-runner-lumo.config.js
+        run: yarn test --config web-test-runner-lumo.config.js
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}
@@ -102,16 +88,14 @@ jobs:
             packages/vaadin-lumo-styles/test/visual/screenshots/failed/*.png
 
   aura:
-    environment: ${{ github.event.pull_request.head.repo.fork && 'PR-validation' || '' }}
     name: Aura
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'vaadin'
     container:
-      image: mcr.microsoft.com/playwright:v1.60.0-noble
+      image: mcr.microsoft.com/playwright:v1.61.0-noble
       options: --ipc=host
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: '0'
           ref: ${{ env._HEAD_SHA }}
@@ -131,20 +115,10 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Visual tests (default)
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 20
-          retry_wait_seconds: 60
-          max_attempts: 3
-          command: yarn test --config web-test-runner-aura.config.js
+        run: yarn test --config web-test-runner-aura.config.js
 
       - name: Visual tests (dark)
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 20
-          retry_wait_seconds: 60
-          max_attempts: 3
-          command: yarn test --config web-test-runner-aura.config.js --dark
+        run: yarn test --config web-test-runner-aura.config.js --dark
 
       - uses: actions/upload-artifact@v6
         if: ${{ failure() }}

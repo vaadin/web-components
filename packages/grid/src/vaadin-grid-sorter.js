@@ -67,7 +67,7 @@ class GridSorter extends GridSorterMixin(ThemableMixin(DirMixin(PolylitMixin(Lum
   render() {
     return html`
       <div part="content">
-        <slot></slot>
+        <slot @slotchange="${this.__updateAccessibleName}"></slot>
       </div>
       <div part="indicators">
         <span part="order">${this._getDisplayOrder(this._order)}</span>

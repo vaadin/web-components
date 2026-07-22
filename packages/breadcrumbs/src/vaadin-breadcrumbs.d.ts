@@ -3,10 +3,10 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import type { KeyboardDirectionMixinClass } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
+import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
-import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 export interface BreadcrumbsI18n {
   moreItems?: string;
@@ -57,9 +57,25 @@ export interface BreadcrumbsI18n {
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
-declare class Breadcrumbs extends ElementMixin(HTMLElement) {}
-
-interface Breadcrumbs extends I18nMixinClass<BreadcrumbsI18n>, KeyboardDirectionMixinClass, ResizeMixinClass {}
+declare class Breadcrumbs extends ResizeMixin(
+  KeyboardDirectionMixin(ElementMixin(I18nMixin<typeof HTMLElement, BreadcrumbsI18n>(HTMLElement))),
+) {
+  /**
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
+   *
+   * The object has the following JSON structure and default values:
+   *
+   * ```
+   * {
+   *   // Accessible label of the overflow button revealing collapsed items.
+   *   moreItems: 'More items'
+   * }
+   * ```
+   */
+  i18n: BreadcrumbsI18n;
+}
 
 declare global {
   interface HTMLElementTagNameMap {

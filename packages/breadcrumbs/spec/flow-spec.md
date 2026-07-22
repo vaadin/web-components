@@ -4,11 +4,11 @@
 
 ## Key Design Decisions
 
-1. **`Mode` enum drives ownership.** Following flow-api.md §1 and §9, `Breadcrumbs.Mode` is a public nested enum with values `ROUTER` (default) and `MANUAL`. The mode is set at construction (`new Breadcrumbs()` / `new Breadcrumbs(Mode)`) and can be switched at runtime via `setMode(Mode)`. `add`/`remove`/`removeAll` throw `IllegalStateException` while in `Mode.ROUTER`. `setMode(Mode)` is symmetric: both transitions clear the current children and install the new mode's wiring — `ROUTER → MANUAL` drops router-derived items and unregisters the navigation listener, `MANUAL → ROUTER` drops manually-added items and starts the router listener plus an initial rebuild. See "Mode switching" below for the full contract.
+1. **`Mode` enum drives ownership.** `Breadcrumbs.Mode` is a public nested enum (`ROUTER` default, `MANUAL`); flow-api.md §9 defines the developer contract — construction, `setMode`, and the `IllegalStateException` guard on `add`/`remove`/`removeAll` in `Mode.ROUTER`. This spec covers enforcement: `setMode(Mode)` clears the current children and re-wires the mode (see "Mode switching"); the guard bypasses internal updates via `internalChildUpdate` (see KDD §3).
 
 2. **`HasComponentsOfType<BreadcrumbsItem>` for child management.** Per flow-api.md §1 "Why this shape". The Flow core interface extends `HasElement, HasEnabled` and supplies the full child-management surface as default methods (see the class skeleton in "Component Classes"), all of which must be intercepted by the `Mode.ROUTER` guard (see KDD §1). `HasEnabled` is inherited transitively — it does not need to appear in `Breadcrumbs`'s `implements` list.
 
-3. **Router integration via `AfterNavigationListener`.** For `Mode.ROUTER`, the component registers `UI.addAfterNavigationListener(...)` in its attach handler and unregisters in detach. The listener resolves the route hierarchy via `RouteConfiguration#getRouteHierarchy` and calls `updateChildrenInternal(List<BreadcrumbsItem>)` to replace the trail. `updateChildrenInternal` sets an internal `boolean routerUpdateInProgress` flag, routes the update through the normal component API (`removeAll()` + `add(...)`), then clears the flag; the `Mode.ROUTER` guard on the public methods skips the throw when the flag is set.
+3. **Router integration via `AfterNavigationListener`.** For `Mode.ROUTER`, the component registers `UI.addAfterNavigationListener(...)` in its attach handler and unregisters in detach. The listener resolves the route hierarchy via `RouteConfiguration#getRouteHierarchy` and calls `updateChildrenInternal(List<BreadcrumbsItem>)` to replace the trail. `updateChildrenInternal` sets an internal `boolean internalChildUpdate` flag, routes the update through the normal component API (`removeAll()` + `add(...)`), then clears the flag; the `Mode.ROUTER` guard on the public methods skips the throw when the flag is set.
 
 4. **`@RouteParent` comes from Flow core.** Per flow-api.md §10. The annotation declares a route's logical parent (static `value()` or dynamic `resolver()`); the breadcrumb module only consumes it. See "Reuse and Proposed Adjustments" for the Flow core dependency.
 
@@ -54,24 +54,20 @@ flow-components/
     │           ├── BreadcrumbsTest.java
     │           ├── BreadcrumbsModeTest.java
     │           ├── BreadcrumbsItemTest.java
-    │           ├── BreadcrumbsVariantTest.java
+    │           ├── BreadcrumbsItemSignalTest.java
     │           ├── BreadcrumbsSerializableTest.java
     │           ├── BreadcrumbsI18nTest.java
     │           └── FeatureFlagTest.java
     ├── vaadin-breadcrumbs-flow-integration-tests/
     │   ├── pom.xml
+    │   ├── vite.config.ts                              # copied from an existing IT module
     │   └── src/
+    │       ├── main/java/com/vaadin/flow/component/app/
+    │       │   └── TestAppShell.java                   # AppShellConfigurator (Lumo), copied from an existing IT module
     │       ├── main/java/com/vaadin/flow/component/breadcrumbs/tests/
-    │       │   ├── ManualBreadcrumbsPage.java     # @Route for Mode.MANUAL
-    │       │   ├── RouterBreadcrumbsPage.java     # @Route for Mode.ROUTER
-    │       │   ├── RouteParentPage.java               # @Route with @RouteParent
-    │       │   ├── DynamicTitlePage.java              # HasDynamicTitle on current view
-    │       │   └── IconBreadcrumbsPage.java       # prefix icons
+    │       │   └── ManualBreadcrumbsPage.java     # @Route for Mode.MANUAL
     │       └── test/java/com/vaadin/flow/component/breadcrumbs/tests/
-    │           ├── ManualBreadcrumbsIT.java
-    │           ├── RouterBreadcrumbsIT.java
-    │           ├── RouteParentIT.java
-    │           └── IconBreadcrumbsIT.java
+    │           └── ManualBreadcrumbsIT.java
     └── vaadin-breadcrumbs-testbench/
         ├── pom.xml
         └── src/main/java/com/vaadin/flow/component/breadcrumbs/testbench/
@@ -81,7 +77,7 @@ flow-components/
 
 Java package: `com.vaadin.flow.component.breadcrumbs`.
 
-Integration-tests module must include `src/main/resources/vaadin-featureflags.properties` enabling `com.vaadin.experimental.breadcrumbsComponent=true`, mirroring `vaadin-master-detail-layout-flow-integration-tests`.
+Integration-tests module must include `src/main/resources/vaadin-featureflags.properties` enabling `com.vaadin.experimental.breadcrumbsComponent=true`, mirroring `vaadin-master-detail-layout-flow-integration-tests`. Its `vite.config.ts` (frontend build config) and `TestAppShell` (an `AppShellConfigurator` applying the Lumo stylesheet) are copied unchanged from an existing integration-tests module.
 
 ---
 
@@ -118,7 +114,7 @@ public class Breadcrumbs extends Component
 
     // Items — all inherited from HasComponentsOfType<BreadcrumbsItem>, each
     // overridden to throw IllegalStateException if Mode.ROUTER (unless the
-    // internal routerUpdateInProgress flag is set — see KDD §3):
+    // internal internalChildUpdate flag is set — see KDD §3):
     //   add(BreadcrumbsItem...) / add(Collection<BreadcrumbsItem>)
     //   addComponentAsFirst(BreadcrumbsItem)
     //   addComponentAtIndex(int, BreadcrumbsItem)
@@ -154,7 +150,7 @@ public class Breadcrumbs extends Component
 - `HasStyle` — covers requirement that the component can be styled by the application (universal API hygiene).
 - `HasAriaLabel` — requirement 10 (navigation landmark accessible name). Flow core interface.
 - `HasThemeVariant<BreadcrumbsVariant>` — requirement 5 plus general theming. Shared interface from `vaadin-flow-components-base`. See "Theme Variants" for the variant enum and the inherited method surface.
-- `HasComponentsOfType<BreadcrumbsItem>` — requirement 1, 9 (add/remove/manage items with compile-time type safety). Flow core interface. All inherited mutating methods (see the class skeleton above) are overridden to throw `IllegalStateException` when `Mode.ROUTER` (unless the internal `routerUpdateInProgress` flag is set).
+- `HasComponentsOfType<BreadcrumbsItem>` — requirement 1, 9 (add/remove/manage items with compile-time type safety). Flow core interface. All inherited mutating methods (see the class skeleton above) are overridden to throw `IllegalStateException` when `Mode.ROUTER` (unless the internal `internalChildUpdate` flag is set).
 
 **@Synchronize'd properties:** none.
 
@@ -197,25 +193,28 @@ Both overloads ultimately build the trail via the same private routine (see "How
 `updateChildrenInternal(List<BreadcrumbsItem> trail)`:
 
 ```java
-private boolean routerUpdateInProgress;
+private boolean internalChildUpdate;
 
 void updateChildrenInternal(List<BreadcrumbsItem> trail) {
-    routerUpdateInProgress = true;
+    internalChildUpdate = true;
     try {
         removeAll();                                  // reaches super.removeAll() via HasComponentsOfType
         add(trail.toArray(BreadcrumbsItem[]::new));    // reaches super.add(T...)
     } finally {
-        routerUpdateInProgress = false;
+        internalChildUpdate = false;
     }
 }
 ```
 
-The overridden mutating methods check `mode == Mode.ROUTER && !routerUpdateInProgress` and throw `IllegalStateException` if so. This means router-derived items are regular logical children — `getChildren()` returns them, serialisation captures them, no virtual-children machinery is involved.
+The overridden mutating methods check `mode == Mode.ROUTER && !internalChildUpdate` and throw `IllegalStateException` if so. This means router-derived items are regular logical children — `getChildren()` returns them, serialisation captures them, no virtual-children machinery is involved.
 
-**Mode switching.** `setMode(Mode newMode)`:
-- If already equal, no-op.
-- On transition `ROUTER → MANUAL`: clear any router-derived items via `updateChildrenInternal(List.of())`, unregister the navigation listener. Subsequent `add(...)` calls are the application's responsibility.
-- On transition `MANUAL → ROUTER`: clear any manually-added items via `updateChildrenInternal(List.of())` (same bypass — the children are replaced by the router-derived trail anyway). Register the navigation listener if attached and trigger an initial `rebuildFromRouter`; if not attached, registration happens in the next `onAttach`.
+**Mode switching.** `setMode(Mode newMode)` implements the KDD §1 summary with these mechanics:
+
+- If `newMode` equals the current mode, it is a no-op.
+- If a `bindChildren` children binding is active, it throws `IllegalStateException` (see Discussion).
+- Otherwise both transitions clear the children through `updateChildrenInternal(List.of())`
+- `ROUTER → MANUAL` drops router-derived items and unregisters the navigation listener.
+- `MANUAL → ROUTER` drops manually-added items and starts the router listener plus an initial rebuild.
 
 ---
 
@@ -229,6 +228,7 @@ public class BreadcrumbsItem extends Component
         implements HasText, HasEnabled, HasPrefix {
 
     // Constructors — mirror SideNavItem's overload set
+    // The String path overloads validate the URL scheme (throw IllegalArgumentException — see "Path validation").
     public BreadcrumbsItem(String text);                                                            // current page (no path)
     public BreadcrumbsItem(String text, String path);
     public BreadcrumbsItem(String text, Class<? extends Component> view);
@@ -238,14 +238,15 @@ public class BreadcrumbsItem extends Component
     public BreadcrumbsItem(String text, Class<? extends Component> view,
                           RouteParameters params, Component prefixComponent);
 
-    // Text — inherited from HasText:
+    // Text — HasText methods, overridden (see Discussion):
     //   setText(String)
     //   getText()
     //   bindText(Signal<String>) — returns SignalBinding<String>
 
     // Path
     public String getPath();
-    public void setPath(String path);
+    public void setPath(String path);              // validates the URL scheme
+    public void setUnsafePath(String path);         // sets the path without scheme validation
     public void setPath(Class<? extends Component> view);
     public void setPath(Class<? extends Component> view, RouteParameters parameters);
 
@@ -257,7 +258,7 @@ public class BreadcrumbsItem extends Component
 
 **Implemented mixin interfaces:**
 
-- `HasText` — the default slot of `<vaadin-breadcrumbs-item>` holds the item's text content. `HasText` from Flow core provides `setText(String)` / `getText()` and `bindText(Signal<String>) → SignalBinding<String>` as default methods, so the signal-binding entry point for reactive item text is also available without additional code.
+- `HasText` — the default slot of `<vaadin-breadcrumbs-item>` holds the item's text content. The text methods are overridden so setting or binding the text preserves the prefix component (see Discussion).
 - `HasEnabled` — lets the application disable individual items (e.g. an ancestor the user has no permission to visit).
 - `HasPrefix` — requirement 8 (icons). `slot="prefix"` on `<vaadin-breadcrumbs-item>`, shared mixin from `vaadin-flow-components-base`.
 
@@ -266,6 +267,8 @@ public class BreadcrumbsItem extends Component
 **No click listener** — flow-api.md Discussion "Why no click listener on `BreadcrumbsItem`?" The web component renders an anchor; the Flow router intercepts clicks.
 
 **Path resolution.** `setPath(Class<? extends Component>)` and `setPath(Class, RouteParameters)` mirror `SideNavItem.setPath(...)` exactly: `RouteConfiguration.forRegistry(ComponentUtil.getRouter(this).getRegistry()).getUrl(view, params)` and the resulting string is written to the `path` attribute. Router-agnosticism: Flow wraps the routing resolution, but the anchor `<a href="...">` is still plain HTML — Flow does not intercept clicks at the component level.
+
+**Path validation.** `setPath(String)` and the constructors that take a `String path` throw `IllegalArgumentException` when the path's URL scheme is not on Flow's safe-scheme allow-list. `setUnsafePath(String)` writes the same `path` attribute but skips validation, for trusted hard-coded URLs. The `Class<? extends Component>` overloads resolve to router URLs and are not validated. See the Discussion entry "Why does `setPath(String)` validate the URL scheme…" for the rationale and shared mechanism.
 
 **No @Synchronize'd properties.** `path` is server-driven.
 
@@ -328,7 +331,7 @@ public enum BreadcrumbsVariant implements ThemeVariant {
 
 Every value maps to a `theme` token the web component actually honours, as guidelines/09-theming.md requires.
 
-A `BreadcrumbsVariantTest` maps each enum value to its expected token (guidelines/12-testing.md).
+`BreadcrumbsTest` asserts that `Breadcrumbs` implements `HasThemeVariant` (guidelines/12-testing.md).
 
 ---
 
@@ -454,7 +457,7 @@ Everything the breadcrumbs contributes — preferring the current view's live ti
 | Resolve an ancestor's title without an instance | Flow core instance-free title resolution (`@PageTitle` / `PageTitleGenerator`) |
 | Read the current view's live title | `HasDynamicTitle#getPageTitle()` on the view instance |
 
-**Route parameters on ancestors:** `getRouteHierarchy` returns each ancestor with the `RouteParameters` narrowed to its own route template, so the breadcrumbs resolves ancestor labels and URLs with those parameters. Applications that need ancestor labels derived from data beyond the route metadata use `Mode.MANUAL` and build the trail themselves (flow-api.md §9).
+**Route and query parameters:** `getRouteHierarchy` returns each ancestor with the `RouteParameters` narrowed to its own route template, so the breadcrumbs resolves ancestor labels and URLs with those parameters. The current navigation's query parameters (`AfterNavigationEvent#getLocation()#getQueryParameters()`) are applied only when resolving the current (last) item's title; ancestor titles and links are resolved without query parameters (see Discussion). Applications that need ancestor labels derived from data beyond the route metadata use `Mode.MANUAL` and build the trail themselves (flow-api.md §9).
 
 ---
 
@@ -473,16 +476,6 @@ public class BreadcrumbsElement extends TestBenchElement {
     public BreadcrumbsItemElement getItemByText(String text);
 
     public BreadcrumbsItemElement getItemByPath(String path);
-
-    public boolean hasOverflow();                           // reads has-overflow attribute
-
-    public TestBenchElement getOverflowButton();            // shadow-DOM part="overflow-button"
-
-    public void openOverflowOverlay();                       // click overflow button
-
-    public TestBenchElement getOverflowOverlay();           // the <vaadin-breadcrumbs-overlay> element
-
-    public List<TestBenchElement> getOverflowItems();       // links inside the open overlay
 }
 ```
 
@@ -492,22 +485,22 @@ public class BreadcrumbsElement extends TestBenchElement {
 @Element("vaadin-breadcrumbs-item")
 public class BreadcrumbsItemElement extends TestBenchElement {
 
-    public String getText();
+    @Override
+    public String getText();                                // reads `textContent`
 
-    public String getPath();
+    public String getPath();                                // reads the `path` DOM attribute
 
     public boolean isCurrent();                             // reads `current` state attribute
 
     public boolean hasPrefix();                             // reads `has-prefix` state attribute
 
-    public TestBenchElement getPrefixSlotContent();
+    public TestBenchElement getPrefixComponent();           // the element slotted into slot="prefix"
 
-    @Override
-    public void click();                                    // clicks the anchor in shadow DOM
+    public void navigate();                                 // activates the shadow-DOM anchor
 }
 ```
 
-Queries use the same pattern as `SideNavElement` / `SideNavItemElement`: `$("vaadin-breadcrumbs-item").all()` for items, shadow-DOM CSS for parts and slotted content.
+Queries use the same pattern as `SideNavElement` / `SideNavItemElement`: `$(BreadcrumbsItemElement.class).all()` for items, `getDomAttribute(...)` / `hasAttribute(...)` for path and state attributes, and a `slot="prefix"` element query for the prefix component. `navigate()` clicks the shadow-DOM anchor via `executeScript`, since the Chrome driver cannot click shadow-DOM elements directly.
 
 ---
 
@@ -531,7 +524,7 @@ Affects: Flow core — no flow-components module defines any of this. `RouteConf
 
 ### `HasComponentsOfType<T>` in Flow core — Dependency
 
-The Flow wrapper uses `com.vaadin.flow.component.HasComponentsOfType<BreadcrumbsItem>` from Flow core, which provides the full child-management surface as default methods (see the class skeleton in "Component Classes"). `Breadcrumbs` overrides each mutating method to enforce the `Mode.ROUTER` guard (see KDD §3 for the `routerUpdateInProgress` bypass).
+The Flow wrapper uses `com.vaadin.flow.component.HasComponentsOfType<BreadcrumbsItem>` from Flow core, which provides the full child-management surface as default methods (see the class skeleton in "Component Classes"). `Breadcrumbs` overrides each mutating method to enforce the `Mode.ROUTER` guard (see KDD §3 for the `internalChildUpdate` bypass).
 
 ### `vaadin-flow-components-base` — Used as-is
 
@@ -582,7 +575,11 @@ Hierarchy walking, cycle handling, `@RouteParent` resolution, and instance-free 
 
 **Q: What happens if the user calls `setMode(Mode.ROUTER)` on a trail that already has children?**
 
-`setMode` clears the trail and installs the router-derived one — no exception. Both transitions (`ROUTER → MANUAL` and `MANUAL → ROUTER`) discard the existing children and let the new mode's wiring start fresh. Earlier designs considered throwing `IllegalStateException` on `MANUAL → ROUTER` with children, forcing the caller to `removeAll()` first; that was rejected because `setMode` semantically asks "change who owns the trail", which implies the old owner's items are no longer authoritative. Making the caller call `removeAll()` adds no safety — the next line of application code does exactly that — and creates a class of boilerplate-plus-exception traps when a mode switch happens in a handler that doesn't know what state the trail is in. The symmetric auto-clear rule is simpler and matches how `setItems`-shaped APIs behave elsewhere in Flow.
+As specified under "Mode switching", `setMode` clears the existing children and installs the new mode's trail rather than throwing (the active-`bindChildren` case is the sole exception). Earlier designs considered throwing `IllegalStateException` on `MANUAL → ROUTER` with children, forcing the caller to `removeAll()` first; that was rejected because `setMode` semantically asks "change who owns the trail", which implies the old owner's items are no longer authoritative. Making the caller call `removeAll()` adds no safety — the next line of application code does exactly that — and creates a class of boilerplate-plus-exception traps when a mode switch happens in a handler that doesn't know what state the trail is in. The symmetric auto-clear rule is simpler and matches how `setItems`-shaped APIs behave elsewhere in Flow.
+
+**Q: Why does `setMode` throw when a `bindChildren` binding is active?**
+
+A `bindChildren` binding takes over the children reactively, and Flow does not allow handing bound children back to manual or component-controlled population. So unlike plain children — which `setMode` simply clears — an active binding cannot be silently dropped. The active-binding state is read from the element's binding feature rather than tracked in a separate field, so it stays in sync with the actual binding.
 
 **Q: Is there a way to drive the trail reactively from a `Signal<List<BreadcrumbsItem>>`?**
 
@@ -598,7 +595,7 @@ An earlier iteration mirrored `SideNavItem` and exposed `setTarget(String)` for 
 
 **Q: Is per-item reactive text available?**
 
-Yes — `BreadcrumbsItem` implements `HasText`, which provides `bindText(Signal<String>) → SignalBinding<String>` as a default method from Flow core. Applications that want per-item reactive text bind a signal to a specific item directly: `item.bindText(textSignal)`. The container-level reactive pattern (`Signal.effect` on the `Breadcrumbs`) remains the right choice when the whole trail's shape changes; `bindText` is for the narrower case where an item's text updates without the trail structure changing.
+Yes — `BreadcrumbsItem` implements `HasText` and exposes `bindText(Signal<String>) → SignalBinding<String>`. Applications that want per-item reactive text bind a signal to a specific item directly: `item.bindText(textSignal)`. The container-level reactive pattern (`Signal.effect` on the `Breadcrumbs`) remains the right choice when the whole trail's shape changes; `bindText` is for the narrower case where an item's text updates without the trail structure changing.
 
 **Q: Does the router listener need to guard against the detached-component case?**
 
@@ -618,4 +615,20 @@ guidelines/10-i18n-and-a11y.md prescribes `Objects.requireNonNull` in `setI18n`,
 
 **Q: Why does `Breadcrumbs` expose theme variants?**
 
-The web component ships theme variants — `theme="slash"` in base styles, `theme="primary"` in Lumo, and `theme="accent"` in Aura (web-component-spec.md "Theme" table) — so the Flow wrapper exposes them the standard way rather than inventing setters. `BreadcrumbsVariant` mirrors the shipped tokens (`SLASH`, `LUMO_PRIMARY`, `AURA_ACCENT`), since guidelines/09-theming.md requires each `getVariantName()` to match a real `theme` token. An earlier revision exposed no variants because the web component had none; the slash variant changed that.
+See flow-api.md Discussion "Why expose theme variants?" — the web component ships the `slash` separator variant, so the wrapper exposes it through the standard `HasThemeVariant` surface rather than inventing setters. The enum and its `theme`-token mapping are specified in "Theme Variants" above.
+
+**Q: Why are query parameters applied only to the current item's title?**
+
+Query parameters describe the current navigation as a whole, not an individual route level, and ancestor links never carry them (`getUrl` builds ancestor paths from route parameters only). An instance-free title for the current route (a `@PageTitle` generator or `PageTitleGenerator`) can legitimately depend on query parameters — e.g. a legacy `products?product=5` URL whose title is data-driven — so the current (last) item resolves its title with the navigation's query parameters, while ancestors resolve titles with none. The current item has no path, so query parameters only ever affect its text, never a link target.
+
+**Q: Why does `BreadcrumbsItem` override the `HasText` methods instead of inheriting them?**
+
+The default `HasText#setText` replaces all of the element's content, which would drop the prefix component (e.g. an icon) whenever the text is set. `setText(String)` / `getText()` / `bindText(Signal<String>) → SignalBinding<String>` are overridden to hold the text in a dedicated text node (managed via `SignalPropertySupport`, matching `Button` and `Badge`), so updating the text only touches that node and leaves the prefix in place. Routing through `SignalPropertySupport` also keeps the imperative and reactive paths consistent: `setText` throws once a `bindText` binding is active.
+
+**Q: Why does `setPath(String)` validate the URL scheme, and why is there a separate `setUnsafePath`?**
+
+A `path` becomes the `href` of an anchor the browser follows, so a `javascript:` (or other non-allow-listed) scheme is a cross-site scripting (XSS) vector when the value comes from untrusted input. `setPath(String)` and the `String path` constructors reject such schemes at the setter, the same defense `SideNavItem.setPath` applies via Flow core's `UrlUtil.isSafeUrl`. `setUnsafePath(String)` is the explicit escape hatch for trusted, hard-coded URLs that must use a scheme outside the allow-list — making the bypass a named, greppable call rather than a silent flag. The `Class`-based overloads need no validation because router-generated URLs are never attacker-controlled.
+
+**Q: Why does the TestBench API expose no overflow helpers, and why `navigate()` instead of overriding `click()`?**
+
+The TestBench elements cover the breadcrumb's server-driven surface — items, their text, path, current/prefix state, and link activation — which is what Flow integration tests assert. Overflow collapse is purely client-side behavior with no Flow API behind it, so it is exercised by the web component's own tests rather than duplicated as TestBench helpers; the IT tasks have no overflow scenario. `navigate()` is a distinct method rather than an override of `TestBenchElement#click()` because activating the link goes through the shadow-DOM anchor via `executeScript` (the Chrome driver cannot click shadow-DOM elements directly), and a current item has no anchor — naming it `navigate()` signals that it follows a link rather than clicking the host element.

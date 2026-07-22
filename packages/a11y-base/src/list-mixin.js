@@ -77,6 +77,16 @@ export const ListMixin = (superClass) =>
       return ['_enhanceItems(items, orientation, selected, disabled)'];
     }
 
+    constructor() {
+      super();
+
+      /**
+       * Used for mixin detection because `instanceof` does not work with mixins.
+       * @protected
+       */
+      this._hasVaadinListMixin = true;
+    }
+
     /**
      * @return {boolean}
      * @protected

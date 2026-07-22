@@ -8,7 +8,26 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
+ * `<vaadin-context-menu-list-box>` is a Web Component for wrapping `<vaadin-context-menu>` items.
+ *
+ * ```html
+ * <vaadin-context-menu>
+ *   <vaadin-context-menu-list-box slot="overlay">
+ *     <vaadin-context-menu-item>Edit</vaadin-context-menu-item>
+ *     <vaadin-context-menu-item>Delete</vaadin-context-menu-item>
+ *   </vaadin-context-menu-list-box>
+ * </vaadin-context-menu>
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name         | Description
+ * ------------------|------------------------
+ * `items`           | The items container
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  */
 declare class ContextMenuListBox extends ListMixin(DirMixin(ThemableMixin(HTMLElement))) {}
 

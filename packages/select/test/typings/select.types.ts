@@ -12,25 +12,26 @@ import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ItemMixinClass } from '@vaadin/item/src/vaadin-item-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { SelectItem } from '../../src/vaadin-select-item.js';
-import type { SelectListBox } from '../../src/vaadin-select-list-box.js';
 import type {
   Select,
   SelectChangeEvent,
   SelectInvalidChangedEvent,
-  SelectItem as Item,
+  SelectItem as DeprecatedItem,
+  SelectItemData,
   SelectOpenedChangedEvent,
   SelectRenderer,
   SelectValidatedEvent,
   SelectValueChangedEvent,
 } from '../../vaadin-select.js';
+import type { SelectItem } from '../../vaadin-select-item.js';
+import type { SelectListBox } from '../../vaadin-select-list-box.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
 const select: Select = document.createElement('vaadin-select');
 
 // Properties
-assertType<Item[] | null | undefined>(select.items);
+assertType<SelectItemData[] | null | undefined>(select.items);
 assertType<boolean>(select.opened);
 assertType<SelectRenderer | undefined>(select.renderer);
 assertType<string>(select.value);
@@ -54,12 +55,16 @@ assertType<ThemableMixinClass>(select);
 assertType<ValidateMixinClass>(select);
 
 // Item properties
-const item: Item = select.items ? select.items[0] : {};
+const item: SelectItemData = select.items ? select.items[0] : {};
 assertType<string | undefined>(item.label);
 assertType<string | undefined>(item.value);
 assertType<boolean | undefined>(item.disabled);
 assertType<string | undefined>(item.component);
 assertType<string | undefined>(item.className);
+
+// Deprecated `SelectItem` type alias still resolves to `SelectItemData`.
+const deprecatedItem: DeprecatedItem = item;
+assertType<SelectItemData>(deprecatedItem);
 
 // Events
 select.addEventListener('change', (event) => {
@@ -102,7 +107,10 @@ assertType<ItemMixinClass>(option);
 assertType<DirMixinClass>(option);
 assertType<ThemableMixinClass>(option);
 
-// Item
+assertType<string>(option.value);
+assertType<string | undefined>(option.label);
+
+// List box
 const listBox = document.createElement('vaadin-select-list-box');
 
 assertType<SelectListBox>(listBox);

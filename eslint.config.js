@@ -155,7 +155,14 @@ export default [
     },
   },
   {
-    files: ['scripts/**/*.js', '*.config.js', 'wtr-utils.js', 'custom-rules/**/*.js', 'api-docs/.eleventy.js'],
+    files: [
+      'scripts/**/*.js',
+      '.github/claude/**/*.js',
+      '*.config.js',
+      'wtr-utils.js',
+      'custom-rules/**/*.js',
+      'api-docs/.eleventy.js',
+    ],
     languageOptions: {
       globals: {
         ...globals.node,

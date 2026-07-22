@@ -21,21 +21,7 @@ export const CheckboxMixin = (superclass) =>
     static get properties() {
       return {
         /**
-         * True if the checkbox is in the indeterminate state which means
-         * it is not possible to say whether it is checked or unchecked.
-         * The state is reset once the user switches the checkbox by hand.
-         *
-         * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
-         */
-        indeterminate: {
-          type: Boolean,
-          notify: true,
-          value: false,
-          reflectToAttribute: true,
-        },
-
-        /**
-         * The name of the checkbox.
+         * The name of the control, which is submitted with the form data.
          */
         name: {
           type: String,
@@ -43,9 +29,9 @@ export const CheckboxMixin = (superclass) =>
         },
 
         /**
-         * When true, the user cannot modify the value of the checkbox.
+         * When true, the user cannot modify the value of the control.
          * The difference between `disabled` and `readonly` is that the
-         * read-only checkbox remains focusable, is announced by screen
+         * read-only element remains focusable, is announced by screen
          * readers and its value can be submitted as part of the form.
          */
         readonly: {
@@ -61,11 +47,6 @@ export const CheckboxMixin = (superclass) =>
     }
 
     /** @override */
-    static get delegateProps() {
-      return [...super.delegateProps, 'indeterminate'];
-    }
-
-    /** @override */
     static get delegateAttrs() {
       return [...super.delegateAttrs, 'name', 'invalid', 'required'];
     }
@@ -77,12 +58,18 @@ export const CheckboxMixin = (superclass) =>
 
       this._boundOnInputClick = this._onInputClick.bind(this);
 
-      // Set the string "on" as the default value for the checkbox following the HTML specification:
-      // https://html.spec.whatwg.org/multipage/input.html#dom-input-value-default-on
+      /**
+       * Set the string "on" as the default value for the checkbox following the HTML specification:
+       * https://html.spec.whatwg.org/multipage/input.html#dom-input-value-default-on
+       * @internal to not document it in CEM
+       */
       this.value = 'on';
 
-      // Set tabindex to 0 by default to not lose focus on click in Safari
-      // See https://github.com/vaadin/web-components/pull/6780
+      /**
+       * Set tabindex to 0 by default to not lose focus on click in Safari
+       * See https://github.com/vaadin/web-components/pull/6780
+       * @internal to not document it in CEM
+       */
       this.tabindex = 0;
     }
 
@@ -119,9 +106,8 @@ export const CheckboxMixin = (superclass) =>
     }
 
     /**
-     * Override method inherited from `ActiveMixin` to prevent setting `active`
-     * attribute when readonly, or when clicking a link placed inside the label,
-     * or when clicking slotted helper or error message element.
+     * Override method inherited from `ActiveMixin` to only set the `active`
+     * attribute for clicks that actually toggle the checked state.
      *
      * @param {Event} event
      * @return {boolean}
@@ -129,12 +115,14 @@ export const CheckboxMixin = (superclass) =>
      * @override
      */
     _shouldSetActive(event) {
-      if (
-        this.readonly ||
-        event.target.localName === 'a' ||
-        event.target === this._helperNode ||
-        event.target === this._errorNode
-      ) {
+      const [target] = event.composedPath();
+
+      const togglesChecked =
+        target === this.inputElement ||
+        target.part.contains('required-indicator') ||
+        (this._labelNode.contains(target) && !target.closest('a'));
+
+      if (this.readonly || !togglesChecked) {
         return false;
       }
 
@@ -185,22 +173,6 @@ export const CheckboxMixin = (superclass) =>
       } else {
         inputElement.removeAttribute('aria-readonly');
       }
-    }
-
-    /**
-     * Override method inherited from `CheckedMixin` to reset
-     * `indeterminate` state checkbox is toggled by the user.
-     *
-     * @param {boolean} checked
-     * @protected
-     * @override
-     */
-    _toggleChecked(checked) {
-      if (this.indeterminate) {
-        this.indeterminate = false;
-      }
-
-      super._toggleChecked(checked);
     }
 
     /**

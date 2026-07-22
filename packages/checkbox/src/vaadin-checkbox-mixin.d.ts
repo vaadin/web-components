@@ -39,23 +39,14 @@ export declare function CheckboxMixin<T extends Constructor<HTMLElement>>(
 
 export declare class CheckboxMixinClass {
   /**
-   * True if the checkbox is in the indeterminate state which means
-   * it is not possible to say whether it is checked or unchecked.
-   * The state is reset once the user switches the checkbox by hand.
-   *
-   * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
-   */
-  indeterminate: boolean;
-
-  /**
-   * The name of the checkbox.
+   * The name of the control, which is submitted with the form data.
    */
   name: string;
 
   /**
-   * When true, the user cannot modify the value of the checkbox.
+   * When true, the user cannot modify the value of the control.
    * The difference between `disabled` and `readonly` is that the
-   * read-only checkbox remains focusable, is announced by screen
+   * read-only element remains focusable, is announced by screen
    * readers and its value can be submitted as part of the form.
    */
   readonly: boolean;

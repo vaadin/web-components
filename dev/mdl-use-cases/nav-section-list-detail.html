@@ -82,12 +82,7 @@
   </head>
   <body>
     <!-- Level 1: App nav -->
-    <vaadin-master-detail-layout
-      id="appLayout"
-      master-size="180px"
-      expand-detail
-      overlay-size="100%"
-    >
+    <vaadin-master-detail-layout id="appLayout" master-size="180px" expand-detail overlay-size="100%">
       <div class="app-nav">
         <h4>MDL</h4>
         <ul class="nav-list" id="appNav">
@@ -98,12 +93,7 @@
       <div class="detail-placeholder" slot="detail-placeholder">Select a section</div>
 
       <!-- Level 2: Section nav -->
-      <vaadin-master-detail-layout
-        id="sectionLayout"
-        master-size="180px"
-        expand-detail
-        overlay-size="100%"
-      >
+      <vaadin-master-detail-layout id="sectionLayout" master-size="180px" expand-detail overlay-size="100%">
         <div class="section-nav">
           <div class="pane-header">
             <button class="back-btn" id="sectionBackBtn">&larr;</button>
@@ -115,12 +105,7 @@
         </div>
 
         <!-- Level 3: User list -->
-        <vaadin-master-detail-layout
-          id="listLayout"
-          master-size="300px"
-          expand-detail
-          overlay-size="100%"
-        >
+        <vaadin-master-detail-layout id="listLayout" master-size="300px" expand-detail overlay-size="100%">
           <div class="master-pane">
             <div class="pane-header">
               <button class="back-btn" id="listBackBtn">&larr;</button>

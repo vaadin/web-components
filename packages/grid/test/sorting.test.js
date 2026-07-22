@@ -809,4 +809,81 @@ describe('sorting', () => {
       expect(grid._sorters).to.contain(firstNameSorter);
     });
   });
+
+  describe('sort-column accessible name', () => {
+    let grid, sortColumn, sorter;
+
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid style="width: 200px; height: 200px;">
+          <vaadin-grid-sort-column path="first" header="First name"></vaadin-grid-sort-column>
+        </vaadin-grid>
+      `);
+      grid.items = [{ first: 'John' }, { first: 'Jane' }];
+      flushGrid(grid);
+      await nextFrame();
+      sortColumn = grid.querySelector('vaadin-grid-sort-column');
+      sorter = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
+    });
+
+    it('should set sorter aria-label based on grid i18n by default', () => {
+      expect(sorter.getAttribute('aria-label')).to.equal('Sort by First name');
+    });
+
+    it('should update sorter aria-label when column header changes', async () => {
+      sortColumn.header = 'Last name';
+      await nextFrame();
+      expect(sorter.getAttribute('aria-label')).to.equal('Sort by Last name');
+    });
+
+    it('should update sorter aria-label when grid i18n changes', async () => {
+      grid.i18n = { sorter: 'Sort using {column}' };
+      await nextFrame();
+      expect(sorter.getAttribute('aria-label')).to.equal('Sort using First name');
+    });
+
+    it('should apply grid i18n without the placeholder as is', async () => {
+      grid.i18n = { sorter: 'Sort column' };
+      await nextFrame();
+      expect(sorter.getAttribute('aria-label')).to.equal('Sort column');
+    });
+  });
+
+  describe('sorter accessible name', () => {
+    let grid, column, sorter;
+
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid style="width: 200px; height: 200px;">
+          <vaadin-grid-column path="first"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      column = grid.querySelector('vaadin-grid-column');
+      column.headerRenderer = (root) => {
+        if (!root.firstChild) {
+          root.innerHTML = '<vaadin-grid-sorter path="first">First name</vaadin-grid-sorter>';
+        }
+      };
+      grid.items = [{ first: 'John' }, { first: 'Jane' }];
+      flushGrid(grid);
+      await nextFrame();
+      sorter = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
+    });
+
+    it('should set sorter aria-label based on grid i18n by default', () => {
+      expect(sorter.getAttribute('aria-label')).to.equal('Sort by First name');
+    });
+
+    it('should update sorter aria-label when text content changes', async () => {
+      sorter.textContent = 'Last name';
+      await nextFrame();
+      expect(sorter.getAttribute('aria-label')).to.equal('Sort by Last name');
+    });
+
+    it('should update sorter aria-label when grid i18n changes', async () => {
+      grid.i18n = { sorter: 'Sort using {column}' };
+      await nextFrame();
+      expect(sorter.getAttribute('aria-label')).to.equal('Sort using First name');
+    });
+  });
 });

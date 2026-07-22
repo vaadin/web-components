@@ -30,7 +30,7 @@ not a substitute for reading [Component Structure](03-component-structure.md) an
 - [ ] `static get styles()` returns the imported base styles.
 - [ ] `static get properties()` declares every reactive property with a
       JSDoc comment (and `@attr` for camelCase ones).
-- [ ] Defaults set via field initializers, not a `value:` property option.
+- [ ] Defaults set via `value:` property option.
 - [ ] `ready()` sets host attributes (e.g. `role`) and attaches controllers.
 - [ ] `updated(changed)` reacts to property changes (no Polymer observers).
 - [ ] `defineCustomElement(...)` called at the bottom of the source file.

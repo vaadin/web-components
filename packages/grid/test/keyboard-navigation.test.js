@@ -5,7 +5,6 @@ import {
   down as mouseDown,
   fixtureSync,
   focusin,
-  isChrome,
   isDesktopSafari,
   keyboardEventFor,
   keyDownOn,
@@ -159,10 +158,6 @@ function focusFirstHeaderCell() {
 
 function focusFirstFooterCell() {
   focusWithMouse(grid.$.footer.children[0].children[0]);
-}
-
-function focusFirstBodyCell() {
-  focusWithMouse(grid.$.items.children[0].children[0]);
 }
 
 function tabToHeader() {
@@ -1694,95 +1689,6 @@ describe('keyboard navigation', () => {
       expect(getFirstHeaderCell().getAttribute('part')).to.contain('focused-cell');
     });
   });
-
-  describe('focus events on cell content', () => {
-    it('should dispatch cell-focus on keyboard navigation', () => {
-      const expectedContext = {
-        column: grid.querySelector('vaadin-grid-column'),
-        detailsOpened: false,
-        expanded: false,
-        hasChildren: false,
-        index: 0,
-        item: 'foo',
-        level: 0,
-        section: 'body',
-        selected: false,
-      };
-
-      tabToBody();
-      right();
-
-      const spy = sinon.spy();
-
-      grid.addEventListener('cell-focus', spy);
-
-      left();
-
-      expect(spy.calledOnce).to.be.true;
-
-      const e = spy.firstCall.args[0];
-
-      expect(e.detail.context).to.be.deep.equal(expectedContext);
-
-      grid.removeEventListener('cell-focus', spy);
-    });
-
-    // Separate test suite for Chrome, where we use a workaround to dispatch
-    // cell-focus on mouse up
-    (isChrome ? describe : describe.skip)('chrome', () => {
-      it('should dispatch cell-focus on mouse up on cell content', () => {
-        const spy = sinon.spy();
-        grid.addEventListener('cell-focus', spy);
-
-        // Mouse down and release on cell content element
-        const cell = getRowFirstCell(0);
-        mouseDown(cell._content);
-        mouseUp(cell._content);
-        expect(spy.calledOnce).to.be.true;
-      });
-
-      it('should dispatch cell-focus on mouse up on cell content when grid is in shadow DOM', () => {
-        const spy = sinon.spy();
-        grid.addEventListener('cell-focus', spy);
-
-        // Move grid into a shadow DOM
-        const container = document.createElement('div');
-        document.body.appendChild(container);
-        container.attachShadow({ mode: 'open' });
-        container.shadowRoot.appendChild(grid);
-
-        // Mouse down and release on cell content element
-        const cell = getRowFirstCell(0);
-        mouseDown(cell._content);
-        mouseUp(cell._content);
-        expect(spy.calledOnce).to.be.true;
-      });
-
-      it('should dispatch cell-focus on mouse up within cell content', () => {
-        const spy = sinon.spy();
-        grid.addEventListener('cell-focus', spy);
-
-        // Mouse down and release on cell content child
-        const cell = getRowFirstCell(0);
-        const contentSpan = document.createElement('span');
-        cell._content.appendChild(contentSpan);
-
-        mouseDown(contentSpan);
-        mouseUp(contentSpan);
-        expect(spy.calledOnce).to.be.true;
-      });
-
-      // Regression test for https://github.com/vaadin/flow-components/issues/2863
-      it('should not dispatch cell-focus on mouse up outside of cell', () => {
-        const spy = sinon.spy();
-        grid.addEventListener('cell-focus', spy);
-
-        mouseDown(getRowFirstCell(0)._content);
-        mouseUp(document.body);
-        expect(spy.calledOnce).to.be.false;
-      });
-    });
-  });
 });
 
 describe('keyboard navigation on column groups', () => {
@@ -2116,136 +2022,6 @@ describe('hierarchical data', () => {
     pageDown();
 
     expect(getFirstVisibleItem(grid).index).to.equal(previousLastIndex);
-  });
-});
-
-describe('lazy data provider', () => {
-  let dataProviderCallbacks;
-  let cellFocusSpy;
-
-  function flushDataProvider() {
-    dataProviderCallbacks.forEach((cb) => cb());
-    dataProviderCallbacks = [];
-  }
-
-  function lazyDataProvider({ page, pageSize }, callback) {
-    const items = [...Array(pageSize).keys()].map((i) => {
-      return {
-        name: `name-${page * pageSize + i}`,
-      };
-    });
-
-    dataProviderCallbacks.push(() => callback(items, 1000));
-  }
-
-  beforeEach(() => {
-    dataProviderCallbacks = [];
-    grid = fixtureSync(`
-      <vaadin-grid>
-        <vaadin-grid-column path="name"></vaadin-grid-column>
-      </vaadin-grid>
-    `);
-    cellFocusSpy = sinon.spy();
-    grid.addEventListener('cell-focus', cellFocusSpy);
-
-    grid.dataProvider = lazyDataProvider;
-    flushGrid(grid);
-    flushDataProvider();
-    focusFirstBodyCell();
-    cellFocusSpy.resetHistory();
-  });
-
-  it('should dispatch cell-focused event for lazily loaded item', async () => {
-    const expectedContext = {
-      column: grid.querySelector('vaadin-grid-column'),
-      detailsOpened: false,
-      hasChildren: false,
-      expanded: false,
-      index: 999,
-      item: { name: 'name-999' },
-      level: 0,
-      section: 'body',
-      selected: false,
-    };
-
-    // Keyboard navigate to the last row cell
-    ctrlEnd();
-
-    flushDataProvider();
-    await nextFrame();
-
-    expect(cellFocusSpy.calledOnce).to.be.true;
-    const e = cellFocusSpy.firstCall.args[0];
-    expect(e.detail.context).to.be.deep.equal(expectedContext);
-  });
-
-  it('should not dispatch cell-focused event on scroll', async () => {
-    grid.scrollToIndex(Infinity);
-
-    flushDataProvider();
-    await nextFrame();
-
-    expect(cellFocusSpy.called).to.be.false;
-  });
-
-  it('should not dispatch an additional cell-focused event when navigating in body', async () => {
-    // Keyboard navigate to the last row cell
-    ctrlEnd();
-    // Keyboard navigate back to the first row cell
-    ctrlHome();
-
-    flushDataProvider();
-    await nextFrame();
-
-    expect(cellFocusSpy.calledOnce).to.be.true;
-    const e = cellFocusSpy.firstCall.args[0];
-    expect(e.detail.context.item).to.be.deep.equal({ name: 'name-0' });
-  });
-
-  it('should not dispatch an additional cell-focused event when navigating to head', async () => {
-    // Keyboard navigate to the last row cell
-    ctrlEnd();
-    // Keyboard navigate to header
-    shiftTab();
-
-    flushDataProvider();
-    await nextFrame();
-
-    expect(cellFocusSpy.calledOnce).to.be.true;
-    const e = cellFocusSpy.firstCall.args[0];
-    expect(e.detail.context.section).to.be.equal('header');
-  });
-
-  it('should not dispatch an additional cell-focused event when navigating back from head', async () => {
-    // Scroll half way down to get grid in loading state
-    grid.scrollToIndex(500);
-    down();
-
-    // Keyboard navigate to header
-    shiftTab();
-    flushDataProvider();
-    // Keyboard navigate back to body
-    tab();
-    cellFocusSpy.resetHistory();
-    // Scroll to bottom
-    grid.scrollToIndex(Infinity);
-
-    flushDataProvider();
-    await nextFrame();
-    expect(cellFocusSpy.called).to.be.false;
-  });
-
-  it('should not dispatch a cell-focus event when grid has no focus', () => {
-    // Keyboard navigate to the last row cell
-    ctrlEnd();
-    // Blur grid
-    focusable = fixtureSync('<input>');
-    focusable.focus();
-
-    cellFocusSpy.resetHistory();
-    flushDataProvider();
-
-    expect(cellFocusSpy.called).to.be.false;
   });
 });
 

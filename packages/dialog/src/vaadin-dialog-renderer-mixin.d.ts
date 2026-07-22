@@ -17,6 +17,8 @@ export declare class DialogRendererMixinClass {
    *
    * - `root` The root container DOM element. Append your content to it.
    * - `dialog` The reference to the `<vaadin-dialog>` element.
+   *
+   * @deprecated Add content elements as children of the dialog instead
    */
   renderer: DialogRenderer | null | undefined;
 
@@ -44,6 +46,8 @@ export declare class DialogRendererMixinClass {
    * each other, with the title coming first.
    *
    * When `headerRenderer` is set, the attribute `has-header` is set on the dialog.
+   *
+   * @deprecated Add header content as children of the dialog using `slot="header-content"` instead
    */
   headerRenderer: DialogRenderer | null | undefined;
 
@@ -55,6 +59,8 @@ export declare class DialogRendererMixinClass {
    * - `dialog` The reference to the `<vaadin-dialog>` element.
    *
    * When `footerRenderer` is set, the attribute `has-footer` is set on the dialog.
+   *
+   * @deprecated Add footer content as children of the dialog using `slot="footer"` instead
    */
   footerRenderer: DialogRenderer | null | undefined;
 
@@ -63,6 +69,8 @@ export declare class DialogRendererMixinClass {
    * as well as `headerRender` and `footerRenderer` properties, if these are defined.
    *
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   *
+   * @deprecated This method is only used with renderers and will be removed in Vaadin 26
    */
   requestContentUpdate(): void;
 }

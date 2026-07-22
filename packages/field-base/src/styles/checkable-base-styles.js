@@ -18,10 +18,6 @@ export const checkable = (part, propName = part) => css`
     --_cursor: var(--vaadin-clickable-cursor);
   }
 
-  :host([disabled]) {
-    --_cursor: var(--vaadin-disabled-cursor);
-  }
-
   :host(:not([has-label])) {
     column-gap: 0;
   }
@@ -41,7 +37,6 @@ export const checkable = (part, propName = part) => css`
     color: var(--vaadin-${unsafeCSS(propName)}-label-color, var(--vaadin-input-field-label-color, var(--vaadin-text-color)));
     word-break: break-word;
     cursor: var(--_cursor);
-    /* TODO clicking the label part doesn't toggle the checked state, even though it triggers the active state */
   }
 
   [part='${unsafeCSS(part)}'],
@@ -95,8 +90,8 @@ export const checkable = (part, propName = part) => css`
     box-sizing: border-box;
     --_color: var(--vaadin-${unsafeCSS(propName)}-marker-color, var(--vaadin-${unsafeCSS(propName)}-background, var(--vaadin-background-color)));
     color: var(--_color);
-    height: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
-    width: var(--vaadin-${unsafeCSS(propName)}-size, 1lh);
+    height: var(--vaadin-${unsafeCSS(propName)}-size, round(1.125em, 2px));
+    width: var(--vaadin-${unsafeCSS(propName)}-size, round(1.125em, 2px));
     position: relative;
     cursor: var(--_cursor);
     display: flex;
@@ -109,10 +104,24 @@ export const checkable = (part, propName = part) => css`
     --vaadin-${unsafeCSS(propName)}-border-color: transparent;
   }
 
+  :host([readonly]) {
+    --vaadin-${unsafeCSS(part)}-background: transparent;
+    --vaadin-${unsafeCSS(part)}-border-color: var(--vaadin-border-color);
+    --vaadin-${unsafeCSS(part)}-marker-color: var(--vaadin-text-color);
+    --_border-style: dashed;
+    --_cursor: var(--vaadin-disabled-cursor);
+
+    [part='label'],
+    ::slotted(label) {
+      cursor: default;
+    }
+  }
+
   :host([disabled]) {
     --vaadin-${unsafeCSS(propName)}-background: var(--vaadin-input-field-disabled-background, var(--vaadin-background-container-strong));
     --vaadin-${unsafeCSS(propName)}-border-color: transparent;
     --vaadin-${unsafeCSS(propName)}-marker-color: var(--vaadin-text-color-disabled);
+    --_cursor: var(--vaadin-disabled-cursor);
   }
 
   /* Focus ring */
@@ -144,6 +153,30 @@ export const checkable = (part, propName = part) => css`
 
   :host(:not([checked], [indeterminate])) [part='${unsafeCSS(part)}']::after {
     opacity: 0;
+  }
+
+  /* Reverse variant */
+  :host([theme~='reverse']) {
+    grid-template-columns: 1fr auto;
+
+    &::before {
+      display: none;
+    }
+
+    [part='label'],
+    [part='helper-text'],
+    [part='error-message'] {
+      grid-column: 1;
+    }
+
+    [part='${unsafeCSS(part)}'],
+    ::slotted(input) {
+      grid-column: 2;
+    }
+
+    ::slotted(input) {
+      margin-inline: calc(min(0px, (24px - 100%) / -2) - var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s))) 0 !important;
+    }
   }
 
   @media (forced-colors: active) {

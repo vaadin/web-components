@@ -276,6 +276,17 @@ describe('vaadin-accordion', () => {
         arrowDownKeyDown(input);
         expect(spy.called).to.be.false;
       });
+
+      it('should focus a panel without a heading when navigating onto it', async () => {
+        const panel = document.createElement('vaadin-accordion-panel');
+        accordion.insertBefore(panel, accordion.items[1]);
+        accordion._observer.flush();
+        await nextRender();
+        accordion.items[2].focus();
+        heading = getHeading(2);
+        arrowUpKeyDown(heading);
+        expect(accordion.items[1].hasAttribute('focused')).to.be.true;
+      });
     });
 
     describe('keydown event', () => {
@@ -332,6 +343,59 @@ describe('vaadin-accordion', () => {
       content.remove();
       await nextRender();
       expect(heading.hasAttribute('aria-controls')).to.be.false;
+    });
+  });
+
+  describe('heading level', () => {
+    beforeEach(async () => {
+      accordion.headingLevel = 3;
+      await nextUpdate(accordion);
+    });
+
+    it('should set aria-level on all headings when headingLevel is set', () => {
+      accordion.items.forEach((_, idx) => {
+        expect(getHeading(idx).getAttribute('aria-level')).to.equal('3');
+      });
+    });
+
+    it('should remove aria-level from all headings when headingLevel is set to null', async () => {
+      accordion.headingLevel = null;
+      await nextUpdate(accordion);
+      accordion.items.forEach((_, idx) => {
+        expect(getHeading(idx).hasAttribute('aria-level')).to.be.false;
+      });
+    });
+
+    it('should set aria-level on the heading of a panel added lazily', async () => {
+      const panel = document.createElement('vaadin-accordion-panel');
+      panel.summary = 'Lazy panel';
+      accordion.appendChild(panel);
+      await nextRender();
+
+      expect(panel.focusElement.getAttribute('aria-level')).to.equal('3');
+    });
+
+    it('should set aria-level on the heading created lazily from summary', async () => {
+      const panel = document.createElement('vaadin-accordion-panel');
+      accordion.appendChild(panel);
+      await nextRender();
+
+      panel.summary = 'Lazy summary';
+      await nextRender();
+
+      expect(panel.focusElement.getAttribute('aria-level')).to.equal('3');
+    });
+
+    it('should set aria-level on the heading replacing the existing one', async () => {
+      const panel = accordion.items[0];
+      panel.querySelector('vaadin-accordion-heading').remove();
+
+      const heading = document.createElement('vaadin-accordion-heading');
+      heading.setAttribute('slot', 'summary');
+      panel.appendChild(heading);
+      await nextRender();
+
+      expect(heading.getAttribute('aria-level')).to.equal('3');
     });
   });
 });

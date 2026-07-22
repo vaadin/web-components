@@ -7,9 +7,7 @@
   [TypeScript](07-typescript.md)).
 
 Every component is built as a Lit `LitElement`, layered with the Vaadin
-mixins documented in [Common packages](05-common-packages.md). New components
-use Lit-native features (`static properties`, `firstUpdated`, `updated`,
-field initializers) rather than Polymer-style options.
+mixins documented in [Common packages](05-common-packages.md).
 
 ## Test stack
 

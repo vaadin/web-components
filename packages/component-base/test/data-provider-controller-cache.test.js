@@ -109,6 +109,38 @@ describe('DataProviderController - Cache', () => {
     });
   });
 
+  describe('pageSize', () => {
+    let subCache;
+
+    beforeEach(() => {
+      cache = new Cache({ isExpanded }, 50, 500);
+      cache.setPage(0, ['Item 0']);
+      subCache = cache.createSubCache(0);
+    });
+
+    it('should set the new pageSize', () => {
+      cache.pageSize = 10;
+      expect(cache.pageSize).to.equal(10);
+    });
+
+    it('should discard pending requests', () => {
+      cache.pendingRequests[0] = (_items, _size) => {};
+      cache.pageSize = 10;
+      expect(cache.pendingRequests).to.eql({});
+    });
+
+    it('should propagate the new pageSize to sub-caches', () => {
+      cache.pageSize = 10;
+      expect(subCache.pageSize).to.equal(10);
+    });
+
+    it('should discard pending requests of sub-caches', () => {
+      subCache.pendingRequests[0] = (_items, _size) => {};
+      cache.pageSize = 10;
+      expect(subCache.pendingRequests).to.eql({});
+    });
+  });
+
   describe('subCaches', () => {
     let subCache0, subCache1;
 

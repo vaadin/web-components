@@ -3,18 +3,19 @@ import type { ListMixinClass } from '@vaadin/a11y-base/src/list-mixin.js';
 import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
 import type { ItemMixinClass } from '@vaadin/item/src/vaadin-item-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { ContextMenuItem } from '../../src/vaadin-context-menu-item.js';
-import type { ContextMenuListBox } from '../../src/vaadin-context-menu-list-box.js';
 import type {
   ContextMenu,
   ContextMenuClosedEvent,
-  ContextMenuItem as MenuItem,
+  ContextMenuItem as DeprecatedMenuItem,
+  ContextMenuItemData,
   ContextMenuItemSelectedEvent,
   ContextMenuOpenedChangedEvent,
   ContextMenuPosition,
   ContextMenuRenderer,
   ContextMenuRendererContext,
 } from '../../vaadin-context-menu.js';
+import type { ContextMenuItem } from '../../vaadin-context-menu-item.js';
+import type { ContextMenuListBox } from '../../vaadin-context-menu-list-box.js';
 
 const menu = document.createElement('vaadin-context-menu');
 
@@ -35,7 +36,7 @@ menu.addEventListener('opened-changed', (event) => {
 
 menu.addEventListener('item-selected', (event) => {
   assertType<ContextMenuItemSelectedEvent>(event);
-  assertType<MenuItem>(event.detail.value);
+  assertType<ContextMenuItemData>(event.detail.value);
 });
 
 menu.addEventListener('closed', (event) => {
@@ -52,14 +53,18 @@ const renderer: ContextMenuRenderer = (root, contextMenu, context) => {
 menu.renderer = renderer;
 
 // Menu item properties
-const menuItem: MenuItem = {};
+const menuItem: ContextMenuItemData = {};
 assertType<string | undefined>(menuItem.text);
 assertType<string | undefined>(menuItem.tooltip);
 assertType<string | undefined>(menuItem.tooltipPosition);
 assertType<boolean | undefined>(menuItem.disabled);
 assertType<boolean | undefined>(menuItem.checked);
 assertType<boolean | undefined>(menuItem.keepOpen);
-assertType<MenuItem[] | undefined>(menuItem.children);
+assertType<ContextMenuItemData[] | undefined>(menuItem.children);
+
+// Deprecated `ContextMenuItem` type alias still resolves to `ContextMenuItemData`.
+const deprecatedMenuItem: DeprecatedMenuItem = menuItem;
+assertType<ContextMenuItemData>(deprecatedMenuItem);
 
 // Custom item data
 interface ItemData {
@@ -67,7 +72,7 @@ interface ItemData {
   value: string;
 }
 
-const narrowedMenu = menu as ContextMenu<MenuItem<ItemData>>;
+const narrowedMenu = menu as ContextMenu<ContextMenuItemData<ItemData>>;
 
 assertType<ItemData>(narrowedMenu.items![0]);
 assertType<ItemData>(narrowedMenu.items![0].children![0]);

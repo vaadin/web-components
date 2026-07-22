@@ -20,7 +20,7 @@ export const masterDetailLayoutStyles = css`
     overflow: clip;
   }
 
-  :host:not([overlay-containment='page']) {
+  :host(:not([overlay-containment='page'])) {
     isolation: isolate;
   }
 

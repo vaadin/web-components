@@ -107,12 +107,12 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
     constructor() {
       super();
-      this.__onCellTrack = this.__onCellTrack.bind(this);
-      this.__onCellClick = this.__onCellClick.bind(this);
-      this.__onCellMouseDown = this.__onCellMouseDown.bind(this);
+      this.__onCellContentTrack = this.__onCellContentTrack.bind(this);
+      this.__onCellContentClick = this.__onCellContentClick.bind(this);
+      this.__onCellContentMouseDown = this.__onCellContentMouseDown.bind(this);
       this.__onGridInteraction = this.__onGridInteraction.bind(this);
-      this.__onActiveItemChanged = this.__onActiveItemChanged.bind(this);
-      this.__onTouchStart = this.__onTouchStart.bind(this);
+      this.__onGridActiveItemChanged = this.__onGridActiveItemChanged.bind(this);
+      this.__onGridTouchStart = this.__onGridTouchStart.bind(this);
       this.__onSelectRowCheckboxChange = this.__onSelectRowCheckboxChange.bind(this);
       this.__onSelectAllCheckboxChange = this.__onSelectAllCheckboxChange.bind(this);
     }
@@ -124,8 +124,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         this._grid.addEventListener('keyup', this.__onGridInteraction);
         this._grid.addEventListener('keydown', this.__onGridInteraction, { capture: true });
         this._grid.addEventListener('mousedown', this.__onGridInteraction);
-        this._grid.addEventListener('active-item-changed', this.__onActiveItemChanged);
-        this._grid.addEventListener('touchstart', this.__onTouchStart);
+        this._grid.addEventListener('active-item-changed', this.__onGridActiveItemChanged);
+        this._grid.addEventListener('touchstart', this.__onGridTouchStart);
       }
     }
 
@@ -136,8 +136,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
         this._grid.removeEventListener('keyup', this.__onGridInteraction);
         this._grid.removeEventListener('keydown', this.__onGridInteraction, { capture: true });
         this._grid.removeEventListener('mousedown', this.__onGridInteraction);
-        this._grid.removeEventListener('active-item-changed', this.__onActiveItemChanged);
-        this._grid.removeEventListener('touchstart', this.__onTouchStart);
+        this._grid.removeEventListener('active-item-changed', this.__onGridActiveItemChanged);
+        this._grid.removeEventListener('touchstart', this.__onGridTouchStart);
       }
     }
 
@@ -150,16 +150,33 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       let checkbox = root.firstElementChild;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
-        checkbox.accessibleName = 'Select All';
         checkbox.classList.add('vaadin-grid-select-all-checkbox');
         checkbox.addEventListener('change', this.__onSelectAllCheckboxChange);
         root.appendChild(checkbox);
       }
 
+      const { selectAll, selectAllUnavailable } = this._grid.__effectiveI18n;
+      checkbox.accessibleName = selectAll;
+
       const checked = this.__isChecked(this.selectAll, this._indeterminate);
       checkbox.checked = checked;
       checkbox.indeterminate = this._indeterminate;
       checkbox.style.visibility = this._selectAllHidden ? 'hidden' : '';
+
+      // When the Select All checkbox is hidden, the header cell would otherwise
+      // be announced as blank. Render a screen-reader-only label into the cell
+      // so that screen readers announce the `selectAllUnavailable` text.
+      let label = this._headerCell.querySelector(':scope > .sr-only');
+      if (this._selectAllHidden && selectAllUnavailable) {
+        if (!label) {
+          label = document.createElement('span');
+          label.classList.add('sr-only');
+          this._headerCell.appendChild(label);
+        }
+        label.textContent = selectAllUnavailable;
+      } else if (label) {
+        label.remove();
+      }
     }
 
     /**
@@ -171,15 +188,15 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       let checkbox = root.firstElementChild;
       if (!checkbox) {
         checkbox = document.createElement('vaadin-checkbox');
-        checkbox.accessibleName = 'Select Row';
         checkbox.addEventListener('change', this.__onSelectRowCheckboxChange);
         root.appendChild(checkbox);
-        addListener(root, 'track', this.__onCellTrack);
+        addListener(root, 'track', this.__onCellContentTrack);
         setTouchAction(root, 'pinch-zoom');
-        root.addEventListener('mousedown', this.__onCellMouseDown);
-        root.addEventListener('click', this.__onCellClick);
+        root.addEventListener('mousedown', this.__onCellContentMouseDown);
+        root.addEventListener('click', this.__onCellContentClick);
       }
 
+      this.__updateSelectRowAccessibleName(checkbox, root);
       checkbox.__item = item;
       checkbox.checked = selected;
 
@@ -188,6 +205,34 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
       const isHidden = !isSelectable && !selected;
       checkbox.style.visibility = isHidden ? 'hidden' : '';
+    }
+
+    /**
+     * Sets the Select Row checkbox accessible name based on the grid i18n.
+     * The `{rowHeader}` placeholder is replaced with the row header cell text content
+     * or row index if there is no row header column or it's cell is empty.
+     *
+     * @private
+     */
+    __updateSelectRowAccessibleName(checkbox, root) {
+      const ariaLabel = this._grid?.__effectiveI18n?.selectRow;
+      if (!ariaLabel || !ariaLabel.includes('{rowHeader}')) {
+        checkbox.accessibleName = ariaLabel;
+        return;
+      }
+
+      // Defer reading the row header cell text until all cell renderers of
+      // the row have run in the current task, as the selection column may
+      // render before the row header column.
+      queueMicrotask(() => {
+        const row = root.assignedSlot?.parentElement?.__parentRow;
+        if (!checkbox.isConnected || !row) {
+          return;
+        }
+        const rowHeaderCell = row.__cells.find((cell) => cell._column?.rowHeader);
+        const value = rowHeaderCell?._content?.textContent.trim() || String(row.index + 1);
+        checkbox.accessibleName = ariaLabel.replace('{rowHeader}', value);
+      });
     }
 
     /**
@@ -225,7 +270,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    __onCellTrack(event) {
+    __onCellContentTrack(event) {
       if (!this.dragSelect) {
         return;
       }
@@ -261,7 +306,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    __onCellMouseDown(e) {
+    __onCellContentMouseDown(e) {
       if (this.dragSelect) {
         // Prevent text selection when starting to drag
         e.preventDefault();
@@ -269,7 +314,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    __onTouchStart(e) {
+    __onGridTouchStart(e) {
       if (e.touches.length > 1) {
         this.__multiTouchActive = true;
         // Cancel in-progress drag-select on multi-touch (e.g. pinch-zoom)
@@ -281,7 +326,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    __onCellClick(e) {
+    __onCellContentClick(e) {
       if (this.__dragStartIndex !== undefined) {
         // Stop the click event if drag was enabled. This click event should
         // only occur if drag started and stopped on the same item. In that case
@@ -293,7 +338,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _onCellKeyDown(e) {
+    __onCellKeyDown(e) {
       const target = e.composedPath()[0];
       // Toggle on Space without having to enter interaction mode first
       if (e.keyCode !== 32) {
@@ -312,7 +357,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    __onActiveItemChanged(e) {
+    __onGridActiveItemChanged(e) {
       const activeItem = e.detail.value;
       if (this.autoSelect) {
         const item = activeItem || this.__previousActiveItem;

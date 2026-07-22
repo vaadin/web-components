@@ -269,8 +269,21 @@ describe('multi selection column', () => {
     expect(firstBodyCheckbox.checked).to.be.false;
   });
 
-  it('should set aria-label on the checkbox input element', () => {
-    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select Row');
+  it('should set aria-label on the checkbox input element using row index', async () => {
+    await nextRender();
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select Row 1');
+  });
+
+  it('should re-render rows when the i18n select row template changes', async () => {
+    grid.i18n = { selectRow: 'Pick {rowHeader}' };
+    await nextRender();
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.equal('Pick 1');
+  });
+
+  it('should use an i18n template without the placeholder as is', async () => {
+    grid.i18n = { selectRow: 'Select item' };
+    await nextRender();
+    expect(firstBodyCheckbox.inputElement.getAttribute('aria-label')).to.equal('Select item');
   });
 
   it('should select item when checkbox is checked', async () => {
@@ -397,6 +410,12 @@ describe('multi selection column', () => {
     expect(selectAllCheckbox.inputElement.getAttribute('aria-label')).to.eql('Select All');
   });
 
+  it('should update aria-label on the select all checkbox based on i18n', async () => {
+    grid.i18n = { selectAll: 'Select All Items' };
+    await nextRender();
+    expect(selectAllCheckbox.inputElement.getAttribute('aria-label')).to.equal('Select All Items');
+  });
+
   it('should set selectAll when header checkbox is clicked', async () => {
     selectAllCheckbox.click();
     await nextFrame();
@@ -484,6 +503,52 @@ describe('multi selection column', () => {
     grid.items = ['foo'];
 
     expect(selectAllCheckbox.checkVisibility({ visibilityProperty: true })).to.be.true;
+  });
+
+  function getSelectAllEmptyLabel() {
+    return selectionColumn._headerCell.querySelector(':scope > .sr-only');
+  }
+
+  it('should render a screen-reader-only label in the header cell when select all is hidden due to data provider', async () => {
+    grid.items = undefined;
+    grid.dataProvider = infiniteDataProvider;
+    await nextFrame();
+
+    expect(getSelectAllEmptyLabel().textContent).to.equal('Select All unavailable');
+  });
+
+  it('should render a screen-reader-only label in the header cell when select all is hidden due to conditional selection', async () => {
+    grid.isItemSelectable = () => true;
+    await nextFrame();
+
+    expect(getSelectAllEmptyLabel().textContent).to.equal('Select All unavailable');
+  });
+
+  it('should not render the screen-reader-only label when select all is visible', () => {
+    expect(getSelectAllEmptyLabel()).to.be.null;
+  });
+
+  it('should remove the screen-reader-only label when select all becomes visible again', async () => {
+    grid.items = undefined;
+    grid.dataProvider = infiniteDataProvider;
+    await nextFrame();
+
+    expect(getSelectAllEmptyLabel()).to.exist;
+
+    grid.dataProvider = undefined;
+    grid.items = ['foo'];
+    await nextFrame();
+
+    expect(getSelectAllEmptyLabel()).to.be.null;
+  });
+
+  it('should use custom i18n for the screen-reader-only label when select all is hidden', async () => {
+    grid.items = undefined;
+    grid.dataProvider = infiniteDataProvider;
+    grid.i18n = { selectAllUnavailable: 'X' };
+    await nextFrame();
+
+    expect(getSelectAllEmptyLabel().textContent).to.equal('X');
   });
 
   it('should be possible to override the body renderer', () => {
@@ -1252,6 +1317,51 @@ describe('multi selection column', () => {
         document.getSelection().selectAllChildren(row2CellContent1);
         expect(document.getSelection().toString()).to.be.not.empty;
       });
+    });
+  });
+});
+
+describe('select row accessible name', () => {
+  let grid;
+
+  function getBodyCheckbox(rowIndex) {
+    return getBodyCellContent(grid, rowIndex, 0).firstElementChild;
+  }
+
+  describe('with row header', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid style="width: 300px; height: 300px;">
+          <vaadin-grid-selection-column></vaadin-grid-selection-column>
+          <vaadin-grid-column path="name" row-header></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.items = [{ name: 'John' }, { name: 'Jane' }];
+      flushGrid(grid);
+      await nextRender();
+    });
+
+    it('should use the row header cell text for the placeholder', () => {
+      expect(getBodyCheckbox(0).accessibleName).to.equal('Select Row John');
+      expect(getBodyCheckbox(1).accessibleName).to.equal('Select Row Jane');
+    });
+  });
+
+  describe('empty row header', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid style="width: 300px; height: 300px;">
+          <vaadin-grid-selection-column></vaadin-grid-selection-column>
+          <vaadin-grid-column row-header></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.items = [{ name: 'John' }];
+      flushGrid(grid);
+      await nextRender();
+    });
+
+    it('should fall back to the row index when the row header cell has no text', () => {
+      expect(getBodyCheckbox(0).accessibleName).to.equal('Select Row 1');
     });
   });
 });

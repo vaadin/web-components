@@ -88,6 +88,15 @@ export const ContextMenuMixin = (superClass) =>
         },
 
         /**
+         * The `<vaadin-context-menu-list-box>` slotted directly into the overlay slot.
+         * @private
+         */
+        __slottedListBox: {
+          type: Object,
+          sync: true,
+        },
+
+        /**
          * When true, the menu overlay is modeless.
          * @protected
          */
@@ -119,11 +128,7 @@ export const ContextMenuMixin = (superClass) =>
     }
 
     static get observers() {
-      return [
-        '_targetOrOpenOnChanged(listenOn, openOn)',
-        '_rendererChanged(renderer, items)',
-        '_fullscreenChanged(_fullscreen)',
-      ];
+      return ['_targetOrOpenOnChanged(listenOn, openOn)', '_fullscreenChanged(_fullscreen)'];
     }
 
     constructor() {
@@ -185,6 +190,25 @@ export const ContextMenuMixin = (superClass) =>
       if (!this._tooltipController) {
         this._tooltipController = new ContextMenuTooltipController(this);
         this.addController(this._tooltipController);
+      }
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('renderer') || props.has('items') || props.has('__slottedListBox')) {
+        const contentSources = [this.items, this.renderer, this.__slottedListBox].filter(Boolean);
+        if (contentSources.length > 1) {
+          throw new Error(
+            'The "items", "renderer", and slotted "<vaadin-context-menu-list-box>" cannot be used together.',
+          );
+        }
+
+        // With items property, menu closes on item selection or items-outside-click.
+        if (this.items && this.closeOn === 'click') {
+          this.closeOn = '';
+        }
       }
     }
 
@@ -319,19 +343,6 @@ export const ContextMenuMixin = (superClass) =>
       this.__restoreMenuState();
     }
 
-    /** @private */
-    _rendererChanged(renderer, items) {
-      if (items) {
-        if (renderer) {
-          throw new Error('The items API cannot be used together with a renderer');
-        }
-
-        if (this.closeOn === 'click') {
-          this.closeOn = '';
-        }
-      }
-    }
-
     /**
      * Closes the overlay.
      */
@@ -341,13 +352,22 @@ export const ContextMenuMixin = (superClass) =>
       this._setOpened(false);
     }
 
+    /**
+     * Returns the composed path of the event. By default, it uses the path stored
+     * at dispatch time (needed for Flow connector that opens menu asynchronously).
+     * @private
+     */
+    __getComposedPath(e) {
+      return e.__composedPath ?? e.detail?.sourceEvent?.__composedPath ?? e.composedPath();
+    }
+
     /** @private */
     _contextTarget(e) {
       if (this.selector) {
         const targets = this.listenOn.querySelectorAll(this.selector);
 
         return Array.prototype.filter.call(targets, (el) => {
-          return e.composedPath().indexOf(el) > -1;
+          return this.__getComposedPath(e).indexOf(el) > -1;
         })[0];
       } else if (this.listenOn && this.listenOn !== this && this.position) {
         // If listenOn has been set on a different element than the context menu root, then use listenOn as the target.
@@ -362,7 +382,7 @@ export const ContextMenuMixin = (superClass) =>
      */
     open(e) {
       // Ignore events from the overlay
-      if (this._overlayElement && e.composedPath().includes(this._overlayElement)) {
+      if (this._overlayElement && this.__getComposedPath(e).includes(this._overlayElement)) {
         return;
       }
 
@@ -392,7 +412,7 @@ export const ContextMenuMixin = (superClass) =>
 
     /** @private */
     __preserveMenuState() {
-      const listBox = this.__getListBox();
+      const listBox = this._menuListBox;
       if (listBox) {
         this.__focusedIndex = listBox.items.indexOf(listBox.focused);
 
@@ -408,11 +428,11 @@ export const ContextMenuMixin = (superClass) =>
       const subMenuIndex = this.__subMenuIndex;
       const selectedIndex = this.__selectedIndex;
 
-      const listBox = this.__getListBox();
+      const listBox = this._menuListBox;
 
       if (listBox) {
         // Initialize menu items synchronously
-        listBox._observer.flush();
+        listBox._observer?.flush();
 
         if (subMenuIndex > -1) {
           const itemToOpen = listBox.items[subMenuIndex];
@@ -447,6 +467,17 @@ export const ContextMenuMixin = (superClass) =>
       if (item) {
         item.focus({ focusVisible: isKeyboardActive() });
       }
+    }
+
+    /**
+     * Detects a `<vaadin-context-menu-list-box>` slotted directly into the overlay
+     * slot (instead of the default one rendered into slotted `div` element).
+     *
+     * @param {!Event} e
+     * @private
+     */
+    __onOverlaySlotChange(e) {
+      this.__slottedListBox = e.target.assignedElements().find((el) => el._hasVaadinListMixin);
     }
 
     /** @private */
@@ -559,7 +590,8 @@ export const ContextMenuMixin = (superClass) =>
 
         if (position === 0) {
           // Native keyboard event
-          const rect = event.target.getBoundingClientRect();
+          const target = this.__getComposedPath(event)[0] || event.target;
+          const rect = target.getBoundingClientRect();
           return coord === 'x' ? rect.left : rect.top + rect.height;
         }
         // Native mouse or touch event
@@ -596,7 +628,12 @@ export const ContextMenuMixin = (superClass) =>
       });
     }
 
-    /** @private */
+    /**
+     * Mimics the native focus on mousedown: walks up the flat tree from the
+     * target and focuses the closest focusable element, including elements
+     * with `tabindex="-1"` which are focusable by mouse (e.g. grid cells).
+     * @private
+     */
     __focusClosestFocusable(target) {
       let currentElement = target;
       while (currentElement) {
@@ -604,7 +641,8 @@ export const ContextMenuMixin = (superClass) =>
           currentElement.focus();
           return;
         }
-        currentElement = currentElement.parentNode || currentElement.host;
+        // Use assignedSlot to cross shadow DOM boundaries for slotted content
+        currentElement = currentElement.assignedSlot || currentElement.parentNode || currentElement.host;
       }
     }
 
@@ -618,10 +656,8 @@ export const ContextMenuMixin = (superClass) =>
       if (target) {
         // Need to run asynchronously to avoid timing issues with the Lit-based context menu
         queueMicrotask(() => {
-          // Dispatch mousedown and mouseup to the target (grid cell focus depends on it)
-          target.dispatchEvent(this.__createMouseEvent('mousedown', x, y));
-          target.dispatchEvent(this.__createMouseEvent('mouseup', x, y));
-          // Manually try to focus the closest focusable of the target
+          // Focus the target as the native mousedown preceding a real
+          // contextmenu event would do
           this.__focusClosestFocusable(target);
           // Dispatch a contextmenu event to the target
           target.dispatchEvent(this.__createMouseEvent('contextmenu', x, y));

@@ -5,6 +5,9 @@
  */
 @media lumo_components_rich-text-editor {
   :host {
+    background: var(--vaadin-rich-text-editor-background, transparent);
+    border: none;
+    border-radius: 0;
     min-height: calc(var(--lumo-size-m) * 8);
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
@@ -20,12 +23,6 @@
 
   :host(:focus-within) {
     outline: none;
-  }
-
-  .vaadin-rich-text-editor-container {
-    background: var(--vaadin-rich-text-editor-background, transparent);
-    border: none;
-    border-radius: 0;
   }
 
   [part='content'] {

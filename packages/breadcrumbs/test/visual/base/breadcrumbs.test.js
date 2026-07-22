@@ -114,8 +114,9 @@ describe('breadcrumbs', () => {
       const overlay = breadcrumbs.shadowRoot.querySelector('vaadin-breadcrumbs-overlay');
       const button = breadcrumbs.shadowRoot.querySelector('[part="overflow-button"]');
       button.focus();
+      const opened = oneEvent(overlay, 'vaadin-overlay-open');
       await sendKeys({ press: 'Enter' });
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      await opened;
       await visualDiff(div, 'overflow-opened');
     });
   });

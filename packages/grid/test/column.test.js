@@ -353,6 +353,16 @@ describe('column', () => {
         expect(grid.$.header.children[0].hidden).to.be.ok;
       });
 
+      it('should not hide the header row with null header and header renderer', () => {
+        emptyColumn.headerRenderer = (root) => {
+          root.textContent = 'foo';
+        };
+        emptyColumn.header = null;
+        grid.removeChild(grid.querySelector('vaadin-grid-column-group'));
+        flushGrid(grid);
+        expect(grid.$.header.children[0].hidden).not.to.be.ok;
+      });
+
       it('should produce an empty header cell', () => {
         emptyColumn.path = 'foo';
         emptyColumn.header = '';
@@ -490,6 +500,46 @@ describe('column', () => {
 
         expect(cell._content.textContent).to.equal('content2');
       });
+    });
+  });
+
+  describe('cell content attach and detach', () => {
+    ['header', 'body', 'footer'].forEach((sectionName) => {
+      let content;
+
+      beforeEach(() => {
+        switch (sectionName) {
+          case 'header':
+            content = getHeaderCellContent(grid, 1, 0);
+            break;
+          case 'footer':
+            content = getContainerCellContent(grid.$.footer, 0, 0);
+            break;
+          default:
+            content = getBodyCellContent(grid, 0, 0);
+        }
+      });
+
+      it(`should remove ${sectionName} cell content from the grid when column is removed`, async () => {
+        column.remove();
+        await nextFrame();
+
+        expect(content.parentElement).to.be.null;
+      });
+    });
+
+    it('should render cell content when column is added back', async () => {
+      const group = column.parentElement;
+      column.remove();
+      await nextFrame();
+
+      group.insertBefore(column, group.firstElementChild);
+      await nextFrame();
+      flushGrid(grid);
+
+      expect(getHeaderCellContent(grid, 1, 0).textContent).to.equal('header1');
+      expect(getContainerCellContent(grid.$.footer, 0, 0).textContent).to.equal('footer1');
+      expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('cell');
     });
   });
 

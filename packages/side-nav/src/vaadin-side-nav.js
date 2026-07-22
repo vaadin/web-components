@@ -214,23 +214,25 @@ class SideNav extends SideNavChildrenMixin(
   /** @protected */
   render() {
     return html`
-      ${this.collapsible
-        ? html`
-            <button
-              part="label"
-              @click="${this._onLabelClick}"
-              aria-expanded="${!this.collapsed}"
-              aria-controls="children"
-            >
-              <slot name="label" @slotchange="${this._onLabelSlotChange}"></slot>
-              <span part="toggle-button" aria-hidden="true"></span>
-            </button>
-          `
-        : html`
-            <div part="label">
-              <slot name="label" @slotchange="${this._onLabelSlotChange}"></slot>
-            </div>
-          `}
+      ${
+        this.collapsible
+          ? html`
+              <button
+                part="label"
+                @click="${this._onLabelClick}"
+                aria-expanded="${!this.collapsed}"
+                aria-controls="children"
+              >
+                <slot name="label" @slotchange="${this._onLabelSlotChange}"></slot>
+                <span part="toggle-button" aria-hidden="true"></span>
+              </button>
+            `
+          : html`
+              <div part="label">
+                <slot name="label" @slotchange="${this._onLabelSlotChange}"></slot>
+              </div>
+            `
+      }
       <ul
         id="children"
         role="list"

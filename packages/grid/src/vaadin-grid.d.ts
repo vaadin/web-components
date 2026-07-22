@@ -5,6 +5,7 @@
  */
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { GridEventMap, GridMixinClass } from './vaadin-grid-mixin.js';
@@ -12,6 +13,34 @@ import type { GridEventMap, GridMixinClass } from './vaadin-grid-mixin.js';
 export * from './vaadin-grid-mixin.js';
 
 export type GridDefaultItem = any;
+
+export interface GridI18n {
+  /**
+   * The accessible name (aria-label) for the Select All checkbox in the
+   * selection column header cell.
+   */
+  selectAll?: string;
+
+  /**
+   * The accessible name announced for the selection column header cell when the
+   * Select All checkbox is hidden (e.g. a data provider is used or conditional
+   * selection is enabled), rendered as a screen-reader-only label in the cell.
+   */
+  selectAllUnavailable?: string;
+
+  /**
+   * The accessible name (aria-label) template for the Select Row checkbox in
+   * each selection column body cell. The `{rowHeader}` placeholder is replaced with
+   * the row header cell text content or row index if there is no row header column.
+   */
+  selectRow?: string;
+
+  /**
+   * Accessible name (aria-label) for the grid sorters. The `{column}`
+   * placeholder is replaced with the sorter text content.
+   */
+  sorter?: string;
+}
 
 /**
  * `<vaadin-grid>` is a free, high quality data grid / data table Web Component. The content of the
@@ -265,6 +294,33 @@ export type GridDefaultItem = any;
  * @fires {CustomEvent} item-toggle - Fired when the user selects or deselects an item through the selection column.
  */
 declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
+  /**
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
+   *
+   * The object has the following JSON structure and default values:
+   *
+   * ```js
+   * {
+   *   // Accessible name (aria-label) for the select all checkbox in the
+   *   // selection column header cell.
+   *   selectAll: 'Select All',
+   *   // Screen-reader-only label announced for the selection column header cell
+   *   // when the Select All checkbox is hidden (data provider or conditional selection).
+   *   selectAllUnavailable: 'Select All unavailable',
+   *   // Accessible name (aria-label) for the select row checkbox in each
+   *   // selection column body cell. The `{rowHeader}` placeholder is replaced with the
+   *   // row header cell text content or row index if there is no row header column.
+   *   selectRow: 'Select Row {rowHeader}',
+   *   // Accessible name (aria-label) for the grid sorters. The `{column}`
+   *   // placeholder is replaced with the sorter text content.
+   *   sorter: 'Sort by {column}',
+   * }
+   * ```
+   */
+  i18n: GridI18n;
+
   addEventListener<K extends keyof GridEventMap<TItem>>(
     type: K,
     listener: (this: Grid<TItem>, ev: GridEventMap<TItem>[K]) => void,
@@ -279,7 +335,13 @@ declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
 }
 
 interface Grid<TItem = GridDefaultItem>
-  extends DisabledMixinClass, ElementMixinClass, ThemableMixinClass, ThemePropertyMixinClass, GridMixinClass<TItem> {}
+  extends
+    DisabledMixinClass,
+    ElementMixinClass,
+    I18nMixinClass<GridI18n>,
+    ThemableMixinClass,
+    ThemePropertyMixinClass,
+    GridMixinClass<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {

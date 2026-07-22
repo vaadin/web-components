@@ -5,9 +5,8 @@
  */
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
-import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { isAndroid, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 import { setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -25,6 +24,7 @@ import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
 import {
   getBodyRowCells,
+  getClosestCell,
   iterateChildren,
   iterateRowCells,
   updateBooleanRowStates,
@@ -89,12 +89,6 @@ export const GridMixin = (superClass) =>
         _ios: {
           type: Boolean,
           value: isIOS,
-        },
-
-        /** @private */
-        _firefox: {
-          type: Boolean,
-          value: isFirefox,
         },
 
         /** @private */
@@ -164,6 +158,15 @@ export const GridMixin = (superClass) =>
       return lastVisibleItem ? lastVisibleItem.index : undefined;
     }
 
+    constructor() {
+      super();
+
+      this.__onCellMouseEnter = this.__onCellMouseEnter.bind(this);
+      this.__onCellMouseLeave = this.__onCellMouseLeave.bind(this);
+      this.__onCellMouseDown = this.__onCellMouseDown.bind(this);
+      this.__onCellKeyDown = this.__onCellKeyDown.bind(this);
+    }
+
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
@@ -210,13 +213,7 @@ export const GridMixin = (superClass) =>
 
     /** @protected */
     _getRowContainingNode(node) {
-      const content = getClosestElement('vaadin-grid-cell-content', node);
-      if (!content) {
-        return;
-      }
-
-      const cell = content.assignedSlot.parentElement;
-      return cell.parentElement;
+      return getClosestCell(node)?.parentElement;
     }
 
     /** @protected */
@@ -247,6 +244,13 @@ export const GridMixin = (superClass) =>
         // otherwise be triggered by this logic because it reads the row height
         // right after updating the rows' content.
         __disableHeightPlaceholder: true,
+        // The virtualizer amortizes scroller height updates to avoid reflows while
+        // scrolling. In `allRowsVisible` mode the grid has no scrolling and its
+        // height must track the content exactly, so tell the virtualizer to always
+        // apply the scroller height. Otherwise the items container can be left at a
+        // stale, too-small height and clip rows when the grid grows (e.g. when
+        // expanding a tree grid from a small size).
+        __alwaysUpdateScrollerSize: () => this.allRowsVisible,
       });
 
       this._tooltipController = new TooltipController(this);
@@ -364,6 +368,36 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
+    __onCellKeyDown(event) {
+      const cell = event.currentTarget;
+      cell._column?.__onCellKeyDown?.(event);
+    }
+
+    /** @private */
+    __onCellMouseEnter(event) {
+      // For now we only support tooltip on desktop
+      if (!isAndroid && !isIOS && !this.$.scroller.hasAttribute('scrolling')) {
+        this._showTooltip(event);
+      }
+    }
+
+    /** @private */
+    __onCellMouseLeave() {
+      // For now we only support tooltip on desktop
+      if (!isAndroid && !isIOS) {
+        this._hideTooltip();
+      }
+    }
+
+    /** @private */
+    __onCellMouseDown() {
+      // For now we only support tooltip on desktop
+      if (!isAndroid && !isIOS) {
+        this._hideTooltip(true);
+      }
+    }
+
+    /** @private */
     _createCell(tagName, column) {
       const contentId = (this._contentIndex = this._contentIndex + 1 || 0);
       const slotName = `vaadin-grid-cell-content-${contentId}`;
@@ -375,22 +409,10 @@ export const GridMixin = (superClass) =>
       cell.id = slotName.replace('-content-', '-');
       cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
 
-      // For now we only support tooltip on desktop
-      if (!isAndroid && !isIOS) {
-        cell.addEventListener('mouseenter', (event) => {
-          if (!this.$.scroller.hasAttribute('scrolling')) {
-            this._showTooltip(event);
-          }
-        });
-
-        cell.addEventListener('mouseleave', () => {
-          this._hideTooltip();
-        });
-
-        cell.addEventListener('mousedown', () => {
-          this._hideTooltip(true);
-        });
-      }
+      cell.addEventListener('mouseenter', this.__onCellMouseEnter);
+      cell.addEventListener('mouseleave', this.__onCellMouseLeave);
+      cell.addEventListener('mousedown', this.__onCellMouseDown);
+      cell.addEventListener('keydown', this.__onCellKeyDown);
 
       const slot = document.createElement('slot');
       slot.setAttribute('name', slotName);
@@ -414,34 +436,6 @@ export const GridMixin = (superClass) =>
       }
 
       cell._content = cellContent;
-
-      // With native Shadow DOM, mousedown on slotted element does not focus
-      // focusable slot wrapper, that is why cells are not focused with
-      // mousedown. Workaround: listen for mousedown and focus manually.
-      cellContent.addEventListener('mousedown', () => {
-        if (isChrome) {
-          // Chrome bug: focusing before mouseup prevents text selection, see http://crbug.com/771903
-          const mouseUpListener = (event) => {
-            // If focus is on element within the cell content - respect it, do not change
-            const contentContainsFocusedElement = cellContent.contains(this.getRootNode().activeElement);
-            // Only focus if mouse is released on cell content itself
-            const mouseUpWithinCell = event.composedPath().includes(cellContent);
-            if (!contentContainsFocusedElement && mouseUpWithinCell) {
-              cell.focus({ preventScroll: true });
-            }
-            document.removeEventListener('mouseup', mouseUpListener, true);
-          };
-          document.addEventListener('mouseup', mouseUpListener, true);
-        } else {
-          // Focus on mouseup, on the other hand, removes selection on Safari.
-          // Watch out sync focus removal issue, only async focus works here.
-          setTimeout(() => {
-            if (!cellContent.contains(this.getRootNode().activeElement)) {
-              cell.focus({ preventScroll: true });
-            }
-          });
-        }
-      });
 
       return cell;
     }
@@ -481,9 +475,6 @@ export const GridMixin = (superClass) =>
             cell = column._cells.find((cell) => cell._vacant);
             if (!cell) {
               cell = this._createCell('td', column);
-              if (column._onCellKeyDown) {
-                cell.addEventListener('keydown', column._onCellKeyDown.bind(column));
-              }
               column._cells.push(cell);
             }
             updatePart(cell, 'cell', true);
@@ -532,9 +523,6 @@ export const GridMixin = (superClass) =>
               cell = column[`_${section}Cell`];
               if (!cell) {
                 cell = this._createCell(tagName);
-                if (column._onCellKeyDown) {
-                  cell.addEventListener('keydown', column._onCellKeyDown.bind(column));
-                }
               }
               cell._column = column;
               row.appendChild(cell);
@@ -931,9 +919,7 @@ export const GridMixin = (superClass) =>
 
     /** @protected */
     __updateVisibleRows(start, end) {
-      if (this.__virtualizer) {
-        this.__virtualizer.update(start, end);
-      }
+      this.__virtualizer?.update(start, end);
     }
 
     /** @private */

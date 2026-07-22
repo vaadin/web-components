@@ -21,12 +21,14 @@ export const SelectOverlayMixin = (superClass) =>
     }
 
     /**
-     * Override method from OverlayFocusMixin to use slotted div as content root.
+     * Override method from OverlayFocusMixin to use the content root that
+     * actually holds the focused item, so focus is restored on close.
+     *
      * @protected
      * @override
      */
     get _contentRoot() {
-      return this._rendererRoot;
+      return this.owner.__slottedListBox || this._rendererRoot;
     }
 
     /**
@@ -70,7 +72,12 @@ export const SelectOverlayMixin = (superClass) =>
 
     /** @protected */
     _getMenuElement() {
-      return Array.from(this._rendererRoot.children).find((el) => el.localName !== 'style');
+      const slot = this.owner.shadowRoot.querySelector('slot[name="overlay"]');
+      const assigned = slot.assignedElements();
+      return (
+        assigned.find((el) => el._hasVaadinListMixin) ||
+        assigned.flatMap((el) => [...el.children]).find((el) => el._hasVaadinListMixin)
+      );
     }
 
     /** @private */

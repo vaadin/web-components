@@ -17,10 +17,7 @@ export declare function ClearButtonMixin<T extends Constructor<HTMLElement>>(
 export declare class ClearButtonMixinClass {
   /**
    * Set to true to display the clear icon which clears the input.
-   *
-   * It is up to the component to choose where to place the clear icon:
-   * in the Shadow DOM or in the light DOM. In any way, a reference to
-   * the clear icon element should be provided via the `clearElement` getter.
+   * This also enables clearing the input when pressing Esc key.
    *
    * @attr {boolean} clear-button-visible
    */

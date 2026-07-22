@@ -205,7 +205,7 @@ describe('__focusIndex', () => {
 
       const firstVisible = comboBox._scroller.__virtualizer.firstVisibleIndex;
       const lastVisible = comboBox._scroller.__virtualizer.lastVisibleIndex;
-      const targetIndex = firstVisible + Math.floor((lastVisible - firstVisible) / 2);
+      const targetIndex = firstVisible + Math.ceil((lastVisible - firstVisible) / 2);
 
       comboBox.__focusIndex(targetIndex);
       flushComboBox(comboBox);

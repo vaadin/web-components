@@ -56,5 +56,6 @@ export class SelectRendererDirective extends LitRendererDirective {
  * @param renderer the renderer callback that returns a Lit template.
  * @param dependencies a single dependency or an array of dependencies
  *                     which trigger a re-render when changed.
+ * @deprecated Use a slotted `<vaadin-select-list-box>` or the `items` property instead
  */
 export const selectRenderer = directive(SelectRendererDirective);

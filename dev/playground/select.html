@@ -40,6 +40,22 @@
     </section>
 
     <section class="section">
+      <h2 class="heading">Custom list-box</h2>
+
+      <vaadin-select label="Size" value="s">
+        <vaadin-select-list-box slot="overlay">
+          <vaadin-select-item value="all">Show all</vaadin-select-item>
+          <hr />
+          <vaadin-select-item value="xs" disabled>XS (out of stock)</vaadin-select-item>
+          <vaadin-select-item value="s">S</vaadin-select-item>
+          <vaadin-select-item value="m">M</vaadin-select-item>
+          <vaadin-select-item value="l">L</vaadin-select-item>
+          <vaadin-select-item value="xl">XL</vaadin-select-item>
+        </vaadin-select-list-box>
+      </vaadin-select>
+    </section>
+
+    <section class="section">
       <h2 class="heading">States</h2>
       <vaadin-select
         label="Read-only"
