@@ -8,7 +8,7 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { PopoverPositionMixin } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
 import { PopoverTargetMixin } from '@vaadin/popover/src/vaadin-popover-target-mixin.js';
-import { TooltipAriaController } from './tooltip-aria-controller.js';
+import { TooltipAriaMixin } from './vaadin-tooltip-aria-mixin.js';
 
 const DEFAULT_DELAY = 500;
 
@@ -218,35 +218,9 @@ class TooltipStateController {
  * A mixin providing common tooltip functionality.
  */
 export const TooltipMixin = (superClass) =>
-  class TooltipMixinClass extends PopoverPositionMixin(PopoverTargetMixin(superClass)) {
+  class TooltipMixinClass extends TooltipAriaMixin(PopoverPositionMixin(PopoverTargetMixin(superClass))) {
     static get properties() {
       return {
-        /**
-         * Element used to link with the ARIA attribute controlled by the
-         * `ariaLinkMode` property. Supports array of multiple elements.
-         * When not set, defaults to `target`.
-         */
-        ariaTarget: {
-          type: Object,
-        },
-
-        /**
-         * Controls which ARIA attribute is used to link the target element(s)
-         * with the tooltip content. Supported values:
-         *
-         * - `aria-describedby` - links the tooltip as a description.
-         * - `aria-labelledby` - links the tooltip as an accessible name.
-         * - `none` - does not add any ARIA linking attribute.
-         *
-         * Defaults to `aria-describedby`.
-         *
-         * @attr {string} aria-link-mode
-         */
-        ariaLinkMode: {
-          type: String,
-          value: 'aria-describedby',
-        },
-
         /**
          * Object with properties passed to `generator` and
          * `shouldShow` functions for generating tooltip text
@@ -355,16 +329,6 @@ export const TooltipMixin = (superClass) =>
           reflectToAttribute: true,
         },
 
-        /**
-         * Element used to link with the `aria-describedby`
-         * attribute. When not set, defaults to `target`.
-         * @protected
-         */
-        _effectiveAriaTarget: {
-          type: Object,
-          computed: '__computeAriaTarget(ariaTarget, target)',
-        },
-
         /** @private */
         __isTargetHidden: {
           type: Boolean,
@@ -430,7 +394,6 @@ export const TooltipMixin = (superClass) =>
       );
 
       this._stateController = new TooltipStateController(this);
-      this.__ariaController = new TooltipAriaController();
     }
 
     /** @protected */
@@ -465,7 +428,6 @@ export const TooltipMixin = (superClass) =>
           element.id = this._uniqueId;
           element.setAttribute('role', 'tooltip');
           this.__contentNode = element;
-          this.__ariaController.setContent(element);
         },
       });
       this.addController(this.__contentController);
@@ -477,14 +439,6 @@ export const TooltipMixin = (superClass) =>
 
       if (props.has('text') || props.has('generator') || props.has('context') || props.has('markdown')) {
         this.__updateContent();
-      }
-
-      if (props.has('_effectiveAriaTarget')) {
-        this.__ariaController.setTarget(this._effectiveAriaTarget);
-      }
-
-      if (props.has('ariaLinkMode')) {
-        this.__ariaController.setMode(this.ariaLinkMode);
       }
     }
 
@@ -744,13 +698,6 @@ export const TooltipMixin = (superClass) =>
       if (newTextContent !== oldTextContent) {
         this.dispatchEvent(new CustomEvent('content-changed', { detail: { content: newTextContent } }));
       }
-    }
-
-    /** @private */
-    __computeAriaTarget(ariaTarget, target) {
-      const isElementNode = (el) => el?.nodeType === Node.ELEMENT_NODE;
-      const isAriaTargetSet = Array.isArray(ariaTarget) ? ariaTarget.some(isElementNode) : ariaTarget;
-      return ariaTarget === null || isAriaTargetSet ? ariaTarget : target;
     }
 
     /** @private **/
