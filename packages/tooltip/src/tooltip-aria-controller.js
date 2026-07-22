@@ -21,9 +21,9 @@ export class TooltipAriaController {
    * @param {HTMLElement | null | undefined} content
    */
   setContent(content) {
-    this.#removeLinks();
+    this.#removeReferences();
     this.#content = content;
-    this.#addLinks();
+    this.#addReferences();
   }
 
   /**
@@ -33,9 +33,9 @@ export class TooltipAriaController {
    * @param {HTMLElement | HTMLElement[] | null | undefined} target
    */
   setTarget(target) {
-    this.#removeLinks();
+    this.#removeReferences();
     this.#targets = target ? [target].flat() : null;
-    this.#addLinks();
+    this.#addReferences();
   }
 
   /**
@@ -45,12 +45,12 @@ export class TooltipAriaController {
    * @param {'aria-describedby' | 'aria-labelledby' | 'none'} mode
    */
   setMode(mode) {
-    this.#removeLinks();
+    this.#removeReferences();
     this.#mode = mode;
-    this.#addLinks();
+    this.#addReferences();
   }
 
-  #addLinks() {
+  #addReferences() {
     if (!this.#content || !this.#mode || this.#mode === 'none') {
       return;
     }
@@ -60,7 +60,7 @@ export class TooltipAriaController {
     });
   }
 
-  #removeLinks() {
+  #removeReferences() {
     if (!this.#content || !this.#mode || this.#mode === 'none') {
       return;
     }
