@@ -116,6 +116,11 @@ export const PositionMixin = (superClass) =>
     constructor() {
       super();
 
+      /**
+       * Used for mixin detection because `instanceof` does not work with mixins.
+       */
+      this._hasOverlayPositionMixin = true;
+
       this.__onScroll = this.__onScroll.bind(this);
       this._updatePosition = this._updatePosition.bind(this);
     }
