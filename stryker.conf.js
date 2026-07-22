@@ -31,6 +31,11 @@ export default {
   },
   inPlace: true,
   mutate: [`packages/${group}/src/**/*.js`, `!packages/${group}/src/styles/**`],
+  // Skip mutants in code the unit suite never covers (theme injectors), so they
+  // don't waste a run each and don't clutter the report as false survivors.
+  // `plugins` registers the ignorer; `ignorers` activates it by name.
+  plugins: ['./stryker-ignore-plugin.js'],
+  ignorers: ['untested-getters'],
   // Source is plain JS with nothing to strip; skip parsing every file in the
   // repo (avoids noisy HTML parse warnings on generated docs/coverage output).
   disableTypeChecks: false,

@@ -35,6 +35,14 @@ resolves.
   mutation ranges (`file.js:start-end`), groups them by package, and runs
   Stryker once per package with `STRYKER_GROUP` set, so a PR only mutates its
   own changed lines and multi-package changes are handled.
+- **`stryker-ignore-plugin.js`** — a Stryker ignore plugin that skips mutants in
+  code the unit suite never covers, so they don't clutter the report as false
+  survivors (and don't cost a run each). It currently ignores `static get
+  lumoInjector()` / `auraInjector()` — theme injection, exercised only by visual
+  tests. To extend it, add a getter name to `IGNORED_GETTERS`, but only after
+  confirming the code is genuinely not unit-tested (e.g. `styles` is left in
+  because a `getComputedStyle` assertion can catch it). Registered via `plugins`
+  and activated via `ignorers` in `stryker.conf.js`.
 - **`inPlace: true`** mutates source in place (restored afterwards) so the
   monorepo's workspace symlinks stay intact; **`concurrency: 1`** avoids a Web
   Test Runner dev-server port race; **`incremental`** reuses results between
