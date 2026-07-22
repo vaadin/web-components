@@ -70,9 +70,10 @@ function adoptMarkerStyles(field) {
 }
 
 /**
- * An element used to annotate a field as AI-filled. It injects itself into the
- * field's shadow root, draws an "AI" badge anchored to the field, and offers a
- * popover that explains the AI fill and lets the user revert the value.
+ * An element used to annotate a field as AI-filled. It slots itself into the
+ * field via a slot injected into the field's shadow root, draws an "AI" badge
+ * anchored to the field, and offers a popover that explains the AI fill and
+ * lets the user revert the value.
  *
  * Not intended to be used as a standalone tag; use the static
  * `AiFieldMarker.mark()` / `AiFieldMarker.unmark()` API (also reachable from
@@ -81,10 +82,10 @@ function adoptMarkerStyles(field) {
  * toggle an "AI is working" shimmer on the field along with a client-side
  * read-only guard.
  *
- * Custom popover content can be supplied by slotting an element on the FIELD
- * with `slot="ai-field-marker-popover-content"`; the marker forwards it into the
- * popover. This is the integration point for frameworks (e.g. Flow) that render
- * content as server-side elements in the field's light DOM.
+ * The marker and its popover render in the field's light DOM, so custom
+ * popover content can be supplied by appending elements to the marker's
+ * `vaadin-popover` child. This is the integration point for frameworks
+ * (e.g. Flow) that render content as server-side elements.
  *
  * @fires {CustomEvent} ai-field-revert - Fired from the field element when the user activates the revert control. The host restores the value.
  *
@@ -141,9 +142,16 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
     };
   }
 
+  constructor() {
+    super();
+    // Stable badge id: generating it in render() would re-target the tooltip
+    // and popover on every re-render.
+    this.__badgeId = generateUniqueId();
+  }
+
   /** @protected */
   render() {
-    const id = generateUniqueId();
+    const id = this.__badgeId;
     return html`
       <button id="vaadin-ai-marker-${id}" part="badge" type="button" aria-label="${this.badgeLabel}">AI</button>
       <vaadin-tooltip for="vaadin-ai-marker-${id}" text="${this.badgeTooltip}"></vaadin-tooltip>
