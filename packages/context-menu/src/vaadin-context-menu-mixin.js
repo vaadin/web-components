@@ -210,6 +210,22 @@ export const ContextMenuMixin = (superClass) =>
           this.closeOn = '';
         }
       }
+
+      // Re-render an open menu when the items array is reassigned, so the content
+      // stays in sync without an explicit requestContentUpdate() call. Deferred to a
+      // microtask so the rebuild runs after the current update cycle and any in-flight
+      // event dispatch (e.g. item-selected), keeping focus / sub-menu restoration intact.
+      if (props.has('items') && this.opened && !this.__contentUpdateScheduled) {
+        this.__contentUpdateScheduled = true;
+        queueMicrotask(() => {
+          // A manual or internal requestContentUpdate() may have already run and
+          // cleared the flag; only rebuild if the reactive update is still pending.
+          if (this.__contentUpdateScheduled && this.opened) {
+            this.__requestContentUpdate();
+          }
+          this.__contentUpdateScheduled = false;
+        });
+      }
     }
 
     /**
@@ -329,6 +345,14 @@ export const ContextMenuMixin = (superClass) =>
      * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
      */
     requestContentUpdate() {
+      this.__requestContentUpdate();
+    }
+
+    /** @private */
+    __requestContentUpdate() {
+      // Cancel a pending reactive rebuild; this call already refreshes the content.
+      this.__contentUpdateScheduled = false;
+
       if (!this._overlayElement) {
         return;
       }
@@ -440,7 +464,7 @@ export const ContextMenuMixin = (superClass) =>
             if (Array.isArray(itemToOpen._item.children) && itemToOpen._item.children.length) {
               // Keep nested sub-menu opened and update it
               this.__updateSubMenuForItem(this._subMenu, itemToOpen);
-              this._subMenu.requestContentUpdate();
+              this._subMenu.__requestContentUpdate();
             } else {
               // Item no longer has children, close sub-menu
               this._subMenu.close();

@@ -637,6 +637,15 @@ describe('items', () => {
   });
 
   describe('updating while opened', () => {
+    it('should update items reactively while opened without requestContentUpdate', async () => {
+      rootMenu.items = [{ text: 'foo-1' }, { text: 'foo-2' }];
+      await nextRender();
+      const items = getMenuItems(rootMenu);
+      expect(items.length).to.equal(2);
+      expect(items[0].textContent).to.equal('foo-1');
+      expect(items[1].textContent).to.equal('foo-2');
+    });
+
     it('should update items when calling requestContentUpdate while opened', async () => {
       rootMenu.items = [{ text: 'foo-1' }, { text: 'foo-2' }];
       rootMenu.requestContentUpdate();

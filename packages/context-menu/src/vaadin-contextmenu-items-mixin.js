@@ -378,7 +378,7 @@ export const ItemsMixin = (superClass) =>
         // Menu can be no longer opened if parent menu items changed
         if (!!selectedItem.keepOpen && index > -1 && menu.opened) {
           menu.__selectedIndex = index;
-          menu.requestContentUpdate();
+          menu.__requestContentUpdate();
         } else if (!selectedItem.keepOpen) {
           this.close();
         }
