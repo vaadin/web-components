@@ -10,23 +10,21 @@
 export class LabelledInputController {
   constructor(input, labelController) {
     this.input = input;
-    this.__preventDuplicateLabelClick = this.__preventDuplicateLabelClick.bind(this);
 
     labelController.addEventListener('slot-content-changed', (event) => {
-      this.__initLabel(event.detail.node);
+      this.#initLabel(event.detail.node);
     });
 
     // Initialize the default label element
-    this.__initLabel(labelController.node);
+    this.#initLabel(labelController.node);
   }
 
   /**
    * @param {HTMLElement} label
-   * @private
    */
-  __initLabel(label) {
+  #initLabel(label) {
     if (label) {
-      label.addEventListener('click', this.__preventDuplicateLabelClick);
+      label.addEventListener('click', this.#preventDuplicateLabelClick);
 
       if (this.input) {
         label.setAttribute('for', this.input.id);
@@ -40,13 +38,12 @@ export class LabelledInputController {
    * This results in two click events arriving at the host, but we only want one.
    * This method prevents the duplicate click and ensures the correct isTrusted event
    * with the correct event.target arrives at the host.
-   * @private
    */
-  __preventDuplicateLabelClick() {
+  #preventDuplicateLabelClick = () => {
     const inputClickHandler = (e) => {
       e.stopImmediatePropagation();
       this.input.removeEventListener('click', inputClickHandler);
     };
     this.input.addEventListener('click', inputClickHandler);
-  }
+  };
 }
