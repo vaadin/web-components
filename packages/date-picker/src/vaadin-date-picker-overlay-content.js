@@ -12,6 +12,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { loaderStyles } from '@vaadin/component-base/src/styles/loader-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { overlayContentStyles } from './styles/vaadin-date-picker-overlay-content-base-styles.js';
@@ -30,7 +31,7 @@ class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
   }
 
   static get styles() {
-    return overlayContentStyles;
+    return [loaderStyles, overlayContentStyles];
   }
 
   static get lumoInjector() {
@@ -42,6 +43,8 @@ class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
     return html`
       <slot name="months"></slot>
       <slot name="years"></slot>
+
+      <div part="loader" aria-hidden="true"></div>
 
       <div role="toolbar" part="toolbar">
         <slot name="today-button"></slot>

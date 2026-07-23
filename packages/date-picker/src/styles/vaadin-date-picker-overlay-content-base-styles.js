@@ -17,6 +17,7 @@ export const overlayContentStyles = css`
     height: 100%;
     outline: none;
     overflow: hidden;
+    position: relative;
   }
 
   :host([desktop]) {
@@ -47,6 +48,17 @@ export const overlayContentStyles = css`
 
   [hidden] {
     display: none !important;
+  }
+
+  /* Loading spinner shown while data is being loaded (currently while the disabled dates provider
+     resolves). Positioned over the month scroller, which paints its own transformed layers, so
+     grid stacking is not enough. */
+  [part='loader'] {
+    position: absolute;
+    z-index: 1;
+    inset-block-start: var(--vaadin-date-picker-month-header-font-size, 0.9375rem);
+    inset-inline: 0;
+    margin-inline: auto;
   }
 
   ::slotted([slot='months']) {

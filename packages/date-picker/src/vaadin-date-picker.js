@@ -92,6 +92,7 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * ----------------------|--------------------
  * `years-toggle-button` | Fullscreen mode years scroller toggle
  * `toolbar`             | Toolbar with slotted buttons
+ * `loader`              | Loading spinner shown while data is being loaded, for example while the disabled dates provider resolves
  *
  * The following state attributes are available on the `<vaadin-date-picker-overlay-content>` element:
  *
@@ -100,6 +101,7 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * `desktop`       | Set when the overlay content is in desktop mode
  * `fullscreen`    | Set when the overlay content is in fullscreen mode
  * `years-visible` | Set when the year scroller is visible in fullscreen mode
+ * `loading`       | Set while data is being loaded, for example while the disabled dates provider resolves
  *
  * In order to style the month calendar, use `<vaadin-month-calendar>` shadow DOM parts:
  *
@@ -112,11 +114,16 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * `week-number`         | Week number element
  * `date`                | Date element
  * `disabled`            | Disabled date element
+ * `pending`             | Date element in a month whose date metadata provider result is still loading
  * `focused`             | Focused date element
  * `selected`            | Selected date element
  * `today`               | Date element corresponding to the current day
  * `past`                | Date element corresponding to the date in the past
  * `future`              | Date element corresponding to the date in the future
+ *
+ * Custom part names returned per date by `dateMetadataProvider` (the `part` metadata field) are
+ * also added to the matching date elements, so specific dates can be styled with
+ * `vaadin-month-calendar::part(<name>)`.
  *
  * In order to style year scroller elements, use `<vaadin-date-picker-year>` shadow DOM parts:
  *
