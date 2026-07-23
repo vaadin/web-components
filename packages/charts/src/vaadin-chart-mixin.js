@@ -729,7 +729,7 @@ export const ChartMixin = (superClass) =>
       // It is destroyed on re-init (above) and on disconnect; the listener misses the
       // first (synchronous) render, so also apply once now.
       this.__patternFillBridge = new PatternFillBridge(this.configuration, this.shadowRoot);
-      Highcharts.addEvent(this.configuration, 'render', () => this.__patternFillBridge.apply());
+      Highcharts.addEvent(this.configuration, 'render', () => this.__patternFillBridge?.apply());
       this.__patternFillBridge.apply();
 
       this.__forceResize();

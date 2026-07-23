@@ -159,6 +159,10 @@ export class PatternFillBridge {
     // Use the series' theme color when the pattern sets no explicit color.
     const patternColor = pattern.color || `var(--_color-${colorIndex})`;
 
+    // Without an explicit `pattern.id`, the id is derived from the pattern's content
+    // (incl. color), so patterns that differ get distinct defs. An explicit `pattern.id`
+    // identifies one shared def: reusing it across patterns that differ (e.g. a different
+    // color) intentionally reuses the first def — pick distinct ids for distinct patterns.
     const id =
       pattern.id || `vaadin-pattern-${this.#hashPattern({ ...this.#stripInternalKeys(pattern), color: patternColor })}`;
 
@@ -284,13 +288,7 @@ export class PatternFillBridge {
    * @return {Object}
    */
   #stripInternalKeys(pattern) {
-    const result = {};
-    Object.keys(pattern).forEach((key) => {
-      if (!key.startsWith('_')) {
-        result[key] = pattern[key];
-      }
-    });
-    return result;
+    return Object.fromEntries(Object.entries(pattern).filter(([key]) => !key.startsWith('_')));
   }
 
   /**
