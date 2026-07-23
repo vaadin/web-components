@@ -34,11 +34,11 @@ class CrudDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin
   }
 
   /**
-   * Override method from OverlayFocusMixin to use dialog as focus trap root
+   * Override method from OverlayFocusMixin to use dialog as focus root
    * @protected
    * @override
    */
-  get _focusTrapRoot() {
+  get _focusRoot() {
     // Do not use `owner` since that points to `vaadin-crud`
     return this.getRootNode().host;
   }

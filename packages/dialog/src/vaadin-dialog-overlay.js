@@ -32,11 +32,11 @@ export class DialogOverlay extends DialogOverlayMixin(
   }
 
   /**
-   * Override method from OverlayFocusMixin to use owner as focus trap root
+   * Override method from OverlayFocusMixin to use owner as focus root
    * @protected
    * @override
    */
-  get _focusTrapRoot() {
+  get _focusRoot() {
     return this.owner;
   }
 

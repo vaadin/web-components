@@ -40,9 +40,10 @@ export declare class OverlayFocusMixinClass {
   protected _saveFocus(): void;
 
   /**
-   * Trap focus within the overlay after opening has completed.
+   * Sets up focus after the overlay opening has completed: traps focus
+   * within the overlay if `focusTrap` is enabled.
    */
-  protected _trapFocus(): void;
+  protected _initFocus(): void;
 
   /**
    * Returns true if focus is still inside the overlay or on the body element,

@@ -66,11 +66,11 @@ export const OverlayFocusMixin = (superClass) =>
     }
 
     /**
-     * Override to specify another element used as a focus trap root,
+     * Override to specify another element used as a focus root,
      * e.g. the overlay's owner element, rather than overlay part.
      * @protected
      */
-    get _focusTrapRoot() {
+    get _focusRoot() {
       return this.$.overlay;
     }
 
@@ -103,13 +103,14 @@ export const OverlayFocusMixin = (superClass) =>
     }
 
     /**
-     * Trap focus within the overlay after opening has completed.
+     * Sets up focus after the overlay opening has completed: traps focus
+     * within the overlay if `focusTrap` is enabled.
      *
      * @protected
      */
-    _trapFocus() {
-      if (this.focusTrap && !isElementHidden(this._focusTrapRoot)) {
-        this.__focusTrapController.trapFocus(this._focusTrapRoot);
+    _initFocus() {
+      if (this.focusTrap && !isElementHidden(this._focusRoot)) {
+        this.__focusTrapController.trapFocus(this._focusRoot);
       }
     }
 
