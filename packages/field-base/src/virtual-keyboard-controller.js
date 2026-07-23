@@ -18,19 +18,18 @@ export class VirtualKeyboardController {
     host.addEventListener('opened-changed', () => {
       if (!host.opened) {
         // Prevent opening the virtual keyboard when the input gets re-focused on dropdown close
-        this.__setVirtualKeyboardEnabled(false);
+        this.#setVirtualKeyboardEnabled(false);
       }
     });
 
     // Re-enable virtual keyboard on blur, so it gets opened when the field is focused again
-    host.addEventListener('blur', () => this.__setVirtualKeyboardEnabled(true));
+    host.addEventListener('blur', () => this.#setVirtualKeyboardEnabled(true));
 
     // Re-enable the virtual keyboard whenever the field is touched
-    host.addEventListener('touchstart', () => this.__setVirtualKeyboardEnabled(true));
+    host.addEventListener('touchstart', () => this.#setVirtualKeyboardEnabled(true));
   }
 
-  /** @private */
-  __setVirtualKeyboardEnabled(value) {
+  #setVirtualKeyboardEnabled(value) {
     if (this.host.inputElement) {
       this.host.inputElement.inputMode = value ? '' : 'none';
     }

@@ -17,8 +17,8 @@ const instances = [];
 export function getActiveTrappingNode(element) {
   // Iterate backwards since instances are ordered outer-to-inner (push/pop)
   for (let i = instances.length - 1; i >= 0; i--) {
-    if (instances[i].__trapNode?.contains(element)) {
-      return instances[i].__trapNode;
+    if (instances[i].trapNode?.contains(element)) {
+      return instances[i].trapNode;
     }
   }
   return null;
@@ -29,6 +29,13 @@ export function getActiveTrappingNode(element) {
  */
 export class FocusTrapController {
   /**
+   * A node for trapping focus in.
+   *
+   * @type {HTMLElement | null}
+   */
+  trapNode = null;
+
+  /**
    * @param {HTMLElement} host
    */
   constructor(host) {
@@ -38,45 +45,33 @@ export class FocusTrapController {
      * @type {HTMLElement}
      */
     this.host = host;
-
-    /**
-     * A node for trapping focus in.
-     *
-     * @type {HTMLElement | null}
-     * @private
-     */
-    this.__trapNode = null;
-
-    this.__onKeyDown = this.__onKeyDown.bind(this);
   }
 
   /**
    * An array of tab-ordered focusable elements inside the trap node.
    *
    * @return {HTMLElement[]}
-   * @private
    */
-  get __focusableElements() {
-    return getTabbableElements(this.__trapNode);
+  get #focusableElements() {
+    return getTabbableElements(this.trapNode);
   }
 
   /**
    * The index of the element inside the trap node that currently has focus.
    *
    * @return {HTMLElement | undefined}
-   * @private
    */
-  get __focusedElementIndex() {
-    const focusableElements = this.__focusableElements;
+  get #focusedElementIndex() {
+    const focusableElements = this.#focusableElements;
     return focusableElements.indexOf(focusableElements.filter(isElementFocused).pop());
   }
 
   hostConnected() {
-    document.addEventListener('keydown', this.__onKeyDown);
+    document.addEventListener('keydown', this.#onKeyDown);
   }
 
   hostDisconnected() {
-    document.removeEventListener('keydown', this.__onKeyDown);
+    document.removeEventListener('keydown', this.#onKeyDown);
   }
 
   /**
@@ -94,17 +89,17 @@ export class FocusTrapController {
    * @param {HTMLElement} trapNode
    */
   trapFocus(trapNode) {
-    this.__trapNode = trapNode;
+    this.trapNode = trapNode;
 
-    if (this.__focusableElements.length === 0) {
-      this.__trapNode = null;
+    if (this.#focusableElements.length === 0) {
+      this.trapNode = null;
       throw new Error('The trap node should have at least one focusable descendant or be focusable itself.');
     }
 
     instances.push(this);
 
-    if (this.__focusedElementIndex === -1) {
-      this.__focusableElements[0].focus({ focusVisible: isKeyboardActive() });
+    if (this.#focusedElementIndex === -1) {
+      this.#focusableElements[0].focus({ focusVisible: isKeyboardActive() });
     }
   }
 
@@ -113,7 +108,7 @@ export class FocusTrapController {
    * so that it becomes possible to tab outside the trap node.
    */
   releaseFocus() {
-    this.__trapNode = null;
+    this.trapNode = null;
 
     instances.pop();
   }
@@ -127,10 +122,9 @@ export class FocusTrapController {
    * When no prev element to focus, the method moves focus to the last focusable element.
    *
    * @param {KeyboardEvent} event
-   * @private
    */
-  __onKeyDown(event) {
-    if (!this.__trapNode) {
+  #onKeyDown = (event) => {
+    if (!this.trapNode) {
       return;
     }
 
@@ -148,9 +142,9 @@ export class FocusTrapController {
       event.preventDefault();
 
       const backward = event.shiftKey;
-      this.__focusNextElement(backward);
+      this.#focusNextElement(backward);
     }
-  }
+  };
 
   /**
    * - Moves focus to the next focusable element if `backward === false`.
@@ -161,12 +155,11 @@ export class FocusTrapController {
    * If no focusable elements, the method returns immediately.
    *
    * @param {boolean} backward
-   * @private
    */
-  __focusNextElement(backward = false) {
-    const focusableElements = this.__focusableElements;
+  #focusNextElement(backward = false) {
+    const focusableElements = this.#focusableElements;
     const step = backward ? -1 : 1;
-    const currentIndex = this.__focusedElementIndex;
+    const currentIndex = this.#focusedElementIndex;
     const nextIndex = (focusableElements.length + currentIndex + step) % focusableElements.length;
     const element = focusableElements[nextIndex];
     element.focus({ focusVisible: true });

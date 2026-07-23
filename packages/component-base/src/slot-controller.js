@@ -202,7 +202,8 @@ export class SlotController extends EventTarget {
     const selector = slotName === '' ? 'slot:not([name])' : `slot[name=${slotName}]`;
     const slot = this.host.shadowRoot.querySelector(selector);
 
-    this.__slotObserver = new SlotObserver(slot, ({ addedNodes, removedNodes }) => {
+    // eslint-disable-next-line no-new
+    new SlotObserver(slot, ({ addedNodes, removedNodes }) => {
       const current = this.multiple ? this.nodes : [this.node];
 
       // Calling `slot.assignedNodes()` includes whitespace text nodes in case of default slot:

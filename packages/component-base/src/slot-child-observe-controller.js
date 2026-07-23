@@ -10,6 +10,9 @@ import { SlotController } from './slot-controller.js';
  * and the text content, and fires an event to notify host element about those.
  */
 export class SlotChildObserveController extends SlotController {
+  /** @type {MutationObserver} */
+  #nodeObserver;
+
   constructor(host, slot, tagName, config = {}) {
     super(host, slot, tagName, { ...config, useUniqueId: true });
   }
@@ -22,8 +25,8 @@ export class SlotChildObserveController extends SlotController {
    * @override
    */
   initCustomNode(node) {
-    this.__updateNodeId(node);
-    this.__notifyChange(node);
+    this.#updateNodeId(node);
+    this._notifyChange(node);
   }
 
   /**
@@ -39,7 +42,7 @@ export class SlotChildObserveController extends SlotController {
 
     // Custom node is added to the slot
     if (node && node !== this.defaultNode) {
-      this.__notifyChange(node);
+      this._notifyChange(node);
     } else {
       this.restoreDefaultNode();
       this.updateDefaultNode(this.node);
@@ -58,7 +61,7 @@ export class SlotChildObserveController extends SlotController {
     const node = super.attachDefaultNode();
 
     if (node) {
-      this.__updateNodeId(node);
+      this.#updateNodeId(node);
     }
 
     return node;
@@ -80,7 +83,7 @@ export class SlotChildObserveController extends SlotController {
    * @protected
    */
   updateDefaultNode(node) {
-    this.__notifyChange(node);
+    this._notifyChange(node);
   }
 
   /**
@@ -92,11 +95,11 @@ export class SlotChildObserveController extends SlotController {
    */
   observeNode(node) {
     // Stop observing the previous node, if any.
-    if (this.__nodeObserver) {
-      this.__nodeObserver.disconnect();
+    if (this.#nodeObserver) {
+      this.#nodeObserver.disconnect();
     }
 
-    this.__nodeObserver = new MutationObserver((mutations) => {
+    this.#nodeObserver = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         const target = mutation.target;
 
@@ -108,17 +111,17 @@ export class SlotChildObserveController extends SlotController {
           // We use attributeFilter to only observe ID mutation,
           // no need to check for attribute name separately.
           if (isCurrentNodeMutation) {
-            this.__updateNodeId(target);
+            this.#updateNodeId(target);
           }
         } else if (isCurrentNodeMutation || target.parentElement === this.node) {
           // Node text content has changed.
-          this.__notifyChange(this.node);
+          this._notifyChange(this.node);
         }
       });
     });
 
     // Observe changes to node ID attribute, text content and children.
-    this.__nodeObserver.observe(node, {
+    this.#nodeObserver.observe(node, {
       attributes: true,
       attributeFilter: ['id'],
       childList: true,
@@ -133,9 +136,8 @@ export class SlotChildObserveController extends SlotController {
    *
    * @param {Node} node
    * @return {boolean}
-   * @private
    */
-  __hasContent(node) {
+  #hasContent(node) {
     if (!node) {
       return false;
     }
@@ -150,12 +152,12 @@ export class SlotChildObserveController extends SlotController {
    * Fire an event to notify the controller host about node changes.
    *
    * @param {Node} node
-   * @private
+   * @protected
    */
-  __notifyChange(node) {
+  _notifyChange(node) {
     this.dispatchEvent(
       new CustomEvent('slot-content-changed', {
-        detail: { hasContent: this.__hasContent(node), node },
+        detail: { hasContent: this.#hasContent(node), node },
       }),
     );
   }
@@ -164,9 +166,8 @@ export class SlotChildObserveController extends SlotController {
    * Set default ID on the node in case it is an HTML element.
    *
    * @param {Node} node
-   * @private
    */
-  __updateNodeId(node) {
+  #updateNodeId(node) {
     // When in multiple mode, only set ID attribute on the element in default slot.
     const isFirstNode = !this.nodes || node === this.nodes[0];
     if (node.nodeType === Node.ELEMENT_NODE && (!this.multiple || isFirstNode) && !node.id) {

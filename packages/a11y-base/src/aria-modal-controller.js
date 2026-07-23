@@ -13,6 +13,9 @@ import { hideOthers } from './aria-hidden.js';
  * consumer web component. This is done in to ensure the controller only does one thing.
  */
 export class AriaModalController {
+  /** @type {Function | null} */
+  #showOthers = null;
+
   /**
    * @param {HTMLElement} host
    */
@@ -42,7 +45,7 @@ export class AriaModalController {
    */
   showModal() {
     const targets = this.callback();
-    this.__showOthers = hideOthers(targets);
+    this.#showOthers = hideOthers(targets);
   }
 
   /**
@@ -50,9 +53,9 @@ export class AriaModalController {
    * controller hosts on the page activated by using `showModal()` call.
    */
   close() {
-    if (this.__showOthers) {
-      this.__showOthers();
-      this.__showOthers = null;
+    if (this.#showOthers) {
+      this.#showOthers();
+      this.#showOthers = null;
     }
   }
 }
