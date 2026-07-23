@@ -26,7 +26,7 @@ export class SlotChildObserveController extends SlotController {
    */
   initCustomNode(node) {
     this.#updateNodeId(node);
-    this.#notifyChange(node);
+    this._notifyChange(node);
   }
 
   /**
@@ -42,7 +42,7 @@ export class SlotChildObserveController extends SlotController {
 
     // Custom node is added to the slot
     if (node && node !== this.defaultNode) {
-      this.#notifyChange(node);
+      this._notifyChange(node);
     } else {
       this.restoreDefaultNode();
       this.updateDefaultNode(this.node);
@@ -83,7 +83,7 @@ export class SlotChildObserveController extends SlotController {
    * @protected
    */
   updateDefaultNode(node) {
-    this.#notifyChange(node);
+    this._notifyChange(node);
   }
 
   /**
@@ -115,7 +115,7 @@ export class SlotChildObserveController extends SlotController {
           }
         } else if (isCurrentNodeMutation || target.parentElement === this.node) {
           // Node text content has changed.
-          this.#notifyChange(this.node);
+          this._notifyChange(this.node);
         }
       });
     });
@@ -152,8 +152,9 @@ export class SlotChildObserveController extends SlotController {
    * Fire an event to notify the controller host about node changes.
    *
    * @param {Node} node
+   * @protected
    */
-  #notifyChange(node) {
+  _notifyChange(node) {
     this.dispatchEvent(
       new CustomEvent('slot-content-changed', {
         detail: { hasContent: this.#hasContent(node), node },

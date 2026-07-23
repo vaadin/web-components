@@ -24,7 +24,7 @@ export class SummaryController extends SlotChildObserveController {
     super.initSingle();
 
     if (this.node && this.node === this.defaultNode) {
-      this.__notifyChange(this.node);
+      this._notifyChange(this.node);
     }
   }
 
