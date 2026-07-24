@@ -3,14 +3,21 @@
  * Copyright (c) 2026 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { addAriaElementReference, removeAriaElementReference } from '@vaadin/a11y-base/src/aria-element-reference.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 
 /**
  * A mixin providing linking of the tooltip content to the tooltip target
  * elements using the `aria-describedby` or `aria-labelledby` attribute.
+ *
+ * Targets in the same root as the tooltip are linked by the content element
+ * ID. ID references only resolve within a single tree scope, so targets in
+ * other roots are linked with ARIA element references instead.
  */
 export const TooltipAriaMixin = (superClass) =>
   class TooltipAriaMixinClass extends superClass {
+    #ariaReferences = [];
+
     static get properties() {
       return {
         /**
@@ -52,41 +59,62 @@ export const TooltipAriaMixin = (superClass) =>
     }
 
     /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+      this.#addAriaReferences();
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this.#removeAriaReferences();
+    }
+
+    /** @protected */
     updated(props) {
       super.updated(props);
 
-      const ariaTargetChanged = props.has('_effectiveAriaTarget');
-      const ariaLinkModeChanged = props.has('ariaLinkMode');
-
-      if (ariaTargetChanged || ariaLinkModeChanged) {
-        const oldTarget = ariaTargetChanged ? props.get('_effectiveAriaTarget') : this._effectiveAriaTarget;
-        const oldMode = ariaLinkModeChanged ? props.get('ariaLinkMode') : this.ariaLinkMode;
-        this.#removeAriaReferences(oldTarget, oldMode);
-
-        const newTarget = this._effectiveAriaTarget;
-        const newMode = this.ariaLinkMode;
-        this.#addAriaReferences(newTarget, newMode);
+      if (props.has('_effectiveAriaTarget') || props.has('ariaLinkMode')) {
+        this.#updateAriaReferences();
       }
     }
 
-    #addAriaReferences(target, mode) {
-      if (!target || !mode || mode === 'none') {
+    #addAriaReferences() {
+      const mode = this.ariaLinkMode;
+      const targets = this._effectiveAriaTarget;
+      const contentNode = this.__contentNode;
+      if (!contentNode || !targets || !mode || mode === 'none') {
         return;
       }
 
-      [target].flat().forEach((el) => {
-        addValueToAttribute(el, mode, this._uniqueId);
+      [targets].flat().forEach((target) => {
+        const byReference = target.getRootNode() !== this.getRootNode();
+        if (byReference) {
+          addAriaElementReference(target, mode, contentNode);
+        } else {
+          addValueToAttribute(target, mode, contentNode.id);
+        }
+
+        this.#ariaReferences.push({ target, mode, byReference });
       });
     }
 
-    #removeAriaReferences(target, mode) {
-      if (!target || !mode || mode === 'none') {
-        return;
-      }
+    #removeAriaReferences() {
+      const contentNode = this.__contentNode;
 
-      [target].flat().forEach((el) => {
-        removeValueFromAttribute(el, mode, this._uniqueId);
+      this.#ariaReferences.forEach(({ target, mode, byReference }) => {
+        if (byReference) {
+          removeAriaElementReference(target, mode, contentNode);
+        } else {
+          removeValueFromAttribute(target, mode, contentNode.id);
+        }
       });
+      this.#ariaReferences = [];
+    }
+
+    #updateAriaReferences() {
+      this.#removeAriaReferences();
+      this.#addAriaReferences();
     }
 
     /** @private */
