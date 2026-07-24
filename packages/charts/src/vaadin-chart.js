@@ -12,6 +12,7 @@ import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -196,23 +197,25 @@ class Chart extends ChartMixin(
   }
 
   /** @protected */
-  connectedCallback() {
-    // PROTOTYPE: render the Highcharts container into light DOM so it can be
-    // styled with plain document CSS. Must exist before super.connectedCallback()
-    // because ChartMixin's connectedCallback accesses this.$.wrapper/this.$.chart.
-    if (!this.__lightDomContainer) {
-      const wrapper = document.createElement('div');
-      wrapper.setAttribute('slot', 'chart');
-      wrapper.style.cssText = 'height: 100%; width: 100%; position: relative;';
-      const chart = document.createElement('div');
-      chart.toggleAttribute('styled-mode', true);
-      chart.style.cssText = 'height: 100%; width: 100%; position: absolute;';
-      wrapper.appendChild(chart);
-      this.appendChild(wrapper);
-      this.__lightDomContainer = wrapper;
-      this.$ = { wrapper, chart };
-    }
-    super.connectedCallback();
+  ready() {
+    // PROTOTYPE: the element Highcharts renders into is a slotted light DOM
+    // child, so its content can be styled with plain document CSS. The sizing
+    // wrapper stays in the shadow root, out of reach of user CSS. ready() runs
+    // during the synchronous first render on connect, so the slotted div is
+    // adopted before ChartMixin's connectedCallback logic needs this.$.chart.
+    this._chartSlotController = new SlotController(this, 'chart', 'div', {
+      initializer: (node) => {
+        node.toggleAttribute('styled-mode', this.__styledMode ?? true);
+        // inset:0 instead of width/height:100%: Highcharts falls back to its
+        // default 400px height when renderTo has an inline 100% height and its
+        // parentElement (here: the host) has no inline height (highcharts#21510).
+        node.style.cssText = 'position: absolute; inset: 0;';
+        this.$.chart = node;
+      },
+    });
+    this.addController(this._chartSlotController);
+
+    super.ready();
   }
 
   /** @protected */
@@ -226,7 +229,9 @@ class Chart extends ChartMixin(
   /** @protected */
   render() {
     return html`
-      <slot name="chart"></slot>
+      <div id="wrapper" style="height: 100%; width: 100%; position: relative;">
+        <slot name="chart"></slot>
+      </div>
       <slot id="slot"></slot>
     `;
   }
