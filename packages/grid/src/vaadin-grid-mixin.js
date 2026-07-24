@@ -590,33 +590,7 @@ export const GridMixin = (superClass) =>
         this.__updateRow(row);
       });
 
-      // Reset before collecting, so stale cells from a previous render (including
-      // cells of columns that just became hidden) don't accumulate.
-      this._columnTree.flat().forEach((column) => {
-        column._emptyCells = [];
-      });
-
       this.__renderHeaderFooter();
-
-      this.$.header.querySelectorAll('.header-cell').forEach((cell) => {
-        const column = cell._column;
-        const isColumnRow = cell.parentElement === this.$.header.lastElementChild;
-        if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
-          column._headerCell = cell;
-        } else {
-          column._emptyCells.push(cell);
-        }
-      });
-
-      this.$.footer.querySelectorAll('.footer-cell').forEach((cell) => {
-        const column = cell._column;
-        const isColumnRow = cell.parentElement === this.$.footer.firstElementChild;
-        if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
-          column._footerCell = cell;
-        } else {
-          column._emptyCells.push(cell);
-        }
-      });
 
       // Sizer rows
       this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);

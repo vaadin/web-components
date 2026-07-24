@@ -65,6 +65,10 @@ export const ColumnRenderingMixin = (superClass) =>
         return columns.toSorted((a, b) => a._order - b._order);
       });
 
+      sortedColumnTree.flat().forEach((column) => {
+        column._emptyCells = [];
+      });
+
       this.#renderHeader(sortedColumnTree);
       this.#renderFooter(sortedColumnTree);
 
@@ -77,6 +81,16 @@ export const ColumnRenderingMixin = (superClass) =>
 
       this.$.table.toggleAttribute('has-header', !!this.$.header.querySelector('tr:not([hidden])'));
       this.__updateHeaderFooterRowParts('header');
+
+      this.$.header.querySelectorAll('.header-cell').forEach((cell) => {
+        const column = cell._column;
+        const isColumnRow = cell.parentElement === this.$.header.lastElementChild;
+        if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
+          column._headerCell = cell;
+        } else {
+          column._emptyCells.push(cell);
+        }
+      });
     }
 
     #renderHeaderRow = (columns, level, columnTree) => {
@@ -126,6 +140,16 @@ export const ColumnRenderingMixin = (superClass) =>
 
       this.$.table.toggleAttribute('has-footer', !!this.$.footer.querySelector('tr:not([hidden])'));
       this.__updateHeaderFooterRowParts('footer');
+
+      this.$.footer.querySelectorAll('.footer-cell').forEach((cell) => {
+        const column = cell._column;
+        const isColumnRow = cell.parentElement === this.$.footer.firstElementChild;
+        if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
+          column._footerCell = cell;
+        } else {
+          column._emptyCells.push(cell);
+        }
+      });
     }
 
     #renderFooterRow = (columns, level, columnTree) => {
