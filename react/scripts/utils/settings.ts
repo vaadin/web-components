@@ -41,6 +41,11 @@ export const eventSettings = new Map<string, EventSettings>([
   ['GridPro', { makeUnknown: ['size-changed', 'data-provider-changed'] }],
 ]);
 
+// Components that support the `theme` attribute (theme variants or propagation)
+// but do not use `ThemableMixin` / expose `ThemePropertyMixinClass` in their type.
+// These are generated with `createThemedComponent` so the `theme` prop is available.
+export const themedElements = new Set<string>(['Switch', 'Breadcrumbs']);
+
 export const elementsWithMissingEntrypoint = new Set<string>([]);
 
 export const elementToClassNamingConventionViolations = new Map<string, string>([['vaadin-tabsheet', 'TabSheet']]);

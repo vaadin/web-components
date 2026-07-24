@@ -25,7 +25,7 @@ import {
   transform,
   convertElementNameToClassName,
 } from './utils/misc.js';
-import { eventSettings, genericElements, NonGenericInterface } from './utils/settings.js';
+import { eventSettings, genericElements, NonGenericInterface, themedElements } from './utils/settings.js';
 
 // Placeholders
 const CALL_EXPRESSION = '$CALL_EXPRESSION$';
@@ -319,6 +319,12 @@ function generateReactComponent({ name, js }: SchemaHTMLElement, { packageName, 
     namedEvents?.some(({ name }) => !eventsToRemove?.includes(name) && !eventsToBeUnknown?.includes(name)) || false;
   const genericElementInfo = genericElements.get(elementName);
 
+  // Components that support the `theme` attribute but do not use `ThemableMixin`
+  // are generated with `createThemedComponent` so the `theme` prop is available.
+  const isThemed = themedElements.has(elementName);
+  const createFn = isThemed ? 'createThemedComponent' : 'createComponent';
+  const themeSuffix = isThemed ? ' & { theme?: string }' : '';
+
   const ast = template(
     `
 import type { EventName } from "${LIT_REACT_PATH}";
@@ -328,7 +334,7 @@ import {
   ${[...new Set(genericElementInfo?.typeConstraints || [])].map((constraint) => `type ${constraint}`)}
 } from "${MODULE_PATH}";
 import * as React from "react";
-import { createComponent, type WebComponentProps } from "${CREATE_COMPONENT_PATH}";
+import { ${createFn}, type WebComponentProps } from "${CREATE_COMPONENT_PATH}";
 
 export * from "${MODULE_PATH}";
 
@@ -338,8 +344,8 @@ export {
 
 export type ${EVENT_MAP};
 const events = ${EVENTS_DECLARATION} as ${EVENT_MAP_REF_IN_EVENTS};
-export type ${COMPONENT_NAME}Props = WebComponentProps<${COMPONENT_NAME}Element, ${EVENT_MAP}>;
-export const ${COMPONENT_NAME} = createComponent({
+export type ${COMPONENT_NAME}Props = WebComponentProps<${COMPONENT_NAME}Element, ${EVENT_MAP}>${themeSuffix};
+export const ${COMPONENT_NAME} = ${createFn}({
   elementClass: ${COMPONENT_NAME}Element,
   events,
   react: React,

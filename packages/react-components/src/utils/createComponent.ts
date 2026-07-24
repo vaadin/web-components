@@ -60,10 +60,7 @@ type ComponentProps<I, E extends EventNames = {}> = Omit<
   EventListeners<E> &
   ElementProps<I>;
 
-export type ThemedWebComponentProps<
-  I extends ThemePropertyMixinClass & HTMLElement,
-  E extends EventNames = {},
-> = ComponentProps<I, E> & {
+export type ThemedWebComponentProps<I extends HTMLElement, E extends EventNames = {}> = ComponentProps<I, E> & {
   /**
    * Attribute that can be used by the component to apply built-in style variants,
    * or to propagate its value to the sub-components in Shadow DOM.
@@ -79,11 +76,28 @@ type AllWebComponentProps<I extends HTMLElement, E extends EventNames = {}> = I 
 
 export type WebComponentProps<I extends HTMLElement, E extends EventNames = {}> = Partial<AllWebComponentProps<I, E>>;
 
+/**
+ * The type of a React component created from a Vaadin web component.
+ */
+export type ReactWebComponent<I extends HTMLElement, E extends EventNames = {}> = (
+  props: WebComponentProps<I, E> & RefAttributes<I>,
+) => React.ReactElement | null;
+
+/**
+ * The type of a React component that always accepts a `theme` property, even if
+ * the underlying web component does not use `ThemableMixin` / does not expose
+ * `ThemePropertyMixinClass` in its type. Used for components that support theme
+ * variants through the `theme` attribute without the mixin.
+ */
+export type ThemedReactWebComponent<I extends HTMLElement, E extends EventNames = {}> = (
+  props: Partial<ThemedWebComponentProps<I, E>> & RefAttributes<I>,
+) => React.ReactElement | null;
+
 // We need a separate declaration here; otherwise, the TypeScript fails into the
 // endless loop trying to resolve the typings.
 export function createComponent<I extends HTMLElement, E extends EventNames = {}>(
   options: Options<I, E>,
-): (props: WebComponentProps<I, E> & RefAttributes<I>) => React.ReactElement | null;
+): ReactWebComponent<I, E>;
 
 export function createComponent<I extends HTMLElement, E extends EventNames = {}>(options: Options<I, E>): any {
   const { elementClass } = options;
@@ -105,4 +119,19 @@ export function createComponent<I extends HTMLElement, E extends EventNames = {}
         }
       : options,
   );
+}
+
+// A separate declaration is needed here for the same reason as `createComponent`.
+export function createThemedComponent<I extends HTMLElement, E extends EventNames = {}>(
+  options: Options<I, E>,
+): ThemedReactWebComponent<I, E>;
+
+// Creates a React component that always accepts a `theme` property, regardless of
+// whether the underlying web component uses `ThemableMixin`. This only widens the
+// type: the runtime is identical to `createComponent`. `@lit/react` already forwards
+// any prop that is not defined on the element prototype (such as `theme` on a
+// non-`ThemableMixin` element) to the DOM as an attribute, so no runtime change is
+// needed — this function exists purely to expose `theme` at the type level.
+export function createThemedComponent<I extends HTMLElement, E extends EventNames = {}>(options: Options<I, E>): any {
+  return createComponent(options);
 }
