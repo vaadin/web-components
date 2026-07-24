@@ -8,14 +8,22 @@
  * license.
  */
 import './vaadin-chart-series.js';
-import { html, LitElement } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { chartStyles } from './styles/vaadin-chart-base-styles.js';
 import { ChartMixin } from './vaadin-chart-mixin.js';
+
+// PROTOTYPE (light DOM styling, flow-components#9302): re-scope the shadow-DOM
+// base stylesheet to a host-relative, layer-wrapped stylesheet that can be
+// injected into the chart's root node (document or enclosing shadow root).
+const lightDomChartCss = `@layer vaadin.base {
+${chartStyles.cssText.replace(/:host\(([^)]*)\)/gu, 'vaadin-chart$1').replace(/:host/gu, 'vaadin-chart')}
+}`;
 
 /**
  * `<vaadin-chart>` is a Web Component for creating high quality charts.
@@ -152,7 +160,9 @@ import { ChartMixin } from './vaadin-chart-mixin.js';
  * @customElement vaadin-chart
  * @extends HTMLElement
  */
-class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+class Chart extends ChartMixin(
+  SlotStylesMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
+) {
   static get is() {
     return 'vaadin-chart';
   }
@@ -162,7 +172,18 @@ class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjec
   }
 
   static get styles() {
-    return chartStyles;
+    return css`
+      :host {
+        display: block;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+    `;
   }
 
   static get lumoInjector() {
@@ -170,15 +191,42 @@ class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjec
   }
 
   /** @protected */
+  get slotStyles() {
+    return [...(super.slotStyles || []), lightDomChartCss];
+  }
+
+  /** @protected */
+  connectedCallback() {
+    // PROTOTYPE: render the Highcharts container into light DOM so it can be
+    // styled with plain document CSS. Must exist before super.connectedCallback()
+    // because ChartMixin's connectedCallback accesses this.$.wrapper/this.$.chart.
+    if (!this.__lightDomContainer) {
+      const wrapper = document.createElement('div');
+      wrapper.setAttribute('slot', 'chart');
+      wrapper.style.cssText = 'height: 100%; width: 100%; position: relative;';
+      const chart = document.createElement('div');
+      chart.toggleAttribute('styled-mode', true);
+      chart.style.cssText = 'height: 100%; width: 100%; position: absolute;';
+      wrapper.appendChild(chart);
+      this.appendChild(wrapper);
+      this.__lightDomContainer = wrapper;
+      this.$ = { wrapper, chart };
+    }
+    super.connectedCallback();
+  }
+
+  /** @protected */
+  updated(props) {
+    super.updated(props);
+    if (props.has('__styledMode')) {
+      this.$.chart.toggleAttribute('styled-mode', this.__styledMode);
+    }
+  }
+
+  /** @protected */
   render() {
     return html`
-      <div id="wrapper" style="height: 100%; width: 100%; position: relative;">
-        <div
-          id="chart"
-          ?styled-mode="${this.__styledMode}"
-          style="height: 100%; width: 100%; position: absolute;"
-        ></div>
-      </div>
+      <slot name="chart"></slot>
       <slot id="slot"></slot>
     `;
   }

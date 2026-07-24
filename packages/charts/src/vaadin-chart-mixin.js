@@ -556,6 +556,13 @@ export const ChartMixin = (superClass) =>
       super.connectedCallback();
       this.__updateStyles();
       queueMicrotask(() => {
+        // PROTOTYPE (light DOM): never initialize while detached. Highcharts'
+        // temporaryDisplay() re-attaches detached ancestors to document.body,
+        // which in light DOM re-triggers connectedCallback and loops forever.
+        if (!this.isConnected) {
+          return;
+        }
+
         // Detect if the chart had already been initialized. This might happen in
         // environments where the chart is lazily attached (e.g Grid).
         if (this.configuration) {

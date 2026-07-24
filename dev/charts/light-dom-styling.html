@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vaadin charts | light DOM styling prototype</title>
+    <script type="module" src="../common.js"></script>
+    <script type="module">
+      import '@vaadin/charts';
+      import './theme-switcher.js';
+    </script>
+    <script type="module">
+      // Nested-shadow case: chart inside a user-defined web component's shadow root.
+      class WrappedChart extends HTMLElement {
+        connectedCallback() {
+          if (this.shadowRoot) {
+            return;
+          }
+          const root = this.attachShadow({ mode: 'open' });
+          root.innerHTML = `
+            <style>
+              :host { display: block; height: 260px; }
+              /* wrapping component's own shadow CSS targeting the nested chart */
+              .highcharts-title { fill: rebeccapurple !important; }
+            </style>
+            <vaadin-chart type="bar" title="Nested in shadow root" categories='["A","B","C"]' no-legend>
+              <vaadin-chart-series values="[3, 5, 2]"></vaadin-chart-series>
+            </vaadin-chart>
+          `;
+        }
+      }
+      customElements.define('wrapped-chart', WrappedChart);
+    </script>
+    <!-- Unlayered "user CSS" — simulates application styles.css; must win over @layer vaadin.base -->
+    <style>
+      #user-styled .highcharts-color-0 {
+        fill: hotpink;
+        stroke: hotpink;
+      }
+
+      /* descendant selector — the case ::part() could never support */
+      #user-styled .highcharts-legend-item text {
+        fill: teal;
+        font-weight: bold;
+      }
+
+      #user-styled .highcharts-title {
+        fill: crimson;
+        font-size: 1.5rem;
+      }
+
+      vaadin-chart {
+        height: 260px;
+      }
+    </style>
+  </head>
+  <body>
+    <theme-switcher></theme-switcher>
+
+    <h3>1. Default (base styles from document-level @layer)</h3>
+    <vaadin-chart id="default-styled" type="column" title="Default" categories='["Q1","Q2","Q3","Q4"]'>
+      <vaadin-chart-series title="Alpha" values="[10, 20, 30, 40]"></vaadin-chart-series>
+      <vaadin-chart-series title="Beta" values="[15, 25, 20, 35]"></vaadin-chart-series>
+    </vaadin-chart>
+
+    <h3>2. User CSS override (unlayered rules above must win)</h3>
+    <vaadin-chart id="user-styled" type="column" title="User styled" categories='["Q1","Q2","Q3","Q4"]'>
+      <vaadin-chart-series title="Alpha" values="[10, 20, 30, 40]"></vaadin-chart-series>
+      <vaadin-chart-series title="Beta" values="[15, 25, 20, 35]"></vaadin-chart-series>
+    </vaadin-chart>
+
+    <h3>3. Chart nested in another component's shadow root</h3>
+    <wrapped-chart></wrapped-chart>
+  </body>
+</html>
