@@ -99,10 +99,10 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
     }
 
-    #renderHeaderRow = (row) => {
+    #renderHeaderRow = ({ level, columns, isLast: isLastRow, isFirst: isFirstRow, isVisible: isRowVisible }) => {
       const rowParts = {
-        'first-header-row': row.isFirst,
-        'last-header-row': row.isLast,
+        'first-header-row': isFirstRow,
+        'last-header-row': isLastRow,
       };
 
       return html`
@@ -111,10 +111,10 @@ export const HeaderFooterRenderingMixin = (superClass) =>
           part="row header-row ${partMap(rowParts)}"
           class="row header-row ${classMap(rowParts)}"
           tabindex="-1"
-          ?hidden=${!row.isVisible}
+          ?hidden=${!isRowVisible}
         >
           ${repeat(
-            row.columns,
+            columns,
             (column) => column._id,
             (column) => {
               // `cache` keeps the cell and its rendered content when the
@@ -125,8 +125,8 @@ export const HeaderFooterRenderingMixin = (superClass) =>
               }
 
               const cellParts = {
-                'first-header-row-cell': row.isFirst,
-                'last-header-row-cell': row.isLast,
+                'first-header-row-cell': isFirstRow,
+                'last-header-row-cell': isLastRow,
               };
 
               return cache(html`
@@ -143,7 +143,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                   tabindex="-1"
                   ._column=${column}
                 >
-                  ${cellContent(this, `vaadin-grid-header-cell-content-${row.level}-${column._id}`)}
+                  ${cellContent(this, `vaadin-grid-header-cell-content-${level}-${column._id}`)}
                   ${column.resizable ? html`<div part="resize-handle" class="resize-handle"></div>` : nothing}
                 </th>
               `);
@@ -173,10 +173,10 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
     }
 
-    #renderFooterRow = (row) => {
+    #renderFooterRow = ({ level, columns, isLast: isLastRow, isFirst: isFirstRow, isVisible: isRowVisible }) => {
       const rowParts = {
-        'first-footer-row': row.isFirst,
-        'last-footer-row': row.isLast,
+        'first-footer-row': isFirstRow,
+        'last-footer-row': isLastRow,
       };
 
       return html`
@@ -185,10 +185,10 @@ export const HeaderFooterRenderingMixin = (superClass) =>
           part="row footer-row ${partMap(rowParts)}"
           class="row footer-row ${classMap(rowParts)}"
           tabindex="-1"
-          ?hidden=${!row.isVisible}
+          ?hidden=${!isRowVisible}
         >
           ${repeat(
-            row.columns,
+            columns,
             (column) => column._id,
             (column) => {
               // `cache` keeps the cell and its rendered content when the
@@ -199,8 +199,8 @@ export const HeaderFooterRenderingMixin = (superClass) =>
               }
 
               const cellParts = {
-                'first-footer-row-cell': row.isFirst,
-                'last-footer-row-cell': row.isLast,
+                'first-footer-row-cell': isFirstRow,
+                'last-footer-row-cell': isLastRow,
               };
 
               return cache(html`
@@ -217,7 +217,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                   tabindex="-1"
                   ._column=${column}
                 >
-                  ${cellContent(this, `vaadin-grid-footer-cell-content-${row.level}-${column._id}`)}
+                  ${cellContent(this, `vaadin-grid-footer-cell-content-${level}-${column._id}`)}
                 </td>
               `);
             },
