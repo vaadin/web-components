@@ -261,11 +261,11 @@ export const ColumnBaseMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_widthChanged(width, _headerCell, _footerCell, _cells)',
+        '_widthChanged(width, _cells)',
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells)',
         '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells)',
-        '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells)',
-        '_textAlignChanged(textAlign, _cells, _headerCell, _footerCell)',
+        '_flexGrowChanged(flexGrow, _cells)',
+        '_textAlignChanged(textAlign, _cells)',
         '_lastFrozenChanged(_lastFrozen)',
         '_firstFrozenToEndChanged(_firstFrozenToEnd)',
         '_onRendererOrBindingChanged(_renderer, _cells, _bodyContentHidden, path)',
@@ -382,7 +382,9 @@ export const ColumnBaseMixin = (superClass) =>
         this.parentElement._columnPropChanged('flexGrow');
       }
 
-      this._allCells.forEach((cell) => {
+      this._grid?.__scheduleRenderHeaderFooter?.();
+
+      this._cells?.forEach((cell) => {
         cell.style.flexGrow = flexGrow;
       });
     }
@@ -393,7 +395,9 @@ export const ColumnBaseMixin = (superClass) =>
         this.parentElement._columnPropChanged('width');
       }
 
-      this._allCells.forEach((cell) => {
+      this._grid?.__scheduleRenderHeaderFooter?.();
+
+      this._cells?.forEach((cell) => {
         cell.style.width = width;
       });
     }
@@ -513,7 +517,9 @@ export const ColumnBaseMixin = (superClass) =>
         return;
       }
 
-      this._allCells.forEach((cell) => {
+      this._grid.__scheduleRenderHeaderFooter?.();
+
+      this._cells?.forEach((cell) => {
         cell._content.style.textAlign = textAlign;
       });
     }

@@ -102,7 +102,7 @@ snapshots["vaadin-grid basic shadow default"] =
           first-column=""
           part="cell header-cell first-header-row-cell last-header-row-cell first-column-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="0"
         >
           <slot name="vaadin-grid-header-cell-content-0-2">
@@ -113,7 +113,7 @@ snapshots["vaadin-grid basic shadow default"] =
           last-column=""
           part="cell header-cell first-header-row-cell last-header-row-cell last-column-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-header-cell-content-0-3">
@@ -241,7 +241,7 @@ snapshots["vaadin-grid basic shadow default"] =
           first-column=""
           part="cell footer-cell first-column-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-0-2">
@@ -252,7 +252,7 @@ snapshots["vaadin-grid basic shadow default"] =
           last-column=""
           part="cell footer-cell last-column-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-0-3">
@@ -342,7 +342,7 @@ snapshots["vaadin-grid basic shadow selected"] =
           first-column=""
           part="cell header-cell first-header-row-cell last-header-row-cell first-column-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="0"
         >
           <slot name="vaadin-grid-header-cell-content-0-4">
@@ -353,7 +353,7 @@ snapshots["vaadin-grid basic shadow selected"] =
           last-column=""
           part="cell header-cell first-header-row-cell last-header-row-cell last-column-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-header-cell-content-0-5">
@@ -482,7 +482,7 @@ snapshots["vaadin-grid basic shadow selected"] =
           first-column=""
           part="cell footer-cell first-column-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-0-4">
@@ -493,7 +493,7 @@ snapshots["vaadin-grid basic shadow selected"] =
           last-column=""
           part="cell footer-cell last-column-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-0-5">
@@ -583,7 +583,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
           first-column=""
           part="cell header-cell first-header-row-cell last-header-row-cell first-column-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="0"
         >
           <slot name="vaadin-grid-header-cell-content-0-6">
@@ -594,7 +594,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
           last-column=""
           part="cell header-cell first-header-row-cell last-header-row-cell last-column-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-header-cell-content-0-7">
@@ -722,7 +722,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
           first-column=""
           part="cell footer-cell first-column-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-0-6">
@@ -733,7 +733,7 @@ snapshots["vaadin-grid basic shadow details opened"] =
           last-column=""
           part="cell footer-cell last-column-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-0-7">
@@ -813,7 +813,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
           last-column=""
           part="cell header-cell first-header-row-cell last-header-row-cell last-column-cell first-column-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="0"
         >
           <slot name="vaadin-grid-header-cell-content-0-9">
@@ -918,7 +918,7 @@ snapshots["vaadin-grid basic shadow hidden column"] =
           last-column=""
           part="cell footer-cell last-column-cell first-column-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-0-9">
@@ -998,7 +998,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
           last-column=""
           part="cell header-cell first-header-row-cell last-header-row-cell last-column-cell first-column-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="0"
         >
           <slot name="vaadin-grid-header-cell-content-0-11">
@@ -1104,7 +1104,7 @@ snapshots["vaadin-grid basic shadow hidden column selected"] =
           last-column=""
           part="cell footer-cell last-column-cell first-column-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-0-11">
@@ -1195,7 +1195,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
           first-column=""
           part="cell header-cell first-header-row-cell last-header-row-cell first-column-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="0"
         >
           <slot name="vaadin-grid-header-cell-content-0-12">
@@ -1206,7 +1206,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
           last-column=""
           part="cell header-cell first-header-row-cell last-header-row-cell last-column-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-header-cell-content-0-13">
@@ -1333,7 +1333,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
           first-column=""
           part="cell footer-cell first-column-cell first-footer-row-cell last-footer-row-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="0"
         >
           <slot name="vaadin-grid-footer-cell-content-0-12">
@@ -1344,7 +1344,7 @@ snapshots["vaadin-grid basic shadow with footer"] =
           last-column=""
           part="cell footer-cell last-column-cell first-footer-row-cell last-footer-row-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-0-13">
@@ -1438,7 +1438,7 @@ snapshots["vaadin-grid column groups default"] =
           last-column=""
           part="cell header-cell first-column-cell last-column-cell"
           role="columnheader"
-          style="width: calc(200px); flex-grow: 2;"
+          style="width:calc(100px + 100px);flex-grow:2;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-header-cell-content-0-14">
@@ -1458,7 +1458,7 @@ snapshots["vaadin-grid column groups default"] =
           first-column=""
           part="cell header-cell first-header-row-cell last-header-row-cell first-column-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="0"
         >
           <slot name="vaadin-grid-header-cell-content-1-15">
@@ -1469,7 +1469,7 @@ snapshots["vaadin-grid column groups default"] =
           last-column=""
           part="cell header-cell first-header-row-cell last-header-row-cell last-column-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-header-cell-content-1-16">
@@ -1597,7 +1597,7 @@ snapshots["vaadin-grid column groups default"] =
           first-column=""
           part="cell footer-cell first-footer-row-cell last-footer-row-cell first-column-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="0"
         >
           <slot name="vaadin-grid-footer-cell-content-1-15">
@@ -1608,7 +1608,7 @@ snapshots["vaadin-grid column groups default"] =
           last-column=""
           part="cell footer-cell first-footer-row-cell last-footer-row-cell last-column-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-1-16">
@@ -1631,7 +1631,7 @@ snapshots["vaadin-grid column groups default"] =
           last-column=""
           part="cell footer-cell first-column-cell last-column-cell"
           role="gridcell"
-          style="width: calc(200px); flex-grow: 2;"
+          style="width:calc(100px + 100px);flex-grow:2;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-0-14">
@@ -1677,7 +1677,7 @@ snapshots["vaadin-grid column groups with header"] =
       last-column=""
       part="cell header-cell first-column-cell last-column-cell first-header-row-cell"
       role="columnheader"
-      style="width: calc(200px); flex-grow: 2;"
+      style="width:calc(100px + 100px);flex-grow:2;"
       tabindex="-1"
     >
       <slot name="vaadin-grid-header-cell-content-0-17">
@@ -1697,7 +1697,7 @@ snapshots["vaadin-grid column groups with header"] =
       first-column=""
       part="cell header-cell last-header-row-cell first-column-cell"
       role="columnheader"
-      style="width: 100px; flex-grow: 1;"
+      style="width:100px;flex-grow:1;"
       tabindex="0"
     >
       <slot name="vaadin-grid-header-cell-content-1-18">
@@ -1708,7 +1708,7 @@ snapshots["vaadin-grid column groups with header"] =
       last-column=""
       part="cell header-cell last-header-row-cell last-column-cell"
       role="columnheader"
-      style="width: 100px; flex-grow: 1;"
+      style="width:100px;flex-grow:1;"
       tabindex="-1"
     >
       <slot name="vaadin-grid-header-cell-content-1-19">
@@ -1738,7 +1738,7 @@ snapshots["vaadin-grid column groups with footer"] =
       first-column=""
       part="cell footer-cell first-footer-row-cell first-column-cell"
       role="gridcell"
-      style="width: 100px; flex-grow: 1;"
+      style="width:100px;flex-grow:1;"
       tabindex="0"
     >
       <slot name="vaadin-grid-footer-cell-content-1-21">
@@ -1749,7 +1749,7 @@ snapshots["vaadin-grid column groups with footer"] =
       last-column=""
       part="cell footer-cell first-footer-row-cell last-column-cell"
       role="gridcell"
-      style="width: 100px; flex-grow: 1;"
+      style="width:100px;flex-grow:1;"
       tabindex="-1"
     >
       <slot name="vaadin-grid-footer-cell-content-1-22">
@@ -1771,7 +1771,7 @@ snapshots["vaadin-grid column groups with footer"] =
       last-column=""
       part="cell footer-cell first-column-cell last-column-cell last-footer-row-cell"
       role="gridcell"
-      style="width: calc(200px); flex-grow: 2;"
+      style="width:calc(100px + 100px);flex-grow:2;"
       tabindex="-1"
     >
       <slot name="vaadin-grid-footer-cell-content-0-20">
@@ -1836,7 +1836,7 @@ snapshots["vaadin-grid hidden column group with group header"] =
           last-column=""
           part="cell header-cell first-column-cell last-column-cell "
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-header-cell-content-0-23">
@@ -1857,7 +1857,7 @@ snapshots["vaadin-grid hidden column group with group header"] =
           last-column=""
           part="cell header-cell first-column-cell last-column-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-header-cell-content-1-23">
@@ -1962,7 +1962,7 @@ snapshots["vaadin-grid hidden column group with group header"] =
           last-column=""
           part="cell footer-cell first-column-cell last-column-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-1-23">
@@ -1983,7 +1983,7 @@ snapshots["vaadin-grid hidden column group with group header"] =
           last-column=""
           part="cell footer-cell first-column-cell last-column-cell "
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-0-23">
@@ -2063,7 +2063,7 @@ snapshots["vaadin-grid hidden column group with group and column header"] =
           last-column=""
           part="cell header-cell first-column-cell last-column-cell "
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-header-cell-content-0-26">
@@ -2084,7 +2084,7 @@ snapshots["vaadin-grid hidden column group with group and column header"] =
           last-column=""
           part="cell header-cell first-column-cell last-column-cell first-header-row-cell last-header-row-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="0"
         >
           <slot name="vaadin-grid-header-cell-content-1-26">
@@ -2189,7 +2189,7 @@ snapshots["vaadin-grid hidden column group with group and column header"] =
           last-column=""
           part="cell footer-cell first-column-cell last-column-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-1-26">
@@ -2210,7 +2210,7 @@ snapshots["vaadin-grid hidden column group with group and column header"] =
           last-column=""
           part="cell footer-cell first-column-cell last-column-cell "
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-0-26">
@@ -2289,7 +2289,7 @@ snapshots["vaadin-grid hidden column group with group footer"] =
           last-column=""
           part="cell header-cell first-column-cell last-column-cell "
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-header-cell-content-0-29">
@@ -2310,7 +2310,7 @@ snapshots["vaadin-grid hidden column group with group footer"] =
           last-column=""
           part="cell header-cell first-column-cell last-column-cell"
           role="columnheader"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-header-cell-content-1-29">
@@ -2415,7 +2415,7 @@ snapshots["vaadin-grid hidden column group with group footer"] =
           last-column=""
           part="cell footer-cell first-column-cell last-column-cell"
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-1-29">
@@ -2436,7 +2436,7 @@ snapshots["vaadin-grid hidden column group with group footer"] =
           last-column=""
           part="cell footer-cell first-column-cell last-column-cell "
           role="gridcell"
-          style="width: 100px; flex-grow: 1;"
+          style="width:100px;flex-grow:1;"
           tabindex="-1"
         >
           <slot name="vaadin-grid-footer-cell-content-0-29">
@@ -2521,7 +2521,7 @@ snapshots["vaadin-grid column reordering reordered"] =
         part="cell header-cell first-header-row-cell last-header-row-cell first-column-cell reorder--cell"
         reorder-status=""
         role="columnheader"
-        style="width: 100px; flex-grow: 1;"
+        style="width:100px;flex-grow:1;"
         tabindex="-1"
       >
         <slot name="vaadin-grid-header-cell-content-0-33">
@@ -2533,7 +2533,7 @@ snapshots["vaadin-grid column reordering reordered"] =
         part="cell header-cell first-header-row-cell last-header-row-cell last-column-cell reorder--cell"
         reorder-status=""
         role="columnheader"
-        style="width: 100px; flex-grow: 1;"
+        style="width:100px;flex-grow:1;"
         tabindex="0"
       >
         <slot name="vaadin-grid-header-cell-content-0-32">
@@ -2666,7 +2666,7 @@ snapshots["vaadin-grid column reordering reordered"] =
         part="cell footer-cell first-column-cell reorder--cell"
         reorder-status=""
         role="gridcell"
-        style="width: 100px; flex-grow: 1;"
+        style="width:100px;flex-grow:1;"
         tabindex="-1"
       >
         <slot name="vaadin-grid-footer-cell-content-0-33">
@@ -2678,7 +2678,7 @@ snapshots["vaadin-grid column reordering reordered"] =
         part="cell footer-cell last-column-cell reorder--cell"
         reorder-status=""
         role="gridcell"
-        style="width: 100px; flex-grow: 1;"
+        style="width:100px;flex-grow:1;"
         tabindex="-1"
       >
         <slot name="vaadin-grid-footer-cell-content-0-32">
@@ -2750,7 +2750,7 @@ snapshots["vaadin-grid column reordering reordered details opened"] =
         part="cell header-cell first-header-row-cell last-header-row-cell first-column-cell reorder--cell"
         reorder-status=""
         role="columnheader"
-        style="width: 100px; flex-grow: 1;"
+        style="width:100px;flex-grow:1;"
         tabindex="-1"
       >
         <slot name="vaadin-grid-header-cell-content-0-35">
@@ -2762,7 +2762,7 @@ snapshots["vaadin-grid column reordering reordered details opened"] =
         part="cell header-cell first-header-row-cell last-header-row-cell last-column-cell reorder--cell"
         reorder-status=""
         role="columnheader"
-        style="width: 100px; flex-grow: 1;"
+        style="width:100px;flex-grow:1;"
         tabindex="0"
       >
         <slot name="vaadin-grid-header-cell-content-0-34">
@@ -2927,7 +2927,7 @@ snapshots["vaadin-grid column reordering reordered details opened"] =
         part="cell footer-cell first-column-cell reorder--cell"
         reorder-status=""
         role="gridcell"
-        style="width: 100px; flex-grow: 1;"
+        style="width:100px;flex-grow:1;"
         tabindex="-1"
       >
         <slot name="vaadin-grid-footer-cell-content-0-35">
@@ -2939,7 +2939,7 @@ snapshots["vaadin-grid column reordering reordered details opened"] =
         part="cell footer-cell last-column-cell reorder--cell"
         reorder-status=""
         role="gridcell"
-        style="width: 100px; flex-grow: 1;"
+        style="width:100px;flex-grow:1;"
         tabindex="-1"
       >
         <slot name="vaadin-grid-footer-cell-content-0-34">

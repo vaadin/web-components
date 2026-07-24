@@ -8,6 +8,7 @@ import { cache } from 'lit/directives/cache.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { repeat } from 'lit/directives/repeat.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { partMap } from '@vaadin/component-base/src/directives/part-map.js';
@@ -133,6 +134,10 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                   role="columnheader"
                   part="cell header-cell${partMap(cellParts)}"
                   class="cell header-cell${classMap(cellParts)}"
+                  style="${styleMap({
+                    width: column.width,
+                    'flex-grow': column.flexGrow,
+                  })}"
                   ?first-column="${isFirstCell}"
                   ?last-column="${isLastCell}"
                   @keydown="${this.__onCellKeyDown}"
@@ -144,7 +149,9 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                   tabindex="-1"
                   ._column=${column}
                 >
-                  ${cellContent(this, `vaadin-grid-header-cell-content-${level}-${column._id}`)}
+                  ${cellContent(this, `vaadin-grid-header-cell-content-${level}-${column._id}`, {
+                    textAlign: column.textAlign,
+                  })}
                   ${column.resizable ? html`<div part="resize-handle" class="resize-handle"></div>` : nothing}
                 </th>
               `);
@@ -208,6 +215,10 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                   role="gridcell"
                   part="cell footer-cell${partMap(cellParts)}"
                   class="cell footer-cell${classMap(cellParts)}"
+                  style="${styleMap({
+                    width: column.width,
+                    'flex-grow': column.flexGrow,
+                  })}"
                   ?first-column="${isFirstCell}"
                   ?last-column="${isLastCell}"
                   @keydown="${this.__onCellKeyDown}"
@@ -219,7 +230,9 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                   tabindex="-1"
                   ._column=${column}
                 >
-                  ${cellContent(this, `vaadin-grid-footer-cell-content-${level}-${column._id}`)}
+                  ${cellContent(this, `vaadin-grid-footer-cell-content-${level}-${column._id}`, {
+                    textAlign: column.textAlign,
+                  })}
                 </td>
               `);
             },

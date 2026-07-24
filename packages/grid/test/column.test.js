@@ -49,6 +49,7 @@ describe('column', () => {
 
       it('should be bound to header cells', () => {
         column.flexGrow = 2;
+        flushGrid(grid);
 
         const header = grid.$.header;
 
@@ -64,6 +65,7 @@ describe('column', () => {
 
       it('should be bound to footer cells', () => {
         column.flexGrow = 2;
+        flushGrid(grid);
 
         expect(getContainerCell(grid.$.footer, 0, 0).style.flexGrow).to.eql('2');
       });
@@ -76,6 +78,7 @@ describe('column', () => {
 
       it('should be bound to header cells', () => {
         column.width = '20%';
+        flushGrid(grid);
 
         const width = getContainerCell(grid.$.header, 0, 0).style.width;
         expect(width).to.be.oneOf(['calc(20% + 100px)', 'calc(100px + 20%)']);
@@ -89,6 +92,7 @@ describe('column', () => {
 
       it('should be bound to footer cells', () => {
         column.width = '200px';
+        flushGrid(grid);
 
         expect(getContainerCell(grid.$.footer, 0, 0).style.width).to.eql('200px');
       });

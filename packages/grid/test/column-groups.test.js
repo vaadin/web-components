@@ -136,6 +136,7 @@ describe('column groups', () => {
 
       it('should align visually to right', () => {
         emptyGroup.textAlign = 'end';
+        flushGrid(grid);
         expect(getComputedStyle(getContainerCellContent(grid.$.header, 0, 1)).textAlign).to.be.oneOf(['end', 'right']);
         expect(getComputedStyle(getContainerCellContent(grid.$.footer, 1, 1)).textAlign).to.be.oneOf(['end', 'right']);
       });
@@ -143,12 +144,14 @@ describe('column groups', () => {
       it('should align visually to left', () => {
         grid.style.direction = 'rtl';
         emptyGroup.textAlign = 'end';
+        flushGrid(grid);
         expect(getComputedStyle(getContainerCellContent(grid.$.header, 0, 1)).textAlign).to.be.oneOf(['end', 'left']);
         expect(getComputedStyle(getContainerCellContent(grid.$.footer, 1, 1)).textAlign).to.be.oneOf(['end', 'left']);
       });
 
       it('should align visually to center', () => {
         emptyGroup.textAlign = 'center';
+        flushGrid(grid);
         expect(getComputedStyle(getContainerCellContent(grid.$.header, 0, 1)).textAlign).to.equal('center');
         expect(getComputedStyle(getContainerCellContent(grid.$.footer, 1, 1)).textAlign).to.equal('center');
       });
@@ -183,6 +186,7 @@ describe('column groups', () => {
 
       expect(cellGroup0.style.flexGrow).to.equal('2');
       cellHeader1._column.flexGrow = 3;
+      flushGrid(grid);
       expect(cellGroup0.style.flexGrow).to.equal('4');
     });
 

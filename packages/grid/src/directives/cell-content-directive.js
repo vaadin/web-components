@@ -12,10 +12,11 @@ import { AsyncDirective, directive } from 'lit/async-directive.js';
 class CellContentDirective extends AsyncDirective {
   #cell;
 
-  update(part, [grid, slotName]) {
+  update(part, [grid, slotName, { textAlign } = {}]) {
     this.#cell = part.parentNode;
     this.#cell._content ??= document.createElement('vaadin-grid-cell-content');
     this.#cell._content.slot = slotName;
+    this.#cell._content.style.textAlign = textAlign ?? '';
 
     if (!grid.contains(this.#cell._content)) {
       grid.appendChild(this.#cell._content);

@@ -357,6 +357,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
             grid._columnTree[0][i].width = '10px';
             grid._columnTree[0][i].flexGrow = 0;
           }
+          flushGrid(grid);
 
           const finalBoundingClientRect = getRowCells(containerRows[0])[2].getBoundingClientRect();
           expect(finalBoundingClientRect.x).to.equal(initBoundingClientRect.x);
@@ -376,6 +377,7 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
             grid._columnTree[0][i].width = '10px';
             grid._columnTree[0][i].flexGrow = 0;
           }
+          flushGrid(grid);
 
           const boundingClientRect = getRowCells(containerRows[0])[2].getBoundingClientRect();
           let xCoordinate;
