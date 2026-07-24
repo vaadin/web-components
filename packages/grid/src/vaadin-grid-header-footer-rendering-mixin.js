@@ -46,10 +46,10 @@ function isFooterRowVisible(columns, level, columnTree) {
 }
 
 /**
- * A mixin providing rendering of rows based on the column tree.
+ * A mixin providing rendering of header and footer rows based on the column tree.
  */
-export const ColumnRenderingMixin = (superClass) =>
-  class ColumnRenderingMixin extends superClass {
+export const HeaderFooterRenderingMixin = (superClass) =>
+  class HeaderFooterRenderingMixin extends superClass {
     /** @private */
     __scheduleRenderHeaderFooter() {
       this.__renderHeaderFooterDebouncer = Debouncer.debounce(this.__renderHeaderFooterDebouncer, microTask, () => {
