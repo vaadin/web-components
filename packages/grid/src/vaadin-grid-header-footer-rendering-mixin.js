@@ -5,10 +5,12 @@
  */
 import { html, nothing, render } from 'lit';
 import { cache } from 'lit/directives/cache.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { partMap } from '@vaadin/component-base/src/directives/part-map.js';
 import { cellContent } from './directives/cell-content-directive.js';
 
 function isEmptyCell(column, level, columnTree) {
@@ -62,26 +64,25 @@ export const HeaderFooterRenderingMixin = (superClass) =>
     __renderHeaderFooter() {
       this.__renderHeaderFooterDebouncer?.cancel();
 
-      const sortedColumnTree = (this._columnTree ?? []).map((columns) => {
-        return columns.toSorted((a, b) => a._order - b._order);
-      });
-
-      sortedColumnTree.flat().forEach((column) => {
+      (this._columnTree ?? []).flat().forEach((column) => {
         column._emptyCells = [];
       });
 
-      this.#renderHeader(sortedColumnTree);
-      this.#renderFooter(sortedColumnTree);
+      this.#renderHeader();
+      this.#renderFooter();
 
       this._resetKeyboardNavigation();
       this.__a11yUpdateGridSize(this.size, this._columnTree, this.__emptyState);
     }
 
-    #renderHeader(columnTree) {
-      render(columnTree.map(this.#renderHeaderRow), this.$.header, { host: this });
+    #renderHeader() {
+      render(this.#headerRows.map(this.#renderHeaderRow), this.$.header, { host: this });
 
       this.$.table.toggleAttribute('has-header', !!this.$.header.querySelector('tr:not([hidden])'));
-      this.__updateHeaderFooterRowParts('header');
+
+      this.$.header.querySelectorAll('.header-row').forEach((row) => {
+        this._updateFirstAndLastColumnForRow(row);
+      });
 
       this.$.header.querySelectorAll('.header-cell').forEach((cell) => {
         const column = cell._column;
@@ -94,17 +95,22 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
     }
 
-    #renderHeaderRow = (columns, level, columnTree) => {
+    #renderHeaderRow = (row) => {
+      const rowParts = {
+        'first-header-row': row.isFirst,
+        'last-header-row': row.isLast,
+      };
+
       return html`
         <tr
           role="row"
-          part="row header-row"
-          class="row header-row"
+          part="row header-row ${partMap(rowParts)}"
+          class="row header-row ${classMap(rowParts)}"
           tabindex="-1"
-          ?hidden=${!isHeaderRowVisible(columns, level, columnTree)}
+          ?hidden=${!row.isVisible}
         >
           ${repeat(
-            columns,
+            row.columns,
             (column) => column._id,
             (column) => {
               // `cache` keeps the cell and its rendered content when the
@@ -114,11 +120,16 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                 return cache(nothing);
               }
 
+              const cellParts = {
+                'first-header-row-cell': row.isFirst,
+                'last-header-row-cell': row.isLast,
+              };
+
               return cache(html`
                 <th
                   role="columnheader"
-                  part="cell header-cell"
-                  class="cell header-cell"
+                  part="cell header-cell ${partMap(cellParts)}"
+                  class="cell header-cell ${classMap(cellParts)}"
                   @keydown="${this.__onCellKeyDown}"
                   @mousedown=${this.__onCellMouseDown}
                   @mouseenter=${this.__onCellMouseEnter}
@@ -128,7 +139,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                   tabindex="-1"
                   ._column=${column}
                 >
-                  ${cellContent(this, `vaadin-grid-header-cell-content-${level}-${column._id}`)}
+                  ${cellContent(this, `vaadin-grid-header-cell-content-${row.level}-${column._id}`)}
                   ${column.resizable ? html`<div part="resize-handle" class="resize-handle"></div>` : nothing}
                 </th>
               `);
@@ -138,11 +149,14 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       `;
     };
 
-    #renderFooter(columnTree) {
-      render(columnTree.map(this.#renderFooterRow).toReversed(), this.$.footer, { host: this });
+    #renderFooter() {
+      render(this.#footerRows.map(this.#renderFooterRow), this.$.footer, { host: this });
 
       this.$.table.toggleAttribute('has-footer', !!this.$.footer.querySelector('tr:not([hidden])'));
-      this.__updateHeaderFooterRowParts('footer');
+
+      this.$.footer.querySelectorAll('.footer-row').forEach((row) => {
+        this._updateFirstAndLastColumnForRow(row);
+      });
 
       this.$.footer.querySelectorAll('.footer-cell').forEach((cell) => {
         const column = cell._column;
@@ -155,17 +169,22 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
     }
 
-    #renderFooterRow = (columns, level, columnTree) => {
+    #renderFooterRow = (row) => {
+      const rowParts = {
+        'first-footer-row': row.isFirst,
+        'last-footer-row': row.isLast,
+      };
+
       return html`
         <tr
           role="row"
-          part="row footer-row"
-          class="row footer-row"
+          part="row footer-row ${partMap(rowParts)}"
+          class="row footer-row ${classMap(rowParts)}"
           tabindex="-1"
-          ?hidden=${!isFooterRowVisible(columns, level, columnTree)}
+          ?hidden=${!row.isVisible}
         >
           ${repeat(
-            columns,
+            row.columns,
             (column) => column._id,
             (column) => {
               // `cache` keeps the cell and its rendered content when the
@@ -175,11 +194,16 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                 return cache(nothing);
               }
 
+              const cellParts = {
+                'first-footer-row-cell': row.isFirst,
+                'last-footer-row-cell': row.isLast,
+              };
+
               return cache(html`
                 <td
                   role="gridcell"
-                  part="cell footer-cell"
-                  class="cell footer-cell"
+                  part="cell footer-cell ${partMap(cellParts)}"
+                  class="cell footer-cell ${classMap(cellParts)}"
                   @keydown="${this.__onCellKeyDown}"
                   @mousedown=${this.__onCellMouseDown}
                   @mouseenter=${this.__onCellMouseEnter}
@@ -189,7 +213,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                   tabindex="-1"
                   ._column=${column}
                 >
-                  ${cellContent(this, `vaadin-grid-footer-cell-content-${level}-${column._id}`)}
+                  ${cellContent(this, `vaadin-grid-footer-cell-content-${row.level}-${column._id}`)}
                 </td>
               `);
             },
@@ -197,4 +221,47 @@ export const HeaderFooterRenderingMixin = (superClass) =>
         </tr>
       `;
     };
+
+    get #headerRows() {
+      return this.#sortedColumnTree
+        .map((columns, level, columnTree) => {
+          return {
+            level,
+            columns,
+            isVisible: isHeaderRowVisible(columns, level, columnTree),
+          };
+        })
+        .map((row, level, rows) => {
+          return {
+            ...row,
+            isFirst: level === rows.findIndex((r) => r.isVisible),
+            isLast: level === rows.findLastIndex((r) => r.isVisible),
+          };
+        });
+    }
+
+    get #footerRows() {
+      return this.#sortedColumnTree
+        .map((columns, level, columnTree) => {
+          return {
+            level,
+            columns,
+            isVisible: isFooterRowVisible(columns, level, columnTree),
+          };
+        })
+        .toReversed()
+        .map((row, level, rows) => {
+          return {
+            ...row,
+            isFirst: level === rows.findIndex((r) => r.isVisible),
+            isLast: level === rows.findLastIndex((r) => r.isVisible),
+          };
+        });
+    }
+
+    get #sortedColumnTree() {
+      return (this._columnTree ?? []).map((columns) => {
+        return columns.toSorted((a, b) => a._order - b._order);
+      });
+    }
   };
