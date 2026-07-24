@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #740</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+
+  <body>
+    <!-- Failing case: dialog content is an iframe -->
+    <vaadin-dialog id="dialog-iframe" modeless draggable resizable></vaadin-dialog>
+    <!-- Control: identical dialog, content is a plain div -->
+    <vaadin-dialog id="dialog-div" modeless draggable resizable></vaadin-dialog>
+
+    <script type="module">
+      import '@vaadin/dialog';
+
+      const dialogIframe = document.querySelector('#dialog-iframe');
+      dialogIframe.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+        const el = document.createElement('iframe');
+        el.id = 'iframe';
+        el.setAttribute('srcdoc', '<p style="font-family: sans-serif">iframe content</p>');
+        el.style.width = '260px';
+        el.style.height = '160px';
+        el.style.border = '1px solid gray';
+        root.appendChild(el);
+      };
+
+      const dialogDiv = document.querySelector('#dialog-div');
+      dialogDiv.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+        const el = document.createElement('div');
+        el.id = 'div';
+        el.textContent = 'plain div content (control)';
+        el.style.width = '260px';
+        el.style.height = '160px';
+        el.style.border = '1px solid gray';
+        root.appendChild(el);
+      };
+
+      // Fixed positions for deterministic pointer targeting
+      dialogIframe.opened = true;
+      dialogIframe.top = '50px';
+      dialogIframe.left = '50px';
+
+      dialogDiv.opened = true;
+      dialogDiv.top = '50px';
+      dialogDiv.left = '450px';
+    </script>
+  </body>
+</html>
