@@ -9,10 +9,6 @@ registerStyles(
       min-width: 55px; /* Use fixed width for scroll tests */
     }
 
-    :host(:not([orientation='vertical'])) {
-      min-height: 2.75rem;
-    }
-
     [part='tabs'] {
       gap: 0; /* Disable gap for scroll tests */
     }

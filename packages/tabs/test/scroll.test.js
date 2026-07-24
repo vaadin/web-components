@@ -5,7 +5,7 @@ import './tabs-test-styles.js';
 import '../src/vaadin-tabs.js';
 
 describe('scrollable tabs', () => {
-  let tabs, items, scroller;
+  let tabs, items, scroller, forwardButton, backButton;
 
   beforeEach(async () => {
     tabs = fixtureSync(`
@@ -31,6 +31,8 @@ describe('scrollable tabs', () => {
     tabs._observer.flush();
     items = tabs.items;
     scroller = tabs.shadowRoot.querySelector('[part="tabs"]');
+    forwardButton = tabs.shadowRoot.querySelector('[part="forward-button"]');
+    backButton = tabs.shadowRoot.querySelector('[part="back-button"]');
   });
 
   describe('horizontal', () => {
@@ -62,26 +64,26 @@ describe('scrollable tabs', () => {
       expect(scroller.getBoundingClientRect().left).to.be.closeTo(items[1].getBoundingClientRect().left, 60);
     });
 
-    it('should scroll forward when arrow button is clicked', () => {
+    it('should scroll forward when forward button is clicked', () => {
       const initialScrollLeft = scroller.scrollLeft;
-      const btn = tabs.shadowRoot.querySelector('[part="forward-button"]');
-      btn.click();
+      forwardButton.click();
       expect(scroller.scrollLeft).to.be.greaterThan(initialScrollLeft);
     });
 
-    it('should scroll back when arrow button is clicked', () => {
+    it('should scroll back when back button is clicked', async () => {
       tabs.selected = 4;
-      const btn = tabs.shadowRoot.querySelector('[part="back-button"]');
-      btn.click();
+      await nextRender();
+      expect(scroller.scrollLeft).to.be.greaterThan(0);
+
+      backButton.click();
       expect(scroller.scrollLeft).to.be.equal(0);
     });
 
     describe('press and hold', () => {
-      let clock, btn;
+      let clock;
 
       beforeEach(() => {
         clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
-        btn = tabs.shadowRoot.querySelector('[part="forward-button"]');
       });
 
       afterEach(() => {
@@ -89,7 +91,7 @@ describe('scrollable tabs', () => {
       });
 
       it('should scroll continuously while forward button is pressed', () => {
-        btn.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
+        forwardButton.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
         const firstScroll = scroller.scrollLeft;
         expect(firstScroll).to.be.greaterThan(0);
 
@@ -97,20 +99,56 @@ describe('scrollable tabs', () => {
         expect(scroller.scrollLeft).to.be.greaterThan(firstScroll);
       });
 
+      it('should not scroll forward on non-primary button press', () => {
+        forwardButton.dispatchEvent(new PointerEvent('pointerdown', { button: 1 }));
+        expect(scroller.scrollLeft).to.equal(0);
+      });
+
+      it('should scroll continuously while back button is pressed', () => {
+        // Move to the end so there is room to scroll back
+        scroller.scrollLeft = scroller.scrollWidth;
+        const startScroll = scroller.scrollLeft;
+
+        backButton.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
+        const firstScroll = scroller.scrollLeft;
+        expect(firstScroll).to.be.lessThan(startScroll);
+
+        clock.tick(300);
+        expect(scroller.scrollLeft).to.be.lessThan(firstScroll);
+      });
+
+      it('should not scroll back on non-primary button press', () => {
+        scroller.scrollLeft = scroller.scrollWidth;
+        const startScroll = scroller.scrollLeft;
+
+        backButton.dispatchEvent(new PointerEvent('pointerdown', { button: 1 }));
+        expect(scroller.scrollLeft).to.equal(startScroll);
+      });
+
       it('should stop scrolling on pointerup', () => {
-        btn.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
+        forwardButton.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
         const firstScroll = scroller.scrollLeft;
 
-        btn.dispatchEvent(new PointerEvent('pointerup'));
+        forwardButton.dispatchEvent(new PointerEvent('pointerup'));
         clock.tick(300);
         expect(scroller.scrollLeft).to.be.equal(firstScroll);
       });
 
-      it('should not double scroll on click that follows pointerdown', () => {
-        btn.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
+      it('should not double scroll forward on click that follows pointerdown', () => {
+        forwardButton.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
         const firstScroll = scroller.scrollLeft;
 
-        btn.dispatchEvent(new MouseEvent('click'));
+        forwardButton.dispatchEvent(new MouseEvent('click'));
+        expect(scroller.scrollLeft).to.be.equal(firstScroll);
+      });
+
+      it('should not double scroll back on click that follows pointerdown', () => {
+        scroller.scrollLeft = scroller.scrollWidth;
+
+        backButton.dispatchEvent(new PointerEvent('pointerdown', { button: 0 }));
+        const firstScroll = scroller.scrollLeft;
+
+        backButton.dispatchEvent(new MouseEvent('click'));
         expect(scroller.scrollLeft).to.be.equal(firstScroll);
       });
     });
@@ -126,13 +164,13 @@ describe('scrollable tabs', () => {
             const itemRect = item.getBoundingClientRect();
 
             let left = scrollerRect.left;
-            const btnLeft = tabs.shadowRoot.querySelector(dir === 'ltr' ? '[part^="back"]' : '[part^="forward"]');
+            const btnLeft = dir === 'ltr' ? backButton : forwardButton;
             if (getComputedStyle(btnLeft).opacity === '1') {
               left += btnLeft.clientWidth;
             }
 
             let right = scrollerRect.right;
-            const btnRight = tabs.shadowRoot.querySelector(dir === 'ltr' ? '[part^="forward"]' : '[part^="back"]');
+            const btnRight = dir === 'ltr' ? forwardButton : backButton;
             if (getComputedStyle(btnRight).opacity === '1') {
               right -= btnRight.clientWidth;
             }
@@ -154,8 +192,6 @@ describe('scrollable tabs', () => {
         });
 
         it('should have displayed all the items fully when scrolled forward to the end via button', async () => {
-          const forwardButton = tabs.shadowRoot.querySelector('[part="forward-button"]');
-
           const allVisibleItems = new Set();
           getItemsInViewport().forEach((item) => allVisibleItems.add(item));
 
@@ -174,8 +210,6 @@ describe('scrollable tabs', () => {
           tabs._scrollToItem(items.length - 1);
           await nextRender();
 
-          const backButton = tabs.shadowRoot.querySelector('[part="back-button"]');
-
           const allVisibleItems = new Set();
           getItemsInViewport().forEach((item) => allVisibleItems.add(item));
 
@@ -192,7 +226,6 @@ describe('scrollable tabs', () => {
         it('should not get stuck with wide tabs when scrolled forward to the end via button', () => {
           tabs.style.width = '100px';
 
-          const forwardButton = tabs.shadowRoot.querySelector('[part="forward-button"]');
           let previousScrollLeft;
           let currentScrollLeft = tabs._scrollerElement.scrollLeft;
           // Click the forward button until it does not have any effect
@@ -213,7 +246,6 @@ describe('scrollable tabs', () => {
           // Initially scroll to the end
           tabs._scrollToItem(items.length - 1);
 
-          const backButton = tabs.shadowRoot.querySelector('[part="back-button"]');
           let previousScrollLeft;
           let currentScrollLeft = tabs._scrollerElement.scrollLeft;
           // Click the back button until it does not have any effect

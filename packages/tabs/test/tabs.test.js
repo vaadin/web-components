@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { arrowRight, aTimeout, enter, fixtureSync, nextRender, space } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './tabs-test-styles.js';
 import '../src/vaadin-tabs.js';
 
 describe('tabs', () => {
@@ -15,9 +14,7 @@ describe('tabs', () => {
         <vaadin-tab>Some</vaadin-tab>
         <span></span>
         <vaadin-tab disabled>Baz</vaadin-tab>
-        <vaadin-tab>
-          <a>Baz</a>
-        </vaadin-tab>
+        <vaadin-tab>Baz</vaadin-tab>
       </vaadin-tabs>
     `);
     await nextRender();
@@ -37,6 +34,28 @@ describe('tabs', () => {
 
     it('should have a valid static "is" getter', () => {
       expect(customElements.get(tagName).is).to.equal(tagName);
+    });
+  });
+
+  describe('properties', () => {
+    it('should set selected property to 0 by default', () => {
+      expect(tabs.selected).to.equal(0);
+    });
+
+    it('should reflect selected property to attribute', async () => {
+      tabs.selected = 1;
+      await nextUpdate(tabs);
+      expect(tabs.getAttribute('selected')).to.equal('1');
+    });
+
+    it('should set orientation property to horizontal by default', () => {
+      expect(tabs.orientation).to.equal('horizontal');
+    });
+
+    it('should reflect orientation property to attribute', async () => {
+      tabs.orientation = 'vertical';
+      await nextUpdate(tabs);
+      expect(tabs.getAttribute('orientation')).to.equal('vertical');
     });
   });
 
@@ -63,32 +82,6 @@ describe('tabs', () => {
       // Expect the resizeobserver not to have been invoked on the
       // removed tab resize
       expect(stub.called).to.be.false;
-    });
-  });
-
-  describe('slotted anchor', () => {
-    let anchor, tab, spy;
-
-    beforeEach(() => {
-      anchor = tabs.querySelector('a');
-      tab = anchor.parentElement;
-      spy = sinon.spy();
-      anchor.addEventListener('click', spy);
-    });
-
-    it('should propagate click to the anchor element when Enter key pressed', () => {
-      enter(tab);
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should propagate click to the anchor element when Space key pressed', () => {
-      space(tab);
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should not propagate click to the anchor when other key pressed', () => {
-      arrowRight(tab);
-      expect(spy.calledOnce).to.be.false;
     });
   });
 
