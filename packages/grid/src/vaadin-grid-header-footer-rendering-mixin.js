@@ -64,19 +64,23 @@ export const HeaderFooterRenderingMixin = (superClass) =>
     __renderHeaderFooter() {
       this.__renderHeaderFooterDebouncer?.cancel();
 
-      (this._columnTree ?? []).flat().forEach((column) => {
+      const sortedColumnTree = (this._columnTree ?? []).map((columns) => {
+        return columns.toSorted((a, b) => a._order - b._order);
+      });
+
+      sortedColumnTree.flat().forEach((column) => {
         column._emptyCells = [];
       });
 
-      this.#renderHeader();
-      this.#renderFooter();
+      this.#renderHeader(sortedColumnTree);
+      this.#renderFooter(sortedColumnTree);
 
       this._resetKeyboardNavigation();
       this.__a11yUpdateGridSize(this.size, this._columnTree, this.__emptyState);
     }
 
-    #renderHeader() {
-      render(this.#headerRows.map(this.#renderHeaderRow), this.$.header, { host: this });
+    #renderHeader(columnTree) {
+      render(this.#getHeaderRows(columnTree).map(this.#renderHeaderRow), this.$.header, { host: this });
 
       this.$.table.toggleAttribute('has-header', !!this.$.header.querySelector('tr:not([hidden])'));
 
@@ -149,8 +153,8 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       `;
     };
 
-    #renderFooter() {
-      render(this.#footerRows.map(this.#renderFooterRow), this.$.footer, { host: this });
+    #renderFooter(columnTree) {
+      render(this.#getFooterRows(columnTree).map(this.#renderFooterRow), this.$.footer, { host: this });
 
       this.$.table.toggleAttribute('has-footer', !!this.$.footer.querySelector('tr:not([hidden])'));
 
@@ -222,9 +226,9 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       `;
     };
 
-    get #headerRows() {
-      return this.#sortedColumnTree
-        .map((columns, level, columnTree) => {
+    #getHeaderRows(columnTree) {
+      return columnTree
+        .map((columns, level) => {
           return {
             level,
             columns,
@@ -240,9 +244,9 @@ export const HeaderFooterRenderingMixin = (superClass) =>
         });
     }
 
-    get #footerRows() {
-      return this.#sortedColumnTree
-        .map((columns, level, columnTree) => {
+    #getFooterRows(columnTree) {
+      return columnTree
+        .map((columns, level) => {
           return {
             level,
             columns,
@@ -257,11 +261,5 @@ export const HeaderFooterRenderingMixin = (superClass) =>
             isLast: level === rows.findLastIndex((r) => r.isVisible),
           };
         });
-    }
-
-    get #sortedColumnTree() {
-      return (this._columnTree ?? []).map((columns) => {
-        return columns.toSorted((a, b) => a._order - b._order);
-      });
     }
   };
