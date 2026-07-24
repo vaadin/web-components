@@ -2510,7 +2510,7 @@ snapshots["vaadin-grid column reordering reordered"] =
     <tr
       aria-rowindex="1"
       class="first-header-row header-row last-header-row row"
-      part="row header-row first-header-row last-header-row"
+      part="row header-row  first-header-row last-header-row "
       role="row"
       style="--_grid-horizontal-scroll-position: 0px;"
       tabindex="-1"
@@ -2656,7 +2656,7 @@ snapshots["vaadin-grid column reordering reordered"] =
       aria-rowindex="4"
       class="footer-row row"
       hidden=""
-      part="row footer-row"
+      part="row footer-row   "
       role="row"
       tabindex="-1"
     >
@@ -2739,7 +2739,7 @@ snapshots["vaadin-grid column reordering reordered details opened"] =
     <tr
       aria-rowindex="1"
       class="first-header-row header-row last-header-row row"
-      part="row header-row first-header-row last-header-row"
+      part="row header-row  first-header-row last-header-row "
       role="row"
       style="--_grid-horizontal-scroll-position: 0px;"
       tabindex="-1"
@@ -2917,7 +2917,7 @@ snapshots["vaadin-grid column reordering reordered details opened"] =
       aria-rowindex="4"
       class="footer-row row"
       hidden=""
-      part="row footer-row"
+      part="row footer-row   "
       role="row"
       tabindex="-1"
     >
