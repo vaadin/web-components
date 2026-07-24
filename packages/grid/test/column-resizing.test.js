@@ -174,6 +174,7 @@ describe('column resizing', () => {
 
   it('should fix width for preceding columns', () => {
     grid._columnTree[0][1].resizable = true;
+    flushGrid(grid);
 
     grid._columnTree[0][0].width = '50%';
     grid._columnTree[0][0].flexGrow = 1;

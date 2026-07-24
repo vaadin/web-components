@@ -7,7 +7,8 @@ import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
-import { updateCellState, updatePart } from './vaadin-grid-helpers.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { updateCellState } from './vaadin-grid-helpers.js';
 
 export const ColumnBaseMixin = (superClass) =>
   class ColumnBaseMixin extends superClass {
@@ -270,7 +271,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_onRendererOrBindingChanged(_renderer, _cells, _bodyContentHidden, path)',
         '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header)',
         '_onFooterRendererOrBindingChanged(_footerRenderer, _footerCell)',
-        '_resizableChanged(resizable, _headerCell)',
+        '_resizableChanged(resizable)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells)',
         '_rowHeaderChanged(rowHeader, _cells)',
@@ -302,6 +303,19 @@ export const ColumnBaseMixin = (superClass) =>
         .filter((cell) => cell);
     }
 
+    constructor() {
+      super();
+
+      /**
+       * A stable unique id assigned once per column instance. Used to build
+       * cell content slot names that stay stable across re-renders, so lit
+       * can reuse the cell content elements when the column tree changes.
+       *
+       * @protected
+       */
+      this._id = generateUniqueId();
+    }
+
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
@@ -313,7 +327,7 @@ export const ColumnBaseMixin = (superClass) =>
           return;
         }
 
-        this._allCells.forEach((cell) => {
+        this._cells?.forEach((cell) => {
           if (!cell._content.parentNode) {
             this._grid.appendChild(cell._content);
           }
@@ -332,7 +346,7 @@ export const ColumnBaseMixin = (superClass) =>
           return;
         }
 
-        this._allCells.forEach((cell) => {
+        this._cells?.forEach((cell) => {
           if (cell._content.parentNode) {
             cell._content.parentNode.removeChild(cell._content);
           }
@@ -485,27 +499,12 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _resizableChanged(resizable, headerCell) {
-      if (resizable === undefined || headerCell === undefined) {
+    _resizableChanged(resizable) {
+      if (resizable === undefined || this._grid === undefined) {
         return;
       }
 
-      if (headerCell) {
-        [headerCell].concat(this._emptyCells).forEach((cell) => {
-          if (cell) {
-            const existingHandle = cell.querySelector('[part~="resize-handle"]');
-            if (existingHandle) {
-              cell.removeChild(existingHandle);
-            }
-
-            if (resizable) {
-              const handle = document.createElement('div');
-              updatePart(handle, 'resize-handle', true);
-              cell.appendChild(handle);
-            }
-          }
-        });
-      }
+      this._grid.__scheduleRenderHeaderFooter?.();
     }
 
     /** @private */
@@ -531,7 +530,7 @@ export const ColumnBaseMixin = (superClass) =>
 
       if (!!hidden !== !!this._previousHidden && this._grid) {
         if (hidden === true) {
-          this._allCells.forEach((cell) => {
+          this._cells?.forEach((cell) => {
             if (cell._content.parentNode) {
               cell._content.parentNode.removeChild(cell._content);
             }
@@ -632,9 +631,8 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       this.__renderCellsContent(headerRenderer, [headerCell]);
-      if (this._grid && headerCell.parentElement) {
-        this._grid.__debounceUpdateHeaderFooterRowVisibility(headerCell.parentElement);
-      }
+
+      this._grid?.__scheduleRenderHeaderFooter();
     }
 
     /** @protected */
@@ -689,9 +687,8 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       this.__renderCellsContent(footerRenderer, [footerCell]);
-      if (this._grid && footerCell.parentElement) {
-        this._grid.__debounceUpdateHeaderFooterRowVisibility(footerCell.parentElement);
-      }
+
+      this._grid?.__scheduleRenderHeaderFooter();
     }
 
     /** @protected */

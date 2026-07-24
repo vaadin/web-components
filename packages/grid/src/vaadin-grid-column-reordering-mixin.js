@@ -203,6 +203,8 @@ export const ColumnReorderingMixin = (superClass) =>
         for (let i = startIndex; i !== endIndex; i += direction) {
           this._swapColumnOrders(this._draggedColumn, levelColumnsInOrder[i + direction]);
         }
+
+        this.__renderHeaderFooter();
       }
 
       this._updateGhostPosition(e.detail.x, this._touchDevice ? e.detail.y - 50 : e.detail.y);
@@ -434,7 +436,7 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /**
-     * Swaps column orders and physically reorders cells in all rows.
+     * Swaps column orders and reorders cells in all rows.
      * @param {!GridColumn} column1
      * @param {!GridColumn} column2
      * @protected
@@ -444,8 +446,7 @@ export const ColumnReorderingMixin = (superClass) =>
       [column1._order, column2._order] = [column2._order, column1._order];
       const [firstColumn, secondColumn] = column1._order < column2._order ? [column1, column2] : [column2, column1];
 
-      // Reorder cells in all rows (header, footer, body, sizer)
-      [...this.$.header.children, ...this.$.footer.children, ...this.$.items.children, this.$.sizer].forEach((row) => {
+      [...this.$.items.children, this.$.sizer].forEach((row) => {
         const cells = getBodyRowCells(row);
         const firstColumnCells = cells.filter((cell) => firstColumn.contains(cell._column));
         const secondColumnFirstCell = cells.find((cell) => secondColumn.contains(cell._column));
@@ -456,6 +457,7 @@ export const ColumnReorderingMixin = (superClass) =>
         }
       });
 
+      this.__scheduleRenderHeaderFooter();
       this._debounceUpdateFrozenColumn();
       this._updateFirstAndLastColumn();
     }
