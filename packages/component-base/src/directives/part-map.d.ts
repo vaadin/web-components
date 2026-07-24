@@ -9,7 +9,7 @@ import type { DirectiveResult } from 'lit/directive.js';
  * A key-value set of part names to truthy values.
  */
 export interface PartNameInfo {
-  readonly [name: string]: string | boolean | number;
+  readonly [name: string]: string | boolean | number | null | undefined;
 }
 
 /**
