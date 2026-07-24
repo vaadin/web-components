@@ -96,7 +96,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
     }
 
-    #renderHeaderRow = ({ level, cells, isLast: isLastRow, isFirst: isFirstRow, isVisible: isRowVisible }) => {
+    #renderHeaderRow = ({ level, cells, isLastRow, isFirstRow, isRowVisible }) => {
       const rowParts = {
         'first-header-row': isFirstRow,
         'last-header-row': isLastRow,
@@ -113,7 +113,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
           ${repeat(
             cells,
             ({ column }) => column._id,
-            ({ column, isFirst: isFirstCell, isLast: isLastCell }) => {
+            ({ column, isFirstCell, isLastCell }) => {
               // `cache` keeps the cell and its rendered content when the
               // column gets hidden, so it can be restored as-is when the
               // column is shown again.
@@ -133,12 +133,12 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                   role="columnheader"
                   part="cell header-cell ${partMap(cellParts)}"
                   class="cell header-cell ${classMap(cellParts)}"
+                  ?first-column="${isFirstCell}"
+                  ?last-column="${isLastCell}"
                   @keydown="${this.__onCellKeyDown}"
                   @mousedown=${this.__onCellMouseDown}
                   @mouseenter=${this.__onCellMouseEnter}
                   @mouseleave=${this.__onCellMouseLeave}
-                  ?first-column="${isFirstCell}"
-                  ?last-column="${isLastCell}"
                   colspan="${ifDefined(column._colSpan)}"
                   aria-colspan="${ifDefined(column._colSpan)}"
                   tabindex="-1"
@@ -171,7 +171,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
     }
 
-    #renderFooterRow = ({ level, cells, isLast: isLastRow, isFirst: isFirstRow, isVisible: isRowVisible }) => {
+    #renderFooterRow = ({ level, cells, isLastRow, isFirstRow, isRowVisible }) => {
       const rowParts = {
         'first-footer-row': isFirstRow,
         'last-footer-row': isLastRow,
@@ -188,7 +188,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
           ${repeat(
             cells,
             ({ column }) => column._id,
-            ({ column, isFirst: isFirstCell, isLast: isLastCell }) => {
+            ({ column, isFirstCell, isLastCell }) => {
               // `cache` keeps the cell and its rendered content when the
               // column gets hidden, so it can be restored as-is when the
               // column is shown again.
@@ -230,16 +230,18 @@ export const HeaderFooterRenderingMixin = (superClass) =>
 
     #getRows(columnTree, section) {
       let rows = columnTree.map((columns, level) => {
+        const visibleColumns = columns.filter((column) => !column.hidden);
+
         return {
           level,
-          cells: columns.map((column, index) => {
+          cells: columns.map((column) => {
             return {
               column,
-              isFirst: index === 0,
-              isLast: index === columns.length - 1,
+              isFirstCell: column === visibleColumns.at(0),
+              isLastCell: column === visibleColumns.at(-1),
             };
           }),
-          isVisible:
+          isRowVisible:
             section === 'header'
               ? isHeaderRowVisible(columns, level, columnTree)
               : isFooterRowVisible(columns, level, columnTree),
@@ -250,13 +252,13 @@ export const HeaderFooterRenderingMixin = (superClass) =>
         rows = rows.toReversed();
       }
 
-      const visibleRows = rows.filter((row) => row.isVisible);
+      const visibleRows = rows.filter((row) => row.isRowVisible);
 
       return rows.map((row) => {
         return {
           ...row,
-          isFirst: row === visibleRows.at(0),
-          isLast: row === visibleRows.at(-1),
+          isFirstRow: row === visibleRows.at(0),
+          isLastRow: row === visibleRows.at(-1),
         };
       });
     }
