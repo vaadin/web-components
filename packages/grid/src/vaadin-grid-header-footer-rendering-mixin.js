@@ -105,8 +105,8 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       return html`
         <tr
           role="row"
-          part="row header-row ${partMap(rowParts)}"
-          class="row header-row ${classMap(rowParts)}"
+          part="row header-row${partMap(rowParts)}"
+          class="row header-row${classMap(rowParts)}"
           tabindex="-1"
           ?hidden=${!isRowVisible}
         >
@@ -131,8 +131,8 @@ export const HeaderFooterRenderingMixin = (superClass) =>
               return cache(html`
                 <th
                   role="columnheader"
-                  part="cell header-cell ${partMap(cellParts)}"
-                  class="cell header-cell ${classMap(cellParts)}"
+                  part="cell header-cell${partMap(cellParts)}"
+                  class="cell header-cell${classMap(cellParts)}"
                   ?first-column="${isFirstCell}"
                   ?last-column="${isLastCell}"
                   @keydown="${this.__onCellKeyDown}"
@@ -180,8 +180,8 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       return html`
         <tr
           role="row"
-          part="row footer-row ${partMap(rowParts)}"
-          class="row footer-row ${classMap(rowParts)}"
+          part="row footer-row${partMap(rowParts)}"
+          class="row footer-row${classMap(rowParts)}"
           tabindex="-1"
           ?hidden=${!isRowVisible}
         >
@@ -206,8 +206,8 @@ export const HeaderFooterRenderingMixin = (superClass) =>
               return cache(html`
                 <td
                   role="gridcell"
-                  part="cell footer-cell ${partMap(cellParts)}"
-                  class="cell footer-cell ${classMap(cellParts)}"
+                  part="cell footer-cell${partMap(cellParts)}"
+                  class="cell footer-cell${classMap(cellParts)}"
                   ?first-column="${isFirstCell}"
                   ?last-column="${isLastCell}"
                   @keydown="${this.__onCellKeyDown}"
