@@ -2476,10 +2476,10 @@ snapshots["vaadin-grid column reordering reordered"] =
     part="row"
   >
     <td
-      class="body-cell cell last-column-cell reorder--cell"
+      class="body-cell cell first-column-cell reorder--cell"
+      first-column=""
       id="vaadin-grid-cell-1"
-      last-column=""
-      part="cell body-cell last-column-cell reorder--cell"
+      part="cell body-cell first-column-cell reorder--cell"
       reorder-status=""
       role="gridcell"
       style="width: 100px; flex-grow: 1;"
@@ -2489,10 +2489,10 @@ snapshots["vaadin-grid column reordering reordered"] =
       </slot>
     </td>
     <td
-      class="body-cell cell first-column-cell reorder--cell"
-      first-column=""
+      class="body-cell cell last-column-cell reorder--cell"
       id="vaadin-grid-cell-0"
-      part="cell body-cell first-column-cell reorder--cell"
+      last-column=""
+      part="cell body-cell last-column-cell reorder--cell"
       reorder-status=""
       role="gridcell"
       style="width: 100px; flex-grow: 1;"
@@ -2705,10 +2705,10 @@ snapshots["vaadin-grid column reordering reordered details opened"] =
     part="row"
   >
     <td
-      class="body-cell cell last-column-cell reorder--cell"
+      class="body-cell cell first-column-cell reorder--cell"
+      first-column=""
       id="vaadin-grid-cell-1"
-      last-column=""
-      part="cell body-cell last-column-cell reorder--cell"
+      part="cell body-cell first-column-cell reorder--cell"
       reorder-status=""
       role="gridcell"
       style="width: 100px; flex-grow: 1;"
@@ -2718,10 +2718,10 @@ snapshots["vaadin-grid column reordering reordered details opened"] =
       </slot>
     </td>
     <td
-      class="body-cell cell first-column-cell reorder--cell"
-      first-column=""
+      class="body-cell cell last-column-cell reorder--cell"
       id="vaadin-grid-cell-0"
-      part="cell body-cell first-column-cell reorder--cell"
+      last-column=""
+      part="cell body-cell last-column-cell reorder--cell"
       reorder-status=""
       role="gridcell"
       style="width: 100px; flex-grow: 1;"
