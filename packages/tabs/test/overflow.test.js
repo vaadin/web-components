@@ -14,9 +14,7 @@ describe('overflow', () => {
         <vaadin-tab>Some</vaadin-tab>
         <span></span>
         <vaadin-tab disabled>Baz</vaadin-tab>
-        <vaadin-tab>
-          <a>Baz</a>
-        </vaadin-tab>
+        <vaadin-tab>Baz</vaadin-tab>
       </vaadin-tabs>
     `);
     await nextRender();
