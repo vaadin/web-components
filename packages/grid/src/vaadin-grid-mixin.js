@@ -13,7 +13,6 @@ import { A11yMixin } from './vaadin-grid-a11y-mixin.js';
 import { ActiveItemMixin } from './vaadin-grid-active-item-mixin.js';
 import { ArrayDataProviderMixin } from './vaadin-grid-array-data-provider-mixin.js';
 import { ColumnAutoWidthMixin } from './vaadin-grid-column-auto-width-mixin.js';
-import { ColumnRenderingMixin } from './vaadin-grid-column-rendering-mixin.js';
 import { ColumnReorderingMixin } from './vaadin-grid-column-reordering-mixin.js';
 import { ColumnResizingMixin } from './vaadin-grid-column-resizing-mixin.js';
 import { DataProviderMixin } from './vaadin-grid-data-provider-mixin.js';
@@ -21,6 +20,7 @@ import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
+import { HeaderFooterRenderingMixin } from './vaadin-grid-header-footer-rendering-mixin.js';
 import {
   getBodyRowCells,
   getClosestCell,
@@ -47,7 +47,7 @@ export const GridMixin = (superClass) =>
     ArrayDataProviderMixin(
       DataProviderMixin(
         DynamicColumnsMixin(
-          ColumnRenderingMixin(
+          HeaderFooterRenderingMixin(
             ActiveItemMixin(
               ScrollMixin(
                 SelectionMixin(
