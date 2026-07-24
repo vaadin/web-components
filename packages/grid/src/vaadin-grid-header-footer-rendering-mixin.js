@@ -48,6 +48,18 @@ function isFooterRowVisible(columns, level, columnTree) {
   });
 }
 
+function addFirstAndLastRowFlags(rows) {
+  const visibleRows = rows.filter((row) => row.isVisible);
+
+  return rows.map((row) => {
+    return {
+      ...row,
+      isFirst: row === visibleRows.at(0),
+      isLast: row === visibleRows.at(-1),
+    };
+  });
+}
+
 /**
  * A mixin providing rendering of header and footer rows based on the column tree.
  */
@@ -227,25 +239,19 @@ export const HeaderFooterRenderingMixin = (superClass) =>
     };
 
     #getHeaderRows(columnTree) {
-      return columnTree
-        .map((columns, level) => {
-          return {
-            level,
-            columns,
-            isVisible: isHeaderRowVisible(columns, level, columnTree),
-          };
-        })
-        .map((row, level, rows) => {
-          return {
-            ...row,
-            isFirst: level === rows.findIndex((r) => r.isVisible),
-            isLast: level === rows.findLastIndex((r) => r.isVisible),
-          };
-        });
+      const rows = columnTree.map((columns, level) => {
+        return {
+          level,
+          columns,
+          isVisible: isHeaderRowVisible(columns, level, columnTree),
+        };
+      });
+
+      return addFirstAndLastRowFlags(rows);
     }
 
     #getFooterRows(columnTree) {
-      return columnTree
+      const rows = columnTree
         .map((columns, level) => {
           return {
             level,
@@ -253,13 +259,8 @@ export const HeaderFooterRenderingMixin = (superClass) =>
             isVisible: isFooterRowVisible(columns, level, columnTree),
           };
         })
-        .toReversed()
-        .map((row, level, rows) => {
-          return {
-            ...row,
-            isFirst: level === rows.findIndex((r) => r.isVisible),
-            isLast: level === rows.findLastIndex((r) => r.isVisible),
-          };
-        });
+        .toReversed();
+
+      return addFirstAndLastRowFlags(rows);
     }
   };
