@@ -70,8 +70,11 @@ describe('scrollable tabs', () => {
       expect(scroller.scrollLeft).to.be.greaterThan(initialScrollLeft);
     });
 
-    it('should scroll back when back button is clicked', () => {
+    it('should scroll back when back button is clicked', async () => {
       tabs.selected = 4;
+      await nextRender();
+      expect(scroller.scrollLeft).to.be.greaterThan(0);
+
       backButton.click();
       expect(scroller.scrollLeft).to.be.equal(0);
     });
