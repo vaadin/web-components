@@ -101,6 +101,7 @@ describe('column', () => {
 
       it('should not be bound to column-group header cells', () => {
         column.hidden = true;
+        flushGrid(grid);
 
         expect(getContainerCell(grid.$.header, 0, 0).style.display).to.eql('');
       });
@@ -109,6 +110,7 @@ describe('column', () => {
         expect(getContainerCell(grid.$.header, 0, 0).colSpan).to.eql(2);
 
         column.hidden = true;
+        flushGrid(grid);
 
         expect(getContainerCell(grid.$.header, 0, 0).colSpan).to.eql(1);
       });

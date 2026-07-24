@@ -57,7 +57,7 @@ export const GridColumnGroupMixin = (superClass) =>
         '_groupFrozenChanged(frozen, _rootColumns)',
         '_groupFrozenToEndChanged(frozenToEnd, _rootColumns)',
         '_groupHiddenChanged(hidden)',
-        '_colSpanChanged(_colSpan, _headerCell, _footerCell)',
+        '_colSpanChanged(_colSpan)',
         '_groupOrderChanged(_order, _rootColumns)',
         '_groupReorderStatusChanged(_reorderStatus, _rootColumns)',
         '_groupResizableChanged(resizable, _rootColumns)',
@@ -307,19 +307,8 @@ export const GridColumnGroupMixin = (superClass) =>
     }
 
     /** @private */
-    _colSpanChanged(colSpan, headerCell, footerCell) {
-      if (headerCell) {
-        headerCell.setAttribute('colspan', colSpan);
-        if (this._grid) {
-          this._grid.__a11yUpdateCellColspan(headerCell, colSpan);
-        }
-      }
-      if (footerCell) {
-        footerCell.setAttribute('colspan', colSpan);
-        if (this._grid) {
-          this._grid.__a11yUpdateCellColspan(footerCell, colSpan);
-        }
-      }
+    _colSpanChanged() {
+      this._grid?.__scheduleRenderHeaderFooter?.();
     }
 
     /**

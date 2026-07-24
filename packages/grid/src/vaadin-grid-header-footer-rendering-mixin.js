@@ -5,6 +5,7 @@
  */
 import { html, nothing, render } from 'lit';
 import { cache } from 'lit/directives/cache.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
@@ -122,6 +123,8 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                   @mousedown=${this.__onCellMouseDown}
                   @mouseenter=${this.__onCellMouseEnter}
                   @mouseleave=${this.__onCellMouseLeave}
+                  colspan="${ifDefined(column._colSpan)}"
+                  aria-colspan="${ifDefined(column._colSpan)}"
                   tabindex="-1"
                   ._column=${column}
                 >
@@ -181,6 +184,8 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                   @mousedown=${this.__onCellMouseDown}
                   @mouseenter=${this.__onCellMouseEnter}
                   @mouseleave=${this.__onCellMouseLeave}
+                  colspan="${ifDefined(column._colSpan)}"
+                  aria-colspan="${ifDefined(column._colSpan)}"
                   tabindex="-1"
                   ._column=${column}
                 >
