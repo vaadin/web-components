@@ -1,0 +1,59 @@
+/* Login form + overlay. The base drives the whole layout through documented vars;
+   this restores Lumo's tinted surfaces, the primary brand panel, the boxed error
+   message and the larger titles. */
+:where(:root),
+:where(:host) {
+  /* Form surface and typography */
+  --vaadin-login-form-background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+  --vaadin-login-form-title-color: var(--lumo-header-text-color);
+  --vaadin-login-form-title-font-size: var(--lumo-font-size-xxl);
+  --vaadin-login-form-title-line-height: var(--lumo-line-height-xs);
+  --vaadin-login-form-error-color: var(--lumo-error-text-color);
+
+  /* Overlay card and brand panel */
+  --vaadin-login-overlay-background: var(--lumo-base-color)
+    linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+  --vaadin-login-overlay-border-width: 0px;
+  --vaadin-login-overlay-shadow: var(--lumo-box-shadow-s);
+  --vaadin-login-overlay-brand-background: var(--lumo-primary-color);
+  --vaadin-login-overlay-title-color: var(--lumo-primary-contrast-color);
+  --vaadin-login-overlay-title-font-size: var(--lumo-font-size-xxxl);
+  --vaadin-login-overlay-title-line-height: var(--lumo-line-height-xs);
+  --vaadin-login-overlay-description-color: var(--lumo-tint-70pct);
+}
+
+/* Boxed error message (the base renders it inline). The form-wrapper parts are
+   forwarded (exportparts) to both the standalone form and the overlay hosts. */
+:where(vaadin-login-form, vaadin-login-overlay)::part(error-message) {
+  padding: var(--lumo-space-m);
+  border-radius: var(--vaadin-radius-m);
+  background: var(--lumo-error-color-10pct);
+}
+
+:where(vaadin-login-form, vaadin-login-overlay)::part(error-message-title) {
+  font-weight: 600;
+}
+
+:where(vaadin-login-form, vaadin-login-overlay)::part(error-message-description) {
+  font-size: var(--lumo-font-size-s);
+}
+
+:where(vaadin-login-form, vaadin-login-overlay)::part(footer) {
+  font-size: var(--lumo-font-size-xs);
+  color: var(--lumo-secondary-text-color);
+}
+
+/* Brand panel: primary surface with light text, title bottom-aligned */
+:where(vaadin-login-overlay)::part(brand) {
+  justify-content: flex-end;
+  box-sizing: border-box;
+  min-height: calc(var(--lumo-size-m) * 5);
+  padding-block: var(--lumo-space-l);
+  padding-inline: var(--lumo-space-l) var(--lumo-space-xl);
+  color: var(--lumo-primary-contrast-color);
+}
+
+/* Softer backdrop than the default overlay shade */
+:where(vaadin-login-overlay)::part(backdrop) {
+  background: var(--lumo-base-color) linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
+}
