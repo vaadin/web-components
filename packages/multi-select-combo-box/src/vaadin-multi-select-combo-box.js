@@ -96,6 +96,7 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-multi-select-combo-box
  * @extends HTMLElement
  */

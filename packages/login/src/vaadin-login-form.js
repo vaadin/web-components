@@ -65,6 +65,7 @@ import { LoginFormMixin } from './vaadin-login-form-mixin.js';
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login form. The event detail contains `username` and `password`.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-login-form
  * @extends HTMLElement
  */

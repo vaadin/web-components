@@ -34,6 +34,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-time-picker-item
  * @private
  */

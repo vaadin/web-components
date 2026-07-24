@@ -63,6 +63,7 @@ import { DashboardItemMixin, getDefaultI18n } from './vaadin-dashboard-item-mixi
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-dashboard-section
  * @extends HTMLElement
  */

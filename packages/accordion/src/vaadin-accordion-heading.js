@@ -60,6 +60,7 @@ import { accordionHeading } from './styles/vaadin-accordion-heading-base-styles.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-accordion-heading
  * @extends HTMLElement
  */

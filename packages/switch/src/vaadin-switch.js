@@ -91,6 +91,7 @@ import { switchStyles } from './styles/vaadin-switch-base-styles.js';
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-switch
  * @extends HTMLElement
  */

@@ -47,6 +47,7 @@ import { UploadManager } from './vaadin-upload-manager.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-upload-drop-zone
  * @extends HTMLElement
  */

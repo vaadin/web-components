@@ -20,6 +20,7 @@ import { crudDialogOverlayStyles } from './styles/vaadin-crud-dialog-overlay-bas
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-crud-dialog-overlay
  * @extends HTMLElement
  * @private

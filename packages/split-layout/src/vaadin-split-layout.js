@@ -186,6 +186,7 @@ const DEFAULT_I18N = {
  *
  * @fires {Event} splitter-dragend - Fired after resizing the splitter via pointer or keyboard has ended.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-split-layout
  * @extends HTMLElement
  */

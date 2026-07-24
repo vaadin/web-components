@@ -88,6 +88,7 @@ import {
  * @fires {CustomEvent} backdrop-click - Fired when the user clicks the backdrop in the overlay mode.
  * @fires {CustomEvent} detail-escape-press - Fired when the user presses Escape in the detail area.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-master-detail-layout
  * @extends HTMLElement
  */

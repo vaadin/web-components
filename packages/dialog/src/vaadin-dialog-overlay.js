@@ -16,6 +16,7 @@ import { DialogOverlayMixin } from './vaadin-dialog-overlay-mixin.js';
 /**
  * An element used internally by `<vaadin-dialog>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-dialog-overlay
  * @extends HTMLElement
  * @private

@@ -91,6 +91,7 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-side-nav-item
  * @extends HTMLElement
  */

@@ -66,6 +66,7 @@ import { TabSheetMixin } from './vaadin-tabsheet-mixin.js';
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-tabsheet
  * @extends HTMLElement
  */

@@ -15,6 +15,7 @@ import { loginFormWrapperStyles } from './styles/vaadin-login-form-wrapper-base-
  *
  * @extends HTMLElement
  * @private
+ * @attr {string} theme - The theme variants to apply to the component.
  */
 class LoginFormWrapper extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
   static get is() {

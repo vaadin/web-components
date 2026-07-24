@@ -63,6 +63,7 @@ import { RadioButtonMixin } from './vaadin-radio-button-mixin.js';
  *
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-radio-button
  * @extends HTMLElement
  */

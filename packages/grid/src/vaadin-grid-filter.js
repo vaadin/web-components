@@ -37,6 +37,7 @@ import { GridFilterElementMixin } from './vaadin-grid-filter-element-mixin.js';
  *
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-grid-filter
  * @extends HTMLElement
  */

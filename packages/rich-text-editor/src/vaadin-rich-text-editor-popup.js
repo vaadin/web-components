@@ -134,6 +134,7 @@ export { RichTextEditorPopup };
 /**
  * An element used internally by `<vaadin-rich-text-editor>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-rich-text-editor-popup-overlay
  * @extends HTMLElement
  * @private

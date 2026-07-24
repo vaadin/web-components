@@ -24,6 +24,7 @@ import { multiSelectComboBoxChipStyles } from './styles/vaadin-multi-select-comb
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-multi-select-combo-box-chip
  * @extends HTMLElement
  * @private

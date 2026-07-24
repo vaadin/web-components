@@ -12,6 +12,7 @@ import { uploadIconStyles } from './styles/vaadin-upload-icon-base-styles.js';
 /**
  * An element used internally by `<vaadin-upload>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-upload-icon
  * @extends HTMLElement
  * @private

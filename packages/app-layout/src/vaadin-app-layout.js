@@ -127,6 +127,7 @@ import { AppLayoutMixin } from './vaadin-app-layout-mixin.js';
  * @fires {CustomEvent} overlay-changed - Fired when the `overlay` property changes.
  * @fires {CustomEvent} primary-section-changed - Fired when the `primarySection` property changes.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-app-layout
  * @extends HTMLElement
  */

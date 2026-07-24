@@ -74,6 +74,7 @@ import { LoginOverlayMixin } from './vaadin-login-overlay-mixin.js';
  * @fires {CustomEvent} login - Fired when a user submits the login form. The event detail contains `username` and `password`.
  * @fires {CustomEvent} closed - Fired when the overlay is closed.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-login-overlay
  * @extends HTMLElement
  */

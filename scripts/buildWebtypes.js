@@ -21,16 +21,6 @@ const blacklistedPackages = [
   /^aura/u,
 ];
 
-// Additional attributes that will be added to all components
-const additionalAttributes = [
-  // Theme attribute is not properly declared at the moment
-  {
-    name: 'theme',
-    description: 'The theme variants to apply to the component.',
-    type: 'string | null | undefined',
-  },
-];
-
 /**
  * Get packages using lerna, excluding blacklisted packages
  */
@@ -153,7 +143,7 @@ function getPublicWritableProperties(elementDeclaration) {
 function createPlainElementDefinition(packageJson, elementDeclaration) {
   const readonlyFields = new Set((elementDeclaration.members || []).filter((m) => m.readonly).map((m) => m.name));
   const elementAttributes = elementDeclaration.attributes || [];
-  const attributes = [...elementAttributes, ...additionalAttributes]
+  const attributes = elementAttributes
     .filter((attribute) => isWritablePrimitiveAttribute(attribute))
     .filter((attribute) => !readonlyFields.has(attribute.fieldName))
     .sort((a, b) => a.name.localeCompare(b.name))

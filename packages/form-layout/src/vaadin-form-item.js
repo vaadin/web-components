@@ -86,6 +86,7 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-form-item
  * @extends HTMLElement
  */

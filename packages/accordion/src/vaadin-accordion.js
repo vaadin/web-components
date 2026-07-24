@@ -49,6 +49,7 @@ import { AccordionMixin } from './vaadin-accordion-mixin.js';
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-accordion
  * @extends HTMLElement
  */

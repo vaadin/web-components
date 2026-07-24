@@ -15,6 +15,7 @@ import { menuBarItemStyles } from './styles/vaadin-menu-bar-item-base-styles.js'
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-menu-bar-item
  * @extends HTMLElement
  * @protected

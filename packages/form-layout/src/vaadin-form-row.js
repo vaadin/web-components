@@ -17,6 +17,7 @@ import { formRowStyles } from './styles/vaadin-form-row-base-styles.js';
  * the available columns wrap to a new row, which then remains reserved
  * exclusively for the fields of that `<vaadin-form-row>` element.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-form-row
  * @extends HTMLElement
  */

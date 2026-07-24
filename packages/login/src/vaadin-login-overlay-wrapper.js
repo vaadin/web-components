@@ -17,6 +17,7 @@ import { loginOverlayWrapperStyles } from './styles/vaadin-login-overlay-wrapper
  *
  * @extends HTMLElement
  * @private
+ * @attr {string} theme - The theme variants to apply to the component.
  */
 class LoginOverlayWrapper extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
