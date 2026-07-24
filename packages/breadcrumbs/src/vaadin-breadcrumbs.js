@@ -66,6 +66,7 @@ const DEFAULT_I18N = {
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-breadcrumbs
  * @extends HTMLElement
  */

@@ -12,6 +12,7 @@ import { monthCalendarStyles } from './styles/vaadin-month-calendar-base-styles.
 import { MonthCalendarMixin } from './vaadin-month-calendar-mixin.js';
 
 /**
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-month-calendar
  * @extends HTMLElement
  * @private

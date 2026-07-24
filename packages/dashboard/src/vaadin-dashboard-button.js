@@ -20,6 +20,7 @@ import { dashboardButtonStyles } from './styles/vaadin-dashboard-button-base-sty
 /**
  * An element used internally by `<vaadin-dashboard>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-dashboard-button
  * @extends HTMLElement
  * @protected

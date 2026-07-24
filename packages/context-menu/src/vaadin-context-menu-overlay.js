@@ -16,6 +16,7 @@ import { MenuOverlayMixin } from './vaadin-menu-overlay-mixin.js';
 /**
  * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-context-menu-overlay
  * @extends HTMLElement
  * @protected

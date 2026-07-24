@@ -83,6 +83,7 @@ import { MessageMixin } from './vaadin-message-mixin.js';
  *
  * @fires {CustomEvent} attachment-click - Fired when an attachment is clicked.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-message
  * @extends HTMLElement
  */

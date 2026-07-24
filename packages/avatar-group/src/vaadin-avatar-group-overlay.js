@@ -16,6 +16,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 /**
  * An element used internally by `<vaadin-avatar-group>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-avatar-group-overlay
  * @extends HTMLElement
  * @private

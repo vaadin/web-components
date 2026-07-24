@@ -216,6 +216,7 @@ const hasOnlyNestedOverlays = (overlay) => getOverlaysOnTop(overlay).every((el) 
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the popover is closed.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-popover
  * @extends HTMLElement
  */

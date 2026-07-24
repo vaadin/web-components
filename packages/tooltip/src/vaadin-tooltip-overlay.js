@@ -16,6 +16,7 @@ import { tooltipOverlayStyles } from './styles/vaadin-tooltip-overlay-base-style
 /**
  * An element used internally by `<vaadin-tooltip>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-tooltip-overlay
  * @extends HTMLElement
  * @private

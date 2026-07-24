@@ -59,6 +59,7 @@ import { GridTreeToggleMixin } from './vaadin-grid-tree-toggle-mixin.js';
  *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-grid-tree-toggle
  * @extends HTMLElement
  */

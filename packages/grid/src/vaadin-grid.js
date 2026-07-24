@@ -274,6 +274,7 @@ const DEFAULT_I18N = {
  * @fires {CustomEvent} size-changed - Fired when the `size` property changes.
  * @fires {CustomEvent} item-toggle - Fired when the user selects or deselects an item through the selection column.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-grid
  * @extends HTMLElement
  */

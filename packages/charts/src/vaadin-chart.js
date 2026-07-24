@@ -149,6 +149,7 @@ import { ChartMixin } from './vaadin-chart-mixin.js';
  * @fires {CustomEvent} xaxes-extremes-set - Fired when the minimum and maximum is set for the X axis.
  * @fires {CustomEvent} yaxes-extremes-set - Fired when the minimum and maximum is set for the Y axis.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-chart
  * @extends HTMLElement
  */

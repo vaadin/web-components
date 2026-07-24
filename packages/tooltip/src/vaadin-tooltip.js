@@ -73,6 +73,7 @@ import { TooltipMixin } from './vaadin-tooltip-mixin.js';
  *
  * @fires {CustomEvent} content-changed - Fired when the tooltip text content is changed.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-tooltip
  * @extends HTMLElement
  */

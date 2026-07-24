@@ -161,6 +161,7 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  * @fires {CustomEvent} vaadin-combo-box-dropdown-opened - Fired after the `vaadin-combo-box-overlay` opens.
  * @fires {CustomEvent} vaadin-combo-box-dropdown-closed - Fired after the `vaadin-combo-box-overlay` closes.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-combo-box
  * @extends HTMLElement
  */

@@ -81,6 +81,7 @@ import { UploadFileMixin } from './vaadin-upload-file-mixin.js';
  * @fires {CustomEvent} file-retry - Fired when the retry button is pressed to request retrying the upload of this file.
  * @fires {CustomEvent} file-start - Fired when the start button is pressed to request starting the upload of this file.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-upload-file
  * @extends HTMLElement
  */

@@ -254,6 +254,7 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  * @fires {CustomEvent} close-all-menus - Fired when all menus should close, e.g., after pressing Tab or on submenu close.
  * @fires {CustomEvent} items-outside-click - Fired when a click happens outside any open sub-menus.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-context-menu
  * @extends HTMLElement
  */

@@ -102,6 +102,7 @@ import { UploadMixin } from './vaadin-upload-mixin.js';
  * @fires {CustomEvent} upload-retry - Fired when retry upload is requested. If the default is prevented, the retry is not performed.
  * @fires {CustomEvent} upload-abort - Fired when upload abort is requested. If the default is prevented, the upload is not aborted.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-upload
  * @extends HTMLElement
  */

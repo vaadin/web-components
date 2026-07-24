@@ -47,6 +47,7 @@ import { contextMenuItemStyles } from './styles/vaadin-context-menu-item-base-st
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-context-menu-item
  * @extends HTMLElement
  */
