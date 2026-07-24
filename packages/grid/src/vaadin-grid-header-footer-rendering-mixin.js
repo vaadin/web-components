@@ -48,18 +48,6 @@ function isFooterRowVisible(columns, level, columnTree) {
   });
 }
 
-function addFirstAndLastRowFlags(rows) {
-  const visibleRows = rows.filter((row) => row.isVisible);
-
-  return rows.map((row) => {
-    return {
-      ...row,
-      isFirst: row === visibleRows.at(0),
-      isLast: row === visibleRows.at(-1),
-    };
-  });
-}
-
 /**
  * A mixin providing rendering of header and footer rows based on the column tree.
  */
@@ -92,13 +80,10 @@ export const HeaderFooterRenderingMixin = (superClass) =>
     }
 
     #renderHeader(columnTree) {
-      render(this.#getHeaderRows(columnTree).map(this.#renderHeaderRow), this.$.header, { host: this });
+      const rows = this.#getRows(columnTree, 'header');
+      render(rows.map(this.#renderHeaderRow), this.$.header, { host: this });
 
       this.$.table.toggleAttribute('has-header', !!this.$.header.querySelector('tr:not([hidden])'));
-
-      this.$.header.querySelectorAll('.header-row').forEach((row) => {
-        this._updateFirstAndLastColumnForRow(row);
-      });
 
       this.$.header.querySelectorAll('.header-cell').forEach((cell) => {
         const column = cell._column;
@@ -111,7 +96,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
     }
 
-    #renderHeaderRow = ({ level, columns, isLast: isLastRow, isFirst: isFirstRow, isVisible: isRowVisible }) => {
+    #renderHeaderRow = ({ level, cells, isLast: isLastRow, isFirst: isFirstRow, isVisible: isRowVisible }) => {
       const rowParts = {
         'first-header-row': isFirstRow,
         'last-header-row': isLastRow,
@@ -126,9 +111,9 @@ export const HeaderFooterRenderingMixin = (superClass) =>
           ?hidden=${!isRowVisible}
         >
           ${repeat(
-            columns,
-            (column) => column._id,
-            (column) => {
+            cells,
+            ({ column }) => column._id,
+            ({ column, isFirst: isFirstCell, isLast: isLastCell }) => {
               // `cache` keeps the cell and its rendered content when the
               // column gets hidden, so it can be restored as-is when the
               // column is shown again.
@@ -139,6 +124,8 @@ export const HeaderFooterRenderingMixin = (superClass) =>
               const cellParts = {
                 'first-header-row-cell': isFirstRow,
                 'last-header-row-cell': isLastRow,
+                'first-column-cell': isFirstCell,
+                'last-column-cell': isLastCell,
               };
 
               return cache(html`
@@ -150,6 +137,8 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                   @mousedown=${this.__onCellMouseDown}
                   @mouseenter=${this.__onCellMouseEnter}
                   @mouseleave=${this.__onCellMouseLeave}
+                  ?first-column="${isFirstCell}"
+                  ?last-column="${isLastCell}"
                   colspan="${ifDefined(column._colSpan)}"
                   aria-colspan="${ifDefined(column._colSpan)}"
                   tabindex="-1"
@@ -166,13 +155,10 @@ export const HeaderFooterRenderingMixin = (superClass) =>
     };
 
     #renderFooter(columnTree) {
-      render(this.#getFooterRows(columnTree).map(this.#renderFooterRow), this.$.footer, { host: this });
+      const rows = this.#getRows(columnTree, 'footer');
+      render(rows.map(this.#renderFooterRow), this.$.footer, { host: this });
 
       this.$.table.toggleAttribute('has-footer', !!this.$.footer.querySelector('tr:not([hidden])'));
-
-      this.$.footer.querySelectorAll('.footer-row').forEach((row) => {
-        this._updateFirstAndLastColumnForRow(row);
-      });
 
       this.$.footer.querySelectorAll('.footer-cell').forEach((cell) => {
         const column = cell._column;
@@ -185,7 +171,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
     }
 
-    #renderFooterRow = ({ level, columns, isLast: isLastRow, isFirst: isFirstRow, isVisible: isRowVisible }) => {
+    #renderFooterRow = ({ level, cells, isLast: isLastRow, isFirst: isFirstRow, isVisible: isRowVisible }) => {
       const rowParts = {
         'first-footer-row': isFirstRow,
         'last-footer-row': isLastRow,
@@ -200,9 +186,9 @@ export const HeaderFooterRenderingMixin = (superClass) =>
           ?hidden=${!isRowVisible}
         >
           ${repeat(
-            columns,
-            (column) => column._id,
-            (column) => {
+            cells,
+            ({ column }) => column._id,
+            ({ column, isFirst: isFirstCell, isLast: isLastCell }) => {
               // `cache` keeps the cell and its rendered content when the
               // column gets hidden, so it can be restored as-is when the
               // column is shown again.
@@ -213,6 +199,8 @@ export const HeaderFooterRenderingMixin = (superClass) =>
               const cellParts = {
                 'first-footer-row-cell': isFirstRow,
                 'last-footer-row-cell': isLastRow,
+                'first-column-cell': isFirstCell,
+                'last-column-cell': isLastCell,
               };
 
               return cache(html`
@@ -220,6 +208,8 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                   role="gridcell"
                   part="cell footer-cell ${partMap(cellParts)}"
                   class="cell footer-cell ${classMap(cellParts)}"
+                  ?first-column="${isFirstCell}"
+                  ?last-column="${isLastCell}"
                   @keydown="${this.__onCellKeyDown}"
                   @mousedown=${this.__onCellMouseDown}
                   @mouseenter=${this.__onCellMouseEnter}
@@ -238,29 +228,36 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       `;
     };
 
-    #getHeaderRows(columnTree) {
-      const rows = columnTree.map((columns, level) => {
+    #getRows(columnTree, section) {
+      let rows = columnTree.map((columns, level) => {
         return {
           level,
-          columns,
-          isVisible: isHeaderRowVisible(columns, level, columnTree),
+          cells: columns.map((column, index) => {
+            return {
+              column,
+              isFirst: index === 0,
+              isLast: index === columns.length - 1,
+            };
+          }),
+          isVisible:
+            section === 'header'
+              ? isHeaderRowVisible(columns, level, columnTree)
+              : isFooterRowVisible(columns, level, columnTree),
         };
       });
 
-      return addFirstAndLastRowFlags(rows);
-    }
+      if (section === 'footer') {
+        rows = rows.toReversed();
+      }
 
-    #getFooterRows(columnTree) {
-      const rows = columnTree
-        .map((columns, level) => {
-          return {
-            level,
-            columns,
-            isVisible: isFooterRowVisible(columns, level, columnTree),
-          };
-        })
-        .toReversed();
+      const visibleRows = rows.filter((row) => row.isVisible);
 
-      return addFirstAndLastRowFlags(rows);
+      return rows.map((row) => {
+        return {
+          ...row,
+          isFirst: row === visibleRows.at(0),
+          isLast: row === visibleRows.at(-1),
+        };
+      });
     }
   };

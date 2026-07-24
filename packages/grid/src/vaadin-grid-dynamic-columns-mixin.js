@@ -143,14 +143,6 @@ export const DynamicColumnsMixin = (superClass) =>
       });
     }
 
-    /** @protected */
-    _updateFirstAndLastColumn() {
-      // The sizer is a <caption> element, so it isn't matched by the <tr> selector
-      [...this.shadowRoot.querySelectorAll('tr'), this.$.sizer].forEach((row) => {
-        this._updateFirstAndLastColumnForRow(row);
-      });
-    }
-
     /**
      * @param {!HTMLElement} row
      * @protected
