@@ -5,10 +5,12 @@
  */
 import { html, nothing, render } from 'lit';
 import { cache } from 'lit/directives/cache.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { repeat } from 'lit/directives/repeat.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { partMap } from '@vaadin/component-base/src/directives/part-map.js';
 import { cellContent } from './directives/cell-content-directive.js';
 
 function isEmptyCell(column, level, columnTree) {
@@ -78,10 +80,10 @@ export const HeaderFooterRenderingMixin = (superClass) =>
     }
 
     #renderHeader(columnTree) {
-      render(columnTree.map(this.#renderHeaderRow), this.$.header, { host: this });
+      const rows = this.#getRows(columnTree, 'header');
+      render(rows.map(this.#renderHeaderRow), this.$.header, { host: this });
 
       this.$.table.toggleAttribute('has-header', !!this.$.header.querySelector('tr:not([hidden])'));
-      this.__updateHeaderFooterRowParts('header');
 
       this.$.header.querySelectorAll('.header-cell').forEach((cell) => {
         const column = cell._column;
@@ -94,19 +96,24 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
     }
 
-    #renderHeaderRow = (columns, level, columnTree) => {
+    #renderHeaderRow = ({ level, cells, isLastRow, isFirstRow, isRowVisible }) => {
+      const rowParts = {
+        'first-header-row': isFirstRow,
+        'last-header-row': isLastRow,
+      };
+
       return html`
         <tr
           role="row"
-          part="row header-row"
-          class="row header-row"
+          part="row header-row${partMap(rowParts)}"
+          class="row header-row${classMap(rowParts)}"
           tabindex="-1"
-          ?hidden=${!isHeaderRowVisible(columns, level, columnTree)}
+          ?hidden=${!isRowVisible}
         >
           ${repeat(
-            columns,
-            (column) => column._id,
-            (column) => {
+            cells,
+            ({ column }) => column._id,
+            ({ column, isFirstCell, isLastCell }) => {
               // `cache` keeps the cell and its rendered content when the
               // column gets hidden, so it can be restored as-is when the
               // column is shown again.
@@ -114,11 +121,20 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                 return cache(nothing);
               }
 
+              const cellParts = {
+                'first-header-row-cell': isFirstRow,
+                'last-header-row-cell': isLastRow,
+                'first-column-cell': isFirstCell,
+                'last-column-cell': isLastCell,
+              };
+
               return cache(html`
                 <th
                   role="columnheader"
-                  part="cell header-cell"
-                  class="cell header-cell"
+                  part="cell header-cell${partMap(cellParts)}"
+                  class="cell header-cell${classMap(cellParts)}"
+                  ?first-column="${isFirstCell}"
+                  ?last-column="${isLastCell}"
                   @keydown="${this.__onCellKeyDown}"
                   @mousedown=${this.__onCellMouseDown}
                   @mouseenter=${this.__onCellMouseEnter}
@@ -139,10 +155,10 @@ export const HeaderFooterRenderingMixin = (superClass) =>
     };
 
     #renderFooter(columnTree) {
-      render(columnTree.map(this.#renderFooterRow).toReversed(), this.$.footer, { host: this });
+      const rows = this.#getRows(columnTree, 'footer');
+      render(rows.map(this.#renderFooterRow), this.$.footer, { host: this });
 
       this.$.table.toggleAttribute('has-footer', !!this.$.footer.querySelector('tr:not([hidden])'));
-      this.__updateHeaderFooterRowParts('footer');
 
       this.$.footer.querySelectorAll('.footer-cell').forEach((cell) => {
         const column = cell._column;
@@ -155,19 +171,24 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
     }
 
-    #renderFooterRow = (columns, level, columnTree) => {
+    #renderFooterRow = ({ level, cells, isLastRow, isFirstRow, isRowVisible }) => {
+      const rowParts = {
+        'first-footer-row': isFirstRow,
+        'last-footer-row': isLastRow,
+      };
+
       return html`
         <tr
           role="row"
-          part="row footer-row"
-          class="row footer-row"
+          part="row footer-row${partMap(rowParts)}"
+          class="row footer-row${classMap(rowParts)}"
           tabindex="-1"
-          ?hidden=${!isFooterRowVisible(columns, level, columnTree)}
+          ?hidden=${!isRowVisible}
         >
           ${repeat(
-            columns,
-            (column) => column._id,
-            (column) => {
+            cells,
+            ({ column }) => column._id,
+            ({ column, isFirstCell, isLastCell }) => {
               // `cache` keeps the cell and its rendered content when the
               // column gets hidden, so it can be restored as-is when the
               // column is shown again.
@@ -175,11 +196,20 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                 return cache(nothing);
               }
 
+              const cellParts = {
+                'first-footer-row-cell': isFirstRow,
+                'last-footer-row-cell': isLastRow,
+                'first-column-cell': isFirstCell,
+                'last-column-cell': isLastCell,
+              };
+
               return cache(html`
                 <td
                   role="gridcell"
-                  part="cell footer-cell"
-                  class="cell footer-cell"
+                  part="cell footer-cell${partMap(cellParts)}"
+                  class="cell footer-cell${classMap(cellParts)}"
+                  ?first-column="${isFirstCell}"
+                  ?last-column="${isLastCell}"
                   @keydown="${this.__onCellKeyDown}"
                   @mousedown=${this.__onCellMouseDown}
                   @mouseenter=${this.__onCellMouseEnter}
@@ -197,4 +227,39 @@ export const HeaderFooterRenderingMixin = (superClass) =>
         </tr>
       `;
     };
+
+    #getRows(columnTree, section) {
+      let rows = columnTree.map((columns, level) => {
+        const visibleColumns = columns.filter((column) => !column.hidden);
+
+        return {
+          level,
+          cells: columns.map((column) => {
+            return {
+              column,
+              isFirstCell: column === visibleColumns.at(0),
+              isLastCell: column === visibleColumns.at(-1),
+            };
+          }),
+          isRowVisible:
+            section === 'header'
+              ? isHeaderRowVisible(columns, level, columnTree)
+              : isFooterRowVisible(columns, level, columnTree),
+        };
+      });
+
+      if (section === 'footer') {
+        rows = rows.toReversed();
+      }
+
+      const visibleRows = rows.filter((row) => row.isRowVisible);
+
+      return rows.map((row) => {
+        return {
+          ...row,
+          isFirstRow: row === visibleRows.at(0),
+          isLastRow: row === visibleRows.at(-1),
+        };
+      });
+    }
   };

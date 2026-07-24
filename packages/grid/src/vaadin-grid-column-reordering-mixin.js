@@ -457,9 +457,12 @@ export const ColumnReorderingMixin = (superClass) =>
         }
       });
 
+      [...this.$.items.children, this.$.sizer].forEach((row) => {
+        this._updateFirstAndLastColumnForRow(row);
+      });
+
       this.__scheduleRenderHeaderFooter();
       this._debounceUpdateFrozenColumn();
-      this._updateFirstAndLastColumn();
     }
 
     /**

@@ -597,28 +597,11 @@ export const GridMixin = (superClass) =>
 
       this._resizeHandler();
       this._frozenCellsChanged();
-      this._updateFirstAndLastColumn();
       this._resetKeyboardNavigation();
       this.__a11yUpdateHeaderRows();
       this.__a11yUpdateFooterRows();
       this.generateCellPartNames();
       this.__updateHeaderAndFooter();
-    }
-
-    /** @private */
-    __updateHeaderFooterRowParts(section) {
-      const visibleRows = [...this.$[section].querySelectorAll('tr:not([hidden])')];
-      [...this.$[section].children].forEach((row) => {
-        updatePart(row, `first-${section}-row`, row === visibleRows.at(0));
-        updatePart(row, `last-${section}-row`, row === visibleRows.at(-1));
-
-        getBodyRowCells(row).forEach((cell) => {
-          updatePart(cell, `first-${section}-row-cell`, row === visibleRows.at(0));
-          updatePart(cell, `last-${section}-row-cell`, row === visibleRows.at(-1));
-        });
-
-        this._updateFirstAndLastColumnForRow(row);
-      });
     }
 
     /**
