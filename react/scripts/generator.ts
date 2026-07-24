@@ -419,7 +419,13 @@ const sourceFiles = Array.from(elementFilesMap.entries(), ([element, data]) => g
 const elementNames = sourceFiles.map(({ fileName }) => basename(fileName, '.ts'));
 
 function generateIndexFile(elementNames: readonly string[], extension: string): SourceFile {
-  const sourceLines = [...elementNames.map((elementName) => `export * from './${elementName}.js';`)];
+  const sourceLines = [
+    ...elementNames.map((elementName) => `export * from './${elementName}.js';`),
+    // Explicit re-exports beat star exports per-name in TypeScript, so these deterministically
+    // resolve each component name (e.g. `SelectItem`) even if another module's `export *` chain
+    // re-exports a colliding name (e.g. a deprecated type from a web component package).
+    ...elementNames.map((elementName) => `export { ${elementName} } from './${elementName}.js';`),
+  ];
 
   return ts.createSourceFile(
     resolve(packageDir, `index.${extension}`),
