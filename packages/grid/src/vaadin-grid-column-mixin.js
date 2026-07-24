@@ -154,18 +154,6 @@ export const ColumnBaseMixin = (superClass) =>
           sync: true,
         },
 
-        /**
-         * A stable unique id assigned once per column instance. Used to build
-         * cell content slot names that stay stable across re-renders, so lit
-         * can reuse the cell content elements when the column tree changes.
-         *
-         * @protected
-         */
-        _id: {
-          type: Number,
-          value: () => generateUniqueId(),
-        },
-
         /** @private */
         _reorderStatus: {
           type: Boolean,
@@ -313,6 +301,19 @@ export const ColumnBaseMixin = (superClass) =>
         .concat(this._headerCell)
         .concat(this._footerCell)
         .filter((cell) => cell);
+    }
+
+    constructor() {
+      super();
+
+      /**
+       * A stable unique id assigned once per column instance. Used to build
+       * cell content slot names that stay stable across re-renders, so lit
+       * can reuse the cell content elements when the column tree changes.
+       *
+       * @protected
+       */
+      this._id = generateUniqueId();
     }
 
     /** @protected */
