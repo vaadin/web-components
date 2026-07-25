@@ -6,6 +6,7 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { PopoverPositionMixinClass } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
 import type { PopoverTargetMixinClass } from '@vaadin/popover/src/vaadin-popover-target-mixin.js';
+import type { TooltipAriaMixinClass } from './vaadin-tooltip-aria-mixin.js';
 
 export type { PopoverPosition as TooltipPosition } from '@vaadin/popover/src/vaadin-popover-position-mixin.js';
 
@@ -14,30 +15,13 @@ export type { PopoverPosition as TooltipPosition } from '@vaadin/popover/src/vaa
  */
 export declare function TooltipMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<PopoverPositionMixinClass> & Constructor<PopoverTargetMixinClass> & Constructor<TooltipMixinClass> & T;
+): Constructor<PopoverPositionMixinClass> &
+  Constructor<PopoverTargetMixinClass> &
+  Constructor<TooltipAriaMixinClass> &
+  Constructor<TooltipMixinClass> &
+  T;
 
 export declare class TooltipMixinClass {
-  /**
-   * Element used to link with the ARIA attribute controlled by the
-   * `ariaLinkMode` property. Supports array of multiple elements.
-   * When not set, defaults to `target`.
-   */
-  ariaTarget: HTMLElement | HTMLElement[] | null | undefined;
-
-  /**
-   * Controls which ARIA attribute is used to link the target element(s)
-   * with the tooltip content. Supported values:
-   *
-   * - `aria-describedby` - links the tooltip as a description.
-   * - `aria-labelledby` - links the tooltip as an accessible name.
-   * - `none` - does not add any ARIA linking attribute.
-   *
-   * Defaults to `aria-describedby`.
-   *
-   * @attr {string} aria-link-mode
-   */
-  ariaLinkMode: 'aria-describedby' | 'aria-labelledby' | 'none';
-
   /**
    * Object with properties passed to `generator` and
    * `shouldShow` functions for generating tooltip text

@@ -16,6 +16,7 @@ import { PopoverOverlayMixin } from './vaadin-popover-overlay-mixin.js';
 /**
  * An element used internally by `<vaadin-popover>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-popover-overlay
  * @extends HTMLElement
  * @private
@@ -78,11 +79,11 @@ class PopoverOverlay extends PopoverOverlayMixin(
   }
 
   /**
-   * Override method from OverlayFocusMixin to use owner as focus trap root
+   * Override method from OverlayFocusMixin to use owner as focus root
    * @protected
    * @override
    */
-  get _focusTrapRoot() {
+  get _focusRoot() {
     return this.owner;
   }
 

@@ -3,6 +3,11 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-overlay',
   css`
+    :host([zero-duration-animation]) {
+      animation-name: overlay-dummy-animation;
+      animation-duration: 0s;
+    }
+
     :host([animate][opening]),
     :host([animate][closing]) {
       animation: 50ms overlay-dummy-animation;

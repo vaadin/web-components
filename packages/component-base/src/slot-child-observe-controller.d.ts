@@ -25,4 +25,9 @@ export class SlotChildObserveController extends SlotController {
    * Override to update default node text on property change.
    */
   protected updateDefaultNode(node: Node): void;
+
+  /**
+   * Fire an event to notify the controller host about node changes.
+   */
+  protected _notifyChange(node: Node): void;
 }

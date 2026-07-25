@@ -37,11 +37,10 @@ export const SelectBaseMixin = (superClass) =>
          * Note: each item is rendered by default as the internal `<vaadin-select-item>` that is an extension of `<vaadin-item>`.
          * To render the item with a custom component, provide a tag name by the `component` property.
          *
-         * @type {!Array<!SelectItem>}
+         * @type {!Array<!SelectItemData>}
          */
         items: {
           type: Array,
-          observer: '__itemsChanged',
         },
 
         /**
@@ -62,7 +61,9 @@ export const SelectBaseMixin = (superClass) =>
          *
          * - `root` The internal container DOM element. Append your content to it.
          * - `select` The reference to the `<vaadin-select>` element.
+         *
          * @type {!SelectRenderer | undefined}
+         * @deprecated Use a slotted `<vaadin-select-list-box>` or the `items` property instead
          */
         renderer: {
           type: Object,
@@ -138,6 +139,15 @@ export const SelectBaseMixin = (superClass) =>
 
         /** @private */
         _items: Object,
+
+        /**
+         * The `<vaadin-select-list-box>` slotted directly into the overlay slot.
+         * @private
+         */
+        __slottedListBox: {
+          type: Object,
+          sync: true,
+        },
       };
     }
 
@@ -199,6 +209,29 @@ export const SelectBaseMixin = (superClass) =>
       if (props.has('_phone')) {
         this.toggleAttribute('phone', this._phone);
       }
+
+      if (props.has('items') || props.has('renderer') || props.has('__slottedListBox')) {
+        if (this.__slottedListBox && (this.items?.length || this.renderer)) {
+          throw new Error(
+            'A slotted <vaadin-select-list-box> cannot be used together with the "items" or "renderer" property.',
+          );
+        }
+      }
+
+      if (props.has('items')) {
+        this._overlayElement.requestContentUpdate();
+      }
+
+      if (props.has('__slottedListBox')) {
+        const slottedListBox = this.__slottedListBox;
+        if (slottedListBox) {
+          this._assignMenuElement(slottedListBox);
+        } else if (props.get('__slottedListBox')) {
+          this._menuElement = null;
+          this._items = null;
+          this.__lastMenuElement = null;
+        }
+      }
     }
 
     /**
@@ -206,6 +239,8 @@ export const SelectBaseMixin = (superClass) =>
      * While performing the update, it invokes the renderer passed in the `renderer` property.
      *
      * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+     *
+     * @deprecated This method is deprecated and will be removed in Vaadin 26
      */
     requestContentUpdate() {
       if (!this._overlayElement) {
@@ -231,14 +266,14 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     /**
-     * @param {SelectItem[] | undefined | null} newItems
-     * @param {SelectItem[] | undefined | null} oldItems
+     * Detects a `<vaadin-select-list-box>` slotted directly into the overlay
+     * slot (instead of the default one rendered into slotted `div` element).
+     *
+     * @param {!Event} e
      * @private
      */
-    __itemsChanged(newItems, oldItems) {
-      if (newItems || oldItems) {
-        this.requestContentUpdate();
-      }
+    __onOverlaySlotChange(e) {
+      this.__slottedListBox = e.target.assignedElements().find((el) => el._hasVaadinListMixin);
     }
 
     /**
@@ -467,7 +502,7 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     /**
-     * @param {!SelectItem} item
+     * @param {!SelectItemData} item
      * @private
      */
     __createItemElement(item) {

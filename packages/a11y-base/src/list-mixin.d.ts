@@ -36,6 +36,11 @@ export declare class ListMixinClass {
   orientation: 'horizontal' | 'vertical';
 
   /**
+   * Used for mixin detection because `instanceof` does not work with mixins.
+   */
+  protected _hasVaadinListMixin: boolean;
+
+  /**
    * A read-only list of items from which a selection can be made.
    * It is populated from the elements passed to the light DOM,
    * and updated dynamically when adding or removing items.

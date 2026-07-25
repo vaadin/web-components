@@ -153,15 +153,6 @@ export const A11yMixin = (superClass) =>
       });
     }
 
-    /**
-     * @param {!HTMLElement} cell
-     * @param {number} colspan
-     * @private
-     */
-    __a11yUpdateCellColspan(cell, colspan) {
-      cell.setAttribute('aria-colspan', Number(colspan));
-    }
-
     /** @private */
     __a11yUpdateSorters() {
       Array.from(this.querySelectorAll('vaadin-grid-sorter')).forEach((sorter) => {

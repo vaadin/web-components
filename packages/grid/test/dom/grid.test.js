@@ -3,6 +3,7 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../grid-test-styles.js';
 import '../../vaadin-grid.js';
 import '../../vaadin-grid-column-group.js';
+import { dragAndDropOver, getHeaderCellContent } from '../helpers.js';
 import { users } from '../visual/users.js';
 
 describe('vaadin-grid', () => {
@@ -99,6 +100,72 @@ describe('vaadin-grid', () => {
       };
       await nextFrame();
       await expect(grid.$.footer).dom.to.equalSnapshot();
+    });
+  });
+
+  describe('hidden column group', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column-group hidden>
+            <vaadin-grid-column></vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </vaadin-grid>
+      `);
+      grid.items = users.slice(0, 2);
+      await nextFrame();
+    });
+
+    it('with group header', async () => {
+      grid.querySelector('vaadin-grid-column-group').header = 'Group';
+      await nextFrame();
+      await expect(grid).shadowDom.to.equalSnapshot();
+    });
+
+    it('with group and column header', async () => {
+      grid.querySelector('vaadin-grid-column').header = 'Col';
+      grid.querySelector('vaadin-grid-column-group').header = 'Group';
+      await nextFrame();
+      await expect(grid).shadowDom.to.equalSnapshot();
+    });
+
+    it('with group footer', async () => {
+      grid.querySelector('vaadin-grid-column-group').footerRenderer = (root) => {
+        root.textContent = 'Footer';
+      };
+      await nextFrame();
+      await expect(grid).shadowDom.to.equalSnapshot();
+    });
+  });
+
+  describe('column reordering', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid column-reordering-allowed>
+          <vaadin-grid-column path="name.first"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.items = users.slice(0, 2);
+      await nextFrame();
+    });
+
+    it('reordered', async () => {
+      dragAndDropOver(getHeaderCellContent(grid, 0, 0), getHeaderCellContent(grid, 0, 1));
+      await nextFrame();
+      await expect(grid.$.table).dom.to.equalSnapshot();
+    });
+
+    it('reordered details opened', async () => {
+      grid.rowDetailsRenderer = (root) => {
+        root.textContent = 'Details';
+      };
+      grid.detailsOpenedItems = [grid.items[0]];
+      await nextFrame();
+      dragAndDropOver(getHeaderCellContent(grid, 0, 0), getHeaderCellContent(grid, 0, 1));
+      await nextFrame();
+      await expect(grid.$.table).dom.to.equalSnapshot();
     });
   });
 });

@@ -51,6 +51,7 @@ import { GridSorterMixin } from './vaadin-grid-sorter-mixin.js';
  * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  * @fires {CustomEvent} sorter-changed - Fired when the `path` or `direction` property changes.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-grid-sorter
  * @extends HTMLElement
  */

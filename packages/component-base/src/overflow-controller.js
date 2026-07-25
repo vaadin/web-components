@@ -10,6 +10,15 @@
  * where content is overflowing. Supported values are: `top`, `bottom`, `start`, `end`.
  */
 export class OverflowController {
+  /** @type {ResizeObserver} */
+  #resizeObserver;
+
+  /** @type {MutationObserver} */
+  #childObserver;
+
+  /** @type {number} */
+  #resizeRaf;
+
   constructor(host, scrollTarget) {
     /**
      * The controller host element.
@@ -25,9 +34,6 @@ export class OverflowController {
      * @type {HTMLElement}
      */
     this.scrollTarget = scrollTarget || host;
-
-    /** @private */
-    this.__boundOnScroll = this.__onScroll.bind(this);
   }
 
   hostConnected() {
@@ -46,64 +52,60 @@ export class OverflowController {
   observe() {
     const { host } = this;
 
-    this.__resizeObserver = new ResizeObserver(() => this.__onResize());
-    this.__resizeObserver.observe(host);
+    this.#resizeObserver = new ResizeObserver(() => this.#onResize());
+    this.#resizeObserver.observe(host);
 
     // Observe initial children
     [...host.children].forEach((child) => {
-      this.__resizeObserver.observe(child);
+      this.#resizeObserver.observe(child);
     });
 
-    this.__childObserver = new MutationObserver((mutations) => {
+    this.#childObserver = new MutationObserver((mutations) => {
       mutations.forEach(({ addedNodes, removedNodes }) => {
         addedNodes.forEach((node) => {
           if (node.nodeType === Node.ELEMENT_NODE) {
-            this.__resizeObserver.observe(node);
+            this.#resizeObserver.observe(node);
           }
         });
 
         removedNodes.forEach((node) => {
           if (node.nodeType === Node.ELEMENT_NODE) {
-            this.__resizeObserver.unobserve(node);
+            this.#resizeObserver.unobserve(node);
           }
         });
 
         if (addedNodes.length === 0 && removedNodes.length > 0) {
-          this.__updateState({ sync: true });
+          this.#updateState({ sync: true });
         }
       });
     });
 
-    this.__childObserver.observe(host, { childList: true });
+    this.#childObserver.observe(host, { childList: true });
 
     // Update overflow attribute on scroll
-    this.scrollTarget.addEventListener('scroll', this.__boundOnScroll);
+    this.scrollTarget.addEventListener('scroll', this.#onScroll);
   }
 
-  /** @private */
-  __onResize() {
-    this.__updateState({ sync: false });
+  #onResize() {
+    this.#updateState({ sync: false });
   }
 
-  /** @private */
-  __onScroll() {
-    this.__updateState({ sync: true });
-  }
+  #onScroll = () => {
+    this.#updateState({ sync: true });
+  };
 
-  /** @private */
-  __updateState({ sync }) {
-    cancelAnimationFrame(this.__resizeRaf);
+  #updateState({ sync }) {
+    cancelAnimationFrame(this.#resizeRaf);
 
-    const state = this.__readState();
+    const state = this.#readState();
     if (sync) {
-      this.__writeState(state);
+      this.#writeState(state);
     } else {
-      this.__resizeRaf = requestAnimationFrame(() => this.__writeState(state));
+      this.#resizeRaf = requestAnimationFrame(() => this.#writeState(state));
     }
   }
 
-  /** @private */
-  __readState() {
+  #readState() {
     const target = this.scrollTarget;
 
     let overflow = '';
@@ -128,8 +130,7 @@ export class OverflowController {
     return { overflow: overflow.trim() };
   }
 
-  /** @private */
-  __writeState({ overflow }) {
+  #writeState({ overflow }) {
     if (overflow) {
       this.host.setAttribute('overflow', overflow);
     } else {

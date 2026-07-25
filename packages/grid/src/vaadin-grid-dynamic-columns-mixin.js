@@ -143,11 +143,6 @@ export const DynamicColumnsMixin = (superClass) =>
       });
     }
 
-    /** @protected */
-    _updateFirstAndLastColumn() {
-      Array.from(this.shadowRoot.querySelectorAll('tr')).forEach((row) => this._updateFirstAndLastColumnForRow(row));
-    }
-
     /**
      * @param {!HTMLElement} row
      * @protected

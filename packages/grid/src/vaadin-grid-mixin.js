@@ -4,9 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { TabindexMixin } from '@vaadin/a11y-base/src/tabindex-mixin.js';
-import { microTask } from '@vaadin/component-base/src/async.js';
-import { isAndroid, isChrome, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { isAndroid, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -22,6 +20,7 @@ import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
+import { HeaderFooterRenderingMixin } from './vaadin-grid-header-footer-rendering-mixin.js';
 import {
   getBodyRowCells,
   getClosestCell,
@@ -48,17 +47,21 @@ export const GridMixin = (superClass) =>
     ArrayDataProviderMixin(
       DataProviderMixin(
         DynamicColumnsMixin(
-          ActiveItemMixin(
-            ScrollMixin(
-              SelectionMixin(
-                SortMixin(
-                  RowDetailsMixin(
-                    KeyboardNavigationMixin(
-                      A11yMixin(
-                        FilterMixin(
-                          ColumnReorderingMixin(
-                            ColumnResizingMixin(
-                              EventContextMixin(DragAndDropMixin(StylingMixin(TabindexMixin(ResizeMixin(superClass))))),
+          HeaderFooterRenderingMixin(
+            ActiveItemMixin(
+              ScrollMixin(
+                SelectionMixin(
+                  SortMixin(
+                    RowDetailsMixin(
+                      KeyboardNavigationMixin(
+                        A11yMixin(
+                          FilterMixin(
+                            ColumnReorderingMixin(
+                              ColumnResizingMixin(
+                                EventContextMixin(
+                                  DragAndDropMixin(StylingMixin(TabindexMixin(ResizeMixin(superClass)))),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -158,6 +161,15 @@ export const GridMixin = (superClass) =>
       return lastVisibleItem ? lastVisibleItem.index : undefined;
     }
 
+    constructor() {
+      super();
+
+      this.__onCellMouseEnter = this.__onCellMouseEnter.bind(this);
+      this.__onCellMouseLeave = this.__onCellMouseLeave.bind(this);
+      this.__onCellMouseDown = this.__onCellMouseDown.bind(this);
+      this.__onCellKeyDown = this.__onCellKeyDown.bind(this);
+    }
+
     /** @protected */
     connectedCallback() {
       super.connectedCallback();
@@ -235,6 +247,13 @@ export const GridMixin = (superClass) =>
         // otherwise be triggered by this logic because it reads the row height
         // right after updating the rows' content.
         __disableHeightPlaceholder: true,
+        // The virtualizer amortizes scroller height updates to avoid reflows while
+        // scrolling. In `allRowsVisible` mode the grid has no scrolling and its
+        // height must track the content exactly, so tell the virtualizer to always
+        // apply the scroller height. Otherwise the items container can be left at a
+        // stale, too-small height and clip rows when the grid grows (e.g. when
+        // expanding a tree grid from a small size).
+        __alwaysUpdateScrollerSize: () => this.allRowsVisible,
       });
 
       this._tooltipController = new TooltipController(this);
@@ -335,7 +354,7 @@ export const GridMixin = (superClass) =>
         updatePart(row, 'row', true);
         updatePart(row, 'body-row', true);
         if (this._columnTree) {
-          this.__initRow(row, this._columnTree[this._columnTree.length - 1], 'body', false, true);
+          this.__initRow(row, this._columnTree[this._columnTree.length - 1], 'body', true);
         }
         rows.push(row);
       }
@@ -352,6 +371,36 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
+    __onCellKeyDown(event) {
+      const cell = event.currentTarget;
+      cell._column?.__onCellKeyDown?.(event);
+    }
+
+    /** @private */
+    __onCellMouseEnter(event) {
+      // For now we only support tooltip on desktop
+      if (!isAndroid && !isIOS && !this.$.scroller.hasAttribute('scrolling')) {
+        this._showTooltip(event);
+      }
+    }
+
+    /** @private */
+    __onCellMouseLeave() {
+      // For now we only support tooltip on desktop
+      if (!isAndroid && !isIOS) {
+        this._hideTooltip();
+      }
+    }
+
+    /** @private */
+    __onCellMouseDown() {
+      // For now we only support tooltip on desktop
+      if (!isAndroid && !isIOS) {
+        this._hideTooltip(true);
+      }
+    }
+
+    /** @private */
     _createCell(tagName, column) {
       const contentId = (this._contentIndex = this._contentIndex + 1 || 0);
       const slotName = `vaadin-grid-cell-content-${contentId}`;
@@ -363,22 +412,10 @@ export const GridMixin = (superClass) =>
       cell.id = slotName.replace('-content-', '-');
       cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
 
-      // For now we only support tooltip on desktop
-      if (!isAndroid && !isIOS) {
-        cell.addEventListener('mouseenter', (event) => {
-          if (!this.$.scroller.hasAttribute('scrolling')) {
-            this._showTooltip(event);
-          }
-        });
-
-        cell.addEventListener('mouseleave', () => {
-          this._hideTooltip();
-        });
-
-        cell.addEventListener('mousedown', () => {
-          this._hideTooltip(true);
-        });
-      }
+      cell.addEventListener('mouseenter', this.__onCellMouseEnter);
+      cell.addEventListener('mouseleave', this.__onCellMouseLeave);
+      cell.addEventListener('mousedown', this.__onCellMouseDown);
+      cell.addEventListener('keydown', this.__onCellKeyDown);
 
       const slot = document.createElement('slot');
       slot.setAttribute('name', slotName);
@@ -403,34 +440,6 @@ export const GridMixin = (superClass) =>
 
       cell._content = cellContent;
 
-      // With native Shadow DOM, mousedown on slotted element does not focus
-      // focusable slot wrapper, that is why cells are not focused with
-      // mousedown. Workaround: listen for mousedown and focus manually.
-      cellContent.addEventListener('mousedown', () => {
-        if (isChrome) {
-          // Chrome bug: focusing before mouseup prevents text selection, see http://crbug.com/771903
-          const mouseUpListener = (event) => {
-            // If focus is on element within the cell content - respect it, do not change
-            const contentContainsFocusedElement = cellContent.contains(this.getRootNode().activeElement);
-            // Only focus if mouse is released on cell content itself
-            const mouseUpWithinCell = event.composedPath().includes(cellContent);
-            if (!contentContainsFocusedElement && mouseUpWithinCell) {
-              cell.focus({ preventScroll: true });
-            }
-            document.removeEventListener('mouseup', mouseUpListener, true);
-          };
-          document.addEventListener('mouseup', mouseUpListener, true);
-        } else {
-          // Focus on mouseup, on the other hand, removes selection on Safari.
-          // Watch out sync focus removal issue, only async focus works here.
-          setTimeout(() => {
-            if (!cellContent.contains(this.getRootNode().activeElement)) {
-              cell.focus({ preventScroll: true });
-            }
-          });
-        }
-      });
-
       return cell;
     }
 
@@ -438,11 +447,10 @@ export const GridMixin = (superClass) =>
      * @param {!HTMLTableRowElement} row
      * @param {!Array<!GridColumn>} columns
      * @param {?string} section
-     * @param {boolean} isColumnRow
      * @param {boolean} noNotify
      * @private
      */
-    __initRow(row, columns, section = 'body', isColumnRow = false, noNotify = false) {
+    __initRow(row, columns, section = 'body', noNotify = false) {
       const contentsFragment = document.createDocumentFragment();
 
       iterateRowCells(row, (cell) => {
@@ -469,9 +477,6 @@ export const GridMixin = (superClass) =>
             cell = column._cells.find((cell) => cell._vacant);
             if (!cell) {
               cell = this._createCell('td', column);
-              if (column._onCellKeyDown) {
-                cell.addEventListener('keydown', column._onCellKeyDown.bind(column));
-              }
               column._cells.push(cell);
             }
             updatePart(cell, 'cell', true);
@@ -513,33 +518,6 @@ export const GridMixin = (superClass) =>
             if (!noNotify) {
               column._cells = [...column._cells];
             }
-          } else {
-            // Header & footer
-            const tagName = section === 'header' ? 'th' : 'td';
-            if (isColumnRow || column.localName === 'vaadin-grid-column-group') {
-              cell = column[`_${section}Cell`];
-              if (!cell) {
-                cell = this._createCell(tagName);
-                if (column._onCellKeyDown) {
-                  cell.addEventListener('keydown', column._onCellKeyDown.bind(column));
-                }
-              }
-              cell._column = column;
-              row.appendChild(cell);
-              column[`_${section}Cell`] = cell;
-            } else {
-              if (!column._emptyCells) {
-                column._emptyCells = [];
-              }
-              cell = column._emptyCells.find((cell) => cell._vacant) || this._createCell(tagName);
-              cell._column = column;
-              row.appendChild(cell);
-              if (column._emptyCells.indexOf(cell) === -1) {
-                column._emptyCells.push(cell);
-              }
-            }
-            updatePart(cell, 'cell', true);
-            updatePart(cell, `${section}-cell`, true);
           }
 
           if (!cell._content.parentElement) {
@@ -549,84 +527,11 @@ export const GridMixin = (superClass) =>
           cell._column = column;
         });
 
-      if (section !== 'body') {
-        this.__debounceUpdateHeaderFooterRowVisibility(row);
-      }
-
       // Might be empty if only cache was used
       this.appendChild(contentsFragment);
 
       this._frozenCellsChanged();
       this._updateFirstAndLastColumnForRow(row);
-    }
-
-    /**
-     * @param {HTMLTableRowElement} row
-     * @protected
-     */
-    __debounceUpdateHeaderFooterRowVisibility(row) {
-      row.__debounceUpdateHeaderFooterRowVisibility = Debouncer.debounce(
-        row.__debounceUpdateHeaderFooterRowVisibility,
-        microTask,
-        () => this.__updateHeaderFooterRowVisibility(row),
-      );
-    }
-
-    /**
-     * @param {HTMLTableRowElement} row
-     * @protected
-     */
-    __updateHeaderFooterRowVisibility(row) {
-      if (!row) {
-        return;
-      }
-
-      const visibleRowCells = Array.from(row.children).filter((cell) => {
-        const column = cell._column;
-        if (column._emptyCells && column._emptyCells.indexOf(cell) > -1) {
-          // The cell is an "empty cell"  -> doesn't block hiding the row
-          return false;
-        }
-        if (row.parentElement === this.$.header) {
-          if (column.headerRenderer) {
-            // The cell is the header cell of a column that has a header renderer
-            // -> row should be visible
-            return true;
-          }
-          if (column.header === null) {
-            // The column header is explicilty set to null -> doesn't block hiding the row
-            return false;
-          }
-          if (column.path || column.header !== undefined) {
-            // The column has an explicit non-null header or a path that generates a header
-            // -> row should be visible
-            return true;
-          }
-        } else if (column.footerRenderer) {
-          // The cell is the footer cell of a column that has a footer renderer
-          // -> row should be visible
-          return true;
-        }
-        return false;
-      });
-
-      if (row.hidden !== !visibleRowCells.length) {
-        row.hidden = !visibleRowCells.length;
-      }
-
-      if (row.parentElement === this.$.header) {
-        this.$.table.toggleAttribute('has-header', this.$.header.querySelector('tr:not([hidden])'));
-        this.__updateHeaderFooterRowParts('header');
-      }
-
-      if (row.parentElement === this.$.footer) {
-        this.$.table.toggleAttribute('has-footer', this.$.footer.querySelector('tr:not([hidden])'));
-        this.__updateHeaderFooterRowParts('footer');
-      }
-
-      // Make sure the section has a tabbable element
-      this._resetKeyboardNavigation();
-      this.__a11yUpdateGridSize(this.size, this._columnTree, this.__emptyState);
     }
 
     /** @private */
@@ -681,65 +586,22 @@ export const GridMixin = (superClass) =>
      */
     _renderColumnTree(columnTree) {
       iterateChildren(this.$.items, (row) => {
-        this.__initRow(row, columnTree[columnTree.length - 1], 'body', false, true);
+        this.__initRow(row, columnTree[columnTree.length - 1], 'body', true);
         this.__updateRow(row);
       });
 
-      while (this.$.header.children.length < columnTree.length) {
-        const headerRow = document.createElement('tr');
-        headerRow.setAttribute('role', 'row');
-        headerRow.setAttribute('tabindex', '-1');
-        updatePart(headerRow, 'row', true);
-        updatePart(headerRow, 'header-row', true);
-        this.$.header.appendChild(headerRow);
-
-        const footerRow = document.createElement('tr');
-        footerRow.setAttribute('role', 'row');
-        footerRow.setAttribute('tabindex', '-1');
-        updatePart(footerRow, 'row', true);
-        updatePart(footerRow, 'footer-row', true);
-        this.$.footer.appendChild(footerRow);
-      }
-      while (this.$.header.children.length > columnTree.length) {
-        this.$.header.removeChild(this.$.header.firstElementChild);
-        this.$.footer.removeChild(this.$.footer.firstElementChild);
-      }
-
-      iterateChildren(this.$.header, (headerRow, index) => {
-        this.__initRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
-      });
-
-      iterateChildren(this.$.footer, (footerRow, index) => {
-        this.__initRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
-      });
+      this.__renderHeaderFooter();
 
       // Sizer rows
       this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);
 
-      this.__updateHeaderFooterRowParts('header');
-      this.__updateHeaderFooterRowParts('footer');
       this._resizeHandler();
       this._frozenCellsChanged();
-      this._updateFirstAndLastColumn();
       this._resetKeyboardNavigation();
       this.__a11yUpdateHeaderRows();
       this.__a11yUpdateFooterRows();
       this.generateCellPartNames();
       this.__updateHeaderAndFooter();
-    }
-
-    /** @private */
-    __updateHeaderFooterRowParts(section) {
-      const visibleRows = [...this.$[section].querySelectorAll('tr:not([hidden])')];
-      [...this.$[section].children].forEach((row) => {
-        updatePart(row, `first-${section}-row`, row === visibleRows.at(0));
-        updatePart(row, `last-${section}-row`, row === visibleRows.at(-1));
-
-        getBodyRowCells(row).forEach((cell) => {
-          updatePart(cell, `first-${section}-row-cell`, row === visibleRows.at(0));
-          updatePart(cell, `last-${section}-row-cell`, row === visibleRows.at(-1));
-        });
-      });
     }
 
     /**

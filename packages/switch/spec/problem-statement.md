@@ -4,7 +4,7 @@
 
 Business web apps need a simple on/off control.
 
-- Anatomy: sliding track with a thumb and a text label.
+- Anatomy: sliding track with a marker and a text label.
 - Visual meaning: to indicate "is this on?" for a single setting.
 
 The setting controlled by the switch can be applied in 2 ways:

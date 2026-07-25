@@ -15,6 +15,7 @@ import { confirmDialogOverlayStyles } from './styles/vaadin-confirm-dialog-overl
 /**
  * An element used internally by `<vaadin-confirm-dialog>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-confirm-dialog-overlay
  * @extends HTMLElement
  * @private
@@ -88,11 +89,11 @@ class ConfirmDialogOverlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMi
   }
 
   /**
-   * Override method from OverlayFocusMixin to use owner as focus trap root
+   * Override method from OverlayFocusMixin to use owner as focus root
    * @protected
    * @override
    */
-  get _focusTrapRoot() {
+  get _focusRoot() {
     return this.owner;
   }
 }

@@ -8,6 +8,8 @@ const accordion = document.createElement('vaadin-accordion');
 
 accordion.opened = null;
 
+assertType<number | null | undefined>(accordion.headingLevel);
+
 accordion.addEventListener('opened-changed', (event) => {
   assertType<AccordionOpenedChangedEvent>(event);
   assertType<number | null>(event.detail.value);

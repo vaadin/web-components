@@ -8,6 +8,9 @@
  * A controller for listening on media query changes.
  */
 export class MediaQueryController {
+  /** @type {MediaQueryList | null} */
+  #mediaQuery = null;
+
   constructor(query, callback) {
     /**
      * The CSS media query to evaluate.
@@ -24,44 +27,39 @@ export class MediaQueryController {
      * @protected
      */
     this.callback = callback;
-
-    this._boundQueryHandler = this._queryHandler.bind(this);
   }
 
   hostConnected() {
-    this._removeListener();
+    this.#removeListener();
 
-    this._mediaQuery = window.matchMedia(this.query);
+    this.#mediaQuery = window.matchMedia(this.query);
 
-    this._addListener();
+    this.#addListener();
 
-    this._queryHandler(this._mediaQuery);
+    this.#queryHandler(this.#mediaQuery);
   }
 
   hostDisconnected() {
-    this._removeListener();
+    this.#removeListener();
   }
 
-  /** @private */
-  _addListener() {
-    if (this._mediaQuery) {
-      this._mediaQuery.addListener(this._boundQueryHandler);
+  #addListener() {
+    if (this.#mediaQuery) {
+      this.#mediaQuery.addListener(this.#queryHandler);
     }
   }
 
-  /** @private */
-  _removeListener() {
-    if (this._mediaQuery) {
-      this._mediaQuery.removeListener(this._boundQueryHandler);
+  #removeListener() {
+    if (this.#mediaQuery) {
+      this.#mediaQuery.removeListener(this.#queryHandler);
     }
 
-    this._mediaQuery = null;
+    this.#mediaQuery = null;
   }
 
-  /** @private */
-  _queryHandler(mediaQuery) {
+  #queryHandler = (mediaQuery) => {
     if (typeof this.callback === 'function') {
       this.callback(mediaQuery.matches);
     }
-  }
+  };
 }

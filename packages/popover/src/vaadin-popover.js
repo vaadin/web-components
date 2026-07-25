@@ -12,8 +12,9 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import {
-  hasOnlyNestedOverlays,
+  getOverlaysOnTop,
   isLastOverlay as isLastOverlayBase,
+  isNestedOverlay,
 } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { PopoverFocusController } from './vaadin-popover-focus-controller.js';
@@ -159,6 +160,14 @@ const isLastOverlay = (overlay) => {
 };
 
 /**
+ * Returns true if all the overlays shown on top of the given overlay are nested inside it.
+ * @param {HTMLElement} overlay
+ * @return {boolean}
+ * @protected
+ */
+const hasOnlyNestedOverlays = (overlay) => getOverlaysOnTop(overlay).every((el) => isNestedOverlay(overlay, el));
+
+/**
  * `<vaadin-popover>` is a Web Component for creating overlays
  * that are positioned next to specified DOM element (target).
  *
@@ -207,6 +216,7 @@ const isLastOverlay = (overlay) => {
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the popover is closed.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-popover
  * @extends HTMLElement
  */

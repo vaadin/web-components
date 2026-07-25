@@ -3,7 +3,15 @@ import { aTimeout, fixtureSync, keyDownOn, nextFrame, nextResize, oneEvent } fro
 import Sinon from 'sinon';
 import './grid-test-styles.js';
 import '../all-imports.js';
-import { dragAndDropOver, dragStart, fire, flushGrid, getCellContent, getHeaderCellContent } from './helpers.js';
+import {
+  cellDraggableAttribute,
+  dragAndDropOver,
+  dragStart,
+  fire,
+  flushGrid,
+  getCellContent,
+  getHeaderCellContent,
+} from './helpers.js';
 
 ['ltr', 'rtl'].forEach((dir) => {
   describe(`lazy column rendering - ${dir}`, () => {
@@ -411,12 +419,12 @@ import { dragAndDropOver, dragStart, fire, flushGrid, getCellContent, getHeaderC
         grid.rowsDraggable = true;
         await nextFrame();
 
-        expect(getBodyCellContent(getLastVisibleColumnIndex()).getAttribute('draggable')).to.equal('true');
+        expect(getBodyCellContent(getLastVisibleColumnIndex()).getAttribute(cellDraggableAttribute)).to.equal('true');
 
         // Scroll back to the beginning
         await scrollHorizontally(-grid.$.table.scrollWidth);
         // Expect the cell that was previously not visible to have the draggable attribute
-        expect(getBodyCellContent(0).getAttribute('draggable')).to.equal('true');
+        expect(getBodyCellContent(0).getAttribute(cellDraggableAttribute)).to.equal('true');
       });
 
       it('should not create excess cells for a row', async () => {

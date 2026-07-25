@@ -15,6 +15,7 @@ import { passwordFieldButton } from './styles/vaadin-password-field-button-base-
 /**
  * An element used internally by `<vaadin-password-field>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-password-field-button
  * @extends HTMLElement
  * @private

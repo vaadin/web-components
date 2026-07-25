@@ -20,6 +20,11 @@ export class FocusTrapController implements ReactiveController {
    */
   host: HTMLElement;
 
+  /**
+   * A node for trapping focus in.
+   */
+  trapNode: HTMLElement | null;
+
   constructor(node: HTMLElement);
 
   hostConnected(): void;

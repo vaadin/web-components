@@ -232,6 +232,32 @@ describe('vaadin-details', () => {
     });
   });
 
+  describe('without summary', () => {
+    let summary;
+
+    beforeEach(async () => {
+      details = fixtureSync(`
+        <vaadin-details>
+          <div>Content</div>
+        </vaadin-details>
+      `);
+      await nextRender();
+      summary = details.querySelector('vaadin-details-summary');
+    });
+
+    it('should set the default summary as the focus element', () => {
+      expect(details.focusElement).to.equal(summary);
+    });
+
+    it('should toggle opened state on default summary click', () => {
+      summary.click();
+      expect(details.opened).to.be.true;
+
+      summary.click();
+      expect(details.opened).to.be.false;
+    });
+  });
+
   describe('link', () => {
     let link;
 

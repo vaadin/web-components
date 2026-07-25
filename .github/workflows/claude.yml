@@ -50,12 +50,9 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Run Claude Code
-        uses: vaadin/github-actions/claude-code@bfb2659c1efe77731d70b4bb57f1433f5dbf3d90
+        uses: vaadin/github-actions/claude-code@main
         with:
           anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
           extra-allowed-tools: |
-            Bash(yarn test:*)
-            Bash(yarn update:*)
-            Bash(yarn start:*)
-            Bash(yarn lint:*)
+            Bash(yarn:*)
           upload-execution-log: ${{ vars.CLAUDE_DEBUG }}

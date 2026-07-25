@@ -194,6 +194,7 @@ import { CrudMixin } from './vaadin-crud-mixin.js';
  * @fires {CustomEvent} save - Fired when user wants to save a new or an existing item. If the default is prevented, no action is performed: the items array is not modified and the dialog is not closed.
  * @fires {CustomEvent} cancel - Fired when user discards edition. If the default is prevented, no action is performed; the listener is responsible for closing the dialog and resetting the item and grid.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-crud
  * @extends HTMLElement
  */

@@ -14,22 +14,26 @@ const attachedInstances = new Set();
 const getAttachedInstances = () => [...attachedInstances].filter((el) => !el.hasAttribute('closing'));
 
 /**
- * Returns true if all the instances on top of the overlay are nested overlays.
- * @private
+ * Returns overlays shown on top of the given overlay.
+ * @param {HTMLElement} overlay
+ * @return {HTMLElement[]}
+ * @protected
  */
-export const hasOnlyNestedOverlays = (overlay) => {
+export const getOverlaysOnTop = (overlay) => {
   const instances = getAttachedInstances();
-  const next = instances[instances.indexOf(overlay) + 1];
-  if (!next) {
-    return true;
-  }
-
-  if (!overlay._deepContains(next)) {
-    return false;
-  }
-
-  return hasOnlyNestedOverlays(next);
+  const index = instances.indexOf(overlay);
+  // The overlay is not in the visible stack (closing), so nothing is "on top" of it.
+  return index === -1 ? [] : instances.slice(index + 1);
 };
+
+/**
+ * Returns true if the given overlay is a child of a parent overlay.
+ * @param {HTMLElement} parent
+ * @param {HTMLElement} overlay
+ * @return {boolean}
+ * @protected
+ */
+export const isNestedOverlay = (parent, overlay) => parent._deepContains(overlay);
 
 /**
  * Returns true if the overlay is the last one in the opened overlays stack.
@@ -69,22 +73,28 @@ export const OverlayStackMixin = (superClass) =>
      * Brings the overlay as visually the frontmost one.
      */
     bringToFront() {
-      // If the overlay is the last one, or if all other overlays shown above
-      // are nested overlays (e.g. date-picker inside a dialog), do not call
-      // `showPopover()` unnecessarily to avoid scroll position being reset.
-      if (isLastOverlay(this) || hasOnlyNestedOverlays(this)) {
+      if (isLastOverlay(this)) {
         return;
       }
 
-      // Update stacking order of native popover-based overlays
-      if (this.matches(':popover-open')) {
-        this.hidePopover();
-        this.showPopover();
+      const overlays = getOverlaysOnTop(this);
+      // Nested positioned overlays anchored must stay visually on top.
+      const nestedOverlays = overlays.filter((el) => el._hasOverlayPositionMixin && isNestedOverlay(this, el));
+
+      // If the only overlays on top are nested positioned overlays, this overlay is already
+      // effectively frontmost. Skip to avoid resetting scroll position via `showPopover()`.
+      if (nestedOverlays.length === overlays.length) {
+        return;
       }
 
-      // Update order of attached instances
-      this._removeAttachedInstance();
-      this._appendAttachedInstance();
+      [this, ...nestedOverlays].forEach((overlay) => {
+        if (overlay.matches(':popover-open')) {
+          overlay.hidePopover();
+          overlay.showPopover();
+        }
+        overlay._removeAttachedInstance();
+        overlay._appendAttachedInstance();
+      });
     }
 
     /** @protected */

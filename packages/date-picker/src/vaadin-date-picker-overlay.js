@@ -16,6 +16,7 @@ import { DatePickerOverlayMixin } from './vaadin-date-picker-overlay-mixin.js';
 /**
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-date-picker-overlay
  * @extends HTMLElement
  * @private

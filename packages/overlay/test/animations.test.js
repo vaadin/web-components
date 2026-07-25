@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { escKeyDown, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import './animated-styles.js';
 import '../src/vaadin-overlay.js';
 import { createOverlay } from './helpers.js';
@@ -106,6 +107,42 @@ function afterOverlayClosingFinished(overlay, callback) {
   });
   observer.observe(overlay, { attributes: true, attributeFilter: ['closing'] });
 }
+
+describe('overlay with zero-duration animation', () => {
+  let overlay, owner;
+
+  beforeEach(async () => {
+    overlay = createOverlay('overlay content');
+    owner = fixtureSync('<div></div>');
+    overlay.owner = owner;
+    overlay.setAttribute('zero-duration-animation', '');
+    await nextRender();
+  });
+
+  afterEach(() => {
+    overlay.opened = false;
+    sinon.restore();
+  });
+
+  it('should finish opening and closing synchronously', () => {
+    const finishOpening = sinon.spy(overlay, '_finishOpening');
+    const finishClosing = sinon.spy(overlay, '_finishClosing');
+
+    expect(getComputedStyle(overlay).animationName).to.equal('overlay-dummy-animation');
+
+    overlay.opened = true;
+
+    expect(finishOpening).to.be.calledOnce;
+    expect(overlay.hasAttribute('opening')).to.be.false;
+    expect(owner.hasAttribute('opening')).to.be.false;
+
+    overlay.opened = false;
+
+    expect(finishClosing).to.be.calledOnce;
+    expect(overlay.hasAttribute('closing')).to.be.false;
+    expect(owner.hasAttribute('closing')).to.be.false;
+  });
+});
 
 [false, true].forEach((withAnimation) => {
   const titleSuffix = withAnimation ? ' (animated)' : '';

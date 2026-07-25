@@ -65,6 +65,7 @@ import { AvatarGroupMixin } from './vaadin-avatar-group-mixin.js';
  * - `<vaadin-avatar-group-menu>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
  * - `<vaadin-avatar-group-menu-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-avatar-group
  * @extends HTMLElement
  */

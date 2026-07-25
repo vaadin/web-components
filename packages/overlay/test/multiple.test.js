@@ -240,22 +240,20 @@ describe('multiple overlays', () => {
       expect(frontmost).to.equal(modeless2);
     });
 
-    it('should not call showPopover on bringToFront if only nested overlay is open', () => {
-      modeless2.opened = true;
+    it('should bring the overlay to front even if a nested overlay is open above it', () => {
+      modeless1.opened = true;
       modeless2.opened = true;
 
       // Mimic nested overlays case
       modeless1.appendChild(modeless2);
 
-      const showSpy1 = sinon.spy(modeless1, 'showPopover');
-      const showSpy2 = sinon.spy(modeless2, 'showPopover');
-
       modeless1.bringToFront();
 
-      expect(showSpy1).to.be.not.called;
-      expect(showSpy2).to.be.not.called;
-
-      expect(modeless2._last).to.be.true;
+      // Stacking is decoupled from nesting: the overlay is brought to the front
+      // even over its own nested overlay.
+      expect(modeless1._last).to.be.true;
+      const frontmost = getFrontmostOverlayFromScreenCenter();
+      expect(frontmost).to.equal(modeless1);
     });
 
     it('should not call showPopover on bringToFront for the last open overlay', () => {

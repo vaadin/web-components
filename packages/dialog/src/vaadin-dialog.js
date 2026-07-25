@@ -21,9 +21,27 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
 /**
  * `<vaadin-dialog>` is a Web Component for creating customized modal dialogs.
  *
- * ### Rendering
+ * ```html
+ * <vaadin-dialog header-title="Title">
+ *   <div>Dialog content</div>
+ *   <div slot="footer">Footer</div>
+ * </vaadin-dialog>
+ * ```
  *
- * The content of the dialog can be populated by using the renderer callback function.
+ * ### Slots
+ *
+ * Dialog supports following slots for providing content:
+ *
+ * Name             | Description
+ * -----------------|-------------
+ * (none)           | Default slot for the content
+ * `header-content` | Slot for the header content
+ * `footer`         | Slot for the footer content
+ *
+ * #### Renderer (deprecated)
+ *
+ * The content of the dialog can also be populated by using the renderer callback functions,
+ * although this approach is deprecated in favor of slotted content.
  *
  * The renderer function provides `root`, `dialog` arguments.
  * Generate DOM content, append it to the `root` element and control the state
@@ -64,8 +82,8 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * Attribute        | Description
  * -----------------|--------------------------------------------
  * `has-title`      | Set when the element has a title
- * `has-header`     | Set when the element has header renderer
- * `has-footer`     | Set when the element has footer renderer
+ * `has-header`     | Set when the element has header content
+ * `has-footer`     | Set when the element has footer content
  * `overflow`       | Set to `top`, `bottom`, none or both
  *
  * The following custom CSS properties are available for styling:
@@ -98,6 +116,7 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} closed - Fired when the dialog is closed.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-dialog
  * @extends HTMLElement
  */

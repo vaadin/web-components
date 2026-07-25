@@ -15,6 +15,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-menu-bar-list-box
  * @extends HTMLElement
  * @protected

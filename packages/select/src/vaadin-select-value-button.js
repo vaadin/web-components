@@ -14,6 +14,7 @@ import { valueButton } from './styles/vaadin-select-value-button-base-styles.js'
 /**
  * An element used internally by `<vaadin-select>`. Not intended to be used separately.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-select-value-button
  * @extends HTMLElement
  * @protected

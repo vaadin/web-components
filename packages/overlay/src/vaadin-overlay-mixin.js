@@ -359,7 +359,7 @@ export const OverlayMixin = (superClass) =>
 
         this.__scheduledOpen = requestAnimationFrame(() => {
           setTimeout(() => {
-            this._trapFocus();
+            this._initFocus();
 
             // Dispatch the event on the overlay. Not using composed, as propagating the event through shadow roots
             // could have side effects when nesting overlays
@@ -407,8 +407,12 @@ export const OverlayMixin = (superClass) =>
     _shouldAnimate() {
       const style = getComputedStyle(this);
       const name = style.getPropertyValue('animation-name');
+      const hasDuration = style
+        .getPropertyValue('animation-duration')
+        .split(',')
+        .some((duration) => parseFloat(duration) > 0);
       const hidden = style.getPropertyValue('display') === 'none';
-      return !hidden && name && name !== 'none';
+      return !hidden && name && name !== 'none' && hasDuration;
     }
 
     /**
@@ -570,7 +574,7 @@ export const OverlayMixin = (superClass) =>
       }
 
       // Only close modeless overlay on Esc press when it contains focus
-      if (!this._shouldAddGlobalListeners() && !event.composedPath().includes(this._focusTrapRoot)) {
+      if (!this._shouldAddGlobalListeners() && !event.composedPath().includes(this._focusRoot)) {
         return;
       }
 

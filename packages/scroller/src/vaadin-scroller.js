@@ -55,6 +55,7 @@ import { ScrollerMixin } from './vaadin-scroller-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-scroller
  * @extends HTMLElement
  */

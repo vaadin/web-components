@@ -115,6 +115,7 @@ import { RichTextEditorMixin } from './vaadin-rich-text-editor-mixin.js';
  * @fires {CustomEvent} html-value-changed - Fired when the `htmlValue` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-rich-text-editor
  * @extends HTMLElement
  */

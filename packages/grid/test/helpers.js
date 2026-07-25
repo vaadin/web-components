@@ -1,4 +1,8 @@
 import sinon from 'sinon';
+import { isChrome } from '@vaadin/component-base/src/browser-utils.js';
+
+// Draggable cell content uses a browser-specific attribute; see _filterDragAndDrop.
+export const cellDraggableAttribute = isChrome ? 'draggable-source' : 'draggable';
 
 export const flushGrid = (grid) => {
   grid.performUpdate?.();
@@ -11,13 +15,8 @@ export const flushGrid = (grid) => {
     grid._debouncerHiddenChanged,
     grid._debouncerApplyCachedData,
     grid.__debounceUpdateFrozenColumn,
+    grid.__renderHeaderFooterDebouncer,
   ].forEach((debouncer) => debouncer?.flush());
-
-  [...grid.$.header.children, ...grid.$.footer.children].forEach((row) => {
-    if (row.__debounceUpdateHeaderFooterRowVisibility) {
-      row.__debounceUpdateHeaderFooterRowVisibility.flush();
-    }
-  });
 
   grid.__virtualizer.flush();
   grid.__preventScrollerRotatingCellFocusDebouncer?.flush();

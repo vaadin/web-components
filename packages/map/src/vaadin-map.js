@@ -50,6 +50,7 @@ import { MapMixin } from './vaadin-map-mixin.js';
  * </script>
  * ```
  *
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-map
  * @extends HTMLElement
  */

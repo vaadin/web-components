@@ -95,6 +95,7 @@ export class DialogFooterRendererDirective extends AbstractDialogRendererDirecti
  * @param renderer the renderer callback that returns a Lit template.
  * @param dependencies a single dependency or an array of dependencies
  *                     which trigger a re-render when changed.
+ * @deprecated Add content elements as children of the dialog instead
  */
 export const dialogRenderer = directive(DialogRendererDirective);
 
@@ -123,6 +124,7 @@ export const dialogRenderer = directive(DialogRendererDirective);
  * @param renderer the renderer callback.
  * @param dependencies a single dependency or an array of dependencies
  *                     which trigger a re-render when changed.
+ * @deprecated Add header content as children of the dialog using `slot="header-content"` instead
  */
 export const dialogHeaderRenderer = directive(DialogHeaderRendererDirective);
 
@@ -151,5 +153,6 @@ export const dialogHeaderRenderer = directive(DialogHeaderRendererDirective);
  * @param renderer the renderer callback.
  * @param dependencies a single dependency or an array of dependencies
  *                     which trigger a re-render when changed.
+ * @deprecated Add footer content as children of the dialog using `slot="footer"` instead
  */
 export const dialogFooterRenderer = directive(DialogFooterRendererDirective);

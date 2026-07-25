@@ -328,7 +328,7 @@ describe('column groups', () => {
         group.footerRenderer = attributeRenderer('footer');
       });
 
-      sinon.spy(grid, '__updateHeaderFooterRowVisibility');
+      sinon.spy(grid, '__renderHeaderFooter');
       sinon.spy(grid, '_updateColumnTree');
       grid.dataProvider = infiniteDataProvider;
       flushGrid(grid);
@@ -336,12 +336,12 @@ describe('column groups', () => {
       await nextResize(grid);
     });
 
-    it('should update header and footer rows visibility once', () => {
-      // 6 header and footer rows are created
-      expect(grid.__updateHeaderFooterRowVisibility.callCount).to.equal(6);
+    it('should not update header and footer rows too many times', () => {
+      // One from _updateColumnTree, another one from column observers
+      expect(grid.__renderHeaderFooter.callCount).to.equal(2);
     });
 
-    it('should update column tree once', () => {
+    it('should not update column tree too many times', () => {
       expect(grid._updateColumnTree.callCount).to.equal(1);
     });
 
@@ -476,6 +476,30 @@ describe('column groups', () => {
       const columns = grid.querySelectorAll('vaadin-grid-column');
       expect(columns[0].hidden).to.be.true;
       expect(columns[1].hidden).not.to.be.true;
+    });
+
+    it('should update header row visibility when toggling group hidden state', () => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column-group header="Group">
+            <vaadin-grid-column></vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </vaadin-grid>
+      `);
+      flushGrid(grid);
+
+      const group = grid.querySelector('vaadin-grid-column-group');
+
+      group.hidden = true;
+      flushGrid(grid);
+      expect(getRows(grid.$.header)[0].hidden).to.be.true;
+      expect(grid.$.table.hasAttribute('has-header')).to.be.false;
+
+      group.hidden = false;
+      flushGrid(grid);
+      expect(getRows(grid.$.header)[0].hidden).to.be.false;
+      expect(grid.$.table.hasAttribute('has-header')).to.be.true;
     });
   });
 

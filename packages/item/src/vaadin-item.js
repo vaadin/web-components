@@ -61,6 +61,7 @@ import { ItemMixin } from './vaadin-item-mixin.js';
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @prop {string} label - String that can be set to visually represent the selected item in `vaadin-select`.
+ * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-item
  * @extends HTMLElement
  */
@@ -81,22 +82,6 @@ class Item extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMi
         <slot></slot>
       </div>
     `;
-  }
-
-  constructor() {
-    super();
-
-    /**
-     * Submittable string value. The default value is the trimmed text content of the element.
-     * @type {string}
-     */
-    this.value;
-
-    /**
-     * String that can be set to visually represent the selected item in `vaadin-select`.
-     * @type {string}
-     */
-    this.label;
   }
 
   /** @protected */
