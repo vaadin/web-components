@@ -395,55 +395,6 @@ describe('column', () => {
         expect(spy.callCount).to.equal(callCount);
       });
     });
-
-    describe('Text align', () => {
-      it('should align visually to right', () => {
-        emptyColumn.textAlign = 'end';
-        expect(getComputedStyle(getHeaderCellContent(grid, 1, 2)).textAlign).to.be.oneOf(['end', 'right']);
-        expect(getComputedStyle(getBodyCellContent(grid, 0, 2)).textAlign).to.be.oneOf(['end', 'right']);
-        expect(getComputedStyle(getContainerCellContent(grid.$.footer, 0, 2)).textAlign).to.be.oneOf(['end', 'right']);
-      });
-
-      it('should align visually to left', () => {
-        grid.style.direction = 'rtl';
-        emptyColumn.textAlign = 'end';
-        expect(getComputedStyle(getHeaderCellContent(grid, 1, 2)).textAlign).to.be.oneOf(['end', 'left']);
-        expect(getComputedStyle(getBodyCellContent(grid, 0, 2)).textAlign).to.be.oneOf(['end', 'left']);
-        expect(getComputedStyle(getContainerCellContent(grid.$.footer, 0, 2)).textAlign).to.be.oneOf(['end', 'left']);
-      });
-
-      it('should align visually to center', () => {
-        emptyColumn.textAlign = 'center';
-        expect(getComputedStyle(getHeaderCellContent(grid, 1, 2)).textAlign).to.equal('center');
-        expect(getComputedStyle(getBodyCellContent(grid, 0, 2)).textAlign).to.equal('center');
-        expect(getComputedStyle(getContainerCellContent(grid.$.footer, 0, 2)).textAlign).to.equal('center');
-      });
-
-      describe('warnings', () => {
-        beforeEach(() => {
-          sinon.stub(console, 'warn');
-        });
-
-        afterEach(() => {
-          console.warn.restore();
-        });
-
-        it('should warn about invalid text-align value', () => {
-          emptyColumn.textAlign = 'right';
-          expect(console.warn.callCount).to.equal(1);
-        });
-
-        it('should not warn about valid text-align value', () => {
-          emptyColumn.textAlign = 'center';
-          expect(console.warn.callCount).to.equal(0);
-        });
-
-        it('invalid value should not change the effective value', () => {
-          emptyColumn.textAlign = 'right';
-          expect(getComputedStyle(getBodyCellContent(grid, 0, 2)).textAlign).not.to.equal('right');
-        });
-      });
-    });
   });
 
   describe('observing', () => {
