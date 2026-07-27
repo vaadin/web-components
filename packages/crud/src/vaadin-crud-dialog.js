@@ -8,12 +8,12 @@
  * license.
  */
 import './vaadin-crud-dialog-overlay.js';
-import { css, html, LitElement, unsafeCSS } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { DialogBaseMixin } from '@vaadin/dialog/src/vaadin-dialog-base-mixin.js';
-import { overlayAnimationProperties } from '@vaadin/overlay/src/styles/vaadin-overlay-base-styles.js';
+import { overlayAnimationProperties } from '@vaadin/overlay/src/styles/vaadin-overlay-animation-base-styles.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 /**
@@ -34,7 +34,7 @@ class CrudDialog extends DialogBaseMixin(ThemePropertyMixin(PolylitMixin(LitElem
         element to the internal vaadin-crud-dialog element, from where they get explicitly
         inherited by the internal vaadin-crud-dialog-overlay element.
         */
-        ${unsafeCSS(overlayAnimationProperties)}
+        ${overlayAnimationProperties}
       }
 
       :host([opened]),
