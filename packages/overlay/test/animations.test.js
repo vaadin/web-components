@@ -512,6 +512,25 @@ function getAnimation(element, name) {
   return element.getAnimations().find((animation) => animation.animationName === name);
 }
 
+/**
+ * Returns the styles of the element at the given time of the named animation. The animated
+ * value is read instead of the keyframes, because WebKit does not substitute `var()` in the
+ * keyframes returned by `getAnimations()` when a keyframe is left out of the animation.
+ */
+function stylesDuringAnimation(element, name, time) {
+  const animation = getAnimation(element, name);
+  animation.pause();
+  animation.currentTime = time;
+  return getComputedStyle(element);
+}
+
+/** Returns the value the browser computes for the given style, to compare animated values against. */
+function computedValue(property, value) {
+  const element = fixtureSync('<div></div>');
+  element.style.setProperty(property, value);
+  return getComputedStyle(element)[property];
+}
+
 describe('animation properties', () => {
   let overlay;
 
@@ -562,44 +581,51 @@ describe('animation properties', () => {
     expect(getAnimation(overlay.$.overlay, '--fade').effect.getTiming().easing).to.equal('linear');
   });
 
-  it('should use closed and opened opacity for the fade animation', () => {
+  // The animations start at the closed value and end at the value of the part, because the
+  // opened state is left out of the keyframes. With a linear timing function the value in the
+  // middle of the animation is exactly between the two, which pins down both ends.
+  it('should use the closed opacity for the fade animation', () => {
     overlay.style.setProperty('--vaadin-overlay-opacity-closed', '0.25');
-    overlay.style.setProperty('--vaadin-overlay-opacity-opened', '0.75');
+    overlay.style.setProperty('--vaadin-overlay-animation-timing-function', 'linear');
+    overlay.$.overlay.style.opacity = '0.6';
 
     overlay.opened = true;
-    const keyframes = getAnimation(overlay.$.overlay, '--fade').effect.getKeyframes();
-    expect(keyframes[0].opacity).to.equal('0.25');
-    expect(keyframes[1].opacity).to.equal('0.75');
+    expect(stylesDuringAnimation(overlay.$.overlay, '--fade', 0).opacity).to.equal('0.25');
+    expect(stylesDuringAnimation(overlay.$.overlay, '--fade', 5000).opacity).to.equal('0.425');
   });
 
-  it('should use closed and opened translate for the transform animation', () => {
+  it('should use the closed translate for the transform animation', () => {
     overlay.style.setProperty('--vaadin-overlay-translate-closed', '10px 20px');
-    overlay.style.setProperty('--vaadin-overlay-translate-opened', '30px 40px');
+    overlay.style.setProperty('--vaadin-overlay-animation-timing-function', 'linear');
+    overlay.$.overlay.style.translate = '30px 40px';
 
     overlay.opened = true;
-    const keyframes = getAnimation(overlay.$.overlay, '--transform').effect.getKeyframes();
-    expect(keyframes[0].translate).to.equal('10px 20px');
-    expect(keyframes[1].translate).to.equal('30px 40px');
+    expect(stylesDuringAnimation(overlay.$.overlay, '--transform', 0).translate).to.equal('10px 20px');
+    expect(stylesDuringAnimation(overlay.$.overlay, '--transform', 5000).translate).to.equal('20px 30px');
   });
 
-  it('should use closed and opened scale for the transform animation', () => {
+  it('should use the closed scale for the transform animation', () => {
     overlay.style.setProperty('--vaadin-overlay-scale-closed', '0.5');
-    overlay.style.setProperty('--vaadin-overlay-scale-opened', '1.5');
+    overlay.style.setProperty('--vaadin-overlay-animation-timing-function', 'linear');
+    overlay.$.overlay.style.scale = '1.5';
 
     overlay.opened = true;
-    const keyframes = getAnimation(overlay.$.overlay, '--transform').effect.getKeyframes();
-    expect(keyframes[0].scale).to.equal('0.5');
-    expect(keyframes[1].scale).to.equal('1.5');
+    expect(stylesDuringAnimation(overlay.$.overlay, '--transform', 0).scale).to.equal('0.5');
+    expect(stylesDuringAnimation(overlay.$.overlay, '--transform', 5000).scale).to.equal('1');
   });
 
-  it('should use closed and opened transform for the transform animation', () => {
+  it('should use the closed transform for the transform animation', () => {
     overlay.style.setProperty('--vaadin-overlay-transform-closed', 'rotate(10deg)');
-    overlay.style.setProperty('--vaadin-overlay-transform-opened', 'rotate(20deg)');
+    overlay.style.setProperty('--vaadin-overlay-animation-timing-function', 'linear');
+    overlay.$.overlay.style.transform = 'rotate(20deg)';
 
     overlay.opened = true;
-    const keyframes = getAnimation(overlay.$.overlay, '--transform').effect.getKeyframes();
-    expect(keyframes[0].transform).to.equal('rotate(10deg)');
-    expect(keyframes[1].transform).to.equal('rotate(20deg)');
+    expect(stylesDuringAnimation(overlay.$.overlay, '--transform', 0).transform).to.equal(
+      computedValue('transform', 'rotate(10deg)'),
+    );
+    expect(stylesDuringAnimation(overlay.$.overlay, '--transform', 5000).transform).to.equal(
+      computedValue('transform', 'rotate(15deg)'),
+    );
   });
 
   it('should reverse the animation direction while closing', () => {
@@ -777,11 +803,14 @@ describe('animation fill mode', () => {
     expect(getComputedStyle(overlay.$.overlay).opacity).to.equal('0');
   });
 
-  it('should apply the opened value during the closing animation delay', () => {
+  it('should apply the value of the part during the closing animation delay', () => {
     overlay.opened = true;
     overlay._flushAnimation('opening');
     overlay.opened = false;
 
-    expect(getComputedStyle(overlay.$.overlay).opacity).to.equal('1');
+    // The closing animation is reversed, so the fill applies the opened state. That state
+    // is not declared in the keyframes, so the part keeps its own opacity and does not
+    // jump to a different value before the closing animation starts.
+    expect(getComputedStyle(overlay.$.overlay).opacity).to.equal('0.5');
   });
 });
