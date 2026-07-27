@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { escKeyDown, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './animated-styles.js';
@@ -451,5 +452,58 @@ describe('overlay with zero-duration animation', () => {
       overlays[0].opened = true;
       overlays[1].opened = true;
     });
+  });
+});
+
+describe('interaction while closing', () => {
+  let overlay, content, spy;
+
+  beforeEach(async () => {
+    overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
+    overlay.renderer = (root) => {
+      if (!root.firstChild) {
+        const button = document.createElement('button');
+        button.textContent = 'Overlay content';
+        root.appendChild(button);
+      }
+    };
+    overlay.setAttribute('long-animation', '');
+    await nextRender();
+
+    overlay.opened = true;
+    await nextRender();
+    overlay._flushAnimation('opening');
+
+    content = overlay.querySelector('button');
+    spy = sinon.spy();
+    content.addEventListener('click', spy);
+  });
+
+  afterEach(async () => {
+    overlay._flushAnimation('closing');
+    await resetMouse();
+  });
+
+  it('should not allow pointer events on the overlay part while closing', () => {
+    overlay.opened = false;
+
+    expect(overlay.hasAttribute('closing')).to.be.true;
+    expect(getComputedStyle(overlay.$.overlay).pointerEvents).to.equal('none');
+  });
+
+  it('should not dispatch click on the overlay content while closing', async () => {
+    overlay.opened = false;
+
+    await sendMouseToElement({ type: 'click', element: content });
+
+    expect(spy).to.be.not.called;
+  });
+
+  it('should restore pointer events on the overlay part after closing', () => {
+    overlay.opened = false;
+    overlay._flushAnimation('closing');
+
+    expect(overlay.hasAttribute('closing')).to.be.false;
+    expect(getComputedStyle(overlay.$.overlay).pointerEvents).to.equal('auto');
   });
 });

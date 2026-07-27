@@ -97,6 +97,11 @@ export const overlayStyles = css`
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 
+  :host(:where([closing])) [part='overlay'],
+  :host(:where([closing])) ::slotted(*) {
+    pointer-events: none !important;
+  }
+
   @media (forced-colors: active) {
     [part='overlay'] {
       border: 3px solid !important;
