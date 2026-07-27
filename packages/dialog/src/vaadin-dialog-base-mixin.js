@@ -40,8 +40,6 @@ export const DialogBaseMixin = (superClass) =>
 
         /**
          * Set to true to remove backdrop and allow click events on background elements.
-         * A modeless dialog does not trap focus, so focus can be moved out of it with
-         * Tab and Shift+Tab.
          */
         modeless: {
           type: Boolean,
