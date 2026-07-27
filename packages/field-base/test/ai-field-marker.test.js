@@ -456,6 +456,84 @@ describe('ai field marker', () => {
       });
     });
 
+    describe('already marked field', () => {
+      // A new AI request replaces the value the existing marker annotates, so
+      // the badge and glow are stale for the duration. They stay hidden while
+      // the field carries [ai-working] and come back on stopWorking, which
+      // leaves the previous mark usable when a fill is cancelled or fails.
+      let marker;
+      let badge;
+
+      beforeEach(async () => {
+        marker = AiFieldMarker.mark(field);
+        await nextRender();
+        badge = marker.querySelector('[part="badge"]');
+      });
+
+      it('should hide the marker while the AI is working', () => {
+        expect(badge.checkVisibility(), 'badge should start out visible').to.be.true;
+
+        AiFieldMarker.startWorking(field);
+
+        expect(getComputedStyle(marker).display).to.equal('none');
+        expect(badge.checkVisibility()).to.be.false;
+      });
+
+      it('should keep the marker in the DOM while the AI is working', () => {
+        AiFieldMarker.startWorking(field);
+        expect(field.querySelector('vaadin-ai-field-marker')).to.equal(marker);
+      });
+
+      it('should hide an open popover while the AI is working', async () => {
+        badge.click();
+        await nextRender();
+        const overlay = marker.querySelector('vaadin-popover').shadowRoot.querySelector('vaadin-popover-overlay');
+        expect(overlay.checkVisibility(), 'popover should start out showing').to.be.true;
+
+        AiFieldMarker.startWorking(field);
+        await nextRender();
+
+        expect(overlay.checkVisibility()).to.be.false;
+      });
+
+      it('should still enter the working state', () => {
+        AiFieldMarker.startWorking(field);
+        expect(field.hasAttribute('ai-working')).to.be.true;
+        expect(field.readonly).to.be.true;
+      });
+
+      it('should show the marker again on stopWorking', () => {
+        AiFieldMarker.startWorking(field);
+        AiFieldMarker.stopWorking(field);
+
+        expect(getComputedStyle(marker).display).to.equal('contents');
+        expect(badge.checkVisibility()).to.be.true;
+      });
+
+      it('should keep the mark usable when a fill never lands', () => {
+        AiFieldMarker.startWorking(field);
+        AiFieldMarker.stopWorking(field);
+
+        const spy = sinon.spy();
+        field.addEventListener('ai-field-revert', spy);
+        marker.querySelector('[part="revert-button"]').click();
+        expect(spy.firstCall.args[0].detail.value).to.equal('AI value');
+      });
+
+      it('should reuse the marker when marking again for the new value', async () => {
+        AiFieldMarker.startWorking(field);
+        AiFieldMarker.stopWorking(field);
+
+        const newMarker = AiFieldMarker.mark(field, { message: 'Filled again by AI' });
+        await nextRender();
+
+        expect(newMarker).to.equal(marker);
+        expect(field.querySelectorAll('vaadin-ai-field-marker')).to.have.lengthOf(1);
+        expect(field.shadowRoot.querySelectorAll('slot[name="ai-field-marker"]')).to.have.lengthOf(1);
+        expect(marker.querySelector('[part="message"]').textContent).to.equal('Filled again by AI');
+      });
+    });
+
     describe('stopWorking', () => {
       beforeEach(() => {
         AiFieldMarker.startWorking(field);

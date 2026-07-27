@@ -151,6 +151,11 @@ declare class AiFieldMarker extends HTMLElement {
    * no-op when the field is already in the working state or has no shadow
    * root.
    *
+   * Hides an existing mark for the duration, since the value it annotates is
+   * about to be replaced. `stopWorking` brings it back, so a cancelled or
+   * failed fill leaves the previous mark intact; call `mark` again to describe
+   * a new value.
+   *
    * @param field the field the AI is working on
    */
   static startWorking(field: HTMLElement): void;

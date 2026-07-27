@@ -87,6 +87,14 @@ export const aiFieldMarkerStyles = css`
     animation: --ai-marker-slide 1s ease-in-out infinite;
   }
 
+  /* While the AI is working, the badge and glow describe a value that is about
+     to be replaced, so hide the marker until the field leaves the working
+     state. Hiding rather than unmarking keeps the previous mark for a fill that
+     is cancelled or fails. */
+  [ai-working] > vaadin-ai-field-marker {
+    display: none;
+  }
+
   @keyframes fade-in {
     0% {
       opacity: 0;

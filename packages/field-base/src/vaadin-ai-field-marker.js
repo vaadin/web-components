@@ -360,6 +360,11 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
    * it. Idempotent — repeated calls keep the state captured by the first
    * call. A no-op when the field has no shadow root.
    *
+   * Hides an existing mark for the duration, since the value it annotates is
+   * about to be replaced. {@link AiFieldMarker.stopWorking} brings it back, so
+   * a cancelled or failed fill leaves the previous mark intact; call
+   * {@link AiFieldMarker.mark} again to describe a new value.
+   *
    * @param {HTMLElement} field the field the AI is working on
    */
   static startWorking(field) {
