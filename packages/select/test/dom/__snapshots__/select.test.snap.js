@@ -4,10 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-select host default"] = 
 `<vaadin-select>
   <div slot="overlay">
-    <vaadin-select-list-box
-      aria-orientation="vertical"
-      role="listbox"
-    >
+    <vaadin-select-list-box role="listbox">
       <vaadin-select-item
         aria-selected="false"
         role="option"
@@ -55,10 +52,7 @@ snapshots["vaadin-select host default"] =
 snapshots["vaadin-select host label"] = 
 `<vaadin-select has-label="">
   <div slot="overlay">
-    <vaadin-select-list-box
-      aria-orientation="vertical"
-      role="listbox"
-    >
+    <vaadin-select-list-box role="listbox">
       <vaadin-select-item
         aria-selected="false"
         role="option"
@@ -108,10 +102,7 @@ snapshots["vaadin-select host label"] =
 snapshots["vaadin-select host placeholder"] = 
 `<vaadin-select>
   <div slot="overlay">
-    <vaadin-select-list-box
-      aria-orientation="vertical"
-      role="listbox"
-    >
+    <vaadin-select-list-box role="listbox">
       <vaadin-select-item
         aria-selected="false"
         role="option"
@@ -167,10 +158,7 @@ snapshots["vaadin-select host disabled"] =
   disabled=""
 >
   <div slot="overlay">
-    <vaadin-select-list-box
-      aria-orientation="vertical"
-      role="listbox"
-    >
+    <vaadin-select-list-box role="listbox">
       <vaadin-select-item
         aria-selected="false"
         role="option"
@@ -220,10 +208,7 @@ snapshots["vaadin-select host disabled"] =
 snapshots["vaadin-select host required"] = 
 `<vaadin-select required="">
   <div slot="overlay">
-    <vaadin-select-list-box
-      aria-orientation="vertical"
-      role="listbox"
-    >
+    <vaadin-select-list-box role="listbox">
       <vaadin-select-item
         aria-selected="false"
         role="option"
@@ -273,7 +258,6 @@ snapshots["vaadin-select host value"] =
 `<vaadin-select has-value="">
   <div slot="overlay">
     <vaadin-select-list-box
-      aria-orientation="vertical"
       role="listbox"
       selected="0"
     >
@@ -332,10 +316,7 @@ snapshots["vaadin-select host value"] =
 snapshots["vaadin-select host helper"] = 
 `<vaadin-select has-helper="">
   <div slot="overlay">
-    <vaadin-select-list-box
-      aria-orientation="vertical"
-      role="listbox"
-    >
+    <vaadin-select-list-box role="listbox">
       <vaadin-select-item
         aria-selected="false"
         role="option"
@@ -393,10 +374,7 @@ snapshots["vaadin-select host phone"] =
   with-backdrop=""
 >
   <div slot="overlay">
-    <vaadin-select-list-box
-      aria-orientation="vertical"
-      role="listbox"
-    >
+    <vaadin-select-list-box role="listbox">
       <vaadin-select-item
         aria-selected="false"
         role="option"
@@ -447,10 +425,7 @@ snapshots["vaadin-select host error"] =
   invalid=""
 >
   <div slot="overlay">
-    <vaadin-select-list-box
-      aria-orientation="vertical"
-      role="listbox"
-    >
+    <vaadin-select-list-box role="listbox">
       <vaadin-select-item
         aria-selected="false"
         role="option"
@@ -505,10 +480,7 @@ snapshots["vaadin-select host opened default"] =
   top-aligned=""
 >
   <div slot="overlay">
-    <vaadin-select-list-box
-      aria-orientation="vertical"
-      role="listbox"
-    >
+    <vaadin-select-list-box role="listbox">
       <vaadin-select-item
         aria-selected="false"
         focused=""

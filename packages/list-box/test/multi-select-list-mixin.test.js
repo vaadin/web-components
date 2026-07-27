@@ -29,6 +29,18 @@ describe('MultiSelectListMixin', () => {
     `,
     (Base) =>
       class extends MultiSelectListMixin(PolylitMixin(Base)) {
+        static get properties() {
+          return {
+            // `orientation` is no longer defined by `ListMixin`. Define it here
+            // to keep testing the orientation-dependent behavior of the mixin.
+            orientation: {
+              type: String,
+              reflectToAttribute: true,
+              value: '',
+            },
+          };
+        }
+
         get _scrollerElement() {
           return this.$.scroll;
         }

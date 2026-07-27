@@ -35,7 +35,6 @@ snapshots["vaadin-avatar-group default"] =
 snapshots["vaadin-avatar-group items"] = 
 `<vaadin-avatar-group aria-label="Currently 2 active users">
   <vaadin-avatar-group-menu
-    aria-orientation="vertical"
     role="menu"
     slot="overlay"
   >
@@ -121,7 +120,6 @@ snapshots["vaadin-avatar-group theme"] =
   theme="small"
 >
   <vaadin-avatar-group-menu
-    aria-orientation="vertical"
     role="menu"
     slot="overlay"
   >
@@ -212,7 +210,6 @@ snapshots["vaadin-avatar-group opened default"] =
   top-aligned=""
 >
   <vaadin-avatar-group-menu
-    aria-orientation="vertical"
     role="menu"
     slot="overlay"
   >

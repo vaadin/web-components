@@ -43,6 +43,18 @@ describe('ListMixin', () => {
     `,
     (Base) =>
       class extends ListMixin(PolylitMixin(Base)) {
+        static get properties() {
+          return {
+            // `orientation` is no longer defined by `ListMixin`. Define it here
+            // to keep testing the orientation-dependent behavior of the mixin.
+            orientation: {
+              type: String,
+              reflectToAttribute: true,
+              value: '',
+            },
+          };
+        }
+
         get _scrollerElement() {
           return this.$.scroll;
         }
@@ -566,59 +578,6 @@ describe('ListMixin', () => {
         </${listTag}>
       `);
       await nextRender();
-    });
-
-    it('should set aria-orientation attribute to vertical by default', () => {
-      expect(list.getAttribute('aria-orientation')).to.be.equal('vertical');
-    });
-
-    it('should set aria-orientation attribute to horizontal when orientation is set', async () => {
-      list.orientation = 'horizontal';
-      await nextUpdate(list);
-      expect(list.getAttribute('aria-orientation')).to.be.equal('horizontal');
-    });
-
-    it('should set aria-orientation attribute to horizontal when orientation is set', async () => {
-      list.orientation = 'vertical';
-      await nextUpdate(list);
-      expect(list.getAttribute('aria-orientation')).to.be.equal('vertical');
-    });
-
-    it('should not have orientation attribute on each item if orientation is not set', () => {
-      list.querySelectorAll(itemTag).forEach((item) => {
-        expect(item.hasAttribute('orientation')).to.be.false;
-      });
-    });
-
-    it('should have orientation attribute on each item', async () => {
-      list.orientation = 'horizontal';
-      await nextUpdate(list);
-      list.querySelectorAll(itemTag).forEach((item) => {
-        expect(item.getAttribute('orientation')).to.be.equal('horizontal');
-      });
-    });
-
-    it('should change orientation attribute on each item', async () => {
-      list.orientation = 'horizontal';
-      await nextUpdate(list);
-
-      list.orientation = 'vertical';
-      await nextUpdate(list);
-
-      list.querySelectorAll(itemTag).forEach((item) => {
-        expect(item.getAttribute('orientation')).to.be.equal('vertical');
-      });
-    });
-
-    it('should have vertical attribute on newly added item', async () => {
-      list.orientation = 'vertical';
-      await nextUpdate(list);
-
-      const item = document.createElement(itemTag);
-      item.textContent = 'foo';
-      list.appendChild(item);
-      await nextRender();
-      expect(item.hasAttribute('orientation')).to.be.true;
     });
 
     it('should have a protected boolean property to check vertical orientation', async () => {

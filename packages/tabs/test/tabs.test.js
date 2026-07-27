@@ -90,6 +90,40 @@ describe('tabs', () => {
       expect(tabs.getAttribute('role')).to.equal('tablist');
     });
   });
+
+  describe('orientation', () => {
+    it('should set aria-orientation attribute to horizontal by default', () => {
+      expect(tabs.getAttribute('aria-orientation')).to.equal('horizontal');
+    });
+
+    it('should set aria-orientation attribute to vertical when orientation is set', async () => {
+      tabs.orientation = 'vertical';
+      await nextUpdate(tabs);
+      expect(tabs.getAttribute('aria-orientation')).to.equal('vertical');
+    });
+
+    it('should set orientation attribute on each item', () => {
+      tabs.items.forEach((item) => {
+        expect(item.getAttribute('orientation')).to.equal('horizontal');
+      });
+    });
+
+    it('should change orientation attribute on each item', async () => {
+      tabs.orientation = 'vertical';
+      await nextUpdate(tabs);
+      tabs.items.forEach((item) => {
+        expect(item.getAttribute('orientation')).to.equal('vertical');
+      });
+    });
+
+    it('should set orientation attribute on newly added item', async () => {
+      const item = document.createElement('vaadin-tab');
+      item.textContent = 'New';
+      tabs.appendChild(item);
+      await nextRender();
+      expect(item.getAttribute('orientation')).to.equal('horizontal');
+    });
+  });
 });
 
 describe('flex child tabs', () => {
