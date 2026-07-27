@@ -3007,3 +3007,287 @@ snapshots["vaadin-grid column text align default"] =
 `;
 /* end snapshot vaadin-grid column text align default */
 
+snapshots["vaadin-grid column custom part names default"] = 
+`<table
+  aria-colcount="2"
+  aria-multiselectable="true"
+  aria-rowcount="6"
+  has-footer=""
+  has-header=""
+  id="table"
+  role="treegrid"
+  tabindex="0"
+>
+  <caption
+    id="sizer"
+    part="row"
+  >
+    <td
+      class="body-cell cell first-column-cell"
+      first-column=""
+      id="vaadin-grid-cell-0"
+      part="cell body-cell first-column-cell"
+      role="gridcell"
+      style="width: 100px; flex-grow: 1;"
+      tabindex="-1"
+    >
+      <slot name="vaadin-grid-cell-content-0">
+      </slot>
+    </td>
+    <td
+      class="body-cell cell last-column-cell"
+      id="vaadin-grid-cell-1"
+      last-column=""
+      part="cell body-cell last-column-cell"
+      role="gridcell"
+      style="width: 100px; flex-grow: 1;"
+      tabindex="-1"
+    >
+      <slot name="vaadin-grid-cell-content-1">
+      </slot>
+    </td>
+  </caption>
+  <thead
+    id="header"
+    role="rowgroup"
+    style="transform: translate(0px, 0px);"
+  >
+    <tr
+      aria-rowindex="1"
+      class="first-header-row header-row row"
+      part="row header-row first-header-row "
+      role="row"
+      tabindex="-1"
+    >
+      <th
+        aria-colspan="1"
+        class="cell first-column-cell first-header-row-cell header-cell"
+        colspan="1"
+        first-column=""
+        part="cell header-cell first-header-row-cell first-column-cell custom-group-header"
+        role="columnheader"
+        style="width:calc(100px);flex-grow:1;"
+        tabindex="0"
+      >
+        <slot name="vaadin-grid-header-cell-content-0-38">
+        </slot>
+      </th>
+      <th
+        class="cell first-header-row-cell header-cell last-column-cell"
+        last-column=""
+        part="cell header-cell first-header-row-cell last-column-cell "
+        role="columnheader"
+        style="width:100px;flex-grow:1;"
+        tabindex="-1"
+      >
+        <slot name="vaadin-grid-header-cell-content-0-40">
+        </slot>
+      </th>
+    </tr>
+    <tr
+      aria-rowindex="2"
+      class="header-row last-header-row row"
+      part="row header-row last-header-row "
+      role="row"
+      style="--_grid-horizontal-scroll-position: 0px;"
+      tabindex="-1"
+    >
+      <th
+        class="cell first-column-cell header-cell last-header-row-cell"
+        first-column=""
+        part="cell header-cell last-header-row-cell first-column-cell custom-first-header"
+        role="columnheader"
+        style="width:100px;flex-grow:1;"
+        tabindex="-1"
+      >
+        <slot name="vaadin-grid-header-cell-content-1-39">
+        </slot>
+      </th>
+      <th
+        class="cell header-cell last-column-cell last-header-row-cell"
+        last-column=""
+        part="cell header-cell last-header-row-cell last-column-cell custom-last-header"
+        role="columnheader"
+        style="width:100px;flex-grow:1;"
+        tabindex="-1"
+      >
+        <slot name="vaadin-grid-header-cell-content-1-40">
+        </slot>
+      </th>
+    </tr>
+  </thead>
+  <tbody
+    id="items"
+    role="rowgroup"
+    style="transform: translate(0px, 0px); height: 72px;"
+  >
+    <tr
+      aria-rowindex="3"
+      aria-selected="false"
+      class="body-row drag-disabled-row drop-disabled-row even-row first-row row"
+      drag-disabled=""
+      drop-disabled=""
+      even=""
+      first=""
+      part="row body-row first-row even-row drag-disabled-row drop-disabled-row"
+      role="row"
+      style="position: absolute; transform: translateY(0px);"
+      tabindex="-1"
+    >
+      <td
+        aria-selected="false"
+        class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell even-row-cell first-column-cell first-row-cell"
+        first-column=""
+        id="vaadin-grid-cell-2"
+        part="cell body-cell first-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell"
+        role="gridcell"
+        style="width: 100px; flex-grow: 1;"
+        tabindex="0"
+      >
+        <slot name="vaadin-grid-cell-content-2">
+        </slot>
+      </td>
+      <td
+        aria-selected="false"
+        class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell even-row-cell first-row-cell last-column-cell"
+        id="vaadin-grid-cell-3"
+        last-column=""
+        part="cell body-cell last-column-cell first-row-cell even-row-cell drag-disabled-row-cell drop-disabled-row-cell"
+        role="gridcell"
+        style="width: 100px; flex-grow: 1;"
+        tabindex="-1"
+      >
+        <slot name="vaadin-grid-cell-content-3">
+        </slot>
+      </td>
+    </tr>
+    <tr
+      aria-rowindex="4"
+      aria-selected="false"
+      class="body-row drag-disabled-row drop-disabled-row last-row odd-row row"
+      drag-disabled=""
+      drop-disabled=""
+      last=""
+      odd=""
+      part="row body-row last-row odd-row drag-disabled-row drop-disabled-row"
+      role="row"
+      style="position: absolute; transform: translateY(36px);"
+      tabindex="-1"
+    >
+      <td
+        aria-selected="false"
+        class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell first-column-cell last-row-cell odd-row-cell"
+        first-column=""
+        id="vaadin-grid-cell-4"
+        part="cell body-cell first-column-cell last-row-cell odd-row-cell drag-disabled-row-cell drop-disabled-row-cell"
+        role="gridcell"
+        style="width: 100px; flex-grow: 1;"
+        tabindex="-1"
+      >
+        <slot name="vaadin-grid-cell-content-4">
+        </slot>
+      </td>
+      <td
+        aria-selected="false"
+        class="body-cell cell drag-disabled-row-cell drop-disabled-row-cell last-column-cell last-row-cell odd-row-cell"
+        id="vaadin-grid-cell-5"
+        last-column=""
+        part="cell body-cell last-column-cell last-row-cell odd-row-cell drag-disabled-row-cell drop-disabled-row-cell"
+        role="gridcell"
+        style="width: 100px; flex-grow: 1;"
+        tabindex="-1"
+      >
+        <slot name="vaadin-grid-cell-content-5">
+        </slot>
+      </td>
+    </tr>
+  </tbody>
+  <tbody id="emptystatebody">
+    <tr id="emptystaterow">
+      <td
+        class="empty-state"
+        id="emptystatecell"
+        part="empty-state"
+        tabindex="0"
+      >
+        <slot
+          id="emptystateslot"
+          name="empty-state"
+        >
+        </slot>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot
+    id="footer"
+    role="rowgroup"
+    style="transform: translate(0px, 0px);"
+  >
+    <tr
+      aria-rowindex="5"
+      class="first-footer-row footer-row row"
+      part="row footer-row first-footer-row "
+      role="row"
+      style="--_grid-horizontal-scroll-position: 0px;"
+      tabindex="-1"
+    >
+      <td
+        class="cell first-column-cell first-footer-row-cell footer-cell"
+        first-column=""
+        part="cell footer-cell first-footer-row-cell first-column-cell custom-first-footer"
+        role="gridcell"
+        style="width:100px;flex-grow:1;"
+        tabindex="0"
+      >
+        <slot name="vaadin-grid-footer-cell-content-1-39">
+        </slot>
+      </td>
+      <td
+        class="cell first-footer-row-cell footer-cell last-column-cell"
+        last-column=""
+        part="cell footer-cell first-footer-row-cell last-column-cell custom-last-footer"
+        role="gridcell"
+        style="width:100px;flex-grow:1;"
+        tabindex="-1"
+      >
+        <slot name="vaadin-grid-footer-cell-content-1-40">
+        </slot>
+      </td>
+    </tr>
+    <tr
+      aria-rowindex="6"
+      class="footer-row last-footer-row row"
+      part="row footer-row last-footer-row "
+      role="row"
+      tabindex="-1"
+    >
+      <td
+        aria-colspan="1"
+        class="cell first-column-cell footer-cell last-footer-row-cell"
+        colspan="1"
+        first-column=""
+        part="cell footer-cell last-footer-row-cell first-column-cell custom-group-footer"
+        role="gridcell"
+        style="width:calc(100px);flex-grow:1;"
+        tabindex="-1"
+      >
+        <slot name="vaadin-grid-footer-cell-content-0-38">
+        </slot>
+      </td>
+      <td
+        class="cell footer-cell last-column-cell last-footer-row-cell"
+        last-column=""
+        part="cell footer-cell last-footer-row-cell last-column-cell "
+        role="gridcell"
+        style="width:100px;flex-grow:1;"
+        tabindex="-1"
+      >
+        <slot name="vaadin-grid-footer-cell-content-0-40">
+        </slot>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+`;
+/* end snapshot vaadin-grid column custom part names default */
+
