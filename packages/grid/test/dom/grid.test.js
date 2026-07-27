@@ -168,4 +168,29 @@ describe('vaadin-grid', () => {
       await expect(grid.$.table).dom.to.equalSnapshot();
     });
   });
+
+  describe('column text align', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column path="name.first" text-align="right"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.querySelectorAll('vaadin-grid-column').forEach((column) => {
+        column.headerRenderer = (root) => {
+          root.textContent = 'Header';
+        };
+        column.footerRenderer = (root) => {
+          root.textContent = 'Footer';
+        };
+      });
+      grid.items = users.slice(0, 2);
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await expect(grid).dom.to.equalSnapshot();
+    });
+  });
 });

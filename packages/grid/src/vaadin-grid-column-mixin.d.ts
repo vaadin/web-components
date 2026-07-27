@@ -12,7 +12,7 @@ export type GridBodyRenderer<TItem, Column extends GridColumnMixin<TItem, Column
   model: GridItemModel<TItem>,
 ) => void;
 
-export type GridColumnTextAlign = 'center' | 'end' | 'start' | null;
+export type GridColumnTextAlign = 'center' | 'end' | 'left' | 'right' | 'start' | null;
 
 export type GridHeaderFooterRenderer<TItem, Column extends ColumnBaseMixinClass<TItem, Column>> = (
   root: HTMLElement,
@@ -71,8 +71,8 @@ export declare class ColumnBaseMixinClass<TItem, Column extends ColumnBaseMixinC
 
   /**
    * Aligns the columns cell content horizontally.
-   * Supported values: "start", "center" and "end".
-   * @attr {start|center|end} text-align
+   *
+   * @attr {start|center|end|left|right} text-align
    */
   textAlign: GridColumnTextAlign | null | undefined;
 

@@ -93,8 +93,8 @@ export const ColumnBaseMixin = (superClass) =>
 
         /**
          * Aligns the columns cell content horizontally.
-         * Supported values: "start", "center" and "end".
-         * @attr {start|center|end} text-align
+         *
+         * @attr {start|center|end|left|right} text-align
          */
         textAlign: {
           type: String,
@@ -510,10 +510,6 @@ export const ColumnBaseMixin = (superClass) =>
     /** @private */
     _textAlignChanged(textAlign) {
       if (textAlign === undefined || this._grid === undefined) {
-        return;
-      }
-      if (['start', 'end', 'center'].indexOf(textAlign) === -1) {
-        console.warn('textAlign can only be set as "start", "end" or "center"');
         return;
       }
 

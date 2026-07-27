@@ -2951,3 +2951,59 @@ snapshots["vaadin-grid column reordering reordered details opened"] =
 `;
 /* end snapshot vaadin-grid column reordering reordered details opened */
 
+snapshots["vaadin-grid column text align default"] = 
+`<vaadin-grid style="">
+  <vaadin-grid-column
+    path="name.first"
+    text-align="right"
+  >
+  </vaadin-grid-column>
+  <vaadin-grid-column path="name.last">
+  </vaadin-grid-column>
+  <vaadin-grid-cell-content
+    slot="vaadin-grid-header-cell-content-0-36"
+    style="text-align: right;"
+  >
+    Header
+  </vaadin-grid-cell-content>
+  <vaadin-grid-cell-content slot="vaadin-grid-header-cell-content-0-37">
+    Header
+  </vaadin-grid-cell-content>
+  <vaadin-grid-cell-content
+    slot="vaadin-grid-footer-cell-content-0-36"
+    style="text-align: right;"
+  >
+    Footer
+  </vaadin-grid-cell-content>
+  <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-0-37">
+    Footer
+  </vaadin-grid-cell-content>
+  <vaadin-grid-cell-content
+    slot="vaadin-grid-cell-content-0"
+    style="text-align: right;"
+  >
+  </vaadin-grid-cell-content>
+  <vaadin-grid-cell-content slot="vaadin-grid-cell-content-1">
+  </vaadin-grid-cell-content>
+  <vaadin-grid-cell-content
+    slot="vaadin-grid-cell-content-2"
+    style="text-align: right;"
+  >
+    Laura
+  </vaadin-grid-cell-content>
+  <vaadin-grid-cell-content slot="vaadin-grid-cell-content-3">
+    Arnaud
+  </vaadin-grid-cell-content>
+  <vaadin-grid-cell-content
+    slot="vaadin-grid-cell-content-4"
+    style="text-align: right;"
+  >
+    Fabien
+  </vaadin-grid-cell-content>
+  <vaadin-grid-cell-content slot="vaadin-grid-cell-content-5">
+    Le gall
+  </vaadin-grid-cell-content>
+</vaadin-grid>
+`;
+/* end snapshot vaadin-grid column text align default */
+
