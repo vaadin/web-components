@@ -98,6 +98,10 @@ export const ColumnResizingMixin = (superClass) =>
           cell._column.flexGrow = 0;
         });
 
+        // Flush the scheduled header/footer render to apply the new widths
+        // to the cells before measuring the layout below
+        this.__renderHeaderFooterDebouncer?.flush();
+
         const cellFrozenToEnd = this._frozenToEndCells[0];
 
         // When handle moves below the cell frozen to end, scroll into view.
