@@ -9,6 +9,40 @@ const DEFAULT_MESSAGE = 'This field value was modified by AI.';
 const DEFAULT_BADGE_LABEL = 'AI-provided value';
 const DEFAULT_BADGE_TOOLTIP = 'Field value modified by AI.\nClick for details';
 
+/**
+ * A minimal field that gives `focus()` and a host click a component-specific
+ * meaning, the way date-picker and multi-select-combo-box open their overlay.
+ * The marker must not trigger either of those.
+ */
+class FocusSensitiveField extends HTMLElement {
+  constructor() {
+    super();
+    this.openedOnFocus = false;
+    this.openedOnClick = false;
+    this.attachShadow({ mode: 'open' });
+    this._input = document.createElement('input');
+    this.shadowRoot.append(this._input);
+    this.addEventListener('click', () => {
+      this.openedOnClick = true;
+    });
+  }
+
+  get focusElement() {
+    return this._input;
+  }
+
+  get inputElement() {
+    return this._input;
+  }
+
+  focus() {
+    this.openedOnFocus = true;
+    this._input.focus();
+  }
+}
+
+customElements.define('focus-sensitive-field', FocusSensitiveField);
+
 describe('ai field marker', () => {
   let field;
 
@@ -257,6 +291,102 @@ describe('ai field marker', () => {
       revertButton.click();
       await nextUpdate(popover);
       expect(popover.opened).to.be.false;
+    });
+
+    it('should move focus to the field input', () => {
+      // The popover restores focus to the badge, which revert removes, so the
+      // marker moves focus to the field first.
+      revertButton.click();
+      expect(field.inputElement.matches(':focus')).to.be.true;
+      expect(field.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should not force the focus-ring on the field', () => {
+      // Focusing the input directly leaves the focus-ring to the field's own
+      // keyboard-vs-pointer detection; a host focus() would force it on.
+      revertButton.click();
+      expect(field.hasAttribute('focus-ring')).to.be.false;
+    });
+  });
+
+  describe('revert on a field with focus and click semantics', () => {
+    let sensitiveField;
+    let marker;
+
+    beforeEach(async () => {
+      sensitiveField = fixtureSync(`<focus-sensitive-field></focus-sensitive-field>`);
+      marker = AiFieldMarker.mark(sensitiveField);
+      await nextRender();
+    });
+
+    it('should not run the field focus() side effects on revert', () => {
+      marker.querySelector('[part="revert-button"]').click();
+      expect(sensitiveField.openedOnFocus).to.be.false;
+      expect(sensitiveField.inputElement.matches(':focus')).to.be.true;
+    });
+
+    it('should not let a badge click reach the field', () => {
+      marker.querySelector('[part="badge"]').click();
+      expect(sensitiveField.openedOnClick).to.be.false;
+    });
+
+    it('should not let a popover click reach the field', async () => {
+      marker.querySelector('[part="badge"]').click();
+      await nextRender();
+
+      marker.querySelector('[part="revert-button"]').click();
+      expect(sensitiveField.openedOnClick).to.be.false;
+    });
+  });
+
+  describe('click containment', () => {
+    // The marker and its popover content live in the field's light DOM, so
+    // without containment their clicks reach the field host. Fields that open
+    // an overlay on host click (date-picker, multi-select-combo-box) would act
+    // on them as if the field itself had been clicked.
+    let marker;
+    let spy;
+
+    beforeEach(async () => {
+      marker = AiFieldMarker.mark(field);
+      await nextRender();
+      spy = sinon.spy();
+      field.addEventListener('click', spy);
+    });
+
+    it('should not propagate badge clicks to the field', () => {
+      marker.querySelector('[part="badge"]').click();
+      expect(spy.called).to.be.false;
+    });
+
+    it('should not propagate popover clicks to the field', async () => {
+      marker.querySelector('[part="badge"]').click();
+      await nextRender();
+
+      marker.querySelector('[part="revert-button"]').click();
+      expect(spy.called).to.be.false;
+    });
+
+    it('should not propagate description node clicks to the field', () => {
+      // mark() also puts the hidden aria-describedby node inside the marker.
+      const descId = (field.inputElement.getAttribute('aria-describedby') || '')
+        .split(' ')
+        .find((id) => id.startsWith('ai-field-marker-'));
+      marker.querySelector(`#${descId}`).click();
+      expect(spy.called).to.be.false;
+    });
+
+    it('should still let clicks on the field itself through', () => {
+      field.inputElement.click();
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should still open the popover on badge click', async () => {
+      // Containment must not block the popover's own click trigger, which is
+      // bound on the badge inside the marker.
+      marker.querySelector('[part="badge"]').click();
+      await nextRender();
+      expect(marker.querySelector('vaadin-popover').opened).to.be.true;
     });
   });
 

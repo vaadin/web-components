@@ -147,6 +147,15 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
     // Stable badge id: generating it in render() would re-target the tooltip
     // and popover on every re-render.
     this.__badgeId = generateUniqueId();
+
+    // The marker and its popover content live in the field's light DOM, so a
+    // click on the badge or inside the popover bubbles to the field host.
+    // Fields that open their overlay on any host click (date-picker,
+    // multi-select-combo-box) would act on it as if the field itself had been
+    // clicked. Keep marker clicks to the marker. The popover and tooltip bind
+    // their listeners on the badge, which is a descendant, so they still fire
+    // before this bubble-phase listener.
+    this.addEventListener('click', (event) => event.stopPropagation());
   }
 
   /** @protected */
@@ -184,8 +193,16 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
     // revert, which would drop focus to the body. Moving focus to the field
     // first makes the overlay skip its own restore — it only restores while
     // focus is still inside the overlay (see OverlayFocusMixin._shouldRestoreFocus).
+    //
+    // Focus the field's own focusable element rather than calling focus() on
+    // the host: a host focus() can carry component-specific semantics that a
+    // revert must not trigger — date-picker opens its overlay on focus while
+    // it has no usable text input (fullscreen, iOS, or no i18n.parseDate).
+    // Focusing the element directly also leaves the focus-ring to the field's
+    // own keyboard-vs-pointer detection instead of forcing it on.
     if (this._field) {
-      this._field.focus();
+      const focusTarget = this._field.focusElement || this._field.inputElement || this._field;
+      focusTarget.focus();
     }
 
     const popover = this.querySelector('vaadin-popover');
