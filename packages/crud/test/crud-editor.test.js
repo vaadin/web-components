@@ -133,4 +133,52 @@ describe('crud editor', () => {
       expect(crud.editorOpened).to.be.true;
     });
   });
+
+  describe('animation', () => {
+    let dialog, overlay;
+
+    beforeEach(async () => {
+      crud = fixtureSync('<vaadin-crud style="width: 300px; --vaadin-overlay-animation-duration: 10s"></vaadin-crud>');
+      crud.items = [{ foo: 'bar' }];
+      await nextRender();
+      dialog = getDialogEditor(crud);
+      overlay = dialog.$.overlay;
+    });
+
+    afterEach(() => {
+      overlay._flushAnimation('opening');
+      overlay._flushAnimation('closing');
+      crud.editorOpened = false;
+    });
+
+    it('should forward animation properties from the host to the overlay', () => {
+      expect(getComputedStyle(overlay).getPropertyValue('--vaadin-overlay-animation-duration')).to.equal('10s');
+    });
+
+    it('should set opening attribute on the overlay when the editor is opened', async () => {
+      crud.editedItem = crud.items[0];
+      await nextRender();
+
+      expect(overlay.hasAttribute('opening')).to.be.true;
+    });
+
+    it('should not hide the dialog while the overlay is opening', async () => {
+      crud.editedItem = crud.items[0];
+      await nextRender();
+
+      expect(getComputedStyle(dialog).display).to.not.equal('none');
+    });
+
+    it('should not hide the dialog while the overlay is closing', async () => {
+      crud.editedItem = crud.items[0];
+      await nextRender();
+      overlay._flushAnimation('opening');
+
+      crud.editorOpened = false;
+      await nextRender();
+
+      expect(overlay.hasAttribute('closing')).to.be.true;
+      expect(getComputedStyle(dialog).display).to.not.equal('none');
+    });
+  });
 });

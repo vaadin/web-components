@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { emulateMedia, resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { escKeyDown, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './animated-styles.js';
@@ -600,5 +600,188 @@ describe('animation properties', () => {
     const keyframes = getAnimation(overlay.$.overlay, '--transform').effect.getKeyframes();
     expect(keyframes[0].transform).to.equal('rotate(10deg)');
     expect(keyframes[1].transform).to.equal('rotate(20deg)');
+  });
+
+  it('should reverse the animation direction while closing', () => {
+    overlay.opened = true;
+    expect(getAnimation(overlay.$.overlay, '--fade').effect.getTiming().direction).to.equal('normal');
+
+    overlay._flushAnimation('opening');
+    overlay.opened = false;
+    expect(getAnimation(overlay.$.overlay, '--fade').effect.getTiming().direction).to.equal('reverse');
+  });
+
+  describe('backdrop', () => {
+    beforeEach(async () => {
+      overlay.withBackdrop = true;
+      await nextRender();
+    });
+
+    it('should only run the fade animation on the backdrop', () => {
+      overlay.opened = true;
+      const names = overlay.$.backdrop.getAnimations().map((animation) => animation.animationName);
+      expect(names).to.eql(['--fade']);
+    });
+
+    it('should use linear timing function for the backdrop animation', () => {
+      overlay.style.setProperty('--vaadin-overlay-animation-timing-function', 'ease-in');
+
+      overlay.opened = true;
+      expect(getAnimation(overlay.$.backdrop, '--fade').effect.getTiming().easing).to.equal('linear');
+    });
+
+    it('should always use zero closed opacity for the backdrop animation', () => {
+      overlay.style.setProperty('--vaadin-overlay-opacity-closed', '0.25');
+
+      overlay.opened = true;
+      const keyframes = getAnimation(overlay.$.backdrop, '--fade').effect.getKeyframes();
+      expect(keyframes[0].opacity).to.equal('0');
+      expect(keyframes[1].opacity).to.equal('1');
+    });
+  });
+
+  describe('prefers-reduced-motion', () => {
+    before(async () => {
+      await emulateMedia({ reducedMotion: 'reduce' });
+    });
+
+    after(async () => {
+      await emulateMedia({ reducedMotion: 'no-preference' });
+    });
+
+    it('should only run the fade animation on the overlay part', () => {
+      overlay.opened = true;
+      const names = overlay.$.overlay.getAnimations().map((animation) => animation.animationName);
+      expect(names).to.eql(['--fade']);
+    });
+  });
+});
+
+describe('animation delay without duration', () => {
+  let overlay;
+
+  beforeEach(async () => {
+    overlay = createOverlay('overlay content');
+    overlay.style.setProperty('--vaadin-overlay-animation-delay', '2s');
+    await nextRender();
+  });
+
+  afterEach(() => {
+    overlay.opened = false;
+  });
+
+  it('should not set opening attribute when animation duration is 0s', () => {
+    overlay.opened = true;
+    expect(overlay.hasAttribute('opening')).to.be.false;
+  });
+
+  it('should not set closing attribute when animation duration is 0s', () => {
+    overlay.opened = true;
+    overlay.opened = false;
+    expect(overlay.hasAttribute('closing')).to.be.false;
+  });
+});
+
+describe('theme paint properties without an opted-in duration', () => {
+  let overlay;
+
+  // The paint properties a theme applies to the overlay parts. These must survive
+  // the opening and closing windows of a host animation that does not opt in to
+  // the overlay animation duration, e.g. a theme with its own `:host([opening])`
+  // animation. See `animated-styles.js` for the values.
+  const themedValues = {
+    transform: 'matrix(0.707107, 0.707107, -0.707107, 0.707107, 0, 0)',
+    translate: '11px 12px',
+    scale: '0.75',
+    opacity: '0.5',
+  };
+
+  function assertThemedValues(element) {
+    const style = getComputedStyle(element);
+    expect(style.transform).to.equal(themedValues.transform);
+    expect(style.translate).to.equal(themedValues.translate);
+    expect(style.scale).to.equal(themedValues.scale);
+    expect(style.opacity).to.equal(themedValues.opacity);
+  }
+
+  beforeEach(async () => {
+    overlay = createOverlay('overlay content');
+    // A 5s animation on the host, while --vaadin-overlay-animation-duration stays 0s
+    overlay.setAttribute('long-animation', '');
+    overlay.setAttribute('themed-parts', '');
+    overlay.withBackdrop = true;
+    await nextRender();
+  });
+
+  afterEach(() => {
+    overlay._flushAnimation('opening');
+    overlay._flushAnimation('closing');
+    overlay.opened = false;
+  });
+
+  it('should not override the overlay part paint properties while opening', () => {
+    overlay.opened = true;
+
+    expect(overlay.hasAttribute('opening')).to.be.true;
+    assertThemedValues(overlay.$.overlay);
+  });
+
+  it('should not override the backdrop paint properties while opening', () => {
+    overlay.opened = true;
+
+    expect(overlay.hasAttribute('opening')).to.be.true;
+    assertThemedValues(overlay.$.backdrop);
+  });
+
+  it('should not override the overlay part paint properties while closing', () => {
+    overlay.opened = true;
+    overlay._flushAnimation('opening');
+    overlay.opened = false;
+
+    expect(overlay.hasAttribute('closing')).to.be.true;
+    assertThemedValues(overlay.$.overlay);
+  });
+
+  it('should not override the backdrop paint properties while closing', () => {
+    overlay.opened = true;
+    overlay._flushAnimation('opening');
+    overlay.opened = false;
+
+    expect(overlay.hasAttribute('closing')).to.be.true;
+    assertThemedValues(overlay.$.backdrop);
+  });
+});
+
+describe('animation fill mode', () => {
+  let overlay;
+
+  beforeEach(async () => {
+    overlay = createOverlay('overlay content');
+    overlay.setAttribute('themed-parts', '');
+    overlay.style.setProperty('--vaadin-overlay-animation-duration', '10s');
+    overlay.style.setProperty('--vaadin-overlay-animation-delay', '2s');
+    await nextRender();
+  });
+
+  afterEach(() => {
+    overlay._flushAnimation('opening');
+    overlay._flushAnimation('closing');
+    overlay.opened = false;
+  });
+
+  it('should apply the closed value during the opening animation delay', () => {
+    overlay.opened = true;
+
+    // The backwards fill keeps the overlay at its closed opacity for the delay,
+    // instead of painting the theme value until the animation starts.
+    expect(getComputedStyle(overlay.$.overlay).opacity).to.equal('0');
+  });
+
+  it('should apply the opened value during the closing animation delay', () => {
+    overlay.opened = true;
+    overlay._flushAnimation('opening');
+    overlay.opened = false;
+
+    expect(getComputedStyle(overlay.$.overlay).opacity).to.equal('1');
   });
 });

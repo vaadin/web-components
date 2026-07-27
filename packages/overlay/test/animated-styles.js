@@ -19,6 +19,15 @@ registerStyles(
       animation: 5s overlay-dummy-animation;
     }
 
+    /* Paint properties applied by a theme, which the base animation must not override */
+    :host([themed-parts]) [part='overlay'],
+    :host([themed-parts]) [part='backdrop'] {
+      transform: rotate(45deg);
+      translate: 11px 12px;
+      scale: 0.75;
+      opacity: 0.5;
+    }
+
     @keyframes overlay-dummy-animation {
       to {
         opacity: 1 !important; /* stylelint-disable-line keyframe-declaration-no-important */
