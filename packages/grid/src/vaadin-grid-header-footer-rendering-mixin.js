@@ -14,14 +14,14 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { partMap } from '@vaadin/component-base/src/directives/part-map.js';
 import { cellContent } from './directives/cell-content-directive.js';
 
-function isEmptyCell(column, level, columnTree) {
-  const isColumnRow = level === columnTree.length - 1;
-  return !isColumnRow && column.localName !== 'vaadin-grid-column-group';
+function isContentCell(column, level, columnTree) {
+  const isLastRow = level === columnTree.length - 1;
+  return isLastRow || column.localName === 'vaadin-grid-column-group';
 }
 
 function isHeaderRowVisible(columns, level, columnTree) {
   return columns.some((column) => {
-    if (column.hidden || isEmptyCell(column, level, columnTree)) {
+    if (column.hidden || !isContentCell(column, level, columnTree)) {
       return false;
     }
 
@@ -41,12 +41,25 @@ function isHeaderRowVisible(columns, level, columnTree) {
 
 function isFooterRowVisible(columns, level, columnTree) {
   return columns.some((column) => {
-    if (column.hidden || isEmptyCell(column, level, columnTree)) {
+    if (column.hidden || !isContentCell(column, level, columnTree)) {
       return false;
     }
 
     return column.footerRenderer;
   });
+}
+
+/**
+ * Converts a whitespace separated list of custom part names
+ * into an object accepted by the `partMap` directive.
+ */
+function getCustomParts(partName) {
+  return Object.fromEntries(
+    (partName ?? '')
+      .split(' ')
+      .filter((name) => name !== '')
+      .map((name) => [name, true]),
+  );
 }
 
 /**
@@ -114,7 +127,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
           ${repeat(
             cells,
             ({ column }) => column._id,
-            ({ column, isFirstCell, isLastCell }) => {
+            ({ column, isFirstCell, isLastCell, isContentCell }) => {
               // `cache` keeps the cell and its rendered content when the
               // column gets hidden, so it can be restored as-is when the
               // column is shown again.
@@ -129,10 +142,12 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                 'last-column-cell': isLastCell,
               };
 
+              const customCellParts = isContentCell ? getCustomParts(column.headerPartName) : {};
+
               return cache(html`
                 <th
                   role="columnheader"
-                  part="cell header-cell${partMap(cellParts)}"
+                  part="cell header-cell${partMap({ ...cellParts, ...customCellParts })}"
                   class="cell header-cell${classMap(cellParts)}"
                   style="${styleMap({
                     width: column.width,
@@ -195,7 +210,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
           ${repeat(
             cells,
             ({ column }) => column._id,
-            ({ column, isFirstCell, isLastCell }) => {
+            ({ column, isFirstCell, isLastCell, isContentCell }) => {
               // `cache` keeps the cell and its rendered content when the
               // column gets hidden, so it can be restored as-is when the
               // column is shown again.
@@ -210,10 +225,12 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                 'last-column-cell': isLastCell,
               };
 
+              const customCellParts = isContentCell ? getCustomParts(column.footerPartName) : {};
+
               return cache(html`
                 <td
                   role="gridcell"
-                  part="cell footer-cell${partMap(cellParts)}"
+                  part="cell footer-cell${partMap({ ...cellParts, ...customCellParts })}"
                   class="cell footer-cell${classMap(cellParts)}"
                   style="${styleMap({
                     width: column.width,
@@ -252,6 +269,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
               column,
               isFirstCell: column === visibleColumns.at(0),
               isLastCell: column === visibleColumns.at(-1),
+              isContentCell: isContentCell(column, level, columnTree),
             };
           }),
           isRowVisible:
