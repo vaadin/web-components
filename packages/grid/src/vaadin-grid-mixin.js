@@ -152,13 +152,13 @@ export const GridMixin = (superClass) =>
     /** @private */
     get _firstVisibleIndex() {
       const firstVisibleItem = this.__getFirstVisibleItem();
-      return firstVisibleItem ? firstVisibleItem.index : undefined;
+      return firstVisibleItem?.index;
     }
 
     /** @private */
     get _lastVisibleIndex() {
       const lastVisibleItem = this.__getLastVisibleItem();
-      return lastVisibleItem ? lastVisibleItem.index : undefined;
+      return lastVisibleItem?.index;
     }
 
     constructor() {
@@ -305,9 +305,7 @@ export const GridMixin = (superClass) =>
     __focusBodyCell({ item, column }) {
       const row = this._getRenderedRows().find((row) => row._item === item);
       const cell = row && [...row.children].find((cell) => cell._column === column);
-      if (cell) {
-        cell.focus();
-      }
+      cell?.focus();
     }
 
     /** @protected */

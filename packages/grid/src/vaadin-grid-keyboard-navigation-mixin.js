@@ -154,9 +154,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _focusableChanged(focusable, oldFocusable) {
-      if (oldFocusable) {
-        oldFocusable.setAttribute('tabindex', '-1');
-      }
+      oldFocusable?.setAttribute('tabindex', '-1');
       if (focusable) {
         this._updateGridSectionFocusTarget(focusable);
       }
@@ -415,9 +413,7 @@ export const KeyboardNavigationMixin = (superClass) =>
     _onRowNavigation(activeRow, dy) {
       const { dstRow } = this.__navigateRows(dy, activeRow);
 
-      if (dstRow) {
-        dstRow.focus();
-      }
+      dstRow?.focus();
     }
 
     /** @private */
@@ -765,7 +761,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       // When clicking a cell with only text nodes, skip activating the cell
       // on click, since that is already handled on keydown.
       const cell = e.composedPath()[0];
-      const target = (cell._content && cell._content.firstElementChild) || cell;
+      const target = cell._content?.firstElementChild || cell;
       const wasNavigating = this.hasAttribute('navigating');
       const clickEvent = new MouseEvent('click', {
         shiftKey: e.shiftKey,

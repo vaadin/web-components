@@ -37,7 +37,7 @@ export const GridFilterColumnMixin = (superClass) =>
      */
     _defaultHeaderRenderer(root, _column) {
       let filter = root.firstElementChild;
-      let textField = filter ? filter.firstElementChild : undefined;
+      let textField = filter?.firstElementChild;
 
       if (!filter) {
         filter = document.createElement('vaadin-grid-filter');

@@ -180,7 +180,7 @@ export const RowDetailsMixin = (superClass) =>
      * @protected
      */
     _isDetailsOpened(item) {
-      return this.__detailsOpenedKeys && this.__detailsOpenedKeys.has(this.getItemId(item));
+      return this.__detailsOpenedKeys?.has(this.getItemId(item));
     }
 
     /** @private */

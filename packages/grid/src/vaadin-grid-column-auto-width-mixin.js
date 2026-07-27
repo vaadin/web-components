@@ -311,10 +311,9 @@ export const ColumnAutoWidthMixin = (superClass) =>
       // of the virtualizer update loop, ensuring the grid eventually reaches a stable state.
       const hasRowsWithUndefinedIndex = [...this.$.items.children].some((row) => row.index === undefined);
 
-      const debouncingHiddenChanged = this._debouncerHiddenChanged && this._debouncerHiddenChanged.isActive();
+      const debouncingHiddenChanged = this._debouncerHiddenChanged?.isActive();
 
-      const debouncingUpdateFrozenColumn =
-        this.__debounceUpdateFrozenColumn && this.__debounceUpdateFrozenColumn.isActive();
+      const debouncingUpdateFrozenColumn = this.__debounceUpdateFrozenColumn?.isActive();
 
       // When using a percentage-based height, the grid's effective height may
       // be 0 until the resize observer in grid-mixin calculates a min-height.

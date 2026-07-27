@@ -214,7 +214,7 @@ export const DataProviderMixin = (superClass) =>
      * @protected
      */
     _isExpanded(item) {
-      return this.__expandedKeys && this.__expandedKeys.has(this.getItemId(item));
+      return this.__expandedKeys?.has(this.getItemId(item));
     }
 
     /**
