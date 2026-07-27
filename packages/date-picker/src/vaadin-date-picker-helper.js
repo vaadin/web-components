@@ -5,6 +5,45 @@
  */
 
 /**
+ * Create a date at midnight in local time. Unlike `new Date(year, month, day)`,
+ * this supports years below 100, which the constructor maps into the 20th
+ * century. The month is assigned before the day so that the initial day of month
+ * (1) always exists in the target month.
+ *
+ * @param {number} year
+ * @param {number} month Zero-based month, may be out of range to shift the year
+ * @param {number} day May be `0` to select the last day of the previous month
+ * @return {Date}
+ */
+export function createDate(year, month, day) {
+  const date = new Date(0, 0); // Wrong date (1900-01-01), but with midnight in local time
+  date.setFullYear(year);
+  date.setMonth(month);
+  date.setDate(day);
+  return date;
+}
+
+/**
+ * Get the first day of the month the given date is in.
+ *
+ * @param {!Date} date
+ * @return {Date}
+ */
+export function firstOfMonth(date) {
+  return createDate(date.getFullYear(), date.getMonth(), 1);
+}
+
+/**
+ * Get the last day of the month the given date is in.
+ *
+ * @param {!Date} date
+ * @return {Date}
+ */
+export function lastOfMonth(date) {
+  return createDate(date.getFullYear(), date.getMonth() + 1, 0);
+}
+
+/**
  * Get ISO 8601 week number for the given date.
  *
  * @param {!Date} date
@@ -185,11 +224,7 @@ export function parseDate(str) {
     return undefined;
   }
 
-  const date = new Date(0, 0); // Wrong date (1900-01-01), but with midnight in local time
-  date.setFullYear(parseInt(parts[1], 10));
-  date.setMonth(parseInt(parts[2], 10) - 1);
-  date.setDate(parseInt(parts[3], 10));
-  return date;
+  return createDate(parseInt(parts[1], 10), parseInt(parts[2], 10) - 1, parseInt(parts[3], 10));
 }
 
 /**

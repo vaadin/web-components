@@ -5,7 +5,14 @@
  */
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
-import { dateAllowed, dateEquals, getISOWeekNumber, normalizeDate } from './vaadin-date-picker-helper.js';
+import {
+  dateAllowed,
+  dateEquals,
+  firstOfMonth,
+  getISOWeekNumber,
+  lastOfMonth,
+  normalizeDate,
+} from './vaadin-date-picker-helper.js';
 
 export const MonthCalendarMixin = (superClass) =>
   class MonthCalendarMixinClass extends FocusMixin(superClass) {
@@ -148,17 +155,8 @@ export const MonthCalendarMixin = (superClass) =>
      * @protected
      */
     __computeDisabled(month, minDate, maxDate) {
-      // First day of the month
-      const firstDate = new Date(0, 0);
-      firstDate.setFullYear(month.getFullYear());
-      firstDate.setMonth(month.getMonth());
-      firstDate.setDate(1);
-
-      // Last day of the month
-      const lastDate = new Date(0, 0);
-      lastDate.setFullYear(month.getFullYear());
-      lastDate.setMonth(month.getMonth() + 1);
-      lastDate.setDate(0);
+      const firstDate = firstOfMonth(month);
+      const lastDate = lastOfMonth(month);
 
       if (
         minDate &&
