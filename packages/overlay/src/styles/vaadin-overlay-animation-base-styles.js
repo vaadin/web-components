@@ -11,21 +11,20 @@ import { registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
  * property registrations and the `overlayAnimationProperties` snippet below are
  * derived from this list, so a new property only needs to be added here.
  *
- * The `transform` properties have no initial value, which makes them resolve to
- * `none` in the keyframes unless a theme sets them.
+ * Only the closed state is part of the API. The opened state is left out of the
+ * keyframes so that it comes from the part itself, see the keyframes below.
+ *
+ * `--vaadin-overlay-transform-closed` has no initial value, which makes it resolve
+ * to `none` in the keyframes unless a theme sets it.
  */
 const animationProperties = [
   { name: '--vaadin-overlay-animation-duration', syntax: '<time>', initialValue: '0s' },
   { name: '--vaadin-overlay-animation-delay', syntax: '<time>', initialValue: '0s' },
   { name: '--vaadin-overlay-animation-timing-function', syntax: '*', initialValue: 'ease' },
   { name: '--vaadin-overlay-opacity-closed', syntax: '<number>', initialValue: '0' },
-  { name: '--vaadin-overlay-opacity-opened', syntax: '<number>', initialValue: '1' },
   { name: '--vaadin-overlay-translate-closed', syntax: '<length>+ | <percentage>+', initialValue: '0px' },
-  { name: '--vaadin-overlay-translate-opened', syntax: '<length>+ | <percentage>+', initialValue: '0px' },
   { name: '--vaadin-overlay-scale-closed', syntax: '<number> | <percentage>', initialValue: '1' },
-  { name: '--vaadin-overlay-scale-opened', syntax: '<number> | <percentage>', initialValue: '1' },
   { name: '--vaadin-overlay-transform-closed', syntax: '*' },
-  { name: '--vaadin-overlay-transform-opened', syntax: '*' },
 ];
 
 animationProperties.forEach((property) => {
@@ -97,27 +96,22 @@ export const overlayAnimationStyles = css`
   @keyframes --no-op {
   }
 
+  /*
+  Both animations only declare the closed state. The opened state is left out on purpose:
+  a missing keyframe uses the value the element already has, so the animation starts from
+  and ends at whatever a theme applies to the part, with no jump at either end.
+  */
   @keyframes --transform {
     0% {
       transform: var(--vaadin-overlay-transform-closed);
       translate: var(--vaadin-overlay-translate-closed);
       scale: var(--vaadin-overlay-scale-closed);
     }
-
-    100% {
-      transform: var(--vaadin-overlay-transform-opened);
-      translate: var(--vaadin-overlay-translate-opened);
-      scale: var(--vaadin-overlay-scale-opened);
-    }
   }
 
   @keyframes --fade {
     0% {
       opacity: var(--vaadin-overlay-opacity-closed);
-    }
-
-    100% {
-      opacity: var(--vaadin-overlay-opacity-opened);
     }
   }
 `;
