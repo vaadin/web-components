@@ -300,9 +300,12 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       }
     }
 
-    // Config that changes rarely (locale, allowed range, week numbers, theme).
-    // Split from the interaction state below so a keyboard/selection update does
-    // not re-assign every config property on every calendar.
+    /**
+     * Config that changes rarely (locale, allowed range, week numbers, theme).
+     * Split from the interaction state below so a keyboard/selection update
+     * does not re-assign every config property on every calendar.
+     * @private
+     */
     // eslint-disable-next-line @typescript-eslint/max-params
     __updateCalendarsConfig(calendars, i18n, minDate, maxDate, showWeekNumbers, isDateDisabled, theme) {
       if (calendars?.length) {
@@ -322,7 +325,10 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       }
     }
 
-    // Interaction state that changes often (focus, selection, entered date, taps).
+    /**
+     * Interaction state that changes often (focus, selection, entered date, taps).
+     * @private
+     */
     __updateCalendarsState(calendars, selectedDate, focusedDate, enteredDate, ignoreTaps) {
       if (calendars?.length) {
         calendars.forEach((calendar) => {
