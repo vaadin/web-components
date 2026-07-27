@@ -347,9 +347,7 @@ export const ColumnBaseMixin = (superClass) =>
         }
 
         this._cells?.forEach((cell) => {
-          if (cell._content.parentNode) {
-            cell._content.parentNode.removeChild(cell._content);
-          }
+          cell._content.parentNode?.removeChild(cell._content);
         });
       });
 
@@ -378,9 +376,7 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _flexGrowChanged(flexGrow) {
-      if (this.parentElement && this.parentElement._columnPropChanged) {
-        this.parentElement._columnPropChanged('flexGrow');
-      }
+      this.parentElement?._columnPropChanged?.('flexGrow');
 
       this._grid?.__scheduleRenderHeaderFooter?.();
 
@@ -391,9 +387,7 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _widthChanged(width) {
-      if (this.parentElement && this.parentElement._columnPropChanged) {
-        this.parentElement._columnPropChanged('width');
-      }
+      this.parentElement?._columnPropChanged?.('width');
 
       this._grid?.__scheduleRenderHeaderFooter?.();
 
@@ -404,24 +398,18 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _frozenChanged(frozen) {
-      if (this.parentElement && this.parentElement._columnPropChanged) {
-        this.parentElement._columnPropChanged('frozen', frozen);
-      }
+      this.parentElement?._columnPropChanged?.('frozen', frozen);
 
       this._allCells.forEach((cell) => {
         updateCellState(cell, 'frozen', frozen);
       });
 
-      if (this._grid && this._grid._frozenCellsChanged) {
-        this._grid._frozenCellsChanged();
-      }
+      this._grid?._frozenCellsChanged?.();
     }
 
     /** @private */
     _frozenToEndChanged(frozenToEnd) {
-      if (this.parentElement && this.parentElement._columnPropChanged) {
-        this.parentElement._columnPropChanged('frozenToEnd', frozenToEnd);
-      }
+      this.parentElement?._columnPropChanged?.('frozenToEnd', frozenToEnd);
 
       this._allCells.forEach((cell) => {
         // Skip sizer cells to keep correct scrollWidth.
@@ -432,9 +420,7 @@ export const ColumnBaseMixin = (superClass) =>
         updateCellState(cell, 'frozen-to-end', frozenToEnd);
       });
 
-      if (this._grid && this._grid._frozenCellsChanged) {
-        this._grid._frozenCellsChanged();
-      }
+      this._grid?._frozenCellsChanged?.();
     }
 
     /** @private */
@@ -466,11 +452,7 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _rowHeaderChanged(rowHeader, cells) {
-      if (!cells) {
-        return;
-      }
-
-      cells.forEach((cell) => {
+      cells?.forEach((cell) => {
         cell.setAttribute('role', rowHeader ? 'rowheader' : 'gridcell');
       });
     }
@@ -504,20 +486,20 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _resizableChanged(resizable) {
-      if (resizable === undefined || this._grid === undefined) {
+      if (resizable === undefined) {
         return;
       }
 
-      this._grid.__scheduleRenderHeaderFooter?.();
+      this._grid?.__scheduleRenderHeaderFooter?.();
     }
 
     /** @private */
     _textAlignChanged(textAlign) {
-      if (textAlign === undefined || this._grid === undefined) {
+      if (textAlign === undefined) {
         return;
       }
 
-      this._grid.__scheduleRenderHeaderFooter?.();
+      this._grid?.__scheduleRenderHeaderFooter?.();
 
       this._cells?.forEach((cell) => {
         cell._content.style.textAlign = textAlign;
@@ -526,35 +508,24 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _hiddenChanged(hidden) {
-      if (this.parentElement && this.parentElement._columnPropChanged) {
-        this.parentElement._columnPropChanged('hidden', hidden);
-      }
+      this.parentElement?._columnPropChanged?.('hidden', hidden);
 
       if (!!hidden !== !!this._previousHidden && this._grid) {
         if (hidden === true) {
           this._cells?.forEach((cell) => {
-            if (cell._content.parentNode) {
-              cell._content.parentNode.removeChild(cell._content);
-            }
+            cell._content.parentNode?.removeChild(cell._content);
           });
         }
         this._grid._debouncerHiddenChanged = Debouncer.debounce(
           this._grid._debouncerHiddenChanged,
           animationFrame,
           () => {
-            if (this._grid && this._grid._renderColumnTree) {
-              this._grid._renderColumnTree(this._grid._columnTree);
-            }
+            this._grid?._renderColumnTree?.(this._grid._columnTree);
           },
         );
 
-        if (this._grid._debounceUpdateFrozenColumn) {
-          this._grid._debounceUpdateFrozenColumn();
-        }
-
-        if (this._grid._resetKeyboardNavigation) {
-          this._grid._resetKeyboardNavigation();
-        }
+        this._grid._debounceUpdateFrozenColumn?.();
+        this._grid._resetKeyboardNavigation?.();
       }
       this._previousHidden = hidden;
     }
@@ -634,7 +605,7 @@ export const ColumnBaseMixin = (superClass) =>
 
       this.__renderCellsContent(headerRenderer, [headerCell]);
 
-      this._grid?.__scheduleRenderHeaderFooter();
+      this._grid?.__scheduleRenderHeaderFooter?.();
     }
 
     /** @protected */
@@ -679,7 +650,7 @@ export const ColumnBaseMixin = (superClass) =>
 
       this.__renderCellsContent(footerRenderer, [footerCell]);
 
-      this._grid?.__scheduleRenderHeaderFooter();
+      this._grid?.__scheduleRenderHeaderFooter?.();
     }
 
     /** @protected */
