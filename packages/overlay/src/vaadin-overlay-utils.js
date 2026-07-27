@@ -86,6 +86,24 @@ export function observeMove(element, callback) {
 }
 
 /**
+ * Detect whether an animation runs on the given element, so that its end can be
+ * awaited before the element is hidden or removed. An element that is not rendered,
+ * has no animation name, or has a zero duration does not fire `animationend`.
+ *
+ * @param {HTMLElement} element
+ * @return {boolean}
+ */
+export function shouldAnimate(element) {
+  const style = getComputedStyle(element);
+  const name = style.getPropertyValue('animation-name');
+  const hasDuration = style
+    .getPropertyValue('animation-duration')
+    .split(',')
+    .some((duration) => parseFloat(duration) > 0);
+  return style.getPropertyValue('display') !== 'none' && name && name !== 'none' && hasDuration;
+}
+
+/**
  * Toggle the state attribute on the overlay element and also its owner element. This allows targeting state attributes
  * in the light DOM in case the overlay is in the shadow DOM of its owner.
  * @param {HTMLElement} overlay The overlay element on which to toggle the attribute.

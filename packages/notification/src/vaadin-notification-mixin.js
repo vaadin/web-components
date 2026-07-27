@@ -7,6 +7,7 @@ import { render } from 'lit';
 import { isTemplateResult } from 'lit/directive-helpers.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
+import { shouldAnimate } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 /**
@@ -349,8 +350,12 @@ export const NotificationMixin = (superClass) =>
 
         this._card.setAttribute('opening', '');
         this._appendNotificationCard();
-        this.__animationEndListener = () => this.__cleanUpOpeningClosingState();
-        this._card.addEventListener('animationend', this.__animationEndListener);
+        if (shouldAnimate(this._card)) {
+          this.__animationEndListener = () => this.__cleanUpOpeningClosingState();
+          this._card.addEventListener('animationend', this.__animationEndListener);
+        } else {
+          this.__cleanUpOpeningClosingState();
+        }
         this._didAnimateNotificationAppend = true;
       } else {
         this._didAnimateNotificationAppend = false;
@@ -409,8 +414,7 @@ export const NotificationMixin = (superClass) =>
       this.__cleanUpOpeningClosingState();
 
       this._card.setAttribute('closing', '');
-      const name = getComputedStyle(this._card).getPropertyValue('animation-name');
-      if (name && name !== 'none') {
+      if (shouldAnimate(this._card)) {
         this.__animationEndListener = () => {
           this._removeNotificationCard();
           this.__cleanUpOpeningClosingState();

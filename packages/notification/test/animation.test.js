@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import './animation-test-styles.js';
 import '../src/vaadin-notification.js';
 
@@ -124,5 +125,47 @@ describe('animated notifications', () => {
         expect(container.parentNode).to.not.equal(document.body);
       });
     });
+  });
+});
+
+describe('notification that does not animate', () => {
+  let notification, card;
+
+  beforeEach(async () => {
+    notification = fixtureSync('<vaadin-notification duration="-1"></vaadin-notification>');
+    notification.renderer = (root) => {
+      root.textContent = 'Notification';
+    };
+    await nextFrame();
+    card = notification._card;
+  });
+
+  afterEach(async () => {
+    notification.close();
+    // Wait for the notification container to be removed
+    while (document.querySelector('body > vaadin-notification-container')) {
+      await aTimeout(1);
+    }
+  });
+
+  it('should remove the opening attribute without waiting for animationend', () => {
+    card.style.animation = 'none';
+    notification.open();
+
+    expect(card.hasAttribute('opening')).to.be.false;
+  });
+
+  it('should remove a card that is not rendered but has an animation name', () => {
+    const closedSpy = sinon.spy();
+    notification.addEventListener('closed', closedSpy);
+
+    notification.open();
+    // The card has an animation name from `:host([closing])`, but a card that is
+    // not rendered never fires `animationend`.
+    card.style.display = 'none';
+    notification.close();
+
+    expect(card.parentNode).to.be.not.ok;
+    expect(closedSpy).to.be.calledOnce;
   });
 });

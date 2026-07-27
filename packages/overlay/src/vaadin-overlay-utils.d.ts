@@ -13,6 +13,13 @@
 export function observeMove(element: HTMLElement, callback: () => void): () => void;
 
 /**
+ * Detect whether an animation runs on the given element, so that its end can be
+ * awaited before the element is hidden or removed. An element that is not rendered,
+ * has no animation name, or has a zero duration does not fire `animationend`.
+ */
+export function shouldAnimate(element: HTMLElement): boolean;
+
+/**
  * Toggle the state attribute on the overlay element and also its owner element. This allows targeting state attributes
  * in the light DOM in case the overlay is in the shadow DOM of its owner.
  */

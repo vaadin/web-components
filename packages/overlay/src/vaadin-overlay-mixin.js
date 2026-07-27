@@ -6,7 +6,7 @@
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
 import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
-import { setOverlayStateAttribute } from './vaadin-overlay-utils.js';
+import { setOverlayStateAttribute, shouldAnimate } from './vaadin-overlay-utils.js';
 
 export const OverlayMixin = (superClass) =>
   class OverlayMixin extends OverlayFocusMixin(OverlayStackMixin(superClass)) {
@@ -405,14 +405,7 @@ export const OverlayMixin = (superClass) =>
      * @private
      */
     _shouldAnimate() {
-      const style = getComputedStyle(this);
-      const name = style.getPropertyValue('animation-name');
-      const hasDuration = style
-        .getPropertyValue('animation-duration')
-        .split(',')
-        .some((duration) => parseFloat(duration) > 0);
-      const hidden = style.getPropertyValue('display') === 'none';
-      return !hidden && name && name !== 'none' && hasDuration;
+      return shouldAnimate(this);
     }
 
     /**
