@@ -64,6 +64,26 @@ describe('tooltip target', () => {
       await nextUpdate(tooltip);
       expect(target.getAttribute('aria-describedby')).to.equal('foo');
     });
+
+    it('should remove aria-describedby when the tooltip is detached', async () => {
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      tooltip.remove();
+
+      expect(target.hasAttribute('aria-describedby')).to.be.false;
+    });
+
+    it('should restore aria-describedby when the tooltip is reattached', async () => {
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      const parent = tooltip.parentElement;
+      tooltip.remove();
+      parent.appendChild(tooltip);
+
+      expect(target.getAttribute('aria-describedby')).to.equal(contentNode.id);
+    });
   });
 
   describe('ariaTarget', () => {
@@ -245,6 +265,94 @@ describe('tooltip target', () => {
 
       expect(target.getAttribute('aria-describedby')).to.equal('foo');
       expect(target.getAttribute('aria-labelledby')).to.equal(contentNode.id);
+    });
+  });
+
+  describe('ariaTarget in a shadow root', () => {
+    let host, target;
+
+    beforeEach(() => {
+      host = fixtureSync('<div></div>');
+      host.attachShadow({ mode: 'open' });
+
+      target = document.createElement('input');
+      host.shadowRoot.appendChild(target);
+    });
+
+    it('should link the target using ariaDescribedByElements', async () => {
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      expect(target.ariaDescribedByElements).to.eql([contentNode]);
+    });
+
+    it('should remove the element reference when clearing target', async () => {
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      tooltip.target = null;
+      await nextUpdate(tooltip);
+
+      expect(target.ariaDescribedByElements).to.be.null;
+    });
+
+    it('should use ariaLabelledByElements when ariaLinkMode is set to aria-labelledby', async () => {
+      tooltip.ariaLinkMode = 'aria-labelledby';
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      expect(target.ariaLabelledByElements).to.eql([contentNode]);
+      expect(target.ariaDescribedByElements).to.be.null;
+    });
+
+    it('should update element references when ariaLinkMode changes', async () => {
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      tooltip.ariaLinkMode = 'aria-labelledby';
+      await nextUpdate(tooltip);
+
+      expect(target.ariaDescribedByElements).to.be.null;
+      expect(target.ariaLabelledByElements).to.eql([contentNode]);
+    });
+
+    it('should not set element references when ariaLinkMode is none', async () => {
+      tooltip.ariaLinkMode = 'none';
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      expect(target.ariaDescribedByElements).to.be.null;
+      expect(target.ariaLabelledByElements).to.be.null;
+    });
+
+    it('should remove element references when ariaLinkMode is set to none', async () => {
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      tooltip.ariaLinkMode = 'none';
+      await nextUpdate(tooltip);
+
+      expect(target.ariaDescribedByElements).to.be.null;
+    });
+
+    it('should remove element references when the tooltip is detached', async () => {
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      tooltip.remove();
+
+      expect(target.ariaDescribedByElements).to.be.null;
+    });
+
+    it('should restore element references when the tooltip is reattached', async () => {
+      tooltip.target = target;
+      await nextUpdate(tooltip);
+
+      const parent = tooltip.parentElement;
+      tooltip.remove();
+      parent.appendChild(tooltip);
+
+      expect(target.ariaDescribedByElements).to.eql([contentNode]);
     });
   });
 

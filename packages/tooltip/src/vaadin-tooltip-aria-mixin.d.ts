@@ -8,6 +8,10 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 /**
  * A mixin providing linking of the tooltip content to the tooltip target
  * elements using the `aria-describedby` or `aria-labelledby` attribute.
+ *
+ * Targets in the same root as the tooltip are linked by the content element
+ * ID. ID references only resolve within a single tree scope, so targets in
+ * other roots are linked with ARIA element references instead.
  */
 export declare function TooltipAriaMixin<T extends Constructor<HTMLElement>>(
   base: T,
