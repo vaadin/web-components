@@ -70,8 +70,7 @@ export declare class ColumnBaseMixinClass<TItem, Column extends ColumnBaseMixinC
   header: string | null | undefined;
 
   /**
-   * Aligns the columns cell content horizontally by setting the CSS
-   * `text-align` property on the cell content.
+   * Aligns the columns cell content horizontally.
    *
    * @attr {start|center|end|left|right} text-align
    */
