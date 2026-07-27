@@ -1,10 +1,10 @@
-import { ContextMenu, type ContextMenuItem } from '../../packages/react-components/src/ContextMenu.js';
+import { ContextMenu, type ContextMenuItemData } from '../../packages/react-components/src/ContextMenu.js';
 
 const assertType = function <TExpected>(value: TExpected) {
   return value;
 };
 
-type CustomContextMenuItem = ContextMenuItem<{ value: string }>;
+type CustomContextMenuItem = ContextMenuItemData<{ value: string }>;
 
 const items: CustomContextMenuItem[] = [{ text: 'View', value: 'view' }];
 

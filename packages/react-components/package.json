@@ -189,6 +189,14 @@
       "types": "./ContextMenu.d.ts",
       "default": "./ContextMenu.js"
     },
+    "./ContextMenuItem.js": {
+      "types": "./ContextMenuItem.d.ts",
+      "default": "./ContextMenuItem.js"
+    },
+    "./ContextMenuListBox.js": {
+      "types": "./ContextMenuListBox.d.ts",
+      "default": "./ContextMenuListBox.js"
+    },
     "./CustomField.js": {
       "types": "./CustomField.d.ts",
       "default": "./CustomField.js"
@@ -469,6 +477,8 @@
     "./ComboBox": "./ComboBox.js",
     "./ConfirmDialog": "./ConfirmDialog.js",
     "./ContextMenu": "./ContextMenu.js",
+    "./ContextMenuItem": "./ContextMenuItem.js",
+    "./ContextMenuListBox": "./ContextMenuListBox.js",
     "./CustomField": "./CustomField.js",
     "./DatePicker": "./DatePicker.js",
     "./DateTimePicker": "./DateTimePicker.js",

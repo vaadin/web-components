@@ -4,7 +4,7 @@ import {
   type ContextMenuRendererContext,
   type ContextMenuElement,
   type ContextMenuProps as _ContextMenuProps,
-  type ContextMenuItem as _ContextMenuItem,
+  type ContextMenuItemData as _ContextMenuItemData,
 } from './generated/ContextMenu.js';
 import { type ReactContextRendererProps, useContextRenderer } from './renderers/useContextRenderer.js';
 import { getOriginalItem, mapItemsWithComponents } from './utils/mapItemsWithComponents.js';
@@ -13,23 +13,28 @@ export * from './generated/ContextMenu.js';
 
 export type ContextMenuReactRendererProps = ReactContextRendererProps<ContextMenuRendererContext, ContextMenuElement>;
 
-export type ContextMenuItem<TItemData extends object = object> = Omit<
-  _ContextMenuItem<TItemData>,
+export type ContextMenuItemData<TItemData extends object = object> = Omit<
+  _ContextMenuItemData<TItemData>,
   'component' | 'children'
 > & {
   component?: ReactElement | string;
 
-  children?: Array<ContextMenuItem<TItemData>>;
+  children?: Array<ContextMenuItemData<TItemData>>;
 };
 
-export type ContextMenuItemSelectedEvent<TItem extends ContextMenuItem = ContextMenuItem> = CustomEvent<{
-  value: ContextMenuItem<TItem>;
+/**
+ * @deprecated Use `ContextMenuItemData` instead.
+ */
+export type ContextMenuItem<TItemData extends object = object> = ContextMenuItemData<TItemData>;
+
+export type ContextMenuItemSelectedEvent<TItem extends ContextMenuItemData = ContextMenuItemData> = CustomEvent<{
+  value: ContextMenuItemData<TItem>;
 }>;
 
 // The 'opened' property is omitted because it is readonly in the web component.
 // So you cannot set it up manually, only read from the component.
 // For changing the property, use specific methods of the component.
-export type ContextMenuProps<TItem extends ContextMenuItem = ContextMenuItem> = Partial<
+export type ContextMenuProps<TItem extends ContextMenuItemData = ContextMenuItemData> = Partial<
   Omit<_ContextMenuProps, 'opened' | 'renderer' | 'items' | 'onItemSelected'>
 > &
   Readonly<{
@@ -40,7 +45,7 @@ export type ContextMenuProps<TItem extends ContextMenuItem = ContextMenuItem> = 
     onItemSelected?: (event: ContextMenuItemSelectedEvent<TItem>) => void;
   }>;
 
-function ContextMenu<TItem extends ContextMenuItem = ContextMenuItem>(
+function ContextMenu<TItem extends ContextMenuItemData = ContextMenuItemData>(
   props: ContextMenuProps<TItem>,
   ref: ForwardedRef<ContextMenuElement>,
 ): ReactElement | null {
@@ -49,7 +54,7 @@ function ContextMenu<TItem extends ContextMenuItem = ContextMenuItem>(
 
   const onItemSelected = props.onItemSelected;
   const mappedOnItemSelected = onItemSelected
-    ? (event: CustomEvent<{ value: _ContextMenuItem }>) => {
+    ? (event: CustomEvent<{ value: _ContextMenuItemData }>) => {
         // Replace the mapped web component item with the original item
         Object.assign(event.detail, {
           value: getOriginalItem(event.detail.value),
@@ -73,7 +78,7 @@ function ContextMenu<TItem extends ContextMenuItem = ContextMenuItem>(
   );
 }
 
-const ForwardedContextMenu = forwardRef(ContextMenu) as <TItem extends ContextMenuItem = ContextMenuItem>(
+const ForwardedContextMenu = forwardRef(ContextMenu) as <TItem extends ContextMenuItemData = ContextMenuItemData>(
   props: ContextMenuProps<TItem> & RefAttributes<ContextMenuElement>,
 ) => ReactElement | null;
 

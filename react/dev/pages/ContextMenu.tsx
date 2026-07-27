@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   ContextMenu,
-  type ContextMenuItem,
+  type ContextMenuItemData,
   type ContextMenuItemSelectedEvent,
 } from '../../packages/react-components/src/ContextMenu.js';
 import { Icon } from '../../packages/react-components/src/Icon.js';
@@ -25,7 +25,7 @@ function createItem(iconName: string, text: string) {
   );
 }
 
-const initialItemSets: Record<string, ContextMenuItem[]> = {
+const initialItemSets: Record<string, ContextMenuItemData[]> = {
   basic: [{ text: 'View' }, { text: 'Edit' }, { text: 'Delete' }],
   dividers: [{ text: 'View' }, { component: 'hr' }, { text: 'Edit' }, { text: 'Delete' }],
   checkable: [
@@ -74,7 +74,7 @@ type OpenOnType = 'contextmenu' | 'click';
 
 export default function ContextMenuPage() {
   const [itemSetType, setItemSetType] = useState<ItemSetType>('basic');
-  const [items, setItems] = useState<ContextMenuItem[]>(initialItemSets.basic);
+  const [items, setItems] = useState<ContextMenuItemData[]>(initialItemSets.basic);
   const [openOn, setOpenOn] = useState<OpenOnType>('contextmenu');
   const [eventLog, setEventLog] = useState<string[]>([]);
 
@@ -92,7 +92,7 @@ export default function ContextMenuPage() {
 
     if (itemSetType === 'checkable') {
       // Radio-button like behavior: only one item can be checked.
-      const updateCheckedState = (currentItems: ContextMenuItem[]): ContextMenuItem[] => {
+      const updateCheckedState = (currentItems: ContextMenuItemData[]): ContextMenuItemData[] => {
         return currentItems.map((item) => {
           const newItem = { ...item };
           if (item === selectedItem) {

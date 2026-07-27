@@ -31,7 +31,7 @@ import {
 import { ComboBox, type ComboBoxChangeEvent } from '../../packages/react-components/src/ComboBox.js';
 import {
   ContextMenu,
-  type ContextMenuItem,
+  type ContextMenuItemData,
   type ContextMenuItemSelectedEvent,
 } from '../../packages/react-components/src/ContextMenu.js';
 import {
@@ -216,14 +216,14 @@ assertOmitted<HTMLAttributes<LoginOverlayElement>, LoginOverlayProps>('onClick')
 const contextMenuProps = React.createElement(ContextMenu, {}).props;
 
 assertType<ReactElement | string | undefined>(contextMenuProps.items![0].component);
-assertType<ContextMenuItem[]>(contextMenuProps.items!);
+assertType<ContextMenuItemData[]>(contextMenuProps.items!);
 const contextMenuOnItemSelected: typeof contextMenuProps.onItemSelected = (event) => {
   assertType<ContextMenuItemSelectedEvent>(event);
-  assertType<ContextMenuItem>(event.detail.value);
+  assertType<ContextMenuItemData>(event.detail.value);
 };
 assertType<typeof contextMenuProps.onItemSelected>(contextMenuOnItemSelected);
 
-type CustomContextMenuItem = ContextMenuItem<{ value: string }>;
+type CustomContextMenuItem = ContextMenuItemData<{ value: string }>;
 
 const narrowedContextMenuProps = React.createElement(ContextMenu<CustomContextMenuItem>, {}).props;
 assertType<CustomContextMenuItem[] | undefined>(narrowedContextMenuProps.items);
