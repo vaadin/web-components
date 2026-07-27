@@ -94,8 +94,8 @@ export const ColumnBaseMixin = (superClass) =>
         /**
          * Aligns the columns cell content horizontally by setting the CSS
          * `text-align` property on the cell content.
-         * Supported values: "start", "center", "end", "left", "right" and "justify".
-         * @attr {start|center|end|left|right|justify} text-align
+         *
+         * @attr {start|center|end|left|right} text-align
          */
         textAlign: {
           type: String,
