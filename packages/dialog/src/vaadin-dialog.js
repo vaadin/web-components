@@ -172,8 +172,8 @@ class Dialog extends DialogSizeMixin(
         .withBackdrop="${!this.modeless}"
         ?resizable="${this.resizable}"
         restore-focus-on-close
-        ?focus-trap="${!this.noFocusTrap && !this.modeless}"
-        ?auto-focus="${!this.noAutoFocus}"
+        ?focus-trap="${!this.noAutoFocus && !this.noFocusTrap && !this.modeless}"
+        ?auto-focus="${!this.noAutoFocus && !this.noFocusTrap}"
         exportparts="backdrop, overlay, header, title, header-content, content, footer"
       >
         <slot name="title" slot="title"></slot>

@@ -231,7 +231,6 @@ snapshots["vaadin-dialog shadow overlay"] =
 
 snapshots["vaadin-dialog shadow noFocusTrap"] = 
 `<vaadin-dialog-overlay
-  auto-focus=""
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
   id="overlay"
   opened=""
@@ -263,7 +262,6 @@ snapshots["vaadin-dialog shadow noFocusTrap"] =
 snapshots["vaadin-dialog shadow noAutoFocus"] = 
 `<vaadin-dialog-overlay
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
-  focus-trap=""
   id="overlay"
   opened=""
   popover="manual"

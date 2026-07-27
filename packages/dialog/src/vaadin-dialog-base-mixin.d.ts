@@ -33,17 +33,20 @@ export declare class DialogBaseMixinClass {
   modeless: boolean;
 
   /**
-   * Set to true to disable trapping focus inside the dialog. Note that focus
-   * is still moved into the dialog on open, unless `noAutoFocus` is also set.
-   * Focus is never trapped in a modeless dialog.
+   * Set to true to prevent a modal dialog from receiving focus
+   * on open and trapping it inside.
+   *
    * @attr {boolean} no-focus-trap
+   * @deprecated This property is deprecated and will be removed in Vaadin 26. Use `noAutoFocus` instead
    */
   noFocusTrap: boolean;
 
   /**
-   * Set to true to disable moving focus into the dialog on open. Note that
-   * trapping focus always moves focus in, so `noFocusTrap` is also needed
-   * unless the dialog is modeless.
+   * Set to true to prevent focus from moving into the dialog on open.
+   *
+   * Since focus doesn't move inside, the focus trap in modal dialogs
+   * is also not activated.
+   *
    * @attr {boolean} no-auto-focus
    */
   noAutoFocus: boolean;
