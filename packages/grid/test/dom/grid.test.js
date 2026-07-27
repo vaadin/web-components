@@ -193,4 +193,41 @@ describe('vaadin-grid', () => {
       await expect(grid).dom.to.equalSnapshot();
     });
   });
+
+  describe('column custom part names', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column-group
+            header-part-name="custom-group-header"
+            footer-part-name="custom-group-footer"
+          >
+            <vaadin-grid-column
+              header-part-name="custom-first-header"
+              footer-part-name="custom-first-footer"
+            >
+            </vaadin-grid-column>
+          </vaadin-grid-column-group>
+          <vaadin-grid-column
+            header-part-name="custom-last-header"
+            footer-part-name="custom-last-footer"
+          ></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group').forEach((column) => {
+        column.headerRenderer = (root) => {
+          root.textContent = 'Header';
+        };
+        column.footerRenderer = (root) => {
+          root.textContent = 'Footer';
+        };
+      });
+      grid.items = users.slice(0, 2);
+      await nextFrame();
+    });
+
+    it('default', async () => {
+      await expect(grid.$.table).dom.to.equalSnapshot();
+    });
+  });
 });
