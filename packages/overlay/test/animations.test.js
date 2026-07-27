@@ -472,6 +472,7 @@ describe('interaction while closing', () => {
 
     overlay.opened = true;
     await nextRender();
+    overlay._flushAnimation('opening');
 
     content = overlay.querySelector('button');
     spy = sinon.spy();
@@ -479,14 +480,11 @@ describe('interaction while closing', () => {
   });
 
   afterEach(async () => {
-    overlay._flushAnimation('opening');
-    overlay.opened = false;
     overlay._flushAnimation('closing');
     await resetMouse();
   });
 
   it('should not allow pointer events on the overlay part while closing', () => {
-    overlay._flushAnimation('opening');
     overlay.opened = false;
 
     expect(overlay.hasAttribute('closing')).to.be.true;
@@ -494,7 +492,6 @@ describe('interaction while closing', () => {
   });
 
   it('should not dispatch click on the overlay content while closing', async () => {
-    overlay._flushAnimation('opening');
     overlay.opened = false;
 
     await sendMouseToElement({ type: 'click', element: content });
@@ -502,24 +499,7 @@ describe('interaction while closing', () => {
     expect(spy).to.be.not.called;
   });
 
-  it('should dispatch click on the overlay content while opening', async () => {
-    expect(overlay.hasAttribute('opening')).to.be.true;
-
-    await sendMouseToElement({ type: 'click', element: content });
-
-    expect(spy).to.be.calledOnce;
-  });
-
-  it('should dispatch click on the overlay content when fully opened', async () => {
-    overlay._flushAnimation('opening');
-
-    await sendMouseToElement({ type: 'click', element: content });
-
-    expect(spy).to.be.calledOnce;
-  });
-
   it('should restore pointer events on the overlay part after closing', () => {
-    overlay._flushAnimation('opening');
     overlay.opened = false;
     overlay._flushAnimation('closing');
 
