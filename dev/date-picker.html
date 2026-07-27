@@ -29,5 +29,46 @@
       picker.isDateDisabled = isDateDisabled;
       picker.min = '2023-11-01';
     </script>
+
+    <h3>Date metadata provider</h3>
+    <p>
+      Metadata for each date is loaded on demand (a spinner is shown while loading) via
+      <code>dateMetadataProvider</code>. Mondays and the 20th of each month are <code>disabled</code>; the 10th and 25th
+      are enabled but tagged with a custom <code>part</code> name (<code>busy</code>) and styled orange. Results are
+      cached and prefetched around the visible months, so scrolling back and forth does not re-fetch.
+    </p>
+
+    <!-- Custom part names are styled from plain page CSS. The month calendars render in the light
+         DOM, so `vaadin-month-calendar::part()` reaches the date cells without registerStyles. -->
+    <style>
+      vaadin-month-calendar::part(busy) {
+        color: var(--vaadin-warning-contrast, #a05a00);
+        background: var(--vaadin-warning-color-10pct, rgba(255, 153, 0, 0.15));
+      }
+    </style>
+
+    <vaadin-date-picker id="date-metadata-provider" label="Reservation date"></vaadin-date-picker>
+
+    <script type="module">
+      document.querySelector('#date-metadata-provider').dateMetadataProvider = ({ start, end }) =>
+        new Promise((resolve) => {
+          setTimeout(() => {
+            const metadata = [];
+            const first = new Date(start.year, start.month, start.day);
+            const last = new Date(end.year, end.month, end.day);
+            const days = Math.round((last - first) / (24 * 60 * 60 * 1000));
+            for (let i = 0; i <= days; i++) {
+              const date = new Date(first.getFullYear(), first.getMonth(), first.getDate() + i);
+              const entry = { year: date.getFullYear(), month: date.getMonth(), day: date.getDate() };
+              if (date.getDay() === 1 || date.getDate() === 20) {
+                metadata.push({ ...entry, disabled: true });
+              } else if (date.getDate() === 10 || date.getDate() === 25) {
+                metadata.push({ ...entry, part: 'busy' });
+              }
+            }
+            resolve(metadata);
+          }, 600);
+        });
+    </script>
   </body>
 </html>

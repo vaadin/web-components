@@ -3,6 +3,7 @@ import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../not-animated-styles.css';
 import '../../../src/vaadin-date-picker.js';
+import { untilOverlayRendered } from '../../helpers.js';
 
 describe('date-picker', () => {
   let div, element;
@@ -91,6 +92,15 @@ describe('date-picker', () => {
             element.value = '2000-01-01';
             openOverlay();
             await visualDiff(div, `${dir}-dropdown`);
+          });
+
+          it('disabled dates loading', async () => {
+            element.value = '2000-01-01';
+            // A never-resolving provider keeps the calendar in the loading state.
+            element.dateMetadataProvider = () => new Promise(() => {});
+            openOverlay();
+            await untilOverlayRendered(element);
+            await visualDiff(div, `${dir}-disabled-dates-loading`);
           });
 
           it('week numbers', async () => {

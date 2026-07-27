@@ -106,6 +106,38 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           type: Function,
         },
 
+        /**
+         * A batch function that fetches metadata (disabled state, custom part names, ...) for a
+         * range of dates the calendar is about to render. Returns, or resolves with, an array of
+         * `DatePickerDateMetadata` objects.
+         *
+         * @type {function(DatePickerDateRange): Array<DatePickerDateMetadata> | Promise<Array<DatePickerDateMetadata>> | undefined}
+         */
+        dateMetadataProvider: {
+          type: Function,
+        },
+
+        /**
+         * Reflected while data is being loaded, so the overlay can show a loading spinner.
+         * Currently set while the date metadata provider is resolving.
+         */
+        loading: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
+        /**
+         * Bumped whenever the disabled dates controller's cache or loading state changes, to
+         * re-run `__updateCalendars` and push the new state to the rendered months.
+         * @private
+         */
+        _dateMetadataVersion: {
+          type: Number,
+          value: 0,
+          attribute: false,
+        },
+
         enteredDate: {
           type: Date,
           sync: true,
@@ -138,9 +170,10 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme, isDateDisabled, enteredDate)',
+        '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme, isDateDisabled, _dateMetadataVersion, enteredDate)',
+        '__loadingChanged(loading)',
         '__updateCancelButton(_cancelButton, i18n)',
-        '__updateTodayButton(_todayButton, i18n, minDate, maxDate, isDateDisabled)',
+        '__updateTodayButton(_todayButton, i18n, minDate, maxDate, isDateDisabled, _dateMetadataVersion)',
         '__updateYears(years, selectedDate, _theme)',
       ];
     }
@@ -299,6 +332,17 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       }
     }
 
+    /** @private */
+    __loadingChanged(loading) {
+      // Mark the calendar region as busy while data is being loaded so assistive technology knows
+      // the content is still updating.
+      if (loading) {
+        this.setAttribute('aria-busy', 'true');
+      } else {
+        this.removeAttribute('aria-busy');
+      }
+    }
+
     // eslint-disable-next-line @typescript-eslint/max-params
     __updateCalendars(
       calendars,
@@ -311,6 +355,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       ignoreTaps,
       theme,
       isDateDisabled,
+      dateMetadataVersion,
       enteredDate,
     ) {
       if (calendars?.length) {
@@ -319,6 +364,8 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           calendar.minDate = minDate;
           calendar.maxDate = maxDate;
           calendar.isDateDisabled = isDateDisabled;
+          calendar.dateMetadataController = this._dateMetadataController;
+          calendar.__dateMetadataVersion = dateMetadataVersion;
           calendar.focusedDate = focusedDate;
           calendar.selectedDate = selectedDate;
           calendar.showWeekNumbers = showWeekNumbers;
@@ -331,7 +378,46 @@ export const DatePickerOverlayContentMixin = (superClass) =>
             calendar.removeAttribute('theme');
           }
         });
+
+        this.__ensureVisibleDateMetadataLoaded();
       }
+    }
+
+    /**
+     * Asks the disabled dates controller to load the range of months currently rendered by the
+     * scroller. The controller expands the range with a prefetch buffer and skips months that are
+     * already loaded or in flight, so one request covers the whole visible range.
+     * @private
+     */
+    __ensureVisibleDateMetadataLoaded() {
+      const controller = this._dateMetadataController;
+      if (!controller?.provider || !this.calendars || this.calendars.length === 0) {
+        return;
+      }
+      const indexes = this.calendars
+        .map((calendar) => calendar.month)
+        .filter(Boolean)
+        .map((month) => month.getFullYear() * 12 + month.getMonth());
+      if (indexes.length === 0) {
+        return;
+      }
+      const min = Math.min(...indexes);
+      const max = Math.max(...indexes);
+      controller.ensureRangeLoaded(
+        new Date(Math.floor(min / 12), min % 12, 1),
+        new Date(Math.floor(max / 12), max % 12, 1),
+      );
+    }
+
+    /**
+     * Debounced variant used on scroll, so a continuous scroll only triggers one load once it
+     * settles instead of a request per intermediate position.
+     * @private
+     */
+    __scheduleVisibleDateMetadataLoad() {
+      this._loadDateMetadataDebouncer = Debouncer.debounce(this._loadDateMetadataDebouncer, timeOut.after(200), () =>
+        this.__ensureVisibleDateMetadataLoaded(),
+      );
     }
 
     /** @private */
@@ -355,6 +441,11 @@ export const DatePickerOverlayContentMixin = (superClass) =>
      */
     _selectDate(dateToSelect) {
       if (!this._dateAllowed(dateToSelect)) {
+        return false;
+      }
+      // Block dates disabled by the provider, or in a month whose provider result has not loaded
+      // yet, so they cannot be selected via keyboard or the today button either.
+      if (this._dateMetadataController?.isDateBlocked(dateToSelect)) {
         return false;
       }
       this.selectedDate = dateToSelect;
@@ -452,12 +543,17 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       const monthPosition = this._monthScroller.position;
       this._visibleMonthIndex = Math.floor(monthPosition);
       this._yearScroller.position = (monthPosition + this._originDate.getMonth()) / 12;
+      // Called from every navigation path (month scroll, year click, reveal), so this is the
+      // single place to keep the disabled dates loaded for the newly visible months. Debounced
+      // so a continuous scroll only triggers one load once it settles.
+      this.__scheduleVisibleDateMetadataLoad();
     }
 
     /** @private */
     _repositionMonthScroller() {
       this._monthScroller.position = this._yearScroller.position * 12 - this._originDate.getMonth();
       this._visibleMonthIndex = Math.floor(this._monthScroller.position);
+      this.__scheduleVisibleDateMetadataLoad();
     }
 
     /** @private */
@@ -831,6 +927,33 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       this.focusDate(getClosestDate(focus, [this.minDate, this.maxDate]));
     }
 
+    /**
+     * Returns the nearest date to the given one that can actually be selected: inside min/max, not
+     * disabled by `isDateDisabled`, and not disabled by a resolved `dateMetadataProvider`. Scans a
+     * year in both directions and returns `undefined` if none is found, so the caller can leave the
+     * focus untouched.
+     * @private
+     */
+    __closestSelectableDate(date) {
+      const controller = this._dateMetadataController;
+      const isSelectable = (candidate) =>
+        this._dateAllowed(candidate) && !(controller?.provider && controller.isDateDisabled(candidate));
+
+      if (isSelectable(date)) {
+        return date;
+      }
+      for (let offset = 1; offset <= 366; offset++) {
+        for (const direction of [1, -1]) {
+          const candidate = new Date(date);
+          candidate.setDate(candidate.getDate() + offset * direction);
+          if (isSelectable(candidate)) {
+            return candidate;
+          }
+        }
+      }
+      return undefined;
+    }
+
     /** @private */
     _focusAllowedDate(dateToFocus, diff, keepMonth) {
       // For this check we do consider the isDateDisabled function because disabled dates are allowed to be focused, just not outside min/max
@@ -918,7 +1041,12 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     _isTodayAllowed(min, max, isDateDisabled) {
-      return this._dateAllowed(this._getTodayMidnight(), min, max, isDateDisabled);
+      const today = this._getTodayMidnight();
+      if (!this._dateAllowed(today, min, max, isDateDisabled)) {
+        return false;
+      }
+      // Today is not selectable while it is disabled by the provider or its month is still loading.
+      return !this._dateMetadataController?.isDateBlocked(today);
     }
 
     /** @private */

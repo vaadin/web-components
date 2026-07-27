@@ -7,7 +7,12 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
-export { DatePickerDate, DatePickerI18n } from './vaadin-date-picker-mixin.js';
+export {
+  DatePickerDate,
+  DatePickerDateMetadata,
+  DatePickerDateRange,
+  DatePickerI18n,
+} from './vaadin-date-picker-mixin.js';
 
 /**
  * Fired when the user commits a value change.
@@ -148,11 +153,16 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * `week-number`         | Week number element
  * `date`                | Date element
  * `disabled`            | Disabled date element
+ * `pending`             | Date element in a month whose date metadata provider result is still loading
  * `focused`             | Focused date element
  * `selected`            | Selected date element
  * `today`               | Date element corresponding to the current day
  * `past`                | Date element corresponding to the date in the past
  * `future`              | Date element corresponding to the date in the future
+ *
+ * Custom part names returned per date by `dateMetadataProvider` (the `part` metadata field) are
+ * also added to the matching date elements, so specific dates can be styled with
+ * `vaadin-month-calendar::part(<name>)`.
  *
  * In order to style year scroller elements, use `<vaadin-date-picker-year>` shadow DOM parts:
  *

@@ -11,7 +11,13 @@ import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { DatePickerDate, DatePickerI18n, DatePickerMixinClass } from '../../src/vaadin-date-picker-mixin.js';
+import type {
+  DatePickerDate,
+  DatePickerDateMetadata,
+  DatePickerDateRange,
+  DatePickerI18n,
+  DatePickerMixinClass,
+} from '../../src/vaadin-date-picker-mixin.js';
 import type {
   DatePicker,
   DatePickerChangeEvent,
@@ -57,9 +63,23 @@ assertType<() => boolean>(datePicker.checkValidity);
 assertType<() => boolean>(datePicker.validate);
 assertType<() => void>(datePicker.close);
 assertType<() => void>(datePicker.open);
+assertType<() => void>(datePicker.clearCache);
 assertType<string | undefined>(datePicker.max);
 assertType<string | undefined>(datePicker.min);
 assertType<(date: DatePickerDate) => boolean | undefined>(datePicker.isDateDisabled);
+assertType<(range: DatePickerDateRange) => DatePickerDateMetadata[] | Promise<DatePickerDateMetadata[]>>(
+  datePicker.dateMetadataProvider,
+);
+const dateRange: DatePickerDateRange = {
+  start: { year: 2024, month: 0, day: 1 },
+  end: { year: 2024, month: 0, day: 31 },
+};
+assertType<DatePickerDate>(dateRange.start);
+assertType<DatePickerDate>(dateRange.end);
+const dateMetadata: DatePickerDateMetadata = { year: 2024, month: 0, day: 1, disabled: true, part: 'busy' };
+assertType<number>(dateMetadata.year);
+assertType<boolean | undefined>(dateMetadata.disabled);
+assertType<string | undefined>(dateMetadata.part);
 assertType<boolean | null | undefined>(datePicker.showWeekNumbers);
 assertType<boolean | null | undefined>(datePicker.autoOpenDisabled);
 assertType<boolean | null | undefined>(datePicker.opened);
