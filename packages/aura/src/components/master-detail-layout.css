@@ -14,12 +14,23 @@ vaadin-master-detail-layout[has-detail][overlay]::part(detail) {
     var(--aura-overlay-shadow)
   );
   --_inset: var(--aura-master-detail-layout-detail-inset, round(var(--aura-app-layout-inset) / 1.5, 1px));
-  margin: var(--_inset);
   border-radius: clamp(
     0px,
     var(--_inset) * 1000,
     max(var(--vaadin-radius-m), var(--vaadin-radius-l) - round(var(--_inset) / 2, 1px))
   );
+}
+
+/* Use inset properties instead of `margin` because Chromium 150+ does not re-resolve the auto
+block size when only margin changes. See https://issues.chromium.org/issues/539404705 */
+vaadin-master-detail-layout[has-detail][overlay][orientation='horizontal']::part(detail) {
+  inset-block: var(--_inset);
+  inset-inline-end: var(--_inset);
+}
+
+vaadin-master-detail-layout[has-detail][overlay][orientation='vertical']::part(detail) {
+  inset-inline: var(--_inset);
+  inset-block-end: var(--_inset);
 }
 
 vaadin-master-detail-layout[has-detail][overlay][overlay-containment='page']::part(detail) {
