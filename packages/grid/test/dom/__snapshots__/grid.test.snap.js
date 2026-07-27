@@ -3290,4 +3290,3 @@ snapshots["vaadin-grid column custom part names default"] =
 </table>
 `;
 /* end snapshot vaadin-grid column custom part names default */
-
