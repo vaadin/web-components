@@ -275,7 +275,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells)',
         '_rowHeaderChanged(rowHeader, _cells)',
-        '__headerFooterPartNameChanged(_headerCell, _footerCell, headerPartName, footerPartName)',
+        '__headerFooterPartNameChanged(headerPartName, footerPartName)',
       ];
     }
 
@@ -643,19 +643,8 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    __headerFooterPartNameChanged(headerCell, footerCell, headerPartName, footerPartName) {
-      [
-        { cell: headerCell, partName: headerPartName },
-        { cell: footerCell, partName: footerPartName },
-      ].forEach(({ cell, partName }) => {
-        if (cell) {
-          const customParts = cell.__customParts || [];
-          cell.part.remove(...customParts);
-
-          cell.__customParts = partName ? partName.trim().split(' ') : [];
-          cell.part.add(...cell.__customParts);
-        }
-      });
+    __headerFooterPartNameChanged() {
+      this._grid?.__scheduleRenderHeaderFooter?.();
     }
 
     /**

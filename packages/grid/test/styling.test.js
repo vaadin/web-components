@@ -203,6 +203,7 @@ describe('styling', () => {
       column.footerRenderer = (root) => {
         root.textContent = 'footer';
       };
+      flushGrid(grid);
       headerCell = getContainerCell(grid.$.header, 0, 0);
       footerCell = getContainerCell(grid.$.footer, 0, 0);
     });
@@ -210,6 +211,7 @@ describe('styling', () => {
     it('should add a header and footer part name', () => {
       column.headerPartName = 'foobar';
       column.footerPartName = 'bazqux';
+      flushGrid(grid);
 
       expect(headerCell.getAttribute('part')).to.contain('foobar');
       expect(footerCell.getAttribute('part')).to.contain('bazqux');
@@ -218,9 +220,11 @@ describe('styling', () => {
     it('should clear the header and footer part name', () => {
       column.headerPartName = 'foobar';
       column.footerPartName = 'bazqux';
+      flushGrid(grid);
 
       column.headerPartName = '';
       column.footerPartName = '';
+      flushGrid(grid);
 
       expect(headerCell.getAttribute('part')).to.not.contain('foobar');
       expect(footerCell.getAttribute('part')).to.not.contain('bazqux');
@@ -229,6 +233,7 @@ describe('styling', () => {
     it('should add multiple header and footer part names', () => {
       column.headerPartName = 'foobar bazqux';
       column.footerPartName = 'bazqux foobar';
+      flushGrid(grid);
 
       expect(headerCell.getAttribute('part')).to.contain('foobar');
       expect(headerCell.getAttribute('part')).to.contain('bazqux');
@@ -239,9 +244,11 @@ describe('styling', () => {
     it('should remove one header and footer part name', () => {
       column.headerPartName = 'foobar bazqux';
       column.footerPartName = 'bazqux foobar';
+      flushGrid(grid);
 
       column.headerPartName = 'foobar';
       column.footerPartName = 'bazqux';
+      flushGrid(grid);
 
       expect(headerCell.getAttribute('part')).to.contain('foobar');
       expect(headerCell.getAttribute('part')).to.not.contain('bazqux');
@@ -252,6 +259,7 @@ describe('styling', () => {
     it('should add a header and footer part name with trailing whitespace', () => {
       column.headerPartName = 'foobar ';
       column.footerPartName = ' bazqux';
+      flushGrid(grid);
 
       expect(headerCell.getAttribute('part')).to.contain('foobar');
       expect(footerCell.getAttribute('part')).to.contain('bazqux');
@@ -260,9 +268,11 @@ describe('styling', () => {
     it('should clear the header and footer part name with null', () => {
       column.headerPartName = 'foobar';
       column.footerPartName = 'bazqux';
+      flushGrid(grid);
 
       column.headerPartName = null;
       column.footerPartName = null;
+      flushGrid(grid);
 
       expect(headerCell.getAttribute('part')).to.not.contain('foobar');
       expect(footerCell.getAttribute('part')).to.not.contain('bazqux');
@@ -271,9 +281,11 @@ describe('styling', () => {
     it('should clear the header and footer part name with undefined', () => {
       column.headerPartName = 'foobar';
       column.footerPartName = 'bazqux';
+      flushGrid(grid);
 
       column.headerPartName = undefined;
       column.footerPartName = undefined;
+      flushGrid(grid);
 
       expect(headerCell.getAttribute('part')).to.not.contain('foobar');
       expect(footerCell.getAttribute('part')).to.not.contain('bazqux');
