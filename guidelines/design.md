@@ -131,7 +131,7 @@ component (e.g. `<vaadin-icon>`, `<vaadin-tooltip>`) or reusing an
 existing mixin or controller, prefer that over writing new code. Shared
 primitives already carry the keyboard, theming, and edge-case work that a
 new implementation would have to redo. See
-[Common packages](05-common-packages.md) for the catalog.
+[Common packages](common-packages.md) for the catalog.
 
 ### Ship new components as experimental
 
@@ -194,7 +194,7 @@ the right channel for surfacing the problem.
 Components must lay out correctly in right-to-left contexts without any
 application-side intervention. Use logical CSS properties
 (`margin-inline-start`, `padding-inline-end`, `inset-inline-start`, etc.)
-and mirror directional icons. See [Theming](10-theming.md) for the
+and mirror directional icons. See [Theming](theming.md) for the
 implementation conventions.
 
 ### Small viewport support

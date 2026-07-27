@@ -62,7 +62,7 @@ export interface {Name}EventMap extends HTMLElementEventMap {
   'value-changed': {Name}ValueChangedEvent;
 }
 
-declare class {Name} extends {Name}Mixin(ElementMixin(ThemableMixin(HTMLElement))) {
+declare class {Name} extends {Name}Mixin(ElementMixin(HTMLElement)) {
   value: string;
 
   addEventListener<K extends keyof {Name}EventMap>(
@@ -117,7 +117,7 @@ declare class {Name}<TItem = {Name}DefaultItem> extends HTMLElement {
 }
 
 interface {Name}<TItem = {Name}DefaultItem>
-  extends ElementMixinClass, ThemableMixinClass, {Name}MixinClass<TItem> {}
+  extends ElementMixinClass, {Name}MixinClass<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {

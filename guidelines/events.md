@@ -66,5 +66,5 @@ root boundaries, which can be problematic for low-level interaction events.
 
 Every event the component dispatches — `notify: true` change events
 included — needs a `@fires {Event} name - …` line on the class JSDoc so
-CEM picks it up. See [Documenting](06-documenting.md) for the full set
+CEM picks it up. See [Documenting](documenting.md) for the full set
 of JSDoc tags.

@@ -173,11 +173,11 @@ remain distinguishable when backgrounds are gone:
 
 ## Mixins
 
-| Mixin                 | Status                                  | Purpose                                                              |
-| --------------------- | --------------------------------------- | -------------------------------------------------------------------- |
-| `ThemableMixin`       | Deprecated (new components can skip it) | Legacy shadow DOM style injection mechanism.                         |
-| `LumoInjectionMixin`  | Required, internal                      | Auto-injects Lumo styles via CSS custom properties; not for add-ons. |
-| `ThemeDetectionMixin` | Public for add-ons                      | Sets `data-application-theme="lumo"` or `"aura"` on the host.        |
+| Mixin                 | Status                          | Purpose                                                              |
+| --------------------- | ------------------------------- | -------------------------------------------------------------------- |
+| `ThemableMixin`       | Legacy (not for new components) | Legacy shadow DOM style injection mechanism.                         |
+| `LumoInjectionMixin`  | Required, internal              | Auto-injects Lumo styles via CSS custom properties; not for add-ons. |
+| `ThemeDetectionMixin` | Public for add-ons              | Sets `data-application-theme="lumo"` or `"aura"` on the host.        |
 
 Components must declare base styles via `static get styles()` only. The
 `registerStyles()` helper still exists, but in v25 it is **test-only** —

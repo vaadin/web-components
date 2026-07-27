@@ -37,7 +37,7 @@ also reads JSDoc — that's why `@attr` exists, see below.
 Every event a public component dispatches — including the
 `{property}-changed` events emitted by `notify: true` properties — needs
 its own `@fires` line on the class JSDoc. CEM does not infer events from
-`notify: true`. See [Events](09-events.md).
+`notify: true`. See [Events](events.md).
 
 ## Component class JSDoc
 
