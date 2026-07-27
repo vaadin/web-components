@@ -29,14 +29,26 @@ export declare class DialogBaseMixinClass {
 
   /**
    * Set to true to remove backdrop and allow click events on background elements.
+   * A modeless dialog does not trap focus, so focus can be moved out of it with
+   * Tab and Shift+Tab.
    */
   modeless: boolean;
 
   /**
-   * Set to true to disable focus trapping.
+   * Set to true to disable trapping focus inside the dialog. Note that focus
+   * is still moved into the dialog on open, unless `noAutoFocus` is also set.
+   * Focus is never trapped in a modeless dialog.
    * @attr {boolean} no-focus-trap
    */
   noFocusTrap: boolean;
+
+  /**
+   * Set to true to disable moving focus into the dialog on open. Note that
+   * trapping focus always moves focus in, so `noFocusTrap` is also needed
+   * unless the dialog is modeless.
+   * @attr {boolean} no-auto-focus
+   */
+  noAutoFocus: boolean;
 
   /**
    * The `role` attribute value to be set on the dialog. Defaults to "dialog".

@@ -5,7 +5,13 @@
  */
 import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
-import { getDeepActiveElement, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import {
+  getDeepActiveElement,
+  getTabbableElements,
+  isElementFocused,
+  isElementHidden,
+  isKeyboardActive,
+} from '@vaadin/a11y-base/src/focus-utils.js';
 
 export const OverlayFocusMixin = (superClass) =>
   class OverlayFocusMixin extends superClass {
@@ -13,10 +19,23 @@ export const OverlayFocusMixin = (superClass) =>
       return {
         /**
          * When true, opening the overlay moves focus to the first focusable child,
-         * or to the overlay part with tabindex if there are no focusable children.
+         * or to the overlay part with tabindex if there are no focusable children,
+         * and prevents focus from leaving the overlay with Tab and Shift+Tab.
          * @attr {boolean} focus-trap
          */
         focusTrap: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
+         * When true, opening the overlay moves focus to the first focusable child,
+         * or to the overlay part with tabindex if there are no focusable children.
+         * Unlike `focusTrap`, focus can then be moved out of the overlay with Tab
+         * and Shift+Tab. Has no effect when `focusTrap` is true.
+         * @attr {boolean} auto-focus
+         */
+        autoFocus: {
           type: Boolean,
           value: false,
         },
@@ -103,13 +122,25 @@ export const OverlayFocusMixin = (superClass) =>
     }
 
     /**
-     * Sets up focus after the overlay opening has completed: traps focus
-     * within the overlay if `focusTrap` is enabled.
+     * Sets up focus after the overlay opening has completed: moves focus into
+     * the overlay if `autoFocus` is enabled, and traps focus within the overlay
+     * if `focusTrap` is enabled.
      *
      * @protected
      */
     _initFocus() {
-      if (this.focusTrap && !isElementHidden(this._focusRoot)) {
+      if (isElementHidden(this._focusRoot)) {
+        return;
+      }
+
+      if (this.autoFocus) {
+        const tabbables = getTabbableElements(this._focusRoot);
+        if (!tabbables.some(isElementFocused)) {
+          tabbables[0]?.focus({ focusVisible: isKeyboardActive() });
+        }
+      }
+
+      if (this.focusTrap) {
         this.__focusTrapController.trapFocus(this._focusRoot);
       }
     }

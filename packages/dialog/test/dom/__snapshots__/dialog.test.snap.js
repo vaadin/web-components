@@ -79,6 +79,7 @@ snapshots["vaadin-dialog host footerRenderer"] =
 
 snapshots["vaadin-dialog shadow default"] = 
 `<vaadin-dialog-overlay
+  auto-focus=""
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
   focus-trap=""
   id="overlay"
@@ -110,8 +111,8 @@ snapshots["vaadin-dialog shadow default"] =
 
 snapshots["vaadin-dialog shadow modeless"] = 
 `<vaadin-dialog-overlay
+  auto-focus=""
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
-  focus-trap=""
   id="overlay"
   modeless=""
   opened=""
@@ -141,6 +142,7 @@ snapshots["vaadin-dialog shadow modeless"] =
 
 snapshots["vaadin-dialog shadow theme"] = 
 `<vaadin-dialog-overlay
+  auto-focus=""
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
   focus-trap=""
   id="overlay"
@@ -226,4 +228,66 @@ snapshots["vaadin-dialog shadow overlay"] =
 </div>
 `;
 /* end snapshot vaadin-dialog shadow overlay */
+
+snapshots["vaadin-dialog shadow noFocusTrap"] = 
+`<vaadin-dialog-overlay
+  auto-focus=""
+  exportparts="backdrop, overlay, header, title, header-content, content, footer"
+  id="overlay"
+  opened=""
+  popover="manual"
+  restore-focus-on-close=""
+  with-backdrop=""
+>
+  <slot
+    name="title"
+    slot="title"
+  >
+  </slot>
+  <slot
+    name="header-content"
+    slot="header-content"
+  >
+  </slot>
+  <slot
+    name="footer"
+    slot="footer"
+  >
+  </slot>
+  <slot>
+  </slot>
+</vaadin-dialog-overlay>
+`;
+/* end snapshot vaadin-dialog shadow noFocusTrap */
+
+snapshots["vaadin-dialog shadow noAutoFocus"] = 
+`<vaadin-dialog-overlay
+  exportparts="backdrop, overlay, header, title, header-content, content, footer"
+  focus-trap=""
+  id="overlay"
+  opened=""
+  popover="manual"
+  restore-focus-on-close=""
+  with-backdrop=""
+>
+  <slot
+    name="title"
+    slot="title"
+  >
+  </slot>
+  <slot
+    name="header-content"
+    slot="header-content"
+  >
+  </slot>
+  <slot
+    name="footer"
+    slot="footer"
+  >
+  </slot>
+  <slot>
+  </slot>
+</vaadin-dialog-overlay>
+`;
+/* end snapshot vaadin-dialog shadow noAutoFocus */
 

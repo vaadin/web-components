@@ -61,6 +61,18 @@ describe('vaadin-dialog', () => {
       await expect(dialog).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
+    it('noFocusTrap', async () => {
+      dialog.noFocusTrap = true;
+      await nextUpdate(dialog);
+      await expect(dialog).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
+    it('noAutoFocus', async () => {
+      dialog.noAutoFocus = true;
+      await nextUpdate(dialog);
+      await expect(dialog).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
     it('theme', async () => {
       dialog.setAttribute('theme', 'custom');
       await nextUpdate(dialog);
