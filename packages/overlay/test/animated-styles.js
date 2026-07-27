@@ -13,6 +13,12 @@ registerStyles(
       animation: 50ms overlay-dummy-animation;
     }
 
+    /* Long enough for asynchronous interactions to happen while the animation runs */
+    :host([long-animation][opening]),
+    :host([long-animation][closing]) {
+      animation: 5s overlay-dummy-animation;
+    }
+
     @keyframes overlay-dummy-animation {
       to {
         opacity: 1 !important; /* stylelint-disable-line keyframe-declaration-no-important */
