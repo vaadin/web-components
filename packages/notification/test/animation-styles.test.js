@@ -82,6 +82,16 @@ describe('notification card animation styles', () => {
       expect(closedSpy).to.be.calledOnce;
     });
 
+    it('should fill the animation of the overlay part forwards while closing', async () => {
+      notification.opened = true;
+      await oneEvent(card, 'animationend');
+
+      notification.close();
+
+      const part = card.shadowRoot.querySelector('[part="overlay"]');
+      expect(getComputedStyle(part).animationFillMode).to.equal('both');
+    });
+
     it('should not limit the height of a card that is not animating', async () => {
       notification.renderer = (root) => {
         root.textContent = 'Notification. '.repeat(400);
