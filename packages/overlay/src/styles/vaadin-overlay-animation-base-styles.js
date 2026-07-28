@@ -40,7 +40,6 @@ export const overlayAnimationProperties = unsafeCSS(
   animationProperties.map(({ name }) => `${name}: inherit;`).join('\n'),
 );
 
-/* Reusable animation styles for overlay enter and exit */
 export const overlayAnimationStyles = css`
   :host,
   [part='overlay'],
