@@ -50,10 +50,6 @@ class CrudDialog extends DialogBaseMixin(ThemePropertyMixin(PolylitMixin(LitElem
       fullscreen: {
         type: Boolean,
       },
-
-      crudElement: {
-        type: Object,
-      },
     };
   }
 
@@ -62,7 +58,7 @@ class CrudDialog extends DialogBaseMixin(ThemePropertyMixin(PolylitMixin(LitElem
     return html`
       <vaadin-crud-dialog-overlay
         id="overlay"
-        .owner="${this.crudElement}"
+        .owner="${this}"
         .opened="${this.opened}"
         @opened-changed="${this._onOverlayOpened}"
         @mousedown="${this._bringOverlayToFront}"

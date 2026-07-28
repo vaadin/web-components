@@ -2,10 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-crud host default"] = 
-`<vaadin-crud
-  editor-position=""
-  with-backdrop=""
->
+`<vaadin-crud editor-position="">
   <vaadin-confirm-dialog
     aria-description="There are unsaved changes to this item."
     aria-label="Discard changes"
@@ -286,6 +283,7 @@ snapshots["vaadin-crud shadow default"] =
   id="dialog"
   role="dialog"
   tabindex="0"
+  with-backdrop=""
 >
   <slot
     name="header"

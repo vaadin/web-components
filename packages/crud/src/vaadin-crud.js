@@ -261,7 +261,6 @@ class Crud extends CrudMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjecti
                 aria-label="${ifDefined(this.__dialogAriaLabel)}"
                 theme="${ifDefined(this._theme)}"
                 exportparts="backdrop, overlay, header, content, footer"
-                .crudElement="${this}"
                 .opened="${this.editorOpened}"
                 .fullscreen="${this._fullscreen}"
                 .noCloseOnOutsideClick="${this.__isDirty}"
