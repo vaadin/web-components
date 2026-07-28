@@ -16,6 +16,10 @@ const notificationCard = css`
     transition-duration: var(--vaadin-overlay-animation-duration);
   }
 
+  :host([closing]) [part='overlay'] {
+    animation-fill-mode: both;
+  }
+
   :host([slot^='top']) {
     display: flex;
     align-items: end;
