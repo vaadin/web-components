@@ -27,13 +27,11 @@ class CrudDialog extends DialogBaseMixin(ThemePropertyMixin(PolylitMixin(LitElem
   }
 
   static get styles() {
+    // The overlay animation properties need to be explicitly inherited from the vaadin-crud
+    // element to the internal vaadin-crud-dialog element, from where they get explicitly
+    // inherited by the internal vaadin-crud-dialog-overlay element.
     return css`
       :host {
-        /*
-        The overlay animation properties need to be explicitly inherited from the vaadin-crud
-        element to the internal vaadin-crud-dialog element, from where they get explicitly
-        inherited by the internal vaadin-crud-dialog-overlay element.
-        */
         ${overlayAnimationProperties}
       }
 
