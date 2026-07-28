@@ -169,3 +169,52 @@ describe('notification that does not animate', () => {
     expect(closedSpy).to.be.calledOnce;
   });
 });
+
+describe('animationend from the notification content', () => {
+  let notification, card;
+
+  beforeEach(async () => {
+    notification = fixtureSync('<vaadin-notification duration="-1"></vaadin-notification>');
+    notification.renderer = (root) => {
+      root.innerHTML = '<div>Notification</div>';
+    };
+    await nextFrame();
+    card = notification._card;
+  });
+
+  afterEach(async () => {
+    notification.opened = false;
+    // Wait for the notification container to be removed
+    while (document.querySelector('body > vaadin-notification-container')) {
+      await aTimeout(1);
+    }
+  });
+
+  // The content is in the light DOM of the card, so an animation of its own ends on the card
+  function endContentAnimation() {
+    card.querySelector('div').dispatchEvent(new AnimationEvent('animationend', { bubbles: true }));
+  }
+
+  it('should not clear the opening attribute', () => {
+    notification.opened = true;
+    expect(card.hasAttribute('opening')).to.be.true;
+
+    endContentAnimation();
+
+    expect(card.hasAttribute('opening')).to.be.true;
+  });
+
+  it('should not remove the card while it is closing', async () => {
+    notification.opened = true;
+    await oneEvent(card, 'animationend');
+
+    const closedSpy = sinon.spy();
+    notification.addEventListener('closed', closedSpy);
+    notification.close();
+
+    endContentAnimation();
+
+    expect(card.parentNode).to.be.ok;
+    expect(closedSpy).to.be.not.called;
+  });
+});

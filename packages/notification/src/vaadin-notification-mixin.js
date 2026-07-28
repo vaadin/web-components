@@ -343,6 +343,21 @@ export const NotificationMixin = (superClass) =>
       this._card.removeEventListener('animationend', this.__animationEndListener);
     }
 
+    /**
+     * Run the callback when the animation of the card itself ends. Animations of the
+     * notification content also end on the card, as the content is in its light DOM.
+     * @private
+     */
+    __onCardAnimationEnd(callback) {
+      this.__animationEndListener = (event) => {
+        if (event.target !== this._card) {
+          return;
+        }
+        callback();
+      };
+      this._card.addEventListener('animationend', this.__animationEndListener);
+    }
+
     /** @private */
     _animatedAppendNotificationCard() {
       if (this._card) {
@@ -351,8 +366,7 @@ export const NotificationMixin = (superClass) =>
         this._card.setAttribute('opening', '');
         this._appendNotificationCard();
         if (shouldAnimate(this._card)) {
-          this.__animationEndListener = () => this.__cleanUpOpeningClosingState();
-          this._card.addEventListener('animationend', this.__animationEndListener);
+          this.__onCardAnimationEnd(() => this.__cleanUpOpeningClosingState());
         } else {
           this.__cleanUpOpeningClosingState();
         }
@@ -415,11 +429,10 @@ export const NotificationMixin = (superClass) =>
 
       this._card.setAttribute('closing', '');
       if (shouldAnimate(this._card)) {
-        this.__animationEndListener = () => {
+        this.__onCardAnimationEnd(() => {
           this._removeNotificationCard();
           this.__cleanUpOpeningClosingState();
-        };
-        this._card.addEventListener('animationend', this.__animationEndListener);
+        });
       } else {
         this._removeNotificationCard();
       }
