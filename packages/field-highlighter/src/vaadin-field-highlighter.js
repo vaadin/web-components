@@ -155,7 +155,7 @@ export class FieldHighlighterController {
  *
  * @customElement vaadin-field-highlighter
  */
-export class FieldHighlighter extends HTMLElement {
+class FieldHighlighter extends HTMLElement {
   static get is() {
     return 'vaadin-field-highlighter';
   }
@@ -194,3 +194,5 @@ export class FieldHighlighter extends HTMLElement {
 }
 
 defineCustomElement(FieldHighlighter);
+
+export { FieldHighlighter };
