@@ -13,6 +13,7 @@ const notificationCard = css`
     position: relative;
     --vaadin-overlay-animation-duration: 0.3s;
     --vaadin-overlay-animation-delay: 0.1s;
+    transition-duration: var(--vaadin-overlay-animation-duration);
   }
 
   :host([slot^='top']) {
@@ -69,7 +70,6 @@ const notificationCard = css`
   @supports (interpolate-size: allow-keywords) {
     :host {
       interpolate-size: allow-keywords;
-      transition-duration: var(--vaadin-overlay-animation-duration);
       transition-property: height, margin-top, margin-bottom;
     }
 
@@ -93,7 +93,6 @@ const notificationCard = css`
   /* Without interpolate-size, only the margins animate, and max-height stands in for the height */
   @supports not (interpolate-size: allow-keywords) {
     :host {
-      transition-duration: var(--vaadin-overlay-animation-duration);
       transition-property: margin-top, margin-bottom;
     }
 
