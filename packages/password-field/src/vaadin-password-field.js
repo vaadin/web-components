@@ -101,7 +101,7 @@ import { PasswordFieldMixin } from './vaadin-password-field-mixin.js';
  * @customElement vaadin-password-field
  * @extends TextField
  */
-export class PasswordField extends PasswordFieldMixin(TextField) {
+class PasswordField extends PasswordFieldMixin(TextField) {
   static get is() {
     return 'vaadin-password-field';
   }
@@ -125,3 +125,5 @@ export class PasswordField extends PasswordFieldMixin(TextField) {
 }
 
 defineCustomElement(PasswordField);
+
+export { PasswordField };

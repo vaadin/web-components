@@ -28,7 +28,7 @@ const listenOnce = (elem, type) => {
  * @extends HTMLElement
  * @private
  */
-export class UserTags extends PolylitMixin(LitElement) {
+class UserTags extends PolylitMixin(LitElement) {
   static get is() {
     return 'vaadin-user-tags';
   }
@@ -442,3 +442,5 @@ export class UserTags extends PolylitMixin(LitElement) {
 }
 
 defineCustomElement(UserTags);
+
+export { UserTags };

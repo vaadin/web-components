@@ -21,7 +21,7 @@ import { menuBarOverlayStyles } from './styles/vaadin-menu-bar-overlay-base-styl
  * @extends HTMLElement
  * @protected
  */
-export class MenuBarOverlay extends MenuOverlayMixin(
+class MenuBarOverlay extends MenuOverlayMixin(
   OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
@@ -51,3 +51,5 @@ export class MenuBarOverlay extends MenuOverlayMixin(
 }
 
 defineCustomElement(MenuBarOverlay);
+
+export { MenuBarOverlay };

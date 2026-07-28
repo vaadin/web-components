@@ -115,7 +115,7 @@ import { NumberField } from '@vaadin/number-field/src/vaadin-number-field.js';
  * @customElement vaadin-integer-field
  * @extends NumberField
  */
-export class IntegerField extends NumberField {
+class IntegerField extends NumberField {
   static get is() {
     return 'vaadin-integer-field';
   }
@@ -175,3 +175,5 @@ export class IntegerField extends NumberField {
 }
 
 defineCustomElement(IntegerField);
+
+export { IntegerField };

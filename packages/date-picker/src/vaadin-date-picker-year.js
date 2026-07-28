@@ -18,7 +18,7 @@ import { datePickerYearStyles } from './styles/vaadin-date-picker-year-base-styl
  * @extends HTMLElement
  * @private
  */
-export class DatePickerYear extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
+class DatePickerYear extends ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
   static get is() {
     return 'vaadin-date-picker-year';
   }
@@ -64,3 +64,5 @@ export class DatePickerYear extends ThemableMixin(PolylitMixin(LumoInjectionMixi
 }
 
 defineCustomElement(DatePickerYear);
+
+export { DatePickerYear };

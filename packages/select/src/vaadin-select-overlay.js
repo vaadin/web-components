@@ -20,7 +20,7 @@ import { SelectOverlayMixin } from './vaadin-select-overlay-mixin.js';
  * @extends HTMLElement
  * @private
  */
-export class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
+class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-select-overlay';
   }
@@ -52,3 +52,5 @@ export class SelectOverlay extends SelectOverlayMixin(ThemableMixin(PolylitMixin
 }
 
 defineCustomElement(SelectOverlay);
+
+export { SelectOverlay };

@@ -16,7 +16,7 @@ import { ComboBoxScrollerMixin } from './vaadin-combo-box-scroller-mixin.js';
  * @extends HTMLElement
  * @private
  */
-export class ComboBoxScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElement)) {
+class ComboBoxScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElement)) {
   static get is() {
     return 'vaadin-combo-box-scroller';
   }
@@ -36,3 +36,5 @@ export class ComboBoxScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElem
 }
 
 defineCustomElement(ComboBoxScroller);
+
+export { ComboBoxScroller };
