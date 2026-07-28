@@ -11,21 +11,24 @@ export declare function OverlayFocusMixin<T extends Constructor<HTMLElement>>(
 
 export declare class OverlayFocusMixinClass {
   /**
-   * When true, opening the overlay moves focus to the first focusable child,
-   * or to the overlay part with tabindex if there are no focusable children,
-   * and prevents focus from leaving the overlay with Tab and Shift+Tab.
+   * Set to true to move focus into the overlay automatically on open
+   * and keep it inside: Tab and Shift+Tab cycle through the overlay's
+   * content until the overlay is closed.
+   *
+   * Focus is placed on the first tabbable child if the overlay has one,
+   * and on the overlay part otherwise.
+   *
    * @attr {boolean} focus-trap
    */
   focusTrap: boolean;
 
   /**
-   * When true, opening the overlay moves focus to the first focusable child,
-   * or to the overlay part with tabindex if there are no focusable children.
-   * Unlike `focusTrap`, focus can then be moved out of the overlay with Tab
-   * and Shift+Tab. Has no effect when `focusTrap` is true.
-   * @attr {boolean} auto-focus
+   * Set to true to move focus into the overlay automatically on open.
+   *
+   * Focus is placed on the first tabbable child if the overlay has
+   * one, and on the overlay part otherwise.
    */
-  autoFocus: boolean;
+  autofocus: boolean;
 
   /**
    * Set to true to enable restoring of focus when overlay is closed.
@@ -51,7 +54,7 @@ export declare class OverlayFocusMixinClass {
 
   /**
    * Sets up focus after the overlay opening has completed: moves focus into
-   * the overlay if `autoFocus` is enabled, and traps focus within the overlay
+   * the overlay if `autofocus` is enabled, and traps focus within the overlay
    * if `focusTrap` is enabled.
    */
   protected _initFocus(): void;

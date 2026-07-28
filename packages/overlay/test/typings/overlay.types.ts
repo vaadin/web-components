@@ -17,7 +17,7 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 const overlay = document.createElement('vaadin-overlay');
 
 assertType<boolean>(overlay.focusTrap);
-assertType<boolean>(overlay.autoFocus);
+assertType<boolean>(overlay.autofocus);
 assertType<boolean>(overlay.restoreFocusOnClose);
 assertType<HTMLElement | undefined>(overlay.restoreFocusNode);
 assertType<DirMixinClass>(overlay);

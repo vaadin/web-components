@@ -67,8 +67,8 @@ describe('vaadin-dialog', () => {
       await expect(dialog).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
-    it('noAutoFocus', async () => {
-      dialog.noAutoFocus = true;
+    it('noAutofocus', async () => {
+      dialog.noAutofocus = true;
       await nextUpdate(dialog);
       await expect(dialog).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });

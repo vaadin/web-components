@@ -79,7 +79,7 @@ snapshots["vaadin-dialog host footerRenderer"] =
 
 snapshots["vaadin-dialog shadow default"] = 
 `<vaadin-dialog-overlay
-  auto-focus=""
+  autofocus=""
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
   focus-trap=""
   id="overlay"
@@ -111,7 +111,7 @@ snapshots["vaadin-dialog shadow default"] =
 
 snapshots["vaadin-dialog shadow modeless"] = 
 `<vaadin-dialog-overlay
-  auto-focus=""
+  autofocus=""
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
   id="overlay"
   modeless=""
@@ -142,7 +142,7 @@ snapshots["vaadin-dialog shadow modeless"] =
 
 snapshots["vaadin-dialog shadow theme"] = 
 `<vaadin-dialog-overlay
-  auto-focus=""
+  autofocus=""
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
   focus-trap=""
   id="overlay"
@@ -259,7 +259,7 @@ snapshots["vaadin-dialog shadow noFocusTrap"] =
 `;
 /* end snapshot vaadin-dialog shadow noFocusTrap */
 
-snapshots["vaadin-dialog shadow noAutoFocus"] = 
+snapshots["vaadin-dialog shadow noAutofocus"] = 
 `<vaadin-dialog-overlay
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
   id="overlay"
@@ -287,5 +287,5 @@ snapshots["vaadin-dialog shadow noAutoFocus"] =
   </slot>
 </vaadin-dialog-overlay>
 `;
-/* end snapshot vaadin-dialog shadow noAutoFocus */
+/* end snapshot vaadin-dialog shadow noAutofocus */
 

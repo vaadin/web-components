@@ -3,11 +3,11 @@ import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import '../src/vaadin-overlay.js';
 import { getDeepActiveElement, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
-describe('auto-focus', () => {
+describe('autofocus', () => {
   let overlay;
 
   beforeEach(async () => {
-    overlay = fixtureSync('<vaadin-overlay auto-focus></vaadin-overlay>');
+    overlay = fixtureSync('<vaadin-overlay autofocus></vaadin-overlay>');
     overlay.renderer = (root) => {
       if (!root.firstChild) {
         root.innerHTML = `
@@ -33,8 +33,8 @@ describe('auto-focus', () => {
     expect(isElementFocused(overlay.$.overlay)).to.be.true;
   });
 
-  it('should not focus any element when autoFocus is false', async () => {
-    overlay.autoFocus = false;
+  it('should not focus any element when autofocus is false', async () => {
+    overlay.autofocus = false;
     await open();
     expect(getDeepActiveElement()).to.equal(document.body);
   });

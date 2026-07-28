@@ -37,7 +37,7 @@ export declare class DialogBaseMixinClass {
    * on open and trapping it inside.
    *
    * @attr {boolean} no-focus-trap
-   * @deprecated This property is deprecated and will be removed in Vaadin 26. Use `noAutoFocus` instead
+   * @deprecated This property is deprecated and will be removed in Vaadin 26. Use `noAutofocus` instead
    */
   noFocusTrap: boolean;
 
@@ -47,9 +47,9 @@ export declare class DialogBaseMixinClass {
    * Since focus doesn't move inside, the focus trap in modal dialogs
    * is also not activated.
    *
-   * @attr {boolean} no-auto-focus
+   * @attr {boolean} no-autofocus
    */
-  noAutoFocus: boolean;
+  noAutofocus: boolean;
 
   /**
    * The `role` attribute value to be set on the dialog. Defaults to "dialog".
