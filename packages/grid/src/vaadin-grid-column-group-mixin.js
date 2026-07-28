@@ -74,9 +74,7 @@ export const GridColumnGroupMixin = (superClass) =>
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      if (this._observer) {
-        this._observer.disconnect();
-      }
+      this._observer?.disconnect();
     }
 
     /**
@@ -333,9 +331,7 @@ export const GridColumnGroupMixin = (superClass) =>
         this._preventHiddenSynchronization = false;
 
         // Update the column tree
-        if (this._grid && this._grid._debounceUpdateColumnTree) {
-          this._grid._debounceUpdateColumnTree();
-        }
+        this._grid?._debounceUpdateColumnTree?.();
       });
       this._observer.flush();
     }

@@ -71,8 +71,6 @@ export const GridFilterElementMixin = (superClass) =>
     }
 
     focus() {
-      if (this._textField) {
-        this._textField.focus();
-      }
+      this._textField?.focus();
     }
   };

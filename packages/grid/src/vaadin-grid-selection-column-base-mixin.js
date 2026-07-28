@@ -174,8 +174,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
           this._headerCell.appendChild(label);
         }
         label.textContent = selectAllUnavailable;
-      } else if (label) {
-        label.remove();
+      } else {
+        label?.remove();
       }
     }
 
@@ -383,7 +383,7 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
 
       // Get the index of the row being hovered over or the first/last
       // visible row if hovering outside the grid
-      let hoveredIndex = hoveredRow ? hoveredRow.index : undefined;
+      let hoveredIndex = hoveredRow?.index;
       const scrollableArea = this.__getScrollableArea();
       if (this.__dragCurrentY < scrollableArea.top) {
         hoveredIndex = this._grid._firstVisibleIndex;

@@ -110,19 +110,13 @@ export const A11yMixin = (superClass) =>
       const toggleCell = findTreeToggleCell(row);
       if (this.__isRowExpandable(row)) {
         row.setAttribute('aria-expanded', 'false');
-        if (toggleCell) {
-          toggleCell.setAttribute('aria-expanded', 'false');
-        }
+        toggleCell?.setAttribute('aria-expanded', 'false');
       } else if (this.__isRowCollapsible(row)) {
         row.setAttribute('aria-expanded', 'true');
-        if (toggleCell) {
-          toggleCell.setAttribute('aria-expanded', 'true');
-        }
+        toggleCell?.setAttribute('aria-expanded', 'true');
       } else {
         row.removeAttribute('aria-expanded');
-        if (toggleCell) {
-          toggleCell.removeAttribute('aria-expanded');
-        }
+        toggleCell?.removeAttribute('aria-expanded');
       }
     }
 
