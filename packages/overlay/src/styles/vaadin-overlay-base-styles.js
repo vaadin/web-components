@@ -5,8 +5,9 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
+import { overlayAnimationStyles } from './vaadin-overlay-animation-base-styles.js';
 
-export const overlayStyles = css`
+const overlayBase = css`
   :host {
     z-index: 200;
     position: fixed;
@@ -97,14 +98,11 @@ export const overlayStyles = css`
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
   }
 
-  :host(:where([closing])) [part='overlay'],
-  :host(:where([closing])) ::slotted(*) {
-    pointer-events: none !important;
-  }
-
   @media (forced-colors: active) {
     [part='overlay'] {
       border: 3px solid !important;
     }
   }
 `;
+
+export const overlayStyles = [overlayBase, overlayAnimationStyles];
