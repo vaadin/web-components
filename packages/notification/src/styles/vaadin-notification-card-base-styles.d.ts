@@ -5,4 +5,4 @@
  */
 import type { CSSResult } from 'lit';
 
-export const notificationCardStyles: CSSResult;
+export const notificationCardStyles: CSSResult[];
