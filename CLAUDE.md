@@ -55,6 +55,12 @@ All components follow a consistent pattern:
 - Snapshot tests: DOM structure validation
 - Integration tests: Cross-component interaction testing
 
+## Guidelines & Conventions
+
+Always read `CONVENTIONS.md` in full when **authoring** or **reviewing** code — it is the canonical list of checkable conventions.
+
+Design and implementation guidelines live in `guidelines/`. Read the chapters mapped in `guidelines/overview.md` selectively for the topics your work touches.
+
 ## Development Commands
 
 ### Setup and Development

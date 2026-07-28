@@ -1,10 +1,10 @@
 # Testing
 
 Every component ships with unit tests, DOM snapshot tests, and visual
-tests. The test stack is described in [Repository](01-repository.md).
+tests. The test stack is described in [Repository](repository.md).
 This chapter covers **how to author** tests for a new component.
 
-Typings tests are documented in [TypeScript](07-typescript.md).
+Typings tests are documented in [TypeScript](typescript.md).
 
 ## General rules
 

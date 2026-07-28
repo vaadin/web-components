@@ -4,10 +4,10 @@
 
 - [**Lit 3**](https://lit.dev) — base class and templating.
 - **TypeScript 6** — type definitions for every public component (see
-  [TypeScript](07-typescript.md)).
+  [TypeScript](typescript.md)).
 
 Every component is built as a Lit `LitElement`, layered with the Vaadin
-mixins documented in [Common packages](05-common-packages.md).
+mixins documented in [Common packages](common-packages.md).
 
 ## Test stack
 
@@ -36,6 +36,9 @@ The repo is a Lerna + Yarn workspaces monorepo (`lerna.json`, root
 | `test/*`     | Private testing infrastructure (not published).                 |
 | `dev`        | Manual-test playground; one HTML page per component.            |
 | `api-docs`   | Eleventy site that generates per-release API documentation.     |
+
+For the layout of an individual package under `packages/*`, see
+[Package Structure](package-structure.md).
 
 ### Private packages
 

@@ -26,7 +26,7 @@ Core utilities used by every component.
 
 ## `@vaadin/a11y-base`
 
-Accessibility primitives. See [Accessibility](11-a11y.md) for how these
+Accessibility primitives. See [Accessibility](a11y.md) for how these
 fit together.
 
 | Export                       | Purpose                                                                                                         |
@@ -102,9 +102,10 @@ a Lit template. Used by `combo-box` (item renderer), `grid` (cell renderer),
 
 ## `@vaadin/vaadin-themable-mixin`
 
-Theme infrastructure (covered in [Theming](10-theming.md)):
+Theme infrastructure (covered in [Theming](theming.md)):
 
-- **`ThemableMixin`** — registers theme styles and applies them.
+- **`ThemableMixin`** — legacy; registers theme styles and applies them. Kept
+  for existing components, do not use it in new ones.
 - **`LumoInjectionMixin`** — internal; injects Lumo styles via CSS custom
   properties. Not for use by add-ons.
 - **`ThemeDetectionMixin`** — public; sets `data-application-theme="lumo"`
