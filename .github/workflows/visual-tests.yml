@@ -16,7 +16,7 @@ jobs:
     name: Base
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.61.0-noble
+      image: mcr.microsoft.com/playwright:v1.62.0-noble
       options: --ipc=host
 
     steps:
@@ -53,7 +53,7 @@ jobs:
     name: Lumo
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.61.0-noble
+      image: mcr.microsoft.com/playwright:v1.62.0-noble
       options: --ipc=host
 
     steps:
@@ -91,7 +91,7 @@ jobs:
     name: Aura
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.61.0-noble
+      image: mcr.microsoft.com/playwright:v1.62.0-noble
       options: --ipc=host
 
     steps:
