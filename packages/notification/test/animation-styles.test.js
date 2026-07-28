@@ -5,9 +5,8 @@ import sinon from 'sinon';
 import '../src/vaadin-notification.js';
 import { shouldAnimate } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
 
-// Covers the animation that the notification card has out of the box, so this file deliberately
-// does not import `not-animated-styles.css`. The animation lifecycle of the mixin is covered by
-// `animation.test.js`, which brings an animation of its own instead.
+// Do not import `not-animated-styles.css` to verify default animations.
+
 describe('notification card animation styles', () => {
   let notification, card;
 
@@ -36,9 +35,6 @@ describe('notification card animation styles', () => {
 
   describe('shortened animation', () => {
     beforeEach(() => {
-      // These tests only assert that the animation is applied, so they do not need to wait for
-      // the default duration. The properties are set on the card, since it is not a descendant
-      // of the notification element.
       card.style.setProperty('--vaadin-overlay-animation-duration', '50ms');
       card.style.setProperty('--vaadin-overlay-animation-delay', '0s');
     });
@@ -91,7 +87,6 @@ describe('notification card animation styles', () => {
       notification.opened = true;
       await oneEvent(card, 'animationend');
 
-      // A card that has finished opening must not be cut off, however tall its content is
       expect(getComputedStyle(card).maxHeight).to.equal('none');
       expect(card.getBoundingClientRect().height).to.be.above(400);
     });
@@ -105,8 +100,6 @@ describe('notification card animation styles', () => {
         await emulateMedia({ reducedMotion: 'no-preference' });
       });
 
-      // The height animation this suppresses only exists where `interpolate-size` is unsupported,
-      // so this is a real assertion in Firefox and Safari and a no-op in Chromium.
       it('should not animate the height of the card', () => {
         notification.opened = true;
 
