@@ -50,10 +50,6 @@ class CrudDialog extends DialogBaseMixin(ThemePropertyMixin(PolylitMixin(LitElem
       fullscreen: {
         type: Boolean,
       },
-
-      crudElement: {
-        type: Object,
-      },
     };
   }
 
