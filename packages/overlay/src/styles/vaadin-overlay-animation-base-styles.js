@@ -49,11 +49,7 @@ export const overlayAnimationStyles = css`
   }
 
   :host(:where([opening], [closing])) {
-    /*
-    The host is inspected for an animation, to determine whether or not an animation is
-    applied for opening or closing. This empty keyframe animation is used for that,
-    while the real visible animation happens on the "overlay" and "backdrop" parts.
-    */
+    /* This empty animation only reports the state, the parts run the visible animation */
     animation-name: --no-op;
     animation-duration: var(--vaadin-overlay-animation-duration);
     animation-delay: var(--vaadin-overlay-animation-delay);
@@ -69,13 +65,7 @@ export const overlayAnimationStyles = css`
     animation-duration: var(--vaadin-overlay-animation-duration);
     animation-timing-function: var(--vaadin-overlay-animation-timing-function);
     animation-delay: var(--vaadin-overlay-animation-delay);
-    /*
-    Only fill backwards, so that the closed value applies during the animation delay.
-    Filling forwards would keep the last keyframe applied for as long as the attribute
-    is set, which overrides the paint properties a theme sets on these parts whenever
-    the attribute outlives the animation, e.g. a theme that animates the host without
-    setting --vaadin-overlay-animation-duration.
-    */
+    /* Fill backwards only, so the closed value applies during the delay without overriding theme styles */
     animation-fill-mode: backwards;
 
     @media (prefers-reduced-motion) {
@@ -96,11 +86,7 @@ export const overlayAnimationStyles = css`
   @keyframes --no-op {
   }
 
-  /*
-  Both animations only declare the closed state. The opened state is left out on purpose:
-  a missing keyframe uses the value the element already has, so the animation starts from
-  and ends at whatever a theme applies to the part, with no jump at either end.
-  */
+  /* Only the closed state is declared, so the animations end at the value the part already has */
   @keyframes --transform {
     0% {
       transform: var(--vaadin-overlay-transform-closed);
