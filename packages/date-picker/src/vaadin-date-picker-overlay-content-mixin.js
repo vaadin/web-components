@@ -142,9 +142,22 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         '__updateCalendarsState(calendars, selectedDate, focusedDate, enteredDate, _ignoreTaps)',
         '__updateCancelButton(_cancelButton, i18n)',
         '__updateTodayButton(_todayButton, i18n, minDate, maxDate, isDateDisabled)',
-        '__updateDialogAccessibleName(i18n)',
         '__updateYears(years, selectedDate, _theme)',
       ];
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('i18n')) {
+        const accessibleName = this.i18n?.dialogAccessibleName;
+        if (accessibleName) {
+          this.setAttribute('aria-label', accessibleName);
+        } else {
+          this.removeAttribute('aria-label');
+        }
+      }
     }
 
     /**
@@ -298,15 +311,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       if (todayButton) {
         todayButton.textContent = i18n?.today;
         todayButton.disabled = !this._isTodayAllowed(minDate, maxDate, isDateDisabled);
-      }
-    }
-
-    /** @private */
-    __updateDialogAccessibleName(i18n) {
-      if (i18n?.dialogAccessibleName) {
-        this.setAttribute('aria-label', i18n.dialogAccessibleName);
-      } else {
-        this.removeAttribute('aria-label');
       }
     }
 

@@ -48,13 +48,9 @@ export interface DatePickerI18n {
    */
   cancel?: string;
   /**
-   * Accessible name of the calendar dialog, announced by screen readers
-   * when the overlay opens. Unlike the `accessibleName` property, which
-   * names the input, this only names the dialog.
-   *
-   * Set it to an empty string to leave the dialog without a name. Note that
-   * `null` and `undefined` are ignored when merging with the defaults, so
-   * they keep the default name instead of removing it.
+   * Accessible name of the overlay content, announced by screen readers when
+   * the overlay opens. Unlike `accessibleName`, which names the input, this
+   * only names the overlay content.
    */
   dialogAccessibleName?: string;
   /**
@@ -184,12 +180,8 @@ export declare class DatePickerMixinClass {
    *   // Translation of the Cancel button text.
    *   cancel: 'Cancel',
    *
-   *   // Accessible name of the calendar dialog, announced by screen readers
-   *   // when the overlay opens. Unlike the `accessibleName` property, which
-   *   // names the input, this only names the dialog.
-   *   // Set it to an empty string to leave the dialog without a name. Note that
-   *   // `null` and `undefined` are ignored when merging with the defaults, so
-   *   // they keep the default name instead of removing it.
+   *   // Accessible name of the overlay content, announced by screen readers
+   *   // when the overlay opens.
    *   dialogAccessibleName: 'Calendar',
    *
    *   // Used for adjusting the year value when parsing dates with short years.
