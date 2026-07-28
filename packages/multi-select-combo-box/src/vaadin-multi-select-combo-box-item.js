@@ -38,7 +38,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @customElement vaadin-multi-select-combo-box-item
  * @private
  */
-export class MultiSelectComboBoxItem extends ComboBoxItemMixin(
+class MultiSelectComboBoxItem extends ComboBoxItemMixin(
   ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
 ) {
   static get is() {
@@ -61,3 +61,5 @@ export class MultiSelectComboBoxItem extends ComboBoxItemMixin(
 }
 
 defineCustomElement(MultiSelectComboBoxItem);
+
+export { MultiSelectComboBoxItem };

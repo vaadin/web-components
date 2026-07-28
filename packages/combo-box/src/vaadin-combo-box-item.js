@@ -38,9 +38,7 @@ import { ComboBoxItemMixin } from './vaadin-combo-box-item-mixin.js';
  * @customElement vaadin-combo-box-item
  * @private
  */
-export class ComboBoxItem extends ComboBoxItemMixin(
-  ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
-) {
+class ComboBoxItem extends ComboBoxItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-combo-box-item';
   }
@@ -61,3 +59,5 @@ export class ComboBoxItem extends ComboBoxItemMixin(
 }
 
 defineCustomElement(ComboBoxItem);
+
+export { ComboBoxItem };

@@ -16,7 +16,7 @@ import { timePickerScrollerStyles } from './styles/vaadin-time-picker-scroller-b
  * @extends HTMLElement
  * @private
  */
-export class TimePickerScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElement)) {
+class TimePickerScroller extends ComboBoxScrollerMixin(PolylitMixin(LitElement)) {
   static get is() {
     return 'vaadin-time-picker-scroller';
   }
@@ -36,3 +36,5 @@ export class TimePickerScroller extends ComboBoxScrollerMixin(PolylitMixin(LitEl
 }
 
 defineCustomElement(TimePickerScroller);
+
+export { TimePickerScroller };

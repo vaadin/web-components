@@ -96,7 +96,7 @@ import { emailFieldStyles } from './styles/vaadin-email-field-base-styles.js';
  * @customElement vaadin-email-field
  * @extends TextField
  */
-export class EmailField extends TextField {
+class EmailField extends TextField {
   static get is() {
     return 'vaadin-email-field';
   }
@@ -128,3 +128,5 @@ export class EmailField extends TextField {
 }
 
 defineCustomElement(EmailField);
+
+export { EmailField };

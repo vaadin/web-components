@@ -38,9 +38,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @customElement vaadin-time-picker-item
  * @private
  */
-export class TimePickerItem extends ComboBoxItemMixin(
-  ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))),
-) {
+class TimePickerItem extends ComboBoxItemMixin(ThemableMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-time-picker-item';
   }
@@ -61,3 +59,5 @@ export class TimePickerItem extends ComboBoxItemMixin(
 }
 
 defineCustomElement(TimePickerItem);
+
+export { TimePickerItem };

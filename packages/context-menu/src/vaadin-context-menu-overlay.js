@@ -21,7 +21,7 @@ import { MenuOverlayMixin } from './vaadin-menu-overlay-mixin.js';
  * @extends HTMLElement
  * @protected
  */
-export class ContextMenuOverlay extends MenuOverlayMixin(
+class ContextMenuOverlay extends MenuOverlayMixin(
   OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))),
 ) {
   static get is() {
@@ -105,3 +105,5 @@ export class ContextMenuOverlay extends MenuOverlayMixin(
 }
 
 defineCustomElement(ContextMenuOverlay);
+
+export { ContextMenuOverlay };

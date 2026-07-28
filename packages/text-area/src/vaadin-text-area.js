@@ -120,7 +120,7 @@ import { TextAreaMixin } from './vaadin-text-area-mixin.js';
  * @customElement vaadin-text-area
  * @extends HTMLElement
  */
-export class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-text-area';
   }
@@ -177,3 +177,5 @@ export class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolylitMi
 }
 
 defineCustomElement(TextArea);
+
+export { TextArea };

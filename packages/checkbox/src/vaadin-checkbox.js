@@ -88,7 +88,7 @@ import { CheckboxMixin } from './vaadin-checkbox-mixin.js';
  * @customElement vaadin-checkbox
  * @extends HTMLElement
  */
-export class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
+class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
     return 'vaadin-checkbox';
   }
@@ -168,3 +168,5 @@ export class Checkbox extends CheckboxMixin(ElementMixin(ThemableMixin(PolylitMi
 }
 
 defineCustomElement(Checkbox);
+
+export { Checkbox };
