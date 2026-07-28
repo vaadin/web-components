@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { emulateMedia, resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { escKeyDown, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, escKeyDown, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './animated-styles.js';
 import '../src/vaadin-overlay.js';
@@ -555,6 +555,32 @@ describe('animation properties', () => {
     expect(overlay.hasAttribute('closing')).to.be.true;
   });
 
+  // The empty keyframe animation on the host is what reports the end of the animation, so
+  // these do not flush: they verify that the attributes are cleared on their own.
+  it('should clear the opening attribute when the animation ends', async () => {
+    overlay.style.setProperty('--vaadin-overlay-animation-duration', '50ms');
+
+    overlay.opened = true;
+    expect(overlay.hasAttribute('opening')).to.be.true;
+
+    await oneEvent(overlay, 'animationend');
+    expect(overlay.hasAttribute('opening')).to.be.false;
+  });
+
+  it('should clear the closing attribute when the animation ends', async () => {
+    overlay.style.setProperty('--vaadin-overlay-animation-duration', '50ms');
+
+    overlay.opened = true;
+    // Let the opening animation run out, so that closing starts from a fully opened overlay
+    await aTimeout(100);
+
+    overlay.opened = false;
+    expect(overlay.hasAttribute('closing')).to.be.true;
+
+    await oneEvent(overlay, 'animationend');
+    expect(overlay.hasAttribute('closing')).to.be.false;
+  });
+
   it('should use animation duration and delay for opening and closing animations', () => {
     overlay.style.setProperty('--vaadin-overlay-animation-delay', '2s');
 
@@ -664,6 +690,15 @@ describe('animation properties', () => {
       expect(keyframes[0].opacity).to.equal('0');
       expect(keyframes[1].opacity).to.equal('1');
     });
+
+    it('should reverse the backdrop animation direction while closing', () => {
+      overlay.opened = true;
+      expect(getAnimation(overlay.$.backdrop, '--fade').effect.getTiming().direction).to.equal('normal');
+
+      overlay._flushAnimation('opening');
+      overlay.opened = false;
+      expect(getAnimation(overlay.$.backdrop, '--fade').effect.getTiming().direction).to.equal('reverse');
+    });
   });
 
   describe('prefers-reduced-motion', () => {
@@ -679,6 +714,33 @@ describe('animation properties', () => {
       overlay.opened = true;
       const names = overlay.$.overlay.getAnimations().map((animation) => animation.animationName);
       expect(names).to.eql(['--fade']);
+    });
+  });
+
+  describe('fill mode', () => {
+    beforeEach(async () => {
+      overlay.setAttribute('themed-parts', '');
+      overlay.style.setProperty('--vaadin-overlay-animation-delay', '2s');
+      await nextRender();
+    });
+
+    it('should apply the closed value during the opening animation delay', () => {
+      overlay.opened = true;
+
+      // The backwards fill keeps the overlay at its closed opacity for the delay,
+      // instead of painting the theme value until the animation starts.
+      expect(getComputedStyle(overlay.$.overlay).opacity).to.equal('0');
+    });
+
+    it('should apply the value of the part during the closing animation delay', () => {
+      overlay.opened = true;
+      overlay._flushAnimation('opening');
+      overlay.opened = false;
+
+      // The closing animation is reversed, so the fill applies the opened state. That state
+      // is not declared in the keyframes, so the part keeps its own opacity and does not
+      // jump to a different value before the closing animation starts.
+      expect(getComputedStyle(overlay.$.overlay).opacity).to.equal('0.5');
     });
   });
 });
@@ -775,42 +837,5 @@ describe('theme paint properties without an opted-in duration', () => {
 
     expect(overlay.hasAttribute('closing')).to.be.true;
     assertThemedValues(overlay.$.backdrop);
-  });
-});
-
-describe('animation fill mode', () => {
-  let overlay;
-
-  beforeEach(async () => {
-    overlay = createOverlay('overlay content');
-    overlay.setAttribute('themed-parts', '');
-    overlay.style.setProperty('--vaadin-overlay-animation-duration', '10s');
-    overlay.style.setProperty('--vaadin-overlay-animation-delay', '2s');
-    await nextRender();
-  });
-
-  afterEach(() => {
-    overlay._flushAnimation('opening');
-    overlay._flushAnimation('closing');
-    overlay.opened = false;
-  });
-
-  it('should apply the closed value during the opening animation delay', () => {
-    overlay.opened = true;
-
-    // The backwards fill keeps the overlay at its closed opacity for the delay,
-    // instead of painting the theme value until the animation starts.
-    expect(getComputedStyle(overlay.$.overlay).opacity).to.equal('0');
-  });
-
-  it('should apply the value of the part during the closing animation delay', () => {
-    overlay.opened = true;
-    overlay._flushAnimation('opening');
-    overlay.opened = false;
-
-    // The closing animation is reversed, so the fill applies the opened state. That state
-    // is not declared in the keyframes, so the part keeps its own opacity and does not
-    // jump to a different value before the closing animation starts.
-    expect(getComputedStyle(overlay.$.overlay).opacity).to.equal('0.5');
   });
 });
