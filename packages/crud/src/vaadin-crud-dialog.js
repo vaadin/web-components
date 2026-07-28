@@ -42,7 +42,7 @@ class CrudDialog extends DialogBaseMixin(ThemePropertyMixin(PolylitMixin(LitElem
         position: fixed;
       }
 
-      :host:not([opening], [closing]),
+      :host,
       :host([hidden]) {
         display: none !important;
       }
