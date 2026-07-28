@@ -26,14 +26,16 @@ describe('notification card animation styles', () => {
     }
   });
 
-  it('should use the default animation duration and delay', () => {
-    const style = getComputedStyle(card);
+  describe('default', () => {
+    it('should use the default animation duration and delay', () => {
+      const style = getComputedStyle(card);
 
-    expect(style.getPropertyValue('--vaadin-overlay-animation-duration')).to.equal('0.3s');
-    expect(style.getPropertyValue('--vaadin-overlay-animation-delay')).to.equal('0.1s');
+      expect(style.getPropertyValue('--vaadin-overlay-animation-duration')).to.equal('0.3s');
+      expect(style.getPropertyValue('--vaadin-overlay-animation-delay')).to.equal('0.1s');
+    });
   });
 
-  describe('shortened animation', () => {
+  describe('custom', () => {
     beforeEach(() => {
       card.style.setProperty('--vaadin-overlay-animation-duration', '50ms');
       card.style.setProperty('--vaadin-overlay-animation-delay', '0s');
