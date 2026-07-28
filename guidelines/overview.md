@@ -1,7 +1,7 @@
 # Web Component Guidelines
 
 These guidelines describe how Vaadin Web components should be designed and
-implemented in the `web-components` repository. Chapers can be read selectively
+implemented in the `web-components` repository. Chapters can be read selectively
 for the topics your work touches.
 
 Treat these as guidelines, not hard rules. They are best practices that should
