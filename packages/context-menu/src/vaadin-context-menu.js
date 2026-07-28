@@ -362,4 +362,5 @@ class ContextMenu extends ContextMenuMixin(ElementMixin(ThemePropertyMixin(Polyl
 }
 
 defineCustomElement(ContextMenu);
+
 export { ContextMenu };
