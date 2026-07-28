@@ -582,18 +582,23 @@ describe('crud', () => {
     });
   });
 
-  describe('exportparts', () => {
-    let dialog;
+  describe('overlay', () => {
+    let dialog, overlay;
 
     beforeEach(() => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
       dialog = getDialogEditor(crud);
+      overlay = dialog.$.overlay;
+    });
+
+    it('should set owner property on the crud dialog overlay to dialog', () => {
+      expect(overlay.owner).to.equal(dialog);
     });
 
     it('should export all editor dialog overlay parts for styling', () => {
-      const parts = [...dialog.$.overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
+      const parts = [...overlay.shadowRoot.querySelectorAll('[part]')].map((el) => el.getAttribute('part'));
       const dialogExportParts = dialog.getAttribute('exportparts').split(', ');
-      const overlayExportParts = dialog.$.overlay.getAttribute('exportparts').split(', ');
+      const overlayExportParts = overlay.getAttribute('exportparts').split(', ');
 
       parts.forEach((part) => {
         expect(dialogExportParts).to.include(part);
