@@ -339,6 +339,7 @@ snapshots["vaadin-date-picker host opened default"] =
     slot="input"
   >
   <vaadin-date-picker-overlay-content
+    aria-label="Calendar"
     desktop=""
     role="dialog"
     slot="overlay"
