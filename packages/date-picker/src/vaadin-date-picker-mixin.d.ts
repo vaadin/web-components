@@ -48,6 +48,11 @@ export interface DatePickerI18n {
    */
   cancel?: string;
   /**
+   * Accessible name of the overlay content, announced by screen readers when
+   * the overlay opens.
+   */
+  dialogAccessibleName?: string;
+  /**
    * Used for adjusting the year value when parsing dates with short years.
    * The year values between 0 and 99 are evaluated and adjusted.
    * Example: for a referenceDate of 1970-10-30;
@@ -173,6 +178,10 @@ export declare class DatePickerMixinClass {
    *
    *   // Translation of the Cancel button text.
    *   cancel: 'Cancel',
+   *
+   *   // Accessible name of the overlay content, announced by screen readers
+   *   // when the overlay opens.
+   *   dialogAccessibleName: 'Calendar',
    *
    *   // Used for adjusting the year value when parsing dates with short years.
    *   // The year values between 0 and 99 are evaluated and adjusted.

@@ -20,6 +20,54 @@ describe('WAI-ARIA', () => {
       expect(input.getAttribute('aria-expanded')).to.equal('false');
     });
 
+    describe('dialog accessible name', () => {
+      it('should set role and aria-label on the overlay content', async () => {
+        await open(datePicker);
+        const content = datePicker._overlayContent;
+        expect(content.getAttribute('role')).to.equal('dialog');
+        expect(content.getAttribute('aria-label')).to.equal('Calendar');
+      });
+
+      it('should use dialogAccessibleName set before opening', async () => {
+        datePicker.i18n = { dialogAccessibleName: 'Kalenteri' };
+        await open(datePicker);
+        expect(datePicker._overlayContent.getAttribute('aria-label')).to.equal('Kalenteri');
+      });
+
+      it('should update aria-label when dialogAccessibleName changes while opened', async () => {
+        await open(datePicker);
+        datePicker.i18n = { dialogAccessibleName: 'Kalenteri' };
+        await nextRender();
+        expect(datePicker._overlayContent.getAttribute('aria-label')).to.equal('Kalenteri');
+      });
+
+      it('should keep the default aria-label when i18n is set partially', async () => {
+        datePicker.i18n = { today: 'Tänään' };
+        await open(datePicker);
+        expect(datePicker._overlayContent.getAttribute('aria-label')).to.equal('Calendar');
+      });
+
+      it('should not use accessibleName as the overlay content aria-label', async () => {
+        datePicker.accessibleName = 'Delivery date';
+        await open(datePicker);
+        expect(datePicker._overlayContent.getAttribute('aria-label')).to.equal('Calendar');
+      });
+
+      it('should remove aria-label when dialogAccessibleName is an empty string', async () => {
+        datePicker.i18n = { dialogAccessibleName: '' };
+        await open(datePicker);
+        expect(datePicker._overlayContent.hasAttribute('aria-label')).to.be.false;
+      });
+
+      it('should keep the default aria-label when dialogAccessibleName is null', async () => {
+        // `null` and `undefined` are ignored when merging with the defaults,
+        // so they keep the default name rather than removing it.
+        datePicker.i18n = { dialogAccessibleName: null };
+        await open(datePicker);
+        expect(datePicker._overlayContent.getAttribute('aria-label')).to.equal('Calendar');
+      });
+    });
+
     it('should set aria-hidden on all calendars except focusable one', async () => {
       await open(datePicker);
       await nextRender();

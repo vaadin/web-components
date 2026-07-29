@@ -146,6 +146,20 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       ];
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('i18n')) {
+        const accessibleName = this.i18n?.dialogAccessibleName;
+        if (accessibleName) {
+          this.setAttribute('aria-label', accessibleName);
+        } else {
+          this.removeAttribute('aria-label');
+        }
+      }
+    }
+
     /**
      * Whether to scroll to a sub-month position when scrolling to a date.
      * This is active if the month scroller is not large enough to fit a

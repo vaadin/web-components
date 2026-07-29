@@ -35,6 +35,13 @@ describe('i18n property', () => {
     expect(datePicker.i18n).to.not.have.property('parseTime');
   });
 
+  it('should propagate dialogAccessibleName to the date picker', () => {
+    dateTimePicker.i18n = { dialogAccessibleName: 'Kalenteri' };
+
+    expect(datePicker.i18n).to.have.property('dialogAccessibleName', 'Kalenteri');
+    expect(timePicker.i18n).to.not.have.property('dialogAccessibleName');
+  });
+
   it('should fall back to default values', () => {
     dateTimePicker.i18n = {};
 

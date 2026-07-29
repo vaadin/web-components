@@ -42,6 +42,7 @@ export const datePickerI18nDefaults = Object.freeze({
   firstDayOfWeek: 0,
   today: 'Today',
   cancel: 'Cancel',
+  dialogAccessibleName: 'Calendar',
   referenceDate: '',
   formatDate(d) {
     const yearStr = String(d.year).replace(/\d+/u, (y) => '0000'.substr(y.length) + y);
@@ -321,6 +322,10 @@ export const DatePickerMixin = (subclass) =>
      *
      *   // Translation of the Cancel button text.
      *   cancel: 'Cancel',
+     *
+     *   // Accessible name of the overlay content, announced by screen readers
+     *   // when the overlay opens.
+     *   dialogAccessibleName: 'Calendar',
      *
      *   // Used for adjusting the year value when parsing dates with short years.
      *   // The year values between 0 and 99 are evaluated and adjusted.

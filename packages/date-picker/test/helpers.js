@@ -33,6 +33,7 @@ export function getDefaultI18n() {
     firstDayOfWeek: 0,
     today: 'Today',
     cancel: 'Cancel',
+    dialogAccessibleName: 'Calendar',
     formatDate(d) {
       return `${d.month + 1}/${d.day}/${d.year}`;
     },
