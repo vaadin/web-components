@@ -135,7 +135,7 @@ vaadin-multi-select-combo-box,
 vaadin-date-picker,
 vaadin-time-picker,
 vaadin-select,
-vaadin-menu-bar,
+vaadin-menu-bar-submenu,
 vaadin-context-menu,
 vaadin-popover {
   &[closing] {
