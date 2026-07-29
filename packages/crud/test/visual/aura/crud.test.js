@@ -10,7 +10,7 @@ describe('crud', () => {
   beforeEach(async () => {
     div = document.createElement('div');
     div.style.height = '100%';
-    element = fixtureSync('<vaadin-crud style="height: calc(100vh - 16px)"></vaadin-crud>', div);
+    element = fixtureSync('<vaadin-crud style="height: 100%"></vaadin-crud>', div);
     element.items = [{ name: { first: 'John', last: 'Doe' } }, { name: { first: 'Jane', last: 'Doe' } }];
     await nextRender();
   });
