@@ -36,9 +36,12 @@ describe('notification card animation styles', () => {
   });
 
   describe('custom', () => {
+    let overlay;
+
     beforeEach(() => {
       card.style.setProperty('--vaadin-overlay-animation-duration', '50ms');
       card.style.setProperty('--vaadin-overlay-animation-delay', '0s');
+      overlay = card.shadowRoot.querySelector('[part="overlay"]');
     });
 
     it('should animate the card', () => {
@@ -50,12 +53,9 @@ describe('notification card animation styles', () => {
     it('should run the overlay animations on the card', () => {
       notification.opened = true;
 
-      const names = card.shadowRoot
-        .querySelector('[part="overlay"]')
-        .getAnimations()
-        .map((animation) => animation.animationName);
-      expect(names).to.include('--fade');
-      expect(names).to.include('--transform');
+      const animations = overlay.getAnimations().map((animation) => animation.animationName);
+      expect(animations).to.include('--fade');
+      expect(animations).to.include('--transform');
     });
 
     it('should keep the card in the DOM until the closing animation ends', async () => {
@@ -88,8 +88,18 @@ describe('notification card animation styles', () => {
 
       notification.close();
 
-      const part = card.shadowRoot.querySelector('[part="overlay"]');
-      expect(getComputedStyle(part).animationFillMode).to.equal('both');
+      expect(getComputedStyle(overlay).animationFillMode).to.equal('both');
+    });
+
+    it('should resolve the closed state on the overlay part while closing', async () => {
+      notification.opened = true;
+      await oneEvent(card, 'animationend');
+
+      notification.close();
+
+      const style = getComputedStyle(overlay);
+      expect(style.getPropertyValue('--vaadin-overlay-scale-closed').trim()).to.equal('0.98');
+      expect(style.getPropertyValue('--vaadin-overlay-translate-closed').trim()).to.equal('0%');
     });
 
     it('should not limit the height of a card that is not animating', async () => {
@@ -115,8 +125,7 @@ describe('notification card animation styles', () => {
       it('should not animate the height of the card, only opacity', () => {
         notification.opened = true;
 
-        const { animationName } = getComputedStyle(card);
-        expect(animationName).to.equal('--fade');
+        expect(getComputedStyle(card).animationName).to.equal('--fade');
       });
     });
   });
