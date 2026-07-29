@@ -8,7 +8,16 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { dateAfterXMonths, dateAllowed, dateEquals, getClosestDate } from './vaadin-date-picker-helper.js';
+import {
+  createDate,
+  dateAfterXMonths,
+  dateAllowed,
+  dateEquals,
+  firstOfMonth,
+  getClosestDate,
+  lastOfMonth,
+  monthIndex,
+} from './vaadin-date-picker-helper.js';
 
 export const DatePickerOverlayContentMixin = (superClass) =>
   class DatePickerOverlayContentMixin extends superClass {
@@ -440,11 +449,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
      * @private
      */
     _calculateWeekScrollOffset(date) {
-      // Get first day of month
-      const temp = new Date(0, 0);
-      temp.setFullYear(date.getFullYear());
-      temp.setMonth(date.getMonth());
-      temp.setDate(1);
+      const temp = firstOfMonth(date);
       // Determine week (=row index) of date within the month
       let week = 0;
       while (temp.getDate() < date.getDate()) {
@@ -644,8 +649,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     _differenceInMonths(date1, date2) {
-      const months = (date1.getFullYear() - date2.getFullYear()) * 12;
-      return months - date2.getMonth() + date1.getMonth();
+      return monthIndex(date1) - monthIndex(date2);
     }
 
     /** @private */
@@ -873,13 +877,11 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     _getDateDiff(months, days) {
-      const date = new Date(0, 0);
-      date.setFullYear(this.focusedDate.getFullYear());
-      date.setMonth(this.focusedDate.getMonth() + months);
-      if (days) {
-        date.setDate(this.focusedDate.getDate() + days);
-      }
-      return date;
+      return createDate(
+        this.focusedDate.getFullYear(),
+        this.focusedDate.getMonth() + months,
+        days ? this.focusedDate.getDate() + days : 1,
+      );
     }
 
     /** @private */
@@ -909,16 +911,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     _moveFocusInsideMonth(focusedDate, property) {
-      const dateToFocus = new Date(0, 0);
-      dateToFocus.setFullYear(focusedDate.getFullYear());
-
-      if (property === 'minDate') {
-        dateToFocus.setMonth(focusedDate.getMonth());
-        dateToFocus.setDate(1);
-      } else {
-        dateToFocus.setMonth(focusedDate.getMonth() + 1);
-        dateToFocus.setDate(0);
-      }
+      const dateToFocus = property === 'minDate' ? firstOfMonth(focusedDate) : lastOfMonth(focusedDate);
 
       if (this._dateAllowed(dateToFocus)) {
         this.focusDate(dateToFocus);
@@ -944,10 +937,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     /** @private */
     _getTodayMidnight() {
       const today = new Date();
-      const todayMidnight = new Date(0, 0);
-      todayMidnight.setFullYear(today.getFullYear());
-      todayMidnight.setMonth(today.getMonth());
-      todayMidnight.setDate(today.getDate());
-      return todayMidnight;
+      return createDate(today.getFullYear(), today.getMonth(), today.getDate());
     }
   };
