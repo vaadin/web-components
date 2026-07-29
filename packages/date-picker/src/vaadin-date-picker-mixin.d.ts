@@ -18,6 +18,39 @@ export interface DatePickerDate {
   year: number;
 }
 
+/**
+ * A range of dates the provider is asked about. Always covers whole months: `start` is the first
+ * day of a month and `end` the last day of a month, so a provider may group its query by month.
+ */
+export interface DatePickerDateRange {
+  /**
+   * The first date of the range (inclusive).
+   */
+  start: DatePickerDate;
+  /**
+   * The last date of the range (inclusive).
+   */
+  end: DatePickerDate;
+}
+
+/**
+ * Metadata resolved on demand for a single date.
+ */
+export interface DatePickerDateMetadata extends DatePickerDate {
+  /**
+   * Whether the date cannot be selected.
+   */
+  disabled?: boolean;
+}
+
+/**
+ * A function called with the range of dates the calendar is about to show, returning or resolving
+ * with the metadata for the dates in that range.
+ */
+export type DatePickerDateMetadataProvider = (
+  range: DatePickerDateRange,
+) => DatePickerDateMetadata[] | Promise<DatePickerDateMetadata[] | null | undefined> | null | undefined;
+
 export interface DatePickerI18n {
   /**
    * An array with the full names of months starting

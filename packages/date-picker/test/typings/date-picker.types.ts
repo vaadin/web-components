@@ -11,7 +11,14 @@ import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import type { DatePickerDate, DatePickerI18n, DatePickerMixinClass } from '../../src/vaadin-date-picker-mixin.js';
+import type {
+  DatePickerDate,
+  DatePickerDateMetadata,
+  DatePickerDateMetadataProvider,
+  DatePickerDateRange,
+  DatePickerI18n,
+  DatePickerMixinClass,
+} from '../../src/vaadin-date-picker-mixin.js';
 import type {
   DatePicker,
   DatePickerChangeEvent,
@@ -82,6 +89,17 @@ assertType<string | null | undefined>(datePicker.initialPosition);
 // I18n
 assertType<DatePickerI18n>({});
 assertType<DatePickerI18n>({ cancel: 'cancel' });
+
+// Date metadata
+assertType<DatePickerDateRange>({ start: { year: 2024, month: 0, day: 1 }, end: { year: 2024, month: 0, day: 31 } });
+assertType<DatePickerDateMetadata>({ year: 2024, month: 0, day: 1 });
+assertType<DatePickerDateMetadata>({ year: 2024, month: 0, day: 1, disabled: true });
+assertType<DatePickerDateMetadataProvider>((range) => {
+  assertType<DatePickerDate>(range.start);
+  assertType<DatePickerDate>(range.end);
+  return [];
+});
+assertType<DatePickerDateMetadataProvider>(async () => await Promise.resolve([]));
 
 // DatePicker mixins
 assertType<ElementMixinClass>(datePicker);
