@@ -12,7 +12,6 @@ const notificationCard = css`
     display: block;
     position: relative;
     --vaadin-overlay-animation-duration: 0.3s;
-    --vaadin-overlay-animation-delay: 0.1s;
     transition-duration: var(--vaadin-overlay-animation-duration);
   }
 
@@ -43,8 +42,17 @@ const notificationCard = css`
     }
   }
 
-  /* Cards scale down in place instead of sliding back out */
   :host([closing]) {
+    animation-direction: reverse;
+    animation-duration: var(--vaadin-overlay-animation-duration);
+    animation-delay: var(--vaadin-overlay-animation-duration);
+    transition-delay: var(--vaadin-overlay-animation-duration);
+  }
+
+  /* Cards scale down in place instead of sliding back out */
+  /* WebKit/Safari needs these to be explicitly set on the part=overlay element as well */
+  :host([closing]),
+  :host([closing]) [part='overlay'] {
     --vaadin-overlay-translate-closed: 0%;
     --vaadin-overlay-scale-closed: 0.98;
     --vaadin-overlay-animation-delay: 0s;
@@ -71,69 +79,63 @@ const notificationCard = css`
   }
 
   /* The other cards make room for a card that opens, and close the gap when it is removed */
-  @supports (interpolate-size: allow-keywords) {
-    :host {
-      interpolate-size: allow-keywords;
-      transition-property: height, margin-top, margin-bottom;
-    }
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (interpolate-size: allow-keywords) {
+      :host {
+        interpolate-size: allow-keywords;
+        transition-property: height, margin-top, margin-bottom;
+      }
 
-    @starting-style {
-      :host(:not(:nth-child(1 of [slot='middle']))) {
+      @starting-style {
+        :host([opening]:not(:nth-child(1 of [slot='middle']))),
+        :host([closing]) {
+          height: 0;
+          margin-top: 0 !important;
+          margin-bottom: 0 !important;
+        }
+      }
+
+      :host([closing]) {
         height: 0;
         margin-top: 0 !important;
         margin-bottom: 0 !important;
+        transition-delay: var(--vaadin-overlay-animation-duration);
       }
     }
 
-    :host([closing]) {
-      height: 0;
-      margin-top: 0 !important;
-      margin-bottom: 0 !important;
-      transition-delay: var(--vaadin-overlay-animation-duration);
-      animation-duration: calc(var(--vaadin-overlay-animation-duration) * 2);
-    }
-  }
-
-  /* Without interpolate-size, only the margins animate, and max-height stands in for the height */
-  @supports not (interpolate-size: allow-keywords) {
-    :host {
-      transition-property: margin-top, margin-bottom;
-    }
-
-    /* Set while opening only, so that a card taller than this is never cut off once it is open */
-    :host([opening]) {
-      max-height: 25em;
-    }
-
-    :host([opening]:not(:nth-child(1 of [slot='middle']))) {
-      animation: --notification-enter
-        calc(var(--vaadin-overlay-animation-duration) + var(--vaadin-overlay-animation-delay));
-    }
-
-    :host([closing]) {
-      margin-top: 0 !important;
-      margin-bottom: 0 !important;
+    /* Without interpolate-size, only the margins animate, and max-height stands in for the height */
+    @supports not (interpolate-size: allow-keywords) {
+      :host([opening]:not(:nth-child(1 of [slot='middle']))),
+      :host([closing]) {
+        animation-name: --notification-max-height, --notification-margins;
+        animation-duration: calc(var(--vaadin-overlay-animation-duration) * 2 + var(--vaadin-overlay-animation-delay));
+        animation-delay: 0s;
+        animation-timing-function: ease-in-out, cubic-bezier(0.4, 1.1, 0, 1);
+      }
     }
   }
 
   @media (prefers-reduced-motion) {
-    :host {
-      transition-duration: 0s;
-    }
-
     /* The height animation of the fallback above is a keyframe animation, not a transition */
-    :host([opening]:not(:nth-child(1 of [slot='middle']))) {
-      animation-name: --no-op;
-    }
-
-    :host([closing]) {
-      transition-delay: var(--vaadin-overlay-animation-duration);
+    :host(:is([opening], [closing])) {
+      animation-name: --fade !important;
     }
   }
 
-  @keyframes --notification-enter {
+  @keyframes --notification-max-height {
     0% {
       max-height: 0;
+    }
+
+    50% {
+      max-height: 20em;
+    }
+  }
+
+  @keyframes --notification-margins {
+    0% {
+      margin-top: 0;
+      margin-bottom: 0;
     }
   }
 `;
