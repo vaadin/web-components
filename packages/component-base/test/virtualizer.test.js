@@ -234,6 +234,14 @@ describe('virtualizer', () => {
     expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
   });
 
+  it('should update scroll container height on size change', () => {
+    virtualizer.size += 5;
+    expect(elementsContainer.offsetHeight).to.equal(virtualizer.size * 30);
+
+    virtualizer.size -= 5;
+    expect(elementsContainer.offsetHeight).to.equal(virtualizer.size * 30);
+  });
+
   it('should not call updateElement when size increase does not affect visible indexes', () => {
     const updateElement = sinon.spy((el, index) => {
       el.textContent = `item-${index}`;
