@@ -29,8 +29,24 @@ describe('crud', () => {
     await visualDiff(element, 'no-row-borders');
   });
 
-  it('editor-position-default', async () => {
-    element.editedItem = {};
-    await visualDiff(div, 'editor-position-default');
+  ['default', 'aside', 'bottom'].forEach((position) => {
+    describe(`editor-position-${position}`, () => {
+      beforeEach(async () => {
+        switch (position) {
+          case 'aside':
+          case 'bottom':
+            element.editorPosition = position;
+            await nextRender();
+            break;
+          default:
+          // Do nothing
+        }
+      });
+
+      it(`editor-position-${position}`, async () => {
+        element.editedItem = {};
+        await visualDiff(div, `editor-position-${position}`);
+      });
+    });
   });
 });
