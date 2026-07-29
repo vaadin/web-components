@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import '../not-animated-styles.css';
 import '../../vaadin-notification.js';
 
 describe('vaadin-notification', () => {

@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, isIOS, listenOnce, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './not-animated-styles.css';
 import '../src/vaadin-notification.js';
 
 describe('vaadin-notification', () => {
