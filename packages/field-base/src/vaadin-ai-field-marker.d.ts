@@ -41,9 +41,11 @@ export interface AiFieldMarkerOptions {
   message?: string;
 
   /**
-   * Optional extra text shown in the popover below the message.
+   * Optional custom content shown in the popover between the message and the
+   * revert control. The marker places the element in the DOM and removes it
+   * on a re-mark without one.
    */
-  additionalContent?: string;
+  customContent?: HTMLElement;
 
   /**
    * The label of the revert control. Defaults to `Revert`.
@@ -84,10 +86,10 @@ declare global {
  * Not intended to be used as a standalone tag; use the static `mark()` /
  * `unmark()` API.
  *
- * The marker and its popover render in the field's light DOM, so custom
- * popover content can be supplied by appending elements to the marker's
- * `vaadin-popover` child. This is the integration point for frameworks
- * (e.g. Flow) that render content as server-side elements.
+ * Custom popover content — shown between the explanation and the revert
+ * control — is supplied as an element through the `customContent` option of
+ * `mark()`; the marker places it in the DOM. This is the integration point
+ * for frameworks (e.g. Flow) that render content as server-side elements.
  */
 declare class AiFieldMarker extends HTMLElement {
   /**
@@ -96,9 +98,10 @@ declare class AiFieldMarker extends HTMLElement {
   message: string;
 
   /**
-   * Optional extra text shown in the popover below the message.
+   * Optional custom content shown in the popover between the message and the
+   * revert control. `null` shows nothing.
    */
-  additionalContent: string;
+  customContent: HTMLElement | null;
 
   /**
    * The label of the revert control.

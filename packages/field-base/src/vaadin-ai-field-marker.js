@@ -82,10 +82,10 @@ function adoptMarkerStyles(field) {
  * toggle an "AI is working" shimmer on the field along with a client-side
  * read-only guard.
  *
- * The marker and its popover render in the field's light DOM, so custom
- * popover content can be supplied by appending elements to the marker's
- * `vaadin-popover` child. This is the integration point for frameworks
- * (e.g. Flow) that render content as server-side elements.
+ * Custom popover content — shown between the explanation and the revert
+ * control — is supplied as an element through the `customContent` option of
+ * `mark()`; the marker places it in the DOM. This is the integration point
+ * for frameworks (e.g. Flow) that render content as server-side elements.
  *
  * @fires {CustomEvent} ai-field-revert - Fired from the field element when the user activates the revert control. The host restores the value.
  *
@@ -109,11 +109,15 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
       },
 
       /**
-       * Optional extra text shown in the popover below the message.
+       * Optional custom content shown in the popover between the message and
+       * the actions: an element supplied by the host through `mark()` options
+       * (e.g. the provenance of an AI-filled value — confidence, source, a
+       * source image with the driving region outlined). Rendered as-is;
+       * `null` shows nothing.
        */
-      additionalContent: {
-        type: String,
-        value: '',
+      customContent: {
+        attribute: false,
+        value: null,
       },
 
       /**
@@ -174,7 +178,7 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
         position="end-top"
       >
         <p part="message">${this.message}</p>
-        ${this.additionalContent ? html`<div part="additional-content">${this.additionalContent}</div>` : null}
+        ${this.customContent ? html`<div part="custom-content">${this.customContent}</div>` : null}
         <div part="actions">
           <button type="button" part="revert-button" @click="${this._onRevert}">${this.revertText}</button>
         </div>
@@ -255,7 +259,7 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
    * box); pass `options` to override them for this field only.
    *
    * @param {HTMLElement} field the field to mark
-   * @param {{ message?: string, additionalContent?: string, revertText?: string, badgeLabel?: string, badgeTooltip?: string }} [options]
+   * @param {{ message?: string, customContent?: HTMLElement, revertText?: string, badgeLabel?: string, badgeTooltip?: string }} [options]
    * @return {AiFieldMarker | null} the marker instance, or `null` when the field has no shadow root
    */
   static mark(field, options = {}) {
@@ -305,9 +309,10 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
     marker.revertText = options.revertText ?? defaults.revertText;
     marker.badgeLabel = options.badgeLabel ?? defaults.badgeLabel;
     marker.badgeTooltip = options.badgeTooltip ?? defaults.badgeTooltip;
-    if (options.additionalContent != null) {
-      marker.additionalContent = options.additionalContent;
-    }
+    // No stored default for customContent — a re-mark without it clears the
+    // previous value, so the popover never shows content that described an
+    // earlier fill of the field.
+    marker.customContent = options.customContent ?? null;
 
     // Capture the AI-filled value so the revert event can carry it.
     marker._capturedValue = 'value' in field ? field.value : undefined;

@@ -139,20 +139,55 @@ describe('ai field marker', () => {
   });
 
   describe('options', () => {
-    it('should override message, revert text, badge tooltip and additional content', async () => {
+    it('should override message, revert text and badge tooltip', async () => {
       const marker = AiFieldMarker.mark(field, {
         message: 'Custom message',
         revertText: 'Undo',
         badgeTooltip: 'Open AI details',
-        additionalContent: 'Extracted from the uploaded document',
       });
       await nextRender();
       expect(marker.querySelector('[part="message"]').textContent).to.equal('Custom message');
       expect(marker.querySelector('[part="revert-button"]').textContent).to.equal('Undo');
       expect(marker.querySelector('vaadin-tooltip').getAttribute('text')).to.equal('Open AI details');
-      expect(marker.querySelector('[part="additional-content"]').textContent).to.equal(
-        'Extracted from the uploaded document',
+    });
+
+    it('should render custom content passed to mark in the popover', async () => {
+      const custom = document.createElement('img');
+      const marker = AiFieldMarker.mark(field, { customContent: custom });
+      await nextRender();
+
+      const content = marker.querySelector('[part="custom-content"]');
+      expect(content.firstElementChild).to.equal(custom);
+      // Between the explanation and the revert control.
+      expect(content.compareDocumentPosition(marker.querySelector('[part="message"]'))).to.equal(
+        Node.DOCUMENT_POSITION_PRECEDING,
       );
+      expect(content.compareDocumentPosition(marker.querySelector('[part="actions"]'))).to.equal(
+        Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+    });
+
+    it('should keep the custom content across a re-mark that passes it again', async () => {
+      const custom = document.createElement('img');
+      const marker = AiFieldMarker.mark(field, { customContent: custom });
+      await nextRender();
+
+      AiFieldMarker.mark(field, { message: 'Refreshed', customContent: custom });
+      await nextRender();
+
+      expect(marker.querySelector('[part="custom-content"]').firstElementChild).to.equal(custom);
+    });
+
+    it('should clear the custom content on a re-mark without it', async () => {
+      const marker = AiFieldMarker.mark(field, { customContent: document.createElement('img') });
+      await nextRender();
+
+      // The content described the previous fill; a re-mark without it must
+      // not leave it in the popover.
+      AiFieldMarker.mark(field);
+      await nextRender();
+
+      expect(marker.querySelector('[part="custom-content"]')).to.be.null;
     });
 
     it('should keep the field helper description alongside the AI description', async () => {
