@@ -49,8 +49,7 @@ export interface DatePickerI18n {
   cancel?: string;
   /**
    * Accessible name of the overlay content, announced by screen readers when
-   * the overlay opens. Unlike `accessibleName`, which names the input, this
-   * only names the overlay content.
+   * the overlay opens.
    */
   dialogAccessibleName?: string;
   /**
