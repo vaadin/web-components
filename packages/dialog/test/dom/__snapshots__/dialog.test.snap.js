@@ -261,7 +261,9 @@ snapshots["vaadin-dialog shadow noFocusTrap"] =
 
 snapshots["vaadin-dialog shadow noAutofocus"] = 
 `<vaadin-dialog-overlay
+  autofocus=""
   exportparts="backdrop, overlay, header, title, header-content, content, footer"
+  focus-trap=""
   id="overlay"
   opened=""
   popover="manual"
@@ -288,4 +290,34 @@ snapshots["vaadin-dialog shadow noAutofocus"] =
 </vaadin-dialog-overlay>
 `;
 /* end snapshot vaadin-dialog shadow noAutofocus */
+
+snapshots["vaadin-dialog shadow modeless noAutofocus"] = 
+`<vaadin-dialog-overlay
+  exportparts="backdrop, overlay, header, title, header-content, content, footer"
+  id="overlay"
+  modeless=""
+  opened=""
+  popover="manual"
+  restore-focus-on-close=""
+>
+  <slot
+    name="title"
+    slot="title"
+  >
+  </slot>
+  <slot
+    name="header-content"
+    slot="header-content"
+  >
+  </slot>
+  <slot
+    name="footer"
+    slot="footer"
+  >
+  </slot>
+  <slot>
+  </slot>
+</vaadin-dialog-overlay>
+`;
+/* end snapshot vaadin-dialog shadow modeless noAutofocus */
 
