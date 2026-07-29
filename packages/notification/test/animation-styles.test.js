@@ -31,7 +31,7 @@ describe('notification card animation styles', () => {
       const style = getComputedStyle(card);
 
       expect(style.getPropertyValue('--vaadin-overlay-animation-duration')).to.equal('0.3s');
-      expect(style.getPropertyValue('--vaadin-overlay-animation-delay')).to.equal('0.1s');
+      expect(style.getPropertyValue('--vaadin-overlay-animation-delay')).to.equal('0s');
     });
   });
 
@@ -112,12 +112,11 @@ describe('notification card animation styles', () => {
         await emulateMedia({ reducedMotion: 'no-preference' });
       });
 
-      it('should not animate the height of the card', () => {
+      it('should not animate the height of the card, only opacity', () => {
         notification.opened = true;
 
-        const { animationName, transitionDuration } = getComputedStyle(card);
-        expect(animationName).to.equal('--no-op');
-        expect(transitionDuration).to.equal('0s');
+        const { animationName } = getComputedStyle(card);
+        expect(animationName).to.equal('--fade');
       });
     });
   });
