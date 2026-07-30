@@ -304,6 +304,57 @@ describe('title slot', () => {
   });
 });
 
+describe('reset on close', () => {
+  let login, vaadinLoginUsername, vaadinLoginPassword;
+
+  beforeEach(async () => {
+    login = fixtureSync('<vaadin-login-overlay opened></vaadin-login-overlay>');
+    await nextRender();
+    ({ vaadinLoginUsername, vaadinLoginPassword } = fillUsernameAndPassword(login));
+  });
+
+  it('should clear the username and password fields when closing the overlay', async () => {
+    login.opened = false;
+    await nextUpdate(login);
+
+    expect(vaadinLoginUsername.value).to.equal('');
+    expect(vaadinLoginPassword.value).to.equal('');
+  });
+
+  it('should enable the submit button when closing the overlay after submit', async () => {
+    const submit = login.querySelector('vaadin-button[slot="submit"]');
+    submit.click();
+    await nextRender();
+    expect(submit.disabled).to.be.true;
+
+    login.opened = false;
+    await nextRender();
+    expect(submit.disabled).to.be.false;
+  });
+
+  it('should not clear the username and password fields when opening the overlay', async () => {
+    login.opened = false;
+    await nextUpdate(login);
+
+    fillUsernameAndPassword(login);
+    login.opened = true;
+    await nextUpdate(login);
+
+    expect(vaadinLoginUsername.value).to.equal('username');
+    expect(vaadinLoginPassword.value).to.equal('password');
+  });
+});
+
+describe('initially closed', () => {
+  it('should not enable the submit button when disabled is set before attaching', async () => {
+    const login = fixtureSync('<vaadin-login-overlay disabled></vaadin-login-overlay>');
+    await nextRender();
+
+    expect(login.disabled).to.be.true;
+    expect(login.querySelector('vaadin-button[slot="submit"]').disabled).to.be.true;
+  });
+});
+
 describe('detach and re-attach', () => {
   let login;
 
