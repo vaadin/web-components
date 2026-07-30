@@ -105,7 +105,6 @@ vaadin-month-calendar::part(date selected):hover::after {
   vaadin-date-picker {
     --vaadin-overlay-opacity-closed: 1;
     --vaadin-overlay-translate-closed: 0% 110%;
-    --vaadin-overlay-translate-opened: 0%;
 
     &[opening],
     &[closing] {
