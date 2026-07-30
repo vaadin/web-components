@@ -74,12 +74,6 @@ function groupEntriesByMonth(months, entries) {
  * synchronously or a `Promise`, so results from a server (Flow) or a remote
  * availability service can be awaited. Each returned entry is a `DatePickerDate`
  * extended with metadata fields, e.g. `{ year, month, day, disabled: true }`.
- *
- * A month is either resolved or not resolved at all, and only a month's own answer
- * decides its dates. A date in a month that has not resolved yet is not disabled.
- *
- * See `ARCHITECTURE.md` for the reasoning behind the caching, notification and
- * failure behavior.
  */
 export class DateMetadataController {
   /**
@@ -204,9 +198,7 @@ export class DateMetadataController {
   }
 
   /**
-   * Whether the given date is disabled by its metadata. Only returns `true` for
-   * dates in an already-resolved month, and does not consider `min`, `max` or the
-   * date-picker's `isDateDisabled` property.
+   * Whether the given date is disabled by its metadata.
    * @param {Date | null | undefined} date
    * @return {boolean}
    */
