@@ -833,6 +833,14 @@ describe('FieldMixin', () => {
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
       });
 
+      it('should set aria-labelledby when accessible-name is defined before accessible-name-ref', async () => {
+        element.accessibleName = 'accessible name';
+        await nextUpdate(element);
+        element.accessibleNameRef = 'accessible-name-ref-0';
+        await nextUpdate(element);
+        expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
+      });
+
       it('should change aria-labelledby if accessible-name-ref is changed', async () => {
         element.accessibleNameRef = 'accessible-name-ref-0';
         await nextUpdate(element);

@@ -75,19 +75,18 @@ export const FieldMixin = (superclass) =>
       this._helperController = new HelperController(this);
       this._errorController = new ErrorController(this);
 
-      this._errorController.addEventListener('slot-content-changed', (event) => {
-        this.toggleAttribute('has-error-message', event.detail.hasContent);
+      this._labelController.addEventListener('slot-content-changed', () => {
+        this.__syncFieldAriaControllerLabelId();
       });
 
-      this._labelController.addEventListener('slot-content-changed', (event) => {
-        const { hasContent, node } = event.detail;
-        this.__labelChanged(hasContent, node);
+      this._errorController.addEventListener('slot-content-changed', (event) => {
+        this.toggleAttribute('has-error-message', event.detail.hasContent);
+        this.__syncFieldAriaControllerErrorId();
       });
 
       this._helperController.addEventListener('slot-content-changed', (event) => {
-        const { hasContent, node } = event.detail;
-        this.toggleAttribute('has-helper', hasContent);
-        this.__helperChanged(hasContent, node);
+        this.toggleAttribute('has-helper', event.detail.hasContent);
+        this.__syncFieldAriaControllerHelperId();
       });
     }
 
@@ -116,34 +115,18 @@ export const FieldMixin = (superclass) =>
       this.addController(this._errorController);
     }
 
-    /** @private */
-    __helperChanged(hasHelper, helperNode) {
-      if (hasHelper) {
-        this._fieldAriaController.setHelperId(helperNode.id);
-      } else {
-        this._fieldAriaController.setHelperId(null);
-      }
-    }
-
     /** @protected */
     _accessibleNameChanged(accessibleName) {
       this._fieldAriaController.setAriaLabel(accessibleName);
     }
 
     /** @protected */
-    _accessibleNameRefChanged(accessibleNameRef) {
-      this._fieldAriaController.setLabelId(accessibleNameRef, true);
-    }
-
-    /** @private */
-    __labelChanged(hasLabel, labelNode) {
-      // Label ID should be only added when the label content is present.
-      // Otherwise, it may conflict with an `aria-label` attribute possibly added by the user.
-      if (hasLabel) {
-        this._fieldAriaController.setLabelId(labelNode.id);
-      } else {
-        this._fieldAriaController.setLabelId(null);
+    _accessibleNameRefChanged(accessibleNameRef, oldAccessibleNameRef) {
+      if (!accessibleNameRef && oldAccessibleNameRef) {
+        // Remove the user-provided id and restore ids stored by the controller.
+        this._fieldAriaController.setLabelId(null, true);
       }
+      this.__syncFieldAriaControllerLabelId();
     }
 
     /**
@@ -186,7 +169,20 @@ export const FieldMixin = (superclass) =>
      */
     _invalidChanged(invalid) {
       this._errorController.setInvalid(invalid);
+      this.__syncFieldAriaControllerErrorId();
+    }
 
+    /** @private */
+    __syncFieldAriaControllerHelperId() {
+      if (this.hasAttribute('has-helper')) {
+        this._fieldAriaController.setHelperId(this._helperNode?.id);
+      } else {
+        this._fieldAriaController.setHelperId(null);
+      }
+    }
+
+    /** @private */
+    __syncFieldAriaControllerErrorId() {
       // This timeout is needed to prevent NVDA from announcing the error message twice:
       // 1. Once adding the `[role=alert]` attribute when updating `has-error-message` (OK).
       // 2. Once linking the error ID with the ARIA target here (unwanted).
@@ -194,12 +190,24 @@ export const FieldMixin = (superclass) =>
       setTimeout(() => {
         // Error message ID needs to be dynamically added / removed based on the validity
         // Otherwise assistive technologies would announce the error, even if we hide it.
-        if (invalid) {
-          const node = this._errorNode;
-          this._fieldAriaController.setErrorId(node?.id);
+        if (this.invalid) {
+          this._fieldAriaController.setErrorId(this._errorNode?.id);
         } else {
           this._fieldAriaController.setErrorId(null);
         }
       });
+    }
+
+    /** @private */
+    __syncFieldAriaControllerLabelId() {
+      if (this.accessibleNameRef) {
+        this._fieldAriaController.setLabelId(this.accessibleNameRef, true);
+      } else if (this.hasAttribute('has-label')) {
+        // Label ID should be only added when the label content is present.
+        // Otherwise, it may conflict with an `aria-label` attribute possibly added by the user.
+        this._fieldAriaController.setLabelId(this._labelNode?.id);
+      } else {
+        this._fieldAriaController.setLabelId(null);
+      }
     }
   };
