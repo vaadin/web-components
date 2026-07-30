@@ -96,9 +96,7 @@ export class FieldAriaController {
   }
 
   /**
-   * Links the target element with a slotted error element via the target's attribute:
-   * - `aria-labelledby` if the target is the host component (e.g a field group).
-   * - `aria-describedby` otherwise.
+   * Links the target element with a slotted error element via `aria-describedby` attribute.
    *
    * To unlink the previous slotted error element, pass `null` as `errorId`.
    *
@@ -110,9 +108,7 @@ export class FieldAriaController {
   }
 
   /**
-   * Links the target element with a slotted helper element via the target's attribute:
-   * - `aria-labelledby` if the target is the host component (e.g a field group).
-   * - `aria-describedby` otherwise.
+   * Links the target element with a slotted helper element via `aria-describedby` attribute.
    *
    * To unlink the previous slotted helper element, pass `null` as `helperId`.
    *
