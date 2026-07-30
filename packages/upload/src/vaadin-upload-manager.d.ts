@@ -41,8 +41,7 @@ export interface UploadManagerOptions {
   target?: string;
 
   /**
-   * HTTP Method used to send the files. The value is applied to the
-   * request as-is; servers typically expect POST or PUT.
+   * HTTP Method used to send the files. Only POST and PUT are allowed.
    * @default 'POST'
    */
   method?: UploadMethod;
@@ -201,8 +200,7 @@ export class UploadManager extends EventTarget {
   target: string;
 
   /**
-   * HTTP Method used to send the files. The value is applied to the
-   * request as-is; servers typically expect POST or PUT.
+   * HTTP Method used to send the files. Only POST and PUT are allowed.
    */
   method: UploadMethod;
 
@@ -268,8 +266,6 @@ export class UploadManager extends EventTarget {
    * This helps prevent browser performance degradation and XHR limitations when
    * uploading large numbers of files. Files exceeding this limit will be queued
    * and uploaded as active uploads complete.
-   * A non-positive value pauses uploads: files stay in the queue until the
-   * value is raised.
    */
   maxConcurrentUploads: number;
 
@@ -297,10 +293,6 @@ export class UploadManager extends EventTarget {
    * - `abort`: True if the file was canceled by the user.
    * - `complete`: True when the file was transferred to the server.
    * - `uploading`: True while transferring data to the server.
-   *
-   * **Note:** The setter accepts the files as-is, without validating them
-   * against the maxFiles, maxFileSize, and accept constraints. The constraints
-   * only apply to files added with `addFiles`.
    */
   files: UploadFile[];
 
@@ -322,9 +314,6 @@ export class UploadManager extends EventTarget {
 
   /**
    * Triggers the upload of any files that are not completed.
-   *
-   * Files that are not in the `files` list are uploaded without being added
-   * to it, so they do not affect the maxFilesReached state.
    *
    * @param files Files being uploaded. Defaults to all outstanding files.
    */

@@ -84,7 +84,7 @@ export class UploadManager extends EventTarget {
    * Create an UploadManager instance.
    * @param {Object} options - Configuration options
    * @param {string} [options.target=''] - The server URL. The default value is an empty string, which means that _window.location_ will be used.
-   * @param {string} [options.method='POST'] - HTTP Method used to send the files. The value is applied to the request as-is; servers typically expect POST or PUT.
+   * @param {string} [options.method='POST'] - HTTP Method used to send the files. Only POST and PUT are allowed.
    * @param {Object} [options.headers={}] - Key-Value map to send to the server.
    * @param {number} [options.timeout=0] - Max time in milliseconds for the entire upload process, if exceeded the request will be aborted. Zero means that there is no timeout.
    * @param {number} [options.maxFiles=Infinity] - Limit of files to upload, by default it is unlimited. If the value is set to one, native file browser will prevent selecting multiple files.
@@ -100,7 +100,7 @@ export class UploadManager extends EventTarget {
   constructor(options = {}) {
     super();
 
-    // Configuration properties
+    // Configuration properties - use setters for validation
     this.target = options.target || '';
     this.method = options.method || 'POST';
     this.headers = options.headers || {};
@@ -117,8 +117,7 @@ export class UploadManager extends EventTarget {
   }
 
   /**
-   * HTTP Method used to send the files. The value is applied to the request
-   * as-is; servers typically expect POST or PUT.
+   * HTTP Method used to send the files. Only POST and PUT are allowed.
    * @type {string}
    */
   get method() {
@@ -126,6 +125,9 @@ export class UploadManager extends EventTarget {
   }
 
   set method(value) {
+    if (value !== 'POST' && value !== 'PUT') {
+      throw new Error(`Invalid method "${value}". Only POST and PUT are allowed.`);
+    }
     this.#method = value;
   }
 
@@ -147,8 +149,6 @@ export class UploadManager extends EventTarget {
 
   /**
    * Maximum number of files that can be uploaded simultaneously.
-   * A non-positive value pauses uploads: files stay in the queue until the
-   * value is raised.
    * @type {number}
    */
   get maxConcurrentUploads() {
@@ -156,6 +156,9 @@ export class UploadManager extends EventTarget {
   }
 
   set maxConcurrentUploads(value) {
+    if (value <= 0) {
+      throw new Error(`Invalid maxConcurrentUploads "${value}". Value must be positive.`);
+    }
     this.#maxConcurrentUploads = value;
   }
 
@@ -194,9 +197,8 @@ export class UploadManager extends EventTarget {
    * **Note:** The getter returns a shallow copy of the internal array to prevent
    * external mutation. Modifying the returned array will not affect the manager's state.
    *
-   * **Note:** The setter accepts the files as-is, without validating them
-   * against the maxFiles, maxFileSize, and accept constraints. The constraints
-   * only apply to files added with `addFiles`.
+   * **Note:** The setter validates files against maxFiles, maxFileSize, and accept constraints.
+   * Files that fail validation will be rejected with a 'file-reject' event.
    * @type {Array<UploadFile>}
    */
   get files() {
@@ -204,7 +206,29 @@ export class UploadManager extends EventTarget {
   }
 
   set files(value) {
-    this.#setFiles([...value]);
+    const validFiles = [];
+
+    for (const file of value) {
+      // Skip validation for files already in the list
+      if (this.#files.includes(file)) {
+        validFiles.push(file);
+        continue;
+      }
+
+      const error = this.#validateFile(file, validFiles.length);
+      if (error) {
+        this.dispatchEvent(
+          new CustomEvent('file-reject', {
+            detail: { file, error },
+          }),
+        );
+        continue;
+      }
+
+      validFiles.push(file);
+    }
+
+    this.#setFiles(validFiles);
   }
 
   // Internal setter - bypasses validation for internal use only
@@ -212,6 +236,17 @@ export class UploadManager extends EventTarget {
     this.#files = value;
     this.#updateMaxFilesReached();
     this.#notifyFilesChanged();
+  }
+
+  /**
+   * Assign files without validating them against the maxFiles, maxFileSize,
+   * and accept constraints, unlike the `files` setter.
+   * Internal API for `<vaadin-upload>`, may change at any time.
+   * @param {Array<UploadFile>} value
+   * @protected
+   */
+  _setFiles(value) {
+    this.#setFiles([...value]);
   }
 
   /**
@@ -255,15 +290,26 @@ export class UploadManager extends EventTarget {
   /**
    * Triggers the upload of any files that are not completed.
    *
-   * Files that are not in the `files` list are uploaded without being added
-   * to it, so they do not affect the maxFilesReached state.
-   *
    * @param {UploadFile|UploadFile[]} [files] - Files being uploaded. Defaults to all outstanding files.
    */
   uploadFiles(files = this.#files) {
     if (files && !Array.isArray(files)) {
       files = [files];
     }
+    // Only upload files that are managed by this instance
+    this._uploadFiles(files.filter((file) => this.#files.includes(file)));
+  }
+
+  /**
+   * Triggers the upload of any given files that are not completed, unlike
+   * `uploadFiles`, which only uploads files that are in the `files` list.
+   * Files that are not in the list are uploaded without being added to it,
+   * so they do not affect the maxFilesReached state.
+   * Internal API for `<vaadin-upload>`, may change at any time.
+   * @param {UploadFile[]} files
+   * @protected
+   */
+  _uploadFiles(files) {
     files.filter((file) => !file.complete).forEach((file) => this.#queueFileUpload(file));
   }
 

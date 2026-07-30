@@ -368,13 +368,18 @@ export const UploadMixin = (superClass) =>
     constructor() {
       super();
 
-      // Create the internal upload manager. Its `headers` accessor is
-      // shadowed with a plain property to skip the manager's normalization:
-      // undefined headers (from an invalid JSON string) have historically
-      // been applied as-is, throwing when the request is configured.
+      // Create the internal upload manager. Its `method`, `headers` and
+      // `maxConcurrentUploads` accessors are shadowed with plain properties to
+      // skip the manager's validation, since `<vaadin-upload>` has historically
+      // accepted any values for these properties: an unsupported method is
+      // passed to the request, a non-positive maxConcurrentUploads pauses
+      // uploads, and undefined headers (from an invalid JSON string) throw when
+      // the request is configured.
       const manager = new UploadManager();
       Object.defineProperties(manager, {
+        method: { value: manager.method, writable: true },
         headers: { value: manager.headers, writable: true },
+        maxConcurrentUploads: { value: manager.maxConcurrentUploads, writable: true },
       });
       this._manager = manager;
 
@@ -523,7 +528,10 @@ export const UploadMixin = (superClass) =>
       // Sync files to manager when set directly (e.g., from tests or user code)
       // Skip if this change was triggered by the manager's files-changed event
       if (this._manager && !this.__updatingFromManager) {
-        this._manager.files = files;
+        // Use the internal setter to skip validation: files assigned to the
+        // `files` property directly (e.g. to show previously uploaded files)
+        // must be accepted as-is
+        this._manager._setFiles(files);
       }
     }
 
@@ -799,11 +807,12 @@ export const UploadMixin = (superClass) =>
 
       files.forEach((file) => this.__clearFileError(file));
 
-      // The manager uploads files that are not in the `files` list without
-      // adding them to it. Keep track of them to update their status strings.
+      // The internal upload method uploads files that are not in the `files`
+      // list without adding them to it. Keep track of them to update their
+      // status strings.
       files.filter((file) => !this.files.includes(file)).forEach((file) => this.__externalUploads.add(file));
 
-      this._manager.uploadFiles(files);
+      this._manager._uploadFiles(files);
     }
 
     // ============ Utilities ============
