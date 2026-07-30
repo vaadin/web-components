@@ -2,18 +2,10 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, makeSoloTouchEvent, nextFrame, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-month-calendar.js';
-import { getDefaultI18n } from './helpers.js';
+import { getDateCells, getDefaultI18n, getWeekDayCells } from './helpers.js';
 
 describe('vaadin-month-calendar', () => {
   let monthCalendar, valueChangedSpy;
-
-  function getDateCells(calendar) {
-    return [...calendar.shadowRoot.querySelectorAll('[part~="date"]:not(:empty)')];
-  }
-
-  function getWeekDayCells(calendar) {
-    return [...calendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)')];
-  }
 
   beforeEach(async () => {
     monthCalendar = fixtureSync('<vaadin-month-calendar></vaadin-month-calendar>');

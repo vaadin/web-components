@@ -127,11 +127,43 @@ export function getFirstVisibleItem(scroller, bufferOffset = 0) {
 }
 
 /**
+ * The month calendars the overlay content currently holds. The month scroller keeps a fixed pool of
+ * them and reassigns which month each one shows, so the list includes calendars that are scrolled out
+ * of view, and ones with no `month` assigned yet. Filter by `month` to get the rendered ones.
+ *
+ * @param {HTMLElement} root vaadin-date-picker or vaadin-date-picker-overlay-content
+ * @return {HTMLElement[]}
+ */
+export function getCalendars(root) {
+  const overlayContent = root._overlayContent ?? root;
+  return [...overlayContent.querySelectorAll('vaadin-month-calendar')];
+}
+
+/**
+ * The date cells of a month calendar, without the empty ones padding the first and last week.
+ *
+ * @param {HTMLElement} calendar vaadin-month-calendar
+ * @return {HTMLElement[]}
+ */
+export function getDateCells(calendar) {
+  return [...calendar.shadowRoot.querySelectorAll('[part~="date"]:not(:empty)')];
+}
+
+/**
+ * The weekday header cells of a month calendar, without the empty one above the week numbers.
+ *
+ * @param {HTMLElement} calendar vaadin-month-calendar
+ * @return {HTMLElement[]}
+ */
+export function getWeekDayCells(calendar) {
+  return [...calendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)')];
+}
+
+/**
  * @param {HTMLElement} root vaadin-date-picker or vaadin-date-picker-overlay-content
  */
 export function getFocusableCell(root) {
-  const overlayContent = root._overlayContent ?? root;
-  const focusableMonth = [...overlayContent.querySelectorAll('vaadin-month-calendar')].find((month) => {
+  const focusableMonth = getCalendars(root).find((month) => {
     return !!month.shadowRoot.querySelector('[tabindex="0"]');
   });
 
