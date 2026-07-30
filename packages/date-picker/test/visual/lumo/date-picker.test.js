@@ -116,6 +116,14 @@ describe('date-picker', () => {
           await visualDiff(div, `${dir}-dropdown`);
         });
 
+        it('date metadata loading', async () => {
+          element.value = '2000-01-01';
+          // A provider that never resolves keeps the calendar in the loading state.
+          element.dateMetadataProvider = () => new Promise(() => {});
+          await openOverlay();
+          await visualDiff(div, `${dir}-date-metadata-loading`);
+        });
+
         it('week numbers', async () => {
           element.value = '2000-01-01';
           element.showWeekNumbers = true;
