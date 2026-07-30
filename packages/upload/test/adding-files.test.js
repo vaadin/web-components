@@ -3,6 +3,7 @@ import { change, fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/
 import sinon from 'sinon';
 import '../src/vaadin-upload.js';
 import {
+  addFilesViaInput,
   createFile,
   createFiles,
   createFileSystemDirectoryEntry,
@@ -26,10 +27,10 @@ describe('adding files', () => {
   });
 
   describe('files property', () => {
-    it('should push files to `files` Array property', () => {
+    it('should prepend files to `files` Array property when adding via input', () => {
       expect(upload).to.have.property('files').that.is.an('array').that.is.empty;
 
-      files.forEach(upload._addFile.bind(upload));
+      addFilesViaInput(upload, files);
       expect(upload.files[0]).to.equal(files[1]);
       expect(upload.files[1]).to.equal(files[0]);
     });
@@ -102,7 +103,7 @@ describe('adding files', () => {
 
     it('should not have dragover-valid attribute when max files added', async () => {
       upload.maxFiles = 1;
-      upload._addFile(createFile(100, 'image/jpeg'));
+      upload.files = [createFile(100, 'image/jpeg')];
       await nextUpdate(upload);
 
       upload.dispatchEvent(createDndEvent('dragover'));
@@ -114,7 +115,7 @@ describe('adding files', () => {
 
     it('should not have dragover-valid attribute when disabled', async () => {
       upload.disabled = true;
-      upload._addFile(createFile(100, 'image/jpeg'));
+      upload.files = [createFile(100, 'image/jpeg')];
       await nextUpdate(upload);
 
       upload.dispatchEvent(createDndEvent('dragover'));
@@ -133,7 +134,7 @@ describe('adding files', () => {
 
     it('should set drop effect to none when max files reached', () => {
       upload.maxFiles = 1;
-      upload._addFile(createFile(100, 'image/jpeg'));
+      upload.files = [createFile(100, 'image/jpeg')];
 
       const event = createDndEvent('dragover');
       upload.dispatchEvent(event);
@@ -336,7 +337,7 @@ describe('adding files', () => {
       const uploadStartSpy = sinon.spy();
       upload.addEventListener('upload-start', uploadStartSpy);
 
-      files.forEach(upload._addFile.bind(upload));
+      addFilesViaInput(upload, files);
       // With queue behavior, only the first file starts uploading immediately
       expect(uploadStartSpy.calledOnce).to.be.true;
 
@@ -354,7 +355,7 @@ describe('adding files', () => {
       upload.noAuto = true;
       upload.addEventListener('upload-start', uploadStartSpy);
 
-      files.forEach(upload._addFile.bind(upload));
+      addFilesViaInput(upload, files);
       expect(uploadStartSpy.called).to.be.false;
       expect(upload.files[0].held).to.be.true;
       expect(upload.files[0].uploading).to.not.be.true;
@@ -374,7 +375,7 @@ describe('adding files', () => {
         expect(e.detail.error).to.be.ok;
         done();
       });
-      upload._addFiles([file, file]);
+      addFilesViaInput(upload, [file, file]);
     });
 
     it('should reject files with excessive size', (done) => {
@@ -383,7 +384,7 @@ describe('adding files', () => {
         expect(e.detail.error).to.be.ok;
         done();
       });
-      upload._addFiles([file]);
+      addFilesViaInput(upload, [file]);
     });
 
     it('should reject files with incorrect contentType', (done) => {
@@ -393,59 +394,59 @@ describe('adding files', () => {
         expect(e.detail.error).to.equal('Incorrect File Type.');
         done();
       });
-      upload._addFiles([file]);
+      addFilesViaInput(upload, [file]);
     });
 
     it('should allow files with correct extension', () => {
       upload.accept = 'image/*,.foo,video/*';
       file.name = 'bar.FOO';
-      upload._addFiles([file]);
+      addFilesViaInput(upload, [file]);
       expect(upload.files.length).to.equal(1);
     });
 
     it('should allow files with extensions containing multiple dots', () => {
       upload.accept = 'image/*,.bar.baz,video/*';
       file.name = 'foo.bar.baz';
-      upload._addFiles([file]);
+      addFilesViaInput(upload, [file]);
       expect(upload.files).to.have.lengthOf(1);
     });
 
     it('should reject files that have partial extension match', () => {
       upload.accept = 'image/*,.bar.baz,video/*';
       file.name = 'foo.baz';
-      upload._addFiles([file]);
+      addFilesViaInput(upload, [file]);
       expect(upload.files).to.have.lengthOf(0);
     });
 
     it('should allow files with correct mime type', () => {
       upload.accept = 'application/x-octet-stream';
-      upload._addFiles([file]);
+      addFilesViaInput(upload, [file]);
       expect(upload.files.length).to.equal(1);
     });
 
     it('should allow wildcards', () => {
       upload.accept = 'application/*';
-      upload._addFiles([file]);
+      addFilesViaInput(upload, [file]);
       expect(upload.files.length).to.equal(1);
     });
 
     it('should allow files matching other than the first wildcard', () => {
       upload.accept = 'text/*,application/*,image/*,video/*,audio/*';
-      upload._addFiles([file]);
+      addFilesViaInput(upload, [file]);
       expect(upload.files.length).to.equal(1);
     });
 
     it('should allow files when using regex operators in accept string', () => {
       file = createFile(testFileSize, 'image/svg+xml');
       upload.accept = 'image/svg+xml';
-      upload._addFiles([file]);
+      addFilesViaInput(upload, [file]);
       expect(upload.files.length).to.equal(1);
     });
 
     it('should reject files when accept contains regex single character wildcard and file type is not an exact match', () => {
       file = createFile(testFileSize, 'application/vndxms-excel');
       upload.accept = 'application/vnd.ms-excel';
-      upload._addFiles([file]);
+      addFilesViaInput(upload, [file]);
       expect(upload.files.length).to.equal(0);
     });
   });
