@@ -430,6 +430,28 @@ describe('UploadManager', () => {
       expect(spy.firstCall.args[0].detail.file).to.equal(manager.files[1]);
     });
 
+    it('should upload file not in the list without adding it via uploadFiles', () => {
+      const spy = sinon.spy();
+      manager.addEventListener('upload-start', spy);
+      const file = createFile(100, 'text/plain') as UploadFile;
+      manager.uploadFiles(file);
+      expect(spy.calledOnce).to.be.true;
+      expect(spy.firstCall.args[0].detail.file).to.equal(file);
+      expect(manager.files).to.have.lengthOf(0);
+    });
+
+    it('should not update maxFilesReached when uploading file not in the list', () => {
+      manager.maxFiles = 1;
+      manager.uploadFiles(createFile(100, 'text/plain') as UploadFile);
+      expect(manager.maxFilesReached).to.be.false;
+    });
+
+    it('should set default formDataName on file not in the list', () => {
+      const file = createFile(100, 'text/plain') as UploadFile;
+      manager.uploadFiles(file);
+      expect(file.formDataName).to.equal('file');
+    });
+
     it('should dispatch upload-before event', () => {
       const spy = sinon.spy();
       manager.addEventListener('upload-before', spy);
@@ -2171,7 +2193,7 @@ describe('UploadManager', () => {
   });
 
   describe('uploadFiles with external files', () => {
-    it('should reject files not in manager.files', () => {
+    it('should upload files not in manager.files without adding them', () => {
       manager = new UploadManager({
         target: '/api/upload',
         noAuto: true,
@@ -2180,14 +2202,13 @@ describe('UploadManager', () => {
 
       const externalFile = createFile(100, 'text/plain') as UploadFile;
 
-      // Trying to upload a file that wasn't added should fail or be ignored
       const startSpy = sinon.spy();
       manager.addEventListener('upload-start', startSpy);
 
       manager.uploadFiles([externalFile]);
 
-      // Should not have started upload for external file
-      expect(startSpy.called).to.be.false;
+      expect(startSpy.calledOnce).to.be.true;
+      expect(startSpy.firstCall.args[0].detail.file).to.equal(externalFile);
       expect(manager.files.length).to.equal(0);
     });
   });

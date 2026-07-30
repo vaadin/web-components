@@ -370,6 +370,9 @@ export const UploadMixin = (superClass) =>
 
       // Create the internal upload manager
       this._manager = this.__createManager();
+
+      // Files uploaded via `uploadFiles` without being added to the `files` list
+      this.__externalUploads = new Set();
     }
 
     /** @protected */
@@ -381,7 +384,12 @@ export const UploadMixin = (superClass) =>
       this._manager.addEventListener('max-files-reached-changed', (e) => this.__onManagerMaxFilesReachedChanged(e));
       this._manager.addEventListener('file-reject', (e) => this.__onManagerFileReject(e));
       this._manager.addEventListener('file-remove', (e) => this.__onManagerFileRemove(e));
-      this.__addUploadEventListeners(this._manager);
+      this._manager.addEventListener('upload-success', (e) => this.__onManagerUploadSuccess(e));
+      this._manager.addEventListener('upload-error', (e) => this.__onManagerUploadError(e));
+      this._manager.addEventListener('upload-retry', (e) => this.__onManagerUploadRetry(e));
+      ['upload-before', 'upload-request', 'upload-start', 'upload-progress', 'upload-response', 'upload-abort'].forEach(
+        (type) => this._manager.addEventListener(type, (e) => this.__redispatchEvent(e)),
+      );
 
       this.addEventListener('dragover', this._onDragover.bind(this));
       this.addEventListener('dragleave', this._onDragleave.bind(this));
@@ -390,16 +398,15 @@ export const UploadMixin = (superClass) =>
       // Handle events dispatched by the file elements in the list
       this.addEventListener('file-start', (e) => this.uploadFiles(e.detail.file));
       this.addEventListener('file-abort', (e) => {
-        const manager = this.__managerFor(e.detail.file);
-        manager.abortUpload(e.detail.file);
+        this._manager.abortUpload(e.detail.file);
         // The manager does not process its upload queue when a file that has
         // not started uploading is removed, so removing a queued file would
         // not free capacity for other queued files without this
-        manager._processUploadQueue();
+        this._manager._processUploadQueue();
       });
       this.addEventListener('file-retry', (e) => {
         this.__syncManagerConfig();
-        this.__managerFor(e.detail.file).retryUpload(e.detail.file);
+        this._manager.retryUpload(e.detail.file);
       });
 
       // Announce the upload lifecycle to screen readers
@@ -449,19 +456,6 @@ export const UploadMixin = (superClass) =>
     }
 
     /**
-     * Add listeners for the upload lifecycle events of the given manager.
-     * @private
-     */
-    __addUploadEventListeners(manager) {
-      manager.addEventListener('upload-success', (e) => this.__onManagerUploadSuccess(e));
-      manager.addEventListener('upload-error', (e) => this.__onManagerUploadError(e));
-      manager.addEventListener('upload-retry', (e) => this.__onManagerUploadRetry(e));
-      ['upload-before', 'upload-request', 'upload-start', 'upload-progress', 'upload-response', 'upload-abort'].forEach(
-        (type) => manager.addEventListener(type, (e) => this.__redispatchEvent(e)),
-      );
-    }
-
-    /**
      * Create an UploadManager for internal use. Its `method`, `headers` and
      * `maxConcurrentUploads` accessors are shadowed with plain properties to
      * skip the manager's validation, since `<vaadin-upload>` has historically
@@ -508,18 +502,13 @@ export const UploadMixin = (superClass) =>
         maxConcurrentUploads,
         formDataName,
       };
-      // Validation properties only apply to files added to the list, so they
-      // are not synced to the external manager. The manager does not accept
-      // negative maxFiles, which the component treats as no limit.
+      // The manager does not accept negative maxFiles, which the component
+      // treats as no limit
       Object.assign(this._manager, config, {
         maxFiles: this.maxFiles < 0 ? Infinity : this.maxFiles,
         maxFileSize: this.maxFileSize,
         accept: this.accept,
       });
-
-      if (this.__externalManager) {
-        Object.assign(this.__externalManager, config);
-      }
     }
 
     /**
@@ -572,6 +561,9 @@ export const UploadMixin = (superClass) =>
       if (this.__syncingToManager) {
         return;
       }
+      // Files that are not rendered by the file list still need up-to-date status strings
+      this.__externalUploads.forEach((file) => updateFileStatus(file, this.__effectiveI18n));
+
       const files = event.detail.value;
       // Only update the `files` property when files are added or removed, so that
       // `files-changed` is not fired for upload state updates on individual files
@@ -634,7 +626,7 @@ export const UploadMixin = (superClass) =>
     /** @private */
     __redispatchEvent(event) {
       const { file } = event.detail;
-      if (file && this.__isExternalFile(file)) {
+      if (file && this.__externalUploads.has(file)) {
         // Files that are not rendered by the file list still need up-to-date
         // status strings when their upload events are dispatched
         updateFileStatus(file, this.__effectiveI18n);
@@ -648,43 +640,6 @@ export const UploadMixin = (superClass) =>
       if (event.cancelable && !dispatched) {
         event.preventDefault();
       }
-    }
-
-    // ============ External uploads ============
-
-    /**
-     * Files passed to `uploadFiles` that are not in the `files` list are
-     * uploaded without being added to it. They are handled by a separate
-     * manager so that they never affect the `files` list, its validation,
-     * or the `maxFilesReached` state.
-     * @private
-     */
-    __getExternalManager() {
-      if (!this.__externalManager) {
-        const manager = this.__createManager();
-        manager._createXhr = this._manager._createXhr;
-        // Files that are not rendered by the file list still need up-to-date status strings
-        manager.addEventListener('files-changed', () => {
-          manager.files.forEach((file) => updateFileStatus(file, this.__effectiveI18n));
-          // The file list has historically been rendered on upload state
-          // changes even for files that it does not display
-          this.__renderFileList();
-        });
-        this.__addUploadEventListeners(manager);
-        this.__externalManager = manager;
-        this.__syncManagerConfig();
-      }
-      return this.__externalManager;
-    }
-
-    /** @private */
-    __isExternalFile(file) {
-      return !!this.__externalManager && this.__externalManager.files.includes(file);
-    }
-
-    /** @private */
-    __managerFor(file) {
-      return this.__isExternalFile(file) ? this.__externalManager : this._manager;
     }
 
     /** @private */
@@ -860,9 +815,6 @@ export const UploadMixin = (superClass) =>
 
     set _createXhr(value) {
       this._manager._createXhr = value;
-      if (this.__externalManager) {
-        this.__externalManager._createXhr = value;
-      }
     }
 
     /**
@@ -881,19 +833,9 @@ export const UploadMixin = (superClass) =>
 
       files.forEach((file) => this.__clearFileError(file));
 
-      // Files that are not in the `files` list are uploaded by a separate
-      // manager without being added to the list
-      const externalFiles = files.filter((file) => !this.files.includes(file));
-      if (externalFiles.length > 0) {
-        const externalManager = this.__getExternalManager();
-        const externalManagerFiles = externalManager.files;
-        const newFiles = externalFiles.filter((file) => !externalManagerFiles.includes(file));
-        newFiles.forEach((file) => {
-          file.formDataName ??= this.formDataName;
-        });
-        externalManager.files = [...externalManagerFiles, ...newFiles];
-        externalManager.uploadFiles(externalFiles);
-      }
+      // The manager uploads files that are not in the `files` list without
+      // adding them to it. Keep track of them to update their status strings.
+      files.filter((file) => !this.files.includes(file)).forEach((file) => this.__externalUploads.add(file));
 
       this._manager.uploadFiles(files);
     }

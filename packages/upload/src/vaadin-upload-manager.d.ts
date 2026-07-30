@@ -323,6 +323,9 @@ export class UploadManager extends EventTarget {
   /**
    * Triggers the upload of any files that are not completed.
    *
+   * Files that are not in the `files` list are uploaded without being added
+   * to it, so they do not affect the maxFilesReached state.
+   *
    * @param files Files being uploaded. Defaults to all outstanding files.
    */
   uploadFiles(files?: UploadFile | UploadFile[]): void;

@@ -255,14 +255,16 @@ export class UploadManager extends EventTarget {
   /**
    * Triggers the upload of any files that are not completed.
    *
+   * Files that are not in the `files` list are uploaded without being added
+   * to it, so they do not affect the maxFilesReached state.
+   *
    * @param {UploadFile|UploadFile[]} [files] - Files being uploaded. Defaults to all outstanding files.
    */
   uploadFiles(files = this.#files) {
     if (files && !Array.isArray(files)) {
       files = [files];
     }
-    // Only upload files that are managed by this instance and not already complete
-    files.filter((file) => this.#files.includes(file) && !file.complete).forEach((file) => this.#queueFileUpload(file));
+    files.filter((file) => !file.complete).forEach((file) => this.#queueFileUpload(file));
   }
 
   /**
@@ -405,6 +407,9 @@ export class UploadManager extends EventTarget {
     file.uploading = file.indeterminate = true;
     file.complete = file.abort = file.errorKey = false;
     file.stalled = false;
+    // Files added to the list get formDataName in #addFile; this covers
+    // files uploaded without being added to the list
+    file.formDataName ??= this.formDataName;
     this.#notifyFilesChanged();
 
     this.#uploadQueue.push(file);
@@ -533,6 +538,9 @@ export class UploadManager extends EventTarget {
     };
 
     const isRawUpload = this.uploadFormat === 'raw';
+    // Files that are not in the list cannot be "removed during an event
+    // handler", so the mid-upload removal checks only apply to listed files
+    const isListed = this.#files.includes(file);
 
     if (!file.uploadTarget) {
       file.uploadTarget = this.target;
@@ -551,7 +559,7 @@ export class UploadManager extends EventTarget {
 
     // Check if file was removed during upload-before handler
     // If file.abort is true, onabort already decremented #activeUploads
-    if (!this.#files.includes(file)) {
+    if (isListed && !this.#files.includes(file)) {
       if (!file.abort) {
         this.#activeUploads -= 1;
       }
@@ -607,7 +615,7 @@ export class UploadManager extends EventTarget {
 
     // Check if file was removed during upload-request handler
     // If file.abort is true, onabort already decremented #activeUploads
-    if (!this.#files.includes(file)) {
+    if (isListed && !this.#files.includes(file)) {
       if (!file.abort) {
         this.#activeUploads -= 1;
       }
