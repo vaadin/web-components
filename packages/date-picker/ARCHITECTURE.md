@@ -48,6 +48,9 @@ month-at-a-time navigation is slower than any debounce window.
 Fixed blocks also mean every caller asks for the same ranges, which a server can cache. Ranges centred on
 wherever the user happens to be looking are all slightly different, so they cannot be.
 
+A month is rounded **down** to its block, not towards zero, so that a date before year 0 lands in the
+block it belongs to rather than the one after it.
+
 Narrowing keeps the call to what is missing: when an answered block falls between two missing ones, the
 range covers it rather than splitting into a call per gap — one round trip for a slightly wider range.
 
@@ -70,6 +73,10 @@ disagree, and `isLoading()` is derived by looking for a pending month rather tha
 A month has no record until it is loaded, so it is pending, resolved, or absent. That makes what is
 absent exactly what needs loading, and it is why a failure removes the months it covered rather than
 marking them.
+
+Every pending month shares one frozen record, because a month being fetched has nothing of its own to
+hold: only a resolved month is ever read for entries. Anything that has to be remembered per month while
+it is in flight would need a record per month again.
 
 Resolving a month writes a fresh record, so its entries replace the previous ones rather than merging
 into them: a month's own answer is complete by definition. A resolved month is currently only
@@ -133,6 +140,11 @@ rebuilding the date and comparing it back, which catches a month outside 0–11,
 February 30 alike — each would otherwise be stored under a key that no lookup can produce. A month given
 1-based cannot be caught this way, since it is a valid month number, so the 0-based contract is stated on
 the provider type instead.
+
+The three fields are type-checked before that, which is not redundant: a value that cannot be coerced to a
+number, a bigint say, throws while the date is being rebuilt. Since the answer is applied inside the
+error handling above, one such entry would otherwise discard the whole range and have it requested again
+on every navigation, instead of costing only itself.
 
 Both of those are mistakes in how the provider is written rather than runtime failures, so they are warned
 about once rather than once per request, which would otherwise repeat on every scroll. The trade is that

@@ -15,29 +15,15 @@ import {
   monthIndexOf,
 } from './vaadin-date-picker-helper.js';
 
-// Months are fetched in fixed blocks rather than in a buffer centred on what was asked for. A
-// buffer moves with the request, so it never gets ahead of the user: stepping forward one month
-// leaves one new month missing at the far edge, and that is one more request. Rounding out to a
-// block instead means stepping around inside it asks for nothing.
-//
-// Counted from January of year 0, a block is exactly one calendar year, which also means every
-// caller asks for the same ranges, so a server can cache the answers. Ranges centred on wherever
-// the user happens to be looking are all slightly different and cannot be.
+// Counted from January of year 0, so a block is one calendar year.
 const BLOCK_MONTHS = 12;
 
-// `Math.floor`, not `Math.trunc`, so a month before year 0 rounds down to the start of its block
-// rather than towards zero, which would land in the block after it.
 function blockStart(month) {
   return Math.floor(month / BLOCK_MONTHS) * BLOCK_MONTHS;
 }
 
-// Shared, because a pending month has no entries to hold: `#resolvedMonth` only answers for a
-// month that has resolved.
 const PENDING_MONTH = Object.freeze({ pending: true });
 
-// Entries are keyed by the month and day they name, so anything that is not a real date would
-// silently produce a key that no lookup can ever match. Rebuilding the date and comparing it back
-// catches a month outside 0-11, a day outside its month, and February 30 alike.
 function isValidEntry(entry) {
   if (!entry || !Number.isInteger(entry.year) || !Number.isInteger(entry.month) || !Number.isInteger(entry.day)) {
     return false;
@@ -46,8 +32,6 @@ function isValidEntry(entry) {
   return date.getFullYear() === entry.year && date.getMonth() === entry.month && date.getDate() === entry.day;
 }
 
-// One fresh bucket per month being loaded, so a month's own answer replaces its entries, and an
-// entry for any other month is dropped, including one the range covered but did not load.
 function groupEntriesByMonth(months, entries) {
   const result = new Map(months.map((month) => [month, new Map()]));
 
@@ -74,6 +58,9 @@ function groupEntriesByMonth(months, entries) {
  * synchronously or a `Promise`, so results from a server (Flow) or a remote
  * availability service can be awaited. Each returned entry is a `DatePickerDate`
  * extended with metadata fields, e.g. `{ year, month, day, disabled: true }`.
+ *
+ * `ARCHITECTURE.md` in this package records the reasoning behind the request,
+ * caching, notification and failure behavior.
  */
 export class DateMetadataController {
   /**
@@ -113,24 +100,14 @@ export class DateMetadataController {
   }
 
   hostConnected() {
-    // Changes that resolved while the host was detached were not reported to it,
-    // so re-report the current state now that it can act on it again.
     this.#notify();
   }
 
   /**
    * Registers an element to be re-rendered whenever the resolved metadata or the
-   * loading state changes.
-   *
-   * The element must render from its bindings: it is invalidated with
-   * `requestUpdate()`, which leaves the changed properties empty, so `PolylitMixin`
-   * does not re-run observers. State applied imperatively from an observer has to be
-   * refreshed from the host callback instead.
-   *
-   * The element must also not be the one whose own observer triggers a load, or it
-   * invalidates itself mid-update.
-   *
-   * There is no `unsubscribe`: a subscriber is retained for the controller's lifetime.
+   * loading state changes. The element must render from its bindings, and must not be
+   * the one whose own observer triggers a load. It stays registered for the
+   * controller's lifetime.
    *
    * @param {import('lit').ReactiveElement} element
    */
@@ -152,9 +129,8 @@ export class DateMetadataController {
   }
 
   /**
-   * Sets the provider function and clears the cache. Compared by reference, so a
-   * missing provider is normalized to `null` and passing the same provider again is
-   * a no-op. Callers should keep a stable provider reference.
+   * Sets the provider function and clears the cache. Passing the same provider again
+   * is a no-op, so callers should keep a stable reference.
    *
    * @param {Function | null | undefined} provider
    */
@@ -211,9 +187,8 @@ export class DateMetadataController {
    * given dates, rounded out to whole blocks of months. Months already loaded or in
    * flight are skipped, and the ones left over are requested with a single call.
    *
-   * A range inside one block costs nothing once that block is loaded, so moving
-   * around within it does not re-request. Each call that does find a missing month
-   * issues its own request, so a caller that loads on scroll should still debounce.
+   * Each call that finds a missing month issues its own request, so a caller that
+   * loads on scroll should debounce.
    *
    * @param {Date | null | undefined} startDate
    * @param {Date | null | undefined} endDate
@@ -261,7 +236,6 @@ export class DateMetadataController {
       console.error(error);
     }
 
-    // Ignore an answer from before the last `clearCache()`, e.g. because the provider changed.
     if (requestId !== this.#requestId) {
       return;
     }
@@ -270,7 +244,6 @@ export class DateMetadataController {
       if (entries) {
         this.#months.set(month, { pending: false, entries: entries.get(month) });
       } else {
-        // Left absent rather than recorded as empty, so the next range request asks again.
         this.#months.delete(month);
       }
     });
@@ -279,7 +252,6 @@ export class DateMetadataController {
   }
 
   #notify() {
-    // Subscribers re-render from their bindings, so invalidate them synchronously.
     this.#subscribers.forEach((element) => element.requestUpdate());
 
     if (this.#onChange) {

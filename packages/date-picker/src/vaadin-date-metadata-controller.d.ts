@@ -14,6 +14,9 @@ import type { DatePickerDateMetadata, DatePickerDateMetadataProvider } from './v
  * synchronously or a `Promise`, so results from a server (Flow) or a remote
  * availability service can be awaited. Each returned entry is a `DatePickerDate`
  * extended with metadata fields, e.g. `{ year, month, day, disabled: true }`.
+ *
+ * `ARCHITECTURE.md` in this package records the reasoning behind the request,
+ * caching, notification and failure behavior.
  */
 export class DateMetadataController implements ReactiveController {
   /**
@@ -32,17 +35,9 @@ export class DateMetadataController implements ReactiveController {
 
   /**
    * Registers an element to be re-rendered whenever the resolved metadata or the
-   * loading state changes.
-   *
-   * The element must render from its bindings: it is invalidated with
-   * `requestUpdate()`, which leaves the changed properties empty, so `PolylitMixin`
-   * does not re-run observers. State applied imperatively from an observer has to be
-   * refreshed from the host callback instead.
-   *
-   * The element must also not be the one whose own observer triggers a load, or it
-   * invalidates itself mid-update.
-   *
-   * There is no `unsubscribe`: a subscriber is retained for the controller's lifetime.
+   * loading state changes. The element must render from its bindings, and must not be
+   * the one whose own observer triggers a load. It stays registered for the
+   * controller's lifetime.
    */
   subscribe(element: ReactiveElement): void;
 
@@ -52,9 +47,8 @@ export class DateMetadataController implements ReactiveController {
   isLoading(): boolean;
 
   /**
-   * Sets the provider function and clears the cache. Compared by reference, so a
-   * missing provider is normalized to `null` and passing the same provider again is
-   * a no-op. Callers should keep a stable provider reference.
+   * Sets the provider function and clears the cache. Passing the same provider again
+   * is a no-op, so callers should keep a stable reference.
    */
   setProvider(provider: DatePickerDateMetadataProvider | null | undefined): void;
 
@@ -86,9 +80,8 @@ export class DateMetadataController implements ReactiveController {
    * given dates, rounded out to whole blocks of months. Months already loaded or in
    * flight are skipped, and the ones left over are requested with a single call.
    *
-   * A range inside one block costs nothing once that block is loaded, so moving
-   * around within it does not re-request. Each call that does find a missing month
-   * issues its own request, so a caller that loads on scroll should still debounce.
+   * Each call that finds a missing month issues its own request, so a caller that
+   * loads on scroll should debounce.
    */
   ensureRangeLoaded(startDate: Date | null | undefined, endDate: Date | null | undefined): void;
 }
