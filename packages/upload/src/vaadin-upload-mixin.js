@@ -368,8 +368,15 @@ export const UploadMixin = (superClass) =>
     constructor() {
       super();
 
-      // Create the internal upload manager
-      this._manager = this.__createManager();
+      // Create the internal upload manager. Its `headers` accessor is
+      // shadowed with a plain property to skip the manager's normalization:
+      // undefined headers (from an invalid JSON string) have historically
+      // been applied as-is, throwing when the request is configured.
+      const manager = new UploadManager();
+      Object.defineProperties(manager, {
+        headers: { value: manager.headers, writable: true },
+      });
+      this._manager = manager;
 
       // Files uploaded via `uploadFiles` without being added to the `files` list
       this.__externalUploads = new Set();
@@ -455,26 +462,6 @@ export const UploadMixin = (superClass) =>
       this.addController(new SlotController(this, 'drop-label-icon', 'vaadin-upload-icon'));
     }
 
-    /**
-     * Create an UploadManager for internal use. Its `method`, `headers` and
-     * `maxConcurrentUploads` accessors are shadowed with plain properties to
-     * skip the manager's validation, since `<vaadin-upload>` has historically
-     * accepted any values for these properties: an unsupported method is
-     * passed to the request, a non-positive maxConcurrentUploads pauses
-     * uploads, and undefined headers (from an invalid JSON string) throw when
-     * the request is configured.
-     * @private
-     */
-    __createManager() {
-      const manager = new UploadManager();
-      Object.defineProperties(manager, {
-        method: { value: manager.method, writable: true },
-        headers: { value: manager.headers, writable: true },
-        maxConcurrentUploads: { value: manager.maxConcurrentUploads, writable: true },
-      });
-      return manager;
-    }
-
     /** @protected */
     updated(props) {
       super.updated(props);
@@ -536,20 +523,7 @@ export const UploadMixin = (superClass) =>
       // Sync files to manager when set directly (e.g., from tests or user code)
       // Skip if this change was triggered by the manager's files-changed event
       if (this._manager && !this.__updatingFromManager) {
-        const manager = this._manager;
-        // Use flag to prevent the manager's files-changed event from re-syncing
-        this.__syncingToManager = true;
-        // The manager's files setter validates new files against the configured
-        // constraints, while files assigned to the `files` property directly
-        // (e.g. to show previously uploaded files) must be accepted as-is, so
-        // the constraints are temporarily lifted
-        const { maxFiles, maxFileSize, accept } = manager;
-        Object.assign(manager, { maxFiles: Infinity, maxFileSize: Infinity, accept: '' });
-        manager.files = files;
-        Object.assign(manager, { maxFiles, maxFileSize, accept });
-        this.__syncingToManager = false;
-        // Sync `maxFilesReached` in case it changed while its updates were suppressed
-        this._setMaxFilesReached(manager.maxFilesReached);
+        this._manager.files = files;
       }
     }
 
@@ -557,10 +531,6 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     __onManagerFilesChanged(event) {
-      // Skip if this event was triggered by our own sync to the manager
-      if (this.__syncingToManager) {
-        return;
-      }
       // Files that are not rendered by the file list still need up-to-date status strings
       this.__externalUploads.forEach((file) => updateFileStatus(file, this.__effectiveI18n));
 
@@ -590,10 +560,6 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     __onManagerMaxFilesReachedChanged(event) {
-      // Ignore transient changes caused by assigning files to the manager
-      if (this.__syncingToManager) {
-        return;
-      }
       this._setMaxFilesReached(event.detail.value);
     }
 
