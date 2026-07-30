@@ -316,6 +316,9 @@ export const DatePickerMixin = (subclass) =>
 
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnScroll = this._onScroll.bind(this);
+
+      this._dateMetadataController = new DateMetadataController(this, () => this.__onDateMetadataChanged());
+      this.addController(this._dateMetadataController);
     }
 
     /**
@@ -476,9 +479,6 @@ export const DatePickerMixin = (subclass) =>
       );
 
       this.addController(new VirtualKeyboardController(this));
-
-      this._dateMetadataController = new DateMetadataController(this, () => this.__onDateMetadataChanged());
-      this.addController(this._dateMetadataController);
 
       this._overlayElement = this.$.overlay;
     }
@@ -1029,7 +1029,7 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayClosed() {
-      this._overlayContent?.cancelVisibleDateMetadataLoad();
+      this._overlayContent?.cancelLoadVisibleDateMetadata();
 
       // Reset `aria-hidden` state.
       if (this.__showOthers) {

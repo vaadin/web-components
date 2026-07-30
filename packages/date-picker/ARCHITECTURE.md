@@ -70,8 +70,11 @@ The overlay content drives loading; the calendars only read state. It reduces th
 indexes, takes the lowest and highest, and asks for that range. Both the reduction and the way back to a
 date go through the shared month helpers, which keep a year below 100 and a year before 0 correct.
 
-The first load runs synchronously as the calendars are configured, so on the first open the request starts
-while the overlay renders and the loading state is visible immediately. Navigating is debounced instead:
+The first load runs as soon as the calendars and the controller have both arrived, so on the first open the
+request starts while the overlay renders and the loading state is visible immediately. It is tied to those
+two rather than to the config the calendars are given, because config cannot move the scrollers and so never
+changes which months are visible — and because the overlay content outlives closing, so a config change made
+while the overlay is closed would otherwise fetch for a hidden dialog. Navigating is debounced instead:
 every path that moves the scrollers ends up in the same place, so a continuous scroll produces one request
 once it settles rather than one per intermediate position. A scheduled load is dropped when the overlay
 closes and when the calendar leaves the DOM, so navigating and then dismissing the overlay does not call the

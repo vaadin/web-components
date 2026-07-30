@@ -184,7 +184,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      this.cancelVisibleDateMetadataLoad();
+      this.cancelLoadVisibleDateMetadata();
     }
 
     /** @protected */
@@ -203,6 +203,13 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
       if (props.has('i18n')) {
         setOrRemoveAttribute(this, 'aria-label', this.i18n?.dialogAccessibleName);
+      }
+
+      if (props.has('calendars') || props.has('_dateMetadataController')) {
+        // Only when the calendars or the controller arrive: a config change cannot move the
+        // scrollers, so it never changes which months are visible, and the overlay content outlives
+        // closing — loading from there would fetch for a hidden dialog.
+        this.loadVisibleDateMetadata();
       }
 
       if (
@@ -369,7 +376,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       const todayButton = this._todayButton;
       if (todayButton) {
         todayButton.textContent = this.i18n?.today;
-        todayButton.disabled = !this._isTodayAllowed(this.minDate, this.maxDate, this.isDateDisabled);
+        todayButton.disabled = !this._isTodayAllowed();
       }
     }
 
@@ -379,11 +386,11 @@ export const DatePickerOverlayContentMixin = (superClass) =>
      */
     loadVisibleDateMetadata() {
       const controller = this._dateMetadataController;
-      if (!controller?.provider || !this.calendars?.length) {
+      if (!controller?.provider) {
         return;
       }
       // Reduced to month indexes so the outermost months can be picked with plain arithmetic.
-      const indexes = this.calendars
+      const indexes = (this.calendars ?? [])
         .map((calendar) => calendar.month)
         .filter(Boolean)
         .map((month) => monthIndex(month));
@@ -396,7 +403,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     /**
      * Drops a date metadata load that navigating has scheduled but that has not run yet.
      */
-    cancelVisibleDateMetadataLoad() {
+    cancelLoadVisibleDateMetadata() {
       this._loadDateMetadataDebouncer?.cancel();
     }
 
@@ -430,8 +437,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
           setOrRemoveAttribute(calendar, 'theme', theme);
         });
-
-        this.loadVisibleDateMetadata();
       }
     }
 
@@ -440,7 +445,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
      * settles instead of a request per intermediate position.
      * @private
      */
-    __scheduleVisibleDateMetadataLoad() {
+    __scheduleLoadVisibleDateMetadata() {
       this._loadDateMetadataDebouncer = Debouncer.debounce(this._loadDateMetadataDebouncer, timeOut.after(200), () =>
         this.loadVisibleDateMetadata(),
       );
@@ -571,14 +576,14 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       const monthPosition = this._monthScroller.position;
       this._visibleMonthIndex = Math.floor(monthPosition);
       this._yearScroller.position = (monthPosition + this._originDate.getMonth()) / 12;
-      this.__scheduleVisibleDateMetadataLoad();
+      this.__scheduleLoadVisibleDateMetadata();
     }
 
     /** @private */
     _repositionMonthScroller() {
       this._monthScroller.position = this._yearScroller.position * 12 - this._originDate.getMonth();
       this._visibleMonthIndex = Math.floor(this._monthScroller.position);
-      this.__scheduleVisibleDateMetadataLoad();
+      this.__scheduleLoadVisibleDateMetadata();
     }
 
     /** @private */
@@ -1030,15 +1035,15 @@ export const DatePickerOverlayContentMixin = (superClass) =>
      * reports as disabled. Focus uses `_dateAllowed`, since a disabled date can still be focused.
      * @private
      */
-    _dateSelectable(date, min = this.minDate, max = this.maxDate, isDateDisabled = this.isDateDisabled) {
-      return dateSelectable(date, min, max, isDateDisabled, this._dateMetadataController);
+    _dateSelectable(date) {
+      return dateSelectable(date, this.minDate, this.maxDate, this.isDateDisabled, this._dateMetadataController);
     }
 
     /** @private */
-    _isTodayAllowed(min, max, isDateDisabled) {
+    _isTodayAllowed() {
       // `updateTodayButton` re-runs this when a month resolves, since the button applies its state
       // imperatively rather than from a binding.
-      return this._dateSelectable(this._getTodayMidnight(), min, max, isDateDisabled);
+      return this._dateSelectable(this._getTodayMidnight());
     }
 
     /** @private */

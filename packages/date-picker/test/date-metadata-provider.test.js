@@ -325,6 +325,29 @@ describe('dateMetadataProvider integration', () => {
       expect(provider).to.not.be.called;
     });
 
+    it('should not call the provider when config changes while it is closed', async () => {
+      // The overlay content outlives closing, so a config change still reaches it and reconfigures the
+      // calendars. Loading from there would fetch for a hidden dialog and leave the spinner on it.
+      const provider = sinon.stub().returns([]);
+      datePicker.dateMetadataProvider = provider;
+      await open(datePicker);
+      overlayContent = datePicker._overlayContent;
+      await nextRender();
+
+      datePicker.opened = false;
+      await nextRender();
+      // Drop the cache, so there would be something to fetch if a config change asked for it.
+      datePicker._dateMetadataController.clearCache();
+      provider.resetHistory();
+
+      datePicker.min = formatISODate(new Date(year - 1, 0, 1));
+      await nextRender();
+
+      expect(provider).to.not.be.called;
+      expect(overlayContent.hasAttribute('loading')).to.be.false;
+      expect(overlayContent.hasAttribute('aria-busy')).to.be.false;
+    });
+
     it('should not call the provider for a load scheduled before the date-picker was removed', async () => {
       const provider = sinon.stub().returns([]);
       datePicker.dateMetadataProvider = provider;
