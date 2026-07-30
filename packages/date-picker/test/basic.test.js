@@ -4,7 +4,7 @@ import { click, fixtureSync, keyboardEventFor, nextRender, oneEvent, tap } from 
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import { parseDate } from '../src/vaadin-date-picker-helper.js';
-import { open, touchTap, untilOverlayRendered } from './helpers.js';
+import { getCalendars, getWeekDayCells, open, touchTap, untilOverlayRendered } from './helpers.js';
 
 describe('basic features', () => {
   let datePicker, input, overlay;
@@ -217,9 +217,8 @@ describe('basic features', () => {
     });
 
     it('should notify i18n mutation to children', () => {
-      const monthCalendar = overlayContent.querySelector('vaadin-month-calendar');
-      const weekdays = monthCalendar.$.monthGrid.querySelectorAll('[part="weekday"]:not(:empty)');
-      const weekdayTitles = Array.prototype.map.call(weekdays, (weekday) => weekday.textContent.trim());
+      const [monthCalendar] = getCalendars(overlayContent);
+      const weekdayTitles = getWeekDayCells(monthCalendar).map((weekday) => weekday.textContent.trim());
       expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
     });
 
