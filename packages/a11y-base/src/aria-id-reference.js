@@ -4,10 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import {
-  addValueToAttribute,
+  addValuesToAttribute,
   deserializeAttributeValue,
-  removeValueFromAttribute,
-  serializeAttributeValue,
+  removeValuesFromAttribute,
 } from '@vaadin/component-base/src/dom-utils.js';
 
 const attributeToTargets = new Map();
@@ -74,7 +73,7 @@ export function restoreGeneratedAriaIDReference(target, attr) {
   if (!values || values.size === 0) {
     target.removeAttribute(attr);
   } else {
-    addValueToAttribute(target, attr, serializeAttributeValue(values));
+    addValuesToAttribute(target, attr, [...values]);
   }
   attributeMap.delete(target);
 }
@@ -133,11 +132,12 @@ export function setAriaIDReference(target, attr, config = { newId: null, oldId: 
     cleanAriaIDReference(target, attr);
   }
 
-  removeValueFromAttribute(target, attr, oldId);
+  removeValuesFromAttribute(target, attr, oldId);
 
-  const attributeValue = !newId ? serializeAttributeValue(storedValues) : newId;
-  if (attributeValue) {
-    addValueToAttribute(target, attr, attributeValue);
+  if (newId) {
+    addValuesToAttribute(target, attr, newId);
+  } else if (storedValues) {
+    addValuesToAttribute(target, attr, [...storedValues]);
   }
 }
 

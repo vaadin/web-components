@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 
@@ -70,7 +70,7 @@ export const FormItemMixin = (superClass) =>
      * @private
      */
     __linkLabelToField(field) {
-      addValueToAttribute(this._getFieldAriaTarget(field), 'aria-labelledby', this.__labelId);
+      addValuesToAttribute(this._getFieldAriaTarget(field), 'aria-labelledby', this.__labelId);
     }
 
     /**
@@ -81,7 +81,7 @@ export const FormItemMixin = (superClass) =>
      * @private
      */
     __unlinkLabelFromField(field) {
-      removeValueFromAttribute(this._getFieldAriaTarget(field), 'aria-labelledby', this.__labelId);
+      removeValuesFromAttribute(this._getFieldAriaTarget(field), 'aria-labelledby', this.__labelId);
     }
 
     /** @private */
