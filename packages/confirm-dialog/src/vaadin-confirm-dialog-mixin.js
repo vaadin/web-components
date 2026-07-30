@@ -3,7 +3,6 @@
  * Copyright (c) 2018 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { DialogSizeMixin } from '@vaadin/dialog/src/vaadin-dialog-size-mixin.js';
 
@@ -305,18 +304,12 @@ export const ConfirmDialogMixin = (superClass) =>
 
       if (accessibleDescriptionRef) {
         this.removeAttribute('aria-description');
-        setAriaIDReference(this, 'aria-describedby', {
-          newId: accessibleDescriptionRef,
-          oldId: this.__oldAccessibleDescriptionRef,
-          fromUser: true,
-        });
+        this.setAttribute('aria-describedby', accessibleDescriptionRef);
       } else {
         this.removeAttribute('aria-describedby');
         const ariaDescription = messageNodes.map((node) => node.textContent.trim()).join(' ');
         this.setAttribute('aria-description', ariaDescription);
       }
-
-      this.__oldAccessibleDescriptionRef = accessibleDescriptionRef;
     }
 
     /** @private */
