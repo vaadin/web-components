@@ -32,17 +32,24 @@ One function returns all of a date's metadata, rather than a generator per conce
 query answers everything instead of making a pass per concern. Only the disabled state is read today;
 further metadata extends the same entry shape.
 
-### Ranges and prefetch
+### Ranges and blocks
 
-`ensureRangeLoaded(start, end)` expands the requested range by `PREFETCH_MONTHS` (6) on each side, so
-scrolling a few months either way does not trigger a request. Months already loaded or in flight are
-skipped, and the months left over are loaded with a **single call**, narrowed to the first and last of
-them.
+`ensureRangeLoaded(start, end)` rounds the requested range out to whole blocks of `BLOCK_MONTHS` (12).
+Months already loaded or in flight are skipped, and the months left over are loaded with a **single
+call**, narrowed to the first and last of them.
 
-Narrowing keeps the common case tight: after scrolling, the missing months sit at one edge of the range,
-so the call asks for those and not for the year already in cache. When an answered month falls between
-two missing ones, the range covers it rather than splitting into a call per gap — one round trip for a
-slightly wider range.
+Blocks are counted from January of year 0, so one block is exactly one calendar year. Rounding out to a
+block rather than centring a buffer on the request is what makes navigating cheap: a buffer moves with
+the request, so stepping forward one month leaves one new month missing at the far edge, and one missing
+month is one more request — stepping through a year that way costs a request per month. Inside a block
+there is nothing missing, so it costs nothing. Debouncing does not cover this on its own, since deliberate
+month-at-a-time navigation is slower than any debounce window.
+
+Fixed blocks also mean every caller asks for the same ranges, which a server can cache. Ranges centred on
+wherever the user happens to be looking are all slightly different, so they cannot be.
+
+Narrowing keeps the call to what is missing: when an answered block falls between two missing ones, the
+range covers it rather than splitting into a call per gap — one round trip for a slightly wider range.
 
 A call marks as pending, and later writes, only the months it is loading — never the ones its range
 merely covers. An answered month keeps its metadata while the wider reply is in flight, so a date known

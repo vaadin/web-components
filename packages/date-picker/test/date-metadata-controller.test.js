@@ -8,7 +8,7 @@ import { createDate } from '../src/vaadin-date-picker-helper.js';
 describe('DateMetadataController', () => {
   let controller, host, onChange;
 
-  // Most tests care about a single month, which the controller expands by the prefetch buffer.
+  // Most tests care about a single month, which the controller rounds out to a whole block.
   function loadMonth(year, month) {
     const date = createDate(year, month, 1);
     controller.ensureRangeLoaded(date, date);
@@ -26,16 +26,28 @@ describe('DateMetadataController', () => {
     controller = new DateMetadataController(host, onChange);
   });
 
-  it('should call the provider once for a range covering the prefetch window', () => {
+  it('should call the provider once for the whole block the range falls in', () => {
     const provider = stubProvider();
 
     loadMonth(2023, 2); // March 2023
 
     expect(provider).to.be.calledOnce;
-    // March 2023 ± 6 months = Sept 2022 (month 8) through Sept 2023.
+    // A block is one calendar year, so asking about March 2023 asks about all of 2023.
     expect(provider.firstCall.args[0]).to.eql({
-      start: { year: 2022, month: 8, day: 1 },
-      end: { year: 2023, month: 8, day: 30 },
+      start: { year: 2023, month: 0, day: 1 },
+      end: { year: 2023, month: 11, day: 31 },
+    });
+  });
+
+  it('should round a block down for a year before 0', () => {
+    const provider = stubProvider();
+
+    controller.ensureRangeLoaded(createDate(-1, 5, 10), createDate(-1, 5, 10));
+
+    // Rounding towards zero instead of down would land in the block after this one.
+    expect(provider.firstCall.args[0]).to.eql({
+      start: { year: -1, month: 0, day: 1 },
+      end: { year: -1, month: 11, day: 31 },
     });
   });
 
@@ -67,32 +79,48 @@ describe('DateMetadataController', () => {
   it('should not call the provider again for months within the loaded window', async () => {
     const provider = stubProvider();
 
-    // Load a wide span first (Jan..Dec 2023 → window Jul 2022..Jun 2024).
+    // Load a whole year first.
     controller.ensureRangeLoaded(new Date(2023, 0, 1), new Date(2023, 11, 1));
     await aTimeout(0);
     provider.resetHistory();
 
-    // Re-request months whose full prefetch window is already covered.
+    // Re-request months the loaded block already covers.
     controller.ensureRangeLoaded(new Date(2023, 0, 1), new Date(2023, 11, 1));
-    loadMonth(2023, 5); // June, window Dec22..Dec23
+    loadMonth(2023, 5);
 
     expect(provider).to.not.be.called;
   });
 
-  it('should fetch only the new months when scrolling one month forward', async () => {
+  it('should not fetch again when moving within the loaded block', async () => {
     const provider = stubProvider();
 
-    loadMonth(2023, 2); // window Sep22..Sep23
+    loadMonth(2023, 2);
     await aTimeout(0);
     provider.resetHistory();
 
-    loadMonth(2023, 3); // window Oct22..Oct23
+    // Stepping through the rest of the year stays inside the block that is already loaded, which is
+    // the point of aligning them: a buffer centred on the request would ask for a month per step.
+    for (let month = 3; month <= 11; month++) {
+      loadMonth(2023, month);
+    }
 
-    // Only the single new trailing month (Oct 2023) should be fetched.
+    expect(provider).to.not.be.called;
+  });
+
+  it('should fetch the next block when the range reaches into it', async () => {
+    const provider = stubProvider();
+
+    loadMonth(2023, 2);
+    await aTimeout(0);
+    provider.resetHistory();
+
+    controller.ensureRangeLoaded(createDate(2023, 11, 1), createDate(2024, 0, 1));
+
+    // 2023 is already loaded, so only the block it reaches into is requested.
     expect(provider).to.be.calledOnce;
     expect(provider.firstCall.args[0]).to.eql({
-      start: { year: 2023, month: 9, day: 1 },
-      end: { year: 2023, month: 9, day: 31 },
+      start: { year: 2024, month: 0, day: 1 },
+      end: { year: 2024, month: 11, day: 31 },
     });
   });
 
@@ -107,8 +135,8 @@ describe('DateMetadataController', () => {
 
     expect(provider).to.be.calledOnce;
     expect(provider.firstCall.args[0]).to.eql({
-      start: { year: 2024, month: 8, day: 1 },
-      end: { year: 2025, month: 8, day: 30 },
+      start: { year: 2025, month: 0, day: 1 },
+      end: { year: 2025, month: 11, day: 31 },
     });
   });
 
@@ -144,39 +172,37 @@ describe('DateMetadataController', () => {
   it('should narrow the range to the months that are missing', async () => {
     const provider = stubProvider();
 
-    // Load two windows far apart, leaving a gap of unloaded months between them.
-    loadMonth(2023, 0); // Jul 2022 - Jul 2023
-    loadMonth(2025, 0); // Jul 2024 - Jul 2025
+    // Load two blocks with an unloaded one between them.
+    loadMonth(2023, 0);
+    loadMonth(2025, 0);
     await aTimeout(0);
     provider.resetHistory();
 
-    // A range spanning both windows plus the gap. It is narrowed to the months still missing:
-    // August 2023 (first month after the earlier window) through June 2024 (last month before the
-    // later one).
+    // A range covering the first block and the gap. It is narrowed to the block still missing.
     controller.ensureRangeLoaded(new Date(2023, 6, 1), new Date(2024, 6, 1));
 
     expect(provider).to.be.calledOnce;
     expect(provider.firstCall.args[0]).to.eql({
-      start: { year: 2023, month: 7, day: 1 },
-      end: { year: 2024, month: 5, day: 30 },
+      start: { year: 2024, month: 0, day: 1 },
+      end: { year: 2024, month: 11, day: 31 },
     });
   });
 
   it('should request one range when the missing months are not consecutive', async () => {
     const provider = stubProvider();
 
-    // Load a window in the middle, so a wider range around it leaves a gap on either side.
-    loadMonth(2023, 6); // Jan 2023 - Jan 2024
+    // Load a block in the middle, so a wider range leaves a missing one on either side.
+    loadMonth(2024, 6);
     await aTimeout(0);
     provider.resetHistory();
 
-    // Jul 2022 - Jul 2024. The answered middle is covered by the range rather than splitting it.
-    controller.ensureRangeLoaded(new Date(2023, 0, 1), new Date(2024, 0, 1));
+    // The answered block in the middle is covered by the range rather than splitting it in two.
+    controller.ensureRangeLoaded(new Date(2023, 0, 1), new Date(2025, 0, 1));
 
     expect(provider).to.be.calledOnce;
     expect(provider.firstCall.args[0]).to.eql({
-      start: { year: 2022, month: 6, day: 1 },
-      end: { year: 2024, month: 6, day: 31 },
+      start: { year: 2023, month: 0, day: 1 },
+      end: { year: 2025, month: 11, day: 31 },
     });
   });
 
@@ -529,7 +555,7 @@ describe('DateMetadataController', () => {
 
       expect(provider.firstCall.args[0]).to.eql({
         start: { year: 50, month: 0, day: 1 },
-        end: { year: 51, month: 0, day: 31 },
+        end: { year: 50, month: 11, day: 31 },
       });
       expect(controller.isMonthLoaded(createDate(50, 6, 1))).to.be.true;
       expect(controller.isDateDisabled(createDate(50, 6, 15))).to.be.true;
@@ -700,13 +726,14 @@ describe('DateMetadataController', () => {
 
       loadMonth(2023, 2);
       loadMonth(2023, 2);
-      loadMonth(2023, 3); // overlapping window
+      loadMonth(2023, 8); // same block
+      loadMonth(2024, 3); // the next one
 
-      // The second call is fully covered by the pending months; the third adds only Oct 2023.
+      // Everything in the pending block is skipped; only the next block is a second call.
       expect(provider).to.be.calledTwice;
       expect(provider.secondCall.args[0]).to.eql({
-        start: { year: 2023, month: 9, day: 1 },
-        end: { year: 2023, month: 9, day: 31 },
+        start: { year: 2024, month: 0, day: 1 },
+        end: { year: 2024, month: 11, day: 31 },
       });
     });
 
@@ -728,18 +755,18 @@ describe('DateMetadataController', () => {
     });
   });
 
-  describe('month lengths', () => {
-    [
-      { name: 'a leap February', year: 2023, end: { year: 2024, month: 1, day: 29 } },
-      { name: 'a non-leap February', year: 2022, end: { year: 2023, month: 1, day: 28 } },
-    ].forEach(({ name, year, end }) => {
-      it(`should end the range on the last day of ${name}`, () => {
+  describe('block bounds', () => {
+    [2022, 2023, 2024].forEach((year) => {
+      it(`should cover ${year} whichever month of it is asked about`, () => {
         const provider = stubProvider();
 
-        // August + 6 months = February of the next year.
         loadMonth(year, 7);
 
-        expect(provider.firstCall.args[0].end).to.eql(end);
+        // A block ends on 31 December, so a leap year does not change where the range ends.
+        expect(provider.firstCall.args[0]).to.eql({
+          start: { year, month: 0, day: 1 },
+          end: { year, month: 11, day: 31 },
+        });
       });
     });
   });

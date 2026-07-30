@@ -15,8 +15,21 @@ import {
   monthIndexOf,
 } from './vaadin-date-picker-helper.js';
 
-// Months fetched on each side of the requested range, so scrolling a little does not re-request.
-const PREFETCH_MONTHS = 6;
+// Months are fetched in fixed blocks rather than in a buffer centred on what was asked for. A
+// buffer moves with the request, so it never gets ahead of the user: stepping forward one month
+// leaves one new month missing at the far edge, and that is one more request. Rounding out to a
+// block instead means stepping around inside it asks for nothing.
+//
+// Counted from January of year 0, a block is exactly one calendar year, which also means every
+// caller asks for the same ranges, so a server can cache the answers. Ranges centred on wherever
+// the user happens to be looking are all slightly different and cannot be.
+const BLOCK_MONTHS = 12;
+
+// `Math.floor`, not `Math.trunc`, so a month before year 0 rounds down to the start of its block
+// rather than towards zero, which would land in the block after it.
+function blockStart(month) {
+  return Math.floor(month / BLOCK_MONTHS) * BLOCK_MONTHS;
+}
 
 // Shared, because a pending month has no entries to hold: `#resolvedMonth` only answers for a
 // month that has resolved.
@@ -203,12 +216,12 @@ export class DateMetadataController {
 
   /**
    * Ensures the provider has been consulted for the inclusive range between the
-   * given dates, expanded by a prefetch buffer of months on each side. Months
-   * already loaded or in flight are skipped, and the ones left over are requested
-   * with a single call.
+   * given dates, rounded out to whole blocks of months. Months already loaded or in
+   * flight are skipped, and the ones left over are requested with a single call.
    *
-   * Each call that finds a missing month issues its own request, so a caller that
-   * loads on scroll is expected to debounce.
+   * A range inside one block costs nothing once that block is loaded, so moving
+   * around within it does not re-request. Each call that does find a missing month
+   * issues its own request, so a caller that loads on scroll should still debounce.
    *
    * @param {Date | null | undefined} startDate
    * @param {Date | null | undefined} endDate
@@ -218,8 +231,8 @@ export class DateMetadataController {
       return;
     }
 
-    const first = monthIndex(startDate) - PREFETCH_MONTHS;
-    const last = monthIndex(endDate) + PREFETCH_MONTHS;
+    const first = blockStart(monthIndex(startDate));
+    const last = blockStart(monthIndex(endDate)) + BLOCK_MONTHS - 1;
 
     const months = [];
     for (let month = first; month <= last; month++) {

@@ -91,12 +91,12 @@ export class DateMetadataController implements ReactiveController {
 
   /**
    * Ensures the provider has been consulted for the inclusive range between the
-   * given dates, expanded by a prefetch buffer of months on each side. Months
-   * already loaded or in flight are skipped, and the ones left over are requested
-   * with a single call.
+   * given dates, rounded out to whole blocks of months. Months already loaded or in
+   * flight are skipped, and the ones left over are requested with a single call.
    *
-   * Each call that finds a missing month issues its own request, so a caller that
-   * loads on scroll is expected to debounce.
+   * A range inside one block costs nothing once that block is loaded, so moving
+   * around within it does not re-request. Each call that does find a missing month
+   * issues its own request, so a caller that loads on scroll should still debounce.
    */
   ensureRangeLoaded(startDate: Date | null | undefined, endDate: Date | null | undefined): void;
 }
