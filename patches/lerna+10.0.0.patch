@@ -1,0 +1,13 @@
+diff --git a/node_modules/lerna/dist/chunk-TN6YF3FA.js b/node_modules/lerna/dist/chunk-TN6YF3FA.js
+index 9abae21..7a99fa7 100644
+--- a/node_modules/lerna/dist/chunk-TN6YF3FA.js
++++ b/node_modules/lerna/dist/chunk-TN6YF3FA.js
+@@ -231,7 +231,7 @@ var VersionCommand = class extends Command {
+       forceGitTag,
+       overrideMessage
+     };
+-    this.savePrefix = this.options.exact ? "" : "^";
++    this.savePrefix = this.options.exact ? "" : "~";
+   }
+   async initialize() {
+     if (!this.project.isIndependent()) {
