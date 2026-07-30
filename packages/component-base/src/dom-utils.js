@@ -84,7 +84,7 @@ export function getClosestElement(selector, node) {
  * @return {Set<string>}
  */
 export function deserializeAttributeValue(value) {
-  return new Set(value ? value.split(' ') : []);
+  return new Set(value ? value.split(' ').filter(Boolean) : []);
 }
 
 /**
