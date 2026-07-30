@@ -80,6 +80,18 @@ describe('virtualizer - item height', () => {
     expect(item.offsetHeight).to.be.below(ODD_ITEM_HEIGHT);
   });
 
+  it('should add temporary placeholder padding to an item that loses its height on update', async () => {
+    // Wait for the content to update (and resize observer to fire)
+    await contentUpdate();
+
+    const firstItem = elementsContainer.querySelector(`#item-0`);
+    // Updating the item resets its height to 0, so the virtualizer should
+    // give it a temporary placeholder height.
+    virtualizer.update(0, 0);
+
+    expect(firstItem.offsetHeight).to.be.above(0);
+  });
+
   it('should clear the temporary placeholder padding from the item', async () => {
     // Wait for the content to update (and resize observer to fire)
     await contentUpdate();
@@ -570,6 +582,69 @@ describe('virtualizer - item padding', () => {
     await nextResize(scrollTarget);
     await nextFrame();
     expect(item1.getBoundingClientRect().top).to.equal(item0.getBoundingClientRect().bottom);
+  });
+});
+
+describe('virtualizer - item height - placeholder height queue', () => {
+  let elementsContainer;
+  let virtualizer;
+  const SHORT_ITEM_HEIGHT = 10;
+  const TALL_ITEM_HEIGHT = 100;
+  const TALL_FROM_INDEX = 1000;
+
+  beforeEach(() => {
+    const scrollTarget = fixtureSync(`
+      <div style="height: 300px;">
+        <div class="container"></div>
+      </div>
+    `);
+    const scrollContainer = scrollTarget.firstElementChild;
+    elementsContainer = scrollContainer;
+
+    virtualizer = new Virtualizer({
+      createElements: (count) => Array.from({ length: count }, () => document.createElement('div')),
+      updateElement: (el, index) => {
+        el.style.width = '100%';
+
+        if (el.id !== `item-${index}`) {
+          el.id = `item-${index}`;
+
+          // The element initially has a height of 0. Its content is updated
+          // after a timeout, which is when its intrinsic height increases.
+          el.style.height = '';
+          setTimeout(() => {
+            el.style.height = `${index < TALL_FROM_INDEX ? SHORT_ITEM_HEIGHT : TALL_ITEM_HEIGHT}px`;
+          }, 50);
+        }
+      },
+      scrollTarget,
+      scrollContainer,
+    });
+
+    virtualizer.size = 100000;
+  });
+
+  afterEach(() => {
+    // Flush the virtualizer to avoid test flakiness
+    virtualizer.flush();
+  });
+
+  it('should base the placeholder height on the most recently measured items', async () => {
+    // Measure a screenful of short items
+    await contentUpdate();
+
+    // Measure a screenful of tall items
+    virtualizer.scrollToIndex(TALL_FROM_INDEX);
+    await contentUpdate();
+
+    // Scroll to an index that hasn't been measured yet. Its items have no
+    // height of their own yet, so they use the placeholder height, which
+    // should be based on the recently measured tall items instead of an
+    // average of every item measured so far.
+    virtualizer.scrollToIndex(50000);
+    const item = elementsContainer.querySelector(`#item-50000`);
+
+    expect(item.offsetHeight).to.be.closeTo(TALL_ITEM_HEIGHT, 5);
   });
 });
 

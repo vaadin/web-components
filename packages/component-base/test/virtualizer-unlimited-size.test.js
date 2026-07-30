@@ -1,8 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { Virtualizer } from '../src/virtualizer.js';
 
 describe('unlimited size', () => {
+  const FIX_INVALID_ITEM_POSITIONING_TIMEOUT = 100;
   let virtualizer;
   let scrollTarget;
   let elementsContainer;
@@ -304,6 +305,37 @@ describe('unlimited size', () => {
 
     const item = elementsContainer.querySelector(`#item-${index}`);
     expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
+  });
+
+  it('should preserve the scroll position when detached before the positioning fix runs', async () => {
+    const index = Math.floor(virtualizer.size / 2);
+    virtualizer.scrollToIndex(index);
+    const scrollTop = scrollTarget.scrollTop;
+
+    // Detaching resets the scroll position of the scroll target. The pending
+    // item positioning fix must not use it as the actual scroll position.
+    const parent = scrollTarget.parentElement;
+    scrollTarget.remove();
+    await aTimeout(FIX_INVALID_ITEM_POSITIONING_TIMEOUT + 50);
+
+    parent.appendChild(scrollTarget);
+    virtualizer.hostConnected();
+
+    expect(scrollTarget.scrollTop).to.equal(scrollTop);
+  });
+
+  it('should not re-render on a scroll event while hidden', async () => {
+    const index = Math.floor(virtualizer.size / 2);
+    virtualizer.scrollToIndex(index);
+
+    // Hiding the scroll target resets its scrollTop, which fires a scroll event.
+    // The virtualizer must ignore it instead of adjusting the virtual index
+    // offset for a scroll position it cannot measure.
+    scrollTarget.hidden = true;
+    await oneEvent(scrollTarget, 'scroll');
+    scrollTarget.hidden = false;
+
+    expect(elementsContainer.querySelector(`#item-${index}`)).to.be.ok;
   });
 
   it('should preserve scroll position on large size decrease', async () => {

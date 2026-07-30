@@ -180,6 +180,19 @@ describe('virtualizer - variable row height - large variance', () => {
     expect(itemAtBottomText).to.equal(itemAtBottom.textContent);
   });
 
+  it('should fix invalid item positioning on flush', async () => {
+    initWithLargeSize();
+    const rect = scrollTarget.getBoundingClientRect();
+
+    await scrollDownwardsFromStart();
+    // Flush instead of waiting for the debouncer to time out
+    virtualizer.flush();
+
+    // Expect the item at the bottom of the viewport to be an actual item element
+    const itemAtBottom = document.elementFromPoint(rect.left + 1, rect.bottom - 1);
+    expect(itemAtBottom.classList.contains('item')).to.be.true;
+  });
+
   it('should not update the item at last index', async () => {
     initWithLargeSize();
     updateElement.resetHistory();

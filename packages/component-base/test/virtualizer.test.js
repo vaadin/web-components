@@ -385,6 +385,19 @@ describe('virtualizer', () => {
     expect(elementsContainer.childElementCount).to.equal(initialCount);
   });
 
+  it('should not re-assign elements when the size is set to the same value', async () => {
+    // Scroll with a real scroll event so that the elements get recycled and
+    // the physical element order no longer matches the index order.
+    scrollTarget.scrollTop = 500;
+    await oneEvent(scrollTarget, 'scroll');
+    const indexesBefore = [...elementsContainer.children].map((el) => el.index);
+
+    const size = virtualizer.size;
+    virtualizer.size = size;
+
+    expect([...elementsContainer.children].map((el) => el.index)).to.eql(indexesBefore);
+  });
+
   it('should initially have a decent amount of physical elements', () => {
     const initialCount = elementsContainer.childElementCount;
     const viewportHeight = scrollTarget.offsetHeight;
