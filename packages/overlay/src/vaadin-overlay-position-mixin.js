@@ -16,6 +16,38 @@ const PROP_NAMES_HORIZONTAL = {
   end: 'right',
 };
 
+/**
+ * Returns the width of the layout viewport, which is the containing block used
+ * for resolving the `left` and `right` CSS properties of the fixed positioned overlay.
+ */
+function getLayoutViewportWidth() {
+  return Math.min(window.innerWidth, document.documentElement.clientWidth);
+}
+
+/**
+ * Returns the height of the layout viewport, which is the containing block used
+ * for resolving the `top` and `bottom` CSS properties of the fixed positioned overlay.
+ */
+function getLayoutViewportHeight() {
+  return Math.min(window.innerHeight, document.documentElement.clientHeight);
+}
+
+/**
+ * Returns the height of the area that is visible to the user, in the same coordinate
+ * space as the values returned by `getBoundingClientRect()`.
+ *
+ * On iOS Safari, the on-screen keyboard shifts the page up and shrinks the visual
+ * viewport, while the layout viewport keeps its full height. Both `window.innerHeight`
+ * and `document.documentElement.clientHeight` then describe an area that reaches below
+ * the keyboard, so measuring against them treats the space behind the keyboard as free.
+ *
+ * The visual viewport offset is deliberately not added: client rectangles already
+ * account for the shift, so adding it would cancel out the shrinking again.
+ */
+function getVisibleViewportHeight() {
+  return Math.min(getLayoutViewportHeight(), window.visualViewport.height);
+}
+
 const targetResizeObserver = new ResizeObserver((entries) => {
   setTimeout(() => {
     entries.forEach((entry) => {
@@ -330,7 +362,7 @@ export const PositionMixin = (superClass) =>
       const contentWidth = Math.max(this.__oldContentWidth || 0, this.$.overlay.offsetWidth);
       this.__oldContentWidth = this.$.overlay.offsetWidth;
 
-      const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
+      const viewportWidth = getLayoutViewportWidth();
       const defaultAlignLeft = (!rtl && this.horizontalAlign === 'start') || (rtl && this.horizontalAlign === 'end');
 
       return this.__shouldAlignStart(
@@ -351,7 +383,7 @@ export const PositionMixin = (superClass) =>
         this.requiredVerticalSpace || Math.max(this.__oldContentHeight || 0, this.$.overlay.offsetHeight);
       this.__oldContentHeight = this.$.overlay.offsetHeight;
 
-      const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
+      const viewportHeight = getVisibleViewportHeight();
       const defaultAlignTop = this.verticalAlign === 'top';
 
       return this.__shouldAlignStart(
@@ -390,9 +422,11 @@ export const PositionMixin = (superClass) =>
       let adjustedProp;
 
       if (cssPropNameToSet === propNames.end) {
-        // Adjust horizontally
+        // Adjust vertically
         if (propNames.end === PROP_NAMES_VERTICAL.end) {
-          const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
+          // The `bottom` property is resolved against the layout viewport, so the
+          // adjustment must only compensate for changes of the layout viewport.
+          const viewportHeight = getLayoutViewportHeight();
 
           if (currentValue > viewportHeight && this.__oldViewportHeight) {
             const heightDiff = this.__oldViewportHeight - viewportHeight;
@@ -402,9 +436,9 @@ export const PositionMixin = (superClass) =>
           this.__oldViewportHeight = viewportHeight;
         }
 
-        // Adjust vertically
+        // Adjust horizontally
         if (propNames.end === PROP_NAMES_HORIZONTAL.end) {
-          const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
+          const viewportWidth = getLayoutViewportWidth();
 
           if (currentValue > viewportWidth && this.__oldViewportWidth) {
             const widthDiff = this.__oldViewportWidth - viewportWidth;

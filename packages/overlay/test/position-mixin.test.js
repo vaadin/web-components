@@ -414,6 +414,70 @@ describe('position mixin', () => {
     });
   });
 
+  describe('visual viewport', () => {
+    // Mimics the iOS on-screen keyboard: the layout viewport keeps reporting the full
+    // window height, while the visual viewport shrinks to the area above the keyboard.
+    const KEYBOARD_HEIGHT = 200;
+    let visibleHeight;
+
+    beforeEach(() => {
+      visibleHeight = document.documentElement.clientHeight - KEYBOARD_HEIGHT;
+      Object.defineProperty(window.visualViewport, 'height', {
+        configurable: true,
+        get: () => visibleHeight,
+      });
+
+      margin = parseInt(getComputedStyle(overlay).bottom, 10);
+      targetPositionToFlipOverlay = visibleHeight - overlayContent.offsetHeight - margin;
+    });
+
+    afterEach(() => {
+      delete window.visualViewport.height;
+      delete window.visualViewport.offsetTop;
+    });
+
+    it('should flip to align bottom when out of space in the visual viewport', () => {
+      target.style.top = `${targetPositionToFlipOverlay + 3}px`;
+      updatePosition();
+      expectEdgesAligned(BOTTOM, BOTTOM);
+    });
+
+    it('should flip to align bottom when out of required vertical space', () => {
+      overlay.requiredVerticalSpace = 200;
+      target.style.top = `${targetPositionToFlipOverlay - 100}px`;
+      updatePosition();
+      expectEdgesAligned(BOTTOM, BOTTOM);
+    });
+
+    it('should flip back to default when the visual viewport grows again', () => {
+      target.style.top = `${targetPositionToFlipOverlay + 3}px`;
+      updatePosition();
+
+      visibleHeight = document.documentElement.clientHeight;
+      updatePosition();
+      expectEdgesAligned(TOP, TOP);
+    });
+
+    it('should not flip when there is enough space in the visual viewport', () => {
+      target.style.top = `${targetPositionToFlipOverlay - 3}px`;
+      updatePosition();
+      expectEdgesAligned(TOP, TOP);
+    });
+
+    it('should not add the visual viewport offset to the available space', () => {
+      // The on-screen keyboard also shifts the page up, which is already reflected
+      // by the client rectangles, so the offset must not be added to the height.
+      Object.defineProperty(window.visualViewport, 'offsetTop', {
+        configurable: true,
+        get: () => KEYBOARD_HEIGHT,
+      });
+
+      target.style.top = `${targetPositionToFlipOverlay + 3}px`;
+      updatePosition();
+      expectEdgesAligned(BOTTOM, BOTTOM);
+    });
+  });
+
   describe('horizontal align start', () => {
     beforeEach(() => {
       overlay.horizontalAlign = START;
