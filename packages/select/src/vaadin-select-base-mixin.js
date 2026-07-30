@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { setAriaIDReference } from '@vaadin/a11y-base/src/aria-id-reference.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
@@ -168,6 +167,10 @@ export const SelectBaseMixin = (superClass) =>
       this._itemId = `value-${this.localName}-${generateUniqueId()}`;
       this._srLabelController = new LabelController(this);
       this._srLabelController.slotName = 'sr-label';
+
+      this._labelController.addEventListener('slot-content-changed', () => {
+        this.#syncFieldAriaControllerLabelId();
+      });
     }
 
     /** @protected */
@@ -541,39 +544,19 @@ export const SelectBaseMixin = (superClass) =>
     /**
      * @param {string} accessibleName
      * @protected
+     * @override
      */
     _accessibleNameChanged(accessibleName) {
       this._srLabelController.setLabel(accessibleName);
-      this._setCustomAriaLabelledBy(accessibleName ? this._srLabelController.defaultId : null);
+      this.#syncFieldAriaControllerLabelId();
     }
 
     /**
-     * @param {string} accessibleNameRef
      * @protected
+     * @override
      */
-    _accessibleNameRefChanged(accessibleNameRef) {
-      this._setCustomAriaLabelledBy(accessibleNameRef);
-    }
-
-    /**
-     * @param {string} ariaLabelledby
-     * @private
-     */
-    _setCustomAriaLabelledBy(ariaLabelledby) {
-      const labelId = this._getLabelIdWithItemId(ariaLabelledby);
-      this._fieldAriaController.setLabelId(labelId, true);
-    }
-
-    /**
-     * @param {string | null} labelId
-     * @returns string | null
-     * @private
-     */
-    _getLabelIdWithItemId(labelId) {
-      const selected = this._items ? this._items[this._menuElement.selected] : false;
-      const itemId = selected || this.placeholder ? this._itemId : '';
-
-      return labelId ? `${labelId} ${itemId}`.trim() : null;
+    _accessibleNameRefChanged() {
+      this.#syncFieldAriaControllerLabelId();
     }
 
     /** @private */
@@ -607,13 +590,7 @@ export const SelectBaseMixin = (superClass) =>
         delete this._selectedChanging;
       }
 
-      const labelledIdReferenceConfig =
-        selected || this.placeholder ? { newId: this._itemId } : { oldId: this._itemId };
-
-      setAriaIDReference(valueButton, 'aria-labelledby', labelledIdReferenceConfig);
-      if (this.accessibleName || this.accessibleNameRef) {
-        this._setCustomAriaLabelledBy(this.accessibleNameRef || this._srLabelController.defaultId);
-      }
+      this.#syncFieldAriaControllerLabelId();
     }
 
     /** @private */
@@ -708,5 +685,26 @@ export const SelectBaseMixin = (superClass) =>
       this._requestValidation();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
       this.__dispatchChangePending = false;
+    }
+
+    #syncFieldAriaControllerLabelId() {
+      let labelId;
+      if (this.accessibleNameRef) {
+        labelId = this.accessibleNameRef;
+      } else if (this.accessibleName) {
+        labelId = this._srLabelController.defaultId;
+      } else if (this.hasAttribute('has-label')) {
+        labelId = this._labelNode?.id;
+      }
+
+      const selectedItem = this._items?.[this._menuElement.selected];
+      const itemId = selectedItem || this.placeholder ? this._itemId : null;
+
+      const ids = [labelId, itemId].filter(Boolean);
+      if (ids.length > 0) {
+        this._fieldAriaController.setLabelId(ids.join(' '), true);
+      } else {
+        this._fieldAriaController.setLabelId(null, true);
+      }
     }
   };
