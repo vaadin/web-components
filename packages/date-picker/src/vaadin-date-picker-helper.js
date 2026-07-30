@@ -44,6 +44,40 @@ export function lastOfMonth(date) {
 }
 
 /**
+ * Get the index of a month, counted from January of year 0. Reduces a month to a single
+ * integer, so a lookup builds no key and two months are adjacent when their indexes are.
+ *
+ * @param {number} year
+ * @param {number} month Zero-based month
+ * @return {number}
+ */
+export function monthIndexOf(year, month) {
+  return year * 12 + month;
+}
+
+/**
+ * Get the index of the month the given date is in.
+ *
+ * @param {!Date} date
+ * @return {number}
+ */
+export function monthIndex(date) {
+  return monthIndexOf(date.getFullYear(), date.getMonth());
+}
+
+/**
+ * Get the first day of the month with the given index, inverting `monthIndexOf`. Counting from
+ * January of year 0 also inverts negative indexes, since `createDate` normalizes a month outside
+ * 0-11 into the year.
+ *
+ * @param {number} index
+ * @return {Date}
+ */
+export function monthDate(index) {
+  return createDate(0, index, 1);
+}
+
+/**
  * Get ISO 8601 week number for the given date.
  *
  * @param {!Date} date

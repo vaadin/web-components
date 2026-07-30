@@ -251,11 +251,7 @@ export const MonthCalendarMixin = (superClass) =>
       if (month === undefined || i18n === undefined) {
         return [];
       }
-      // First day of the month (at midnight).
-      const date = new Date(0, 0);
-      date.setFullYear(month.getFullYear());
-      date.setMonth(month.getMonth());
-      date.setDate(1);
+      const date = firstOfMonth(month);
 
       // Rewind to first day of the week.
       while (date.getDay() !== i18n.firstDayOfWeek) {
