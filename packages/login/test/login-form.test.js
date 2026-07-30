@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { enter, fixtureSync, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-login-form.js';
@@ -248,6 +249,33 @@ describe('no autofocus', () => {
 
   it('should not focus the username field', () => {
     expect(document.activeElement).to.equal(activeElement);
+  });
+});
+
+describe('Enter key default action', () => {
+  let login, button, vaadinLoginPassword;
+
+  beforeEach(async () => {
+    const wrapper = fixtureSync(`
+      <div>
+        <vaadin-login-form no-autofocus></vaadin-login-form>
+        <button></button>
+      </div>
+    `);
+    [login, button] = wrapper.children;
+    await nextRender();
+    vaadinLoginPassword = fillUsernameAndPassword(login).vaadinLoginPassword;
+  });
+
+  it('should not activate an element focused while handling Enter keydown', async () => {
+    const clickSpy = sinon.spy();
+    button.addEventListener('click', clickSpy);
+    login.addEventListener('login', () => button.focus());
+
+    vaadinLoginPassword.focus();
+    await sendKeys({ press: 'Enter' });
+
+    expect(clickSpy).to.be.not.called;
   });
 });
 

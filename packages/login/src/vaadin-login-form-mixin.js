@@ -189,6 +189,10 @@ export const LoginFormMixin = (superClass) =>
     /** @protected */
     _handleInputKeydown(e) {
       if (e.key === 'Enter') {
+        // Prevent default so that the browser does not apply the Enter activation
+        // behavior to an element that receives focus while this event is handled.
+        e.preventDefault();
+
         const { currentTarget: inputActive } = e;
         const nextInput = inputActive.id === 'vaadinLoginUsername' ? this._passwordField : this._userNameField;
         // eslint-disable-next-line no-restricted-syntax
