@@ -42,59 +42,6 @@ const MANAGER_CONFIG_PROPS = [
   'formDataName',
 ];
 
-class AddButtonController extends SlotController {
-  constructor(host) {
-    super(host, 'add-button', 'vaadin-button');
-  }
-
-  /**
-   * Override method inherited from `SlotController`
-   * to add listeners to default and custom node.
-   *
-   * @param {Node} node
-   * @protected
-   * @override
-   */
-  initNode(node) {
-    // Needed by Flow counterpart to apply i18n to custom button
-    if (node._isDefault) {
-      this.defaultNode = node;
-    }
-
-    node.addEventListener('touchend', (e) => {
-      this.host._onAddFilesTouchEnd(e);
-    });
-
-    node.addEventListener('click', (e) => {
-      this.host._onAddFilesClick(e);
-    });
-
-    this.host._addButton = node;
-  }
-}
-
-class DropLabelController extends SlotController {
-  constructor(host) {
-    super(host, 'drop-label', 'span');
-  }
-
-  /**
-   * Override method inherited from `SlotController`
-   * to add listeners to default and custom node.
-   *
-   * @param {Node} node
-   * @protected
-   * @override
-   */
-  initNode(node) {
-    // Needed by Flow counterpart to apply i18n to custom label
-    if (node._isDefault) {
-      this.defaultNode = node;
-    }
-    this.host._dropLabel = node;
-  }
-}
-
 export const UploadMixin = (superClass) =>
   class UploadMixin extends I18nMixin(superClass) {
     static get properties() {
@@ -439,18 +386,55 @@ export const UploadMixin = (superClass) =>
       this.addEventListener('dragover', this._onDragover.bind(this));
       this.addEventListener('dragleave', this._onDragleave.bind(this));
       this.addEventListener('drop', this._onDrop.bind(this));
-      this.addEventListener('file-retry', this._onFileRetry.bind(this));
-      this.addEventListener('file-abort', this._onFileAbort.bind(this));
-      this.addEventListener('file-start', this._onFileStart.bind(this));
-      this.addEventListener('file-reject', this._onFileReject.bind(this));
-      this.addEventListener('upload-start', this._onUploadStart.bind(this));
-      this.addEventListener('upload-success', this._onUploadSuccess.bind(this));
-      this.addEventListener('upload-error', this._onUploadError.bind(this));
 
-      this._addButtonController = new AddButtonController(this);
+      // Handle events dispatched by the file elements in the list
+      this.addEventListener('file-start', (e) => this.uploadFiles(e.detail.file));
+      this.addEventListener('file-abort', (e) => {
+        const manager = this.__managerFor(e.detail.file);
+        manager.abortUpload(e.detail.file);
+        // The manager does not process its upload queue when a file that has
+        // not started uploading is removed, so removing a queued file would
+        // not free capacity for other queued files without this
+        manager._processUploadQueue();
+      });
+      this.addEventListener('file-retry', (e) => {
+        this.__syncManagerConfig();
+        this.__managerFor(e.detail.file).retryUpload(e.detail.file);
+      });
+
+      // Announce the upload lifecycle to screen readers
+      const alert = (message) => announce(message, { mode: 'alert' });
+      this.addEventListener('file-reject', (e) => alert(`${e.detail.file.name}: ${e.detail.error}`));
+      this.addEventListener('upload-start', (e) => alert(`${e.detail.file.name}: 0%`));
+      this.addEventListener('upload-success', (e) => alert(`${e.detail.file.name}: 100%`));
+      this.addEventListener('upload-error', (e) => alert(`${e.detail.file.name}: ${e.detail.file.error}`));
+
+      this._addButtonController = new SlotController(this, 'add-button', 'vaadin-button', {
+        initializer: (node) => {
+          // Needed by Flow counterpart to apply i18n to custom button
+          if (node._isDefault) {
+            this._addButtonController.defaultNode = node;
+          }
+          node.addEventListener('touchend', (e) => {
+            // Cancel the event to avoid the following click event
+            e.preventDefault();
+            this._onAddFilesClick(e);
+          });
+          node.addEventListener('click', (e) => this._onAddFilesClick(e));
+          this._addButton = node;
+        },
+      });
       this.addController(this._addButtonController);
 
-      this._dropLabelController = new DropLabelController(this);
+      this._dropLabelController = new SlotController(this, 'drop-label', 'span', {
+        initializer: (label) => {
+          // Needed by Flow counterpart to apply i18n to custom label
+          if (label._isDefault) {
+            this._dropLabelController.defaultNode = label;
+          }
+          this._dropLabel = label;
+        },
+      });
       this.addController(this._dropLabelController);
 
       this.addController(
@@ -462,15 +446,6 @@ export const UploadMixin = (superClass) =>
       );
 
       this.addController(new SlotController(this, 'drop-label-icon', 'vaadin-upload-icon'));
-    }
-
-    /** @protected */
-    updated(props) {
-      super.updated(props);
-
-      if (MANAGER_CONFIG_PROPS.some((prop) => props.has(prop))) {
-        this.__syncManagerConfig();
-      }
     }
 
     /**
@@ -506,44 +481,54 @@ export const UploadMixin = (superClass) =>
       return manager;
     }
 
-    /** @private */
-    __syncManagerConfig() {
-      this.__applyManagerConfig(this._manager);
-      // Validation properties only apply to files added to the list.
-      // The manager does not accept negative maxFiles, which the component
-      // treats as no limit.
-      this._manager.maxFiles = this.maxFiles < 0 ? Infinity : this.maxFiles;
-      this._manager.maxFileSize = this.maxFileSize;
-      this._manager.accept = this.accept;
+    /** @protected */
+    updated(props) {
+      super.updated(props);
 
-      if (this.__externalManager) {
-        this.__applyManagerConfig(this.__externalManager);
+      if (MANAGER_CONFIG_PROPS.some((prop) => props.has(prop))) {
+        this.__syncManagerConfig();
       }
     }
 
     /**
-     * Apply the configuration shared by the internal upload managers.
+     * Sync the configuration properties to the internal upload managers.
      * @private
      */
-    __applyManagerConfig(manager) {
-      manager.target = this.target;
-      manager.method = this.method;
-      this.__syncManagerHeaders(manager);
-      manager.timeout = this.timeout;
-      manager.noAuto = this.noAuto;
-      manager.withCredentials = this.withCredentials;
-      manager.uploadFormat = this.uploadFormat;
-      manager.maxConcurrentUploads = this.maxConcurrentUploads;
-      manager.formDataName = this.formDataName;
+    __syncManagerConfig() {
+      const { target, method, timeout, noAuto, withCredentials, uploadFormat, maxConcurrentUploads, formDataName } =
+        this;
+      const config = {
+        target,
+        method,
+        headers: this.__parseHeaders(),
+        timeout,
+        noAuto,
+        withCredentials,
+        uploadFormat,
+        maxConcurrentUploads,
+        formDataName,
+      };
+      // Validation properties only apply to files added to the list, so they
+      // are not synced to the external manager. The manager does not accept
+      // negative maxFiles, which the component treats as no limit.
+      Object.assign(this._manager, config, {
+        maxFiles: this.maxFiles < 0 ? Infinity : this.maxFiles,
+        maxFileSize: this.maxFileSize,
+        accept: this.accept,
+      });
+
+      if (this.__externalManager) {
+        Object.assign(this.__externalManager, config);
+      }
     }
 
     /**
-     * Sync `headers` to the manager. The `headers` property supports a JSON
-     * string, while the manager only accepts an object, so strings are parsed
-     * before syncing. An invalid JSON string resets the property to undefined.
+     * The `headers` property supports a JSON string, while the manager only
+     * accepts an object, so strings are parsed before syncing. An invalid
+     * JSON string resets the property to undefined.
      * @private
      */
-    __syncManagerHeaders(manager) {
+    __parseHeaders() {
       let headers = this.headers;
       if (typeof headers === 'string') {
         try {
@@ -554,7 +539,7 @@ export const UploadMixin = (superClass) =>
           this.headers = undefined;
         }
       }
-      manager.headers = headers;
+      return headers;
     }
 
     /** @private */
@@ -562,29 +547,21 @@ export const UploadMixin = (superClass) =>
       // Sync files to manager when set directly (e.g., from tests or user code)
       // Skip if this change was triggered by the manager's files-changed event
       if (this._manager && !this.__updatingFromManager) {
+        const manager = this._manager;
         // Use flag to prevent the manager's files-changed event from re-syncing
         this.__syncingToManager = true;
-        this.__setManagerFiles(files);
+        // The manager's files setter validates new files against the configured
+        // constraints, while files assigned to the `files` property directly
+        // (e.g. to show previously uploaded files) must be accepted as-is, so
+        // the constraints are temporarily lifted
+        const { maxFiles, maxFileSize, accept } = manager;
+        Object.assign(manager, { maxFiles: Infinity, maxFileSize: Infinity, accept: '' });
+        manager.files = files;
+        Object.assign(manager, { maxFiles, maxFileSize, accept });
         this.__syncingToManager = false;
         // Sync `maxFilesReached` in case it changed while its updates were suppressed
-        this._setMaxFilesReached(this._manager.maxFilesReached);
+        this._setMaxFilesReached(manager.maxFilesReached);
       }
-    }
-
-    /**
-     * Assign files to the manager without validation. The manager's files
-     * setter validates new files against the configured constraints, while
-     * files assigned to the `files` property directly (e.g. to show previously
-     * uploaded files) must be accepted as-is.
-     * @private
-     */
-    __setManagerFiles(files) {
-      const manager = this._manager;
-      const { maxFiles, maxFileSize, accept } = manager;
-      // Temporarily lift the constraints so that the setter accepts all files
-      Object.assign(manager, { maxFiles: Infinity, maxFileSize: Infinity, accept: '' });
-      manager.files = files;
-      Object.assign(manager, { maxFiles, maxFileSize, accept });
     }
 
     // ============ Manager event handlers ============
@@ -686,15 +663,16 @@ export const UploadMixin = (superClass) =>
       if (!this.__externalManager) {
         const manager = this.__createManager();
         manager._createXhr = this._manager._createXhr;
+        // Files that are not rendered by the file list still need up-to-date status strings
         manager.addEventListener('files-changed', () => {
-          this.__updateExternalFileStatuses();
+          manager.files.forEach((file) => updateFileStatus(file, this.__effectiveI18n));
           // The file list has historically been rendered on upload state
           // changes even for files that it does not display
           this.__renderFileList();
         });
         this.__addUploadEventListeners(manager);
         this.__externalManager = manager;
-        this.__applyManagerConfig(manager);
+        this.__syncManagerConfig();
       }
       return this.__externalManager;
     }
@@ -707,11 +685,6 @@ export const UploadMixin = (superClass) =>
     /** @private */
     __managerFor(file) {
       return this.__isExternalFile(file) ? this.__externalManager : this._manager;
-    }
-
-    /** @private */
-    __updateExternalFileStatuses() {
-      this.__externalManager.files.forEach((file) => updateFileStatus(file, this.__effectiveI18n));
     }
 
     /** @private */
@@ -835,13 +808,6 @@ export const UploadMixin = (superClass) =>
     // ============ File input handling ============
 
     /** @private */
-    _onAddFilesTouchEnd(e) {
-      // Cancel the event to avoid the following click event
-      e.preventDefault();
-      this._onAddFilesClick(e);
-    }
-
-    /** @private */
     _onAddFilesClick(e) {
       if (this.maxFilesReached) {
         return;
@@ -858,50 +824,7 @@ export const UploadMixin = (superClass) =>
       this._manager.addFiles(event.target.files);
     }
 
-    // ============ File events ============
-
-    /** @private */
-    _onFileStart(event) {
-      this.uploadFiles(event.detail.file);
-    }
-
-    /** @private */
-    _onFileRetry(event) {
-      this.__syncManagerConfig();
-      this.__managerFor(event.detail.file).retryUpload(event.detail.file);
-    }
-
-    /** @private */
-    _onFileAbort(event) {
-      const manager = this.__managerFor(event.detail.file);
-      manager.abortUpload(event.detail.file);
-      // The manager does not process its upload queue when a file that has
-      // not started uploading is removed, so removing a queued file would
-      // not free capacity for other queued files without this
-      manager._processUploadQueue();
-    }
-
     // ============ Accessibility ============
-
-    /** @private */
-    _onFileReject(event) {
-      announce(`${event.detail.file.name}: ${event.detail.error}`, { mode: 'alert' });
-    }
-
-    /** @private */
-    _onUploadStart(event) {
-      announce(`${event.detail.file.name}: 0%`, { mode: 'alert' });
-    }
-
-    /** @private */
-    _onUploadSuccess(event) {
-      announce(`${event.detail.file.name}: 100%`, { mode: 'alert' });
-    }
-
-    /** @private */
-    _onUploadError(event) {
-      announce(`${event.detail.file.name}: ${event.detail.file.error}`, { mode: 'alert' });
-    }
 
     /** @private */
     _updateFocus(fileIndex) {
