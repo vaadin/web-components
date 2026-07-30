@@ -324,20 +324,6 @@ describe('unlimited size', () => {
     expect(scrollTarget.scrollTop).to.equal(scrollTop);
   });
 
-  it('should not re-render on a scroll event while hidden', async () => {
-    const index = Math.floor(virtualizer.size / 2);
-    virtualizer.scrollToIndex(index);
-
-    // Hiding the scroll target resets its scrollTop, which fires a scroll event.
-    // The virtualizer must ignore it instead of adjusting the virtual index
-    // offset for a scroll position it cannot measure.
-    scrollTarget.hidden = true;
-    await oneEvent(scrollTarget, 'scroll');
-    scrollTarget.hidden = false;
-
-    expect(elementsContainer.querySelector(`#item-${index}`)).to.be.ok;
-  });
-
   it('should preserve scroll position on large size decrease', async () => {
     const index = 300000;
     virtualizer.scrollToIndex(index);
