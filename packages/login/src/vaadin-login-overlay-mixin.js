@@ -86,7 +86,7 @@ export const LoginOverlayMixin = (superClass) =>
       }
 
       if (props.has('opened')) {
-        this._openedChanged(this.opened);
+        this._openedChanged(this.opened, props.get('opened'));
       }
     }
 
