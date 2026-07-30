@@ -167,10 +167,6 @@ export const SelectBaseMixin = (superClass) =>
       this._itemId = `value-${this.localName}-${generateUniqueId()}`;
       this._srLabelController = new LabelController(this);
       this._srLabelController.slotName = 'sr-label';
-
-      this._labelController.addEventListener('slot-content-changed', () => {
-        this.#syncFieldAriaControllerLabelId();
-      });
     }
 
     /** @protected */
@@ -548,15 +544,7 @@ export const SelectBaseMixin = (superClass) =>
      */
     _accessibleNameChanged(accessibleName) {
       this._srLabelController.setLabel(accessibleName);
-      this.#syncFieldAriaControllerLabelId();
-    }
-
-    /**
-     * @protected
-     * @override
-     */
-    _accessibleNameRefChanged() {
-      this.#syncFieldAriaControllerLabelId();
+      this.__syncFieldAriaControllerLabelId();
     }
 
     /** @private */
@@ -590,7 +578,7 @@ export const SelectBaseMixin = (superClass) =>
         delete this._selectedChanging;
       }
 
-      this.#syncFieldAriaControllerLabelId();
+      this.__syncFieldAriaControllerLabelId();
     }
 
     /** @private */
@@ -687,7 +675,8 @@ export const SelectBaseMixin = (superClass) =>
       this.__dispatchChangePending = false;
     }
 
-    #syncFieldAriaControllerLabelId() {
+    /** @override */
+    __syncFieldAriaControllerLabelId() {
       let labelId;
       if (this.accessibleNameRef) {
         labelId = this.accessibleNameRef;
