@@ -1,12 +1,12 @@
 import { expect } from '@vaadin/chai-plugins';
 import { defineCE, fixtureSync } from '@vaadin/testing-helpers';
 import {
-  addValueToAttribute,
+  addValuesToAttribute,
   getAncestorRootNodes,
   getClosestElement,
   getFlattenedElements,
   isEmptyTextNode,
-  removeValueFromAttribute,
+  removeValuesFromAttribute,
 } from '../src/dom-utils.js';
 
 describe('dom-utils', () => {
@@ -93,41 +93,68 @@ describe('dom-utils', () => {
     });
   });
 
-  describe('addValueToAttribute', () => {
+  describe('addValuesToAttribute', () => {
     let element;
 
     beforeEach(() => {
       element = document.createElement('div');
     });
 
-    it('should add a value to an attribute', () => {
-      addValueToAttribute(element, 'aria-labelledby', 'label-id');
+    it('should add a single value to an attribute', () => {
+      addValuesToAttribute(element, 'aria-labelledby', 'label-id');
       expect(element.getAttribute('aria-labelledby')).to.equal('label-id');
 
-      addValueToAttribute(element, 'aria-labelledby', 'error-id');
+      addValuesToAttribute(element, 'aria-labelledby', 'error-id');
       expect(element.getAttribute('aria-labelledby')).to.equal('label-id error-id');
     });
 
+    it('should add a string of space-delimited values to an attribute', () => {
+      addValuesToAttribute(element, 'aria-labelledby', 'label-id error-id');
+      expect(element.getAttribute('aria-labelledby')).to.equal('label-id error-id');
+    });
+
+    it('should add an array of values to an attribute', () => {
+      addValuesToAttribute(element, 'aria-labelledby', ['label-id', 'error-id helper-id']);
+      expect(element.getAttribute('aria-labelledby')).to.equal('label-id error-id helper-id');
+    });
+
     it('should not duplicate values in the attribute', () => {
-      addValueToAttribute(element, 'aria-labelledby', 'label-id');
-      addValueToAttribute(element, 'aria-labelledby', 'label-id');
-      expect(element.getAttribute('aria-labelledby')).to.equal('label-id');
+      addValuesToAttribute(element, 'aria-labelledby', ['label-id', 'error-id']);
+      addValuesToAttribute(element, 'aria-labelledby', 'label-id');
+      expect(element.getAttribute('aria-labelledby')).to.equal('label-id error-id');
+    });
+
+    it('should not set the attribute when there are no values to add', () => {
+      addValuesToAttribute(element, 'aria-labelledby', []);
+      expect(element.hasAttribute('aria-labelledby')).to.be.false;
     });
   });
 
-  describe('removeValueFromAttribute', () => {
+  describe('removeValuesFromAttribute', () => {
     let element;
 
     beforeEach(() => {
       element = document.createElement('div');
-      element.setAttribute('aria-labelledby', 'label-id error-id');
+      element.setAttribute('aria-labelledby', 'label-id error-id helper-id');
     });
 
-    it('should remove a value from an attribute', () => {
-      removeValueFromAttribute(element, 'aria-labelledby', 'error-id');
-      expect(element.getAttribute('aria-labelledby')).to.equal('label-id');
+    it('should remove a single value from an attribute', () => {
+      removeValuesFromAttribute(element, 'aria-labelledby', 'error-id');
+      expect(element.getAttribute('aria-labelledby')).to.equal('label-id helper-id');
+    });
 
-      removeValueFromAttribute(element, 'aria-labelledby', 'label-id');
+    it('should remove a string of space-delimited values from an attribute', () => {
+      removeValuesFromAttribute(element, 'aria-labelledby', 'error-id helper-id');
+      expect(element.getAttribute('aria-labelledby')).to.equal('label-id');
+    });
+
+    it('should remove an array of values from an attribute', () => {
+      removeValuesFromAttribute(element, 'aria-labelledby', ['error-id', 'helper-id']);
+      expect(element.getAttribute('aria-labelledby')).to.equal('label-id');
+    });
+
+    it('should remove the attribute when no values remain', () => {
+      removeValuesFromAttribute(element, 'aria-labelledby', ['label-id', 'error-id helper-id']);
       expect(element.hasAttribute('aria-labelledby')).to.be.false;
     });
   });

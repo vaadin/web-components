@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { addAriaElementReference, removeAriaElementReference } from '@vaadin/a11y-base/src/aria-element-reference.js';
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 
 /**
  * A mixin providing linking of the tooltip content to the tooltip target
@@ -92,7 +92,7 @@ export const TooltipAriaMixin = (superClass) =>
         if (byReference) {
           addAriaElementReference(target, mode, contentNode);
         } else {
-          addValueToAttribute(target, mode, contentNode.id);
+          addValuesToAttribute(target, mode, contentNode.id);
         }
 
         this.#ariaReferences.push({ target, mode, byReference });
@@ -106,7 +106,7 @@ export const TooltipAriaMixin = (superClass) =>
         if (byReference) {
           removeAriaElementReference(target, mode, contentNode);
         } else {
-          removeValueFromAttribute(target, mode, contentNode.id);
+          removeValuesFromAttribute(target, mode, contentNode.id);
         }
       });
       this.#ariaReferences = [];

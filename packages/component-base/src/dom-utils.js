@@ -84,11 +84,7 @@ export function getClosestElement(selector, node) {
  * @return {Set<string>}
  */
 export function deserializeAttributeValue(value) {
-  if (!value) {
-    return new Set();
-  }
-
-  return new Set(value.split(' '));
+  return new Set(value ? value.split(' ') : []);
 }
 
 /**
@@ -102,34 +98,65 @@ export function serializeAttributeValue(values) {
 }
 
 /**
- * Adds a value to an attribute containing space-delimited values.
+ * Normalizes values passed to `addValuesToAttribute` and `removeValuesFromAttribute`
+ * into a set of values. Both a single string and every array entry may contain
+ * multiple values separated by space.
  *
- * @param {HTMLElement} element
- * @param {string} attr
- * @param {string} value
+ * @param {string | string[] | null | undefined} values
+ * @return {Set<string>}
  */
-export function addValueToAttribute(element, attr, value) {
-  const values = deserializeAttributeValue(element.getAttribute(attr));
-  values.add(value);
-  element.setAttribute(attr, serializeAttributeValue(values));
+function normalizeAttributeValues(values) {
+  return deserializeAttributeValue(Array.isArray(values) ? values.join(' ') : values);
 }
 
 /**
- * Removes a value from an attribute containing space-delimited values.
- * If the value is the last one, the whole attribute is removed.
+ * Sets the attribute to the given set of values. If the set is empty,
+ * the whole attribute is removed.
  *
  * @param {HTMLElement} element
  * @param {string} attr
- * @param {string} value
+ * @param {Set<string>} values
  */
-export function removeValueFromAttribute(element, attr, value) {
-  const values = deserializeAttributeValue(element.getAttribute(attr));
-  values.delete(value);
+function setAttributeValues(element, attr, values) {
   if (values.size === 0) {
     element.removeAttribute(attr);
-    return;
+  } else {
+    element.setAttribute(attr, serializeAttributeValue(values));
   }
-  element.setAttribute(attr, serializeAttributeValue(values));
+}
+
+/**
+ * Adds one or more values to an attribute containing space-delimited values.
+ * If no values remain, the whole attribute is removed.
+ *
+ * @param {HTMLElement} element
+ * @param {string} attr
+ * @param {string | string[]} valuesToAdd a string or an array of strings with values separated by space
+ */
+export function addValuesToAttribute(element, attr, valuesToAdd) {
+  valuesToAdd = normalizeAttributeValues(valuesToAdd);
+
+  const values = deserializeAttributeValue(element.getAttribute(attr));
+  valuesToAdd.forEach((value) => values.add(value));
+
+  setAttributeValues(element, attr, values);
+}
+
+/**
+ * Removes one or more values from an attribute containing space-delimited values.
+ * If no values remain, the whole attribute is removed.
+ *
+ * @param {HTMLElement} element
+ * @param {string} attr
+ * @param {string | string[]} valuesToRemove a string or an array of strings with values separated by space
+ */
+export function removeValuesFromAttribute(element, attr, valuesToRemove) {
+  valuesToRemove = normalizeAttributeValues(valuesToRemove);
+
+  const values = deserializeAttributeValue(element.getAttribute(attr));
+  valuesToRemove.forEach((value) => values.delete(value));
+
+  setAttributeValues(element, attr, values);
 }
 
 /**

@@ -37,15 +37,16 @@ export function deserializeAttributeValue(value: string): Set<string>;
 export function serializeAttributeValue(values: Set<string>): string;
 
 /**
- * Adds a value to an attribute containing space-delimited values.
+ * Adds one or more values to an attribute containing space-delimited values.
+ * If no values remain, the whole attribute is removed.
  */
-export function addValueToAttribute(element: HTMLElement, attr: string, value: string): void;
+export function addValuesToAttribute(element: HTMLElement, attr: string, valuesToAdd: string | string[]): void;
 
 /**
- * Removes a value from an attribute containing space-delimited values.
- * If the value is the last one, the whole attribute is removed.
+ * Removes one or more values from an attribute containing space-delimited values.
+ * If no values remain, the whole attribute is removed.
  */
-export function removeValueFromAttribute(element: HTMLElement, attr: string, value: string): void;
+export function removeValuesFromAttribute(element: HTMLElement, attr: string, valuesToRemove: string | string[]): void;
 
 /**
  * Returns true if the given node is an empty text node, false otherwise.
