@@ -48,6 +48,20 @@ function getVisibleViewportHeight() {
   return Math.min(getLayoutViewportHeight(), window.visualViewport.height);
 }
 
+/**
+ * Returns the height of the area that is not visible to the user at the bottom of the
+ * layout viewport, e.g. covered by the on-screen keyboard, measured in the coordinate
+ * space of the layout viewport.
+ *
+ * Unlike `getVisibleViewportHeight`, this includes the visual viewport offset: iOS Safari
+ * shifts the page to reveal the focused field, but leaves the layout viewport in place,
+ * so the offset is the distance between the two coordinate spaces.
+ */
+function getViewportOcclusionHeight() {
+  const { height, offsetTop } = window.visualViewport;
+  return Math.max(0, document.documentElement.clientHeight - (height + offsetTop));
+}
+
 const targetResizeObserver = new ResizeObserver((entries) => {
   setTimeout(() => {
     entries.forEach((entry) => {
@@ -142,6 +156,19 @@ export const PositionMixin = (superClass) =>
           value: 0,
           sync: true,
         },
+
+        /**
+         * When true, the overlay content is limited to the part of the viewport that is
+         * visible to the user, so that it shrinks instead of extending into an area that
+         * is covered by the on-screen keyboard.
+         *
+         * @attr {boolean} limit-to-visual-viewport
+         */
+        limitToVisualViewport: {
+          type: Boolean,
+          value: false,
+          sync: true,
+        },
       };
     }
 
@@ -202,6 +229,7 @@ export const PositionMixin = (superClass) =>
         'noHorizontalOverlap',
         'noVerticalOverlap',
         'requiredVerticalSpace',
+        'limitToVisualViewport',
       ];
       if (positionProps.some((prop) => props.has(prop))) {
         this._updatePosition();
@@ -296,10 +324,25 @@ export const PositionMixin = (superClass) =>
         right: '',
       });
 
+      this.style.removeProperty('--_vaadin-overlay-viewport-occlusion');
+
       setOverlayStateAttribute(this, 'bottom-aligned', false);
       setOverlayStateAttribute(this, 'top-aligned', false);
       setOverlayStateAttribute(this, 'end-aligned', false);
       setOverlayStateAttribute(this, 'start-aligned', false);
+    }
+
+    /**
+     * Reduces the space available to the overlay by the height of the area that is not
+     * visible to the user, so that the content shrinks instead of extending into it.
+     * @private
+     */
+    __updateViewportOcclusion() {
+      if (this.limitToVisualViewport) {
+        this.style.setProperty('--_vaadin-overlay-viewport-occlusion', `${getViewportOcclusionHeight()}px`);
+      } else {
+        this.style.removeProperty('--_vaadin-overlay-viewport-occlusion');
+      }
     }
 
     _updatePosition() {
@@ -313,6 +356,10 @@ export const PositionMixin = (superClass) =>
         this.opened = false;
         return;
       }
+
+      // Apply the constraint before measuring, so that the content is measured
+      // with the height it will actually get.
+      this.__updateViewportOcclusion();
 
       // Detect the desired alignment and update the layout accordingly
       const shouldAlignStartVertically = this.__shouldAlignStartVertically(targetRect);

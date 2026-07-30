@@ -19,7 +19,10 @@ const overlayBase = css`
           override this to adjust the gap between the overlay and the viewport. */
     inset: max(env(safe-area-inset-top, 0px), var(--vaadin-overlay-viewport-inset, 8px))
       max(env(safe-area-inset-right, 0px), var(--vaadin-overlay-viewport-inset, 8px))
-      max(env(safe-area-inset-bottom, 0px), var(--vaadin-overlay-viewport-bottom))
+      calc(
+        max(env(safe-area-inset-bottom, 0px), var(--vaadin-overlay-viewport-bottom)) +
+          var(--_vaadin-overlay-viewport-occlusion, 0px)
+      )
       max(env(safe-area-inset-left, 0px), var(--vaadin-overlay-viewport-inset, 8px));
 
     /* Override native [popover] user agent styles */

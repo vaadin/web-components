@@ -65,3 +65,4 @@ assertType<'end' | 'start'>(customOverlay.horizontalAlign);
 assertType<'bottom' | 'top'>(customOverlay.verticalAlign);
 assertType<HTMLElement>(customOverlay.positionTarget);
 assertType<number>(customOverlay.requiredVerticalSpace);
+assertType<boolean>(customOverlay.limitToVisualViewport);

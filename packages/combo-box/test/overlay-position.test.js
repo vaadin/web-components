@@ -168,6 +168,33 @@ describe('overlay position', () => {
       expect(overlayPart.getBoundingClientRect().top).to.closeTo(inputField.getBoundingClientRect().bottom, 1);
     });
 
+    describe('visual viewport', () => {
+      // Mimics the iOS on-screen keyboard, which shrinks the visual viewport
+      // while the layout viewport keeps reporting its full height.
+      const KEYBOARD_HEIGHT = 250;
+      let visibleHeight;
+
+      beforeEach(() => {
+        visibleHeight = document.documentElement.clientHeight - KEYBOARD_HEIGHT;
+        Object.defineProperty(window.visualViewport, 'height', {
+          configurable: true,
+          get: () => visibleHeight,
+        });
+      });
+
+      afterEach(() => {
+        delete window.visualViewport.height;
+      });
+
+      it('should not extend the overlay below the visible viewport', async () => {
+        moveComboBox(xCenter, yTop, 300);
+
+        comboBox.open();
+        await aTimeout(1);
+        expect(overlayPart.getBoundingClientRect().bottom).to.be.at.most(visibleHeight);
+      });
+    });
+
     describe('lazy data provider', () => {
       beforeEach(() => {
         comboBox.items = undefined;

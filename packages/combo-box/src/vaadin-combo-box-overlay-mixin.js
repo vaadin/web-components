@@ -16,6 +16,7 @@ export const ComboBoxOverlayMixin = (superClass) =>
       super();
 
       this.requiredVerticalSpace = 200;
+      this.limitToVisualViewport = true;
     }
 
     /**

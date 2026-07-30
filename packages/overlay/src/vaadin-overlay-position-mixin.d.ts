@@ -64,4 +64,13 @@ export declare class PositionMixinClass {
    * @attr {number} required-vertical-space
    */
   requiredVerticalSpace: number;
+
+  /**
+   * When true, the overlay content is limited to the part of the viewport that is
+   * visible to the user, so that it shrinks instead of extending into an area that
+   * is covered by the on-screen keyboard.
+   *
+   * @attr {boolean} limit-to-visual-viewport
+   */
+  limitToVisualViewport: boolean;
 }

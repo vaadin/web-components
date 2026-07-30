@@ -464,6 +464,47 @@ describe('position mixin', () => {
       expectEdgesAligned(TOP, TOP);
     });
 
+    describe('limit to visual viewport', () => {
+      beforeEach(() => {
+        // Content taller than the whole viewport, so that it has to shrink
+        overlay.querySelector('#overlay-child').style.height = `${document.documentElement.clientHeight}px`;
+        target.style.top = '0px';
+      });
+
+      it('should not extend the overlay below the visible viewport', () => {
+        overlay.limitToVisualViewport = true;
+        updatePosition();
+        expect(overlayContent.getBoundingClientRect().bottom).to.be.at.most(visibleHeight - margin + 1);
+      });
+
+      it('should extend the overlay below the visible viewport when not constrained', () => {
+        updatePosition();
+        expect(overlayContent.getBoundingClientRect().bottom).to.be.above(visibleHeight - margin + 1);
+      });
+
+      it('should not constrain the overlay when the visual viewport is only shifted', () => {
+        // The bottom of the layout viewport is visible, only the top is out of view,
+        // so there is nothing to constrain even though the visual viewport is smaller.
+        Object.defineProperty(window.visualViewport, 'offsetTop', {
+          configurable: true,
+          get: () => KEYBOARD_HEIGHT,
+        });
+
+        overlay.limitToVisualViewport = true;
+        updatePosition();
+        expect(overlayContent.getBoundingClientRect().bottom).to.be.above(visibleHeight - margin + 1);
+      });
+
+      it('should release the constraint when the visual viewport grows again', () => {
+        overlay.limitToVisualViewport = true;
+        updatePosition();
+
+        visibleHeight = document.documentElement.clientHeight;
+        updatePosition();
+        expect(overlayContent.getBoundingClientRect().bottom).to.be.closeTo(visibleHeight - margin, 1);
+      });
+    });
+
     it('should not add the visual viewport offset to the available space', () => {
       // The on-screen keyboard also shifts the page up, which is already reflected
       // by the client rectangles, so the offset must not be added to the height.
