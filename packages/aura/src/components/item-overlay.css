@@ -130,6 +130,8 @@ vaadin-select[theme~='filled'] > [slot='overlay'] [role='option']:not([disabled]
   border-color: var(--vaadin-border-color);
 }
 
+vaadin-avatar-group,
+vaadin-breadcrumbs,
 vaadin-combo-box,
 vaadin-multi-select-combo-box,
 vaadin-date-picker,
