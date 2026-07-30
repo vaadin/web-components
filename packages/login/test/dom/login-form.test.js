@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../../vaadin-login-form.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -38,6 +38,7 @@ describe('vaadin-login-form', () => {
       form.querySelectorAll('[required]').forEach((el) => {
         el.invalid = true;
       });
+      await aTimeout(0);
       await expect(form).dom.to.equalSnapshot();
     });
 
@@ -58,6 +59,7 @@ describe('vaadin-login-form', () => {
       form.querySelectorAll('[required]').forEach((el) => {
         el.invalid = true;
       });
+      await aTimeout(0);
       await nextUpdate(form);
       await expect(form).dom.to.equalSnapshot();
     });
