@@ -118,14 +118,11 @@ export const FieldMixin = (superclass) =>
     /** @protected */
     _accessibleNameChanged(accessibleName) {
       this._fieldAriaController.setAriaLabel(accessibleName);
+      this.__syncFieldAriaControllerLabelId();
     }
 
     /** @protected */
-    _accessibleNameRefChanged(accessibleNameRef, oldAccessibleNameRef) {
-      if (!accessibleNameRef && oldAccessibleNameRef) {
-        // Remove the user-provided id and restore ids stored by the controller.
-        this._fieldAriaController.setLabelId(null, true);
-      }
+    _accessibleNameRefChanged() {
       this.__syncFieldAriaControllerLabelId();
     }
 
@@ -201,10 +198,10 @@ export const FieldMixin = (superclass) =>
     /** @private */
     __syncFieldAriaControllerLabelId() {
       if (this.accessibleNameRef) {
-        this._fieldAriaController.setLabelId(this.accessibleNameRef, true);
-      } else if (this.hasAttribute('has-label')) {
-        // Label ID should be only added when the label content is present.
-        // Otherwise, it may conflict with an `aria-label` attribute possibly added by the user.
+        this._fieldAriaController.setLabelId(this.accessibleNameRef);
+      } else if (this.hasAttribute('has-label') && !this.accessibleName) {
+        // Label ID should be only added when the label content is present
+        // and not overridden by `accessible-name` which sets `aria-label`.
         this._fieldAriaController.setLabelId(this._labelNode?.id);
       } else {
         this._fieldAriaController.setLabelId(null);

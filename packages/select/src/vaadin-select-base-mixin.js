@@ -691,9 +691,9 @@ export const SelectBaseMixin = (superClass) =>
 
       const ids = [labelId, itemId].filter(Boolean);
       if (ids.length > 0) {
-        this._fieldAriaController.setLabelId(ids.join(' '), true);
+        this._fieldAriaController.setLabelId(ids.join(' '));
       } else {
-        this._fieldAriaController.setLabelId(null, true);
+        this._fieldAriaController.setLabelId(null);
       }
     }
   };
