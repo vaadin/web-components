@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { change, fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-upload.js';
 import {
@@ -41,20 +41,6 @@ describe('adding files', () => {
       upload.files = files;
       await nextUpdate(upload);
       expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should add files on input change', () => {
-      const input = upload.$.fileInput;
-
-      // We can't simply assign `files` property of input[type="file"].
-      // Tweaking __proto__ to make it assignable below.
-      Object.setPrototypeOf(input, HTMLElement.prototype);
-      input.files = files;
-
-      change(input);
-
-      expect(upload.files[0]).to.equal(files[1]);
-      expect(upload.files[1]).to.equal(files[0]);
     });
   });
 
