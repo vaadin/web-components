@@ -128,6 +128,11 @@ describe('dom-utils', () => {
       addValuesToAttribute(element, 'aria-labelledby', []);
       expect(element.hasAttribute('aria-labelledby')).to.be.false;
     });
+
+    it('should ignore empty tokens produced by extra whitespace', () => {
+      addValuesToAttribute(element, 'aria-labelledby', '  label-id   error-id  ');
+      expect(element.getAttribute('aria-labelledby')).to.equal('label-id error-id');
+    });
   });
 
   describe('removeValuesFromAttribute', () => {
@@ -155,6 +160,12 @@ describe('dom-utils', () => {
 
     it('should remove the attribute when no values remain', () => {
       removeValuesFromAttribute(element, 'aria-labelledby', ['label-id', 'error-id helper-id']);
+      expect(element.hasAttribute('aria-labelledby')).to.be.false;
+    });
+
+    it('should remove the attribute when only whitespace remains', () => {
+      element.setAttribute('aria-labelledby', ' label-id  error-id ');
+      removeValuesFromAttribute(element, 'aria-labelledby', ['label-id', 'error-id']);
       expect(element.hasAttribute('aria-labelledby')).to.be.false;
     });
   });
