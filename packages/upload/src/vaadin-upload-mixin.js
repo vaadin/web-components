@@ -9,9 +9,12 @@ import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { DEFAULT_I18N as FILE_LIST_DEFAULT_I18N } from './vaadin-upload-file-list-mixin.js';
 import { getFilesFromDropEvent } from './vaadin-upload-helpers.js';
+import { UploadManager } from './vaadin-upload-manager.js';
 
 export const DEFAULT_I18N = {
+  ...FILE_LIST_DEFAULT_I18N,
   dropFiles: {
     one: 'Drop file here',
     many: 'Drop files here',
@@ -19,37 +22,6 @@ export const DEFAULT_I18N = {
   addFiles: {
     one: 'Upload File...',
     many: 'Upload Files...',
-  },
-  error: {
-    tooManyFiles: 'Too Many Files.',
-    fileIsTooBig: 'File is Too Big.',
-    incorrectFileType: 'Incorrect File Type.',
-  },
-  uploading: {
-    status: {
-      connecting: 'Connecting...',
-      stalled: 'Stalled',
-      processing: 'Processing File...',
-      held: 'Queued',
-    },
-    remainingTime: {
-      prefix: 'remaining time: ',
-      unknown: 'unknown remaining time',
-    },
-    error: {
-      serverUnavailable: 'Upload failed, please try again later',
-      unexpectedServerError: 'Upload failed due to server error',
-      forbidden: 'Upload forbidden',
-      fileTooLarge: 'File is too large',
-    },
-  },
-  file: {
-    retry: 'Retry',
-    start: 'Start',
-    remove: 'Remove',
-  },
-  units: {
-    size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
   },
 };
 
@@ -177,7 +149,8 @@ export const UploadMixin = (superClass) =>
         _dragover: {
           type: Boolean,
           value: false,
-          observer: '_dragoverChanged',
+          reflectToAttribute: true,
+          attribute: 'dragover',
         },
 
         /**
@@ -208,6 +181,7 @@ export const UploadMixin = (superClass) =>
           notify: true,
           value: () => [],
           sync: true,
+          observer: '__filesChanged',
         },
 
         /**
@@ -266,7 +240,8 @@ export const UploadMixin = (superClass) =>
         _dragoverValid: {
           type: Boolean,
           value: false,
-          observer: '_dragoverValidChanged',
+          reflectToAttribute: true,
+          attribute: 'dragover-valid',
         },
 
         /**
@@ -344,23 +319,6 @@ export const UploadMixin = (superClass) =>
         _fileList: {
           type: Object,
         },
-
-        /** @private */
-        _files: {
-          type: Array,
-        },
-
-        /** @private */
-        _uploadQueue: {
-          type: Array,
-          value: () => [],
-        },
-
-        /** @private */
-        _activeUploads: {
-          type: Number,
-          value: 0,
-        },
       };
     }
 
@@ -369,7 +327,7 @@ export const UploadMixin = (superClass) =>
         '__updateAddButton(_addButton, maxFiles, __effectiveI18n, maxFilesReached, disabled)',
         '__updateDropLabel(_dropLabel, maxFiles, __effectiveI18n)',
         '__updateFileList(_fileList, files, __effectiveI18n, disabled, _theme)',
-        '__updateMaxFilesReached(maxFiles, files)',
+        '__syncManagerConfig(target, method, headers, timeout, maxFiles, maxFileSize, accept, noAuto, withCredentials, uploadFormat, maxConcurrentUploads, formDataName)',
       ];
     }
 
@@ -444,29 +402,41 @@ export const UploadMixin = (superClass) =>
       super.i18n = value;
     }
 
-    /** @private */
-    get __acceptRegexp() {
-      if (!this.accept) {
-        return null;
-      }
-      const processedTokens = this.accept.split(',').map((token) => {
-        let processedToken = token.trim();
-        // Escape regex operators common to mime types
-        processedToken = processedToken.replace(/[+.]/gu, '\\$&');
-        // Make extension patterns match the end of the file name
-        if (processedToken.startsWith('\\.')) {
-          processedToken = `.*${processedToken}$`;
-        }
-        // Handle star (*) wildcards
-        return processedToken.replace(/\/\*/gu, '/.*');
-      });
-      // Create accept regex
-      return new RegExp(`^(${processedTokens.join('|')})$`, 'iu');
+    constructor() {
+      super();
+
+      // Create the internal upload manager
+      this._manager = new UploadManager();
+
+      // Bind manager event handlers
+      this.__onManagerFilesChanged = this.__onManagerFilesChanged.bind(this);
+      this.__onManagerMaxFilesReachedChanged = this.__onManagerMaxFilesReachedChanged.bind(this);
+      this.__onManagerFileReject = this.__onManagerFileReject.bind(this);
+      this.__onManagerFileRemove = this.__onManagerFileRemove.bind(this);
+      this.__onManagerUploadSuccess = this.__onManagerUploadSuccess.bind(this);
+      this.__onManagerUploadError = this.__onManagerUploadError.bind(this);
+      this.__redispatchEvent = this.__redispatchEvent.bind(this);
     }
 
     /** @protected */
     ready() {
       super.ready();
+
+      // Set up manager event listeners
+      this._manager.addEventListener('files-changed', this.__onManagerFilesChanged);
+      this._manager.addEventListener('max-files-reached-changed', this.__onManagerMaxFilesReachedChanged);
+      this._manager.addEventListener('file-reject', this.__onManagerFileReject);
+      this._manager.addEventListener('file-remove', this.__onManagerFileRemove);
+      this._manager.addEventListener('upload-before', this.__redispatchEvent);
+      this._manager.addEventListener('upload-request', this.__redispatchEvent);
+      this._manager.addEventListener('upload-start', this.__redispatchEvent);
+      this._manager.addEventListener('upload-progress', this.__redispatchEvent);
+      this._manager.addEventListener('upload-response', this.__redispatchEvent);
+      this._manager.addEventListener('upload-success', this.__onManagerUploadSuccess);
+      this._manager.addEventListener('upload-error', this.__onManagerUploadError);
+      this._manager.addEventListener('upload-retry', this.__redispatchEvent);
+      this._manager.addEventListener('upload-abort', this.__redispatchEvent);
+
       this.addEventListener('dragover', this._onDragover.bind(this));
       this.addEventListener('dragleave', this._onDragleave.bind(this));
       this.addEventListener('drop', this._onDrop.bind(this));
@@ -496,65 +466,133 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    _formatSize(bytes) {
-      if (typeof this.__effectiveI18n.formatSize === 'function') {
-        return this.__effectiveI18n.formatSize(bytes);
+    // eslint-disable-next-line @typescript-eslint/max-params
+    __syncManagerConfig(
+      _target,
+      _method,
+      _headers,
+      _timeout,
+      _maxFiles,
+      _maxFileSize,
+      _accept,
+      _noAuto,
+      _withCredentials,
+      _uploadFormat,
+      _maxConcurrentUploads,
+      _formDataName,
+    ) {
+      if (!this._manager) {
+        return;
       }
-
-      // https://wiki.ubuntu.com/UnitsPolicy
-      const base = this.__effectiveI18n.units.sizeBase || 1000;
-      const unit = ~~(Math.log(bytes) / Math.log(base));
-      const dec = Math.max(0, Math.min(3, unit - 1));
-      const size = parseFloat((bytes / base ** unit).toFixed(dec));
-      return `${size} ${this.__effectiveI18n.units.size[unit]}`;
+      this._manager.target = this.target;
+      this._manager.method = this.method;
+      this._manager.headers = this.headers;
+      this._manager.timeout = this.timeout;
+      this._manager.maxFiles = this.maxFiles;
+      this._manager.maxFileSize = this.maxFileSize;
+      this._manager.accept = this.accept;
+      this._manager.noAuto = this.noAuto;
+      this._manager.withCredentials = this.withCredentials;
+      this._manager.uploadFormat = this.uploadFormat;
+      this._manager.maxConcurrentUploads = this.maxConcurrentUploads;
+      this._manager.formDataName = this.formDataName;
     }
 
     /** @private */
-    _splitTimeByUnits(time) {
-      const unitSizes = [60, 60, 24, Infinity];
-      const timeValues = [0];
-
-      for (let i = 0; i < unitSizes.length && time > 0; i++) {
-        timeValues[i] = time % unitSizes[i];
-        time = Math.floor(time / unitSizes[i]);
+    __filesChanged(files) {
+      // Sync files to manager when set directly (e.g., from tests or user code)
+      // Skip if this change was triggered by the manager's files-changed event
+      if (this._manager && !this.__updatingFromManager) {
+        // Use flag to prevent the manager's files-changed event from re-syncing
+        this.__syncingToManager = true;
+        this._manager.files = files;
+        this.__syncingToManager = false;
       }
+    }
 
-      return timeValues;
+    // ============ Manager event handlers ============
+
+    /** @private */
+    __onManagerFilesChanged(event) {
+      // Skip if this event was triggered by our own sync to the manager
+      if (this.__syncingToManager) {
+        return;
+      }
+      // Update files from manager
+      const files = event.detail.value;
+      // Use flag to prevent recursive sync back to manager
+      this.__updatingFromManager = true;
+      this.files = [...files];
+      this.__updatingFromManager = false;
     }
 
     /** @private */
-    _formatTime(seconds, split) {
-      if (typeof this.__effectiveI18n.formatTime === 'function') {
-        return this.__effectiveI18n.formatTime(seconds, split);
-      }
-
-      // Fill HH:MM:SS with leading zeros
-      while (split.length < 3) {
-        split.push(0);
-      }
-
-      return split
-        .reverse()
-        .map((number) => {
-          return (number < 10 ? '0' : '') + number;
-        })
-        .join(':');
+    __onManagerMaxFilesReachedChanged(event) {
+      this._setMaxFilesReached(event.detail.value);
     }
 
     /** @private */
-    _formatFileProgress(file) {
-      const remainingTime =
-        file.loaded > 0
-          ? this.__effectiveI18n.uploading.remainingTime.prefix + file.remainingStr
-          : this.__effectiveI18n.uploading.remainingTime.unknown;
-
-      return `${file.totalStr}: ${file.progress}% (${remainingTime})`;
+    __onManagerFileReject(event) {
+      const { file, error } = event.detail;
+      // Translate error code to i18n message
+      const errorMessage = this.__effectiveI18n.error[error] || error;
+      this.dispatchEvent(
+        new CustomEvent('file-reject', {
+          detail: { file, error: errorMessage },
+        }),
+      );
     }
 
     /** @private */
-    __updateMaxFilesReached(maxFiles, files) {
-      this._setMaxFilesReached(maxFiles >= 0 && files.length >= maxFiles);
+    __onManagerFileRemove(event) {
+      const { file, fileIndex } = event.detail;
+
+      this.dispatchEvent(
+        new CustomEvent('file-remove', {
+          detail: { file },
+          bubbles: true,
+          composed: true,
+        }),
+      );
+      this._updateFocus(fileIndex);
     }
+
+    /** @private */
+    __redispatchEvent(event) {
+      const dispatched = this.dispatchEvent(
+        new CustomEvent(event.type, {
+          detail: event.detail,
+          cancelable: event.cancelable,
+        }),
+      );
+      if (event.cancelable && !dispatched) {
+        event.preventDefault();
+      }
+    }
+
+    /** @private */
+    __onManagerUploadSuccess(event) {
+      const { file } = event.detail;
+      // Check if error was set by upload-response listener (for backwards compatibility)
+      if (file.error) {
+        file.complete = false;
+        this.dispatchEvent(new CustomEvent('upload-error', { detail: event.detail }));
+        return;
+      }
+      this.__redispatchEvent(event);
+    }
+
+    /** @private */
+    __onManagerUploadError(event) {
+      const { file } = event.detail;
+      // Translate errorKey to i18n message and set file.error (only if error wasn't already set directly)
+      if (file.errorKey && !file.error) {
+        file.error = this.__effectiveI18n.uploading.error[file.errorKey] || file.errorKey;
+      }
+      this.__redispatchEvent(event);
+    }
+
+    // ============ UI updates ============
 
     /** @private */
     __updateAddButton(addButton, maxFiles, effectiveI18n, maxFilesReached, disabled) {
@@ -586,6 +624,8 @@ export const UploadMixin = (superClass) =>
       }
     }
 
+    // ============ Drag and drop ============
+
     /** @private */
     _onDragover(event) {
       event.preventDefault();
@@ -611,384 +651,11 @@ export const UploadMixin = (superClass) =>
         this._dragover = this._dragoverValid = false;
 
         const files = await getFilesFromDropEvent(event);
-        this._addFiles(files);
+        this._manager.addFiles(files);
       }
     }
 
-    /** @private */
-    _createXhr() {
-      return new XMLHttpRequest();
-    }
-
-    /** @private */
-    _configureXhr(xhr, file = null, isRawUpload = false) {
-      if (typeof this.headers === 'string') {
-        try {
-          this.headers = JSON.parse(this.headers);
-        } catch (_) {
-          this.headers = undefined;
-        }
-      }
-      Object.entries(this.headers).forEach(([key, value]) => {
-        xhr.setRequestHeader(key, value);
-      });
-
-      // Set Content-Type and filename header for raw binary uploads
-      if (isRawUpload && file) {
-        xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
-        xhr.setRequestHeader('X-Filename', encodeURIComponent(file.name));
-      }
-
-      if (this.timeout) {
-        xhr.timeout = this.timeout;
-      }
-      xhr.withCredentials = this.withCredentials;
-    }
-
-    /** @private */
-    _setStatus(file, total, loaded, elapsed) {
-      file.elapsed = elapsed;
-      file.elapsedStr = this._formatTime(file.elapsed, this._splitTimeByUnits(file.elapsed));
-      file.remaining = Math.ceil(elapsed * (total / loaded - 1));
-      file.remainingStr = this._formatTime(file.remaining, this._splitTimeByUnits(file.remaining));
-      file.speed = ~~(total / elapsed / 1024);
-      file.totalStr = this._formatSize(total);
-      file.loadedStr = this._formatSize(loaded);
-      file.status = this._formatFileProgress(file);
-    }
-
-    /**
-     * Triggers the upload of any files that are not completed
-     *
-     * @param {!UploadFile | !Array<!UploadFile>=} files - Files being uploaded. Defaults to all outstanding files
-     */
-    uploadFiles(files = this.files) {
-      if (files && !Array.isArray(files)) {
-        files = [files];
-      }
-      files.filter((file) => !file.complete).forEach((file) => this._queueFileUpload(file));
-    }
-
-    /** @private */
-    _queueFileUpload(file) {
-      if (file.uploading) {
-        return;
-      }
-
-      file.held = true;
-      file.uploading = file.indeterminate = true;
-      file.complete = file.abort = file.error = false;
-      file.status = this.__effectiveI18n.uploading.status.held;
-      this._renderFileList();
-
-      this._uploadQueue.push(file);
-      this._processUploadQueue();
-    }
-
-    /**
-     * Process the upload queue by starting uploads for queued files
-     * if there is available capacity.
-     *
-     * @private
-     */
-    _processUploadQueue() {
-      // Process as many queued files as we have capacity for
-      while (this._uploadQueue.length > 0 && this._activeUploads < this.maxConcurrentUploads) {
-        const nextFile = this._uploadQueue.shift();
-        if (nextFile) {
-          this._uploadFile(nextFile);
-        }
-      }
-    }
-
-    /** @private */
-    _uploadFile(file) {
-      // Increment active uploads counter
-      this._activeUploads += 1;
-
-      const ini = Date.now();
-      const xhr = (file.xhr = this._createXhr());
-
-      let stalledId, last;
-      // Onprogress is called always after onreadystatechange
-      xhr.upload.onprogress = (e) => {
-        clearTimeout(stalledId);
-
-        last = Date.now();
-        const elapsed = (last - ini) / 1000;
-        const loaded = e.loaded,
-          total = e.total,
-          progress = ~~((loaded / total) * 100);
-        file.loaded = loaded;
-        file.progress = progress;
-        file.indeterminate = loaded <= 0 || loaded >= total;
-
-        if (file.error) {
-          file.indeterminate = file.status = undefined;
-        } else if (!file.abort) {
-          if (progress < 100) {
-            this._setStatus(file, total, loaded, elapsed);
-            stalledId = setTimeout(() => {
-              file.status = this.__effectiveI18n.uploading.status.stalled;
-              this._renderFileList();
-            }, 2000);
-          } else {
-            file.loadedStr = file.totalStr;
-            file.status = this.__effectiveI18n.uploading.status.processing;
-          }
-        }
-
-        this._renderFileList();
-        this.dispatchEvent(new CustomEvent('upload-progress', { detail: { file, xhr } }));
-      };
-
-      xhr.onabort = () => {
-        // Decrement active uploads counter
-        this._activeUploads -= 1;
-        this._processUploadQueue();
-      };
-
-      // More reliable than xhr.onload
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-          clearTimeout(stalledId);
-          file.indeterminate = file.uploading = false;
-
-          // Decrement active uploads counter
-          this._activeUploads -= 1;
-          this._processUploadQueue();
-
-          if (file.abort) {
-            return;
-          }
-          file.status = '';
-          // Custom listener can modify the default behavior either
-          // preventing default, changing the xhr, or setting the file error
-          const evt = this.dispatchEvent(
-            new CustomEvent('upload-response', {
-              detail: { file, xhr },
-              cancelable: true,
-            }),
-          );
-
-          if (!evt) {
-            return;
-          }
-          if (xhr.status === 0) {
-            file.error = this.__effectiveI18n.uploading.error.serverUnavailable;
-          } else if (xhr.status >= 500) {
-            file.error = this.__effectiveI18n.uploading.error.unexpectedServerError;
-          } else if (xhr.status === 413) {
-            file.error = this.__effectiveI18n.uploading.error.fileTooLarge;
-          } else if (xhr.status >= 400) {
-            file.error = this.__effectiveI18n.uploading.error.forbidden;
-          }
-
-          file.complete = !file.error;
-          this.dispatchEvent(
-            new CustomEvent(`upload-${file.error ? 'error' : 'success'}`, {
-              detail: { file, xhr },
-            }),
-          );
-          this._renderFileList();
-        }
-      };
-
-      // Determine upload format and prepare request body
-      const isRawUpload = this.uploadFormat === 'raw';
-
-      if (!file.uploadTarget) {
-        file.uploadTarget = this.target || '';
-      }
-
-      // Only set formDataName for multipart uploads
-      if (!isRawUpload) {
-        file.formDataName = this.formDataName;
-      }
-
-      const evt = this.dispatchEvent(
-        new CustomEvent('upload-before', {
-          detail: { file, xhr },
-          cancelable: true,
-        }),
-      );
-      if (!evt) {
-        return;
-      }
-
-      let requestBody;
-      if (isRawUpload) {
-        // Raw binary upload - send file directly
-        requestBody = file;
-      } else {
-        // Multipart upload - use FormData
-        const formData = new FormData();
-        formData.append(file.formDataName, file, file.name);
-        requestBody = formData;
-      }
-
-      xhr.open(this.method, file.uploadTarget, true);
-      this._configureXhr(xhr, file, isRawUpload);
-
-      file.held = false;
-      file.status = this.__effectiveI18n.uploading.status.connecting;
-
-      xhr.upload.onloadstart = () => {
-        this.dispatchEvent(
-          new CustomEvent('upload-start', {
-            detail: { file, xhr },
-          }),
-        );
-        this._renderFileList();
-      };
-
-      // Custom listener could modify the xhr just before sending it
-      // preventing default
-      const eventDetail = {
-        file,
-        xhr,
-        uploadFormat: this.uploadFormat,
-        requestBody,
-      };
-
-      // Expose formData property when using multipart so listeners can modify it
-      if (!isRawUpload) {
-        eventDetail.formData = requestBody;
-      }
-
-      const uploadEvt = this.dispatchEvent(
-        new CustomEvent('upload-request', {
-          detail: eventDetail,
-          cancelable: true,
-        }),
-      );
-      if (uploadEvt) {
-        xhr.send(requestBody);
-      }
-    }
-
-    /** @private */
-    _retryFileUpload(file) {
-      const evt = this.dispatchEvent(
-        new CustomEvent('upload-retry', {
-          detail: { file, xhr: file.xhr },
-          cancelable: true,
-        }),
-      );
-      if (evt) {
-        this._queueFileUpload(file);
-        this._updateFocus(this.files.indexOf(file));
-      }
-    }
-
-    /** @private */
-    _abortFileUpload(file) {
-      const evt = this.dispatchEvent(
-        new CustomEvent('upload-abort', {
-          detail: { file, xhr: file.xhr },
-          cancelable: true,
-        }),
-      );
-      if (evt) {
-        file.abort = true;
-        if (file.xhr) {
-          file.xhr.abort();
-        }
-        this._removeFile(file);
-      }
-    }
-
-    /** @private */
-    _renderFileList() {
-      if (this._fileList && typeof this._fileList.requestContentUpdate === 'function') {
-        this._fileList.requestContentUpdate();
-      }
-    }
-
-    /** @private */
-    _addFiles(files) {
-      Array.prototype.forEach.call(files, this._addFile.bind(this));
-    }
-
-    /**
-     * Add the file for uploading. Called internally for each file after picking files from dialog or dropping files.
-     *
-     * @param {!UploadFile} file File being added
-     * @protected
-     */
-    _addFile(file) {
-      if (this.maxFilesReached) {
-        this.dispatchEvent(
-          new CustomEvent('file-reject', {
-            detail: { file, error: this.__effectiveI18n.error.tooManyFiles },
-          }),
-        );
-        return;
-      }
-      if (this.maxFileSize >= 0 && file.size > this.maxFileSize) {
-        this.dispatchEvent(
-          new CustomEvent('file-reject', {
-            detail: { file, error: this.__effectiveI18n.error.fileIsTooBig },
-          }),
-        );
-        return;
-      }
-      const re = this.__acceptRegexp;
-      if (re && !(re.test(file.type) || re.test(file.name))) {
-        this.dispatchEvent(
-          new CustomEvent('file-reject', {
-            detail: { file, error: this.__effectiveI18n.error.incorrectFileType },
-          }),
-        );
-        return;
-      }
-      file.loaded = 0;
-      file.held = true;
-      file.status = this.__effectiveI18n.uploading.status.held;
-      this.files = [file, ...this.files];
-
-      if (!this.noAuto) {
-        this._queueFileUpload(file);
-      }
-    }
-
-    /** @private */
-    _updateFocus(fileIndex) {
-      if (this.files.length === 0) {
-        this._addButton.focus({ focusVisible: isKeyboardActive() });
-        return;
-      }
-      const lastFileRemoved = fileIndex === this.files.length;
-      if (lastFileRemoved) {
-        fileIndex -= 1;
-      }
-      this._fileList.children[fileIndex].firstElementChild.focus({ focusVisible: isKeyboardActive() });
-    }
-
-    /**
-     * Remove file from upload list. Called internally if file upload was canceled.
-     * @param {!UploadFile} file File to remove
-     * @protected
-     */
-    _removeFile(file) {
-      this._uploadQueue = this._uploadQueue.filter((f) => f !== file);
-      this._processUploadQueue();
-
-      const fileIndex = this.files.indexOf(file);
-      if (fileIndex >= 0) {
-        this.files = this.files.filter((i) => i !== file);
-
-        this.dispatchEvent(
-          new CustomEvent('file-remove', {
-            detail: { file },
-            bubbles: true,
-            composed: true,
-          }),
-        );
-
-        this._updateFocus(fileIndex);
-      }
-    }
+    // ============ File input handling ============
 
     /** @private */
     _onAddFilesTouchEnd(e) {
@@ -1010,23 +677,29 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _onFileInputChange(event) {
-      this._addFiles(event.target.files);
+      this.__syncManagerConfig();
+      this._manager.addFiles(event.target.files);
     }
+
+    // ============ File events ============
 
     /** @private */
     _onFileStart(event) {
-      this._queueFileUpload(event.detail.file);
+      this._manager.uploadFiles(event.detail.file);
     }
 
     /** @private */
     _onFileRetry(event) {
-      this._retryFileUpload(event.detail.file);
+      this._manager.retryUpload(event.detail.file);
+      this._updateFocus(this.files.indexOf(event.detail.file));
     }
 
     /** @private */
     _onFileAbort(event) {
-      this._abortFileUpload(event.detail.file);
+      this._manager.abortUpload(event.detail.file);
     }
+
+    // ============ Accessibility ============
 
     /** @private */
     _onFileReject(event) {
@@ -1049,14 +722,68 @@ export const UploadMixin = (superClass) =>
     }
 
     /** @private */
-    _dragoverChanged(dragover) {
-      setOrRemoveAttribute(this, 'dragover', dragover);
+    _updateFocus(fileIndex) {
+      // Use requestAnimationFrame to ensure the file list has been updated
+      requestAnimationFrame(() => {
+        if (this.files.length === 0) {
+          this._addButton.focus({ focusVisible: isKeyboardActive() });
+          return;
+        }
+        // If the removed file was at the end, focus the new last file
+        const lastFileRemoved = fileIndex >= this.files.length;
+        if (lastFileRemoved) {
+          fileIndex = this.files.length - 1;
+        }
+        if (this._fileList && this._fileList.children[fileIndex]) {
+          this._fileList.children[fileIndex].firstElementChild.focus({ focusVisible: isKeyboardActive() });
+        }
+      });
     }
 
-    /** @private */
-    _dragoverValidChanged(dragoverValid) {
-      setOrRemoveAttribute(this, 'dragover-valid', dragoverValid);
+    /**
+     * Getter/setter for _createXhr to allow tests to mock XHR creation.
+     * @private
+     */
+    get _createXhr() {
+      return this.__createXhrOverride || this._manager._createXhr;
     }
+
+    set _createXhr(value) {
+      // Store the original value for spy assertions in tests
+      this.__createXhrOverride = value;
+      // Set on manager - the manager will call this function
+      this._manager._createXhr = value;
+    }
+
+    /**
+     * Triggers the upload of any files that are not completed
+     *
+     * @param {!UploadFile | !Array<!UploadFile>=} files - Files being uploaded. Defaults to all outstanding files
+     */
+    uploadFiles(files = this.files) {
+      // Ensure manager config is synced before adding files
+      this.__syncManagerConfig();
+
+      // Convert to array if single file
+      if (files && !Array.isArray(files)) {
+        files = [files];
+      }
+
+      // Add files that aren't already in the manager (without auto-upload)
+      const managerFiles = this._manager.files;
+      const newFiles = files.filter((file) => !managerFiles.includes(file));
+      if (newFiles.length > 0) {
+        // Temporarily enable noAuto to prevent auto-upload when adding
+        const wasNoAuto = this._manager.noAuto;
+        this._manager.noAuto = true;
+        this._manager.addFiles(newFiles);
+        this._manager.noAuto = wasNoAuto;
+      }
+
+      this._manager.uploadFiles(files);
+    }
+
+    // ============ Utilities ============
 
     /** @private */
     _i18nPlural(value, plural) {
