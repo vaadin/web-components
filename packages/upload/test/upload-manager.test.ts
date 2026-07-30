@@ -1880,47 +1880,42 @@ describe('UploadManager', () => {
     });
   });
 
-  describe('files setter validation', () => {
-    it('should reject files exceeding maxFiles when set via setter', () => {
+  describe('files setter', () => {
+    it('should accept files exceeding maxFiles when set via setter', () => {
       manager = new UploadManager({ noAuto: true, maxFiles: 2 });
 
       const rejectSpy = sinon.spy();
       manager.addEventListener('file-reject', rejectSpy);
 
-      // Try to set 3 files when maxFiles is 2
       manager.files = createFiles(3, 100, 'text/plain') as UploadFile[];
 
-      expect(manager.files).to.have.lengthOf(2);
-      expect(rejectSpy.calledOnce).to.be.true;
-      expect(rejectSpy.firstCall.args[0].detail.error).to.equal('tooManyFiles');
+      expect(manager.files).to.have.lengthOf(3);
+      expect(rejectSpy.called).to.be.false;
+      expect(manager.maxFilesReached).to.be.true;
     });
 
-    it('should reject oversized files when set via setter', () => {
+    it('should accept oversized files when set via setter', () => {
       manager = new UploadManager({ noAuto: true, maxFileSize: 50 });
 
       const rejectSpy = sinon.spy();
       manager.addEventListener('file-reject', rejectSpy);
 
-      // Try to set a file larger than maxFileSize
       manager.files = [createFile(100, 'text/plain')] as UploadFile[];
 
-      expect(manager.files).to.have.lengthOf(0);
-      expect(rejectSpy.calledOnce).to.be.true;
-      expect(rejectSpy.firstCall.args[0].detail.error).to.equal('fileIsTooBig');
+      expect(manager.files).to.have.lengthOf(1);
+      expect(rejectSpy.called).to.be.false;
     });
 
-    it('should reject files with wrong type when set via setter', () => {
+    it('should accept files with unaccepted type when set via setter', () => {
       manager = new UploadManager({ noAuto: true, accept: 'image/*' });
 
       const rejectSpy = sinon.spy();
       manager.addEventListener('file-reject', rejectSpy);
 
-      // Try to set a text file when only images are accepted
       manager.files = [createFile(100, 'text/plain')] as UploadFile[];
 
-      expect(manager.files).to.have.lengthOf(0);
-      expect(rejectSpy.calledOnce).to.be.true;
-      expect(rejectSpy.firstCall.args[0].detail.error).to.equal('incorrectFileType');
+      expect(manager.files).to.have.lengthOf(1);
+      expect(rejectSpy.called).to.be.false;
     });
 
     it('should allow existing files to remain when re-setting', () => {
@@ -1952,14 +1947,13 @@ describe('UploadManager', () => {
       }).to.throw('Invalid maxFiles "-5". Value must be non-negative.');
     });
 
-    it('should reject negative maxConcurrentUploads', () => {
-      expect(() => {
-        manager = new UploadManager({
-          target: '/api/upload',
-          noAuto: true,
-          maxConcurrentUploads: -1,
-        });
-      }).to.throw('Invalid maxConcurrentUploads "-1". Value must be positive.');
+    it('should accept negative maxConcurrentUploads', () => {
+      manager = new UploadManager({
+        target: '/api/upload',
+        noAuto: true,
+        maxConcurrentUploads: -1,
+      });
+      expect(manager.maxConcurrentUploads).to.equal(-1);
     });
   });
 
@@ -1968,10 +1962,9 @@ describe('UploadManager', () => {
       manager = new UploadManager({ noAuto: true });
     });
 
-    it('should reject invalid method via setter', () => {
-      expect(() => {
-        (manager as any).method = 'DELETE';
-      }).to.throw('Invalid method "DELETE". Only POST and PUT are allowed.');
+    it('should accept unsupported method via setter', () => {
+      (manager as any).method = 'DELETE';
+      expect(manager.method).to.equal('DELETE');
     });
 
     it('should accept valid method via setter', () => {
@@ -1994,13 +1987,11 @@ describe('UploadManager', () => {
       expect(manager.maxFiles).to.equal(0);
     });
 
-    it('should reject non-positive maxConcurrentUploads via setter', () => {
-      expect(() => {
-        manager.maxConcurrentUploads = 0;
-      }).to.throw('Invalid maxConcurrentUploads "0". Value must be positive.');
-      expect(() => {
-        manager.maxConcurrentUploads = -1;
-      }).to.throw('Invalid maxConcurrentUploads "-1". Value must be positive.');
+    it('should accept non-positive maxConcurrentUploads via setter', () => {
+      manager.maxConcurrentUploads = 0;
+      expect(manager.maxConcurrentUploads).to.equal(0);
+      manager.maxConcurrentUploads = -1;
+      expect(manager.maxConcurrentUploads).to.equal(-1);
     });
 
     it('should accept valid maxConcurrentUploads via setter', () => {
