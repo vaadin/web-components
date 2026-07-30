@@ -137,6 +137,7 @@ snapshots["vaadin-login-form host required"] =
       spellcheck="false"
     >
       <input
+        aria-describedby="error-message-vaadin-text-field-2"
         aria-invalid="true"
         aria-labelledby="label-vaadin-text-field-0"
         autocapitalize="none"
@@ -175,6 +176,7 @@ snapshots["vaadin-login-form host required"] =
       spellcheck="false"
     >
       <input
+        aria-describedby="error-message-vaadin-password-field-5"
         aria-invalid="true"
         aria-labelledby="label-vaadin-password-field-3"
         autocapitalize="off"
@@ -475,6 +477,7 @@ snapshots["vaadin-login-form host i18n-required"] =
       spellcheck="false"
     >
       <input
+        aria-describedby="error-message-vaadin-text-field-2"
         aria-invalid="true"
         aria-labelledby="label-vaadin-text-field-0"
         autocapitalize="none"
@@ -513,6 +516,7 @@ snapshots["vaadin-login-form host i18n-required"] =
       spellcheck="false"
     >
       <input
+        aria-describedby="error-message-vaadin-password-field-5"
         aria-invalid="true"
         aria-labelledby="label-vaadin-password-field-3"
         autocapitalize="off"
