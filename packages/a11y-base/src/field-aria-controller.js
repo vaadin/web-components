@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { removeAriaIDReference, restoreGeneratedAriaIDReference, setAriaIDReference } from './aria-id-reference.js';
+import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 
 /**
  * A controller for managing ARIA attributes for a field element:
@@ -23,13 +23,16 @@ export class FieldAriaController {
   #labelId;
 
   /** @type {string | null | undefined} */
-  #labelIdFromUser;
-
-  /** @type {string | null | undefined} */
   #errorId;
 
   /** @type {string | null | undefined} */
   #helperId;
+
+  /** @type {string[]} */
+  #ariaLabelledByIds = [];
+
+  /** @type {string[]} */
+  #ariaDescribedByIds = [];
 
   constructor(host) {
     this.host = host;
@@ -42,15 +45,10 @@ export class FieldAriaController {
    */
   setTarget(target) {
     this.#target = target;
-    this.#setAriaRequiredAttribute(this.#required);
-    // We need to make sure that value in #labelId is stored
-    this.#setLabelIdToAriaAttribute(this.#labelId, this.#labelId);
-    if (this.#labelIdFromUser != null) {
-      this.#setLabelIdToAriaAttribute(this.#labelIdFromUser, this.#labelIdFromUser, true);
-    }
-    this.#setErrorIdToAriaAttribute(this.#errorId);
-    this.#setHelperIdToAriaAttribute(this.#helperId);
-    this.setAriaLabel(this.#label);
+    this.#updateAriaLabelAttribute();
+    this.#updateAriaLabelledByAttribute();
+    this.#updateAriaDescribedByAttribute();
+    this.#updateAriaRequiredAttribute();
   }
 
   /**
@@ -61,8 +59,8 @@ export class FieldAriaController {
    * @param {boolean} required
    */
   setRequired(required) {
-    this.#setAriaRequiredAttribute(required);
     this.#required = required;
+    this.#updateAriaRequiredAttribute();
   }
 
   /**
@@ -73,8 +71,8 @@ export class FieldAriaController {
    * @param {string | null | undefined} label
    */
   setAriaLabel(label) {
-    this.#setAriaLabelToAttribute(label);
     this.#label = label;
+    this.#updateAriaLabelAttribute();
   }
 
   /**
@@ -85,85 +83,76 @@ export class FieldAriaController {
    *
    * @param {string | null} labelId
    */
-  setLabelId(labelId, fromUser = false) {
-    const oldLabelId = fromUser ? this.#labelIdFromUser : this.#labelId;
-    this.#setLabelIdToAriaAttribute(labelId, oldLabelId, fromUser);
-    if (fromUser) {
-      this.#labelIdFromUser = labelId;
-    } else {
-      this.#labelId = labelId;
-    }
+  setLabelId(labelId) {
+    this.#labelId = labelId;
+    this.#updateAriaLabelledByAttribute();
   }
 
   /**
-   * Links the target element with a slotted error element via `aria-describedby` attribute.
+   * Links the target element with a slotted error element via the target's attribute:
+   * - `aria-labelledby` if the target is the host component (e.g a field group).
+   * - `aria-describedby` otherwise.
    *
    * To unlink the previous slotted error element, pass `null` as `errorId`.
    *
    * @param {string | null} errorId
    */
   setErrorId(errorId) {
-    this.#setErrorIdToAriaAttribute(errorId, this.#errorId);
     this.#errorId = errorId;
+    this.#updateAriaDescribedByAttribute();
   }
 
   /**
-   * Links the target element with a slotted helper element via `aria-describedby` attribute.
+   * Links the target element with a slotted helper element via the target's attribute:
+   * - `aria-labelledby` if the target is the host component (e.g a field group).
+   * - `aria-describedby` otherwise.
    *
    * To unlink the previous slotted helper element, pass `null` as `helperId`.
    *
    * @param {string | null} helperId
    */
   setHelperId(helperId) {
-    this.#setHelperIdToAriaAttribute(helperId, this.#helperId);
     this.#helperId = helperId;
+    this.#updateAriaDescribedByAttribute();
   }
 
-  /**
-   * @param {string | null | undefined} label
-   */
-  #setAriaLabelToAttribute(label) {
+  #updateAriaLabelAttribute() {
     if (!this.#target) {
       return;
     }
-    if (label) {
-      removeAriaIDReference(this.#target, 'aria-labelledby');
-      this.#target.setAttribute('aria-label', label);
-    } else if (this.#label) {
-      restoreGeneratedAriaIDReference(this.#target, 'aria-labelledby');
+
+    if (this.#label) {
+      this.#target.setAttribute('aria-label', this.#label);
+    } else {
       this.#target.removeAttribute('aria-label');
     }
   }
 
-  /**
-   * @param {string | null | undefined} labelId
-   * @param {string | null | undefined} oldLabelId
-   * @param {boolean | null | undefined} fromUser
-   */
-  #setLabelIdToAriaAttribute(labelId, oldLabelId, fromUser) {
-    setAriaIDReference(this.#target, 'aria-labelledby', { newId: labelId, oldId: oldLabelId, fromUser });
+  #updateAriaLabelledByAttribute() {
+    if (!this.#target) {
+      return;
+    }
+
+    removeValuesFromAttribute(this.#target, 'aria-labelledby', this.#ariaLabelledByIds);
+
+    this.#ariaLabelledByIds = [this.#labelId];
+
+    addValuesToAttribute(this.#target, 'aria-labelledby', this.#ariaLabelledByIds);
   }
 
-  /**
-   * @param {string | null | undefined} errorId
-   * @param {string | null | undefined} oldErrorId
-   */
-  #setErrorIdToAriaAttribute(errorId, oldErrorId) {
-    setAriaIDReference(this.#target, 'aria-describedby', { newId: errorId, oldId: oldErrorId, fromUser: false });
+  #updateAriaDescribedByAttribute() {
+    if (!this.#target) {
+      return;
+    }
+
+    removeValuesFromAttribute(this.#target, 'aria-describedby', this.#ariaDescribedByIds);
+
+    this.#ariaDescribedByIds = [this.#helperId, this.#errorId];
+
+    addValuesToAttribute(this.#target, 'aria-describedby', this.#ariaDescribedByIds);
   }
 
-  /**
-   * @param {string | null | undefined} helperId
-   * @param {string | null | undefined} oldHelperId
-   */
-  #setHelperIdToAriaAttribute(helperId, oldHelperId) {
-    setAriaIDReference(this.#target, 'aria-describedby', { newId: helperId, oldId: oldHelperId, fromUser: false });
-  }
-
-  /**
-   * @param {boolean} required
-   */
-  #setAriaRequiredAttribute(required) {
+  #updateAriaRequiredAttribute() {
     if (!this.#target) {
       return;
     }
@@ -173,7 +162,7 @@ export class FieldAriaController {
       return;
     }
 
-    if (required) {
+    if (this.#required) {
       this.#target.setAttribute('aria-required', 'true');
     } else {
       this.#target.removeAttribute('aria-required');
