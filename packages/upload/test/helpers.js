@@ -199,3 +199,17 @@ export function removeFile(upload, idx = 0) {
   const file = files[idx];
   file.shadowRoot.querySelector('[part="remove-button"]').click();
 }
+
+/**
+ * Adds files to the upload component through the file input (with validation).
+ * @param {HTMLElement} upload - The upload component
+ * @param {File[]} files - Array of files to add
+ */
+export function addFilesViaInput(upload, files) {
+  const input = upload.$.fileInput;
+  // We can't simply assign `files` property of input[type="file"].
+  // Tweaking __proto__ to make it assignable.
+  Object.setPrototypeOf(input, HTMLElement.prototype);
+  input.files = files;
+  input.dispatchEvent(new Event('change'));
+}

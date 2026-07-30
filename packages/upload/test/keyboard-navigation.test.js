@@ -4,8 +4,6 @@ import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-upload.js';
 import { createFile } from './helpers.js';
 
-const FAKE_FILE = createFile(100000, 'application/uknown');
-
 async function repeatTab(times) {
   for (let i = 0; i < times; i++) {
     await sendKeys({ press: 'Tab' });
@@ -29,7 +27,7 @@ describe('keyboard navigation', () => {
 
   beforeEach(async () => {
     uploadElement = fixtureSync(`<vaadin-upload></vaadin-upload>`);
-    uploadElement.files = [FAKE_FILE];
+    uploadElement.files = [createFile(100000, 'application/uknown')];
 
     await nextRender();
     uploadButton = uploadElement.querySelector('vaadin-button[slot=add-button]');
@@ -129,7 +127,7 @@ describe('keyboard navigation', () => {
       // Programmatic upload does not actually set focus, so we first navigate to the button.
       await repeatTab(1);
 
-      uploadElement._uploadFile(FAKE_FILE);
+      uploadElement.uploadFiles(uploadElement.files[0]);
 
       expect(document.activeElement).to.equal(uploadButton);
     });
