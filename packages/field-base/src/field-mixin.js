@@ -71,21 +71,21 @@ export const FieldMixin = (superclass) =>
     constructor() {
       super();
 
-      this._fieldAriaController = new FieldAriaController(this);
-      this._helperController = new HelperController(this);
-      this._errorController = new ErrorController(this);
-
       this._labelController.addEventListener('slot-content-changed', (event) => {
-        this.#onLabelSlotChange(event);
+        this.#onLabelSlotContentChange(event);
       });
 
+      this._errorController = new ErrorController(this);
       this._errorController.addEventListener('slot-content-changed', (event) => {
-        this.#onErrorSlotChange(event);
+        this.#onErrorSlotContentChange(event);
       });
 
+      this._helperController = new HelperController(this);
       this._helperController.addEventListener('slot-content-changed', (event) => {
-        this.#onHelperSlotChange(event);
+        this.#onHelperSlotContentChange(event);
       });
+
+      this._fieldAriaController = new FieldAriaController(this);
     }
 
     /**
@@ -179,11 +179,11 @@ export const FieldMixin = (superclass) =>
       }
     }
 
-    #onLabelSlotChange(_event) {
+    #onLabelSlotContentChange(_event) {
       this.__updateFieldAriaControllerLabelledBy();
     }
 
-    #onHelperSlotChange(event) {
+    #onHelperSlotContentChange(event) {
       const { hasContent } = event.detail;
 
       this.toggleAttribute('has-helper', hasContent);
@@ -195,7 +195,7 @@ export const FieldMixin = (superclass) =>
       }
     }
 
-    #onErrorSlotChange(event) {
+    #onErrorSlotContentChange(event) {
       this.toggleAttribute('has-error-message', event.detail.hasContent);
 
       // This timeout is needed to prevent NVDA from announcing the error message twice:
