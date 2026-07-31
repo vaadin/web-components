@@ -499,6 +499,17 @@ describe('position mixin', () => {
         expect(overlayContent.getBoundingClientRect().bottom).to.be.above(visibleHeight - margin + 1);
       });
 
+      it('should update position when setting limitToVisualViewport', () => {
+        overlay.limitToVisualViewport = true;
+        expect(overlayContent.getBoundingClientRect().bottom).to.be.at.most(visibleHeight - margin + 1);
+      });
+
+      it('should release the constraint when unsetting limitToVisualViewport', () => {
+        overlay.limitToVisualViewport = true;
+        overlay.limitToVisualViewport = false;
+        expect(overlayContent.getBoundingClientRect().bottom).to.be.above(visibleHeight - margin + 1);
+      });
+
       it('should not constrain the bottom when the visual viewport is only shifted', () => {
         // The bottom of the layout viewport is visible, only the top is out of view,
         // so there is nothing to constrain at the bottom side.
