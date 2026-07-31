@@ -15,7 +15,7 @@ import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js'
 import { aiFieldMarkerHostStyles, aiFieldMarkerStyles } from './styles/vaadin-ai-field-marker-base-styles.js';
 
 const DEFAULT_MESSAGE = 'This field value was modified by AI.';
-const DEFAULT_REVERT_TEXT = 'Revert';
+const DEFAULT_REVERT_TEXT = 'Revert Value';
 const DEFAULT_BADGE_LABEL = 'AI-provided value';
 const DEFAULT_BADGE_TOOLTIP = 'Field value modified by AI.\nClick for details';
 
@@ -67,6 +67,35 @@ function adoptMarkerStyles(field) {
   if (!field.shadowRoot.adoptedStyleSheets.includes(markerHostStyles)) {
     field.shadowRoot.adoptedStyleSheets.push(markerHostStyles);
   }
+}
+
+function delayValueSets(field, delay = 500) {
+  if (Object.getOwnPropertyDescriptor(field, 'value')) {
+    // Already intercepting
+    return;
+  }
+
+  // Find the original accessor up the prototype chain
+  let proto = Object.getPrototypeOf(field);
+  let desc;
+  while (proto && !(desc = Object.getOwnPropertyDescriptor(proto, 'value'))) {
+    proto = Object.getPrototypeOf(proto);
+  }
+
+  let timer;
+  Object.defineProperty(field, 'value', {
+    configurable: true,
+    get() {
+      return desc.get.call(field);
+    },
+    set(v) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        delete field.value;
+        field.value = v;
+      }, delay);
+    },
+  });
 }
 
 /**
@@ -166,7 +195,7 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
   render() {
     const id = this.__badgeId;
     return html`
-      <button id="vaadin-ai-marker-${id}" part="badge" type="button" aria-label="${this.badgeLabel}">AI</button>
+      <button id="vaadin-ai-marker-${id}" part="badge" type="button" aria-label="${this.badgeLabel}"></button>
       <vaadin-tooltip for="vaadin-ai-marker-${id}" text="${this.badgeTooltip}"></vaadin-tooltip>
       <vaadin-popover
         for="vaadin-ai-marker-${id}"
@@ -379,6 +408,9 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
 
     adoptMarkerStyles(field);
 
+    // TODO uses a fixed 500ms timeout, exactly half of the --ai-marker-slide animation
+    delayValueSets(field, 500);
+
     // vaadin-custom-field does not propagate `readonly` to its inputs, so
     // they are locked (and restored) individually alongside the field.
     const locked = [field, ...(field.localName === 'vaadin-custom-field' ? (field.inputs ?? []) : [])];
@@ -408,8 +440,12 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
 
     field.removeAttribute('ai-working');
     entry.forEach(({ element, readonly }) => {
-      element.readonly = readonly;
+      // TODO uses a fixed 500ms timeout, exactly half of the --ai-marker-slide animation
+      setTimeout(() => {
+        element.readonly = readonly;
+      }, 500);
     });
+    // });
 
     workingFields.delete(field);
   }

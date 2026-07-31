@@ -6,7 +6,7 @@
 import { css } from 'lit';
 
 export const aiFieldMarkerHostStyles = css`
-  @keyframes --ai-marker-slide {
+  @keyframes --vaadin-ai-marker-slide {
     0% {
       --vaadin-ai-marker-mask-pos: -100px;
     }
@@ -16,7 +16,7 @@ export const aiFieldMarkerHostStyles = css`
     }
   }
 
-  @keyframes --ai-marker-remove-mask {
+  @keyframes --vaadin-ai-marker-remove-mask {
     100% {
       mask-image: none;
     }
@@ -38,7 +38,7 @@ export const aiFieldMarkerStyles = css`
     initial-value: 0;
   }
 
-  vaadin-ai-field-marker {
+  :where(vaadin-ai-field-marker) {
     display: contents;
     --color1: light-dark(#932fffd9, #bc64ff);
     --color2: light-dark(#004cffcc, #539aff);
@@ -62,8 +62,114 @@ export const aiFieldMarkerStyles = css`
         transparent calc(var(--vaadin-ai-marker-mask-pos) + 20px),
         transparent
       );
-      animation: --ai-marker-slide 700ms 200ms both;
+      animation: --vaadin-ai-marker-slide 700ms 200ms both;
       animation-timing-function: cubic-bezier(0.78, 0, 0.22, 1);
+    }
+
+    [part='badge'] {
+      all: initial;
+      position: absolute;
+      top: -6px;
+      inset-inline-end: -6px;
+      box-sizing: border-box;
+      display: inline-flex;
+      align-items: center;
+      padding: 4px;
+      border: none;
+      border-radius: var(--vaadin-radius-m);
+      margin: 0;
+      background: transparent;
+      color: var(--vaadin-ai-marker-badge-icon-color, var(--vaadin-text-color-secondary));
+      font: inherit;
+      font-size: 1rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: color 200ms;
+      animation: --vaadin-ai-marker-fade-in 300ms 700ms backwards;
+
+      &:hover {
+        color: var(--vaadin-ai-marker-badge-icon-color, var(--vaadin-text-color));
+      }
+
+      &::before {
+        content: '';
+        display: block;
+        width: 1lh;
+        height: 1lh;
+        background: currentColor;
+        --_icon-ai-badge: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none"><path d="M7.18848 8.48926H5.46289L6.32715 5.8623L7.18848 8.48926Z" fill="black"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11 0C13.7614 0 16 2.23858 16 5V11C16 13.7614 13.7614 16 11 16H5C2.23858 16 0 13.7614 0 11V5C0 2.23858 2.23858 0 5 0H11ZM5.58203 4.52051L3.25977 11H4.63672L5.10742 9.56934H7.54297L8.01172 11H9.45215L7.12988 4.52051H5.58203ZM10.1211 4.52051V11H11.5068V4.52051H10.1211Z" fill="black"/></svg>');
+        mask-image: var(--_icon-ai-badge);
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        top: 50%;
+        left: 50%;
+        translate: -50% -50%;
+      }
+    }
+
+    [part='badge']:focus-visible {
+      outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    }
+
+    > vaadin-popover::part(content) {
+      display: flex;
+      flex-direction: column;
+      gap: var(--vaadin-gap-s);
+      padding: var(--vaadin-padding-m);
+      max-width: 20em;
+    }
+
+    [part='message'] {
+      margin: 0;
+    }
+
+    [part='actions'] {
+      display: flex;
+      gap: var(--vaadin-gap-xs);
+    }
+
+    [part='revert-button'] {
+      display: flex;
+      align-items: center;
+      gap: var(--vaadin-gap-s);
+      pointer-events: auto;
+      box-sizing: border-box;
+      padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
+      margin: calc(var(--vaadin-padding-block-container) * -1) calc(var(--vaadin-padding-inline-container) * -1);
+      border: 0;
+      border-radius: var(--vaadin-radius-m);
+      background: transparent;
+      color: var(--vaadin-text-color);
+      font: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 100ms;
+
+      &:hover {
+        background: var(--vaadin-background-container);
+      }
+
+      &:active {
+        background: var(--vaadin-background-container-strong);
+      }
+
+      &:focus-visible {
+        outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+      }
+
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        background: currentColor;
+        mask: var(--_vaadin-icon-undo);
+      }
     }
   }
 
@@ -79,12 +185,12 @@ export const aiFieldMarkerStyles = css`
       #000 calc(var(--vaadin-ai-marker-mask-pos) + 100px)
     );
     animation:
-      --ai-marker-slide 1s cubic-bezier(0.78, 0, 0.22, 1) forwards,
-      --ai-marker-remove-mask 0s 1s forwards;
+      --vaadin-ai-marker-slide 1s cubic-bezier(0.78, 0, 0.22, 1) forwards,
+      --vaadin-ai-marker-remove-mask 0s 1s forwards;
   }
 
   [ai-working] {
-    animation: --ai-marker-slide 1s ease-in-out infinite;
+    animation: --vaadin-ai-marker-slide 1s ease-in-out infinite;
   }
 
   /* While the AI is working, the badge and glow describe a value that is about
@@ -95,91 +201,9 @@ export const aiFieldMarkerStyles = css`
     display: none;
   }
 
-  @keyframes fade-in {
+  @keyframes --vaadin-ai-marker-fade-in {
     0% {
       opacity: 0;
-    }
-  }
-
-  @scope (vaadin-ai-field-marker) {
-    [part='badge'] {
-      position: absolute;
-      top: -6px;
-      inset-inline-end: -6px;
-      box-sizing: border-box;
-      display: inline-flex;
-      align-items: center;
-      padding: 3px 4px;
-      border: none;
-      border-radius: 0 5px;
-      margin: 0;
-      background: var(--vaadin-ai-marker-badge-background, linear-gradient(135deg, var(--color1), var(--color2)));
-      color: var(--vaadin-ai-marker-badge-color, light-dark(#fff, #000));
-      font: inherit;
-      font-size: 10px;
-      font-weight: 600;
-      line-height: 1;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      opacity: 0.75;
-      transition: opacity 200ms;
-      animation: fade-in 300ms 700ms backwards;
-
-      &:hover {
-        opacity: 1;
-      }
-
-      &::before {
-        content: '';
-        position: absolute;
-        width: 24px;
-        height: 24px;
-        top: 50%;
-        left: 50%;
-        translate: -50% -50%;
-      }
-    }
-
-    [part='badge']:focus-visible {
-      outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-      outline-offset: 2px;
-    }
-
-    [part='content'] {
-      pointer-events: auto;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      max-width: 20rem;
-      padding: 0.5rem;
-    }
-
-    [part='message'] {
-      margin: 0;
-    }
-
-    [part='actions'] {
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.5rem;
-    }
-
-    [part='revert-button'] {
-      pointer-events: auto;
-      box-sizing: border-box;
-      padding: 0.25rem 0.75rem;
-      border: 1px solid var(--vaadin-ai-marker-accent-color, var(--color1));
-      border-radius: 0.25rem;
-      background: transparent;
-      color: var(--vaadin-ai-marker-accent-color, var(--color1));
-      font: inherit;
-      cursor: pointer;
-    }
-
-    [part='revert-button']:focus-visible {
-      outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-      outline-offset: 2px;
     }
   }
 
