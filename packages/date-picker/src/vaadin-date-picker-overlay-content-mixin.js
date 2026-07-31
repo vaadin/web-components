@@ -386,7 +386,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
      */
     loadVisibleDateMetadata() {
       const controller = this._dateMetadataController;
-      if (!controller?.provider) {
+      if (!controller) {
         return;
       }
       // Reduced to month indexes so the outermost months can be picked with plain arithmetic.
