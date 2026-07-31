@@ -7,7 +7,7 @@ import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { isIOS, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
@@ -218,6 +218,9 @@ export const ComboBoxBaseMixin = (superClass) =>
         this._onOverlayClosed();
       });
 
+      // Restore the input into the visual viewport on iOS after the overlay is open
+      overlay.addEventListener('vaadin-overlay-open', () => this.__onOverlayOpen());
+
       this._overlayElement = overlay;
     }
 
@@ -319,6 +322,15 @@ export const ComboBoxBaseMixin = (superClass) =>
         }
 
         this._onClosed();
+
+        // Stop any in-flight viewport correction from a previous open.
+        this.__stopViewportCorrection();
+
+        // On iOS, the input can keep focus while the overlay closes, e.g. on an outside
+        // click (`_mouseDownListener` in vaadin-combo-box-overlay-mixin.js, added in
+        // #7846). Remember it so the next overlay open can scroll the input back into
+        // the visual viewport, which iOS only does on a fresh focus event.
+        this.__inputFocusRetained = isIOS && this._isInputFocused();
       }
 
       const input = this.inputElement;
@@ -386,6 +398,59 @@ export const ComboBoxBaseMixin = (superClass) =>
       if (!this.autoOpenDisabled) {
         event.preventDefault();
         this.open();
+      }
+    }
+
+    /**
+     * The input keeps focus when closing on outside click. Subsequent click does not
+     * fire focus event and iOS skips its automatic scrolling into view logic, so the
+     * input can end up behind the virtual keyboard. Scroll it into view manually.
+     * @private
+     */
+    __onOverlayOpen() {
+      if (!this.__inputFocusRetained) {
+        return;
+      }
+      this.__inputFocusRetained = false;
+      this.__scrollInputIntoViewport();
+    }
+
+    /**
+     * Scrolls the input into the visual viewport if the virtual keyboard covers it.
+     * @private
+     */
+    __scrollInputIntoViewport() {
+      const viewport = window.visualViewport;
+      const scrollIfCovered = () => {
+        // Client rectangles are relative to the visual viewport on iOS, so the visible
+        // area starts at 0 and ends at its height. Adding the visual viewport offset
+        // here would count the shift that the keyboard causes a second time.
+        const rect = this.inputElement.getBoundingClientRect();
+        if (rect.bottom > viewport.height || rect.top < 0) {
+          this.inputElement.scrollIntoView({ block: 'center' });
+        }
+      };
+
+      // Virtual keyboard can close on the outside click and reopen on re-tap, so its final
+      // geometry is not known yet at open time. Check right away in case the keyboard stayed
+      // open, keep correcting on every visual viewport resize while it settles, then stop so
+      // later user scrolling is not overridden.
+      this.__stopViewportCorrection();
+      scrollIfCovered();
+      viewport.addEventListener('resize', scrollIfCovered);
+      this.__viewportCorrectionCleanup = () => viewport.removeEventListener('resize', scrollIfCovered);
+      this.__viewportCorrectionTimeout = setTimeout(() => this.__stopViewportCorrection(), 500);
+    }
+
+    /** @private */
+    __stopViewportCorrection() {
+      if (this.__viewportCorrectionCleanup) {
+        this.__viewportCorrectionCleanup();
+        this.__viewportCorrectionCleanup = null;
+      }
+      if (this.__viewportCorrectionTimeout) {
+        clearTimeout(this.__viewportCorrectionTimeout);
+        this.__viewportCorrectionTimeout = null;
       }
     }
 
@@ -741,6 +806,9 @@ export const ComboBoxBaseMixin = (superClass) =>
 
       if (!focused) {
         this.__autoselectPending = false;
+        // A genuine blur (e.g. the keyboard Done key) makes the next tap a fresh focus
+        // that iOS scrolls into view itself, so drop the retained-focus flag.
+        this.__inputFocusRetained = false;
       }
 
       if (!focused && !this.readonly && !this._closeOnBlurIsPrevented) {
