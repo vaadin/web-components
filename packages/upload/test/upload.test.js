@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-upload.js';
 import { addFilesViaInput, createFile, createFiles, removeFile, xhrCreator } from './helpers.js';
@@ -42,7 +42,7 @@ describe('upload', () => {
       let clock;
 
       beforeEach(() => {
-        clock = sinon.useFakeTimers();
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
       });
 
       afterEach(() => {
@@ -271,13 +271,19 @@ describe('upload', () => {
         upload.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
       });
 
-      it('should fire the `upload-success` event when retrying after a failed upload', async () => {
+      // Uploads the file against a server that rejects the first request and
+      // accepts the following ones, and waits for the upload to fail
+      async function uploadWithServerError() {
         let fail = true;
         upload._createXhr = xhrCreator({
           size: file.size,
           uploadTime: 200,
           stepTime: 50,
-          serverValidation: () => (fail ? { status: 500, statusText: 'Error' } : undefined),
+          serverValidation: () => {
+            const error = fail ? { status: 500, statusText: 'Error' } : undefined;
+            fail = false;
+            return error;
+          },
         });
 
         const errorSpy = sinon.spy();
@@ -286,8 +292,12 @@ describe('upload', () => {
         await clock.tickAsync(400);
         expect(errorSpy).to.be.calledOnce;
         expect(file.error).to.be.ok;
+        return errorSpy;
+      }
 
-        fail = false;
+      it('should fire the `upload-success` event when retrying after a failed upload', async () => {
+        const errorSpy = await uploadWithServerError();
+
         const successSpy = sinon.spy();
         upload.addEventListener('upload-success', successSpy);
         upload.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
@@ -300,22 +310,8 @@ describe('upload', () => {
       });
 
       it('should fire the `upload-success` event when uploadFiles restarts a failed upload', async () => {
-        let fail = true;
-        upload._createXhr = xhrCreator({
-          size: file.size,
-          uploadTime: 200,
-          stepTime: 50,
-          serverValidation: () => (fail ? { status: 500, statusText: 'Error' } : undefined),
-        });
+        const errorSpy = await uploadWithServerError();
 
-        const errorSpy = sinon.spy();
-        upload.addEventListener('upload-error', errorSpy);
-        upload.uploadFiles(file);
-        await clock.tickAsync(400);
-        expect(errorSpy).to.be.calledOnce;
-        expect(file.error).to.be.ok;
-
-        fail = false;
         const successSpy = sinon.spy();
         upload.addEventListener('upload-success', successSpy);
         upload.uploadFiles(file);
@@ -536,7 +532,7 @@ describe('upload', () => {
       let clock;
 
       beforeEach(() => {
-        clock = sinon.useFakeTimers();
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
       });
 
       afterEach(() => {
@@ -594,7 +590,7 @@ describe('upload', () => {
         serverTime: 500,
       });
 
-      clock = sinon.useFakeTimers();
+      clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
     });
 
     afterEach(() => {
@@ -636,7 +632,7 @@ describe('upload', () => {
         stepTime: 2500,
       });
 
-      clock = sinon.useFakeTimers();
+      clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
     });
 
     afterEach(() => {
@@ -694,7 +690,7 @@ describe('upload', () => {
         stepTime: 3000000,
       });
 
-      clock = sinon.useFakeTimers();
+      clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
     });
 
     afterEach(() => {
@@ -720,15 +716,38 @@ describe('upload', () => {
   });
 
   describe('Invalid configuration', () => {
-    it('should upload using a lowercase method', (done) => {
+    let clock;
+
+    beforeEach(() => {
+      clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should upload using a lowercase method', async () => {
       const lowercaseUpload = fixtureSync(`<vaadin-upload method="put" target="/api/endpoint"></vaadin-upload>`);
       lowercaseUpload._createXhr = xhrCreator({ size: file.size, uploadTime: 10, stepTime: 5 });
-      lowercaseUpload.addEventListener('upload-start', (e) => {
-        expect(e.detail.xhr.method).to.equal('PUT');
-        expect(e.detail.xhr.url).to.equal('/api/endpoint');
-        done();
+
+      // Capture the method that the component passes to the request
+      let requestMethod;
+      lowercaseUpload.addEventListener('upload-before', (e) => {
+        const originalOpen = e.detail.xhr.open;
+        e.detail.xhr.open = function (method, ...args) {
+          requestMethod = method;
+          return originalOpen.call(this, method, ...args);
+        };
       });
+
+      const startSpy = sinon.spy();
+      lowercaseUpload.addEventListener('upload-start', startSpy);
       lowercaseUpload.uploadFiles(file);
+      await clock.tickAsync(50);
+
+      expect(startSpy).to.be.calledOnce;
+      expect(requestMethod).to.equal('put');
+      expect(startSpy.firstCall.args[0].detail.xhr.url).to.equal('/api/endpoint');
     });
 
     it('should upload using an unsupported method', async () => {
@@ -743,6 +762,7 @@ describe('upload', () => {
       expect(startSpy).to.be.calledOnce;
       expect(startSpy.firstCall.args[0].detail.xhr.method).to.equal('DELETE');
       expect(startSpy.firstCall.args[0].detail.xhr.url).to.equal('https://foo.com/bar');
+      await clock.tickAsync(50);
     });
 
     it('should treat negative maxFiles as no limit', async () => {
@@ -753,6 +773,7 @@ describe('upload', () => {
       addFilesViaInput(upload, createFiles(2, 100, 'application/x-octet-stream'));
       expect(upload.files).to.have.lengthOf(2);
       expect(upload.maxFilesReached).to.be.false;
+      await clock.tickAsync(50);
     });
 
     it('should pause uploads when maxConcurrentUploads is non-positive', async () => {
@@ -763,7 +784,7 @@ describe('upload', () => {
       const startSpy = sinon.spy();
       upload.addEventListener('upload-start', startSpy);
       upload.uploadFiles(file);
-      await aTimeout(50);
+      await clock.tickAsync(50);
 
       expect(startSpy).to.not.be.called;
     });
@@ -968,7 +989,7 @@ describe('upload', () => {
 
     beforeEach(() => {
       upload._createXhr = xhrCreator({ size: file.size, uploadTime: 200, stepTime: 50 });
-      clock = sinon.useFakeTimers();
+      clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
     });
 
     afterEach(() => {
@@ -1121,7 +1142,7 @@ describe('upload', () => {
         stepTime: 100,
         serverTime: 500,
       });
-      clock = sinon.useFakeTimers();
+      clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
     });
 
     afterEach(() => {
@@ -1148,10 +1169,11 @@ describe('upload', () => {
     });
 
     it('should set translated error message on the file on failure', async () => {
+      upload.i18n = { uploading: { error: { forbidden: 'Hochladen verboten' } } };
       upload._createXhr = xhrCreator({ size: file.size, serverValidation: () => ({ status: 403 }) });
       addFilesViaInput(upload, [file]);
       await clock.tickAsync(100);
-      expect(file.error).to.equal('Upload forbidden');
+      expect(file.error).to.equal('Hochladen verboten');
     });
   });
 

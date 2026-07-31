@@ -95,11 +95,25 @@ describe('adding files', () => {
       expect(upload.maxFilesReached).to.be.false;
     });
 
-    it('should upload files assigned to the files property', (done) => {
-      upload.maxFileSize = testFileSize - 1;
-      upload.addEventListener('upload-start', () => done());
-      upload.files = [files[0]];
-      upload.uploadFiles();
+    describe('uploading assigned files', () => {
+      let clock;
+
+      beforeEach(() => {
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
+      });
+
+      afterEach(() => {
+        clock.restore();
+      });
+
+      it('should upload files assigned to the files property', async () => {
+        upload.maxFileSize = testFileSize - 1;
+        upload.files = [files[0]];
+        upload.uploadFiles();
+
+        await clock.tickAsync(400);
+        expect(files[0].complete).to.be.true;
+      });
     });
   });
 
