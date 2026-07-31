@@ -105,6 +105,15 @@ export const CheckboxMixin = (superclass) =>
       this._createPropertyObserver('checked', '_checkedChanged');
     }
 
+    updated(props) {
+      super.updated(props);
+
+      // Validate when the required constraint is removed.
+      if (props.has('required') && this.required === false) {
+        this._requestValidation();
+      }
+    }
+
     /**
      * Override method inherited from `ActiveMixin` to only set the `active`
      * attribute for clicks that actually toggle the checked state.
@@ -201,21 +210,6 @@ export const CheckboxMixin = (superclass) =>
     /** @private */
     _checkedChanged(checked, oldChecked) {
       if (checked || oldChecked) {
-        this._requestValidation();
-      }
-    }
-
-    /**
-     * Override an observer from `FieldMixin`
-     * to validate when required is removed.
-     *
-     * @protected
-     * @override
-     */
-    _requiredChanged(required) {
-      super._requiredChanged(required);
-
-      if (required === false) {
         this._requestValidation();
       }
     }
