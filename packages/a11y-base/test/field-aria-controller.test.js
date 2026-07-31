@@ -44,7 +44,7 @@ describe('FieldAriaController', () => {
 
     describe('label id', () => {
       beforeEach(() => {
-        controller.setLabelId('label-id');
+        controller.setLabelledBy('label-id');
         controller.setTarget(input);
       });
 
@@ -101,9 +101,9 @@ describe('FieldAriaController', () => {
       });
 
       it('should set label id to aria-labelledby attribute', () => {
-        controller.setLabelId('label-id');
+        controller.setLabelledBy('label-id');
         expect(input.getAttribute('aria-labelledby')).equal('custom-id label-id');
-        controller.setLabelId(null);
+        controller.setLabelledBy(null);
         expect(input.getAttribute('aria-labelledby')).equal('custom-id');
       });
 
@@ -138,7 +138,7 @@ describe('FieldAriaController', () => {
 
     describe('label id', () => {
       beforeEach(() => {
-        controller.setLabelId('label-id');
+        controller.setLabelledBy('label-id');
         controller.setTarget(element);
       });
 
@@ -187,9 +187,9 @@ describe('FieldAriaController', () => {
       });
 
       it('should set label id to aria-labelledby attribute', () => {
-        controller.setLabelId('label-id');
+        controller.setLabelledBy('label-id');
         expect(element.getAttribute('aria-labelledby')).equal('custom-id label-id');
-        controller.setLabelId(null);
+        controller.setLabelledBy(null);
         expect(element.getAttribute('aria-labelledby')).equal('custom-id');
       });
 

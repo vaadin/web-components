@@ -20,7 +20,7 @@ export class FieldAriaController {
   #label;
 
   /** @type {string | null | undefined} */
-  #labelId;
+  #labelledBy;
 
   /** @type {string | null | undefined} */
   #errorId;
@@ -29,10 +29,10 @@ export class FieldAriaController {
   #helperId;
 
   /** @type {string[]} */
-  #ariaLabelledByIds = [];
+  #ariaLabelledByAttributeIds = [];
 
   /** @type {string[]} */
-  #ariaDescribedByIds = [];
+  #ariaDescribedByAttributeIds = [];
 
   constructor(host) {
     this.host = host;
@@ -70,30 +70,27 @@ export class FieldAriaController {
    *
    * @param {string | null | undefined} label
    */
-  setAriaLabel(label) {
+  setLabel(label) {
     this.#label = label;
     this.#updateAriaLabelAttribute();
   }
 
   /**
-   * Links the target element with a slotted label element
-   * via the target's attribute `aria-labelledby`.
+   * Links the target element to one or more elements via the `aria-labelledby` attribute.
    *
-   * To unlink the previous slotted label element, pass `null` as `labelId`.
-   *
-   * @param {string | null} labelId
+   * @param {string | null} labelledBy the space-delimited list of IDs,
+   * or `null` to remove the previously linked IDs
    */
-  setLabelId(labelId) {
-    this.#labelId = labelId;
+  setLabelledBy(labelledBy) {
+    this.#labelledBy = labelledBy;
     this.#updateAriaLabelledByAttribute();
   }
 
   /**
-   * Links the target element with a slotted error element via `aria-describedby` attribute.
+   * Links the target element to a slotted error element via the `aria-describedby` attribute.
    *
-   * To unlink the previous slotted error element, pass `null` as `errorId`.
-   *
-   * @param {string | null} errorId
+   * @param {string | null} errorId the ID of the error element,
+   * or `null` to remove the previously linked ID
    */
   setErrorId(errorId) {
     this.#errorId = errorId;
@@ -101,11 +98,10 @@ export class FieldAriaController {
   }
 
   /**
-   * Links the target element with a slotted helper element via `aria-describedby` attribute.
+   * Links the target element to a slotted helper element via the `aria-describedby` attribute.
    *
-   * To unlink the previous slotted helper element, pass `null` as `helperId`.
-   *
-   * @param {string | null} helperId
+   * @param {string | null} helperId the ID of the helper element,
+   * or `null` to remove the previously linked ID
    */
   setHelperId(helperId) {
     this.#helperId = helperId;
@@ -129,11 +125,11 @@ export class FieldAriaController {
       return;
     }
 
-    removeValuesFromAttribute(this.#target, 'aria-labelledby', this.#ariaLabelledByIds);
+    removeValuesFromAttribute(this.#target, 'aria-labelledby', this.#ariaLabelledByAttributeIds);
 
-    this.#ariaLabelledByIds = [this.#labelId];
+    this.#ariaLabelledByAttributeIds = [this.#labelledBy];
 
-    addValuesToAttribute(this.#target, 'aria-labelledby', this.#ariaLabelledByIds);
+    addValuesToAttribute(this.#target, 'aria-labelledby', this.#ariaLabelledByAttributeIds);
   }
 
   #updateAriaDescribedByAttribute() {
@@ -141,11 +137,11 @@ export class FieldAriaController {
       return;
     }
 
-    removeValuesFromAttribute(this.#target, 'aria-describedby', this.#ariaDescribedByIds);
+    removeValuesFromAttribute(this.#target, 'aria-describedby', this.#ariaDescribedByAttributeIds);
 
-    this.#ariaDescribedByIds = [this.#helperId, this.#errorId];
+    this.#ariaDescribedByAttributeIds = [this.#helperId, this.#errorId];
 
-    addValuesToAttribute(this.#target, 'aria-describedby', this.#ariaDescribedByIds);
+    addValuesToAttribute(this.#target, 'aria-describedby', this.#ariaDescribedByAttributeIds);
   }
 
   #updateAriaRequiredAttribute() {

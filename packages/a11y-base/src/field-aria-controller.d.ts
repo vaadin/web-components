@@ -33,27 +33,26 @@ export class FieldAriaController {
    *
    * To remove the attribute, pass `null` as `label`.
    */
-  setAriaLabel(label: string | null): void;
+  setLabel(label: string | null): void;
 
   /**
-   * Links the target element with a slotted label element
-   * via the target's attribute `aria-labelledby`.
+   * Links the target element to one or more elements via the `aria-labelledby` attribute.
    *
-   * To unlink the previous slotted label element, pass `null` as `labelId`.
+   * Pass a space-delimited list of IDs, or `null` to remove the previously linked IDs.
    */
-  setLabelId(labelId: string | null, fromUser: boolean | null): void;
+  setLabelledBy(labelledBy: string | null): void;
 
   /**
-   * Links the target element with a slotted error element via `aria-describedby` attribute.
+   * Links the target element to a slotted error element via the `aria-describedby` attribute.
    *
-   * To unlink the previous slotted error element, pass `null` as `errorId`.
+   * Pass the ID of the error element, or `null` to remove the previously linked ID.
    */
   setErrorId(errorId: string | null): void;
 
   /**
-   * Links the target element with a slotted helper element via `aria-describedby` attribute.
+   * Links the target element to a slotted helper element via the `aria-describedby` attribute.
    *
-   * To unlink the previous slotted helper element, pass `null` as `helperId`.
+   * Pass the ID of the helper element, or `null` to remove the previously linked ID.
    */
   setHelperId(helperId: string | null): void;
 }

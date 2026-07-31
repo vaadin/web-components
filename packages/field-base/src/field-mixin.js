@@ -76,17 +76,17 @@ export const FieldMixin = (superclass) =>
       this._errorController = new ErrorController(this);
 
       this._labelController.addEventListener('slot-content-changed', () => {
-        this.__syncFieldAriaControllerLabelId();
+        this.__updateFieldAriaControllerLabelledBy();
       });
 
       this._errorController.addEventListener('slot-content-changed', (event) => {
         this.toggleAttribute('has-error-message', event.detail.hasContent);
-        this.__syncFieldAriaControllerErrorId();
+        this.__updateFieldAriaControllerErrorId();
       });
 
       this._helperController.addEventListener('slot-content-changed', (event) => {
         this.toggleAttribute('has-helper', event.detail.hasContent);
-        this.__syncFieldAriaControllerHelperId();
+        this.__updateFieldAriaControllerHelperId();
       });
     }
 
@@ -117,13 +117,13 @@ export const FieldMixin = (superclass) =>
 
     /** @protected */
     _accessibleNameChanged(accessibleName) {
-      this._fieldAriaController.setAriaLabel(accessibleName);
-      this.__syncFieldAriaControllerLabelId();
+      this._fieldAriaController.setLabel(accessibleName);
+      this.__updateFieldAriaControllerLabelledBy();
     }
 
     /** @protected */
     _accessibleNameRefChanged() {
-      this.__syncFieldAriaControllerLabelId();
+      this.__updateFieldAriaControllerLabelledBy();
     }
 
     /**
@@ -166,11 +166,11 @@ export const FieldMixin = (superclass) =>
      */
     _invalidChanged(invalid) {
       this._errorController.setInvalid(invalid);
-      this.__syncFieldAriaControllerErrorId();
+      this.__updateFieldAriaControllerErrorId();
     }
 
     /** @private */
-    __syncFieldAriaControllerHelperId() {
+    __updateFieldAriaControllerHelperId() {
       if (this.hasAttribute('has-helper')) {
         this._fieldAriaController.setHelperId(this._helperNode?.id);
       } else {
@@ -179,7 +179,7 @@ export const FieldMixin = (superclass) =>
     }
 
     /** @private */
-    __syncFieldAriaControllerErrorId() {
+    __updateFieldAriaControllerErrorId() {
       // This timeout is needed to prevent NVDA from announcing the error message twice:
       // 1. Once adding the `[role=alert]` attribute when updating `has-error-message` (OK).
       // 2. Once linking the error ID with the ARIA target here (unwanted).
@@ -196,15 +196,15 @@ export const FieldMixin = (superclass) =>
     }
 
     /** @private */
-    __syncFieldAriaControllerLabelId() {
+    __updateFieldAriaControllerLabelledBy() {
       if (this.accessibleNameRef) {
-        this._fieldAriaController.setLabelId(this.accessibleNameRef);
+        this._fieldAriaController.setLabelledBy(this.accessibleNameRef);
       } else if (this.hasAttribute('has-label') && !this.accessibleName) {
         // Label ID should be only added when the label content is present
         // and not overridden by `accessible-name` which sets `aria-label`.
-        this._fieldAriaController.setLabelId(this._labelNode?.id);
+        this._fieldAriaController.setLabelledBy(this._labelNode?.id);
       } else {
-        this._fieldAriaController.setLabelId(null);
+        this._fieldAriaController.setLabelledBy(null);
       }
     }
   };
