@@ -136,8 +136,9 @@ export class SlotChildObserveController extends SlotController {
    *
    * @param {Node} node
    * @return {boolean}
+   * @protected
    */
-  #hasContent(node) {
+  _hasContent(node) {
     if (!node) {
       return false;
     }
@@ -157,7 +158,7 @@ export class SlotChildObserveController extends SlotController {
   _notifyChange(node) {
     this.dispatchEvent(
       new CustomEvent('slot-content-changed', {
-        detail: { hasContent: this.#hasContent(node), node },
+        detail: { hasContent: this._hasContent(node), node },
       }),
     );
   }

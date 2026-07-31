@@ -67,6 +67,8 @@ describe('FieldMixin', () => {
       },
   );
 
+  customElements.define('custom-error-message', class extends HTMLElement {});
+
   let element, label, error, helper, input;
 
   describe('error message', () => {
@@ -246,6 +248,32 @@ describe('FieldMixin', () => {
         element.errorMessage = 'This field is required';
         await nextUpdate(element);
         expect(error.textContent).to.equal('This field is required');
+      });
+    });
+
+    describe('slotted custom element', () => {
+      beforeEach(async () => {
+        element = fixtureSync(`
+          <${tag}>
+            <custom-error-message slot="error-message">Required field</custom-error-message>
+          </${tag}>
+        `);
+        await nextRender();
+        error = element.querySelector('[slot=error-message]');
+      });
+
+      it('should not set has-error-message attribute when the field is valid', () => {
+        expect(element.hasAttribute('has-error-message')).to.be.false;
+      });
+
+      it('should toggle has-error-message attribute on invalid property change', async () => {
+        element.invalid = true;
+        await nextUpdate(element);
+        expect(element.hasAttribute('has-error-message')).to.be.true;
+
+        element.invalid = false;
+        await nextUpdate(element);
+        expect(element.hasAttribute('has-error-message')).to.be.false;
       });
     });
   });
@@ -745,6 +773,32 @@ describe('FieldMixin', () => {
           expect(aria).to.include(error.id);
           expect(aria).to.not.include(label.id);
         });
+      });
+    });
+
+    describe('custom element error message', () => {
+      beforeEach(async () => {
+        element = fixtureSync(`
+          <${tag}>
+            <custom-error-message slot="error-message">Required field</custom-error-message>
+          </${tag}>
+        `);
+        await nextRender();
+        input = element.querySelector('[slot=input]');
+        error = element.querySelector('[slot=error-message]');
+      });
+
+      it('should not contain error id in aria-describedby when the field is valid', async () => {
+        await aTimeout(0);
+        const aria = input.getAttribute('aria-describedby') || '';
+        expect(aria).to.not.include(error.id);
+      });
+
+      it('should add error id to aria-describedby when the field becomes invalid', async () => {
+        element.invalid = true;
+        await nextUpdate(element);
+        await aTimeout(0);
+        expect(input.getAttribute('aria-describedby')).to.include(error.id);
       });
     });
 

@@ -27,6 +27,12 @@ export class SlotChildObserveController extends SlotController {
   protected updateDefaultNode(node: Node): void;
 
   /**
+   * Returns true if a node is an HTML element with children,
+   * or is a defined custom element, or has non-empty text.
+   */
+  protected _hasContent(node: Node): boolean;
+
+  /**
    * Fire an event to notify the controller host about node changes.
    */
   protected _notifyChange(node: Node): void;

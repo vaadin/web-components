@@ -102,21 +102,37 @@ export class ErrorController extends SlotChildObserveController {
    * @override
    */
   updateDefaultNode(errorNode) {
-    const { errorMessage, invalid } = this;
-    const hasError = Boolean(invalid && errorMessage && errorMessage.trim() !== '');
+    const hasError = this.#hasError;
 
     if (errorNode) {
-      errorNode.textContent = hasError ? errorMessage : '';
+      errorNode.textContent = hasError ? this.errorMessage : '';
       errorNode.hidden = !hasError;
 
       if (hasError) {
         // Assertive mode ensures VoiceOver reads
         // the error message on commit with Enter.
-        announce(errorMessage, { mode: 'assertive' });
+        announce(this.errorMessage, { mode: 'assertive' });
       }
     }
 
     // Notify the host after update.
     super.updateDefaultNode(errorNode);
+  }
+
+  /**
+   * Override method inherited from `SlotChildObserveController`
+   * to report content based on whether the error is shown, since
+   * the controller clears and hides the error element when the
+   * field is valid, regardless of the node type.
+   *
+   * @override
+   */
+  _hasContent(_node) {
+    return this.#hasError;
+  }
+
+  get #hasError() {
+    const { errorMessage, invalid } = this;
+    return Boolean(invalid && errorMessage && errorMessage.trim() !== '');
   }
 }
