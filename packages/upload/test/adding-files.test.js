@@ -42,6 +42,79 @@ describe('adding files', () => {
       await nextUpdate(upload);
       expect(spy.calledOnce).to.be.true;
     });
+
+    it('should not validate files assigned to the files property', async () => {
+      upload.maxFileSize = testFileSize - 1;
+      await nextUpdate(upload);
+
+      const rejectSpy = sinon.spy();
+      upload.addEventListener('file-reject', rejectSpy);
+      upload.files = files;
+      await nextUpdate(upload);
+
+      expect(rejectSpy).to.not.be.called;
+      expect(upload.files).to.have.lengthOf(2);
+    });
+
+    it('should allow files not matching the accept filter to be assigned', async () => {
+      upload.accept = 'image/*';
+      await nextUpdate(upload);
+
+      const rejectSpy = sinon.spy();
+      upload.addEventListener('file-reject', rejectSpy);
+      // Represent previously uploaded files
+      upload.files = files.map((file) => Object.assign(file, { complete: true }));
+      await nextUpdate(upload);
+
+      expect(rejectSpy).to.not.be.called;
+      expect(upload.files).to.have.lengthOf(2);
+    });
+
+    it('should allow more files than maxFiles to be assigned', async () => {
+      upload.maxFiles = 1;
+      await nextUpdate(upload);
+
+      const rejectSpy = sinon.spy();
+      upload.addEventListener('file-reject', rejectSpy);
+      upload.files = files;
+      await nextUpdate(upload);
+
+      expect(rejectSpy).to.not.be.called;
+      expect(upload.files).to.have.lengthOf(2);
+      expect(upload.maxFilesReached).to.be.true;
+    });
+
+    it('should update maxFilesReached when files are assigned', async () => {
+      upload.maxFiles = 1;
+      upload.files = [files[0]];
+      await nextUpdate(upload);
+      expect(upload.maxFilesReached).to.be.true;
+
+      upload.files = [];
+      await nextUpdate(upload);
+      expect(upload.maxFilesReached).to.be.false;
+    });
+
+    describe('uploading assigned files', () => {
+      let clock;
+
+      beforeEach(() => {
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
+      });
+
+      afterEach(() => {
+        clock.restore();
+      });
+
+      it('should upload files assigned to the files property', async () => {
+        upload.maxFileSize = testFileSize - 1;
+        upload.files = [files[0]];
+        upload.uploadFiles();
+
+        await clock.tickAsync(400);
+        expect(files[0].complete).to.be.true;
+      });
+    });
   });
 
   (touchDevice ? describe.skip : describe)('Dropping file', () => {
