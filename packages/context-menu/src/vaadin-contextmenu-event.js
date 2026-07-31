@@ -7,6 +7,11 @@ import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isFirefox, isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { prevent, register } from '@vaadin/component-base/src/gestures.js';
 
+// A `contextmenu` caused by a selection change on touch focus (e.g. with `autoselect`) is
+// dispatched in the same input turn as the tap, measured at ~80 ms after `touchstart`. A long
+// press needs the finger held for 500 ms or more, which platform settings can shorten.
+const SELECTION_CONTEXTMENU_MAX_DELAY = 200;
+
 register({
   name: 'vaadin-contextmenu',
   deps: ['touchstart', 'touchmove', 'touchend', 'contextmenu'],
@@ -20,6 +25,10 @@ register({
   info: {
     sourceEvent: null,
   },
+
+  // Deliberately not cleared in `reset()`: it runs when the `contextmenu` handling starts,
+  // which is exactly when this value is needed.
+  _touchStartTime: null,
 
   reset() {
     this.info.sourceEvent = null;
@@ -48,6 +57,8 @@ register({
 
   touchstart(e) {
     this._setSourceEvent(e);
+
+    this._touchStartTime = performance.now();
 
     this.info.touchStartCoords = {
       x: e.changedTouches[0].clientX,
@@ -92,6 +103,18 @@ register({
   },
 
   contextmenu(e) {
+    // Ignore a `contextmenu` that fires too soon after `touchstart` to be a long press. On
+    // touch, changing the text selection on focus (e.g. with `autoselect`) makes the browser
+    // fire `contextmenu` as a side effect of the tap itself. Mouse and keyboard events do
+    // not follow a touch this closely in practice.
+    //
+    // Uses `performance.now()` rather than `e.timeStamp`: on Android, the `contextmenu` of a
+    // long press carries the timestamp of the touch that started it, so `e.timeStamp` would
+    // report no elapsed time and suppress every long press.
+    if (this._touchStartTime !== null && performance.now() - this._touchStartTime < SELECTION_CONTEXTMENU_MAX_DELAY) {
+      return;
+    }
+
     if (!e.shiftKey) {
       this._setSourceEvent(e);
       if (isFirefox && isKeyboardActive()) {
