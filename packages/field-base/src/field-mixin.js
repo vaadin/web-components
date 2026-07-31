@@ -75,18 +75,16 @@ export const FieldMixin = (superclass) =>
       this._helperController = new HelperController(this);
       this._errorController = new ErrorController(this);
 
-      this._labelController.addEventListener('slot-content-changed', () => {
-        this.__updateFieldAriaControllerLabelledBy();
+      this._labelController.addEventListener('slot-content-changed', (event) => {
+        this.#onLabelSlotChange(event);
       });
 
       this._errorController.addEventListener('slot-content-changed', (event) => {
-        this.toggleAttribute('has-error-message', event.detail.hasContent);
-        this.__updateFieldAriaControllerErrorId();
+        this.#onErrorSlotChange(event);
       });
 
       this._helperController.addEventListener('slot-content-changed', (event) => {
-        this.toggleAttribute('has-helper', event.detail.hasContent);
-        this.__updateFieldAriaControllerHelperId();
+        this.#onHelperSlotChange(event);
       });
     }
 
@@ -166,33 +164,6 @@ export const FieldMixin = (superclass) =>
      */
     _invalidChanged(invalid) {
       this._errorController.setInvalid(invalid);
-      this.__updateFieldAriaControllerErrorId();
-    }
-
-    /** @private */
-    __updateFieldAriaControllerHelperId() {
-      if (this.hasAttribute('has-helper')) {
-        this._fieldAriaController.setHelperId(this._helperNode?.id);
-      } else {
-        this._fieldAriaController.setHelperId(null);
-      }
-    }
-
-    /** @private */
-    __updateFieldAriaControllerErrorId() {
-      // This timeout is needed to prevent NVDA from announcing the error message twice:
-      // 1. Once adding the `[role=alert]` attribute when updating `has-error-message` (OK).
-      // 2. Once linking the error ID with the ARIA target here (unwanted).
-      // Related issue: https://github.com/vaadin/web-components/issues/3061.
-      setTimeout(() => {
-        // Error message ID needs to be dynamically added / removed based on the validity
-        // Otherwise assistive technologies would announce the error, even if we hide it.
-        if (this.invalid) {
-          this._fieldAriaController.setErrorId(this._errorNode?.id);
-        } else {
-          this._fieldAriaController.setErrorId(null);
-        }
-      });
     }
 
     /** @private */
@@ -206,5 +177,39 @@ export const FieldMixin = (superclass) =>
       } else {
         this._fieldAriaController.setLabelledBy(null);
       }
+    }
+
+    #onLabelSlotChange(_event) {
+      this.__updateFieldAriaControllerLabelledBy();
+    }
+
+    #onHelperSlotChange(event) {
+      const { hasContent } = event.detail;
+
+      this.toggleAttribute('has-helper', hasContent);
+
+      if (hasContent) {
+        this._fieldAriaController.setHelperId(this._helperNode?.id);
+      } else {
+        this._fieldAriaController.setHelperId(null);
+      }
+    }
+
+    #onErrorSlotChange(event) {
+      const { hasContent } = event.detail;
+
+      this.toggleAttribute('has-error-message', hasContent);
+
+      // This timeout is needed to prevent NVDA from announcing the error message twice:
+      // 1. Once adding the `[role=alert]` attribute when updating `has-error-message` (OK).
+      // 2. Once linking the error ID with the ARIA target here (unwanted).
+      // Related issue: https://github.com/vaadin/web-components/issues/3061.
+      setTimeout(() => {
+        if (hasContent) {
+          this._fieldAriaController.setErrorId(this._errorNode?.id);
+        } else {
+          this._fieldAriaController.setErrorId(null);
+        }
+      });
     }
   };
