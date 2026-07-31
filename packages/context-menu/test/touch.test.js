@@ -79,6 +79,8 @@ describe('mobile support', () => {
       clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
       spy = sinon.spy();
       menu.listenOn.addEventListener('vaadin-contextmenu', spy);
+      // `tap` is not registered on the target, so nothing resets its state between tests.
+      gestures.tap.reset();
     });
 
     afterEach(() => {
@@ -94,13 +96,23 @@ describe('mobile support', () => {
       target.dispatchEvent(new CustomEvent('contextmenu', { bubbles: true }));
 
       expect(spy).to.be.not.called;
+      // The tap itself must still reach the target, e.g. to focus the field.
+      expect(gestures.tap.info.prevent).to.be.false;
     });
 
-    it('should fire on `contextmenu` during a long press', async () => {
+    it('should not fire on `contextmenu` just below the threshold', async () => {
+      touchstart(target);
+      await clock.tickAsync(199);
+      target.dispatchEvent(new CustomEvent('contextmenu', { bubbles: true }));
+
+      expect(spy).to.be.not.called;
+    });
+
+    it('should fire on `contextmenu` once the threshold has passed', async () => {
       // Platforms fire `contextmenu` after holding for 500 ms or more, but the finger only
       // has to be down for longer than the text selection side effect takes.
       touchstart(target);
-      await clock.tickAsync(250);
+      await clock.tickAsync(200);
       target.dispatchEvent(new CustomEvent('contextmenu', { bubbles: true }));
 
       expect(spy).to.be.calledOnce;
