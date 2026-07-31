@@ -64,6 +64,39 @@ const i18nConfigs = [
   { name: 'partial i18n', i18n: PARTIAL_I18N, expectedI18n: { ...DEFAULT_I18N, ...PARTIAL_I18N } },
 ];
 
+describe('custom formatters', () => {
+  let upload, clock, file;
+
+  beforeEach(async () => {
+    upload = fixtureSync('<vaadin-upload></vaadin-upload>');
+    upload.target = 'https://foo.com/bar';
+    await nextRender();
+    file = createFile(100000, 'application/octet-stream');
+    clock = sinon.useFakeTimers();
+  });
+
+  afterEach(() => {
+    clock.restore();
+  });
+
+  it('should use custom formatSize for file size strings', async () => {
+    upload.i18n = { formatSize: (bytes) => `${bytes} B!` };
+    upload._createXhr = xhrCreator({ size: file.size, uploadTime: 200, stepTime: 50 });
+    upload.uploadFiles(file);
+    await clock.tickAsync(110);
+    expect(file.totalStr).to.equal('100000 B!');
+    expect(file.loadedStr).to.equal('50000 B!');
+  });
+
+  it('should use custom formatTime for elapsed time strings', async () => {
+    upload.i18n = { formatTime: (seconds) => `${seconds} seconds` };
+    upload._createXhr = xhrCreator({ size: file.size, connectTime: 1000, uploadTime: 4000, stepTime: 2000 });
+    upload.uploadFiles(file);
+    await clock.tickAsync(3000);
+    expect(file.elapsedStr).to.equal('3 seconds');
+  });
+});
+
 describe('upload i18n', () => {
   i18nConfigs.forEach(({ name, i18n, expectedI18n }) => {
     describe(name, () => {

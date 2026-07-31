@@ -1,8 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-upload.js';
-import { createFile } from './helpers.js';
+import { createFile, xhrCreator } from './helpers.js';
 
 async function repeatTab(times) {
   for (let i = 0; i < times; i++) {
@@ -121,6 +122,29 @@ describe('keyboard navigation', () => {
       await nextFrame();
 
       expect(document.activeElement.file.name).to.equal('file-0');
+    });
+
+    describe('retry', () => {
+      let clock;
+
+      beforeEach(() => {
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
+      });
+
+      afterEach(() => {
+        clock.restore();
+      });
+
+      it('should focus the file when retrying its upload', async () => {
+        uploadElement._createXhr = xhrCreator();
+        const file = uploadElement.files[0];
+
+        uploadElement.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
+        expect(document.activeElement.file).to.equal(file);
+
+        // Run the retried upload to completion so that no timers leak
+        await clock.tickAsync(500);
+      });
     });
 
     it('should not change focus after upload', async () => {

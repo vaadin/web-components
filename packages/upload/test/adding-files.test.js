@@ -48,7 +48,8 @@ describe('adding files', () => {
     // Using dispatchEvent instead of fire in this case because
     // we have to pass the info in the dataTransfer property
     function createDndEvent(type, entries = []) {
-      const e = new Event(type);
+      // Native drag and drop events are cancelable
+      const e = new Event(type, { cancelable: true });
       const items = entries.map((entry) => ({
         webkitGetAsEntry() {
           return entry;
@@ -58,6 +59,45 @@ describe('adding files', () => {
       e.dataTransfer = { items, files };
       return e;
     }
+
+    it('should prevent default on dragover', () => {
+      const event = createDndEvent('dragover');
+      upload.dispatchEvent(event);
+      expect(event.defaultPrevented).to.be.true;
+    });
+
+    it('should prevent default on dragleave', () => {
+      const event = createDndEvent('dragleave');
+      upload.dispatchEvent(event);
+      expect(event.defaultPrevented).to.be.true;
+    });
+
+    it('should prevent default on drop', () => {
+      const event = createDndEvent('drop', [createFileSystemFileEntry(100, 'image/jpeg')]);
+      upload.dispatchEvent(event);
+      expect(event.defaultPrevented).to.be.true;
+    });
+
+    it('should reset dragover state on drop', async () => {
+      upload.dispatchEvent(createDndEvent('dragover'));
+      await nextUpdate(upload);
+      expect(upload.hasAttribute('dragover')).to.be.true;
+
+      upload.dispatchEvent(createDndEvent('drop'));
+      await nextUpdate(upload);
+      expect(upload._dragover).to.be.false;
+      expect(upload.hasAttribute('dragover')).to.be.false;
+    });
+
+    it('should remove dragover-valid attribute on dragleave', async () => {
+      upload.dispatchEvent(createDndEvent('dragover'));
+      await nextUpdate(upload);
+      expect(upload.hasAttribute('dragover-valid')).to.be.true;
+
+      upload.dispatchEvent(createDndEvent('dragleave'));
+      await nextUpdate(upload);
+      expect(upload.hasAttribute('dragover-valid')).to.be.false;
+    });
 
     it('should set dragover attribute on dragover', async () => {
       expect(upload._dragover).not.to.be.ok;
@@ -364,6 +404,12 @@ describe('adding files', () => {
       addFilesViaInput(upload, [file, file]);
     });
 
+    it('should not add files over the maxFiles limit', () => {
+      upload.maxFiles = 1;
+      addFilesViaInput(upload, [file, createFile(testFileSize, 'application/x-octet-stream')]);
+      expect(upload.files.length).to.equal(1);
+    });
+
     it('should reject files with excessive size', (done) => {
       upload.maxFileSize = testFileSize - 1;
       upload.addEventListener('file-reject', (e) => {
@@ -371,6 +417,12 @@ describe('adding files', () => {
         done();
       });
       addFilesViaInput(upload, [file]);
+    });
+
+    it('should not add files with excessive size', () => {
+      upload.maxFileSize = testFileSize - 1;
+      addFilesViaInput(upload, [file]);
+      expect(upload.files.length).to.equal(0);
     });
 
     it('should reject files with incorrect contentType', (done) => {

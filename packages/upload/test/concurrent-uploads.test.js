@@ -167,6 +167,49 @@ describe('concurrent uploads', () => {
       files[0].xhr.abort();
       expect(upload._createXhr).to.be.calledOnce;
     });
+
+    it('should start a queued file when removing another queued file frees capacity', () => {
+      const files = createFiles(3, 100, 'application/json');
+      upload.maxConcurrentUploads = 1;
+
+      upload.uploadFiles(files);
+
+      // Increasing the limit alone does not process the queue
+      upload.maxConcurrentUploads = 3;
+
+      // Removing a queued file processes the queue with the new limit
+      upload.dispatchEvent(new CustomEvent('file-abort', { detail: { file: files[1] } }));
+      expect(files[2].held).to.be.false;
+      expect(files[2].uploading).to.be.true;
+    });
+  });
+
+  describe('upload queue with abort and completion', () => {
+    let clock;
+
+    beforeEach(() => {
+      upload._createXhr = sinon.spy(xhrCreator({ size: 100, uploadTime: 200, stepTime: 50 }));
+      clock = sinon.useFakeTimers({
+        shouldClearNativeTimers: true,
+      });
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should not upload a queued file that was aborted before starting', async () => {
+      const files = createFiles(2, 100, 'application/json');
+      upload.maxConcurrentUploads = 1;
+
+      upload.uploadFiles(files);
+      upload.dispatchEvent(new CustomEvent('file-abort', { detail: { file: files[1] } }));
+
+      // Wait for the first upload to complete
+      await clock.tickAsync(500);
+      expect(files[0].complete).to.be.true;
+      expect(upload._createXhr).to.be.calledOnce;
+    });
   });
 
   describe('upload queue with errors', () => {
@@ -352,6 +395,19 @@ describe('concurrent uploads', () => {
       // Try to upload same file again
       upload.uploadFiles(files[0]);
       expect(upload._createXhr).to.be.not.called;
+    });
+
+    it('should not restart or queue a file that is already uploading when below the limit', () => {
+      const files = createFiles(1, 100, 'application/json');
+
+      upload.uploadFiles(files[0]);
+      expect(upload._createXhr).to.be.calledOnce;
+      expect(files[0].held).to.be.false;
+
+      // Try to upload same file again while there is upload capacity left
+      upload.uploadFiles(files[0]);
+      expect(upload._createXhr).to.be.calledOnce;
+      expect(files[0].held).to.be.false;
     });
   });
 });
