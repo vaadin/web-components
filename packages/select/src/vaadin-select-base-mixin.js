@@ -544,7 +544,7 @@ export const SelectBaseMixin = (superClass) =>
      */
     _accessibleNameChanged(accessibleName) {
       this._srLabelController.setLabel(accessibleName);
-      this.__syncFieldAriaControllerLabelId();
+      this.__updateFieldAriaControllerLabelledBy();
     }
 
     /** @private */
@@ -578,7 +578,7 @@ export const SelectBaseMixin = (superClass) =>
         delete this._selectedChanging;
       }
 
-      this.__syncFieldAriaControllerLabelId();
+      this.__updateFieldAriaControllerLabelledBy();
     }
 
     /** @private */
@@ -676,7 +676,7 @@ export const SelectBaseMixin = (superClass) =>
     }
 
     /** @override */
-    __syncFieldAriaControllerLabelId() {
+    __updateFieldAriaControllerLabelledBy() {
       let labelId;
       if (this.accessibleNameRef) {
         labelId = this.accessibleNameRef;
@@ -691,9 +691,9 @@ export const SelectBaseMixin = (superClass) =>
 
       const ids = [labelId, itemId].filter(Boolean);
       if (ids.length > 0) {
-        this._fieldAriaController.setLabelId(ids.join(' '));
+        this._fieldAriaController.setLabelledBy(ids.join(' '));
       } else {
-        this._fieldAriaController.setLabelId(null);
+        this._fieldAriaController.setLabelledBy(null);
       }
     }
   };
