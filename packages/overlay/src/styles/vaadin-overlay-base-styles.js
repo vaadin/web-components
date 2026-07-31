@@ -15,8 +15,9 @@ const overlayBase = css`
     /* Despite of what the names say, <vaadin-overlay> is just a container
           for position/sizing/alignment. The actual overlay is the overlay part. */
 
-    /* Default position constraints. Themes can
-          override this to adjust the gap between the overlay and the viewport. */
+    /* Default position constraints. Themes can override this to adjust the gap between
+          the overlay and the viewport, but must keep the occlusion term on the bottom
+          side, or the overlay extends into the area hidden by the on-screen keyboard. */
     inset: max(env(safe-area-inset-top, 0px), var(--vaadin-overlay-viewport-inset, 8px))
       max(env(safe-area-inset-right, 0px), var(--vaadin-overlay-viewport-inset, 8px))
       calc(
