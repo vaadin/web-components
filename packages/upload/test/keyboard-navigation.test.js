@@ -124,6 +124,17 @@ describe('keyboard navigation', () => {
       expect(document.activeElement.file.name).to.equal('file-0');
     });
 
+    it('should not change focus when upload-retry is prevented', async () => {
+      uploadElement.addEventListener('upload-retry', (e) => e.preventDefault());
+
+      const retryButton = fileElements[0].shadowRoot.querySelector('[part=retry-button]');
+      retryButton.focus();
+      retryButton.click();
+      await nextFrame();
+
+      expect(fileElements[0].shadowRoot.activeElement).to.equal(retryButton);
+    });
+
     describe('retry', () => {
       let clock;
 

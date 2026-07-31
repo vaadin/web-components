@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-upload.js';
 import { addFilesViaInput, createFile, createFiles, removeFile, xhrCreator } from './helpers.js';
@@ -269,6 +269,96 @@ describe('upload', () => {
           });
         });
         upload.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
+      });
+
+      it('should fire the `upload-success` event when retrying after a failed upload', async () => {
+        let fail = true;
+        upload._createXhr = xhrCreator({
+          size: file.size,
+          uploadTime: 200,
+          stepTime: 50,
+          serverValidation: () => (fail ? { status: 500, statusText: 'Error' } : undefined),
+        });
+
+        const errorSpy = sinon.spy();
+        upload.addEventListener('upload-error', errorSpy);
+        upload.uploadFiles(file);
+        await clock.tickAsync(400);
+        expect(errorSpy).to.be.calledOnce;
+        expect(file.error).to.be.ok;
+
+        fail = false;
+        const successSpy = sinon.spy();
+        upload.addEventListener('upload-success', successSpy);
+        upload.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
+        await clock.tickAsync(400);
+
+        expect(successSpy).to.be.calledOnce;
+        expect(errorSpy).to.be.calledOnce;
+        expect(file.error).to.not.be.ok;
+        expect(file.complete).to.be.true;
+      });
+
+      it('should fire the `upload-success` event when uploadFiles restarts a failed upload', async () => {
+        let fail = true;
+        upload._createXhr = xhrCreator({
+          size: file.size,
+          uploadTime: 200,
+          stepTime: 50,
+          serverValidation: () => (fail ? { status: 500, statusText: 'Error' } : undefined),
+        });
+
+        const errorSpy = sinon.spy();
+        upload.addEventListener('upload-error', errorSpy);
+        upload.uploadFiles(file);
+        await clock.tickAsync(400);
+        expect(errorSpy).to.be.calledOnce;
+        expect(file.error).to.be.ok;
+
+        fail = false;
+        const successSpy = sinon.spy();
+        upload.addEventListener('upload-success', successSpy);
+        upload.uploadFiles(file);
+        expect(file.error).to.not.be.ok;
+        await clock.tickAsync(400);
+
+        expect(successSpy).to.be.calledOnce;
+        expect(errorSpy).to.be.calledOnce;
+        expect(file.complete).to.be.true;
+      });
+
+      it('should not add files passed to uploadFiles to the files list', (done) => {
+        upload.addEventListener('upload-start', () => {
+          expect(upload.files).to.have.lengthOf(0);
+          done();
+        });
+        upload.uploadFiles(file);
+      });
+
+      it('should not count files passed to uploadFiles towards maxFiles', async () => {
+        upload.maxFiles = 1;
+        upload.uploadFiles(file);
+        await clock.tickAsync(400);
+        expect(file.complete).to.be.true;
+        expect(upload.maxFilesReached).to.be.false;
+
+        addFilesViaInput(upload, [createFile(100, 'image/jpeg')]);
+        expect(upload.files).to.have.lengthOf(1);
+      });
+
+      it('should fire files-changed only when files are added or removed', async () => {
+        const spy = sinon.spy();
+        upload.addEventListener('files-changed', spy);
+
+        addFilesViaInput(upload, [file]);
+        await clock.tickAsync(400);
+        expect(upload.files[0].complete).to.be.true;
+        expect(spy).to.be.calledOnce;
+
+        removeFile(upload);
+        await clock.tickAsync(10);
+        expect(upload.files).to.have.lengthOf(0);
+        expect(spy).to.be.calledTwice;
       });
 
       it('should propagate with-credentials to the xhr', (done) => {
@@ -626,6 +716,56 @@ describe('upload', () => {
       expect(file.remainingStr).to.equal('01:02:05');
       expect(file.loadedStr).to.equal('50 kB');
       expect(file.status).to.contain('remaining time: ');
+    });
+  });
+
+  describe('Invalid configuration', () => {
+    it('should upload using a lowercase method', (done) => {
+      const lowercaseUpload = fixtureSync(`<vaadin-upload method="put" target="/api/endpoint"></vaadin-upload>`);
+      lowercaseUpload._createXhr = xhrCreator({ size: file.size, uploadTime: 10, stepTime: 5 });
+      lowercaseUpload.addEventListener('upload-start', (e) => {
+        expect(e.detail.xhr.method).to.equal('PUT');
+        expect(e.detail.xhr.url).to.equal('/api/endpoint');
+        done();
+      });
+      lowercaseUpload.uploadFiles(file);
+    });
+
+    it('should upload using an unsupported method', async () => {
+      upload.method = 'DELETE';
+      await nextUpdate(upload);
+      upload._createXhr = xhrCreator({ size: file.size, uploadTime: 10, stepTime: 5 });
+
+      const startSpy = sinon.spy();
+      upload.addEventListener('upload-start', startSpy);
+      upload.uploadFiles(file);
+
+      expect(startSpy).to.be.calledOnce;
+      expect(startSpy.firstCall.args[0].detail.xhr.method).to.equal('DELETE');
+      expect(startSpy.firstCall.args[0].detail.xhr.url).to.equal('https://foo.com/bar');
+    });
+
+    it('should treat negative maxFiles as no limit', async () => {
+      upload.maxFiles = -1;
+      await nextUpdate(upload);
+      upload._createXhr = xhrCreator({ size: 100, uploadTime: 10, stepTime: 5 });
+
+      addFilesViaInput(upload, createFiles(2, 100, 'application/x-octet-stream'));
+      expect(upload.files).to.have.lengthOf(2);
+      expect(upload.maxFilesReached).to.be.false;
+    });
+
+    it('should pause uploads when maxConcurrentUploads is non-positive', async () => {
+      upload.maxConcurrentUploads = 0;
+      await nextUpdate(upload);
+      upload._createXhr = xhrCreator({ size: file.size, uploadTime: 10, stepTime: 5 });
+
+      const startSpy = sinon.spy();
+      upload.addEventListener('upload-start', startSpy);
+      upload.uploadFiles(file);
+      await aTimeout(50);
+
+      expect(startSpy).to.not.be.called;
     });
   });
 
