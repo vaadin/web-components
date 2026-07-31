@@ -26,7 +26,8 @@ register({
     sourceEvent: null,
   },
 
-  // Not part of `info`, which `reset()` clears when the `contextmenu` handling starts.
+  // Deliberately not cleared in `reset()`: it runs when the `contextmenu` handling starts,
+  // which is exactly when this value is needed.
   _touchStartTime: null,
 
   reset() {
