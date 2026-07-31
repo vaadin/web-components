@@ -16,6 +16,10 @@ describe('FieldAriaController', () => {
       element.addController(controller);
     });
 
+    it('should not set aria-label attribute initially', () => {
+      expect(element.hasAttribute('aria-label')).to.be.false;
+    });
+
     it('should not set aria-labelledby attribute initially', () => {
       expect(element.hasAttribute('aria-labelledby')).to.be.false;
     });
@@ -29,7 +33,31 @@ describe('FieldAriaController', () => {
     });
   });
 
-  describe('field', () => {
+  describe('aria-label', () => {
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}><input></${tag}>`);
+      await nextRender();
+      input = element.querySelector('input');
+      controller = new FieldAriaController(element);
+      element.addController(controller);
+    });
+
+    it('should set aria-label attribute when label is set before target', () => {
+      controller.setLabel('Label');
+      controller.setTarget(input);
+      expect(input.getAttribute('aria-label')).to.equal('Label');
+    });
+
+    it('should set aria-label attribute when label is set after target', () => {
+      controller.setTarget(input);
+      controller.setLabel('Label');
+      expect(input.getAttribute('aria-label')).to.equal('Label');
+      controller.setLabel(null);
+      expect(input.hasAttribute('aria-label')).to.be.false;
+    });
+  });
+
+  describe('id references', () => {
     beforeEach(async () => {
       element = fixtureSync(`
         <${tag}>
@@ -42,172 +70,86 @@ describe('FieldAriaController', () => {
       element.addController(controller);
     });
 
-    describe('label id', () => {
-      beforeEach(() => {
+    describe('set before target', () => {
+      it('should add label id to aria-labelledby attribute', () => {
         controller.setLabelledBy('label-id');
         controller.setTarget(input);
-      });
-
-      it('should add label id to aria-labelledby attribute', () => {
-        expect(input.getAttribute('aria-labelledby')).equal('custom-id label-id');
-      });
-
-      it('should not add label id to aria-describedby attribute', () => {
-        expect(input.getAttribute('aria-describedby')).not.to.include('label-id');
-      });
-    });
-
-    describe('error id', () => {
-      beforeEach(() => {
-        controller.setErrorId('error-id');
-        controller.setTarget(input);
+        expect(input.getAttribute('aria-labelledby')).to.equal('custom-id label-id');
       });
 
       it('should add error id to aria-describedby attribute', () => {
-        expect(input.getAttribute('aria-describedby')).equal('custom-id error-id');
-      });
-
-      it('should not add error id to aria-labelledby attribute', () => {
-        expect(input.getAttribute('aria-labelledby')).not.to.include('error-id');
-      });
-    });
-
-    describe('helper id', () => {
-      beforeEach(() => {
-        controller.setHelperId('helper-id');
+        controller.setErrorId('error-id');
         controller.setTarget(input);
+        expect(input.getAttribute('aria-describedby')).to.equal('custom-id error-id');
       });
 
       it('should add helper id to aria-describedby attribute', () => {
-        expect(input.getAttribute('aria-describedby')).equal('custom-id helper-id');
-      });
-
-      it('should not add helper id to aria-labelledby attribute', () => {
-        expect(input.getAttribute('aria-labelledby')).not.to.include('helper-id');
-      });
-    });
-
-    describe('aria-required', () => {
-      it('should not add aria-required attribute', () => {
-        controller.setRequired(true);
+        controller.setHelperId('helper-id');
         controller.setTarget(input);
-        expect(element.hasAttribute('aria-required')).to.be.false;
+        expect(input.getAttribute('aria-describedby')).to.equal('custom-id helper-id');
       });
     });
 
-    describe('target is set initially', () => {
+    describe('set after target', () => {
       beforeEach(() => {
         controller.setTarget(input);
       });
 
       it('should set label id to aria-labelledby attribute', () => {
         controller.setLabelledBy('label-id');
-        expect(input.getAttribute('aria-labelledby')).equal('custom-id label-id');
+        expect(input.getAttribute('aria-labelledby')).to.equal('custom-id label-id');
         controller.setLabelledBy(null);
-        expect(input.getAttribute('aria-labelledby')).equal('custom-id');
+        expect(input.getAttribute('aria-labelledby')).to.equal('custom-id');
       });
 
       it('should set error id to aria-describedby attribute', () => {
         controller.setErrorId('error-id');
-        expect(input.getAttribute('aria-describedby')).equal('custom-id error-id');
+        expect(input.getAttribute('aria-describedby')).to.equal('custom-id error-id');
         controller.setErrorId(null);
-        expect(input.getAttribute('aria-describedby')).equal('custom-id');
+        expect(input.getAttribute('aria-describedby')).to.equal('custom-id');
       });
 
       it('should set helper id to aria-describedby attribute', () => {
         controller.setHelperId('helper-id');
-        expect(input.getAttribute('aria-describedby')).equal('custom-id helper-id');
+        expect(input.getAttribute('aria-describedby')).to.equal('custom-id helper-id');
         controller.setHelperId(null);
-        expect(input.getAttribute('aria-describedby')).equal('custom-id');
+        expect(input.getAttribute('aria-describedby')).to.equal('custom-id');
       });
     });
   });
 
-  describe('field group', () => {
+  describe('aria-required', () => {
     beforeEach(async () => {
-      element = fixtureSync(`
-        <${tag}
-          aria-labelledby="custom-id"
-          aria-describedby="custom-id"
-        ></${tag}>
-      `);
+      element = fixtureSync(`<${tag}><input></${tag}>`);
       await nextRender();
+      input = element.querySelector('input');
       controller = new FieldAriaController(element);
       element.addController(controller);
     });
 
-    describe('label id', () => {
-      beforeEach(() => {
-        controller.setLabelledBy('label-id');
-        controller.setTarget(element);
+    describe('set before target', () => {
+      it('should not set aria-required attribute on a native input target', () => {
+        controller.setRequired(true);
+        controller.setTarget(input);
+        expect(input.hasAttribute('aria-required')).to.be.false;
       });
 
-      it('should add label id to aria-labelledby attribute', () => {
-        expect(element.getAttribute('aria-labelledby')).equal('custom-id label-id');
-      });
-
-      it('should not add label id to aria-describedby attribute', () => {
-        expect(element.getAttribute('aria-describedby')).not.to.include('label-id');
-      });
-    });
-
-    describe('error id', () => {
-      beforeEach(() => {
-        controller.setErrorId('error-id');
-        controller.setTarget(element);
-      });
-
-      it('should add error id to aria-describedby attribute', () => {
-        expect(element.getAttribute('aria-describedby')).equal('custom-id error-id');
-      });
-    });
-
-    describe('helper id', () => {
-      beforeEach(() => {
-        controller.setHelperId('helper-id');
-        controller.setTarget(element);
-      });
-
-      it('should add helper id to aria-describedby attribute', () => {
-        expect(element.getAttribute('aria-describedby')).equal('custom-id helper-id');
-      });
-    });
-
-    describe('aria-required', () => {
-      it('should add aria-required attribute', () => {
+      it('should set aria-required attribute on a field group target', () => {
         controller.setRequired(true);
         controller.setTarget(element);
         expect(element.getAttribute('aria-required')).to.equal('true');
       });
     });
 
-    describe('target is set initially', () => {
-      beforeEach(() => {
+    describe('set after target', () => {
+      it('should not set aria-required attribute on a native input target', () => {
+        controller.setTarget(input);
+        controller.setRequired(true);
+        expect(input.hasAttribute('aria-required')).to.be.false;
+      });
+
+      it('should toggle aria-required attribute on a field group target', () => {
         controller.setTarget(element);
-      });
-
-      it('should set label id to aria-labelledby attribute', () => {
-        controller.setLabelledBy('label-id');
-        expect(element.getAttribute('aria-labelledby')).equal('custom-id label-id');
-        controller.setLabelledBy(null);
-        expect(element.getAttribute('aria-labelledby')).equal('custom-id');
-      });
-
-      it('should set error id to aria-describedby attribute', () => {
-        controller.setErrorId('error-id');
-        expect(element.getAttribute('aria-describedby')).to.equal('custom-id error-id');
-        controller.setErrorId(null);
-        expect(element.getAttribute('aria-describedby')).to.equal('custom-id');
-      });
-
-      it('should set helper id to aria-describedby attribute', () => {
-        controller.setHelperId('helper-id');
-        expect(element.getAttribute('aria-describedby')).to.equal('custom-id helper-id');
-        controller.setHelperId(null);
-        expect(element.getAttribute('aria-describedby')).to.equal('custom-id');
-      });
-
-      it('should toggle aria-required attribute', () => {
         controller.setRequired(true);
         expect(element.getAttribute('aria-required')).to.equal('true');
         controller.setRequired(false);

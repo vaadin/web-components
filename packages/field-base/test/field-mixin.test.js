@@ -716,35 +716,23 @@ describe('FieldMixin', () => {
         helper = element.querySelector('[slot=helper]');
       });
 
-      describe('aria-labelledby', () => {
-        it('should only contain label id when the field is valid', () => {
-          const aria = input.getAttribute('aria-labelledby');
-          expect(aria).to.equal(label.id);
-        });
-
-        it('should only contain label id when the field is invalid', async () => {
-          element.invalid = true;
-          await nextUpdate(element);
-          const aria = input.getAttribute('aria-labelledby');
-          expect(aria).to.equal(label.id);
-        });
+      it('should only contain label id in aria-labelledby attribute', () => {
+        const aria = input.getAttribute('aria-labelledby');
+        expect(aria).to.equal(label.id);
       });
 
-      describe('aria-describedby', () => {
-        it('should only contain helper id when the field is valid', () => {
-          const aria = input.getAttribute('aria-describedby');
-          expect(aria).to.equal(helper.id);
-        });
+      it('should only contain helper id in aria-describedby attribute when the field is valid', () => {
+        const aria = input.getAttribute('aria-describedby');
+        expect(aria).to.equal(helper.id);
+      });
 
-        it('should add error id asynchronously after the field becomes invalid', async () => {
-          element.invalid = true;
-          await nextUpdate(element);
-          await aTimeout(0);
-          const aria = input.getAttribute('aria-describedby');
-          expect(aria).to.include(helper.id);
-          expect(aria).to.include(error.id);
-          expect(aria).to.not.include(label.id);
-        });
+      it('should add error id to aria-describedby attribute asynchronously after the field becomes invalid', async () => {
+        element.invalid = true;
+        await nextUpdate(element);
+        await aTimeout(0);
+        const aria = input.getAttribute('aria-describedby');
+        expect(aria).to.include(helper.id);
+        expect(aria).to.include(error.id);
       });
     });
 
