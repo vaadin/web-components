@@ -23,3 +23,17 @@ vaadin-confirm-dialog::part(overlay) {
 vaadin-confirm-dialog::part(message) {
   color: var(--vaadin-text-color-secondary);
 }
+
+vaadin-dialog,
+vaadin-confirm-dialog,
+vaadin-crud {
+  --vaadin-overlay-animation-duration: 0.16s;
+  --vaadin-overlay-scale-closed: 0.97;
+}
+
+/* vaadin-crud is excluded, as closing is set on its internal dialog element */
+vaadin-dialog[closing],
+vaadin-confirm-dialog[closing] {
+  --vaadin-overlay-animation-duration: 0.12s;
+  --vaadin-overlay-animation-delay: 60ms;
+}

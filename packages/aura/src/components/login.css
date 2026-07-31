@@ -24,6 +24,30 @@ vaadin-login-form::part(error-message-title) {
 vaadin-login-overlay {
   --vaadin-overlay-backdrop-background: var(--aura-app-background);
 
+  &[opening] {
+    --vaadin-overlay-scale-closed: 0.95;
+    --vaadin-overlay-translate-closed: 0 30px;
+    --vaadin-overlay-animation-duration: 1.2s;
+    --vaadin-overlay-animation-delay: 0.2s;
+    --vaadin-overlay-animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+
+    &::part(overlay) {
+      /* Override the fade animation duration */
+      animation-duration: 0.3s, var(--vaadin-overlay-animation-duration);
+    }
+
+    &::part(backdrop) {
+      --vaadin-overlay-animation-duration: 0.3s;
+      --vaadin-overlay-animation-delay: 0s;
+    }
+  }
+
+  &[closing] {
+    --vaadin-overlay-animation-duration: 0.3s;
+    --vaadin-overlay-animation-delay: 0.3s;
+    --vaadin-overlay-scale-closed: 1.1;
+  }
+
   &::part(overlay) {
     --aura-surface-level: 2;
     background: var(--vaadin-login-overlay-background, var(--vaadin-overlay-background, var(--aura-surface-color)));

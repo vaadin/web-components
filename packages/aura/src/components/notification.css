@@ -1,7 +1,6 @@
 :where(:root),
 :where(:host) {
   --vaadin-notification-border-width: 0px;
-  --vaadin-ease-fluid: cubic-bezier(0.78, 0, 0.22, 1);
   --vaadin-notification-padding: var(--vaadin-padding-m);
 }
 

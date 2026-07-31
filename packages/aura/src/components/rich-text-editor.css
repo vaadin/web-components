@@ -71,3 +71,9 @@ vaadin-rich-text-editor::part(toolbar-button):active {
     --vaadin-rich-text-editor-toolbar-button-text-color: var(--vaadin-text-color);
   }
 }
+
+vaadin-rich-text-editor-popup[closing] {
+  --vaadin-overlay-animation-duration: 100ms;
+  --vaadin-overlay-animation-delay: 60ms;
+  --vaadin-overlay-animation-timing-function: ease-in;
+}
