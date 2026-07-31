@@ -16,13 +16,16 @@ const overlayBase = css`
           for position/sizing/alignment. The actual overlay is the overlay part. */
 
     /* Default position constraints. Themes can override this to adjust the gap between
-          the overlay and the viewport, but must keep the occlusion term on the bottom
-          side, or the overlay extends into the area hidden by the on-screen keyboard. */
-    inset: max(env(safe-area-inset-top, 0px), var(--vaadin-overlay-viewport-inset, 8px))
+          the overlay and the viewport, but must keep the occlusion terms on the vertical
+          sides, or the overlay extends into the area hidden by the on-screen keyboard. */
+    inset: calc(
+        max(env(safe-area-inset-top, 0px), var(--vaadin-overlay-viewport-inset, 8px)) +
+          var(--_vaadin-overlay-viewport-occlusion-top, 0px)
+      )
       max(env(safe-area-inset-right, 0px), var(--vaadin-overlay-viewport-inset, 8px))
       calc(
         max(env(safe-area-inset-bottom, 0px), var(--vaadin-overlay-viewport-bottom)) +
-          var(--_vaadin-overlay-viewport-occlusion, 0px)
+          var(--_vaadin-overlay-viewport-occlusion-bottom, 0px)
       )
       max(env(safe-area-inset-left, 0px), var(--vaadin-overlay-viewport-inset, 8px));
 

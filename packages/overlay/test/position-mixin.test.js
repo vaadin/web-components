@@ -482,9 +482,9 @@ describe('position mixin', () => {
         expect(overlayContent.getBoundingClientRect().bottom).to.be.above(visibleHeight - margin + 1);
       });
 
-      it('should not constrain the overlay when the visual viewport is only shifted', () => {
+      it('should not constrain the bottom when the visual viewport is only shifted', () => {
         // The bottom of the layout viewport is visible, only the top is out of view,
-        // so there is nothing to constrain even though the visual viewport is smaller.
+        // so there is nothing to constrain at the bottom side.
         Object.defineProperty(window.visualViewport, 'offsetTop', {
           configurable: true,
           get: () => KEYBOARD_HEIGHT,
@@ -502,6 +502,32 @@ describe('position mixin', () => {
         visibleHeight = document.documentElement.clientHeight;
         updatePosition();
         expect(overlayContent.getBoundingClientRect().bottom).to.be.closeTo(visibleHeight - margin, 1);
+      });
+
+      describe('flipped to the other side', () => {
+        beforeEach(() => {
+          // The page is shifted up, so that the top of the layout viewport is out of view
+          Object.defineProperty(window.visualViewport, 'offsetTop', {
+            configurable: true,
+            get: () => KEYBOARD_HEIGHT,
+          });
+
+          // Move the target down, so that the overlay flips and grows upwards
+          target.style.top = `${visibleHeight - 30}px`;
+        });
+
+        it('should not extend the overlay above the visible viewport', () => {
+          overlay.limitToVisualViewport = true;
+          updatePosition();
+          expect(overlay.hasAttribute('bottom-aligned')).to.be.true;
+          expect(overlayContent.getBoundingClientRect().top).to.be.at.least(KEYBOARD_HEIGHT + margin - 1);
+        });
+
+        it('should extend the overlay above the visible viewport when not constrained', () => {
+          updatePosition();
+          expect(overlay.hasAttribute('bottom-aligned')).to.be.true;
+          expect(overlayContent.getBoundingClientRect().top).to.be.below(KEYBOARD_HEIGHT + margin - 1);
+        });
       });
     });
 

@@ -49,17 +49,22 @@ function getVisibleViewportHeight() {
 }
 
 /**
- * Returns the height of the area that is not visible to the user at the bottom of the
- * layout viewport, e.g. covered by the on-screen keyboard, measured in the coordinate
+ * Returns the heights of the areas that are not visible to the user above and below the
+ * visual viewport, e.g. covered by the on-screen keyboard, measured in the coordinate
  * space of the layout viewport.
  *
- * Unlike `getVisibleViewportHeight`, this includes the visual viewport offset: iOS Safari
- * shifts the page to reveal the focused field, but leaves the layout viewport in place,
- * so the offset is the distance between the two coordinate spaces.
+ * Unlike `getVisibleViewportHeight`, these take the visual viewport offset into account:
+ * iOS Safari shifts the page to reveal the focused field, but leaves the layout viewport
+ * in place, so the offset is the distance between the two coordinate spaces. The area
+ * above the offset is scrolled out of view, and the one below the visual viewport is
+ * covered by the keyboard.
  */
-function getViewportOcclusionHeight() {
+function getViewportOcclusion() {
   const { height, offsetTop } = window.visualViewport;
-  return Math.max(0, document.documentElement.clientHeight - (height + offsetTop));
+  return {
+    top: Math.max(0, offsetTop),
+    bottom: Math.max(0, document.documentElement.clientHeight - (height + offsetTop)),
+  };
 }
 
 const targetResizeObserver = new ResizeObserver((entries) => {
@@ -324,7 +329,8 @@ export const PositionMixin = (superClass) =>
         right: '',
       });
 
-      this.style.removeProperty('--_vaadin-overlay-viewport-occlusion');
+      this.style.removeProperty('--_vaadin-overlay-viewport-occlusion-top');
+      this.style.removeProperty('--_vaadin-overlay-viewport-occlusion-bottom');
 
       setOverlayStateAttribute(this, 'bottom-aligned', false);
       setOverlayStateAttribute(this, 'top-aligned', false);
@@ -339,9 +345,12 @@ export const PositionMixin = (superClass) =>
      */
     __updateViewportOcclusion() {
       if (this.limitToVisualViewport) {
-        this.style.setProperty('--_vaadin-overlay-viewport-occlusion', `${getViewportOcclusionHeight()}px`);
+        const { top, bottom } = getViewportOcclusion();
+        this.style.setProperty('--_vaadin-overlay-viewport-occlusion-top', `${top}px`);
+        this.style.setProperty('--_vaadin-overlay-viewport-occlusion-bottom', `${bottom}px`);
       } else {
-        this.style.removeProperty('--_vaadin-overlay-viewport-occlusion');
+        this.style.removeProperty('--_vaadin-overlay-viewport-occlusion-top');
+        this.style.removeProperty('--_vaadin-overlay-viewport-occlusion-bottom');
       }
     }
 
