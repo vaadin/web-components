@@ -459,12 +459,40 @@ describe('position mixin', () => {
       expectEdgesAligned(BOTTOM, BOTTOM);
     });
 
-    it('should flip back to default when the visual viewport grows again', () => {
+    it('should keep the alignment when the visual viewport grows again', () => {
       target.style.top = `${targetPositionToFlipOverlay + 3}px`;
       updatePosition();
       expectEdgesAligned(BOTTOM, BOTTOM);
 
       visibleHeight = document.documentElement.clientHeight;
+      updatePosition();
+      expectEdgesAligned(BOTTOM, BOTTOM);
+    });
+
+    it('should keep the alignment on further updates after the visual viewport grows', () => {
+      target.style.top = `${targetPositionToFlipOverlay + 3}px`;
+      updatePosition();
+      expectEdgesAligned(BOTTOM, BOTTOM);
+
+      visibleHeight = document.documentElement.clientHeight;
+      updatePosition();
+
+      // Scrolling the overlay causes further updates, which must not change the side
+      updatePosition();
+      updatePosition();
+      expectEdgesAligned(BOTTOM, BOTTOM);
+    });
+
+    it('should flip back to default when the target moves after the viewport grows', () => {
+      target.style.top = `${targetPositionToFlipOverlay + 3}px`;
+      updatePosition();
+      expectEdgesAligned(BOTTOM, BOTTOM);
+
+      visibleHeight = document.documentElement.clientHeight;
+      updatePosition();
+
+      // Moving the target is not a change of the visible area, so the side is decided again
+      target.style.top = `${targetPositionToFlipOverlay}px`;
       updatePosition();
       expectEdgesAligned(TOP, TOP);
     });

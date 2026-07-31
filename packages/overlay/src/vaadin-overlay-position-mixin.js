@@ -86,6 +86,17 @@ function getViewportOcclusion() {
   };
 }
 
+/**
+ * Returns the space that is available for the overlay on both sides of the target,
+ * in one dimension.
+ */
+function getSpaceForAlignments({ targetRect, viewportSize, margins, noOverlap, propNames }) {
+  return {
+    start: viewportSize - targetRect[noOverlap ? propNames.end : propNames.start] - margins[propNames.end],
+    end: targetRect[noOverlap ? propNames.start : propNames.end] - margins[propNames.start],
+  };
+}
+
 const targetResizeObserver = new ResizeObserver((entries) => {
   setTimeout(() => {
     entries.forEach((entry) => {
@@ -256,6 +267,8 @@ export const PositionMixin = (superClass) =>
         'limitToVisualViewport',
       ];
       if (positionProps.some((prop) => props.has(prop))) {
+        // The properties that changed are inputs of the alignment, so it is decided again
+        this.__resetVerticalAlignment();
         this._updatePosition();
       }
     }
@@ -319,6 +332,10 @@ export const PositionMixin = (superClass) =>
           });
         }
 
+        // Decide the side to open to from scratch, instead of keeping the one
+        // that the overlay used the last time it was open.
+        this.__resetVerticalAlignment();
+
         this._updatePosition();
         // Schedule another position update (to cover virtual keyboard opening for example)
         requestAnimationFrame(() => this._updatePosition());
@@ -350,6 +367,8 @@ export const PositionMixin = (superClass) =>
 
       this.style.removeProperty('--_vaadin-overlay-viewport-occlusion-top');
       this.style.removeProperty('--_vaadin-overlay-viewport-occlusion-bottom');
+
+      this.__resetVerticalAlignment();
 
       setOverlayStateAttribute(this, 'bottom-aligned', false);
       setOverlayStateAttribute(this, 'top-aligned', false);
@@ -451,6 +470,17 @@ export const PositionMixin = (superClass) =>
       );
     }
 
+    /**
+     * Forgets the side that the overlay is aligned to, so that the next position update
+     * decides it from scratch instead of keeping the current one.
+     * @private
+     */
+    __resetVerticalAlignment() {
+      this.__alignedStartVertically = undefined;
+      this.__alignedSpaceVertically = undefined;
+      this.__alignedContentHeight = undefined;
+    }
+
     __shouldAlignStartVertically(targetRect) {
       // Using previous size to fix a case where window resize may cause the overlay to be squeezed
       // smaller than its current space before the fit-calculations.
@@ -459,9 +489,29 @@ export const PositionMixin = (superClass) =>
       this.__oldContentHeight = this.$.overlay.offsetHeight;
 
       const viewportHeight = getVisibleViewportHeight();
+      const space = getSpaceForAlignments({
+        targetRect,
+        viewportSize: viewportHeight,
+        margins: this.__margins,
+        noOverlap: this.noVerticalOverlap,
+        propNames: PROP_NAMES_VERTICAL,
+      });
+
+      // Keep the side that the overlay is on as long as it did not get less space, and
+      // the content did not get taller, than when that side was chosen. Only the space
+      // on the other side depends on the height of the visible area, so closing the
+      // on-screen keyboard would otherwise move the overlay to that side, which happens
+      // while the user scrolls the overlay.
+      if (this.__alignedStartVertically !== undefined) {
+        const currentSpace = this.__alignedStartVertically ? space.start : space.end;
+        if (currentSpace >= this.__alignedSpaceVertically - 1 && contentHeight <= this.__alignedContentHeight + 1) {
+          return this.__alignedStartVertically;
+        }
+      }
+
       const defaultAlignTop = this.verticalAlign === 'top';
 
-      return this.__shouldAlignStart(
+      const alignStart = this.__shouldAlignStart(
         targetRect,
         contentHeight,
         viewportHeight,
@@ -470,13 +520,23 @@ export const PositionMixin = (superClass) =>
         this.noVerticalOverlap,
         PROP_NAMES_VERTICAL,
       );
+
+      this.__alignedStartVertically = alignStart;
+      this.__alignedSpaceVertically = alignStart ? space.start : space.end;
+      this.__alignedContentHeight = contentHeight;
+
+      return alignStart;
     }
 
     // eslint-disable-next-line @typescript-eslint/max-params
     __shouldAlignStart(targetRect, contentSize, viewportSize, margins, defaultAlignStart, noOverlap, propNames) {
-      const spaceForStartAlignment =
-        viewportSize - targetRect[noOverlap ? propNames.end : propNames.start] - margins[propNames.end];
-      const spaceForEndAlignment = targetRect[noOverlap ? propNames.start : propNames.end] - margins[propNames.start];
+      const { start: spaceForStartAlignment, end: spaceForEndAlignment } = getSpaceForAlignments({
+        targetRect,
+        viewportSize,
+        margins,
+        noOverlap,
+        propNames,
+      });
 
       const spaceForDefaultAlignment = defaultAlignStart ? spaceForStartAlignment : spaceForEndAlignment;
       const spaceForOtherAlignment = defaultAlignStart ? spaceForEndAlignment : spaceForStartAlignment;
