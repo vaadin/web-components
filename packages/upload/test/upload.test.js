@@ -964,6 +964,57 @@ describe('upload', () => {
     });
   });
 
+  describe('Custom file list', () => {
+    let clock;
+
+    beforeEach(async () => {
+      // A custom file list does not compute file status strings on its own,
+      // so these tests cover the statuses maintained by the upload mixin for
+      // files added to the list
+      upload = fixtureSync(`<vaadin-upload><div slot="file-list"></div></vaadin-upload>`);
+      upload.target = 'https://foo.com/bar';
+      await nextRender();
+      upload._createXhr = xhrCreator({
+        size: file.size,
+        connectTime: 500,
+        uploadTime: 200,
+        stepTime: 100,
+        serverTime: 500,
+      });
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should set connecting status on the file when upload starts', async () => {
+      addFilesViaInput(upload, [file]);
+      await clock.tickAsync(200);
+      expect(file.status).to.equal('Connecting...');
+    });
+
+    it('should set remaining time status on the file on progress', async () => {
+      addFilesViaInput(upload, [file]);
+      await clock.tickAsync(650);
+      expect(file.status).to.contain('remaining time: ');
+    });
+
+    it('should clear the file status after successful upload', async () => {
+      addFilesViaInput(upload, [file]);
+      await clock.tickAsync(2000);
+      expect(file.complete).to.be.true;
+      expect(file.status).to.equal('');
+    });
+
+    it('should set translated error message on the file on failure', async () => {
+      upload._createXhr = xhrCreator({ size: file.size, serverValidation: () => ({ status: 403 }) });
+      addFilesViaInput(upload, [file]);
+      await clock.tickAsync(100);
+      expect(file.error).to.equal('Upload forbidden');
+    });
+  });
+
   describe('theme', () => {
     it('should propagate theme to file list', async () => {
       upload.setAttribute('theme', 'thumbnails');
