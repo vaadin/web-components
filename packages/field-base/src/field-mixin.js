@@ -75,14 +75,14 @@ export const FieldMixin = (superclass) =>
         this.#onLabelSlotContentChange(event);
       });
 
-      this._errorController = new ErrorController(this);
-      this._errorController.addEventListener('slot-content-changed', (event) => {
-        this.#onErrorSlotContentChange(event);
-      });
-
       this._helperController = new HelperController(this);
       this._helperController.addEventListener('slot-content-changed', (event) => {
         this.#onHelperSlotContentChange(event);
+      });
+
+      this._errorController = new ErrorController(this);
+      this._errorController.addEventListener('slot-content-changed', (event) => {
+        this.#onErrorSlotContentChange(event);
       });
 
       this._fieldAriaController = new FieldAriaController(this);
