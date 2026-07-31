@@ -85,13 +85,14 @@ function getFileStatus(file, i18n) {
     // File upload is stalled
     return i18n.uploading.status.stalled;
   }
+  if (file.uploading && file.progress < 100 && file.total) {
+    // A progress event has arrived, show the progress even when no bytes
+    // have been transferred yet (formatted as unknown remaining time)
+    return formatFileProgress(file, i18n);
+  }
   if (file.uploading && file.indeterminate && !file.held) {
     // File is uploading but progress is indeterminate (connecting or processing)
     return file.progress === 100 ? i18n.uploading.status.processing : i18n.uploading.status.connecting;
-  }
-  if (file.uploading && file.progress < 100 && file.total) {
-    // File is uploading with known progress
-    return formatFileProgress(file, i18n);
   }
   return file.status;
 }

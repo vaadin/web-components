@@ -313,6 +313,15 @@ export class UploadManager extends EventTarget {
     this.#removeFile(file);
   }
 
+  /**
+   * Start uploads for queued files if there is capacity for them.
+   * Internal API for `<vaadin-upload>`, may change at any time.
+   * @protected
+   */
+  _processUploadQueue() {
+    this.#processUploadQueue();
+  }
+
   // ============ Private methods ============
 
   get #acceptRegexp() {

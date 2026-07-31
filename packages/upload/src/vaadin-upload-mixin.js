@@ -487,18 +487,20 @@ export const UploadMixin = (superClass) =>
     }
 
     /**
-     * Create an UploadManager for internal use. Its `method` and
+     * Create an UploadManager for internal use. Its `method`, `headers` and
      * `maxConcurrentUploads` accessors are shadowed with plain properties to
      * skip the manager's validation, since `<vaadin-upload>` has historically
      * accepted any values for these properties: an unsupported method is
-     * passed to the request, and a non-positive maxConcurrentUploads pauses
-     * uploads.
+     * passed to the request, a non-positive maxConcurrentUploads pauses
+     * uploads, and undefined headers (from an invalid JSON string) throw when
+     * the request is configured.
      * @private
      */
     __createManager() {
       const manager = new UploadManager();
       Object.defineProperties(manager, {
         method: { value: manager.method, writable: true },
+        headers: { value: manager.headers, writable: true },
         maxConcurrentUploads: { value: manager.maxConcurrentUploads, writable: true },
       });
       return manager;
@@ -538,7 +540,7 @@ export const UploadMixin = (superClass) =>
     /**
      * Sync `headers` to the manager. The `headers` property supports a JSON
      * string, while the manager only accepts an object, so strings are parsed
-     * before syncing.
+     * before syncing. An invalid JSON string resets the property to undefined.
      * @private
      */
     __syncManagerHeaders(manager) {
@@ -549,6 +551,7 @@ export const UploadMixin = (superClass) =>
         } catch (_) {
           issueWarning(`Failed to parse headers "${headers}". Expected a valid JSON string.`);
           headers = undefined;
+          this.headers = undefined;
         }
       }
       manager.headers = headers;
@@ -601,15 +604,18 @@ export const UploadMixin = (superClass) =>
         this.__updatingFromManager = true;
         this.files = [...files];
         this.__updatingFromManager = false;
-      } else {
-        this.__renderFileList();
       }
+      this.__renderFileList();
     }
 
     /** @private */
     __renderFileList() {
       if (this._fileList && typeof this._fileList.requestContentUpdate === 'function') {
         this._fileList.requestContentUpdate();
+      } else {
+        // A custom file list does not compute file status strings on its own,
+        // so keep them up-to-date here
+        this.files.forEach((file) => updateFileStatus(file, this.__effectiveI18n));
       }
     }
 
@@ -680,7 +686,12 @@ export const UploadMixin = (superClass) =>
       if (!this.__externalManager) {
         const manager = this.__createManager();
         manager._createXhr = this._manager._createXhr;
-        manager.addEventListener('files-changed', () => this.__updateExternalFileStatuses());
+        manager.addEventListener('files-changed', () => {
+          this.__updateExternalFileStatuses();
+          // The file list has historically been rendered on upload state
+          // changes even for files that it does not display
+          this.__renderFileList();
+        });
         this.__addUploadEventListeners(manager);
         this.__externalManager = manager;
         this.__applyManagerConfig(manager);
@@ -723,7 +734,9 @@ export const UploadMixin = (superClass) =>
 
         const fileIndex = this.files.indexOf(event.detail.file);
         if (fileIndex >= 0) {
-          this._updateFocus(fileIndex);
+          // The file list does not change on retry, so the file can be
+          // focused synchronously
+          this.__focusFile(fileIndex);
         }
       }
     }
@@ -749,6 +762,10 @@ export const UploadMixin = (superClass) =>
         file.error = this.__effectiveI18n.uploading.error[file.errorKey] || file.errorKey;
       }
       this.__redispatchEvent(event);
+      // The manager stops tracking upload progress once the upload has
+      // failed, so clear the stale status and progress state here
+      file.status = undefined;
+      file.indeterminate = undefined;
     }
 
     // ============ UI updates ============
@@ -856,7 +873,12 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _onFileAbort(event) {
-      this.__managerFor(event.detail.file).abortUpload(event.detail.file);
+      const manager = this.__managerFor(event.detail.file);
+      manager.abortUpload(event.detail.file);
+      // The manager does not process its upload queue when a file that has
+      // not started uploading is removed, so removing a queued file would
+      // not free capacity for other queued files without this
+      manager._processUploadQueue();
     }
 
     // ============ Accessibility ============
@@ -885,19 +907,24 @@ export const UploadMixin = (superClass) =>
     _updateFocus(fileIndex) {
       // Use requestAnimationFrame to ensure the file list has been updated
       requestAnimationFrame(() => {
-        if (this.files.length === 0) {
-          this._addButton.focus({ focusVisible: isKeyboardActive() });
-          return;
-        }
-        // If the removed file was at the end, focus the new last file
-        const lastFileRemoved = fileIndex >= this.files.length;
-        if (lastFileRemoved) {
-          fileIndex = this.files.length - 1;
-        }
-        if (this._fileList && this._fileList.children[fileIndex]) {
-          this._fileList.children[fileIndex].firstElementChild.focus({ focusVisible: isKeyboardActive() });
-        }
+        this.__focusFile(fileIndex);
       });
+    }
+
+    /** @private */
+    __focusFile(fileIndex) {
+      if (this.files.length === 0) {
+        this._addButton.focus({ focusVisible: isKeyboardActive() });
+        return;
+      }
+      // If the removed file was at the end, focus the new last file
+      const lastFileRemoved = fileIndex >= this.files.length;
+      if (lastFileRemoved) {
+        fileIndex = this.files.length - 1;
+      }
+      if (this._fileList && this._fileList.children[fileIndex]) {
+        this._fileList.children[fileIndex].firstElementChild.focus({ focusVisible: isKeyboardActive() });
+      }
     }
 
     /**
