@@ -77,6 +77,8 @@ function getViewportOcclusion() {
     return { top: 0, bottom: 0 };
   }
 
+  // Measured against `clientHeight` rather than `getLayoutViewportHeight()`: iOS Safari
+  // reduces `innerHeight` to the visible area, which would cancel out the occlusion.
   const { height, offsetTop } = window.visualViewport;
   return {
     top: Math.max(0, offsetTop),

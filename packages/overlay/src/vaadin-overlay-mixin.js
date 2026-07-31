@@ -234,8 +234,14 @@ export const OverlayMixin = (superClass) =>
 
     /** @private */
     _detectIosNavbar() {
-      /* c8 ignore next 15 */
+      /* c8 ignore next 21 */
       if (!this.opened) {
+        return;
+      }
+
+      // Overlays that keep out of the area hidden by the visual viewport already reserve
+      // the space taken by the navbar, so reserving it here as well would double it.
+      if (this.limitToVisualViewport) {
         return;
       }
 
