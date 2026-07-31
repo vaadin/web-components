@@ -9,8 +9,9 @@ import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { DEFAULT_I18N as FILE_LIST_DEFAULT_I18N } from './vaadin-upload-file-list-mixin.js';
-import { getFilesFromDropEvent } from './vaadin-upload-helpers.js';
+import { getFilesFromDropEvent, updateFileStatus } from './vaadin-upload-helpers.js';
 import { UploadManager } from './vaadin-upload-manager.js';
 
 export const DEFAULT_I18N = {
@@ -24,6 +25,22 @@ export const DEFAULT_I18N = {
     many: 'Upload Files...',
   },
 };
+
+// Configuration properties that are mirrored to the internal upload managers
+const MANAGER_CONFIG_PROPS = [
+  'target',
+  'method',
+  'headers',
+  'timeout',
+  'maxFiles',
+  'maxFileSize',
+  'accept',
+  'noAuto',
+  'withCredentials',
+  'uploadFormat',
+  'maxConcurrentUploads',
+  'formDataName',
+];
 
 class AddButtonController extends SlotController {
   constructor(host) {
@@ -327,7 +344,6 @@ export const UploadMixin = (superClass) =>
         '__updateAddButton(_addButton, maxFiles, __effectiveI18n, maxFilesReached, disabled)',
         '__updateDropLabel(_dropLabel, maxFiles, __effectiveI18n)',
         '__updateFileList(_fileList, files, __effectiveI18n, disabled, _theme)',
-        '__syncManagerConfig(target, method, headers, timeout, maxFiles, maxFileSize, accept, noAuto, withCredentials, uploadFormat, maxConcurrentUploads, formDataName)',
       ];
     }
 
@@ -406,16 +422,7 @@ export const UploadMixin = (superClass) =>
       super();
 
       // Create the internal upload manager
-      this._manager = new UploadManager();
-
-      // Bind manager event handlers
-      this.__onManagerFilesChanged = this.__onManagerFilesChanged.bind(this);
-      this.__onManagerMaxFilesReachedChanged = this.__onManagerMaxFilesReachedChanged.bind(this);
-      this.__onManagerFileReject = this.__onManagerFileReject.bind(this);
-      this.__onManagerFileRemove = this.__onManagerFileRemove.bind(this);
-      this.__onManagerUploadSuccess = this.__onManagerUploadSuccess.bind(this);
-      this.__onManagerUploadError = this.__onManagerUploadError.bind(this);
-      this.__redispatchEvent = this.__redispatchEvent.bind(this);
+      this._manager = this.__createManager();
     }
 
     /** @protected */
@@ -423,19 +430,11 @@ export const UploadMixin = (superClass) =>
       super.ready();
 
       // Set up manager event listeners
-      this._manager.addEventListener('files-changed', this.__onManagerFilesChanged);
-      this._manager.addEventListener('max-files-reached-changed', this.__onManagerMaxFilesReachedChanged);
-      this._manager.addEventListener('file-reject', this.__onManagerFileReject);
-      this._manager.addEventListener('file-remove', this.__onManagerFileRemove);
-      this._manager.addEventListener('upload-before', this.__redispatchEvent);
-      this._manager.addEventListener('upload-request', this.__redispatchEvent);
-      this._manager.addEventListener('upload-start', this.__redispatchEvent);
-      this._manager.addEventListener('upload-progress', this.__redispatchEvent);
-      this._manager.addEventListener('upload-response', this.__redispatchEvent);
-      this._manager.addEventListener('upload-success', this.__onManagerUploadSuccess);
-      this._manager.addEventListener('upload-error', this.__onManagerUploadError);
-      this._manager.addEventListener('upload-retry', this.__redispatchEvent);
-      this._manager.addEventListener('upload-abort', this.__redispatchEvent);
+      this._manager.addEventListener('files-changed', (e) => this.__onManagerFilesChanged(e));
+      this._manager.addEventListener('max-files-reached-changed', (e) => this.__onManagerMaxFilesReachedChanged(e));
+      this._manager.addEventListener('file-reject', (e) => this.__onManagerFileReject(e));
+      this._manager.addEventListener('file-remove', (e) => this.__onManagerFileRemove(e));
+      this.__addUploadEventListeners(this._manager);
 
       this.addEventListener('dragover', this._onDragover.bind(this));
       this.addEventListener('dragleave', this._onDragleave.bind(this));
@@ -465,37 +464,94 @@ export const UploadMixin = (superClass) =>
       this.addController(new SlotController(this, 'drop-label-icon', 'vaadin-upload-icon'));
     }
 
-    /** @private */
-    // eslint-disable-next-line @typescript-eslint/max-params
-    __syncManagerConfig(
-      _target,
-      _method,
-      _headers,
-      _timeout,
-      _maxFiles,
-      _maxFileSize,
-      _accept,
-      _noAuto,
-      _withCredentials,
-      _uploadFormat,
-      _maxConcurrentUploads,
-      _formDataName,
-    ) {
-      if (!this._manager) {
-        return;
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (MANAGER_CONFIG_PROPS.some((prop) => props.has(prop))) {
+        this.__syncManagerConfig();
       }
-      this._manager.target = this.target;
-      this._manager.method = this.method;
-      this._manager.headers = this.headers;
-      this._manager.timeout = this.timeout;
-      this._manager.maxFiles = this.maxFiles;
+    }
+
+    /**
+     * Add listeners for the upload lifecycle events of the given manager.
+     * @private
+     */
+    __addUploadEventListeners(manager) {
+      manager.addEventListener('upload-success', (e) => this.__onManagerUploadSuccess(e));
+      manager.addEventListener('upload-error', (e) => this.__onManagerUploadError(e));
+      manager.addEventListener('upload-retry', (e) => this.__onManagerUploadRetry(e));
+      ['upload-before', 'upload-request', 'upload-start', 'upload-progress', 'upload-response', 'upload-abort'].forEach(
+        (type) => manager.addEventListener(type, (e) => this.__redispatchEvent(e)),
+      );
+    }
+
+    /**
+     * Create an UploadManager for internal use. Its `method` and
+     * `maxConcurrentUploads` accessors are shadowed with plain properties to
+     * skip the manager's validation, since `<vaadin-upload>` has historically
+     * accepted any values for these properties: an unsupported method is
+     * passed to the request, and a non-positive maxConcurrentUploads pauses
+     * uploads.
+     * @private
+     */
+    __createManager() {
+      const manager = new UploadManager();
+      Object.defineProperties(manager, {
+        method: { value: manager.method, writable: true },
+        maxConcurrentUploads: { value: manager.maxConcurrentUploads, writable: true },
+      });
+      return manager;
+    }
+
+    /** @private */
+    __syncManagerConfig() {
+      this.__applyManagerConfig(this._manager);
+      // Validation properties only apply to files added to the list.
+      // The manager does not accept negative maxFiles, which the component
+      // treats as no limit.
+      this._manager.maxFiles = this.maxFiles < 0 ? Infinity : this.maxFiles;
       this._manager.maxFileSize = this.maxFileSize;
       this._manager.accept = this.accept;
-      this._manager.noAuto = this.noAuto;
-      this._manager.withCredentials = this.withCredentials;
-      this._manager.uploadFormat = this.uploadFormat;
-      this._manager.maxConcurrentUploads = this.maxConcurrentUploads;
-      this._manager.formDataName = this.formDataName;
+
+      if (this.__externalManager) {
+        this.__applyManagerConfig(this.__externalManager);
+      }
+    }
+
+    /**
+     * Apply the configuration shared by the internal upload managers.
+     * @private
+     */
+    __applyManagerConfig(manager) {
+      manager.target = this.target;
+      manager.method = this.method;
+      this.__syncManagerHeaders(manager);
+      manager.timeout = this.timeout;
+      manager.noAuto = this.noAuto;
+      manager.withCredentials = this.withCredentials;
+      manager.uploadFormat = this.uploadFormat;
+      manager.maxConcurrentUploads = this.maxConcurrentUploads;
+      manager.formDataName = this.formDataName;
+    }
+
+    /**
+     * Sync `headers` to the manager. The `headers` property supports a JSON
+     * string, while the manager only accepts an object, so strings are parsed
+     * before syncing.
+     * @private
+     */
+    __syncManagerHeaders(manager) {
+      let headers = this.headers;
+      if (typeof headers === 'string') {
+        try {
+          headers = JSON.parse(headers);
+        } catch (_) {
+          issueWarning(`Failed to parse headers "${headers}". Expected a valid JSON string.`);
+          headers = undefined;
+        }
+      }
+      manager.headers = headers;
     }
 
     /** @private */
@@ -505,9 +561,27 @@ export const UploadMixin = (superClass) =>
       if (this._manager && !this.__updatingFromManager) {
         // Use flag to prevent the manager's files-changed event from re-syncing
         this.__syncingToManager = true;
-        this._manager.files = files;
+        this.__setManagerFiles(files);
         this.__syncingToManager = false;
+        // Sync `maxFilesReached` in case it changed while its updates were suppressed
+        this._setMaxFilesReached(this._manager.maxFilesReached);
       }
+    }
+
+    /**
+     * Assign files to the manager without validation. The manager's files
+     * setter validates new files against the configured constraints, while
+     * files assigned to the `files` property directly (e.g. to show previously
+     * uploaded files) must be accepted as-is.
+     * @private
+     */
+    __setManagerFiles(files) {
+      const manager = this._manager;
+      const { maxFiles, maxFileSize, accept } = manager;
+      // Temporarily lift the constraints so that the setter accepts all files
+      Object.assign(manager, { maxFiles: Infinity, maxFileSize: Infinity, accept: '' });
+      manager.files = files;
+      Object.assign(manager, { maxFiles, maxFileSize, accept });
     }
 
     // ============ Manager event handlers ============
@@ -518,16 +592,33 @@ export const UploadMixin = (superClass) =>
       if (this.__syncingToManager) {
         return;
       }
-      // Update files from manager
       const files = event.detail.value;
-      // Use flag to prevent recursive sync back to manager
-      this.__updatingFromManager = true;
-      this.files = [...files];
-      this.__updatingFromManager = false;
+      // Only update the `files` property when files are added or removed, so that
+      // `files-changed` is not fired for upload state updates on individual files
+      const filesChanged = files.length !== this.files.length || files.some((file, i) => file !== this.files[i]);
+      if (filesChanged) {
+        // Use flag to prevent recursive sync back to manager
+        this.__updatingFromManager = true;
+        this.files = [...files];
+        this.__updatingFromManager = false;
+      } else {
+        this.__renderFileList();
+      }
+    }
+
+    /** @private */
+    __renderFileList() {
+      if (this._fileList && typeof this._fileList.requestContentUpdate === 'function') {
+        this._fileList.requestContentUpdate();
+      }
     }
 
     /** @private */
     __onManagerMaxFilesReachedChanged(event) {
+      // Ignore transient changes caused by assigning files to the manager
+      if (this.__syncingToManager) {
+        return;
+      }
       this._setMaxFilesReached(event.detail.value);
     }
 
@@ -559,6 +650,12 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     __redispatchEvent(event) {
+      const { file } = event.detail;
+      if (file && this.__isExternalFile(file)) {
+        // Files that are not rendered by the file list still need up-to-date
+        // status strings when their upload events are dispatched
+        updateFileStatus(file, this.__effectiveI18n);
+      }
       const dispatched = this.dispatchEvent(
         new CustomEvent(event.type, {
           detail: event.detail,
@@ -568,6 +665,42 @@ export const UploadMixin = (superClass) =>
       if (event.cancelable && !dispatched) {
         event.preventDefault();
       }
+    }
+
+    // ============ External uploads ============
+
+    /**
+     * Files passed to `uploadFiles` that are not in the `files` list are
+     * uploaded without being added to it. They are handled by a separate
+     * manager so that they never affect the `files` list, its validation,
+     * or the `maxFilesReached` state.
+     * @private
+     */
+    __getExternalManager() {
+      if (!this.__externalManager) {
+        const manager = this.__createManager();
+        manager._createXhr = this._manager._createXhr;
+        manager.addEventListener('files-changed', () => this.__updateExternalFileStatuses());
+        this.__addUploadEventListeners(manager);
+        this.__externalManager = manager;
+        this.__applyManagerConfig(manager);
+      }
+      return this.__externalManager;
+    }
+
+    /** @private */
+    __isExternalFile(file) {
+      return !!this.__externalManager && this.__externalManager.files.includes(file);
+    }
+
+    /** @private */
+    __managerFor(file) {
+      return this.__isExternalFile(file) ? this.__externalManager : this._manager;
+    }
+
+    /** @private */
+    __updateExternalFileStatuses() {
+      this.__externalManager.files.forEach((file) => updateFileStatus(file, this.__effectiveI18n));
     }
 
     /** @private */
@@ -580,6 +713,32 @@ export const UploadMixin = (superClass) =>
         return;
       }
       this.__redispatchEvent(event);
+    }
+
+    /** @private */
+    __onManagerUploadRetry(event) {
+      this.__redispatchEvent(event);
+      if (!event.defaultPrevented) {
+        this.__clearFileError(event.detail.file);
+
+        const fileIndex = this.files.indexOf(event.detail.file);
+        if (fileIndex >= 0) {
+          this._updateFocus(fileIndex);
+        }
+      }
+    }
+
+    /**
+     * Clear the error from a previous upload attempt when the upload of the
+     * file is about to be restarted. The manager resets its own error state
+     * (`errorKey`) when queueing a file, but not the translated `error` message
+     * that this mixin assigns.
+     * @private
+     */
+    __clearFileError(file) {
+      if (!file.complete && !file.uploading) {
+        file.error = false;
+      }
     }
 
     /** @private */
@@ -651,6 +810,7 @@ export const UploadMixin = (superClass) =>
         this._dragover = this._dragoverValid = false;
 
         const files = await getFilesFromDropEvent(event);
+        this.__syncManagerConfig();
         this._manager.addFiles(files);
       }
     }
@@ -685,18 +845,18 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _onFileStart(event) {
-      this._manager.uploadFiles(event.detail.file);
+      this.uploadFiles(event.detail.file);
     }
 
     /** @private */
     _onFileRetry(event) {
-      this._manager.retryUpload(event.detail.file);
-      this._updateFocus(this.files.indexOf(event.detail.file));
+      this.__syncManagerConfig();
+      this.__managerFor(event.detail.file).retryUpload(event.detail.file);
     }
 
     /** @private */
     _onFileAbort(event) {
-      this._manager.abortUpload(event.detail.file);
+      this.__managerFor(event.detail.file).abortUpload(event.detail.file);
     }
 
     // ============ Accessibility ============
@@ -745,14 +905,14 @@ export const UploadMixin = (superClass) =>
      * @private
      */
     get _createXhr() {
-      return this.__createXhrOverride || this._manager._createXhr;
+      return this._manager._createXhr;
     }
 
     set _createXhr(value) {
-      // Store the original value for spy assertions in tests
-      this.__createXhrOverride = value;
-      // Set on manager - the manager will call this function
       this._manager._createXhr = value;
+      if (this.__externalManager) {
+        this.__externalManager._createXhr = value;
+      }
     }
 
     /**
@@ -761,7 +921,7 @@ export const UploadMixin = (superClass) =>
      * @param {!UploadFile | !Array<!UploadFile>=} files - Files being uploaded. Defaults to all outstanding files
      */
     uploadFiles(files = this.files) {
-      // Ensure manager config is synced before adding files
+      // Ensure manager config is synced before uploading files
       this.__syncManagerConfig();
 
       // Convert to array if single file
@@ -769,15 +929,20 @@ export const UploadMixin = (superClass) =>
         files = [files];
       }
 
-      // Add files that aren't already in the manager (without auto-upload)
-      const managerFiles = this._manager.files;
-      const newFiles = files.filter((file) => !managerFiles.includes(file));
-      if (newFiles.length > 0) {
-        // Temporarily enable noAuto to prevent auto-upload when adding
-        const wasNoAuto = this._manager.noAuto;
-        this._manager.noAuto = true;
-        this._manager.addFiles(newFiles);
-        this._manager.noAuto = wasNoAuto;
+      files.forEach((file) => this.__clearFileError(file));
+
+      // Files that are not in the `files` list are uploaded by a separate
+      // manager without being added to the list
+      const externalFiles = files.filter((file) => !this.files.includes(file));
+      if (externalFiles.length > 0) {
+        const externalManager = this.__getExternalManager();
+        const externalManagerFiles = externalManager.files;
+        const newFiles = externalFiles.filter((file) => !externalManagerFiles.includes(file));
+        newFiles.forEach((file) => {
+          file.formDataName ??= this.formDataName;
+        });
+        externalManager.files = [...externalManagerFiles, ...newFiles];
+        externalManager.uploadFiles(externalFiles);
       }
 
       this._manager.uploadFiles(files);
