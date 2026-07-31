@@ -310,11 +310,8 @@ describe('upload', () => {
 
       it('should reset headers set as an invalid JSON string', () => {
         upload.headers = 'invalid json';
-        try {
-          upload.uploadFiles(file);
-        } catch (_) {
-          // Reset headers currently cause a TypeError when configuring the request
-        }
+        // Configuring the request currently throws after headers are reset
+        expect(() => upload.uploadFiles(file)).to.throw(TypeError);
         expect(upload.headers).to.be.undefined;
       });
 
@@ -436,13 +433,12 @@ describe('upload', () => {
 
       it('should render the file list when the upload starts', () => {
         const renderSpy = sinon.spy(upload._fileList, 'requestContentUpdate');
-        let countAtStart;
         upload.addEventListener('upload-start', () => {
-          countAtStart = renderSpy.callCount;
+          renderSpy.resetHistory();
         });
         upload.uploadFiles(file);
-        // One render right after the upload-start event
-        expect(renderSpy.callCount).to.equal(countAtStart + 1);
+        // Rendered once right after the upload-start event
+        expect(renderSpy).to.be.calledOnce;
       });
     });
 

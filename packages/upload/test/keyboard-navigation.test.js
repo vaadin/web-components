@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-upload.js';
 import { createFile, xhrCreator } from './helpers.js';
 
@@ -123,13 +124,27 @@ describe('keyboard navigation', () => {
       expect(document.activeElement.file.name).to.equal('file-0');
     });
 
-    it('should focus the file when retrying its upload', () => {
-      uploadElement._createXhr = xhrCreator();
-      const file = uploadElement.files[0];
+    describe('retry', () => {
+      let clock;
 
-      uploadElement.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
+      beforeEach(() => {
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
+      });
 
-      expect(document.activeElement.file).to.equal(file);
+      afterEach(() => {
+        clock.restore();
+      });
+
+      it('should focus the file when retrying its upload', async () => {
+        uploadElement._createXhr = xhrCreator();
+        const file = uploadElement.files[0];
+
+        uploadElement.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
+        expect(document.activeElement.file).to.equal(file);
+
+        // Run the retried upload to completion so that no timers leak
+        await clock.tickAsync(500);
+      });
     });
 
     it('should not change focus after upload', async () => {

@@ -64,8 +64,8 @@ describe('properties', () => {
     });
 
     it('should not be in dragover state by default', () => {
-      expect(upload._dragover).to.be.false;
-      expect(upload._dragoverValid).to.be.false;
+      expect(upload.hasAttribute('dragover')).to.be.false;
+      expect(upload.hasAttribute('dragover-valid')).to.be.false;
     });
 
     it('should not have max-files-reached attribute by default', () => {
