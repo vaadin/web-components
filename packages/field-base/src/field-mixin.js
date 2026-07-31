@@ -42,7 +42,8 @@ export const FieldMixin = (superclass) =>
         },
 
         /**
-         * String used to label the component to screen reader users.
+         * String used to label the component for screen reader users.
+         *
          * @attr {string} accessible-name
          */
         accessibleName: {
@@ -50,10 +51,22 @@ export const FieldMixin = (superclass) =>
         },
 
         /**
-         * Id of the element used as label of the component to screen reader users.
+         * A space-separated list of IDs referencing the elements that
+         * label the component for screen reader users.
+         *
          * @attr {string} accessible-name-ref
          */
         accessibleNameRef: {
+          type: String,
+        },
+
+        /**
+         * A space-separated list of IDs referencing the elements that
+         * describe the component for screen reader users.
+         *
+         * @attr {string} accessible-description-ref
+         */
+        accessibleDescriptionRef: {
           type: String,
         },
       };
@@ -135,6 +148,10 @@ export const FieldMixin = (superclass) =>
       if (props.has('accessibleName') || props.has('accessibleNameRef')) {
         this.__updateFieldAriaControllerLabelledBy();
       }
+
+      if (props.has('accessibleDescriptionRef')) {
+        this.__updateFieldAriaControllerDescribedBy();
+      }
     }
 
     /** @private */
@@ -155,6 +172,15 @@ export const FieldMixin = (superclass) =>
       }
 
       this._fieldAriaController.setLabelledBy(id);
+    }
+
+    /** @private */
+    __updateFieldAriaControllerDescribedBy() {
+      if (this.accessibleDescriptionRef) {
+        this._fieldAriaController.setDescribedBy(this.accessibleDescriptionRef);
+      } else {
+        this._fieldAriaController.setDescribedBy(null);
+      }
     }
 
     #onLabelSlotContentChange(_event) {

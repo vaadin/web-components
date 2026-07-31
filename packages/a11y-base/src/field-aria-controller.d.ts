@@ -43,6 +43,14 @@ export class FieldAriaController {
   setLabelledBy(labelledBy: string | null): void;
 
   /**
+   * Links the target element to one or more elements via the `aria-describedby` attribute.
+   *
+   * @param describedBy the space-delimited list of IDs,
+   * or `null` to remove the previously linked IDs
+   */
+  setDescribedBy(describedBy: string | null): void;
+
+  /**
    * Links the target element to a slotted error element via the `aria-describedby` attribute.
    *
    * Pass the ID of the error element, or `null` to remove the previously linked ID.
