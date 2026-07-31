@@ -135,7 +135,7 @@
 
   /* Invalid */
   :host([invalid]) {
-    background: var(--_invalid-background);
+    --vaadin-input-field-background: var(--_invalid-background);
   }
 
   :host([invalid]:not([readonly]))::after {

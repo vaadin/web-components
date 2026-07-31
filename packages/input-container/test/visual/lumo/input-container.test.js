@@ -59,6 +59,33 @@ describe('input-container', () => {
         element.invalid = true;
         await visualDiff(div, `${initialState}-readonly-invalid`);
       });
+
+      it('disabled invalid', async () => {
+        element.disabled = true;
+        element.invalid = true;
+        await visualDiff(div, `${initialState}-disabled-invalid`);
+      });
+
+      // The default Lumo backgrounds are too subtle for the screenshot diff to
+      // detect, so the styled tests below use opaque colors to verify that the
+      // readonly and disabled backgrounds take precedence over the invalid one.
+      it('styled readonly invalid', async () => {
+        div.style.setProperty('--vaadin-input-field-invalid-background', 'red');
+
+        element.readonly = true;
+        element.invalid = true;
+        await visualDiff(div, `${initialState}-styled-readonly-invalid`);
+      });
+
+      it('styled disabled invalid', async () => {
+        div.style.setProperty('--vaadin-input-field-invalid-background', 'red');
+        div.style.setProperty('--vaadin-input-field-disabled-background', 'black');
+        div.style.setProperty('--vaadin-input-field-disabled-value-color', 'white');
+
+        element.disabled = true;
+        element.invalid = true;
+        await visualDiff(div, `${initialState}-styled-disabled-invalid`);
+      });
     });
   });
 
