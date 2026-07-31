@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-upload.js';
-import { createFile } from './helpers.js';
+import { createFile, xhrCreator } from './helpers.js';
 
 async function repeatTab(times) {
   for (let i = 0; i < times; i++) {
@@ -121,6 +121,15 @@ describe('keyboard navigation', () => {
       await nextFrame();
 
       expect(document.activeElement.file.name).to.equal('file-0');
+    });
+
+    it('should focus the file when retrying its upload', () => {
+      uploadElement._createXhr = xhrCreator();
+      const file = uploadElement.files[0];
+
+      uploadElement.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
+
+      expect(document.activeElement.file).to.equal(file);
     });
 
     it('should not change focus after upload', async () => {

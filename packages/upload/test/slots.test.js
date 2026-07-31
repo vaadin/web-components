@@ -89,6 +89,17 @@ describe('slots', () => {
         });
 
         runAddButtonTests('default');
+
+        it('should stop button click event from propagating to the host', () => {
+          const clickSpy = sinon.spy();
+          upload.addEventListener('click', clickSpy);
+
+          // Stub the file input click method so that only the button
+          // click event can possibly propagate to the host
+          sinon.stub(input, 'click');
+          click(addButton);
+          expect(clickSpy).to.not.be.called;
+        });
       });
     });
 
@@ -138,6 +149,12 @@ describe('slots', () => {
 
         runAddButtonTests('custom');
       });
+    });
+  });
+
+  describe('drop label icon', () => {
+    it('should create default drop label icon element', () => {
+      expect(upload.querySelector('vaadin-upload-icon[slot="drop-label-icon"]')).to.be.ok;
     });
   });
 

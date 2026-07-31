@@ -47,6 +47,16 @@ describe('file list', () => {
       expect(getFileListItems(upload).length).to.equal(0);
     });
 
+    it('should propagate disabled to the file list', async () => {
+      upload.disabled = true;
+      await nextFrame();
+      expect(upload._fileList.disabled).to.be.true;
+
+      upload.disabled = false;
+      await nextFrame();
+      expect(upload._fileList.disabled).to.be.false;
+    });
+
     it('should not overflow content', async () => {
       upload.style.width = '180px';
       upload.files = createFiles(1);

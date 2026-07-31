@@ -280,6 +280,170 @@ describe('upload', () => {
         });
         upload.uploadFiles(file);
       });
+
+      it('should propagate timeout to the xhr', (done) => {
+        upload.timeout = 5000;
+        upload.addEventListener('upload-request', (e) => {
+          expect(e.detail.xhr.timeout).to.equal(5000);
+          done();
+        });
+        upload.uploadFiles(file);
+      });
+
+      it('should set request headers from the headers object', (done) => {
+        upload.headers = { 'X-Foo': 'Bar' };
+        upload.addEventListener('upload-request', (e) => {
+          expect(e.detail.xhr.getRequestHeader('X-Foo')).to.equal('Bar');
+          done();
+        });
+        upload.uploadFiles(file);
+      });
+
+      it('should parse headers set as a JSON string', (done) => {
+        upload.headers = '{"X-Foo": "Bar"}';
+        upload.addEventListener('upload-request', (e) => {
+          expect(e.detail.xhr.getRequestHeader('X-Foo')).to.equal('Bar');
+          done();
+        });
+        upload.uploadFiles(file);
+      });
+
+      it('should reset headers set as an invalid JSON string', () => {
+        upload.headers = 'invalid json';
+        try {
+          upload.uploadFiles(file);
+        } catch (_) {
+          // Reset headers currently cause a TypeError when configuring the request
+        }
+        expect(upload.headers).to.be.undefined;
+      });
+
+      it('should fire a cancelable upload-request event', () => {
+        const spy = sinon.spy();
+        upload.addEventListener('upload-request', spy);
+        upload.uploadFiles(file);
+        expect(spy).to.be.calledOnce;
+        expect(spy.firstCall.args[0].cancelable).to.be.true;
+      });
+
+      it('should fire a cancelable upload-response event', async () => {
+        const spy = sinon.spy();
+        upload.addEventListener('upload-response', spy);
+        upload.uploadFiles(file);
+        await clock.tickAsync(400);
+        expect(spy).to.be.calledOnce;
+        expect(spy.firstCall.args[0].cancelable).to.be.true;
+      });
+
+      it('should not complete file if a `upload-response` listener prevents default', async () => {
+        upload.addEventListener('upload-response', (e) => e.preventDefault());
+        const successSpy = sinon.spy();
+        upload.addEventListener('upload-success', successSpy);
+
+        upload.uploadFiles(file);
+        await clock.tickAsync(400);
+
+        expect(successSpy).to.not.be.called;
+        expect(file.complete).to.not.be.ok;
+      });
+
+      it('should fire a cancelable upload-retry event with file and xhr in detail', async () => {
+        upload.uploadFiles(file);
+        await clock.tickAsync(50);
+        const xhr = file.xhr;
+
+        const spy = sinon.spy();
+        upload.addEventListener('upload-retry', spy);
+        upload.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
+
+        expect(spy).to.be.calledOnce;
+        const e = spy.firstCall.args[0];
+        expect(e.cancelable).to.be.true;
+        expect(e.detail.file).to.equal(file);
+        expect(e.detail.xhr).to.equal(xhr);
+      });
+
+      it('should fire a cancelable upload-abort event with file and xhr in detail', async () => {
+        upload.uploadFiles(file);
+        await clock.tickAsync(50);
+        const xhr = file.xhr;
+
+        const spy = sinon.spy();
+        upload.addEventListener('upload-abort', spy);
+        upload.dispatchEvent(new CustomEvent('file-abort', { detail: { file } }));
+
+        expect(spy).to.be.calledOnce;
+        const e = spy.firstCall.args[0];
+        expect(e.cancelable).to.be.true;
+        expect(e.detail.file).to.equal(file);
+        expect(e.detail.xhr).to.equal(xhr);
+      });
+
+      it('should abort the xhr when aborting a file', async () => {
+        upload.uploadFiles(file);
+        await clock.tickAsync(50);
+
+        const abortSpy = sinon.spy(file.xhr, 'abort');
+        upload.dispatchEvent(new CustomEvent('file-abort', { detail: { file } }));
+        expect(abortSpy).to.be.calledOnce;
+      });
+
+      it('should not complete or fire upload-success for an aborted file', async () => {
+        const successSpy = sinon.spy();
+        upload.addEventListener('upload-success', successSpy);
+
+        upload.uploadFiles(file);
+        await clock.tickAsync(50);
+        upload.dispatchEvent(new CustomEvent('file-abort', { detail: { file } }));
+        await clock.tickAsync(400);
+
+        expect(successSpy).to.not.be.called;
+        expect(file.complete).to.not.be.ok;
+      });
+
+      it('should reset file status after successful upload', async () => {
+        upload.uploadFiles(file);
+        await clock.tickAsync(400);
+        expect(file.complete).to.be.true;
+        expect(file.status).to.equal('');
+      });
+
+      it('should set loadedStr to totalStr when upload progress reaches 100%', async () => {
+        upload.uploadFiles(file);
+        await clock.tickAsync(210);
+        expect(file.loadedStr).to.equal('100 kB');
+        expect(file.loadedStr).to.equal(file.totalStr);
+      });
+
+      it('should clear error and completion flags when retrying a failed upload', async () => {
+        upload._createXhr = xhrCreator({ size: file.size, serverValidation: () => ({ status: 500 }) });
+        upload.uploadFiles(file);
+        await clock.tickAsync(100);
+        expect(file.error).to.be.ok;
+
+        upload.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
+        expect(file.error).to.be.false;
+        expect(file.complete).to.be.false;
+        expect(file.abort).to.be.false;
+      });
+
+      it('should render the file list when a file is queued', () => {
+        const renderSpy = sinon.spy(upload._fileList, 'requestContentUpdate');
+        upload.addEventListener('upload-request', (e) => e.preventDefault());
+        upload.uploadFiles(file);
+        expect(renderSpy).to.be.called;
+      });
+
+      it('should render the file list when the upload starts', () => {
+        const renderSpy = sinon.spy(upload._fileList, 'requestContentUpdate');
+        let countAtStart;
+        upload.addEventListener('upload-start', () => {
+          countAtStart = renderSpy.callCount;
+        });
+        upload.uploadFiles(file);
+        // One render right after the upload-start event
+        expect(renderSpy.callCount).to.equal(countAtStart + 1);
+      });
     });
 
     describe('Response Status', () => {
@@ -398,6 +562,75 @@ describe('upload', () => {
       await clock.tickAsync(2200);
       expect(file.status).to.be.equal(upload.i18n.uploading.status.stalled);
     });
+
+    it('should not be stalled when progress updates within 2 sec.', async () => {
+      upload._createXhr = xhrCreator({ size: file.size, uploadTime: 6000, stepTime: 1500 });
+      upload.uploadFiles(file);
+      await clock.tickAsync(2500);
+      expect(file.status).to.not.equal(upload.i18n.uploading.status.stalled);
+    });
+
+    it('should not become stalled after upload fails between progress updates', async () => {
+      // Progress updates 3 seconds apart so that no progress event occurs
+      // between the failure and the pending 2 second stalled timeout
+      upload._createXhr = xhrCreator({ size: file.size, uploadTime: 6000, stepTime: 3000 });
+      upload.uploadFiles(file);
+      await clock.tickAsync(100);
+      file.xhr.err();
+      await clock.tickAsync(2400);
+      expect(file.status).to.not.equal(upload.i18n.uploading.status.stalled);
+    });
+
+    it('should clear status and progress state on progress update after upload failed', async () => {
+      upload._createXhr = xhrCreator({ size: file.size, uploadTime: 200, stepTime: 50 });
+      upload.uploadFiles(file);
+      await clock.tickAsync(100);
+      file.xhr.err();
+      // Next progress event arrives after the upload has already failed
+      await clock.tickAsync(50);
+      expect(file.status).to.be.undefined;
+      expect(file.indeterminate).to.be.undefined;
+    });
+  });
+
+  describe('Progress time and size', () => {
+    let clock;
+
+    beforeEach(() => {
+      // Upload progressing 50% every 3000 seconds, first progress event
+      // after 725 seconds, so that elapsed and remaining time reach the
+      // hours unit: at the second progress event 3725 s (01:02:05) have
+      // elapsed and 50% of the file remains
+      upload._createXhr = xhrCreator({
+        size: file.size,
+        connectTime: 725000,
+        uploadTime: 6000000,
+        stepTime: 3000000,
+      });
+
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should show unknown remaining time before the first progress', async () => {
+      upload.uploadFiles(file);
+      await clock.tickAsync(725000);
+      expect(file.status).to.contain('unknown remaining time');
+    });
+
+    it('should update elapsed and remaining time on progress', async () => {
+      upload.uploadFiles(file);
+      await clock.tickAsync(3725000);
+      expect(file.elapsed).to.equal(3725);
+      expect(file.elapsedStr).to.equal('01:02:05');
+      expect(file.remaining).to.equal(3725);
+      expect(file.remainingStr).to.equal('01:02:05');
+      expect(file.loadedStr).to.equal('50 kB');
+      expect(file.status).to.contain('remaining time: ');
+    });
   });
 
   describe('Manual Upload', () => {
@@ -414,6 +647,22 @@ describe('upload', () => {
       expect(file.uploaded).not.to.be.ok;
       expect(file.held).to.be.true;
       expect(file.status).to.be.equal(upload.i18n.uploading.status.held);
+    });
+
+    it('should initialize loaded to zero when a file is added', async () => {
+      addFilesViaInput(upload, [file]);
+      await nextRender();
+      expect(file.loaded).to.equal(0);
+    });
+
+    it('should set held status when using a custom file list', async () => {
+      // The default file list re-computes file.status on its own, so use
+      // a custom file list element to cover the status set by the mixin
+      const customUpload = fixtureSync(`<vaadin-upload><div slot="file-list"></div></vaadin-upload>`);
+      customUpload.noAuto = true;
+      await nextRender();
+      addFilesViaInput(customUpload, [file]);
+      expect(file.status).to.equal('Queued');
     });
 
     it('should start uploading non-completed files after call to uploadFiles', (done) => {
@@ -556,6 +805,25 @@ describe('upload', () => {
       removeFile(upload, 0);
       await clock.tickAsync(1);
       expect(upload.files.length).to.equal(0);
+    });
+
+    it('should fire a bubbling composed file-remove event with file in detail', async () => {
+      upload.noAuto = true;
+      addFilesViaInput(upload, files);
+      await clock.tickAsync(1);
+
+      const spy = sinon.spy();
+      upload.addEventListener('file-remove', spy);
+
+      const removed = upload.files[0];
+      removeFile(upload, 0);
+      await clock.tickAsync(1);
+
+      expect(spy).to.be.calledOnce;
+      const e = spy.firstCall.args[0];
+      expect(e.detail.file).to.equal(removed);
+      expect(e.bubbles).to.be.true;
+      expect(e.composed).to.be.true;
     });
   });
 
