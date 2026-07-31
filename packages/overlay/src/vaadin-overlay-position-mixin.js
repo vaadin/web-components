@@ -33,6 +33,15 @@ function getLayoutViewportHeight() {
 }
 
 /**
+ * Returns whether the page is pinch-zoomed. The browser shrinks the visual viewport when
+ * zooming in as well, but the area outside of it is only panned away instead of being
+ * hidden, so the overlay should keep using the layout viewport in that case.
+ */
+function isPinchZoomed() {
+  return window.visualViewport.scale > 1;
+}
+
+/**
  * Returns the height of the area that is visible to the user, in the same coordinate
  * space as the values returned by `getBoundingClientRect()`.
  *
@@ -45,6 +54,10 @@ function getLayoutViewportHeight() {
  * account for the shift, so adding it would cancel out the shrinking again.
  */
 function getVisibleViewportHeight() {
+  if (isPinchZoomed()) {
+    return getLayoutViewportHeight();
+  }
+
   return Math.min(getLayoutViewportHeight(), window.visualViewport.height);
 }
 
@@ -60,6 +73,10 @@ function getVisibleViewportHeight() {
  * covered by the keyboard.
  */
 function getViewportOcclusion() {
+  if (isPinchZoomed()) {
+    return { top: 0, bottom: 0 };
+  }
+
   const { height, offsetTop } = window.visualViewport;
   return {
     top: Math.max(0, offsetTop),

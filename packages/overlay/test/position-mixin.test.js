@@ -434,7 +434,17 @@ describe('position mixin', () => {
     afterEach(() => {
       delete window.visualViewport.height;
       delete window.visualViewport.offsetTop;
+      delete window.visualViewport.scale;
     });
+
+    // The browser also shrinks the visual viewport when the page is pinch-zoomed,
+    // which only pans the rest of the page away instead of hiding it.
+    function pinchZoom() {
+      Object.defineProperty(window.visualViewport, 'scale', {
+        configurable: true,
+        get: () => 2,
+      });
+    }
 
     it('should flip to align bottom when out of space in the visual viewport', () => {
       target.style.top = `${targetPositionToFlipOverlay + 3}px`;
@@ -460,6 +470,13 @@ describe('position mixin', () => {
 
     it('should not flip when there is enough space in the visual viewport', () => {
       target.style.top = `${targetPositionToFlipOverlay - 3}px`;
+      updatePosition();
+      expectEdgesAligned(TOP, TOP);
+    });
+
+    it('should not flip based on the visual viewport when pinch-zoomed', () => {
+      pinchZoom();
+      target.style.top = `${targetPositionToFlipOverlay + 3}px`;
       updatePosition();
       expectEdgesAligned(TOP, TOP);
     });
@@ -490,6 +507,13 @@ describe('position mixin', () => {
           get: () => KEYBOARD_HEIGHT,
         });
 
+        overlay.limitToVisualViewport = true;
+        updatePosition();
+        expect(overlayContent.getBoundingClientRect().bottom).to.be.above(visibleHeight - margin + 1);
+      });
+
+      it('should not constrain the overlay when pinch-zoomed', () => {
+        pinchZoom();
         overlay.limitToVisualViewport = true;
         updatePosition();
         expect(overlayContent.getBoundingClientRect().bottom).to.be.above(visibleHeight - margin + 1);
