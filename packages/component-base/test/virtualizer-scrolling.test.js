@@ -35,6 +35,13 @@ describe('virtualizer - overscroll', () => {
     expect(scrollTarget.style.overscrollBehavior).to.equal('none');
   });
 
+  it('should still prevent outer scrolling before the timeout has elapsed', async () => {
+    scrollTarget.scrollTop = scrollTarget.scrollHeight;
+    await oneEvent(scrollTarget, 'scroll');
+    await aTimeout(PREVENT_OVERSCROLL_TIMEOUT / 2);
+    expect(scrollTarget.style.overscrollBehavior).to.equal('none');
+  });
+
   it('should allow outer scrolling again after timeout', async () => {
     scrollTarget.scrollTop = scrollTarget.scrollHeight;
     await oneEvent(scrollTarget, 'scroll');

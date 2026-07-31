@@ -103,6 +103,15 @@ describe('reorder elements', () => {
     expect(() => scrollRecycle()).not.to.throw(Error);
   });
 
+  it('should not try to reorder an empty virtualizer on flush', () => {
+    virtualizer.size = 0;
+    // Unlike the test above, this calls flush() directly. The reorder runs
+    // synchronously inside it, so a throw is not swallowed by the promise
+    // scrollRecycle() returns.
+    virtualizer.scrollToIndex(Math.ceil(elementsContainer.childElementCount / 2));
+    expect(() => virtualizer.flush()).not.to.throw(Error);
+  });
+
   it('should not reorder before debouncer flushes', () => {
     scrollRecycle(true);
     clock.tick(REORDER_DEBOUNCE_TIMEOUT - 10);
@@ -132,6 +141,47 @@ describe('reorder elements', () => {
     mousedown(elementsContainer.children[0]);
     scrollRecycle();
     expect(elementsInOrder()).to.be.true;
+  });
+
+  it('should not reorder when the scroll bar handle is grabbed and released without scrolling', () => {
+    const half = Math.ceil(elementsContainer.childElementCount / 2);
+
+    // Grab the scroll bar handle and scroll, which defers the reorder
+    mousedown(scrollTarget);
+    virtualizer.scrollToIndex(half);
+    clock.tick(REORDER_DEBOUNCE_TIMEOUT);
+    expect(elementsInOrder()).to.be.false;
+
+    // Releasing the handle runs the deferred reorder
+    mouseup(scrollTarget);
+    expect(elementsInOrder()).to.be.true;
+
+    // Scroll with the wheel instead, and don't let the reorder debouncer flush
+    virtualizer.scrollToIndex(half * 2);
+    expect(elementsInOrder()).to.be.false;
+
+    // Grabbing and releasing the handle without scrolling must not reorder,
+    // since no reorder was deferred this time
+    mousedown(scrollTarget);
+    mouseup(scrollTarget);
+    expect(elementsInOrder()).to.be.false;
+  });
+
+  it('should not change scroll position on focus when reordering is disabled', () => {
+    init({ reorderElements: false });
+
+    const lastRenderedElement = [...elementsContainer.children].pop();
+    // Scroll the last rendered element into view
+    scrollTarget.scrollTop +=
+      lastRenderedElement.getBoundingClientRect().bottom - scrollTarget.getBoundingClientRect().bottom;
+    // Make sure the next sibling is also inside the viewport
+    scrollTarget.scrollTop += 10;
+
+    const scrollTop = scrollTarget.scrollTop;
+
+    lastRenderedElement.focus();
+
+    expect(scrollTarget.scrollTop).to.equal(scrollTop);
   });
 
   describe('focus', () => {
@@ -167,6 +217,45 @@ describe('reorder elements', () => {
     it('should not throw if non-item element is focused', () => {
       elementsContainer.tabIndex = 0;
       expect(() => elementsContainer.focus()).not.to.throw();
+    });
+
+    it('should not throw if focus enters an empty virtualizer', () => {
+      virtualizer.size = 0;
+      elementsContainer.tabIndex = 0;
+      expect(() => elementsContainer.focus()).not.to.throw();
+    });
+
+    // The following two tests focus with `preventScroll` so that the browser
+    // does not scroll the element into view on its own. That leaves the
+    // virtualizer with no elements to recycle, which is the case where it has
+    // to scroll by itself to reveal the focusable sibling.
+    it('should reveal the next focusable sibling of the last rendered element', () => {
+      virtualizer.flush();
+
+      const lastRenderedElement = [...elementsContainer.children].pop();
+      const index = lastRenderedElement.index;
+      expect(index).to.be.below(virtualizer.size - 1);
+
+      lastRenderedElement.focus({ preventScroll: true });
+
+      // The virtualizer should have scrolled just enough to recycle an element
+      // for the following index, so the user can keep tabbing forwards.
+      expect(elementsContainer.querySelector(`#item-${index + 1}`)).to.be.ok;
+    });
+
+    it('should reveal the previous focusable sibling of the first rendered element', () => {
+      virtualizer.scrollToIndex(virtualizer.size - 1);
+      virtualizer.flush();
+
+      const firstRenderedElement = elementsContainer.children[0];
+      const index = firstRenderedElement.index;
+      expect(index).to.be.above(0);
+
+      firstRenderedElement.focus({ preventScroll: true });
+
+      // The virtualizer should have scrolled just enough to recycle an element
+      // for the preceding index, so the user can keep tabbing backwards.
+      expect(elementsContainer.querySelector(`#item-${index - 1}`)).to.be.ok;
     });
 
     it('should not change scroll position if elements are being reordered - scrolling forwards', () => {

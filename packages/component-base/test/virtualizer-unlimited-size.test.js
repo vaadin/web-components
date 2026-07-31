@@ -1,8 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { Virtualizer } from '../src/virtualizer.js';
 
 describe('unlimited size', () => {
+  const FIX_INVALID_ITEM_POSITIONING_TIMEOUT = 100;
   let virtualizer;
   let scrollTarget;
   let elementsContainer;
@@ -304,6 +305,23 @@ describe('unlimited size', () => {
 
     const item = elementsContainer.querySelector(`#item-${index}`);
     expect(item.getBoundingClientRect().top).to.be.closeTo(scrollTarget.getBoundingClientRect().top - 10, 1);
+  });
+
+  it('should preserve the scroll position when detached before the positioning fix runs', async () => {
+    const index = Math.floor(virtualizer.size / 2);
+    virtualizer.scrollToIndex(index);
+    const scrollTop = scrollTarget.scrollTop;
+
+    // Detaching resets the scroll position of the scroll target. The pending
+    // item positioning fix must not use it as the actual scroll position.
+    const parent = scrollTarget.parentElement;
+    scrollTarget.remove();
+    await aTimeout(FIX_INVALID_ITEM_POSITIONING_TIMEOUT + 50);
+
+    parent.appendChild(scrollTarget);
+    virtualizer.hostConnected();
+
+    expect(scrollTarget.scrollTop).to.equal(scrollTop);
   });
 
   it('should preserve scroll position on large size decrease', async () => {
