@@ -196,16 +196,14 @@ export const FieldMixin = (superclass) =>
     }
 
     #onErrorSlotChange(event) {
-      const { hasContent } = event.detail;
-
-      this.toggleAttribute('has-error-message', hasContent);
+      this.toggleAttribute('has-error-message', event.detail.hasContent);
 
       // This timeout is needed to prevent NVDA from announcing the error message twice:
       // 1. Once adding the `[role=alert]` attribute when updating `has-error-message` (OK).
       // 2. Once linking the error ID with the ARIA target here (unwanted).
       // Related issue: https://github.com/vaadin/web-components/issues/3061.
       setTimeout(() => {
-        if (hasContent) {
+        if (this.invalid) {
           this._fieldAriaController.setErrorId(this._errorNode?.id);
         } else {
           this._fieldAriaController.setErrorId(null);
