@@ -462,6 +462,7 @@ describe('position mixin', () => {
     it('should flip back to default when the visual viewport grows again', () => {
       target.style.top = `${targetPositionToFlipOverlay + 3}px`;
       updatePosition();
+      expectEdgesAligned(BOTTOM, BOTTOM);
 
       visibleHeight = document.documentElement.clientHeight;
       updatePosition();
@@ -533,6 +534,7 @@ describe('position mixin', () => {
       it('should release the constraint when the visual viewport grows again', () => {
         overlay.limitToVisualViewport = true;
         updatePosition();
+        expect(overlayContent.getBoundingClientRect().bottom).to.be.at.most(visibleHeight - margin + 1);
 
         visibleHeight = document.documentElement.clientHeight;
         updatePosition();
