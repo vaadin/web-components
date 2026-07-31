@@ -166,7 +166,6 @@ export const FieldMixin = (superclass) =>
      */
     _invalidChanged(invalid) {
       this._errorController.setInvalid(invalid);
-      this.__updateFieldAriaControllerErrorId();
     }
 
     /** @private */
@@ -185,9 +184,7 @@ export const FieldMixin = (superclass) =>
       // 2. Once linking the error ID with the ARIA target here (unwanted).
       // Related issue: https://github.com/vaadin/web-components/issues/3061.
       setTimeout(() => {
-        // Error message ID needs to be dynamically added / removed based on the validity
-        // Otherwise assistive technologies would announce the error, even if we hide it.
-        if (this.invalid) {
+        if (this.hasAttribute('has-error-message')) {
           this._fieldAriaController.setErrorId(this._errorNode?.id);
         } else {
           this._fieldAriaController.setErrorId(null);

@@ -518,7 +518,6 @@ snapshots["vaadin-date-time-picker host error"] =
     >
     </div>
     <input
-      aria-describedby="error-message-vaadin-date-picker-5"
       aria-expanded="false"
       aria-haspopup="dialog"
       aria-invalid="true"
@@ -554,7 +553,6 @@ snapshots["vaadin-date-time-picker host error"] =
     </div>
     <input
       aria-autocomplete="list"
-      aria-describedby="error-message-vaadin-time-picker-9"
       aria-expanded="false"
       aria-invalid="true"
       autocapitalize="off"
