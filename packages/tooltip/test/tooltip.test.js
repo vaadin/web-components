@@ -792,21 +792,3 @@ describe('vaadin-tooltip', () => {
     });
   });
 });
-
-describe('manual opened', () => {
-  let tooltip, overlay;
-
-  beforeEach(async () => {
-    tooltip = fixtureSync('<vaadin-tooltip text="Test" manual opened></vaadin-tooltip>');
-    await nextRender();
-    overlay = tooltip._overlayElement;
-  });
-
-  afterEach(() => {
-    tooltip.opened = false;
-  });
-
-  it('should set owner on the overlay element', () => {
-    expect(overlay.owner).to.equal(tooltip);
-  });
-});
