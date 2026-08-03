@@ -666,9 +666,7 @@ export const UploadMixin = (superClass) =>
 
         const fileIndex = this.files.indexOf(event.detail.file);
         if (fileIndex >= 0) {
-          // The file list does not change on retry, so the file can be
-          // focused synchronously
-          this.__focusFile(fileIndex);
+          this._updateFocus(fileIndex);
         }
       }
     }
@@ -808,14 +806,6 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _updateFocus(fileIndex) {
-      // Use requestAnimationFrame to ensure the file list has been updated
-      requestAnimationFrame(() => {
-        this.__focusFile(fileIndex);
-      });
-    }
-
-    /** @private */
-    __focusFile(fileIndex) {
       if (this.files.length === 0) {
         this._addButton.focus({ focusVisible: isKeyboardActive() });
         return;
