@@ -140,6 +140,7 @@ export const CustomFieldMixin = (superClass) =>
       });
     }
 
+    /** @protected */
     updated(props) {
       super.updated(props);
 

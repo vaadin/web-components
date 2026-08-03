@@ -105,6 +105,7 @@ export const CheckboxMixin = (superclass) =>
       this._createPropertyObserver('checked', '_checkedChanged');
     }
 
+    /** @protected */
     updated(props) {
       super.updated(props);
 

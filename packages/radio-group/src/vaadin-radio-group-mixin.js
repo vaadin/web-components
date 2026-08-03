@@ -137,6 +137,7 @@ export const RadioGroupMixin = (superclass) =>
       this.addController(this._tooltipController);
     }
 
+    /** @protected */
     updated(props) {
       super.updated(props);
 

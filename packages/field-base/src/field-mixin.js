@@ -104,6 +104,7 @@ export const FieldMixin = (superclass) =>
       this.addController(this._errorController);
     }
 
+    /** @protected */
     updated(props) {
       super.updated(props);
 
