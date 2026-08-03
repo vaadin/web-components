@@ -181,6 +181,13 @@ describe('adding files', () => {
       expect(upload.hasAttribute('dragover')).to.be.true;
     });
 
+    it('should set dragover attribute values to true on dragover', async () => {
+      upload.dispatchEvent(createDndEvent('dragover'));
+      await nextUpdate(upload);
+      expect(upload.getAttribute('dragover')).to.equal('true');
+      expect(upload.getAttribute('dragover-valid')).to.equal('true');
+    });
+
     it('should remove dragover attribute on dragleave', async () => {
       upload.dispatchEvent(createDndEvent('dragover'));
       await nextUpdate(upload);

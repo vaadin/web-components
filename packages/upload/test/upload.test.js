@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-upload.js';
 import { addFilesViaInput, createFile, createFiles, removeFile, xhrCreator } from './helpers.js';
@@ -105,6 +105,13 @@ describe('upload', () => {
         expect(e.detail.xhr.status).to.be.equal(200);
       });
 
+      it('should keep the file xhr after the upload has succeeded', async () => {
+        upload.uploadFiles(file);
+        await clock.tickAsync(400);
+        expect(file.complete).to.be.true;
+        expect(file.xhr).to.be.ok;
+      });
+
       it('should fire the upload-error event on connection error', async () => {
         const progressSpy = sinon.spy();
         upload.addEventListener('upload-progress', progressSpy);
@@ -205,6 +212,32 @@ describe('upload', () => {
         expect(file.xhr.readyState).to.equal(0);
       });
 
+      it('should keep the file queued when `upload-before` event is cancelled', () => {
+        upload.addEventListener('upload-before', (e) => {
+          e.preventDefault();
+        });
+        upload.uploadFiles(file);
+        expect(file.held).to.be.true;
+        expect(file.uploading).to.be.true;
+        expect(file.status).to.equal('Queued');
+      });
+
+      it('should continue the upload when the file is removed in an `upload-before` listener', async () => {
+        upload.files = [file];
+        upload.addEventListener('upload-before', () => {
+          upload.files = [];
+        });
+        const startSpy = sinon.spy();
+        upload.addEventListener('upload-start', startSpy);
+        const successSpy = sinon.spy();
+        upload.addEventListener('upload-success', successSpy);
+
+        upload.uploadFiles(file);
+        await clock.tickAsync(400);
+        expect(startSpy).to.be.calledOnce;
+        expect(successSpy).to.be.calledOnce;
+      });
+
       it('should fire upload-request event in multipart mode', (done) => {
         upload.uploadFormat = 'multipart';
 
@@ -229,6 +262,32 @@ describe('upload', () => {
         });
 
         upload.uploadFiles(file);
+      });
+
+      it('should keep the file connecting when `upload-request` listener prevents default', () => {
+        upload.addEventListener('upload-request', (e) => {
+          e.preventDefault();
+        });
+        upload.uploadFiles(file);
+        expect(file.held).to.be.false;
+        expect(file.uploading).to.be.true;
+        expect(file.status).to.equal('Connecting...');
+      });
+
+      it('should complete the upload when the request is sent manually after preventing default', async () => {
+        let xhr;
+        upload.addEventListener('upload-request', (e) => {
+          e.preventDefault();
+          xhr = e.detail.xhr;
+        });
+        const successSpy = sinon.spy();
+        upload.addEventListener('upload-success', successSpy);
+        upload.uploadFiles(file);
+
+        xhr.send();
+        await clock.tickAsync(400);
+        expect(successSpy).to.be.calledOnce;
+        expect(file.complete).to.be.true;
       });
 
       it('should fail if a `upload-response` listener sets an error', async () => {
@@ -323,6 +382,33 @@ describe('upload', () => {
         expect(file.complete).to.be.true;
       });
 
+      it('should reference the previous request in the `upload-retry` event detail', async () => {
+        await uploadWithServerError();
+        expect(file.xhr).to.be.ok;
+
+        const retrySpy = sinon.spy((e) => e.preventDefault());
+        upload.addEventListener('upload-retry', retrySpy);
+        upload.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
+        expect(retrySpy.firstCall.args[0].detail.xhr).to.equal(file.xhr);
+      });
+
+      it('should ignore file-retry while the file is uploading', async () => {
+        const startSpy = sinon.spy();
+        upload.addEventListener('upload-start', startSpy);
+        const retrySpy = sinon.spy();
+        upload.addEventListener('upload-retry', retrySpy);
+
+        upload.uploadFiles(file);
+        await clock.tickAsync(60);
+        expect(file.uploading).to.be.true;
+
+        upload.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
+        await clock.tickAsync(400);
+        expect(retrySpy).to.be.calledOnce;
+        expect(startSpy).to.be.calledOnce;
+        expect(file.complete).to.be.true;
+      });
+
       it('should not add files passed to uploadFiles to the files list', (done) => {
         upload.addEventListener('upload-start', () => {
           expect(upload.files).to.have.lengthOf(0);
@@ -392,6 +478,13 @@ describe('upload', () => {
           done();
         });
         upload.uploadFiles(file);
+      });
+
+      it('should parse headers set as a JSON string back to an object', () => {
+        upload.headers = '{"X-Foo": "Bar"}';
+        upload.uploadFiles(file);
+        expect(upload.headers).to.be.an('object');
+        expect(upload.headers['X-Foo']).to.equal('Bar');
       });
 
       it('should reset headers set as an invalid JSON string', () => {
@@ -713,6 +806,30 @@ describe('upload', () => {
       expect(file.loadedStr).to.equal('50 kB');
       expect(file.status).to.contain('remaining time: ');
     });
+
+    it('should have infinite remaining time before any bytes are transferred', async () => {
+      upload.uploadFiles(file);
+      await clock.tickAsync(725000);
+      expect(file.remaining).to.equal(Infinity);
+      expect(file.status).to.equal('100 kB: 0% (unknown remaining time)');
+    });
+
+    it('should compute upload speed from the total file size', async () => {
+      upload._createXhr = xhrCreator({
+        size: file.size,
+        connectTime: 10,
+        uploadTime: 200,
+        stepTime: 50,
+      });
+      upload.uploadFiles(file);
+      // First progress event: elapsed 0.01s, loaded 0
+      await clock.tickAsync(10);
+      expect(file.speed).to.equal(9765);
+      // Second progress event: elapsed 0.06s, loaded 25000
+      await clock.tickAsync(50);
+      expect(file.speed).to.equal(1627);
+      expect(file.remaining).to.equal(1);
+    });
   });
 
   describe('Invalid configuration', () => {
@@ -914,6 +1031,38 @@ describe('upload', () => {
       expect(e.detail.xhr).to.be.ok;
       expect(e.detail.file).to.be.ok;
       expect(e.detail.file.uploading).to.be.ok;
+    });
+
+    it('should upload a complete file again on file-start', async () => {
+      addFilesViaInput(upload, [file]);
+      await nextRender();
+
+      upload.uploadFiles();
+      await oneEvent(upload, 'upload-success');
+      expect(file.complete).to.be.true;
+
+      const startSpy = sinon.spy();
+      upload.addEventListener('upload-start', startSpy);
+      upload.dispatchEvent(new CustomEvent('file-start', { detail: { file } }));
+      await oneEvent(upload, 'upload-success');
+      expect(startSpy).to.be.calledOnce;
+      expect(file.complete).to.be.true;
+    });
+
+    it('should use the current formDataName when uploading files added earlier', async () => {
+      upload.uploadFormat = 'multipart';
+      addFilesViaInput(upload, [file]);
+      await nextRender();
+
+      upload.formDataName = 'attachment';
+
+      const requestSpy = sinon.spy((e) => e.preventDefault());
+      upload.addEventListener('upload-request', requestSpy);
+      upload.uploadFiles();
+
+      const { formData, file: requestFile } = requestSpy.firstCall.args[0].detail;
+      expect([...formData.keys()]).to.eql(['attachment']);
+      expect(requestFile.formDataName).to.equal('attachment');
     });
   });
 
