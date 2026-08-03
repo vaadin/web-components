@@ -390,10 +390,43 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     // not a field also clears what was rendered for the previous one.
     this.requestUpdate();
 
-    const field = this.#field;
-    if (!field) {
+    if (this.#field) {
+      this.#markField();
+    } else {
+      this.#markWhenUpgraded(parent);
+    }
+  }
+
+  /**
+   * Waits for the parent's custom element definition to load and marks it then,
+   * for a marker attached before the field was upgraded — at which point it had
+   * no shadow root to inject the marker into.
+   *
+   * @param {HTMLElement} parent
+   */
+  #markWhenUpgraded(parent) {
+    const tagName = parent && parent.localName;
+    if (!tagName || !tagName.includes('-') || customElements.get(tagName)) {
       return;
     }
+
+    customElements.whenDefined(tagName).then(() => {
+      // The marker may have been moved or removed while the field was loading.
+      if (!this.isConnected || this.parentElement !== parent || !parent.shadowRoot) {
+        return;
+      }
+
+      this.#field = parent;
+      this.requestUpdate();
+      this.#markField();
+    });
+  }
+
+  /**
+   * Injects the marker into the resolved field and describes it as AI-filled.
+   */
+  #markField() {
+    const field = this.#field;
 
     adoptMarkerStyles(field);
 

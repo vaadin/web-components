@@ -773,6 +773,29 @@ describe('ai field marker', () => {
       expect(field.hasAttribute('ai-working')).to.be.true;
     });
 
+    it('should mark the field once it is upgraded', async () => {
+      // The marker can be attached before the field's own module has loaded,
+      // so the parent has no shadow root yet.
+      const lateField = fixtureSync(`<late-upgraded-field></late-upgraded-field>`);
+      const marker = mark(lateField);
+      await nextRender();
+      expect(marker.assignedSlot, 'field is not upgraded yet').to.not.exist;
+
+      customElements.define(
+        'late-upgraded-field',
+        class extends HTMLElement {
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+          }
+        },
+      );
+      await nextRender();
+
+      expect(marker.assignedSlot).to.exist;
+      expect(marker.assignedSlot.name).to.equal('ai-field-marker');
+    });
+
     it('should do nothing for a parent without a shadow root', async () => {
       const container = fixtureSync(`<div></div>`);
       const marker = mark(container, { working: true });
