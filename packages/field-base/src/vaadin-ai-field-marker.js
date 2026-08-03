@@ -5,7 +5,7 @@
  */
 import '@vaadin/popover/src/vaadin-popover.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
-import { html, LitElement } from 'lit';
+import { html, LitElement, nothing } from 'lit';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
@@ -19,9 +19,10 @@ const DEFAULT_REVERT_TEXT = 'Revert Value';
 const DEFAULT_BADGE_LABEL = 'AI-provided value';
 const DEFAULT_BADGE_TOOLTIP = 'Field value modified by AI.\nClick for details';
 
-// Application-configurable defaults applied to every marked field, so the
-// texts can be localized once via AiFieldMarker.setDefaults() instead of being
-// passed to each mark() call. Per-call options still take precedence.
+// Application-configurable defaults applied to every subsequently created
+// marker, so the texts can be localized once via AiFieldMarker.setDefaults()
+// instead of being set on each marker instance. Properties set on an instance
+// still take precedence.
 const defaults = {
   message: DEFAULT_MESSAGE,
   revertText: DEFAULT_REVERT_TEXT,
@@ -38,20 +39,6 @@ markerStyles.replaceSync(aiFieldMarkerStyles);
 
 const markerHostStyles = new CSSStyleSheet();
 markerHostStyles.replaceSync(aiFieldMarkerHostStyles);
-
-/**
- * Per-field marker bookkeeping, keyed by the field so `mark()` is idempotent
- * and `unmark()` can fully clean up.
- */
-const markers = new WeakMap();
-
-/**
- * Fields currently in the "AI is working" state, mapped to the elements whose
- * client-side `readonly` state `startWorking()` overrode — the field itself
- * and, for a `vaadin-custom-field`, its inputs — so `stopWorking()` can
- * restore it.
- */
-const workingFields = new WeakMap();
 
 /**
  * Adopts the marker stylesheets into the field's root node and shadow root,
@@ -99,22 +86,33 @@ function delayValueSets(field, delay = 500) {
 }
 
 /**
- * An element used to annotate a field as AI-filled. It slots itself into the
- * field via a slot injected into the field's shadow root, draws an "AI" badge
- * anchored to the field, and offers a popover that explains the AI fill and
- * lets the user revert the value.
+ * An element used to annotate a field as AI-filled. Appended as a direct
+ * child of the field, it slots itself into the field via a slot injected
+ * into the field's shadow root, draws an "AI" badge anchored to the field,
+ * and offers a popover that explains the AI fill and lets the user revert
+ * the value.
  *
- * Not intended to be used as a standalone tag; use the static
- * `AiFieldMarker.mark()` / `AiFieldMarker.unmark()` API (also reachable from
- * Flow via `customElements.get('vaadin-ai-field-marker')`). While an AI fill
- * is in progress, `AiFieldMarker.startWorking()` / `AiFieldMarker.stopWorking()`
- * toggle an "AI is working" shimmer on the field along with a client-side
- * read-only guard.
+ * The marker manages the annotation through its own lifecycle: adding it to
+ * the field marks the field, removing it clears the mark:
+ *
+ * ```js
+ * const marker = document.createElement('vaadin-ai-field-marker');
+ * marker.message = 'Filled based on the uploaded document.';
+ * field.appendChild(marker);
+ * // ...
+ * marker.remove();
+ * ```
+ *
+ * While an AI fill is in progress, set the `working` property to show an
+ * "AI is working" shimmer on the field along with a client-side read-only
+ * guard. An existing mark is hidden for the duration, since the value it
+ * annotates is about to be replaced; setting `working` back to `false`
+ * brings it back, so a cancelled or failed fill leaves the mark intact.
  *
  * Custom popover content — shown between the explanation and the revert
- * control — is supplied as an element through the `customContent` option of
- * `mark()`; the marker places it in the DOM. This is the integration point
- * for frameworks (e.g. Flow) that render content as server-side elements.
+ * control — is supplied as an element through the `customContent` property;
+ * the marker places it in the DOM. This is the integration point for
+ * frameworks (e.g. Flow) that render content as server-side elements.
  *
  * @fires {CustomEvent} ai-field-revert - Fired from the field element when the user activates the revert control. The host restores the value.
  *
@@ -134,15 +132,14 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
        */
       message: {
         type: String,
-        value: DEFAULT_MESSAGE,
+        value: () => defaults.message,
       },
 
       /**
        * Optional custom content shown in the popover between the message and
-       * the actions: an element supplied by the host through `mark()` options
-       * (e.g. the provenance of an AI-filled value — confidence, source, a
-       * source image with the driving region outlined). Rendered as-is;
-       * `null` shows nothing.
+       * the actions: an element supplied by the host (e.g. the provenance of
+       * an AI-filled value — confidence, source, a source image with the
+       * driving region outlined). Rendered as-is; `null` shows nothing.
        */
       customContent: {
         attribute: false,
@@ -154,7 +151,7 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
        */
       revertText: {
         type: String,
-        value: DEFAULT_REVERT_TEXT,
+        value: () => defaults.revertText,
       },
 
       /**
@@ -162,7 +159,7 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
        */
       badgeLabel: {
         type: String,
-        value: DEFAULT_BADGE_LABEL,
+        value: () => defaults.badgeLabel,
       },
 
       /**
@@ -170,10 +167,52 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
        */
       badgeTooltip: {
         type: String,
-        value: DEFAULT_BADGE_TOOLTIP,
+        value: () => defaults.badgeTooltip,
+      },
+
+      /**
+       * Whether an AI is currently working on the field. While `true`, the
+       * field shows an "AI is working" shimmer and is made read-only on the
+       * client so the user cannot edit a value the AI is about to overwrite;
+       * only the client-side `readonly` state is touched, and setting the
+       * property back to `false` restores it. The marker badge is hidden for
+       * the duration, since the value it annotates is about to be replaced.
+       */
+      working: {
+        type: Boolean,
+        value: false,
       },
     };
   }
+
+  /**
+   * The field the marker annotates: its parent element. Set while the marker
+   * is connected to a field with a shadow root.
+   */
+  #field = null;
+
+  /**
+   * The hidden description node added to the marker's light DOM and linked
+   * to the field's input via `aria-describedby`.
+   */
+  #descNode = null;
+
+  /** The input whose `aria-describedby` references the description node. */
+  #describedInput = null;
+
+  /** The field value captured for the revert event detail. */
+  #capturedValue;
+
+  /**
+   * While in the working state, the elements whose client-side `readonly`
+   * state was overridden — the field itself and, for a `vaadin-custom-field`,
+   * its inputs — with their original values, so leaving the working state can
+   * restore them. `null` when not working.
+   */
+  #lockedElements = null;
+
+  /** Set when the AI-fill announcement should be made on the next update. */
+  #announcePending = false;
 
   constructor() {
     super();
@@ -191,75 +230,12 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
     this.addEventListener('click', (event) => event.stopPropagation());
   }
 
-  /** @protected */
-  render() {
-    const id = this.__badgeId;
-    return html`
-      <button id="vaadin-ai-marker-${id}" part="badge" type="button" aria-label="${this.badgeLabel}"></button>
-      <vaadin-tooltip for="vaadin-ai-marker-${id}" text="${this.badgeTooltip}"></vaadin-tooltip>
-      <vaadin-popover
-        for="vaadin-ai-marker-${id}"
-        role="dialog"
-        accessible-name="${this.badgeLabel}"
-        .trigger="${POPOVER_TRIGGER}"
-        autofocus
-        theme="arrow"
-        position="end-top"
-      >
-        <p part="message">${this.message}</p>
-        ${this.customContent ? html`<div part="custom-content">${this.customContent}</div>` : null}
-        <div part="actions">
-          <button type="button" part="revert-button" @click="${this._onRevert}">${this.revertText}</button>
-        </div>
-      </vaadin-popover>
-    `;
-  }
-
-  createRenderRoot() {
-    return this;
-  }
-
-  /** @private */
-  _onRevert() {
-    // Return focus to the field before closing the popover. The popover targets
-    // the badge for focus restoration, but `unmark()` removes the badge on
-    // revert, which would drop focus to the body. Moving focus to the field
-    // first makes the overlay skip its own restore — it only restores while
-    // focus is still inside the overlay (see OverlayFocusMixin._shouldRestoreFocus).
-    //
-    // Focus the field's own focusable element rather than calling focus() on
-    // the host: a host focus() can carry component-specific semantics that a
-    // revert must not trigger — date-picker opens its overlay on focus while
-    // it has no usable text input (fullscreen, iOS, or no i18n.parseDate).
-    // Focusing the element directly also leaves the focus-ring to the field's
-    // own keyboard-vs-pointer detection instead of forcing it on.
-    if (this._field) {
-      const focusTarget = this._field.focusElement || this._field.inputElement || this._field;
-      focusTarget.focus();
-    }
-
-    const popover = this.querySelector('vaadin-popover');
-    if (popover) {
-      popover.opened = false;
-    }
-
-    if (this._field) {
-      this._field.dispatchEvent(
-        new CustomEvent('ai-field-revert', {
-          bubbles: true,
-          composed: true,
-          detail: { value: this._capturedValue },
-        }),
-      );
-    }
-  }
-
   /**
-   * Sets the texts used by every subsequently marked field, so an application
-   * can localize them once instead of passing options to each {@link mark}
-   * call. Only the provided keys change; per-call {@link mark} options still
-   * take precedence over these defaults. Does not retroactively update fields
-   * that are already marked.
+   * Sets the texts used by every subsequently created marker, so an
+   * application can localize them once instead of setting the properties on
+   * each marker. Only the provided keys change; properties set on a marker
+   * instance still take precedence over these defaults. Does not
+   * retroactively update markers that already exist.
    *
    * @param {{ message?: string, revertText?: string, badgeLabel?: string, badgeTooltip?: string }} newDefaults
    */
@@ -279,134 +255,194 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
   }
 
   /**
-   * Marks the given field as AI-filled: injects the highlight + badge + popover
-   * into the field's shadow root, announces the change to screen readers, and
-   * associates the explanation with the field's input. Idempotent — repeated
-   * calls reuse the existing marker and only refresh its content.
+   * Marks the parent field as AI-filled: injects the highlight + badge +
+   * popover into the field's shadow root, announces the change to screen
+   * readers, and associates the explanation with the field's input.
+   * Does nothing when the parent is not a field with a shadow root.
    *
-   * Texts default to those set via {@link setDefaults} (English out of the
-   * box); pass `options` to override them for this field only.
-   *
-   * @param {HTMLElement} field the field to mark
-   * @param {{ message?: string, customContent?: HTMLElement, revertText?: string, badgeLabel?: string, badgeTooltip?: string }} [options]
-   * @return {AiFieldMarker | null} the marker instance, or `null` when the field has no shadow root
+   * @protected
+   * @override
    */
-  static mark(field, options = {}) {
-    if (!field || !field.shadowRoot) {
-      return null;
+  connectedCallback() {
+    // Resolve the field before super: PolylitMixin renders synchronously on
+    // connect, and render() must already know the field — committing the
+    // `nothing` fallback first and the template later would make Lit clear
+    // its part range, taking manually added light-DOM children with it.
+    const parent = this.parentElement;
+    if (parent && parent.shadowRoot) {
+      this.#field = parent;
+    }
+
+    super.connectedCallback();
+
+    const field = this.#field;
+    if (!field) {
+      return;
     }
 
     adoptMarkerStyles(field);
 
-    let entry = markers.get(field);
-    if (!entry) {
-      // Create a new slot for the marker element inside the field's own shadow root.
+    // Create a slot for the marker element inside the field's own shadow
+    // root (unless a previous marker already left one) and assign the marker
+    // to it, so the marker renders although the field defines no such slot.
+    if (!field.shadowRoot.querySelector(`slot[name="${MARKER_SLOT}"]`)) {
       const markerSlot = document.createElement('slot');
       markerSlot.setAttribute('name', MARKER_SLOT);
       field.shadowRoot.appendChild(markerSlot);
-
-      // Create the marker element and place it in the marker slot.
-      const marker = document.createElement(AiFieldMarker.is);
-      marker._field = field;
-      marker.slot = MARKER_SLOT;
-      field.appendChild(marker);
-
-      // Add a hidden description node in the field's light DOM (so its id
-      // resolves in the input's scope) and append its id to the input's
-      // aria-describedby. Appending — rather than using aria-description, which
-      // a screen reader ignores when aria-describedby is present — lets the
-      // field's own helper/error description and the AI note both get read.
-      const input = field.inputElement || field.focusElement;
-      let descNode = null;
-      if (input) {
-        descNode = document.createElement('span');
-        descNode.id = `ai-field-marker-${generateUniqueId()}`;
-        descNode.style.cssText =
-          'position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;';
-        marker.appendChild(descNode);
-        addValuesToAttribute(input, 'aria-describedby', descNode.id);
-      }
-
-      entry = { marker, input, markerSlot, descNode };
-      markers.set(field, entry);
     }
+    this.slot = MARKER_SLOT;
 
-    const { marker } = entry;
-
-    // Per-call options win over the application-configured defaults.
-    marker.message = options.message ?? defaults.message;
-    marker.revertText = options.revertText ?? defaults.revertText;
-    marker.badgeLabel = options.badgeLabel ?? defaults.badgeLabel;
-    marker.badgeTooltip = options.badgeTooltip ?? defaults.badgeTooltip;
-    // No stored default for customContent — a re-mark without it clears the
-    // previous value, so the popover never shows content that described an
-    // earlier fill of the field.
-    marker.customContent = options.customContent ?? null;
+    // Add a hidden description node in the field's light DOM (so its id
+    // resolves in the input's scope) and append its id to the input's
+    // aria-describedby. Appending — rather than using aria-description, which
+    // a screen reader ignores when aria-describedby is present — lets the
+    // field's own helper/error description and the AI note both get read.
+    const input = field.inputElement || field.focusElement;
+    if (input) {
+      const descNode = document.createElement('span');
+      descNode.id = `ai-field-marker-${generateUniqueId()}`;
+      descNode.textContent = this.message;
+      descNode.style.cssText =
+        'position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;';
+      // Insert before Lit's rendered content so the node stays outside the
+      // range Lit manages (and may clear) in the light-DOM render root.
+      this.insertBefore(descNode, this.firstChild);
+      addValuesToAttribute(input, 'aria-describedby', descNode.id);
+      this.#descNode = descNode;
+      this.#describedInput = input;
+    }
 
     // Capture the AI-filled value so the revert event can carry it.
-    marker._capturedValue = 'value' in field ? field.value : undefined;
+    this.#capturedValue = 'value' in field ? field.value : undefined;
 
-    // Announce to screen readers that the field was filled by AI.
-    const { message } = marker;
-    const { label } = field;
-    announce(label ? `${label}: ${message}` : message);
-
-    // Keep the hidden field description in sync with the current message.
-    if (entry.descNode) {
-      entry.descNode.textContent = message;
+    if (this.working) {
+      // Apply the working state directly: on a reconnect no `working`
+      // property change triggers updated(), which handles the first connect.
+      this.#startWorking();
+    } else {
+      this.#announcePending = true;
     }
 
-    return marker;
+    // Re-render on reconnect, when no property change schedules an update.
+    this.requestUpdate();
   }
 
   /**
-   * Removes the AI-filled annotation previously added by {@link AiFieldMarker.mark}.
-   * A no-op when the field is not marked.
+   * Removes the AI-filled annotation from the field the marker was attached
+   * to: clears the working state (restoring the field's client-side
+   * read-only state), the input description and the injected slot.
    *
-   * @param {HTMLElement} field the field to clear
+   * @protected
+   * @override
    */
-  static unmark(field) {
-    const entry = field && markers.get(field);
-    if (!entry) {
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    const field = this.#field;
+    if (!field) {
       return;
     }
 
-    const { marker, input, descNode, markerSlot } = entry;
+    this.#stopWorking(true);
 
-    if (input && descNode) {
-      removeValuesFromAttribute(input, 'aria-describedby', descNode.id);
+    if (this.#descNode) {
+      removeValuesFromAttribute(this.#describedInput, 'aria-describedby', this.#descNode.id);
+      this.#descNode.remove();
+      this.#descNode = null;
+      this.#describedInput = null;
     }
 
-    if (markerSlot) {
+    // Remove the injected slot unless another marker still uses it.
+    const markerSlot = field.shadowRoot.querySelector(`slot[name="${MARKER_SLOT}"]`);
+    if (markerSlot && !field.querySelector(`:scope > ${AiFieldMarker.is}`)) {
       markerSlot.remove();
     }
 
-    marker.remove();
-
-    markers.delete(field);
+    this.#field = null;
   }
 
   /**
-   * Marks the field as being worked on by an AI: shows the "AI is working"
-   * shimmer and makes the field read-only on the client so the user cannot
-   * edit a value the AI is about to overwrite. Only the client-side
-   * `readonly` state is touched; {@link AiFieldMarker.stopWorking} restores
-   * it. Idempotent — repeated calls keep the state captured by the first
-   * call. A no-op when the field has no shadow root.
-   *
-   * Hides an existing mark for the duration, since the value it annotates is
-   * about to be replaced. {@link AiFieldMarker.stopWorking} brings it back, so
-   * a cancelled or failed fill leaves the previous mark intact; call
-   * {@link AiFieldMarker.mark} again to describe a new value.
-   *
-   * @param {HTMLElement} field the field the AI is working on
+   * @protected
+   * @override
    */
-  static startWorking(field) {
-    if (!field || !field.shadowRoot || workingFields.has(field)) {
+  updated(props) {
+    super.updated(props);
+
+    const field = this.#field;
+    if (!field) {
       return;
     }
 
-    adoptMarkerStyles(field);
+    // Keep the hidden field description in sync with the current message.
+    if (props.has('message') && this.#descNode) {
+      this.#descNode.textContent = this.message;
+    }
+
+    if (props.has('working')) {
+      if (this.working) {
+        this.#startWorking();
+      } else if (this.#lockedElements) {
+        this.#stopWorking();
+        // The fill landed: the marker now annotates the current value, so
+        // re-capture it for the revert event and announce the mark again.
+        this.#capturedValue = 'value' in field ? field.value : undefined;
+        this.#announcePending = true;
+      }
+    }
+
+    // Announce after the update so the announcement reflects a message set in
+    // the same batch as the append or the `working` toggle.
+    if (this.#announcePending && !this.working) {
+      this.#announcePending = false;
+      const { message } = this;
+      const { label } = field;
+      announce(label ? `${label}: ${message}` : message);
+    }
+  }
+
+  /** @protected */
+  render() {
+    if (!this.#field) {
+      return nothing;
+    }
+
+    const id = this.__badgeId;
+    return html`
+      <button id="vaadin-ai-marker-${id}" part="badge" type="button" aria-label="${this.badgeLabel}"></button>
+      <vaadin-tooltip for="vaadin-ai-marker-${id}" text="${this.badgeTooltip}"></vaadin-tooltip>
+      <vaadin-popover
+        for="vaadin-ai-marker-${id}"
+        role="dialog"
+        accessible-name="${this.badgeLabel}"
+        .trigger="${POPOVER_TRIGGER}"
+        autofocus
+        theme="arrow"
+        position="end-top"
+      >
+        <p part="message">${this.message}</p>
+        ${this.customContent ? html`<div part="custom-content">${this.customContent}</div>` : nothing}
+        <div part="actions">
+          <button type="button" part="revert-button" @click="${this.#onRevert}">${this.revertText}</button>
+        </div>
+      </vaadin-popover>
+    `;
+  }
+
+  /** @protected */
+  createRenderRoot() {
+    return this;
+  }
+
+  /**
+   * Enters the "AI is working" state: shows the shimmer and makes the field
+   * read-only on the client so the user cannot edit a value the AI is about
+   * to overwrite. Idempotent — keeps the state captured on entry.
+   */
+  #startWorking() {
+    const field = this.#field;
+    if (!field || this.#lockedElements) {
+      return;
+    }
 
     // TODO uses a fixed 500ms timeout, exactly half of the --ai-marker-slide animation
     delayValueSets(field, 500);
@@ -414,10 +450,7 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
     // vaadin-custom-field does not propagate `readonly` to its inputs, so
     // they are locked (and restored) individually alongside the field.
     const locked = [field, ...(field.localName === 'vaadin-custom-field' ? (field.inputs ?? []) : [])];
-    workingFields.set(
-      field,
-      locked.map((element) => ({ element, readonly: element.readonly })),
-    );
+    this.#lockedElements = locked.map((element) => ({ element, readonly: element.readonly }));
 
     field.setAttribute('ai-working', '');
     locked.forEach((element) => {
@@ -426,28 +459,67 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
   }
 
   /**
-   * Clears the "AI is working" state set by {@link AiFieldMarker.startWorking}:
-   * removes the shimmer and restores the field's previous client-side
-   * read-only state. A no-op when the field is not in the working state.
+   * Leaves the "AI is working" state: removes the shimmer and restores the
+   * field's previous client-side read-only state. A no-op when not working.
    *
-   * @param {HTMLElement} field the field to release
+   * @param {boolean} immediate restore the read-only state right away instead
+   *   of after the shimmer wind-down (used on disconnect)
    */
-  static stopWorking(field) {
-    const entry = field && workingFields.get(field);
-    if (!entry) {
+  #stopWorking(immediate = false) {
+    const field = this.#field;
+    if (!field || !this.#lockedElements) {
       return;
     }
 
     field.removeAttribute('ai-working');
-    entry.forEach(({ element, readonly }) => {
-      // TODO uses a fixed 500ms timeout, exactly half of the --ai-marker-slide animation
-      setTimeout(() => {
+    this.#lockedElements.forEach(({ element, readonly }) => {
+      if (immediate) {
         element.readonly = readonly;
-      }, 500);
+      } else {
+        // TODO uses a fixed 500ms timeout, exactly half of the --ai-marker-slide animation
+        setTimeout(() => {
+          element.readonly = readonly;
+        }, 500);
+      }
     });
-    // });
 
-    workingFields.delete(field);
+    this.#lockedElements = null;
+  }
+
+  #onRevert() {
+    // Return focus to the field before closing the popover. The popover
+    // targets the badge for focus restoration, but the host may remove the
+    // marker on revert, which would drop focus to the body. Moving focus to
+    // the field first makes the overlay skip its own restore — it only
+    // restores while focus is still inside the overlay (see
+    // OverlayFocusMixin._shouldRestoreFocus).
+    //
+    // Focus the field's own focusable element rather than calling focus() on
+    // the host: a host focus() can carry component-specific semantics that a
+    // revert must not trigger — date-picker opens its overlay on focus while
+    // it has no usable text input (fullscreen, iOS, or no i18n.parseDate).
+    // Focusing the element directly also leaves the focus-ring to the field's
+    // own keyboard-vs-pointer detection instead of forcing it on.
+    const field = this.#field;
+    if (field) {
+      const focusTarget = field.focusElement || field.inputElement || field;
+      focusTarget.focus();
+    }
+
+    const popover = this.querySelector('vaadin-popover');
+    if (popover) {
+      popover.opened = false;
+    }
+
+    if (field) {
+      field.dispatchEvent(
+        new CustomEvent('ai-field-revert', {
+          bubbles: true,
+          composed: true,
+          detail: { value: this.#capturedValue },
+        }),
+      );
+    }
   }
 }
 

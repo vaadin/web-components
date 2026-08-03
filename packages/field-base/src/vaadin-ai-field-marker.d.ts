@@ -31,41 +31,6 @@ export interface AiFieldMarkerDefaults {
 }
 
 /**
- * Options accepted by {@link AiFieldMarker.mark}.
- */
-export interface AiFieldMarkerOptions {
-  /**
-   * The message shown in the popover explaining the AI fill. Defaults to a
-   * built-in English string; override for i18n.
-   */
-  message?: string;
-
-  /**
-   * Optional custom content shown in the popover between the message and the
-   * revert control. The marker places the element in the DOM and removes it
-   * on a re-mark without one.
-   */
-  customContent?: HTMLElement;
-
-  /**
-   * The label of the revert control. Defaults to `Revert`.
-   */
-  revertText?: string;
-
-  /**
-   * The accessible label of the badge button and the popover dialog. Defaults
-   * to `AI-provided value`.
-   */
-  badgeLabel?: string;
-
-  /**
-   * The tooltip text of the badge button. Defaults to
-   * `Field value modified by AI.\nClick for details`.
-   */
-  badgeTooltip?: string;
-}
-
-/**
  * Fired from the field element when the user activates the revert control.
  * The host is expected to restore the field's previous value.
  */
@@ -78,18 +43,20 @@ declare global {
 }
 
 /**
- * An element that annotates a field as AI-filled. It slots itself into the
- * field via a slot injected into the field's shadow root, draws an "AI" badge
- * anchored to the field, and offers a popover that explains the AI fill and
- * lets the user revert the value.
+ * An element that annotates a field as AI-filled. Appended as a direct child
+ * of the field, it slots itself into the field via a slot injected into the
+ * field's shadow root, draws an "AI" badge anchored to the field, and offers
+ * a popover that explains the AI fill and lets the user revert the value.
  *
- * Not intended to be used as a standalone tag; use the static `mark()` /
- * `unmark()` API.
+ * The marker manages the annotation through its own lifecycle: adding it to
+ * the field marks the field, removing it clears the mark. While an AI fill is
+ * in progress, set the `working` property to show an "AI is working" shimmer
+ * on the field along with a client-side read-only guard.
  *
  * Custom popover content — shown between the explanation and the revert
- * control — is supplied as an element through the `customContent` option of
- * `mark()`; the marker places it in the DOM. This is the integration point
- * for frameworks (e.g. Flow) that render content as server-side elements.
+ * control — is supplied as an element through the `customContent` property;
+ * the marker places it in the DOM. This is the integration point for
+ * frameworks (e.g. Flow) that render content as server-side elements.
  */
 declare class AiFieldMarker extends HTMLElement {
   /**
@@ -119,58 +86,25 @@ declare class AiFieldMarker extends HTMLElement {
   badgeTooltip: string;
 
   /**
-   * Sets the texts used by every subsequently marked field, so an application
-   * can localize them once instead of passing options to each `mark` call.
-   * Only the provided keys change; per-call `mark` options still take
-   * precedence. Does not retroactively update already-marked fields.
+   * Whether an AI is currently working on the field. While `true`, the field
+   * shows an "AI is working" shimmer and is made read-only on the client so
+   * the user cannot edit a value the AI is about to overwrite; only the
+   * client-side `readonly` state is touched, and setting the property back to
+   * `false` restores it. The marker badge is hidden for the duration, since
+   * the value it annotates is about to be replaced.
+   */
+  working: boolean;
+
+  /**
+   * Sets the texts used by every subsequently created marker, so an
+   * application can localize them once instead of setting the properties on
+   * each marker. Only the provided keys change; properties set on a marker
+   * instance still take precedence. Does not retroactively update markers
+   * that already exist.
    *
    * @param defaults the default texts to set
    */
   static setDefaults(defaults: AiFieldMarkerDefaults): void;
-
-  /**
-   * Marks the given field as AI-filled. Texts default to those set via
-   * `setDefaults`; `options` overrides them for this field only.
-   *
-   * @param field the field to mark
-   * @param options optional content overrides
-   * @returns the marker instance, or `null` when the field has no shadow root
-   */
-  static mark(field: HTMLElement, options?: AiFieldMarkerOptions): AiFieldMarker | null;
-
-  /**
-   * Removes the AI-filled annotation previously added by `mark`. A no-op when
-   * the field is not marked.
-   *
-   * @param field the field to clear
-   */
-  static unmark(field: HTMLElement): void;
-
-  /**
-   * Marks the field as being worked on by an AI: shows the "AI is working"
-   * shimmer and makes the field read-only on the client so the user cannot
-   * edit a value the AI is about to overwrite. Only the client-side
-   * `readonly` state is touched; `stopWorking` restores it. Idempotent — a
-   * no-op when the field is already in the working state or has no shadow
-   * root.
-   *
-   * Hides an existing mark for the duration, since the value it annotates is
-   * about to be replaced. `stopWorking` brings it back, so a cancelled or
-   * failed fill leaves the previous mark intact; call `mark` again to describe
-   * a new value.
-   *
-   * @param field the field the AI is working on
-   */
-  static startWorking(field: HTMLElement): void;
-
-  /**
-   * Clears the "AI is working" state set by `startWorking`: removes the
-   * shimmer and restores the field's previous client-side read-only state.
-   * A no-op when the field is not in the working state.
-   *
-   * @param field the field to release
-   */
-  static stopWorking(field: HTMLElement): void;
 }
 
 declare global {

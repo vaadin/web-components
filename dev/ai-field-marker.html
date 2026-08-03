@@ -35,12 +35,14 @@
       import '@vaadin/text-area';
       import '@vaadin/text-field';
       import '@vaadin/radio-group';
-      import { AiFieldMarker } from '@vaadin/field-base/src/vaadin-ai-field-marker.js';
+      import '@vaadin/field-base/src/vaadin-ai-field-marker.js';
 
       const fields = [...document.querySelectorAll('vaadin-form-layout > *')];
 
       // Remember the value before the "AI fill" so the revert handler can restore it.
       const previousValues = new WeakMap();
+
+      const unmark = (field) => field.querySelector('vaadin-ai-field-marker')?.remove();
 
       // The marker fires this from the field; the host restores the value.
       fields.forEach((field) => {
@@ -48,11 +50,11 @@
 
         field.addEventListener('ai-field-revert', () => {
           field.value = previousValues.get(field) ?? '';
-          AiFieldMarker.unmark(field);
+          unmark(field);
         });
 
         field.addEventListener('input', () => {
-          AiFieldMarker.unmark(field);
+          unmark(field);
         });
 
         field.addEventListener('change', () => {
@@ -60,26 +62,29 @@
         });
       });
 
-      document.querySelector('#simulate').addEventListener('click', async () => {
+      document.querySelector('#simulate').addEventListener('click', () => {
         fields.forEach((field) => {
-          AiFieldMarker.unmark(field);
+          unmark(field);
           field.value = previousValues.get(field) ?? '';
-          AiFieldMarker.startWorking(field);
+
+          // Show the "AI is working" state while the fill is in progress.
+          const marker = document.createElement('vaadin-ai-field-marker');
+          marker.working = true;
+          field.appendChild(marker);
         });
 
-        // Mimic an AI fill, then mark the field.
+        // Mimic an AI fill, then clear the working state to show the mark.
         window.setTimeout(() => {
           fields.forEach((field, index) => {
-            AiFieldMarker.stopWorking(field);
+            const marker = field.querySelector('vaadin-ai-field-marker');
 
-            AiFieldMarker.mark(field, {
-              customContent: index === 1 ? 'Extracted from the uploaded document.' : '',
-            });
+            marker.customContent = index === 1 ? 'Extracted from the uploaded document.' : '';
 
             // Demonstrate custom popover content: slot a rich element on the FIELD
             // (this is how a server-side framework like Flow would inject content).
             if (index === 2) {
-              const link = field.querySelector('vaadin-ai-field-marker > vaadin-popover > a') ?? document.createElement('a');
+              const link =
+                field.querySelector('vaadin-ai-field-marker > vaadin-popover > a') ?? document.createElement('a');
               link.href = '#';
               link.textContent = 'Why was this filled in?';
               field.querySelector('vaadin-ai-field-marker > vaadin-popover').appendChild(link);
@@ -92,11 +97,7 @@
               field.value = 'AI value';
             }
 
-            // The marker fires this from the field; the host restores the value.
-            field.addEventListener('ai-field-revert', () => {
-              field.value = previousValues.get(field) ?? '';
-              AiFieldMarker.unmark(field);
-            });
+            marker.working = false;
           });
         }, 2000 * Math.random());
       });

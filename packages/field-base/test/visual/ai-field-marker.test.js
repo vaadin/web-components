@@ -3,8 +3,8 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import './not-animated-styles.css';
 import '@vaadin/text-field/src/vaadin-text-field.js';
+import '../../src/vaadin-ai-field-marker.js';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
-import { AiFieldMarker } from '../../src/vaadin-ai-field-marker.js';
 
 describe('ai-field-marker', () => {
   let div, field;
@@ -12,6 +12,13 @@ describe('ai-field-marker', () => {
   before(() => {
     Tooltip.setDefaultFocusDelay(0);
   });
+
+  function mark(properties = {}) {
+    const marker = document.createElement('vaadin-ai-field-marker');
+    Object.assign(marker, properties);
+    field.appendChild(marker);
+    return marker;
+  }
 
   async function createField({ overlay = false } = {}) {
     div = document.createElement('div');
@@ -43,7 +50,7 @@ describe('ai-field-marker', () => {
 
         it('basic', async () => {
           await createField();
-          AiFieldMarker.mark(field);
+          mark();
           await nextRender();
           await visualDiff(div, `ai-marker-${dir}-basic`);
         });
@@ -52,7 +59,7 @@ describe('ai-field-marker', () => {
 
     it('badge focus', async () => {
       await createField({ overlay: true });
-      AiFieldMarker.mark(field);
+      mark();
       await nextRender();
       // Tab to the field input and on to the badge: keyboard focus shows the
       // focus ring and opens the badge tooltip.
@@ -69,7 +76,7 @@ describe('ai-field-marker', () => {
     });
 
     it('default content', async () => {
-      AiFieldMarker.mark(field);
+      mark();
       await nextRender();
       field.querySelector('[part="badge"]').click();
       await nextRender();
@@ -79,7 +86,7 @@ describe('ai-field-marker', () => {
     it('custom content', async () => {
       const content = document.createElement('div');
       content.textContent = 'Extracted from the uploaded document.';
-      AiFieldMarker.mark(field, { customContent: content });
+      mark({ customContent: content });
       await nextRender();
       field.querySelector('[part="badge"]').click();
       await nextRender();
@@ -93,7 +100,7 @@ describe('ai-field-marker', () => {
     });
 
     it('working', async () => {
-      AiFieldMarker.startWorking(field);
+      mark({ working: true });
       await nextRender();
       await visualDiff(div, 'ai-marker-working');
     });
@@ -101,9 +108,9 @@ describe('ai-field-marker', () => {
     it('working while marked', async () => {
       // The badge and glow describe the value the AI is about to replace, so
       // the working state hides them along with showing the shimmer.
-      AiFieldMarker.mark(field);
+      const marker = mark();
       await nextRender();
-      AiFieldMarker.startWorking(field);
+      marker.working = true;
       await nextRender();
       await visualDiff(div, 'ai-marker-working-marked');
     });

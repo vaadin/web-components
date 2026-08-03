@@ -6,8 +6,20 @@ import '@vaadin/text-field/src/vaadin-text-field.js';
 import { AiFieldMarker } from '../src/vaadin-ai-field-marker.js';
 
 const DEFAULT_MESSAGE = 'This field value was modified by AI.';
+const DEFAULT_REVERT_TEXT = 'Revert Value';
 const DEFAULT_BADGE_LABEL = 'AI-provided value';
 const DEFAULT_BADGE_TOOLTIP = 'Field value modified by AI.\nClick for details';
+
+/**
+ * Creates a marker with the given properties and appends it to the field,
+ * the way a host application marks a field as AI-filled.
+ */
+function mark(field, properties = {}) {
+  const marker = document.createElement('vaadin-ai-field-marker');
+  Object.assign(marker, properties);
+  field.appendChild(marker);
+  return marker;
+}
 
 /**
  * A minimal field that gives `focus()` and a host click a component-specific
@@ -55,7 +67,7 @@ describe('ai field marker', () => {
     let marker;
 
     beforeEach(async () => {
-      marker = AiFieldMarker.mark(field);
+      marker = mark(field);
       await nextRender();
     });
 
@@ -119,11 +131,14 @@ describe('ai field marker', () => {
       expect(marker.assignedSlot).to.exist;
     });
 
-    it('should be idempotent', () => {
-      const again = AiFieldMarker.mark(field);
-      expect(again).to.equal(marker);
+    it('should not duplicate the injected slot when re-added', async () => {
+      marker.remove();
+      field.appendChild(marker);
+      await nextRender();
+
       expect(field.querySelectorAll('vaadin-ai-field-marker')).to.have.lengthOf(1);
       expect(field.shadowRoot.querySelectorAll('slot[name="ai-field-marker"]')).to.have.lengthOf(1);
+      expect(marker.assignedSlot).to.exist;
     });
 
     it('should open the popover on badge click', async () => {
@@ -133,14 +148,17 @@ describe('ai field marker', () => {
       expect(popover.opened).to.be.true;
     });
 
-    it('should return null for a field without a shadow root', () => {
-      expect(AiFieldMarker.mark(document.createElement('input'))).to.be.null;
+    it('should not render for a parent without a shadow root', async () => {
+      const container = fixtureSync(`<div></div>`);
+      const other = mark(container);
+      await nextRender();
+      expect(other.querySelector('[part="badge"]')).to.be.null;
     });
   });
 
-  describe('options', () => {
+  describe('properties', () => {
     it('should override message, revert text and badge tooltip', async () => {
-      const marker = AiFieldMarker.mark(field, {
+      const marker = mark(field, {
         message: 'Custom message',
         revertText: 'Undo',
         badgeTooltip: 'Open AI details',
@@ -151,9 +169,22 @@ describe('ai field marker', () => {
       expect(marker.querySelector('vaadin-tooltip').getAttribute('text')).to.equal('Open AI details');
     });
 
-    it('should render custom content passed to mark in the popover', async () => {
+    it('should update the description node when the message changes', async () => {
+      const marker = mark(field);
+      await nextRender();
+
+      marker.message = 'Refreshed';
+      await nextUpdate(marker);
+
+      const descId = (field.inputElement.getAttribute('aria-describedby') || '')
+        .split(' ')
+        .find((id) => id.startsWith('ai-field-marker-'));
+      expect(field.querySelector(`#${descId}`).textContent).to.equal('Refreshed');
+    });
+
+    it('should render custom content in the popover', async () => {
       const custom = document.createElement('img');
-      const marker = AiFieldMarker.mark(field, { customContent: custom });
+      const marker = mark(field, { customContent: custom });
       await nextRender();
 
       const content = marker.querySelector('[part="custom-content"]');
@@ -167,25 +198,25 @@ describe('ai field marker', () => {
       );
     });
 
-    it('should keep the custom content across a re-mark that passes it again', async () => {
+    it('should keep the custom content when other properties change', async () => {
       const custom = document.createElement('img');
-      const marker = AiFieldMarker.mark(field, { customContent: custom });
+      const marker = mark(field, { customContent: custom });
       await nextRender();
 
-      AiFieldMarker.mark(field, { message: 'Refreshed', customContent: custom });
-      await nextRender();
+      marker.message = 'Refreshed';
+      await nextUpdate(marker);
 
       expect(marker.querySelector('[part="custom-content"]').firstElementChild).to.equal(custom);
     });
 
-    it('should clear the custom content on a re-mark without it', async () => {
-      const marker = AiFieldMarker.mark(field, { customContent: document.createElement('img') });
+    it('should clear the custom content when set to null', async () => {
+      const marker = mark(field, { customContent: document.createElement('img') });
       await nextRender();
 
-      // The content described the previous fill; a re-mark without it must
-      // not leave it in the popover.
-      AiFieldMarker.mark(field);
-      await nextRender();
+      // The content described the previous fill; describing a new fill
+      // without it must not leave it in the popover.
+      marker.customContent = null;
+      await nextUpdate(marker);
 
       expect(marker.querySelector('[part="custom-content"]')).to.be.null;
     });
@@ -197,7 +228,7 @@ describe('ai field marker', () => {
       await nextRender();
       const helperIds = helperField.inputElement.getAttribute('aria-describedby').split(' ');
 
-      AiFieldMarker.mark(helperField);
+      mark(helperField);
       const ids = helperField.inputElement.getAttribute('aria-describedby').split(' ');
 
       // Every original (helper) id is preserved...
@@ -212,13 +243,13 @@ describe('ai field marker', () => {
       // Restore built-in defaults so global state does not leak between tests.
       AiFieldMarker.setDefaults({
         message: DEFAULT_MESSAGE,
-        revertText: 'Revert',
+        revertText: DEFAULT_REVERT_TEXT,
         badgeLabel: DEFAULT_BADGE_LABEL,
         badgeTooltip: DEFAULT_BADGE_TOOLTIP,
       });
     });
 
-    it('should apply globally configured texts to subsequently marked fields', async () => {
+    it('should apply globally configured texts to subsequently created markers', async () => {
       AiFieldMarker.setDefaults({
         message: 'Tämä arvo on tekoälyn täyttämä',
         revertText: 'Kumoa',
@@ -226,7 +257,7 @@ describe('ai field marker', () => {
         badgeTooltip: 'Avaa tekoälyn tiedot',
       });
 
-      const marker = AiFieldMarker.mark(field);
+      const marker = mark(field);
       await nextRender();
 
       expect(marker.querySelector('[part="message"]').textContent).to.equal('Tämä arvo on tekoälyn täyttämä');
@@ -235,10 +266,10 @@ describe('ai field marker', () => {
       expect(marker.querySelector('vaadin-tooltip').getAttribute('text')).to.equal('Avaa tekoälyn tiedot');
     });
 
-    it('should let per-field options override the global defaults', async () => {
+    it('should let per-marker properties override the global defaults', async () => {
       AiFieldMarker.setDefaults({ message: 'Global default' });
 
-      const marker = AiFieldMarker.mark(field, { message: 'Per-field override' });
+      const marker = mark(field, { message: 'Per-field override' });
       await nextRender();
 
       expect(marker.querySelector('[part="message"]').textContent).to.equal('Per-field override');
@@ -247,18 +278,18 @@ describe('ai field marker', () => {
     it('should only change the provided keys', async () => {
       AiFieldMarker.setDefaults({ message: 'Only message changed' });
 
-      const marker = AiFieldMarker.mark(field);
+      const marker = mark(field);
       await nextRender();
 
       expect(marker.querySelector('[part="message"]').textContent).to.equal('Only message changed');
       // revertText was not configured, so it stays the built-in default.
-      expect(marker.querySelector('[part="revert-button"]').textContent).to.equal('Revert');
+      expect(marker.querySelector('[part="revert-button"]').textContent).to.equal(DEFAULT_REVERT_TEXT);
     });
   });
 
   describe('custom popover content', () => {
     it('should render custom content appended to the popover', async () => {
-      const marker = AiFieldMarker.mark(field);
+      const marker = mark(field);
       await nextRender();
 
       // The marker renders in the field's light DOM, so a framework (e.g.
@@ -284,7 +315,7 @@ describe('ai field marker', () => {
     let revertButton;
 
     beforeEach(async () => {
-      marker = AiFieldMarker.mark(field);
+      marker = mark(field);
       await nextRender();
       revertButton = marker.querySelector('[part="revert-button"]');
     });
@@ -293,7 +324,7 @@ describe('ai field marker', () => {
       const spy = sinon.spy();
       field.addEventListener('ai-field-revert', spy);
       revertButton.click();
-      expect(spy.calledOnce).to.be.true;
+      expect(spy).to.be.calledOnce;
     });
 
     it('should carry the captured value in the event detail', () => {
@@ -308,7 +339,7 @@ describe('ai field marker', () => {
       document.addEventListener('ai-field-revert', spy);
       revertButton.click();
       document.removeEventListener('ai-field-revert', spy);
-      expect(spy.calledOnce).to.be.true;
+      expect(spy).to.be.calledOnce;
     });
 
     it('should not restore the value itself', () => {
@@ -329,8 +360,8 @@ describe('ai field marker', () => {
     });
 
     it('should move focus to the field input', () => {
-      // The popover restores focus to the badge, which revert removes, so the
-      // marker moves focus to the field first.
+      // The popover restores focus to the badge, which the host may remove on
+      // revert, so the marker moves focus to the field first.
       revertButton.click();
       expect(field.inputElement.matches(':focus')).to.be.true;
       expect(field.hasAttribute('focused')).to.be.true;
@@ -350,7 +381,7 @@ describe('ai field marker', () => {
 
     beforeEach(async () => {
       sensitiveField = fixtureSync(`<focus-sensitive-field></focus-sensitive-field>`);
-      marker = AiFieldMarker.mark(sensitiveField);
+      marker = mark(sensitiveField);
       await nextRender();
     });
 
@@ -383,7 +414,7 @@ describe('ai field marker', () => {
     let spy;
 
     beforeEach(async () => {
-      marker = AiFieldMarker.mark(field);
+      marker = mark(field);
       await nextRender();
       spy = sinon.spy();
       field.addEventListener('click', spy);
@@ -391,7 +422,7 @@ describe('ai field marker', () => {
 
     it('should not propagate badge clicks to the field', () => {
       marker.querySelector('[part="badge"]').click();
-      expect(spy.called).to.be.false;
+      expect(spy).to.not.be.called;
     });
 
     it('should not propagate popover clicks to the field', async () => {
@@ -399,21 +430,21 @@ describe('ai field marker', () => {
       await nextRender();
 
       marker.querySelector('[part="revert-button"]').click();
-      expect(spy.called).to.be.false;
+      expect(spy).to.not.be.called;
     });
 
     it('should not propagate description node clicks to the field', () => {
-      // mark() also puts the hidden aria-describedby node inside the marker.
+      // The marker also holds the hidden aria-describedby node.
       const descId = (field.inputElement.getAttribute('aria-describedby') || '')
         .split(' ')
         .find((id) => id.startsWith('ai-field-marker-'));
       marker.querySelector(`#${descId}`).click();
-      expect(spy.called).to.be.false;
+      expect(spy).to.not.be.called;
     });
 
     it('should still let clicks on the field itself through', () => {
       field.inputElement.click();
-      expect(spy.calledOnce).to.be.true;
+      expect(spy).to.be.calledOnce;
     });
 
     it('should still open the popover on badge click', async () => {
@@ -425,19 +456,21 @@ describe('ai field marker', () => {
     });
   });
 
-  describe('unmark', () => {
+  describe('remove', () => {
+    let marker;
+
     beforeEach(async () => {
-      AiFieldMarker.mark(field);
+      marker = mark(field);
       await nextRender();
     });
 
     it('should remove the marker element', () => {
-      AiFieldMarker.unmark(field);
+      marker.remove();
       expect(field.querySelector('vaadin-ai-field-marker')).to.not.exist;
     });
 
     it('should remove the injected marker slot', () => {
-      AiFieldMarker.unmark(field);
+      marker.remove();
       expect(field.shadowRoot.querySelector('slot[name="ai-field-marker"]')).to.not.exist;
     });
 
@@ -445,23 +478,60 @@ describe('ai field marker', () => {
       const ids = (field.inputElement.getAttribute('aria-describedby') || '').split(' ');
       const descId = ids.find((id) => id.startsWith('ai-field-marker-'));
 
-      AiFieldMarker.unmark(field);
+      marker.remove();
 
       const after = field.inputElement.getAttribute('aria-describedby') || '';
       expect(after).to.not.contain('ai-field-marker-');
       expect(field.querySelector(`#${descId}`)).to.not.exist;
     });
 
-    it('should be a no-op for an unmarked field', () => {
-      const other = fixtureSync(`<vaadin-text-field></vaadin-text-field>`);
-      expect(() => AiFieldMarker.unmark(other)).to.not.throw();
+    it('should mark the field again when re-added', async () => {
+      marker.remove();
+      field.appendChild(marker);
+      await nextRender();
+
+      expect(marker.assignedSlot).to.exist;
+      expect(field.inputElement.getAttribute('aria-describedby')).to.contain('ai-field-marker-');
+    });
+
+    it('should be a no-op for a marker that was never added', () => {
+      const other = document.createElement('vaadin-ai-field-marker');
+      expect(() => other.remove()).to.not.throw();
     });
   });
 
   describe('working state', () => {
-    describe('startWorking', () => {
-      beforeEach(() => {
-        AiFieldMarker.startWorking(field);
+    let clock;
+
+    afterEach(() => {
+      if (clock) {
+        clock.restore();
+        clock = null;
+      }
+    });
+
+    it('should apply the working state when added with working set', () => {
+      mark(field, { working: true });
+      expect(field.hasAttribute('ai-working')).to.be.true;
+      expect(field.readonly).to.be.true;
+    });
+
+    it('should do nothing for a parent without a shadow root', async () => {
+      const container = fixtureSync(`<div></div>`);
+      const marker = mark(container, { working: true });
+      await nextRender();
+      expect(container.hasAttribute('ai-working')).to.be.false;
+      expect(marker.working).to.be.true;
+    });
+
+    describe('working set after adding', () => {
+      let marker;
+
+      beforeEach(async () => {
+        marker = mark(field);
+        await nextRender();
+        marker.working = true;
+        await nextUpdate(marker);
       });
 
       it('should set the ai-working attribute on the field', () => {
@@ -476,46 +546,87 @@ describe('ai field marker', () => {
         expect(field.value).to.equal('AI value');
       });
 
-      it('should be idempotent', () => {
-        AiFieldMarker.startWorking(field);
+      it('should re-apply the working state when re-added while working', async () => {
+        marker.remove();
+        expect(field.hasAttribute('ai-working')).to.be.false;
+        expect(field.readonly).to.be.false;
 
-        AiFieldMarker.stopWorking(field);
+        field.appendChild(marker);
+        await nextRender();
+        expect(field.hasAttribute('ai-working')).to.be.true;
+        expect(field.readonly).to.be.true;
+      });
+
+      it('should restore the field when removed while working', () => {
+        marker.remove();
         expect(field.hasAttribute('ai-working')).to.be.false;
         expect(field.readonly).to.be.false;
       });
+    });
 
-      it('should be a no-op for a field without a shadow root', () => {
-        const input = document.createElement('input');
-        expect(() => AiFieldMarker.startWorking(input)).to.not.throw();
-        expect(input.hasAttribute('ai-working')).to.be.false;
+    describe('working cleared', () => {
+      let marker;
+
+      beforeEach(async () => {
+        marker = mark(field, { working: true });
+        await nextRender();
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true, toFake: ['setTimeout', 'clearTimeout'] });
+        marker.working = false;
+        await nextUpdate(marker);
+      });
+
+      it('should remove the ai-working attribute', () => {
+        expect(field.hasAttribute('ai-working')).to.be.false;
+      });
+
+      it('should restore the client read-only state after the shimmer wind-down', async () => {
+        expect(field.readonly).to.be.true;
+        await clock.tickAsync(500);
+        expect(field.readonly).to.be.false;
+      });
+
+      it('should keep a read-only state that was set before working', async () => {
+        await clock.tickAsync(500);
+        field.readonly = true;
+
+        marker.working = true;
+        await nextUpdate(marker);
+        marker.working = false;
+        await nextUpdate(marker);
+        await clock.tickAsync(500);
+
+        expect(field.readonly).to.be.true;
       });
     });
 
     describe('already marked field', () => {
       // A new AI request replaces the value the existing marker annotates, so
       // the badge and glow are stale for the duration. They stay hidden while
-      // the field carries [ai-working] and come back on stopWorking, which
-      // leaves the previous mark usable when a fill is cancelled or fails.
+      // the field carries [ai-working] and come back when `working` is set to
+      // `false`, which leaves the mark usable when a fill is cancelled or
+      // fails.
       let marker;
       let badge;
 
       beforeEach(async () => {
-        marker = AiFieldMarker.mark(field);
+        marker = mark(field);
         await nextRender();
         badge = marker.querySelector('[part="badge"]');
       });
 
-      it('should hide the marker while the AI is working', () => {
+      it('should hide the marker while the AI is working', async () => {
         expect(badge.checkVisibility(), 'badge should start out visible').to.be.true;
 
-        AiFieldMarker.startWorking(field);
+        marker.working = true;
+        await nextUpdate(marker);
 
         expect(getComputedStyle(marker).display).to.equal('none');
         expect(badge.checkVisibility()).to.be.false;
       });
 
-      it('should keep the marker in the DOM while the AI is working', () => {
-        AiFieldMarker.startWorking(field);
+      it('should keep the marker in the DOM while the AI is working', async () => {
+        marker.working = true;
+        await nextUpdate(marker);
         expect(field.querySelector('vaadin-ai-field-marker')).to.equal(marker);
       });
 
@@ -525,29 +636,27 @@ describe('ai field marker', () => {
         const overlay = marker.querySelector('vaadin-popover').shadowRoot.querySelector('vaadin-popover-overlay');
         expect(overlay.checkVisibility(), 'popover should start out showing').to.be.true;
 
-        AiFieldMarker.startWorking(field);
+        marker.working = true;
         await nextRender();
 
         expect(overlay.checkVisibility()).to.be.false;
       });
 
-      it('should still enter the working state', () => {
-        AiFieldMarker.startWorking(field);
-        expect(field.hasAttribute('ai-working')).to.be.true;
-        expect(field.readonly).to.be.true;
-      });
-
-      it('should show the marker again on stopWorking', () => {
-        AiFieldMarker.startWorking(field);
-        AiFieldMarker.stopWorking(field);
+      it('should show the marker again when working ends', async () => {
+        marker.working = true;
+        await nextUpdate(marker);
+        marker.working = false;
+        await nextUpdate(marker);
 
         expect(getComputedStyle(marker).display).to.equal('contents');
         expect(badge.checkVisibility()).to.be.true;
       });
 
-      it('should keep the mark usable when a fill never lands', () => {
-        AiFieldMarker.startWorking(field);
-        AiFieldMarker.stopWorking(field);
+      it('should keep the mark usable when a fill never lands', async () => {
+        marker.working = true;
+        await nextUpdate(marker);
+        marker.working = false;
+        await nextUpdate(marker);
 
         const spy = sinon.spy();
         field.addEventListener('ai-field-revert', spy);
@@ -555,52 +664,24 @@ describe('ai field marker', () => {
         expect(spy.firstCall.args[0].detail.value).to.equal('AI value');
       });
 
-      it('should reuse the marker when marking again for the new value', async () => {
-        AiFieldMarker.startWorking(field);
-        AiFieldMarker.stopWorking(field);
+      it('should update the mark for the new value', async () => {
+        marker.working = true;
+        await nextUpdate(marker);
 
-        const newMarker = AiFieldMarker.mark(field, { message: 'Filled again by AI' });
-        await nextRender();
+        marker.message = 'Filled again by AI';
+        marker.working = false;
+        await nextUpdate(marker);
 
-        expect(newMarker).to.equal(marker);
         expect(field.querySelectorAll('vaadin-ai-field-marker')).to.have.lengthOf(1);
         expect(field.shadowRoot.querySelectorAll('slot[name="ai-field-marker"]')).to.have.lengthOf(1);
         expect(marker.querySelector('[part="message"]').textContent).to.equal('Filled again by AI');
       });
     });
 
-    describe('stopWorking', () => {
-      beforeEach(() => {
-        AiFieldMarker.startWorking(field);
-        AiFieldMarker.stopWorking(field);
-      });
-
-      it('should remove the ai-working attribute', () => {
-        expect(field.hasAttribute('ai-working')).to.be.false;
-      });
-
-      it('should restore the client read-only state', () => {
-        expect(field.readonly).to.be.false;
-      });
-
-      it('should keep a read-only state that was set before startWorking', () => {
-        field.readonly = true;
-
-        AiFieldMarker.startWorking(field);
-        AiFieldMarker.stopWorking(field);
-
-        expect(field.readonly).to.be.true;
-      });
-
-      it('should be a no-op for a field not in the working state', () => {
-        const other = fixtureSync(`<vaadin-text-field></vaadin-text-field>`);
-        expect(() => AiFieldMarker.stopWorking(other)).to.not.throw();
-      });
-    });
-
     describe('custom field', () => {
       let customField;
       let inputs;
+      let marker;
 
       beforeEach(async () => {
         // vaadin-custom-field does not propagate readonly to its inputs, so
@@ -613,16 +694,18 @@ describe('ai field marker', () => {
         `);
         await nextRender();
         inputs = customField.inputs;
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true, toFake: ['setTimeout', 'clearTimeout'] });
+        marker = mark(customField, { working: true });
       });
 
-      it('should make the inputs read-only on startWorking', () => {
-        AiFieldMarker.startWorking(customField);
+      it('should make the inputs read-only while working', () => {
         expect(inputs.every((input) => input.readonly)).to.be.true;
       });
 
-      it('should restore each input read-only state on stopWorking', () => {
-        AiFieldMarker.startWorking(customField);
-        AiFieldMarker.stopWorking(customField);
+      it('should restore each input read-only state when working ends', async () => {
+        marker.working = false;
+        await nextUpdate(marker);
+        await clock.tickAsync(500);
         expect(inputs[0].readonly).to.be.false;
         expect(inputs[1].readonly).to.be.true;
       });
