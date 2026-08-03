@@ -83,11 +83,12 @@ function delayValueSets(field, delay = 500) {
 }
 
 /**
- * An element used to annotate a field as AI-filled. Appended as a direct
- * child of the field, it slots itself into the field via a slot injected
- * into the field's shadow root, draws an "AI" badge anchored to the field,
- * and offers a popover that explains the AI fill and lets the user revert
- * the value.
+ * An element used internally by Vaadin. Not intended to be used separately.
+ *
+ * Annotates a field as AI-filled: appended as a direct child of the field,
+ * it slots itself into the field via a slot injected into the field's shadow
+ * root, draws an "AI" badge anchored to the field, and offers a popover that
+ * explains the AI fill and lets the user revert the value.
  *
  * The marker manages the annotation through its own lifecycle: adding it to
  * the field marks the field, removing it clears the mark:
