@@ -908,6 +908,20 @@ describe('ai field marker', () => {
         expect(spy.firstCall.args[0].detail.value).to.equal('New AI value');
       });
 
+      it('should carry a value filled in the same batch in the revert event', async () => {
+        // The host fills the value and clears the working state together, so
+        // the fill is still held back when the marker re-captures it.
+        field.value = 'New AI value';
+        marker.working = false;
+        await nextUpdate(marker);
+        await clock.tickAsync(500);
+
+        const spy = sinon.spy();
+        field.addEventListener('ai-field-revert', spy);
+        marker.querySelector('[part="revert-button"]').click();
+        expect(spy.firstCall.args[0].detail.value).to.equal('New AI value');
+      });
+
       it('should still apply a value set queued before working ended', async () => {
         field.value = 'AI filled';
         marker.working = false;

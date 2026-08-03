@@ -99,6 +99,17 @@ class DelayedFieldValue {
     return this.#descriptor != null;
   }
 
+  /**
+   * The value the field ends up with: a queued value while one is pending,
+   * otherwise the field's current value. Reading `field.value` instead would
+   * return the value that the queued assignment is about to replace.
+   *
+   * @return {unknown}
+   */
+  get latestValue() {
+    return this.#timer != null ? this.#queuedValue : this.#field.value;
+  }
+
   /** Starts holding back value assignments. Keeps a queued assignment. */
   install() {
     const field = this.#field;
@@ -404,7 +415,7 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     }
 
     // Capture the AI-filled value so the revert event can carry it.
-    this.#capturedValue = 'value' in field ? field.value : undefined;
+    this.#capturedValue = this.#annotatedValue();
 
     if (this.working) {
       // Apply the working state directly: on a reconnect no `working`
@@ -485,7 +496,7 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
         this.#stopWorking();
         // The fill landed: the marker now annotates the current value, so
         // re-capture it for the revert event and announce the mark again.
-        this.#capturedValue = 'value' in field ? field.value : undefined;
+        this.#capturedValue = this.#annotatedValue();
         this.#announcePending = true;
       }
     }
@@ -524,6 +535,22 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
       </vaadin-popover>
       <slot name="description"></slot>
     `;
+  }
+
+  /**
+   * The field value the mark annotates. A value the AI has already set but
+   * that the working state still holds back counts as the annotated one, since
+   * it is the value the field ends up showing.
+   *
+   * @return {unknown} the annotated value, or `undefined` for a field that has
+   *   no value at all
+   */
+  #annotatedValue() {
+    const field = this.#field;
+    if (!('value' in field)) {
+      return undefined;
+    }
+    return this.#valueDelay ? this.#valueDelay.latestValue : field.value;
   }
 
   /**
