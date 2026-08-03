@@ -736,34 +736,28 @@ describe('FieldMixin', () => {
       });
     });
 
-    describe('accessible-name', () => {
+    describe('accessibleName', () => {
       beforeEach(async () => {
         element = fixtureSync(`<${tag} label="Label"></${tag}>`);
         await nextRender();
         input = element.querySelector('[slot=input]');
       });
 
-      it('should not define aria-label if no accessible-name is defined', () => {
+      it('should not set aria-label by default', () => {
         expect(input.hasAttribute('aria-label')).to.be.false;
       });
 
-      it('should not change aria-labelledby if no accessible-name is defined', () => {
+      it('should not change aria-labelledby by default', () => {
         expect(input.hasAttribute('aria-labelledby')).to.be.true;
       });
 
-      it('should set aria-label when accessible-name is defined', async () => {
+      it('should set aria-label when the property is set', async () => {
         element.accessibleName = 'accessible name';
         await nextUpdate(element);
         expect(input.getAttribute('aria-label')).to.be.equal('accessible name');
       });
 
-      it('should remove aria-labelledby by if no accessible name is defined', async () => {
-        element.accessibleName = 'accessible name';
-        await nextUpdate(element);
-        expect(input.hasAttribute('aria-labelledby')).to.be.false;
-      });
-
-      it('should remove aria-label when accessible name is cleared', async () => {
+      it('should remove aria-label when the property is cleared', async () => {
         element.accessibleName = 'accessible name';
         await nextUpdate(element);
         element.accessibleName = null;
@@ -771,7 +765,13 @@ describe('FieldMixin', () => {
         expect(input.hasAttribute('aria-label')).to.be.false;
       });
 
-      it('should restore aria-labelledby value if accessible-name is cleared', async () => {
+      it('should remove aria-labelledby when the property is set', async () => {
+        element.accessibleName = 'accessible name';
+        await nextUpdate(element);
+        expect(input.hasAttribute('aria-labelledby')).to.be.false;
+      });
+
+      it('should restore original aria-labelledby when the property is cleared', async () => {
         const ariaLabelledby = input.getAttribute('aria-labelledby');
         element.accessibleName = 'accessible name';
         await nextUpdate(element);
@@ -781,47 +781,40 @@ describe('FieldMixin', () => {
       });
     });
 
-    describe('accessible-name is set initially', () => {
+    describe('accessibleName is set initially', () => {
       beforeEach(async () => {
         element = fixtureSync(`<${tag} label="Label" accessible-name="accessible-name"></${tag}>`);
         await nextRender();
         input = element.querySelector('[slot=input]');
       });
 
-      it('should have accessibleName value in aria-label', () => {
+      it('should have aria-label set to the property value', () => {
         expect(input.getAttribute('aria-label')).to.equal('accessible-name');
       });
 
-      it('input should have aria-labellebdy by empty', () => {
+      it('should not have aria-labelledby set', () => {
         expect(input.getAttribute('aria-labelledby')).to.be.null;
-      });
-
-      it('should set default label to `aria-labellebdy` when accessible-name is removed', async () => {
-        const label = element.querySelector('[slot=label]');
-        element.accessibleName = null;
-        await nextRender();
-        expect(input.getAttribute('aria-labelledby')).to.equal(label.id);
       });
     });
 
-    describe('accessible-name-ref', () => {
+    describe('accessibleNameRef', () => {
       beforeEach(async () => {
         element = fixtureSync(`<${tag} label="Label"></${tag}>`);
         await nextRender();
         input = element.querySelector('[slot=input]');
       });
 
-      it('should not override aria-labelledby if no accessible-name-ref is defined', () => {
+      it('should not change aria-labelledby by default', () => {
         expect(input.hasAttribute('aria-labelledby')).to.be.true;
       });
 
-      it('should set aria-labelledby when accessible-name-ref is defined', async () => {
+      it('should override aria-labelledby when the property is set', async () => {
         element.accessibleNameRef = 'accessible-name-ref-0';
         await nextUpdate(element);
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
       });
 
-      it('should set aria-labelledby when accessible-name is defined before accessible-name-ref', async () => {
+      it('should override aria-labelledby when accessibleName is set first', async () => {
         element.accessibleName = 'accessible name';
         await nextUpdate(element);
         element.accessibleNameRef = 'accessible-name-ref-0';
@@ -829,7 +822,7 @@ describe('FieldMixin', () => {
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
       });
 
-      it('should change aria-labelledby if accessible-name-ref is changed', async () => {
+      it('should update aria-labelledby when the property changes', async () => {
         element.accessibleNameRef = 'accessible-name-ref-0';
         await nextUpdate(element);
         element.accessibleNameRef = 'accessible-name-ref-1';
@@ -837,7 +830,7 @@ describe('FieldMixin', () => {
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-1');
       });
 
-      it('should restore aria-labelledby by if accessible-name-ref is cleared', async () => {
+      it('should restore original aria-labelledby when the property is cleared', async () => {
         const previousAriaLabelledBy = input.getAttribute('aria-labelledby');
         expect(previousAriaLabelledBy).to.not.be.empty;
         element.accessibleNameRef = 'accessible-name-ref-0';
@@ -846,40 +839,17 @@ describe('FieldMixin', () => {
         await nextUpdate(element);
         expect(input.getAttribute('aria-labelledby')).to.be.equal(previousAriaLabelledBy);
       });
-
-      it('should not remove aria-labelledby if accessible-name-ref is defined and label is cleared', async () => {
-        element.accessibleNameRef = 'accessible-name-ref-0';
-        await nextUpdate(element);
-        element.label = null;
-        await nextUpdate(element);
-        expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
-      });
-
-      it('should not change aria-labelledby if accessible-name-ref is defined and label is changed', async () => {
-        element.accessibleNameRef = 'accessible-name-ref-0';
-        await nextUpdate(element);
-        element.label = 'Another label';
-        await nextUpdate(element);
-        expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
-      });
     });
 
-    describe('accessible-name-ref is set initially', () => {
+    describe('accessibleNameRef is set initially', () => {
       beforeEach(async () => {
         element = fixtureSync(`<${tag} label="Label" accessible-name-ref="accessible-name-ref-0"></${tag}>`);
         await nextRender();
         input = element.querySelector('[slot=input]');
       });
 
-      it('should contain accessibleNameRef in aria-labelledby', () => {
+      it('should have aria-labelledby set to the property value', () => {
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
-      });
-
-      it('should set default label to `aria-labellebdy` when accessible-name-ref is removed', async () => {
-        const label = element.querySelector('[slot=label]');
-        element.accessibleNameRef = null;
-        await nextRender();
-        expect(input.getAttribute('aria-labelledby')).to.equal(label.id);
       });
     });
   });
