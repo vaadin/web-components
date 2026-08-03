@@ -3,12 +3,9 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 
-/**
- * Application-wide default texts for {@link AiFieldMarker}, settable via
- * {@link AiFieldMarker.setDefaults}.
- */
-export interface AiFieldMarkerDefaults {
+export interface AiFieldMarkerI18n {
   /**
    * The message shown in the popover explaining the AI fill.
    */
@@ -17,7 +14,7 @@ export interface AiFieldMarkerDefaults {
   /**
    * The label of the revert control.
    */
-  revertText?: string;
+  revert?: string;
 
   /**
    * The accessible label of the badge button and the popover dialog.
@@ -58,26 +55,28 @@ declare global {
  * marker is slotted into the popover. This is the integration point for
  * frameworks (e.g. Flow) that render content as server-side elements.
  */
-declare class AiFieldMarker extends HTMLElement {
+declare class AiFieldMarker extends I18nMixin<typeof HTMLElement, AiFieldMarkerI18n>(HTMLElement) {
   /**
-   * The message shown in the popover explaining the AI fill.
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
+   *
+   * The object has the following JSON structure and default values:
+   *
+   * ```
+   * {
+   *   // The message shown in the popover explaining the AI fill.
+   *   message: 'This field value was modified by AI.',
+   *   // The label of the revert control.
+   *   revert: 'Revert Value',
+   *   // The accessible label of the badge button and the popover dialog.
+   *   badgeLabel: 'AI-provided value',
+   *   // The tooltip text of the badge button.
+   *   badgeTooltip: 'Field value modified by AI.\nClick for details'
+   * }
+   * ```
    */
-  message: string;
-
-  /**
-   * The label of the revert control.
-   */
-  revertText: string;
-
-  /**
-   * The accessible label of the badge button and the popover dialog.
-   */
-  badgeLabel: string;
-
-  /**
-   * The tooltip text of the badge button.
-   */
-  badgeTooltip: string;
+  i18n: AiFieldMarkerI18n;
 
   /**
    * Whether an AI is currently working on the field. While `true`, the field
@@ -88,17 +87,6 @@ declare class AiFieldMarker extends HTMLElement {
    * the value it annotates is about to be replaced.
    */
   working: boolean;
-
-  /**
-   * Sets the texts used by every subsequently created marker, so an
-   * application can localize them once instead of setting the properties on
-   * each marker. Only the provided keys change; properties set on a marker
-   * instance still take precedence. Does not retroactively update markers
-   * that already exist.
-   *
-   * @param defaults the default texts to set
-   */
-  static setDefaults(defaults: AiFieldMarkerDefaults): void;
 }
 
 declare global {

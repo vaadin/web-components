@@ -10,6 +10,7 @@ import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -19,20 +20,11 @@ import {
   aiFieldMarkerStyles,
 } from './styles/vaadin-ai-field-marker-base-styles.js';
 
-const DEFAULT_MESSAGE = 'This field value was modified by AI.';
-const DEFAULT_REVERT_TEXT = 'Revert Value';
-const DEFAULT_BADGE_LABEL = 'AI-provided value';
-const DEFAULT_BADGE_TOOLTIP = 'Field value modified by AI.\nClick for details';
-
-// Application-configurable defaults applied to every subsequently created
-// marker, so the texts can be localized once via AiFieldMarker.setDefaults()
-// instead of being set on each marker instance. Properties set on an instance
-// still take precedence.
-const defaults = {
-  message: DEFAULT_MESSAGE,
-  revertText: DEFAULT_REVERT_TEXT,
-  badgeLabel: DEFAULT_BADGE_LABEL,
-  badgeTooltip: DEFAULT_BADGE_TOOLTIP,
+const DEFAULT_I18N = {
+  message: 'This field value was modified by AI.',
+  revert: 'Revert Value',
+  badgeLabel: 'AI-provided value',
+  badgeTooltip: 'Field value modified by AI.\nClick for details',
 };
 
 const POPOVER_TRIGGER = ['click'];
@@ -102,7 +94,7 @@ function delayValueSets(field, delay = 500) {
  *
  * ```js
  * const marker = document.createElement('vaadin-ai-field-marker');
- * marker.message = 'Filled based on the uploaded document.';
+ * marker.i18n = { message: 'Filled based on the uploaded document.' };
  * field.appendChild(marker);
  * // ...
  * marker.remove();
@@ -128,7 +120,7 @@ function delayValueSets(field, delay = 500) {
  * @extends HTMLElement
  * @private
  */
-export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
+export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-ai-field-marker';
   }
@@ -137,40 +129,12 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
     return aiFieldMarkerShadowStyles;
   }
 
+  static get defaultI18n() {
+    return DEFAULT_I18N;
+  }
+
   static get properties() {
     return {
-      /**
-       * The message shown in the popover explaining the AI fill.
-       */
-      message: {
-        type: String,
-        value: () => defaults.message,
-      },
-
-      /**
-       * The label of the revert control.
-       */
-      revertText: {
-        type: String,
-        value: () => defaults.revertText,
-      },
-
-      /**
-       * The accessible label of the badge button and the popover dialog.
-       */
-      badgeLabel: {
-        type: String,
-        value: () => defaults.badgeLabel,
-      },
-
-      /**
-       * The tooltip text of the badge button.
-       */
-      badgeTooltip: {
-        type: String,
-        value: () => defaults.badgeTooltip,
-      },
-
       /**
        * Whether an AI is currently working on the field. While `true`, the
        * field shows an "AI is working" shimmer and is made read-only on the
@@ -288,27 +252,33 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
   }
 
   /**
-   * Sets the texts used by every subsequently created marker, so an
-   * application can localize them once instead of setting the properties on
-   * each marker. Only the provided keys change; properties set on a marker
-   * instance still take precedence over these defaults. Does not
-   * retroactively update markers that already exist.
+   * The object used to localize this component. To change the default
+   * localization, replace this with an object that provides all properties, or
+   * just the individual properties you want to change.
    *
-   * @param {{ message?: string, revertText?: string, badgeLabel?: string, badgeTooltip?: string }} newDefaults
+   * The object has the following JSON structure and default values:
+   *
+   * ```
+   * {
+   *   // The message shown in the popover explaining the AI fill.
+   *   message: 'This field value was modified by AI.',
+   *   // The label of the revert control.
+   *   revert: 'Revert Value',
+   *   // The accessible label of the badge button and the popover dialog.
+   *   badgeLabel: 'AI-provided value',
+   *   // The tooltip text of the badge button.
+   *   badgeTooltip: 'Field value modified by AI.\nClick for details'
+   * }
+   * ```
+   *
+   * @return {!Object}
    */
-  static setDefaults(newDefaults = {}) {
-    if (newDefaults.message != null) {
-      defaults.message = newDefaults.message;
-    }
-    if (newDefaults.revertText != null) {
-      defaults.revertText = newDefaults.revertText;
-    }
-    if (newDefaults.badgeLabel != null) {
-      defaults.badgeLabel = newDefaults.badgeLabel;
-    }
-    if (newDefaults.badgeTooltip != null) {
-      defaults.badgeTooltip = newDefaults.badgeTooltip;
-    }
+  get i18n() {
+    return super.i18n;
+  }
+
+  set i18n(value) {
+    super.i18n = value;
   }
 
   /**
@@ -358,7 +328,7 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
       const descNode = document.createElement('span');
       descNode.id = `ai-field-marker-${generateUniqueId()}`;
       descNode.slot = 'description';
-      descNode.textContent = this.message;
+      descNode.textContent = this.__effectiveI18n.message;
       descNode.style.cssText =
         'position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;';
       this.appendChild(descNode);
@@ -423,22 +393,17 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
   updated(props) {
     super.updated(props);
 
-    // Apply text properties to the generated content.
-    if (props.has('message')) {
-      this.#messageController.node.textContent = this.message;
+    // Apply the localized texts to the generated content.
+    if (props.has('__effectiveI18n')) {
+      const { message, revert, badgeLabel, badgeTooltip } = this.__effectiveI18n;
+      this.#messageController.node.textContent = message;
       // Keep the hidden field description in sync with the current message.
       if (this.#descNode) {
-        this.#descNode.textContent = this.message;
+        this.#descNode.textContent = message;
       }
-    }
-    if (props.has('badgeLabel')) {
-      this.#badgeController.node.setAttribute('aria-label', this.badgeLabel);
-    }
-    if (props.has('badgeTooltip')) {
-      this.#tooltipController.node.text = this.badgeTooltip;
-    }
-    if (props.has('revertText')) {
-      this.#revertButton.textContent = this.revertText;
+      this.#badgeController.node.setAttribute('aria-label', badgeLabel);
+      this.#tooltipController.node.text = badgeTooltip;
+      this.#revertButton.textContent = revert;
     }
 
     const field = this.#field;
@@ -462,7 +427,7 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
     // the same batch as the append or the `working` toggle.
     if (this.#announcePending && !this.working) {
       this.#announcePending = false;
-      const { message } = this;
+      const { message } = this.__effectiveI18n;
       const { label } = field;
       announce(label ? `${label}: ${message}` : message);
     }
@@ -480,7 +445,7 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
       <vaadin-popover
         .target="${this.#badgeController.node}"
         role="dialog"
-        accessible-name="${this.badgeLabel}"
+        accessible-name="${this.__effectiveI18n.badgeLabel}"
         .trigger="${POPOVER_TRIGGER}"
         autofocus
         theme="arrow"

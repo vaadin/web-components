@@ -3,7 +3,7 @@ import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/custom-field/src/vaadin-custom-field.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
-import { AiFieldMarker } from '../src/vaadin-ai-field-marker.js';
+import '../src/vaadin-ai-field-marker.js';
 
 const DEFAULT_MESSAGE = 'This field value was modified by AI.';
 const DEFAULT_REVERT_TEXT = 'Revert Value';
@@ -175,24 +175,12 @@ describe('ai field marker', () => {
     });
   });
 
-  describe('properties', () => {
-    it('should override message, revert text and badge tooltip', async () => {
-      const marker = mark(field, {
-        message: 'Custom message',
-        revertText: 'Undo',
-        badgeTooltip: 'Open AI details',
-      });
-      await nextRender();
-      expect(marker.querySelector('[part="message"]').textContent).to.equal('Custom message');
-      expect(marker.querySelector('[part="revert-button"]').textContent).to.equal('Undo');
-      expect(marker.querySelector('vaadin-tooltip').text).to.equal('Open AI details');
-    });
-
+  describe('input description', () => {
     it('should update the description node when the message changes', async () => {
       const marker = mark(field);
       await nextRender();
 
-      marker.message = 'Refreshed';
+      marker.i18n = { message: 'Refreshed' };
       await nextUpdate(marker);
 
       const descId = (field.inputElement.getAttribute('aria-describedby') || '')
@@ -218,26 +206,16 @@ describe('ai field marker', () => {
     });
   });
 
-  describe('setDefaults', () => {
-    afterEach(() => {
-      // Restore built-in defaults so global state does not leak between tests.
-      AiFieldMarker.setDefaults({
-        message: DEFAULT_MESSAGE,
-        revertText: DEFAULT_REVERT_TEXT,
-        badgeLabel: DEFAULT_BADGE_LABEL,
-        badgeTooltip: DEFAULT_BADGE_TOOLTIP,
+  describe('i18n', () => {
+    it('should apply localized texts to the marker', async () => {
+      const marker = mark(field, {
+        i18n: {
+          message: 'Tämä arvo on tekoälyn täyttämä',
+          revert: 'Kumoa',
+          badgeLabel: 'Tekoälyn täyttämä',
+          badgeTooltip: 'Avaa tekoälyn tiedot',
+        },
       });
-    });
-
-    it('should apply globally configured texts to subsequently created markers', async () => {
-      AiFieldMarker.setDefaults({
-        message: 'Tämä arvo on tekoälyn täyttämä',
-        revertText: 'Kumoa',
-        badgeLabel: 'Tekoälyn täyttämä',
-        badgeTooltip: 'Avaa tekoälyn tiedot',
-      });
-
-      const marker = mark(field);
       await nextRender();
 
       expect(marker.querySelector('[part="message"]').textContent).to.equal('Tämä arvo on tekoälyn täyttämä');
@@ -246,24 +224,25 @@ describe('ai field marker', () => {
       expect(marker.querySelector('vaadin-tooltip').text).to.equal('Avaa tekoälyn tiedot');
     });
 
-    it('should let per-marker properties override the global defaults', async () => {
-      AiFieldMarker.setDefaults({ message: 'Global default' });
-
-      const marker = mark(field, { message: 'Per-field override' });
-      await nextRender();
-
-      expect(marker.querySelector('[part="message"]').textContent).to.equal('Per-field override');
-    });
-
-    it('should only change the provided keys', async () => {
-      AiFieldMarker.setDefaults({ message: 'Only message changed' });
-
+    it('should apply localized texts set after adding the marker', async () => {
       const marker = mark(field);
       await nextRender();
 
+      marker.i18n = { revert: 'Kumoa' };
+      await nextUpdate(marker);
+
+      expect(marker.querySelector('[part="revert-button"]').textContent).to.equal('Kumoa');
+    });
+
+    it('should keep the default texts for keys not provided', async () => {
+      const marker = mark(field, { i18n: { message: 'Only message changed' } });
+      await nextRender();
+
       expect(marker.querySelector('[part="message"]').textContent).to.equal('Only message changed');
-      // revertText was not configured, so it stays the built-in default.
+      // revert was not configured, so it stays the built-in default.
       expect(marker.querySelector('[part="revert-button"]').textContent).to.equal(DEFAULT_REVERT_TEXT);
+      expect(marker.querySelector('[part="badge"]').getAttribute('aria-label')).to.equal(DEFAULT_BADGE_LABEL);
+      expect(marker.querySelector('vaadin-tooltip').text).to.equal(DEFAULT_BADGE_TOOLTIP);
     });
   });
 
@@ -676,7 +655,7 @@ describe('ai field marker', () => {
         marker.working = true;
         await nextUpdate(marker);
 
-        marker.message = 'Filled again by AI';
+        marker.i18n = { message: 'Filled again by AI' };
         marker.working = false;
         await nextUpdate(marker);
 
