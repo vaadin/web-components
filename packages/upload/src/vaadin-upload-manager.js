@@ -114,6 +114,17 @@ export class UploadManager extends EventTarget {
   __cancelUploadOfRemovedFiles = true;
 
   /**
+   * When true (default), the `file.xhr` reference is cleared once the upload
+   * succeeds or fails to allow garbage collection. `<vaadin-upload>` disables
+   * this to preserve its historical behavior, where the last request stays
+   * available on the file, e.g. in the `upload-retry` event detail.
+   * Internal API for `<vaadin-upload>`, may change at any time.
+   * @type {boolean}
+   * @private
+   */
+  __clearXhrOnComplete = true;
+
+  /**
    * Create an UploadManager instance.
    * @param {Object} options - Configuration options
    * @param {string} [options.target=''] - The server URL. The default value is an empty string, which means that _window.location_ will be used.
@@ -664,8 +675,10 @@ export class UploadManager extends EventTarget {
         const eventName = file.errorKey ? 'upload-error' : 'upload-success';
         this.dispatchEvent(new CustomEvent(eventName, { detail: { file, xhr } }));
 
-        // Clear file.xhr reference to allow garbage collection
-        file.xhr = null;
+        if (this.__clearXhrOnComplete) {
+          // Clear file.xhr reference to allow garbage collection
+          file.xhr = null;
+        }
 
         this.#notifyFilesChanged();
       }

@@ -377,6 +377,9 @@ export const UploadMixin = (superClass) =>
       // events does not cancel its upload
       this._manager.__holdOnUploadPrevented = false;
       this._manager.__cancelUploadOfRemovedFiles = false;
+      // Also keep the last request available on the file after the upload
+      // has finished
+      this._manager.__clearXhrOnComplete = false;
     }
 
     /** @protected */
