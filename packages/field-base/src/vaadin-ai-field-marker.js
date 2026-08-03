@@ -11,8 +11,13 @@ import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { aiFieldMarkerHostStyles, aiFieldMarkerStyles } from './styles/vaadin-ai-field-marker-base-styles.js';
+import {
+  aiFieldMarkerHostStyles,
+  aiFieldMarkerShadowStyles,
+  aiFieldMarkerStyles,
+} from './styles/vaadin-ai-field-marker-base-styles.js';
 
 const DEFAULT_MESSAGE = 'This field value was modified by AI.';
 const DEFAULT_REVERT_TEXT = 'Revert Value';
@@ -109,10 +114,13 @@ function delayValueSets(field, delay = 500) {
  * annotates is about to be replaced; setting `working` back to `false`
  * brings it back, so a cancelled or failed fill leaves the mark intact.
  *
- * Custom popover content — shown between the explanation and the revert
- * control — is supplied as an element through the `customContent` property;
- * the marker places it in the DOM. This is the integration point for
- * frameworks (e.g. Flow) that render content as server-side elements.
+ * The parts that construct the marker — the badge, its tooltip, the popover
+ * message and actions — are generated as light-DOM children assigned to
+ * named slots. The popover itself renders in the marker's shadow root,
+ * wrapping the content slots, so that content appended to the marker is
+ * slotted into the popover — shown between the explanation and the revert
+ * control. This default slot is the integration point for frameworks (e.g.
+ * Flow) that provide custom popover content as server-side elements.
  *
  * @fires {CustomEvent} ai-field-revert - Fired from the field element when the user activates the revert control. The host restores the value.
  *
@@ -125,6 +133,10 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
     return 'vaadin-ai-field-marker';
   }
 
+  static get styles() {
+    return aiFieldMarkerShadowStyles;
+  }
+
   static get properties() {
     return {
       /**
@@ -133,17 +145,6 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
       message: {
         type: String,
         value: () => defaults.message,
-      },
-
-      /**
-       * Optional custom content shown in the popover between the message and
-       * the actions: an element supplied by the host (e.g. the provenance of
-       * an AI-filled value — confidence, source, a source image with the
-       * driving region outlined). Rendered as-is; `null` shows nothing.
-       */
-      customContent: {
-        attribute: false,
-        value: null,
       },
 
       /**
@@ -214,11 +215,19 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
   /** Set when the AI-fill announcement should be made on the next update. */
   #announcePending = false;
 
+  #badgeController;
+
+  #tooltipController;
+
+  #messageController;
+
+  #actionsController;
+
+  /** The revert button, updated from the `revertText` property. */
+  #revertButton;
+
   constructor() {
     super();
-    // Stable badge id: generating it in render() would re-target the tooltip
-    // and popover on every re-render.
-    this.__badgeId = generateUniqueId();
 
     // The marker and its popover content live in the field's light DOM, so a
     // click on the badge or inside the popover bubbles to the field host.
@@ -228,6 +237,54 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
     // their listeners on the badge, which is a descendant, so they still fire
     // before this bubble-phase listener.
     this.addEventListener('click', (event) => event.stopPropagation());
+
+    // The parts are generated as light-DOM children assigned to named slots,
+    // so frameworks (e.g. Flow) can reach them without piercing a shadow
+    // root. The tooltip targets the badge by id, which resolves in the
+    // light-DOM scope shared by both; the popover renders in the shadow root
+    // and targets the badge through its `target` property instead.
+    const badgeId = `vaadin-ai-marker-${generateUniqueId()}`;
+
+    this.#badgeController = new SlotController(this, 'badge', 'button', {
+      observe: false,
+      initializer: (badge) => {
+        badge.id = badgeId;
+        badge.setAttribute('part', 'badge');
+        badge.type = 'button';
+      },
+    });
+    this.addController(this.#badgeController);
+
+    this.#tooltipController = new SlotController(this, 'tooltip', 'vaadin-tooltip', {
+      observe: false,
+      initializer: (tooltip) => {
+        tooltip.setAttribute('for', badgeId);
+      },
+    });
+    this.addController(this.#tooltipController);
+
+    this.#messageController = new SlotController(this, 'message', 'p', {
+      observe: false,
+      initializer: (message) => {
+        message.setAttribute('part', 'message');
+      },
+    });
+    this.addController(this.#messageController);
+
+    this.#actionsController = new SlotController(this, 'actions', 'div', {
+      observe: false,
+      initializer: (actions) => {
+        actions.setAttribute('part', 'actions');
+
+        const revertButton = document.createElement('button');
+        revertButton.type = 'button';
+        revertButton.setAttribute('part', 'revert-button');
+        revertButton.addEventListener('click', () => this.#onRevert());
+        this.#revertButton = revertButton;
+        actions.appendChild(revertButton);
+      },
+    });
+    this.addController(this.#actionsController);
   }
 
   /**
@@ -265,9 +322,8 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
    */
   connectedCallback() {
     // Resolve the field before super: PolylitMixin renders synchronously on
-    // connect, and render() must already know the field — committing the
-    // `nothing` fallback first and the template later would make Lit clear
-    // its part range, taking manually added light-DOM children with it.
+    // connect, and render() must already know the field to render the popover
+    // and the slots for the generated content.
     const parent = this.parentElement;
     if (parent && parent.shadowRoot) {
       this.#field = parent;
@@ -301,12 +357,11 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
     if (input) {
       const descNode = document.createElement('span');
       descNode.id = `ai-field-marker-${generateUniqueId()}`;
+      descNode.slot = 'description';
       descNode.textContent = this.message;
       descNode.style.cssText =
         'position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;';
-      // Insert before Lit's rendered content so the node stays outside the
-      // range Lit manages (and may clear) in the light-DOM render root.
-      this.insertBefore(descNode, this.firstChild);
+      this.appendChild(descNode);
       addValuesToAttribute(input, 'aria-describedby', descNode.id);
       this.#descNode = descNode;
       this.#describedInput = input;
@@ -368,14 +423,27 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
   updated(props) {
     super.updated(props);
 
+    // Apply text properties to the generated content.
+    if (props.has('message')) {
+      this.#messageController.node.textContent = this.message;
+      // Keep the hidden field description in sync with the current message.
+      if (this.#descNode) {
+        this.#descNode.textContent = this.message;
+      }
+    }
+    if (props.has('badgeLabel')) {
+      this.#badgeController.node.setAttribute('aria-label', this.badgeLabel);
+    }
+    if (props.has('badgeTooltip')) {
+      this.#tooltipController.node.text = this.badgeTooltip;
+    }
+    if (props.has('revertText')) {
+      this.#revertButton.textContent = this.revertText;
+    }
+
     const field = this.#field;
     if (!field) {
       return;
-    }
-
-    // Keep the hidden field description in sync with the current message.
-    if (props.has('message') && this.#descNode) {
-      this.#descNode.textContent = this.message;
     }
 
     if (props.has('working')) {
@@ -406,12 +474,11 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
       return nothing;
     }
 
-    const id = this.__badgeId;
     return html`
-      <button id="vaadin-ai-marker-${id}" part="badge" type="button" aria-label="${this.badgeLabel}"></button>
-      <vaadin-tooltip for="vaadin-ai-marker-${id}" text="${this.badgeTooltip}"></vaadin-tooltip>
+      <slot name="badge"></slot>
+      <slot name="tooltip"></slot>
       <vaadin-popover
-        for="vaadin-ai-marker-${id}"
+        .target="${this.#badgeController.node}"
         role="dialog"
         accessible-name="${this.badgeLabel}"
         .trigger="${POPOVER_TRIGGER}"
@@ -419,18 +486,12 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
         theme="arrow"
         position="end-top"
       >
-        <p part="message">${this.message}</p>
-        ${this.customContent ? html`<div part="custom-content">${this.customContent}</div>` : nothing}
-        <div part="actions">
-          <button type="button" part="revert-button" @click="${this.#onRevert}">${this.revertText}</button>
-        </div>
+        <slot name="message"></slot>
+        <slot></slot>
+        <slot name="actions"></slot>
       </vaadin-popover>
+      <slot name="description"></slot>
     `;
-  }
-
-  /** @protected */
-  createRenderRoot() {
-    return this;
   }
 
   /**
@@ -506,7 +567,7 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
       focusTarget.focus();
     }
 
-    const popover = this.querySelector('vaadin-popover');
+    const popover = this.shadowRoot.querySelector('vaadin-popover');
     if (popover) {
       popover.opened = false;
     }

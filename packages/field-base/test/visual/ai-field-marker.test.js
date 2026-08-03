@@ -86,7 +86,8 @@ describe('ai-field-marker', () => {
     it('custom content', async () => {
       const content = document.createElement('div');
       content.textContent = 'Extracted from the uploaded document.';
-      mark({ customContent: content });
+      const marker = mark();
+      marker.appendChild(content);
       await nextRender();
       field.querySelector('[part="badge"]').click();
       await nextRender();

@@ -54,8 +54,8 @@ declare global {
  * on the field along with a client-side read-only guard.
  *
  * Custom popover content — shown between the explanation and the revert
- * control — is supplied as an element through the `customContent` property;
- * the marker places it in the DOM. This is the integration point for
+ * control — is provided through the default slot: content appended to the
+ * marker is slotted into the popover. This is the integration point for
  * frameworks (e.g. Flow) that render content as server-side elements.
  */
 declare class AiFieldMarker extends HTMLElement {
@@ -63,12 +63,6 @@ declare class AiFieldMarker extends HTMLElement {
    * The message shown in the popover explaining the AI fill.
    */
   message: string;
-
-  /**
-   * Optional custom content shown in the popover between the message and the
-   * revert control. `null` shows nothing.
-   */
-  customContent: HTMLElement | null;
 
   /**
    * The label of the revert control.

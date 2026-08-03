@@ -78,16 +78,20 @@
           fields.forEach((field, index) => {
             const marker = field.querySelector('vaadin-ai-field-marker');
 
-            marker.customContent = index === 1 ? 'Extracted from the uploaded document.' : '';
+            // Demonstrate custom popover content: append elements to the
+            // marker's default slot and they show up in the popover (this is
+            // how a server-side framework like Flow would inject content).
+            if (index === 1) {
+              const info = document.createElement('div');
+              info.textContent = 'Extracted from the uploaded document.';
+              marker.appendChild(info);
+            }
 
-            // Demonstrate custom popover content: slot a rich element on the FIELD
-            // (this is how a server-side framework like Flow would inject content).
             if (index === 2) {
-              const link =
-                field.querySelector('vaadin-ai-field-marker > vaadin-popover > a') ?? document.createElement('a');
+              const link = document.createElement('a');
               link.href = '#';
               link.textContent = 'Why was this filled in?';
-              field.querySelector('vaadin-ai-field-marker > vaadin-popover').appendChild(link);
+              marker.appendChild(link);
             }
 
             if (field.localName === 'vaadin-radio-group') {

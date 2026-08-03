@@ -97,7 +97,24 @@ describe('ai field marker', () => {
       const badge = marker.querySelector('[part="badge"]');
       const tooltip = marker.querySelector('vaadin-tooltip');
       expect(tooltip.getAttribute('for')).to.equal(badge.id);
-      expect(tooltip.getAttribute('text')).to.equal(DEFAULT_BADGE_TOOLTIP);
+      expect(tooltip.text).to.equal(DEFAULT_BADGE_TOOLTIP);
+    });
+
+    it('should assign the generated content to named slots in the shadow root', () => {
+      ['badge', 'tooltip', 'message', 'actions'].forEach((slotName) => {
+        const slot = marker.shadowRoot.querySelector(`slot[name="${slotName}"]`);
+        expect(slot, `${slotName} slot should exist`).to.exist;
+        expect(slot.assignedElements()).to.have.lengthOf(1);
+      });
+    });
+
+    it('should render the popover in the shadow root wrapping the content slots', () => {
+      const popover = marker.shadowRoot.querySelector('vaadin-popover');
+      expect(popover).to.exist;
+      expect(popover.target).to.equal(marker.querySelector('[part="badge"]'));
+      expect(popover.querySelector('slot[name="message"]')).to.exist;
+      expect(popover.querySelector('slot:not([name])')).to.exist;
+      expect(popover.querySelector('slot[name="actions"]')).to.exist;
     });
 
     it('should render the default message in the popover', () => {
@@ -142,7 +159,7 @@ describe('ai field marker', () => {
     });
 
     it('should open the popover on badge click', async () => {
-      const popover = marker.querySelector('vaadin-popover');
+      const popover = marker.shadowRoot.querySelector('vaadin-popover');
       marker.querySelector('[part="badge"]').click();
       await nextRender();
       expect(popover.opened).to.be.true;
@@ -152,7 +169,9 @@ describe('ai field marker', () => {
       const container = fixtureSync(`<div></div>`);
       const other = mark(container);
       await nextRender();
-      expect(other.querySelector('[part="badge"]')).to.be.null;
+      const badge = other.querySelector('[part="badge"]');
+      expect(badge.assignedSlot).to.be.null;
+      expect(badge.checkVisibility()).to.be.false;
     });
   });
 
@@ -166,7 +185,7 @@ describe('ai field marker', () => {
       await nextRender();
       expect(marker.querySelector('[part="message"]').textContent).to.equal('Custom message');
       expect(marker.querySelector('[part="revert-button"]').textContent).to.equal('Undo');
-      expect(marker.querySelector('vaadin-tooltip').getAttribute('text')).to.equal('Open AI details');
+      expect(marker.querySelector('vaadin-tooltip').text).to.equal('Open AI details');
     });
 
     it('should update the description node when the message changes', async () => {
@@ -180,45 +199,6 @@ describe('ai field marker', () => {
         .split(' ')
         .find((id) => id.startsWith('ai-field-marker-'));
       expect(field.querySelector(`#${descId}`).textContent).to.equal('Refreshed');
-    });
-
-    it('should render custom content in the popover', async () => {
-      const custom = document.createElement('img');
-      const marker = mark(field, { customContent: custom });
-      await nextRender();
-
-      const content = marker.querySelector('[part="custom-content"]');
-      expect(content.firstElementChild).to.equal(custom);
-      // Between the explanation and the revert control.
-      expect(content.compareDocumentPosition(marker.querySelector('[part="message"]'))).to.equal(
-        Node.DOCUMENT_POSITION_PRECEDING,
-      );
-      expect(content.compareDocumentPosition(marker.querySelector('[part="actions"]'))).to.equal(
-        Node.DOCUMENT_POSITION_FOLLOWING,
-      );
-    });
-
-    it('should keep the custom content when other properties change', async () => {
-      const custom = document.createElement('img');
-      const marker = mark(field, { customContent: custom });
-      await nextRender();
-
-      marker.message = 'Refreshed';
-      await nextUpdate(marker);
-
-      expect(marker.querySelector('[part="custom-content"]').firstElementChild).to.equal(custom);
-    });
-
-    it('should clear the custom content when set to null', async () => {
-      const marker = mark(field, { customContent: document.createElement('img') });
-      await nextRender();
-
-      // The content described the previous fill; describing a new fill
-      // without it must not leave it in the popover.
-      marker.customContent = null;
-      await nextUpdate(marker);
-
-      expect(marker.querySelector('[part="custom-content"]')).to.be.null;
     });
 
     it('should keep the field helper description alongside the AI description', async () => {
@@ -263,7 +243,7 @@ describe('ai field marker', () => {
       expect(marker.querySelector('[part="message"]').textContent).to.equal('Tämä arvo on tekoälyn täyttämä');
       expect(marker.querySelector('[part="revert-button"]').textContent).to.equal('Kumoa');
       expect(marker.querySelector('[part="badge"]').getAttribute('aria-label')).to.equal('Tekoälyn täyttämä');
-      expect(marker.querySelector('vaadin-tooltip').getAttribute('text')).to.equal('Avaa tekoälyn tiedot');
+      expect(marker.querySelector('vaadin-tooltip').text).to.equal('Avaa tekoälyn tiedot');
     });
 
     it('should let per-marker properties override the global defaults', async () => {
@@ -288,25 +268,51 @@ describe('ai field marker', () => {
   });
 
   describe('custom popover content', () => {
-    it('should render custom content appended to the popover', async () => {
-      const marker = mark(field);
+    let marker;
+
+    beforeEach(async () => {
+      marker = mark(field);
       await nextRender();
+    });
 
-      // The marker renders in the field's light DOM, so a framework (e.g.
-      // Flow) can add popover content by appending it to the popover element.
-      const popover = field.querySelector('vaadin-ai-field-marker > vaadin-popover');
-      expect(popover).to.exist;
+    it('should slot content appended to the marker into the popover', () => {
+      // The default slot is how a framework (e.g. Flow) adds custom popover
+      // content: elements appended to the marker are slotted into the
+      // popover, staying children of the marker.
+      const custom = document.createElement('div');
+      marker.appendChild(custom);
 
+      expect(custom.parentElement).to.equal(marker);
+      const slot = custom.assignedSlot;
+      expect(slot, 'custom content should be slotted').to.exist;
+      expect(slot.parentElement).to.equal(marker.shadowRoot.querySelector('vaadin-popover'));
+      // Between the explanation and the revert control.
+      expect(slot.previousElementSibling).to.equal(marker.shadowRoot.querySelector('slot[name="message"]'));
+      expect(slot.nextElementSibling).to.equal(marker.shadowRoot.querySelector('slot[name="actions"]'));
+    });
+
+    it('should show the custom content in the popover overlay', async () => {
       const custom = document.createElement('div');
       custom.textContent = 'Custom content';
-      popover.appendChild(custom);
+      marker.appendChild(custom);
+      await nextRender();
 
       marker.querySelector('[part="badge"]').click();
       await nextRender();
 
-      // The content stays in place and is slotted into the popover overlay.
-      expect(custom.assignedSlot, 'custom content should be slotted').to.exist;
-      expect(custom.assignedSlot.getRootNode().host.localName).to.equal('vaadin-popover');
+      expect(custom.checkVisibility()).to.be.true;
+    });
+
+    it('should keep the custom content when other properties change', async () => {
+      const custom = document.createElement('img');
+      marker.appendChild(custom);
+      await nextRender();
+
+      marker.message = 'Refreshed';
+      await nextUpdate(marker);
+
+      expect(custom.parentElement).to.equal(marker);
+      expect(custom.assignedSlot).to.exist;
     });
   });
 
@@ -349,7 +355,7 @@ describe('ai field marker', () => {
     });
 
     it('should close the popover on revert', async () => {
-      const popover = marker.querySelector('vaadin-popover');
+      const popover = marker.shadowRoot.querySelector('vaadin-popover');
       marker.querySelector('[part="badge"]').click();
       await nextRender();
       expect(popover.opened).to.be.true;
@@ -452,7 +458,7 @@ describe('ai field marker', () => {
       // bound on the badge inside the marker.
       marker.querySelector('[part="badge"]').click();
       await nextRender();
-      expect(marker.querySelector('vaadin-popover').opened).to.be.true;
+      expect(marker.shadowRoot.querySelector('vaadin-popover').opened).to.be.true;
     });
   });
 
@@ -633,7 +639,9 @@ describe('ai field marker', () => {
       it('should hide an open popover while the AI is working', async () => {
         badge.click();
         await nextRender();
-        const overlay = marker.querySelector('vaadin-popover').shadowRoot.querySelector('vaadin-popover-overlay');
+        const overlay = marker.shadowRoot
+          .querySelector('vaadin-popover')
+          .shadowRoot.querySelector('vaadin-popover-overlay');
         expect(overlay.checkVisibility(), 'popover should start out showing').to.be.true;
 
         marker.working = true;

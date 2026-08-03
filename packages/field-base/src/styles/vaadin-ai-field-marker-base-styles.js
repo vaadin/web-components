@@ -24,6 +24,20 @@ export const aiFieldMarkerHostStyles = css`
 `;
 
 /**
+ * Styles for the marker's shadow root: the popover that wraps the content
+ * slots.
+ */
+export const aiFieldMarkerShadowStyles = css`
+  vaadin-popover::part(content) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vaadin-gap-s);
+    padding: var(--vaadin-padding-m);
+    max-width: 20em;
+  }
+`;
+
+/**
  * Styles applied to the `<vaadin-ai-field-marker>` element itself: the badge
  * button anchored to the field's top corner and the popover content.
  */
@@ -114,14 +128,6 @@ export const aiFieldMarkerStyles = css`
 
     [part='badge']:focus-visible {
       outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
-    }
-
-    > vaadin-popover::part(content) {
-      display: flex;
-      flex-direction: column;
-      gap: var(--vaadin-gap-s);
-      padding: var(--vaadin-padding-m);
-      max-width: 20em;
     }
 
     [part='message'] {
