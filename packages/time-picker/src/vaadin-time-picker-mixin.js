@@ -370,7 +370,7 @@ export const TimePickerMixin = (superClass) =>
     _setFocused(focused) {
       super._setFocused(focused);
 
-      if (!focused) {
+      if (!focused && !this._closeOnBlurIsPrevented) {
         // Do not validate when focusout is caused by document
         // losing focus, which happens on browser tab switch.
         if (document.hasFocus()) {
