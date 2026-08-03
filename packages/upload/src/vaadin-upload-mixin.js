@@ -112,8 +112,7 @@ export const UploadMixin = (superClass) =>
         _dragover: {
           type: Boolean,
           value: false,
-          reflectToAttribute: true,
-          attribute: 'dragover',
+          observer: '_dragoverChanged',
         },
 
         /**
@@ -203,8 +202,7 @@ export const UploadMixin = (superClass) =>
         _dragoverValid: {
           type: Boolean,
           value: false,
-          reflectToAttribute: true,
-          attribute: 'dragover-valid',
+          observer: '_dragoverValidChanged',
         },
 
         /**
@@ -713,6 +711,24 @@ export const UploadMixin = (superClass) =>
     }
 
     // ============ Drag and drop ============
+
+    /** @private */
+    _dragoverChanged(dragover) {
+      if (dragover) {
+        this.setAttribute('dragover', dragover);
+      } else {
+        this.removeAttribute('dragover');
+      }
+    }
+
+    /** @private */
+    _dragoverValidChanged(dragoverValid) {
+      if (dragoverValid) {
+        this.setAttribute('dragover-valid', dragoverValid);
+      } else {
+        this.removeAttribute('dragover-valid');
+      }
+    }
 
     /** @private */
     _onDragover(event) {
