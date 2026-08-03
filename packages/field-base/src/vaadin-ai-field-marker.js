@@ -385,6 +385,11 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
 
     super.connectedCallback();
 
+    // Re-render on reconnect, when no property change schedules an update. Done
+    // before resolving the field, so that moving the marker to a parent that is
+    // not a field also clears what was rendered for the previous one.
+    this.requestUpdate();
+
     const field = this.#field;
     if (!field) {
       return;
@@ -436,9 +441,6 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     } else {
       this.#announcePending = true;
     }
-
-    // Re-render on reconnect, when no property change schedules an update.
-    this.requestUpdate();
   }
 
   /**

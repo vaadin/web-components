@@ -622,6 +622,17 @@ describe('ai field marker', () => {
       expect(() => other.remove()).to.not.throw();
     });
 
+    it('should stop rendering when moved to a parent without a shadow root', async () => {
+      expect(marker.shadowRoot.querySelector('vaadin-popover'), 'popover should start out rendered').to.exist;
+
+      const container = fixtureSync(`<div></div>`);
+      container.appendChild(marker);
+      await nextRender();
+
+      expect(marker.shadowRoot.querySelector('vaadin-popover')).to.not.exist;
+      expect(marker.shadowRoot.querySelector('slot[name="badge"]')).to.not.exist;
+    });
+
     it('should not accumulate description nodes when re-added', async () => {
       marker.remove();
       field.appendChild(marker);
