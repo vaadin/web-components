@@ -168,15 +168,17 @@ export const FieldMixin = (superclass) =>
 
     /** @private */
     __updateFieldAriaControllerLabelledBy() {
+      let id = null;
+
       if (this.accessibleNameRef) {
-        this._fieldAriaController.setLabelledBy(this.accessibleNameRef);
+        id = this.accessibleNameRef;
       } else if (this.hasAttribute('has-label') && !this.accessibleName) {
         // Label ID should be only added when the label content is present
         // and not overridden by `accessible-name` which sets `aria-label`.
-        this._fieldAriaController.setLabelledBy(this._labelNode?.id);
-      } else {
-        this._fieldAriaController.setLabelledBy(null);
-      }
+        id = this._labelNode?.id;
+      } 
+
+      this._fieldAriaController.setLabelledBy(id);
     }
 
     #onLabelSlotContentChange(_event) {
