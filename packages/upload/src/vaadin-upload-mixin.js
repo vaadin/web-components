@@ -370,6 +370,13 @@ export const UploadMixin = (superClass) =>
 
       // Create the internal upload manager
       this._manager = new UploadManager();
+
+      // Preserve the component behavior that predates the manager
+      // integration: a prevented upload-before or upload-request leaves the
+      // file state untouched, and removing a file in a listener of these
+      // events does not cancel its upload
+      this._manager.__holdOnUploadPrevented = false;
+      this._manager.__cancelUploadOfRemovedFiles = false;
     }
 
     /** @protected */

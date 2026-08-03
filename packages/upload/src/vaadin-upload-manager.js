@@ -90,6 +90,30 @@ export class UploadManager extends EventTarget {
   __externalFiles = new Set();
 
   /**
+   * When true (default), a file whose `upload-before` or `upload-request`
+   * event is prevented is reset to the held state, freeing its upload slot
+   * so that it can be started again. `<vaadin-upload>` disables this to
+   * preserve its historical behavior, where a prevented upload leaves the
+   * file state untouched so that a listener can take over the request
+   * (e.g. send the xhr manually).
+   * Internal API for `<vaadin-upload>`, may change at any time.
+   * @type {boolean}
+   * @private
+   */
+  __holdOnUploadPrevented = true;
+
+  /**
+   * When true (default), an upload is canceled if its file is removed from
+   * the `files` list by an `upload-before` or `upload-request` event
+   * listener. `<vaadin-upload>` disables this to preserve its historical
+   * behavior, where such an upload still proceeds.
+   * Internal API for `<vaadin-upload>`, may change at any time.
+   * @type {boolean}
+   * @private
+   */
+  __cancelUploadOfRemovedFiles = true;
+
+  /**
    * Create an UploadManager instance.
    * @param {Object} options - Configuration options
    * @param {string} [options.target=''] - The server URL. The default value is an empty string, which means that _window.location_ will be used.
@@ -630,14 +654,16 @@ export class UploadManager extends EventTarget {
       }),
     );
     if (!evt) {
-      this.#holdFile(file);
+      if (this.__holdOnUploadPrevented) {
+        this.#holdFile(file);
+      }
       return;
     }
 
     // Check if file was removed during upload-before handler, except for
     // tracked external files, which are never in the list
     // If file.abort is true, onabort already decremented #activeUploads
-    if (!this.#files.includes(file) && !this.__externalFiles.has(file)) {
+    if (this.__cancelUploadOfRemovedFiles && !this.#files.includes(file) && !this.__externalFiles.has(file)) {
       if (!file.abort) {
         this.#activeUploads -= 1;
       }
@@ -687,14 +713,16 @@ export class UploadManager extends EventTarget {
       }),
     );
     if (!uploadEvt) {
-      this.#holdFile(file);
+      if (this.__holdOnUploadPrevented) {
+        this.#holdFile(file);
+      }
       return;
     }
 
     // Check if file was removed during upload-request handler, except for
     // tracked external files, which are never in the list
     // If file.abort is true, onabort already decremented #activeUploads
-    if (!this.#files.includes(file) && !this.__externalFiles.has(file)) {
+    if (this.__cancelUploadOfRemovedFiles && !this.#files.includes(file) && !this.__externalFiles.has(file)) {
       if (!file.abort) {
         this.#activeUploads -= 1;
       }
