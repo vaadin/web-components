@@ -26,7 +26,7 @@ export const DEFAULT_I18N = {
   },
 };
 
-// Configuration properties that are mirrored to the internal upload managers
+// Configuration properties that are mirrored to the internal upload manager
 const MANAGER_CONFIG_PROPS = [
   'target',
   'method',
@@ -378,7 +378,7 @@ export const UploadMixin = (superClass) =>
 
       // Set up manager event listeners
       this._manager.addEventListener('files-changed', (e) => this.__onManagerFilesChanged(e));
-      this._manager.addEventListener('max-files-reached-changed', (e) => this.__onManagerMaxFilesReachedChanged(e));
+      this._manager.addEventListener('max-files-reached-changed', (e) => this._setMaxFilesReached(e.detail.value));
       this._manager.addEventListener('file-reject', (e) => this.__onManagerFileReject(e));
       this._manager.addEventListener('file-remove', (e) => this.__onManagerFileRemove(e));
       this._manager.addEventListener('upload-success', (e) => this.__onManagerUploadSuccess(e));
@@ -551,11 +551,6 @@ export const UploadMixin = (superClass) =>
         // so keep them up-to-date here
         this.files.forEach((file) => updateFileStatus(file, this.__effectiveI18n));
       }
-    }
-
-    /** @private */
-    __onManagerMaxFilesReachedChanged(event) {
-      this._setMaxFilesReached(event.detail.value);
     }
 
     /** @private */
