@@ -587,9 +587,11 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
       clearTimeout(this.#restoreTimer);
       this.#restoreTimer = null;
     } else {
-      // vaadin-custom-field does not propagate `readonly` to its inputs, so
-      // they are locked (and restored) individually alongside the field.
-      const locked = [field, ...(field.localName === 'vaadin-custom-field' ? (field.inputs ?? []) : [])];
+      // A composite field does not propagate `readonly` to its inputs, so they
+      // are locked (and restored) individually alongside the field. Recognized
+      // by the `inputs` array rather than by tag name, which also covers a
+      // composite field shipped under its own tag name.
+      const locked = [field, ...(Array.isArray(field.inputs) ? field.inputs : [])];
       this.#lockedElements = locked.map((element) => ({ element, readonly: element.readonly }));
     }
 

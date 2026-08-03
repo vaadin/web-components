@@ -55,6 +55,10 @@ class FocusSensitiveField extends HTMLElement {
 
 customElements.define('focus-sensitive-field', FocusSensitiveField);
 
+// A composite field can ship under its own tag name, the way a framework
+// provides a field derived from custom-field.
+customElements.define('derived-custom-field', class extends customElements.get('vaadin-custom-field') {});
+
 describe('ai field marker', () => {
   let field;
 
@@ -1105,6 +1109,37 @@ describe('ai field marker', () => {
         inputs = customField.inputs;
         clock = sinon.useFakeTimers({ shouldClearNativeTimers: true, toFake: ['setTimeout', 'clearTimeout'] });
         marker = mark(customField, { working: true });
+      });
+
+      it('should make the inputs read-only while working', () => {
+        expect(inputs.every((input) => input.readonly)).to.be.true;
+      });
+
+      it('should restore each input read-only state when working ends', async () => {
+        marker.working = false;
+        await nextUpdate(marker);
+        await clock.tickAsync(500);
+        expect(inputs[0].readonly).to.be.false;
+        expect(inputs[1].readonly).to.be.true;
+      });
+    });
+
+    describe('composite field under another tag name', () => {
+      let derivedField;
+      let inputs;
+      let marker;
+
+      beforeEach(async () => {
+        derivedField = fixtureSync(`
+          <derived-custom-field label="License plate">
+            <vaadin-text-field></vaadin-text-field>
+            <vaadin-text-field readonly></vaadin-text-field>
+          </derived-custom-field>
+        `);
+        await nextRender();
+        inputs = derivedField.inputs;
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true, toFake: ['setTimeout', 'clearTimeout'] });
+        marker = mark(derivedField, { working: true });
       });
 
       it('should make the inputs read-only while working', () => {
