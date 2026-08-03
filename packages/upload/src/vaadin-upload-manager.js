@@ -545,6 +545,8 @@ export class UploadManager extends EventTarget {
 
   #removeFile(file) {
     this.#uploadQueue = this.#uploadQueue.filter((f) => f !== file);
+    // Stop tracking an external file whose upload has not started
+    this.__externalFiles.delete(file);
 
     // If the file is actively uploading (not held) and not already aborted, abort the XHR
     if (file.uploading && !file.held && !file.abort && file.xhr) {
@@ -643,6 +645,7 @@ export class UploadManager extends EventTarget {
     xhr.onabort = () => {
       clearTimeout(stalledId);
       this.#activeUploads -= 1;
+      this.__externalFiles.delete(file);
       this.#cleanupXhr(xhr);
       this.#processUploadQueue();
     };
@@ -658,6 +661,7 @@ export class UploadManager extends EventTarget {
       this.#cleanupXhr(xhr);
 
       this.dispatchEvent(new CustomEvent('upload-error', { detail: { file, xhr } }));
+      this.__externalFiles.delete(file);
       this.#notifyFilesChanged();
     };
 
@@ -704,6 +708,9 @@ export class UploadManager extends EventTarget {
           // Clear file.xhr reference to allow garbage collection
           file.xhr = null;
         }
+
+        // Stop tracking the file now that its upload has finished
+        this.__externalFiles.delete(file);
 
         this.#notifyFilesChanged();
       }
@@ -806,6 +813,7 @@ export class UploadManager extends EventTarget {
       file.uploading = false;
       file.indeterminate = false;
       file.errorKey = e.message || 'sendFailed';
+      this.__externalFiles.delete(file);
       this.#cleanupXhr(xhr);
       this.#notifyFilesChanged();
       this.#processUploadQueue();
