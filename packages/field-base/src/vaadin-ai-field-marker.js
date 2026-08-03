@@ -9,7 +9,7 @@ import { html, LitElement } from 'lit';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { aiFieldMarkerHostStyles, aiFieldMarkerStyles } from './styles/vaadin-ai-field-marker-base-styles.js';
@@ -324,7 +324,7 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
         descNode.style.cssText =
           'position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;';
         marker.appendChild(descNode);
-        addValueToAttribute(input, 'aria-describedby', descNode.id);
+        addValuesToAttribute(input, 'aria-describedby', descNode.id);
       }
 
       entry = { marker, input, markerSlot, descNode };
@@ -374,7 +374,7 @@ export class AiFieldMarker extends DirMixin(PolylitMixin(LitElement)) {
     const { marker, input, descNode, markerSlot } = entry;
 
     if (input && descNode) {
-      removeValueFromAttribute(input, 'aria-describedby', descNode.id);
+      removeValuesFromAttribute(input, 'aria-describedby', descNode.id);
     }
 
     if (markerSlot) {
