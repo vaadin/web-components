@@ -277,14 +277,23 @@ describe('interactions', () => {
   });
 
   describe('virtual keyboard', () => {
-    it('should disable virtual keyboard on close', () => {
+    it('should disable virtual keyboard on close when input is not focused', () => {
       comboBox.open();
+      input.blur();
       comboBox.close();
       expect(input.inputMode).to.equal('none');
     });
 
+    it('should keep virtual keyboard enabled on close when input is focused', () => {
+      input.focus();
+      comboBox.open();
+      comboBox.close();
+      expect(input.inputMode).to.equal('');
+    });
+
     it('should re-enable virtual keyboard on touchstart', () => {
       comboBox.open();
+      input.blur();
       comboBox.close();
       touchstart(comboBox);
       expect(input.inputMode).to.equal('');

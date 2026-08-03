@@ -10,7 +10,7 @@ import type { ReactiveController } from 'lit';
  * when the field's overlay is closed.
  */
 export class VirtualKeyboardController implements ReactiveController {
-  constructor(host: HTMLElement & { inputElement?: HTMLElement; opened: boolean });
+  constructor(host: HTMLElement & { inputElement?: HTMLElement; opened: boolean }, keepWhenFocused?: boolean);
 
   /**
    * Phantom optional method to satisfy the `ReactiveController` interface

@@ -169,7 +169,9 @@ export const ComboBoxBaseMixin = (superClass) =>
         this.clearElement.addEventListener('mousedown', this._boundOnClearButtonMouseDown);
       }
 
-      this.addController(new VirtualKeyboardController(this));
+      // Keep the keyboard open when the input keeps focus on close (e.g. on Enter or
+      // toggle button click), so that a focused input never has a hidden keyboard.
+      this.addController(new VirtualKeyboardController(this, true));
     }
 
     /** @protected */
