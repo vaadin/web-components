@@ -163,6 +163,16 @@ describe('upload', () => {
         upload.uploadFiles(file);
       });
 
+      it('should use an empty upload target when target is null', (done) => {
+        upload.target = null;
+        upload.addEventListener('upload-before', (e) => {
+          e.preventDefault();
+          expect(e.detail.file.uploadTarget).to.equal('');
+          done();
+        });
+        upload.uploadFiles(file);
+      });
+
       it('should fire the upload-before with configurable form data name in multipart mode', (done) => {
         upload.uploadFormat = 'multipart';
 
@@ -272,6 +282,35 @@ describe('upload', () => {
         expect(file.held).to.be.false;
         expect(file.uploading).to.be.true;
         expect(file.status).to.equal('Connecting...');
+      });
+
+      it('should update the file status before upload-request and upload-start events', () => {
+        upload.files = [file];
+        let statusAtRequest, statusAtStart;
+        upload.addEventListener('upload-request', (e) => {
+          statusAtRequest = e.detail.file.status;
+        });
+        upload.addEventListener('upload-start', (e) => {
+          statusAtStart = e.detail.file.status;
+        });
+        upload.uploadFiles(file);
+        expect(statusAtRequest).to.equal('Connecting...');
+        expect(statusAtStart).to.equal('Connecting...');
+      });
+
+      it('should clear the status when an error is set while the file is uploading', async () => {
+        upload.addEventListener(
+          'upload-progress',
+          (e) => {
+            e.detail.file.error = 'Custom Error';
+          },
+          { once: true },
+        );
+        upload.uploadFiles(file);
+        // First progress event sets the error, the second one reacts to it
+        await clock.tickAsync(60);
+        expect(file.status).to.be.undefined;
+        expect(file.indeterminate).to.be.undefined;
       });
 
       it('should complete the upload when the request is sent manually after preventing default', async () => {
@@ -392,6 +431,17 @@ describe('upload', () => {
         expect(retrySpy.firstCall.args[0].detail.xhr).to.equal(file.xhr);
       });
 
+      it('should keep the progress of the previous attempt when the file is queued again', async () => {
+        await uploadWithServerError();
+        expect(file.progress).to.equal(100);
+        expect(file.loaded).to.equal(100000);
+
+        upload.addEventListener('upload-before', (e) => e.preventDefault());
+        upload.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
+        expect(file.progress).to.equal(100);
+        expect(file.loaded).to.equal(100000);
+      });
+
       it('should ignore file-retry while the file is uploading', async () => {
         const startSpy = sinon.spy();
         upload.addEventListener('upload-start', startSpy);
@@ -485,6 +535,12 @@ describe('upload', () => {
         upload.uploadFiles(file);
         expect(upload.headers).to.be.an('object');
         expect(upload.headers['X-Foo']).to.equal('Bar');
+      });
+
+      it('should not parse string headers before an upload starts', async () => {
+        upload.headers = '{"X-Foo": "Bar"}';
+        await nextUpdate(upload);
+        expect(upload.headers).to.be.a('string');
       });
 
       it('should reset headers set as an invalid JSON string', () => {
