@@ -15,7 +15,7 @@ describe('ai field marker custom property', () => {
     const probe = document.createElement('div');
     host.shadowRoot.appendChild(probe);
 
-    const maskPos = getComputedStyle(probe).getPropertyValue('--vaadin-ai-marker-mask-pos');
+    const maskPos = getComputedStyle(probe).getPropertyValue('--vaadin-ai-field-marker-mask-pos');
     expect(maskPos.trim()).to.not.equal('');
   });
 });

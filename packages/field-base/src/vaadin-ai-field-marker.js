@@ -41,7 +41,7 @@ const MARKER_STYLE_ATTRIBUTE = 'ai-field-marker-styles';
 // at document scope, and that root node is a shadow root for a field nested
 // inside another component.
 registerCSSProperty({
-  name: '--vaadin-ai-marker-mask-pos',
+  name: '--vaadin-ai-field-marker-mask-pos',
   syntax: '<length-percentage>',
   inherits: false,
   initialValue: '0px',
@@ -323,7 +323,7 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     // root. The tooltip targets the badge by id, which resolves in the
     // light-DOM scope shared by both; the popover renders in the shadow root
     // and targets the badge through its `target` property instead.
-    const badgeId = `vaadin-ai-marker-${generateUniqueId()}`;
+    const badgeId = `vaadin-ai-field-marker-${generateUniqueId()}`;
 
     this.#badgeController = new SlotController(this, 'badge', 'button', {
       observe: false,

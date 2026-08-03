@@ -6,17 +6,17 @@
 import { css } from 'lit';
 
 export const aiFieldMarkerHostStyles = css`
-  @keyframes --vaadin-ai-marker-slide {
+  @keyframes --vaadin-ai-field-marker-slide {
     0% {
-      --vaadin-ai-marker-mask-pos: -100px;
+      --vaadin-ai-field-marker-mask-pos: -100px;
     }
 
     100% {
-      --vaadin-ai-marker-mask-pos: calc(100% + 100px);
+      --vaadin-ai-field-marker-mask-pos: calc(100% + 100px);
     }
   }
 
-  @keyframes --vaadin-ai-marker-remove-mask {
+  @keyframes --vaadin-ai-field-marker-remove-mask {
     100% {
       mask-image: none;
     }
@@ -46,7 +46,7 @@ export const aiFieldMarkerStyles = css`
     position: relative;
   }
 
-  /* --vaadin-ai-marker-mask-pos is registered from JS: an @property rule only
+  /* --vaadin-ai-field-marker-mask-pos is registered from JS: an @property rule only
      takes effect at document scope, and this sheet is adopted into the field's
      root node, which is a shadow root for a nested field. */
 
@@ -70,11 +70,11 @@ export const aiFieldMarkerStyles = css`
       mask-image: linear-gradient(
         90deg,
         #000,
-        #000 var(--vaadin-ai-marker-mask-pos),
-        transparent calc(var(--vaadin-ai-marker-mask-pos) + 20px),
+        #000 var(--vaadin-ai-field-marker-mask-pos),
+        transparent calc(var(--vaadin-ai-field-marker-mask-pos) + 20px),
         transparent
       );
-      animation: --vaadin-ai-marker-slide 700ms 200ms both;
+      animation: --vaadin-ai-field-marker-slide 700ms 200ms both;
       animation-timing-function: cubic-bezier(0.78, 0, 0.22, 1);
     }
 
@@ -91,16 +91,16 @@ export const aiFieldMarkerStyles = css`
       border-radius: var(--vaadin-radius-m);
       margin: 0;
       background: transparent;
-      color: var(--vaadin-ai-marker-badge-icon-color, var(--vaadin-text-color-secondary));
+      color: var(--vaadin-ai-field-marker-badge-icon-color, var(--vaadin-text-color-secondary));
       font: inherit;
       font-size: 1rem;
       line-height: 1;
       cursor: pointer;
       transition: color 200ms;
-      animation: --vaadin-ai-marker-fade-in 300ms 700ms backwards;
+      animation: --vaadin-ai-field-marker-fade-in 300ms 700ms backwards;
 
       &:hover {
-        color: var(--vaadin-ai-marker-badge-icon-color, var(--vaadin-text-color));
+        color: var(--vaadin-ai-field-marker-badge-icon-color, var(--vaadin-text-color));
       }
 
       &::before {
@@ -182,19 +182,19 @@ export const aiFieldMarkerStyles = css`
   :has(> vaadin-ai-field-marker)::part(group-field) {
     mask-image: linear-gradient(
       90deg,
-      #000 calc(var(--vaadin-ai-marker-mask-pos) - 100px),
-      rgba(0, 0, 0, 0.3) calc(var(--vaadin-ai-marker-mask-pos) - 70px),
-      rgba(0, 0, 0, 0.3) var(--vaadin-ai-marker-mask-pos),
-      #000 calc(var(--vaadin-ai-marker-mask-pos) + 70px),
-      #000 calc(var(--vaadin-ai-marker-mask-pos) + 100px)
+      #000 calc(var(--vaadin-ai-field-marker-mask-pos) - 100px),
+      rgba(0, 0, 0, 0.3) calc(var(--vaadin-ai-field-marker-mask-pos) - 70px),
+      rgba(0, 0, 0, 0.3) var(--vaadin-ai-field-marker-mask-pos),
+      #000 calc(var(--vaadin-ai-field-marker-mask-pos) + 70px),
+      #000 calc(var(--vaadin-ai-field-marker-mask-pos) + 100px)
     );
     animation:
-      --vaadin-ai-marker-slide 1s cubic-bezier(0.78, 0, 0.22, 1) forwards,
-      --vaadin-ai-marker-remove-mask 0s 1s forwards;
+      --vaadin-ai-field-marker-slide 1s cubic-bezier(0.78, 0, 0.22, 1) forwards,
+      --vaadin-ai-field-marker-remove-mask 0s 1s forwards;
   }
 
   [ai-working] {
-    animation: --vaadin-ai-marker-slide 1s ease-in-out infinite;
+    animation: --vaadin-ai-field-marker-slide 1s ease-in-out infinite;
   }
 
   /* While the AI is working, the badge and glow describe a value that is about
@@ -205,7 +205,7 @@ export const aiFieldMarkerStyles = css`
     display: none;
   }
 
-  @keyframes --vaadin-ai-marker-fade-in {
+  @keyframes --vaadin-ai-field-marker-fade-in {
     0% {
       opacity: 0;
     }
