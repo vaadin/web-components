@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { enter, fixtureSync, nextFrame, nextRender, touchend } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-time-picker.js';
@@ -132,6 +133,10 @@ describe('validation', () => {
     });
 
     describe('opened', () => {
+      afterEach(async () => {
+        await resetMouse();
+      });
+
       it('should not validate on overlay touch action causing internal blur', () => {
         timePicker.inputElement.focus();
         timePicker.open();
@@ -140,6 +145,19 @@ describe('validation', () => {
 
         expect(validateSpy).to.be.not.called;
         expect(timePicker.invalid).to.be.false;
+      });
+
+      it('should validate on internal blur caused by closing on outside click', async () => {
+        // Mimic iOS, where the input is blurred once the overlay is closed
+        timePicker._ios = true;
+        timePicker.inputElement.focus();
+        timePicker.open();
+        await nextRender();
+
+        await sendMouseToElement({ type: 'click', element: document.body });
+
+        // The input is no longer focused, so no other focusout follows
+        expect(validateSpy).to.be.calledOnce;
       });
     });
 

@@ -574,9 +574,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * @protected
      */
     _setFocused(focused) {
-      // Do not validate, commit or close on internal blur triggered
-      // on overlay touch action needed to hide the virtual keyboard.
-      const blurred = !focused && !this._closeOnBlurIsPrevented;
+      // An internal blur, triggered by the component itself to hide the virtual keyboard,
+      // does not mean the user left the field, so it must not affect the value or close.
+      const internalBlur = !focused && this._closeOnBlurIsPrevented;
+      const blurred = !focused && !internalBlur;
 
       if (blurred) {
         this._ignoreCommitValue = true;
@@ -584,9 +585,11 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
       super._setFocused(focused);
 
-      // Do not validate when focusout is caused by document
-      // losing focus, which happens on browser tab switch.
-      if (blurred && document.hasFocus()) {
+      // The input is focused again after an internal blur that keeps the overlay open,
+      // so validation waits for the focusout that follows when the user leaves.
+      // Also do not validate when focusout is caused by document losing focus,
+      // which happens on browser tab switch.
+      if (!focused && !(internalBlur && this.opened) && document.hasFocus()) {
         this._focusedChipIndex = -1;
         this._requestValidation();
       }

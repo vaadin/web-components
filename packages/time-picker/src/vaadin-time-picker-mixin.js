@@ -367,7 +367,9 @@ export const TimePickerMixin = (superClass) =>
     _setFocused(focused) {
       super._setFocused(focused);
 
-      if (!focused && !this._closeOnBlurIsPrevented) {
+      // The input is focused again after an internal blur that keeps the overlay open,
+      // so validation waits for the focusout that follows when the user leaves.
+      if (!focused && !(this._closeOnBlurIsPrevented && this.opened)) {
         // Do not validate when focusout is caused by document
         // losing focus, which happens on browser tab switch.
         if (document.hasFocus()) {

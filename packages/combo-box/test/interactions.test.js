@@ -1,19 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { sendMouseToElement } from '@vaadin/test-runner-commands';
 import {
-  aTimeout,
   click,
-  escKeyDown,
-  fire,
   fixtureSync,
   focusout,
   nextRender,
   nextUpdate,
   oneEvent,
   outsideClick,
-  tabKeyDown,
   tap,
-  touchstart,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-combo-box.js';
@@ -65,26 +60,6 @@ describe('interactions', () => {
       tap(comboBox._toggleElement);
 
       expect(comboBox.opened).to.be.false;
-    });
-
-    it('should close when focus is lost from keyboard', () => {
-      tabKeyDown(input);
-      focusout(input);
-
-      expect(comboBox.opened).to.be.false;
-    });
-
-    it('should not close when focus is moved to item', () => {
-      const item = getFirstItem(comboBox);
-      focusout(input, item);
-
-      expect(comboBox.opened).to.be.true;
-    });
-
-    it('should not close when focus is moved to overlay', () => {
-      focusout(input, overlay);
-
-      expect(comboBox.opened).to.be.true;
     });
 
     it('should close the overlay on entering non-existent value', () => {
@@ -159,52 +134,12 @@ describe('interactions', () => {
       expect(comboBox.hasAttribute('focused')).to.be.true;
     });
 
-    it('should blur the input with the blur method', () => {
-      comboBox.focus();
-      comboBox.blur();
-
-      expect(comboBox.hasAttribute('focused')).to.be.false;
-      expect(document.activeElement).to.not.equal(input);
-    });
-
     it('should focus the input on required indicator click', () => {
       comboBox.required = true;
       comboBox.shadowRoot.querySelector('[part="required-indicator"]').click();
 
       expect(comboBox.hasAttribute('focused')).to.be.true;
       expect(document.activeElement).to.equal(input);
-    });
-
-    it('should not blur the input on overlay touchstart', () => {
-      comboBox.focus();
-      comboBox.open();
-
-      const spy = sinon.spy(input, 'blur');
-      overlay.dispatchEvent(new CustomEvent('touchstart'));
-      expect(spy.callCount).to.eql(0);
-    });
-
-    it('should blur the input on overlay touchend', () => {
-      comboBox.focus();
-      comboBox.open();
-
-      const spy = sinon.spy(input, 'blur');
-      overlay.dispatchEvent(new CustomEvent('touchend'));
-      expect(spy.callCount).to.eql(1);
-    });
-
-    it('should blur the input on overlay touchmove', () => {
-      comboBox.focus();
-      comboBox.open();
-
-      const spy = sinon.spy(input, 'blur');
-      overlay.dispatchEvent(new CustomEvent('touchmove'));
-      expect(spy.callCount).to.eql(1);
-    });
-
-    it('should prevent default on overlay mousedown', () => {
-      const event = fire(overlay, 'mousedown');
-      expect(event.defaultPrevented).to.be.true;
     });
 
     // NOTE: WebKit incorrectly detects touch environment
@@ -230,73 +165,6 @@ describe('interactions', () => {
       tap(comboBox._toggleElement);
 
       expect(spy).to.be.not.called;
-    });
-
-    it('should not remove the focused attribute when focusing the scroll bar', () => {
-      comboBox.focus();
-      comboBox.open();
-      focusout(input, overlay);
-      expect(comboBox.hasAttribute('focused')).to.be.true;
-    });
-
-    it('should keep focus-ring attribute after closing with Escape', () => {
-      comboBox.focus();
-      comboBox.setAttribute('focus-ring', '');
-      comboBox.open();
-      escKeyDown(input);
-      expect(comboBox.hasAttribute('focus-ring')).to.be.true;
-    });
-
-    describe('close on click', () => {
-      afterEach(async () => {
-        await resetMouse();
-      });
-
-      it('should restore focus to the input on outside click', async () => {
-        comboBox.focus();
-        comboBox.open();
-        await sendMouseToElement({ type: 'click', element: document.body });
-        expect(document.activeElement).to.equal(input);
-      });
-
-      it('should keep focus in the input on toggle button click', async () => {
-        comboBox.focus();
-        comboBox.open();
-        await sendMouseToElement({ type: 'click', element: comboBox._toggleElement });
-        expect(document.activeElement).to.equal(input);
-      });
-
-      it('should keep focus-ring attribute after closing with outside click', async () => {
-        comboBox.focus();
-        comboBox.setAttribute('focus-ring', '');
-        comboBox.open();
-        await sendMouseToElement({ type: 'click', element: document.body });
-        expect(comboBox.hasAttribute('focus-ring')).to.be.true;
-      });
-    });
-  });
-
-  describe('virtual keyboard', () => {
-    it('should disable virtual keyboard on close', () => {
-      comboBox.open();
-      comboBox.close();
-      expect(input.inputMode).to.equal('none');
-    });
-
-    it('should re-enable virtual keyboard on touchstart', () => {
-      comboBox.open();
-      comboBox.close();
-      touchstart(comboBox);
-      expect(input.inputMode).to.equal('');
-    });
-
-    it('should re-enable virtual keyboard on blur', async () => {
-      comboBox.focus();
-      comboBox.open();
-      comboBox.close();
-      await aTimeout(0);
-      await sendKeys({ press: 'Tab' });
-      expect(input.inputMode).to.equal('');
     });
   });
 

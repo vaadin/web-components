@@ -40,9 +40,14 @@ export const ComboBoxOverlayMixin = (superClass) =>
 
       // Prevent global mousedown event to avoid losing focus on outside click,
       // unless the clicked element is also focusable (e.g. in date-time-picker).
-      if (this._shouldCloseOnOutsideClick(event) && !isElementFocusable(event.composedPath()[0])) {
+      const preventBlur = this._shouldCloseOnOutsideClick(event) && !isElementFocusable(event.composedPath()[0]);
+      if (preventBlur) {
         event.preventDefault();
       }
+
+      // Let the owner know whether it needs to blur the input itself once closed.
+      // Assigned on every mousedown, so that a click inside also clears it.
+      this.owner._outsideClickBlurPrevented = preventBlur;
     }
 
     /** @protected */

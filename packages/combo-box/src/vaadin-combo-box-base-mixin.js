@@ -7,7 +7,7 @@ import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
-import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { isIOS, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
@@ -83,6 +83,12 @@ export const ComboBoxBaseMixin = (superClass) =>
           sync: true,
           observer: '_overlayOpenedChanged',
         },
+
+        /** @private */
+        _ios: {
+          type: Boolean,
+          value: isIOS,
+        },
       };
     }
 
@@ -98,12 +104,22 @@ export const ComboBoxBaseMixin = (superClass) =>
       this._scroller;
 
       /**
-       * Used to detect if focusout should be ignored due to touch.
+       * Set while the component blurs the input itself, so that the focusout logic
+       * does not treat it as the user leaving the field.
        * Do not define in `properties` to avoid triggering updates.
        * @type {boolean}
        * @protected
        */
       this._closeOnBlurIsPrevented;
+
+      /**
+       * Set by the overlay when it suppresses the blur on the outside click that closes
+       * it, so that the input can be blurred once closed.
+       * Do not define in `properties` to avoid triggering updates.
+       * @type {boolean}
+       * @protected
+       */
+      this._outsideClickBlurPrevented;
 
       this._boundOverlaySelectedItemChanged = this._overlaySelectedItemChanged.bind(this);
       this._boundOnClearButtonMouseDown = this.__onClearButtonMouseDown.bind(this);
@@ -311,15 +327,28 @@ export const ComboBoxBaseMixin = (superClass) =>
           }
         }
       } else {
-        if (this.autoselect) {
-          // When the dropdown closes, the input remains focused. Mark that the next
-          // host click should re-trigger autoselect, since the normal focus event
-          // won't fire again.
+        // By default, overlay keeps focus by preventing `mousedown` event for the outside
+        // click. On touch devices, blur input programmatically in this case: iOS scrolls
+        // the input into the  viewport only on focus event, so tapping again with focus
+        // preserved would result with the input placed behind the on-screen keyboard.
+        const shouldBlur = this._ios && this._outsideClickBlurPrevented && this._isInputFocused();
+
+        if (this.autoselect && !shouldBlur) {
+          // When the dropdown closes and input remains focused, the next host click
+          // should re-trigger autoselect, since the normal focus event won't fire.
           this.__autoselectPending = true;
         }
 
         this._onClosed();
+
+        // On iOS, blur the input after the overlay is closed and the value is committed.
+        if (shouldBlur) {
+          this.__blurWithoutClosing();
+        }
       }
+
+      // The flag only applies to the close caused by that outside click.
+      this._outsideClickBlurPrevented = false;
 
       const input = this.inputElement;
       if (input) {
@@ -335,8 +364,17 @@ export const ComboBoxBaseMixin = (superClass) =>
 
     /** @private */
     _onOverlayTouchAction() {
-      // On touch devices, blur the input on touch start inside the overlay, in order to hide
-      // the virtual keyboard. But don't close the overlay on this blur.
+      // On touch devices, blur the input on touch start inside the overlay,
+      // in order to hide the virtual keyboard.
+      this.__blurWithoutClosing();
+    }
+
+    /**
+     * Blurs the input without the focusout logic closing the overlay
+     * or committing the value.
+     * @private
+     */
+    __blurWithoutClosing() {
       this._closeOnBlurIsPrevented = true;
       this.inputElement.blur();
       this._closeOnBlurIsPrevented = false;
