@@ -14,7 +14,6 @@ import { getFilesFromDropEvent, updateFileStatus } from './vaadin-upload-helpers
 import { UploadManager } from './vaadin-upload-manager.js';
 
 export const DEFAULT_I18N = {
-  ...FILE_LIST_DEFAULT_I18N,
   dropFiles: {
     one: 'Drop file here',
     many: 'Drop files here',
@@ -23,6 +22,10 @@ export const DEFAULT_I18N = {
     one: 'Upload File...',
     many: 'Upload Files...',
   },
+  error: FILE_LIST_DEFAULT_I18N.error,
+  uploading: FILE_LIST_DEFAULT_I18N.uploading,
+  file: FILE_LIST_DEFAULT_I18N.file,
+  units: FILE_LIST_DEFAULT_I18N.units,
 };
 
 // Configuration properties that are mirrored to the internal upload manager
