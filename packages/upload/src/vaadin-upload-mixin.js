@@ -411,7 +411,13 @@ export const UploadMixin = (superClass) =>
       this.addEventListener('drop', this._onDrop.bind(this));
 
       // Handle events dispatched by the file elements in the list
-      this.addEventListener('file-start', (e) => this.uploadFiles(e.detail.file));
+      this.addEventListener('file-start', (e) => {
+        this.__syncManagerConfig();
+        this.__clearFileError(e.detail.file);
+        // The internal upload method also uploads files that are already
+        // complete or not in the `files` list
+        this._manager.__startUpload(e.detail.file);
+      });
       this.addEventListener('file-abort', (e) => {
         this._manager.abortUpload(e.detail.file);
         // The manager does not process its upload queue when a file that has
@@ -421,7 +427,9 @@ export const UploadMixin = (superClass) =>
       });
       this.addEventListener('file-retry', (e) => {
         this.__syncManagerConfig();
-        this._manager.retryUpload(e.detail.file);
+        // The internal retry method ignores files that are currently
+        // uploading or queued instead of restarting them
+        this._manager.__retryUpload(e.detail.file);
       });
 
       // Announce the upload lifecycle to screen readers
@@ -651,7 +659,7 @@ export const UploadMixin = (superClass) =>
      * @private
      */
     __clearFileError(file) {
-      if (!file.complete && !file.uploading) {
+      if (!file.uploading) {
         file.error = false;
       }
     }
@@ -805,7 +813,7 @@ export const UploadMixin = (superClass) =>
         files = [files];
       }
 
-      files.forEach((file) => this.__clearFileError(file));
+      files.filter((file) => !file.complete).forEach((file) => this.__clearFileError(file));
 
       // The internal upload method uploads files that are not in the `files`
       // list without adding them to it

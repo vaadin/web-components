@@ -368,11 +368,48 @@ export class UploadManager extends EventTarget {
   }
 
   /**
+   * Queue an upload of the given file, even if it is already complete, in
+   * which case it is uploaded again from scratch. A file that is not in the
+   * `files` list is uploaded without being added to it and is tracked in
+   * `__externalFiles`.
+   * Internal API for `<vaadin-upload>`, may change at any time.
+   * @param {UploadFile} file
+   * @private
+   */
+  __startUpload(file) {
+    if (!this.#files.includes(file)) {
+      this.__externalFiles.add(file);
+    }
+    this.#queueFileUpload(file);
+  }
+
+  /**
    * Retry a failed upload.
    * @param {UploadFile} file - The file to retry
    */
   retryUpload(file) {
     this.#retryFileUpload(file);
+  }
+
+  /**
+   * Dispatch the `upload-retry` event and re-queue the file unless the
+   * event is prevented. Unlike `retryUpload`, a file that is currently
+   * uploading or queued is left alone, matching the historical
+   * `<vaadin-upload>` behavior where such a retry is ignored.
+   * Internal API for `<vaadin-upload>`, may change at any time.
+   * @param {UploadFile} file
+   * @private
+   */
+  __retryUpload(file) {
+    const evt = this.dispatchEvent(
+      new CustomEvent('upload-retry', {
+        detail: { file, xhr: file.xhr },
+        cancelable: true,
+      }),
+    );
+    if (evt) {
+      this.#queueFileUpload(file);
+    }
   }
 
   /**
