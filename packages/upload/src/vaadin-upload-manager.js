@@ -339,7 +339,14 @@ export class UploadManager extends EventTarget {
     if (files && !Array.isArray(files)) {
       files = [files];
     }
-    files.filter((file) => !this.#files.includes(file)).forEach((file) => this._externalFiles.add(file));
+    files
+      .filter((file) => !this.#files.includes(file))
+      .forEach((file) => {
+        // Files added to the list get formDataName in #addFile; this covers
+        // files uploaded without being added to the list
+        file.formDataName ??= this.formDataName;
+        this._externalFiles.add(file);
+      });
     files.filter((file) => !file.complete).forEach((file) => this.#queueFileUpload(file));
   }
 
@@ -483,12 +490,6 @@ export class UploadManager extends EventTarget {
     file.uploading = file.indeterminate = true;
     file.complete = file.abort = file.errorKey = false;
     file.stalled = false;
-    // Also clear the translated error message that `<vaadin-upload>` assigns
-    // when an upload fails
-    file.error = false;
-    // Files added to the list get formDataName in #addFile; this covers
-    // files uploaded without being added to the list
-    file.formDataName ??= this.formDataName;
     this.#notifyFilesChanged();
 
     this.#uploadQueue.push(file);
@@ -617,9 +618,6 @@ export class UploadManager extends EventTarget {
     };
 
     const isRawUpload = this.uploadFormat === 'raw';
-    // Files that are not in the list cannot be "removed during an event
-    // handler", so the mid-upload removal checks only apply to listed files
-    const isListed = this.#files.includes(file);
 
     if (!file.uploadTarget) {
       file.uploadTarget = this.target;
@@ -636,9 +634,10 @@ export class UploadManager extends EventTarget {
       return;
     }
 
-    // Check if file was removed during upload-before handler
+    // Check if file was removed during upload-before handler, except for
+    // tracked external files, which are never in the list
     // If file.abort is true, onabort already decremented #activeUploads
-    if (isListed && !this.#files.includes(file)) {
+    if (!this.#files.includes(file) && !this._externalFiles.has(file)) {
       if (!file.abort) {
         this.#activeUploads -= 1;
       }
@@ -692,9 +691,10 @@ export class UploadManager extends EventTarget {
       return;
     }
 
-    // Check if file was removed during upload-request handler
+    // Check if file was removed during upload-request handler, except for
+    // tracked external files, which are never in the list
     // If file.abort is true, onabort already decremented #activeUploads
-    if (isListed && !this.#files.includes(file)) {
+    if (!this.#files.includes(file) && !this._externalFiles.has(file)) {
       if (!file.abort) {
         this.#activeUploads -= 1;
       }

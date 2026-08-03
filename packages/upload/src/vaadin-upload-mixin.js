@@ -614,12 +614,27 @@ export const UploadMixin = (superClass) =>
     __onManagerUploadRetry(event) {
       this.__redispatchEvent(event);
       if (!event.defaultPrevented) {
+        this.__clearFileError(event.detail.file);
+
         const fileIndex = this.files.indexOf(event.detail.file);
         if (fileIndex >= 0) {
           // The file list does not change on retry, so the file can be
           // focused synchronously
           this.__focusFile(fileIndex);
         }
+      }
+    }
+
+    /**
+     * Clear the error from a previous upload attempt when the upload of the
+     * file is about to be restarted. The manager resets its own error state
+     * (`errorKey`) when queueing a file, but not the translated `error` message
+     * that this mixin assigns.
+     * @private
+     */
+    __clearFileError(file) {
+      if (!file.complete && !file.uploading) {
+        file.error = false;
       }
     }
 
@@ -766,6 +781,14 @@ export const UploadMixin = (superClass) =>
     uploadFiles(files = this.files) {
       // Ensure manager config is synced before uploading files
       this.__syncManagerConfig();
+
+      // Convert to array if single file
+      if (files && !Array.isArray(files)) {
+        files = [files];
+      }
+
+      files.forEach((file) => this.__clearFileError(file));
+
       // The internal upload method uploads files that are not in the `files`
       // list without adding them to it
       this._manager._uploadFiles(files);
