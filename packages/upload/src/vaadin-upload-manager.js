@@ -125,6 +125,17 @@ export class UploadManager extends EventTarget {
   __clearXhrOnComplete = true;
 
   /**
+   * When true (default), the `loaded` and `progress` properties of a file
+   * are reset to zero when the file is queued for upload. `<vaadin-upload>`
+   * disables this to preserve its historical behavior, where the values of
+   * the previous upload attempt stay until the new upload progresses.
+   * Internal API for `<vaadin-upload>`, may change at any time.
+   * @type {boolean}
+   * @private
+   */
+  __resetProgressOnQueue = true;
+
+  /**
    * Create an UploadManager instance.
    * @param {Object} options - Configuration options
    * @param {string} [options.target=''] - The server URL. The default value is an empty string, which means that _window.location_ will be used.
@@ -576,8 +587,10 @@ export class UploadManager extends EventTarget {
       return;
     }
 
-    file.loaded = 0;
-    file.progress = 0;
+    if (this.__resetProgressOnQueue) {
+      file.loaded = 0;
+      file.progress = 0;
+    }
     file.held = true;
     file.uploading = file.indeterminate = true;
     file.complete = file.abort = file.errorKey = false;

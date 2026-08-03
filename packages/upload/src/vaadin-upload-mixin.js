@@ -378,8 +378,10 @@ export const UploadMixin = (superClass) =>
       this._manager.__holdOnUploadPrevented = false;
       this._manager.__cancelUploadOfRemovedFiles = false;
       // Also keep the last request available on the file after the upload
-      // has finished
+      // has finished, and the progress properties of the previous upload
+      // attempt until a new upload progresses
       this._manager.__clearXhrOnComplete = false;
+      this._manager.__resetProgressOnQueue = false;
     }
 
     /** @protected */
