@@ -399,7 +399,7 @@ export const UploadMixin = (superClass) =>
         // The manager does not process its upload queue when a file that has
         // not started uploading is removed, so removing a queued file would
         // not free capacity for other queued files without this
-        this._manager._processUploadQueue();
+        this._manager.__processUploadQueue();
       });
       this.addEventListener('file-retry', (e) => {
         this.__syncManagerConfig();
@@ -472,7 +472,7 @@ export const UploadMixin = (superClass) =>
      * @private
      */
     __syncManagerConfig() {
-      this._manager._setConfig({
+      this._manager.__setConfig({
         target: this.target,
         method: this.method,
         headers: this.__parseHeaders(),
@@ -518,7 +518,7 @@ export const UploadMixin = (superClass) =>
         // Use the internal setter to skip validation: files assigned to the
         // `files` property directly (e.g. to show previously uploaded files)
         // must be accepted as-is
-        this._manager._setFiles(files);
+        this._manager.__setFiles(files);
       }
     }
 
@@ -527,7 +527,7 @@ export const UploadMixin = (superClass) =>
     /** @private */
     __onManagerFilesChanged(event) {
       // Files that are not rendered by the file list still need up-to-date status strings
-      this._manager._externalFiles.forEach((file) => updateFileStatus(file, this.__effectiveI18n));
+      this._manager.__externalFiles.forEach((file) => updateFileStatus(file, this.__effectiveI18n));
 
       const files = event.detail.value;
       // Only update the `files` property when files are added or removed, so that
@@ -582,7 +582,7 @@ export const UploadMixin = (superClass) =>
     /** @private */
     __redispatchEvent(event) {
       const { file } = event.detail;
-      if (file && this._manager._externalFiles.has(file)) {
+      if (file && this._manager.__externalFiles.has(file)) {
         // Files that are not rendered by the file list still need up-to-date
         // status strings when their upload events are dispatched
         updateFileStatus(file, this.__effectiveI18n);
@@ -791,7 +791,7 @@ export const UploadMixin = (superClass) =>
 
       // The internal upload method uploads files that are not in the `files`
       // list without adding them to it
-      this._manager._uploadFiles(files);
+      this._manager.__uploadFiles(files);
     }
 
     // ============ Utilities ============

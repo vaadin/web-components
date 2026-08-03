@@ -81,13 +81,13 @@ export class UploadManager extends EventTarget {
   #headers = {};
 
   /**
-   * Files that have been uploaded via `_uploadFiles` without being added to
+   * Files that have been uploaded via `__uploadFiles` without being added to
    * the `files` list.
    * Internal API for `<vaadin-upload>`, may change at any time.
    * @type {Set<UploadFile>}
-   * @protected
+   * @private
    */
-  _externalFiles = new Set();
+  __externalFiles = new Set();
 
   /**
    * Create an UploadManager instance.
@@ -132,9 +132,9 @@ export class UploadManager extends EventTarget {
    * object are all applied as-is.
    * Internal API for `<vaadin-upload>`, may change at any time.
    * @param {Object} config
-   * @protected
+   * @private
    */
-  _setConfig({ method, headers, maxConcurrentUploads, ...config }) {
+  __setConfig({ method, headers, maxConcurrentUploads, ...config }) {
     Object.assign(this, config);
     this.#method = method;
     this.#headers = headers;
@@ -268,9 +268,9 @@ export class UploadManager extends EventTarget {
    * and accept constraints, unlike the `files` setter.
    * Internal API for `<vaadin-upload>`, may change at any time.
    * @param {Array<UploadFile>} value
-   * @protected
+   * @private
    */
-  _setFiles(value) {
+  __setFiles(value) {
     this.#setFiles([...value]);
   }
 
@@ -322,7 +322,7 @@ export class UploadManager extends EventTarget {
       files = [files];
     }
     // Only upload files that are managed by this instance
-    this._uploadFiles(files.filter((file) => this.#files.includes(file)));
+    this.__uploadFiles(files.filter((file) => this.#files.includes(file)));
   }
 
   /**
@@ -330,12 +330,12 @@ export class UploadManager extends EventTarget {
    * `uploadFiles`, which only uploads files that are in the `files` list.
    * Files that are not in the list are uploaded without being added to it,
    * so they do not affect the maxFilesReached state. They are tracked in
-   * `_externalFiles`.
+   * `__externalFiles`.
    * Internal API for `<vaadin-upload>`, may change at any time.
    * @param {UploadFile|UploadFile[]} files
-   * @protected
+   * @private
    */
-  _uploadFiles(files) {
+  __uploadFiles(files) {
     if (files && !Array.isArray(files)) {
       files = [files];
     }
@@ -345,7 +345,7 @@ export class UploadManager extends EventTarget {
         // Files added to the list get formDataName in #addFile; this covers
         // files uploaded without being added to the list
         file.formDataName ??= this.formDataName;
-        this._externalFiles.add(file);
+        this.__externalFiles.add(file);
       });
     files.filter((file) => !file.complete).forEach((file) => this.#queueFileUpload(file));
   }
@@ -377,9 +377,9 @@ export class UploadManager extends EventTarget {
   /**
    * Start uploads for queued files if there is capacity for them.
    * Internal API for `<vaadin-upload>`, may change at any time.
-   * @protected
+   * @private
    */
-  _processUploadQueue() {
+  __processUploadQueue() {
     this.#processUploadQueue();
   }
 
@@ -637,7 +637,7 @@ export class UploadManager extends EventTarget {
     // Check if file was removed during upload-before handler, except for
     // tracked external files, which are never in the list
     // If file.abort is true, onabort already decremented #activeUploads
-    if (!this.#files.includes(file) && !this._externalFiles.has(file)) {
+    if (!this.#files.includes(file) && !this.__externalFiles.has(file)) {
       if (!file.abort) {
         this.#activeUploads -= 1;
       }
@@ -694,7 +694,7 @@ export class UploadManager extends EventTarget {
     // Check if file was removed during upload-request handler, except for
     // tracked external files, which are never in the list
     // If file.abort is true, onabort already decremented #activeUploads
-    if (!this.#files.includes(file) && !this._externalFiles.has(file)) {
+    if (!this.#files.includes(file) && !this.__externalFiles.has(file)) {
       if (!file.abort) {
         this.#activeUploads -= 1;
       }
