@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, outsideClick, touchend } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
 
@@ -89,6 +89,33 @@ describe('validation', () => {
       comboBox.required = false;
       expect(validateSpy.called).to.be.false;
     });
+
+    describe('opened', () => {
+      it('should not validate on overlay touch action causing internal blur', () => {
+        comboBox.inputElement.focus();
+        comboBox.open();
+
+        touchend(comboBox.$.overlay);
+
+        expect(validateSpy).to.be.not.called;
+      });
+    });
+
+    describe('document losing focus', () => {
+      beforeEach(() => {
+        sinon.stub(document, 'hasFocus').returns(false);
+      });
+
+      afterEach(() => {
+        document.hasFocus.restore();
+      });
+
+      it('should not validate on blur when document does not have focus', () => {
+        comboBox.inputElement.focus();
+        comboBox.inputElement.blur();
+        expect(validateSpy).to.be.not.called;
+      });
+    });
   });
 
   describe('required', () => {
@@ -110,23 +137,6 @@ describe('validation', () => {
     it('should pass validation when selectedItems is not empty', () => {
       comboBox.selectedItems = ['apple'];
       expect(comboBox.checkValidity()).to.be.true;
-    });
-
-    describe('document losing focus', () => {
-      beforeEach(() => {
-        sinon.stub(document, 'hasFocus').returns(false);
-      });
-
-      afterEach(() => {
-        document.hasFocus.restore();
-      });
-
-      it('should not validate on blur when document does not have focus', () => {
-        const spy = sinon.spy(comboBox, 'validate');
-        comboBox.inputElement.focus();
-        comboBox.inputElement.blur();
-        expect(spy.called).to.be.false;
-      });
     });
   });
 });
