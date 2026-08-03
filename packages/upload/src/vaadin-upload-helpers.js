@@ -76,7 +76,7 @@ function formatFileProgress(file, i18n) {
 }
 
 /** @private */
-function getFileStatus(file, i18n) {
+function getFileStatus(file, i18n, indeterminateFirst) {
   if (file.held && !file.error) {
     // File is queued and waiting
     return i18n.uploading.status.held;
@@ -85,14 +85,19 @@ function getFileStatus(file, i18n) {
     // File upload is stalled
     return i18n.uploading.status.stalled;
   }
-  if (file.uploading && file.progress < 100 && file.total) {
-    // A progress event has arrived, show the progress even when no bytes
-    // have been transferred yet (formatted as unknown remaining time)
-    return formatFileProgress(file, i18n);
+  // A progress event has arrived, show the progress even when no bytes
+  // have been transferred yet (formatted as unknown remaining time)
+  const progressStatus =
+    file.uploading && file.progress < 100 && file.total ? formatFileProgress(file, i18n) : undefined;
+  if (progressStatus && !indeterminateFirst) {
+    return progressStatus;
   }
   if (file.uploading && file.indeterminate && !file.held) {
     // File is uploading but progress is indeterminate (connecting or processing)
     return file.progress === 100 ? i18n.uploading.status.processing : i18n.uploading.status.connecting;
+  }
+  if (progressStatus) {
+    return progressStatus;
   }
   return file.status;
 }
@@ -103,9 +108,13 @@ function getFileStatus(file, i18n) {
  *
  * @param {Object} file - The file to update
  * @param {Object} i18n - The effective i18n object
+ * @param {Object} [options]
+ * @param {boolean} [options.indeterminateFirst=false] - Give the
+ *   indeterminate statuses (connecting, processing) precedence over the
+ *   transfer progress, like `<vaadin-upload-file-list>` historically does.
  * @private
  */
-export function updateFileStatus(file, i18n) {
+export function updateFileStatus(file, i18n, { indeterminateFirst = false } = {}) {
   // Always set size-related strings when total is available
   if (file.total) {
     file.totalStr = formatSize(file.total, i18n);
@@ -120,7 +129,7 @@ export function updateFileStatus(file, i18n) {
   }
 
   // Apply status message based on file state
-  file.status = getFileStatus(file, i18n);
+  file.status = getFileStatus(file, i18n, indeterminateFirst);
 }
 
 /**

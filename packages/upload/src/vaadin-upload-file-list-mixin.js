@@ -258,6 +258,8 @@ export const UploadFileListMixin = (superClass) =>
     /** @private */
     __updateItems(items, i18n, _disabled, _theme) {
       if (items && i18n) {
+        // Apply i18n formatting to each file
+        items.forEach((file) => this.__applyI18nToFile(file));
         this.requestContentUpdate();
       }
     }
@@ -267,7 +269,7 @@ export const UploadFileListMixin = (superClass) =>
       const i18n = this.__effectiveI18n;
 
       // Apply size and status strings based on file state
-      updateFileStatus(file, i18n);
+      updateFileStatus(file, i18n, { indeterminateFirst: true });
 
       // Translate error codes to i18n messages
       this.__applyFileError(file, i18n);
@@ -289,9 +291,6 @@ export const UploadFileListMixin = (superClass) =>
       if (!items || !i18n) {
         return;
       }
-
-      // Apply i18n formatting to each file
-      items.forEach((file) => this.__applyI18nToFile(file));
 
       const managerDisabled = this.manager instanceof UploadManager && this.manager.disabled;
       const effectiveDisabled = disabled || managerDisabled;

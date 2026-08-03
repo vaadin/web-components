@@ -592,12 +592,13 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     __renderFileList() {
+      // Compute the file status strings before rendering, like the component
+      // did before the manager integration; the file list does not compute
+      // them when rendering
+      this.files.forEach((file) => updateFileStatus(file, this.__effectiveI18n));
+
       if (this._fileList && typeof this._fileList.requestContentUpdate === 'function') {
         this._fileList.requestContentUpdate();
-      } else {
-        // A custom file list does not compute file status strings on its own,
-        // so keep them up-to-date here
-        this.files.forEach((file) => updateFileStatus(file, this.__effectiveI18n));
       }
     }
 
