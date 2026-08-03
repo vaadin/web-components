@@ -277,6 +277,25 @@ describe('ai field marker', () => {
       expect(getComputedStyle(descNode).width).to.equal('1px');
     });
 
+    it('should link the description to a field that has no input element', async () => {
+      // Group and composite fields expose neither inputElement nor
+      // focusElement; they point at the element carrying their own
+      // descriptions through ariaTarget.
+      const customField = fixtureSync(`
+        <vaadin-custom-field label="License plate">
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-custom-field>
+      `);
+      await nextRender();
+
+      const marker = mark(customField);
+      await nextRender();
+
+      const descNode = marker.querySelector('span[id^="ai-field-marker-"]');
+      expect(descNode).to.exist;
+      expect(customField.getAttribute('aria-describedby')).to.contain(descNode.id);
+    });
+
     it('should keep the field helper description alongside the AI description', async () => {
       const helperField = fixtureSync(
         `<vaadin-text-field label="Name" helper-text="Keep it short"></vaadin-text-field>`,

@@ -233,8 +233,8 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
    */
   #descNode = null;
 
-  /** The input whose `aria-describedby` references the description node. */
-  #describedInput = null;
+  /** The element whose `aria-describedby` references the description node. */
+  #describedElement = null;
 
   /** The field value captured for the revert event detail. */
   #capturedValue;
@@ -403,12 +403,17 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     this.slot = MARKER_SLOT;
 
     // Add a hidden description node in the field's light DOM (so its id
-    // resolves in the input's scope) and append its id to the input's
-    // aria-describedby. Appending — rather than using aria-description, which
-    // a screen reader ignores when aria-describedby is present — lets the
-    // field's own helper/error description and the AI note both get read.
-    const input = field.inputElement || field.focusElement;
-    if (input) {
+    // resolves in the described element's scope) and append its id to that
+    // element's aria-describedby. Appending — rather than using
+    // aria-description, which a screen reader ignores when aria-describedby is
+    // present — lets the field's own helper/error description and the AI note
+    // both get read.
+    //
+    // `ariaTarget` is where the field puts its own descriptions, and is the
+    // only one of the three for group and composite fields, which expose
+    // neither an input nor a focus element.
+    const describedElement = field.ariaTarget || field.inputElement || field.focusElement;
+    if (describedElement) {
       const descNode = document.createElement('span');
       descNode.id = `ai-field-marker-${generateUniqueId()}`;
       descNode.slot = 'description';
@@ -416,9 +421,9 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
       descNode.style.cssText =
         'position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;';
       this.appendChild(descNode);
-      addValuesToAttribute(input, 'aria-describedby', descNode.id);
+      addValuesToAttribute(describedElement, 'aria-describedby', descNode.id);
       this.#descNode = descNode;
-      this.#describedInput = input;
+      this.#describedElement = describedElement;
     }
 
     // Capture the AI-filled value so the revert event can carry it.
@@ -455,10 +460,10 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     this.#stopWorking(true);
 
     if (this.#descNode) {
-      removeValuesFromAttribute(this.#describedInput, 'aria-describedby', this.#descNode.id);
+      removeValuesFromAttribute(this.#describedElement, 'aria-describedby', this.#descNode.id);
       this.#descNode.remove();
       this.#descNode = null;
-      this.#describedInput = null;
+      this.#describedElement = null;
     }
 
     // Remove the injected slot unless another marker still uses it.
