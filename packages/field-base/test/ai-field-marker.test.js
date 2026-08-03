@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/custom-field/src/vaadin-custom-field.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
@@ -100,6 +100,28 @@ describe('ai field marker', () => {
       expect(tooltip.text).to.equal(DEFAULT_BADGE_TOOLTIP);
     });
 
+    it('should upgrade the generated tooltip', () => {
+      const tooltipClass = customElements.get('vaadin-tooltip');
+      expect(tooltipClass, 'vaadin-tooltip should be registered').to.exist;
+      expect(marker.querySelector('vaadin-tooltip')).to.be.instanceOf(tooltipClass);
+    });
+
+    it('should adopt the marker keyframes into the field shadow root', () => {
+      const hasKeyframes = field.shadowRoot.adoptedStyleSheets.some((sheet) =>
+        [...sheet.cssRules].some((rule) => rule.cssText.includes('--vaadin-ai-marker-slide')),
+      );
+      expect(hasKeyframes).to.be.true;
+    });
+
+    it('should render the badge and revert controls as non-submitting buttons', () => {
+      expect(marker.querySelector('[part="badge"]').type).to.equal('button');
+      expect(marker.querySelector('[part="revert-button"]').type).to.equal('button');
+    });
+
+    it('should render the revert control inside the actions part', () => {
+      expect(marker.querySelector('[part="actions"] > [part="revert-button"]')).to.exist;
+    });
+
     it('should assign the generated content to named slots in the shadow root', () => {
       ['badge', 'tooltip', 'message', 'actions'].forEach((slotName) => {
         const slot = marker.shadowRoot.querySelector(`slot[name="${slotName}"]`);
@@ -175,6 +197,53 @@ describe('ai field marker', () => {
     });
   });
 
+  describe('popover', () => {
+    let marker;
+    let popover;
+
+    beforeEach(async () => {
+      marker = mark(field);
+      await nextRender();
+      popover = marker.shadowRoot.querySelector('vaadin-popover');
+    });
+
+    it('should label the popover dialog with the badge label', () => {
+      expect(popover.getAttribute('aria-label')).to.equal(DEFAULT_BADGE_LABEL);
+    });
+
+    it('should position the popover against the field end top corner', () => {
+      expect(popover.position).to.equal('end-top');
+    });
+
+    it('should use the arrow theme for the popover overlay', () => {
+      const overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
+      expect(overlay.getAttribute('theme')).to.contain('arrow');
+    });
+
+    it('should lay out the popover content as a column', async () => {
+      marker.querySelector('[part="badge"]').click();
+      await nextRender();
+
+      const overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
+      const content = overlay.shadowRoot.querySelector('[part="content"]');
+      expect(getComputedStyle(content).flexDirection).to.equal('column');
+    });
+
+    it('should move focus into the popover on open', async () => {
+      const overlay = popover.shadowRoot.querySelector('vaadin-popover-overlay');
+      const opened = oneEvent(overlay, 'vaadin-overlay-open');
+      marker.querySelector('[part="badge"]').click();
+      await opened;
+
+      expect(marker.contains(document.activeElement), 'focus should move into the popover').to.be.true;
+    });
+
+    it('should keep the description slot outside the popover', () => {
+      expect(popover.querySelector('slot[name="description"]')).to.be.null;
+      expect(marker.shadowRoot.querySelector('slot[name="description"]')).to.exist;
+    });
+  });
+
   describe('input description', () => {
     it('should update the description node when the message changes', async () => {
       const marker = mark(field);
@@ -187,6 +256,25 @@ describe('ai field marker', () => {
         .split(' ')
         .find((id) => id.startsWith('ai-field-marker-'));
       expect(field.querySelector(`#${descId}`).textContent).to.equal('Refreshed');
+    });
+
+    it('should assign the description node to its own slot', async () => {
+      const marker = mark(field);
+      await nextRender();
+
+      const descNode = marker.querySelector('span[id^="ai-field-marker-"]');
+      expect(descNode.assignedSlot).to.exist;
+      // Not the default slot, which would show the node in the popover.
+      expect(descNode.assignedSlot.name).to.equal('description');
+    });
+
+    it('should visually hide the description node', async () => {
+      const marker = mark(field);
+      await nextRender();
+
+      const descNode = marker.querySelector('span[id^="ai-field-marker-"]');
+      expect(getComputedStyle(descNode).position).to.equal('absolute');
+      expect(getComputedStyle(descNode).width).to.equal('1px');
     });
 
     it('should keep the field helper description alongside the AI description', async () => {
@@ -207,6 +295,14 @@ describe('ai field marker', () => {
   });
 
   describe('i18n', () => {
+    it('should return the default texts from the i18n property', () => {
+      const marker = document.createElement('vaadin-ai-field-marker');
+      expect(marker.i18n.message).to.equal(DEFAULT_MESSAGE);
+      expect(marker.i18n.revert).to.equal(DEFAULT_REVERT_TEXT);
+      expect(marker.i18n.badgeLabel).to.equal(DEFAULT_BADGE_LABEL);
+      expect(marker.i18n.badgeTooltip).to.equal(DEFAULT_BADGE_TOOLTIP);
+    });
+
     it('should apply localized texts to the marker', async () => {
       const marker = mark(field, {
         i18n: {
@@ -358,6 +454,25 @@ describe('ai field marker', () => {
       revertButton.click();
       expect(field.hasAttribute('focus-ring')).to.be.false;
     });
+
+    it('should compose the revert event through shadow roots', async () => {
+      // A field can live inside another component's shadow root; the revert
+      // event must still reach document-level listeners.
+      const host = fixtureSync(`<div></div>`);
+      const root = host.attachShadow({ mode: 'open' });
+      const shadowField = document.createElement('vaadin-text-field');
+      root.appendChild(shadowField);
+      await nextRender();
+
+      const shadowMarker = mark(shadowField);
+      await nextRender();
+
+      const spy = sinon.spy();
+      document.addEventListener('ai-field-revert', spy);
+      shadowMarker.querySelector('[part="revert-button"]').click();
+      document.removeEventListener('ai-field-revert', spy);
+      expect(spy).to.be.calledOnce;
+    });
   });
 
   describe('revert on a field with focus and click semantics', () => {
@@ -483,6 +598,117 @@ describe('ai field marker', () => {
       const other = document.createElement('vaadin-ai-field-marker');
       expect(() => other.remove()).to.not.throw();
     });
+
+    it('should not accumulate description nodes when re-added', async () => {
+      marker.remove();
+      field.appendChild(marker);
+      await nextRender();
+
+      expect(marker.querySelectorAll('[slot="description"]')).to.have.lengthOf(1);
+    });
+
+    it('should not control the field after removal', async () => {
+      marker.remove();
+
+      marker.working = true;
+      await nextUpdate(marker);
+
+      expect(field.hasAttribute('ai-working')).to.be.false;
+      expect(field.readonly).to.be.false;
+    });
+
+    it('should stop tracking document direction when removed', async () => {
+      marker.remove();
+
+      document.documentElement.setAttribute('dir', 'rtl');
+      await nextRender();
+      const dir = marker.getAttribute('dir');
+      document.documentElement.removeAttribute('dir');
+      await nextRender();
+
+      expect(dir).to.be.null;
+    });
+
+    it('should skip the update work for a marker removed right after adding', async () => {
+      const rejectionSpy = sinon.spy();
+      window.addEventListener('unhandledrejection', rejectionSpy);
+
+      // Removing the marker before its scheduled update runs must not make
+      // that update fail on the missing field.
+      const other = mark(field);
+      other.remove();
+      await nextUpdate(other);
+      await aTimeout(10);
+
+      window.removeEventListener('unhandledrejection', rejectionSpy);
+      expect(rejectionSpy).to.not.be.called;
+    });
+
+    it('should render the marker again when re-added after an update', async () => {
+      marker.remove();
+      // An update while detached renders the empty fallback.
+      marker.i18n = { message: 'Updated while detached' };
+      await nextUpdate(marker);
+
+      field.appendChild(marker);
+      await nextRender();
+
+      expect(marker.querySelector('[part="badge"]').assignedSlot).to.exist;
+    });
+  });
+
+  describe('announcements', () => {
+    let clock;
+    let region;
+
+    before(() => {
+      region = document.querySelector('body > [aria-live]');
+    });
+
+    beforeEach(() => {
+      clock = sinon.useFakeTimers({ shouldClearNativeTimers: true, toFake: ['setTimeout', 'clearTimeout'] });
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should announce the message with the field label when marked', async () => {
+      const marker = mark(field, { i18n: { message: 'Filled by AI' } });
+      await nextUpdate(marker);
+
+      clock.tick(150);
+      expect(region.textContent).to.equal('Name: Filled by AI');
+    });
+
+    it('should announce the message again when a fill lands', async () => {
+      const marker = mark(field, { i18n: { message: 'Refill' } });
+      await nextUpdate(marker);
+      clock.tick(150);
+      region.textContent = '';
+
+      marker.working = true;
+      await nextUpdate(marker);
+      marker.working = false;
+      await nextUpdate(marker);
+      clock.tick(150);
+
+      expect(region.textContent).to.contain('Refill');
+    });
+
+    it('should announce only once per mark', async () => {
+      const marker = mark(field, { i18n: { message: 'Once' } });
+      await nextUpdate(marker);
+      clock.tick(150);
+      region.textContent = '';
+
+      // An unrelated update must not repeat the announcement.
+      marker.i18n = { message: 'Once', badgeTooltip: 'Updated tooltip' };
+      await nextUpdate(marker);
+      clock.tick(150);
+
+      expect(region.textContent).to.not.contain('Once');
+    });
   });
 
   describe('working state', () => {
@@ -495,10 +721,22 @@ describe('ai field marker', () => {
       }
     });
 
+    it('should have working set to false by default', () => {
+      const marker = document.createElement('vaadin-ai-field-marker');
+      expect(marker.working).to.be.false;
+    });
+
     it('should apply the working state when added with working set', () => {
       mark(field, { working: true });
       expect(field.hasAttribute('ai-working')).to.be.true;
       expect(field.readonly).to.be.true;
+    });
+
+    it('should set the working state via attribute', () => {
+      const marker = document.createElement('vaadin-ai-field-marker');
+      marker.setAttribute('working', '');
+      field.appendChild(marker);
+      expect(field.hasAttribute('ai-working')).to.be.true;
     });
 
     it('should do nothing for a parent without a shadow root', async () => {
@@ -581,6 +819,72 @@ describe('ai field marker', () => {
         await clock.tickAsync(500);
 
         expect(field.readonly).to.be.true;
+      });
+    });
+
+    describe('value set delay', () => {
+      let marker;
+
+      beforeEach(async () => {
+        marker = mark(field);
+        await nextRender();
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true, toFake: ['setTimeout', 'clearTimeout'] });
+        marker.working = true;
+        await nextUpdate(marker);
+      });
+
+      it('should delay a value set on the field while working', async () => {
+        field.value = 'Delayed value';
+        expect(field.value).to.equal('AI value');
+
+        await clock.tickAsync(500);
+        expect(field.value).to.equal('Delayed value');
+      });
+
+      it('should only apply the last value set while working', async () => {
+        field.value = 'One';
+        await clock.tickAsync(300);
+        field.value = 'Two';
+
+        // The first set was superseded, so nothing lands at its deadline.
+        await clock.tickAsync(200);
+        expect(field.value).to.equal('AI value');
+
+        await clock.tickAsync(300);
+        expect(field.value).to.equal('Two');
+      });
+
+      it('should keep delaying value sets when working restarts', async () => {
+        field.value = 'One';
+        await clock.tickAsync(200);
+
+        marker.working = false;
+        await nextUpdate(marker);
+        marker.working = true;
+        await nextUpdate(marker);
+
+        field.value = 'Two';
+
+        // The set from the previous working session was superseded, so
+        // nothing lands at its deadline.
+        await clock.tickAsync(300);
+        expect(field.value).to.equal('AI value');
+
+        await clock.tickAsync(200);
+        expect(field.value).to.equal('Two');
+      });
+
+      it('should carry the newly filled value in the revert event', async () => {
+        field.value = 'New AI value';
+        await clock.tickAsync(500);
+
+        marker.working = false;
+        await nextUpdate(marker);
+
+        const spy = sinon.spy();
+        field.addEventListener('ai-field-revert', spy);
+        marker.querySelector('[part="revert-button"]').click();
+        expect(spy.firstCall.args[0].detail.value).to.equal('New AI value');
       });
     });
 
