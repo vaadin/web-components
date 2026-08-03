@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, keyboardEventFor, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, keyboardEventFor, nextRender, oneEvent, touchend } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
 import { getAllItems, getDataProvider, getFirstItem } from './helpers.js';
@@ -67,6 +67,17 @@ describe('selecting items', () => {
       await sendKeys({ type: 'orange' });
       await sendKeys({ down: 'Enter' });
       expect(comboBox.selectedItems).to.deep.equal(['orange']);
+    });
+
+    it('should select item on Enter after internal blur on overlay touch action', async () => {
+      comboBox.open();
+      touchend(comboBox.$.overlay);
+
+      inputElement.focus();
+      await sendKeys({ type: 'apple' });
+      await sendKeys({ press: 'Enter' });
+
+      expect(comboBox.selectedItems).to.deep.equal(['apple']);
     });
 
     it('should update has-value attribute on selected items change', () => {
