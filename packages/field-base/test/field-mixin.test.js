@@ -757,18 +757,18 @@ describe('FieldMixin', () => {
         expect(input.getAttribute('aria-label')).to.be.equal('accessible name');
       });
 
+      it('should remove aria-labelledby when the property is set', async () => {
+        element.accessibleName = 'accessible name';
+        await nextUpdate(element);
+        expect(input.hasAttribute('aria-labelledby')).to.be.false;
+      });
+
       it('should remove aria-label when the property is cleared', async () => {
         element.accessibleName = 'accessible name';
         await nextUpdate(element);
         element.accessibleName = null;
         await nextUpdate(element);
         expect(input.hasAttribute('aria-label')).to.be.false;
-      });
-
-      it('should remove aria-labelledby when the property is set', async () => {
-        element.accessibleName = 'accessible name';
-        await nextUpdate(element);
-        expect(input.hasAttribute('aria-labelledby')).to.be.false;
       });
 
       it('should restore original aria-labelledby when the property is cleared', async () => {
