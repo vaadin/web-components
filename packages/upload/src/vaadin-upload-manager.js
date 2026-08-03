@@ -81,6 +81,15 @@ export class UploadManager extends EventTarget {
   #headers = {};
 
   /**
+   * Files that have been uploaded via `_uploadFiles` without being added to
+   * the `files` list.
+   * Internal API for `<vaadin-upload>`, may change at any time.
+   * @type {Set<UploadFile>}
+   * @protected
+   */
+  _externalFiles = new Set();
+
+  /**
    * Create an UploadManager instance.
    * @param {Object} options - Configuration options
    * @param {string} [options.target=''] - The server URL. The default value is an empty string, which means that _window.location_ will be used.
@@ -114,6 +123,22 @@ export class UploadManager extends EventTarget {
     this.maxConcurrentUploads = options.maxConcurrentUploads ?? 3;
     this.formDataName = options.formDataName || 'file';
     this.disabled = options.disabled ?? false;
+  }
+
+  /**
+   * Assign configuration properties, skipping the validation and
+   * normalization that the individual setters apply: an unsupported `method`,
+   * a non-positive `maxConcurrentUploads`, and `headers` that are not an
+   * object are all applied as-is.
+   * Internal API for `<vaadin-upload>`, may change at any time.
+   * @param {Object} config
+   * @protected
+   */
+  _setConfig({ method, headers, maxConcurrentUploads, ...config }) {
+    Object.assign(this, config);
+    this.#method = method;
+    this.#headers = headers;
+    this.#maxConcurrentUploads = maxConcurrentUploads;
   }
 
   /**
@@ -304,12 +329,17 @@ export class UploadManager extends EventTarget {
    * Triggers the upload of any given files that are not completed, unlike
    * `uploadFiles`, which only uploads files that are in the `files` list.
    * Files that are not in the list are uploaded without being added to it,
-   * so they do not affect the maxFilesReached state.
+   * so they do not affect the maxFilesReached state. They are tracked in
+   * `_externalFiles`.
    * Internal API for `<vaadin-upload>`, may change at any time.
-   * @param {UploadFile[]} files
+   * @param {UploadFile|UploadFile[]} files
    * @protected
    */
   _uploadFiles(files) {
+    if (files && !Array.isArray(files)) {
+      files = [files];
+    }
+    files.filter((file) => !this.#files.includes(file)).forEach((file) => this._externalFiles.add(file));
     files.filter((file) => !file.complete).forEach((file) => this.#queueFileUpload(file));
   }
 
@@ -453,6 +483,9 @@ export class UploadManager extends EventTarget {
     file.uploading = file.indeterminate = true;
     file.complete = file.abort = file.errorKey = false;
     file.stalled = false;
+    // Also clear the translated error message that `<vaadin-upload>` assigns
+    // when an upload fails
+    file.error = false;
     // Files added to the list get formDataName in #addFile; this covers
     // files uploaded without being added to the list
     file.formDataName ??= this.formDataName;
