@@ -407,19 +407,17 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
    * @override
    */
   connectedCallback() {
-    // Resolve the field before super: PolylitMixin renders synchronously on
-    // connect, and render() must already know the field to render the popover
-    // and the slots for the generated content.
+    super.connectedCallback();
+
     const parent = this.parentElement;
     if (parent && parent.shadowRoot) {
       this.#field = parent;
     }
 
-    super.connectedCallback();
-
-    // Re-render on reconnect, when no property change schedules an update. Done
-    // before resolving the field, so that moving the marker to a parent that is
-    // not a field also clears what was rendered for the previous one.
+    // Render now that the field is known: PolylitMixin's synchronous render on
+    // first connect ran before it was resolved, and on a reconnect no property
+    // change schedules an update. Requested even without a field, so that moving
+    // the marker to a parent that is not one clears the previous field's UI.
     this.requestUpdate();
 
     if (this.#field) {
