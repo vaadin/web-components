@@ -33,14 +33,12 @@ export interface AiFieldMarkerI18n {
 /**
  * Fired from the field element when the user activates the revert control.
  * The host is expected to restore the field's previous value.
+ *
+ * The event bubbles from the field rather than from the marker, so it is not
+ * declared on a listener map: listen for it on the field or a container, and
+ * annotate the listener with this type.
  */
 export type AiFieldRevertEvent = CustomEvent<{ value: unknown }>;
-
-declare global {
-  interface HTMLElementEventMap {
-    'ai-field-revert': AiFieldRevertEvent;
-  }
-}
 
 /**
  * An element used internally by Vaadin. Not intended to be used separately.
@@ -59,6 +57,8 @@ declare global {
  * control — is provided through the default slot: content appended to the
  * marker is slotted into the popover. This is the integration point for
  * frameworks (e.g. Flow) that render content as server-side elements.
+ *
+ * @fires {CustomEvent} ai-field-revert - Fired from the field element when the user activates the revert control. The host restores the value.
  */
 declare class AiFieldMarker extends I18nMixin<typeof HTMLElement, AiFieldMarkerI18n>(HTMLElement) {
   /**
