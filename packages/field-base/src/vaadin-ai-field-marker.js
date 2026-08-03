@@ -31,15 +31,15 @@ const POPOVER_TRIGGER = ['click'];
 
 const MARKER_SLOT = 'ai-field-marker';
 
+/** Marks the `<style>` element the marker injects into a field's shadow root. */
+const MARKER_STYLE_ATTRIBUTE = 'ai-field-marker-styles';
+
 const markerStyles = new CSSStyleSheet();
 markerStyles.replaceSync(aiFieldMarkerStyles);
 
-const markerHostStyles = new CSSStyleSheet();
-markerHostStyles.replaceSync(aiFieldMarkerHostStyles);
-
 /**
- * Adopts the marker stylesheets into the field's root node and shadow root,
- * so the badge, popover and working-shimmer styles apply to the field.
+ * Adopts the marker stylesheet into the field's root node, so the badge,
+ * popover and working-shimmer styles apply to the field.
  *
  * @param {HTMLElement} field
  */
@@ -47,10 +47,29 @@ function adoptMarkerStyles(field) {
   if (!field.getRootNode().adoptedStyleSheets.includes(markerStyles)) {
     field.getRootNode().adoptedStyleSheets.push(markerStyles);
   }
+}
 
-  if (!field.shadowRoot.adoptedStyleSheets.includes(markerHostStyles)) {
-    field.shadowRoot.adoptedStyleSheets.push(markerHostStyles);
+/**
+ * Adds the marker's keyframes to the field's own shadow root, where the
+ * animation names used by the `::part()` rules above have to resolve, since
+ * keyframes are looked up in the tree scope of the animated element.
+ *
+ * Injected as a `<style>` element rather than an adopted stylesheet because the
+ * themable infrastructure replaces `adoptedStyleSheets` wholesale — on a Lumo
+ * stylesheet load or a theme switch — which would silently drop the keyframes
+ * and leave the field's input masked but never animating.
+ *
+ * @param {HTMLElement} field
+ */
+function injectMarkerHostStyles(field) {
+  if (field.shadowRoot.querySelector(`style[${MARKER_STYLE_ATTRIBUTE}]`)) {
+    return;
   }
+
+  const style = document.createElement('style');
+  style.setAttribute(MARKER_STYLE_ATTRIBUTE, '');
+  style.textContent = aiFieldMarkerHostStyles.cssText;
+  field.shadowRoot.appendChild(style);
 }
 
 /**
@@ -429,6 +448,7 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     const field = this.#field;
 
     adoptMarkerStyles(field);
+    injectMarkerHostStyles(field);
 
     // Create a slot for the marker element inside the field's own shadow
     // root (unless a previous marker already left one) and assign the marker
@@ -501,10 +521,10 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
       this.#describedElement = null;
     }
 
-    // Remove the injected slot unless another marker still uses it.
-    const markerSlot = field.shadowRoot.querySelector(`slot[name="${MARKER_SLOT}"]`);
-    if (markerSlot && !field.querySelector(`:scope > ${AiFieldMarker.is}`)) {
-      markerSlot.remove();
+    // Remove the injected slot and styles unless another marker still uses them.
+    if (!field.querySelector(`:scope > ${AiFieldMarker.is}`)) {
+      field.shadowRoot.querySelector(`slot[name="${MARKER_SLOT}"]`)?.remove();
+      field.shadowRoot.querySelector(`style[${MARKER_STYLE_ATTRIBUTE}]`)?.remove();
     }
 
     this.#field = null;

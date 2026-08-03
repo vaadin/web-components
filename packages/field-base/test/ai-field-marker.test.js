@@ -4,6 +4,7 @@ import sinon from 'sinon';
 import '@vaadin/custom-field/src/vaadin-custom-field.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import '../src/vaadin-ai-field-marker.js';
+import { applyInstanceStyles } from '@vaadin/vaadin-themable-mixin/src/css-utils.js';
 
 const DEFAULT_MESSAGE = 'This field value was modified by AI.';
 const DEFAULT_REVERT_TEXT = 'Revert Value';
@@ -19,6 +20,20 @@ function mark(field, properties = {}) {
   Object.assign(marker, properties);
   field.appendChild(marker);
   return marker;
+}
+
+/**
+ * Whether the animation names the marker uses resolve in the given root,
+ * regardless of how the styles got there.
+ */
+function hasMarkerKeyframes(root) {
+  const sheets = [
+    ...root.adoptedStyleSheets,
+    ...[...root.querySelectorAll('style')].map((style) => style.sheet).filter(Boolean),
+  ];
+  return sheets.some((sheet) =>
+    [...sheet.cssRules].some((rule) => rule instanceof CSSKeyframesRule && rule.name.startsWith('--vaadin-ai-')),
+  );
 }
 
 /**
@@ -82,8 +97,16 @@ describe('ai field marker', () => {
       expect(marker.assignedSlot.getRootNode()).to.equal(field.shadowRoot);
     });
 
-    it('should adopt the highlight styles into the field shadow root', () => {
-      expect(field.shadowRoot.adoptedStyleSheets).to.have.length.above(0);
+    it('should add the marker animations to the field shadow root', () => {
+      expect(hasMarkerKeyframes(field.shadowRoot)).to.be.true;
+    });
+
+    it('should keep the marker animations when the field re-adopts its styles', () => {
+      // The themable infrastructure replaces adoptedStyleSheets wholesale, for
+      // instance when a Lumo stylesheet loads or the theme changes.
+      applyInstanceStyles(field);
+
+      expect(hasMarkerKeyframes(field.shadowRoot)).to.be.true;
     });
 
     it('should adopt the marker styles into the field root node', () => {
@@ -108,13 +131,6 @@ describe('ai field marker', () => {
       const tooltipClass = customElements.get('vaadin-tooltip');
       expect(tooltipClass, 'vaadin-tooltip should be registered').to.exist;
       expect(marker.querySelector('vaadin-tooltip')).to.be.instanceOf(tooltipClass);
-    });
-
-    it('should adopt the marker keyframes into the field shadow root', () => {
-      const hasKeyframes = field.shadowRoot.adoptedStyleSheets.some((sheet) =>
-        [...sheet.cssRules].some((rule) => rule.cssText.includes('--vaadin-ai-marker-slide')),
-      );
-      expect(hasKeyframes).to.be.true;
     });
 
     it('should render the badge and revert controls as non-submitting buttons', () => {
