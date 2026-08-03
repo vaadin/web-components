@@ -80,6 +80,7 @@ vaadin-notification-card::part(overlay),
 vaadin-checkbox::part(checkbox),
 vaadin-radio-button::part(radio),
 vaadin-side-nav-item::part(content),
+vaadin-select-item,
 vaadin-tab,
 vaadin-upload-file,
 :where(
