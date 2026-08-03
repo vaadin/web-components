@@ -46,11 +46,9 @@ export const aiFieldMarkerStyles = css`
     position: relative;
   }
 
-  @property --vaadin-ai-marker-mask-pos {
-    syntax: '<length-percentage>';
-    inherits: false;
-    initial-value: 0;
-  }
+  /* --vaadin-ai-marker-mask-pos is registered from JS: an @property rule only
+     takes effect at document scope, and this sheet is adopted into the field's
+     root node, which is a shadow root for a nested field. */
 
   :where(vaadin-ai-field-marker) {
     display: contents;

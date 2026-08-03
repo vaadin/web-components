@@ -7,6 +7,7 @@ import '@vaadin/popover/src/vaadin-popover.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { html, LitElement, nothing } from 'lit';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
@@ -33,6 +34,18 @@ const MARKER_SLOT = 'ai-field-marker';
 
 /** Marks the `<style>` element the marker injects into a field's shadow root. */
 const MARKER_STYLE_ATTRIBUTE = 'ai-field-marker-styles';
+
+// The position the shimmer's mask is at, animated by the marker's keyframes.
+// Registered here rather than with an @property rule in the marker stylesheet,
+// which is adopted into the field's root node: a registration only takes effect
+// at document scope, and that root node is a shadow root for a field nested
+// inside another component.
+registerCSSProperty({
+  name: '--vaadin-ai-marker-mask-pos',
+  syntax: '<length-percentage>',
+  inherits: false,
+  initialValue: '0px',
+});
 
 const markerStyles = new CSSStyleSheet();
 markerStyles.replaceSync(aiFieldMarkerStyles);
