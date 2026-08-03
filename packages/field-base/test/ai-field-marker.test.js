@@ -747,6 +747,27 @@ describe('ai field marker', () => {
       expect(marker.working).to.be.true;
     });
 
+    describe('field without a value property', () => {
+      let valuelessField;
+
+      beforeEach(async () => {
+        valuelessField = fixtureSync(`<focus-sensitive-field></focus-sensitive-field>`);
+        await nextRender();
+      });
+
+      it('should apply the working state without throwing', async () => {
+        expect(() => mark(valuelessField, { working: true })).to.not.throw();
+        await nextRender();
+        expect(valuelessField.hasAttribute('ai-working')).to.be.true;
+      });
+
+      it('should not define a value property on the field', async () => {
+        mark(valuelessField, { working: true });
+        await nextRender();
+        expect('value' in valuelessField).to.be.false;
+      });
+    });
+
     describe('working set after adding', () => {
       let marker;
 

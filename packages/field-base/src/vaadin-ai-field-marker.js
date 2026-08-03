@@ -66,6 +66,12 @@ function delayValueSets(field, delay = 500) {
     proto = Object.getPrototypeOf(proto);
   }
 
+  if (!desc || !desc.get || !desc.set) {
+    // Nothing to delegate to: leave the field's own `value` alone, so that
+    // `'value' in field` keeps reporting that the field has no value.
+    return;
+  }
+
   let timer;
   Object.defineProperty(field, 'value', {
     configurable: true,
