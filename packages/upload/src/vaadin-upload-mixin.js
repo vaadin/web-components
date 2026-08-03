@@ -406,6 +406,12 @@ export const UploadMixin = (superClass) =>
           e.detail.file.formDataName = this.formDataName;
         }
         this.__redispatchEvent(e);
+        if (!e.defaultPrevented && typeof this.headers === 'string') {
+          // The component has historically parsed a headers JSON string
+          // into the property when an upload starts, after the
+          // upload-before listeners have run
+          this.headers = this.__parseHeaders();
+        }
       });
       this._manager.addEventListener('upload-progress', (e) => {
         this.__applyLegacyProgressStats(e.detail.file);
@@ -529,9 +535,8 @@ export const UploadMixin = (superClass) =>
 
     /**
      * The `headers` property supports a JSON string, while the manager only
-     * accepts an object, so strings are parsed before syncing. The parsed
-     * object is assigned back to the property; an invalid JSON string resets
-     * it to undefined.
+     * accepts an object, so strings are parsed before syncing. An invalid
+     * JSON string parses to undefined.
      * @private
      */
     __parseHeaders() {
@@ -542,7 +547,6 @@ export const UploadMixin = (superClass) =>
         } catch (_) {
           headers = undefined;
         }
-        this.headers = headers;
       }
       return headers;
     }
