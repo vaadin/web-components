@@ -363,14 +363,7 @@ export class UploadManager extends EventTarget {
     if (files && !Array.isArray(files)) {
       files = [files];
     }
-    files
-      .filter((file) => !this.#files.includes(file))
-      .forEach((file) => {
-        // Files added to the list get formDataName in #addFile; this covers
-        // files uploaded without being added to the list
-        file.formDataName ??= this.formDataName;
-        this.__externalFiles.add(file);
-      });
+    files.filter((file) => !this.#files.includes(file)).forEach((file) => this.__externalFiles.add(file));
     files.filter((file) => !file.complete).forEach((file) => this.#queueFileUpload(file));
   }
 

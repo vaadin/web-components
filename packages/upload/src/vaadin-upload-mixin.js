@@ -391,8 +391,19 @@ export const UploadMixin = (superClass) =>
       this._manager.addEventListener('upload-success', (e) => this.__onManagerUploadSuccess(e));
       this._manager.addEventListener('upload-error', (e) => this.__onManagerUploadError(e));
       this._manager.addEventListener('upload-retry', (e) => this.__onManagerUploadRetry(e));
-      ['upload-before', 'upload-request', 'upload-start', 'upload-progress', 'upload-response', 'upload-abort'].forEach(
-        (type) => this._manager.addEventListener(type, (e) => this.__redispatchEvent(e)),
+      this._manager.addEventListener('upload-before', (e) => {
+        // The manager assigns formDataName when a file is added, but the
+        // component has historically assigned it when the upload starts, so
+        // that later changes to the property also apply to files that were
+        // already added. Listeners of the redispatched event can still
+        // override the value before the request body is created.
+        if (this.uploadFormat !== 'raw') {
+          e.detail.file.formDataName = this.formDataName;
+        }
+        this.__redispatchEvent(e);
+      });
+      ['upload-request', 'upload-start', 'upload-progress', 'upload-response', 'upload-abort'].forEach((type) =>
+        this._manager.addEventListener(type, (e) => this.__redispatchEvent(e)),
       );
 
       this.addEventListener('dragover', this._onDragover.bind(this));
