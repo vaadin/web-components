@@ -89,6 +89,33 @@ describe('validation', () => {
       comboBox.required = false;
       expect(validateSpy.called).to.be.false;
     });
+
+    describe('opened', () => {
+      it('should not validate on overlay touch action causing internal blur', () => {
+        comboBox.inputElement.focus();
+        comboBox.open();
+
+        touchend(comboBox.$.overlay);
+
+        expect(validateSpy).to.be.not.called;
+      });
+    });
+
+    describe('document losing focus', () => {
+      beforeEach(() => {
+        sinon.stub(document, 'hasFocus').returns(false);
+      });
+
+      afterEach(() => {
+        document.hasFocus.restore();
+      });
+
+      it('should not validate on blur when document does not have focus', () => {
+        comboBox.inputElement.focus();
+        comboBox.inputElement.blur();
+        expect(validateSpy).to.be.not.called;
+      });
+    });
   });
 
   describe('required', () => {
@@ -110,46 +137,6 @@ describe('validation', () => {
     it('should pass validation when selectedItems is not empty', () => {
       comboBox.selectedItems = ['apple'];
       expect(comboBox.checkValidity()).to.be.true;
-    });
-  });
-
-  describe('blur', () => {
-    let validateSpy;
-
-    beforeEach(async () => {
-      comboBox = fixtureSync(`<vaadin-multi-select-combo-box required></vaadin-multi-select-combo-box>`);
-      comboBox.items = ['apple', 'banana'];
-      await nextRender();
-
-      validateSpy = sinon.spy(comboBox, 'validate');
-      comboBox.inputElement.focus();
-    });
-
-    describe('opened', () => {
-      it('should not validate on overlay touch action causing internal blur', () => {
-        comboBox.open();
-
-        touchend(comboBox.$.overlay);
-
-        expect(validateSpy).to.be.not.called;
-        expect(comboBox.invalid).to.be.false;
-      });
-    });
-
-    describe('document losing focus', () => {
-      beforeEach(() => {
-        sinon.stub(document, 'hasFocus').returns(false);
-      });
-
-      afterEach(() => {
-        document.hasFocus.restore();
-      });
-
-      it('should not validate on blur when document does not have focus', () => {
-        comboBox.inputElement.blur();
-        expect(validateSpy).to.be.not.called;
-        expect(comboBox.invalid).to.be.false;
-      });
     });
   });
 });
