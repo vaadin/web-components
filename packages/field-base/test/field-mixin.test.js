@@ -839,6 +839,14 @@ describe('FieldMixin', () => {
         await nextUpdate(element);
         expect(input.getAttribute('aria-labelledby')).to.be.equal(previousAriaLabelledBy);
       });
+
+      it('should not change aria-labelledby when label is cleared', async () => {
+        element.accessibleNameRef = 'accessible-name-ref-0';
+        await nextUpdate(element);
+        element.label = null;
+        await nextUpdate(element);
+        expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
+      });
     });
 
     describe('accessibleNameRef is set initially', () => {
