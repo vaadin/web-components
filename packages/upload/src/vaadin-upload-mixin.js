@@ -506,7 +506,9 @@ export const UploadMixin = (superClass) =>
      */
     __syncManagerConfig() {
       this._manager.__setConfig({
-        target: this.target,
+        // Fall back to an empty string, which means that window.location
+        // will be used, also when the property is set to null
+        target: this.target || '',
         method: this.method,
         headers: this.__parseHeaders(),
         timeout: this.timeout,
