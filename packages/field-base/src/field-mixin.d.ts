@@ -49,12 +49,4 @@ export declare class FieldMixinClass {
   protected readonly _errorNode: HTMLElement;
 
   protected readonly _helperNode?: HTMLElement;
-
-  protected _helperTextChanged(helperText: string | null | undefined): void;
-
-  protected _ariaTargetChanged(target: HTMLElement): void;
-
-  protected _requiredChanged(required: boolean): void;
-
-  protected _invalidChanged(invalid: boolean): void;
 }

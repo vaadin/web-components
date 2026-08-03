@@ -22,7 +22,6 @@ export const FieldMixin = (superclass) =>
          */
         ariaTarget: {
           type: Object,
-          observer: '_ariaTargetChanged',
         },
 
         /**
@@ -32,7 +31,6 @@ export const FieldMixin = (superclass) =>
          */
         errorMessage: {
           type: String,
-          observer: '_errorMessageChanged',
         },
 
         /**
@@ -41,7 +39,6 @@ export const FieldMixin = (superclass) =>
          */
         helperText: {
           type: String,
-          observer: '_helperTextChanged',
         },
 
         /**
@@ -50,7 +47,6 @@ export const FieldMixin = (superclass) =>
          */
         accessibleName: {
           type: String,
-          observer: '_accessibleNameChanged',
         },
 
         /**
@@ -59,13 +55,8 @@ export const FieldMixin = (superclass) =>
          */
         accessibleNameRef: {
           type: String,
-          observer: '_accessibleNameRefChanged',
         },
       };
-    }
-
-    static get observers() {
-      return ['_invalidChanged(invalid)', '_requiredChanged(required)'];
     }
 
     constructor() {
@@ -114,56 +105,41 @@ export const FieldMixin = (superclass) =>
     }
 
     /** @protected */
-    _accessibleNameChanged(accessibleName) {
-      this._fieldAriaController.setLabel(accessibleName);
-      this.__updateFieldAriaControllerLabelledBy();
-    }
+    updated(props) {
+      super.updated(props);
 
-    /** @protected */
-    _accessibleNameRefChanged() {
-      this.__updateFieldAriaControllerLabelledBy();
-    }
+      if (props.has('invalid')) {
+        this._errorController.setInvalid(this.invalid);
+      }
 
-    /**
-     * @param {string | null | undefined} errorMessage
-     * @protected
-     */
-    _errorMessageChanged(errorMessage) {
-      this._errorController.setErrorMessage(errorMessage);
-    }
+      if (props.has('errorMessage')) {
+        this._errorController.setErrorMessage(this.errorMessage);
+      }
 
-    /**
-     * @param {string} helperText
-     * @protected
-     */
-    _helperTextChanged(helperText) {
-      this._helperController.setHelperText(helperText);
-    }
+      if (props.has('helperText')) {
+        this._helperController.setHelperText(this.helperText);
+      }
 
-    /**
-     * @param {HTMLElement | null | undefined} target
-     * @protected
-     */
-    _ariaTargetChanged(target) {
-      if (target) {
-        this._fieldAriaController.setTarget(target);
+      if (props.has('ariaTarget')) {
+        this._fieldAriaController.setTarget(this.ariaTarget);
+      }
+
+      if (props.has('required')) {
+        this._fieldAriaController.setRequired(this.required);
+      }
+
+      if (props.has('accessibleName')) {
+        this.__updateFieldAriaControllerLabel();
+      }
+
+      if (props.has('accessibleName') || props.has('accessibleNameRef')) {
+        this.__updateFieldAriaControllerLabelledBy();
       }
     }
 
-    /**
-     * @param {boolean} required
-     * @protected
-     */
-    _requiredChanged(required) {
-      this._fieldAriaController.setRequired(required);
-    }
-
-    /**
-     * @param {boolean} invalid
-     * @protected
-     */
-    _invalidChanged(invalid) {
-      this._errorController.setInvalid(invalid);
+    /** @private */
+    __updateFieldAriaControllerLabel() {
+      this._fieldAriaController.setLabel(this.accessibleName);
     }
 
     /** @private */

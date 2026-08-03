@@ -137,6 +137,19 @@ export const RadioGroupMixin = (superclass) =>
       this.addController(this._tooltipController);
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('invalid')) {
+        if (this.invalid) {
+          this.setAttribute('aria-invalid', 'true');
+        } else {
+          this.removeAttribute('aria-invalid');
+        }
+      }
+    }
+
     /**
      * @param {!Array<!Node>} nodes
      * @return {!Array<!RadioButton>}
@@ -170,23 +183,6 @@ export const RadioGroupMixin = (superclass) =>
       if (['ArrowRight', 'ArrowDown'].includes(event.key)) {
         event.preventDefault();
         this.__selectPrevRadioButton(radioButton);
-      }
-    }
-
-    /**
-     * Override an observer from `FieldMixin`.
-     *
-     * @param {boolean} invalid
-     * @protected
-     * @override
-     */
-    _invalidChanged(invalid) {
-      super._invalidChanged(invalid);
-
-      if (invalid) {
-        this.setAttribute('aria-invalid', 'true');
-      } else {
-        this.removeAttribute('aria-invalid');
       }
     }
 

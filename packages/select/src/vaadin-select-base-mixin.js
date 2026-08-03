@@ -231,6 +231,15 @@ export const SelectBaseMixin = (superClass) =>
           this.__lastMenuElement = null;
         }
       }
+
+      if (props.has('accessibleName')) {
+        this._srLabelController.setLabel(this.accessibleName);
+      }
+
+      // Validate when the required constraint is removed.
+      if (props.has('required') && this.required === false) {
+        this._requestValidation();
+      }
     }
 
     /**
@@ -247,21 +256,6 @@ export const SelectBaseMixin = (superClass) =>
       }
 
       this._overlayElement.requestContentUpdate();
-    }
-
-    /**
-     * Override an observer from `FieldMixin`
-     * to validate when required is removed.
-     *
-     * @protected
-     * @override
-     */
-    _requiredChanged(required) {
-      super._requiredChanged(required);
-
-      if (required === false) {
-        this._requestValidation();
-      }
     }
 
     /**
@@ -537,16 +531,6 @@ export const SelectBaseMixin = (superClass) =>
       itemElement.setAttribute('id', this._itemId);
     }
 
-    /**
-     * @param {string} accessibleName
-     * @protected
-     * @override
-     */
-    _accessibleNameChanged(accessibleName) {
-      this._srLabelController.setLabel(accessibleName);
-      this.__updateFieldAriaControllerLabelledBy();
-    }
-
     /** @private */
     __updateValueButton() {
       const valueButton = this.focusElement;
@@ -673,6 +657,11 @@ export const SelectBaseMixin = (superClass) =>
       this._requestValidation();
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
       this.__dispatchChangePending = false;
+    }
+
+    /** @override */
+    __updateFieldAriaControllerLabel() {
+      // NO-OP
     }
 
     /** @override */

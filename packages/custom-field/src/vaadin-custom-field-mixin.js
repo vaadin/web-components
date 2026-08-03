@@ -140,6 +140,16 @@ export const CustomFieldMixin = (superClass) =>
       });
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      // Validate when the required constraint is removed.
+      if (props.has('required') && this.required === false) {
+        this._requestValidation();
+      }
+    }
+
     /**
      * @param {FocusOptions=} options
      * @protected
@@ -191,21 +201,6 @@ export const CustomFieldMixin = (superClass) =>
         return false;
       }
       return true;
-    }
-
-    /**
-     * Override an observer from `FieldMixin`
-     * to validate when required is removed.
-     *
-     * @protected
-     * @override
-     */
-    _requiredChanged(required) {
-      super._requiredChanged(required);
-
-      if (required === false) {
-        this._requestValidation();
-      }
     }
 
     /**
