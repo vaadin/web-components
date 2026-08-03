@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enter, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextFrame, nextRender, touchend } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-time-picker.js';
 import { setInputValue } from './helpers.js';
@@ -263,6 +263,45 @@ describe('validation', () => {
       timePicker.value = '20:00';
       expect(timePicker.validate()).to.equal(true);
       expect(timePicker.invalid).to.equal(false);
+    });
+  });
+
+  describe('blur', () => {
+    let validateSpy;
+
+    beforeEach(async () => {
+      timePicker = fixtureSync(`<vaadin-time-picker required></vaadin-time-picker>`);
+      await nextRender();
+
+      validateSpy = sinon.spy(timePicker, 'validate');
+      timePicker.inputElement.focus();
+    });
+
+    describe('opened', () => {
+      it('should not validate on overlay touch action causing internal blur', () => {
+        timePicker.open();
+
+        touchend(timePicker.$.overlay);
+
+        expect(validateSpy).to.be.not.called;
+        expect(timePicker.invalid).to.be.false;
+      });
+    });
+
+    describe('document losing focus', () => {
+      beforeEach(() => {
+        sinon.stub(document, 'hasFocus').returns(false);
+      });
+
+      afterEach(() => {
+        document.hasFocus.restore();
+      });
+
+      it('should not validate on blur when document does not have focus', () => {
+        timePicker.inputElement.blur();
+        expect(validateSpy).to.be.not.called;
+        expect(timePicker.invalid).to.be.false;
+      });
     });
   });
 
