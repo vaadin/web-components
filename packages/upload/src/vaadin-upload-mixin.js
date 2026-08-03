@@ -9,7 +9,6 @@ import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
-import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { DEFAULT_I18N as FILE_LIST_DEFAULT_I18N } from './vaadin-upload-file-list-mixin.js';
 import { getFilesFromDropEvent, updateFileStatus } from './vaadin-upload-helpers.js';
 import { UploadManager } from './vaadin-upload-manager.js';
@@ -521,8 +520,9 @@ export const UploadMixin = (superClass) =>
 
     /**
      * The `headers` property supports a JSON string, while the manager only
-     * accepts an object, so strings are parsed before syncing. An invalid
-     * JSON string resets the property to undefined.
+     * accepts an object, so strings are parsed before syncing. The parsed
+     * object is assigned back to the property; an invalid JSON string resets
+     * it to undefined.
      * @private
      */
     __parseHeaders() {
@@ -531,10 +531,9 @@ export const UploadMixin = (superClass) =>
         try {
           headers = JSON.parse(headers);
         } catch (_) {
-          issueWarning(`Failed to parse headers "${headers}". Expected a valid JSON string.`);
           headers = undefined;
-          this.headers = undefined;
         }
+        this.headers = headers;
       }
       return headers;
     }
