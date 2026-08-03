@@ -176,7 +176,7 @@ export const FieldMixin = (superclass) =>
         // Label ID should be only added when the label content is present
         // and not overridden by `accessible-name` which sets `aria-label`.
         id = this._labelNode?.id;
-      } 
+      }
 
       this._fieldAriaController.setLabelledBy(id);
     }
