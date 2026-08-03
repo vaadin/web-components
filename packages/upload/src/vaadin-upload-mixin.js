@@ -559,7 +559,7 @@ export const UploadMixin = (superClass) =>
           file.remaining = Infinity;
         }
         // Recompute the strings derived from the stats
-        updateFileStatus(file, this.__effectiveI18n);
+        this.__updateFileStatus(file);
       }
     }
 
@@ -577,10 +577,24 @@ export const UploadMixin = (superClass) =>
 
     // ============ Manager event handlers ============
 
+    /**
+     * Update the status strings of the given file, hiding the status when an
+     * error has been assigned to the file (e.g. by an `upload-progress`
+     * listener) while it is uploading, like the component historically did.
+     * @private
+     */
+    __updateFileStatus(file) {
+      updateFileStatus(file, this.__effectiveI18n);
+      if (file.uploading && file.error) {
+        file.status = undefined;
+        file.indeterminate = undefined;
+      }
+    }
+
     /** @private */
     __onManagerFilesChanged(event) {
       // Files that are not rendered by the file list still need up-to-date status strings
-      this._manager.__externalFiles.forEach((file) => updateFileStatus(file, this.__effectiveI18n));
+      this._manager.__externalFiles.forEach((file) => this.__updateFileStatus(file));
 
       const files = event.detail.value;
       // Only update the `files` property when files are added or removed, so that
@@ -600,7 +614,7 @@ export const UploadMixin = (superClass) =>
       // Compute the file status strings before rendering, like the component
       // did before the manager integration; the file list does not compute
       // them when rendering
-      this.files.forEach((file) => updateFileStatus(file, this.__effectiveI18n));
+      this.files.forEach((file) => this.__updateFileStatus(file));
 
       if (this._fileList && typeof this._fileList.requestContentUpdate === 'function') {
         this._fileList.requestContentUpdate();
@@ -636,10 +650,12 @@ export const UploadMixin = (superClass) =>
     /** @private */
     __redispatchEvent(event) {
       const { file } = event.detail;
-      if (file && this._manager.__externalFiles.has(file)) {
-        // Files that are not rendered by the file list still need up-to-date
-        // status strings when their upload events are dispatched
-        updateFileStatus(file, this.__effectiveI18n);
+      if (file) {
+        // Make sure the status strings are up-to-date when listeners of the
+        // redispatched event read them, like they were historically: e.g.
+        // 'Connecting...' already at the upload-request event, while the
+        // file list only renders it on the next files-changed
+        this.__updateFileStatus(file);
       }
       const dispatched = this.dispatchEvent(
         new CustomEvent(event.type, {
