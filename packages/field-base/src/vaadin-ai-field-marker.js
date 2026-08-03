@@ -243,9 +243,16 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
    * While in the working state, the elements whose client-side `readonly`
    * state was overridden — the field itself and, for a `vaadin-custom-field`,
    * its inputs — with their original values, so leaving the working state can
-   * restore them. `null` when not working.
+   * restore them. `null` once the state has been restored.
    */
   #lockedElements = null;
+
+  /**
+   * The pending restore of the captured read-only state, scheduled when the
+   * working state ends so the field stays locked for the shimmer wind-down.
+   * Non-`null` only while winding down.
+   */
+  #restoreTimer = null;
 
   /** Set when the AI-fill announcement should be made on the next update. */
   #announcePending = false;
@@ -560,7 +567,7 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
    */
   #startWorking() {
     const field = this.#field;
-    if (!field || this.#lockedElements) {
+    if (!field || (this.#lockedElements && this.#restoreTimer == null)) {
       return;
     }
 
@@ -568,13 +575,21 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     this.#valueDelay ??= new DelayedFieldValue(field, 500);
     this.#valueDelay.install();
 
-    // vaadin-custom-field does not propagate `readonly` to its inputs, so
-    // they are locked (and restored) individually alongside the field.
-    const locked = [field, ...(field.localName === 'vaadin-custom-field' ? (field.inputs ?? []) : [])];
-    this.#lockedElements = locked.map((element) => ({ element, readonly: element.readonly }));
+    if (this.#restoreTimer != null) {
+      // The previous working state is still winding down. Cancel its restore
+      // and keep the read-only state it captured: the elements are locked right
+      // now, so capturing again would take the lock itself as the original.
+      clearTimeout(this.#restoreTimer);
+      this.#restoreTimer = null;
+    } else {
+      // vaadin-custom-field does not propagate `readonly` to its inputs, so
+      // they are locked (and restored) individually alongside the field.
+      const locked = [field, ...(field.localName === 'vaadin-custom-field' ? (field.inputs ?? []) : [])];
+      this.#lockedElements = locked.map((element) => ({ element, readonly: element.readonly }));
+    }
 
     field.setAttribute('ai-working', '');
-    locked.forEach((element) => {
+    this.#lockedElements.forEach(({ element }) => {
       element.readonly = true;
     });
   }
@@ -588,7 +603,20 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
    */
   #stopWorking(immediate = false) {
     const field = this.#field;
-    if (!field || !this.#lockedElements) {
+    if (!field) {
+      return;
+    }
+
+    if (this.#restoreTimer != null) {
+      // Already winding down. Finish it now when the marker is going away, so
+      // the restore cannot overwrite a read-only state set after this point.
+      if (immediate) {
+        this.#restoreLockedElements();
+      }
+      return;
+    }
+
+    if (!this.#lockedElements) {
       return;
     }
 
@@ -603,18 +631,27 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     }
 
     field.removeAttribute('ai-working');
-    this.#lockedElements.forEach(({ element, readonly }) => {
-      if (immediate) {
-        element.readonly = readonly;
-      } else {
-        // TODO uses a fixed 500ms timeout, exactly half of the --ai-marker-slide animation
-        setTimeout(() => {
-          element.readonly = readonly;
-        }, 500);
-      }
-    });
 
+    if (immediate) {
+      this.#restoreLockedElements();
+    } else {
+      // TODO uses a fixed 500ms timeout, exactly half of the --ai-marker-slide animation
+      this.#restoreTimer = setTimeout(() => this.#restoreLockedElements(), 500);
+    }
+  }
+
+  /** Restores the read-only state captured when the working state was entered. */
+  #restoreLockedElements() {
+    clearTimeout(this.#restoreTimer);
+    this.#restoreTimer = null;
+
+    const locked = this.#lockedElements;
     this.#lockedElements = null;
+    if (locked) {
+      locked.forEach(({ element, readonly }) => {
+        element.readonly = readonly;
+      });
+    }
   }
 
   #onRevert() {

@@ -829,6 +829,34 @@ describe('ai field marker', () => {
         expect(field.readonly).to.be.false;
       });
 
+      it('should keep the field read-only when working restarts during the wind-down', async () => {
+        marker.working = true;
+        await nextUpdate(marker);
+
+        // The restore scheduled by the previous working state must not unlock
+        // the field while the AI is working again.
+        await clock.tickAsync(500);
+        expect(field.readonly).to.be.true;
+      });
+
+      it('should restore the read-only state after working restarts during the wind-down', async () => {
+        marker.working = true;
+        await nextUpdate(marker);
+        marker.working = false;
+        await nextUpdate(marker);
+        await clock.tickAsync(500);
+
+        expect(field.readonly).to.be.false;
+      });
+
+      it('should not restore the read-only state after the marker is removed', async () => {
+        marker.remove();
+        field.readonly = true;
+
+        await clock.tickAsync(500);
+        expect(field.readonly).to.be.true;
+      });
+
       it('should keep a read-only state that was set before working', async () => {
         await clock.tickAsync(500);
         field.readonly = true;
