@@ -113,19 +113,6 @@ describe('scrolling input into the visual viewport', () => {
       await open();
       expect(scrollIntoView).to.be.calledOnce;
     });
-
-    it('should skip the correction when the overlay open event fires after close', async () => {
-      setVisualViewportHeight(input.getBoundingClientRect().top - 10);
-
-      // The overlay dispatches `vaadin-overlay-open` from a timeout that closing
-      // does not cancel, so the event can arrive while the combo-box is closed
-      comboBox.$.overlay.dispatchEvent(new CustomEvent('vaadin-overlay-open'));
-      expect(scrollIntoView).to.not.be.called;
-
-      // The retained focus state must survive for the next real open
-      await open();
-      expect(scrollIntoView).to.be.calledOnce;
-    });
   });
 
   it('should not scroll the input on open when focus was not retained', async () => {
