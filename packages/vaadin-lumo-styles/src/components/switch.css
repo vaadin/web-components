@@ -131,14 +131,17 @@
   }
 
   :host([readonly]) {
-    --vaadin-switch-marker-color: var(--lumo-contrast-70pct);
+    --vaadin-switch-marker-color: var(--lumo-contrast-50pct);
     --vaadin-switch-marker-scale: 0.8;
+    --_border-style: solid;
   }
 
   :host([readonly][checked]) {
-    --vaadin-switch-background: var(--lumo-primary-color-50pct);
-    --vaadin-switch-marker-color: var(--lumo-primary-contrast-color);
-    --vaadin-switch-icon-color: var(--lumo-primary-color);
+    --vaadin-switch-background: transparent;
+    --_border-style: solid;
+    --vaadin-switch-border-color: var(--lumo-contrast-50pct);
+    --vaadin-switch-marker-color: var(--lumo-secondary-text-color);
+    --vaadin-switch-icon-color: var(--lumo-base-color);
   }
 
   :host([invalid]) {
