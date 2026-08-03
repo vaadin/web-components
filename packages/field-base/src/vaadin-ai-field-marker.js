@@ -53,39 +53,92 @@ function adoptMarkerStyles(field) {
   }
 }
 
-function delayValueSets(field, delay = 500) {
-  if (Object.getOwnPropertyDescriptor(field, 'value')) {
-    // Already intercepting
-    return;
+/**
+ * Holds back value assignments on a field, so that the value an AI fills in
+ * lands halfway through the marker's slide animation instead of instantly.
+ *
+ * While installed, the field's own `value` accessor is replaced with one that
+ * queues an assignment and applies it after the delay; a further assignment
+ * supersedes a queued one. Uninstalling restores the field's own accessor but
+ * leaves a queued assignment on its deadline, since it carries the value the
+ * marker was working on. Call `flush()` to apply it right away instead.
+ */
+class DelayedFieldValue {
+  /** The intercepted accessor, found on the field's prototype chain. */
+  #descriptor;
+
+  #field;
+
+  #delay;
+
+  #timer = null;
+
+  /** The queued value, while `#timer` is pending. */
+  #queuedValue;
+
+  constructor(field, delay) {
+    this.#field = field;
+    this.#delay = delay;
+
+    let proto = Object.getPrototypeOf(field);
+    let descriptor;
+    while (proto && !(descriptor = Object.getOwnPropertyDescriptor(proto, 'value'))) {
+      proto = Object.getPrototypeOf(proto);
+    }
+    this.#descriptor = descriptor && descriptor.get && descriptor.set ? descriptor : null;
   }
 
-  // Find the original accessor up the prototype chain
-  let proto = Object.getPrototypeOf(field);
-  let desc;
-  while (proto && !(desc = Object.getOwnPropertyDescriptor(proto, 'value'))) {
-    proto = Object.getPrototypeOf(proto);
+  /**
+   * Whether the field exposes a `value` accessor that can be intercepted.
+   * Without one there is nothing to delegate to, and defining an own `value`
+   * would make `'value' in field` report a value the field does not have.
+   *
+   * @return {boolean}
+   */
+  get supported() {
+    return this.#descriptor != null;
   }
 
-  if (!desc || !desc.get || !desc.set) {
-    // Nothing to delegate to: leave the field's own `value` alone, so that
-    // `'value' in field` keeps reporting that the field has no value.
-    return;
+  /** Starts holding back value assignments. Keeps a queued assignment. */
+  install() {
+    const field = this.#field;
+    if (!this.supported || Object.getOwnPropertyDescriptor(field, 'value')) {
+      return;
+    }
+
+    const descriptor = this.#descriptor;
+    Object.defineProperty(field, 'value', {
+      configurable: true,
+      get: () => descriptor.get.call(field),
+      set: (value) => {
+        this.#queuedValue = value;
+        clearTimeout(this.#timer);
+        this.#timer = setTimeout(() => this.flush(), this.#delay);
+      },
+    });
   }
 
-  let timer;
-  Object.defineProperty(field, 'value', {
-    configurable: true,
-    get() {
-      return desc.get.call(field);
-    },
-    set(v) {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        delete field.value;
-        field.value = v;
-      }, delay);
-    },
-  });
+  /** Restores the field's own accessor, leaving a queued value on its deadline. */
+  uninstall() {
+    if (Object.getOwnPropertyDescriptor(this.#field, 'value')) {
+      delete this.#field.value;
+    }
+  }
+
+  /** Applies a queued value right away, and stops holding back assignments. */
+  flush() {
+    if (this.#timer == null) {
+      this.uninstall();
+      return;
+    }
+
+    clearTimeout(this.#timer);
+    this.#timer = null;
+    const value = this.#queuedValue;
+    this.#queuedValue = undefined;
+    this.uninstall();
+    this.#field.value = value;
+  }
 }
 
 /**
@@ -185,6 +238,12 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
 
   /** Set when the AI-fill announcement should be made on the next update. */
   #announcePending = false;
+
+  /**
+   * Holds back the field's value assignments while working. Kept across
+   * working states, so a new assignment supersedes a still-queued one.
+   */
+  #valueDelay = null;
 
   #badgeController;
 
@@ -391,6 +450,7 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     }
 
     this.#field = null;
+    this.#valueDelay = null;
   }
 
   /**
@@ -478,7 +538,8 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     }
 
     // TODO uses a fixed 500ms timeout, exactly half of the --ai-marker-slide animation
-    delayValueSets(field, 500);
+    this.#valueDelay ??= new DelayedFieldValue(field, 500);
+    this.#valueDelay.install();
 
     // vaadin-custom-field does not propagate `readonly` to its inputs, so
     // they are locked (and restored) individually alongside the field.
@@ -502,6 +563,16 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     const field = this.#field;
     if (!field || !this.#lockedElements) {
       return;
+    }
+
+    // Stop holding back the field's value assignments. A value the AI already
+    // set stays queued so it still lands with the shimmer wind-down, unless the
+    // marker is going away, in which case it is applied right away rather than
+    // after the marker stopped annotating the field.
+    if (immediate) {
+      this.#valueDelay.flush();
+    } else {
+      this.#valueDelay.uninstall();
     }
 
     field.removeAttribute('ai-working');

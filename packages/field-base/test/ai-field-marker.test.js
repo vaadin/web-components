@@ -907,6 +907,42 @@ describe('ai field marker', () => {
         marker.querySelector('[part="revert-button"]').click();
         expect(spy.firstCall.args[0].detail.value).to.equal('New AI value');
       });
+
+      it('should still apply a value set queued before working ended', async () => {
+        field.value = 'AI filled';
+        marker.working = false;
+        await nextUpdate(marker);
+
+        expect(field.value).to.equal('AI value');
+        await clock.tickAsync(500);
+        expect(field.value).to.equal('AI filled');
+      });
+
+      it('should stop delaying value sets when working ends', async () => {
+        marker.working = false;
+        await nextUpdate(marker);
+        await clock.tickAsync(500);
+
+        field.value = 'Host value';
+        expect(field.value).to.equal('Host value');
+      });
+
+      it('should restore the field value accessor when working ends', async () => {
+        marker.working = false;
+        await nextUpdate(marker);
+        expect(Object.getOwnPropertyDescriptor(field, 'value')).to.not.exist;
+      });
+
+      it('should apply a queued value set when the marker is removed', () => {
+        field.value = 'Last value';
+        marker.remove();
+        expect(field.value).to.equal('Last value');
+      });
+
+      it('should restore the field value accessor when the marker is removed', () => {
+        marker.remove();
+        expect(Object.getOwnPropertyDescriptor(field, 'value')).to.not.exist;
+      });
     });
 
     describe('already marked field', () => {
