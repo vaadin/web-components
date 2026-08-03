@@ -402,7 +402,11 @@ export const UploadMixin = (superClass) =>
         }
         this.__redispatchEvent(e);
       });
-      ['upload-request', 'upload-start', 'upload-progress', 'upload-response', 'upload-abort'].forEach((type) =>
+      this._manager.addEventListener('upload-progress', (e) => {
+        this.__applyLegacyProgressStats(e.detail.file);
+        this.__redispatchEvent(e);
+      });
+      ['upload-request', 'upload-start', 'upload-response', 'upload-abort'].forEach((type) =>
         this._manager.addEventListener(type, (e) => this.__redispatchEvent(e)),
       );
 
@@ -534,6 +538,24 @@ export const UploadMixin = (superClass) =>
         this.headers = headers;
       }
       return headers;
+    }
+
+    /**
+     * Restore the `speed` and `remaining` stats the component computed
+     * before the manager integration: the speed derived from the total file
+     * size instead of the transferred bytes, and unknown (infinite)
+     * remaining time when no bytes have been transferred yet.
+     * @private
+     */
+    __applyLegacyProgressStats(file) {
+      if (file.uploading && !file.errorKey && !file.abort && file.total && file.elapsed) {
+        file.speed = ~~(file.total / file.elapsed / 1024);
+        if (!file.loaded) {
+          file.remaining = Infinity;
+        }
+        // Recompute the strings derived from the stats
+        updateFileStatus(file, this.__effectiveI18n);
+      }
     }
 
     /** @private */
@@ -669,7 +691,10 @@ export const UploadMixin = (superClass) =>
       const { file } = event.detail;
       // Translate errorKey to i18n message and set file.error (only if error wasn't already set directly)
       if (file.errorKey && !file.error) {
-        file.error = this.__effectiveI18n.uploading.error[file.errorKey] || file.errorKey;
+        // There is no i18n message for the manager's timeout error; a timed
+        // out request has historically surfaced as server unavailable
+        const errorKey = file.errorKey === 'timeout' ? 'serverUnavailable' : file.errorKey;
+        file.error = this.__effectiveI18n.uploading.error[errorKey] || errorKey;
       }
       this.__redispatchEvent(event);
       // The manager stops tracking upload progress once the upload has
