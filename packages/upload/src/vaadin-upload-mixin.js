@@ -778,8 +778,7 @@ export const UploadMixin = (superClass) =>
         this._dragover = this._dragoverValid = false;
 
         const files = await getFilesFromDropEvent(event);
-        this.__syncManagerConfig();
-        this._manager.addFiles(files);
+        this._addFiles(files);
       }
     }
 
@@ -798,8 +797,32 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _onFileInputChange(event) {
+      this._addFiles(event.target.files);
+    }
+
+    /** @private */
+    _addFiles(files) {
       this.__syncManagerConfig();
-      this._manager.addFiles(event.target.files);
+      this._manager.addFiles(files);
+    }
+
+    /**
+     * Add the file for uploading. Called internally for each file after picking files from dialog or dropping files.
+     *
+     * @param {!UploadFile} file File being added
+     * @protected
+     */
+    _addFile(file) {
+      this._addFiles([file]);
+    }
+
+    /**
+     * Remove file from upload list. Called internally if file upload was canceled.
+     * @param {!UploadFile} file File to remove
+     * @protected
+     */
+    _removeFile(file) {
+      this._manager.__removeFile(file);
     }
 
     // ============ Accessibility ============

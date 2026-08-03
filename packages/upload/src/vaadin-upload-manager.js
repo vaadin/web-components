@@ -440,6 +440,31 @@ export class UploadManager extends EventTarget {
   }
 
   /**
+   * Remove a file from the list and the upload queue, and process the queue
+   * to start uploads for other queued files. Unlike `removeFile`, an active
+   * upload of the file is not aborted, matching the historical
+   * `<vaadin-upload>` behavior.
+   * Internal API for `<vaadin-upload>`, may change at any time.
+   * @param {UploadFile} file
+   * @private
+   */
+  __removeFile(file) {
+    this.#uploadQueue = this.#uploadQueue.filter((f) => f !== file);
+    this.#processUploadQueue();
+
+    const fileIndex = this.#files.indexOf(file);
+    if (fileIndex >= 0) {
+      this.#setFiles(this.#files.filter((f) => f !== file));
+
+      this.dispatchEvent(
+        new CustomEvent('file-remove', {
+          detail: { file, fileIndex },
+        }),
+      );
+    }
+  }
+
+  /**
    * Start uploads for queued files if there is capacity for them.
    * Internal API for `<vaadin-upload>`, may change at any time.
    * @private
