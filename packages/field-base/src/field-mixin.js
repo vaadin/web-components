@@ -176,11 +176,7 @@ export const FieldMixin = (superclass) =>
 
     /** @private */
     __updateFieldAriaControllerDescribedBy() {
-      if (this.accessibleDescriptionRef) {
-        this._fieldAriaController.setDescribedBy(this.accessibleDescriptionRef);
-      } else {
-        this._fieldAriaController.setDescribedBy(null);
-      }
+      this._fieldAriaController.setDescribedBy(this.accessibleDescriptionRef);
     }
 
     #onLabelSlotContentChange(_event) {
