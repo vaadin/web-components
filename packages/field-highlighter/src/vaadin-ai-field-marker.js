@@ -36,9 +36,12 @@ const MARKER_SLOT = 'ai-field-marker';
 /** Marks the `<style>` element the marker injects into a field's shadow root. */
 const MARKER_STYLE_ATTRIBUTE = 'ai-field-marker-styles';
 
+/** Marks the `<style>` element the marker injects into a field's root node. */
+const MARKER_ROOT_STYLE_ATTRIBUTE = 'ai-field-marker-root-styles';
+
 // The position the shimmer's mask is at, animated by the marker's keyframes.
 // Registered here rather than with an @property rule in the marker stylesheet,
-// which is adopted into the field's root node: a registration only takes effect
+// which is injected into the field's root node: a registration only takes effect
 // at document scope, and that root node is a shadow root for a field nested
 // inside another component.
 registerCSSProperty({
@@ -48,19 +51,28 @@ registerCSSProperty({
   initialValue: '0px',
 });
 
-const markerStyles = new CSSStyleSheet();
-markerStyles.replaceSync(aiFieldMarkerStyles);
-
 /**
- * Adopts the marker stylesheet into the field's root node, so the badge,
- * popover and working-shimmer styles apply to the field.
+ * Adds the marker styles to the field's root node, so the badge, popover and
+ * working-shimmer styles apply to the field.
+ *
+ * Injected as a `<style>` element rather than an adopted stylesheet because
+ * the themable infrastructure replaces `adoptedStyleSheets` wholesale — on a
+ * Lumo stylesheet load or a theme switch — which, for a field nested in
+ * another component's shadow root, would silently drop the marker styles.
  *
  * @param {HTMLElement} field
  */
-function adoptMarkerStyles(field) {
-  if (!field.getRootNode().adoptedStyleSheets.includes(markerStyles)) {
-    field.getRootNode().adoptedStyleSheets.push(markerStyles);
+function injectMarkerRootStyles(field) {
+  const root = field.getRootNode();
+  const container = root === document ? document.head : root;
+  if (container.querySelector(`:scope > style[${MARKER_ROOT_STYLE_ATTRIBUTE}]`)) {
+    return;
   }
+
+  const style = document.createElement('style');
+  style.setAttribute(MARKER_ROOT_STYLE_ATTRIBUTE, '');
+  style.textContent = aiFieldMarkerStyles.cssText;
+  container.appendChild(style);
 }
 
 /**
@@ -535,7 +547,7 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
   #markField() {
     const field = this.#field;
 
-    adoptMarkerStyles(field);
+    injectMarkerRootStyles(field);
     injectMarkerHostStyles(field);
 
     // Create a slot for the marker element inside the field's own shadow

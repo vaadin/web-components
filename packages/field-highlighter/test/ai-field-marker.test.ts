@@ -121,8 +121,25 @@ describe('ai field marker', () => {
       expect(hasMarkerKeyframes(field.shadowRoot!)).to.be.true;
     });
 
-    it('should adopt the marker styles into the field root node', () => {
-      expect((field.getRootNode() as Document).adoptedStyleSheets).to.have.length.above(0);
+    it('should apply the marker styles in the field root node', () => {
+      expect(getComputedStyle(field).position).to.equal('relative');
+    });
+
+    it('should keep the marker styles when the field root node re-adopts its stylesheets', async () => {
+      // A field nested in another component's shadow root: the themable
+      // infrastructure replaces that root's adoptedStyleSheets wholesale, for
+      // instance when a Lumo stylesheet loads or the theme changes.
+      const wrapper = fixtureSync<HTMLElement>(`<div></div>`);
+      const root = wrapper.attachShadow({ mode: 'open' });
+      const nestedField = document.createElement('vaadin-text-field');
+      root.appendChild(nestedField);
+      await nextRender();
+      mark(nestedField);
+      await nextRender();
+
+      root.adoptedStyleSheets = [];
+
+      expect(getComputedStyle(nestedField).position).to.equal('relative');
     });
 
     it('should render an accessible badge button', () => {

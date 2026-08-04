@@ -33,7 +33,7 @@ export const aiFieldMarkerStyles = css`
   }
 
   /* --vaadin-ai-field-marker-mask-pos is registered from JS: an @property rule only
-     takes effect at document scope, and this sheet is adopted into the field's
+     takes effect at document scope, and this sheet is injected into the field's
      root node, which is a shadow root for a nested field. */
 
   vaadin-ai-field-marker[hidden] {
