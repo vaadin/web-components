@@ -30,6 +30,12 @@ describe('vaadin-number-field', () => {
       await expect(field).dom.to.equalSnapshot();
     });
 
+    it('accessibleDescriptionRef', async () => {
+      field.accessibleDescriptionRef = 'accessible-description-ref-0';
+      await nextUpdate(field);
+      await expect(field).dom.to.equalSnapshot();
+    });
+
     it('min', async () => {
       field.min = 2;
       await nextUpdate(field);

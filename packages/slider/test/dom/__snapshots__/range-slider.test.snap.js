@@ -1279,3 +1279,52 @@ snapshots["vaadin-range-slider shadow max < min"] =
 `;
 /* end snapshot vaadin-range-slider shadow max < min */
 
+snapshots["vaadin-range-slider host accessibleDescriptionRef"] = 
+`<vaadin-range-slider aria-describedby="accessible-description-ref-0">
+  <input
+    aria-label="min"
+    id="slider-3"
+    max="100"
+    min="0"
+    slot="input"
+    step="1"
+    tabindex="0"
+    type="range"
+  >
+  <input
+    aria-label="max"
+    id="slider-4"
+    max="100"
+    min="0"
+    slot="input"
+    step="1"
+    tabindex="0"
+    type="range"
+  >
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    0
+  </vaadin-slider-bubble>
+  <vaadin-slider-bubble
+    modeless=""
+    slot="bubble"
+  >
+    100
+  </vaadin-slider-bubble>
+  <label
+    id="label-vaadin-range-slider-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-range-slider-2"
+    slot="error-message"
+  >
+  </div>
+</vaadin-range-slider>
+`;
+/* end snapshot vaadin-range-slider host accessibleDescriptionRef */
+

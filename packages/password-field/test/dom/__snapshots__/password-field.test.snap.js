@@ -387,3 +387,36 @@ snapshots["vaadin-password-field shadow theme"] =
 `;
 /* end snapshot vaadin-password-field shadow theme */
 
+snapshots["vaadin-password-field host accessibleDescriptionRef"] = 
+`<vaadin-password-field>
+  <label
+    for="input-vaadin-password-field-3"
+    id="label-vaadin-password-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-password-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-describedby="accessible-description-ref-0"
+    autocapitalize="off"
+    id="input-vaadin-password-field-3"
+    slot="input"
+    type="password"
+  >
+  <vaadin-password-field-button
+    aria-label="Show password"
+    aria-pressed="false"
+    role="button"
+    slot="reveal"
+    tabindex="0"
+  >
+  </vaadin-password-field-button>
+</vaadin-password-field>
+`;
+/* end snapshot vaadin-password-field host accessibleDescriptionRef */
+

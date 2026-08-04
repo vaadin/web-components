@@ -142,3 +142,23 @@ snapshots["vaadin-custom-field shadow default"] =
 `;
 /* end snapshot vaadin-custom-field shadow default */
 
+snapshots["vaadin-custom-field host accessibleDescriptionRef"] = 
+`<vaadin-custom-field
+  aria-describedby="accessible-description-ref-0"
+  role="group"
+>
+  <label
+    id="label-vaadin-custom-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-custom-field-2"
+    slot="error-message"
+  >
+  </div>
+</vaadin-custom-field>
+`;
+/* end snapshot vaadin-custom-field host accessibleDescriptionRef */
+

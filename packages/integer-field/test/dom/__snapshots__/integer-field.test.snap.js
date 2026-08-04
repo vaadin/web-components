@@ -462,3 +462,30 @@ snapshots["vaadin-integer-field shadow theme"] =
 `;
 /* end snapshot vaadin-integer-field shadow theme */
 
+snapshots["vaadin-integer-field host accessibleDescriptionRef"] = 
+`<vaadin-integer-field>
+  <label
+    for="input-vaadin-integer-field-3"
+    id="label-vaadin-integer-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-integer-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-describedby="accessible-description-ref-0"
+    id="input-vaadin-integer-field-3"
+    max="undefined"
+    min="undefined"
+    slot="input"
+    step="any"
+    type="number"
+  >
+</vaadin-integer-field>
+`;
+/* end snapshot vaadin-integer-field host accessibleDescriptionRef */
+
