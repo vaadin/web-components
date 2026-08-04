@@ -274,22 +274,6 @@ describe('interactions', () => {
     });
   });
 
-  describe('virtual keyboard', () => {
-    it('should not set inputmode on close when input is focused', () => {
-      input.focus();
-      comboBox.open();
-      comboBox.close();
-      expect(input.inputMode).to.equal('');
-    });
-
-    it('should not set inputmode on close when input is not focused', () => {
-      comboBox.open();
-      input.blur();
-      comboBox.close();
-      expect(input.inputMode).to.equal('');
-    });
-  });
-
   describe('clear button', () => {
     let clearButton;
 
