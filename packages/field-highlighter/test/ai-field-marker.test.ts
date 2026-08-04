@@ -1047,8 +1047,29 @@ describe('ai field marker', () => {
         expect(Object.getOwnPropertyDescriptor(field, 'value')).to.not.exist;
       });
 
+      it('should keep delaying value sets after a queued value lands', async () => {
+        field.value = 'One';
+        await clock!.tickAsync(500);
+        expect(field.value).to.equal('One');
+
+        field.value = 'Two';
+        expect(field.value, 'a set after the first landing should still be delayed').to.equal('One');
+
+        await clock!.tickAsync(500);
+        expect(field.value).to.equal('Two');
+      });
+
       it('should apply a queued value set when the marker is removed', () => {
         field.value = 'Last value';
+        marker.remove();
+        expect(field.value).to.equal('Last value');
+      });
+
+      it('should apply a queued value set when the marker is removed during the wind-down', async () => {
+        field.value = 'Last value';
+        marker.working = false;
+        await nextUpdate(marker);
+
         marker.remove();
         expect(field.value).to.equal('Last value');
       });

@@ -169,10 +169,13 @@ class DelayedFieldValue {
     }
   }
 
-  /** Applies a queued value right away, and stops holding back assignments. */
+  /**
+   * Applies a queued value right away. Applied through the intercepted
+   * accessor, so an installed hold-back stays in place for further
+   * assignments — this is also how a queued value lands on its deadline.
+   */
   flush() {
     if (this.#timer == null) {
-      this.uninstall();
       return;
     }
 
@@ -180,8 +183,7 @@ class DelayedFieldValue {
     this.#timer = null;
     const value = this.#queuedValue;
     this.#queuedValue = undefined;
-    this.uninstall();
-    this.#field.value = value;
+    this.#descriptor.set.call(this.#field, value);
   }
 }
 
@@ -643,8 +645,10 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
 
     if (this.#restoreTimer != null) {
       // Already winding down. Finish it now when the marker is going away, so
-      // the restore cannot overwrite a read-only state set after this point.
+      // the restore cannot overwrite a read-only state set after this point
+      // and a value still queued from the working state cannot land after it.
       if (immediate) {
+        this.#valueDelay.flush();
         this.#restoreLockedElements();
       }
       return;
@@ -658,10 +662,9 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
     // set stays queued so it still lands with the shimmer wind-down, unless the
     // marker is going away, in which case it is applied right away rather than
     // after the marker stopped annotating the field.
+    this.#valueDelay.uninstall();
     if (immediate) {
       this.#valueDelay.flush();
-    } else {
-      this.#valueDelay.uninstall();
     }
 
     field.removeAttribute('ai-working');
