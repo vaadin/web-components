@@ -53,11 +53,6 @@ export type AiFieldRevertEvent = CustomEvent<{ value: unknown }>;
  * in progress, set the `working` property to show an "AI is working" shimmer
  * on the field along with a client-side read-only guard.
  *
- * Custom popover content — shown between the explanation and the revert
- * control — is provided through the default slot: content appended to the
- * marker is slotted into the popover. This is the integration point for
- * frameworks (e.g. Flow) that render content as server-side elements.
- *
  * ### Styling
  *
  * The following state attribute is set on the field element for styling:

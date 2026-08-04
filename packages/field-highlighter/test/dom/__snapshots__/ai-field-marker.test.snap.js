@@ -4,7 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-ai-field-marker host default"] = 
 `<vaadin-ai-field-marker slot="ai-field-marker">
   <button
-    aria-controls=""
+    aria-controls="vaadin-popover-6"
     aria-describedby="vaadin-tooltip-5"
     aria-expanded="false"
     aria-haspopup="dialog"
@@ -28,16 +28,27 @@ snapshots["vaadin-ai-field-marker host default"] =
 Click for details
     </div>
   </vaadin-tooltip>
-  <p slot="message">
-    This field value was modified by AI.
-  </p>
-  <div slot="actions">
-    <button type="button">
-      Revert Value
-    </button>
-  </div>
+  <vaadin-popover
+    aria-label="AI-provided value"
+    for="vaadin-ai-field-marker-4"
+    id="vaadin-popover-6"
+    modeless=""
+    role="dialog"
+    slot="popover"
+    tabindex="0"
+    theme="arrow"
+  >
+    <p class="message">
+      This field value was modified by AI.
+    </p>
+    <div class="actions">
+      <button type="button">
+        Revert Value
+      </button>
+    </div>
+  </vaadin-popover>
   <span
-    id="ai-field-marker-6"
+    id="ai-field-marker-7"
     slot="description"
   >
     This field value was modified by AI.
@@ -46,76 +57,13 @@ Click for details
 `;
 /* end snapshot vaadin-ai-field-marker host default */
 
-snapshots["vaadin-ai-field-marker host custom content"] = 
-`<vaadin-ai-field-marker slot="ai-field-marker">
-  <button
-    aria-controls=""
-    aria-describedby="vaadin-tooltip-5"
-    aria-expanded="false"
-    aria-haspopup="dialog"
-    aria-label="AI-provided value"
-    id="vaadin-ai-field-marker-4"
-    slot="badge"
-    type="button"
-  >
-  </button>
-  <vaadin-tooltip
-    for="vaadin-ai-field-marker-4"
-    modeless=""
-    slot="tooltip"
-  >
-    <div
-      id="vaadin-tooltip-5"
-      role="tooltip"
-      slot="overlay"
-    >
-      Field value modified by AI.
-Click for details
-    </div>
-  </vaadin-tooltip>
-  <p slot="message">
-    This field value was modified by AI.
-  </p>
-  <div slot="actions">
-    <button type="button">
-      Revert Value
-    </button>
-  </div>
-  <span
-    id="ai-field-marker-6"
-    slot="description"
-  >
-    This field value was modified by AI.
-  </span>
-  <div>
-    Extracted from the uploaded document.
-  </div>
-</vaadin-ai-field-marker>
-`;
-/* end snapshot vaadin-ai-field-marker host custom content */
-
 snapshots["vaadin-ai-field-marker shadow default"] = 
 `<slot name="badge">
 </slot>
 <slot name="tooltip">
 </slot>
-<vaadin-popover
-  aria-label="AI-provided value"
-  autofocus=""
-  id="vaadin-popover-7"
-  modeless=""
-  position="end-top"
-  role="dialog"
-  tabindex="0"
-  theme="arrow"
->
-  <slot name="message">
-  </slot>
-  <slot>
-  </slot>
-  <slot name="actions">
-  </slot>
-</vaadin-popover>
+<slot name="popover">
+</slot>
 <slot name="description">
 </slot>
 `;

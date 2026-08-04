@@ -75,24 +75,8 @@
 
         // Mimic an AI fill, then clear the working state to show the mark.
         window.setTimeout(() => {
-          fields.forEach((field, index) => {
+          fields.forEach((field) => {
             const marker = field.querySelector('vaadin-ai-field-marker');
-
-            // Demonstrate custom popover content: append elements to the
-            // marker's default slot and they show up in the popover (this is
-            // how a server-side framework like Flow would inject content).
-            if (index === 1) {
-              const info = document.createElement('div');
-              info.textContent = 'Extracted from the uploaded document.';
-              marker.appendChild(info);
-            }
-
-            if (index === 2) {
-              const link = document.createElement('a');
-              link.href = '#';
-              link.textContent = 'Why was this filled in?';
-              marker.appendChild(link);
-            }
 
             if (field.localName === 'vaadin-radio-group') {
               const items = field.querySelectorAll('vaadin-radio-button');

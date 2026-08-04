@@ -8,5 +8,3 @@ import type { CSSResult } from 'lit';
 export const aiFieldMarkerStyles: CSSResult;
 
 export const aiFieldMarkerHostStyles: CSSResult;
-
-export const aiFieldMarkerShadowStyles: CSSResult;

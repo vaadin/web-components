@@ -91,17 +91,6 @@ describe('ai-field-marker', () => {
       await nextRender();
       await visualDiff(div, 'ai-marker-popover');
     });
-
-    it('custom content', async () => {
-      const content = document.createElement('div');
-      content.textContent = 'Extracted from the uploaded document.';
-      const marker = mark();
-      marker.appendChild(content);
-      await nextRender();
-      field.querySelector<HTMLButtonElement>('[slot="badge"]')!.click();
-      await nextRender();
-      await visualDiff(div, 'ai-marker-popover-custom-content');
-    });
   });
 
   describe('working', () => {

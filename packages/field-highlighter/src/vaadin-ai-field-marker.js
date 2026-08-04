@@ -17,11 +17,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
-import {
-  aiFieldMarkerHostStyles,
-  aiFieldMarkerShadowStyles,
-  aiFieldMarkerStyles,
-} from './styles/vaadin-ai-field-marker-base-styles.js';
+import { aiFieldMarkerHostStyles, aiFieldMarkerStyles } from './styles/vaadin-ai-field-marker-base-styles.js';
 
 const DEFAULT_I18N = {
   message: 'This field value was modified by AI.',
@@ -216,13 +212,10 @@ class DelayedFieldValue {
  * annotates is about to be replaced; setting `working` back to `false`
  * brings it back, so a cancelled or failed fill leaves the mark intact.
  *
- * The pieces that construct the marker — the badge, its tooltip, the popover
- * message and actions — are generated as light-DOM children assigned to
- * named slots. The popover itself renders in the marker's shadow root,
- * wrapping the content slots, so that content appended to the marker is
- * slotted into the popover — shown between the explanation and the revert
- * control. This default slot is the integration point for frameworks (e.g.
- * Flow) that provide custom popover content as server-side elements.
+ * The pieces that construct the marker — the badge, its tooltip and the
+ * popover with the explanation and the revert control — are generated as
+ * light-DOM children assigned to named slots, so that document-level themes
+ * and user stylesheets can reach them.
  *
  * ### Styling
  *
@@ -250,10 +243,6 @@ class DelayedFieldValue {
 class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-ai-field-marker';
-  }
-
-  static get styles() {
-    return aiFieldMarkerShadowStyles;
   }
 
   static get defaultI18n() {
@@ -323,11 +312,12 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LumoInjectionMixin(L
 
   #tooltipController;
 
-  #messageController;
+  #popoverController;
 
-  #actionsController;
+  /** The popover message, updated from the `i18n.message` property. */
+  #messageNode;
 
-  /** The revert button, updated from the `revertText` property. */
+  /** The revert button, updated from the `i18n.revert` property. */
   #revertButton;
 
   constructor() {
@@ -344,11 +334,12 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LumoInjectionMixin(L
 
     // The pieces are generated as light-DOM children assigned to named slots,
     // which is also what the styles select them by, since a `part` on a
-    // light-DOM element is not reachable with `::part()`. Keeping them in the
-    // light DOM lets frameworks (e.g. Flow) reach them without piercing a
-    // shadow root. The tooltip targets the badge by id, which resolves in the
-    // light-DOM scope shared by both; the popover renders in the shadow root
-    // and targets the badge through its `target` property instead.
+    // light-DOM element is not reachable with `::part()`. They live in the
+    // light DOM because the themes can only reach a nested Vaadin component
+    // (the tooltip, the popover) there: Aura selects components by tag name
+    // at document scope and has no way into another component's shadow root.
+    // The tooltip and popover target the badge by id, which resolves in the
+    // light-DOM scope shared by all three.
     const badgeId = `vaadin-ai-field-marker-${generateUniqueId()}`;
 
     this.#badgeController = new SlotController(this, 'badge', 'button', {
@@ -368,20 +359,33 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LumoInjectionMixin(L
     });
     this.addController(this.#tooltipController);
 
-    this.#messageController = new SlotController(this, 'message', 'p', { observe: false });
-    this.addController(this.#messageController);
-
-    this.#actionsController = new SlotController(this, 'actions', 'div', {
+    this.#popoverController = new SlotController(this, 'popover', 'vaadin-popover', {
       observe: false,
-      initializer: (actions) => {
+      initializer: (popover) => {
+        popover.setAttribute('for', badgeId);
+        popover.trigger = POPOVER_TRIGGER;
+        popover.autofocus = true;
+        popover.setAttribute('role', 'dialog');
+        popover.setAttribute('theme', 'arrow');
+        popover.position = 'end-top';
+
+        // The popover content is generated as the popover's own children.
+        const message = document.createElement('p');
+        message.className = 'message';
+        this.#messageNode = message;
+
+        const actions = document.createElement('div');
+        actions.className = 'actions';
         const revertButton = document.createElement('button');
         revertButton.type = 'button';
         revertButton.addEventListener('click', () => this.#onRevert());
         this.#revertButton = revertButton;
         actions.appendChild(revertButton);
+
+        popover.append(message, actions);
       },
     });
-    this.addController(this.#actionsController);
+    this.addController(this.#popoverController);
   }
 
   /**
@@ -489,13 +493,14 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LumoInjectionMixin(L
     // Apply the localized texts to the generated content.
     if (props.has('__effectiveI18n')) {
       const { message, revert, badgeLabel, badgeTooltip } = this.__effectiveI18n;
-      this.#messageController.node.textContent = message;
+      this.#messageNode.textContent = message;
       // Keep the hidden field description in sync with the current message.
       if (this.#descNode) {
         this.#descNode.textContent = message;
       }
       this.#badgeController.node.setAttribute('aria-label', badgeLabel);
       this.#tooltipController.node.text = badgeTooltip;
+      this.#popoverController.node.setAttribute('aria-label', badgeLabel);
       this.#revertButton.textContent = revert;
     }
 
@@ -535,19 +540,7 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LumoInjectionMixin(L
     return html`
       <slot name="badge"></slot>
       <slot name="tooltip"></slot>
-      <vaadin-popover
-        .target="${this.#badgeController.node}"
-        role="dialog"
-        aria-label="${this.__effectiveI18n.badgeLabel}"
-        .trigger="${POPOVER_TRIGGER}"
-        autofocus
-        theme="arrow"
-        position="end-top"
-      >
-        <slot name="message"></slot>
-        <slot></slot>
-        <slot name="actions"></slot>
-      </vaadin-popover>
+      <slot name="popover"></slot>
       <slot name="description"></slot>
     `;
   }
@@ -762,7 +755,7 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LumoInjectionMixin(L
       focusTarget.focus({ focusVisible: isKeyboardActive() });
     }
 
-    const popover = this.shadowRoot.querySelector('vaadin-popover');
+    const popover = this.#popoverController.node;
     if (popover) {
       popover.opened = false;
     }

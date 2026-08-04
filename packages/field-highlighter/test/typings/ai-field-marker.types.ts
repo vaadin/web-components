@@ -1,9 +1,5 @@
 import type { CSSResult } from 'lit';
-import {
-  aiFieldMarkerHostStyles,
-  aiFieldMarkerShadowStyles,
-  aiFieldMarkerStyles,
-} from '../../src/styles/vaadin-ai-field-marker-base-styles.js';
+import { aiFieldMarkerHostStyles, aiFieldMarkerStyles } from '../../src/styles/vaadin-ai-field-marker-base-styles.js';
 import type { AiFieldMarkerI18n, AiFieldRevertEvent } from '../../src/vaadin-ai-field-marker.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
@@ -11,7 +7,6 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 // Styles
 assertType<CSSResult>(aiFieldMarkerStyles);
 assertType<CSSResult>(aiFieldMarkerHostStyles);
-assertType<CSSResult>(aiFieldMarkerShadowStyles);
 
 // Element
 const marker = document.createElement('vaadin-ai-field-marker');

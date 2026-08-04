@@ -23,14 +23,6 @@ describe('vaadin-ai-field-marker', () => {
     it('default', async () => {
       await expect(marker).dom.to.equalSnapshot();
     });
-
-    it('custom content', async () => {
-      const content = document.createElement('div');
-      content.textContent = 'Extracted from the uploaded document.';
-      marker.appendChild(content);
-      await nextRender();
-      await expect(marker).dom.to.equalSnapshot();
-    });
   });
 
   describe('shadow', () => {
