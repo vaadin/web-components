@@ -347,6 +347,31 @@ describe('upload', () => {
         expect(e.detail.xhr.status).to.be.equal(200);
       });
 
+      it('should not mark the file complete when a `upload-response` listener sets an error', async () => {
+        upload.addEventListener('upload-response', (e) => {
+          e.detail.file.error = 'Custom Error';
+        });
+
+        upload.uploadFiles(file);
+        await clock.tickAsync(250);
+
+        expect(file.complete).to.be.false;
+      });
+
+      it('should not fire upload-success when a `upload-response` listener sets an error', async () => {
+        upload.addEventListener('upload-response', (e) => {
+          e.detail.file.error = 'Custom Error';
+        });
+
+        const successSpy = sinon.spy();
+        upload.addEventListener('upload-success', successSpy);
+
+        upload.uploadFiles(file);
+        await clock.tickAsync(250);
+
+        expect(successSpy).to.not.be.called;
+      });
+
       it('should do nothing if a `upload-response` listener prevents default', async () => {
         upload.addEventListener('upload-response', (e) => {
           e.preventDefault();
@@ -429,6 +454,18 @@ describe('upload', () => {
         upload.addEventListener('upload-retry', retrySpy);
         upload.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
         expect(retrySpy.firstCall.args[0].detail.xhr).to.equal(file.xhr);
+      });
+
+      it('should use the up-to-date headers when retrying an upload from the file-retry event', async () => {
+        await uploadWithServerError();
+
+        const requestSpy = sinon.spy();
+        upload.addEventListener('upload-request', requestSpy);
+        upload.headers = { 'X-Foo': 'Bar' };
+        upload.dispatchEvent(new CustomEvent('file-retry', { detail: { file } }));
+        await clock.tickAsync(400);
+
+        expect(requestSpy.firstCall.args[0].detail.xhr.getRequestHeader('X-Foo')).to.equal('Bar');
       });
 
       it('should keep the progress of the previous attempt when the file is queued again', async () => {
@@ -664,6 +701,13 @@ describe('upload', () => {
         upload.addEventListener('upload-request', (e) => e.preventDefault());
         upload.uploadFiles(file);
         expect(renderSpy).to.be.called;
+      });
+
+      it('should render the file list only once when a file is added', () => {
+        upload.noAuto = true;
+        const renderSpy = sinon.spy(upload._fileList, 'requestContentUpdate');
+        addFilesViaInput(upload, [file]);
+        expect(renderSpy).to.be.calledOnce;
       });
 
       it('should render the file list when the upload starts', () => {
@@ -1103,6 +1147,39 @@ describe('upload', () => {
       await oneEvent(upload, 'upload-success');
       expect(startSpy).to.be.calledOnce;
       expect(file.complete).to.be.true;
+    });
+
+    it('should use the up-to-date target when starting an upload from the file-start event', async () => {
+      addFilesViaInput(upload, [file]);
+      await nextRender();
+
+      upload.addEventListener('upload-before', (e) => e.preventDefault());
+      upload.target = 'https://foo.com/baz';
+      upload.dispatchEvent(new CustomEvent('file-start', { detail: { file } }));
+
+      expect(file.uploadTarget).to.equal('https://foo.com/baz');
+    });
+
+    it('should clear the error when starting an upload from the file-start event', async () => {
+      upload._createXhr = xhrCreator({ size: file.size, serverValidation: () => ({ status: 500 }) });
+      addFilesViaInput(upload, [file]);
+      await nextRender();
+
+      upload.dispatchEvent(new CustomEvent('file-start', { detail: { file } }));
+      await oneEvent(upload, 'upload-error');
+      expect(file.error).to.equal('Upload failed due to server error');
+
+      upload.addEventListener('upload-before', (e) => e.preventDefault());
+      upload.dispatchEvent(new CustomEvent('file-start', { detail: { file } }));
+      expect(file.error).to.be.false;
+    });
+
+    it('should assign formDataName to the file when it is added', () => {
+      upload.uploadFormat = 'multipart';
+      upload.formDataName = 'attachment';
+
+      addFilesViaInput(upload, [file]);
+      expect(file.formDataName).to.equal('attachment');
     });
 
     it('should use the current formDataName when uploading files added earlier', async () => {
