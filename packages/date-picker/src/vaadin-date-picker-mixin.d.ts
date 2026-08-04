@@ -41,6 +41,12 @@ export interface DatePickerDateMetadata extends DatePickerDate {
    * Whether the date cannot be selected.
    */
   disabled?: boolean;
+  /**
+   * Part names to add to the date, so a theme can style it with `::part()`. A single name, or
+   * several separated by spaces. Affects appearance only: what is disabled and what can be
+   * selected are decided separately, so a date cannot be made selectable through `part`.
+   */
+  part?: string;
 }
 
 /**
@@ -305,6 +311,11 @@ export declare class DatePickerMixinClass {
    * A value is checked against the provider even if the overlay is never opened, which loads the
    * month holding it. Until that month answers the value is valid, and it is re-validated once the
    * answer arrives, so `checkValidity()` can report a value as valid and then invalid.
+   *
+   * `part` from the metadata adds part names to the date, so a theme can style specific dates with
+   * `::part()` — e.g. `{ year, month, day, part: 'busy' }`. Give a single name or several separated
+   * by spaces. It affects appearance only; naming a built-in part such as `disabled` changes how the
+   * date looks but not whether it can be selected.
    *
    * Keep a stable reference to the function. Assigning a new function clears the cache and
    * re-fetches every visible range. To re-fetch while keeping the same function, because the data

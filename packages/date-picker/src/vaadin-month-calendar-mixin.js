@@ -6,6 +6,7 @@
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import {
   dateAllowed,
   dateEquals,
@@ -370,7 +371,27 @@ export const MonthCalendarMixin = (superClass) =>
         result.push('future');
       }
 
+      result.push(...this.__customDateParts(date));
+
       return result.join(' ');
+    }
+
+    /**
+     * The part names the provider supplied for the date, so a theme can style specific dates with
+     * `::part()`. Appearance only: what is disabled and what can be selected are decided from the
+     * metadata's `disabled` flag, not from these, so a date cannot be made selectable through them.
+     * @private
+     */
+    __customDateParts(date) {
+      const part = date && this._dateMetadataController?.getMetadata(date)?.part;
+      if (!part) {
+        return [];
+      }
+      if (typeof part !== 'string') {
+        issueWarning('Expected the `part` of a date metadata entry to be a string.');
+        return [];
+      }
+      return part.split(' ').filter(Boolean);
     }
 
     /** @private */

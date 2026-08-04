@@ -178,6 +178,20 @@ button are the ones that need it open.
 A value whose month resolved while the field was detached is validated when it is attached again, since the
 controller re-reports its state on reconnect and the armed flag is still set.
 
+## What custom part names can do
+
+`part` from an entry is appended to the date's own parts, so a theme can style particular dates through
+`::part()` without the component knowing what they mean.
+
+It changes appearance only. Naming a built-in part such as `disabled` makes a date *look* disabled, but
+what is disabled and what can be selected are computed from the metadata's `disabled` flag, and the click
+handler reads the rendered `disabled` attribute — none of which consult `part`. So a date cannot be made
+selectable, or unselectable, through it. The value is bound as an attribute and therefore escaped.
+
+Only a string is accepted, and a value that is not one is reported rather than ignored: an array would
+otherwise stringify into a comma-separated name that no selector can match, which looks like the theme
+being at fault rather than the provider.
+
 ## How consumers are notified
 
 **Subscribers are invalidated synchronously** with `requestUpdate()`. A subscriber has to render from its
