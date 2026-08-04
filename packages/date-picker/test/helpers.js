@@ -140,6 +140,21 @@ export function getCalendars(root) {
 }
 
 /**
+ * The month calendar showing the given year and month, or `undefined` when none of the rendered
+ * calendars shows it.
+ *
+ * @param {HTMLElement} root vaadin-date-picker or vaadin-date-picker-overlay-content
+ * @param {number} year
+ * @param {number} month 0-based, like `Date#getMonth()`
+ * @return {HTMLElement | undefined}
+ */
+export function getMonthCalendar(root, year, month) {
+  return getCalendars(root).find(
+    (calendar) => calendar.month && calendar.month.getFullYear() === year && calendar.month.getMonth() === month,
+  );
+}
+
+/**
  * The date cells of a month calendar, without the empty ones padding the first and last week.
  *
  * @param {HTMLElement} calendar vaadin-month-calendar
@@ -147,6 +162,18 @@ export function getCalendars(root) {
  */
 export function getDateCells(calendar) {
   return [...calendar.shadowRoot.querySelectorAll('[part~="date"]:not(:empty)')];
+}
+
+/**
+ * The date cell of a month calendar showing the given day of the month, or `undefined` when the
+ * calendar does not show it.
+ *
+ * @param {HTMLElement} calendar vaadin-month-calendar
+ * @param {number} day
+ * @return {HTMLElement | undefined}
+ */
+export function getDateCell(calendar, day) {
+  return getDateCells(calendar).find((cell) => cell.date.getDate() === day);
 }
 
 /**
