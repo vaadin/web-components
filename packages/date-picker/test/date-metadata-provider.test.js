@@ -36,6 +36,8 @@ describe('dateMetadataProvider integration', () => {
     for (let i = 0; i < 50 && !predicate(); i++) {
       await nextRender();
     }
+    // One more render, so assertions that follow the polled one see a settled DOM.
+    await nextRender();
   }
 
   // A provider that disables the 15th of every month in the requested range.
