@@ -5,7 +5,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { VirtualKeyboardController } from '../src/virtual-keyboard-controller.js';
 
 describe('VirtualKeyboardController', () => {
-  const defineHost = (name, options) =>
+  const defineHost = (name, keepWhenFocused) =>
     defineLit(
       name,
       `<slot></slot>`,
@@ -19,7 +19,7 @@ describe('VirtualKeyboardController', () => {
 
           ready() {
             super.ready();
-            this.addController(new VirtualKeyboardController(this, options));
+            this.addController(new VirtualKeyboardController(this, keepWhenFocused));
           }
 
           open() {
