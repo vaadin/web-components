@@ -290,6 +290,36 @@ describe('ai field marker', () => {
       const descNode = marker.querySelector('.description')!;
       expect(popover.contains(descNode)).to.be.false;
     });
+
+    it('should close the popover when focus leaves the marker', async () => {
+      // A click-triggered popover only closes on outside pointer interaction
+      // or Esc, so tabbing on to the next field — where an outside click never
+      // happens — would otherwise leave the dialog open, and popovers of
+      // several marked fields could pile up.
+      const overlay = popover.shadowRoot!.querySelector('vaadin-popover-overlay')!;
+      const opened = oneEvent(overlay, 'vaadin-overlay-open');
+      marker.querySelector<HTMLButtonElement>('.badge')!.click();
+      await opened;
+      expect(marker.contains(document.activeElement), 'focus should move into the popover').to.be.true;
+
+      const outsideInput = fixtureSync<HTMLInputElement>(`<input />`);
+      outsideInput.focus();
+      await nextRender();
+
+      expect(popover.opened).to.be.false;
+    });
+
+    it('should keep the popover open while focus moves within the marker', async () => {
+      const overlay = popover.shadowRoot!.querySelector('vaadin-popover-overlay')!;
+      const opened = oneEvent(overlay, 'vaadin-overlay-open');
+      marker.querySelector<HTMLButtonElement>('.badge')!.click();
+      await opened;
+
+      marker.querySelector<HTMLButtonElement>('.actions > button')!.focus();
+      await nextRender();
+
+      expect(popover.opened).to.be.true;
+    });
   });
 
   describe('input description', () => {

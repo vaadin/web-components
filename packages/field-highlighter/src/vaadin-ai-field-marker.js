@@ -337,6 +337,21 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
     // their listeners on the badge, which is a descendant, so they still fire
     // before this bubble-phase listener.
     this.addEventListener('click', (event) => event.stopPropagation());
+
+    // Close the popover when focus moves on, e.g. to the next field. A
+    // click-triggered popover only closes itself on outside pointer
+    // interaction or Esc, so keyboard navigation — where an outside click
+    // never happens — would otherwise leave it open, and popovers of several
+    // marked fields could pile up. A null relatedTarget is left alone so that
+    // the window losing focus does not close the popover.
+    this.addEventListener('focusout', (event) => {
+      if (event.relatedTarget && !this.contains(event.relatedTarget)) {
+        const popover = this.querySelector(':scope > vaadin-popover');
+        if (popover) {
+          popover.opened = false;
+        }
+      }
+    });
   }
 
   /**
