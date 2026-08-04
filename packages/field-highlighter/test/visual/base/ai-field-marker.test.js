@@ -1,9 +1,9 @@
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import './not-animated-styles.css';
+import '../ai-field-marker-not-animated-styles.css';
 import '@vaadin/text-field/src/vaadin-text-field.js';
-import '../../src/vaadin-ai-field-marker.js';
+import '../../../src/vaadin-ai-field-marker.js';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 describe('ai-field-marker', () => {
