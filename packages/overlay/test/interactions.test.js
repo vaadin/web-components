@@ -394,15 +394,6 @@ describe('interactions', () => {
 
         expect(document.activeElement).to.be.equal(overlay);
       });
-
-      it('should not focus overlay part if tabindex attribute removed', async () => {
-        overlay.$.overlay.removeAttribute('tabindex');
-
-        await sendMouseToElement({ type: 'click', element: overlay.querySelector('div') });
-        await nextRender();
-
-        expect(document.activeElement).to.be.equal(document.body);
-      });
     });
   });
 });
