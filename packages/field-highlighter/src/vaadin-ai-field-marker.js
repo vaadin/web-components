@@ -516,8 +516,10 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
     }
 
     customElements.whenDefined(tagName).then(() => {
-      // The marker may have been moved or removed while the field was loading.
-      if (!this.isConnected || this.parentElement !== parent || !parent.shadowRoot) {
+      // The marker may have been moved or removed while the field was loading,
+      // or already marked by a callback an earlier connect to the same parent
+      // left waiting.
+      if (!this.isConnected || this.#field || this.parentElement !== parent || !parent.shadowRoot) {
         return;
       }
 

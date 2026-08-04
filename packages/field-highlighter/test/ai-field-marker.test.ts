@@ -779,6 +779,40 @@ describe('ai field marker', () => {
       expect(marker.assignedSlot!.name).to.equal('ai-field-marker');
     });
 
+    it('should mark the field only once when re-added before it is upgraded', async () => {
+      const lateField = fixtureSync<HTMLElement>(`<reappended-late-field></reappended-late-field>`);
+      const marker = mark(lateField);
+      await nextRender();
+
+      // Each connect while the field is not yet upgraded waits for its
+      // definition separately; the field must still be marked only once.
+      marker.remove();
+      lateField.appendChild(marker);
+      await nextRender();
+
+      customElements.define(
+        'reappended-late-field',
+        class extends HTMLElement {
+          _input = document.createElement('input');
+
+          constructor() {
+            super();
+            this.attachShadow({ mode: 'open' });
+            this.shadowRoot!.append(this._input);
+          }
+
+          get inputElement() {
+            return this._input;
+          }
+        },
+      );
+      await nextRender();
+
+      expect(marker.querySelectorAll('.description')).to.have.lengthOf(1);
+      const describedBy = lateField.shadowRoot!.querySelector('input')!.getAttribute('aria-describedby')!;
+      expect(describedBy.split(' ').filter((id) => id.startsWith('ai-field-marker-'))).to.have.lengthOf(1);
+    });
+
     it('should do nothing for a parent without a shadow root', async () => {
       const container = fixtureSync<HTMLElement>(`<div></div>`);
       const marker = mark(container, { working: true });
