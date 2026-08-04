@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enter, fixtureSync, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, listenOnce, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import { DateMetadataController } from '../src/vaadin-date-metadata-controller.js';
@@ -161,7 +161,12 @@ describe('dateMetadataProvider integration', () => {
       await nextRender();
       provider.resetHistory();
 
-      overlayContent._onMonthScroll();
+      const monthScroller = overlayContent._monthScroller;
+      const scrolled = new Promise((resolve) => {
+        listenOnce(monthScroller, 'custom-scroll', resolve);
+      });
+      monthScroller.$.scroller.scrollTop += 1;
+      await scrolled;
       overlayContent._loadDateMetadataDebouncer.flush();
       await nextRender();
 
@@ -227,8 +232,12 @@ describe('dateMetadataProvider integration', () => {
       await nextRender();
       provider.resetHistory();
 
-      overlayContent._yearScroller.position += 3;
-      overlayContent._onYearScroll();
+      const yearScroller = overlayContent._yearScroller;
+      const scrolled = new Promise((resolve) => {
+        listenOnce(yearScroller, 'custom-scroll', resolve);
+      });
+      yearScroller.$.scroller.scrollTop += yearScroller.itemHeight * 3;
+      await scrolled;
       overlayContent._loadDateMetadataDebouncer.flush();
       await nextRender();
 
