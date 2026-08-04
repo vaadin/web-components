@@ -311,6 +311,10 @@ export declare class DatePickerMixinClass {
    * month holding it. Until that month answers the value is valid, and it is re-validated once the
    * answer arrives, so `checkValidity()` can report a value as valid and then invalid.
    *
+   * When the overlay opens without a value, the automatically focused date is moved to the closest
+   * selectable date if the provider reports it disabled — unless the user has moved the focus
+   * already, since disabled dates stay focusable.
+   *
    * `part` from the metadata adds part names to the date, so a theme can style specific dates with
    * `::part()` — e.g. `{ year, month, day, part: 'busy' }`. Give a single name or several separated
    * by spaces. Do not use built-in names like `disabled` and `selected`.

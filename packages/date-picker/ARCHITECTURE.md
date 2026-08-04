@@ -178,6 +178,22 @@ button are the ones that need it open.
 A value whose month resolved while the field was detached is validated when it is attached again, since the
 controller re-reports its state on reconnect and the armed flag is still set.
 
+## How the initial focus reacts to the provider
+
+When the overlay opens without a value, a date is focused automatically — and the provider may later report
+that date disabled. The focus is then moved to the closest selectable date within a year, in either
+direction. The scan uses the same predicate as selection and validation, so a month the provider has not
+answered for yet counts as selectable; if nothing within a year qualifies, the focus stays where it is.
+
+Only the auto-picked date is ever moved, and only while the focus is still on it. Disabled dates stay
+keyboard-focusable on purpose, so a date the user navigated to — or a selected value, even one the provider
+disables — is not taken away from under them. The adjustment stops at the first navigation and when the
+overlay closes; the host callback keeps running with the overlay closed for validation, and must not move
+the focus of a dropdown that is no longer shown.
+
+The whole policy lives on the date-picker: it owns the constraints and the controller, and reaches the
+overlay content only through its public `focusedDate` and `focusDate()`.
+
 ## What custom part names can do
 
 `part` from an entry is appended to the date's own parts, so a theme can style particular dates through

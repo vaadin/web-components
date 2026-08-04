@@ -240,6 +240,10 @@ export const DatePickerMixin = (subclass) =>
          * month holding it. Until that month answers the value is valid, and it is re-validated once
          * the answer arrives, so `checkValidity()` can report a value as valid and then invalid.
          *
+         * When the overlay opens without a value, the automatically focused date is moved to the
+         * closest selectable date if the provider reports it disabled — unless the user has moved
+         * the focus already, since disabled dates stay focusable.
+         *
          * `part` from the metadata adds part names to the date, so a theme can style specific dates
          * with `::part()` — e.g. `{ year, month, day, part: 'busy' }`. Give a single name or several
          * separated by spaces. Do not use built-in names like `disabled` and `selected`.
@@ -714,6 +718,65 @@ export const DatePickerMixin = (subclass) =>
         this.__awaitingProviderValidation = false;
         this._requestValidation();
       }
+
+      this.__adjustInitialFocusForProvider();
+    }
+
+    /**
+     * Moves the overlay's initial focus off a date the provider turns out to disable, once the
+     * provider has answered for that month. Only touches the auto-picked initial date and only
+     * while the user has not navigated away, so disabled dates the user focuses on purpose (which
+     * stay keyboard-focusable) are left alone.
+     * @private
+     */
+    __adjustInitialFocusForProvider() {
+      const content = this._overlayContent;
+      const controller = this._dateMetadataController;
+      const initial = this.__initialFocusDate;
+      if (!content || !initial || !controller.provider) {
+        return;
+      }
+      // The user has moved focus; stop trying to adjust the initial date.
+      if (!dateEquals(content.focusedDate, initial)) {
+        this.__initialFocusDate = null;
+        return;
+      }
+      // Wait until the provider has answered for the initial month.
+      if (!controller.isMonthLoaded(initial)) {
+        return;
+      }
+      this.__initialFocusDate = null;
+      if (controller.isDateDisabled(initial)) {
+        const closest = this.__closestSelectableDate(initial);
+        if (closest) {
+          content.focusDate(closest);
+        }
+      }
+    }
+
+    /**
+     * The date closest to the given one that can be selected, looking up to a year in both
+     * directions, or `undefined` when there is none. A date in a month the provider has not answered
+     * for yet counts as selectable, like everywhere else.
+     * @private
+     */
+    __closestSelectableDate(date) {
+      const isSelectable = (candidate) =>
+        dateSelectable(candidate, this._minDate, this._maxDate, this.isDateDisabled, this._dateMetadataController);
+
+      if (isSelectable(date)) {
+        return date;
+      }
+      for (let offset = 1; offset <= 366; offset++) {
+        for (const direction of [1, -1]) {
+          const candidate = new Date(date);
+          candidate.setDate(candidate.getDate() + offset * direction);
+          if (isSelectable(candidate)) {
+            return candidate;
+          }
+        }
+      }
+      return undefined;
     }
 
     /**
@@ -1029,6 +1092,12 @@ export const DatePickerMixin = (subclass) =>
       content.focusedDate = scrollFocusDate;
       this._ignoreFocusedDateChange = false;
 
+      // When opening without a selected value, remember the auto-picked initial date so it can be
+      // moved off a provider-disabled date once the provider answers (see __onDateMetadataChanged).
+      // A date the user selected themselves is left in place even if the provider disables it.
+      this.__initialFocusDate = this._selectedDate ? null : scrollFocusDate;
+      this.__adjustInitialFocusForProvider();
+
       window.addEventListener('scroll', this._boundOnScroll, true);
 
       if (this._focusOverlayOnOpen) {
@@ -1092,6 +1161,10 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayClosed() {
+      // The metadata callback keeps running with the overlay closed, so stop it from moving the
+      // focus of a dropdown that is no longer shown.
+      this.__initialFocusDate = null;
+
       this._overlayContent?.cancelLoadVisibleDateMetadata();
 
       // Reset `aria-hidden` state.
