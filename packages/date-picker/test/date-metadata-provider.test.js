@@ -4,23 +4,13 @@ import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import { DateMetadataController } from '../src/vaadin-date-metadata-controller.js';
 import { formatISODate } from '../src/vaadin-date-picker-helper.js';
-import { getCalendars, getDateCells, open, setInputValue } from './helpers.js';
+import { getCalendars, getDateCell, getDateCells, getMonthCalendar, open, setInputValue } from './helpers.js';
 
 describe('dateMetadataProvider integration', () => {
   let datePicker, overlayContent, today, year, month;
 
-  function getMonthCalendar(y, m) {
-    return getCalendars(overlayContent).find(
-      (calendar) => calendar.month && calendar.month.getFullYear() === y && calendar.month.getMonth() === m,
-    );
-  }
-
-  function getCell(calendar, day) {
-    return getDateCells(calendar).find((cell) => cell.date.getDate() === day);
-  }
-
   function getVisibleCell(day, y = year, m = month) {
-    return getCell(getMonthCalendar(y, m), day);
+    return getDateCell(getMonthCalendar(overlayContent, y, m), day);
   }
 
   function isDisabled(cell) {
@@ -197,8 +187,8 @@ describe('dateMetadataProvider integration', () => {
 
       resolveProvider(disableFifteenth(provider.lastCall.args[0]));
       await untilRendered(() => {
-        const calendar = getMonthCalendar(target.getFullYear(), target.getMonth());
-        const cell = calendar && getCell(calendar, 15);
+        const calendar = getMonthCalendar(overlayContent, target.getFullYear(), target.getMonth());
+        const cell = calendar && getDateCell(calendar, 15);
         return cell && isDisabled(cell);
       });
 
@@ -299,12 +289,12 @@ describe('dateMetadataProvider integration', () => {
       overlayContent._loadDateMetadataDebouncer.flush();
       await nextRender();
 
-      const december = getMonthCalendar(year, 11);
-      const january = getMonthCalendar(year + 1, 0);
+      const december = getMonthCalendar(overlayContent, year, 11);
+      const january = getMonthCalendar(overlayContent, year + 1, 0);
       expect(december, 'December should be rendered').to.exist;
       expect(january, 'January should be rendered').to.exist;
-      expect(hasPart(getCell(december, 15), 'loading')).to.be.false;
-      expect(hasPart(getCell(january, 15), 'loading')).to.be.true;
+      expect(hasPart(getDateCell(december, 15), 'loading')).to.be.false;
+      expect(hasPart(getDateCell(january, 15), 'loading')).to.be.true;
     });
   });
 
