@@ -9,7 +9,6 @@ import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
-import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 export const ComboBoxBaseMixin = (superClass) =>
@@ -168,8 +167,6 @@ export const ComboBoxBaseMixin = (superClass) =>
       if (this.clearElement) {
         this.clearElement.addEventListener('mousedown', this._boundOnClearButtonMouseDown);
       }
-
-      this.addController(new VirtualKeyboardController(this));
     }
 
     /** @protected */
