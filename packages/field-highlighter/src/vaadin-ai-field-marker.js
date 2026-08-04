@@ -590,9 +590,6 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
    */
   #annotatedValue() {
     const field = this.#field;
-    if (!('value' in field)) {
-      return undefined;
-    }
     return this.#valueDelay ? this.#valueDelay.latestValue : field.value;
   }
 

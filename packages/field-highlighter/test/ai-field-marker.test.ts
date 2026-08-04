@@ -801,6 +801,21 @@ describe('ai field marker', () => {
         expect(valuelessField.hasAttribute('ai-working')).to.be.true;
       });
 
+      it('should carry an undefined value in the revert event', async () => {
+        const marker = mark(valuelessField, { working: true });
+        await nextRender();
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true, toFake: ['setTimeout', 'clearTimeout'] });
+        marker.working = false;
+        await nextUpdate(marker);
+        await clock.tickAsync(500);
+
+        const spy = sinon.spy();
+        valuelessField.addEventListener('ai-field-revert', spy);
+        marker.querySelector<HTMLButtonElement>('.actions > button')!.click();
+        expect(spy).to.be.calledOnce;
+        expect(spy.firstCall.args[0].detail.value).to.be.undefined;
+      });
+
       it('should not define a value property on the field', async () => {
         mark(valuelessField, { working: true });
         await nextRender();
@@ -844,6 +859,23 @@ describe('ai field marker', () => {
       it('should restore the field when removed while working', () => {
         marker.remove();
         expect(field.hasAttribute('ai-working')).to.be.false;
+        expect(field.readonly).to.be.false;
+      });
+
+      it('should keep the original read-only state when working is re-set in one update', async () => {
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true, toFake: ['setTimeout', 'clearTimeout'] });
+
+        // Both changes land in the same update: the working state is entered
+        // again while the field is locked, and must not take the lock itself
+        // as the read-only state to restore.
+        marker.working = false;
+        marker.working = true;
+        await nextUpdate(marker);
+
+        marker.working = false;
+        await nextUpdate(marker);
+        await clock.tickAsync(500);
+
         expect(field.readonly).to.be.false;
       });
     });
