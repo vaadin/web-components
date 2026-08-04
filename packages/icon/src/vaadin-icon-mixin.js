@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { IconFontSizeMixin } from './vaadin-icon-font-size-mixin.js';
 import { unsafeSvgLiteral } from './vaadin-icon-svg.js';
@@ -265,13 +266,11 @@ export const IconMixin = (superClass) =>
         this.__addedIconClasses = [...this.__iconClasses];
         this.classList.add(...this.__addedIconClasses);
       }
+      let content = ligature;
       if (char) {
-        this.setAttribute('font-icon-content', char.length > 1 ? String.fromCodePoint(parseInt(char, 16)) : char);
-      } else if (ligature) {
-        this.setAttribute('font-icon-content', ligature);
-      } else {
-        this.removeAttribute('font-icon-content');
+        content = char.length > 1 ? String.fromCodePoint(parseInt(char, 16)) : char;
       }
+      setOrRemoveAttribute(this, 'font-icon-content', content);
       if ((iconClass || char || ligature) && !this.icon) {
         // The "icon" attribute needs to be set on the host also when using font icons
         // to avoid issues such as https://github.com/vaadin/web-components/issues/6301

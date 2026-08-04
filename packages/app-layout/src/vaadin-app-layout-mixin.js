@@ -503,17 +503,11 @@ export const AppLayoutMixin = (superclass) =>
         });
       }
 
-      if (this.$.navbarTop.querySelector('[name=navbar]').assignedNodes().length === 0) {
-        this.$.navbarTop.setAttribute('hidden', '');
-      } else {
-        this.$.navbarTop.removeAttribute('hidden');
-      }
+      const hasNavbar = this.$.navbarTop.querySelector('[name=navbar]').assignedNodes().length > 0;
+      this.$.navbarTop.toggleAttribute('hidden', !hasNavbar);
 
-      if (this.$.navbarBottom.querySelector('[name=navbar-bottom]').assignedNodes().length === 0) {
-        this.$.navbarBottom.setAttribute('hidden', '');
-      } else {
-        this.$.navbarBottom.removeAttribute('hidden');
-      }
+      const hasNavbarBottom = this.$.navbarBottom.querySelector('[name=navbar-bottom]').assignedNodes().length > 0;
+      this.$.navbarBottom.toggleAttribute('hidden', !hasNavbarBottom);
     }
 
     /** @protected */

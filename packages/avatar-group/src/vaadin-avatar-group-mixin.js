@@ -6,6 +6,7 @@
 import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
@@ -224,11 +225,7 @@ export const AvatarGroupMixin = (superClass) =>
       }
 
       if (props.has('_theme')) {
-        if (this._theme) {
-          this._overflow.setAttribute('theme', this._theme);
-        } else {
-          this._overflow.removeAttribute('theme');
-        }
+        setOrRemoveAttribute(this._overflow, 'theme', this._theme);
       }
 
       if (props.has('_overflowItems') || props.has('__effectiveI18n') || props.has('_theme')) {

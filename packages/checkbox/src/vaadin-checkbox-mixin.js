@@ -5,6 +5,7 @@
  */
 import { ActiveMixin } from '@vaadin/a11y-base/src/active-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
@@ -178,11 +179,7 @@ export const CheckboxMixin = (superclass) =>
       }
 
       // Use aria-readonly since native checkbox doesn't support readonly
-      if (readonly) {
-        inputElement.setAttribute('aria-readonly', 'true');
-      } else {
-        inputElement.removeAttribute('aria-readonly');
-      }
+      setOrRemoveAttribute(inputElement, 'aria-readonly', readonly);
     }
 
     /**

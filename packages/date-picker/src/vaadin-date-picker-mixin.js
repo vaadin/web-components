@@ -8,6 +8,7 @@ import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.j
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
@@ -865,11 +866,7 @@ export const DatePickerMixin = (subclass) =>
     /** @private */
     __updateOverlayContentTheme(overlayContent, theme) {
       if (overlayContent) {
-        if (theme) {
-          overlayContent.setAttribute('theme', theme);
-        } else {
-          overlayContent.removeAttribute('theme');
-        }
+        setOrRemoveAttribute(overlayContent, 'theme', theme);
       }
     }
 

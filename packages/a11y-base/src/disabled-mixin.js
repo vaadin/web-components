@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 
 /**
  * A mixin to provide disabled property for field components.
@@ -38,11 +39,7 @@ const DisabledMixinImplementation = (superclass) => {
      * @protected
      */
     _setAriaDisabled(disabled) {
-      if (disabled) {
-        this.setAttribute('aria-disabled', 'true');
-      } else {
-        this.removeAttribute('aria-disabled');
-      }
+      setOrRemoveAttribute(this, 'aria-disabled', disabled);
     }
 
     /**

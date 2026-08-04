@@ -11,6 +11,7 @@ import '../vendor/vaadin-quill.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 
 const Quill = window.Quill;
@@ -893,11 +894,7 @@ export const RichTextEditorMixin = (superClass) =>
     /** @private */
     _toggleToolbarDisabled(disable) {
       const buttons = this._toolbarButtons;
-      if (disable) {
-        buttons.forEach((btn) => btn.setAttribute('disabled', 'true'));
-      } else {
-        buttons.forEach((btn) => btn.removeAttribute('disabled'));
-      }
+      buttons.forEach((btn) => setOrRemoveAttribute(btn, 'disabled', disable));
     }
 
     /** @private */

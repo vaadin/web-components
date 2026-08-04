@@ -6,6 +6,7 @@
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { getFilesFromDropEvent } from './vaadin-upload-helpers.js';
@@ -581,11 +582,7 @@ export const UploadMixin = (superClass) =>
         list.items = [...files];
         list.i18n = effectiveI18n;
         list.disabled = disabled;
-        if (this._theme) {
-          list.setAttribute('theme', this._theme);
-        } else {
-          list.removeAttribute('theme');
-        }
+        setOrRemoveAttribute(list, 'theme', this._theme);
       }
     }
 
@@ -1053,20 +1050,12 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _dragoverChanged(dragover) {
-      if (dragover) {
-        this.setAttribute('dragover', dragover);
-      } else {
-        this.removeAttribute('dragover');
-      }
+      setOrRemoveAttribute(this, 'dragover', dragover);
     }
 
     /** @private */
     _dragoverValidChanged(dragoverValid) {
-      if (dragoverValid) {
-        this.setAttribute('dragover-valid', dragoverValid);
-      } else {
-        this.removeAttribute('dragover-valid');
-      }
+      setOrRemoveAttribute(this, 'dragover-valid', dragoverValid);
     }
 
     /** @private */

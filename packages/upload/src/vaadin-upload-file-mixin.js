@@ -168,15 +168,6 @@ export const UploadFileMixin = (superClass) =>
     }
 
     /** @private */
-    __disabledChanged(disabled) {
-      if (disabled) {
-        this.removeAttribute('tabindex');
-      } else {
-        this.setAttribute('tabindex', this.tabindex);
-      }
-    }
-
-    /** @private */
     _errorMessageChanged(errorMessage) {
       this.toggleAttribute('error', Boolean(errorMessage));
     }

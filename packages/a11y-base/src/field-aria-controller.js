@@ -3,7 +3,11 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import {
+  addValuesToAttribute,
+  removeValuesFromAttribute,
+  setOrRemoveAttribute,
+} from '@vaadin/component-base/src/dom-utils.js';
 
 /**
  * A controller for managing ARIA attributes for a field element:
@@ -113,11 +117,7 @@ export class FieldAriaController {
       return;
     }
 
-    if (this.#label) {
-      this.#target.setAttribute('aria-label', this.#label);
-    } else {
-      this.#target.removeAttribute('aria-label');
-    }
+    setOrRemoveAttribute(this.#target, 'aria-label', this.#label);
   }
 
   #updateAriaLabelledByAttribute() {
@@ -154,10 +154,6 @@ export class FieldAriaController {
       return;
     }
 
-    if (this.#required) {
-      this.#target.setAttribute('aria-required', 'true');
-    } else {
-      this.#target.removeAttribute('aria-required');
-    }
+    setOrRemoveAttribute(this.#target, 'aria-required', this.#required);
   }
 }

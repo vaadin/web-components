@@ -5,6 +5,7 @@
  */
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
@@ -160,12 +161,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       super.updated(props);
 
       if (props.has('i18n')) {
-        const accessibleName = this.i18n?.dialogAccessibleName;
-        if (accessibleName) {
-          this.setAttribute('aria-label', accessibleName);
-        } else {
-          this.removeAttribute('aria-label');
-        }
+        setOrRemoveAttribute(this, 'aria-label', this.i18n?.dialogAccessibleName);
       }
     }
 
@@ -339,11 +335,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           calendar.isDateDisabled = isDateDisabled;
           calendar.showWeekNumbers = showWeekNumbers;
 
-          if (theme) {
-            calendar.setAttribute('theme', theme);
-          } else {
-            calendar.removeAttribute('theme');
-          }
+          setOrRemoveAttribute(calendar, 'theme', theme);
         });
       }
     }
@@ -369,11 +361,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
         years.forEach((year) => {
           year.selectedDate = selectedDate;
 
-          if (theme) {
-            year.setAttribute('theme', theme);
-          } else {
-            year.removeAttribute('theme');
-          }
+          setOrRemoveAttribute(year, 'theme', theme);
         });
       }
     }

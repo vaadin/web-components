@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { getClosestCell } from './vaadin-grid-helpers.js';
 
 /**
@@ -97,11 +98,7 @@ export const GridSorterMixin = (superClass) =>
       }
 
       const ariaLabel = grid.__effectiveI18n.sorter?.replace('{column}', this.textContent.trim());
-      if (ariaLabel) {
-        this.setAttribute('aria-label', ariaLabel);
-      } else {
-        this.removeAttribute('aria-label');
-      }
+      setOrRemoveAttribute(this, 'aria-label', ariaLabel);
     }
 
     /** @private */

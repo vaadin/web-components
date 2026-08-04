@@ -3,6 +3,7 @@
  * Copyright (c) 2015 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
@@ -389,11 +390,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
       el.setAttribute('aria-posinset', index + 1);
       el.setAttribute('aria-setsize', this.items.length);
 
-      if (this.theme) {
-        el.setAttribute('theme', this.theme);
-      } else {
-        el.removeAttribute('theme');
-      }
+      setOrRemoveAttribute(el, 'theme', this.theme);
 
       if (item instanceof ComboBoxPlaceholder) {
         this.__requestItemByIndex(index);

@@ -3,6 +3,7 @@
  * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 
 export const DialogBaseMixin = (superClass) =>
   class DialogBaseMixin extends superClass {
@@ -134,11 +135,7 @@ export const DialogBaseMixin = (superClass) =>
       }
 
       if (props.has('modeless')) {
-        if (!this.modeless) {
-          this.setAttribute('aria-modal', 'true');
-        } else {
-          this.removeAttribute('aria-modal');
-        }
+        setOrRemoveAttribute(this, 'aria-modal', !this.modeless);
       }
     }
 

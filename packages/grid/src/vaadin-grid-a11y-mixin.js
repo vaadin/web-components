@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { findTreeToggleCell, getClosestCell, iterateChildren, iterateRowCells } from './vaadin-grid-helpers.js';
 
 export const A11yMixin = (superClass) =>
@@ -127,11 +128,8 @@ export const A11yMixin = (superClass) =>
      */
     __a11yUpdateRowLevel(row, level) {
       // Set level for the expandable rows itself, and all the nested rows.
-      if (level > 0 || this.__isRowCollapsible(row) || this.__isRowExpandable(row)) {
-        row.setAttribute('aria-level', level + 1);
-      } else {
-        row.removeAttribute('aria-level');
-      }
+      const hasLevel = level > 0 || this.__isRowCollapsible(row) || this.__isRowExpandable(row);
+      setOrRemoveAttribute(row, 'aria-level', hasLevel && level + 1);
     }
 
     /**
