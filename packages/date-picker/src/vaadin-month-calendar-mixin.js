@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
 import {
   dateAllowed,
@@ -223,11 +224,8 @@ export const MonthCalendarMixin = (superClass) =>
 
     /** @private */
     __focusedDateChanged(focusedDate, days) {
-      if (Array.isArray(days) && days.some((date) => dateEquals(date, focusedDate))) {
-        this.removeAttribute('aria-hidden');
-      } else {
-        this.setAttribute('aria-hidden', 'true');
-      }
+      const hasFocusedDate = Array.isArray(days) && days.some((date) => dateEquals(date, focusedDate));
+      setOrRemoveAttribute(this, 'aria-hidden', !hasFocusedDate);
     }
 
     /** @protected */
@@ -324,11 +322,7 @@ export const MonthCalendarMixin = (superClass) =>
 
     /** @private */
     _showWeekNumbersChanged(showWeekNumbers, i18n) {
-      if (this.__computeShowWeekSeparator(showWeekNumbers, i18n)) {
-        this.setAttribute('week-numbers', '');
-      } else {
-        this.removeAttribute('week-numbers');
-      }
+      this.toggleAttribute('week-numbers', this.__computeShowWeekSeparator(showWeekNumbers, i18n));
     }
 
     // eslint-disable-next-line @typescript-eslint/max-params

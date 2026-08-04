@@ -12,6 +12,7 @@ import { isElementFocused, isElementHidden, isKeyboardActive } from '@vaadin/a11
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
@@ -404,13 +405,8 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     _themeChanged(theme) {
-      if (theme) {
-        this._overflow.setAttribute('theme', theme);
-        this._subMenu.setAttribute('theme', theme);
-      } else {
-        this._overflow.removeAttribute('theme');
-        this._subMenu.removeAttribute('theme');
-      }
+      setOrRemoveAttribute(this._overflow, 'theme', theme);
+      setOrRemoveAttribute(this._subMenu, 'theme', theme);
     }
 
     /** @private */
@@ -445,11 +441,7 @@ export const MenuBarMixin = (superClass) =>
     /** @private */
     __i18nChanged(effectiveI18n) {
       if (effectiveI18n?.moreOptions !== undefined) {
-        if (effectiveI18n.moreOptions) {
-          this._overflow.setAttribute('aria-label', effectiveI18n.moreOptions);
-        } else {
-          this._overflow.removeAttribute('aria-label');
-        }
+        setOrRemoveAttribute(this._overflow, 'aria-label', effectiveI18n.moreOptions);
       }
     }
 

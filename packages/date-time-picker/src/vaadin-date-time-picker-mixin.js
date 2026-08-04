@@ -5,6 +5,7 @@
  */
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -969,13 +970,7 @@ export const DateTimePickerMixin = (superClass) =>
         return;
       }
 
-      [datePicker, timePicker].forEach((picker) => {
-        if (theme) {
-          picker.setAttribute('theme', theme);
-        } else {
-          picker.removeAttribute('theme');
-        }
-      });
+      [datePicker, timePicker].forEach((picker) => setOrRemoveAttribute(picker, 'theme', theme));
     }
 
     /** @private */

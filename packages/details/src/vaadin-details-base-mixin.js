@@ -5,6 +5,7 @@
  */
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { CollapsibleMixin } from './collapsible-mixin.js';
 import { SummaryController } from './summary-controller.js';
@@ -97,11 +98,7 @@ export const DetailsBaseMixin = (superClass) =>
       if (summary && contentElements) {
         const node = contentElements[0];
 
-        if (node?.id) {
-          summary.setAttribute('aria-controls', node.id);
-        } else {
-          summary.removeAttribute('aria-controls');
-        }
+        setOrRemoveAttribute(summary, 'aria-controls', node?.id);
       }
     }
 

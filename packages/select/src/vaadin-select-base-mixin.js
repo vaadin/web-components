@@ -6,6 +6,7 @@
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { DelegateStateMixin } from '@vaadin/component-base/src/delegate-state-mixin.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -466,11 +467,7 @@ export const SelectBaseMixin = (superClass) =>
     /** @private */
     _updateAriaLive(ariaLive) {
       if (this.focusElement) {
-        if (ariaLive) {
-          this.focusElement.setAttribute('aria-live', 'polite');
-        } else {
-          this.focusElement.removeAttribute('aria-live');
-        }
+        setOrRemoveAttribute(this.focusElement, 'aria-live', ariaLive && 'polite');
       }
     }
 

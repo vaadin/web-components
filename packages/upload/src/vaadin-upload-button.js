@@ -6,6 +6,7 @@
 import { html, LitElement } from 'lit';
 import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -214,22 +215,14 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
 
     // Set accept attribute from manager
     const accept = this.manager && this.manager.accept;
-    if (accept) {
-      fileInput.setAttribute('accept', accept);
-    } else {
-      fileInput.removeAttribute('accept');
-    }
+    setOrRemoveAttribute(fileInput, 'accept', accept);
 
     // Set multiple attribute based on manager's maxFiles
     const maxFiles = this.manager && this.manager.maxFiles != null ? this.manager.maxFiles : Infinity;
     fileInput.multiple = maxFiles !== 1;
 
     // Set capture attribute
-    if (this.capture) {
-      fileInput.setAttribute('capture', this.capture);
-    } else {
-      fileInput.removeAttribute('capture');
-    }
+    setOrRemoveAttribute(fileInput, 'capture', this.capture);
   }
 
   /** @private */

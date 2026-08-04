@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { setOrRemoveAttribute } from './dom-utils.js';
 
 /**
  * A controller that detects if content inside the element overflows its scrolling viewport,
@@ -131,10 +132,6 @@ export class OverflowController {
   }
 
   #writeState({ overflow }) {
-    if (overflow) {
-      this.host.setAttribute('overflow', overflow);
-    } else {
-      this.host.removeAttribute('overflow');
-    }
+    setOrRemoveAttribute(this.host, 'overflow', overflow);
   }
 }

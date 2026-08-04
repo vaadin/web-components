@@ -8,6 +8,7 @@ import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
@@ -285,11 +286,7 @@ export const ComboBoxBaseMixin = (superClass) =>
       }
 
       const item = this._getItemElements().find((el) => el.index === index);
-      if (item) {
-        input.setAttribute('aria-activedescendant', item.id);
-      } else {
-        input.removeAttribute('aria-activedescendant');
-      }
+      setOrRemoveAttribute(input, 'aria-activedescendant', item?.id);
     }
 
     /** @private */
@@ -322,11 +319,7 @@ export const ComboBoxBaseMixin = (superClass) =>
       if (input) {
         input.setAttribute('aria-expanded', !!opened);
 
-        if (opened) {
-          input.setAttribute('aria-controls', this._scroller.id);
-        } else {
-          input.removeAttribute('aria-controls');
-        }
+        setOrRemoveAttribute(input, 'aria-controls', opened && this._scroller.id);
       }
     }
 

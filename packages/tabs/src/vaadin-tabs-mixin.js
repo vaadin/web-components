@@ -5,6 +5,7 @@
  */
 import { ListMixin } from '@vaadin/a11y-base/src/list-mixin.js';
 import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 export const TabsMixin = (superClass) =>
@@ -195,10 +196,6 @@ export const TabsMixin = (superClass) =>
         });
       }
 
-      if (overflow) {
-        this.setAttribute('overflow', overflow.trim());
-      } else {
-        this.removeAttribute('overflow');
-      }
+      setOrRemoveAttribute(this, 'overflow', overflow.trim());
     }
   };

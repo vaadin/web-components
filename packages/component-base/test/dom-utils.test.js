@@ -7,6 +7,7 @@ import {
   getFlattenedElements,
   isEmptyTextNode,
   removeValuesFromAttribute,
+  setOrRemoveAttribute,
 } from '../src/dom-utils.js';
 
 describe('dom-utils', () => {
@@ -167,6 +168,45 @@ describe('dom-utils', () => {
       element.setAttribute('aria-labelledby', ' label-id  error-id ');
       removeValuesFromAttribute(element, 'aria-labelledby', ['label-id', 'error-id']);
       expect(element.hasAttribute('aria-labelledby')).to.be.false;
+    });
+  });
+
+  describe('setOrRemoveAttribute', () => {
+    let element;
+
+    beforeEach(() => {
+      element = document.createElement('div');
+    });
+
+    it('should toggle the attribute on setting and clearing the value', () => {
+      setOrRemoveAttribute(element, 'theme', 'small');
+      expect(element.getAttribute('theme')).to.equal('small');
+
+      setOrRemoveAttribute(element, 'theme', null);
+      expect(element.hasAttribute('theme')).to.be.false;
+    });
+
+    it('should set the attribute to a stringified value', () => {
+      setOrRemoveAttribute(element, 'aria-modal', true);
+      expect(element.getAttribute('aria-modal')).to.equal('true');
+    });
+
+    it('should remove the attribute when the value is undefined', () => {
+      element.setAttribute('theme', 'small');
+      setOrRemoveAttribute(element, 'theme', undefined);
+      expect(element.hasAttribute('theme')).to.be.false;
+    });
+
+    it('should remove the attribute when the value is false', () => {
+      element.setAttribute('theme', 'small');
+      setOrRemoveAttribute(element, 'theme', false);
+      expect(element.hasAttribute('theme')).to.be.false;
+    });
+
+    it('should remove the attribute when the value is an empty string', () => {
+      element.setAttribute('theme', 'small');
+      setOrRemoveAttribute(element, 'theme', '');
+      expect(element.hasAttribute('theme')).to.be.false;
     });
   });
 

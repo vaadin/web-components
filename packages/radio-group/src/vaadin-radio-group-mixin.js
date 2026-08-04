@@ -6,6 +6,7 @@
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -142,11 +143,7 @@ export const RadioGroupMixin = (superclass) =>
       super.updated(props);
 
       if (props.has('invalid')) {
-        if (this.invalid) {
-          this.setAttribute('aria-invalid', 'true');
-        } else {
-          this.removeAttribute('aria-invalid');
-        }
+        setOrRemoveAttribute(this, 'aria-invalid', this.invalid);
       }
     }
 

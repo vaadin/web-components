@@ -214,11 +214,7 @@ export const ColumnAutoWidthMixin = (superClass) =>
           }
         });
 
-      if (autoWidth) {
-        this.$.scroller.setAttribute('measuring-auto-width', '');
-      } else {
-        this.$.scroller.removeAttribute('measuring-auto-width');
-      }
+      this.$.scroller.toggleAttribute('measuring-auto-width', autoWidth);
     }
 
     /**

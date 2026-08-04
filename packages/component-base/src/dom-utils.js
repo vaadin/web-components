@@ -98,6 +98,22 @@ export function serializeAttributeValue(values) {
 }
 
 /**
+ * Sets the attribute to the given value, or removes the attribute when the
+ * value is falsy (e.g. `null`, `undefined`, `false` or an empty string).
+ *
+ * @param {HTMLElement} element
+ * @param {string} attr
+ * @param {string | boolean | null | undefined} value
+ */
+export function setOrRemoveAttribute(element, attr, value) {
+  if (value) {
+    element.setAttribute(attr, value);
+  } else {
+    element.removeAttribute(attr);
+  }
+}
+
+/**
  * Normalizes values passed to `addValuesToAttribute` and `removeValuesFromAttribute`
  * into a set of values. Both a single string and every array entry may contain
  * multiple values separated by space.
@@ -107,22 +123,6 @@ export function serializeAttributeValue(values) {
  */
 function normalizeAttributeValues(values) {
   return deserializeAttributeValue(Array.isArray(values) ? values.join(' ') : values);
-}
-
-/**
- * Sets the attribute to the given set of values. If the set is empty,
- * the whole attribute is removed.
- *
- * @param {HTMLElement} element
- * @param {string} attr
- * @param {Set<string>} values
- */
-function setAttributeValues(element, attr, values) {
-  if (values.size === 0) {
-    element.removeAttribute(attr);
-  } else {
-    element.setAttribute(attr, serializeAttributeValue(values));
-  }
 }
 
 /**
@@ -139,7 +139,7 @@ export function addValuesToAttribute(element, attr, valuesToAdd) {
   const values = deserializeAttributeValue(element.getAttribute(attr));
   valuesToAdd.forEach((value) => values.add(value));
 
-  setAttributeValues(element, attr, values);
+  setOrRemoveAttribute(element, attr, serializeAttributeValue(values));
 }
 
 /**
@@ -156,7 +156,7 @@ export function removeValuesFromAttribute(element, attr, valuesToRemove) {
   const values = deserializeAttributeValue(element.getAttribute(attr));
   valuesToRemove.forEach((value) => values.delete(value));
 
-  setAttributeValues(element, attr, values);
+  setOrRemoveAttribute(element, attr, serializeAttributeValue(values));
 }
 
 /**

@@ -6,6 +6,7 @@
 import { microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 
 const timeouts = {
@@ -377,11 +378,7 @@ export const ScrollMixin = (superClass) =>
 
     /** @private */
     __columnRenderingChanged(_columnTree, columnRendering) {
-      if (columnRendering === 'eager') {
-        this.$.scroller.removeAttribute('column-rendering');
-      } else {
-        this.$.scroller.setAttribute('column-rendering', columnRendering);
-      }
+      setOrRemoveAttribute(this.$.scroller, 'column-rendering', columnRendering !== 'eager' && columnRendering);
 
       this.__updateColumnsBodyContentHidden();
     }

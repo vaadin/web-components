@@ -5,6 +5,7 @@
  */
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 
 export const ItemsMixin = (superClass) =>
   class ItemsMixin extends superClass {
@@ -165,11 +166,7 @@ export const ItemsMixin = (superClass) =>
       subMenuOverlay._setParentOverlay(parent);
 
       // Set theme attribute from parent element
-      if (parent.hasAttribute('theme')) {
-        subMenu.setAttribute('theme', parent.getAttribute('theme'));
-      } else {
-        subMenu.removeAttribute('theme');
-      }
+      setOrRemoveAttribute(subMenu, 'theme', parent.getAttribute('theme'));
 
       const content = subMenuOverlay.$.content;
       content.style.minWidth = '';
@@ -547,11 +544,7 @@ export const ItemsMixin = (superClass) =>
 
     /** @private */
     __updateTheme(component, theme) {
-      if (theme) {
-        component.setAttribute('theme', theme);
-      } else {
-        component.removeAttribute('theme');
-      }
+      setOrRemoveAttribute(component, 'theme', theme);
     }
 
     close() {

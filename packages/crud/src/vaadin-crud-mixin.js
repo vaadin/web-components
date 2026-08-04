@@ -8,6 +8,7 @@
  * license.
  */
 import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
@@ -620,11 +621,7 @@ export const CrudMixin = (superClass) =>
         form.include = include;
         form.exclude = exclude;
 
-        if (theme) {
-          form.setAttribute('theme', theme);
-        } else {
-          form.removeAttribute('theme');
-        }
+        setOrRemoveAttribute(form, 'theme', theme);
       }
     }
 
@@ -652,11 +649,7 @@ export const CrudMixin = (superClass) =>
         grid.include = include;
         grid.exclude = exclude;
 
-        if (theme) {
-          grid.setAttribute('theme', theme);
-        } else {
-          grid.removeAttribute('theme');
-        }
+        setOrRemoveAttribute(grid, 'theme', theme);
       }
 
       grid.items = items;
@@ -997,10 +990,6 @@ export const CrudMixin = (superClass) =>
     __hideElement(element, value) {
       if (!element) return;
 
-      if (value) {
-        element.setAttribute('aria-hidden', 'true');
-      } else {
-        element.removeAttribute('aria-hidden');
-      }
+      setOrRemoveAttribute(element, 'aria-hidden', value);
     }
   };

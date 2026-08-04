@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isChrome, isSafari } from '@vaadin/component-base/src/browser-utils.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import {
   getBodyRowCells,
   iterateChildren,
@@ -494,11 +495,7 @@ export const DragAndDropMixin = (superClass) =>
       const draggableAttribute = isChrome ? 'draggable-source' : 'draggable';
 
       iterateRowCells(row, (cell) => {
-        if (dragDisabled) {
-          cell._content.removeAttribute(draggableAttribute);
-        } else {
-          cell._content.setAttribute(draggableAttribute, true);
-        }
+        setOrRemoveAttribute(cell._content, draggableAttribute, !dragDisabled);
       });
 
       updateBooleanRowStates(row, {

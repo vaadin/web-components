@@ -37,6 +37,16 @@ export function deserializeAttributeValue(value: string): Set<string>;
 export function serializeAttributeValue(values: Set<string>): string;
 
 /**
+ * Sets the attribute to the given value, or removes the attribute when the
+ * value is falsy (e.g. `null`, `undefined`, `false` or an empty string).
+ */
+export function setOrRemoveAttribute(
+  element: HTMLElement,
+  attr: string,
+  value: string | boolean | null | undefined,
+): void;
+
+/**
  * Adds one or more values to an attribute containing space-delimited values.
  * If no values remain, the whole attribute is removed.
  */

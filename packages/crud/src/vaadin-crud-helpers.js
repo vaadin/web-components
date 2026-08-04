@@ -8,6 +8,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { get, set } from '@vaadin/component-base/src/path-utils.js';
 
 /**
@@ -77,11 +78,7 @@ export function editColumnDefaultRenderer(root, column) {
     root.appendChild(edit);
   }
 
-  if (column.ariaLabel) {
-    edit.setAttribute('aria-label', column.ariaLabel);
-  } else {
-    edit.removeAttribute('aria-label');
-  }
+  setOrRemoveAttribute(edit, 'aria-label', column.ariaLabel);
 }
 
 export function createField(crudForm, parent, path) {

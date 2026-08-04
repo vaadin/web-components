@@ -8,6 +8,7 @@ import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
@@ -608,27 +609,15 @@ class Popover extends PopoverPositionMixin(
     }
 
     if (props.has('accessibleName')) {
-      if (this.accessibleName) {
-        this.setAttribute('aria-label', this.accessibleName);
-      } else {
-        this.removeAttribute('aria-label');
-      }
+      setOrRemoveAttribute(this, 'aria-label', this.accessibleName);
     }
 
     if (props.has('accessibleNameRef')) {
-      if (this.accessibleNameRef) {
-        this.setAttribute('aria-labelledby', this.accessibleNameRef);
-      } else {
-        this.removeAttribute('aria-labelledby');
-      }
+      setOrRemoveAttribute(this, 'aria-labelledby', this.accessibleNameRef);
     }
 
     if (props.has('modal')) {
-      if (this.modal) {
-        this.setAttribute('aria-modal', 'true');
-      } else {
-        this.removeAttribute('aria-modal');
-      }
+      setOrRemoveAttribute(this, 'aria-modal', this.modal);
     }
   }
 

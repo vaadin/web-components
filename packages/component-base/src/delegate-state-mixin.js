@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
+import { setOrRemoveAttribute } from './dom-utils.js';
 
 /**
  * A mixin to delegate properties and attributes to a target element.
@@ -103,10 +104,8 @@ const DelegateStateMixinImplementation = (superclass) => {
 
       if (typeof value === 'boolean') {
         this.stateTarget.toggleAttribute(name, value);
-      } else if (value) {
-        this.stateTarget.setAttribute(name, value);
       } else {
-        this.stateTarget.removeAttribute(name);
+        setOrRemoveAttribute(this.stateTarget, name, value);
       }
     }
 

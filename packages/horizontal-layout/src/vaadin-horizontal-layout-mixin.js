@@ -61,21 +61,11 @@ export const HorizontalLayoutMixin = (superClass) =>
     __updateAttributes(nodes, slot, setFirst, setLast) {
       nodes.forEach((child, idx) => {
         if (setFirst) {
-          const attr = `first-${slot}-child`;
-          if (idx === 0) {
-            child.setAttribute(attr, '');
-          } else if (child.hasAttribute(attr)) {
-            child.removeAttribute(attr);
-          }
+          child.toggleAttribute(`first-${slot}-child`, idx === 0);
         }
 
         if (setLast) {
-          const attr = `last-${slot}-child`;
-          if (idx === nodes.length - 1) {
-            child.setAttribute(attr, '');
-          } else if (child.hasAttribute(attr)) {
-            child.removeAttribute(attr);
-          }
+          child.toggleAttribute(`last-${slot}-child`, idx === nodes.length - 1);
         }
       });
     }

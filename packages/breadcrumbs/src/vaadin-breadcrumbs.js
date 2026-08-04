@@ -9,6 +9,7 @@ import { html, LitElement } from 'lit';
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -222,14 +223,7 @@ class Breadcrumbs extends KeyboardDirectionMixin(
    * @private
    */
   __restoreSlots(items) {
-    items.forEach((item, index) => {
-      const expected = index === 0 ? 'root' : null;
-      if (expected === null) {
-        item.removeAttribute('slot');
-      } else {
-        item.setAttribute('slot', expected);
-      }
-    });
+    items.forEach((item, index) => setOrRemoveAttribute(item, 'slot', index === 0 ? 'root' : null));
   }
 
   /**
