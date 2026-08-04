@@ -621,12 +621,17 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
       // by the `inputs` array rather than by tag name, which also covers a
       // composite field shipped under its own tag name.
       const locked = [field, ...(Array.isArray(field.inputs) ? field.inputs : [])];
-      this.#lockedElements = locked.map((element) => ({ element, readonly: element.readonly }));
+      this.#lockedElements = locked.map((element) => {
+        // A composite field also accepts native inputs, which spell the
+        // property `readOnly`.
+        const property = 'readonly' in element ? 'readonly' : 'readOnly';
+        return { element, property, value: element[property] };
+      });
     }
 
     field.setAttribute('ai-working', '');
-    this.#lockedElements.forEach(({ element }) => {
-      element.readonly = true;
+    this.#lockedElements.forEach(({ element, property }) => {
+      element[property] = true;
     });
   }
 
@@ -684,8 +689,8 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
     const locked = this.#lockedElements;
     this.#lockedElements = null;
     if (locked) {
-      locked.forEach(({ element, readonly }) => {
-        element.readonly = readonly;
+      locked.forEach(({ element, property, value }) => {
+        element[property] = value;
       });
     }
   }

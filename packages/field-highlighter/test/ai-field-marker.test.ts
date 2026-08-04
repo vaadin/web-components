@@ -1192,6 +1192,39 @@ describe('ai field marker', () => {
       });
     });
 
+    describe('custom field with native inputs', () => {
+      let customField: CustomField;
+      let inputs: HTMLInputElement[];
+      let marker: AiFieldMarker;
+
+      beforeEach(async () => {
+        // A custom field also accepts native inputs, which spell the
+        // client-side read-only property `readOnly` instead of `readonly`.
+        customField = fixtureSync(`
+          <vaadin-custom-field label="License plate">
+            <input type="text" />
+            <input type="text" readonly />
+          </vaadin-custom-field>
+        `);
+        await nextRender();
+        inputs = customField.inputs as HTMLInputElement[];
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true, toFake: ['setTimeout', 'clearTimeout'] });
+        marker = mark(customField, { working: true });
+      });
+
+      it('should make the native inputs read-only while working', () => {
+        expect(inputs.every((input) => input.readOnly)).to.be.true;
+      });
+
+      it('should restore each native input read-only state when working ends', async () => {
+        marker.working = false;
+        await nextUpdate(marker);
+        await clock!.tickAsync(500);
+        expect(inputs[0].readOnly).to.be.false;
+        expect(inputs[1].readOnly).to.be.true;
+      });
+    });
+
     describe('composite field under another tag name', () => {
       let derivedField: CustomField;
       let inputs: TextField[];
