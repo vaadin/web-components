@@ -50,6 +50,10 @@ export const aiFieldMarkerStyles = css`
      takes effect at document scope, and this sheet is adopted into the field's
      root node, which is a shadow root for a nested field. */
 
+  vaadin-ai-field-marker[hidden] {
+    display: none !important;
+  }
+
   :where(vaadin-ai-field-marker) {
     display: contents;
     --color1: light-dark(#932fffd9, #bc64ff);
@@ -78,7 +82,7 @@ export const aiFieldMarkerStyles = css`
       animation-timing-function: cubic-bezier(0.78, 0, 0.22, 1);
     }
 
-    [part='badge'] {
+    [slot='badge'] {
       all: initial;
       position: absolute;
       top: -6px;
@@ -124,20 +128,36 @@ export const aiFieldMarkerStyles = css`
       }
     }
 
-    [part='badge']:focus-visible {
+    [slot='badge']:focus-visible {
       outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     }
 
-    [part='message'] {
+    [slot='message'] {
       margin: 0;
     }
 
-    [part='actions'] {
+    /* The hidden AI-fill description linked to the field's input via
+       aria-describedby: visually hidden but kept in the accessibility tree,
+       following the sr-only pattern from @vaadin/a11y-base. */
+    [slot='description'] {
+      border: 0;
+      clip: rect(1px, 1px, 1px, 1px);
+      clip-path: inset(50%);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+      white-space: nowrap;
+    }
+
+    [slot='actions'] {
       display: flex;
       gap: var(--vaadin-gap-xs);
     }
 
-    [part='revert-button'] {
+    [slot='actions'] > button {
       display: flex;
       align-items: center;
       gap: var(--vaadin-gap-s);

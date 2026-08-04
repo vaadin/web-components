@@ -58,6 +58,23 @@ export type AiFieldRevertEvent = CustomEvent<{ value: unknown }>;
  * marker is slotted into the popover. This is the integration point for
  * frameworks (e.g. Flow) that render content as server-side elements.
  *
+ * ### Styling
+ *
+ * The following state attribute is set on the field element for styling:
+ *
+ * Attribute    | Description
+ * -------------|-------------
+ * `ai-working` | Set while an AI is working on the field.
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                         |
+ * :-------------------------------------------|
+ * `--vaadin-ai-field-marker-badge-icon-color` |
+ * `--vaadin-ai-field-marker-mask-pos`         |
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @fires {CustomEvent} ai-field-revert - Fired from the field element when the user activates the revert control. The host restores the value.
  */
 declare class AiFieldMarker extends I18nMixin<typeof HTMLElement, AiFieldMarkerI18n>(HTMLElement) {

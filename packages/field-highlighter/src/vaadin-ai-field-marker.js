@@ -7,6 +7,7 @@ import '@vaadin/popover/src/vaadin-popover.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { html, LitElement, nothing } from 'lit';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
@@ -15,6 +16,7 @@ import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import {
   aiFieldMarkerHostStyles,
   aiFieldMarkerShadowStyles,
@@ -29,6 +31,11 @@ const DEFAULT_I18N = {
 };
 
 const POPOVER_TRIGGER = ['click'];
+
+// Half of the 1s working shimmer slide (`--vaadin-ai-field-marker-slide` in
+// the base styles), so that held-back values land — and the read-only lock
+// lifts — in the middle of a slide instead of at its edge.
+const HALF_WORKING_SLIDE_MS = 500;
 
 const MARKER_SLOT = 'ai-field-marker';
 
@@ -209,7 +216,7 @@ class DelayedFieldValue {
  * annotates is about to be replaced; setting `working` back to `false`
  * brings it back, so a cancelled or failed fill leaves the mark intact.
  *
- * The parts that construct the marker — the badge, its tooltip, the popover
+ * The pieces that construct the marker — the badge, its tooltip, the popover
  * message and actions — are generated as light-DOM children assigned to
  * named slots. The popover itself renders in the marker's shadow root,
  * wrapping the content slots, so that content appended to the marker is
@@ -217,13 +224,30 @@ class DelayedFieldValue {
  * control. This default slot is the integration point for frameworks (e.g.
  * Flow) that provide custom popover content as server-side elements.
  *
+ * ### Styling
+ *
+ * The following state attribute is set on the field element for styling:
+ *
+ * Attribute    | Description
+ * -------------|-------------
+ * `ai-working` | Set while an AI is working on the field.
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                         |
+ * :-------------------------------------------|
+ * `--vaadin-ai-field-marker-badge-icon-color` |
+ * `--vaadin-ai-field-marker-mask-pos`         |
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @fires {CustomEvent} ai-field-revert - Fired from the field element when the user activates the revert control. The host restores the value.
  *
  * @customElement vaadin-ai-field-marker
  * @extends HTMLElement
  * @private
  */
-export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
+class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'vaadin-ai-field-marker';
   }
@@ -318,9 +342,11 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     // before this bubble-phase listener.
     this.addEventListener('click', (event) => event.stopPropagation());
 
-    // The parts are generated as light-DOM children assigned to named slots,
-    // so frameworks (e.g. Flow) can reach them without piercing a shadow
-    // root. The tooltip targets the badge by id, which resolves in the
+    // The pieces are generated as light-DOM children assigned to named slots,
+    // which is also what the styles select them by, since a `part` on a
+    // light-DOM element is not reachable with `::part()`. Keeping them in the
+    // light DOM lets frameworks (e.g. Flow) reach them without piercing a
+    // shadow root. The tooltip targets the badge by id, which resolves in the
     // light-DOM scope shared by both; the popover renders in the shadow root
     // and targets the badge through its `target` property instead.
     const badgeId = `vaadin-ai-field-marker-${generateUniqueId()}`;
@@ -329,7 +355,6 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
       observe: false,
       initializer: (badge) => {
         badge.id = badgeId;
-        badge.setAttribute('part', 'badge');
         badge.type = 'button';
       },
     });
@@ -343,22 +368,14 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     });
     this.addController(this.#tooltipController);
 
-    this.#messageController = new SlotController(this, 'message', 'p', {
-      observe: false,
-      initializer: (message) => {
-        message.setAttribute('part', 'message');
-      },
-    });
+    this.#messageController = new SlotController(this, 'message', 'p', { observe: false });
     this.addController(this.#messageController);
 
     this.#actionsController = new SlotController(this, 'actions', 'div', {
       observe: false,
       initializer: (actions) => {
-        actions.setAttribute('part', 'actions');
-
         const revertButton = document.createElement('button');
         revertButton.type = 'button';
-        revertButton.setAttribute('part', 'revert-button');
         revertButton.addEventListener('click', () => this.#onRevert());
         this.#revertButton = revertButton;
         actions.appendChild(revertButton);
@@ -424,86 +441,6 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
       this.#markField();
     } else {
       this.#markWhenUpgraded(parent);
-    }
-  }
-
-  /**
-   * Waits for the parent's custom element definition to load and marks it then,
-   * for a marker attached before the field was upgraded — at which point it had
-   * no shadow root to inject the marker into.
-   *
-   * @param {HTMLElement} parent
-   */
-  #markWhenUpgraded(parent) {
-    const tagName = parent && parent.localName;
-    if (!tagName || !tagName.includes('-') || customElements.get(tagName)) {
-      return;
-    }
-
-    customElements.whenDefined(tagName).then(() => {
-      // The marker may have been moved or removed while the field was loading.
-      if (!this.isConnected || this.parentElement !== parent || !parent.shadowRoot) {
-        return;
-      }
-
-      this.#field = parent;
-      this.requestUpdate();
-      this.#markField();
-    });
-  }
-
-  /**
-   * Injects the marker into the resolved field and describes it as AI-filled.
-   */
-  #markField() {
-    const field = this.#field;
-
-    adoptMarkerStyles(field);
-    injectMarkerHostStyles(field);
-
-    // Create a slot for the marker element inside the field's own shadow
-    // root (unless a previous marker already left one) and assign the marker
-    // to it, so the marker renders although the field defines no such slot.
-    if (!field.shadowRoot.querySelector(`slot[name="${MARKER_SLOT}"]`)) {
-      const markerSlot = document.createElement('slot');
-      markerSlot.setAttribute('name', MARKER_SLOT);
-      field.shadowRoot.appendChild(markerSlot);
-    }
-    this.slot = MARKER_SLOT;
-
-    // Add a hidden description node in the field's light DOM (so its id
-    // resolves in the described element's scope) and append its id to that
-    // element's aria-describedby. Appending — rather than using
-    // aria-description, which a screen reader ignores when aria-describedby is
-    // present — lets the field's own helper/error description and the AI note
-    // both get read.
-    //
-    // `ariaTarget` is where the field puts its own descriptions, and is the
-    // only one of the three for group and composite fields, which expose
-    // neither an input nor a focus element.
-    const describedElement = field.ariaTarget || field.inputElement || field.focusElement;
-    if (describedElement) {
-      const descNode = document.createElement('span');
-      descNode.id = `ai-field-marker-${generateUniqueId()}`;
-      descNode.slot = 'description';
-      descNode.textContent = this.__effectiveI18n.message;
-      descNode.style.cssText =
-        'position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;';
-      this.appendChild(descNode);
-      addValuesToAttribute(describedElement, 'aria-describedby', descNode.id);
-      this.#descNode = descNode;
-      this.#describedElement = describedElement;
-    }
-
-    // Capture the AI-filled value so the revert event can carry it.
-    this.#capturedValue = this.#annotatedValue();
-
-    if (this.working) {
-      // Apply the working state directly: on a reconnect no `working`
-      // property change triggers updated(), which handles the first connect.
-      this.#startWorking();
-    } else {
-      this.#announcePending = true;
     }
   }
 
@@ -601,7 +538,7 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
       <vaadin-popover
         .target="${this.#badgeController.node}"
         role="dialog"
-        accessible-name="${this.__effectiveI18n.badgeLabel}"
+        aria-label="${this.__effectiveI18n.badgeLabel}"
         .trigger="${POPOVER_TRIGGER}"
         autofocus
         theme="arrow"
@@ -613,6 +550,84 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
       </vaadin-popover>
       <slot name="description"></slot>
     `;
+  }
+
+  /**
+   * Waits for the parent's custom element definition to load and marks it then,
+   * for a marker attached before the field was upgraded — at which point it had
+   * no shadow root to inject the marker into.
+   *
+   * @param {HTMLElement} parent
+   */
+  #markWhenUpgraded(parent) {
+    const tagName = parent && parent.localName;
+    if (!tagName || !tagName.includes('-') || customElements.get(tagName)) {
+      return;
+    }
+
+    customElements.whenDefined(tagName).then(() => {
+      // The marker may have been moved or removed while the field was loading.
+      if (!this.isConnected || this.parentElement !== parent || !parent.shadowRoot) {
+        return;
+      }
+
+      this.#field = parent;
+      this.requestUpdate();
+      this.#markField();
+    });
+  }
+
+  /**
+   * Injects the marker into the resolved field and describes it as AI-filled.
+   */
+  #markField() {
+    const field = this.#field;
+
+    adoptMarkerStyles(field);
+    injectMarkerHostStyles(field);
+
+    // Create a slot for the marker element inside the field's own shadow
+    // root (unless a previous marker already left one) and assign the marker
+    // to it, so the marker renders although the field defines no such slot.
+    if (!field.shadowRoot.querySelector(`slot[name="${MARKER_SLOT}"]`)) {
+      const markerSlot = document.createElement('slot');
+      markerSlot.setAttribute('name', MARKER_SLOT);
+      field.shadowRoot.appendChild(markerSlot);
+    }
+    this.slot = MARKER_SLOT;
+
+    // Add a hidden description node in the field's light DOM (so its id
+    // resolves in the described element's scope) and append its id to that
+    // element's aria-describedby. Appending — rather than using
+    // aria-description, which a screen reader ignores when aria-describedby is
+    // present — lets the field's own helper/error description and the AI note
+    // both get read.
+    //
+    // `ariaTarget` is where the field puts its own descriptions, and is the
+    // only one of the three for group and composite fields, which expose
+    // neither an input nor a focus element.
+    const describedElement = field.ariaTarget || field.inputElement || field.focusElement;
+    if (describedElement) {
+      const descNode = document.createElement('span');
+      descNode.id = `ai-field-marker-${generateUniqueId()}`;
+      descNode.slot = 'description';
+      descNode.textContent = this.__effectiveI18n.message;
+      this.appendChild(descNode);
+      addValuesToAttribute(describedElement, 'aria-describedby', descNode.id);
+      this.#descNode = descNode;
+      this.#describedElement = describedElement;
+    }
+
+    // Capture the AI-filled value so the revert event can carry it.
+    this.#capturedValue = this.#annotatedValue();
+
+    if (this.working) {
+      // Apply the working state directly: on a reconnect no `working`
+      // property change triggers updated(), which handles the first connect.
+      this.#startWorking();
+    } else {
+      this.#announcePending = true;
+    }
   }
 
   /**
@@ -642,8 +657,7 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
       return;
     }
 
-    // TODO uses a fixed 500ms timeout, exactly half of the --ai-marker-slide animation
-    this.#valueDelay ??= new DelayedFieldValue(field, 500);
+    this.#valueDelay ??= new DelayedFieldValue(field, HALF_WORKING_SLIDE_MS);
     this.#valueDelay.install();
 
     if (this.#restoreTimer != null) {
@@ -708,8 +722,7 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     if (immediate) {
       this.#restoreLockedElements();
     } else {
-      // TODO uses a fixed 500ms timeout, exactly half of the --ai-marker-slide animation
-      this.#restoreTimer = setTimeout(() => this.#restoreLockedElements(), 500);
+      this.#restoreTimer = setTimeout(() => this.#restoreLockedElements(), HALF_WORKING_SLIDE_MS);
     }
   }
 
@@ -739,12 +752,14 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
     // the host: a host focus() can carry component-specific semantics that a
     // revert must not trigger — date-picker opens its overlay on focus while
     // it has no usable text input (fullscreen, iOS, or no i18n.parseDate).
-    // Focusing the element directly also leaves the focus-ring to the field's
-    // own keyboard-vs-pointer detection instead of forcing it on.
+    //
+    // The revert control can be activated by pointer as well as by keyboard,
+    // so the focus ring is left to the current interaction modality instead of
+    // being forced on, which is what a bare focus() does on a Vaadin field.
     const field = this.#field;
     if (field) {
       const focusTarget = field.focusElement || field.inputElement || field;
-      focusTarget.focus();
+      focusTarget.focus({ focusVisible: isKeyboardActive() });
     }
 
     const popover = this.shadowRoot.querySelector('vaadin-popover');
@@ -765,3 +780,5 @@ export class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement)))
 }
 
 defineCustomElement(AiFieldMarker);
+
+export { AiFieldMarker };

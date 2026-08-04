@@ -10,23 +10,26 @@ import '@vaadin/vaadin-lumo-styles/components/ai-field-marker.css';
 import '../ai-field-marker-not-animated-styles.css';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import '../../../src/vaadin-ai-field-marker.js';
+import type { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
+import type { AiFieldMarker } from '../../../src/vaadin-ai-field-marker.js';
 
 describe('ai-field-marker', () => {
-  let div, field;
+  let div: HTMLDivElement;
+  let field: TextField;
 
   before(() => {
     Tooltip.setDefaultFocusDelay(0);
   });
 
-  function mark(properties = {}) {
+  function mark(properties: Partial<AiFieldMarker> = {}): AiFieldMarker {
     const marker = document.createElement('vaadin-ai-field-marker');
     Object.assign(marker, properties);
     field.appendChild(marker);
     return marker;
   }
 
-  async function createField({ overlay = false } = {}) {
+  async function createField({ overlay = false }: { overlay?: boolean } = {}) {
     div = document.createElement('div');
     div.style.padding = '20px';
     if (overlay) {
@@ -84,7 +87,7 @@ describe('ai-field-marker', () => {
     it('default content', async () => {
       mark();
       await nextRender();
-      field.querySelector('[part="badge"]').click();
+      field.querySelector<HTMLButtonElement>('[slot="badge"]')!.click();
       await nextRender();
       await visualDiff(div, 'ai-marker-popover');
     });
@@ -95,7 +98,7 @@ describe('ai-field-marker', () => {
       const marker = mark();
       marker.appendChild(content);
       await nextRender();
-      field.querySelector('[part="badge"]').click();
+      field.querySelector<HTMLButtonElement>('[slot="badge"]')!.click();
       await nextRender();
       await visualDiff(div, 'ai-marker-popover-custom-content');
     });
