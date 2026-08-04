@@ -28,22 +28,6 @@ export const DEFAULT_I18N = {
   units: FILE_LIST_DEFAULT_I18N.units,
 };
 
-// Configuration properties that are mirrored to the internal upload manager
-const MANAGER_CONFIG_PROPS = [
-  'target',
-  'method',
-  'headers',
-  'timeout',
-  'maxFiles',
-  'maxFileSize',
-  'accept',
-  'noAuto',
-  'withCredentials',
-  'uploadFormat',
-  'maxConcurrentUploads',
-  'formDataName',
-];
-
 export const UploadMixin = (superClass) =>
   class UploadMixin extends I18nMixin(superClass) {
     static get properties() {
@@ -497,14 +481,22 @@ export const UploadMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      if (MANAGER_CONFIG_PROPS.some((prop) => props.has(prop))) {
-        this.__syncManagerConfig();
+      const config = this.__createManagerConfig();
+      if (Object.keys(config).some((prop) => props.has(prop))) {
+        this._manager.__setConfig(config);
       }
     }
 
     /**
-     * Sync the configuration properties to the internal upload manager. The
-     * manager's internal API applies `method`, `headers` and
+     * Sync the configuration properties to the internal upload manager.
+     * @private
+     */
+    __syncManagerConfig() {
+      this._manager.__setConfig(this.__createManagerConfig());
+    }
+
+    /**
+     * The manager's internal API applies `method`, `headers` and
      * `maxConcurrentUploads` without validation, since `<vaadin-upload>` has
      * historically accepted any values for these properties: an unsupported
      * method is passed to the request, a non-positive maxConcurrentUploads
@@ -512,8 +504,8 @@ export const UploadMixin = (superClass) =>
      * throw when the request is configured.
      * @private
      */
-    __syncManagerConfig() {
-      this._manager.__setConfig({
+    __createManagerConfig() {
+      return {
         // Fall back to an empty string, which means that window.location
         // will be used, also when the property is set to null
         target: this.target || '',
@@ -530,7 +522,7 @@ export const UploadMixin = (superClass) =>
         maxFiles: this.maxFiles < 0 ? Infinity : this.maxFiles,
         maxFileSize: this.maxFileSize,
         accept: this.accept,
-      });
+      };
     }
 
     /**
