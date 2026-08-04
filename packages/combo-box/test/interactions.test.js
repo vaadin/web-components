@@ -1,7 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
+import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import {
-  aTimeout,
   click,
   escKeyDown,
   fire,
@@ -13,7 +12,6 @@ import {
   outsideClick,
   tabKeyDown,
   tap,
-  touchstart,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-combo-box.js';
@@ -277,25 +275,17 @@ describe('interactions', () => {
   });
 
   describe('virtual keyboard', () => {
-    it('should disable virtual keyboard on close', () => {
+    it('should not set inputmode on close when input is focused', () => {
+      input.focus();
       comboBox.open();
       comboBox.close();
-      expect(input.inputMode).to.equal('none');
-    });
-
-    it('should re-enable virtual keyboard on touchstart', () => {
-      comboBox.open();
-      comboBox.close();
-      touchstart(comboBox);
       expect(input.inputMode).to.equal('');
     });
 
-    it('should re-enable virtual keyboard on blur', async () => {
-      comboBox.focus();
+    it('should not set inputmode on close when input is not focused', () => {
       comboBox.open();
+      input.blur();
       comboBox.close();
-      await aTimeout(0);
-      await sendKeys({ press: 'Tab' });
       expect(input.inputMode).to.equal('');
     });
   });
