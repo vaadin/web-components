@@ -7,10 +7,7 @@ snapshots["context-menu items"] =
     Target
   </div>
   <div slot="overlay">
-    <vaadin-context-menu-list-box
-      aria-orientation="vertical"
-      role="menu"
-    >
+    <vaadin-context-menu-list-box role="menu">
       <vaadin-context-menu-item
         aria-haspopup="false"
         aria-selected="false"
@@ -74,10 +71,7 @@ snapshots["context-menu items nested"] =
   top-aligned=""
 >
   <div slot="overlay">
-    <vaadin-context-menu-list-box
-      aria-orientation="vertical"
-      role="menu"
-    >
+    <vaadin-context-menu-list-box role="menu">
       <vaadin-context-menu-item
         aria-haspopup="false"
         aria-selected="false"
@@ -108,10 +102,7 @@ snapshots["context-menu items nested"] =
     top-aligned=""
   >
     <div slot="overlay">
-      <vaadin-context-menu-list-box
-        aria-orientation="vertical"
-        role="menu"
-      >
+      <vaadin-context-menu-list-box role="menu">
         <vaadin-context-menu-item
           aria-haspopup="false"
           aria-selected="false"

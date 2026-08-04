@@ -82,10 +82,7 @@ snapshots["menu-bar opened"] =
       slot="overlay"
       style="display: contents;"
     >
-      <vaadin-menu-bar-list-box
-        aria-orientation="vertical"
-        role="menu"
-      >
+      <vaadin-menu-bar-list-box role="menu">
         <vaadin-menu-bar-item
           aria-haspopup="false"
           aria-selected="false"

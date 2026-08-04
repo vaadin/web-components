@@ -29,13 +29,6 @@ export declare class ListMixinClass {
   selected: number | null | undefined;
 
   /**
-   * Define how items are disposed in the dom.
-   * Possible values are: `horizontal|vertical`.
-   * It also changes navigation keys from left/right to up/down.
-   */
-  orientation: 'horizontal' | 'vertical';
-
-  /**
    * Used for mixin detection because `instanceof` does not work with mixins.
    */
   protected _hasVaadinListMixin: boolean;

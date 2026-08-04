@@ -33,7 +33,7 @@ export const TabsMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__tabsItemsChanged(items)'];
+      return ['__tabsItemsChanged(items)', '__updateOrientation(items, orientation)'];
     }
 
     constructor() {
@@ -82,6 +82,24 @@ export const TabsMixin = (superClass) =>
      */
     _onResize() {
       this._updateOverflow();
+    }
+
+    /**
+     * Set `aria-orientation` on the host and `orientation` attribute on the
+     * items based on the current `orientation` value.
+     * @private
+     */
+    __updateOrientation(items, orientation) {
+      if (items) {
+        this.setAttribute('aria-orientation', orientation || 'vertical');
+        items.forEach((item) => {
+          if (orientation) {
+            item.setAttribute('orientation', orientation);
+          } else {
+            item.removeAttribute('orientation');
+          }
+        });
+      }
     }
 
     /** @private */

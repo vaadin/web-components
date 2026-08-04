@@ -58,17 +58,6 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(PolylitMix
     return listBoxStyles;
   }
 
-  static get properties() {
-    return {
-      // We don't need to define this property since super default is vertical,
-      // but we don't want it to be modified, or be shown in the API docs.
-      /** @private */
-      orientation: {
-        readOnly: true,
-      },
-    };
-  }
-
   /** @protected */
   render() {
     return html`

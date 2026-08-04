@@ -47,18 +47,6 @@ class ContextMenuListBox extends ListMixin(ThemableMixin(DirMixin(PolylitMixin(L
     return listBoxStyles;
   }
 
-  static get properties() {
-    return {
-      // We don't need to define this property since super default is vertical,
-      // but we don't want it to be modified, or be shown in the API docs.
-      /** @private */
-      orientation: {
-        type: String,
-        readOnly: true,
-      },
-    };
-  }
-
   /**
    * @return {!HTMLElement}
    * @protected

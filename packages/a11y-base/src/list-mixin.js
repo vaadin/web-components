@@ -40,17 +40,6 @@ export const ListMixin = (superClass) =>
         },
 
         /**
-         * Define how items are disposed in the dom.
-         * Possible values are: `horizontal|vertical`.
-         * It also changes navigation keys from left/right to up/down.
-         */
-        orientation: {
-          type: String,
-          reflectToAttribute: true,
-          value: '',
-        },
-
-        /**
          * A read-only list of items from which a selection can be made.
          * It is populated from the elements passed to the light DOM,
          * and updated dynamically when adding or removing items.
@@ -74,7 +63,7 @@ export const ListMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_enhanceItems(items, orientation, selected, disabled)'];
+      return ['_enhanceItems(items, selected, disabled)'];
     }
 
     constructor() {
@@ -159,18 +148,9 @@ export const ListMixin = (superClass) =>
     }
 
     /** @private */
-    _enhanceItems(items, orientation, selected, disabled) {
+    _enhanceItems(items, selected, disabled) {
       if (!disabled) {
         if (items) {
-          this.setAttribute('aria-orientation', orientation || 'vertical');
-          items.forEach((item) => {
-            if (orientation) {
-              item.setAttribute('orientation', orientation);
-            } else {
-              item.removeAttribute('orientation');
-            }
-          });
-
           // When selected is set to -1, focus the first available item.
           this._setFocusable(selected < 0 || !selected ? 0 : selected);
 
