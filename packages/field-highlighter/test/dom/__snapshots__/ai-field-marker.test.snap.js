@@ -4,7 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-ai-field-marker host default"] = 
 `<vaadin-ai-field-marker slot="ai-field-marker">
   <span
-    class="description"
+    class="description sr-only"
     id="ai-field-marker-5"
   >
     This field value was modified by AI.

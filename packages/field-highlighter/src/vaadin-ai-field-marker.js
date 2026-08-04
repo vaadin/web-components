@@ -574,7 +574,7 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
     if (describedElement) {
       const descNode = document.createElement('span');
       descNode.id = `ai-field-marker-${generateUniqueId()}`;
-      descNode.className = 'description';
+      descNode.className = 'description sr-only';
       descNode.textContent = this.__effectiveI18n.message;
       // Insert before Lit's rendered content so the node stays outside the
       // range Lit manages (and may clear) in the light-DOM render root.

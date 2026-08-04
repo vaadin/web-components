@@ -326,6 +326,24 @@ describe('ai field marker', () => {
       expect(getComputedStyle(descNode).width).to.equal('1px');
     });
 
+    it('should keep the description node hidden under conflicting document styles', async () => {
+      // A user stylesheet rule that happens to match the description node with
+      // a higher specificity must not make the screen-reader text visible.
+      const conflictingStyle = document.createElement('style');
+      conflictingStyle.textContent = 'vaadin-ai-field-marker span.description { position: static; }';
+      document.head.appendChild(conflictingStyle);
+
+      try {
+        const marker = mark(field);
+        await nextRender();
+
+        const descNode = marker.querySelector('span[id^="ai-field-marker-"]')!;
+        expect(getComputedStyle(descNode).position).to.equal('absolute');
+      } finally {
+        conflictingStyle.remove();
+      }
+    });
+
     it('should link the description to a field that has no input element', async () => {
       // Group and composite fields expose neither inputElement nor
       // focusElement; they point at the element carrying their own

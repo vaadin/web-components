@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css } from 'lit';
+import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 
 export const aiFieldMarkerHostStyles = css`
   @keyframes --vaadin-ai-field-marker-slide {
@@ -132,19 +133,8 @@ export const aiFieldMarkerStyles = css`
 
     /* The hidden AI-fill description linked to the field's input via
        aria-describedby: visually hidden but kept in the accessibility tree,
-       following the sr-only pattern from @vaadin/a11y-base. */
-    .description {
-      border: 0;
-      clip: rect(1px, 1px, 1px, 1px);
-      clip-path: inset(50%);
-      height: 1px;
-      margin: -1px;
-      overflow: hidden;
-      padding: 0;
-      position: absolute;
-      width: 1px;
-      white-space: nowrap;
-    }
+       using the sr-only styles from @vaadin/a11y-base. */
+    ${screenReaderOnly}
 
     .actions {
       display: flex;
