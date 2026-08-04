@@ -126,14 +126,14 @@ describe('ai field marker', () => {
     });
 
     it('should render an accessible badge button', () => {
-      const badge = marker.querySelector<HTMLButtonElement>('[slot="badge"]')!;
+      const badge = marker.querySelector<HTMLButtonElement>('.badge')!;
       expect(badge).to.exist;
       expect(badge.localName).to.equal('button');
       expect(badge.getAttribute('aria-label')).to.equal(DEFAULT_BADGE_LABEL);
     });
 
     it('should render a badge tooltip', () => {
-      const badge = marker.querySelector<HTMLButtonElement>('[slot="badge"]')!;
+      const badge = marker.querySelector<HTMLButtonElement>('.badge')!;
       const tooltip: Tooltip = marker.querySelector('vaadin-tooltip')!;
       expect(tooltip.getAttribute('for')).to.equal(badge.id);
       expect(tooltip.text).to.equal(DEFAULT_BADGE_TOOLTIP);
@@ -146,7 +146,7 @@ describe('ai field marker', () => {
     });
 
     it('should render the badge and revert controls as non-submitting buttons', () => {
-      expect(marker.querySelector<HTMLButtonElement>('[slot="badge"]')!.type).to.equal('button');
+      expect(marker.querySelector<HTMLButtonElement>('.badge')!.type).to.equal('button');
       expect(marker.querySelector<HTMLButtonElement>('.actions > button')!.type).to.equal('button');
     });
 
@@ -154,11 +154,11 @@ describe('ai field marker', () => {
       expect(marker.querySelector<HTMLButtonElement>('.actions > button')).to.exist;
     });
 
-    it('should assign the generated content to named slots in the shadow root', () => {
-      ['badge', 'tooltip', 'popover'].forEach((slotName) => {
-        const slot = marker.shadowRoot!.querySelector<HTMLSlotElement>(`slot[name="${slotName}"]`)!;
-        expect(slot, `${slotName} slot should exist`).to.exist;
-        expect(slot.assignedElements()).to.have.lengthOf(1);
+    it('should render the generated content as light-DOM children', () => {
+      ['.badge', 'vaadin-tooltip', 'vaadin-popover'].forEach((selector) => {
+        const piece = marker.querySelector(selector);
+        expect(piece, `${selector} should be rendered`).to.exist;
+        expect(piece!.parentElement).to.equal(marker);
       });
     });
 
@@ -166,7 +166,7 @@ describe('ai field marker', () => {
       const popover = marker.querySelector('vaadin-popover')!;
       expect(popover).to.exist;
       expect(popover.parentElement).to.equal(marker);
-      expect(popover.target).to.equal(marker.querySelector<HTMLButtonElement>('[slot="badge"]'));
+      expect(popover.target).to.equal(marker.querySelector<HTMLButtonElement>('.badge'));
       // The explanation comes before the revert control.
       const message = popover.querySelector('.message')!;
       expect(message.nextElementSibling).to.equal(popover.querySelector('.actions'));
@@ -215,7 +215,7 @@ describe('ai field marker', () => {
 
     it('should open the popover on badge click', async () => {
       const popover = marker.querySelector('vaadin-popover')!;
-      marker.querySelector<HTMLButtonElement>('[slot="badge"]')!.click();
+      marker.querySelector<HTMLButtonElement>('.badge')!.click();
       await nextRender();
       expect(popover.opened).to.be.true;
     });
@@ -224,9 +224,7 @@ describe('ai field marker', () => {
       const container = fixtureSync<HTMLElement>(`<div></div>`);
       const other = mark(container);
       await nextRender();
-      const badge = other.querySelector<HTMLButtonElement>('[slot="badge"]')!;
-      expect(badge.assignedSlot).to.be.null;
-      expect(badge.checkVisibility()).to.be.false;
+      expect(other.querySelector('.badge')).to.not.exist;
     });
   });
 
@@ -254,7 +252,7 @@ describe('ai field marker', () => {
     });
 
     it('should lay out the popover content as a column', async () => {
-      marker.querySelector<HTMLButtonElement>('[slot="badge"]')!.click();
+      marker.querySelector<HTMLButtonElement>('.badge')!.click();
       await nextRender();
 
       const overlay = popover.shadowRoot!.querySelector('vaadin-popover-overlay')!;
@@ -265,16 +263,15 @@ describe('ai field marker', () => {
     it('should move focus into the popover on open', async () => {
       const overlay = popover.shadowRoot!.querySelector('vaadin-popover-overlay')!;
       const opened = oneEvent(overlay, 'vaadin-overlay-open');
-      marker.querySelector<HTMLButtonElement>('[slot="badge"]')!.click();
+      marker.querySelector<HTMLButtonElement>('.badge')!.click();
       await opened;
 
       expect(marker.contains(document.activeElement), 'focus should move into the popover').to.be.true;
     });
 
     it('should keep the description outside the popover', () => {
-      const descNode = marker.querySelector('[slot="description"]')!;
+      const descNode = marker.querySelector('.description')!;
       expect(popover.contains(descNode)).to.be.false;
-      expect(marker.shadowRoot!.querySelector('slot[name="description"]')).to.exist;
     });
   });
 
@@ -292,14 +289,15 @@ describe('ai field marker', () => {
       expect(field.querySelector<HTMLElement>(`#${descId}`)!.textContent).to.equal('Refreshed');
     });
 
-    it('should assign the description node to its own slot', async () => {
+    it('should keep the description node out of the Lit-managed content', async () => {
       const marker = mark(field);
       await nextRender();
 
       const descNode = marker.querySelector('span[id^="ai-field-marker-"]')!;
-      expect(descNode.assignedSlot).to.exist;
-      // Not the default slot, which would show the node in the popover.
-      expect(descNode.assignedSlot!.name).to.equal('description');
+      // An update while marked must not clear the manually added node.
+      marker.i18n = { message: 'Refreshed' };
+      await nextUpdate(marker);
+      expect(descNode.parentElement).to.equal(marker);
     });
 
     it('should visually hide the description node', async () => {
@@ -369,7 +367,7 @@ describe('ai field marker', () => {
 
       expect(marker.querySelector('.message')!.textContent).to.equal('Tämä arvo on tekoälyn täyttämä');
       expect(marker.querySelector<HTMLButtonElement>('.actions > button')!.textContent).to.equal('Kumoa');
-      expect(marker.querySelector<HTMLButtonElement>('[slot="badge"]')!.getAttribute('aria-label')).to.equal(
+      expect(marker.querySelector<HTMLButtonElement>('.badge')!.getAttribute('aria-label')).to.equal(
         'Tekoälyn täyttämä',
       );
       expect(marker.querySelector('vaadin-tooltip')!.text).to.equal('Avaa tekoälyn tiedot');
@@ -392,7 +390,7 @@ describe('ai field marker', () => {
       expect(marker.querySelector('.message')!.textContent).to.equal('Only message changed');
       // revert was not configured, so it stays the built-in default.
       expect(marker.querySelector<HTMLButtonElement>('.actions > button')!.textContent).to.equal(DEFAULT_REVERT_TEXT);
-      expect(marker.querySelector<HTMLButtonElement>('[slot="badge"]')!.getAttribute('aria-label')).to.equal(
+      expect(marker.querySelector<HTMLButtonElement>('.badge')!.getAttribute('aria-label')).to.equal(
         DEFAULT_BADGE_LABEL,
       );
       expect(marker.querySelector('vaadin-tooltip')!.text).to.equal(DEFAULT_BADGE_TOOLTIP);
@@ -439,7 +437,7 @@ describe('ai field marker', () => {
 
     it('should close the popover on revert', async () => {
       const popover = marker.querySelector('vaadin-popover')!;
-      marker.querySelector<HTMLButtonElement>('[slot="badge"]')!.click();
+      marker.querySelector<HTMLButtonElement>('.badge')!.click();
       await nextRender();
       expect(popover.opened).to.be.true;
 
@@ -500,12 +498,12 @@ describe('ai field marker', () => {
     });
 
     it('should not let a badge click reach the field', () => {
-      marker.querySelector<HTMLButtonElement>('[slot="badge"]')!.click();
+      marker.querySelector<HTMLButtonElement>('.badge')!.click();
       expect(sensitiveField.openedOnClick).to.be.false;
     });
 
     it('should not let a popover click reach the field', async () => {
-      marker.querySelector<HTMLButtonElement>('[slot="badge"]')!.click();
+      marker.querySelector<HTMLButtonElement>('.badge')!.click();
       await nextRender();
 
       marker.querySelector<HTMLButtonElement>('.actions > button')!.click();
@@ -529,12 +527,12 @@ describe('ai field marker', () => {
     });
 
     it('should not propagate badge clicks to the field', () => {
-      marker.querySelector<HTMLButtonElement>('[slot="badge"]')!.click();
+      marker.querySelector<HTMLButtonElement>('.badge')!.click();
       expect(spy).to.not.be.called;
     });
 
     it('should not propagate popover clicks to the field', async () => {
-      marker.querySelector<HTMLButtonElement>('[slot="badge"]')!.click();
+      marker.querySelector<HTMLButtonElement>('.badge')!.click();
       await nextRender();
 
       marker.querySelector<HTMLButtonElement>('.actions > button')!.click();
@@ -558,7 +556,7 @@ describe('ai field marker', () => {
     it('should still open the popover on badge click', async () => {
       // Containment must not block the popover's own click trigger, which is
       // bound on the badge inside the marker.
-      marker.querySelector<HTMLButtonElement>('[slot="badge"]')!.click();
+      marker.querySelector<HTMLButtonElement>('.badge')!.click();
       await nextRender();
       expect(marker.querySelector('vaadin-popover')!.opened).to.be.true;
     });
@@ -608,15 +606,14 @@ describe('ai field marker', () => {
     });
 
     it('should stop rendering when moved to a parent without a shadow root', async () => {
-      const popover = marker.querySelector('vaadin-popover')!;
-      expect(popover.assignedSlot, 'popover should start out rendered').to.exist;
+      expect(marker.querySelector('vaadin-popover'), 'popover should start out rendered').to.exist;
 
       const container = fixtureSync<HTMLElement>(`<div></div>`);
       container.appendChild(marker);
       await nextRender();
 
-      expect(popover.assignedSlot).to.be.null;
-      expect(marker.shadowRoot!.querySelector('slot[name="badge"]')).to.not.exist;
+      expect(marker.querySelector('vaadin-popover')).to.not.exist;
+      expect(marker.querySelector('.badge')).to.not.exist;
     });
 
     it('should not accumulate description nodes when re-added', async () => {
@@ -624,7 +621,7 @@ describe('ai field marker', () => {
       field.appendChild(marker);
       await nextRender();
 
-      expect(marker.querySelectorAll('[slot="description"]')).to.have.lengthOf(1);
+      expect(marker.querySelectorAll('.description')).to.have.lengthOf(1);
     });
 
     it('should not control the field after removal', async () => {
@@ -673,7 +670,7 @@ describe('ai field marker', () => {
       field.appendChild(marker);
       await nextRender();
 
-      expect(marker.querySelector<HTMLButtonElement>('[slot="badge"]')!.assignedSlot).to.exist;
+      expect(marker.querySelector('.badge')).to.exist;
     });
   });
 
@@ -1042,7 +1039,7 @@ describe('ai field marker', () => {
       beforeEach(async () => {
         marker = mark(field);
         await nextRender();
-        badge = marker.querySelector<HTMLButtonElement>('[slot="badge"]')!;
+        badge = marker.querySelector<HTMLButtonElement>('.badge')!;
       });
 
       it('should hide the marker while the AI is working', async () => {

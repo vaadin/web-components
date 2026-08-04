@@ -68,7 +68,7 @@ export const aiFieldMarkerStyles = css`
       animation-timing-function: cubic-bezier(0.78, 0, 0.22, 1);
     }
 
-    [slot='badge'] {
+    .badge {
       all: initial;
       position: absolute;
       top: -6px;
@@ -114,11 +114,11 @@ export const aiFieldMarkerStyles = css`
       }
     }
 
-    [slot='badge']:focus-visible {
+    .badge:focus-visible {
       outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     }
 
-    [slot='popover']::part(content) {
+    > vaadin-popover::part(content) {
       display: flex;
       flex-direction: column;
       gap: var(--vaadin-gap-s);
@@ -133,7 +133,7 @@ export const aiFieldMarkerStyles = css`
     /* The hidden AI-fill description linked to the field's input via
        aria-describedby: visually hidden but kept in the accessibility tree,
        following the sr-only pattern from @vaadin/a11y-base. */
-    [slot='description'] {
+    .description {
       border: 0;
       clip: rect(1px, 1px, 1px, 1px);
       clip-path: inset(50%);

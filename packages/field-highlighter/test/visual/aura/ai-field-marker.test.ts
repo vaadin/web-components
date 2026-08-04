@@ -82,7 +82,7 @@ describe('ai-field-marker', () => {
     it('default content', async () => {
       mark();
       await nextRender();
-      field.querySelector<HTMLButtonElement>('[slot="badge"]')!.click();
+      field.querySelector<HTMLButtonElement>('.badge')!.click();
       await nextRender();
       await visualDiff(div, 'ai-marker-popover');
     });

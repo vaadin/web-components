@@ -23,18 +23,12 @@ describe('vaadin-ai-field-marker', () => {
     it('default', async () => {
       await expect(marker).dom.to.equalSnapshot();
     });
-  });
-
-  describe('shadow', () => {
-    it('default', async () => {
-      await expect(marker).shadowDom.to.equalSnapshot();
-    });
 
     it('unmarked', async () => {
       // Moved to a parent that is not a field, so there is nothing to annotate.
       fixtureSync('<div id="container"></div>').appendChild(marker);
       await nextRender();
-      await expect(marker).shadowDom.to.equalSnapshot();
+      await expect(marker).dom.to.equalSnapshot();
     });
   });
 });

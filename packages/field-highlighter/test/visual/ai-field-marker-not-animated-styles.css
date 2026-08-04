@@ -4,7 +4,7 @@
    frames instead. Zero the durations and delays to jump straight to the
    settled end state. */
 vaadin-ai-field-marker::before,
-vaadin-ai-field-marker [slot='badge'],
+vaadin-ai-field-marker .badge,
 :has(> vaadin-ai-field-marker)::part(input-field),
 :has(> vaadin-ai-field-marker)::part(group-field) {
   animation-duration: 0s !important;
