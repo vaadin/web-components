@@ -8,14 +8,20 @@ import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin
 
 export const ComboBoxOverlayMixin = (superClass) =>
   class ComboBoxOverlayMixin extends PositionMixin(superClass) {
-    static get observers() {
-      return ['_setOverlayWidth(positionTarget, opened)'];
-    }
-
     constructor() {
       super();
 
       this.requiredVerticalSpace = 200;
+    }
+
+    /** @protected */
+    willUpdate(props) {
+      super.willUpdate(props);
+
+      // Update width here so that `PositionMixin` uses correct width in `updated()`.
+      if ((props.has('opened') || props.has('positionTarget')) && this.opened && this.positionTarget) {
+        this._updateOverlayWidth();
+      }
     }
 
     /**
@@ -48,14 +54,5 @@ export const ComboBoxOverlayMixin = (superClass) =>
     /** @protected */
     _updateOverlayWidth() {
       this.style.setProperty(`--_${this.localName}-default-width`, `${this.positionTarget.offsetWidth}px`);
-    }
-
-    /** @private */
-    _setOverlayWidth(positionTarget, opened) {
-      if (positionTarget && opened) {
-        this._updateOverlayWidth();
-
-        this._updatePosition();
-      }
     }
   };
