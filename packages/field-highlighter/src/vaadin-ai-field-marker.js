@@ -14,6 +14,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { aiFieldMarkerHostStyles, aiFieldMarkerStyles } from './styles/vaadin-ai-field-marker-base-styles.js';
 
@@ -36,9 +37,6 @@ const MARKER_SLOT = 'ai-field-marker';
 /** Marks the `<style>` element the marker injects into a field's shadow root. */
 const MARKER_STYLE_ATTRIBUTE = 'ai-field-marker-styles';
 
-/** Marks the `<style>` element the marker injects into a field's root node. */
-const MARKER_ROOT_STYLE_ATTRIBUTE = 'ai-field-marker-root-styles';
-
 // The position the shimmer's mask is at, animated by the marker's keyframes.
 // Registered here rather than with an @property rule in the marker stylesheet,
 // which is injected into the field's root node: a registration only takes effect
@@ -50,30 +48,6 @@ registerCSSProperty({
   inherits: false,
   initialValue: '0px',
 });
-
-/**
- * Adds the marker styles to the field's root node, so the badge, popover and
- * working-shimmer styles apply to the field.
- *
- * Injected as a `<style>` element rather than an adopted stylesheet because
- * the themable infrastructure replaces `adoptedStyleSheets` wholesale — on a
- * Lumo stylesheet load or a theme switch — which, for a field nested in
- * another component's shadow root, would silently drop the marker styles.
- *
- * @param {HTMLElement} field
- */
-function injectMarkerRootStyles(field) {
-  const root = field.getRootNode();
-  const container = root === document ? document.head : root;
-  if (container.querySelector(`:scope > style[${MARKER_ROOT_STYLE_ATTRIBUTE}]`)) {
-    return;
-  }
-
-  const style = document.createElement('style');
-  style.setAttribute(MARKER_ROOT_STYLE_ATTRIBUTE, '');
-  style.textContent = aiFieldMarkerStyles.cssText;
-  container.appendChild(style);
-}
 
 /**
  * Adds the marker's keyframes to the field's own shadow root, where the
@@ -104,9 +78,10 @@ function injectMarkerHostStyles(field) {
  *
  * While installed, the field's own `value` accessor is replaced with one that
  * queues an assignment and applies it after the delay; a further assignment
- * supersedes a queued one. Uninstalling restores the field's own accessor but
- * leaves a queued assignment on its deadline, since it carries the value the
- * marker was working on. Call `flush()` to apply it right away instead.
+ * supersedes a queued one. Uninstalling restores the field's own accessor and
+ * applies a queued assignment right away, since it carries the value the
+ * marker was working on and nothing may land after the accessor is restored —
+ * a late-landing value would overwrite one the host has set since.
  */
 class DelayedFieldValue {
   /** The intercepted accessor, found on the field's prototype chain. */
@@ -125,12 +100,11 @@ class DelayedFieldValue {
     this.#field = field;
     this.#delay = delay;
 
-    let proto = Object.getPrototypeOf(field);
-    let descriptor;
-    while (proto && !(descriptor = Object.getOwnPropertyDescriptor(proto, 'value'))) {
-      proto = Object.getPrototypeOf(proto);
+    let descriptor = null;
+    for (let proto = Object.getPrototypeOf(field); proto && !descriptor; proto = Object.getPrototypeOf(proto)) {
+      descriptor = Object.getOwnPropertyDescriptor(proto, 'value');
     }
-    this.#descriptor = descriptor && descriptor.get && descriptor.set ? descriptor : null;
+    this.#descriptor = descriptor?.get && descriptor.set ? descriptor : null;
   }
 
   /**
@@ -169,16 +143,17 @@ class DelayedFieldValue {
       set: (value) => {
         this.#queuedValue = value;
         clearTimeout(this.#timer);
-        this.#timer = setTimeout(() => this.flush(), this.#delay);
+        this.#timer = setTimeout(() => this.#flush(), this.#delay);
       },
     });
   }
 
-  /** Restores the field's own accessor, leaving a queued value on its deadline. */
+  /** Restores the field's own accessor, applying a queued value right away. */
   uninstall() {
     if (Object.getOwnPropertyDescriptor(this.#field, 'value')) {
       delete this.#field.value;
     }
+    this.#flush();
   }
 
   /**
@@ -186,7 +161,7 @@ class DelayedFieldValue {
    * accessor, so an installed hold-back stays in place for further
    * assignments — this is also how a queued value lands on its deadline.
    */
-  flush() {
+  #flush() {
     if (this.#timer == null) {
       return;
     }
@@ -194,7 +169,7 @@ class DelayedFieldValue {
     clearTimeout(this.#timer);
     this.#timer = null;
     const value = this.#queuedValue;
-    this.#queuedValue = undefined;
+    this.#queuedValue = null;
     this.#descriptor.set.call(this.#field, value);
   }
 }
@@ -252,7 +227,7 @@ class DelayedFieldValue {
  * @extends HTMLElement
  * @private
  */
-class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
+class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitElement)))) {
   static get is() {
     return 'vaadin-ai-field-marker';
   }
@@ -399,6 +374,26 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
   }
 
   /**
+   * Override getter from `SlotStylesMixin` to insert the marker styles into
+   * the field's root node — the marker's own root node, since the marker is
+   * a child of the field — so the badge, popover and working-shimmer styles
+   * apply to the field.
+   *
+   * `SlotStylesMixin` inserts them as a `<style>` element rather than an
+   * adopted stylesheet, which matters here: the themable infrastructure
+   * replaces `adoptedStyleSheets` wholesale — on a Lumo stylesheet load or a
+   * theme switch — which, for a field nested in another component's shadow
+   * root, would silently drop the marker styles.
+   *
+   * @protected
+   * @override
+   * @return {string[]}
+   */
+  get slotStyles() {
+    return [aiFieldMarkerStyles.cssText];
+  }
+
+  /**
    * Marks the parent field as AI-filled: injects the highlight + badge +
    * popover into the field's shadow root, announces the change to screen
    * readers, and associates the explanation with the field's input.
@@ -411,7 +406,7 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
     super.connectedCallback();
 
     const parent = this.parentElement;
-    if (parent && parent.shadowRoot) {
+    if (parent?.shadowRoot) {
       this.#field = parent;
     }
 
@@ -537,7 +532,7 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
    * @param {HTMLElement} parent
    */
   #markWhenUpgraded(parent) {
-    const tagName = parent && parent.localName;
+    const tagName = parent?.localName;
     if (!tagName || !tagName.includes('-') || customElements.get(tagName)) {
       return;
     }
@@ -562,7 +557,6 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
   #markField() {
     const field = this.#field;
 
-    injectMarkerRootStyles(field);
     injectMarkerHostStyles(field);
 
     // Create a slot for the marker element inside the field's own shadow
@@ -682,7 +676,6 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
       // the restore cannot overwrite a read-only state set after this point
       // and a value still queued from the working state cannot land after it.
       if (immediate) {
-        this.#valueDelay.flush();
         this.#restoreLockedElements();
       }
       return;
@@ -692,17 +685,12 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
       return;
     }
 
-    // Stop holding back the field's value assignments. A value the AI already
-    // set stays queued so it still lands with the shimmer wind-down, unless the
-    // marker is going away, in which case it is applied right away rather than
-    // after the marker stopped annotating the field.
-    this.#valueDelay.uninstall();
-    if (immediate) {
-      this.#valueDelay.flush();
-    }
-
     field.removeAttribute('ai-working');
 
+    // The value hold-back stays installed for the wind-down: a queued value
+    // still lands on its own deadline, and a value the host sets before the
+    // wind-down finishes supersedes a queued one instead of being overwritten
+    // by it when its deadline passes. The restore then lifts the hold-back.
     if (immediate) {
       this.#restoreLockedElements();
     } else {
@@ -710,10 +698,17 @@ class AiFieldMarker extends I18nMixin(DirMixin(PolylitMixin(LitElement))) {
     }
   }
 
-  /** Restores the read-only state captured when the working state was entered. */
+  /**
+   * Restores the read-only state captured when the working state was entered
+   * and stops holding back the field's value assignments, applying a value
+   * still queued at this point right away — rather than on its deadline, after
+   * the marker stopped controlling the field.
+   */
   #restoreLockedElements() {
     clearTimeout(this.#restoreTimer);
     this.#restoreTimer = null;
+
+    this.#valueDelay.uninstall();
 
     const locked = this.#lockedElements;
     this.#lockedElements = null;

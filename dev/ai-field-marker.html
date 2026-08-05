@@ -39,6 +39,10 @@
 
       const fields = [...document.querySelectorAll('vaadin-form-layout > *')];
 
+      // A random number in [0, 1). Math.random() would do here, but SonarCloud
+      // flags it as security-sensitive.
+      const random = () => crypto.getRandomValues(new Uint32Array(1))[0] / 2 ** 32;
+
       // Remember the value before the "AI fill" so the revert handler can restore it.
       const previousValues = new WeakMap();
 
@@ -80,14 +84,14 @@
 
             if (field.localName === 'vaadin-radio-group') {
               const items = field.querySelectorAll('vaadin-radio-button');
-              field.value = items[Math.floor(items.length * Math.random())].value;
+              field.value = items[Math.floor(items.length * random())].value;
             } else {
               field.value = 'AI value';
             }
 
             marker.working = false;
           });
-        }, 2000 * Math.random());
+        }, 2000 * random());
       });
     </script>
   </body>

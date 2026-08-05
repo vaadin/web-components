@@ -1140,10 +1140,27 @@ describe('ai field marker', () => {
         expect(field.value).to.equal('Host value');
       });
 
-      it('should restore the field value accessor when working ends', async () => {
+      it('should restore the field value accessor after the shimmer wind-down', async () => {
         marker.working = false;
         await nextUpdate(marker);
+        await clock!.tickAsync(500);
         expect(Object.getOwnPropertyDescriptor(field, 'value')).to.not.exist;
+      });
+
+      it('should not overwrite a value set during the wind-down with a queued value', async () => {
+        // The AI fill is still queued when working ends; a newer value the
+        // host sets during the shimmer wind-down must supersede it instead of
+        // being clobbered when the queued value reaches its deadline.
+        field.value = 'AI filled';
+        marker.working = false;
+        await nextUpdate(marker);
+
+        field.value = 'Host value';
+        await clock!.tickAsync(500);
+        expect(field.value).to.equal('Host value');
+
+        await clock!.tickAsync(500);
+        expect(field.value).to.equal('Host value');
       });
 
       it('should keep delaying value sets after a queued value lands', async () => {

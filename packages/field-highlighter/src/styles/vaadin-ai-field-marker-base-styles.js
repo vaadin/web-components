@@ -43,8 +43,8 @@ export const aiFieldMarkerStyles = css`
 
   :where(vaadin-ai-field-marker) {
     display: contents;
-    --color1: light-dark(#932fffd9, #bc64ff);
-    --color2: light-dark(#004cffcc, #539aff);
+    --_vaadin-ai-field-marker-color-1: light-dark(#932fffd9, #bc64ff);
+    --_vaadin-ai-field-marker-color-2: light-dark(#004cffcc, #539aff);
 
     &::before {
       content: '';
@@ -53,10 +53,10 @@ export const aiFieldMarkerStyles = css`
       border-radius: 9px;
       z-index: -1;
       pointer-events: none;
-      background-color: color-mix(in srgb, var(--color2) 30%, transparent);
+      background-color: color-mix(in srgb, var(--_vaadin-ai-field-marker-color-2) 30%, transparent);
       background-image:
-        radial-gradient(66.92% 123.25% at 100% 88.78%, var(--color1) 0%, transparent 100%),
-        radial-gradient(42.57% 69.91% at 14.85% 33.33%, var(--color2) 0%, transparent 100%);
+        radial-gradient(66.92% 123.25% at 100% 88.78%, var(--_vaadin-ai-field-marker-color-1) 0%, transparent 100%),
+        radial-gradient(42.57% 69.91% at 14.85% 33.33%, var(--_vaadin-ai-field-marker-color-2) 0%, transparent 100%);
       opacity: 0.16;
       mask-image: linear-gradient(
         90deg,
@@ -183,6 +183,7 @@ export const aiFieldMarkerStyles = css`
 
   [ai-working],
   :has(> vaadin-ai-field-marker)::part(input-field),
+  :has(> vaadin-ai-field-marker)::part(input-fields),
   :has(> vaadin-ai-field-marker)::part(group-field) {
     mask-image: linear-gradient(
       90deg,
