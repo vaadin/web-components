@@ -74,7 +74,8 @@
   },
   "resolutions": {
     "@web/test-runner-commands": "^1.0.1",
-    "playwright": "~1.62.0"
+    "playwright": "~1.62.0",
+    "brace-expansion": "2.1.2"
   },
   "lint-staged": {
     "*.{js,ts}": [
