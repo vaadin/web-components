@@ -46,7 +46,9 @@ export declare class FieldMixinClass {
 
   /**
    * A space-separated list of IDs referencing the elements that
-   * describe the component for screen reader users.
+   * describe the component for screen reader users. The referenced
+   * elements are announced in addition to the helper text and
+   * the error message.
    *
    * @attr {string} accessible-description-ref
    */
