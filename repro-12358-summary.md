@@ -13,7 +13,7 @@
 - **Reproduced on:** vaadin/web-components @ `main` (25.3.0-alpha8)
 - **Present on main?:** yes (still broken)
 - **Theme / Browser:** Lumo / Chromium
-- **Screenshot**: ![virtual-list is empty inside form-layout, but renders in the control cases](https://raw.githubusercontent.com/vaadin/web-components/<commit-sha>/repro-12358.png)
+- **Screenshot**: ![virtual-list is empty inside form-layout, but renders in the control cases](https://raw.githubusercontent.com/vaadin/web-components/43c9be8f2f7b53cc1d6292106adff539e4d65bae/repro-12358.png)
 
 ## Observed behavior
 
