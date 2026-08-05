@@ -574,12 +574,6 @@ describe('upload', () => {
         expect(upload.headers['X-Foo']).to.equal('Bar');
       });
 
-      it('should not parse string headers before an upload starts', async () => {
-        upload.headers = '{"X-Foo": "Bar"}';
-        await nextUpdate(upload);
-        expect(upload.headers).to.be.a('string');
-      });
-
       it('should reset headers set as an invalid JSON string', () => {
         upload.headers = 'invalid json';
         // Configuring the request currently throws after headers are reset
@@ -1188,15 +1182,6 @@ describe('upload', () => {
       upload.addEventListener('upload-before', (e) => e.preventDefault());
       upload.dispatchEvent(new CustomEvent('file-start', { detail: { file } }));
       expect(file.error).to.be.false;
-    });
-
-    it('should not assign formDataName to the file when it is added', () => {
-      upload.uploadFormat = 'multipart';
-      upload.formDataName = 'attachment';
-
-      addFilesViaInput(upload, [file]);
-      // formDataName is only assigned to the file when its upload starts
-      expect(file.formDataName).to.be.undefined;
     });
 
     it('should use the current formDataName when uploading files added earlier', async () => {

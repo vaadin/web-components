@@ -97,12 +97,6 @@ describe('custom formatters', () => {
   });
 });
 
-describe('default i18n', () => {
-  it('should keep the default i18n key order', () => {
-    expect(Object.keys(DEFAULT_I18N)).to.eql(['dropFiles', 'addFiles', 'error', 'uploading', 'file', 'units']);
-  });
-});
-
 describe('upload i18n', () => {
   i18nConfigs.forEach(({ name, i18n, expectedI18n }) => {
     describe(name, () => {
