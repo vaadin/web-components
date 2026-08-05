@@ -111,6 +111,7 @@ assertType<DatePickerI18n>({ cancel: 'cancel' });
 assertType<DatePickerDateRange>({ start: { year: 2024, month: 0, day: 1 }, end: { year: 2024, month: 0, day: 31 } });
 assertType<DatePickerDateMetadata>({ year: 2024, month: 0, day: 1 });
 assertType<DatePickerDateMetadata>({ year: 2024, month: 0, day: 1, disabled: true });
+assertType<() => void>(datePicker.clearCache);
 assertType<DatePickerDateMetadataProvider>((range) => {
   assertType<DatePickerDate>(range.start);
   assertType<DatePickerDate>(range.end);

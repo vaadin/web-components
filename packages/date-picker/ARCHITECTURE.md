@@ -18,13 +18,17 @@ further metadata extends the same entry shape.
 an unset property as `undefined` does not look like a change. Assigning a new function resets the cache.
 Callers are expected to keep a stable reference instead of passing a fresh function on every update.
 
+`clearCache()` exists because of that reference comparison: re-fetching after the data behind the provider
+changed would otherwise mean handing over a new function, which conflates "ask again" with "ask something
+else". The two are the same operation internally, and differ only in whether the function is replaced.
+
 ## Where the cache lives
 
 The date-picker element owns the controller, not the overlay content — which exists only once the overlay
 has been opened. Keeping it on the element is what makes the cache survive opening and closing, and a value
 can be set or typed without the overlay ever being opened. Checking such a value against the provider is
-what the ownership is for; the field's validity does not consult the provider yet, so for now the cache is
-filled only once the overlay has been opened.
+what the ownership is for: setting or typing a value loads the month holding it even if the overlay is
+never opened (see [When a value counts as valid](#when-a-value-counts-as-valid)).
 
 The month calendars therefore read a controller they do not own. That is why change notification is
 explicit rather than a property assignment (see [How consumers are notified](#how-consumers-are-notified)).
@@ -82,9 +86,11 @@ provider afterwards. Reopening does not change what the calendars are configured
 debounced load; the cache survives close and reopen, so there is usually nothing left to fetch.
 
 The visible range is also refilled when the cache is dropped, which nothing else would ask for again. That
-happens where the cache is dropped, on a provider change, and deliberately not from the controller's
-notification: a month whose request failed becomes missing again, so refilling on every notification would
-make a provider that throws or rejects retry without ever stopping.
+is done at each of the two places that drop it — a provider change and `clearCache()` — and deliberately
+not from the controller's notification: a month whose request failed is dropped and so becomes missing
+again, and refilling on every notification would make a provider that throws or rejects retry without ever
+stopping. Both places also reload the month holding the value, which the overlay does not cover while it
+is closed.
 
 ## What the cache holds
 
@@ -118,11 +124,10 @@ true if a per-month refresh is ever added.
 The controller's `isDateDisabled` is true when the date's month is resolved **and** its metadata says so. A
 date whose month is still being fetched is not disabled; it is re-checked when the month resolves.
 
-Being optimistic and correcting afterwards keeps rendering and selection consistent with each other,
-because both read the same predicate; validation is meant to join them and does not consult the provider
-yet. The alternative — treating an unresolved date as unusable — would make the whole visible calendar go
-dead while a slow provider answers, and report a value invalid on every fresh load, before anything is
-known about it.
+Being optimistic and correcting afterwards keeps rendering, selection and validation consistent with each
+other, because all three read the same predicate. The alternative — treating an unresolved date as unusable
+— would make the whole visible calendar go dead while a slow provider answers, and report a value invalid on
+every fresh load, before anything is known about it.
 
 Dates in a month that is still being fetched render with a `loading` part while the spinner is shown, but
 they stay selectable. The cache calls such a month `pending` and the part is named for what the user sees,
@@ -147,8 +152,31 @@ predicate above already says about them.
 A date picked from a pending month is committed straight away. Holding the overlay open until the answer
 arrived would reintroduce blocking at the last moment, and leave the overlay stuck open on a provider that
 never answers. The window is narrow: reaching a pending month means navigating into a block that has not
-been loaded yet and clicking before it answers. Correcting such a commit once the month resolves needs
-validation to consult the provider, which it does not do yet.
+been loaded yet and clicking before it answers. Such a commit is corrected once the month resolves, by the
+re-validation below reporting the value invalid.
+
+## When a value counts as valid
+
+Validity reads the same predicate, so what the calendar refuses to select is what the field reports as
+invalid. A value can also be set programmatically or typed without the overlay ever opening, and nothing
+would have asked the provider about its month, so setting one loads that month on its own.
+
+**The value is valid until the provider says otherwise.** While the month is on its way the date counts as
+allowed, and validation runs again once the answer arrives. `checkValidity()` is therefore time-dependent:
+it can report a value as valid and then invalid a moment later. The alternative — treating an unanswered
+date as invalid — would flash an error on every fresh load, before anything is known about the value, which
+is the failure this window exists to avoid.
+
+Re-validation is driven from the host callback rather than from the request, because only the callback
+knows the month has arrived. It is armed when the load starts and disarmed when it fires — and re-decided
+on every value and provider change, so clearing the value or removing the provider mid-flight disarms it.
+An answer therefore never re-validates a value that was not waiting for it. Removing the provider is the
+one change with no answer to wait for: it lifts a constraint, so the value is re-checked right away. The
+callback runs whether or not the overlay was ever opened; the parts that update the spinner and the today
+button are the ones that need it open.
+
+A value whose month resolved while the field was detached is validated when it is attached again, since the
+controller re-reports its state on reconnect and the armed flag is still set.
 
 ## How consumers are notified
 

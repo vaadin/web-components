@@ -1,10 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enter, fixtureSync, listenOnce, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, nextRender, nextUpdate, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import { DateMetadataController } from '../src/vaadin-date-metadata-controller.js';
 import { formatISODate } from '../src/vaadin-date-picker-helper.js';
-import { getCalendars, getDateCell, getDateCells, getMonthCalendar, open, setInputValue } from './helpers.js';
+import { getCalendars, getDateCell, getDateCells, getMonthCalendar, open } from './helpers.js';
 
 describe('dateMetadataProvider integration', () => {
   let datePicker, overlayContent, today, year, month;
@@ -645,25 +645,6 @@ describe('dateMetadataProvider integration', () => {
       await nextRender();
 
       expect(provider).to.be.called;
-    });
-  });
-
-  describe('validity is not checked against the provider yet', () => {
-    // Pins the postponed gap rather than desired behaviour: these expectations are meant to change
-    // when validation starts consulting the provider.
-    it('should accept a typed provider-disabled date as valid', async () => {
-      datePicker.dateMetadataProvider = disableFifteenth;
-      datePicker.autoOpenDisabled = true;
-      await nextRender();
-
-      const disabledDate = new Date(year, month, 15);
-      setInputValue(datePicker, `${month + 1}/15/${year}`);
-      enter(datePicker.inputElement);
-      await nextRender();
-
-      expect(datePicker.value).to.equal(formatISODate(disabledDate));
-      expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.invalid).to.be.false;
     });
   });
 

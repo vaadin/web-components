@@ -299,11 +299,16 @@ export declare class DatePickerMixinClass {
    *
    * `disabled` from the metadata is combined with `min`, `max` and `isDateDisabled`: a date is
    * disabled if it is out of the min/max range, or `isDateDisabled` returns `true`, or its metadata
-   * marks it disabled. That decides what the calendar renders as disabled and what can be selected;
-   * the field's validity is not yet checked against the provider.
+   * marks it disabled. That decides what the calendar renders as disabled, what can be selected, and
+   * whether the field is valid.
    *
-   * Keep a stable reference to the function; assigning a new one clears the cache and re-fetches
-   * every visible range.
+   * A value is checked against the provider even if the overlay is never opened, which loads the
+   * month holding it. Until that month answers the value is valid, and it is re-validated once the
+   * answer arrives, so `checkValidity()` can report a value as valid and then invalid.
+   *
+   * Keep a stable reference to the function. Assigning a new function clears the cache and
+   * re-fetches every visible range. To re-fetch while keeping the same function, because the data
+   * behind it changed, call `clearCache()`.
    */
   dateMetadataProvider: DatePickerDateMetadataProvider | null | undefined;
 
@@ -316,4 +321,9 @@ export declare class DatePickerMixinClass {
    * Closes the dropdown.
    */
   close(): void;
+
+  /**
+   * Clears the `dateMetadataProvider` cache and reloads the date metadata.
+   */
+  clearCache(): void;
 }
