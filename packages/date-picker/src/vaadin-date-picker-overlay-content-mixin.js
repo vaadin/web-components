@@ -194,11 +194,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       if (props.has('loading')) {
         // Mark the calendar region as busy while data is being loaded so assistive technology knows
         // the content is still updating.
-        if (this.loading) {
-          this.setAttribute('aria-busy', 'true');
-        } else {
-          this.removeAttribute('aria-busy');
-        }
+        setOrRemoveAttribute(this, 'aria-busy', this.loading);
       }
 
       if (props.has('i18n')) {
