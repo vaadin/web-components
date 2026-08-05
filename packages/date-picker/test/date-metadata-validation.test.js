@@ -23,119 +23,118 @@ describe('dateMetadataProvider validation', () => {
     };
   }
 
+  function spyProvider() {
+    return sinon.stub().returns([]);
+  }
+
   beforeEach(async () => {
     datePicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
     await nextRender();
   });
 
-  describe('a value the provider disables', () => {
-    it('should report the value invalid once its month resolves', async () => {
-      datePicker.dateMetadataProvider = disableFifteenth();
-      datePicker.value = '2024-01-15';
-      await aTimeout(0);
+  it('should report value disabled by the provider as invalid', async () => {
+    datePicker.dateMetadataProvider = disableFifteenth();
+    datePicker.value = '2024-01-15';
+    await aTimeout(0);
 
-      expect(datePicker.checkValidity()).to.be.false;
-      expect(datePicker.invalid).to.be.true;
-    });
-
-    it('should report the value valid while its month is still being fetched', async () => {
-      datePicker.dateMetadataProvider = () => new Promise(() => {});
-      datePicker.value = '2024-01-15';
-      await aTimeout(0);
-
-      // Allowed until the provider says otherwise, so a slow provider does not flash an error.
-      expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.invalid).to.be.false;
-    });
-
-    it('should report a value the provider allows as valid', async () => {
-      datePicker.dateMetadataProvider = disableFifteenth();
-      datePicker.value = '2024-01-16';
-      await aTimeout(0);
-
-      expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.invalid).to.be.false;
-    });
-
-    it('should not consult a provider that is not set', async () => {
-      datePicker.value = '2024-01-15';
-      await aTimeout(0);
-
-      expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.invalid).to.be.false;
-    });
+    expect(datePicker.checkValidity()).to.be.false;
+    expect(datePicker.invalid).to.be.true;
   });
 
-  describe('without opening the overlay', () => {
-    it('should ask the provider for the month holding a value that is set', async () => {
-      const provider = sinon.stub().returns([]);
-      datePicker.dateMetadataProvider = provider;
-      provider.resetHistory();
+  it('should report value allowed by the provider as valid', async () => {
+    datePicker.dateMetadataProvider = disableFifteenth();
+    datePicker.value = '2024-01-16';
+    await aTimeout(0);
 
-      datePicker.value = '2024-01-15';
-      await aTimeout(0);
+    expect(datePicker.checkValidity()).to.be.true;
+    expect(datePicker.invalid).to.be.false;
+  });
 
-      expect(provider).to.be.calledOnce;
-      // Requests cover whole blocks, so the range is the calendar year holding the value.
-      const range = provider.firstCall.args[0];
-      expect(range.start).to.eql({ year: 2024, month: 0, day: 1 });
-      expect(range.end).to.eql({ year: 2024, month: 11, day: 31 });
-    });
+  it('should report value as valid when the provider is not set', async () => {
+    datePicker.value = '2024-01-15';
+    await aTimeout(0);
 
-    it('should ask for the month of a value set after the provider settled', async () => {
-      const provider = sinon.stub().returns([]);
-      datePicker.dateMetadataProvider = provider;
-      datePicker.value = '2024-01-15';
-      await aTimeout(0);
-      provider.resetHistory();
+    expect(datePicker.checkValidity()).to.be.true;
+    expect(datePicker.invalid).to.be.false;
+  });
 
-      // Far outside the months loaded for the first value, so nothing covers it yet.
-      datePicker.value = '2030-06-10';
-      await aTimeout(0);
+  it('should validate user input value against the provider', async () => {
+    datePicker.autoOpenDisabled = true;
+    datePicker.dateMetadataProvider = disableFifteenth();
+    await nextRender();
 
-      expect(provider).to.be.calledOnce;
-    });
+    setInputValue(datePicker, '1/15/2024');
+    await aTimeout(0);
 
-    it('should report a value set after the provider settled as invalid', async () => {
-      datePicker.dateMetadataProvider = disableFifteenth();
-      datePicker.value = '2024-01-16';
-      await aTimeout(0);
-      expect(datePicker.invalid).to.be.false;
+    expect(datePicker.checkValidity()).to.be.false;
+  });
 
-      datePicker.value = '2030-06-15';
-      await aTimeout(0);
+  it('should request range including the value from the provider', async () => {
+    datePicker.dateMetadataProvider = spyProvider();
+    datePicker.value = '2024-01-15';
+    await aTimeout(0);
 
-      expect(datePicker.invalid).to.be.true;
-    });
+    expect(datePicker.dateMetadataProvider).to.be.calledOnce;
+    // Requests cover whole blocks, so the range is the calendar year holding the value.
+    const range = datePicker.dateMetadataProvider.firstCall.args[0];
+    expect(range.start).to.eql({ year: 2024, month: 0, day: 1 });
+    expect(range.end).to.eql({ year: 2024, month: 11, day: 31 });
+  });
 
-    it('should not ask again for a value in an already loaded month', async () => {
-      const provider = sinon.stub().returns([]);
-      datePicker.dateMetadataProvider = provider;
-      datePicker.value = '2024-01-15';
-      await aTimeout(0);
-      provider.resetHistory();
+  it('should request metadata again on value set after the provider settled', async () => {
+    datePicker.dateMetadataProvider = spyProvider();
+    datePicker.value = '2024-01-15';
+    await aTimeout(0);
+    datePicker.dateMetadataProvider.resetHistory();
 
-      datePicker.value = '2024-01-20';
-      await aTimeout(0);
+    datePicker.value = '2030-06-10';
+    await aTimeout(0);
 
-      expect(provider).to.not.be.called;
-    });
+    expect(datePicker.dateMetadataProvider).to.be.calledOnce;
+  });
 
-    it('should validate a typed value against the provider', async () => {
-      datePicker.autoOpenDisabled = true;
-      datePicker.dateMetadataProvider = disableFifteenth();
-      await nextRender();
+  it('should report value set after the provider settled as invalid', async () => {
+    datePicker.dateMetadataProvider = disableFifteenth();
+    datePicker.value = '2024-01-16';
+    await aTimeout(0);
+    expect(datePicker.invalid).to.be.false;
 
-      setInputValue(datePicker, '1/15/2024');
-      await aTimeout(0);
+    datePicker.value = '2030-06-15';
+    await aTimeout(0);
 
-      expect(datePicker.checkValidity()).to.be.false;
-    });
+    expect(datePicker.invalid).to.be.true;
+  });
+
+  it('should not request again if a value changed is within loaded range', async () => {
+    datePicker.dateMetadataProvider = spyProvider();
+    datePicker.value = '2024-01-15';
+    await aTimeout(0);
+    datePicker.dateMetadataProvider.resetHistory();
+
+    datePicker.value = '2024-01-20';
+    await aTimeout(0);
+
+    expect(datePicker.dateMetadataProvider).to.not.be.called;
+  });
+
+  it('should not validate again when an unrelated month resolves', async () => {
+    datePicker.dateMetadataProvider = disableFifteenth();
+    datePicker.value = '2024-01-15';
+    await aTimeout(0);
+
+    const validated = sinon.spy();
+    datePicker.addEventListener('validated', validated);
+
+    // A month far from the value, so nothing about the value has changed.
+    datePicker._dateMetadataController.ensureRangeLoaded(new Date(2030, 5, 1), new Date(2030, 5, 1));
+    await aTimeout(0);
+
+    expect(validated).to.not.be.called;
   });
 
   describe('provider changes', () => {
     it('should re-validate the value against a new provider', async () => {
-      datePicker.dateMetadataProvider = () => [];
+      datePicker.dateMetadataProvider = spyProvider();
       datePicker.value = '2024-01-15';
       await aTimeout(0);
       expect(datePicker.invalid).to.be.false;
@@ -152,7 +151,7 @@ describe('dateMetadataProvider validation', () => {
       await aTimeout(0);
       expect(datePicker.invalid).to.be.true;
 
-      datePicker.dateMetadataProvider = () => [];
+      datePicker.dateMetadataProvider = spyProvider();
       await aTimeout(0);
 
       expect(datePicker.invalid).to.be.false;
@@ -172,30 +171,32 @@ describe('dateMetadataProvider validation', () => {
     });
   });
 
-  describe('no redundant validation', () => {
-    it('should not validate again when an unrelated month resolves', async () => {
-      datePicker.dateMetadataProvider = disableFifteenth();
+  describe('async provider', () => {
+    let pending;
+
+    // Resolves every request made so far, so a test controls when the answers arrive.
+    function resolveProvider(dates) {
+      pending.splice(0).forEach((resolve) => resolve(dates));
+    }
+
+    beforeEach(() => {
+      pending = [];
+      datePicker.dateMetadataProvider = () =>
+        new Promise((resolve) => {
+          pending.push(resolve);
+        });
+    });
+
+    it('should report the value valid while its month is still being fetched', async () => {
       datePicker.value = '2024-01-15';
       await aTimeout(0);
 
-      const validated = sinon.spy();
-      datePicker.addEventListener('validated', validated);
-
-      // A month far from the value, so nothing about the value has changed.
-      datePicker._dateMetadataController.ensureRangeLoaded(new Date(2030, 5, 1), new Date(2030, 5, 1));
-      await aTimeout(0);
-
-      expect(validated).to.not.be.called;
+      // Allowed until the provider says otherwise, so a slow provider does not flash an error.
+      expect(datePicker.checkValidity()).to.be.true;
+      expect(datePicker.invalid).to.be.false;
     });
-  });
 
-  describe('detached while awaiting the provider', () => {
     it('should validate the value once the field is attached again', async () => {
-      let resolveProvider;
-      datePicker.dateMetadataProvider = () =>
-        new Promise((resolve) => {
-          resolveProvider = resolve;
-        });
       datePicker.value = '2024-01-15';
       await aTimeout(0);
 
@@ -211,15 +212,8 @@ describe('dateMetadataProvider validation', () => {
 
       expect(datePicker.invalid).to.be.true;
     });
-  });
 
-  describe('value cleared while awaiting the provider', () => {
-    it('should not report an empty value invalid', async () => {
-      let resolveProvider;
-      datePicker.dateMetadataProvider = () =>
-        new Promise((resolve) => {
-          resolveProvider = resolve;
-        });
+    it('should not report a value cleared before the answer arrives invalid', async () => {
       datePicker.value = '2024-01-15';
       await aTimeout(0);
 
@@ -232,17 +226,12 @@ describe('dateMetadataProvider validation', () => {
     });
 
     it('should not re-validate when a later answer arrives for a value in a loaded month', async () => {
-      const pending = [];
-      datePicker.dateMetadataProvider = () =>
-        new Promise((resolve) => {
-          pending.push(resolve);
-        });
       datePicker.value = '2024-01-15';
       await aTimeout(0);
 
       // Cleared before the answer arrives, so nothing waits for it anymore.
       datePicker.value = '';
-      pending.splice(0).forEach((resolve) => resolve([]));
+      resolveProvider([]);
       await aTimeout(0);
 
       // A value in the month that just loaded needs no request of its own.
@@ -254,7 +243,7 @@ describe('dateMetadataProvider validation', () => {
 
       // An answer for months far from the value must not re-validate it.
       datePicker._dateMetadataController.ensureRangeLoaded(new Date(2030, 5, 1), new Date(2030, 5, 1));
-      pending.splice(0).forEach((resolve) => resolve([]));
+      resolveProvider([]);
       await aTimeout(0);
 
       expect(validated).to.not.be.called;
