@@ -703,11 +703,27 @@ describe('upload', () => {
         expect(renderSpy).to.be.called;
       });
 
-      it('should render the file list only once when a file is added', () => {
+      it('should not render the file list synchronously when a file is added', () => {
         upload.noAuto = true;
         const renderSpy = sinon.spy(upload._fileList, 'requestContentUpdate');
         addFilesViaInput(upload, [file]);
-        expect(renderSpy).to.be.calledOnce;
+        // The file list is only updated through the files property observer
+        expect(renderSpy).to.not.be.called;
+      });
+
+      it('should not render the file list synchronously when files are assigned', () => {
+        const renderSpy = sinon.spy(upload._fileList, 'requestContentUpdate');
+        upload.files = [file];
+        // The file list is only updated through the files property observer
+        expect(renderSpy).to.not.be.called;
+      });
+
+      it('should render the file list when a previously assigned file is queued', () => {
+        upload.files = [file];
+        const renderSpy = sinon.spy(upload._fileList, 'requestContentUpdate');
+        upload.addEventListener('upload-request', (e) => e.preventDefault());
+        upload.uploadFiles(file);
+        expect(renderSpy).to.be.called;
       });
 
       it('should render the file list when the upload starts', () => {
@@ -1174,12 +1190,13 @@ describe('upload', () => {
       expect(file.error).to.be.false;
     });
 
-    it('should assign formDataName to the file when it is added', () => {
+    it('should not assign formDataName to the file when it is added', () => {
       upload.uploadFormat = 'multipart';
       upload.formDataName = 'attachment';
 
       addFilesViaInput(upload, [file]);
-      expect(file.formDataName).to.equal('attachment');
+      // formDataName is only assigned to the file when its upload starts
+      expect(file.formDataName).to.be.undefined;
     });
 
     it('should use the current formDataName when uploading files added earlier', async () => {
