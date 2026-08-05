@@ -773,20 +773,12 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _dragoverChanged(dragover) {
-      if (dragover) {
-        this.setAttribute('dragover', dragover);
-      } else {
-        this.removeAttribute('dragover');
-      }
+      setOrRemoveAttribute(this, 'dragover', dragover);
     }
 
     /** @private */
     _dragoverValidChanged(dragoverValid) {
-      if (dragoverValid) {
-        this.setAttribute('dragover-valid', dragoverValid);
-      } else {
-        this.removeAttribute('dragover-valid');
-      }
+      setOrRemoveAttribute(this, 'dragover-valid', dragoverValid);
     }
 
     /** @private */
