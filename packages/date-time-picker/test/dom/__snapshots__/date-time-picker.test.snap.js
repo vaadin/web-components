@@ -571,43 +571,6 @@ snapshots["vaadin-date-time-picker host error"] =
 `;
 /* end snapshot vaadin-date-time-picker host error */
 
-snapshots["vaadin-date-time-picker shadow default"] = 
-`<div class="vaadin-date-time-picker-container">
-  <div part="label">
-    <slot name="label">
-    </slot>
-    <span
-      aria-hidden="true"
-      part="required-indicator"
-    >
-    </span>
-  </div>
-  <div part="input-fields">
-    <slot
-      id="dateSlot"
-      name="date-picker"
-    >
-    </slot>
-    <slot
-      id="timeSlot"
-      name="time-picker"
-    >
-    </slot>
-  </div>
-  <div part="helper-text">
-    <slot name="helper">
-    </slot>
-  </div>
-  <div part="error-message">
-    <slot name="error-message">
-    </slot>
-  </div>
-</div>
-<slot name="tooltip">
-</slot>
-`;
-/* end snapshot vaadin-date-time-picker shadow default */
-
 snapshots["vaadin-date-time-picker host accessibleDescriptionRef"] = 
 `<vaadin-date-time-picker
   aria-describedby="accessible-description-ref-0"
@@ -681,4 +644,41 @@ snapshots["vaadin-date-time-picker host accessibleDescriptionRef"] =
 </vaadin-date-time-picker>
 `;
 /* end snapshot vaadin-date-time-picker host accessibleDescriptionRef */
+
+snapshots["vaadin-date-time-picker shadow default"] = 
+`<div class="vaadin-date-time-picker-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <div part="input-fields">
+    <slot
+      id="dateSlot"
+      name="date-picker"
+    >
+    </slot>
+    <slot
+      id="timeSlot"
+      name="time-picker"
+    >
+    </slot>
+  </div>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+<slot name="tooltip">
+</slot>
+`;
+/* end snapshot vaadin-date-time-picker shadow default */
 

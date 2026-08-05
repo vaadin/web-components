@@ -237,6 +237,32 @@ snapshots["vaadin-checkbox host error"] =
 `;
 /* end snapshot vaadin-checkbox host error */
 
+snapshots["vaadin-checkbox host accessibleDescriptionRef"] = 
+`<vaadin-checkbox has-value="">
+  <label
+    for="input-vaadin-checkbox-3"
+    id="label-vaadin-checkbox-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-checkbox-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-describedby="accessible-description-ref-0"
+    id="input-vaadin-checkbox-3"
+    slot="input"
+    tabindex="0"
+    type="checkbox"
+    value="on"
+  >
+</vaadin-checkbox>
+`;
+/* end snapshot vaadin-checkbox host accessibleDescriptionRef */
+
 snapshots["vaadin-checkbox shadow default"] = 
 `<div class="vaadin-checkbox-container">
   <div
@@ -265,30 +291,4 @@ snapshots["vaadin-checkbox shadow default"] =
 </slot>
 `;
 /* end snapshot vaadin-checkbox shadow default */
-
-snapshots["vaadin-checkbox host accessibleDescriptionRef"] = 
-`<vaadin-checkbox has-value="">
-  <label
-    for="input-vaadin-checkbox-3"
-    id="label-vaadin-checkbox-0"
-    slot="label"
-  >
-  </label>
-  <div
-    hidden=""
-    id="error-message-vaadin-checkbox-2"
-    slot="error-message"
-  >
-  </div>
-  <input
-    aria-describedby="accessible-description-ref-0"
-    id="input-vaadin-checkbox-3"
-    slot="input"
-    tabindex="0"
-    type="checkbox"
-    value="on"
-  >
-</vaadin-checkbox>
-`;
-/* end snapshot vaadin-checkbox host accessibleDescriptionRef */
 
