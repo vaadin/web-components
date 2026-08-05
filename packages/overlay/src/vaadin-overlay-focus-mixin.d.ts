@@ -16,8 +16,8 @@ export declare class OverlayFocusMixinClass {
    * content until the overlay is closed.
    *
    * Focus moves to the first tabbable element in the tab order. This
-   * can be the overlay itself if it is tabbable and comes first in
-   * the tab order.
+   * can be the overlay itself if it has `tabindex` attribute set to `0`
+   * on the host element or the `overlay` shadow DOM part.
    *
    * @attr {boolean} focus-trap
    */
@@ -27,8 +27,8 @@ export declare class OverlayFocusMixinClass {
    * Set to true to move focus into the overlay automatically on open.
    *
    * Focus moves to the first tabbable element in the tab order. This
-   * can be the overlay itself if it is tabbable and comes first in
-   * the tab order.
+   * can be the overlay itself if it has `tabindex` attribute set to `0`
+   * on the host element or the `overlay` shadow DOM part.
    */
   autofocus: boolean;
 
