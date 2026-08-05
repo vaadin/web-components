@@ -496,8 +496,7 @@ export const DatePickerMixin = (subclass) =>
       if (props.has('dateMetadataProvider')) {
         this._dateMetadataController.setProvider(this.dateMetadataProvider);
         this.__reloadDateMetadata();
-        // Removing the provider lifts its constraint, and with no provider there is no answer left
-        // to re-validate on, so a value it had reported disabled is re-checked here instead.
+        // Re-validate selected date when the provider is removed.
         if (!this.dateMetadataProvider && props.get('dateMetadataProvider') && this._selectedDate) {
           this._requestValidation();
         }
