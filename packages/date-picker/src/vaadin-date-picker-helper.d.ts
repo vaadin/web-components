@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import type { DateMetadataController } from './vaadin-date-metadata-controller.js';
 import type { DatePickerDate } from './vaadin-date-picker-mixin.js';
 
 /**
@@ -29,6 +30,21 @@ declare function dateAllowed(
   min: Date | null,
   max: Date | null,
   isDateDisabled: (date: DatePickerDate) => boolean | null,
+): boolean;
+
+/**
+ * Check if the given date can be selected: allowed by `dateAllowed` and not reported as disabled
+ * by the date metadata controller. This is narrower than `dateAllowed`, which decides what can be
+ * focused: a disabled date is still focusable, it just cannot be selected.
+ *
+ * @returns True if the date can be selected
+ */
+declare function dateSelectable(
+  date: Date,
+  min: Date | null,
+  max: Date | null,
+  isDateDisabled: (date: DatePickerDate) => boolean | null,
+  controller?: DateMetadataController | null,
 ): boolean;
 
 /**
@@ -66,6 +82,7 @@ export {
   getISOWeekNumber,
   dateEquals,
   dateAllowed,
+  dateSelectable,
   getClosestDate,
   extractDateParts,
   dateAfterXMonths,

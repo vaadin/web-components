@@ -4,9 +4,6 @@ Notes on the parts of `<vaadin-date-picker>` whose design is not obvious from th
 date metadata resolution: `DateMetadataController` decides which ranges to request, caches the answers, and
 notifies whoever reads them.
 
-> The controller is not wired into the component yet. Paragraphs marked _planned_ describe the integration
-> it is built for, which lands separately.
-
 ## What the provider is for
 
 `isDateDisabled` answers one date at a time and synchronously, which cannot be backed by a server.
@@ -24,13 +21,23 @@ Callers are expected to keep a stable reference instead of passing a fresh funct
 ## Where the cache lives
 
 The date-picker element owns the controller, not the overlay content — which exists only once the overlay
-has been opened. Keeping it on the element is what makes the cache survive opening and closing.
+has been opened. Keeping it on the element is what makes the cache survive opening and closing, and a value
+can be set or typed without the overlay ever being opened. Checking such a value against the provider is
+what the ownership is for; the field's validity does not consult the provider yet, so for now the cache is
+filled only once the overlay has been opened.
 
 The month calendars therefore read a controller they do not own. That is why change notification is
 explicit rather than a property assignment (see [How consumers are notified](#how-consumers-are-notified)).
 
-_Planned:_ validating a value that was set or typed without ever opening the overlay needs the metadata
-too, which is only possible with the cache on the element. Validation does not consult the provider yet.
+## How the calendars reach the controller
+
+The host assigns its controller to the overlay content, which passes it on to each calendar and subscribes
+them. Both the controller and the calendars are declared dependencies of the observer that does this, so it
+does not matter which of the two arrives first. Doing it from the scroller's `init-done` event instead
+would be unsafe: that event fires from a `requestAnimationFrame` while the controller arrives from an
+observer, nothing orders the two, and a calendar could end up never subscribed. Subscribing twice is a
+no-op, and a missing controller is tolerated because the overlay content is also instantiated on its own
+in tests, without a host.
 
 ## Which months are requested
 
@@ -56,6 +63,28 @@ The controller does not coalesce calls: each one that finds a missing month issu
 caller that loads while the user navigates has to debounce. That covers a fast scroll, where many positions
 pass in a single gesture. It does nothing for deliberate month-at-a-time stepping, which is slower than any
 window worth setting — block alignment is what covers that.
+
+## How the visible range is loaded
+
+The overlay content drives loading; the calendars only read state. It reduces the rendered months to month
+indexes, takes the lowest and highest, and asks for that range. Both the reduction and the way back to a
+date go through the shared month helpers, which keep a year below 100 and a year before 0 correct.
+
+The first load runs as soon as the calendars and the controller have both arrived, so on the first open the
+request starts while the overlay renders and the loading state is visible immediately. It is tied to those
+two rather than to the config the calendars are given, because config cannot move the scrollers and so never
+changes which months are visible — and because the overlay content outlives closing, so a config change made
+while the overlay is closed would otherwise fetch for a hidden dialog. Navigating is debounced instead:
+every path that moves the scrollers ends up in the same place, so a continuous scroll produces one request
+once it settles rather than one per intermediate position. A scheduled load is dropped when the overlay
+closes and when the calendar leaves the DOM, so navigating and then dismissing the overlay does not call the
+provider afterwards. Reopening does not change what the calendars are configured with and relies on the
+debounced load; the cache survives close and reopen, so there is usually nothing left to fetch.
+
+The visible range is also refilled when the cache is dropped, which nothing else would ask for again. That
+happens where the cache is dropped, on a provider change, and deliberately not from the controller's
+notification: a month whose request failed becomes missing again, so refilling on every notification would
+make a provider that throws or rejects retry without ever stopping.
 
 ## What the cache holds
 
@@ -89,13 +118,37 @@ true if a per-month refresh is ever added.
 The controller's `isDateDisabled` is true when the date's month is resolved **and** its metadata says so. A
 date whose month is still being fetched is not disabled; it is re-checked when the month resolves.
 
-Being optimistic and correcting afterwards keeps rendering, selection and validation consistent with each
-other, because all three read the same predicate. The alternative — treating an unresolved date as unusable
-— would make the whole visible calendar go dead while a slow provider answers, and report a value invalid
-on every fresh load, before anything is known about it.
+Being optimistic and correcting afterwards keeps rendering and selection consistent with each other,
+because both read the same predicate; validation is meant to join them and does not consult the provider
+yet. The alternative — treating an unresolved date as unusable — would make the whole visible calendar go
+dead while a slow provider answers, and report a value invalid on every fresh load, before anything is
+known about it.
 
-_Planned:_ dates in a month that is still loading render with a `pending` part while a loading indicator is
-shown, but they stay selectable.
+Dates in a month that is still being fetched render with a `loading` part while the spinner is shown, but
+they stay selectable. The cache calls such a month `pending` and the part is named for what the user sees,
+so the two words describe one state from either side.
+
+Everything that blocks a date reads that one predicate, and it is literally one function rather than the
+same pair of checks repeated: the calendar's `disabled` part and `aria-disabled`, keyboard selection, and
+the today button's own enabled state. Clicking is blocked one step removed, by the cell's rendered
+`disabled` attribute, which comes from the same predicate.
+
+That predicate is deliberately separate from the range check deciding what can be **focused**, because a
+disabled date is still focusable — one caller of that check even neutralizes the date-disabled callback on
+purpose, which folding the metadata in would defeat.
+
+The `loading` part carries no behaviour of its own. It is a styling hook for dates whose month is being
+fetched right now, the same state the spinner and `aria-busy` report. Tying it to a request in flight rather
+than to "not answered for yet" is what keeps the two from disagreeing: navigating only schedules a load, so
+for a moment the months on screen have not been asked about, and marking them as loading there would style
+dates as in-flight while nothing was. Those dates render plain instead, which is what the optimistic
+predicate above already says about them.
+
+A date picked from a pending month is committed straight away. Holding the overlay open until the answer
+arrived would reintroduce blocking at the last moment, and leave the overlay stuck open on a provider that
+never answers. The window is narrow: reaching a pending month means navigating into a block that has not
+been loaded yet and clicking before it answers. Correcting such a commit once the month resolves needs
+validation to consult the provider, which it does not do yet.
 
 ## How consumers are notified
 
@@ -105,9 +158,9 @@ observers, and state applied imperatively from an observer is refreshed from the
 subscriber also must not be the element whose own observer triggered the load, or it invalidates itself
 mid-update.
 
-There is no `unsubscribe`; a subscriber is retained for the controller's lifetime. _Planned:_ the month
-scroller creates its pool of calendars once and afterwards only reassigns which month each one shows, so
-every subscriber lives as long as the controller's host.
+There is no `unsubscribe`; a subscriber is retained for the controller's lifetime. The month scroller
+creates its pool of calendars once and afterwards only reassigns which month each one shows, so every
+subscriber lives as long as the controller's host.
 
 **The host callback is deferred by one microtask, and coalesced.** Loads are triggered from observers that
 run inside a Lit update, and the host reacts by writing reactive state of its own. Writing reactive state
@@ -139,11 +192,11 @@ A failed month is left absent instead of being recorded as empty, so the next ra
 again and a transient failure heals on the next scroll or reopen. Recording it as empty would cache
 "nothing is disabled" as authoritative for the rest of the session; treating an empty month as a failure
 would re-request every month a provider reports nothing for, which for most providers is most months.
-Asking again marks the month pending, which is what makes it render as pending while the retry is in flight
+Asking again marks the month pending, which is what makes it render as loading while the retry is in flight
 rather than showing a spinner over dates that look settled.
 
 A promise that never settles cannot be recovered from. Its months stay pending, so they keep rendering as
-pending and `isLoading()` stays true, until the cache is cleared.
+loading and `isLoading()` stays true, until the cache is cleared.
 
 ### When the provider is written wrong
 
@@ -163,3 +216,17 @@ navigation, instead of costing only itself.
 Both are mistakes in how the provider is written rather than runtime failures, so they are warned about
 once instead of once per request, which would otherwise repeat on every scroll. The trade is that the
 message states the contract instead of naming the offending entry.
+
+## Testing
+
+- The controller reads `isConnected` from its host, so a stand-in host has to report it; a host that does
+  not is treated as disconnected and never gets the callback.
+- Subscriber invalidation is synchronous, so assert `requestUpdate` before awaiting; the host callback needs
+  a microtask.
+- Because of that split, a calendar's re-render and the overlay's `loading` / `aria-busy` settle in
+  different microtasks after a provider resolves. Do not assert the overlay's state straight after awaiting
+  a calendar update; await the date-picker instead.
+- A provider's answer is awaited even when it is a plain array, so what it resolves has to be awaited before
+  being asserted. What the provider was *asked* can be asserted right away.
+- Provider ranges use **0-indexed months** and cover whole blocks, so a range starts on 1 January and ends
+  on 31 December of the years it spans.

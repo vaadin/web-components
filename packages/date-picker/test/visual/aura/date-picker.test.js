@@ -3,6 +3,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
 import '../../not-animated-styles.css';
 import '../../../vaadin-date-picker.js';
+import { untilOverlayRendered } from '../../helpers.js';
 
 describe('date-picker', () => {
   let div, element;
@@ -61,6 +62,14 @@ describe('date-picker', () => {
 
       openOverlay();
       await visualDiff(div, 'disabled-date');
+    });
+
+    it('date metadata loading', async () => {
+      // A provider that never resolves keeps the calendar in the loading state.
+      element.dateMetadataProvider = () => new Promise(() => {});
+      openOverlay();
+      await untilOverlayRendered(element);
+      await visualDiff(div, 'date-metadata-loading');
     });
 
     it('week numbers', async () => {

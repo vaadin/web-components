@@ -13,6 +13,7 @@ import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
+import { DateMetadataController } from './vaadin-date-metadata-controller.js';
 import {
   dateAllowed,
   dateEquals,
@@ -211,6 +212,39 @@ export const DatePickerMixin = (subclass) =>
         },
 
         /**
+         * A batch function that fetches metadata for a range of dates the calendar is about to
+         * render. It receives a `DatePickerDateRange` and returns, or resolves with, an array of
+         * `DatePickerDateMetadata` objects — a `DatePickerDate` extended with metadata such as
+         * `disabled`, e.g. `{ year, month, day, disabled: true }` — for the dates that have metadata
+         * within that range. Dates it does not mention have no metadata. `month` is 0-based: 0 is
+         * January and 11 is December.
+         *
+         * Unlike `isDateDisabled`, which is called once per date, this function is called for a
+         * range of dates at a time, and again as the calendar renders further dates. The size of the
+         * range is decided by the calendar and may span several months, and may include months it
+         * already has metadata for, whose entries are then ignored.
+         *
+         * It may return a `Promise`, so the answer can come from a server. Until it resolves, the
+         * affected dates render with the `loading` part but stay selectable, and a loading spinner
+         * is shown. Nothing is disabled before the provider has actually reported it, so a slow
+         * provider does not make the calendar unusable. If it throws or rejects, the error is logged
+         * and the affected months are requested again the next time the user navigates.
+         *
+         * `disabled` from the metadata is combined with `min`, `max` and `isDateDisabled`: a date is
+         * disabled if it is out of the min/max range, or `isDateDisabled` returns `true`, or its
+         * metadata marks it disabled. That decides what the calendar renders as disabled and what can
+         * be selected; the field's validity is not yet checked against the provider.
+         *
+         * Keep a stable reference to the function; assigning a new one clears the cache and re-fetches
+         * every visible range.
+         *
+         * @type {DatePickerDateMetadataProvider | null | undefined}
+         */
+        dateMetadataProvider: {
+          type: Function,
+        },
+
+        /**
          * The earliest date that can be selected. All earlier dates will be disabled.
          * @type {Date | undefined}
          * @protected
@@ -282,6 +316,9 @@ export const DatePickerMixin = (subclass) =>
 
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnScroll = this._onScroll.bind(this);
+
+      this._dateMetadataController = new DateMetadataController(this, () => this.__onDateMetadataChanged());
+      this.addController(this._dateMetadataController);
     }
 
     /**
@@ -450,6 +487,13 @@ export const DatePickerMixin = (subclass) =>
     updated(props) {
       super.updated(props);
 
+      if (props.has('dateMetadataProvider')) {
+        this._dateMetadataController.setProvider(this.dateMetadataProvider);
+        if (this.opened) {
+          this._overlayContent?.loadVisibleDateMetadata();
+        }
+      }
+
       if (props.has('showWeekNumbers') || props.has('__effectiveI18n')) {
         // Currently only supported for locales that start the week on Monday.
         this.toggleAttribute('week-numbers', this.showWeekNumbers && this.__effectiveI18n.firstDayOfWeek === 1);
@@ -592,6 +636,20 @@ export const DatePickerMixin = (subclass) =>
       }
 
       return inputValid && isDateValid && inputValidity;
+    }
+
+    /**
+     * Called by the date metadata controller, one microtask after its state changed
+     * and coalesced, so this never writes reactive state from inside an update. The
+     * rendered months refresh on their own because they subscribe to the controller.
+     * @private
+     */
+    __onDateMetadataChanged() {
+      if (!this._overlayContent) {
+        return;
+      }
+      this._overlayContent.loading = this._dateMetadataController.isLoading();
+      this._overlayContent.updateTodayButton();
     }
 
     /**
@@ -851,6 +909,8 @@ export const DatePickerMixin = (subclass) =>
       enteredDate,
     ) {
       if (overlayContent) {
+        // Reuse the date-picker's controller so the overlay shares the same cache.
+        overlayContent._dateMetadataController = this._dateMetadataController;
         overlayContent.i18n = effectiveI18n;
         overlayContent.label = label;
         overlayContent.minDate = minDate;
@@ -966,6 +1026,8 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayClosed() {
+      this._overlayContent?.cancelLoadVisibleDateMetadata();
+
       // Reset `aria-hidden` state.
       if (this.__showOthers) {
         this.__showOthers();

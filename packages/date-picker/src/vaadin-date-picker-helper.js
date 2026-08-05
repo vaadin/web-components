@@ -180,6 +180,22 @@ export function dateAllowed(date, min, max, isDateDisabled) {
 }
 
 /**
+ * Check if the given date can be selected: allowed by `dateAllowed` and not reported as disabled
+ * by the date metadata controller. This is narrower than `dateAllowed`, which decides what can be
+ * focused: a disabled date is still focusable, it just cannot be selected.
+ *
+ * @param {!Date} date The date to check
+ * @param {Date | null} min Range start
+ * @param {Date | null} max Range end
+ * @param {function(!DatePickerDate): boolean} isDateDisabled Callback to check if the date is disabled
+ * @param {DateMetadataController | null} [controller] The date metadata controller
+ * @return {boolean} True if the date can be selected
+ */
+export function dateSelectable(date, min, max, isDateDisabled, controller) {
+  return dateAllowed(date, min, max, isDateDisabled) && !controller?.isDateDisabled(date);
+}
+
+/**
  * Get closest date from array of dates.
  *
  * @param {!Date} date The date to compare dates with
