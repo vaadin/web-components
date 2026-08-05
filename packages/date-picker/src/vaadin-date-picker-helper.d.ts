@@ -33,11 +33,16 @@ declare function dateAllowed(
 ): boolean;
 
 /**
- * Check if the given date can be picked: in the range of allowed dates, and not reported as disabled
- * by the date metadata controller. Only a date whose month the controller has already resolved counts
- * as disabled, so a date whose month is still being fetched can be picked.
+ * Check if the given date can be picked, that is, allowed by `dateAllowed` and not reported as
+ * disabled by the date metadata controller. Rendering and selection both use this, so they cannot
+ * disagree about what is disabled. The field's validity does not consult the provider yet, so it
+ * still uses `dateAllowed`.
  *
- * This is narrower than `dateAllowed`, which decides what can be focused: a disabled date is
+ * Only a date whose month the controller has already resolved counts as disabled. A date whose month
+ * is still being fetched can be picked, and is re-checked once the answer arrives, so a slow provider
+ * does not make the calendar unusable or report a value invalid before anything is known about it.
+ *
+ * This is narrower than `dateAllowed`, which decides what can be *focused*: a disabled date is
  * focusable, it just cannot be picked.
  *
  * @returns True if the date can be picked

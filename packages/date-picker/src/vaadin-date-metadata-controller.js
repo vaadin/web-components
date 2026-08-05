@@ -166,7 +166,7 @@ export class DateMetadataController {
    * Whether the month containing the given date is currently being fetched. A month
    * that has not been asked about is not pending, so this reports the same state as
    * `isLoading()` does for the whole cache.
-   * @param {Date} date
+   * @param {Date | null | undefined} date
    * @return {boolean}
    */
   isMonthPending(date) {
