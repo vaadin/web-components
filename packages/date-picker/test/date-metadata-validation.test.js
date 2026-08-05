@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import { monthDate, monthIndexOf } from '../src/vaadin-date-picker-helper.js';
@@ -64,9 +64,12 @@ describe('dateMetadataProvider validation', () => {
     await nextRender();
 
     setInputValue(datePicker, '1/15/2024');
+    enter(datePicker.inputElement);
     await aTimeout(0);
 
+    expect(datePicker.value).to.equal('2024-01-15');
     expect(datePicker.checkValidity()).to.be.false;
+    expect(datePicker.invalid).to.be.true;
   });
 
   it('should request range including the value from the provider', async () => {
@@ -115,6 +118,22 @@ describe('dateMetadataProvider validation', () => {
     await aTimeout(0);
 
     expect(datePicker.dateMetadataProvider).to.not.be.called;
+  });
+
+  it('should keep the invalid state when min or max is removed', async () => {
+    datePicker.dateMetadataProvider = disableFifteenth();
+    datePicker.value = '2024-01-15';
+    await aTimeout(0);
+    datePicker.min = '2020-01-01';
+    await aTimeout(0);
+    expect(datePicker.invalid).to.be.true;
+
+    // The provider counts as a constraint, so this is not the last constraint removed
+    // and the invalid state it still justifies is re-checked rather than dropped.
+    datePicker.min = '';
+    await aTimeout(0);
+
+    expect(datePicker.invalid).to.be.true;
   });
 
   it('should not validate again when an unrelated month resolves', async () => {

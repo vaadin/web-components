@@ -314,7 +314,7 @@ export const DatePickerMixin = (subclass) =>
     }
 
     static get constraints() {
-      return [...super.constraints, 'min', 'max'];
+      return [...super.constraints, 'min', 'max', 'dateMetadataProvider'];
     }
 
     constructor() {
@@ -496,10 +496,6 @@ export const DatePickerMixin = (subclass) =>
       if (props.has('dateMetadataProvider')) {
         this._dateMetadataController.setProvider(this.dateMetadataProvider);
         this.__reloadDateMetadata();
-        // Re-validate selected date when the provider is removed.
-        if (!this.dateMetadataProvider && props.get('dateMetadataProvider') && this._selectedDate) {
-          this._requestValidation();
-        }
       }
 
       if (props.has('showWeekNumbers') || props.has('__effectiveI18n')) {
