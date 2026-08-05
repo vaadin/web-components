@@ -45,8 +45,7 @@ export interface DatePickerDateMetadata extends DatePickerDate {
 
 /**
  * A function called with the range of dates the calendar is about to show, returning or resolving
- * with the metadata for the dates in that range. Returning nothing is the same as returning an
- * empty array: no date in the range has metadata.
+ * with the metadata for the dates in that range.
  */
 export type DatePickerDateMetadataProvider = (
   range: DatePickerDateRange,

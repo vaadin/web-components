@@ -1021,19 +1021,13 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       return dateAllowed(date, min, max, isDateDisabled);
     }
 
-    /**
-     * Whether the date can be picked, which unlike `_dateAllowed` also rules out a date the metadata
-     * reports as disabled. Focus uses `_dateAllowed`, since a disabled date can still be focused.
-     * @private
-     */
+    /** @private */
     _dateSelectable(date) {
       return dateSelectable(date, this.minDate, this.maxDate, this.isDateDisabled, this._dateMetadataController);
     }
 
     /** @private */
     _isTodayAllowed() {
-      // `updateTodayButton` re-runs this when a month resolves, since the button applies its state
-      // imperatively rather than from a binding.
       return this._dateSelectable(this._getTodayMidnight());
     }
 

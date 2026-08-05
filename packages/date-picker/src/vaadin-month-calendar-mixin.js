@@ -105,8 +105,6 @@ export const MonthCalendarMixin = (superClass) =>
         _dateMetadataController: {
           type: Object,
           attribute: false,
-          // Sync, like the other config properties the overlay content assigns next to it, so that
-          // the render triggered by those does not run with the controller still missing.
           sync: true,
         },
 

@@ -489,9 +489,6 @@ export const DatePickerMixin = (subclass) =>
 
       if (props.has('dateMetadataProvider')) {
         this._dateMetadataController.setProvider(this.dateMetadataProvider);
-        // A new provider clears the cache, so refill it for the months on screen — but only while the
-        // overlay is open, since the overlay content outlives closing and would otherwise fetch for
-        // the months it last rendered and show a spinner on a hidden dialog.
         if (this.opened) {
           this._overlayContent?.loadVisibleDateMetadata();
         }

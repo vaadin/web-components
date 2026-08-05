@@ -50,8 +50,6 @@ export const overlayContentStyles = css`
     display: none !important;
   }
 
-  /* Sits over the month scroller, which paints its own transformed layers, so grid stacking alone
-     would not keep the spinner on top. */
   [part='loader'] {
     position: absolute;
     z-index: 1;
