@@ -322,10 +322,7 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
     // the window losing focus does not close the popover.
     this.addEventListener('focusout', (event) => {
       if (event.relatedTarget && !this.contains(event.relatedTarget)) {
-        const popover = this.querySelector(':scope > vaadin-popover');
-        if (popover) {
-          popover.opened = false;
-        }
+        this.#closePopover();
       }
     });
   }
@@ -717,10 +714,16 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
 
     const locked = this.#lockedElements;
     this.#lockedElements = null;
-    if (locked) {
-      locked.forEach(({ element, property, value }) => {
-        element[property] = value;
-      });
+    locked.forEach(({ element, property, value }) => {
+      element[property] = value;
+    });
+  }
+
+  /** Closes the marker's popover, if rendered. */
+  #closePopover() {
+    const popover = this.querySelector(':scope > vaadin-popover');
+    if (popover) {
+      popover.opened = false;
     }
   }
 
@@ -746,10 +749,7 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
       focusTarget.focus({ focusVisible: isKeyboardActive() });
     }
 
-    const popover = this.querySelector(':scope > vaadin-popover');
-    if (popover) {
-      popover.opened = false;
-    }
+    this.#closePopover();
 
     if (field) {
       field.dispatchEvent(
