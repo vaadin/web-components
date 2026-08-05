@@ -101,7 +101,8 @@ declare class AiFieldMarker extends I18nMixin<typeof HTMLElement, AiFieldMarkerI
    * the user cannot edit a value the AI is about to overwrite; only the
    * client-side `readonly` state is touched, and setting the property back to
    * `false` restores it. The marker badge is hidden for the duration, since
-   * the value it annotates is about to be replaced.
+   * the value it annotates is about to be replaced. For assistive technology,
+   * the field is marked with `aria-busy`.
    */
   working: boolean;
 }

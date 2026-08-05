@@ -245,6 +245,7 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
        * only the client-side `readonly` state is touched, and setting the
        * property back to `false` restores it. The marker badge is hidden for
        * the duration, since the value it annotates is about to be replaced.
+       * For assistive technology, the field is marked with `aria-busy`.
        */
       working: {
         type: Boolean,
@@ -653,6 +654,9 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
     }
 
     field.setAttribute('ai-working', '');
+    // Expose the working state to assistive technology on the same element
+    // that carries the AI description: the shimmer alone is only visual.
+    this.#describedElement?.setAttribute('aria-busy', 'true');
     this.#lockedElements.forEach(({ element, property }) => {
       element[property] = true;
     });
@@ -686,6 +690,7 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
     }
 
     field.removeAttribute('ai-working');
+    this.#describedElement?.removeAttribute('aria-busy');
 
     // The value hold-back stays installed for the wind-down: a queued value
     // still lands on its own deadline, and a value the host sets before the

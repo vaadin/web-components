@@ -812,6 +812,7 @@ describe('ai field marker', () => {
       mark(field, { working: true });
       expect(field.hasAttribute('ai-working')).to.be.true;
       expect(field.readonly).to.be.true;
+      expect(field.inputElement.getAttribute('aria-busy')).to.equal('true');
     });
 
     it('should set the working state via attribute', () => {
@@ -940,6 +941,17 @@ describe('ai field marker', () => {
         expect(field.readonly).to.be.true;
       });
 
+      it('should mark the field input busy for assistive technology', () => {
+        // The shimmer alone is only visual, so the input carries aria-busy
+        // for the duration of the working state.
+        expect(field.inputElement.getAttribute('aria-busy')).to.equal('true');
+      });
+
+      it('should remove aria-busy when removed while working', () => {
+        marker.remove();
+        expect(field.inputElement.hasAttribute('aria-busy')).to.be.false;
+      });
+
       it('should not change the field value', () => {
         expect(field.value).to.equal('AI value');
       });
@@ -992,6 +1004,10 @@ describe('ai field marker', () => {
 
       it('should remove the ai-working attribute', () => {
         expect(field.hasAttribute('ai-working')).to.be.false;
+      });
+
+      it('should remove aria-busy right away, not after the wind-down', () => {
+        expect(field.inputElement.hasAttribute('aria-busy')).to.be.false;
       });
 
       it('should restore the client read-only state after the shimmer wind-down', async () => {
