@@ -33,6 +33,138 @@ export const DEFAULT_I18N = {
   units: FILE_LIST_DEFAULT_I18N.units,
 };
 
+/**
+ * An `UploadManager` subclass used internally by `<vaadin-upload>`. It
+ * overrides the manager behavior where the component behavior that predates
+ * the manager integration differs from the standalone manager.
+ */
+class InternalUploadManager extends UploadManager {
+  /**
+   * Files assigned by the component are accepted as-is, without validating
+   * them against the maxFiles, maxFileSize and accept constraints, e.g. to
+   * show previously uploaded files.
+   * @override
+   */
+  get files() {
+    return super.files;
+  }
+
+  set files(files) {
+    this._setFiles([...files]);
+  }
+
+  // The component has historically accepted any values for the following
+  // properties, so the validation and normalization of the manager's
+  // accessors is skipped: an unsupported method is passed to the request
+  // as-is, a non-positive maxConcurrentUploads pauses uploads, and headers
+  // that are not an object (e.g. from an invalid JSON string) throw when
+  // the request is configured.
+
+  /** @override */
+  get method() {
+    return this.__method;
+  }
+
+  set method(method) {
+    this.__method = method;
+  }
+
+  /** @override */
+  get headers() {
+    return this.__headers;
+  }
+
+  set headers(headers) {
+    this.__headers = headers;
+  }
+
+  /** @override */
+  get maxConcurrentUploads() {
+    return this.__maxConcurrentUploads;
+  }
+
+  set maxConcurrentUploads(maxConcurrentUploads) {
+    this.__maxConcurrentUploads = maxConcurrentUploads;
+  }
+
+  /**
+   * Start the upload of the given file, even if it is already complete, in
+   * which case it is uploaded again from scratch. A file that is already
+   * uploading or queued is ignored.
+   * @param {UploadFile} file
+   */
+  startUpload(file) {
+    this._queueFileUpload(file);
+  }
+
+  /**
+   * Unlike the manager, the component does not restart the upload of a file
+   * that is already uploading or queued on retry; only the `upload-retry`
+   * event is dispatched.
+   * @override
+   */
+  retryUpload(file) {
+    const evt = this.dispatchEvent(
+      new CustomEvent('upload-retry', {
+        detail: { file, xhr: file.xhr },
+        cancelable: true,
+      }),
+    );
+    if (evt) {
+      this._queueFileUpload(file);
+    }
+  }
+
+  /**
+   * The component uploads all files given to `uploadFiles`, also files that
+   * are not in the `files` list, without adding them to it. Removing a file
+   * in an `upload-before` or `upload-request` listener does not cancel its
+   * upload either.
+   * @override
+   */
+  _isFileManaged(_file) {
+    return true;
+  }
+
+  /**
+   * A prevented `upload-before` or `upload-request` event leaves the file
+   * state untouched, so that the preventing listener can take over the
+   * request (e.g. send the xhr manually). The upload slot stays taken until
+   * the taken-over request completes.
+   * @override
+   */
+  _holdFile(_file) {
+    // The listener that prevented the upload is expected to take it over
+  }
+
+  /**
+   * The component keeps the progress properties of the previous upload
+   * attempt until a new upload progresses.
+   * @override
+   */
+  _resetFileProgress(_file) {
+    // Progress is only updated by upload progress events
+  }
+
+  /**
+   * The component keeps the last request available on the file after the
+   * upload has finished, e.g. in the `upload-retry` event detail.
+   * @override
+   */
+  _clearFileXhr(_file) {
+    // The request reference is kept on the file
+  }
+
+  /**
+   * Removing a file also frees upload capacity for other queued files.
+   * @override
+   */
+  _removeFile(file) {
+    super._removeFile(file);
+    this._processUploadQueue();
+  }
+}
+
 export const UploadMixin = (superClass) =>
   class UploadMixin extends I18nMixin(superClass) {
     static get properties() {
@@ -358,22 +490,11 @@ export const UploadMixin = (superClass) =>
       super();
 
       // Create the internal upload manager
-      this._manager = new UploadManager();
+      this._manager = new InternalUploadManager();
 
-      // Preserve the component behavior that predates the manager
-      // integration: a prevented upload-before or upload-request leaves the
-      // file state untouched, and removing a file in a listener of these
-      // events does not cancel its upload
-      this._manager.__holdOnUploadPrevented = false;
-      this._manager.__cancelUploadOfRemovedFiles = false;
-      // Also keep the last request available on the file after the upload
-      // has finished, and the progress properties of the previous upload
-      // attempt until a new upload progresses
-      this._manager.__clearXhrOnComplete = false;
-      this._manager.__resetProgressOnQueue = false;
-      // The component has historically assigned formDataName to the file
-      // only when the upload starts, not when the file is added
-      this._manager.__assignFormDataNameOnAdd = false;
+      // Files that are uploaded without being added to the `files` list
+      // (e.g. passed directly to `uploadFiles`)
+      this.__externalFiles = new Set();
     }
 
     /** @protected */
@@ -428,22 +549,19 @@ export const UploadMixin = (superClass) =>
       this.addEventListener('file-start', (e) => {
         this.__syncManagerConfig();
         this.__clearFileError(e.detail.file);
-        // The internal upload method also uploads files that are already
-        // complete or not in the `files` list
-        this._manager.__startUpload(e.detail.file);
+        this.__trackExternalFile(e.detail.file);
+        this._manager.startUpload(e.detail.file);
       });
       this.addEventListener('file-abort', (e) => {
-        this._manager.abortUpload(e.detail.file);
-        // The manager does not process its upload queue when a file that has
-        // not started uploading is removed, so removing a queued file would
-        // not free capacity for other queued files without this
-        this._manager.__processUploadQueue();
+        const { file } = e.detail;
+        this._manager.abortUpload(file);
+        if (file.abort) {
+          this.__externalFiles.delete(file);
+        }
       });
       this.addEventListener('file-retry', (e) => {
         this.__syncManagerConfig();
-        // The internal retry method ignores files that are currently
-        // uploading or queued instead of restarting them
-        this._manager.__retryUpload(e.detail.file);
+        this._manager.retryUpload(e.detail.file);
       });
 
       // Announce the upload lifecycle to screen readers
@@ -502,7 +620,7 @@ export const UploadMixin = (superClass) =>
       if (!managerConfigProps || managerConfigProps.some((prop) => props.has(prop))) {
         const config = this.__createManagerConfig();
         managerConfigProps ||= Object.keys(config);
-        this._manager.__setConfig(config);
+        Object.assign(this._manager, config);
       }
     }
 
@@ -511,18 +629,10 @@ export const UploadMixin = (superClass) =>
      * @private
      */
     __syncManagerConfig() {
-      this._manager.__setConfig(this.__createManagerConfig());
+      Object.assign(this._manager, this.__createManagerConfig());
     }
 
-    /**
-     * The manager's internal API applies `method`, `headers` and
-     * `maxConcurrentUploads` without validation, since `<vaadin-upload>` has
-     * historically accepted any values for these properties: an unsupported
-     * method is passed to the request, a non-positive maxConcurrentUploads
-     * pauses uploads, and undefined headers (from an invalid JSON string)
-     * throw when the request is configured.
-     * @private
-     */
+    /** @private */
     __createManagerConfig() {
       return {
         // Fall back to an empty string, which means that window.location
@@ -587,13 +697,11 @@ export const UploadMixin = (superClass) =>
       // Sync files to manager when set directly (e.g., from tests or user code)
       // Skip if this change was triggered by the manager's files-changed event
       if (this._manager && !this.__updatingFromManager) {
-        // Use the internal setter to skip validation: files assigned to the
-        // `files` property directly (e.g. to show previously uploaded files)
-        // must be accepted as-is. The flag suppresses the synchronous file
-        // list render for the resulting files-changed event, which the
-        // component has historically not done for property assignments
+        // The flag suppresses the synchronous file list render for the
+        // resulting files-changed event, which the component has
+        // historically not done for property assignments
         this.__syncingFilesToManager = true;
-        this._manager.__setFiles(files);
+        this._manager.files = files;
         this.__syncingFilesToManager = false;
       }
     }
@@ -617,7 +725,6 @@ export const UploadMixin = (superClass) =>
     /** @private */
     __onManagerFilesChanged(event) {
       const files = event.detail.value;
-      const file = this._manager.__changedFile;
       // Only update the `files` property when files are added or removed, so that
       // `files-changed` is not fired for upload state updates on individual files
       const filesChanged = files.length !== this.files.length || files.some((f, i) => f !== this.files[i]);
@@ -635,14 +742,8 @@ export const UploadMixin = (superClass) =>
       } else if (!this.__syncingFilesToManager) {
         // Compute the file status strings before rendering, like the
         // component did before the manager integration; the file list does
-        // not compute them when rendering. When the notification reports
-        // the single file whose upload state changed, skip recomputing the
-        // strings of the other files.
-        if (file) {
-          this.__updateFileStatus(file);
-        } else {
-          this.__updateFileStatuses();
-        }
+        // not compute them when rendering.
+        this.__updateFileStatuses();
         this.__renderFileList();
       }
     }
@@ -654,8 +755,20 @@ export const UploadMixin = (superClass) =>
      * @private
      */
     __updateFileStatuses() {
-      this._manager.__externalFiles.forEach((file) => this.__updateFileStatus(file));
+      this.__externalFiles.forEach((file) => this.__updateFileStatus(file));
       this.files.forEach((file) => this.__updateFileStatus(file));
+    }
+
+    /**
+     * Track a file that is uploaded without being in the `files` list, so
+     * that its status strings are also updated while it uploads. The file is
+     * removed from the tracked set once its upload finishes or is aborted.
+     * @private
+     */
+    __trackExternalFile(file) {
+      if (!this.files.includes(file)) {
+        this.__externalFiles.add(file);
+      }
     }
 
     /** @private */
@@ -715,6 +828,7 @@ export const UploadMixin = (superClass) =>
     /** @private */
     __onManagerUploadSuccess(event) {
       const { file } = event.detail;
+      this.__externalFiles.delete(file);
       // Check if error was set by upload-response listener (for backwards compatibility)
       if (file.error) {
         file.complete = false;
@@ -753,6 +867,7 @@ export const UploadMixin = (superClass) =>
     /** @private */
     __onManagerUploadError(event) {
       const { file } = event.detail;
+      this.__externalFiles.delete(file);
       // Translate errorKey to i18n message and set file.error (only if error wasn't already set directly)
       if (file.errorKey && !file.error) {
         // There is no i18n message for the manager's timeout error; a timed
@@ -880,7 +995,7 @@ export const UploadMixin = (superClass) =>
      * @protected
      */
     _removeFile(file) {
-      this._manager.__removeFile(file);
+      this._manager.removeFile(file);
     }
 
     // ============ Accessibility ============
@@ -927,11 +1042,14 @@ export const UploadMixin = (superClass) =>
         files = [files];
       }
 
-      files.filter((file) => !file.complete).forEach((file) => this.__clearFileError(file));
+      files
+        .filter((file) => !file.complete)
+        .forEach((file) => {
+          this.__clearFileError(file);
+          this.__trackExternalFile(file);
+        });
 
-      // The internal upload method uploads files that are not in the `files`
-      // list without adding them to it
-      this._manager.__uploadFiles(files);
+      this._manager.uploadFiles(files);
     }
 
     // ============ Utilities ============
