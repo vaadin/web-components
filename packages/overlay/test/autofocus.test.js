@@ -28,7 +28,7 @@ describe('autofocus', () => {
     await oneEvent(overlay, 'vaadin-overlay-open');
   }
 
-  it('should focus the first tabbable element when opened', async () => {
+  it('should focus the overlay part when opened', async () => {
     await open();
     expect(isElementFocused(overlay.$.overlay)).to.be.true;
   });

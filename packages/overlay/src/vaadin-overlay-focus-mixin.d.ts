@@ -15,8 +15,9 @@ export declare class OverlayFocusMixinClass {
    * and keep it inside: Tab and Shift+Tab cycle through the overlay's
    * content until the overlay is closed.
    *
-   * Focus is placed on the first tabbable child if the overlay has one,
-   * and on the overlay part otherwise.
+   * Focus moves to the first tabbable element in the tab order. This
+   * can be the overlay itself if it is tabbable and comes first in
+   * the tab order.
    *
    * @attr {boolean} focus-trap
    */
@@ -25,8 +26,9 @@ export declare class OverlayFocusMixinClass {
   /**
    * Set to true to move focus into the overlay automatically on open.
    *
-   * Focus is placed on the first tabbable child if the overlay has
-   * one, and on the overlay part otherwise.
+   * Focus moves to the first tabbable element in the tab order. This
+   * can be the overlay itself if it is tabbable and comes first in
+   * the tab order.
    */
   autofocus: boolean;
 
