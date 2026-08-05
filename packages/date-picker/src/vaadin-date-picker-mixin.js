@@ -496,6 +496,11 @@ export const DatePickerMixin = (subclass) =>
       if (props.has('dateMetadataProvider')) {
         this._dateMetadataController.setProvider(this.dateMetadataProvider);
         this.__reloadDateMetadata();
+        // Removing the provider lifts its constraint, and with no provider there is no answer left
+        // to re-validate on, so a value it had reported disabled is re-checked here instead.
+        if (!this.dateMetadataProvider && props.get('dateMetadataProvider') && this._selectedDate) {
+          this._requestValidation();
+        }
       }
 
       if (props.has('showWeekNumbers') || props.has('__effectiveI18n')) {
@@ -679,8 +684,12 @@ export const DatePickerMixin = (subclass) =>
      */
     __ensureSelectedDateLoaded() {
       const controller = this._dateMetadataController;
-      if (controller?.provider && this._selectedDate && !controller.isMonthLoaded(this._selectedDate)) {
-        this.__awaitingProviderValidation = true;
+      const awaiting = !!(controller?.provider && this._selectedDate && !controller.isMonthLoaded(this._selectedDate));
+      // Always assigned, so clearing the value or removing the provider while a request is in
+      // flight disarms the pending re-validation, and a later answer for some other month does not
+      // re-validate a value that never waited for it.
+      this.__awaitingProviderValidation = awaiting;
+      if (awaiting) {
         controller.ensureRangeLoaded(this._selectedDate, this._selectedDate);
       }
     }

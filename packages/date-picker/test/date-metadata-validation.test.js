@@ -157,6 +157,19 @@ describe('dateMetadataProvider validation', () => {
 
       expect(datePicker.invalid).to.be.false;
     });
+
+    it('should clear the invalid state when the provider is removed', async () => {
+      datePicker.dateMetadataProvider = disableFifteenth();
+      datePicker.value = '2024-01-15';
+      await aTimeout(0);
+      expect(datePicker.invalid).to.be.true;
+
+      // Removal resolves nothing, so the re-check cannot wait for an answer.
+      datePicker.dateMetadataProvider = null;
+      await aTimeout(0);
+
+      expect(datePicker.invalid).to.be.false;
+    });
   });
 
   describe('no redundant validation', () => {
@@ -216,6 +229,35 @@ describe('dateMetadataProvider validation', () => {
 
       expect(datePicker.checkValidity()).to.be.true;
       expect(datePicker.invalid).to.be.false;
+    });
+
+    it('should not re-validate when a later answer arrives for a value in a loaded month', async () => {
+      const pending = [];
+      datePicker.dateMetadataProvider = () =>
+        new Promise((resolve) => {
+          pending.push(resolve);
+        });
+      datePicker.value = '2024-01-15';
+      await aTimeout(0);
+
+      // Cleared before the answer arrives, so nothing waits for it anymore.
+      datePicker.value = '';
+      pending.splice(0).forEach((resolve) => resolve([]));
+      await aTimeout(0);
+
+      // A value in the month that just loaded needs no request of its own.
+      datePicker.value = '2024-01-20';
+      await aTimeout(0);
+
+      const validated = sinon.spy();
+      datePicker.addEventListener('validated', validated);
+
+      // An answer for months far from the value must not re-validate it.
+      datePicker._dateMetadataController.ensureRangeLoaded(new Date(2030, 5, 1), new Date(2030, 5, 1));
+      pending.splice(0).forEach((resolve) => resolve([]));
+      await aTimeout(0);
+
+      expect(validated).to.not.be.called;
     });
   });
 });

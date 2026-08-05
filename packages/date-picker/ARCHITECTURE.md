@@ -168,9 +168,12 @@ date as invalid — would flash an error on every fresh load, before anything is
 is the failure this window exists to avoid.
 
 Re-validation is driven from the host callback rather than from the request, because only the callback
-knows the month has arrived. It is armed when the load starts and disarmed when it fires, so an answer for
-some other month does not re-validate anything. The callback runs whether or not the overlay was ever
-opened; the parts that update the spinner and the today button are the ones that need it open.
+knows the month has arrived. It is armed when the load starts and disarmed when it fires — and re-decided
+on every value and provider change, so clearing the value or removing the provider mid-flight disarms it.
+An answer therefore never re-validates a value that was not waiting for it. Removing the provider is the
+one change with no answer to wait for: it lifts a constraint, so the value is re-checked right away. The
+callback runs whether or not the overlay was ever opened; the parts that update the spinner and the today
+button are the ones that need it open.
 
 A value whose month resolved while the field was detached is validated when it is attached again, since the
 controller re-reports its state on reconnect and the armed flag is still set.
