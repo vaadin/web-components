@@ -180,24 +180,16 @@ export function dateAllowed(date, min, max, isDateDisabled) {
 }
 
 /**
- * Check if the given date can be picked, that is, allowed by `dateAllowed` and not reported as
- * disabled by the date metadata controller. Rendering and selection both use this, so they cannot
- * disagree about what is disabled. The field's validity does not consult the provider yet, so it
- * still uses `dateAllowed`.
- *
- * Only a date whose month the controller has already resolved counts as disabled. A date whose month
- * is still being fetched can be picked, and is re-checked once the answer arrives, so a slow provider
- * does not make the calendar unusable or report a value invalid before anything is known about it.
- *
- * This is narrower than `dateAllowed`, which decides what can be *focused*: a disabled date is
- * focusable, it just cannot be picked.
+ * Check if the given date can be selected: allowed by `dateAllowed` and not reported as disabled
+ * by the date metadata controller. This is narrower than `dateAllowed`, which decides what can be
+ * focused: a disabled date is still focusable, it just cannot be selected.
  *
  * @param {!Date} date The date to check
  * @param {Date | null} min Range start
  * @param {Date | null} max Range end
  * @param {function(!DatePickerDate): boolean} isDateDisabled Callback to check if the date is disabled
  * @param {DateMetadataController | null} [controller] The date metadata controller
- * @return {boolean} True if the date can be picked
+ * @return {boolean} True if the date can be selected
  */
 export function dateSelectable(date, min, max, isDateDisabled, controller) {
   return dateAllowed(date, min, max, isDateDisabled) && !controller?.isDateDisabled(date);
