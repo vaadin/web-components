@@ -603,6 +603,62 @@ describe('overflow', () => {
     });
   });
 
+  describe('sub-pixel rounding', () => {
+    // Reproduces #11982: a sub-pixel overflow used to false-collapse because
+    // offsetWidth/scrollWidth round independently (e.g. 60.5px in 60px read
+    // as 60 < 61).
+    let wrapper, menu, overflow;
+
+    // Overrides the outer beforeEach's whole-pixel button width, which would
+    // otherwise mask the sub-pixel scenario.
+    const CONTAINER_WIDTH = 60;
+
+    async function initSingleItem(buttonWidth) {
+      wrapper = fixtureSync(`
+        <div>
+          <style>
+            #sub-pixel-menu-bar vaadin-menu-bar-button:not([slot='overflow']) {
+              width: ${buttonWidth}px;
+            }
+          </style>
+          <vaadin-menu-bar id="sub-pixel-menu-bar" style="width: ${CONTAINER_WIDTH}px"></vaadin-menu-bar>
+        </div>
+      `);
+      menu = wrapper.querySelector('vaadin-menu-bar');
+      menu.items = [{ text: 'Item 1' }];
+
+      await nextResize(menu);
+      overflow = menu._buttons.at(-1);
+    }
+
+    // Must be read while the button is still visible — a hidden button is
+    // position: absolute and its rect no longer reflects the overflow.
+    function measureOverflowPx() {
+      return menu._buttons[0].getBoundingClientRect().right - menu._container.getBoundingClientRect().right;
+    }
+
+    it('should not collapse a single item overflowing by a sub-pixel amount', async () => {
+      await initSingleItem(60.5);
+      // Sanity check: this fixture really overflows, it isn't just a fit.
+      expect(measureOverflowPx()).to.be.within(0, 1);
+      expect(overflow.hasAttribute('hidden')).to.be.true;
+      expect(overflow.item.children.length).to.equal(0);
+      assertVisible(menu._buttons[0]);
+    });
+
+    it('should not collapse a single item across a sweep of sub-pixel overflows', async () => {
+      // Guards against a narrower version of #11982 slipping through, the way
+      // a fixed +1px tolerance did in the rejected #11986.
+      for (let buttonWidth = 60.1; buttonWidth <= 60.9; buttonWidth += 0.1) {
+        await initSingleItem(buttonWidth);
+        const label = `button width ${buttonWidth.toFixed(1)}px`;
+        expect(overflow.hasAttribute('hidden'), label).to.be.true;
+        expect(overflow.item.children.length, label).to.equal(0);
+        assertVisible(menu._buttons[0]);
+      }
+    });
+  });
+
   describe('performance', () => {
     let menu, spy;
 
