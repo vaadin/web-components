@@ -192,8 +192,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       super.updated(props);
 
       if (props.has('loading')) {
-        // Mark the calendar region as busy while data is being loaded so assistive technology knows
-        // the content is still updating.
         setOrRemoveAttribute(this, 'aria-busy', this.loading);
       }
 
@@ -202,9 +200,6 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       }
 
       if (props.has('calendars') || props.has('_dateMetadataController')) {
-        // Only when the calendars or the controller arrive: a config change cannot move the
-        // scrollers, so it never changes which months are visible, and the overlay content outlives
-        // closing — loading from there would fetch for a hidden dialog.
         this.loadVisibleDateMetadata();
       }
 
