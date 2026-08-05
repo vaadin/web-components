@@ -13,6 +13,11 @@ import { DEFAULT_I18N as FILE_LIST_DEFAULT_I18N } from './vaadin-upload-file-lis
 import { getFilesFromDropEvent, updateFileStatus } from './vaadin-upload-helpers.js';
 import { UploadManager } from './vaadin-upload-manager.js';
 
+// The names of the reactive properties mirrored to the manager config by
+// `updated()`, derived once from the config object created by
+// `__createManagerConfig()` (the keys match the property names)
+let managerConfigProps;
+
 export const DEFAULT_I18N = {
   dropFiles: {
     one: 'Drop file here',
@@ -393,11 +398,18 @@ export const UploadMixin = (superClass) =>
           e.detail.file.formDataName = this.formDataName;
         }
         this.__redispatchEvent(e);
-        if (!e.defaultPrevented && typeof this.headers === 'string') {
-          // The component has historically parsed a headers JSON string
-          // into the property when an upload starts, after the
-          // upload-before listeners have run
-          this.headers = this.__parseHeaders();
+        if (!e.defaultPrevented) {
+          if (typeof this.headers === 'string') {
+            // The component has historically parsed a headers JSON string
+            // into the property when an upload starts, after the
+            // upload-before listeners have run
+            this.headers = this.__parseHeaders();
+          }
+          // Configuration changed by an upload-before listener (e.g. headers
+          // with a fresh auth token) has historically applied to the request
+          // being started, so sync it before the manager configures the
+          // request
+          this.__syncManagerConfig();
         }
       });
       this._manager.addEventListener('upload-progress', (e) => {
@@ -484,8 +496,12 @@ export const UploadMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      const config = this.__createManagerConfig();
-      if (Object.keys(config).some((prop) => props.has(prop))) {
+      // Only build the config (which involves parsing the headers JSON
+      // string) when a mirrored property has changed; the first update
+      // always has them all changed, as they all have default values
+      if (!managerConfigProps || managerConfigProps.some((prop) => props.has(prop))) {
+        const config = this.__createManagerConfig();
+        managerConfigProps ||= Object.keys(config);
         this._manager.__setConfig(config);
       }
     }
@@ -552,7 +568,9 @@ export const UploadMixin = (superClass) =>
      * Restore the `speed` and `remaining` stats the component computed
      * before the manager integration: the speed derived from the total file
      * size instead of the transferred bytes, and unknown (infinite)
-     * remaining time when no bytes have been transferred yet.
+     * remaining time when no bytes have been transferred yet. The status
+     * strings derived from the stats are recomputed by `__redispatchEvent`
+     * before the `upload-progress` listeners run.
      * @private
      */
     __applyLegacyProgressStats(file) {
@@ -561,8 +579,6 @@ export const UploadMixin = (superClass) =>
         if (!file.loaded) {
           file.remaining = Infinity;
         }
-        // Recompute the strings derived from the stats
-        this.__updateFileStatus(file);
       }
     }
 
@@ -600,13 +616,11 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     __onManagerFilesChanged(event) {
-      // Files that are not rendered by the file list still need up-to-date status strings
-      this._manager.__externalFiles.forEach((file) => this.__updateFileStatus(file));
-
       const files = event.detail.value;
+      const file = this._manager.__changedFile;
       // Only update the `files` property when files are added or removed, so that
       // `files-changed` is not fired for upload state updates on individual files
-      const filesChanged = files.length !== this.files.length || files.some((file, i) => file !== this.files[i]);
+      const filesChanged = files.length !== this.files.length || files.some((f, i) => f !== this.files[i]);
       if (filesChanged) {
         // Use flag to prevent recursive sync back to manager
         this.__updatingFromManager = true;
@@ -617,19 +631,35 @@ export const UploadMixin = (superClass) =>
         // updated through the files property observer instead. Only compute
         // the file status strings, which the file list does not compute
         // when rendering.
-        this.files.forEach((file) => this.__updateFileStatus(file));
+        this.__updateFileStatuses();
       } else if (!this.__syncingFilesToManager) {
+        // Compute the file status strings before rendering, like the
+        // component did before the manager integration; the file list does
+        // not compute them when rendering. When the notification reports
+        // the single file whose upload state changed, skip recomputing the
+        // strings of the other files.
+        if (file) {
+          this.__updateFileStatus(file);
+        } else {
+          this.__updateFileStatuses();
+        }
         this.__renderFileList();
       }
     }
 
+    /**
+     * Update the status strings of all files, including files that are
+     * uploaded without being added to the `files` list, which are not
+     * rendered by the file list but still need up-to-date status strings.
+     * @private
+     */
+    __updateFileStatuses() {
+      this._manager.__externalFiles.forEach((file) => this.__updateFileStatus(file));
+      this.files.forEach((file) => this.__updateFileStatus(file));
+    }
+
     /** @private */
     __renderFileList() {
-      // Compute the file status strings before rendering, like the component
-      // did before the manager integration; the file list does not compute
-      // them when rendering
-      this.files.forEach((file) => this.__updateFileStatus(file));
-
       if (this._fileList && typeof this._fileList.requestContentUpdate === 'function') {
         this._fileList.requestContentUpdate();
       }
@@ -830,8 +860,7 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _addFiles(files) {
-      this.__syncManagerConfig();
-      this._manager.addFiles(files);
+      Array.from(files).forEach((file) => this._addFile(file));
     }
 
     /**
@@ -841,7 +870,8 @@ export const UploadMixin = (superClass) =>
      * @protected
      */
     _addFile(file) {
-      this._addFiles([file]);
+      this.__syncManagerConfig();
+      this._manager.addFiles([file]);
     }
 
     /**

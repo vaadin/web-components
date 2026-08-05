@@ -90,6 +90,16 @@ export class UploadManager extends EventTarget {
   __externalFiles = new Set();
 
   /**
+   * The file whose upload state update triggered the `files-changed` event
+   * that is being dispatched, when the event is not for a change to the
+   * array itself. Allows listeners to skip processing the other files.
+   * Internal API for `<vaadin-upload>`, may change at any time.
+   * @type {UploadFile | undefined}
+   * @private
+   */
+  __changedFile;
+
+  /**
    * When true (default), a file whose `upload-before` or `upload-request`
    * event is prevented is reset to the held state, freeing its upload slot
    * so that it can be started again. `<vaadin-upload>` disables this to
@@ -608,7 +618,7 @@ export class UploadManager extends EventTarget {
     file.uploading = file.indeterminate = true;
     file.complete = file.abort = file.errorKey = false;
     file.stalled = false;
-    this.#notifyFilesChanged();
+    this.#notifyFilesChanged(file);
 
     this.#uploadQueue.push(file);
     this.#processUploadQueue();
@@ -658,13 +668,13 @@ export class UploadManager extends EventTarget {
             // Only set stalled if file is still uploading and not aborted
             if (file.uploading && !file.abort) {
               file.stalled = true;
-              this.#notifyFilesChanged();
+              this.#notifyFilesChanged(file);
             }
           }, 2000);
         }
       }
 
-      this.#notifyFilesChanged();
+      this.#notifyFilesChanged(file);
       this.dispatchEvent(new CustomEvent('upload-progress', { detail: { file, xhr } }));
     };
 
@@ -688,7 +698,7 @@ export class UploadManager extends EventTarget {
 
       this.dispatchEvent(new CustomEvent('upload-error', { detail: { file, xhr } }));
       this.__externalFiles.delete(file);
-      this.#notifyFilesChanged();
+      this.#notifyFilesChanged(file);
     };
 
     xhr.onreadystatechange = () => {
@@ -738,7 +748,7 @@ export class UploadManager extends EventTarget {
         // Stop tracking the file now that its upload has finished
         this.__externalFiles.delete(file);
 
-        this.#notifyFilesChanged();
+        this.#notifyFilesChanged(file);
       }
     };
 
@@ -793,7 +803,7 @@ export class UploadManager extends EventTarget {
           detail: { file, xhr },
         }),
       );
-      this.#notifyFilesChanged();
+      this.#notifyFilesChanged(file);
     };
 
     const eventDetail = {
@@ -841,7 +851,7 @@ export class UploadManager extends EventTarget {
       file.errorKey = e.message || 'sendFailed';
       this.__externalFiles.delete(file);
       this.#cleanupXhr(xhr);
-      this.#notifyFilesChanged();
+      this.#notifyFilesChanged(file);
       this.#processUploadQueue();
     }
   }
@@ -862,7 +872,7 @@ export class UploadManager extends EventTarget {
     file.uploading = false;
     file.indeterminate = false;
     file.held = true;
-    this.#notifyFilesChanged();
+    this.#notifyFilesChanged(file);
     this.#processUploadQueue();
   }
 
@@ -938,10 +948,11 @@ export class UploadManager extends EventTarget {
     file.total = total;
   }
 
-  #notifyFilesChanged() {
+  #notifyFilesChanged(file) {
     // This method is called when file properties change (progress, status, etc.)
     // but not when the array structure changes. We don't track the previous state,
     // so we only provide the current value.
+    this.__changedFile = file;
     this.dispatchEvent(
       new CustomEvent('files-changed', {
         detail: { value: this.#files },
