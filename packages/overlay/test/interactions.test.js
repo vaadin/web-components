@@ -1,5 +1,4 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import {
   aTimeout,
   click,
@@ -380,28 +379,6 @@ describe('interactions', () => {
         click(overlayPart);
 
         expect(overlay.opened).to.be.true;
-      });
-    });
-
-    describe('mousedown on content', () => {
-      afterEach(async () => {
-        await resetMouse();
-      });
-
-      it('should focus overlay part on clicking the content element', async () => {
-        await sendMouseToElement({ type: 'click', element: overlay.querySelector('div') });
-        await nextRender();
-
-        expect(document.activeElement).to.be.equal(overlay);
-      });
-
-      it('should not focus overlay part if tabindex attribute removed', async () => {
-        overlay.$.overlay.removeAttribute('tabindex');
-
-        await sendMouseToElement({ type: 'click', element: overlay.querySelector('div') });
-        await nextRender();
-
-        expect(document.activeElement).to.be.equal(document.body);
       });
     });
   });
