@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #12358</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/form-layout';
+      import '@vaadin/virtual-list';
+      import '@vaadin/vertical-layout';
+
+      const items = ['hello', 'world', 'foo', 'bar', 'baz'];
+      const renderer = (root, _, { item }) => {
+        root.textContent = item;
+      };
+
+      document.querySelectorAll('vaadin-virtual-list').forEach((list) => {
+        list.items = items;
+        list.renderer = renderer;
+      });
+    </script>
+
+    <style>
+      section {
+        outline: 1px dashed red;
+        margin-bottom: 24px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section>
+      <h2 class="heading">FAIL: virtual-list inside form-layout (responsive steps)</h2>
+      <vaadin-form-layout id="form">
+        <label colspan="2">Elements</label>
+        <vaadin-virtual-list id="list-in-form" colspan="2" style="height: 80px"></vaadin-virtual-list>
+      </vaadin-form-layout>
+    </section>
+
+    <section>
+      <h2 class="heading">CONTROL 1: virtual-list inside vertical-layout</h2>
+      <vaadin-vertical-layout>
+        <label>Elements</label>
+        <vaadin-virtual-list id="list-in-vl" style="height: 80px"></vaadin-virtual-list>
+      </vaadin-vertical-layout>
+    </section>
+
+    <section>
+      <h2 class="heading">CONTROL 2: form-layout + flex: none workaround</h2>
+      <vaadin-form-layout id="form-fixed">
+        <label colspan="2">Elements</label>
+        <vaadin-virtual-list
+          id="list-in-form-flex-none"
+          colspan="2"
+          style="height: 80px; flex: none"
+        ></vaadin-virtual-list>
+      </vaadin-form-layout>
+    </section>
+
+    <section>
+      <h2 class="heading">CONTROL 3: form-layout auto-responsive (CSS grid)</h2>
+      <vaadin-form-layout id="form-ar" auto-responsive>
+        <label>Elements</label>
+        <vaadin-virtual-list id="list-in-form-ar" style="height: 80px"></vaadin-virtual-list>
+      </vaadin-form-layout>
+    </section>
+  </body>
+</html>
