@@ -192,6 +192,51 @@ snapshots["vaadin-multi-select-combo-box host error"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box host error */
 
+snapshots["vaadin-multi-select-combo-box host accessibleDescriptionRef"] = 
+`<vaadin-multi-select-combo-box>
+  <vaadin-multi-select-combo-box-scroller
+    aria-multiselectable="true"
+    id="vaadin-multi-select-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-multi-select-combo-box-scroller>
+  <label
+    for="input-vaadin-multi-select-combo-box-4"
+    id="label-vaadin-multi-select-combo-box-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-multi-select-combo-box-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-autocomplete="list"
+    aria-describedby="accessible-description-ref-0"
+    aria-expanded="false"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    id="input-vaadin-multi-select-combo-box-4"
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+  <vaadin-multi-select-combo-box-chip
+    count="0"
+    hidden=""
+    slot="overflow"
+    title=""
+  >
+  </vaadin-multi-select-combo-box-chip>
+</vaadin-multi-select-combo-box>
+`;
+/* end snapshot vaadin-multi-select-combo-box host accessibleDescriptionRef */
+
 snapshots["vaadin-multi-select-combo-box host required"] = 
 `<vaadin-multi-select-combo-box required="">
   <vaadin-multi-select-combo-box-scroller

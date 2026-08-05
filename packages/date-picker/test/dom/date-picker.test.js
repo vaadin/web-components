@@ -58,6 +58,12 @@ describe('vaadin-date-picker', () => {
       await expect(datePicker).dom.to.equalSnapshot();
     });
 
+    it('accessibleDescriptionRef', async () => {
+      datePicker.accessibleDescriptionRef = 'accessible-description-ref-0';
+      await nextUpdate(datePicker);
+      await expect(datePicker).dom.to.equalSnapshot();
+    });
+
     it('name', async () => {
       datePicker.name = 'Field Name';
       await nextUpdate(datePicker);

@@ -63,6 +63,12 @@ describe('vaadin-combo-box', () => {
       await expect(comboBox).dom.to.equalSnapshot();
     });
 
+    it('accessibleDescriptionRef', async () => {
+      comboBox.accessibleDescriptionRef = 'accessible-description-ref-0';
+      await nextUpdate(comboBox);
+      await expect(comboBox).dom.to.equalSnapshot();
+    });
+
     it('value', async () => {
       comboBox.allowCustomValue = true;
       comboBox.value = 'value';

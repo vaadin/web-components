@@ -402,6 +402,70 @@ snapshots["vaadin-radio-group host error"] =
 `;
 /* end snapshot vaadin-radio-group host error */
 
+snapshots["vaadin-radio-group host accessibleDescriptionRef"] = 
+`<vaadin-radio-group
+  aria-describedby="accessible-description-ref-0"
+  role="radiogroup"
+>
+  <vaadin-radio-button
+    has-label=""
+    has-value=""
+    label="Radio 1"
+    value="1"
+  >
+    <label
+      for="input-vaadin-radio-button-6"
+      id="label-vaadin-radio-button-3"
+      slot="label"
+    >
+      Radio 1
+    </label>
+    <input
+      id="input-vaadin-radio-button-6"
+      name="vaadin-radio-group-5"
+      slot="input"
+      tabindex="0"
+      type="radio"
+      value="1"
+    >
+  </vaadin-radio-button>
+  <vaadin-radio-button
+    has-label=""
+    has-value=""
+    label="Radio 2"
+    value="2"
+  >
+    <label
+      for="input-vaadin-radio-button-7"
+      id="label-vaadin-radio-button-4"
+      slot="label"
+    >
+      Radio 2
+    </label>
+    <input
+      id="input-vaadin-radio-button-7"
+      name="vaadin-radio-group-5"
+      slot="input"
+      tabindex="0"
+      type="radio"
+      value="2"
+    >
+  </vaadin-radio-button>
+  <label
+    id="label-vaadin-radio-group-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-radio-group-2"
+    slot="error-message"
+  >
+  </div>
+</vaadin-radio-group>
+`;
+/* end snapshot vaadin-radio-group host accessibleDescriptionRef */
+
 snapshots["vaadin-radio-group shadow default"] = 
 `<div class="vaadin-group-field-container">
   <div part="label">

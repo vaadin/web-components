@@ -46,6 +46,12 @@ describe('vaadin-switch', () => {
       await aTimeout(0);
       await expect(element).dom.to.equalSnapshot();
     });
+
+    it('accessibleDescriptionRef', async () => {
+      element.accessibleDescriptionRef = 'accessible-description-ref-0';
+      await nextUpdate(element);
+      await expect(element).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {

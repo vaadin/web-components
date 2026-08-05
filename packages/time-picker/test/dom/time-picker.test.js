@@ -35,6 +35,12 @@ describe('vaadin-time-picker', () => {
       await expect(timePicker).dom.to.equalSnapshot();
     });
 
+    it('accessibleDescriptionRef', async () => {
+      timePicker.accessibleDescriptionRef = 'accessible-description-ref-0';
+      await nextUpdate(timePicker);
+      await expect(timePicker).dom.to.equalSnapshot();
+    });
+
     it('required', async () => {
       timePicker.required = true;
       await expect(timePicker).dom.to.equalSnapshot();

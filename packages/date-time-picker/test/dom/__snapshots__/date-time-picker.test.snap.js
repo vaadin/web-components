@@ -571,6 +571,80 @@ snapshots["vaadin-date-time-picker host error"] =
 `;
 /* end snapshot vaadin-date-time-picker host error */
 
+snapshots["vaadin-date-time-picker host accessibleDescriptionRef"] = 
+`<vaadin-date-time-picker
+  aria-describedby="accessible-description-ref-0"
+  role="group"
+>
+  <label
+    id="label-vaadin-date-time-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-date-time-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <vaadin-date-picker slot="date-picker">
+    <label
+      for="search-input-vaadin-date-picker-6"
+      id="label-vaadin-date-picker-3"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-date-picker-5"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-expanded="false"
+      aria-haspopup="dialog"
+      autocomplete="off"
+      id="search-input-vaadin-date-picker-6"
+      role="combobox"
+      slot="input"
+    >
+  </vaadin-date-picker>
+  <vaadin-time-picker slot="time-picker">
+    <vaadin-time-picker-scroller
+      id="vaadin-time-picker-scroller-10"
+      role="listbox"
+      slot="overlay"
+      tabindex="-1"
+    >
+    </vaadin-time-picker-scroller>
+    <label
+      for="search-input-vaadin-time-picker-11"
+      id="label-vaadin-time-picker-7"
+      slot="label"
+    >
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-time-picker-9"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-autocomplete="list"
+      aria-expanded="false"
+      autocapitalize="off"
+      autocomplete="off"
+      autocorrect="off"
+      id="search-input-vaadin-time-picker-11"
+      role="combobox"
+      slot="input"
+      spellcheck="false"
+    >
+  </vaadin-time-picker>
+</vaadin-date-time-picker>
+`;
+/* end snapshot vaadin-date-time-picker host accessibleDescriptionRef */
+
 snapshots["vaadin-date-time-picker shadow default"] = 
 `<div class="vaadin-date-time-picker-container">
   <div part="label">

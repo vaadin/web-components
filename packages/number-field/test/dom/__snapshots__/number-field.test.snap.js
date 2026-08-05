@@ -92,6 +92,33 @@ snapshots["vaadin-number-field host error"] =
 `;
 /* end snapshot vaadin-number-field host error */
 
+snapshots["vaadin-number-field host accessibleDescriptionRef"] = 
+`<vaadin-number-field>
+  <label
+    for="input-vaadin-number-field-3"
+    id="label-vaadin-number-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-number-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-describedby="accessible-description-ref-0"
+    id="input-vaadin-number-field-3"
+    max="undefined"
+    min="undefined"
+    slot="input"
+    step="any"
+    type="number"
+  >
+</vaadin-number-field>
+`;
+/* end snapshot vaadin-number-field host accessibleDescriptionRef */
+
 snapshots["vaadin-number-field host min"] = 
 `<vaadin-number-field>
   <label

@@ -86,6 +86,31 @@ snapshots["vaadin-email-field host error"] =
 `;
 /* end snapshot vaadin-email-field host error */
 
+snapshots["vaadin-email-field host accessibleDescriptionRef"] = 
+`<vaadin-email-field>
+  <label
+    for="input-vaadin-email-field-3"
+    id="label-vaadin-email-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-email-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-describedby="accessible-description-ref-0"
+    autocapitalize="off"
+    id="input-vaadin-email-field-3"
+    slot="input"
+    type="email"
+  >
+</vaadin-email-field>
+`;
+/* end snapshot vaadin-email-field host accessibleDescriptionRef */
+
 snapshots["vaadin-email-field shadow default"] = 
 `<div class="vaadin-field-container">
   <div part="label">

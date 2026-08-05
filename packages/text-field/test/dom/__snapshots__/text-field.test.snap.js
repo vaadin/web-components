@@ -108,6 +108,30 @@ snapshots["vaadin-text-field host error"] =
 `;
 /* end snapshot vaadin-text-field host error */
 
+snapshots["vaadin-text-field host accessibleDescriptionRef"] = 
+`<vaadin-text-field>
+  <label
+    for="input-vaadin-text-field-3"
+    id="label-vaadin-text-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-text-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-describedby="accessible-description-ref-0"
+    id="input-vaadin-text-field-3"
+    slot="input"
+    type="text"
+  >
+</vaadin-text-field>
+`;
+/* end snapshot vaadin-text-field host accessibleDescriptionRef */
+
 snapshots["vaadin-text-field host inputMode property"] = 
 `<vaadin-text-field>
   <label

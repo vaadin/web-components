@@ -28,6 +28,12 @@ describe('vaadin-text-area', () => {
       await aTimeout(0);
       await expect(textArea).dom.to.equalSnapshot();
     });
+
+    it('accessibleDescriptionRef', async () => {
+      textArea.accessibleDescriptionRef = 'accessible-description-ref-0';
+      await nextUpdate(textArea);
+      await expect(textArea).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
