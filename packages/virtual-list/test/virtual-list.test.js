@@ -30,17 +30,33 @@ describe('virtual-list', () => {
     expect(list.children.length).to.equal(0);
   });
 
-  it('should not collapse inside a flexbox', () => {
-    const flexBox = fixtureSync(`
-      <div style="display:flex">
-        <vaadin-virtual-list></vaadin-virtual-list>
-      </div>`);
-
-    expect(flexBox.firstElementChild.offsetWidth).to.equal(flexBox.offsetWidth);
-  });
-
   it('should have role="list"', () => {
     expect(list.role).to.equal('list');
+  });
+
+  describe('inside flexbox', () => {
+    let wrapper;
+
+    beforeEach(() => {
+      wrapper = document.createElement('div');
+      wrapper.style.display = 'flex';
+      list = fixtureSync('<vaadin-virtual-list></vaadin-virtual-list>', wrapper);
+    });
+
+    it('should not collapse', () => {
+      expect(list.offsetWidth).to.equal(wrapper.offsetWidth);
+    });
+
+    it('should not collapse when flex-grow and flex-shrink are reset', () => {
+      wrapper.style.width = '400px';
+
+      // Mimic CSS applied by form-layout
+      list.style.flexGrow = 0;
+      list.style.flexShrink = 0;
+      list.style.width = '100%';
+
+      expect(list.offsetWidth).to.equal(wrapper.offsetWidth);
+    });
   });
 
   describe('with items', () => {
