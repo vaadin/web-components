@@ -366,6 +366,9 @@ export const UploadMixin = (superClass) =>
       // attempt until a new upload progresses
       this._manager.__clearXhrOnComplete = false;
       this._manager.__resetProgressOnQueue = false;
+      // The component has historically assigned formDataName to the file
+      // only when the upload starts, not when the file is added
+      this._manager.__assignFormDataNameOnAdd = false;
     }
 
     /** @protected */
@@ -515,7 +518,9 @@ export const UploadMixin = (superClass) =>
         noAuto: this.noAuto,
         withCredentials: this.withCredentials,
         uploadFormat: this.uploadFormat,
-        formDataName: this.formDataName,
+        // formDataName is not synced: the upload-before listener assigns it
+        // to the file when the upload starts, like the component has
+        // historically done
         maxConcurrentUploads: this.maxConcurrentUploads,
         // The manager does not accept negative maxFiles, which the component
         // treats as no limit
@@ -568,8 +573,12 @@ export const UploadMixin = (superClass) =>
       if (this._manager && !this.__updatingFromManager) {
         // Use the internal setter to skip validation: files assigned to the
         // `files` property directly (e.g. to show previously uploaded files)
-        // must be accepted as-is
+        // must be accepted as-is. The flag suppresses the synchronous file
+        // list render for the resulting files-changed event, which the
+        // component has historically not done for property assignments
+        this.__syncingFilesToManager = true;
         this._manager.__setFiles(files);
+        this.__syncingFilesToManager = false;
       }
     }
 
@@ -603,8 +612,15 @@ export const UploadMixin = (superClass) =>
         this.__updatingFromManager = true;
         this.files = [...files];
         this.__updatingFromManager = false;
+        // The component has historically not rendered the file list
+        // synchronously when files are added or removed — the list is
+        // updated through the files property observer instead. Only compute
+        // the file status strings, which the file list does not compute
+        // when rendering.
+        this.files.forEach((file) => this.__updateFileStatus(file));
+      } else if (!this.__syncingFilesToManager) {
+        this.__renderFileList();
       }
-      this.__renderFileList();
     }
 
     /** @private */

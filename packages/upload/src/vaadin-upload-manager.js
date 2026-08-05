@@ -136,6 +136,17 @@ export class UploadManager extends EventTarget {
   __resetProgressOnQueue = true;
 
   /**
+   * When true (default), `formDataName` is assigned to a file when it is
+   * added, so that it can be inspected and overridden before the upload
+   * starts. `<vaadin-upload>` disables this to preserve its historical
+   * behavior, where the property is only assigned when the upload starts.
+   * Internal API for `<vaadin-upload>`, may change at any time.
+   * @type {boolean}
+   * @private
+   */
+  __assignFormDataNameOnAdd = true;
+
+  /**
    * Create an UploadManager instance.
    * @param {Object} options - Configuration options
    * @param {string} [options.target=''] - The server URL. The default value is an empty string, which means that _window.location_ will be used.
@@ -546,7 +557,9 @@ export class UploadManager extends EventTarget {
 
     file.loaded = 0;
     file.held = true;
-    file.formDataName = this.formDataName;
+    if (this.__assignFormDataNameOnAdd) {
+      file.formDataName = this.formDataName;
+    }
     this.#setFiles([file, ...this.#files]);
 
     if (!this.noAuto) {
