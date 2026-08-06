@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { click, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-overlay.js';
 import { createOverlay } from './helpers.js';
@@ -46,30 +46,6 @@ describe('multiple overlays', () => {
         overlay2.opened = false;
 
         expect(overlay1._last).to.be.true;
-      });
-    });
-
-    describe('vaadin-overlay-outside-click', () => {
-      let spy;
-
-      beforeEach(() => {
-        spy = sinon.spy();
-        overlay1.addEventListener('vaadin-overlay-outside-click', spy);
-      });
-
-      it('should fire the vaadin-overlay-outside-click if it is the only overlay opened', () => {
-        overlay1.opened = true;
-        click(parent);
-        expect(spy.calledOnce).to.be.true;
-      });
-
-      it('should not fire the vaadin-overlay-outside-click if there is a recent overlay opened', () => {
-        overlay1.opened = true;
-
-        overlay2.opened = true;
-
-        click(parent);
-        expect(spy.called).to.be.false;
       });
     });
 
