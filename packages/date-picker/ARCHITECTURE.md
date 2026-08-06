@@ -194,9 +194,9 @@ What is disabled and what can be selected are computed from the metadata's `disa
 which consult `part`, so a name never changes what the component itself treats as selectable. The value is
 bound as an attribute and therefore escaped.
 
-Only a string is accepted, and a value that is not one is reported rather than ignored: an array would
-otherwise stringify into a comma-separated name that no selector can match, which looks like the theme
-being at fault rather than the provider.
+Only a string is used, and anything else is ignored without a warning, as `<vaadin-grid>` treats the
+result of its cell part name generator. Nothing but the styling of that one date depends on it, so there
+is nothing for a warning to protect.
 
 ## How consumers are notified
 

@@ -4,9 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { deserializeAttributeValue, setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
-import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import {
   dateAllowed,
   dateEquals,
@@ -381,18 +380,14 @@ export const MonthCalendarMixin = (superClass) =>
      * `::part()`. These do not decide what is disabled or selectable — that comes from the metadata's
      * `disabled` flag — but they share the attribute with the built-in names, so one that a theme
      * already styles brings its rules along. Providers are told to use names of their own.
+     *
+     * Anything but a string is ignored: it cannot name a part, and nothing else about the date
+     * depends on it.
      * @private
      */
     __customDateParts(date) {
       const part = date && this._dateMetadataController?.getMetadata(date)?.part;
-      if (!part) {
-        return [];
-      }
-      if (typeof part !== 'string') {
-        issueWarning('Expected the `part` of a date metadata entry to be a string.');
-        return [];
-      }
-      return part.split(' ').filter(Boolean);
+      return typeof part === 'string' ? deserializeAttributeValue(part) : [];
     }
 
     /** @private */

@@ -1,8 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 import { getDateCell, getMonthCalendar, open } from './helpers.js';
 
 describe('dateMetadataProvider part names', () => {
@@ -85,24 +83,24 @@ describe('dateMetadataProvider part names', () => {
   });
 
   describe('a part that is not a string', () => {
-    beforeEach(() => {
-      sinon.stub(console, 'warn');
-    });
-
-    afterEach(() => {
-      console.warn.restore();
-      clearWarnings();
-    });
-
-    it('should warn about and ignore an array of part names', async () => {
+    it('should ignore an array of part names', async () => {
       datePicker.dateMetadataProvider = () => [{ year, month, day: 10, part: ['busy', 'almost-full'] }];
       await open(datePicker);
       overlayContent = datePicker._overlayContent;
       await nextRender();
 
-      expect(console.warn).to.be.called;
-      expect(console.warn.firstCall.args[0]).to.contain('part');
       expect(getCell(10).part.contains('busy')).to.be.false;
+      expect(getCell(10).part.contains('date')).to.be.true;
+    });
+
+    it('should keep the date selectable', async () => {
+      datePicker.dateMetadataProvider = () => [{ year, month, day: 10, part: 1, disabled: true }];
+      await open(datePicker);
+      overlayContent = datePicker._overlayContent;
+      await untilRendered(() => getCell(10)?.hasAttribute('disabled'));
+
+      // An unusable `part` says nothing about the `disabled` flag beside it.
+      expect(getCell(10).hasAttribute('disabled')).to.be.true;
     });
   });
 });
