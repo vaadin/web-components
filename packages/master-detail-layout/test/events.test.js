@@ -46,6 +46,14 @@ describe('events', () => {
         await sendMouse({ type: 'click', position: [bounds.x + 10, bounds.y + 10] });
         expect(spy).to.not.be.called;
       });
+
+      it('should not fire backdrop-click event on backdrop click if the event was prevented', async () => {
+        const backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
+        const bounds = backdrop.getBoundingClientRect();
+        backdrop.addEventListener('click', (event) => event.preventDefault(), { capture: true });
+        await sendMouse({ type: 'click', position: [bounds.x + 10, bounds.y + 10] });
+        expect(spy).to.not.be.called;
+      });
     });
 
     describe('Escape press', () => {
