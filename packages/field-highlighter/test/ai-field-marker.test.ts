@@ -2,10 +2,12 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/custom-field/src/vaadin-custom-field.js';
+import '@vaadin/radio-group/src/vaadin-radio-group.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import '../src/vaadin-ai-field-marker.js';
 import type { CustomField } from '@vaadin/custom-field/src/vaadin-custom-field.js';
 import type { Popover } from '@vaadin/popover/src/vaadin-popover.js';
+import type { RadioGroup } from '@vaadin/radio-group/src/vaadin-radio-group.js';
 import type { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 import type { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 // @ts-ignore - applyInstanceStyles is not exported with types
@@ -573,6 +575,37 @@ describe('ai field marker', () => {
 
       marker.querySelector<HTMLButtonElement>('.actions > button')!.click();
       expect(sensitiveField.openedOnClick).to.be.false;
+    });
+  });
+
+  describe('revert on a radio group', () => {
+    // A group field exposes neither a focusElement nor an inputElement, and
+    // the group host itself is not focusable: focus must land on one of the
+    // slotted radio inputs instead of being dropped on the body.
+    let group: RadioGroup;
+    let marker: AiFieldMarker;
+
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-radio-group label="Options">
+          <vaadin-radio-button value="one" label="One"></vaadin-radio-button>
+          <vaadin-radio-button value="two" label="Two"></vaadin-radio-button>
+        </vaadin-radio-group>
+      `);
+      await nextRender();
+      marker = mark(group);
+      await nextRender();
+    });
+
+    it('should move focus into the group on revert', () => {
+      marker.querySelector<HTMLButtonElement>('.actions > button')!.click();
+      expect(group.contains(document.activeElement)).to.be.true;
+    });
+
+    it('should not focus the marker content on revert', () => {
+      // The marker's own badge and popover are also tabbable field content.
+      marker.querySelector<HTMLButtonElement>('.actions > button')!.click();
+      expect(marker.contains(document.activeElement)).to.be.false;
     });
   });
 

@@ -7,7 +7,7 @@ import '@vaadin/popover/src/vaadin-popover.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { html, LitElement, nothing } from 'lit';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getTabbableElements, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
@@ -745,7 +745,7 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
     // being forced on, which is what a bare focus() does on a Vaadin field.
     const field = this.#field;
     if (field) {
-      const focusTarget = field.focusElement || field.inputElement || field;
+      const focusTarget = field.focusElement || field.inputElement || getTabbableElements(field)[0] || field;
       focusTarget.focus({ focusVisible: isKeyboardActive() });
     }
 
