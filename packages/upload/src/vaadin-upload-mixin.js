@@ -13,22 +13,51 @@ import { DEFAULT_I18N as FILE_LIST_DEFAULT_I18N } from './vaadin-upload-file-lis
 import { getFilesFromDropEvent, translateErrorKey, updateFileStatus } from './vaadin-upload-helpers.js';
 import { UploadManager } from './vaadin-upload-manager.js';
 
-// The names of the reactive properties that are mirrored to the manager
-// config by `updated()`. Must match the keys of the config object created
-// by `__createManagerConfig()`.
-const MANAGER_CONFIG_PROPS = [
-  'target',
-  'method',
-  'headers',
-  'timeout',
-  'noAuto',
-  'withCredentials',
-  'uploadFormat',
-  'maxConcurrentUploads',
-  'maxFiles',
-  'maxFileSize',
-  'accept',
-];
+/**
+ * The `headers` property also supports a JSON string, while the manager only
+ * accepts an object, so strings are parsed. An invalid JSON string parses to
+ * undefined, which throws when the request is configured.
+ * @private
+ */
+function parseHeaders(headers) {
+  if (typeof headers !== 'string') {
+    return headers;
+  }
+  try {
+    return JSON.parse(headers);
+  } catch (_) {
+    return undefined;
+  }
+}
+
+// The manager configuration derived from the component properties. Each entry
+// is defined as a getter on `InternalUploadManager`, so that the manager reads
+// the current value whenever it needs it. This way configuration changed by an
+// `upload-before` listener (e.g. headers with a fresh auth token) applies to
+// the request being started, like it historically did.
+//
+// `formDataName` is not included: the `upload-before` listener assigns it to
+// the file when the upload starts, like the component has historically done.
+const MANAGER_CONFIG = {
+  // Fall back to an empty string, which means that window.location will be
+  // used, also when the property is set to null
+  target: (host) => host.target || '',
+  // Unlike the manager, the component passes an unsupported method to the
+  // request as-is instead of throwing
+  method: (host) => host.method,
+  headers: (host) => parseHeaders(host.headers),
+  timeout: (host) => host.timeout,
+  noAuto: (host) => host.noAuto,
+  withCredentials: (host) => host.withCredentials,
+  uploadFormat: (host) => host.uploadFormat,
+  // Unlike the manager, the component pauses uploads on a non-positive value
+  // instead of throwing
+  maxConcurrentUploads: (host) => host.maxConcurrentUploads,
+  // Unlike the manager, the component treats a negative value as no limit
+  maxFiles: (host) => (host.maxFiles < 0 ? Infinity : host.maxFiles),
+  maxFileSize: (host) => host.maxFileSize,
+  accept: (host) => host.accept,
+};
 
 export const DEFAULT_I18N = {
   dropFiles: {
@@ -51,6 +80,11 @@ export const DEFAULT_I18N = {
  * the manager integration differs from the standalone manager.
  */
 class InternalUploadManager extends UploadManager {
+  constructor(host) {
+    super();
+    this.__host = host;
+  }
+
   /**
    * Override accessor from `UploadManager` to accept assigned files as-is,
    * without validating them against the maxFiles, maxFileSize and accept
@@ -63,49 +97,6 @@ class InternalUploadManager extends UploadManager {
 
   set files(files) {
     this._setFiles([...files]);
-  }
-
-  /**
-   * Override accessor from `UploadManager` to accept any value without
-   * validation, like the component historically does: an unsupported method
-   * is passed to the request as-is.
-   * @override
-   */
-  get method() {
-    return this.__method;
-  }
-
-  set method(method) {
-    this.__method = method;
-  }
-
-  /**
-   * Override accessor from `UploadManager` to accept any value without
-   * normalization, like the component historically does: headers that are
-   * not an object (e.g. from an invalid JSON string) throw when the request
-   * is configured.
-   * @override
-   */
-  get headers() {
-    return this.__headers;
-  }
-
-  set headers(headers) {
-    this.__headers = headers;
-  }
-
-  /**
-   * Override accessor from `UploadManager` to accept any value without
-   * validation, like the component historically does: a non-positive value
-   * pauses uploads.
-   * @override
-   */
-  get maxConcurrentUploads() {
-    return this.__maxConcurrentUploads;
-  }
-
-  set maxConcurrentUploads(maxConcurrentUploads) {
-    this.__maxConcurrentUploads = maxConcurrentUploads;
   }
 
   /**
@@ -188,6 +179,18 @@ class InternalUploadManager extends UploadManager {
     this._processUploadQueue();
   }
 }
+
+// Define the configuration properties as getters that read the current value
+// from the host component. The setters are no-ops so that the assignments in
+// the `UploadManager` constructor are ignored.
+Object.entries(MANAGER_CONFIG).forEach(([prop, getValue]) => {
+  Object.defineProperty(InternalUploadManager.prototype, prop, {
+    get() {
+      return getValue(this.__host);
+    },
+    set(_value) {},
+  });
+});
 
 export const UploadMixin = (superClass) =>
   class UploadMixin extends I18nMixin(superClass) {
@@ -433,6 +436,7 @@ export const UploadMixin = (superClass) =>
 
     static get observers() {
       return [
+        '__updateMaxFilesReached(maxFiles, files)',
         '__updateAddButton(_addButton, maxFiles, __effectiveI18n, maxFilesReached, disabled)',
         '__updateDropLabel(_dropLabel, maxFiles, __effectiveI18n)',
         '__updateFileList(_fileList, files, __effectiveI18n, disabled, _theme)',
@@ -513,8 +517,9 @@ export const UploadMixin = (superClass) =>
     constructor() {
       super();
 
-      // Create the internal upload manager
-      this._manager = new InternalUploadManager();
+      // Create the internal upload manager, which reads its configuration
+      // from this component
+      this._manager = new InternalUploadManager(this);
 
       // Files that are uploaded without being added to the `files` list
       // (e.g. passed directly to `uploadFiles`)
@@ -527,7 +532,6 @@ export const UploadMixin = (superClass) =>
 
       // Set up manager event listeners
       this._manager.addEventListener('files-changed', (e) => this.__onManagerFilesChanged(e));
-      this._manager.addEventListener('max-files-reached-changed', (e) => this._setMaxFilesReached(e.detail.value));
       this._manager.addEventListener('file-reject', (e) => this.__onManagerFileReject(e));
       this._manager.addEventListener('file-remove', (e) => this.__onManagerFileRemove(e));
       this._manager.addEventListener('upload-success', (e) => this.__onManagerUploadSuccess(e));
@@ -543,18 +547,11 @@ export const UploadMixin = (superClass) =>
           e.detail.file.formDataName = this.formDataName;
         }
         this.__redispatchEvent(e);
-        if (!e.defaultPrevented) {
-          if (typeof this.headers === 'string') {
-            // The component has historically parsed a headers JSON string
-            // into the property when an upload starts, after the
-            // upload-before listeners have run
-            this.headers = this.__parseHeaders();
-          }
-          // Configuration changed by an upload-before listener (e.g. headers
-          // with a fresh auth token) has historically applied to the request
-          // being started, so sync it before the manager configures the
-          // request
-          this.__syncManagerConfig();
+        if (!e.defaultPrevented && typeof this.headers === 'string') {
+          // The component has historically parsed a headers JSON string into
+          // the property when an upload starts, after the upload-before
+          // listeners have run
+          this.headers = parseHeaders(this.headers);
         }
       });
       this._manager.addEventListener('upload-progress', (e) => {
@@ -571,7 +568,6 @@ export const UploadMixin = (superClass) =>
 
       // Handle events dispatched by the file elements in the list
       this.addEventListener('file-start', (e) => {
-        this.__syncManagerConfig();
         this.__clearFileError(e.detail.file);
         this.__trackExternalFile(e.detail.file);
         this._manager.startUpload(e.detail.file);
@@ -583,10 +579,7 @@ export const UploadMixin = (superClass) =>
           this.__externalFiles.delete(file);
         }
       });
-      this.addEventListener('file-retry', (e) => {
-        this.__syncManagerConfig();
-        this._manager.retryUpload(e.detail.file);
-      });
+      this.addEventListener('file-retry', (e) => this._manager.retryUpload(e.detail.file));
 
       // Announce the upload lifecycle to screen readers
       const alert = (message) => announce(message, { mode: 'alert' });
@@ -634,69 +627,9 @@ export const UploadMixin = (superClass) =>
       this.addController(new SlotController(this, 'drop-label-icon', 'vaadin-upload-icon'));
     }
 
-    /** @protected */
-    updated(props) {
-      super.updated(props);
-
-      // Only build the config (which involves parsing the headers JSON
-      // string) when a mirrored property has changed
-      if (MANAGER_CONFIG_PROPS.some((prop) => props.has(prop))) {
-        this.__syncManagerConfig();
-      }
-    }
-
-    /**
-     * Sync the configuration properties to the internal upload manager.
-     * @private
-     */
-    __syncManagerConfig() {
-      Object.assign(this._manager, this.__createManagerConfig());
-    }
-
-    /**
-     * Create the manager configuration from the component properties. The
-     * keys must match the property names in `MANAGER_CONFIG_PROPS`.
-     * @private
-     */
-    __createManagerConfig() {
-      return {
-        // Fall back to an empty string, which means that window.location
-        // will be used, also when the property is set to null
-        target: this.target || '',
-        method: this.method,
-        headers: this.__parseHeaders(),
-        timeout: this.timeout,
-        noAuto: this.noAuto,
-        withCredentials: this.withCredentials,
-        uploadFormat: this.uploadFormat,
-        // formDataName is not synced: the upload-before listener assigns it
-        // to the file when the upload starts, like the component has
-        // historically done
-        maxConcurrentUploads: this.maxConcurrentUploads,
-        // The manager does not accept negative maxFiles, which the component
-        // treats as no limit
-        maxFiles: this.maxFiles < 0 ? Infinity : this.maxFiles,
-        maxFileSize: this.maxFileSize,
-        accept: this.accept,
-      };
-    }
-
-    /**
-     * The `headers` property supports a JSON string, while the manager only
-     * accepts an object, so strings are parsed before syncing. An invalid
-     * JSON string parses to undefined.
-     * @private
-     */
-    __parseHeaders() {
-      let headers = this.headers;
-      if (typeof headers === 'string') {
-        try {
-          headers = JSON.parse(headers);
-        } catch (_) {
-          headers = undefined;
-        }
-      }
-      return headers;
+    /** @private */
+    __updateMaxFilesReached(maxFiles, files) {
+      this._setMaxFilesReached(maxFiles >= 0 && files.length >= maxFiles);
     }
 
     /**
@@ -1002,8 +935,6 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _addFiles(files) {
-      // Sync the config once for the whole batch instead of once per file
-      this.__syncManagerConfig();
       Array.from(files).forEach((file) => this._addFile(file));
     }
 
@@ -1062,9 +993,6 @@ export const UploadMixin = (superClass) =>
      * @param {!UploadFile | !Array<!UploadFile>=} files - Files being uploaded. Defaults to all outstanding files
      */
     uploadFiles(files = this.files) {
-      // Ensure manager config is synced before uploading files
-      this.__syncManagerConfig();
-
       // Convert to array if single file
       if (files && !Array.isArray(files)) {
         files = [files];
