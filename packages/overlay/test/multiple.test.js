@@ -62,28 +62,12 @@ describe('multiple overlays', () => {
     };
 
     beforeEach(async () => {
-      parent = fixtureSync(`
-        <div id="parent">
-          <vaadin-overlay modeless></vaadin-overlay>
-          <vaadin-overlay modeless></vaadin-overlay>
-        </div>
-      `);
-      modeless1 = parent.children[0];
-      modeless1.renderer = (root) => {
-        if (!root.firstChild) {
-          root.textContent = 'overlay 1';
-          const input = document.createElement('input');
-          root.appendChild(input);
-        }
-      };
-      modeless2 = parent.children[1];
-      modeless2.renderer = (root) => {
-        if (!root.firstChild) {
-          root.textContent = 'overlay 2';
-          const input = document.createElement('input');
-          root.appendChild(input);
-        }
-      };
+      parent = fixtureSync('<div></div>');
+      modeless1 = createOverlay('overlay 1');
+      modeless2 = createOverlay('overlay 2');
+      modeless1.modeless = true;
+      modeless2.modeless = true;
+      parent.append(modeless1, modeless2);
       await nextRender();
     });
 
