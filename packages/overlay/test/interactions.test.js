@@ -146,6 +146,17 @@ describe('interactions', () => {
         expect(click(parent).defaultPrevented).to.be.false;
       });
 
+      it('should not prevent default when closing a modeless overlay on outside click', () => {
+        // Mimic vaadin-popover, which adds the outside click listener also when modeless
+        overlay._shouldAddGlobalListeners = () => true;
+        overlay.modeless = true;
+
+        const event = click(parent);
+
+        expect(overlay.opened).to.be.false;
+        expect(event.defaultPrevented).to.be.false;
+      });
+
       it('should not prevent default if vaadin-overlay-outside-click was prevented', () => {
         overlay.addEventListener('vaadin-overlay-outside-click', (e) => e.preventDefault());
 

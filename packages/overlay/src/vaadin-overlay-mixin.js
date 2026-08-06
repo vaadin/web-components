@@ -547,7 +547,10 @@ export const OverlayMixin = (superClass) =>
       if (this.opened && !evt.defaultPrevented) {
         this.close(event);
 
-        if (!this.opened) {
+        // Mark the click as handled, so that other components that close on click,
+        // e.g. the master-detail-layout backdrop, can ignore it. Only for a modal
+        // overlay, which has already made the content behind it non-interactive.
+        if (!this.opened && !this.modeless) {
           event.preventDefault();
         }
       }
