@@ -375,19 +375,10 @@ export const MonthCalendarMixin = (superClass) =>
       return result.join(' ');
     }
 
-    /**
-     * The part names the provider supplied for the date, so a theme can style specific dates with
-     * `::part()`. These do not decide what is disabled or selectable — that comes from the metadata's
-     * `disabled` flag — but they share the attribute with the built-in names, so one that a theme
-     * already styles brings its rules along. Providers are told to use names of their own.
-     *
-     * Anything but a string is ignored: it cannot name a part, and nothing else about the date
-     * depends on it.
-     * @private
-     */
-    __customDateParts(date) {
+    /** @private */
+    __getCustomDateParts(date) {
       const part = date && this._dateMetadataController?.getMetadata(date)?.part;
-      return typeof part === 'string' ? deserializeAttributeValue(part) : [];
+      return deserializeAttributeValue(part);
     }
 
     /** @private */
