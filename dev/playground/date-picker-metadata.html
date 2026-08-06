@@ -13,6 +13,17 @@
         opacity: 0.5;
       }
 
+      /* Part names the provider supplies. They style the date without disabling it. */
+      vaadin-month-calendar::part(busy) {
+        background: #b00;
+        color: #fff;
+      }
+
+      vaadin-month-calendar::part(almost-full) {
+        outline: 2px dashed #b80;
+        outline-offset: -2px;
+      }
+
       #log {
         font-family: ui-monospace, monospace;
         font-size: 0.8rem;
@@ -87,6 +98,21 @@
         <code>isDateDisabled</code> disables the 16th of each month, and the range is limited to 90 days from today.
       </p>
       <vaadin-date-picker id="combined" label="Booking date"></vaadin-date-picker>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Custom part names and clearCache()</h2>
+      <p>
+        The provider marks a few dates <code>busy</code> and <code>almost-full</code> through <code>part</code>, styled
+        below with <code>::part()</code>. Naming a part does not disable a date — the busy ones stay selectable.
+        <em>Book a date</em> marks the next free weekday busy behind the provider, then calls
+        <code>clearCache()</code>, which re-fetches without replacing the provider function.
+      </p>
+      <div class="controls">
+        <button id="book" type="button">Book a date</button>
+        <button id="reset-bookings" type="button">Reset</button>
+      </div>
+      <vaadin-date-picker id="parts" label="Room"></vaadin-date-picker>
     </section>
 
     <section class="section">
@@ -210,6 +236,42 @@
       combined.isDateDisabled = ({ day }) => day === 16;
       combined.min = formatDate(toParts(new Date()));
       combined.max = formatDate(toParts(new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)));
+
+      // Stands in for data that changes behind the provider, keyed by ISO date.
+      const booked = new Set();
+
+      function bookingEntry(date) {
+        const iso = formatDate(toParts(date));
+        if (booked.has(iso)) {
+          return { ...toParts(date), part: 'busy' };
+        }
+        // Fridays fill up first, so mark them without disabling anything.
+        return date.getDay() === 5 ? { ...toParts(date), part: 'almost-full' } : null;
+      }
+
+      const parts = document.querySelector('#parts');
+      parts.dateMetadataProvider = (range) => {
+        const done = logCall('parts ', range);
+        const dates = datesInRange(range).map(bookingEntry).filter(Boolean);
+        done(`${dates.length} with parts`);
+        return dates;
+      };
+
+      document.querySelector('#book').addEventListener('click', () => {
+        const date = new Date();
+        // The next weekday that is not booked yet.
+        do {
+          date.setDate(date.getDate() + 1);
+        } while (isWeekend(date) || booked.has(formatDate(toParts(date))));
+        booked.add(formatDate(toParts(date)));
+        // Same provider function, new answer: `clearCache()` is what makes it visible.
+        parts.clearCache();
+      });
+
+      document.querySelector('#reset-bookings').addEventListener('click', () => {
+        booked.clear();
+        parts.clearCache();
+      });
 
       document.querySelector('#clear-log').addEventListener('click', () => {
         logElement.textContent = '';

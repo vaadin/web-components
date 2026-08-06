@@ -370,6 +370,12 @@ export const MonthCalendarMixin = (superClass) =>
         result.push('future');
       }
 
+      // Only a string can name parts, so anything else the provider set is ignored.
+      const customParts = date && this._dateMetadataController?.getMetadata(date)?.part;
+      if (customParts && typeof customParts === 'string') {
+        result.push(customParts);
+      }
+
       return result.join(' ');
     }
 
