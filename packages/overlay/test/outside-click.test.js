@@ -9,15 +9,8 @@ describe('outside click', () => {
     let parent, overlay, overlayPart, backdrop;
 
     beforeEach(async () => {
-      parent = document.createElement('div');
-      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>', parent);
-      overlay.renderer = (root) => {
-        if (!root.firstChild) {
-          const div = document.createElement('div');
-          div.textContent = 'overlay content';
-          root.appendChild(div);
-        }
-      };
+      overlay = createOverlay('overlay content');
+      parent = overlay.parentElement;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
       overlayPart = overlay.$.overlay;
