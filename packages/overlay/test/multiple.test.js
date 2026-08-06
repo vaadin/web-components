@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { click, escKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { click, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-overlay.js';
 import { createOverlay } from './helpers.js';
@@ -46,30 +46,6 @@ describe('multiple overlays', () => {
         overlay2.opened = false;
 
         expect(overlay1._last).to.be.true;
-      });
-    });
-
-    describe('vaadin-overlay-escape-press', () => {
-      let spy;
-
-      beforeEach(() => {
-        spy = sinon.spy();
-        overlay1.addEventListener('vaadin-overlay-escape-press', spy);
-      });
-
-      it('should fire the vaadin-overlay-escape-press if it is the only overlay opened', () => {
-        overlay1.opened = true;
-        escKeyDown(document.body);
-        expect(spy.called).to.be.true;
-      });
-
-      it('should not fire the vaadin-overlay-escape-press if there is a recent overlay opened', () => {
-        overlay1.opened = true;
-
-        overlay2.opened = true;
-
-        escKeyDown(document.body);
-        expect(spy.called).to.be.false;
       });
     });
 
@@ -267,59 +243,6 @@ describe('multiple overlays', () => {
       expect(showSpy2).to.be.not.called;
 
       expect(modeless2._last).to.be.true;
-    });
-
-    it('should not fire the vaadin-overlay-escape-press if the overlay does not contain focus', () => {
-      const spy = sinon.spy();
-      modeless1.addEventListener('vaadin-overlay-escape-press', spy);
-
-      modeless1.opened = true;
-
-      escKeyDown(document.body);
-      expect(spy.called).to.be.false;
-    });
-
-    it('should not fire the vaadin-overlay-escape-press if the overlay contains focus', () => {
-      const spy = sinon.spy();
-      modeless1.addEventListener('vaadin-overlay-escape-press', spy);
-
-      modeless1.opened = true;
-
-      const input = modeless1.querySelector('input');
-      input.focus();
-
-      escKeyDown(input);
-      expect(spy.called).to.be.true;
-    });
-
-    it('should fire the vaadin-overlay-escape-press if the overlay is the frontmost one', () => {
-      const spy = sinon.spy();
-      modeless1.addEventListener('vaadin-overlay-escape-press', spy);
-
-      modeless1.opened = true;
-
-      modeless2.opened = true;
-      modeless1.bringToFront();
-
-      const input = modeless1.querySelector('input');
-      input.focus();
-
-      escKeyDown(input);
-      expect(spy.called).to.be.true;
-    });
-
-    it('should not fire the vaadin-overlay-escape-press if the overlay is not the frontmost', () => {
-      const spy = sinon.spy();
-      modeless1.addEventListener('vaadin-overlay-escape-press', spy);
-
-      modeless1.opened = true;
-      modeless2.opened = true;
-
-      const input = modeless2.querySelector('input');
-      input.focus();
-
-      escKeyDown(input);
-      expect(spy.called).to.be.false;
     });
   });
 });

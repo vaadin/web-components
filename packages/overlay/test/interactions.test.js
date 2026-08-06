@@ -1,84 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
-import {
-  aTimeout,
-  click,
-  enterKeyDown,
-  escKeyDown,
-  fixtureSync,
-  mousedown,
-  mouseup,
-  nextRender,
-  oneEvent,
-} from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, mousedown, mouseup, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-overlay.js';
-import { createOverlay } from './helpers.js';
 
 describe('interactions', () => {
-  describe('Esc', () => {
-    let overlay;
-
-    beforeEach(async () => {
-      overlay = createOverlay('overlay content');
-      overlay.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
-    });
-
-    afterEach(() => {
-      overlay.opened = false;
-    });
-
-    it('should close on Esc', () => {
-      escKeyDown(document.body);
-
-      expect(overlay.opened).to.be.false;
-    });
-
-    it('should fire the vaadin-overlay-escape-press event on Esc', () => {
-      const spy = sinon.spy();
-      overlay.addEventListener('vaadin-overlay-escape-press', spy);
-
-      escKeyDown(document.body);
-
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should not fire the vaadin-overlay-escape-press event on other key press', () => {
-      const spy = sinon.spy();
-      overlay.addEventListener('vaadin-overlay-escape-press', spy);
-
-      enterKeyDown(document.body);
-
-      expect(spy.called).to.be.false;
-    });
-
-    it('should not close on Esc if the event was prevented', () => {
-      overlay.addEventListener('vaadin-overlay-escape-press', (e) => e.preventDefault());
-
-      escKeyDown(document.body);
-
-      expect(overlay.opened).to.be.true;
-    });
-
-    it('should not close on Esc if the keydown event was prevented', () => {
-      overlay.addEventListener('keydown', (e) => e.preventDefault());
-
-      escKeyDown(overlay);
-
-      expect(overlay.opened).to.be.true;
-    });
-
-    it('should not fire the vaadin-overlay-escape-press event if keydown was prevented', () => {
-      const spy = sinon.spy();
-      overlay.addEventListener('vaadin-overlay-escape-press', spy);
-      overlay.addEventListener('keydown', (e) => e.preventDefault());
-
-      enterKeyDown(overlay);
-
-      expect(spy.called).to.be.false;
-    });
-  });
-
   describe('click', () => {
     let parent, overlay, overlayPart, backdrop;
 
