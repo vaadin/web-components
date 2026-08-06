@@ -1,0 +1,45 @@
+/* Lumo message (rendered inside message-list). The base provides the flex layout,
+   the avatar/content/header structure, the attachment grid and the focus ring; this
+   restores Lumo's spacing, the wider horizontal padding, the larger secondary time
+   and the tinted attachment tile. The message-list container itself needs no Lumo
+   styling — its appearance comes entirely from the message items. */
+:where(vaadin-message) {
+  /* Wider horizontal padding than the base, and no flex gap — Lumo spaces the
+     header, avatar and attachments with explicit margins below. */
+  --vaadin-message-padding: var(--lumo-space-s) var(--lumo-space-m);
+  --vaadin-message-gap: 0px;
+  --vaadin-message-time-font-size: var(--lumo-font-size-s);
+}
+
+/* Reserve one text line of height for the header row */
+:where(vaadin-message)::part(header) {
+  min-height: calc(var(--lumo-font-size-m) * var(--lumo-line-height-m));
+}
+
+/* Gap between the name and the time */
+:where(vaadin-message)::part(name) {
+  margin-inline-end: var(--lumo-space-s);
+}
+
+/* Avatar: flat (no colored ring), spaced from the content. The size is the avatar's
+   own Lumo default (--lumo-size-m), so it isn't repeated here. */
+:where(vaadin-message) > [slot='avatar'] {
+  --vaadin-avatar-border-width: 0px;
+  margin-block-start: var(--lumo-space-s);
+  margin-inline-end: var(--lumo-space-m);
+}
+
+/* Attachments: vertical breathing room, a tinted icon tile and a smaller name */
+:where(vaadin-message)::part(attachments) {
+  margin-block: var(--lumo-space-xs);
+}
+
+:where(vaadin-message)::part(attachment-icon) {
+  color: var(--lumo-secondary-text-color);
+  background: var(--lumo-contrast-5pct);
+  --vaadin-icon-size: var(--lumo-icon-size-s);
+}
+
+:where(vaadin-message)::part(attachment-name) {
+  font-size: var(--lumo-font-size-s);
+}
