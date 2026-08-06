@@ -1,17 +1,15 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, click, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, click, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-overlay.js';
+import { createOverlay } from './helpers.js';
 
 describe('events', () => {
   describe('vaadin-overlay-open event', () => {
     let overlay, spy;
 
     beforeEach(() => {
-      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
-      overlay.renderer = (root) => {
-        root.textContent = 'overlay content';
-      };
+      overlay = createOverlay('overlay content');
       spy = sinon.spy();
       overlay.addEventListener('vaadin-overlay-open', spy);
     });
@@ -95,15 +93,8 @@ describe('events', () => {
     let parent, overlay;
 
     beforeEach(async () => {
-      parent = document.createElement('div');
-      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>', parent);
-      overlay.renderer = (root) => {
-        if (!root.firstChild) {
-          const div = document.createElement('div');
-          div.textContent = 'overlay content';
-          root.appendChild(div);
-        }
-      };
+      overlay = createOverlay('overlay content');
+      parent = overlay.parentElement;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
