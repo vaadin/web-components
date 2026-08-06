@@ -242,7 +242,7 @@ export const DatePickerMixin = (subclass) =>
          *
          * `part` from the metadata adds part names to the date, so a theme can style specific dates
          * with `::part()` — e.g. `{ year, month, day, part: 'busy' }`. Give a single name or several
-         * separated by spaces. Do not override built-in names like `disabled` and `selected`.
+         * separated by spaces. Do not use built-in names like `disabled` and `selected`.
          *
          * Keep a stable reference to the function. Assigning a new function clears the cache and
          * re-fetches every visible range. To re-fetch while keeping the same function, because the
