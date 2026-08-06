@@ -749,14 +749,17 @@ export const UploadMixin = (superClass) =>
     }
 
     /**
-     * Update the status strings of all files, including files that are
-     * uploaded without being added to the `files` list, which are not
-     * rendered by the file list but still need up-to-date status strings.
+     * Update the status strings of files, including files that are uploaded
+     * without being added to the `files` list, which are not rendered by the
+     * file list but still need up-to-date status strings. Only files that
+     * are uploading or queued are updated: the status of other files stays
+     * the same until they are queued again.
      * @private
      */
     __updateFileStatuses() {
-      this.__externalFiles.forEach((file) => this.__updateFileStatus(file));
-      this.files.forEach((file) => this.__updateFileStatus(file));
+      [...this.__externalFiles, ...this.files]
+        .filter((file) => file.uploading || file.held)
+        .forEach((file) => this.__updateFileStatus(file));
     }
 
     /**
