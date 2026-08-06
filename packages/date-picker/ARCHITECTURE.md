@@ -183,10 +183,16 @@ controller re-reports its state on reconnect and the armed flag is still set.
 `part` from an entry is appended to the date's own parts, so a theme can style particular dates through
 `::part()` without the component knowing what they mean.
 
-It changes appearance only. Naming a built-in part such as `disabled` makes a date *look* disabled, but
-what is disabled and what can be selected are computed from the metadata's `disabled` flag, and the click
-handler reads the rendered `disabled` attribute — none of which consult `part`. So a date cannot be made
-selectable, or unselectable, through it. The value is bound as an attribute and therefore escaped.
+Custom names land in the same `part` attribute as the built-in ones — `date`, `disabled`, `selected`,
+`focused`, `today`, `past`, `future` and `loading` — so a name a theme already styles brings that theme's
+rules with it. Lumo, for one, removes pointer events from `[part~='disabled']`, so a date that borrows the
+name cannot be clicked, even though the component still counts it as selectable. Names of the provider's
+own therefore keep its styling clear of the state the component manages.
+
+What is disabled and what can be selected are computed from the metadata's `disabled` flag together with
+`min`, `max` and `isDateDisabled`, and the click handler reads the rendered `disabled` attribute — none of
+which consult `part`, so a name never changes what the component itself treats as selectable. The value is
+bound as an attribute and therefore escaped.
 
 Only a string is accepted, and a value that is not one is reported rather than ignored: an array would
 otherwise stringify into a comma-separated name that no selector can match, which looks like the theme

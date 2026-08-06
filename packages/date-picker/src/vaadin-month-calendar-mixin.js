@@ -378,8 +378,9 @@ export const MonthCalendarMixin = (superClass) =>
 
     /**
      * The part names the provider supplied for the date, so a theme can style specific dates with
-     * `::part()`. Appearance only: what is disabled and what can be selected are decided from the
-     * metadata's `disabled` flag, not from these, so a date cannot be made selectable through them.
+     * `::part()`. These do not decide what is disabled or selectable — that comes from the metadata's
+     * `disabled` flag — but they share the attribute with the built-in names, so one that a theme
+     * already styles brings its rules along. Providers are told to use names of their own.
      * @private
      */
     __customDateParts(date) {

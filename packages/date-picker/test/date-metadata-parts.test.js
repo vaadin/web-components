@@ -70,14 +70,14 @@ describe('dateMetadataProvider part names', () => {
     });
   });
 
-  describe('a part name is appearance only', () => {
+  describe('a part name that matches a built-in one', () => {
     it('should not disable a date whose part is named disabled', async () => {
       datePicker.dateMetadataProvider = () => [{ year, month, day: 10, part: 'disabled' }];
       await open(datePicker);
       overlayContent = datePicker._overlayContent;
       await untilRendered(() => getCell(10)?.part.contains('disabled'));
 
-      // Looks disabled, but nothing that blocks selection consulted `part`.
+      // The theme styles it as disabled, but nothing that decides the state consulted `part`.
       expect(getCell(10).hasAttribute('disabled')).to.be.false;
       expect(getCell(10).getAttribute('aria-disabled')).to.equal('false');
       expect(overlayContent._selectDate(getCell(10).date)).to.be.true;
