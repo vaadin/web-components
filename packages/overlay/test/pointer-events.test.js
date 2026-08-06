@@ -68,27 +68,23 @@ describe('pointer-events', () => {
     });
 
     it('should disable pointer-events in first overlay when second opens', () => {
-      const overlay1Part = overlay1.shadowRoot.querySelector('[part="overlay"]');
       overlay1.opened = true;
 
       overlay2.opened = true;
 
-      expect(getComputedStyle(overlay1Part).pointerEvents).to.equal('none');
+      expect(getComputedStyle(overlay1.$.overlay).pointerEvents).to.equal('none');
     });
 
     it('should restore pointer-events in first overlay when second closes', () => {
-      const overlay1Part = overlay1.shadowRoot.querySelector('[part="overlay"]');
       overlay1.opened = true;
 
       overlay2.opened = true;
 
       overlay2.opened = false;
-      expect(getComputedStyle(overlay1Part).pointerEvents).to.equal('auto');
+      expect(getComputedStyle(overlay1.$.overlay).pointerEvents).to.equal('auto');
     });
 
     it('should restore pointer-events in second overlay when third closes', () => {
-      const overlay1Part = overlay1.shadowRoot.querySelector('[part="overlay"]');
-      const overlay2Part = overlay2.shadowRoot.querySelector('[part="overlay"]');
       overlay1.opened = true;
 
       overlay2.opened = true;
@@ -97,12 +93,11 @@ describe('pointer-events', () => {
 
       overlay3.opened = false;
 
-      expect(getComputedStyle(overlay2Part).pointerEvents).to.equal('auto');
-      expect(getComputedStyle(overlay1Part).pointerEvents).to.equal('none');
+      expect(getComputedStyle(overlay2.$.overlay).pointerEvents).to.equal('auto');
+      expect(getComputedStyle(overlay1.$.overlay).pointerEvents).to.equal('none');
     });
 
     it('should clear pointer events after closing overlays', () => {
-      const overlay1Part = overlay1.shadowRoot.querySelector('[part="overlay"]');
       // Step 1: Opening overlay 1 so it's physically moved under the body
       overlay1.opened = true;
       // Step 2: As overlay2 is modal, it will set overlay 1's pointer events to none
@@ -114,7 +109,7 @@ describe('pointer-events', () => {
       overlay2.opened = false;
       // The fix: Clear pointer-events whenever an overlay is closed
       // (in this case overlay 1 at step 3)
-      expect(getComputedStyle(overlay1Part).pointerEvents).to.equal('auto');
+      expect(getComputedStyle(overlay1.$.overlay).pointerEvents).to.equal('auto');
     });
   });
 });
