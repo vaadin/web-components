@@ -1,10 +1,97 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, click, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-overlay.js';
 
-describe('interactions', () => {
-  describe('click', () => {
+describe('events', () => {
+  describe('vaadin-overlay-open event', () => {
+    let overlay, spy;
+
+    beforeEach(() => {
+      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
+      overlay.renderer = (root) => {
+        root.textContent = 'overlay content';
+      };
+      spy = sinon.spy();
+      overlay.addEventListener('vaadin-overlay-open', spy);
+    });
+
+    afterEach(() => {
+      overlay.opened = false;
+    });
+
+    it('should fire when after a delay when setting opened property to true', async () => {
+      overlay.opened = true;
+      await nextFrame();
+      await aTimeout(0);
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should provide reference to the overlay in the event detail', async () => {
+      overlay.opened = true;
+      await nextFrame();
+      await aTimeout(0);
+      const event = spy.firstCall.args[0];
+      expect(event.detail.overlay).to.equal(overlay);
+    });
+
+    it('should not fire when immediately setting opened property back to false', async () => {
+      overlay.opened = true;
+      overlay.opened = false;
+      await nextFrame();
+      await aTimeout(0);
+      expect(spy).to.not.be.called;
+    });
+
+    it('should not fire when immediately disconnected after setting opened to true', async () => {
+      overlay.opened = true;
+      overlay.remove();
+
+      await nextFrame();
+      await aTimeout(0);
+
+      expect(spy).to.not.be.called;
+    });
+
+    it('should not propagate through shadow roots', async () => {
+      overlay.opened = true;
+      await nextFrame();
+      await aTimeout(0);
+
+      expect(spy.firstCall.args[0].composed).to.be.false;
+    });
+
+    describe('global', () => {
+      let globalSpy;
+
+      beforeEach(() => {
+        globalSpy = sinon.spy();
+        document.addEventListener('vaadin-overlay-open', globalSpy);
+      });
+
+      afterEach(() => {
+        document.removeEventListener('vaadin-overlay-open', globalSpy);
+      });
+
+      it('should fire a global event on the document body when opened', async () => {
+        overlay.opened = true;
+        await nextFrame();
+        await aTimeout(0);
+        expect(globalSpy).to.be.called;
+        expect(globalSpy.firstCall.args);
+      });
+
+      it('should provide reference to the overlay in the global event detail', async () => {
+        overlay.opened = true;
+        await nextFrame();
+        await aTimeout(0);
+        const event = globalSpy.firstCall.args[0];
+        expect(event.detail.overlay).to.equal(overlay);
+      });
+    });
+  });
+
+  describe('close events', () => {
     let parent, overlay;
 
     beforeEach(async () => {
