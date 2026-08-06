@@ -131,6 +131,35 @@ describe('interactions', () => {
       });
     });
 
+    describe('prevent default on click', () => {
+      it('should prevent default on the click that closed the overlay', () => {
+        expect(click(parent).defaultPrevented).to.be.true;
+      });
+
+      it('should not prevent default on inside click', () => {
+        expect(click(overlayPart).defaultPrevented).to.be.false;
+      });
+
+      it('should not prevent default on outside click when modeless', () => {
+        overlay.modeless = true;
+
+        expect(click(parent).defaultPrevented).to.be.false;
+      });
+
+      it('should not prevent default if vaadin-overlay-outside-click was prevented', () => {
+        overlay.addEventListener('vaadin-overlay-outside-click', (e) => e.preventDefault());
+
+        expect(click(parent).defaultPrevented).to.be.false;
+      });
+
+      it('should not prevent default if vaadin-overlay-close was prevented', () => {
+        overlay.addEventListener('vaadin-overlay-close', (e) => e.preventDefault());
+
+        expect(click(parent).defaultPrevented).to.be.false;
+        expect(overlay.opened).to.be.true;
+      });
+    });
+
     describe('vaadin-overlay-outside-click event', () => {
       it('should fire the event on outside click', () => {
         const spy = sinon.spy();
