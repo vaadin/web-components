@@ -6,7 +6,7 @@
 import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
-import { updateFileStatus } from './vaadin-upload-helpers.js';
+import { translateErrorKey, updateFileStatus } from './vaadin-upload-helpers.js';
 import { UploadManager } from './vaadin-upload-manager.js';
 
 export const DEFAULT_I18N = {
@@ -277,9 +277,9 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     __applyFileError(file, i18n) {
-      if (file.errorKey && i18n.uploading.error[file.errorKey]) {
-        file.error = i18n.uploading.error[file.errorKey];
-      } else if (!file.errorKey && this.manager instanceof UploadManager) {
+      if (file.errorKey) {
+        file.error = translateErrorKey(file.errorKey, i18n);
+      } else if (this.manager instanceof UploadManager) {
         // Clear error when errorKey is reset (e.g., on retry) only when using manager
         file.error = '';
       }

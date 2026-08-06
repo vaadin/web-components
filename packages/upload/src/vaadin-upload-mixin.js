@@ -10,13 +10,25 @@ import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { DEFAULT_I18N as FILE_LIST_DEFAULT_I18N } from './vaadin-upload-file-list-mixin.js';
-import { getFilesFromDropEvent, updateFileStatus } from './vaadin-upload-helpers.js';
+import { getFilesFromDropEvent, translateErrorKey, updateFileStatus } from './vaadin-upload-helpers.js';
 import { UploadManager } from './vaadin-upload-manager.js';
 
-// The names of the reactive properties mirrored to the manager config by
-// `updated()`, derived once from the config object created by
-// `__createManagerConfig()` (the keys match the property names)
-let managerConfigProps;
+// The names of the reactive properties that are mirrored to the manager
+// config by `updated()`. Must match the keys of the config object created
+// by `__createManagerConfig()`.
+const MANAGER_CONFIG_PROPS = [
+  'target',
+  'method',
+  'headers',
+  'timeout',
+  'noAuto',
+  'withCredentials',
+  'uploadFormat',
+  'maxConcurrentUploads',
+  'maxFiles',
+  'maxFileSize',
+  'accept',
+];
 
 export const DEFAULT_I18N = {
   dropFiles: {
@@ -40,9 +52,9 @@ export const DEFAULT_I18N = {
  */
 class InternalUploadManager extends UploadManager {
   /**
-   * Files assigned by the component are accepted as-is, without validating
-   * them against the maxFiles, maxFileSize and accept constraints, e.g. to
-   * show previously uploaded files.
+   * Override accessor from `UploadManager` to accept assigned files as-is,
+   * without validating them against the maxFiles, maxFileSize and accept
+   * constraints, e.g. to show previously uploaded files.
    * @override
    */
   get files() {
@@ -53,14 +65,12 @@ class InternalUploadManager extends UploadManager {
     this._setFiles([...files]);
   }
 
-  // The component has historically accepted any values for the following
-  // properties, so the validation and normalization of the manager's
-  // accessors is skipped: an unsupported method is passed to the request
-  // as-is, a non-positive maxConcurrentUploads pauses uploads, and headers
-  // that are not an object (e.g. from an invalid JSON string) throw when
-  // the request is configured.
-
-  /** @override */
+  /**
+   * Override accessor from `UploadManager` to accept any value without
+   * validation, like the component historically does: an unsupported method
+   * is passed to the request as-is.
+   * @override
+   */
   get method() {
     return this.__method;
   }
@@ -69,7 +79,13 @@ class InternalUploadManager extends UploadManager {
     this.__method = method;
   }
 
-  /** @override */
+  /**
+   * Override accessor from `UploadManager` to accept any value without
+   * normalization, like the component historically does: headers that are
+   * not an object (e.g. from an invalid JSON string) throw when the request
+   * is configured.
+   * @override
+   */
   get headers() {
     return this.__headers;
   }
@@ -78,7 +94,12 @@ class InternalUploadManager extends UploadManager {
     this.__headers = headers;
   }
 
-  /** @override */
+  /**
+   * Override accessor from `UploadManager` to accept any value without
+   * validation, like the component historically does: a non-positive value
+   * pauses uploads.
+   * @override
+   */
   get maxConcurrentUploads() {
     return this.__maxConcurrentUploads;
   }
@@ -98,9 +119,9 @@ class InternalUploadManager extends UploadManager {
   }
 
   /**
-   * Unlike the manager, the component does not restart the upload of a file
-   * that is already uploading or queued on retry; only the `upload-retry`
-   * event is dispatched.
+   * Override method from `UploadManager` to not restart the upload of a
+   * file that is already uploading or queued, like the component
+   * historically does; only the `upload-retry` event is dispatched.
    * @override
    */
   retryUpload(file) {
@@ -116,10 +137,10 @@ class InternalUploadManager extends UploadManager {
   }
 
   /**
-   * The component uploads all files given to `uploadFiles`, also files that
-   * are not in the `files` list, without adding them to it. Removing a file
-   * in an `upload-before` or `upload-request` listener does not cancel its
-   * upload either.
+   * Override method from `UploadManager` to treat all files as managed:
+   * files that are not in the `files` list are uploaded without being added
+   * to it, and removing a file in an `upload-before` or `upload-request`
+   * listener does not cancel its upload.
    * @override
    */
   _isFileManaged(_file) {
@@ -127,10 +148,11 @@ class InternalUploadManager extends UploadManager {
   }
 
   /**
-   * A prevented `upload-before` or `upload-request` event leaves the file
-   * state untouched, so that the preventing listener can take over the
-   * request (e.g. send the xhr manually). The upload slot stays taken until
-   * the taken-over request completes.
+   * Override method from `UploadManager` to leave the state of a file whose
+   * `upload-before` or `upload-request` event was prevented untouched, so
+   * that the preventing listener can take over the request (e.g. send the
+   * xhr manually). The upload slot stays taken until the taken-over request
+   * completes.
    * @override
    */
   _holdFile(_file) {
@@ -138,8 +160,8 @@ class InternalUploadManager extends UploadManager {
   }
 
   /**
-   * The component keeps the progress properties of the previous upload
-   * attempt until a new upload progresses.
+   * Override method from `UploadManager` to keep the progress properties of
+   * the previous upload attempt until a new upload progresses.
    * @override
    */
   _resetFileProgress(_file) {
@@ -147,8 +169,9 @@ class InternalUploadManager extends UploadManager {
   }
 
   /**
-   * The component keeps the last request available on the file after the
-   * upload has finished, e.g. in the `upload-retry` event detail.
+   * Override method from `UploadManager` to keep the last request available
+   * on the file after the upload has finished, e.g. in the `upload-retry`
+   * event detail.
    * @override
    */
   _clearFileXhr(_file) {
@@ -156,7 +179,8 @@ class InternalUploadManager extends UploadManager {
   }
 
   /**
-   * Removing a file also frees upload capacity for other queued files.
+   * Override method from `UploadManager` to also free upload capacity for
+   * other queued files when a file is removed.
    * @override
    */
   _removeFile(file) {
@@ -615,12 +639,9 @@ export const UploadMixin = (superClass) =>
       super.updated(props);
 
       // Only build the config (which involves parsing the headers JSON
-      // string) when a mirrored property has changed; the first update
-      // always has them all changed, as they all have default values
-      if (!managerConfigProps || managerConfigProps.some((prop) => props.has(prop))) {
-        const config = this.__createManagerConfig();
-        managerConfigProps ||= Object.keys(config);
-        Object.assign(this._manager, config);
+      // string) when a mirrored property has changed
+      if (MANAGER_CONFIG_PROPS.some((prop) => props.has(prop))) {
+        this.__syncManagerConfig();
       }
     }
 
@@ -632,7 +653,11 @@ export const UploadMixin = (superClass) =>
       Object.assign(this._manager, this.__createManagerConfig());
     }
 
-    /** @private */
+    /**
+     * Create the manager configuration from the component properties. The
+     * keys must match the property names in `MANAGER_CONFIG_PROPS`.
+     * @private
+     */
     __createManagerConfig() {
       return {
         // Fall back to an empty string, which means that window.location
@@ -871,12 +896,11 @@ export const UploadMixin = (superClass) =>
     __onManagerUploadError(event) {
       const { file } = event.detail;
       this.__externalFiles.delete(file);
-      // Translate errorKey to i18n message and set file.error (only if error wasn't already set directly)
-      if (file.errorKey && !file.error) {
-        // There is no i18n message for the manager's timeout error; a timed
-        // out request has historically surfaced as server unavailable
-        const errorKey = file.errorKey === 'timeout' ? 'serverUnavailable' : file.errorKey;
-        file.error = this.__effectiveI18n.uploading.error[errorKey] || errorKey;
+      // Translate errorKey to i18n message and set file.error, also when a
+      // listener has already assigned an error, which the component has
+      // historically overwritten with the message derived from the response
+      if (file.errorKey) {
+        file.error = translateErrorKey(file.errorKey, this.__effectiveI18n);
       }
       this.__redispatchEvent(event);
       // The manager stops tracking upload progress once the upload has
@@ -978,6 +1002,8 @@ export const UploadMixin = (superClass) =>
 
     /** @private */
     _addFiles(files) {
+      // Sync the config once for the whole batch instead of once per file
+      this.__syncManagerConfig();
       Array.from(files).forEach((file) => this._addFile(file));
     }
 
@@ -988,7 +1014,6 @@ export const UploadMixin = (superClass) =>
      * @protected
      */
     _addFile(file) {
-      this.__syncManagerConfig();
       this._manager.addFiles([file]);
     }
 

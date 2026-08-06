@@ -133,6 +133,21 @@ export function updateFileStatus(file, i18n, { indeterminateFirst = false } = {}
 }
 
 /**
+ * Translate the error key of a failed upload into the matching i18n error
+ * message. A timed out request surfaces as server unavailable, and an error
+ * key without a message translates to the key itself.
+ *
+ * @param {string} errorKey - The error key of a failed upload
+ * @param {Object} i18n - The effective i18n object
+ * @returns {string} - The translated error message
+ * @private
+ */
+export function translateErrorKey(errorKey, i18n) {
+  const key = errorKey === 'timeout' ? 'serverUnavailable' : errorKey;
+  return i18n.uploading.error[key] || key;
+}
+
+/**
  * Get the files from the drop event. The dropped items may contain a
  * combination of files and directories. If a dropped item is a directory,
  * it will be recursively traversed to get all files.
