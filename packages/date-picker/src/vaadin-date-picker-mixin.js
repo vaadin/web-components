@@ -22,6 +22,7 @@ import {
   formatISODate,
   getAdjustedYear,
   getClosestDate,
+  normalizeDate,
   parseDate,
 } from './vaadin-date-picker-helper.js';
 
@@ -618,6 +619,12 @@ export const DatePickerMixin = (subclass) =>
       // Two-way data binding for `focusedDate` property
       content.addEventListener('focused-date-changed', (e) => {
         this._focusedDate = e.detail.value;
+
+        // Every focus change the component makes itself is guarded, so an unguarded one is the
+        // user's own and the auto-picked date stops being ours to adjust.
+        if (!this._ignoreFocusedDateChange) {
+          this.__initialFocusDate = null;
+        }
       });
 
       content.addEventListener('click', (e) => e.stopPropagation());
@@ -724,8 +731,8 @@ export const DatePickerMixin = (subclass) =>
 
     /**
      * Moves the overlay's initial focus off a date the provider turns out to disable, once the
-     * provider has answered for that month. Only touches the auto-picked initial date and only
-     * while the user has not navigated away, so disabled dates the user focuses on purpose (which
+     * provider has answered for that month. Only touches the auto-picked initial date, which any
+     * focus change of the user's own clears, so disabled dates the user focuses on purpose (which
      * stay keyboard-focusable) are left alone.
      * @private
      */
@@ -736,11 +743,6 @@ export const DatePickerMixin = (subclass) =>
       if (!content || !initial || !controller.provider) {
         return;
       }
-      // The user has moved focus; stop trying to adjust the initial date.
-      if (!dateEquals(content.focusedDate, initial)) {
-        this.__initialFocusDate = null;
-        return;
-      }
       // Wait until the provider has answered for the initial month.
       if (!controller.isMonthLoaded(initial)) {
         return;
@@ -749,7 +751,12 @@ export const DatePickerMixin = (subclass) =>
       if (controller.isDateDisabled(initial)) {
         const closest = this.__closestSelectableDate(initial);
         if (closest) {
-          content.focusDate(closest);
+          // Assigned the way opening does, rather than through `focusDate()`: notifying would apply
+          // the date to the input as if it had been typed, and focusing the cell would take focus
+          // away from the input the user may be using.
+          this._ignoreFocusedDateChange = true;
+          content.focusedDate = closest;
+          this._ignoreFocusedDateChange = false;
         }
       }
     }
@@ -761,19 +768,34 @@ export const DatePickerMixin = (subclass) =>
      * @private
      */
     __closestSelectableDate(date) {
+      const minDate = this._minDate;
+      const maxDate = this._maxDate;
       const isSelectable = (candidate) =>
-        dateSelectable(candidate, this._minDate, this._maxDate, this.isDateDisabled, this._dateMetadataController);
+        dateSelectable(candidate, minDate, maxDate, this.isDateDisabled, this._dateMetadataController);
 
-      if (isSelectable(date)) {
-        return date;
+      // At midnight, like the parsed `min` and `max`, so that a candidate on either of those days is
+      // not rejected for the time of day the date happens to carry.
+      const start = normalizeDate(date);
+      if (isSelectable(start)) {
+        return start;
       }
       for (let offset = 1; offset <= 366; offset++) {
+        let withinRange = false;
         for (const direction of [1, -1]) {
-          const candidate = new Date(date);
+          const candidate = new Date(start);
           candidate.setDate(candidate.getDate() + offset * direction);
+          if ((minDate && candidate < minDate) || (maxDate && candidate > maxDate)) {
+            continue;
+          }
+          withinRange = true;
           if (isSelectable(candidate)) {
             return candidate;
           }
+        }
+        // Both directions have left the allowed range, so widening the search cannot find anything.
+        // Worth stopping for: `isDateDisabled` is the caller's own code, and is called per candidate.
+        if (!withinRange) {
+          break;
         }
       }
       return undefined;

@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-date-picker.js';
-import { monthDate, monthIndexOf } from '../src/vaadin-date-picker-helper.js';
+import { formatISODate, monthDate, monthIndexOf } from '../src/vaadin-date-picker-helper.js';
 import { open } from './helpers.js';
 
 describe('dateMetadataProvider initial focus', () => {
@@ -160,6 +160,58 @@ describe('dateMetadataProvider initial focus', () => {
     await untilRendered(() => datePicker._dateMetadataController.isMonthLoaded(new Date(2020, 0, 15)));
 
     expect(content.focusedDate.getDate()).to.equal(15);
+  });
+
+  it('should not apply the moved date to the input', async () => {
+    datePicker.dateMetadataProvider = disableFifteenth;
+    await open(datePicker);
+    content = datePicker._overlayContent;
+
+    await untilRendered(() => content.focusedDate && content.focusedDate.getDate() !== 15);
+
+    // Moving the focus is not the user picking a date, so nothing may be typed into the input or
+    // committed from it when the overlay is dismissed.
+    expect(datePicker.inputElement.value).to.equal('');
+    datePicker.close();
+    await nextRender();
+
+    expect(datePicker.value).to.equal('');
+  });
+
+  it('should not move focus the user navigated away from and back to', async () => {
+    const provider = deferredProvider();
+    datePicker.dateMetadataProvider = provider;
+    await open(datePicker);
+    content = datePicker._overlayContent;
+
+    // Moving within the loaded month and back leaves the 15th focused by the user's own choice.
+    content.focusDate(new Date(2020, 0, 20));
+    content.focusDate(new Date(2020, 0, 15));
+    provider.resolveAll();
+    await untilRendered(() => datePicker._dateMetadataController.isMonthLoaded(new Date(2020, 0, 15)));
+
+    expect(content.focusedDate.getDate()).to.equal(15);
+  });
+
+  it('should move initial focus to a date on the max day', async () => {
+    // With no initial position the focus starts at the current time of day, which must not make a
+    // candidate on the `max` day, parsed to midnight, look out of range.
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    datePicker.initialPosition = '';
+    datePicker.min = formatISODate(today);
+    datePicker.max = formatISODate(tomorrow);
+    datePicker.dateMetadataProvider = () => [
+      { year: today.getFullYear(), month: today.getMonth(), day: today.getDate(), disabled: true },
+    ];
+    await open(datePicker);
+    content = datePicker._overlayContent;
+
+    await untilRendered(() => content.focusedDate && content.focusedDate.getDate() === tomorrow.getDate());
+
+    expect(content.focusedDate.getMonth()).to.equal(tomorrow.getMonth());
+    expect(content.focusedDate.getDate()).to.equal(tomorrow.getDate());
   });
 
   it('should not move focus after the overlay was closed', async () => {
