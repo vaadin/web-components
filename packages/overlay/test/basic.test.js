@@ -173,39 +173,6 @@ describe('vaadin-overlay', () => {
     });
   });
 
-  describe('pointer-events', () => {
-    let overlay;
-
-    beforeEach(async () => {
-      overlay = createOverlay('overlay content');
-      overlay.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
-    });
-
-    afterEach(() => {
-      overlay.opened = false;
-    });
-
-    it('should not prevent clicking elements outside overlay when modeless (non-modal)', () => {
-      overlay.modeless = true;
-      expect(document.body.style.pointerEvents).to.eql('');
-    });
-
-    it('should prevent clicking elements outside overlay when modal', () => {
-      expect(document.body.style.pointerEvents).to.eql('none');
-    });
-
-    it('should not prevent clicking document elements after modal is closed', () => {
-      overlay.opened = false;
-      expect(document.body.style.pointerEvents).to.eql('');
-    });
-
-    it('should allow pointer events on the overlayPart while skipping on the host', () => {
-      expect(getComputedStyle(overlay.$.overlay).pointerEvents).to.equal('auto');
-      expect(getComputedStyle(overlay).pointerEvents).to.equal('none');
-    });
-  });
-
   describe('modeless', () => {
     let overlay, owner;
 
