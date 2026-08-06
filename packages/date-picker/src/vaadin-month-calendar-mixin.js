@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { deserializeAttributeValue, setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
 import {
   dateAllowed,
@@ -370,15 +370,13 @@ export const MonthCalendarMixin = (superClass) =>
         result.push('future');
       }
 
-      result.push(...this.__customDateParts(date));
+      // Only a string can name parts, so anything else the provider set is ignored.
+      const customParts = date && this._dateMetadataController?.getMetadata(date)?.part;
+      if (customParts && typeof customParts === 'string') {
+        result.push(customParts);
+      }
 
       return result.join(' ');
-    }
-
-    /** @private */
-    __getCustomDateParts(date) {
-      const part = date && this._dateMetadataController?.getMetadata(date)?.part;
-      return deserializeAttributeValue(part);
     }
 
     /** @private */
