@@ -259,16 +259,18 @@ describe('dateMetadataProvider integration', () => {
     expect(hasPart(getDateCell(january, 15), 'loading')).to.be.true;
   });
 
-  // What the range then resolves to is the controller's own; this covers the way back from a month
-  // index here, where `new Date(50, ...)` would ask the provider about the 1950s instead.
-  it('should ask the provider for a visible range below year 100, not for the 20th century', async () => {
-    const provider = sinon.stub().returns([]);
+  // `new Date(50, ...)` would move a two-digit year into the 1950s, which would break both the range
+  // the provider is asked about and the dates the metadata is matched against.
+  it('should request and disable the dates of a year below 100', async () => {
+    const provider = sinon.stub().returns([{ year: 50, month: 5, day: 15, disabled: true }]);
     datePicker.initialPosition = '0050-06-01';
     await openWithProvider(provider);
 
     const { start, end } = provider.firstCall.args[0];
     expect(start.year).to.be.within(49, 50);
     expect(end.year).to.be.within(50, 51);
+    expect(isDisabled(getVisibleCell(15, 50, 5))).to.be.true;
+    expect(isDisabled(getVisibleCell(16, 50, 5))).to.be.false;
   });
 
   it('should disable the dates rejected by any constraint and keep the others enabled', async () => {
