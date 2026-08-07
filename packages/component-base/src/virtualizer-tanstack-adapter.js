@@ -20,6 +20,15 @@ const OVERSCAN_RATIO = 0.25;
 
 const DEFAULT_ESTIMATED_SIZE = 200;
 
+// The underlying virtualizer computes the scroll container height as the sum
+// of all item sizes, which for a large enough count would exceed the maximum
+// element height supported by browsers. When size is larger than
+// MAX_VIRTUAL_COUNT, the underlying virtualizer is given MAX_VIRTUAL_COUNT
+// items and a virtual index offset is used to map the indexes it works with
+// ("virtual indexes") to the actual index range.
+const MAX_VIRTUAL_COUNT = 100000;
+const OFFSET_ADJUST_MIN_THRESHOLD = 1000;
+
 /**
  * Pairs each element with a virtual item, reusing the element that already
  * renders an item with the same key. Returns an array of [element, item] pairs:
@@ -66,6 +75,18 @@ export class TanStackAdapter {
 
   /** @type {Debouncer} */
   #reorderElementsDebouncer;
+
+  /** @type {number} */
+  #size = 0;
+
+  /** @type {number} */
+  #indexOffset = 0;
+
+  /** @type {number} */
+  #scrollPosition = 0;
+
+  /** @type {boolean} */
+  #skipIndexOffsetAdjust = false;
 
   constructor({ createElements, updateElement, scrollTarget, scrollContainer, elementsContainer, reorderElements }) {
     this.createElements = createElements;
@@ -151,36 +172,95 @@ export class TanStackAdapter {
   }
 
   get size() {
-    return this.#virtualizer.options.count;
+    return this.#size;
   }
 
   set size(size) {
-    this.#virtualizer.setOptions({ ...this.#virtualizer.options, count: size });
+    if (size === this.size) {
+      return;
+    }
+
+    // Record the scroll position before changing the size
+    const shouldRestoreScrollPosition = size > 0 && this.scrollTarget.scrollTop > 0;
+    let fvi; // First visible index
+    let fviOffsetBefore; // Scroll offset of the first visible index
+    if (shouldRestoreScrollPosition) {
+      fvi = this.adjustedFirstVisibleIndex;
+      fviOffsetBefore = this.#getIndexScrollOffset(fvi);
+    }
+
+    this.#size = size;
+    this.#virtualizer.setOptions({ ...this.#virtualizer.options, count: Math.min(size, MAX_VIRTUAL_COUNT) });
+    this.#indexOffset = Math.max(0, Math.min(this.#indexOffset, this.#maxIndexOffset));
+
     this.#render();
+
+    if (shouldRestoreScrollPosition) {
+      // Note, calling scrollToIndex also updates the virtual index offset,
+      // causing the virtualizer to add more items when size is increased,
+      // and remove exceeding items when size is decreased.
+      fvi = Math.min(fvi, size - 1);
+      this.scrollToIndex(fvi);
+      this.#restoreScrollOffset(fvi, fviOffsetBefore);
+    }
+
     this.flush();
   }
 
   get adjustedFirstVisibleIndex() {
-    return this.#virtualizer.range.startIndex;
+    return this.#virtualizer.range.startIndex + this.#indexOffset;
   }
 
   get adjustedLastVisibleIndex() {
-    return this.#virtualizer.range.endIndex;
+    return this.#virtualizer.range.endIndex + this.#indexOffset;
   }
 
   scrollToIndex(index) {
-    this.#virtualizer.scrollToIndex(index, { align: 'start' });
+    if (typeof index !== 'number' || isNaN(index) || this.size === 0 || !this.scrollTarget.offsetHeight) {
+      return;
+    }
 
-    // TanStack normally settles the scroll position asynchronously via rAF
-    // (scheduleScrollReconcile). Drive that loop synchronously: sync the
-    // scroll offset, render so newly visible items get measured, then let
-    // reconcileScroll recompute the target and re-scroll. Repeat until
-    // reconcileScroll clears scrollState.
-    while (this.#virtualizer.scrollState) {
-      this.#virtualizer.scrollOffset = this.scrollTarget.scrollTop;
-      this.#render();
-      this.#renderDebouncer?.flush();
-      this.#virtualizer.reconcileScroll();
+    index = Math.max(0, Math.min(index, this.size - 1));
+
+    // Pick a virtual index to scroll to and a virtual index offset that maps
+    // it to the requested index, in a way that leaves the user room to scroll
+    // to the actual first and last index (see #adjustIndexOffset).
+    const visibleElementCount = this.#visibleElements.length;
+    let targetVirtualIndex = Math.floor((index / this.size) * this.#virtualCount);
+    if (this.#virtualCount - targetVirtualIndex < visibleElementCount) {
+      targetVirtualIndex = this.#virtualCount - (this.size - index);
+      this.#indexOffset = this.#maxIndexOffset;
+    } else if (targetVirtualIndex < visibleElementCount) {
+      if (index < OFFSET_ADJUST_MIN_THRESHOLD) {
+        targetVirtualIndex = index;
+        this.#indexOffset = 0;
+      } else {
+        targetVirtualIndex = OFFSET_ADJUST_MIN_THRESHOLD;
+        this.#indexOffset = index - targetVirtualIndex;
+      }
+    } else {
+      this.#indexOffset = index - targetVirtualIndex;
+    }
+
+    // The scroll position change originates from the virtualizer itself,
+    // so it must not affect the virtual index offset computed above.
+    this.#skipIndexOffsetAdjust = true;
+    try {
+      this.#virtualizer.scrollToIndex(targetVirtualIndex, { align: 'start' });
+
+      // TanStack normally settles the scroll position asynchronously via rAF
+      // (scheduleScrollReconcile). Drive that loop synchronously: sync the
+      // scroll offset, render so newly visible items get measured, then let
+      // reconcileScroll recompute the target and re-scroll. Repeat until
+      // reconcileScroll clears scrollState.
+      while (this.#virtualizer.scrollState) {
+        this.#virtualizer.scrollOffset = this.scrollTarget.scrollTop;
+        this.#render();
+        this.#renderDebouncer?.flush();
+        this.#virtualizer.reconcileScroll();
+      }
+    } finally {
+      this.#skipIndexOffsetAdjust = false;
     }
   }
 
@@ -247,6 +327,13 @@ export class TanStackAdapter {
   #render() {
     this.#renderDebouncer?.cancel();
 
+    const scrollPosition = this.#virtualizer.scrollOffset ?? 0;
+    const delta = scrollPosition - this.#scrollPosition;
+    this.#scrollPosition = scrollPosition;
+    if (delta !== 0 && !this.#skipIndexOffsetAdjust) {
+      this.#adjustIndexOffset(delta);
+    }
+
     this.scrollContainer.style.height = `${this.#virtualizer.getTotalSize()}px`;
 
     if (this.#virtualizer.isScrolling) {
@@ -265,10 +352,11 @@ export class TanStackAdapter {
       return;
     }
 
-    const index = parseInt(element.dataset.index);
     const height = Math.ceil(entry ? entry.borderBoxSize[0].blockSize : getBorderBoxBlockSize(element));
     if (height > 0) {
-      this.#virtualizer.resizeItem(index, height);
+      // The element's key equals the virtual index of the item it renders,
+      // regardless of the current virtual index offset.
+      this.#virtualizer.resizeItem(element.key, height);
     }
   }
 
@@ -303,7 +391,7 @@ export class TanStackAdapter {
       }
 
       const oldIndex = parseInt(el.dataset.index);
-      const newIndex = item.index;
+      const newIndex = item.index + this.#indexOffset;
 
       el.key = item.key;
       el.hidden = false;
@@ -418,6 +506,112 @@ export class TanStackAdapter {
   get #overscan() {
     const averageVisibleCount = Math.ceil(this.#virtualizer.scrollRect.height / this.#averageSize);
     return Math.max(1, Math.ceil(averageVisibleCount * OVERSCAN_RATIO));
+  }
+
+  /** The item count the underlying virtualizer works with */
+  get #virtualCount() {
+    return this.#virtualizer.options.count;
+  }
+
+  /** The maximum valid virtual index offset for the current size */
+  get #maxIndexOffset() {
+    return this.size - this.#virtualCount;
+  }
+
+  /**
+   * Adjusts the virtual index offset based on a scroll position change so
+   * that a scroll bar drag maps the full scroll range to the full index
+   * range, and the user can always slowly scroll to the actual first and
+   * last index.
+   *
+   * @param {number} delta - The scroll offset change
+   */
+  #adjustIndexOffset(delta) {
+    const maxOffset = this.#maxIndexOffset;
+
+    if (maxOffset <= 0) {
+      this.#indexOffset = 0;
+      return;
+    }
+
+    const scrollTop = this.scrollTarget.scrollTop;
+    const maxScrollTop = this.scrollTarget.scrollHeight - this.scrollTarget.clientHeight;
+
+    if (Math.abs(delta) > 10000) {
+      // Process a large scroll position change (e.g. a scroll bar drag)
+      const scale = maxScrollTop > 0 ? scrollTop / maxScrollTop : 0;
+      this.#indexOffset = Math.round(scale * maxOffset);
+      return;
+    }
+
+    // Make sure the user can always swipe/wheel scroll to the start and end
+    const threshold = OFFSET_ADJUST_MIN_THRESHOLD;
+    const maxShift = 100;
+    const firstVisibleVirtualIndex = this.#virtualizer.range?.startIndex ?? 0;
+
+    // Near start
+    if (scrollTop === 0) {
+      // At the actual start, drop the remaining offset so the actual
+      // first indexes are rendered
+      this.#indexOffset = 0;
+    } else if (firstVisibleVirtualIndex < threshold && this.#indexOffset > 0) {
+      this.#shiftIndexOffset(-Math.min(this.#indexOffset, maxShift));
+    }
+
+    // Near end
+    if (scrollTop >= maxScrollTop && maxScrollTop > 0) {
+      // At the actual end, use the max offset so the actual last indexes
+      // are rendered
+      this.#indexOffset = maxOffset;
+    } else if (this.#virtualCount - firstVisibleVirtualIndex < threshold && this.#indexOffset < maxOffset) {
+      this.#shiftIndexOffset(Math.min(maxOffset - this.#indexOffset, maxShift));
+    }
+  }
+
+  /**
+   * Shifts the virtual index offset by the given amount while keeping the
+   * currently visible items in place. Changing the offset relabels each
+   * virtual index to a new actual index, so the scroll position is adjusted
+   * by the distance between the anchor item's old and new virtual index.
+   *
+   * @param {number} shift - The amount to shift the virtual index offset by
+   */
+  #shiftIndexOffset(shift) {
+    const anchorVirtualIndex = this.#virtualizer.range?.startIndex;
+    this.#indexOffset += shift;
+
+    const measurements = this.#virtualizer.measurementsCache;
+    const anchorBefore = measurements[anchorVirtualIndex];
+    const anchorAfter = measurements[anchorVirtualIndex - shift];
+    if (anchorBefore && anchorAfter) {
+      this.scrollTarget.scrollTop += anchorAfter.start - anchorBefore.start;
+      this.#virtualizer.scrollOffset = this.scrollTarget.scrollTop;
+      this.#scrollPosition = this.#virtualizer.scrollOffset;
+    }
+  }
+
+  /**
+   * Returns the scroll offset of the element rendering the given index,
+   * relative to the scroll target's top, or undefined if not rendered.
+   *
+   * @param {number} index
+   */
+  #getIndexScrollOffset(index) {
+    const element = this.#visibleElements.find((el) => parseInt(el.dataset.index) === index);
+    return element ? this.scrollTarget.getBoundingClientRect().top - element.getBoundingClientRect().top : undefined;
+  }
+
+  /**
+   * Adjusts the scroll position to compensate for any offset change of a given index.
+   *
+   * @param {number} index - The index whose scroll offset to restore
+   * @param {number | undefined} offsetBefore - The scroll offset of the index before the change
+   */
+  #restoreScrollOffset(index, offsetBefore) {
+    const offsetAfter = this.#getIndexScrollOffset(index);
+    if (offsetBefore !== undefined && offsetAfter !== undefined) {
+      this.scrollTarget.scrollTop += offsetBefore - offsetAfter;
+    }
   }
 
   get #virtualItems() {
