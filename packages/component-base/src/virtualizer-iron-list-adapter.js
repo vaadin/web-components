@@ -78,12 +78,7 @@ export class IronListAdapter {
     });
     attachObserver.observe(this.scrollTarget);
 
-    this.scrollTarget.addEventListener('virtualizer-element-focused', (e) => this.__onElementFocused(e));
-    this.elementsContainer.addEventListener('focusin', () => {
-      this.scrollTarget.dispatchEvent(
-        new CustomEvent('virtualizer-element-focused', { detail: { element: this.__getFocusedElement() } }),
-      );
-    });
+    this.elementsContainer.addEventListener('focusin', () => this.__onElementFocused());
 
     if (this.reorderElements) {
       // Reordering the physical elements cancels the user's grab of the scroll bar handle on Safari.
@@ -558,12 +553,12 @@ export class IronListAdapter {
   }
 
   /** @private */
-  __onElementFocused(e) {
+  __onElementFocused() {
     if (!this.reorderElements) {
       return;
     }
 
-    const focusedElement = e.detail.element;
+    const focusedElement = this.__getFocusedElement();
     if (!focusedElement) {
       return;
     }
