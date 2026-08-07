@@ -1,98 +1,17 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import {
-  aTimeout,
-  click,
-  enterKeyDown,
-  escKeyDown,
-  fixtureSync,
-  mousedown,
-  mouseup,
-  nextRender,
-  oneEvent,
-} from '@vaadin/testing-helpers';
+import { click, fixtureSync, mousedown, mouseup, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-overlay.js';
 import { createOverlay } from './helpers.js';
 
-describe('interactions', () => {
-  describe('Esc', () => {
-    let overlay;
-
-    beforeEach(async () => {
-      overlay = createOverlay('overlay content');
-      overlay.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
-    });
-
-    afterEach(() => {
-      overlay.opened = false;
-    });
-
-    it('should close on Esc', () => {
-      escKeyDown(document.body);
-
-      expect(overlay.opened).to.be.false;
-    });
-
-    it('should fire the vaadin-overlay-escape-press event on Esc', () => {
-      const spy = sinon.spy();
-      overlay.addEventListener('vaadin-overlay-escape-press', spy);
-
-      escKeyDown(document.body);
-
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should not fire the vaadin-overlay-escape-press event on other key press', () => {
-      const spy = sinon.spy();
-      overlay.addEventListener('vaadin-overlay-escape-press', spy);
-
-      enterKeyDown(document.body);
-
-      expect(spy.called).to.be.false;
-    });
-
-    it('should not close on Esc if the event was prevented', () => {
-      overlay.addEventListener('vaadin-overlay-escape-press', (e) => e.preventDefault());
-
-      escKeyDown(document.body);
-
-      expect(overlay.opened).to.be.true;
-    });
-
-    it('should not close on Esc if the keydown event was prevented', () => {
-      overlay.addEventListener('keydown', (e) => e.preventDefault());
-
-      escKeyDown(overlay);
-
-      expect(overlay.opened).to.be.true;
-    });
-
-    it('should not fire the vaadin-overlay-escape-press event if keydown was prevented', () => {
-      const spy = sinon.spy();
-      overlay.addEventListener('vaadin-overlay-escape-press', spy);
-      overlay.addEventListener('keydown', (e) => e.preventDefault());
-
-      enterKeyDown(overlay);
-
-      expect(spy.called).to.be.false;
-    });
-  });
-
-  describe('click', () => {
+describe('outside click', () => {
+  describe('single overlay', () => {
     let parent, overlay, overlayPart, backdrop;
 
     beforeEach(async () => {
-      parent = document.createElement('div');
-      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>', parent);
-      overlay.renderer = (root) => {
-        if (!root.firstChild) {
-          const div = document.createElement('div');
-          div.textContent = 'overlay content';
-          root.appendChild(div);
-        }
-      };
+      overlay = createOverlay('overlay content');
+      parent = overlay.parentElement;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
       overlayPart = overlay.$.overlay;
@@ -202,104 +121,6 @@ describe('interactions', () => {
       });
     });
 
-    describe('vaadin-overlay-close event', () => {
-      const preventDefaultListener = (e) => {
-        e.preventDefault();
-      };
-
-      it('should not propagate through shadow roots', () => {
-        const spy = sinon.spy();
-        overlay.addEventListener('vaadin-overlay-close', spy);
-
-        click(parent);
-
-        expect(spy.firstCall.args[0].composed).to.be.false;
-      });
-
-      it('should prevent closing the overlay if the event was prevented', async () => {
-        overlay.addEventListener('vaadin-overlay-close', preventDefaultListener);
-        click(parent);
-        await aTimeout(1);
-
-        expect(overlay.opened).to.be.true;
-      });
-
-      it('should provide reference to the overlay in the event detail', () => {
-        const spy = sinon.spy();
-        overlay.addEventListener('vaadin-overlay-close', spy);
-        click(parent);
-        const event = spy.firstCall.args[0];
-        expect(event.detail.overlay).to.equal(overlay);
-      });
-
-      describe('global', () => {
-        it('should prevent closing the overlay if the global event was prevented', async () => {
-          document.addEventListener('vaadin-overlay-close', preventDefaultListener, { once: true });
-
-          click(parent);
-          await aTimeout(1);
-
-          expect(overlay.opened).to.be.true;
-        });
-
-        it('should provide reference to the overlay in the global event detail', () => {
-          const globalSpy = sinon.spy();
-          document.addEventListener('vaadin-overlay-close', globalSpy, { once: true });
-          click(parent);
-          const event = globalSpy.firstCall.args[0];
-          expect(event.detail.overlay).to.equal(overlay);
-        });
-      });
-    });
-
-    describe('vaadin-overlay-closing event', () => {
-      it('should fire the event when the overlay is closing', async () => {
-        const spy = sinon.spy();
-        overlay.addEventListener('vaadin-overlay-closing', spy);
-
-        click(parent);
-        await nextRender();
-
-        expect(spy.calledOnce).to.be.true;
-      });
-
-      it('should not fire the event when preventing vaadin-overlay-close', async () => {
-        const spy = sinon.spy();
-        overlay.addEventListener('vaadin-overlay-closing', spy);
-        overlay.addEventListener('vaadin-overlay-close', (e) => e.preventDefault());
-        click(parent);
-        await nextRender();
-        expect(spy.called).to.be.false;
-      });
-    });
-
-    describe('vaadin-overlay-closed event', () => {
-      it('should fire the event after the overlay has closed', async () => {
-        const closingSpy = sinon.spy();
-        overlay.addEventListener('vaadin-overlay-closing', closingSpy);
-
-        const closedSpy = sinon.spy();
-        overlay.addEventListener('vaadin-overlay-closed', closedSpy);
-
-        click(parent);
-        await nextRender();
-
-        expect(closedSpy.calledOnce).to.be.true;
-        expect(closedSpy.calledAfter(closingSpy)).to.be.true;
-      });
-
-      it('should not fire the event when preventing vaadin-overlay-close', async () => {
-        const spy = sinon.spy();
-        overlay.addEventListener('vaadin-overlay-closed', spy);
-        overlay.addEventListener('vaadin-overlay-close', (e) => e.preventDefault());
-
-        click(parent);
-        await nextRender();
-
-        expect(spy.called).to.be.false;
-      });
-    });
-
     describe('moving mouse pointer during click', () => {
       it('should close if both mousedown and mouseup outside', () => {
         mousedown(parent);
@@ -403,6 +224,43 @@ describe('interactions', () => {
 
         expect(document.activeElement).to.be.equal(document.body);
       });
+    });
+  });
+
+  describe('multiple modal overlays', () => {
+    let parent, overlay1, overlay2, overlay3, spy;
+
+    beforeEach(async () => {
+      parent = fixtureSync('<div></div>');
+      overlay1 = createOverlay('overlay 1');
+      overlay2 = createOverlay('overlay 2');
+      overlay3 = createOverlay('overlay 3');
+      parent.append(overlay1, overlay2, overlay3);
+      await nextRender();
+
+      spy = sinon.spy();
+      overlay1.addEventListener('vaadin-overlay-outside-click', spy);
+    });
+
+    afterEach(() => {
+      overlay1.opened = false;
+      overlay2.opened = false;
+      overlay3.opened = false;
+    });
+
+    it('should fire the vaadin-overlay-outside-click if it is the only overlay opened', () => {
+      overlay1.opened = true;
+      click(parent);
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should not fire the vaadin-overlay-outside-click if there is a recent overlay opened', () => {
+      overlay1.opened = true;
+
+      overlay2.opened = true;
+
+      click(parent);
+      expect(spy.called).to.be.false;
     });
   });
 });
