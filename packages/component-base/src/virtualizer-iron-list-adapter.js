@@ -507,20 +507,8 @@ export class IronListAdapter {
   toggleScrollListener() {}
 
   /** @private */
-  __getFocusedElement(visibleElements = this.__getVisibleElements()) {
-    // `document.activeElement` retargets to the outermost shadow host when
-    // focus lives in a nested shadow tree. Descend through nested shadow
-    // roots' `activeElement`s to reach the real focused node, then walk up
-    // the flattened tree (via `assignedSlot`/`parentNode`/`host`) until a
-    // visible row is reached.
-    let node = document.activeElement;
-    while (node?.shadowRoot?.activeElement) {
-      node = node.shadowRoot.activeElement;
-    }
-    while (node && !visibleElements.includes(node)) {
-      node = node.assignedSlot || node.parentNode || node.host;
-    }
-    return node;
+  __getFocusedElement() {
+    return this.__getVisibleElements().find((element) => element.matches(':focus-within'));
   }
 
   /** @private */
@@ -791,7 +779,7 @@ export class IronListAdapter {
 
     // Which row to use as a target?
     const visibleElements = this.__getVisibleElements();
-    const targetElement = this.__getFocusedElement(visibleElements) || visibleElements[0];
+    const targetElement = this.__getFocusedElement() || visibleElements[0];
     if (!targetElement) {
       // All elements are hidden, don't reorder
       return;
