@@ -13,11 +13,17 @@
 export function observeMove(element: HTMLElement, callback: () => void): () => void;
 
 /**
- * Detect whether an animation runs on the given element, so that its end can be
- * awaited before the element is hidden or removed. An element that is not rendered,
- * has no animation name, or has a zero duration does not fire `animationend`.
+ * Detect whether an animation runs on the given element. Prefer `getStateAnimations()`.
  */
 export function shouldAnimate(element: HTMLElement): boolean;
+
+/**
+ * The animations that report the state of the given element, so that their end can be awaited
+ * before the element is hidden or removed. Only CSS animations of the element itself that take
+ * time are included: a keyframes rule that does not exist and an element that is not rendered
+ * both give an empty list.
+ */
+export function getStateAnimations(element: HTMLElement): Animation[];
 
 /**
  * Toggle the state attribute on the overlay element and also its owner element. This allows targeting state attributes

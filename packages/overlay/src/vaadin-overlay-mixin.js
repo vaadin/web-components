@@ -6,7 +6,7 @@
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
 import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
-import { setOverlayStateAttribute, shouldAnimate } from './vaadin-overlay-utils.js';
+import { getStateAnimations, setOverlayStateAttribute } from './vaadin-overlay-utils.js';
 
 export const OverlayMixin = (superClass) =>
   class OverlayMixin extends OverlayFocusMixin(OverlayStackMixin(superClass)) {
@@ -132,11 +132,6 @@ export const OverlayMixin = (superClass) =>
       if (this.$.backdrop) {
         this.$.backdrop.addEventListener('click', () => {});
       }
-
-      this.addEventListener('animationcancel', () => {
-        this._flushAnimation('opening');
-        this._flushAnimation('closing');
-      });
     }
 
     /** @protected */
@@ -393,30 +388,24 @@ export const OverlayMixin = (superClass) =>
     }
 
     /**
-     * @return {boolean}
-     * @private
-     */
-    _shouldAnimate() {
-      return shouldAnimate(this);
-    }
-
-    /**
      * @param {string} type
+     * @param {!Array<!Animation>} animations
      * @param {Function} callback
      * @private
      */
-    _enqueueAnimation(type, callback) {
+    _enqueueAnimation(type, animations, callback) {
       const handler = `__${type}Handler`;
-      const listener = (event) => {
-        if (event && event.target !== this) {
+      const finish = () => {
+        // The phase may already have been finished by _flushAnimation()
+        if (this[handler] !== finish) {
           return;
         }
-        callback();
-        this.removeEventListener('animationend', listener);
         delete this[handler];
+        callback();
       };
-      this[handler] = listener;
-      this.addEventListener('animationend', listener);
+      this[handler] = finish;
+      // A cancelled animation rejects, which ends the phase just as finishing does
+      Promise.all(animations.map((animation) => animation.finished)).then(finish, finish);
     }
 
     /**
@@ -443,8 +432,9 @@ export const OverlayMixin = (superClass) =>
       }
       setOverlayStateAttribute(this, 'opening', true);
 
-      if (this._shouldAnimate()) {
-        this._enqueueAnimation('opening', () => {
+      const animations = getStateAnimations(this);
+      if (animations.length > 0) {
+        this._enqueueAnimation('opening', animations, () => {
           this._finishOpening();
         });
       } else {
@@ -483,8 +473,9 @@ export const OverlayMixin = (superClass) =>
         setOverlayStateAttribute(this, 'closing', true);
         this.dispatchEvent(new CustomEvent('vaadin-overlay-closing'));
 
-        if (this._shouldAnimate()) {
-          this._enqueueAnimation('closing', () => {
+        const animations = getStateAnimations(this);
+        if (animations.length > 0) {
+          this._enqueueAnimation('closing', animations, () => {
             this._finishClosing();
           });
         } else {

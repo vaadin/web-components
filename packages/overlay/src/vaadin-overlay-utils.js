@@ -90,6 +90,10 @@ export function observeMove(element, callback) {
  * awaited before the element is hidden or removed. An element that is not rendered,
  * has no animation name, or has a zero duration does not fire `animationend`.
  *
+ * Prefer `getStateAnimations()`. This is still used by notification, whose card cancels and
+ * restarts a same-named animation when it moves between the opening and closing state, which
+ * leaves the animation objects briefly unobservable.
+ *
  * @param {HTMLElement} element
  * @return {boolean}
  */
@@ -101,6 +105,27 @@ export function shouldAnimate(element) {
     .split(',')
     .some((duration) => parseFloat(duration) > 0);
   return style.getPropertyValue('display') !== 'none' && name && name !== 'none' && hasDuration;
+}
+
+/**
+ * The animations that report the state of the given element, so that their end can be awaited
+ * before the element is hidden or removed. The animations are read instead of the computed
+ * style, so that the decision to wait cannot disagree with what the browser actually created:
+ * a keyframes rule that does not exist and an element that is not rendered both give an empty
+ * list.
+ *
+ * Only CSS animations of the element itself count. `getAnimations()` also returns transitions
+ * and animations started from script, neither of which reports the state, and the animations of
+ * any content are left out because they are not part of the element's own animation. Animations
+ * that take no time are dropped as well, so that a delay on its own does not hold the state.
+ *
+ * @param {HTMLElement} element
+ * @return {!Array<!Animation>}
+ */
+export function getStateAnimations(element) {
+  return element
+    .getAnimations()
+    .filter((animation) => animation.animationName && animation.effect.getComputedTiming().activeDuration > 0);
 }
 
 /**
