@@ -45,11 +45,6 @@ export declare function isElementHidden(element: HTMLElement): boolean;
 export declare function isElementFocusable(element: HTMLElement): boolean;
 
 /**
- * Returns true if the element is focused, false otherwise.
- */
-export declare function isElementFocused(element: HTMLElement): boolean;
-
-/**
  * Returns a tab-ordered array of focusable elements for a root element.
  * The resulting array will include the root element if it is focusable.
  *

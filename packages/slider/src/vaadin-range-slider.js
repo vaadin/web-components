@@ -8,7 +8,6 @@ import { css, html, LitElement, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { styleMap } from 'lit/directives/style-map.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -514,7 +513,7 @@ class RangeSlider extends FieldMixin(
    */
   blur() {
     if (this._inputElements) {
-      const focusedInput = this._inputElements.find((input) => isElementFocused(input));
+      const focusedInput = this._inputElements.find((input) => input.matches(':focus'));
       if (focusedInput) {
         focusedInput.blur();
       }
@@ -532,8 +531,8 @@ class RangeSlider extends FieldMixin(
   _setFocused(focused) {
     super._setFocused(focused);
 
-    this.__startFocused = isElementFocused(this._inputElements[0]);
-    this.__endFocused = isElementFocused(this._inputElements[1]);
+    this.__startFocused = this._inputElements[0].matches(':focus');
+    this.__endFocused = this._inputElements[1].matches(':focus');
   }
 
   /** @private */

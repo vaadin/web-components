@@ -3,7 +3,6 @@
  * Copyright (c) 2019 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 
@@ -72,7 +71,7 @@ export const AccordionMixin = (superClass) =>
      * @override
      */
     get focused() {
-      return (this._getItems() || []).find((item) => isElementFocused(item.focusElement));
+      return (this._getItems() || []).find((item) => item.focusElement.matches(':focus'));
     }
 
     /**

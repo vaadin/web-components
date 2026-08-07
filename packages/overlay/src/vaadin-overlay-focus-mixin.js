@@ -8,7 +8,6 @@ import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller
 import {
   getDeepActiveElement,
   getTabbableElements,
-  isElementFocused,
   isElementHidden,
   isKeyboardActive,
 } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -140,7 +139,7 @@ export const OverlayFocusMixin = (superClass) =>
 
       if (this.autofocus) {
         const tabbables = getTabbableElements(this._focusRoot);
-        if (!tabbables.some(isElementFocused)) {
+        if (!tabbables.some((element) => element.matches(':focus'))) {
           tabbables[0]?.focus({ focusVisible: isKeyboardActive() });
         }
       }

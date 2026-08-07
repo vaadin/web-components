@@ -3,7 +3,6 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { InputMixin } from './input-mixin.js';
@@ -117,6 +116,6 @@ export const ClearButtonMixin = (superclass) =>
      * @return {boolean}
      */
     _shouldKeepFocusOnClearMousedown() {
-      return isElementFocused(this.inputElement);
+      return this.inputElement.matches(':focus');
     }
   };

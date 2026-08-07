@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { getTabbableElements, isElementFocused, isKeyboardActive } from './focus-utils.js';
+import { getTabbableElements, isKeyboardActive } from './focus-utils.js';
 
 const instances = [];
 
@@ -63,7 +63,7 @@ export class FocusTrapController {
    */
   get #focusedElementIndex() {
     const focusableElements = this.#focusableElements;
-    return focusableElements.indexOf(focusableElements.filter(isElementFocused).pop());
+    return focusableElements.indexOf(focusableElements.filter((element) => element.matches(':focus')).pop());
   }
 
   hostConnected() {

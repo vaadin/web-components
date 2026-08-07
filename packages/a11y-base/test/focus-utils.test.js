@@ -4,7 +4,6 @@ import {
   getDeepActiveElement,
   getTabbableElements,
   isElementFocusable,
-  isElementFocused,
   isElementHidden,
   isKeyboardActive,
 } from '../src/focus-utils.js';
@@ -174,24 +173,6 @@ describe('focus-utils', () => {
       const focusableElements = getTabbableElements(ancestor.querySelector('#root'));
       expect(focusableElements).to.have.lengthOf(1);
       expect(focusableElements[0].id).to.equal('root');
-    });
-  });
-
-  describe('isElementFocused', () => {
-    let input;
-
-    beforeEach(() => {
-      input = fixtureSync(`<input>`);
-    });
-
-    it('should return true for a focused element', () => {
-      input.focus();
-      expect(isElementFocused(input)).to.be.true;
-    });
-
-    it('should return false for a not focused element', () => {
-      input.focus();
-      expect(isElementFocused(document.body)).to.be.false;
     });
   });
 

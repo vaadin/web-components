@@ -195,16 +195,6 @@ export function isElementFocusable(element) {
 }
 
 /**
- * Returns true if the element is focused, false otherwise.
- *
- * @param {HTMLElement} element
- * @return {boolean}
- */
-export function isElementFocused(element) {
-  return element.getRootNode().activeElement === element;
-}
-
-/**
  * Returns the normalized element tabindex. If not focusable, returns -1.
  * It checks for the attribute "tabindex" instead of the element property
  * `tabIndex` since browsers assign different values to it.

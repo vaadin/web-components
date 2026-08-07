@@ -6,14 +6,14 @@ import '@vaadin/grid';
 import '@vaadin/radio-group';
 import '@vaadin/text-field';
 import '@vaadin/overlay/test/fixtures/mock-overlay.js';
-import { getTabbableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getTabbableElements } from '@vaadin/a11y-base/src/focus-utils.js';
 import { flushGrid } from '@vaadin/grid/test/helpers.js';
 
 describe('overlay focus-trap', () => {
   let overlay, focusableElements;
 
   function getFocusedElementIndex() {
-    return focusableElements.findIndex(isElementFocused);
+    return focusableElements.findIndex((element) => element.matches(':focus'));
   }
 
   describe('elements in light DOM', () => {

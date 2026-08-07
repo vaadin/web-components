@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import './fixtures/mock-overlay.js';
-import { getDeepActiveElement, getTabbableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement, getTabbableElements } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('autofocus', () => {
   let overlay;
@@ -30,7 +30,7 @@ describe('autofocus', () => {
 
   it('should focus the overlay part when opened', async () => {
     await open();
-    expect(isElementFocused(overlay.$.overlay)).to.be.true;
+    expect(overlay.$.overlay.matches(':focus')).to.be.true;
   });
 
   it('should not focus any element when autofocus is false', async () => {
@@ -54,7 +54,7 @@ describe('autofocus', () => {
       root.querySelectorAll('button')[1].focus();
     };
     await open();
-    expect(isElementFocused(overlay.querySelectorAll('button')[1])).to.be.true;
+    expect(overlay.querySelectorAll('button')[1].matches(':focus')).to.be.true;
   });
 });
 
@@ -62,7 +62,7 @@ describe('focus-trap', () => {
   let overlay, overlayPart, focusableElements;
 
   function getFocusedElementIndex() {
-    return focusableElements.findIndex(isElementFocused);
+    return focusableElements.findIndex((element) => element.matches(':focus'));
   }
 
   describe('focusable elements', () => {

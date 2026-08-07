@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { getActiveTrappingNode } from '@vaadin/a11y-base/src/focus-trap-controller.js';
-import { getDeepActiveElement, getTabbableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement, getTabbableElements } from '@vaadin/a11y-base/src/focus-utils.js';
 
 /**
  * Controller that routes Tab and Shift+Tab when a non-modal popover is opened.
@@ -38,7 +38,7 @@ export class PopoverFocusController {
     const host = this.host;
     const targetFocusable = this.__getTargetFocusable();
 
-    if (targetFocusable && isElementFocused(targetFocusable)) {
+    if (targetFocusable && targetFocusable.matches(':focus')) {
       event.preventDefault();
       if (host.noTabFocus) {
         this.__moveLogicalNext(event, targetFocusable);
@@ -49,7 +49,7 @@ export class PopoverFocusController {
     }
 
     const lastPopoverFocusable = this.__getLastPopoverFocusable();
-    if (isElementFocused(lastPopoverFocusable)) {
+    if (lastPopoverFocusable.matches(':focus')) {
       // With noTabFocus the popover isn't in the logical list, so the target
       // becomes the reference for "next after the popover".
       this.__moveLogicalNext(event, host.noTabFocus ? targetFocusable : host);
@@ -75,11 +75,11 @@ export class PopoverFocusController {
     // through to the redirect logic: when the popover is DOM-prev of the target,
     // case 5 steers focus away from it instead of letting the browser land on
     // the popover host or its content.
-    if (targetFocusable && isElementFocused(targetFocusable) && host.__shouldRestoreFocus) {
+    if (targetFocusable && targetFocusable.matches(':focus') && host.__shouldRestoreFocus) {
       host.__shouldRestoreFocus = false;
     }
 
-    if (isElementFocused(host)) {
+    if (host.matches(':focus')) {
       event.preventDefault();
       targetFocusable.focus();
       return;

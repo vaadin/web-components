@@ -8,7 +8,7 @@ import { Directive, directive } from 'lit/directive.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { isElementFocused, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
@@ -237,7 +237,7 @@ export const MenuBarMixin = (superClass) =>
      * @override
      */
     get focused() {
-      return (this._getItems() || []).find(isElementFocused) || this._expandedButton;
+      return (this._getItems() || []).find((item) => item.matches(':focus')) || this._expandedButton;
     }
 
     /**
@@ -759,7 +759,7 @@ export const MenuBarMixin = (superClass) =>
     /** @private */
     __getFocusTarget() {
       // First, check if focus is moving to a visible button
-      let target = this._buttons.find((btn) => isElementFocused(btn));
+      let target = this._buttons.find((btn) => btn.matches(':focus'));
 
       if (!target) {
         const selector = this.tabNavigation ? '[focused]' : '[tabindex="0"]';

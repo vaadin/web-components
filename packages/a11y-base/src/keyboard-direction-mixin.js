@@ -3,7 +3,7 @@
  * Copyright (c) 2022 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isElementFocused, isElementHidden } from './focus-utils.js';
+import { isElementHidden } from './focus-utils.js';
 import { KeyboardMixin } from './keyboard-mixin.js';
 
 /**
@@ -16,7 +16,7 @@ export const KeyboardDirectionMixin = (superclass) =>
      * @protected
      */
     get focused() {
-      return (this._getItems() || []).find(isElementFocused);
+      return (this._getItems() || []).find((item) => item.matches(':focus'));
     }
 
     /**

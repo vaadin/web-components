@@ -4,7 +4,6 @@ import { fixtureSync, listenOnce, nextRender, nextResize } from '@vaadin/testing
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
-import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { flushGrid, getRowCells, getRows, infiniteDataProvider, isWithinParentConstraints } from './helpers.js';
 
@@ -388,9 +387,9 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
           }
           const yCoordinate = boundingClientRect.y + Math.floor(boundingClientRect.height / 2);
 
-          expect(isElementFocused(grid)).to.be.false;
+          expect(grid.matches(':focus')).to.be.false;
           await sendMouse({ type: 'click', position: [xCoordinate, yCoordinate] });
-          expect(isElementFocused(grid)).to.be.true;
+          expect(grid.matches(':focus')).to.be.true;
         });
       });
     });

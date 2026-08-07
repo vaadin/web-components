@@ -5,7 +5,7 @@
  */
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
-import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
@@ -275,7 +275,7 @@ export const ComboBoxBaseMixin = (superClass) =>
 
     /** @protected */
     _isInputFocused() {
-      return this.inputElement && isElementFocused(this.inputElement);
+      return !!this.inputElement?.matches(':focus');
     }
 
     /** @private */

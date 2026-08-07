@@ -1,5 +1,4 @@
 import { fire, makeSoloTouchEvent, nextRender } from '@vaadin/testing-helpers';
-import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 export function activateScroller(scroller) {
   scroller.active = true;
@@ -204,7 +203,7 @@ export function getFocusableCell(root) {
  */
 export function getFocusedCell(root) {
   const focusableCell = getFocusableCell(root);
-  if (focusableCell && isElementFocused(focusableCell)) {
+  if (focusableCell?.matches(':focus')) {
     return focusableCell;
   }
 }

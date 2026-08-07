@@ -6,13 +6,7 @@ export { FieldAriaController } from './src/field-aria-controller.js';
 export { FocusMixin } from './src/focus-mixin.js';
 export { FocusTrapController } from './src/focus-trap-controller.js';
 export { FocusRestorationController } from './src/focus-restoration-controller.js';
-export {
-  getTabbableElements,
-  isElementFocusable,
-  isElementFocused,
-  isElementHidden,
-  isKeyboardActive,
-} from './src/focus-utils.js';
+export { getTabbableElements, isElementFocusable, isElementHidden, isKeyboardActive } from './src/focus-utils.js';
 export { KeyboardDirectionMixin } from './src/keyboard-direction-mixin.js';
 export { KeyboardMixin } from './src/keyboard-mixin.js';
 export { ListMixin } from './src/list-mixin.js';
