@@ -3,7 +3,7 @@ import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-help
 import { Virtualizer } from '../src/virtualizer.js';
 
 describe('virtualizer - overscroll', () => {
-  const PREVENT_OVERSCROLL_TIMEOUT = 500;
+  const PREVENT_OVERSCROLL_TIMEOUT = 150;
   let virtualizer;
   let scrollTarget;
 
