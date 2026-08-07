@@ -146,8 +146,3 @@ vaadin-popover {
     --vaadin-overlay-animation-timing-function: ease-in;
   }
 }
-
-vaadin-menu-bar-submenu,
-vaadin-context-menu {
-  --vaadin-overlay-animation-duration: 1ms;
-}
