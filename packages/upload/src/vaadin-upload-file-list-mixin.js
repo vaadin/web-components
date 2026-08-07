@@ -6,9 +6,10 @@
 import { html, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
+import { translateErrorKey, updateFileStatus } from './vaadin-upload-helpers.js';
 import { UploadManager } from './vaadin-upload-manager.js';
 
-const DEFAULT_I18N = {
+export const DEFAULT_I18N = {
   file: {
     retry: 'Retry',
     start: 'Start',
@@ -267,56 +268,20 @@ export const UploadFileListMixin = (superClass) =>
     __applyI18nToFile(file) {
       const i18n = this.__effectiveI18n;
 
-      // Always set size-related strings when total is available
-      if (file.total) {
-        this.__applyFileSizeStrings(file);
-      }
-
-      // Apply status messages based on file state
-      file.status = this.__getFileStatus(file, i18n);
+      // Apply size and status strings based on file state
+      updateFileStatus(file, i18n, { indeterminateFirst: true });
 
       // Translate error codes to i18n messages
       this.__applyFileError(file, i18n);
     }
 
     /** @private */
-    __applyFileSizeStrings(file) {
-      file.totalStr = this.__formatSize(file.total);
-      file.loadedStr = this.__formatSize(file.loaded || 0);
-      // TODO: Remove elapsedStr in next major version - it's not used by vaadin-upload-file
-      if (file.elapsed != null) {
-        file.elapsedStr = this.__formatTime(file.elapsed, this.__splitTimeByUnits(file.elapsed));
-      }
-      if (file.remaining != null) {
-        file.remainingStr = this.__formatTime(file.remaining, this.__splitTimeByUnits(file.remaining));
-      }
-    }
-
-    /** @private */
-    __getFileStatus(file, i18n) {
-      if (file.held && !file.error) {
-        // File is queued and waiting
-        return i18n.uploading.status.held;
-      }
-      if (file.stalled) {
-        // File upload is stalled
-        return i18n.uploading.status.stalled;
-      }
-      if (file.uploading && file.indeterminate && !file.held) {
-        // File is uploading but progress is indeterminate (connecting or processing)
-        return file.progress === 100 ? i18n.uploading.status.processing : i18n.uploading.status.connecting;
-      }
-      if (file.uploading && file.progress < 100 && file.total) {
-        // File is uploading with known progress
-        return this.__formatFileProgress(file);
-      }
-      return file.status;
-    }
-
-    /** @private */
     __applyFileError(file, i18n) {
-      if (file.errorKey && i18n.uploading.error[file.errorKey]) {
-        file.error = i18n.uploading.error[file.errorKey];
+      // An error key without an i18n message (e.g. a failure to send the
+      // request) leaves the error assigned to the file untouched
+      const error = file.errorKey && translateErrorKey(file.errorKey, i18n);
+      if (error) {
+        file.error = error;
       } else if (!file.errorKey && this.manager instanceof UploadManager) {
         // Clear error when errorKey is reset (e.g., on retry) only when using manager
         file.error = '';
@@ -324,67 +289,9 @@ export const UploadFileListMixin = (superClass) =>
     }
 
     /** @private */
-    __formatSize(bytes) {
-      const i18n = this.__effectiveI18n;
-      if (typeof i18n.formatSize === 'function') {
-        return i18n.formatSize(bytes);
-      }
-
-      // https://wiki.ubuntu.com/UnitsPolicy
-      const base = i18n.units.sizeBase || 1000;
-      const unit = Math.trunc(Math.log(bytes) / Math.log(base));
-      const dec = Math.max(0, Math.min(3, unit - 1));
-      const size = Number.parseFloat((bytes / base ** unit).toFixed(dec));
-      return `${size} ${i18n.units.size[unit]}`;
-    }
-
-    /** @private */
-    __splitTimeByUnits(time) {
-      const unitSizes = [60, 60, 24, Infinity];
-      const timeValues = [0];
-
-      for (let i = 0; i < unitSizes.length && time > 0; i++) {
-        timeValues[i] = time % unitSizes[i];
-        time = Math.floor(time / unitSizes[i]);
-      }
-
-      return timeValues;
-    }
-
-    /** @private */
-    __formatTime(seconds, split) {
-      const i18n = this.__effectiveI18n;
-      if (typeof i18n.formatTime === 'function') {
-        return i18n.formatTime(seconds, split);
-      }
-
-      // Fill HH:MM:SS with leading zeros
-      while (split.length < 3) {
-        split.push(0);
-      }
-
-      return split
-        .reverse()
-        .map((number) => {
-          return (number < 10 ? '0' : '') + number;
-        })
-        .join(':');
-    }
-
-    /** @private */
-    __formatFileProgress(file) {
-      const i18n = this.__effectiveI18n;
-      const remainingTime =
-        file.loaded > 0
-          ? i18n.uploading.remainingTime.prefix + file.remainingStr
-          : i18n.uploading.remainingTime.unknown;
-
-      return `${file.totalStr}: ${file.progress}% (${remainingTime})`;
-    }
-
-    /** @private */
     requestContentUpdate() {
       const { items, __effectiveI18n: i18n, disabled } = this;
+
       const managerDisabled = this.manager instanceof UploadManager && this.manager.disabled;
       const effectiveDisabled = disabled || managerDisabled;
 
