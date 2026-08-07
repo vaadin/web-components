@@ -13,7 +13,7 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/overlay/vaadin-overlay.js';
+import '@vaadin/overlay/test/fixtures/mock-overlay.js';
 import { Tooltip } from '../src/vaadin-tooltip.js';
 import { mouseenter, mouseleave, waitForIntersectionObserver } from './helpers.js';
 
@@ -475,7 +475,7 @@ describe('vaadin-tooltip', () => {
 
       expect(overlay.opened).to.be.true;
 
-      const otherOverlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
+      const otherOverlay = fixtureSync('<mock-overlay></mock-overlay>');
       otherOverlay.opened = true;
       await nextRender();
 
@@ -774,7 +774,7 @@ describe('vaadin-tooltip', () => {
       tooltip.opened = true;
       expect(overlay.opened).to.be.true;
 
-      const otherOverlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
+      const otherOverlay = fixtureSync('<mock-overlay></mock-overlay>');
       otherOverlay.opened = true;
       await nextRender();
 
