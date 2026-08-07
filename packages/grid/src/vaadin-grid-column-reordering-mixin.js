@@ -116,7 +116,7 @@ export const ColumnReorderingMixin = (superClass) =>
           return;
         }
 
-        if (headerCell._content.contains(this.getRootNode().activeElement)) {
+        if (headerCell._content.matches(':focus-within')) {
           // Something was focused inside the cell
           return;
         }
