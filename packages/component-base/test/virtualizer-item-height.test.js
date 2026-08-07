@@ -636,6 +636,7 @@ describe('virtualizer - item height - placeholder height queue', () => {
       scrollContainer,
     });
 
+    virtualizer.hostConnected();
     virtualizer.size = 100000;
   });
 
