@@ -156,7 +156,7 @@ export class IronListAdapter {
     this.__skipNextVirtualIndexAdjust = true;
     super.scrollToIndex(targetVirtualIndex);
 
-    if (this.adjustedFirstVisibleIndex !== index && this._scrollTop < this._maxScrollTop && !this.grid) {
+    if (this.adjustedFirstVisibleIndex !== index && this._scrollTop < this._maxScrollTop) {
       // Workaround an iron-list issue by manually adjusting the scroll position
       this._scrollTop -= this.__getIndexScrollOffset(index) || 0;
     }
@@ -183,9 +183,6 @@ export class IronListAdapter {
     }
     if (this.__scrollReorderDebouncer) {
       this.__scrollReorderDebouncer.flush();
-    }
-    if (this.__debouncerWheelAnimationFrame) {
-      this.__debouncerWheelAnimationFrame.flush();
     }
   }
 
@@ -457,15 +454,9 @@ export class IronListAdapter {
 
   /** @private */
   updateViewportBoundaries() {
-    const styles = window.getComputedStyle(this.scrollTarget);
-    this._scrollerPaddingTop = this.scrollTarget === this ? 0 : parseInt(styles['padding-top'], 10);
-    this._isRTL = Boolean(styles.direction === 'rtl');
-    this._viewportWidth = this.elementsContainer.offsetWidth;
+    this._scrollerPaddingTop = parseInt(window.getComputedStyle(this.scrollTarget)['padding-top'], 10);
     this._viewportHeight = this.scrollTarget.offsetHeight;
   }
-
-  /** @private */
-  setAttribute() {}
 
   /** @private */
   _createPool(size) {
