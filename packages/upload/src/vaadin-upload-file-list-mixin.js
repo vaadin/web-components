@@ -288,9 +288,6 @@ export const UploadFileListMixin = (superClass) =>
     /** @private */
     requestContentUpdate() {
       const { items, __effectiveI18n: i18n, disabled } = this;
-      if (!items || !i18n) {
-        return;
-      }
 
       const managerDisabled = this.manager instanceof UploadManager && this.manager.disabled;
       const effectiveDisabled = disabled || managerDisabled;
