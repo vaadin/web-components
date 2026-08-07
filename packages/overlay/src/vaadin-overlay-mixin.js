@@ -437,7 +437,6 @@ export const OverlayMixin = (superClass) =>
       }
       this._attachOverlay();
       this._appendAttachedInstance();
-      this.bringToFront();
       if (!this.modeless) {
         this._enterModalState();
       }
