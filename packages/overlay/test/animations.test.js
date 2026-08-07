@@ -2,50 +2,30 @@ import { expect } from '@vaadin/chai-plugins';
 import { emulateMedia, resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { aTimeout, escKeyDown, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import './animated-styles.js';
-import '../src/vaadin-overlay.js';
-import { createOverlay } from './helpers.js';
+import './fixtures/mock-animated-overlay.js';
 
-customElements.define(
-  'two-overlays',
-  class extends HTMLElement {
-    constructor() {
-      super();
+function fixtureMultiple() {
+  const parent = fixtureSync(`
+    <div>
+      <mock-animated-overlay>
+        <div>Overlay 1</div>
+        <button>Go to overlay 2</button>
+      </mock-animated-overlay>
+      <mock-animated-overlay>
+        <div>Overlay 2</div>
+      </mock-animated-overlay>
+    </div>
+  `);
 
-      this.attachShadow({ mode: 'open' });
+  const [overlay1, overlay2] = parent.children;
 
-      const overlay1 = document.createElement('vaadin-overlay');
-      const overlay2 = document.createElement('vaadin-overlay');
+  overlay1.querySelector('button').addEventListener('click', () => {
+    overlay1.opened = false;
+    overlay2.opened = true;
+  });
 
-      overlay1.renderer = (root) => {
-        if (!root.firstChild) {
-          const div = document.createElement('div');
-          div.textContent = 'Overlay 1';
-
-          const button = document.createElement('button');
-          button.textContent = 'Go to overlay 2';
-
-          button.addEventListener('click', () => {
-            overlay1.opened = false;
-            overlay2.opened = true;
-          });
-
-          root.append(div, button);
-        }
-      };
-
-      overlay2.renderer2 = (root) => {
-        if (!root.firstChild) {
-          const div = document.createElement('div');
-          div.textContent = 'Overlay 2';
-          root.appendChild(div);
-        }
-      };
-
-      this.shadowRoot.append(overlay1, overlay2);
-    }
-  },
-);
+  return parent;
+}
 
 customElements.define(
   'animated-div',
@@ -113,7 +93,7 @@ describe('overlay with zero-duration animation', () => {
   let overlay, owner;
 
   beforeEach(async () => {
-    overlay = createOverlay('overlay content');
+    overlay = fixtureSync('<mock-animated-overlay>overlay content</mock-animated-overlay>');
     owner = fixtureSync('<div></div>');
     overlay.owner = owner;
     overlay.setAttribute('zero-duration-animation', '');
@@ -152,7 +132,7 @@ describe('overlay with zero-duration animation', () => {
     let overlay, owner;
 
     beforeEach(async () => {
-      overlay = createOverlay('overlay content');
+      overlay = fixtureSync('<mock-animated-overlay>overlay content</mock-animated-overlay>');
       owner = fixtureSync('<div></div>');
       overlay.owner = owner;
       if (withAnimation) {
@@ -315,8 +295,8 @@ describe('overlay with zero-duration animation', () => {
     let wrapper, overlays;
 
     beforeEach((done) => {
-      wrapper = fixtureSync('<two-overlays><two-overlays>');
-      overlays = Array.from(wrapper.shadowRoot.querySelectorAll('vaadin-overlay'));
+      wrapper = fixtureMultiple();
+      overlays = [...wrapper.children];
       if (withAnimation) {
         overlays.forEach((overlay) => overlay.setAttribute('animate', ''));
       }
@@ -343,9 +323,9 @@ describe('overlay with zero-duration animation', () => {
     let wrapper, overlays;
 
     beforeEach(async () => {
-      wrapper = fixtureSync('<two-overlays><two-overlays>');
+      wrapper = fixtureMultiple();
+      overlays = [...wrapper.children];
       await nextRender();
-      overlays = Array.from(wrapper.shadowRoot.querySelectorAll('vaadin-overlay'));
       if (withAnimation) {
         overlays.forEach((overlay) => overlay.setAttribute('animate', ''));
       }
@@ -372,11 +352,11 @@ describe('overlay with zero-duration animation', () => {
     let wrapper, overlays;
 
     beforeEach(async () => {
-      wrapper = fixtureSync('<two-overlays><two-overlays>');
+      wrapper = fixtureMultiple();
       await nextRender();
-      const third = document.createElement('vaadin-overlay');
-      wrapper.shadowRoot.appendChild(third);
-      overlays = Array.from(wrapper.shadowRoot.querySelectorAll('vaadin-overlay'));
+      const third = document.createElement('mock-animated-overlay');
+      wrapper.appendChild(third);
+      overlays = [...wrapper.children];
 
       if (withAnimation) {
         overlays.forEach((overlay) => overlay.setAttribute('animate', ''));
@@ -410,26 +390,16 @@ describe('overlay with zero-duration animation', () => {
     beforeEach(async () => {
       wrapper = fixtureSync(`
         <div>
-          <vaadin-overlay></vaadin-overlay>
-          <vaadin-overlay></vaadin-overlay>
+          <mock-animated-overlay>
+            <div>Plain old content</div>
+          </mock-animated-overlay>
+          <mock-animated-overlay>
+            <animated-div>Fancy content</animated-div>
+          </mock-animated-overlay>
         </div>
       `);
       await nextRender();
-      overlays = Array.from(wrapper.querySelectorAll('vaadin-overlay'));
-      overlays[0].renderer = (root) => {
-        if (!root.firstChild) {
-          const div = document.createElement('div');
-          div.textContent = 'Plain old content';
-          root.appendChild(div);
-        }
-      };
-      overlays[1].renderer = (root) => {
-        if (!root.firstChild) {
-          const div = document.createElement('animated-div');
-          div.textContent = 'Fancy content';
-          root.appendChild(div);
-        }
-      };
+      overlays = [...wrapper.children];
       if (withAnimation) {
         overlays.forEach((overlay) => {
           overlay.setAttribute('animate', '');
@@ -459,14 +429,7 @@ describe('interaction while closing', () => {
   let overlay, content, spy;
 
   beforeEach(async () => {
-    overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
-    overlay.renderer = (root) => {
-      if (!root.firstChild) {
-        const button = document.createElement('button');
-        button.textContent = 'Overlay content';
-        root.appendChild(button);
-      }
-    };
+    overlay = fixtureSync('<mock-animated-overlay><button>Overlay content</button></mock-animated-overlay>');
     overlay.setAttribute('long-animation', '');
     await nextRender();
 
@@ -535,7 +498,7 @@ describe('animation properties', () => {
   let overlay;
 
   beforeEach(async () => {
-    overlay = createOverlay('overlay content');
+    overlay = fixtureSync('<mock-animated-overlay>overlay content</mock-animated-overlay>');
     overlay.style.setProperty('--vaadin-overlay-animation-duration', '10s');
     await nextRender();
   });
@@ -749,7 +712,7 @@ describe('animation delay without duration', () => {
   let overlay;
 
   beforeEach(async () => {
-    overlay = createOverlay('overlay content');
+    overlay = fixtureSync('<mock-animated-overlay>overlay content</mock-animated-overlay>');
     overlay.style.setProperty('--vaadin-overlay-animation-delay', '2s');
     await nextRender();
   });
@@ -793,7 +756,7 @@ describe('theme paint properties without an opted-in duration', () => {
   }
 
   beforeEach(async () => {
-    overlay = createOverlay('overlay content');
+    overlay = fixtureSync('<mock-animated-overlay>overlay content</mock-animated-overlay>');
     // A 5s animation on the host, while --vaadin-overlay-animation-duration stays 0s
     overlay.setAttribute('long-animation', '');
     overlay.setAttribute('themed-parts', '');

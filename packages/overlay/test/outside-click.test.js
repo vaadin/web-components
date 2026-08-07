@@ -1,15 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
 import { click, fixtureSync, mousedown, mouseup, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-overlay.js';
-import { createOverlay } from './helpers.js';
+import './fixtures/mock-overlay.js';
 
 describe('outside click', () => {
   describe('single overlay', () => {
     let parent, overlay, overlayPart, backdrop;
 
     beforeEach(async () => {
-      overlay = createOverlay('overlay content');
+      overlay = fixtureSync('<mock-overlay>overlay content</mock-overlay>');
       parent = overlay.parentElement;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -208,11 +207,14 @@ describe('outside click', () => {
     let parent, overlay1, overlay2, overlay3, spy;
 
     beforeEach(async () => {
-      parent = fixtureSync('<div></div>');
-      overlay1 = createOverlay('overlay 1');
-      overlay2 = createOverlay('overlay 2');
-      overlay3 = createOverlay('overlay 3');
-      parent.append(overlay1, overlay2, overlay3);
+      parent = fixtureSync(`
+        <div>
+          <mock-overlay>overlay1</mock-overlay>
+          <mock-overlay>overlay2</mock-overlay>
+          <mock-overlay>overlay3</mock-overlay>
+        </div>
+      `);
+      [overlay1, overlay2, overlay3] = parent.children;
       await nextRender();
 
       spy = sinon.spy();

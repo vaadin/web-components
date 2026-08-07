@@ -1,16 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { Overlay } from '../src/vaadin-overlay.js';
-import { PositionMixin } from '../src/vaadin-overlay-position-mixin.js';
-
-class PositionedOverlay extends PositionMixin(Overlay) {
-  static get is() {
-    return 'vaadin-positioned-overlay';
-  }
-}
-
-customElements.define(PositionedOverlay.is, PositionedOverlay);
+import './fixtures/mock-positioned-overlay.js';
 
 class ScrollableWrapper extends HTMLElement {
   constructor() {
@@ -44,20 +35,13 @@ describe('position mixin listeners', () => {
         <div id="target" style="position: fixed; top: 100px; left: 100px; width: 20px; height: 20px; border: 1px solid">
           target
         </div>
-        <vaadin-positioned-overlay id="overlay"></vaadin-positioned-overlay>
+        <mock-positioned-overlay id="overlay">
+          <div id="overlay-child" style="width: 50px; height: 50px"></div>
+        </mock-positioned-overlay>
       </scrollable-wrapper>
     `);
     target = wrapper.querySelector('#target');
     overlay = wrapper.querySelector('#overlay');
-    overlay.renderer = (root) => {
-      if (!root.firstChild) {
-        const div = document.createElement('div');
-        div.id = 'overlay-child';
-        div.style.width = '50px';
-        div.style.height = '50px';
-        root.appendChild(div);
-      }
-    };
     updatePositionSpy = sinon.spy(overlay, '_updatePosition');
   });
 
