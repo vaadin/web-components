@@ -212,14 +212,14 @@ describe('animation properties', () => {
     });
   });
 
-  describe('fill mode', () => {
+  describe('fill during the animation delay', () => {
     beforeEach(async () => {
       overlay.setAttribute('themed-parts', '');
       overlay.style.setProperty('--vaadin-overlay-animation-delay', '2s');
       await nextRender();
     });
 
-    it('should apply the closed value during the opening animation delay', () => {
+    it('should apply the closed value while opening', () => {
       overlay.opened = true;
 
       // The backwards fill keeps the overlay at its closed opacity for the delay,
@@ -227,7 +227,7 @@ describe('animation properties', () => {
       expect(getComputedStyle(overlay.$.overlay).opacity).to.equal('0');
     });
 
-    it('should apply the value of the part during the closing animation delay', () => {
+    it('should apply the value of the part while closing', () => {
       overlay.opened = true;
       overlay._flushAnimation('opening');
       overlay.opened = false;
@@ -265,26 +265,30 @@ describe('animation delay without duration', () => {
   });
 });
 
-describe('theme paint properties without an opted-in duration', () => {
+/**
+ * The `[opening]` and `[closing]` attributes follow the animation on the host, which is defined
+ * separately from the overlay animation properties and can therefore outlast the part animations.
+ * These cover `animation-fill-mode: backwards`: filling forwards would pin the parts on their
+ * last keyframe for the rest of that window, covering the styles set on them, and while closing
+ * that keyframe is the closed one, so the overlay would vanish instead of fading out.
+ */
+describe('theme animation on the host', () => {
   let overlay;
 
-  // The paint properties a theme applies to the overlay parts. These must survive
-  // the opening and closing windows of a host animation that does not opt in to
-  // the overlay animation duration, e.g. a theme with its own `:host([opening])`
-  // animation. See `fixtures/mock-animated-overlay.js` for the values.
-  const themedValues = {
+  // The styles the theme applies to the parts, see `fixtures/mock-animated-overlay.js`
+  const themeStyles = {
     transform: 'matrix(0.707107, 0.707107, -0.707107, 0.707107, 0, 0)',
     translate: '11px 12px',
     scale: '0.75',
     opacity: '0.5',
   };
 
-  function assertThemedValues(element) {
+  function expectThemeStyles(element) {
     const style = getComputedStyle(element);
-    expect(style.transform).to.equal(themedValues.transform);
-    expect(style.translate).to.equal(themedValues.translate);
-    expect(style.scale).to.equal(themedValues.scale);
-    expect(style.opacity).to.equal(themedValues.opacity);
+    expect(style.transform).to.equal(themeStyles.transform);
+    expect(style.translate).to.equal(themeStyles.translate);
+    expect(style.scale).to.equal(themeStyles.scale);
+    expect(style.opacity).to.equal(themeStyles.opacity);
   }
 
   beforeEach(async () => {
@@ -302,35 +306,35 @@ describe('theme paint properties without an opted-in duration', () => {
     overlay.opened = false;
   });
 
-  it('should not override the overlay part paint properties while opening', () => {
+  it('should keep the theme styles on the overlay part while opening', () => {
     overlay.opened = true;
 
     expect(overlay.hasAttribute('opening')).to.be.true;
-    assertThemedValues(overlay.$.overlay);
+    expectThemeStyles(overlay.$.overlay);
   });
 
-  it('should not override the backdrop paint properties while opening', () => {
+  it('should keep the theme styles on the backdrop while opening', () => {
     overlay.opened = true;
 
     expect(overlay.hasAttribute('opening')).to.be.true;
-    assertThemedValues(overlay.$.backdrop);
+    expectThemeStyles(overlay.$.backdrop);
   });
 
-  it('should not override the overlay part paint properties while closing', () => {
+  it('should keep the theme styles on the overlay part while closing', () => {
     overlay.opened = true;
     overlay._flushAnimation('opening');
     overlay.opened = false;
 
     expect(overlay.hasAttribute('closing')).to.be.true;
-    assertThemedValues(overlay.$.overlay);
+    expectThemeStyles(overlay.$.overlay);
   });
 
-  it('should not override the backdrop paint properties while closing', () => {
+  it('should keep the theme styles on the backdrop while closing', () => {
     overlay.opened = true;
     overlay._flushAnimation('opening');
     overlay.opened = false;
 
     expect(overlay.hasAttribute('closing')).to.be.true;
-    assertThemedValues(overlay.$.backdrop);
+    expectThemeStyles(overlay.$.backdrop);
   });
 });
