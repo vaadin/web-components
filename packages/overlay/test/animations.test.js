@@ -192,6 +192,32 @@ function afterOverlayClosingFinished(overlay, callback) {
         expect(overlay.hasAttribute('closing')).to.be.false;
         expect(owner.hasAttribute('closing')).to.be.false;
       });
+
+      it('should remove the animationend listener after the animation has finished', async () => {
+        overlay.opened = true;
+
+        await new Promise((resolve) => {
+          afterOverlayOpeningFinished(overlay, resolve);
+        });
+
+        const spy = sinon.spy(overlay, '_finishOpening');
+        overlay.dispatchEvent(new AnimationEvent('animationend'));
+
+        expect(spy).to.be.not.called;
+      });
+
+      it('should not run the animation callback again after the animation has finished', async () => {
+        overlay.opened = true;
+
+        await new Promise((resolve) => {
+          afterOverlayOpeningFinished(overlay, resolve);
+        });
+
+        const spy = sinon.spy(overlay, '_finishOpening');
+        overlay._flushAnimation('opening');
+
+        expect(spy).to.be.not.called;
+      });
     }
 
     it('should flush closing overlay when re-opened while closing animation is in progress', () => {
@@ -224,7 +250,7 @@ function afterOverlayClosingFinished(overlay, callback) {
       overlay.opened = false;
       overlay._flushAnimation('closing');
 
-      expect(overlay.parentNode).not.to.equal(document.body);
+      expect(overlay.matches(':popover-open')).to.be.false;
     });
 
     it('should not animate closing if the overlay is explicitly hidden', () => {
@@ -234,7 +260,8 @@ function afterOverlayClosingFinished(overlay, callback) {
 
       overlay.opened = false;
 
-      expect(overlay.parentNode).not.to.equal(document.body);
+      expect(overlay.hasAttribute('closing')).to.be.false;
+      expect(overlay.matches(':popover-open')).to.be.false;
     });
 
     it('should close the overlay if hidden is set while closing', () => {
@@ -244,7 +271,8 @@ function afterOverlayClosingFinished(overlay, callback) {
 
       overlay.hidden = true;
 
-      expect(overlay.parentNode).not.to.equal(document.body);
+      expect(overlay.hasAttribute('closing')).to.be.false;
+      expect(overlay.matches(':popover-open')).to.be.false;
     });
 
     it('should close the overlay when ESC pressed while opening', () => {
@@ -376,7 +404,7 @@ function afterOverlayClosingFinished(overlay, callback) {
       });
     });
 
-    it('should not remove pointer events on last opened overlay', (done) => {
+    it('should not remove pointer events on last opened overlay with animated content', (done) => {
       afterOverlayOpeningFinished(overlays[1], () => {
         expect(overlays[0].$.overlay.style.pointerEvents).to.equal('none');
         expect(overlays[1].$.overlay.style.pointerEvents).to.equal('');
@@ -385,6 +413,34 @@ function afterOverlayClosingFinished(overlay, callback) {
       overlays[0].opened = true;
       overlays[1].opened = true;
     });
+  });
+});
+
+describe('content animation', () => {
+  let overlay;
+
+  beforeEach(async () => {
+    overlay = fixtureSync(`
+      <mock-animated-overlay long-animation>
+        <animated-div>Fancy content</animated-div>
+      </mock-animated-overlay>
+    `);
+    await nextRender();
+  });
+
+  afterEach(() => {
+    overlay._flushAnimation('opening');
+    overlay.opened = false;
+  });
+
+  it('should not finish the overlay animation when the content animation ends', async () => {
+    overlay.opened = true;
+
+    // The content animation is much shorter than the overlay animation, so the first
+    // `animationend` bubbling to the overlay is the one from the content
+    await oneEvent(overlay, 'animationend');
+
+    expect(overlay.hasAttribute('opening')).to.be.true;
   });
 });
 
