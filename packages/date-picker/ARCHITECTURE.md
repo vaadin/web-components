@@ -178,6 +178,32 @@ button are the ones that need it open.
 A value whose month resolved while the field was detached is validated when it is attached again, since the
 controller re-reports its state on reconnect and the armed flag is still set.
 
+## How the initial focus reacts to the provider
+
+When the overlay opens without a value, a date is focused automatically — and the provider may later report
+that date disabled. The focus is then moved to the closest selectable date within a year, in either
+direction. The scan uses the same predicate as selection and validation, so a month the provider has not
+answered for yet counts as selectable; if nothing within a year qualifies, the focus stays where it is.
+
+The scan starts from midnight, because `min` and `max` are parsed to midnight and a date carrying the
+current time of day would otherwise look past `max` on the `max` day itself. It also stops once both
+directions have left that range, rather than spending a year of offsets on candidates that cannot qualify
+— each one runs `isDateDisabled`, which is the caller's own code.
+
+Only the auto-picked date is ever moved, and any focus change of the user's own clears it: every change the
+component makes itself is guarded, so an unguarded one is theirs. Recognizing it that way rather than by
+comparing dates also covers navigating away and back. Disabled dates stay keyboard-focusable on purpose, so
+a date the user navigated to — or a selected value, even one the provider disables — is not taken away from
+under them. The adjustment also stops when the overlay closes; the host callback keeps running with the
+overlay closed for validation, and must not move the focus of a dropdown that is no longer shown.
+
+The move assigns `focusedDate` under that same guard, the way opening does, rather than going through
+`focusDate()`: notifying would apply the date to the input as if it had been typed, leaving it to be
+committed when the overlay is dismissed, and focusing the cell would take focus away from the input.
+
+The whole policy lives on the date-picker: it owns the constraints and the controller, and reaches the
+overlay content only through its `focusedDate`.
+
 ## What custom part names can do
 
 `part` from an entry is appended to the date's own parts, so a theme can style particular dates through

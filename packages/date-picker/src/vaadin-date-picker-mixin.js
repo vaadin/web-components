@@ -22,6 +22,7 @@ import {
   formatISODate,
   getAdjustedYear,
   getClosestDate,
+  normalizeDate,
   parseDate,
 } from './vaadin-date-picker-helper.js';
 
@@ -239,6 +240,10 @@ export const DatePickerMixin = (subclass) =>
          * A value is checked against the provider even if the overlay is never opened, which loads the
          * month holding it. Until that month answers the value is valid, and it is re-validated once
          * the answer arrives, so `checkValidity()` can report a value as valid and then invalid.
+         *
+         * When the overlay opens without a value, the automatically focused date is moved to the
+         * closest selectable date if the provider reports it disabled — unless the user has moved
+         * the focus already, since disabled dates stay focusable.
          *
          * `part` from the metadata adds part names to the date, so a theme can style specific dates
          * with `::part()` — e.g. `{ year, month, day, part: 'busy' }`. Give a single name or several
@@ -614,6 +619,12 @@ export const DatePickerMixin = (subclass) =>
       // Two-way data binding for `focusedDate` property
       content.addEventListener('focused-date-changed', (e) => {
         this._focusedDate = e.detail.value;
+
+        // Every focus change the component makes itself is guarded, so an unguarded one is the
+        // user's own and the auto-picked date stops being ours to adjust.
+        if (!this._ignoreFocusedDateChange) {
+          this.__initialFocusDate = null;
+        }
       });
 
       content.addEventListener('click', (e) => e.stopPropagation());
@@ -714,6 +725,80 @@ export const DatePickerMixin = (subclass) =>
         this.__awaitingProviderValidation = false;
         this._requestValidation();
       }
+
+      this.__adjustInitialFocusForProvider();
+    }
+
+    /**
+     * Moves the overlay's initial focus off a date the provider turns out to disable, once the
+     * provider has answered for that month. Only touches the auto-picked initial date, which any
+     * focus change of the user's own clears, so disabled dates the user focuses on purpose (which
+     * stay keyboard-focusable) are left alone.
+     * @private
+     */
+    __adjustInitialFocusForProvider() {
+      const content = this._overlayContent;
+      const controller = this._dateMetadataController;
+      const initial = this.__initialFocusDate;
+      if (!content || !initial || !controller.provider) {
+        return;
+      }
+      // Wait until the provider has answered for the initial month.
+      if (!controller.isMonthLoaded(initial)) {
+        return;
+      }
+      this.__initialFocusDate = null;
+      if (controller.isDateDisabled(initial)) {
+        const closest = this.__closestSelectableDate(initial);
+        if (closest) {
+          // Assigned the way opening does, rather than through `focusDate()`: notifying would apply
+          // the date to the input as if it had been typed, and focusing the cell would take focus
+          // away from the input the user may be using.
+          this._ignoreFocusedDateChange = true;
+          content.focusedDate = closest;
+          this._ignoreFocusedDateChange = false;
+        }
+      }
+    }
+
+    /**
+     * The date closest to the given one that can be selected, looking up to a year in both
+     * directions, or `undefined` when there is none. A date in a month the provider has not answered
+     * for yet counts as selectable, like everywhere else.
+     * @private
+     */
+    __closestSelectableDate(date) {
+      const minDate = this._minDate;
+      const maxDate = this._maxDate;
+      const isSelectable = (candidate) =>
+        dateSelectable(candidate, minDate, maxDate, this.isDateDisabled, this._dateMetadataController);
+
+      // At midnight, like the parsed `min` and `max`, so that a candidate on either of those days is
+      // not rejected for the time of day the date happens to carry.
+      const start = normalizeDate(date);
+      if (isSelectable(start)) {
+        return start;
+      }
+      for (let offset = 1; offset <= 366; offset++) {
+        let withinRange = false;
+        for (const direction of [1, -1]) {
+          const candidate = new Date(start);
+          candidate.setDate(candidate.getDate() + offset * direction);
+          if ((minDate && candidate < minDate) || (maxDate && candidate > maxDate)) {
+            continue;
+          }
+          withinRange = true;
+          if (isSelectable(candidate)) {
+            return candidate;
+          }
+        }
+        // Both directions have left the allowed range, so widening the search cannot find anything.
+        // Worth stopping for: `isDateDisabled` is the caller's own code, and is called per candidate.
+        if (!withinRange) {
+          break;
+        }
+      }
+      return undefined;
     }
 
     /**
@@ -1029,6 +1114,12 @@ export const DatePickerMixin = (subclass) =>
       content.focusedDate = scrollFocusDate;
       this._ignoreFocusedDateChange = false;
 
+      // When opening without a selected value, remember the auto-picked initial date so it can be
+      // moved off a provider-disabled date once the provider answers (see __onDateMetadataChanged).
+      // A date the user selected themselves is left in place even if the provider disables it.
+      this.__initialFocusDate = this._selectedDate ? null : scrollFocusDate;
+      this.__adjustInitialFocusForProvider();
+
       window.addEventListener('scroll', this._boundOnScroll, true);
 
       if (this._focusOverlayOnOpen) {
@@ -1092,6 +1183,10 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayClosed() {
+      // The metadata callback keeps running with the overlay closed, so stop it from moving the
+      // focus of a dropdown that is no longer shown.
+      this.__initialFocusDate = null;
+
       this._overlayContent?.cancelLoadVisibleDateMetadata();
 
       // Reset `aria-hidden` state.
