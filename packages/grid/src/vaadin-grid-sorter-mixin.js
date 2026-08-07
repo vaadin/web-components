@@ -131,8 +131,7 @@ export const GridSorterMixin = (superClass) =>
         return;
       }
 
-      const activeElement = this.getRootNode().activeElement;
-      if (this !== activeElement && this.contains(activeElement)) {
+      if (this.matches(':focus-within') && !this.matches(':focus')) {
         // Some focusable content inside the sorter was clicked, do nothing.
         return;
       }
