@@ -653,14 +653,9 @@ describe('theme attribute', () => {
 describe('touch', () => {
   let menu, buttons, subMenu, subMenuOverlay, items, item;
 
-  const open = (openTarget) => {
-    const menu = openTarget.parentElement.parentElement.owner;
-    if (menu) {
-      menu.__openListenerActive = true;
-      const overlay = menu._overlayElement;
-      overlay.__openingHandler?.();
-    }
+  const open = async (openTarget, subMenuToOpen) => {
     fire(openTarget, menuOpenEvent);
+    await oneEvent(subMenuToOpen._overlayElement, 'vaadin-overlay-open');
   };
 
   beforeEach(async () => {
@@ -697,8 +692,7 @@ describe('touch', () => {
     const subMenu2 = subMenu.querySelector('vaadin-menu-bar-submenu');
     items = subMenuOverlay._contentRoot.querySelectorAll('vaadin-menu-bar-item');
     item = items[items.length - 1];
-    open(item);
-    await nextRender();
+    await open(item, subMenu2);
     items = subMenu2._overlayElement._contentRoot.querySelectorAll('vaadin-menu-bar-item');
     item = items[items.length - 1];
     touchstart(item);
@@ -714,13 +708,11 @@ describe('touch', () => {
     const subMenu2 = subMenu.querySelector('vaadin-menu-bar-submenu');
     items = subMenuOverlay._contentRoot.querySelectorAll('vaadin-menu-bar-item');
     item = items[items.length - 1];
-    open(item);
-    await nextRender();
+    await open(item, subMenu2);
     const subMenu3 = subMenu2.querySelector('vaadin-menu-bar-submenu');
     item = subMenu2._overlayElement._contentRoot.querySelector('vaadin-menu-bar-item');
     expect(item).to.be.ok;
-    open(item);
-    await nextRender();
+    await open(item, subMenu3);
     expect(subMenu3.opened).to.be.true;
     subMenu3.dispatchEvent(new CustomEvent('close-all-menus'));
   });
