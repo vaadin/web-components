@@ -85,11 +85,17 @@ export function observeMove(element, callback) {
   return cleanup;
 }
 
+// Notification still uses `shouldAnimate()`: its card cancels and restarts a same-named
+// animation when it moves between the opening and closing state, which leaves the animation
+// objects briefly unobservable.
+
 /**
  * Detect whether an animation runs on the given element, so that its end can be
  * awaited before the element is hidden or removed. An element that is not rendered,
  * has no animation name, or has a zero duration does not fire `animationend`.
  *
+ * @deprecated Use `getStateAnimations()`, which reads the animations the browser created
+ * rather than the computed style, so that the two cannot disagree.
  * @param {HTMLElement} element
  * @return {boolean}
  */
@@ -101,6 +107,29 @@ export function shouldAnimate(element) {
     .split(',')
     .some((duration) => parseFloat(duration) > 0);
   return style.getPropertyValue('display') !== 'none' && name && name !== 'none' && hasDuration;
+}
+
+/**
+ * Collect the animations that report the state of the given element, so that their end can be
+ * awaited before the element is hidden or removed. The animations are read instead of the
+ * computed style, so that the decision to wait cannot disagree with what the browser actually
+ * created: a keyframes rule that does not exist and an element that is not rendered both give
+ * an empty list.
+ *
+ * Only CSS animations count, as the transitions and the script animations that `getAnimations()`
+ * also returns do not report the state. Animations of any content are already left out, as
+ * `getAnimations()` only descends into the subtree when asked to. Animations that take no time
+ * are dropped, so that a delay on its own does not hold the state, and so are endless ones,
+ * which would hold it forever.
+ *
+ * @param {HTMLElement} element
+ * @return {!Array<!Animation>}
+ */
+export function getStateAnimations(element) {
+  return element.getAnimations().filter((animation) => {
+    const { activeDuration } = animation.effect.getComputedTiming();
+    return animation instanceof CSSAnimation && activeDuration > 0 && Number.isFinite(activeDuration);
+  });
 }
 
 /**
