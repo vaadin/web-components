@@ -165,6 +165,10 @@ describe('renderer', () => {
       };
     });
 
+    afterEach(() => {
+      overlay.opened = false;
+    });
+
     it('should render the content', () => {
       expect(overlay.textContent).to.equal('Initial Content');
     });
