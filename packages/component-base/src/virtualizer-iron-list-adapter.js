@@ -78,8 +78,6 @@ export class IronListAdapter {
     });
     attachObserver.observe(this.scrollTarget);
 
-    // The focusin event bubbles through the flat tree, so it also fires for
-    // focus on slotted light DOM content, e.g. grid cell content.
     this.elementsContainer.addEventListener('focusin', () => this.__onElementFocused());
 
     if (this.reorderElements) {
