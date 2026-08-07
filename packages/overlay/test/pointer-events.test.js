@@ -1,5 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
+import './fixtures/mock-animated-overlay.js';
 import './fixtures/mock-overlay.js';
 
 describe('pointer-events', () => {
@@ -112,6 +114,50 @@ describe('pointer-events', () => {
       // The fix: Clear pointer-events whenever an overlay is closed
       // (in this case overlay 1 at step 3)
       expect(getComputedStyle(overlay1.$.overlay).pointerEvents).to.equal('auto');
+    });
+  });
+
+  describe('animated closing', () => {
+    let overlay, content, spy;
+
+    beforeEach(async () => {
+      overlay = fixtureSync('<mock-animated-overlay><button>Overlay content</button></mock-animated-overlay>');
+      overlay.setAttribute('long-animation', '');
+      await nextRender();
+
+      overlay.opened = true;
+      await nextRender();
+      overlay._flushAnimation('opening');
+
+      content = overlay.querySelector('button');
+      spy = sinon.spy();
+      content.addEventListener('click', spy);
+    });
+
+    afterEach(async () => {
+      overlay._flushAnimation('closing');
+    });
+
+    it('should not allow pointer events on the overlay part while closing', () => {
+      overlay.opened = false;
+
+      expect(overlay.hasAttribute('closing')).to.be.true;
+      expect(getComputedStyle(overlay.$.overlay).pointerEvents).to.equal('none');
+    });
+
+    it('should not dispatch click on the overlay content while closing', async () => {
+      overlay.opened = false;
+
+      content = overlay.querySelector('button');
+      expect(getComputedStyle(content).pointerEvents).to.equal('none');
+    });
+
+    it('should restore pointer events on the overlay part after closing', () => {
+      overlay.opened = false;
+      overlay._flushAnimation('closing');
+
+      expect(overlay.hasAttribute('closing')).to.be.false;
+      expect(getComputedStyle(overlay.$.overlay).pointerEvents).to.equal('auto');
     });
   });
 });
