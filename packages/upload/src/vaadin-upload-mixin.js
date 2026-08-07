@@ -665,9 +665,12 @@ export const UploadMixin = (superClass) =>
       this.__externalFiles.delete(file);
       // Translate errorKey to i18n message and set file.error, also when a
       // listener has already assigned an error, which the component has
-      // historically overwritten with the message derived from the response
-      if (file.errorKey) {
-        file.error = translateErrorKey(file.errorKey, this.__effectiveI18n);
+      // historically overwritten with the message derived from the response.
+      // An error key without an i18n message (e.g. a failure to send the
+      // request) leaves the assigned error untouched.
+      const error = file.errorKey && translateErrorKey(file.errorKey, this.__effectiveI18n);
+      if (error) {
+        file.error = error;
       }
       this.__redispatchEvent(event);
       // The manager stops tracking upload progress once the upload has

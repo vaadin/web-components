@@ -134,17 +134,17 @@ export function updateFileStatus(file, i18n, { indeterminateFirst = false } = {}
 
 /**
  * Translate the error key of a failed upload into the matching i18n error
- * message. A timed out request surfaces as server unavailable, and an error
- * key without a message translates to the key itself.
+ * message. A timed out request is reported as server unavailable.
  *
  * @param {string} errorKey - The error key of a failed upload
  * @param {Object} i18n - The effective i18n object
- * @returns {string} - The translated error message
+ * @returns {string | undefined} - The translated error message, or `undefined`
+ *   when the i18n object has no message for the key
  * @private
  */
 export function translateErrorKey(errorKey, i18n) {
   const key = errorKey === 'timeout' ? 'serverUnavailable' : errorKey;
-  return i18n.uploading.error[key] || key;
+  return i18n.uploading.error[key];
 }
 
 /**

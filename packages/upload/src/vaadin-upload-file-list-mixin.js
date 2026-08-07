@@ -277,9 +277,12 @@ export const UploadFileListMixin = (superClass) =>
 
     /** @private */
     __applyFileError(file, i18n) {
-      if (file.errorKey) {
-        file.error = translateErrorKey(file.errorKey, i18n);
-      } else if (this.manager instanceof UploadManager) {
+      // An error key without an i18n message (e.g. a failure to send the
+      // request) leaves the error assigned to the file untouched
+      const error = file.errorKey && translateErrorKey(file.errorKey, i18n);
+      if (error) {
+        file.error = error;
+      } else if (!file.errorKey && this.manager instanceof UploadManager) {
         // Clear error when errorKey is reset (e.g., on retry) only when using manager
         file.error = '';
       }
