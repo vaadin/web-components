@@ -20,7 +20,7 @@ function formatSize(bytes, i18n) {
 
   // https://wiki.ubuntu.com/UnitsPolicy
   const base = i18n.units.sizeBase || 1000;
-  const unit = Math.trunc(Math.log(bytes) / Math.log(base));
+  const unit = bytes > 0 ? Math.trunc(Math.log(bytes) / Math.log(base)) : 0;
   const dec = Math.max(0, Math.min(3, unit - 1));
   const size = Number.parseFloat((bytes / base ** unit).toFixed(dec));
   return `${size} ${i18n.units.size[unit]}`;
