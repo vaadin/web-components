@@ -1,15 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
 import { enterKeyDown, escKeyDown, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-overlay.js';
-import { createOverlay } from './helpers.js';
+import './fixtures/mock-overlay.js';
 
 describe('Esc', () => {
   describe('single overlay', () => {
     let overlay;
 
     beforeEach(async () => {
-      overlay = createOverlay('overlay content');
+      overlay = fixtureSync('<mock-overlay>overlay content</mock-overlay>');
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -73,11 +72,14 @@ describe('Esc', () => {
     let parent, overlay1, overlay2, overlay3, spy;
 
     beforeEach(async () => {
-      parent = fixtureSync('<div></div>');
-      overlay1 = createOverlay('overlay 1');
-      overlay2 = createOverlay('overlay 2');
-      overlay3 = createOverlay('overlay 3');
-      parent.append(overlay1, overlay2, overlay3);
+      parent = fixtureSync(`
+        <div>
+          <mock-overlay>overlay1</mock-overlay>
+          <mock-overlay>overlay2</mock-overlay>
+          <mock-overlay>overlay3</mock-overlay>
+        </div>
+      `);
+      [overlay1, overlay2, overlay3] = parent.children;
       await nextRender();
 
       spy = sinon.spy();
@@ -112,26 +114,17 @@ describe('Esc', () => {
     beforeEach(async () => {
       parent = fixtureSync(`
         <div id="parent">
-          <vaadin-overlay modeless></vaadin-overlay>
-          <vaadin-overlay modeless></vaadin-overlay>
+          <mock-overlay modeless>
+            overlay1
+            <input />
+          </mock-overlay>
+          <mock-overlay modeless>
+            overlay2
+            <input />
+          </mock-overlay>
         </div>
       `);
-      modeless1 = parent.children[0];
-      modeless1.renderer = (root) => {
-        if (!root.firstChild) {
-          root.textContent = 'overlay 1';
-          const input = document.createElement('input');
-          root.appendChild(input);
-        }
-      };
-      modeless2 = parent.children[1];
-      modeless2.renderer = (root) => {
-        if (!root.firstChild) {
-          root.textContent = 'overlay 2';
-          const input = document.createElement('input');
-          root.appendChild(input);
-        }
-      };
+      [modeless1, modeless2] = parent.children;
       await nextRender();
     });
 

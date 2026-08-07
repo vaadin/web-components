@@ -1,8 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
 import { escKeyDown, fixtureSync, mousedown, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './fixtures/mock-dialog.js';
+import './fixtures/mock-overlay.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { Overlay } from '../src/vaadin-overlay.js';
 
 customElements.define(
   'overlay-field-wrapper',
@@ -12,7 +13,7 @@ customElements.define(
 
       this.attachShadow({ mode: 'open' });
 
-      const overlay = document.createElement('vaadin-overlay');
+      const overlay = document.createElement('mock-overlay');
       overlay.focusTrap = true;
       overlay.renderer = (root) => {
         if (!root.firstChild) {
@@ -45,7 +46,7 @@ describe('restore focus', () => {
     focusInput = document.createElement('input');
     wrapper = fixtureSync('<overlay-field-wrapper></overlay-field-wrapper>');
     await nextRender();
-    overlay = wrapper.shadowRoot.querySelector('vaadin-overlay');
+    overlay = wrapper.shadowRoot.querySelector('mock-overlay');
     focusable = wrapper.shadowRoot.querySelector('input');
   });
 
@@ -187,58 +188,15 @@ describe('restore focus', () => {
 
 // Emulate dialog DOM structure, where the content root is slotted into the overlay
 describe('custom content root', () => {
-  customElements.define(
-    'custom-overlay',
-    class extends Overlay {
-      get _contentRoot() {
-        return this.owner;
-      }
-
-      get _rendererRoot() {
-        return this.owner;
-      }
-    },
-  );
-
-  customElements.define(
-    'custom-overlay-wrapper',
-    class extends HTMLElement {
-      constructor() {
-        super();
-
-        this.attachShadow({ mode: 'open' });
-
-        const overlay = document.createElement('custom-overlay');
-
-        const owner = document.createElement('div');
-        overlay.owner = owner;
-
-        // Forward the slotted content from wrapper to overlay
-        const slot = document.createElement('slot');
-        overlay.appendChild(slot);
-
-        overlay.focusTrap = true;
-        overlay.renderer = (root) => {
-          if (!root.firstChild) {
-            root.appendChild(document.createElement('input'));
-          }
-        };
-
-        this.shadowRoot.append(overlay);
-        this.append(owner);
-      }
-    },
-  );
-
   let wrapper, overlay, contentRoot, focusInput;
 
   beforeEach(async () => {
     focusInput = document.createElement('input');
     document.body.appendChild(focusInput);
 
-    wrapper = fixtureSync('<custom-overlay-wrapper></custom-overlay-wrapper>');
+    wrapper = fixtureSync('<mock-dialog></mock-dialog>');
     await nextRender();
-    overlay = wrapper.shadowRoot.querySelector('custom-overlay');
+    overlay = wrapper.shadowRoot.querySelector('mock-dialog-overlay');
     contentRoot = wrapper.querySelector('div');
 
     overlay.restoreFocusOnClose = true;

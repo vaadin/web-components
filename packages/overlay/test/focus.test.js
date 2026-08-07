@@ -1,13 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
-import '../src/vaadin-overlay.js';
+import './fixtures/mock-overlay.js';
 import { getDeepActiveElement, getTabbableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('autofocus', () => {
   let overlay;
 
   beforeEach(async () => {
-    overlay = fixtureSync('<vaadin-overlay autofocus></vaadin-overlay>');
+    overlay = fixtureSync('<mock-overlay autofocus></mock-overlay>');
     overlay.renderer = (root) => {
       if (!root.firstChild) {
         root.innerHTML = `
@@ -67,7 +67,7 @@ describe('focus-trap', () => {
 
   describe('focusable elements', () => {
     beforeEach(async () => {
-      overlay = fixtureSync('<vaadin-overlay focus-trap></vaadin-overlay>');
+      overlay = fixtureSync('<mock-overlay focus-trap></mock-overlay>');
       overlay.renderer = (root) => {
         if (!root.firstChild) {
           root.innerHTML = `
@@ -132,7 +132,7 @@ describe('focus-trap', () => {
 
   describe('empty', () => {
     beforeEach(async () => {
-      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
+      overlay = fixtureSync('<mock-overlay></mock-overlay>');
       await nextRender();
       overlayPart = overlay.$.overlay;
     });
@@ -168,14 +168,14 @@ describe('focus-trap', () => {
     let nested;
 
     beforeEach(async () => {
-      overlay = fixtureSync('<vaadin-overlay focus-trap></vaadin-overlay>');
+      overlay = fixtureSync('<mock-overlay focus-trap></mock-overlay>');
       overlay.renderer = (root) => {
         if (!root.firstChild) {
           const button = document.createElement('button');
           button.textContent = 'Button';
           root.appendChild(button);
 
-          const nested = document.createElement('vaadin-overlay');
+          const nested = document.createElement('mock-overlay');
           nested.renderer = (root) => {
             root.textContent = 'Inner content';
           };
@@ -185,7 +185,7 @@ describe('focus-trap', () => {
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
       focusableElements = getTabbableElements(overlay.$.overlay);
-      nested = overlay.querySelector('vaadin-overlay');
+      nested = overlay.querySelector('mock-overlay');
     });
 
     afterEach(() => {

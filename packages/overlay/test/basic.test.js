@@ -1,18 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, isIOS, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-overlay.js';
-import { createOverlay } from './helpers.js';
+import './fixtures/mock-overlay.js';
 
 describe('vaadin-overlay', () => {
   describe('popover', () => {
     let overlay;
 
     beforeEach(() => {
-      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
-      overlay.renderer = (root) => {
-        root.textContent = 'overlay content';
-      };
+      overlay = fixtureSync('<mock-overlay>overlay content</mock-overlay>');
     });
 
     afterEach(() => {
@@ -64,10 +60,8 @@ describe('vaadin-overlay', () => {
 
     describe('open before connecting', () => {
       beforeEach(() => {
-        overlay = document.createElement('vaadin-overlay');
-        overlay.renderer = (root) => {
-          root.textContent = 'overlay content';
-        };
+        overlay = document.createElement('mock-overlay');
+        overlay.textContent = 'overlay content';
       });
 
       afterEach(() => {
@@ -90,8 +84,8 @@ describe('vaadin-overlay', () => {
     let overlay, owner;
 
     beforeEach(() => {
-      overlay = createOverlay('overlay content');
-      owner = document.createElement('div');
+      overlay = fixtureSync('<mock-overlay>overlay content</mock-overlay>');
+      owner = overlay.parentElement;
       overlay.owner = owner;
     });
 
@@ -111,8 +105,8 @@ describe('vaadin-overlay', () => {
     let overlay, backdrop, owner;
 
     beforeEach(async () => {
-      overlay = createOverlay('overlay content');
-      owner = document.createElement('div');
+      overlay = fixtureSync('<mock-overlay>overlay content</mock-overlay>');
+      owner = overlay.parentElement;
       overlay.owner = owner;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -157,7 +151,7 @@ describe('vaadin-overlay', () => {
     let overlay, overlayPart;
 
     beforeEach(async () => {
-      overlay = createOverlay('overlay content');
+      overlay = fixtureSync('<mock-overlay><div>overlay content</div></mock-overlay>');
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
       overlayPart = overlay.$.overlay;
@@ -225,7 +219,7 @@ describe('vaadin-overlay', () => {
     let overlay;
 
     beforeEach(async () => {
-      overlay = createOverlay('overlay content');
+      overlay = fixtureSync('<mock-overlay>overlay content</mock-overlay>');
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });

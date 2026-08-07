@@ -1,19 +1,21 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-overlay.js';
-import { createOverlay } from './helpers.js';
+import './fixtures/mock-overlay.js';
 
 describe('multiple overlays', () => {
   describe('modal', () => {
     let parent, overlay1, overlay2, overlay3;
 
     beforeEach(async () => {
-      parent = fixtureSync('<div></div>');
-      overlay1 = createOverlay('overlay 1');
-      overlay2 = createOverlay('overlay 2');
-      overlay3 = createOverlay('overlay 3');
-      parent.append(overlay1, overlay2, overlay3);
+      parent = fixtureSync(`
+        <div>
+          <mock-overlay>overlay1</mock-overlay>
+          <mock-overlay>overlay2</mock-overlay>
+          <mock-overlay>overlay3</mock-overlay>
+        </div>
+      `);
+      [overlay1, overlay2, overlay3] = parent.children;
       await nextRender();
     });
 
@@ -55,19 +57,20 @@ describe('multiple overlays', () => {
 
     const getFrontmostOverlayFromScreenCenter = () => {
       let elementFromPoint = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
-      while (elementFromPoint && elementFromPoint.localName !== 'vaadin-overlay') {
+      while (elementFromPoint && elementFromPoint.localName !== 'mock-overlay') {
         elementFromPoint = elementFromPoint.host || elementFromPoint.parentNode;
       }
       return elementFromPoint;
     };
 
     beforeEach(async () => {
-      parent = fixtureSync('<div></div>');
-      modeless1 = createOverlay('overlay 1');
-      modeless2 = createOverlay('overlay 2');
-      modeless1.modeless = true;
-      modeless2.modeless = true;
-      parent.append(modeless1, modeless2);
+      parent = fixtureSync(`
+        <div>
+          <mock-overlay modeless>overlay1</mock-overlay>
+          <mock-overlay modeless>overlay2</mock-overlay>
+        </div>
+      `);
+      [modeless1, modeless2] = parent.children;
       await nextRender();
     });
 

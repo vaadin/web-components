@@ -1,14 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
-import '../src/vaadin-overlay.js';
-import { createOverlay } from './helpers.js';
+import './fixtures/mock-overlay.js';
 
 describe('pointer-events', () => {
   describe('single overlay', () => {
     let overlay;
 
     beforeEach(async () => {
-      overlay = createOverlay('overlay content');
+      overlay = fixtureSync('<mock-overlay>overlay content</mock-overlay>');
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -41,11 +40,14 @@ describe('pointer-events', () => {
     let parent, overlay1, overlay2, overlay3;
 
     beforeEach(async () => {
-      parent = fixtureSync('<div></div>');
-      overlay1 = createOverlay('overlay 1');
-      overlay2 = createOverlay('overlay 2');
-      overlay3 = createOverlay('overlay 3');
-      parent.append(overlay1, overlay2, overlay3);
+      parent = fixtureSync(`
+        <div>
+          <mock-overlay>overlay1</mock-overlay>
+          <mock-overlay>overlay2</mock-overlay>
+          <mock-overlay>overlay3</mock-overlay>
+        </div>
+      `);
+      [overlay1, overlay2, overlay3] = parent.children;
       await nextRender();
     });
 
