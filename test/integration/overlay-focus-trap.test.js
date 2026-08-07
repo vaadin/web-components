@@ -1,9 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
-import '@vaadin/button/src/vaadin-button.js';
-import '@vaadin/overlay/src/vaadin-overlay.js';
-import '@vaadin/radio-group/src/vaadin-radio-group.js';
-import '@vaadin/text-field/src/vaadin-text-field.js';
+import '@vaadin/button';
+import '@vaadin/radio-group';
+import '@vaadin/text-field';
+import '@vaadin/overlay/test/fixtures/mock-overlay.js';
 import { getTabbableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('focus-trap', () => {
@@ -15,7 +15,7 @@ describe('focus-trap', () => {
 
   describe('elements in light DOM', () => {
     beforeEach(async () => {
-      overlay = fixtureSync('<vaadin-overlay focus-trap></vaadin-overlay>');
+      overlay = fixtureSync('<mock-overlay focus-trap></mock-overlay>');
       await nextRender();
       overlay.renderer = (root) => {
         if (!root.firstChild) {
@@ -72,7 +72,7 @@ describe('focus-trap', () => {
 
   describe('elements in shadow DOM', () => {
     beforeEach(async () => {
-      overlay = fixtureSync('<vaadin-overlay focus-trap></vaadin-overlay>');
+      overlay = fixtureSync('<mock-overlay focus-trap></mock-overlay>');
       await nextRender();
       overlay.renderer = (root) => {
         if (!root.firstChild) {
