@@ -353,8 +353,6 @@ export const UploadMixin = (superClass) =>
     constructor() {
       super();
 
-      // Create the internal upload manager, which reads its configuration
-      // from this component
       this._manager = new InternalUploadManager(this);
 
       // Files that are uploaded without being added to the `files` list
