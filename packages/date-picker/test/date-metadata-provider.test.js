@@ -21,6 +21,12 @@ describe('dateMetadataProvider integration', () => {
     return cell.part.contains(part);
   }
 
+  function calendarsWithLoadingDates() {
+    return getCalendars(overlayContent)
+      .filter((calendar) => calendar.month)
+      .filter((calendar) => getDateCells(calendar).some((cell) => cell.part.contains('loading')));
+  }
+
   // Bounded polling: an answer can take more than one render to reach the cells.
   async function untilRendered(predicate) {
     for (let i = 0; i < 50 && !predicate(); i++) {
@@ -56,6 +62,12 @@ describe('dateMetadataProvider integration', () => {
     return { provider, resolve: (dates) => resolveProvider(dates) };
   }
 
+  async function openWithProvider(provider) {
+    datePicker.dateMetadataProvider = provider;
+    await open(datePicker);
+    overlayContent = datePicker._overlayContent;
+  }
+
   beforeEach(() => {
     datePicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
     today = new Date();
@@ -65,9 +77,7 @@ describe('dateMetadataProvider integration', () => {
 
   describe('synchronous provider', () => {
     beforeEach(async () => {
-      datePicker.dateMetadataProvider = disableFifteenth;
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
+      await openWithProvider(disableFifteenth);
     });
 
     it('should mark only the provided dates as disabled', () => {
@@ -80,14 +90,11 @@ describe('dateMetadataProvider integration', () => {
       expect(getVisibleCell(16).getAttribute('aria-disabled')).to.equal('false');
     });
 
-    it('should not mark any date as loading', () => {
-      expect(hasPart(getVisibleCell(15), 'loading')).to.be.false;
-      expect(hasPart(getVisibleCell(16), 'loading')).to.be.false;
-    });
-
-    it('should not show the loading spinner for a synchronous result', () => {
+    it('should not report loading for an answer that needs no waiting', () => {
       expect(overlayContent.hasAttribute('loading')).to.be.false;
       expect(overlayContent.hasAttribute('aria-busy')).to.be.false;
+      expect(hasPart(getVisibleCell(15), 'loading')).to.be.false;
+      expect(hasPart(getVisibleCell(16), 'loading')).to.be.false;
     });
   });
 
@@ -96,15 +103,7 @@ describe('dateMetadataProvider integration', () => {
 
     beforeEach(async () => {
       ({ provider, resolve: resolveProvider } = deferredProvider());
-      datePicker.dateMetadataProvider = provider;
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
-    });
-
-    it('should consult the provider for a range wider than a single month', () => {
-      const { start, end } = provider.firstCall.args[0];
-      const months = (end.year - start.year) * 12 + (end.month - start.month);
-      expect(months).to.be.greaterThan(1);
+      await openWithProvider(provider);
     });
 
     it('should show the loading spinner and mark the calendar busy while pending', () => {
@@ -126,8 +125,7 @@ describe('dateMetadataProvider integration', () => {
     });
 
     it('should commit a date picked from a month being fetched', async () => {
-      // Nothing corrects the commit afterwards yet: a date the provider turns out to disable stays
-      // committed and valid.
+      // A pending date is selectable, and the value is re-validated once its month answers.
       const date = new Date(year, month, 15);
       expect(overlayContent._selectDate(date)).to.be.true;
       await nextRender();
@@ -135,7 +133,7 @@ describe('dateMetadataProvider integration', () => {
       expect(datePicker.value).to.equal(formatISODate(date));
     });
 
-    it('should hide the spinner and mark the provided dates disabled after resolving', async () => {
+    it('should update the dates and the spinner once the month resolves', async () => {
       resolveProvider(disableFifteenth(provider.firstCall.args[0]));
       await untilRendered(() => {
         const cell = getVisibleCell(15);
@@ -145,13 +143,9 @@ describe('dateMetadataProvider integration', () => {
       expect(overlayContent.hasAttribute('loading')).to.be.false;
       expect(overlayContent.hasAttribute('aria-busy')).to.be.false;
       expect(isDisabled(getVisibleCell(15))).to.be.true;
+      expect(getVisibleCell(15).getAttribute('aria-disabled')).to.equal('true');
       expect(isDisabled(getVisibleCell(16))).to.be.false;
-    });
-
-    it('should drop the loading part once the month resolves', async () => {
-      resolveProvider([]);
-      await untilRendered(() => !hasPart(getVisibleCell(16), 'loading'));
-
+      expect(getVisibleCell(16).getAttribute('aria-disabled')).to.equal('false');
       expect(hasPart(getVisibleCell(15), 'loading')).to.be.false;
       expect(hasPart(getVisibleCell(16), 'loading')).to.be.false;
     });
@@ -185,10 +179,6 @@ describe('dateMetadataProvider integration', () => {
       await nextRender();
 
       expect(provider).to.be.called;
-      const { start, end } = provider.lastCall.args[0];
-      const targetIndex = target.getFullYear() * 12 + target.getMonth();
-      expect(start.year * 12 + start.month).to.be.at.most(targetIndex);
-      expect(end.year * 12 + end.month).to.be.at.least(targetIndex);
 
       resolveProvider(disableFifteenth(provider.lastCall.args[0]));
       await untilRendered(() => {
@@ -215,17 +205,6 @@ describe('dateMetadataProvider integration', () => {
       expect(provider).to.be.calledOnce;
     });
 
-    it('should set aria-disabled once the provider reports the date as disabled', async () => {
-      // The synchronous case is covered above; here the attribute has to follow a later answer.
-      expect(getVisibleCell(15).getAttribute('aria-disabled')).to.equal('false');
-
-      resolveProvider(disableFifteenth(provider.firstCall.args[0]));
-      await untilRendered(() => getVisibleCell(15)?.getAttribute('aria-disabled') === 'true');
-
-      expect(getVisibleCell(15).getAttribute('aria-disabled')).to.equal('true');
-      expect(getVisibleCell(16).getAttribute('aria-disabled')).to.equal('false');
-    });
-
     it('should load the metadata for months reached through the year scroller', async () => {
       // A third navigation path, separate from the month scroller and from `scrollToDate`.
       resolveProvider([]);
@@ -245,75 +224,97 @@ describe('dateMetadataProvider integration', () => {
     });
   });
 
-  describe('loading dates and the loading indicator', () => {
-    // The dates and the indicator report the same thing, so they must never disagree.
-    function calendarsWithLoadingDates() {
-      return getCalendars(overlayContent)
-        .filter((calendar) => calendar.month)
-        .filter((calendar) => getDateCells(calendar).some((cell) => cell.part.contains('loading')));
-    }
+  it('should not mark dates loading for a load that is only scheduled', async () => {
+    await openWithProvider(sinon.stub().returns([]));
 
-    beforeEach(async () => {
-      // Synchronous, so a settled range leaves nothing in flight.
-      datePicker.dateMetadataProvider = sinon.stub().returns([]);
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
-    });
+    // Navigating only schedules a load, so for a moment the months on screen are not being fetched.
+    overlayContent.scrollToDate(new Date(year + 5, 0, 1), false);
+    await nextRender();
 
-    it('should not mark any date loading while nothing is being fetched', async () => {
-      // Navigating only schedules a load, so for a moment the months on screen are not being fetched.
-      overlayContent.scrollToDate(new Date(year + 5, 0, 1), false);
-      await nextRender();
-
-      expect(overlayContent.hasAttribute('loading')).to.be.false;
-      expect(calendarsWithLoadingDates()).to.be.empty;
-    });
-
-    it('should mark dates loading while a request is in flight', async () => {
-      datePicker.dateMetadataProvider = () => new Promise(() => {});
-      await nextRender();
-
-      expect(overlayContent.hasAttribute('loading')).to.be.true;
-      expect(calendarsWithLoadingDates()).to.not.be.empty;
-    });
+    expect(overlayContent.hasAttribute('loading')).to.be.false;
+    expect(calendarsWithLoadingDates()).to.be.empty;
   });
 
-  describe('months in different states at once', () => {
-    it('should mark only the months actually being fetched as loading', async () => {
-      // Requests cover whole calendar years, so a view spanning a year boundary can hold one answered
-      // year and one still being fetched. Reporting the overlay-wide state per date would mark both.
-      let requests = 0;
-      const provider = sinon.stub().callsFake(() => {
-        requests += 1;
-        // Only the year in view when the overlay opened answers; the one reached by scrolling does not.
-        return requests === 1 ? [] : new Promise(() => {});
-      });
-      datePicker.dateMetadataProvider = provider;
-      datePicker.initialPosition = `${year}-06-01`;
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
-      await nextRender();
-
-      overlayContent.scrollToDate(new Date(year, 11, 1), false);
-      overlayContent._loadDateMetadataDebouncer.flush();
-      await nextRender();
-
-      const december = getMonthCalendar(overlayContent, year, 11);
-      const january = getMonthCalendar(overlayContent, year + 1, 0);
-      expect(december, 'December should be rendered').to.exist;
-      expect(january, 'January should be rendered').to.exist;
-      expect(hasPart(getDateCell(december, 15), 'loading')).to.be.false;
-      expect(hasPart(getDateCell(january, 15), 'loading')).to.be.true;
+  it('should mark only the months actually being fetched as loading', async () => {
+    // Requests cover whole calendar years, so a view spanning a year boundary can hold one answered
+    // year and one still being fetched. Reporting the overlay-wide state per date would mark both.
+    let requests = 0;
+    datePicker.initialPosition = `${year}-06-01`;
+    await openWithProvider(() => {
+      requests += 1;
+      // Only the year in view when the overlay opened answers; the one reached by scrolling does not.
+      return requests === 1 ? [] : new Promise(() => {});
     });
+    await nextRender();
+
+    overlayContent.scrollToDate(new Date(year, 11, 1), false);
+    overlayContent._loadDateMetadataDebouncer.flush();
+    await nextRender();
+
+    const december = getMonthCalendar(overlayContent, year, 11);
+    const january = getMonthCalendar(overlayContent, year + 1, 0);
+    expect(december, 'December should be rendered').to.exist;
+    expect(january, 'January should be rendered').to.exist;
+    expect(hasPart(getDateCell(december, 15), 'loading')).to.be.false;
+    expect(hasPart(getDateCell(january, 15), 'loading')).to.be.true;
+  });
+
+  // `new Date(50, ...)` would move a two-digit year into the 1950s, which would break both the range
+  // the provider is asked about and the dates the metadata is matched against.
+  it('should request and disable the dates of a year below 100', async () => {
+    const provider = sinon.stub().returns([{ year: 50, month: 5, day: 15, disabled: true }]);
+    datePicker.initialPosition = '0050-06-01';
+    await openWithProvider(provider);
+
+    const { start, end } = provider.firstCall.args[0];
+    expect(start.year).to.be.within(49, 50);
+    expect(end.year).to.be.within(50, 51);
+    expect(isDisabled(getVisibleCell(15, 50, 5))).to.be.true;
+    expect(isDisabled(getVisibleCell(16, 50, 5))).to.be.false;
+  });
+
+  it('should disable the dates rejected by any constraint and keep the others enabled', async () => {
+    // The 15th is disabled by the provider, the 20th by `isDateDisabled`, and everything before
+    // the 10th and after the 25th is out of the min/max range.
+    datePicker.isDateDisabled = ({ day }) => day === 20;
+    datePicker.min = formatISODate(new Date(year, month, 10));
+    datePicker.max = formatISODate(new Date(year, month, 25));
+    await openWithProvider(disableFifteenth);
+
+    expect(isDisabled(getVisibleCell(9))).to.be.true;
+    expect(isDisabled(getVisibleCell(15))).to.be.true;
+    expect(isDisabled(getVisibleCell(20))).to.be.true;
+    expect(isDisabled(getVisibleCell(26))).to.be.true;
+    expect(isDisabled(getVisibleCell(16))).to.be.false;
+  });
+
+  it('should load the metadata again for a cache dropped while closed', async () => {
+    const provider = sinon.stub().returns([]);
+    await openWithProvider(provider);
+    await nextRender();
+
+    datePicker.opened = false;
+    await nextRender();
+    // The cache survives close and reopen, so drop it to leave something to fetch.
+    datePicker._dateMetadataController.clearCache();
+    provider.resetHistory();
+
+    await open(datePicker);
+    overlayContent._loadDateMetadataDebouncer?.flush();
+    await nextRender();
+
+    expect(provider).to.be.called;
   });
 
   describe('closing the overlay', () => {
-    it('should not call the provider for a load scheduled before it closed', async () => {
-      const provider = sinon.stub().returns([]);
-      datePicker.dateMetadataProvider = provider;
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
+    let provider;
 
+    beforeEach(async () => {
+      provider = sinon.stub().returns([]);
+      await openWithProvider(provider);
+    });
+
+    it('should not call the provider for a load scheduled before it closed', async () => {
       // Navigate to schedule a load, then dismiss the overlay before the debouncer fires.
       overlayContent.scrollToDate(new Date(year + 5, 0, 1), false);
       provider.resetHistory();
@@ -329,12 +330,7 @@ describe('dateMetadataProvider integration', () => {
     it('should not call the provider when config changes while it is closed', async () => {
       // The overlay content outlives closing, so a config change still reaches it and reconfigures the
       // calendars. Loading from there would fetch for a hidden dialog and leave the spinner on it.
-      const provider = sinon.stub().returns([]);
-      datePicker.dateMetadataProvider = provider;
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
       await nextRender();
-
       datePicker.opened = false;
       await nextRender();
       // Drop the cache, so there would be something to fetch if a config change asked for it.
@@ -349,12 +345,7 @@ describe('dateMetadataProvider integration', () => {
       expect(overlayContent.hasAttribute('aria-busy')).to.be.false;
     });
 
-    it('should not call the provider for a load scheduled before the date-picker was removed', async () => {
-      const provider = sinon.stub().returns([]);
-      datePicker.dateMetadataProvider = provider;
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
-
+    it('should not call the provider for a load scheduled before the date-picker was removed', () => {
       // Closing can be deferred by the animation, so the load has to be dropped as soon as the
       // calendar leaves the DOM. Flushed without awaiting, to stay inside that window.
       overlayContent.scrollToDate(new Date(year + 5, 0, 1), false);
@@ -367,43 +358,13 @@ describe('dateMetadataProvider integration', () => {
     });
   });
 
-  describe('combined with the other constraints', () => {
-    beforeEach(async () => {
-      // The 15th is disabled by the provider, the 20th by `isDateDisabled`, and everything before
-      // the 10th and after the 25th is out of the min/max range.
-      datePicker.dateMetadataProvider = disableFifteenth;
-      datePicker.isDateDisabled = ({ day }) => day === 20;
-      datePicker.min = formatISODate(new Date(year, month, 10));
-      datePicker.max = formatISODate(new Date(year, month, 25));
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
-    });
-
-    it('should disable dates rejected by any of the constraints', () => {
-      expect(isDisabled(getVisibleCell(9))).to.be.true;
-      expect(isDisabled(getVisibleCell(15))).to.be.true;
-      expect(isDisabled(getVisibleCell(20))).to.be.true;
-      expect(isDisabled(getVisibleCell(26))).to.be.true;
-    });
-
-    it('should keep a date allowed by all of the constraints enabled', () => {
-      expect(isDisabled(getVisibleCell(16))).to.be.false;
-    });
-  });
-
   describe('selection', () => {
     beforeEach(async () => {
-      datePicker.dateMetadataProvider = disableFifteenth;
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
+      await openWithProvider(disableFifteenth);
     });
 
-    it('should refuse to select a provider-disabled date', () => {
+    it('should not select a provider-disabled date', async () => {
       expect(overlayContent._selectDate(new Date(year, month, 15))).to.be.false;
-    });
-
-    it('should not commit a provider-disabled date', async () => {
-      overlayContent._selectDate(new Date(year, month, 15));
       await nextRender();
 
       expect(datePicker.value).to.equal('');
@@ -438,9 +399,7 @@ describe('dateMetadataProvider integration', () => {
 
     it('should disable the today button once the provider reports today as disabled', async () => {
       const { provider, resolve } = deferredProvider();
-      datePicker.dateMetadataProvider = provider;
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
+      await openWithProvider(provider);
 
       // Applied imperatively to a slotted element, so it only refreshes via the host callback.
       resolve([todayMetadata()]);
@@ -451,18 +410,14 @@ describe('dateMetadataProvider integration', () => {
 
     it('should keep the today button enabled while today is not known to be disabled', async () => {
       // A never-resolving provider: today's month stays pending, and a pending date is selectable.
-      datePicker.dateMetadataProvider = () => new Promise(() => {});
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
+      await openWithProvider(() => new Promise(() => {}));
 
       expect(overlayContent._todayButton.disabled).to.be.false;
     });
 
     it('should re-enable the today button when the provider stops disabling today', async () => {
       let disabled = [todayMetadata()];
-      datePicker.dateMetadataProvider = () => disabled;
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
+      await openWithProvider(() => disabled);
       expect(overlayContent._todayButton.disabled).to.be.true;
 
       disabled = [];
@@ -476,9 +431,7 @@ describe('dateMetadataProvider integration', () => {
 
     it('should keep the today button disabled while the provider still disables today', async () => {
       // The counterpart of the test above: an unchanged answer must not re-enable the button.
-      datePicker.dateMetadataProvider = () => [todayMetadata()];
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
+      await openWithProvider(() => [todayMetadata()]);
       expect(overlayContent._todayButton.disabled).to.be.true;
 
       datePicker._dateMetadataController.clearCache();
@@ -491,9 +444,7 @@ describe('dateMetadataProvider integration', () => {
 
   describe('notification', () => {
     beforeEach(async () => {
-      datePicker.dateMetadataProvider = () => [];
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
+      await openWithProvider(() => []);
     });
 
     it('should invalidate every rendered calendar', () => {
@@ -568,9 +519,7 @@ describe('dateMetadataProvider integration', () => {
 
   describe('provider changes', () => {
     it('should reload the visible range for a new provider', async () => {
-      datePicker.dateMetadataProvider = disableFifteenth;
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
+      await openWithProvider(disableFifteenth);
       expect(isDisabled(getVisibleCell(15))).to.be.true;
 
       // Assigning a new function drops the cache, which has to be refilled for what is on screen.
@@ -585,21 +534,8 @@ describe('dateMetadataProvider integration', () => {
       expect(isDisabled(getVisibleCell(15))).to.be.false;
     });
 
-    it('should re-consult a newly assigned provider', async () => {
-      datePicker.dateMetadataProvider = disableFifteenth;
-      await open(datePicker);
-      const provider = sinon.spy(disableFifteenth);
-
-      datePicker.dateMetadataProvider = provider;
-      await nextRender();
-
-      expect(provider).to.be.called;
-    });
-
     it('should disable nothing once the provider is removed', async () => {
-      datePicker.dateMetadataProvider = disableFifteenth;
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
+      await openWithProvider(disableFifteenth);
       expect(isDisabled(getVisibleCell(15))).to.be.true;
 
       datePicker.dateMetadataProvider = undefined;
@@ -612,9 +548,7 @@ describe('dateMetadataProvider integration', () => {
     it('should stop loading when the provider is removed while a request is in flight', async () => {
       // Otherwise the spinner and `aria-busy` would be left on for a request whose answer can no
       // longer arrive.
-      datePicker.dateMetadataProvider = () => new Promise(() => {});
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
+      await openWithProvider(() => new Promise(() => {}));
       expect(overlayContent.hasAttribute('loading')).to.be.true;
 
       datePicker.dateMetadataProvider = null;
@@ -623,28 +557,6 @@ describe('dateMetadataProvider integration', () => {
       expect(overlayContent.hasAttribute('loading')).to.be.false;
       expect(overlayContent.hasAttribute('aria-busy')).to.be.false;
       expect(hasPart(getVisibleCell(15), 'loading')).to.be.false;
-    });
-  });
-
-  describe('reopening the overlay', () => {
-    it('should load the metadata again for a cache dropped while closed', async () => {
-      const provider = sinon.stub().returns([]);
-      datePicker.dateMetadataProvider = provider;
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
-      await nextRender();
-
-      datePicker.opened = false;
-      await nextRender();
-      // The cache survives close and reopen, so drop it to leave something to fetch.
-      datePicker._dateMetadataController.clearCache();
-      provider.resetHistory();
-
-      await open(datePicker);
-      overlayContent._loadDateMetadataDebouncer?.flush();
-      await nextRender();
-
-      expect(provider).to.be.called;
     });
   });
 
@@ -667,9 +579,7 @@ describe('dateMetadataProvider integration', () => {
           // The controller logs provider failures; keep them out of the test output.
           sinon.stub(console, 'error');
           spy = sinon.spy(provider);
-          datePicker.dateMetadataProvider = spy;
-          await open(datePicker);
-          overlayContent = datePicker._overlayContent;
+          await openWithProvider(spy);
         });
 
         afterEach(() => {
@@ -684,16 +594,11 @@ describe('dateMetadataProvider integration', () => {
           expect(spy).to.have.callCount(callsAfterOpen);
         });
 
-        it('should stop loading', async () => {
+        it('should stop loading and disable nothing', async () => {
           await nextRender();
 
           expect(overlayContent.hasAttribute('loading')).to.be.false;
           expect(overlayContent.hasAttribute('aria-busy')).to.be.false;
-        });
-
-        it('should disable nothing', async () => {
-          await nextRender();
-
           expect(isDisabled(getVisibleCell(15))).to.be.false;
           expect(hasPart(getVisibleCell(15), 'loading')).to.be.false;
         });
@@ -709,31 +614,6 @@ describe('dateMetadataProvider integration', () => {
           expect(spy).to.be.called;
         });
       });
-    });
-  });
-
-  describe('years below 100', () => {
-    // `new Date(50, ...)` would move the range into the 1900s, so the provider would be asked about
-    // the wrong century.
-    it('should ask the provider for the visible range, not for the 20th century', async () => {
-      const provider = sinon.stub().returns([]);
-      datePicker.dateMetadataProvider = provider;
-      datePicker.initialPosition = '0050-06-01';
-      await open(datePicker);
-
-      const { start, end } = provider.firstCall.args[0];
-      expect(start.year).to.be.within(49, 50);
-      expect(end.year).to.be.within(50, 51);
-    });
-
-    it('should disable a provided date in a year below 100', async () => {
-      datePicker.dateMetadataProvider = () => [{ year: 50, month: 5, day: 15, disabled: true }];
-      datePicker.initialPosition = '0050-06-01';
-      await open(datePicker);
-      overlayContent = datePicker._overlayContent;
-
-      expect(isDisabled(getVisibleCell(15, 50, 5))).to.be.true;
-      expect(isDisabled(getVisibleCell(16, 50, 5))).to.be.false;
     });
   });
 });

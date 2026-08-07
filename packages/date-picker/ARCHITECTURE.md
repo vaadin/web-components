@@ -178,6 +178,26 @@ button are the ones that need it open.
 A value whose month resolved while the field was detached is validated when it is attached again, since the
 controller re-reports its state on reconnect and the armed flag is still set.
 
+## What custom part names can do
+
+`part` from an entry is appended to the date's own parts, so a theme can style particular dates through
+`::part()` without the component knowing what they mean.
+
+Custom names land in the same `part` attribute as the built-in ones — `date`, `disabled`, `selected`,
+`focused`, `today`, `past`, `future` and `loading` — so a name a theme already styles brings that theme's
+rules with it. Lumo, for one, removes pointer events from `[part~='disabled']`, so a date that borrows the
+name cannot be clicked, even though the component still counts it as selectable. Names of the provider's
+own therefore keep its styling clear of the state the component manages.
+
+What is disabled and what can be selected are computed from the metadata's `disabled` flag together with
+`min`, `max` and `isDateDisabled`, and the click handler reads the rendered `disabled` attribute — none of
+which consult `part`, so a name never changes what the component itself treats as selectable. The value is
+bound as an attribute and therefore escaped.
+
+Only a string is used, and anything else is ignored without a warning, as `<vaadin-grid>` treats the
+result of its cell part name generator. Nothing but the styling of that one date depends on it, so there
+is nothing for a warning to protect.
+
 ## How consumers are notified
 
 **Subscribers are invalidated synchronously** with `requestUpdate()`. A subscriber has to render from its
