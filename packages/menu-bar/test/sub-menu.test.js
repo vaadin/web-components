@@ -658,7 +658,7 @@ describe('touch', () => {
     if (menu) {
       menu.__openListenerActive = true;
       const overlay = menu._overlayElement;
-      overlay.__openingHandler?.();
+      overlay._flushAnimation('opening');
     }
     fire(openTarget, menuOpenEvent);
   };
