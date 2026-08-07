@@ -1,8 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextUpdate } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../../src/vaadin-month-calendar.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { DateMetadataController } from '../../src/vaadin-date-metadata-controller.js';
 import { getDefaultI18n } from '../helpers.js';
 
 describe('vaadin-month-calendar', () => {
@@ -57,6 +58,48 @@ describe('vaadin-month-calendar', () => {
       };
       await nextUpdate(monthCalendar);
       await expect(monthCalendar).shadowDom.to.equalSnapshot();
+    });
+
+    describe('date metadata', () => {
+      let controller;
+
+      beforeEach(() => {
+        // The real controller, which works with a plain host, so the snapshots capture the state the
+        // calendar actually reads rather than a stand-in.
+        controller = new DateMetadataController(monthCalendar);
+        monthCalendar._dateMetadataController = controller;
+        // Subscribed as the overlay content does, so the calendar re-renders once an answer lands.
+        controller.subscribe(monthCalendar);
+      });
+
+      it('loading month', async () => {
+        // A provider that never resolves, so the request for the month stays in flight, which is the
+        // state the dates are rendered in until it answers.
+        controller.setProvider(() => new Promise(() => {}));
+        controller.ensureRangeLoaded(monthCalendar.month, monthCalendar.month);
+        await nextUpdate(monthCalendar);
+        await expect(monthCalendar).shadowDom.to.equalSnapshot();
+      });
+
+      it('provider disabled dates', async () => {
+        // Answer for the displayed month explicitly, rather than deriving it from the requested
+        // range, which covers a whole block and so spans several months.
+        const { month } = monthCalendar;
+        controller.setProvider(() => {
+          const dates = [];
+          for (let day = 1; day <= 29; day++) {
+            if (day % 2) {
+              dates.push({ year: month.getFullYear(), month: month.getMonth(), day, disabled: true });
+            }
+          }
+          return dates;
+        });
+        controller.ensureRangeLoaded(month, month);
+        // The answer is awaited even for a synchronous provider, so let it land before capturing.
+        await aTimeout(0);
+        await nextUpdate(monthCalendar);
+        await expect(monthCalendar).shadowDom.to.equalSnapshot();
+      });
     });
   });
 });

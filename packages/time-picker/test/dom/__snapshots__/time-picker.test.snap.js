@@ -160,6 +160,43 @@ snapshots["vaadin-time-picker host error"] =
 `;
 /* end snapshot vaadin-time-picker host error */
 
+snapshots["vaadin-time-picker host accessibleDescriptionRef"] = 
+`<vaadin-time-picker>
+  <vaadin-time-picker-scroller
+    id="vaadin-time-picker-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-time-picker-scroller>
+  <label
+    for="search-input-vaadin-time-picker-4"
+    id="label-vaadin-time-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-time-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-autocomplete="list"
+    aria-describedby="accessible-description-ref-0"
+    aria-expanded="false"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    id="search-input-vaadin-time-picker-4"
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+</vaadin-time-picker>
+`;
+/* end snapshot vaadin-time-picker host accessibleDescriptionRef */
+
 snapshots["vaadin-time-picker host required"] = 
 `<vaadin-time-picker required="">
   <vaadin-time-picker-scroller

@@ -1,12 +1,15 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
-import '@vaadin/button/src/vaadin-button.js';
-import '@vaadin/overlay/src/vaadin-overlay.js';
-import '@vaadin/radio-group/src/vaadin-radio-group.js';
-import '@vaadin/text-field/src/vaadin-text-field.js';
+import '@vaadin/button';
+import '@vaadin/grid';
+import '@vaadin/radio-group';
+import '@vaadin/text-field';
+import '@vaadin/overlay/test/fixtures/mock-overlay.js';
 import { getTabbableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { flushGrid } from '@vaadin/grid/test/helpers.js';
 
-describe('focus-trap', () => {
+describe('overlay focus-trap', () => {
   let overlay, focusableElements;
 
   function getFocusedElementIndex() {
@@ -15,22 +18,18 @@ describe('focus-trap', () => {
 
   describe('elements in light DOM', () => {
     beforeEach(async () => {
-      overlay = fixtureSync('<vaadin-overlay focus-trap></vaadin-overlay>');
+      overlay = fixtureSync(`
+        <mock-overlay focus-trap>
+          <vaadin-text-field></vaadin-text-field>
+          <vaadin-radio-group>
+            <vaadin-radio-button id="radioButton1" label="Button 1"></vaadin-radio-button>
+            <vaadin-radio-button id="radioButton2" label="Button 2"></vaadin-radio-button>
+            <vaadin-radio-button id="radioButton3" label="Button 3"></vaadin-radio-button>
+          </vaadin-radio-group>
+          <vaadin-button>tabindex 0</vaadin-button>
+        </mock-overlay>
+      `);
       await nextRender();
-      overlay.renderer = (root) => {
-        if (!root.firstChild) {
-          root.innerHTML = `
-            <vaadin-text-field></vaadin-text-field>
-            <vaadin-radio-group>
-              <vaadin-radio-button id="radioButton1" label="Button 1"></vaadin-radio-button>
-              <vaadin-radio-button id="radioButton2" label="Button 2"></vaadin-radio-button>
-              <vaadin-radio-button id="radioButton3" label="Button 3"></vaadin-radio-button>
-            </vaadin-radio-group>
-            <vaadin-button>tabindex 0</vaadin-button>
-          `;
-        }
-      };
-      overlay.requestContentUpdate();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
       focusableElements = getTabbableElements(overlay.$.overlay);
@@ -72,20 +71,17 @@ describe('focus-trap', () => {
 
   describe('elements in shadow DOM', () => {
     beforeEach(async () => {
-      overlay = fixtureSync('<vaadin-overlay focus-trap></vaadin-overlay>');
+      overlay = fixtureSync(`
+        <mock-overlay focus-trap>
+          <div></div>
+          <input />
+        </mock-overlay>
+      `);
       await nextRender();
-      overlay.renderer = (root) => {
-        if (!root.firstChild) {
-          const div = document.createElement('div');
-          div.attachShadow({ mode: 'open' });
-          div.shadowRoot.appendChild(document.createElement('vaadin-text-field'));
-          div.shadowRoot.appendChild(document.createElement('button'));
-          root.appendChild(div);
-
-          root.appendChild(document.createElement('input'));
-        }
-      };
-      overlay.requestContentUpdate();
+      const div = overlay.querySelector('div');
+      div.attachShadow({ mode: 'open' });
+      div.shadowRoot.appendChild(document.createElement('vaadin-text-field'));
+      div.shadowRoot.appendChild(document.createElement('button'));
     });
 
     it('should properly detect multiple focusable elements inside shadow DOM', async () => {
@@ -138,6 +134,43 @@ describe('focus-trap', () => {
         tabKeyDown(focusableElements[focusedIndex], ['shift']);
       }
       expect(getFocusedElementIndex()).to.equal(focusableElements.length - 1);
+    });
+  });
+
+  describe('grid', () => {
+    let grid, button;
+
+    function getFirstHeaderCell() {
+      return grid.$.header.children[0].children[0];
+    }
+
+    beforeEach(async () => {
+      overlay = fixtureSync(`
+        <mock-overlay focus-trap>
+          <vaadin-grid style="width: 200px">
+            <vaadin-grid-column path="name"></vaadin-grid-column>
+          </vaadin-grid>
+          <vaadin-button>Button</vaadin-button>
+        </mock-overlay>
+      `);
+      [grid, button] = overlay.children;
+      grid.items = [{ name: 'foo' }, { name: 'bar' }];
+      flushGrid(grid);
+      overlay.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+    });
+
+    it('should correctly move focus on Tab when inside overlay', async () => {
+      const headerCell = getFirstHeaderCell();
+      headerCell.focus();
+
+      // Move focus to grid body
+      await sendKeys({ press: 'Tab' });
+
+      // Move focus to the button
+      await sendKeys({ press: 'Tab' });
+
+      expect(document.activeElement).to.equal(button);
     });
   });
 });

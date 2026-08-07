@@ -16,7 +16,7 @@ export const virtualListStyles = css`
     display: block;
     height: 400px;
     overflow: auto;
-    flex: 1;
+    flex: 1 1 auto;
     align-self: stretch;
     box-sizing: border-box;
     padding: 0;

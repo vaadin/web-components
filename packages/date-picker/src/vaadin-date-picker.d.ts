@@ -134,6 +134,7 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * ----------------------|--------------------
  * `years-toggle-button` | Fullscreen mode years scroller toggle
  * `toolbar`             | Toolbar with slotted buttons
+ * `loader`              | Loading spinner shown while the date metadata provider is resolving
  *
  * The following state attributes are available on the `<vaadin-date-picker-overlay-content>` element:
  *
@@ -142,6 +143,7 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * `desktop`       | Set when the overlay content is in desktop mode
  * `fullscreen`    | Set when the overlay content is in fullscreen mode
  * `years-visible` | Set when the year scroller is visible in fullscreen mode
+ * `loading`       | Set while the date metadata provider is resolving
  *
  * In order to style the month calendar, use `<vaadin-month-calendar>` shadow DOM parts:
  *
@@ -154,6 +156,7 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * `week-number`         | Week number element
  * `date`                | Date element
  * `disabled`            | Disabled date element
+ * `loading`             | Date element in a month whose metadata is currently being fetched
  * `focused`             | Focused date element
  * `selected`            | Selected date element
  * `today`               | Date element corresponding to the current day

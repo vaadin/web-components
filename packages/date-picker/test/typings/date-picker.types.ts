@@ -67,6 +67,23 @@ assertType<() => void>(datePicker.open);
 assertType<string | undefined>(datePicker.max);
 assertType<string | undefined>(datePicker.min);
 assertType<(date: DatePickerDate) => boolean | undefined>(datePicker.isDateDisabled);
+assertType<DatePickerDateMetadataProvider | null | undefined>(datePicker.dateMetadataProvider);
+
+// Assigning a provider checks that the range is inferred and that each accepted return shape fits.
+datePicker.dateMetadataProvider = (range) => {
+  assertType<DatePickerDateRange>(range);
+  assertType<DatePickerDate>(range.start);
+  assertType<DatePickerDate>(range.end);
+  return [{ year: range.start.year, month: range.start.month, day: range.start.day, disabled: true }];
+};
+datePicker.dateMetadataProvider = async () => await Promise.resolve([]);
+datePicker.dateMetadataProvider = () => undefined;
+
+const dateMetadata: DatePickerDateMetadata = { year: 2024, month: 0, day: 1, disabled: true };
+assertType<number>(dateMetadata.year);
+assertType<number>(dateMetadata.month);
+assertType<number>(dateMetadata.day);
+assertType<boolean | undefined>(dateMetadata.disabled);
 assertType<boolean | null | undefined>(datePicker.showWeekNumbers);
 assertType<boolean | null | undefined>(datePicker.autoOpenDisabled);
 assertType<boolean | null | undefined>(datePicker.opened);
@@ -94,6 +111,8 @@ assertType<DatePickerI18n>({ cancel: 'cancel' });
 assertType<DatePickerDateRange>({ start: { year: 2024, month: 0, day: 1 }, end: { year: 2024, month: 0, day: 31 } });
 assertType<DatePickerDateMetadata>({ year: 2024, month: 0, day: 1 });
 assertType<DatePickerDateMetadata>({ year: 2024, month: 0, day: 1, disabled: true });
+assertType<DatePickerDateMetadata>({ year: 2024, month: 0, day: 1, part: 'busy almost-full' });
+assertType<() => void>(datePicker.clearCache);
 assertType<DatePickerDateMetadataProvider>((range) => {
   assertType<DatePickerDate>(range.start);
   assertType<DatePickerDate>(range.end);

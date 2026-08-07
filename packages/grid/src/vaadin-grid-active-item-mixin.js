@@ -76,7 +76,7 @@ export const ActiveItemMixin = (superClass) =>
         // Cell is the empty state cell
         cell === this.$.emptystatecell ||
         // Cell content is focused
-        cell._content.contains(this.getRootNode().activeElement) ||
+        cell._content.matches(':focus-within') ||
         // Clicked on a focusable element
         this._isFocusable(e.target) ||
         // Clicked on a label element

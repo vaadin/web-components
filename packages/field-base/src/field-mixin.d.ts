@@ -30,16 +30,29 @@ export declare class FieldMixinClass {
   errorMessage: string | null | undefined;
 
   /**
-   * String used to label the component to screen reader users.
+   * String used to label the component for screen reader users.
+   *
    * @attr {string} accessible-name
    */
   accessibleName: string | null | undefined;
 
   /**
-   * Id of the element used as label of the component to screen reader users.
+   * A space-separated list of IDs referencing the elements that
+   * label the component for screen reader users.
+   *
    * @attr {string} accessible-name-ref
    */
   accessibleNameRef: string | null | undefined;
+
+  /**
+   * A space-separated list of IDs referencing the elements that
+   * describe the component for screen reader users. The referenced
+   * elements are announced in addition to the helper text and
+   * the error message.
+   *
+   * @attr {string} accessible-description-ref
+   */
+  accessibleDescriptionRef: string | null | undefined;
 
   /**
    * A target element to which ARIA attributes are set.

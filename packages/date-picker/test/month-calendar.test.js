@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, makeSoloTouchEvent, nextFrame, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-month-calendar.js';
-import { getDateCells, getDefaultI18n, getWeekDayCells } from './helpers.js';
+import { getDateCell, getDateCells, getDefaultI18n, getWeekDayCells } from './helpers.js';
 
 describe('vaadin-month-calendar', () => {
   let monthCalendar, valueChangedSpy;
@@ -92,7 +92,7 @@ describe('vaadin-month-calendar', () => {
   });
 
   it('should update value on tap', () => {
-    const date10 = getDateCells(monthCalendar).find((dateElement) => dateElement.date.getDate() === 10);
+    const date10 = getDateCell(monthCalendar, 10);
     tap(date10);
     expect(monthCalendar.selectedDate.getFullYear()).to.equal(2016);
     expect(monthCalendar.selectedDate.getMonth()).to.equal(1);
@@ -136,7 +136,7 @@ describe('vaadin-month-calendar', () => {
   it('should not update value on disabled-by-max date tap', async () => {
     monthCalendar.maxDate = new Date('2016-02-09');
     await nextRender();
-    const date10 = getDateCells(monthCalendar).find((dateElement) => dateElement.date.getDate() === 10);
+    const date10 = getDateCell(monthCalendar, 10);
     tap(date10);
     expect(monthCalendar.selectedDate).to.be.undefined;
   });
@@ -149,7 +149,7 @@ describe('vaadin-month-calendar', () => {
       return date.year === 2016 && date.month === 1 && date.day === 9;
     };
     await nextFrame();
-    const date9 = getDateCells(monthCalendar).find((dateElement) => dateElement.date.getDate() === 9);
+    const date9 = getDateCell(monthCalendar, 9);
     tap(date9);
     expect(monthCalendar.selectedDate).to.be.undefined;
   });

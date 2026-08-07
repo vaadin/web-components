@@ -78,12 +78,7 @@ export class IronListAdapter {
     });
     attachObserver.observe(this.scrollTarget);
 
-    this.scrollTarget.addEventListener('virtualizer-element-focused', (e) => this.__onElementFocused(e));
-    this.elementsContainer.addEventListener('focusin', () => {
-      this.scrollTarget.dispatchEvent(
-        new CustomEvent('virtualizer-element-focused', { detail: { element: this.__getFocusedElement() } }),
-      );
-    });
+    this.elementsContainer.addEventListener('focusin', () => this.__onElementFocused());
 
     if (this.reorderElements) {
       // Reordering the physical elements cancels the user's grab of the scroll bar handle on Safari.
@@ -161,7 +156,7 @@ export class IronListAdapter {
     this.__skipNextVirtualIndexAdjust = true;
     super.scrollToIndex(targetVirtualIndex);
 
-    if (this.adjustedFirstVisibleIndex !== index && this._scrollTop < this._maxScrollTop && !this.grid) {
+    if (this.adjustedFirstVisibleIndex !== index && this._scrollTop < this._maxScrollTop) {
       // Workaround an iron-list issue by manually adjusting the scroll position
       this._scrollTop -= this.__getIndexScrollOffset(index) || 0;
     }
@@ -188,9 +183,6 @@ export class IronListAdapter {
     }
     if (this.__scrollReorderDebouncer) {
       this.__scrollReorderDebouncer.flush();
-    }
-    if (this.__debouncerWheelAnimationFrame) {
-      this.__debouncerWheelAnimationFrame.flush();
     }
   }
 
@@ -462,15 +454,9 @@ export class IronListAdapter {
 
   /** @private */
   updateViewportBoundaries() {
-    const styles = window.getComputedStyle(this.scrollTarget);
-    this._scrollerPaddingTop = this.scrollTarget === this ? 0 : parseInt(styles['padding-top'], 10);
-    this._isRTL = Boolean(styles.direction === 'rtl');
-    this._viewportWidth = this.elementsContainer.offsetWidth;
+    this._scrollerPaddingTop = parseInt(window.getComputedStyle(this.scrollTarget)['padding-top'], 10);
     this._viewportHeight = this.scrollTarget.offsetHeight;
   }
-
-  /** @private */
-  setAttribute() {}
 
   /** @private */
   _createPool(size) {
@@ -521,20 +507,8 @@ export class IronListAdapter {
   toggleScrollListener() {}
 
   /** @private */
-  __getFocusedElement(visibleElements = this.__getVisibleElements()) {
-    // `document.activeElement` retargets to the outermost shadow host when
-    // focus lives in a nested shadow tree. Descend through nested shadow
-    // roots' `activeElement`s to reach the real focused node, then walk up
-    // the flattened tree (via `assignedSlot`/`parentNode`/`host`) until a
-    // visible row is reached.
-    let node = document.activeElement;
-    while (node?.shadowRoot?.activeElement) {
-      node = node.shadowRoot.activeElement;
-    }
-    while (node && !visibleElements.includes(node)) {
-      node = node.assignedSlot || node.parentNode || node.host;
-    }
-    return node;
+  __getFocusedElement() {
+    return this.__getVisibleElements().find((element) => element.matches(':focus-within'));
   }
 
   /** @private */
@@ -558,12 +532,12 @@ export class IronListAdapter {
   }
 
   /** @private */
-  __onElementFocused(e) {
+  __onElementFocused() {
     if (!this.reorderElements) {
       return;
     }
 
-    const focusedElement = e.detail.element;
+    const focusedElement = this.__getFocusedElement();
     if (!focusedElement) {
       return;
     }
@@ -805,7 +779,7 @@ export class IronListAdapter {
 
     // Which row to use as a target?
     const visibleElements = this.__getVisibleElements();
-    const targetElement = this.__getFocusedElement(visibleElements) || visibleElements[0];
+    const targetElement = this.__getFocusedElement() || visibleElements[0];
     if (!targetElement) {
       // All elements are hidden, don't reorder
       return;

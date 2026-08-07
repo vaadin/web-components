@@ -1,14 +1,16 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { Overlay } from '../src/vaadin-overlay.js';
+import './fixtures/mock-custom-root-overlay.js';
+import './fixtures/mock-overlay.js';
+import { html, render } from 'lit';
 
 describe('renderer', () => {
   let overlay, content;
 
   describe('default', () => {
     beforeEach(async () => {
-      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
+      overlay = fixtureSync('<mock-overlay></mock-overlay>');
       await nextRender();
       content = document.createElement('p');
       content.textContent = 'renderer-content';
@@ -152,27 +154,39 @@ describe('renderer', () => {
     });
   });
 
+  describe('lit', () => {
+    let overlay;
+
+    beforeEach(() => {
+      overlay = fixtureSync('<mock-overlay></mock-overlay>');
+      overlay.opened = true;
+      overlay.renderer = (root) => {
+        render(html`Initial Content`, root);
+      };
+    });
+
+    afterEach(() => {
+      overlay.opened = false;
+    });
+
+    it('should render the content', () => {
+      expect(overlay.textContent).to.equal('Initial Content');
+    });
+
+    it('should render new content after assigning a new renderer', () => {
+      overlay.renderer = (root) => {
+        render(html`New Content`, root);
+      };
+
+      expect(overlay.textContent).to.equal('New Content');
+    });
+  });
+
   describe('custom root', () => {
     let root;
 
-    customElements.define(
-      'custom-root-overlay',
-      class extends Overlay {
-        get _rendererRoot() {
-          return this.__customRoot;
-        }
-
-        firstUpdated() {
-          super.firstUpdated();
-
-          this.__customRoot = document.createElement('div');
-          this.appendChild(this.__customRoot);
-        }
-      },
-    );
-
     beforeEach(async () => {
-      overlay = fixtureSync('<custom-root-overlay></custom-root-overlay>');
+      overlay = fixtureSync('<mock-custom-root-overlay></mock-custom-root-overlay>');
       await nextRender();
       root = overlay._rendererRoot;
       content = document.createElement('p');

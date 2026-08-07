@@ -349,6 +349,43 @@ snapshots["vaadin-combo-box host error"] =
 `;
 /* end snapshot vaadin-combo-box host error */
 
+snapshots["vaadin-combo-box host accessibleDescriptionRef"] = 
+`<vaadin-combo-box>
+  <vaadin-combo-box-scroller
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-combo-box-scroller>
+  <label
+    for="input-vaadin-combo-box-4"
+    id="label-vaadin-combo-box-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-combo-box-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-autocomplete="list"
+    aria-describedby="accessible-description-ref-0"
+    aria-expanded="false"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    id="input-vaadin-combo-box-4"
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+</vaadin-combo-box>
+`;
+/* end snapshot vaadin-combo-box host accessibleDescriptionRef */
+
 snapshots["vaadin-combo-box host value"] = 
 `<vaadin-combo-box has-value="">
   <vaadin-combo-box-scroller

@@ -27,6 +27,9 @@ export class FieldAriaController {
   #labelledBy;
 
   /** @type {string | null | undefined} */
+  #describedBy;
+
+  /** @type {string | null | undefined} */
   #errorId;
 
   /** @type {string | null | undefined} */
@@ -91,6 +94,17 @@ export class FieldAriaController {
   }
 
   /**
+   * Links the target element to one or more elements via the `aria-describedby` attribute.
+   *
+   * @param {string | null} describedBy the space-delimited list of IDs,
+   * or `null` to remove the previously linked IDs
+   */
+  setDescribedBy(describedBy) {
+    this.#describedBy = describedBy;
+    this.#updateAriaDescribedByAttribute();
+  }
+
+  /**
    * Links the target element to a slotted error element via the `aria-describedby` attribute.
    *
    * @param {string | null} errorId the ID of the error element,
@@ -139,7 +153,7 @@ export class FieldAriaController {
 
     removeValuesFromAttribute(this.#target, 'aria-describedby', this.#ariaDescribedByAttributeIds);
 
-    this.#ariaDescribedByAttributeIds = [this.#helperId, this.#errorId];
+    this.#ariaDescribedByAttributeIds = [this.#describedBy, this.#helperId, this.#errorId];
 
     addValuesToAttribute(this.#target, 'aria-describedby', this.#ariaDescribedByAttributeIds);
   }

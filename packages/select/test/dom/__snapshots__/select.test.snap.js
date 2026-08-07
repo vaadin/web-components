@@ -498,6 +498,58 @@ snapshots["vaadin-select host error"] =
 `;
 /* end snapshot vaadin-select host error */
 
+snapshots["vaadin-select host accessibleDescriptionRef"] = 
+`<vaadin-select>
+  <div slot="overlay">
+    <vaadin-select-list-box
+      aria-orientation="vertical"
+      role="listbox"
+    >
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="0"
+      >
+        Option 1
+      </vaadin-select-item>
+      <vaadin-select-item
+        aria-selected="false"
+        role="option"
+        tabindex="-1"
+      >
+        Option 2
+      </vaadin-select-item>
+    </vaadin-select-list-box>
+  </div>
+  <label
+    id="label-vaadin-select-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-select-2"
+    slot="error-message"
+  >
+  </div>
+  <vaadin-select-value-button
+    aria-describedby="accessible-description-ref-0"
+    aria-expanded="false"
+    aria-haspopup="listbox"
+    role="button"
+    slot="value"
+    tabindex="0"
+  >
+  </vaadin-select-value-button>
+  <label
+    id="label-vaadin-select-4"
+    slot="sr-label"
+  >
+  </label>
+</vaadin-select>
+`;
+/* end snapshot vaadin-select host accessibleDescriptionRef */
+
 snapshots["vaadin-select host opened default"] = 
 `<vaadin-select
   opened=""

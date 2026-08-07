@@ -163,6 +163,17 @@ export class DateMetadataController {
   }
 
   /**
+   * Whether the month containing the given date is currently being fetched. A month
+   * that has not been asked about is not pending, so this reports the same state as
+   * `isLoading()` does for the whole cache.
+   * @param {Date | null | undefined} date
+   * @return {boolean}
+   */
+  isMonthPending(date) {
+    return !!date && !!this.#months.get(monthIndex(date))?.pending;
+  }
+
+  /**
    * The metadata resolved for the given date, or `undefined` when the date has
    * no metadata or its month has not been resolved yet. Returns the entry the
    * provider supplied, which the caller must not modify.

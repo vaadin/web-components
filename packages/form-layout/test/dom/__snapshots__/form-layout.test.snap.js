@@ -169,6 +169,50 @@ snapshots["vaadin-form-layout auto-responsive host autoRows maxColumns > number 
 `;
 /* end snapshot vaadin-form-layout auto-responsive host autoRows maxColumns > number of columns */
 
+snapshots["vaadin-form-layout auto-responsive host autoRows minColumns < number of columns"] = 
+`<vaadin-form-layout
+  auto-responsive=""
+  auto-rows=""
+  style="--_min-columns: 1; --_max-columns: 2;"
+>
+  <input
+    placeholder="First name"
+    style="--_grid-colstart: 1;"
+  >
+  <input placeholder="Last name">
+  <br>
+  <input hidden="">
+  <input
+    colspan="2"
+    placeholder="Address"
+    style="--_grid-colstart: 1; --_grid-colspan: 2;"
+  >
+</vaadin-form-layout>
+`;
+/* end snapshot vaadin-form-layout auto-responsive host autoRows minColumns < number of columns */
+
+snapshots["vaadin-form-layout auto-responsive host autoRows minColumns > number of columns"] = 
+`<vaadin-form-layout
+  auto-responsive=""
+  auto-rows=""
+  style="--_min-columns: 20; --_max-columns: 2;"
+>
+  <input
+    placeholder="First name"
+    style="--_grid-colstart: 1;"
+  >
+  <input placeholder="Last name">
+  <br>
+  <input hidden="">
+  <input
+    colspan="2"
+    placeholder="Address"
+    style="--_grid-colstart: 1; --_grid-colspan: 2;"
+  >
+</vaadin-form-layout>
+`;
+/* end snapshot vaadin-form-layout auto-responsive host autoRows minColumns > number of columns */
+
 snapshots["vaadin-form-layout auto-responsive host explicit rows default"] = 
 `<vaadin-form-layout
   auto-responsive=""
@@ -232,6 +276,48 @@ snapshots["vaadin-form-layout auto-responsive host explicit rows maxColumns > nu
 `;
 /* end snapshot vaadin-form-layout auto-responsive host explicit rows maxColumns > number of columns */
 
+snapshots["vaadin-form-layout auto-responsive host explicit rows minColumns < number of columns"] = 
+`<vaadin-form-layout
+  auto-responsive=""
+  style="--_min-columns: 1; --_max-columns: 2;"
+>
+  <vaadin-form-row>
+    <input placeholder="First name">
+    <input placeholder="Last name">
+  </vaadin-form-row>
+  <vaadin-form-row>
+    <input hidden="">
+    <input
+      colspan="2"
+      placeholder="Address"
+      style="--_grid-colspan: 2;"
+    >
+  </vaadin-form-row>
+</vaadin-form-layout>
+`;
+/* end snapshot vaadin-form-layout auto-responsive host explicit rows minColumns < number of columns */
+
+snapshots["vaadin-form-layout auto-responsive host explicit rows minColumns > number of columns"] = 
+`<vaadin-form-layout
+  auto-responsive=""
+  style="--_min-columns: 20; --_max-columns: 2;"
+>
+  <vaadin-form-row>
+    <input placeholder="First name">
+    <input placeholder="Last name">
+  </vaadin-form-row>
+  <vaadin-form-row>
+    <input hidden="">
+    <input
+      colspan="2"
+      placeholder="Address"
+      style="--_grid-colspan: 2;"
+    >
+  </vaadin-form-row>
+</vaadin-form-layout>
+`;
+/* end snapshot vaadin-form-layout auto-responsive host explicit rows minColumns > number of columns */
+
 snapshots["vaadin-form-layout auto-responsive shadow autoRows default"] = 
 `<div
   id="layout"
@@ -265,6 +351,28 @@ snapshots["vaadin-form-layout auto-responsive shadow autoRows maxColumns > numbe
 `;
 /* end snapshot vaadin-form-layout auto-responsive shadow autoRows maxColumns > number of columns */
 
+snapshots["vaadin-form-layout auto-responsive shadow autoRows minColumns < number of columns"] = 
+`<div
+  id="layout"
+  style="--_grid-rendered-column-count: 2;"
+>
+  <slot id="slot">
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-form-layout auto-responsive shadow autoRows minColumns < number of columns */
+
+snapshots["vaadin-form-layout auto-responsive shadow autoRows minColumns > number of columns"] = 
+`<div
+  id="layout"
+  style="--_grid-rendered-column-count: 20;"
+>
+  <slot id="slot">
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-form-layout auto-responsive shadow autoRows minColumns > number of columns */
+
 snapshots["vaadin-form-layout auto-responsive shadow explicit rows default"] = 
 `<div
   id="layout"
@@ -297,6 +405,28 @@ snapshots["vaadin-form-layout auto-responsive shadow explicit rows maxColumns > 
 </div>
 `;
 /* end snapshot vaadin-form-layout auto-responsive shadow explicit rows maxColumns > number of columns */
+
+snapshots["vaadin-form-layout auto-responsive shadow explicit rows minColumns < number of columns"] = 
+`<div
+  id="layout"
+  style="--_grid-rendered-column-count: 2;"
+>
+  <slot id="slot">
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-form-layout auto-responsive shadow explicit rows minColumns < number of columns */
+
+snapshots["vaadin-form-layout auto-responsive shadow explicit rows minColumns > number of columns"] = 
+`<div
+  id="layout"
+  style="--_grid-rendered-column-count: 20;"
+>
+  <slot id="slot">
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-form-layout auto-responsive shadow explicit rows minColumns > number of columns */
 
 snapshots["vaadin-form-layout defaultAutoResponsiveFormLayout feature flag default"] = 
 `<vaadin-form-layout
@@ -360,134 +490,4 @@ snapshots["vaadin-form-layout responsive-steps shadow switching to autoResponsiv
 </div>
 `;
 /* end snapshot vaadin-form-layout responsive-steps shadow switching to autoResponsive */
-
-snapshots["vaadin-form-layout auto-responsive host autoRows minColumns < number of columns"] = 
-`<vaadin-form-layout
-  auto-responsive=""
-  auto-rows=""
-  style="--_min-columns: 1; --_max-columns: 2;"
->
-  <input
-    placeholder="First name"
-    style="--_grid-colstart: 1;"
-  >
-  <input placeholder="Last name">
-  <br>
-  <input hidden="">
-  <input
-    colspan="2"
-    placeholder="Address"
-    style="--_grid-colstart: 1; --_grid-colspan: 2;"
-  >
-</vaadin-form-layout>
-`;
-/* end snapshot vaadin-form-layout auto-responsive host autoRows minColumns < number of columns */
-
-snapshots["vaadin-form-layout auto-responsive host autoRows minColumns > number of columns"] = 
-`<vaadin-form-layout
-  auto-responsive=""
-  auto-rows=""
-  style="--_min-columns: 20; --_max-columns: 2;"
->
-  <input
-    placeholder="First name"
-    style="--_grid-colstart: 1;"
-  >
-  <input placeholder="Last name">
-  <br>
-  <input hidden="">
-  <input
-    colspan="2"
-    placeholder="Address"
-    style="--_grid-colstart: 1; --_grid-colspan: 2;"
-  >
-</vaadin-form-layout>
-`;
-/* end snapshot vaadin-form-layout auto-responsive host autoRows minColumns > number of columns */
-
-snapshots["vaadin-form-layout auto-responsive host explicit rows minColumns < number of columns"] = 
-`<vaadin-form-layout
-  auto-responsive=""
-  style="--_min-columns: 1; --_max-columns: 2;"
->
-  <vaadin-form-row>
-    <input placeholder="First name">
-    <input placeholder="Last name">
-  </vaadin-form-row>
-  <vaadin-form-row>
-    <input hidden="">
-    <input
-      colspan="2"
-      placeholder="Address"
-      style="--_grid-colspan: 2;"
-    >
-  </vaadin-form-row>
-</vaadin-form-layout>
-`;
-/* end snapshot vaadin-form-layout auto-responsive host explicit rows minColumns < number of columns */
-
-snapshots["vaadin-form-layout auto-responsive host explicit rows minColumns > number of columns"] = 
-`<vaadin-form-layout
-  auto-responsive=""
-  style="--_min-columns: 20; --_max-columns: 2;"
->
-  <vaadin-form-row>
-    <input placeholder="First name">
-    <input placeholder="Last name">
-  </vaadin-form-row>
-  <vaadin-form-row>
-    <input hidden="">
-    <input
-      colspan="2"
-      placeholder="Address"
-      style="--_grid-colspan: 2;"
-    >
-  </vaadin-form-row>
-</vaadin-form-layout>
-`;
-/* end snapshot vaadin-form-layout auto-responsive host explicit rows minColumns > number of columns */
-
-snapshots["vaadin-form-layout auto-responsive shadow autoRows minColumns < number of columns"] = 
-`<div
-  id="layout"
-  style="--_grid-rendered-column-count: 2;"
->
-  <slot id="slot">
-  </slot>
-</div>
-`;
-/* end snapshot vaadin-form-layout auto-responsive shadow autoRows minColumns < number of columns */
-
-snapshots["vaadin-form-layout auto-responsive shadow autoRows minColumns > number of columns"] = 
-`<div
-  id="layout"
-  style="--_grid-rendered-column-count: 20;"
->
-  <slot id="slot">
-  </slot>
-</div>
-`;
-/* end snapshot vaadin-form-layout auto-responsive shadow autoRows minColumns > number of columns */
-
-snapshots["vaadin-form-layout auto-responsive shadow explicit rows minColumns < number of columns"] = 
-`<div
-  id="layout"
-  style="--_grid-rendered-column-count: 2;"
->
-  <slot id="slot">
-  </slot>
-</div>
-`;
-/* end snapshot vaadin-form-layout auto-responsive shadow explicit rows minColumns < number of columns */
-
-snapshots["vaadin-form-layout auto-responsive shadow explicit rows minColumns > number of columns"] = 
-`<div
-  id="layout"
-  style="--_grid-rendered-column-count: 20;"
->
-  <slot id="slot">
-  </slot>
-</div>
-`;
-/* end snapshot vaadin-form-layout auto-responsive shadow explicit rows minColumns > number of columns */
 

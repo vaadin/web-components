@@ -9,6 +9,7 @@ import { addListener } from '@vaadin/component-base/src/gestures.js';
 import {
   dateAllowed,
   dateEquals,
+  dateSelectable,
   firstOfMonth,
   getISOWeekNumber,
   lastOfMonth,
@@ -93,6 +94,18 @@ export const MonthCalendarMixin = (superClass) =>
         isDateDisabled: {
           type: Function,
           value: () => false,
+        },
+
+        /**
+         * The date-picker's controller resolving the metadata returned by its
+         * `dateMetadataProvider`. Assigned by the overlay content, which also subscribes this
+         * calendar to it.
+         * @protected
+         */
+        _dateMetadataController: {
+          type: Object,
+          attribute: false,
+          sync: true,
         },
 
         enteredDate: {
@@ -333,6 +346,10 @@ export const MonthCalendarMixin = (superClass) =>
         result.push('disabled');
       }
 
+      if (date && this.__isMonthPending()) {
+        result.push('loading');
+      }
+
       if (dateEquals(date, focusedDate) && (hasFocus || dateEquals(date, enteredDate))) {
         result.push('focused');
       }
@@ -353,6 +370,12 @@ export const MonthCalendarMixin = (superClass) =>
         result.push('future');
       }
 
+      // Only a string can name parts, so anything else the provider set is ignored.
+      const customParts = date && this._dateMetadataController?.getMetadata(date)?.part;
+      if (customParts && typeof customParts === 'string') {
+        result.push(customParts);
+      }
+
       return result.join(' ');
     }
 
@@ -366,14 +389,29 @@ export const MonthCalendarMixin = (superClass) =>
       return String(this.__isDaySelected(date, selectedDate));
     }
 
+    /**
+     * Whether the displayed month is currently being fetched, which is the same state the overlay
+     * reports with its spinner. A month that has not been asked about yet is not pending: nothing is
+     * loading, so there is nothing to report.
+     * @private
+     */
+    __isMonthPending() {
+      return !!this._dateMetadataController?.isMonthPending(this.month);
+    }
+
     /** @private */
     __isDayDisabled(date, minDate, maxDate, isDateDisabled) {
-      return !dateAllowed(date, minDate, maxDate, isDateDisabled);
+      return !dateSelectable(date, minDate, maxDate, isDateDisabled, this._dateMetadataController);
     }
 
     /** @private */
     __computeDayAriaDisabled(date, min, max, isDateDisabled) {
-      if (date === undefined || (min === undefined && max === undefined && isDateDisabled === undefined)) {
+      if (date === undefined) {
+        return 'false';
+      }
+
+      const hasProvider = !!this._dateMetadataController?.provider;
+      if (!hasProvider && min === undefined && max === undefined && isDateDisabled === undefined) {
         return 'false';
       }
 

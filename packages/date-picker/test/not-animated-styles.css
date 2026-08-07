@@ -27,3 +27,9 @@ vaadin-date-picker input:placeholder-shown {
 vaadin-month-calendar::part(focused)::before {
   animation: none !important;
 }
+
+/* Show the loading spinner */
+vaadin-date-picker-overlay-content[loading]::part(loader) {
+  animation: none;
+  opacity: 1;
+}

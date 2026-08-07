@@ -860,6 +860,63 @@ describe('FieldMixin', () => {
         expect(input.getAttribute('aria-labelledby')).to.be.equal('accessible-name-ref-0');
       });
     });
+
+    describe('accessibleDescriptionRef', () => {
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag} label="Label" helper-text="Helper"></${tag}>`);
+        await nextRender();
+        input = element.querySelector('[slot=input]');
+        helper = element.querySelector('[slot=helper]');
+      });
+
+      it('should not change aria-describedby by default', () => {
+        expect(input.getAttribute('aria-describedby')).to.be.equal(helper.id);
+      });
+
+      it('should update aria-describedby when the property changes', async () => {
+        element.accessibleDescriptionRef = 'accessible-description-ref-0';
+        await nextUpdate(element);
+        let aria = input.getAttribute('aria-describedby');
+        expect(aria).to.include('accessible-description-ref-0');
+        expect(aria).to.include(helper.id);
+
+        element.accessibleDescriptionRef = 'accessible-description-ref-1 accessible-description-ref-2';
+        await nextUpdate(element);
+        aria = input.getAttribute('aria-describedby');
+        expect(aria).to.include('accessible-description-ref-1');
+        expect(aria).to.include('accessible-description-ref-2');
+        expect(aria).to.not.include('accessible-description-ref-0');
+      });
+
+      it('should restore original aria-describedby when the property is cleared', async () => {
+        element.accessibleDescriptionRef = 'accessible-description-ref-0';
+        await nextUpdate(element);
+        element.accessibleDescriptionRef = null;
+        await nextUpdate(element);
+        expect(input.getAttribute('aria-describedby')).to.be.equal(helper.id);
+      });
+    });
+
+    describe('accessibleDescriptionRef is set initially', () => {
+      beforeEach(async () => {
+        element = fixtureSync(`
+          <${tag}
+            label="Label"
+            helper-text="Helper"
+            accessible-description-ref="accessible-description-ref-0"
+          ></${tag}>
+        `);
+        await nextRender();
+        input = element.querySelector('[slot=input]');
+        helper = element.querySelector('[slot=helper]');
+      });
+
+      it('should include the property value in aria-describedby', () => {
+        const aria = input.getAttribute('aria-describedby');
+        expect(aria).to.include('accessible-description-ref-0');
+        expect(aria).to.include(helper.id);
+      });
+    });
   });
 
   describe('slotted label', () => {

@@ -13,9 +13,11 @@ import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
+import { DateMetadataController } from './vaadin-date-metadata-controller.js';
 import {
   dateAllowed,
   dateEquals,
+  dateSelectable,
   extractDateParts,
   formatISODate,
   getAdjustedYear,
@@ -211,6 +213,48 @@ export const DatePickerMixin = (subclass) =>
         },
 
         /**
+         * A batch function that fetches metadata for a range of dates the calendar is about to
+         * render. It receives a `DatePickerDateRange` and returns, or resolves with, an array of
+         * `DatePickerDateMetadata` objects — a `DatePickerDate` extended with metadata such as
+         * `disabled`, e.g. `{ year, month, day, disabled: true }` — for the dates that have metadata
+         * within that range. Dates it does not mention have no metadata. `month` is 0-based: 0 is
+         * January and 11 is December.
+         *
+         * Unlike `isDateDisabled`, which is called once per date, this function is called for a
+         * range of dates at a time, and again as the calendar renders further dates. The size of the
+         * range is decided by the calendar and may span several months, and may include months it
+         * already has metadata for, whose entries are then ignored.
+         *
+         * It may return a `Promise`, so the answer can come from a server. Until it resolves, the
+         * affected dates render with the `loading` part but stay selectable, and a loading spinner
+         * is shown. Nothing is disabled before the provider has actually reported it, so a slow
+         * provider does not make the calendar unusable. If it throws or rejects, the error is logged
+         * and the affected months are requested again the next time the user navigates.
+         *
+         * `disabled` from the metadata is combined with `min`, `max` and `isDateDisabled`: a date is
+         * disabled if it is out of the min/max range, or `isDateDisabled` returns `true`, or its
+         * metadata marks it disabled. That decides what the calendar renders as disabled, what can be
+         * selected, and whether the field is valid.
+         *
+         * A value is checked against the provider even if the overlay is never opened, which loads the
+         * month holding it. Until that month answers the value is valid, and it is re-validated once
+         * the answer arrives, so `checkValidity()` can report a value as valid and then invalid.
+         *
+         * `part` from the metadata adds part names to the date, so a theme can style specific dates
+         * with `::part()` — e.g. `{ year, month, day, part: 'busy' }`. Give a single name or several
+         * separated by spaces. Do not use built-in names like `disabled` and `selected`.
+         *
+         * Keep a stable reference to the function. Assigning a new function clears the cache and
+         * re-fetches every visible range. To re-fetch while keeping the same function, because the
+         * data behind it changed, call `clearCache()`.
+         *
+         * @type {DatePickerDateMetadataProvider | null | undefined}
+         */
+        dateMetadataProvider: {
+          type: Function,
+        },
+
+        /**
          * The earliest date that can be selected. All earlier dates will be disabled.
          * @type {Date | undefined}
          * @protected
@@ -274,7 +318,7 @@ export const DatePickerMixin = (subclass) =>
     }
 
     static get constraints() {
-      return [...super.constraints, 'min', 'max'];
+      return [...super.constraints, 'min', 'max', 'dateMetadataProvider'];
     }
 
     constructor() {
@@ -282,6 +326,9 @@ export const DatePickerMixin = (subclass) =>
 
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnScroll = this._onScroll.bind(this);
+
+      this._dateMetadataController = new DateMetadataController(this, () => this.__onDateMetadataChanged());
+      this.addController(this._dateMetadataController);
     }
 
     /**
@@ -450,6 +497,11 @@ export const DatePickerMixin = (subclass) =>
     updated(props) {
       super.updated(props);
 
+      if (props.has('dateMetadataProvider')) {
+        this._dateMetadataController.setProvider(this.dateMetadataProvider);
+        this.__reloadDateMetadata();
+      }
+
       if (props.has('showWeekNumbers') || props.has('__effectiveI18n')) {
         // Currently only supported for locales that start the week on Monday.
         this.toggleAttribute('week-numbers', this.showWeekNumbers && this.__effectiveI18n.firstDayOfWeek === 1);
@@ -490,6 +542,28 @@ export const DatePickerMixin = (subclass) =>
      */
     close() {
       this.$.overlay.close();
+    }
+
+    /**
+     * Clears the `dateMetadataProvider` cache and reloads the date metadata.
+     */
+    clearCache() {
+      this._dateMetadataController.clearCache();
+      this.__reloadDateMetadata();
+    }
+
+    /**
+     * Asks for what the dropped cache was holding: the months the overlay is showing, and the month
+     * of the value being validated. Requested from here rather than from the controller's
+     * notification, which would turn a provider that keeps failing into an endless retry, since a
+     * failed month is dropped and so becomes missing again.
+     * @private
+     */
+    __reloadDateMetadata() {
+      if (this.opened) {
+        this._overlayContent?.loadVisibleDateMetadata();
+      }
+      this.__ensureSelectedDateLoaded();
     }
 
     /** @private */
@@ -584,7 +658,14 @@ export const DatePickerMixin = (subclass) =>
       const inputValue = this._inputElementValue;
       const inputValid = !inputValue || (!!this._selectedDate && inputValue === this.__formatDate(this._selectedDate));
       const isDateValid =
-        !this._selectedDate || dateAllowed(this._selectedDate, this._minDate, this._maxDate, this.isDateDisabled);
+        !this._selectedDate ||
+        dateSelectable(
+          this._selectedDate,
+          this._minDate,
+          this._maxDate,
+          this.isDateDisabled,
+          this._dateMetadataController,
+        );
 
       let inputValidity = true;
       if (this.inputElement && this.inputElement.checkValidity) {
@@ -592,6 +673,47 @@ export const DatePickerMixin = (subclass) =>
       }
 
       return inputValid && isDateValid && inputValidity;
+    }
+
+    /**
+     * Asks the controller for the month holding the selected date, so a value that was set or typed
+     * without ever opening the overlay is still checked against the provider. Validation is re-run
+     * from the host callback once the month resolves.
+     * @private
+     */
+    __ensureSelectedDateLoaded() {
+      const controller = this._dateMetadataController;
+      const awaiting = !!(controller?.provider && this._selectedDate && !controller.isMonthLoaded(this._selectedDate));
+      // Always assigned, so clearing the value or removing the provider while a request is in
+      // flight disarms the pending re-validation, and a later answer for some other month does not
+      // re-validate a value that never waited for it.
+      this.__awaitingProviderValidation = awaiting;
+      if (awaiting) {
+        controller.ensureRangeLoaded(this._selectedDate, this._selectedDate);
+      }
+    }
+
+    /**
+     * Called by the date metadata controller, one microtask after its state changed
+     * and coalesced, so this never writes reactive state from inside an update. The
+     * rendered months refresh on their own because they subscribe to the controller.
+     * @private
+     */
+    __onDateMetadataChanged() {
+      const controller = this._dateMetadataController;
+
+      // Only the open overlay has a spinner to update and a today button to re-evaluate.
+      if (this._overlayContent) {
+        this._overlayContent.loading = controller.isLoading();
+        this._overlayContent.updateTodayButton();
+      }
+
+      // Runs whether or not the overlay was ever opened, which is the case this exists for: a value
+      // set or typed with the overlay closed is reported invalid as soon as its month answers.
+      if (this.__awaitingProviderValidation && this._selectedDate && controller.isMonthLoaded(this._selectedDate)) {
+        this.__awaitingProviderValidation = false;
+        this._requestValidation();
+      }
     }
 
     /**
@@ -781,6 +903,8 @@ export const DatePickerMixin = (subclass) =>
       this._ignoreFocusedDateChange = true;
       this._focusedDate = selectedDate;
       this._ignoreFocusedDateChange = false;
+
+      this.__ensureSelectedDateLoaded();
     }
 
     /** @private */
@@ -851,6 +975,8 @@ export const DatePickerMixin = (subclass) =>
       enteredDate,
     ) {
       if (overlayContent) {
+        // Reuse the date-picker's controller so the overlay shares the same cache.
+        overlayContent._dateMetadataController = this._dateMetadataController;
         overlayContent.i18n = effectiveI18n;
         overlayContent.label = label;
         overlayContent.minDate = minDate;
@@ -966,6 +1092,8 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayClosed() {
+      this._overlayContent?.cancelLoadVisibleDateMetadata();
+
       // Reset `aria-hidden` state.
       if (this.__showOthers) {
         this.__showOthers();

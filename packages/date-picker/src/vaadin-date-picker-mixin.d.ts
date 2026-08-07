@@ -41,6 +41,11 @@ export interface DatePickerDateMetadata extends DatePickerDate {
    * Whether the date cannot be selected.
    */
   disabled?: boolean;
+  /**
+   * Part names to add to the date, so a theme can style it with `::part()`. A single name, or
+   * several separated by spaces. Do not use built-in names like `disabled` and `selected`.
+   */
+  part?: string;
 }
 
 /**
@@ -279,6 +284,44 @@ export declare class DatePickerMixinClass {
   isDateDisabled: (date: DatePickerDate) => boolean;
 
   /**
+   * A batch function that fetches metadata for a range of dates the calendar is about to
+   * render. It receives a `DatePickerDateRange` and returns, or resolves with, an array of
+   * `DatePickerDateMetadata` objects — a `DatePickerDate` extended with metadata such as
+   * `disabled`, e.g. `{ year, month, day, disabled: true }` — for the dates that have metadata
+   * within that range. Dates it does not mention have no metadata. `month` is 0-based: 0 is
+   * January and 11 is December.
+   *
+   * Unlike `isDateDisabled`, which is called once per date, this function is called for a range of
+   * dates at a time, and again as the calendar renders further dates. The size of the range is
+   * decided by the calendar and may span several months, and may include months it already has
+   * metadata for, whose entries are then ignored.
+   *
+   * It may return a `Promise`, so the answer can come from a server. Until it resolves, the
+   * affected dates render with the `loading` part but stay selectable, and a loading spinner is
+   * shown. Nothing is disabled before the provider has actually reported it, so a slow provider
+   * does not make the calendar unusable. If it throws or rejects, the error is logged and the
+   * affected months are requested again the next time the user navigates.
+   *
+   * `disabled` from the metadata is combined with `min`, `max` and `isDateDisabled`: a date is
+   * disabled if it is out of the min/max range, or `isDateDisabled` returns `true`, or its metadata
+   * marks it disabled. That decides what the calendar renders as disabled, what can be selected, and
+   * whether the field is valid.
+   *
+   * A value is checked against the provider even if the overlay is never opened, which loads the
+   * month holding it. Until that month answers the value is valid, and it is re-validated once the
+   * answer arrives, so `checkValidity()` can report a value as valid and then invalid.
+   *
+   * `part` from the metadata adds part names to the date, so a theme can style specific dates with
+   * `::part()` — e.g. `{ year, month, day, part: 'busy' }`. Give a single name or several separated
+   * by spaces. Do not use built-in names like `disabled` and `selected`.
+   *
+   * Keep a stable reference to the function. Assigning a new function clears the cache and
+   * re-fetches every visible range. To re-fetch while keeping the same function, because the data
+   * behind it changed, call `clearCache()`.
+   */
+  dateMetadataProvider: DatePickerDateMetadataProvider | null | undefined;
+
+  /**
    * Opens the dropdown.
    */
   open(): void;
@@ -287,4 +330,9 @@ export declare class DatePickerMixinClass {
    * Closes the dropdown.
    */
   close(): void;
+
+  /**
+   * Clears the `dateMetadataProvider` cache and reloads the date metadata.
+   */
+  clearCache(): void;
 }

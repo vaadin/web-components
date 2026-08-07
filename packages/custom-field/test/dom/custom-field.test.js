@@ -39,6 +39,12 @@ describe('vaadin-custom-field', () => {
       await aTimeout(0);
       await expect(field).dom.to.equalSnapshot();
     });
+
+    it('accessibleDescriptionRef', async () => {
+      field.accessibleDescriptionRef = 'accessible-description-ref-0';
+      await nextUpdate(field);
+      await expect(field).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {

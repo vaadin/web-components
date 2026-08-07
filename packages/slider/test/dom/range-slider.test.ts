@@ -86,6 +86,12 @@ describe('vaadin-range-slider', () => {
       await expect(slider).dom.to.equalSnapshot();
     });
 
+    it('accessibleDescriptionRef', async () => {
+      slider.accessibleDescriptionRef = 'accessible-description-ref-0';
+      await nextUpdate(slider);
+      await expect(slider).dom.to.equalSnapshot();
+    });
+
     it('value always visible', async () => {
       slider.valueAlwaysVisible = true;
       await nextUpdate(slider);

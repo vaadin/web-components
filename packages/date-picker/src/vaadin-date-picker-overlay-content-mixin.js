@@ -14,9 +14,11 @@ import {
   dateAfterXMonths,
   dateAllowed,
   dateEquals,
+  dateSelectable,
   firstOfMonth,
   getClosestDate,
   lastOfMonth,
+  monthDate,
   monthIndex,
 } from './vaadin-date-picker-helper.js';
 
@@ -116,6 +118,17 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           type: Function,
         },
 
+        /**
+         * Reflected while data is being loaded, so the overlay can show a loading spinner.
+         * Currently set while the date metadata provider is resolving.
+         * @protected
+         */
+        loading: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
+        },
+
         enteredDate: {
           type: Date,
           sync: true,
@@ -134,6 +147,18 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           type: Object,
         },
 
+        /**
+         * The date-picker's date metadata controller, assigned by the host. Declared as a property,
+         * and a dependency of `__updateCalendarsConfig` below, so that the calendars are handed it
+         * and subscribed whenever it arrives, rather than relying on the host assigning it before
+         * the properties that happen to trigger that observer.
+         * @protected
+         */
+        _dateMetadataController: {
+          type: Object,
+          sync: true,
+        },
+
         calendars: {
           type: Array,
           value: () => [],
@@ -148,20 +173,44 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__updateCalendarsConfig(calendars, i18n, minDate, maxDate, showWeekNumbers, isDateDisabled, _theme)',
+        '__updateCalendarsConfig(calendars, i18n, minDate, maxDate, showWeekNumbers, isDateDisabled, _theme, _dateMetadataController)',
         '__updateCalendarsState(calendars, selectedDate, focusedDate, enteredDate, _ignoreTaps)',
         '__updateCancelButton(_cancelButton, i18n)',
-        '__updateTodayButton(_todayButton, i18n, minDate, maxDate, isDateDisabled)',
         '__updateYears(years, selectedDate, _theme)',
       ];
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      this.cancelLoadVisibleDateMetadata();
     }
 
     /** @protected */
     updated(props) {
       super.updated(props);
 
+      if (props.has('loading')) {
+        setOrRemoveAttribute(this, 'aria-busy', this.loading);
+      }
+
       if (props.has('i18n')) {
         setOrRemoveAttribute(this, 'aria-label', this.i18n?.dialogAccessibleName);
+      }
+
+      if (props.has('calendars') || props.has('_dateMetadataController')) {
+        this.loadVisibleDateMetadata();
+      }
+
+      if (
+        props.has('_todayButton') ||
+        props.has('i18n') ||
+        props.has('minDate') ||
+        props.has('maxDate') ||
+        props.has('isDateDisabled')
+      ) {
+        this.updateTodayButton();
       }
     }
 
@@ -311,12 +360,42 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __updateTodayButton(todayButton, i18n, minDate, maxDate, isDateDisabled) {
+    /**
+     * Applies the today button's label and whether today can be selected.
+     */
+    updateTodayButton() {
+      const todayButton = this._todayButton;
       if (todayButton) {
-        todayButton.textContent = i18n?.today;
-        todayButton.disabled = !this._isTodayAllowed(minDate, maxDate, isDateDisabled);
+        todayButton.textContent = this.i18n?.today;
+        todayButton.disabled = !this._isTodayAllowed();
       }
+    }
+
+    /**
+     * Requests the date metadata for the months currently rendered. Months already loaded or in flight
+     * are skipped.
+     */
+    loadVisibleDateMetadata() {
+      const controller = this._dateMetadataController;
+      if (!controller) {
+        return;
+      }
+      // Reduced to month indexes so the outermost months can be picked with plain arithmetic.
+      const indexes = (this.calendars ?? [])
+        .map((calendar) => calendar.month)
+        .filter(Boolean)
+        .map((month) => monthIndex(month));
+      if (indexes.length === 0) {
+        return;
+      }
+      controller.ensureRangeLoaded(monthDate(Math.min(...indexes)), monthDate(Math.max(...indexes)));
+    }
+
+    /**
+     * Drops a date metadata load that navigating has scheduled but that has not run yet.
+     */
+    cancelLoadVisibleDateMetadata() {
+      this._loadDateMetadataDebouncer?.cancel();
     }
 
     /**
@@ -326,18 +405,41 @@ export const DatePickerOverlayContentMixin = (superClass) =>
      * @private
      */
     // eslint-disable-next-line @typescript-eslint/max-params
-    __updateCalendarsConfig(calendars, i18n, minDate, maxDate, showWeekNumbers, isDateDisabled, theme) {
+    __updateCalendarsConfig(
+      calendars,
+      i18n,
+      minDate,
+      maxDate,
+      showWeekNumbers,
+      isDateDisabled,
+      theme,
+      dateMetadataController,
+    ) {
       if (calendars?.length) {
         calendars.forEach((calendar) => {
           calendar.i18n = i18n;
           calendar.minDate = minDate;
           calendar.maxDate = maxDate;
           calendar.isDateDisabled = isDateDisabled;
+          calendar._dateMetadataController = dateMetadataController;
+          // Subscribe to controller updates (subscribing again is a no-op).
+          dateMetadataController?.subscribe(calendar);
           calendar.showWeekNumbers = showWeekNumbers;
 
           setOrRemoveAttribute(calendar, 'theme', theme);
         });
       }
+    }
+
+    /**
+     * Debounced variant used while navigating, so a continuous scroll triggers one load once it
+     * settles instead of a request per intermediate position.
+     * @private
+     */
+    __scheduleLoadVisibleDateMetadata() {
+      this._loadDateMetadataDebouncer = Debouncer.debounce(this._loadDateMetadataDebouncer, timeOut.after(200), () =>
+        this.loadVisibleDateMetadata(),
+      );
     }
 
     /**
@@ -371,7 +473,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
      * @protected
      */
     _selectDate(dateToSelect) {
-      if (!this._dateAllowed(dateToSelect)) {
+      if (!this._dateSelectable(dateToSelect)) {
         return false;
       }
       this.selectedDate = dateToSelect;
@@ -465,12 +567,14 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       const monthPosition = this._monthScroller.position;
       this._visibleMonthIndex = Math.floor(monthPosition);
       this._yearScroller.position = (monthPosition + this._originDate.getMonth()) / 12;
+      this.__scheduleLoadVisibleDateMetadata();
     }
 
     /** @private */
     _repositionMonthScroller() {
       this._monthScroller.position = this._yearScroller.position * 12 - this._originDate.getMonth();
       this._visibleMonthIndex = Math.floor(this._monthScroller.position);
+      this.__scheduleLoadVisibleDateMetadata();
     }
 
     /** @private */
@@ -918,8 +1022,13 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @private */
-    _isTodayAllowed(min, max, isDateDisabled) {
-      return this._dateAllowed(this._getTodayMidnight(), min, max, isDateDisabled);
+    _dateSelectable(date) {
+      return dateSelectable(date, this.minDate, this.maxDate, this.isDateDisabled, this._dateMetadataController);
+    }
+
+    /** @private */
+    _isTodayAllowed() {
+      return this._dateSelectable(this._getTodayMidnight());
     }
 
     /** @private */

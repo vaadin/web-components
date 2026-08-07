@@ -10,6 +10,7 @@
 @import '../src/mixins/field-helper-above.css';
 @import '../src/mixins/field-label.css';
 @import '../src/mixins/field-required.css';
+@import '../src/mixins/loader.css';
 @import '../src/mixins/menu-overlay-core.css';
 @import '../src/mixins/menu-overlay-ext.css';
 @import '../src/mixins/overlay.css';
@@ -45,7 +46,9 @@
     lumo_components_date-picker-overlay;
 
   --_lumo-vaadin-date-picker-overlay-content-inject: 1;
-  --_lumo-vaadin-date-picker-overlay-content-inject-modules: lumo_components_date-picker-overlay-content;
+  --_lumo-vaadin-date-picker-overlay-content-inject-modules:
+    lumo_mixins_loader,
+    lumo_components_date-picker-overlay-content;
 
   --_lumo-vaadin-month-calendar-inject: 1;
   --_lumo-vaadin-month-calendar-inject-modules: lumo_components_date-picker-month-calendar;

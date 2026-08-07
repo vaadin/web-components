@@ -86,6 +86,31 @@ snapshots["vaadin-text-area host error"] =
 `;
 /* end snapshot vaadin-text-area host error */
 
+snapshots["vaadin-text-area host accessibleDescriptionRef"] = 
+`<vaadin-text-area>
+  <label
+    for="textarea-vaadin-text-area-3"
+    id="label-vaadin-text-area-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-text-area-2"
+    slot="error-message"
+  >
+  </div>
+  <textarea
+    aria-describedby="accessible-description-ref-0"
+    id="textarea-vaadin-text-area-3"
+    rows="2"
+    slot="textarea"
+  >
+  </textarea>
+</vaadin-text-area>
+`;
+/* end snapshot vaadin-text-area host accessibleDescriptionRef */
+
 snapshots["vaadin-text-area shadow default"] = 
 `<div class="vaadin-text-area-container">
   <div part="label">

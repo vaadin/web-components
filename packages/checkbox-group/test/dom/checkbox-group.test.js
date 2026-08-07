@@ -56,6 +56,12 @@ describe('vaadin-checkbox-group', () => {
       await aTimeout(0);
       await expect(group).dom.to.equalSnapshot();
     });
+
+    it('accessibleDescriptionRef', async () => {
+      group.accessibleDescriptionRef = 'accessible-description-ref-0';
+      await nextUpdate(group);
+      await expect(group).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {

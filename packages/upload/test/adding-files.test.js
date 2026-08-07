@@ -95,6 +95,33 @@ describe('adding files', () => {
       expect(upload.maxFilesReached).to.be.false;
     });
 
+    it('should sync files cleared by assignment after adding files via input', async () => {
+      upload.noAuto = true;
+      upload.maxFiles = 1;
+      addFilesViaInput(upload, [files[0]]);
+      await nextUpdate(upload);
+      expect(upload.maxFilesReached).to.be.true;
+
+      upload.files = [];
+      await nextUpdate(upload);
+      expect(upload.maxFilesReached).to.be.false;
+    });
+
+    it('should add a file with the protected _addFile method', () => {
+      upload.noAuto = true;
+      upload._addFile(files[0]);
+      expect(upload.files[0]).to.equal(files[0]);
+    });
+
+    it('should remove a file with the protected _removeFile method', async () => {
+      upload.noAuto = true;
+      addFilesViaInput(upload, [files[0]]);
+      await nextUpdate(upload);
+
+      upload._removeFile(files[0]);
+      expect(upload.files).to.have.lengthOf(0);
+    });
+
     describe('uploading assigned files', () => {
       let clock;
 
@@ -179,6 +206,13 @@ describe('adding files', () => {
       await nextUpdate(upload);
       expect(upload._dragover).to.be.ok;
       expect(upload.hasAttribute('dragover')).to.be.true;
+    });
+
+    it('should set dragover attribute values to true on dragover', async () => {
+      upload.dispatchEvent(createDndEvent('dragover'));
+      await nextUpdate(upload);
+      expect(upload.getAttribute('dragover')).to.equal('true');
+      expect(upload.getAttribute('dragover-valid')).to.equal('true');
     });
 
     it('should remove dragover attribute on dragleave', async () => {

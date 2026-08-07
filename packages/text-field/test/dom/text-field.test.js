@@ -35,6 +35,12 @@ describe('vaadin-text-field', () => {
       await expect(field).dom.to.equalSnapshot();
     });
 
+    it('accessibleDescriptionRef', async () => {
+      field.accessibleDescriptionRef = 'accessible-description-ref-0';
+      await nextUpdate(field);
+      await expect(field).dom.to.equalSnapshot();
+    });
+
     it('inputMode property', async () => {
       field.inputMode = 'search';
       await nextUpdate(field);

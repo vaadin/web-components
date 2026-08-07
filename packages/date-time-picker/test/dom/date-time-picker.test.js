@@ -51,6 +51,12 @@ describe('vaadin-date-time-picker', () => {
       await aTimeout(0);
       await expect(dateTimePicker).dom.to.equalSnapshot();
     });
+
+    it('accessibleDescriptionRef', async () => {
+      dateTimePicker.accessibleDescriptionRef = 'accessible-description-ref-0';
+      await nextUpdate(dateTimePicker);
+      await expect(dateTimePicker).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {

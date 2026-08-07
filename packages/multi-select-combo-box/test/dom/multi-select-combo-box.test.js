@@ -36,6 +36,12 @@ describe('vaadin-multi-select-combo-box', () => {
       await expect(multiSelectComboBox).dom.to.equalSnapshot();
     });
 
+    it('accessibleDescriptionRef', async () => {
+      multiSelectComboBox.accessibleDescriptionRef = 'accessible-description-ref-0';
+      await nextUpdate(multiSelectComboBox);
+      await expect(multiSelectComboBox).dom.to.equalSnapshot();
+    });
+
     it('required', async () => {
       multiSelectComboBox.required = true;
       await expect(multiSelectComboBox).dom.to.equalSnapshot();

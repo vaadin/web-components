@@ -1,105 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { aTimeout, fixtureSync, isIOS, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, isIOS, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-overlay.js';
-import { createOverlay } from './helpers.js';
+import './fixtures/mock-overlay.js';
 
 describe('vaadin-overlay', () => {
-  describe('vaadin-overlay-open event', () => {
-    let overlay, spy;
-
-    beforeEach(() => {
-      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
-      overlay.renderer = (root) => {
-        root.textContent = 'overlay content';
-      };
-      spy = sinon.spy();
-      overlay.addEventListener('vaadin-overlay-open', spy);
-    });
-
-    afterEach(() => {
-      overlay.opened = false;
-    });
-
-    it('should fire when after a delay when setting opened property to true', async () => {
-      overlay.opened = true;
-      await nextFrame();
-      await aTimeout(0);
-      expect(spy).to.be.calledOnce;
-    });
-
-    it('should provide reference to the overlay in the event detail', async () => {
-      overlay.opened = true;
-      await nextFrame();
-      await aTimeout(0);
-      const event = spy.firstCall.args[0];
-      expect(event.detail.overlay).to.equal(overlay);
-    });
-
-    it('should not fire when immediately setting opened property back to false', async () => {
-      overlay.opened = true;
-      overlay.opened = false;
-      await nextFrame();
-      await aTimeout(0);
-      expect(spy).to.not.be.called;
-    });
-
-    it('should not fire when immediately disconnected after setting opened to true', async () => {
-      overlay.opened = true;
-      overlay.remove();
-
-      await nextFrame();
-      await aTimeout(0);
-
-      expect(spy).to.not.be.called;
-    });
-
-    it('should not propagate through shadow roots', async () => {
-      overlay.opened = true;
-      await nextFrame();
-      await aTimeout(0);
-
-      expect(spy.firstCall.args[0].composed).to.be.false;
-    });
-
-    describe('global', () => {
-      let globalSpy;
-
-      beforeEach(() => {
-        globalSpy = sinon.spy();
-        document.addEventListener('vaadin-overlay-open', globalSpy);
-      });
-
-      afterEach(() => {
-        document.removeEventListener('vaadin-overlay-open', globalSpy);
-      });
-
-      it('should fire a global event on the document body when opened', async () => {
-        overlay.opened = true;
-        await nextFrame();
-        await aTimeout(0);
-        expect(globalSpy).to.be.called;
-        expect(globalSpy.firstCall.args);
-      });
-
-      it('should provide reference to the overlay in the global event detail', async () => {
-        overlay.opened = true;
-        await nextFrame();
-        await aTimeout(0);
-        const event = globalSpy.firstCall.args[0];
-        expect(event.detail.overlay).to.equal(overlay);
-      });
-    });
-  });
-
   describe('popover', () => {
     let overlay;
 
     beforeEach(() => {
-      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
-      overlay.renderer = (root) => {
-        root.textContent = 'overlay content';
-      };
+      overlay = fixtureSync('<mock-overlay>overlay content</mock-overlay>');
     });
 
     afterEach(() => {
@@ -151,10 +60,8 @@ describe('vaadin-overlay', () => {
 
     describe('open before connecting', () => {
       beforeEach(() => {
-        overlay = document.createElement('vaadin-overlay');
-        overlay.renderer = (root) => {
-          root.textContent = 'overlay content';
-        };
+        overlay = document.createElement('mock-overlay');
+        overlay.textContent = 'overlay content';
       });
 
       afterEach(() => {
@@ -173,45 +80,12 @@ describe('vaadin-overlay', () => {
     });
   });
 
-  describe('pointer-events', () => {
-    let overlay;
-
-    beforeEach(async () => {
-      overlay = createOverlay('overlay content');
-      overlay.opened = true;
-      await oneEvent(overlay, 'vaadin-overlay-open');
-    });
-
-    afterEach(() => {
-      overlay.opened = false;
-    });
-
-    it('should not prevent clicking elements outside overlay when modeless (non-modal)', () => {
-      overlay.modeless = true;
-      expect(document.body.style.pointerEvents).to.eql('');
-    });
-
-    it('should prevent clicking elements outside overlay when modal', () => {
-      expect(document.body.style.pointerEvents).to.eql('none');
-    });
-
-    it('should not prevent clicking document elements after modal is closed', () => {
-      overlay.opened = false;
-      expect(document.body.style.pointerEvents).to.eql('');
-    });
-
-    it('should allow pointer events on the overlayPart while skipping on the host', () => {
-      expect(getComputedStyle(overlay.$.overlay).pointerEvents).to.equal('auto');
-      expect(getComputedStyle(overlay).pointerEvents).to.equal('none');
-    });
-  });
-
   describe('modeless', () => {
     let overlay, owner;
 
     beforeEach(() => {
-      overlay = createOverlay('overlay content');
-      owner = document.createElement('div');
+      overlay = fixtureSync('<mock-overlay>overlay content</mock-overlay>');
+      owner = overlay.parentElement;
       overlay.owner = owner;
     });
 
@@ -231,8 +105,8 @@ describe('vaadin-overlay', () => {
     let overlay, backdrop, owner;
 
     beforeEach(async () => {
-      overlay = createOverlay('overlay content');
-      owner = document.createElement('div');
+      overlay = fixtureSync('<mock-overlay>overlay content</mock-overlay>');
+      owner = overlay.parentElement;
       overlay.owner = owner;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -277,7 +151,7 @@ describe('vaadin-overlay', () => {
     let overlay, overlayPart;
 
     beforeEach(async () => {
-      overlay = createOverlay('overlay content');
+      overlay = fixtureSync('<mock-overlay><div>overlay content</div></mock-overlay>');
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
       overlayPart = overlay.$.overlay;
@@ -345,7 +219,7 @@ describe('vaadin-overlay', () => {
     let overlay;
 
     beforeEach(async () => {
-      overlay = createOverlay('overlay content');
+      overlay = fixtureSync('<mock-overlay>overlay content</mock-overlay>');
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });

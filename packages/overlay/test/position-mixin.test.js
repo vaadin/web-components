@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { setViewport } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
-import './position-mixin-styles.js';
-import './position-mixin-element.js';
+import './fixtures/mock-positioned-overlay.js';
 
 describe('position mixin', () => {
   const TOP = 'top';
@@ -35,21 +34,14 @@ describe('position mixin', () => {
         <div id="target" style="position: fixed; top: 100px; left: 100px; width: 20px; height: 20px; border: 1px solid">
           target
         </div>
-        <vaadin-positioned-overlay id="overlay"></vaadin-positioned-overlay>
+        <mock-positioned-overlay id="overlay">
+          <div id="overlay-child" style="width: 50px; height: 50px"></div>
+        </mock-positioned-overlay>
       </div>
     `);
     target = parent.querySelector('#target');
     overlay = parent.querySelector('#overlay');
     overlay.owner = parent;
-    overlay.renderer = (root) => {
-      if (!root.firstChild) {
-        const div = document.createElement('div');
-        div.id = 'overlay-child';
-        div.style.width = '50px';
-        div.style.height = '50px';
-        root.appendChild(div);
-      }
-    };
     await nextRender();
     overlayContent = overlay.$.overlay;
     overlay.positionTarget = target;
@@ -714,7 +706,7 @@ describe('opened before attach', () => {
   });
 
   it('should not throw when adding pre-opened overlay to the DOM', async () => {
-    overlay = document.createElement('vaadin-positioned-overlay');
+    overlay = document.createElement('mock-positioned-overlay');
     overlay.owner = parent;
     overlay.positionTarget = target;
     overlay.opened = true;

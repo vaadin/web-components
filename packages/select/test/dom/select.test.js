@@ -67,6 +67,12 @@ describe('vaadin-select', () => {
       await expect(select).dom.to.equalSnapshot();
     });
 
+    it('accessibleDescriptionRef', async () => {
+      select.accessibleDescriptionRef = 'accessible-description-ref-0';
+      await nextUpdate(select);
+      await expect(select).dom.to.equalSnapshot();
+    });
+
     describe('opened', () => {
       let overlay;
 

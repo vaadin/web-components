@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Date Picker Metadata</title>
+    <script type="module" src="../common.js"></script>
+
+    <style>
+      /* TODO: remove after adding `loading` part base styles */
+      vaadin-month-calendar::part(loading) {
+        opacity: 0.5;
+      }
+
+      /* Part names the provider supplies. They style the date without disabling it. */
+      vaadin-month-calendar::part(busy) {
+        background: #b00;
+        color: #fff;
+      }
+
+      vaadin-month-calendar::part(almost-full) {
+        outline: 2px dashed #b80;
+        outline-offset: -2px;
+      }
+
+      #log {
+        font-family: ui-monospace, monospace;
+        font-size: 0.8rem;
+        line-height: 1.6;
+        max-height: 16lh;
+        overflow-y: auto;
+        margin: 0;
+        padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+        border: 1px solid;
+        border-radius: 0.25rem;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      #log:empty::after {
+        content: 'No provider calls yet — open a picker above.';
+        font-style: italic;
+        opacity: 0.6;
+      }
+
+      #log li.failed {
+        color: #b00;
+      }
+
+      .controls {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="section">
+      <h2 class="heading">Weekends disabled (synchronous)</h2>
+      <p>
+        The provider returns an array straight away, so nothing is ever pending and no spinner is shown. Note the log
+        below: one call covers about 18 months, because the visible range is expanded by six months on each side.
+      </p>
+      <vaadin-date-picker id="weekends" label="Delivery date"></vaadin-date-picker>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Slow provider (asynchronous)</h2>
+      <p>
+        The provider resolves after 1200&nbsp;ms. Until it does, the overlay shows a spinner and sets
+        <code>aria-busy</code>, and the dates render with the <code>loading</code> part — dimmed here — but stay
+        selectable, so a slow backend does not make the calendar unusable. Scroll past the loaded range to see it fetch
+        again.
+      </p>
+      <vaadin-date-picker id="slow" label="Appointment"></vaadin-date-picker>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Failing provider</h2>
+      <p>
+        A provider that rejects fails open: the error is logged, nothing is disabled, and the month is asked for again
+        the next time it comes into range. Turn failures off and scroll a little to watch it heal.
+      </p>
+      <vaadin-date-picker id="flaky" label="Pickup date"></vaadin-date-picker>
+      <div class="controls">
+        <button id="toggle-failure" type="button">Failures: on</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Combined with the other constraints</h2>
+      <p>
+        A date is disabled if it is outside <code>min</code>/<code>max</code>, or <code>isDateDisabled</code> returns
+        <code>true</code>, or the provider's metadata marks it disabled. Here the provider disables weekends,
+        <code>isDateDisabled</code> disables the 16th of each month, and the range is limited to 90 days from today.
+      </p>
+      <vaadin-date-picker id="combined" label="Booking date"></vaadin-date-picker>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Custom part names and clearCache()</h2>
+      <p>
+        The provider marks a few dates <code>busy</code> and <code>almost-full</code> through <code>part</code>, styled
+        below with <code>::part()</code>. Naming a part does not disable a date — the busy ones stay selectable.
+        <em>Book a date</em> marks the next free weekday busy behind the provider, then calls
+        <code>clearCache()</code>, which re-fetches without replacing the provider function.
+      </p>
+      <div class="controls">
+        <button id="book" type="button">Book a date</button>
+        <button id="reset-bookings" type="button">Reset</button>
+      </div>
+      <vaadin-date-picker id="parts" label="Room"></vaadin-date-picker>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Provider calls</h2>
+      <div class="controls">
+        <button id="clear-log" type="button">Clear</button>
+      </div>
+      <ol id="log" reversed></ol>
+    </section>
+
+    <script type="module">
+      import '@vaadin/date-picker';
+
+      const logElement = document.querySelector('#log');
+      const MAX_ENTRIES = 50;
+
+      // `month` in a `DatePickerDateRange` is 0-based, so add one to read it as a calendar month.
+      function formatDate({ year, month, day }) {
+        return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      }
+
+      function countMonths({ start, end }) {
+        return (end.year - start.year) * 12 + (end.month - start.month) + 1;
+      }
+
+      /**
+       * Appends a log entry for a provider call and returns a function to record its outcome, so a
+       * request and its answer can be read as one line.
+       */
+      function logCall(name, range) {
+        const entry = document.createElement('li');
+        const span = `${formatDate(range.start)} → ${formatDate(range.end)}`;
+        entry.textContent = `${name}  ${span}  (${countMonths(range)} months)`;
+        logElement.prepend(entry);
+
+        while (logElement.children.length > MAX_ENTRIES) {
+          logElement.lastElementChild.remove();
+        }
+
+        const started = performance.now();
+        return (outcome, failed) => {
+          entry.textContent += `  →  ${outcome} after ${Math.round(performance.now() - started)} ms`;
+          entry.classList.toggle('failed', !!failed);
+        };
+      }
+
+      /** Every date in the requested range, so a provider can filter it down to the ones it cares about. */
+      function datesInRange({ start, end }) {
+        const dates = [];
+        const last = new Date(end.year, end.month, end.day);
+        let date = new Date(start.year, start.month, start.day);
+        while (date <= last) {
+          dates.push(date);
+          date = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+        }
+        return dates;
+      }
+
+      function toParts(date) {
+        return { year: date.getFullYear(), month: date.getMonth(), day: date.getDate() };
+      }
+
+      function disabledEntry(date) {
+        return { ...toParts(date), disabled: true };
+      }
+
+      function isWeekend(date) {
+        return date.getDay() === 0 || date.getDay() === 6;
+      }
+
+      function weekendsInRange(range) {
+        return datesInRange(range).filter(isWeekend).map(disabledEntry);
+      }
+
+      // Synchronous: resolves within the same task, so nothing is ever pending.
+      document.querySelector('#weekends').dateMetadataProvider = (range) => {
+        const done = logCall('sync  ', range);
+        const dates = weekendsInRange(range);
+        done(`${dates.length} disabled`);
+        return dates;
+      };
+
+      // Asynchronous: the pending state and the spinner are visible until this resolves.
+      document.querySelector('#slow').dateMetadataProvider = (range) => {
+        const done = logCall('slow  ', range);
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            const dates = weekendsInRange(range);
+            done(`${dates.length} disabled`);
+            resolve(dates);
+          }, 1200);
+        });
+      };
+
+      // Fails while the toggle is on, to show that a failure disables nothing and is retried later.
+      let failRequests = true;
+      const toggle = document.querySelector('#toggle-failure');
+      toggle.addEventListener('click', () => {
+        failRequests = !failRequests;
+        toggle.textContent = `Failures: ${failRequests ? 'on' : 'off'}`;
+      });
+
+      document.querySelector('#flaky').dateMetadataProvider = (range) => {
+        const done = logCall('flaky ', range);
+        if (failRequests) {
+          done('rejected', true);
+          return Promise.reject(new Error('Availability service unavailable'));
+        }
+        const dates = weekendsInRange(range);
+        done(`${dates.length} disabled`);
+        return dates;
+      };
+
+      const combined = document.querySelector('#combined');
+      combined.dateMetadataProvider = (range) => {
+        const done = logCall('mixed ', range);
+        const dates = weekendsInRange(range);
+        done(`${dates.length} disabled`);
+        return dates;
+      };
+      combined.isDateDisabled = ({ day }) => day === 16;
+      combined.min = formatDate(toParts(new Date()));
+      combined.max = formatDate(toParts(new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)));
+
+      // Stands in for data that changes behind the provider, keyed by ISO date.
+      const booked = new Set();
+
+      function bookingEntry(date) {
+        const iso = formatDate(toParts(date));
+        if (booked.has(iso)) {
+          return { ...toParts(date), part: 'busy' };
+        }
+        // Fridays fill up first, so mark them without disabling anything.
+        return date.getDay() === 5 ? { ...toParts(date), part: 'almost-full' } : null;
+      }
+
+      const parts = document.querySelector('#parts');
+      parts.dateMetadataProvider = (range) => {
+        const done = logCall('parts ', range);
+        const dates = datesInRange(range).map(bookingEntry).filter(Boolean);
+        done(`${dates.length} with parts`);
+        return dates;
+      };
+
+      document.querySelector('#book').addEventListener('click', () => {
+        const date = new Date();
+        // The next weekday that is not booked yet.
+        do {
+          date.setDate(date.getDate() + 1);
+        } while (isWeekend(date) || booked.has(formatDate(toParts(date))));
+        booked.add(formatDate(toParts(date)));
+        // Same provider function, new answer: `clearCache()` is what makes it visible.
+        parts.clearCache();
+      });
+
+      document.querySelector('#reset-bookings').addEventListener('click', () => {
+        booked.clear();
+        parts.clearCache();
+      });
+
+      document.querySelector('#clear-log').addEventListener('click', () => {
+        logElement.textContent = '';
+      });
+    </script>
+  </body>
+</html>

@@ -553,6 +553,82 @@ snapshots["vaadin-checkbox-group host error"] =
 `;
 /* end snapshot vaadin-checkbox-group host error */
 
+snapshots["vaadin-checkbox-group host accessibleDescriptionRef"] = 
+`<vaadin-checkbox-group
+  aria-describedby="accessible-description-ref-0"
+  role="group"
+>
+  <vaadin-checkbox
+    has-label=""
+    has-value=""
+    label="Checkbox 1"
+    value="1"
+  >
+    <label
+      for="input-vaadin-checkbox-9"
+      id="label-vaadin-checkbox-3"
+      slot="label"
+    >
+      Checkbox 1
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-checkbox-5"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-labelledby="label-vaadin-checkbox-3"
+      id="input-vaadin-checkbox-9"
+      slot="input"
+      tabindex="0"
+      type="checkbox"
+      value="1"
+    >
+  </vaadin-checkbox>
+  <vaadin-checkbox
+    has-label=""
+    has-value=""
+    label="Checkbox 2"
+    value="2"
+  >
+    <label
+      for="input-vaadin-checkbox-10"
+      id="label-vaadin-checkbox-6"
+      slot="label"
+    >
+      Checkbox 2
+    </label>
+    <div
+      hidden=""
+      id="error-message-vaadin-checkbox-8"
+      slot="error-message"
+    >
+    </div>
+    <input
+      aria-labelledby="label-vaadin-checkbox-6"
+      id="input-vaadin-checkbox-10"
+      slot="input"
+      tabindex="0"
+      type="checkbox"
+      value="2"
+    >
+  </vaadin-checkbox>
+  <label
+    id="label-vaadin-checkbox-group-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-checkbox-group-2"
+    slot="error-message"
+  >
+  </div>
+</vaadin-checkbox-group>
+`;
+/* end snapshot vaadin-checkbox-group host accessibleDescriptionRef */
+
 snapshots["vaadin-checkbox-group shadow default"] = 
 `<div class="vaadin-group-field-container">
   <div part="label">

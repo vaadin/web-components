@@ -150,6 +150,33 @@ snapshots["vaadin-switch host invalid"] =
 `;
 /* end snapshot vaadin-switch host invalid */
 
+snapshots["vaadin-switch host accessibleDescriptionRef"] = 
+`<vaadin-switch has-value="">
+  <label
+    for="input-vaadin-switch-3"
+    id="label-vaadin-switch-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-switch-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-describedby="accessible-description-ref-0"
+    id="input-vaadin-switch-3"
+    role="switch"
+    slot="input"
+    tabindex="0"
+    type="checkbox"
+    value="on"
+  >
+</vaadin-switch>
+`;
+/* end snapshot vaadin-switch host accessibleDescriptionRef */
+
 snapshots["vaadin-switch shadow default"] = 
 `<div class="vaadin-switch-container">
   <div

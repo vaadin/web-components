@@ -71,10 +71,10 @@ describe('FieldAriaController', () => {
     });
 
     describe('set before target', () => {
-      it('should add label id to aria-labelledby attribute', () => {
-        controller.setLabelledBy('label-id');
+      it('should add label ids to aria-labelledby attribute', () => {
+        controller.setLabelledBy('label-id-0 label-id-1');
         controller.setTarget(input);
-        expect(input.getAttribute('aria-labelledby')).to.equal('custom-id label-id');
+        expect(input.getAttribute('aria-labelledby')).to.equal('custom-id label-id-0 label-id-1');
       });
 
       it('should add error id to aria-describedby attribute', () => {
@@ -88,6 +88,12 @@ describe('FieldAriaController', () => {
         controller.setTarget(input);
         expect(input.getAttribute('aria-describedby')).to.equal('custom-id helper-id');
       });
+
+      it('should add description ids to aria-describedby attribute', () => {
+        controller.setDescribedBy('description-id-0 description-id-1');
+        controller.setTarget(input);
+        expect(input.getAttribute('aria-describedby')).to.equal('custom-id description-id-0 description-id-1');
+      });
     });
 
     describe('set after target', () => {
@@ -95,9 +101,9 @@ describe('FieldAriaController', () => {
         controller.setTarget(input);
       });
 
-      it('should set label id to aria-labelledby attribute', () => {
-        controller.setLabelledBy('label-id');
-        expect(input.getAttribute('aria-labelledby')).to.equal('custom-id label-id');
+      it('should set label ids to aria-labelledby attribute', () => {
+        controller.setLabelledBy('label-id-0 label-id-1');
+        expect(input.getAttribute('aria-labelledby')).to.equal('custom-id label-id-0 label-id-1');
         controller.setLabelledBy(null);
         expect(input.getAttribute('aria-labelledby')).to.equal('custom-id');
       });
@@ -113,6 +119,13 @@ describe('FieldAriaController', () => {
         controller.setHelperId('helper-id');
         expect(input.getAttribute('aria-describedby')).to.equal('custom-id helper-id');
         controller.setHelperId(null);
+        expect(input.getAttribute('aria-describedby')).to.equal('custom-id');
+      });
+
+      it('should set description ids to aria-describedby attribute', () => {
+        controller.setDescribedBy('description-id-0 description-id-1');
+        expect(input.getAttribute('aria-describedby')).to.equal('custom-id description-id-0 description-id-1');
+        controller.setDescribedBy(null);
         expect(input.getAttribute('aria-describedby')).to.equal('custom-id');
       });
     });

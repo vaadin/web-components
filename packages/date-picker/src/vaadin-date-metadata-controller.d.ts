@@ -64,6 +64,13 @@ export class DateMetadataController implements ReactiveController {
   isMonthLoaded(date: Date | null | undefined): boolean;
 
   /**
+   * Whether the month containing the given date is currently being fetched. A month
+   * that has not been asked about is not pending, so this reports the same state as
+   * `isLoading()` does for the whole cache.
+   */
+  isMonthPending(date: Date | null | undefined): boolean;
+
+  /**
    * The metadata resolved for the given date, or `undefined` when the date has
    * no metadata or its month has not been resolved yet. Returns the entry the
    * provider supplied, which the caller must not modify.
