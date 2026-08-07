@@ -143,6 +143,10 @@ export class TanStackAdapter {
         this.#mouseDown = false;
         this.flush();
       });
+
+      this.elementsContainer.addEventListener('focusin', () => {
+        this.#onElementFocused();
+      });
     }
   }
 
@@ -341,7 +345,79 @@ export class TanStackAdapter {
     });
   }
 
+  #nextFocusableSiblingMissing(focusedElement, visibleElements) {
+    const nextIndex = parseInt(focusedElement.dataset.index) + 1;
+    const nextElement = visibleElements[visibleElements.indexOf(focusedElement) + 1];
+    return (
+      // There are more items available
+      nextIndex < this.size &&
+      // ...while the element rendering the next index is not the next
+      // focusable sibling in DOM order (out of order or not rendered at all)
+      (!nextElement || parseInt(nextElement.dataset.index) !== nextIndex)
+    );
+  }
+
+  #previousFocusableSiblingMissing(focusedElement, visibleElements) {
+    const previousIndex = parseInt(focusedElement.dataset.index) - 1;
+    const previousElement = visibleElements[visibleElements.indexOf(focusedElement) - 1];
+    return (
+      // There are preceding items available
+      previousIndex >= 0 &&
+      // ...while the element rendering the preceding index is not the
+      // previous focusable sibling in DOM order (out of order or not
+      // rendered at all)
+      (!previousElement || parseInt(previousElement.dataset.index) !== previousIndex)
+    );
+  }
+
+  #onElementFocused() {
+    const visibleElements = this.#visibleElements;
+    const focusedElement = visibleElements.find((el) => el.matches(':focus-within'));
+    if (!focusedElement) {
+      return;
+    }
+
+    // The user has tabbed to or within a virtualizer element. Check if a next
+    // or previous focusable sibling is missing while it should be there (so
+    // the user can continue tabbing). The sibling might be missing because
+    // the elements are not yet in the correct DOM order. First try rendering
+    // and reordering at the current scroll position.
+    if (
+      this.#previousFocusableSiblingMissing(focusedElement, visibleElements) ||
+      this.#nextFocusableSiblingMissing(focusedElement, visibleElements)
+    ) {
+      this.flush();
+    }
+
+    // If the focusable sibling is still missing (because the focused element
+    // is at the edge of the viewport and the virtualizer hasn't had the need
+    // to recycle elements), scroll just enough to have the sibling inside the
+    // visible viewport to force the virtualizer to recycle.
+    const reorderedVisibleElements = this.#visibleElements;
+    if (this.#nextFocusableSiblingMissing(focusedElement, reorderedVisibleElements)) {
+      this.scrollTarget.scrollTop +=
+        Math.ceil(focusedElement.getBoundingClientRect().bottom) -
+        Math.floor(this.scrollTarget.getBoundingClientRect().bottom - 1);
+      this.flush();
+    } else if (this.#previousFocusableSiblingMissing(focusedElement, reorderedVisibleElements)) {
+      this.scrollTarget.scrollTop -=
+        Math.ceil(this.scrollTarget.getBoundingClientRect().top + 1) -
+        Math.floor(focusedElement.getBoundingClientRect().top);
+      this.flush();
+    }
+  }
+
   flush() {
+    // The scroll position may have changed (e.g. by the browser scrolling
+    // the focused element into view) with the scroll event not fired yet,
+    // so sync the scroll offset and render in that case. Skip this for a
+    // hidden scroll target whose scrollTop reads 0, to preserve the offset
+    // for restoring once the target becomes visible again.
+    if (this.scrollTarget.offsetHeight > 0 && this.#virtualizer.scrollOffset !== this.scrollTarget.scrollTop) {
+      this.#virtualizer.scrollOffset = this.scrollTarget.scrollTop;
+      this.#render();
+    }
+
     this.#renderDebouncer?.flush();
     this.#reorderElementsDebouncer?.flush();
   }
@@ -365,5 +441,9 @@ export class TanStackAdapter {
 
   get #elements() {
     return [...this.elementsContainer.children];
+  }
+
+  get #visibleElements() {
+    return this.#elements.filter((el) => !el.hidden);
   }
 }

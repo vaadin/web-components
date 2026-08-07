@@ -183,11 +183,12 @@ export function isEmptyTextNode(node) {
 export function reorderChildren(container, comparator) {
   const children = [...container.children].toSorted(comparator);
 
-  // Use the focused element as the anchor to avoid losing focus, or the first element otherwise.
-  const anchorIndex = Math.max(
-    0,
-    children.findIndex((el) => el.matches(':focus-within')),
-  );
+  // Use the focused element as the anchor to avoid losing focus, or the first
+  // child in DOM order otherwise.
+  let anchorIndex = children.findIndex((el) => el.matches(':focus-within'));
+  if (anchorIndex === -1) {
+    anchorIndex = children.indexOf(container.children[0]);
+  }
 
   // Place elements after the anchor into correct DOM order, going forward.
   // Each element is moved to right after its predecessor if not already there.
