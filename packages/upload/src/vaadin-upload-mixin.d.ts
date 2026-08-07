@@ -5,6 +5,7 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
+import type { UploadFileListI18n } from './vaadin-upload-file-list-mixin.js';
 
 export interface UploadFile extends File {
   uploadTarget: string;
@@ -25,7 +26,7 @@ export interface UploadFile extends File {
   uploading?: boolean;
 }
 
-export interface UploadI18n {
+export interface UploadI18n extends UploadFileListI18n {
   dropFiles?: {
     one?: string;
     many?: string;
@@ -34,37 +35,6 @@ export interface UploadI18n {
     one?: string;
     many?: string;
   };
-  error?: {
-    tooManyFiles?: string;
-    fileIsTooBig?: string;
-    incorrectFileType?: string;
-  };
-  uploading?: {
-    status?: {
-      connecting?: string;
-      stalled?: string;
-      processing?: string;
-      held?: string;
-    };
-    remainingTime?: {
-      prefix?: string;
-      unknown?: string;
-    };
-    error?: {
-      serverUnavailable?: string;
-      unexpectedServerError?: string;
-      forbidden?: string;
-      fileTooLarge?: string;
-    };
-  };
-  units?: {
-    size?: string[];
-    sizeBase?: number;
-  };
-
-  formatSize?(bytes: number): string;
-
-  formatTime?(seconds: number, units: number[]): string;
 }
 
 export type UploadMethod = 'POST' | 'PUT';
