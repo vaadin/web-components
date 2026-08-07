@@ -345,64 +345,49 @@ export class TanStackAdapter {
     });
   }
 
-  #nextFocusableSiblingMissing(focusedElement, visibleElements) {
-    const nextIndex = parseInt(focusedElement.dataset.index) + 1;
-    const nextElement = visibleElements[visibleElements.indexOf(focusedElement) + 1];
-    return (
-      // There are more items available
-      nextIndex < this.size &&
-      // ...while the element rendering the next index is not the next
-      // focusable sibling in DOM order (out of order or not rendered at all)
-      (!nextElement || parseInt(nextElement.dataset.index) !== nextIndex)
-    );
-  }
-
-  #previousFocusableSiblingMissing(focusedElement, visibleElements) {
-    const previousIndex = parseInt(focusedElement.dataset.index) - 1;
-    const previousElement = visibleElements[visibleElements.indexOf(focusedElement) - 1];
-    return (
-      // There are preceding items available
-      previousIndex >= 0 &&
-      // ...while the element rendering the preceding index is not the
-      // previous focusable sibling in DOM order (out of order or not
-      // rendered at all)
-      (!previousElement || parseInt(previousElement.dataset.index) !== previousIndex)
-    );
-  }
-
   #onElementFocused() {
-    const visibleElements = this.#visibleElements;
-    const focusedElement = visibleElements.find((el) => el.matches(':focus-within'));
+    const focusedElement = this.#visibleElements.find((el) => el.matches(':focus-within'));
     if (!focusedElement) {
       return;
     }
+
+    // The focusable sibling in the given direction (1 = next, -1 = previous)
+    // is missing when there is an item available in that direction while the
+    // element rendering its index is not the focused element's DOM-order
+    // neighbor (out of order or not rendered at all).
+    const focusableSiblingMissing = (direction) => {
+      const siblingIndex = parseInt(focusedElement.dataset.index) + direction;
+      const visibleElements = this.#visibleElements;
+      const siblingElement = visibleElements[visibleElements.indexOf(focusedElement) + direction];
+      return (
+        siblingIndex >= 0 &&
+        siblingIndex < this.size &&
+        (!siblingElement || parseInt(siblingElement.dataset.index) !== siblingIndex)
+      );
+    };
 
     // The user has tabbed to or within a virtualizer element. Check if a next
     // or previous focusable sibling is missing while it should be there (so
     // the user can continue tabbing). The sibling might be missing because
     // the elements are not yet in the correct DOM order. First try rendering
     // and reordering at the current scroll position.
-    if (
-      this.#previousFocusableSiblingMissing(focusedElement, visibleElements) ||
-      this.#nextFocusableSiblingMissing(focusedElement, visibleElements)
-    ) {
+    if (focusableSiblingMissing(1) || focusableSiblingMissing(-1)) {
       this.flush();
     }
 
     // If the focusable sibling is still missing (because the focused element
     // is at the edge of the viewport and the virtualizer hasn't had the need
-    // to recycle elements), scroll just enough to have the sibling inside the
-    // visible viewport to force the virtualizer to recycle.
-    const reorderedVisibleElements = this.#visibleElements;
-    if (this.#nextFocusableSiblingMissing(focusedElement, reorderedVisibleElements)) {
-      this.scrollTarget.scrollTop +=
-        Math.ceil(focusedElement.getBoundingClientRect().bottom) -
-        Math.floor(this.scrollTarget.getBoundingClientRect().bottom - 1);
+    // to recycle elements), scroll by how far the focused element sticks out
+    // of the viewport, plus a pixel to reveal the sibling and force the
+    // virtualizer to recycle. Rounding up keeps the sibling revealed with
+    // fractional element positions.
+    if (focusableSiblingMissing(1)) {
+      const overflow = focusedElement.getBoundingClientRect().bottom - this.scrollTarget.getBoundingClientRect().bottom;
+      this.scrollTarget.scrollTop += Math.ceil(overflow) + 1;
       this.flush();
-    } else if (this.#previousFocusableSiblingMissing(focusedElement, reorderedVisibleElements)) {
-      this.scrollTarget.scrollTop -=
-        Math.ceil(this.scrollTarget.getBoundingClientRect().top + 1) -
-        Math.floor(focusedElement.getBoundingClientRect().top);
+    } else if (focusableSiblingMissing(-1)) {
+      const overflow = this.scrollTarget.getBoundingClientRect().top - focusedElement.getBoundingClientRect().top;
+      this.scrollTarget.scrollTop -= Math.ceil(overflow) + 1;
       this.flush();
     }
   }
