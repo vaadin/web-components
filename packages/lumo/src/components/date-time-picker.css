@@ -1,0 +1,31 @@
+/* date-time-picker joins the date and time fields into one control: a 2px seam with
+   flat inner corners (only the outer corners stay rounded). The base provides the flex
+   layout and the field ratios; the label/helper/error and the custom-field label
+   spacing are shared via field.css and custom-field.css. */
+:where(:root),
+:where(:host) {
+  --vaadin-date-time-picker-gap: 2px;
+}
+
+/* The base baseline guide assumes a single-line input, but the date-time-picker's
+   input row is a full child field: the child input (--lumo-size-m) plus the child
+   field's own vertical padding (--lumo-space-s) plus the input's top padding where the
+   text baseline sits (--vaadin-padding-block-container). Tell the guide the input row
+   is that tall so it lines the date/time inputs up with sibling fields' inputs. */
+:where(vaadin-date-time-picker) {
+  --vaadin-field-baseline-input-height: calc(
+    var(--lumo-size-m) + var(--lumo-space-s) + var(--vaadin-padding-block-container)
+  );
+}
+
+/* Flatten the inner corners so the two fields read as one joined control. Logical
+   radii keep the seam in the middle under RTL. */
+:where(vaadin-date-time-picker) > [slot='date-picker'] {
+  --vaadin-input-field-top-end-radius: 0px;
+  --vaadin-input-field-bottom-end-radius: 0px;
+}
+
+:where(vaadin-date-time-picker) > [slot='time-picker'] {
+  --vaadin-input-field-top-start-radius: 0px;
+  --vaadin-input-field-bottom-start-radius: 0px;
+}
