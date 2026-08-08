@@ -1,0 +1,31 @@
+/* Lumo message-input is a borderless, transparent row: the slotted text-area is a
+   filled Lumo field (styled by input-container.css) and the send button sits beside
+   it. The base instead wraps the row in a bordered input box — neutralize that box
+   and restore Lumo's padding and the text-area/button flex layout. */
+:where(vaadin-message-input) {
+  align-items: flex-start;
+  overflow: hidden;
+  padding: var(--lumo-space-s) var(--lumo-space-m);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* No container focus ring — the filled text-area shows its own focus highlight */
+:where(vaadin-message-input):focus-within {
+  outline: none;
+}
+
+/* Stretch the text-area to the row height and space it from the button */
+:where(vaadin-message-input) > vaadin-text-area {
+  align-self: stretch;
+  margin-inline-end: var(--lumo-space-s);
+}
+
+/* Use the standard Lumo button margin instead of the base's field-padding-derived one:
+   0 inline (so the only gap to the button is the text-area's trailing margin) and the
+   space-xs block margin, which also keeps the button's margin box from stretching the
+   text-area (via align-self) taller than one Lumo field. */
+:where(vaadin-message-input) > vaadin-message-input-button {
+  margin: var(--lumo-space-xs) 0;
+}
