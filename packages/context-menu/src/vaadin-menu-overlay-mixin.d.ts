@@ -18,4 +18,17 @@ export declare class MenuOverlayMixinClass {
    * Returns the adjusted boundaries of the overlay.
    */
   getBoundaries(): { xMax: number; xMin: number; yMax: number };
+
+  /**
+   * Override method from `OverlayMixin` to always add global listeners,
+   * so that outside click also works for modeless sub-menu overlays.
+   */
+  protected _shouldAddGlobalListeners(): boolean;
+
+  /**
+   * Override method from `OverlayMixin` so that a click inside any overlay
+   * of the same menu is not an outside click, and only the topmost menu
+   * overlay closes the menu.
+   */
+  protected _shouldCloseOnOutsideClick(event: Event): boolean;
 }

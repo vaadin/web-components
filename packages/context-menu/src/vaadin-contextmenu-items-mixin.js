@@ -87,21 +87,6 @@ export const ItemsMixin = (superClass) =>
       };
     }
 
-    constructor() {
-      super();
-
-      // Overlay's outside click listener doesn't work with modeless
-      // overlays (submenus) so we need additional logic for it
-      this.__itemsOutsideClickListener = (e) => {
-        if (this._shouldCloseOnOutsideClick(e)) {
-          this.dispatchEvent(new CustomEvent('items-outside-click'));
-        }
-      };
-      this.addEventListener('items-outside-click', () => {
-        this.items && this.close();
-      });
-    }
-
     /**
      * Tag name prefix used by overlay, list-box and items.
      * @protected
@@ -112,30 +97,9 @@ export const ItemsMixin = (superClass) =>
     }
 
     /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
-      // Firefox leaks click to document on contextmenu even if prevented
-      // https://bugzilla.mozilla.org/show_bug.cgi?id=990614
-      document.documentElement.addEventListener('click', this.__itemsOutsideClickListener);
-    }
-
-    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener);
       this._tooltipController.setTarget(null);
-    }
-
-    /**
-     * Whether to close the overlay on outside click or not.
-     * Override this method to customize the closing logic.
-     *
-     * @param {Event} event
-     * @return {boolean}
-     * @protected
-     */
-    _shouldCloseOnOutsideClick(event) {
-      return !event.composedPath().some((el) => el.localName === `${this._tagNamePrefix}-overlay`);
     }
 
     /** @protected */
@@ -290,6 +254,14 @@ export const ItemsMixin = (superClass) =>
         this.close();
       });
 
+      // Only the topmost overlay of the menu chain fires the outside click
+      // event, close the whole menu through the `close-all-menus` wiring.
+      overlay.addEventListener('vaadin-overlay-outside-click', () => {
+        // TODO: remove the deprecated event in Vaadin 26
+        this.dispatchEvent(new CustomEvent('items-outside-click'));
+        this.dispatchEvent(new CustomEvent('close-all-menus'));
+      });
+
       // Open a submenu on click event when a touch device is used.
       // On desktop, a submenu opens on hover.
       overlay.addEventListener(isTouch ? 'click' : 'mouseover', (event) => {
@@ -354,6 +326,12 @@ export const ItemsMixin = (superClass) =>
       // Forward event to the parent menu element.
       subMenu.addEventListener('close-all-menus', () => {
         this.dispatchEvent(new CustomEvent('close-all-menus'));
+      });
+
+      // Forward event to the parent menu element.
+      // TODO: remove the deprecated event in Vaadin 26
+      subMenu.addEventListener('items-outside-click', () => {
+        this.dispatchEvent(new CustomEvent('items-outside-click'));
       });
 
       // Forward event to the parent menu element.

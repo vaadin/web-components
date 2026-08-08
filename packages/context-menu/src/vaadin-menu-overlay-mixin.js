@@ -5,6 +5,7 @@
  */
 import { OverlayFocusMixin } from '@vaadin/overlay/src/vaadin-overlay-focus-mixin.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
+import { isLastOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
 
 export const MenuOverlayMixin = (superClass) =>
   class MenuOverlayMixin extends OverlayFocusMixin(PositionMixin(superClass)) {
@@ -83,6 +84,48 @@ export const MenuOverlayMixin = (superClass) =>
     /** @private */
     _themeChanged() {
       this.close();
+    }
+
+    /**
+     * Override method from `OverlayMixin` to always add global listeners,
+     * so that outside click also works for modeless sub-menu overlays.
+     *
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldAddGlobalListeners() {
+      return true;
+    }
+
+    /**
+     * The overlay of the root menu in the menu chain.
+     * @private
+     */
+    get __rootOverlay() {
+      return this.parentOverlay ? this.parentOverlay.__rootOverlay : this;
+    }
+
+    /**
+     * Override method from `OverlayMixin` so that a click inside any overlay
+     * of the same menu (e.g. an item with a sub-menu or `keepOpen` set) is not
+     * an outside click, and only the topmost menu overlay closes the menu.
+     * Overlays of other types (e.g. a tooltip shown for a menu item) may be
+     * on top of the stack and must not block closing.
+     *
+     * @param {Event} event
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldCloseOnOutsideClick(event) {
+      // All menu overlay content is slotted through the root menu element,
+      // so clicks inside any overlay of the same menu pass through it.
+      if (event.composedPath().includes(this.__rootOverlay.owner)) {
+        return false;
+      }
+
+      return isLastOverlay(this, (overlay) => overlay.localName === this.localName);
     }
 
     /**
