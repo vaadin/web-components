@@ -93,9 +93,13 @@ snapshots["vaadin-details host theme"] =
 `;
 /* end snapshot vaadin-details host theme */
 
-snapshots["vaadin-details shadow default"] = 
-`<slot name="summary">
-</slot>
+snapshots["vaadin-details shadow default"] =
+`<div part="summary-wrapper">
+  <slot name="summary">
+  </slot>
+  <slot name="summary-suffix">
+  </slot>
+</div>
 <div part="content">
   <slot>
   </slot>
@@ -105,9 +109,13 @@ snapshots["vaadin-details shadow default"] =
 `;
 /* end snapshot vaadin-details shadow default */
 
-snapshots["vaadin-details shadow opened"] = 
-`<slot name="summary">
-</slot>
+snapshots["vaadin-details shadow opened"] =
+`<div part="summary-wrapper">
+  <slot name="summary">
+  </slot>
+  <slot name="summary-suffix">
+  </slot>
+</div>
 <div part="content">
   <slot>
   </slot>

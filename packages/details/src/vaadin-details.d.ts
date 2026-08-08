@@ -35,9 +35,10 @@ export type DetailsEventMap = DetailsCustomEventMap & HTMLElementEventMap;
  *
  * The following shadow DOM parts are exposed for styling:
  *
- * Part name        | Description
- * -----------------|----------------
- * `content`        | The wrapper for the collapsible details content.
+ * Part name          | Description
+ * -------------------|----------------
+ * `content`          | The wrapper for the collapsible details content.
+ * `summary-wrapper`  | The wrapper for the summary and summary-suffix slots.
  *
  * The following state attributes are available for styling:
  *
