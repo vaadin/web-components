@@ -9,13 +9,14 @@
   transition: background-color 100ms;
 }
 
-/* Small gap between the input field and the dropdown (top/bottom-aligned reflect
-   to the host via setOverlayStateAttribute). Shared with time-picker. */
-:where(vaadin-combo-box, vaadin-time-picker)[top-aligned]::part(overlay) {
+/* Small gap between the input field and the anchored overlay (top/bottom-aligned
+   reflect to the host via setOverlayStateAttribute). Shared with time-picker and
+   date-picker, which all place their overlay right below/above the field. */
+:where(vaadin-combo-box, vaadin-time-picker, vaadin-date-picker)[top-aligned]::part(overlay) {
   margin-top: var(--lumo-space-xs);
 }
 
-:where(vaadin-combo-box, vaadin-time-picker)[bottom-aligned]::part(overlay) {
+:where(vaadin-combo-box, vaadin-time-picker, vaadin-date-picker)[bottom-aligned]::part(overlay) {
   margin-bottom: var(--lumo-space-xs);
 }
 
