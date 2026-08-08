@@ -4,13 +4,13 @@ import {
   arrowLeftKeyDown,
   arrowRightKeyDown,
   arrowUpKeyDown,
-  aTimeout,
   enterKeyDown,
   escKeyDown,
   fire,
   fixtureSync,
   nextFrame,
   nextRender,
+  outsideClick,
   spaceKeyDown,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
@@ -18,7 +18,6 @@ import sinon from 'sinon';
 import '../src/vaadin-context-menu.js';
 import '@vaadin/item/src/vaadin-item.js';
 import '@vaadin/list-box/src/vaadin-list-box.js';
-import '@vaadin/overlay/vaadin-overlay.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { activateItem, getMenuItems, getSubMenu, openMenu } from './helpers.js';
 
@@ -89,6 +88,17 @@ describe('items', () => {
     expect(getMenuItems(subMenu)[0].textContent).to.equal('foo-0-0');
   });
 
+  it('should only report outside click on the topmost overlay of the menu', () => {
+    const rootSpy = sinon.spy();
+    rootOverlay.addEventListener('vaadin-overlay-outside-click', rootSpy);
+    const subSpy = sinon.spy();
+    subOverlay1.addEventListener('vaadin-overlay-outside-click', subSpy);
+
+    outsideClick();
+    expect(subSpy).to.be.calledOnce;
+    expect(rootSpy).to.not.be.called;
+  });
+
   it('should close all menus', () => {
     fire(document.documentElement, 'click');
     expect(rootMenu.opened).to.be.false;
@@ -102,50 +112,32 @@ describe('items', () => {
         <button></button>
       </vaadin-context-menu>
     `);
-    otherMenu.openOn = isTouch ? 'click' : 'mouseover';
+    otherMenu.openOn = 'mouseover';
     otherMenu.items = [{ text: 'bar-0' }];
     await nextRender();
     await openMenu(otherMenu.firstElementChild);
     expect(rootMenu.opened).to.be.true;
     expect(otherMenu.opened).to.be.true;
 
-    fire(document.documentElement, 'click');
+    outsideClick();
     expect(rootMenu.opened).to.be.false;
     expect(subMenu.opened).to.be.false;
     expect(otherMenu.opened).to.be.false;
   });
 
-  it('should close all menus on outside click when other overlay is on top', async () => {
-    const overlay = fixtureSync('<vaadin-overlay modeless></vaadin-overlay>');
-    overlay.renderer = (root) => {
-      root.textContent = 'overlay';
-    };
-    overlay.opened = true;
-    await nextRender();
-
-    fire(document.documentElement, 'click');
+  // On touch, a click on the target would open the menu again.
+  (isTouch ? it.skip : it)('should close all menus on click on the menu light DOM content', () => {
+    target.click();
     expect(rootMenu.opened).to.be.false;
     expect(subMenu.opened).to.be.false;
-
-    overlay.opened = false;
   });
 
   it('should not react to outside click when closed', async () => {
     rootMenu.close();
     await nextRender();
     const spy = sinon.spy(rootMenu, 'close');
-    fire(document.documentElement, 'click');
-    expect(spy.called).to.be.false;
-  });
-
-  it('should not react to outside click when disconnected', async () => {
-    rootMenu.parentNode.removeChild(rootMenu);
-    // Wait for the deferred close scheduled on disconnect
-    await aTimeout(0);
-    await nextRender();
-    const spy = sinon.spy(rootMenu, 'close');
-    fire(document.documentElement, 'click');
-    expect(spy.called).to.be.false;
+    outsideClick();
+    expect(spy).to.not.be.called;
   });
 
   // TODO: remove when the deprecated event is removed in Vaadin 26
@@ -153,8 +145,8 @@ describe('items', () => {
     it('should fire on outside click when a sub-menu is open', () => {
       const spy = sinon.spy();
       rootMenu.addEventListener('items-outside-click', spy);
-      fire(document.documentElement, 'click');
-      expect(spy.calledOnce).to.be.true;
+      outsideClick();
+      expect(spy).to.be.calledOnce;
     });
 
     it('should fire on outside click when only the root menu is open', async () => {
@@ -162,8 +154,8 @@ describe('items', () => {
       await nextRender();
       const spy = sinon.spy();
       rootMenu.addEventListener('items-outside-click', spy);
-      fire(document.documentElement, 'click');
-      expect(spy.calledOnce).to.be.true;
+      outsideClick();
+      expect(spy).to.be.calledOnce;
     });
 
     it('should not fire on outside click when the menu is closed', async () => {
@@ -171,15 +163,15 @@ describe('items', () => {
       await nextRender();
       const spy = sinon.spy();
       rootMenu.addEventListener('items-outside-click', spy);
-      fire(document.documentElement, 'click');
-      expect(spy.called).to.be.false;
+      outsideClick();
+      expect(spy).to.not.be.called;
     });
 
     it('should not fire on click inside the menu', () => {
       const spy = sinon.spy();
       rootMenu.addEventListener('items-outside-click', spy);
       getMenuItems(subMenu)[3].click();
-      expect(spy.called).to.be.false;
+      expect(spy).to.not.be.called;
     });
   });
 

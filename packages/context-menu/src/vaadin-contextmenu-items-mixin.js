@@ -254,14 +254,14 @@ export const ItemsMixin = (superClass) =>
         this.close();
       });
 
-      // Only the topmost overlay of the menu chain fires the outside click
-      // event, close the whole menu by closing the root menu. Do not use
-      // the `close-all-menus` event: menu-bar restores focus to the button
-      // on it, which must not happen on a mouse click elsewhere on the page.
+      // Only the topmost overlay of the menu fires the outside click event.
+      // Do not use the `close-all-menus` event to close the menu: menu-bar
+      // restores focus to the button on it, which must not happen on a
+      // mouse click elsewhere on the page.
       overlay.addEventListener('vaadin-overlay-outside-click', () => {
         // TODO: remove the deprecated event in Vaadin 26
-        this.dispatchEvent(new CustomEvent('items-outside-click'));
-        this.__closeAllMenus();
+        this.__rootMenu.dispatchEvent(new CustomEvent('items-outside-click'));
+        this.__rootMenu.close();
       });
 
       // Open a submenu on click event when a touch device is used.
@@ -331,12 +331,6 @@ export const ItemsMixin = (superClass) =>
       });
 
       // Forward event to the parent menu element.
-      // TODO: remove the deprecated event in Vaadin 26
-      subMenu.addEventListener('items-outside-click', () => {
-        this.dispatchEvent(new CustomEvent('items-outside-click'));
-      });
-
-      // Forward event to the parent menu element.
       subMenu.addEventListener('item-selected', (event) => {
         const { detail } = event;
         this.dispatchEvent(new CustomEvent('item-selected', { detail }));
@@ -344,7 +338,7 @@ export const ItemsMixin = (superClass) =>
 
       // Listen to the forwarded event from sub-menu.
       this.addEventListener('close-all-menus', () => {
-        this.close();
+        this.__rootMenu.close();
       });
 
       // Listen to the forwarded event from sub-menu.
@@ -528,16 +522,12 @@ export const ItemsMixin = (superClass) =>
     }
 
     /**
-     * Closes the root menu of the menu chain. Closing a menu also
-     * closes its sub-menu, so the whole chain closes level by level.
+     * The root menu element of the menu chain. Closing a menu also closes
+     * its sub-menu, so closing the root closes the whole menu.
      * @private
      */
-    __closeAllMenus() {
-      if (this.__parentMenu) {
-        this.__parentMenu.__closeAllMenus();
-      } else {
-        this.close();
-      }
+    get __rootMenu() {
+      return this.__parentMenu ? this.__parentMenu.__rootMenu : this;
     }
 
     close() {

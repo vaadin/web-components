@@ -89,6 +89,8 @@ export const MenuOverlayMixin = (superClass) =>
     /**
      * Override method from `OverlayMixin` to always add global listeners,
      * so that outside click also works for modeless sub-menu overlays.
+     * As a side effect, Escape also closes a modeless sub-menu overlay
+     * when it does not contain focus.
      *
      * @return {boolean}
      * @protected
@@ -99,18 +101,10 @@ export const MenuOverlayMixin = (superClass) =>
     }
 
     /**
-     * The overlay of the root menu in the menu chain.
-     * @private
-     */
-    get __rootOverlay() {
-      return this.parentOverlay ? this.parentOverlay.__rootOverlay : this;
-    }
-
-    /**
-     * Override method from `OverlayMixin` so that a click inside any overlay
-     * of the same menu (e.g. an item with a sub-menu or `keepOpen` set) is not
-     * an outside click, and only the topmost overlay of the same menu closes
-     * the whole menu. Other overlays (e.g. a tooltip shown for a menu item,
+     * Override method from `OverlayMixin` to ignore clicks inside any overlay
+     * of the same menu (e.g. on an item with a sub-menu or `keepOpen` set),
+     * and to only close the whole menu from its topmost overlay. Overlays
+     * that do not belong to the menu (e.g. a tooltip shown for a menu item,
      * or another menu open at the same time) may be on top of the stack and
      * must not block closing.
      *
@@ -122,9 +116,7 @@ export const MenuOverlayMixin = (superClass) =>
     _shouldCloseOnOutsideClick(event) {
       const rootOverlay = this.__rootOverlay;
 
-      // All menu overlay content is slotted through the root menu element,
-      // so clicks inside any overlay of the same menu pass through it.
-      if (event.composedPath().includes(rootOverlay.owner)) {
+      if (event.composedPath().some((node) => node.__rootOverlay === rootOverlay)) {
         return false;
       }
 
@@ -219,5 +211,15 @@ export const MenuOverlayMixin = (superClass) =>
      */
     _deepContains(node) {
       return this.owner.contains(node);
+    }
+
+    /**
+     * The overlay of the root menu in the menu chain. Serves as the identity
+     * of the chain: overlays belong to the same menu when their root overlays
+     * are the same element. Undefined on other overlay types.
+     * @private
+     */
+    get __rootOverlay() {
+      return this.parentOverlay ? this.parentOverlay.__rootOverlay : this;
     }
   };

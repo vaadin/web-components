@@ -386,7 +386,7 @@ describe('overlay', () => {
       expect(menu.opened).to.eql(false);
     });
 
-    it('should disable close on empty `closeOn`', () => {
+    it('should not close on overlay click with empty `closeOn`', () => {
       menu.closeOn = '';
 
       overlay.dispatchEvent(new CustomEvent('click'));

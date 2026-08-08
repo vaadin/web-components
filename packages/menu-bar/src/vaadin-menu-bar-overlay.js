@@ -37,8 +37,12 @@ class MenuBarOverlay extends MenuOverlayMixin(
   }
 
   /**
-   * Override method from `MenuOverlayMixin` to prevent closing
-   * the sub-menu on the same click event that was used to open it.
+   * Override method from `MenuOverlayMixin` to prevent closing the menu on
+   * a click on the menu-bar button that opened it: the same click would
+   * otherwise first close the menu here and then toggle it open again in
+   * the menu-bar click handler. The button is the `listenOn` target of the
+   * root sub-menu, so consult the root overlay's owner: this must also
+   * apply when a nested sub-menu overlay is the topmost one.
    *
    * @param {Event} event
    * @return {boolean}
@@ -46,7 +50,7 @@ class MenuBarOverlay extends MenuOverlayMixin(
    * @override
    */
   _shouldCloseOnOutsideClick(event) {
-    if (this.owner.hasAttribute('is-root') && event.composedPath().includes(this.owner.listenOn)) {
+    if (event.composedPath().includes(this.__rootOverlay.owner.listenOn)) {
       return false;
     }
 
