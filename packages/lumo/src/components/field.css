@@ -30,7 +30,8 @@
   vaadin-time-picker,
   vaadin-date-picker,
   vaadin-select,
-  vaadin-custom-field
+  vaadin-custom-field,
+  vaadin-date-time-picker
 ) {
   &[has-label] {
     padding-top: var(--lumo-space-m);
