@@ -1,0 +1,97 @@
+/* date-picker + month-calendar + year scroller. The base provides the whole overlay
+   layout, the month grid, the year scroller and the date/selected/today/focus states
+   through documented --vaadin-date-picker-* vars; this restores Lumo's sizing, the
+   primary-color selection/today, the header typography and the year scroller look. The
+   field itself is styled by input-container.css/field.css (widened to include
+   vaadin-date-picker). */
+:where(:root),
+:where(:host) {
+  /* Sizing: Lumo date cells and year scroller drive the overlay width and height */
+  --vaadin-date-picker-date-width: var(--lumo-size-m);
+  --vaadin-date-picker-date-height: var(--lumo-size-m);
+  --vaadin-date-picker-month-padding: var(--lumo-space-xs);
+  --vaadin-date-picker-year-scroller-width: 57px;
+  --vaadin-date-picker-overlay-max-height: calc(var(--lumo-size-m) * 14);
+
+  /* Month header + weekday/week-number typography */
+  --vaadin-date-picker-month-header-color: var(--lumo-header-text-color);
+  --vaadin-date-picker-month-header-font-size: var(--lumo-font-size-l);
+  --vaadin-date-picker-weekday-font-size: var(--lumo-font-size-xxs);
+  --vaadin-date-picker-weekday-font-weight: normal;
+  --vaadin-date-picker-week-number-font-size: var(--lumo-font-size-xxs);
+
+  /* Primary-color selection and today, matching Lumo */
+  --vaadin-date-picker-date-selected-background: var(--lumo-primary-color);
+  --vaadin-date-picker-date-selected-color: var(--lumo-primary-contrast-color);
+  --vaadin-date-picker-date-today-color: var(--lumo-primary-text-color);
+
+  /* Year scroller: subtle shaded panel with a primary current-year */
+  --vaadin-date-picker-year-scroller-background: var(--lumo-shade-5pct);
+  --vaadin-date-picker-year-scroller-current-year-color: var(--lumo-primary-text-color);
+}
+
+/* Lumo spacing below the month header and the weekday row (the base uses tighter
+   values and exposes no var for either margin). */
+:where(vaadin-month-calendar)::part(month-header) {
+  margin-bottom: var(--lumo-space-m);
+}
+
+:where(vaadin-month-calendar)::part(weekday) {
+  margin-bottom: var(--lumo-space-s);
+  line-height: 1;
+}
+
+/* Lumo dims disabled dates with the disabled text color alone, at full opacity
+   (the base additionally fades them to 0.7). */
+:where(vaadin-month-calendar)::part(date disabled) {
+  opacity: 1;
+}
+
+/* Date hover highlight (the base draws the date background via ::after). Keep disabled
+   dates flat and selected dates on their primary fill. */
+:where(vaadin-month-calendar)::part(date):hover::after {
+  background: var(--lumo-primary-color-10pct);
+}
+
+:where(vaadin-month-calendar)::part(date disabled):hover::after {
+  background: transparent;
+}
+
+:where(vaadin-month-calendar)::part(date selected):hover::after {
+  background: var(--lumo-primary-color);
+}
+
+/* Toolbar: round off the overlay's outer bottom corner, and drop the block margin
+   button.css gives every Lumo button — inside the toolbar it would make the row 8px
+   taller than Lumo's. */
+:where(vaadin-date-picker-overlay-content)::part(toolbar) {
+  border-end-start-radius: var(--lumo-border-radius-l);
+}
+
+:where(vaadin-date-picker-overlay-content) > vaadin-button {
+  --vaadin-button-margin: 0px;
+}
+
+/* Years toggle button: Lumo primary accent (the base uses the neutral text color) */
+:where(vaadin-date-picker-overlay-content)::part(years-toggle-button) {
+  color: var(--lumo-primary-text-color);
+}
+
+:where(vaadin-date-picker-overlay-content)[years-visible]::part(years-toggle-button) {
+  background: var(--lumo-primary-color);
+  color: var(--lumo-primary-contrast-color);
+}
+
+/* Year separator bullet (the base renders no separator) */
+:where(vaadin-date-picker-year)::part(year-separator) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50%;
+  transform: translateY(-50%);
+}
+
+:where(vaadin-date-picker-year)::part(year-separator)::after {
+  content: '\2022';
+  color: var(--lumo-disabled-text-color);
+}
