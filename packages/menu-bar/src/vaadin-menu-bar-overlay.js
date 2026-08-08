@@ -36,6 +36,27 @@ class MenuBarOverlay extends MenuOverlayMixin(
     return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
+  /**
+   * Override method from `MenuOverlayMixin` to prevent closing the menu on
+   * a click on the menu-bar button that opened it: the same click would
+   * otherwise first close the menu here and then toggle it open again in
+   * the menu-bar click handler. The button is the `listenOn` target of the
+   * root sub-menu, so consult the root overlay's owner: this must also
+   * apply when a nested sub-menu overlay is the topmost one.
+   *
+   * @param {Event} event
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _shouldCloseOnOutsideClick(event) {
+    if (event.composedPath().includes(this.__rootOverlay.owner.listenOn)) {
+      return false;
+    }
+
+    return super._shouldCloseOnOutsideClick(event);
+  }
+
   /** @protected */
   render() {
     return html`

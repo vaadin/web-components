@@ -61,7 +61,10 @@ export const ContextMenuMixin = (superClass) =>
         },
 
         /**
-         * Event name to listen for closing the context menu.
+         * Event name to listen for closing the context menu. The listener is
+         * added to the overlay, so events from the overlay content close the
+         * menu. When empty, events inside the overlay do not close the menu;
+         * outside click and Escape still do.
          * @attr {string} close-on
          */
         closeOn: {
@@ -137,7 +140,6 @@ export const ContextMenuMixin = (superClass) =>
 
       this._boundOpen = this.open.bind(this);
       this._boundClose = this.close.bind(this);
-      this._boundPreventDefault = this._preventDefault.bind(this);
       this.__onGlobalContextMenu = this.__onGlobalContextMenu.bind(this);
     }
 
@@ -206,7 +208,8 @@ export const ContextMenuMixin = (superClass) =>
           );
         }
 
-        // With items property, menu closes on item selection or items-outside-click.
+        // Clicks on items bubble to the overlay and must not close the menu
+        // (items with `keepOpen` or with children), so disable `closeOn`.
         if (this.items && this.closeOn === 'click') {
           this.closeOn = '';
         }
@@ -297,9 +300,6 @@ export const ContextMenuMixin = (superClass) =>
 
     /** @private */
     _closeOnChanged(closeOn, oldCloseOn) {
-      // Outside click event from overlay
-      const evtOverlay = 'vaadin-overlay-outside-click';
-
       const overlay = this._overlayElement;
 
       if (oldCloseOn) {
@@ -307,15 +307,7 @@ export const ContextMenuMixin = (superClass) =>
       }
       if (closeOn) {
         this._listen(overlay, closeOn, this._boundClose);
-        overlay.removeEventListener(evtOverlay, this._boundPreventDefault);
-      } else {
-        overlay.addEventListener(evtOverlay, this._boundPreventDefault);
       }
-    }
-
-    /** @private */
-    _preventDefault(e) {
-      e.preventDefault();
     }
 
     /** @private */

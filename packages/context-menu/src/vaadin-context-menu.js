@@ -251,8 +251,8 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
  * @fires {CustomEvent} closed - Fired when the context menu is closed.
- * @fires {CustomEvent} close-all-menus - Fired when all menus should close, e.g., after pressing Tab or on submenu close.
- * @fires {CustomEvent} items-outside-click - Fired when a click happens outside any open sub-menus.
+ * @fires {CustomEvent} close-all-menus - Fired when all menus should close, e.g., after pressing Tab or on submenu close. Deprecated: listen for `opened-changed` or `closed` instead. The event will be removed in Vaadin 26.
+ * @fires {CustomEvent} items-outside-click - Fired when an outside click closes the menu opened using the `items` API. Deprecated: listen for `opened-changed` or `closed` instead. The event will be removed in Vaadin 26.
  *
  * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-context-menu

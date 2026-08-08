@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { arrowDownKeyDown, arrowUpKeyDown, fixtureSync, mousedown, nextRender } from '@vaadin/testing-helpers';
+import { arrowDownKeyDown, arrowUpKeyDown, fire, fixtureSync, mousedown, nextRender } from '@vaadin/testing-helpers';
 import '@vaadin/context-menu/src/vaadin-context-menu.js';
 import { getMenuItems, getSubMenu } from '@vaadin/context-menu/test/helpers.js';
 import { isLastOverlay } from '@vaadin/overlay/src/vaadin-overlay-stack-mixin.js';
@@ -173,6 +173,21 @@ describe('context-menu with tooltip', () => {
     await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
     await nextRender();
     expect(isLastOverlay(tooltipOverlay)).to.be.true;
+  });
+
+  it('should close all menus on outside click while the tooltip is on top', async () => {
+    contextMenu.items = [{ text: 'Parent', tooltip: 'Parent tooltip', children: [{ text: 'Child 0' }] }];
+    await sendMouseToElement({ type: 'click', element: target });
+    await nextRender();
+    await sendMouseToElement({ type: 'move', element: getMenuItems(contextMenu)[0] });
+    await nextRender();
+    expect(isLastOverlay(tooltipOverlay)).to.be.true;
+
+    // Use a synthetic click to keep the mouse over the item,
+    // so that the tooltip overlay stays on top of the stack.
+    fire(document.documentElement, 'click');
+    expect(contextMenu.opened).to.be.false;
+    expect(getSubMenu(contextMenu).opened).to.be.false;
   });
 
   it('should use per-item tooltipPosition over the default', async () => {

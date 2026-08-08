@@ -18,4 +18,12 @@ export declare class MenuOverlayMixinClass {
    * Returns the adjusted boundaries of the overlay.
    */
   getBoundaries(): { xMax: number; xMin: number; yMax: number };
+
+  /**
+   * Override method from `OverlayMixin` to ignore clicks inside any overlay
+   * of the same menu, and to only close the whole menu from its topmost
+   * overlay. Overlays that do not belong to the menu (e.g. a tooltip shown
+   * for a menu item) may be on top of the stack and must not block closing.
+   */
+  protected _shouldCloseOnOutsideClick(event: Event): boolean;
 }

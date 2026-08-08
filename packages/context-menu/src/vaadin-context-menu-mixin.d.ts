@@ -38,7 +38,10 @@ export declare class ContextMenuMixinClass {
   listenOn: HTMLElement;
 
   /**
-   * Event name to listen for closing the context menu.
+   * Event name to listen for closing the context menu. The listener is
+   * added to the overlay, so events from the overlay content close the
+   * menu. When empty, events inside the overlay do not close the menu;
+   * outside click and Escape still do.
    * @attr {string} close-on
    */
   closeOn: string;

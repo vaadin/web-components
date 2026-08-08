@@ -126,23 +126,6 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
       this.parentElement._close();
     }
   }
-
-  /**
-   * Override method from `ContextMenuMixin` to prevent closing
-   * sub-menu on the same click event that was used to open it.
-   *
-   * @param {Event} event
-   * @return {boolean}
-   * @protected
-   * @override
-   */
-  _shouldCloseOnOutsideClick(event) {
-    if (this.hasAttribute('is-root') && event.composedPath().includes(this.listenOn)) {
-      return false;
-    }
-
-    return super._shouldCloseOnOutsideClick(event);
-  }
 }
 
 defineCustomElement(MenuBarSubmenu);
