@@ -280,4 +280,46 @@ describe('vaadin-details', () => {
       expect(details.opened).to.be.false;
     });
   });
+
+  describe('summary-suffix slot', () => {
+    let suffix;
+
+    beforeEach(async () => {
+      details = fixtureSync(`
+        <vaadin-details summary="Summary">
+          <div slot="summary-suffix">Suffix</div>
+          <div>Content</div>
+        </vaadin-details>
+      `);
+      await nextRender();
+      suffix = details.querySelector('[slot="summary-suffix"]');
+    });
+
+    it('should render a summary-wrapper part in the shadow DOM', () => {
+      const wrapper = details.shadowRoot.querySelector('[part="summary-wrapper"]');
+      expect(wrapper).to.be.ok;
+    });
+
+    it('should render a summary-suffix slot in the shadow DOM', () => {
+      const slot = details.shadowRoot.querySelector('slot[name="summary-suffix"]');
+      expect(slot).to.be.ok;
+    });
+
+    it('should assign the suffix element to the summary-suffix slot', () => {
+      const slot = details.shadowRoot.querySelector('slot[name="summary-suffix"]');
+      expect(slot.assignedNodes()).to.include(suffix);
+    });
+
+    it('should not toggle opened on summary-suffix click', () => {
+      suffix.click();
+      expect(details.opened).to.be.false;
+    });
+
+    it('should still toggle opened on summary click', async () => {
+      const summary = details.querySelector('[slot="summary"]');
+      summary.click();
+      await nextUpdate(details);
+      expect(details.opened).to.be.true;
+    });
+  });
 });
