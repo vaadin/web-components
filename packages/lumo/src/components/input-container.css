@@ -12,6 +12,7 @@
   vaadin-text-area,
   vaadin-combo-box,
   vaadin-time-picker,
+  vaadin-date-picker,
   vaadin-select
 ) {
   padding: var(--lumo-space-xs) 0;
