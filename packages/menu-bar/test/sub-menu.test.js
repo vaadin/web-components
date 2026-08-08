@@ -281,6 +281,22 @@ describe('sub-menu', () => {
     expect(subMenu.opened).to.be.false;
   });
 
+  it('should not move focus to the button on outside click', async () => {
+    buttons[0].click();
+    await nextRender();
+
+    const input = document.createElement('input');
+    document.body.appendChild(input);
+    input.focus();
+
+    document.body.click();
+    await nextRender();
+    expect(subMenu.opened).to.be.false;
+    expect(document.activeElement).to.equal(input);
+
+    input.remove();
+  });
+
   it('should close and dispatch item-selected event on select', async () => {
     buttons[0].click();
     await nextRender();

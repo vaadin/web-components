@@ -95,6 +95,26 @@ describe('items', () => {
     expect(subMenu.opened).to.be.false;
   });
 
+  // On touch, the click opening the second menu closes the first one.
+  (isTouch ? it.skip : it)('should close all menus of every open menu on outside click', async () => {
+    const otherMenu = fixtureSync(`
+      <vaadin-context-menu>
+        <button></button>
+      </vaadin-context-menu>
+    `);
+    otherMenu.openOn = isTouch ? 'click' : 'mouseover';
+    otherMenu.items = [{ text: 'bar-0' }];
+    await nextRender();
+    await openMenu(otherMenu.firstElementChild);
+    expect(rootMenu.opened).to.be.true;
+    expect(otherMenu.opened).to.be.true;
+
+    fire(document.documentElement, 'click');
+    expect(rootMenu.opened).to.be.false;
+    expect(subMenu.opened).to.be.false;
+    expect(otherMenu.opened).to.be.false;
+  });
+
   it('should close all menus on outside click when other overlay is on top', async () => {
     const overlay = fixtureSync('<vaadin-overlay modeless></vaadin-overlay>');
     overlay.renderer = (root) => {

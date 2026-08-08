@@ -255,11 +255,13 @@ export const ItemsMixin = (superClass) =>
       });
 
       // Only the topmost overlay of the menu chain fires the outside click
-      // event, close the whole menu through the `close-all-menus` wiring.
+      // event, close the whole menu by closing the root menu. Do not use
+      // the `close-all-menus` event: menu-bar restores focus to the button
+      // on it, which must not happen on a mouse click elsewhere on the page.
       overlay.addEventListener('vaadin-overlay-outside-click', () => {
         // TODO: remove the deprecated event in Vaadin 26
         this.dispatchEvent(new CustomEvent('items-outside-click'));
-        this.dispatchEvent(new CustomEvent('close-all-menus'));
+        this.__closeAllMenus();
       });
 
       // Open a submenu on click event when a touch device is used.
@@ -523,6 +525,19 @@ export const ItemsMixin = (superClass) =>
     /** @private */
     __updateTheme(component, theme) {
       setOrRemoveAttribute(component, 'theme', theme);
+    }
+
+    /**
+     * Closes the root menu of the menu chain. Closing a menu also
+     * closes its sub-menu, so the whole chain closes level by level.
+     * @private
+     */
+    __closeAllMenus() {
+      if (this.__parentMenu) {
+        this.__parentMenu.__closeAllMenus();
+      } else {
+        this.close();
+      }
     }
 
     close() {

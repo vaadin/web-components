@@ -27,8 +27,8 @@ export declare class MenuOverlayMixinClass {
 
   /**
    * Override method from `OverlayMixin` so that a click inside any overlay
-   * of the same menu is not an outside click, and only the topmost menu
-   * overlay closes the menu.
+   * of the same menu is not an outside click, and only the topmost overlay
+   * of the same menu closes the whole menu.
    */
   protected _shouldCloseOnOutsideClick(event: Event): boolean;
 }

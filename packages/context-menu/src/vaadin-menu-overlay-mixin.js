@@ -109,9 +109,10 @@ export const MenuOverlayMixin = (superClass) =>
     /**
      * Override method from `OverlayMixin` so that a click inside any overlay
      * of the same menu (e.g. an item with a sub-menu or `keepOpen` set) is not
-     * an outside click, and only the topmost menu overlay closes the menu.
-     * Overlays of other types (e.g. a tooltip shown for a menu item) may be
-     * on top of the stack and must not block closing.
+     * an outside click, and only the topmost overlay of the same menu closes
+     * the whole menu. Other overlays (e.g. a tooltip shown for a menu item,
+     * or another menu open at the same time) may be on top of the stack and
+     * must not block closing.
      *
      * @param {Event} event
      * @return {boolean}
@@ -119,13 +120,15 @@ export const MenuOverlayMixin = (superClass) =>
      * @override
      */
     _shouldCloseOnOutsideClick(event) {
+      const rootOverlay = this.__rootOverlay;
+
       // All menu overlay content is slotted through the root menu element,
       // so clicks inside any overlay of the same menu pass through it.
-      if (event.composedPath().includes(this.__rootOverlay.owner)) {
+      if (event.composedPath().includes(rootOverlay.owner)) {
         return false;
       }
 
-      return isLastOverlay(this, (overlay) => overlay.localName === this.localName);
+      return isLastOverlay(this, (overlay) => overlay.__rootOverlay === rootOverlay);
     }
 
     /**
