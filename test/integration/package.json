@@ -27,6 +27,7 @@
     "@vaadin/icon": "25.3.0-alpha9",
     "@vaadin/integer-field": "25.3.0-alpha9",
     "@vaadin/list-box": "25.3.0-alpha9",
+    "@vaadin/master-detail-layout": "25.3.0-alpha9",
     "@vaadin/menu-bar": "25.3.0-alpha9",
     "@vaadin/message-input": "25.3.0-alpha9",
     "@vaadin/multi-select-combo-box": "25.3.0-alpha9",
