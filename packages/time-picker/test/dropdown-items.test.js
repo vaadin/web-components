@@ -93,7 +93,7 @@ describe('value set before attach', () => {
     picker.remove();
   });
 
-  it('should set value to the input when added to the DOM', async () => {
+  it('should select the matching dropdown item when added to the DOM', async () => {
     picker.value = '10:00';
     document.body.appendChild(picker);
     await nextRender();
