@@ -314,29 +314,20 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
     // before this bubble-phase listener.
     this.addEventListener('click', (event) => event.stopPropagation());
 
-    // Close the popover when focus moves on, e.g. to the next field. A
-    // click-triggered popover only closes itself on outside pointer
-    // interaction or Esc, so keyboard navigation — where an outside click
-    // never happens — would otherwise leave it open, and popovers of several
-    // marked fields could pile up. A null relatedTarget is left alone so that
-    // the window losing focus does not close the popover.
-    //
-    // The popover is closed only once the focus transition has settled: while
-    // it is still in progress the document has no focused element, which the
-    // popover overlay reads as focus not having left it, and so it restores
-    // focus to the badge (see OverlayFocusMixin._shouldRestoreFocus). That
-    // restore is itself deferred, so it would land on the badge after the
-    // browser has focused the element the user clicked — clicking a field
-    // input would close the popover but leave the badge focused.
-    this.addEventListener('focusout', (event) => {
-      if (event.relatedTarget && !this.contains(event.relatedTarget)) {
-        setTimeout(() => {
-          // Focus may have moved back into the marker in the meantime.
-          if (!this.contains(getDeepActiveElement())) {
-            this.#closePopover();
-          }
-        });
-      }
+    // Close the popover when focus moves on, e.g. by tabbing to the next
+    // field: a click-triggered popover only closes itself on outside pointer
+    // interaction or Esc, so popovers of several marked fields could pile up.
+    // Where focus ended up is read only once the transition has settled — mid
+    // transition the document has no focused element, which the popover
+    // overlay reads as focus not having left it (see
+    // OverlayFocusMixin._shouldRestoreFocus) and restores focus to the badge,
+    // stealing it from the input the user clicked.
+    this.addEventListener('focusout', () => {
+      setTimeout(() => {
+        if (!this.contains(getDeepActiveElement())) {
+          this.#closePopover();
+        }
+      });
     });
   }
 
