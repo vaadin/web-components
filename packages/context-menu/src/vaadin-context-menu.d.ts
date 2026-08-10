@@ -57,8 +57,14 @@ export interface ContextMenuCustomEventMap<TItem extends ContextMenuItemData = C
 
   'item-selected': ContextMenuItemSelectedEvent<TItem>;
 
+  /**
+   * @deprecated This event is deprecated and will be removed in Vaadin 26. Use `closed` instead.
+   */
   'close-all-menus': Event;
 
+  /**
+   * @deprecated This event is deprecated and will be removed in Vaadin 26. Use `closed` instead.
+   */
   'items-outside-click': Event;
 
   closed: ContextMenuClosedEvent;
@@ -303,8 +309,8 @@ export interface ContextMenuEventMap<TItem extends ContextMenuItemData = Context
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
  * @fires {CustomEvent} closed - Fired when the context menu is closed.
- * @fires {CustomEvent} close-all-menus - Fired when all menus should close, e.g., after pressing Tab or on submenu close.
- * @fires {CustomEvent} items-outside-click - Fired when a click happens outside any open sub-menus.
+ * @fires {CustomEvent} close-all-menus - Fired when all menus should close, e.g., after pressing Tab or on submenu close. This event is deprecated and will be removed in Vaadin 26. Use `closed` instead.
+ * @fires {CustomEvent} items-outside-click - Fired when a click happens outside any open sub-menus. This event is deprecated and will be removed in Vaadin 26. Use `closed` instead.
  */
 declare class ContextMenu<TItem extends ContextMenuItemData = ContextMenuItemData> extends HTMLElement {
   /**
