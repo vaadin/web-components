@@ -51,6 +51,40 @@ describe('outside click', () => {
       });
     });
 
+    describe('click prevention', () => {
+      it('should prevent default on outside click by default', () => {
+        expect(click(parent).defaultPrevented).to.be.true;
+      });
+
+      it('should not prevent default on inside click', () => {
+        expect(click(overlayPart).defaultPrevented).to.be.false;
+      });
+
+      it('should not prevent default on outside click when modeless', () => {
+        // Mimic vaadin-popover, which adds the outside click listener also when modeless
+        overlay._shouldAddGlobalListeners = () => true;
+        overlay.modeless = true;
+
+        const event = click(parent);
+
+        expect(overlay.opened).to.be.false;
+        expect(event.defaultPrevented).to.be.false;
+      });
+
+      it('should not prevent default if vaadin-overlay-outside-click was prevented', () => {
+        overlay.addEventListener('vaadin-overlay-outside-click', (e) => e.preventDefault());
+
+        expect(click(parent).defaultPrevented).to.be.false;
+      });
+
+      it('should not prevent default if vaadin-overlay-close was prevented', () => {
+        overlay.addEventListener('vaadin-overlay-close', (e) => e.preventDefault());
+
+        expect(click(parent).defaultPrevented).to.be.false;
+        expect(overlay.opened).to.be.true;
+      });
+    });
+
     describe('vaadin-overlay-outside-click event', () => {
       it('should fire the event on outside click', () => {
         const spy = sinon.spy();

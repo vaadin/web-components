@@ -557,6 +557,11 @@ export const OverlayMixin = (superClass) =>
 
       if (this.opened && !evt.defaultPrevented) {
         this.close(event);
+
+        // Only for modal overlays which make underlying content non-interactive.
+        if (!this.opened && !this.modeless) {
+          event.preventDefault();
+        }
       }
     }
 

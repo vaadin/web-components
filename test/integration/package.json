@@ -27,6 +27,7 @@
     "@vaadin/icon": "~25.2.7",
     "@vaadin/integer-field": "~25.2.7",
     "@vaadin/list-box": "~25.2.7",
+    "@vaadin/master-detail-layout": "~25.2.7",
     "@vaadin/menu-bar": "~25.2.7",
     "@vaadin/message-input": "~25.2.7",
     "@vaadin/multi-select-combo-box": "~25.2.7",

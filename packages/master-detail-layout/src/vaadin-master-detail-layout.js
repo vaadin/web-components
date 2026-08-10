@@ -488,7 +488,11 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
   }
 
   /** @private */
-  __onBackdropClick() {
+  __onBackdropClick(event) {
+    if (event.defaultPrevented) {
+      return;
+    }
+
     this.dispatchEvent(new CustomEvent('backdrop-click'));
   }
 
