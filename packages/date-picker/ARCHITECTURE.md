@@ -157,13 +157,15 @@ re-validation below reporting the value invalid.
 
 ## What the overlay focuses when it opens
 
-Opening focuses the value, `initialPosition`, or today, and the provider may then report that date disabled.
-The focus stays on it: a disabled date is focusable, so it renders as disabled, `Enter` does nothing, and the
-user moves to another date. Opening on a date that can be selected is what `initialPosition` is for.
+Opening focuses the value when there is one, otherwise `initialPosition`, otherwise today. A date the
+developer named is used as it is: neither a value nor an explicit `initialPosition` is checked against
+anything that might disable it. Only the fallback to today is, and `min`, `max` and `isDateDisabled` can send
+it to the closest of `min` and `max` instead.
 
-`isDateDisabled` leaves a disabled initial date focused in the same way. `_getInitialPosition` steps off such
-a date only when `min` or `max` rules it out, and it honors an explicit `initialPosition` even when something
-else disables that date.
+The provider takes no part in that choice. Those checks are synchronous, while the answer for the month may
+still be on its way, so a date the provider goes on to report disabled ends up focused — and stays focused. A
+disabled date is focusable, so it renders as disabled, `Enter` does nothing, and the user moves to another
+date. Opening on a date that can be selected is what `initialPosition` is for.
 
 Moving the focus would have to find somewhere to move it to, and a search can only trust the months already
 loaded. Since an unanswered date counts as selectable, the search stops at the first date nothing is known
