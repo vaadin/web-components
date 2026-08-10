@@ -115,6 +115,10 @@ describe('items', () => {
   });
 
   it('should close all menus on click on the menu light DOM content', () => {
+    // Unlike a real click, a synthetic one is not blocked by the modal
+    // overlay, so on touch it would also open the menu again.
+    rootMenu.openOn = 'mouseover';
+
     target.click();
     expect(rootMenu.opened).to.be.false;
     expect(subMenu.opened).to.be.false;
