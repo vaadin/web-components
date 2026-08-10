@@ -634,6 +634,152 @@ describe('ai field marker', () => {
     });
   });
 
+  describe('confidence', () => {
+    let marker: AiFieldMarker;
+
+    function getConfidenceNode(host: HTMLElement = field): HTMLSpanElement | null {
+      return host.querySelector(':scope > [slot="helper"].confidence');
+    }
+
+    beforeEach(async () => {
+      marker = mark(field, { confidence: 'low' });
+      await nextRender();
+    });
+
+    it('should render the confidence indicator into the field helper slot', () => {
+      const node = getConfidenceNode()!;
+      expect(node).to.exist;
+      expect(node.textContent).to.equal('Low confidence');
+      expect(node.assignedSlot).to.exist;
+      expect(node.assignedSlot!.name).to.equal('helper');
+      expect(node.assignedSlot!.getRootNode()).to.equal(field.shadowRoot);
+    });
+
+    it('should have the confidence level as a class name', () => {
+      expect(getConfidenceNode()!.classList.contains('low')).to.be.true;
+    });
+
+    it('should set the ai-confidence attribute on the field', () => {
+      expect(field.getAttribute('ai-confidence')).to.equal('low');
+    });
+
+    it('should show the helper text section for a field without a helper', () => {
+      const helperPart = field.shadowRoot!.querySelector('[part="helper-text"]')!;
+      expect(getComputedStyle(helperPart).display).to.not.equal('none');
+    });
+
+    it('should update the indicator when the confidence changes', async () => {
+      marker.confidence = 'high';
+      await nextUpdate(marker);
+
+      const node = getConfidenceNode()!;
+      expect(node.classList.contains('high')).to.be.true;
+      expect(node.classList.contains('low')).to.be.false;
+      expect(node.textContent).to.equal('High confidence');
+      expect(field.getAttribute('ai-confidence')).to.equal('high');
+    });
+
+    it('should remove the indicator when the confidence is cleared', async () => {
+      marker.confidence = null;
+      await nextUpdate(marker);
+
+      expect(getConfidenceNode()).to.be.null;
+      expect(field.hasAttribute('ai-confidence')).to.be.false;
+    });
+
+    it('should remove the indicator when the marker is removed', async () => {
+      marker.remove();
+      await nextRender();
+
+      expect(getConfidenceNode()).to.be.null;
+      expect(field.hasAttribute('ai-confidence')).to.be.false;
+    });
+
+    it('should render the indicator when confidence is set after adding', async () => {
+      const plainField = fixtureSync<TextField>(`<vaadin-text-field label="Name"></vaadin-text-field>`);
+      await nextRender();
+      const plainMarker = mark(plainField);
+      await nextRender();
+      expect(getConfidenceNode(plainField)).to.be.null;
+
+      plainMarker.confidence = 'medium';
+      await nextUpdate(plainMarker);
+
+      const node = getConfidenceNode(plainField)!;
+      expect(node.textContent).to.equal('Medium confidence');
+      expect(plainField.getAttribute('ai-confidence')).to.equal('medium');
+    });
+
+    it('should render the indicator again when the marker is re-added', async () => {
+      marker.remove();
+      await nextRender();
+      field.appendChild(marker);
+      await nextRender();
+
+      expect(getConfidenceNode()).to.exist;
+      expect(field.getAttribute('ai-confidence')).to.equal('low');
+    });
+
+    it('should keep the field helper text alongside the indicator', async () => {
+      field.helperText = 'Keep it short';
+      await nextRender();
+
+      const helper = field.querySelector(':scope > [slot="helper"]:not(.confidence)')!;
+      expect(helper.textContent).to.equal('Keep it short');
+      expect(helper.assignedSlot).to.exist;
+      expect(getConfidenceNode()!.assignedSlot).to.exist;
+    });
+
+    it('should not evict an existing field helper', async () => {
+      const helperField = fixtureSync<TextField>(
+        `<vaadin-text-field label="Name" helper-text="Keep it short"></vaadin-text-field>`,
+      );
+      await nextRender();
+      const helper = helperField.querySelector(':scope > [slot="helper"]')!;
+
+      mark(helperField, { confidence: 'high' });
+      await nextRender();
+
+      expect(helper.isConnected).to.be.true;
+      expect(helper.assignedSlot).to.exist;
+      expect(getConfidenceNode(helperField)).to.exist;
+    });
+
+    it('should describe the field input via aria-describedby', () => {
+      const ids = field.inputElement.getAttribute('aria-describedby')!.split(' ');
+      expect(ids).to.include(getConfidenceNode()!.id);
+    });
+
+    it('should remove the indicator description when the confidence is cleared', async () => {
+      const nodeId = getConfidenceNode()!.id;
+      marker.confidence = null;
+      await nextUpdate(marker);
+
+      expect(field.inputElement.getAttribute('aria-describedby') || '').to.not.contain(nodeId);
+    });
+
+    it('should hide the indicator while the AI is working', async () => {
+      marker.working = true;
+      await nextUpdate(marker);
+
+      expect(getComputedStyle(getConfidenceNode()!).display).to.equal('none');
+    });
+
+    it('should apply localized confidence texts', async () => {
+      marker.i18n = { confidence: { low: 'Matala luottamus' } };
+      await nextUpdate(marker);
+
+      expect(getConfidenceNode()!.textContent).to.equal('Matala luottamus');
+    });
+
+    it('should keep the default texts for levels not provided', async () => {
+      marker.i18n = { confidence: { high: 'Korkea luottamus' } };
+      await nextUpdate(marker);
+
+      expect(getConfidenceNode()!.textContent).to.equal('Low confidence');
+    });
+  });
+
   describe('revert', () => {
     let marker: AiFieldMarker;
     let revertButton: HTMLButtonElement;

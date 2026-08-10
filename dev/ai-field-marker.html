@@ -74,6 +74,8 @@
           // Show the "AI is working" state while the fill is in progress.
           const marker = document.createElement('vaadin-ai-field-marker');
           marker.working = true;
+          // Show the confidence level of the filled value in the helper section.
+          marker.confidence = ['low', 'medium', 'high'][Math.floor(3 * random())];
           field.appendChild(marker);
         });
 

@@ -22,6 +22,22 @@ export const aiFieldMarkerHostStyles = css`
       mask-image: none;
     }
   }
+
+  /* Show the helper text section while it holds the confidence indicator,
+     even for a field that has no helper of its own: the indicator is hidden
+     from the field's helper slot controller (see the marker source), so the
+     field does not set its own has-helper attribute for it. The custom
+     properties mirror the field's has-helper toggles, so the label and error
+     message keep the spacing they have next to a helper. Not applied while
+     the AI is working, when the indicator is hidden along with the marker. */
+  :host([ai-confidence]:not([ai-working])) {
+    --_has-helper: initial;
+    --_no-helper: ;
+  }
+
+  :host([ai-confidence]:not([ai-working])) [part='helper-text'] {
+    display: block;
+  }
 `;
 
 /**
@@ -179,6 +195,49 @@ export const aiFieldMarkerStyles = css`
         mask: var(--_vaadin-icon-undo);
       }
     }
+  }
+
+  /* The confidence indicator: a sibling of the marker slotted into the
+     field's helper text section. The level class name (low, medium, high)
+     picks the color and how much of the pie icon is filled. */
+  :has(> vaadin-ai-field-marker) > [slot='helper'].confidence {
+    display: flex;
+    align-items: center;
+    gap: var(--vaadin-gap-s);
+    color: var(--_vaadin-ai-field-marker-confidence-color);
+
+    &::before {
+      content: '';
+      flex: none;
+      box-sizing: border-box;
+      width: var(--vaadin-icon-size, 1lh);
+      height: var(--vaadin-icon-size, 1lh);
+      border: 1px solid color-mix(in srgb, currentColor 50%, transparent);
+      border-radius: 50%;
+      background-color: color-mix(in srgb, currentColor 15%, transparent);
+      background-image: conic-gradient(currentColor var(--_vaadin-ai-field-marker-confidence-fill, 0%), #0000 0%);
+    }
+
+    &.low {
+      --_vaadin-ai-field-marker-confidence-color: light-dark(#c5352e, #f2827b);
+      --_vaadin-ai-field-marker-confidence-fill: 25%;
+    }
+
+    &.medium {
+      --_vaadin-ai-field-marker-confidence-color: light-dark(#96640f, #e0b352);
+      --_vaadin-ai-field-marker-confidence-fill: 50%;
+    }
+
+    &.high {
+      --_vaadin-ai-field-marker-confidence-color: light-dark(#207c3c, #6ec886);
+      --_vaadin-ai-field-marker-confidence-fill: 75%;
+    }
+  }
+
+  /* While the AI is working, the confidence describes a value that is about
+     to be replaced, so hide it along with the marker. */
+  [ai-working] > [slot='helper'].confidence {
+    display: none;
   }
 
   [ai-working],

@@ -87,6 +87,20 @@ describe('ai-field-marker', () => {
     });
   });
 
+  describe('confidence', () => {
+    beforeEach(async () => {
+      await createField();
+    });
+
+    (['low', 'medium', 'high'] as const).forEach((confidence) => {
+      it(confidence, async () => {
+        mark({ confidence });
+        await nextRender();
+        await visualDiff(div, `ai-marker-confidence-${confidence}`);
+      });
+    });
+  });
+
   describe('working', () => {
     beforeEach(async () => {
       await createField();
