@@ -70,6 +70,33 @@ describe('dropdown items', () => {
     expect(timePicker.value).to.be.equal('01:00:00.000');
     timePicker.step = 3600;
     expect(timePicker.value).to.be.equal('01:00');
-    expect(timePicker._scroller.selectedItem).to.deep.equal(timePicker._dropdownItems[1]);
+    expect(timePicker._scroller.selectedItem).to.equal(timePicker._dropdownItems[1]);
+  });
+
+  ['min', 'max'].forEach((constraint) => {
+    it(`should keep the matching item selected after regenerating items on ${constraint} change`, () => {
+      timePicker.value = '10:00';
+      timePicker[constraint] = constraint === 'min' ? '01:00' : '23:00';
+      expect(timePicker._dropdownItems).to.include(timePicker._scroller.selectedItem);
+    });
+  });
+});
+
+describe('value set before attach', () => {
+  let picker;
+
+  beforeEach(() => {
+    picker = document.createElement('vaadin-time-picker');
+  });
+
+  afterEach(() => {
+    picker.remove();
+  });
+
+  it('should set value to the input when added to the DOM', async () => {
+    picker.value = '10:00';
+    document.body.appendChild(picker);
+    await nextRender();
+    expect(picker._scroller.selectedItem).to.equal(picker._dropdownItems[10]);
   });
 });
