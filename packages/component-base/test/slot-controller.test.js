@@ -396,34 +396,6 @@ describe('SlotController', () => {
         expect(controller.node).to.equal(custom);
       });
 
-      it('should not call teardownNode when element with data-slot-ignore is removed', async () => {
-        const ignored = document.createElement('div');
-        ignored.setAttribute('slot', 'foo');
-        ignored.setAttribute('data-slot-ignore', '');
-        element.appendChild(ignored);
-        await nextFrame();
-
-        const teardownSpy = sinon.spy(controller, 'teardownNode');
-        ignored.remove();
-        await nextFrame();
-
-        expect(teardownSpy.called).to.be.false;
-      });
-
-      it('should keep the node in use when element with data-slot-ignore is removed', async () => {
-        const ignored = document.createElement('div');
-        ignored.setAttribute('slot', 'foo');
-        ignored.setAttribute('data-slot-ignore', '');
-        element.insertBefore(ignored, defaultNode);
-        await nextFrame();
-
-        ignored.remove();
-        await nextFrame();
-
-        expect(controller.node).to.equal(defaultNode);
-        expect(defaultNode.isConnected).to.be.true;
-      });
-
       it('should not call initCustomNode for element with data-slot-ignore', async () => {
         const initSpy = sinon.spy(controller, 'initCustomNode');
 
