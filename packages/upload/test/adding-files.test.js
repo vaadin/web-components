@@ -122,6 +122,18 @@ describe('adding files', () => {
       expect(upload.files).to.have.lengthOf(0);
     });
 
+    it('should not throw when calling the protected _removeFile method without a file', async () => {
+      upload.noAuto = true;
+      addFilesViaInput(upload, [files[0]]);
+      await nextUpdate(upload);
+
+      // Calls the protected method directly, like UploadElement in flow-components
+      // does: its removeFile(index) evaluates `_removeFile(files[index])`, which
+      // passes undefined when there is no file with the given index
+      expect(() => upload._removeFile()).to.not.throw();
+      expect(upload.files).to.have.lengthOf(1);
+    });
+
     describe('uploading assigned files', () => {
       let clock;
 

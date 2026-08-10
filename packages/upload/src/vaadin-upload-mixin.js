@@ -787,10 +787,16 @@ export const UploadMixin = (superClass) =>
 
     /**
      * Remove file from upload list. Called internally if file upload was canceled.
+     * Does nothing when called without a file.
      * @param {!UploadFile} file File to remove
      * @protected
      */
     _removeFile(file) {
+      // Tolerate a missing file to keep the historical no-op behavior,
+      // which e.g. UploadElement.removeFile(index) in Flow relies on
+      if (!file) {
+        return;
+      }
       this._manager.removeFile(file);
     }
 
