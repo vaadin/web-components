@@ -698,7 +698,10 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
       // the indicator. The browser still renders it in the helper slot.
       node.setAttribute('data-slot-ignore', '');
       node.id = `ai-field-marker-confidence-${generateUniqueId()}`;
-      field.appendChild(node);
+      // Insert ahead of a helper the field already has, so that the indicator
+      // comes first in the helper text section. A helper added later ends up
+      // after the indicator, since the field appends it.
+      field.insertBefore(node, field.querySelector(':scope > [slot="helper"]'));
       if (this.#describedElement) {
         addValuesToAttribute(this.#describedElement, 'aria-describedby', node.id);
       }

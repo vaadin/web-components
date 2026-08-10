@@ -745,6 +745,78 @@ describe('ai field marker', () => {
       expect(getConfidenceNode(helperField)).to.exist;
     });
 
+    describe('order', () => {
+      let helperField: TextField;
+
+      /** The helper slot content in rendered order. */
+      function getHelperNodes(host: HTMLElement = helperField): Element[] {
+        return [...host.querySelectorAll(':scope > [slot="helper"]')];
+      }
+
+      beforeEach(async () => {
+        helperField = fixtureSync<TextField>(
+          `<vaadin-text-field label="Name" helper-text="Keep it short"></vaadin-text-field>`,
+        );
+        await nextRender();
+      });
+
+      it('should render the indicator before an existing field helper', async () => {
+        mark(helperField, { confidence: 'low' });
+        await nextRender();
+
+        expect(getHelperNodes()[0]).to.equal(getConfidenceNode(helperField));
+        expect(getHelperNodes().map((node) => node.textContent)).to.eql(['Low confidence', 'Keep it short']);
+      });
+
+      it('should render the indicator before a helper added after marking', async () => {
+        const plainField = fixtureSync<TextField>(`<vaadin-text-field label="Name"></vaadin-text-field>`);
+        await nextRender();
+        mark(plainField, { confidence: 'low' });
+        await nextRender();
+
+        plainField.helperText = 'Keep it short';
+        await nextRender();
+
+        expect(getHelperNodes(plainField).map((node) => node.textContent)).to.eql(['Low confidence', 'Keep it short']);
+      });
+
+      it('should render the indicator before a custom slotted helper', async () => {
+        const customHelper = document.createElement('span');
+        customHelper.setAttribute('slot', 'helper');
+        customHelper.textContent = 'Custom helper';
+        helperField.appendChild(customHelper);
+        await nextRender();
+
+        mark(helperField, { confidence: 'low' });
+        await nextRender();
+
+        expect(getHelperNodes()[0]).to.equal(getConfidenceNode(helperField));
+      });
+
+      it('should keep the indicator first when the field is marked again', async () => {
+        mark(helperField, { confidence: 'low' }).remove();
+        // Re-marking right away is what a host does when a new AI fill starts.
+        mark(helperField, { confidence: 'high' });
+        await nextRender();
+
+        expect(getHelperNodes().map((node) => node.textContent)).to.eql(['High confidence', 'Keep it short']);
+      });
+
+      it('should keep the indicator first across consecutive AI fills', async () => {
+        // A host filling the same field twice: unmark, re-mark as working,
+        // then let the fill land.
+        for (const confidence of ['low', 'high'] as const) {
+          helperField.querySelector('vaadin-ai-field-marker')?.remove();
+          const marker = mark(helperField, { confidence, working: true });
+          await nextRender();
+          marker.working = false;
+          await nextUpdate(marker);
+        }
+
+        expect(getHelperNodes().map((node) => node.textContent)).to.eql(['High confidence', 'Keep it short']);
+      });
+    });
+
     it('should describe the field input via aria-describedby', () => {
       const ids = field.inputElement.getAttribute('aria-describedby')!.split(' ');
       expect(ids).to.include(getConfidenceNode()!.id);

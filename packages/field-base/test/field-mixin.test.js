@@ -329,6 +329,58 @@ describe('FieldMixin', () => {
       });
     });
 
+    describe('ignored slot content', () => {
+      // Content another component slots into the helper slot without taking
+      // the slot over, e.g. the AI field marker's confidence indicator.
+      let ignored;
+
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag} helper-text="3 digits"></${tag}>`);
+        await nextRender();
+        helper = element.querySelector('[slot=helper]');
+
+        ignored = document.createElement('span');
+        ignored.setAttribute('slot', 'helper');
+        ignored.setAttribute('data-slot-ignore', '');
+        element.insertBefore(ignored, helper);
+        await nextRender();
+      });
+
+      it('should keep the helper element when ignored content is added', () => {
+        expect(helper.isConnected).to.be.true;
+        expect(element.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('should keep the helper element in place when ignored content is removed', async () => {
+        ignored.remove();
+        await nextRender();
+
+        expect(element.querySelector('[slot=helper]')).to.equal(helper);
+        expect(helper.textContent).to.equal('3 digits');
+        expect(element.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('should not move the helper element when ignored content is replaced', async () => {
+        // Appended after the helper, the way a component that does not care
+        // about the order adds its content.
+        const appended = document.createElement('span');
+        appended.setAttribute('slot', 'helper');
+        appended.setAttribute('data-slot-ignore', '');
+        element.appendChild(appended);
+        await nextRender();
+
+        // Replacing the content in one go, the way re-marking a field does.
+        appended.remove();
+        const replacement = document.createElement('span');
+        replacement.setAttribute('slot', 'helper');
+        replacement.setAttribute('data-slot-ignore', '');
+        element.appendChild(replacement);
+        await nextRender();
+
+        expect([...element.querySelectorAll('[slot=helper]')]).to.eql([ignored, helper, replacement]);
+      });
+    });
+
     describe('unique id', () => {
       let helper1, helper2;
 

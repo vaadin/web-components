@@ -8,6 +8,18 @@ import { SlotObserver } from './slot-observer.js';
 import { generateUniqueId } from './unique-id-utils.js';
 
 /**
+ * Whether the node is explicitly excluded from slot management with the
+ * `data-slot-ignore` attribute, e.g. content another component slots into
+ * the host without taking the slot over from the host's own content.
+ *
+ * @param {Node} node
+ * @return {boolean}
+ */
+function isIgnoredNode(node) {
+  return node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('data-slot-ignore');
+}
+
+/**
  * A controller for providing content to slot element and observing changes.
  */
 export class SlotController extends EventTarget {
@@ -130,7 +142,7 @@ export class SlotController extends EventTarget {
     const { slotName } = this;
     return Array.from(this.host.childNodes).filter((node) => {
       // Ignore nodes with data-slot-ignore attribute
-      if (node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('data-slot-ignore')) {
+      if (isIgnoredNode(node)) {
         return false;
       }
       // Either an element (any slot) or a text node (only un-named slot).
@@ -210,16 +222,18 @@ export class SlotController extends EventTarget {
       // unlike comment nodes, they are not filtered out. So we need to manually ignore them.
       // Also ignore nodes with data-slot-ignore attribute.
       const newNodes = addedNodes.filter(
-        (node) =>
-          !isEmptyTextNode(node) &&
-          !current.includes(node) &&
-          !(node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('data-slot-ignore')),
+        (node) => !isEmptyTextNode(node) && !current.includes(node) && !isIgnoredNode(node),
       );
 
-      if (removedNodes.length) {
-        this.nodes = current.filter((node) => !removedNodes.includes(node));
+      // Ignored nodes were never adopted by the controller, so their removal
+      // must not tear down the node that is in use, which would restore the
+      // default node and move it to the end of the host's child nodes.
+      const goneNodes = removedNodes.filter((node) => !isIgnoredNode(node));
 
-        removedNodes.forEach((node) => {
+      if (goneNodes.length) {
+        this.nodes = current.filter((node) => !goneNodes.includes(node));
+
+        goneNodes.forEach((node) => {
           this.teardownNode(node);
         });
       }

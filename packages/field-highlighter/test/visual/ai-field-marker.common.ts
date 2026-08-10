@@ -99,6 +99,14 @@ describe('ai-field-marker', () => {
         await visualDiff(div, `ai-marker-confidence-${confidence}`);
       });
     });
+
+    it('helper text', async () => {
+      // The indicator comes first in the helper text section.
+      field.helperText = 'Keep it short, just one value';
+      mark({ confidence: 'medium' });
+      await nextRender();
+      await visualDiff(div, 'ai-marker-confidence-helper-text');
+    });
   });
 
   describe('working', () => {
