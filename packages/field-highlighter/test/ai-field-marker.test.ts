@@ -668,6 +668,73 @@ describe('ai field marker', () => {
       expect(getComputedStyle(helperPart).display).to.not.equal('none');
     });
 
+    describe('has-helper', () => {
+      it('should set has-helper on the field while the indicator is shown', () => {
+        expect(field.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('should toggle has-helper when the confidence is set and cleared', async () => {
+        marker.confidence = null;
+        await nextUpdate(marker);
+        expect(field.hasAttribute('has-helper')).to.be.false;
+
+        marker.confidence = 'high';
+        await nextUpdate(marker);
+        expect(field.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('should remove has-helper when the marker is removed', async () => {
+        marker.remove();
+        await nextRender();
+
+        expect(field.hasAttribute('has-helper')).to.be.false;
+      });
+
+      it('should not set has-helper while the AI is working', async () => {
+        marker.working = true;
+        await nextUpdate(marker);
+        expect(field.hasAttribute('has-helper')).to.be.false;
+
+        marker.working = false;
+        await nextUpdate(marker);
+        expect(field.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('should keep has-helper for a field that has a helper of its own', async () => {
+        field.helperText = 'Keep it short';
+        await nextRender();
+
+        marker.confidence = null;
+        await nextUpdate(marker);
+
+        expect(field.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('should re-assert has-helper when the field drops it', async () => {
+        field.helperText = 'Keep it short';
+        await nextRender();
+
+        // Clearing the helper makes the field recompute the attribute from its
+        // own helper content, which does not include the indicator.
+        field.helperText = '';
+        await nextRender();
+
+        expect(field.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('should stop re-asserting has-helper once the indicator is gone', async () => {
+        marker.confidence = null;
+        await nextUpdate(marker);
+
+        field.helperText = 'Keep it short';
+        await nextRender();
+        field.helperText = '';
+        await nextRender();
+
+        expect(field.hasAttribute('has-helper')).to.be.false;
+      });
+    });
+
     it('should update the indicator when the confidence changes', async () => {
       marker.confidence = 'high';
       await nextUpdate(marker);

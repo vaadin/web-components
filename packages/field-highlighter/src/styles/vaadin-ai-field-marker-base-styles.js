@@ -22,22 +22,6 @@ export const aiFieldMarkerHostStyles = css`
       mask-image: none;
     }
   }
-
-  /* Show the helper text section while it holds the confidence indicator,
-     even for a field that has no helper of its own: the indicator is hidden
-     from the field's helper slot controller (see the marker source), so the
-     field does not set its own has-helper attribute for it. The custom
-     properties mirror the field's has-helper toggles, so the label and error
-     message keep the spacing they have next to a helper. Not applied while
-     the AI is working, when the indicator is hidden along with the marker. */
-  :host([ai-confidence]:not([ai-working])) {
-    --_has-helper: initial;
-    --_no-helper: ;
-  }
-
-  :host([ai-confidence]:not([ai-working])) [part='helper-text'] {
-    display: block;
-  }
 `;
 
 /**

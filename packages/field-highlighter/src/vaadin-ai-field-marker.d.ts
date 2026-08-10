@@ -64,7 +64,9 @@ export type AiFieldRevertEvent = CustomEvent<{ value: unknown }>;
  *
  * Set the `confidence` property to show the confidence level of the filled
  * value (`low`, `medium` or `high`) as an indicator in the field's helper
- * text section, alongside a helper the field itself may have.
+ * text section, ahead of a helper the field itself may have. While the
+ * indicator is shown, the field is marked with `has-helper`, so that the
+ * helper text section is laid out the same as for a helper of its own.
  *
  * ### Styling
  *

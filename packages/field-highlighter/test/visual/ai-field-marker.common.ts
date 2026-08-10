@@ -107,6 +107,22 @@ describe('ai-field-marker', () => {
       await nextRender();
       await visualDiff(div, 'ai-marker-confidence-helper-text');
     });
+
+    it('helper above field', async () => {
+      // The helper text section, indicator included, moves above the field.
+      field.setAttribute('theme', 'helper-above-field');
+      field.helperText = 'Keep it short, just one value';
+      mark({ confidence: 'medium' });
+      await nextRender();
+      await visualDiff(div, 'ai-marker-confidence-helper-above-field');
+    });
+
+    it('helper above field without helper text', async () => {
+      field.setAttribute('theme', 'helper-above-field');
+      mark({ confidence: 'medium' });
+      await nextRender();
+      await visualDiff(div, 'ai-marker-confidence-helper-above-field-only');
+    });
   });
 
   describe('working', () => {
