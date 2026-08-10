@@ -252,6 +252,15 @@ describe('items', () => {
       expect(spy).to.be.calledOnce;
     });
 
+    it('should not fire on outside click when the menu is closed', async () => {
+      rootMenu.close();
+      await nextRender();
+      const spy = sinon.spy();
+      rootMenu.addEventListener('items-outside-click', spy);
+      outsideClick();
+      expect(spy).to.not.be.called;
+    });
+
     it('should not fire on click inside the menu', () => {
       const spy = sinon.spy();
       rootMenu.addEventListener('items-outside-click', spy);
