@@ -148,7 +148,7 @@ describe('items', () => {
     it('should not fire on click inside the menu', () => {
       const spy = sinon.spy();
       rootMenu.addEventListener('items-outside-click', spy);
-      getMenuItems(subMenu)[3].click();
+      getMenuItems(subMenu)[4].click();
       expect(spy).to.not.be.called;
     });
   });
@@ -360,7 +360,7 @@ describe('items', () => {
   });
 
   it('should not close the menu if sub menu item has keep open', () => {
-    getMenuItems(subMenu)[3].click();
+    getMenuItems(subMenu)[4].click();
     expect(rootMenu.opened).to.be.true;
     expect(subMenu.opened).to.be.true;
   });
