@@ -265,7 +265,7 @@ export const TimePickerMixin = (superClass) =>
         opened,
         focusedIndex,
         theme,
-        selectedItem: items?.find((item) => item.value === comboBoxValue),
+        selectedItem: items && items.find((item) => item.value === comboBoxValue),
       });
     }
 
