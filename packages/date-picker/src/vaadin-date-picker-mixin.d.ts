@@ -307,6 +307,9 @@ export declare class DatePickerMixinClass {
    * marks it disabled. That decides what the calendar renders as disabled, what can be selected, and
    * whether the field is valid.
    *
+   * The date focused when the overlay opens is not moved if the provider reports it disabled. Use
+   * `initialPosition` to open on a date that can be selected.
+   *
    * A value is checked against the provider even if the overlay is never opened, which loads the
    * month holding it. Until that month answers the value is valid, and it is re-validated once the
    * answer arrives, so `checkValidity()` can report a value as valid and then invalid.

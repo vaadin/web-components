@@ -155,6 +155,25 @@ never answers. The window is narrow: reaching a pending month means navigating i
 been loaded yet and clicking before it answers. Such a commit is corrected once the month resolves, by the
 re-validation below reporting the value invalid.
 
+## What the overlay focuses when it opens
+
+Opening focuses the value when there is one, otherwise `initialPosition`, otherwise today. A date the
+developer named is used as it is: neither a value nor an explicit `initialPosition` is checked against
+anything that might disable it. Only the fallback to today is, and `min`, `max` and `isDateDisabled` can send
+it to the closest of `min` and `max` instead.
+
+The provider takes no part in that choice. Those checks are synchronous, while the answer for the month may
+still be on its way, so a date the provider goes on to report disabled ends up focused — and stays focused. A
+disabled date is focusable, so it renders as disabled, `Enter` does nothing, and the user moves to another
+date. Opening on a date that can be selected is what `initialPosition` is for.
+
+Moving the focus would have to find somewhere to move it to, and a search can only trust the months already
+loaded. Since an unanswered date counts as selectable, the search stops at the first date nothing is known
+about; revealing that date asks the provider about it, and the answer can be that it is disabled too — so the
+focus has travelled, possibly months, and still ends up on a disabled date. Treating unanswered dates as
+unselectable instead would keep the search inside the loaded months, and contradict the predicate every other
+caller reads. Either way the focus moves on its own, some time after the user opened the dropdown.
+
 ## When a value counts as valid
 
 Validity reads the same predicate, so what the calendar refuses to select is what the field reports as
