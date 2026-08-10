@@ -10,6 +10,7 @@ import {
   fixtureSync,
   nextFrame,
   nextRender,
+  outsideClick,
   spaceKeyDown,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
@@ -93,11 +94,63 @@ describe('items', () => {
     expect(subMenu.opened).to.be.false;
   });
 
+  // On touch, the click opening the second menu closes the first one.
+  (isTouch ? it.skip : it)('should close all menus of every open menu on outside click', async () => {
+    const otherMenu = fixtureSync(`
+      <vaadin-context-menu>
+        <button></button>
+      </vaadin-context-menu>
+    `);
+    otherMenu.openOn = 'mouseover';
+    otherMenu.items = [{ text: 'bar-0' }];
+    await nextRender();
+    await openMenu(otherMenu.firstElementChild);
+    expect(rootMenu.opened).to.be.true;
+    expect(otherMenu.opened).to.be.true;
+
+    outsideClick();
+    expect(rootMenu.opened).to.be.false;
+    expect(subMenu.opened).to.be.false;
+    expect(otherMenu.opened).to.be.false;
+  });
+
+  it('should close all menus on click on the menu light DOM content', () => {
+    target.click();
+    expect(rootMenu.opened).to.be.false;
+    expect(subMenu.opened).to.be.false;
+  });
+
   it('should remove close listener', () => {
     rootMenu.parentNode.removeChild(rootMenu);
     const spy = sinon.spy(rootMenu, 'close');
     fire(document.documentElement, 'click');
     expect(spy.called).to.be.false;
+  });
+
+  // TODO: remove when the deprecated event is removed in Vaadin 26
+  describe('items-outside-click event', () => {
+    it('should fire on outside click when a sub-menu is open', () => {
+      const spy = sinon.spy();
+      rootMenu.addEventListener('items-outside-click', spy);
+      outsideClick();
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should fire on outside click when only the root menu is open', async () => {
+      subMenu.close();
+      await nextRender();
+      const spy = sinon.spy();
+      rootMenu.addEventListener('items-outside-click', spy);
+      outsideClick();
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should not fire on click inside the menu', () => {
+      const spy = sinon.spy();
+      rootMenu.addEventListener('items-outside-click', spy);
+      getMenuItems(subMenu)[3].click();
+      expect(spy).to.not.be.called;
+    });
   });
 
   (isTouch ? it.skip : it)('should open the subMenu on the right side', () => {
