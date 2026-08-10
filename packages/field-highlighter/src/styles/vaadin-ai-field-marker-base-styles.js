@@ -212,10 +212,14 @@ export const aiFieldMarkerStyles = css`
       box-sizing: border-box;
       width: var(--vaadin-icon-size, 1lh);
       height: var(--vaadin-icon-size, 1lh);
+      /* The padding insets the pie from the ring: the wedge is clipped to the
+         content box, while the tint fills the whole circle behind it. */
+      padding: calc(var(--vaadin-icon-size, 1lh) / 12);
       border: 1px solid color-mix(in srgb, currentColor 50%, transparent);
       border-radius: 50%;
       background-color: color-mix(in srgb, currentColor 15%, transparent);
       background-image: conic-gradient(currentColor var(--_vaadin-ai-field-marker-confidence-fill, 0%), #0000 0%);
+      background-clip: content-box, border-box;
     }
 
     &.low {
