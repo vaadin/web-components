@@ -108,7 +108,7 @@ export const TimePickerMixin = (superClass) =>
     static get observers() {
       return [
         '_openedOrItemsChanged(opened, _dropdownItems)',
-        '_updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
+        '_updateScroller(opened, _dropdownItems, _focusedIndex, _theme, _comboBoxValue)',
         '__updateAriaAttributes(_dropdownItems, opened, inputElement)',
         '__updateDropdownItems(__effectiveI18n, min, max, step)',
       ];
@@ -225,16 +225,6 @@ export const TimePickerMixin = (superClass) =>
       this.addController(this._tooltipController);
     }
 
-    /** @protected */
-    updated(props) {
-      super.updated(props);
-
-      // Update selected item in the scroller
-      if (props.has('_comboBoxValue') && this._dropdownItems) {
-        this._scroller.selectedItem = this._dropdownItems.find((item) => item.value === this._comboBoxValue);
-      }
-    }
-
     /**
      * Returns true if the current input value satisfies all constraints (if any).
      * You can override this method for custom validations.
@@ -259,7 +249,7 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /** @private */
-    _updateScroller(opened, items, focusedIndex, theme) {
+    _updateScroller(opened, items, focusedIndex, theme, comboBoxValue) {
       if (opened) {
         this._scroller.style.maxHeight =
           getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
@@ -270,6 +260,7 @@ export const TimePickerMixin = (superClass) =>
         opened,
         focusedIndex,
         theme,
+        selectedItem: items?.find((item) => item.value === comboBoxValue),
       });
     }
 
