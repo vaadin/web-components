@@ -182,11 +182,14 @@ class Breadcrumbs extends KeyboardDirectionMixin(
     this.$.overlay.restoreFocusNode = this.$.overflow;
 
     // Re-evaluate items on add / remove via a single shadow-root-level observer.
-    this.__slotObserver = new SlotObserver(this.shadowRoot, () => {
-      this.__updateItems();
-      this.__updateOverflow();
-    });
-    this.__slotObserver.flush();
+    this.__slotObserver = new SlotObserver(
+      this.shadowRoot,
+      () => {
+        this.__updateItems();
+        this.__updateOverflow();
+      },
+      { syncInitial: true },
+    );
 
     // Observe `path` attribute changes on items to modify the `current` state.
     this.__pathObserver = new MutationObserver(() => this.__updateItems());
