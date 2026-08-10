@@ -7,7 +7,7 @@ import '@vaadin/popover/src/vaadin-popover.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { html, LitElement, nothing } from 'lit';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
-import { getTabbableElements, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement, getTabbableElements, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
@@ -320,9 +320,22 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
     // never happens — would otherwise leave it open, and popovers of several
     // marked fields could pile up. A null relatedTarget is left alone so that
     // the window losing focus does not close the popover.
+    //
+    // The popover is closed only once the focus transition has settled: while
+    // it is still in progress the document has no focused element, which the
+    // popover overlay reads as focus not having left it, and so it restores
+    // focus to the badge (see OverlayFocusMixin._shouldRestoreFocus). That
+    // restore is itself deferred, so it would land on the badge after the
+    // browser has focused the element the user clicked — clicking a field
+    // input would close the popover but leave the badge focused.
     this.addEventListener('focusout', (event) => {
       if (event.relatedTarget && !this.contains(event.relatedTarget)) {
-        this.#closePopover();
+        setTimeout(() => {
+          // Focus may have moved back into the marker in the meantime.
+          if (!this.contains(getDeepActiveElement())) {
+            this.#closePopover();
+          }
+        });
       }
     });
   }
