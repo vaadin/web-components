@@ -1,0 +1,15 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+vaadin-ai-field-marker :is(.badge, .actions > button):focus-visible {
+  outline: var(--vaadin-focus-ring-width, 2px) solid var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+}
+
+[has-label] > vaadin-ai-field-marker {
+  &::before,
+  .badge {
+    top: calc(var(--lumo-space-m) - 6px);
+  }
+}

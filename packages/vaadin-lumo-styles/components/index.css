@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @import './accordion.css';
+@import './ai-field-marker.css';
 @import './app-layout.css';
 @import './avatar-group.css';
 @import './avatar.css';

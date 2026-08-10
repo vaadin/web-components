@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI field marker</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+
+  <body>
+    <section class="section">
+      <h2 class="heading">AI-filled fields</h2>
+      <vaadin-button id="simulate">Simulate Form Filling</vaadin-button>
+      <vaadin-form-layout>
+        <vaadin-text-field label="Field One" value="Mumbo jumbo"></vaadin-text-field>
+        <vaadin-text-field
+          label="Another Field"
+          value="123455"
+          helper-text="Keep it short, just one value"
+        ></vaadin-text-field>
+        <vaadin-text-field label="The Last Field" value="ABC-DEF-123"></vaadin-text-field>
+        <vaadin-radio-group label="Options">
+          <vaadin-radio-button value="one" label="Option one"></vaadin-radio-button>
+          <vaadin-radio-button value="two" label="Option two"></vaadin-radio-button>
+          <vaadin-radio-button value="three" label="Option three"></vaadin-radio-button>
+        </vaadin-radio-group>
+        <vaadin-text-area label="Notes"></vaadin-text-area>
+      </vaadin-form-layout>
+    </section>
+
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/form-layout';
+      import '@vaadin/text-area';
+      import '@vaadin/text-field';
+      import '@vaadin/radio-group';
+      import '@vaadin/field-highlighter/src/vaadin-ai-field-marker.js';
+
+      const fields = [...document.querySelectorAll('vaadin-form-layout > *')];
+
+      // A random number in [0, 1). Math.random() would do here, but SonarCloud
+      // flags it as security-sensitive.
+      const random = () => crypto.getRandomValues(new Uint32Array(1))[0] / 2 ** 32;
+
+      // Remember the value before the "AI fill" so the revert handler can restore it.
+      const previousValues = new WeakMap();
+
+      const unmark = (field) => field.querySelector('vaadin-ai-field-marker')?.remove();
+
+      // The marker fires this from the field; the host restores the value.
+      fields.forEach((field) => {
+        previousValues.set(field, field.value);
+
+        field.addEventListener('ai-field-revert', () => {
+          field.value = previousValues.get(field) ?? '';
+          unmark(field);
+        });
+
+        field.addEventListener('input', () => {
+          unmark(field);
+        });
+
+        field.addEventListener('change', () => {
+          previousValues.set(field, field.value);
+        });
+      });
+
+      document.querySelector('#simulate').addEventListener('click', () => {
+        fields.forEach((field) => {
+          unmark(field);
+          field.value = previousValues.get(field) ?? '';
+
+          // Show the "AI is working" state while the fill is in progress.
+          const marker = document.createElement('vaadin-ai-field-marker');
+          marker.working = true;
+          field.appendChild(marker);
+        });
+
+        // Mimic an AI fill, then clear the working state to show the mark.
+        window.setTimeout(() => {
+          fields.forEach((field) => {
+            const marker = field.querySelector('vaadin-ai-field-marker');
+
+            if (field.localName === 'vaadin-radio-group') {
+              const items = field.querySelectorAll('vaadin-radio-button');
+              field.value = items[Math.floor(items.length * random())].value;
+            } else {
+              field.value = 'AI value';
+            }
+
+            marker.working = false;
+          });
+        }, 2000 * random());
+      });
+    </script>
+  </body>
+</html>
