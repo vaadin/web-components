@@ -1,0 +1,5 @@
+:has(> vaadin-ai-field-marker) {
+  --vaadin-ai-field-marker-confidence-low-color: var(--aura-red-text);
+  --vaadin-ai-field-marker-confidence-medium-color: var(--aura-yellow-text);
+  --vaadin-ai-field-marker-confidence-high-color: var(--aura-green-text);
+}

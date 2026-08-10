@@ -81,10 +81,13 @@ export type AiFieldRevertEvent = CustomEvent<{ value: unknown }>;
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                         |
- * :-------------------------------------------|
- * `--vaadin-ai-field-marker-badge-icon-color` |
- * `--vaadin-ai-field-marker-mask-pos`         |
+ * Custom CSS property                                  |
+ * :----------------------------------------------------|
+ * `--vaadin-ai-field-marker-badge-icon-color`          |
+ * `--vaadin-ai-field-marker-confidence-high-color`     |
+ * `--vaadin-ai-field-marker-confidence-low-color`      |
+ * `--vaadin-ai-field-marker-confidence-medium-color`   |
+ * `--vaadin-ai-field-marker-mask-pos`                  |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

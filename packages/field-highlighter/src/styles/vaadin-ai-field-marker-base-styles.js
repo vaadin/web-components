@@ -222,18 +222,30 @@ export const aiFieldMarkerStyles = css`
       background-clip: content-box, border-box;
     }
 
+    /* The levels are told apart by how much of the pie is filled, so the base
+       styles keep them in the same neutral color. The themes map the custom
+       properties to their own semantic colors. */
     &.low {
-      --_vaadin-ai-field-marker-confidence-color: light-dark(#c5352e, #f2827b);
+      --_vaadin-ai-field-marker-confidence-color: var(
+        --vaadin-ai-field-marker-confidence-low-color,
+        var(--vaadin-text-color-secondary)
+      );
       --_vaadin-ai-field-marker-confidence-fill: 25%;
     }
 
     &.medium {
-      --_vaadin-ai-field-marker-confidence-color: light-dark(#96640f, #e0b352);
+      --_vaadin-ai-field-marker-confidence-color: var(
+        --vaadin-ai-field-marker-confidence-medium-color,
+        var(--vaadin-text-color-secondary)
+      );
       --_vaadin-ai-field-marker-confidence-fill: 50%;
     }
 
     &.high {
-      --_vaadin-ai-field-marker-confidence-color: light-dark(#207c3c, #6ec886);
+      --_vaadin-ai-field-marker-confidence-color: var(
+        --vaadin-ai-field-marker-confidence-high-color,
+        var(--vaadin-text-color-secondary)
+      );
       --_vaadin-ai-field-marker-confidence-fill: 75%;
     }
   }

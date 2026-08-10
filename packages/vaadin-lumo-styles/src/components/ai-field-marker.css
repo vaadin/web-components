@@ -13,3 +13,9 @@ vaadin-ai-field-marker :is(.badge, .actions > button):focus-visible {
     top: calc(var(--lumo-space-m) - 6px);
   }
 }
+
+:has(> vaadin-ai-field-marker) {
+  --vaadin-ai-field-marker-confidence-low-color: var(--lumo-error-text-color);
+  --vaadin-ai-field-marker-confidence-medium-color: var(--lumo-warning-text-color);
+  --vaadin-ai-field-marker-confidence-high-color: var(--lumo-success-text-color);
+}
