@@ -133,6 +133,12 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
     this.__iconSlotObserver = new SlotObserver(iconSlot, ({ currentNodes }) => {
       this.toggleAttribute('has-icon', currentNodes.length > 0);
     });
+
+    // Resolve the slot state synchronously so that the badge has its final size as soon as it is
+    // connected. Otherwise, consumers that measure content synchronously, e.g. auto-width columns
+    // in vaadin-grid, would measure a badge whose content is still hidden by `display: none`.
+    this.__slotObserver.flush();
+    this.__iconSlotObserver.flush();
   }
 }
 
