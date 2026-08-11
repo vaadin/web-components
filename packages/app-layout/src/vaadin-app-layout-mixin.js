@@ -154,6 +154,12 @@ export const AppLayoutMixin = (superclass) =>
       this.addController(this.__focusTrapController);
       this.__setAriaExpanded();
 
+      // The `drawer` slot's `slotchange` handler updates the drawer size, but
+      // `slotchange` does not fire for a slot that never receives assigned nodes.
+      // Update the drawer size once on init so that a layout that is empty from
+      // the start collapses the drawer instead of reserving space for it.
+      this.__updateDrawerSize();
+
       this.$.drawer.addEventListener('transitionstart', () => {
         this.__isDrawerAnimating = true;
       });
