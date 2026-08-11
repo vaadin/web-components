@@ -24,6 +24,11 @@ import {
 
 export const DatePickerOverlayContentMixin = (superClass) =>
   class DatePickerOverlayContentMixin extends superClass {
+    /** Incremented to invalidate the animation frame callbacks of a cancelled scroll animation. */
+    #scrollAnimationId = 0;
+
+    #revealResolve;
+
     static get properties() {
       return {
         scrollDuration: {
@@ -497,7 +502,10 @@ export const DatePickerOverlayContentMixin = (superClass) =>
      * Scrolls the month and year scrollers enough to reveal the given date.
      */
     revealDate(date, animate = true) {
-      if (!date) {
+      // The scrollers have no layout while the overlay is closed, so the current position
+      // can neither be read nor set. Scrolling to the date is then done by `scrollToDate()`
+      // once the overlay opens.
+      if (!date || !this._monthScroller.clientHeight) {
         return;
       }
       const diff = this._differenceInMonths(date, this._originDate);
@@ -647,25 +655,30 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     /** @private */
     _scrollToPosition(targetPosition, animate) {
-      if (this._targetPosition !== undefined) {
-        this._targetPosition = targetPosition;
-        return;
-      }
-
       if (!animate) {
+        // A scroll without animation takes precedence over an animation that is still
+        // running, so that e.g. opening the overlay shows the correct month at once.
+        this.#cancelScrollAnimation();
+
         this._monthScroller.position = targetPosition;
         this._monthScroller.forceUpdate();
-        this._targetPosition = undefined;
         this._repositionYearScroller();
         this.__tryFocusDate();
         return;
       }
 
+      if (this._targetPosition !== undefined) {
+        this._targetPosition = targetPosition;
+        return;
+      }
+
       this._targetPosition = targetPosition;
 
-      let revealResolve;
+      this.#scrollAnimationId += 1;
+      const animationId = this.#scrollAnimationId;
+
       this._revealPromise = new Promise((resolve) => {
-        revealResolve = resolve;
+        this.#revealResolve = resolve;
       });
 
       // http://gizma.com/easing/
@@ -682,6 +695,11 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       const initialPosition = this._monthScroller.position;
 
       const smoothScroll = (timestamp) => {
+        if (animationId !== this.#scrollAnimationId) {
+          // The animation was cancelled by a scroll without animation.
+          return;
+        }
+
         if (!start) {
           start = timestamp;
         }
@@ -713,8 +731,9 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           this._monthScroller.forceUpdate();
           this._targetPosition = undefined;
 
-          revealResolve();
           this._revealPromise = undefined;
+          this.#revealResolve();
+          this.#revealResolve = undefined;
         }
 
         setTimeout(this._repositionYearScroller.bind(this), 1);
@@ -722,6 +741,24 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
       // Start the animation.
       window.requestAnimationFrame(smoothScroll);
+    }
+
+    /**
+     * Stops the scroll animation that is currently running, if any, and releases
+     * the callers awaiting `_revealPromise`.
+     */
+    #cancelScrollAnimation() {
+      if (this._targetPosition === undefined) {
+        return;
+      }
+
+      // Bumping the id makes the pending animation frame callback bail out.
+      this.#scrollAnimationId += 1;
+      this._targetPosition = undefined;
+
+      this._revealPromise = undefined;
+      this.#revealResolve();
+      this.#revealResolve = undefined;
     }
 
     /** @private */

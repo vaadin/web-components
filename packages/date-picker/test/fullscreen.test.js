@@ -156,6 +156,51 @@ describe('fullscreen mode', () => {
     });
   });
 
+  describe('scroll position', () => {
+    let overlayContent, position;
+
+    beforeEach(async () => {
+      datePicker.value = '2000-02-11';
+      // The overlay content is only created on first open, so the date has to be
+      // revealed once before the reveal while closed has anything to act on.
+      await open(datePicker);
+      overlayContent = datePicker._overlayContent;
+      position = overlayContent._monthScroller.position;
+      datePicker.close();
+      await nextRender();
+    });
+
+    it('should not scroll the overlay when re-committing the date while closed', async () => {
+      const spy = sinon.spy();
+      overlayContent.addEventListener('scroll-animation-finished', spy);
+
+      // Tapping the input focuses and immediately blurs it, which re-commits
+      // the selected date while the overlay is still closed.
+      input.focus();
+      await nextRender();
+
+      await open(datePicker);
+
+      expect(spy).to.be.not.called;
+      expect(overlayContent._monthScroller.position).to.be.closeTo(position, 0.001);
+    });
+
+    it('should not scroll the overlay when reopening it during a scroll animation', async () => {
+      await open(datePicker);
+
+      const spy = sinon.spy();
+      overlayContent.addEventListener('scroll-animation-finished', spy);
+
+      // Start an animated scroll, then close and reopen before it finishes.
+      overlayContent.revealDate(new Date(2001, 5, 1));
+      datePicker.close();
+      await open(datePicker);
+
+      expect(spy).to.be.not.called;
+      expect(overlayContent._monthScroller.position).to.be.closeTo(position, 0.001);
+    });
+  });
+
   describe('buttons', () => {
     let overlayContent;
 

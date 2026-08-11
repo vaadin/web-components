@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { click, fixtureSync, listenOnce, tap } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, listenOnce, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker-overlay-content.js';
 import { getDefaultI18n, getFirstVisibleItem, monthsEqual, untilOverlayScrolled } from './helpers.js';
@@ -459,6 +459,64 @@ describe('overlay', () => {
         const position = monthScroller.position;
         overlay.revealDate(new Date(2021, 3, 1), false);
         expect(monthScroller.position).to.equal(position + 0.6 /* The bottom 10% offset is ensured by JS */);
+      });
+    });
+
+    describe('not rendered', () => {
+      beforeEach(async () => {
+        overlay = await customizeFixture({
+          initialPosition: new Date(2021, 1, 1),
+          monthScrollerItems: 2,
+          monthScrollerOffset: 0,
+        });
+        overlay.style.display = 'none';
+      });
+
+      it('should not scroll when the scrollers have no layout', () => {
+        const spy = sinon.spy(overlay, '_scrollToPosition');
+        overlay.focusedDate = new Date(2021, 5, 1);
+        expect(spy).to.be.not.called;
+        expect(overlay._revealPromise).to.be.undefined;
+      });
+    });
+
+    describe('cancelling the animation', () => {
+      beforeEach(async () => {
+        overlay = await customizeFixture({
+          initialPosition: new Date(2021, 1, 1),
+          monthScrollerItems: 2,
+          monthScrollerOffset: 0,
+        });
+        monthScroller = overlay._monthScroller;
+      });
+
+      it('should snap to the position when scrolling without animation during animation', () => {
+        const position = monthScroller.position;
+        overlay.revealDate(new Date(2021, 3, 1));
+        overlay.scrollToDate(new Date(2021, 0, 1), false);
+        expect(monthScroller.position).to.equal(position - 1);
+      });
+
+      it('should not dispatch scroll-animation-finished for a cancelled animation', async () => {
+        overlay.scrollDuration = 50;
+        const spy = sinon.spy();
+        overlay.addEventListener('scroll-animation-finished', spy);
+
+        overlay.revealDate(new Date(2021, 3, 1));
+        overlay.scrollToDate(new Date(2021, 0, 1), false);
+        await aTimeout(100);
+
+        expect(spy).to.be.not.called;
+      });
+
+      it('should resolve the reveal promise for a cancelled animation', async () => {
+        overlay.revealDate(new Date(2021, 3, 1));
+        const revealPromise = overlay._revealPromise;
+        overlay.scrollToDate(new Date(2021, 0, 1), false);
+
+        await revealPromise;
+
+        expect(overlay._revealPromise).to.be.undefined;
       });
     });
   });
