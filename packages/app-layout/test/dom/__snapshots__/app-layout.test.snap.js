@@ -6,7 +6,7 @@ snapshots["vaadin-app-layout host default"] =
   no-anim=""
   overlay=""
   primary-section="navbar"
-  style="--_vaadin-app-layout-drawer-offset-size: 320px; --_vaadin-app-layout-navbar-offset-size: 16px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px;"
+  style="--_vaadin-app-layout-drawer-width: 0; --_vaadin-app-layout-drawer-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size: 16px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px;"
 >
 </vaadin-app-layout>
 `;
@@ -31,7 +31,7 @@ snapshots["vaadin-app-layout host with navbar"] =
   has-navbar=""
   overlay=""
   primary-section="navbar"
-  style="--_vaadin-app-layout-drawer-offset-size: 320px; --_vaadin-app-layout-navbar-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px;"
+  style="--_vaadin-app-layout-drawer-width: 0; --_vaadin-app-layout-drawer-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px;"
 >
   <div slot="navbar">
     Navbar Content
@@ -40,7 +40,7 @@ snapshots["vaadin-app-layout host with navbar"] =
 `;
 /* end snapshot vaadin-app-layout host with navbar */
 
-snapshots["vaadin-app-layout shadow desktop layout default"] = 
+snapshots["vaadin-app-layout shadow drawer content desktop layout default"] = 
 `<div
   id="navbarTop"
   part="navbar navbar-top"
@@ -80,9 +80,9 @@ snapshots["vaadin-app-layout shadow desktop layout default"] =
   </slot>
 </div>
 `;
-/* end snapshot vaadin-app-layout shadow desktop layout default */
+/* end snapshot vaadin-app-layout shadow drawer content desktop layout default */
 
-snapshots["vaadin-app-layout shadow desktop layout drawer closed"] = 
+snapshots["vaadin-app-layout shadow drawer content desktop layout drawer closed"] = 
 `<div
   id="navbarTop"
   part="navbar navbar-top"
@@ -122,9 +122,9 @@ snapshots["vaadin-app-layout shadow desktop layout drawer closed"] =
   </slot>
 </div>
 `;
-/* end snapshot vaadin-app-layout shadow desktop layout drawer closed */
+/* end snapshot vaadin-app-layout shadow drawer content desktop layout drawer closed */
 
-snapshots["vaadin-app-layout shadow mobile layout default"] = 
+snapshots["vaadin-app-layout shadow drawer content mobile layout default"] = 
 `<div
   id="navbarTop"
   part="navbar navbar-top"
@@ -167,9 +167,9 @@ snapshots["vaadin-app-layout shadow mobile layout default"] =
   </slot>
 </div>
 `;
-/* end snapshot vaadin-app-layout shadow mobile layout default */
+/* end snapshot vaadin-app-layout shadow drawer content mobile layout default */
 
-snapshots["vaadin-app-layout shadow mobile layout drawer opened"] = 
+snapshots["vaadin-app-layout shadow drawer content mobile layout drawer opened"] = 
 `<div
   id="navbarTop"
   part="navbar navbar-top"
@@ -212,5 +212,94 @@ snapshots["vaadin-app-layout shadow mobile layout drawer opened"] =
   </slot>
 </div>
 `;
-/* end snapshot vaadin-app-layout shadow mobile layout drawer opened */
+/* end snapshot vaadin-app-layout shadow drawer content mobile layout drawer opened */
+
+snapshots["vaadin-app-layout shadow empty desktop layout default"] = 
+`<div
+  id="navbarTop"
+  part="navbar navbar-top"
+>
+  <slot name="navbar">
+  </slot>
+</div>
+<div part="backdrop">
+</div>
+<div
+  hidden=""
+  id="drawer"
+  part="drawer"
+>
+  <slot
+    id="drawerSlot"
+    name="drawer"
+  >
+  </slot>
+</div>
+<div part="content">
+  <slot>
+  </slot>
+</div>
+<div
+  hidden=""
+  id="navbarBottom"
+  part="navbar navbar-bottom"
+>
+  <slot name="navbar-bottom">
+  </slot>
+</div>
+<div hidden="">
+  <slot
+    id="touchSlot"
+    name="navbar touch-optimized"
+  >
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-app-layout shadow empty desktop layout default */
+
+snapshots["vaadin-app-layout shadow empty mobile layout default"] = 
+`<div
+  id="navbarTop"
+  part="navbar navbar-top"
+>
+  <slot name="navbar">
+  </slot>
+</div>
+<div part="backdrop">
+</div>
+<div
+  aria-label="Drawer"
+  aria-modal="true"
+  hidden=""
+  id="drawer"
+  part="drawer"
+  role="dialog"
+>
+  <slot
+    id="drawerSlot"
+    name="drawer"
+  >
+  </slot>
+</div>
+<div part="content">
+  <slot>
+  </slot>
+</div>
+<div
+  hidden=""
+  id="navbarBottom"
+  part="navbar navbar-bottom"
+>
+  <slot name="navbar-bottom">
+  </slot>
+</div>
+<div hidden="">
+  <slot
+    id="touchSlot"
+    name="navbar touch-optimized"
+  >
+  </slot>
+</div>
+`;
+/* end snapshot vaadin-app-layout shadow empty mobile layout default */
 
