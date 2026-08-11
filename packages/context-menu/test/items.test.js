@@ -10,8 +10,6 @@ import {
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-context-menu.js';
-import '@vaadin/item/src/vaadin-item.js';
-import '@vaadin/list-box/src/vaadin-list-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { getMenuItems, getSubMenu, openMenu, openSubMenu } from './helpers.js';
 
