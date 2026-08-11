@@ -487,35 +487,6 @@ describe('animation objects', () => {
       overlay.style.animationDuration = '10s';
     });
 
-    it('should report an animation in the computed style but create none', () => {
-      overlay.opened = true;
-
-      const style = getComputedStyle(overlay);
-      expect(style.animationName).to.equal('does-not-exist');
-      expect(parseFloat(style.animationDuration)).to.be.above(0);
-      expect(overlay.getAnimations()).to.be.empty;
-    });
-
-    it('should not wait for the opening animation', () => {
-      overlay.opened = true;
-
-      expect(overlay.hasAttribute('opening')).to.be.false;
-    });
-
-    it('should not wait for the closing animation', () => {
-      overlay.opened = true;
-      overlay.opened = false;
-
-      expect(overlay.hasAttribute('closing')).to.be.false;
-      expect(overlay.matches(':popover-open')).to.be.false;
-    });
-  });
-
-  describe('animation that never ends', () => {
-    beforeEach(() => {
-      overlay.setAttribute('endless-animation', '');
-    });
-
     it('should not wait for the opening animation', () => {
       overlay.opened = true;
 

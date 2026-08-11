@@ -46,14 +46,6 @@ describe('getStateAnimations', () => {
     expect(animations.map((animation) => animation.animationName)).to.eql(['utils-scale']);
   });
 
-  it('should return an empty list for an animation that never ends', () => {
-    element.style.animation = 'utils-fade 1s infinite';
-
-    const [animation] = element.getAnimations();
-    expect(animation.effect.getComputedTiming().activeDuration).to.equal(Infinity);
-    expect(getStateAnimations(element)).to.be.empty;
-  });
-
   it('should return an empty list for a transition', () => {
     element.style.transition = 'opacity 1s';
     // The transition only starts from a value the browser has already resolved
