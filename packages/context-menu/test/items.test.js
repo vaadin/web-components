@@ -1,5 +1,13 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enterKeyDown, fire, fixtureSync, nextFrame, nextRender, outsideClick } from '@vaadin/testing-helpers';
+import {
+  aTimeout,
+  enterKeyDown,
+  fire,
+  fixtureSync,
+  nextFrame,
+  nextRender,
+  outsideClick,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-context-menu.js';
 import '@vaadin/item/src/vaadin-item.js';
@@ -260,10 +268,14 @@ describe('items', () => {
       await openSubMenu(rootMenu);
     });
 
-    it('should remove close listener', () => {
-      rootMenu.parentNode.removeChild(rootMenu);
+    it('should not react to outside click when disconnected', async () => {
+      rootMenu.remove();
+      // Closing on disconnect is deferred, so that moving the menu in the DOM
+      // does not close it
+      await aTimeout(0);
+
       const spy = sinon.spy(rootMenu, 'close');
-      fire(document.documentElement, 'click');
+      outsideClick();
       expect(spy).to.not.be.called;
     });
 
