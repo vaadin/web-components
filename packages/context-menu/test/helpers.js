@@ -35,6 +35,11 @@ export function getSubMenu(menu) {
   return menu.querySelector(':scope > vaadin-context-menu[slot="submenu"]');
 }
 
+export async function openSubMenu(menu, index = 0) {
+  await openMenu(getMenuItems(menu)[index]);
+  return getSubMenu(menu);
+}
+
 export async function openSubMenus(menu) {
   await oneEvent(menu._overlayElement, 'vaadin-overlay-open');
   const itemElement = menu.querySelector(':scope > [slot="overlay"] [aria-haspopup="true"]');
