@@ -107,7 +107,7 @@ const notificationCard = css`
     @supports not (interpolate-size: allow-keywords) {
       :host([opening]:not(:nth-child(1 of [slot='middle']))),
       :host([closing]) {
-        animation-name: --notification-max-height, --notification-margins;
+        animation-name: __notification-max-height, __notification-margins;
         animation-duration: calc(var(--vaadin-overlay-animation-duration) * 2 + var(--vaadin-overlay-animation-delay));
         animation-delay: 0s;
         animation-timing-function: ease-in-out, cubic-bezier(0.4, 1.1, 0, 1);
@@ -118,11 +118,11 @@ const notificationCard = css`
   @media (prefers-reduced-motion) {
     /* The height animation of the fallback above is a keyframe animation, not a transition */
     :host(:is([opening], [closing])) {
-      animation-name: --fade !important;
+      animation-name: __fade !important;
     }
   }
 
-  @keyframes --notification-max-height {
+  @keyframes __notification-max-height {
     0% {
       max-height: 0;
     }
@@ -132,7 +132,7 @@ const notificationCard = css`
     }
   }
 
-  @keyframes --notification-margins {
+  @keyframes __notification-margins {
     0% {
       margin-top: 0;
       margin-bottom: 0;

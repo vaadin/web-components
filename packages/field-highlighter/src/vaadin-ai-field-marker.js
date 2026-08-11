@@ -27,7 +27,7 @@ const DEFAULT_I18N = {
 
 const POPOVER_TRIGGER = ['click'];
 
-// Half of the 1s working shimmer slide (`--vaadin-ai-field-marker-slide` in
+// Half of the 1s working shimmer slide (`__vaadin-ai-field-marker-slide` in
 // the base styles), so that held-back values land — and the read-only lock
 // lifts — in the middle of a slide instead of at its edge.
 const HALF_WORKING_SLIDE_MS = 500;

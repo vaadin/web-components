@@ -42,7 +42,7 @@ function hasMarkerKeyframes(root: ShadowRoot): boolean {
       .filter((sheet): sheet is CSSStyleSheet => sheet !== null),
   ];
   return sheets.some((sheet) =>
-    [...sheet.cssRules].some((rule) => rule instanceof CSSKeyframesRule && rule.name.startsWith('--vaadin-ai-')),
+    [...sheet.cssRules].some((rule) => rule instanceof CSSKeyframesRule && rule.name.startsWith('__vaadin-ai-')),
   );
 }
 

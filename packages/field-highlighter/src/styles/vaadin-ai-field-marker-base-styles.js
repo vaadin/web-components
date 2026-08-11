@@ -7,7 +7,7 @@ import { css } from 'lit';
 import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 
 export const aiFieldMarkerHostStyles = css`
-  @keyframes --vaadin-ai-field-marker-slide {
+  @keyframes __vaadin-ai-field-marker-slide {
     0% {
       --vaadin-ai-field-marker-mask-pos: -100px;
     }
@@ -17,7 +17,7 @@ export const aiFieldMarkerHostStyles = css`
     }
   }
 
-  @keyframes --vaadin-ai-field-marker-remove-mask {
+  @keyframes __vaadin-ai-field-marker-remove-mask {
     100% {
       mask-image: none;
     }
@@ -65,7 +65,7 @@ export const aiFieldMarkerStyles = css`
         transparent calc(var(--vaadin-ai-field-marker-mask-pos) + 20px),
         transparent
       );
-      animation: --vaadin-ai-field-marker-slide 700ms 200ms both;
+      animation: __vaadin-ai-field-marker-slide 700ms 200ms both;
       animation-timing-function: cubic-bezier(0.78, 0, 0.22, 1);
     }
 
@@ -88,7 +88,7 @@ export const aiFieldMarkerStyles = css`
       line-height: 1;
       cursor: pointer;
       transition: color 200ms;
-      animation: --vaadin-ai-field-marker-fade-in 300ms 700ms backwards;
+      animation: __vaadin-ai-field-marker-fade-in 300ms 700ms backwards;
 
       &:hover {
         color: var(--vaadin-ai-field-marker-badge-icon-color, var(--vaadin-text-color));
@@ -194,12 +194,12 @@ export const aiFieldMarkerStyles = css`
       #000 calc(var(--vaadin-ai-field-marker-mask-pos) + 100px)
     );
     animation:
-      --vaadin-ai-field-marker-slide 1s cubic-bezier(0.78, 0, 0.22, 1) forwards,
-      --vaadin-ai-field-marker-remove-mask 0s 1s forwards;
+      __vaadin-ai-field-marker-slide 1s cubic-bezier(0.78, 0, 0.22, 1) forwards,
+      __vaadin-ai-field-marker-remove-mask 0s 1s forwards;
   }
 
   [ai-working] {
-    animation: --vaadin-ai-field-marker-slide 1s ease-in-out infinite;
+    animation: __vaadin-ai-field-marker-slide 1s ease-in-out infinite;
   }
 
   /* While the AI is working, the badge and glow describe a value that is about
@@ -210,7 +210,7 @@ export const aiFieldMarkerStyles = css`
     display: none;
   }
 
-  @keyframes --vaadin-ai-field-marker-fade-in {
+  @keyframes __vaadin-ai-field-marker-fade-in {
     0% {
       opacity: 0;
     }

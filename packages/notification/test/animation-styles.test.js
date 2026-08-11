@@ -54,8 +54,8 @@ describe('notification card animation styles', () => {
       notification.opened = true;
 
       const animations = overlay.getAnimations().map((animation) => animation.animationName);
-      expect(animations).to.include('--fade');
-      expect(animations).to.include('--transform');
+      expect(animations).to.include('__fade');
+      expect(animations).to.include('__transform');
     });
 
     it('should keep the card in the DOM until the closing animation ends', async () => {
@@ -125,7 +125,7 @@ describe('notification card animation styles', () => {
       it('should not animate the height of the card, only opacity', () => {
         notification.opened = true;
 
-        expect(getComputedStyle(card).animationName).to.equal('--fade');
+        expect(getComputedStyle(card).animationName).to.equal('__fade');
       });
     });
   });

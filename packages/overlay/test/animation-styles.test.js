@@ -80,13 +80,13 @@ describe('animation properties', () => {
     overlay.style.setProperty('--vaadin-overlay-animation-delay', '2s');
 
     overlay.opened = true;
-    let timing = getAnimation(overlay.$.overlay, '--fade').effect.getTiming();
+    let timing = getAnimation(overlay.$.overlay, '__fade').effect.getTiming();
     expect(timing.duration).to.equal(10000);
     expect(timing.delay).to.equal(2000);
 
     overlay._flushAnimation('opening');
     overlay.opened = false;
-    timing = getAnimation(overlay.$.overlay, '--fade').effect.getTiming();
+    timing = getAnimation(overlay.$.overlay, '__fade').effect.getTiming();
     expect(timing.duration).to.equal(10000);
     expect(timing.delay).to.equal(2000);
   });
@@ -95,11 +95,11 @@ describe('animation properties', () => {
     overlay.style.setProperty('--vaadin-overlay-animation-timing-function', 'linear');
 
     overlay.opened = true;
-    expect(getAnimation(overlay.$.overlay, '--fade').effect.getTiming().easing).to.equal('linear');
+    expect(getAnimation(overlay.$.overlay, '__fade').effect.getTiming().easing).to.equal('linear');
 
     overlay._flushAnimation('opening');
     overlay.opened = false;
-    expect(getAnimation(overlay.$.overlay, '--fade').effect.getTiming().easing).to.equal('linear');
+    expect(getAnimation(overlay.$.overlay, '__fade').effect.getTiming().easing).to.equal('linear');
   });
 
   // The animations start at the closed value and end at the value of the part, because the
@@ -111,8 +111,8 @@ describe('animation properties', () => {
     overlay.$.overlay.style.opacity = '0.6';
 
     overlay.opened = true;
-    expect(stylesDuringAnimation(overlay.$.overlay, '--fade', 0).opacity).to.equal('0.25');
-    expect(stylesDuringAnimation(overlay.$.overlay, '--fade', 5000).opacity).to.equal('0.425');
+    expect(stylesDuringAnimation(overlay.$.overlay, '__fade', 0).opacity).to.equal('0.25');
+    expect(stylesDuringAnimation(overlay.$.overlay, '__fade', 5000).opacity).to.equal('0.425');
   });
 
   it('should use the closed translate for the transform animation', () => {
@@ -121,8 +121,8 @@ describe('animation properties', () => {
     overlay.$.overlay.style.translate = '30px 40px';
 
     overlay.opened = true;
-    expect(stylesDuringAnimation(overlay.$.overlay, '--transform', 0).translate).to.equal('10px 20px');
-    expect(stylesDuringAnimation(overlay.$.overlay, '--transform', 5000).translate).to.equal('20px 30px');
+    expect(stylesDuringAnimation(overlay.$.overlay, '__transform', 0).translate).to.equal('10px 20px');
+    expect(stylesDuringAnimation(overlay.$.overlay, '__transform', 5000).translate).to.equal('20px 30px');
   });
 
   it('should use the closed scale for the transform animation', () => {
@@ -131,8 +131,8 @@ describe('animation properties', () => {
     overlay.$.overlay.style.scale = '1.5';
 
     overlay.opened = true;
-    expect(stylesDuringAnimation(overlay.$.overlay, '--transform', 0).scale).to.equal('0.5');
-    expect(stylesDuringAnimation(overlay.$.overlay, '--transform', 5000).scale).to.equal('1');
+    expect(stylesDuringAnimation(overlay.$.overlay, '__transform', 0).scale).to.equal('0.5');
+    expect(stylesDuringAnimation(overlay.$.overlay, '__transform', 5000).scale).to.equal('1');
   });
 
   it('should use the closed transform for the transform animation', () => {
@@ -141,21 +141,21 @@ describe('animation properties', () => {
     overlay.$.overlay.style.transform = 'rotate(20deg)';
 
     overlay.opened = true;
-    expect(stylesDuringAnimation(overlay.$.overlay, '--transform', 0).transform).to.equal(
+    expect(stylesDuringAnimation(overlay.$.overlay, '__transform', 0).transform).to.equal(
       computedValue('transform', 'rotate(10deg)'),
     );
-    expect(stylesDuringAnimation(overlay.$.overlay, '--transform', 5000).transform).to.equal(
+    expect(stylesDuringAnimation(overlay.$.overlay, '__transform', 5000).transform).to.equal(
       computedValue('transform', 'rotate(15deg)'),
     );
   });
 
   it('should reverse the animation direction while closing', () => {
     overlay.opened = true;
-    expect(getAnimation(overlay.$.overlay, '--fade').effect.getTiming().direction).to.equal('normal');
+    expect(getAnimation(overlay.$.overlay, '__fade').effect.getTiming().direction).to.equal('normal');
 
     overlay._flushAnimation('opening');
     overlay.opened = false;
-    expect(getAnimation(overlay.$.overlay, '--fade').effect.getTiming().direction).to.equal('reverse');
+    expect(getAnimation(overlay.$.overlay, '__fade').effect.getTiming().direction).to.equal('reverse');
   });
 
   describe('backdrop', () => {
@@ -167,32 +167,32 @@ describe('animation properties', () => {
     it('should only run the fade animation on the backdrop', () => {
       overlay.opened = true;
       const names = overlay.$.backdrop.getAnimations().map((animation) => animation.animationName);
-      expect(names).to.eql(['--fade']);
+      expect(names).to.eql(['__fade']);
     });
 
     it('should use linear timing function for the backdrop animation', () => {
       overlay.style.setProperty('--vaadin-overlay-animation-timing-function', 'ease-in');
 
       overlay.opened = true;
-      expect(getAnimation(overlay.$.backdrop, '--fade').effect.getTiming().easing).to.equal('linear');
+      expect(getAnimation(overlay.$.backdrop, '__fade').effect.getTiming().easing).to.equal('linear');
     });
 
     it('should always use zero closed opacity for the backdrop animation', () => {
       overlay.style.setProperty('--vaadin-overlay-opacity-closed', '0.25');
 
       overlay.opened = true;
-      const keyframes = getAnimation(overlay.$.backdrop, '--fade').effect.getKeyframes();
+      const keyframes = getAnimation(overlay.$.backdrop, '__fade').effect.getKeyframes();
       expect(keyframes[0].opacity).to.equal('0');
       expect(keyframes[1].opacity).to.equal('1');
     });
 
     it('should reverse the backdrop animation direction while closing', () => {
       overlay.opened = true;
-      expect(getAnimation(overlay.$.backdrop, '--fade').effect.getTiming().direction).to.equal('normal');
+      expect(getAnimation(overlay.$.backdrop, '__fade').effect.getTiming().direction).to.equal('normal');
 
       overlay._flushAnimation('opening');
       overlay.opened = false;
-      expect(getAnimation(overlay.$.backdrop, '--fade').effect.getTiming().direction).to.equal('reverse');
+      expect(getAnimation(overlay.$.backdrop, '__fade').effect.getTiming().direction).to.equal('reverse');
     });
   });
 
@@ -208,7 +208,7 @@ describe('animation properties', () => {
     it('should only run the fade animation on the overlay part', () => {
       overlay.opened = true;
       const names = overlay.$.overlay.getAnimations().map((animation) => animation.animationName);
-      expect(names).to.eql(['--fade']);
+      expect(names).to.eql(['__fade']);
     });
   });
 

@@ -49,7 +49,7 @@ export const overlayAnimationStyles = css`
 
   :host(:where([opening], [closing])) {
     /* This empty animation only reports the state, the parts run the visible animation */
-    animation-name: --no-op;
+    animation-name: __no-op;
     animation-duration: var(--vaadin-overlay-animation-duration);
     animation-delay: var(--vaadin-overlay-animation-delay);
   }
@@ -60,7 +60,7 @@ export const overlayAnimationStyles = css`
   }
 
   :host(:where([opening], [closing])) :is([part='overlay'], [part='backdrop']) {
-    animation-name: --fade, --transform;
+    animation-name: __fade, __transform;
     animation-duration: var(--vaadin-overlay-animation-duration);
     animation-timing-function: var(--vaadin-overlay-animation-timing-function);
     animation-delay: var(--vaadin-overlay-animation-delay);
@@ -68,12 +68,12 @@ export const overlayAnimationStyles = css`
     animation-fill-mode: backwards;
 
     @media (prefers-reduced-motion) {
-      animation-name: --fade;
+      animation-name: __fade;
     }
   }
 
   :host(:where([opening], [closing])) [part='backdrop'] {
-    animation-name: --fade;
+    animation-name: __fade;
     animation-timing-function: linear;
     --vaadin-overlay-opacity-closed: 0;
   }
@@ -82,11 +82,11 @@ export const overlayAnimationStyles = css`
     animation-direction: reverse;
   }
 
-  @keyframes --no-op {
+  @keyframes __no-op {
   }
 
   /* Only the closed state is declared, so the animations end at the value the part already has */
-  @keyframes --transform {
+  @keyframes __transform {
     0% {
       transform: var(--vaadin-overlay-transform-closed);
       translate: var(--vaadin-overlay-translate-closed);
@@ -94,7 +94,7 @@ export const overlayAnimationStyles = css`
     }
   }
 
-  @keyframes --fade {
+  @keyframes __fade {
     0% {
       opacity: var(--vaadin-overlay-opacity-closed);
     }

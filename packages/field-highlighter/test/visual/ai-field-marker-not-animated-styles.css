@@ -1,5 +1,5 @@
 /* The marker entrance animations rely on their fill modes to hold the end
-   state (the glow slide-in opens the mask, --vaadin-ai-field-marker-remove-mask
+   state (the glow slide-in opens the mask, __vaadin-ai-field-marker-remove-mask
    clears the field mask), so `animation: none` would freeze the initial
    frames instead. Zero the durations and delays to jump straight to the
    settled end state. */
