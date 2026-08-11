@@ -13,7 +13,7 @@
 - **Reproduced on:** vaadin/web-components @ `main` (`@vaadin/date-picker` 25.3.0-alpha9, commit b8810b2a3814843de85a592520e48d4bc4bf868f)
 - **Present on main?:** yes (still broken)
 - **Theme / Browser:** Lumo / Chromium (Playwright)
-- **Screenshot** (static bug): ![November 2018 header not faded while all its dates are disabled; December 2018 header correctly faded](https://raw.githubusercontent.com/vaadin/web-components/<commit-sha>/repro-1616.png)
+- **Screenshot** (static bug): ![November 2018 header not faded while all its dates are disabled; December 2018 header correctly faded](https://raw.githubusercontent.com/vaadin/web-components/f45fd7dfdde4858ad58559a44a3b18a02a745506/repro-1616.png)
 
 ## Observed behavior
 
