@@ -78,8 +78,8 @@ export type AiFieldRevertEvent = CustomEvent<{ value: unknown }>;
  * `ai-confidence` | Set while a confidence level is shown, with the level as the value.
  *
  * The confidence indicator is rendered into the field's light DOM as a
- * `<span>` with the `confidence` class name and the level (`low`, `medium`
- * or `high`) as an additional class name.
+ * `<span>` with the `ai-confidence` class name and the level as an additional
+ * `ai-confidence-low`, `ai-confidence-medium` or `ai-confidence-high` one.
  *
  * The following custom CSS properties are available for styling:
  *

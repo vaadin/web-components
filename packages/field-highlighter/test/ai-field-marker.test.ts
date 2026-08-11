@@ -638,7 +638,7 @@ describe('ai field marker', () => {
     let marker: AiFieldMarker;
 
     function getConfidenceNode(host: HTMLElement = field): HTMLSpanElement | null {
-      return host.querySelector(':scope > [slot="helper"].confidence');
+      return host.querySelector(':scope > [slot="helper"].ai-confidence');
     }
 
     beforeEach(async () => {
@@ -656,7 +656,7 @@ describe('ai field marker', () => {
     });
 
     it('should have the confidence level as a class name', () => {
-      expect(getConfidenceNode()!.classList.contains('low')).to.be.true;
+      expect(getConfidenceNode()!.classList.contains('ai-confidence-low')).to.be.true;
     });
 
     it('should set the ai-confidence attribute on the field', () => {
@@ -740,8 +740,8 @@ describe('ai field marker', () => {
       await nextUpdate(marker);
 
       const node = getConfidenceNode()!;
-      expect(node.classList.contains('high')).to.be.true;
-      expect(node.classList.contains('low')).to.be.false;
+      expect(node.classList.contains('ai-confidence-high')).to.be.true;
+      expect(node.classList.contains('ai-confidence-low')).to.be.false;
       expect(node.textContent).to.equal('High confidence');
       expect(field.getAttribute('ai-confidence')).to.equal('high');
     });
@@ -791,7 +791,7 @@ describe('ai field marker', () => {
       field.helperText = 'Keep it short';
       await nextRender();
 
-      const helper = field.querySelector(':scope > [slot="helper"]:not(.confidence)')!;
+      const helper = field.querySelector(':scope > [slot="helper"]:not(.ai-confidence)')!;
       expect(helper.textContent).to.equal('Keep it short');
       expect(helper.assignedSlot).to.exist;
       expect(getConfidenceNode()!.assignedSlot).to.exist;

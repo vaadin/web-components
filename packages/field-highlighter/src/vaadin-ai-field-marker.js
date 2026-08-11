@@ -40,6 +40,15 @@ const MARKER_SLOT = 'ai-field-marker';
 /** Marks the `<style>` element the marker injects into a field's shadow root. */
 const MARKER_STYLE_ATTRIBUTE = 'ai-field-marker-styles';
 
+/**
+ * The class name of the confidence indicator the marker adds to the field's
+ * light DOM; the level goes on a suffixed class name of its own. Prefixed the
+ * same way as the field's `ai-confidence` attribute, since the indicator sits
+ * among the application's own children of the field, where a plain
+ * `confidence` or `low` would be ambiguous.
+ */
+const CONFIDENCE_CLASS = 'ai-confidence';
+
 // The position the shimmer's mask is at, animated by the marker's keyframes.
 // Registered here rather than with an @property rule in the marker stylesheet,
 // which is injected into the field's root node: a registration only takes effect
@@ -231,8 +240,8 @@ class DelayedFieldValue {
  * `ai-confidence` | Set while a confidence level is shown, with the level as the value.
  *
  * The confidence indicator is rendered into the field's light DOM as a
- * `<span>` with the `confidence` class name and the level (`low`, `medium`
- * or `high`) as an additional class name.
+ * `<span>` with the `ai-confidence` class name and the level as an additional
+ * `ai-confidence-low`, `ai-confidence-medium` or `ai-confidence-high` one.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -686,8 +695,9 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
   /**
    * Syncs the confidence indicator in the field's helper text section with
    * the `confidence` property: a `<span>` slotted into the field's helper
-   * slot, with the level as a class name and the localized level text as
-   * content. The field carries the level in its `ai-confidence` attribute.
+   * slot, with the `ai-confidence` and `ai-confidence-<level>` class names
+   * and the localized level text as content. The field carries the level in
+   * its `ai-confidence` attribute.
    */
   #updateConfidence() {
     const field = this.#field;
@@ -719,7 +729,7 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
       this.#confidenceNode = node;
     }
 
-    this.#confidenceNode.className = `confidence ${level}`;
+    this.#confidenceNode.className = `${CONFIDENCE_CLASS} ${CONFIDENCE_CLASS}-${level}`;
     this.#confidenceNode.textContent = this.__effectiveI18n.confidence[level] ?? '';
     field.setAttribute('ai-confidence', level);
     this.#updateFieldHelperState();

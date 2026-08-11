@@ -182,9 +182,9 @@ export const aiFieldMarkerStyles = css`
   }
 
   /* The confidence indicator: a sibling of the marker slotted into the
-     field's helper text section. The level class name (low, medium, high)
-     picks the color and how much of the pie icon is filled. */
-  :has(> vaadin-ai-field-marker) > [slot='helper'].confidence {
+     field's helper text section. The level class name picks the color and how
+     much of the pie icon is filled. */
+  :has(> vaadin-ai-field-marker) > [slot='helper'].ai-confidence {
     display: flex;
     align-items: center;
     gap: var(--vaadin-gap-s);
@@ -209,7 +209,7 @@ export const aiFieldMarkerStyles = css`
     /* The levels are told apart by how much of the pie is filled, so the base
        styles keep them in the same neutral color. The themes map the custom
        properties to their own semantic colors. */
-    &.low {
+    &.ai-confidence-low {
       --_vaadin-ai-field-marker-confidence-color: var(
         --vaadin-ai-field-marker-confidence-low-color,
         var(--vaadin-text-color-secondary)
@@ -217,7 +217,7 @@ export const aiFieldMarkerStyles = css`
       --_vaadin-ai-field-marker-confidence-fill: 25%;
     }
 
-    &.medium {
+    &.ai-confidence-medium {
       --_vaadin-ai-field-marker-confidence-color: var(
         --vaadin-ai-field-marker-confidence-medium-color,
         var(--vaadin-text-color-secondary)
@@ -225,7 +225,7 @@ export const aiFieldMarkerStyles = css`
       --_vaadin-ai-field-marker-confidence-fill: 50%;
     }
 
-    &.high {
+    &.ai-confidence-high {
       --_vaadin-ai-field-marker-confidence-color: var(
         --vaadin-ai-field-marker-confidence-high-color,
         var(--vaadin-text-color-secondary)
@@ -236,7 +236,7 @@ export const aiFieldMarkerStyles = css`
 
   /* While the AI is working, the confidence describes a value that is about
      to be replaced, so hide it along with the marker. */
-  [ai-working] > [slot='helper'].confidence {
+  [ai-working] > [slot='helper'].ai-confidence {
     display: none;
   }
 

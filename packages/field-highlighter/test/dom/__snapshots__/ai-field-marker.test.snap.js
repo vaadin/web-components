@@ -71,7 +71,7 @@ snapshots["vaadin-ai-field-marker host unmarked"] =
 
 snapshots["vaadin-ai-field-marker host confidence"] = 
 `<span
-  class="confidence high"
+  class="ai-confidence ai-confidence-high"
   data-slot-ignore=""
   id="ai-field-marker-confidence-8"
   slot="helper"
