@@ -1,8 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import '@vaadin/badge/src/vaadin-badge.js';
-import '@vaadin/grid/src/vaadin-grid.js';
-import '@vaadin/grid/src/vaadin-grid-column.js';
+import '@vaadin/badge';
+import '@vaadin/grid';
 import { flushGrid, getBodyCellContent } from '@vaadin/grid/test/helpers.js';
 
 describe('badge in grid', () => {
