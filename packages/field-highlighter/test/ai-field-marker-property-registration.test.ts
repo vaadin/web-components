@@ -24,4 +24,28 @@ describe('ai field marker custom property', () => {
     const maskPos = getComputedStyle(probe).getPropertyValue('--vaadin-ai-field-marker-mask-pos');
     expect(maskPos.trim()).to.not.equal('');
   });
+
+  it('should register the mask position property as a length', () => {
+    // A value that is not a length falls back to the initial value, which is
+    // what makes the property animatable by the shimmer keyframes.
+    host = document.createElement('div');
+    document.body.appendChild(host);
+    host.style.setProperty('--vaadin-ai-field-marker-mask-pos', 'red');
+
+    const maskPos = getComputedStyle(host).getPropertyValue('--vaadin-ai-field-marker-mask-pos');
+    expect(maskPos.trim()).to.equal('0px');
+  });
+
+  it('should not inherit the mask position property', () => {
+    // The mask position is animated per element, so a field must not pick up
+    // the position of an ancestor that is being animated.
+    host = document.createElement('div');
+    document.body.appendChild(host);
+    host.style.setProperty('--vaadin-ai-field-marker-mask-pos', '10px');
+    const child = document.createElement('div');
+    host.appendChild(child);
+
+    const maskPos = getComputedStyle(child).getPropertyValue('--vaadin-ai-field-marker-mask-pos');
+    expect(maskPos.trim()).to.equal('0px');
+  });
 });
