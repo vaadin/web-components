@@ -658,9 +658,6 @@ export const TimePickerMixin = (superClass) =>
       const parsedMin = parseISOTime(this.min || MIN_ALLOWED_TIME);
       const parsedMax = parseISOTime(this.max || MAX_ALLOWED_TIME);
 
-      // Check whether the constraint could be parsed at all, instead of whether
-      // it has a non-zero amount of milliseconds, so that an explicit midnight
-      // `max` is not mistaken for an unset one.
       return (
         (!parsedMin || this.__getMsec(time) >= this.__getMsec(parsedMin)) &&
         (!parsedMax || this.__getMsec(time) <= this.__getMsec(parsedMax))
