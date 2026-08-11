@@ -11,7 +11,7 @@
 - **Reproduced on:** vaadin/web-components @ `main` (25.3.0-alpha9)
 - **Present on main?:** yes (still broken)
 - **Theme / Browser:** base / WebKit **and** Chromium, both with mobile emulation (402×681)
-- **Screenshot** (mid-scroll, wrong month visible while opening): ![date-picker overlay showing May 2012 while opening, before scrolling to the selected February 2026](https://raw.githubusercontent.com/vaadin/web-components/<commit-sha>/repro-12341.png)
+- **Screenshot** (mid-scroll, wrong month visible while opening): ![date-picker overlay showing May 2012 while opening, before scrolling to the selected February 2026](https://raw.githubusercontent.com/vaadin/web-components/8a7ee1a1e5b0f21c2e2137fc46791f059a476f82/repro-12341.png)
 - **Demo video** (motion bug): `repro-12341-scroll-on-open.webm` (on the branch; drag into the comment for inline playback)
 
 ## Observed behavior
