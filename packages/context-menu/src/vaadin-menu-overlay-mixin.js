@@ -104,7 +104,8 @@ export const MenuOverlayMixin = (superClass) =>
         return false;
       }
 
-      // Close on outside click also if there is a tooltip shown on top
+      // With items, overlays above the root overlay belong to the menu itself,
+      // e.g. an open sub-menu or item tooltip, so ignore the overlay stack
       if (this.owner.items) {
         return true;
       }
