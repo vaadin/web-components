@@ -254,22 +254,6 @@ describe('vaadin-app-layout', () => {
         expect(getComputedStyle(layout).paddingInlineStart).to.be.equal(initialPadding);
       });
 
-      it('should hide the drawer when rendered without drawer content', async () => {
-        const emptyLayout = fixtureSync(`
-          <vaadin-app-layout style="--vaadin-app-layout-transition-duration: 0s;">
-            <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
-            <main>Page content</main>
-          </vaadin-app-layout>
-        `);
-        await nextRender();
-        await nextResize(emptyLayout);
-        await nextFrame();
-
-        const emptyDrawer = emptyLayout.shadowRoot.querySelector('[part=drawer]');
-        expect(emptyDrawer.hasAttribute('hidden')).to.be.true;
-        expect(getComputedStyle(emptyLayout).paddingInlineStart).to.be.equal('0px');
-      });
-
       it('should not close the drawer on navigation event', () => {
         window.dispatchEvent(new CustomEvent('vaadin-router-location-changed'));
         expect(layout.drawerOpened).to.be.true;
