@@ -154,6 +154,8 @@ export const AppLayoutMixin = (superclass) =>
       this.addController(this.__focusTrapController);
       this.__setAriaExpanded();
 
+      this.__updateDrawerSize();
+
       this.$.drawer.addEventListener('transitionstart', () => {
         this.__isDrawerAnimating = true;
       });
