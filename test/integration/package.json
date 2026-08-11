@@ -8,6 +8,7 @@
   "devDependencies": {
     "@vaadin/a11y-base": "25.3.0-alpha9",
     "@vaadin/accordion": "25.3.0-alpha9",
+    "@vaadin/badge": "25.3.0-alpha9",
     "@vaadin/button": "25.3.0-alpha9",
     "@vaadin/chai-plugins": "25.3.0-alpha9",
     "@vaadin/checkbox": "25.3.0-alpha9",

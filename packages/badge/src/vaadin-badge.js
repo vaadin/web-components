@@ -124,15 +124,26 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
   firstUpdated() {
     super.firstUpdated();
 
+    // Both slots use `syncInitial` because `has-content` and `has-icon` control the size of the
+    // badge. Without it, consumers that measure content synchronously, e.g. auto-width columns in
+    // vaadin-grid, would measure a badge whose content is still hidden by `display: none`.
     const slot = this.shadowRoot.querySelector('slot:not([name])');
-    this.__slotObserver = new SlotObserver(slot, ({ currentNodes }) => {
-      this.toggleAttribute('has-content', currentNodes.filter((node) => !isEmptyTextNode(node)).length > 0);
-    });
+    this.__slotObserver = new SlotObserver(
+      slot,
+      ({ currentNodes }) => {
+        this.toggleAttribute('has-content', currentNodes.filter((node) => !isEmptyTextNode(node)).length > 0);
+      },
+      { syncInitial: true },
+    );
 
     const iconSlot = this.shadowRoot.querySelector('slot[name="icon"]');
-    this.__iconSlotObserver = new SlotObserver(iconSlot, ({ currentNodes }) => {
-      this.toggleAttribute('has-icon', currentNodes.length > 0);
-    });
+    this.__iconSlotObserver = new SlotObserver(
+      iconSlot,
+      ({ currentNodes }) => {
+        this.toggleAttribute('has-icon', currentNodes.length > 0);
+      },
+      { syncInitial: true },
+    );
   }
 }
 
