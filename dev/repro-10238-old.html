@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Repro #10238 — older released versions (CDN)</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h3 id="title">loading…</h3>
+    <vaadin-combo-box id="cb" label="Country" allow-custom-value></vaadin-combo-box>
+
+    <script type="module">
+      const version = new URLSearchParams(location.search).get('v') || '24.4.13';
+      document.querySelector('#title').textContent = `@vaadin/combo-box@${version}`;
+
+      await import(`https://esm.sh/@vaadin/combo-box@${version}?bundle`);
+
+      const comboBox = document.querySelector('#cb');
+      comboBox.items = ['Austria', 'Belgium', 'Croatia', 'Denmark', 'Estonia', 'Finland'];
+
+      window.__log = [];
+      const overlay =
+        comboBox.shadowRoot.querySelector('vaadin-combo-box-overlay') ||
+        comboBox.$?.overlay?.shadowRoot?.querySelector('vaadin-combo-box-overlay') ||
+        document.querySelector('vaadin-combo-box-overlay');
+
+      window.__overlay = overlay;
+
+      if (overlay) {
+        new MutationObserver(() => {
+          window.__log.push({
+            t: Math.round(performance.now()),
+            opened: comboBox.opened,
+            overlayOpened: overlay.opened,
+            attrs: overlay.getAttributeNames().join(','),
+            visible: overlay.offsetHeight > 0,
+          });
+        }).observe(overlay, { attributes: true });
+        overlay.addEventListener('animationend', (e) =>
+          window.__log.push({ t: Math.round(performance.now()), animationend: e.animationName }),
+        );
+      }
+      window.__ready = true;
+    </script>
+  </body>
+</html>

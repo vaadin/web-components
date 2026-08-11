@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #10238 — combo-box overlay flickers when no item is matched</title>
+    <script type="module" src="./common.js"></script>
+    <style>
+      /* Contrasting page background so the flashing (empty) overlay box is visible in a still frame. */
+      body {
+        background: #ffd66b;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Type a character that matches nothing (e.g. <code>z</code>) into each field.</p>
+
+    <h3>1. allow-custom-value (docs example)</h3>
+    <vaadin-combo-box id="custom" label="Country" allow-custom-value></vaadin-combo-box>
+
+    <h3>2. control: plain combo-box (no custom value)</h3>
+    <vaadin-combo-box id="plain" label="Country"></vaadin-combo-box>
+
+    <script type="module">
+      import '@vaadin/combo-box';
+
+      const items = ['Austria', 'Belgium', 'Croatia', 'Denmark', 'Estonia', 'Finland'];
+
+      window.__log = [];
+
+      for (const id of ['custom', 'plain']) {
+        const comboBox = document.querySelector(`#${id}`);
+        comboBox.items = items;
+
+        const overlay = comboBox.shadowRoot.querySelector('vaadin-combo-box-overlay');
+
+        // Log every change of the overlay state attributes that drive the animation.
+        const observer = new MutationObserver(() => {
+          window.__log.push({
+            id,
+            t: Math.round(performance.now()),
+            opened: comboBox.opened,
+            overlayOpened: overlay.opened,
+            attrs: overlay.getAttributeNames().join(','),
+            visible: overlay.offsetHeight > 0,
+          });
+        });
+        observer.observe(overlay, { attributes: true });
+
+        overlay.addEventListener('animationstart', (e) => {
+          window.__log.push({ id, t: Math.round(performance.now()), animationstart: e.animationName });
+        });
+        overlay.addEventListener('animationend', (e) => {
+          window.__log.push({ id, t: Math.round(performance.now()), animationend: e.animationName });
+        });
+      }
+    </script>
+  </body>
+</html>
