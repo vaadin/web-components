@@ -31,32 +31,25 @@ function mark(field: HTMLElement, properties: Partial<AiFieldMarker> = {}): AiFi
 }
 
 /**
- * Whether the animation names the marker uses resolve in the given root,
- * regardless of how the styles got there.
+ * How many style sheets define the animation names the marker uses in the
+ * given root, counting every way the styles can get there, so that a second
+ * marker adding its own copy can be told apart from reusing the existing one.
  */
-function hasMarkerKeyframes(root: ShadowRoot): boolean {
+function countMarkerKeyframes(root: ShadowRoot): number {
   const sheets = [
     ...root.adoptedStyleSheets,
     ...[...root.querySelectorAll('style')]
       .map((style) => style.sheet)
       .filter((sheet): sheet is CSSStyleSheet => sheet !== null),
   ];
-  return sheets.some((sheet) =>
+  return sheets.filter((sheet) =>
     [...sheet.cssRules].some((rule) => rule instanceof CSSKeyframesRule && rule.name.startsWith('--vaadin-ai-')),
-  );
+  ).length;
 }
 
-/**
- * How many times the marker animations are present in the given root, so that
- * a second marker adding its own copy can be told apart from reusing the
- * existing one.
- */
-function countMarkerKeyframes(root: ShadowRoot): number {
-  return [...root.querySelectorAll('style')].filter((style) =>
-    [...(style.sheet?.cssRules || [])].some(
-      (rule) => rule instanceof CSSKeyframesRule && rule.name.startsWith('--vaadin-ai-'),
-    ),
-  ).length;
+/** Whether the animation names the marker uses resolve in the given root. */
+function hasMarkerKeyframes(root: ShadowRoot): boolean {
+  return countMarkerKeyframes(root) > 0;
 }
 
 /**
@@ -935,48 +928,50 @@ describe('ai field marker', () => {
   });
 
   describe('moved to another field', () => {
-    // The marker keeps no state of the field it was attached to before, so a
-    // field that provides none of its own can not end up with the previous
-    // field's state.
-    let bareField: BareShadowField;
-    let marker: AiFieldMarker;
-
-    beforeEach(async () => {
-      bareField = fixtureSync(`<bare-shadow-field></bare-shadow-field>`);
-      marker = mark(field);
-      await nextRender();
-      marker.remove();
-      bareField.appendChild(marker);
-      await nextRender();
-    });
-
-    it('should not mark the previous field input busy', async () => {
-      marker.working = true;
-      await nextUpdate(marker);
-
-      expect(field.inputElement.hasAttribute('aria-busy')).to.be.false;
-    });
-
-    it('should not describe the previous field again when removed', () => {
-      expect(() => marker.remove()).to.not.throw();
-      expect(field.inputElement.getAttribute('aria-describedby') || '').to.not.contain('ai-field-marker-');
-    });
-
     it('should capture the value of the field it was moved to', async () => {
       const otherField = fixtureSync<TextField>(`<vaadin-text-field value="Other value"></vaadin-text-field>`);
       await nextRender();
-      const other = mark(field, { working: true });
+      const marker = mark(field, { working: true });
       await nextRender();
 
-      other.remove();
-      otherField.appendChild(other);
+      marker.remove();
+      otherField.appendChild(marker);
       await nextRender();
 
       const spy = sinon.spy();
       (otherField as HTMLElement).addEventListener('ai-field-revert', spy);
-      other.querySelector<HTMLButtonElement>('.actions > button')!.click();
+      marker.querySelector<HTMLButtonElement>('.actions > button')!.click();
 
       expect(spy.firstCall.args[0].detail.value).to.equal('Other value');
+    });
+
+    describe('to a field with no described element', () => {
+      // The marker keeps no state of the field it was attached to before, so a
+      // field that provides none of its own can not end up with the previous
+      // field's state.
+      let bareField: BareShadowField;
+      let marker: AiFieldMarker;
+
+      beforeEach(async () => {
+        bareField = fixtureSync(`<bare-shadow-field></bare-shadow-field>`);
+        marker = mark(field);
+        await nextRender();
+        marker.remove();
+        bareField.appendChild(marker);
+        await nextRender();
+      });
+
+      it('should not mark the previous field input busy', async () => {
+        marker.working = true;
+        await nextUpdate(marker);
+
+        expect(field.inputElement.hasAttribute('aria-busy')).to.be.false;
+      });
+
+      it('should not describe the previous field again when removed', () => {
+        expect(() => marker.remove()).to.not.throw();
+        expect(field.inputElement.getAttribute('aria-describedby') || '').to.not.contain('ai-field-marker-');
+      });
     });
   });
 
