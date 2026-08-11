@@ -129,6 +129,11 @@ export declare class TimePickerMixinClass {
    *
    * NOTE: `formatTime` and `parseTime` must be implemented in a
    * compatible manner to ensure the component works properly.
+   *
+   * NOTE: these functions only apply to the text shown in the input field and
+   * in the dropdown. The `value`, `min` and `max` properties always use the
+   * ISO 8601 format, and are never passed to `parseTime`, so implementations
+   * do not need to accept ISO 8601 input.
    */
   i18n: TimePickerI18n;
 }
