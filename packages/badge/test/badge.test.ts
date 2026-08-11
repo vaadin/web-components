@@ -112,4 +112,24 @@ describe('vaadin-badge', () => {
       expect(badge.hasAttribute('has-icon')).to.be.false;
     });
   });
+
+  describe('state attributes on connect', () => {
+    it('should set has-content attribute synchronously when connected with text content', () => {
+      const newBadge = fixtureSync<Badge>('<vaadin-badge>Text</vaadin-badge>');
+      expect(newBadge.hasAttribute('has-content')).to.be.true;
+    });
+
+    it('should set has-icon attribute synchronously when connected with icon content', () => {
+      const newBadge = fixtureSync<Badge>('<vaadin-badge><span slot="icon"></span></vaadin-badge>');
+      expect(newBadge.hasAttribute('has-icon')).to.be.true;
+    });
+
+    it('should set has-content attribute synchronously when content is set before connecting', () => {
+      const wrapper = fixtureSync('<div></div>');
+      const newBadge = document.createElement('vaadin-badge');
+      newBadge.textContent = 'Text';
+      wrapper.appendChild(newBadge);
+      expect(newBadge.hasAttribute('has-content')).to.be.true;
+    });
+  });
 });
