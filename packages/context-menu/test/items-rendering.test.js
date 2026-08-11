@@ -1,10 +1,127 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-context-menu.js';
-import '@vaadin/item/src/vaadin-item.js';
-import '@vaadin/list-box/src/vaadin-list-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { getMenuItems, getSubMenu, openMenu } from './helpers.js';
+import { getMenuItems, openMenu, openSubMenu } from './helpers.js';
+
+describe('items rendering', () => {
+  let rootMenu, subMenu, target;
+
+  beforeEach(async () => {
+    rootMenu = fixtureSync(`
+      <vaadin-context-menu>
+        <button id="target"></button>
+      </vaadin-context-menu>
+    `);
+    rootMenu.openOn = isTouch ? 'click' : 'mouseover';
+    target = rootMenu.firstElementChild;
+    rootMenu.items = [
+      {
+        text: 'foo-0',
+        children: [
+          { text: 'foo-0-0', checked: true },
+          { text: 'foo-0-1', disabled: true },
+        ],
+      },
+      { text: 'foo-1' },
+    ];
+    await nextRender();
+  });
+
+  afterEach(() => {
+    rootMenu.close();
+  });
+
+  async function openRoot() {
+    await openMenu(target);
+  }
+
+  describe('item content', () => {
+    beforeEach(async () => {
+      await openRoot();
+      subMenu = await openSubMenu(rootMenu);
+    });
+
+    it('should render root level items', () => {
+      expect(getMenuItems(rootMenu)[0].textContent).to.equal('foo-0');
+    });
+
+    it('should render sub-menu items', () => {
+      expect(getMenuItems(subMenu)[0].textContent).to.equal('foo-0-0');
+    });
+  });
+
+  describe('item elements', () => {
+    it('should have default item type', async () => {
+      await openRoot();
+      expect(getMenuItems(rootMenu)[0].localName).to.equal('vaadin-context-menu-item');
+    });
+
+    it('should accept component items', async () => {
+      const component = document.createElement('button');
+      rootMenu.items = [{ component }];
+      await openRoot();
+      expect(getMenuItems(rootMenu)[0]).to.equal(component);
+    });
+
+    it('should accept custom tags', async () => {
+      rootMenu.items = [{ component: 'button' }];
+      await openRoot();
+      expect(getMenuItems(rootMenu)[0].localName).to.equal('button');
+    });
+
+    it('should not remove the component attributes', async () => {
+      const button = document.createElement('button');
+      button.setAttribute('disabled', '');
+      button.setAttribute('menu-item-checked', '');
+      rootMenu.items[0].component = button;
+      await openRoot();
+      expect(button.hasAttribute('disabled')).to.be.true;
+      expect(button.hasAttribute('menu-item-checked')).to.be.true;
+    });
+  });
+
+  describe('item state attributes', () => {
+    it('should have menuitem role attribute', async () => {
+      await openRoot();
+      expect(getMenuItems(rootMenu)[0].getAttribute('role')).to.equal('menuitem');
+    });
+
+    it('should set aria-haspopup on an item with children', async () => {
+      await openRoot();
+      expect(getMenuItems(rootMenu)[0].getAttribute('aria-haspopup')).to.equal('true');
+    });
+
+    it('should unset aria-haspopup on an item without children', async () => {
+      const button = document.createElement('button');
+      rootMenu.items[0].component = button;
+      await openRoot();
+      rootMenu.close();
+      rootMenu.items[0].children = [];
+      await openRoot();
+      expect(getMenuItems(rootMenu)[0].getAttribute('aria-haspopup')).to.equal('false');
+    });
+
+    it('should have a checked item', async () => {
+      await openRoot();
+      subMenu = await openSubMenu(rootMenu);
+      expect(getMenuItems(subMenu)[0].hasAttribute('menu-item-checked')).to.be.true;
+    });
+
+    it('should not have a checked item', async () => {
+      rootMenu.items[0].children[0].checked = false;
+      await openRoot();
+      subMenu = await openSubMenu(rootMenu);
+      expect(getMenuItems(subMenu)[0].hasAttribute('menu-item-checked')).to.be.false;
+    });
+
+    it('should have a disabled item', async () => {
+      await openRoot();
+      subMenu = await openSubMenu(rootMenu);
+      expect(getMenuItems(subMenu)[1].disabled).to.be.true;
+    });
+  });
+});
 
 describe('items theme', () => {
   let rootMenu, subMenu, subMenu2, target;
@@ -44,10 +161,8 @@ describe('items theme', () => {
     ];
     await nextRender();
     await openMenu(target);
-    await openMenu(getMenuItems(rootMenu)[0]);
-    subMenu = getSubMenu(rootMenu);
-    await openMenu(getMenuItems(subMenu)[1]);
-    subMenu2 = getSubMenu(subMenu);
+    subMenu = await openSubMenu(rootMenu);
+    subMenu2 = await openSubMenu(subMenu, 1);
   });
 
   afterEach(() => {
@@ -82,8 +197,8 @@ describe('items theme', () => {
     // Should wait until submenus will be opened again.
     await nextRender();
     await openMenu(target);
-    await openMenu(getMenuItems(rootMenu)[0]);
-    await openMenu(getMenuItems(subMenu)[1]);
+    await openSubMenu(rootMenu);
+    await openSubMenu(subMenu, 1);
 
     [rootMenu, subMenu, subMenu2].forEach((subMenu) => {
       const overlay = subMenu._overlayElement;
@@ -103,8 +218,7 @@ describe('items theme', () => {
     rootMenu.items[0].children[0].theme = 'bar-0-0';
     await updateItemsAndReopen();
 
-    await openMenu(getMenuItems(rootMenu)[0]);
-    subMenu = getSubMenu(rootMenu);
+    subMenu = await openSubMenu(rootMenu);
 
     const rootItems = getMenuItems(rootMenu);
     const subItems = getMenuItems(subMenu);
@@ -163,7 +277,7 @@ describe('items theme', () => {
     subMenu.close();
     subMenu.items = [...subMenu.items];
 
-    await openMenu(getMenuItems(rootMenu)[0]);
+    await openSubMenu(rootMenu);
 
     const item = getMenuItems(subMenu)[2];
 
