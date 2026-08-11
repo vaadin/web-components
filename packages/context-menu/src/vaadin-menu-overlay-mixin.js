@@ -86,13 +86,7 @@ export const MenuOverlayMixin = (superClass) =>
     }
 
     /**
-     * Override method from `OverlayMixin` to close the whole menu from its
-     * root overlay: a click inside any overlay of the menu passes through
-     * the root overlay in the composed path, since all menu content is
-     * slotted through it (e.g. a click on an item with a sub-menu or with
-     * `keepOpen` set is not an outside click). Menus using the `items` API
-     * close regardless of the overlay stack, so overlays that do not belong
-     * to the menu (e.g. a tooltip shown for a menu item) do not block closing.
+     * Override method from `OverlayMixin` to close the menu from its root overlay.
      *
      * @param {Event} event
      * @return {boolean}
@@ -100,15 +94,17 @@ export const MenuOverlayMixin = (superClass) =>
      * @override
      */
     _shouldCloseOnOutsideClick(event) {
+      // Only close the menu from its root overlay
       if (this.parentOverlay) {
-        // Sub-menu overlays do not act, the root overlay closes the menu.
         return false;
       }
 
+      // Ignore clicks on nested menu items
       if (event.composedPath().includes(this)) {
         return false;
       }
 
+      // Ignore other overlays on top, e.g. an item tooltip
       if (this.owner.items) {
         return true;
       }
