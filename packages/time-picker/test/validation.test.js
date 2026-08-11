@@ -255,6 +255,23 @@ describe('validation', () => {
     });
   });
 
+  describe('midnight max', () => {
+    beforeEach(async () => {
+      timePicker = fixtureSync(`<vaadin-time-picker max="00:00"></vaadin-time-picker>`);
+      await nextRender();
+    });
+
+    it('should fail validation with a value > max', () => {
+      timePicker.value = '05:00';
+      expect(timePicker.checkValidity()).to.be.false;
+    });
+
+    it('should pass validation with a value = max', () => {
+      timePicker.value = '00:00';
+      expect(timePicker.checkValidity()).to.be.true;
+    });
+  });
+
   describe('min and max with custom i18n', () => {
     beforeEach(async () => {
       timePicker = fixtureSync(`<vaadin-time-picker min="10:00" max="14:00"></vaadin-time-picker>`);
@@ -282,7 +299,9 @@ describe('validation', () => {
       timePicker.i18n = { ...strictAmPmI18n, parseTime };
       timePicker.value = '12:00';
       timePicker.checkValidity();
-      expect(parseTime.args.flat()).to.not.include.members(['12:00', '10:00', '14:00']);
+      expect(parseTime).to.not.be.calledWith('12:00');
+      expect(parseTime).to.not.be.calledWith('10:00');
+      expect(parseTime).to.not.be.calledWith('14:00');
     });
   });
 
