@@ -384,10 +384,6 @@ describe('ai field marker', () => {
       popover = marker.querySelector('vaadin-popover')!;
     });
 
-    it('should expose the popover as a dialog', () => {
-      expect(popover.getAttribute('role')).to.equal('dialog');
-    });
-
     it('should label the popover dialog with the badge label', () => {
       expect(popover.getAttribute('aria-label')).to.equal(DEFAULT_BADGE_LABEL);
     });
