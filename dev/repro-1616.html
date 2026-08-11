@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #1616</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/date-picker';
+    </script>
+  </head>
+  <body>
+    <!-- Failing case: min and max are in the SAME calendar month (November 2020). -->
+    <vaadin-date-picker
+      id="failing"
+      label="min/max same month (Nov 2020)"
+      min="2020-11-15"
+      max="2020-11-20"
+      initial-position="2018-11-01"
+    ></vaadin-date-picker>
+
+    <!-- Control: min and max span TWO different months, everything else identical. -->
+    <vaadin-date-picker
+      id="control"
+      label="min/max different months (Nov-Dec 2020)"
+      min="2020-11-15"
+      max="2020-12-20"
+      initial-position="2018-11-01"
+    ></vaadin-date-picker>
+  </body>
+</html>
