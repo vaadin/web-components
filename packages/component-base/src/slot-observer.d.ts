@@ -14,12 +14,18 @@
  * bubbling to it and diffs the **union** of `assignedNodes({ flatten: true })`
  * every descendant `<slot>`. Cross-slot reassignment of the same node does
  * not change the union and therefore fires no callback.
+ *
+ * The initial pass runs in a microtask by default. Use the `syncInitial` option
+ * when the callback sets state that affects the layout of the component, so that
+ * it has its final size once connected. Otherwise consumers that measure it
+ * synchronously, such as auto-width columns in `<vaadin-grid>`, would measure the
+ * component before that state is applied.
  */
 export class SlotObserver {
   constructor(
     target: HTMLSlotElement | DocumentFragment,
     callback: (info: { addedNodes: Node[]; currentNodes: Node[]; movedNodes: Node[]; removedNodes: Node[] }) => void,
-    forceInitial?: boolean,
+    options?: { forceInitial?: boolean; syncInitial?: boolean },
   );
 
   readonly target: HTMLSlotElement | DocumentFragment;

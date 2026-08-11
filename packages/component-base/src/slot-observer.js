@@ -14,9 +14,20 @@
  * bubbling to it and diffs the **union** of `assignedNodes({ flatten: true })`
  * across every descendant `<slot>`. Cross-slot reassignment of the same node
  * does not change the union and therefore fires no callback.
+ *
+ * The initial pass runs in a microtask by default. Use the `syncInitial` option
+ * when the callback sets state that affects the layout of the component, so that
+ * it has its final size once connected. Otherwise consumers that measure it
+ * synchronously, such as auto-width columns in `<vaadin-grid>`, would measure the
+ * component before that state is applied.
  */
 export class SlotObserver {
-  constructor(target, callback, forceInitial) {
+  /**
+   * @param {HTMLSlotElement | DocumentFragment} target
+   * @param {Function} callback
+   * @param {{ forceInitial?: boolean, syncInitial?: boolean }} options
+   */
+  constructor(target, callback, options = {}) {
     /** @type {HTMLSlotElement | DocumentFragment} */
     this.target = target;
 
@@ -24,7 +35,7 @@ export class SlotObserver {
     this.callback = callback;
 
     /** @type {boolean} */
-    this.forceInitial = forceInitial;
+    this.forceInitial = options.forceInitial;
 
     /** @type {Node[]} */
     this._storedNodes = [];
@@ -40,7 +51,12 @@ export class SlotObserver {
     };
 
     this.connect();
-    this._schedule();
+
+    if (options.syncInitial) {
+      this.flush();
+    } else {
+      this._schedule();
+    }
   }
 
   /**
@@ -69,7 +85,11 @@ export class SlotObserver {
       this._scheduled = true;
 
       queueMicrotask(() => {
-        this.flush();
+        // Skip if the nodes have already been processed by an explicit `flush()`
+        // in the meantime, to avoid running the diff a second time for nothing.
+        if (this._scheduled) {
+          this.flush();
+        }
       });
     }
   }

@@ -139,10 +139,13 @@ class BreadcrumbsItem extends FocusMixin(DisabledMixin(ElementMixin(PolylitMixin
   ready() {
     super.ready();
 
-    this.__slotObserver = new SlotObserver(this.shadowRoot, () => {
-      this.toggleAttribute('has-prefix', !!this.querySelector('[slot="prefix"]'));
-    });
-    this.__slotObserver.flush();
+    this.__slotObserver = new SlotObserver(
+      this.shadowRoot,
+      () => {
+        this.toggleAttribute('has-prefix', !!this.querySelector('[slot="prefix"]'));
+      },
+      { syncInitial: true },
+    );
   }
 
   /**

@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { SlotObserver } from '../src/slot-observer.js';
 
@@ -201,7 +202,7 @@ describe('SlotObserver', () => {
     host.innerHTML = '';
 
     spy = sinon.spy();
-    observer = new SlotObserver(slot, spy, true);
+    observer = new SlotObserver(slot, spy, { forceInitial: true });
     await Promise.resolve();
 
     expect(spy).to.be.calledOnce;
@@ -211,7 +212,7 @@ describe('SlotObserver', () => {
     host.innerHTML = '';
 
     spy = sinon.spy();
-    observer = new SlotObserver(slot, spy, true);
+    observer = new SlotObserver(slot, spy, { forceInitial: true });
     await Promise.resolve();
 
     spy.resetHistory();
@@ -219,6 +220,43 @@ describe('SlotObserver', () => {
     observer.flush();
 
     expect(spy).to.be.not.called;
+  });
+
+  it('should run callback for initial nodes synchronously with syncInitial: true', () => {
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy, { syncInitial: true });
+
+    expect(spy).to.be.calledOnce;
+    expect(spy.firstCall.args[0].addedNodes).to.have.lengthOf(3);
+  });
+
+  it('should not schedule a microtask pass with syncInitial: true', async () => {
+    // Let the slotchange from the initial assignment settle first, so that it
+    // does not schedule a pass of its own while the assertion is running.
+    await nextFrame();
+
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy, { syncInitial: true });
+
+    const processSpy = sinon.spy(observer, '_processNodes');
+    await Promise.resolve();
+
+    expect(processSpy).to.be.not.called;
+  });
+
+  it('should not process nodes again after the microtask when flushed early', async () => {
+    // Let the slotchange from the initial assignment settle first, so that it
+    // does not schedule a pass of its own while the assertion is running.
+    await nextFrame();
+
+    spy = sinon.spy();
+    observer = new SlotObserver(slot, spy);
+
+    const processSpy = sinon.spy(observer, '_processNodes');
+    observer.flush();
+    await Promise.resolve();
+
+    expect(processSpy).to.be.calledOnce;
   });
 
   describe('target mode', () => {
