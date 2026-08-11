@@ -35,9 +35,37 @@ class MockAnimatedOverlay extends MockOverlay {
           opacity: 0.5;
         }
 
+        /* Two animations of different lengths, the state ends with the longest */
+        :host([multiple-animations][opening]),
+        :host([multiple-animations][closing]) {
+          animation:
+            50ms overlay-dummy-animation,
+            5s content-dummy-animation;
+        }
+
+        /* A transition applied by a theme, which does not report the state of the overlay */
+        :host([theme-transition]) {
+          transition: opacity 5s;
+        }
+
+        :host([theme-transition][opening]) {
+          opacity: 0.9;
+        }
+
+        /* Content that keeps animating for longer than the overlay itself */
+        ::slotted(.slow-content) {
+          animation: 5s content-dummy-animation;
+        }
+
         @keyframes overlay-dummy-animation {
           to {
             opacity: 1 !important; /* stylelint-disable-line keyframe-declaration-no-important */
+          }
+        }
+
+        @keyframes content-dummy-animation {
+          to {
+            opacity: 0.5;
           }
         }
       `,

@@ -6,7 +6,7 @@
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
 import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
-import { setOverlayStateAttribute, shouldAnimate } from './vaadin-overlay-utils.js';
+import { getStateAnimations, setOverlayStateAttribute } from './vaadin-overlay-utils.js';
 
 export const OverlayMixin = (superClass) =>
   class OverlayMixin extends OverlayFocusMixin(OverlayStackMixin(superClass)) {
@@ -132,11 +132,6 @@ export const OverlayMixin = (superClass) =>
       if (this.$.backdrop) {
         this.$.backdrop.addEventListener('click', () => {});
       }
-
-      this.addEventListener('animationcancel', () => {
-        this._flushAnimation('opening');
-        this._flushAnimation('closing');
-      });
     }
 
     /** @protected */
@@ -393,30 +388,35 @@ export const OverlayMixin = (superClass) =>
     }
 
     /**
-     * @return {boolean}
-     * @private
-     */
-    _shouldAnimate() {
-      return shouldAnimate(this);
-    }
-
-    /**
+     * Run the callback once every animation reporting the state has ended, or right away when
+     * there is none.
+     *
      * @param {string} type
      * @param {Function} callback
      * @private
      */
     _enqueueAnimation(type, callback) {
+      const animations = getStateAnimations(this);
+      if (animations.length === 0) {
+        callback();
+        return;
+      }
+
       const handler = `__${type}Handler`;
-      const listener = (event) => {
-        if (event && event.target !== this) {
+      const finish = () => {
+        // The phase may already have been finished by _flushAnimation(), or superseded by a
+        // later one of the same type, in which case this callback no longer applies
+        if (this[handler] !== finish) {
           return;
         }
-        callback();
-        this.removeEventListener('animationend', listener);
+        // Cleared before the callback, so that a listener reopening the overlay synchronously
+        // installs its own handler rather than having it deleted afterwards
         delete this[handler];
+        callback();
       };
-      this[handler] = listener;
-      this.addEventListener('animationend', listener);
+      this[handler] = finish;
+      // A cancelled animation rejects, which ends the phase just as finishing does
+      Promise.all(animations.map((animation) => animation.finished)).then(finish, finish);
     }
 
     /**
@@ -442,13 +442,9 @@ export const OverlayMixin = (superClass) =>
       }
       setOverlayStateAttribute(this, 'opening', true);
 
-      if (this._shouldAnimate()) {
-        this._enqueueAnimation('opening', () => {
-          this._finishOpening();
-        });
-      } else {
+      this._enqueueAnimation('opening', () => {
         this._finishOpening();
-      }
+      });
     }
 
     /** @private */
@@ -482,13 +478,9 @@ export const OverlayMixin = (superClass) =>
         setOverlayStateAttribute(this, 'closing', true);
         this.dispatchEvent(new CustomEvent('vaadin-overlay-closing'));
 
-        if (this._shouldAnimate()) {
-          this._enqueueAnimation('closing', () => {
-            this._finishClosing();
-          });
-        } else {
+        this._enqueueAnimation('closing', () => {
           this._finishClosing();
-        }
+        });
       }
     }
 

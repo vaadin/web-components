@@ -20,6 +20,20 @@ export function observeMove(element: HTMLElement, callback: () => void): () => v
 export function shouldAnimate(element: HTMLElement): boolean;
 
 /**
+ * Collect the animations that report the state of the given element, so that their end can be
+ * awaited before the element is hidden or removed. The animations are read instead of the
+ * computed style, so that the decision to wait cannot disagree with what the browser actually
+ * created: a keyframes rule that does not exist and an element that is not rendered both give
+ * an empty list.
+ *
+ * Only CSS animations count, as the transitions and the script animations that `getAnimations()`
+ * also returns do not report the state. Animations of any content are already left out, as
+ * `getAnimations()` only descends into the subtree when asked to. Animations that take no time
+ * are dropped as well, so that a delay on its own does not hold the state.
+ */
+export function getStateAnimations(element: HTMLElement): Animation[];
+
+/**
  * Toggle the state attribute on the overlay element and also its owner element. This allows targeting state attributes
  * in the light DOM in case the overlay is in the shadow DOM of its owner.
  */

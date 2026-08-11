@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { escKeyDown, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, escKeyDown, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './fixtures/mock-animated-overlay.js';
 
@@ -191,19 +191,6 @@ function afterOverlayClosingFinished(overlay, callback) {
 
         expect(overlay.hasAttribute('closing')).to.be.false;
         expect(owner.hasAttribute('closing')).to.be.false;
-      });
-
-      it('should remove the animationend listener after the animation has finished', async () => {
-        overlay.opened = true;
-
-        await new Promise((resolve) => {
-          afterOverlayOpeningFinished(overlay, resolve);
-        });
-
-        const spy = sinon.spy(overlay, '_finishOpening');
-        overlay.dispatchEvent(new AnimationEvent('animationend'));
-
-        expect(spy).to.be.not.called;
       });
 
       it('should not run the animation callback again after the animation has finished', async () => {
@@ -477,5 +464,119 @@ describe('zero-duration animation', () => {
     expect(finishClosing).to.be.calledOnce;
     expect(overlay.hasAttribute('closing')).to.be.false;
     expect(owner.hasAttribute('closing')).to.be.false;
+  });
+});
+
+describe('animation objects', () => {
+  let overlay;
+
+  beforeEach(async () => {
+    overlay = fixtureSync('<mock-animated-overlay>overlay content</mock-animated-overlay>');
+    await nextRender();
+  });
+
+  afterEach(() => {
+    overlay._flushAnimation('opening');
+    overlay.opened = false;
+    overlay._flushAnimation('closing');
+  });
+
+  describe('animations that do not report the state', () => {
+    it('should not wait for a transition on the overlay', () => {
+      overlay.setAttribute('theme-transition', '');
+      expect(getComputedStyle(overlay).transitionDuration).to.equal('5s');
+
+      overlay.opened = true;
+
+      expect(overlay.hasAttribute('opening')).to.be.false;
+    });
+
+    it('should not wait for a content animation that outlives the overlay animation', async () => {
+      overlay.setAttribute('animate', '');
+
+      const div = document.createElement('div');
+      div.classList.add('slow-content');
+      overlay.appendChild(div);
+
+      overlay.opened = true;
+      expect(div.getAnimations()).to.have.lengthOf(1);
+
+      await oneEvent(overlay, 'animationend');
+      await nextFrame();
+
+      expect(div.getAnimations()).to.have.lengthOf(1);
+      expect(overlay.hasAttribute('opening')).to.be.false;
+    });
+  });
+
+  describe('long animation', () => {
+    beforeEach(() => {
+      overlay.setAttribute('long-animation', '');
+    });
+
+    it('should wait for the closing animation when closed while opening', () => {
+      overlay.opened = true;
+      overlay.opened = false;
+
+      expect(overlay.hasAttribute('closing')).to.be.true;
+    });
+
+    it('should stay open when reopened while the closing animation runs', async () => {
+      overlay.opened = true;
+      overlay._flushAnimation('opening');
+      overlay.opened = false;
+      overlay.opened = true;
+      await aTimeout(100);
+
+      expect(overlay.hasAttribute('closing')).to.be.false;
+      expect(overlay.matches(':popover-open')).to.be.true;
+    });
+  });
+
+  describe('short animation', () => {
+    beforeEach(() => {
+      overlay.setAttribute('animate', '');
+    });
+
+    it('should not get stuck when closed right after the opening animation ended', async () => {
+      overlay.opened = true;
+      await oneEvent(overlay, 'animationend');
+
+      overlay.opened = false;
+
+      expect(overlay.hasAttribute('closing')).to.be.false;
+      expect(overlay.matches(':popover-open')).to.be.false;
+    });
+
+    it('should not fire closed again when the flushed closing animation settles', async () => {
+      overlay.opened = true;
+      overlay._flushAnimation('opening');
+      overlay.opened = false;
+      overlay._flushAnimation('closing');
+
+      const spy = sinon.spy();
+      overlay.addEventListener('vaadin-overlay-closed', spy);
+      // Longer than the animation, so its promise has settled either way
+      await aTimeout(100);
+
+      expect(spy).to.be.not.called;
+    });
+  });
+
+  describe('multiple animations', () => {
+    beforeEach(() => {
+      overlay.setAttribute('multiple-animations', '');
+    });
+
+    it('should wait for the longest animation', async () => {
+      overlay.opened = true;
+      expect(overlay.getAnimations()).to.have.lengthOf(2);
+
+      // The 50ms animation ends first, while the 5s one is still running
+      await oneEvent(overlay, 'animationend');
+      await nextFrame();
+
+      expect(overlay.hasAttribute('opening')).to.be.true;
+    });
   });
 });
