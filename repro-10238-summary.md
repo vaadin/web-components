@@ -13,7 +13,7 @@
 - **Reproduced on:** vaadin/web-components @ `main` (25.3.0-alpha9, commit b8810b2a3814843de85a592520e48d4bc4bf868f)
 - **Present on main?:** yes (still broken)
 - **Theme / Browser:** Lumo and Aura (not visible in base) / Chromium 141 (Playwright)
-- **Screenshot** (still frame of the flash, exit animation paused): ![Empty combo-box overlay flashing below the field](https://raw.githubusercontent.com/vaadin/web-components/PLACEHOLDER/repro-10238.png)
+- **Screenshot** (still frame of the flash, exit animation paused): ![Empty combo-box overlay flashing below the field](https://raw.githubusercontent.com/vaadin/web-components/ce0500d3c6b4cbc7cc0834efa000e1122894d455/repro-10238.png)
 - **Demo video** (motion bug): `repro-10238-flicker.webm` (on the branch; drag into the comment for inline playback)
 
 ## Observed behavior
