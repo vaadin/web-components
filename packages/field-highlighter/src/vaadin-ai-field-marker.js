@@ -502,8 +502,9 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
     }
 
     const { message, revert, badgeLabel, badgeTooltip } = this.__effectiveI18n;
+    // Safari leaves buttons out of the tab order unless they set a tabindex.
     return html`
-      <button id="${this.#badgeId}" class="badge" type="button" aria-label="${badgeLabel}"></button>
+      <button id="${this.#badgeId}" class="badge" type="button" tabindex="0" aria-label="${badgeLabel}"></button>
       <vaadin-tooltip for="${this.#badgeId}" text="${badgeTooltip}"></vaadin-tooltip>
       <vaadin-popover
         for="${this.#badgeId}"
@@ -516,7 +517,7 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
       >
         <p class="message">${message}</p>
         <div class="actions">
-          <button type="button" @click="${this.#onRevert}">${revert}</button>
+          <button type="button" tabindex="0" @click="${this.#onRevert}">${revert}</button>
         </div>
       </vaadin-popover>
     `;

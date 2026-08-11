@@ -17,6 +17,7 @@ snapshots["vaadin-ai-field-marker host default"] =
     aria-label="AI-provided value"
     class="badge"
     id="vaadin-ai-field-marker-4"
+    tabindex="0"
     type="button"
   >
   </button>
@@ -50,7 +51,10 @@ Click for details
       This field value was modified by AI.
     </p>
     <div class="actions">
-      <button type="button">
+      <button
+        tabindex="0"
+        type="button"
+      >
         Revert Value
       </button>
     </div>
