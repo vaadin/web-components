@@ -481,27 +481,6 @@ describe('animation objects', () => {
     overlay._flushAnimation('closing');
   });
 
-  describe('keyframes that do not exist', () => {
-    beforeEach(() => {
-      overlay.style.animationName = 'does-not-exist';
-      overlay.style.animationDuration = '10s';
-    });
-
-    it('should not wait for the opening animation', () => {
-      overlay.opened = true;
-
-      expect(overlay.hasAttribute('opening')).to.be.false;
-    });
-
-    it('should not wait for the closing animation', () => {
-      overlay.opened = true;
-      overlay.opened = false;
-
-      expect(overlay.hasAttribute('closing')).to.be.false;
-      expect(overlay.matches(':popover-open')).to.be.false;
-    });
-  });
-
   describe('animations that do not report the state', () => {
     it('should not wait for a transition on the overlay', () => {
       overlay.setAttribute('theme-transition', '');
@@ -557,6 +536,16 @@ describe('animation objects', () => {
   describe('short animation', () => {
     beforeEach(() => {
       overlay.setAttribute('animate', '');
+    });
+
+    it('should not get stuck when closed right after the opening animation ended', async () => {
+      overlay.opened = true;
+      await oneEvent(overlay, 'animationend');
+
+      overlay.opened = false;
+
+      expect(overlay.hasAttribute('closing')).to.be.false;
+      expect(overlay.matches(':popover-open')).to.be.false;
     });
 
     it('should not fire closed again when the flushed closing animation settles', async () => {

@@ -85,10 +85,6 @@ export function observeMove(element, callback) {
   return cleanup;
 }
 
-// Notification still uses `shouldAnimate()`: its card cancels and restarts a same-named
-// animation when it moves between the opening and closing state, which leaves the animation
-// objects briefly unobservable.
-
 /**
  * Detect whether an animation runs on the given element, so that its end can be
  * awaited before the element is hidden or removed. An element that is not rendered,
