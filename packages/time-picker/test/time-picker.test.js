@@ -3,7 +3,7 @@ import { enter, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpe
 import sinon from 'sinon';
 import '../src/vaadin-time-picker.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { setInputValue } from './helpers.js';
+import { setInputValue, strictAmPmI18n } from './helpers.js';
 
 describe('time-picker', () => {
   let timePicker, inputElement;
@@ -394,6 +394,25 @@ describe('time-picker', () => {
       timePicker.value = '12:00';
       expect(inputElement.value).to.equal('12:00');
       expect(timePicker.value).to.equal('12:00');
+    });
+
+    it('should keep the value when a custom i18n is set after the value', () => {
+      timePicker.value = '08:00';
+      timePicker.i18n = strictAmPmI18n;
+      expect(timePicker.value).to.be.equal('08:00');
+      expect(inputElement.value).to.be.equal('8:00 AM');
+    });
+
+    ['min', 'max', 'step'].forEach((property) => {
+      const value = property === 'step' ? 1800 : property === 'min' ? '01:00' : '23:00';
+
+      it(`should keep the value on ${property} change with a custom i18n`, () => {
+        timePicker.i18n = strictAmPmI18n;
+        timePicker.value = '08:00';
+        timePicker[property] = value;
+        expect(timePicker.value).to.be.equal('08:00');
+        expect(inputElement.value).to.be.equal('8:00 AM');
+      });
     });
   });
 
