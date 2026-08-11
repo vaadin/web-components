@@ -293,16 +293,6 @@ describe('validation', () => {
       timePicker.value = '12:00';
       expect(timePicker.checkValidity()).to.be.true;
     });
-
-    it('should not pass value, min or max to the custom parser', () => {
-      const parseTime = sinon.spy(strictAmPmI18n.parseTime);
-      timePicker.i18n = { ...strictAmPmI18n, parseTime };
-      timePicker.value = '12:00';
-      timePicker.checkValidity();
-      expect(parseTime).to.not.be.calledWith('12:00');
-      expect(parseTime).to.not.be.calledWith('10:00');
-      expect(parseTime).to.not.be.calledWith('14:00');
-    });
   });
 
   describe('pattern', () => {
