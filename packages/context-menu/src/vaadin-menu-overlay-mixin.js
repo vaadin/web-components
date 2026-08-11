@@ -104,7 +104,7 @@ export const MenuOverlayMixin = (superClass) =>
         return false;
       }
 
-      // Ignore other overlays on top, e.g. an item tooltip
+      // Close on outside click also if there is a tooltip shown on top
       if (this.owner.items) {
         return true;
       }
