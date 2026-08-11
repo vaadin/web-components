@@ -61,17 +61,11 @@ describe('items interactions', () => {
     document.documentElement.setAttribute('dir', 'ltr');
   });
 
-  async function openRoot() {
-    await openMenu(target);
-    rootOverlay = rootMenu._overlayElement;
-    subMenu = getSubMenu(rootMenu);
-    subOverlay1 = subMenu._overlayElement;
-  }
-
   describe('closing on click', () => {
     beforeEach(async () => {
-      await openRoot();
-      await openSubMenu(rootMenu);
+      await openMenu(target);
+      subMenu = await openSubMenu(rootMenu);
+      subOverlay1 = subMenu._overlayElement;
     });
 
     // On touch, the click opening the second menu closes the first one.
@@ -122,8 +116,9 @@ describe('items interactions', () => {
 
   describe('hover', () => {
     beforeEach(async () => {
-      await openRoot();
-      await openSubMenu(rootMenu);
+      await openMenu(target);
+      subMenu = await openSubMenu(rootMenu);
+      rootOverlay = rootMenu._overlayElement;
     });
 
     it('should update the submenu when activating other parent item', () => {
@@ -179,8 +174,8 @@ describe('items interactions', () => {
 
   describe('closing with keyboard', () => {
     beforeEach(async () => {
-      await openRoot();
-      await openSubMenu(rootMenu);
+      await openMenu(target);
+      subMenu = await openSubMenu(rootMenu);
     });
 
     it('should close the submenu on left arrow', async () => {
@@ -212,7 +207,8 @@ describe('items interactions', () => {
 
   describe('opening sub-menu with keyboard', () => {
     beforeEach(async () => {
-      await openRoot();
+      await openMenu(target);
+      subMenu = getSubMenu(rootMenu);
       // Focus the parent item explicitly, as sendKeys sends to the browser
       getMenuItems(rootMenu)[0].focus();
     });
@@ -242,7 +238,9 @@ describe('items interactions', () => {
 
   describe('focus on sub-menu open', () => {
     beforeEach(async () => {
-      await openRoot();
+      await openMenu(target);
+      subMenu = getSubMenu(rootMenu);
+      rootOverlay = rootMenu._overlayElement;
       // Move focus from the root item to the overlay itself: a sub-menu only
       // focuses its first item when the parent item has focus.
       rootOverlay.$.overlay.focus();
@@ -318,35 +316,38 @@ describe('items interactions', () => {
   });
 
   describe('expanded state', () => {
+    let items;
+
     beforeEach(async () => {
-      await openRoot();
-      await openSubMenu(rootMenu);
+      await openMenu(target);
+      subMenu = await openSubMenu(rootMenu);
+      items = getMenuItems(rootMenu);
     });
 
     it('should have expanded attributes', async () => {
-      expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.true;
-      expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('true');
+      expect(items[0].hasAttribute('expanded')).to.be.true;
+      expect(items[0].getAttribute('aria-expanded')).to.equal('true');
       subMenu.close();
       await nextRender();
-      expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.false;
-      expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('false');
+      expect(items[0].hasAttribute('expanded')).to.be.false;
+      expect(items[0].getAttribute('aria-expanded')).to.equal('false');
     });
 
-    it('should update expanded attributes when activating different parent items', async () => {
-      expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.true;
-      expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('true');
+    it('should update expanded attributes when activating different parent item', async () => {
+      expect(items[0].hasAttribute('expanded')).to.be.true;
+      expect(items[0].getAttribute('aria-expanded')).to.equal('true');
 
-      await activateItem(getMenuItems(rootMenu)[3]);
-      expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.false;
-      expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('false');
-      expect(getMenuItems(rootMenu)[3].hasAttribute('expanded')).to.be.true;
-      expect(getMenuItems(rootMenu)[3].getAttribute('aria-expanded')).to.equal('true');
+      await activateItem(items[3]);
+      expect(items[0].hasAttribute('expanded')).to.be.false;
+      expect(items[0].getAttribute('aria-expanded')).to.equal('false');
+      expect(items[3].hasAttribute('expanded')).to.be.true;
+      expect(items[3].getAttribute('aria-expanded')).to.equal('true');
 
-      await activateItem(getMenuItems(rootMenu)[0]);
-      expect(getMenuItems(rootMenu)[0].hasAttribute('expanded')).to.be.true;
-      expect(getMenuItems(rootMenu)[0].getAttribute('aria-expanded')).to.equal('true');
-      expect(getMenuItems(rootMenu)[3].hasAttribute('expanded')).to.be.false;
-      expect(getMenuItems(rootMenu)[3].getAttribute('aria-expanded')).to.equal('false');
+      await activateItem(items[0]);
+      expect(items[0].hasAttribute('expanded')).to.be.true;
+      expect(items[0].getAttribute('aria-expanded')).to.equal('true');
+      expect(items[3].hasAttribute('expanded')).to.be.false;
+      expect(items[3].getAttribute('aria-expanded')).to.equal('false');
     });
   });
 });
