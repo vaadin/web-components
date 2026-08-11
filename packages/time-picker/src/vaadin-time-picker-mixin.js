@@ -169,6 +169,11 @@ export const TimePickerMixin = (superClass) =>
      * NOTE: `formatTime` and `parseTime` must be implemented in a
      * compatible manner to ensure the component works properly.
      *
+     * NOTE: these functions only apply to the text shown in the input field and
+     * in the dropdown. The `value`, `min` and `max` properties always use the
+     * ISO 8601 format, and are never passed to `parseTime`, so implementations
+     * do not need to accept ISO 8601 input.
+     *
      * @type {!TimePickerI18n}
      */
     get i18n() {
@@ -234,7 +239,7 @@ export const TimePickerMixin = (superClass) =>
     checkValidity() {
       return !!(
         this.inputElement.checkValidity() &&
-        (!this.value || this._timeAllowed(this.__effectiveI18n.parseTime(this.value))) &&
+        (!this.value || this._timeAllowed(parseISOTime(this.value))) &&
         (!this._comboBoxValue || this.__effectiveI18n.parseTime(this._comboBoxValue))
       );
     }
@@ -507,14 +512,15 @@ export const TimePickerMixin = (superClass) =>
 
       this._dropdownItems = this.__generateDropdownList(minSec, maxSec, step);
 
+      const parsedValue = validateTime(parseISOTime(this.value), step);
+
       if (step !== this.__oldStep) {
         this.__oldStep = step;
-        const parsedObj = validateTime(parseISOTime(this.value), step);
-        this.__updateValue(parsedObj);
+        this.__updateValue(parsedValue);
       }
 
       if (this.value) {
-        this._comboBoxValue = effectiveI18n.formatTime(effectiveI18n.parseTime(this.value));
+        this._comboBoxValue = effectiveI18n.formatTime(parsedValue);
       }
     }
 
@@ -647,12 +653,12 @@ export const TimePickerMixin = (superClass) =>
      * @protected
      */
     _timeAllowed(time) {
-      const parsedMin = this.__effectiveI18n.parseTime(this.min || MIN_ALLOWED_TIME);
-      const parsedMax = this.__effectiveI18n.parseTime(this.max || MAX_ALLOWED_TIME);
+      const parsedMin = parseISOTime(this.min || MIN_ALLOWED_TIME);
+      const parsedMax = parseISOTime(this.max || MAX_ALLOWED_TIME);
 
       return (
-        (!this.__getMsec(parsedMin) || this.__getMsec(time) >= this.__getMsec(parsedMin)) &&
-        (!this.__getMsec(parsedMax) || this.__getMsec(time) <= this.__getMsec(parsedMax))
+        (!parsedMin || this.__getMsec(time) >= this.__getMsec(parsedMin)) &&
+        (!parsedMax || this.__getMsec(time) <= this.__getMsec(parsedMax))
       );
     }
 
