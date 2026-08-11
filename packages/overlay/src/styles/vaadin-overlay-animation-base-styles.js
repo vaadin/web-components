@@ -49,7 +49,6 @@ export const overlayAnimationStyles = css`
 
   :host(:where([opening], [closing])) {
     /* This empty animation only reports the state, the parts run the visible animation */
-    /* The state ends with it, so a theme animating a part for longer must extend the duration */
     animation-name: --no-op;
     animation-duration: var(--vaadin-overlay-animation-duration);
     animation-delay: var(--vaadin-overlay-animation-delay);
