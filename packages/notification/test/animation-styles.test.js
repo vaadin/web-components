@@ -3,7 +3,6 @@ import { emulateMedia } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-notification.js';
-import { shouldAnimate } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
 
 // Do not import `not-animated-styles.css` to verify default animations.
 
@@ -47,7 +46,7 @@ describe('notification card animation styles', () => {
     it('should animate the card', () => {
       notification.opened = true;
 
-      expect(shouldAnimate(card)).to.be.true;
+      expect(notification.__shouldAnimateCard()).to.be.true;
     });
 
     it('should run the overlay animations on the card', () => {

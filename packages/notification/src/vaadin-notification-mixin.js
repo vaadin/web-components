@@ -7,7 +7,6 @@ import { render } from 'lit';
 import { isTemplateResult } from 'lit/directive-helpers.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { OverlayClassMixin } from '@vaadin/component-base/src/overlay-class-mixin.js';
-import { shouldAnimate } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 /**
@@ -344,6 +343,27 @@ export const NotificationMixin = (superClass) =>
     }
 
     /**
+     * Detect whether an animation runs on the card, so that its end can be awaited before the
+     * card is removed. A card that is not rendered, has no animation name, or has a zero
+     * duration does not fire `animationend`.
+     *
+     * `getStateAnimations()` cannot replace this: the card declares the same keyframes for both
+     * states, so nothing restarts when it closes right after the opening animation ended, and no
+     * animation is found. The computed style still reports the declared animation, which is what
+     * the card needs in order to stay in the DOM until its height has collapsed.
+     * @private
+     */
+    __shouldAnimateCard() {
+      const style = getComputedStyle(this._card);
+      const name = style.getPropertyValue('animation-name');
+      const hasDuration = style
+        .getPropertyValue('animation-duration')
+        .split(',')
+        .some((duration) => parseFloat(duration) > 0);
+      return style.getPropertyValue('display') !== 'none' && name && name !== 'none' && hasDuration;
+    }
+
+    /**
      * Run the callback when the animation of the card itself ends. Animations of the
      * notification content also end on the card, as the content is in its light DOM.
      * @private
@@ -365,7 +385,7 @@ export const NotificationMixin = (superClass) =>
 
         this._card.setAttribute('opening', '');
         this._appendNotificationCard();
-        if (shouldAnimate(this._card)) {
+        if (this.__shouldAnimateCard()) {
           this.__onCardAnimationEnd(() => this.__cleanUpOpeningClosingState());
         } else {
           this.__cleanUpOpeningClosingState();
@@ -428,7 +448,7 @@ export const NotificationMixin = (superClass) =>
       this.__cleanUpOpeningClosingState();
 
       this._card.setAttribute('closing', '');
-      if (shouldAnimate(this._card)) {
+      if (this.__shouldAnimateCard()) {
         this.__onCardAnimationEnd(() => {
           this._removeNotificationCard();
           this.__cleanUpOpeningClosingState();
