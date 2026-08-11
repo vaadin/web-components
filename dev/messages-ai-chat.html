@@ -14,41 +14,75 @@
         margin: 0;
       }
 
-      #chat {
-        display: flex;
-        flex-direction: column;
+      vaadin-split-layout,
+      .chat {
         height: 100%;
       }
 
-      #compose-area {
+      .chat {
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) auto;
+
+        .footer {
+          box-sizing: border-box;
+          width: 100%;
+          padding: var(--vaadin-message-padding, var(--vaadin-padding-s) var(--vaadin-padding-m));
+          padding-top: 0;
+          max-width: var(--vaadin-message-list-max-width);
+          margin-inline: auto;
+        }
+
+        vaadin-message-list {
+          mask-image: linear-gradient(#000 calc(100% - var(--vaadin-padding-m)), transparent);
+        }
+      }
+
+      #group-chat {
+        --vaadin-message-list-max-width: 30em;
+      }
+
+      #assistant-chat {
+        --vaadin-message-list-max-width: 50em;
+      }
+
+      .prompt-buttons {
         display: flex;
-        flex-direction: column;
-        gap: 8px;
-        padding: 8px;
+        flex-wrap: wrap;
+        gap: var(--vaadin-gap-xs);
       }
 
-      #input-layout {
-        display: flex;
-        align-items: baseline;
-        gap: 8px;
+      .disclaimer {
+        font-size: 0.8em;
+        color: var(--vaadin-text-color-secondary);
+        text-align: center;
       }
 
-      vaadin-message-list {
-        flex: 1 1 auto;
+      theme-switcher {
+        bottom: 50%;
       }
 
-      vaadin-message-input {
-        flex: 1;
-      }
-
-      vaadin-upload-drop-zone {
-        height: 100%;
+      .controls {
+        position: fixed;
+        z-index: 1;
+        top: 0.5em;
+        right: 0.5em;
+        background: var(--vaadin-background-color);
+        padding: 0.5em;
+        display: grid;
+        gap: var(--vaadin-gap-s);
+        border: 1px solid var(--vaadin-border-color);
+        border-radius: var(--vaadin-radius-m);
+        box-shadow: 0 2px 3px -1px hsl(0 0 0 / 0.2);
       }
     </style>
 
     <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/checkbox';
       import '@vaadin/message-input';
       import '@vaadin/message-list';
+      import '@vaadin/scroller';
+      import '@vaadin/split-layout';
       import '@vaadin/upload/vaadin-upload-button.js';
       import '@vaadin/upload/vaadin-upload-drop-zone.js';
       import '@vaadin/upload/vaadin-upload-file-list.js';
@@ -67,10 +101,10 @@
         const answerMarkdown = `
 I can help you with:
 
-1. **Answering questions** – from quick facts to in-depth explanations.  
-2. **Explaining concepts** – breaking down complex ideas into clear, step-by-step logic.  
-3. **Brainstorming & creativity** – generating outlines, stories, code snippets, or design ideas.  
-4. **Guidance & troubleshooting** – walking you through processes or helping debug issues.  
+1. **Answering questions** – from quick facts to in-depth explanations.
+2. **Explaining concepts** – breaking down complex ideas into clear, step-by-step logic.
+3. **Brainstorming & creativity** – generating outlines, stories, code snippets, or design ideas.
+4. **Guidance & troubleshooting** – walking you through processes or helping debug issues.
 
 ---
 
@@ -88,8 +122,8 @@ I can help you with:
 
 > **You:** "Explain quantum entanglement in simple terms."
 
-> **Me:**  
-> *Imagine two coins spun so perfectly in sync that the moment you look at one and see "heads," the other coin—no matter how far away—will instantly show "tails." In quantum physics, particles can become linked in just that way…*  
+> **Me:**
+> *Imagine two coins spun so perfectly in sync that the moment you look at one and see "heads," the other coin—no matter how far away—will instantly show "tails." In quantum physics, particles can become linked in just that way…*
 
 ---
 
@@ -130,25 +164,76 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
         return subscription;
       }
 
-      function createItem(text, assistant = false) {
+      const localUser = {
+        name: 'Maya',
+        colorIndex: 0,
+      };
+
+      const groupParticipants = [
+        localUser,
+        { name: 'Felix', colorIndex: 2 },
+        { name: 'Nora', colorIndex: 4 },
+        { name: 'Theo', colorIndex: 6 },
+      ];
+
+      const groupResponses = [
+        'That reminds me—I still need to check the blue folder.',
+        'Sure! Give me five minutes and a cup of coffee.',
+        'I was thinking the same thing, more or less.',
+        'Maybe. The weather might change our plans, though.',
+        'That works for me. Should we meet by the old entrance?',
+        'Wait, did anyone remember to bring the tiny screwdriver?',
+      ];
+
+      function createItem(text, participant) {
         return {
           text,
           time: 'Just now',
-          userName: assistant ? 'Assistant' : 'User',
-          userColorIndex: assistant ? 2 : 1,
+          userName: participant.name,
+          userColorIndex: participant.colorIndex,
         };
       }
 
-      const list = document.querySelector('vaadin-message-list');
-      const input = document.querySelector('vaadin-message-input');
+      const groupList = document.querySelector('#group-chat vaadin-message-list');
+      const groupInput = document.querySelector('#group-chat vaadin-message-input');
+      const assistantList = document.querySelector('#assistant-chat vaadin-message-list');
+      const assistantInput = document.querySelector('#assistant-chat vaadin-message-input');
+      const assistant = { name: 'Assistant', colorIndex: 2 };
 
-      // Set initial messages
-      list.items = [
+      document.querySelectorAll('#assistant-chat .prompt-button').forEach((button) => {
+        button.addEventListener('click', () => {
+          assistantInput.value = button.dataset.prompt;
+          assistantInput.focus();
+        });
+      });
+
+      groupList.items = [
+        {
+          ...createItem('Did anyone else hear that odd buzzing near the window?', groupParticipants[1]),
+          time: '9:41 AM',
+        },
+        {
+          ...createItem('Yes! I thought it was my phone, but it stopped when I went outside.', groupParticipants[2]),
+          time: '9:43 AM',
+        },
+        {
+          ...createItem('Probably the little fan on the shelf. It has been dramatic all week.', localUser),
+          time: '9:44 AM',
+          theme: 'self',
+        },
+        {
+          ...createItem("Mystery solved, then. I'll add it to our extremely official repair list.", groupParticipants[3]),
+          time: '9:46 AM',
+        },
+      ];
+      groupList.typingIndicatorTheme = 'ellipsis';
+
+      assistantList.items = [
         {
           text: 'Can you help me analyze these Q3 financial documents? I need a summary of the key findings and any concerns you spot.',
           time: 'Yesterday',
-          userName: 'User',
-          userColorIndex: 1,
+          userName: localUser.name,
+          userColorIndex: localUser.colorIndex,
           attachments: [
             { name: 'proposal.pdf', url: '#proposal.pdf', type: 'application/pdf' },
             {
@@ -162,23 +247,51 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
               type: 'image/svg+xml',
             },
           ],
+          theme: 'self',
         },
         {
           text: "I've reviewed your Q3 financial documents. Here's a summary:\n\n**Key Findings:**\n- Revenue increased 12% compared to Q2\n- Operating costs remained stable\n- The chart shows positive growth trends\n\n**Concerns:**\n- Marketing spend is 15% over budget\n- Cash flow projections need revision\n\nWould you like me to elaborate on any of these points?",
           time: 'Yesterday',
-          userName: 'Assistant',
-          userColorIndex: 2,
+          userName: assistant.name,
+          userColorIndex: assistant.colorIndex,
+          theme: 'full-width',
         },
       ];
+      assistantList.typingIndicatorText = 'Thinking';
+      assistantList.typingIndicatorTheme = 'full-width';
 
       // Handle attachment clicks
-      list.addEventListener('attachment-click', (e) => {
+      assistantList.addEventListener('attachment-click', (e) => {
         const { attachment } = e.detail;
         Notification.show(`Attachment clicked: ${attachment.name}`, { position: 'bottom-start' });
       });
 
-      // Handle new messages from user
-      input.addEventListener('submit', async (e) => {
+      const othersTyping = new Set();
+
+      groupInput.addEventListener('submit', (e) => {
+        const userItem = createItem(e.detail.value, localUser);
+        userItem.theme = 'self';
+        groupList.items = [...groupList.items, userItem];
+
+        const otherParticipants = groupParticipants.slice(1);
+        const participant = otherParticipants[Math.floor(Math.random() * otherParticipants.length)];
+        if (!othersTyping.has(participant)) {
+          othersTyping.add(participant);
+          groupList.usersTyping = Array.from(othersTyping);
+          setTimeout(
+            () => {
+              othersTyping.delete(participant);
+              groupList.usersTyping = Array.from(othersTyping);
+              const newMessage = createItem(groupResponses[Math.floor(Math.random() * groupResponses.length)], participant);
+              groupList.items = [...groupList.items, newMessage];
+            },
+            4000 + Math.random() * 4000,
+          );
+        }
+      });
+
+      // Handle new messages to the assistant
+      assistantInput.addEventListener('submit', (e) => {
         // Convert uploaded files to message attachments
         const attachments = manager.files
           .filter((file) => file.complete)
@@ -189,24 +302,41 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
           }));
 
         // Add user message to the list
-        const userItem = createItem(e.detail.value);
+        const userItem = createItem(e.detail.value, localUser);
         if (attachments.length) {
           userItem.attachments = attachments;
         }
-        list.items = [...list.items, userItem];
+        userItem.theme = 'self';
+        assistantList.items = [...assistantList.items, userItem];
 
         // Clear uploaded files
         manager.files = [];
 
-        // Create empty assistant message that will be populated gradually
-        const newAssistantItem = createItem('', true);
+        if (assistantList.usersTyping?.includes(assistant)) {
+          return;
+        }
 
-        // Simulate AI typing response token by token
-        simulateMessageStream().onNext((token) => {
-          newAssistantItem.text += token;
-          // Force UI update by creating a new array
-          list.items = list.items.includes(newAssistantItem) ? [...list.items] : [...list.items, newAssistantItem];
-        });
+        assistantInput.disabled = true;
+
+        // Show a typing placeholder before streaming the assistant response
+        assistantList.usersTyping = [assistant];
+
+        setTimeout(
+          () => {
+            assistantInput.disabled = false;
+            assistantList.usersTyping = [];
+            const newAssistantItem = createItem('', assistant);
+            newAssistantItem.theme = 'full-width';
+            assistantList.items = [...assistantList.items, newAssistantItem];
+            // Simulate AI typing response token by token
+            simulateMessageStream().onNext((token) => {
+              newAssistantItem.text += token;
+              // Force UI update by creating a new array
+              assistantList.items = [...assistantList.items];
+            });
+          },
+          3000 + Math.random() * 6000,
+        );
       });
 
       // Create the manager
@@ -217,27 +347,87 @@ Need anything else? Just let me know, and I'll jump right in! ✨`;
       manager._createXhr = xhrCreator({ size: 512, uploadTime: 3000, stepTime: 500 });
 
       // Link components to manager
-      document.querySelectorAll('.upload').forEach((el) => {
+      document.querySelectorAll('#assistant-chat .upload').forEach((el) => {
         el.manager = manager;
+      });
+
+      document.querySelector('#chat-theme').addEventListener('change', (e) => {
+        if (e.currentTarget.checked) {
+          groupList.setAttribute('theme', 'bubble');
+          groupList.typingIndicatorTheme = 'ellipsis';
+          assistantList.setAttribute('theme', 'bubble one-to-one');
+        } else {
+          groupList.setAttribute('theme', 'sticky-typing-indicator');
+          groupList.typingIndicatorTheme = 'text';
+          assistantList.setAttribute('theme', 'one-to-one');
+        }
+      });
+
+      document.querySelector('#typing-indicators').addEventListener('change', (e) => {
+        if (e.currentTarget.checked) {
+          groupList.usersTyping = groupParticipants.slice(1);
+          assistantList.usersTyping = [assistant];
+        } else {
+          groupList.usersTyping = [];
+          assistantList.usersTyping = [];
+        }
       });
     </script>
   </head>
 
   <body>
-    <vaadin-upload-drop-zone class="upload">
-      <div id="chat">
-        <vaadin-message-list markdown></vaadin-message-list>
-
-        <div id="compose-area">
-          <vaadin-upload-file-list class="upload" theme="thumbnails"></vaadin-upload-file-list>
-          <div id="input-layout">
-            <vaadin-upload-button class="upload" theme="icon">
-              <vaadin-icon icon="vaadin:upload"></vaadin-icon>
-            </vaadin-upload-button>
-            <vaadin-message-input></vaadin-message-input>
-          </div>
+    <div class="controls">
+      <vaadin-checkbox id="chat-theme" label="Bubble Variant" checked></vaadin-checkbox>
+      <vaadin-checkbox id="typing-indicators" label="Show Typing Indicators"></vaadin-checkbox>
+    </div>
+    <vaadin-split-layout theme="small">
+      <div id="group-chat" class="chat" theme="medium">
+        <vaadin-message-list markdown theme="bubble"></vaadin-message-list>
+        <div class="footer">
+          <vaadin-message-input theme="icon-button"></vaadin-message-input>
         </div>
       </div>
-    </vaadin-upload-drop-zone>
-  </body>
+
+      <vaadin-upload-drop-zone id="assistant-chat" class="upload chat" theme="medium">
+        <vaadin-message-list markdown theme="one-to-one bubble"></vaadin-message-list>
+        <div class="footer">
+          <vaadin-message-input>
+            <vaadin-upload-file-list class="upload" theme="thumbnails" slot="header"></vaadin-upload-file-list>
+            <vaadin-upload-button class="upload" theme="icon tertiary" slot="prefix">
+              <vaadin-icon icon="vaadin:paperclip"></vaadin-icon>
+              <vaadin-tooltip slot="tooltip" text="Add files"></vaadin-tooltip>
+            </vaadin-upload-button>
+            <vaadin-button theme="icon primary" slot="button">
+              <vaadin-icon icon="vaadin:arrow-up"></vaadin-icon>
+              <vaadin-tooltip slot="tooltip" text="Send prompt"></vaadin-tooltip>
+            </vaadin-button>
+            <div slot="footer" class="prompt-buttons">
+              <vaadin-button
+                class="prompt-button"
+                theme="small tertiary"
+                data-prompt="Summarize the attached documents in five concise bullet points."
+                >
+                Summarize documents
+              </vaadin-button>
+              <vaadin-button
+              class="prompt-button"
+              theme="small tertiary"
+              data-prompt="Identify the three biggest risks in this material and explain why they matter."
+              >
+              List key risks
+            </vaadin-button>
+            <vaadin-button
+            class="prompt-button"
+            theme="small tertiary"
+            data-prompt="Draft a short follow-up email based on these findings."
+            >
+            Draft follow-up
+          </vaadin-button>
+        </div>
+      </vaadin-message-input>
+      <div class="disclaimer">Assistant can make mistakes. Always check responses for errors.</div>
+    </div>
+  </vaadin-upload-drop-zone>
+</vaadin-split-layout>
+</body>
 </html>

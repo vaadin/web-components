@@ -4,12 +4,14 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-message.js';
-import { css, html, LitElement } from 'lit';
+import '@vaadin/avatar-group';
+import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { messageListStyles } from './styles/vaadin-message-list-base-styles.js';
 import { MessageListMixin } from './vaadin-message-list-mixin.js';
 
 /**
@@ -57,25 +59,7 @@ class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(Themable
   }
 
   static get styles() {
-    return css`
-      :host {
-        display: block;
-        overflow: auto;
-        padding: var(--vaadin-message-list-padding, var(--vaadin-padding-xs) 0);
-        scroll-padding: var(--vaadin-message-list-padding, var(--vaadin-padding-xs) 0);
-        scroll-snap-type: y proximity;
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      [part='list']::after {
-        content: '';
-        display: block;
-        scroll-snap-align: var(--_vaadin-message-list-scroll-snap-align, none);
-      }
-    `;
+    return messageListStyles;
   }
 
   /** @protected */
@@ -83,6 +67,8 @@ class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(Themable
     return html`
       <div part="list" role="list" id="list">
         <slot></slot>
+        <slot name="typing-indicator"></slot>
+        <div class="scroll-lock"></div>
       </div>
     `;
   }

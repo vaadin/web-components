@@ -6,10 +6,18 @@
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
 
+CSS.registerProperty({
+  name: '--_vaadin-message-typing-mask-pos',
+  syntax: '<length-percentage>',
+  inherits: false,
+  initialValue: 0,
+});
+
 export const messageStyles = css`
   :host {
     display: flex;
     flex-direction: row;
+    box-sizing: border-box;
     padding: var(--vaadin-message-padding, var(--vaadin-padding-s) var(--vaadin-padding-m));
     gap: var(--vaadin-message-gap, var(--vaadin-gap-xs) var(--vaadin-gap-s));
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
@@ -29,6 +37,9 @@ export const messageStyles = css`
     flex-direction: column;
     flex-grow: 1;
     gap: inherit;
+    background: var(--vaadin-message-content-background, transparent);
+    padding: var(--vaadin-message-content-padding, 0);
+    border-radius: var(--vaadin-message-content-border-radius, 0);
   }
 
   [part='header'] {
@@ -41,6 +52,7 @@ export const messageStyles = css`
   }
 
   [part='name'] {
+    display: var(--vaadin-message-name-display, inline);
     font-size: var(--vaadin-message-name-font-size, inherit);
     font-weight: var(--vaadin-message-name-font-weight, 500);
     color: var(--vaadin-message-name-color, var(--vaadin-text-color));
@@ -62,6 +74,12 @@ export const messageStyles = css`
 
   ::slotted([slot='avatar']) {
     flex: none;
+    visibility: var(--vaadin-message-avatar-visibility, visible);
+    display: var(--vaadin-message-avatar-display);
+  }
+
+  ::slotted(vaadin-avatar-group) {
+    width: fit-content;
   }
 
   ::slotted(vaadin-markdown) {
@@ -73,6 +91,7 @@ export const messageStyles = css`
     flex-wrap: wrap;
     gap: var(--vaadin-gap-s);
     padding-bottom: var(--vaadin-gap-xs);
+    justify-content: var(--vaadin-message-attachments-alignment, start);
   }
 
   [part~='attachment'] {
@@ -131,5 +150,83 @@ export const messageStyles = css`
     grid-column: 2;
     padding: var(--vaadin-message-attachment-padding, var(--vaadin-padding-s));
     padding-inline-start: 0;
+  }
+
+  :host([typing]:not([theme~='text'])) [part='message'],
+  :host([typing][theme~='text']) [part='content'] {
+    mask-image: linear-gradient(
+      90deg,
+      hsla(0, 0%, 0%, 0.4) calc(var(--_vaadin-message-typing-mask-pos) - max(60px, 60%)),
+      hsl(0, 0%, 0%) calc(var(--_vaadin-message-typing-mask-pos) - max(40px, 40%)),
+      hsl(0, 0%, 0%),
+      calc(var(--_vaadin-message-typing-mask-pos) - max(20px, 20%)),
+      hsla(0, 0%, 0%, 0.4) var(--_vaadin-message-typing-mask-pos)
+    );
+    animation: --_vaadin-message-typing-slide 1.5s ease-in-out infinite;
+    width: fit-content !important;
+    color: var(--vaadin-text-color) !important;
+
+    [part='time'] {
+      display: none;
+    }
+
+    [part='header'] {
+      display: contents;
+    }
+  }
+
+  @keyframes --_vaadin-message-typing-slide {
+    100% {
+      --_vaadin-message-typing-mask-pos: calc(100% + max(60px, 60%));
+    }
+  }
+
+  :host([typing][theme~='ellipsis']) {
+    [part='message'] {
+      line-height: inherit !important;
+      color: var(--vaadin-text-color-secondary) !important;
+    }
+
+    [part='message']::before {
+      content: '';
+      display: block;
+      width: var(--vaadin-icon-size, 1lh);
+      height: var(--vaadin-icon-size, 1lh);
+      mask: var(--_vaadin-icon-ellipsis);
+      background: currentColor;
+    }
+
+    [part='header'],
+    [part='message'] slot {
+      display: none;
+    }
+
+    [part='content'] {
+      align-self: center;
+    }
+  }
+
+  :host([typing][theme~='text']) {
+    display: block;
+
+    slot[name='avatar'] {
+      display: none;
+    }
+
+    [part='content'] {
+      display: block;
+    }
+
+    [part='header'],
+    [part='name'],
+    [part='message'] {
+      display: contents;
+      color: inherit;
+      font-size: inherit;
+    }
+
+    [part='message'] {
+      text-transform: lowercase;
+    }
   }
 `;

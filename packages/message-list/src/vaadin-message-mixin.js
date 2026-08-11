@@ -85,7 +85,10 @@ export const MessageMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['__avatarChanged(_avatar, userName, userAbbr, userImg, userColorIndex)'];
+      return [
+        '__avatarChanged(_avatar, userName, userAbbr, userImg, userColorIndex)',
+        '__colorIndexChanged(userColorIndex)',
+      ];
     }
 
     /** @protected */
@@ -110,6 +113,15 @@ export const MessageMixin = (superClass) =>
           img: userImg,
           colorIndex: userColorIndex,
         });
+      }
+    }
+
+    /** @private */
+    __colorIndexChanged(userColorIndex) {
+      if (userColorIndex !== undefined) {
+        this.style.setProperty('--vaadin-user-color', `var(--vaadin-user-color-${userColorIndex})`);
+      } else {
+        this.style.removeProperty('--vaadin-user-color');
       }
     }
 

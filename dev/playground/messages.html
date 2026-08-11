@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Messages</title>
+    <script type="module" src="../common.js"></script>
+
+    <script type="module">
+      import '@vaadin/checkbox-group';
+      import '@vaadin/message-input';
+      import '@vaadin/message-list';
+      import '@vaadin/tooltip';
+      import '@vaadin/component-base/src/styles/user-colors.js';
+
+      const list = document.querySelector('vaadin-message-list');
+      list.items = [
+        {
+          text: 'Nature does not hurry, yet everything gets accomplished.',
+          time: 'yesterday',
+          userName: 'Matt Mambo',
+          userColorIndex: 1,
+          theme: 'self',
+        },
+        {
+          text: "I've reviewed your Q3 financial documents. Here's a summary:\n\n**Key Findings:**\n- Revenue increased 12% compared to Q2\n- Operating costs remained stable\n- The chart shows positive growth trends\n\n**Concerns:**\n- Marketing spend is 15% over budget\n- Cash flow projections need revision\n\nWould you like me to elaborate on any of these points?",
+          time: 'right now',
+          userName: 'Assistant',
+          theme: 'full-width',
+        },
+        {
+          text: 'Using your talent, hobby or profession in a way that makes you contribute with something good to this world is truly the way to go.',
+          time: 'right now',
+          userName: 'Linsey Listy',
+          userColorIndex: 2,
+        },
+      ];
+
+      const input = document.querySelector('vaadin-message-input');
+      input.addEventListener('submit', (e) => {
+        const message = e.detail.value;
+        list.items = [
+          ...list.items,
+          {
+            text: message,
+            time: 'now',
+            userName: 'You',
+            userColorIndex: 0,
+          },
+        ];
+      });
+
+      document.querySelector('#variant').addEventListener('change', function () {
+        list.setAttribute('theme', this.value.join(' '));
+      });
+    </script>
+  </head>
+
+  <body>
+    <vaadin-checkbox-group label="Variant" id="variant">
+      <vaadin-checkbox label="Bubble" value="bubble"></vaadin-checkbox>
+      <vaadin-checkbox label="One to One" value="one-to-one"></vaadin-checkbox>
+    </vaadin-checkbox-group>
+    <h2 class="heading">Default</h2>
+    <vaadin-message-list announce-messages markdown>
+      <vaadin-message slot="typing-indicator" typing user-name="Assistant"><span>Typing…</span></vaadin-message>
+      <vaadin-message slot="typing-indicator" typing user-name="Assistant" theme="ellipsis"><span>Typing…</span></vaadin-message>
+      <vaadin-message slot="typing-indicator" typing user-name="Assistant" theme="text"><span>Typing…</span></vaadin-message>
+    </vaadin-message-list>
+    <vaadin-message-input>
+      <vaadin-tooltip slot="tooltip" text="Press Enter to send"></vaadin-tooltip>
+    </vaadin-message-input>
+    <h2 class="heading">Icon-Button Variant</h2>
+    <vaadin-message-input theme="icon-button"></vaadin-message-input>
+  </body>
+</html>
