@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #12341</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <p>
+      Requires fullscreen mode: make the viewport narrower than 450px (or shorter than 450px).<br />
+      Steps: tap the input to open, close the overlay, then tap the input again &mdash; the calendar smooth-scrolls
+      into place instead of appearing at the selected month. Opening with the toggle button never scrolls.
+    </p>
+
+    <h3>with value (failing case)</h3>
+    <!-- A month far from today, so the unwanted scroll is easy to see. -->
+    <vaadin-date-picker id="with-value" label="With value" value="2026-02-11"></vaadin-date-picker>
+
+    <h3>no value (control)</h3>
+    <vaadin-date-picker id="no-value" label="No value"></vaadin-date-picker>
+
+    <pre id="log"></pre>
+
+    <script type="module">
+      import '@vaadin/date-picker';
+
+      window.__log = [];
+
+      const record = (msg) => {
+        window.__log.push(msg);
+        document.getElementById('log').textContent = window.__log.join('\n');
+      };
+
+      for (const picker of document.querySelectorAll('vaadin-date-picker')) {
+        picker.addEventListener('opened-changed', (e) => {
+          if (e.detail.value) {
+            record(`${picker.id}: opened (fullscreen=${picker._fullscreen})`);
+          }
+        });
+        // Only dispatched when _scrollToPosition() ran an animated scroll.
+        // A non-zero delta here is the bug: the overlay scrolls while opening.
+        picker.addEventListener('scroll-animation-finished', (e) => {
+          const { position, oldPosition } = e.detail;
+          record(
+            `${picker.id}: scroll-animation-finished ${oldPosition.toFixed(2)} -> ${position.toFixed(2)} (delta ${(
+              position - oldPosition
+            ).toFixed(2)} months)`,
+          );
+        });
+      }
+    </script>
+  </body>
+</html>
