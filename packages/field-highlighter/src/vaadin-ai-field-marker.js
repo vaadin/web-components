@@ -502,11 +502,7 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
     }
 
     const { message, revert, badgeLabel, badgeTooltip } = this.__effectiveI18n;
-    // Both buttons set `tabindex` although they are natively focusable: with the
-    // macOS keyboard navigation setting off — the default — Safari leaves buttons
-    // out of the tab order, unless they set a tabindex of their own. Without it,
-    // neither the badge nor the revert control could be reached with the keyboard
-    // there.
+    // Safari leaves buttons out of the tab order unless they set a tabindex.
     return html`
       <button id="${this.#badgeId}" class="badge" type="button" tabindex="0" aria-label="${badgeLabel}"></button>
       <vaadin-tooltip for="${this.#badgeId}" text="${badgeTooltip}"></vaadin-tooltip>
