@@ -84,6 +84,18 @@ class FocusSensitiveField extends HTMLElement {
 
 customElements.define('focus-sensitive-field', FocusSensitiveField);
 
+/** A field that keeps its value in an own property instead of an accessor. */
+class OwnValueField extends HTMLElement {
+  value = 'own value';
+
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+}
+
+customElements.define('own-value-field', OwnValueField);
+
 // A composite field can ship under its own tag name, the way a framework
 // provides a field derived from custom-field.
 customElements.define('derived-custom-field', class extends customElements.get('vaadin-custom-field')! {});
@@ -918,6 +930,29 @@ describe('ai field marker', () => {
       await nextRender();
       expect(container.hasAttribute('ai-working')).to.be.false;
       expect(marker.working).to.be.true;
+    });
+
+    describe('field with an own value property', () => {
+      // A field that keeps its value in an own property has no accessor to
+      // intercept, so the marker must leave the property alone.
+      let ownValueField: OwnValueField;
+
+      beforeEach(async () => {
+        ownValueField = fixtureSync(`<own-value-field></own-value-field>`);
+        await nextRender();
+      });
+
+      it('should keep a value property the field owns itself', async () => {
+        const marker = mark(ownValueField, { working: true });
+        await nextRender();
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true, toFake: ['setTimeout', 'clearTimeout'] });
+
+        marker.working = false;
+        await nextUpdate(marker);
+        await clock.tickAsync(500);
+
+        expect(ownValueField.value).to.equal('own value');
+      });
     });
 
     describe('field without a value property', () => {

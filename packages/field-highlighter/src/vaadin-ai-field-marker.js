@@ -96,6 +96,9 @@ class DelayedFieldValue {
   /** The queued value, while `#timer` is pending. */
   #queuedValue;
 
+  /** Whether the field's own `value` accessor is currently replaced. */
+  #installed = false;
+
   constructor(field, delay) {
     this.#field = field;
     this.#delay = delay;
@@ -146,12 +149,17 @@ class DelayedFieldValue {
         this.#timer = setTimeout(() => this.#flush(), this.#delay);
       },
     });
+    this.#installed = true;
   }
 
   /** Restores the field's own accessor, applying a queued value right away. */
   uninstall() {
-    if (Object.getOwnPropertyDescriptor(this.#field, 'value')) {
+    // Only remove an own property that this instance defined, so that a field
+    // keeping its value in an own property instead of an accessor — which
+    // `install()` leaves alone — does not lose it.
+    if (this.#installed) {
       delete this.#field.value;
+      this.#installed = false;
     }
     this.#flush();
   }
