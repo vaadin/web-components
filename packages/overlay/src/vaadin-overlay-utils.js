@@ -94,8 +94,6 @@ export function observeMove(element, callback) {
  * awaited before the element is hidden or removed. An element that is not rendered,
  * has no animation name, or has a zero duration does not fire `animationend`.
  *
- * @deprecated Use `getStateAnimations()`, which reads the animations the browser created
- * rather than the computed style, so that the two cannot disagree.
  * @param {HTMLElement} element
  * @return {boolean}
  */

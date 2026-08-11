@@ -16,9 +16,6 @@ export function observeMove(element: HTMLElement, callback: () => void): () => v
  * Detect whether an animation runs on the given element, so that its end can be
  * awaited before the element is hidden or removed. An element that is not rendered,
  * has no animation name, or has a zero duration does not fire `animationend`.
- *
- * @deprecated Use `getStateAnimations()`, which reads the animations the browser created
- * rather than the computed style, so that the two cannot disagree.
  */
 export function shouldAnimate(element: HTMLElement): boolean;
 
