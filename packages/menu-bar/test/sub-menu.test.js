@@ -281,6 +281,34 @@ describe('sub-menu', () => {
     expect(subMenu.opened).to.be.false;
   });
 
+  it('should close the menu on expanded button click when a nested sub-menu is open', async () => {
+    buttons[0].click();
+    await nextRender();
+
+    const item = subMenuOverlay._contentRoot.querySelectorAll('vaadin-menu-bar-item')[1];
+    fire(item, menuOpenEvent);
+    const nestedSubMenu = subMenu._subMenu;
+    await oneEvent(nestedSubMenu._overlayElement, 'vaadin-overlay-open');
+    expect(nestedSubMenu.opened).to.be.true;
+
+    buttons[0].click();
+    await nextRender();
+    expect(subMenu.opened).to.be.false;
+    expect(nestedSubMenu.opened).to.be.false;
+  });
+
+  it('should not move focus to the button on outside click', async () => {
+    buttons[0].click();
+    await nextRender();
+
+    const spy = sinon.spy(buttons[0], 'focus');
+
+    document.body.click();
+    await nextRender();
+    expect(subMenu.opened).to.be.false;
+    expect(spy).to.not.be.called;
+  });
+
   it('should close and dispatch item-selected event on select', async () => {
     buttons[0].click();
     await nextRender();

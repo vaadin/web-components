@@ -64,8 +64,43 @@ describe('items interactions', () => {
   describe('closing on click', () => {
     beforeEach(async () => {
       await openMenu(target);
+      rootOverlay = rootMenu._overlayElement;
       subMenu = await openSubMenu(rootMenu);
       subOverlay1 = subMenu._overlayElement;
+    });
+
+    it('should close the menu using its close() method on outside click', () => {
+      const spy = sinon.spy(rootMenu, 'close');
+
+      outsideClick();
+      expect(spy).to.be.called;
+    });
+
+    it('should only report outside click on the root overlay of the menu', () => {
+      const rootSpy = sinon.spy();
+      rootOverlay.addEventListener('vaadin-overlay-outside-click', rootSpy);
+      const subSpy = sinon.spy();
+      subOverlay1.addEventListener('vaadin-overlay-outside-click', subSpy);
+
+      outsideClick();
+      expect(rootSpy).to.be.calledOnce;
+      expect(subSpy).to.not.be.called;
+    });
+
+    it('should not close menus when the outside click event is prevented', () => {
+      rootOverlay.addEventListener('vaadin-overlay-outside-click', (event) => event.preventDefault(), { once: true });
+
+      outsideClick();
+      expect(rootMenu.opened).to.be.true;
+      expect(subMenu.opened).to.be.true;
+    });
+
+    it('should not react to outside click when closed', async () => {
+      rootMenu.close();
+      await nextRender();
+      const spy = sinon.spy(rootMenu, 'close');
+      outsideClick();
+      expect(spy).to.not.be.called;
     });
 
     // On touch, the click opening the second menu closes the first one.

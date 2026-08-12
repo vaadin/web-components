@@ -206,7 +206,8 @@ export const ContextMenuMixin = (superClass) =>
           );
         }
 
-        // With items property, menu closes on item selection or items-outside-click.
+        // Clicks on items bubble to the overlay and must not close the menu
+        // (items with `keepOpen` or with children), so disable `closeOn`.
         if (this.items && this.closeOn === 'click') {
           this.closeOn = '';
         }
@@ -224,9 +225,12 @@ export const ContextMenuMixin = (superClass) =>
       }
 
       const opened = event.detail.value;
-      this._setOpened(opened);
       if (opened) {
+        this._setOpened(true);
         this.__alignOverlayPosition();
+      } else if (this.opened) {
+        // Use `close()` to also reset menu-bar button on outside click.
+        this.close();
       }
     }
 
@@ -315,7 +319,11 @@ export const ContextMenuMixin = (superClass) =>
 
     /** @private */
     _preventDefault(e) {
-      e.preventDefault();
+      // With items, `closeOn` is cleared to not close the menu on clicks bubbling
+      // from the items to the overlay, and the menu still closes on outside click.
+      if (!this.items) {
+        e.preventDefault();
+      }
     }
 
     /** @private */

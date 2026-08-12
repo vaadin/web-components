@@ -7,7 +7,7 @@ import '@vaadin/popover/src/vaadin-popover.js';
 import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { html, LitElement, nothing } from 'lit';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
-import { getTabbableElements, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement, getTabbableElements, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
@@ -322,16 +322,20 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
     // before this bubble-phase listener.
     this.addEventListener('click', (event) => event.stopPropagation());
 
-    // Close the popover when focus moves on, e.g. to the next field. A
-    // click-triggered popover only closes itself on outside pointer
-    // interaction or Esc, so keyboard navigation — where an outside click
-    // never happens — would otherwise leave it open, and popovers of several
-    // marked fields could pile up. A null relatedTarget is left alone so that
-    // the window losing focus does not close the popover.
-    this.addEventListener('focusout', (event) => {
-      if (event.relatedTarget && !this.contains(event.relatedTarget)) {
-        this.#closePopover();
-      }
+    // Close the popover when focus moves on, e.g. by tabbing to the next
+    // field: a click-triggered popover only closes itself on outside pointer
+    // interaction or Esc, so popovers of several marked fields could pile up.
+    // Where focus ended up is read only once the transition has settled — mid
+    // transition the document has no focused element, which the popover
+    // overlay reads as focus not having left it (see
+    // OverlayFocusMixin._shouldRestoreFocus) and restores focus to the badge,
+    // stealing it from the input the user clicked.
+    this.addEventListener('focusout', () => {
+      setTimeout(() => {
+        if (!this.contains(getDeepActiveElement())) {
+          this.#closePopover();
+        }
+      });
     });
   }
 
