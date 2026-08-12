@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
@@ -7,6 +8,10 @@ import { flushGrid, getBodyCellContent } from './helpers.js';
 
 describe('tree toggle', () => {
   let toggle;
+
+  afterEach(async () => {
+    await resetMouse();
+  });
 
   describe('default', () => {
     beforeEach(async () => {
@@ -39,6 +44,19 @@ describe('tree toggle', () => {
         clickEvent = click(toggle);
         expect(toggle.expanded).to.be.false;
         expect(clickEvent.defaultPrevented).to.be.true;
+      });
+
+      it('should toggle on toggle icon click', async () => {
+        const spy = sinon.spy();
+        toggle.addEventListener('click', spy);
+        const icon = toggle.shadowRoot.querySelector('[part~="toggle"]');
+
+        await sendMouseToElement({ type: 'click', element: icon });
+        expect(toggle.expanded).to.be.true;
+        expect(spy).to.be.calledWithMatch({ defaultPrevented: true });
+
+        await sendMouseToElement({ type: 'click', element: icon });
+        expect(toggle.expanded).to.be.false;
       });
 
       it('should notify for expanded on toggle', () => {
@@ -99,33 +117,58 @@ describe('tree toggle', () => {
   });
 
   describe('with content', () => {
+    let clickSpy;
+
     beforeEach(async () => {
       toggle = fixtureSync(`
         <vaadin-grid-tree-toggle>
+          text
           <label for="foo-input">foo label</label>
           <input id="foo-input">
           <div>foo</div>
+          <a href="#"><span>link</span></a>
         </vaadin-grid-tree-toggle>
       `);
+      clickSpy = sinon.spy();
+      toggle.addEventListener('click', clickSpy);
       await nextFrame();
     });
 
-    it('should not toggle on internal focusable click', () => {
-      const clickEvent = click(toggle.querySelector('input'));
+    it('should not toggle on text click', async () => {
+      const textNode = [...toggle.childNodes].find((node) => node.textContent.trim() === 'text');
+      const range = document.createRange();
+      range.selectNodeContents(textNode);
+      const rect = range.getBoundingClientRect();
+      await sendMouse({
+        type: 'click',
+        position: [Math.floor(rect.x + rect.width / 2), Math.floor(rect.y + rect.height / 2)],
+      });
       expect(toggle.expanded).to.be.false;
-      expect(clickEvent.defaultPrevented).to.be.false;
+      expect(clickSpy).to.not.be.calledWithMatch({ defaultPrevented: true });
     });
 
-    it('should not toggle on internal label click', () => {
-      const clickEvent = click(toggle.querySelector('label'));
+    it('should not toggle on internal focusable click', async () => {
+      await sendMouseToElement({ type: 'click', element: toggle.querySelector('input') });
       expect(toggle.expanded).to.be.false;
-      expect(clickEvent.defaultPrevented).to.be.false;
+      expect(clickSpy).to.not.be.calledWithMatch({ defaultPrevented: true });
     });
 
-    it('should toggle on internal non-focusable element click', () => {
-      const clickEvent = click(toggle.querySelector('div'));
-      expect(toggle.expanded).to.be.true;
-      expect(clickEvent.defaultPrevented).to.be.true;
+    it('should not toggle on internal label click', async () => {
+      await sendMouseToElement({ type: 'click', element: toggle.querySelector('label') });
+      expect(toggle.expanded).to.be.false;
+      expect(clickSpy).to.not.be.calledWithMatch({ defaultPrevented: true });
+    });
+
+    it('should not toggle on internal element click', async () => {
+      await sendMouseToElement({ type: 'click', element: toggle.querySelector('div') });
+      expect(toggle.expanded).to.be.false;
+      expect(clickSpy).to.not.be.calledWithMatch({ defaultPrevented: true });
+    });
+
+    it('should not toggle on click on element inside link', async () => {
+      await sendMouseToElement({ type: 'click', element: toggle.querySelector('a > span') });
+      expect(toggle.expanded).to.be.false;
+      expect(clickSpy).to.not.be.calledWithMatch({ defaultPrevented: true });
     });
   });
 

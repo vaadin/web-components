@@ -14,6 +14,8 @@ export * from './vaadin-grid-tree-toggle-mixin.js';
  * `<vaadin-grid-tree-toggle>` is a helper element for the `<vaadin-grid>`
  * that provides toggle and level display functionality for the item tree.
  *
+ * The tree sublevel is expanded and collapsed by clicking the toggle icon.
+ *
  * #### Example:
  * ```html
  * <vaadin-grid-column id="column"></vaadin-grid-column>

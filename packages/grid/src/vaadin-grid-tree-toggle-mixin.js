@@ -3,8 +3,6 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { isFocusable } from './vaadin-grid-active-item-mixin.js';
-
 export const GridTreeToggleMixin = (superClass) =>
   class extends superClass {
     static get properties() {
@@ -52,7 +50,12 @@ export const GridTreeToggleMixin = (superClass) =>
       if (this.leaf) {
         return;
       }
-      if (isFocusable(e.target) || e.target instanceof HTMLLabelElement) {
+
+      // Only expand or collapse on the toggle icon click. Clicks dispatched
+      // directly on the host element, such as the synthetic click the grid
+      // fires on Space key, also toggle to keep keyboard interaction working.
+      const [target] = e.composedPath();
+      if (target !== this && target !== this.$.toggle) {
         return;
       }
 

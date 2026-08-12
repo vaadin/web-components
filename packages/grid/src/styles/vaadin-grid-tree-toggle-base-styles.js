@@ -23,7 +23,7 @@ export const gridTreeToggleStyles = css`
     display: none !important;
   }
 
-  :host(:not([leaf])) {
+  :host(:not([leaf])) [part='toggle'] {
     cursor: var(--vaadin-clickable-cursor);
   }
 
