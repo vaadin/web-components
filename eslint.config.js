@@ -1,7 +1,6 @@
 import prettier from 'eslint-config-vaadin/prettier';
 import testing from 'eslint-config-vaadin/testing';
 import typescript from 'eslint-config-vaadin/typescript';
-import esX from 'eslint-plugin-es-x';
 import html from 'eslint-plugin-html';
 import noOnlyTests from 'eslint-plugin-no-only-tests';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
@@ -48,7 +47,6 @@ export default [
   ...prettier,
   {
     plugins: {
-      'es-x': esX,
       'no-only-tests': noOnlyTests,
       'simple-import-sort': simpleImportSort,
       'custom-rules': {
