@@ -1,8 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/combo-box';
+import '@vaadin/context-menu';
 import '@vaadin/date-picker';
 import '@vaadin/master-detail-layout';
 
@@ -21,6 +22,9 @@ describe('overlay in master-detail-layout', () => {
         <div slot="detail">
           <vaadin-combo-box></vaadin-combo-box>
           <vaadin-date-picker></vaadin-date-picker>
+          <vaadin-context-menu open-on="click">
+            <button>target</button>
+          </vaadin-context-menu>
         </div>
       </vaadin-master-detail-layout>
     `);
@@ -62,6 +66,39 @@ describe('overlay in master-detail-layout', () => {
 
         expect(spy).to.be.calledOnce;
       });
+    });
+  });
+
+  describe('context-menu', () => {
+    let menu;
+
+    beforeEach(async () => {
+      menu = layout.querySelector('vaadin-context-menu');
+      menu.items = [{ text: 'Item 0', children: [{ text: 'Item 0-0' }] }, { text: 'Item 1' }];
+      await nextRender();
+
+      menu.querySelector('button').click();
+      await oneEvent(menu._overlayElement, 'vaadin-overlay-open');
+    });
+
+    it('should not fire backdrop-click when the click closes the context menu', async () => {
+      await clickBackdrop();
+
+      expect(menu.opened).to.be.false;
+      expect(spy).to.not.be.called;
+    });
+
+    it('should not fire backdrop-click when the click closes the menu with a sub-menu open', async () => {
+      const item = menu.querySelector('vaadin-context-menu-item');
+      fire(item, 'mouseover');
+      const subMenu = menu.querySelector('vaadin-context-menu');
+      await oneEvent(subMenu._overlayElement, 'vaadin-overlay-open');
+
+      await clickBackdrop();
+
+      expect(menu.opened).to.be.false;
+      expect(subMenu.opened).to.be.false;
+      expect(spy).to.not.be.called;
     });
   });
 });
