@@ -526,7 +526,7 @@ customElements.define(
         return;
       }
 
-      let index = -1;
+      let index;
       if (value == null) {
         index = presets.findIndex((entry) => entry.default);
       } else {

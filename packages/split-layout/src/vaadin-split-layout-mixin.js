@@ -132,7 +132,7 @@ export const SplitLayoutMixin = (superClass) =>
       }
 
       const { container, primary } = this.__getSizes();
-      let newPrimary = primary;
+      let newPrimary;
 
       switch (event.key) {
         case 'ArrowDown':
