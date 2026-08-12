@@ -19,22 +19,22 @@ export interface DatePickerDate {
 }
 
 /**
- * A range of dates the provider is asked about. Always covers whole months: `start` is the first
- * day of a month and `end` the last day of a month, so a provider may group its query by month.
+ * A range of dates that `dateMetadataProvider` is asked about.
+ * It can span several months and always covers whole months.
  */
 export interface DatePickerDateRange {
   /**
-   * The first date of the range (inclusive).
+   * The first date of the range.
    */
   start: DatePickerDate;
   /**
-   * The last date of the range (inclusive).
+   * The last date of the range.
    */
   end: DatePickerDate;
 }
 
 /**
- * Metadata resolved on demand for a single date.
+ * Metadata for a single date, returned by `dateMetadataProvider`.
  */
 export interface DatePickerDateMetadata extends DatePickerDate {
   /**
@@ -49,8 +49,9 @@ export interface DatePickerDateMetadata extends DatePickerDate {
 }
 
 /**
- * A function called with the range of dates the calendar is about to show, returning or resolving
- * with the metadata for the dates in that range.
+ * A function called with the range of dates the calendar is about to render, returning
+ * the metadata for the dates in that range. It can return a `Promise` to load the metadata
+ * asynchronously, and `null` or `undefined` when no date in the range has metadata.
  */
 export type DatePickerDateMetadataProvider = (
   range: DatePickerDateRange,
@@ -284,43 +285,41 @@ export declare class DatePickerMixinClass {
   isDateDisabled: (date: DatePickerDate) => boolean;
 
   /**
-   * A batch function that fetches metadata for a range of dates the calendar is about to
-   * render. It receives a `DatePickerDateRange` and returns, or resolves with, an array of
-   * `DatePickerDateMetadata` objects — a `DatePickerDate` extended with metadata such as
-   * `disabled`, e.g. `{ year, month, day, disabled: true }` — for the dates that have metadata
-   * within that range. Dates it does not mention have no metadata. `month` is 0-based: 0 is
-   * January and 11 is December.
+   * A function that provides metadata for the dates the calendar is about to render: whether they
+   * are disabled, and CSS `part` names for styling from outside using the `::part()` selector.
+   * Unlike `isDateDisabled`, which is called once per date, the metadata provider is called for
+   * a range of dates at a time, and again as the calendar renders further dates.
    *
-   * Unlike `isDateDisabled`, which is called once per date, this function is called for a range of
-   * dates at a time, and again as the calendar renders further dates. The size of the range is
-   * decided by the calendar and may span several months, and may include months it already has
-   * metadata for, whose entries are then ignored.
+   * It receives a `DatePickerDateRange` and returns an array of `DatePickerDateMetadata` objects
+   * for the dates in that range that have metadata. It can return a `Promise` to load the metadata
+   * asynchronously, and `null` or `undefined` when no date in the range has metadata.
    *
-   * It may return a `Promise`, so the answer can come from a server. Until it resolves, the
-   * affected dates render with the `loading` part but stay selectable, and a loading spinner is
-   * shown. Nothing is disabled before the provider has actually reported it, so a slow provider
-   * does not make the calendar unusable. If it throws or rejects, the error is logged and the
-   * affected months are requested again the next time the user navigates.
+   * The returned array has the following structure:
    *
-   * `disabled` from the metadata is combined with `min`, `max` and `isDateDisabled`: a date is
-   * disabled if it is out of the min/max range, or `isDateDisabled` returns `true`, or its metadata
-   * marks it disabled. That decides what the calendar renders as disabled, what can be selected, and
-   * whether the field is valid.
+   * ```js
+   * [
+   *   // month is 0-based: January = 0 and December = 11.
+   *   { year: 2026, month: 0, day: 1, disabled: true },
    *
-   * The date focused when the overlay opens is not moved if the provider reports it disabled. Use
-   * `initialPosition` to open on a date that can be selected.
+   *   // Adds a custom part name to the date.
+   *   { year: 2026, month: 0, day: 2, part: 'busy' },
+   * ]
+   * ```
    *
-   * A value is checked against the provider even if the overlay is never opened, which loads the
-   * month holding it. Until that month answers the value is valid, and it is re-validated once the
-   * answer arrives, so `checkValidity()` can report a value as valid and then invalid.
+   * A date is disabled if its metadata marks it disabled, or `isDateDisabled` returns `true`, or
+   * it is outside `min` and `max`. Disabled dates are not selectable, and typing a disabled date in
+   * the field makes it invalid. The provider does not affect which date is focused when opening the
+   * overlay. Use `initialPosition` property to provide a selectable date.
    *
-   * `part` from the metadata adds part names to the date, so a theme can style specific dates with
-   * `::part()` — e.g. `{ year, month, day, part: 'busy' }`. Give a single name or several separated
-   * by spaces. Do not use built-in names like `disabled` and `selected`.
+   * While a returned `Promise` is pending, the dates it covers are not disabled yet and render with
+   * the `loading` part. If the function throws or rejects, corresponding dates are requested again
+   * the next time the user navigates.
    *
-   * Keep a stable reference to the function. Assigning a new function clears the cache and
-   * re-fetches every visible range. To re-fetch while keeping the same function, because the data
-   * behind it changed, call `clearCache()`.
+   * The provider is used for validation also when the overlay is closed. Date is considered valid
+   * while the provider is pending, and is re-validated again after the metadata is loaded.
+   *
+   * Keep a stable reference to the function: assigning a new one clears the cache and re-fetches
+   * everything. Call `clearCache()` to re-fetch when the data behind the same function changed.
    */
   dateMetadataProvider: DatePickerDateMetadataProvider | null | undefined;
 
