@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/custom-field/src/vaadin-custom-field.js';
@@ -441,6 +442,43 @@ describe('ai field marker', () => {
       await nextRender();
 
       expect(popover.opened).to.be.true;
+    });
+
+    describe('click outside the popover', () => {
+      let otherField: TextField;
+
+      beforeEach(async () => {
+        otherField = fixtureSync(`<vaadin-text-field label="Other"></vaadin-text-field>`);
+        await nextRender();
+
+        const overlay = popover.shadowRoot!.querySelector('vaadin-popover-overlay')!;
+        const opened = oneEvent(overlay, 'vaadin-overlay-open');
+        marker.querySelector<HTMLButtonElement>('.badge')!.click();
+        await opened;
+      });
+
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('should focus the field input clicked while the popover is open', async () => {
+        await sendMouseToElement({ type: 'click', element: field.inputElement });
+        await nextRender();
+        // The popover overlay defers restoring focus to the badge.
+        await aTimeout(0);
+
+        expect(popover.opened).to.be.false;
+        expect(field.inputElement.matches(':focus')).to.be.true;
+      });
+
+      it('should focus another field input clicked while the popover is open', async () => {
+        await sendMouseToElement({ type: 'click', element: otherField.inputElement });
+        await nextRender();
+        await aTimeout(0);
+
+        expect(popover.opened).to.be.false;
+        expect(otherField.inputElement.matches(':focus')).to.be.true;
+      });
     });
   });
 
