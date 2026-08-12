@@ -86,6 +86,34 @@ export const MenuOverlayMixin = (superClass) =>
     }
 
     /**
+     * Override method from `OverlayMixin` to close the menu from its root overlay.
+     *
+     * @param {Event} event
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldCloseOnOutsideClick(event) {
+      // Only close the menu from its root overlay
+      if (this.parentOverlay) {
+        return false;
+      }
+
+      // Ignore clicks on nested menu items
+      if (event.composedPath().includes(this)) {
+        return false;
+      }
+
+      // With items, overlays above the root overlay belong to the menu itself,
+      // e.g. an open sub-menu or item tooltip, so ignore the overlay stack
+      if (this.owner.items) {
+        return true;
+      }
+
+      return super._shouldCloseOnOutsideClick(event);
+    }
+
+    /**
      * Returns the adjusted boundaries of the overlay.
      *
      * @returns {object}

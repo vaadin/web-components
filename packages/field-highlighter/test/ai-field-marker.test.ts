@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/custom-field/src/vaadin-custom-field.js';
@@ -12,7 +13,7 @@ import type { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 import type { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 // @ts-ignore - applyInstanceStyles is not exported with types
 import { applyInstanceStyles } from '@vaadin/vaadin-themable-mixin/src/css-utils.js';
-import type { AiFieldMarker } from '../src/vaadin-ai-field-marker.js';
+import { AiFieldMarker } from '../src/vaadin-ai-field-marker.js';
 
 const DEFAULT_MESSAGE = 'This field value was modified by AI.';
 const DEFAULT_REVERT_TEXT = 'Revert Value';
@@ -31,19 +32,25 @@ function mark(field: HTMLElement, properties: Partial<AiFieldMarker> = {}): AiFi
 }
 
 /**
- * Whether the animation names the marker uses resolve in the given root,
- * regardless of how the styles got there.
+ * How many style sheets define the animation names the marker uses in the
+ * given root, counting every way the styles can get there, so that a second
+ * marker adding its own copy can be told apart from reusing the existing one.
  */
-function hasMarkerKeyframes(root: ShadowRoot): boolean {
+function countMarkerKeyframes(root: ShadowRoot): number {
   const sheets = [
     ...root.adoptedStyleSheets,
     ...[...root.querySelectorAll('style')]
       .map((style) => style.sheet)
       .filter((sheet): sheet is CSSStyleSheet => sheet !== null),
   ];
-  return sheets.some((sheet) =>
+  return sheets.filter((sheet) =>
     [...sheet.cssRules].some((rule) => rule instanceof CSSKeyframesRule && rule.name.startsWith('--vaadin-ai-')),
-  );
+  ).length;
+}
+
+/** Whether the animation names the marker uses resolve in the given root. */
+function hasMarkerKeyframes(root: ShadowRoot): boolean {
+  return countMarkerKeyframes(root) > 0;
 }
 
 /**
@@ -84,6 +91,60 @@ class FocusSensitiveField extends HTMLElement {
 
 customElements.define('focus-sensitive-field', FocusSensitiveField);
 
+/**
+ * A field that exposes none of the elements the marker can describe: no
+ * `ariaTarget`, no `inputElement` and no `focusElement`.
+ */
+class BareShadowField extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+}
+
+customElements.define('bare-shadow-field', BareShadowField);
+
+/**
+ * A field that exposes `value` without a setter, so its assignments can not be
+ * held back.
+ */
+class GetterValueField extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  get value() {
+    return 'fixed value';
+  }
+}
+
+customElements.define('getter-value-field', GetterValueField);
+
+/**
+ * A field that exposes a focusable element but no input element, and that has
+ * another tabbable element (such as a prefix control) ahead of it.
+ */
+class FocusElementField extends HTMLElement {
+  _prefix: HTMLButtonElement;
+
+  _button: HTMLButtonElement;
+
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+    this._prefix = document.createElement('button');
+    this._button = document.createElement('button');
+    this.shadowRoot!.append(this._prefix, this._button);
+  }
+
+  get focusElement() {
+    return this._button;
+  }
+}
+
+customElements.define('focus-element-field', FocusElementField);
+
 // A composite field can ship under its own tag name, the way a framework
 // provides a field derived from custom-field.
 customElements.define('derived-custom-field', class extends customElements.get('vaadin-custom-field')! {});
@@ -94,6 +155,10 @@ describe('ai field marker', () => {
   beforeEach(async () => {
     field = fixtureSync(`<vaadin-text-field label="Name" value="AI value"></vaadin-text-field>`);
     await nextRender();
+  });
+
+  it('should export the marker class under its tag name', () => {
+    expect(customElements.get('vaadin-ai-field-marker')).to.equal(AiFieldMarker);
   });
 
   describe('mark', () => {
@@ -245,6 +310,62 @@ describe('ai field marker', () => {
       await nextRender();
       expect(other.querySelector('.badge')).to.not.exist;
     });
+
+    it('should not render when added without a parent element', async () => {
+      // A node added directly to a shadow root has no parent element.
+      const host = fixtureSync<HTMLElement>(`<div></div>`);
+      const root = host.attachShadow({ mode: 'open' });
+      const other = document.createElement('vaadin-ai-field-marker');
+
+      expect(() => root.appendChild(other)).to.not.throw();
+      await nextRender();
+      expect(other.querySelector('.badge')).to.not.exist;
+    });
+
+    it('should not wait for a definition for a parent that is not a custom element', async () => {
+      const rejectionSpy = sinon.spy();
+      window.addEventListener('unhandledrejection', rejectionSpy);
+
+      const container = fixtureSync<HTMLElement>(`<div></div>`);
+      mark(container);
+      await nextRender();
+      await aTimeout(10);
+
+      window.removeEventListener('unhandledrejection', rejectionSpy);
+      expect(rejectionSpy).to.not.be.called;
+    });
+  });
+
+  describe('multiple markers', () => {
+    // A field can carry more than one marker; the pieces injected into its
+    // shadow root are shared and must live as long as the last marker.
+    let first: AiFieldMarker;
+    let second: AiFieldMarker;
+
+    beforeEach(async () => {
+      first = mark(field);
+      second = mark(field);
+      await nextRender();
+    });
+
+    it('should inject the slot and the animations only once', () => {
+      expect(field.shadowRoot!.querySelectorAll('slot[name="ai-field-marker"]')).to.have.lengthOf(1);
+      expect(countMarkerKeyframes(field.shadowRoot!)).to.equal(1);
+    });
+
+    it('should keep the injected slot and animations for the remaining marker', () => {
+      first.remove();
+
+      expect(second.assignedSlot).to.exist;
+      expect(hasMarkerKeyframes(field.shadowRoot!)).to.be.true;
+    });
+
+    it('should remove the injected animations with the last marker', () => {
+      first.remove();
+      second.remove();
+
+      expect(hasMarkerKeyframes(field.shadowRoot!)).to.be.false;
+    });
   });
 
   describe('popover', () => {
@@ -321,6 +442,43 @@ describe('ai field marker', () => {
       await nextRender();
 
       expect(popover.opened).to.be.true;
+    });
+
+    describe('click outside the popover', () => {
+      let otherField: TextField;
+
+      beforeEach(async () => {
+        otherField = fixtureSync(`<vaadin-text-field label="Other"></vaadin-text-field>`);
+        await nextRender();
+
+        const overlay = popover.shadowRoot!.querySelector('vaadin-popover-overlay')!;
+        const opened = oneEvent(overlay, 'vaadin-overlay-open');
+        marker.querySelector<HTMLButtonElement>('.badge')!.click();
+        await opened;
+      });
+
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('should focus the field input clicked while the popover is open', async () => {
+        await sendMouseToElement({ type: 'click', element: field.inputElement });
+        await nextRender();
+        // The popover overlay defers restoring focus to the badge.
+        await aTimeout(0);
+
+        expect(popover.opened).to.be.false;
+        expect(field.inputElement.matches(':focus')).to.be.true;
+      });
+
+      it('should focus another field input clicked while the popover is open', async () => {
+        await sendMouseToElement({ type: 'click', element: otherField.inputElement });
+        await nextRender();
+        await aTimeout(0);
+
+        expect(popover.opened).to.be.false;
+        expect(otherField.inputElement.matches(':focus')).to.be.true;
+      });
     });
   });
 
@@ -528,6 +686,22 @@ describe('ai field marker', () => {
       expect(field.hasAttribute('focus-ring')).to.be.false;
     });
 
+    it('should do nothing when revert is activated after the marker was removed', () => {
+      // The host may remove the marker on revert, which leaves the popover
+      // content around for the duration of its closing animation.
+      const errorSpy = sinon.spy();
+      window.addEventListener('error', errorSpy);
+      const revertSpy = sinon.spy();
+      (field as HTMLElement).addEventListener('ai-field-revert', revertSpy);
+
+      marker.remove();
+      revertButton.click();
+
+      window.removeEventListener('error', errorSpy);
+      expect(errorSpy).to.not.be.called;
+      expect(revertSpy).to.not.be.called;
+    });
+
     it('should compose the revert event through shadow roots', async () => {
       // A field can live inside another component's shadow root; the revert
       // event must still reach document-level listeners.
@@ -575,6 +749,25 @@ describe('ai field marker', () => {
 
       marker.querySelector<HTMLButtonElement>('.actions > button')!.click();
       expect(sensitiveField.openedOnClick).to.be.false;
+    });
+  });
+
+  describe('revert on a field with no input element', () => {
+    // A field can expose a focusable element without exposing an input, in
+    // which case focus must still land on that element.
+    let focusField: FocusElementField;
+    let marker: AiFieldMarker;
+
+    beforeEach(async () => {
+      focusField = fixtureSync(`<focus-element-field></focus-element-field>`);
+      marker = mark(focusField);
+      await nextRender();
+    });
+
+    it('should move focus to the field focus element on revert', () => {
+      marker.querySelector<HTMLButtonElement>('.actions > button')!.click();
+      // Not just to the first tabbable element the field happens to contain.
+      expect(focusField.focusElement.matches(':focus')).to.be.true;
     });
   });
 
@@ -772,6 +965,54 @@ describe('ai field marker', () => {
     });
   });
 
+  describe('moved to another field', () => {
+    it('should capture the value of the field it was moved to', async () => {
+      const otherField = fixtureSync<TextField>(`<vaadin-text-field value="Other value"></vaadin-text-field>`);
+      await nextRender();
+      const marker = mark(field, { working: true });
+      await nextRender();
+
+      marker.remove();
+      otherField.appendChild(marker);
+      await nextRender();
+
+      const spy = sinon.spy();
+      (otherField as HTMLElement).addEventListener('ai-field-revert', spy);
+      marker.querySelector<HTMLButtonElement>('.actions > button')!.click();
+
+      expect(spy.firstCall.args[0].detail.value).to.equal('Other value');
+    });
+
+    describe('to a field with no described element', () => {
+      // The marker keeps no state of the field it was attached to before, so a
+      // field that provides none of its own can not end up with the previous
+      // field's state.
+      let bareField: BareShadowField;
+      let marker: AiFieldMarker;
+
+      beforeEach(async () => {
+        bareField = fixtureSync(`<bare-shadow-field></bare-shadow-field>`);
+        marker = mark(field);
+        await nextRender();
+        marker.remove();
+        bareField.appendChild(marker);
+        await nextRender();
+      });
+
+      it('should not mark the previous field input busy', async () => {
+        marker.working = true;
+        await nextUpdate(marker);
+
+        expect(field.inputElement.hasAttribute('aria-busy')).to.be.false;
+      });
+
+      it('should not describe the previous field again when removed', () => {
+        expect(() => marker.remove()).to.not.throw();
+        expect(field.inputElement.getAttribute('aria-describedby') || '').to.not.contain('ai-field-marker-');
+      });
+    });
+  });
+
   describe('announcements', () => {
     let clock: sinon.SinonFakeTimers;
     let region: Element;
@@ -809,6 +1050,49 @@ describe('ai field marker', () => {
       clock.tick(150);
 
       expect(region.textContent).to.contain('Refill');
+    });
+
+    it('should announce only the message for a field without a label', async () => {
+      const unlabeled = fixtureSync<TextField>(`<vaadin-text-field></vaadin-text-field>`);
+      const marker = mark(unlabeled, { i18n: { message: 'Unlabeled' } });
+      await nextUpdate(marker);
+
+      clock.tick(150);
+      expect(region.textContent).to.equal('Unlabeled');
+    });
+
+    it('should not announce when working is set and cleared in the same update', async () => {
+      const marker = mark(field, { i18n: { message: 'Batched' } });
+      await nextUpdate(marker);
+      clock.tick(150);
+      region.textContent = '';
+
+      // No fill ever started, so there is no new value to announce.
+      marker.working = true;
+      marker.working = false;
+      await nextUpdate(marker);
+      clock.tick(150);
+
+      expect(region.textContent).to.not.contain('Batched');
+    });
+
+    it('should not announce again on an unrelated update during the wind-down', async () => {
+      const marker = mark(field, { i18n: { message: 'Wind down' } });
+      await nextUpdate(marker);
+      marker.working = true;
+      await nextUpdate(marker);
+      marker.working = false;
+      await nextUpdate(marker);
+      clock.tick(150);
+      region.textContent = '';
+
+      // The read-only restore is still pending, so the marker is still in the
+      // state the end of a fill leaves behind.
+      marker.i18n = { message: 'Wind down', badgeTooltip: 'Updated tooltip' };
+      await nextUpdate(marker);
+      clock.tick(150);
+
+      expect(region.textContent).to.not.contain('Wind down');
     });
 
     it('should announce only once per mark', async () => {
@@ -876,6 +1160,24 @@ describe('ai field marker', () => {
 
       expect(marker.assignedSlot).to.exist;
       expect(marker.assignedSlot!.name).to.equal('ai-field-marker');
+      expect(marker.querySelector('.badge')).to.exist;
+    });
+
+    it('should not mark a field that is upgraded without a shadow root', async () => {
+      const rejectionSpy = sinon.spy();
+      window.addEventListener('unhandledrejection', rejectionSpy);
+
+      const lateField = fixtureSync<HTMLElement>(`<shadowless-late-field></shadowless-late-field>`);
+      const marker = mark(lateField);
+      await nextRender();
+
+      customElements.define('shadowless-late-field', class extends HTMLElement {});
+      await nextRender();
+      await aTimeout(10);
+
+      window.removeEventListener('unhandledrejection', rejectionSpy);
+      expect(rejectionSpy).to.not.be.called;
+      expect(marker.querySelector('.badge')).to.not.exist;
     });
 
     it('should mark the field only once when re-added before it is upgraded', async () => {
@@ -918,6 +1220,62 @@ describe('ai field marker', () => {
       await nextRender();
       expect(container.hasAttribute('ai-working')).to.be.false;
       expect(marker.working).to.be.true;
+    });
+
+    describe('field without a described element', () => {
+      // A field that exposes neither an ariaTarget, an inputElement nor a
+      // focusElement gets no AI description, and nothing that hangs off it.
+      let bareField: BareShadowField;
+
+      beforeEach(async () => {
+        bareField = fixtureSync(`<bare-shadow-field></bare-shadow-field>`);
+        await nextRender();
+      });
+
+      it('should mark the field without a description node', async () => {
+        let marker!: AiFieldMarker;
+        expect(() => {
+          marker = mark(bareField);
+        }).to.not.throw();
+        await nextRender();
+
+        expect(marker.querySelector('.description')).to.not.exist;
+        expect(marker.querySelector('.badge')).to.exist;
+      });
+
+      it('should enter the working state without throwing', async () => {
+        expect(() => mark(bareField, { working: true })).to.not.throw();
+        await nextRender();
+
+        expect(bareField.hasAttribute('ai-working')).to.be.true;
+      });
+
+      it('should leave the working state without throwing', async () => {
+        const marker = mark(bareField, { working: true });
+        await nextRender();
+
+        expect(() => marker.remove()).to.not.throw();
+        expect(bareField.hasAttribute('ai-working')).to.be.false;
+      });
+    });
+
+    describe('field with a read-only value accessor', () => {
+      // Without a setter there is nothing to hold assignments back with, so
+      // the field's own accessor is left alone.
+      let getterField: GetterValueField;
+
+      beforeEach(async () => {
+        getterField = fixtureSync(`<getter-value-field></getter-value-field>`);
+        await nextRender();
+      });
+
+      it('should not intercept the field value accessor', async () => {
+        mark(getterField, { working: true });
+        await nextRender();
+
+        expect(Object.getOwnPropertyDescriptor(getterField, 'value')).to.not.exist;
+        expect(getterField.value).to.equal('fixed value');
+      });
     });
 
     describe('field without a value property', () => {
@@ -1222,6 +1580,32 @@ describe('ai field marker', () => {
 
         await clock!.tickAsync(500);
         expect(field.value).to.equal('Two');
+      });
+
+      it('should not let a superseded deadline apply a later value set early', async () => {
+        field.value = 'One';
+        await clock!.tickAsync(500);
+
+        // A value set during the wind-down lands when the wind-down finishes,
+        // ahead of its own deadline.
+        marker.working = false;
+        await nextUpdate(marker);
+        await clock!.tickAsync(100);
+        field.value = 'Two';
+        await clock!.tickAsync(400);
+        expect(field.value).to.equal('Two');
+
+        marker.working = true;
+        await nextUpdate(marker);
+        field.value = 'Three';
+
+        // The deadline of the value that already landed has passed by now, and
+        // must not carry the newly set value with it.
+        await clock!.tickAsync(150);
+        expect(field.value).to.equal('Two');
+
+        await clock!.tickAsync(350);
+        expect(field.value).to.equal('Three');
       });
 
       it('should apply a queued value set when the marker is removed', () => {
