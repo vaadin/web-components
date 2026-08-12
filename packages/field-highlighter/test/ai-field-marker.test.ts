@@ -121,6 +121,18 @@ class GetterValueField extends HTMLElement {
 
 customElements.define('getter-value-field', GetterValueField);
 
+/** A field that keeps its value in an own property instead of an accessor. */
+class OwnValueField extends HTMLElement {
+  value = 'own value';
+
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+}
+
+customElements.define('own-value-field', OwnValueField);
+
 /**
  * A field that exposes a focusable element but no input element, and that has
  * another tabbable element (such as a prefix control) ahead of it.
@@ -1275,6 +1287,29 @@ describe('ai field marker', () => {
 
         expect(Object.getOwnPropertyDescriptor(getterField, 'value')).to.not.exist;
         expect(getterField.value).to.equal('fixed value');
+      });
+    });
+
+    describe('field with an own value property', () => {
+      // A field that keeps its value in an own property has no accessor to
+      // intercept, so the marker must leave the property alone.
+      let ownValueField: OwnValueField;
+
+      beforeEach(async () => {
+        ownValueField = fixtureSync(`<own-value-field></own-value-field>`);
+        await nextRender();
+      });
+
+      it('should keep a value property the field owns itself', async () => {
+        const marker = mark(ownValueField, { working: true });
+        await nextRender();
+        clock = sinon.useFakeTimers({ shouldClearNativeTimers: true, toFake: ['setTimeout', 'clearTimeout'] });
+
+        marker.working = false;
+        await nextUpdate(marker);
+        await clock.tickAsync(500);
+
+        expect(ownValueField.value).to.equal('own value');
       });
     });
 
