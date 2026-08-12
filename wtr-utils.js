@@ -260,7 +260,7 @@ const createUnitTestsConfig = (config) => {
 };
 
 const createVisualTestsConfig = (theme) => {
-  let visualPackages = [];
+  let visualPackages;
   if (theme === 'base') {
     visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles');
   } else if (theme === 'aura') {

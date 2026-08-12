@@ -61,7 +61,7 @@ class AuraExportDialog extends LitElement {
 
   async #onCopyClick() {
     const original = this.copyLabel;
-    let copied = false;
+    let copied;
     try {
       copied = await copyText(this.value);
     } catch (_error) {

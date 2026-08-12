@@ -244,7 +244,7 @@ function collectFocusableNodes(node, result) {
     result.push(element);
   }
 
-  let children = [];
+  let children;
   if (element.localName === 'slot') {
     children = element.assignedNodes({ flatten: true });
   } else {

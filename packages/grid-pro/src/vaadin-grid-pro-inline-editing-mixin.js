@@ -513,7 +513,7 @@ export const InlineEditingMixin = (superClass) =>
           }
           // Stop looking if the next cell is editable
           const nextRow = this._getRowByIndex(nextIndex);
-          // eslint-disable-next-line @typescript-eslint/no-loop-func
+          // eslint-disable-next-line no-loop-func
           nextCell = nextRow && Array.from(nextRow.__cells).find((cell) => cell._column === nextColumn);
           if (nextCell && this._isCellEditable(nextCell)) {
             break;

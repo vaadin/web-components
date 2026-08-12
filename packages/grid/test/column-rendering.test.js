@@ -95,7 +95,7 @@ import {
         const column = document.createElement('vaadin-grid-column');
         column.header = `Col ${i}`;
 
-        // eslint-disable-next-line @typescript-eslint/no-loop-func
+        // eslint-disable-next-line no-loop-func
         column.renderer = Sinon.spy((root) => {
           root.__columnIndex = i;
           root.textContent = `${cellContent} ${i}`;

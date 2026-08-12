@@ -169,7 +169,6 @@ describe('items', () => {
     // TODO: Previously this test was relying on iframe which had fixed size of WCT.
     // Consider changing it so that it no longer depends on the browser window size.
     it.skip('should open the second subMenu on the right again if not enough space', async () => {
-      let padding;
       rootMenu.items[0].children[2].text = 'foo-0-2-longer';
 
       const rootItem = getMenuItems(rootMenu)[0];
@@ -177,7 +176,6 @@ describe('items', () => {
       rootOverlay.style.removeProperty('left');
       rootOverlay.style.right = `${rootItemRect.width}px`;
       rootOverlay.setAttribute('end-aligned', '');
-      padding = parseFloat(getComputedStyle(rootOverlay.$.content).paddingLeft) * 2;
 
       /* First sub-menu end-aligned */
       await openMenu(rootItem);
@@ -189,7 +187,7 @@ describe('items', () => {
       /* Second sub-menu left-aligned */
       const nestedItem = getMenuItems(subMenu)[2];
       const nestedItemRect = nestedItem.getBoundingClientRect();
-      padding = parseFloat(getComputedStyle(subOverlay1.$.content).paddingLeft) * 2;
+      const padding = parseFloat(getComputedStyle(subOverlay1.$.content).paddingLeft) * 2;
       await openMenu(nestedItem);
       const subMenu2 = getSubMenu(subMenu);
       expect(subMenu2._overlayElement.hasAttribute('end-aligned')).to.be.false;
