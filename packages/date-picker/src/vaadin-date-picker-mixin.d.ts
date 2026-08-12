@@ -24,11 +24,11 @@ export interface DatePickerDate {
  */
 export interface DatePickerDateRange {
   /**
-   * The first date of the range.
+   * The first date of the range (inclusive).
    */
   start: DatePickerDate;
   /**
-   * The last date of the range.
+   * The last date of the range (inclusive).
    */
   end: DatePickerDate;
 }
@@ -319,7 +319,7 @@ export declare class DatePickerMixinClass {
    * while the provider is pending, and is re-validated again after the metadata is loaded.
    *
    * Keep a stable reference to the function: assigning a new one clears the cache and re-fetches
-   * everything. Call `clearCache()` to re-fetch when the data behind the same function changed.
+   * visible range. Call `clearCache()` to re-fetch when the data behind the same function changed.
    */
   dateMetadataProvider: DatePickerDateMetadataProvider | null | undefined;
 

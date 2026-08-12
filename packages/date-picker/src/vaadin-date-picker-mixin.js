@@ -247,7 +247,7 @@ export const DatePickerMixin = (subclass) =>
          * while the provider is pending, and is re-validated again after the metadata is loaded.
          *
          * Keep a stable reference to the function: assigning a new one clears the cache and re-fetches
-         * everything. Call `clearCache()` to re-fetch when the data behind the same function changed.
+         * visible range. Call `clearCache()` to re-fetch when the data behind the same function changed.
          *
          * @type {DatePickerDateMetadataProvider | null | undefined}
          */
