@@ -25,8 +25,6 @@ const DEFAULT_I18N = {
   badgeTooltip: 'Field value modified by AI.\nClick for details',
 };
 
-const POPOVER_TRIGGER = ['click'];
-
 // Half of the 1s working shimmer slide (`--vaadin-ai-field-marker-slide` in
 // the base styles), so that held-back values land — and the read-only lock
 // lifts — in the middle of a slide instead of at its edge.
@@ -510,15 +508,7 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
     return html`
       <button id="${this.#badgeId}" class="badge" type="button" tabindex="0" aria-label="${badgeLabel}"></button>
       <vaadin-tooltip for="${this.#badgeId}" text="${badgeTooltip}"></vaadin-tooltip>
-      <vaadin-popover
-        for="${this.#badgeId}"
-        role="dialog"
-        aria-label="${badgeLabel}"
-        .trigger="${POPOVER_TRIGGER}"
-        autofocus
-        theme="arrow"
-        position="end-top"
-      >
+      <vaadin-popover for="${this.#badgeId}" aria-label="${badgeLabel}" autofocus theme="arrow" position="end-top">
         <p class="message">${message}</p>
         <div class="actions">
           <button type="button" tabindex="0" @click="${this.#onRevert}">${revert}</button>
@@ -673,9 +663,6 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
    */
   #stopWorking(immediate = false) {
     const field = this.#field;
-    if (!field) {
-      return;
-    }
 
     if (this.#restoreTimer != null) {
       // Already winding down. Finish it now when the marker is going away, so
