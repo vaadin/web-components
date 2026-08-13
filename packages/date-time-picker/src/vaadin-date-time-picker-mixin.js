@@ -182,6 +182,51 @@ export const DateTimePickerMixin = (superClass) =>
         },
 
         /**
+         * A function that provides metadata for the dates the calendar is about to render: whether they
+         * are disabled, and CSS `part` names for styling from outside using the `::part()` selector.
+         * The provider is called for a range of dates at a time, and again as the calendar renders
+         * further dates.
+         *
+         * It receives a `DatePickerDateRange` and returns an array of `DatePickerDateMetadata` objects
+         * for the dates in that range that have metadata. It can return a `Promise` to load the metadata
+         * asynchronously, and `null` or `undefined` when no date in the range has metadata.
+         *
+         * The returned array has the following structure:
+         *
+         * ```js
+         * [
+         *   // month is 0-based: January = 0 and December = 11.
+         *   { year: 2026, month: 0, day: 1, disabled: true },
+         *
+         *   // Adds a custom part name to the date.
+         *   { year: 2026, month: 0, day: 2, part: 'busy' },
+         * ]
+         * ```
+         *
+         * A date is disabled if its metadata marks it disabled, or it is outside `min` and `max`.
+         * Disabled dates are not selectable, and a value on a disabled date makes the field invalid.
+         * The provider does not affect which date is focused when opening the overlay. Use
+         * `initialPosition` property to provide a selectable date.
+         *
+         * While a returned `Promise` is pending, the dates it covers are not disabled yet and render with
+         * the `loading` part. If the function throws or rejects, corresponding dates are requested again
+         * the next time the user navigates.
+         *
+         * The provider is used for validation also when the overlay is closed. Date is considered valid
+         * while the provider is pending. Unlike `<vaadin-date-picker>`, the value is not re-validated
+         * when the metadata is loaded, but checked against it at the next validation instead.
+         *
+         * Keep a stable reference to the function: assigning a new one clears the cache and re-fetches
+         * visible range. Call `clearCache()` to re-fetch when the data behind the same function changed.
+         *
+         * @type {DatePickerDateMetadataProvider | null | undefined}
+         */
+        dateMetadataProvider: {
+          type: Function,
+          sync: true,
+        },
+
+        /**
          * Set to true to prevent the overlays from opening automatically.
          * @attr {boolean} auto-open-disabled
          */
@@ -246,6 +291,7 @@ export const DateTimePickerMixin = (superClass) =>
         '__stepChanged(step, __timePicker)',
         '__initialPositionChanged(initialPosition, __datePicker)',
         '__showWeekNumbersChanged(showWeekNumbers, __datePicker)',
+        '__dateMetadataProviderChanged(dateMetadataProvider, __datePicker)',
         '__requiredChanged(required, __datePicker, __timePicker)',
         '__invalidChanged(invalid, __datePicker, __timePicker)',
         '__disabledChanged(disabled, __datePicker, __timePicker)',
@@ -545,6 +591,7 @@ export const DateTimePickerMixin = (superClass) =>
         this.datePlaceholder = newDatePicker.placeholder;
         this.initialPosition = newDatePicker.initialPosition;
         this.showWeekNumbers = newDatePicker.showWeekNumbers;
+        this.dateMetadataProvider = newDatePicker.dateMetadataProvider;
       }
 
       // Min and max are always synchronized from date time picker (host) to inner fields because time picker
@@ -660,6 +707,13 @@ export const DateTimePickerMixin = (superClass) =>
     __showWeekNumbersChanged(showWeekNumbers, datePicker) {
       if (datePicker) {
         datePicker.showWeekNumbers = showWeekNumbers;
+      }
+    }
+
+    /** @private */
+    __dateMetadataProviderChanged(dateMetadataProvider, datePicker) {
+      if (datePicker) {
+        datePicker.dateMetadataProvider = dateMetadataProvider;
       }
     }
 
@@ -799,6 +853,13 @@ export const DateTimePickerMixin = (superClass) =>
           this.step,
         ),
       );
+    }
+
+    /**
+     * Clears the `dateMetadataProvider` cache and reloads the date metadata.
+     */
+    clearCache() {
+      this.__datePicker?.clearCache();
     }
 
     /**

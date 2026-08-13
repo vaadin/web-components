@@ -3,6 +3,7 @@ import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
+import type { DatePickerDateMetadataProvider } from '@vaadin/date-picker/src/vaadin-date-picker.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
@@ -71,6 +72,8 @@ assertType<boolean | null | undefined>(picker.autoOpenDisabled);
 assertType<boolean | null | undefined>(picker.autofocus);
 assertType<() => boolean>(picker.validate);
 assertType<() => boolean>(picker.checkValidity);
+assertType<DatePickerDateMetadataProvider | null | undefined>(picker.dateMetadataProvider);
+assertType<() => void>(picker.clearCache);
 
 // I18n
 assertType<DateTimePickerI18n>({});
