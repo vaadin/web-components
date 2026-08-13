@@ -602,7 +602,11 @@ export const TimePickerMixin = (superClass) =>
         return;
       }
 
-      const parsedObj = this.__useMemo ? this.__memoValue : this.__effectiveI18n.parseTime(value);
+      const parsed = this.__useMemo ? this.__memoValue : this.__effectiveI18n.parseTime(value);
+
+      // Strip parsed time to the resolution defined by the step before formatting
+      // it back, so that the result matches the text shown in the input field.
+      const parsedObj = validateTime(parsed, this.step);
       const newValue = this.__effectiveI18n.formatTime(parsedObj) || '';
 
       if (parsedObj) {
