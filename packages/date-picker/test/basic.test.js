@@ -37,7 +37,6 @@ describe('basic features', () => {
     expect(parseDate('+12026-01-01')).to.eql(createDate(12026, 0, 1));
   });
 
-
   it('should have default value', () => {
     expect(datePicker.value).to.equal('');
   });
