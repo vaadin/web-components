@@ -75,17 +75,25 @@ function getStepSegment(stepValue) {
 /**
  * A function to validate the time object based on the given step.
  *
+ * Returns a new object, so that a time object owned by the caller, such as one
+ * returned by the `i18n.parseTime` function, is left as it is.
+ *
  * @param {object} timeObject
  * @param {number} step
  * @return {object | undefined}
  */
 export function validateTime(timeObject, step) {
-  if (timeObject) {
-    const stepSegment = getStepSegment(step);
-    timeObject.hours = parseInt(timeObject.hours);
-    timeObject.minutes = parseInt(timeObject.minutes || 0);
-    timeObject.seconds = stepSegment < 3 ? undefined : parseInt(timeObject.seconds || 0);
-    timeObject.milliseconds = stepSegment < 4 ? undefined : parseInt(timeObject.milliseconds || 0);
+  if (!timeObject) {
+    return timeObject;
   }
-  return timeObject;
+
+  const stepSegment = getStepSegment(step);
+
+  return {
+    ...timeObject,
+    hours: parseInt(timeObject.hours),
+    minutes: parseInt(timeObject.minutes || 0),
+    seconds: stepSegment < 3 ? undefined : parseInt(timeObject.seconds || 0),
+    milliseconds: stepSegment < 4 ? undefined : parseInt(timeObject.milliseconds || 0),
+  };
 }
