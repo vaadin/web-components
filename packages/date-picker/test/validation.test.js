@@ -328,6 +328,23 @@ describe('validation', () => {
     });
   });
 
+  describe('min and max with a signed year', () => {
+    beforeEach(async () => {
+      datePicker = fixtureSync(`<vaadin-date-picker min="-2026-01-01" max="-2026-12-31"></vaadin-date-picker>`);
+      await nextRender();
+    });
+
+    it('should fail validation with a value outside the range', () => {
+      datePicker.value = '2026-01-01';
+      expect(datePicker.checkValidity()).to.be.false;
+    });
+
+    it('should pass validation with a value inside the range', () => {
+      datePicker.value = '-2026-06-15';
+      expect(datePicker.checkValidity()).to.be.true;
+    });
+  });
+
   describe('custom validator', () => {
     beforeEach(() => {
       datePicker = fixtureSync(`<vaadin-date-picker-2016></vaadin-date-picker-2016>`);

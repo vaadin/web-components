@@ -260,16 +260,18 @@ export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
   return adjustedYear;
 }
 
+const ISO_DATE = /^([-+]\d{1,6}|\d{2,4})-(\d{1,2})-(\d{1,2})$/u;
+
 /**
  * Parse date string of one of the following date formats:
  * - ISO 8601 `"YYYY-MM-DD"`
- * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+ * - Extended ISO 8601 with a signed year, e.g. `"+012026-MM-DD"` or `"-0001-MM-DD"`
  * @param {!string} str Date string to parse
  * @return {Date} Parsed date in system timezone
  */
 export function parseDate(str) {
   // Parsing with RegExp to ensure correct format
-  const parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/u.exec(str);
+  const parts = ISO_DATE.exec(str);
   if (!parts) {
     return undefined;
   }
@@ -280,7 +282,7 @@ export function parseDate(str) {
 /**
  * Parse date string of one of the following date formats:
  * - ISO 8601 `"YYYY-MM-DD"`
- * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+ * - Extended ISO 8601 with a signed year, e.g. `"+012026-MM-DD"` or `"-0001-MM-DD"`
  *
  * Uses UTC date components to allow handling date instances independently of
  * the system time-zone.
@@ -290,7 +292,7 @@ export function parseDate(str) {
  */
 export function parseUTCDate(str) {
   // Parsing with RegExp to ensure correct format
-  const parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/u.exec(str);
+  const parts = ISO_DATE.exec(str);
   if (!parts) {
     return undefined;
   }
