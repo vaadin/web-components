@@ -206,6 +206,10 @@ export const DatePickerMixin = (subclass) =>
          * Receives a `DatePickerDate` object of the date to be selected and should return a
          * boolean.
          *
+         * The function is called once per date and has to answer synchronously. Use
+         * `dateMetadataProvider` when the answer has to be loaded first, or when dates also need
+         * custom part names. A date is disabled when either of the two disables it.
+         *
          * @type {function(DatePickerDate): boolean | undefined}
          */
         isDateDisabled: {
