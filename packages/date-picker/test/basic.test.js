@@ -3,7 +3,7 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { click, fixtureSync, keyboardEventFor, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { parseDate } from '../src/vaadin-date-picker-helper.js';
+import { createDate, parseDate } from '../src/vaadin-date-picker-helper.js';
 import { getCalendars, getWeekDayCells, open, touchTap, untilOverlayRendered } from './helpers.js';
 
 describe('basic features', () => {
@@ -28,6 +28,21 @@ describe('basic features', () => {
     expect(parseDate('2017-11-11')).to.eql(composeDate('2017', '10', '11'));
     expect(parseDate('2016-1-1')).to.eql(composeDate('2016', '0', '1'));
     expect(parseDate('04-11-2')).to.eql(composeDate('04', '10', '2'));
+  });
+
+  // A signed year is padded to six digits here but to four by `java.time`, so a Flow application
+  // passing `LocalDate.toString()` sends the shorter form.
+  it('should parse a signed year of any width', () => {
+    expect(parseDate('-000001-01-01')).to.eql(createDate(-1, 0, 1));
+    expect(parseDate('-0001-01-01')).to.eql(createDate(-1, 0, 1));
+    expect(parseDate('+012026-01-01')).to.eql(createDate(12026, 0, 1));
+    expect(parseDate('+12026-01-01')).to.eql(createDate(12026, 0, 1));
+  });
+
+  it('should not parse a date carrying a time part or a time zone', () => {
+    expect(parseDate('2026-01-01T00:00:00')).to.be.undefined;
+    expect(parseDate('2026-01-01T00:00:00Z')).to.be.undefined;
+    expect(parseDate('2026-01-01Z')).to.be.undefined;
   });
 
   it('should have default value', () => {
@@ -154,6 +169,13 @@ describe('basic features', () => {
       datePicker.value = '-010000-02-03';
       date.setFullYear(-10000);
       expect(datePicker._selectedDate).to.eql(date);
+    });
+
+    // The form `LocalDate.toString()` produces for a year outside 0000-9999.
+    it('should accept a signed year padded to four digits', () => {
+      datePicker.value = '-2026-03-15';
+
+      expect(datePicker._selectedDate).to.eql(createDate(-2026, 2, 15));
     });
 
     it('should not accept non-ISO formats', () => {
