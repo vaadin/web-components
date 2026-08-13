@@ -260,11 +260,6 @@ export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
   return adjustedYear;
 }
 
-/**
- * A date without a time part. The year is accepted with one to six digits when it carries a sign,
- * because producers pad it differently: this package pads to six digits, `java.time` to four.
- * A time part and a time zone designator are deliberately not accepted.
- */
 const ISO_DATE = /^([-+]\d{1,6}|\d{2,4})-(\d{1,2})-(\d{1,2})$/u;
 
 /**
