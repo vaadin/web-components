@@ -206,6 +206,12 @@ function getTimePicker(dateTimePicker) {
       expect(datePicker.showWeekNumbers).to.be.true;
     });
 
+    it('should propagate dateMetadataProvider to date picker', () => {
+      const dateMetadataProvider = () => [];
+      dateTimePicker.dateMetadataProvider = dateMetadataProvider;
+      expect(datePicker.dateMetadataProvider).to.equal(dateMetadataProvider);
+    });
+
     it('should propagate invalid to date and time pickers', async () => {
       dateTimePicker.invalid = true;
       await nextFrame();
@@ -334,5 +340,44 @@ function getTimePicker(dateTimePicker) {
     it('should have initial value for label', () => {
       expect(dateTimePicker.label).to.equal('Birth date and time');
     });
+  });
+});
+
+describe('Initial function property values', () => {
+  const dateMetadataProvider = () => [];
+
+  let dateTimePicker;
+
+  beforeEach(() => {
+    dateTimePicker = document.createElement('vaadin-date-time-picker');
+  });
+
+  afterEach(() => {
+    dateTimePicker.remove();
+  });
+
+  it('should forward the provider assigned before the pickers exist', async () => {
+    dateTimePicker.dateMetadataProvider = dateMetadataProvider;
+
+    document.body.appendChild(dateTimePicker);
+    await nextRender();
+
+    expect(getDatePicker(dateTimePicker).dateMetadataProvider).to.equal(dateMetadataProvider);
+  });
+
+  it('should keep and hoist the provider of a slotted date picker', async () => {
+    const datePicker = document.createElement('vaadin-date-picker');
+    datePicker.setAttribute('slot', 'date-picker');
+    datePicker.dateMetadataProvider = dateMetadataProvider;
+
+    const timePicker = document.createElement('vaadin-time-picker');
+    timePicker.setAttribute('slot', 'time-picker');
+    dateTimePicker.append(datePicker, timePicker);
+
+    document.body.appendChild(dateTimePicker);
+    await nextRender();
+
+    expect(datePicker.dateMetadataProvider).to.equal(dateMetadataProvider);
+    expect(dateTimePicker.dateMetadataProvider).to.equal(dateMetadataProvider);
   });
 });

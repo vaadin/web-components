@@ -197,6 +197,14 @@ button are the ones that need it open.
 A value whose month resolved while the field was detached is validated when it is attached again, since the
 controller re-reports its state on reconnect and the armed flag is still set.
 
+Re-validation is delivered through `_requestValidation()`, which a host that sets `manualValidation` turns
+off — `<vaadin-date-time-picker>` does, for both of its pickers, so that it alone decides when the composite
+field reports an error. A wrapper like that therefore gets everything else the provider offers and not this:
+the month is still loaded and `checkValidity()` still consults the answer, but nothing tells the wrapper the
+answer arrived, so the value is re-checked at the wrapper's next validation instead of straight away.
+Reporting it upwards would need a signal that survives `manualValidation`, and the current design has no way
+to send one.
+
 ## What custom part names can do
 
 `part` from an entry is appended to the date's own parts, so a theme can style particular dates through

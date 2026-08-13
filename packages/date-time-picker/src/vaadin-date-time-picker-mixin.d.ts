@@ -7,7 +7,7 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { DisabledMixinClass } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
-import type { DatePickerI18n } from '@vaadin/date-picker/src/vaadin-date-picker.js';
+import type { DatePickerDateMetadataProvider, DatePickerI18n } from '@vaadin/date-picker/src/vaadin-date-picker.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
@@ -128,6 +128,46 @@ export declare class DateTimePickerMixinClass {
   showWeekNumbers: boolean | null | undefined;
 
   /**
+   * A function that provides metadata for the dates the calendar is about to render: whether they
+   * are disabled, and CSS `part` names for styling from outside using the `::part()` selector.
+   * The provider is called for a range of dates at a time, and again as the calendar renders
+   * further dates.
+   *
+   * It receives a `DatePickerDateRange` and returns an array of `DatePickerDateMetadata` objects
+   * for the dates in that range that have metadata. It can return a `Promise` to load the metadata
+   * asynchronously, and `null` or `undefined` when no date in the range has metadata.
+   *
+   * The returned array has the following structure:
+   *
+   * ```js
+   * [
+   *   // month is 0-based: January = 0 and December = 11.
+   *   { year: 2026, month: 0, day: 1, disabled: true },
+   *
+   *   // Adds a custom part name to the date.
+   *   { year: 2026, month: 0, day: 2, part: 'busy' },
+   * ]
+   * ```
+   *
+   * A date is disabled if its metadata marks it disabled, or it is outside `min` and `max`.
+   * Disabled dates are not selectable, and a value on a disabled date makes the field invalid.
+   * The provider does not affect which date is focused when opening the overlay. Use
+   * `initialPosition` property to provide a selectable date.
+   *
+   * While a returned `Promise` is pending, the dates it covers are not disabled yet and render with
+   * the `loading` part. If the function throws or rejects, corresponding dates are requested again
+   * the next time the user navigates.
+   *
+   * The provider is used for validation also when the overlay is closed. Date is considered valid
+   * while the provider is pending. Unlike `<vaadin-date-picker>`, the value is not re-validated
+   * when the metadata is loaded, but checked against it at the next validation instead.
+   *
+   * Keep a stable reference to the function: assigning a new one clears the cache and re-fetches
+   * visible range. Call `clearCache()` to re-fetch when the data behind the same function changed.
+   */
+  dateMetadataProvider: DatePickerDateMetadataProvider | null | undefined;
+
+  /**
    * Set to true to prevent the overlays from opening automatically.
    * @attr {boolean} auto-open-disabled
    */
@@ -171,4 +211,9 @@ export declare class DateTimePickerMixinClass {
    * [`<vaadin-time-picker>`](#/elements/vaadin-time-picker) are supported.
    */
   i18n: DateTimePickerI18n;
+
+  /**
+   * Clears the `dateMetadataProvider` cache and reloads the date metadata.
+   */
+  clearCache(): void;
 }
