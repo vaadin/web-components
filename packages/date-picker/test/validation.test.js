@@ -328,9 +328,7 @@ describe('validation', () => {
     });
   });
 
-  // A constraint that does not parse is no constraint at all, so a value it forbids would pass. The
-  // form is the one `LocalDate.toString()` produces for a year outside 0000-9999.
-  describe('min and max with a signed year padded to four digits', () => {
+  describe('min and max with a signed year', () => {
     beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker min="-2026-01-01" max="-2026-12-31"></vaadin-date-picker>`);
       await nextRender();

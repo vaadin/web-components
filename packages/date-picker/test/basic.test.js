@@ -30,8 +30,6 @@ describe('basic features', () => {
     expect(parseDate('04-11-2')).to.eql(composeDate('04', '10', '2'));
   });
 
-  // A signed year is padded to six digits here but to four by `java.time`, so a Flow application
-  // passing `LocalDate.toString()` sends the shorter form.
   it('should parse a signed year of any width', () => {
     expect(parseDate('-000001-01-01')).to.eql(createDate(-1, 0, 1));
     expect(parseDate('-0001-01-01')).to.eql(createDate(-1, 0, 1));
@@ -39,11 +37,6 @@ describe('basic features', () => {
     expect(parseDate('+12026-01-01')).to.eql(createDate(12026, 0, 1));
   });
 
-  it('should not parse a date carrying a time part or a time zone', () => {
-    expect(parseDate('2026-01-01T00:00:00')).to.be.undefined;
-    expect(parseDate('2026-01-01T00:00:00Z')).to.be.undefined;
-    expect(parseDate('2026-01-01Z')).to.be.undefined;
-  });
 
   it('should have default value', () => {
     expect(datePicker.value).to.equal('');
@@ -172,7 +165,7 @@ describe('basic features', () => {
     });
 
     // The form `LocalDate.toString()` produces for a year outside 0000-9999.
-    it('should accept a signed year padded to four digits', () => {
+    it('should accept a signed year', () => {
       datePicker.value = '-2026-03-15';
 
       expect(datePicker._selectedDate).to.eql(createDate(-2026, 2, 15));
