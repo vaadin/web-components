@@ -414,6 +414,33 @@ describe('time-picker', () => {
         expect(inputElement.value).to.be.equal('8:00 AM');
       });
     });
+
+    it('should commit the value when the custom parser returns stripped seconds', () => {
+      // The step defaults to minute precision, so the seconds are stripped
+      // from the value, while the custom parser keeps returning them.
+      timePicker.i18n = { parseTime: () => ({ hours: 12, minutes: 0, seconds: 0 }) };
+      setInputValue(timePicker, 'noon');
+      enter(inputElement);
+      expect(timePicker.value).to.be.equal('12:00');
+    });
+
+    it('should not modify the object returned by the custom parser', () => {
+      const parsed = { hours: 8, minutes: 0, seconds: 0, milliseconds: 0 };
+      timePicker.i18n = { formatTime: strictAmPmI18n.formatTime, parseTime: () => parsed };
+      setInputValue(timePicker, '8:00 AM');
+      enter(inputElement);
+      expect(parsed).to.deep.equal({ hours: 8, minutes: 0, seconds: 0, milliseconds: 0 });
+    });
+
+    it('should not fail when the custom parser returns a frozen object', () => {
+      timePicker.i18n = {
+        formatTime: strictAmPmI18n.formatTime,
+        parseTime: () => Object.freeze({ hours: 8, minutes: 0, seconds: 0, milliseconds: 0 }),
+      };
+      setInputValue(timePicker, '8:00 AM');
+      enter(inputElement);
+      expect(timePicker.value).to.be.equal('08:00');
+    });
   });
 
   describe('helper text', () => {
