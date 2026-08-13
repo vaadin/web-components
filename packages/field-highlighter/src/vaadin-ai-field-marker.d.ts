@@ -62,6 +62,10 @@ export type AiFieldRevertEvent = CustomEvent<{ value: unknown }>;
  * in progress, set the `working` property to show an "AI is working" shimmer
  * on the field along with a client-side read-only guard.
  *
+ * The popover can show custom content — such as a summary of what the AI
+ * based the value on — below the explanation, given as a DOM node through
+ * the `content` property.
+ *
  * Set the `confidence` property to show the confidence level of the filled
  * value (`low`, `medium` or `high`) as an indicator in the field's helper
  * text section, ahead of a helper the field itself may have. While the
@@ -121,6 +125,23 @@ declare class AiFieldMarker extends I18nMixin<typeof HTMLElement, AiFieldMarkerI
    * ```
    */
   i18n: AiFieldMarkerI18n;
+
+  /**
+   * A DOM node to show in the popover, between the message and the revert
+   * control — for example a summary of what the AI based the value on.
+   *
+   * The node is rendered as given, and moved into the marker's own light DOM.
+   * The host owns it: setting the property to another node or to `null`
+   * removes the previous node from the popover.
+   *
+   * ```js
+   * const source = document.createElement('a');
+   * source.href = '/documents/invoice.pdf';
+   * source.textContent = 'invoice.pdf';
+   * marker.content = source;
+   * ```
+   */
+  content: Node | null | undefined;
 
   /**
    * Whether an AI is currently working on the field. While `true`, the field
