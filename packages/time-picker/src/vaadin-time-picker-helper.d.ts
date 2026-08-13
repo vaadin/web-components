@@ -25,6 +25,9 @@ export function parseISOTime(timeString: string): TimePickerTime | undefined;
 
 /**
  * A function to validate the time object based on the given step.
+ *
+ * Returns a new object, so that a time object owned by the caller, such as one
+ * returned by the `i18n.parseTime` function, is left as it is.
  */
 export function validateTime(
   timeObject: TimePickerTime | undefined,
