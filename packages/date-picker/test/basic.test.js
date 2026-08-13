@@ -37,6 +37,17 @@ describe('basic features', () => {
     expect(parseDate('+12026-01-01')).to.eql(createDate(12026, 0, 1));
   });
 
+  it('should not parse a date that does not exist', () => {
+    // Building it would carry the surplus into the next month or year.
+    expect(parseDate('2026-02-30')).to.be.undefined;
+    expect(parseDate('2023-02-29')).to.be.undefined;
+    expect(parseDate('2026-13-01')).to.be.undefined;
+    expect(parseDate('2026-00-01')).to.be.undefined;
+    expect(parseDate('2026-01-32')).to.be.undefined;
+    expect(parseDate('2026-01-00')).to.be.undefined;
+    expect(parseDate('2024-02-29')).to.eql(createDate(2024, 1, 29));
+  });
+
   it('should have default value', () => {
     expect(datePicker.value).to.equal('');
   });
@@ -168,6 +179,16 @@ describe('basic features', () => {
       datePicker.value = '-2026-03-15';
 
       expect(datePicker._selectedDate).to.eql(createDate(-2026, 2, 15));
+    });
+
+    it('should not accept a date that does not exist', () => {
+      datePicker.value = '2026-01-15';
+
+      datePicker.value = '2026-02-30';
+
+      // Reverted rather than answered with the 2nd of March.
+      expect(datePicker.value).to.equal('2026-01-15');
+      expect(datePicker._selectedDate).to.eql(createDate(2026, 0, 15));
     });
 
     it('should not accept non-ISO formats', () => {

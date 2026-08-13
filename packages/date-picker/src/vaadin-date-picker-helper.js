@@ -262,21 +262,38 @@ export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
 
 const ISO_DATE = /^([-+]\d{1,6}|\d{2,4})-(\d{1,2})-(\d{1,2})$/u;
 
-/**
- * Parse date string of one of the following date formats:
- * - ISO 8601 `"YYYY-MM-DD"`
- * - Extended ISO 8601 with a signed year, e.g. `"+012026-MM-DD"` or `"-0001-MM-DD"`
- * @param {!string} str Date string to parse
- * @return {Date} Parsed date in system timezone
- */
-export function parseDate(str) {
+// The parts of a date string in a format the parsers accept, as written, or `undefined` for anything
+// else. Only a string is matched, since coercing another type to one can throw.
+function parseParts(str) {
   // Parsing with RegExp to ensure correct format
-  const parts = ISO_DATE.exec(str);
+  const parts = typeof str === 'string' ? ISO_DATE.exec(str) : null;
   if (!parts) {
     return undefined;
   }
 
-  return createDate(parseInt(parts[1], 10), parseInt(parts[2], 10) - 1, parseInt(parts[3], 10));
+  return { year: parseInt(parts[1], 10), month: parseInt(parts[2], 10) - 1, day: parseInt(parts[3], 10) };
+}
+
+/**
+ * Parse date string of one of the following date formats:
+ * - ISO 8601 `"YYYY-MM-DD"`
+ * - Extended ISO 8601 with a signed year, e.g. `"+012026-MM-DD"` or `"-0001-MM-DD"`
+ *
+ * A date that does not exist, such as `"2026-02-30"`, is not parsed. Building it would carry the
+ * surplus into the next month or year and answer with a date that was never asked for.
+ *
+ * @param {!string} str Date string to parse
+ * @return {Date} Parsed date in system timezone
+ */
+export function parseDate(str) {
+  const parts = parseParts(str);
+  if (!parts) {
+    return undefined;
+  }
+
+  const date = createDate(parts.year, parts.month, parts.day);
+
+  return date.getMonth() === parts.month && date.getDate() === parts.day ? date : undefined;
 }
 
 /**
@@ -287,22 +304,23 @@ export function parseDate(str) {
  * Uses UTC date components to allow handling date instances independently of
  * the system time-zone.
  *
+ * A date that does not exist, such as `"2026-02-30"`, is not parsed, as in `parseDate`.
+ *
  * @param {!string} str Date string to parse
  * @return {Date} Parsed date in UTC timezone
  */
 export function parseUTCDate(str) {
-  // Parsing with RegExp to ensure correct format
-  const parts = ISO_DATE.exec(str);
+  const parts = parseParts(str);
   if (!parts) {
     return undefined;
   }
 
   const date = new Date(Date.UTC(0, 0)); // Wrong date (1900-01-01), but with midnight in UTC
-  date.setUTCFullYear(parseInt(parts[1], 10));
-  date.setUTCMonth(parseInt(parts[2], 10) - 1);
-  date.setUTCDate(parseInt(parts[3], 10));
+  date.setUTCFullYear(parts.year);
+  date.setUTCMonth(parts.month);
+  date.setUTCDate(parts.day);
 
-  return date;
+  return date.getUTCMonth() === parts.month && date.getUTCDate() === parts.day ? date : undefined;
 }
 
 function formatISODateBase(dateParts) {
