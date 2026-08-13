@@ -38,7 +38,6 @@ describe('basic features', () => {
   });
 
   it('should not parse a date that does not exist', () => {
-    // Building it would carry the surplus into the next month or year.
     expect(parseDate('2026-02-30')).to.be.undefined;
     expect(parseDate('2023-02-29')).to.be.undefined;
     expect(parseDate('2026-13-01')).to.be.undefined;
@@ -186,7 +185,6 @@ describe('basic features', () => {
 
       datePicker.value = '2026-02-30';
 
-      // Reverted rather than answered with the 2nd of March.
       expect(datePicker.value).to.equal('2026-01-15');
       expect(datePicker._selectedDate).to.eql(createDate(2026, 0, 15));
     });
