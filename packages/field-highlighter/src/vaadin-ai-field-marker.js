@@ -771,8 +771,11 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
       field.toggleAttribute('has-helper', true);
 
       this.#helperStateObserver ??= new MutationObserver(() => {
-        if (this.#confidenceNode && !this.working && !field.hasAttribute('has-helper')) {
-          field.toggleAttribute('has-helper', true);
+        // Read the field live: the observer is reused when the marker moves
+        // to another field, so a captured one could be a previous field.
+        const observedField = this.#field;
+        if (observedField && this.#confidenceNode && !this.working && !observedField.hasAttribute('has-helper')) {
+          observedField.toggleAttribute('has-helper', true);
         }
       });
       this.#helperStateObserver.observe(field, { attributes: true, attributeFilter: ['has-helper'] });

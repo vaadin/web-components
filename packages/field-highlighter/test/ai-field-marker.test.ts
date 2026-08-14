@@ -1440,6 +1440,27 @@ describe('ai field marker', () => {
       expect(spy.firstCall.args[0].detail.value).to.equal('Other value');
     });
 
+    it('should re-assert has-helper on the field it was moved to', async () => {
+      const otherField = fixtureSync<TextField>(`<vaadin-text-field label="Other"></vaadin-text-field>`);
+      await nextRender();
+      const marker = mark(field, { confidence: 'low' });
+      await nextRender();
+
+      marker.remove();
+      otherField.appendChild(marker);
+      await nextRender();
+
+      // Make the new field recompute has-helper from its own helper content,
+      // which does not include the indicator.
+      otherField.helperText = 'Keep it short';
+      await nextRender();
+      otherField.helperText = '';
+      await nextRender();
+
+      expect(otherField.hasAttribute('has-helper')).to.be.true;
+      expect(field.hasAttribute('has-helper')).to.be.false;
+    });
+
     describe('to a field with no described element', () => {
       // The marker keeps no state of the field it was attached to before, so a
       // field that provides none of its own can not end up with the previous
