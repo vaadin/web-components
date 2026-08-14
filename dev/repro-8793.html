@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #8793 — Tooltip sizing issue / scrollbar</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/menu-bar';
+      import '@vaadin/tooltip';
+    </script>
+  </head>
+  <body>
+    <style>
+      /* Floating toolbar near the bottom viewport edge, like the StarPass selection toolbar.
+         `bottom` is tuned at runtime so the gap below the buttons is just big enough for the
+         tooltip content but too small for content + the 4px tooltip offset. */
+      #bottom-toolbar {
+        position: fixed;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        background: #223;
+        border-radius: 8px;
+        z-index: 1;
+      }
+
+      #middle {
+        padding: 12px;
+      }
+
+      #readout {
+        font: 13px/1.5 monospace;
+        padding: 12px;
+        white-space: pre;
+      }
+    </style>
+
+    <div id="middle">
+      <!-- CONTROL: same button + tooltip far from the viewport edges -->
+      <vaadin-button id="control-btn">
+        Control button
+        <vaadin-tooltip
+          id="control-tooltip"
+          slot="tooltip"
+          hover-delay="0"
+          hide-delay="0"
+          text="Add to favorites"
+        ></vaadin-tooltip>
+      </vaadin-button>
+    </div>
+
+    <div id="readout">Hover a button to measure its tooltip.</div>
+
+    <!-- FAILING CASE: targets close to the bottom viewport edge -->
+    <div id="bottom-toolbar">
+      <vaadin-button id="bottom-btn" theme="icon">
+        ★
+        <vaadin-tooltip
+          id="bottom-tooltip"
+          slot="tooltip"
+          hover-delay="0"
+          hide-delay="0"
+          text="Add to favorites"
+        ></vaadin-tooltip>
+      </vaadin-button>
+
+      <vaadin-menu-bar id="bottom-menu-bar">
+        <vaadin-tooltip id="bottom-menu-bar-tooltip" slot="tooltip" hover-delay="0" hide-delay="0"></vaadin-tooltip>
+      </vaadin-menu-bar>
+    </div>
+
+    <script type="module">
+      document.querySelector('#bottom-menu-bar').items = [
+        { text: 'View', tooltip: 'Options for how to view the content' },
+        { text: 'Edit', tooltip: 'Edit the content' },
+      ];
+
+      // Live readout of the tooltip overlay part: a scrollbar means scrollHeight > clientHeight.
+      const readout = document.querySelector('#readout');
+      setInterval(() => {
+        const lines = [];
+        for (const tooltip of document.querySelectorAll('vaadin-tooltip')) {
+          const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+          if (!overlay || !overlay.hasAttribute('opened')) {
+            continue;
+          }
+          const part = overlay.shadowRoot.querySelector('[part="overlay"]');
+          const side = overlay.hasAttribute('top-aligned') ? 'below target' : 'above target';
+          const clipped = part.scrollHeight > part.clientHeight;
+          lines.push(
+            `${tooltip.id}: ${side}  clientHeight=${part.clientHeight} scrollHeight=${part.scrollHeight}` +
+              `  ${clipped ? '<<< SCROLLBAR / CLIPPED' : 'ok'}`,
+          );
+        }
+        readout.textContent = lines.join('\n') || 'Hover a button to measure its tooltip.';
+      }, 200);
+    </script>
+  </body>
+</html>
