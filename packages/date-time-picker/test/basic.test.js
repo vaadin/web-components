@@ -264,6 +264,13 @@ describe('Basic features', () => {
       expect(dateTimePicker.__selectedDateTime).to.eql(date);
     });
 
+    it('should not accept a date that does not exist', () => {
+      dateTimePicker.value = '2026-02-30T08:30';
+
+      expect(dateTimePicker.value).to.equal('');
+      expect(dateTimePicker.__selectedDateTime).to.equal('');
+    });
+
     it('should not accept non-ISO formats', () => {
       const invalidValues = [
         '03/02/01T08:30',
