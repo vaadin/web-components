@@ -956,6 +956,36 @@ describe('ai field marker', () => {
       expect(field.inputElement.getAttribute('aria-describedby') || '').to.not.contain(nodeId);
     });
 
+    it('should remove the indicator description while the AI is working', async () => {
+      // A hidden indicator would still get read as part of the field's
+      // description, although it describes a value about to be replaced.
+      const nodeId = getConfidenceNode()!.id;
+
+      marker.working = true;
+      await nextUpdate(marker);
+      expect(field.inputElement.getAttribute('aria-describedby') || '').to.not.contain(nodeId);
+
+      marker.working = false;
+      await nextUpdate(marker);
+      expect(field.inputElement.getAttribute('aria-describedby')!.split(' ')).to.include(nodeId);
+    });
+
+    it('should not describe an indicator shown while the AI is working', async () => {
+      marker.confidence = null;
+      await nextUpdate(marker);
+      marker.working = true;
+      await nextUpdate(marker);
+
+      marker.confidence = 'high';
+      await nextUpdate(marker);
+      const nodeId = getConfidenceNode()!.id;
+      expect(field.inputElement.getAttribute('aria-describedby') || '').to.not.contain(nodeId);
+
+      marker.working = false;
+      await nextUpdate(marker);
+      expect(field.inputElement.getAttribute('aria-describedby')!.split(' ')).to.include(nodeId);
+    });
+
     it('should hide the indicator while the AI is working', async () => {
       marker.working = true;
       await nextUpdate(marker);

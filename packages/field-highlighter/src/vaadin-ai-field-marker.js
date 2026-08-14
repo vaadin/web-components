@@ -560,7 +560,9 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
       }
 
       // The indicator is hidden while working, so the helper text section is
-      // only claimed for it once the working state ends.
+      // only claimed for it — and the indicator described — once the working
+      // state ends.
+      this.#updateConfidenceDescription();
       this.#updateFieldHelperState();
     }
 
@@ -723,16 +725,33 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
       // comes first in the helper text section. A helper added later ends up
       // after the indicator, since the field appends it.
       field.insertBefore(node, field.querySelector(':scope > [slot="helper"]'));
-      if (this.#describedElement) {
-        addValuesToAttribute(this.#describedElement, 'aria-describedby', node.id);
-      }
       this.#confidenceNode = node;
     }
 
     this.#confidenceNode.className = `${CONFIDENCE_CLASS} ${CONFIDENCE_CLASS}-${level}`;
     this.#confidenceNode.textContent = this.__effectiveI18n.confidence[level] ?? '';
     field.setAttribute('ai-confidence', level);
+    this.#updateConfidenceDescription();
     this.#updateFieldHelperState();
+  }
+
+  /**
+   * Keeps the indicator's id in the described element's `aria-describedby`
+   * only while the indicator is shown: a visually hidden indicator would
+   * still get read as part of the field's description, although it describes
+   * a value the AI is about to replace.
+   */
+  #updateConfidenceDescription() {
+    const node = this.#confidenceNode;
+    if (!node || !this.#describedElement) {
+      return;
+    }
+
+    if (this.working) {
+      removeValuesFromAttribute(this.#describedElement, 'aria-describedby', node.id);
+    } else {
+      addValuesToAttribute(this.#describedElement, 'aria-describedby', node.id);
+    }
   }
 
   /**
