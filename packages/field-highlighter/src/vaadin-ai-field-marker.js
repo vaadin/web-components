@@ -11,7 +11,11 @@ import { getDeepActiveElement, getTabbableElements, isKeyboardActive } from '@va
 import { registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import {
+  addValuesToAttribute,
+  hasNodeContent,
+  removeValuesFromAttribute,
+} from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
@@ -793,19 +797,14 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
 
   /**
    * Whether the field has helper content of its own, i.e. helper slot content
-   * other than the indicator. Judges content the way the field itself does:
-   * a defined custom element counts even without light-DOM text or children,
-   * since it may render content in its shadow root.
+   * other than the indicator. Judged with the same content check the field
+   * itself uses for its `has-helper` attribute.
    *
    * @return {boolean}
    */
   #hasFieldHelper() {
     return [...this.#field.querySelectorAll(':scope > [slot="helper"]')].some(
-      (node) =>
-        node !== this.#confidenceNode &&
-        (customElements.get(node.localName) !== undefined ||
-          node.children.length > 0 ||
-          node.textContent.trim() !== ''),
+      (node) => node !== this.#confidenceNode && hasNodeContent(node),
     );
   }
 
