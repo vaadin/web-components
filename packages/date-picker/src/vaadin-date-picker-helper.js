@@ -171,25 +171,41 @@ export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
   return adjustedYear;
 }
 
+const ISO_DATE = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/u;
+
+// The parts of a date string in a format the parsers accept, as written.
+function parseParts(str) {
+  // Parsing with RegExp to ensure correct format
+  const parts = ISO_DATE.exec(str);
+  if (!parts) {
+    return undefined;
+  }
+
+  return { year: parseInt(parts[1], 10), month: parseInt(parts[2], 10) - 1, day: parseInt(parts[3], 10) };
+}
+
 /**
  * Parse date string of one of the following date formats:
  * - ISO 8601 `"YYYY-MM-DD"`
  * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+ *
+ * A date that does not exist, such as `"2026-02-30"`, is not parsed.
+ *
  * @param {!string} str Date string to parse
  * @return {Date} Parsed date in system timezone
  */
 export function parseDate(str) {
-  // Parsing with RegExp to ensure correct format
-  const parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/u.exec(str);
+  const parts = parseParts(str);
   if (!parts) {
     return undefined;
   }
 
   const date = new Date(0, 0); // Wrong date (1900-01-01), but with midnight in local time
-  date.setFullYear(parseInt(parts[1], 10));
-  date.setMonth(parseInt(parts[2], 10) - 1);
-  date.setDate(parseInt(parts[3], 10));
-  return date;
+  date.setFullYear(parts.year);
+  date.setMonth(parts.month);
+  date.setDate(parts.day);
+
+  return date.getMonth() === parts.month && date.getDate() === parts.day ? date : undefined;
 }
 
 /**
@@ -200,22 +216,23 @@ export function parseDate(str) {
  * Uses UTC date components to allow handling date instances independently of
  * the system time-zone.
  *
+ * A date that does not exist, such as `"2026-02-30"`, is not parsed, as in `parseDate`.
+ *
  * @param {!string} str Date string to parse
  * @return {Date} Parsed date in UTC timezone
  */
 export function parseUTCDate(str) {
-  // Parsing with RegExp to ensure correct format
-  const parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/u.exec(str);
+  const parts = parseParts(str);
   if (!parts) {
     return undefined;
   }
 
   const date = new Date(Date.UTC(0, 0)); // Wrong date (1900-01-01), but with midnight in UTC
-  date.setUTCFullYear(parseInt(parts[1], 10));
-  date.setUTCMonth(parseInt(parts[2], 10) - 1);
-  date.setUTCDate(parseInt(parts[3], 10));
+  date.setUTCFullYear(parts.year);
+  date.setUTCMonth(parts.month);
+  date.setUTCDate(parts.day);
 
-  return date;
+  return date.getUTCMonth() === parts.month && date.getUTCDate() === parts.day ? date : undefined;
 }
 
 function formatISODateBase(dateParts) {
