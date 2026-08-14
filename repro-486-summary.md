@@ -13,7 +13,7 @@
 - **Present on main?:** yes (still broken)
 - **Theme / Browser:** base:light / Chromium (playwright-cli)
 - **Screenshot** (static bug): after two backdrop clicks — the counter is still 0 and the modal dialog is still open:
-  ![Modal dialog with a modeless dialog on top; outside-click count 0, modal still opened, modal overlay _last false](https://raw.githubusercontent.com/vaadin/web-components/COMMIT_SHA/repro-486.png)
+  ![Modal dialog with a modeless dialog on top; outside-click count 0, modal still opened, modal overlay _last false](https://raw.githubusercontent.com/vaadin/web-components/d1642b15ff8cac5c502463904fc8851975d42f53/repro-486.png)
 
 ## Observed behavior
 
