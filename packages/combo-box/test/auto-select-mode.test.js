@@ -20,6 +20,12 @@ describe('auto-select-mode', () => {
       expect(comboBox.autoSelectMode).to.equal('full-match');
     });
 
+    it('should highlight the full match', () => {
+      setInputValue(comboBox, 'grape');
+
+      expect(getFocusedItemIndex(comboBox)).to.equal(1);
+    });
+
     it('should not highlight a partial match', () => {
       setInputValue(comboBox, 'gra');
 
