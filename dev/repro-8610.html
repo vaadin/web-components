@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #8610</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/context-menu';
+      import '@vaadin/menu-bar';
+
+      const items = [
+        {
+          text: 'Share',
+          children: [
+            {
+              text: 'On social media',
+              children: [
+                { text: 'Facebook', children: [{ text: 'Post' }, { text: 'Story' }] },
+                { text: 'Twitter' },
+                { text: 'Instagram' },
+              ],
+            },
+          ],
+        },
+      ];
+
+      document.querySelectorAll('vaadin-menu-bar').forEach((menuBar) => {
+        menuBar.items = items;
+      });
+
+      // The same nested items in a context menu, which shares the sub-menu logic
+      document.querySelector('vaadin-context-menu').items = items[0].children;
+    </script>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 24px 0;
+      }
+
+      .row {
+        display: flex;
+        margin-bottom: 40px;
+      }
+
+      .right {
+        justify-content: flex-end;
+      }
+
+      .left {
+        justify-content: flex-start;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Failing case: no space to the right, sub-menus must keep opening to the left -->
+    <div class="row right">
+      <vaadin-menu-bar id="menu-bar-right"></vaadin-menu-bar>
+    </div>
+
+    <!-- Control: space on the right, sub-menus open to the right -->
+    <div class="row left">
+      <vaadin-menu-bar id="menu-bar-left"></vaadin-menu-bar>
+    </div>
+
+    <!-- Same nesting in a context menu at the right edge -->
+    <div class="row right">
+      <vaadin-context-menu>
+        <div id="context-target" style="border: 1px solid #999; padding: 8px">Right click me (right edge)</div>
+      </vaadin-context-menu>
+    </div>
+  </body>
+</html>
