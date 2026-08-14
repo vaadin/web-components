@@ -239,6 +239,15 @@ describe('validation', () => {
       expect(datePicker.invalid).to.be.true;
     });
 
+    it('should be invalid when trying to commit a date that does not exist', async () => {
+      setInputValue(datePicker, '2/31/2022');
+      await untilOverlayRendered(datePicker);
+      enter(input);
+      await nextUpdate(datePicker);
+      expect(datePicker.value).to.equal('');
+      expect(datePicker.invalid).to.be.true;
+    });
+
     describe('autoOpenDisabled', () => {
       beforeEach(() => {
         datePicker.autoOpenDisabled = true;

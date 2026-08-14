@@ -433,6 +433,16 @@ describe('keyboard', () => {
       expect(result.getDate()).to.equal(9);
     });
 
+    it('should parse short year against today for non-parsable reference date', async () => {
+      datePicker.i18n = { ...datePicker.i18n, referenceDate: '2026-02-30' };
+
+      await sendKeys({ type: '1/15/24' });
+      await untilOverlayRendered(datePicker);
+
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(getAdjustedYear(new Date(), 24, 0, 15));
+    });
+
     it('should throw when passing a year < 0', () => {
       expect(() => getAdjustedYear(today, -1, 1, 1)).to.throw(Error);
     });
