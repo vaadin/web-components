@@ -439,7 +439,8 @@ describe('keyboard', () => {
       await sendKeys({ type: '1/15/24' });
       await untilOverlayRendered(datePicker);
 
-      expect(focusedDate().getFullYear()).to.equal(getAdjustedYear(new Date(), 24, 0, 15));
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(getAdjustedYear(new Date(), 24, 0, 15));
     });
 
     it('should throw when passing a year < 0', () => {
