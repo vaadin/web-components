@@ -3,6 +3,7 @@
  * Copyright (c) 2022 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { hasNodeContent } from './dom-utils.js';
 import { SlotController } from './slot-controller.js';
 
 /**
@@ -131,24 +132,6 @@ export class SlotChildObserveController extends SlotController {
   }
 
   /**
-   * Returns true if a node is an HTML element with children,
-   * or is a defined custom element, or has non-empty text.
-   *
-   * @param {Node} node
-   * @return {boolean}
-   */
-  #hasContent(node) {
-    if (!node) {
-      return false;
-    }
-
-    return (
-      (node.nodeType === Node.ELEMENT_NODE && (customElements.get(node.localName) || node.children.length > 0)) ||
-      (node.textContent && node.textContent.trim() !== '')
-    );
-  }
-
-  /**
    * Fire an event to notify the controller host about node changes.
    *
    * @param {Node} node
@@ -157,7 +140,7 @@ export class SlotChildObserveController extends SlotController {
   _notifyChange(node) {
     this.dispatchEvent(
       new CustomEvent('slot-content-changed', {
-        detail: { hasContent: this.#hasContent(node), node },
+        detail: { hasContent: hasNodeContent(node), node },
       }),
     );
   }

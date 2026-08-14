@@ -62,3 +62,10 @@ export function removeValuesFromAttribute(element: HTMLElement, attr: string, va
  * Returns true if the given node is an empty text node, false otherwise.
  */
 export function isEmptyTextNode(node: Node): boolean;
+
+/**
+ * Returns true if the given node has content of its own: an element with
+ * children, a defined custom element — which may render content in its
+ * shadow root — or a node with non-empty text.
+ */
+export function hasNodeContent(node: Node | null | undefined): boolean;
