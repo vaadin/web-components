@@ -63,7 +63,7 @@ export const datePickerI18nDefaults = Object.freeze({
       date = parseInt(parts[1]);
       year = parseInt(parts[2]);
       if (parts[2].length < 3 && year >= 0) {
-        const usedReferenceDate = this.referenceDate ? parseDate(this.referenceDate) : new Date();
+        const usedReferenceDate = parseDate(this.referenceDate) || new Date();
         year = getAdjustedYear(usedReferenceDate, year, month, date);
       }
     } else if (parts.length === 2) {

@@ -262,11 +262,10 @@ export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
 
 const ISO_DATE = /^([-+]\d{1,6}|\d{2,4})-(\d{1,2})-(\d{1,2})$/u;
 
-// The parts of a date string in a format the parsers accept, as written, or `undefined` for anything
-// else. Only a string is matched, since coercing another type to one can throw.
+// The parts of a date string in a format the parsers accept, as written.
 function parseParts(str) {
   // Parsing with RegExp to ensure correct format
-  const parts = typeof str === 'string' ? ISO_DATE.exec(str) : null;
+  const parts = ISO_DATE.exec(str);
   if (!parts) {
     return undefined;
   }
