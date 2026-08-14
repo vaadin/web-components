@@ -1,0 +1,44 @@
+/* menu-bar is a joined button group: Lumo buttons separated by a thin seam, with only
+   the outer corners rounded. The base already provides the container flex layout, the
+   first/last/overflow corner rounding and the end-aligned theme; the buttons get the
+   full Lumo button look from button.css, the submenu items from item.css and the
+   overlay from overlay.css / context-menu.css (all widened for the menu-bar family). */
+:where(:root),
+:where(:host) {
+  /* Thin seam between the joined buttons */
+  --vaadin-menu-bar-gap: calc(var(--lumo-space-xs) / 2);
+}
+
+/* Menu bar buttons sit tighter vertically than standalone Lumo buttons, and the seam
+   between them comes from the container gap instead of an inline margin. */
+:where(vaadin-menu-bar) > vaadin-menu-bar-button {
+  --vaadin-button-margin: calc(var(--lumo-space-xs) / 2) 0;
+}
+
+/* An item used as a button's component renders inside the button, not in the overlay,
+   so it must not paint the item hover background over the button's own hover. Needs to
+   outweigh the shared item hover rule in item.css, hence the extra :not([disabled]). */
+@media (any-hover: hover) {
+  :where(vaadin-menu-bar-button) > vaadin-menu-bar-item:hover:not([disabled]) {
+    background-color: transparent;
+  }
+}
+
+/* Overflow ("···") button: square, with a larger glyph */
+:where(vaadin-menu-bar) > vaadin-menu-bar-button[slot='overflow'] {
+  min-width: var(--lumo-size-m);
+  --vaadin-button-padding: 0 calc(var(--lumo-size-m) / 4);
+}
+
+:where(vaadin-menu-bar) > vaadin-menu-bar-button[slot='overflow'] > * {
+  font-size: var(--lumo-font-size-xl);
+}
+
+/* Lumo shows the dropdown chevron only with the dropdown-indicators theme, while the
+   base renders it on every submenu button. The theme is propagated to the buttons.
+   Hide the whole suffix, not just the chevron it draws in ::after — an empty suffix
+   would still take the button's gap and widen the button. */
+:where(vaadin-menu-bar-button)[aria-haspopup]:not([theme~='dropdown-indicators'])::part(suffix),
+:where(vaadin-menu-bar-button)[aria-haspopup][theme~='icon']::part(suffix) {
+  display: none;
+}
