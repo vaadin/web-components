@@ -181,6 +181,7 @@ class Chart extends ChartMixin(ThemableMixin(ElementMixin(PolylitMixin(LumoInjec
         ></div>
       </div>
       <slot id="slot"></slot>
+      <div part="loader"></div>
     `;
   }
 }

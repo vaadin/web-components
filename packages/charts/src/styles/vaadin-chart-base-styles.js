@@ -19,7 +19,8 @@
 import '@vaadin/component-base/src/styles/style-props.js';
 import '@vaadin/component-base/src/styles/user-colors.js';
 import { css, unsafeCSS } from 'lit';
-import { addGlobalStyles } from '@vaadin/component-base/src/css-utils.js';
+import { addGlobalStyles, registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
+import { loaderStyles } from '@vaadin/component-base/src/styles/loader-styles.js';
 
 /* Tooltip styles, to support `"tooltip": { "outside": true }` config option */
 // postcss-lit-disable-next-line
@@ -1399,4 +1400,73 @@ export const chartStyles = css`
   :host([dir='rtl']) :where([styled-mode]) .highcharts-menu {
     box-shadow: -3px 3px 10px #888;
   }
+
+  ${loaderStyles}
+
+  [part='loader'] {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    --vaadin-spinner-size: 2lh;
+  }
+
+  :host([ai-working]) {
+    position: relative;
+    pointer-events: none;
+
+    [part~='loader'] {
+      display: block;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      backdrop-filter: blur(8px);
+      animation: fade-in 300ms linear;
+    }
+  }
+
+  :host([ai-shimmer])::after {
+    --color1: light-dark(#932fff34, #bc64ff);
+    --color2: light-dark(#004cff31, #539aff);
+    content: '';
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(10px);
+    animation: fade-in 300ms linear;
+    background: linear-gradient(30deg, var(--color1), var(--color2));
+  }
+
+  @keyframes --vaadin-ai-shimmer {
+    0% {
+      --vaadin-ai-shimmer-pos: -100px;
+    }
+
+    100% {
+      --vaadin-ai-shimmer-pos: calc(100% + 100px);
+    }
+  }
+
+  :host([ai-shimmer]) {
+    position: relative;
+    pointer-events: none;
+    mask-image: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.1) calc(var(--vaadin-ai-shimmer-pos) - 100px),
+      rgba(0, 0, 0, 0.9) calc(var(--vaadin-ai-shimmer-pos) - 70px),
+      rgba(0, 0, 0, 0.9) var(--vaadin-ai-shimmer-pos),
+      rgba(0, 0, 0, 0.1) calc(var(--vaadin-ai-shimmer-pos) + 70px),
+      rgba(0, 0, 0, 0.1) calc(var(--vaadin-ai-shimmer-pos) + 100px)
+    );
+    animation: --vaadin-ai-shimmer 3s cubic-bezier(0.78, 0, 0.22, 1) infinite;
+  }
 `;
+
+registerCSSProperty({
+  name: '--vaadin-ai-shimmer-pos',
+  syntax: '<length-percentage>',
+  inherits: false,
+  initialValue: '0px',
+});
