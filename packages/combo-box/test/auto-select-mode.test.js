@@ -20,7 +20,7 @@ describe('auto-select-mode', () => {
       expect(comboBox.autoSelectMode).to.equal('full-match');
     });
 
-    it('should not highlight the first matching item', () => {
+    it('should not highlight a partial match', () => {
       setInputValue(comboBox, 'gra');
 
       expect(getFocusedItemIndex(comboBox)).to.equal(-1);
@@ -33,13 +33,13 @@ describe('auto-select-mode', () => {
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
-    it('should highlight the first matching item', () => {
+    it('should highlight the first match', () => {
       setInputValue(comboBox, 'gra');
 
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
-    it('should highlight the exact match instead of the first matching item', () => {
+    it('should highlight the exact match', () => {
       setInputValue(comboBox, 'grape');
 
       expect(getFocusedItemIndex(comboBox)).to.equal(1);
@@ -57,7 +57,7 @@ describe('auto-select-mode', () => {
       expect(comboBox._focusedIndex).to.equal(-1);
     });
 
-    it('should not highlight the first matching item when custom values are allowed', () => {
+    it('should not highlight the first match when custom values are allowed', () => {
       comboBox.allowCustomValue = true;
 
       setInputValue(comboBox, 'gra');
@@ -72,13 +72,13 @@ describe('auto-select-mode', () => {
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
-    it('should not highlight the first matching item when multiple items match', () => {
+    it('should not highlight any item when multiple items match', () => {
       setInputValue(comboBox, 'gra');
 
       expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
-    it('should highlight the item when only one item matches', () => {
+    it('should highlight the only match', () => {
       setInputValue(comboBox, 'ban');
 
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
@@ -102,7 +102,7 @@ describe('auto-select-mode', () => {
       };
     });
 
-    it('should highlight the first matching item after the page is loaded', async () => {
+    it('should highlight the first match after the page is loaded', async () => {
       comboBox.autoSelectMode = 'first-match';
 
       setInputValue(comboBox, 'gra');
@@ -111,7 +111,7 @@ describe('auto-select-mode', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
-    it('should highlight the only matching item after the page is loaded', async () => {
+    it('should highlight the only match after the page is loaded', async () => {
       comboBox.autoSelectMode = 'only-match';
 
       setInputValue(comboBox, 'ban');
