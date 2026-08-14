@@ -42,7 +42,7 @@ describe('auto-select-mode', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
-    it('should prefer the exact match over the first match', () => {
+    it('should highlight the exact match when there is one', () => {
       setInputValue(comboBox, 'grape');
       expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
@@ -64,13 +64,13 @@ describe('auto-select-mode', () => {
     });
   });
 
-  describe('only-match', () => {
+  describe('single-match', () => {
     beforeEach(() => {
-      comboBox.autoSelectMode = 'only-match';
+      comboBox.autoSelectMode = 'single-match';
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
-    it('should highlight the only match', () => {
+    it('should highlight the single match', () => {
       setInputValue(comboBox, 'ban');
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
@@ -80,7 +80,7 @@ describe('auto-select-mode', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
-    it('should highlight the exact match when multiple items match', () => {
+    it('should highlight the exact match when there is one', () => {
       setInputValue(comboBox, 'grape');
       expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
@@ -106,8 +106,8 @@ describe('auto-select-mode', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
-    it('should highlight the only match after the page is loaded', async () => {
-      comboBox.autoSelectMode = 'only-match';
+    it('should highlight the single match after the page is loaded', async () => {
+      comboBox.autoSelectMode = 'single-match';
 
       setInputValue(comboBox, 'ban');
       await aTimeout(0);

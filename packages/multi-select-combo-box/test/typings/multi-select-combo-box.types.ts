@@ -89,7 +89,7 @@ assertType<() => boolean>(narrowedComboBox.checkValidity);
 assertType<() => boolean>(narrowedComboBox.validate);
 assertType<boolean>(narrowedComboBox.allowCustomValue);
 assertType<boolean | null | undefined>(narrowedComboBox.autoOpenDisabled);
-assertType<'exact-match' | 'first-match' | 'only-match'>(narrowedComboBox.autoSelectMode);
+assertType<'exact-match' | 'first-match' | 'single-match'>(narrowedComboBox.autoSelectMode);
 assertType<string>(narrowedComboBox.filter);
 assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.filteredItems);
 assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.items);

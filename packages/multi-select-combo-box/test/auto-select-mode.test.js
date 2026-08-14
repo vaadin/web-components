@@ -43,12 +43,12 @@ describe('auto-select-mode', () => {
     });
   });
 
-  describe('only-match', () => {
+  describe('single-match', () => {
     beforeEach(() => {
-      comboBox.autoSelectMode = 'only-match';
+      comboBox.autoSelectMode = 'single-match';
     });
 
-    it('should highlight the only match', () => {
+    it('should highlight the single match', () => {
       setInputValue(comboBox, 'ban');
       expect(getFocusedItemIndex()).to.equal(0);
     });

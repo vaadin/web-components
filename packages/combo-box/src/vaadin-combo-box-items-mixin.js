@@ -68,12 +68,12 @@ export const ComboBoxItemsMixin = (superClass) =>
          *
          * - `exact-match` (default): select an item only if its label matches the filter exactly.
          * - `first-match`: select the first matching item, giving preference to an exact match.
-         * - `only-match`: select the matching item only if there is exactly one.
+         * - `single-match`: select the matching item only if there is exactly one.
          *
          * Matching is case-insensitive. The item to be selected is highlighted
          * in the dropdown while typing. Auto-selection is not performed when
          * the filter is empty or when `allowCustomValue` is enabled.
-         * @attr {exact-match|first-match|only-match} auto-select-mode
+         * @attr {exact-match|first-match|single-match} auto-select-mode
          */
         autoSelectMode: {
           type: String,
@@ -319,7 +319,7 @@ export const ComboBoxItemsMixin = (superClass) =>
         return -1;
       }
 
-      if (this.autoSelectMode === 'first-match' || (this.autoSelectMode === 'only-match' && items.length === 1)) {
+      if (this.autoSelectMode === 'first-match' || (this.autoSelectMode === 'single-match' && items.length === 1)) {
         // Skip an item that is not yet loaded. Once the item is loaded,
         // the focused index is updated again.
         return items[0] instanceof ComboBoxPlaceholder ? -1 : 0;
