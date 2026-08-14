@@ -779,12 +779,7 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
       return;
     }
 
-    // Nothing to release for a marker that never claimed the helper section.
-    if (!this.#helperStateObserver) {
-      return;
-    }
-
-    this.#helperStateObserver.disconnect();
+    this.#helperStateObserver?.disconnect();
 
     // The field keeps the attribute when its own helper provides content,
     // which it may have gained while the indicator was shown.
