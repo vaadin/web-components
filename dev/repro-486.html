@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #486</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+
+  <body>
+    <style>
+      #status {
+        font-family: monospace;
+        font-size: 15px;
+        line-height: 1.6;
+        border: 1px solid lightgray;
+        padding: 12px 16px;
+        margin-bottom: 1rem;
+        width: fit-content;
+      }
+
+      #status b {
+        display: inline-block;
+        min-width: 20em;
+      }
+
+      .fail {
+        color: crimson;
+        font-weight: 700;
+      }
+
+      .ok {
+        color: seagreen;
+        font-weight: 700;
+      }
+
+      p.hint {
+        max-width: 46em;
+      }
+    </style>
+
+    <div id="status"></div>
+
+    <vaadin-button id="open-modal">Open modal dialog</vaadin-button>
+    <vaadin-button id="reset">Reset counters</vaadin-button>
+
+    <p class="hint">
+      Steps: open the modal dialog, then use a button inside it to open a modeless overlay on top, then click the
+      backdrop (the dimmed area outside both). Watch <code>outside-click on modal</code> below: it stays at 0 and the
+      modal dialog does not close. Clicking the backdrop with no modeless overlay on top is the control — it closes the
+      modal dialog.
+    </p>
+
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/dialog';
+      import '@vaadin/popover';
+      import '@vaadin/tooltip';
+
+      const modal = document.createElement('vaadin-dialog');
+      modal.headerTitle = 'Modal dialog (the one that should close)';
+      document.body.appendChild(modal);
+
+      const modeless = document.createElement('vaadin-dialog');
+      modeless.modeless = true;
+      modeless.headerTitle = 'Modeless dialog on top';
+      modeless.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+        root.textContent = 'Modeless. Now click the backdrop of the modal dialog behind me.';
+      };
+      document.body.appendChild(modeless);
+
+      let outsideClicks = 0;
+      modal.$.overlay.addEventListener('vaadin-overlay-outside-click', () => {
+        outsideClicks += 1;
+        render();
+      });
+
+      // Built lazily: both need a target that only exists once the modal renderer ran
+      let tooltip;
+      let popover;
+
+      modal.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+
+        const openModeless = document.createElement('vaadin-button');
+        openModeless.id = 'open-modeless';
+        openModeless.textContent = 'Open modeless dialog on top';
+        openModeless.addEventListener('click', () => {
+          modeless.opened = true;
+        });
+
+        const tooltipTarget = document.createElement('vaadin-button');
+        tooltipTarget.id = 'open-tooltip';
+        tooltipTarget.textContent = 'Show manual tooltip on top';
+        tooltip = document.createElement('vaadin-tooltip');
+        tooltip.text = 'Manual tooltip';
+        tooltip.manual = true;
+        tooltip.target = tooltipTarget;
+        tooltipTarget.addEventListener('click', () => {
+          tooltip.opened = true;
+        });
+
+        const popoverTarget = document.createElement('vaadin-button');
+        popoverTarget.id = 'open-popover';
+        popoverTarget.textContent = 'Open non-modal popover on top';
+        popover = document.createElement('vaadin-popover');
+        popover.target = popoverTarget;
+        popover.renderer = (root2) => {
+          root2.textContent = 'Non-modal popover';
+        };
+
+        const text = document.createElement('p');
+        text.textContent = 'Open one of the overlays below on top of this modal dialog, then click the backdrop.';
+
+        root.append(text, openModeless, tooltipTarget, popoverTarget, tooltip, popover);
+      };
+
+      document.querySelector('#open-modal').addEventListener('click', () => {
+        modal.opened = true;
+      });
+
+      document.querySelector('#reset').addEventListener('click', () => {
+        outsideClicks = 0;
+        modal.opened = false;
+        modeless.opened = false;
+        if (tooltip) {
+          tooltip.opened = false;
+        }
+        if (popover) {
+          popover.opened = false;
+        }
+        render();
+      });
+
+      function render() {
+        const modalOverlay = modal.$.overlay;
+        const onTop = [];
+        if (modeless.opened) {
+          onTop.push('modeless dialog');
+        }
+        if (tooltip && tooltip.opened) {
+          onTop.push('tooltip');
+        }
+        if (popover && popover.opened) {
+          onTop.push('popover');
+        }
+
+        const last = modal.opened ? modalOverlay._last : null;
+        const stuck = modal.opened && !last;
+
+        document.querySelector('#status').innerHTML = [
+          `<b>outside-click on modal:</b> <span class="${stuck && outsideClicks === 0 ? 'fail' : ''}">${outsideClicks}</span>`,
+          `<b>modal dialog opened:</b> ${modal.opened}`,
+          `<b>modeless overlay(s) on top:</b> ${onTop.length ? onTop.join(', ') : 'none'}`,
+          `<b>modal overlay _last:</b> ${last === null ? 'n/a (closed)' : `<span class="${last ? 'ok' : 'fail'}">${last}</span>`}`,
+        ].join('<br>');
+      }
+
+      modal.addEventListener('opened-changed', render);
+      modeless.addEventListener('opened-changed', render);
+      // Popover and tooltip do not bubble opened-changed through the dialog, poll for the readout
+      setInterval(render, 200);
+
+      render();
+    </script>
+  </body>
+</html>
