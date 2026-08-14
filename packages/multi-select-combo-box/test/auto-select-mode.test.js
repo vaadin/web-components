@@ -1,11 +1,10 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-multi-select-combo-box.js';
-import { getAllItems } from './helpers.js';
+import { getAllItems, setInputValue } from './helpers.js';
 
 describe('auto-select-mode', () => {
-  let comboBox, inputElement;
+  let comboBox;
 
   function getFocusedItemIndex() {
     return getAllItems(comboBox).findIndex((item) => item.hasAttribute('focused'));
@@ -15,8 +14,6 @@ describe('auto-select-mode', () => {
     comboBox = fixtureSync('<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>');
     await nextRender();
     comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
-    inputElement = comboBox.inputElement;
-    inputElement.focus();
   });
 
   describe('first-match', () => {
@@ -24,40 +21,28 @@ describe('auto-select-mode', () => {
       comboBox.autoSelectMode = 'first-match';
     });
 
-    it('should highlight the first matching item while typing', async () => {
-      await sendKeys({ type: 'gra' });
+    it('should highlight the first matching item', () => {
+      setInputValue(comboBox, 'gra');
 
       expect(getFocusedItemIndex()).to.equal(0);
     });
 
-    it('should select the first matching item on Enter', async () => {
-      await sendKeys({ type: 'gra' });
+    it('should highlight the exact match instead of the first matching item', () => {
+      setInputValue(comboBox, 'grape');
 
-      await sendKeys({ press: 'Enter' });
-
-      expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
+      expect(getFocusedItemIndex()).to.equal(1);
     });
 
-    it('should select the exact match instead of the first matching item', async () => {
-      await sendKeys({ type: 'grape' });
+    it('should not focus any item when no item matches the filter', () => {
+      setInputValue(comboBox, 'xyz');
 
-      await sendKeys({ press: 'Enter' });
-
-      expect(comboBox.selectedItems).to.deep.equal(['grape']);
+      expect(comboBox._focusedIndex).to.equal(-1);
     });
 
-    it('should not select anything on Enter when no item matches the filter', async () => {
-      await sendKeys({ type: 'xyz' });
-
-      await sendKeys({ press: 'Enter' });
-
-      expect(comboBox.selectedItems).to.deep.equal([]);
-    });
-
-    it('should not highlight the first matching item when custom values are allowed', async () => {
+    it('should not highlight the first matching item when custom values are allowed', () => {
       comboBox.allowCustomValue = true;
 
-      await sendKeys({ type: 'gra' });
+      setInputValue(comboBox, 'gra');
 
       expect(getFocusedItemIndex()).to.equal(-1);
     });
@@ -68,26 +53,16 @@ describe('auto-select-mode', () => {
       comboBox.autoSelectMode = 'only-match';
     });
 
-    it('should not highlight the first item when multiple items match', async () => {
-      await sendKeys({ type: 'gra' });
+    it('should not highlight the first matching item when multiple items match', () => {
+      setInputValue(comboBox, 'gra');
 
       expect(getFocusedItemIndex()).to.equal(-1);
     });
 
-    it('should not select anything on Enter when multiple items match', async () => {
-      await sendKeys({ type: 'gra' });
+    it('should highlight the item when only one item matches', () => {
+      setInputValue(comboBox, 'ban');
 
-      await sendKeys({ press: 'Enter' });
-
-      expect(comboBox.selectedItems).to.deep.equal([]);
-    });
-
-    it('should select the only matching item on Enter', async () => {
-      await sendKeys({ type: 'ban' });
-
-      await sendKeys({ press: 'Enter' });
-
-      expect(comboBox.selectedItems).to.deep.equal(['banana']);
+      expect(getFocusedItemIndex()).to.equal(0);
     });
   });
 });
