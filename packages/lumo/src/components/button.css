@@ -13,7 +13,7 @@
   --vaadin-button-border-width: 0px;
 }
 
-:where(vaadin-button, vaadin-message-input-button) {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button) {
   position: relative;
   min-width: var(--vaadin-button-min-width, calc(var(--_lumo-button-size) * 2));
   outline-offset: 0;
@@ -129,7 +129,7 @@
   }
 }
 
-:where(vaadin-button, vaadin-message-input-button, vaadin-drawer-toggle) {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button, vaadin-drawer-toggle) {
   &::before,
   &::after {
     content: '';
@@ -160,39 +160,51 @@
 }
 
 @media (any-hover: hover) {
-  :where(vaadin-button, vaadin-message-input-button, vaadin-drawer-toggle):hover:not([disabled])::before {
+  :where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button, vaadin-drawer-toggle):hover:not(
+      [disabled]
+    )::before {
     opacity: 0.02;
   }
 
-  :where(vaadin-button, vaadin-message-input-button)[theme~='primary']:hover:not([disabled])::before {
+  :where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='primary']:hover:not(
+      [disabled]
+    )::before {
     opacity: 0.05;
   }
 }
 
-:where(vaadin-button, vaadin-message-input-button, vaadin-drawer-toggle)[active]:not([disabled])::before {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button, vaadin-drawer-toggle)[active]:not(
+    [disabled]
+  )::before {
   opacity: 0.05;
   transition-duration: 0s;
 }
 
-:where(vaadin-button, vaadin-message-input-button, vaadin-drawer-toggle)[active]:not([disabled])::after {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button, vaadin-drawer-toggle)[active]:not(
+    [disabled]
+  )::after {
   opacity: 0.1;
   transition-duration: 0s, 0s;
   transform: scale(0);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='primary'][active]:not([disabled])::before {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='primary'][active]:not(
+    [disabled]
+  )::before {
   opacity: 0.1;
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='primary'][active]:not([disabled])::after {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='primary'][active]:not(
+    [disabled]
+  )::after {
   opacity: 0.2;
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='primary']::before,
-:where(vaadin-button, vaadin-message-input-button)[theme~='primary']::after {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='primary']::before,
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='primary']::after {
   background-color: black;
 }
 
-:where(vaadin-button, vaadin-message-input-button) > vaadin-icon[icon^='vaadin:'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button) > vaadin-icon[icon^='vaadin:'] {
   padding: 0.25em;
 }
