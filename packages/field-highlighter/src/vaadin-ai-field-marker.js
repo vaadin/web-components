@@ -764,7 +764,12 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
       return;
     }
 
-    this.#helperStateObserver?.disconnect();
+    // Nothing to release for a marker that never claimed the helper section.
+    if (!this.#helperStateObserver) {
+      return;
+    }
+
+    this.#helperStateObserver.disconnect();
 
     // The field keeps the attribute when its own helper provides content,
     // which it may have gained while the indicator was shown.
@@ -775,13 +780,19 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
 
   /**
    * Whether the field has helper content of its own, i.e. helper slot content
-   * other than the indicator.
+   * other than the indicator. Judges content the way the field itself does:
+   * a defined custom element counts even without light-DOM text or children,
+   * since it may render content in its shadow root.
    *
    * @return {boolean}
    */
   #hasFieldHelper() {
     return [...this.#field.querySelectorAll(':scope > [slot="helper"]')].some(
-      (node) => node !== this.#confidenceNode && (node.textContent.trim() !== '' || node.children.length > 0),
+      (node) =>
+        node !== this.#confidenceNode &&
+        (customElements.get(node.localName) !== undefined ||
+          node.children.length > 0 ||
+          node.textContent.trim() !== ''),
     );
   }
 

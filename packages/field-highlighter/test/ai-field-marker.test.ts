@@ -92,6 +92,19 @@ class FocusSensitiveField extends HTMLElement {
 customElements.define('focus-sensitive-field', FocusSensitiveField);
 
 /**
+ * A helper element that renders its content in its shadow root, so it has
+ * neither light-DOM text nor children although it shows helper content.
+ */
+class ShadowHelper extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' }).textContent = 'Shadow helper';
+  }
+}
+
+customElements.define('shadow-helper', ShadowHelper);
+
+/**
  * A field that exposes none of the elements the marker can describe: no
  * `ariaTarget`, no `inputElement` and no `focusElement`.
  */
@@ -720,6 +733,52 @@ describe('ai field marker', () => {
         await nextRender();
 
         expect(field.hasAttribute('has-helper')).to.be.true;
+      });
+
+      describe('field with a helper rendering in its shadow root', () => {
+        let helperField: TextField;
+
+        beforeEach(async () => {
+          // The field counts a defined custom element as helper content even
+          // without light-DOM text or children, since it may render content
+          // in its shadow root — the marker must judge it the same way.
+          helperField = fixtureSync<TextField>(
+            `<vaadin-text-field label="Name"><shadow-helper slot="helper"></shadow-helper></vaadin-text-field>`,
+          );
+          await nextRender();
+        });
+
+        it('should keep has-helper while the AI is working', async () => {
+          const helperMarker = mark(helperField, { confidence: 'low' });
+          await nextRender();
+
+          helperMarker.working = true;
+          await nextUpdate(helperMarker);
+
+          expect(helperField.hasAttribute('has-helper')).to.be.true;
+        });
+
+        it('should keep has-helper when the confidence is cleared', async () => {
+          const helperMarker = mark(helperField, { confidence: 'low' });
+          await nextRender();
+
+          helperMarker.confidence = null;
+          await nextUpdate(helperMarker);
+
+          expect(helperField.hasAttribute('has-helper')).to.be.true;
+        });
+
+        it('should not touch has-helper when no indicator was ever shown', async () => {
+          const helperMarker = mark(helperField);
+          await nextRender();
+
+          helperMarker.working = true;
+          await nextUpdate(helperMarker);
+          helperMarker.working = false;
+          await nextUpdate(helperMarker);
+
+          expect(helperField.hasAttribute('has-helper')).to.be.true;
+        });
       });
 
       it('should stop re-asserting has-helper once the indicator is gone', async () => {
