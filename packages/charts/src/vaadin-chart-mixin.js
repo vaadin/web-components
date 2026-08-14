@@ -35,6 +35,7 @@ import { get } from '@vaadin/component-base/src/path-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { cleanupExport, deepMerge, inflateFunctions, prepareExport } from './helpers.js';
+import { PatternFillBridge } from './vaadin-chart-pattern-fill.js';
 
 ['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
   /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
@@ -711,6 +712,10 @@ export const ChartMixin = (superClass) =>
     /** @private */
     __initChart(options) {
       this.__initEventsListeners(options);
+      // Discard any previous bridge before re-creating the chart. The reset re-init path
+      // reaches here with the old chart still live, so this removes its injected `<style>`
+      // and defs instead of orphaning them.
+      this.__patternFillBridge?.destroy();
       this.__styledMode = options.chart.styledMode;
       if (options.chart.type === 'gantt') {
         this.configuration = Highcharts.ganttChart(this.$.chart, options);
@@ -719,6 +724,13 @@ export const ChartMixin = (superClass) =>
       } else {
         this.configuration = Highcharts.chart(this.$.chart, options);
       }
+
+      // Bridge Highcharts pattern-fill into styled mode; re-applied on every render.
+      // It is destroyed on re-init (above) and on disconnect; the listener misses the
+      // first (synchronous) render, so also apply once now.
+      this.__patternFillBridge = new PatternFillBridge(this.configuration, this.shadowRoot);
+      Highcharts.addEvent(this.configuration, 'render', () => this.__patternFillBridge?.apply());
+      this.__patternFillBridge.apply();
 
       this.__forceResize();
     }
@@ -737,6 +749,8 @@ export const ChartMixin = (superClass) =>
         }
 
         if (this.configuration) {
+          this.__patternFillBridge?.destroy();
+          this.__patternFillBridge = undefined;
           this.configuration.destroy();
           this.configuration = undefined;
 
