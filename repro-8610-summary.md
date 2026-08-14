@@ -13,7 +13,7 @@
 - **Reproduced on:** vaadin/web-components @ `main` (25.3.0-alpha11, commit 1d2414c85e) and on published `@vaadin/menu-bar@24.7.0`
 - **Present on main?:** yes (still broken)
 - **Theme / Browser:** Lumo / Chromium via Playwright
-- **Screenshot** (static bug): ![Third level sub-menu opening on top of the first level menu](https://raw.githubusercontent.com/vaadin/web-components/<commit-sha>/repro-8610.png)
+- **Screenshot** (static bug): ![Third level sub-menu opening on top of the first level menu](https://raw.githubusercontent.com/vaadin/web-components/32b993879e18088bb79f3945ec487571a19876fa/repro-8610.png)
 
 ## Observed behavior
 
