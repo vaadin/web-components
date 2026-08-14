@@ -13,23 +13,23 @@
   --vaadin-button-border-width: 0px;
 }
 
-:where(vaadin-button, vaadin-message-input-button) {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button) {
   position: relative;
   min-width: var(--vaadin-button-min-width, calc(var(--_lumo-button-size) * 2));
   outline-offset: 0;
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='small'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='small'] {
   --_lumo-button-size: var(--lumo-size-s);
   --vaadin-button-font-size: var(--lumo-font-size-s);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='large'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='large'] {
   --_lumo-button-size: var(--lumo-size-l);
   --vaadin-button-font-size: var(--lumo-font-size-l);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='primary'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='primary'] {
   --vaadin-button-background: var(--vaadin-button-primary-background, var(--lumo-primary-color));
   --vaadin-button-text-color: var(--vaadin-button-primary-text-color, var(--lumo-primary-contrast-color));
   --vaadin-button-font-weight: 600;
@@ -37,16 +37,19 @@
   outline-offset: 1px;
 }
 
-:where(vaadin-button, vaadin-message-input-button):is([theme~='tertiary'], [theme~='tertiary-inline']) {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button):is(
+  [theme~='tertiary'],
+  [theme~='tertiary-inline']
+) {
   --vaadin-button-background: transparent;
   min-width: 0;
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='tertiary'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='tertiary'] {
   --vaadin-button-padding: 0 calc(var(--_lumo-button-size) / 6);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='tertiary-inline'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='tertiary-inline'] {
   --vaadin-button-padding: 0;
   --vaadin-button-margin: 0;
   --vaadin-button-height: auto;
@@ -54,59 +57,61 @@
   --vaadin-button-line-height: inherit;
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='icon']:not([theme~='tertiary-inline']) {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='icon']:not(
+    [theme~='tertiary-inline']
+  ) {
   min-width: var(--_lumo-button-size);
   --vaadin-button-padding: 0 calc(var(--_lumo-button-size) / 4);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='success'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='success'] {
   --vaadin-button-text-color: var(--lumo-success-text-color);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='success'][theme~='primary'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='success'][theme~='primary'] {
   --vaadin-button-background: var(--lumo-success-color);
   --vaadin-button-text-color: var(--lumo-success-contrast-color);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='warning'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='warning'] {
   --vaadin-button-text-color: var(--lumo-warning-text-color);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='warning'][theme~='primary'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='warning'][theme~='primary'] {
   --vaadin-button-background: var(--lumo-warning-color);
   --vaadin-button-text-color: var(--lumo-warning-contrast-color);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='error'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='error'] {
   --vaadin-button-text-color: var(--lumo-error-text-color);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='error'][theme~='primary'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='error'][theme~='primary'] {
   --vaadin-button-background: var(--lumo-error-color);
   --vaadin-button-text-color: var(--lumo-error-contrast-color);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='contrast'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='contrast'] {
   --vaadin-button-text-color: var(--lumo-contrast);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='contrast'][theme~='primary'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='contrast'][theme~='primary'] {
   --vaadin-button-background: var(--lumo-contrast);
   --vaadin-button-text-color: var(--lumo-base-color);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[disabled] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[disabled] {
   opacity: 1;
   --vaadin-button-text-color: var(--lumo-disabled-text-color);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[disabled][theme~='primary'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[disabled][theme~='primary'] {
   --vaadin-button-background: var(--lumo-contrast-30pct);
   --vaadin-button-text-color: var(--lumo-base-color);
 }
 
-:where(vaadin-button, vaadin-message-input-button, vaadin-drawer-toggle)::before,
-:where(vaadin-button, vaadin-message-input-button, vaadin-drawer-toggle)::after {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button, vaadin-drawer-toggle)::before,
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button, vaadin-drawer-toggle)::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -117,22 +122,22 @@
   pointer-events: none;
 }
 
-:where(vaadin-button, vaadin-message-input-button, vaadin-drawer-toggle)::before {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button, vaadin-drawer-toggle)::before {
   transition: opacity 100ms;
 }
 
-:where(vaadin-button, vaadin-message-input-button, vaadin-drawer-toggle)::after {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button, vaadin-drawer-toggle)::after {
   transition:
     opacity 1.4s,
     transform 0.1s;
   filter: blur(8px);
 }
 
-:where(vaadin-button, vaadin-message-input-button, vaadin-drawer-toggle):is(
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button, vaadin-drawer-toggle):is(
     [disabled],
     [theme~='tertiary-inline']
   )::before,
-:where(vaadin-button, vaadin-message-input-button, vaadin-drawer-toggle):is(
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button, vaadin-drawer-toggle):is(
     [disabled],
     [theme~='tertiary-inline']
   )::after {
@@ -140,39 +145,51 @@
 }
 
 @media (any-hover: hover) {
-  :where(vaadin-button, vaadin-message-input-button, vaadin-drawer-toggle):hover:not([disabled])::before {
+  :where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button, vaadin-drawer-toggle):hover:not(
+      [disabled]
+    )::before {
     opacity: 0.02;
   }
 
-  :where(vaadin-button, vaadin-message-input-button)[theme~='primary']:hover:not([disabled])::before {
+  :where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='primary']:hover:not(
+      [disabled]
+    )::before {
     opacity: 0.05;
   }
 }
 
-:where(vaadin-button, vaadin-message-input-button, vaadin-drawer-toggle)[active]:not([disabled])::before {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button, vaadin-drawer-toggle)[active]:not(
+    [disabled]
+  )::before {
   opacity: 0.05;
   transition-duration: 0s;
 }
 
-:where(vaadin-button, vaadin-message-input-button, vaadin-drawer-toggle)[active]:not([disabled])::after {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button, vaadin-drawer-toggle)[active]:not(
+    [disabled]
+  )::after {
   opacity: 0.1;
   transition-duration: 0s, 0s;
   transform: scale(0);
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='primary'][active]:not([disabled])::before {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='primary'][active]:not(
+    [disabled]
+  )::before {
   opacity: 0.1;
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='primary'][active]:not([disabled])::after {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='primary'][active]:not(
+    [disabled]
+  )::after {
   opacity: 0.2;
 }
 
-:where(vaadin-button, vaadin-message-input-button)[theme~='primary']::before,
-:where(vaadin-button, vaadin-message-input-button)[theme~='primary']::after {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='primary']::before,
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button)[theme~='primary']::after {
   background-color: black;
 }
 
-:where(vaadin-button, vaadin-message-input-button) > vaadin-icon[icon^='vaadin:'] {
+:where(vaadin-button, vaadin-menu-bar-button, vaadin-message-input-button) > vaadin-icon[icon^='vaadin:'] {
   padding: 0.25em;
 }
