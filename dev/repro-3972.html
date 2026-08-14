@@ -1,0 +1,74 @@
+<!--
+  Repro for https://github.com/vaadin/web-components/issues/3972
+
+  NOTE: this page intentionally has NO doctype, like the example in the issue.
+  Without it the browser uses quirks mode, where document.documentElement.clientHeight
+  returns the height of the document instead of the height of the viewport.
+  The context menu uses that value to decide where to place the overlay.
+
+  Steps: right click the bottom button (it must be at the bottom edge of the window,
+  resize the window if needed). Expected: menu opens upwards from the pointer.
+  Actual: menu is squeezed into the few pixels below the pointer.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #3972</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/context-menu';
+
+      const items = [{ text: 'Menu Item 1' }, { text: 'Menu Item 2' }, { text: 'Menu Item 3' }];
+
+      document.querySelectorAll('vaadin-context-menu').forEach((menu) => {
+        menu.items = items;
+      });
+
+      document.querySelector('#info').textContent =
+        `document.compatMode: ${document.compatMode}, ` +
+        `documentElement.clientHeight: ${document.documentElement.clientHeight}, ` +
+        `window.innerHeight: ${window.innerHeight}`;
+    </script>
+
+    <style>
+      body {
+        margin: 0;
+      }
+
+      button {
+        font-size: 16px;
+      }
+
+      #info {
+        position: fixed;
+        top: 0;
+        right: 0;
+        padding: 4px 8px;
+        background: #eee;
+        font: 12px monospace;
+      }
+
+      .spacer {
+        padding: 900px 0 1000px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="info"></div>
+
+    <!-- Control: enough space below the target, menu opens downwards as expected -->
+    <vaadin-context-menu id="menu-top">
+      <button id="target-top">Right click me (control: space below)</button>
+    </vaadin-context-menu>
+
+    <div class="spacer">
+      <!-- Failing case: scroll so that this button sits at the bottom edge of the window -->
+      <vaadin-context-menu id="menu-bottom">
+        <button id="target-bottom">Right click me (no space below)</button>
+      </vaadin-context-menu>
+    </div>
+  </body>
+</html>
