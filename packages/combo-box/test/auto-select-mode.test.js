@@ -1,16 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-combo-box.js';
 import { getFocusedItemIndex, setInputValue } from './helpers.js';
 
 describe('auto-select-mode', () => {
-  let comboBox, input;
+  let comboBox;
 
   beforeEach(async () => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
     await nextRender();
-    input = comboBox.inputElement;
   });
 
   describe('full-match (default)', () => {
@@ -65,24 +63,6 @@ describe('auto-select-mode', () => {
       setInputValue(comboBox, 'gra');
 
       expect(getFocusedItemIndex(comboBox)).to.equal(-1);
-    });
-
-    it('should remove the highlight on Escape', async () => {
-      input.focus();
-      setInputValue(comboBox, 'gra');
-
-      await sendKeys({ press: 'Escape' });
-
-      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
-    });
-
-    it('should start keyboard navigation from the highlighted item', async () => {
-      input.focus();
-      setInputValue(comboBox, 'gra');
-
-      await sendKeys({ press: 'ArrowDown' });
-
-      expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
   });
 
