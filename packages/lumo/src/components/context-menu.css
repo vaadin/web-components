@@ -1,16 +1,16 @@
-:where(vaadin-context-menu)::part(backdrop) {
+:where(vaadin-context-menu, vaadin-menu-bar)::part(backdrop) {
   background: var(--vaadin-overlay-backdrop-background);
 }
 
 @media (max-width: 450px), (max-height: 450px) {
-  :where(vaadin-context-menu)::part(overlay) {
+  :where(vaadin-context-menu, vaadin-menu-bar)::part(overlay) {
     max-height: 50vh;
     width: 100vw;
     border-radius: 0;
     box-shadow: var(--lumo-box-shadow-xl);
   }
 
-  :where(vaadin-context-menu)::part(content) {
+  :where(vaadin-context-menu, vaadin-menu-bar)::part(content) {
     padding: 30px var(--lumo-space-m);
     max-height: inherit;
     box-sizing: border-box;
@@ -18,7 +18,7 @@
     mask-image: linear-gradient(transparent, #000 40px, #000 calc(100% - 40px), transparent);
   }
 
-  :where(vaadin-context-menu)::part(backdrop) {
+  :where(vaadin-context-menu, vaadin-menu-bar)::part(backdrop) {
     display: block;
   }
 }
