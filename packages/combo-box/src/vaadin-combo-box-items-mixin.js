@@ -66,18 +66,18 @@ export const ComboBoxItemsMixin = (superClass) =>
          * Controls which item is selected when committing the value while
          * a filter is typed, for example on blur, Enter press, or outside click:
          *
-         * - `full-match` (default): select an item only if its label matches the filter exactly.
+         * - `exact-match` (default): select an item only if its label matches the filter exactly.
          * - `first-match`: select the first matching item, giving preference to an exact match.
          * - `only-match`: select the matching item only if there is exactly one.
          *
          * Matching is case-insensitive. The item to be selected is highlighted
          * in the dropdown while typing. Auto-selection is not performed when
          * the filter is empty or when `allowCustomValue` is enabled.
-         * @attr {full-match|first-match|only-match} auto-select-mode
+         * @attr {exact-match|first-match|only-match} auto-select-mode
          */
         autoSelectMode: {
           type: String,
-          value: 'full-match',
+          value: 'exact-match',
         },
 
         /**

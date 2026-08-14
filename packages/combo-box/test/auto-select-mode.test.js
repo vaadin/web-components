@@ -11,16 +11,16 @@ describe('auto-select-mode', () => {
     await nextRender();
   });
 
-  describe('full-match (default)', () => {
+  describe('exact-match (default)', () => {
     beforeEach(() => {
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
-    it('should be full-match by default', () => {
-      expect(comboBox.autoSelectMode).to.equal('full-match');
+    it('should be exact-match by default', () => {
+      expect(comboBox.autoSelectMode).to.equal('exact-match');
     });
 
-    it('should highlight the full match', () => {
+    it('should highlight the exact match', () => {
       setInputValue(comboBox, 'grape');
       expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
@@ -42,7 +42,7 @@ describe('auto-select-mode', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
-    it('should prefer the full match over the first match', () => {
+    it('should prefer the exact match over the first match', () => {
       setInputValue(comboBox, 'grape');
       expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
@@ -80,7 +80,7 @@ describe('auto-select-mode', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
-    it('should highlight the full match when multiple items match', () => {
+    it('should highlight the exact match when multiple items match', () => {
       setInputValue(comboBox, 'grape');
       expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });

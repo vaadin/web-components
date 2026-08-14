@@ -26,7 +26,7 @@ describe('auto-select-mode', () => {
       expect(getFocusedItemIndex()).to.equal(0);
     });
 
-    it('should prefer the full match over the first match', () => {
+    it('should prefer the exact match over the first match', () => {
       setInputValue(comboBox, 'grape');
       expect(getFocusedItemIndex()).to.equal(1);
     });
