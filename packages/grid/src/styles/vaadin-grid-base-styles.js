@@ -5,6 +5,7 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
+import { loaderStyles } from '@vaadin/component-base/src/styles/loader-styles.js';
 
 export const gridStyles = css`
   /* stylelint-disable no-duplicate-selectors */
@@ -687,5 +688,27 @@ export const gridStyles = css`
 
   #sizer .cell::before {
     content: '-';
+  }
+
+  ${loaderStyles}
+
+  [part='loader'] {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    --vaadin-spinner-size: 2lh;
+  }
+
+  :host([ai-working]) [part~='loader'] {
+    display: block;
+  }
+
+  :host([ai-working])::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(8px);
+    animation: fade-in 300ms linear;
   }
 `;

@@ -363,6 +363,8 @@ class Grid extends GridMixin(I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(L
       <slot name="tooltip"></slot>
 
       <div id="focusexit" tabindex="0"></div>
+
+      <div part="loader"></div>
     `;
   }
 }
