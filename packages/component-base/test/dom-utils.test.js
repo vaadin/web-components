@@ -5,6 +5,7 @@ import {
   getAncestorRootNodes,
   getClosestElement,
   getFlattenedElements,
+  hasNodeContent,
   isEmptyTextNode,
   removeValuesFromAttribute,
   setOrRemoveAttribute,
@@ -229,6 +230,53 @@ describe('dom-utils', () => {
     it('should return false when node has non-empty text content', () => {
       node.textContent = '0';
       expect(isEmptyTextNode(node)).to.be.false;
+    });
+  });
+
+  describe('hasNodeContent', () => {
+    it('should return false for a nullish node', () => {
+      expect(hasNodeContent(null)).to.be.false;
+      expect(hasNodeContent(undefined)).to.be.false;
+    });
+
+    it('should return false for an element with no children and no text', () => {
+      const element = fixtureSync('<div></div>');
+      expect(hasNodeContent(element)).to.be.false;
+    });
+
+    it('should return false for an element with whitespace text only', () => {
+      const element = fixtureSync('<div> </div>');
+      expect(hasNodeContent(element)).to.be.false;
+    });
+
+    it('should return true for an element with non-empty text', () => {
+      const element = fixtureSync('<div>content</div>');
+      expect(hasNodeContent(element)).to.be.true;
+    });
+
+    it('should return true for an element with element children', () => {
+      const element = fixtureSync('<div><span></span></div>');
+      expect(hasNodeContent(element)).to.be.true;
+    });
+
+    it('should return true for an empty defined custom element', () => {
+      // A defined custom element may render content in its shadow root.
+      const tag = defineCE(class extends HTMLElement {});
+      const element = fixtureSync(`<${tag}></${tag}>`);
+      expect(hasNodeContent(element)).to.be.true;
+    });
+
+    it('should return false for an empty undefined custom element', () => {
+      const element = fixtureSync('<x-undefined-element></x-undefined-element>');
+      expect(hasNodeContent(element)).to.be.false;
+    });
+
+    it('should return true for a text node with non-empty text', () => {
+      expect(hasNodeContent(document.createTextNode('content'))).to.be.true;
+    });
+
+    it('should return false for a text node with whitespace text only', () => {
+      expect(hasNodeContent(document.createTextNode(' '))).to.be.false;
     });
   });
 

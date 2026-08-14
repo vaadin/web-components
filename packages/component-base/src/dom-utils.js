@@ -168,3 +168,22 @@ export function removeValuesFromAttribute(element, attr, valuesToRemove) {
 export function isEmptyTextNode(node) {
   return node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '';
 }
+
+/**
+ * Returns true if the given node has content of its own: an element with
+ * children, a defined custom element — which may render content in its
+ * shadow root — or a node with non-empty text.
+ *
+ * @param {Node | null | undefined} node
+ * @return {boolean}
+ */
+export function hasNodeContent(node) {
+  if (!node) {
+    return false;
+  }
+
+  return Boolean(
+    (node.nodeType === Node.ELEMENT_NODE && (customElements.get(node.localName) || node.children.length > 0)) ||
+    node.textContent?.trim(),
+  );
+}
