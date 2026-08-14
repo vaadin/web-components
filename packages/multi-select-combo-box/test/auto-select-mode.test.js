@@ -21,27 +21,24 @@ describe('auto-select-mode', () => {
       comboBox.autoSelectMode = 'first-match';
     });
 
-    it('should highlight first partially matching item', () => {
+    it('should highlight the first match', () => {
       setInputValue(comboBox, 'gra');
       expect(getFocusedItemIndex()).to.equal(0);
     });
 
-    it('should prefer fully matching item over partially matching items', () => {
+    it('should prefer the full match over the first match', () => {
       setInputValue(comboBox, 'grape');
       expect(getFocusedItemIndex()).to.equal(1);
     });
 
-    it('should not focus any item when no item matches the filter', () => {
+    it('should not highlight anything when no items match', () => {
       setInputValue(comboBox, 'xyz');
-
       expect(comboBox._focusedIndex).to.equal(-1);
     });
 
-    it('should not highlight first matching item when custom values are allowed', () => {
+    it('should not highlight the first match when custom values are allowed', () => {
       comboBox.allowCustomValue = true;
-
       setInputValue(comboBox, 'gra');
-
       expect(getFocusedItemIndex()).to.equal(-1);
     });
   });
@@ -51,16 +48,14 @@ describe('auto-select-mode', () => {
       comboBox.autoSelectMode = 'only-match';
     });
 
-    it('should not highlight any item when multiple items match', () => {
-      setInputValue(comboBox, 'gra');
-
-      expect(getFocusedItemIndex()).to.equal(-1);
+    it('should highlight the only match', () => {
+      setInputValue(comboBox, 'ban');
+      expect(getFocusedItemIndex()).to.equal(0);
     });
 
-    it('should highlight only matching item', () => {
-      setInputValue(comboBox, 'ban');
-
-      expect(getFocusedItemIndex()).to.equal(0);
+    it('should not highlight anything when multiple items match', () => {
+      setInputValue(comboBox, 'gra');
+      expect(getFocusedItemIndex()).to.equal(-1);
     });
   });
 });
