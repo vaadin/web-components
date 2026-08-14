@@ -13,7 +13,7 @@
 - **Reproduced on:** vaadin/web-components @ `main` (25.3.0-alpha11, commit 1d2414c85e) and on published `@vaadin/context-menu@23.0.11`
 - **Present on main?:** yes (still broken)
 - **Theme / Browser:** Lumo and base (both) / Chromium via Playwright
-- **Screenshot** (static bug): ![Context menu collapsed to a 2px sliver at the pointer](https://raw.githubusercontent.com/vaadin/web-components/<commit-sha>/repro-3972.png)
+- **Screenshot** (static bug): ![Context menu collapsed to a 2px sliver at the pointer](https://raw.githubusercontent.com/vaadin/web-components/cf7aa10dd7c5da95e080bcbadd4c755a3acb7a08/repro-3972.png)
 
 ## Observed behavior
 
