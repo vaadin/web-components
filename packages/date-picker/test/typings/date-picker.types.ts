@@ -72,17 +72,15 @@ assertType<DatePickerDateMetadataProvider | null | undefined>(datePicker.dateMet
 // Assigning a provider checks that the range is inferred and that each accepted return shape fits.
 datePicker.dateMetadataProvider = (range) => {
   assertType<DatePickerDateRange>(range);
-  assertType<DatePickerDate>(range.start);
-  assertType<DatePickerDate>(range.end);
-  return [{ year: range.start.year, month: range.start.month, day: range.start.day, disabled: true }];
+  assertType<string>(range.start);
+  assertType<string>(range.end);
+  return [{ date: range.start, disabled: true }];
 };
 datePicker.dateMetadataProvider = async () => await Promise.resolve([]);
 datePicker.dateMetadataProvider = () => undefined;
 
-const dateMetadata: DatePickerDateMetadata = { year: 2024, month: 0, day: 1, disabled: true };
-assertType<number>(dateMetadata.year);
-assertType<number>(dateMetadata.month);
-assertType<number>(dateMetadata.day);
+const dateMetadata: DatePickerDateMetadata = { date: '2024-01-01', disabled: true };
+assertType<string>(dateMetadata.date);
 assertType<boolean | undefined>(dateMetadata.disabled);
 assertType<boolean | null | undefined>(datePicker.showWeekNumbers);
 assertType<boolean | null | undefined>(datePicker.autoOpenDisabled);
@@ -108,14 +106,14 @@ assertType<DatePickerI18n>({});
 assertType<DatePickerI18n>({ cancel: 'cancel' });
 
 // Date metadata
-assertType<DatePickerDateRange>({ start: { year: 2024, month: 0, day: 1 }, end: { year: 2024, month: 0, day: 31 } });
-assertType<DatePickerDateMetadata>({ year: 2024, month: 0, day: 1 });
-assertType<DatePickerDateMetadata>({ year: 2024, month: 0, day: 1, disabled: true });
-assertType<DatePickerDateMetadata>({ year: 2024, month: 0, day: 1, part: 'busy almost-full' });
+assertType<DatePickerDateRange>({ start: '2024-01-01', end: '2024-01-31' });
+assertType<DatePickerDateMetadata>({ date: '2024-01-01' });
+assertType<DatePickerDateMetadata>({ date: '2024-01-01', disabled: true });
+assertType<DatePickerDateMetadata>({ date: '2024-01-01', part: 'busy almost-full' });
 assertType<() => void>(datePicker.clearCache);
 assertType<DatePickerDateMetadataProvider>((range) => {
-  assertType<DatePickerDate>(range.start);
-  assertType<DatePickerDate>(range.end);
+  assertType<string>(range.start);
+  assertType<string>(range.end);
   return [];
 });
 assertType<DatePickerDateMetadataProvider>(async () => await Promise.resolve([]));

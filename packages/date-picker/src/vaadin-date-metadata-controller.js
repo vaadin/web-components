@@ -6,14 +6,7 @@
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
-import {
-  createDate,
-  extractDateParts,
-  lastOfMonth,
-  monthDate,
-  monthIndex,
-  monthIndexOf,
-} from './vaadin-date-picker-helper.js';
+import { formatISODate, lastOfMonth, monthDate, monthIndex, parseDate } from './vaadin-date-picker-helper.js';
 
 // Counted from January of year 0, so a block is one calendar year.
 const BLOCK_MONTHS = 12;
@@ -24,12 +17,10 @@ function blockStart(month) {
 
 const PENDING_MONTH = Object.freeze({ pending: true });
 
-function isValidEntry(entry) {
-  if (!entry || !Number.isInteger(entry.year) || !Number.isInteger(entry.month) || !Number.isInteger(entry.day)) {
-    return false;
-  }
-  const date = createDate(entry.year, entry.month, entry.day);
-  return date.getFullYear() === entry.year && date.getMonth() === entry.month && date.getDate() === entry.day;
+// The date of an entry, or `undefined` when its `date` is not one. Checked for being a string first,
+// since coercing another type to one can throw, and an entry comes from outside.
+function entryDate(entry) {
+  return typeof entry?.date === 'string' ? parseDate(entry.date) : undefined;
 }
 
 function groupEntriesByMonth(months, entries) {
@@ -37,10 +28,11 @@ function groupEntriesByMonth(months, entries) {
 
   if (Array.isArray(entries)) {
     entries.forEach((entry) => {
-      if (isValidEntry(entry)) {
-        result.get(monthIndexOf(entry.year, entry.month))?.set(entry.day, entry);
+      const date = entryDate(entry);
+      if (date) {
+        result.get(monthIndex(date))?.set(date.getDate(), entry);
       } else {
-        issueWarning('Ignored `dateMetadataProvider` entries with an invalid year, month (0-11) or day.');
+        issueWarning('Ignored `dateMetadataProvider` entries whose `date` is not an ISO 8601 date.');
       }
     });
   } else if (entries != null) {
@@ -56,8 +48,8 @@ function groupEntriesByMonth(months, entries) {
  *
  * The provider is called for a range of months and may return an array
  * synchronously or a `Promise`, so results from a server (Flow) or a remote
- * availability service can be awaited. Each returned entry is a `DatePickerDate`
- * extended with metadata fields, e.g. `{ year, month, day, disabled: true }`.
+ * availability service can be awaited. The range and each returned entry identify
+ * a date by an ISO 8601 string, e.g. `{ date: '2026-01-01', disabled: true }`.
  *
  * `ARCHITECTURE.md` in this package records the reasoning behind the request,
  * caching, notification and failure behavior.
@@ -235,8 +227,8 @@ export class DateMetadataController {
     this.#notify();
 
     const range = {
-      start: extractDateParts(monthDate(months[0])),
-      end: extractDateParts(lastOfMonth(monthDate(months.at(-1)))),
+      start: formatISODate(monthDate(months[0])),
+      end: formatISODate(lastOfMonth(monthDate(months.at(-1)))),
     };
 
     let entries;

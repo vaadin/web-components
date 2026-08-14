@@ -1,5 +1,6 @@
 import { fire, makeSoloTouchEvent, nextRender } from '@vaadin/testing-helpers';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
+import { createDate, formatISODate, monthDate } from '../src/vaadin-date-picker-helper.js';
 
 export function activateScroller(scroller) {
   scroller.active = true;
@@ -207,6 +208,31 @@ export function getFocusedCell(root) {
   if (focusableCell && isElementFocused(focusableCell)) {
     return focusableCell;
   }
+}
+
+/**
+ * The ISO date of the given day. Formatting through the component's own helpers keeps a year below
+ * 100 or before 0 in the form it parses back.
+ *
+ * @param {number} year
+ * @param {number} month Zero-based month
+ * @param {number} day
+ * @return {string}
+ */
+export function isoDate(year, month, day) {
+  return formatISODate(createDate(year, month, day));
+}
+
+/**
+ * The ISO date of the given day of the month with the given index.
+ *
+ * @param {number} monthIndex
+ * @param {number} day
+ * @return {string}
+ */
+export function isoDateInMonth(monthIndex, day) {
+  const first = monthDate(monthIndex);
+  return isoDate(first.getFullYear(), first.getMonth(), day);
 }
 
 /**

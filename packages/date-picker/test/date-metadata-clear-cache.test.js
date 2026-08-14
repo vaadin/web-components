@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { getDateCell, getMonthCalendar, open } from './helpers.js';
+import { getDateCell, getMonthCalendar, isoDate, open } from './helpers.js';
 
 describe('dateMetadataProvider clearCache', () => {
   let datePicker, overlayContent, year, month;
@@ -43,7 +43,7 @@ describe('dateMetadataProvider clearCache', () => {
 
   it('should reflect metadata that changed behind the provider', async () => {
     let disabledDay = 10;
-    datePicker.dateMetadataProvider = () => [{ year, month, day: disabledDay, disabled: true }];
+    datePicker.dateMetadataProvider = () => [{ date: isoDate(year, month, disabledDay), disabled: true }];
     await open(datePicker);
     overlayContent = datePicker._overlayContent;
     await untilRendered(() => getCell(10)?.hasAttribute('disabled'));
@@ -70,7 +70,7 @@ describe('dateMetadataProvider clearCache', () => {
 
   it('should re-validate the value while the overlay is closed', async () => {
     let disabled = false;
-    datePicker.dateMetadataProvider = () => (disabled ? [{ year: 2024, month: 0, day: 15, disabled: true }] : []);
+    datePicker.dateMetadataProvider = () => (disabled ? [{ date: '2024-01-15', disabled: true }] : []);
     datePicker.value = '2024-01-15';
     await aTimeout(0);
     expect(datePicker.invalid).to.be.false;

@@ -105,8 +105,8 @@
       <p>
         The provider marks a few dates <code>busy</code> and <code>almost-full</code> through <code>part</code>, styled
         below with <code>::part()</code>. Naming a part does not disable a date — the busy ones stay selectable.
-        <em>Book a date</em> marks the next free weekday busy behind the provider, then calls
-        <code>clearCache()</code>, which re-fetches without replacing the provider function.
+        <em>Book a date</em> marks the next free weekday busy behind the provider, then calls <code>clearCache()</code>,
+        which re-fetches without replacing the provider function.
       </p>
       <div class="controls">
         <button id="book" type="button">Book a date</button>
@@ -129,13 +129,23 @@
       const logElement = document.querySelector('#log');
       const MAX_ENTRIES = 50;
 
-      // `month` in a `DatePickerDateRange` is 0-based, so add one to read it as a calendar month.
-      function formatDate({ year, month, day }) {
-        return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      // A range and an entry identify a date by an ISO 8601 string, the same format as `value`.
+      function parseISODate(iso) {
+        const [year, month, day] = iso.split('-').map(Number);
+        return new Date(year, month - 1, day);
+      }
+
+      function formatISODate(date) {
+        return [
+          String(date.getFullYear()).padStart(4, '0'),
+          String(date.getMonth() + 1).padStart(2, '0'),
+          String(date.getDate()).padStart(2, '0'),
+        ].join('-');
       }
 
       function countMonths({ start, end }) {
-        return (end.year - start.year) * 12 + (end.month - start.month) + 1;
+        const [first, last] = [parseISODate(start), parseISODate(end)];
+        return (last.getFullYear() - first.getFullYear()) * 12 + (last.getMonth() - first.getMonth()) + 1;
       }
 
       /**
@@ -144,7 +154,7 @@
        */
       function logCall(name, range) {
         const entry = document.createElement('li');
-        const span = `${formatDate(range.start)} → ${formatDate(range.end)}`;
+        const span = `${range.start} → ${range.end}`;
         entry.textContent = `${name}  ${span}  (${countMonths(range)} months)`;
         logElement.prepend(entry);
 
@@ -162,8 +172,8 @@
       /** Every date in the requested range, so a provider can filter it down to the ones it cares about. */
       function datesInRange({ start, end }) {
         const dates = [];
-        const last = new Date(end.year, end.month, end.day);
-        let date = new Date(start.year, start.month, start.day);
+        const last = parseISODate(end);
+        let date = parseISODate(start);
         while (date <= last) {
           dates.push(date);
           date = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
@@ -171,12 +181,8 @@
         return dates;
       }
 
-      function toParts(date) {
-        return { year: date.getFullYear(), month: date.getMonth(), day: date.getDate() };
-      }
-
       function disabledEntry(date) {
-        return { ...toParts(date), disabled: true };
+        return { date: formatISODate(date), disabled: true };
       }
 
       function isWeekend(date) {
@@ -234,19 +240,19 @@
         return dates;
       };
       combined.isDateDisabled = ({ day }) => day === 16;
-      combined.min = formatDate(toParts(new Date()));
-      combined.max = formatDate(toParts(new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)));
+      combined.min = formatISODate(new Date());
+      combined.max = formatISODate(new Date(Date.now() + 90 * 24 * 60 * 60 * 1000));
 
       // Stands in for data that changes behind the provider, keyed by ISO date.
       const booked = new Set();
 
       function bookingEntry(date) {
-        const iso = formatDate(toParts(date));
+        const iso = formatISODate(date);
         if (booked.has(iso)) {
-          return { ...toParts(date), part: 'busy' };
+          return { date: iso, part: 'busy' };
         }
         // Fridays fill up first, so mark them without disabling anything.
-        return date.getDay() === 5 ? { ...toParts(date), part: 'almost-full' } : null;
+        return date.getDay() === 5 ? { date: iso, part: 'almost-full' } : null;
       }
 
       const parts = document.querySelector('#parts');
@@ -262,8 +268,8 @@
         // The next weekday that is not booked yet.
         do {
           date.setDate(date.getDate() + 1);
-        } while (isWeekend(date) || booked.has(formatDate(toParts(date))));
-        booked.add(formatDate(toParts(date)));
+        } while (isWeekend(date) || booked.has(formatISODate(date)));
+        booked.add(formatISODate(date));
         // Same provider function, new answer: `clearCache()` is what makes it visible.
         parts.clearCache();
       });

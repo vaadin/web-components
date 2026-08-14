@@ -3,8 +3,8 @@ import { fixtureSync, listenOnce, nextRender, nextUpdate, tap } from '@vaadin/te
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import { DateMetadataController } from '../src/vaadin-date-metadata-controller.js';
-import { formatISODate } from '../src/vaadin-date-picker-helper.js';
-import { getCalendars, getDateCell, getDateCells, getMonthCalendar, open } from './helpers.js';
+import { formatISODate, monthIndex, parseDate } from '../src/vaadin-date-picker-helper.js';
+import { getCalendars, getDateCell, getDateCells, getMonthCalendar, isoDate, isoDateInMonth, open } from './helpers.js';
 
 describe('dateMetadataProvider integration', () => {
   let datePicker, overlayContent, today, year, month;
@@ -36,20 +36,18 @@ describe('dateMetadataProvider integration', () => {
     await nextRender();
   }
 
-  // A provider that disables the 15th of every month in the requested range.
-  function disableFifteenth({ start, end }) {
-    const disabled = [];
-    const first = new Date(start.year, start.month, start.day);
-    const last = new Date(end.year, end.month, end.day);
-    const days = Math.round((last - first) / (24 * 60 * 60 * 1000));
-    for (let i = 0; i <= days; i++) {
-      const date = new Date(first.getFullYear(), first.getMonth(), first.getDate() + i);
-      if (date.getDate() === 15) {
-        disabled.push({ year: date.getFullYear(), month: date.getMonth(), day: date.getDate(), disabled: true });
+  // A provider that disables the given day of every month in the requested range.
+  function disableDay(day) {
+    return ({ start, end }) => {
+      const disabled = [];
+      for (let month = monthIndex(parseDate(start)); month <= monthIndex(parseDate(end)); month++) {
+        disabled.push({ date: isoDateInMonth(month, day), disabled: true });
       }
-    }
-    return disabled;
+      return disabled;
+    };
   }
+
+  const disableFifteenth = disableDay(15);
 
   function deferredProvider() {
     let resolveProvider;
@@ -262,13 +260,14 @@ describe('dateMetadataProvider integration', () => {
   // `new Date(50, ...)` would move a two-digit year into the 1950s, which would break both the range
   // the provider is asked about and the dates the metadata is matched against.
   it('should request and disable the dates of a year below 100', async () => {
-    const provider = sinon.stub().returns([{ year: 50, month: 5, day: 15, disabled: true }]);
+    const provider = sinon.stub().returns([{ date: '0050-06-15', disabled: true }]);
     datePicker.initialPosition = '0050-06-01';
     await openWithProvider(provider);
 
     const { start, end } = provider.firstCall.args[0];
-    expect(start.year).to.be.within(49, 50);
-    expect(end.year).to.be.within(50, 51);
+    // Either block can be the one asked about; either way the year is padded, not read as 1950.
+    expect(start).to.be.oneOf(['0049-01-01', '0050-01-01']);
+    expect(end).to.be.oneOf(['0050-12-31', '0051-12-31']);
     expect(isDisabled(getVisibleCell(15, 50, 5))).to.be.true;
     expect(isDisabled(getVisibleCell(16, 50, 5))).to.be.false;
   });
@@ -394,7 +393,7 @@ describe('dateMetadataProvider integration', () => {
 
   describe('today button', () => {
     function todayMetadata() {
-      return { year, month, day: today.getDate(), disabled: true };
+      return { date: isoDate(year, month, today.getDate()), disabled: true };
     }
 
     it('should disable the today button once the provider reports today as disabled', async () => {
@@ -505,7 +504,7 @@ describe('dateMetadataProvider integration', () => {
     });
 
     it('should consult a provider set before connecting when the overlay opens', async () => {
-      const provider = sinon.stub().returns([{ year, month, day: 15, disabled: true }]);
+      const provider = sinon.stub().returns([{ date: isoDate(year, month, 15), disabled: true }]);
       element = document.createElement('vaadin-date-picker');
       element.dateMetadataProvider = provider;
       document.body.appendChild(element);
@@ -523,8 +522,7 @@ describe('dateMetadataProvider integration', () => {
       expect(isDisabled(getVisibleCell(15))).to.be.true;
 
       // Assigning a new function drops the cache, which has to be refilled for what is on screen.
-      datePicker.dateMetadataProvider = ({ start, end }) =>
-        disableFifteenth({ start, end }).map((entry) => ({ ...entry, day: 16 }));
+      datePicker.dateMetadataProvider = disableDay(16);
       await untilRendered(() => {
         const cell = getVisibleCell(16);
         return cell && isDisabled(cell);

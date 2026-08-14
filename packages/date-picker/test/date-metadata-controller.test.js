@@ -34,8 +34,8 @@ describe('DateMetadataController', () => {
     expect(provider).to.be.calledOnce;
     // A block is one calendar year, so asking about March 2023 asks about all of 2023.
     expect(provider.firstCall.args[0]).to.eql({
-      start: { year: 2023, month: 0, day: 1 },
-      end: { year: 2023, month: 11, day: 31 },
+      start: '2023-01-01',
+      end: '2023-12-31',
     });
   });
 
@@ -46,13 +46,13 @@ describe('DateMetadataController', () => {
 
     // Rounding towards zero instead of down would land in the block after this one.
     expect(provider.firstCall.args[0]).to.eql({
-      start: { year: -1, month: 0, day: 1 },
-      end: { year: -1, month: 11, day: 31 },
+      start: '-000001-01-01',
+      end: '-000001-12-31',
     });
   });
 
   it('should mark the requested months as loaded and expose disabled dates', async () => {
-    controller.setProvider(() => [{ year: 2023, month: 2, day: 15, disabled: true }]);
+    controller.setProvider(() => [{ date: '2023-03-15', disabled: true }]);
     loadMonth(2023, 2);
     await aTimeout(0);
 
@@ -64,8 +64,8 @@ describe('DateMetadataController', () => {
 
   it('should return the entry the provider supplied', async () => {
     controller.setProvider(() => [
-      { year: 2023, month: 2, day: 10, occupancy: 'high' },
-      { year: 2023, month: 2, day: 15, disabled: true },
+      { date: '2023-03-10', occupancy: 'high' },
+      { date: '2023-03-15', disabled: true },
     ]);
     loadMonth(2023, 2);
     await aTimeout(0);
@@ -119,8 +119,8 @@ describe('DateMetadataController', () => {
     // 2023 is already loaded, so only the block it reaches into is requested.
     expect(provider).to.be.calledOnce;
     expect(provider.firstCall.args[0]).to.eql({
-      start: { year: 2024, month: 0, day: 1 },
-      end: { year: 2024, month: 11, day: 31 },
+      start: '2024-01-01',
+      end: '2024-12-31',
     });
   });
 
@@ -135,13 +135,13 @@ describe('DateMetadataController', () => {
 
     expect(provider).to.be.calledOnce;
     expect(provider.firstCall.args[0]).to.eql({
-      start: { year: 2025, month: 0, day: 1 },
-      end: { year: 2025, month: 11, day: 31 },
+      start: '2025-01-01',
+      end: '2025-12-31',
     });
   });
 
   it('should clear the cache when the provider changes', async () => {
-    controller.setProvider(() => [{ year: 2023, month: 2, day: 15, disabled: true }]);
+    controller.setProvider(() => [{ date: '2023-03-15', disabled: true }]);
     loadMonth(2023, 2);
     await aTimeout(0);
     expect(controller.isDateDisabled(new Date(2023, 2, 15))).to.be.true;
@@ -163,7 +163,7 @@ describe('DateMetadataController', () => {
 
     // Provider changes (reset) before the first request resolves.
     controller.setProvider(() => []);
-    resolveStale([{ year: 2023, month: 2, day: 15, disabled: true }]);
+    resolveStale([{ date: '2023-03-15', disabled: true }]);
     await aTimeout(0);
 
     expect(controller.isDateDisabled(new Date(2023, 2, 15))).to.be.false;
@@ -183,8 +183,8 @@ describe('DateMetadataController', () => {
 
     expect(provider).to.be.calledOnce;
     expect(provider.firstCall.args[0]).to.eql({
-      start: { year: 2024, month: 0, day: 1 },
-      end: { year: 2024, month: 11, day: 31 },
+      start: '2024-01-01',
+      end: '2024-12-31',
     });
   });
 
@@ -201,8 +201,8 @@ describe('DateMetadataController', () => {
 
     expect(provider).to.be.calledOnce;
     expect(provider.firstCall.args[0]).to.eql({
-      start: { year: 2023, month: 0, day: 1 },
-      end: { year: 2025, month: 11, day: 31 },
+      start: '2023-01-01',
+      end: '2025-12-31',
     });
   });
 
@@ -215,7 +215,7 @@ describe('DateMetadataController', () => {
         return new Promise(() => {});
       }
       answered = true;
-      return [{ year: 2023, month: 6, day: 15, disabled: true }];
+      return [{ date: '2023-07-15', disabled: true }];
     });
 
     loadMonth(2023, 6); // Jan 2023 - Jan 2024
@@ -248,7 +248,7 @@ describe('DateMetadataController', () => {
       expect(controller.isLoading()).to.be.true;
       expect(controller.isMonthLoaded(new Date(2023, 2, 1))).to.be.false;
 
-      resolveProvider([{ year: 2023, month: 2, day: 15, disabled: true }]);
+      resolveProvider([{ date: '2023-03-15', disabled: true }]);
       await aTimeout(0);
 
       expect(controller.isLoading()).to.be.false;
@@ -272,7 +272,7 @@ describe('DateMetadataController', () => {
 
   describe('nullish dates', () => {
     beforeEach(async () => {
-      controller.setProvider(() => [{ year: 2023, month: 2, day: 15, disabled: true }]);
+      controller.setProvider(() => [{ date: '2023-03-15', disabled: true }]);
       loadMonth(2023, 2);
       await aTimeout(0);
     });
@@ -395,7 +395,7 @@ describe('DateMetadataController', () => {
         if (fail) {
           throw new Error('provider failed');
         }
-        return [{ year: 2023, month: 2, day: 15, disabled: true }];
+        return [{ date: '2023-03-15', disabled: true }];
       });
       controller.setProvider(provider);
       loadMonth(2023, 2);
@@ -459,7 +459,7 @@ describe('DateMetadataController', () => {
       loadMonth(2023, 2);
       element.requestUpdate.resetHistory();
 
-      resolveProvider([{ year: 2023, month: 2, day: 15, disabled: true }]);
+      resolveProvider([{ date: '2023-03-15', disabled: true }]);
       await aTimeout(0);
 
       expect(element.requestUpdate).to.be.called;
@@ -486,7 +486,7 @@ describe('DateMetadataController', () => {
 
   describe('detached host', () => {
     it('should keep the resolved cache when the host reconnects', async () => {
-      const provider = stubProvider([{ year: 2023, month: 2, day: 15, disabled: true }]);
+      const provider = stubProvider([{ date: '2023-03-15', disabled: true }]);
       loadMonth(2023, 2);
       await aTimeout(0);
       provider.resetHistory();
@@ -512,7 +512,7 @@ describe('DateMetadataController', () => {
       // Detached while the request is on its way: discarding the answer would only re-fetch the
       // same range once the host came back.
       host.isConnected = false;
-      resolveProvider([{ year: 2023, month: 2, day: 15, disabled: true }]);
+      resolveProvider([{ date: '2023-03-15', disabled: true }]);
       await aTimeout(0);
 
       expect(controller.isMonthLoaded(new Date(2023, 2, 1))).to.be.true;
@@ -532,7 +532,7 @@ describe('DateMetadataController', () => {
 
     it('should report the current state again once the host is reconnected', async () => {
       host.isConnected = false;
-      controller.setProvider(() => [{ year: 2023, month: 2, day: 15, disabled: true }]);
+      controller.setProvider(() => [{ date: '2023-03-15', disabled: true }]);
       // Resolves while detached, so the host is never told about it.
       loadMonth(2023, 2);
       await aTimeout(0);
@@ -548,14 +548,14 @@ describe('DateMetadataController', () => {
 
   describe('years below 100', () => {
     it('should resolve metadata for a year below 100', async () => {
-      const provider = stubProvider([{ year: 50, month: 6, day: 15, disabled: true }]);
+      const provider = stubProvider([{ date: '0050-07-15', disabled: true }]);
 
       loadMonth(50, 6);
       await aTimeout(0);
 
       expect(provider.firstCall.args[0]).to.eql({
-        start: { year: 50, month: 0, day: 1 },
-        end: { year: 50, month: 11, day: 31 },
+        start: '0050-01-01',
+        end: '0050-12-31',
       });
       expect(controller.isMonthLoaded(createDate(50, 6, 1))).to.be.true;
       expect(controller.isDateDisabled(createDate(50, 6, 15))).to.be.true;
@@ -568,8 +568,8 @@ describe('DateMetadataController', () => {
     // months must not be trusted before that month is loaded in its own right.
     beforeEach(async () => {
       controller.setProvider(() => [
-        { year: 2023, month: 2, day: 15, disabled: true },
-        { year: 2024, month: 0, day: 5, disabled: true },
+        { date: '2023-03-15', disabled: true },
+        { date: '2024-01-05', disabled: true },
       ]);
       loadMonth(2023, 2); // Sep 2022 - Sep 2023
       await aTimeout(0);
@@ -597,7 +597,7 @@ describe('DateMetadataController', () => {
       let call = 0;
       controller.setProvider(() => {
         call += 1;
-        return call === 1 ? [] : [{ year: 2026, month: 2, day: 10, disabled: true }];
+        return call === 1 ? [] : [{ date: '2026-03-10', disabled: true }];
       });
       loadMonth(2026, 2);
       await aTimeout(0);
@@ -611,7 +611,7 @@ describe('DateMetadataController', () => {
     });
   });
 
-  describe('entries that are not a real date', () => {
+  describe('entry date validation', () => {
     beforeEach(() => {
       sinon.stub(console, 'warn');
     });
@@ -623,17 +623,29 @@ describe('DateMetadataController', () => {
 
     [
       { name: 'a missing date', entry: { disabled: true } },
-      { name: 'a non-integer day', entry: { year: 2024, month: 0, day: '15' } },
-      { name: 'a month above 11', entry: { year: 2024, month: 12, day: 15 } },
-      { name: 'a negative month', entry: { year: 2024, month: -1, day: 15 } },
-      { name: 'a day above the month length', entry: { year: 2024, month: 0, day: 32 } },
-      { name: 'a zero day', entry: { year: 2024, month: 0, day: 0 } },
-      { name: 'a day that does not exist in that month', entry: { year: 2023, month: 1, day: 29 } },
-      // Throws when coerced to a number, rather than merely describing no real date.
-      { name: 'a bigint month', entry: { year: 2024, month: 0n, day: 15 } },
+      { name: 'a date that is not a string', entry: { date: 20240115 } },
+      // Coercing these to a string throws, which would discard the whole range rather than the entry.
+      { name: 'a date that is a symbol', entry: { date: Symbol('2024-01-15') } },
+      {
+        name: 'a date that throws when coerced',
+        entry: {
+          date: {
+            toString: () => {
+              throw new Error('should not be coerced');
+            },
+          },
+        },
+      },
+      { name: 'a date in another format', entry: { date: '15/01/2024' } },
+      { name: 'a date with a time part', entry: { date: '2024-01-15T00:00:00' } },
+      { name: 'a month above 12', entry: { date: '2024-13-15' } },
+      { name: 'a zero month', entry: { date: '2024-00-15' } },
+      { name: 'a day above the month length', entry: { date: '2024-01-32' } },
+      { name: 'a zero day', entry: { date: '2024-01-00' } },
+      { name: 'a day that does not exist in that month', entry: { date: '2023-02-29' } },
     ].forEach(({ name, entry }) => {
       it(`should warn about and ignore ${name}`, async () => {
-        controller.setProvider(() => [entry, { year: 2024, month: 0, day: 20, disabled: true }]);
+        controller.setProvider(() => [entry, { date: '2024-01-20', disabled: true }]);
         loadMonth(2024, 0);
         await aTimeout(0);
 
@@ -643,12 +655,30 @@ describe('DateMetadataController', () => {
     });
 
     it('should accept the last day of a leap February', async () => {
-      controller.setProvider(() => [{ year: 2024, month: 1, day: 29, disabled: true }]);
+      controller.setProvider(() => [{ date: '2024-02-29', disabled: true }]);
       loadMonth(2024, 1);
       await aTimeout(0);
 
       expect(console.warn).to.not.be.called;
       expect(controller.isDateDisabled(new Date(2024, 1, 29))).to.be.true;
+    });
+
+    it('should accept a month and day without a leading zero', async () => {
+      controller.setProvider(() => [{ date: '2024-1-5', disabled: true }]);
+      loadMonth(2024, 0);
+      await aTimeout(0);
+
+      expect(console.warn).to.not.be.called;
+      expect(controller.isDateDisabled(new Date(2024, 0, 5))).to.be.true;
+    });
+
+    it('should accept a signed year', async () => {
+      controller.setProvider(() => [{ date: '-0001-01-15', disabled: true }]);
+      loadMonth(-1, 0);
+      await aTimeout(0);
+
+      expect(console.warn).to.not.be.called;
+      expect(controller.isDateDisabled(createDate(-1, 0, 15))).to.be.true;
     });
 
     it('should warn only once however many requests return invalid entries', async () => {
@@ -661,7 +691,7 @@ describe('DateMetadataController', () => {
     });
 
     it('should not warn for a well-formed result', async () => {
-      controller.setProvider(() => [{ year: 2024, month: 0, day: 15, disabled: true }]);
+      controller.setProvider(() => [{ date: '2024-01-15', disabled: true }]);
       loadMonth(2024, 0);
       await aTimeout(0);
 
@@ -672,7 +702,7 @@ describe('DateMetadataController', () => {
   describe('re-resolving a month', () => {
     it('should answer from the provider again after the cache is cleared', async () => {
       let disabledDay = 15;
-      controller.setProvider(() => [{ year: 2023, month: 2, day: disabledDay, disabled: true }]);
+      controller.setProvider(() => [{ date: `2023-03-${disabledDay}`, disabled: true }]);
       loadMonth(2023, 2);
       await aTimeout(0);
       expect(controller.isDateDisabled(new Date(2023, 2, 15))).to.be.true;
@@ -691,7 +721,7 @@ describe('DateMetadataController', () => {
 
   describe('provider identity', () => {
     it('should not reset the cache when the same provider is set again', async () => {
-      const provider = stubProvider([{ year: 2023, month: 2, day: 15, disabled: true }]);
+      const provider = stubProvider([{ date: '2023-03-15', disabled: true }]);
       loadMonth(2023, 2);
       await aTimeout(0);
       provider.resetHistory();
@@ -732,8 +762,8 @@ describe('DateMetadataController', () => {
       // Everything in the pending block is skipped; only the next block is a second call.
       expect(provider).to.be.calledTwice;
       expect(provider.secondCall.args[0]).to.eql({
-        start: { year: 2024, month: 0, day: 1 },
-        end: { year: 2024, month: 11, day: 31 },
+        start: '2024-01-01',
+        end: '2024-12-31',
       });
     });
 
@@ -764,8 +794,8 @@ describe('DateMetadataController', () => {
 
         // A block ends on 31 December, so a leap year does not change where the range ends.
         expect(provider.firstCall.args[0]).to.eql({
-          start: { year, month: 0, day: 1 },
-          end: { year, month: 11, day: 31 },
+          start: `${year}-01-01`,
+          end: `${year}-12-31`,
         });
       });
     });

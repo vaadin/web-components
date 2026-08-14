@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-date-picker.js';
-import { getDateCell, getMonthCalendar, open } from './helpers.js';
+import { getDateCell, getMonthCalendar, isoDate, open } from './helpers.js';
 
 describe('dateMetadataProvider part names', () => {
   let datePicker, overlayContent, year, month;
@@ -27,21 +27,21 @@ describe('dateMetadataProvider part names', () => {
   });
 
   it('should add a single part name to the date', async () => {
-    await openWithProvider(() => [{ year, month, day: 10, part: 'busy' }]);
+    await openWithProvider(() => [{ date: isoDate(year, month, 10), part: 'busy' }]);
 
     expect(getCell(10).part.contains('busy')).to.be.true;
     expect(getCell(11).part.contains('busy')).to.be.false;
   });
 
   it('should add several space-separated part names', async () => {
-    await openWithProvider(() => [{ year, month, day: 10, part: 'busy almost-full' }]);
+    await openWithProvider(() => [{ date: isoDate(year, month, 10), part: 'busy almost-full' }]);
 
     expect(getCell(10).part.contains('busy')).to.be.true;
     expect(getCell(10).part.contains('almost-full')).to.be.true;
   });
 
   it('should keep the built-in parts alongside the custom ones', async () => {
-    await openWithProvider(() => [{ year, month, day: 10, part: 'busy', disabled: true }]);
+    await openWithProvider(() => [{ date: isoDate(year, month, 10), part: 'busy', disabled: true }]);
 
     expect(getCell(10).part.contains('date')).to.be.true;
     expect(getCell(10).part.contains('disabled')).to.be.true;
