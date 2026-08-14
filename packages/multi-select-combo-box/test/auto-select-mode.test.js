@@ -21,15 +21,13 @@ describe('auto-select-mode', () => {
       comboBox.autoSelectMode = 'first-match';
     });
 
-    it('should highlight the first match', () => {
+    it('should highlight first partially matching item', () => {
       setInputValue(comboBox, 'gra');
-
       expect(getFocusedItemIndex()).to.equal(0);
     });
 
-    it('should highlight the exact match', () => {
+    it('should prefer fully matching item over partially matching items', () => {
       setInputValue(comboBox, 'grape');
-
       expect(getFocusedItemIndex()).to.equal(1);
     });
 
@@ -39,7 +37,7 @@ describe('auto-select-mode', () => {
       expect(comboBox._focusedIndex).to.equal(-1);
     });
 
-    it('should not highlight the first match when custom values are allowed', () => {
+    it('should not highlight first matching item when custom values are allowed', () => {
       comboBox.allowCustomValue = true;
 
       setInputValue(comboBox, 'gra');
@@ -59,7 +57,7 @@ describe('auto-select-mode', () => {
       expect(getFocusedItemIndex()).to.equal(-1);
     });
 
-    it('should highlight the only match', () => {
+    it('should highlight only matching item', () => {
       setInputValue(comboBox, 'ban');
 
       expect(getFocusedItemIndex()).to.equal(0);
