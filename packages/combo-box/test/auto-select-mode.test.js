@@ -108,6 +108,7 @@ describe('auto-select-mode', () => {
     });
 
     it('should not select anything when no item matches the filter', () => {
+      input.focus();
       setInputValue(comboBox, 'xyz');
 
       outsideClick();
