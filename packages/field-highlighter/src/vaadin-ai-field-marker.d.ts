@@ -75,7 +75,6 @@ export type AiFieldRevertEvent = CustomEvent<{ value: unknown }>;
  * Attribute       | Description
  * ----------------|-------------
  * `ai-working`    | Set while an AI is working on the field.
- * `ai-confidence` | Set while a confidence level is shown, with the level as the value.
  *
  * The confidence indicator is rendered into the field's light DOM as a
  * `<span>` with the `ai-confidence` class name and the level as an additional

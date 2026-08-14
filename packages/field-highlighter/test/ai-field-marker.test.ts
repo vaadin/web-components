@@ -672,10 +672,6 @@ describe('ai field marker', () => {
       expect(getConfidenceNode()!.classList.contains('ai-confidence-low')).to.be.true;
     });
 
-    it('should set the ai-confidence attribute on the field', () => {
-      expect(field.getAttribute('ai-confidence')).to.equal('low');
-    });
-
     it('should show the helper text section for a field without a helper', () => {
       const helperPart = field.shadowRoot!.querySelector('[part="helper-text"]')!;
       expect(getComputedStyle(helperPart).display).to.not.equal('none');
@@ -802,7 +798,6 @@ describe('ai field marker', () => {
       expect(node.classList.contains('ai-confidence-high')).to.be.true;
       expect(node.classList.contains('ai-confidence-low')).to.be.false;
       expect(node.textContent).to.equal('High confidence');
-      expect(field.getAttribute('ai-confidence')).to.equal('high');
     });
 
     it('should remove the indicator when the confidence is cleared', async () => {
@@ -810,7 +805,6 @@ describe('ai field marker', () => {
       await nextUpdate(marker);
 
       expect(getConfidenceNode()).to.be.null;
-      expect(field.hasAttribute('ai-confidence')).to.be.false;
     });
 
     it('should remove the indicator when the marker is removed', async () => {
@@ -818,7 +812,6 @@ describe('ai field marker', () => {
       await nextRender();
 
       expect(getConfidenceNode()).to.be.null;
-      expect(field.hasAttribute('ai-confidence')).to.be.false;
     });
 
     it('should render the indicator when confidence is set after adding', async () => {
@@ -833,7 +826,6 @@ describe('ai field marker', () => {
 
       const node = getConfidenceNode(plainField)!;
       expect(node.textContent).to.equal('Medium confidence');
-      expect(plainField.getAttribute('ai-confidence')).to.equal('medium');
     });
 
     it('should render the indicator again when the marker is re-added', async () => {
@@ -843,7 +835,7 @@ describe('ai field marker', () => {
       await nextRender();
 
       expect(getConfidenceNode()).to.exist;
-      expect(field.getAttribute('ai-confidence')).to.equal('low');
+      expect(getConfidenceNode()!.classList.contains('ai-confidence-low')).to.be.true;
     });
 
     it('should keep the field helper text alongside the indicator', async () => {

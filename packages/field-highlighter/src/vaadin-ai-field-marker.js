@@ -42,10 +42,9 @@ const MARKER_STYLE_ATTRIBUTE = 'ai-field-marker-styles';
 
 /**
  * The class name of the confidence indicator the marker adds to the field's
- * light DOM; the level goes on a suffixed class name of its own. Prefixed the
- * same way as the field's `ai-confidence` attribute, since the indicator sits
- * among the application's own children of the field, where a plain
- * `confidence` or `low` would be ambiguous.
+ * light DOM; the level goes on a suffixed class name of its own. Prefixed
+ * with `ai-`, since the indicator sits among the application's own children
+ * of the field, where a plain `confidence` or `low` would be ambiguous.
  */
 const CONFIDENCE_CLASS = 'ai-confidence';
 
@@ -237,7 +236,6 @@ class DelayedFieldValue {
  * Attribute       | Description
  * ----------------|-------------
  * `ai-working`    | Set while an AI is working on the field.
- * `ai-confidence` | Set while a confidence level is shown, with the level as the value.
  *
  * The confidence indicator is rendered into the field's light DOM as a
  * `<span>` with the `ai-confidence` class name and the level as an additional
@@ -698,8 +696,7 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
    * Syncs the confidence indicator in the field's helper text section with
    * the `confidence` property: a `<span>` slotted into the field's helper
    * slot, with the `ai-confidence` and `ai-confidence-<level>` class names
-   * and the localized level text as content. The field carries the level in
-   * its `ai-confidence` attribute.
+   * and the localized level text as content.
    */
   #updateConfidence() {
     const field = this.#field;
@@ -730,7 +727,6 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
 
     this.#confidenceNode.className = `${CONFIDENCE_CLASS} ${CONFIDENCE_CLASS}-${level}`;
     this.#confidenceNode.textContent = this.__effectiveI18n.confidence[level] ?? '';
-    field.setAttribute('ai-confidence', level);
     this.#updateConfidenceDescription();
     this.#updateFieldHelperState();
   }
@@ -815,7 +811,7 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
     );
   }
 
-  /** Removes the confidence indicator and the field's `ai-confidence` attribute. */
+  /** Removes the confidence indicator. */
   #removeConfidenceNode() {
     const node = this.#confidenceNode;
     if (!node) {
@@ -827,7 +823,6 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
     }
     node.remove();
     this.#confidenceNode = null;
-    this.#field.removeAttribute('ai-confidence');
     this.#updateFieldHelperState();
   }
 
