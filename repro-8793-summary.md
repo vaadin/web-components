@@ -11,7 +11,7 @@
 - **Reproduced on:** vaadin/web-components @ `main` (25.3.0-alpha11) **and** on the reporter's live app (StarPass, Vaadin 24.5.0-beta1)
 - **Present on main?:** yes (still broken)
 - **Theme / Browser:** Lumo / Chromium (Playwright)
-- **Screenshot** (static bug): ![Tooltip below a bottom toolbar, clipped, with an internal scrollbar](https://raw.githubusercontent.com/vaadin/web-components/COMMIT_SHA/repro-8793.png)
+- **Screenshot** (static bug): ![Tooltip below a bottom toolbar, clipped, with an internal scrollbar](https://raw.githubusercontent.com/vaadin/web-components/d6765d20b666ea9534184fd001f7af7bb47d4f28/repro-8793.png)
 
 ## Observed behavior
 
