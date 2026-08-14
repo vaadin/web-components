@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import '../../src/vaadin-month-calendar.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { DateMetadataController } from '../../src/vaadin-date-metadata-controller.js';
-import { getDefaultI18n } from '../helpers.js';
+import { getDefaultI18n, isoDate } from '../helpers.js';
 
 describe('vaadin-month-calendar', () => {
   let monthCalendar, clock;
@@ -89,7 +89,7 @@ describe('vaadin-month-calendar', () => {
           const dates = [];
           for (let day = 1; day <= 29; day++) {
             if (day % 2) {
-              dates.push({ year: month.getFullYear(), month: month.getMonth(), day, disabled: true });
+              dates.push({ date: isoDate(month.getFullYear(), month.getMonth(), day), disabled: true });
             }
           }
           return dates;

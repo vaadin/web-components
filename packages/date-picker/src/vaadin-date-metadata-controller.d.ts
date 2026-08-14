@@ -12,8 +12,8 @@ import type { DatePickerDateMetadata, DatePickerDateMetadataProvider } from './v
  *
  * The provider is called for a range of months and may return an array
  * synchronously or a `Promise`, so results from a server (Flow) or a remote
- * availability service can be awaited. Each returned entry is a `DatePickerDate`
- * extended with metadata fields, e.g. `{ year, month, day, disabled: true }`.
+ * availability service can be awaited. The range and each returned entry identify
+ * a date by an ISO 8601 string, e.g. `{ date: '2026-01-01', disabled: true }`.
  *
  * `ARCHITECTURE.md` in this package records the reasoning behind the request,
  * caching, notification and failure behavior.

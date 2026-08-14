@@ -24,19 +24,23 @@ export interface DatePickerDate {
  */
 export interface DatePickerDateRange {
   /**
-   * The first date of the range (inclusive).
+   * The first date of the range (inclusive), as an ISO 8601 date.
    */
-  start: DatePickerDate;
+  start: string;
   /**
-   * The last date of the range (inclusive).
+   * The last date of the range (inclusive), as an ISO 8601 date.
    */
-  end: DatePickerDate;
+  end: string;
 }
 
 /**
  * Metadata for a single date, returned by `dateMetadataProvider`.
  */
-export interface DatePickerDateMetadata extends DatePickerDate {
+export interface DatePickerDateMetadata {
+  /**
+   * The date the metadata applies to in ISO 8601 format.
+   */
+  date: string;
   /**
    * Whether the date cannot be selected.
    */
@@ -302,11 +306,11 @@ export declare class DatePickerMixinClass {
    *
    * ```js
    * [
-   *   // month is 0-based: January = 0 and December = 11.
-   *   { year: 2026, month: 0, day: 1, disabled: true },
+   *   // The date is an ISO 8601 string.
+   *   { date: '2026-01-01', disabled: true },
    *
    *   // Adds a custom part name to the date.
-   *   { year: 2026, month: 0, day: 2, part: 'busy' },
+   *   { date: '2026-01-02', part: 'busy' },
    * ]
    * ```
    *

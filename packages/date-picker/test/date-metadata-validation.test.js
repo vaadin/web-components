@@ -2,8 +2,8 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { monthDate, monthIndexOf } from '../src/vaadin-date-picker-helper.js';
-import { setInputValue } from './helpers.js';
+import { monthIndex, parseDate } from '../src/vaadin-date-picker-helper.js';
+import { isoDateInMonth, setInputValue } from './helpers.js';
 
 describe('dateMetadataProvider validation', () => {
   let datePicker;
@@ -12,12 +12,9 @@ describe('dateMetadataProvider validation', () => {
   // months the request happens to cover.
   function disableFifteenth() {
     return ({ start, end }) => {
-      const first = monthIndexOf(start.year, start.month);
-      const last = monthIndexOf(end.year, end.month);
       const dates = [];
-      for (let month = first; month <= last; month++) {
-        const date = monthDate(month);
-        dates.push({ year: date.getFullYear(), month: date.getMonth(), day: 15, disabled: true });
+      for (let month = monthIndex(parseDate(start)); month <= monthIndex(parseDate(end)); month++) {
+        dates.push({ date: isoDateInMonth(month, 15), disabled: true });
       }
       return dates;
     };
@@ -80,8 +77,8 @@ describe('dateMetadataProvider validation', () => {
     expect(datePicker.dateMetadataProvider).to.be.calledOnce;
     // Requests cover whole blocks, so the range is the calendar year holding the value.
     const range = datePicker.dateMetadataProvider.firstCall.args[0];
-    expect(range.start).to.eql({ year: 2024, month: 0, day: 1 });
-    expect(range.end).to.eql({ year: 2024, month: 11, day: 31 });
+    expect(range.start).to.equal('2024-01-01');
+    expect(range.end).to.equal('2024-12-31');
   });
 
   it('should request metadata again on value set after the provider settled', async () => {
@@ -222,7 +219,7 @@ describe('dateMetadataProvider validation', () => {
       const parent = datePicker.parentNode;
       parent.removeChild(datePicker);
       // Answered while detached, so the host was never told about it.
-      resolveProvider([{ year: 2024, month: 0, day: 15, disabled: true }]);
+      resolveProvider([{ date: '2024-01-15', disabled: true }]);
       await aTimeout(0);
       expect(datePicker.invalid).to.be.false;
 
@@ -237,7 +234,7 @@ describe('dateMetadataProvider validation', () => {
       await aTimeout(0);
 
       datePicker.value = '';
-      resolveProvider([{ year: 2024, month: 0, day: 15, disabled: true }]);
+      resolveProvider([{ date: '2024-01-15', disabled: true }]);
       await aTimeout(0);
 
       expect(datePicker.checkValidity()).to.be.true;

@@ -8,7 +8,7 @@ describe('dateMetadataProvider', () => {
 
   // The 15th of January 2024 is disabled, whatever range the provider is asked about.
   function disableFifteenth() {
-    return [{ year: 2024, month: 0, day: 15, disabled: true }];
+    return [{ date: '2024-01-15', disabled: true }];
   }
 
   function deferredProvider() {

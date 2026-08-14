@@ -275,18 +275,17 @@ loading and `isLoading()` stays true, until the cache is cleared.
 
 ### When the provider is written wrong
 
-A result that is not an array, and an entry that does not describe a real date, are reported rather than
+A result that is not an array, and an entry whose `date` is not a real date, are reported rather than
 ignored: ignoring them would present a provider bug as "nothing is disabled".
 
-Entries are checked by rebuilding the date and comparing it back, which catches a month outside 0–11, a day
-outside its month, and February 30 alike — each would otherwise be stored under a key that no lookup can
-produce. A month given 1-based cannot be caught this way, being a valid month number, so the 0-based
-contract is stated on the provider type instead.
+An entry's date goes through the same parser as `value`, `min` and `max`, so one format is accepted
+everywhere and a date that does not exist is rejected there rather than here. February 30 would otherwise be
+stored as the 2nd of March, under a key no lookup for the 30th can produce.
 
-The three fields are type-checked before that, which is not redundant. A value that cannot be coerced to a
-number (e.g. bigint) throws while the date is being rebuilt; because the answer is applied inside the
-error handling above, one such entry would discard the whole range and have it requested again on every
-navigation, instead of costing only itself.
+What the parser does not do is check its argument is a string, since it documents one. An entry comes from
+outside, so the check is made here: coercion can itself throw — a `Symbol` or a throwing `toString` does —
+and the answer is applied inside the error handling above, so one such entry would discard the whole range
+and have it requested again on every navigation instead of costing only itself.
 
 Both are mistakes in how the provider is written rather than runtime failures, so they are warned about
 once instead of once per request, which would otherwise repeat on every scroll. The trade is that the
@@ -302,6 +301,6 @@ message states the contract instead of naming the offending entry.
   different microtasks after a provider resolves. Do not assert the overlay's state straight after awaiting
   a calendar update; await the date-picker instead.
 - A provider's answer is awaited even when it is a plain array, so what it resolves has to be awaited before
-  being asserted. What the provider was *asked* can be asserted right away.
-- Provider ranges use **0-indexed months** and cover whole blocks, so a range starts on 1 January and ends
-  on 31 December of the years it spans.
+  being asserted. What the provider was _asked_ can be asserted right away.
+- Provider ranges cover whole blocks, so a range starts on 1 January and ends on 31 December of the years
+  it spans.
