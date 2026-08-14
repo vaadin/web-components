@@ -106,6 +106,10 @@ export const DirMixin = (superClass) =>
       this.__unsubscribe();
     }
 
+    // The two overrides below are only invoked by Polymer's property reflection.
+    // Vaadin components no longer extend `PolymerElement`, but some add-ons still
+    // apply this mixin to `PolymerElement`, so the overrides are kept for them.
+
     /** @protected */
     _valueToNodeAttribute(node, value, attribute) {
       // Override default Polymer attribute reflection to match native behavior of HTMLElement.dir property
