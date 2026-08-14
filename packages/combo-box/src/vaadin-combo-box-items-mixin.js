@@ -63,6 +63,24 @@ export const ComboBoxItemsMixin = (superClass) =>
         },
 
         /**
+         * Controls which item is selected when committing the value while
+         * a filter is typed, for example on blur, Enter press, or outside click:
+         *
+         * - `full-match` (default): select an item only if its label matches the filter exactly.
+         * - `first-match`: select the first matching item, giving preference to an exact match.
+         * - `only-match`: select the matching item only if there is exactly one.
+         *
+         * Matching is case-insensitive. The item to be selected is highlighted
+         * in the dropdown while typing. Auto-selection is not performed when
+         * the filter is empty or when `allowCustomValue` is enabled.
+         * @attr {full-match|first-match|only-match} auto-select-mode
+         */
+        autoSelectMode: {
+          type: String,
+          value: 'full-match',
+        },
+
+        /**
          * Filtering string the user has typed into the input field.
          */
         filter: {
@@ -281,5 +299,32 @@ export const ComboBoxItemsMixin = (superClass) =>
       return findItemIndex(items, (item) => {
         return this._getItemLabel(item).toString().toLowerCase() === label.toString().toLowerCase();
       });
+    }
+
+    /**
+     * Returns the index of the item to focus based on the current filter,
+     * considering the `autoSelectMode` property. Returns -1 when no item
+     * should be focused.
+     * @private
+     */
+    __getItemIndexByFilter(items) {
+      // An item whose label matches the filter exactly takes precedence.
+      const exactMatchIndex = this.__getItemIndexByLabel(items, this.filter);
+      if (exactMatchIndex > -1) {
+        return exactMatchIndex;
+      }
+
+      // Auto-select modes require a typed filter and are ignored when custom values are allowed.
+      if (!items || items.length === 0 || !this.filter || this.allowCustomValue) {
+        return -1;
+      }
+
+      if (this.autoSelectMode === 'first-match' || (this.autoSelectMode === 'only-match' && items.length === 1)) {
+        // Skip an item that is not yet loaded. Once the item is loaded,
+        // the focused index is updated again.
+        return items[0] instanceof ComboBoxPlaceholder ? -1 : 0;
+      }
+
+      return -1;
     }
   };

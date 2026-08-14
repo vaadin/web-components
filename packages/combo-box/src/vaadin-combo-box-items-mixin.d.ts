@@ -6,11 +6,28 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { ComboBoxBaseMixinClass } from './vaadin-combo-box-base-mixin.js';
 
+export type ComboBoxAutoSelectMode = 'first-match' | 'full-match' | 'only-match';
+
 export declare function ComboBoxItemsMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<ComboBoxBaseMixinClass> & Constructor<ComboBoxItemsMixinClass<TItem>> & T;
 
 export declare class ComboBoxItemsMixinClass<TItem> {
+  /**
+   * Controls which item is selected when committing the value while
+   * a filter is typed, for example on blur, Enter press, or outside click:
+   *
+   * - `full-match` (default): select an item only if its label matches the filter exactly.
+   * - `first-match`: select the first matching item, giving preference to an exact match.
+   * - `only-match`: select the matching item only if there is exactly one.
+   *
+   * Matching is case-insensitive. The item to be selected is highlighted
+   * in the dropdown while typing. Auto-selection is not performed when
+   * the filter is empty or when `allowCustomValue` is enabled.
+   * @attr {full-match|first-match|only-match} auto-select-mode
+   */
+  autoSelectMode: ComboBoxAutoSelectMode;
+
   /**
    * A full set of items to filter the visible options from.
    * The items can be of either `String` or `Object` type.

@@ -542,7 +542,7 @@ export const ComboBoxMixin = (superClass) =>
       } else {
         // When the user filled in something that is different from the current value = filtering is enabled,
         // set the focused index to the item that matches the filter query.
-        this._focusedIndex = this.__getItemIndexByLabel(newItems, this.filter);
+        this._focusedIndex = this.__getItemIndexByFilter(newItems);
       }
     }
 
