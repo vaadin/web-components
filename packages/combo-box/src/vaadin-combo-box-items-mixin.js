@@ -304,12 +304,7 @@ export const ComboBoxItemsMixin = (superClass) =>
       });
     }
 
-    /**
-     * Returns the index of the item to focus based on the current filter,
-     * considering the `autoFocusPartialMatch` property. Returns -1 when
-     * no item should be focused.
-     * @private
-     */
+    /** @private */
     __getItemIndexByFilter(items) {
       // An item whose label matches the filter exactly takes precedence.
       const exactMatchIndex = this.__getItemIndexByLabel(items, this.filter);
