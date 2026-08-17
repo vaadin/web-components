@@ -58,7 +58,7 @@ describe('auto-focus-partial-match', () => {
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
-    it('should highlight the first match', () => {
+    it('should highlight first partial match', () => {
       setInputValue(comboBox, 'gra');
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
@@ -68,7 +68,7 @@ describe('auto-focus-partial-match', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
 
-    it('should not highlight the first match when custom values are allowed', () => {
+    it('should not highlight first partial match when custom values are allowed', () => {
       comboBox.allowCustomValue = true;
       setInputValue(comboBox, 'gra');
       expect(getFocusedItemIndex(comboBox)).to.equal(-1);
@@ -80,7 +80,7 @@ describe('auto-focus-partial-match', () => {
     });
 
     describe('committing input', () => {
-      it('should commit the first match on Enter', () => {
+      it('should commit first partial match on Enter', () => {
         setInputValue(comboBox, 'grap');
         enterKeyDown(inputElement);
         expect(comboBox.value).to.equal('grapefruit');
@@ -92,13 +92,13 @@ describe('auto-focus-partial-match', () => {
         expect(comboBox.value).to.equal('');
       });
 
-      it('should commit the first match on outside click', () => {
+      it('should commit first partial match on outside click', () => {
         setInputValue(comboBox, 'grap');
         outsideClick();
         expect(comboBox.value).to.equal('grapefruit');
       });
 
-      it('should commit the clicked item instead of the first match', () => {
+      it('should commit the clicked item instead of first partial match', () => {
         setInputValue(comboBox, 'grap');
         clickItem(comboBox, 1);
         expect(comboBox.value).to.equal('grape');
@@ -112,7 +112,7 @@ describe('auto-focus-partial-match', () => {
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
-    it('should highlight the only match', () => {
+    it('should highlight only partial match', () => {
       setInputValue(comboBox, 'ban');
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
@@ -128,7 +128,7 @@ describe('auto-focus-partial-match', () => {
     });
 
     describe('committing input', () => {
-      it('should commit the only match on Enter', () => {
+      it('should commit only partial match on Enter', () => {
         setInputValue(comboBox, 'grapef');
         enterKeyDown(inputElement);
         expect(comboBox.value).to.equal('grapefruit');
@@ -140,7 +140,7 @@ describe('auto-focus-partial-match', () => {
         expect(comboBox.value).to.equal('');
       });
 
-      it('should commit the only match on outside click', () => {
+      it('should commit only partial match on outside click', () => {
         setInputValue(comboBox, 'grapef');
         outsideClick();
         expect(comboBox.value).to.equal('grapefruit');
@@ -171,7 +171,7 @@ describe('auto-focus-partial-match', () => {
       };
     });
 
-    it('should highlight the first match after the page is loaded', async () => {
+    it('should highlight first partial match after the page is loaded', async () => {
       comboBox.autoFocusPartialMatch = 'first-match';
 
       setInputValue(comboBox, 'gra');
@@ -180,7 +180,7 @@ describe('auto-focus-partial-match', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
-    it('should highlight the only match after the page is loaded', async () => {
+    it('should highlight only partial match after the page is loaded', async () => {
       comboBox.autoFocusPartialMatch = 'only-match';
 
       setInputValue(comboBox, 'ban');
