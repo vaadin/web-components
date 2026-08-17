@@ -31,22 +31,24 @@ describe('auto-focus-partial-match', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
-    it('should not commit the partial match on Enter', () => {
-      setInputValue(comboBox, 'grap');
-      enterKeyDown(inputElement);
-      expect(comboBox.value).to.equal('');
-    });
+    describe('committing input', () => {
+      it('should not commit the partial match on Enter', () => {
+        setInputValue(comboBox, 'grap');
+        enterKeyDown(inputElement);
+        expect(comboBox.value).to.equal('');
+      });
 
-    it('should not commit the partial match on outside click', () => {
-      setInputValue(comboBox, 'grap');
-      outsideClick();
-      expect(comboBox.value).to.equal('');
-    });
+      it('should not commit the partial match on outside click', () => {
+        setInputValue(comboBox, 'grap');
+        outsideClick();
+        expect(comboBox.value).to.equal('');
+      });
 
-    it('should commit the clicked item', () => {
-      setInputValue(comboBox, 'grap');
-      clickItem(comboBox, 0);
-      expect(comboBox.value).to.equal('grapefruit');
+      it('should commit the clicked item', () => {
+        setInputValue(comboBox, 'grap');
+        clickItem(comboBox, 0);
+        expect(comboBox.value).to.equal('grapefruit');
+      });
     });
   });
 
@@ -77,28 +79,30 @@ describe('auto-focus-partial-match', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
-    it('should not commit on Enter when no items match', () => {
-      setInputValue(comboBox, 'xyz');
-      enterKeyDown(inputElement);
-      expect(comboBox.value).to.equal('');
-    });
+    describe('committing input', () => {
+      it('should commit the highlighted item on Enter', () => {
+        setInputValue(comboBox, 'grap');
+        enterKeyDown(inputElement);
+        expect(comboBox.value).to.equal('grapefruit');
+      });
 
-    it('should commit the highlighted item on Enter', () => {
-      setInputValue(comboBox, 'grap');
-      enterKeyDown(inputElement);
-      expect(comboBox.value).to.equal('grapefruit');
-    });
+      it('should not commit on Enter when no items match', () => {
+        setInputValue(comboBox, 'xyz');
+        enterKeyDown(inputElement);
+        expect(comboBox.value).to.equal('');
+      });
 
-    it('should commit the highlighted item on outside click', () => {
-      setInputValue(comboBox, 'grap');
-      outsideClick();
-      expect(comboBox.value).to.equal('grapefruit');
-    });
+      it('should commit the highlighted item on outside click', () => {
+        setInputValue(comboBox, 'grap');
+        outsideClick();
+        expect(comboBox.value).to.equal('grapefruit');
+      });
 
-    it('should commit the clicked item instead of the highlighted one', () => {
-      setInputValue(comboBox, 'grap');
-      clickItem(comboBox, 1);
-      expect(comboBox.value).to.equal('grape');
+      it('should commit the clicked item instead of the highlighted one', () => {
+        setInputValue(comboBox, 'grap');
+        clickItem(comboBox, 1);
+        expect(comboBox.value).to.equal('grape');
+      });
     });
   });
 
@@ -123,34 +127,36 @@ describe('auto-focus-partial-match', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
 
-    it('should commit the highlighted item on Enter', () => {
-      setInputValue(comboBox, 'grapef');
-      enterKeyDown(inputElement);
-      expect(comboBox.value).to.equal('grapefruit');
-    });
+    describe('committing input', () => {
+      it('should commit the highlighted item on Enter', () => {
+        setInputValue(comboBox, 'grapef');
+        enterKeyDown(inputElement);
+        expect(comboBox.value).to.equal('grapefruit');
+      });
 
-    it('should not commit on Enter when multiple items match', () => {
-      setInputValue(comboBox, 'grap');
-      enterKeyDown(inputElement);
-      expect(comboBox.value).to.equal('');
-    });
+      it('should not commit on Enter when multiple items match', () => {
+        setInputValue(comboBox, 'grap');
+        enterKeyDown(inputElement);
+        expect(comboBox.value).to.equal('');
+      });
 
-    it('should commit the highlighted item on outside click', () => {
-      setInputValue(comboBox, 'grapef');
-      outsideClick();
-      expect(comboBox.value).to.equal('grapefruit');
-    });
+      it('should commit the highlighted item on outside click', () => {
+        setInputValue(comboBox, 'grapef');
+        outsideClick();
+        expect(comboBox.value).to.equal('grapefruit');
+      });
 
-    it('should not commit on outside click when multiple items match', () => {
-      setInputValue(comboBox, 'grap');
-      outsideClick();
-      expect(comboBox.value).to.equal('');
-    });
+      it('should not commit on outside click when multiple items match', () => {
+        setInputValue(comboBox, 'grap');
+        outsideClick();
+        expect(comboBox.value).to.equal('');
+      });
 
-    it('should commit the clicked item', () => {
-      setInputValue(comboBox, 'grapef');
-      clickItem(comboBox, 0);
-      expect(comboBox.value).to.equal('grapefruit');
+      it('should commit the clicked item', () => {
+        setInputValue(comboBox, 'grapef');
+        clickItem(comboBox, 0);
+        expect(comboBox.value).to.equal('grapefruit');
+      });
     });
   });
 
