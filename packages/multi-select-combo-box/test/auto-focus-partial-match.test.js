@@ -13,12 +13,32 @@ describe('auto-focus-partial-match', () => {
   beforeEach(async () => {
     comboBox = fixtureSync('<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>');
     await nextRender();
-    comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
+  });
+
+  describe('none (default)', () => {
+    beforeEach(() => {
+      comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
+    });
+
+    it('should be none by default', () => {
+      expect(comboBox.autoFocusPartialMatch).to.equal('none');
+    });
+
+    it('should highlight the exact match', () => {
+      setInputValue(comboBox, 'grape');
+      expect(getFocusedItemIndex()).to.equal(1);
+    });
+
+    it('should not highlight partial matches', () => {
+      setInputValue(comboBox, 'gra');
+      expect(getFocusedItemIndex()).to.equal(-1);
+    });
   });
 
   describe('first-match', () => {
     beforeEach(() => {
       comboBox.autoFocusPartialMatch = 'first-match';
+      comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
     it('should highlight the first match', () => {
@@ -26,14 +46,9 @@ describe('auto-focus-partial-match', () => {
       expect(getFocusedItemIndex()).to.equal(0);
     });
 
-    it('should prefer the exact match over the first match', () => {
+    it('should highlight the exact match when there is one', () => {
       setInputValue(comboBox, 'grape');
       expect(getFocusedItemIndex()).to.equal(1);
-    });
-
-    it('should not highlight anything when no items match', () => {
-      setInputValue(comboBox, 'xyz');
-      expect(comboBox._focusedIndex).to.equal(-1);
     });
 
     it('should not highlight the first match when custom values are allowed', () => {
@@ -41,11 +56,22 @@ describe('auto-focus-partial-match', () => {
       setInputValue(comboBox, 'gra');
       expect(getFocusedItemIndex()).to.equal(-1);
     });
+
+    it('should not highlight anything when the filter is empty', () => {
+      comboBox.open();
+      expect(getFocusedItemIndex()).to.equal(-1);
+    });
+
+    it('should not highlight anything when no items match', () => {
+      setInputValue(comboBox, 'xyz');
+      expect(comboBox._focusedIndex).to.equal(-1);
+    });
   });
 
   describe('only-match', () => {
     beforeEach(() => {
       comboBox.autoFocusPartialMatch = 'only-match';
+      comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
     it('should highlight the only match', () => {
@@ -56,6 +82,11 @@ describe('auto-focus-partial-match', () => {
     it('should not highlight anything when multiple items match', () => {
       setInputValue(comboBox, 'gra');
       expect(getFocusedItemIndex()).to.equal(-1);
+    });
+
+    it('should highlight the exact match when there is one', () => {
+      setInputValue(comboBox, 'grape');
+      expect(getFocusedItemIndex()).to.equal(1);
     });
   });
 });
