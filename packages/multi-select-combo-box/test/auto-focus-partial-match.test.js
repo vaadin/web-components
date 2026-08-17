@@ -105,13 +105,13 @@ describe('auto-focus-partial-match', () => {
     });
 
     describe('committing input', () => {
-      it('should select the highlighted item on Enter', () => {
+      it('should select the first match on Enter', () => {
         setInputValue(comboBox, 'grap');
         enterKeyDown(inputElement);
         expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
       });
 
-      it('should not unselect the already selected highlighted item on Enter', () => {
+      it('should not unselect the already selected first match on Enter', () => {
         comboBox.selectedItems = ['grapefruit'];
         setInputValue(comboBox, 'grap');
         enterKeyDown(inputElement);
@@ -141,20 +141,20 @@ describe('auto-focus-partial-match', () => {
         expect(comboBox.selectedItems).to.deep.equal([]);
       });
 
-      it('should not select the highlighted item on outside click', () => {
+      it('should not select the first match on outside click', () => {
         setInputValue(comboBox, 'grap');
         outsideClick();
         expect(comboBox.selectedItems).to.deep.equal([]);
       });
 
-      it('should not unselect the already selected highlighted item on outside click', () => {
+      it('should not unselect the already selected first match on outside click', () => {
         comboBox.selectedItems = ['grapefruit'];
         setInputValue(comboBox, 'grap');
         outsideClick();
         expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
       });
 
-      it('should select the clicked item instead of the highlighted one', () => {
+      it('should select the clicked item instead of the first match', () => {
         setInputValue(comboBox, 'grap');
         getAllItems(comboBox)[1].click();
         expect(comboBox.selectedItems).to.deep.equal(['grape']);
@@ -191,13 +191,13 @@ describe('auto-focus-partial-match', () => {
     });
 
     describe('committing input', () => {
-      it('should select the highlighted item on Enter', () => {
+      it('should select the only match on Enter', () => {
         setInputValue(comboBox, 'grapef');
         enterKeyDown(inputElement);
         expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
       });
 
-      it('should not unselect the already selected highlighted item on Enter', () => {
+      it('should not unselect the already selected only match on Enter', () => {
         comboBox.selectedItems = ['grapefruit'];
         setInputValue(comboBox, 'grapef');
         enterKeyDown(inputElement);
@@ -211,13 +211,13 @@ describe('auto-focus-partial-match', () => {
         expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
       });
 
-      it('should not select the highlighted item on outside click', () => {
+      it('should not select the only match on outside click', () => {
         setInputValue(comboBox, 'grapef');
         outsideClick();
         expect(comboBox.selectedItems).to.deep.equal([]);
       });
 
-      it('should not unselect the already selected highlighted item on outside click', () => {
+      it('should not unselect the already selected only match on outside click', () => {
         comboBox.selectedItems = ['grapefruit'];
         setInputValue(comboBox, 'grapef');
         outsideClick();

@@ -80,7 +80,7 @@ describe('auto-focus-partial-match', () => {
     });
 
     describe('committing input', () => {
-      it('should commit the highlighted item on Enter', () => {
+      it('should commit the first match on Enter', () => {
         setInputValue(comboBox, 'grap');
         enterKeyDown(inputElement);
         expect(comboBox.value).to.equal('grapefruit');
@@ -92,13 +92,13 @@ describe('auto-focus-partial-match', () => {
         expect(comboBox.value).to.equal('');
       });
 
-      it('should commit the highlighted item on outside click', () => {
+      it('should commit the first match on outside click', () => {
         setInputValue(comboBox, 'grap');
         outsideClick();
         expect(comboBox.value).to.equal('grapefruit');
       });
 
-      it('should commit the clicked item instead of the highlighted one', () => {
+      it('should commit the clicked item instead of the first match', () => {
         setInputValue(comboBox, 'grap');
         clickItem(comboBox, 1);
         expect(comboBox.value).to.equal('grape');
@@ -128,7 +128,7 @@ describe('auto-focus-partial-match', () => {
     });
 
     describe('committing input', () => {
-      it('should commit the highlighted item on Enter', () => {
+      it('should commit the only match on Enter', () => {
         setInputValue(comboBox, 'grapef');
         enterKeyDown(inputElement);
         expect(comboBox.value).to.equal('grapefruit');
@@ -140,7 +140,7 @@ describe('auto-focus-partial-match', () => {
         expect(comboBox.value).to.equal('');
       });
 
-      it('should commit the highlighted item on outside click', () => {
+      it('should commit the only match on outside click', () => {
         setInputValue(comboBox, 'grapef');
         outsideClick();
         expect(comboBox.value).to.equal('grapefruit');
