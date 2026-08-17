@@ -68,12 +68,14 @@ export const ComboBoxItemsMixin = (superClass) =>
          * in the dropdown while typing and is selected when committing the
          * value, for example on blur, Enter press, or outside click:
          *
-         * - `none` (default): focus only an item whose label matches the filter exactly.
-         * - `first-match`: focus the first matching item, giving preference to an exact match.
-         * - `only-match`: focus the matching item only if there is exactly one.
+         * - `none` (default): do not focus partial matches.
+         * - `first-match`: focus the first item in the filtered results.
+         * - `only-match`: focus the item when filtering narrows the results to a single item.
          *
-         * Matching is case-insensitive. A partial match is not focused when
-         * the filter is empty or when `allowCustomValue` is enabled.
+         * An item whose label matches the filter exactly is always focused,
+         * regardless of this property. Matching is case-insensitive. A partial
+         * match is not focused when `allowCustomValue` is enabled.
+         *
          * @attr {none|first-match|only-match} auto-focus-partial-match
          */
         autoFocusPartialMatch: {
