@@ -253,7 +253,6 @@ class DelayedFieldValue {
  * `--vaadin-ai-field-marker-confidence-high-color`     |
  * `--vaadin-ai-field-marker-confidence-low-color`      |
  * `--vaadin-ai-field-marker-confidence-medium-color`   |
- * `--vaadin-ai-field-marker-mask-pos`                  |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
