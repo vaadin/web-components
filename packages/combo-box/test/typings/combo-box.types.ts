@@ -93,7 +93,7 @@ assertType<() => void>(narrowedComboBox.open);
 assertType<() => void>(narrowedComboBox.requestContentUpdate);
 assertType<boolean>(narrowedComboBox.allowCustomValue);
 assertType<boolean>(narrowedComboBox.autofocus);
-assertType<'exact-match' | 'first-match' | 'single-match'>(narrowedComboBox.autoSelectMode);
+assertType<'first-match' | 'none' | 'only-match'>(narrowedComboBox.autoFocusPartialMatch);
 assertType<boolean>(narrowedComboBox.autoselect);
 assertType<boolean | null | undefined>(narrowedComboBox.autoOpenDisabled);
 assertType<boolean>(narrowedComboBox.opened);

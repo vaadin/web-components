@@ -3,7 +3,7 @@ import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-combo-box.js';
 import { getFocusedItemIndex, setInputValue } from './helpers.js';
 
-describe('auto-select-mode', () => {
+describe('auto-focus-partial-match', () => {
   let comboBox;
 
   beforeEach(async () => {
@@ -11,13 +11,13 @@ describe('auto-select-mode', () => {
     await nextRender();
   });
 
-  describe('exact-match (default)', () => {
+  describe('none (default)', () => {
     beforeEach(() => {
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
-    it('should be exact-match by default', () => {
-      expect(comboBox.autoSelectMode).to.equal('exact-match');
+    it('should be none by default', () => {
+      expect(comboBox.autoFocusPartialMatch).to.equal('none');
     });
 
     it('should highlight the exact match', () => {
@@ -33,7 +33,7 @@ describe('auto-select-mode', () => {
 
   describe('first-match', () => {
     beforeEach(() => {
-      comboBox.autoSelectMode = 'first-match';
+      comboBox.autoFocusPartialMatch = 'first-match';
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
@@ -64,13 +64,13 @@ describe('auto-select-mode', () => {
     });
   });
 
-  describe('single-match', () => {
+  describe('only-match', () => {
     beforeEach(() => {
-      comboBox.autoSelectMode = 'single-match';
+      comboBox.autoFocusPartialMatch = 'only-match';
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
-    it('should highlight the single match', () => {
+    it('should highlight the only match', () => {
       setInputValue(comboBox, 'ban');
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
@@ -98,7 +98,7 @@ describe('auto-select-mode', () => {
     });
 
     it('should highlight the first match after the page is loaded', async () => {
-      comboBox.autoSelectMode = 'first-match';
+      comboBox.autoFocusPartialMatch = 'first-match';
 
       setInputValue(comboBox, 'gra');
       await aTimeout(0);
@@ -106,8 +106,8 @@ describe('auto-select-mode', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
-    it('should highlight the single match after the page is loaded', async () => {
-      comboBox.autoSelectMode = 'single-match';
+    it('should highlight the only match after the page is loaded', async () => {
+      comboBox.autoFocusPartialMatch = 'only-match';
 
       setInputValue(comboBox, 'ban');
       await aTimeout(0);

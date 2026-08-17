@@ -3,7 +3,7 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-multi-select-combo-box.js';
 import { getAllItems, setInputValue } from './helpers.js';
 
-describe('auto-select-mode', () => {
+describe('auto-focus-partial-match', () => {
   let comboBox;
 
   function getFocusedItemIndex() {
@@ -18,7 +18,7 @@ describe('auto-select-mode', () => {
 
   describe('first-match', () => {
     beforeEach(() => {
-      comboBox.autoSelectMode = 'first-match';
+      comboBox.autoFocusPartialMatch = 'first-match';
     });
 
     it('should highlight the first match', () => {
@@ -43,12 +43,12 @@ describe('auto-select-mode', () => {
     });
   });
 
-  describe('single-match', () => {
+  describe('only-match', () => {
     beforeEach(() => {
-      comboBox.autoSelectMode = 'single-match';
+      comboBox.autoFocusPartialMatch = 'only-match';
     });
 
-    it('should highlight the single match', () => {
+    it('should highlight the only match', () => {
       setInputValue(comboBox, 'ban');
       expect(getFocusedItemIndex()).to.equal(0);
     });

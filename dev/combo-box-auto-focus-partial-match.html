@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Combo Box Auto Select Mode</title>
+    <title>Combo Box Auto Focus Partial Match</title>
     <script type="module" src="./common.js"></script>
     <style>
       section {
@@ -26,17 +26,17 @@
     </p>
 
     <section>
-      <vaadin-combo-box id="exact-match" label="exact-match (default)"></vaadin-combo-box>
+      <vaadin-combo-box id="none" label="none (default)"></vaadin-combo-box>
       <output></output>
     </section>
 
     <section>
-      <vaadin-combo-box id="first-match" label="first-match" auto-select-mode="first-match"></vaadin-combo-box>
+      <vaadin-combo-box id="first-match" label="first-match" auto-focus-partial-match="first-match"></vaadin-combo-box>
       <output></output>
     </section>
 
     <section>
-      <vaadin-combo-box id="single-match" label="single-match" auto-select-mode="single-match"></vaadin-combo-box>
+      <vaadin-combo-box id="only-match" label="only-match" auto-focus-partial-match="only-match"></vaadin-combo-box>
       <output></output>
     </section>
 
@@ -44,7 +44,7 @@
       <vaadin-combo-box
         id="custom-value"
         label="first-match + allow-custom-value"
-        auto-select-mode="first-match"
+        auto-focus-partial-match="first-match"
         allow-custom-value
       ></vaadin-combo-box>
       <output></output>
@@ -54,7 +54,7 @@
       <vaadin-combo-box
         id="lazy"
         label="first-match + lazy countries"
-        auto-select-mode="first-match"
+        auto-focus-partial-match="first-match"
       ></vaadin-combo-box>
       <output></output>
     </section>
@@ -63,7 +63,7 @@
       <vaadin-multi-select-combo-box
         id="multi-first-match"
         label="multi-select first-match"
-        auto-select-mode="first-match"
+        auto-focus-partial-match="first-match"
         style="width: 300px"
       ></vaadin-multi-select-combo-box>
       <output></output>
@@ -71,9 +71,9 @@
 
     <section>
       <vaadin-multi-select-combo-box
-        id="multi-single-match"
-        label="multi-select single-match"
-        auto-select-mode="single-match"
+        id="multi-only-match"
+        label="multi-select only-match"
+        auto-focus-partial-match="only-match"
         style="width: 300px"
       ></vaadin-multi-select-combo-box>
       <output></output>

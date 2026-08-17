@@ -6,7 +6,7 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { ComboBoxBaseMixinClass } from './vaadin-combo-box-base-mixin.js';
 
-export type ComboBoxAutoSelectMode = 'exact-match' | 'first-match' | 'single-match';
+export type ComboBoxAutoFocusPartialMatch = 'first-match' | 'none' | 'only-match';
 
 export declare function ComboBoxItemsMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
@@ -14,19 +14,20 @@ export declare function ComboBoxItemsMixin<TItem, T extends Constructor<HTMLElem
 
 export declare class ComboBoxItemsMixinClass<TItem> {
   /**
-   * Controls which item is selected when committing the value while
-   * a filter is typed, for example on blur, Enter press, or outside click:
+   * Controls whether an item whose label partially matches the typed
+   * filter is automatically focused. The focused item is highlighted
+   * in the dropdown while typing and is selected when committing the
+   * value, for example on blur, Enter press, or outside click:
    *
-   * - `exact-match` (default): select an item only if its label matches the filter exactly.
-   * - `first-match`: select the first matching item, giving preference to an exact match.
-   * - `single-match`: select the matching item only if there is exactly one.
+   * - `none` (default): focus only an item whose label matches the filter exactly.
+   * - `first-match`: focus the first matching item, giving preference to an exact match.
+   * - `only-match`: focus the matching item only if there is exactly one.
    *
-   * Matching is case-insensitive. The item to be selected is highlighted
-   * in the dropdown while typing. Auto-selection is not performed when
+   * Matching is case-insensitive. A partial match is not focused when
    * the filter is empty or when `allowCustomValue` is enabled.
-   * @attr {exact-match|first-match|single-match} auto-select-mode
+   * @attr {none|first-match|only-match} auto-focus-partial-match
    */
-  autoSelectMode: ComboBoxAutoSelectMode;
+  autoFocusPartialMatch: ComboBoxAutoFocusPartialMatch;
 
   /**
    * A full set of items to filter the visible options from.

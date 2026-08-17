@@ -63,21 +63,22 @@ export const ComboBoxItemsMixin = (superClass) =>
         },
 
         /**
-         * Controls which item is selected when committing the value while
-         * a filter is typed, for example on blur, Enter press, or outside click:
+         * Controls whether an item whose label partially matches the typed
+         * filter is automatically focused. The focused item is highlighted
+         * in the dropdown while typing and is selected when committing the
+         * value, for example on blur, Enter press, or outside click:
          *
-         * - `exact-match` (default): select an item only if its label matches the filter exactly.
-         * - `first-match`: select the first matching item, giving preference to an exact match.
-         * - `single-match`: select the matching item only if there is exactly one.
+         * - `none` (default): focus only an item whose label matches the filter exactly.
+         * - `first-match`: focus the first matching item, giving preference to an exact match.
+         * - `only-match`: focus the matching item only if there is exactly one.
          *
-         * Matching is case-insensitive. The item to be selected is highlighted
-         * in the dropdown while typing. Auto-selection is not performed when
+         * Matching is case-insensitive. A partial match is not focused when
          * the filter is empty or when `allowCustomValue` is enabled.
-         * @attr {exact-match|first-match|single-match} auto-select-mode
+         * @attr {none|first-match|only-match} auto-focus-partial-match
          */
-        autoSelectMode: {
+        autoFocusPartialMatch: {
           type: String,
-          value: 'exact-match',
+          value: 'none',
         },
 
         /**
@@ -303,8 +304,8 @@ export const ComboBoxItemsMixin = (superClass) =>
 
     /**
      * Returns the index of the item to focus based on the current filter,
-     * considering the `autoSelectMode` property. Returns -1 when no item
-     * should be focused.
+     * considering the `autoFocusPartialMatch` property. Returns -1 when
+     * no item should be focused.
      * @private
      */
     __getItemIndexByFilter(items) {
@@ -314,12 +315,15 @@ export const ComboBoxItemsMixin = (superClass) =>
         return exactMatchIndex;
       }
 
-      // Auto-select modes require a typed filter and are ignored when custom values are allowed.
+      // Focusing a partial match requires a typed filter and is ignored when custom values are allowed.
       if (!items || items.length === 0 || !this.filter || this.allowCustomValue) {
         return -1;
       }
 
-      if (this.autoSelectMode === 'first-match' || (this.autoSelectMode === 'single-match' && items.length === 1)) {
+      if (
+        this.autoFocusPartialMatch === 'first-match' ||
+        (this.autoFocusPartialMatch === 'only-match' && items.length === 1)
+      ) {
         // Skip an item that is not yet loaded. Once the item is loaded,
         // the focused index is updated again.
         return items[0] instanceof ComboBoxPlaceholder ? -1 : 0;
