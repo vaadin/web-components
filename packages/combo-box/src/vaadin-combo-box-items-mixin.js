@@ -63,6 +63,29 @@ export const ComboBoxItemsMixin = (superClass) =>
         },
 
         /**
+         * Controls whether an item whose label partially matches the typed
+         * filter is automatically focused. The focused item is highlighted
+         * in the dropdown while typing and is selected when committing the
+         * value, for example on Enter press:
+         *
+         * - `none` (default): do not focus partial matches.
+         * - `first-match`: focus the first item in the filtered results.
+         * - `only-match`: focus the item when filtering narrows the results to a single item.
+         *
+         * An item whose label matches the filter exactly is always focused,
+         * regardless of this property. Matching is case-insensitive. A partial
+         * match is not focused when `allowCustomValue` is enabled, or while
+         * the dropdown is closed. For example, with `autoOpenDisabled`, typing
+         * does not focus or select a match until the dropdown is opened.
+         *
+         * @attr {none|first-match|only-match} auto-focus-partial-match
+         */
+        autoFocusPartialMatch: {
+          type: String,
+          value: 'none',
+        },
+
+        /**
          * Filtering string the user has typed into the input field.
          */
         filter: {
@@ -159,6 +182,22 @@ export const ComboBoxItemsMixin = (superClass) =>
       }
 
       this.setProperties(props);
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to focus the item matching
+     * the filter when the dropdown is opened after typing, which is possible
+     * when `autoOpenDisabled` is enabled.
+     *
+     * @protected
+     * @override
+     */
+    _onOpened() {
+      super._onOpened();
+
+      if (this.filter && this._focusedIndex === -1) {
+        this._focusedIndex = this.__getItemIndexByFilter(this._dropdownItems);
+      }
     }
 
     /**
@@ -281,5 +320,29 @@ export const ComboBoxItemsMixin = (superClass) =>
       return findItemIndex(items, (item) => {
         return this._getItemLabel(item).toString().toLowerCase() === label.toString().toLowerCase();
       });
+    }
+
+    /** @private */
+    __getItemIndexByFilter(items) {
+      // An item whose label matches the filter exactly takes precedence.
+      const exactMatchIndex = this.__getItemIndexByLabel(items, this.filter);
+      if (exactMatchIndex > -1) {
+        return exactMatchIndex;
+      }
+
+      if (!this.opened || !items || items.length === 0 || !this.filter || this.allowCustomValue) {
+        return -1;
+      }
+
+      if (
+        this.autoFocusPartialMatch === 'first-match' ||
+        (this.autoFocusPartialMatch === 'only-match' && items.length === 1)
+      ) {
+        // Skip an item that is not yet loaded. Once the item is loaded,
+        // the focused index is updated again.
+        return items[0] instanceof ComboBoxPlaceholder ? -1 : 0;
+      }
+
+      return -1;
     }
   };

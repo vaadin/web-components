@@ -537,6 +537,16 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     __commitUserInput() {
       if (this._focusedIndex > -1) {
         const focusedItem = this._dropdownItems[this._focusedIndex];
+        // Do not unselect an already selected item when it was focused by
+        // filtering, in which case the input value still equals the filter.
+        if (
+          this._lastFilter &&
+          this._lastFilter === this._inputElementValue &&
+          this._findIndex(focusedItem, this.selectedItems, this.itemIdPath) !== -1
+        ) {
+          this.__clearInternalValue();
+          return;
+        }
         this.__selectItem(focusedItem);
       } else if (this._inputElementValue) {
         // Detect if input value doesn't match an existing item
@@ -754,7 +764,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       } else {
         // When the user filled in something that is different from the current value = filtering is enabled,
         // set the focused index to the item that matches the filter query.
-        this._focusedIndex = this.__getItemIndexByLabel(newItems, this.filter);
+        this._focusedIndex = this.__getItemIndexByFilter(newItems);
       }
     }
 

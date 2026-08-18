@@ -6,11 +6,33 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { ComboBoxBaseMixinClass } from './vaadin-combo-box-base-mixin.js';
 
+export type ComboBoxAutoFocusPartialMatch = 'first-match' | 'none' | 'only-match';
+
 export declare function ComboBoxItemsMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<ComboBoxBaseMixinClass> & Constructor<ComboBoxItemsMixinClass<TItem>> & T;
 
 export declare class ComboBoxItemsMixinClass<TItem> {
+  /**
+   * Controls whether an item whose label partially matches the typed
+   * filter is automatically focused. The focused item is highlighted
+   * in the dropdown while typing and is selected when committing the
+   * value, for example on Enter press:
+   *
+   * - `none` (default): do not focus partial matches.
+   * - `first-match`: focus the first item in the filtered results.
+   * - `only-match`: focus the item when filtering narrows the results to a single item.
+   *
+   * An item whose label matches the filter exactly is always focused,
+   * regardless of this property. Matching is case-insensitive. A partial
+   * match is not focused when `allowCustomValue` is enabled, or while
+   * the dropdown is closed. For example, with `autoOpenDisabled`, typing
+   * does not focus or select a match until the dropdown is opened.
+   *
+   * @attr {none|first-match|only-match} auto-focus-partial-match
+   */
+  autoFocusPartialMatch: ComboBoxAutoFocusPartialMatch;
+
   /**
    * A full set of items to filter the visible options from.
    * The items can be of either `String` or `Object` type.
