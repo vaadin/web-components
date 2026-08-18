@@ -8,7 +8,6 @@ describe('auto-focus-partial-match', () => {
   let comboBox, inputElement;
 
   beforeEach(async () => {
-    // The extra input serves as a Tab navigation target.
     [comboBox] = fixtureSync(
       `<div>
         <vaadin-combo-box></vaadin-combo-box>
