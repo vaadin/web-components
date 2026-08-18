@@ -170,6 +170,28 @@ export const DateTimePickerMixin = (superClass) =>
         },
 
         /**
+         * The time part to set automatically when the user commits a date while
+         * the time picker is empty. Supported time formats are in ISO 8601:
+         *
+         * - `hh:mm` (default)
+         * - `hh:mm:ss`
+         * - `hh:mm:ss.fff`
+         *
+         * The time part is set when a date is committed while the time picker
+         * is empty — never for programmatic or initial values. A value outside
+         * `min` / `max` is applied as-is and makes the field invalid.
+         *
+         * When not set, selecting a date leaves the time part empty. A string
+         * that is not a valid ISO 8601 time is ignored and logs a warning.
+         *
+         * @attr {string} default-time
+         */
+        defaultTime: {
+          type: String,
+          sync: true,
+        },
+
+        /**
          * Set true to display ISO-8601 week numbers in the calendar. Notice that
          * displaying week numbers is only supported when `i18n.firstDayOfWeek`
          * is 1 (Monday).
@@ -526,6 +548,17 @@ export const DateTimePickerMixin = (superClass) =>
     __changeEventHandler(event) {
       event.stopPropagation();
 
+      if (
+        event.target === this.__datePicker &&
+        this.__datePicker.value &&
+        !(this.__timePicker.value || this.__timePicker.__unparsableValue)
+      ) {
+        const defaultTime = this.__normalizeDefaultTime();
+        if (defaultTime) {
+          this.__timePicker.value = defaultTime;
+        }
+      }
+
       const isAlreadyInvalid = this.invalid;
       const filledPickers = this.__filledPickers;
       if (filledPickers.length === 1 && filledPickers[0].checkValidity() && !isAlreadyInvalid) {
@@ -836,23 +869,49 @@ export const DateTimePickerMixin = (superClass) =>
     }
 
     /**
+     * Time object to string (ISO date time)
+     * @param {object} timeObj
+     * @return {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff' (depending on precision defined by "step" property)
+     * @private
+     */
+    __formatTimeISO(timeObj) {
+      return formatISOTime(validateTime(timeObj, this.step));
+    }
+
+    /**
      * Date object to string (ISO time)
      * @param {Date} date
      * @return {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff' (depending on precision defined by "step" property)
      * @private
      */
     __dateToIsoTimeString(date) {
-      return formatISOTime(
-        validateTime(
-          {
-            hours: date.getUTCHours(),
-            minutes: date.getUTCMinutes(),
-            seconds: date.getUTCSeconds(),
-            milliseconds: date.getUTCMilliseconds(),
-          },
-          this.step,
-        ),
-      );
+      return this.__formatTimeISO({
+        hours: date.getUTCHours(),
+        minutes: date.getUTCMinutes(),
+        seconds: date.getUTCSeconds(),
+        milliseconds: date.getUTCMilliseconds(),
+      });
+    }
+
+    /**
+     * `defaultTime` to string (ISO time), or an empty string when unset or unparsable.
+     * @return {string}
+     * @private
+     */
+    __normalizeDefaultTime() {
+      if (!this.defaultTime) {
+        return '';
+      }
+
+      const timeObj = parseISOTime(this.defaultTime);
+      if (!timeObj) {
+        console.warn(
+          `<vaadin-date-time-picker> Ignored "defaultTime" that is not a valid ISO 8601 time: ${this.defaultTime}`,
+        );
+        return '';
+      }
+
+      return this.__formatTimeISO(timeObj);
     }
 
     /**
