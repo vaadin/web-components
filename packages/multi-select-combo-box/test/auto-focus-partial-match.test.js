@@ -85,7 +85,7 @@ describe('auto-focus-partial-match', () => {
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
-    it('should highlight first partial match', async () => {
+    it('should highlight the first partial match', async () => {
       await sendKeys({ type: 'gra' });
       expect(getFocusedItemIndex()).to.equal(0);
     });
@@ -95,7 +95,7 @@ describe('auto-focus-partial-match', () => {
       expect(getFocusedItemIndex()).to.equal(1);
     });
 
-    it('should not highlight first partial match when custom values are allowed', async () => {
+    it('should not highlight the first partial match when custom values are allowed', async () => {
       comboBox.allowCustomValue = true;
       await sendKeys({ type: 'gra' });
       expect(getFocusedItemIndex()).to.equal(-1);
@@ -107,7 +107,7 @@ describe('auto-focus-partial-match', () => {
     });
 
     describe('value commit', () => {
-      it('should select first partial match on Enter', async () => {
+      it('should select the first partial match on Enter', async () => {
         await sendKeys({ type: 'grap' });
         await sendKeys({ press: 'Enter' });
         expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
@@ -143,7 +143,7 @@ describe('auto-focus-partial-match', () => {
         expect(comboBox.selectedItems).to.deep.equal([]);
       });
 
-      it('should not select first partial match on outside click', async () => {
+      it('should not select the first partial match on outside click', async () => {
         await sendKeys({ type: 'grap' });
         outsideClick();
         expect(comboBox.selectedItems).to.deep.equal([]);
@@ -156,7 +156,7 @@ describe('auto-focus-partial-match', () => {
         expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
       });
 
-      it('should select the clicked item instead of first partial match', async () => {
+      it('should select the clicked item instead of the first partial match', async () => {
         await sendKeys({ type: 'grap' });
         getAllItems(comboBox)[1].click();
         expect(comboBox.selectedItems).to.deep.equal(['grape']);
@@ -177,7 +177,7 @@ describe('auto-focus-partial-match', () => {
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
-    it('should highlight only partial match', async () => {
+    it('should highlight the only partial match', async () => {
       await sendKeys({ type: 'ban' });
       expect(getFocusedItemIndex()).to.equal(0);
     });
@@ -193,7 +193,7 @@ describe('auto-focus-partial-match', () => {
     });
 
     describe('value commit', () => {
-      it('should select only partial match on Enter', async () => {
+      it('should select the only partial match on Enter', async () => {
         await sendKeys({ type: 'grapef' });
         await sendKeys({ press: 'Enter' });
         expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
@@ -213,7 +213,7 @@ describe('auto-focus-partial-match', () => {
         expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
       });
 
-      it('should not select only partial match on outside click', async () => {
+      it('should not select the only partial match on outside click', async () => {
         await sendKeys({ type: 'grapef' });
         outsideClick();
         expect(comboBox.selectedItems).to.deep.equal([]);
@@ -248,25 +248,25 @@ describe('auto-focus-partial-match', () => {
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
-    it('should select exact match on Enter while closed', async () => {
+    it('should select the exact match on Enter while closed', async () => {
       await sendKeys({ type: 'grape' });
       await sendKeys({ press: 'Enter' });
       expect(comboBox.selectedItems).to.deep.equal(['grape']);
     });
 
-    it('should not select first partial match on Enter while closed', async () => {
+    it('should not select the first partial match on Enter while closed', async () => {
       await sendKeys({ type: 'grap' });
       await sendKeys({ press: 'Enter' });
       expect(comboBox.selectedItems).to.deep.equal([]);
     });
 
-    it('should highlight first partial match when opening the dropdown after typing', async () => {
+    it('should highlight the first partial match when opening the dropdown after typing', async () => {
       await sendKeys({ type: 'grap' });
       await sendKeys({ press: 'ArrowDown' });
       expect(getFocusedItemIndex()).to.equal(0);
     });
 
-    it('should select first partial match on Enter after opening the dropdown', async () => {
+    it('should select the first partial match on Enter after opening the dropdown', async () => {
       await sendKeys({ type: 'grap' });
       await sendKeys({ press: 'ArrowDown' });
       await sendKeys({ press: 'Enter' });
