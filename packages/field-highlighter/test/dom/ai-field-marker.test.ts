@@ -30,5 +30,13 @@ describe('vaadin-ai-field-marker', () => {
       await nextRender();
       await expect(marker).dom.to.equalSnapshot();
     });
+
+    it('confidence', async () => {
+      marker.confidence = 'high';
+      await nextRender();
+      // The indicator is a sibling of the marker slotted into the field's
+      // helper text section.
+      await expect(field.querySelector(':scope > [slot="helper"]')!).dom.to.equalSnapshot();
+    });
   });
 });

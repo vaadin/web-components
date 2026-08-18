@@ -92,6 +92,19 @@ class FocusSensitiveField extends HTMLElement {
 customElements.define('focus-sensitive-field', FocusSensitiveField);
 
 /**
+ * A helper element that renders its content in its shadow root, so it has
+ * neither light-DOM text nor children although it shows helper content.
+ */
+class ShadowHelper extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' }).textContent = 'Shadow helper';
+  }
+}
+
+customElements.define('shadow-helper', ShadowHelper);
+
+/**
  * A field that exposes none of the elements the marker can describe: no
  * `ariaTarget`, no `inputElement` and no `focusElement`.
  */
@@ -634,6 +647,438 @@ describe('ai field marker', () => {
     });
   });
 
+  describe('confidence', () => {
+    let marker: AiFieldMarker;
+
+    function getConfidenceNode(host: HTMLElement = field): HTMLSpanElement | null {
+      return host.querySelector(':scope > [slot="helper"].ai-confidence');
+    }
+
+    beforeEach(async () => {
+      marker = mark(field, { confidence: 'low' });
+      await nextRender();
+    });
+
+    it('should have no confidence by default', () => {
+      expect(document.createElement('vaadin-ai-field-marker').confidence).to.be.null;
+    });
+
+    it('should render the confidence indicator into the field helper slot', () => {
+      const node = getConfidenceNode()!;
+      expect(node).to.exist;
+      expect(node.textContent).to.equal('Low confidence');
+      expect(node.assignedSlot).to.exist;
+      expect(node.assignedSlot!.name).to.equal('helper');
+      expect(node.assignedSlot!.getRootNode()).to.equal(field.shadowRoot);
+    });
+
+    it('should have the confidence level as a class name', () => {
+      expect(getConfidenceNode()!.classList.contains('ai-confidence-low')).to.be.true;
+    });
+
+    it('should show the helper text section for a field without a helper', () => {
+      const helperPart = field.shadowRoot!.querySelector('[part="helper-text"]')!;
+      expect(getComputedStyle(helperPart).display).to.not.equal('none');
+    });
+
+    describe('has-helper', () => {
+      it('should set has-helper on the field while the indicator is shown', () => {
+        expect(field.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('should toggle has-helper when the confidence is set and cleared', async () => {
+        marker.confidence = null;
+        await nextUpdate(marker);
+        expect(field.hasAttribute('has-helper')).to.be.false;
+
+        marker.confidence = 'high';
+        await nextUpdate(marker);
+        expect(field.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('should remove has-helper when the marker is removed', async () => {
+        marker.remove();
+        await nextRender();
+
+        expect(field.hasAttribute('has-helper')).to.be.false;
+      });
+
+      it('should not set has-helper while the AI is working', async () => {
+        marker.working = true;
+        await nextUpdate(marker);
+        expect(field.hasAttribute('has-helper')).to.be.false;
+
+        marker.working = false;
+        await nextUpdate(marker);
+        expect(field.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('should keep has-helper for the field helper text while the AI is working', async () => {
+        field.helperText = 'Keep it short';
+        await nextRender();
+
+        marker.working = true;
+        await nextUpdate(marker);
+
+        expect(field.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('should keep has-helper for a helper with only element content', async () => {
+        const childField = fixtureSync<TextField>(
+          `<vaadin-text-field label="Name"><div slot="helper"><span></span></div></vaadin-text-field>`,
+        );
+        await nextRender();
+        const childMarker = mark(childField, { confidence: 'low' });
+        await nextRender();
+
+        childMarker.working = true;
+        await nextUpdate(childMarker);
+
+        expect(childField.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('should not keep has-helper for an empty slotted helper element', async () => {
+        const emptyField = fixtureSync<TextField>(
+          `<vaadin-text-field label="Name"><span slot="helper"></span></vaadin-text-field>`,
+        );
+        await nextRender();
+        const emptyMarker = mark(emptyField, { confidence: 'low' });
+        await nextRender();
+
+        emptyMarker.working = true;
+        await nextUpdate(emptyMarker);
+
+        expect(emptyField.hasAttribute('has-helper')).to.be.false;
+      });
+
+      it('should not re-assert has-helper dropped as the working state begins', async () => {
+        field.helperText = 'Keep it short';
+        await nextRender();
+
+        // The drop and the working state land in the same update cycle: the
+        // re-assert observer must judge against the live working state, not
+        // the state at observation time.
+        field.removeAttribute('has-helper');
+        marker.working = true;
+        await nextUpdate(marker);
+
+        expect(field.hasAttribute('has-helper')).to.be.false;
+      });
+
+      it('should keep has-helper for a field that has a helper of its own', async () => {
+        field.helperText = 'Keep it short';
+        await nextRender();
+
+        marker.confidence = null;
+        await nextUpdate(marker);
+
+        expect(field.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('should re-assert has-helper when the field drops it', async () => {
+        field.helperText = 'Keep it short';
+        await nextRender();
+
+        // Clearing the helper makes the field recompute the attribute from its
+        // own helper content, which does not include the indicator.
+        field.helperText = '';
+        await nextRender();
+
+        expect(field.hasAttribute('has-helper')).to.be.true;
+      });
+
+      describe('field with a helper rendering in its shadow root', () => {
+        let helperField: TextField;
+
+        beforeEach(async () => {
+          // The field counts a defined custom element as helper content even
+          // without light-DOM text or children, since it may render content
+          // in its shadow root — the marker must judge it the same way.
+          helperField = fixtureSync<TextField>(
+            `<vaadin-text-field label="Name"><shadow-helper slot="helper"></shadow-helper></vaadin-text-field>`,
+          );
+          await nextRender();
+        });
+
+        it('should keep has-helper while the AI is working', async () => {
+          const helperMarker = mark(helperField, { confidence: 'low' });
+          await nextRender();
+
+          helperMarker.working = true;
+          await nextUpdate(helperMarker);
+
+          expect(helperField.hasAttribute('has-helper')).to.be.true;
+        });
+
+        it('should keep has-helper when the confidence is cleared', async () => {
+          const helperMarker = mark(helperField, { confidence: 'low' });
+          await nextRender();
+
+          helperMarker.confidence = null;
+          await nextUpdate(helperMarker);
+
+          expect(helperField.hasAttribute('has-helper')).to.be.true;
+        });
+
+        it('should not touch has-helper when no indicator was ever shown', async () => {
+          const helperMarker = mark(helperField);
+          await nextRender();
+
+          helperMarker.working = true;
+          await nextUpdate(helperMarker);
+          helperMarker.working = false;
+          await nextUpdate(helperMarker);
+
+          expect(helperField.hasAttribute('has-helper')).to.be.true;
+        });
+      });
+
+      it('should stop re-asserting has-helper once the indicator is gone', async () => {
+        marker.confidence = null;
+        await nextUpdate(marker);
+
+        field.helperText = 'Keep it short';
+        await nextRender();
+        field.helperText = '';
+        await nextRender();
+
+        expect(field.hasAttribute('has-helper')).to.be.false;
+      });
+    });
+
+    it('should update the indicator when the confidence changes', async () => {
+      marker.confidence = 'high';
+      await nextUpdate(marker);
+
+      const node = getConfidenceNode()!;
+      expect(node.classList.contains('ai-confidence-high')).to.be.true;
+      expect(node.classList.contains('ai-confidence-low')).to.be.false;
+      expect(node.textContent).to.equal('High confidence');
+    });
+
+    it('should reuse the indicator element when the confidence changes', async () => {
+      const node = getConfidenceNode();
+      marker.confidence = 'high';
+      await nextUpdate(marker);
+
+      expect(getConfidenceNode()).to.equal(node);
+      expect(field.querySelectorAll(':scope > [slot="helper"].ai-confidence')).to.have.lengthOf(1);
+    });
+
+    it('should clear the indicator on a field with no described element', async () => {
+      const bareField = fixtureSync<HTMLElement>(`<bare-shadow-field></bare-shadow-field>`);
+      await nextRender();
+      const bareMarker = mark(bareField, { confidence: 'low' });
+      await nextRender();
+      expect(bareField.hasAttribute('has-helper')).to.be.true;
+
+      bareMarker.confidence = null;
+      await nextUpdate(bareMarker);
+
+      expect(bareField.querySelector('.ai-confidence')).to.be.null;
+      expect(bareField.hasAttribute('has-helper')).to.be.false;
+    });
+
+    it('should remove the indicator when the confidence is cleared', async () => {
+      marker.confidence = null;
+      await nextUpdate(marker);
+
+      expect(getConfidenceNode()).to.be.null;
+    });
+
+    it('should remove the indicator when the marker is removed', async () => {
+      marker.remove();
+      await nextRender();
+
+      expect(getConfidenceNode()).to.be.null;
+    });
+
+    it('should render the indicator when confidence is set after adding', async () => {
+      const plainField = fixtureSync<TextField>(`<vaadin-text-field label="Name"></vaadin-text-field>`);
+      await nextRender();
+      const plainMarker = mark(plainField);
+      await nextRender();
+      expect(getConfidenceNode(plainField)).to.be.null;
+
+      plainMarker.confidence = 'medium';
+      await nextUpdate(plainMarker);
+
+      const node = getConfidenceNode(plainField)!;
+      expect(node.textContent).to.equal('Medium confidence');
+    });
+
+    it('should render the indicator again when the marker is re-added', async () => {
+      marker.remove();
+      await nextRender();
+      field.appendChild(marker);
+      await nextRender();
+
+      expect(getConfidenceNode()).to.exist;
+      expect(getConfidenceNode()!.classList.contains('ai-confidence-low')).to.be.true;
+    });
+
+    it('should keep the field helper text alongside the indicator', async () => {
+      field.helperText = 'Keep it short';
+      await nextRender();
+
+      const helper = field.querySelector(':scope > [slot="helper"]:not(.ai-confidence)')!;
+      expect(helper.textContent).to.equal('Keep it short');
+      expect(helper.assignedSlot).to.exist;
+      expect(getConfidenceNode()!.assignedSlot).to.exist;
+    });
+
+    it('should not evict an existing field helper', async () => {
+      const helperField = fixtureSync<TextField>(
+        `<vaadin-text-field label="Name" helper-text="Keep it short"></vaadin-text-field>`,
+      );
+      await nextRender();
+      const helper = helperField.querySelector(':scope > [slot="helper"]')!;
+
+      mark(helperField, { confidence: 'high' });
+      await nextRender();
+
+      expect(helper.isConnected).to.be.true;
+      expect(helper.assignedSlot).to.exist;
+      expect(getConfidenceNode(helperField)).to.exist;
+    });
+
+    describe('order', () => {
+      let helperField: TextField;
+
+      /** The helper slot content in rendered order. */
+      function getHelperNodes(host: HTMLElement = helperField): Element[] {
+        return [...host.querySelectorAll(':scope > [slot="helper"]')];
+      }
+
+      beforeEach(async () => {
+        helperField = fixtureSync<TextField>(
+          `<vaadin-text-field label="Name" helper-text="Keep it short"></vaadin-text-field>`,
+        );
+        await nextRender();
+      });
+
+      it('should render the indicator before an existing field helper', async () => {
+        mark(helperField, { confidence: 'low' });
+        await nextRender();
+
+        expect(getHelperNodes()[0]).to.equal(getConfidenceNode(helperField));
+        expect(getHelperNodes().map((node) => node.textContent)).to.eql(['Low confidence', 'Keep it short']);
+      });
+
+      it('should render the indicator before a helper added after marking', async () => {
+        const plainField = fixtureSync<TextField>(`<vaadin-text-field label="Name"></vaadin-text-field>`);
+        await nextRender();
+        mark(plainField, { confidence: 'low' });
+        await nextRender();
+
+        plainField.helperText = 'Keep it short';
+        await nextRender();
+
+        expect(getHelperNodes(plainField).map((node) => node.textContent)).to.eql(['Low confidence', 'Keep it short']);
+      });
+
+      it('should render the indicator before a custom slotted helper', async () => {
+        const customHelper = document.createElement('span');
+        customHelper.setAttribute('slot', 'helper');
+        customHelper.textContent = 'Custom helper';
+        helperField.appendChild(customHelper);
+        await nextRender();
+
+        mark(helperField, { confidence: 'low' });
+        await nextRender();
+
+        expect(getHelperNodes()[0]).to.equal(getConfidenceNode(helperField));
+      });
+
+      it('should keep the indicator first when the field is marked again', async () => {
+        mark(helperField, { confidence: 'low' }).remove();
+        // Re-marking right away is what a host does when a new AI fill starts.
+        mark(helperField, { confidence: 'high' });
+        await nextRender();
+
+        expect(getHelperNodes().map((node) => node.textContent)).to.eql(['High confidence', 'Keep it short']);
+      });
+
+      it('should keep the indicator first across consecutive AI fills', async () => {
+        // A host filling the same field twice: unmark, re-mark as working,
+        // then let the fill land.
+        for (const confidence of ['low', 'high'] as const) {
+          helperField.querySelector('vaadin-ai-field-marker')?.remove();
+          const marker = mark(helperField, { confidence, working: true });
+          await nextRender();
+          marker.working = false;
+          await nextUpdate(marker);
+        }
+
+        expect(getHelperNodes().map((node) => node.textContent)).to.eql(['High confidence', 'Keep it short']);
+      });
+    });
+
+    it('should describe the field input via aria-describedby', () => {
+      const ids = field.inputElement.getAttribute('aria-describedby')!.split(' ');
+      expect(ids).to.include(getConfidenceNode()!.id);
+    });
+
+    it('should remove the indicator description when the confidence is cleared', async () => {
+      const nodeId = getConfidenceNode()!.id;
+      marker.confidence = null;
+      await nextUpdate(marker);
+
+      expect(field.inputElement.getAttribute('aria-describedby') || '').to.not.contain(nodeId);
+    });
+
+    it('should remove the indicator description while the AI is working', async () => {
+      // A hidden indicator would still get read as part of the field's
+      // description, although it describes a value about to be replaced.
+      const nodeId = getConfidenceNode()!.id;
+
+      marker.working = true;
+      await nextUpdate(marker);
+      expect(field.inputElement.getAttribute('aria-describedby') || '').to.not.contain(nodeId);
+
+      marker.working = false;
+      await nextUpdate(marker);
+      expect(field.inputElement.getAttribute('aria-describedby')!.split(' ')).to.include(nodeId);
+    });
+
+    it('should not describe an indicator shown while the AI is working', async () => {
+      marker.confidence = null;
+      await nextUpdate(marker);
+      marker.working = true;
+      await nextUpdate(marker);
+
+      marker.confidence = 'high';
+      await nextUpdate(marker);
+      const nodeId = getConfidenceNode()!.id;
+      expect(field.inputElement.getAttribute('aria-describedby') || '').to.not.contain(nodeId);
+
+      marker.working = false;
+      await nextUpdate(marker);
+      expect(field.inputElement.getAttribute('aria-describedby')!.split(' ')).to.include(nodeId);
+    });
+
+    it('should hide the indicator while the AI is working', async () => {
+      marker.working = true;
+      await nextUpdate(marker);
+
+      expect(getComputedStyle(getConfidenceNode()!).display).to.equal('none');
+    });
+
+    it('should apply localized confidence texts', async () => {
+      marker.i18n = { confidence: { low: 'Matala luottamus' } };
+      await nextUpdate(marker);
+
+      expect(getConfidenceNode()!.textContent).to.equal('Matala luottamus');
+    });
+
+    it('should keep the default texts for levels not provided', async () => {
+      marker.i18n = { confidence: { high: 'Korkea luottamus' } };
+      await nextUpdate(marker);
+
+      expect(getConfidenceNode()!.textContent).to.equal('Low confidence');
+    });
+  });
+
   describe('revert', () => {
     let marker: AiFieldMarker;
     let revertButton: HTMLButtonElement;
@@ -993,6 +1438,27 @@ describe('ai field marker', () => {
       marker.querySelector<HTMLButtonElement>('.actions > button')!.click();
 
       expect(spy.firstCall.args[0].detail.value).to.equal('Other value');
+    });
+
+    it('should re-assert has-helper on the field it was moved to', async () => {
+      const otherField = fixtureSync<TextField>(`<vaadin-text-field label="Other"></vaadin-text-field>`);
+      await nextRender();
+      const marker = mark(field, { confidence: 'low' });
+      await nextRender();
+
+      marker.remove();
+      otherField.appendChild(marker);
+      await nextRender();
+
+      // Make the new field recompute has-helper from its own helper content,
+      // which does not include the indicator.
+      otherField.helperText = 'Keep it short';
+      await nextRender();
+      otherField.helperText = '';
+      await nextRender();
+
+      expect(otherField.hasAttribute('has-helper')).to.be.true;
+      expect(field.hasAttribute('has-helper')).to.be.false;
     });
 
     describe('to a field with no described element', () => {

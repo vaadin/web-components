@@ -28,6 +28,15 @@ export interface AiFieldMarkerI18n {
    * The tooltip text of the badge button.
    */
   badgeTooltip?: string;
+
+  /**
+   * The texts of the confidence indicator.
+   */
+  confidence?: {
+    low?: string;
+    medium?: string;
+    high?: string;
+  };
 }
 
 /**
@@ -53,20 +62,32 @@ export type AiFieldRevertEvent = CustomEvent<{ value: unknown }>;
  * in progress, set the `working` property to show an "AI is working" shimmer
  * on the field along with a client-side read-only guard.
  *
+ * Set the `confidence` property to show the confidence level of the filled
+ * value (`low`, `medium` or `high`) as an indicator in the field's helper
+ * text section, ahead of a helper the field itself may have. While the
+ * indicator is shown, the field is marked with `has-helper`, so that the
+ * helper text section is laid out the same as for a helper of its own.
+ *
  * ### Styling
  *
- * The following state attribute is set on the field element for styling:
+ * The following state attributes are set on the field element for styling:
  *
- * Attribute    | Description
- * -------------|-------------
- * `ai-working` | Set while an AI is working on the field.
+ * Attribute       | Description
+ * ----------------|-------------
+ * `ai-working`    | Set while an AI is working on the field.
+ *
+ * The confidence indicator is rendered into the field's light DOM as a
+ * `<span>` with the `ai-confidence` class name and the level as an additional
+ * `ai-confidence-low`, `ai-confidence-medium` or `ai-confidence-high` one.
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                         |
- * :-------------------------------------------|
- * `--vaadin-ai-field-marker-badge-icon-color` |
- * `--vaadin-ai-field-marker-mask-pos`         |
+ * Custom CSS property                                  |
+ * :----------------------------------------------------|
+ * `--vaadin-ai-field-marker-badge-icon-color`          |
+ * `--vaadin-ai-field-marker-confidence-high-color`     |
+ * `--vaadin-ai-field-marker-confidence-low-color`      |
+ * `--vaadin-ai-field-marker-confidence-medium-color`   |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -89,7 +110,13 @@ declare class AiFieldMarker extends I18nMixin<typeof HTMLElement, AiFieldMarkerI
    *   // The accessible label of the badge button and the popover dialog.
    *   badgeLabel: 'AI-provided value',
    *   // The tooltip text of the badge button.
-   *   badgeTooltip: 'Field value modified by AI.\nClick for details'
+   *   badgeTooltip: 'Field value modified by AI.\nClick for details',
+   *   // The texts of the confidence indicator.
+   *   confidence: {
+   *     low: 'Low confidence',
+   *     medium: 'Medium confidence',
+   *     high: 'High confidence'
+   *   }
    * }
    * ```
    */
@@ -105,6 +132,14 @@ declare class AiFieldMarker extends I18nMixin<typeof HTMLElement, AiFieldMarkerI
    * the field is marked with `aria-busy`.
    */
   working: boolean;
+
+  /**
+   * The confidence level of the AI-filled value, shown as an indicator
+   * in the field's helper text section. Possible values are `low`,
+   * `medium` and `high`; when not set, no indicator is shown. The
+   * indicator texts can be localized with the `i18n` property.
+   */
+  confidence: 'high' | 'low' | 'medium' | null;
 }
 
 declare global {

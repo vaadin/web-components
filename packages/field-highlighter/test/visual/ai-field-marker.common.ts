@@ -87,6 +87,44 @@ describe('ai-field-marker', () => {
     });
   });
 
+  describe('confidence', () => {
+    beforeEach(async () => {
+      await createField();
+    });
+
+    (['low', 'medium', 'high'] as const).forEach((confidence) => {
+      it(confidence, async () => {
+        mark({ confidence });
+        await nextRender();
+        await visualDiff(div, `ai-marker-confidence-${confidence}`);
+      });
+    });
+
+    it('helper text', async () => {
+      // The indicator comes first in the helper text section.
+      field.helperText = 'Keep it short, just one value';
+      mark({ confidence: 'medium' });
+      await nextRender();
+      await visualDiff(div, 'ai-marker-confidence-helper-text');
+    });
+
+    it('helper above field', async () => {
+      // The helper text section, indicator included, moves above the field.
+      field.setAttribute('theme', 'helper-above-field');
+      field.helperText = 'Keep it short, just one value';
+      mark({ confidence: 'medium' });
+      await nextRender();
+      await visualDiff(div, 'ai-marker-confidence-helper-above-field');
+    });
+
+    it('helper above field without helper text', async () => {
+      field.setAttribute('theme', 'helper-above-field');
+      mark({ confidence: 'medium' });
+      await nextRender();
+      await visualDiff(div, 'ai-marker-confidence-helper-above-field-only');
+    });
+  });
+
   describe('working', () => {
     beforeEach(async () => {
       await createField();

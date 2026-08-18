@@ -11,7 +11,11 @@ import { getDeepActiveElement, getTabbableElements, isKeyboardActive } from '@va
 import { registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import {
+  addValuesToAttribute,
+  hasNodeContent,
+  removeValuesFromAttribute,
+} from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
@@ -23,6 +27,11 @@ const DEFAULT_I18N = {
   revert: 'Revert Value',
   badgeLabel: 'AI-provided value',
   badgeTooltip: 'Field value modified by AI.\nClick for details',
+  confidence: {
+    low: 'Low confidence',
+    medium: 'Medium confidence',
+    high: 'High confidence',
+  },
 };
 
 // Half of the 1s working shimmer slide (`--vaadin-ai-field-marker-slide` in
@@ -34,6 +43,14 @@ const MARKER_SLOT = 'ai-field-marker';
 
 /** Marks the `<style>` element the marker injects into a field's shadow root. */
 const MARKER_STYLE_ATTRIBUTE = 'ai-field-marker-styles';
+
+/**
+ * The class name of the confidence indicator the marker adds to the field's
+ * light DOM; the level goes on a suffixed class name of its own. Prefixed
+ * with `ai-`, since the indicator sits among the application's own children
+ * of the field, where a plain `confidence` or `low` would be ambiguous.
+ */
+const CONFIDENCE_CLASS = 'ai-confidence';
 
 // The position the shimmer's mask is at, animated by the marker's keyframes.
 // Registered here rather than with an @property rule in the marker stylesheet,
@@ -210,20 +227,32 @@ class DelayedFieldValue {
  * directly into the marker's light DOM, so that document-level themes
  * and user stylesheets can reach them.
  *
+ * Set the `confidence` property to show the confidence level of the filled
+ * value (`low`, `medium` or `high`) as an indicator in the field's helper
+ * text section, ahead of a helper the field itself may have. While the
+ * indicator is shown, the field is marked with `has-helper`, so that the
+ * helper text section is laid out the same as for a helper of its own.
+ *
  * ### Styling
  *
- * The following state attribute is set on the field element for styling:
+ * The following state attributes are set on the field element for styling:
  *
- * Attribute    | Description
- * -------------|-------------
- * `ai-working` | Set while an AI is working on the field.
+ * Attribute       | Description
+ * ----------------|-------------
+ * `ai-working`    | Set while an AI is working on the field.
+ *
+ * The confidence indicator is rendered into the field's light DOM as a
+ * `<span>` with the `ai-confidence` class name and the level as an additional
+ * `ai-confidence-low`, `ai-confidence-medium` or `ai-confidence-high` one.
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                         |
- * :-------------------------------------------|
- * `--vaadin-ai-field-marker-badge-icon-color` |
- * `--vaadin-ai-field-marker-mask-pos`         |
+ * Custom CSS property                                  |
+ * :----------------------------------------------------|
+ * `--vaadin-ai-field-marker-badge-icon-color`          |
+ * `--vaadin-ai-field-marker-confidence-high-color`     |
+ * `--vaadin-ai-field-marker-confidence-low-color`      |
+ * `--vaadin-ai-field-marker-confidence-medium-color`   |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -257,6 +286,17 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
         type: Boolean,
         value: false,
       },
+
+      /**
+       * The confidence level of the AI-filled value, shown as an indicator
+       * in the field's helper text section. Possible values are `low`,
+       * `medium` and `high`; when not set, no indicator is shown. The
+       * indicator texts can be localized with the `i18n` property.
+       */
+      confidence: {
+        type: String,
+        value: null,
+      },
     };
   }
 
@@ -277,6 +317,20 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
 
   /** The field value captured for the revert event detail. */
   #capturedValue;
+
+  /**
+   * The confidence indicator added to the field's light DOM and rendered
+   * in the field's helper text section. Set while `confidence` is set on
+   * a marked field.
+   */
+  #confidenceNode = null;
+
+  /**
+   * Observes the field's `has-helper` attribute while the confidence
+   * indicator is shown, so that the marker can re-assert it if the field
+   * recomputes it from its own helper content. Created on first use.
+   */
+  #helperStateObserver = null;
 
   /**
    * While in the working state, the elements whose client-side `readonly`
@@ -367,7 +421,13 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
    *   // The accessible label of the badge button and the popover dialog.
    *   badgeLabel: 'AI-provided value',
    *   // The tooltip text of the badge button.
-   *   badgeTooltip: 'Field value modified by AI.\nClick for details'
+   *   badgeTooltip: 'Field value modified by AI.\nClick for details',
+   *   // The texts of the confidence indicator.
+   *   confidence: {
+   *     low: 'Low confidence',
+   *     medium: 'Medium confidence',
+   *     high: 'High confidence'
+   *   }
    * }
    * ```
    *
@@ -449,6 +509,8 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
 
     this.#stopWorking(true);
 
+    this.#removeConfidenceNode();
+
     if (this.#descNode) {
       removeValuesFromAttribute(this.#describedElement, 'aria-describedby', this.#descNode.id);
       this.#descNode.remove();
@@ -483,6 +545,10 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
       return;
     }
 
+    if (props.has('confidence') || props.has('__effectiveI18n')) {
+      this.#updateConfidence();
+    }
+
     if (props.has('working')) {
       if (this.working) {
         this.#startWorking();
@@ -493,6 +559,12 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
         this.#capturedValue = this.#annotatedValue();
         this.#announcePending = true;
       }
+
+      // The indicator is hidden while working, so the helper text section is
+      // only claimed for it — and the indicator described — once the working
+      // state ends.
+      this.#updateConfidenceDescription();
+      this.#updateFieldHelperState();
     }
 
     // Announce after the update so the announcement reflects a message set in
@@ -594,6 +666,10 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
       this.#describedElement = describedElement;
     }
 
+    // Apply the confidence indicator directly: on a reconnect no property
+    // change triggers updated(), which handles the first connect.
+    this.#updateConfidence();
+
     // Capture the AI-filled value so the revert event can carry it.
     this.#capturedValue = this.#annotatedValue();
 
@@ -617,6 +693,133 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
   #annotatedValue() {
     const field = this.#field;
     return this.#valueDelay ? this.#valueDelay.latestValue : field.value;
+  }
+
+  /**
+   * Syncs the confidence indicator in the field's helper text section with
+   * the `confidence` property: a `<span>` slotted into the field's helper
+   * slot, with the `ai-confidence` and `ai-confidence-<level>` class names
+   * and the localized level text as content.
+   */
+  #updateConfidence() {
+    const field = this.#field;
+    if (!field) {
+      return;
+    }
+
+    const level = this.confidence;
+    if (!level) {
+      this.#removeConfidenceNode();
+      return;
+    }
+
+    if (!this.#confidenceNode) {
+      const node = document.createElement('span');
+      node.setAttribute('slot', 'helper');
+      // Hide the indicator from the field's helper slot controller, which
+      // would otherwise evict the field's own helper element in favor of
+      // the indicator. The browser still renders it in the helper slot.
+      node.setAttribute('data-slot-ignore', '');
+      node.id = `ai-field-marker-confidence-${generateUniqueId()}`;
+      // Insert ahead of a helper the field already has, so that the indicator
+      // comes first in the helper text section. A helper added later ends up
+      // after the indicator, since the field appends it.
+      field.insertBefore(node, field.querySelector(':scope > [slot="helper"]'));
+      this.#confidenceNode = node;
+    }
+
+    this.#confidenceNode.className = `${CONFIDENCE_CLASS} ${CONFIDENCE_CLASS}-${level}`;
+    this.#confidenceNode.textContent = this.__effectiveI18n.confidence[level] ?? '';
+    this.#updateConfidenceDescription();
+    this.#updateFieldHelperState();
+  }
+
+  /**
+   * Keeps the indicator's id in the described element's `aria-describedby`
+   * only while the indicator is shown: a visually hidden indicator would
+   * still get read as part of the field's description, although it describes
+   * a value the AI is about to replace.
+   */
+  #updateConfidenceDescription() {
+    const node = this.#confidenceNode;
+    if (!node || !this.#describedElement) {
+      return;
+    }
+
+    if (this.working) {
+      removeValuesFromAttribute(this.#describedElement, 'aria-describedby', node.id);
+    } else {
+      addValuesToAttribute(this.#describedElement, 'aria-describedby', node.id);
+    }
+  }
+
+  /**
+   * Keeps the field's `has-helper` attribute set while the indicator is
+   * shown, since it is content in the field's helper text section although
+   * the field's own helper is not what provides it. The attribute is what
+   * both the field and the themes key their helper text section styles on —
+   * from showing the section at all to placing it above the field for the
+   * `helper-above-field` theme.
+   *
+   * The field recomputes the attribute from its own helper content, which
+   * never includes the indicator, so a recomputation can drop it while the
+   * indicator is still shown. An observer re-asserts it in that case.
+   */
+  #updateFieldHelperState() {
+    const field = this.#field;
+
+    // While the AI is working the indicator is hidden, so the field should
+    // only reserve the helper text section for a helper of its own.
+    if (this.#confidenceNode && !this.working) {
+      field.toggleAttribute('has-helper', true);
+
+      this.#helperStateObserver ??= new MutationObserver(() => {
+        // Read the field live: the observer is reused when the marker moves
+        // to another field, so a captured one could be a previous field.
+        const observedField = this.#field;
+        if (observedField && this.#confidenceNode && !this.working && !observedField.hasAttribute('has-helper')) {
+          observedField.toggleAttribute('has-helper', true);
+        }
+      });
+      this.#helperStateObserver.observe(field, { attributes: true, attributeFilter: ['has-helper'] });
+      return;
+    }
+
+    this.#helperStateObserver?.disconnect();
+
+    // The field keeps the attribute when its own helper provides content,
+    // which it may have gained while the indicator was shown.
+    if (!this.#hasFieldHelper()) {
+      field.removeAttribute('has-helper');
+    }
+  }
+
+  /**
+   * Whether the field has helper content of its own, i.e. helper slot content
+   * other than the indicator. Judged with the same content check the field
+   * itself uses for its `has-helper` attribute.
+   *
+   * @return {boolean}
+   */
+  #hasFieldHelper() {
+    return [...this.#field.querySelectorAll(':scope > [slot="helper"]')].some(
+      (node) => node !== this.#confidenceNode && hasNodeContent(node),
+    );
+  }
+
+  /** Removes the confidence indicator. */
+  #removeConfidenceNode() {
+    const node = this.#confidenceNode;
+    if (!node) {
+      return;
+    }
+
+    if (this.#describedElement) {
+      removeValuesFromAttribute(this.#describedElement, 'aria-describedby', node.id);
+    }
+    node.remove();
+    this.#confidenceNode = null;
+    this.#updateFieldHelperState();
   }
 
   /**

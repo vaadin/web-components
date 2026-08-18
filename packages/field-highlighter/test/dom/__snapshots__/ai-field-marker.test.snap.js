@@ -69,3 +69,15 @@ snapshots["vaadin-ai-field-marker host unmarked"] =
 `;
 /* end snapshot vaadin-ai-field-marker host unmarked */
 
+snapshots["vaadin-ai-field-marker host confidence"] = 
+`<span
+  class="ai-confidence ai-confidence-high"
+  data-slot-ignore=""
+  id="ai-field-marker-confidence-8"
+  slot="helper"
+>
+  High confidence
+</span>
+`;
+/* end snapshot vaadin-ai-field-marker host confidence */
+
