@@ -330,8 +330,6 @@ export const ComboBoxItemsMixin = (superClass) =>
         return exactMatchIndex;
       }
 
-      // Focusing a partial match requires an open dropdown and a typed filter,
-      // and is ignored when custom values are allowed.
       if (!this.opened || !items || items.length === 0 || !this.filter || this.allowCustomValue) {
         return -1;
       }
