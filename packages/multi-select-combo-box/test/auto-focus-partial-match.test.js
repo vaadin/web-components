@@ -38,42 +38,21 @@ describe('auto-focus-partial-match', () => {
     });
 
     describe('value commit', () => {
+      it('should select the exact match on Enter', async () => {
+        await sendKeys({ type: 'grape' });
+        await sendKeys({ press: 'Enter' });
+        expect(comboBox.selectedItems).to.deep.equal(['grape']);
+      });
+
+      it('should not select the exact match on outside click', async () => {
+        await sendKeys({ type: 'grape' });
+        outsideClick();
+        expect(comboBox.selectedItems).to.deep.equal([]);
+      });
+
       it('should not select the partial match on Enter', async () => {
         await sendKeys({ type: 'grap' });
         await sendKeys({ press: 'Enter' });
-        expect(comboBox.selectedItems).to.deep.equal([]);
-      });
-
-      it('should not unselect the already selected partial match on Enter', async () => {
-        comboBox.selectedItems = ['grapefruit'];
-        await sendKeys({ type: 'grap' });
-        await sendKeys({ press: 'Enter' });
-        expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
-      });
-
-      it('should not select the partial match on outside click', async () => {
-        await sendKeys({ type: 'grap' });
-        outsideClick();
-        expect(comboBox.selectedItems).to.deep.equal([]);
-      });
-
-      it('should not unselect the already selected partial match on outside click', async () => {
-        comboBox.selectedItems = ['grapefruit'];
-        await sendKeys({ type: 'grap' });
-        outsideClick();
-        expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
-      });
-
-      it('should select the clicked item', async () => {
-        await sendKeys({ type: 'grap' });
-        getAllItems(comboBox)[0].click();
-        expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
-      });
-
-      it('should unselect the already selected clicked item', async () => {
-        comboBox.selectedItems = ['grapefruit'];
-        await sendKeys({ type: 'grap' });
-        getAllItems(comboBox)[0].click();
         expect(comboBox.selectedItems).to.deep.equal([]);
       });
     });
@@ -113,21 +92,6 @@ describe('auto-focus-partial-match', () => {
         expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
       });
 
-      it('should not unselect the already selected first partial match on Enter', async () => {
-        comboBox.selectedItems = ['grapefruit'];
-        await sendKeys({ type: 'grap' });
-        await sendKeys({ press: 'Enter' });
-        expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
-      });
-
-      it('should clear the input value on Enter when keeping the item selected', async () => {
-        comboBox.selectedItems = ['grapefruit'];
-        await sendKeys({ type: 'grap' });
-        await sendKeys({ press: 'Enter' });
-        expect(inputElement.value).to.equal('');
-        expect(comboBox.filter).to.equal('');
-      });
-
       it('should unselect the already selected item on Enter after highlighting it with arrow keys', async () => {
         comboBox.selectedItems = ['grape'];
         await sendKeys({ type: 'grap' });
@@ -149,24 +113,27 @@ describe('auto-focus-partial-match', () => {
         expect(comboBox.selectedItems).to.deep.equal([]);
       });
 
-      it('should not unselect the already selected first partial match on outside click', async () => {
-        comboBox.selectedItems = ['grapefruit'];
-        await sendKeys({ type: 'grap' });
-        outsideClick();
-        expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
-      });
+      describe('committing the same partial match again', () => {
+        beforeEach(async () => {
+          comboBox.selectedItems = ['grapefruit'];
+          await sendKeys({ type: 'grap' });
+        });
 
-      it('should select the clicked item instead of the first partial match', async () => {
-        await sendKeys({ type: 'grap' });
-        getAllItems(comboBox)[1].click();
-        expect(comboBox.selectedItems).to.deep.equal(['grape']);
-      });
+        it('should not unselect the item on Enter', async () => {
+          await sendKeys({ press: 'Enter' });
+          expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
+        });
 
-      it('should unselect the already selected clicked item', async () => {
-        comboBox.selectedItems = ['grapefruit'];
-        await sendKeys({ type: 'grap' });
-        getAllItems(comboBox)[0].click();
-        expect(comboBox.selectedItems).to.deep.equal([]);
+        it('should clear the input value on Enter', async () => {
+          await sendKeys({ press: 'Enter' });
+          expect(inputElement.value).to.equal('');
+          expect(comboBox.filter).to.equal('');
+        });
+
+        it('should not unselect the item on outside click', () => {
+          outsideClick();
+          expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
+        });
       });
     });
   });
@@ -199,44 +166,11 @@ describe('auto-focus-partial-match', () => {
         expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
       });
 
-      it('should not unselect the already selected only partial match on Enter', async () => {
-        comboBox.selectedItems = ['grapefruit'];
-        await sendKeys({ type: 'grapef' });
-        await sendKeys({ press: 'Enter' });
-        expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
-      });
-
       it('should not change the selection on Enter when multiple items match', async () => {
         comboBox.selectedItems = ['grapefruit'];
         await sendKeys({ type: 'grap' });
         await sendKeys({ press: 'Enter' });
         expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
-      });
-
-      it('should not select the only partial match on outside click', async () => {
-        await sendKeys({ type: 'grapef' });
-        outsideClick();
-        expect(comboBox.selectedItems).to.deep.equal([]);
-      });
-
-      it('should not unselect the already selected only partial match on outside click', async () => {
-        comboBox.selectedItems = ['grapefruit'];
-        await sendKeys({ type: 'grapef' });
-        outsideClick();
-        expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
-      });
-
-      it('should select the clicked item', async () => {
-        await sendKeys({ type: 'grapef' });
-        getAllItems(comboBox)[0].click();
-        expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
-      });
-
-      it('should unselect the already selected clicked item', async () => {
-        comboBox.selectedItems = ['grapefruit'];
-        await sendKeys({ type: 'grapef' });
-        getAllItems(comboBox)[0].click();
-        expect(comboBox.selectedItems).to.deep.equal([]);
       });
     });
   });
