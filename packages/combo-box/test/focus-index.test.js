@@ -104,6 +104,26 @@ describe('__focusIndex', () => {
       expect(viewport[0].index).to.equal(0);
     });
 
+    it('should not focus the index while a filter is active', () => {
+      comboBox.opened = true;
+      // Matches every item, so the index is in range of the filtered list
+      comboBox.filter = 'item';
+      flushComboBox(comboBox);
+
+      comboBox.__focusIndex(100);
+      flushComboBox(comboBox);
+
+      expect(comboBox._focusedIndex).to.equal(-1);
+      expect(getViewportItems(comboBox)[0].index).to.equal(0);
+    });
+
+    it('should not queue the index while a filter is active', () => {
+      comboBox.filter = 'item';
+      comboBox.__focusIndex(100);
+
+      expect(comboBox.__pendingFocusIndex).to.be.undefined;
+    });
+
     [-1, Number.NaN, '100', SIZE + 50].forEach((invalidIndex) => {
       it(`should ignore invalid index: ${String(invalidIndex)}`, () => {
         comboBox.opened = true;
