@@ -537,10 +537,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     __commitUserInput() {
       if (this._focusedIndex > -1) {
         const focusedItem = this._dropdownItems[this._focusedIndex];
-        // When the input value still equals the filter, the item was focused by
-        // filtering rather than by keyboard navigation (navigation replaces the
-        // input value with the item label). Do not unselect an already selected
-        // item in this case, as the user typed to filter, not to toggle.
+        // Do not unselect an already selected item when it was focused by
+        // filtering, in which case the input value still equals the filter.
         if (
           this._lastFilter &&
           this._lastFilter === this._inputElementValue &&
