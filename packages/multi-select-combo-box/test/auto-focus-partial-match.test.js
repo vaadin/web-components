@@ -37,7 +37,7 @@ describe('auto-focus-partial-match', () => {
       expect(getFocusedItemIndex()).to.equal(-1);
     });
 
-    describe('committing input', () => {
+    describe('value commit', () => {
       it('should not select the partial match on Enter', async () => {
         await sendKeys({ type: 'grap' });
         await sendKeys({ press: 'Enter' });
@@ -106,7 +106,7 @@ describe('auto-focus-partial-match', () => {
       expect(getFocusedItemIndex()).to.equal(-1);
     });
 
-    describe('committing input', () => {
+    describe('value commit', () => {
       it('should select first partial match on Enter', async () => {
         await sendKeys({ type: 'grap' });
         await sendKeys({ press: 'Enter' });
@@ -192,7 +192,7 @@ describe('auto-focus-partial-match', () => {
       expect(getFocusedItemIndex()).to.equal(1);
     });
 
-    describe('committing input', () => {
+    describe('value commit', () => {
       it('should select only partial match on Enter', async () => {
         await sendKeys({ type: 'grapef' });
         await sendKeys({ press: 'Enter' });
@@ -248,13 +248,13 @@ describe('auto-focus-partial-match', () => {
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
-    it('should select exact match on Enter while the dropdown is closed', async () => {
+    it('should select exact match on Enter while closed', async () => {
       await sendKeys({ type: 'grape' });
       await sendKeys({ press: 'Enter' });
       expect(comboBox.selectedItems).to.deep.equal(['grape']);
     });
 
-    it('should not select first partial match on Enter while the dropdown is closed', async () => {
+    it('should not select first partial match on Enter while closed', async () => {
       await sendKeys({ type: 'grap' });
       await sendKeys({ press: 'Enter' });
       expect(comboBox.selectedItems).to.deep.equal([]);
