@@ -24,6 +24,11 @@ export const ComboBoxFocusIndexMixin = (superClass) =>
         return;
       }
 
+      // Ignore while a filter is active, keep the dropdown at the first match.
+      if (this.filter) {
+        return;
+      }
+
       // Defer until the dropdown is open and the items array has been
       // populated. `_onOpened` and `__onDataProviderPageLoaded` re-fire
       // the queued call once those conditions hold.
