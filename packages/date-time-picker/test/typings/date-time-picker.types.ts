@@ -66,6 +66,7 @@ assertType<string | null | undefined>(picker.label);
 assertType<string | null | undefined>(picker.datePlaceholder);
 assertType<string | null | undefined>(picker.timePlaceholder);
 assertType<string | null | undefined>(picker.initialPosition);
+assertType<string | null | undefined>(picker.defaultTime);
 assertType<number | null | undefined>(picker.step);
 assertType<boolean | null | undefined>(picker.showWeekNumbers);
 assertType<boolean | null | undefined>(picker.autoOpenDisabled);

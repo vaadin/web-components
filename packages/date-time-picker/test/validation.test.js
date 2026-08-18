@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-time-picker.js';
+import { changeInputValue } from './helpers.js';
 
 class DateTimePicker2020Element extends customElements.get('vaadin-date-time-picker') {
   checkValidity() {
@@ -245,5 +246,35 @@ describe('custom validator', () => {
     dateTimePicker.value = '2020-02-02T20:20';
     expect(dateTimePicker.validate()).to.equal(true);
     expect(dateTimePicker.invalid).to.equal(false);
+  });
+});
+
+describe('defaultTime', () => {
+  let dateTimePicker, datePicker, timePicker;
+
+  beforeEach(async () => {
+    dateTimePicker = fixtureSync('<vaadin-date-time-picker default-time="09:30"></vaadin-date-time-picker>');
+    await nextRender();
+    datePicker = dateTimePicker.querySelector('[slot=date-picker]');
+    timePicker = dateTimePicker.querySelector('[slot=time-picker]');
+  });
+
+  it('should be valid when the default time is applied', () => {
+    dateTimePicker.required = true;
+    changeInputValue(datePicker, '2001-01-01');
+
+    expect(dateTimePicker.value).to.equal('2001-01-01T09:30');
+    expect(dateTimePicker.validate()).to.be.true;
+    expect(dateTimePicker.invalid).to.be.false;
+  });
+
+  it('should be invalid when the default time is outside min/max', () => {
+    dateTimePicker.min = '2001-01-01T10:00';
+    dateTimePicker.max = '2001-01-01T20:00';
+    changeInputValue(datePicker, '2001-01-01');
+
+    expect(timePicker.value).to.equal('09:30');
+    expect(dateTimePicker.validate()).to.be.false;
+    expect(dateTimePicker.invalid).to.be.true;
   });
 });
