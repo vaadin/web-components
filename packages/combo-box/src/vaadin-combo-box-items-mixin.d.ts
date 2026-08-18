@@ -17,7 +17,7 @@ export declare class ComboBoxItemsMixinClass<TItem> {
    * Controls whether an item whose label partially matches the typed
    * filter is automatically focused. The focused item is highlighted
    * in the dropdown while typing and is selected when committing the
-   * value, for example on blur, Enter press, or outside click:
+   * value, for example on Enter press:
    *
    * - `none` (default): do not focus partial matches.
    * - `first-match`: focus the first item in the filtered results.
