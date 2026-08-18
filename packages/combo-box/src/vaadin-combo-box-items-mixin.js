@@ -74,7 +74,9 @@ export const ComboBoxItemsMixin = (superClass) =>
          *
          * An item whose label matches the filter exactly is always focused,
          * regardless of this property. Matching is case-insensitive. A partial
-         * match is not focused when `allowCustomValue` is enabled.
+         * match is not focused when `allowCustomValue` is enabled, or while
+         * the dropdown is closed. For example, with `autoOpenDisabled`, typing
+         * does not focus or select a match until the dropdown is opened.
          *
          * @attr {none|first-match|only-match} auto-focus-partial-match
          */
@@ -180,6 +182,22 @@ export const ComboBoxItemsMixin = (superClass) =>
       }
 
       this.setProperties(props);
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to focus the item matching
+     * the filter when the dropdown is opened after typing, which is possible
+     * when `autoOpenDisabled` is enabled.
+     *
+     * @protected
+     * @override
+     */
+    _onOpened() {
+      super._onOpened();
+
+      if (this.filter && this._focusedIndex === -1) {
+        this._focusedIndex = this.__getItemIndexByFilter(this._dropdownItems);
+      }
     }
 
     /**
@@ -312,8 +330,9 @@ export const ComboBoxItemsMixin = (superClass) =>
         return exactMatchIndex;
       }
 
-      // Focusing a partial match requires a typed filter and is ignored when custom values are allowed.
-      if (!items || items.length === 0 || !this.filter || this.allowCustomValue) {
+      // Focusing a partial match requires an open dropdown and a typed filter,
+      // and is ignored when custom values are allowed.
+      if (!this.opened || !items || items.length === 0 || !this.filter || this.allowCustomValue) {
         return -1;
       }
 

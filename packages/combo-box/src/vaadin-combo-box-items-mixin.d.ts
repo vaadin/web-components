@@ -25,7 +25,9 @@ export declare class ComboBoxItemsMixinClass<TItem> {
    *
    * An item whose label matches the filter exactly is always focused,
    * regardless of this property. Matching is case-insensitive. A partial
-   * match is not focused when `allowCustomValue` is enabled.
+   * match is not focused when `allowCustomValue` is enabled, or while
+   * the dropdown is closed. For example, with `autoOpenDisabled`, typing
+   * does not focus or select a match until the dropdown is opened.
    *
    * @attr {none|first-match|only-match} auto-focus-partial-match
    */

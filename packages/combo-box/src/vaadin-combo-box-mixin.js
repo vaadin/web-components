@@ -281,6 +281,8 @@ export const ComboBoxMixin = (superClass) =>
      * @override
      */
     _onOpened() {
+      super._onOpened();
+
       this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-opened', { bubbles: true, composed: true }));
 
       // _detectAndDispatchChange() should not consider value changes done before opening
