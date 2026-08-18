@@ -40,6 +40,12 @@ describe('auto-focus-partial-match', () => {
         expect(comboBox.value).to.equal('');
       });
 
+      it('should not commit the partial match on Tab', async () => {
+        await sendKeys({ type: 'grap' });
+        await sendKeys({ press: 'Tab' });
+        expect(comboBox.value).to.equal('');
+      });
+
       it('should not commit the partial match on outside click', async () => {
         await sendKeys({ type: 'grap' });
         outsideClick();
@@ -94,6 +100,12 @@ describe('auto-focus-partial-match', () => {
         expect(comboBox.value).to.equal('');
       });
 
+      it('should commit first partial match on Tab', async () => {
+        await sendKeys({ type: 'grap' });
+        await sendKeys({ press: 'Tab' });
+        expect(comboBox.value).to.equal('grapefruit');
+      });
+
       it('should commit first partial match on outside click', async () => {
         await sendKeys({ type: 'grap' });
         outsideClick();
@@ -139,6 +151,18 @@ describe('auto-focus-partial-match', () => {
       it('should not commit on Enter when multiple items match', async () => {
         await sendKeys({ type: 'grap' });
         await sendKeys({ press: 'Enter' });
+        expect(comboBox.value).to.equal('');
+      });
+
+      it('should commit only partial match on Tab', async () => {
+        await sendKeys({ type: 'grapef' });
+        await sendKeys({ press: 'Tab' });
+        expect(comboBox.value).to.equal('grapefruit');
+      });
+
+      it('should not commit on Tab when multiple items match', async () => {
+        await sendKeys({ type: 'grap' });
+        await sendKeys({ press: 'Tab' });
         expect(comboBox.value).to.equal('');
       });
 
