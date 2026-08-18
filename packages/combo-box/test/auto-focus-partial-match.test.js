@@ -8,7 +8,13 @@ describe('auto-focus-partial-match', () => {
   let comboBox, inputElement;
 
   beforeEach(async () => {
-    comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+    // The extra input serves as a Tab navigation target.
+    [comboBox] = fixtureSync(
+      `<div>
+        <vaadin-combo-box></vaadin-combo-box>
+        <input id="last-global-focusable" />
+      </div>`,
+    ).children;
     await nextRender();
     inputElement = comboBox.inputElement;
     inputElement.focus();
