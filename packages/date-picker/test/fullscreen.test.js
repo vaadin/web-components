@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys, setViewport } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync, nextRender, outsideClick, tabKeyDown, tap } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, nextUpdate, outsideClick, tabKeyDown, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import { getFocusableCell, open, touchTap, untilOverlayRendered } from './helpers.js';
@@ -153,6 +153,60 @@ describe('fullscreen mode', () => {
         await open(datePicker);
         expect(document.activeElement).to.not.equal(input);
       });
+    });
+  });
+
+  describe('validation', () => {
+    let validateSpy;
+
+    beforeEach(async () => {
+      datePicker.required = true;
+      await nextUpdate(datePicker);
+      validateSpy = sinon.spy(datePicker, 'validate');
+    });
+
+    it('should not validate when focusing the input', () => {
+      input.focus();
+      expect(validateSpy.called).to.be.false;
+      expect(datePicker.invalid).to.be.false;
+    });
+
+    it('should not validate when opening overlay on input tap', async () => {
+      input.focus();
+      tap(input);
+      await untilOverlayRendered(datePicker);
+      expect(validateSpy.called).to.be.false;
+      expect(datePicker.invalid).to.be.false;
+    });
+
+    it('should validate when closing overlay on outside click', async () => {
+      await open(datePicker);
+      validateSpy.resetHistory();
+
+      outsideClick();
+      await nextRender();
+
+      expect(validateSpy.called).to.be.true;
+      expect(datePicker.invalid).to.be.true;
+    });
+
+    it('should validate on blur after the input has been blurred internally', async () => {
+      input.focus();
+      tap(input);
+      await untilOverlayRendered(datePicker);
+      datePicker.close();
+      await nextRender();
+
+      // Make the input focusable
+      datePicker.autoOpenDisabled = true;
+      await nextUpdate(datePicker);
+      validateSpy.resetHistory();
+
+      input.focus();
+      input.blur();
+
+      expect(validateSpy.called).to.be.true;
+      expect(datePicker.invalid).to.be.true;
     });
   });
 
