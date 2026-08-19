@@ -56,6 +56,18 @@ describe('DelegateFocusMixin', () => {
       expect(element.hasAttribute('focused')).to.be.true;
     });
 
+    it('should forward preventScroll option to the input on focus call', () => {
+      const spy = sinon.spy(input, 'focus');
+      element.focus({ preventScroll: true });
+      expect(spy.firstCall.args[0]).to.deep.include({ preventScroll: true });
+    });
+
+    it('should not prevent scroll on the input on focus call by default', () => {
+      const spy = sinon.spy(input, 'focus');
+      element.focus();
+      expect(spy.firstCall.args[0]).to.deep.include({ preventScroll: false });
+    });
+
     it('should blur the input on blur call', () => {
       const spy = sinon.spy(input, 'blur');
       element.focus();
