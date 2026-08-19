@@ -343,4 +343,25 @@ describe('dropdown', () => {
       expect(input.inputMode).to.equal('');
     });
   });
+
+  describe('item height', () => {
+    it('should update month scroller item height when it changes between opens', async () => {
+      await open(datePicker);
+      const scroller = datePicker._overlayContent._monthScroller;
+      const initialItemHeight = scroller.itemHeight;
+
+      datePicker.close();
+      await nextRender();
+
+      // Enabling week numbers changes the item height defined in CSS
+      datePicker.showWeekNumbers = true;
+      datePicker.i18n = { ...datePicker.i18n, firstDayOfWeek: 1 };
+      await open(datePicker);
+
+      expect(scroller.itemHeight).to.be.above(initialItemHeight);
+
+      const wrapper = scroller.querySelector('div[slot]');
+      expect(wrapper.getBoundingClientRect().height).to.be.closeTo(scroller.itemHeight, 0.1);
+    });
+  });
 });

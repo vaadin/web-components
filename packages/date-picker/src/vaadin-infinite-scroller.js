@@ -153,7 +153,7 @@ export class InfiniteScroller extends HTMLElement {
       this.$.scroller.scrollTop = this.itemHeight * (index - this._firstIndex) + this._buffers[0].translateY;
     } else {
       this._initialIndex = ~~index;
-      this._reset();
+      this.reset();
       this._scrollDisabled = true;
       this.$.scroller.scrollTop += (index % 1) * this.itemHeight;
       this._scrollDisabled = false;
@@ -239,7 +239,7 @@ export class InfiniteScroller extends HTMLElement {
       });
 
       if (!this._buffers[0].translateY) {
-        this._reset();
+        this.reset();
       }
 
       this._initDone = true;
@@ -266,7 +266,7 @@ export class InfiniteScroller extends HTMLElement {
     if (scrollTop < this._bufferHeight || scrollTop > this._initialScroll * 2 - this._bufferHeight) {
       // Scrolled near the end/beginning of the scrollable area -> reset.
       this._initialIndex = ~~this.position;
-      this._reset();
+      this.reset();
     }
 
     // Check if we scrolled enough to translate the buffer positions.
@@ -292,8 +292,18 @@ export class InfiniteScroller extends HTMLElement {
     });
   }
 
-  /** @private */
-  _reset() {
+  /**
+   * Resets the scroller to the last starting index, and re-measures the
+   * item height in case the computed value of the CSS custom property
+   * has changed.
+   */
+  reset() {
+    if (!this._activated || !this.isConnected) {
+      return;
+    }
+
+    this._itemHeightVal = null;
+
     this._scrollDisabled = true;
     this.$.scroller.scrollTop = this._initialScroll;
     this._buffers[0].translateY = this._initialScroll - this._bufferHeight;
