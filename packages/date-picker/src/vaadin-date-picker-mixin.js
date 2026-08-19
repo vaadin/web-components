@@ -401,7 +401,10 @@ export const DatePickerMixin = (subclass) =>
       super._onFocus(event);
 
       if (this._noInput && !isKeyboardActive()) {
+        // Blur to hide the virtual keyboard, but do not validate.
+        this.__ignoreInternalBlur = true;
         event.target.blur();
+        this.__ignoreInternalBlur = false;
       }
     }
 
@@ -411,6 +414,10 @@ export const DatePickerMixin = (subclass) =>
      */
     _onBlur(event) {
       super._onBlur(event);
+
+      if (this.__ignoreInternalBlur) {
+        return;
+      }
 
       if (!this.opened) {
         this.__commitParsedOrFocusedDate();
