@@ -124,6 +124,25 @@ describe('vaadin-infinite-scroller', () => {
       });
     });
   });
+
+  describe('item height change', () => {
+    beforeEach(() => {
+      scroller.style.setProperty('--vaadin-infinite-scroller-item-height', '50px');
+    });
+
+    it('should re-measure item height on reset', () => {
+      scroller.reset();
+      expect(scroller.itemHeight).to.equal(50);
+      expect(getFirstVisibleItem(scroller).clientHeight).to.equal(50);
+      expect(scroller._buffers[1].translateY - scroller._buffers[0].translateY).to.equal(50 * scroller.bufferSize);
+    });
+
+    it('should keep position mapping consistent after reset', () => {
+      scroller.reset();
+      scroller.position = 5.5;
+      verifyPosition();
+    });
+  });
 });
 
 describe('fractional item size', () => {

@@ -268,6 +268,8 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
     reset() {
       this._closeYearScroller();
+      this._monthScroller?.reset();
+      this._yearScroller?.reset();
     }
 
     /**
