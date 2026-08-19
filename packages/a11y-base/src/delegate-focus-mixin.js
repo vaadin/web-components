@@ -79,7 +79,8 @@ const DelegateFocusMixinImplementation = (superclass) => {
      */
     focus(options) {
       if (this.focusElement && !this.disabled) {
-        this.focusElement.focus();
+        // Only forward the native option, `focusVisible` is handled below.
+        this.focusElement.focus({ preventScroll: !!options?.preventScroll });
 
         // Set focus-ring attribute on programmatic focus by default
         // unless explicitly disabled by `{ focusVisible: false }`.
