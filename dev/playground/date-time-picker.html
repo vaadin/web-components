@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Date Time Picker</title>
+    <script type="module" src="../common.js"></script>
+
+    <script type="module">
+      import '@vaadin/date-time-picker';
+
+      const picker = document.querySelector('vaadin-date-time-picker#weekNumbers');
+      picker.i18n = {
+        ...picker.i18n,
+        firstDayOfWeek: 1,
+      };
+
+      function parseISODate(iso) {
+        const [year, month, day] = iso.split('-').map(Number);
+        return new Date(year, month - 1, day);
+      }
+
+      function formatISODate(date) {
+        return [
+          String(date.getFullYear()).padStart(4, '0'),
+          String(date.getMonth() + 1).padStart(2, '0'),
+          String(date.getDate()).padStart(2, '0'),
+        ].join('-');
+      }
+
+      // Synchronous provider that disables every weekend in the requested range.
+      document.querySelector('vaadin-date-time-picker#metadata').dateMetadataProvider = ({ start, end }) => {
+        const dates = [];
+        const last = parseISODate(end);
+        let date = parseISODate(start);
+        while (date <= last) {
+          if (date.getDay() === 0 || date.getDay() === 6) {
+            dates.push({ date: formatISODate(date), disabled: true });
+          }
+          date = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+        }
+        return dates;
+      };
+    </script>
+  </head>
+
+  <body>
+    <section class="section">
+      <h2 class="heading">Plain</h2>
+      <vaadin-date-time-picker value="2026-08-19T12:00"></vaadin-date-time-picker>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Bells & Whistles</h2>
+      <vaadin-date-time-picker
+        id="weekNumbers"
+        date-placeholder="Date"
+        time-placeholder="Time"
+        error-message="You need to select a date and time."
+        helper-text="Description for this field."
+        label="Label"
+        required
+        show-week-numbers
+        step="900"
+      ></vaadin-date-time-picker>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">States</h2>
+      <vaadin-date-time-picker label="Read-only" value="2026-08-19T12:00" readonly></vaadin-date-time-picker>
+      <vaadin-date-time-picker label="Disabled" value="2026-08-19T12:00" disabled></vaadin-date-time-picker>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Date metadata provider</h2>
+      <vaadin-date-time-picker id="metadata" label="Weekends disabled"></vaadin-date-time-picker>
+    </section>
+  </body>
+</html>
