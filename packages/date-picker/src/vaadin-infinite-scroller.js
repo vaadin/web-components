@@ -37,6 +37,10 @@ template.innerHTML = `
       box-sizing: border-box;
       top: var(--vaadin-infinite-scroller-buffer-offset, 0);
     }
+
+    ::slotted(div) {
+      height: var(--vaadin-infinite-scroller-item-height);
+    }
   </style>
 
   <div id="scroller" tabindex="-1">
@@ -314,7 +318,6 @@ export class InfiniteScroller extends HTMLElement {
     this._buffers.forEach((buffer) => {
       for (let i = 0; i < this.bufferSize; i++) {
         const itemWrapper = document.createElement('div');
-        itemWrapper.style.height = `${this.itemHeight}px`;
         itemWrapper.instance = {};
 
         const slotName = `vaadin-infinite-scroller-item-content-${generateUniqueId()}`;
