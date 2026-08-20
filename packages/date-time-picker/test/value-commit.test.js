@@ -3,6 +3,7 @@ import { sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-time-picker.js';
+import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 import { changeInputValue } from './helpers.js';
 
 function describeForEachPicker(title, fn) {
@@ -523,6 +524,7 @@ describe('value commit', () => {
 
       afterEach(() => {
         console.warn.restore();
+        clearWarnings();
       });
 
       it('should warn and not fill the time picker on date-picker Enter', async () => {

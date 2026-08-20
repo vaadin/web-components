@@ -9,6 +9,7 @@ import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import {
   dateEquals,
   formatUTCISODate,
@@ -905,7 +906,7 @@ export const DateTimePickerMixin = (superClass) =>
 
       const timeObj = parseISOTime(this.defaultTime);
       if (!timeObj) {
-        console.warn(
+        issueWarning(
           `<vaadin-date-time-picker> Ignored "defaultTime" that is not a valid ISO 8601 time: ${this.defaultTime}`,
         );
         return '';
