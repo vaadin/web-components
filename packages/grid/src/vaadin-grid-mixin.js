@@ -576,7 +576,6 @@ export const GridMixin = (superClass) =>
       this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);
 
       this._resizeHandler();
-      this._frozenCellsChanged();
       this._resetKeyboardNavigation();
       this.__a11yUpdateHeaderRows();
       this.__a11yUpdateFooterRows();
