@@ -26,7 +26,7 @@ When focusing an element programmatically from a location that can be reached by
 
 To detect whether a default slot has content, do not rely on `querySelector` as it does not cover text nodes. Query the assigned nodes from the slot instead, filtered by `isEmptyTextNode` to ignore formatting related text nodes. `querySelector(':scope > [slot="name"]')` remains fine for named slots, which only ever hold elements.
 
-To detect whether a component implements a mixin, apply a flag such as `this._hasVaadinItemMixin = true` in the mixin and check for the flag. Do not use `instanceof` or constructor string checks.
+To detect whether an element implements a mixin that separate components implement (e.g. `ItemMixin`, used by `vaadin-item`, `vaadin-select-item`, `vaadin-context-menu-item`), apply a flag such as `this._hasVaadinItemMixin = true` in the mixin and check for the flag — the implementing components share no common class, so `instanceof` cannot cover them all. To detect a specific element class, use `instanceof` against the exported class (e.g. `node instanceof Checkbox`), which also covers subclasses registered with custom tag names. Never detect by tag name or constructor string checks.
 
 All component classes that are part of the public API (e.g. items, list boxes, columns) must be exported from both the `.js` and `.d.ts` modules so that they can be instantiated imperatively. Purely internal elements stay unexported (e.g. value buttons, chips, containers, scrollers).
 
