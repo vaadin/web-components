@@ -11,6 +11,7 @@ assertType<CSSResult>(aiFieldMarkerHostStyles);
 // Element
 const marker = document.createElement('vaadin-ai-field-marker');
 assertType<AiFieldMarkerI18n>(marker.i18n);
+assertType<Node | null | undefined>(marker.content);
 assertType<boolean>(marker.working);
 assertType<'high' | 'low' | 'medium' | null>(marker.confidence);
 assertType<string | undefined>(marker.i18n.confidence?.low);

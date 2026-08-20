@@ -85,6 +85,16 @@ describe('ai-field-marker', () => {
       await nextRender();
       await visualDiff(div, 'ai-marker-popover');
     });
+
+    it('custom content', async () => {
+      const content = document.createElement('div');
+      content.textContent = 'Based on invoice.pdf';
+      mark({ content });
+      await nextRender();
+      field.querySelector<HTMLButtonElement>('.badge')!.click();
+      await nextRender();
+      await visualDiff(div, 'ai-marker-popover-custom-content');
+    });
   });
 
   describe('confidence', () => {

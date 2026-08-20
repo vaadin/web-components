@@ -507,6 +507,90 @@ describe('ai field marker', () => {
     });
   });
 
+  describe('custom content', () => {
+    let marker: AiFieldMarker;
+    let popover: Popover;
+    let content: HTMLElement;
+
+    beforeEach(async () => {
+      content = document.createElement('div');
+      content.className = 'source';
+      content.textContent = 'Based on invoice.pdf';
+      // Set before the marker is added, the way a host provides the content
+      // together with the message.
+      marker = mark(field, { content });
+      await nextRender();
+      popover = marker.querySelector('vaadin-popover')!;
+    });
+
+    it('should render the content between the message and the actions', () => {
+      expect(popover.querySelector('.message')!.nextElementSibling).to.equal(content);
+      expect(content.nextElementSibling).to.equal(popover.querySelector('.actions'));
+    });
+
+    it('should show the content when the popover is opened', async () => {
+      const overlay = popover.shadowRoot!.querySelector('vaadin-popover-overlay')!;
+      const opened = oneEvent(overlay, 'vaadin-overlay-open');
+      marker.querySelector<HTMLButtonElement>('.badge')!.click();
+      await opened;
+
+      expect(content.checkVisibility()).to.be.true;
+    });
+
+    it('should replace the previous content node', async () => {
+      const other = document.createElement('div');
+      marker.content = other;
+      await nextUpdate(marker);
+
+      expect(other.parentElement).to.equal(popover);
+      expect(content.parentElement).to.be.null;
+    });
+
+    it('should remove the content when cleared', async () => {
+      marker.content = null;
+      await nextUpdate(marker);
+
+      expect(content.parentElement).to.be.null;
+      expect(popover.querySelector('.message')!.nextElementSibling).to.equal(popover.querySelector('.actions'));
+    });
+
+    it('should keep the content when the message changes', async () => {
+      marker.i18n = { message: 'Refreshed' };
+      await nextUpdate(marker);
+
+      expect(popover.querySelector('.message')!.textContent).to.equal('Refreshed');
+      expect(content.parentElement).to.equal(popover);
+    });
+
+    it('should keep the content when the marker is re-added to the field', async () => {
+      marker.remove();
+      field.appendChild(marker);
+      await nextRender();
+
+      expect(content.parentElement).to.equal(marker.querySelector('vaadin-popover'));
+    });
+
+    it('should keep the content when the marker moves to another field', async () => {
+      const otherField = fixtureSync<TextField>(`<vaadin-text-field label="Other"></vaadin-text-field>`);
+      await nextRender();
+      otherField.appendChild(marker);
+      await nextRender();
+
+      expect(content.parentElement).to.equal(marker.querySelector('vaadin-popover'));
+    });
+
+    it('should not render the content for a parent that is not a field', async () => {
+      const container = fixtureSync<HTMLElement>(`<div></div>`);
+      container.appendChild(marker);
+      await nextRender();
+
+      // The popover is gone with the rest of the marker UI, taking the content
+      // with it, so nothing of the mark is left rendered.
+      expect(marker.contains(content)).to.be.false;
+      expect(content.isConnected).to.be.false;
+    });
+  });
+
   describe('input description', () => {
     it('should update the description node when the message changes', async () => {
       const marker = mark(field);

@@ -24,6 +24,14 @@ describe('vaadin-ai-field-marker', () => {
       await expect(marker).dom.to.equalSnapshot();
     });
 
+    it('content', async () => {
+      const content = document.createElement('div');
+      content.textContent = 'Based on invoice.pdf';
+      marker.content = content;
+      await nextRender();
+      await expect(marker).dom.to.equalSnapshot();
+    });
+
     it('unmarked', async () => {
       // Moved to a parent that is not a field, so there is nothing to annotate.
       fixtureSync('<div id="container"></div>').appendChild(marker);

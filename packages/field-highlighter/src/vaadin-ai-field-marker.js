@@ -222,6 +222,10 @@ class DelayedFieldValue {
  * annotates is about to be replaced; setting `working` back to `false`
  * brings it back, so a cancelled or failed fill leaves the mark intact.
  *
+ * The popover can show custom content — such as a summary of what the AI
+ * based the value on — below the explanation, given as a DOM node through
+ * the `content` property.
+ *
  * The pieces that construct the marker — the badge, its tooltip and the
  * popover with the explanation and the revert control — are rendered
  * directly into the marker's light DOM, so that document-level themes
@@ -273,6 +277,25 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
 
   static get properties() {
     return {
+      /**
+       * A DOM node to show in the popover, between the message and the revert
+       * control — for example a summary of what the AI based the value on.
+       *
+       * The node is rendered as given, and moved into the marker's own light
+       * DOM. The host owns it: setting the property to another node or to
+       * `null` removes the previous node from the popover.
+       *
+       * ```js
+       * const source = document.createElement('a');
+       * source.href = '/documents/invoice.pdf';
+       * source.textContent = 'invoice.pdf';
+       * marker.content = source;
+       * ```
+       */
+      content: {
+        type: Object,
+      },
+
       /**
        * Whether an AI is currently working on the field. While `true`, the
        * field shows an "AI is working" shimmer and is made read-only on the
@@ -590,6 +613,7 @@ class AiFieldMarker extends SlotStylesMixin(I18nMixin(DirMixin(PolylitMixin(LitE
       <vaadin-tooltip for="${this.#badgeId}" text="${badgeTooltip}"></vaadin-tooltip>
       <vaadin-popover for="${this.#badgeId}" aria-label="${badgeLabel}" autofocus theme="arrow" position="end-top">
         <p class="message">${message}</p>
+        ${this.content ?? nothing}
         <div class="actions">
           <button type="button" tabindex="0" @click="${this.#onRevert}">${revert}</button>
         </div>

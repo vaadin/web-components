@@ -48,6 +48,15 @@
 
       const unmark = (field) => field.querySelector('vaadin-ai-field-marker')?.remove();
 
+      // Custom popover content: a link to the source the value came from.
+      const createContent = () => {
+        const source = document.createElement('a');
+        source.href = '#';
+        source.textContent = 'invoice.pdf';
+        source.addEventListener('click', (event) => event.preventDefault());
+        return source;
+      };
+
       // The marker fires this from the field; the host restores the value.
       fields.forEach((field) => {
         previousValues.set(field, field.value);
@@ -73,6 +82,7 @@
 
           // Show the "AI is working" state while the fill is in progress.
           const marker = document.createElement('vaadin-ai-field-marker');
+          marker.content = createContent();
           marker.working = true;
           // Show the confidence level of the filled value in the helper section.
           marker.confidence = ['low', 'medium', 'high'][Math.floor(3 * random())];
