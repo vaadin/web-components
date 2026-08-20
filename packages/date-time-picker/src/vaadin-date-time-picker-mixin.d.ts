@@ -120,6 +120,25 @@ export declare class DateTimePickerMixinClass {
   initialPosition: string | null | undefined;
 
   /**
+   * The time part to set automatically when the user commits a date while
+   * the time picker is empty.
+   *
+   * Supports same time formats as the `value` property, without the date
+   * part. Precision exceeding the one defined by `step` is discarded,
+   * e.g. `09:30:45` is applied as `09:30` with the default `step`.
+   *
+   * The time part is set when a date is committed while the time picker
+   * is empty — never for programmatic or initial values. A value outside
+   * `min` / `max` is applied as-is and makes the field invalid.
+   *
+   * When not set, selecting a date leaves the time part empty. A string
+   * that is not a valid ISO 8601 time is ignored and logs a warning.
+   *
+   * @attr {string} default-time
+   */
+  defaultTime: string | null | undefined;
+
+  /**
    * Set true to display ISO-8601 week numbers in the calendar. Notice that
    * displaying week numbers is only supported when `i18n.firstDayOfWeek`
    * is 1 (Monday).

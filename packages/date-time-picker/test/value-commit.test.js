@@ -3,6 +3,7 @@ import { sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-time-picker.js';
+import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 import { changeInputValue } from './helpers.js';
 
 function describeForEachPicker(title, fn) {
@@ -417,6 +418,124 @@ describe('value commit', () => {
       // Time picker has no value so date time picker value is still empty
       dateTimePicker.value = '2020-01-17T16:00';
       expect(changeSpy).to.be.not.called;
+    });
+  });
+
+  describe('defaultTime', () => {
+    beforeEach(() => {
+      dateTimePicker.defaultTime = '09:30';
+    });
+
+    it('should fill the time picker and commit on date-picker Enter', async () => {
+      await enterInput(datePicker, '1/1/2001');
+      await sendKeys({ press: 'Enter' });
+      await expectValueCommit();
+      expect(timePicker.value).to.equal('09:30');
+      expect(dateTimePicker.value).to.equal('2001-01-01T09:30');
+    });
+
+    it('should fill the time picker before dispatching change', async () => {
+      let valueOnChange;
+      dateTimePicker.addEventListener('change', () => {
+        valueOnChange = dateTimePicker.value;
+      });
+
+      await enterInput(datePicker, '1/1/2001');
+      await sendKeys({ press: 'Enter' });
+      await nextRender();
+
+      expect(valueOnChange).to.equal('2001-01-01T09:30');
+    });
+
+    it('should commit on date-picker outside click while time-picker is empty', async () => {
+      await enterInput(datePicker, '1/1/2001');
+      outsideClick();
+      await expectValueCommit();
+      expect(dateTimePicker.value).to.equal('2001-01-01T09:30');
+    });
+
+    it('should fill the time picker on date-picker Tab when auto-open is disabled', async () => {
+      dateTimePicker.autoOpenDisabled = true;
+      await enterInput(datePicker, '1/1/2001');
+      await sendKeys({ press: 'Tab' });
+      await expectValueCommit();
+      expect(timePicker.value).to.equal('09:30');
+    });
+
+    it('should re-insert the default time on committing another date after the time picker is cleared', async () => {
+      await enterInput(datePicker, '1/1/2001');
+      await sendKeys({ press: 'Enter' });
+      await expectValueCommit();
+      await clearInput(timePicker);
+      await sendKeys({ press: 'Enter' });
+      resetSpyHistories();
+
+      await enterInput(datePicker, '1/2/2001');
+      await sendKeys({ press: 'Enter' });
+      await expectValueCommit();
+      expect(dateTimePicker.value).to.equal('2001-01-02T09:30');
+    });
+
+    it('should not overwrite the time picker value on date-picker Enter', async () => {
+      timePicker.value = '10:00';
+      await enterInput(datePicker, '1/1/2001');
+      await sendKeys({ press: 'Enter' });
+      await expectValueCommit();
+      expect(timePicker.value).to.equal('10:00');
+      expect(dateTimePicker.value).to.equal('2001-01-01T10:00');
+    });
+
+    it('should not overwrite unparsable time-picker input on date-picker Enter', async () => {
+      await enterUnparsableInput(timePicker);
+      await enterInput(datePicker, '1/1/2001');
+      await sendKeys({ press: 'Enter' });
+      await nextRender();
+      expect(timePicker.value).to.equal('');
+      expect(dateTimePicker.value).to.equal('');
+      expect(changeSpy).to.be.not.called;
+    });
+
+    it('should not fill the time picker on programmatic date-picker value change', async () => {
+      datePicker.value = '2001-01-01';
+      await expectNoValueCommit();
+      expect(timePicker.value).to.equal('');
+    });
+
+    it('should apply the default time with the precision defined by step', async () => {
+      dateTimePicker.step = 1;
+      await enterInput(datePicker, '1/1/2001');
+      await sendKeys({ press: 'Enter' });
+      await expectValueCommit();
+      expect(timePicker.value).to.equal('09:30:00');
+    });
+
+    it('should truncate the default time exceeding the precision defined by step', async () => {
+      dateTimePicker.defaultTime = '09:30:45';
+      await enterInput(datePicker, '1/1/2001');
+      await sendKeys({ press: 'Enter' });
+      await expectValueCommit();
+      expect(timePicker.value).to.equal('09:30');
+    });
+
+    describe('unparsable defaultTime', () => {
+      beforeEach(() => {
+        sinon.stub(console, 'warn');
+      });
+
+      afterEach(() => {
+        console.warn.restore();
+        clearWarnings();
+      });
+
+      it('should warn and not fill the time picker on date-picker Enter', async () => {
+        dateTimePicker.defaultTime = '25:99';
+        await enterInput(datePicker, '1/1/2001');
+        await sendKeys({ press: 'Enter' });
+        await expectNoValueCommit();
+        expect(timePicker.value).to.equal('');
+        expect(console.warn).to.be.calledOnce;
+        expect(console.warn.firstCall.args[0]).to.include('defaultTime');
+      });
     });
   });
 });

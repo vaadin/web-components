@@ -9,6 +9,7 @@ import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import {
   dateEquals,
   formatUTCISODate,
@@ -165,6 +166,28 @@ export const DateTimePickerMixin = (superClass) =>
          * @attr {string} initial-position
          */
         initialPosition: {
+          type: String,
+          sync: true,
+        },
+
+        /**
+         * The time part to set automatically when the user commits a date while
+         * the time picker is empty.
+         *
+         * Supports same time formats as the `value` property, without the date
+         * part. Precision exceeding the one defined by `step` is discarded,
+         * e.g. `09:30:45` is applied as `09:30` with the default `step`.
+         *
+         * The time part is set when a date is committed while the time picker
+         * is empty — never for programmatic or initial values. A value outside
+         * `min` / `max` is applied as-is and makes the field invalid.
+         *
+         * When not set, selecting a date leaves the time part empty. A string
+         * that is not a valid ISO 8601 time is ignored and logs a warning.
+         *
+         * @attr {string} default-time
+         */
+        defaultTime: {
           type: String,
           sync: true,
         },
@@ -526,6 +549,17 @@ export const DateTimePickerMixin = (superClass) =>
     __changeEventHandler(event) {
       event.stopPropagation();
 
+      if (
+        event.target === this.__datePicker &&
+        this.__datePicker.value &&
+        !(this.__timePicker.value || this.__timePicker.__unparsableValue)
+      ) {
+        const defaultTime = this.__normalizeDefaultTime();
+        if (defaultTime) {
+          this.__timePicker.value = defaultTime;
+        }
+      }
+
       const isAlreadyInvalid = this.invalid;
       const filledPickers = this.__filledPickers;
       if (filledPickers.length === 1 && filledPickers[0].checkValidity() && !isAlreadyInvalid) {
@@ -836,23 +870,49 @@ export const DateTimePickerMixin = (superClass) =>
     }
 
     /**
+     * Time object to string (ISO time)
+     * @param {object} timeObj
+     * @return {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff' (depending on precision defined by "step" property)
+     * @private
+     */
+    __formatTimeISO(timeObj) {
+      return formatISOTime(validateTime(timeObj, this.step));
+    }
+
+    /**
      * Date object to string (ISO time)
      * @param {Date} date
      * @return {string} e.g. 'hh:mm', 'hh:mm:ss', 'hh:mm:ss.fff' (depending on precision defined by "step" property)
      * @private
      */
     __dateToIsoTimeString(date) {
-      return formatISOTime(
-        validateTime(
-          {
-            hours: date.getUTCHours(),
-            minutes: date.getUTCMinutes(),
-            seconds: date.getUTCSeconds(),
-            milliseconds: date.getUTCMilliseconds(),
-          },
-          this.step,
-        ),
-      );
+      return this.__formatTimeISO({
+        hours: date.getUTCHours(),
+        minutes: date.getUTCMinutes(),
+        seconds: date.getUTCSeconds(),
+        milliseconds: date.getUTCMilliseconds(),
+      });
+    }
+
+    /**
+     * `defaultTime` to string (ISO time), or an empty string when unset or unparsable.
+     * @return {string}
+     * @private
+     */
+    __normalizeDefaultTime() {
+      if (!this.defaultTime) {
+        return '';
+      }
+
+      const timeObj = parseISOTime(this.defaultTime);
+      if (!timeObj) {
+        issueWarning(
+          `<vaadin-date-time-picker> Ignored "defaultTime" that is not a valid ISO 8601 time: ${this.defaultTime}`,
+        );
+        return '';
+      }
+
+      return this.__formatTimeISO(timeObj);
     }
 
     /**
