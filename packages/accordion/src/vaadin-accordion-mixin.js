@@ -6,6 +6,7 @@
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
+import { AccordionPanel } from './vaadin-accordion-panel.js';
 
 /**
  * A mixin providing common accordion functionality.
@@ -130,7 +131,7 @@ export const AccordionMixin = (superClass) =>
      * @protected
      */
     _filterItems(array) {
-      return array.filter((el) => el instanceof customElements.get('vaadin-accordion-panel'));
+      return array.filter((el) => el instanceof AccordionPanel);
     }
 
     /** @private */
