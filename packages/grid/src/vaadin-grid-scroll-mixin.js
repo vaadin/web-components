@@ -226,13 +226,8 @@ export const ScrollMixin = (superClass) =>
 
     /** @private */
     _scheduleScrolling() {
-      if (!this._scrollingFrame) {
-        // Defer setting state attributes to avoid Edge hiccups
-        this._scrollingFrame = requestAnimationFrame(() => this.$.scroller.toggleAttribute('scrolling', true));
-      }
+      this.$.scroller.toggleAttribute('scrolling', true);
       this._debounceScrolling = Debouncer.debounce(this._debounceScrolling, timeOut.after(timeouts.SCROLLING), () => {
-        cancelAnimationFrame(this._scrollingFrame);
-        delete this._scrollingFrame;
         this.$.scroller.toggleAttribute('scrolling', false);
       });
     }
