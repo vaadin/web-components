@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, listenOnce, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-helpers';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
 import { flushGrid, infiniteDataProvider, scrollToEnd } from './helpers.js';
@@ -35,16 +35,12 @@ describe('scrolling mode', () => {
     expect(grid.scrollHeight - grid.clientHeight).to.equal(0);
   });
 
-  it('should defer adding scrolling state attributes', (done) => {
+  it('should toggle scrolling state attribute on scroll', () => {
     const scroller = grid.$.scroller;
-    listenOnce(grid.$.table, 'scroll', () => {
-      expect(scroller.hasAttribute('scrolling')).to.be.false;
-      requestAnimationFrame(() => {
-        expect(scroller.hasAttribute('scrolling')).to.be.true;
-        done();
-      });
-    });
     grid.$.table.dispatchEvent(new CustomEvent('scroll'));
+    expect(scroller.hasAttribute('scrolling')).to.be.true;
+    grid._debounceScrolling.flush();
+    expect(scroller.hasAttribute('scrolling')).to.be.false;
   });
 
   describe('overflow attribute', () => {
