@@ -171,11 +171,11 @@ export const DateTimePickerMixin = (superClass) =>
 
         /**
          * The time part to set automatically when the user commits a date while
-         * the time picker is empty. Supported time formats are in ISO 8601:
+         * the time picker is empty.
          *
-         * - `hh:mm` (default)
-         * - `hh:mm:ss`
-         * - `hh:mm:ss.fff`
+         * Supports same time formats as the `value` property, without the date
+         * part. Precision exceeding the one defined by `step` is discarded,
+         * e.g. `09:30:45` is applied as `09:30` with the default `step`.
          *
          * The time part is set when a date is committed while the time picker
          * is empty — never for programmatic or initial values. A value outside
