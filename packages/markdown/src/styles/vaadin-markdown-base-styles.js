@@ -68,6 +68,10 @@ export const markdownSlotStyles = css`
         margin-block: 1.25em;
       }
 
+      p {
+        white-space: pre-line;
+      }
+
       code {
         font-family: ui-monospace, monospace;
         font-size: 0.9em;
