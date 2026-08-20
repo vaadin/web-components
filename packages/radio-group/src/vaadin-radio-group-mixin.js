@@ -10,6 +10,7 @@ import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+import { RadioButton } from './vaadin-radio-button.js';
 
 /**
  * A mixin providing common radio-group functionality.
@@ -143,7 +144,7 @@ export const RadioGroupMixin = (superclass) =>
      * @private
      */
     __filterRadioButtons(nodes) {
-      return nodes.filter((node) => node.nodeType === Node.ELEMENT_NODE && node.localName === 'vaadin-radio-button');
+      return nodes.filter((node) => node instanceof RadioButton);
     }
 
     /**
@@ -158,9 +159,7 @@ export const RadioGroupMixin = (superclass) =>
     _onKeyDown(event) {
       super._onKeyDown(event);
 
-      const radioButton = event
-        .composedPath()
-        .find((node) => node.nodeType === Node.ELEMENT_NODE && node.localName === 'vaadin-radio-button');
+      const radioButton = event.composedPath().find((node) => node instanceof RadioButton);
 
       if (['ArrowLeft', 'ArrowUp'].includes(event.key)) {
         event.preventDefault();

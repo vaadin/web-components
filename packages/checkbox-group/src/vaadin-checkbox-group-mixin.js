@@ -5,6 +5,7 @@
  */
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
+import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
@@ -119,7 +120,7 @@ export const CheckboxGroupMixin = (superclass) =>
      * @private
      */
     __filterCheckboxes(nodes) {
-      return nodes.filter((node) => node.nodeType === Node.ELEMENT_NODE && node.localName === 'vaadin-checkbox');
+      return nodes.filter((node) => node instanceof Checkbox);
     }
 
     /**
