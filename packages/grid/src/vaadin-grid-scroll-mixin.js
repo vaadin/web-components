@@ -89,19 +89,6 @@ export const ScrollMixin = (superClass) =>
       return this.$.table.scrollLeft;
     }
 
-    /** @private */
-    get _scrollTop() {
-      return this.$.table.scrollTop;
-    }
-
-    /**
-     * Override (from iron-scroll-target-behavior) to avoid document scroll
-     * @private
-     */
-    set _scrollTop(top) {
-      this.$.table.scrollTop = top;
-    }
-
     /** @protected */
     get _lazyColumns() {
       return this.columnRendering === 'lazy';
