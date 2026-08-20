@@ -10,7 +10,9 @@
       "calc",
       "calculator",
       "math"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "calc"
   },
   {
     "name": "absolute-position",
@@ -21,7 +23,8 @@
     "meta": [
       "css",
       "layout"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "accessibility",
@@ -45,7 +48,8 @@
       "html",
       "component",
       "navigation"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "add-dock",
@@ -56,7 +60,9 @@
     "meta": [
       "layout",
       "navigation"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "dock"
   },
   {
     "name": "adjust",
@@ -69,7 +75,9 @@
       "contrast",
       "brightness",
       "settings"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "contrast"
   },
   {
     "name": "airplane",
@@ -270,7 +278,8 @@
     "meta": [
       "html",
       "pointer"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "arrow-backward",
@@ -303,7 +312,9 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "arrow-circle-down"
   },
   {
     "name": "arrow-circle-left",
@@ -323,7 +334,9 @@
     ],
     "meta": [
       "previous"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "arrow-circle-left"
   },
   {
     "name": "arrow-circle-right",
@@ -343,7 +356,9 @@
     ],
     "meta": [
       "next"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "arrow-circle-right"
   },
   {
     "name": "arrow-circle-up",
@@ -363,7 +378,9 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "arrow-circle-up"
   },
   {
     "name": "arrow-down",
@@ -614,7 +631,9 @@
       "alert",
       "reminder",
       "ring"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "bell"
   },
   {
     "name": "bell-slash",
@@ -648,7 +667,9 @@
       "do not disturb",
       "off",
       "disable"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "bell-slash"
   },
   {
     "name": "boat",
@@ -749,7 +770,9 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "bookmark"
   },
   {
     "name": "briefcase",
@@ -794,7 +817,9 @@
     ],
     "meta": [
       "insect"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "bug"
   },
   {
     "name": "building",
@@ -818,7 +843,9 @@
       "structure",
       "headquarters",
       "office"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "building"
   },
   {
     "name": "bullets",
@@ -854,7 +881,8 @@
       "html",
       "component",
       "navigation"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "calc",
@@ -947,7 +975,9 @@
       "appointment",
       "meeting",
       "time"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "calendar"
   },
   {
     "name": "calendar-user",
@@ -1031,7 +1061,9 @@
     ],
     "meta": [
       "triangle"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "caret-square-down"
   },
   {
     "name": "caret-square-left-o",
@@ -1042,7 +1074,9 @@
     "meta": [
       "triangle",
       "previous"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "caret-square-left"
   },
   {
     "name": "caret-square-right-o",
@@ -1055,7 +1089,9 @@
       "play",
       "start",
       "next"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "caret-square-right"
   },
   {
     "name": "caret-square-up-o",
@@ -1065,7 +1101,9 @@
     ],
     "meta": [
       "triangle"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "caret-square-up"
   },
   {
     "name": "caret-up",
@@ -1097,7 +1135,9 @@
     "meta": [
       "shopping",
       "buy"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "cart"
   },
   {
     "name": "chart",
@@ -1119,7 +1159,9 @@
     "meta": [
       "graph",
       "diagram"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "line-chart"
   },
   {
     "name": "chat",
@@ -1169,7 +1211,9 @@
       "assign",
       "agreed",
       "ok"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "check-circle"
   },
   {
     "name": "check-square",
@@ -1195,7 +1239,9 @@
       "assign",
       "agreed",
       "ok"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "check-square"
   },
   {
     "name": "chevron-circle-down",
@@ -1215,7 +1261,9 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "chevron-circle-down"
   },
   {
     "name": "chevron-circle-left",
@@ -1235,7 +1283,9 @@
     ],
     "meta": [
       "previous"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "chevron-circle-left"
   },
   {
     "name": "chevron-circle-right",
@@ -1255,7 +1305,9 @@
     ],
     "meta": [
       "next"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "chevron-circle-right"
   },
   {
     "name": "chevron-circle-up",
@@ -1275,7 +1327,9 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "chevron-circle-up"
   },
   {
     "name": "chevron-down",
@@ -1351,7 +1405,9 @@
     "meta": [
       "ball",
       "disc"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "circle"
   },
   {
     "name": "clipboard",
@@ -1468,7 +1524,9 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "cloud-download"
   },
   {
     "name": "cloud-o",
@@ -1479,7 +1537,9 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "cloud"
   },
   {
     "name": "cloud-upload",
@@ -1499,7 +1559,9 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "cloud-upload"
   },
   {
     "name": "code",
@@ -1548,7 +1610,9 @@
     "meta": [
       "settings",
       "gear"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "cog"
   },
   {
     "name": "cogs",
@@ -1574,7 +1638,8 @@
       "component",
       "navigation",
       "dropdown"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "comment",
@@ -1611,7 +1676,9 @@
       "chat",
       "dialog",
       "talk"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "comment-ellipsis"
   },
   {
     "name": "comment-o",
@@ -1624,7 +1691,9 @@
       "chat",
       "dialog",
       "talk"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "comment"
   },
   {
     "name": "comments",
@@ -1648,7 +1717,9 @@
       "chat",
       "dialog",
       "talk"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "comments"
   },
   {
     "name": "compress",
@@ -1691,7 +1762,9 @@
     "meta": [
       "share",
       "network"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "connect"
   },
   {
     "name": "controller",
@@ -1727,7 +1800,9 @@
       "duplicate",
       "documents",
       "files"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "copy"
   },
   {
     "name": "copyright",
@@ -1832,7 +1907,9 @@
     ],
     "meta": [
       "html"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "code"
   },
   {
     "name": "cube",
@@ -1904,7 +1981,8 @@
       "layout",
       "html",
       "component"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "deindent",
@@ -1917,7 +1995,9 @@
       "column",
       "unindent",
       "outdent"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "outdent"
   },
   {
     "name": "dental-chair",
@@ -2106,7 +2186,9 @@
     ],
     "meta": [
       "dots"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "ellipsis-circle"
   },
   {
     "name": "ellipsis-h",
@@ -2154,7 +2236,9 @@
       "mail",
       "letter",
       "email"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "envelope"
   },
   {
     "name": "envelope-open",
@@ -2178,7 +2262,9 @@
       "mail",
       "letter",
       "email"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "envelope-open"
   },
   {
     "name": "eraser",
@@ -2238,7 +2324,9 @@
     ],
     "meta": [
       "warning"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "exclamation-circle"
   },
   {
     "name": "exit",
@@ -2261,7 +2349,9 @@
     "meta": [
       "sign out",
       "log out"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "exit"
   },
   {
     "name": "expand",
@@ -2367,7 +2457,8 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "facebook-square",
@@ -2378,7 +2469,8 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "factory",
@@ -2480,7 +2572,9 @@
     ],
     "meta": [
       "document"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "file"
   },
   {
     "name": "file-picture",
@@ -2590,7 +2684,9 @@
     "meta": [
       "text",
       "document"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "file-text"
   },
   {
     "name": "file-tree",
@@ -2612,7 +2708,9 @@
     "meta": [
       "nodes",
       "mindmap"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "file-tree"
   },
   {
     "name": "file-tree-sub",
@@ -2623,7 +2721,9 @@
     "meta": [
       "nodes",
       "mindmap"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "file-tree"
   },
   {
     "name": "file-zip",
@@ -2710,7 +2810,9 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "flag"
   },
   {
     "name": "adobe-flash",
@@ -2720,7 +2822,8 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "flash",
@@ -2789,7 +2892,9 @@
       "document",
       "file",
       "container"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "folder"
   },
   {
     "name": "folder-open",
@@ -2813,7 +2918,9 @@
       "document",
       "file",
       "container"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "folder-open"
   },
   {
     "name": "font",
@@ -2862,7 +2969,9 @@
       "unhappy",
       "sad",
       "emoji"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "frown"
   },
   {
     "name": "function",
@@ -2970,7 +3079,8 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "google-plus-square",
@@ -2981,7 +3091,8 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "grab",
@@ -3018,7 +3129,9 @@
       "html",
       "component",
       "table"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "grid"
   },
   {
     "name": "grid-big",
@@ -3040,7 +3153,9 @@
     "meta": [
       "menu",
       "window"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "grid-big"
   },
   {
     "name": "grid-h",
@@ -3066,7 +3181,9 @@
       "html",
       "component",
       "table"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "grid"
   },
   {
     "name": "grid-small-o",
@@ -3079,7 +3196,9 @@
       "html",
       "component",
       "table"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "grid-small"
   },
   {
     "name": "grid-v",
@@ -3136,7 +3255,9 @@
       "person",
       "happy",
       "joy"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "person"
   },
   {
     "name": "harddrive",
@@ -3166,7 +3287,9 @@
       "harddisk",
       "HD",
       "storage"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "harddrive"
   },
   {
     "name": "hash",
@@ -3245,7 +3368,9 @@
       "love",
       "health",
       "healthcare"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "heart"
   },
   {
     "name": "home",
@@ -3265,7 +3390,9 @@
     ],
     "meta": [
       "house"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "home"
   },
   {
     "name": "inbox",
@@ -3319,7 +3446,9 @@
     ],
     "meta": [
       "information"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "info-circle"
   },
   {
     "name": "input",
@@ -3434,7 +3563,9 @@
     "meta": [
       "input",
       "type"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "keyboard"
   },
   {
     "name": "laptop",
@@ -3481,7 +3612,9 @@
     "meta": [
       "arrow",
       "angle"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "level-down"
   },
   {
     "name": "level-left",
@@ -3509,7 +3642,9 @@
       "back",
       "reply",
       "previous"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "level-left"
   },
   {
     "name": "level-right",
@@ -3537,7 +3672,9 @@
       "arrow",
       "angle",
       "next"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "level-right"
   },
   {
     "name": "level-up",
@@ -3559,7 +3696,9 @@
     "meta": [
       "arrow",
       "angle"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "level-up"
   },
   {
     "name": "lifebuoy",
@@ -3663,7 +3802,8 @@
       "html",
       "component",
       "navigation"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "list-ul",
@@ -3699,7 +3839,9 @@
       "map",
       "direction",
       "compass"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "compass"
   },
   {
     "name": "location-arrow-circle-o",
@@ -3711,7 +3853,9 @@
       "map",
       "direction",
       "compass"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "location-arrow-circle"
   },
   {
     "name": "lock",
@@ -3877,7 +4021,9 @@
       "whatever",
       "bored",
       "emoji"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "meh"
   },
   {
     "name": "microphone",
@@ -3930,7 +4076,9 @@
       "collapse",
       "remove",
       "no-entry"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "minus-circle"
   },
   {
     "name": "minus-square-o",
@@ -3942,7 +4090,9 @@
       "minimize",
       "collapse",
       "remove"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "minus-square"
   },
   {
     "name": "mobile",
@@ -3985,7 +4135,8 @@
       "web page",
       "site",
       "pop-up"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "money",
@@ -4019,7 +4170,9 @@
     "meta": [
       "night",
       "evening"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "moon"
   },
   {
     "name": "movie",
@@ -4072,7 +4225,8 @@
       "html",
       "component",
       "navigation"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "notebook",
@@ -4270,7 +4424,8 @@
       "layout",
       "html",
       "component"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "paperclip",
@@ -4303,7 +4458,9 @@
     "meta": [
       "email",
       "send"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "paperplane"
   },
   {
     "name": "paragraph",
@@ -4485,7 +4642,9 @@
     ],
     "meta": [
       "start"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "play-circle"
   },
   {
     "name": "plug",
@@ -4529,7 +4688,9 @@
     "meta": [
       "add",
       "expand"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "plus-circle"
   },
   {
     "name": "plus-minus",
@@ -4551,7 +4712,9 @@
     "meta": [
       "add",
       "expand"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "plus-square"
   },
   {
     "name": "pointer",
@@ -4668,7 +4831,9 @@
     "meta": [
       "help",
       "puzzle"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "question-circle"
   },
   {
     "name": "quote-left",
@@ -4838,7 +5003,9 @@
       "route",
       "path",
       "intersection"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "branch"
   },
   {
     "name": "road-branches",
@@ -4852,7 +5019,9 @@
       "route",
       "path",
       "intersection"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "branch"
   },
   {
     "name": "road-split",
@@ -4928,7 +5097,9 @@
     "meta": [
       "news",
       "subscribe"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "rss"
   },
   {
     "name": "safe",
@@ -5038,7 +5209,8 @@
       "component",
       "navigation",
       "dropdown"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "database",
@@ -5130,7 +5302,9 @@
       "log in",
       "login",
       "enter"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "sign-in"
   },
   {
     "name": "sign-out",
@@ -5157,7 +5331,9 @@
       "log out",
       "leave",
       "exit"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "sign-out"
   },
   {
     "name": "signal",
@@ -5196,7 +5372,9 @@
     ],
     "meta": [
       "adjust"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "sliders"
   },
   {
     "name": "sliders",
@@ -5222,7 +5400,9 @@
       "happy",
       "smile",
       "emoji"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "smiley"
   },
   {
     "name": "sort",
@@ -5282,7 +5462,9 @@
     "meta": [
       "loader",
       "loading"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "spinner"
   },
   {
     "name": "spinner-third",
@@ -5293,7 +5475,9 @@
     "meta": [
       "loader",
       "loading"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "spinner"
   },
   {
     "name": "split",
@@ -5340,7 +5524,9 @@
     ],
     "meta": [
       "soup"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "cutlery"
   },
   {
     "name": "square-shadow",
@@ -5352,7 +5538,9 @@
     "meta": [
       "box",
       "check"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "square"
   },
   {
     "name": "star",
@@ -5373,7 +5561,9 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "star-half"
   },
   {
     "name": "star-half-left-o",
@@ -5383,7 +5573,9 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "star-half-left"
   },
   {
     "name": "star-half-right",
@@ -5393,7 +5585,9 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "star-half"
   },
   {
     "name": "star-half-right-o",
@@ -5403,7 +5597,9 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "star-half-right"
   },
   {
     "name": "star-o",
@@ -5414,7 +5610,9 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "star"
   },
   {
     "name": "start-cog",
@@ -5462,7 +5660,9 @@
       "doctor",
       "healthcare",
       "diagnose"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "doctor"
   },
   {
     "name": "stop",
@@ -5534,7 +5734,9 @@
     "meta": [
       "summer",
       "warm"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "sun"
   },
   {
     "name": "superscript",
@@ -5597,7 +5799,8 @@
       "component",
       "navigation",
       "tabsheet"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "tag",
@@ -5682,7 +5885,9 @@
       "layout",
       "html",
       "component"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "input"
   },
   {
     "name": "text-label",
@@ -5696,7 +5901,9 @@
       "font",
       "character",
       "text-decoration"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "font"
   },
   {
     "name": "text-width",
@@ -5708,7 +5915,8 @@
       "font",
       "character",
       "text-decoration"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "teeth",
@@ -5721,7 +5929,8 @@
       "dentist",
       "healthcare",
       "mouth"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "thin-square",
@@ -5733,7 +5942,9 @@
     "meta": [
       "check box",
       "stop"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "square"
   },
   {
     "name": "tooth",
@@ -5745,7 +5956,8 @@
       "dental",
       "dentist",
       "healthcare"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "thumbs-down",
@@ -5767,7 +5979,9 @@
     "meta": [
       "dislike",
       "facebook"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "thumbs-down"
   },
   {
     "name": "thumbs-up",
@@ -5789,7 +6003,9 @@
     "meta": [
       "like",
       "facebook"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "thumbs-up"
   },
   {
     "name": "ticket",
@@ -5889,7 +6105,8 @@
       "html",
       "component",
       "navigation"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "trophy",
@@ -5928,7 +6145,8 @@
       "html",
       "component",
       "navigation"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "twitter",
@@ -5939,7 +6157,8 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "twitter-square",
@@ -5950,7 +6169,8 @@
     ],
     "meta": [
       ""
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "umbrella",
@@ -6116,7 +6336,8 @@
     "meta": [
       "screen",
       "canvas"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "vimeo",
@@ -6130,7 +6351,8 @@
       "video",
       "clip",
       "movie"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "vimeo-square",
@@ -6144,7 +6366,8 @@
       "video",
       "clip",
       "movie"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "volume",
@@ -6264,7 +6487,9 @@
       "x",
       "delete",
       "remove"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "close-circle"
   },
   {
     "name": "youtube",
@@ -6278,7 +6503,8 @@
       "video",
       "clip",
       "movie"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "youtube-square",
@@ -6292,7 +6518,8 @@
       "video",
       "clip",
       "movie"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "diploma",
@@ -6426,7 +6653,9 @@
       "option",
       "shortcut",
       "type"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "alt"
   },
   {
     "name": "alt",
@@ -6467,7 +6696,9 @@
       "back",
       "shortcut",
       "type"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "backspace"
   },
   {
     "name": "backspace",
@@ -6596,7 +6827,9 @@
       "delete",
       "remove",
       "x"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "close"
   },
   {
     "name": "cluster",
@@ -6663,7 +6896,9 @@
     "meta": [
       "closed",
       "disabled"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "close"
   },
   {
     "name": "ctrl-a",
@@ -6676,7 +6911,8 @@
       "shortcut",
       "type",
       "control"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "ctrl",
@@ -6689,7 +6925,8 @@
       "shortcut",
       "type",
       "control"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "cursor-o",
@@ -6701,7 +6938,9 @@
       "pointer",
       "click",
       "mouse"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "cursor"
   },
   {
     "name": "cursor",
@@ -6727,7 +6966,8 @@
       "type",
       "delete",
       "remove"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "del",
@@ -6741,7 +6981,8 @@
       "type",
       "delete",
       "remove"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "diamond-o",
@@ -6754,7 +6995,9 @@
       "gem",
       "ruby",
       "jewelry"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "diamond"
   },
   {
     "name": "diamond",
@@ -6780,7 +7023,9 @@
       "horizontal",
       "more",
       "additional"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "ellipsis-h"
   },
   {
     "name": "ellipsis-dots-v",
@@ -6793,7 +7038,9 @@
       "vertical",
       "more",
       "additional"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "ellipsis-v"
   },
   {
     "name": "enter-arrow",
@@ -6834,7 +7081,9 @@
       "mail",
       "letter",
       "email"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "envelopes"
   },
   {
     "name": "envelopes",
@@ -6863,7 +7112,8 @@
       "stop",
       "close",
       "cancel"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "esc",
@@ -6879,7 +7129,8 @@
       "stop",
       "close",
       "cancel"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "name": "euro",
@@ -7037,7 +7288,9 @@
       "filter",
       "limit",
       "define"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "filter"
   },
   {
     "name": "globe-wire",
@@ -7203,7 +7456,9 @@
       "web",
       "page",
       "site"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "mobile"
   },
   {
     "name": "mobile-retro",
@@ -7215,7 +7470,9 @@
     "meta": [
       "cellphone",
       "old"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "mobile"
   },
   {
     "name": "money-deposit",
@@ -7273,7 +7530,9 @@
       "horizon",
       "summer",
       "time"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "sun-rise"
   },
   {
     "name": "newspaper",
@@ -7327,7 +7586,9 @@
       "modifier",
       "Mac",
       "OS X"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "command"
   },
   {
     "name": "option",
@@ -7343,7 +7604,9 @@
       "modifier",
       "Mac",
       "OS X"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "command"
   },
   {
     "name": "phone-landline",
@@ -7356,7 +7619,9 @@
       "call",
       "dial",
       "contact"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "phone"
   },
   {
     "name": "pie-bar-chart",
@@ -7383,7 +7648,9 @@
       "currency",
       "banking",
       "finance"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "piggy-bank"
   },
   {
     "name": "piggy-bank",
@@ -7436,7 +7703,9 @@
       "measure",
       "weight",
       "evaluate"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "scale"
   },
   {
     "name": "scale",
@@ -7474,7 +7743,9 @@
       "shortcut",
       "type",
       "modifier"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "shift"
   },
   {
     "name": "shift",
@@ -7551,7 +7822,9 @@
       "warehouse",
       "storing",
       "pallet"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "forklift"
   },
   {
     "name": "stopwatch",
@@ -7619,7 +7892,9 @@
       "type",
       "tabulator",
       "indent"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "tab"
   },
   {
     "name": "tab",
@@ -7661,7 +7936,9 @@
       "click",
       "pointer",
       "finger"
-    ]
+    ],
+    "deprecated": true,
+    "replacement": "pointer"
   },
   {
     "name": "trending-down",
@@ -7713,6 +7990,252 @@
       "currency",
       "cash",
       "coins"
+    ]
+  },
+  {
+    "name": "branch",
+    "code": "e670",
+    "categories": [
+      "Sign",
+      "Directions",
+      "Web application"
+    ],
+    "meta": [
+      "route",
+      "path",
+      "intersection"
+    ]
+  },
+  {
+    "name": "caret-square-down",
+    "code": "e7bf",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "triangle"
+    ]
+  },
+  {
+    "name": "caret-square-left",
+    "code": "e7c0",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "triangle",
+      "previous"
+    ]
+  },
+  {
+    "name": "caret-square-right",
+    "code": "e7c1",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "triangle",
+      "play",
+      "start",
+      "next"
+    ]
+  },
+  {
+    "name": "caret-square-up",
+    "code": "e7c2",
+    "categories": [
+      "Directions"
+    ],
+    "meta": [
+      "triangle"
+    ]
+  },
+  {
+    "name": "command",
+    "code": "e947",
+    "categories": [
+      "Keyboard"
+    ],
+    "meta": [
+      "key",
+      "shortcut",
+      "type",
+      "command",
+      "modifier",
+      "Mac",
+      "OS X"
+    ]
+  },
+  {
+    "name": "compass",
+    "code": "e727",
+    "categories": [
+      "Location"
+    ],
+    "meta": [
+      "map",
+      "direction",
+      "compass"
+    ]
+  },
+  {
+    "name": "contrast",
+    "code": "e74a",
+    "categories": [
+      "Web application",
+      "Edit"
+    ],
+    "meta": [
+      "contrast",
+      "brightness",
+      "settings"
+    ]
+  },
+  {
+    "name": "dock",
+    "code": "e620",
+    "categories": [
+      "Web application"
+    ],
+    "meta": [
+      "layout",
+      "navigation"
+    ]
+  },
+  {
+    "name": "forklift",
+    "code": "e957",
+    "categories": [
+      "Item"
+    ],
+    "meta": [
+      "boxes",
+      "packages",
+      "warehouse",
+      "storing",
+      "pallet"
+    ]
+  },
+  {
+    "name": "frown",
+    "code": "e6a4",
+    "categories": [
+      "Social",
+      "Sign"
+    ],
+    "meta": [
+      "unhappy",
+      "sad",
+      "emoji"
+    ]
+  },
+  {
+    "name": "meh",
+    "code": "e6b5",
+    "categories": [
+      "Social",
+      "Sign"
+    ],
+    "meta": [
+      "blah",
+      "whatever",
+      "bored",
+      "emoji"
+    ]
+  },
+  {
+    "name": "minus-square",
+    "code": "e7f5",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "minimize",
+      "collapse",
+      "remove"
+    ]
+  },
+  {
+    "name": "outdent",
+    "code": "e770",
+    "categories": [
+      "Text editor"
+    ],
+    "meta": [
+      "paragraph",
+      "column",
+      "unindent",
+      "outdent"
+    ]
+  },
+  {
+    "name": "person",
+    "code": "e6a8",
+    "categories": [
+      "People"
+    ],
+    "meta": [
+      "human",
+      "person",
+      "happy",
+      "joy"
+    ]
+  },
+  {
+    "name": "plus-square",
+    "code": "e800",
+    "categories": [
+      "Form"
+    ],
+    "meta": [
+      "add",
+      "expand"
+    ]
+  },
+  {
+    "name": "smiley",
+    "code": "e6d0",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      "happy",
+      "smile",
+      "emoji"
+    ]
+  },
+  {
+    "name": "square",
+    "code": "e7a6",
+    "categories": [
+      "Shape",
+      "Form"
+    ],
+    "meta": [
+      "check box",
+      "stop"
+    ]
+  },
+  {
+    "name": "star-half",
+    "code": "e79d",
+    "categories": [
+      "Social"
+    ],
+    "meta": [
+      ""
+    ]
+  },
+  {
+    "name": "sun",
+    "code": "e73c",
+    "categories": [
+      "Sign",
+      "Weather"
+    ],
+    "meta": [
+      "summer",
+      "warm"
     ]
   }
 ]

@@ -24,11 +24,22 @@ function getIconsetName(icon) {
 }
 
 function initIconsMap(iconset, name) {
-  iconset._icons = [...iconset.querySelectorAll('[id]')].reduce((map, svg) => {
+  const icons = [...iconset.querySelectorAll('[id]')].reduce((map, svg) => {
     const key = getIconId(svg.id, name);
     map[key] = svg;
     return map;
   }, {});
+
+  [...iconset.querySelectorAll('[id]')].forEach((svg) => {
+    const use = svg.children.length === 1 && svg.firstElementChild.localName === 'use' ? svg.firstElementChild : null;
+    const href = use?.getAttribute('href');
+    const target = href?.startsWith('#') ? icons[getIconId(href.slice(1), name)] : null;
+    if (target) {
+      icons[getIconId(svg.id, name)] = target;
+    }
+  });
+
+  iconset._icons = icons;
 }
 
 export const IconsetMixin = (superClass) =>

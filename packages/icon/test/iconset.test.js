@@ -12,6 +12,7 @@ describe('vaadin-iconset', () => {
         <svg xmlns="http://www.w3.org/2000/svg">
           <defs>
             <g id="vaadin:caret-down"><path d="M3 4h10l-5 7z"></path></g>
+            <g id="vaadin:caret-down-alias"><use href="#vaadin:caret-down"></use></g>
             <g id="caret-up"><path d="M13 12h-10l5-7z"></path></g>
           </defs>
         </svg>
@@ -34,6 +35,10 @@ describe('vaadin-iconset', () => {
     it('should return svg literal when called with non-prefixed id', () => {
       const { svg } = Iconset.getIconSvg('caret-up', 'vaadin');
       expect(isValidSvg(svg)).to.be.true;
+    });
+
+    it('should resolve an icon alias using a <use> element', () => {
+      expect(iconset._icons['caret-down-alias']).to.equal(iconset._icons['caret-down']);
     });
 
     it('should return empty svg when called with incorrect id', () => {
