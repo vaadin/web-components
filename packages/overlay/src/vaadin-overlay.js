@@ -7,6 +7,7 @@ import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { overlayStyles } from './styles/vaadin-overlay-base-styles.js';
@@ -93,6 +94,15 @@ class Overlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjec
         </div>
       </div>
     `;
+  }
+
+  /** @protected */
+  firstUpdated() {
+    super.firstUpdated();
+
+    issueWarning(
+      '`<vaadin-overlay>` is deprecated and will be removed in Vaadin 26. Consider using `OverlayMixin` and `PositionMixin` instead.',
+    );
   }
 }
 
