@@ -11,15 +11,6 @@ import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { parseNumber } from './number-utils.js';
 
-// [type=number] value returns an empty string for invalid numbers,
-// while valueAsNumber returns NaN for empty strings, which makes
-// invalid and empty values indistinguishable. It's only possible
-// to detect unparsable input by checking the validity.badInput
-// boolean property. This string is used in _inputElementValue
-// as a marker to help Flow detect and clear unparsable values
-// through that property.
-const BAD_INPUT_STRING = 'NaN';
-
 /**
  * A mixin providing common number field functionality.
  */
@@ -61,11 +52,7 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_stepChanged(step, inputElement)'];
-    }
-
-    static get delegateProps() {
-      return [...super.delegateProps, 'min', 'max'];
+      return ['_stepChanged(step)'];
     }
 
     static get constraints() {
@@ -74,8 +61,7 @@ export const NumberFieldMixin = (superClass) =>
 
     constructor() {
       super();
-      this._setType('number');
-      this.__onWheel = this.__onWheel.bind(this);
+      this._setType('text');
     }
 
     /** @protected */
@@ -83,21 +69,11 @@ export const NumberFieldMixin = (superClass) =>
       const tag = this.localName;
       return [
         `
-          ${tag} input[type="number"]::-webkit-outer-spin-button,
-          ${tag} input[type="number"]::-webkit-inner-spin-button {
-            appearance: none;
-            margin: 0;
-          }
-
-          ${tag} input[type="number"] {
-            appearance: textfield;
-          }
-
-          ${tag}[dir='rtl'] input[type="number"]::placeholder {
+          ${tag}[dir='rtl'] input[slot="input"]::placeholder {
             direction: rtl;
           }
 
-          ${tag}[dir='rtl']:not([step-buttons-visible]) input[type="number"]::placeholder {
+          ${tag}[dir='rtl']:not([step-buttons-visible]) input[slot="input"]::placeholder {
             text-align: left;
           }
         `,
@@ -118,7 +94,7 @@ export const NumberFieldMixin = (superClass) =>
      * @private
      */
     get __hasUnparsableValue() {
-      return this._inputElementValue === BAD_INPUT_STRING;
+      return !!this._inputElementValue && !this._hasValue;
     }
 
     /** @protected */
@@ -189,50 +165,6 @@ export const NumberFieldMixin = (superClass) =>
         stepMismatch,
         valid: !(badInput || valueMissing || rangeUnderflow || rangeOverflow || stepMismatch),
       };
-    }
-
-    /**
-     * Override the method from `InputMixin` to add
-     * a wheel event listener to the input element.
-     *
-     * @param {HTMLElement} input
-     * @override
-     * @protected
-     */
-    _addInputListeners(input) {
-      super._addInputListeners(input);
-      input.addEventListener('wheel', this.__onWheel);
-    }
-
-    /**
-     * Override the method from `InputMixin` to remove
-     * the wheel event listener from the input element.
-     *
-     * @param {HTMLElement} input
-     * @override
-     * @protected
-     */
-    _removeInputListeners(input) {
-      super._removeInputListeners(input);
-      input.removeEventListener('wheel', this.__onWheel);
-    }
-
-    /**
-     * Prevents default browser behavior for wheel events on the input element
-     * when it's focused. More precisely, this prevents the browser from attempting
-     * to increment or decrement the value when the mouse wheel is used within
-     * the input element.
-     *
-     * CAVEAT: As a side-effect, this also prevents page scrolling when
-     * the pointer is positioned over the field and the field is focused.
-     *
-     * @param {WheelEvent} event
-     * @private
-     */
-    __onWheel(event) {
-      if (this.hasAttribute('focused')) {
-        event.preventDefault();
-      }
     }
 
     /** @protected */
@@ -420,12 +352,13 @@ export const NumberFieldMixin = (superClass) =>
 
     /**
      * @param {number} step
-     * @param {HTMLElement | undefined} inputElement
      * @protected
      */
-    _stepChanged(step, inputElement) {
-      if (inputElement) {
-        inputElement.step = step || 'any';
+    _stepChanged(step) {
+      if (step != null && step <= 0) {
+        issueWarning(
+          `<${this.localName}> The \`step\` property must be a positive number but \`${step}\` was provided, so it was ignored.`,
+        );
       }
     }
 
@@ -438,9 +371,7 @@ export const NumberFieldMixin = (superClass) =>
     _valueChanged(newVal, oldVal) {
       // Validate value to be numeric
       if (newVal && parseNumber(String(newVal)) === null) {
-        if (!this.__userInputValue) {
-          issueWarning(`Trying to set non-numeric value "${newVal}" to <${this.localName}>. Clearing the value.`);
-        }
+        issueWarning(`Trying to set non-numeric value "${newVal}" to <${this.localName}>. Clearing the value.`);
         this.value = '';
       } else if (typeof this.value !== 'string') {
         this.value = String(this.value);
@@ -474,7 +405,8 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     /**
-     * Override this method from `InputMixin` to prevent
+     * Override this method from `InputMixin` to parse the input element
+     * text before assigning it to the value property, and to prevent
      * the value change caused by user input from being treated
      * as initiated programmatically by the developer and therefore
      * from getting silently committed by the value observer without
@@ -486,13 +418,23 @@ export const NumberFieldMixin = (superClass) =>
      * @protected
      */
     _onInput(event) {
+      const raw = event.composedPath()[0].value;
+      // Parse trusted input only: synthetic input event text (step buttons,
+      // clear button) is already canonical. Assigning raw text and letting
+      // the value observer clear it would leak unparsable text into `value`
+      // for a moment, firing value-changed events for the round-trip.
+      const parsed = event.isTrusted ? parseNumber(raw) : raw;
       this.__keepCommittedValue = true;
-      // The non-numeric value warning is meant for developers, so it must
-      // not fire when the assignment originates from trusted user input.
-      this.__userInputValue = event.isTrusted;
-      super._onInput(event);
-      this.__userInputValue = false;
+      this.__userInput = event.isTrusted;
+      this.value = parsed == null ? '' : parsed;
+      this.__userInput = false;
       this.__keepCommittedValue = false;
+
+      // Re-validate on the unparsable -> unparsable path, where `value`
+      // stays an empty string and the value observer never runs.
+      if (this.invalid) {
+        this._requestValidation();
+      }
     }
 
     /**
@@ -582,19 +524,5 @@ export const NumberFieldMixin = (superClass) =>
 
       this.__committedValue = this.value;
       this.__committedUnparsableValueStatus = this.__hasUnparsableValue;
-    }
-
-    /** @override */
-    get _inputElementValue() {
-      if (this.inputElement && this.inputElement.validity.badInput) {
-        return BAD_INPUT_STRING;
-      }
-
-      return super._inputElementValue;
-    }
-
-    /** @override */
-    set _inputElementValue(value) {
-      super._inputElementValue = value;
     }
   };
