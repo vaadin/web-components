@@ -18,7 +18,7 @@ function keptByNativeSanitizer(value) {
 }
 
 describe('native parity', () => {
-  let field, input;
+  let field, oracle;
 
   const values = ['', '0', '5', '-5', '0.3', '10.5', '-10', '1e3', '0.1', '2.5', '0.14', '0.39', '.5'];
 
@@ -39,7 +39,8 @@ describe('native parity', () => {
   beforeEach(async () => {
     field = fixtureSync('<vaadin-number-field></vaadin-number-field>');
     await nextRender();
-    input = field.inputElement;
+    oracle = document.createElement('input');
+    oracle.type = 'number';
   });
 
   constraintSets.forEach((constraints) => {
@@ -52,12 +53,24 @@ describe('native parity', () => {
           field.value = value;
           await nextUpdate(field);
 
+          // Every entry in `static get constraints()` must be mirrored onto
+          // the oracle, since the field no longer delegates any of them to
+          // its own input element. A missing `min`, `max` or `required`
+          // silently inverts the verdict for the affected cases, and native
+          // treats a missing `step` as `1` rather than as no constraint,
+          // so it must be translated to "any".
+          oracle.min = constraints.min != null ? String(constraints.min) : '';
+          oracle.max = constraints.max != null ? String(constraints.max) : '';
+          oracle.step = constraints.step != null ? String(constraints.step) : 'any';
+          oracle.required = !!constraints.required;
+          oracle.value = value;
+
           const validity = field.__validity;
-          expect(validity.valueMissing, 'valueMissing').to.equal(input.validity.valueMissing);
-          expect(validity.rangeUnderflow, 'rangeUnderflow').to.equal(input.validity.rangeUnderflow);
-          expect(validity.rangeOverflow, 'rangeOverflow').to.equal(input.validity.rangeOverflow);
-          expect(validity.stepMismatch, 'stepMismatch').to.equal(input.validity.stepMismatch);
-          expect(validity.valid, 'valid').to.equal(input.checkValidity());
+          expect(validity.valueMissing, 'valueMissing').to.equal(oracle.validity.valueMissing);
+          expect(validity.rangeUnderflow, 'rangeUnderflow').to.equal(oracle.validity.rangeUnderflow);
+          expect(validity.rangeOverflow, 'rangeOverflow').to.equal(oracle.validity.rangeOverflow);
+          expect(validity.stepMismatch, 'stepMismatch').to.equal(oracle.validity.stepMismatch);
+          expect(validity.valid, 'valid').to.equal(oracle.checkValidity());
         });
       });
     });

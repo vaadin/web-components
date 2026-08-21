@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { fixtureSync, isDesktopSafari, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-number-field.js';
 
@@ -49,30 +49,6 @@ describe('validation', () => {
       await nextUpdate(field);
       expect(field.value).to.be.empty;
       expect(field.validate()).to.be.true;
-    });
-
-    it('should align checkValidity with the native input element', async () => {
-      field.value = -1;
-      field.min = 0;
-      await nextUpdate(field);
-
-      expect(field.checkValidity()).to.equal(input.checkValidity());
-    });
-
-    [
-      { props: { max: 4 }, value: 5 },
-      { props: { step: 1 }, value: 1.5 },
-      { props: { required: true }, value: '' },
-      { props: { min: 1, max: 5 }, value: 3 },
-      { props: { min: -10 }, value: -10 },
-    ].forEach(({ props, value }) => {
-      it(`should align checkValidity with the native input element for ${JSON.stringify(props)} and value "${value}"`, async () => {
-        Object.assign(field, props);
-        field.value = value;
-        await nextUpdate(field);
-
-        expect(field.checkValidity()).to.equal(input.checkValidity());
-      });
     });
 
     it('should allow setting decimals', async () => {
@@ -175,15 +151,15 @@ describe('validation', () => {
       expect(field.invalid).to.be.false;
     });
 
-    // Safari 26 installed since Playwright 1.56 disallows typing two minus signs
-    (isDesktopSafari ? it.skip : it)('should be invalid when trying to commit an invalid number', async () => {
+    it('should be invalid when trying to commit an invalid number', async () => {
       await sendKeys({ type: '1--' });
       input.blur();
       expect(field.invalid).to.be.true;
       expect(field.value).to.equal('');
+      expect(input.value).to.equal('1--');
     });
 
-    (isDesktopSafari ? it.skip : it)('should be valid after removing an invalid number', async () => {
+    it('should be valid after removing an invalid number', async () => {
       await sendKeys({ type: '1--' });
       input.blur();
       input.focus();
@@ -194,17 +170,15 @@ describe('validation', () => {
       expect(field.invalid).to.be.false;
     });
 
-    (isDesktopSafari ? it.skip : it)(
-      'should be invalid when committing an invalid number to a required field',
-      async () => {
-        field.required = true;
-        await nextUpdate(field);
-        await sendKeys({ type: '1--' });
-        input.blur();
-        expect(field.invalid).to.be.true;
-        expect(field.value).to.equal('');
-      },
-    );
+    it('should be invalid when committing an invalid number to a required field', async () => {
+      field.required = true;
+      await nextUpdate(field);
+      await sendKeys({ type: '1--' });
+      input.blur();
+      expect(field.invalid).to.be.true;
+      expect(field.value).to.equal('');
+      expect(input.value).to.equal('1--');
+    });
   });
 
   describe('initial', () => {
