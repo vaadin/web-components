@@ -268,10 +268,7 @@ export const GridMixin = (superClass) =>
 
       if (props.has('__tableRect')) {
         setTimeout(() => this.__updateColumnsBodyContentHidden());
-
-        // Updating data can change the visibility of the scroll bar. Therefore,
-        // the scroll position has to be recalculated.
-        this.__updateHorizontalScrollPosition();
+        this.__updateFrozenCellOffsets();
       }
     }
 
@@ -653,7 +650,7 @@ export const GridMixin = (superClass) =>
     /** @private */
     _resizeHandler() {
       this._updateDetailsCellHeights();
-      this.__updateHorizontalScrollPosition();
+      this.__updateFrozenCellOffsets();
     }
 
     /**

@@ -402,6 +402,8 @@ export const ColumnBaseMixin = (superClass) =>
       if (this.__styleRule) {
         this.__styleRule.style.flexGrow = this.flexGrow ?? '';
       }
+
+      this._grid?._frozenCellsChanged?.();
     }
 
     /** @private */
@@ -411,6 +413,8 @@ export const ColumnBaseMixin = (superClass) =>
       if (this.__styleRule) {
         this.__styleRule.style.width = this.width ?? '';
       }
+
+      this._grid?._frozenCellsChanged?.();
     }
 
     /** @private */
