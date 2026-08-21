@@ -74,6 +74,7 @@ class Markdown extends SlotStylesMixin(ElementMixin(ThemableMixin(PolylitMixin(L
        */
       lineBreaks: {
         type: Boolean,
+        value: false,
         sync: true,
       },
     };
