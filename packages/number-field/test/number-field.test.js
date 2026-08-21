@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { arrowDown, arrowUp, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { arrowDown, arrowUp, fixtureSync, keyDownOn, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-number-field.js';
 
@@ -121,6 +121,65 @@ describe('number-field', () => {
       input.blur();
       arrowUp(input);
       expect(numberField.value).to.equal('2');
+    });
+  });
+
+  describe('allowed char pattern', () => {
+    let input, keydownSpy;
+
+    beforeEach(async () => {
+      numberField = fixtureSync('<vaadin-number-field></vaadin-number-field>');
+      await nextRender();
+      input = numberField.inputElement;
+      keydownSpy = sinon.spy();
+      input.addEventListener('keydown', keydownSpy);
+    });
+
+    [
+      [65, [], 'a'],
+      [188, [], ','],
+      [32, [], ' '],
+      [191, [], '?'],
+    ].forEach(([keyCode, modifiers, key]) => {
+      it(`should prevent "${key}"`, () => {
+        keyDownOn(input, keyCode, modifiers, key);
+        const event = keydownSpy.lastCall.args[0];
+        expect(event.defaultPrevented).to.be.true;
+      });
+    });
+
+    [
+      [49, [], '1'],
+      [189, [], '-'],
+      [187, [], '+'],
+      [190, [], '.'],
+      [69, [], 'e'],
+      [69, ['shift'], 'E'],
+      [8, [], 'Backspace'],
+      [37, [], 'ArrowLeft'],
+    ].forEach(([keyCode, modifiers, key]) => {
+      it(`should not prevent "${modifiers.concat(key).join('+')}"`, () => {
+        keyDownOn(input, keyCode, modifiers, key);
+        const event = keydownSpy.lastCall.args[0];
+        expect(event.defaultPrevented).to.be.false;
+      });
+    });
+
+    it('should toggle input-prevented attribute when a key is prevented', () => {
+      keyDownOn(input, 65, [], 'a');
+      expect(numberField.hasAttribute('input-prevented')).to.be.true;
+    });
+
+    it('should not override a pattern set by the developer', async () => {
+      numberField = fixtureSync('<vaadin-number-field allowed-char-pattern="[0-9]"></vaadin-number-field>');
+      await nextRender();
+      input = numberField.inputElement;
+      keydownSpy = sinon.spy();
+      input.addEventListener('keydown', keydownSpy);
+
+      keyDownOn(input, 190, [], '.');
+      const event = keydownSpy.lastCall.args[0];
+      expect(event.defaultPrevented).to.be.true;
     });
   });
 
