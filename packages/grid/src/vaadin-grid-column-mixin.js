@@ -234,6 +234,12 @@ export const ColumnBaseMixin = (superClass) =>
           sync: true,
         },
 
+        /** @private */
+        __styleRule: {
+          type: Object,
+          sync: true,
+        },
+
         /**
          * Represents the final footer renderer computed on the set of observable arguments.
          * It is supposed to be used internally when rendering the footer cell content.
@@ -250,10 +256,10 @@ export const ColumnBaseMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_widthChanged(width, _cells)',
+        '_widthChanged(width, __styleRule)',
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells)',
         '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells)',
-        '_flexGrowChanged(flexGrow, _cells)',
+        '_flexGrowChanged(flexGrow, __styleRule)',
         '_textAlignChanged(textAlign, _cells)',
         '_lastFrozenChanged(_lastFrozen)',
         '_firstFrozenToEndChanged(_firstFrozenToEnd)',
@@ -316,6 +322,8 @@ export const ColumnBaseMixin = (superClass) =>
           return;
         }
 
+        this.__insertStyleRule();
+
         this._cells?.forEach((cell) => {
           if (!cell._content.parentNode) {
             this._grid.appendChild(cell._content);
@@ -327,6 +335,8 @@ export const ColumnBaseMixin = (superClass) =>
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
+
+      this.__deleteStyleRule();
 
       // Removes the column cells from the grid after the column is detached
       requestAnimationFrame(() => {
@@ -341,6 +351,28 @@ export const ColumnBaseMixin = (superClass) =>
       });
 
       this._gridValue = undefined;
+    }
+
+    /** @private */
+    __insertStyleRule() {
+      const stylesheet = this._grid?.__stylesheet;
+      if (!stylesheet || this.__styleRule) {
+        return;
+      }
+
+      const index = stylesheet.insertRule(`.cell.column-${this._id}-cell {}`, stylesheet.cssRules.length);
+      this.__styleRule = stylesheet.cssRules[index];
+    }
+
+    /** @private */
+    __deleteStyleRule() {
+      const stylesheet = this._grid.__stylesheet;
+      if (!stylesheet || !this.__styleRule) {
+        return;
+      }
+
+      stylesheet.deleteRule([...stylesheet.cssRules].indexOf(this.__styleRule));
+      this.__styleRule = undefined;
     }
 
     /**
@@ -364,25 +396,21 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _flexGrowChanged(flexGrow) {
+    _flexGrowChanged() {
       this.parentElement?._columnPropChanged?.('flexGrow');
 
-      this._grid?.__scheduleRenderHeaderFooter?.();
-
-      this._cells?.forEach((cell) => {
-        cell.style.flexGrow = flexGrow;
-      });
+      if (this.__styleRule) {
+        this.__styleRule.style.flexGrow = this.flexGrow ?? '';
+      }
     }
 
     /** @private */
-    _widthChanged(width) {
+    _widthChanged() {
       this.parentElement?._columnPropChanged?.('width');
 
-      this._grid?.__scheduleRenderHeaderFooter?.();
-
-      this._cells?.forEach((cell) => {
-        cell.style.width = width;
-      });
+      if (this.__styleRule) {
+        this.__styleRule.style.width = this.width ?? '';
+      }
     }
 
     /** @private */

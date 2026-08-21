@@ -8,7 +8,6 @@ import { cache } from 'lit/directives/cache.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { repeat } from 'lit/directives/repeat.js';
-import { styleMap } from 'lit/directives/style-map.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { partMap } from '@vaadin/component-base/src/directives/part-map.js';
@@ -148,10 +147,9 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                 <th
                   role="columnheader"
                   part="cell header-cell${partMap({ ...cellParts, ...customCellParts })}"
-                  class="cell header-cell${classMap(cellParts)}"
-                  style="${styleMap({
-                    width: column.width,
-                    'flex-grow': column.flexGrow,
+                  class="cell header-cell${classMap({
+                    ...cellParts,
+                    [`column-${column._id}-cell`]: true,
                   })}"
                   ?first-column="${isFirstCell}"
                   ?last-column="${isLastCell}"
@@ -231,10 +229,9 @@ export const HeaderFooterRenderingMixin = (superClass) =>
                 <td
                   role="gridcell"
                   part="cell footer-cell${partMap({ ...cellParts, ...customCellParts })}"
-                  class="cell footer-cell${classMap(cellParts)}"
-                  style="${styleMap({
-                    width: column.width,
-                    'flex-grow': column.flexGrow,
+                  class="cell footer-cell${classMap({
+                    ...cellParts,
+                    [`column-${column._id}-cell`]: true,
                   })}"
                   ?first-column="${isFirstCell}"
                   ?last-column="${isLastCell}"

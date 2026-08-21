@@ -329,6 +329,8 @@ class Grid extends GridMixin(I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   /** @protected */
   render() {
     return html`
+      <style id="columnStyles"></style>
+
       <div
         id="scroller"
         ?safari="${this._safari}"

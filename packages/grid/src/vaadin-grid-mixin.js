@@ -218,6 +218,8 @@ export const GridMixin = (superClass) =>
     ready() {
       super.ready();
 
+      this.__stylesheet = this.$.columnStyles.sheet;
+
       setTouchAction(this, '');
       setTouchAction(this.$.scroller, '');
 
@@ -391,6 +393,9 @@ export const GridMixin = (superClass) =>
       const cell = document.createElement(tagName);
       cell.id = slotName.replace('-content-', '-');
       cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
+      if (column) {
+        cell.classList.add(`column-${column._id}-cell`);
+      }
 
       cell.addEventListener('mouseenter', this.__onCellMouseEnter);
       cell.addEventListener('mouseleave', this.__onCellMouseLeave);
