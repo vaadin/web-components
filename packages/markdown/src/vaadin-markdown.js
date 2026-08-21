@@ -25,6 +25,7 @@ import { markdownSlotStyles } from './styles/vaadin-markdown-base-styles.js';
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @attr {string} theme - The theme variants to apply to the component.
+ * @attr {boolean} line-breaks - When set, single line breaks in paragraphs are rendered as `<br>`.
  * @customElement vaadin-markdown
  * @extends HTMLElement
  */
@@ -59,6 +60,22 @@ class Markdown extends SlotStylesMixin(ElementMixin(ThemableMixin(PolylitMixin(L
         type: String,
         sync: true,
       },
+
+      /**
+       * When set to `true`, single line breaks ("soft breaks") within a
+       * paragraph are converted into `<br>` elements, the same way chat and
+       * message-style Markdown behaves.
+       *
+       * By default, following the original Markdown specification, single line
+       * breaks are ignored (collapsed into a space) and a blank line is
+       * required to start a new paragraph.
+       *
+       * @attr {boolean} line-breaks
+       */
+      lineBreaks: {
+        type: Boolean,
+        sync: true,
+      },
     };
   }
 
@@ -74,8 +91,8 @@ class Markdown extends SlotStylesMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   updated(props) {
     super.updated(props);
 
-    if (props.has('content')) {
-      renderMarkdownToElement(this, this.content);
+    if (props.has('content') || props.has('lineBreaks')) {
+      renderMarkdownToElement(this, this.content, { lineBreaks: this.lineBreaks });
     }
   }
 }

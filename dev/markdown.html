@@ -11,6 +11,12 @@
       import '@vaadin/markdown';
 
       const markdown = document.querySelector('vaadin-markdown');
+
+      const lineBreaksToggle = document.querySelector('#line-breaks');
+      lineBreaksToggle.addEventListener('change', () => {
+        markdown.lineBreaks = lineBreaksToggle.checked;
+      });
+
       markdown.content = `
 # Vaadin Adventures 🚀
 ## Building UIs with Style
@@ -170,6 +176,7 @@ Thanks for scrolling — may your **UIs be responsive** and your **builds stay g
   </head>
 
   <body>
+    <label> <input type="checkbox" id="line-breaks" /> lineBreaks </label>
     <vaadin-markdown></vaadin-markdown>
   </body>
 </html>

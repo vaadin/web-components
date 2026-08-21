@@ -76,10 +76,15 @@ function synchronizeNodes(targetNode, sourceNode) {
 
 /**
  * Updates the content of a target element with the given Markdown parsed as HTML.
+ *
+ * When `lineBreaks` is enabled, single line breaks ("soft breaks") within a
+ * paragraph are converted into `<br>` elements, matching the behavior of
+ * chat/message-style Markdown. By default they are ignored, following the
+ * original Markdown specification.
  */
-export function renderMarkdownToElement(element, markdown) {
+export function renderMarkdownToElement(element, markdown, { lineBreaks = false } = {}) {
   const template = document.createElement('template');
-  template.innerHTML = DOMPurify.sanitize(parse(markdown || ''), {
+  template.innerHTML = DOMPurify.sanitize(parse(markdown || '', { breaks: lineBreaks }), {
     CUSTOM_ELEMENT_HANDLING: {
       tagNameCheck: (_tagName) => true,
     },

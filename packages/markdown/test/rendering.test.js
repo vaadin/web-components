@@ -122,4 +122,47 @@ code block
     expect(customElement).to.be.ok;
     expect(customElement.textContent).to.equal('Custom content');
   });
+
+  describe('line breaks', () => {
+    it('should not render single line breaks as <br> by default', async () => {
+      element.content = 'First line\nSecond line';
+      await nextUpdate(element);
+
+      const paragraph = element.querySelector('p');
+      expect(paragraph).to.be.ok;
+      expect(paragraph.querySelector('br')).to.be.null;
+    });
+
+    it('should render single line breaks as <br> when lineBreaks is enabled', async () => {
+      element.lineBreaks = true;
+      element.content = 'First line\nSecond line';
+      await nextUpdate(element);
+
+      const paragraph = element.querySelector('p');
+      expect(paragraph).to.be.ok;
+      expect(paragraph.querySelector('br')).to.be.ok;
+    });
+
+    it('should re-render content when lineBreaks changes', async () => {
+      element.content = 'First line\nSecond line';
+      await nextUpdate(element);
+      expect(element.querySelector('p br')).to.be.null;
+
+      element.lineBreaks = true;
+      await nextUpdate(element);
+      expect(element.querySelector('p br')).to.be.ok;
+
+      element.lineBreaks = false;
+      await nextUpdate(element);
+      expect(element.querySelector('p br')).to.be.null;
+    });
+
+    it('should still separate paragraphs on blank lines when lineBreaks is enabled', async () => {
+      element.lineBreaks = true;
+      element.content = 'First paragraph\n\nSecond paragraph';
+      await nextUpdate(element);
+
+      expect(element.querySelectorAll('p').length).to.equal(2);
+    });
+  });
 });
