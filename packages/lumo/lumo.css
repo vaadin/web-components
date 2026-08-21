@@ -35,6 +35,7 @@
 @import './src/components/message-list.css';
 @import './src/components/notification.css';
 @import './src/components/number-field.css';
+@import './src/components/ordered-layout.css';
 @import './src/components/overlay.css';
 @import './src/components/popover.css';
 @import './src/components/radio-button.css';

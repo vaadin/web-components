@@ -1,0 +1,30 @@
+/* Ordered layouts (horizontal-layout, vertical-layout). The base provides the flex
+   layout and the margin/padding/spacing theme variants, but with its own (tighter)
+   defaults and without the spacing-xs/s/l/xl sizes — restore Lumo's space-m defaults
+   and add the missing sizes. Both layouts share identical Lumo spacing, so the size
+   variants use one selector list; widen it as more layout components are ported. */
+:where(:root),
+:where(:host) {
+  --vaadin-horizontal-layout-margin: var(--lumo-space-m);
+  --vaadin-horizontal-layout-padding: var(--lumo-space-m);
+  --vaadin-horizontal-layout-gap: var(--lumo-space-m);
+  --vaadin-vertical-layout-margin: var(--lumo-space-m);
+  --vaadin-vertical-layout-padding: var(--lumo-space-m);
+  --vaadin-vertical-layout-gap: var(--lumo-space-m);
+}
+
+:where(vaadin-horizontal-layout, vaadin-vertical-layout)[theme~='spacing-xs'] {
+  gap: var(--lumo-space-xs);
+}
+
+:where(vaadin-horizontal-layout, vaadin-vertical-layout)[theme~='spacing-s'] {
+  gap: var(--lumo-space-s);
+}
+
+:where(vaadin-horizontal-layout, vaadin-vertical-layout)[theme~='spacing-l'] {
+  gap: var(--lumo-space-l);
+}
+
+:where(vaadin-horizontal-layout, vaadin-vertical-layout)[theme~='spacing-xl'] {
+  gap: var(--lumo-space-xl);
+}
