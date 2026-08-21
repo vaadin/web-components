@@ -90,7 +90,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       this.#renderFooter(sortedColumnTree);
 
       this._resetKeyboardNavigation();
-      this.__a11yUpdateGridSize(this.size, this._columnTree, this.__emptyState);
+      this.__a11yUpdateGridSize(this._flatSize, this._columnTree, this.__emptyState);
     }
 
     #renderHeader(columnTree) {

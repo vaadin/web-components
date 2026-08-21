@@ -368,6 +368,36 @@ describe('accessibility', () => {
     });
   });
 
+  describe('columns without data', () => {
+    beforeEach(() => {
+      grid = fixtureSync('<vaadin-grid></vaadin-grid>');
+      const column = document.createElement('vaadin-grid-column');
+      column.header = 'Header';
+      column.footerRenderer = (root) => {
+        root.textContent = 'footer';
+      };
+      grid.appendChild(column);
+      flushGrid(grid);
+    });
+
+    it('should have aria-rowindex on header and footer rows before data is set', () => {
+      expect(grid.$.header.children[0].getAttribute('aria-rowindex')).to.equal('1');
+      // Header row + zero body rows -> the footer row is the second row
+      expect(grid.$.footer.children[0].getAttribute('aria-rowindex')).to.equal('2');
+    });
+
+    it('should have aria-rowindex on footer rows with a lazy data provider', () => {
+      // The size is only provided through the data provider callback
+      grid.dataProvider = (_params, callback) => {
+        callback([{ name: 'foo' }, { name: 'bar' }], 2);
+      };
+      flushGrid(grid);
+
+      // Header row + two body rows -> the footer row is the fourth row
+      expect(grid.$.footer.children[0].getAttribute('aria-rowindex')).to.equal('4');
+    });
+  });
+
   describe('path and header', () => {
     let col;
 
