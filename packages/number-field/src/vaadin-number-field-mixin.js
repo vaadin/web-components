@@ -304,29 +304,40 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     /** @private */
-    _getIncrement(incr, currentValue) {
+    __getStepContext(value) {
       let step = this.step || 1,
         min = this.min || 0;
 
       // To avoid problems with decimal math, multiplying to operate with integers.
-      const multiplier = Math.max(
-        this._getMultiplier(currentValue),
-        this._getMultiplier(step),
-        this._getMultiplier(min),
-      );
+      const multiplier = Math.max(this._getMultiplier(value), this._getMultiplier(step), this._getMultiplier(min));
 
-      step *= multiplier;
-      currentValue = Math.round(currentValue * multiplier);
-      min *= multiplier;
+      // Rounding removes the float error from the scaled terms, e.g.
+      // 0.07 * 100 === 7.000000000000001. The fallback covers terms in
+      // exponential notation (e.g. step="1e-7"), whose decimal count is
+      // misread so the product rounds to 0 and the margin would be NaN.
+      step = Math.round(step * multiplier) || step * multiplier;
+      min = Math.round(min * multiplier) || min * multiplier;
+      value = Math.round(value * multiplier);
 
-      const margin = (currentValue - min) % step;
+      return {
+        value,
+        min,
+        step,
+        multiplier,
+        margin: (value - min) % step,
+      };
+    }
+
+    /** @private */
+    _getIncrement(incr, currentValue) {
+      const { value, step, multiplier, margin } = this.__getStepContext(currentValue);
 
       if (incr > 0) {
-        return (currentValue - margin + step) / multiplier;
+        return (value - margin + step) / multiplier;
       } else if (incr < 0) {
-        return (currentValue - (margin || step)) / multiplier;
+        return (value - (margin || step)) / multiplier;
       }
-      return currentValue / multiplier;
+      return value / multiplier;
     }
 
     /** @private */
