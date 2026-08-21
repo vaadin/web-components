@@ -4,7 +4,7 @@ import { fixtureSync, nextFrame, nextRender, nextResize } from '@vaadin/testing-
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
-import { fire, flushGrid, getBodyCellContent, getHeaderCell, infiniteDataProvider } from './helpers.js';
+import { fire, flushGrid, getBodyCellContent, getCell, getHeaderCell, infiniteDataProvider } from './helpers.js';
 
 describe('hidden grid', () => {
   let grid;
@@ -78,6 +78,22 @@ describe('hidden grid', () => {
       // Show grid again, should retain scroll position
       grid.removeAttribute('hidden');
       expect(grid.$.table.scrollTop).to.equal(300);
+    });
+
+    it('should reset the body tab stop after rows change while hidden', async () => {
+      // Make a cell further down the body tab stop
+      getCell(grid, 10).focus();
+
+      grid.hidden = true;
+      grid.size = 1;
+      flushGrid(grid);
+
+      grid.hidden = false;
+      await nextResize(grid);
+      await nextFrame();
+
+      // The tab stop should have moved to a cell of the only remaining row
+      expect(getCell(grid, 0).tabIndex).to.equal(0);
     });
   });
 });

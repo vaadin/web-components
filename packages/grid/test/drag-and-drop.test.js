@@ -187,6 +187,16 @@ describe('drag and drop', () => {
         expect(getContent(0).hasAttribute(cellDraggableAttribute)).to.be.false;
         expect(getContent(1).getAttribute(cellDraggableAttribute)).to.equal('true');
       });
+
+      it('should set the drag marker on cells of a newly added column', () => {
+        const column = document.createElement('vaadin-grid-column');
+        column.renderer = (root, _, model) => {
+          root.textContent = model.index;
+        };
+        grid.appendChild(column);
+        flushGrid(grid);
+        expect(getBodyCellContent(grid, 0, 2).getAttribute(cellDraggableAttribute)).to.equal('true');
+      });
     });
 
     describe('dragstart', () => {
