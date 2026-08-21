@@ -25,7 +25,6 @@ import { markdownSlotStyles } from './styles/vaadin-markdown-base-styles.js';
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @attr {string} theme - The theme variants to apply to the component.
- * @attr {boolean} line-breaks - When set, single line breaks in paragraphs are rendered as `<br>`.
  * @customElement vaadin-markdown
  * @extends HTMLElement
  */
