@@ -578,11 +578,7 @@ export const NumberFieldMixin = (superClass) =>
      * parsable => unparsable   | change
      * unparsable => empty      | unparsable-change
      * unparsable => parsable   | change
-     * unparsable => unparsable | -
-     *
-     * Note, there is currently no way to detect unparsable => unparsable changes
-     * because the browser doesn't provide access to unparsable values of native
-     * [type=number] inputs.
+     * unparsable => unparsable | unparsable-change
      *
      * @private
      */
@@ -592,7 +588,7 @@ export const NumberFieldMixin = (superClass) =>
       if (this.__committedValue !== this.value) {
         this._requestValidation();
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-      } else if ((this.__committedUnparsableValue !== null) !== (unparsableValue !== null)) {
+      } else if (this.__committedUnparsableValue !== unparsableValue) {
         this._requestValidation();
         this.dispatchEvent(new CustomEvent('unparsable-change'));
       }
