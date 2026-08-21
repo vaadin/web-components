@@ -144,18 +144,51 @@ export const NumberFieldMixin = (superClass) =>
 
     /**
      * Override the method from `InputConstraintsMixin`
-     * to enforce HTML constraint validation even if
-     * the user didn't add any constraints explicitly:
+     * to compute the constraint validation verdict in JavaScript
+     * instead of delegating to the native input, and to run it even
+     * if the user didn't add any constraints explicitly:
      * the field has to be regardless checked for bad input.
      *
      * @override
      */
     checkValidity() {
       if (this.inputElement) {
-        return this.inputElement.checkValidity();
+        return this.__validity.valid;
       }
 
       return !this.invalid;
+    }
+
+    /**
+     * A `ValidityState`-like object computed from the field's constraints.
+     * Kept as an object rather than inline booleans so that the native
+     * parity tests can compare it field by field against a native
+     * `[type=number]` input.
+     *
+     * @private
+     */
+    get __validity() {
+      const badInput = this.__hasUnparsableValue;
+      // Native reports both flags for unparsable text in a required field,
+      // since the input value getter returns an empty string for it — so
+      // valueMissing deliberately does not exclude badInput.
+      const valueMissing = !!this.required && !this._hasValue;
+      // The only place where the canonical value string becomes a Number:
+      // comparisons against min / max / step legitimately need one.
+      const num = this._hasValue ? Number(this.value) : null;
+      const rangeUnderflow = num !== null && this.min != null && num < this.min;
+      const rangeOverflow = num !== null && this.max != null && num > this.max;
+      // Step is optional: no step means no mismatch, and a non-positive
+      // step is not applied as a constraint.
+      const stepMismatch = num !== null && this.step > 0 && this.__hasStepMismatch(num);
+      return {
+        badInput,
+        valueMissing,
+        rangeUnderflow,
+        rangeOverflow,
+        stepMismatch,
+        valid: !(badInput || valueMissing || rangeUnderflow || rangeOverflow || stepMismatch),
+      };
     }
 
     /**
@@ -326,6 +359,20 @@ export const NumberFieldMixin = (superClass) =>
         multiplier,
         margin: (value - min) % step,
       };
+    }
+
+    /**
+     * Whether the given value does not match the step constraint.
+     * Must share the decimal-safe scaled math with the step buttons
+     * through `__getStepContext` — re-deriving it from the multiplier
+     * helpers would let the two verdicts drift apart.
+     *
+     * @param {number} value
+     * @return {boolean}
+     * @private
+     */
+    __hasStepMismatch(value) {
+      return this.__getStepContext(value).margin !== 0;
     }
 
     /** @private */
