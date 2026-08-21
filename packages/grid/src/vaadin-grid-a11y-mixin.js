@@ -76,8 +76,13 @@ export const A11yMixin = (superClass) =>
 
     /** @private */
     __a11yUpdateFooterRows() {
+      // The size is undefined until a data provider or items are assigned
+      const bodyRowCount = this.size || 0;
       iterateChildren(this.$.footer, (footerRow, index) => {
-        footerRow.setAttribute('aria-rowindex', this.__a11yGetHeaderRowCount(this._columnTree) + this.size + index + 1);
+        footerRow.setAttribute(
+          'aria-rowindex',
+          this.__a11yGetHeaderRowCount(this._columnTree) + bodyRowCount + index + 1,
+        );
       });
     }
 
