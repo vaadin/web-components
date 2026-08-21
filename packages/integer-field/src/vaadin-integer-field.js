@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { NumberField } from '@vaadin/number-field/src/vaadin-number-field.js';
 
 /**
@@ -117,10 +118,24 @@ class IntegerField extends NumberField {
     return 'vaadin-integer-field';
   }
 
-  constructor() {
-    super();
+  /**
+   * Override the getter from `NumberFieldMixin` to allow
+   * only digit and sign characters.
+   * @protected
+   * @override
+   */
+  get _defaultAllowedCharPattern() {
+    return '[-+\\d]';
+  }
 
-    this.allowedCharPattern = '[-+\\d]';
+  /**
+   * Override the getter from `NumberFieldMixin` to use
+   * the integer keyboard layout on mobile devices.
+   * @protected
+   * @override
+   */
+  get _defaultInputMode() {
+    return 'numeric';
   }
 
   /**
@@ -144,20 +159,19 @@ class IntegerField extends NumberField {
    * Override an observer from `NumberField` to reset the step
    * property when an invalid step is set.
    * @param {number} step
-   * @param {HTMLElement | undefined} inputElement
    * @protected
    * @override
    */
-  _stepChanged(step, inputElement) {
+  _stepChanged(step) {
     if (step != null && !this.__hasOnlyDigits(step)) {
-      console.warn(
+      issueWarning(
         `<vaadin-integer-field> The \`step\` property must be a positive integer but \`${step}\` was provided, so the property was reset to \`null\`.`,
       );
       this.step = null;
       return;
     }
 
-    super._stepChanged(step, inputElement);
+    super._stepChanged(step);
   }
 
   /** @private */
