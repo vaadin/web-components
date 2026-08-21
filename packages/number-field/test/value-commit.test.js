@@ -159,6 +159,7 @@ describe('value commit', () => {
       numberField.blur();
       await nextUpdate(numberField);
       expectUnparsableValueCommit();
+      expect(numberField.value).to.equal('');
       expect(numberField.inputElement.validity.badInput).to.be.true;
     });
 
@@ -166,6 +167,7 @@ describe('value commit', () => {
       await sendKeys({ press: 'Enter' });
       await nextUpdate(numberField);
       expectUnparsableValueCommit();
+      expect(numberField.value).to.equal('');
       expect(numberField.inputElement.validity.badInput).to.be.true;
     });
   });
@@ -190,12 +192,14 @@ describe('value commit', () => {
         numberField.blur();
         await nextUpdate(numberField);
         expectUnparsableValueCommit();
+        expect(numberField.value).to.equal('');
       });
 
       it('should commit as unparsable value change on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         await nextUpdate(numberField);
         expectUnparsableValueCommit();
+        expect(numberField.value).to.equal('');
       });
     });
   });
@@ -299,6 +303,14 @@ describe('value commit', () => {
       expectValueCommit('1');
     });
 
+    it('should fire change event once per ArrowUp press', async () => {
+      await sendKeys({ press: 'ArrowUp' });
+      await sendKeys({ press: 'ArrowUp' });
+      await nextUpdate(numberField);
+      expect(changeSpy).to.be.calledTwice;
+      expect(numberField.value).to.equal('2');
+    });
+
     it('should commit on ArrowDown', async () => {
       await sendKeys({ press: 'ArrowDown' });
       await nextUpdate(numberField);
@@ -346,6 +358,14 @@ describe('value commit', () => {
       decreaseButton.click();
       await nextUpdate(numberField);
       expectValueCommit('-1');
+    });
+
+    it('should fire change event once per increase button click', async () => {
+      increaseButton.click();
+      increaseButton.click();
+      await nextUpdate(numberField);
+      expect(changeSpy).to.be.calledTwice;
+      expect(numberField.value).to.equal('2');
     });
   });
 

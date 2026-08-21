@@ -115,6 +115,7 @@ describe('validation', () => {
       await sendKeys({ type: '1--' });
       input.blur();
       expect(integerField.invalid).to.be.true;
+      expect(integerField.value).to.equal('');
     });
 
     (isDesktopSafari ? it.skip : it)('should be valid after removing an invalid number', async () => {

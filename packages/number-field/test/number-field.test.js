@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { arrowDown, arrowUp, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-number-field.js';
@@ -102,6 +103,37 @@ describe('number-field', () => {
       input.focus();
       numberField.dispatchEvent(event);
       expect(event.defaultPrevented).to.be.false;
+    });
+  });
+
+  describe('typed value', () => {
+    let input;
+
+    beforeEach(async () => {
+      numberField = fixtureSync('<vaadin-number-field></vaadin-number-field>');
+      await nextRender();
+      input = numberField.inputElement;
+      input.focus();
+    });
+
+    it('should keep exponent notation as typed', async () => {
+      await sendKeys({ type: '1e3' });
+      input.blur();
+      expect(numberField.value).to.equal('1e3');
+    });
+
+    it('should keep more decimals than double precision as typed', async () => {
+      await sendKeys({ type: '1.00000000000000000001' });
+      input.blur();
+      expect(numberField.value).to.equal('1.00000000000000000001');
+    });
+
+    it('should keep value as typed on focus and blur cycle', async () => {
+      await sendKeys({ type: '1e3' });
+      input.blur();
+      input.focus();
+      input.blur();
+      expect(numberField.value).to.equal('1e3');
     });
   });
 
