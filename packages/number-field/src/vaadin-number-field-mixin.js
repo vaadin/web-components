@@ -5,9 +5,11 @@
  */
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
+import { parseNumber } from './number-utils.js';
 
 // [type=number] value returns an empty string for invalid numbers,
 // while valueAsNumber returns NaN for empty strings, which makes
@@ -377,7 +379,10 @@ export const NumberFieldMixin = (superClass) =>
      */
     _valueChanged(newVal, oldVal) {
       // Validate value to be numeric
-      if (newVal && isNaN(parseFloat(newVal))) {
+      if (newVal && parseNumber(String(newVal)) === null) {
+        if (!this.__userInputValue) {
+          issueWarning(`Trying to set non-numeric value "${newVal}" to <${this.localName}>. Clearing the value.`);
+        }
         this.value = '';
       } else if (typeof this.value !== 'string') {
         this.value = String(this.value);
@@ -424,7 +429,11 @@ export const NumberFieldMixin = (superClass) =>
      */
     _onInput(event) {
       this.__keepCommittedValue = true;
+      // The non-numeric value warning is meant for developers, so it must
+      // not fire when the assignment originates from trusted user input.
+      this.__userInputValue = event.isTrusted;
       super._onInput(event);
+      this.__userInputValue = false;
       this.__keepCommittedValue = false;
     }
 
