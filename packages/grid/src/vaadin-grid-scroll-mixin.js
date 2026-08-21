@@ -416,6 +416,10 @@ export const ScrollMixin = (superClass) =>
         return;
       }
 
+      const offsetUpdates = [];
+
+      // Read all cell widths before updating any offsets. Otherwise, each offset
+      // write can invalidate layout before the next getBoundingClientRect() call.
       this.$.table.querySelectorAll("[part~='row']:not(#sizer)").forEach((row) => {
         const cells = [...row.children].filter((cell) => cell._column);
 
@@ -423,8 +427,9 @@ export const ScrollMixin = (superClass) =>
         cells
           .filter((cell) => cell._column.frozen)
           .forEach((cell) => {
-            cell.style.setProperty('--_grid-frozen-cell-offset', `${frozenOffset}px`);
-            frozenOffset += cell.getBoundingClientRect().width;
+            const width = cell.getBoundingClientRect().width;
+            offsetUpdates.push([cell, '--_grid-frozen-cell-offset', `${frozenOffset}px`]);
+            frozenOffset += width;
           });
 
         let frozenToEndOffset = 0;
@@ -432,9 +437,16 @@ export const ScrollMixin = (superClass) =>
           .filter((cell) => cell._column.frozenToEnd)
           .reverse()
           .forEach((cell) => {
-            cell.style.setProperty('--_grid-frozen-to-end-cell-offset', `${frozenToEndOffset}px`);
-            frozenToEndOffset += cell.getBoundingClientRect().width;
+            const width = cell.getBoundingClientRect().width;
+            offsetUpdates.push([cell, '--_grid-frozen-to-end-cell-offset', `${frozenToEndOffset}px`]);
+            frozenToEndOffset += width;
           });
+      });
+
+      offsetUpdates.forEach(([cell, property, value]) => {
+        if (cell.style.getPropertyValue(property) !== value) {
+          cell.style.setProperty(property, value);
+        }
       });
     }
 

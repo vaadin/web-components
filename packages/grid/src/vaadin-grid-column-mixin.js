@@ -10,6 +10,18 @@ import { get } from '@vaadin/component-base/src/path-utils.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { updateCellState } from './vaadin-grid-helpers.js';
 
+const PERCENTAGE_PATTERN = /(-?(?:\d+(?:\.\d+)?|\.\d+))%/gu;
+
+export const resolveViewportRelativeWidth = (width, viewportWidth) => {
+  if (typeof width !== 'string' || !viewportWidth) {
+    return width;
+  }
+
+  return width.replace(PERCENTAGE_PATTERN, (_match, percentage) => {
+    return `${(Number(percentage) / 100) * viewportWidth}px`;
+  });
+};
+
 export const ColumnBaseMixin = (superClass) =>
   class ColumnBaseMixin extends superClass {
     static get properties() {
@@ -411,7 +423,7 @@ export const ColumnBaseMixin = (superClass) =>
       this.parentElement?._columnPropChanged?.('width');
 
       if (this.__styleRule) {
-        this.__styleRule.style.width = this.width ?? '';
+        this.__styleRule.style.width = resolveViewportRelativeWidth(this.width, this._grid?.__tableRect?.width) || '';
       }
 
       this._grid?._frozenCellsChanged?.();

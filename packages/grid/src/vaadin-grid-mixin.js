@@ -13,6 +13,7 @@ import { A11yMixin } from './vaadin-grid-a11y-mixin.js';
 import { ActiveItemMixin } from './vaadin-grid-active-item-mixin.js';
 import { ArrayDataProviderMixin } from './vaadin-grid-array-data-provider-mixin.js';
 import { ColumnAutoWidthMixin } from './vaadin-grid-column-auto-width-mixin.js';
+import { resolveViewportRelativeWidth } from './vaadin-grid-column-mixin.js';
 import { ColumnReorderingMixin } from './vaadin-grid-column-reordering-mixin.js';
 import { ColumnResizingMixin } from './vaadin-grid-column-resizing-mixin.js';
 import { DataProviderMixin } from './vaadin-grid-data-provider-mixin.js';
@@ -267,6 +268,12 @@ export const GridMixin = (superClass) =>
       }
 
       if (props.has('__tableRect')) {
+        new Set(this._columnTree?.flat()).forEach((column) => {
+          if (column.width?.includes('%') && column.__styleRule) {
+            column.__styleRule.style.width = resolveViewportRelativeWidth(column.width, this.__tableRect.width);
+          }
+        });
+
         setTimeout(() => this.__updateColumnsBodyContentHidden());
         this.__updateFrozenCellOffsets();
       }
