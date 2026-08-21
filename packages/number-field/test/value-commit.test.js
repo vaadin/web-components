@@ -202,6 +202,40 @@ describe('value commit', () => {
         expect(numberField.value).to.equal('');
       });
     });
+
+    describe('unparsable input changed', () => {
+      beforeEach(async () => {
+        await sendKeys({ type: '-' });
+        await nextUpdate(numberField);
+        validateSpy.resetHistory();
+        unparsableChangeSpy.resetHistory();
+      });
+
+      it('should commit as unparsable value change on blur', async () => {
+        numberField.blur();
+        await nextUpdate(numberField);
+        expectUnparsableValueCommit();
+        expect(numberField.inputElement.value).to.equal('--');
+      });
+
+      it('should commit as unparsable value change on Enter', async () => {
+        await sendKeys({ press: 'Enter' });
+        await nextUpdate(numberField);
+        expectUnparsableValueCommit();
+        expect(numberField.inputElement.value).to.equal('--');
+      });
+
+      it('should not commit again when the unparsable input has not changed', async () => {
+        await sendKeys({ press: 'Enter' });
+        await nextUpdate(numberField);
+        unparsableChangeSpy.resetHistory();
+        validateSpy.resetHistory();
+        numberField.blur();
+        await nextUpdate(numberField);
+        expect(changeSpy).to.be.not.called;
+        expect(unparsableChangeSpy).to.be.not.called;
+      });
+    });
   });
 
   describe('value set programmatically', () => {

@@ -100,10 +100,7 @@ import { NumberField } from '@vaadin/number-field/src/vaadin-number-field.js';
  * parsable => unparsable   | change
  * unparsable => empty      | unparsable-change
  * unparsable => parsable   | change
- * unparsable => unparsable | -
- *
- * Note, there is currently no way to detect unparsable => unparsable changes because the browser
- * doesn't provide access to unparsable values of native [type=number] inputs.
+ * unparsable => unparsable | unparsable-change
  *
  * @fires {Event} input - Fired when the value is changed by the user: on every typing keystroke, and the value is cleared using the clear button.
  * @fires {Event} change - Fired when the user commits a value change.
