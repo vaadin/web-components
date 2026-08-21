@@ -127,12 +127,14 @@ describe('value commit', () => {
     it('should commit as unparsable value change on blur', () => {
       integerField.blur();
       expectUnparsableValueCommit();
+      expect(integerField.value).to.equal('');
       expect(integerField.inputElement.validity.badInput).to.be.true;
     });
 
     it('should commit as unparsable value change on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expectUnparsableValueCommit();
+      expect(integerField.value).to.equal('');
       expect(integerField.inputElement.validity.badInput).to.be.true;
     });
   });

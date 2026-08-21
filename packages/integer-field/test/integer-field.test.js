@@ -222,6 +222,12 @@ describe('integer-field', () => {
       expect(integerField.value).to.eql('');
     });
 
+    it('should accept integer value larger than max safe integer as string', async () => {
+      integerField.value = '9007199254740993';
+      await nextUpdate(integerField);
+      expect(integerField.value).to.eql('9007199254740993');
+    });
+
     describe('invalid value', () => {
       beforeEach(() => {
         sinon.stub(console, 'warn');

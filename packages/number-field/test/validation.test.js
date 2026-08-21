@@ -59,6 +59,22 @@ describe('validation', () => {
       expect(field.checkValidity()).to.equal(input.checkValidity());
     });
 
+    [
+      { props: { max: 4 }, value: 5 },
+      { props: { step: 1 }, value: 1.5 },
+      { props: { required: true }, value: '' },
+      { props: { min: 1, max: 5 }, value: 3 },
+      { props: { min: -10 }, value: -10 },
+    ].forEach(({ props, value }) => {
+      it(`should align checkValidity with the native input element for ${JSON.stringify(props)} and value "${value}"`, async () => {
+        Object.assign(field, props);
+        field.value = value;
+        await nextUpdate(field);
+
+        expect(field.checkValidity()).to.equal(input.checkValidity());
+      });
+    });
+
     it('should allow setting decimals', async () => {
       field.value = 7.6;
       await nextUpdate(field);
@@ -110,6 +126,14 @@ describe('validation', () => {
       field.value = '5';
       await nextUpdate(field);
       expect(field.validate(), 'value should not be greater than max').to.be.false;
+
+      field.value = '2';
+      await nextUpdate(field);
+      expect(field.validate(), 'value equal to min should be valid').to.be.true;
+
+      field.value = '4';
+      await nextUpdate(field);
+      expect(field.validate(), 'value equal to max should be valid').to.be.true;
     });
 
     it('should fire a validated event on validation success', () => {
@@ -156,6 +180,7 @@ describe('validation', () => {
       await sendKeys({ type: '1--' });
       input.blur();
       expect(field.invalid).to.be.true;
+      expect(field.value).to.equal('');
     });
 
     (isDesktopSafari ? it.skip : it)('should be valid after removing an invalid number', async () => {
@@ -168,6 +193,18 @@ describe('validation', () => {
       input.blur();
       expect(field.invalid).to.be.false;
     });
+
+    (isDesktopSafari ? it.skip : it)(
+      'should be invalid when committing an invalid number to a required field',
+      async () => {
+        field.required = true;
+        await nextUpdate(field);
+        await sendKeys({ type: '1--' });
+        input.blur();
+        expect(field.invalid).to.be.true;
+        expect(field.value).to.equal('');
+      },
+    );
   });
 
   describe('initial', () => {
@@ -269,6 +306,54 @@ describe('validation', () => {
       });
     });
 
+    describe('decimal step values', () => {
+      beforeEach(async () => {
+        field = fixtureSync('<vaadin-number-field></vaadin-number-field>');
+        field.step = 0.1;
+        await nextRender();
+      });
+
+      [0.1, 0.3, 0.7].forEach((validValue) => {
+        it(`should validate valid value "${validValue}" by decimal step`, async () => {
+          field.value = validValue;
+          await nextUpdate(field);
+          expect(field.validate()).to.be.true;
+        });
+      });
+
+      [0.15, 0.25].forEach((invalidValue) => {
+        it(`should validate invalid value "${invalidValue}" by decimal step`, async () => {
+          field.value = invalidValue;
+          await nextUpdate(field);
+          expect(field.validate()).to.be.false;
+        });
+      });
+    });
+
+    describe('imprecise decimal step values', () => {
+      beforeEach(async () => {
+        field = fixtureSync('<vaadin-number-field></vaadin-number-field>');
+        field.step = 0.07;
+        await nextRender();
+      });
+
+      [0.07, 0.14, 0.21].forEach((validValue) => {
+        it(`should validate valid value "${validValue}" by imprecise decimal step`, async () => {
+          field.value = validValue;
+          await nextUpdate(field);
+          expect(field.validate()).to.be.true;
+        });
+      });
+
+      [0.1].forEach((invalidValue) => {
+        it(`should validate invalid value "${invalidValue}" by imprecise decimal step`, async () => {
+          field.value = invalidValue;
+          await nextUpdate(field);
+          expect(field.validate()).to.be.false;
+        });
+      });
+    });
+
     describe('basis', () => {
       beforeEach(async () => {
         field = fixtureSync('<vaadin-number-field></vaadin-number-field>');
@@ -287,6 +372,31 @@ describe('validation', () => {
 
       [1.5, 3, 5].forEach((invalidValue) => {
         it(`should validate invalid value "${invalidValue}" using min as basis`, async () => {
+          field.value = invalidValue;
+          await nextUpdate(field);
+          expect(field.validate()).to.be.false;
+        });
+      });
+    });
+
+    describe('decimal basis', () => {
+      beforeEach(async () => {
+        field = fixtureSync('<vaadin-number-field></vaadin-number-field>');
+        field.min = 0.29;
+        field.step = 0.1;
+        await nextRender();
+      });
+
+      [0.29, 0.39, 0.49].forEach((validValue) => {
+        it(`should validate valid value "${validValue}" using decimal min as basis`, async () => {
+          field.value = validValue;
+          await nextUpdate(field);
+          expect(field.validate()).to.be.true;
+        });
+      });
+
+      [0.3, 0.35].forEach((invalidValue) => {
+        it(`should validate invalid value "${invalidValue}" using decimal min as basis`, async () => {
           field.value = invalidValue;
           await nextUpdate(field);
           expect(field.validate()).to.be.false;
