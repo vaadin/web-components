@@ -23,6 +23,10 @@ assertType<InputFieldMixinClass>(field);
 assertType<SlotStylesMixinClass>(field);
 assertType<ThemableMixinClass>(field);
 
+// Properties
+assertType<string | null | undefined>(field.locale);
+assertType<Intl.NumberFormatOptions | null | undefined>(field.formatOptions);
+
 // Events
 field.addEventListener('change', (event) => {
   assertType<NumberFieldChangeEvent>(event);

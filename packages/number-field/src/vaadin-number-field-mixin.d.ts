@@ -62,4 +62,26 @@ export declare class NumberFieldMixinClass {
    * @attr {boolean} step-buttons-visible
    */
   stepButtonsVisible: boolean;
+
+  /**
+   * The locale used for parsing user input and formatting the
+   * presentation value, as a BCP 47 language tag. The `value`
+   * property is not affected: it always uses the machine-readable
+   * format with a dot as the decimal separator.
+   *
+   * When not set, the browser's default locale is used.
+   */
+  locale: string | null | undefined;
+
+  /**
+   * Options passed to the `Intl.NumberFormat` instance used for
+   * formatting the presentation value, e.g. `useGrouping`,
+   * `minimumFractionDigits`, `maximumFractionDigits`, or
+   * `style: 'currency'` with `currency`.
+   *
+   * Formatting is display-only and never changes the `value`
+   * property, so options that round or truncate only affect
+   * what the input element shows.
+   */
+  formatOptions: Intl.NumberFormatOptions | null | undefined;
 }
