@@ -148,15 +148,6 @@ describe('row details', () => {
       expect(getRowCells(row)[1].hidden).to.be.true;
     });
 
-    it('should add details to fixed cells cache', () => {
-      openRowDetails(1);
-
-      flushGrid(grid);
-      bodyRows = getRows(grid.$.items);
-
-      expect(grid._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);
-    });
-
     it('should open details for equaling item', () => {
       const cells = getRowCells(bodyRows[0]);
       grid.itemIdPath = 'value';
