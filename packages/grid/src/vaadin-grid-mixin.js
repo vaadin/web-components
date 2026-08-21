@@ -510,7 +510,6 @@ export const GridMixin = (superClass) =>
       // Might be empty if only cache was used
       this.appendChild(contentsFragment);
 
-      this._frozenCellsChanged();
       this._updateFirstAndLastColumnForRow(row);
     }
 
@@ -576,10 +575,8 @@ export const GridMixin = (superClass) =>
       this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);
 
       this._resizeHandler();
-      this._resetKeyboardNavigation();
       this.__a11yUpdateHeaderRows();
       this.__a11yUpdateFooterRows();
-      this.generateCellPartNames();
       this.__updateHeaderAndFooter();
     }
 
