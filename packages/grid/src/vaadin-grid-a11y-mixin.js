@@ -20,7 +20,7 @@ export const A11yMixin = (superClass) =>
       };
     }
     static get observers() {
-      return ['__a11yUpdateGridSize(size, _columnTree, __emptyState)', '__a11yI18nChanged(__effectiveI18n)'];
+      return ['__a11yUpdateGridSize(_flatSize, _columnTree, __emptyState)', '__a11yI18nChanged(__effectiveI18n)'];
     }
 
     /** @private */
@@ -44,14 +44,14 @@ export const A11yMixin = (superClass) =>
     }
 
     /** @private */
-    __a11yUpdateGridSize(size, _columnTree, emptyState) {
-      if (size === undefined || _columnTree === undefined) {
+    __a11yUpdateGridSize(flatSize, _columnTree, emptyState) {
+      if (flatSize === undefined || _columnTree === undefined) {
         return;
       }
 
       const headerRowsCount = this.__a11yGetHeaderRowCount(_columnTree);
       const footerRowsCount = this.__a11yGetFooterRowCount(_columnTree);
-      const bodyRowsCount = emptyState ? 1 : size;
+      const bodyRowsCount = emptyState ? 1 : flatSize;
       const rowsCount = bodyRowsCount + headerRowsCount + footerRowsCount;
 
       this.$.table.setAttribute('aria-rowcount', rowsCount);
@@ -76,8 +76,7 @@ export const A11yMixin = (superClass) =>
 
     /** @private */
     __a11yUpdateFooterRows() {
-      // The size is undefined until a data provider or items are assigned
-      const bodyRowCount = this.size || 0;
+      const bodyRowCount = this._flatSize || 0;
       iterateChildren(this.$.footer, (footerRow, index) => {
         footerRow.setAttribute(
           'aria-rowindex',
