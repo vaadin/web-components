@@ -115,6 +115,13 @@ describe('number-field', () => {
       input.blur();
       expect(numberField.value).to.equal('1e3');
     });
+
+    it('should apply step arithmetic at double precision when incrementing', async () => {
+      await sendKeys({ type: '1.00000000000000000001' });
+      input.blur();
+      arrowUp(input);
+      expect(numberField.value).to.equal('2');
+    });
   });
 
   describe('required', () => {

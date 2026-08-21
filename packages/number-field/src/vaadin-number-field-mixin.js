@@ -9,7 +9,7 @@ import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { parseNumber } from './number-utils.js';
+import { formatNumber, parseNumber } from './number-utils.js';
 
 /**
  * A mixin providing common number field functionality.
@@ -262,7 +262,11 @@ export const NumberFieldMixin = (superClass) =>
 
       const newValue = this._getIncrement(incr, value);
       if (!this.value || incr === 0 || this._incrementIsInsideTheLimits(incr, value)) {
-        this.inputElement.value = String(parseFloat(newValue));
+        // Write the canonical string and dispatch a synthetic input event:
+        // the value change must land inside the `__keepCommittedValue`
+        // window that `_onInput` opens, or `__commitValueChange()` below
+        // finds the value already committed and fires no change event.
+        this._inputElementValue = String(parseFloat(newValue));
         this.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
         this.__commitValueChange();
       }
@@ -490,6 +494,36 @@ export const NumberFieldMixin = (superClass) =>
     _onEnter(event) {
       super._onEnter(event);
       this.__commitValueChange();
+    }
+
+    /**
+     * Override the method from `InputMixin`
+     * to format the value before writing it to the input element.
+     *
+     * @param {string} value
+     * @override
+     * @protected
+     */
+    _forwardInputValue(value) {
+      super._forwardInputValue(value ? formatNumber(value) : '');
+    }
+
+    /**
+     * Override the method from `InputFieldMixin`
+     * to format the initial value written to the input element
+     * by the slot initializers, which forward the canonical value
+     * verbatim.
+     *
+     * @param {HTMLElement | undefined} input
+     * @override
+     * @protected
+     */
+    _inputElementChanged(input) {
+      super._inputElementChanged(input);
+
+      if (input && this.value) {
+        this._inputElementValue = formatNumber(this.value);
+      }
     }
 
     /**
