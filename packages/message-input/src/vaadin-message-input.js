@@ -65,9 +65,15 @@ class MessageInput extends MessageInputMixin(
   /** @protected */
   render() {
     return html`
+      <slot name="header"></slot>
+
+      <slot name="prefix"></slot>
+
       <slot name="textarea"></slot>
 
       <slot name="button"></slot>
+
+      <slot name="footer"></slot>
 
       <slot name="tooltip"></slot>
     `;

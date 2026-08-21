@@ -16,6 +16,10 @@ export const uploadFileListStyles = css`
     display: none !important;
   }
 
+  :host([empty]) {
+    display: none;
+  }
+
   [part='list'] {
     list-style-type: none;
     margin: 0;

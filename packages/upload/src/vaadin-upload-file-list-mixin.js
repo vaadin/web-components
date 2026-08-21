@@ -262,6 +262,7 @@ export const UploadFileListMixin = (superClass) =>
         items.forEach((file) => this.__applyI18nToFile(file));
         this.requestContentUpdate();
       }
+      this.toggleAttribute('empty', items.length === 0);
     }
 
     /** @private */

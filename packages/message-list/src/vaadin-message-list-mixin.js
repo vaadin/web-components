@@ -65,6 +65,33 @@ export const MessageListMixin = (superClass) =>
           observer: '__announceChanged',
           sync: true,
         },
+
+        /**
+         * An array of objects which will be rendered as avatars.
+         * The user objects can have the following properties:
+         * ```js
+         * Array<{
+         *   name: string,
+         *   abbr: string,
+         *   img: string,
+         *   colorIndex: number
+         * }>
+         * ```
+         */
+        usersTyping: {
+          type: Array,
+          observer: '__usersTypingChanged',
+          sync: true,
+        },
+
+        typingIndicatorText: {
+          type: String,
+          value: 'Typing…',
+        },
+
+        typingIndicatorTheme: {
+          type: String,
+        },
       };
     }
 
@@ -145,6 +172,14 @@ export const MessageListMixin = (superClass) =>
         requestAnimationFrame(() => {
           if (items.length > oldItems.length && closeToBottom) {
             this._scrollToLastMessage();
+
+            const loadingMarkdown = this.markdown && !customElements.get('vaadin-markdown');
+
+            if (loadingMarkdown) {
+              customElements.whenDefined('vaadin-markdown').then(() => {
+                this._scrollToLastMessage();
+              });
+            }
           }
         });
       }
@@ -161,6 +196,35 @@ export const MessageListMixin = (superClass) =>
           .then(() => this._renderMessages(this.items));
       }
       this._renderMessages(this.items);
+    }
+
+    /** @private */
+    __usersTypingChanged(users) {
+      let typingIndicator = this.querySelector('vaadin-message[slot="typing-indicator"]');
+      if (!typingIndicator) {
+        typingIndicator = document.createElement('vaadin-message');
+        typingIndicator.slot = 'typing-indicator';
+        typingIndicator.setAttribute('typing', '');
+        const avatars = document.createElement('vaadin-avatar-group');
+        avatars.maxItemsVisible = 100;
+        avatars.slot = 'avatar';
+        const typingText = document.createElement('span');
+        typingIndicator.append(avatars, typingText);
+      }
+      if (users.length === 0) {
+        typingIndicator.remove();
+      } else {
+        const formatter = new Intl.ListFormat(navigator.language, {
+          type: 'conjunction',
+        });
+        const avatars = typingIndicator.querySelector(':scope > vaadin-avatar-group');
+        avatars.items = users;
+        const typingText = typingIndicator.querySelector(':scope > span');
+        typingIndicator.setAttribute('theme', this.typingIndicatorTheme);
+        typingText.textContent = this.typingIndicatorText;
+        typingIndicator.userName = formatter.format(users.map((user) => user.name));
+        this.append(typingIndicator);
+      }
     }
 
     /** @private */
@@ -184,10 +248,12 @@ export const MessageListMixin = (superClass) =>
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
                 @attachment-click="${(e) => this.__onAttachmentClick(e, item)}"
-                style="${ifDefined(loadingMarkdown ? 'visibility: hidden' : undefined)}"
-                >${
-                  this.markdown ? html`<vaadin-markdown .content=${item.text}></vaadin-markdown>` : item.text
-                }<vaadin-avatar slot="avatar"></vaadin-avatar
+                style="--vaadin-user-color: var(--vaadin-user-color-${item.userColorIndex});${loadingMarkdown
+                  ? 'visibility: hidden;'
+                  : undefined}"
+                >${this.markdown
+                  ? html`<vaadin-markdown .content=${item.text}></vaadin-markdown>`
+                  : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
             `,
           )}
@@ -206,11 +272,11 @@ export const MessageListMixin = (superClass) =>
 
     /** @private */
     __enableScrollSnapping() {
-      this.$.list.style.setProperty('--_vaadin-message-list-scroll-snap-align', 'end');
+      this.style.setProperty('--_vaadin-message-list-scroll-snap-align', 'end');
       // Disable scroll-snapping after a delay to allow the user to freely scroll
       // without being snapped back to the bottom.
       this.__debounceScrollSnapping = Debouncer.debounce(this.__debounceScrollSnapping, timeOut.after(500), () => {
-        this.$.list.style.removeProperty('--_vaadin-message-list-scroll-snap-align');
+        this.style.removeProperty('--_vaadin-message-list-scroll-snap-align');
       });
     }
 

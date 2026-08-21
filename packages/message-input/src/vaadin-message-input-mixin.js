@@ -124,6 +124,8 @@ export const MessageInputMixin = (superClass) =>
 
       this._tooltipController = new TooltipController(this);
       this.addController(this._tooltipController);
+
+      this.addEventListener('click', () => this._textArea.focus());
     }
 
     focus(options) {
@@ -136,7 +138,11 @@ export const MessageInputMixin = (superClass) =>
     __buttonPropsChanged(button, disabled, effectiveI18n, value) {
       if (button) {
         button.disabled = disabled || !value;
-        button.textContent = effectiveI18n.send;
+        if (button.localName === 'vaadin-message-input-button') {
+          button.textContent = effectiveI18n.send;
+        } else if (button.textContent.trim().length === 0) {
+          button.setAttribute('aria-label', effectiveI18n.send);
+        }
       }
     }
 
