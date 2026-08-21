@@ -1,0 +1,115 @@
+/* Dashboard, its layout, sections and widgets. The base provides the grid, the widget
+   border/radius/shadow system and the header/title/content parts, driven by documented
+   --vaadin-dashboard-* vars — this restores Lumo's wider grid gap, the larger bolder
+   titles, the roomier headers, the editable/selected tints and the three layout theme
+   variants (which the base does not implement at all). */
+:where(:root),
+:where(:host) {
+  /* Lumo spaces the grid wider than the base (gap-s) */
+  --vaadin-dashboard-gap: var(--lumo-space-m);
+}
+
+/* Layout theme variants */
+:where(vaadin-dashboard, vaadin-dashboard-layout) {
+  &[theme~='shaded-background'] {
+    background: var(--lumo-shade-5pct);
+  }
+
+  &[theme~='elevated-widgets'] {
+    --vaadin-dashboard-widget-shadow: var(--lumo-box-shadow-xs);
+    --vaadin-dashboard-widget-border-color: var(--lumo-contrast-10pct);
+    --vaadin-dashboard-widget-background: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct))
+      var(--lumo-base-color);
+  }
+
+  &[theme~='flat-widgets'] {
+    --vaadin-dashboard-widget-background: var(--lumo-contrast-5pct);
+    --vaadin-dashboard-widget-border-color: transparent;
+  }
+}
+
+/* Widgets and sections share the title vars, so each scopes its own — Lumo titles are
+   larger and bolder than the base 1em/500, and section titles one step larger again. */
+:where(vaadin-dashboard-widget) {
+  --vaadin-dashboard-widget-title-font-size: var(--lumo-font-size-l);
+  --vaadin-dashboard-widget-title-font-weight: 600;
+  --vaadin-dashboard-widget-header-padding: var(--lumo-space-xs) var(--lumo-space-m);
+
+  /* Editable mode tightens the header padding to make room for the controls */
+  &[editable] {
+    --vaadin-dashboard-widget-header-padding: var(--lumo-space-xs);
+    --vaadin-dashboard-widget-border-color: var(--lumo-contrast-20pct);
+  }
+
+  &[selected] {
+    --vaadin-dashboard-widget-background: var(--lumo-primary-color-10pct);
+  }
+
+  /* Roomier than the base's 1em minimum */
+  &::part(content) {
+    min-height: var(--lumo-size-m);
+  }
+
+  /* While moving or resizing, blur the content behind the mode controls (the base
+     draws the controls but leaves the content untouched) */
+  &:is([resize-mode], [move-mode])::part(content) {
+    opacity: 0.75;
+    filter: blur(10px);
+  }
+}
+
+:where(vaadin-dashboard-section) {
+  --vaadin-dashboard-widget-title-font-size: var(--lumo-font-size-xl);
+  --vaadin-dashboard-widget-title-font-weight: 600;
+  --vaadin-dashboard-widget-title-line-height: var(--lumo-line-height-m);
+
+  /* Editable sections sit on a faint fill; selecting tints it primary */
+  &[editable] {
+    background: var(--lumo-contrast-5pct);
+  }
+
+  &[selected] {
+    background: var(--lumo-primary-color-10pct);
+  }
+
+  &::part(header) {
+    padding-inline: var(--lumo-space-s);
+  }
+
+  &[editable]::part(header) {
+    padding-inline: var(--lumo-space-xs);
+  }
+
+  &[move-mode] > * {
+    opacity: 0.3;
+    filter: blur(10px);
+  }
+}
+
+/* Chrome shared by widgets and sections */
+:where(vaadin-dashboard-widget, vaadin-dashboard-section) {
+  &::part(header) {
+    min-height: var(--lumo-size-l);
+  }
+
+  /* The base's cross icon fills the whole button; Lumo's is lighter and smaller */
+  &::part(remove-button) {
+    --vaadin-icon-visual-size: 75%;
+  }
+
+  /* Move/resize mode controls are theme="primary" buttons, but they live inside the
+     widget's shadow tree, so button.css cannot reach them by tag — give them Lumo's
+     primary fill through their parts instead (an outer-context rule, so it beats the
+     button's own :host([theme~='primary']) declaration). */
+  &::part(move-apply-button),
+  &::part(move-backward-button),
+  &::part(move-forward-button),
+  &::part(resize-apply-button),
+  &::part(resize-grow-width-button),
+  &::part(resize-shrink-width-button),
+  &::part(resize-grow-height-button),
+  &::part(resize-shrink-height-button) {
+    --vaadin-button-background: var(--lumo-primary-color);
+    --vaadin-button-text-color: var(--lumo-primary-contrast-color);
+  }
+}
