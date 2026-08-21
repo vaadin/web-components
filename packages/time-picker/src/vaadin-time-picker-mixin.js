@@ -521,8 +521,14 @@ export const TimePickerMixin = (superClass) =>
         this.__updateValue(parsedValue);
       }
 
-      if (this.value) {
-        this._comboBoxValue = effectiveI18n.formatTime(parsedValue);
+      // Not run on a `min` or `max` change, so that text the user is still
+      // typing is not replaced.
+      if (effectiveI18n !== this.__oldEffectiveI18n) {
+        this.__oldEffectiveI18n = effectiveI18n;
+
+        if (this.value) {
+          this.__updateInputValue(parsedValue);
+        }
       }
     }
 
