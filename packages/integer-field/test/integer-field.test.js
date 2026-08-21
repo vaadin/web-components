@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { arrowDown, arrowUp, fixtureSync, keyDownOn, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-integer-field.js';
+import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 
 describe('integer-field', () => {
   let integerField, input;
@@ -43,26 +44,6 @@ describe('integer-field', () => {
       input.addEventListener('input', spy);
       integerField.shadowRoot.querySelector('[part~="increase-button"]').click();
       expect(spy).to.be.calledOnce;
-    });
-
-    it('should not prevent default for input wheel events when not focused', () => {
-      const event = new CustomEvent('wheel', { cancelable: true });
-      input.dispatchEvent(event);
-      expect(event.defaultPrevented).to.be.false;
-    });
-
-    it('should prevent default for input wheel events when focused', () => {
-      const event = new CustomEvent('wheel', { cancelable: true });
-      input.focus();
-      input.dispatchEvent(event);
-      expect(event.defaultPrevented).to.be.true;
-    });
-
-    it('should not prevent default for host wheel events when focused', () => {
-      const event = new CustomEvent('wheel', { cancelable: true });
-      input.focus();
-      integerField.dispatchEvent(event);
-      expect(event.defaultPrevented).to.be.false;
     });
   });
 
@@ -261,6 +242,9 @@ describe('integer-field', () => {
 
     describe('invalid step', () => {
       beforeEach(() => {
+        // The step warning is issued through the deduplicating issueWarning
+        // helper, and several cases below produce an identical message.
+        clearWarnings();
         sinon.stub(console, 'warn');
       });
 

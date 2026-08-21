@@ -128,14 +128,14 @@ describe('value commit', () => {
       integerField.blur();
       expectUnparsableValueCommit();
       expect(integerField.value).to.equal('');
-      expect(integerField.inputElement.validity.badInput).to.be.true;
+      expect(integerField.inputElement.value).to.equal('-');
     });
 
     it('should commit as unparsable value change on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expectUnparsableValueCommit();
       expect(integerField.value).to.equal('');
-      expect(integerField.inputElement.validity.badInput).to.be.true;
+      expect(integerField.inputElement.value).to.equal('-');
     });
   });
 
@@ -215,13 +215,13 @@ describe('value commit', () => {
       it('should commit an empty value on blur', () => {
         integerField.blur();
         expectValueCommit('');
-        expect(integerField.inputElement.validity.badInput).to.be.true;
+        expect(integerField.inputElement.value).to.equal('-');
       });
 
       it('should commit an empty value on Enter', async () => {
         await sendKeys({ press: 'Enter' });
         expectValueCommit('');
-        expect(integerField.inputElement.validity.badInput).to.be.true;
+        expect(integerField.inputElement.value).to.equal('-');
       });
     });
   });

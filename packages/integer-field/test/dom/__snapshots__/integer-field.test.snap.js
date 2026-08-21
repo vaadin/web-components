@@ -17,11 +17,9 @@ snapshots["vaadin-integer-field host default"] =
   </div>
   <input
     id="input-vaadin-integer-field-3"
-    max="undefined"
-    min="undefined"
+    inputmode="numeric"
     slot="input"
-    step="any"
-    type="number"
+    type="text"
   >
 </vaadin-integer-field>
 `;
@@ -44,11 +42,9 @@ snapshots["vaadin-integer-field host helper"] =
   <input
     aria-describedby="helper-vaadin-integer-field-1"
     id="input-vaadin-integer-field-3"
-    max="undefined"
-    min="undefined"
+    inputmode="numeric"
     slot="input"
-    step="any"
-    type="number"
+    type="text"
   >
   <div
     id="helper-vaadin-integer-field-1"
@@ -81,12 +77,10 @@ snapshots["vaadin-integer-field host error"] =
     aria-describedby="error-message-vaadin-integer-field-2"
     aria-invalid="true"
     id="input-vaadin-integer-field-3"
+    inputmode="numeric"
     invalid=""
-    max="undefined"
-    min="undefined"
     slot="input"
-    step="any"
-    type="number"
+    type="text"
   >
 </vaadin-integer-field>
 `;
@@ -109,11 +103,9 @@ snapshots["vaadin-integer-field host accessibleDescriptionRef"] =
   <input
     aria-describedby="accessible-description-ref-0"
     id="input-vaadin-integer-field-3"
-    max="undefined"
-    min="undefined"
+    inputmode="numeric"
     slot="input"
-    step="any"
-    type="number"
+    type="text"
   >
 </vaadin-integer-field>
 `;
