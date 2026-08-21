@@ -123,6 +123,39 @@ describe('value control buttons', () => {
       expect(numberField.value).to.equal('1.0001');
     });
 
+    it('should increase value by imprecise decimal step on plus button click', async () => {
+      numberField.step = 0.07;
+      numberField.value = 0;
+      await nextUpdate(numberField);
+
+      increaseButton.click();
+      expect(numberField.value).to.equal('0.07');
+
+      increaseButton.click();
+      expect(numberField.value).to.equal('0.14');
+    });
+
+    it('should increment value to next multiple of step offset by imprecise decimal min', async () => {
+      numberField.step = 0.1;
+      numberField.min = 0.29;
+      numberField.value = 0.29;
+      await nextUpdate(numberField);
+
+      increaseButton.click();
+
+      expect(numberField.value).to.equal('0.39');
+    });
+
+    it('should increase value by step in exponential notation on plus button click', async () => {
+      numberField.step = 1e-7;
+      numberField.value = 0;
+      await nextUpdate(numberField);
+
+      increaseButton.click();
+
+      expect(numberField.value).to.equal('1e-7');
+    });
+
     it('should not increase value on plus button click when max value is reached', async () => {
       numberField.value = 0;
       numberField.max = 0;
