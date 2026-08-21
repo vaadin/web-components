@@ -17,11 +17,8 @@ snapshots["vaadin-number-field host default"] =
   </div>
   <input
     id="input-vaadin-number-field-3"
-    max="undefined"
-    min="undefined"
     slot="input"
-    step="any"
-    type="number"
+    type="text"
   >
 </vaadin-number-field>
 `;
@@ -44,11 +41,8 @@ snapshots["vaadin-number-field host helper"] =
   <input
     aria-describedby="helper-vaadin-number-field-1"
     id="input-vaadin-number-field-3"
-    max="undefined"
-    min="undefined"
     slot="input"
-    step="any"
-    type="number"
+    type="text"
   >
   <div
     id="helper-vaadin-number-field-1"
@@ -82,11 +76,8 @@ snapshots["vaadin-number-field host error"] =
     aria-invalid="true"
     id="input-vaadin-number-field-3"
     invalid=""
-    max="undefined"
-    min="undefined"
     slot="input"
-    step="any"
-    type="number"
+    type="text"
   >
 </vaadin-number-field>
 `;
@@ -109,11 +100,8 @@ snapshots["vaadin-number-field host accessibleDescriptionRef"] =
   <input
     aria-describedby="accessible-description-ref-0"
     id="input-vaadin-number-field-3"
-    max="undefined"
-    min="undefined"
     slot="input"
-    step="any"
-    type="number"
+    type="text"
   >
 </vaadin-number-field>
 `;
@@ -135,11 +123,8 @@ snapshots["vaadin-number-field host min"] =
   </div>
   <input
     id="input-vaadin-number-field-3"
-    max="undefined"
-    min="2"
     slot="input"
-    step="any"
-    type="number"
+    type="text"
   >
 </vaadin-number-field>
 `;
@@ -161,11 +146,8 @@ snapshots["vaadin-number-field host max"] =
   </div>
   <input
     id="input-vaadin-number-field-3"
-    max="2"
-    min="undefined"
     slot="input"
-    step="any"
-    type="number"
+    type="text"
   >
 </vaadin-number-field>
 `;
@@ -187,11 +169,8 @@ snapshots["vaadin-number-field host step"] =
   </div>
   <input
     id="input-vaadin-number-field-3"
-    max="undefined"
-    min="undefined"
     slot="input"
-    step="2"
-    type="number"
+    type="text"
   >
 </vaadin-number-field>
 `;
