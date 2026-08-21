@@ -206,8 +206,13 @@ export const ColumnAutoWidthMixin = (superClass) =>
       col.__insertStyleRule();
 
       const style = col.__styleRule.style;
-      style.width = measuring ? 'auto' : (col.width ?? '');
-      style.position = measuring ? 'absolute' : '';
+      if (measuring) {
+        style.setProperty('width', 'auto', 'important');
+        style.setProperty('position', 'absolute', 'important');
+      } else {
+        style.setProperty('width', col.width ?? '');
+        style.removeProperty('position');
+      }
 
       this.$.scroller.toggleAttribute('measuring-auto-width', measuring);
     }
@@ -270,7 +275,7 @@ export const ColumnAutoWidthMixin = (superClass) =>
 
     /** @private */
     __getAutoWidthColumns() {
-      return this._getColumns().filter((col) => !col.hidden && col.autoWidth);
+      return this._getColumns().filter((col) => col.isConnected && !col.hidden && col.autoWidth);
     }
 
     /**

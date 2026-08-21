@@ -150,6 +150,11 @@ export const GridMixin = (superClass) =>
       return lastVisibleItem?.index;
     }
 
+    /** @private */
+    get __stylesheet() {
+      return this.$.columnStyles.sheet;
+    }
+
     constructor() {
       super();
 
@@ -217,8 +222,6 @@ export const GridMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
-
-      this.__stylesheet = this.$.columnStyles.sheet;
 
       setTouchAction(this, '');
       setTouchAction(this.$.scroller, '');

@@ -315,6 +315,10 @@ export const ColumnBaseMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
+      // Cells can be created before a lazily defined custom column is upgraded
+      // and assigned its stable id.
+      this._allCells.forEach((cell) => cell.classList.add(`column-${this._id}-cell`));
+
       // Adds the column cells to the grid after the column is attached
       requestAnimationFrame(() => {
         // Skip if the column has been detached
@@ -356,7 +360,7 @@ export const ColumnBaseMixin = (superClass) =>
     /** @private */
     __insertStyleRule() {
       const stylesheet = this._grid?.__stylesheet;
-      if (!stylesheet || this.__styleRule) {
+      if (!stylesheet || this.__styleRule?.parentStyleSheet === stylesheet) {
         return;
       }
 
@@ -366,8 +370,8 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     __deleteStyleRule() {
-      const stylesheet = this._grid.__stylesheet;
-      if (!stylesheet || !this.__styleRule) {
+      const stylesheet = this.__styleRule?.parentStyleSheet;
+      if (!stylesheet) {
         return;
       }
 
