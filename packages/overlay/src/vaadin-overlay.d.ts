@@ -118,6 +118,8 @@ export type OverlayEventMap = HTMLElementEventMap & OverlayCustomEventMap;
  * @fires {CustomEvent} vaadin-overlay-closed - Fired after the overlay is closed.
  * @fires {CustomEvent} vaadin-overlay-outside-click - Fired before the overlay is closed on outside click. Calling `preventDefault()` on the event cancels the closing.
  * @fires {CustomEvent} vaadin-overlay-escape-press - Fired before the overlay is closed on Escape key press. Calling `preventDefault()` on the event cancels the closing.
+ * @deprecated `<vaadin-overlay>` is deprecated and will be removed in Vaadin 26.
+ * Consider using `OverlayMixin` and `PositionMixin` instead.
  */
 declare class Overlay extends OverlayMixin(ThemableMixin(DirMixin(HTMLElement))) {
   addEventListener<K extends keyof OverlayEventMap>(

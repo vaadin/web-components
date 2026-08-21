@@ -74,6 +74,8 @@ import { OverlayMixin } from './vaadin-overlay-mixin.js';
  *
  * @customElement vaadin-overlay
  * @extends HTMLElement
+ * @deprecated `<vaadin-overlay>` is deprecated and will be removed in Vaadin 26.
+ * Consider using `OverlayMixin` and `PositionMixin` instead.
  */
 class Overlay extends OverlayMixin(DirMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(LitElement))))) {
   static get is() {
