@@ -315,14 +315,14 @@ export const ColumnBaseMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      this.__insertStyleRule();
-
       // Adds the column cells to the grid after the column is attached
       requestAnimationFrame(() => {
         // Skip if the column has been detached
         if (!this._grid) {
           return;
         }
+
+        this.__insertStyleRule();
 
         this._cells?.forEach((cell) => {
           if (!cell._content.parentNode) {

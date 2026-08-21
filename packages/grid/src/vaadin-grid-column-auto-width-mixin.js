@@ -201,6 +201,10 @@ export const ColumnAutoWidthMixin = (superClass) =>
           cell.__measuringAutoWidth = measuring;
         });
 
+      // Auto-width can run before the scheduled style rule insertion, for example
+      // when a synchronous data provider is used during grid initialization.
+      col.__insertStyleRule();
+
       const style = col.__styleRule.style;
       style.width = measuring ? 'auto' : (col.width ?? '');
       style.position = measuring ? 'absolute' : '';
