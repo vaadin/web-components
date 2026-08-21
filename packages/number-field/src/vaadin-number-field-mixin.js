@@ -62,6 +62,27 @@ export const NumberFieldMixin = (superClass) =>
     constructor() {
       super();
       this._setType('text');
+      this.__committedUnparsableValue = null;
+    }
+
+    /**
+     * The default pattern for the `allowedCharPattern` property,
+     * applied unless the developer has set their own.
+     *
+     * @protected
+     */
+    get _defaultAllowedCharPattern() {
+      return '[\\d\\-+.eE]';
+    }
+
+    /**
+     * The `inputmode` set on the input element, selecting
+     * the on-screen keyboard layout on mobile devices.
+     *
+     * @protected
+     */
+    get _defaultInputMode() {
+      return 'decimal';
     }
 
     /** @protected */
@@ -107,8 +128,13 @@ export const NumberFieldMixin = (superClass) =>
           this._setFocusElement(input);
           this.stateTarget = input;
           this.ariaTarget = input;
+          input.inputMode = this._defaultInputMode;
         }),
       );
+
+      if (!this.allowedCharPattern) {
+        this.allowedCharPattern = this._defaultAllowedCharPattern;
+      }
 
       this.addController(new LabelledInputController(this.inputElement, this._labelController));
 
@@ -385,7 +411,7 @@ export const NumberFieldMixin = (superClass) =>
 
       if (!this.__keepCommittedValue) {
         this.__committedValue = this.value;
-        this.__committedUnparsableValueStatus = false;
+        this.__committedUnparsableValue = null;
       }
     }
 
@@ -548,15 +574,24 @@ export const NumberFieldMixin = (superClass) =>
      * @private
      */
     __commitValueChange() {
+      const unparsableValue = this.__hasUnparsableValue ? this._inputElementValue : null;
+
       if (this.__committedValue !== this.value) {
         this._requestValidation();
         this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-      } else if (this.__committedUnparsableValueStatus !== this.__hasUnparsableValue) {
+      } else if ((this.__committedUnparsableValue !== null) !== (unparsableValue !== null)) {
         this._requestValidation();
         this.dispatchEvent(new CustomEvent('unparsable-change'));
       }
 
       this.__committedValue = this.value;
-      this.__committedUnparsableValueStatus = this.__hasUnparsableValue;
+      this.__committedUnparsableValue = unparsableValue;
+
+      // Reformat the presentation unconditionally: a commit that does not
+      // change `value` can still need it, e.g. typed "1.50" committing over
+      // the already-committed "1.5". Unparsable text is left as typed.
+      if (unparsableValue === null) {
+        this._forwardInputValue(this.value);
+      }
     }
   };
