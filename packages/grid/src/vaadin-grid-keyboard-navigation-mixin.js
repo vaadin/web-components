@@ -572,7 +572,6 @@ export const KeyboardNavigationMixin = (superClass) =>
               dstSizerCell.scrollIntoView();
             }
             this.__updateColumnsBodyContentHidden();
-            this.__updateHorizontalScrollPosition();
           }
 
           dstCell = [...dstRow.children].find((cell) => cell._column === dstSizerCell._column);
@@ -881,7 +880,6 @@ export const KeyboardNavigationMixin = (superClass) =>
     _detectInteracting(e) {
       const isInteracting = e.composedPath().some((el) => el.localName === 'slot' && this.shadowRoot.contains(el));
       this._setInteracting(isInteracting);
-      this.__updateHorizontalScrollPosition();
     }
 
     /**

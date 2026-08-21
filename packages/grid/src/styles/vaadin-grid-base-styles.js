@@ -69,9 +69,8 @@ export const gridStyles = css`
     flex-grow: 1;
     flex-shrink: 0;
     display: block;
-    position: sticky;
+    position: relative;
     width: 100%;
-    left: 0;
     min-height: 1px;
     z-index: 1;
   }
@@ -91,15 +90,10 @@ export const gridStyles = css`
   #footer {
     display: block;
     position: sticky;
-    left: 0;
+    right: auto;
+    left: auto;
     width: 100%;
     z-index: 2;
-  }
-
-  :host([dir='rtl']) #items,
-  :host([dir='rtl']) #header,
-  :host([dir='rtl']) #footer {
-    left: auto;
   }
 
   #header {
@@ -123,7 +117,8 @@ export const gridStyles = css`
 
   .row {
     display: flex;
-    width: 100%;
+    width: max-content;
+    min-width: 100%;
     box-sizing: border-box;
     margin: 0;
     position: relative;
@@ -391,6 +386,16 @@ export const gridStyles = css`
   .frozen-cell,
   .frozen-to-end-cell {
     z-index: 2;
+  }
+
+  .row:not(#sizer) > .frozen-cell {
+    position: sticky;
+    inset-inline-start: var(--_grid-frozen-cell-offset, 0);
+  }
+
+  .row:not(#sizer) > .frozen-to-end-cell {
+    position: sticky;
+    inset-inline-end: var(--_grid-frozen-to-end-cell-offset, 0);
   }
 
   /* Empty state */
