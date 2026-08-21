@@ -367,6 +367,21 @@ describe('value commit', () => {
       });
     });
 
+    describe('overlay', () => {
+      beforeEach(async () => {
+        timePicker.click();
+        await sendKeys({ press: 'ArrowDown' });
+        await sendKeys({ press: 'ArrowDown' });
+      });
+
+      it('should update the input value on selecting the item matching the value', () => {
+        expect(timePicker.inputElement.value).to.equal('01:00');
+        getAllItems(timePicker)[0].click();
+        expect(timePicker.inputElement.value).to.equal('00:00');
+        expectNoValueCommit();
+      });
+    });
+
     describe('parsable input entered', () => {
       beforeEach(async () => {
         timePicker.inputElement.select();
@@ -440,11 +455,21 @@ describe('value commit', () => {
     it('should clear on clear button click', () => {
       timePicker.$.clearButton.click();
       expectValueCommit('');
+      expect(timePicker.inputElement.value).to.equal('');
     });
 
     it('should clear on Escape', async () => {
       await sendKeys({ press: 'Escape' });
       expectValueCommit('');
+      expect(timePicker.inputElement.value).to.equal('');
+    });
+
+    it('should clear unparsable input on clear button click', async () => {
+      timePicker.inputElement.select();
+      await sendKeys({ type: 'foo' });
+      timePicker.$.clearButton.click();
+      expectValueCommit('');
+      expect(timePicker.inputElement.value).to.equal('');
     });
   });
 
