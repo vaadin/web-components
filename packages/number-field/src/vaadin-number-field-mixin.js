@@ -9,7 +9,7 @@ import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { formatNumber, parseNumber } from './number-utils.js';
+import { createNumberContext, formatNumber, parseNumber } from './number-utils.js';
 
 /**
  * A mixin providing common number field functionality.
@@ -48,11 +48,37 @@ export const NumberFieldMixin = (superClass) =>
           value: false,
           reflectToAttribute: true,
         },
+
+        /**
+         * The locale used for parsing user input and formatting the
+         * presentation value, as a BCP 47 language tag. The `value`
+         * property is not affected: it always uses the machine-readable
+         * format with a dot as the decimal separator.
+         *
+         * When not set, the browser's default locale is used.
+         */
+        locale: {
+          type: String,
+        },
+
+        /**
+         * Options passed to the `Intl.NumberFormat` instance used for
+         * formatting the presentation value, e.g. `useGrouping`,
+         * `minimumFractionDigits`, `maximumFractionDigits`, or
+         * `style: 'currency'` with `currency`.
+         *
+         * Formatting is display-only and never changes the `value`
+         * property, so options that round or truncate only affect
+         * what the input element shows.
+         */
+        formatOptions: {
+          type: Object,
+        },
       };
     }
 
     static get observers() {
-      return ['_stepChanged(step)'];
+      return ['_stepChanged(step)', '__localeChanged(locale, formatOptions)'];
     }
 
     static get constraints() {
@@ -67,12 +93,33 @@ export const NumberFieldMixin = (superClass) =>
 
     /**
      * The default pattern for the `allowedCharPattern` property,
-     * applied unless the developer has set their own.
+     * derived from the locale symbols and applied unless the
+     * developer has set their own.
      *
      * @protected
      */
     get _defaultAllowedCharPattern() {
-      return '[\\d\\-+.eE]';
+      return this.__numberContext.allowedCharPattern;
+    }
+
+    /**
+     * The parsing and formatting context for the current `locale`
+     * and `formatOptions`, rebuilt when either changes.
+     *
+     * @private
+     */
+    get __numberContext() {
+      if (!this.__cachedNumberContext) {
+        try {
+          this.__cachedNumberContext = createNumberContext(this.locale, this.formatOptions);
+        } catch (_) {
+          issueWarning(
+            `<${this.localName}> The locale "${this.locale}" or the format options are invalid and were ignored.`,
+          );
+          this.__cachedNumberContext = createNumberContext();
+        }
+      }
+      return this.__cachedNumberContext;
     }
 
     /**
@@ -133,7 +180,8 @@ export const NumberFieldMixin = (superClass) =>
       );
 
       if (!this.allowedCharPattern) {
-        this.allowedCharPattern = this._defaultAllowedCharPattern;
+        this.__appliedDefaultCharPattern = this._defaultAllowedCharPattern;
+        this.allowedCharPattern = this.__appliedDefaultCharPattern;
       }
 
       this.addController(new LabelledInputController(this.inputElement, this._labelController));
@@ -380,6 +428,24 @@ export const NumberFieldMixin = (superClass) =>
       return !this.value || (!this.disabled && this._incrementIsInsideTheLimits(incr, value));
     }
 
+    /** @private */
+    __localeChanged() {
+      this.__cachedNumberContext = undefined;
+
+      // Re-derive the default character pattern, unless the developer
+      // has set their own.
+      const previousDefault = this.__appliedDefaultCharPattern;
+      if (!this.allowedCharPattern || this.allowedCharPattern === previousDefault) {
+        this.__appliedDefaultCharPattern = this._defaultAllowedCharPattern;
+        this.allowedCharPattern = this.__appliedDefaultCharPattern;
+      }
+
+      // Reformat the presentation, leaving unparsable text as typed.
+      if (this.inputElement && !this.__hasUnparsableValue) {
+        this._forwardInputValue(this.value);
+      }
+    }
+
     /**
      * @param {number} step
      * @protected
@@ -453,7 +519,7 @@ export const NumberFieldMixin = (superClass) =>
       // clear button) is already canonical. Assigning raw text and letting
       // the value observer clear it would leak unparsable text into `value`
       // for a moment, firing value-changed events for the round-trip.
-      const parsed = event.isTrusted ? parseNumber(raw) : raw;
+      const parsed = event.isTrusted ? parseNumber(raw, this.__numberContext) : raw;
       this.__keepCommittedValue = true;
       this.__userInput = event.isTrusted;
       this.value = parsed == null ? '' : parsed;
@@ -531,7 +597,7 @@ export const NumberFieldMixin = (superClass) =>
      * @protected
      */
     _forwardInputValue(value) {
-      super._forwardInputValue(value ? formatNumber(value) : '');
+      super._forwardInputValue(value ? formatNumber(value, this.__numberContext) : '');
     }
 
     /**
@@ -548,7 +614,7 @@ export const NumberFieldMixin = (superClass) =>
       super._inputElementChanged(input);
 
       if (input && this.value) {
-        this._inputElementValue = formatNumber(this.value);
+        this._inputElementValue = formatNumber(this.value, this.__numberContext);
       }
     }
 

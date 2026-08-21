@@ -90,7 +90,9 @@ describe('number-field', () => {
     let input;
 
     beforeEach(async () => {
-      numberField = fixtureSync('<vaadin-number-field></vaadin-number-field>');
+      // The locale is pinned because typed text is interpreted in it:
+      // in a comma-decimal locale a typed "." is a group separator.
+      numberField = fixtureSync('<vaadin-number-field locale="en-US"></vaadin-number-field>');
       await nextRender();
       input = numberField.inputElement;
       input.focus();
@@ -128,7 +130,7 @@ describe('number-field', () => {
     let input, keydownSpy;
 
     beforeEach(async () => {
-      numberField = fixtureSync('<vaadin-number-field></vaadin-number-field>');
+      numberField = fixtureSync('<vaadin-number-field locale="en-US"></vaadin-number-field>');
       await nextRender();
       input = numberField.inputElement;
       keydownSpy = sinon.spy();
@@ -137,7 +139,6 @@ describe('number-field', () => {
 
     [
       [65, [], 'a'],
-      [188, [], ','],
       [32, [], ' '],
       [191, [], '?'],
     ].forEach(([keyCode, modifiers, key]) => {
@@ -153,6 +154,7 @@ describe('number-field', () => {
       [189, [], '-'],
       [187, [], '+'],
       [190, [], '.'],
+      [188, [], ','],
       [69, [], 'e'],
       [69, ['shift'], 'E'],
       [8, [], 'Backspace'],
