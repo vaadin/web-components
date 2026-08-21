@@ -8,6 +8,7 @@ const markdown = document.createElement('vaadin-markdown');
 
 // Properties
 assertType<string | null | undefined>(markdown.content);
+assertType<boolean>(markdown.lineBreaks);
 
 // Mixins
 assertType<ElementMixinClass>(markdown);

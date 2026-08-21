@@ -24,6 +24,19 @@ declare class Markdown extends SlotStylesMixin(ElementMixin(ThemableMixin(HTMLEl
    * The Markdown content.
    */
   content: string | null | undefined;
+
+  /**
+   * When set to `true`, single line breaks ("soft breaks") within a
+   * paragraph are converted into `<br>` elements, the same way chat and
+   * message-style Markdown behaves.
+   *
+   * By default, following the original Markdown specification, single line
+   * breaks are ignored (collapsed into a space) and a blank line is
+   * required to start a new paragraph.
+   *
+   * @attr {boolean} line-breaks
+   */
+  lineBreaks: boolean;
 }
 
 declare global {
