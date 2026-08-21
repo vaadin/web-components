@@ -2025,6 +2025,49 @@ describe('hierarchical data', () => {
   });
 });
 
+describe('hierarchical data - collapse with focus', () => {
+  const items = [{ name: 'parent', children: true }, { name: 'sibling 1' }, { name: 'sibling 2' }];
+
+  function smallTreeDataProvider({ parentItem, page, pageSize }, callback) {
+    if (parentItem) {
+      const children = Array.from({ length: 50 }, (_, i) => ({ name: `child ${i}` }));
+      const offset = page * pageSize;
+      callback(children.slice(offset, offset + pageSize), children.length);
+    } else {
+      callback(items, items.length);
+    }
+  }
+
+  beforeEach(() => {
+    grid = fixtureSync(`
+      <vaadin-grid style="width: 200px; height: 300px;">
+        <vaadin-grid-tree-column path="name" item-has-children-path="children"></vaadin-grid-tree-column>
+      </vaadin-grid>
+    `);
+    grid.dataProvider = smallTreeDataProvider;
+    grid.expandedItems = [items[0]];
+    flushGrid(grid);
+  });
+
+  it('should keep the same item focused when the focused row is hidden on collapse', () => {
+    // Scroll to the end where the sibling rows following the expanded subtree are rendered
+    grid.scrollToIndex(52);
+    flushGrid(grid);
+
+    const row = getPhysicalItems(grid).find((row) => row._item.name === 'sibling 1');
+    row.firstElementChild.focus();
+
+    // Collapsing hides the previously focused row and renders the item on another row
+    grid.collapseItem(items[0]);
+    flushGrid(grid);
+
+    const focusedCell = grid.shadowRoot.activeElement;
+    expect(focusedCell.localName).to.equal('td');
+    expect(focusedCell.parentElement.hidden).to.be.false;
+    expect(focusedCell.parentElement._item.name).to.equal('sibling 1');
+  });
+});
+
 describe('empty state', () => {
   function getEmptyState() {
     return grid.querySelector('[slot="empty-state"]');

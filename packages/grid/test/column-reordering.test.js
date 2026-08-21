@@ -12,6 +12,7 @@ import {
   dragStart,
   flushGrid,
   getContainerCell,
+  getPhysicalItems,
   getRowCells,
   getRows,
   infiniteDataProvider,
@@ -315,6 +316,17 @@ describe('reordering simple grid', () => {
   describe('basic reordering', () => {
     it('should reorder the columns', () => {
       dragAndDropOver(headerContent[0], headerContent[1]);
+      expectVisualOrder(grid, [2, 1]);
+    });
+
+    it('should use the visual order for cells of newly created rows', () => {
+      dragAndDropOver(headerContent[0], headerContent[1]);
+      const initialRowCount = getPhysicalItems(grid).length;
+
+      // Grow the grid so that the virtualizer creates and initializes new rows
+      grid.size = 2;
+      expect(getPhysicalItems(grid).length).to.be.above(initialRowCount);
+
       expectVisualOrder(grid, [2, 1]);
     });
 

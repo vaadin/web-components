@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../all-imports.js';
@@ -33,6 +33,30 @@ describe('basic features', () => {
     });
     flushGrid(grid);
     await nextFrame();
+  });
+
+  it('should have allRowsVisible set to false by default', () => {
+    expect(grid.allRowsVisible).to.be.false;
+  });
+
+  it('should update first and last column parts for newly created rows', async () => {
+    const initialRowCount = getPhysicalItems(grid).length;
+
+    // Grow the grid so that the virtualizer creates and initializes new rows
+    grid.style.height = '500px';
+    await nextResize(grid);
+    flushGrid(grid);
+
+    const rows = getPhysicalItems(grid);
+    expect(rows.length).to.be.greaterThan(initialRowCount);
+    const newRowCell = rows[rows.length - 1].firstElementChild;
+    expect(newRowCell.getAttribute('part')).to.contain('first-column-cell');
+    expect(newRowCell.getAttribute('part')).to.contain('last-column-cell');
+  });
+
+  it('should allow touch scrolling by clearing the gesture touch-action', () => {
+    expect(getComputedStyle(grid).touchAction).to.equal('auto');
+    expect(getComputedStyle(grid.$.scroller).touchAction).to.equal('auto');
   });
 
   it('should notify `size` property', () => {
