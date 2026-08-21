@@ -182,14 +182,14 @@ export const ColumnAutoWidthMixin = (superClass) =>
     }
 
     /**
-     * Toggles the cell content for the given column to use or not use auto width.
+     * Toggles measurement styles for the given column and marks its visible cells for measuring.
      *
-     * While content for all the column cells uses auto width (instead of the default 100%),
-     * their offsetWidth can be used to calculate the collective intrinsic width of the column.
+     * While the column cells use auto width (instead of the default 100%), the offsetWidth of the
+     * marked cells can be used to calculate the collective intrinsic width of the column.
      *
      * @private
      */
-    __setVisibleCellContentAutoWidth(col, autoWidth) {
+    __setColumnMeasurementState(col, measuring) {
       col._allCells
         .filter((cell) => {
           if (this.$.items.contains(cell)) {
@@ -198,23 +198,14 @@ export const ColumnAutoWidthMixin = (superClass) =>
           return true;
         })
         .forEach((cell) => {
-          cell.__measuringAutoWidth = autoWidth;
-
-          if (cell.__measuringAutoWidth) {
-            // Store the original inline width of the cell to restore it later
-            cell.__originalWidth = cell.style.width;
-            // Prepare the cell for having its intrinsic width measured
-            cell.style.width = 'auto';
-            cell.style.position = 'absolute';
-          } else {
-            // Restore the original width
-            cell.style.width = cell.__originalWidth;
-            delete cell.__originalWidth;
-            cell.style.position = '';
-          }
+          cell.__measuringAutoWidth = measuring;
         });
 
-      this.$.scroller.toggleAttribute('measuring-auto-width', autoWidth);
+      const style = col.__styleRule.style;
+      style.width = measuring ? 'auto' : (col.width ?? '');
+      style.position = measuring ? 'absolute' : '';
+
+      this.$.scroller.toggleAttribute('measuring-auto-width', measuring);
     }
 
     /**
@@ -239,14 +230,14 @@ export const ColumnAutoWidthMixin = (superClass) =>
     __calculateAndCacheIntrinsicWidths(cols) {
       // Make all the columns use auto width at once before measuring to
       // avoid reflows in between the measurements
-      cols.forEach((col) => this.__setVisibleCellContentAutoWidth(col, true));
+      cols.forEach((col) => this.__setColumnMeasurementState(col, true));
       // Measure and cache
       cols.forEach((col) => {
         const width = this.__getAutoWidthCellsMaxWidth(col);
         this.__intrinsicWidthCache.set(col, width);
       });
       // Reset the columns to use 100% width
-      cols.forEach((col) => this.__setVisibleCellContentAutoWidth(col, false));
+      cols.forEach((col) => this.__setColumnMeasurementState(col, false));
     }
 
     /**
