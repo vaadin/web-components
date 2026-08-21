@@ -58,24 +58,6 @@ export const ScrollMixin = (superClass) =>
           value: 'eager',
           sync: true,
         },
-
-        /**
-         * Cached array of frozen cells
-         * @private
-         */
-        _frozenCells: {
-          type: Array,
-          value: () => [],
-        },
-
-        /**
-         * Cached array of cells frozen to end
-         * @private
-         */
-        _frozenToEndCells: {
-          type: Array,
-          value: () => [],
-        },
       };
     }
 
@@ -355,8 +337,6 @@ export const ScrollMixin = (superClass) =>
           cell.style.removeProperty('--_grid-frozen-cell-offset');
           cell.style.removeProperty('--_grid-frozen-to-end-cell-offset');
         });
-        this._frozenCells = Array.prototype.slice.call(this.$.table.querySelectorAll('[frozen]'));
-        this._frozenToEndCells = Array.prototype.slice.call(this.$.table.querySelectorAll('[frozen-to-end]'));
         this.__updateFrozenCellOffsets();
       });
       this._debounceUpdateFrozenColumn();

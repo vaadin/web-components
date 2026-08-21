@@ -102,7 +102,7 @@ export const ColumnResizingMixin = (superClass) =>
         // to the cells before measuring the layout below
         this.__renderHeaderFooterDebouncer?.flush();
 
-        const cellFrozenToEnd = this._frozenToEndCells[0];
+        const cellFrozenToEnd = columnRowCells.find((cell) => cell.hasAttribute('frozen-to-end'));
 
         // When handle moves below the cell frozen to end, scroll into view.
         if (cellFrozenToEnd && this.$.table.scrollWidth > this.$.table.offsetWidth) {
