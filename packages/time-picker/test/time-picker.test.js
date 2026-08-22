@@ -351,11 +351,21 @@ describe('time-picker', () => {
   });
 
   describe('custom functions', () => {
-    it('should use custom parser if that exists', () => {
-      timePicker.i18n = { parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 }) };
+    it('should not use custom parser for the value set programmatically', () => {
+      const parseTime = sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 });
+      timePicker.i18n = { parseTime };
       timePicker.value = '12';
-      expect(timePicker.i18n.parseTime.args[0][0]).to.be.equal('12:00');
+      expect(parseTime).to.be.not.called;
       expect(timePicker.value).to.be.equal('12:00');
+    });
+
+    it('should not use custom parser when committing an empty field', () => {
+      const parseTime = sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 });
+      timePicker.i18n = { parseTime };
+      inputElement.focus();
+      timePicker.blur();
+      expect(parseTime).to.be.not.called;
+      expect(timePicker.value).to.be.equal('');
     });
 
     it('should align values of dropdown and input when i18n was reassigned', () => {
@@ -415,13 +425,16 @@ describe('time-picker', () => {
       });
     });
 
-    it('should commit the value when the custom parser returns stripped seconds', () => {
+    it('should use custom parser for the text entered by the user', () => {
       // The step defaults to minute precision, so the seconds are stripped
       // from the value, while the custom parser keeps returning them.
-      timePicker.i18n = { parseTime: () => ({ hours: 12, minutes: 0, seconds: 0 }) };
+      const parseTime = sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 });
+      timePicker.i18n = { parseTime };
       setInputValue(timePicker, 'noon');
       enter(inputElement);
+      expect(parseTime).to.be.calledWith('noon');
       expect(timePicker.value).to.be.equal('12:00');
+      expect(inputElement.value).to.be.equal('12:00');
     });
 
     it('should not modify the object returned by the custom parser', () => {

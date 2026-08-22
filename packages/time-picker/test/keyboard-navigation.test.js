@@ -125,23 +125,22 @@ describe('keyboard navigation', () => {
       it('should correctly add the step with custom parser and formatter', () => {
         timePicker.value = '12:0';
         timePicker.step = 20;
-        for (let inc = 1; inc < 4; inc++) {
+        ['12:00:20', '12:00:40', '12:01:00'].forEach((value) => {
           expect(inputElement.value).to.be.equal('12.0');
-          expect(timePicker.value).to.be.equal('12:00:00');
           arrowUp(inputElement);
-        }
+          expect(timePicker.value).to.be.equal(value);
+        });
         expect(inputElement.value).to.be.equal('12.1');
-        expect(timePicker.value).to.be.equal('12:01:00');
       });
 
       it('should correctly subtract the step with custom parser and formatter', () => {
         timePicker.value = '12:0';
         timePicker.step = 20;
-        for (let inc = 1; inc < 4; inc++) {
+        ['11:59:40', '11:59:20', '11:59:00'].forEach((value) => {
           arrowDown(inputElement);
           expect(inputElement.value).to.be.equal('11.59');
-          expect(timePicker.value).to.be.equal('11:59:40');
-        }
+          expect(timePicker.value).to.be.equal(value);
+        });
         arrowDown(inputElement);
         expect(inputElement.value).to.be.equal('11.58');
         expect(timePicker.value).to.be.equal('11:58:40');
