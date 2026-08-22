@@ -480,8 +480,8 @@ export const TimePickerMixin = (superClass) =>
      * from an ISO 8601 time, stripped to the resolution defined by the step.
      * @private
      */
-    __getTimeObject(isoTime) {
-      return validateTime(parseISOTime(isoTime), this.step);
+    __getTimeObject(timeString) {
+      return validateTime(parseISOTime(timeString), this.step);
     }
 
     /**
