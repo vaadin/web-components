@@ -582,7 +582,8 @@ export const TimePickerMixin = (superClass) =>
      * @override
      */
     _valueChanged(value, oldValue) {
-      const parsedObj = (this.__memoValue = parseISOTime(value));
+      // Strip value to the step resolution before marking as committed.
+      const parsedObj = (this.__memoValue = this.__getTimeObject(value));
       const newValue = formatISOTime(parsedObj) || '';
 
       // Mark value set programmatically by the user
