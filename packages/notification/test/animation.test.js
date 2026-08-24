@@ -79,6 +79,23 @@ describe('animated notifications', () => {
       expect(notifications[1]._card.hasAttribute('closing')).to.be.false;
     });
 
+    it('should not allow pointer events on the card while closing', () => {
+      notifications[1].close();
+
+      const overlayPart = notifications[1]._card.shadowRoot.querySelector('[part="overlay"]');
+      expect(getComputedStyle(overlayPart).pointerEvents).to.equal('none');
+    });
+
+    it('should not allow pointer events on the card content while closing', () => {
+      const button = document.createElement('button');
+      button.style.pointerEvents = 'auto';
+      notifications[1]._card.appendChild(button);
+
+      notifications[1].close();
+
+      expect(getComputedStyle(button).pointerEvents).to.equal('none');
+    });
+
     it('should set `opening` attribute and remove later', async () => {
       notifications[1].close();
       await oneEvent(notifications[1]._card, 'animationend');
