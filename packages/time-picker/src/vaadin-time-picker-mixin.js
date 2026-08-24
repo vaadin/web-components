@@ -119,7 +119,6 @@ export const TimePickerMixin = (superClass) =>
         '_openedOrItemsChanged(opened, _dropdownItems)',
         '_updateScroller(opened, _dropdownItems, _focusedIndex, _theme, _comboBoxValue)',
         '__updateAriaAttributes(_dropdownItems, opened, inputElement)',
-        '__updateDropdownItems(__effectiveI18n, min, max, step)',
       ];
     }
 
@@ -233,6 +232,23 @@ export const TimePickerMixin = (superClass) =>
       this._tooltipController.setPosition('top');
       this._tooltipController.setAriaTarget(this.inputElement);
       this.addController(this._tooltipController);
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (['__effectiveI18n', 'min', 'max', 'step'].some((prop) => props.has(prop))) {
+        this.__updateDropdownItems();
+      }
+
+      if (props.has('step')) {
+        this.__updateValue(this.__getTimeObject(this.value));
+      }
+
+      if (props.has('__effectiveI18n') && this.value) {
+        this.__updateInputValue(this.__getTimeObject(this.value));
+      }
     }
 
     /**
@@ -463,6 +479,15 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
+     * Returning Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+     * from an ISO 8601 time, stripped to the resolution defined by the step.
+     * @private
+     */
+    __getTimeObject(timeString) {
+      return validateTime(parseISOTime(timeString), this.step);
+    }
+
+    /**
      * Returning seconds from Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
      * @private
      */
@@ -508,25 +533,11 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /** @private */
-    __updateDropdownItems(effectiveI18n, min, max, step) {
-      const minTimeObj = validateTime(parseISOTime(min || MIN_ALLOWED_TIME), step);
-      const minSec = this.__getSec(minTimeObj);
+    __updateDropdownItems() {
+      const minSec = this.__getSec(this.__getTimeObject(this.min || MIN_ALLOWED_TIME));
+      const maxSec = this.__getSec(this.__getTimeObject(this.max || MAX_ALLOWED_TIME));
 
-      const maxTimeObj = validateTime(parseISOTime(max || MAX_ALLOWED_TIME), step);
-      const maxSec = this.__getSec(maxTimeObj);
-
-      this._dropdownItems = this.__generateDropdownList(minSec, maxSec, step);
-
-      const parsedValue = validateTime(parseISOTime(this.value), step);
-
-      if (step !== this.__oldStep) {
-        this.__oldStep = step;
-        this.__updateValue(parsedValue);
-      }
-
-      if (this.value) {
-        this._comboBoxValue = effectiveI18n.formatTime(parsedValue);
-      }
+      this._dropdownItems = this.__generateDropdownList(minSec, maxSec, this.step);
     }
 
     /** @private */
