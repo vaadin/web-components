@@ -456,6 +456,23 @@ describe('vaadin-icon', () => {
 
         expectIcon(`<g>${ANGLE_UP}</g>`);
       });
+
+      it('should render the target icon when the icon is an alias', () => {
+        fixtureSync(`
+          <vaadin-iconset name="baz">
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <g id="baz:angle-up">${ANGLE_UP}</g>
+                <g id="baz:angle-up-alias"><use href="#baz:angle-up"></use></g>
+              </defs>
+            </svg>
+          </vaadin-iconset>
+        `);
+
+        icon.icon = 'baz:angle-up-alias';
+
+        expectIcon(`<g>${ANGLE_UP}</g>`);
+      });
     });
 
     describe('set before attach', () => {
