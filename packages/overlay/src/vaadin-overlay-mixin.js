@@ -479,7 +479,7 @@ export const OverlayMixin = (superClass) =>
     _finishClosing() {
       this._detachOverlay();
       this._removeAttachedInstance();
-      this.$.overlay.style.removeProperty('pointer-events');
+      this.toggleAttribute('suppressed', false);
       setOverlayStateAttribute(this, 'closing', false);
       this.dispatchEvent(new CustomEvent('vaadin-overlay-closed'));
     }
