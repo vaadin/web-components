@@ -127,9 +127,11 @@ describe('keyboard navigation', () => {
         timePicker.step = 20;
         for (let inc = 1; inc < 4; inc++) {
           expect(inputElement.value).to.be.equal('12.0');
+          expect(timePicker.value).to.be.equal('12:00:00');
           arrowUp(inputElement);
         }
         expect(inputElement.value).to.be.equal('12.1');
+        expect(timePicker.value).to.be.equal('12:01:00');
       });
 
       it('should correctly subtract the step with custom parser and formatter', () => {
@@ -138,9 +140,11 @@ describe('keyboard navigation', () => {
         for (let inc = 1; inc < 4; inc++) {
           arrowDown(inputElement);
           expect(inputElement.value).to.be.equal('11.59');
+          expect(timePicker.value).to.be.equal('11:59:40');
         }
         arrowDown(inputElement);
         expect(inputElement.value).to.be.equal('11.58');
+        expect(timePicker.value).to.be.equal('11:58:40');
       });
     });
   });
