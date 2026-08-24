@@ -52,7 +52,7 @@ declare function monthDate(index: number): Date;
  *
  * @returns Week number
  */
-declare function getISOWeekNumber(Date: Date): number;
+declare function getISOWeekNumber(date: Date): number;
 
 /**
  * Creates a new object with the same date, but sets the hours, minutes, seconds and milliseconds to 0.
@@ -78,7 +78,7 @@ declare function normalizeUTCDate(date: Date): Date;
  *
  * @returns True if the given date objects refer to the same date
  */
-declare function dateEquals(date1: Date | null, date2: Date | null): boolean;
+declare function dateEquals(date1: Date | null, date2: Date | null, normalizer?: (date: Date) => Date): boolean;
 
 /**
  * Extracts the basic component parts of a date (day, month and year)
@@ -123,30 +123,44 @@ declare function getClosestDate(date: Date, dates: Date[]): Date;
 /**
  * Get difference in months between today and given months value.
  */
-declare function dateAfterXMonths(months: number): number;
+declare function dateAfterXMonths(months: number): Date;
 
 /**
- * Calculate the year of the date based on the provided reference date
+ * Calculate the year of the date based on the provided reference date.
  * Gets a two-digit year and returns a full year.
+ *
+ * @param year Should be in the range of [0, 99]
+ * @returns Adjusted year value
  */
-declare function getAdjustedYear(referenceDate: Date, year: number, month?: number, day?: number): Date;
+declare function getAdjustedYear(referenceDate: Date, year: number, month?: number, day?: number): number;
 
 /**
  * Parse date string of one of the following date formats:
  * - ISO 8601 `"YYYY-MM-DD"`
- * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+ * - Extended ISO 8601 with a signed year, e.g. `"+012026-MM-DD"` or `"-0001-MM-DD"`
+ *
+ * A date that does not exist, such as `"2026-02-30"`, is not parsed. Building it would carry the
+ * surplus into the next month or year and answer with a date that was never asked for.
+ *
+ * @param str Date string to parse
+ * @returns Parsed date in system timezone, or `undefined` when the string is not a date
  */
-declare function parseDate(str: string): Date;
+declare function parseDate(str: string): Date | undefined;
 
 /**
  * Parse date string of one of the following date formats:
  * - ISO 8601 `"YYYY-MM-DD"`
- * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+ * - Extended ISO 8601 with a signed year, e.g. `"+012026-MM-DD"` or `"-0001-MM-DD"`
  *
  * Uses UTC date components to allow handling date instances independently of
  * the system time-zone.
+ *
+ * A date that does not exist, such as `"2026-02-30"`, is not parsed, as in `parseDate`.
+ *
+ * @param str Date string to parse
+ * @returns Parsed date in UTC timezone, or `undefined` when the string is not a date
  */
-declare function parseUTCDate(str: string): Date;
+declare function parseUTCDate(str: string): Date | undefined;
 
 /**
  * Format a date instance in ISO 8601 (`"YYYY-MM-DD"`) or 6-digit extended ISO
