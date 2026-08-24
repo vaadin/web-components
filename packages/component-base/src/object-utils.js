@@ -11,8 +11,6 @@
  */
 const IGNORED_KEYS = ['__proto__', 'constructor', 'prototype'];
 
-const hasOwnProperty = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
-
 const isPlainObject = (value) => {
   if (!value || typeof value !== 'object') {
     return false;
@@ -41,7 +39,7 @@ function merge(target, source, partial) {
     if (isPlainObject(value)) {
       // Only merge into an own plain object, so that the merge can never
       // continue into an object inherited from the prototype chain.
-      if (!hasOwnProperty(target, key) || !isPlainObject(target[key])) {
+      if (!Object.hasOwn(target, key) || !isPlainObject(target[key])) {
         target[key] = {};
       }
 
