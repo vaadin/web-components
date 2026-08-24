@@ -479,6 +479,15 @@ describe('value commit', () => {
       expect(timePicker.inputElement.value).to.equal('10:00:00');
     });
 
+    it('should strip milliseconds without commit on Enter if value was set programmatically', async () => {
+      timePicker.value = '10:00:00.500';
+      valueChangedSpy.resetHistory();
+      await sendKeys({ press: 'Enter' });
+      expectNoValueCommit();
+      expect(timePicker.value).to.equal('10:00:00');
+      expect(timePicker.inputElement.value).to.equal('10:00:00');
+    });
+
     describe('with arrow key committed', () => {
       beforeEach(async () => {
         await sendKeys({ press: 'ArrowDown' });
