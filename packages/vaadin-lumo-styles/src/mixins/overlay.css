@@ -50,6 +50,11 @@
     display: none !important;
   }
 
+  :host([suppressed]) [part='overlay'],
+  :host([suppressed]) ::slotted(*) {
+    pointer-events: none !important;
+  }
+
   [part='overlay'] {
     overflow: auto;
     pointer-events: auto;
