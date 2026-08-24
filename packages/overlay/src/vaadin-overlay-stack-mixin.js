@@ -106,10 +106,10 @@ export const OverlayStackMixin = (superClass) =>
         document.body.style.pointerEvents = 'none';
       }
 
-      // Disable pointer events in other attached overlays
+      // Suppress pointer events in other attached overlays
       getAttachedInstances().forEach((el) => {
         if (el !== this) {
-          el.$.overlay.style.pointerEvents = 'none';
+          el.toggleAttribute('suppressed', true);
         }
       });
     }
@@ -122,7 +122,7 @@ export const OverlayStackMixin = (superClass) =>
         delete this._previousDocumentPointerEvents;
       }
 
-      // Restore pointer events in the previous overlay(s)
+      // Stop suppressing pointer events in the previous overlay(s)
       const instances = getAttachedInstances();
 
       let el;
@@ -132,7 +132,7 @@ export const OverlayStackMixin = (superClass) =>
           // Skip the current instance
           continue;
         }
-        el.$.overlay.style.removeProperty('pointer-events');
+        el.toggleAttribute('suppressed', false);
         if (!el.modeless) {
           // Stop after the last modal
           break;
