@@ -419,7 +419,7 @@ export const ColumnBaseMixin = (superClass) =>
         this.__styleRule.style.flexGrow = this.flexGrow ?? '';
       }
 
-      this._grid?._frozenCellsChanged?.();
+      this._grid?._debounceUpdateFrozenCellOffsets?.();
     }
 
     /** @private */
@@ -430,7 +430,7 @@ export const ColumnBaseMixin = (superClass) =>
         this.__styleRule.style.width = resolveViewportRelativeWidth(this.width, this._grid?.__tableRect?.width) || '';
       }
 
-      this._grid?._frozenCellsChanged?.();
+      this._grid?._debounceUpdateFrozenCellOffsets?.();
     }
 
     /** @private */

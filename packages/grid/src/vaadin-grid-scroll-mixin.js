@@ -331,6 +331,12 @@ export const ScrollMixin = (superClass) =>
 
     /** @protected */
     _frozenCellsChanged() {
+      this._debounceUpdateFrozenCellOffsets();
+      this._debounceUpdateFrozenColumn();
+    }
+
+    /** @protected */
+    _debounceUpdateFrozenCellOffsets() {
       this._debouncerCacheElements = Debouncer.debounce(this._debouncerCacheElements, microTask, () => {
         Array.from(this.shadowRoot.querySelectorAll('[part~="cell"]')).forEach((cell) => {
           cell.style.transform = '';
@@ -339,7 +345,6 @@ export const ScrollMixin = (superClass) =>
         });
         this.__updateFrozenCellOffsets();
       });
-      this._debounceUpdateFrozenColumn();
     }
 
     /** @protected */
