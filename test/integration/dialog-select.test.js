@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, mousedown, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import './not-animated-styles.js';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import '@vaadin/select/src/vaadin-select.js';
@@ -11,8 +12,17 @@ describe('select in dialog', () => {
   beforeEach(async () => {
     dialog = fixtureSync(`
       <vaadin-dialog modeless header-title="Title">
+        <button slot="header-content">Action</button>
         <vaadin-select no-vertical-overlap></vaadin-select>
       </vaadin-dialog>
+    `);
+    fixtureSync(`
+      <style>
+        /* Make sendMouseToElement click button */
+        vaadin-dialog::part(header-content) {
+          justify-content: center;
+        }
+      </style>
     `);
     dialog.opened = true;
     await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
@@ -36,6 +46,19 @@ describe('select in dialog', () => {
 
     await sendMouseToElement({ type: 'click', element: title });
 
+    expect(select.opened).to.be.false;
+  });
+
+  it('should not click dialog header button when closing select overlay', async () => {
+    const spy = sinon.spy();
+    dialog.querySelector('button').addEventListener('click', spy);
+
+    // Use header content part instead of the actual slotted button element,
+    // since `getBoundingClientRect()` for the latter returns 0 coordinates.
+    const header = dialog.$.overlay.shadowRoot.querySelector('[part="header-content"]');
+    await sendMouseToElement({ type: 'click', element: header });
+
+    expect(spy).to.be.not.called;
     expect(select.opened).to.be.false;
   });
 
