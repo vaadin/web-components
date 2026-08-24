@@ -15,12 +15,6 @@ on:
     types: [opened, ready_for_review, review_requested]
     branches: [main]
 
-# One review per PR at a time; a re-trigger queues instead of aborting a run
-# that may be mid-posting.
-concurrency:
-  group: code-review-${{ github.event.issue.number || github.event.pull_request.number }}
-  cancel-in-progress: false
-
 env:
   PR_NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
 
@@ -69,6 +63,16 @@ jobs:
   review:
     needs: check
     if: needs.check.outputs.eligible == 'true'
+    # One review per PR at a time; a re-trigger queues instead of aborting a run
+    # that may be mid-posting. Group is enforced on the job level instead of the
+    # workflow: newer workflow runs in the same group cancel previous ones that 
+    # haven't started yet. This can lead to a scenario where opening a PR and
+    # assigning reviewers at the same time can cause workflows that would pass
+    # the check pre-condition to get canceled by workflows whose condition would
+    # not pass.
+    concurrency:
+      group: code-review-${{ github.event.issue.number || github.event.pull_request.number }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     permissions:
       contents: read
