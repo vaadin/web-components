@@ -337,14 +337,9 @@ export const ScrollMixin = (superClass) =>
 
     /** @protected */
     _debounceUpdateFrozenCellOffsets() {
-      this._debouncerCacheElements = Debouncer.debounce(this._debouncerCacheElements, microTask, () => {
-        Array.from(this.shadowRoot.querySelectorAll('[part~="cell"]')).forEach((cell) => {
-          cell.style.transform = '';
-          cell.style.removeProperty('--_grid-frozen-cell-offset');
-          cell.style.removeProperty('--_grid-frozen-to-end-cell-offset');
-        });
-        this.__updateFrozenCellOffsets();
-      });
+      this._debouncerCacheElements = Debouncer.debounce(this._debouncerCacheElements, microTask, () =>
+        this.__updateFrozenCellOffsets(),
+      );
     }
 
     /** @protected */
@@ -401,38 +396,42 @@ export const ScrollMixin = (superClass) =>
         return;
       }
 
-      const offsetUpdates = [];
+      const frozenOffsets = new Map();
+      const frozenToEndOffsets = new Map();
 
-      // Read all cell widths before updating any offsets. Otherwise, each offset
-      // write can invalidate layout before the next getBoundingClientRect() call.
+      // Read all widths and calculate offsets before updating any styles.
       this.$.table.querySelectorAll("[part~='row']:not(#sizer)").forEach((row) => {
         const cells = [...row.children].filter((cell) => cell._column);
 
-        let frozenOffset = 0;
+        let offset = 0;
         cells
           .filter((cell) => cell._column.frozen)
           .forEach((cell) => {
-            const width = cell.getBoundingClientRect().width;
-            offsetUpdates.push([cell, '--_grid-frozen-cell-offset', `${frozenOffset}px`]);
-            frozenOffset += width;
+            frozenOffsets.set(cell._column, offset);
+            offset += cell.getBoundingClientRect().width;
           });
 
-        let frozenToEndOffset = 0;
+        offset = 0;
         cells
           .filter((cell) => cell._column.frozenToEnd)
           .reverse()
           .forEach((cell) => {
-            const width = cell.getBoundingClientRect().width;
-            offsetUpdates.push([cell, '--_grid-frozen-to-end-cell-offset', `${frozenToEndOffset}px`]);
-            frozenToEndOffset += width;
+            frozenToEndOffsets.set(cell._column, offset);
+            offset += cell.getBoundingClientRect().width;
           });
       });
 
-      offsetUpdates.forEach(([cell, property, value]) => {
-        if (cell.style.getPropertyValue(property) !== value) {
-          cell.style.setProperty(property, value);
-        }
-      });
+      const updateOffsets = (offsets, property) =>
+        offsets.forEach((offset, column) => {
+          const style = column.__styleRule?.style;
+          const value = `${offset}px`;
+          if (style && style.getPropertyValue(property) !== value) {
+            style.setProperty(property, value);
+          }
+        });
+
+      updateOffsets(frozenOffsets, '--_grid-frozen-cell-offset');
+      updateOffsets(frozenToEndOffsets, '--_grid-frozen-to-end-cell-offset');
     }
 
     /** @private */
