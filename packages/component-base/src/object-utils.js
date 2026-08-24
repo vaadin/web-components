@@ -13,7 +13,13 @@ const IGNORED_KEYS = ['__proto__', 'constructor', 'prototype'];
 
 const hasOwnProperty = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
 
-const isPlainObject = (value) => !!value && typeof value === 'object' && !Array.isArray(value);
+const isPlainObject = (value) => {
+  if (!value || typeof value !== 'object') {
+    return false;
+  }
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
+};
 
 /**
  * Merges `source` into `target`. With `partial`, the source is treated as an
@@ -53,6 +59,8 @@ function merge(target, source, partial) {
 /**
  * Recursively copies own properties of `source` into `target` and returns
  * `target`. Plain objects are merged, other values are assigned as they are.
+ * An object is plain when it inherits from `Object.prototype` or from nothing,
+ * so values such as a `Date` or a class instance are assigned, not merged.
  *
  * Merges a single source. Use `deepMergePartials()` to merge several objects,
  * or to merge objects that only provide some of the properties.

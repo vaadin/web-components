@@ -7,6 +7,8 @@
 /**
  * Recursively copies own properties of `source` into `target` and returns
  * `target`. Plain objects are merged, other values are assigned as they are.
+ * An object is plain when it inherits from `Object.prototype` or from nothing,
+ * so values such as a `Date` or a class instance are assigned, not merged.
  *
  * Merges a single source. Use `deepMergePartials()` to merge several objects,
  * or to merge objects that only provide some of the properties.

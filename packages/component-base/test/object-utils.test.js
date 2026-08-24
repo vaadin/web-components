@@ -40,6 +40,20 @@ describe('object-utils', () => {
       expect(deepMerge({}, { foo: array }).foo).to.equal(array);
     });
 
+    it('should assign a value that is an object but not a plain object', () => {
+      const source = { date: new Date(0), map: new Map(), instance: new (class Foo {})() };
+      const merged = deepMerge({}, source);
+      expect(merged.date).to.equal(source.date);
+      expect(merged.map).to.equal(source.map);
+      expect(merged.instance).to.equal(source.instance);
+    });
+
+    it('should merge an object without a prototype', () => {
+      const source = Object.create(null);
+      source.foo = 'foo';
+      expect(deepMerge({}, { nested: source })).to.eql({ nested: { foo: 'foo' } });
+    });
+
     it('should return the target when the source is not an object', () => {
       const target = { foo: 'foo' };
       expect(deepMerge(target, 'bar')).to.equal(target);
@@ -133,6 +147,11 @@ describe('object-utils', () => {
       const merged = deepMergePartials({}, source);
       expect(merged.foo).to.not.equal(source.foo);
       expect(merged.foo).to.eql(source.foo);
+    });
+
+    it('should assign a value that is an object but not a plain object', () => {
+      const source = { date: new Date(0) };
+      expect(deepMergePartials({}, source).date).to.equal(source.date);
     });
 
     it('should ignore a source that is not a plain object', () => {
