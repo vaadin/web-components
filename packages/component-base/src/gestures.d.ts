@@ -44,6 +44,12 @@ declare function register(recog: GestureRecognizer): void;
 export { register };
 
 /**
+ * The registered gesture event recognizers by their event type.
+ */
+declare const gestures: Record<string, GestureRecognizer | undefined>;
+export { gestures };
+
+/**
  * Sets scrolling direction on node.
  *
  * This value is checked on first move, thus it should be called prior to

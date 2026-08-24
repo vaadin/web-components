@@ -7,6 +7,17 @@ import type { DateMetadataController } from './vaadin-date-metadata-controller.j
 import type { DatePickerDate } from './vaadin-date-picker-mixin.js';
 
 /**
+ * Create a date at midnight in local time. Unlike `new Date(year, month, day)`,
+ * this supports years below 100, which the constructor maps into the 20th
+ * century. The month is assigned before the day so that the initial day of month
+ * (1) always exists in the target month.
+ *
+ * @param month Zero-based month, may be out of range to shift the year
+ * @param day May be `0` to select the last day of the previous month
+ */
+declare function createDate(year: number, month: number, day: number): Date;
+
+/**
  * Get ISO 8601 week number for the given date.
  *
  * @returns Week number
@@ -79,6 +90,7 @@ declare function getAdjustedYear(referenceDate: Date, year: number, month?: numb
 declare function parseDate(str: string): Date;
 
 export {
+  createDate,
   getISOWeekNumber,
   dateEquals,
   dateAllowed,
