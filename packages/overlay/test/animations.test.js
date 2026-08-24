@@ -290,7 +290,7 @@ function afterOverlayClosingFinished(overlay, callback) {
 
     it('should remove pointer events on previously opened overlay', (done) => {
       afterOverlayClosingFinished(overlays[0], () => {
-        expect(overlays[0].$.overlay.style.pointerEvents).to.equal('');
+        expect(getComputedStyle(overlays[0].$.overlay).pointerEvents).to.equal('auto');
         done();
       });
       overlays[0].querySelector('button').click();
@@ -317,8 +317,8 @@ function afterOverlayClosingFinished(overlay, callback) {
 
     it('should not remove pointer events on last opened overlay', (done) => {
       afterOverlayOpeningFinished(overlays[1], () => {
-        expect(overlays[0].$.overlay.style.pointerEvents).to.equal('none');
-        expect(overlays[1].$.overlay.style.pointerEvents).to.equal('');
+        expect(getComputedStyle(overlays[0].$.overlay).pointerEvents).to.equal('none');
+        expect(getComputedStyle(overlays[1].$.overlay).pointerEvents).to.equal('auto');
         done();
       });
       overlays[0].opened = true;
@@ -349,11 +349,11 @@ function afterOverlayClosingFinished(overlay, callback) {
 
     it('should restore pointer events on the remaining overlay', (done) => {
       afterOverlayOpeningFinished(overlays[2], async () => {
-        expect(overlays[0].$.overlay.style.pointerEvents).to.equal('none');
+        expect(getComputedStyle(overlays[0].$.overlay).pointerEvents).to.equal('none');
         overlays[1].opened = false;
         overlays[2].opened = false;
         await nextFrame();
-        expect(overlays[0].$.overlay.style.pointerEvents).to.equal('');
+        expect(getComputedStyle(overlays[0].$.overlay).pointerEvents).to.equal('auto');
         done();
       });
       overlays[0].opened = true;
@@ -393,8 +393,8 @@ function afterOverlayClosingFinished(overlay, callback) {
 
     it('should not remove pointer events on last opened overlay with animated content', (done) => {
       afterOverlayOpeningFinished(overlays[1], () => {
-        expect(overlays[0].$.overlay.style.pointerEvents).to.equal('none');
-        expect(overlays[1].$.overlay.style.pointerEvents).to.equal('');
+        expect(getComputedStyle(overlays[0].$.overlay).pointerEvents).to.equal('none');
+        expect(getComputedStyle(overlays[1].$.overlay).pointerEvents).to.equal('auto');
         done();
       });
       overlays[0].opened = true;

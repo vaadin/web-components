@@ -56,6 +56,11 @@ const overlayBase = css`
     display: none !important;
   }
 
+  :host([suppressed]) [part='overlay'],
+  :host([suppressed]) ::slotted(*) {
+    pointer-events: none !important;
+  }
+
   [part='overlay'] {
     color: var(--vaadin-overlay-text-color, var(--vaadin-text-color));
     background: var(--vaadin-overlay-background, var(--vaadin-background-color));

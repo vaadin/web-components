@@ -114,6 +114,31 @@ describe('pointer-events', () => {
       // (in this case overlay 1 at step 3)
       expect(getComputedStyle(overlay1.$.overlay).pointerEvents).to.equal('auto');
     });
+
+    it('should disable pointer events on slotted content of the covered overlay', () => {
+      const button = document.createElement('button');
+      button.setAttribute('style', 'pointer-events: auto');
+      overlay1.appendChild(button);
+
+      overlay1.opened = true;
+
+      overlay2.opened = true;
+
+      expect(getComputedStyle(button).pointerEvents).to.equal('none');
+    });
+
+    it('should restore pointer events on slotted content when the top overlay closes', () => {
+      const button = document.createElement('button');
+      button.setAttribute('style', 'pointer-events: auto');
+      overlay1.appendChild(button);
+
+      overlay1.opened = true;
+
+      overlay2.opened = true;
+
+      overlay2.opened = false;
+      expect(getComputedStyle(button).pointerEvents).to.equal('auto');
+    });
   });
 
   describe('animated closing', () => {
