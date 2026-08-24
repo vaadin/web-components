@@ -23,12 +23,35 @@ function getIconsetName(icon) {
   return parts[0] || 'vaadin';
 }
 
+/**
+ * Get the icon entry for an alias e.g. `<g id="a"><use href="#b"></use></g>`.
+ */
+function getAliasTarget(svg, entries, name) {
+  const use = svg.children.length === 1 && svg.firstElementChild.localName === 'use' ? svg.firstElementChild : null;
+  const href = use?.getAttribute('href');
+  return href?.startsWith('#') ? entries[getIconId(href.slice(1), name)] : null;
+}
+
 function initIconsMap(iconset, name) {
-  iconset._icons = [...iconset.querySelectorAll('[id]')].reduce((map, svg) => {
+  const svgs = [...iconset.querySelectorAll('[id]')];
+
+  const icons = svgs.reduce((map, svg) => {
     const key = getIconId(svg.id, name);
     map[key] = svg;
     return map;
   }, {});
+
+  // Copy to resolve aliases regardless of declaration order.
+  const entries = { ...icons };
+
+  svgs.forEach((svg) => {
+    const target = getAliasTarget(svg, entries, name);
+    if (target) {
+      icons[getIconId(svg.id, name)] = target;
+    }
+  });
+
+  iconset._icons = icons;
 }
 
 export const IconsetMixin = (superClass) =>
