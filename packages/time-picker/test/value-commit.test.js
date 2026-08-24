@@ -371,10 +371,10 @@ describe('value commit', () => {
       beforeEach(async () => {
         timePicker.click();
         await sendKeys({ press: 'ArrowDown' });
-        await sendKeys({ press: 'ArrowDown' });
       });
 
-      it('should update the input value on selecting the item matching the value', () => {
+      it('should revert on item selection with click matching the value', () => {
+        await sendKeys({ press: 'ArrowDown' });
         expect(timePicker.inputElement.value).to.equal('01:00');
         getAllItems(timePicker)[0].click();
         expect(timePicker.inputElement.value).to.equal('00:00');
