@@ -108,7 +108,7 @@ export const TimePickerMixin = (superClass) =>
     static get observers() {
       return [
         '_openedOrItemsChanged(opened, _dropdownItems)',
-        '_updateScroller(opened, _dropdownItems, _focusedIndex, _theme, _comboBoxValue)',
+        '_updateScroller(opened, _dropdownItems, _focusedIndex, _theme, value)',
         '__updateAriaAttributes(_dropdownItems, opened, inputElement)',
       ];
     }
@@ -270,7 +270,7 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /** @private */
-    _updateScroller(opened, items, focusedIndex, theme, comboBoxValue) {
+    _updateScroller(opened, items, focusedIndex, theme, value) {
       if (opened) {
         this._scroller.style.maxHeight =
           getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
@@ -283,7 +283,7 @@ export const TimePickerMixin = (superClass) =>
         opened,
         focusedIndex,
         theme,
-        selectedItem: items?.find((item) => item.value === comboBoxValue),
+        selectedItem: items?.find((item) => item.value === value),
       });
     }
 
@@ -570,7 +570,7 @@ export const TimePickerMixin = (superClass) =>
         const timeObj = validateTime(this.__addStep(time * 1000, step), step);
         time += step;
         const formatted = this.__effectiveI18n.formatTime(timeObj);
-        generatedList.push({ label: formatted, value: formatted });
+        generatedList.push({ label: formatted, value: formatISOTime(timeObj) });
       }
 
       return generatedList;
