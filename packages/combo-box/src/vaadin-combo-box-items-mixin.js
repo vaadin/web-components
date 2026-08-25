@@ -63,35 +63,6 @@ export const ComboBoxItemsMixin = (superClass) =>
         },
 
         /**
-         * Controls which item is automatically set to be selected, for
-         * example on Enter, when the typed filter only partially matches
-         * its label. The item that will be selected is highlighted in the
-         * dropdown while typing:
-         *
-         * - `none` (default): an item is automatically set to be selected only when the filter matches its label exactly.
-         * - `first-match`: the first item in the filtered results is automatically set to be selected.
-         * - `only-match`: the item is automatically set to be selected when filtering narrows the results to a single item.
-         *
-         * In general, an exact match is always set to be selected and takes
-         * precedence over partial matches, regardless of the mode.
-         *
-         * A partial match is only applied while the dropdown is open. For
-         * example, when auto-open is disabled with `autoOpenDisabled`, typing
-         * does not highlight a match or set it to be selected until the
-         * dropdown is opened.
-         *
-         * This feature cannot be used together with custom values, because a
-         * partial match is also a valid custom value. A partial match is not
-         * applied when custom values are allowed with `allowCustomValue`.
-         *
-         * @attr {none|first-match|only-match} partial-match-mode
-         */
-        partialMatchMode: {
-          type: String,
-          value: 'none',
-        },
-
-        /**
          * Filtering string the user has typed into the input field.
          */
         filter: {
@@ -139,6 +110,35 @@ export const ComboBoxItemsMixin = (superClass) =>
           type: String,
           value: 'value',
           sync: true,
+        },
+
+        /**
+         * Controls which item is automatically set to be selected, for
+         * example on Enter, when the typed filter only partially matches
+         * its label. The item that will be selected is highlighted in the
+         * dropdown while typing:
+         *
+         * - `none` (default): an item is automatically set to be selected only when the filter matches its label exactly.
+         * - `first-match`: the first item in the filtered results is automatically set to be selected.
+         * - `only-match`: the item is automatically set to be selected when filtering narrows the results to a single item.
+         *
+         * In general, an exact match is always set to be selected and takes
+         * precedence over partial matches, regardless of the mode.
+         *
+         * A partial match is only applied while the dropdown is open. For
+         * example, when auto-open is disabled with `autoOpenDisabled`, typing
+         * does not highlight a match or set it to be selected until the
+         * dropdown is opened.
+         *
+         * This feature cannot be used together with custom values, because a
+         * partial match is also a valid custom value. A partial match is not
+         * applied when custom values are allowed with `allowCustomValue`.
+         *
+         * @attr {none|first-match|only-match} partial-match-mode
+         */
+        partialMatchMode: {
+          type: String,
+          value: 'none',
         },
       };
     }
