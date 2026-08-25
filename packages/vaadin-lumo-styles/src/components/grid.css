@@ -52,11 +52,9 @@
   }
 
   :host([all-rows-visible]) {
-    height: auto;
-    align-self: flex-start;
+    height: max-content;
     min-height: auto;
     flex-grow: 0;
-    width: 100%;
   }
 
   :host([all-rows-visible]) #scroller {

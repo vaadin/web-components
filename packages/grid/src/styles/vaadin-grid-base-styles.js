@@ -46,12 +46,10 @@ export const gridStyles = css`
   }
 
   :host([all-rows-visible]) {
-    height: auto;
-    align-self: flex-start;
+    height: max-content;
     min-height: auto;
     flex-grow: 0;
     flex-shrink: 0;
-    width: 100%;
   }
 
   #scroller {

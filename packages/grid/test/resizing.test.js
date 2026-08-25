@@ -146,16 +146,18 @@ describe('resizing', () => {
   });
 
   describe('flexbox parent', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       grid.style.height = grid.style.width = '';
       grid.size = 1;
       component.style.display = 'flex';
       component.style.flexDirection = 'column';
       grid.allRowsVisible = true;
+      await nextFrame();
     });
 
-    it('should have the default height inside a column flexbox', () => {
+    it('should have the default height inside a column flexbox', async () => {
       grid.allRowsVisible = false;
+      await nextFrame();
       expect(grid.getBoundingClientRect().height).to.equal(400);
     });
 
@@ -172,8 +174,19 @@ describe('resizing', () => {
       expect(grid.getBoundingClientRect().height).to.equal(130);
     });
 
-    it('should not shrink horizontally inside a row flexbox', () => {
+    it('should not fill a row flexbox', () => {
       component.style.flexDirection = 'row';
+      expect(grid.getBoundingClientRect().width).to.be.below(component.offsetWidth);
+    });
+
+    it('should fill a row flexbox when flex-grow is set', () => {
+      component.style.flexDirection = 'row';
+      grid.style.flexGrow = '1';
+      expect(grid.getBoundingClientRect().width).to.equal(component.offsetWidth);
+    });
+
+    it('should stretch horizontally inside a column flexbox with align-items start', () => {
+      component.style.alignItems = 'flex-start';
       expect(grid.getBoundingClientRect().width).to.equal(component.offsetWidth);
     });
 
@@ -187,11 +200,12 @@ describe('resizing', () => {
       expect(grid._lastVisibleIndex).to.equal(grid.size - 1);
     });
 
-    it('should shrink horizontally inside a row flexbox with another child', () => {
+    it('should not squeeze another child inside a row flexbox', () => {
       component.style.flexDirection = 'row';
-      grid.after(fixtureSync('<div style="height: 100%; width: 100px;"></div>'));
+      const sibling = fixtureSync('<div style="height: 100%; width: 100px;"></div>');
+      grid.after(sibling);
 
-      expect(grid.getBoundingClientRect().width).to.be.equal(component.offsetWidth - 100);
+      expect(sibling.getBoundingClientRect().width).to.equal(100);
     });
   });
 });
