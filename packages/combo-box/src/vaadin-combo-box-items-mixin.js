@@ -78,9 +78,9 @@ export const ComboBoxItemsMixin = (superClass) =>
          * the dropdown is closed. For example, with `autoOpenDisabled`, typing
          * does not focus or select a match until the dropdown is opened.
          *
-         * @attr {none|first-match|only-match} auto-focus-partial-match
+         * @attr {none|first-match|only-match} partial-match-mode
          */
-        autoFocusPartialMatch: {
+        partialMatchMode: {
           type: String,
           value: 'none',
         },
@@ -334,10 +334,7 @@ export const ComboBoxItemsMixin = (superClass) =>
         return -1;
       }
 
-      if (
-        this.autoFocusPartialMatch === 'first-match' ||
-        (this.autoFocusPartialMatch === 'only-match' && items.length === 1)
-      ) {
+      if (this.partialMatchMode === 'first-match' || (this.partialMatchMode === 'only-match' && items.length === 1)) {
         // Skip an item that is not yet loaded. Once the item is loaded,
         // the focused index is updated again.
         return items[0] instanceof ComboBoxPlaceholder ? -1 : 0;

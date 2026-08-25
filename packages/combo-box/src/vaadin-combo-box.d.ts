@@ -30,7 +30,7 @@ export {
   ComboBoxDataProviderCallback,
   ComboBoxDataProviderParams,
 } from './vaadin-combo-box-data-provider-mixin.js';
-export { ComboBoxAutoFocusPartialMatch } from './vaadin-combo-box-items-mixin.js';
+export { ComboBoxPartialMatchMode } from './vaadin-combo-box-items-mixin.js';
 export { ComboBoxDefaultItem, ComboBoxItemModel, ComboBoxRenderer } from './vaadin-combo-box-mixin.js';
 
 /**

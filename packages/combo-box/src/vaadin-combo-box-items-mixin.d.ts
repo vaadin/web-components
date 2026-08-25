@@ -6,7 +6,7 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { ComboBoxBaseMixinClass } from './vaadin-combo-box-base-mixin.js';
 
-export type ComboBoxAutoFocusPartialMatch = 'first-match' | 'none' | 'only-match';
+export type ComboBoxPartialMatchMode = 'first-match' | 'none' | 'only-match';
 
 export declare function ComboBoxItemsMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
@@ -29,9 +29,9 @@ export declare class ComboBoxItemsMixinClass<TItem> {
    * the dropdown is closed. For example, with `autoOpenDisabled`, typing
    * does not focus or select a match until the dropdown is opened.
    *
-   * @attr {none|first-match|only-match} auto-focus-partial-match
+   * @attr {none|first-match|only-match} partial-match-mode
    */
-  autoFocusPartialMatch: ComboBoxAutoFocusPartialMatch;
+  partialMatchMode: ComboBoxPartialMatchMode;
 
   /**
    * A full set of items to filter the visible options from.

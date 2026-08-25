@@ -4,7 +4,7 @@ import { aTimeout, fixtureSync, nextRender, outsideClick } from '@vaadin/testing
 import '../src/vaadin-combo-box.js';
 import { getFocusedItemIndex } from './helpers.js';
 
-describe('auto-focus-partial-match', () => {
+describe('partial-match-mode', () => {
   let comboBox, inputElement;
 
   beforeEach(async () => {
@@ -25,7 +25,7 @@ describe('auto-focus-partial-match', () => {
     });
 
     it('should be none by default', () => {
-      expect(comboBox.autoFocusPartialMatch).to.equal('none');
+      expect(comboBox.partialMatchMode).to.equal('none');
     });
 
     it('should highlight the exact match', async () => {
@@ -67,7 +67,7 @@ describe('auto-focus-partial-match', () => {
 
   describe('first-match', () => {
     beforeEach(() => {
-      comboBox.autoFocusPartialMatch = 'first-match';
+      comboBox.partialMatchMode = 'first-match';
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
@@ -121,7 +121,7 @@ describe('auto-focus-partial-match', () => {
 
   describe('only-match', () => {
     beforeEach(() => {
-      comboBox.autoFocusPartialMatch = 'only-match';
+      comboBox.partialMatchMode = 'only-match';
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
@@ -158,7 +158,7 @@ describe('auto-focus-partial-match', () => {
   describe('autoOpenDisabled', () => {
     beforeEach(() => {
       comboBox.autoOpenDisabled = true;
-      comboBox.autoFocusPartialMatch = 'first-match';
+      comboBox.partialMatchMode = 'first-match';
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
@@ -200,7 +200,7 @@ describe('auto-focus-partial-match', () => {
     });
 
     it('should highlight the first partial match after the page is loaded', async () => {
-      comboBox.autoFocusPartialMatch = 'first-match';
+      comboBox.partialMatchMode = 'first-match';
 
       await sendKeys({ type: 'gra' });
       await aTimeout(0);
@@ -209,7 +209,7 @@ describe('auto-focus-partial-match', () => {
     });
 
     it('should highlight the only partial match after the page is loaded', async () => {
-      comboBox.autoFocusPartialMatch = 'only-match';
+      comboBox.partialMatchMode = 'only-match';
 
       await sendKeys({ type: 'ban' });
       await aTimeout(0);
