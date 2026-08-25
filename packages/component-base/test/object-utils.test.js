@@ -40,6 +40,10 @@ describe('object-utils', () => {
       expect(deepMerge({}, { foo: array }).foo).to.equal(array);
     });
 
+    it('should replace an array target property with an object', () => {
+      expect(deepMerge({ foo: ['foo'] }, { foo: { bar: 'bar' } })).to.eql({ foo: { bar: 'bar' } });
+    });
+
     it('should assign a value that is an object but not a plain object', () => {
       const source = { date: new Date(0), map: new Map(), instance: new (class Foo {})() };
       const merged = deepMerge({}, source);
@@ -89,6 +93,11 @@ describe('object-utils', () => {
 
       it('should not copy a nested __proto__ key', () => {
         deepMerge({}, JSON.parse('{"foo": {"__proto__": {"injected": "yes"}}}'));
+        expect({}.injected).to.be.undefined;
+      });
+
+      it('should not copy the prototype key', () => {
+        deepMerge({}, JSON.parse('{"prototype": {"injected": "yes"}}'));
         expect({}.injected).to.be.undefined;
       });
 
@@ -147,6 +156,26 @@ describe('object-utils', () => {
       const merged = deepMergePartials({}, source);
       expect(merged.foo).to.not.equal(source.foo);
       expect(merged.foo).to.eql(source.foo);
+    });
+
+    it('should keep a target property that is not a plain object', () => {
+      const target = { weekdays: ['Sunday'], date: new Date(0), text: 'text' };
+      const merged = deepMergePartials(target, {
+        weekdays: { 0: 'Sunnuntai' },
+        date: { foo: 'foo' },
+        text: { foo: 'foo' },
+      });
+      expect(merged.weekdays).to.eql(['Sunday']);
+      expect(merged.date).to.eql(new Date(0));
+      expect(merged.text).to.equal('text');
+    });
+
+    it('should merge an object that the target does not have', () => {
+      expect(deepMergePartials({ foo: 'foo' }, { bar: { baz: 'baz' } })).to.eql({ foo: 'foo', bar: { baz: 'baz' } });
+    });
+
+    it('should replace a falsy target property with the merged object', () => {
+      expect(deepMergePartials({ foo: 0 }, { foo: { bar: 'bar' } })).to.eql({ foo: { bar: 'bar' } });
     });
 
     it('should assign a value that is an object but not a plain object', () => {

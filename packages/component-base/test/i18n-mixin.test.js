@@ -73,10 +73,15 @@ describe('I18nMixin', () => {
     expect(element.__effectiveI18n).to.deep.equal(DEFAULT_I18N);
   });
 
-  it('should not copy the __proto__ key of custom i18n', () => {
-    element.i18n = JSON.parse('{"__proto__": {"injected": "yes"}}');
-    expect({}.injected).to.be.undefined;
-    delete Object.prototype.injected;
+  describe('ignored keys', () => {
+    afterEach(() => {
+      delete Object.prototype.injected;
+    });
+
+    it('should not copy the __proto__ key of custom i18n', () => {
+      element.i18n = JSON.parse('{"__proto__": {"injected": "yes"}}');
+      expect({}.injected).to.be.undefined;
+    });
   });
 
   it('should not refresh i18n when setting property to same reference', () => {

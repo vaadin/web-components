@@ -14,7 +14,8 @@
  * or to merge objects that only provide some of the properties.
  *
  * Both arguments are expected to be plain objects. When either of them is not,
- * `target` is returned without changes.
+ * `target` is returned without changes. A property of the target that is not a
+ * plain object is replaced with the merged object, unlike the arguments.
  *
  * Keys that would modify `Object.prototype`, such as `__proto__`, are ignored.
  */
@@ -25,9 +26,10 @@ export function deepMerge<T extends object>(target: T, source: object): T;
  * `target`, so that a later source overrides an earlier one.
  *
  * Values that are `null` or `undefined` are skipped, so a source that only
- * provides some of the properties does not remove the others. Arrays are
- * copied, so that the result shares no object or array with any of the
- * sources and can not be modified through them.
+ * provides some of the properties does not remove the others. For the same
+ * reason, a property that the target already has is not replaced with an
+ * object when the source has one for the same key. Arrays are copied one level
+ * deep, so that the result does not share an array with any of the sources.
  *
  * Sources that are not plain objects are ignored. When `target` is not a plain
  * object, it is returned without changes.

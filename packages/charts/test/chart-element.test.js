@@ -243,11 +243,16 @@ describe('vaadin-chart', () => {
       expect(title.textContent).to.be.empty;
     });
 
-    it('should not copy the __proto__ key of a JSON configuration', async () => {
-      chart.updateConfiguration(JSON.parse('{"__proto__": {"injected": "yes"}}'));
-      await nextFrame();
-      expect({}.injected).to.be.undefined;
-      delete Object.prototype.injected;
+    describe('ignored keys', () => {
+      afterEach(() => {
+        delete Object.prototype.injected;
+      });
+
+      it('should not copy the __proto__ key of a JSON configuration', async () => {
+        chart.updateConfiguration(JSON.parse('{"__proto__": {"injected": "yes"}}'));
+        await nextFrame();
+        expect({}.injected).to.be.undefined;
+      });
     });
   });
 
