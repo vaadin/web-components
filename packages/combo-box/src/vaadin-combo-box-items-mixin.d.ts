@@ -6,33 +6,13 @@
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { ComboBoxBaseMixinClass } from './vaadin-combo-box-base-mixin.js';
 
-export type ComboBoxAutoFocusPartialMatch = 'first-match' | 'none' | 'only-match';
+export type ComboBoxPartialMatchMode = 'first-match' | 'none' | 'only-match';
 
 export declare function ComboBoxItemsMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<ComboBoxBaseMixinClass> & Constructor<ComboBoxItemsMixinClass<TItem>> & T;
 
 export declare class ComboBoxItemsMixinClass<TItem> {
-  /**
-   * Controls whether an item whose label partially matches the typed
-   * filter is automatically focused. The focused item is highlighted
-   * in the dropdown while typing and is selected when committing the
-   * value, for example on Enter press:
-   *
-   * - `none` (default): do not focus partial matches.
-   * - `first-match`: focus the first item in the filtered results.
-   * - `only-match`: focus the item when filtering narrows the results to a single item.
-   *
-   * An item whose label matches the filter exactly is always focused,
-   * regardless of this property. Matching is case-insensitive. A partial
-   * match is not focused when `allowCustomValue` is enabled, or while
-   * the dropdown is closed. For example, with `autoOpenDisabled`, typing
-   * does not focus or select a match until the dropdown is opened.
-   *
-   * @attr {none|first-match|only-match} auto-focus-partial-match
-   */
-  autoFocusPartialMatch: ComboBoxAutoFocusPartialMatch;
-
   /**
    * A full set of items to filter the visible options from.
    * The items can be of either `String` or `Object` type.
@@ -79,4 +59,30 @@ export declare class ComboBoxItemsMixinClass<TItem> {
    * @attr {string} item-value-path
    */
   itemValuePath: string;
+
+  /**
+   * Controls which item is automatically set to be selected, for
+   * example on Enter, when the typed filter only partially matches
+   * its label. The item that will be selected is highlighted in the
+   * dropdown while typing:
+   *
+   * - `none` (default): an item is automatically set to be selected only when the filter matches its label exactly.
+   * - `first-match`: the first item in the filtered results is automatically set to be selected.
+   * - `only-match`: the item is automatically set to be selected when filtering narrows the results to a single item.
+   *
+   * In general, an exact match is always set to be selected and takes
+   * precedence over partial matches, regardless of the mode.
+   *
+   * A partial match is only applied while the dropdown is open. For
+   * example, when auto-open is disabled with `autoOpenDisabled`, typing
+   * does not highlight a match or set it to be selected until the
+   * dropdown is opened.
+   *
+   * This feature cannot be used together with custom values, because a
+   * partial match is also a valid custom value. A partial match is not
+   * applied when custom values are allowed with `allowCustomValue`.
+   *
+   * @attr {none|first-match|only-match} partial-match-mode
+   */
+  partialMatchMode: ComboBoxPartialMatchMode;
 }

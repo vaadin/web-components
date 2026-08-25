@@ -4,7 +4,7 @@ import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import '../src/vaadin-multi-select-combo-box.js';
 import { getAllItems } from './helpers.js';
 
-describe('auto-focus-partial-match', () => {
+describe('partial-match-mode', () => {
   let comboBox, inputElement;
 
   function getFocusedItemIndex() {
@@ -24,7 +24,7 @@ describe('auto-focus-partial-match', () => {
     });
 
     it('should be none by default', () => {
-      expect(comboBox.autoFocusPartialMatch).to.equal('none');
+      expect(comboBox.partialMatchMode).to.equal('none');
     });
 
     it('should highlight the exact match', async () => {
@@ -60,7 +60,7 @@ describe('auto-focus-partial-match', () => {
 
   describe('first-match', () => {
     beforeEach(() => {
-      comboBox.autoFocusPartialMatch = 'first-match';
+      comboBox.partialMatchMode = 'first-match';
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
@@ -140,7 +140,7 @@ describe('auto-focus-partial-match', () => {
 
   describe('only-match', () => {
     beforeEach(() => {
-      comboBox.autoFocusPartialMatch = 'only-match';
+      comboBox.partialMatchMode = 'only-match';
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
@@ -178,7 +178,7 @@ describe('auto-focus-partial-match', () => {
   describe('autoOpenDisabled', () => {
     beforeEach(() => {
       comboBox.autoOpenDisabled = true;
-      comboBox.autoFocusPartialMatch = 'first-match';
+      comboBox.partialMatchMode = 'first-match';
       comboBox.items = ['apple', 'banana', 'grapefruit', 'grape'];
     });
 
