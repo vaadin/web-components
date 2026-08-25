@@ -19,6 +19,16 @@ describe('message', () => {
     expect(customElements.get(tagName).is).to.equal(tagName);
   });
 
+  it('should expose the user color as a custom property', async () => {
+    message.userColorIndex = 2;
+    await nextRender();
+    expect(message.style.getPropertyValue('--vaadin-user-color')).to.equal('var(--vaadin-user-color-2)');
+
+    message.userColorIndex = undefined;
+    await nextRender();
+    expect(message.style.getPropertyValue('--vaadin-user-color')).to.equal('');
+  });
+
   describe('attachments', () => {
     const imgUrl = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
