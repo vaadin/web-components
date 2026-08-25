@@ -42,4 +42,15 @@ describe('message-list', () => {
   it('basic', async () => {
     await visualDiff(div, 'basic');
   });
+
+  ['bubble', 'bubble one-to-one'].forEach((theme) => {
+    it(theme, async () => {
+      element.setAttribute('theme', theme);
+      element.items[1].theme = 'self';
+      element.items[2].theme = 'full-width';
+      element.items = [...element.items];
+      await nextRender();
+      await visualDiff(div, theme.replaceAll(' ', '-'));
+    });
+  });
 });

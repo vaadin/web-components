@@ -56,6 +56,17 @@ describe('message-list', () => {
           await visualDiff(div, `${dir}-basic`);
         });
 
+        ['bubble', 'bubble one-to-one'].forEach((theme) => {
+          it(theme, async () => {
+            element.setAttribute('theme', theme);
+            element.items[1].theme = 'self';
+            element.items[2].theme = 'full-width';
+            element.items = [...element.items];
+            await nextRender();
+            await visualDiff(div, `${dir}-${theme.replaceAll(' ', '-')}`);
+          });
+        });
+
         it('focused', async () => {
           element.querySelectorAll('vaadin-message')[0].focus();
           await sendKeys({ press: 'ArrowDown' });
