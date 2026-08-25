@@ -7,7 +7,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
-import { deepMerge } from './helpers.js';
+import { deepMerge } from '@vaadin/component-base/src/object-utils.js';
 
 export const ChartSeriesMixin = (superClass) =>
   class extends superClass {
