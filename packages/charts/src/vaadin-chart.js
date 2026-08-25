@@ -31,31 +31,17 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import Pointer from 'highcharts/es-modules/Core/Pointer.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { deepMerge } from '@vaadin/component-base/src/object-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { inflateFunctions } from './helpers.js';
 import { ChartSeries } from './vaadin-chart-series.js';
 
-/** @private */
-export function deepMerge(target, source) {
-  const isObject = (item) => item && typeof item === 'object' && !Array.isArray(item);
-
-  if (isObject(source) && isObject(target)) {
-    Object.keys(source).forEach((key) => {
-      if (isObject(source[key])) {
-        if (!target[key]) {
-          Object.assign(target, { [key]: {} });
-        }
-
-        deepMerge(target[key], source[key]);
-      } else {
-        Object.assign(target, { [key]: source[key] });
-      }
-    });
-  }
-
-  return target;
-}
+/**
+ * @private
+ * @deprecated Import `deepMerge` from `@vaadin/component-base/src/object-utils.js` instead.
+ */
+export { deepMerge };
 
 /**
  * Convenience method for reading a value from a path.
