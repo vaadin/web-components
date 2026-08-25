@@ -79,6 +79,22 @@ describe('i18n', () => {
     });
   });
 
+  describe('dropdown items', () => {
+    beforeEach(() => {
+      timePicker.i18n = strictAmPmI18n;
+    });
+
+    it('should set formatted time as item label and ISO time as item value', () => {
+      expect(timePicker._dropdownItems[10].label).to.be.equal('10:00 AM');
+      expect(timePicker._dropdownItems[10].value).to.be.equal('10:00');
+    });
+
+    it('should select the item matching the value', () => {
+      timePicker.value = '10:00';
+      expect(timePicker._scroller.selectedItem).to.equal(timePicker._dropdownItems[10]);
+    });
+  });
+
   describe('reassigned', () => {
     it('should align values of dropdown and input when i18n was reassigned', () => {
       timePicker.value = '12';
