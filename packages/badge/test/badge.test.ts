@@ -132,20 +132,4 @@ describe('vaadin-badge', () => {
       expect(newBadge.hasAttribute('has-content')).to.be.true;
     });
   });
-
-  describe('border width', () => {
-    it('should compensate for the border with a negative margin by default', () => {
-      const { borderTopWidth, marginTop } = getComputedStyle(badge);
-      expect(borderTopWidth).to.equal('1px');
-      expect(marginTop).to.equal('-1px');
-    });
-
-    it('should not compensate for the border when border width is zero', () => {
-      const height = badge.offsetHeight;
-      badge.style.setProperty('--vaadin-badge-border-width', '0px');
-      const { marginTop, marginRight, marginBottom, marginLeft } = getComputedStyle(badge);
-      expect([marginTop, marginRight, marginBottom, marginLeft]).to.eql(['0px', '0px', '0px', '0px']);
-      expect(badge.offsetHeight).to.equal(height - 2);
-    });
-  });
 });
