@@ -54,6 +54,7 @@ export const MessageMixin = (superClass) =>
 
         /**
          * A color index to be used to render the color of the avatar.
+         * Also sets `--vaadin-message-user-color` custom CSS property.
          *
          * @attr {number} user-color-index
          */
@@ -99,6 +100,20 @@ export const MessageMixin = (superClass) =>
         },
       });
       this.addController(this._avatarController);
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('userColorIndex')) {
+        const index = this.userColorIndex;
+        if (index != null) {
+          this.style.setProperty('--vaadin-message-user-color', `var(--vaadin-user-color-${index})`);
+        } else {
+          this.style.removeProperty('--vaadin-message-user-color');
+        }
+      }
     }
 
     /** @private */

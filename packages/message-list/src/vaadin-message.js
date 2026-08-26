@@ -78,6 +78,7 @@ import { MessageMixin } from './vaadin-message-mixin.js';
  * `--vaadin-message-time-color`                |
  * `--vaadin-message-time-font-size`            |
  * `--vaadin-message-time-font-weight`          |
+ * `--vaadin-message-user-color`                |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
