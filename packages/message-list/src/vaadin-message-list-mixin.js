@@ -165,9 +165,6 @@ export const MessageListMixin = (superClass) =>
 
     /** @private */
     _renderMessages(items) {
-      // Check if markdown component is still loading
-      const loadingMarkdown = this.markdown && !customElements.get('vaadin-markdown');
-
       render(
         html`
           ${items.map(
@@ -184,7 +181,6 @@ export const MessageListMixin = (superClass) =>
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
                 @attachment-click="${(e) => this.__onAttachmentClick(e, item)}"
-                style="${ifDefined(loadingMarkdown ? 'visibility: hidden' : undefined)}"
                 >${
                   this.markdown
                     ? html`<vaadin-markdown .content=${item.text} line-breaks></vaadin-markdown>`

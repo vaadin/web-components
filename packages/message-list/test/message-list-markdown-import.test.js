@@ -33,7 +33,12 @@ describe('message-list-markdown dynamic import', () => {
     // Expect the markdown to not exist in DOM as such
     expect(messageList.textContent).to.not.include('**bold text**');
 
+    const message = messageList.querySelector('vaadin-message');
+    expect(getComputedStyle(message).visibility).to.equal('hidden');
+
     // Expect the markdown to be rendered as HTML eventually
     await until(() => messageList.querySelector('vaadin-message strong')?.textContent === 'bold text');
+
+    expect(getComputedStyle(message).visibility).to.equal('visible');
   });
 });
