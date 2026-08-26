@@ -54,6 +54,7 @@ export const MessageMixin = (superClass) =>
 
         /**
          * A color index to be used to render the color of the avatar.
+         * Also sets `--vaadin-message-user-color` custom CSS property.
          *
          * @attr {number} user-color-index
          */
@@ -85,10 +86,7 @@ export const MessageMixin = (superClass) =>
     }
 
     static get observers() {
-      return [
-        '__avatarChanged(_avatar, userName, userAbbr, userImg, userColorIndex)',
-        '__colorIndexChanged(userColorIndex)',
-      ];
+      return ['__avatarChanged(_avatar, userName, userAbbr, userImg, userColorIndex)'];
     }
 
     /** @protected */
@@ -104,6 +102,20 @@ export const MessageMixin = (superClass) =>
       this.addController(this._avatarController);
     }
 
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('userColorIndex')) {
+        const index = this.userColorIndex;
+        if (index != null) {
+          this.style.setProperty('--vaadin-message-user-color', `var(--vaadin-user-color-${index})`);
+        } else {
+          this.style.removeProperty('--vaadin-message-user-color');
+        }
+      }
+    }
+
     /** @private */
     __avatarChanged(avatar, userName, userAbbr, userImg, userColorIndex) {
       if (avatar) {
@@ -113,15 +125,6 @@ export const MessageMixin = (superClass) =>
           img: userImg,
           colorIndex: userColorIndex,
         });
-      }
-    }
-
-    /** @private */
-    __colorIndexChanged(userColorIndex) {
-      if (userColorIndex !== undefined) {
-        this.style.setProperty('--vaadin-user-color', `var(--vaadin-user-color-${userColorIndex})`);
-      } else {
-        this.style.removeProperty('--vaadin-user-color');
       }
     }
 

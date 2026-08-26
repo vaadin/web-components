@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-message.js';
 
@@ -19,14 +19,26 @@ describe('message', () => {
     expect(customElements.get(tagName).is).to.equal(tagName);
   });
 
-  it('should expose the user color as a custom property', async () => {
+  it('should toggle the user color custom property on userColorIndex', async () => {
     message.userColorIndex = 2;
-    await nextRender();
-    expect(message.style.getPropertyValue('--vaadin-user-color')).to.equal('var(--vaadin-user-color-2)');
+    await nextUpdate(message);
+    expect(message.style.getPropertyValue('--vaadin-message-user-color')).to.equal('var(--vaadin-user-color-2)');
 
     message.userColorIndex = undefined;
-    await nextRender();
-    expect(message.style.getPropertyValue('--vaadin-user-color')).to.equal('');
+    await nextUpdate(message);
+    expect(message.style.getPropertyValue('--vaadin-message-user-color')).to.equal('');
+  });
+
+  it('should set the user color custom property for zero color index', async () => {
+    message.userColorIndex = 0;
+    await nextUpdate(message);
+    expect(message.style.getPropertyValue('--vaadin-message-user-color')).to.equal('var(--vaadin-user-color-0)');
+  });
+
+  it('should not set the user color custom property for null color index', async () => {
+    message.userColorIndex = null;
+    await nextUpdate(message);
+    expect(message.style.getPropertyValue('--vaadin-message-user-color')).to.equal('');
   });
 
   describe('attachments', () => {
