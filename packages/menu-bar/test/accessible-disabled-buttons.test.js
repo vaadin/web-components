@@ -6,15 +6,6 @@ import '../src/vaadin-menu-bar.js';
 describe('accessible disabled buttons', () => {
   let menuBar, buttons;
 
-  before(() => {
-    window.Vaadin.featureFlags ??= {};
-    window.Vaadin.featureFlags.accessibleDisabledButtons = true;
-  });
-
-  after(() => {
-    window.Vaadin.featureFlags.accessibleDisabledButtons = false;
-  });
-
   beforeEach(async () => {
     menuBar = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
     menuBar.items = [

@@ -56,19 +56,10 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  *
  * #### Disabled menu items
  *
- * When disabled, menu items are rendered as "dimmed".
- *
- * By default, disabled items are not focusable and don't react to hover.
- * As a result, they are hidden from assistive technologies, and it's not
- * possible to show a tooltip to explain why they are disabled. This can
- * be addressed by enabling the feature flag `accessibleDisabledMenuItems`,
- * which makes disabled items focusable and hoverable, while still
- * preventing them from being activated:
- *
- * ```js
- * // Set before any context menu is attached to the DOM.
- * window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
- * ```
+ * When disabled, menu items are rendered as "dimmed" and prevented
+ * from being activated. Disabled items remain focusable and hoverable,
+ * so they stay visible to assistive technologies and can show a
+ * tooltip to explain why they are disabled.
  *
  * #### Item tooltips
  *

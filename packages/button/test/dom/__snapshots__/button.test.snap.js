@@ -4,6 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-button host default"] = 
 `<vaadin-button
   role="button"
+  style="--_vaadin-button-disabled-pointer-events: auto;"
   tabindex="0"
 >
   Confirm
@@ -16,7 +17,8 @@ snapshots["vaadin-button host disabled"] =
   aria-disabled="true"
   disabled=""
   role="button"
-  tabindex="-1"
+  style="--_vaadin-button-disabled-pointer-events: auto;"
+  tabindex="1"
 >
   Confirm
 </vaadin-button>
@@ -26,6 +28,7 @@ snapshots["vaadin-button host disabled"] =
 snapshots["vaadin-button host tabIndex"] = 
 `<vaadin-button
   role="button"
+  style="--_vaadin-button-disabled-pointer-events: auto;"
   tabindex="1"
 >
   Confirm
@@ -36,6 +39,7 @@ snapshots["vaadin-button host tabIndex"] =
 snapshots["vaadin-button host tabindex"] = 
 `<vaadin-button
   role="button"
+  style="--_vaadin-button-disabled-pointer-events: auto;"
   tabindex="1"
 >
   Confirm
@@ -47,6 +51,7 @@ snapshots["vaadin-button host focused"] =
 `<vaadin-button
   focused=""
   role="button"
+  style="--_vaadin-button-disabled-pointer-events: auto;"
   tabindex="0"
 >
   Confirm
@@ -59,6 +64,7 @@ snapshots["vaadin-button host focus-ring"] =
   focus-ring=""
   focused=""
   role="button"
+  style="--_vaadin-button-disabled-pointer-events: auto;"
   tabindex="0"
 >
   Confirm
@@ -70,6 +76,7 @@ snapshots["vaadin-button host active"] =
 `<vaadin-button
   active=""
   role="button"
+  style="--_vaadin-button-disabled-pointer-events: auto;"
   tabindex="0"
 >
   Confirm

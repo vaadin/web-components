@@ -17,6 +17,7 @@ snapshots["menu-bar basic"] =
     class="home"
     first-visible=""
     role="menuitem"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
   >
     Home
@@ -25,6 +26,7 @@ snapshots["menu-bar basic"] =
     aria-expanded="false"
     aria-haspopup="true"
     role="menuitem"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
   >
     Reports
@@ -33,7 +35,8 @@ snapshots["menu-bar basic"] =
     aria-disabled="true"
     disabled=""
     role="menuitem"
-    tabindex="-1"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
   >
     Dashboard
   </vaadin-menu-bar-button>
@@ -41,9 +44,13 @@ snapshots["menu-bar basic"] =
     class="help"
     last-visible=""
     role="menuitem"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
   >
-    <vaadin-menu-bar-item aria-selected="false">
+    <vaadin-menu-bar-item
+      aria-selected="false"
+      style="--_vaadin-item-disabled-pointer-events: auto;"
+    >
       <strong>
         Help
       </strong>
@@ -56,6 +63,7 @@ snapshots["menu-bar basic"] =
     hidden=""
     role="menuitem"
     slot="overflow"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
   >
     <div aria-hidden="true">
@@ -90,6 +98,7 @@ snapshots["menu-bar opened"] =
           aria-haspopup="false"
           aria-selected="false"
           role="menuitem"
+          style="--_vaadin-item-disabled-pointer-events: auto;"
           tabindex="0"
         >
           View Reports
@@ -99,6 +108,7 @@ snapshots["menu-bar opened"] =
           aria-selected="false"
           class="generate reports"
           role="menuitem"
+          style="--_vaadin-item-disabled-pointer-events: auto;"
           tabindex="-1"
         >
           Generate Report
@@ -115,6 +125,7 @@ snapshots["menu-bar opened"] =
     class="home"
     first-visible=""
     role="menuitem"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
   >
     Home
@@ -125,6 +136,7 @@ snapshots["menu-bar opened"] =
     aria-haspopup="true"
     expanded=""
     role="menuitem"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
   >
     Reports
@@ -133,7 +145,8 @@ snapshots["menu-bar opened"] =
     aria-disabled="true"
     disabled=""
     role="menuitem"
-    tabindex="-1"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
+    tabindex="0"
   >
     Dashboard
   </vaadin-menu-bar-button>
@@ -141,9 +154,13 @@ snapshots["menu-bar opened"] =
     class="help"
     last-visible=""
     role="menuitem"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
   >
-    <vaadin-menu-bar-item aria-selected="false">
+    <vaadin-menu-bar-item
+      aria-selected="false"
+      style="--_vaadin-item-disabled-pointer-events: auto;"
+    >
       <strong>
         Help
       </strong>
@@ -156,6 +173,7 @@ snapshots["menu-bar opened"] =
     hidden=""
     role="menuitem"
     slot="overflow"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
   >
     <div aria-hidden="true">
