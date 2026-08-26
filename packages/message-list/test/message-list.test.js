@@ -85,6 +85,28 @@ describe('message-list', () => {
     expect(messageList.items).to.be.empty;
   });
 
+  describe('max width', () => {
+    let list;
+
+    beforeEach(async () => {
+      messageList.items = messages;
+      messageList.style.width = '500px';
+      messageList.style.setProperty('--vaadin-message-list-max-width', '200px');
+      list = messageList.shadowRoot.querySelector('[part="list"]');
+      await nextRender();
+    });
+
+    it('should limit the width of the list content', () => {
+      expect(list.getBoundingClientRect().width).to.equal(200);
+    });
+
+    it('should center the list content horizontally', () => {
+      const listRect = list.getBoundingClientRect();
+      const listRootRect = messageList.getBoundingClientRect();
+      expect(listRect.left - listRootRect.left).to.equal(listRootRect.right - listRect.right);
+    });
+  });
+
   describe('items property', () => {
     beforeEach(async () => {
       messageList.items = messages;
