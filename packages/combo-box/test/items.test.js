@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-combo-box.js';
+import { html, render } from 'lit';
 import { getAllItems, getFirstItem, setInputValue } from './helpers.js';
 
 describe('items', () => {
@@ -118,6 +119,19 @@ describe('items', () => {
       comboBox.renderer = null;
 
       expect(getFirstItem(comboBox).textContent).to.equal('foo');
+    });
+
+    it('should not keep the item label when restoring the renderer', () => {
+      const renderer = (root, _owner, { item }) => render(html`<span>${item}</span>`, root);
+      comboBox.renderer = renderer;
+      comboBox.opened = true;
+
+      comboBox.renderer = null;
+      expect(getFirstItem(comboBox).textContent).to.equal('foo');
+
+      comboBox.renderer = renderer;
+      expect(getFirstItem(comboBox).textContent).to.equal('foo');
+      expect(getFirstItem(comboBox).querySelectorAll('span')).to.have.lengthOf(1);
     });
 
     it('should clear the old content after assigning a new renderer', () => {

@@ -125,10 +125,10 @@ export const ComboBoxItemMixin = (superClass) =>
         // When clearing the rendered content, this part needs to be manually disposed of.
         // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
         delete this._$litPart$;
+        this._oldRenderer = renderer;
       }
 
       if (renderer) {
-        this._oldRenderer = renderer;
         this.requestContentUpdate();
       }
     }
