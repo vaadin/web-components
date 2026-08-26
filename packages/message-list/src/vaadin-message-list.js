@@ -92,6 +92,10 @@ class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(Themable
     const tag = this.localName;
     return [
       `
+      ${tag} vaadin-message:has(> vaadin-markdown:not(:defined)) {
+        visibility: hidden;
+      }
+
       ${tag} :where(vaadin-markdown > :is(h1, h2, h3, h4, h5, h6, p, ul, ol):first-child) {
         margin-top: 0;
       }
