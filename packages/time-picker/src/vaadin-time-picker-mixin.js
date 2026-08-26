@@ -95,7 +95,6 @@ export const TimePickerMixin = (superClass) =>
         _comboBoxValue: {
           type: String,
           sync: true,
-          observer: '__comboBoxValueChanged',
         },
 
         /** @private */
@@ -238,7 +237,12 @@ export const TimePickerMixin = (superClass) =>
       }
 
       if (props.has('step')) {
-        this.__updateValue(this.__getTimeObject(this.value));
+        const time = this.__getTimeObject(this.value);
+        this.value = formatISOTime(time);
+        // Always update the input value, even if the component value hasn't
+        // changed, so that the text matches the step interval. For example,
+        // if the step is 3600 "10:00:50" should become "10:00".
+        this.__updateInputValue(time);
       }
 
       if (props.has('__effectiveI18n') && this.value) {
@@ -318,8 +322,7 @@ export const TimePickerMixin = (superClass) =>
      * @override
      */
     _onClearAction() {
-      this._comboBoxValue = '';
-      this._inputElementValue = '';
+      this.__setValueFromText('');
 
       this.__commitValueChange();
     }
@@ -333,14 +336,12 @@ export const TimePickerMixin = (superClass) =>
       if (this._focusedIndex > -1) {
         // Commit value based on focused index
         const focusedItem = this._dropdownItems[this._focusedIndex];
-        const itemValue = this._getItemLabel(focusedItem);
-        this._inputElementValue = itemValue;
-        this._comboBoxValue = itemValue;
+        this.__setValueFromTime(parseISOTime(focusedItem.value));
         this._focusedIndex = -1;
-      } else if (this._inputElementValue === '' || this._inputElementValue === undefined) {
-        this._comboBoxValue = '';
-      } else {
-        this._comboBoxValue = this._inputElementValue;
+      } else if (this._inputElementValue !== this._comboBoxValue) {
+        // Committing text that did not change would parse and format it again,
+        // and set the value from the result, so skip it.
+        this.__setValueFromText(this._inputElementValue || '');
       }
 
       this.__commitValueChange();
@@ -420,12 +421,12 @@ export const TimePickerMixin = (superClass) =>
       const objWithStep = this.__addStep(this.__getMsec(this.__memoValue), step, true);
       this.__memoValue = objWithStep;
 
-      // Setting `_comboBoxValue` property triggers the synchronous
-      // observer where the value can be parsed again, so we set
-      // this flag to ensure it does not alter the value.
-      this.__useMemo = true;
-      this._comboBoxValue = this.__effectiveI18n.formatTime(objWithStep);
-      this.__useMemo = false;
+      // Only commit when the formatted text changes, so that a step finer than
+      // the formatter can show does not move the value on its own, see #6397.
+      const text = this.__effectiveI18n.formatTime(objWithStep) || '';
+      if (text !== this._comboBoxValue) {
+        this.__setValueFromTime(objWithStep);
+      }
 
       this.__commitValueChange();
     }
@@ -584,7 +585,7 @@ export const TimePickerMixin = (superClass) =>
     _valueChanged(value, oldValue) {
       // Strip value to the step resolution before marking as committed.
       const parsedObj = (this.__memoValue = this.__getTimeObject(value));
-      const newValue = formatISOTime(parsedObj) || '';
+      const newValue = formatISOTime(parsedObj);
 
       // Mark value set programmatically by the user
       // as committed for the change event detection.
@@ -599,68 +600,67 @@ export const TimePickerMixin = (superClass) =>
       } else if (value !== newValue) {
         // Value can be parsed (e.g. 12 -> 12:00), adjust.
         this.value = newValue;
-      } else if (this.__keepInvalidInput) {
-        // User input could not be parsed and was reset
-        // to empty string, do not update input value.
-        delete this.__keepInvalidInput;
-      } else {
+      } else if (!this.__keepCommittedValue) {
         this.__updateInputValue(parsedObj);
       }
 
       this._toggleHasValue(this._hasValue);
     }
 
-    /** @private */
-    __comboBoxValueChanged(value, oldValue) {
-      if (value === '' && oldValue === undefined) {
+    /**
+     * Sets the value without marking it as committed, so that
+     * `__commitValueChange()` can still detect the change and
+     * fire an event for it.
+     *
+     * @param {string} value
+     * @private
+     */
+    __setUncommittedValue(value) {
+      this.__keepCommittedValue = true;
+      this.value = value;
+      this.__keepCommittedValue = false;
+    }
+
+    /**
+     * Sets the value and the input text from the given time,
+     * stripped to the resolution defined by the step.
+     *
+     * @param {!TimePickerTime} time
+     * @private
+     */
+    __setValueFromTime(time) {
+      const stripped = validateTime(time, this.step);
+      this.__setUncommittedValue(formatISOTime(stripped));
+      this.__updateInputValue(stripped);
+    }
+
+    /**
+     * Sets the value from the given text. When the text can not be parsed as a
+     * time, the value is set to an empty string and the text is left in the
+     * input for the user to correct.
+     *
+     * @param {string} text
+     * @private
+     */
+    __setValueFromText(text) {
+      // Skip parsing an empty field to not call custom `i18n.parseTime` for it.
+      const parsed = text ? this.__effectiveI18n.parseTime(text) : undefined;
+
+      if (parsed) {
+        this.__setValueFromTime(parsed);
         return;
       }
 
-      const parsed = this.__useMemo ? this.__memoValue : this.__effectiveI18n.parseTime(value);
-
-      // Strip parsed time to the resolution defined by the step before formatting
-      // it back, so that the result matches the text shown in the input field.
-      const parsedObj = validateTime(parsed, this.step);
-      const newValue = this.__effectiveI18n.formatTime(parsedObj) || '';
-
-      if (parsedObj) {
-        if (value !== newValue) {
-          this._comboBoxValue = newValue;
-        } else {
-          this.__keepCommittedValue = true;
-          this.__updateValue(parsedObj);
-          this.__keepCommittedValue = false;
-        }
-      } else {
-        // If the user input can not be parsed, set a flag
-        // that prevents `__valueChanged` from removing the input
-        // after setting the value property to an empty string below.
-        if (this.value !== '' && value !== '') {
-          this.__keepInvalidInput = true;
-        }
-
-        this.__keepCommittedValue = true;
-        this.value = '';
-        this.__keepCommittedValue = false;
-      }
-    }
-
-    /** @private */
-    __updateValue(obj) {
-      const timeString = formatISOTime(validateTime(obj, this.step)) || '';
-      this.value = timeString;
-
-      // Always strip the input value to match the step interval, even
-      // if the component value hasn't changed. For example, if the step
-      // is 3600 "10:00:50" should become "10:00".
-      this.__updateInputValue(obj);
+      this.__setUncommittedValue('');
+      this._inputElementValue = text;
+      this._comboBoxValue = text;
     }
 
     /** @private */
     __updateInputValue(obj) {
-      const timeString = this.__effectiveI18n.formatTime(validateTime(obj, this.step)) || '';
-      this._inputElementValue = timeString;
-      this._comboBoxValue = timeString;
+      const text = this.__effectiveI18n.formatTime(obj) || '';
+      this._inputElementValue = text;
+      this._comboBoxValue = text;
     }
 
     /**

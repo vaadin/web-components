@@ -537,4 +537,41 @@ describe('value commit', () => {
       });
     });
   });
+
+  describe('with a formatter coarser than the step', () => {
+    beforeEach(() => {
+      timePicker.step = 0.5;
+      timePicker.i18n = {
+        formatTime: (time) => `${time.hours}.${time.minutes}`,
+        parseTime: (text) => {
+          const parts = text.split('.');
+          return { hours: parts[0], minutes: parts[1] };
+        },
+      };
+      timePicker.value = '10:00:30';
+      valueChangedSpy.resetHistory();
+    });
+
+    it('should not commit but validate on blur', () => {
+      timePicker.blur();
+      expectValidationOnly();
+      expect(timePicker.value).to.equal('10:00:30.000');
+      expect(timePicker.inputElement.value).to.equal('10.0');
+    });
+
+    it('should not commit on Enter', async () => {
+      await sendKeys({ press: 'Enter' });
+      expectNoValueCommit();
+      expect(timePicker.value).to.equal('10:00:30.000');
+      expect(timePicker.inputElement.value).to.equal('10.0');
+    });
+
+    it('should not commit but validate on close with outside click', () => {
+      timePicker.click();
+      outsideClick();
+      expectValidationOnly();
+      expect(timePicker.value).to.equal('10:00:30.000');
+      expect(timePicker.inputElement.value).to.equal('10.0');
+    });
+  });
 });
