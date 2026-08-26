@@ -132,4 +132,25 @@ describe('vaadin-badge', () => {
       expect(newBadge.hasAttribute('has-content')).to.be.true;
     });
   });
+
+  describe('theme variant custom CSS properties', () => {
+    beforeEach(async () => {
+      badge.style.setProperty('--vaadin-badge-background', 'rgb(255, 0, 0)');
+      badge.style.setProperty('--vaadin-badge-text-color', 'rgb(0, 128, 0)');
+      await nextUpdate(badge);
+    });
+
+    it('should apply custom CSS properties to the filled variant', async () => {
+      badge.setAttribute('theme', 'filled');
+      await nextUpdate(badge);
+      expect(getComputedStyle(badge).backgroundColor).to.equal('rgb(255, 0, 0)');
+      expect(getComputedStyle(badge).color).to.equal('rgb(0, 128, 0)');
+    });
+
+    it('should apply custom CSS properties to the dot variant', async () => {
+      badge.setAttribute('theme', 'dot');
+      await nextUpdate(badge);
+      expect(getComputedStyle(badge).backgroundColor).to.equal('rgb(255, 0, 0)');
+    });
+  });
 });
