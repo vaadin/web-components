@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/field-highlighter",
-  "version": "25.3.0-alpha14",
+  "version": "26.0.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
@@ -32,32 +32,32 @@
     "field"
   ],
   "dependencies": {
-    "@vaadin/a11y-base": "25.3.0-alpha14",
-    "@vaadin/component-base": "25.3.0-alpha14",
-    "@vaadin/overlay": "25.3.0-alpha14",
-    "@vaadin/popover": "25.3.0-alpha14",
-    "@vaadin/tooltip": "25.3.0-alpha14",
-    "@vaadin/vaadin-themable-mixin": "25.3.0-alpha14",
+    "@vaadin/a11y-base": "26.0.0-alpha0",
+    "@vaadin/component-base": "26.0.0-alpha0",
+    "@vaadin/overlay": "26.0.0-alpha0",
+    "@vaadin/popover": "26.0.0-alpha0",
+    "@vaadin/tooltip": "26.0.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "26.0.0-alpha0",
     "lit": "^3.0.0"
   },
   "devDependencies": {
-    "@vaadin/aura": "25.3.0-alpha14",
-    "@vaadin/chai-plugins": "25.3.0-alpha14",
-    "@vaadin/checkbox": "25.3.0-alpha14",
-    "@vaadin/checkbox-group": "25.3.0-alpha14",
-    "@vaadin/custom-field": "25.3.0-alpha14",
-    "@vaadin/date-picker": "25.3.0-alpha14",
-    "@vaadin/date-time-picker": "25.3.0-alpha14",
-    "@vaadin/item": "25.3.0-alpha14",
-    "@vaadin/list-box": "25.3.0-alpha14",
-    "@vaadin/radio-group": "25.3.0-alpha14",
-    "@vaadin/select": "25.3.0-alpha14",
-    "@vaadin/test-runner-commands": "25.3.0-alpha14",
+    "@vaadin/aura": "26.0.0-alpha0",
+    "@vaadin/chai-plugins": "26.0.0-alpha0",
+    "@vaadin/checkbox": "26.0.0-alpha0",
+    "@vaadin/checkbox-group": "26.0.0-alpha0",
+    "@vaadin/custom-field": "26.0.0-alpha0",
+    "@vaadin/date-picker": "26.0.0-alpha0",
+    "@vaadin/date-time-picker": "26.0.0-alpha0",
+    "@vaadin/item": "26.0.0-alpha0",
+    "@vaadin/list-box": "26.0.0-alpha0",
+    "@vaadin/radio-group": "26.0.0-alpha0",
+    "@vaadin/select": "26.0.0-alpha0",
+    "@vaadin/test-runner-commands": "26.0.0-alpha0",
     "@vaadin/testing-helpers": "^2.0.0",
-    "@vaadin/text-area": "25.3.0-alpha14",
-    "@vaadin/text-field": "25.3.0-alpha14",
-    "@vaadin/time-picker": "25.3.0-alpha14",
-    "@vaadin/vaadin-lumo-styles": "25.3.0-alpha14",
+    "@vaadin/text-area": "26.0.0-alpha0",
+    "@vaadin/text-field": "26.0.0-alpha0",
+    "@vaadin/time-picker": "26.0.0-alpha0",
+    "@vaadin/vaadin-lumo-styles": "26.0.0-alpha0",
     "sinon": "^22.0.0"
   }
 }
