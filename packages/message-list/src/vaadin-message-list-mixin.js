@@ -156,6 +156,14 @@ export const MessageListMixin = (superClass) =>
         requestAnimationFrame(() => {
           if (items.length > oldItems.length && closeToBottom) {
             this._scrollToLastMessage();
+
+            const loadingMarkdown = this.markdown && !customElements.get('vaadin-markdown');
+
+            if (loadingMarkdown) {
+              customElements.whenDefined('vaadin-markdown').then(() => {
+                this._scrollToLastMessage();
+              });
+            }
           }
         });
       }
@@ -192,11 +200,9 @@ export const MessageListMixin = (superClass) =>
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
                 @attachment-click="${(e) => this.__onAttachmentClick(e, item)}"
-                >${
-                  this.markdown
-                    ? html`<vaadin-markdown .content=${item.text} line-breaks></vaadin-markdown>`
-                    : item.text
-                }<vaadin-avatar slot="avatar"></vaadin-avatar
+                >${this.markdown
+                  ? html`<vaadin-markdown .content=${item.text} line-breaks></vaadin-markdown>`
+                  : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
             `,
           )}
