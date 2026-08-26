@@ -100,7 +100,7 @@ snapshots["vaadin-message avatar img"] =
 /* end snapshot vaadin-message avatar img */
 
 snapshots["vaadin-message avatar userColorIndex"] = 
-`<vaadin-message>
+`<vaadin-message style="--vaadin-message-user-color: var(--vaadin-user-color-2);">
   <vaadin-avatar
     aria-hidden="true"
     has-color-index=""

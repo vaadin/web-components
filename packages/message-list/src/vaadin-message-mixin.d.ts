@@ -56,6 +56,7 @@ export declare class MessageMixinClass {
 
   /**
    * A color index to be used to render the color of the avatar.
+   * Also sets `--vaadin-message-user-color` custom CSS property.
    *
    * @attr {number} user-color-index
    */
