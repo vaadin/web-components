@@ -13,9 +13,15 @@ describe('vaadin-badge (Lumo)', () => {
     await nextRender();
   });
 
-  it('should not use a negative margin when the border is removed', () => {
-    const { borderTopWidth, marginTop, marginRight, marginBottom, marginLeft } = getComputedStyle(badge);
-    expect(borderTopWidth).to.equal('0px');
-    expect([marginTop, marginRight, marginBottom, marginLeft]).to.eql(['0px', '0px', '0px', '0px']);
+  it('should hide the border without removing the space it reserves', () => {
+    const { borderTopWidth, borderTopColor, marginTop } = getComputedStyle(badge);
+    expect(borderTopColor).to.equal('rgba(0, 0, 0, 0)');
+    expect(borderTopWidth).to.equal('1px');
+    expect(marginTop).to.equal('-1px');
+  });
+
+  it('should use the border color custom property when set', () => {
+    badge.style.setProperty('--vaadin-badge-border-color', 'rgb(0, 0, 255)');
+    expect(getComputedStyle(badge).borderTopColor).to.equal('rgb(0, 0, 255)');
   });
 });
