@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/aura",
-  "version": "25.2.8",
+  "version": "25.2.9",
   "publishConfig": {
     "access": "public"
   },
