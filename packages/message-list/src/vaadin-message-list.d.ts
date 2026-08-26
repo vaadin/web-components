@@ -47,6 +47,13 @@ export type MessageListEventMap = HTMLElementEventMap & {
  * ----------|----------------
  * `list`    | The container wrapping messages.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                |
+ * :--------------------------------- |
+ * `--vaadin-message-list-max-width`  |
+ * `--vaadin-message-list-padding`    |
+ *
  * See the [`<vaadin-message>`](#/elements/vaadin-message) documentation for the available
  * state attributes and stylable shadow parts of message elements.
  *

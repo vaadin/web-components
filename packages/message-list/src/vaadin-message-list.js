@@ -40,6 +40,13 @@ import { MessageListMixin } from './vaadin-message-list-mixin.js';
  * ----------|----------------
  * `list`    | The container wrapping messages.
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                |
+ * :--------------------------------- |
+ * `--vaadin-message-list-max-width`  |
+ * `--vaadin-message-list-padding`    |
+ *
  * See the [`<vaadin-message>`](#/elements/vaadin-message) documentation for the available
  * state attributes and stylable shadow parts of message elements.
  *
@@ -61,6 +68,7 @@ class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(Themable
       :host {
         display: block;
         overflow: auto;
+        box-sizing: border-box;
         padding: var(--vaadin-message-list-padding, var(--vaadin-padding-xs) 0);
         scroll-padding: var(--vaadin-message-list-padding, var(--vaadin-padding-xs) 0);
         scroll-snap-type: y proximity;
@@ -68,6 +76,16 @@ class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(Themable
 
       :host([hidden]) {
         display: none !important;
+      }
+
+      [part='list'] {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 100%;
+        max-width: var(--vaadin-message-list-max-width, none);
+        margin-inline: auto;
       }
 
       [part='list']::after {
