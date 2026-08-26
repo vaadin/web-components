@@ -20,6 +20,13 @@ describe('vaadin-badge (Lumo)', () => {
     expect(marginTop).to.equal('-1px');
   });
 
+  it('should keep the border hidden when only the border width is set', () => {
+    badge.style.setProperty('--vaadin-badge-border-width', '2px');
+    const { borderTopWidth, borderTopColor } = getComputedStyle(badge);
+    expect(borderTopWidth).to.equal('2px');
+    expect(borderTopColor).to.equal('rgba(0, 0, 0, 0)');
+  });
+
   it('should use the border color custom property when set', () => {
     badge.style.setProperty('--vaadin-badge-border-color', 'rgb(0, 0, 255)');
     expect(getComputedStyle(badge).borderTopColor).to.equal('rgb(0, 0, 255)');
