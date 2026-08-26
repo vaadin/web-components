@@ -45,6 +45,19 @@ describe('message-list-markdown', () => {
     expect(messageList.querySelector('vaadin-message strong')).to.exist;
   });
 
+  it('should render single line breaks as <br> (soft line breaks)', async () => {
+    messageList.items = [{ text: 'First line\nSecond line', time: '10:00 AM', userName: 'MU' }];
+    await nextUpdate(messageList);
+    await nextFrame();
+    const markdown = messageList.querySelector('vaadin-message vaadin-markdown');
+    expect(markdown.querySelector('br')).to.exist;
+  });
+
+  it('should enable line breaks on the markdown element', () => {
+    const markdown = messageList.querySelector('vaadin-message vaadin-markdown');
+    expect(markdown.lineBreaks).to.be.true;
+  });
+
   it('should toggle markdown attribute', async () => {
     expect(messageList.hasAttribute('markdown')).to.be.true;
     messageList.markdown = false;
