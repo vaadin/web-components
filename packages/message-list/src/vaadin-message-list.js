@@ -61,6 +61,7 @@ class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(Themable
       :host {
         display: block;
         overflow: auto;
+        box-sizing: border-box;
         padding: var(--vaadin-message-list-padding, var(--vaadin-padding-xs) 0);
         scroll-padding: var(--vaadin-message-list-padding, var(--vaadin-padding-xs) 0);
         scroll-snap-type: y proximity;
@@ -68,6 +69,13 @@ class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(Themable
 
       :host([hidden]) {
         display: none !important;
+      }
+
+      [part='list'] {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        min-height: 100%;
       }
 
       [part='list']::after {
