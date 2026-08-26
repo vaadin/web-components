@@ -153,20 +153,30 @@ export const MessageListMixin = (superClass) =>
           this.__enableScrollSnapping();
         }
 
-        requestAnimationFrame(() => {
-          if (items.length > oldItems.length && closeToBottom) {
-            this._scrollToLastMessage();
-
-            const loadingMarkdown = this.markdown && !customElements.get('vaadin-markdown');
-
-            if (loadingMarkdown) {
-              customElements.whenDefined('vaadin-markdown').then(() => {
-                this._scrollToLastMessage();
-              });
-            }
-          }
-        });
+        if (items.length > oldItems.length && closeToBottom) {
+          this.__scrollToLastMessagePending = true;
+          this.__flushScrollToLastMessage();
+        }
       }
+    }
+
+    /** @private */
+    get __isMarkdownLoading() {
+      return !!this.markdown && !customElements.get('vaadin-markdown');
+    }
+
+    /**
+     * Scrolls to the last message, unless the markdown component is still loading,
+     * in which case the final height of the messages is not yet known.
+     * @private
+     */
+    __flushScrollToLastMessage() {
+      if (!this.__scrollToLastMessagePending || this.__isMarkdownLoading) {
+        return;
+      }
+
+      this.__scrollToLastMessagePending = false;
+      requestAnimationFrame(() => this._scrollToLastMessage());
     }
 
     /** @private */
@@ -176,8 +186,8 @@ export const MessageListMixin = (superClass) =>
         import('@vaadin/markdown/src/vaadin-markdown.js')
           // Wait until the component is defined
           .then(() => customElements.whenDefined('vaadin-markdown'))
-          // Render the messages again
-          .then(() => this._renderMessages(this.items));
+          // The messages grow once the markdown content is rendered
+          .then(() => this.__flushScrollToLastMessage());
       }
       this._renderMessages(this.items);
     }
@@ -200,9 +210,11 @@ export const MessageListMixin = (superClass) =>
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
                 @attachment-click="${(e) => this.__onAttachmentClick(e, item)}"
-                >${this.markdown
-                  ? html`<vaadin-markdown .content=${item.text} line-breaks></vaadin-markdown>`
-                  : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
+                >${
+                  this.markdown
+                    ? html`<vaadin-markdown .content=${item.text} line-breaks></vaadin-markdown>`
+                    : item.text
+                }<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
             `,
           )}
