@@ -65,6 +65,10 @@ export type MessageEventMap = HTMLElementEventMap & {
  * `--vaadin-message-attachment-line-height`    |
  * `--vaadin-message-attachment-padding`        |
  * `--vaadin-message-attachment-text-color`     |
+ * `--vaadin-message-attachments-alignment`     |
+ * `--vaadin-message-content-background`        |
+ * `--vaadin-message-content-border-radius`     |
+ * `--vaadin-message-content-padding`           |
  * `--vaadin-message-font-size`                 |
  * `--vaadin-message-font-weight`               |
  * `--vaadin-message-gap`                       |
