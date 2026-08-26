@@ -22,20 +22,36 @@ describe('i18n', () => {
   });
 
   describe('parseTime', () => {
-    it('should use custom parser if that exists', () => {
-      timePicker.i18n = { parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 }) };
+    it('should not use custom parser for the value set programmatically', () => {
+      const parseTime = sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 });
+      timePicker.i18n = { parseTime };
       timePicker.value = '12';
-      expect(timePicker.i18n.parseTime.args[0][0]).to.be.equal('12:00');
+      expect(parseTime).to.be.not.called;
       expect(timePicker.value).to.be.equal('12:00');
     });
 
-    it('should commit the value when the custom parser returns stripped seconds', () => {
+    it('should not use custom parser when committing an empty field', () => {
+      const parseTime = sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 });
+      timePicker.i18n = { parseTime };
+      setInputValue(timePicker, '10:00');
+      enter(inputElement);
+      parseTime.resetHistory();
+      setInputValue(timePicker, '');
+      enter(inputElement);
+      expect(parseTime).to.be.not.called;
+      expect(timePicker.value).to.be.equal('');
+    });
+
+    it('should use custom parser for the text entered by the user', () => {
       // The step defaults to minute precision, so the seconds are stripped
       // from the value, while the custom parser keeps returning them.
-      timePicker.i18n = { parseTime: () => ({ hours: 12, minutes: 0, seconds: 0 }) };
+      const parseTime = sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 });
+      timePicker.i18n = { parseTime };
       setInputValue(timePicker, 'noon');
       enter(inputElement);
+      expect(parseTime).to.be.calledWith('noon');
       expect(timePicker.value).to.be.equal('12:00');
+      expect(inputElement.value).to.be.equal('12:00');
     });
 
     it('should not modify the object returned by the custom parser', () => {
@@ -77,6 +93,30 @@ describe('i18n', () => {
       expect(inputElement.value).to.equal('1200');
       expect(timePicker.value).to.equal('12:00');
     });
+
+    it('should use custom formatter once when committing the text entered by the user', () => {
+      const formatTime = sinon.spy((time) => `${time.hours}.${time.minutes}`);
+      timePicker.i18n = { formatTime, parseTime: () => ({ hours: 12, minutes: 0 }) };
+      formatTime.resetHistory();
+      setInputValue(timePicker, 'noon');
+      enter(inputElement);
+      expect(formatTime).to.be.calledOnce;
+      expect(inputElement.value).to.be.equal('12.0');
+    });
+
+    it('should keep the value that is finer than the formatter can show', () => {
+      timePicker.step = 0.5;
+      timePicker.i18n = {
+        formatTime: (time) => `${time.hours}.${time.minutes}`,
+        parseTime: (text) => {
+          const parts = text.split('.');
+          return { hours: parts[0], minutes: parts[1] };
+        },
+      };
+      timePicker.value = '10:00:30';
+      expect(timePicker.value).to.be.equal('10:00:30.000');
+      expect(inputElement.value).to.be.equal('10.0');
+    });
   });
 
   describe('dropdown items', () => {
@@ -92,6 +132,17 @@ describe('i18n', () => {
     it('should select the item matching the value', () => {
       timePicker.value = '10:00';
       expect(timePicker._scroller.selectedItem).to.equal(timePicker._dropdownItems[10]);
+    });
+
+    it('should set the value from the focused item without using the parser', () => {
+      const parseTime = sinon.spy(strictAmPmI18n, 'parseTime');
+      timePicker.open();
+      timePicker._focusedIndex = 10;
+      enter(inputElement);
+      parseTime.restore();
+      expect(parseTime).to.be.not.called;
+      expect(timePicker.value).to.be.equal('10:00');
+      expect(inputElement.value).to.be.equal('10:00 AM');
     });
   });
 
