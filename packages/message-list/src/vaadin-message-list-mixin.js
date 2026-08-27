@@ -160,18 +160,13 @@ export const MessageListMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    get __isMarkdownLoading() {
-      return !!this.markdown && !customElements.get('vaadin-markdown');
-    }
-
     /**
      * Scrolls to the last message, unless the markdown component is still loading,
      * in which case the final height of the messages is not yet known.
      * @private
      */
     __flushScrollToLastMessage() {
-      if (!this.__scrollToLastMessagePending || this.__isMarkdownLoading) {
+      if (!this.__scrollToLastMessagePending || (this.markdown && !customElements.get('vaadin-markdown'))) {
         return;
       }
 
