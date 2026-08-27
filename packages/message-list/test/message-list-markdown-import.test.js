@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../src/vaadin-message-list.js';
 
 async function until(predicate) {
@@ -13,20 +13,18 @@ async function until(predicate) {
 
 describe('message-list-markdown dynamic import', () => {
   let messageList;
-  const messages = [
-    {
-      text: 'This is a **bold text** in Markdown',
-      time: '10:00 AM',
-      userName: 'Markdown User',
-      userAbbr: 'MU',
-    },
-  ];
+  const messages = Array.from({ length: 20 }, (_, i) => ({
+    text: `Message ${i} with **bold text** in Markdown`,
+    time: '10:00 AM',
+    userName: 'Markdown User',
+    userAbbr: 'MU',
+  }));
 
   beforeEach(() => {
-    messageList = fixtureSync('<vaadin-message-list></vaadin-message-list>');
+    messageList = fixtureSync('<vaadin-message-list style="height: 200px"></vaadin-message-list>');
   });
 
-  it('should not render incorrect content during import', async () => {
+  it('should render the markdown and scroll to the last message after the import', async () => {
     messageList.markdown = true;
     messageList.items = messages;
 
@@ -37,8 +35,10 @@ describe('message-list-markdown dynamic import', () => {
     expect(getComputedStyle(message).visibility).to.equal('hidden');
 
     // Expect the markdown to be rendered as HTML eventually
-    await until(() => messageList.querySelector('vaadin-message strong')?.textContent === 'bold text');
+    await until(() => messageList.querySelectorAll('vaadin-message strong').length === messages.length);
+    await nextFrame();
 
     expect(getComputedStyle(message).visibility).to.equal('visible');
+    expect(messageList.scrollTop).to.be.closeTo(messageList.scrollHeight - messageList.clientHeight, 1);
   });
 });
