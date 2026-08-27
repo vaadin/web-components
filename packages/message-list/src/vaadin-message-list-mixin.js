@@ -153,12 +153,25 @@ export const MessageListMixin = (superClass) =>
           this.__enableScrollSnapping();
         }
 
-        requestAnimationFrame(() => {
-          if (items.length > oldItems.length && closeToBottom) {
-            this._scrollToLastMessage();
-          }
-        });
+        if (items.length > oldItems.length && closeToBottom) {
+          this.__scrollToLastMessagePending = true;
+          this.__flushScrollToLastMessage();
+        }
       }
+    }
+
+    /**
+     * Scrolls to the last message, unless the markdown component is still loading,
+     * in which case the final height of the messages is not yet known.
+     * @private
+     */
+    __flushScrollToLastMessage() {
+      if (!this.__scrollToLastMessagePending || (this.markdown && !customElements.get('vaadin-markdown'))) {
+        return;
+      }
+
+      this.__scrollToLastMessagePending = false;
+      requestAnimationFrame(() => this._scrollToLastMessage());
     }
 
     /** @private */
@@ -168,8 +181,8 @@ export const MessageListMixin = (superClass) =>
         import('@vaadin/markdown/src/vaadin-markdown.js')
           // Wait until the component is defined
           .then(() => customElements.whenDefined('vaadin-markdown'))
-          // Render the messages again
-          .then(() => this._renderMessages(this.items));
+          // The messages grow once the markdown content is rendered
+          .then(() => this.__flushScrollToLastMessage());
       }
       this._renderMessages(this.items);
     }
