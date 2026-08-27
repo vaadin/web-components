@@ -99,27 +99,42 @@ export const NumberFieldMixin = (superClass) =>
      * @protected
      */
     get _defaultAllowedCharPattern() {
-      return this.__numberContext.allowedCharPattern;
+      return this._numberContext.allowedCharPattern;
     }
 
     /**
      * The parsing and formatting context for the current `locale`
      * and `formatOptions`, rebuilt when either changes.
      *
-     * @private
+     * @protected
      */
-    get __numberContext() {
-      if (!this.__cachedNumberContext) {
+    get _numberContext() {
+      if (!this.__numberContextCache) {
+        let formatOptions = this.formatOptions;
+        // Percent and compact notation change the magnitude of the shown
+        // number, so the text could not be parsed back into the same value.
+        if (formatOptions && (formatOptions.style === 'percent' || formatOptions.notation === 'compact')) {
+          issueWarning(
+            `<${this.localName}> The "percent" style and "compact" notation are not supported by formatOptions and were ignored.`,
+          );
+          formatOptions = { ...formatOptions };
+          if (formatOptions.style === 'percent') {
+            delete formatOptions.style;
+          }
+          if (formatOptions.notation === 'compact') {
+            delete formatOptions.notation;
+          }
+        }
         try {
-          this.__cachedNumberContext = createNumberContext(this.locale, this.formatOptions);
+          this.__numberContextCache = createNumberContext(this.locale, formatOptions);
         } catch (_) {
           issueWarning(
             `<${this.localName}> The locale "${this.locale}" or the format options are invalid and were ignored.`,
           );
-          this.__cachedNumberContext = createNumberContext();
+          this.__numberContextCache = createNumberContext();
         }
       }
-      return this.__cachedNumberContext;
+      return this.__numberContextCache;
     }
 
     /**
@@ -218,6 +233,19 @@ export const NumberFieldMixin = (superClass) =>
      * @private
      */
     get __validity() {
+      // Like a native input, a readonly or disabled field is barred from
+      // constraint validation and always reports valid.
+      if (this.readonly || this.disabled) {
+        return {
+          badInput: false,
+          valueMissing: false,
+          rangeUnderflow: false,
+          rangeOverflow: false,
+          stepMismatch: false,
+          valid: true,
+        };
+      }
+
       const badInput = this.__hasUnparsableValue;
       // Native reports both flags for unparsable text in a required field,
       // since the input value getter returns an empty string for it — so
@@ -430,7 +458,7 @@ export const NumberFieldMixin = (superClass) =>
 
     /** @private */
     __localeChanged() {
-      this.__cachedNumberContext = undefined;
+      this.__numberContextCache = undefined;
 
       // Re-derive the default character pattern, unless the developer
       // has set their own.
@@ -519,7 +547,7 @@ export const NumberFieldMixin = (superClass) =>
       // clear button) is already canonical. Assigning raw text and letting
       // the value observer clear it would leak unparsable text into `value`
       // for a moment, firing value-changed events for the round-trip.
-      const parsed = event.isTrusted ? parseNumber(raw, this.__numberContext) : raw;
+      const parsed = event.isTrusted ? parseNumber(raw, this._numberContext) : raw;
       this.__keepCommittedValue = true;
       this.__userInput = event.isTrusted;
       this.value = parsed == null ? '' : parsed;
@@ -597,7 +625,7 @@ export const NumberFieldMixin = (superClass) =>
      * @protected
      */
     _forwardInputValue(value) {
-      super._forwardInputValue(value ? formatNumber(value, this.__numberContext) : '');
+      super._forwardInputValue(value ? formatNumber(value, this._numberContext) : '');
     }
 
     /**
@@ -614,7 +642,7 @@ export const NumberFieldMixin = (superClass) =>
       super._inputElementChanged(input);
 
       if (input && this.value) {
-        this._inputElementValue = formatNumber(this.value, this.__numberContext);
+        this._inputElementValue = formatNumber(this.value, this._numberContext);
       }
     }
 

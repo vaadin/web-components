@@ -34,6 +34,8 @@ describe('native parity', () => {
     { min: -10, step: 0.5 },
     { min: 1, step: 2 },
     { required: true },
+    { required: true, readonly: true },
+    { min: 1, max: 5, step: 2, disabled: true },
   ];
 
   beforeEach(async () => {
@@ -63,14 +65,25 @@ describe('native parity', () => {
           oracle.max = constraints.max != null ? String(constraints.max) : '';
           oracle.step = constraints.step != null ? String(constraints.step) : 'any';
           oracle.required = !!constraints.required;
+          // A readonly or disabled input is barred from constraint validation.
+          oracle.readOnly = !!constraints.readonly;
+          oracle.disabled = !!constraints.disabled;
           oracle.value = value;
 
           const validity = field.__validity;
+          expect(validity.valid, 'valid').to.equal(oracle.checkValidity());
+
+          // A barred (readonly / disabled) native input still computes the
+          // individual flags — inconsistently between the two in Chromium —
+          // while checkValidity() is forced to true, so only the verdict is
+          // comparable for those sets.
+          if (constraints.readonly || constraints.disabled) {
+            return;
+          }
           expect(validity.valueMissing, 'valueMissing').to.equal(oracle.validity.valueMissing);
           expect(validity.rangeUnderflow, 'rangeUnderflow').to.equal(oracle.validity.rangeUnderflow);
           expect(validity.rangeOverflow, 'rangeOverflow').to.equal(oracle.validity.rangeOverflow);
           expect(validity.stepMismatch, 'stepMismatch').to.equal(oracle.validity.stepMismatch);
-          expect(validity.valid, 'valid').to.equal(oracle.checkValidity());
         });
       });
     });

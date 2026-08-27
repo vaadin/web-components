@@ -186,6 +186,64 @@ describe('locale', () => {
     });
   });
 
+  describe('currency format options', () => {
+    beforeEach(async () => {
+      await fixture('<vaadin-number-field locale="de-DE" value="1234.5"></vaadin-number-field>');
+      numberField.formatOptions = { style: 'currency', currency: 'EUR' };
+      await nextUpdate(numberField);
+    });
+
+    it('should format presentation value with the currency affix', () => {
+      expect(input.value).to.equal('1.234,50\u00A0€');
+    });
+
+    it('should keep the value when the formatted text is edited', async () => {
+      input.focus();
+      input.setSelectionRange(0, 1);
+      await sendKeys({ type: '2' });
+      input.blur();
+      expect(numberField.value).to.equal('2234.50');
+      expect(input.value).to.equal('2.234,50\u00A0€');
+    });
+
+    it('should parse typed value without the currency affix', async () => {
+      input.focus();
+      input.select();
+      await sendKeys({ type: '2000' });
+      input.blur();
+      expect(numberField.value).to.equal('2000');
+      expect(input.value).to.equal('2.000,00\u00A0€');
+    });
+
+    it('should allow typing the currency affix characters', async () => {
+      input.focus();
+      input.select();
+      await sendKeys({ type: '99 €' });
+      input.blur();
+      expect(numberField.value).to.equal('99');
+    });
+  });
+
+  describe('unsupported format options', () => {
+    beforeEach(async () => {
+      await fixture('<vaadin-number-field locale="en-US" value="0.5"></vaadin-number-field>');
+    });
+
+    it('should ignore the percent style', async () => {
+      numberField.formatOptions = { style: 'percent' };
+      await nextUpdate(numberField);
+      expect(numberField.value).to.equal('0.5');
+      expect(input.value).to.equal('0.5');
+    });
+
+    it('should ignore the compact notation', async () => {
+      numberField.value = '1234567';
+      numberField.formatOptions = { notation: 'compact' };
+      await nextUpdate(numberField);
+      expect(input.value).to.equal('1,234,567');
+    });
+  });
+
   describe('locale change', () => {
     beforeEach(async () => {
       await fixture('<vaadin-number-field value="1234.5"></vaadin-number-field>');

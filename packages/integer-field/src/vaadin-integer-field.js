@@ -120,12 +120,12 @@ class IntegerField extends NumberField {
 
   /**
    * Override the getter from `NumberFieldMixin` to allow
-   * only digit and sign characters.
+   * only digit, sign and group separator characters.
    * @protected
    * @override
    */
   get _defaultAllowedCharPattern() {
-    return '[-+\\d]';
+    return this._numberContext.integerAllowedCharPattern;
   }
 
   /**

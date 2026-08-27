@@ -13,6 +13,20 @@ const NUMBER_REGEX = /^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$/u;
 // separators: regular space, no-break space (ru-RU), narrow no-break
 // space (fr-FR). When a locale groups with any whitespace, users type
 // a regular space for it, so all variants are accepted interchangeably.
+// formatToParts types that carry the number itself; everything else
+// (currency, unit, percentSign, literal, compact) is an affix.
+const NUMERIC_PART_TYPES = new Set([
+  'integer',
+  'group',
+  'decimal',
+  'fraction',
+  'minusSign',
+  'plusSign',
+  'exponentSeparator',
+  'exponentMinusSign',
+  'exponentInteger',
+]);
+
 const GROUP_WHITESPACE_CLASS = ` \\u00A0\\u202F`;
 const GROUP_WHITESPACE_REGEX = new RegExp(`[${GROUP_WHITESPACE_CLASS}]`, `gu`);
 
@@ -31,6 +45,21 @@ function escapeCharClass(char) {
  */
 export function createNumberContext(locale, formatOptions) {
   const formatter = new Intl.NumberFormat(locale || undefined, formatOptions || {});
+
+  // Affixes the formatter adds around the number (currency symbol, unit,
+  // surrounding literals), which the parser strips before reading digits.
+  // Percent and compact notation are excluded from the affix list on
+  // purpose: their affixes change the magnitude, so stripping them would
+  // corrupt the value, and the mixin rejects those options instead.
+  const affixes = [
+    ...new Set(
+      formatter
+        .formatToParts(-12345678.9)
+        .filter((part) => !NUMERIC_PART_TYPES.has(part.type))
+        .map((part) => part.value)
+        .filter((affix) => affix.trim() !== ''),
+    ),
+  ];
 
   // Symbols come from a separate plain formatter so that format options
   // such as `useGrouping: false` do not hide the group separator that
@@ -56,23 +85,30 @@ export function createNumberContext(locale, formatOptions) {
   }
 
   const groupIsWhitespace = !!symbols.group && /^\s$/u.test(symbols.group);
-  const patternChars = ['\\d', '+\\-', 'eE', '−', escapeCharClass(symbols.decimal)];
+  // Characters shared by integer and decimal input: digits, signs, group
+  // separator, and the affix characters so formatted text can be typed back.
+  const integerChars = ['\\d', '+\\-', '−'];
   if (symbols.group) {
-    patternChars.push(groupIsWhitespace ? GROUP_WHITESPACE_CLASS : escapeCharClass(symbols.group));
+    integerChars.push(groupIsWhitespace ? GROUP_WHITESPACE_CLASS : escapeCharClass(symbols.group));
   }
   if (symbols.minusSign !== '-' && symbols.minusSign !== '−') {
-    patternChars.push(escapeCharClass(symbols.minusSign));
+    integerChars.push(escapeCharClass(symbols.minusSign));
   }
   if (digitMap) {
-    patternChars.push(...[...digitMap.keys()].map(escapeCharClass));
+    integerChars.push(...[...digitMap.keys()].map(escapeCharClass));
   }
+  affixes.forEach((affix) => {
+    integerChars.push(...[...affix].map(escapeCharClass), GROUP_WHITESPACE_CLASS);
+  });
 
   return {
     formatter,
     symbols,
     digitMap,
     groupIsWhitespace,
-    allowedCharPattern: `[${patternChars.join('')}]`,
+    affixes,
+    allowedCharPattern: `[${[...integerChars, 'eE', escapeCharClass(symbols.decimal)].join('')}]`,
+    integerAllowedCharPattern: `[${integerChars.join('')}]`,
   };
 }
 
@@ -98,7 +134,12 @@ export function parseNumber(text, context) {
   let value = text ? String(text).trim() : '';
 
   if (context && value) {
-    const { symbols, digitMap, groupIsWhitespace } = context;
+    const { symbols, digitMap, groupIsWhitespace, affixes } = context;
+
+    affixes.forEach((affix) => {
+      value = value.split(affix).join('');
+    });
+    value = value.trim();
 
     if (symbols.group) {
       const groupRegExp = groupIsWhitespace

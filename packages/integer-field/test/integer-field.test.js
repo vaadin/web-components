@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { arrowDown, arrowUp, fixtureSync, keyDownOn, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-integer-field.js';
@@ -8,7 +9,8 @@ describe('integer-field', () => {
   let integerField, input;
 
   beforeEach(async () => {
-    integerField = fixtureSync('<vaadin-integer-field></vaadin-integer-field>');
+    // The locale is pinned because the allowed characters derive from it.
+    integerField = fixtureSync('<vaadin-integer-field locale="en-US"></vaadin-integer-field>');
     await nextRender();
     input = integerField.inputElement;
   });
@@ -56,7 +58,6 @@ describe('integer-field', () => {
     });
 
     [
-      [188, [], ','],
       [190, [], '.'],
       [69, [], 'e'],
       [69, ['shift'], 'E'],
@@ -77,6 +78,7 @@ describe('integer-field', () => {
       [49, [], '1'],
       [187, [], '+'],
       [189, [], '-'],
+      [188, [], ','],
       [49, ['ctrl'], '1'],
       [49, ['meta'], '1'],
       [65, ['ctrl'], 'e'],
@@ -226,6 +228,41 @@ describe('integer-field', () => {
           expect(console.warn.called).to.be.true;
         });
       });
+    });
+  });
+
+  describe('locale', () => {
+    let keydownSpy;
+
+    beforeEach(async () => {
+      integerField = fixtureSync('<vaadin-integer-field locale="en-US" value="1234"></vaadin-integer-field>');
+      await nextRender();
+      input = integerField.inputElement;
+      keydownSpy = sinon.spy();
+      input.addEventListener('keydown', keydownSpy);
+    });
+
+    it('should format presentation value with group separators', () => {
+      expect(input.value).to.equal('1,234');
+    });
+
+    it('should not prevent typing the group separator', () => {
+      keyDownOn(input, 188, [], ',');
+      expect(keydownSpy.lastCall.args[0].defaultPrevented).to.be.false;
+    });
+
+    it('should prevent typing the decimal separator', () => {
+      keyDownOn(input, 190, [], '.');
+      expect(keydownSpy.lastCall.args[0].defaultPrevented).to.be.true;
+    });
+
+    it('should parse typed value with group separators', async () => {
+      input.focus();
+      input.select();
+      await sendKeys({ type: '12,345' });
+      input.blur();
+      expect(integerField.value).to.equal('12345');
+      expect(input.value).to.equal('12,345');
     });
   });
 

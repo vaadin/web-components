@@ -44,6 +44,15 @@ guard only prevents the rounded product from collapsing to `0` and dividing
 by zero; outside the decimal-notation range the multiplier scheme is still
 imprecise, exactly as it ships today.
 
+Readonly and disabled fields are barred from constraint validation and
+always report valid, as native inputs do. The first version of the JS
+validity computation missed this (the parity matrix had no readonly or
+disabled column) and made `<vaadin-number-field readonly required>`
+invalid; the matrix now covers both. Note that Chromium still computes
+the individual `ValidityState` flags for a disabled input (but not for a
+readonly one) while forcing `checkValidity()` to `true`, so for barred
+inputs only the verdict is comparable.
+
 `badInput` is the one validity field the differential matrix cannot
 exercise (programmatic sets never produce bad input; the detached oracle
 cannot be typed into). Its parity rests on the typed-input tests in
@@ -70,6 +79,20 @@ programmatic set, locale change) means the text is never rewritten while
 typing, so there is no caret management anywhere in the implementation.
 Step-button presses rewrite the input text, which places the caret at the
 end — acceptable, per the demo page.
+
+Affixes are supported: the parser strips every non-numeric part that
+`formatToParts` reports for the configured formatter (currency symbol,
+unit, surrounding literals), so `style: 'currency'` and `style: 'unit'`
+round-trip and the affix characters are typeable. `style: 'percent'` and
+`notation: 'compact'` are rejected with a warning: their affixes change
+the magnitude of the shown number, so the text could not be parsed back
+into the same value.
+
+Integer-field shares the formatter, so a plain `<vaadin-integer-field
+value="1234">` shows `1,234` in `en-US` — a display change from before.
+Its character pattern is derived from the same locale symbols (digits,
+signs, group separator, affixes; no decimal separator or exponent), so
+the grouped text is typeable back.
 
 Grouping is parsed leniently: group separators are stripped wherever they
 appear (required for lakh grouping), except after the decimal separator,
