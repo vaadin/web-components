@@ -36,32 +36,34 @@ export const messageListStyles = css`
     scroll-snap-align: var(--_vaadin-message-list-scroll-snap-align, none);
   }
 
-  :host([theme~='bubble']) ::slotted(vaadin-message) {
-    --vaadin-message-name-font-size: 0.9em;
-  }
+  :host([theme~='bubble']) {
+    & ::slotted(vaadin-message) {
+      --vaadin-message-name-font-size: 0.9em;
+    }
 
-  :host([theme~='bubble']) ::slotted(vaadin-message[theme~='full-width']) {
-    padding-block: var(--vaadin-padding-xl);
-  }
+    & ::slotted(vaadin-message[theme~='full-width']) {
+      padding-block: var(--vaadin-padding-xl);
+    }
 
-  :host([theme~='bubble']) ::slotted(vaadin-message:not([theme~='full-width'])) {
-    --vaadin-message-content-background: var(--vaadin-background-container);
-    --vaadin-message-content-padding: var(--vaadin-padding-s) var(--vaadin-padding-m);
-    --vaadin-message-content-border-radius: var(--vaadin-radius-l);
+    & ::slotted(vaadin-message:not([theme~='full-width'])) {
+      --vaadin-message-content-background: var(--vaadin-background-container);
+      --vaadin-message-content-padding: var(--vaadin-padding-s) var(--vaadin-padding-m);
+      --vaadin-message-content-border-radius: var(--vaadin-radius-l);
 
-    width: fit-content;
-    max-width: calc(100% - 2em);
-  }
+      width: fit-content;
+      max-width: calc(100% - 2em);
+    }
 
-  :host([theme~='bubble']) ::slotted(vaadin-message[theme~='self']) {
-    --_vaadin-message-avatar-visibility: hidden;
-    --vaadin-message-content-background: linear-gradient(
-        color-mix(in srgb, var(--vaadin-message-user-color, var(--vaadin-user-color-0)) 10%, transparent)
-      )
-      var(--vaadin-background-color);
-    --vaadin-message-attachments-alignment: end;
-    align-items: end;
-    align-self: end;
+    & ::slotted(vaadin-message[theme~='self']) {
+      --_vaadin-message-avatar-visibility: hidden;
+      --vaadin-message-content-background: linear-gradient(
+          color-mix(in srgb, var(--vaadin-message-user-color, var(--vaadin-user-color-0)) 10%, transparent)
+        )
+        var(--vaadin-background-color);
+      --vaadin-message-attachments-alignment: end;
+      align-items: end;
+      align-self: end;
+    }
   }
 
   :host([theme~='bubble'][theme~='one-to-one']) ::slotted(vaadin-message) {
