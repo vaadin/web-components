@@ -42,7 +42,6 @@ export const MessageListMixin = (superClass) =>
         items: {
           type: Array,
           value: () => [],
-          observer: '_itemsChanged',
           sync: true,
         },
 
@@ -51,7 +50,6 @@ export const MessageListMixin = (superClass) =>
          */
         markdown: {
           type: Boolean,
-          observer: '__markdownChanged',
           reflectToAttribute: true,
         },
 
@@ -80,6 +78,19 @@ export const MessageListMixin = (superClass) =>
       // Make screen readers announce new messages
       this.setAttribute('aria-relevant', 'additions');
       this.setAttribute('role', 'region');
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('items')) {
+        this._itemsChanged(this.items, props.get('items'));
+      }
+
+      if (props.has('markdown')) {
+        this.__markdownChanged(this.markdown);
+      }
     }
 
     /**
