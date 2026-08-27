@@ -56,7 +56,7 @@ export const messageListStyles = css`
   :host([theme~='bubble']) ::slotted(vaadin-message[theme~='self']) {
     --_vaadin-message-avatar-visibility: hidden;
     --vaadin-message-content-background: linear-gradient(
-        color-mix(in srgb, var(--vaadin-user-color, var(--vaadin-user-color-0)) 10%, transparent)
+        color-mix(in srgb, var(--vaadin-message-user-color, var(--vaadin-user-color-0)) 10%, transparent)
       )
       var(--vaadin-background-color);
     --vaadin-message-attachments-alignment: end;

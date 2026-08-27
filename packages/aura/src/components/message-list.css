@@ -4,11 +4,6 @@
   --vaadin-message-attachment-border-width: 1px;
 }
 
-vaadin-message:not([theme~='full-width']) {
-  --aura-accent-color-light: var(--vaadin-user-color);
-  --aura-accent-color-dark: var(--vaadin-user-color);
-}
-
 vaadin-message::part(attachment) {
   --aura-surface-level: 4;
   background: var(--vaadin-message-attachment-background, var(--aura-surface-color) padding-box);
@@ -28,6 +23,8 @@ vaadin-message::part(attachment-icon) {
 }
 
 vaadin-message-list[theme~='bubble'] > vaadin-message:not([theme~='full-width']) {
+  --aura-accent-color-light: var(--vaadin-message-user-color);
+  --aura-accent-color-dark: var(--vaadin-message-user-color);
   --aura-surface-level: 3;
   --aura-surface-opacity: 0.6;
 
