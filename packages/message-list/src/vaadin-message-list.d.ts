@@ -54,8 +54,17 @@ export type MessageListEventMap = HTMLElementEventMap & {
  * `--vaadin-message-list-max-width`  |
  * `--vaadin-message-list-padding`    |
  *
+ * ### Built-in Theme Variants
+ *
+ * `<vaadin-message-list>` supports the following theme variants:
+ *
+ * Theme variant        | Description
+ * ---------------------|---------------
+ * `theme="bubble"`     | Shows the messages as chat bubbles
+ * `theme="one-to-one"` | Hides the avatar and name of every message, for a chat between two participants. Works together with `bubble`
+ *
  * See the [`<vaadin-message>`](#/elements/vaadin-message) documentation for the available
- * state attributes and stylable shadow parts of message elements.
+ * theme variants, state attributes and stylable shadow parts of message elements.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
