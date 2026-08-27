@@ -42,4 +42,56 @@ describe('message-list', () => {
   it('basic', async () => {
     await visualDiff(div, 'basic');
   });
+
+  describe('bubble', () => {
+    beforeEach(async () => {
+      div = document.createElement('div');
+      div.style.padding = '10px';
+      div.style.width = '400px';
+
+      element = fixtureSync('<vaadin-message-list></vaadin-message-list>', div);
+      element.items = [
+        {
+          text: 'Hello list',
+          time: 'yesterday',
+          userName: 'Matt Mambo',
+          userAbbr: 'MM',
+          userColorIndex: 1,
+        },
+        {
+          text: 'A message long enough to wrap onto several lines, so that the width restriction of the bubble applies to it',
+          time: 'right now',
+          userName: 'Linsey Listy',
+          userAbbr: 'LL',
+          userColorIndex: 2,
+          theme: 'self',
+        },
+        {
+          text: 'A message from a user without a color index',
+          time: 'right now',
+          userName: 'Nils Nocolor',
+          userAbbr: 'NN',
+          theme: 'self',
+          attachments: [{ name: 'report.pdf' }],
+        },
+        {
+          text: 'A full-width message, long enough to show that the width restriction of the bubble does not apply to it',
+          time: 'right now',
+          userName: 'Ada Assistant',
+          userAbbr: 'AA',
+          userColorIndex: 3,
+          theme: 'full-width',
+        },
+      ];
+      await nextRender();
+    });
+
+    ['bubble', 'bubble one-to-one'].forEach((theme) => {
+      it(theme, async () => {
+        element.setAttribute('theme', theme);
+        await nextRender();
+        await visualDiff(div, theme.replaceAll(' ', '-'));
+      });
+    });
+  });
 });

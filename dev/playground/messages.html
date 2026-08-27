@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Messages</title>
+    <script type="module" src="../common.js"></script>
+
+    <script type="module">
+      import '@vaadin/checkbox-group';
+      import '@vaadin/message-input';
+      import '@vaadin/message-list';
+
+      const list = document.querySelector('vaadin-message-list');
+
+      list.items = [
+        {
+          text: 'Are we still on for the design review this afternoon?',
+          time: '9:41 AM',
+          userName: 'Nora',
+          userColorIndex: 2,
+        },
+        {
+          text: 'Yes. I added the latest screenshots to the project folder.',
+          time: '9:43 AM',
+          userName: 'Maya',
+          userColorIndex: 0,
+          theme: 'self',
+        },
+        {
+          text: 'I also left comments on the empty and loading states.',
+          time: '9:44 AM',
+          userName: 'Nora',
+          userColorIndex: 2,
+          attachments: [{ name: 'review-notes.pdf', type: 'application/pdf', url: '#review-notes.pdf' }],
+        },
+        {
+          text: 'The review starts in 15 minutes.',
+          time: '9:45 AM',
+          userName: 'Assistant',
+          userColorIndex: 4,
+          theme: 'full-width',
+        },
+      ];
+
+      document.querySelector('#list-variants').addEventListener('change', (event) => {
+        const theme = event.currentTarget.value.join(' ');
+        list.setAttribute('theme', theme);
+      });
+
+      document.querySelector('vaadin-message-input').addEventListener('submit', (event) => {
+        list.items = [
+          ...list.items,
+          {
+            text: event.detail.value,
+            time: 'Now',
+            userName: 'Maya',
+            userColorIndex: 0,
+            theme: 'self',
+          },
+        ];
+      });
+    </script>
+
+    <style>
+      .preview {
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) auto;
+        width: min(48rem, 100%);
+        height: 32rem;
+        border: 1px solid var(--vaadin-border-color-secondary);
+        border-radius: var(--vaadin-radius-m);
+        overflow: hidden;
+      }
+
+      vaadin-message-input {
+        margin: var(--vaadin-padding-m);
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="section">
+      <vaadin-checkbox-group id="list-variants" label="Theme Variants">
+        <vaadin-checkbox label="Bubble" value="bubble"></vaadin-checkbox>
+        <vaadin-checkbox label="One to one" value="one-to-one"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+    </section>
+
+    <section class="section">
+      <div class="preview">
+        <vaadin-message-list announce-messages></vaadin-message-list>
+        <vaadin-message-input></vaadin-message-input>
+      </div>
+    </section>
+  </body>
+</html>
