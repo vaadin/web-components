@@ -54,12 +54,13 @@ export const InputFieldMixin = (superclass) =>
     }
 
     /**
-     * @param {HTMLElement} input
+     * @param {HTMLElement | undefined} input
+     * @param {HTMLElement | undefined} oldInput
      * @protected
      * @override
      */
-    _inputElementChanged(input) {
-      super._inputElementChanged(input);
+    _inputElementChanged(input, oldInput) {
+      super._inputElementChanged(input, oldInput);
 
       if (input) {
         // Discard value set on the custom slotted input.
