@@ -84,6 +84,16 @@ import { MessageMixin } from './vaadin-message-mixin.js';
  * `--vaadin-message-time-font-weight`          |
  * `--vaadin-message-user-color`                |
  *
+ * ### Built-in Theme Variants
+ *
+ * `<vaadin-message>` supports the following theme variants. Both of them require the parent
+ * [`<vaadin-message-list>`](#/elements/vaadin-message-list) to use `theme="bubble"`:
+ *
+ * Theme variant         | Description
+ * ----------------------|---------------
+ * `theme="self"`        | Shows the message as sent by the current user, hides the avatar and name
+ * `theme="full-width"`  | Removes the bubble and the width restriction, for an assistant or AI response
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} attachment-click - Fired when an attachment is clicked.
