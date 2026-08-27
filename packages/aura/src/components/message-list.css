@@ -23,8 +23,6 @@ vaadin-message::part(attachment-icon) {
 }
 
 vaadin-message-list[theme~='bubble'] > vaadin-message:not([theme~='full-width']) {
-  --aura-accent-color-light: var(--vaadin-message-user-color);
-  --aura-accent-color-dark: var(--vaadin-message-user-color);
   --aura-surface-level: 3;
   --aura-surface-opacity: 0.6;
 
@@ -35,6 +33,8 @@ vaadin-message-list[theme~='bubble'] > vaadin-message:not([theme~='full-width'])
   }
 
   &[theme~='self'] {
+    --aura-accent-color-light: var(--vaadin-message-user-color, var(--vaadin-user-color-0));
+    --aura-accent-color-dark: var(--vaadin-message-user-color, var(--vaadin-user-color-0));
     --aura-surface-level: 2;
     --aura-surface-opacity: 1;
 
