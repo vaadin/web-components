@@ -22,15 +22,19 @@
     display: none;
   }
 
-  [part='status'],
-  [part='error'] {
-    color: var(--lumo-secondary-text-color);
-    font-size: var(--lumo-font-size-s);
+  [part='name'] {
+    color: var(--vaadin-upload-file-name-color, var(--lumo-body-text-color));
+    white-space: nowrap;
   }
 
-  [part='name'] {
-    color: var(--lumo-body-text-color);
-    white-space: nowrap;
+  [part='status'] {
+    color: var(--vaadin-upload-file-status-color, var(--lumo-secondary-text-color));
+    font-size: var(--vaadin-upload-file-status-font-size, var(--lumo-font-size-s));
+  }
+
+  [part='error'] {
+    color: var(--vaadin-upload-file-error-color, var(--lumo-error-text-color));
+    font-size: var(--vaadin-upload-file-error-font-size, var(--lumo-font-size-s));
   }
 
   [part='commands'] {
@@ -92,10 +96,6 @@
 
   [part='remove-button']::before {
     content: var(--lumo-icons-cross);
-  }
-
-  [part='error'] {
-    color: var(--lumo-error-text-color);
   }
 
   ::slotted([slot='progress']) {
