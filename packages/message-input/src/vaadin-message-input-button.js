@@ -33,7 +33,7 @@ class MessageInputButton extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin
   /** @protected */
   render() {
     return html`
-      <div class="vaadin-button-container">
+      <div class="vaadin-button-container" role="presentation">
         <span part="label">
           <slot></slot>
         </span>
