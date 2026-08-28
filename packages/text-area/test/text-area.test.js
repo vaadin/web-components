@@ -77,6 +77,16 @@ describe('text-area', () => {
       expect(newHeight).to.be.at.least(originalHeight + 10);
     });
 
+    it('should grow over the input field height custom property', async () => {
+      textArea.style.setProperty('--vaadin-input-field-height', '100px');
+      expect(parseFloat(window.getComputedStyle(inputField).height)).to.equal(100);
+
+      textArea.value = Array(400).join('400');
+      await nextUpdate(textArea);
+
+      expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.above(100);
+    });
+
     it('should not grow over max-height', async () => {
       inputField.style.padding = '0';
       inputField.style.border = 'none';

@@ -74,4 +74,23 @@ describe('vaadin-input-container', () => {
     input.click();
     expect(focusSpy.called).to.be.false;
   });
+
+  describe('height', () => {
+    it('should not define a default value for the height custom property', () => {
+      expect(getComputedStyle(container).getPropertyValue('--vaadin-input-field-height')).to.equal('');
+      expect(getComputedStyle(container).minHeight).to.equal('0px');
+    });
+
+    it('should use the height custom property as the input container height', () => {
+      const height = container.getBoundingClientRect().height;
+      container.style.setProperty('--vaadin-input-field-height', `${height + 20}px`);
+      expect(container.getBoundingClientRect().height).to.equal(height + 20);
+    });
+
+    it('should not shrink the input container below its content height', () => {
+      const height = container.getBoundingClientRect().height;
+      container.style.setProperty('--vaadin-input-field-height', '1px');
+      expect(container.getBoundingClientRect().height).to.equal(height);
+    });
+  });
 });
