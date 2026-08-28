@@ -33,16 +33,6 @@ snapshots["vaadin-button host tabIndex"] =
 `;
 /* end snapshot vaadin-button host tabIndex */
 
-snapshots["vaadin-button host tabindex"] = 
-`<vaadin-button
-  role="button"
-  tabindex="1"
->
-  Confirm
-</vaadin-button>
-`;
-/* end snapshot vaadin-button host tabindex */
-
 snapshots["vaadin-button host focused"] = 
 `<vaadin-button
   focused=""

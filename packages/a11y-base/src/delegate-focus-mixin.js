@@ -115,7 +115,7 @@ const DelegateFocusMixinImplementation = (superclass) => {
       if (element) {
         element.disabled = this.disabled;
         this._addFocusListeners(element);
-        this.__forwardTabIndex(this.tabindex);
+        this.__forwardTabIndex(this.tabIndex);
       } else if (oldElement) {
         this._removeFocusListeners(oldElement);
       }
@@ -222,7 +222,7 @@ const DelegateFocusMixinImplementation = (superclass) => {
 
         // Preserve tabindex="-1" on the host element
         if (tabindex !== -1) {
-          this.tabindex = undefined;
+          this.tabIndex = undefined;
         }
       }
 
@@ -231,7 +231,7 @@ const DelegateFocusMixinImplementation = (superclass) => {
         if (tabindex !== -1) {
           this._lastTabIndex = tabindex;
         }
-        this.tabindex = undefined;
+        this.tabIndex = undefined;
       }
 
       // Lit does not remove attribute when setting property to undefined

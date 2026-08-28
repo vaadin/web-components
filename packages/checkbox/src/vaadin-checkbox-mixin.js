@@ -71,7 +71,7 @@ export const CheckboxMixin = (superclass) =>
        * See https://github.com/vaadin/web-components/pull/6780
        * @internal to not document it in CEM
        */
-      this.tabindex = 0;
+      this.tabIndex = 0;
     }
 
     /** @protected */

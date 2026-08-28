@@ -26,11 +26,6 @@ describe('vaadin-button', () => {
       await expect(button).dom.to.equalSnapshot();
     });
 
-    it('tabindex', async () => {
-      button.tabindex = 1;
-      await expect(button).dom.to.equalSnapshot();
-    });
-
     it('focused', async () => {
       button.focus({ focusVisible: false });
       await expect(button).dom.to.equalSnapshot();
