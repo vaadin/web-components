@@ -261,18 +261,18 @@ describe('basic', () => {
       expect(inputElement.value).to.equal('');
     });
 
-    it('should clear input element value after clicking matching value', async () => {
+    it('should keep input element value after clicking matching value', async () => {
       await sendKeys({ type: 'ora' });
       const item = getFirstItem(comboBox);
       item.click();
-      expect(inputElement.value).to.equal('');
+      expect(inputElement.value).to.equal('ora');
     });
 
-    it('should clear filter property after clicking matching value', async () => {
+    it('should keep filter property after clicking matching value', async () => {
       await sendKeys({ type: 'ora' });
       const item = getFirstItem(comboBox);
       item.click();
-      expect(comboBox.filter).to.equal('');
+      expect(comboBox.filter).to.equal('ora');
     });
 
     it('should not add custom value to selectedItems automatically', async () => {

@@ -124,10 +124,10 @@ describe('partial-match-mode', () => {
           expect(comboBox.selectedItems).to.deep.equal(['grapefruit']);
         });
 
-        it('should clear the input value on Enter', async () => {
+        it('should keep the input value on Enter', async () => {
           await sendKeys({ press: 'Enter' });
-          expect(inputElement.value).to.equal('');
-          expect(comboBox.filter).to.equal('');
+          expect(inputElement.value).to.equal('grap');
+          expect(comboBox.filter).to.equal('grap');
         });
 
         it('should not unselect the item on outside click', () => {

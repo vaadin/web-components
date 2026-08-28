@@ -131,8 +131,9 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
   i18n: MultiSelectComboBoxI18n;
 
   /**
-   * When true, filter string isn't cleared after selecting an item.
-   * @attr {boolean} keep-filter
+   * When true, the filter string isn't cleared after selecting an item,
+   * which allows selecting multiple filtered items in succession.
+   * Set to false to clear the filter after selecting an item.
    */
   keepFilter: boolean;
 

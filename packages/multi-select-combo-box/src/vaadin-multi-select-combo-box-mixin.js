@@ -89,11 +89,13 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
 
         /**
-         * When true, filter string isn't cleared after selecting an item.
+         * When true, the filter string isn't cleared after selecting an item,
+         * which allows selecting multiple filtered items in succession.
+         * Set to false to clear the filter after selecting an item.
          */
         keepFilter: {
           type: Boolean,
-          value: false,
+          value: true,
         },
 
         /**
@@ -1344,9 +1346,9 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       }
 
       if (this.opened) {
-        // Store filter value for checking if user input is matching
-        // an item which is already selected, to not un-select it.
-        this._lastFilter = this._inputElementValue;
+        // Clicking an item always toggles its selected state, as opposed to
+        // committing user input, where an already selected item is not un-selected.
+        this._lastFilter = null;
         this.__selectItem(event.detail.item);
       }
     }

@@ -94,13 +94,6 @@ describe('selecting items', () => {
       expect(comboBox.hasAttribute('has-value')).to.be.true;
     });
 
-    it('should clear input element value when selecting an item', async () => {
-      await sendKeys({ down: 'ArrowDown' });
-      await sendKeys({ type: 'apple' });
-      await sendKeys({ down: 'Enter' });
-      expect(inputElement.value).to.equal('');
-    });
-
     it('should keep overlay open when selecting an item', async () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'ArrowDown' });
@@ -120,7 +113,7 @@ describe('selecting items', () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ type: 'banana' });
       await sendKeys({ down: 'Enter' });
-      const item = getAllItems(comboBox)[1];
+      const item = getFirstItem(comboBox);
       expect(item.hasAttribute('focused')).to.be.true;
     });
 
@@ -534,39 +527,9 @@ describe('selecting items', () => {
     });
   });
 
-  describe('keep filter by default', () => {
-    beforeEach(() => {
-      comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
-    });
-
-    it('should keep the filter after selecting an item with keyboard', async () => {
-      await sendKeys({ type: 'an' });
-      expectItems(['banana', 'orange']);
-
-      await sendKeys({ down: 'ArrowDown' });
-      await sendKeys({ down: 'Enter' });
-      expect(comboBox.selectedItems).to.deep.equal(['banana']);
-      expect(comboBox.filter).to.equal('an');
-      expect(inputElement.value).to.equal('an');
-      expectItems(['banana', 'orange']);
-    });
-
-    it('should keep the filter after selecting an item with mouse', async () => {
-      await sendKeys({ type: 'an' });
-      expectItems(['banana', 'orange']);
-
-      getFirstItem(comboBox).click();
-      expect(comboBox.selectedItems).to.deep.equal(['banana']);
-      expect(comboBox.filter).to.equal('an');
-      expect(inputElement.value).to.equal('an');
-      expectItems(['banana', 'orange']);
-    });
-  });
-
   describe('keep filter', () => {
     beforeEach(() => {
       comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
-      comboBox.keepFilter = true;
     });
 
     it('should keep the filter after selecting items', async () => {
@@ -584,6 +547,17 @@ describe('selecting items', () => {
       expectItems(['banana', 'orange']);
       // Filter should never change, otherwise data provider would be called
       expect(filterChangeSpy.notCalled).to.be.true;
+    });
+
+    it('should keep the filter after selecting items with mouse', async () => {
+      await sendKeys({ type: 'an' });
+      expectItems(['banana', 'orange']);
+
+      getFirstItem(comboBox).click();
+      expect(comboBox.selectedItems).to.deep.equal(['banana']);
+      expect(comboBox.filter).to.equal('an');
+      expect(inputElement.value).to.equal('an');
+      expectItems(['banana', 'orange']);
     });
 
     it('should clear the filter when closing the overlay', async () => {
@@ -675,6 +649,31 @@ describe('selecting items', () => {
         await sendKeys({ down: 'Enter' });
         expect(comboBox.filter).to.equal('');
         expect(inputElement.value).to.equal('');
+      });
+    });
+
+    describe('with keepFilter disabled', () => {
+      beforeEach(() => {
+        comboBox.keepFilter = false;
+      });
+
+      it('should clear the filter after selecting items with keyboard', async () => {
+        await sendKeys({ type: 'an' });
+        await sendKeys({ down: 'ArrowDown' });
+        await sendKeys({ down: 'Enter' });
+        expect(comboBox.selectedItems).to.deep.equal(['banana']);
+        expect(comboBox.filter).to.equal('');
+        expect(inputElement.value).to.equal('');
+        expectItems(['apple', 'banana', 'lemon', 'orange']);
+      });
+
+      it('should clear the filter after selecting items with mouse', async () => {
+        await sendKeys({ type: 'an' });
+        getFirstItem(comboBox).click();
+        expect(comboBox.selectedItems).to.deep.equal(['banana']);
+        expect(comboBox.filter).to.equal('');
+        expect(inputElement.value).to.equal('');
+        expectItems(['apple', 'banana', 'lemon', 'orange']);
       });
     });
   });
