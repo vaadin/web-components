@@ -46,15 +46,11 @@ describe('vaadin-chart local exporting', () => {
     expect(events).to.eql(['before', 'after']);
   });
 
-  it('should copy shadow styles to the body during a local export', () => {
-    let styleContent;
-    chart.addEventListener('chart-before-export', () => {
-      styleContent = document.body.contains(chart.tempBodyStyle) && chart.tempBodyStyle.textContent;
-    });
-
+  it('should apply the shadow styles to the exported SVG', () => {
     chart.configuration.exportChartLocal();
 
-    expect(styleContent).to.include('.highcharts-color-0');
+    // Blue comes from the `:host(#chart)` rule in exporting-styles.js
+    expect(downloadStub.firstCall.args[0]).to.include('fill="rgb(0, 0, 255)"');
   });
 
   it('should not leave the temporary style in the document body', () => {
