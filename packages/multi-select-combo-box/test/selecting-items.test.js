@@ -534,6 +534,35 @@ describe('selecting items', () => {
     });
   });
 
+  describe('keep filter by default', () => {
+    beforeEach(() => {
+      comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
+    });
+
+    it('should keep the filter after selecting an item with keyboard', async () => {
+      await sendKeys({ type: 'an' });
+      expectItems(['banana', 'orange']);
+
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
+      expect(comboBox.selectedItems).to.deep.equal(['banana']);
+      expect(comboBox.filter).to.equal('an');
+      expect(inputElement.value).to.equal('an');
+      expectItems(['banana', 'orange']);
+    });
+
+    it('should keep the filter after selecting an item with mouse', async () => {
+      await sendKeys({ type: 'an' });
+      expectItems(['banana', 'orange']);
+
+      getFirstItem(comboBox).click();
+      expect(comboBox.selectedItems).to.deep.equal(['banana']);
+      expect(comboBox.filter).to.equal('an');
+      expect(inputElement.value).to.equal('an');
+      expectItems(['banana', 'orange']);
+    });
+  });
+
   describe('keep filter', () => {
     beforeEach(() => {
       comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
