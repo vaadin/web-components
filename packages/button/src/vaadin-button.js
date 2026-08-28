@@ -83,7 +83,7 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
 
   static get template() {
     return html`
-      <div class="vaadin-button-container">
+      <div class="vaadin-button-container" role="presentation">
         <span part="prefix" aria-hidden="true">
           <slot name="prefix"></slot>
         </span>
