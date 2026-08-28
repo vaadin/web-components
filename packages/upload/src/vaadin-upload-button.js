@@ -139,7 +139,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
   /** @protected */
   render() {
     return html`
-      <div class="vaadin-button-container">
+      <div class="vaadin-button-container" role="presentation">
         <span part="prefix" aria-hidden="true">
           <slot name="prefix"></slot>
         </span>
