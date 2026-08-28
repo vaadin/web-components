@@ -100,14 +100,6 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  *
  * ### Styling
  *
- * The following custom properties are available for styling:
- *
- * Custom property                         | Description                | Default
- * ----------------------------------------|----------------------------|---------
- * `--vaadin-field-default-width`          | Default width of the field | `12em`
- * `--vaadin-combo-box-overlay-width`      | Width of the overlay       | `auto`
- * `--vaadin-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
- *
  * The following shadow DOM parts are available for styling:
  *
  * Part name            | Description
@@ -140,6 +132,48 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  * `readonly`           | Set when the element is readonly
  * `opened`             | Set when the overlay is opened
  * `loading`            | Set when loading items from the data provider
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                                |
+ * :--------------------------------------------------|
+ * | `--vaadin-combo-box-overlay-max-height`          |
+ * | `--vaadin-combo-box-overlay-width`               |
+ * | `--vaadin-field-default-width`                   |
+ * | `--vaadin-input-field-background`                |
+ * | `--vaadin-input-field-border-color`              |
+ * | `--vaadin-input-field-border-radius`             |
+ * | `--vaadin-input-field-border-width`              |
+ * | `--vaadin-input-field-bottom-end-radius`         |
+ * | `--vaadin-input-field-bottom-start-radius`       |
+ * | `--vaadin-input-field-button-text-color`         |
+ * | `--vaadin-input-field-container-gap`             |
+ * | `--vaadin-input-field-disabled-background`       |
+ * | `--vaadin-input-field-disabled-text-color`       |
+ * | `--vaadin-input-field-error-color`               |
+ * | `--vaadin-input-field-error-font-size`           |
+ * | `--vaadin-input-field-error-font-weight`         |
+ * | `--vaadin-input-field-error-line-height`         |
+ * | `--vaadin-input-field-gap`                       |
+ * | `--vaadin-input-field-helper-color`              |
+ * | `--vaadin-input-field-helper-font-size`          |
+ * | `--vaadin-input-field-helper-font-weight`        |
+ * | `--vaadin-input-field-helper-line-height`        |
+ * | `--vaadin-input-field-label-color`               |
+ * | `--vaadin-input-field-label-font-size`           |
+ * | `--vaadin-input-field-label-font-weight`         |
+ * | `--vaadin-input-field-label-line-height`         |
+ * | `--vaadin-input-field-padding`                   |
+ * | `--vaadin-input-field-placeholder-color`         |
+ * | `--vaadin-input-field-required-indicator`        |
+ * | `--vaadin-input-field-required-indicator-color`  |
+ * | `--vaadin-input-field-top-end-radius`            |
+ * | `--vaadin-input-field-top-start-radius`          |
+ * | `--vaadin-input-field-value-color`               |
+ * | `--vaadin-input-field-value-font-size`           |
+ * | `--vaadin-input-field-value-font-weight`         |
+ * | `--vaadin-input-field-value-line-height`         |
+ * | `--vaadin-item-overlay-padding`                  |
  *
  * ### Internal components
  *
