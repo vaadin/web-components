@@ -36,7 +36,6 @@ export { AvatarI18n } from './vaadin-avatar-mixin.js';
  * | `--vaadin-avatar-font-weight`    |
  * | `--vaadin-avatar-size`           |
  * | `--vaadin-avatar-text-color`     |
- * | `--vaadin-avatar-user-color`     |
  *
  * The following state attributes are available for styling:
  *
