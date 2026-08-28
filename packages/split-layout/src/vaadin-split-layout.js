@@ -150,6 +150,7 @@ import { SplitLayoutMixin } from './vaadin-split-layout-mixin.js';
  *
  * Custom CSS property                            |
  * :----------------------------------------------|
+ * | `--vaadin-split-layout-handle-background`    |
  * | `--vaadin-split-layout-handle-size`          |
  * | `--vaadin-split-layout-handle-target-size`   |
  * | `--vaadin-split-layout-splitter-background`  |

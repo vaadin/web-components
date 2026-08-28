@@ -48,6 +48,7 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  * | `--vaadin-button-border-color`   |
  * | `--vaadin-button-border-radius`  |
  * | `--vaadin-button-border-width`   |
+ * | `--vaadin-button-font-family`    |
  * | `--vaadin-button-font-size`      |
  * | `--vaadin-button-font-weight`    |
  * | `--vaadin-button-gap`            |

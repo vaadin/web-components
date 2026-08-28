@@ -151,6 +151,7 @@ export interface SplitLayoutEventMap extends HTMLElementEventMap, SplitLayoutCus
  *
  * Custom CSS property                            |
  * :----------------------------------------------|
+ * | `--vaadin-split-layout-handle-background`    |
  * | `--vaadin-split-layout-handle-size`          |
  * | `--vaadin-split-layout-handle-target-size`   |
  * | `--vaadin-split-layout-splitter-background`  |
