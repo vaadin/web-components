@@ -36,12 +36,6 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  *
  * ### Styling
  *
- * The following custom properties are available for styling:
- *
- * Custom property                | Description                | Default
- * -------------------------------|----------------------------|---------
- * `--vaadin-field-default-width` | Default width of the field | `12em`
- *
  * The following shadow DOM parts are available for styling:
  *
  * Part name            | Description
@@ -74,6 +68,69 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * `readonly`           | Set when the element is readonly
  * `opened`             | Set when the overlay is opened
  * `week-numbers`       | Set when week numbers are shown in the calendar
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                                        |
+ * :----------------------------------------------------------|
+ * | `--vaadin-date-picker-date-border-radius`                |
+ * | `--vaadin-date-picker-date-disabled-color`               |
+ * | `--vaadin-date-picker-date-height`                       |
+ * | `--vaadin-date-picker-date-selected-background`          |
+ * | `--vaadin-date-picker-date-selected-color`               |
+ * | `--vaadin-date-picker-date-today-color`                  |
+ * | `--vaadin-date-picker-date-width`                        |
+ * | `--vaadin-date-picker-month-header-color`                |
+ * | `--vaadin-date-picker-month-header-font-size`            |
+ * | `--vaadin-date-picker-month-header-font-weight`          |
+ * | `--vaadin-date-picker-month-padding`                     |
+ * | `--vaadin-date-picker-overlay-max-height`                |
+ * | `--vaadin-date-picker-overlay-width`                     |
+ * | `--vaadin-date-picker-toolbar-padding`                   |
+ * | `--vaadin-date-picker-week-divider-color`                |
+ * | `--vaadin-date-picker-week-number-color`                 |
+ * | `--vaadin-date-picker-week-number-font-size`             |
+ * | `--vaadin-date-picker-weekday-color`                     |
+ * | `--vaadin-date-picker-weekday-font-size`                 |
+ * | `--vaadin-date-picker-weekday-font-weight`               |
+ * | `--vaadin-date-picker-year-scroller-background`          |
+ * | `--vaadin-date-picker-year-scroller-border-color`        |
+ * | `--vaadin-date-picker-year-scroller-current-year-color`  |
+ * | `--vaadin-date-picker-year-scroller-width`               |
+ * | `--vaadin-field-default-width`                           |
+ * | `--vaadin-input-field-background`                        |
+ * | `--vaadin-input-field-border-color`                      |
+ * | `--vaadin-input-field-border-radius`                     |
+ * | `--vaadin-input-field-border-width`                      |
+ * | `--vaadin-input-field-bottom-end-radius`                 |
+ * | `--vaadin-input-field-bottom-start-radius`               |
+ * | `--vaadin-input-field-button-text-color`                 |
+ * | `--vaadin-input-field-container-gap`                     |
+ * | `--vaadin-input-field-disabled-background`               |
+ * | `--vaadin-input-field-disabled-text-color`               |
+ * | `--vaadin-input-field-error-color`                       |
+ * | `--vaadin-input-field-error-font-size`                   |
+ * | `--vaadin-input-field-error-font-weight`                 |
+ * | `--vaadin-input-field-error-line-height`                 |
+ * | `--vaadin-input-field-gap`                               |
+ * | `--vaadin-input-field-helper-color`                      |
+ * | `--vaadin-input-field-helper-font-size`                  |
+ * | `--vaadin-input-field-helper-font-weight`                |
+ * | `--vaadin-input-field-helper-line-height`                |
+ * | `--vaadin-input-field-label-color`                       |
+ * | `--vaadin-input-field-label-font-size`                   |
+ * | `--vaadin-input-field-label-font-weight`                 |
+ * | `--vaadin-input-field-label-line-height`                 |
+ * | `--vaadin-input-field-padding`                           |
+ * | `--vaadin-input-field-placeholder-color`                 |
+ * | `--vaadin-input-field-required-indicator`                |
+ * | `--vaadin-input-field-required-indicator-color`          |
+ * | `--vaadin-input-field-top-end-radius`                    |
+ * | `--vaadin-input-field-top-start-radius`                  |
+ * | `--vaadin-input-field-value-color`                       |
+ * | `--vaadin-input-field-value-font-size`                   |
+ * | `--vaadin-input-field-value-font-weight`                 |
+ * | `--vaadin-input-field-value-line-height`                 |
  *
  * ### Internal components
  *
