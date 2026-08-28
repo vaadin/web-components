@@ -96,10 +96,6 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout {
-    /* By default, labels should be displayed above the fields */
-    --_form-item-labels-above: initial; /* true */
-    --_form-item-labels-aside: ' '; /* false */
-
     /* CSS grid related properties */
     --_grid-column-width: var(--_column-width-labels-above);
     --_grid-repeat: var(--_grid-column-width);
@@ -140,10 +136,6 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
-    /* Make form items inherit label position from the layout */
-    --_form-item-labels-above: inherit;
-    --_form-item-labels-aside: inherit;
-
     /* By default, place each child on a new row */
     grid-column: 1 / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
 
@@ -160,8 +152,6 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
-    --_form-item-labels-above: ' '; /* false */
-    --_form-item-labels-aside: initial; /* true */
     --_grid-column-width: var(--_column-width-labels-aside);
   }
 
@@ -198,7 +188,8 @@ export const formLayoutSlotStyles = css`
   :where(
     vaadin-form-layout[auto-responsive][expand-fields] > *,
     vaadin-form-layout[auto-responsive][expand-fields] vaadin-form-row > *,
-    vaadin-form-layout[auto-responsive][expand-fields] vaadin-form-item > *
+    vaadin-form-layout[auto-responsive][expand-fields] vaadin-form-item > *,
+    vaadin-form-layout[auto-responsive] vaadin-form-item:has(> .full-width)
   ) {
     min-width: 100%;
   }

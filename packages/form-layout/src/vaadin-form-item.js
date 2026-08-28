@@ -110,10 +110,7 @@ class FormItem extends FormItemMixin(ThemableMixin(PolylitMixin(LumoInjectionMix
         <slot name="label" id="labelSlot" @slotchange="${this.__onLabelSlotChange}"></slot>
         <span part="required-indicator" aria-hidden="true"></span>
       </div>
-      <div id="spacing"></div>
-      <div id="content">
-        <slot id="contentSlot" @slotchange="${this.__onContentSlotChange}"></slot>
-      </div>
+      <slot id="contentSlot" @slotchange="${this.__onContentSlotChange}"></slot>
     `;
   }
 }

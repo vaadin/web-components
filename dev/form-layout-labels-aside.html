@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Layout: labels aside prototype</title>
+    <script type="module" src="./common.js"></script>
+
+    <style>
+      h2 {
+        margin-top: 2em;
+        margin-bottom: 0.5em;
+
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+
+      .frame {
+        border: 1px dashed gray;
+        padding: 1em;
+        resize: horizontal;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>labelsAside + expandColumns: rich form</h2>
+    <div class="frame">
+      <vaadin-form-layout auto-responsive auto-rows max-columns="2" labels-aside expand-columns>
+        <vaadin-form-item>
+          <vaadin-text-field label="First name" helper-text="As shown in your passport"></vaadin-text-field>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <vaadin-text-field label="Last name" helper-text="As shown in your passport"></vaadin-text-field>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <vaadin-text-field
+            label="Email"
+            required
+            invalid
+            error-message="Email is required"
+            helper-text="We never share your email"
+          ></vaadin-text-field>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <vaadin-password-field
+            label="Password"
+            theme="helper-above-field"
+            helper-text="At least 8 characters"
+          ></vaadin-password-field>
+        </vaadin-form-item>
+        <vaadin-form-item colspan="2">
+          <vaadin-text-area
+            label="Shipping address"
+            required
+            invalid
+            error-message="Address is required"
+            helper-text="Street, building, apartment"
+          ></vaadin-text-area>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <vaadin-checkbox-group label="Notifications" helper-text="Choose at least one channel">
+            <vaadin-checkbox label="Email"></vaadin-checkbox>
+            <vaadin-checkbox label="SMS"></vaadin-checkbox>
+          </vaadin-checkbox-group>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <vaadin-checkbox label="Accept terms" helper-text="See the terms and conditions"></vaadin-checkbox>
+        </vaadin-form-item>
+      </vaadin-form-layout>
+    </div>
+
+    <h2>labelsAside + expandColumns + expandFields: rich form</h2>
+    <div class="frame">
+      <vaadin-form-layout auto-responsive auto-rows max-columns="2" labels-aside expand-columns expand-fields>
+        <vaadin-form-item>
+          <vaadin-text-field label="First name" helper-text="As shown in your passport"></vaadin-text-field>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <vaadin-text-field label="Last name" helper-text="As shown in your passport"></vaadin-text-field>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <vaadin-text-field
+            label="Email"
+            required
+            invalid
+            error-message="Email is required"
+            helper-text="We never share your email"
+          ></vaadin-text-field>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <vaadin-password-field
+            label="Password"
+            theme="helper-above-field"
+            helper-text="At least 8 characters"
+          ></vaadin-password-field>
+        </vaadin-form-item>
+        <vaadin-form-item colspan="2">
+          <vaadin-text-area
+            label="Shipping address"
+            required
+            invalid
+            error-message="Address is required"
+            helper-text="Street, building, apartment"
+          ></vaadin-text-area>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <vaadin-checkbox-group label="Notifications" helper-text="Choose at least one channel">
+            <vaadin-checkbox label="Email"></vaadin-checkbox>
+            <vaadin-checkbox label="SMS"></vaadin-checkbox>
+          </vaadin-checkbox-group>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <vaadin-checkbox label="Accept terms" helper-text="See the terms and conditions"></vaadin-checkbox>
+        </vaadin-form-item>
+      </vaadin-form-layout>
+    </div>
+
+    <script type="module">
+      import '@vaadin/checkbox';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/form-layout';
+      import '@vaadin/form-layout/vaadin-form-item.js';
+      import '@vaadin/password-field';
+      import '@vaadin/text-area';
+      import '@vaadin/text-field';
+    </script>
+  </body>
+</html>

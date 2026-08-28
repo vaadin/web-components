@@ -4,11 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
+import { SlotStylesMixin } from '@vaadin/component-base/src/slot-styles-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
+import { formItemSlotStyles } from './styles/vaadin-form-item-base-styles.js';
 
 export const FormItemMixin = (superClass) =>
-  class extends superClass {
+  class extends SlotStylesMixin(superClass) {
     constructor() {
       super();
 
@@ -41,6 +43,11 @@ export const FormItemMixin = (superClass) =>
       this.__fieldNode = null;
 
       this.__isFieldDirty = false;
+    }
+
+    /** @protected */
+    get slotStyles() {
+      return [`${formItemSlotStyles}`.replaceAll('vaadin-form-item', this.localName)];
     }
 
     /** @protected */
