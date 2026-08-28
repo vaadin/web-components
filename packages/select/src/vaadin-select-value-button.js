@@ -27,7 +27,7 @@ class SelectValueButton extends ButtonMixin(ThemableMixin(PolymerElement)) {
 
   static get template() {
     return html`
-      <div class="vaadin-button-container">
+      <div class="vaadin-button-container" role="presentation">
         <span part="label">
           <slot></slot>
         </span>
