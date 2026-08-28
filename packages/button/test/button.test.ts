@@ -142,6 +142,12 @@ describe('vaadin-button', () => {
       expect(document.activeElement).to.equal(lastGlobalFocusable);
     });
 
+    it('should allow programmatic focus after being enabled', () => {
+      button.disabled = false;
+      button.focus();
+      expect(document.activeElement).to.equal(button);
+    });
+
     it('should prevent pointer focus when disabled', async () => {
       await sendMouseToElement({ type: 'click', element: button });
       expect(document.activeElement).to.equal(document.body);

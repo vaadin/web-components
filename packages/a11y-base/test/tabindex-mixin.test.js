@@ -65,6 +65,22 @@ describe('TabindexMixin', () => {
       expect(element.getAttribute('tabindex')).to.be.equal('2');
     });
 
+    it('should restore tabindex when disabled attribute precedes tabindex in markup', () => {
+      element = fixtureSync(`<${tag} disabled tabindex="1"></${tag}>`);
+      expect(element.getAttribute('tabindex')).to.be.equal('-1');
+
+      element.disabled = false;
+      expect(element.getAttribute('tabindex')).to.be.equal('1');
+    });
+
+    it('should restore tabindex when tabindex attribute precedes disabled in markup', () => {
+      element = fixtureSync(`<${tag} tabindex="1" disabled></${tag}>`);
+      expect(element.getAttribute('tabindex')).to.be.equal('-1');
+
+      element.disabled = false;
+      expect(element.getAttribute('tabindex')).to.be.equal('1');
+    });
+
     it('should allow programmatic focus when enabled', () => {
       element.tabIndex = 0;
       element.focus();
