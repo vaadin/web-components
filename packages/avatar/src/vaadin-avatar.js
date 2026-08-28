@@ -33,15 +33,16 @@ import { AvatarMixin } from './vaadin-avatar-mixin.js';
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property            | Description
- * -------------------------------|-------------
- * `--vaadin-avatar-background`   | Background color of the avatar
- * `--vaadin-avatar-border-color` | Border color of the avatar
- * `--vaadin-avatar-border-width` | Border width of the avatar
- * `--vaadin-avatar-font-size`    | Font size of the avatar
- * `--vaadin-avatar-font-weight`  | Font weight of the avatar
- * `--vaadin-avatar-size`         | Size of the avatar
- * `--vaadin-avatar-text-color`   | Text color of the avatar
+ * Custom CSS property                |
+ * :----------------------------------|
+ * | `--vaadin-avatar-background`     |
+ * | `--vaadin-avatar-border-color`   |
+ * | `--vaadin-avatar-border-width`   |
+ * | `--vaadin-avatar-font-size`      |
+ * | `--vaadin-avatar-font-weight`    |
+ * | `--vaadin-avatar-size`           |
+ * | `--vaadin-avatar-text-color`     |
+ * | `--vaadin-avatar-user-color`     |
  *
  * The following state attributes are available for styling:
  *

@@ -46,6 +46,12 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  * `disabled`          | Set when the menu bar is disabled
  * `has-single-button` | Set when there is only one button visible
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property         |
+ * :---------------------------|
+ * | `--vaadin-menu-bar-gap`   |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * ### Internal components
