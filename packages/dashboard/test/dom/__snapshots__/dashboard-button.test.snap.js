@@ -11,7 +11,10 @@ snapshots["vaadin-dashboard-button host"] =
 /* end snapshot vaadin-dashboard-button host */
 
 snapshots["vaadin-dashboard-button shadow"] = 
-`<div class="vaadin-button-container">
+`<div
+  class="vaadin-button-container"
+  role="presentation"
+>
   <span
     aria-hidden="true"
     part="prefix"
