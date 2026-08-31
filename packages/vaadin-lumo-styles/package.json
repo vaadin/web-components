@@ -47,9 +47,9 @@
     "@vaadin/vaadin-themable-mixin": "26.0.0-alpha0"
   },
   "devDependencies": {
-    "cssnano": "^7.1.1",
-    "postcss": "^8.5.15",
+    "cssnano": "^9.0.1",
+    "postcss": "^8.5.26",
     "postcss-cli": "^11.0.1",
-    "postcss-import": "^16.1.1"
+    "postcss-import": "^17.0.0"
   }
 }
