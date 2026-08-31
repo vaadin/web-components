@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "cssnano": "^9.0.1",
-    "postcss": "^8.5.15",
+    "postcss": "^8.5.26",
     "postcss-cli": "^11.0.1",
     "postcss-import": "^17.0.0"
   }
