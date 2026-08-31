@@ -153,7 +153,7 @@
       >
         <vaadin-chart-series
           title="Progress"
-          values='[{ "y": 80, "colorIndex": 4 }]'
+          values='[{"y": 80}, { "y": 20, "colorIndex": 4 }]'
           additional-options='{
             "dataLabels": {
               "format": "<span style=\"font-size:25px;\">{y}</span><span style=\"font-size:12px;color:silver;\"> %</span>"
@@ -162,5 +162,125 @@
         ></vaadin-chart-series>
       </vaadin-chart>
     </div>
+
+    <h3>Point <code>colorIndex</code> in styled mode (highcharts/highcharts#23279)</h3>
+    <p>
+      Composed gauge from the upstream report: a <code>solidgauge</code> arc series plus a <code>gauge</code> pointer
+      series, with <code>plotLines</code> and a <code>plotBand</code> on the same <code>yAxis</code>. No
+      <code>stops</code>, <code>minColor</code> or <code>maxColor</code> are set anywhere.
+    </p>
+    <ul>
+      <li>
+        <b>Arc 1</b> — point <code>colorIndex: 0</code>, same as the series. This is the case in the upstream report;
+        the CSS workarounds suggested there cover it.
+      </li>
+      <li>
+        <b>Arc 2</b> — point <code>colorIndex: 3</code>, different from the series <code>colorIndex: 0</code>. No CSS
+        workaround can cover this one, because the point path has no color class left to select. The arc must be a
+        different color than in Arc 1.
+      </li>
+      <li>
+        <b>Arc 3</b> — same as Arc 2 but with <code>yAxis.stops</code>. Here the color axis paints the point, so the arc
+        follows the gradient and <code>colorIndex</code> is ignored by design.
+      </li>
+    </ul>
+
+    <div id="repro-23279" style="display: flex; flex-direction: row"></div>
+
+    <script type="module">
+      // Mirrors the chart options from https://github.com/highcharts/highcharts/issues/23279
+      const chartOptions = {
+        pane: {
+          center: ['50%', '85%'],
+          startAngle: -90,
+          endAngle: 90,
+          background: {
+            borderRadius: 5,
+            innerRadius: '60%',
+            outerRadius: '100%',
+            shape: 'arc',
+          },
+        },
+        yAxis: {
+          min: 1,
+          max: 5,
+          startOnTick: false,
+          endOnTick: false,
+          tickPositions: [1, 5],
+          minorTickInterval: null,
+          tickAmount: 1,
+          lineWidth: 0,
+          tickWidth: 0,
+          labels: { y: 16 },
+          plotLines: [{ className: 'goal-line', value: 3, zIndex: 15 }],
+          plotBands: [{ className: 'positive', from: 3.7, to: 4.2, thickness: '40%', zIndex: 10 }],
+        },
+      };
+
+      const arcOptions = {
+        colorIndex: 0,
+        dataLabels: { allowOverlap: true, y: 0 },
+      };
+
+      const pointerOptions = {
+        className: 'positive',
+        dataLabels: { enabled: false },
+        dial: {
+          path: [
+            ['M', 50, -1],
+            ['l', 200, 0],
+            ['l', -5, -3],
+            ['l', 20, 4],
+            ['l', -20, 4],
+            ['l', 5, -3],
+            ['l', -200, 0],
+            ['Z'],
+          ],
+          radius: '105%',
+          baseWidth: 5,
+          baseLength: '0%',
+          rearLength: '0%',
+        },
+        pivot: { radius: 0 },
+      };
+
+      const cases = [
+        { title: 'Arc 1: point colorIndex 0 = series colorIndex 0', pointColorIndex: 0 },
+        { title: 'Arc 2: point colorIndex 3 ≠ series colorIndex 0', pointColorIndex: 3 },
+        {
+          title: 'Arc 3: point colorIndex 3, with yAxis.stops',
+          pointColorIndex: 3,
+          stops: [
+            [0, '#55bf3b'],
+            [0.5, '#dddf0d'],
+            [0.9, '#df5353'],
+          ],
+        },
+      ];
+
+      const container = document.querySelector('#repro-23279');
+
+      cases.forEach(({ title, pointColorIndex, stops }) => {
+        const chart = document.createElement('vaadin-chart');
+        chart.title = title;
+        chart.type = 'solidgauge';
+        chart.tooltip = true;
+        chart.additionalOptions = stops ? { ...chartOptions, yAxis: { ...chartOptions.yAxis, stops } } : chartOptions;
+
+        const arc = document.createElement('vaadin-chart-series');
+        arc.title = 'Arc';
+        arc.values = [{ y: 4.2, colorIndex: pointColorIndex }];
+        arc.additionalOptions = arcOptions;
+
+        const pointer = document.createElement('vaadin-chart-series');
+        pointer.title = 'Pointer';
+        pointer.type = 'gauge';
+        pointer.values = [4.2];
+        pointer.additionalOptions = pointerOptions;
+
+        chart.append(arc, pointer);
+        container.append(chart);
+      });
+    </script>
   </body>
 </html>
