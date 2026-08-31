@@ -179,6 +179,22 @@ export const checkable = (part, propName = part) => css`
     }
   }
 
+  /*
+   * PROTOTYPE: A checkbox or radio button placed directly into a form layout
+   * with labels aside keeps its label next to the control. The whole component
+   * is indented into the input column instead. The two-column field template
+   * from field-base-styles.js does not apply because the rules here come later
+   * in the cascade and restore the checkable layout.
+   */
+  @container style(--_form-layout-labels-aside: true) {
+    :host {
+      /* Padding instead of margin: the form layout resets margins on slotted children */
+      padding-inline-start: calc(
+        var(--vaadin-form-layout-label-width, 8em) + var(--vaadin-form-layout-label-spacing, 1em)
+      );
+    }
+  }
+
   @media (forced-colors: active) {
     :host(:is([checked], [indeterminate])) {
       --vaadin-${unsafeCSS(propName)}-border-color: CanvasText !important;

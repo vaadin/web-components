@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Layout: labels aside with direct field children</title>
+    <script type="module" src="./common.js"></script>
+
+    <style>
+      h2 {
+        margin-top: 2em;
+        margin-bottom: 0.5em;
+
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+
+      .frame {
+        border: 1px dashed gray;
+        padding: 1em;
+        resize: horizontal;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>Direct field children: labelsAside + expandColumns</h2>
+    <div class="frame">
+      <vaadin-form-layout auto-responsive auto-rows max-columns="2" labels-aside expand-columns>
+        <vaadin-text-field label="First name" helper-text="As shown in your passport"></vaadin-text-field>
+        <vaadin-text-field label="Last name" helper-text="As shown in your passport"></vaadin-text-field>
+        <vaadin-email-field
+          label="Email"
+          required
+          invalid
+          error-message="Email is required"
+          helper-text="We never share your email"
+        ></vaadin-email-field>
+        <vaadin-password-field
+          label="Password"
+          theme="helper-above-field"
+          helper-text="At least 8 characters"
+        ></vaadin-password-field>
+        <vaadin-number-field label="Weight" helper-text="In kilograms"></vaadin-number-field>
+        <vaadin-integer-field label="Age" step-buttons-visible></vaadin-integer-field>
+        <vaadin-text-area
+          label="Shipping address"
+          style="width: 100%"
+          colspan="2"
+          required
+          invalid
+          error-message="Address is required"
+          helper-text="Street, building, apartment"
+        ></vaadin-text-area>
+        <vaadin-select label="Country" helper-text="Where you live"></vaadin-select>
+        <vaadin-combo-box label="City"></vaadin-combo-box>
+        <vaadin-multi-select-combo-box label="Skills" helper-text="Pick a few"></vaadin-multi-select-combo-box>
+        <vaadin-date-picker label="Birth date"></vaadin-date-picker>
+        <vaadin-time-picker label="Preferred time"></vaadin-time-picker>
+        <vaadin-date-time-picker label="Appointment"></vaadin-date-time-picker>
+        <vaadin-custom-field label="Enrollment period" helper-text="First and last day">
+          <vaadin-text-field placeholder="From"></vaadin-text-field>
+          <vaadin-text-field placeholder="To"></vaadin-text-field>
+        </vaadin-custom-field>
+        <vaadin-slider label="Volume"></vaadin-slider>
+        <vaadin-radio-group label="Language" helper-text="Preferred language">
+          <vaadin-radio-button label="English" value="en"></vaadin-radio-button>
+          <vaadin-radio-button label="Finnish" value="fi"></vaadin-radio-button>
+        </vaadin-radio-group>
+        <vaadin-checkbox-group label="Notifications" helper-text="Choose at least one channel">
+          <vaadin-checkbox label="Email" value="email"></vaadin-checkbox>
+          <vaadin-checkbox label="SMS" value="sms"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+        <vaadin-switch label="Enable notifications"></vaadin-switch>
+        <vaadin-checkbox label="Accept terms" helper-text="See the terms and conditions"></vaadin-checkbox>
+        <vaadin-form-item>
+          <vaadin-button>Submit</vaadin-button>
+        </vaadin-form-item>
+      </vaadin-form-layout>
+    </div>
+
+    <h2>Direct field children: labelsAside + expandColumns + expandFields</h2>
+    <div class="frame">
+      <vaadin-form-layout auto-responsive auto-rows max-columns="2" labels-aside expand-columns expand-fields>
+        <vaadin-text-field label="First name" helper-text="As shown in your passport"></vaadin-text-field>
+        <vaadin-text-field label="Last name" helper-text="As shown in your passport"></vaadin-text-field>
+        <vaadin-email-field
+          label="Email"
+          required
+          invalid
+          error-message="Email is required"
+          helper-text="We never share your email"
+        ></vaadin-email-field>
+        <vaadin-password-field
+          label="Password"
+          theme="helper-above-field"
+          helper-text="At least 8 characters"
+        ></vaadin-password-field>
+        <vaadin-number-field label="Weight" helper-text="In kilograms"></vaadin-number-field>
+        <vaadin-integer-field label="Age" step-buttons-visible></vaadin-integer-field>
+        <vaadin-text-area
+          label="Shipping address"
+          colspan="2"
+          required
+          invalid
+          error-message="Address is required"
+          helper-text="Street, building, apartment"
+        ></vaadin-text-area>
+        <vaadin-select label="Country" helper-text="Where you live"></vaadin-select>
+        <vaadin-combo-box label="City"></vaadin-combo-box>
+        <vaadin-multi-select-combo-box label="Skills" helper-text="Pick a few"></vaadin-multi-select-combo-box>
+        <vaadin-date-picker label="Birth date"></vaadin-date-picker>
+        <vaadin-time-picker label="Preferred time"></vaadin-time-picker>
+        <vaadin-date-time-picker label="Appointment"></vaadin-date-time-picker>
+        <vaadin-custom-field label="Enrollment period" helper-text="First and last day">
+          <vaadin-text-field placeholder="From"></vaadin-text-field>
+          <vaadin-text-field placeholder="To"></vaadin-text-field>
+        </vaadin-custom-field>
+        <vaadin-slider label="Volume"></vaadin-slider>
+        <vaadin-radio-group label="Language" helper-text="Preferred language">
+          <vaadin-radio-button label="English" value="en"></vaadin-radio-button>
+          <vaadin-radio-button label="Finnish" value="fi"></vaadin-radio-button>
+        </vaadin-radio-group>
+        <vaadin-checkbox-group label="Notifications" helper-text="Choose at least one channel">
+          <vaadin-checkbox label="Email" value="email"></vaadin-checkbox>
+          <vaadin-checkbox label="SMS" value="sms"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+        <vaadin-switch label="Enable notifications"></vaadin-switch>
+        <vaadin-checkbox label="Accept terms" helper-text="See the terms and conditions"></vaadin-checkbox>
+        <vaadin-form-item>
+          <vaadin-button>Submit</vaadin-button>
+        </vaadin-form-item>
+      </vaadin-form-layout>
+    </div>
+
+    <h2>Comparison: same form with form items (item labels + labelless fields)</h2>
+    <div class="frame">
+      <vaadin-form-layout auto-responsive auto-rows max-columns="2" labels-aside expand-columns>
+        <vaadin-form-item>
+          <label slot="label">First name</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <label slot="label">Last name</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <label slot="label">Email</label>
+          <vaadin-text-field required invalid error-message="Email is required"></vaadin-text-field>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <label slot="label">Password</label>
+          <vaadin-password-field></vaadin-password-field>
+        </vaadin-form-item>
+        <vaadin-form-item colspan="2">
+          <label slot="label">Shipping address</label>
+          <vaadin-text-area required invalid error-message="Address is required"></vaadin-text-area>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <label slot="label">Notifications</label>
+          <vaadin-checkbox-group>
+            <vaadin-checkbox label="Email" value="email"></vaadin-checkbox>
+            <vaadin-checkbox label="SMS" value="sms"></vaadin-checkbox>
+          </vaadin-checkbox-group>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <vaadin-checkbox label="Accept terms"></vaadin-checkbox>
+        </vaadin-form-item>
+        <vaadin-form-item>
+          <vaadin-button>Submit</vaadin-button>
+        </vaadin-form-item>
+      </vaadin-form-layout>
+    </div>
+
+    <h2>Standalone fields (outside a form layout, must be unaffected)</h2>
+    <div class="frame">
+      <vaadin-text-field label="First name" helper-text="As shown in your passport"></vaadin-text-field>
+      <vaadin-checkbox label="Accept terms"></vaadin-checkbox>
+    </div>
+
+    <script type="module">
+      // Enable feature flag for the experimental vaadin-switch component
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.switchComponent = true;
+
+      import '@vaadin/button';
+      import '@vaadin/checkbox';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/combo-box';
+      import '@vaadin/custom-field';
+      import '@vaadin/date-picker';
+      import '@vaadin/date-time-picker';
+      import '@vaadin/email-field';
+      import '@vaadin/form-layout';
+      import '@vaadin/form-layout/vaadin-form-item.js';
+      import '@vaadin/integer-field';
+      import '@vaadin/multi-select-combo-box';
+      import '@vaadin/number-field';
+      import '@vaadin/password-field';
+      import '@vaadin/radio-group';
+      import '@vaadin/select';
+      import '@vaadin/slider';
+      import '@vaadin/switch';
+      import '@vaadin/text-area';
+      import '@vaadin/text-field';
+      import '@vaadin/time-picker';
+
+      document.querySelectorAll('vaadin-select').forEach((select) => {
+        select.items = [
+          { label: 'Finland', value: 'fi' },
+          { label: 'Germany', value: 'de' },
+        ];
+      });
+
+      document.querySelectorAll('vaadin-combo-box').forEach((comboBox) => {
+        comboBox.items = ['Helsinki', 'Turku', 'Tampere'];
+      });
+
+      document.querySelectorAll('vaadin-multi-select-combo-box').forEach((comboBox) => {
+        comboBox.items = ['CSS', 'HTML', 'JavaScript'];
+        comboBox.selectedItems = ['CSS', 'HTML'];
+      });
+    </script>
+  </body>
+</html>
