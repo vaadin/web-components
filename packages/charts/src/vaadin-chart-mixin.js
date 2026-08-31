@@ -99,6 +99,33 @@ KeyboardNavigation.prototype.onMouseUp = function (e) {
   }
 };
 
+// In styled mode Highcharts removes the `highcharts-color-{n}` classes from solid gauge points
+// whenever `yAxis.stops` is set, so that the gradient color it writes as a `fill` attribute is not
+// overridden by CSS. But `stops` is always initialized: it falls back to
+// `[[0, minColor], [1, maxColor]]`, and those are undefined in styled mode. The classes are then
+// removed even though no color is painted, and the points become invisible.
+// Re-apply the class list when the stops carry no usable color. Using `getClassName()` with
+// `replace` keeps point-level `colorIndex` working, also after `update()` and `setData()`.
+// Workaround for https://github.com/highcharts/highcharts/issues/23279
+//
+// TODO: Remove this monkeypatch once the referenced issue is fixed
+/* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
+Highcharts.wrap(Highcharts.seriesTypes.solidgauge.prototype, 'drawPoints', function (proceed, ...args) {
+  proceed.apply(this, args);
+
+  const stops = this.yAxis?.stops;
+  if (!this.chart.styledMode || (stops && stops.every((stop) => stop.color?.get('rgb') !== ''))) {
+    return;
+  }
+
+  this.points.forEach((point) => {
+    if (point.graphic) {
+      point.graphic.addClass(point.getClassName(), true);
+    }
+  });
+});
+/* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
+
 // Init Highcharts global language defaults
 // No data message should be empty by default
 Highcharts.setOptions({ lang: { noData: '' } });

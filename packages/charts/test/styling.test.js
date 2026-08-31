@@ -82,4 +82,59 @@ describe('vaadin-chart styling', () => {
       expect(getComputedStyle(rects[0]).fill).to.equal('rgb(0, 255, 0)');
     });
   });
+
+  describe('solid gauge', () => {
+    let chart;
+
+    function points() {
+      return [...chart.$.chart.querySelectorAll('.highcharts-solidgauge-series .highcharts-point')];
+    }
+
+    async function createChart(yAxis) {
+      chart = fixtureSync('<vaadin-chart type="solidgauge"></vaadin-chart>');
+      chart.additionalOptions = { yAxis: { min: 0, max: 100, ...yAxis } };
+      await oneEvent(chart, 'chart-load');
+      chart.configuration.addSeries({
+        data: [
+          { y: 20, colorIndex: 1 },
+          { y: 50, colorIndex: 3 },
+        ],
+      });
+    }
+
+    it('should keep color classes on points when no stops are defined', async () => {
+      await createChart();
+      expect(points().map((point) => point.getAttribute('class'))).to.eql([
+        'highcharts-point highcharts-color-1',
+        'highcharts-point highcharts-color-3',
+      ]);
+    });
+
+    it('should update color classes on points when colorIndex changes', async () => {
+      await createChart();
+      chart.configuration.series[0].points[0].update({ colorIndex: 5 });
+      expect(points()[0].getAttribute('class')).to.equal('highcharts-point highcharts-color-5');
+    });
+
+    it('should remove color classes from points when stops are defined', async () => {
+      await createChart({
+        stops: [
+          [0, '#ff0000'],
+          [1, '#0000ff'],
+        ],
+      });
+      points().forEach((point) => {
+        expect(point.getAttribute('class')).to.equal('highcharts-point');
+        expect(point.getAttribute('fill')).to.not.equal('none');
+      });
+    });
+
+    it('should remove color classes from points when minColor and maxColor are defined', async () => {
+      await createChart({ minColor: '#ff0000', maxColor: '#0000ff' });
+      points().forEach((point) => {
+        expect(point.getAttribute('class')).to.equal('highcharts-point');
+        expect(point.getAttribute('fill')).to.not.equal('none');
+      });
+    });
+  });
 });
