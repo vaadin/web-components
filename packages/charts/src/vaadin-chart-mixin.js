@@ -40,7 +40,7 @@ import { cleanupExport, inflateFunctions, prepareExport } from './helpers.js';
 // Highcharts moves a copy of the chart into the document body when exporting, losing the styles
 // defined in the shadow root. The `beforeExport` and `afterExport` events copy them over for the
 // duration of the export. Wrapping `getSVG` covers every export path, as both `exportChart` and
-// `exportChartLocal` call it through `getSVGForExport` (#11911).
+// `exportChartLocal` call it through `getSVGForExport`.
 // Workaround for https://github.com/vaadin/vaadin-charts/issues/389
 /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
 Highcharts.wrap(Highcharts.Chart.prototype, 'getSVG', function (proceed, ...args) {

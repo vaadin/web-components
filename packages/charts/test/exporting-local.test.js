@@ -3,10 +3,10 @@ import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './exporting-styles.js';
 import '../src/vaadin-chart.js';
-// Loaded after Vaadin Charts, like an app adding the optional module itself (#11911)
+// Loaded after Vaadin Charts, like an app adding the optional module itself, see
+// https://github.com/vaadin/web-components/issues/11911
 import 'highcharts/es-modules/masters/modules/offline-exporting.src.js';
 import OfflineExporting from 'highcharts/es-modules/Extensions/OfflineExporting/OfflineExporting.js';
-import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 
 describe('vaadin-chart local exporting', () => {
   let chart, downloadStub;
@@ -27,13 +27,10 @@ describe('vaadin-chart local exporting', () => {
     downloadStub.resetHistory();
   });
 
-  it('should let the offline-exporting module install exportChartLocal', () => {
-    expect(Highcharts.Chart.prototype.exportChartLocal).to.be.a('function');
-  });
-
   it('should export locally without throwing', () => {
     chart.configuration.exportChartLocal();
-    expect(downloadStub.calledOnce).to.be.true;
+
+    expect(downloadStub).to.be.calledOnce;
   });
 
   it('should dispatch export events once per local export', () => {
