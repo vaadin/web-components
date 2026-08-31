@@ -239,7 +239,7 @@ export const mapStyles = css`
   .ol-attribution.ol-uncollapsible {
     margin-inline-end: calc(var(--vaadin-map-controls-inset, 4px) * -1);
     margin-block-end: calc(var(--vaadin-map-controls-inset, 4px) * -1);
-    border-radius: var(--vaadin-radius) 0 0 0;
+    border-radius: var(--vaadin-radius-m) 0 0 0;
   }
 
   .ol-attribution button span:empty::before {
@@ -302,7 +302,7 @@ export const mapStyles = css`
     width: 160px;
     margin: 4px;
     border: 0;
-    border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius));
+    border-radius: var(--vaadin-button-border-radius, var(--vaadin-radius-m));
   }
 
   .ol-overviewmap:not(.ol-uncollapsible) .ol-overviewmap-map {
