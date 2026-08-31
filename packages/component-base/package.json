@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/component-base",
-  "version": "26.0.0-alpha0",
+  "version": "25.4.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
@@ -39,8 +39,8 @@
   },
   "devDependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/chai-plugins": "26.0.0-alpha0",
-    "@vaadin/test-runner-commands": "26.0.0-alpha0",
+    "@vaadin/chai-plugins": "25.4.0-alpha0",
+    "@vaadin/test-runner-commands": "25.4.0-alpha0",
     "@vaadin/testing-helpers": "^2.0.0",
     "sinon": "^22.0.0"
   },
