@@ -112,6 +112,16 @@ describe('vaadin-chart exporting', () => {
     expect(styleRemovedFromBody).to.be.true;
   });
 
+  it('should dispatch export events once per export', () => {
+    const events = [];
+    chart.addEventListener('chart-before-export', () => events.push('before'));
+    chart.addEventListener('chart-after-export', () => events.push('after'));
+
+    chart.configuration.exportChart();
+
+    expect(events).to.eql(['before', 'after']);
+  });
+
   it('should add styled-mode attribute to body before export and delete it afterwards', async () => {
     expect(document.body.hasAttribute(attributeName)).to.be.false;
 
