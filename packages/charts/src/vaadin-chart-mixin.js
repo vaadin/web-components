@@ -37,16 +37,19 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { cleanupExport, inflateFunctions, prepareExport } from './helpers.js';
 
-['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
-  /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
-  Highcharts.wrap(Highcharts.Chart.prototype, methodName, function (proceed, ...args) {
-    Highcharts.fireEvent(this, 'beforeExport');
-    const result = proceed.apply(this, args);
-    Highcharts.fireEvent(this, 'afterExport');
-    return result;
-  });
-  /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
+// Highcharts moves a copy of the chart into the document body when exporting, losing the styles
+// defined in the shadow root. The `beforeExport` and `afterExport` events copy them over for the
+// duration of the export. Wrapping `getSVG` covers every export path, as both `exportChart` and
+// `exportChartLocal` call it through `getSVGForExport`.
+// Workaround for https://github.com/vaadin/vaadin-charts/issues/389
+/* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
+Highcharts.wrap(Highcharts.Chart.prototype, 'getSVG', function (proceed, ...args) {
+  Highcharts.fireEvent(this, 'beforeExport');
+  const result = proceed.apply(this, args);
+  Highcharts.fireEvent(this, 'afterExport');
+  return result;
 });
+/* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
 
 // Monkeypatch the onDocumentMouseMove method to fix the check for the source of the event
 // Due to the fact that the event is attached to the document, the target of the event is
