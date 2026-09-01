@@ -51,9 +51,11 @@ export * from './vaadin-grid-tree-toggle-mixin.js';
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property | Description | Default
- * ---|---|---
- * `--vaadin-grid-tree-toggle-level-offset` | Visual offset step for each tree sublevel | `1em`
+ * Custom CSS property                          |
+ * :--------------------------------------------|
+ * | `--vaadin-grid-tree-toggle-level-offset`   |
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} expanded-changed - Fired when the `expanded` property changes.
  */
