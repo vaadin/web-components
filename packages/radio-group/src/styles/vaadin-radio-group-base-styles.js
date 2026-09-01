@@ -14,7 +14,8 @@ export const radioGroupStyles = [
     :host([readonly]) ::slotted(vaadin-radio-button) {
       --vaadin-radio-button-background: transparent;
       --vaadin-radio-button-border-color: var(--vaadin-border-color);
-      --_marker-color: var(--vaadin-text-color);
+      --_color: var(--vaadin-radio-button-marker-color, var(--vaadin-text-color));
+      --_filter: none;
       --_border-style: dashed;
       --_cursor: var(--vaadin-disabled-cursor);
     }
