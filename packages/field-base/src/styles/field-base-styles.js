@@ -200,6 +200,38 @@ export const field = css`
     --_helper-below-field: ;
   }
 
+  /*
+   * The "label-aside" theme variant displays the label beside the input,
+   * switching the field's own grid to a label column + input column.
+   * Because the label column width is a fixed length, every field resolves
+   * the same track width and labels align across fields without shared grid
+   * tracks (no subgrid needed). Checkables override this and keep their own
+   * layout indented into the input column (see checkable-base-styles.js).
+   */
+  :host([theme~='label-aside']) {
+    grid-template-columns: var(--vaadin-field-label-width, 8em) minmax(0, 1fr);
+    column-gap: var(--vaadin-field-label-spacing, 1em);
+  }
+
+  :host([theme~='label-aside']) [part='label'] {
+    align-self: baseline;
+    grid-column: 1;
+    grid-row: input / -1;
+    margin-bottom: 0;
+  }
+
+  :host([theme~='label-aside']) [part='input-field'],
+  :host([theme~='label-aside']) [part='group-field'],
+  :host([theme~='label-aside']) [part='input-fields'] {
+    align-self: baseline;
+    grid-column: 2;
+  }
+
+  :host([theme~='label-aside']) [part='helper-text'],
+  :host([theme~='label-aside']) [part='error-message'] {
+    grid-column: 2;
+  }
+
   @media (forced-colors: active) {
     [part='error-message']::before {
       background: CanvasText;

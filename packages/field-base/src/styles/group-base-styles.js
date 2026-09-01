@@ -30,4 +30,16 @@ export const group = css`
     padding-inline: 0;
     border-block: var(--vaadin-input-field-border-width, 1px) solid transparent;
   }
+
+  /*
+   * The baseline guide of a group should not account for the input's
+   * padding and border, which checkables don't have, so that the group
+   * label aligns with the labels of other fields on the same row when
+   * labels are displayed aside.
+   */
+  :host([theme~='label-aside']) {
+    --vaadin-field-baseline-input-height: calc(
+      1lh + var(--vaadin-padding-block-container) + var(--vaadin-input-field-border-width, 1px)
+    );
+  }
 `;

@@ -134,4 +134,21 @@ export const sliderStyles = css`
     display: flex;
     justify-content: space-between;
   }
+
+  /*
+   * Labels aside for a slider with the "label-aside" theme variant
+   * (see field-base-styles.js). The controls and marks move into the
+   * input column, mirroring what the shared field styles do for input parts.
+   */
+
+  /* Restore the label column: the min-max-visible grid-template resets it */
+  :host([theme~='label-aside'][min-max-visible]) {
+    grid-template-columns: var(--vaadin-field-label-width, 8em) minmax(0, 1fr);
+    column-gap: var(--vaadin-field-label-spacing, 1em);
+  }
+
+  :host([theme~='label-aside']) #controls,
+  :host([theme~='label-aside']) [part='marks'] {
+    grid-column: 2;
+  }
 `;
