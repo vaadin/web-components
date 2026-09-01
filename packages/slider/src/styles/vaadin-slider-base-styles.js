@@ -39,11 +39,14 @@ export const sliderStyles = css`
 
   :host([min-max-visible]) {
     grid-template:
-      'label' auto var(--_helper-above-field, 'helper' auto) 'baseline' 0 'input' 1fr 'marks' auto var(
-        --_helper-below-field,
-        'helper' auto
-      )
-      'error' auto / 100%;
+      'label' auto
+      'top-helper' auto
+      'baseline' 0
+      'input' 1fr
+      'marks' auto
+      'bottom-helper' auto
+      'error' auto
+      / 100%;
   }
 
   #controls {

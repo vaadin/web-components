@@ -20,11 +20,13 @@ export const field = css`
     --_gap-s: round(var(--_gap) / 3, 2px);
     display: inline-grid;
     grid-template:
-      'label' auto var(--_helper-above-field, 'helper' auto) 'baseline' 0 'input' 1fr var(
-        --_helper-below-field,
-        'helper' auto
-      )
-      'error' auto / 100%;
+      'label' auto
+      'top-helper' auto
+      'baseline' 0
+      'input' 1fr
+      'bottom-helper' auto
+      'error' auto
+      / 100%;
     height: fit-content;
     outline: none;
     cursor: default;
@@ -168,7 +170,7 @@ export const field = css`
     line-height: var(--vaadin-input-field-helper-line-height, inherit);
     font-weight: var(--vaadin-input-field-helper-font-weight, 400);
     color: var(--vaadin-input-field-helper-color, var(--vaadin-text-color-secondary));
-    grid-area: helper;
+    grid-area: var(--_helper-above-field, top-helper) var(--_helper-below-field, bottom-helper);
     margin-top: var(--_helper-above-field, var(--_gap-s)) var(--_helper-below-field, var(--_gap));
     margin-bottom: var(--_helper-above-field, var(--_gap));
   }
