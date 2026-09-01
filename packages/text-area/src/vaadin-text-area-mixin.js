@@ -54,6 +54,10 @@ export const TextAreaMixin = (superClass) =>
          * Maximum number of rows to expand to before the text area starts scrolling. This effectively sets a max-height
          * on the `input-field` part. By default, it is not set, and the text area grows with the content without
          * constraints.
+         *
+         * Note, the `--vaadin-input-field-height` custom CSS property is applied as a minimum height and takes
+         * priority: when set to a value larger than the height given by `maxRows`, the text area only starts
+         * scrolling once the content grows past that minimum.
          * @attr {number} max-rows
          */
         maxRows: {
