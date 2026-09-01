@@ -96,14 +96,16 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout {
+    /* By default, labels should be displayed above the fields */
+    --_form-item-labels-above: initial; /* true */
+    --_form-item-labels-aside: ' '; /* false */
+
     /*
-      By default, labels should be displayed above the fields. The property
-      inherits into slotted children (also through <vaadin-form-row>), letting
-      form items and fields switch their label position via a container style
-      query in their own styles. The slot styles below reset it for anything
-      nested deeper than the direct children.
+      PROTOTYPE: Label sizing for slotted fields. Fields use these tokens for
+      their label column when the layout applies the "label-aside" variant.
     */
-    --_form-layout-labels-aside: false;
+    --vaadin-field-label-width: var(--_label-width);
+    --vaadin-field-label-spacing: var(--_label-spacing);
 
     /* CSS grid related properties */
     --_grid-column-width: var(--_column-width-labels-above);
@@ -145,6 +147,10 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
+    /* Make form items inherit label position from the layout */
+    --_form-item-labels-above: inherit;
+    --_form-item-labels-aside: inherit;
+
     /* By default, place each child on a new row */
     grid-column: 1 / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
 
@@ -160,8 +166,9 @@ export const formLayoutStyles = css`
     --_max-width: var(--_max-width-labels-aside);
   }
 
-  :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
-    --_form-layout-labels-aside: true;
+  :host([auto-responsive][labels-aside-active]) #layout {
+    --_form-item-labels-above: ' '; /* false */
+    --_form-item-labels-aside: initial; /* true */
     --_grid-column-width: var(--_column-width-labels-aside);
   }
 
@@ -201,16 +208,5 @@ export const formLayoutSlotStyles = css`
     vaadin-form-layout[auto-responsive][expand-fields] vaadin-form-item > *
   ) {
     min-width: 100%;
-  }
-
-  /*
-    PROTOTYPE: The labels-aside property published by the layout must only
-    affect its grid items. Reset it for every element inside the layout that
-    is not an immediate child of a form layout or a form row, e.g. fields
-    wrapped in form items or slotted into other fields. This also lets a
-    nested form layout publish the property for its own grid items again.
-  */
-  :where(vaadin-form-layout[auto-responsive] *:not(vaadin-form-layout > *, vaadin-form-row > *)) {
-    --_form-layout-labels-aside: initial;
   }
 `;
