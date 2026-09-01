@@ -10,8 +10,6 @@ export const field = css`
   :host {
     --_helper-below-field: initial;
     --_helper-above-field: ;
-    --_no-label: initial;
-    --_has-label: ;
     --_no-helper: initial;
     --_has-helper: ;
     --_no-error: initial;
@@ -29,11 +27,6 @@ export const field = css`
     outline: none;
     cursor: default;
     -webkit-tap-highlight-color: transparent;
-  }
-
-  :host([has-label]) {
-    --_has-label: initial;
-    --_no-label: ;
   }
 
   :host([has-helper]) {
@@ -60,8 +53,8 @@ export const field = css`
   :host::before {
     content: '\\2003' / '';
     grid-column: 1;
-    grid-row: var(--_has-label, label / baseline) var(--_no-label, label / input);
-    align-self: var(--_has-label, end) var(--_no-label, start);
+    grid-row: 1 / baseline;
+    align-self: end;
     font-size: var(--vaadin-input-field-value-font-size, inherit);
     line-height: var(--vaadin-input-field-value-line-height, inherit);
     padding: var(
@@ -70,17 +63,13 @@ export const field = css`
     );
     border: var(--vaadin-input-field-border-width, 1px) solid transparent;
     pointer-events: none;
-    margin-bottom: var(--_no-label, 0)
+    margin-bottom: calc(
       var(
-        --_has-label,
-        calc(
-          var(
-              --vaadin-field-baseline-input-height,
-              (1lh + var(--vaadin-padding-block-container) * 2 + var(--vaadin-input-field-border-width, 1px) * 2)
-            ) *
-            -1
-        )
-      );
+          --vaadin-field-baseline-input-height,
+          (1lh + var(--vaadin-padding-block-container) * 2 + var(--vaadin-input-field-border-width, 1px) * 2)
+        ) *
+        -1
+    );
   }
 
   [class$='container'] {

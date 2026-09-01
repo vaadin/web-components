@@ -53,12 +53,9 @@ export const sliderStyles = css`
     width: var(--vaadin-field-default-width, 12em);
     max-width: 100%;
     min-width: 100%;
-    --_track-width: calc(100% - var(--_thumb-width));
-  }
-
-  :host([has-label]) #controls {
     border-block: var(--vaadin-input-field-border-width, 1px) solid transparent;
     padding-block: var(--vaadin-padding-block-container);
+    --_track-width: calc(100% - var(--_thumb-width));
   }
 
   [part='track'] {
