@@ -60,6 +60,34 @@ export interface GridProEventMap<TItem>
  * - `<vaadin-grid-pro-edit-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
  * - `<vaadin-grid-pro-edit-select>` - has the same API as [`<vaadin-select>`](#/elements/vaadin-select).
  *
+ * ### Styling
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                                    |
+ * :------------------------------------------------------|
+ * | `--vaadin-grid-background`                           |
+ * | `--vaadin-grid-border-color`                         |
+ * | `--vaadin-grid-border-radius`                        |
+ * | `--vaadin-grid-border-width`                         |
+ * | `--vaadin-grid-cell-background-color`                |
+ * | `--vaadin-grid-cell-padding`                         |
+ * | `--vaadin-grid-cell-text-overflow`                   |
+ * | `--vaadin-grid-column-border-width`                  |
+ * | `--vaadin-grid-column-resize-handle-color`           |
+ * | `--vaadin-grid-header-font-size`                     |
+ * | `--vaadin-grid-header-font-weight`                   |
+ * | `--vaadin-grid-header-text-color`                    |
+ * | `--vaadin-grid-pro-editable-cell-background-color`   |
+ * | `--vaadin-grid-row-background-color`                 |
+ * | `--vaadin-grid-row-border-width`                     |
+ * | `--vaadin-grid-row-highlight-background-color`       |
+ * | `--vaadin-grid-row-hover-background-color`           |
+ * | `--vaadin-grid-row-odd-background-color`             |
+ * | `--vaadin-grid-row-selected-background-color`        |
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
+ *
  * @fires {CustomEvent} active-item-changed - Fired when the `activeItem` property changes.
  * @fires {CustomEvent} cell-activate - Fired when the cell is activated with click or keyboard.
  * @fires {CustomEvent} cell-edit-started - Fired when the user starts editing a grid cell.
