@@ -14,8 +14,23 @@ export const messageInputStyles = css`
     flex-shrink: 0;
     border: var(--vaadin-input-field-border-width, 1px) solid
       var(--vaadin-input-field-border-color, var(--vaadin-border-color));
-    border-radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
+    --_radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
+    border-radius:
+      /* See https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius */
+      var(--vaadin-input-field-top-start-radius, var(--_radius))
+      var(--vaadin-input-field-top-end-radius, var(--_radius))
+      var(--vaadin-input-field-bottom-end-radius, var(--_radius))
+      var(--vaadin-input-field-bottom-start-radius, var(--_radius));
     background: var(--vaadin-input-field-background, var(--vaadin-background-color));
+  }
+
+  :host([dir='rtl']) {
+    border-radius:
+      /* Don't use logical props, see https://github.com/vaadin/vaadin-time-picker/issues/145 */
+      var(--vaadin-input-field-top-end-radius, var(--_radius))
+      var(--vaadin-input-field-top-start-radius, var(--_radius))
+      var(--vaadin-input-field-bottom-start-radius, var(--_radius))
+      var(--vaadin-input-field-bottom-end-radius, var(--_radius));
   }
 
   :host([hidden]) {
