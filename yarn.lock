@@ -1452,13 +1452,13 @@
   resolved "https://registry.yarnpkg.com/@open-wc/dedupe-mixin/-/dedupe-mixin-1.3.1.tgz#5c1a1eeb0386b344290ebe3f1fca0c4869933dbf"
   integrity sha512-ukowSvzpZQDUH0Y3znJTsY88HkiGk3Khc0WGpIPhap1xlerieYi27QBg6wx/nTurpWfU6XXXsx9ocxDYCdtw0Q==
 
-"@open-wc/semantic-dom-diff@^0.20.1":
-  version "0.20.1"
-  resolved "https://registry.yarnpkg.com/@open-wc/semantic-dom-diff/-/semantic-dom-diff-0.20.1.tgz#b1bb78be455bd99fb034d9baadbb959d7d124030"
-  integrity sha512-mPF/RPT2TU7Dw41LEDdaeP6eyTOWBD4z0+AHP4/d0SbgcfJZVRymlIB6DQmtz0fd2CImIS9kszaMmwMt92HBPA==
+"@open-wc/semantic-dom-diff@^0.21.0":
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/@open-wc/semantic-dom-diff/-/semantic-dom-diff-0.21.0.tgz#47607e32e5491b00ac4e156cbd856534d67e30e9"
+  integrity sha512-2hrNt9MWhz4kfuIWI6M6zyK+UJXd2ehjaP+nJ1shf9HZAperr+braPToTbRODx1oE6EvoVvTJGQlsCqHv7NKQg==
   dependencies:
     "@types/chai" "^4.3.1"
-    "@web/test-runner-commands" "^0.9.0"
+    "@web/test-runner-commands" "^1.0.0"
 
 "@oxc-resolver/binding-android-arm-eabi@11.16.3":
   version "11.16.3"
@@ -2569,7 +2569,7 @@
     chrome-launcher "^0.15.0"
     puppeteer-core "^24.0.0"
 
-"@web/test-runner-commands@^0.9.0", "@web/test-runner-commands@^1.0.0", "@web/test-runner-commands@^1.0.1":
+"@web/test-runner-commands@^1.0.0", "@web/test-runner-commands@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@web/test-runner-commands/-/test-runner-commands-1.0.1.tgz#d50bb821be7c69c5b5b629b9306118dd8c87f050"
   integrity sha512-rvAvHJKlNzh5Tv8L2wGjnNX/hSkPmQx5eyKqeyExEvA7A2pVXiNYFstJzUGCD52TlAJSPF3BtW1yOwpf6vG7Eg==
