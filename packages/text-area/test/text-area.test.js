@@ -77,6 +77,22 @@ describe('text-area', () => {
       expect(newHeight).to.be.at.least(originalHeight + 10);
     });
 
+    it('should grow over the input field height custom property', async () => {
+      textArea.style.setProperty('--vaadin-input-field-height', '100px');
+      textArea.value = Array(400).join('400');
+      await nextUpdate(textArea);
+
+      expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.above(100);
+    });
+
+    it('should use the property as the input field height with one row', async () => {
+      textArea.minRows = 1;
+      await nextUpdate(textArea);
+
+      textArea.style.setProperty('--vaadin-input-field-height', '100px');
+      expect(parseFloat(window.getComputedStyle(inputField).height)).to.equal(100);
+    });
+
     it('should not grow over max-height', async () => {
       inputField.style.padding = '0';
       inputField.style.border = 'none';
@@ -617,6 +633,24 @@ describe('text-area', () => {
         textArea.value += 'change';
 
         expect(textArea.clientHeight).to.equal(lineHeight * 4 + padding + border);
+      });
+
+      it('should use the input field height property as minimum over max-height', async () => {
+        textArea.maxRows = 2;
+        textArea.style.setProperty('--vaadin-input-field-height', `${lineHeight * 4 + padding + border}px`);
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4 + padding + border);
+      });
+
+      it('should stop growing at max-rows when the input field height property is below', async () => {
+        textArea.maxRows = 2;
+        textArea.style.setProperty('--vaadin-input-field-height', '1px');
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 2 + padding + border);
       });
     });
 

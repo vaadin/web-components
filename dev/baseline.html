@@ -32,6 +32,10 @@
       document.querySelector('#flex').addEventListener('change', (e) => {
         document.documentElement.classList.toggle('use-flex', e.target.checked);
       });
+
+      document.querySelector('#height').addEventListener('change', (e) => {
+        document.documentElement.classList.toggle('use-height', e.target.checked);
+      });
     </script>
     <style>
       .use-flex section {
@@ -57,11 +61,17 @@
           }
         }
       }
+
+      .use-height {
+        --vaadin-input-field-height: 56px;
+        --vaadin-button-height: 56px;
+      }
     </style>
   </head>
 
   <body>
     <vaadin-checkbox id="flex" label="Use flex layout & show baseline"></vaadin-checkbox>
+    <vaadin-checkbox id="height" label="Set --vaadin-input-field-height & --vaadin-button-height"></vaadin-checkbox>
     <h2 class="heading">Plain</h2>
     <section>
       <span>Inline text</span>
