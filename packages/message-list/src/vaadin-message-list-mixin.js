@@ -63,6 +63,36 @@ export const MessageListMixin = (superClass) =>
           observer: '__announceChanged',
           sync: true,
         },
+
+        /**
+         * An array of objects which will be rendered as avatars.
+         * The user objects can have the following properties:
+         * ```js
+         * Array<{
+         *   name: string,
+         *   abbr: string,
+         *   img: string,
+         *   colorIndex: number
+         * }>
+         * ```
+         * @private
+         */
+        _usersTyping: {
+          type: Array,
+          observer: '__usersTypingChanged',
+          sync: true,
+        },
+
+        /** @private */
+        _typingIndicatorText: {
+          type: String,
+          value: 'Typing…',
+        },
+
+        /** @private */
+        _typingIndicatorType: {
+          type: String,
+        },
       };
     }
 
@@ -188,6 +218,34 @@ export const MessageListMixin = (superClass) =>
     }
 
     /** @private */
+    __usersTypingChanged(users) {
+      let typingIndicator = this.querySelector('vaadin-message[slot="typing-indicator"]');
+      if (!typingIndicator) {
+        typingIndicator = document.createElement('vaadin-message');
+        typingIndicator.slot = 'typing-indicator';
+        const avatars = document.createElement('vaadin-avatar-group');
+        avatars.maxItemsVisible = 100;
+        avatars.slot = 'avatar';
+        const typingText = document.createElement('span');
+        typingIndicator.append(avatars, typingText);
+      }
+      if (users.length === 0) {
+        typingIndicator.remove();
+      } else {
+        typingIndicator.setAttribute('typing-indicator', this._typingIndicatorType);
+        const avatars = typingIndicator.querySelector(':scope > vaadin-avatar-group');
+        avatars.items = users;
+        const formatter = new Intl.ListFormat(navigator.language, {
+          type: 'conjunction',
+        });
+        typingIndicator.userName = formatter.format(users.map((user) => user.name));
+        const typingText = typingIndicator.querySelector(':scope > span');
+        typingText.textContent = this._typingIndicatorText;
+        this.append(typingIndicator);
+      }
+    }
+
+    /** @private */
     _renderMessages(items) {
       render(
         html`
@@ -205,11 +263,9 @@ export const MessageListMixin = (superClass) =>
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
                 @attachment-click="${(e) => this.__onAttachmentClick(e, item)}"
-                >${
-                  this.markdown
-                    ? html`<vaadin-markdown .content=${item.text} line-breaks></vaadin-markdown>`
-                    : item.text
-                }<vaadin-avatar slot="avatar"></vaadin-avatar
+                >${this.markdown
+                  ? html`<vaadin-markdown .content=${item.text} line-breaks></vaadin-markdown>`
+                  : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
             `,
           )}
