@@ -9,7 +9,7 @@
   "module": "index.js",
   "type": "module",
   "dependencies": {
-    "@open-wc/semantic-dom-diff": "^0.20.1",
+    "@open-wc/semantic-dom-diff": "^0.21.0",
     "@types/sinon": "^22.0.0",
     "@types/sinon-chai": "^4.0.0",
     "chai": "^6.2.2",
