@@ -296,6 +296,10 @@ export const gridStyles = css`
     }
   }
 
+  :host([theme~='column-borders']) {
+    --_column-border-width: var(--vaadin-grid-column-border-width, 1px);
+  }
+
   /* Row and cell background */
 
   .row {
