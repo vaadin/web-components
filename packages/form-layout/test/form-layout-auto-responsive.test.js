@@ -226,6 +226,24 @@ describe('form-layout auto responsive', () => {
         assertFormLayoutLabelPosition(layout, { position: labelPosition });
       }
     });
+
+    it('should toggle labels-aside-active attribute based on container width', async () => {
+      expect(layout.hasAttribute('labels-aside-active')).to.be.true;
+
+      container.style.width = '200px';
+      await nextResize(layout);
+      expect(layout.hasAttribute('labels-aside-active')).to.be.false;
+
+      container.style.width = '500px';
+      await nextResize(layout);
+      expect(layout.hasAttribute('labels-aside-active')).to.be.true;
+    });
+
+    it('should remove labels-aside-active attribute when labelsAside is disabled', async () => {
+      layout.labelsAside = false;
+      await nextFrame();
+      expect(layout.hasAttribute('labels-aside-active')).to.be.false;
+    });
   });
 
   describe('colspan', () => {
