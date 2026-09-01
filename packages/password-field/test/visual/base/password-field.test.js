@@ -46,6 +46,14 @@ describe('password-field', () => {
     });
   });
 
+  describe('custom CSS properties', () => {
+    it('height', async () => {
+      element.value = 'value';
+      element.style.setProperty('--vaadin-input-field-height', '56px');
+      await visualDiff(div, 'css-props-height');
+    });
+  });
+
   describe('features', () => {
     ['ltr', 'rtl'].forEach((dir) => {
       describe(dir, () => {
