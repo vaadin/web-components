@@ -180,19 +180,24 @@ export const checkable = (part, propName = part) => css`
   }
 
   /*
-   * PROTOTYPE: A checkbox or radio button placed directly into a form layout
-   * with labels aside keeps its label next to the control. The whole component
-   * is indented into the input column instead. The two-column field template
-   * from field-base-styles.js does not apply because the rules here come later
-   * in the cascade and restore the checkable layout.
+   * PROTOTYPE: A checkbox or radio button with the "label-aside" theme
+   * variant keeps its label next to the control. The whole component is
+   * indented into the input column instead. The remaining rules restore the
+   * checkable layout, which the label-aside field rules would otherwise
+   * override due to higher specificity.
    */
-  @container style(--_form-layout-labels-aside: true) {
-    :host {
-      /* Padding instead of margin: the form layout resets margins on slotted children */
-      padding-inline-start: calc(
-        var(--vaadin-form-layout-label-width, 8em) + var(--vaadin-form-layout-label-spacing, 1em)
-      );
-    }
+  :host([theme~='label-aside']) {
+    grid-template-columns: auto 1fr;
+    column-gap: var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s));
+    /* Padding instead of margin: the form layout resets margins on slotted children */
+    padding-inline-start: calc(
+      var(--vaadin-field-label-width, 8em) + var(--vaadin-field-label-spacing, 1em)
+    );
+  }
+
+  :host([theme~='label-aside']) [part='label'] {
+    grid-column: 2;
+    grid-row: 1;
   }
 
   @media (forced-colors: active) {
