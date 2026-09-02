@@ -42,67 +42,70 @@ function buildTooltipFixture(outside) {
 /** One radial progress gauge; `solidgauge` renders three that differ only in value and colour. */
 function buildProgressGauge(y, colorIndex) {
   return `
-      <vaadin-chart
-        title="Progress"
-        type="solidgauge"
-        style="width: 200px; height: 260px"
-        additional-options='{
-          "pane": {
-            "center": ["50%", "50%"],
-            "startAngle": 0,
-            "endAngle": 360,
-            "background": { "innerRadius": "60%", "outerRadius": "100%", "shape": "arc" }
-          },
-          "yAxis": {
-            "min": 0,
-            "max": 100,
-            "minorTickInterval": null,
-            "tickAmount": 0,
-            "labels": { "enabled": false }
-          }
-        }'
-      >
-        <vaadin-chart-series title="Progress" values='[{ "y": ${y}, "colorIndex": ${colorIndex} }]'></vaadin-chart-series>
-      </vaadin-chart>`;
+    <vaadin-chart
+      title="Progress"
+      type="solidgauge"
+      style="width: 200px; height: 260px"
+      additional-options='{
+        "pane": {
+          "center": ["50%", "50%"],
+          "startAngle": 0,
+          "endAngle": 360,
+          "background": { "innerRadius": "60%", "outerRadius": "100%", "shape": "arc" }
+        },
+        "yAxis": {
+          "min": 0,
+          "max": 100,
+          "minorTickInterval": null,
+          "tickAmount": 0,
+          "labels": { "enabled": false }
+        }
+      }'
+    >
+      <vaadin-chart-series title="Progress" values='[{ "y": ${y}, "colorIndex": ${colorIndex} }]'></vaadin-chart-series>
+    </vaadin-chart>
+  `;
 }
 
 /** Candlestick and OHLC must plot identical data for the up/down point comparison to mean anything. */
 function buildOhlcFixture(type, title) {
   return `
-      <vaadin-chart
-        type="${type}"
-        title="${title}"
-        style="width: 400px; height: 300px"
-        additional-options='{ "xAxis": { "type": "datetime" }, "time": { "timezone": "UTC" } }'
-      >
-        <vaadin-chart-series
-          title="Price"
-          values='[
-            [${day(0)}, 10, 14, 9, 13],
-            [${day(1)}, 13, 15, 11, 11],
-            [${day(2)}, 11, 16, 10, 15],
-            [${day(3)}, 15, 17, 12, 12],
-            [${day(4)}, 12, 18, 12, 17]
-          ]'
-        ></vaadin-chart-series>
-      </vaadin-chart>`;
+    <vaadin-chart
+      type="${type}"
+      title="${title}"
+      style="width: 400px; height: 300px"
+      additional-options='{ "xAxis": { "type": "datetime" }, "time": { "timezone": "UTC" } }'
+    >
+      <vaadin-chart-series
+        title="Price"
+        values='[
+          [${day(0)}, 10, 14, 9, 13],
+          [${day(1)}, 13, 15, 11, 11],
+          [${day(2)}, 11, 16, 10, 15],
+          [${day(3)}, 15, 17, 12, 12],
+          [${day(4)}, 12, 18, 12, 17]
+        ]'
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  `;
 }
 
 /** Funnel and pyramid render the same series to contrast their two shapes. */
 function buildFunnelFixture(type, title) {
   return `
-      <vaadin-chart type="${type}" title="${title}" style="width: 400px; height: 400px">
-        <vaadin-chart-series
-          title="Unique users"
-          values='[
-            ["Website visits", 15654],
-            ["Downloads", 4064],
-            ["Requested price list", 1987],
-            ["Invoice sent", 976],
-            ["Finalized", 846]
-          ]'
-        ></vaadin-chart-series>
-      </vaadin-chart>`;
+    <vaadin-chart type="${type}" title="${title}" style="width: 400px; height: 400px">
+      <vaadin-chart-series
+        title="Unique users"
+        values='[
+          ["Website visits", 15654],
+          ["Downloads", 4064],
+          ["Requested price list", 1987],
+          ["Invoice sent", 976],
+          ["Finalized", 846]
+        ]'
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  `;
 }
 
 /**
@@ -470,10 +473,9 @@ const baseOnlyFixtures = {
   `,
 
   funnel: `
-    <div style="display: flex; width: 800px; height: 400px">${buildFunnelFixture('funnel', 'Sales funnel')}${buildFunnelFixture(
-      'pyramid',
-      'Sales pyramid',
-    )}
+    <div style="display: flex; width: 800px; height: 400px">
+      ${buildFunnelFixture('funnel', 'Sales funnel')}
+      ${buildFunnelFixture('pyramid', 'Sales pyramid')}
     </div>
   `,
 
@@ -546,10 +548,9 @@ const baseOnlyFixtures = {
 
   // Covers the highstock-only up and down point rules.
   candlestick: `
-    <div style="display: flex; width: 800px; height: 300px">${buildOhlcFixture('candlestick', 'Candlestick')}${buildOhlcFixture(
-      'ohlc',
-      'OHLC',
-    )}
+    <div style="display: flex; width: 800px; height: 300px">
+      ${buildOhlcFixture('candlestick', 'Candlestick')}
+      ${buildOhlcFixture('ohlc', 'OHLC')}
     </div>
   `,
 
