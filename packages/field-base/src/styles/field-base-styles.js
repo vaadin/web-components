@@ -213,14 +213,21 @@ export const field = css`
  */
 export const fieldLabelAside = css`
   :host([theme~='label-aside']) {
+    --_label-aside-width: 8em;
+    --_label-aside-spacing: 1em;
     grid-template:
       var(--_helper-above-field, '.     helper' auto)
       '                           .     baseline' 0
       '                           label input' 1fr
       var(--_helper-below-field, 'label helper' auto)
       '                           label error' auto
-      / var(--vaadin-field-label-width, 8em) minmax(0, 1fr);
-    column-gap: var(--vaadin-field-label-spacing, 1em);
+      / var(--vaadin-field-label-width, var(--_label-aside-width)) minmax(0, 1fr);
+    column-gap: var(--vaadin-field-label-spacing, var(--_label-aside-spacing));
+  }
+
+  :host([theme~='label-aside']:not([has-label])) {
+    --_label-aside-width: 0px;
+    --_label-aside-spacing: 0px;
   }
 
   :host([theme~='label-aside']) [part='label'] {
