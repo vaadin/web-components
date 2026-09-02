@@ -3,6 +3,9 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
 import '../../chart-not-animated-styles.js';
 import '../../../vaadin-chart.js';
+import { defineSharedScreenshotTests } from '../chart.common.js';
+
+defineSharedScreenshotTests();
 
 describe('chart', () => {
   let element;
