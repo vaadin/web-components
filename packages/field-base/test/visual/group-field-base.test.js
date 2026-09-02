@@ -1,6 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import './mock-group-field.js';
+import '../fixtures/mock-group-field.js';
 
 describe('group-field-base', () => {
   let div, element;

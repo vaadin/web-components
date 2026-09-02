@@ -1,7 +1,7 @@
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import { html, LitElement } from 'lit';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { InputController } from '../..//src/input-controller.js';
+import { InputController } from '../../src/input-controller.js';
 import { InputFieldMixin } from '../../src/input-field-mixin.js';
 import { inputFieldShared } from '../../src/styles/input-field-shared-styles.js';
 
