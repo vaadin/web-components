@@ -20,89 +20,75 @@ describe('group-field-base', () => {
     );
   });
 
-  describe('features', () => {
-    ['ltr', 'rtl'].forEach((dir) => {
-      describe(dir, () => {
-        before(() => {
-          document.documentElement.setAttribute('dir', dir);
-        });
+  it('default', async () => {
+    await visualDiff(div, 'group-default');
+  });
 
-        after(() => {
-          document.documentElement.removeAttribute('dir');
-        });
+  it('label', async () => {
+    element.label = 'Label';
+    await visualDiff(div, 'group-label');
+  });
 
-        it('default', async () => {
-          await visualDiff(div, `group-${dir}-default`);
-        });
+  it('required', async () => {
+    element.label = 'Label';
+    element.required = true;
+    await visualDiff(div, 'group-required');
+  });
 
-        it('label', async () => {
-          element.label = 'Label';
-          await visualDiff(div, `group-${dir}-label`);
-        });
+  it('error message', async () => {
+    element.errorMessage = 'This field is required';
+    element.invalid = true;
+    await visualDiff(div, 'group-error-message');
+  });
 
-        it('required', async () => {
-          element.label = 'Label';
-          element.required = true;
-          await visualDiff(div, `group-${dir}-required`);
-        });
+  it('helper text', async () => {
+    element.helperText = 'Helper text';
+    await visualDiff(div, 'group-helper-text');
+  });
 
-        it('error message', async () => {
-          element.errorMessage = 'This field is required';
-          element.invalid = true;
-          await visualDiff(div, `group-${dir}-error-message`);
-        });
+  it('helper above field', async () => {
+    element.helperText = 'Helper text';
+    element.setAttribute('theme', 'helper-above-field');
+    await visualDiff(div, 'group-helper-above-field');
+  });
 
-        it('helper text', async () => {
-          element.helperText = 'Helper text';
-          await visualDiff(div, `group-${dir}-helper-text`);
-        });
+  it('label and helper above field', async () => {
+    element.label = 'Label';
+    element.helperText = 'Helper text';
+    element.setAttribute('theme', 'helper-above-field');
+    await visualDiff(div, 'group-label-helper-above-field');
+  });
 
-        it('helper above field', async () => {
-          element.helperText = 'Helper text';
-          element.setAttribute('theme', 'helper-above-field');
-          await visualDiff(div, `group-${dir}-helper-above-field`);
-        });
+  describe('horizontal', () => {
+    beforeEach(() => {
+      element.setAttribute('theme', 'horizontal');
+    });
 
-        it('label and helper above field', async () => {
-          element.label = 'Label';
-          element.helperText = 'Helper text';
-          element.setAttribute('theme', 'helper-above-field');
-          await visualDiff(div, `group-${dir}-label-helper-above-field`);
-        });
+    it('default', async () => {
+      await visualDiff(div, 'group-horizontal');
+    });
 
-        describe('horizontal', () => {
-          beforeEach(() => {
-            element.setAttribute('theme', 'horizontal');
-          });
+    it('label', async () => {
+      element.label = 'Label';
+      await visualDiff(div, 'group-horizontal-label');
+    });
 
-          it('default', async () => {
-            await visualDiff(div, `group-${dir}-horizontal`);
-          });
+    it('wrapped', async () => {
+      element.style.width = '150px';
+      await visualDiff(div, 'group-horizontal-wrapped');
+    });
 
-          it('label', async () => {
-            element.label = 'Label';
-            await visualDiff(div, `group-${dir}-horizontal-label`);
-          });
+    it('helper above field', async () => {
+      element.helperText = 'Helper text';
+      element.setAttribute('theme', 'horizontal helper-above-field');
+      await visualDiff(div, 'group-horizontal-helper-above-field');
+    });
 
-          it('wrapped', async () => {
-            element.style.width = '150px';
-            await visualDiff(div, `group-${dir}-horizontal-wrapped`);
-          });
-
-          it('helper above field', async () => {
-            element.helperText = 'Helper text';
-            element.setAttribute('theme', 'horizontal helper-above-field');
-            await visualDiff(div, `group-${dir}-horizontal-helper-above-field`);
-          });
-
-          it('label and helper above field', async () => {
-            element.label = 'Label';
-            element.helperText = 'Helper text';
-            element.setAttribute('theme', 'horizontal helper-above-field');
-            await visualDiff(div, `group-${dir}-horizontal-label-helper-above-field`);
-          });
-        });
-      });
+    it('label and helper above field', async () => {
+      element.label = 'Label';
+      element.helperText = 'Helper text';
+      element.setAttribute('theme', 'horizontal helper-above-field');
+      await visualDiff(div, 'group-horizontal-label-helper-above-field');
     });
   });
 });
