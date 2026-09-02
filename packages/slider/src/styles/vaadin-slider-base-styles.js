@@ -49,6 +49,7 @@ export const sliderStyles = css`
   #controls {
     grid-area: input;
     display: inline-grid;
+    grid-template-rows: minmax(1lh, auto);
     align-items: center;
     width: var(--vaadin-field-default-width, 12em);
     max-width: 100%;

@@ -53,7 +53,7 @@ export const messageInputStyles = css`
 
   ::slotted([slot='textarea']) {
     flex: 1;
-    --vaadin-input-field-border-width: 0 !important;
+    --vaadin-input-field-border-width: 0px !important;
     --vaadin-focus-ring-width: 0;
     --vaadin-input-field-background: transparent !important;
   }
