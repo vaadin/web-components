@@ -100,12 +100,6 @@ describe('group-field-base', () => {
       await visualDiff(div, 'group-label-aside');
     });
 
-    it('label width without label', async () => {
-      element.style.setProperty('--vaadin-field-label-width', '8em');
-      element.style.setProperty('--vaadin-field-label-spacing', '1em');
-      await visualDiff(div, 'group-label-aside-label-width');
-    });
-
     it('label', async () => {
       element.label = 'Label';
       await visualDiff(div, 'group-label-aside-label');

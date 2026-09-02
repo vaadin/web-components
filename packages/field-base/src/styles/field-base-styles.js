@@ -198,39 +198,28 @@ export const field = css`
   }
 `;
 
-/**
- * Styles for the "label-aside" theme variant, which displays the label
- * beside the input. The variant template moves the label area into a
- * fixed-width column at the start, repeating the default rows otherwise.
- * Because the label column width is a fixed length, every field resolves
- * the same track width and labels align across fields without shared
- * grid tracks (no subgrid needed). The label area starts at the input
- * row so that the label shares a baseline alignment context with the
- * input.
- *
- * Included only by fields that support the variant. Checkables don't:
- * their label is always displayed next to the control.
- */
 export const fieldLabelAside = css`
   :host([theme~='label-aside']) {
-    --_label-aside-width: 8em;
-    --_label-aside-spacing: 1em;
+    --_side-label-width: var(--vaadin-field-side-label-width);
+    --_side-label-gap: var(--vaadin-field-side-label-gap);
+
     grid-template:
       var(--_helper-above-field, '.     helper' auto)
       '                           .     baseline' 0
       '                           label input' 1fr
       var(--_helper-below-field, 'label helper' auto)
       '                           label error' auto
-      / var(--vaadin-field-label-width, var(--_label-aside-width)) minmax(0, 1fr);
-    column-gap: var(--vaadin-field-label-spacing, var(--_label-aside-spacing));
+      / var(--_side-label-width, 0) minmax(0, 1fr);
+    column-gap: var(--_side-label-gap, 0);
   }
 
-  :host([theme~='label-aside']:not([has-label])) {
-    --_label-aside-width: 0px;
-    --_label-aside-spacing: 0px;
+  :host([theme~='label-aside'][has-label]) {
+    --_side-label-width: var(--vaadin-field-side-label-width, auto);
+    --_side-label-gap: var(--vaadin-field-side-label-gap, 1em);
   }
 
   :host([theme~='label-aside']) [part='label'] {
+    width: auto;
     align-self: baseline;
     margin-bottom: 0;
   }

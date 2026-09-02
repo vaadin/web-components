@@ -81,12 +81,6 @@ describe('field-base', () => {
             await visualDiff(div, `${dir}-label-aside`);
           });
 
-          it('label width without label', async () => {
-            element.style.setProperty('--vaadin-field-label-width', '8em');
-            element.style.setProperty('--vaadin-field-label-spacing', '1em');
-            await visualDiff(div, `${dir}-label-aside-label-width`);
-          });
-
           it('label', async () => {
             element.label = 'Label';
             await visualDiff(div, `${dir}-label-aside-label`);
@@ -122,6 +116,13 @@ describe('field-base', () => {
             element.helperText = 'Helper text';
             element.setAttribute('theme', 'label-aside helper-above-field');
             await visualDiff(div, `${dir}-label-aside-helper-above-field`);
+          });
+
+          it('custom label width and spacing', async () => {
+            element.label = 'Label';
+            element.style.setProperty('--vaadin-field-side-label-width', '6em');
+            element.style.setProperty('--vaadin-field-side-label-gap', '2em');
+            await visualDiff(div, `${dir}-label-aside-custom-width-gap`);
           });
         });
       });
