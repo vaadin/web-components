@@ -137,6 +137,66 @@ describe('message-list', () => {
           });
         });
       });
+
+      describe('typing indicator', () => {
+        const users = {
+          single: [{ name: 'Linsey Listy', abbr: 'LL', colorIndex: 2 }],
+          multiple: [
+            { name: 'Linsey Listy', abbr: 'LL', colorIndex: 2 },
+            { name: 'Matt Mambo', abbr: 'MM', colorIndex: 1 },
+          ],
+        };
+
+        const types = {
+          default: 'on',
+          ellipsis: 'ellipsis',
+          minimal: 'minimal',
+        };
+
+        before(() => {
+          Object.defineProperty(navigator, 'language', { configurable: true, value: 'en-US' });
+        });
+
+        after(() => {
+          delete navigator.language;
+        });
+
+        beforeEach(async () => {
+          div = document.createElement('div');
+          div.style.padding = '10px';
+          div.style.width = '400px';
+
+          element = fixtureSync('<vaadin-message-list></vaadin-message-list>', div);
+          element.items = [
+            {
+              text: 'Hello list',
+              time: 'yesterday',
+              userName: 'Matt Mambo',
+              userAbbr: 'MM',
+              userColorIndex: 1,
+            },
+          ];
+          await nextRender();
+        });
+
+        Object.entries(types).forEach(([typeName, type]) => {
+          Object.entries(users).forEach(([userCount, typingUsers]) => {
+            ['default', 'bubble'].forEach((variant) => {
+              it(`${typeName} - ${userCount} - ${variant}`, async () => {
+                if (variant === 'bubble') {
+                  element.setAttribute('theme', 'bubble');
+                }
+                element._typingIndicatorType = type;
+                element._usersTyping = typingUsers;
+                await nextRender();
+                await nextFrame();
+
+                await visualDiff(div, `${dir}-typing-indicator-${typeName}-${userCount}-${variant}`);
+              });
+            });
+          });
+        });
+      });
     });
   });
 });
