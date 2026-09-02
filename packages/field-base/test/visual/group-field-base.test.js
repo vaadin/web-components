@@ -6,18 +6,17 @@ describe('group-field-base', () => {
   let div, element;
 
   beforeEach(() => {
-    div = document.createElement('div');
-    div.style.width = 'fit-content';
-    div.style.padding = '10px';
-    element = fixtureSync(
-      `Baseline
+    div = fixtureSync(`
+      <div style="width: fit-content; padding: 10px">
+        Baseline
         <mock-group-field>
           <span>Item A</span>
           <span>Item B</span>
           <span>Item C</span>
-        </mock-group-field>`,
-      div,
-    );
+        </mock-group-field>
+      </div>
+    `);
+    element = div.querySelector('mock-group-field');
   });
 
   it('default', async () => {

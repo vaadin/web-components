@@ -6,10 +6,13 @@ describe('field-base', () => {
   let div, element;
 
   beforeEach(() => {
-    div = document.createElement('div');
-    div.style.width = 'fit-content';
-    div.style.padding = '10px';
-    element = fixtureSync('Baseline <mock-field></mock-field>', div);
+    div = fixtureSync(`
+      <div style="width: fit-content; padding: 10px">
+        Baseline
+        <mock-field></mock-field>
+      </div>
+    `);
+    element = div.querySelector('mock-field');
   });
 
   describe('features', () => {
