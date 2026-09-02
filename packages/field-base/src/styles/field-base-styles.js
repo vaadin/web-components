@@ -223,15 +223,6 @@ export const fieldLabelAside = css`
     column-gap: var(--vaadin-field-label-spacing, 1em);
   }
 
-  /*
-   * The label area starts at the input row, so the baseline guide can no
-   * longer be anchored to the label row lines; anchor it to the first row
-   * instead.
-   */
-  :host([theme~='label-aside'])::before {
-    grid-row: var(--_has-label, 1 / baseline) var(--_no-label, 1 / input);
-  }
-
   :host([theme~='label-aside']) [part='label'] {
     align-self: baseline;
     margin-bottom: 0;
