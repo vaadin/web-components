@@ -1091,13 +1091,7 @@ export const DateTimePickerMixin = (superClass) =>
         return;
       }
 
-      // The "label-aside" theme variant only concerns the field's own
-      // label and must not be forwarded to the slotted pickers, which
-      // have no labels and would otherwise reserve an empty label column.
-      const forwardedTheme = theme
-        ?.split(' ')
-        .filter((variant) => variant !== 'label-aside')
-        .join(' ');
+      const forwardedTheme = theme?.replace(/(^|\s)label-aside(\s|$)/u, ' ').trim();
 
       [datePicker, timePicker].forEach((picker) => setOrRemoveAttribute(picker, 'theme', forwardedTheme));
     }
