@@ -23,11 +23,7 @@ export const group = css`
   :host([theme~='horizontal']) [part='group-field'] {
     flex-flow: row wrap;
     align-items: center;
-  }
-
-  :host([has-label][theme~='horizontal']) [part='group-field'] {
-    padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
-    padding-inline: 0;
+    padding-block: var(--vaadin-padding-block-container);
     border-block: var(--vaadin-input-field-border-width, 1px) solid transparent;
   }
 `;
