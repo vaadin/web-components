@@ -59,6 +59,11 @@ describe('range-slider', () => {
       element.value = [25, 75];
       await visualDiff(div, 'readonly-value');
     });
+
+    it('label', async () => {
+      element.label = 'Label';
+      await visualDiff(div, 'label');
+    });
   });
 
   describe('focus', () => {
