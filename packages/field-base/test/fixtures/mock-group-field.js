@@ -1,7 +1,7 @@
 import { html, LitElement } from 'lit';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { FieldMixin } from '../../src/field-mixin.js';
-import { field } from '../../src/styles/field-base-styles.js';
+import { field, fieldLabelAside } from '../../src/styles/field-base-styles.js';
 import { group } from '../../src/styles/group-base-styles.js';
 
 class MockGroupField extends FieldMixin(PolylitMixin(LitElement)) {
@@ -14,7 +14,7 @@ class MockGroupField extends FieldMixin(PolylitMixin(LitElement)) {
   }
 
   static get styles() {
-    return [field, group];
+    return [field, fieldLabelAside, group];
   }
 
   render() {
