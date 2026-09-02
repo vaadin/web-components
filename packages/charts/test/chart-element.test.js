@@ -83,54 +83,54 @@ describe('vaadin-chart', () => {
   describe('organization', () => {
     let chart;
 
+    // `__forceResize` in `vaadin-chart-mixin.js` re-measures the labels, which are
+    // otherwise positioned before the styled-mode label CSS applies.
+    // Workaround for https://github.com/highcharts/highcharts/issues/23443
+    // On 12.2.0: ~7 px deviation with the workaround, ~73 px without it.
+    function worstLabelDeviation() {
+      const nodes = chart.configuration.series[0].nodes.filter((node) => node.graphic && node.dataLabel);
+      // Fail loudly if a Highcharts upgrade leaves nothing to measure.
+      expect(nodes).to.have.lengthOf(13);
+
+      return nodes.reduce((worst, node) => {
+        const box = node.graphic.element.getBoundingClientRect();
+        const label = node.dataLabel.element.getBoundingClientRect();
+        const dx = label.left + label.width / 2 - (box.left + box.width / 2);
+        const dy = label.top + label.height / 2 - (box.top + box.height / 2);
+        return Math.max(worst, Math.hypot(dx, dy));
+      }, 0);
+    }
+
     beforeEach(async () => {
-      chart = fixtureSync('<vaadin-chart type="gantt"></vaadin-chart>');
-      chart.updateConfiguration(
-        {
-          chart: {
-            styledMode: true,
-            inverted: true,
-            type: 'organization',
-          },
-          title: {
-            text: 'Acme organization chart',
-          },
-          series: [
-            {
-              keys: ['from', 'to'],
-              nodes: [
-                {
-                  id: 'Acme',
-                },
-                {
-                  id: 'Head Office',
-                },
-                {
-                  id: 'Labs',
-                },
-              ],
-              name: 'Highsoft',
-              data: [
-                ['Acme', 'Head Office'],
-                ['Acme', 'Labs'],
-              ],
-            },
-          ],
-        },
-        true,
-      );
-      await oneEvent(chart, 'chart-end-resize');
+      chart = fixtureSync(`
+        <vaadin-chart type="organization" title="Acme" style="width: 800px; height: 500px"
+          additional-options='{ "chart": { "inverted": true } }'>
+          <vaadin-chart-series
+            title="Acme"
+            values='[
+              ["Acme", "Head Office"], ["Acme", "Labs"],
+              ["Head Office", "Coyote Building"], ["Head Office", "Road Runner Building"],
+              ["Coyote Building", "Sales"], ["Coyote Building", "Marketing"],
+              ["Road Runner Building", "Administration"], ["Road Runner Building", "MDs Office"],
+              ["Sales", "Joseph Miler"], ["Marketing", "Erik Perez"],
+              ["Administration", "Ewan Herbert"], ["MDs Office", "Sally Brown"]
+            ]'
+            additional-options='{
+              "keys": ["from", "to"],
+              "levels": [{ "level": 0, "height": 25 }, { "level": 1, "height": 25 }],
+              "nodeWidth": 65
+            }'
+          ></vaadin-chart-series>
+        </vaadin-chart>
+      `);
+      await oneEvent(chart, 'chart-load');
+      // `__initChart` schedules the label re-measure on the next animation frame.
+      await nextFrame();
+      await nextFrame();
     });
 
-    it('should have labels aligned with points', () => {
-      const renderElement = chart.$.chart;
-      const point = renderElement.querySelector('path.highcharts-node.highcharts-point.highcharts-color-0');
-      const label = renderElement.querySelector('div.highcharts-data-label.highcharts-data-label-color-0');
-
-      const { left: pointLeft, width: pointWidth } = point.getBoundingClientRect();
-      const { left: labelLeft, width: labelWidth } = label.getBoundingClientRect();
-
-      expect(pointLeft + pointWidth / 2).to.be.equal(labelLeft + labelWidth / 2);
+    it('should centre every data label on its own node', () => {
+      expect(worstLabelDeviation()).to.be.below(20);
     });
   });
 

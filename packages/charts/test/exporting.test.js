@@ -112,6 +112,14 @@ describe('vaadin-chart exporting', () => {
     expect(styleRemovedFromBody).to.be.true;
   });
 
+  // The export copy renders outside the shadow root, so without the style copying
+  // above the SVG loses its paint attributes (~35 `fill=` with the copy, a handful
+  // without). Workaround for https://github.com/vaadin/vaadin-charts/issues/389
+  it('should inline paint attributes into the exported SVG', () => {
+    const svg = chart.configuration.getSVGForExport({}, {});
+    expect(svg.match(/fill="/gu)).to.have.length.above(20);
+  });
+
   it('should dispatch export events once per export', () => {
     const events = [];
     chart.addEventListener('chart-before-export', () => events.push('before'));
