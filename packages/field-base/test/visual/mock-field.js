@@ -10,6 +10,10 @@ class MockField extends InputFieldMixin(PolylitMixin(LitElement)) {
     return 'mock-field';
   }
 
+  static get version() {
+    return '1.0.0';
+  }
+
   static get styles() {
     return [inputFieldShared];
   }

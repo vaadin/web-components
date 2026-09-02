@@ -9,7 +9,7 @@ describe('field-base', () => {
     div = document.createElement('div');
     div.style.width = 'fit-content';
     div.style.padding = '10px';
-    element = fixtureSync('<mock-field></mock-field>', div);
+    element = fixtureSync('Baseline <mock-field></mock-field>', div);
   });
 
   describe('features', () => {
@@ -21,6 +21,10 @@ describe('field-base', () => {
 
         after(() => {
           document.documentElement.removeAttribute('dir');
+        });
+
+        it('default', async () => {
+          await visualDiff(div, `${dir}-default`);
         });
 
         it('label', async () => {
@@ -41,7 +45,6 @@ describe('field-base', () => {
         });
 
         it('error message', async () => {
-          element.label = 'Label';
           element.errorMessage = 'This field is required';
           element.required = true;
           element.validate();
@@ -54,10 +57,16 @@ describe('field-base', () => {
         });
 
         it('helper above field', async () => {
-          element.label = 'Label';
           element.helperText = 'Helper text';
           element.setAttribute('theme', 'helper-above-field');
           await visualDiff(div, `${dir}-helper-above-field`);
+        });
+
+        it('label and helper above field', async () => {
+          element.label = 'Label';
+          element.helperText = 'Helper text';
+          element.setAttribute('theme', 'helper-above-field');
+          await visualDiff(div, `${dir}-label-helper-above-field`);
         });
       });
     });
