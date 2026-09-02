@@ -15,6 +15,17 @@ export const selectStyles = css`
     flex: 1;
   }
 
+  /*
+   * Keep a text baseline in the value button also when no value is
+   * selected, so that the label doesn't shift when the value changes
+   * while displayed beside the field (the "label-aside" theme variant).
+   */
+  ::slotted([slot='value'])::before {
+    content: '\\2003' / '';
+    display: inline-block;
+    width: 0;
+  }
+
   ::slotted(div[slot='overlay']) {
     display: contents;
   }
