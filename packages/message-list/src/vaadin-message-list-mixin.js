@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, render } from 'lit';
+import { html, nothing, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
@@ -79,7 +79,8 @@ export const MessageListMixin = (superClass) =>
          */
         _usersTyping: {
           type: Array,
-          observer: '__usersTypingChanged',
+          value: () => [],
+          observer: '__typingIndicatorChanged',
           sync: true,
         },
 
@@ -87,18 +88,20 @@ export const MessageListMixin = (superClass) =>
         _typingIndicatorText: {
           type: String,
           value: 'Typing…',
+          observer: '__typingIndicatorChanged',
         },
 
         /** @private */
         _typingIndicatorType: {
           type: String,
+          observer: '__typingIndicatorChanged',
         },
       };
     }
 
     /** @protected */
     get _messages() {
-      return [...this.querySelectorAll('vaadin-message')];
+      return [...this.querySelectorAll('vaadin-message:not([slot="typing-indicator"])')];
     }
 
     /** @protected */
@@ -205,6 +208,11 @@ export const MessageListMixin = (superClass) =>
     }
 
     /** @private */
+    __typingIndicatorChanged() {
+      this._renderMessages(this.items);
+    }
+
+    /** @private */
     __markdownChanged(markdown) {
       if (markdown && !customElements.get('vaadin-markdown')) {
         // Dynamically import the markdown component
@@ -218,31 +226,23 @@ export const MessageListMixin = (superClass) =>
     }
 
     /** @private */
-    __usersTypingChanged(users) {
-      let typingIndicator = this.querySelector('vaadin-message[slot="typing-indicator"]');
-      if (!typingIndicator) {
-        typingIndicator = document.createElement('vaadin-message');
-        typingIndicator.slot = 'typing-indicator';
-        const avatars = document.createElement('vaadin-avatar-group');
-        avatars.maxItemsVisible = 100;
-        avatars.slot = 'avatar';
-        const typingText = document.createElement('span');
-        typingIndicator.append(avatars, typingText);
-      }
+    __renderTypingIndicator() {
+      const users = this._usersTyping;
       if (users.length === 0) {
-        typingIndicator.remove();
-      } else {
-        typingIndicator.setAttribute('typing-indicator', this._typingIndicatorType);
-        const avatars = typingIndicator.querySelector(':scope > vaadin-avatar-group');
-        avatars.items = users;
-        const formatter = new Intl.ListFormat(navigator.language, {
-          type: 'conjunction',
-        });
-        typingIndicator.userName = formatter.format(users.map((user) => user.name));
-        const typingText = typingIndicator.querySelector(':scope > span');
-        typingText.textContent = this._typingIndicatorText;
-        this.append(typingIndicator);
+        return nothing;
       }
+
+      const userNames = new Intl.ListFormat(navigator.language, { type: 'conjunction' }).format(
+        users.map((user) => user.name),
+      );
+
+      return html`<vaadin-message
+        slot="typing-indicator"
+        typing-indicator="${this._typingIndicatorType || ''}"
+        .userName="${userNames}"
+        ><vaadin-avatar-group slot="avatar" .items="${users}" .maxItemsVisible="${100}"></vaadin-avatar-group
+        ><span>${this._typingIndicatorText}</span></vaadin-message
+      >`;
     }
 
     /** @private */
@@ -263,12 +263,14 @@ export const MessageListMixin = (superClass) =>
                 class="${ifDefined(item.className)}"
                 @focusin="${this._onMessageFocusIn}"
                 @attachment-click="${(e) => this.__onAttachmentClick(e, item)}"
-                >${this.markdown
-                  ? html`<vaadin-markdown .content=${item.text} line-breaks></vaadin-markdown>`
-                  : item.text}<vaadin-avatar slot="avatar"></vaadin-avatar
+                >${
+                  this.markdown
+                    ? html`<vaadin-markdown .content=${item.text} line-breaks></vaadin-markdown>`
+                    : item.text
+                }<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
             `,
-          )}
+          )}${this.__renderTypingIndicator()}
         `,
         this,
         { host: this },

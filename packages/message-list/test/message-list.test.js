@@ -12,6 +12,7 @@ import {
   mousedown,
   nextRender,
   nextResize,
+  nextUpdate,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
@@ -513,6 +514,142 @@ describe('message-list', () => {
       expect(messageList.getAttribute('aria-live')).to.equal('polite');
       messageList.announceMessages = false;
       expect(messageList.getAttribute('aria-live')).to.be.null;
+    });
+  });
+
+  describe('typing indicator', () => {
+    const users = [
+      { name: 'Linsey Listy', abbr: 'LL', colorIndex: 2 },
+      { name: 'Matt Mambo', abbr: 'MM', colorIndex: 1 },
+    ];
+
+    function getTypingIndicator() {
+      return messageList.querySelector('[slot="typing-indicator"]');
+    }
+
+    before(() => {
+      Object.defineProperty(navigator, 'language', { configurable: true, value: 'en-US' });
+    });
+
+    after(() => {
+      delete navigator.language;
+    });
+
+    beforeEach(async () => {
+      messageList.items = messages;
+      await nextRender();
+    });
+
+    it('should not create typing indicator when no one is typing', () => {
+      expect(getTypingIndicator()).to.be.null;
+    });
+
+    it('should create typing indicator when users are typing', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      const indicator = getTypingIndicator();
+      expect(indicator.localName).to.equal('vaadin-message');
+      expect(indicator.hidden).to.be.false;
+    });
+
+    it('should set names of the typing users on the typing indicator', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator().userName).to.equal('Linsey Listy and Matt Mambo');
+    });
+
+    it('should set typing users as the avatar group items', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      const avatarGroup = getTypingIndicator().querySelector('vaadin-avatar-group');
+      expect(avatarGroup.getAttribute('slot')).to.equal('avatar');
+      expect(avatarGroup.items).to.equal(users);
+    });
+
+    it('should set the typing indicator text', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator().querySelector('span').textContent).to.equal('Typing…');
+    });
+
+    it('should update the typing indicator text', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      messageList._typingIndicatorText = 'is typing';
+      await nextUpdate(messageList);
+      expect(getTypingIndicator().querySelector('span').textContent).to.equal('is typing');
+    });
+
+    it('should reflect the typing indicator type to an attribute', async () => {
+      messageList._typingIndicatorType = 'ellipsis';
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator().getAttribute('typing-indicator')).to.equal('ellipsis');
+    });
+
+    it('should update the typing indicator type while users are typing', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      messageList._typingIndicatorType = 'minimal';
+      await nextUpdate(messageList);
+      expect(getTypingIndicator().getAttribute('typing-indicator')).to.equal('minimal');
+    });
+
+    it('should remove the typing indicator when no one is typing anymore', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      messageList._usersTyping = [];
+      await nextRender();
+      expect(getTypingIndicator()).to.be.null;
+    });
+
+    it('should render the typing indicator again when users start typing again', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+
+      messageList._usersTyping = [];
+      messageList._usersTyping = [users[0]];
+      await nextRender();
+      expect(getTypingIndicator().userName).to.equal('Linsey Listy');
+    });
+
+    it('should update the typing indicator in place when the users change', async () => {
+      messageList._usersTyping = [users[0]];
+      await nextRender();
+      const indicator = getTypingIndicator();
+
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator() === indicator).to.be.true;
+      expect(indicator.userName).to.equal('Linsey Listy and Matt Mambo');
+    });
+
+    it('should keep the typing indicator when messages are removed', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+
+      messageList.items = [];
+      await nextRender();
+      expect(getTypingIndicator().isConnected).to.be.true;
+    });
+
+    it('should not include the typing indicator in the messages', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(messageList._messages).to.have.lengthOf(messages.length);
+      expect(messageList._messages).to.not.include(getTypingIndicator());
+    });
+
+    it('should not move focus to the typing indicator on keyboard navigation', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+
+      // Navigating past the last message wraps around to the first one
+      const lastMessage = messageList._messages[messageList._messages.length - 1];
+      lastMessage.focus();
+      arrowDown(lastMessage);
+      expect(messageList._messages[0].hasAttribute('focused')).to.be.true;
+      expect(getTypingIndicator().hasAttribute('focused')).to.be.false;
     });
   });
 
