@@ -18,12 +18,12 @@ export const field = css`
     --_gap-s: round(var(--_gap) / 3, 2px);
     display: inline-grid;
     grid-template:
-      'label' auto
+      '                           label' auto
       var(--_helper-above-field, 'helper' auto)
-      'baseline' 0
-      'input' 1fr
+      '                           baseline' 0
+      '                           input' 1fr
       var(--_helper-below-field, 'helper' auto)
-      'error' auto
+      '                           error' auto
       / 100%;
     height: fit-content;
     outline: none;
@@ -215,10 +215,10 @@ export const fieldLabelAside = css`
   :host([theme~='label-aside']) {
     grid-template:
       var(--_helper-above-field, '.     helper' auto)
-      '.     baseline' 0
-      'label input' 1fr
+      '                           .     baseline' 0
+      '                           label input' 1fr
       var(--_helper-below-field, 'label helper' auto)
-      'label error' auto
+      '                           label error' auto
       / var(--vaadin-field-label-width, 8em) minmax(0, 1fr);
     column-gap: var(--vaadin-field-label-spacing, 1em);
   }
