@@ -81,6 +81,12 @@ describe('field-base', () => {
             await visualDiff(div, `${dir}-label-aside`);
           });
 
+          it('label width without label', async () => {
+            element.style.setProperty('--vaadin-field-label-width', '8em');
+            element.style.setProperty('--vaadin-field-label-spacing', '1em');
+            await visualDiff(div, `${dir}-label-aside-label-width`);
+          });
+
           it('label', async () => {
             element.label = 'Label';
             await visualDiff(div, `${dir}-label-aside-label`);
