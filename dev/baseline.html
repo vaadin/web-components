@@ -29,10 +29,6 @@
         ];
       });
 
-      document.querySelector('#flex').addEventListener('change', (e) => {
-        document.documentElement.classList.toggle('use-flex', e.target.checked);
-      });
-
       document.querySelector('#label-aside').addEventListener('change', (e) => {
         document.querySelectorAll('section > :not(span, vaadin-button)').forEach((field) => {
           const theme = (field.getAttribute('theme') || '').split(' ').filter((t) => t && t !== 'label-aside');
@@ -48,7 +44,7 @@
       });
     </script>
     <style>
-      .use-flex section {
+      section {
         display: flex;
         align-items: baseline;
         gap: 0.3em;
@@ -75,7 +71,6 @@
   </head>
 
   <body>
-    <vaadin-checkbox id="flex" label="Use flex layout & show baseline"></vaadin-checkbox>
     <vaadin-checkbox id="label-aside" label="Label aside"></vaadin-checkbox>
     <h2 class="heading">Plain</h2>
     <section>
