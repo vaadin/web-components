@@ -149,6 +149,6 @@ export const sliderStyles = css`
       'label marks' auto
       var(--_helper-below-field, 'label helper' auto)
       'label error' auto
-      / var(--vaadin-field-label-width, var(--_label-aside-width)) minmax(0, 1fr);
+      / var(--_side-label-width, 0) minmax(0, 1fr);
   }
 `;
