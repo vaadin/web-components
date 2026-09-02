@@ -18,11 +18,13 @@ export const field = css`
     --_gap-s: round(var(--_gap) / 3, 2px);
     display: inline-grid;
     grid-template:
-      'label' auto var(--_helper-above-field, 'helper' auto) 'baseline' 0 'input' 1fr var(
-        --_helper-below-field,
-        'helper' auto
-      )
-      'error' auto / 100%;
+      'label' auto
+      var(--_helper-above-field, 'helper' auto)
+      'baseline' 0
+      'input' 1fr
+      var(--_helper-below-field, 'helper' auto)
+      'error' auto
+      / 100%;
     height: fit-content;
     outline: none;
     cursor: default;
@@ -193,5 +195,51 @@ export const field = css`
     [part='error-message']::before {
       background: CanvasText;
     }
+  }
+`;
+
+/**
+ * Styles for the "label-aside" theme variant, which displays the label
+ * beside the input. The variant template moves the label area into a
+ * fixed-width column at the start, repeating the default rows otherwise.
+ * Because the label column width is a fixed length, every field resolves
+ * the same track width and labels align across fields without shared
+ * grid tracks (no subgrid needed). The label area starts at the input
+ * row so that the label shares a baseline alignment context with the
+ * input.
+ *
+ * Included only by fields that support the variant. Checkables don't:
+ * their label is always displayed next to the control.
+ */
+export const fieldLabelAside = css`
+  :host([theme~='label-aside']) {
+    grid-template:
+      var(--_helper-above-field, '.     helper' auto)
+      '.     baseline' 0
+      'label input' 1fr
+      var(--_helper-below-field, 'label helper' auto)
+      'label error' auto
+      / var(--vaadin-field-label-width, 8em) minmax(0, 1fr);
+    column-gap: var(--vaadin-field-label-spacing, 1em);
+  }
+
+  /*
+   * The label area starts at the input row, so the baseline guide can no
+   * longer be anchored to the label row lines; anchor it to the first row
+   * instead.
+   */
+  :host([theme~='label-aside'])::before {
+    grid-row: var(--_has-label, 1 / baseline) var(--_no-label, 1 / input);
+  }
+
+  :host([theme~='label-aside']) [part='label'] {
+    align-self: baseline;
+    margin-bottom: 0;
+  }
+
+  :host([theme~='label-aside']) [part='input-field'],
+  :host([theme~='label-aside']) [part='group-field'],
+  :host([theme~='label-aside']) [part='input-fields'] {
+    align-self: baseline;
   }
 `;

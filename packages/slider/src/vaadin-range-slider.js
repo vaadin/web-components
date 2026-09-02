@@ -14,7 +14,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
-import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
+import { field, fieldLabelAside } from '@vaadin/field-base/src/styles/field-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sliderStyles } from './styles/vaadin-slider-base-styles.js';
@@ -139,6 +139,7 @@ class RangeSlider extends FieldMixin(
   static get styles() {
     return [
       field,
+      fieldLabelAside,
       sliderStyles,
       css`
         :host([focus-ring][start-focused]) [part~='thumb-start'],
