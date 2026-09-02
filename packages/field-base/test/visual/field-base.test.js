@@ -71,6 +71,53 @@ describe('field-base', () => {
           element.setAttribute('theme', 'helper-above-field');
           await visualDiff(div, `${dir}-label-helper-above-field`);
         });
+
+        describe('label aside', () => {
+          beforeEach(() => {
+            element.setAttribute('theme', 'label-aside');
+          });
+
+          it('default', async () => {
+            await visualDiff(div, `${dir}-label-aside`);
+          });
+
+          it('label', async () => {
+            element.label = 'Label';
+            await visualDiff(div, `${dir}-label-aside-label`);
+          });
+
+          it('long label', async () => {
+            element.label = 'Label that wraps on multiple lines';
+            await visualDiff(div, `${dir}-label-aside-long-label`);
+          });
+
+          it('required', async () => {
+            element.label = 'Label';
+            element.required = true;
+            await visualDiff(div, `${dir}-label-aside-required`);
+          });
+
+          it('error message', async () => {
+            element.label = 'Label';
+            element.errorMessage = 'This field is required';
+            element.required = true;
+            element.validate();
+            await visualDiff(div, `${dir}-label-aside-error-message`);
+          });
+
+          it('helper text', async () => {
+            element.label = 'Label';
+            element.helperText = 'Helper text';
+            await visualDiff(div, `${dir}-label-aside-helper-text`);
+          });
+
+          it('helper above field', async () => {
+            element.label = 'Label';
+            element.helperText = 'Helper text';
+            element.setAttribute('theme', 'label-aside helper-above-field');
+            await visualDiff(div, `${dir}-label-aside-helper-above-field`);
+          });
+        });
       });
     });
   });
