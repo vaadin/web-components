@@ -101,4 +101,14 @@ describe('number-field', () => {
       });
     });
   });
+
+  it('label aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    element.helperText = 'Helper text';
+    element.errorMessage = 'Error message';
+    element.required = true;
+    element.invalid = true;
+    await visualDiff(div, 'label-aside');
+  });
 });
