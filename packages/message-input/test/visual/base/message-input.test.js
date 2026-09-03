@@ -48,6 +48,19 @@ describe('message-input', () => {
           await sendKeys({ press: 'Tab' });
           await visualDiff(div, `${dir}-button-focused`);
         });
+
+        it('slots', async () => {
+          element.value = 'Hello';
+          element.insertAdjacentHTML(
+            'afterbegin',
+            `
+              <div slot="header">Header</div>
+              <span slot="prefix">Prefix</span>
+              <div slot="footer">Footer</div>
+            `,
+          );
+          await visualDiff(div, `${dir}-slots`);
+        });
       });
     });
   });

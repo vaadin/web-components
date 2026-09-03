@@ -8,6 +8,7 @@
     align-items: flex-start;
     box-sizing: border-box;
     display: flex;
+    flex-wrap: wrap;
     max-height: 50vh;
     overflow: hidden;
     flex-shrink: 0;
@@ -26,5 +27,20 @@
     align-self: stretch;
     flex-grow: 1;
     margin-inline-end: var(--lumo-space-s);
+  }
+
+  :host(:has([slot='prefix'])) ::slotted([slot='textarea']) {
+    margin-inline-start: var(--lumo-space-s);
+  }
+
+  @scope {
+    :scope:has([slot='prefix']) ::slotted([slot='textarea']) {
+      margin-inline-start: var(--lumo-space-s);
+    }
+  }
+
+  ::slotted([slot='header']),
+  ::slotted([slot='footer']) {
+    width: 100%;
   }
 }

@@ -33,6 +33,16 @@ export type MessageInputEventMap = HTMLElementEventMap & MessageInputCustomEvent
  * <vaadin-message-input></vaadin-message-input>
  * ```
  *
+ * ### Slots
+ *
+ * The following slots are available for adding content around the message input:
+ *
+ * Name       | Description
+ * -----------|-------------
+ * `header`   | Content displayed above the text area and controls
+ * `prefix`   | Content displayed before the text area
+ * `footer`   | Content displayed below the text area and controls
+ *
  * ### Styling
  *
  * The following state attributes are available for styling:
