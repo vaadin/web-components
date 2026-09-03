@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-date-picker.js';
-import { activateScroller, getCalendars, getDefaultI18n, open } from './helpers.js';
+import { activateScroller, getCalendars, getDateButton, getDefaultI18n, open } from './helpers.js';
 
 describe('WAI-ARIA', () => {
   describe('date picker', () => {
@@ -126,11 +126,11 @@ describe('WAI-ARIA', () => {
       await nextRender();
     });
 
-    it('should indicate today on date cells', async () => {
+    it('should indicate today on date buttons', async () => {
       monthCalendar.month = new Date();
       await nextFrame();
       const todayElement = monthCalendar.shadowRoot.querySelector('[part~="today"]');
-      expect(todayElement.getAttribute('aria-label')).to.match(/, Today$/u);
+      expect(getDateButton(todayElement).getAttribute('aria-label')).to.match(/, Today$/u);
     });
   });
 
