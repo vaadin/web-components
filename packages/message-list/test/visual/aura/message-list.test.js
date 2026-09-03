@@ -154,5 +154,15 @@ describe('message-list', () => {
         });
       });
     });
+
+    it('default - single - bubble one-to-one', async () => {
+      element.setAttribute('theme', 'bubble one-to-one');
+      element._typingIndicatorType = types.default;
+      element._usersTyping = users.single;
+      await nextRender();
+      await nextFrame();
+
+      await visualDiff(div, 'typing-indicator-default-single-bubble-one-to-one');
+    });
   });
 });

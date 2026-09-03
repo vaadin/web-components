@@ -552,6 +552,11 @@ describe('message-list', () => {
       expect(indicator.hidden).to.be.false;
     });
 
+    it('should create typing indicator synchronously when users start typing', () => {
+      messageList._usersTyping = users;
+      expect(getTypingIndicator()).to.be.not.null;
+    });
+
     it('should set names of the typing users on the typing indicator', async () => {
       messageList._usersTyping = users;
       await nextRender();
@@ -593,6 +598,18 @@ describe('message-list', () => {
       messageList._typingIndicatorType = 'minimal';
       await nextUpdate(messageList);
       expect(getTypingIndicator().getAttribute('typing-indicator')).to.equal('minimal');
+    });
+
+    it('should render an icon for the ellipsis typing indicator', async () => {
+      messageList._typingIndicatorType = 'ellipsis';
+      messageList._usersTyping = users;
+      await nextRender();
+      const message = getTypingIndicator().shadowRoot.querySelector('[part="message"]');
+      const { backgroundColor, maskImage, width, height } = getComputedStyle(message, '::before');
+      expect(maskImage).to.contain('svg');
+      expect(backgroundColor).to.equal(getComputedStyle(message).color);
+      expect(width).to.equal(height);
+      expect(parseFloat(width)).to.be.above(0);
     });
 
     it('should remove the typing indicator when no one is typing anymore', async () => {
