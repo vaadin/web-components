@@ -100,10 +100,6 @@ export const formLayoutStyles = css`
     --_form-item-labels-above: initial; /* true */
     --_form-item-labels-aside: ' '; /* false */
 
-    /*
-      PROTOTYPE: Label sizing for slotted fields. Fields use these tokens for
-      their label column when the layout applies the "label-aside" variant.
-    */
     --vaadin-field-side-label-width: var(--_label-width);
     --vaadin-field-side-label-gap: var(--_label-spacing);
 
