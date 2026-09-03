@@ -419,8 +419,8 @@ export const ItemsMixin = (superClass) =>
         }
       }
 
-      // Only reachable with `accessibleDisabledMenuItems` enabled (disabled
-      // items otherwise have `pointer-events: none` and never receive mouseover).
+      // Disabled items are hoverable but never open a sub-menu, so close
+      // an expanded sibling sub-menu when the pointer moves onto one.
       if (item?.disabled) {
         subMenu.close();
       }

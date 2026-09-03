@@ -4,6 +4,7 @@ export const snapshots = {};
 snapshots["vaadin-upload-button host default"] = 
 `<vaadin-upload-button
   role="button"
+  style="--_vaadin-button-disabled-pointer-events: auto;"
   tabindex="0"
 >
   Upload
@@ -16,7 +17,8 @@ snapshots["vaadin-upload-button host disabled"] =
   aria-disabled="true"
   disabled=""
   role="button"
-  tabindex="-1"
+  style="--_vaadin-button-disabled-pointer-events: auto;"
+  tabindex="0"
 >
   Upload
 </vaadin-upload-button>
@@ -27,6 +29,7 @@ snapshots["vaadin-upload-button host max-files-reached"] =
 `<vaadin-upload-button
   max-files-reached=""
   role="button"
+  style="--_vaadin-button-disabled-pointer-events: auto;"
   tabindex="0"
 >
   Upload
@@ -38,6 +41,7 @@ snapshots["vaadin-upload-button host focused"] =
 `<vaadin-upload-button
   focused=""
   role="button"
+  style="--_vaadin-button-disabled-pointer-events: auto;"
   tabindex="0"
 >
   Upload
@@ -50,6 +54,7 @@ snapshots["vaadin-upload-button host focus-ring"] =
   focus-ring=""
   focused=""
   role="button"
+  style="--_vaadin-button-disabled-pointer-events: auto;"
   tabindex="0"
 >
   Upload
@@ -61,6 +66,7 @@ snapshots["vaadin-upload-button host active"] =
 `<vaadin-upload-button
   active=""
   role="button"
+  style="--_vaadin-button-disabled-pointer-events: auto;"
   tabindex="0"
 >
   Upload

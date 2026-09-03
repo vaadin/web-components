@@ -77,19 +77,10 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
   static get properties() {
     return {
       /**
-       * When disabled, the button is rendered as "dimmed".
-       *
-       * By default, disabled buttons are not focusable and don't react to hover.
-       * As a result, they are hidden from assistive technologies, and it's not
-       * possible to show a tooltip to explain why they are disabled. This can
-       * be addressed by enabling the feature flag `accessibleDisabledButtons`,
-       * which makes disabled buttons focusable and hoverable, while still
-       * preventing them from being activated:
-       *
-       * ```js
-       * // Set before any button is attached to the DOM.
-       * window.Vaadin.featureFlags.accessibleDisabledButtons = true
-       * ```
+       * When disabled, the button is rendered as "dimmed" and prevented
+       * from being activated. Disabled buttons remain focusable and
+       * hoverable, so they stay visible to assistive technologies and
+       * can show a tooltip to explain why they are disabled.
        */
       disabled: {
         type: Boolean,
@@ -130,7 +121,7 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
 
   /** @override */
   __shouldAllowFocusWhenDisabled() {
-    return window.Vaadin.featureFlags.accessibleDisabledButtons;
+    return true;
   }
 }
 

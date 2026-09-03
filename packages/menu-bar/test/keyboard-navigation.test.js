@@ -56,14 +56,14 @@ describe('keyboard navigation', () => {
           expect(buttons[0].hasAttribute('focused')).to.be.true;
         });
 
-        it('should move focus to second button if first is disabled on Home keydown', async () => {
+        it('should move focus to first button on Home keydown even if it is disabled', async () => {
           menu.items[0].disabled = true;
           updateItemsAndButtons();
           buttons[3].focus();
-          const spy = sinon.spy(buttons[1], 'focus');
+          const spy = sinon.spy(buttons[0], 'focus');
           await sendKeys({ press: 'Home' });
           expect(spy.calledOnce).to.be.true;
-          expect(buttons[1].hasAttribute('focused')).to.be.true;
+          expect(buttons[0].hasAttribute('focused')).to.be.true;
         });
 
         it('should move focus to last button on End keydown', async () => {
@@ -74,14 +74,14 @@ describe('keyboard navigation', () => {
           expect(buttons[3].hasAttribute('focused')).to.be.true;
         });
 
-        it('should move focus to the closest enabled button if last is disabled on End keydown', async () => {
+        it('should move focus to last button on End keydown even if it is disabled', async () => {
           menu.items[3].disabled = true;
           updateItemsAndButtons();
           buttons[0].focus();
-          const spy = sinon.spy(buttons[1], 'focus');
+          const spy = sinon.spy(buttons[3], 'focus');
           await sendKeys({ press: 'End' });
           expect(spy.calledOnce).to.be.true;
-          expect(buttons[1].hasAttribute('focused')).to.be.true;
+          expect(buttons[3].hasAttribute('focused')).to.be.true;
         });
 
         it('should move focus to first button on Arrow Right, if last button has focus', async () => {
@@ -233,10 +233,10 @@ describe('keyboard navigation', () => {
         expect(buttons[0].hasAttribute('focused')).to.be.true;
       });
 
-      it('should move focus to fourth button if third is disabled on Tab keydown', async () => {
+      it('should move focus to third button on Tab keydown even if it is disabled', async () => {
         buttons[1].focus();
         await sendKeys({ press: 'Tab' });
-        expect(buttons[3].hasAttribute('focused')).to.be.true;
+        expect(buttons[2].hasAttribute('focused')).to.be.true;
       });
 
       it('should move focus out of the menu bar on last button Tab keydown', async () => {
@@ -492,7 +492,7 @@ describe('keyboard navigation', () => {
         expect(document.activeElement).to.equal(firstGlobalFocusable);
       });
 
-      it('should move focus out of the menu bar on last available submenu item Tab', async () => {
+      it('should move focus to next disabled button on submenu item Tab', async () => {
         menu.items[3].disabled = true;
         updateItemsAndButtons();
 
@@ -502,15 +502,15 @@ describe('keyboard navigation', () => {
         expect(subMenu.opened).to.be.true;
         expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
-        // Tab outside the menu bar (since next button is disabled)
+        // Tab moves focus to the next button even though it is disabled
         await sendKeys({ press: 'Tab' });
         await nextRender();
 
         expect(subMenu.opened).to.be.false;
-        expect(document.activeElement).to.equal(lastGlobalFocusable);
+        expect(document.activeElement).to.equal(buttons[3]);
       });
 
-      it('should move focus out of the menu bar on first available submenu item Tab', async () => {
+      it('should move focus to previous disabled button on submenu item Shift Tab', async () => {
         menu.items[0].disabled = true;
         menu.items[1].disabled = true;
         updateItemsAndButtons();
@@ -521,12 +521,12 @@ describe('keyboard navigation', () => {
         expect(subMenu.opened).to.be.true;
         expect(document.activeElement).to.equal(subMenu.querySelector('vaadin-menu-bar-item'));
 
-        // Tab outside the menu bar (since previous buttons are disabled)
+        // Shift + Tab moves focus to the previous button even though it is disabled
         await sendKeys({ press: 'Shift+Tab' });
         await nextRender();
 
         expect(subMenu.opened).to.be.false;
-        expect(document.activeElement).to.equal(firstGlobalFocusable);
+        expect(document.activeElement).to.equal(buttons[1]);
       });
     });
   });

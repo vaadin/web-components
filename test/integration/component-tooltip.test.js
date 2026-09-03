@@ -272,15 +272,6 @@ before(() => {
 describe('accessible disabled button', () => {
   let button, tooltip;
 
-  before(() => {
-    window.Vaadin.featureFlags ??= {};
-    window.Vaadin.featureFlags.accessibleDisabledButtons = true;
-  });
-
-  after(() => {
-    window.Vaadin.featureFlags.accessibleDisabledButtons = false;
-  });
-
   beforeEach(() => {
     button = fixtureSync(
       `<div>

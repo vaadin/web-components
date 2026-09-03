@@ -70,7 +70,7 @@ snapshots["vaadin-upload host max files"] =
     disabled=""
     role="button"
     slot="add-button"
-    tabindex="-1"
+    tabindex="0"
   >
     Upload File...
   </vaadin-button>
@@ -134,7 +134,7 @@ snapshots["vaadin-upload host disabled"] =
     disabled=""
     role="button"
     slot="add-button"
-    tabindex="-1"
+    tabindex="0"
   >
     Upload Files...
   </vaadin-button>
