@@ -16,6 +16,11 @@ export const checkable = (part, propName = part) => css`
     grid-template-rows: repeat(auto-fill, minmax(0, max-content));
     -webkit-tap-highlight-color: transparent;
     --_cursor: var(--vaadin-clickable-cursor);
+    --_form-item-labels-aside: ' ';
+    margin-inline-start: var(
+      --_form-item-labels-aside,
+      calc(var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing))
+    );
   }
 
   :host(:not([has-label])) {

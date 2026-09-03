@@ -100,9 +100,6 @@ export const formLayoutStyles = css`
     --_form-item-labels-above: initial; /* true */
     --_form-item-labels-aside: ' '; /* false */
 
-    --vaadin-field-side-label-width: var(--_label-width);
-    --vaadin-field-side-label-gap: var(--_label-spacing);
-
     /* CSS grid related properties */
     --_grid-column-width: var(--_column-width-labels-above);
     --_grid-repeat: var(--_grid-column-width);
@@ -150,8 +147,8 @@ export const formLayoutStyles = css`
     /* By default, place each child on a new row */
     grid-column: 1 / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
 
-    /* Form items do not need margins in auto-responsive mode */
-    margin: 0;
+    /* Form items do not need block margins in auto-responsive mode */
+    margin-block: 0;
   }
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
@@ -160,16 +157,16 @@ export const formLayoutStyles = css`
 
   :host([auto-responsive][labels-aside]) {
     --_max-width: var(--_max-width-labels-aside);
+
+    --vaadin-field-side-label-width: var(--_label-width);
+    --vaadin-field-side-label-gap: var(--_label-spacing);
   }
 
   :host([auto-responsive][labels-aside-active]) #layout {
+    --_grid-column-width: var(--_column-width-labels-aside);
+
     --_form-item-labels-above: ' '; /* false */
     --_form-item-labels-aside: initial; /* true */
-    --_grid-column-width: var(--_column-width-labels-aside);
-  }
-
-  :host([auto-responsive][labels-aside-active]) #layout ::slotted(*) {
-    margin-inline-start: var(--_label-aside-indent, calc(var(--_label-width) + var(--_label-spacing)));
   }
 
   :host([auto-responsive][expand-columns]) #layout {
