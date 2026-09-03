@@ -28,7 +28,6 @@ export const messageInputStyles = css`
       var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
     );
     gap: var(--vaadin-input-field-gap, var(--vaadin-gap-s));
-    --vaadin-field-default-width: 8em;
   }
 
   :host([dir='rtl']) {
@@ -73,6 +72,7 @@ export const messageInputStyles = css`
     --vaadin-input-field-background: transparent !important;
     --vaadin-input-field-disabled-background: transparent !important;
     --vaadin-input-field-border-radius: 0px !important;
+    --vaadin-field-default-width: 8em;
     align-self: center;
   }
 
