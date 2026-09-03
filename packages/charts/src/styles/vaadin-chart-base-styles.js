@@ -87,11 +87,11 @@ export const chartStyles = css`
     font-size: var(--vaadin-charts-font-size, 0.75rem);
     line-height: normal;
 
-    /* The chart canvas only. Needs to be a color, not a background image, and a
-       theme may set it to transparent (Aura does). */
+    /* Needs to be a color, not a background image. A theme may set it to transparent. */
     --_bg: var(--vaadin-charts-background, var(--vaadin-background-color));
-    /* Anything that has to read against the chart. Never themeable to transparent. */
-    --_surface: var(--vaadin-background-color);
+    /* What elements drawn on the canvas read against. A transparent canvas has to
+       declare what shows through instead. */
+    --_surface: var(--vaadin-charts-surface, var(--_bg));
 
     --_color-0: var(--highcharts-color-0, var(--vaadin-charts-color-0, var(--vaadin-user-color-0)));
     --_color-1: var(--highcharts-color-1, var(--vaadin-charts-color-1, var(--vaadin-user-color-1)));
@@ -949,8 +949,7 @@ export const chartStyles = css`
     fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-button-label, var(--_label)));
   }
 
-  /* With no theme accent to go on, the base default inverts the same way
-     vaadin-button[theme~='primary'] does. Lumo and Aura override both properties. */
+  /* Inverts like vaadin-button[theme~='primary']. Lumo and Aura override both. */
   :where([styled-mode]) .highcharts-button-pressed {
     font-weight: bold;
     fill: var(--highcharts-highlight-color-10, var(--vaadin-charts-button-active-background, var(--_label)));

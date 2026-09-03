@@ -57,43 +57,60 @@ describe('vaadin-chart styling', () => {
     });
   });
 
-  describe('contrast colours with a transparent background', () => {
+  describe('contrast colours', () => {
     const TRANSPARENT = 'rgba(0, 0, 0, 0)';
-    let chart;
+    const SURFACE = 'rgb(1, 2, 3)';
+    const OPAQUE_BG = 'rgb(51, 51, 51)';
 
-    // `beforeEach`, not `before`: `fixtureSync` removes the element after each test.
-    beforeEach(async () => {
-      chart = fixtureSync(`
-        <vaadin-chart type="treemap" timeline style="--vaadin-charts-background: transparent">
+    async function chartWith(style) {
+      const chart = fixtureSync(`
+        <vaadin-chart type="treemap" timeline style="${style}">
           <vaadin-chart-series values='[{ "name": "A", "value": 5 }, { "name": "B", "value": 3 }]'></vaadin-chart-series>
         </vaadin-chart>
       `);
       await oneEvent(chart, 'chart-load');
+      return chart.shadowRoot;
+    }
+
+    describe('transparent canvas', () => {
+      // Aura's configuration.
+      const STYLE = `--vaadin-charts-background: transparent; --vaadin-charts-surface: ${SURFACE}`;
+      let root;
+
+      beforeEach(async () => {
+        root = await chartWith(STYLE);
+      });
+
+      it('should leave the chart canvas transparent', () => {
+        expect(getComputedStyle(root.querySelector('.highcharts-background')).fill).to.equal(TRANSPARENT);
+      });
+
+      it('should paint treemap point borders in the surface colour', () => {
+        const point = root.querySelector('.highcharts-treemap-series .highcharts-point');
+        expect(getComputedStyle(point).stroke).to.equal(SURFACE);
+      });
+
+      it('should paint the pressed range selector label in the surface colour', () => {
+        expect(getComputedStyle(root.querySelector('.highcharts-button-pressed text')).fill).to.equal(SURFACE);
+      });
+
+      // No screenshot covers the navigator handle.
+      it('should paint the navigator handle in the surface colour', () => {
+        expect(getComputedStyle(root.querySelector('.highcharts-navigator-handle')).fill).to.equal(SURFACE);
+      });
     });
 
-    it('should leave the chart canvas transparent', () => {
-      const background = chart.shadowRoot.querySelector('.highcharts-background');
-      expect(getComputedStyle(background).fill).to.equal(TRANSPARENT);
-    });
+    describe('opaque canvas', () => {
+      it('should paint treemap point borders in the chart background colour', async () => {
+        const root = await chartWith(`--vaadin-charts-background: ${OPAQUE_BG}`);
+        const point = root.querySelector('.highcharts-treemap-series .highcharts-point');
+        expect(getComputedStyle(point).stroke).to.equal(OPAQUE_BG);
+      });
 
-    it('should paint a visible border around treemap points', () => {
-      const point = chart.shadowRoot.querySelector('.highcharts-treemap-series .highcharts-point');
-      expect(getComputedStyle(point).stroke).to.not.equal(TRANSPARENT);
-    });
-
-    it('should paint a visible label on the pressed range selector button', () => {
-      const button = chart.shadowRoot.querySelector('.highcharts-button-pressed');
-      const label = button.querySelector('text');
-      // The pressed button inverts, so its label reads against the box, not the page.
-      expect(getComputedStyle(label).fill).to.not.equal(TRANSPARENT);
-      expect(getComputedStyle(label).fill).to.not.equal(getComputedStyle(button).fill);
-    });
-
-    // No screenshot covers the navigator handle, loading overlay, export menu
-    // or crosshair label, which the same defect reached.
-    it('should paint a visible navigator handle', () => {
-      const handle = chart.shadowRoot.querySelector('.highcharts-navigator-handle');
-      expect(getComputedStyle(handle).fill).to.not.equal(TRANSPARENT);
+      it('should paint the navigator handle in the chart background colour', async () => {
+        const root = await chartWith(`--vaadin-charts-background: ${OPAQUE_BG}`);
+        expect(getComputedStyle(root.querySelector('.highcharts-navigator-handle')).fill).to.equal(OPAQUE_BG);
+      });
     });
   });
 

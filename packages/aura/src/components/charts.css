@@ -1,9 +1,10 @@
 :where(:root),
 :where(:host) {
   --vaadin-charts-background: transparent;
+  /* The canvas is transparent, so elements on it read against the page. */
+  --vaadin-charts-surface: var(--vaadin-background-color);
 
-  /* Match a primary button. Its --vaadin-button-* properties are scoped to the
-     button element and never reach a chart, hence the accent tokens. */
+  /* Match a primary button. Its --vaadin-button-* properties never reach a chart. */
   --vaadin-charts-button-active-background: var(--aura-accent-color);
   --vaadin-charts-button-active-label: var(--aura-accent-contrast-color);
 }
