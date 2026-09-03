@@ -180,19 +180,6 @@ export const checkable = (part, propName = part) => css`
     }
   }
 
-  :host([theme~='label-aside']) {
-    grid-template-columns: auto 1fr;
-    column-gap: var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s));
-    padding-inline-start: calc(
-      var(--vaadin-input-field-label-aside-width, 8em) + var(--vaadin-input-field-label-aside-gap, 1em)
-    );
-  }
-
-  :host([theme~='label-aside']) [part='label'] {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
   @media (forced-colors: active) {
     :host(:is([checked], [indeterminate])) {
       --vaadin-${unsafeCSS(propName)}-border-color: CanvasText !important;
