@@ -158,8 +158,7 @@ export const messageStyles = css`
       90deg,
       hsla(0, 0%, 0%, 0.4) calc(var(--_vaadin-message-typing-mask-pos) - max(60px, 60%)),
       hsl(0, 0%, 0%) calc(var(--_vaadin-message-typing-mask-pos) - max(40px, 40%)),
-      hsl(0, 0%, 0%),
-      calc(var(--_vaadin-message-typing-mask-pos) - max(20px, 20%)),
+      hsl(0, 0%, 0%) calc(var(--_vaadin-message-typing-mask-pos) - max(20px, 20%)),
       hsla(0, 0%, 0%, 0.4) var(--_vaadin-message-typing-mask-pos)
     );
     animation: --_vaadin-message-typing-slide 1.5s ease-in-out infinite;
