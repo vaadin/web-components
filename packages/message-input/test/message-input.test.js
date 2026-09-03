@@ -114,6 +114,17 @@ describe('message-input', () => {
       expect(button.innerText).to.be.equal('Lähetä');
       expect(textArea.placeholder).to.be.equal('Message');
     });
+
+    it('should set aria-label on an icon-only custom button', async () => {
+      const customButton = document.createElement('button');
+      customButton.slot = 'button';
+      customButton.innerHTML = '<svg aria-hidden="true"><path d="M0 0h1v1H0z"></path></svg>';
+      button.replaceWith(customButton);
+      messageInput.i18n = { send: 'Lähetä' };
+      await nextFrame();
+
+      expect(customButton.getAttribute('aria-label')).to.equal('Lähetä');
+    });
   });
 
   describe('disabled', () => {

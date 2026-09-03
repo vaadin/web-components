@@ -12,7 +12,16 @@ export const messageInputButtonStyles = css`
     align-self: end;
     --vaadin-button-border-width: 0;
     --vaadin-button-background: transparent;
-    --vaadin-button-text-color: var(--vaadin-text-color);
+    --vaadin-button-text-color: var(--vaadin-text-color-secondary);
     --vaadin-button-padding: 0;
+    --vaadin-button-border-radius: var(--vaadin-radius-s);
+  }
+
+  :host(:is([focus-ring], :focus-visible)) {
+    outline-offset: 0.125em;
+  }
+
+  :host(:hover) {
+    --vaadin-button-text-color: var(--vaadin-text-color);
   }
 `;
