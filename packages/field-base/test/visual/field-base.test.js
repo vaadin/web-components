@@ -88,6 +88,7 @@ describe('field-base', () => {
 
           it('long label', async () => {
             element.label = 'Label that wraps on multiple lines';
+            element.style.setProperty('--vaadin-field-side-label-width', '8em');
             await visualDiff(div, `${dir}-label-aside-long-label`);
           });
 
