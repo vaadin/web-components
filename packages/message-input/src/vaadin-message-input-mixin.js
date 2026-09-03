@@ -124,6 +124,15 @@ export const MessageInputMixin = (superClass) =>
 
       this._tooltipController = new TooltipController(this);
       this.addController(this._tooltipController);
+
+      this.addEventListener('mousedown', (event) => {
+        // Focus the text area when clicking the space around it.
+        if (event.target === this) {
+          // Prevent mousedown to avoid blur and re-focus if already focused.
+          event.preventDefault();
+          this.focus({ focusVisible: false });
+        }
+      });
     }
 
     focus(options) {
