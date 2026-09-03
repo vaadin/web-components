@@ -87,8 +87,11 @@ export const chartStyles = css`
     font-size: var(--vaadin-charts-font-size, 0.75rem);
     line-height: normal;
 
-    /* Needs to be a color, not a background image */
+    /* The chart canvas only. Needs to be a color, not a background image, and a
+       theme may set it to transparent (Aura does). */
     --_bg: var(--vaadin-charts-background, var(--vaadin-background-color));
+    /* Anything that has to read against the chart. Never themeable to transparent. */
+    --_surface: var(--vaadin-background-color);
 
     --_color-0: var(--highcharts-color-0, var(--vaadin-charts-color-0, var(--vaadin-user-color-0)));
     --_color-1: var(--highcharts-color-1, var(--vaadin-charts-color-1, var(--vaadin-user-color-1)));
@@ -118,7 +121,7 @@ export const chartStyles = css`
     --_label: var(--vaadin-charts-label, var(--vaadin-text-color));
     --_secondary-label: var(--vaadin-charts-secondary-label, var(--vaadin-text-color-secondary));
     --_disabled-label: var(--vaadin-charts-disabled-label, var(--vaadin-text-color-disabled));
-    --_point-border: var(--vaadin-charts-point-border, var(--_bg));
+    --_point-border: var(--vaadin-charts-point-border, var(--_surface));
     --_axis-line: var(--vaadin-charts-axis-line, var(--vaadin-border-color-secondary));
     --_axis-title: var(--vaadin-charts-axis-title, var(--_secondary-label));
     --_axis-label: var(--vaadin-charts-axis-label, var(--_secondary-label));
@@ -478,7 +481,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-markers {
     stroke-width: 1px;
-    stroke: var(--highcharts-background-color, var(--_bg));
+    stroke: var(--highcharts-background-color, var(--_surface));
   }
 
   :where([styled-mode])
@@ -717,7 +720,7 @@ export const chartStyles = css`
   /* Loading */
   :where([styled-mode]) .highcharts-loading {
     position: absolute;
-    background-color: var(--highcharts-background-color, var(--_bg));
+    background-color: var(--highcharts-background-color, var(--_surface));
     opacity: 0.5;
     text-align: center;
     z-index: 10;
@@ -761,7 +764,7 @@ export const chartStyles = css`
 
   /* Highcharts More and modules */
   :where([styled-mode]) .highcharts-boxplot-box {
-    fill: var(--highcharts-background-color, var(--_bg));
+    fill: var(--highcharts-background-color, var(--_surface));
   }
 
   :where([styled-mode]) .highcharts-boxplot-median {
@@ -856,7 +859,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-navigator-handle {
     stroke: var(--highcharts-neutral-color-40, var(--_grid-line));
-    fill: var(--highcharts-neutral-color-5, var(--_bg));
+    fill: var(--highcharts-neutral-color-5, var(--_surface));
     cursor: ew-resize;
   }
 
@@ -900,7 +903,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-scrollbar-button {
-    fill: var(--highcharts-neutral-color-10, var(--_bg));
+    fill: var(--highcharts-neutral-color-10, var(--_surface));
     stroke: var(--highcharts-neutral-color-20);
     stroke-width: 1px;
   }
@@ -946,6 +949,8 @@ export const chartStyles = css`
     fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-button-label, var(--_label)));
   }
 
+  /* With no theme accent to go on, the base default inverts the same way
+     vaadin-button[theme~='primary'] does. Lumo and Aura override both properties. */
   :where([styled-mode]) .highcharts-button-pressed {
     font-weight: bold;
     fill: var(--highcharts-highlight-color-10, var(--vaadin-charts-button-active-background, var(--_label)));
@@ -953,7 +958,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-button-pressed text {
-    fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-button-active-label, var(--_bg)));
+    fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-button-active-label, var(--_surface)));
     font-weight: bold;
   }
 
@@ -1006,7 +1011,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-crosshair-label text {
-    fill: var(--highcharts-background-color, var(--_bg));
+    fill: var(--highcharts-background-color, var(--_surface));
     font-size: 0.9em;
   }
 
@@ -1046,7 +1051,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-flags-series .highcharts-point .highcharts-label-box {
     stroke: var(--highcharts-neutral-color-40, var(--_grid-line));
-    fill: var(--highcharts-background-color, var(--_bg));
+    fill: var(--highcharts-background-color, var(--_surface));
     transition: fill 250ms;
   }
 
@@ -1055,7 +1060,7 @@ export const chartStyles = css`
       --highcharts-neutral-color-100,
       color-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 60%, transparent)
     );
-    fill: var(--highcharts-highlight-color-20, var(--_bg));
+    fill: var(--highcharts-highlight-color-20, var(--_surface));
   }
 
   :where([styled-mode]) .highcharts-flags-series .highcharts-point text {
@@ -1134,7 +1139,7 @@ export const chartStyles = css`
   /* Exporting module */
   :where([styled-mode]) .highcharts-contextbutton {
     /* Fill is needed to capture hover */
-    fill: var(--highcharts-background-color, var(--_bg));
+    fill: var(--highcharts-background-color, var(--_surface));
     stroke: none;
     stroke-linecap: round;
   }
@@ -1151,7 +1156,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-menu {
     border: none;
-    background: var(--highcharts-background-color, var(--_bg));
+    background: var(--highcharts-background-color, var(--_surface));
     border-radius: 3px;
     padding: 0.5em;
     box-shadow: 3px 3px 10px #888;
@@ -1171,7 +1176,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-menu-item:hover {
-    background: var(--highcharts-neutral-color-5, var(--_bg));
+    background: var(--highcharts-neutral-color-5, var(--_surface));
   }
 
   /* Breadcrumbs */
