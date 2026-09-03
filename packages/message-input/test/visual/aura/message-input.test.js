@@ -36,6 +36,19 @@ describe('message-input', () => {
           element.setAttribute('theme', 'icon-button');
           await visualDiff(div, `${dir}-icon-button`);
         });
+
+        it('slots', async () => {
+          element.value = 'Hello';
+          element.insertAdjacentHTML(
+            'afterbegin',
+            `
+              <div slot="header">Header</div>
+              <span slot="prefix">Prefix</span>
+              <div slot="footer">Footer</div>
+            `,
+          );
+          await visualDiff(div, `${dir}-slots`);
+        });
       });
     });
   });

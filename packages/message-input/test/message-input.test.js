@@ -162,6 +162,12 @@ describe('message-input', () => {
       expect(spy).to.be.calledOnce;
     });
 
+    it('should focus the text-area on click', () => {
+      const spy = sinon.spy(textArea, 'focus');
+      messageInput.click();
+      expect(spy).to.be.calledOnce;
+    });
+
     it('should not throw on focus when not attached to the DOM', () => {
       const element = document.createElement('vaadin-message-input');
       expect(() => element.focus()).not.to.throw(Error);

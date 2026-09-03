@@ -8,9 +8,17 @@
     <script type="module" src="../common.js"></script>
 
     <script type="module">
+      import '@vaadin/button';
       import '@vaadin/checkbox-group';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
       import '@vaadin/message-input';
       import '@vaadin/message-list';
+      import '@vaadin/upload/src/vaadin-upload-button.js';
+      import '@vaadin/upload/vaadin-upload-drop-zone.js';
+      import '@vaadin/upload/vaadin-upload-file-list.js';
+      import { xhrCreator } from '@vaadin/upload/test/helpers.js';
+      import { UploadManager } from '@vaadin/upload/vaadin-upload-manager.js';
 
       const list = document.querySelector('vaadin-message-list');
 
@@ -49,7 +57,17 @@
         list.setAttribute('theme', theme);
       });
 
-      document.querySelector('vaadin-message-input').addEventListener('submit', (event) => {
+      const messageInput = document.querySelector('vaadin-message-input');
+      messageInput.addEventListener('submit', (event) => {
+        // Convert uploaded files to message attachments
+        const attachments = manager.files
+          .filter((file) => file.complete)
+          .map((file) => ({
+            name: file.name,
+            url: file.type?.startsWith('image/') ? URL.createObjectURL(file) : `#${file.name}`,
+            type: file.type,
+          }));
+
         list.items = [
           ...list.items,
           {
@@ -58,8 +76,30 @@
             userName: 'Maya',
             userColorIndex: 0,
             theme: 'self',
+            attachments,
           },
         ];
+
+        // Clear uploaded files
+        manager.files = [];
+      });
+
+      // Create the manager
+      const manager = new UploadManager({
+        target: '/api/upload',
+      });
+      // Use mock XHR
+      manager._createXhr = xhrCreator({ size: 512, uploadTime: 3000, stepTime: 500 });
+
+      // Link components to manager
+      document.querySelectorAll('vaadin-upload-file-list, vaadin-upload-button, vaadin-upload-drop-zone').forEach((el) => {
+        el.manager = manager;
+      });
+
+      document.querySelectorAll('.prompt-button').forEach((button) => {
+        button.addEventListener('click', () => {
+          messageInput.value = button.dataset.prompt;
+        });
       });
     </script>
 
@@ -89,10 +129,32 @@
     </section>
 
     <section class="section">
-      <div class="preview">
-        <vaadin-message-list announce-messages></vaadin-message-list>
-        <vaadin-message-input></vaadin-message-input>
-      </div>
+      <vaadin-upload-drop-zone>
+        <div class="preview">
+          <vaadin-message-list announce-messages></vaadin-message-list>
+          <vaadin-message-input>
+            <vaadin-upload-file-list class="upload" theme="thumbnails" slot="header"></vaadin-upload-file-list>
+            <vaadin-upload-button class="upload" theme="icon tertiary" slot="prefix">
+              <vaadin-icon icon="vaadin:paperclip"></vaadin-icon>
+              <vaadin-tooltip slot="tooltip" text="Add files"></vaadin-tooltip>
+            </vaadin-upload-button>
+            <div slot="footer" class="prompt-buttons">
+              <vaadin-button class="prompt-button" theme="small tertiary"
+                data-prompt="Summarize the attached documents in five concise bullet points.">
+                Summarize documents
+              </vaadin-button>
+              <vaadin-button class="prompt-button" theme="small tertiary"
+                data-prompt="Identify the three biggest risks in this material and explain why they matter.">
+                List key risks
+              </vaadin-button>
+              <vaadin-button class="prompt-button" theme="small tertiary"
+                data-prompt="Draft a short follow-up email based on these findings.">
+                Draft follow-up
+              </vaadin-button>
+            </div>
+          </vaadin-message-input>
+        </div>
+      </vaadin-upload-drop-zone>
     </section>
   </body>
 </html>
