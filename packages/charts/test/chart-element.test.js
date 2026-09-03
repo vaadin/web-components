@@ -83,13 +83,11 @@ describe('vaadin-chart', () => {
   describe('organization', () => {
     let chart;
 
-    // `__forceResize` in `vaadin-chart-mixin.js` re-measures the labels, which are
-    // otherwise positioned before the styled-mode label CSS applies.
-    // Workaround for https://github.com/highcharts/highcharts/issues/23443
+    // Chart forces a resize to re-measure the labels, which are otherwise positioned
+    // before the styled-mode label CSS applies. See the TODO in vaadin-chart-mixin.js.
     // On 12.2.0: ~7 px deviation with the workaround, ~73 px without it.
     function worstLabelDeviation() {
       const nodes = chart.configuration.series[0].nodes.filter((node) => node.graphic && node.dataLabel);
-      // Fail loudly if a Highcharts upgrade leaves nothing to measure.
       expect(nodes).to.have.lengthOf(13);
 
       return nodes.reduce((worst, node) => {
@@ -124,7 +122,7 @@ describe('vaadin-chart', () => {
         </vaadin-chart>
       `);
       await oneEvent(chart, 'chart-load');
-      // `__initChart` schedules the label re-measure on the next animation frame.
+      // Wait to the next animation frame for label re-measurement.
       await nextFrame();
       await nextFrame();
     });

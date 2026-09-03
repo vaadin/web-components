@@ -51,9 +51,8 @@ describe('vaadin-chart accessibility', () => {
       expect(chart.shadowRoot.querySelector('.highcharts-focus-border')).to.exist;
     });
 
-    // `KeyboardNavigation.onMouseUp` is overridden in `vaadin-chart-mixin.js` to read
-    // `composedPath()[0]`: on a document listener the target is the <vaadin-chart> host,
-    // so every release would look like an outside one.
+    // On a document listener the event target is the <vaadin-chart> host, so without
+    // the composed path every mouse release would look like an outside one.
     // Workaround for https://github.com/highcharts/highcharts/issues/23490
     describe('pointer release', () => {
       beforeEach(async () => {

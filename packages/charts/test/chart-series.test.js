@@ -395,11 +395,9 @@ describe('vaadin-chart-series', () => {
       expect(legend.classList.contains(HIDDEN)).to.be.true;
     });
   });
-  // `dataSorting` has no Vaadin or Flow API and is reachable only through
-  // `additionalOptions`, so nothing else in the suite exercises it. It moved out of
-  // the Highcharts core into `modules/data-sorting.js` in 13.x, which
-  // `vaadin-chart-mixin.js` does not import, and a missing module fails silently:
-  // the option is ignored and the points keep their input order.
+  // `dataSorting` moved out of the Highcharts core into `modules/data-sorting.js`
+  // in 13.x, which `vaadin-chart-mixin.js` does not import. A missing module fails
+  // silently: the option is ignored and the points keep their input order.
   describe('dataSorting', () => {
     let chart;
 

@@ -116,10 +116,8 @@ describe('vaadin-chart events', () => {
       expect(yValue).to.be.a('number');
     });
 
-    // Highcharts always supplies both axes on a real interaction, so the guards'
-    // negative branch can only be driven with a synthetic payload. The keys must
-    // stay absent rather than be set to `undefined`, which is what replacing the
-    // guards with `Object.assign` would do.
+    // A real interaction always carries both axes, so only a synthetic payload can
+    // cover this branch. The keys must stay absent rather than be set to `undefined`.
     it('should omit the axis fields the event does not carry', () => {
       function detailOf(type, payload) {
         const spy = sinon.spy();
