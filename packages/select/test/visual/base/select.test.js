@@ -109,6 +109,22 @@ describe('select', () => {
     });
   });
 
+  describe('label-aside', () => {
+    beforeEach(() => {
+      element.label = 'Label';
+      element.setAttribute('theme', 'label-aside');
+    });
+
+    it('empty', async () => {
+      await visualDiff(div, 'label-aside');
+    });
+
+    it('value', async () => {
+      element.value = 'value-1';
+      await visualDiff(div, 'label-aside-value');
+    });
+  });
+
   ['ltr', 'rtl'].forEach((dir) => {
     describe(dir, () => {
       before(() => {
