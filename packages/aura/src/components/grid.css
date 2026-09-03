@@ -15,10 +15,6 @@ vaadin-grid-sorter::part(indicators) {
   transition: color 120ms;
 }
 
-:is(vaadin-grid, vaadin-crud, vaadin-grid-pro)[theme~='column-borders'] {
-  --vaadin-grid-column-border-width: 1px;
-}
-
 :is(vaadin-grid, vaadin-crud, vaadin-grid-pro)[theme~='no-row-borders'] {
   --vaadin-grid-row-border-width: 0px;
 }
