@@ -11,6 +11,7 @@ export const formItemStyles = css`
     /* By default, when auto-responsive mode is disabled, labels should be displayed beside the fields. */
     --_form-item-labels-above: ' '; /* false */
     --_form-item-labels-aside: initial; /* true */
+    --_label-aside-indent: 0px;
 
     align-items: var(--_form-item-labels-aside, baseline);
     display: inline-flex;

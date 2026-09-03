@@ -203,6 +203,7 @@ export const fieldLabelAside = css`
   :host([theme~='label-aside']) {
     --_side-label-width: var(--vaadin-field-side-label-width);
     --_side-label-gap: var(--vaadin-field-side-label-gap);
+    --_label-aside-indent: 0px;
 
     grid-template:
       var(--_helper-above-field, '.     helper' auto)
