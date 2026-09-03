@@ -38,15 +38,11 @@ export const sliderStyles = css`
   }
 
   :host([min-max-visible]) {
-    grid-template:
-      'label' auto
-      var(--_helper-above-field, 'helper' auto)
-      'baseline' 0
-      'input' 1fr
-      'marks' auto
-      var(--_helper-below-field, 'helper' auto)
-      'error' auto
-      / 100%;
+    --_rows-after-input: 'marks' auto;
+  }
+
+  :host([theme~='label-aside'][min-max-visible]) {
+    --_rows-after-input: 'label marks' auto;
   }
 
   #controls {
@@ -134,21 +130,5 @@ export const sliderStyles = css`
     grid-area: marks;
     display: flex;
     justify-content: space-between;
-  }
-
-  /*
-   * Labels aside for a slider with min and max labels: same as the shared
-   * label-aside template (see field-base-styles.js) with the marks row of
-   * the min-max-visible template above.
-   */
-  :host([theme~='label-aside'][min-max-visible]) {
-    grid-template:
-      var(--_helper-above-field, '.     helper' auto)
-      '.     baseline' 0
-      'label input' 1fr
-      'label marks' auto
-      var(--_helper-below-field, 'label helper' auto)
-      'label error' auto
-      / var(--_side-label-width, 0) minmax(0, 1fr);
   }
 `;

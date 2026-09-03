@@ -22,6 +22,7 @@ export const field = css`
       var(--_helper-above-field, 'helper' auto)
       '                           baseline' 0
       '                           input' 1fr
+      var(--_rows-after-input,)
       var(--_helper-below-field, 'helper' auto)
       '                           error' auto
       / 100%;
@@ -207,6 +208,7 @@ export const fieldLabelAside = css`
       var(--_helper-above-field, '.     helper' auto)
       '                           .     baseline' 0
       '                           label input' 1fr
+      var(--_rows-after-input,)
       var(--_helper-below-field, 'label helper' auto)
       '                           label error' auto
       / var(--_side-label-width, 0) minmax(0, 1fr);
