@@ -20,6 +20,10 @@ export const formRowStyles = css`
     --_form-item-labels-aside: inherit;
 
     grid-column: auto / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
+    margin-inline-start: var(
+      --_form-item-labels-aside,
+      var(--_label-aside-indent, calc(var(--_label-width) + var(--_label-spacing)))
+    );
   }
 
   ::slotted(:first-child) {

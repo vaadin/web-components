@@ -291,6 +291,28 @@ describe('form-layout auto responsive', () => {
         expect(getComputedStyle(textField).marginInlineStart).to.equal('0px');
         expect(getComputedStyle(formItem).marginInlineStart).to.equal('0px');
       });
+
+      it('should not indent children when labels do not fit aside', async () => {
+        container.style.width = '200px';
+        await nextResize(layout);
+        expect(getComputedStyle(input).marginInlineStart).to.equal('0px');
+      });
+
+      it('should apply theme and indent to children of form rows', async () => {
+        const row = fixtureSync(`
+          <vaadin-form-row>
+            <vaadin-text-field label="Last name"></vaadin-text-field>
+            <input />
+          </vaadin-form-row>
+        `);
+        layout.appendChild(row);
+        await nextResize(layout);
+        const [rowTextField, rowInput] = row.children;
+        expect(rowTextField.getAttribute('theme')).to.equal('label-aside');
+        expect(rowInput.hasAttribute('theme')).to.be.false;
+        expect(getComputedStyle(rowTextField).marginInlineStart).to.equal('0px');
+        expect(getComputedStyle(rowInput).marginInlineStart).to.equal('150px');
+      });
     });
   });
 
