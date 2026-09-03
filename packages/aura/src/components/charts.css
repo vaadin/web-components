@@ -1,4 +1,9 @@
 :where(:root),
 :where(:host) {
   --vaadin-charts-background: transparent;
+
+  /* Match a primary button. Its --vaadin-button-* properties are scoped to the
+     button element and never reach a chart, hence the accent tokens. */
+  --vaadin-charts-button-active-background: var(--aura-accent-color);
+  --vaadin-charts-button-active-label: var(--aura-accent-contrast-color);
 }

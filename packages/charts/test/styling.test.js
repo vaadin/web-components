@@ -57,6 +57,46 @@ describe('vaadin-chart styling', () => {
     });
   });
 
+  describe('contrast colours with a transparent background', () => {
+    const TRANSPARENT = 'rgba(0, 0, 0, 0)';
+    let chart;
+
+    // `beforeEach`, not `before`: `fixtureSync` removes the element after each test.
+    beforeEach(async () => {
+      chart = fixtureSync(`
+        <vaadin-chart type="treemap" timeline style="--vaadin-charts-background: transparent">
+          <vaadin-chart-series values='[{ "name": "A", "value": 5 }, { "name": "B", "value": 3 }]'></vaadin-chart-series>
+        </vaadin-chart>
+      `);
+      await oneEvent(chart, 'chart-load');
+    });
+
+    it('should leave the chart canvas transparent', () => {
+      const background = chart.shadowRoot.querySelector('.highcharts-background');
+      expect(getComputedStyle(background).fill).to.equal(TRANSPARENT);
+    });
+
+    it('should paint a visible border around treemap points', () => {
+      const point = chart.shadowRoot.querySelector('.highcharts-treemap-series .highcharts-point');
+      expect(getComputedStyle(point).stroke).to.not.equal(TRANSPARENT);
+    });
+
+    it('should paint a visible label on the pressed range selector button', () => {
+      const button = chart.shadowRoot.querySelector('.highcharts-button-pressed');
+      const label = button.querySelector('text');
+      // The pressed button inverts, so its label reads against the box, not the page.
+      expect(getComputedStyle(label).fill).to.not.equal(TRANSPARENT);
+      expect(getComputedStyle(label).fill).to.not.equal(getComputedStyle(button).fill);
+    });
+
+    // No screenshot covers the navigator handle, loading overlay, export menu
+    // or crosshair label, which the same defect reached.
+    it('should paint a visible navigator handle', () => {
+      const handle = chart.shadowRoot.querySelector('.highcharts-navigator-handle');
+      expect(getComputedStyle(handle).fill).to.not.equal(TRANSPARENT);
+    });
+  });
+
   describe('CSS custom properties', () => {
     let chart, configuration;
 
