@@ -124,6 +124,14 @@ describe('date-picker', () => {
           await visualDiff(div, `${dir}-date-metadata-loading`);
         });
 
+        it('disabled dates', async () => {
+          element.value = '2000-01-01';
+          element.min = '2000-01-01';
+          element.max = '2000-01-20';
+          await openOverlay();
+          await visualDiff(div, `${dir}-disabled-dates`);
+        });
+
         it('week numbers', async () => {
           element.value = '2000-01-01';
           element.showWeekNumbers = true;
