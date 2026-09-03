@@ -204,7 +204,6 @@ export const fieldLabelAside = css`
   :host([theme~='label-aside']) {
     --_label-aside-width: 0px;
     --_label-aside-gap: 0px;
-    --_label-aside-indent: 0px;
 
     grid-template:
       var(--_helper-above-field, '.     helper' auto)
