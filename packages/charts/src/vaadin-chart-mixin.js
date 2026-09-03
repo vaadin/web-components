@@ -724,7 +724,34 @@ export const ChartMixin = (superClass) =>
         this.configuration = Highcharts.chart(this.$.chart, options);
       }
 
+      this.__syncOutsideTooltipColors();
       this.__forceResize();
+    }
+
+    /**
+     * A `tooltip: { outside: true }` tooltip renders in `document.body`, so it
+     * inherits neither the palette a theme scopes to `vaadin-chart` nor any
+     * `--vaadin-charts-color-*` set on this element. Copy the resolved series
+     * colours onto its container instead.
+     *
+     * @private
+     */
+    __syncOutsideTooltipColors() {
+      const { tooltip } = this.configuration;
+      if (!tooltip || !tooltip.outside) {
+        return;
+      }
+
+      Highcharts.addEvent(tooltip, 'refresh', () => {
+        const { container } = tooltip;
+        if (!container) {
+          return;
+        }
+        const style = getComputedStyle(this);
+        for (let i = 0; i < 10; i++) {
+          container.style.setProperty(`--_color-${i}`, style.getPropertyValue(`--_color-${i}`));
+        }
+      });
     }
 
     /** @protected */
