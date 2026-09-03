@@ -184,4 +184,28 @@
       outline-color: GrayText;
     }
   }
+
+  :host([theme~='label-aside']) [class$='container'] {
+    display: grid;
+    grid-template-columns: var(--vaadin-field-side-label-width, 8em) minmax(0, 1fr);
+    column-gap: var(--vaadin-field-side-label-gap, 1em);
+    align-items: baseline;
+    width: auto;
+  }
+
+  :host([theme~='label-aside']) [part='input-field'] {
+    width: var(--vaadin-field-default-width, 12em);
+    min-width: 100%;
+  }
+
+  :host([theme~='label-aside']) [part='input-field'],
+  :host([theme~='label-aside']) [part='input-fields'] {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  :host([theme~='label-aside']) [part='helper-text'],
+  :host([theme~='label-aside']) [part='error-message'] {
+    grid-column: 2;
+  }
 }

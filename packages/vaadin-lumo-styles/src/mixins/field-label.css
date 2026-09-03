@@ -59,4 +59,19 @@
   :host([has-label]) ::slotted([slot='tooltip']) {
     --vaadin-tooltip-offset-bottom: calc((var(--lumo-space-m) - var(--lumo-space-xs)) * -1);
   }
+
+  :host([theme~='label-aside']) [part='label'] {
+    align-self: baseline;
+    grid-column: 1;
+    grid-row: 1;
+    padding-bottom: 0;
+  }
+
+  :host([has-label][theme~='label-aside']) {
+    padding-top: var(--lumo-space-xs);
+  }
+
+  :host([has-label][theme~='label-aside'])::before {
+    margin-top: 0;
+  }
 }

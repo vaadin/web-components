@@ -99,4 +99,29 @@
   :host([theme~='whitespace'][has-label]) [part='label'] {
     padding-bottom: 0.5em;
   }
+
+  :host([has-label][theme~='label-aside']) {
+    padding-top: 0;
+  }
+
+  :host([has-label][theme~='label-aside'])::before {
+    margin-top: var(--lumo-space-xs);
+  }
+
+  :host([theme~='label-aside']) .vaadin-custom-field-container {
+    display: grid;
+    grid-template-columns: var(--vaadin-field-side-label-width, 8em) minmax(0, 1fr);
+    column-gap: var(--vaadin-field-side-label-gap, 1em);
+    align-items: baseline;
+  }
+
+  :host([theme~='label-aside']) [part='input-fields'] {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  :host([theme~='label-aside']) [part='helper-text'],
+  :host([theme~='label-aside']) [part='error-message'] {
+    grid-column: 2;
+  }
 }
