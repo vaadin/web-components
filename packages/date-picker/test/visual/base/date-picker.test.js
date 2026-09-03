@@ -15,6 +15,13 @@ describe('date-picker', () => {
     element = fixtureSync('<vaadin-date-picker></vaadin-date-picker>', div);
   });
 
+  afterEach(() => {
+    // After tests which use sendKeys() the focus-utils.js -> isKeyboardActive is set to true.
+    // Click once here on body to reset it so other tests are not affected by it.
+    // An unwanted focus-ring would be shown in other tests otherwise.
+    mousedown(document.body);
+  });
+
   describe('states', () => {
     it('basic', async () => {
       await visualDiff(div, 'state-basic');
@@ -33,10 +40,6 @@ describe('date-picker', () => {
     describe('focus', () => {
       afterEach(async () => {
         await resetMouse();
-        // After tests which use sendKeys() the focus-utils.js -> isKeyboardActive is set to true.
-        // Click once here on body to reset it so other tests are not affected by it.
-        // An unwanted focus-ring would be shown in other tests otherwise.
-        mousedown(document.body);
       });
 
       it('keyboard focus', async () => {
