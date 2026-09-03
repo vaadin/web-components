@@ -143,10 +143,6 @@ export class AutoResponsiveLayout extends AbstractLayout {
         return;
       }
 
-      // PROTOTYPE: Fields as direct children switch their label position
-      // based on the "label-aside" theme variant, applied when labels fit
-      // aside. Form items ignore it and instead inherit the label position
-      // from the layout through CSS custom properties.
       if (labelsAsideActive) {
         addValuesToAttribute(child, 'theme', 'label-aside');
       } else {
