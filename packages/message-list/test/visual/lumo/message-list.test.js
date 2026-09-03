@@ -4,6 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/message-list.css';
 import '../../../vaadin-message-list.js';
+import '../not-animated-styles.css';
 
 describe('message-list', () => {
   let div, element;

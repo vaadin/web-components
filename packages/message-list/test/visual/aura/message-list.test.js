@@ -2,6 +2,7 @@ import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
 import '../../../vaadin-message-list.js';
+import '../not-animated-styles.css';
 
 describe('message-list', () => {
   let div, element;
