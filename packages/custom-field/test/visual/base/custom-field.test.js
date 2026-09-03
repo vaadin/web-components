@@ -65,5 +65,15 @@ describe('custom-field', () => {
       element.setAttribute('theme', 'helper-above-field');
       await visualDiff(div, 'helper-above-field');
     });
+
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      element.helperText = 'Helper text';
+      element.errorMessage = 'Error message';
+      element.required = true;
+      element.invalid = true;
+      await visualDiff(div, 'label-aside');
+    });
   });
 });
