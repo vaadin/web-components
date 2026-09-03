@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, LitElement } from 'lit';
+import { html, LitElement, nothing } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
@@ -80,16 +80,24 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LumoIn
                       )}"
                       .date="${date}"
                       ?disabled="${this.__isDayDisabled(date, this.minDate, this.maxDate, this.isDateDisabled)}"
-                      tabindex="${this.__computeDayTabIndex(date, this.focusedDate)}"
                       aria-selected="${this.__computeDayAriaSelected(date, this.selectedDate)}"
-                      aria-disabled="${this.__computeDayAriaDisabled(
-                        date,
-                        this.minDate,
-                        this.maxDate,
-                        this.isDateDisabled,
-                      )}"
-                      aria-label="${this.__computeDayAriaLabel(date)}"
-                      >${this._getDate(date)}</td
+                      >${
+                        date
+                          ? html`<div
+                              part="date-button"
+                              role="button"
+                              tabindex="${this.__computeDayTabIndex(date, this.focusedDate)}"
+                              aria-label="${this.__computeDayAriaLabel(date)}"
+                              aria-disabled="${this.__computeDayAriaDisabled(
+                                date,
+                                this.minDate,
+                                this.maxDate,
+                                this.isDateDisabled,
+                              )}"
+                              >${this._getDate(date)}</div
+                            >`
+                          : nothing
+                      }</td
                     >
                   `;
                 })}
