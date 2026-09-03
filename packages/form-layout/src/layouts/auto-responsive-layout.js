@@ -143,7 +143,7 @@ export class AutoResponsiveLayout extends AbstractLayout {
         return;
       }
 
-      if (labelsAsideActive) {
+      if (labelsAsideActive && '_theme' in child) {
         addValuesToAttribute(child, 'theme', 'label-aside');
       } else {
         removeValuesFromAttribute(child, 'theme', 'label-aside');

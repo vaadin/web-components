@@ -168,6 +168,10 @@ export const formLayoutStyles = css`
     --_grid-column-width: var(--_column-width-labels-aside);
   }
 
+  :host([auto-responsive][labels-aside-active]) #layout ::slotted(*) {
+    margin-inline-start: var(--_label-aside-indent, calc(var(--_label-width) + var(--_label-spacing)));
+  }
+
   :host([auto-responsive][expand-columns]) #layout {
     /*
       The "min" value in minmax ensures that once "maxColumns" is reached, the grid stops adding

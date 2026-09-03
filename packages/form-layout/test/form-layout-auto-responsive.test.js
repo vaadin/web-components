@@ -3,6 +3,7 @@ import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import '../src/vaadin-form-layout.js';
 import '../src/vaadin-form-item.js';
 import '../src/vaadin-form-row.js';
+import '@vaadin/text-field/src/vaadin-text-field.js';
 import { assertFormLayoutGrid, assertFormLayoutLabelPosition } from './helpers.js';
 
 describe('form-layout auto responsive', () => {
@@ -243,6 +244,53 @@ describe('form-layout auto responsive', () => {
       layout.labelsAside = false;
       await nextFrame();
       expect(layout.hasAttribute('labels-aside-active')).to.be.false;
+    });
+
+    describe('direct children', () => {
+      let textField, input, formItem;
+
+      beforeEach(async () => {
+        container = fixtureSync(`
+          <div style="width: 500px">
+            <vaadin-form-layout
+              auto-responsive
+              labels-aside
+              style="
+                --vaadin-form-layout-column-width: 100px;
+                --vaadin-form-layout-label-width: 100px;
+                --vaadin-form-layout-label-spacing: 50px;
+                --vaadin-form-layout-column-spacing: 0px;
+              "
+            >
+              <vaadin-text-field label="First name"></vaadin-text-field>
+              <input />
+              <vaadin-form-item>
+                <label slot="label">Email</label>
+                <input />
+              </vaadin-form-item>
+            </vaadin-form-layout>
+          </div>`);
+        layout = container.firstElementChild;
+        [textField, input, formItem] = layout.children;
+        await nextResize(layout);
+      });
+
+      it('should apply label-aside theme only to children with theme property', () => {
+        expect(textField.getAttribute('theme')).to.equal('label-aside');
+        expect(input.hasAttribute('theme')).to.be.false;
+      });
+
+      it('should remove label-aside theme when labels do not fit aside', async () => {
+        container.style.width = '200px';
+        await nextResize(layout);
+        expect(textField.hasAttribute('theme')).to.be.false;
+      });
+
+      it('should indent children without label column by label width and spacing', () => {
+        expect(getComputedStyle(input).marginInlineStart).to.equal('150px');
+        expect(getComputedStyle(textField).marginInlineStart).to.equal('0px');
+        expect(getComputedStyle(formItem).marginInlineStart).to.equal('0px');
+      });
     });
   });
 
