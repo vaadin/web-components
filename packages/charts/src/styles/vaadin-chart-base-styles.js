@@ -21,9 +21,32 @@ import '@vaadin/component-base/src/styles/user-colors.js';
 import { css, unsafeCSS } from 'lit';
 import { addGlobalStyles } from '@vaadin/component-base/src/css-utils.js';
 
-/* Tooltip styles, to support `"tooltip": { "outside": true }` config option */
+const seriesColorTokens = Array.from(
+  { length: 10 },
+  (_, i) =>
+    `--_color-${i}: var(--highcharts-color-${i}, var(--vaadin-charts-color-${i}, var(--vaadin-user-color-${i})));`,
+).join('\n    ');
+
+// A non-split tooltip carries highcharts-color-N on the tooltip element itself,
+// a split one on its child boxes, so both selectors are needed.
+const seriesColorRules = Array.from(
+  { length: 10 },
+  (_, i) =>
+    `.highcharts-tooltip-container .highcharts-tooltip.highcharts-color-${i},
+    .highcharts-tooltip-container .highcharts-tooltip .highcharts-color-${i} { fill: var(--_color-${i}); stroke: var(--_color-${i}); }`,
+).join('\n');
+
+/* Emitted at both scopes, so it looks absent from upstream Highcharts. Do not prune. */
 // postcss-lit-disable-next-line
 const tooltipStyles = (scope) => css`
+  ${unsafeCSS(scope)} .highcharts-strong {
+    font-weight: bold;
+  }
+
+  ${unsafeCSS(scope)} .highcharts-emphasized {
+    font-style: italic;
+  }
+
   ${unsafeCSS(scope)} .highcharts-tooltip {
     cursor: default;
     pointer-events: none;
@@ -35,6 +58,9 @@ const tooltipStyles = (scope) => css`
   ${unsafeCSS(scope)} .highcharts-tooltip text,
   ${unsafeCSS(scope)} .highcharts-tooltip foreignObject span {
     fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-data-label, var(--vaadin-text-color)));
+    /* The tooltip element carries the series colour, and stroke inherits into the
+       glyphs. Inside the shadow root .highcharts-root text already zeroes it. */
+    stroke-width: 0;
   }
 
   ${unsafeCSS(scope)} .highcharts-tooltip .highcharts-tracker {
@@ -65,6 +91,14 @@ const tooltipStyles = (scope) => css`
 addGlobalStyles(
   'vaadin-charts-tooltip',
   css`
+    /* An outside tooltip renders in document.body, out of reach of chartStyles,
+       so it needs the colour tokens and rules restated here. */
+    .highcharts-tooltip-container {
+      ${unsafeCSS(seriesColorTokens)}
+    }
+
+    ${unsafeCSS(seriesColorRules)}
+
     .highcharts-tooltip-container .highcharts-root {
       overflow: visible;
       font-size: var(--vaadin-charts-font-size, 0.75rem);
@@ -93,17 +127,7 @@ export const chartStyles = css`
     /* Anything that has to read against the chart. Never themeable to transparent. */
     --_surface: var(--vaadin-background-color);
 
-    --_color-0: var(--highcharts-color-0, var(--vaadin-charts-color-0, var(--vaadin-user-color-0)));
-    --_color-1: var(--highcharts-color-1, var(--vaadin-charts-color-1, var(--vaadin-user-color-1)));
-    --_color-2: var(--highcharts-color-2, var(--vaadin-charts-color-2, var(--vaadin-user-color-2)));
-    --_color-3: var(--highcharts-color-3, var(--vaadin-charts-color-3, var(--vaadin-user-color-3)));
-    --_color-4: var(--highcharts-color-4, var(--vaadin-charts-color-4, var(--vaadin-user-color-4)));
-    --_color-5: var(--highcharts-color-5, var(--vaadin-charts-color-5, var(--vaadin-user-color-5)));
-    --_color-6: var(--highcharts-color-6, var(--vaadin-charts-color-6, var(--vaadin-user-color-6)));
-    --_color-7: var(--highcharts-color-7, var(--vaadin-charts-color-7, var(--vaadin-user-color-7)));
-    --_color-8: var(--highcharts-color-8, var(--vaadin-charts-color-8, var(--vaadin-user-color-8)));
-    --_color-9: var(--highcharts-color-9, var(--vaadin-charts-color-9, var(--vaadin-user-color-9)));
-
+    ${unsafeCSS(seriesColorTokens)}
     --_color-0-label: oklch(from var(--_color-0) clamp(0, (0.62 - l) * 1000, 1) 0 0);
     --_color-1-label: oklch(from var(--_color-1) clamp(0, (0.62 - l) * 1000, 1) 0 0);
     --_color-2-label: oklch(from var(--_color-2) clamp(0, (0.62 - l) * 1000, 1) 0 0);
@@ -169,14 +193,6 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-root text {
     stroke-width: 0;
-  }
-
-  :where([styled-mode]) .highcharts-strong {
-    font-weight: bold;
-  }
-
-  :where([styled-mode]) .highcharts-emphasized {
-    font-style: italic;
   }
 
   :where([styled-mode]) .highcharts-anchor {
