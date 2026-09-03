@@ -192,7 +192,7 @@ export const checkable = (part, propName = part) => css`
     column-gap: var(--vaadin-${unsafeCSS(propName)}-gap, var(--vaadin-gap-s));
     /* Padding instead of margin: the form layout resets margins on slotted children */
     padding-inline-start: calc(
-      var(--vaadin-field-label-width, 8em) + var(--vaadin-field-label-spacing, 1em)
+      var(--vaadin-input-field-label-aside-width, 8em) + var(--vaadin-input-field-label-aside-gap, 1em)
     );
   }
 
