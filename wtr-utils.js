@@ -151,6 +151,72 @@ const getUnitTestGroups = (packages) => {
 };
 
 /**
+ * Packages whose Lumo visual tests are reused for the light-DOM Lumo (`wip`) theme.
+ * Only components already ported to `packages/lumo` and whose tested states render
+ * no built-in icon glyphs (lumo-icons font in the original vs SVG masks in the base),
+ * so screenshots are comparable against the existing Lumo baselines.
+ */
+const WIP_LUMO_PACKAGES = [
+  'breadcrumbs',
+  'button',
+  'card',
+  'charts',
+  'confirm-dialog',
+  'dialog',
+  'horizontal-layout',
+  'icon',
+  'input-container',
+  'master-detail-layout',
+  'message-input',
+  'message-list',
+  'notification',
+  'overlay',
+  'popover',
+  'radio-group',
+  'scroller',
+  'split-layout',
+  'tooltip',
+  'vertical-layout',
+  'virtual-list',
+];
+
+const LUMO_TEST_FILES = '/packages/*/test/visual/lumo/*.test.{js,ts}';
+const LUMO_STYLES_IMPORT =
+  /^\s*import\s+['"][^'"]*vaadin-lumo-styles\/(?:src\/(?:props|global)\/index|components\/[\w-]+)\.css[^'"]*['"];?\s*$/gmu;
+const LUMO_GLOBAL_IMPORT = /vaadin-lumo-styles\/src\/global\/index\.css/u;
+
+/**
+ * `wip`: rewrites `test/visual/lumo/*.test.js` modules so they load the light-DOM
+ * Lumo theme (`packages/lumo/lumo.css`) instead of the shadow-DOM Lumo styles:
+ * - drops `@vaadin/vaadin-lumo-styles/{src/props,src/global}/index.css` imports
+ * - drops `@vaadin/vaadin-lumo-styles/components/*.css` imports (shadow injection markers)
+ * - prepends a single `packages/lumo/lumo.css` import
+ * Iconset imports (`vaadin-iconset.js`) are kept: they are JS, not theme CSS.
+ *
+ * `wip-ref`: keeps the shadow-DOM Lumo styles but adds `src/global/index.css`
+ * (body typography, color scheme) when the test does not import it, so the
+ * reference screenshots share the globals that `lumo.css` always applies.
+ */
+const createLumoLightDomPlugin = (theme) => {
+  return {
+    name: 'lumo-light-dom',
+    transform(context) {
+      if (!path.matchesGlob(context.path, LUMO_TEST_FILES)) {
+        return;
+      }
+      if (theme === 'wip-ref') {
+        if (LUMO_GLOBAL_IMPORT.test(context.body)) {
+          return;
+        }
+        return `import '/packages/vaadin-lumo-styles/src/global/index.css?injectCSS';\n${context.body}`;
+      }
+      const body = context.body.replace(LUMO_STYLES_IMPORT, '');
+      return `import '/packages/lumo/lumo.css?injectCSS';\n${body}`;
+    },
+  };
+};
+
+/**
  * Get visual test groups based on packages.
  */
 const getVisualTestGroups = (packages, theme) => {
@@ -160,12 +226,15 @@ const getVisualTestGroups = (packages, theme) => {
     packages = packages.filter((pkg) => !pkg.includes('lumo'));
   }
 
+  // Light-DOM Lumo reuses the Lumo test files.
+  const themeDir = theme.startsWith('wip') ? 'lumo' : theme;
+
   return packages.map((pkg) => {
     return {
       name: pkg,
       files: [
         `packages/${pkg}/test/visual/${filesGlob}.test.{js,ts}`,
-        `packages/${pkg}/test/visual/${theme}/${filesGlob}.test.{js,ts}`,
+        `packages/${pkg}/test/visual/${themeDir}/${filesGlob}.test.{js,ts}`,
       ],
     };
   });
@@ -203,8 +272,13 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
   </html>
 `;
 
-const getScreenshotFileName = ({ name, testFile }, type, diff) => {
+const getScreenshotFileName = ({ name, testFile }, type, diff, theme) => {
   let folder = path.join(path.dirname(testFile), 'screenshots');
+
+  // Light-DOM Lumo screenshots live next to the Lumo ones under `wip-*` folders (gitignored).
+  if (theme && theme.startsWith('wip')) {
+    type = `wip-${type}`;
+  }
 
   if (path.matchesGlob(testFile, '**/visual/aura/*')) {
     folder = path.join(folder, `${argv.dark ? 'dark' : 'default'}`);
@@ -265,11 +339,14 @@ const createVisualTestsConfig = (theme) => {
     visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles');
   } else if (theme === 'aura') {
     visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles' && dir !== 'field-base');
+  } else if (theme.startsWith('wip')) {
+    visualPackages = getAllVisualPackages().filter((dir) => WIP_LUMO_PACKAGES.includes(dir));
   } else {
     visualPackages = getAllVisualPackages().filter((dir) => dir !== 'field-base');
   }
 
-  const packages = getTestPackages(visualPackages);
+  // The wip subset is explicit; skip the changed-packages detection.
+  const packages = theme.startsWith('wip') ? visualPackages : getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
   const viewportWidth = 1024;
@@ -304,20 +381,22 @@ const createVisualTestsConfig = (theme) => {
       visualRegressionPlugin({
         baseDir: 'packages',
         getBaselineName(args) {
-          return getScreenshotFileName(args, 'baseline');
+          return getScreenshotFileName(args, 'baseline', false, theme);
         },
         getDiffName(args) {
-          return getScreenshotFileName(args, 'failed', true);
+          return getScreenshotFileName(args, 'failed', true, theme);
         },
         getFailedName(args) {
-          return getScreenshotFileName(args, 'failed');
+          return getScreenshotFileName(args, 'failed', false, theme);
         },
         diffOptions: { threshold: 0.2 },
         failureThreshold: 0.05,
         failureThresholdType: 'percent',
-        update: process.env.TEST_ENV === 'update',
+        // Light-DOM Lumo never writes references; `wip-ref` does.
+        update: process.env.TEST_ENV === 'update' && theme !== 'wip',
       }),
       cssImportPlugin(),
+      ...(theme.startsWith('wip') ? [createLumoLightDomPlugin(theme)] : []),
     ],
     groups,
     testRunnerHtml: getTestRunnerHtml(theme),

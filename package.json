@@ -33,11 +33,13 @@
     "test:lumo": "./scripts/run-docker-visual-tests.sh test --config web-test-runner-lumo.config.js",
     "test:snapshots": "yarn test --config web-test-runner-snapshots.config.js",
     "test:webkit": "yarn test --config web-test-runner-webkit.config.js",
+    "test:wip": "./scripts/run-docker-visual-tests.sh test --config web-test-runner-wip.config.js",
     "update:aura": "TEST_ENV=update ./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js",
     "update:aura:dark": "TEST_ENV=update ./scripts/run-docker-visual-tests.sh test --config web-test-runner-aura.config.js --dark",
     "update:base": "TEST_ENV=update ./scripts/run-docker-visual-tests.sh test --config web-test-runner-base.config.js",
     "update:lumo": "TEST_ENV=update ./scripts/run-docker-visual-tests.sh test --config web-test-runner-lumo.config.js",
-    "update:snapshots": "yarn test --config web-test-runner-snapshots.config.js --update-snapshots"
+    "update:snapshots": "yarn test --config web-test-runner-snapshots.config.js --update-snapshots",
+    "update:wip": "TEST_ENV=update ./scripts/run-docker-visual-tests.sh test --config web-test-runner-wip-ref.config.js"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",
