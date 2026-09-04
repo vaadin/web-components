@@ -15,5 +15,98 @@
   <body>
     <vaadin-text-field label="First name" required clear-button-visible></vaadin-text-field>
     <vaadin-text-field label="Last name" required clear-button-visible></vaadin-text-field>
+
+    <h2 class="heading">Format</h2>
+
+    <div class="section">
+      <vaadin-text-field
+        id="iban"
+        label="IBAN"
+        format='{"blocks":[4,4,4,4,2],"case":"upper"}'
+        allowed-char-pattern="[A-Za-z0-9]"
+        clear-button-visible
+      ></vaadin-text-field>
+      <pre id="iban-readout"></pre>
+
+      <button id="iban-swap">Swap blocks</button>
+      <button id="iban-remove">Remove format</button>
+      <button id="iban-set-value">Set value</button>
+    </div>
+
+    <div class="section">
+      <vaadin-text-field
+        id="phone"
+        label="Phone (FI)"
+        format='{"blocks":[3,3,4]}'
+        inputmode="tel"
+        allowed-char-pattern="[0-9]"
+        clear-button-visible
+      ></vaadin-text-field>
+      <pre id="phone-readout"></pre>
+    </div>
+
+    <div class="section">
+      <vaadin-text-field id="unformatted" label="Unformatted control" clear-button-visible></vaadin-text-field>
+      <pre id="unformatted-readout"></pre>
+
+      <button id="unformatted-set-value">Set value</button>
+    </div>
+
+    <p>
+      1. Type into the IBAN field and watch grouping appear.<br />
+      2. Backspace with the caret just after a space; a digit disappears, not the space.<br />
+      3. Press Ctrl/Cmd+Z; the digit comes back (run in headed Safari — keyboard undo is inert headless).<br />
+      4. Paste <code>FI2112345600000785</code>, then <code>FI21 1234 5600 0007 85</code>; both present identically.<br />
+      5. Paste a 25-character string; nothing is truncated.<br />
+      6. Press "Swap blocks" with a value present; the value regroups, nothing is lost.<br />
+      7. Press "Remove format"; the field shows the raw unformatted value, readout's value is unchanged and
+      formattedValue goes empty.<br />
+      8. Focus the IBAN field, put the caret mid-string, press its "Set value"; the caret stays put.<br />
+      9. Focus the unformatted field, put the caret mid-string, press its "Set value"; the caret jumps to the end,
+      exactly as today.<br />
+      10. Switch to the Japanese IME and compose into the phone field; the candidate window is not disturbed.<br />
+      11. Turn on VoiceOver and repeat step 1; record what is announced.
+    </p>
+
+    <script type="module">
+      function bindReadout(field, readout) {
+        const update = () => {
+          readout.textContent = `value: ${JSON.stringify(field.value)}\nformattedValue: ${JSON.stringify(field.formattedValue)}`;
+        };
+        field.addEventListener('value-changed', update);
+        field.addEventListener('input', update);
+        update();
+      }
+
+      const iban = document.getElementById('iban');
+      bindReadout(iban, document.getElementById('iban-readout'));
+
+      const ibanFormats = [
+        { blocks: [4, 4, 4, 4, 2], case: 'upper' },
+        { blocks: [2, 4, 4, 4, 4], case: 'upper' },
+      ];
+      let ibanFormatIndex = 0;
+      document.getElementById('iban-swap').addEventListener('click', () => {
+        ibanFormatIndex = 1 - ibanFormatIndex;
+        iban.format = ibanFormats[ibanFormatIndex];
+      });
+      document.getElementById('iban-remove').addEventListener('click', () => {
+        iban.format = undefined;
+      });
+      document.getElementById('iban-set-value').addEventListener('mousedown', (event) => {
+        event.preventDefault();
+        iban.value = 'FI2112345600000785';
+      });
+
+      const phone = document.getElementById('phone');
+      bindReadout(phone, document.getElementById('phone-readout'));
+
+      const unformatted = document.getElementById('unformatted');
+      bindReadout(unformatted, document.getElementById('unformatted-readout'));
+      document.getElementById('unformatted-set-value').addEventListener('mousedown', (event) => {
+        event.preventDefault();
+        unformatted.value = 'FI2112345600000785';
+      });
+    </script>
   </body>
 </html>
