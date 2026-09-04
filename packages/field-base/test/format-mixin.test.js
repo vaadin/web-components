@@ -357,4 +357,194 @@ describe('FormatMixin with a trivial formatter', () => {
       expect(element.formattedValue).to.equal('');
     });
   });
+
+  describe('formatting while typing', () => {
+    beforeEach(() => {
+      input.focus();
+    });
+
+    it('should present the typed text in its formatted form', async () => {
+      await sendKeys({ type: 'abc' });
+      expect(input.value).to.equal('ABC');
+    });
+
+    it('should update value and formattedValue while typing', async () => {
+      await sendKeys({ type: 'abc' });
+      expect(element.value).to.equal('ABC');
+      expect(element.formattedValue).to.equal('ABC');
+    });
+
+    it('should keep the caret after the typed character', async () => {
+      await sendKeys({ type: 'abc' });
+      expect(input.selectionStart).to.equal(3);
+      expect(input.selectionEnd).to.equal(3);
+    });
+
+    it('should fire one value-changed event per typed character', async () => {
+      const spy = sinon.spy();
+      element.addEventListener('value-changed', spy);
+      await sendKeys({ type: 'abc' });
+      expect(spy).to.be.calledThrice;
+    });
+
+    it('should have value formatted when the input event reaches the host', async () => {
+      const seen = [];
+      element.addEventListener('input', () => seen.push([element.value, input.value]));
+      await sendKeys({ type: 'abc' });
+      expect(seen).to.eql([
+        ['A', 'A'],
+        ['AB', 'AB'],
+        ['ABC', 'ABC'],
+      ]);
+    });
+  });
+
+  describe('delete intents', () => {
+    let spy;
+
+    beforeEach(async () => {
+      input.focus();
+      await sendKeys({ type: 'abc' });
+      spy = sinon.spy(element, '_formatOnInput');
+    });
+
+    it('should not format the view when a character is deleted', async () => {
+      await sendKeys({ press: 'Backspace' });
+      expect(spy).to.be.not.called;
+      expect(element.value).to.equal('AB');
+    });
+
+    it('should not format the view when a synthetic input event shrinks it', async () => {
+      input.value = 'AB';
+      input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+      await nextUpdate(element);
+      expect(spy).to.be.not.called;
+      expect(element.value).to.equal('AB');
+    });
+
+    it('should format the view when a synthetic input event grows it', async () => {
+      input.value = 'ABCd';
+      input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+      await nextUpdate(element);
+      expect(spy).to.be.calledOnce;
+      expect(input.value).to.equal('ABCD');
+    });
+
+    it('should not apply a recorded delete intent to a later event', async () => {
+      input.dispatchEvent(
+        new InputEvent('beforeinput', {
+          bubbles: true,
+          composed: true,
+          cancelable: true,
+          inputType: 'deleteContentBackward',
+        }),
+      );
+      input.value = 'AB';
+      input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+      await nextUpdate(element);
+      expect(spy).to.be.not.called;
+
+      input.value = 'ABc';
+      input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+      await nextUpdate(element);
+      expect(spy).to.be.calledOnce;
+      expect(input.value).to.equal('ABC');
+    });
+  });
+
+  describe('prevented edit', () => {
+    let spy;
+
+    beforeEach(async () => {
+      element.allowedCharPattern = '[a-z]';
+      element.value = 'abc';
+      await nextUpdate(element);
+      spy = sinon.spy(element, '_formatOnInput');
+    });
+
+    it('should not record an intent for an edit that a lower layer prevents', async () => {
+      const event = new InputEvent('beforeinput', {
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+        inputType: 'insertText',
+        data: '1',
+      });
+      input.dispatchEvent(event);
+      expect(event.defaultPrevented).to.be.true;
+
+      // With no intent recorded, the shrinking event below reads as a deletion.
+      // Had the prevented `insertText` been recorded, it would reformat instead.
+      input.value = 'AB';
+      input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+      await nextUpdate(element);
+      expect(spy).to.be.not.called;
+      expect(element.value).to.equal('AB');
+    });
+  });
+
+  describe('composition', () => {
+    let spy;
+
+    beforeEach(() => {
+      input.focus();
+      spy = sinon.spy(element, '_formatOnInput');
+    });
+
+    async function compose(text) {
+      input.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true, composed: true }));
+      await sendKeys({ type: text });
+    }
+
+    it('should not format the view while composing', async () => {
+      await compose('abc');
+      expect(spy).to.be.not.called;
+      expect(input.value).to.equal('abc');
+    });
+
+    it('should update value while composing', async () => {
+      await compose('abc');
+      expect(element.value).to.equal('ABC');
+    });
+
+    it('should format the view once when the composition ends', async () => {
+      await compose('abc');
+      input.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true, composed: true }));
+      await nextUpdate(element);
+      expect(spy).to.be.calledOnce;
+      expect(input.value).to.equal('ABC');
+      expect(element.formattedValue).to.equal('ABC');
+    });
+  });
+
+  describe('formatting on commit', () => {
+    let spy;
+
+    beforeEach(() => {
+      sinon.stub(element, '_shouldFormatOnInput').returns(false);
+      spy = sinon.spy(element, '_formatOnInput');
+      input.focus();
+    });
+
+    it('should update value on every typed character', async () => {
+      const valueChangedSpy = sinon.spy();
+      element.addEventListener('value-changed', valueChangedSpy);
+      await sendKeys({ type: 'abc' });
+      expect(element.value).to.equal('ABC');
+      expect(valueChangedSpy).to.be.calledThrice;
+    });
+
+    it('should leave the view exactly as typed', async () => {
+      await sendKeys({ type: 'abc' });
+      expect(spy).to.be.not.called;
+      expect(input.value).to.equal('abc');
+    });
+
+    it('should format the view when _presentValue is called from a commit path', async () => {
+      await sendKeys({ type: 'abc' });
+      element._presentValue(input.value.toUpperCase());
+      expect(input.value).to.equal('ABC');
+      expect(element.formattedValue).to.equal('ABC');
+    });
+  });
 });

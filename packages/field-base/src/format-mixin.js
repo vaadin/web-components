@@ -41,6 +41,12 @@ const FormatMixinImplementation = (superclass) =>
     /** @private */
     #prevViewValue = '';
 
+    /** @private */
+    #boundOnCompositionStart;
+
+    /** @private */
+    #boundOnCompositionEnd;
+
     static get properties() {
       return {
         /**
@@ -55,6 +61,13 @@ const FormatMixinImplementation = (superclass) =>
           readOnly: true,
         },
       };
+    }
+
+    constructor() {
+      super();
+
+      this.#boundOnCompositionStart = this.#onCompositionStart.bind(this);
+      this.#boundOnCompositionEnd = this.#onCompositionEnd.bind(this);
     }
 
     /**
@@ -189,8 +202,8 @@ const FormatMixinImplementation = (superclass) =>
     }
 
     /**
-     * Override a method from `InputMixin` so that the presentation layer can
-     * register its own listeners on the input element.
+     * Override a method from `InputMixin` to listen for composition events, so
+     * that no reformat runs while an IME session is in flight.
      *
      * @param {!HTMLElement} input
      * @protected
@@ -198,11 +211,14 @@ const FormatMixinImplementation = (superclass) =>
      */
     _addInputListeners(input) {
       super._addInputListeners(input);
+
+      input.addEventListener('compositionstart', this.#boundOnCompositionStart);
+      input.addEventListener('compositionend', this.#boundOnCompositionEnd);
     }
 
     /**
-     * Override a method from `InputMixin` so that the presentation layer can
-     * remove the listeners it registered in `_addInputListeners`.
+     * Override a method from `InputMixin` to remove the composition listeners
+     * registered in `_addInputListeners`.
      *
      * @param {!HTMLElement} input
      * @protected
@@ -210,13 +226,16 @@ const FormatMixinImplementation = (superclass) =>
      */
     _removeInputListeners(input) {
       super._removeInputListeners(input);
+
+      input.removeEventListener('compositionstart', this.#boundOnCompositionStart);
+      input.removeEventListener('compositionend', this.#boundOnCompositionEnd);
     }
 
     /**
-     * Override a method from `InputControlMixin` so that the presentation layer
-     * can inspect an edit before it is applied. The `super` method is called
-     * defensively, since the control layer that registers the `beforeinput`
-     * listener sits below this mixin and is optional.
+     * Override a method from `InputControlMixin` to record the kind of edit that
+     * is about to be applied, which decides whether a reformat runs for it. The
+     * `super` method is called defensively, since the control layer that registers
+     * the `beforeinput` listener sits below this mixin and is optional.
      *
      * @param {InputEvent} event
      * @protected
@@ -224,19 +243,67 @@ const FormatMixinImplementation = (superclass) =>
      */
     _onBeforeInput(event) {
       super._onBeforeInput?.(event);
+
+      // An edit that a lower layer rejected is never applied, so it must not
+      // leave an intent behind for the next event to read.
+      if (event.defaultPrevented) {
+        return;
+      }
+
+      // The intent is recorded before any layer above performs the edit itself:
+      // a scripted edit dispatches its `input` event synchronously, so `_onInput`
+      // can run before this method returns.
+      this.#lastInputType = event.inputType;
     }
 
     /**
-     * Override a method from `InputMixin` so that the presentation layer can
-     * update the presented text before the model value is set, keeping
-     * `formattedValue` current when `value-changed` fires.
+     * Override a method from `InputMixin` so that the presentation layer updates
+     * the presented text before the model value is set, keeping `formattedValue`
+     * current when `value-changed` fires.
      *
      * @param {Event} event
      * @protected
      * @override
      */
     _onInput(event) {
+      if (this._shouldFormatOnInput(event)) {
+        this._formatOnInput(event);
+      }
+
+      // The setter owns the previous view value for every write it makes; this
+      // is the other owner, for an edit that writes nothing at all, such as a
+      // deletion that skips the reformat.
+      this.#prevViewValue = event.composedPath()[0].value;
+
       super._onInput(event);
+
+      this.#lastInputType = undefined;
+    }
+
+    /**
+     * Suspends the reformat for the duration of an IME session, so that the text
+     * being composed is left alone until it is committed.
+     *
+     * @private
+     */
+    #onCompositionStart() {
+      this.#composing = true;
+    }
+
+    /**
+     * Resumes the reformat once the composed text is committed, and runs the one
+     * reformat that was suspended for the session.
+     *
+     * @private
+     */
+    #onCompositionEnd(event) {
+      this.#composing = false;
+
+      // Goes through the policy predicate rather than around it, so that an
+      // adopter that formats on commit gets no live reformat here either.
+      if (this._shouldFormatOnInput(event)) {
+        this._formatOnInput(event);
+      }
     }
 
     /**
