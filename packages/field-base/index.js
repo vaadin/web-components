@@ -1,4 +1,5 @@
 export { CheckedMixin } from './src/checked-mixin.js';
+export { ChunkFormatMixin } from './src/chunk-format-mixin.js';
 export { FieldMixin } from './src/field-mixin.js';
 export { FormatMixin } from './src/format-mixin.js';
 export { InputController } from './src/input-controller.js';

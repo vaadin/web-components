@@ -232,6 +232,24 @@ const FormatMixinImplementation = (superclass) =>
     }
 
     /**
+     * Override a method from `InputMixin` to re-present the value once the input
+     * element is set, since both the input controller and `InputFieldMixin` copy
+     * the model value to the input element verbatim.
+     *
+     * @param {HTMLElement | undefined} input
+     * @param {HTMLElement | undefined} oldInput
+     * @protected
+     * @override
+     */
+    _inputElementChanged(input, oldInput) {
+      super._inputElementChanged(input, oldInput);
+
+      if (input && this._hasFormat && this.value) {
+        this._forwardInputValue(this.value);
+      }
+    }
+
+    /**
      * Override a method from `InputControlMixin` to record the kind of edit that
      * is about to be applied, which decides whether a reformat runs for it. The
      * `super` method is called defensively, since the control layer that registers
