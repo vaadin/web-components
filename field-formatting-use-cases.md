@@ -15,17 +15,17 @@ constrain the shared API.
 ## 1. Three features, not one
 
 The request is regularly stated as "input mask", but it is three separable features. Juuso in the source
-notes: *"Formatting, parsing and visible masks are all nice things and with current addons using one
-technique rules out the others AFAIK."* Each add-on implements one and blocks the other two.
+notes: _"Formatting, parsing and visible masks are all nice things and with current addons using one
+technique rules out the others AFAIK."_ Each add-on implements one and blocks the other two.
 
-| # | Feature | What it changes | Runs |
-| - | ------- | --------------- | ---- |
-| A | **Format** | how the value is displayed | as you type, or on blur |
-| B | **Parse / normalize** | the value the server receives | on commit |
-| C | **Visible mask** | an affordance showing the expected shape | while the field is empty or partly filled |
+| #   | Feature               | What it changes                          | Runs                                      |
+| --- | --------------------- | ---------------------------------------- | ----------------------------------------- |
+| A   | **Format**            | how the value is displayed               | as you type, or on blur                   |
+| B   | **Parse / normalize** | the value the server receives            | on commit                                 |
+| C   | **Visible mask**      | an affordance showing the expected shape | while the field is empty or partly filled |
 
-They can conflict, and the notes say so explicitly — Juuso: *"I am not suggesting that we should have
-formatting, parsing and visible masks for all inputs."*
+They can conflict, and the notes say so explicitly — Juuso: _"I am not suggesting that we should have
+formatting, parsing and visible masks for all inputs."_
 
 ---
 
@@ -33,16 +33,16 @@ formatting, parsing and visible masks for all inputs."*
 
 ### 2.1 Chunking / grouping (format as you type)
 
-Insert separators into an otherwise continuous value. Rolf: *"The chunking (i.e. space-based
-segmentation) for e.g. IBAN or phone numbers should IMO be easily doable as a feature."* This is the
+Insert separators into an otherwise continuous value. Rolf: _"The chunking (i.e. space-based
+segmentation) for e.g. IBAN or phone numbers should IMO be easily doable as a feature."_ This is the
 cheapest, highest-value subset.
 
-| Case | Input | Displayed |
-| ---- | ----- | --------- |
-| IBAN | `FI2112345600000785` | `FI21 1234 5600 0007 85` |
-| National phone (FI) | `0401234567` | `040 123 4567` |
-| Payment card, 16-digit | `4111111111111111` | `4111 1111 1111 1111` |
-| Payment card, AMEX | `341111111111111` | `3411 111111 11111` |
+| Case                   | Input                | Displayed                |
+| ---------------------- | -------------------- | ------------------------ |
+| IBAN                   | `FI2112345600000785` | `FI21 1234 5600 0007 85` |
+| National phone (FI)    | `0401234567`         | `040 123 4567`           |
+| Payment card, 16-digit | `4111111111111111`   | `4111 1111 1111 1111`    |
+| Payment card, AMEX     | `341111111111111`    | `3411 111111 11111`      |
 
 Card grouping is the proof that block patterns cannot be static: 4-4-4-4 for 16-digit VISA / MasterCard /
 Discover / JCB, but **4-6-5 for 15-digit AMEX**, detected from the `34`/`37` prefix, plus 14-digit Diners
@@ -54,23 +54,23 @@ either value-dependent block selection or a dedicated card mode.
 
 Reformat a loosely typed value into the canonical presentation when the field commits.
 
-| Case | Typed | Displayed after commit |
-| ---- | ----- | ---------------------- |
-| Date, missing leading zeros | `5.1.2027` | `05.01.2027` |
-| Padding / case | `fi21 1234...` | `FI21 1234 …` |
+| Case                        | Typed          | Displayed after commit |
+| --------------------------- | -------------- | ---------------------- |
+| Date, missing leading zeros | `5.1.2027`     | `05.01.2027`           |
+| Padding / case              | `fi21 1234...` | `FI21 1234 …`          |
 
 ### 2.3 Parsing / normalization (what the server gets)
 
-The typed form and the model form differ. Jean-Christophe: *"Pattern validation is different [from] what
+The typed form and the model form differ. Jean-Christophe: _"Pattern validation is different [from] what
 I expect, because I need to type the separators 044-787-90-90 or allow bad data in the backend like
-04478790-90 or revalidate/reparse it."*
+04478790-90 or revalidate/reparse it."_
 
-| Case | Typed | Model value |
-| ---- | ----- | ----------- |
-| Finnish domestic account → IBAN | `211234-56785` | `FI2112345600000785` |
-| National phone → E.164 | `0401234567` | `+358401234567` |
-| Short date → ISO / `LocalDate` | `5/1/27` | `2027-01-05` |
-| Grouped value → plain | `FI21 1234 5600 0007 85` | `FI2112345600000785` |
+| Case                            | Typed                    | Model value          |
+| ------------------------------- | ------------------------ | -------------------- |
+| Finnish domestic account → IBAN | `211234-56785`           | `FI2112345600000785` |
+| National phone → E.164          | `0401234567`             | `+358401234567`      |
+| Short date → ISO / `LocalDate`  | `5/1/27`                 | `2027-01-05`         |
+| Grouped value → plain           | `FI21 1234 5600 0007 85` | `FI2112345600000785` |
 
 The last row is the one today's formatter add-on gets wrong: the separators end up in the model value.
 
@@ -78,16 +78,16 @@ The last row is the one today's formatter add-on gets wrong: the separators end 
 
 Show the expected shape and fill it in progressively.
 
-| Case | Empty | Partly typed | Complete |
-| ---- | ----- | ------------ | -------- |
-| IBAN | `FI################` | `FI21123###########` | `FI2112345600000785` |
-| Phone | `___ ___ ____` | `040 ___ ____` | `040 123 4567` |
-| Date | `DD-MM-YYYY` | `05.MM.YYYY` | `05.01.2027` |
+| Case  | Empty                | Partly typed         | Complete             |
+| ----- | -------------------- | -------------------- | -------------------- |
+| IBAN  | `FI################` | `FI21123###########` | `FI2112345600000785` |
+| Phone | `___ ___ ____`       | `040 ___ ____`       | `040 123 4567`       |
+| Date  | `DD-MM-YYYY`         | `05.MM.YYYY`         | `05.01.2027`         |
 
-The concrete Vaadin gap, from Juuso: *"Missing in DatePicker: Visible mask and or formatting as you type.
+The concrete Vaadin gap, from Juuso: _"Missing in DatePicker: Visible mask and or formatting as you type.
 Our Date Format example uses placeholder + helper text (which probably no one does). Once you type, the
 placeholder is hidden and you lose the hint of date format. You need to guess the right separator
-character whereas in formatting the separator is added for you and you just type in numbers."*
+character whereas in formatting the separator is added for you and you just type in numbers."_
 
 ### 2.5 Embedded literal segments (legacy alphanumeric masks)
 
@@ -103,8 +103,8 @@ and a decision on whether the literals belong to the model value.
 
 Olli: a Finnish SSN is `[8 digits]` `[one of -, +, A]` `[3 digits + a checksum char computed from the
 rest]`. German landlines have a 3- or 4-digit area code — `+49 030 1234567` (Berlin) vs
-`+49 0211 1234567` (Düsseldorf) — *"so where to put the space after the second group depends on the value
-of the second group."*
+`+49 0211 1234567` (Düsseldorf) — _"so where to put the space after the second group depends on the value
+of the second group."_
 
 Requirements: alternative patterns selected from the value, optional sections, and a per-position class
 that is not just "digit".
@@ -117,15 +117,15 @@ configured twice.
 
 ### 2.8 Explicitly out of scope for now
 
-Numeral and currency formatting (`1234567.12` → `$1,234,567.12`, `500 000,34 €`, Indian *lakh* and Chinese
-*wan* grouping). Jean-Christophe: *"Not being able to have a number field with 500,000.34 euros is
-annoying."* Deferred with `number-field` until it moves to `input type="text"`.
+Numeral and currency formatting (`1234567.12` → `$1,234,567.12`, `500 000,34 €`, Indian _lakh_ and Chinese
+_wan_ grouping). Jean-Christophe: _"Not being able to have a number field with 500,000.34 euros is
+annoying."_ Deferred with `number-field` until it moves to `input type="text"`.
 
 Full international as-you-type phone formatting is also out of scope: it needs libphonenumber-sized locale
 data. cleave.js split its phone support into per-country add-ons for exactly that reason — the full i18n
 lib is 254 KB minified / 50 KB gzipped, versus 14 KB / 5 KB per country
 ([cleave.js phone addon docs](https://github.com/nosir/cleave.js/blob/master/doc/phone-lib-addon.md)).
-Plain grouping of a *known* national format (§2.1) stays in scope; resolving the country from the digits
+Plain grouping of a _known_ national format (§2.1) stays in scope; resolving the country from the digits
 does not.
 
 ---
@@ -156,7 +156,7 @@ new InputMask("(000) 000-0000").extend(phoneField);
 ```
 
 - `InputMask extends AbstractSinglePropertyField<InputMask, String> implements HasValidation`, single
-  property `unmaskedValue` — so the *wrapper itself* is the `HasValue` carrying the unmasked value, and
+  property `unmaskedValue` — so the _wrapper itself_ is the `HasValue` carrying the unmasked value, and
   Binder is pointed at the wrapper, not the field, when the app wants unmasked data
 - `extend(Component)` / `remove()`, `WeakReference` to the host plus an attach listener
 - `setMask(String)`, `setMask(String, boolean evalMask)`, `setMask(String, boolean, InputMaskOption...)`
@@ -171,10 +171,10 @@ new InputMask("(000) 000-0000").extend(phoneField);
 - `setPresentationValue` **throws `IllegalArgumentException` unless the host is a `TextField`** — unmasked
   binding is TextField-only
 
-**What the source tells us.** Johannes named three fragilities — *"value sync in eager mode, paste
-handling, runtime mask changes"* — and all three are hand-patched in `input-mask.js`:
+**What the source tells us.** Johannes named three fragilities — _"value sync in eager mode, paste
+handling, runtime mask changes"_ — and all three are hand-patched in `input-mask.js`:
 
-- `_handleMaskedInput` is registered *after* `new IMask(...)` so it runs after IMask reformats, then
+- `_handleMaskedInput` is registered _after_ `new IMask(...)` so it runs after IMask reformats, then
   defers the correction to a `queueMicrotask`, guarded on `e.isTrusted` and `document.activeElement`.
   Without it, EAGER / TIMEOUT value-change modes send the server the raw pre-mask text, including
   characters the mask rejected.
@@ -197,8 +197,8 @@ mask switching from a `Select`, and both Binder styles.
 
 `~/cf/textfieldformatter-zen`, branch `v25`, wraps `cleave-zen` 0.0.17 + `libphonenumber-js` 1.12.8.
 
-The README states the design fork outright: *"Different from an input mask, the actual value of the input
-field is formatted."*
+The README states the design fork outright: _"Different from an input mask, the actual value of the input
+field is formatted."_
 
 **Web component** — `cleave-zen-formatter/src/main/resources/META-INF/resources/frontend/textfield-formatter.ts`
 
@@ -221,47 +221,47 @@ provides `extend(Component)` / `remove()`, pushes config via `executeJs("$0.upda
 `addPasteOverflowListener` → `PasteOverflowEvent(originalValue, formattedValue)`, fired when a pasted value
 is truncated by the format. Concrete formatters, all with `extend(TextField)`:
 
-| Class | Configuration |
-| ----- | ------------- |
+| Class                        | Configuration                                                                                                                                                                                                                                                           |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CustomStringBlockFormatter` | `int[] blocks`, `String[] delimiters`, `delimiterLazyShow`, `ForceCase {NONE,UPPER,LOWER}`, `prefix` (+`showPrefixImmediately`), `numericOnly`; `Options` bean + fluent `Builder` (`block(len, delim)`, `blocks(int...)`, `delimiters(…)`, `numeric()`, `forceCase(…)`) |
-| `IBANFormatter` | `fromIBANLength(int)` — 4-char blocks with a shorter tail, forced upper case, `" "` delimiter |
-| `CreditCardFieldFormatter` | `creditCardStrictMode` (19-digit PAN); `addCreditCardChangedListener` → `CreditCardType` enum of 14 brands |
-| `DateFieldFormatter` | `datePattern` (`yyyy\|yy\|MM\|dd`, translated to cleave's `Y\|y\|m\|d`), `dateMin` / `dateMax` as `LocalDate` (clamps the typed value), `delimiter`; `Builder` |
-| `NumeralFieldFormatter` | `delimiter`, `numeralDecimalMark`, integer/decimal scale, `numeralPositiveOnly`, `ThousandsGroupStyle {THOUSAND, LAKH, WAN, NONE}`, `signBeforePrefix`, `stripLeadingZeroes`, `prefix`, `tailPrefix`; `Builder` |
-| `PhoneFieldFormatter` | `country` (default `"US"`), `formatNational` — delegates to libphonenumber-js |
+| `IBANFormatter`              | `fromIBANLength(int)` — 4-char blocks with a shorter tail, forced upper case, `" "` delimiter                                                                                                                                                                           |
+| `CreditCardFieldFormatter`   | `creditCardStrictMode` (19-digit PAN); `addCreditCardChangedListener` → `CreditCardType` enum of 14 brands                                                                                                                                                              |
+| `DateFieldFormatter`         | `datePattern` (`yyyy\|yy\|MM\|dd`, translated to cleave's `Y\|y\|m\|d`), `dateMin` / `dateMax` as `LocalDate` (clamps the typed value), `delimiter`; `Builder`                                                                                                          |
+| `NumeralFieldFormatter`      | `delimiter`, `numeralDecimalMark`, integer/decimal scale, `numeralPositiveOnly`, `ThousandsGroupStyle {THOUSAND, LAKH, WAN, NONE}`, `signBeforePrefix`, `stripLeadingZeroes`, `prefix`, `tailPrefix`; `Builder`                                                         |
+| `PhoneFieldFormatter`        | `country` (default `"US"`), `formatNational` — delegates to libphonenumber-js                                                                                                                                                                                           |
 
 **Documented limitations** (`TODO.md`, verbatim):
 
-- *"A different ValueChangeMode for the TextField are not working well since the value is formatted eagerly
+- _"A different ValueChangeMode for the TextField are not working well since the value is formatted eagerly
   and updated to the server side automatically (if it's not updated automatically with the `_onChange` then
-  the value is wrong on the server side!)"*
-- *"The cursor position might be an issue to be tested. It doesn't work for all the different cases (with
-  delimiters)"*
+  the value is wrong on the server side!)"_
+- _"The cursor position might be an issue to be tested. It doesn't work for all the different cases (with
+  delimiters)"_
 - `noImmediatePrefix` has no cleave-zen equivalent
 - missing from cleave-zen: add leading zero (`.99` → `0.99`), always display decimals (`99` → `99.00`)
 
 ### 3.3 Engine constraints worth knowing
 
 - **cleave-zen has no per-character grammar.** `FormatGeneralOptions` is `blocks: number[]` plus
-  delimiters/prefix, with `numericOnly` / `uppercase` / `lowercase` as *global* booleans. Delimiters only
-  go *between* blocks. §2.5 (literal inside a group) and §2.6 (per-position classes) are inexpressible.
+  delimiters/prefix, with `numericOnly` / `uppercase` / `lowercase` as _global_ booleans. Delimiters only
+  go _between_ blocks. §2.5 (literal inside a group) and §2.6 (per-position classes) are inexpressible.
 - **cleave.js has a known, wontfix caret defect.**
-  [nosir/cleave.js#374](https://github.com/nosir/cleave.js/issues/374): *"When using Backspace in the middle
-  of an input, delimiters will consume keystrokes to give unintuitive results."* The maintainer's own
-  diagnosis: *"it's hard since how the lib works is totally based on string replacement but not mask input
-  actions. TL;DR: won't fix this soon."* Juuso reported the same symptom independently. cleave-zen does not
-  fix it — `registerCursorTracker` listens to `input` *after* the browser applied the edit and restores a
+  [nosir/cleave.js#374](https://github.com/nosir/cleave.js/issues/374): _"When using Backspace in the middle
+  of an input, delimiters will consume keystrokes to give unintuitive results."_ The maintainer's own
+  diagnosis: _"it's hard since how the lib works is totally based on string replacement but not mask input
+  actions. TL;DR: won't fix this soon."_ Juuso reported the same symptom independently. cleave-zen does not
+  fix it — `registerCursorTracker` listens to `input` _after_ the browser applied the edit and restores a
   caret index in a `setTimeout(…, 0)`; it never intercepts Backspace over a delimiter.
 - **cleave-zen's factoring is nevertheless the right one for us:** pure `format*(value, options) → string`
   functions plus an opt-in `registerCursorTracker(props): CursorTrackerDestructor`. The formatting logic
-  stays pure and testable and the *component* owns the DOM write, the caret and the lifecycle — which is
+  stays pure and testable and the _component_ owns the DOM write, the caret and the lifecycle — which is
   exactly what a field-base mixin is positioned to do. ([cleave.js#723](https://github.com/nosir/cleave.js/issues/723))
 - **IMask keeps the value split.** `value` (masked), `unmaskedValue` (raw) and `typedValue` are separate,
   two-way assignable accessors: `mask.unmaskedValue = '70000000000'` yields
   `mask.value === '+7(000)000-00-00'`. It also has dynamic masks (an array of masks, best-fit selection plus
   a `dispatch` callback) for §2.6, and `lazy: false` + `placeholderChar` for §2.4.
-- **IMask requires `type="text"`.** From its guide: *"If you apply mask to `input` element you have to use
-  `type=text`. Other types are not supported."* In this repo that rules out `email-field`
+- **IMask requires `type="text"`.** From its guide: _"If you apply mask to `input` element you have to use
+  `type=text`. Other types are not supported."_ In this repo that rules out `email-field`
   (`packages/email-field/src/vaadin-email-field.js:116` → `_setType('email')`) as well as `number-field`
   (`packages/number-field/src/vaadin-number-field-mixin.js:75`). This is engine-specific, not inherent — we
   control `_setType` — but any IMask-backed prototype has to plan for it.
@@ -273,26 +273,26 @@ is truncated by the format. Concrete formatters, all with `extend(TextField)`:
 ### 3.4 Lion `form-core` — the closest prior art to a built-in mixin
 
 `~/cf/lion/packages/ui/components/form-core/src/FormatMixin.js` (ING's Lion). Not an add-on wrapping a
-masking library — a *mixin inside the field*, which is the shape §4 argues for. Worth studying closely
+masking library — a _mixin inside the field_, which is the shape §4 argues for. Worth studying closely
 because it solves several problems both Component Factory add-ons hand-patch from the outside.
 
 **Value model.** Four representations, connected by four overridable hooks:
 
-| Representation | Meaning |
-| -------------- | ------- |
-| `value` | the view value, delegated to `_inputNode.value` |
-| `formattedValue` | the *scheduled* view value — the formatter's output, held until the reflect condition is met |
-| `modelValue` | the typed value the app works with (`Date`, `Number`, IBAN string…) |
-| `serializedValue` | the transport form (ISO date, `'1234.56'`) |
+| Representation    | Meaning                                                                                      |
+| ----------------- | -------------------------------------------------------------------------------------------- |
+| `value`           | the view value, delegated to `_inputNode.value`                                              |
+| `formattedValue`  | the _scheduled_ view value — the formatter's output, held until the reflect condition is met |
+| `modelValue`      | the typed value the app works with (`Date`, `Number`, IBAN string…)                          |
+| `serializedValue` | the transport form (ISO date, `'1234.56'`)                                                   |
 
 Hooks: `parser(viewValue, opts) → modelValue`, `formatter(modelValue, opts) → string`,
 `serializer` / `deserializer`, plus `preprocessor` (below). Two flows, documented in the mixin header:
-app sets `modelValue` → formatter → view; user types → parser → `modelValue` → formatter → *debounced*
+app sets `modelValue` → formatter → view; user types → parser → `modelValue` → formatter → _debounced_
 back to the view.
 
-**`preprocessor` — the live formatter, separate from `formatter`.** *"Preprocessors could be considered
+**`preprocessor` — the live formatter, separate from `formatter`.** _"Preprocessors could be considered
 'live formatters'… preprocessors are run before modelValue is computed (and work based on view value),
-whereas formatters are run after the parser."* Signature:
+whereas formatters are run after the parser."_ Signature:
 
 ```js
 preprocessor(viewValue, { currentCaretIndex, prevViewValue, mode })
@@ -304,14 +304,14 @@ rather than one setting. Returning `undefined` means "leave it alone", which pre
 nothing.
 
 **Caret handling is in the contract, not bolted on.** `__handlePreprocessor` reads `selectionStart`
-*before* calling the preprocessor, passes it in, and writes back the returned `caretIndex`.
+_before_ calling the preprocessor, passes it in, and writes back the returned `caretIndex`.
 `NativeTextFieldMixin._setValueAndPreserveCaret` restores the selection on every programmatic write, only
 when focused (changing `selectionStart` moves focus in Safari) and inside a try/catch for input types that
 throw. And `liveFormatPhoneNumber` (`input-tel/src/preprocessors.js`) opens with:
 
 ```js
 const diff = viewValue.length - prevViewValue.length;
-if (diff <= 0 || !PhoneUtilManager.isLoaded) return undefined;   // don't reformat while deleting
+if (diff <= 0 || !PhoneUtilManager.isLoaded) return undefined; // don't reformat while deleting
 ```
 
 That single guard is the answer to the cleave backspace defect (§3.3) — don't fight the delete.
@@ -327,7 +327,7 @@ value becomes `new Unparseable(viewValue)`, which retains the raw text. The half
 silently lost, validation can act on it, and a session can be restored. The formatter then syncs
 `modelValue.viewValue` back rather than blanking the field.
 
-**`formatOptions.mode: 'auto' | 'pasted' | 'user-edited'`** — meta info about *how* the current value came
+**`formatOptions.mode: 'auto' | 'pasted' | 'user-edited'`** — meta info about _how_ the current value came
 to be, computed right before each parser/formatter call and passed into both. `_isPasting` is set on
 `paste` and cleared in a `setTimeout`. `parseAmount` uses it to reject unmatched characters when typed but
 tolerate them when pasted. Compare with `_handlePaste` in `input-mask.js`: same problem, solved as a
@@ -335,14 +335,14 @@ declarative flag instead of an event interception.
 
 **`viewValueStates: ['formatted']`** — tracks whether what is currently in the view is the formatter's own
 output that actually reached the view. `getParseMode` (`localize/src/number/parseNumber.js`) uses it: when
-the user edits a value *we* formatted, stick to the locale we used instead of re-guessing from the
+the user edits a value _we_ formatted, stick to the locale we used instead of re-guessing from the
 separators. The documented consequence: typing `400,0` in an English locale gives `4,000.00`, pasting it
 gives `400.00`.
 
 **Other details worth copying:** `_calculateValues({source})` computes all representations in one place
 with a recursion lock and a `source` marker so the triggering representation is not recomputed;
-`_callFormatter` skips formatting while the user is editing an invalid value (*"we only 'reward' valid
-inputs"*); `compositionstart`/`compositionend` suspend preprocessing so IME input is not mangled
+`_callFormatter` skips formatting while the user is editing an invalid value (_"we only 'reward' valid
+inputs"_); `compositionstart`/`compositionend` suspend preprocessing so IME input is not mangled
 mid-composition — neither add-on handles composition at all.
 
 **No mask grammar anywhere.** Lion covers our §2.1–§2.3 by composing small per-type parser/formatter pairs
@@ -396,7 +396,7 @@ A `DatePattern` bean (`Order {DAY_MONTH_YEAR, …}`, `MonthDisplayMode {ZERO_PRE
 `i18n.parseDate` / `i18n.formatDate`** on the date picker and monkey-patches `$connector.setLocale` to
 survive locale changes. This predates `DatePickerI18n#setDateFormats(primary, additional…)` +
 `setReferenceDate(LocalDate)`, which now cover the same ground in core — the relevant lesson for §2.7 is
-that the format string in `i18n.dateFormats[0]` (`dd.MM.yyyy`) already *is* the mask template.
+that the format string in `i18n.dateFormats[0]` (`dd.MM.yyyy`) already _is_ the mask template.
 
 **Text** — `superfields/text/SuperTextField.java`, `frontend/super-text-field.js`, `text-selection-mixin.js`
 
@@ -417,7 +417,7 @@ that the format string in `i18n.dateFormats[0]` (`dd.MM.yyyy`) already *is* the 
 Read from `~/vaadin/flow` and `~/vaadin/flow-components`.
 
 **1. Flow can ship data, not functions.** Lion's `preprocessor` / `formatter` / `parser` are JS
-functions. Flow's channel to the client is element properties (JSON) and `executeJs`. That is *why*
+functions. Flow's channel to the client is element properties (JSON) and `executeJs`. That is _why_
 vcf-input-mask grew an `evalMask` flag and an `eval()` in `_generateIMaskOptions`. Consequence: any
 as-you-type behaviour must be **fully declarative** on the client — blocks, delimiter, case, a mask string,
 or a named preset. Custom Java logic can only run at commit time, after a round trip.
@@ -443,7 +443,7 @@ presentation, `unparsable-change` when the input changed but the model did not (
 **4. A server-side parse hook already exists — on DatePicker.**
 `DatePicker#setFallbackParser(SerializableFunction<String, Result<LocalDate>>)`. It runs inside
 `setModelValue` (guarded by `isFallbackParserRunning`), and on success calls `setPresentationValue(parsed)`
-so the field *displays the normalised value*; on `Result.error(msg)` the message becomes the validation
+so the field _displays the normalised value_; on `Result.error(msg)` the message becomes the validation
 error. This is exactly "some sort of API for using custom parsing logic" — for dates. The same shape on
 `TextField` — `SerializableFunction<String, Result<String>>` applied at commit — covers §2.2 and §2.3
 (`5.1.2027` → `05.01.2027`, `0401234567` → `+358401234567`) with no client code. Limitation: commit only,
@@ -453,7 +453,7 @@ never as you type.
 `TextFieldBase.setValueChangeMode` → `setSynchronizedEvent(ValueChangeMode.eventForMode(mode, "input"))`,
 i.e. Flow reads the `value` property when the `input` DOM event reaches the host. The WC's `_onInput`
 (`input-mixin.js:174`) does `this.value = target.value` synchronously in the input element's listener,
-which fires *before* host-level listeners. Add-ons break because their listener runs after `_onInput`, so
+which fires _before_ host-level listeners. Add-ons break because their listener runs after `_onInput`, so
 Flow reads the pre-format value. A mixin that formats **inside** `_onInput` has already written the model
 value by the time Flow's listener runs — EAGER / LAZY / TIMEOUT work with zero Flow changes.
 
@@ -494,9 +494,9 @@ NumberField use for unparsable input.
 
 **Two-tier shape this implies for Flow.**
 
-| Tier | Runs | Configured by | Covers |
-| ---- | ---- | ------------- | ------ |
-| Live | client, on every `input` | declarative WC properties set from Java (`blocks`, `delimiter`, `mask`…) | §2.1, §2.4–2.6 |
+| Tier   | Runs                                | Configured by                                                                                                                                   | Covers           |
+| ------ | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| Live   | client, on every `input`            | declarative WC properties set from Java (`blocks`, `delimiter`, `mask`…)                                                                        | §2.1, §2.4–2.6   |
 | Commit | server, on `change` / value-changed | `SerializableFunction<String, Result<String>>` in `setModelValue`, DatePicker `setFallbackParser` shape; `modelToPresentation` for typed fields | §2.2, §2.3, §2.7 |
 
 ---
@@ -530,8 +530,8 @@ programmatic changes would run, gated by a `_reflectBackOn()`-style predicate. `
 
 Integration points the outside-in wrappers had to fake, and that a mixin gets natively: value-change modes
 (EAGER / TIMEOUT), paste, programmatic `setValue` from the server, runtime mask change, clear, and the
-interplay with existing validation. Rolf: TextField *"already has allowed-chars (that prevents entering
-disallowed chars) and pattern validation (that validates the full value on commit)"* — the mask must
+interplay with existing validation. Rolf: TextField _"already has allowed-chars (that prevents entering
+disallowed chars) and pattern validation (that validates the full value on commit)"_ — the mask must
 compose with those, not duplicate or fight them.
 
 ---
@@ -542,7 +542,7 @@ compose with those, not duplicate or fight them.
    behaviour with auto-inserted separators and caret jumps that survived verification. This is genuinely
    open, and it could veto layers 2 and 3 — it should be settled before, not after, a prototype.
 2. **Default value direction.** Does the field expose the normalized value or the formatted string?
-   vcf-input-mask makes the caller bind a *separate object* to get the unmasked value, and only for
+   vcf-input-mask makes the caller bind a _separate object_ to get the unmasked value, and only for
    TextField. A core API has to decide once, for Binder, validation, `pattern`, Grid and serialization —
    and say what a mask change does to an already-set value.
 3. **Mask grammar.** Invent one, adopt IMask's, or align with Swing's `MaskFormatter` for the
@@ -573,7 +573,7 @@ Local code (both add-ons, read in full) and the source notes are primary. Librar
 official docs and source, several claims re-verified against the live cleave.js demo.
 
 Deliberately **not** asserted here, because it did not survive adversarial verification: the exact IMask
-pattern-definition token set (`0` / `a` / `*` / `[]` / `{}`), and the framing of IMask `blocks` as *the*
+pattern-definition token set (`0` / `a` / `*` / `[]` / `{}`), and the framing of IMask `blocks` as _the_
 mechanism for grouping — grouping is done with literal characters in a flat mask, and `blocks` is for
 per-block validation (`MaskedRange`, `MaskedEnum`). Verify the definitions table against imask.js.org
 before it goes into a spec.
