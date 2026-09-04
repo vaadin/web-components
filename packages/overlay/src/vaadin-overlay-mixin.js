@@ -388,6 +388,19 @@ export const OverlayMixin = (superClass) =>
     }
 
     /**
+     * The elements whose animations report the state of the overlay. The parts run the visible
+     * animation, so waiting for them keeps the state from ending while the overlay is still
+     * being animated. The host is included for the themes that animate `:host` instead.
+     *
+     * @return {!Array<!HTMLElement>}
+     * @protected
+     */
+    get _stateAnimationElements() {
+      // The backdrop is left out of the template by the overlays that never have one
+      return [this, this.$.overlay, this.$.backdrop].filter(Boolean);
+    }
+
+    /**
      * Run the callback once every animation reporting the state has ended, or right away when
      * there is none.
      *
@@ -396,7 +409,7 @@ export const OverlayMixin = (superClass) =>
      * @private
      */
     _enqueueAnimation(type, callback) {
-      const animations = getStateAnimations(this);
+      const animations = this._stateAnimationElements.flatMap((element) => getStateAnimations(element));
       if (animations.length === 0) {
         callback();
         return;

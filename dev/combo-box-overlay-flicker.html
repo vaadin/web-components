@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Combo Box overlay closing flicker</title>
+    <script type="module" src="./common.js"></script>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        margin: 1rem;
+        gap: 0.75rem;
+      }
+
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+
+      vaadin-grid {
+        flex: 1 1 auto;
+        min-height: 200px;
+      }
+
+      #log {
+        flex: 0 0 auto;
+        max-height: 11lh;
+        overflow: auto;
+        margin: 0;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font: 12px/1.4 ui-monospace, monospace;
+        white-space: pre-wrap;
+      }
+
+      #verdict {
+        font: 600 13px/1 ui-monospace, monospace;
+        padding: 0.35rem 0.6rem;
+        border-radius: 4px;
+        background: #eee;
+      }
+
+      #verdict[data-state='flicker'] {
+        background: #b3261e;
+        color: #fff;
+      }
+
+      #verdict[data-state='clean'] {
+        background: #146c2e;
+        color: #fff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <p style="margin: 0">
+      Open the combo box and pick an item, then read the trace below. The overlay closes over the grid, so any frame
+      that paints at full opacity after the fade is plainly visible. Add <code>?theme=aura</code> (or use the theme
+      switcher) to compare Aura against Lumo and base.
+    </p>
+
+    <div class="controls">
+      <vaadin-combo-box id="languages" label="Language"></vaadin-combo-box>
+      <label> <input type="checkbox" id="slowmo" /> Slow motion (10&times; animation duration) </label>
+      <label> <input type="checkbox" id="desync" /> Force de-sync (restart part animation mid-close) </label>
+      <button id="clear">Clear log</button>
+      <span id="verdict">no trace yet</span>
+    </div>
+
+    <vaadin-grid id="grid">
+      <vaadin-grid-selection-column></vaadin-grid-selection-column>
+      <vaadin-grid-column path="first" header="First name"></vaadin-grid-column>
+      <vaadin-grid-column path="last" header="Last name"></vaadin-grid-column>
+      <vaadin-grid-column path="age" header="Age"></vaadin-grid-column>
+    </vaadin-grid>
+
+    <pre id="log"></pre>
+
+    <script type="module">
+      import '@vaadin/combo-box';
+      import '@vaadin/grid/all-imports';
+
+      const comboBox = document.querySelector('#languages');
+      const grid = document.querySelector('#grid');
+      const log = document.querySelector('#log');
+      const verdict = document.querySelector('#verdict');
+      const slowmo = document.querySelector('#slowmo');
+      const desync = document.querySelector('#desync');
+
+      comboBox.items = ['English', 'Turkish', 'German', 'Finnish', 'Swedish'];
+
+      grid.items = Array.from({ length: 200 }, (_, i) => ({
+        first: `First ${i}`,
+        last: `Last ${i}`,
+        age: 20 + (i % 50),
+      }));
+
+      document.querySelector('#clear').addEventListener('click', () => {
+        log.textContent = '';
+        verdict.textContent = 'no trace yet';
+        verdict.removeAttribute('data-state');
+      });
+
+      // 10x duration makes a one-frame flash last long enough to see by eye.
+      slowmo.addEventListener('change', () => {
+        const value = slowmo.checked ? '1s' : '';
+        comboBox.style.setProperty('--vaadin-overlay-animation-duration', value);
+      });
+
+      const overlay = () => comboBox.shadowRoot.querySelector('vaadin-combo-box-overlay');
+      const overlayPart = () => overlay().shadowRoot.querySelector('[part="overlay"]');
+
+      const write = (line) => {
+        log.textContent += `${line}\n`;
+        log.scrollTop = log.scrollHeight;
+      };
+
+      /**
+       * Sample the overlay every animation frame while it closes.
+       *
+       * The state machine in `_enqueueAnimation()` waits on the host's `--no-op`
+       * animation, while the visible fade runs on `[part=overlay]` with
+       * `animation-fill-mode: backwards`. Because nothing fills the part
+       * forwards, the part reverts to its base `opacity: 1` the moment its own
+       * animation ends. Any frame in which the part has already reverted but the
+       * host animation has not yet finished paints the overlay fully opaque.
+       */
+      const sampleClosing = () => {
+        const host = overlay();
+        const part = overlayPart();
+        const t0 = performance.now();
+        const samples = [];
+        let frames = 0;
+
+        const tick = () => {
+          const hostStyle = getComputedStyle(host);
+          const opacity = Number(getComputedStyle(part).opacity);
+          const hidden = hostStyle.display === 'none';
+
+          samples.push({
+            t: Math.round(performance.now() - t0),
+            opacity,
+            hidden,
+            hostAnimations: host.getAnimations().length,
+            partAnimations: part.getAnimations().length,
+          });
+
+          if (desync.checked && frames === 4) {
+            // Restart the part animation only, leaving the host animation alone.
+            part.getAnimations().forEach((animation) => {
+              animation.cancel();
+              animation.play();
+            });
+          }
+
+          frames += 1;
+          if (!hidden && frames < 200) {
+            requestAnimationFrame(tick);
+          } else {
+            report(samples);
+          }
+        };
+
+        requestAnimationFrame(tick);
+      };
+
+      const report = (samples) => {
+        const visible = samples.filter((sample) => !sample.hidden);
+        const trace = visible.map((sample) => sample.opacity.toFixed(2));
+
+        // A rebound is any rise in opacity after the fade has started downwards.
+        let lowest = 1;
+        let rebound = 0;
+        let reboundAt = null;
+        visible.forEach((sample) => {
+          lowest = Math.min(lowest, sample.opacity);
+          if (sample.opacity > lowest + 0.05 && sample.opacity - lowest > rebound) {
+            rebound = sample.opacity - lowest;
+            reboundAt = sample.t;
+          }
+        });
+
+        const lastVisible = visible.at(-1);
+        write(`trace: ${trace.join(' ')}`);
+        write(
+          `frames visible: ${visible.length}, hidden after ${lastVisible ? lastVisible.t : 0}ms, ` +
+            `lowest opacity ${lowest.toFixed(2)}, opacity at hide ${lastVisible ? lastVisible.opacity.toFixed(2) : 'n/a'}`,
+        );
+
+        const residual = lastVisible ? lastVisible.opacity : 0;
+
+        if (rebound > 0.05) {
+          write(`FLICKER: opacity rebounded by ${rebound.toFixed(2)} at ${reboundAt}ms before the overlay was hidden`);
+          verdict.textContent = `FLICKER (+${rebound.toFixed(2)} opacity)`;
+          verdict.dataset.state = 'flicker';
+        } else if (residual > 0.05) {
+          write(`CUT: overlay was hidden while still at opacity ${residual.toFixed(2)}`);
+          verdict.textContent = `CUT at ${residual.toFixed(2)}`;
+          verdict.dataset.state = 'flicker';
+        } else if (residual > 0) {
+          // The host and part animations are nominally the same length, so a
+          // non-zero residual means they did not end on the same frame.
+          write(`EARLY: host animation ended ~1 frame before the part reached 0 (residual ${residual.toFixed(2)})`);
+          verdict.textContent = `early by ${residual.toFixed(2)}`;
+          verdict.dataset.state = 'clean';
+        } else {
+          verdict.textContent = 'clean fade';
+          verdict.dataset.state = 'clean';
+        }
+        write('');
+      };
+
+      comboBox.addEventListener('opened-changed', (event) => {
+        if (event.detail.value === false) {
+          const theme = document.documentElement.dataset.theme || 'base:light';
+          const style = getComputedStyle(overlayPart());
+          write(
+            `--- close (theme=${theme}, duration=${style.animationDuration}, ` +
+              `delay=${style.animationDelay}, fill=${style.animationFillMode}) ---`,
+          );
+          sampleClosing();
+        }
+      });
+    </script>
+  </body>
+</html>

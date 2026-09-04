@@ -38,6 +38,12 @@ describe('getStateAnimations', () => {
     expect(getStateAnimations(element)).to.be.empty;
   });
 
+  it('should return an empty list for an endless animation', () => {
+    element.style.animation = 'utils-fade 1s infinite';
+    expect(element.getAnimations()).to.have.lengthOf(1);
+    expect(getStateAnimations(element)).to.be.empty;
+  });
+
   it('should return the animations that take time', () => {
     element.style.animationName = 'utils-fade, utils-scale';
     element.style.animationDuration = '0s, 1s';

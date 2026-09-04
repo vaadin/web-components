@@ -563,6 +563,65 @@ describe('animation objects', () => {
     });
   });
 
+  describe('animations on the parts', () => {
+    it('should wait for an animation on the overlay part', () => {
+      overlay.setAttribute('animate-part', '');
+
+      overlay.opened = true;
+
+      expect(overlay.hasAttribute('opening')).to.be.true;
+    });
+
+    it('should wait for an animation on the backdrop', async () => {
+      overlay.setAttribute('animate-backdrop', '');
+      overlay.withBackdrop = true;
+      await nextRender();
+
+      overlay.opened = true;
+
+      expect(overlay.hasAttribute('opening')).to.be.true;
+    });
+
+    it('should stay open while an animation on the part outlives the one on the host', async () => {
+      overlay.setAttribute('animate', '');
+      overlay.setAttribute('long-animation-part', '');
+
+      overlay.opened = true;
+      overlay._flushAnimation('opening');
+      overlay.opened = false;
+
+      // The 50ms animation on the host ends first, while the 5s one on the part keeps running
+      await oneEvent(overlay, 'animationend');
+      await nextFrame();
+
+      expect(overlay.hasAttribute('closing')).to.be.true;
+      expect(overlay.matches(':popover-open')).to.be.true;
+    });
+
+    it('should close the overlay when the animation on the part is cancelled', async () => {
+      overlay.setAttribute('long-animation-part', '');
+
+      overlay.opened = true;
+      overlay._flushAnimation('opening');
+      overlay.opened = false;
+      expect(overlay.hasAttribute('closing')).to.be.true;
+
+      overlay.$.overlay.getAnimations().forEach((animation) => animation.cancel());
+      await nextFrame();
+
+      expect(overlay.hasAttribute('closing')).to.be.false;
+      expect(overlay.matches(':popover-open')).to.be.false;
+    });
+
+    it('should not wait for an endless animation on the part', () => {
+      overlay.setAttribute('endless-animation-part', '');
+
+      overlay.opened = true;
+
+      expect(overlay.hasAttribute('opening')).to.be.false;
+    });
+  });
+
   describe('multiple animations', () => {
     beforeEach(() => {
       overlay.setAttribute('multiple-animations', '');

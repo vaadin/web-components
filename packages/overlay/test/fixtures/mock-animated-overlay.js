@@ -35,6 +35,29 @@ class MockAnimatedOverlay extends MockOverlay {
           opacity: 0.5;
         }
 
+        /* An animation on a part instead of the host, which is what the base styles do */
+        :host([animate-part][opening]) [part='overlay'],
+        :host([animate-part][closing]) [part='overlay'] {
+          animation: 50ms overlay-dummy-animation;
+        }
+
+        :host([animate-backdrop][opening]) [part='backdrop'],
+        :host([animate-backdrop][closing]) [part='backdrop'] {
+          animation: 50ms overlay-dummy-animation;
+        }
+
+        /* Long enough for the overlay to be closed while the part is still animating */
+        :host([long-animation-part][opening]) [part='overlay'],
+        :host([long-animation-part][closing]) [part='overlay'] {
+          animation: 5s overlay-dummy-animation;
+        }
+
+        /* An animation on a part that never ends, so it cannot report the state */
+        :host([endless-animation-part][opening]) [part='overlay'],
+        :host([endless-animation-part][closing]) [part='overlay'] {
+          animation: 50ms overlay-dummy-animation infinite;
+        }
+
         /* Two animations of different lengths, the state ends with the longest */
         :host([multiple-animations][opening]),
         :host([multiple-animations][closing]) {

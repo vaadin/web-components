@@ -47,18 +47,15 @@ export const overlayAnimationStyles = css`
     ${overlayAnimationProperties}
   }
 
-  :host(:where([opening], [closing])) {
-    /* This empty animation only reports the state, the parts run the visible animation */
-    animation-name: --no-op;
-    animation-duration: var(--vaadin-overlay-animation-duration);
-    animation-delay: var(--vaadin-overlay-animation-delay);
-  }
-
   :host(:where([closing])) [part='overlay'],
   :host(:where([closing])) ::slotted(*) {
     pointer-events: none !important;
   }
 
+  /*
+   * These animations also report the state: the overlay is only hidden once they have ended, so
+   * the state and the visible animation cannot disagree about when the overlay is done.
+   */
   :host(:where([opening], [closing])) :is([part='overlay'], [part='backdrop']) {
     animation-name: --fade, --transform;
     animation-duration: var(--vaadin-overlay-animation-duration);
@@ -80,9 +77,6 @@ export const overlayAnimationStyles = css`
 
   :host(:where([closing])) :is([part='overlay'], [part='backdrop']) {
     animation-direction: reverse;
-  }
-
-  @keyframes --no-op {
   }
 
   /* Only the closed state is declared, so the animations end at the value the part already has */

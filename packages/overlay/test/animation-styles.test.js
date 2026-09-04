@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { emulateMedia } from '@vaadin/test-runner-commands';
-import { aTimeout, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import './fixtures/mock-animated-overlay.js';
 
 function getAnimation(element, name) {
@@ -50,15 +50,16 @@ describe('animation properties', () => {
     expect(overlay.hasAttribute('closing')).to.be.true;
   });
 
-  // The empty keyframe animation on the host is what reports the end of the animation, so
-  // these do not flush: they verify that the attributes are cleared on their own.
+  // The animations on the parts are what report the end of the animation, so these do not
+  // flush: they verify that the attributes are cleared on their own.
   it('should clear the opening attribute when the animation ends', async () => {
     overlay.style.setProperty('--vaadin-overlay-animation-duration', '50ms');
 
     overlay.opened = true;
     expect(overlay.hasAttribute('opening')).to.be.true;
 
-    await oneEvent(overlay, 'animationend');
+    await oneEvent(overlay.$.overlay, 'animationend');
+    await nextFrame();
     expect(overlay.hasAttribute('opening')).to.be.false;
   });
 
@@ -72,7 +73,8 @@ describe('animation properties', () => {
     overlay.opened = false;
     expect(overlay.hasAttribute('closing')).to.be.true;
 
-    await oneEvent(overlay, 'animationend');
+    await oneEvent(overlay.$.overlay, 'animationend');
+    await nextFrame();
     expect(overlay.hasAttribute('closing')).to.be.false;
   });
 

@@ -19,6 +19,17 @@ const notificationCard = css`
     animation-fill-mode: both;
   }
 
+  /*
+   * This empty animation only reports the state of the card. The card needs one of its own,
+   * because what collapses it is a transition, which does not report the state, and because
+   * the same keyframes run for both states, so nothing restarts when it closes right away.
+   */
+  :host(:where([opening], [closing])) {
+    animation-name: --no-op;
+    animation-duration: var(--vaadin-overlay-animation-duration);
+    animation-delay: var(--vaadin-overlay-animation-delay);
+  }
+
   :host([slot^='top']) {
     display: flex;
     align-items: end;
@@ -120,6 +131,9 @@ const notificationCard = css`
     :host(:is([opening], [closing])) {
       animation-name: --fade !important;
     }
+  }
+
+  @keyframes --no-op {
   }
 
   @keyframes --notification-max-height {

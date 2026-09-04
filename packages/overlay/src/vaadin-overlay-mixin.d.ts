@@ -81,6 +81,12 @@ export declare class OverlayMixinClass {
   protected _flushAnimation(type: 'closing' | 'opening'): void;
 
   /**
+   * The elements whose animations report the state of the overlay.
+   * Override this getter to include other animated elements.
+   */
+  protected readonly _stateAnimationElements: HTMLElement[];
+
+  /**
    * Whether to close the overlay on outside click or not.
    * Override this method to customize the closing logic.
    */

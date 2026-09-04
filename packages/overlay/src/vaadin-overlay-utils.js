@@ -95,17 +95,20 @@ export function observeMove(element, callback) {
  * Only CSS animations count, as the transitions and the script animations that `getAnimations()`
  * also returns do not report the state. Animations of any content are already left out, as
  * `getAnimations()` only descends into the subtree when asked to. Animations that take no time
- * are dropped as well, so that a delay on its own does not hold the state.
+ * are dropped as well, so that a delay on its own does not hold the state, and so are endless
+ * ones, which would never let it end.
  *
  * @param {HTMLElement} element
  * @return {!Array<!Animation>}
  */
 export function getStateAnimations(element) {
-  return element
-    .getAnimations()
-    .filter(
-      (animation) => animation instanceof CSSAnimation && animation.effect.getComputedTiming().activeDuration > 0,
-    );
+  return element.getAnimations().filter((animation) => {
+    if (!(animation instanceof CSSAnimation)) {
+      return false;
+    }
+    const { activeDuration } = animation.effect.getComputedTiming();
+    return activeDuration > 0 && activeDuration !== Infinity;
+  });
 }
 
 /**
