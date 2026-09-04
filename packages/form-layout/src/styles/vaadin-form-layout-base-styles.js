@@ -168,12 +168,6 @@ export const formLayoutStyles = css`
     --_grid-column-width: var(--_column-width-labels-aside);
   }
 
-  :host([auto-responsive][labels-aside-active])
-    #layout
-    ::slotted(:is(vaadin-checkbox, vaadin-radio-button, vaadin-switch)) {
-    margin-inline-start: calc(var(--_label-width) + var(--_label-spacing));
-  }
-
   :host([auto-responsive][expand-columns]) #layout {
     /*
       The "min" value in minmax ensures that once "maxColumns" is reached, the grid stops adding
@@ -210,5 +204,14 @@ export const formLayoutSlotStyles = css`
     vaadin-form-layout[auto-responsive][expand-fields] vaadin-form-item > *
   ) {
     min-width: 100%;
+  }
+
+  :where(
+    vaadin-form-layout[auto-responsive][labels-aside-active],
+    vaadin-form-layout[auto-responsive][labels-aside-active] > vaadin-form-row
+  ) {
+    > :where(vaadin-checkbox, vaadin-radio-button, vaadin-switch) {
+      margin-inline-start: calc(var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing));
+    }
   }
 `;
