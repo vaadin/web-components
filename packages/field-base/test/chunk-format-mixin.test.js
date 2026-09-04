@@ -216,6 +216,7 @@ describe('ChunkFormatMixin', () => {
       input.setSelectionRange(5, 5);
       await sendKeys({ press: 'Backspace' });
       expect(element.value).to.equal('FI25678');
+      expect(input.value).to.equal('FI25 678');
       expect(input.selectionStart).to.equal(3);
     });
 
@@ -223,6 +224,7 @@ describe('ChunkFormatMixin', () => {
       input.setSelectionRange(4, 4);
       await sendKeys({ press: 'Delete' });
       expect(element.value).to.equal('FI21678');
+      expect(input.value).to.equal('FI21 678');
       expect(input.selectionStart).to.equal(4);
     });
 
@@ -240,14 +242,14 @@ describe('ChunkFormatMixin', () => {
       expect(input.selectionStart).to.equal(6);
     });
 
-    it('should leave the presented text ungrouped after a widened deletion', async () => {
+    it('should regroup the presented text after a widened deletion', async () => {
       input.setSelectionRange(5, 5);
       await sendKeys({ press: 'Backspace' });
-      expect(input.value).to.equal('FI25678');
-      expect(element.formattedValue).to.equal('FI25678');
+      expect(input.value).to.equal('FI25 678');
+      expect(element.formattedValue).to.equal('FI25 678');
     });
 
-    it('should regroup the presented text on the next insertion', async () => {
+    it('should keep the regrouped text consistent on the next insertion', async () => {
       input.setSelectionRange(5, 5);
       await sendKeys({ press: 'Backspace' });
       await sendKeys({ type: '9' });
@@ -261,50 +263,6 @@ describe('ChunkFormatMixin', () => {
       input.setSelectionRange(5, 5);
       await sendKeys({ press: 'Backspace' });
       expect(spy).to.be.calledOnce;
-    });
-
-    it('should keep a widened deletion in the native undo stack', async () => {
-      input.setSelectionRange(5, 5);
-      await sendKeys({ press: 'Backspace' });
-      document.execCommand('undo');
-      expect(input.value).to.equal('FI21 5678');
-      expect(element.value).to.equal('FI215678');
-    });
-
-    describe('execCommand fallback', () => {
-      beforeEach(() => {
-        const stub = sinon.stub(document, 'execCommand');
-        stub.callsFake((command, ...args) => {
-          // Leaves the text untouched for the deletion, which is what makes the
-          // mixin rewrite it by hand, and lets every other command through.
-          return command === 'delete' ? false : stub.wrappedMethod.call(document, command, ...args);
-        });
-      });
-
-      it('should rewrite the text when the browser performs no deletion', async () => {
-        input.setSelectionRange(5, 5);
-        await sendKeys({ press: 'Backspace' });
-        expect(element.value).to.equal('FI25678');
-        expect(input.value).to.equal('FI25678');
-        expect(element.formattedValue).to.equal('FI25678');
-        expect(input.selectionStart).to.equal(3);
-      });
-
-      it('should fire one value-changed event for a rewritten deletion', async () => {
-        const spy = sinon.spy();
-        element.addEventListener('value-changed', spy);
-        input.setSelectionRange(5, 5);
-        await sendKeys({ press: 'Backspace' });
-        expect(spy).to.be.calledOnce;
-      });
-
-      it('should lose the undo history for a rewritten deletion', async () => {
-        input.setSelectionRange(5, 5);
-        await sendKeys({ press: 'Backspace' });
-        document.execCommand('undo');
-        expect(input.value).to.equal('FI25678');
-        expect(element.value).to.equal('FI25678');
-      });
     });
   });
 

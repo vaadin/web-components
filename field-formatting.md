@@ -213,6 +213,9 @@ API stays → 25.4 with a release note. A default flips or an API goes → 26.
    the format. Target the additive bucket for 25.4.
 7. **Then extend:** `text-area`; `date-picker` opt-in as-you-type from `dateFormat`; pattern mask
    grammar (decide: own, IMask, or Swing-compatible); visible mask.
-8. **Coordinate with Component Factory** on a deprecation path for the two add-ons once layer 1 ships.
-9. **Revisit `number-field`** after the `type="text"` refactor — number/currency formatting reuses the
+8. **Undo across live formatting** — dropped from the PoC. Every reformat is a script write and clears the
+   native undo stack, so RFC options are: accept absent undo (peer libraries do), or route all presentation
+   writes through `execCommand('insertText')`. Related: regroup on every delete, not only delimiter deletes.
+9. **Coordinate with Component Factory** on a deprecation path for the two add-ons once layer 1 ships.
+10. **Revisit `number-field`** after the `type="text"` refactor — number/currency formatting reuses the
    same mixin.
