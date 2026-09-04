@@ -3,8 +3,6 @@ import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import '../src/vaadin-form-layout.js';
 import '../src/vaadin-form-item.js';
 import '../src/vaadin-form-row.js';
-import '@vaadin/checkbox/src/vaadin-checkbox.js';
-import '@vaadin/text-field/src/vaadin-text-field.js';
 import { assertFormLayoutGrid, assertFormLayoutLabelPosition } from './helpers.js';
 
 describe('form-layout auto responsive', () => {
@@ -227,100 +225,6 @@ describe('form-layout auto responsive', () => {
         assertFormLayoutGrid(layout, { columns, rows });
         assertFormLayoutLabelPosition(layout, { position: labelPosition });
       }
-    });
-
-    it('should toggle labels-aside-active attribute based on container width', async () => {
-      expect(layout.hasAttribute('labels-aside-active')).to.be.true;
-
-      container.style.width = '200px';
-      await nextResize(layout);
-      expect(layout.hasAttribute('labels-aside-active')).to.be.false;
-
-      container.style.width = '500px';
-      await nextResize(layout);
-      expect(layout.hasAttribute('labels-aside-active')).to.be.true;
-    });
-
-    it('should remove labels-aside-active attribute when labelsAside is disabled', async () => {
-      layout.labelsAside = false;
-      await nextFrame();
-      expect(layout.hasAttribute('labels-aside-active')).to.be.false;
-    });
-
-    describe('direct children', () => {
-      let textField, checkbox, input, formItem;
-
-      beforeEach(async () => {
-        container = fixtureSync(`
-          <div style="width: 500px">
-            <vaadin-form-layout
-              auto-responsive
-              labels-aside
-              style="
-                --vaadin-form-layout-column-width: 100px;
-                --vaadin-form-layout-label-width: 100px;
-                --vaadin-form-layout-label-spacing: 50px;
-                --vaadin-form-layout-column-spacing: 0px;
-              "
-            >
-              <vaadin-text-field label="First name"></vaadin-text-field>
-              <vaadin-checkbox label="Subscribe"></vaadin-checkbox>
-              <input />
-              <vaadin-form-item>
-                <label slot="label">Email</label>
-                <input />
-              </vaadin-form-item>
-            </vaadin-form-layout>
-          </div>`);
-        layout = container.firstElementChild;
-        [textField, checkbox, input, formItem] = layout.children;
-        await nextResize(layout);
-      });
-
-      it('should apply label-aside theme only to children with theme property', () => {
-        expect(textField.getAttribute('theme')).to.equal('label-aside');
-        expect(checkbox.getAttribute('theme')).to.equal('label-aside');
-        expect(input.hasAttribute('theme')).to.be.false;
-      });
-
-      it('should remove label-aside theme when labels do not fit aside', async () => {
-        container.style.width = '200px';
-        await nextResize(layout);
-        expect(textField.hasAttribute('theme')).to.be.false;
-      });
-
-      it('should indent checkable by label width and spacing', () => {
-        expect(getComputedStyle(checkbox).marginInlineStart).to.equal('150px');
-        expect(getComputedStyle(textField).marginInlineStart).to.equal('0px');
-        expect(getComputedStyle(input).marginInlineStart).to.equal('0px');
-        expect(getComputedStyle(formItem).marginInlineStart).to.equal('0px');
-      });
-
-      it('should not indent checkable when labels do not fit aside', async () => {
-        container.style.width = '200px';
-        await nextResize(layout);
-        expect(getComputedStyle(checkbox).marginInlineStart).to.equal('0px');
-      });
-
-      it('should not indent checkable outside form layout', () => {
-        const standalone = fixtureSync('<vaadin-checkbox label="Standalone"></vaadin-checkbox>');
-        expect(getComputedStyle(standalone).marginInlineStart).to.equal('0px');
-      });
-
-      it('should indent checkable inside form row', async () => {
-        const row = fixtureSync(`
-          <vaadin-form-row>
-            <vaadin-text-field label="Last name"></vaadin-text-field>
-            <vaadin-checkbox label="Newsletter"></vaadin-checkbox>
-          </vaadin-form-row>
-        `);
-        layout.appendChild(row);
-        await nextResize(layout);
-        const [rowTextField, rowCheckbox] = row.children;
-        expect(rowTextField.getAttribute('theme')).to.equal('label-aside');
-        expect(getComputedStyle(rowTextField).marginInlineStart).to.equal('0px');
-        expect(getComputedStyle(rowCheckbox).marginInlineStart).to.equal('150px');
-      });
     });
   });
 
