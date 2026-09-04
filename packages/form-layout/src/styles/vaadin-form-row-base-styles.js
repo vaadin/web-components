@@ -25,4 +25,8 @@ export const formRowStyles = css`
   ::slotted(:first-child) {
     grid-column-start: 1;
   }
+
+  ::slotted(:is(vaadin-checkbox, vaadin-radio-button, vaadin-switch)) {
+    margin-inline-start: var(--_form-item-labels-aside, calc(var(--_label-width) + var(--_label-spacing)));
+  }
 `;

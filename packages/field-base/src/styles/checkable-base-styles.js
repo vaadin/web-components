@@ -18,11 +18,6 @@ export const checkable = (part, propName = part) => css`
     --_cursor: var(--vaadin-clickable-cursor);
     --_marker-color: var(--vaadin-${unsafeCSS(propName)}-marker-color, var(--vaadin-${unsafeCSS(propName)}-background, var(--vaadin-background-color)));
     --_marker-filter: var(--vaadin-${unsafeCSS(propName)}-marker-color, saturate(0) invert(1) hue-rotate(180deg) contrast(100) brightness(100));
-    --_form-item-labels-aside: ' ';
-    margin-inline-start: var(
-      --_form-item-labels-aside,
-      calc(var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing))
-    );
   }
 
   :host(:not([has-label])) {
