@@ -275,9 +275,9 @@ const FormatMixinImplementation = (superclass) =>
     }
 
     /**
-     * Override a method from `InputMixin` so that the presentation layer updates
-     * the presented text before the model value is set, keeping `formattedValue`
-     * current when `value-changed` fires.
+     * Override a method from `InputMixin` to update the presented text before the
+     * model value is set, keeping `formattedValue` current when `value-changed`
+     * fires.
      *
      * @param {Event} event
      * @protected

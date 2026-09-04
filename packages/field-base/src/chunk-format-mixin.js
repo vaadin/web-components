@@ -217,11 +217,8 @@ const ChunkFormatMixinImplementation = (superclass) =>
      * @override
      */
     _shouldAcceptText(text) {
-      if (!this._hasFormat) {
-        return super._shouldAcceptText?.(text) ?? true;
-      }
-
-      return super._shouldAcceptText?.(unformat(text, this.#format)) ?? true;
+      const candidate = this._hasFormat ? unformat(text, this.#format) : text;
+      return super._shouldAcceptText?.(candidate) ?? true;
     }
 
     /**
@@ -339,10 +336,10 @@ const ChunkFormatMixinImplementation = (superclass) =>
       // and fires `value-changed` exactly once.
       input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
 
-      // That path treats an untrusted event as a programmatic value set and
-      // presents the value in its grouped form (`input-mixin.js:243-257`), which
-      // is what the native path above does not do. Presented once more, so that
-      // both paths leave the same text behind.
+      // `InputMixin._valueChanged` treats an untrusted event as a programmatic
+      // value set and presents the value in its grouped form, which the native
+      // path above does not do. Presented once more, so that both paths leave
+      // the same text behind.
       this._presentValue(text, start);
     }
 

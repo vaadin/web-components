@@ -211,6 +211,8 @@ export const InputControlMixin = (superclass) =>
 
     /** @private */
     _onPaste(e) {
+      // A synthetic event without a payload is accepted rather than thrown on,
+      // even when `allowedCharPattern` is set. Deliberate; covered by tests.
       const pastedText = e.clipboardData?.getData('text') ?? '';
       if (!this._shouldAcceptText(pastedText)) {
         e.preventDefault();
