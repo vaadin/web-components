@@ -1,7 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
 import { click, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-chart.js';
+import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 
 describe('vaadin-chart events', () => {
   let chart;
@@ -59,6 +61,75 @@ describe('vaadin-chart events', () => {
       chart.addEventListener('point-update', spy);
       chart.configuration.series[0].points[0].update({ y: 20 });
       expect(spy.calledOnce).to.be.true;
+    });
+  });
+
+  // `xAxisMin`/`xAxisMax`/`yAxisMin`/`yAxisMax` on `chart-selection` and
+  // `xValue`/`yValue` on `chart-click` are public API, read by Flow through
+  // `@EventData` in ChartSelectionEvent.java and ChartClickEvent.java.
+  describe('axis detail fields', () => {
+    let bounds;
+
+    beforeEach(async () => {
+      // Sized and zoomable so that a real drag produces a selection.
+      chart = fixtureSync(`
+        <vaadin-chart style="width: 600px; height: 400px"
+          additional-options='{ "chart": { "zooming": { "type": "xy" } } }'>
+          <vaadin-chart-series values="[10, 20, 30, 40, 50]"></vaadin-chart-series>
+        </vaadin-chart>
+      `);
+      await oneEvent(chart, 'chart-load');
+      const { left, top } = chart.getBoundingClientRect();
+      bounds = (x, y) => [Math.round(left + x), Math.round(top + y)];
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    it('should expose axis extremes on chart-selection', async () => {
+      const spy = sinon.spy();
+      chart.addEventListener('chart-selection', spy);
+
+      await sendMouse({ type: 'move', position: bounds(150, 150) });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: bounds(350, 300) });
+      await sendMouse({ type: 'up' });
+
+      expect(spy).to.be.calledOnce;
+      const { xAxisMin, xAxisMax, yAxisMin, yAxisMax } = spy.firstCall.args[0].detail;
+      expect(xAxisMin).to.be.within(0, 4);
+      expect(xAxisMax).to.be.within(xAxisMin, 4);
+      expect(yAxisMin).to.be.a('number');
+      expect(yAxisMax).to.be.above(yAxisMin);
+    });
+
+    it('should expose axis values on chart-click', async () => {
+      const spy = sinon.spy();
+      chart.addEventListener('chart-click', spy);
+
+      await sendMouse({ type: 'click', position: bounds(300, 200) });
+
+      expect(spy).to.be.calledOnce;
+      const { xValue, yValue } = spy.firstCall.args[0].detail;
+      expect(xValue).to.be.within(0, 4);
+      expect(yValue).to.be.a('number');
+    });
+
+    // A real interaction always carries both axes, so only a synthetic payload can
+    // cover this branch. The keys must stay absent rather than be set to `undefined`.
+    it('should omit the axis fields the event does not carry', () => {
+      function detailOf(type, payload) {
+        const spy = sinon.spy();
+        chart.addEventListener(`chart-${type}`, spy);
+        Highcharts.fireEvent(chart.configuration, type, payload);
+        expect(spy).to.be.calledOnce;
+        return spy.firstCall.args[0].detail;
+      }
+
+      expect(detailOf('selection', {})).to.not.have.any.keys('xAxisMin', 'xAxisMax', 'yAxisMin', 'yAxisMax');
+      expect(detailOf('click', {})).to.not.have.any.keys('xValue', 'yValue');
+      expect(detailOf('selection', { xAxis: [{ min: 0, max: 5 }] })).to.not.have.any.keys('yAxisMin', 'yAxisMax');
     });
   });
 
