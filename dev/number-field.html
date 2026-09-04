@@ -8,14 +8,149 @@
     <script type="module" src="./common.js"></script>
 
     <script type="module">
+      import '@vaadin/integer-field';
       import '@vaadin/number-field';
       import '@vaadin/tooltip';
     </script>
+
+    <style>
+      body {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1rem;
+        align-items: start;
+      }
+
+      .cases {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+        gap: 0.5rem 1rem;
+      }
+
+      .case {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 0.5rem;
+      }
+
+      .case vaadin-number-field,
+      .case vaadin-integer-field {
+        width: 100%;
+      }
+
+      .readout {
+        margin: 0.5rem 0 0;
+        font-family: monospace;
+        font-size: 0.75rem;
+        white-space: pre-wrap;
+      }
+
+      #log-panel {
+        position: sticky;
+        top: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 0.5rem;
+      }
+
+      #log {
+        margin: 0.5rem 0 0;
+        padding: 0;
+        list-style: none;
+        font-family: monospace;
+        font-size: 0.75rem;
+        max-height: 80vh;
+        overflow: auto;
+      }
+    </style>
   </head>
 
   <body>
-    <vaadin-number-field value="2.1" step="0.1" label="Size (kg)" step-buttons-visible>
-      <vaadin-tooltip slot="tooltip" text="Number field tooltip text"></vaadin-tooltip>
-    </vaadin-number-field>
+    <div class="cases">
+      <div class="case">
+        <vaadin-number-field label="Default"></vaadin-number-field>
+      </div>
+      <div class="case">
+        <vaadin-number-field
+          label="min=-10 max=10 step=0.5 required"
+          min="-10"
+          max="10"
+          step="0.5"
+          required
+          step-buttons-visible
+        ></vaadin-number-field>
+      </div>
+      <div class="case">
+        <vaadin-number-field label="step=0.07" step="0.07" step-buttons-visible></vaadin-number-field>
+      </div>
+      <div class="case">
+        <vaadin-number-field label="min=0.29 step=0.1" min="0.29" step="0.1" step-buttons-visible>
+        </vaadin-number-field>
+      </div>
+      <div class="case">
+        <vaadin-integer-field label="Integer field" step-buttons-visible></vaadin-integer-field>
+      </div>
+      <div class="case" dir="rtl">
+        <vaadin-number-field label="dir=rtl wrapper" placeholder="Placeholder"></vaadin-number-field>
+      </div>
+      <div class="case">
+        <vaadin-number-field label="Readonly" readonly value="1234.5"></vaadin-number-field>
+      </div>
+      <div class="case">
+        <vaadin-number-field label="Disabled" disabled value="1234.5"></vaadin-number-field>
+      </div>
+      <div class="case">
+        <vaadin-number-field label="Clear button" clear-button-visible value="42">
+          <vaadin-tooltip slot="tooltip" text="Number field tooltip text"></vaadin-tooltip>
+        </vaadin-number-field>
+      </div>
+    </div>
+
+    <div id="log-panel">
+      <button id="clear-log">Clear event log</button>
+      <ol id="log" reversed></ol>
+    </div>
+
+    <script type="module">
+      const log = document.querySelector('#log');
+      let sequence = 0;
+
+      document.querySelector('#clear-log').addEventListener('click', () => {
+        log.textContent = '';
+      });
+
+      const fields = [...document.querySelectorAll('vaadin-number-field, vaadin-integer-field')];
+
+      function updateReadout(field) {
+        let readout = field.parentElement.querySelector('.readout');
+        if (!readout) {
+          readout = document.createElement('p');
+          readout.className = 'readout';
+          field.parentElement.append(readout);
+        }
+        readout.textContent = [
+          `value: ${JSON.stringify(field.value)}`,
+          `input: ${JSON.stringify(field.inputElement?.value)}`,
+          `invalid: ${field.invalid}`,
+        ].join('\n');
+      }
+
+      fields.forEach((field) => {
+        ['input', 'change', 'unparsable-change', 'value-changed', 'invalid-changed'].forEach((type) => {
+          field.addEventListener(type, () => {
+            sequence += 1;
+            const item = document.createElement('li');
+            const label = field.getAttribute('label');
+            item.textContent = `#${sequence} [${label}] ${type} value=${JSON.stringify(field.value)}`;
+            log.prepend(item);
+            updateReadout(field);
+          });
+        });
+      });
+
+      customElements.whenDefined('vaadin-number-field').then(() => {
+        requestAnimationFrame(() => fields.forEach(updateReadout));
+      });
+    </script>
   </body>
 </html>
