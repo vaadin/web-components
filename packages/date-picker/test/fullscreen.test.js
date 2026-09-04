@@ -3,7 +3,7 @@ import { sendKeys, setViewport } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender, nextUpdate, outsideClick, tabKeyDown, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { getFocusableCell, open, touchTap, untilOverlayRendered } from './helpers.js';
+import { getFocusableCell, getFocusableDateButton, open, touchTap, untilOverlayRendered } from './helpers.js';
 
 describe('fullscreen mode', () => {
   let datePicker, input, overlay, width, height;
@@ -240,9 +240,9 @@ describe('fullscreen mode', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should move focus to date cell button on Cancel button Tab', async () => {
-      const cell = getFocusableCell(datePicker);
-      const spy = sinon.spy(cell, 'focus');
+    it('should move focus to date button on Cancel button Tab', async () => {
+      const button = getFocusableDateButton(datePicker);
+      const spy = sinon.spy(button, 'focus');
 
       // Move focus to Cancel button
       await sendKeys({ press: 'Shift+Tab' });

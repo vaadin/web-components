@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { aTimeout, fixtureSync, makeSoloTouchEvent, nextFrame, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-month-calendar.js';
-import { getDateCell, getDateCells, getDefaultI18n, getWeekDayCells } from './helpers.js';
+import { getDateButton, getDateCell, getDateCells, getDefaultI18n, getWeekDayCells } from './helpers.js';
 
 describe('vaadin-month-calendar', () => {
   let monthCalendar, valueChangedSpy;
@@ -99,6 +99,13 @@ describe('vaadin-month-calendar', () => {
     expect(monthCalendar.selectedDate.getDate()).to.equal(10);
   });
 
+  it('should update value on tapping the date button', () => {
+    tap(getDateButton(getDateCell(monthCalendar, 10)));
+    expect(monthCalendar.selectedDate.getFullYear()).to.equal(2016);
+    expect(monthCalendar.selectedDate.getMonth()).to.equal(1);
+    expect(monthCalendar.selectedDate.getDate()).to.equal(10);
+  });
+
   it('should not react if the tap takes more than 300ms', async () => {
     const tapSpy = sinon.spy();
     monthCalendar.addEventListener('date-tap', tapSpy);
@@ -179,7 +186,7 @@ describe('vaadin-month-calendar', () => {
     it('should label dates in correct locale', () => {
       const dates = getDateCells(monthCalendar);
       dates.slice(0, 7).forEach((date, index) => {
-        const label = date.getAttribute('aria-label');
+        const label = getDateButton(date).getAttribute('aria-label');
         const day = ['maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai', 'sunnuntai'][index];
         expect(label).to.equal(`${index + 1} helmikuu 2016, ${day}`);
       });
@@ -189,7 +196,7 @@ describe('vaadin-month-calendar', () => {
       monthCalendar.month = new Date();
       await nextRender();
       const today = getDateCells(monthCalendar).find((date) => date.getAttribute('part').includes('today'));
-      expect(today.getAttribute('aria-label').split(', ').pop()).to.equal('Tänään');
+      expect(getDateButton(today).getAttribute('aria-label').split(', ').pop()).to.equal('Tänään');
     });
 
     it('should render month name in correct locale', () => {
