@@ -15,11 +15,16 @@
  *   `strictTemplates`.
  *
  * Usage: `yarn release:cem && node scripts/generate-vue-types.js`
+ *
+ * Pass `--packages-dir <dir>` to run against another directory of installed
+ * packages that ship `custom-elements.json`, e.g. `node_modules/@vaadin`.
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { parseArgs } from 'node:util';
 
-const PACKAGES_DIR = path.resolve('./packages');
+const { values: args } = parseArgs({ options: { 'packages-dir': { type: 'string', default: './packages' } } });
+const PACKAGES_DIR = path.resolve(args['packages-dir']);
 const OUTPUT_FILE = 'vue.d.ts';
 
 // Keep in sync with scripts/buildWebtypes.js
@@ -148,21 +153,34 @@ function isPublicWritableField(member) {
   );
 }
 
+// Primitive types are emitted literally instead of as `Class['prop']`, so that
+// Vue's SFC compiler can infer runtime prop types for wrappers that reuse these
+// Props types in `defineProps<>()` (a `Boolean` prop is what makes `<v-field required>`
+// cast the empty attribute value to `true`).
+const primitiveTypePattern =
+  /^(string|number|boolean|null|undefined)(\s*\|\s*(string|number|boolean|null|undefined))*$/u;
+
+function getPropType(className, member) {
+  const typeText = member.type?.text?.trim();
+  return typeText && primitiveTypePattern.test(typeText) ? typeText : `${className}['${member.name}']`;
+}
+
 function generateElementProps(element, eventMap) {
   const className = element.name;
   const fields = (element.members || []).filter(isPublicWritableField);
-  const fieldNames = new Set(fields.map((field) => field.name));
+  const fieldsByName = new Map(fields.map((field) => [field.name, field]));
   const lines = [];
 
   for (const field of fields) {
-    lines.push(`${toJsDoc(field.description)}  ${field.name}?: ${className}['${field.name}'];`);
+    lines.push(`${toJsDoc(field.description)}  ${field.name}?: ${getPropType(className, field)};`);
   }
 
   for (const attribute of element.attributes || []) {
     const fieldName = attribute.fieldName || toCamelCase(attribute.name);
-    if (fieldNames.has(fieldName)) {
+    const field = fieldsByName.get(fieldName);
+    if (field) {
       if (attribute.name !== fieldName) {
-        lines.push(`${toJsDoc(attribute.description)}  '${attribute.name}'?: ${className}['${fieldName}'];`);
+        lines.push(`${toJsDoc(attribute.description)}  '${attribute.name}'?: ${getPropType(className, field)};`);
       }
     } else if (!attribute.fieldName) {
       // Attribute-only entries without a backing property, such as `theme`
@@ -180,7 +198,7 @@ function generateElementProps(element, eventMap) {
     lines.push(`${toJsDoc(event.description)}  on${toPascalCase(event.name)}?: (event: ${eventType}) => void;`);
   }
 
-  return `type ${className}Props = {\n${lines.join('\n')}\n};\n`;
+  return `export type ${className}Props = {\n${lines.join('\n')}\n};\n`;
 }
 
 function generatePackageTypes(packageName, elements) {
@@ -227,6 +245,12 @@ function generatePackageTypes(packageName, elements) {
     ``,
     ...propsBlocks,
     `declare module 'vue' {`,
+    `  // Vue's HTMLAttributes lacks \`slot\`, which light DOM children of Vaadin`,
+    `  // elements use for named slots such as \`prefix\` and \`suffix\`.`,
+    `  interface HTMLAttributes {`,
+    `    slot?: string;`,
+    `  }`,
+    ``,
     `  interface GlobalComponents {`,
     componentEntries.join('\n'),
     `  }`,
