@@ -146,9 +146,6 @@ export const formLayoutStyles = css`
 
     /* By default, place each child on a new row */
     grid-column: 1 / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
-
-    /* Form items do not need margins in auto-responsive mode */
-    margin: 0;
   }
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
