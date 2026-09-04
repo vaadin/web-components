@@ -177,6 +177,116 @@ describe('ChunkFormatMixin', () => {
     });
   });
 
+  describe('deleting', () => {
+    // The delimiter of `FI21 5678` is at index 4, so the caret is next to it at
+    // index 4 and at index 5, and away from it at index 2 and index 6.
+    beforeEach(async () => {
+      element.format = IBAN;
+      element.value = 'FI215678';
+      await nextUpdate(element);
+      input.focus();
+    });
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it('should delete the character before the delimiter on Backspace', async () => {
+      input.setSelectionRange(5, 5);
+      await sendKeys({ press: 'Backspace' });
+      expect(element.value).to.equal('FI25678');
+      expect(input.selectionStart).to.equal(3);
+    });
+
+    it('should delete the character after the delimiter on Delete', async () => {
+      input.setSelectionRange(4, 4);
+      await sendKeys({ press: 'Delete' });
+      expect(element.value).to.equal('FI21678');
+      expect(input.selectionStart).to.equal(4);
+    });
+
+    it('should delete natively on Backspace away from the delimiter', async () => {
+      input.setSelectionRange(2, 2);
+      await sendKeys({ press: 'Backspace' });
+      expect(element.value).to.equal('F215678');
+      expect(input.selectionStart).to.equal(1);
+    });
+
+    it('should delete natively on Delete away from the delimiter', async () => {
+      input.setSelectionRange(6, 6);
+      await sendKeys({ press: 'Delete' });
+      expect(element.value).to.equal('FI21578');
+      expect(input.selectionStart).to.equal(6);
+    });
+
+    it('should leave the presented text ungrouped after a widened deletion', async () => {
+      input.setSelectionRange(5, 5);
+      await sendKeys({ press: 'Backspace' });
+      expect(input.value).to.equal('FI25678');
+      expect(element.formattedValue).to.equal('FI25678');
+    });
+
+    it('should regroup the presented text on the next insertion', async () => {
+      input.setSelectionRange(5, 5);
+      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ type: '9' });
+      expect(input.value).to.equal('FI29 5678');
+      expect(element.value).to.equal('FI295678');
+    });
+
+    it('should fire one value-changed event for a widened deletion', async () => {
+      const spy = sinon.spy();
+      element.addEventListener('value-changed', spy);
+      input.setSelectionRange(5, 5);
+      await sendKeys({ press: 'Backspace' });
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should keep a widened deletion in the native undo stack', async () => {
+      input.setSelectionRange(5, 5);
+      await sendKeys({ press: 'Backspace' });
+      document.execCommand('undo');
+      expect(input.value).to.equal('FI21 5678');
+      expect(element.value).to.equal('FI215678');
+    });
+
+    describe('execCommand fallback', () => {
+      beforeEach(() => {
+        const stub = sinon.stub(document, 'execCommand');
+        stub.callsFake((command, ...args) => {
+          // Leaves the text untouched for the deletion, which is what makes the
+          // mixin rewrite it by hand, and lets every other command through.
+          return command === 'delete' ? false : stub.wrappedMethod.call(document, command, ...args);
+        });
+      });
+
+      it('should rewrite the text when the browser performs no deletion', async () => {
+        input.setSelectionRange(5, 5);
+        await sendKeys({ press: 'Backspace' });
+        expect(element.value).to.equal('FI25678');
+        expect(input.value).to.equal('FI25678');
+        expect(element.formattedValue).to.equal('FI25678');
+        expect(input.selectionStart).to.equal(3);
+      });
+
+      it('should fire one value-changed event for a rewritten deletion', async () => {
+        const spy = sinon.spy();
+        element.addEventListener('value-changed', spy);
+        input.setSelectionRange(5, 5);
+        await sendKeys({ press: 'Backspace' });
+        expect(spy).to.be.calledOnce;
+      });
+
+      it('should lose the undo history for a rewritten deletion', async () => {
+        input.setSelectionRange(5, 5);
+        await sendKeys({ press: 'Backspace' });
+        document.execCommand('undo');
+        expect(input.value).to.equal('FI25678');
+        expect(element.value).to.equal('FI25678');
+      });
+    });
+  });
+
   describe('programmatic value', () => {
     beforeEach(async () => {
       element.format = IBAN;

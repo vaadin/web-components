@@ -141,6 +141,61 @@ const ChunkFormatMixinImplementation = (superclass) =>
     }
 
     /**
+     * Override a method from `FormatMixin` to widen a deletion that would remove
+     * a delimiter, so that Backspace right after one and Delete right before one
+     * each remove the user character on its other side instead.
+     *
+     * @param {InputEvent} event
+     * @protected
+     * @override
+     */
+    _onBeforeInput(event) {
+      // Called first, so that the core has recorded the intent before the edit
+      // below is performed: the browser dispatches its `input` event from inside
+      // the `execCommand` call, so `_onInput` runs before this method returns.
+      super._onBeforeInput(event);
+
+      // The core makes the same check. Repeated here because rejecting an edit
+      // and performing it by hand are two different decisions, and the second
+      // one must not run for an edit that the first one has already dropped.
+      if (event.defaultPrevented || !this._hasFormat) {
+        return;
+      }
+
+      const input = event.composedPath()[0];
+      const { selectionStart, selectionEnd, value: view } = input;
+
+      // A selection is deleted as a whole, so there is no adjacent delimiter to
+      // widen over. This is also what keeps the widened deletion below from
+      // recursing through the re-entrant `beforeinput` that WebKit fires for it.
+      if (selectionStart !== selectionEnd) {
+        return;
+      }
+
+      const { delimiter } = this.#format;
+      let start, end;
+
+      if (event.inputType === 'deleteContentBackward' && view[selectionStart - 1] === delimiter) {
+        start = selectionStart - 2;
+        end = selectionStart;
+      } else if (event.inputType === 'deleteContentForward' && view[selectionStart] === delimiter) {
+        start = selectionStart;
+        end = selectionStart + 2;
+      } else {
+        return;
+      }
+
+      // A delimiter with no user character on its other side, which only a
+      // hand-written value can produce, is deleted on its own as it is.
+      if (start < 0 || end > view.length) {
+        return;
+      }
+
+      event.preventDefault();
+      this.#deleteRange(input, start, end);
+    }
+
+    /**
      * Override a method from `FormatMixin` to keep the caret at the same position
      * in the unformatted value across a write that did not come from the user,
      * most notably a programmatic `value` set while the field is focused.
@@ -213,6 +268,53 @@ const ChunkFormatMixinImplementation = (superclass) =>
     #isInsertIntent(event) {
       const { inputType } = event;
       return inputType === undefined || inputType.startsWith('insert');
+    }
+
+    /**
+     * Removes the given range from the input element.
+     *
+     * The deletion is performed by the browser rather than by a value assignment,
+     * so that the edit stays in the native undo stack. `execCommand` returning
+     * `true` is not evidence that it happened, so the text itself is the signal:
+     * when it is unchanged, the range is removed by hand instead. Undo is lost
+     * for an edit taken by that path, which is an accepted trade.
+     *
+     * Like every other deletion, the text left behind is presented as the edit
+     * left it, and is regrouped by the next insertion rather than here. Writing
+     * a regrouped text back would empty the undo stack of the deletion that this
+     * method just took care to keep in it.
+     *
+     * @private
+     */
+    #deleteRange(input, start, end) {
+      const before = input.value;
+      input.setSelectionRange(start, end);
+
+      // Deprecated, and the only call to it in the repository. It is still the
+      // one way to delete text without dropping the edit from the undo stack.
+      document.execCommand('delete');
+
+      if (input.value !== before) {
+        // The browser performed the edit and dispatched the `input` event for it.
+        // Presenting the text it left writes nothing, since it is already there,
+        // and only brings `formattedValue` along with it.
+        this._presentValue(input.value, input.selectionStart);
+        return;
+      }
+
+      const text = before.slice(0, start) + before.slice(end);
+      this._presentValue(text, start);
+
+      // Nothing was dispatched for an edit that the browser did not make, so the
+      // model value is updated through the regular input path, which sets `value`
+      // and fires `value-changed` exactly once.
+      input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+
+      // That path treats an untrusted event as a programmatic value set and
+      // presents the value in its grouped form (`input-mixin.js:243-257`), which
+      // is what the native path above does not do. Presented once more, so that
+      // both paths leave the same text behind.
+      this._presentValue(text, start);
     }
 
     /**
