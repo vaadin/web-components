@@ -10,6 +10,9 @@ yarn-error.log
 packages/*/test/visual/screenshots/failed
 packages/*/test/visual/*/screenshots/**/*/failed
 
+# Light-DOM Lumo (wip) reference and failed screenshots
+packages/*/test/visual/*/screenshots/*/wip-*
+
 # Screenshots from local visual test runs
 packages/*/test/visual/screenshots/local-*
 packages/*/test/visual/*/screenshots/*/local-*
