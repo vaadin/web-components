@@ -123,6 +123,14 @@ describe('text-area', () => {
     });
   });
 
+  describe('custom CSS properties', () => {
+    it('height single row', async () => {
+      element.minRows = 1;
+      element.style.setProperty('--vaadin-input-field-height', '56px');
+      await visualDiff(div, 'css-props-height-single-row');
+    });
+  });
+
   describe('features', () => {
     ['ltr', 'rtl'].forEach((dir) => {
       describe(dir, () => {
