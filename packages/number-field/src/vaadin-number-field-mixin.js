@@ -66,6 +66,48 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     /**
+     * The value of the field.
+     *
+     * @return {string}
+     * @override
+     */
+    get value() {
+      // Defined only so that the setter override below does not hide
+      // the getter that `InputMixin` installs for the value property.
+      return super.value;
+    }
+
+    /**
+     * Override the property setter from `InputMixin` to normalize the value
+     * before it is stored: `null` and `undefined` become an empty string,
+     * any other non-string value is converted with `String()`, a numeric
+     * string is stored in its parsed (trimmed) form, and a non-numeric
+     * string is rejected with a warning and cleared.
+     *
+     * User input arrives here already parsed by `_onInput`, so the parse
+     * below is redundant for it and only guards programmatic sets.
+     *
+     * @param {unknown} value
+     * @override
+     */
+    set value(value) {
+      let normalized = value == null ? '' : String(value);
+
+      if (normalized !== '') {
+        const parsed = parseNumber(normalized);
+        if (parsed === null) {
+          issueWarning(`Trying to set non-numeric value "${value}" to <${this.localName}>. Clearing the value.`);
+        }
+        normalized = parsed ?? '';
+      }
+
+      // Normalizing here instead of in the value observer keeps an
+      // unparsable programmatic set on an empty field a no-op: the value
+      // property's own equality check then fires no value-changed event.
+      super.value = normalized;
+    }
+
+    /**
      * The default pattern for the `allowedCharPattern` property,
      * applied unless the developer has set their own.
      *
@@ -406,21 +448,17 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     /**
+     * Override the observer from `InputMixin` to treat a value change that
+     * the developer initiated as already committed, so that a later blur
+     * or Enter does not fire a change event for it.
+     *
      * @param {unknown} newVal
      * @param {unknown} oldVal
      * @protected
      * @override
      */
     _valueChanged(newVal, oldVal) {
-      // Validate value to be numeric
-      if (newVal && parseNumber(String(newVal)) === null) {
-        issueWarning(`Trying to set non-numeric value "${newVal}" to <${this.localName}>. Clearing the value.`);
-        this.value = '';
-      } else if (typeof this.value !== 'string') {
-        this.value = String(this.value);
-      }
-
-      super._valueChanged(this.value, oldVal);
+      super._valueChanged(newVal, oldVal);
 
       if (!this.__keepCommittedValue) {
         this.__committedValue = this.value;

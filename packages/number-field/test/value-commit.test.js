@@ -105,6 +105,23 @@ describe('value commit', () => {
     expect(numberField.inputElement.value).to.equal('5');
   });
 
+  // https://github.com/vaadin/web-components/issues/8007
+  it('should not fire value-changed when setting unparsable value on empty field', async () => {
+    numberField.value = 'foo';
+    await nextUpdate(numberField);
+    numberField.value = 'NaN';
+    await nextUpdate(numberField);
+    expect(valueChangedSpy).to.be.not.called;
+  });
+
+  // https://github.com/vaadin/web-components/issues/8007
+  it('should fire value-changed once when setting numeric value', async () => {
+    numberField.value = 9.99;
+    await nextUpdate(numberField);
+    expect(valueChangedSpy).to.be.calledOnce;
+    expect(valueChangedSpy.firstCall.args[0].detail.value).to.equal('9.99');
+  });
+
   describe('parsable input committed', () => {
     beforeEach(async () => {
       await sendKeys({ type: '1' });

@@ -209,8 +209,18 @@ describe('integer-field', () => {
       expect(integerField.value).to.eql('9007199254740993');
     });
 
+    it('should set value from attribute', async () => {
+      integerField = fixtureSync('<vaadin-integer-field value="5"></vaadin-integer-field>');
+      await nextRender();
+      expect(integerField.value).to.eql('5');
+      expect(integerField.inputElement.value).to.eql('5');
+    });
+
     describe('invalid value', () => {
       beforeEach(() => {
+        // The warning is issued through the deduplicating issueWarning
+        // helper, and several cases below produce an identical message.
+        clearWarnings();
         sinon.stub(console, 'warn');
       });
 
@@ -225,6 +235,26 @@ describe('integer-field', () => {
           expect(integerField.value).to.eql('');
           expect(console.warn.called).to.be.true;
         });
+      });
+
+      it('should clear non-integer value set from attribute', async () => {
+        integerField = fixtureSync('<vaadin-integer-field value="1.2"></vaadin-integer-field>');
+        await nextRender();
+        expect(integerField.value).to.eql('');
+        expect(integerField.inputElement.value).to.eql('');
+        expect(console.warn.called).to.be.true;
+      });
+
+      // https://github.com/vaadin/web-components/issues/8007
+      it('should not fire value-changed when setting non-integer value on empty field', async () => {
+        integerField.value = '';
+        await nextUpdate(integerField);
+        const valueChangedSpy = sinon.spy();
+        integerField.addEventListener('value-changed', valueChangedSpy);
+        integerField.value = '1.2';
+        await nextUpdate(integerField);
+        expect(integerField.value).to.eql('');
+        expect(valueChangedSpy).to.be.not.called;
       });
     });
   });

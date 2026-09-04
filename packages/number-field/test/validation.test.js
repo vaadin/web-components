@@ -3,6 +3,7 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-number-field.js';
+import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
 
 describe('validation', () => {
   let field, input;
@@ -51,10 +52,34 @@ describe('validation', () => {
       expect(field.validate()).to.be.true;
     });
 
+    // https://github.com/vaadin/web-components/issues/1263
+    ['3foo', '12abc', '0x10', 'Infinity'].forEach((invalidValue) => {
+      it(`should clear non-numeric value "${invalidValue}" and warn`, async () => {
+        clearWarnings();
+        const warn = sinon.stub(console, 'warn');
+        try {
+          field.value = invalidValue;
+          await nextUpdate(field);
+        } finally {
+          warn.restore();
+        }
+        expect(field.value).to.equal('');
+        expect(input.value).to.equal('');
+        expect(warn).to.be.called;
+      });
+    });
+
     it('should allow setting decimals', async () => {
       field.value = 7.6;
       await nextUpdate(field);
       expect(field.value).to.be.equal('7.6');
+    });
+
+    it('should trim whitespace from value set programmatically', async () => {
+      field.value = ' 5 ';
+      await nextUpdate(field);
+      expect(field.value).to.be.equal('5');
+      expect(input.value).to.be.equal('5');
     });
 
     it('should not prevent invalid values applied programmatically (step)', async () => {

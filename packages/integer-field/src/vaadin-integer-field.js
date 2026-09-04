@@ -119,6 +119,34 @@ class IntegerField extends NumberField {
   }
 
   /**
+   * The value of the field.
+   *
+   * @return {string}
+   * @override
+   */
+  get value() {
+    // Defined only so that the setter override below does not hide
+    // the getter that `InputMixin` installs for the value property.
+    return super.value;
+  }
+
+  /**
+   * Override the property setter from `NumberFieldMixin` to reject
+   * a non-integer value with a warning and clear it.
+   *
+   * @param {unknown} value
+   * @override
+   */
+  set value(value) {
+    if (value !== '' && !this.__isInteger(value)) {
+      issueWarning(`Trying to set non-integer value "${value}" to <vaadin-integer-field>. Clearing the value.`);
+      value = '';
+    }
+
+    super.value = value;
+  }
+
+  /**
    * Override the getter from `NumberFieldMixin` to allow
    * only digit and sign characters.
    * @protected
@@ -136,23 +164,6 @@ class IntegerField extends NumberField {
    */
   get _defaultInputMode() {
     return 'numeric';
-  }
-
-  /**
-   * Override an observer from `InputMixin` to clear the value
-   * when trying to type invalid characters.
-   * @param {string | undefined} newVal
-   * @param {string | undefined} oldVal
-   * @protected
-   * @override
-   */
-  _valueChanged(newVal, oldVal) {
-    if (newVal !== '' && !this.__isInteger(newVal)) {
-      console.warn(`Trying to set non-integer value "${newVal}" to <vaadin-integer-field>. Clearing the value.`);
-      this.value = '';
-      return;
-    }
-    super._valueChanged(newVal, oldVal);
   }
 
   /**
