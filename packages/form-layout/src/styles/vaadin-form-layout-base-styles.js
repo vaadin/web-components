@@ -36,6 +36,9 @@ export const formLayoutStyles = css`
     --_column-spacing: var(--vaadin-form-layout-column-spacing);
     --_row-spacing: var(--vaadin-form-layout-row-spacing);
 
+    --vaadin-field-side-label-width: var(--_label-width);
+    --vaadin-field-side-label-gap: var(--_label-spacing);
+
     align-self: stretch;
     display: block;
     max-width: 100%;
@@ -146,6 +149,9 @@ export const formLayoutStyles = css`
 
     /* By default, place each child on a new row */
     grid-column: 1 / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
+
+    /* Form items do not need margins in auto-responsive mode */
+    margin: 0;
   }
 
   :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
@@ -154,16 +160,18 @@ export const formLayoutStyles = css`
 
   :host([auto-responsive][labels-aside]) {
     --_max-width: var(--_max-width-labels-aside);
-
-    --vaadin-field-side-label-width: var(--_label-width);
-    --vaadin-field-side-label-gap: var(--_label-spacing);
   }
 
   :host([auto-responsive][labels-aside-active]) #layout {
-    --_grid-column-width: var(--_column-width-labels-aside);
-
     --_form-item-labels-above: ' '; /* false */
     --_form-item-labels-aside: initial; /* true */
+    --_grid-column-width: var(--_column-width-labels-aside);
+  }
+
+  :host([auto-responsive][labels-aside-active])
+    #layout
+    ::slotted(:is(vaadin-checkbox, vaadin-radio-button, vaadin-switch)) {
+    margin-inline-start: calc(var(--_label-width) + var(--_label-spacing));
   }
 
   :host([auto-responsive][expand-columns]) #layout {
