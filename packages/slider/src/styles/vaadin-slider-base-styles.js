@@ -41,7 +41,7 @@ export const sliderStyles = css`
     --_rows-after-input: 'marks' auto;
   }
 
-  :host([theme~='label-aside'][min-max-visible]) {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])[min-max-visible]) {
     --_rows-after-input: 'label marks' auto;
   }
 
