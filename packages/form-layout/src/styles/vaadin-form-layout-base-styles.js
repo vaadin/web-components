@@ -147,7 +147,7 @@ export const formLayoutStyles = css`
     /* By default, place each child on a new row */
     grid-column: 1 / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
 
-    /* Form items do not need block margins in auto-responsive mode */
+    /* Rows are spaced by the grid gap; reset the default block margins of native children like <hr> */
     margin-block: 0;
   }
 
