@@ -361,4 +361,115 @@ describe('InputControlMixin', () => {
       });
     });
   });
+
+  describe('_shouldAcceptText', () => {
+    // Omitting the argument fires an event that carries no clipboard data / data transfer.
+    const firePasteEvent = (pastedText) => {
+      const event = new Event('paste', {
+        bubbles: true,
+        cancelable: true,
+        composed: true,
+      });
+      if (pastedText !== undefined) {
+        event.clipboardData = {
+          getData: () => pastedText,
+        };
+      }
+      input.dispatchEvent(event);
+      return event;
+    };
+
+    const fireDropEvent = (draggedText) => {
+      const event = new Event('drop', {
+        bubbles: true,
+        cancelable: true,
+        composed: true,
+      });
+      if (draggedText !== undefined) {
+        event.dataTransfer = {
+          getData: () => draggedText,
+        };
+      }
+      input.dispatchEvent(event);
+      return event;
+    };
+
+    const fireBeforeInputEvent = (textToInput) => {
+      const event = new Event('beforeinput', {
+        bubbles: true,
+        cancelable: true,
+        composed: true,
+      });
+      event.data = textToInput;
+      event.inputType = 'insertFromPaste';
+      input.dispatchEvent(event);
+      return event;
+    };
+
+    describe('allowed char pattern set', () => {
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag} allowed-char-pattern="[0-9]"></${tag}>`);
+        await nextRender();
+        input = element.querySelector('[slot=input]');
+      });
+
+      [
+        ['paste', firePasteEvent],
+        ['drop', fireDropEvent],
+        ['beforeinput', fireBeforeInputEvent],
+      ].forEach(([eventName, fireEvent]) => {
+        it(`should not prevent ${eventName} with text rejected by the pattern when accepted by _shouldAcceptText`, () => {
+          sinon.stub(element, '_shouldAcceptText').returns(true);
+          const event = fireEvent('foo');
+          expect(event.defaultPrevented).to.be.false;
+          expect(element.hasAttribute('input-prevented')).to.be.false;
+        });
+
+        it(`should prevent ${eventName} with text allowed by the pattern when rejected by _shouldAcceptText`, () => {
+          sinon.stub(element, '_shouldAcceptText').returns(false);
+          const event = fireEvent('123');
+          expect(event.defaultPrevented).to.be.true;
+          expect(element.hasAttribute('input-prevented')).to.be.true;
+        });
+      });
+
+      it('should not prevent paste event that has no clipboard data', () => {
+        const event = firePasteEvent();
+        expect(event.defaultPrevented).to.be.false;
+        expect(element.hasAttribute('input-prevented')).to.be.false;
+      });
+
+      it('should not prevent drop event that has no data transfer', () => {
+        const event = fireDropEvent();
+        expect(event.defaultPrevented).to.be.false;
+        expect(element.hasAttribute('input-prevented')).to.be.false;
+      });
+    });
+
+    describe('allowed char pattern not set', () => {
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag}></${tag}>`);
+        await nextRender();
+        input = element.querySelector('[slot=input]');
+      });
+
+      it('should not prevent paste event with arbitrary text', () => {
+        const event = firePasteEvent('foo');
+        expect(event.defaultPrevented).to.be.false;
+        expect(element.hasAttribute('input-prevented')).to.be.false;
+      });
+
+      it('should not prevent paste event that has no clipboard data', () => {
+        const event = firePasteEvent();
+        expect(event.defaultPrevented).to.be.false;
+        expect(element.hasAttribute('input-prevented')).to.be.false;
+      });
+
+      it('should not prevent drop event that has no data transfer', () => {
+        const event = fireDropEvent();
+        expect(event.defaultPrevented).to.be.false;
+        expect(element.hasAttribute('input-prevented')).to.be.false;
+      });
+    });
+  });
 });

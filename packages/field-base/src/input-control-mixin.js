@@ -186,6 +186,18 @@ export const InputControlMixin = (superclass) =>
       });
     }
 
+    /**
+     * Returns true when the given text may be inserted into the field.
+     * Override to accept text that the raw `allowedCharPattern` test would reject,
+     * for example a formatted string that is valid once unformatted.
+     * @param {string} text
+     * @return {boolean}
+     * @protected
+     */
+    _shouldAcceptText(text) {
+      return !this.allowedCharPattern || this.__allowedTextRegExp.test(text);
+    }
+
     /** @private */
     __shouldAcceptKey(event) {
       return (
@@ -199,33 +211,29 @@ export const InputControlMixin = (superclass) =>
 
     /** @private */
     _onPaste(e) {
-      if (this.allowedCharPattern) {
-        const pastedText = e.clipboardData.getData('text');
-        if (!this.__allowedTextRegExp.test(pastedText)) {
-          e.preventDefault();
-          this._markInputPrevented();
-        }
+      const pastedText = e.clipboardData?.getData('text') ?? '';
+      if (!this._shouldAcceptText(pastedText)) {
+        e.preventDefault();
+        this._markInputPrevented();
       }
     }
 
     /** @private */
     _onDrop(e) {
-      if (this.allowedCharPattern) {
-        const draggedText = e.dataTransfer.getData('text');
-        if (!this.__allowedTextRegExp.test(draggedText)) {
-          e.preventDefault();
-          this._markInputPrevented();
-        }
+      const draggedText = e.dataTransfer?.getData('text') ?? '';
+      if (!this._shouldAcceptText(draggedText)) {
+        e.preventDefault();
+        this._markInputPrevented();
       }
     }
 
-    /** @private */
+    /** @protected */
     _onBeforeInput(e) {
       // The `beforeinput` event covers all the cases for `allowedCharPattern`: keyboard, pasting and dropping,
       // but it is still experimental technology so we can't rely on it. It's used here just as an additional check,
       // because it seems to be the only way to detect and prevent specific keys on mobile devices.
       // See https://github.com/vaadin/vaadin-text-field/issues/429
-      if (this.allowedCharPattern && e.data && !this.__allowedTextRegExp.test(e.data)) {
+      if (e.data && !this._shouldAcceptText(e.data)) {
         e.preventDefault();
         this._markInputPrevented();
       }
