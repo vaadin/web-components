@@ -196,6 +196,35 @@ const ChunkFormatMixinImplementation = (superclass) =>
     }
 
     /**
+     * Override a method from `InputControlMixin` to test the unformatted text
+     * against `allowedCharPattern`, so that pasting or dropping an already
+     * grouped string is accepted by a pattern that does not allow the delimiter.
+     * The same predicate backs the `paste`, `drop` and `beforeinput` entry
+     * points, so the three can never disagree about one piece of text.
+     *
+     * Unformatting also applies the configured `case`, so `fi21 1234` under
+     * `case: 'upper'` is tested as `FI211234`. That is intended: the case is
+     * applied on the way to `value`, so the pattern is tested against the text
+     * that the field actually stores.
+     *
+     * The `super` method is called defensively, since the control layer that
+     * declares it sits below this mixin and is optional. Without it there is no
+     * pattern to test against, so the text is accepted.
+     *
+     * @param {string} text
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldAcceptText(text) {
+      if (!this._hasFormat) {
+        return super._shouldAcceptText?.(text) ?? true;
+      }
+
+      return super._shouldAcceptText?.(unformat(text, this.#format)) ?? true;
+    }
+
+    /**
      * Override a method from `FormatMixin` to keep the caret at the same position
      * in the unformatted value across a write that did not come from the user,
      * most notably a programmatic `value` set while the field is focused.

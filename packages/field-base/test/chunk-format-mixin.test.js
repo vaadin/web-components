@@ -11,6 +11,27 @@ import { InputController } from '../src/input-controller.js';
 const IBAN = { blocks: [4, 4, 4, 4, 2] };
 const PHONE = { blocks: [3, 3, 4] };
 
+const FORMATTED_IBAN = 'FI21 1234 5600 0007 85';
+const UNFORMATTED_IBAN = 'FI2112345600000785';
+// Seven characters longer than the eighteen the IBAN format describes.
+const OVERLONG_IBAN = 'FI2112345600000785ABCDEFG';
+
+/**
+ * Emulates what the browser does for a paste: a cancelable `beforeinput`
+ * carrying the pasted text, then, unless it was prevented, the edit itself
+ * and the `input` event dispatched for it.
+ */
+function paste(input, text) {
+  const options = { inputType: 'insertFromPaste', data: text, bubbles: true, composed: true };
+
+  if (!input.dispatchEvent(new InputEvent('beforeinput', { ...options, cancelable: true }))) {
+    return;
+  }
+
+  input.setRangeText(text, input.selectionStart, input.selectionEnd, 'end');
+  input.dispatchEvent(new InputEvent('input', options));
+}
+
 describe('ChunkFormatMixin', () => {
   const tag = defineLit(
     'chunk-format-mixin',
@@ -287,6 +308,173 @@ describe('ChunkFormatMixin', () => {
     });
   });
 
+  describe('pasting', () => {
+    beforeEach(async () => {
+      element.format = IBAN;
+      await nextUpdate(element);
+      input.focus();
+    });
+
+    it('should group a formatted string pasted into an empty field', () => {
+      paste(input, FORMATTED_IBAN);
+      expect(element.value).to.equal('FI2112345600000785');
+      expect(element.formattedValue).to.equal('FI21 1234 5600 0007 85');
+      expect(input.selectionStart).to.equal(22);
+    });
+
+    it('should group an unformatted string pasted into an empty field', () => {
+      paste(input, UNFORMATTED_IBAN);
+      expect(element.value).to.equal('FI2112345600000785');
+      expect(element.formattedValue).to.equal('FI21 1234 5600 0007 85');
+      expect(input.selectionStart).to.equal(22);
+    });
+
+    it('should keep the overflow of an over-long string pasted into an empty field', () => {
+      paste(input, OVERLONG_IBAN);
+      expect(element.value).to.equal('FI2112345600000785ABCDEFG');
+      expect(element.formattedValue).to.equal('FI21 1234 5600 0007 85 ABCDEFG');
+      expect(input.selectionStart).to.equal(30);
+    });
+
+    it('should regroup the whole field around a formatted string pasted in the middle', async () => {
+      element.value = 'FI211234';
+      await nextUpdate(element);
+      input.setSelectionRange(2, 2);
+      paste(input, FORMATTED_IBAN);
+      expect(element.value).to.equal('FIFI2112345600000785211234');
+      expect(element.formattedValue).to.equal('FIFI 2112 3456 0000 07 85211234');
+      expect(input.selectionStart).to.equal(25);
+    });
+
+    it('should regroup the whole field around an unformatted string pasted in the middle', async () => {
+      element.value = 'FI211234';
+      await nextUpdate(element);
+      input.setSelectionRange(2, 2);
+      paste(input, UNFORMATTED_IBAN);
+      expect(element.value).to.equal('FIFI2112345600000785211234');
+      expect(element.formattedValue).to.equal('FIFI 2112 3456 0000 07 85211234');
+      expect(input.selectionStart).to.equal(25);
+    });
+
+    it('should move the caret past a delimiter that the paste pushed in front of it', async () => {
+      element.value = UNFORMATTED_IBAN;
+      await nextUpdate(element);
+      input.setSelectionRange(0, 0);
+      paste(input, 'ABCD');
+      expect(element.formattedValue).to.equal('ABCD FI21 1234 5600 00 0785');
+      expect(input.selectionStart).to.equal(5);
+    });
+
+    it('should keep the overflow of an over-long string pasted in the middle', async () => {
+      element.value = 'FI211234';
+      await nextUpdate(element);
+      input.setSelectionRange(2, 2);
+      paste(input, OVERLONG_IBAN);
+      expect(element.value).to.equal('FIFI2112345600000785ABCDEFG211234');
+      expect(element.formattedValue).to.equal('FIFI 2112 3456 0000 07 85ABCDEFG211234');
+      expect(input.selectionStart).to.equal(32);
+    });
+  });
+
+  describe('pasting under allowedCharPattern', () => {
+    beforeEach(async () => {
+      element.format = IBAN;
+      element.allowedCharPattern = '[A-Z0-9]';
+      await nextUpdate(element);
+    });
+
+    function fireBeforeInput(data) {
+      const event = new InputEvent('beforeinput', {
+        inputType: 'insertFromPaste',
+        data,
+        bubbles: true,
+        cancelable: true,
+        composed: true,
+      });
+      input.dispatchEvent(event);
+      return event;
+    }
+
+    function firePaste(text) {
+      const event = new Event('paste', { bubbles: true, cancelable: true, composed: true });
+      event.clipboardData = { getData: () => text };
+      input.dispatchEvent(event);
+      return event;
+    }
+
+    function fireDrop(text) {
+      const event = new Event('drop', { bubbles: true, cancelable: true, composed: true });
+      event.dataTransfer = { getData: () => text };
+      input.dispatchEvent(event);
+      return event;
+    }
+
+    it('should not prevent a beforeinput carrying a formatted string', () => {
+      expect(fireBeforeInput(FORMATTED_IBAN).defaultPrevented).to.be.false;
+      expect(element.hasAttribute('input-prevented')).to.be.false;
+    });
+
+    it('should not prevent a paste carrying a formatted string', () => {
+      expect(firePaste(FORMATTED_IBAN).defaultPrevented).to.be.false;
+      expect(element.hasAttribute('input-prevented')).to.be.false;
+    });
+
+    it('should not prevent a drop carrying a formatted string', () => {
+      expect(fireDrop(FORMATTED_IBAN).defaultPrevented).to.be.false;
+      expect(element.hasAttribute('input-prevented')).to.be.false;
+    });
+
+    it('should prevent a beforeinput carrying a character the pattern rejects', () => {
+      // The hyphen is not the delimiter, so unformatting leaves it in place.
+      expect(fireBeforeInput('FI21-1234').defaultPrevented).to.be.true;
+      expect(element.hasAttribute('input-prevented')).to.be.true;
+    });
+
+    it('should prevent a paste carrying a character the pattern rejects', () => {
+      expect(firePaste('FI21-1234').defaultPrevented).to.be.true;
+      expect(element.hasAttribute('input-prevented')).to.be.true;
+    });
+  });
+
+  describe('composition', () => {
+    beforeEach(async () => {
+      // The case makes the reformat observable: the composed text is presented
+      // exactly as typed until the session ends, and uppercased afterwards.
+      element.format = { blocks: [4, 4, 4, 4, 2], case: 'upper' };
+      await nextUpdate(element);
+      input.focus();
+      input.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true, composed: true }));
+    });
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it('should leave the composed text as typed while the session is in flight', async () => {
+      await sendKeys({ type: 'fi21' });
+      expect(input.value).to.equal('fi21');
+    });
+
+    it('should update value while the session is in flight', async () => {
+      await sendKeys({ type: 'fi21' });
+      expect(element.value).to.equal('FI21');
+    });
+
+    it('should format the composed text once the session ends', async () => {
+      await sendKeys({ type: 'fi21' });
+      input.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true, composed: true }));
+      expect(input.value).to.equal('FI21');
+      expect(element.formattedValue).to.equal('FI21');
+    });
+
+    it('should format the composed text exactly once', async () => {
+      const spy = sinon.spy(element, '_formatOnInput');
+      await sendKeys({ type: 'fi21' });
+      input.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true, composed: true }));
+      expect(spy).to.be.calledOnce;
+    });
+  });
+
   describe('programmatic value', () => {
     beforeEach(async () => {
       element.format = IBAN;
@@ -467,6 +655,67 @@ describe('ChunkFormatMixin', () => {
       expect(detached.value).to.equal(element.value);
       expect(detached.formattedValue).to.equal(element.formattedValue);
       expect(detachedInput.value).to.equal(input.value);
+    });
+  });
+
+  describe('without InputControlMixin', () => {
+    const bareTag = defineLit(
+      'chunk-format-mixin-bare',
+      '<slot name="input"></slot>',
+      (Base) => class extends ChunkFormatMixin(PolylitMixin(Base)) {},
+    );
+
+    let bare, bareInput;
+
+    beforeEach(async () => {
+      bare = fixtureSync(`<${bareTag}></${bareTag}>`);
+      await nextRender();
+      bareInput = document.createElement('input');
+      bareInput.setAttribute('slot', 'input');
+      bare.appendChild(bareInput);
+      bare._setInputElement(bareInput);
+      bare.format = IBAN;
+      await nextUpdate(bare);
+      bareInput.focus();
+    });
+
+    it('should group the typed text without the control layer below', async () => {
+      await sendKeys({ type: 'FI2112345600000785' });
+      expect(bareInput.value).to.equal('FI21 1234 5600 0007 85');
+      expect(bare.value).to.equal('FI2112345600000785');
+    });
+
+    it('should accept any text when no acceptance predicate is inherited', () => {
+      expect(bare._shouldAcceptText('FI21 1234')).to.be.true;
+      expect(bare._shouldAcceptText('anything')).to.be.true;
+    });
+
+    it('should accept any text when no format is configured', async () => {
+      bare.format = undefined;
+      await nextUpdate(bare);
+      expect(bare._shouldAcceptText('anything')).to.be.true;
+    });
+
+    it('should leave a delete intent to the browser', () => {
+      bareInput.value = 'FI21 5678';
+      bareInput.setSelectionRange(5, 5);
+      const event = new InputEvent('beforeinput', {
+        inputType: 'deleteContentBackward',
+        bubbles: true,
+        cancelable: true,
+        composed: true,
+      });
+      bareInput.dispatchEvent(event);
+      expect(event.defaultPrevented).to.be.false;
+      expect(bareInput.value).to.equal('FI21 5678');
+    });
+
+    it('should leave a paste to the browser', () => {
+      const event = new Event('paste', { bubbles: true, cancelable: true, composed: true });
+      event.clipboardData = { getData: () => FORMATTED_IBAN };
+      bareInput.dispatchEvent(event);
+      expect(event.defaultPrevented).to.be.false;
+      expect(bare.hasAttribute('input-prevented')).to.be.false;
     });
   });
 });
