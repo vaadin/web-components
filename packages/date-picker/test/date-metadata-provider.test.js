@@ -17,10 +17,6 @@ describe('dateMetadataProvider integration', () => {
     return cell.hasAttribute('disabled') && cell.part.contains('disabled');
   }
 
-  function hasPart(cell, part) {
-    return cell.part.contains(part);
-  }
-
   function calendarsWithLoadingDates() {
     return getCalendars(overlayContent)
       .filter((calendar) => calendar.month)
@@ -74,34 +70,40 @@ describe('dateMetadataProvider integration', () => {
   });
 
   describe('synchronous provider', () => {
+    let cell15, cell16;
+
     beforeEach(async () => {
       await openWithProvider(disableFifteenth);
+      cell15 = getVisibleCell(15);
+      cell16 = getVisibleCell(16);
     });
 
     it('should mark only the provided dates as disabled', () => {
-      expect(isDisabled(getVisibleCell(15))).to.be.true;
-      expect(isDisabled(getVisibleCell(16))).to.be.false;
+      expect(isDisabled(cell15)).to.be.true;
+      expect(isDisabled(cell16)).to.be.false;
     });
 
     it('should set aria-disabled on a provider-disabled date', () => {
-      expect(getVisibleCell(15).getAttribute('aria-disabled')).to.equal('true');
-      expect(getVisibleCell(16).getAttribute('aria-disabled')).to.equal('false');
+      expect(cell15.getAttribute('aria-disabled')).to.equal('true');
+      expect(cell16.getAttribute('aria-disabled')).to.equal('false');
     });
 
     it('should not report loading for an answer that needs no waiting', () => {
       expect(overlayContent.hasAttribute('loading')).to.be.false;
       expect(overlayContent.hasAttribute('aria-busy')).to.be.false;
-      expect(hasPart(getVisibleCell(15), 'loading')).to.be.false;
-      expect(hasPart(getVisibleCell(16), 'loading')).to.be.false;
+      expect(cell15.part.contains('loading')).to.be.false;
+      expect(cell16.part.contains('loading')).to.be.false;
     });
   });
 
   describe('asynchronous provider', () => {
-    let provider, resolveProvider;
+    let provider, resolveProvider, cell15, cell16;
 
     beforeEach(async () => {
       ({ provider, resolve: resolveProvider } = deferredProvider());
       await openWithProvider(provider);
+      cell15 = getVisibleCell(15);
+      cell16 = getVisibleCell(16);
     });
 
     it('should show the loading spinner and mark the calendar busy while pending', () => {
@@ -113,13 +115,13 @@ describe('dateMetadataProvider integration', () => {
     });
 
     it('should mark the dates of a month being fetched with the loading part', () => {
-      expect(hasPart(getVisibleCell(15), 'loading')).to.be.true;
-      expect(hasPart(getVisibleCell(16), 'loading')).to.be.true;
+      expect(cell15.part.contains('loading')).to.be.true;
+      expect(cell16.part.contains('loading')).to.be.true;
     });
 
     it('should keep the dates of a pending month selectable', () => {
-      expect(isDisabled(getVisibleCell(15))).to.be.false;
-      expect(getVisibleCell(15).getAttribute('aria-disabled')).to.equal('false');
+      expect(isDisabled(cell15)).to.be.false;
+      expect(cell15.getAttribute('aria-disabled')).to.equal('false');
     });
 
     it('should commit a date picked from a month being fetched', async () => {
@@ -140,12 +142,15 @@ describe('dateMetadataProvider integration', () => {
 
       expect(overlayContent.hasAttribute('loading')).to.be.false;
       expect(overlayContent.hasAttribute('aria-busy')).to.be.false;
-      expect(isDisabled(getVisibleCell(15))).to.be.true;
-      expect(getVisibleCell(15).getAttribute('aria-disabled')).to.equal('true');
-      expect(isDisabled(getVisibleCell(16))).to.be.false;
-      expect(getVisibleCell(16).getAttribute('aria-disabled')).to.equal('false');
-      expect(hasPart(getVisibleCell(15), 'loading')).to.be.false;
-      expect(hasPart(getVisibleCell(16), 'loading')).to.be.false;
+
+      expect(isDisabled(cell15)).to.be.true;
+      expect(cell15.getAttribute('aria-disabled')).to.equal('true');
+
+      expect(isDisabled(cell16)).to.be.false;
+      expect(cell16.getAttribute('aria-disabled')).to.equal('false');
+
+      expect(cell15.part.contains('loading')).to.be.false;
+      expect(cell16.part.contains('loading')).to.be.false;
     });
 
     it('should not re-consult the provider for already loaded months', async () => {
@@ -253,8 +258,8 @@ describe('dateMetadataProvider integration', () => {
     const january = getMonthCalendar(overlayContent, year + 1, 0);
     expect(december, 'December should be rendered').to.exist;
     expect(january, 'January should be rendered').to.exist;
-    expect(hasPart(getDateCell(december, 15), 'loading')).to.be.false;
-    expect(hasPart(getDateCell(january, 15), 'loading')).to.be.true;
+    expect(getDateCell(december, 15).part.contains('loading')).to.be.false;
+    expect(getDateCell(january, 15).part.contains('loading')).to.be.true;
   });
 
   // `new Date(50, ...)` would move a two-digit year into the 1950s, which would break both the range
@@ -519,28 +524,28 @@ describe('dateMetadataProvider integration', () => {
   describe('provider changes', () => {
     it('should reload the visible range for a new provider', async () => {
       await openWithProvider(disableFifteenth);
-      expect(isDisabled(getVisibleCell(15))).to.be.true;
+      const cell15 = getVisibleCell(15);
+      const cell16 = getVisibleCell(16);
+      expect(isDisabled(cell15)).to.be.true;
 
       // Assigning a new function drops the cache, which has to be refilled for what is on screen.
       datePicker.dateMetadataProvider = disableDay(16);
-      await untilRendered(() => {
-        const cell = getVisibleCell(16);
-        return cell && isDisabled(cell);
-      });
+      await untilRendered(() => isDisabled(cell16));
 
-      expect(isDisabled(getVisibleCell(16))).to.be.true;
-      expect(isDisabled(getVisibleCell(15))).to.be.false;
+      expect(isDisabled(cell16)).to.be.true;
+      expect(isDisabled(cell15)).to.be.false;
     });
 
     it('should disable nothing once the provider is removed', async () => {
       await openWithProvider(disableFifteenth);
-      expect(isDisabled(getVisibleCell(15))).to.be.true;
+      const cell15 = getVisibleCell(15);
+      expect(isDisabled(cell15)).to.be.true;
 
       datePicker.dateMetadataProvider = undefined;
-      await untilRendered(() => !isDisabled(getVisibleCell(15)));
+      await untilRendered(() => !isDisabled(cell15));
 
-      expect(isDisabled(getVisibleCell(15))).to.be.false;
-      expect(hasPart(getVisibleCell(15), 'loading')).to.be.false;
+      expect(isDisabled(cell15)).to.be.false;
+      expect(cell15.part.contains('loading')).to.be.false;
     });
 
     it('should stop loading when the provider is removed while a request is in flight', async () => {
@@ -554,7 +559,7 @@ describe('dateMetadataProvider integration', () => {
 
       expect(overlayContent.hasAttribute('loading')).to.be.false;
       expect(overlayContent.hasAttribute('aria-busy')).to.be.false;
-      expect(hasPart(getVisibleCell(15), 'loading')).to.be.false;
+      expect(getVisibleCell(15).part.contains('loading')).to.be.false;
     });
   });
 
@@ -597,8 +602,10 @@ describe('dateMetadataProvider integration', () => {
 
           expect(overlayContent.hasAttribute('loading')).to.be.false;
           expect(overlayContent.hasAttribute('aria-busy')).to.be.false;
-          expect(isDisabled(getVisibleCell(15))).to.be.false;
-          expect(hasPart(getVisibleCell(15), 'loading')).to.be.false;
+
+          const cell = getVisibleCell(15);
+          expect(isDisabled(cell)).to.be.false;
+          expect(cell.part.contains('loading')).to.be.false;
         });
 
         it('should retry when the user navigates', async () => {
