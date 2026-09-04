@@ -90,10 +90,10 @@ Details in [`field-formatting-use-cases.md`](./field-formatting-use-cases.md) §
   vcf-input-mask needed `eval`. Live formatting must be **declarative WC properties**; custom Java logic
   can only run at commit, after a round trip. Two tiers:
 
-  | Tier | Runs | Configured by | Covers |
-  | ---- | ---- | ------------- | ------ |
-  | Live | client, every `input` | properties set from Java (`blocks`, `delimiter`, `mask`…) | chunking, masks |
-  | Commit | server, on value change | `SerializableFunction<String, Result<String>>` | normalize, parse |
+  | Tier   | Runs                    | Configured by                                             | Covers           |
+  | ------ | ----------------------- | --------------------------------------------------------- | ---------------- |
+  | Live   | client, every `input`   | properties set from Java (`blocks`, `delimiter`, `mask`…) | chunking, masks  |
+  | Commit | server, on value change | `SerializableFunction<String, Result<String>>`            | normalize, parse |
 
 - **The split already exists in Flow.** `AbstractSinglePropertyField` takes `presentationToModel` /
   `modelToPresentation`; `DatePicker` (`String` ↔ `LocalDate`) and `AbstractNumberField` use it today.
@@ -101,7 +101,7 @@ Details in [`field-formatting-use-cases.md`](./field-formatting-use-cases.md) §
   vs "the value" — DatePicker and NumberField sync it, keep a server-side `unparsableValue`, and validate
   with `badInputErrorMessage`. Reuse it for a masked `TextField` instead of inventing a new channel.
 - **A server-side parse hook already exists:** `DatePicker#setFallbackParser(SerializableFunction<String,
-  Result<LocalDate>>)` — runs in `setModelValue`, pushes the parsed value back as presentation, turns
+Result<LocalDate>>)` — runs in `setModelValue`, pushes the parsed value back as presentation, turns
   `Result.error` into a validation error. Same shape on `TextField` covers normalize-on-commit and
   parse-to-model with **no WC work**.
 - **Value-change modes need no Flow change** if the WC formats inside `_onInput`: Flow reads `value` on the
@@ -158,29 +158,29 @@ API stays → 25.4 with a release note. A default flips or an API goes → 26.
 
 ### Additive — fine for 25.4
 
-| Item                                                                                 | Note                                             |
-| ------------------------------------------------------------------------------------ | ------------------------------------------------ |
-| Format mixin in `field-base` with identity defaults                                  | zero behavior change until configured            |
-| Chunking properties on `text-field` (and later `text-area`)                          | opt-in                                           |
-| Read-only `formattedValue`                                                           | new property                                     |
-| Pattern-mask property (layer 2)                                                      | opt-in; grammar TBD                              |
-| Visible placeholder mask (layer 3)                                                   | opt-in; blocked on a11y                          |
-| `date-picker` / `time-picker` as-you-type, **opt-in** flag derived from `dateFormat` | default stays off                                |
-| Flow: `TextField#setFormat(...)` or equivalent, serialised to client props           | Binder already gets `value`                      |
+| Item                                                                                  | Note                                             |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| Format mixin in `field-base` with identity defaults                                   | zero behavior change until configured            |
+| Chunking properties on `text-field` (and later `text-area`)                           | opt-in                                           |
+| Read-only `formattedValue`                                                            | new property                                     |
+| Pattern-mask property (layer 2)                                                       | opt-in; grammar TBD                              |
+| Visible placeholder mask (layer 3)                                                    | opt-in; blocked on a11y                          |
+| `date-picker` / `time-picker` as-you-type, **opt-in** flag derived from `dateFormat`  | default stays off                                |
+| Flow: `TextField#setFormat(...)` or equivalent, serialised to client props            | Binder already gets `value`                      |
 | Flow: shared `HasInputFormat`-style interface over properties, with `bindXxx(Signal)` | same pattern as `HasAllowedCharPattern`          |
-| Flow: `TextField#setFallbackParser(SerializableFunction<String, Result<String>>)`    | copies the `DatePicker` hook; commit-time only   |
-| Flow: `TextFieldI18n#setBadInputErrorMessage`                                        | mirrors `AbstractNumberFieldI18n`                |
-| Flow: overflow / truncation event on paste                                           | mirrors the cleave add-on's `PasteOverflowEvent` |
+| Flow: `TextField#setFallbackParser(SerializableFunction<String, Result<String>>)`     | copies the `DatePicker` hook; commit-time only   |
+| Flow: `TextFieldI18n#setBadInputErrorMessage`                                         | mirrors `AbstractNumberFieldI18n`                |
+| Flow: overflow / truncation event on paste                                            | mirrors the cleave add-on's `PasteOverflowEvent` |
 
 ### Behavior-altering — acceptable in 25.4, call out in release notes
 
-| Item                                                                    | What changes                                                                              |
-| ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Caret-preserving `_inputElementValue` writes for all text fields        | programmatic `value` set while focused no longer jumps caret to end                       |
-| Route `_onInput` / `_valueChanged` through one sync function            | internal; timing of `value-changed` must stay identical — regression risk, not API change |
-| Suspend value sync during IME composition                               | fewer intermediate `value-changed` events in EAGER mode for IME users                     |
-| `allowedCharPattern` deprecated in favour of the mask when both are set | still works; warning only                                                                 |
-| `maxlength` / `pattern` not delegated to the native input when a format is active | only fields with a format configured; server-side validation unchanged          |
+| Item                                                                              | What changes                                                                              |
+| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Caret-preserving `_inputElementValue` writes for all text fields                  | programmatic `value` set while focused no longer jumps caret to end                       |
+| Route `_onInput` / `_valueChanged` through one sync function                      | internal; timing of `value-changed` must stay identical — regression risk, not API change |
+| Suspend value sync during IME composition                                         | fewer intermediate `value-changed` events in EAGER mode for IME users                     |
+| `allowedCharPattern` deprecated in favour of the mask when both are set           | still works; warning only                                                                 |
+| `maxlength` / `pattern` not delegated to the native input when a format is active | only fields with a format configured; server-side validation unchanged                    |
 
 ### Breaking — postpone to 26
 
@@ -218,4 +218,4 @@ API stays → 25.4 with a release note. A default flips or an API goes → 26.
    writes through `execCommand('insertText')`. Related: regroup on every delete, not only delimiter deletes.
 9. **Coordinate with Component Factory** on a deprecation path for the two add-ons once layer 1 ships.
 10. **Revisit `number-field`** after the `type="text"` refactor — number/currency formatting reuses the
-   same mixin.
+    same mixin.
