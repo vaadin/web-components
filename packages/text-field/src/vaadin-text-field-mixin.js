@@ -3,15 +3,23 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ChunkFormatMixin } from '@vaadin/field-base/src/chunk-format-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
+
+// The constraints that a configured format takes away from the input element and
+// matches against the unformatted `value` instead.
+const FORMAT_CONSTRAINTS = ['maxlength', 'minlength', 'pattern'];
 
 /**
  * A mixin providing common text field functionality.
  */
 export const TextFieldMixin = (superClass) =>
-  class TextFieldMixinClass extends InputFieldMixin(superClass) {
+  class TextFieldMixinClass extends ChunkFormatMixin(InputFieldMixin(superClass)) {
+    /** @private */
+    #previousFormat;
+
     static get properties() {
       return {
         /**
@@ -80,5 +88,126 @@ export const TextFieldMixin = (superClass) =>
         }),
       );
       this.addController(new LabelledInputController(this.inputElement, this._labelController));
+    }
+
+    /**
+     * Override a method from `InputConstraintsMixin` to match `maxlength`,
+     * `minlength` and `pattern` against the unformatted `value` while a format
+     * is configured. Those attributes are then not on the input element, so the
+     * native constraint validation would otherwise not run them at all, and it
+     * would run them against the presented value if they were.
+     *
+     * @return {boolean}
+     * @override
+     */
+    checkValidity() {
+      if (!this._hasFormat) {
+        return super.checkValidity();
+      }
+
+      // A readonly or disabled control is barred from constraint validation and
+      // always reports valid, exactly as a native input does.
+      if (this.readonly || this.disabled) {
+        return true;
+      }
+
+      const value = this.value ?? '';
+
+      if (this.required && value === '') {
+        return false;
+      }
+
+      // An empty value satisfies `minlength` and `pattern` natively, which only
+      // ever fail a value the user has actually entered.
+      if (this.minlength != null && value !== '' && value.length < this.minlength) {
+        return false;
+      }
+
+      if (this.maxlength != null && value.length > this.maxlength) {
+        return false;
+      }
+
+      if (this.pattern && value !== '') {
+        try {
+          if (!new RegExp(`^(?:${this.pattern})$`, 'u').test(value)) {
+            return false;
+          }
+        } catch {
+          // A pattern that does not compile is ignored, the same way the browser
+          // ignores an invalid `pattern` attribute.
+        }
+      }
+
+      return true;
+    }
+
+    /**
+     * Override a method from `DelegateStateMixin` to stop delegating the length
+     * and pattern constraints while a format is configured. Left on the input
+     * element, `maxlength` would block typing before the last group is finished,
+     * and `pattern` would be matched against the text with its delimiters.
+     *
+     * @param {string} name
+     * @param {unknown} value
+     * @protected
+     * @override
+     */
+    _delegateAttribute(name, value) {
+      if (this._hasFormat && FORMAT_CONSTRAINTS.includes(name)) {
+        super._delegateAttribute(name, null);
+        return;
+      }
+
+      super._delegateAttribute(name, value);
+    }
+
+    /**
+     * Override a method from `InputConstraintsMixin` to also observe `format`.
+     * It changes what the length and pattern constraints are matched against
+     * without being a constraint itself, so a field that already has a value or
+     * is already invalid has to be validated again when it is set or removed.
+     *
+     * @protected
+     * @override
+     */
+    _createConstraintsObserver() {
+      super._createConstraintsObserver();
+
+      this._createMethodObserver('__formatConstraintsChanged(stateTarget, format)');
+    }
+
+    /** @private */
+    __formatConstraintsChanged(stateTarget, format) {
+      if (!stateTarget) {
+        return;
+      }
+
+      // The observer also runs when the state target is set, which is when the
+      // constraints are delegated for the first time anyway. Only a format that
+      // has actually changed asks for anything to be done again.
+      const hasFormatChanged = format !== this.#previousFormat;
+      this.#previousFormat = format;
+
+      if (!hasFormatChanged) {
+        return;
+      }
+
+      this.#ensureFormatConstraintsDelegated();
+
+      if (this._hasValue || this.invalid) {
+        this._requestValidation();
+      }
+    }
+
+    /**
+     * Re-delegates the constraints that the format gates. Their own values have
+     * not changed, so the observer that normally delegates them does not run.
+     *
+     * @private
+     */
+    #ensureFormatConstraintsDelegated() {
+      FORMAT_CONSTRAINTS.forEach((name) => {
+        this._delegateAttribute(name, this[name]);
+      });
     }
   };

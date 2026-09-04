@@ -6,8 +6,11 @@ import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
+import type { ChunkFormatMixinClass } from '@vaadin/field-base/src/chunk-format-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
+import type { FormatMixinClass } from '@vaadin/field-base/src/format-mixin.js';
+import type { FieldFormat } from '@vaadin/field-base/src/format-utils.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import type { InputFieldMixinClass } from '@vaadin/field-base/src/input-field-mixin.js';
@@ -28,6 +31,7 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 const field = document.createElement('vaadin-text-field');
 
 // Mixins
+assertType<ChunkFormatMixinClass>(field);
 assertType<ClearButtonMixinClass>(field);
 assertType<DelegateFocusMixinClass>(field);
 assertType<DelegateStateMixinClass>(field);
@@ -35,6 +39,7 @@ assertType<DisabledMixinClass>(field);
 assertType<ElementMixinClass>(field);
 assertType<FieldMixinClass>(field);
 assertType<FocusMixinClass>(field);
+assertType<FormatMixinClass>(field);
 assertType<InputConstraintsMixinClass>(field);
 assertType<InputControlMixinClass>(field);
 assertType<InputFieldMixinClass>(field);
@@ -44,6 +49,10 @@ assertType<LabelMixinClass>(field);
 assertType<SlotStylesMixinClass>(field);
 assertType<ValidateMixinClass>(field);
 assertType<ThemableMixinClass>(field);
+
+// Properties
+assertType<FieldFormat | undefined>(field.format);
+assertType<string>(field.formattedValue);
 
 // Events
 field.addEventListener('change', (event) => {

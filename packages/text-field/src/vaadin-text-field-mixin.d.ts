@@ -10,8 +10,10 @@ import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { DelegateStateMixinClass } from '@vaadin/component-base/src/delegate-state-mixin.js';
 import type { SlotStylesMixinClass } from '@vaadin/component-base/src/slot-styles-mixin.js';
+import type { ChunkFormatMixinClass } from '@vaadin/field-base/src/chunk-format-mixin.js';
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
+import type { FormatMixinClass } from '@vaadin/field-base/src/format-mixin.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import type { InputFieldMixinClass } from '@vaadin/field-base/src/input-field-mixin.js';
@@ -24,12 +26,14 @@ import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.j
  */
 export declare function TextFieldMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<ClearButtonMixinClass> &
+): Constructor<ChunkFormatMixinClass> &
+  Constructor<ClearButtonMixinClass> &
   Constructor<DelegateFocusMixinClass> &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &
   Constructor<FieldMixinClass> &
   Constructor<FocusMixinClass> &
+  Constructor<FormatMixinClass> &
   Constructor<InputConstraintsMixinClass> &
   Constructor<InputControlMixinClass> &
   Constructor<InputFieldMixinClass> &
