@@ -187,7 +187,10 @@ import { FormLayoutMixin } from './vaadin-form-layout-mixin.js';
  * With this, FormLayout will display labels beside fields, falling back to
  * the default position above the fields only when there isn't enough space.
  * While labels are displayed beside fields, the component sets the
- * `labels-aside-active` state attribute, which can be used for styling.
+ * `labels-aside-active` state attribute on itself and the
+ * `data-form-layout-labels-aside` attribute on each child. Fields use
+ * the child attribute to place their label beside the input, and
+ * checkboxes, radio buttons and switches use it to indent by the label column.
  *
  * ### CSS Properties Reference
  *

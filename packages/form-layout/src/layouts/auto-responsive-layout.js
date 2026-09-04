@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
-import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { AbstractLayout } from './abstract-layout.js';
 
 /**
@@ -63,7 +62,7 @@ export class AutoResponsiveLayout extends AbstractLayout {
     this.__children.forEach((child) => {
       child.style.removeProperty('--_grid-colstart');
       child.style.removeProperty('--_grid-colspan');
-      removeValuesFromAttribute(child, 'theme', 'label-aside');
+      child.removeAttribute('data-form-layout-labels-aside');
     });
   }
 
@@ -139,14 +138,8 @@ export class AutoResponsiveLayout extends AbstractLayout {
     host.toggleAttribute('labels-aside-active', labelsAsideActive);
 
     children.forEach((child) => {
-      if (isBreakLine(child)) {
-        return;
-      }
-
-      if (labelsAsideActive && '_theme' in child) {
-        addValuesToAttribute(child, 'theme', 'label-aside');
-      } else {
-        removeValuesFromAttribute(child, 'theme', 'label-aside');
+      if (!isBreakLine(child)) {
+        child.toggleAttribute('data-form-layout-labels-aside', labelsAsideActive);
       }
     });
 

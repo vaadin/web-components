@@ -205,13 +205,4 @@ export const formLayoutSlotStyles = css`
   ) {
     min-width: 100%;
   }
-
-  :where(
-    vaadin-form-layout[auto-responsive][labels-aside-active],
-    vaadin-form-layout[auto-responsive][labels-aside-active] > vaadin-form-row
-  ) {
-    > :where(vaadin-checkbox, vaadin-radio-button, vaadin-switch) {
-      margin-inline-start: calc(var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing));
-    }
-  }
 `;
