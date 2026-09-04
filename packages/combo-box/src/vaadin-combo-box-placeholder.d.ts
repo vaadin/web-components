@@ -10,6 +10,10 @@
  * @private
  */
 declare class ComboBoxPlaceholder {
+  // Nominal brand: keeps structurally similar values from being assignable
+  // eslint-disable-next-line @typescript-eslint/no-unused-private-class-members
+  private __comboBoxPlaceholder: true;
+
   toString(): string;
 }
 
