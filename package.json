@@ -14,11 +14,13 @@
     "lint:css": "stylelint --ignore-path .gitignore \"packages/**/src/**/*.js\" \"packages/vaadin-lumo-styles/mixins/*.js\" \"packages/**/*.css\" \"dev/**/*.html\"",
     "lint:js": "eslint",
     "lint:types": "tsc",
+    "lint:types:vue": "vue-tsc --noEmit -p test/typings/vue/tsconfig.json",
     "postinstall": "patch-package",
     "prepare": "husky",
-    "release": "yarn release:themes && yarn release:cem && yarn release:web-types",
+    "release": "yarn release:themes && yarn release:cem && yarn release:web-types && yarn release:vue-types",
     "release:cem": "custom-elements-manifest analyze --config custom-elements-manifest.config.js && node ./scripts/split-cem.js",
     "release:themes": "yarn workspace @vaadin/aura build && yarn workspace @vaadin/vaadin-lumo-styles build",
+    "release:vue-types": "node scripts/generate-vue-types.js",
     "release:web-types": "node scripts/buildWebtypes.js",
     "start": "web-dev-server --node-resolve --open /dev",
     "start:aura": "web-dev-server --node-resolve --open /dev --theme=aura",
@@ -69,7 +71,9 @@
     "stylelint": "^17.4.0",
     "stylelint-config-html": "^1.1.0",
     "stylelint-config-vaadin": "^1.0.0-alpha.2",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vue": "^3.5.42",
+    "vue-tsc": "^3.3.11"
   },
   "resolutions": {
     "playwright": "~1.62.0"

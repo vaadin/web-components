@@ -1,0 +1,10 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "types": []
+  },
+  "include": ["./*.vue", "../../../packages/*/vue.d.ts"],
+  "vueCompilerOptions": {
+    "strictTemplates": true
+  }
+}

@@ -35,6 +35,9 @@ CLAUDE.local.md
 web-types.json
 web-types.lit.json
 
+# Generated Vue type declarations
+packages/*/vue.d.ts
+
 # Generated auto-complete CSS file for Lumo theme
 packages/vaadin-lumo-styles/auto-complete.css
 
