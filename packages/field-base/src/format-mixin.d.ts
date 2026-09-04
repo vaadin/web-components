@@ -60,7 +60,8 @@ export declare class FormatMixinClass {
    *
    * Pass `caret` to restore the caret to that index. Omit it to leave the caret
    * wherever writing the text puts it, which is what a formatter that only runs
-   * on commit wants.
+   * on commit wants. Either way the caret is left alone when no format is
+   * configured.
    */
   protected _presentValue(text: string, caret?: number): void;
 

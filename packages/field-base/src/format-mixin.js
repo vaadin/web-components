@@ -7,6 +7,11 @@ import { dedupeMixin } from '@open-wc/dedupe-mixin';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { InputMixin } from './input-mixin.js';
 
+// Marks a `_presentValue` call that passed no caret index, as opposed to no
+// `_presentValue` call being in flight at all. The two cases differ: the first
+// leaves the caret alone, the second asks `_mapCaretToPresentedValue` for it.
+const SKIP_CARET = Symbol('skip-caret');
+
 /**
  * A mixin that provides the machinery for presenting the field value in another
  * form than the one stored in the `value` property.
@@ -24,6 +29,9 @@ import { InputMixin } from './input-mixin.js';
  */
 const FormatMixinImplementation = (superclass) =>
   class FormatMixinClass extends InputMixin(superclass) {
+    /** @private */
+    #caretIntent;
+
     /** @private */
     #composing = false;
 
@@ -62,6 +70,67 @@ const FormatMixinImplementation = (superclass) =>
     }
 
     /**
+     * Override a getter from `InputMixin` to keep it paired with the setter
+     * below. A class that declares only the setter shadows the inherited getter
+     * into `undefined`.
+     *
+     * @return {string}
+     * @protected
+     * @override
+     */
+    get _inputElementValue() {
+      return super._inputElementValue;
+    }
+
+    /**
+     * Override a setter from `InputMixin` to make the write idempotent, keep the
+     * caret in place, and keep `formattedValue` in sync on every write path.
+     *
+     * Without a format the write is a plain passthrough, so an unformatted field
+     * behaves exactly as it does without this mixin.
+     *
+     * @protected
+     * @override
+     */
+    set _inputElementValue(value) {
+      // The intent is scoped to the write that follows it, so it is consumed
+      // even by a write that takes the passthrough branch below. Otherwise it
+      // would outlive its write and be applied to an unrelated one.
+      const intent = this.#caretIntent;
+      this.#caretIntent = undefined;
+
+      const input = this.inputElement;
+      if (!this._hasFormat || !input) {
+        super._inputElementValue = value;
+        return;
+      }
+
+      if (input[this._inputElementValueProperty] === value) {
+        // Writing the same string collapses the selection, so the write is
+        // skipped altogether rather than followed by a caret restore.
+        this._setFormattedValue(value);
+        this.#prevViewValue = value;
+        return;
+      }
+
+      let caret;
+      if (typeof intent === 'number') {
+        caret = intent;
+      } else if (intent !== SKIP_CARET) {
+        caret = this._mapCaretToPresentedValue(input, value);
+      }
+
+      super._inputElementValue = value;
+
+      if (caret !== undefined) {
+        this.#restoreCaret(input, caret);
+      }
+
+      this._setFormattedValue(value);
+      this.#prevViewValue = value;
+    }
+
+    /**
      * Returns true when a live reformat should run for this input event.
      * Override to format on commit instead of on input; the write site stays
      * reachable through `_presentValue`.
@@ -92,18 +161,16 @@ const FormatMixinImplementation = (superclass) =>
      *
      * Pass `caret` to restore the caret to that index. Omit it to leave the caret
      * wherever writing the text puts it, which is what a formatter that only runs
-     * on commit wants.
+     * on commit wants. Either way the caret is left alone when no format is
+     * configured.
      *
      * @param {string} text
      * @param {number} [caret]
      * @protected
      */
     _presentValue(text, caret) {
+      this.#caretIntent = caret === undefined ? SKIP_CARET : caret;
       this._inputElementValue = text;
-
-      if (caret !== undefined) {
-        this.#restoreCaret(this.inputElement, caret);
-      }
     }
 
     /**
