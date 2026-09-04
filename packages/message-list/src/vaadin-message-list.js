@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-message.js';
+import '@vaadin/avatar-group/src/vaadin-avatar-group.js';
 import { html, LitElement } from 'lit';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -82,6 +83,7 @@ class MessageList extends SlotStylesMixin(MessageListMixin(ElementMixin(Themable
     return html`
       <div part="list" role="list" id="list">
         <slot></slot>
+        <slot name="typing-indicator"></slot>
       </div>
     `;
   }

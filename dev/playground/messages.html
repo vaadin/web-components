@@ -11,6 +11,7 @@
       import '@vaadin/checkbox-group';
       import '@vaadin/message-input';
       import '@vaadin/message-list';
+      import '@vaadin/radio-group';
 
       const list = document.querySelector('vaadin-message-list');
 
@@ -44,6 +45,17 @@
         },
       ];
 
+      const participants = [
+        {
+          name: 'Nora',
+          colorIndex: 2,
+        },
+        {
+          name: 'Assistant',
+          colorIndex: 4,
+        },
+      ];
+
       document.querySelector('#list-variants').addEventListener('change', (event) => {
         const theme = event.currentTarget.value.join(' ');
         list.setAttribute('theme', theme);
@@ -61,21 +73,30 @@
           },
         ];
       });
+
+      document.querySelector('#typing-indicators').addEventListener('change', (e) => {
+        list._usersTyping = [];
+        if (e.currentTarget.value !== 'off') {
+          list._typingIndicatorType = e.currentTarget.value;
+          list._usersTyping = participants;
+        }
+      });
     </script>
 
     <style>
       .preview {
         display: grid;
         grid-template-rows: minmax(0, 1fr) auto;
-        width: min(48rem, 100%);
+        width: min(40rem, 100%);
         height: 32rem;
         border: 1px solid var(--vaadin-border-color-secondary);
-        border-radius: var(--vaadin-radius-m);
+        border-radius: var(--vaadin-radius-l);
         overflow: hidden;
       }
 
       vaadin-message-input {
         margin: var(--vaadin-padding-m);
+        --vaadin-field-default-width: auto;
       }
     </style>
   </head>
@@ -86,6 +107,12 @@
         <vaadin-checkbox label="Bubble" value="bubble"></vaadin-checkbox>
         <vaadin-checkbox label="One to one" value="one-to-one"></vaadin-checkbox>
       </vaadin-checkbox-group>
+      <vaadin-radio-group id="typing-indicators" label="Typing Indicator" value="off">
+        <vaadin-radio-button label="Off" value="off"></vaadin-radio-button>
+        <vaadin-radio-button label="Default" value="on"></vaadin-radio-button>
+        <vaadin-radio-button label="Ellipsis" value="ellipsis"></vaadin-radio-button>
+        <vaadin-radio-button label="Minimal" value="minimal"></vaadin-radio-button>
+      </vaadin-radio-group>
     </section>
 
     <section class="section">

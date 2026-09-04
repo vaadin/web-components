@@ -5,6 +5,14 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
+import { registerCSSProperty } from '@vaadin/component-base/src/css-utils.js';
+
+registerCSSProperty({
+  name: '--_vaadin-message-typing-mask-pos',
+  syntax: '<length-percentage>',
+  inherits: false,
+  initialValue: 0,
+});
 
 export const messageStyles = css`
   :host {
@@ -68,6 +76,10 @@ export const messageStyles = css`
     flex: none;
     visibility: var(--_vaadin-message-avatar-visibility, revert-layer);
     display: var(--_vaadin-message-avatar-display, revert-layer);
+  }
+
+  ::slotted(vaadin-avatar-group) {
+    width: fit-content;
   }
 
   ::slotted(vaadin-markdown) {
@@ -138,5 +150,84 @@ export const messageStyles = css`
     grid-column: 2;
     padding: var(--vaadin-message-attachment-padding, var(--vaadin-padding-s));
     padding-inline-start: 0;
+  }
+
+  :host([typing-indicator]:not([typing-indicator='text'])) [part='message'],
+  :host([typing-indicator='minimal']) [part='content'] {
+    mask-image: linear-gradient(
+      90deg,
+      hsla(0, 0%, 0%, 0.4) calc(var(--_vaadin-message-typing-mask-pos) - max(60px, 60%)),
+      hsl(0, 0%, 0%) calc(var(--_vaadin-message-typing-mask-pos) - max(40px, 40%)),
+      hsl(0, 0%, 0%) calc(var(--_vaadin-message-typing-mask-pos) - max(20px, 20%)),
+      hsla(0, 0%, 0%, 0.4) var(--_vaadin-message-typing-mask-pos)
+    );
+    animation: --_vaadin-message-typing-slide 1.5s ease-in-out infinite;
+    width: fit-content !important;
+    color: var(--vaadin-text-color) !important;
+
+    [part='time'] {
+      display: none;
+    }
+
+    [part='header'] {
+      display: contents;
+    }
+  }
+
+  @keyframes --_vaadin-message-typing-slide {
+    100% {
+      --_vaadin-message-typing-mask-pos: calc(100% + max(60px, 60%));
+    }
+  }
+
+  :host([typing-indicator='ellipsis']) {
+    [part='message'] {
+      line-height: inherit !important;
+      color: var(--vaadin-text-color-secondary) !important;
+    }
+
+    [part='message']::before {
+      content: '';
+      display: block;
+      width: var(--vaadin-icon-size, 1lh);
+      height: var(--vaadin-icon-size, 1lh);
+      mask: var(--_vaadin-icon-ellipsis);
+      background: currentColor;
+    }
+
+    [part='header'],
+    [part='message'] slot {
+      display: none;
+    }
+
+    [part='content'] {
+      align-self: center;
+    }
+  }
+
+  :host([typing-indicator='minimal']) {
+    width: auto !important;
+    max-width: none !important;
+    align-items: center !important;
+    --vaadin-avatar-size: 1lh;
+
+    [part='content'] {
+      display: block;
+      background: transparent !important;
+      border: 0 !important;
+      padding: 0 !important;
+    }
+
+    [part='header'],
+    [part='name'],
+    [part='message'] {
+      display: contents;
+      color: inherit;
+      font-size: inherit;
+    }
+
+    [part='message'] {
+      text-transform: lowercase;
+    }
   }
 `;
