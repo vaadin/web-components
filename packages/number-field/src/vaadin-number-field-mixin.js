@@ -144,6 +144,19 @@ export const NumberFieldMixin = (superClass) =>
      * @private
      */
     get __validity() {
+      // Like a native input, a readonly or disabled field is barred from
+      // constraint validation and always reports valid.
+      if (this.readonly || this.disabled) {
+        return {
+          badInput: false,
+          valueMissing: false,
+          rangeUnderflow: false,
+          rangeOverflow: false,
+          stepMismatch: false,
+          valid: true,
+        };
+      }
+
       const badInput = this.__hasUnparsableValue;
       // Native reports both flags for unparsable text in a required field,
       // since the input value getter returns an empty string for it — so
