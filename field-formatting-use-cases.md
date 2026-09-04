@@ -557,6 +557,13 @@ compose with those, not duplicate or fight them.
    active, translate them, or document that they apply to the formatted string?
 7. **Live vs commit.** Which use cases are worth client-side declarative support, and which are fine as a
    server-side commit hook (`setFallbackParser` shape, §3.6 #4)? The second is cheap and needs no WC work.
+8. **Undo across live formatting.** Every reformat that changes the presented text is a script write to
+   `input.value`, and browsers clear the native undo stack on such writes — so Ctrl/Cmd+Z is inert in a
+   live-formatted field after any block boundary (or any keystroke under a `case` transform). The PoC
+   accepts this, as IMask and cleave do. Preserving undo would mean routing every presentation write through
+   `document.execCommand('insertText')` (deprecated, no standard replacement) and doubling undo granularity
+   at block boundaries. Decide in the RFC whether the cost is worth paying; the PoC measured that
+   `execCommand` works in Chromium, Firefox and WebKit, so the option is real.
 
 ---
 
