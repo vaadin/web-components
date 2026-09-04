@@ -24,13 +24,3 @@ export function parseNumber(text) {
   const value = text ? String(text).trim() : '';
   return NUMBER_REGEX.test(value) ? value : null;
 }
-
-/**
- * Formats the given canonical decimal string for showing in the input element.
- *
- * @param {string} value
- * @return {string}
- */
-export function formatNumber(value) {
-  return value ? String(value) : '';
-}

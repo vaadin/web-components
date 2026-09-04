@@ -94,6 +94,17 @@ describe('value commit', () => {
     });
   });
 
+  it('should trim whitespace from input value on commit', async () => {
+    numberField.allowedCharPattern = '[\\d ]';
+    await nextUpdate(numberField);
+    await sendKeys({ type: ' 5 ' });
+    await nextUpdate(numberField);
+    numberField.blur();
+    await nextUpdate(numberField);
+    expectValueCommit('5');
+    expect(numberField.inputElement.value).to.equal('5');
+  });
+
   describe('parsable input committed', () => {
     beforeEach(async () => {
       await sendKeys({ type: '1' });

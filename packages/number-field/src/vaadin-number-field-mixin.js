@@ -9,7 +9,7 @@ import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { formatNumber, parseNumber } from './number-utils.js';
+import { parseNumber } from './number-utils.js';
 
 /**
  * A mixin providing common number field functionality.
@@ -462,11 +462,7 @@ export const NumberFieldMixin = (superClass) =>
      */
     _onInput(event) {
       const raw = event.composedPath()[0].value;
-      // Parse trusted input only: synthetic input event text (step buttons,
-      // clear button) is already canonical. Assigning raw text and letting
-      // the value observer clear it would leak unparsable text into `value`
-      // for a moment, firing value-changed events for the round-trip.
-      const parsed = event.isTrusted ? parseNumber(raw) : raw;
+      const parsed = this._modelValueFromInput(raw, event);
       this.__keepCommittedValue = true;
       this.__userInput = event.isTrusted;
       this.value = parsed == null ? '' : parsed;
@@ -478,6 +474,43 @@ export const NumberFieldMixin = (superClass) =>
       if (this.invalid) {
         this._requestValidation();
       }
+    }
+
+    /**
+     * Converts the text shown in the input element into the canonical
+     * `value`, returning `null` when the text is not a parsable number.
+     *
+     * Only trusted input text is parsed. Synthetic input event text
+     * (step buttons, clear button) is already canonical. Parsing before
+     * assignment also keeps unparsable text out of `value`: assigning raw
+     * text and letting the value observer clear it would leak the text
+     * into `value` for a moment, firing value-changed events for the
+     * round-trip.
+     *
+     * This hook has the same shape as the future `FormatMixin` seam in
+     * `field-base`, see PROTOTYPE-NOTES §4.
+     *
+     * @param {string} viewValue
+     * @param {InputEvent} event
+     * @return {string | null}
+     * @protected
+     */
+    _modelValueFromInput(viewValue, event) {
+      return event.isTrusted ? parseNumber(viewValue) : viewValue;
+    }
+
+    /**
+     * Converts the canonical `value` into the text shown in the input element.
+     *
+     * This hook has the same shape as the future `FormatMixin` seam in
+     * `field-base`, see PROTOTYPE-NOTES §4.
+     *
+     * @param {string} value
+     * @return {string}
+     * @protected
+     */
+    _inputValueFromModel(value) {
+      return value;
     }
 
     /**
@@ -536,33 +569,25 @@ export const NumberFieldMixin = (superClass) =>
     }
 
     /**
-     * Override the method from `InputMixin`
-     * to format the value before writing it to the input element.
+     * Override the method from `InputMixin` to convert the value into
+     * presentation text before writing it to the input element, and to
+     * skip the write when the input element already shows that text.
      *
      * @param {string} value
      * @override
      * @protected
      */
     _forwardInputValue(value) {
-      super._forwardInputValue(value ? formatNumber(value) : '');
-    }
+      const text = this._inputValueFromModel(value || '');
 
-    /**
-     * Override the method from `InputFieldMixin`
-     * to format the initial value written to the input element
-     * by the slot initializers, which forward the canonical value
-     * verbatim.
-     *
-     * @param {HTMLElement | undefined} input
-     * @override
-     * @protected
-     */
-    _inputElementChanged(input) {
-      super._inputElementChanged(input);
-
-      if (input && this.value) {
-        this._inputElementValue = formatNumber(this.value);
+      // The step button path otherwise writes the same string three times:
+      // the direct write in `_incrementValue`, the one from
+      // `InputMixin._valueChanged`, and the reformat on commit.
+      if (this._inputElementValue === text) {
+        return;
       }
+
+      super._forwardInputValue(text);
     }
 
     /**
@@ -596,9 +621,11 @@ export const NumberFieldMixin = (superClass) =>
       this.__committedValue = this.value;
       this.__committedUnparsableValue = unparsableValue;
 
-      // Reformat the presentation unconditionally: a commit that does not
-      // change `value` can still need it, e.g. typed "1.50" committing over
-      // the already-committed "1.5". Unparsable text is left as typed.
+      // Rewrite the presentation from the value on every commit: typed input
+      // never reaches `_forwardInputValue` through the value observer (the
+      // `__userInput` guard skips it), so e.g. typed " 5 " would otherwise
+      // stay on screen after committing as "5". Unparsable text is left as
+      // typed.
       if (unparsableValue === null) {
         this._forwardInputValue(this.value);
       }
