@@ -5,7 +5,7 @@
  */
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
-import { getBodyRowCells, iterateChildren, updateColumnOrders } from './vaadin-grid-helpers.js';
+import { iterateChildren, updateColumnOrders } from './vaadin-grid-helpers.js';
 
 export const ColumnReorderingMixin = (superClass) =>
   class ColumnReorderingMixin extends superClass {
@@ -442,23 +442,10 @@ export const ColumnReorderingMixin = (superClass) =>
      * @protected
      */
     _swapColumnOrders(column1, column2) {
-      // Swap order values and determine which column should come first
       [column1._order, column2._order] = [column2._order, column1._order];
-      const [firstColumn, secondColumn] = column1._order < column2._order ? [column1, column2] : [column2, column1];
 
       [...this.$.items.children, this.$.sizer].forEach((row) => {
-        const cells = getBodyRowCells(row);
-        const firstColumnCells = cells.filter((cell) => firstColumn.contains(cell._column));
-        const secondColumnFirstCell = cells.find((cell) => secondColumn.contains(cell._column));
-        firstColumnCells.forEach((cell) => secondColumnFirstCell.before(cell));
-        // row.__cells are out of sync with the actual cell order after the move, and must be updated
-        if (row.__cells) {
-          row.__cells = row.__cells.toSorted((a, b) => a._column._order - b._column._order);
-        }
-      });
-
-      [...this.$.items.children, this.$.sizer].forEach((row) => {
-        this._updateFirstAndLastColumnForRow(row);
+        this.__initRow(row, true);
       });
 
       this.__scheduleRenderHeaderFooter();
