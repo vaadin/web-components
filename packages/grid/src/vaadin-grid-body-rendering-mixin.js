@@ -13,21 +13,28 @@ export const BodyRenderingMixin = (superClass) =>
     /** @private */
     __createBodyRow() {
       const fragment = document.createDocumentFragment();
-      fragment.appendChild(document.createComment(' vaadin-grid-row-start '));
-      fragment.appendChild(document.createComment(' vaadin-grid-row-end '));
-      this.__renderBodyRow(fragment, fragment.lastChild);
-      return fragment;
+      const endMarker = fragment.appendChild(document.createComment(''));
+
+      const litPart = render(this.#bodyRowTemplate(), fragment, {
+        host: this,
+        renderBefore: endMarker,
+      });
+
+      const row = fragment.firstElementChild;
+      row.__startMarker = litPart.startNode;
+      row.__endMarker = endMarker;
+      return row;
     }
 
     /** @private */
-    __renderBodyRow(container, renderBefore, index) {
-      return render(this.#renderBodyRow(index), container, {
-        renderBefore,
+    __renderBodyRow(row, index) {
+      render(this.#bodyRowTemplate(index), row.parentNode, {
         host: this,
+        renderBefore: row.__endMarker,
       });
     }
 
-    #renderBodyRow = (index) => {
+    #bodyRowTemplate = (index) => {
       return html`<tr role="row" tabindex="-1" part="row body-row" class="row body-row" .index="${index}"></tr>`;
     };
   };
