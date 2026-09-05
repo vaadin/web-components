@@ -27,7 +27,7 @@ export const group = css`
     border-block: var(--vaadin-input-field-border-width, 1px) solid transparent;
   }
 
-  :host([theme~='label-aside']) [part='group-field'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) [part='group-field'] {
     padding-block-start: var(--vaadin-padding-block-container);
     border-block-start: var(--vaadin-input-field-border-width, 1px) solid transparent;
   }
