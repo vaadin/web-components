@@ -398,10 +398,10 @@ export function unmask(state, compiled) {
  * @param {number[]} range
  * @param {string} data
  * @param {NormalizedMask | function(MaskState): NormalizedMask} compiled
- * @param {MaskEditOptions} options
+ * @param {MaskDeleteOptions} [options]
  * @return {{ state: MaskState, leading: string | null }}
  */
-function applyEdit(prevState, range, data, compiled, options) {
+function applyEdit(prevState, range, data, compiled, options = {}) {
   const { literals = 'hop', forward = false } = options;
   const prevValue = prevState.value;
   let [from, to] = range;
@@ -443,12 +443,11 @@ function applyEdit(prevState, range, data, compiled, options) {
  * @param {MaskState} prevState
  * @param {string} data
  * @param {NormalizedMask | function(MaskState): NormalizedMask} compiled
- * @param {MaskEditOptions} [options]
  * @return {MaskState | null}
  */
-export function insertText(prevState, data, compiled, options = {}) {
+export function insertText(prevState, data, compiled) {
   const prev = toState(prevState);
-  const { state, leading } = applyEdit(prev, prev.selection, data, compiled, options);
+  const { state, leading } = applyEdit(prev, prev.selection, data, compiled);
 
   const isUnchanged =
     state.value === prev.value && state.selection[0] === prev.selection[0] && state.selection[1] === prev.selection[1];
@@ -473,7 +472,7 @@ export function insertText(prevState, data, compiled, options = {}) {
  * @param {MaskState} prevState
  * @param {number[]} range
  * @param {NormalizedMask | function(MaskState): NormalizedMask} compiled
- * @param {MaskEditOptions} [options]
+ * @param {MaskDeleteOptions} [options]
  * @return {MaskState}
  */
 export function deleteRange(prevState, range, compiled, options = {}) {

@@ -8,6 +8,39 @@ import { FormatMixin } from '../src/format-mixin.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
 import { InputController } from '../src/input-controller.js';
 
+const INPUT_CONTROL_TEMPLATE = `
+  <div part="label">
+    <slot name="label"></slot>
+  </div>
+  <slot name="input"></slot>
+  <button id="clearButton">Clear</button>
+  <div part="error-message">
+    <slot name="error-message"></slot>
+  </div>
+  <slot name="helper"></slot>
+`;
+
+// Wires up the clear button and the input element that `InputControlMixin` expects.
+const InputControlHostMixin = (superclass) =>
+  class extends superclass {
+    get clearElement() {
+      return this.$.clearButton;
+    }
+
+    ready() {
+      super.ready();
+
+      this.addController(
+        new InputController(this, (input) => {
+          this._setInputElement(input);
+          this._setFocusElement(input);
+          this.stateTarget = input;
+          this.ariaTarget = input;
+        }),
+      );
+    }
+  };
+
 describe('FormatMixin', () => {
   const tag = defineLit(
     'format-mixin',
@@ -117,42 +150,15 @@ describe('FormatMixin', () => {
 describe('FormatMixin with a trivial formatter', () => {
   const tag = defineLit(
     'format-mixin-uppercase',
-    `
-      <div part="label">
-        <slot name="label"></slot>
-      </div>
-      <slot name="input"></slot>
-      <button id="clearButton">Clear</button>
-      <div part="error-message">
-        <slot name="error-message"></slot>
-      </div>
-      <slot name="helper"></slot>
-    `,
+    INPUT_CONTROL_TEMPLATE,
     (Base) =>
-      class extends FormatMixin(InputControlMixin(PolylitMixin(Base))) {
+      class extends InputControlHostMixin(FormatMixin(InputControlMixin(PolylitMixin(Base)))) {
         // Backs `_hasFormat` with a field so that a test can turn the format
         // off, the way a component with an unset `format` property behaves.
         formatEnabled = true;
 
-        get clearElement() {
-          return this.$.clearButton;
-        }
-
         get _hasFormat() {
           return this.formatEnabled;
-        }
-
-        ready() {
-          super.ready();
-
-          this.addController(
-            new InputController(this, (input) => {
-              this._setInputElement(input);
-              this._setFocusElement(input);
-              this.stateTarget = input;
-              this.ariaTarget = input;
-            }),
-          );
         }
 
         _formatOnInput(_event) {
@@ -658,36 +664,9 @@ describe('FormatMixin with a format from a layer above chunking', () => {
 
   const tag = defineLit(
     'format-mixin-layered',
-    `
-      <div part="label">
-        <slot name="label"></slot>
-      </div>
-      <slot name="input"></slot>
-      <button id="clearButton">Clear</button>
-      <div part="error-message">
-        <slot name="error-message"></slot>
-      </div>
-      <slot name="helper"></slot>
-    `,
+    INPUT_CONTROL_TEMPLATE,
     (Base) =>
-      class extends FormatLayerMixin(ChunkFormatMixin(InputControlMixin(PolylitMixin(Base)))) {
-        get clearElement() {
-          return this.$.clearButton;
-        }
-
-        ready() {
-          super.ready();
-
-          this.addController(
-            new InputController(this, (input) => {
-              this._setInputElement(input);
-              this._setFocusElement(input);
-              this.stateTarget = input;
-              this.ariaTarget = input;
-            }),
-          );
-        }
-      },
+      class extends InputControlHostMixin(FormatLayerMixin(ChunkFormatMixin(InputControlMixin(PolylitMixin(Base))))) {},
   );
 
   let element, input;

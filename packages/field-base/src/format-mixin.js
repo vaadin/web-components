@@ -51,7 +51,7 @@ const FormatMixinImplementation = (superclass) =>
     #changeBaseline = '';
 
     /** @private */
-    #inputTurn = false;
+    #handlingInput = false;
 
     /** @private */
     #boundOnCompositionStart;
@@ -314,7 +314,7 @@ const FormatMixinImplementation = (superclass) =>
     _forwardInputValue(value) {
       super._forwardInputValue(value);
 
-      if (!this.#inputTurn) {
+      if (!this.#handlingInput) {
         this.#changeBaseline = this._inputElementValue ?? '';
       }
     }
@@ -385,11 +385,11 @@ const FormatMixinImplementation = (superclass) =>
       // deletion that skips the reformat.
       this.#recordState(event.composedPath()[0]);
 
-      this.#inputTurn = true;
+      this.#handlingInput = true;
       try {
         super._onInput(event);
       } finally {
-        this.#inputTurn = false;
+        this.#handlingInput = false;
       }
 
       this.#beforeInputEvent = undefined;
@@ -495,15 +495,14 @@ const FormatMixinImplementation = (superclass) =>
      * @private
      */
     #recordState(input) {
-      const value = (input && input[this._inputElementValueProperty]) ?? '';
+      const value = input?.[this._inputElementValueProperty] ?? '';
 
       let start, end;
-      if (input) {
-        try {
-          ({ selectionStart: start, selectionEnd: end } = input);
-        } catch {
-          // Some input types have no selection API. Fall back to the end below.
-        }
+      try {
+        start = input?.selectionStart;
+        end = input?.selectionEnd;
+      } catch {
+        // Some input types have no selection API. Fall back to the end below.
       }
 
       const hasSelection = typeof start === 'number' && typeof end === 'number';

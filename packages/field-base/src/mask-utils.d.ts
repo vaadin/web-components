@@ -38,9 +38,9 @@ export interface MaskStateInput {
 export type MaskExpression = ((state: MaskState) => NormalizedMask) | NormalizedMask;
 
 /**
- * Options for an edit applied through the mask.
+ * Options for a deletion applied through the mask.
  */
-export interface MaskEditOptions {
+export interface MaskDeleteOptions {
   /**
    * What deleting a range that covers fixed characters only does: move the caret over
    * them (`'hop'`, the default), or delete one character on the far side instead
@@ -153,12 +153,7 @@ export function unmask(state: MaskState | MaskStateInput, compiled: MaskExpressi
  * Returns `null` when the mask rejected all of the given text, so that the caller can
  * signal the rejection instead of presenting an unchanged value.
  */
-export function insertText(
-  prevState: MaskState,
-  data: string,
-  compiled: MaskExpression,
-  options?: MaskEditOptions,
-): MaskState | null;
+export function insertText(prevState: MaskState, data: string, compiled: MaskExpression): MaskState | null;
 
 /**
  * Returns the state that results from deleting the given range of the given state, with
@@ -174,7 +169,7 @@ export function deleteRange(
   prevState: MaskState,
   range: number[],
   compiled: MaskExpression,
-  options?: MaskEditOptions,
+  options?: MaskDeleteOptions,
 ): MaskState;
 
 /**
