@@ -276,6 +276,29 @@ describe('calibrate', () => {
     expect(calibrate({ value: 'fi21' }, compileMask('aa00'), { raw: true }).value).to.equal('fi21');
   });
 
+  it('should store a digit of another script as the ASCII digit', () => {
+    const mask = compileMask('0000');
+    // Arabic-Indic, Extended Arabic-Indic, Devanagari and fullwidth digits.
+    expect(calibrate({ value: '٠١٢٣' }, mask).value).to.equal('0123');
+    expect(calibrate({ value: '۴۵۶۷' }, mask).value).to.equal('4567');
+    expect(calibrate({ value: '८९०१' }, mask).value).to.equal('8901');
+    expect(calibrate({ value: '２３４５' }, mask).value).to.equal('2345');
+  });
+
+  it('should store a digit of another script as the ASCII digit around a fixed character', () => {
+    expect(calibrate({ value: '٣٤٥٦' }, TIME).value).to.equal('34:56');
+  });
+
+  it('should keep a digit of another script outside a digit slot', () => {
+    expect(calibrate({ value: '٣٤' }, compileMask('**')).value).to.equal('٣٤');
+  });
+
+  it('should drop a digit that no code unit of it fits a digit slot', () => {
+    // A digit outside the Basic Multilingual Plane, such as MATHEMATICAL BOLD DIGIT
+    // ZERO, is a surrogate pair, and neither half of it is a digit on its own.
+    expect(calibrate({ value: '\u{1D7CE}' }, compileMask('00')).value).to.equal('');
+  });
+
   it('should map both selection indexes to the masked value', () => {
     const state = calibrate({ value: '900201', selection: [3, 5] }, PHONE);
     expect(state.value).to.equal('+7 (900) 201');
@@ -410,6 +433,21 @@ describe('insertText', () => {
   it('should keep the case of the inserted text when the mask has no text case', () => {
     const state = insertText({ value: '', selection: [0, 0] }, 'ab', compileMask('aaa'));
     expect(state.value).to.equal('ab');
+  });
+
+  it('should insert a digit of another script as the ASCII digit', () => {
+    const state = insertText({ value: '', selection: [0, 0] }, '٣', TIME);
+    expect(state.value).to.equal('3');
+    expect(state.selection).to.eql([1, 1]);
+  });
+
+  it('should return null when a letter slot rejects a digit of another script', () => {
+    expect(insertText({ value: '', selection: [0, 0] }, '٣', compileMask('aa-00'))).to.be.null;
+  });
+
+  it('should insert a digit of another script unchanged in a star slot', () => {
+    const state = insertText({ value: '', selection: [0, 0] }, '٣', compileMask('**'));
+    expect(state.value).to.equal('٣');
   });
 
   it('should insert a pasted fragment that the mask partly rejects', () => {

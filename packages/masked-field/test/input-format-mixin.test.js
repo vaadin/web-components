@@ -962,6 +962,62 @@ describe('InputFormatMixin', () => {
       await nextUpdate(element);
       expect(element._shouldAcceptText('(555) 123-4567')).to.be.true;
     });
+
+    it('should lay a typed digit of another script out as the ASCII digit', async () => {
+      await sendKeys({ type: '٣' });
+      expect(input.value).to.equal('3');
+      expect(element.value).to.equal('3');
+      await sendKeys({ type: '۵' });
+      expect(input.value).to.equal('35');
+    });
+
+    it('should lay typed digits of another script out as the ASCII digits without a fixed character', async () => {
+      // Without a fixed character the typed text already fits the mask, so this only
+      // holds because the early return of the layout tests for the ASCII digits too.
+      element.formatMask = '0000';
+      await nextUpdate(element);
+      await sendKeys({ type: '٣٤٥٦' });
+      expect(input.value).to.equal('3456');
+      expect(element.value).to.equal('3456');
+    });
+
+    it('should mark the input as prevented for a digit of another script in a letter slot', async () => {
+      element.formatMask = 'aa-00';
+      await nextUpdate(element);
+      await sendKeys({ type: '٣' });
+      expect(input.value).to.equal('');
+      expect(element.hasAttribute('input-prevented')).to.be.true;
+    });
+  });
+
+  describe('programmatic value with digits of another script', () => {
+    let warn;
+
+    beforeEach(async () => {
+      warn = sinon.stub(console, 'warn');
+      element.formatMask = '0000';
+      await nextUpdate(element);
+      element.value = '٣٤٥٦';
+      await nextUpdate(element);
+    });
+
+    afterEach(() => {
+      warn.restore();
+    });
+
+    it('should present the value with the ASCII digits', () => {
+      expect(input.value).to.equal('3456');
+      expect(element.formattedValue).to.equal('3456');
+    });
+
+    it('should keep the value as it was assigned', () => {
+      expect(element.value).to.equal('٣٤٥٦');
+    });
+
+    it('should warn once that the presented value does not fit', () => {
+      expect(warn).to.be.calledOnce;
+      expect(warn.firstCall.args[0]).to.match(/does not fit the configured format/u);
+    });
   });
 
   describe('formatMask with optional sections', () => {

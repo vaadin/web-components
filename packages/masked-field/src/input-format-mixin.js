@@ -107,7 +107,7 @@ const InputFormatMixinImplementation = (superclass) =>
          * for a US phone number. Each character of the pattern is either a slot
          * that the user fills or a character that the field inserts:
          *
-         * - `0` any digit
+         * - `0` any digit, stored as the ASCII digit
          * - `a` any letter
          * - `*` any character
          * - `[…]` an optional section at the end of the mask, shown once the user

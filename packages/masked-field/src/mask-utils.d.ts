@@ -118,7 +118,7 @@ export function applyTextCase(text: string, textCase: string | null | undefined)
  *
  * The grammar is a subset of the IMask one:
  *
- * - `0` any digit
+ * - `0` any digit, stored as the ASCII digit
  * - `a` any letter
  * - `*` any character
  * - `[…]` an optional section at the end of the mask
@@ -176,7 +176,9 @@ export function validateWithMask(value: string, compiled: MaskExpression): boole
  * mask are truncated.
  *
  * When the mask has a text case, every character of the value is stored with that case
- * applied.
+ * applied. A character that lands in a digit slot is stored as the ASCII digit with the
+ * same numeric value, so that a value typed with another set of digits reads the same as
+ * one typed with the ASCII ones.
  *
  * With `raw: true` the value is taken as an unmasked one, so the fixed characters are
  * always inserted and never consume a character of the value. With `raw: false` a

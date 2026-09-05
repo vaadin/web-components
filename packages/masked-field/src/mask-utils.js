@@ -16,6 +16,13 @@ const USER_SLOTS = new Map([
 ]);
 
 /**
+ * The pattern of the digit slot, held separately so that the item lists of a compiled
+ * mask can be tested for it by identity: `compileMask` pushes the very object that
+ * `USER_SLOTS` holds, so no other slot can be mistaken for it.
+ */
+const DIGIT_SLOT = USER_SLOTS.get('0');
+
+/**
  * The largest number of optional sections that a mask may hold. The expansions of a
  * mask are a chain of one per section plus one, so this is a readability cap rather
  * than a limit the engine needs.
@@ -91,6 +98,54 @@ export function applyTextCase(text, textCase) {
   }
 
   return text;
+}
+
+/**
+ * Returns the ASCII digit with the same numeric value as the given one.
+ *
+ * The character is one that the digit slot accepted, so it is a single code unit that
+ * belongs to one of the sets of digits in the Basic Multilingual Plane. Each of those
+ * sets is a run of ten consecutive code points, so the zero of the run is at most nine
+ * steps back from the character and the offset from it is the digit.
+ *
+ * @param {string} char a character accepted by the digit slot
+ * @return {string}
+ */
+function normalizeDigit(char) {
+  if (char >= '0' && char <= '9') {
+    return char;
+  }
+
+  const code = char.charCodeAt(0);
+  let zero = code;
+
+  while (DIGIT_SLOT.test(String.fromCharCode(zero - 1))) {
+    zero -= 1;
+  }
+
+  return String(code - zero);
+}
+
+/**
+ * Returns the given value with every character sitting in a digit slot of the given
+ * mask items replaced by the ASCII digit with the same numeric value. The characters
+ * of the other slots are returned as they are.
+ *
+ * The value is taken as one that fits the items, that is one character per item, so
+ * that each character can be paired with the item it sits in.
+ *
+ * @param {string} value
+ * @param {Array<RegExp | string>} items
+ * @return {string}
+ */
+function normalizeDigits(value, items) {
+  let result = '';
+
+  for (let i = 0; i < value.length; i++) {
+    result += items[i] === DIGIT_SLOT ? normalizeDigit(value[i]) : value[i];
+  }
+
+  return result;
 }
 
 /**
@@ -231,8 +286,9 @@ function fixedRunAt(items, index, char, initialState, raw) {
  *
  * The text case of the mask is applied to each character as it is placed, so the value
  * stores the transformed character while matching a slot and consuming a fixed character
- * both work off the character as it was typed. The fixed characters of the mask are
- * never transformed.
+ * both work off the character as it was typed. A character placed in a digit slot is
+ * stored as the ASCII digit with the same numeric value instead. The fixed characters
+ * of the mask are never transformed.
  *
  * @param {MaskState} state
  * @param {NormalizedMask} mask
@@ -265,7 +321,7 @@ function rebuildValue(state, mask, initialState, raw) {
       // The character being placed is the fixed character due here, keep the latter only.
       result = withRun + item;
     } else if (item !== undefined && item.test(char)) {
-      result = withRun + applyTextCase(char, textCase);
+      result = withRun + (item === DIGIT_SLOT ? normalizeDigit(char) : applyTextCase(char, textCase));
     } else if (run.startsWith(char)) {
       // The character was already covered by the run inserted for it.
       result = withRun;
@@ -319,7 +375,7 @@ function coversFixedOnly(value, items, from, to) {
  *
  * The grammar is a subset of the IMask one:
  *
- * - `0` any digit
+ * - `0` any digit, stored as the ASCII digit
  * - `a` any letter
  * - `*` any character
  * - `[…]` an optional section at the end of the mask
@@ -524,7 +580,9 @@ export function validateWithMask(value, compiled) {
  * that the mask inserts anyway does not double it.
  *
  * When the mask has a text case, every character of the value is stored with that case
- * applied.
+ * applied. A character that lands in a digit slot is stored as the ASCII digit with the
+ * same numeric value, so that a value typed with another set of digits reads the same as
+ * one typed with the ASCII ones.
  *
  * @param {MaskState | { value: string, selection?: number[] }} state
  * @param {NormalizedMask | function(MaskState): NormalizedMask} compiled
@@ -537,7 +595,11 @@ export function calibrate(state, compiled, options = {}) {
   const mask = resolveMask(compiled, candidate);
   const { items, textCase } = mask;
 
-  if (isValidValue(candidate.value, items) && candidate.value === applyTextCase(candidate.value, textCase)) {
+  if (
+    isValidValue(candidate.value, items) &&
+    candidate.value === applyTextCase(candidate.value, textCase) &&
+    candidate.value === normalizeDigits(candidate.value, items)
+  ) {
     return candidate;
   }
 

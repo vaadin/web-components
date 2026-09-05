@@ -81,7 +81,7 @@ export declare class InputFormatMixinClass {
    * for a US phone number. Each character of the pattern is either a slot
    * that the user fills or a character that the field inserts:
    *
-   * - `0` any digit
+   * - `0` any digit, stored as the ASCII digit
    * - `a` any letter
    * - `*` any character
    * - `\x` the character `x` itself, e.g. `\0` for a literal zero
