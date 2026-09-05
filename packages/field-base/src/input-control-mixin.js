@@ -188,6 +188,8 @@ export const InputControlMixin = (superclass) =>
 
     /**
      * Returns true when the given text may be inserted into the field.
+     * Backs every `allowedCharPattern` check: the typed character on `keydown`,
+     * and the inserted text on `paste`, `drop` and `beforeinput`.
      * Override to accept text that the raw `allowedCharPattern` test would reject,
      * for example a formatted string that is valid once unformatted.
      * @param {string} text
@@ -205,7 +207,7 @@ export const InputControlMixin = (superclass) =>
         event.ctrlKey ||
         !event.key || // Allow typing anything if event.key is not supported
         event.key.length !== 1 || // Allow "Backspace", "ArrowLeft" etc.
-        this.__allowedCharRegExp.test(event.key)
+        this._shouldAcceptText(event.key)
       );
     }
 
@@ -245,7 +247,6 @@ export const InputControlMixin = (superclass) =>
     _allowedCharPatternChanged(charPattern) {
       if (charPattern) {
         try {
-          this.__allowedCharRegExp = new RegExp(`^${charPattern}$`, 'u');
           this.__allowedTextRegExp = new RegExp(`^${charPattern}*$`, 'u');
         } catch (e) {
           console.error(e);

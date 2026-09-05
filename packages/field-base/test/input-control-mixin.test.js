@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { defineLit, fixtureSync, keyDownOn, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync, keyboardEventFor, keyDownOn, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
@@ -406,6 +406,12 @@ describe('InputControlMixin', () => {
       return event;
     };
 
+    const fireKeyDownEvent = (key) => {
+      const event = keyboardEventFor('keydown', key.charCodeAt(0), [], key);
+      input.dispatchEvent(event);
+      return event;
+    };
+
     describe('allowed char pattern set', () => {
       beforeEach(async () => {
         element = fixtureSync(`<${tag} allowed-char-pattern="[0-9]"></${tag}>`);
@@ -431,6 +437,20 @@ describe('InputControlMixin', () => {
           expect(event.defaultPrevented).to.be.true;
           expect(element.hasAttribute('input-prevented')).to.be.true;
         });
+      });
+
+      it('should not prevent keydown with a key rejected by the pattern when accepted by _shouldAcceptText', () => {
+        sinon.stub(element, '_shouldAcceptText').returns(true);
+        const event = fireKeyDownEvent('-');
+        expect(event.defaultPrevented).to.be.false;
+        expect(element.hasAttribute('input-prevented')).to.be.false;
+      });
+
+      it('should prevent keydown with a key allowed by the pattern when rejected by _shouldAcceptText', () => {
+        sinon.stub(element, '_shouldAcceptText').returns(false);
+        const event = fireKeyDownEvent('5');
+        expect(event.defaultPrevented).to.be.true;
+        expect(element.hasAttribute('input-prevented')).to.be.true;
       });
 
       it('should not prevent paste event that has no clipboard data', () => {

@@ -102,7 +102,9 @@ describe('formatMask', () => {
     it('should consume a typed character that the mask inserts itself', async () => {
       // The caret sits after the last digit of `+7 (900) 201`, right before the
       // `-` that the mask is about to insert, so typing it adds the fixed
-      // character and leaves the value alone.
+      // character and leaves the value alone. The `-` is not a digit, so this
+      // also covers that `allowedCharPattern` lets a mask character through.
+      field.allowedCharPattern = '[0-9]';
       field.value = '900201';
       await nextUpdate(field);
       input.setSelectionRange(12, 12);

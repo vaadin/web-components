@@ -79,6 +79,8 @@ export declare class InputControlMixinClass {
 
   /**
    * Returns true when the given text may be inserted into the field.
+   * Backs every `allowedCharPattern` check: the typed character on `keydown`,
+   * and the inserted text on `paste`, `drop` and `beforeinput`.
    * Override to accept text that the raw `allowedCharPattern` test would reject,
    * for example a formatted string that is valid once unformatted.
    */
