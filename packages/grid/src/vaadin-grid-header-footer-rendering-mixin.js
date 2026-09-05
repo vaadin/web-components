@@ -95,7 +95,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
 
     #renderHeader(columnTree) {
       const rows = this.#getRows(columnTree, 'header');
-      render(rows.map(this.#renderHeaderRow), this.$.header, { host: this });
+      render(rows.map(this.#headerRowTemplate), this.$.header, { host: this });
 
       this.$.table.toggleAttribute('has-header', !!this.$.header.querySelector('tr:not([hidden])'));
 
@@ -110,7 +110,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
     }
 
-    #renderHeaderRow = ({ level, cells, isLastRow, isFirstRow, isRowVisible }) => {
+    #headerRowTemplate = ({ level, cells, isLastRow, isFirstRow, isRowVisible }) => {
       const rowParts = {
         'first-header-row': isFirstRow,
         'last-header-row': isLastRow,
@@ -178,7 +178,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
 
     #renderFooter(columnTree) {
       const rows = this.#getRows(columnTree, 'footer');
-      render(rows.map(this.#renderFooterRow), this.$.footer, { host: this });
+      render(rows.map(this.#footerRowTemplate), this.$.footer, { host: this });
 
       this.$.table.toggleAttribute('has-footer', !!this.$.footer.querySelector('tr:not([hidden])'));
 
@@ -193,7 +193,7 @@ export const HeaderFooterRenderingMixin = (superClass) =>
       });
     }
 
-    #renderFooterRow = ({ level, cells, isLastRow, isFirstRow, isRowVisible }) => {
+    #footerRowTemplate = ({ level, cells, isLastRow, isFirstRow, isRowVisible }) => {
       const rowParts = {
         'first-footer-row': isFirstRow,
         'last-footer-row': isLastRow,

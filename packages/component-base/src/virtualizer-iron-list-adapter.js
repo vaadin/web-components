@@ -460,51 +460,15 @@ export class IronListAdapter {
 
   /** @private */
   _createPool(size) {
+    const physicalItems = this.createElements(size);
     const fragment = document.createDocumentFragment();
-
-    const physicalItems = this.createElements(size).map((elementOrFragment) => {
-      let element = elementOrFragment;
-
-      // An element may come wrapped in a fragment together with marker nodes
-      // that must stay with the element when it moves in the DOM
-      if (elementOrFragment.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
-        element = elementOrFragment.firstElementChild;
-        element.__startMarker = elementOrFragment.firstChild;
-        element.__endMarker = elementOrFragment.lastChild;
-      }
-
-      element.style.position = 'absolute';
-      this.__resizeObserver.observe(element, { box: 'border-box' });
-
-      // Appending a fragment moves its contents, markers included
-      fragment.appendChild(elementOrFragment);
-      return element;
+    physicalItems.forEach((el) => {
+      el.style.position = 'absolute';
+      fragment.append(...[el.__startMarker, el, el.__endMarker].filter(Boolean));
+      this.__resizeObserver.observe(el, { box: 'border-box' });
     });
-
     this.elementsContainer.appendChild(fragment);
     return physicalItems;
-  }
-
-  /**
-   * Moves an element to a new position in the elements container, keeping
-   * any associated marker nodes (`__startMarker` / `__endMarker`, e.g. Lit
-   * part markers) together with it.
-   *
-   * @param {HTMLElement} el The element to move
-   * @param {Node | null} refNode The node before which to insert, or null to append
-   * @private
-   */
-  __moveElement(el, refNode = null) {
-    let node = el.__startMarker || el;
-    const lastNode = el.__endMarker || el;
-    while (node) {
-      const nextNode = node.nextSibling;
-      this.elementsContainer.insertBefore(node, refNode);
-      if (node === lastNode) {
-        break;
-      }
-      node = nextNode;
-    }
   }
 
   /** @private */
@@ -828,14 +792,13 @@ export class IronListAdapter {
     const delta = visibleElements.indexOf(targetElement) - targetPhysicalIndex;
     if (delta > 0) {
       for (let i = 0; i < delta; i++) {
-        this.__moveElement(visibleElements[i]);
+        const el = visibleElements[i];
+        this.elementsContainer.append(...[el.__startMarker, el, el.__endMarker].filter(Boolean));
       }
     } else if (delta < 0) {
-      // Insert before the first element's start marker to avoid breaking up
-      // the marker-delimited span of the first element
-      const refNode = visibleElements[0].__startMarker || visibleElements[0];
-      for (let i = visibleElements.length + delta; i < visibleElements.length; i++) {
-        this.__moveElement(visibleElements[i], refNode);
+      for (let i = visibleElements.length - 1; i >= visibleElements.length + delta; i--) {
+        const el = visibleElements[i];
+        this.elementsContainer.prepend(...[el.__startMarker, el, el.__endMarker].filter(Boolean));
       }
     }
 

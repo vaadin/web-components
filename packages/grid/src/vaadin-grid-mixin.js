@@ -331,17 +331,15 @@ export const GridMixin = (superClass) =>
     __createVirtualizerElements(count) {
       const rows = [];
       for (let i = 0; i < count; i++) {
-        const rowFragment = this.__createBodyRow();
-
+        const row = this.__createBodyRow();
         if (this._columnTree) {
-          this.__initRow(rowFragment.firstElementChild, this._columnTree.at(-1), 'body', true);
+          this.__initRow(row, this._columnTree[this._columnTree.length - 1], 'body', true);
         }
-
-        rows.push(rowFragment);
+        rows.push(row);
       }
 
       if (this._columnTree) {
-        this._columnTree.at(-1).forEach((c) => {
+        this._columnTree[this._columnTree.length - 1].forEach((c) => {
           if (c.isConnected && c._cells) {
             c._cells = [...c._cells];
           }
@@ -522,7 +520,7 @@ export const GridMixin = (superClass) =>
         return;
       }
 
-      this.__renderBodyRow(row.parentElement, row.__endMarker, index);
+      this.__renderBodyRow(row, index);
       this.__ensureRowItem(row);
       this.__ensureRowHierarchy(row);
       this.__updateRow(row);
