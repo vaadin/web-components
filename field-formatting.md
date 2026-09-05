@@ -90,10 +90,10 @@ Details in [`field-formatting-use-cases.md`](./field-formatting-use-cases.md) §
   vcf-input-mask needed `eval`. Live formatting must be **declarative WC properties**; custom Java logic
   can only run at commit, after a round trip. Two tiers:
 
-  | Tier   | Runs                    | Configured by                                             | Covers           |
-  | ------ | ----------------------- | --------------------------------------------------------- | ---------------- |
-  | Live   | client, every `input`   | properties set from Java (`blocks`, `delimiter`, `mask`…) | chunking, masks  |
-  | Commit | server, on value change | `SerializableFunction<String, Result<String>>`            | normalize, parse |
+  | Tier   | Runs                    | Configured by                                                                          | Covers           |
+  | ------ | ----------------------- | -------------------------------------------------------------------------------------- | ---------------- |
+  | Live   | client, every `input`   | properties set from Java (`formatBlocks`, `formatDelimiter`, `formatTextCase`, `mask`) | chunking, masks  |
+  | Commit | server, on value change | `SerializableFunction<String, Result<String>>`                                         | normalize, parse |
 
 - **The split already exists in Flow.** `AbstractSinglePropertyField` takes `presentationToModel` /
   `modelToPresentation`; `DatePicker` (`String` ↔ `LocalDate`) and `AbstractNumberField` use it today.
@@ -129,8 +129,10 @@ Result<LocalDate>>)` — runs in `setModelValue`, pushes the parsed value back a
 **Scope**
 
 - `vaadin-text-field` only. Web component only — no Flow API yet.
-- One layer: chunking. Properties along the lines of `blocks`, `delimiter`, `case` — names are
-  placeholders.
+- One layer: chunking. Three flat properties: `formatBlocks` (`format-blocks`, JSON array), `formatDelimiter`
+  (`format-delimiter`, one character, default space) and `formatTextCase` (`format-text-case`, `upper` |
+  `lower`). Flat rather than one `format` object because every other TextField constraint is flat, Flow binds
+  signals per property, and Hilla exposes props 1:1; the `format` prefix groups them next to `formattedValue`.
 - Value contract: `value` = unformatted, `inputElement.value` = formatted. Read-only `formattedValue`
   for anyone who wants the string.
 - Live formatting on insert and paste; no reformat on delete.
@@ -158,19 +160,19 @@ API stays → 25.4 with a release note. A default flips or an API goes → 26.
 
 ### Additive — fine for 25.4
 
-| Item                                                                                  | Note                                             |
-| ------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| Format mixin in `field-base` with identity defaults                                   | zero behavior change until configured            |
-| Chunking properties on `text-field` (and later `text-area`)                           | opt-in                                           |
-| Read-only `formattedValue`                                                            | new property                                     |
-| Pattern-mask property (layer 2)                                                       | opt-in; grammar TBD                              |
-| Visible placeholder mask (layer 3)                                                    | opt-in; blocked on a11y                          |
-| `date-picker` / `time-picker` as-you-type, **opt-in** flag derived from `dateFormat`  | default stays off                                |
-| Flow: `TextField#setFormat(...)` or equivalent, serialised to client props            | Binder already gets `value`                      |
-| Flow: shared `HasInputFormat`-style interface over properties, with `bindXxx(Signal)` | same pattern as `HasAllowedCharPattern`          |
-| Flow: `TextField#setFallbackParser(SerializableFunction<String, Result<String>>)`     | copies the `DatePicker` hook; commit-time only   |
-| Flow: `TextFieldI18n#setBadInputErrorMessage`                                         | mirrors `AbstractNumberFieldI18n`                |
-| Flow: overflow / truncation event on paste                                            | mirrors the cleave add-on's `PasteOverflowEvent` |
+| Item                                                                                                            | Note                                                                                 |
+| --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Format mixin in `field-base` with identity defaults                                                             | zero behavior change until configured                                                |
+| Chunking properties on `text-field` (and later `text-area`)                                                     | opt-in                                                                               |
+| Read-only `formattedValue`                                                                                      | new property                                                                         |
+| Pattern-mask property (layer 2)                                                                                 | opt-in; grammar TBD                                                                  |
+| Visible placeholder mask (layer 3)                                                                              | opt-in; blocked on a11y                                                              |
+| `date-picker` / `time-picker` as-you-type, **opt-in** flag derived from `dateFormat`                            | default stays off                                                                    |
+| Flow: `setFormatBlocks(int...)`, `setFormatDelimiter(String)`, `setFormatTextCase(TextCase)`, `setMask(String)` | Binder already gets `value`; `getFormattedValue()` needs `notify` on the WC property |
+| Flow: shared `HasInputFormat` default-method interface over those properties, with `bindXxx(Signal)`            | same pattern as `HasAllowedCharPattern`; `@Synchronize` works on interface getters   |
+| Flow: `TextField#setFallbackParser(SerializableFunction<String, Result<String>>)`                               | copies the `DatePicker` hook; commit-time only                                       |
+| Flow: `TextFieldI18n#setBadInputErrorMessage`                                                                   | mirrors `AbstractNumberFieldI18n`                                                    |
+| Flow: overflow / truncation event on paste                                                                      | mirrors the cleave add-on's `PasteOverflowEvent`                                     |
 
 ### Behavior-altering — acceptable in 25.4, call out in release notes
 
