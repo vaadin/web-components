@@ -20,7 +20,6 @@ export const maskedFieldStyles = css`
     font: inherit;
     font-size: 1em;
     pointer-events: none;
-    text-align: inherit;
     white-space: pre;
   }
 

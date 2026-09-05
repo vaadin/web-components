@@ -1014,9 +1014,8 @@ describe('InputFormatMixin', () => {
       expect(element.value).to.equal('٣٤٥٦');
     });
 
-    it('should warn once that the presented value does not fit', () => {
-      expect(warn).to.be.calledOnce;
-      expect(warn.firstCall.args[0]).to.match(/does not fit the configured format/u);
+    it('should not warn, since every character of the value is laid out', () => {
+      expect(warn).to.not.be.called;
     });
   });
 

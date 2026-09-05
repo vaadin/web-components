@@ -84,6 +84,8 @@ export declare class InputFormatMixinClass {
    * - `0` any digit, stored as the ASCII digit
    * - `a` any letter
    * - `*` any character
+   * - `[…]` an optional section at the end of the mask, shown once the user
+   *   types into it, e.g. `'00000[-0000]'`
    * - `\x` the character `x` itself, e.g. `\0` for a literal zero
    * - every other character is inserted as it is
    *

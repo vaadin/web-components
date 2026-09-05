@@ -65,6 +65,7 @@ export interface MaskedFieldEventMap extends HTMLElementEventMap, MaskedFieldCus
  * ---------------------|----------------
  * `label`              | The label element
  * `input-field`        | The element that wraps prefix, value and suffix
+ * `prompt`             | The visual mask shown for the unfilled part of `formatMask` when `formatPrompt` is set
  * `field-button`       | Set on the clear button
  * `clear-button`       | The clear button
  * `error-message`      | The error message element
@@ -77,6 +78,7 @@ export interface MaskedFieldEventMap extends HTMLElementEventMap, MaskedFieldCus
  * ---------------------|---------------------------------
  * `disabled`           | Set when the element is disabled
  * `has-value`          | Set when the element has a value
+ * `has-format-prompt`  | Set when the visual mask has something to show
  * `has-label`          | Set when the element has a label
  * `has-helper`         | Set when the element has helper text or slot
  * `has-error-message`  | Set when the element has an error message

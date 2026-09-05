@@ -194,6 +194,18 @@ describe('prompt', () => {
     it('should show the shape on an empty field with no placeholder', () => {
       expect(getComputedStyle(promptNode(field)).display).to.not.equal('none');
     });
+
+    it('should show the shape while readonly and while disabled', async () => {
+      field.value = '12';
+      field.readonly = true;
+      await nextUpdate(field);
+      expect(getComputedStyle(promptNode(field)).display).to.not.equal('none');
+
+      field.readonly = false;
+      field.disabled = true;
+      await nextUpdate(field);
+      expect(getComputedStyle(promptNode(field)).display).to.not.equal('none');
+    });
   });
 
   describe('geometry', () => {
@@ -220,6 +232,20 @@ describe('prompt', () => {
       expect(field.value).to.equal('');
       expect(field.formattedValue).to.equal('');
       expect(input.value).to.equal('');
+    });
+
+    it('should lay the shape over the input element moved by a prefix added later', async () => {
+      const plain = fixtureSync('<vaadin-masked-field format-mask="00:00" format-prompt="_"></vaadin-masked-field>');
+      await nextRender();
+
+      plain.appendChild(Object.assign(document.createElement('span'), { slot: 'prefix', textContent: '+358' }));
+      await nextResize(plain.inputElement);
+
+      const promptRect = promptNode(plain).getBoundingClientRect();
+      const inputRect = plain.inputElement.getBoundingClientRect();
+
+      expect(promptRect.left).to.be.closeTo(inputRect.left, 1);
+      expect(promptRect.width).to.be.closeTo(inputRect.width, 1);
     });
   });
 });

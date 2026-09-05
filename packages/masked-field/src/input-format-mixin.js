@@ -522,9 +522,12 @@ const InputFormatMixinImplementation = (superclass) =>
      *
      * The value is taken as one that holds none of the characters that the format
      * inserts, so a character equal to one of them is a character of its own rather
-     * than one the format placed. A value that the format cannot lay out in full is
-     * reported with a warning: the value is kept as it was assigned, and the input
-     * element shows the part of it that fits.
+     * than one the format placed. A value whose characters the format cannot all lay
+     * out is reported with a warning: the value is kept as it was assigned, and the
+     * input element shows the part of it that fits. A value that the format does lay
+     * out in full is presented with the characters it normalizes, such as a digit of
+     * another script shown as the ASCII digit, and is kept as assigned without a
+     * warning.
      *
      * @param {string} value
      * @return {string}
@@ -538,7 +541,7 @@ const InputFormatMixinImplementation = (superclass) =>
 
       const presented = calibrate({ value, selection: [0, 0] }, this.#mask, { raw: true }).value;
 
-      if (!this.#roundTrips(presented, value)) {
+      if (!this.#keepsEveryCharacter(presented, value)) {
         issueWarning(
           `The value "${value}" does not fit the configured format. Keeping the value and presenting "${presented}".`,
         );
@@ -555,6 +558,9 @@ const InputFormatMixinImplementation = (superclass) =>
      * length to fill, so there is nothing for the value to be short of, and a mask
      * that did not compile is treated as unset everywhere else as well.
      *
+     * A value that the mask normalizes, such as a digit of another script or a
+     * character the case is applied to, is complete once it is presented in full.
+     *
      * @return {boolean}
      * @protected
      */
@@ -567,7 +573,8 @@ const InputFormatMixinImplementation = (superclass) =>
       // the mask cannot lay out in full is kept and only partly shown, so a longer
       // value can present as a text that fills the mask exactly.
       return (
-        validateWithMask(this.formattedValue, this.#mask) && this.#roundTrips(this.formattedValue, this.value ?? '')
+        validateWithMask(this.formattedValue, this.#mask) &&
+        this.#keepsEveryCharacter(this.formattedValue, this.value ?? '')
       );
     }
 
@@ -718,14 +725,19 @@ const InputFormatMixinImplementation = (superclass) =>
     }
 
     /**
-     * Returns whether the given presented text unmasks back to the given value,
-     * that is whether the format laid the value out in full rather than keeping it
-     * and showing only the part of it that fits.
+     * Returns whether the format laid every character of the given value out,
+     * rather than dropping the ones it could not place.
+     *
+     * The characters are compared by count rather than one by one, since the layout
+     * normalizes them on the way in: a digit slot stores the ASCII digit whatever
+     * script the digit was written in, and `formatTextCase` applies the case. Such a
+     * value is presented in full and only looks different, which is not the question
+     * this answers.
      *
      * @private
      */
-    #roundTrips(presented, value) {
-      return unmask(presented, this.#mask) === value;
+    #keepsEveryCharacter(presented, value) {
+      return unmask(presented, this.#mask).length === value.length;
     }
 
     /**

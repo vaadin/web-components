@@ -221,12 +221,13 @@ and the field turns invalid; they type the missing digit and tab away again, and
 
 A digit position accepts a digit written in any script. What the user types is shown and stored as
 the ASCII digit with the same numeric value, so the application always receives `0` to `9`. A value
-the application sets is presented with its digits normalised the same way, and kept as it was
-assigned, which is the case requirement 12 covers.
+the application sets is presented with its digits normalised the same way and kept as it was
+assigned. Nothing is reported for it: every character of the value is laid out, only shown
+differently, so requirement 12 does not apply.
 
 _Example: A user typing `٣٤٥٦` on an Arabic keyboard into a field shaped `0000` sees `3456`, and the
-value is `3456`. Setting `٣٤٥٦` from the application shows `3456`, keeps the value `٣٤٥٦` and logs
-one warning._
+value is `3456`. Setting `٣٤٥٦` from the application shows `3456` and keeps the value `٣٤٥٦`, with
+no warning._
 
 ---
 
@@ -313,9 +314,16 @@ fails `required` therefore show the same message.
 No. Narrowing it would block a user typing on an Arabic or Devanagari keyboard instead of helping
 them, so the position accepts any Unicode decimal digit and stores the ASCII one. The two paths
 differ in what they leave behind: what the user types normalises the value as well as the text,
-while a value the application sets is presented normalised and kept as it was given. That means a
-non-ASCII value set from the application now logs the requirement 12 warning, which it did not
-before, because the text shown no longer matches the value character for character.
+while a value the application sets is presented normalised and kept as it was given.
+
+**Q: Why does a normalised value set from the application not warn?**
+
+Because the warning of requirement 12 says that the shape dropped characters, not that the text
+shown differs from the value. A value whose digits or case the shape normalises is laid out in full,
+so there is nothing lost to report, and warning about it would train developers to ignore the
+message. The check counts the characters the shape laid out instead of comparing them one by one.
+Comparing them would also have failed the completeness constraint of requirement 19 for a value that
+fills the shape exactly.
 
 **Q: Should a `]` with no `[` before it stay a literal?**
 

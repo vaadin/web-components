@@ -489,6 +489,23 @@ describe('formatMask', () => {
       expect(field.checkValidity()).to.be.false;
     });
 
+    it('should be valid for a value whose digits the mask normalizes', async () => {
+      field.formatMask = '0000';
+      field.value = '٣٤٥٦';
+      await nextUpdate(field);
+
+      expect(field.checkValidity()).to.be.true;
+    });
+
+    it('should be valid for a value whose case the mask normalizes', async () => {
+      field.formatMask = 'aa00';
+      field.formatTextCase = 'upper';
+      field.value = 'fi21';
+      await nextUpdate(field);
+
+      expect(field.checkValidity()).to.be.true;
+    });
+
     it('should be valid with blocks, which have no length to fill', async () => {
       field.formatBlocks = [4, 4];
       await nextUpdate(field);

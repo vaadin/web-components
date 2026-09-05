@@ -134,6 +134,12 @@ class MaskedField extends MaskedFieldMixin(TextField) {
    * come. The node is `aria-hidden` because the accessible description of the
    * shape belongs to the label and the helper text, not to a decorative overlay.
    *
+   * Apart from that node the template is a copy of `TextField.render()` in
+   * `packages/text-field/src/vaadin-text-field.js`, and has to be copied again
+   * whenever that template changes. After a format change the shape settles one
+   * update cycle later, since `formattedValue` is written in the `updated()` of
+   * `InputFormatMixin`, after the render that reads it.
+   *
    * @protected
    * @override
    */
@@ -183,6 +189,23 @@ class MaskedField extends MaskedFieldMixin(TextField) {
     if (this.inputElement) {
       this.#resizeObserver.observe(this.inputElement);
     }
+
+    this.#observeContainer();
+  }
+
+  /**
+   * Override a method from `LitElement` to measure the visual mask against the
+   * container as well, so that a change of its border or padding that leaves the
+   * input element the same size still moves the overlay.
+   *
+   * @param {!Object} props
+   * @protected
+   * @override
+   */
+  firstUpdated(props) {
+    super.firstUpdated(props);
+
+    this.#observeContainer();
   }
 
   /**
@@ -244,6 +267,19 @@ class MaskedField extends MaskedFieldMixin(TextField) {
   }
 
   /**
+   * Starts measuring the container that the visual mask is positioned against.
+   *
+   * @private
+   */
+  #observeContainer() {
+    const container = this.shadowRoot?.querySelector('[part="input-field"]');
+
+    if (container) {
+      this.#resizeObserver.observe(container);
+    }
+  }
+
+  /**
    * Lays the visual mask exactly over the input element. The box is measured
    * rather than mirrored from the styles, since a prefix, a suffix and the theme
    * padding all move the input element inside its container.
@@ -251,6 +287,12 @@ class MaskedField extends MaskedFieldMixin(TextField) {
    * @private
    */
   #syncPromptGeometry() {
+    // A hidden overlay is measured by `updated()` at the moment it is shown, so
+    // there is nothing for a resize of a field without a shape to keep in sync.
+    if (!this.hasAttribute('has-format-prompt')) {
+      return;
+    }
+
     const input = this.inputElement;
     const container = this.shadowRoot?.querySelector('[part="input-field"]');
     const prompt = this.shadowRoot?.querySelector('[part="prompt"]');

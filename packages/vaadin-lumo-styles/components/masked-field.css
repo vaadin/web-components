@@ -10,8 +10,8 @@
 @import '../src/mixins/field-helper-above.css';
 @import '../src/mixins/field-label.css';
 @import '../src/mixins/field-required.css';
-@import './input-container.css';
 @import '../src/components/masked-field.css';
+@import './input-container.css';
 
 :root,
 :host {

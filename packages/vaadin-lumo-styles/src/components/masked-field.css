@@ -4,7 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+/* Mirrors vaadin-masked-field-base-styles.js, since Lumo does not adopt the base sheet */
 @media lumo_components_masked-field {
+  [part='input-field'] {
+    position: relative;
+  }
+
   [part='prompt'] {
     position: absolute;
     display: flex;
@@ -15,7 +20,6 @@
     font: inherit;
     font-size: 1em;
     pointer-events: none;
-    text-align: inherit;
     white-space: pre;
   }
 

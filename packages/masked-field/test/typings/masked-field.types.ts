@@ -1,6 +1,7 @@
 import '../../vaadin-masked-field.js';
 import type { FormatMixinClass } from '../../src/format-mixin.js';
 import type { InputFormatMixinClass } from '../../src/input-format-mixin.js';
+import type { MaskedFieldMixinClass } from '../../src/vaadin-masked-field-mixin.js';
 import type {
   MaskedField,
   MaskedFieldChangeEvent,
@@ -16,6 +17,7 @@ const field = document.createElement('vaadin-masked-field');
 // Mixins
 assertType<FormatMixinClass>(field);
 assertType<InputFormatMixinClass>(field);
+assertType<MaskedFieldMixinClass>(field);
 
 // Properties
 assertType<number[] | undefined>(field.formatBlocks);

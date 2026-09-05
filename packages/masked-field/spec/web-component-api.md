@@ -173,6 +173,10 @@ field.formattedValue; // '+7 (900) 201-11-22'
 field.value; // '90020111223344' — kept; one warning logged
 ```
 
+The warning is for a value the format could not lay out in full. A value the format only normalises,
+such as `'٣٤٥٦'` on a `0000` mask presented as `3456`, is laid out in full and kept as assigned, with
+no warning.
+
 **Why this shape:** Overwriting an application-supplied value silently would hide a data problem,
 and a second value change on assignment would surprise Binder. The field shows what fits and warns.
 
@@ -235,7 +239,8 @@ field.checkValidity(); // true — an empty value is left to `required`
 constraints, and the field validates it on commit, so an incomplete value is reported when the user
 leaves the field. An empty value is left to `required`. A `readonly` or `disabled` field is always
 valid, as it is for every other constraint. With `formatBlocks` the property does nothing, since the
-blocks have no length to fill.
+blocks have no length to fill. A value the mask only normalises, such as `'٣٤٥٦'` on `0000`, fills
+the mask and stays valid.
 
 **Why this shape:** One boolean named after the state it turns on, opt-in so that no existing field
 changes validity, and checked at the moment the other constraints are. Deriving a `pattern` from the

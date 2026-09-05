@@ -93,13 +93,13 @@ Three opt-in layers on top, all three on the branch:
 On top of the two-value contract, the prototype carries five behaviours adopted from USWDS, Ignite UI
 and the shadcn/ui thread:
 
-| Behaviour                      | Property                                               | Note                                                       |
-| ------------------------------ | ------------------------------------------------------ | ---------------------------------------------------------- |
-| Trailing optional sections     | `formatMask="00000[-0000]"`                            | trailing run only; sections enable left to right           |
-| Completeness as a constraint   | `formatCompletionRequired`                             | opt-in, checked on commit, no message of its own           |
-| Unicode digits stored as ASCII | —                                                      | typing path normalises the value, programmatic path warns  |
-| Derived `inputmode`            | —                                                      | `numeric` for an all-digit mask while `inputMode` is unset |
-| Visible shape while typing     | `formatPrompt="_"`, `prompt` part, `has-format-prompt` | hidden while a `placeholder` shows; nothing for blocks     |
+| Behaviour                      | Property                                               | Note                                                                                       |
+| ------------------------------ | ------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| Trailing optional sections     | `formatMask="00000[-0000]"`                            | trailing run only; sections enable left to right                                           |
+| Completeness as a constraint   | `formatCompletionRequired`                             | opt-in, checked on commit, no message of its own                                           |
+| Unicode digits stored as ASCII | —                                                      | typing path normalises the value, programmatic path presents normalised digits, value kept |
+| Derived `inputmode`            | —                                                      | `numeric` for an all-digit mask while `inputMode` is unset                                 |
+| Visible shape while typing     | `formatPrompt="_"`, `prompt` part, `has-format-prompt` | hidden while a `placeholder` shows; nothing for blocks                                     |
 
 Deferred to the API RFC rather than built: announcing a rejected character to a screen reader (A1)
 and describing the accepted shape (A3), undo across the field's own edits, and a selector that picks

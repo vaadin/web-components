@@ -130,7 +130,9 @@ function normalizeDigit(char) {
   const code = char.charCodeAt(0);
   let zero = code;
 
-  while (DIGIT_SLOT.test(String.fromCharCode(zero - 1))) {
+  // Bounded to the nine steps the run allows, so that a future Unicode version
+  // placing two runs next to each other can not walk past the start of this one.
+  for (let steps = 0; steps < 9 && DIGIT_SLOT.test(String.fromCharCode(zero - 1)); steps += 1) {
     zero -= 1;
   }
 
