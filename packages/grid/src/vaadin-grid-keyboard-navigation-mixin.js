@@ -676,8 +676,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           if (focusStepTarget === this._headerFocusable) {
             focusStepTarget = firstVisibleColumn._headerCell;
           } else if (focusStepTarget === this._itemsFocusable) {
-            const rowIndex = focusStepTarget._column._cells.indexOf(focusStepTarget);
-            focusStepTarget = firstVisibleColumn._cells[rowIndex];
+            focusStepTarget = focusStepTarget.__parentRow.__cells.find((cell) => cell._column === firstVisibleColumn);
           } else if (focusStepTarget === this._footerFocusable) {
             focusStepTarget = firstVisibleColumn._footerCell;
           }

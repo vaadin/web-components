@@ -3,8 +3,6 @@
  * Copyright (c) 2016 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { updatePart } from './vaadin-grid-helpers.js';
-
 export const RowDetailsMixin = (superClass) =>
   class RowDetailsMixin extends superClass {
     static get properties() {
@@ -87,7 +85,7 @@ export const RowDetailsMixin = (superClass) =>
         // Only update the rows if the column tree has already been initialized
         this._getRenderedRows().forEach((row) => {
           if (!row.querySelector('[part~=details-cell]')) {
-            this.__initRow(row, this._columnTree[this._columnTree.length - 1]);
+            this.__initRow(row);
             this.__updateRow(row);
             return;
           }
@@ -113,11 +111,12 @@ export const RowDetailsMixin = (superClass) =>
      * @protected
      */
     _configureDetailsCell(cell) {
-      updatePart(cell, 'cell', true);
-      updatePart(cell, 'details-cell', true);
-      // Freeze the details cell, so that it does not scroll horizontally
-      // with the normal cells. This way it looks less weird.
-      cell.toggleAttribute('frozen', true);
+      if (!this._detailsCells) {
+        this._detailsCells = [];
+      }
+      if (!this._detailsCells.includes(cell)) {
+        this._detailsCells.push(cell);
+      }
 
       this._detailsCellResizeObserver.observe(cell);
     }

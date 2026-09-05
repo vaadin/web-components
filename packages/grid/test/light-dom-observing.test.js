@@ -182,11 +182,11 @@ describe('light dom observing', () => {
         expect(getHeaderCellContent(grid, 0, 1)).to.equal(content);
       });
 
-      it('should not create new cells', () => {
-        const spy = sinon.spy(grid, '_createCell');
+      it('should reuse column body cells', () => {
+        const content = getBodyCellContent(grid, 0, 0);
         grid.appendChild(grid._columnTree[0][0]);
         flushGrid(grid);
-        expect(spy.called).to.be.false;
+        expect(getBodyCellContent(grid, 0, 1)).to.equal(content);
       });
     });
 

@@ -509,7 +509,7 @@ export const ColumnBaseMixin = (superClass) =>
           this._grid._debouncerHiddenChanged,
           animationFrame,
           () => {
-            this._grid?._renderColumnTree?.(this._grid._columnTree);
+            this._grid?._renderColumnTree?.();
           },
         );
 
@@ -613,7 +613,7 @@ export const ColumnBaseMixin = (superClass) =>
      * @protected
      */
     _renderBodyCellsContent(renderer, cells) {
-      if (!cells || !renderer) {
+      if (!cells || !renderer || this._bodyContentHidden) {
         return;
       }
 
