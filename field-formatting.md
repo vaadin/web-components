@@ -65,6 +65,12 @@ variable-length groups.
 **Engine constraints.** IMask requires `type="text"` — affects `email-field` (`_setType('email')`) as well
 as `number-field`. cleave.js is dead, cleave-zen stale; IMask 7 is alive.
 
+**Maskito's model is the one to copy.** A per-position mask (`Array<RegExp | string>`) with five pure
+functions over `{ value, selection }`, and a mask that may be a function of the value for variable-length
+shapes. The prototype reimplements that model (`mask-utils.js`) and generates chunking from it as a dynamic
+mask, so one engine serves groups and masks. Details in
+[`field-formatting-use-cases.md`](./field-formatting-use-cases.md) §3.7.
+
 ## Proposed direction
 
 A mixin in `field-base`, applied to text-based fields, with an explicit two-value contract:
@@ -213,11 +219,15 @@ API stays → 25.4 with a release note. A default flips or an API goes → 26.
    same list for comparison.
 6. **Write the API RFC** — property names, Flow classes, how `pattern` / `allowedCharPattern` compose with
    the format. Target the additive bucket for 25.4.
-7. **Then extend:** `text-area`; `date-picker` opt-in as-you-type from `dateFormat`; pattern mask
-   grammar (decide: own, IMask, or Swing-compatible); visible mask.
+7. **Then extend:** `text-area`; `date-picker` opt-in as-you-type from `dateFormat`; visible mask. The
+   pattern mask itself is on the branch: `formatMask` with the IMask token subset, one engine with chunking
+   (`InputFormatMixin` over `mask-utils.js`), widened deletes, regroup on every delete.
+   - Spec documents for the planned `@vaadin/format-base` package live in `packages/format-base/spec/`
+     (problem statement, requirements, web component API, Flow API). Moving the mixins and utils out of
+     `field-base` into that package is recommended once the prototype settles.
 8. **Undo across live formatting** — dropped from the PoC. Every reformat is a script write and clears the
-   native undo stack, so RFC options are: accept absent undo (peer libraries do), or route all presentation
-   writes through `execCommand('insertText')`. Related: regroup on every delete, not only delimiter deletes.
+   native undo stack, so RFC options are: accept absent undo (peer libraries do), route all presentation
+   writes through `execCommand('insertText')`, or keep a field-owned history as Maskito does.
 9. **Coordinate with Component Factory** on a deprecation path for the two add-ons once layer 1 ships.
 10. **Revisit `number-field`** after the `type="text"` refactor — number/currency formatting reuses the
     same mixin.

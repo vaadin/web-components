@@ -501,6 +501,26 @@ NumberField use for unparsable input.
 
 ---
 
+### 3.7 Maskito — the model the prototype's engine follows
+
+[Maskito](https://github.com/taiga-family/maskito) (Apache-2.0, zero dependencies, v5.4.0 read locally) splits
+into a ~350-line pure model and a ~1.2k-line DOM runtime. The model is a per-position mask,
+`Array<RegExp | string>`, where a string item is a fixed character that is inserted for the user and never
+deleted, plus five functions over `{ value, selection }`: validate, calibrate (rebuild a value left to right,
+inserting fixed runs and dropping characters that do not fit), unmask (drop a fixed character only at its own
+index), and insert / delete computed in the unmasked domain. A mask can be a function of the current state,
+which is how variable-length and value-dependent shapes are done. The runtime computes the result in
+`beforeinput`, lets the browser apply the edit, overwrites in a capture-phase `input` listener, and re-validates
+in the bubble phase for edits with no usable `beforeinput` (Firefox `insertReplacementText`, Chrome autofill).
+
+What was taken: the model, reimplemented in `mask-utils.js` in this repo's idiom with Maskito's spec cases
+paraphrased as fixtures, plus a raw mode Maskito does not need (its value is always the masked string; ours
+omits literals, so a value character equal to the next literal must not be consumed when presenting a raw
+value). What was not: the runtime (the prototype's `FormatMixin` already is one), processors as public API
+(functions are not Flow-shippable), its own undo stack (`MaskHistory`, a third option for open question 8),
+and the package itself (no unmasked-value API, own `keydown` interception, non-serialisable options).
+Maskito documents no accessibility guidance and no undo behaviour.
+
 ## 4. What this suggests for a built-in API
 
 A sketch, not a decision — offered so the open questions below have something concrete to attack.
@@ -545,9 +565,11 @@ compose with those, not duplicate or fight them.
    vcf-input-mask makes the caller bind a _separate object_ to get the unmasked value, and only for
    TextField. A core API has to decide once, for Binder, validation, `pattern`, Grid and serialization —
    and say what a mask change does to an already-set value.
-3. **Mask grammar.** Invent one, adopt IMask's, or align with Swing's `MaskFormatter` for the
-   legacy-migration audience Johannes describes? How are embedded literals (the `08000` case) and computed
-   positions (SSN checksum) expressed, and do literals belong to the model value?
+3. **Mask grammar.** Decided for the prototype: the IMask token subset `0` digit, `a` letter, `*` any
+   character, `\x` literal, everything else literal (verified against imask.js.org). Embedded literals are
+   escaped digits, so the `08000` case is `*\08\0\0\0-…` unchanged; literals do not belong to the model
+   value. Still open: `[…]` optional sections, `{…}` literals-in-value per position, custom definitions,
+   alternatives selected from the value, and computed positions (SSN checksum stays validation).
 4. **Date/time composition.** Does the visible mask compose with the existing i18n `dateFormat` and parser,
    or replace it — and can the mask be derived from the configured format so apps don't specify it twice?
 5. **email-field.** Does it get masking at all, given `type="email"`? Change `_setType` the way
@@ -564,6 +586,15 @@ compose with those, not duplicate or fight them.
    `document.execCommand('insertText')` (deprecated, no standard replacement) and doubling undo granularity
    at block boundaries. Decide in the RFC whether the cost is worth paying; the PoC measured that
    `execCommand` works in Chromium, Firefox and WebKit, so the option is real.
+
+9. **`change` after a field-applied edit.** When the field cancels the user's `beforeinput` and applies the
+   edit itself from script (the widened delete, the literal hop), the browser sees no user edit and fires no
+   native `change` on blur, so Flow's `LAZY` / `ON_BLUR` modes miss the edit. Reproduced in Chromium 152
+   with one widened Backspace. Maskito ships a plugin for exactly this. The prototype's core now remembers
+   the text at focus and dispatches `change` on blur when it differs, resetting on native `change` and on
+   programmatic writes outside an input turn. Decide in the RFC whether this belongs in the format core only
+   or in `InputControlMixin` for every field that cancels `beforeinput` (a prevented keystroke changes no
+   value, so today nothing is suppressed there).
 
 ---
 
