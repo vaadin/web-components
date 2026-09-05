@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Masked Field</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      // Enable feature flag
+      window.Vaadin ||= {};
+      window.Vaadin.featureFlags ||= {};
+      window.Vaadin.featureFlags.maskedFieldComponent = true;
+
+      import '@vaadin/masked-field';
+    </script>
+  </head>
+
+  <body>
+    <div class="section">
+      <vaadin-masked-field
+        id="iban"
+        label="IBAN"
+        format-blocks="[4,4,4,4,2]"
+        format-text-case="upper"
+        allowed-char-pattern="[A-Za-z0-9]"
+        clear-button-visible
+      ></vaadin-masked-field>
+      <pre id="iban-readout"></pre>
+
+      <button id="iban-swap">Swap blocks</button>
+      <button id="iban-remove">Remove format</button>
+      <button id="iban-set-value">Set value</button>
+      <button id="iban-mask">Mask the IBAN field</button>
+    </div>
+
+    <div class="section">
+      <vaadin-masked-field
+        id="phone"
+        label="Phone (FI)"
+        format-blocks="[3,3,4]"
+        inputmode="tel"
+        allowed-char-pattern="[0-9]"
+        clear-button-visible
+      ></vaadin-masked-field>
+      <pre id="phone-readout"></pre>
+    </div>
+
+    <div class="section">
+      <vaadin-masked-field
+        id="us-phone"
+        label="Phone (US)"
+        format-mask="+1 (000) 000-0000"
+        inputmode="tel"
+        clear-button-visible
+      ></vaadin-masked-field>
+      <pre id="us-phone-readout"></pre>
+    </div>
+
+    <div class="section">
+      <vaadin-masked-field id="time" label="Time" format-mask="00:00" inputmode="numeric" clear-button-visible>
+      </vaadin-masked-field>
+      <pre id="time-readout"></pre>
+    </div>
+
+    <div class="section">
+      <vaadin-masked-field
+        id="legacy"
+        label="Legacy mask"
+        format-mask="*\08\0\0\0-00-**-000000-0"
+        format-text-case="upper"
+        clear-button-visible
+      ></vaadin-masked-field>
+      <pre id="legacy-readout"></pre>
+    </div>
+
+    <div class="section">
+      <vaadin-masked-field id="unformatted" label="Unformatted control" clear-button-visible></vaadin-masked-field>
+      <pre id="unformatted-readout"></pre>
+
+      <button id="unformatted-set-value">Set value</button>
+    </div>
+
+    <p>
+      1. Type into the IBAN field and watch grouping appear.<br />
+      2. Backspace with the caret just after a space; the deletion widens over the space and removes the digit before
+      it, not the space.<br />
+      3. Press Ctrl/Cmd+Z; the digit comes back (run in headed Safari — keyboard undo is inert headless).<br />
+      4. Paste <code>FI2112345600000785</code>, then <code>FI21 1234 5600 0007 85</code>; both present identically.<br />
+      5. Paste a 25-character string; nothing is truncated.<br />
+      6. Press "Swap blocks" with a value present; <code>formatBlocks</code> changes, the value regroups and nothing is
+      lost.<br />
+      7. Press "Remove format"; both format properties are cleared, the field shows the raw unformatted value, readout's
+      value is unchanged and formattedValue goes empty.<br />
+      8. Focus the IBAN field, put the caret mid-string, press its "Set value"; the caret stays put.<br />
+      9. Focus the unformatted field, put the caret mid-string, press its "Set value"; the caret jumps to the end,
+      exactly as today.<br />
+      10. Switch to the Japanese IME and compose into the phone field; the candidate window is not disturbed.<br />
+      11. Turn on VoiceOver and repeat step 1; record what is announced.<br />
+      12. Type a space into the middle of a group in the IBAN field; the delimiter is consumed, the text does not change
+      and the field does not flash as prevented.<br />
+      13. Type <code>9002011122</code> into the US phone field; it presents as <code>+1 (900) 201-1122</code> and stops
+      there — a mask truncates at its last slot, unlike the blocks.<br />
+      14. In the US phone field, put the caret right before a <code>-</code> and press Delete; the deletion widens over
+      it and removes the digit on its far side.<br />
+      15. Type <code>C10476001374</code> into the legacy mask field; it presents as
+      <code>C08000-10-47-600137-4</code> while <code>value</code> stays <code>C10476001374</code>.<br />
+      16. Press "Mask the IBAN field" with a value present; <code>formatMask</code> and <code>formatBlocks</code> are
+      both set, one warning is logged and the mask wins — the groups are joined by <code>-</code> and the text stops at
+      the last slot of the mask.<br />
+      17. Edit the IBAN field and Tab away; the change counter goes up by one per focus session, including for the
+      keystrokes that the format applies itself.
+    </p>
+
+    <script type="module">
+      function bindReadout(field, readout, { countChanges = false } = {}) {
+        let changes = 0;
+        const update = () => {
+          const counter = countChanges ? `\nchange events: ${changes}` : '';
+          readout.textContent = `value: ${JSON.stringify(field.value)}\nformattedValue: ${JSON.stringify(field.formattedValue)}${counter}`;
+        };
+        field.addEventListener('value-changed', update);
+        field.addEventListener('input', update);
+        if (countChanges) {
+          field.addEventListener('change', () => {
+            changes += 1;
+            update();
+          });
+        }
+        update();
+        return update;
+      }
+
+      const iban = document.getElementById('iban');
+      const updateIbanReadout = bindReadout(iban, document.getElementById('iban-readout'), { countChanges: true });
+
+      // The format properties fire no event of their own, so a button that
+      // changes one refreshes the readout once the field has re-presented.
+      function refreshIbanReadout() {
+        iban.updateComplete.then(updateIbanReadout);
+      }
+
+      const ibanBlocks = [
+        [4, 4, 4, 4, 2],
+        [2, 4, 4, 4, 4],
+      ];
+      let ibanBlocksIndex = 0;
+      document.getElementById('iban-swap').addEventListener('click', () => {
+        ibanBlocksIndex = 1 - ibanBlocksIndex;
+        iban.formatBlocks = ibanBlocks[ibanBlocksIndex];
+        refreshIbanReadout();
+      });
+      document.getElementById('iban-remove').addEventListener('click', () => {
+        iban.formatBlocks = undefined;
+        iban.formatMask = undefined;
+        refreshIbanReadout();
+      });
+      document.getElementById('iban-set-value').addEventListener('mousedown', (event) => {
+        event.preventDefault();
+        iban.value = 'FI2112345600000785';
+      });
+
+      document.getElementById('iban-mask').addEventListener('click', () => {
+        iban.formatMask = 'aa00-0000-0000-0000-00';
+        refreshIbanReadout();
+      });
+
+      const phone = document.getElementById('phone');
+      bindReadout(phone, document.getElementById('phone-readout'));
+
+      bindReadout(document.getElementById('us-phone'), document.getElementById('us-phone-readout'));
+      bindReadout(document.getElementById('time'), document.getElementById('time-readout'));
+      bindReadout(document.getElementById('legacy'), document.getElementById('legacy-readout'));
+
+      const unformatted = document.getElementById('unformatted');
+      bindReadout(unformatted, document.getElementById('unformatted-readout'));
+      document.getElementById('unformatted-set-value').addEventListener('mousedown', (event) => {
+        event.preventDefault();
+        unformatted.value = 'FI2112345600000785';
+      });
+    </script>
+  </body>
+</html>

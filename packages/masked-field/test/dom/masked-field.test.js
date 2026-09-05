@@ -1,0 +1,90 @@
+import { expect } from '@vaadin/chai-plugins';
+import { aTimeout, fixtureSync, nextUpdate } from '@vaadin/testing-helpers';
+import '../../src/vaadin-masked-field.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+
+window.Vaadin ??= {};
+window.Vaadin.featureFlags ??= {};
+window.Vaadin.featureFlags.maskedFieldComponent = true;
+
+describe('vaadin-masked-field', () => {
+  let field;
+
+  beforeEach(() => {
+    resetUniqueId();
+    field = fixtureSync('<vaadin-masked-field></vaadin-masked-field>');
+  });
+
+  describe('host', () => {
+    it('default', async () => {
+      await expect(field).dom.to.equalSnapshot();
+    });
+
+    it('label', async () => {
+      field.label = 'Label';
+      await nextUpdate(field);
+      await expect(field).dom.to.equalSnapshot();
+    });
+
+    it('helper', async () => {
+      field.helperText = 'Helper';
+      await nextUpdate(field);
+      await expect(field).dom.to.equalSnapshot();
+    });
+
+    it('error', async () => {
+      field.errorMessage = 'Error';
+      field.invalid = true;
+      await aTimeout(0);
+      await expect(field).dom.to.equalSnapshot();
+    });
+
+    it('accessibleDescriptionRef', async () => {
+      field.accessibleDescriptionRef = 'accessible-description-ref-0';
+      await nextUpdate(field);
+      await expect(field).dom.to.equalSnapshot();
+    });
+
+    it('inputMode property', async () => {
+      field.inputMode = 'search';
+      await nextUpdate(field);
+      await expect(field).dom.to.equalSnapshot();
+    });
+
+    it('inputmode attribute', async () => {
+      field.setAttribute('inputmode', 'search');
+      await nextUpdate(field);
+      await expect(field).dom.to.equalSnapshot();
+    });
+  });
+
+  describe('shadow', () => {
+    it('default', async () => {
+      await expect(field).shadowDom.to.equalSnapshot();
+    });
+
+    it('disabled', async () => {
+      field.disabled = true;
+      await nextUpdate(field);
+      await expect(field).shadowDom.to.equalSnapshot();
+    });
+
+    it('readonly', async () => {
+      field.readonly = true;
+      await nextUpdate(field);
+      await expect(field).shadowDom.to.equalSnapshot();
+    });
+
+    it('invalid', async () => {
+      field.invalid = true;
+      await nextUpdate(field);
+      await expect(field).shadowDom.to.equalSnapshot();
+    });
+
+    it('theme', async () => {
+      field.setAttribute('theme', 'align-right');
+      await nextUpdate(field);
+      await expect(field).shadowDom.to.equalSnapshot();
+    });
+  });
+});
