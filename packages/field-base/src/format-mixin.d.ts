@@ -16,6 +16,12 @@ import type { InputMixinClass } from './input-mixin.js';
  * text is. Without such a layer `_hasFormat` stays `false`, `formattedValue`
  * stays empty, and the field behaves exactly as an unformatted one.
  *
+ * While a format is configured, the mixin also reports an edit that a layer
+ * applied from script rather than letting the browser apply it: on blur it
+ * dispatches `change` when the text in the input element differs from the text
+ * the focus session started with, since the browser fires no `change` of its own
+ * for such an edit.
+ *
  * Requires `InputControlMixin` (or a mixin applying it) below this mixin in the
  * chain. The `beforeinput`, `paste` and `drop` listeners are registered there;
  * without it, the delete intents and paste acceptance are inert and shrink

@@ -335,4 +335,70 @@ describe('format', () => {
       expect(field.checkValidity()).to.be.true;
     });
   });
+
+  describe('change event', () => {
+    // The case makes every keystroke below go through a script write, which is
+    // what removes the browser's own basis for firing `change`.
+    const UPPER_IBAN = { blocks: [4, 4, 4, 4, 2], case: 'upper' };
+
+    let spy;
+
+    beforeEach(() => {
+      spy = sinon.spy();
+      field.addEventListener('change', spy);
+    });
+
+    it('should fire change on blur after an edit that the format applied itself', async () => {
+      field.format = UPPER_IBAN;
+      field.value = 'FI2112345';
+      await nextUpdate(field);
+      expect(input.value).to.equal('FI21 1234 5');
+
+      input.focus();
+      input.setSelectionRange(5, 5);
+      await sendKeys({ press: 'Backspace' });
+      await nextUpdate(field);
+
+      input.blur();
+
+      expect(field.value).to.equal('FI212345');
+      expect(input.value).to.equal('FI21 2345');
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should fire change once on blur after typing a formatted value', async () => {
+      field.format = UPPER_IBAN;
+      await nextUpdate(field);
+
+      input.focus();
+      await sendKeys({ type: 'fi2112345' });
+      await nextUpdate(field);
+
+      input.blur();
+
+      expect(field.value).to.equal('FI2112345');
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should fire change once on blur after typing without a format', async () => {
+      input.focus();
+      await sendKeys({ type: 'abc' });
+      await nextUpdate(field);
+
+      input.blur();
+
+      expect(field.value).to.equal('abc');
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should not fire change on blur after a programmatic value set without a format', async () => {
+      input.focus();
+      field.value = 'x';
+      await nextUpdate(field);
+
+      input.blur();
+
+      expect(spy).to.be.not.called;
+    });
+  });
 });

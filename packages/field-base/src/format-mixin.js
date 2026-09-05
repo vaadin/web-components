@@ -22,6 +22,12 @@ const SKIP_CARET = Symbol('skip-caret');
  * text is. Without such a layer `_hasFormat` stays `false`, `formattedValue`
  * stays empty, and the field behaves exactly as an unformatted one.
  *
+ * While a format is configured, the mixin also reports an edit that a layer
+ * applied from script rather than letting the browser apply it: on blur it
+ * dispatches `change` when the text in the input element differs from the text
+ * the focus session started with, since the browser fires no `change` of its own
+ * for such an edit.
+ *
  * Requires `InputControlMixin` (or a mixin applying it) below this mixin in the
  * chain. The `beforeinput`, `paste` and `drop` listeners are registered there;
  * without it, the delete intents and paste acceptance are inert and shrink
@@ -42,10 +48,25 @@ const FormatMixinImplementation = (superclass) =>
     #prevViewValue = '';
 
     /** @private */
+    #changeBaseline = '';
+
+    /** @private */
+    #inputTurn = false;
+
+    /** @private */
     #boundOnCompositionStart;
 
     /** @private */
     #boundOnCompositionEnd;
+
+    /** @private */
+    #boundOnFocus;
+
+    /** @private */
+    #boundOnBlur;
+
+    /** @private */
+    #boundOnNativeChange;
 
     static get properties() {
       return {
@@ -68,6 +89,9 @@ const FormatMixinImplementation = (superclass) =>
 
       this.#boundOnCompositionStart = this.#onCompositionStart.bind(this);
       this.#boundOnCompositionEnd = this.#onCompositionEnd.bind(this);
+      this.#boundOnFocus = this.#onFocus.bind(this);
+      this.#boundOnBlur = this.#onBlur.bind(this);
+      this.#boundOnNativeChange = this.#onNativeChange.bind(this);
     }
 
     /**
@@ -203,7 +227,8 @@ const FormatMixinImplementation = (superclass) =>
 
     /**
      * Override a method from `InputMixin` to listen for composition events, so
-     * that no reformat runs while an IME session is in flight.
+     * that no reformat runs while an IME session is in flight, and for the focus
+     * session events that decide whether a `change` event has to be dispatched.
      *
      * @param {!HTMLElement} input
      * @protected
@@ -214,11 +239,14 @@ const FormatMixinImplementation = (superclass) =>
 
       input.addEventListener('compositionstart', this.#boundOnCompositionStart);
       input.addEventListener('compositionend', this.#boundOnCompositionEnd);
+      input.addEventListener('focus', this.#boundOnFocus);
+      input.addEventListener('blur', this.#boundOnBlur);
+      input.addEventListener('change', this.#boundOnNativeChange);
     }
 
     /**
-     * Override a method from `InputMixin` to remove the composition listeners
-     * registered in `_addInputListeners`.
+     * Override a method from `InputMixin` to remove the composition and focus
+     * session listeners registered in `_addInputListeners`.
      *
      * @param {!HTMLElement} input
      * @protected
@@ -229,6 +257,32 @@ const FormatMixinImplementation = (superclass) =>
 
       input.removeEventListener('compositionstart', this.#boundOnCompositionStart);
       input.removeEventListener('compositionend', this.#boundOnCompositionEnd);
+      input.removeEventListener('focus', this.#boundOnFocus);
+      input.removeEventListener('blur', this.#boundOnBlur);
+      input.removeEventListener('change', this.#boundOnNativeChange);
+    }
+
+    /**
+     * Override a method from `InputMixin` to move the change baseline along with
+     * a value that the application sets, so that a programmatic write is never
+     * reported as a user edit.
+     *
+     * A write made while an input event is being handled is not such a case: a
+     * layer above can apply an edit itself and announce it with an untrusted
+     * `input` event, which `InputMixin` routes through this method precisely
+     * because it does not come from the user. Moving the baseline there would
+     * silence the edit that the baseline exists to report.
+     *
+     * @param {string} value
+     * @protected
+     * @override
+     */
+    _forwardInputValue(value) {
+      super._forwardInputValue(value);
+
+      if (!this.#inputTurn) {
+        this.#changeBaseline = this._inputElementValue ?? '';
+      }
     }
 
     /**
@@ -293,7 +347,12 @@ const FormatMixinImplementation = (superclass) =>
       // deletion that skips the reformat.
       this.#prevViewValue = event.composedPath()[0].value;
 
-      super._onInput(event);
+      this.#inputTurn = true;
+      try {
+        super._onInput(event);
+      } finally {
+        this.#inputTurn = false;
+      }
 
       this.#lastInputType = undefined;
     }
@@ -322,6 +381,48 @@ const FormatMixinImplementation = (superclass) =>
       if (this._shouldFormatOnInput(event)) {
         this._formatOnInput(event);
       }
+    }
+
+    /**
+     * Starts a focus session by taking the text in the input element as the
+     * value against which the blur below compares.
+     *
+     * @private
+     */
+    #onFocus() {
+      this.#changeBaseline = this._inputElementValue ?? '';
+    }
+
+    /**
+     * Ends a focus session by reporting an edit that the browser does not report
+     * itself. An edit that a layer applies from script, after preventing the one
+     * the user asked for, leaves no trace in the input element for the browser
+     * to compare against, so no native `change` follows on blur. The event is
+     * dispatched on the input element so that it takes the same path as the
+     * native one and reaches the application exactly once.
+     *
+     * @private
+     */
+    #onBlur() {
+      const input = this.inputElement;
+      if (!this._hasFormat || !input) {
+        return;
+      }
+
+      if (this._inputElementValue !== this.#changeBaseline) {
+        // Not composed, the same as the native `change` event.
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }
+
+    /**
+     * Ends the pending comparison once the edits so far are reported, whether by
+     * the browser or by the blur above.
+     *
+     * @private
+     */
+    #onNativeChange() {
+      this.#changeBaseline = this._inputElementValue ?? '';
     }
 
     /**

@@ -547,4 +547,35 @@ describe('FormatMixin with a trivial formatter', () => {
       expect(element.formattedValue).to.equal('ABC');
     });
   });
+
+  describe('change event', () => {
+    let spy;
+
+    beforeEach(() => {
+      spy = sinon.spy();
+      element.addEventListener('change', spy);
+      input.focus();
+    });
+
+    it('should not fire change on blur after a programmatic value set with a format', async () => {
+      element.value = 'FI21';
+      await nextUpdate(element);
+
+      input.blur();
+
+      expect(input.value).to.equal('FI21');
+      expect(spy).to.be.not.called;
+    });
+
+    it('should fire change once on blur after typing without a format', async () => {
+      element.formatEnabled = false;
+      await sendKeys({ type: 'abc' });
+      await nextUpdate(element);
+
+      input.blur();
+
+      expect(input.value).to.equal('abc');
+      expect(spy).to.be.calledOnce;
+    });
+  });
 });
