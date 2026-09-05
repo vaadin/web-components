@@ -197,7 +197,7 @@ export const InputControlMixin = (superclass) =>
      * @protected
      */
     _shouldAcceptText(text) {
-      return !this.allowedCharPattern || this.__allowedTextRegExp.test(text);
+      return this.__allowedTextRegExp.test(text);
     }
 
     /** @private */
