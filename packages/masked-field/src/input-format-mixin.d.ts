@@ -119,4 +119,11 @@ export declare class InputFormatMixinClass {
    * that did not compile is treated as unset everywhere else as well.
    */
   protected _isFormatComplete(): boolean;
+
+  /**
+   * The `inputmode` that the configured format implies, `'numeric'` for a mask
+   * whose every slot is a digit, `undefined` otherwise. Derived from the mask's
+   * maximal expansion, so it does not change while the user types.
+   */
+  protected readonly _formatInputMode: string | undefined;
 }

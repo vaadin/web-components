@@ -23,6 +23,17 @@ const USER_SLOTS = new Map([
 const DIGIT_SLOT = USER_SLOTS.get('0');
 
 /**
+ * Returns whether the given item of a compiled mask is the digit slot, that is a
+ * slot that a single digit fills, rather than another slot or a fixed character.
+ *
+ * @param {RegExp | string} item
+ * @return {boolean}
+ */
+export function isDigitSlot(item) {
+  return item === DIGIT_SLOT;
+}
+
+/**
  * The largest number of optional sections that a mask may hold. The expansions of a
  * mask are a chain of one per section plus one, so this is a readability cap rather
  * than a limit the engine needs.

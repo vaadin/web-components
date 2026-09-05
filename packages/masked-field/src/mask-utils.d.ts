@@ -161,6 +161,12 @@ export function compileMask(mask: string | null | undefined, options?: MaskCompi
 export function maximalOf(compiled: MaskExpression): NormalizedMask | undefined;
 
 /**
+ * Returns whether the given item of a compiled mask is the digit slot, that is a
+ * slot that a single digit fills, rather than another slot or a fixed character.
+ */
+export function isDigitSlot(item: RegExp | string): boolean;
+
+/**
  * Returns whether the given value fits the given mask exactly, that is whether it has
  * one character per mask item and every character is accepted by its item.
  */

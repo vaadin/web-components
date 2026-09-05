@@ -78,9 +78,10 @@ export const MaskedFieldMixin = (superClass) =>
 
     /**
      * Override a method from `DelegateStateMixin` to stop delegating the length
-     * and pattern constraints while a format is configured. Left on the input
-     * element, `maxlength` would block typing before the last group is finished,
-     * and `pattern` would be matched against the text with its delimiters.
+     * and pattern constraints while a format is configured, and to derive the
+     * `inputmode` from the format instead. Left on the input element, `maxlength`
+     * would block typing before the last group is finished, and `pattern` would be
+     * matched against the text with its delimiters.
      *
      * @param {string} name
      * @param {unknown} value
@@ -90,6 +91,14 @@ export const MaskedFieldMixin = (superClass) =>
     _delegateAttribute(name, value) {
       if (this._hasFormat && FORMAT_CONSTRAINTS.includes(name)) {
         super._delegateAttribute(name, null);
+        return;
+      }
+
+      // The format only fills an `inputMode` in that the application left unset.
+      // An empty string is one the application set, and keeps removing the
+      // attribute the way it does on a field with no format.
+      if (this._hasFormat && name === 'inputMode' && (value === null || value === undefined)) {
+        super._delegateAttribute(name, this._formatInputMode);
         return;
       }
 
@@ -155,7 +164,7 @@ export const MaskedFieldMixin = (superClass) =>
     }
 
     /**
-     * Re-delegates the constraints that the format gates. Their own values have
+     * Re-delegates the attributes that the format gates. Their own values have
      * not changed, so the observer that normally delegates them does not run.
      *
      * @private
@@ -164,5 +173,11 @@ export const MaskedFieldMixin = (superClass) =>
       FORMAT_CONSTRAINTS.forEach((name) => {
         this._delegateAttribute(name, this[name]);
       });
+
+      // `inputMode` is re-delegated on its own and must not join
+      // `FORMAT_CONSTRAINTS`, whose members are delegated as `null` while a format
+      // is configured. That would remove the attribute in the one case the format
+      // is there to set it.
+      this._delegateAttribute('inputMode', this.inputMode);
     }
   };

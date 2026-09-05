@@ -345,6 +345,77 @@ describe('formatMask', () => {
     });
   });
 
+  describe('inputmode', () => {
+    it('should delegate a numeric inputmode for a mask whose slots are all digits', async () => {
+      // The mask has no optional section, so its maximal expansion is the mask itself.
+      field.formatMask = PHONE_MASK;
+      await nextUpdate(field);
+
+      expect(input.getAttribute('inputmode')).to.equal('numeric');
+    });
+
+    it('should not delegate an inputmode for a mask holding a letter slot', async () => {
+      field.formatMask = 'aa-000';
+      await nextUpdate(field);
+
+      expect(input.hasAttribute('inputmode')).to.be.false;
+    });
+
+    it('should keep the inputmode set on the field', async () => {
+      field.formatMask = PHONE_MASK;
+      field.inputMode = 'text';
+      await nextUpdate(field);
+
+      expect(input.getAttribute('inputmode')).to.equal('text');
+    });
+
+    it('should not delegate an inputmode set to an empty string on the field', async () => {
+      field.formatMask = PHONE_MASK;
+      field.inputMode = '';
+      await nextUpdate(field);
+
+      expect(input.hasAttribute('inputmode')).to.be.false;
+    });
+
+    it('should remove the derived inputmode when the mask is removed', async () => {
+      field.formatMask = PHONE_MASK;
+      await nextUpdate(field);
+      field.formatMask = undefined;
+      await nextUpdate(field);
+
+      expect(input.hasAttribute('inputmode')).to.be.false;
+    });
+
+    it('should keep the derived inputmode while an optional digit section is filled', async () => {
+      field.formatMask = '000[00]';
+      await nextUpdate(field);
+      expect(input.getAttribute('inputmode')).to.equal('numeric');
+
+      input.focus();
+      await sendKeys({ type: '12345' });
+
+      expect(input.getAttribute('inputmode')).to.equal('numeric');
+    });
+
+    it('should not derive an inputmode from a mask with an optional letter section', async () => {
+      field.formatMask = '000[aa]';
+      await nextUpdate(field);
+      expect(input.hasAttribute('inputmode')).to.be.false;
+
+      input.focus();
+      await sendKeys({ type: '123' });
+
+      expect(input.hasAttribute('inputmode')).to.be.false;
+    });
+
+    it('should not delegate an inputmode for a blocks format', async () => {
+      field.formatBlocks = [4, 4];
+      await nextUpdate(field);
+
+      expect(input.hasAttribute('inputmode')).to.be.false;
+    });
+  });
+
   describe('formatCompletionRequired', () => {
     beforeEach(() => {
       field.formatCompletionRequired = true;

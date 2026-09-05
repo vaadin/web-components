@@ -13,7 +13,9 @@ import {
   compileMask,
   deleteRange,
   insertText,
+  isDigitSlot,
   maskedIndex,
+  maximalOf,
   reconstructEdit,
   unmask,
   unmaskedIndex,
@@ -159,6 +161,26 @@ const InputFormatMixinImplementation = (superclass) =>
      */
     get _hasFormat() {
       return Boolean(this.#mask);
+    }
+
+    /**
+     * The `inputmode` that the configured format implies, `'numeric'` for a mask
+     * whose every slot is a digit, `undefined` otherwise. Derived from the mask's
+     * maximal expansion, so it does not change while the user types.
+     *
+     * @return {string | undefined}
+     * @protected
+     */
+    get _formatInputMode() {
+      const maximal = maximalOf(this.#mask);
+
+      if (!maximal) {
+        return undefined;
+      }
+
+      const slots = maximal.items.filter((item) => typeof item !== 'string');
+
+      return slots.length > 0 && slots.every(isDigitSlot) ? 'numeric' : undefined;
     }
 
     /**
