@@ -6,8 +6,10 @@ import {
   compileMask,
   deleteRange,
   insertText,
+  maskedIndex,
   reconstructEdit,
   unmask,
+  unmaskedIndex,
   validateWithMask,
 } from '../src/mask-utils.js';
 
@@ -21,6 +23,42 @@ const PHONE_FIXED_ZERO = compileMask('+7 (000) 0\\00-00-00');
 const LEGACY = compileMask('*\\08\\0\\0\\0-00-**-000000-0');
 
 const TIME = compileMask('00:00');
+
+// A dynamic mask that lays a value out in blocks joined by a delimiter, as a chunk
+// format does, so that a value laid out by one set of blocks can be mapped under another.
+function chunkMaskFor(blocks, delimiter = ' ') {
+  const slot = new RegExp(`[^${delimiter}]`, 'u');
+
+  return ({ value }) => {
+    const rawLength = value.split(delimiter).join('').length;
+    const items = [];
+    let covered = 0;
+
+    for (const block of blocks) {
+      if (items.length > 0) {
+        items.push(delimiter);
+      }
+
+      for (let i = 0; i < block; i++) {
+        items.push(slot);
+      }
+
+      covered += block;
+
+      if (covered >= rawLength) {
+        return { items, literalChars: new Set([delimiter]) };
+      }
+    }
+
+    items.push(delimiter);
+
+    for (let i = covered; i < rawLength; i++) {
+      items.push(slot);
+    }
+
+    return { items, literalChars: new Set([delimiter]) };
+  };
+}
 
 describe('compileMask', () => {
   beforeEach(() => {
@@ -67,6 +105,17 @@ describe('compileMask', () => {
     expect(validateWithMask('x', compileMask('a'))).to.be.true;
     expect(validateWithMask('ä', compileMask('a'))).to.be.true;
     expect(validateWithMask('1', compileMask('a'))).to.be.false;
+  });
+
+  it('should record the text case on the compiled mask', () => {
+    expect(compileMask('aa00', { textCase: 'upper' }).textCase).to.equal('upper');
+    expect(compileMask('aa00', { textCase: 'lower' }).textCase).to.equal('lower');
+  });
+
+  it('should record no text case without warning for an unknown value', () => {
+    expect(compileMask('aa00').textCase).to.be.undefined;
+    expect(compileMask('aa00', { textCase: 'title' }).textCase).to.be.undefined;
+    expect(console.warn).to.not.be.called;
   });
 
   it('should return null without warning when the mask is not set', () => {
@@ -162,6 +211,19 @@ describe('calibrate', () => {
     expect(calibrate({ value: '1' }, compileMask('00:')).value).to.equal('1');
   });
 
+  it('should apply the text case of the mask to the value', () => {
+    expect(calibrate({ value: 'fi21' }, compileMask('aa00', { textCase: 'upper' }), { raw: true }).value).to.equal(
+      'FI21',
+    );
+    expect(calibrate({ value: 'FI21' }, compileMask('aa00', { textCase: 'lower' }), { raw: true }).value).to.equal(
+      'fi21',
+    );
+  });
+
+  it('should keep the case of the value when the mask has no text case', () => {
+    expect(calibrate({ value: 'fi21' }, compileMask('aa00'), { raw: true }).value).to.equal('fi21');
+  });
+
   it('should map both selection indexes to the masked value', () => {
     const state = calibrate({ value: '900201', selection: [3, 5] }, PHONE);
     expect(state.value).to.equal('+7 (900) 201');
@@ -188,9 +250,54 @@ describe('unmask', () => {
     expect(state.selection).to.eql([3, 4]);
   });
 
+  it('should keep the case of the characters when the mask has a text case', () => {
+    expect(unmask('fi21', compileMask('aa00', { textCase: 'upper' }))).to.equal('fi21');
+    expect(unmask('FI21', compileMask('aa00', { textCase: 'lower' }))).to.equal('FI21');
+  });
+
   it('should map a selection past the end of the value to its end', () => {
     const state = unmask({ value: '+7 (90' }, PHONE);
     expect(state.selection).to.eql([2, 2]);
+  });
+});
+
+describe('unmaskedIndex', () => {
+  it('should count the characters that are not a fixed character of the mask', () => {
+    expect(unmaskedIndex('12:34', TIME, 4)).to.equal(3);
+  });
+
+  it('should return 0 for index 0', () => {
+    expect(unmaskedIndex('12:34', TIME, 0)).to.equal(0);
+  });
+
+  it('should clamp an index past the end of the value', () => {
+    expect(unmaskedIndex('12:34', TIME, 99)).to.equal(4);
+  });
+
+  it('should count independently of where the fixed characters sit', () => {
+    // Spike defect D-1: the value was laid out by the blocks [4, 4, 4, 4, 2] and is
+    // counted under [2, 4, 4], where none of the delimiters sit at the same index.
+    expect(unmaskedIndex('FI21 1234 5600', chunkMaskFor([2, 4, 4]), 6)).to.equal(5);
+  });
+});
+
+describe('maskedIndex', () => {
+  it('should return the index after the character that the index counts up to', () => {
+    expect(maskedIndex('12:34', TIME, 3)).to.equal(4);
+  });
+
+  it('should return 0 for index 0', () => {
+    expect(maskedIndex('12:34', TIME, 0)).to.equal(0);
+  });
+
+  it('should return the length of the value for an index past its last character', () => {
+    expect(maskedIndex('12:34', TIME, 9)).to.equal(5);
+  });
+
+  it('should keep the caret next to the same character across a mask change', () => {
+    // Spike defect D-1: the caret at 6 of a value laid out by the blocks [4, 4, 4, 4, 2]
+    // counts five characters, and lands next to the same one after [2, 4, 4] laid it out again.
+    expect(maskedIndex('FI 2112 3456 00', chunkMaskFor([2, 4, 4]), 5)).to.equal(6);
   });
 });
 
@@ -234,6 +341,23 @@ describe('insertText', () => {
   it('should replace the selected range with the inserted text', () => {
     const state = insertText({ value: '12:34', selection: [3, 5] }, '59', TIME);
     expect(state.value).to.equal('12:59');
+  });
+
+  it('should apply the text case of the mask to the inserted text', () => {
+    const state = insertText({ value: '', selection: [0, 0] }, 'ab', compileMask('aaa', { textCase: 'upper' }));
+    expect(state.value).to.equal('AB');
+    expect(state.selection).to.eql([2, 2]);
+  });
+
+  it('should apply the text case to a character typed in the other case', () => {
+    const state = insertText({ value: 'A', selection: [1, 1] }, 'b', compileMask('aaa', { textCase: 'upper' }));
+    expect(state.value).to.equal('AB');
+    expect(state.selection).to.eql([2, 2]);
+  });
+
+  it('should keep the case of the inserted text when the mask has no text case', () => {
+    const state = insertText({ value: '', selection: [0, 0] }, 'ab', compileMask('aaa'));
+    expect(state.value).to.equal('ab');
   });
 
   it('should insert a pasted fragment that the mask partly rejects', () => {

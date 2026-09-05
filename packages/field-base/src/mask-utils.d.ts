@@ -7,11 +7,13 @@
 /**
  * A compiled mask: one item per character of the masked value, a regular expression
  * for a user slot and a string for a fixed character, together with the set of every
- * character that the mask holds as a fixed character.
+ * character that the mask holds as a fixed character and the text case to apply to
+ * the characters that the user types.
  */
 export interface NormalizedMask {
   items: Array<RegExp | string>;
   literalChars: Set<string>;
+  textCase?: 'lower' | 'upper';
 }
 
 /**
@@ -36,6 +38,17 @@ export interface MaskStateInput {
  * for a mask that depends on the value.
  */
 export type MaskExpression = ((state: MaskState) => NormalizedMask) | NormalizedMask;
+
+/**
+ * Options for compiling a mask.
+ */
+export interface MaskCompileOptions {
+  /**
+   * The case to apply to the characters that the user types. Any value other than
+   * `'upper'` and `'lower'` is compiled as no case at all, without a warning.
+   */
+  textCase?: string | null;
+}
 
 /**
  * Options for a deletion applied through the mask.
@@ -89,6 +102,11 @@ export interface MaskEdit {
  * character that the mask holds as a fixed character, for offset independent filtering
  * of a text fragment.
  *
+ * The compiled mask carries the text case to apply to the characters that the user
+ * types, taken from `options.textCase`. Only `'upper'` and `'lower'` are accepted, any
+ * other value is recorded as no case at all and does not warn, since the layer that
+ * reads the property is the one that validates it.
+ *
  * The grammar is a subset of the IMask one:
  *
  * - `0` any digit
@@ -104,7 +122,7 @@ export interface MaskEdit {
  * - the mask ends with a dangling `\`
  * - the mask has no user slot at all
  */
-export function compileMask(mask: string | null | undefined): NormalizedMask | null;
+export function compileMask(mask: string | null | undefined, options?: MaskCompileOptions): NormalizedMask | null;
 
 /**
  * Returns whether the given value fits the given mask exactly, that is whether it has
@@ -120,6 +138,9 @@ export function validateWithMask(value: string, compiled: MaskExpression): boole
  * left to right: the fixed characters of the mask are inserted where they are due,
  * characters that their slot rejects are dropped, and characters past the end of the
  * mask are truncated.
+ *
+ * When the mask has a text case, every character of the value is stored with that case
+ * applied.
  *
  * With `raw: true` the value is taken as an unmasked one, so the fixed characters are
  * always inserted and never consume a character of the value. With `raw: false` a
@@ -144,6 +165,30 @@ export function calibrate(
  */
 export function unmask(state: string, compiled: MaskExpression): string;
 export function unmask(state: MaskState | MaskStateInput, compiled: MaskExpression): MaskState;
+
+/**
+ * Returns the index in the unmasked value that corresponds to the given index in the
+ * masked value, that is the number of characters before it that the mask does not hold
+ * as a fixed character anywhere.
+ *
+ * Unlike `unmask`, which only drops a fixed character sitting at its own index, this
+ * does not depend on the offsets of the mask, so it also maps an index of a value that
+ * another mask laid out, such as after a mask change while the field is focused. The
+ * given index is clamped to the length of the value.
+ */
+export function unmaskedIndex(value: string, compiled: MaskExpression, index: number): number;
+
+/**
+ * Returns the index in the masked value that corresponds to the given index in the
+ * unmasked value, that is the index just after the character that the given index
+ * counts up to, counting only the characters that the mask does not hold as a fixed
+ * character anywhere.
+ *
+ * Returns `0` for index `0`, which callers must treat as a valid index rather than as
+ * falsy, and the length of the value when the given index is past its last character
+ * that the mask does not hold as a fixed character.
+ */
+export function maskedIndex(value: string, compiled: MaskExpression, unmaskedIdx: number): number;
 
 /**
  * Returns the state that results from inserting the given text at the selection of the

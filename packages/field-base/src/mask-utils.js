@@ -28,6 +28,25 @@ function clamp(value, min, max) {
 }
 
 /**
+ * Returns the text with the given case applied, or unchanged when no case is set.
+ *
+ * @param {string} text
+ * @param {string | undefined} textCase
+ * @return {string}
+ */
+function applyCase(text, textCase) {
+  if (textCase === 'upper') {
+    return text.toUpperCase();
+  }
+
+  if (textCase === 'lower') {
+    return text.toLowerCase();
+  }
+
+  return text;
+}
+
+/**
  * Returns a mask state for the given value or state, with the selection defaulting to
  * a collapsed one at the end of the value.
  *
@@ -92,14 +111,17 @@ function isFixedAt(value, items, index) {
 /**
  * Returns the index in the unmasked value that corresponds to the given index in the
  * masked value, that is the number of characters before it that the mask does not
- * hold as a fixed character.
+ * hold as a fixed character sitting at that same index.
+ *
+ * This is the positional counterpart of the exported `unmaskedIndex`, which counts
+ * every character that the mask does not hold as a fixed character anywhere.
  *
  * @param {string} value
  * @param {Array<RegExp | string>} items
  * @param {number} index
  * @return {number}
  */
-function unmaskedIndex(value, items, index) {
+function positionalIndex(value, items, index) {
   const end = Math.min(index, value.length);
   let unmasked = 0;
 
@@ -151,8 +173,8 @@ function fixedRunAt(items, index, char, initialState, raw) {
 }
 
 /**
- * Rebuilds the given value left to right so that it fits the given mask items, and
- * maps both selection indexes to the rebuilt value.
+ * Rebuilds the given value left to right so that it fits the given mask, and maps both
+ * selection indexes to the rebuilt value.
  *
  * Before each character of the value, the run of fixed characters that is due at the
  * current output index is inserted. The character is then kept when it matches the
@@ -160,14 +182,20 @@ function fixedRunAt(items, index, char, initialState, raw) {
  * dropped otherwise. Characters past the end of the mask are dropped, and the trailing
  * run of fixed characters is appended only when it completes the mask.
  *
+ * The text case of the mask is applied to each character as it is placed, so the value
+ * stores the transformed character while matching a slot and consuming a fixed character
+ * both work off the character as it was typed. The fixed characters of the mask are
+ * never transformed.
+ *
  * @param {MaskState} state
- * @param {Array<RegExp | string>} items
+ * @param {NormalizedMask} mask
  * @param {MaskState | null} initialState
  * @param {boolean} raw
  * @return {MaskState}
  */
-function rebuildValue(state, items, initialState, raw) {
+function rebuildValue(state, mask, initialState, raw) {
   const { value, selection } = state;
+  const { items, textCase } = mask;
   let result = '';
   let mappedFrom = null;
   let mappedTo = null;
@@ -190,7 +218,7 @@ function rebuildValue(state, items, initialState, raw) {
       // The character being placed is the fixed character due here, keep the latter only.
       result = withRun + item;
     } else if (item !== undefined && item.test(char)) {
-      result = withRun + char;
+      result = withRun + applyCase(char, textCase);
     } else if (run.startsWith(char)) {
       // The character was already covered by the run inserted for it.
       result = withRun;
@@ -237,6 +265,11 @@ function coversFixedOnly(value, items, from, to) {
  * character that the mask holds as a fixed character, for offset independent filtering
  * of a text fragment.
  *
+ * The compiled mask carries the text case to apply to the characters that the user
+ * types, taken from `options.textCase`. Only `'upper'` and `'lower'` are accepted, any
+ * other value is recorded as no case at all and does not warn, since the layer that
+ * reads the property is the one that validates it.
+ *
  * The grammar is a subset of the IMask one:
  *
  * - `0` any digit
@@ -253,9 +286,10 @@ function coversFixedOnly(value, items, from, to) {
  * - the mask has no user slot at all
  *
  * @param {string | null | undefined} mask
+ * @param {MaskCompileOptions} [options]
  * @return {NormalizedMask | null}
  */
-export function compileMask(mask) {
+export function compileMask(mask, options = {}) {
   if (mask === undefined || mask === null) {
     return null;
   }
@@ -296,7 +330,9 @@ export function compileMask(mask) {
     return null;
   }
 
-  return { items, literalChars };
+  const textCase = options.textCase === 'upper' || options.textCase === 'lower' ? options.textCase : undefined;
+
+  return { items, literalChars, textCase };
 }
 
 /**
@@ -328,6 +364,9 @@ export function validateWithMask(value, compiled) {
  * unless `initialState` already held it at that index, which is how typing a delimiter
  * that the mask inserts anyway does not double it.
  *
+ * When the mask has a text case, every character of the value is stored with that case
+ * applied.
+ *
  * @param {MaskState | { value: string, selection?: number[] }} state
  * @param {NormalizedMask | function(MaskState): NormalizedMask} compiled
  * @param {MaskCalibrateOptions} [options]
@@ -336,13 +375,14 @@ export function validateWithMask(value, compiled) {
 export function calibrate(state, compiled, options = {}) {
   const { initialState = null, raw = false } = options;
   const candidate = toState(state);
-  const { items } = resolveMask(compiled, candidate);
+  const mask = resolveMask(compiled, candidate);
+  const { items, textCase } = mask;
 
-  if (isValidValue(candidate.value, items)) {
+  if (isValidValue(candidate.value, items) && candidate.value === applyCase(candidate.value, textCase)) {
     return candidate;
   }
 
-  return rebuildValue(candidate, items, initialState, raw);
+  return rebuildValue(candidate, mask, initialState, raw);
 }
 
 /**
@@ -377,8 +417,73 @@ export function unmask(state, compiled) {
 
   return {
     value: unmasked,
-    selection: [unmaskedIndex(value, items, selection[0]), unmaskedIndex(value, items, selection[1])],
+    selection: [positionalIndex(value, items, selection[0]), positionalIndex(value, items, selection[1])],
   };
+}
+
+/**
+ * Returns the index in the unmasked value that corresponds to the given index in the
+ * masked value, that is the number of characters before it that the mask does not hold
+ * as a fixed character anywhere.
+ *
+ * Unlike `unmask`, which only drops a fixed character sitting at its own index, this
+ * does not depend on the offsets of the mask, so it also maps an index of a value that
+ * another mask laid out, such as after a mask change while the field is focused. The
+ * given index is clamped to the length of the value.
+ *
+ * @param {string} value
+ * @param {NormalizedMask | function(MaskState): NormalizedMask} compiled
+ * @param {number} index
+ * @return {number}
+ */
+export function unmaskedIndex(value, compiled, index) {
+  const { literalChars } = resolveMask(compiled, { value, selection: [index, index] });
+  const end = Math.min(index, value.length);
+  let unmasked = 0;
+
+  for (let i = 0; i < end; i++) {
+    if (!literalChars.has(value[i])) {
+      unmasked += 1;
+    }
+  }
+
+  return unmasked;
+}
+
+/**
+ * Returns the index in the masked value that corresponds to the given index in the
+ * unmasked value, that is the index just after the character that the given index
+ * counts up to, counting only the characters that the mask does not hold as a fixed
+ * character anywhere.
+ *
+ * Returns `0` for index `0`, which callers must treat as a valid index rather than as
+ * falsy, and the length of the value when the given index is past its last character
+ * that the mask does not hold as a fixed character.
+ *
+ * @param {string} value
+ * @param {NormalizedMask | function(MaskState): NormalizedMask} compiled
+ * @param {number} unmaskedIdx
+ * @return {number}
+ */
+export function maskedIndex(value, compiled, unmaskedIdx) {
+  if (unmaskedIdx <= 0) {
+    return 0;
+  }
+
+  const { literalChars } = resolveMask(compiled, { value, selection: [unmaskedIdx, unmaskedIdx] });
+  let count = 0;
+
+  for (let i = 0; i < value.length; i++) {
+    if (!literalChars.has(value[i])) {
+      count += 1;
+
+      if (count === unmaskedIdx) {
+        return i + 1;
+      }
+    }
+  }
+
+  return value.length;
 }
 
 /**
