@@ -76,4 +76,11 @@ export declare class InputControlMixinClass {
    * The text usually displayed in a tooltip popup when the mouse is over the field.
    */
   title: string;
+
+  /**
+   * Returns true when the given text may be inserted into the field.
+   * Override to accept text that the raw `allowedCharPattern` test would reject,
+   * for example a formatted string that is valid once unformatted.
+   */
+  protected _shouldAcceptText(text: string): boolean;
 }
