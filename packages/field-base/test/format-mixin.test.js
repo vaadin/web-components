@@ -3,10 +3,10 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { defineLit, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
-import { ChunkFormatMixin } from '../src/chunk-format-mixin.js';
 import { FormatMixin } from '../src/format-mixin.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
 import { InputController } from '../src/input-controller.js';
+import { InputFormatMixin } from '../src/input-format-mixin.js';
 
 const INPUT_CONTROL_TEMPLATE = `
   <div part="label">
@@ -651,11 +651,11 @@ describe('FormatMixin with a trivial formatter', () => {
   });
 });
 
-describe('FormatMixin with a format from a layer above chunking', () => {
-  // A layer that presents a format of its own on top of the chunking layer, the
-  // way a second format mixin in the chain does. It reports a format without
-  // configuring the chunking below it, so nothing but that layer's own guards
-  // keeps the field working.
+describe('FormatMixin with a format from a layer above the input format', () => {
+  // A layer that presents a format of its own on top of the input format layer,
+  // the way a second format mixin in the chain does. It reports a format without
+  // configuring the layer below it, so nothing but that layer's own guards keeps
+  // the field working.
   const FormatLayerMixin = (superclass) =>
     class extends FormatMixin(superclass) {
       get _hasFormat() {
@@ -667,7 +667,7 @@ describe('FormatMixin with a format from a layer above chunking', () => {
     'format-mixin-layered',
     INPUT_CONTROL_TEMPLATE,
     (Base) =>
-      class extends InputControlHostMixin(FormatLayerMixin(ChunkFormatMixin(InputControlMixin(PolylitMixin(Base))))) {},
+      class extends InputControlHostMixin(FormatLayerMixin(InputFormatMixin(InputControlMixin(PolylitMixin(Base))))) {},
   );
 
   let element, input;

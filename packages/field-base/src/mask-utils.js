@@ -29,12 +29,14 @@ function clamp(value, min, max) {
 
 /**
  * Returns the text with the given case applied, or unchanged when no case is set.
+ * Only `'upper'` and `'lower'` are recognized, any other value leaves the text as
+ * it is.
  *
  * @param {string} text
  * @param {string | undefined} textCase
  * @return {string}
  */
-function applyCase(text, textCase) {
+export function applyTextCase(text, textCase) {
   if (textCase === 'upper') {
     return text.toUpperCase();
   }
@@ -218,7 +220,7 @@ function rebuildValue(state, mask, initialState, raw) {
       // The character being placed is the fixed character due here, keep the latter only.
       result = withRun + item;
     } else if (item !== undefined && item.test(char)) {
-      result = withRun + applyCase(char, textCase);
+      result = withRun + applyTextCase(char, textCase);
     } else if (run.startsWith(char)) {
       // The character was already covered by the run inserted for it.
       result = withRun;
@@ -378,7 +380,7 @@ export function calibrate(state, compiled, options = {}) {
   const mask = resolveMask(compiled, candidate);
   const { items, textCase } = mask;
 
-  if (isValidValue(candidate.value, items) && candidate.value === applyCase(candidate.value, textCase)) {
+  if (isValidValue(candidate.value, items) && candidate.value === applyTextCase(candidate.value, textCase)) {
     return candidate;
   }
 

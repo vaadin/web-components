@@ -96,6 +96,13 @@ export interface MaskEdit {
 }
 
 /**
+ * Returns the text with the given case applied, or unchanged when no case is set.
+ * Only `'upper'` and `'lower'` are recognized, any other value leaves the text as
+ * it is.
+ */
+export function applyTextCase(text: string, textCase: string | null | undefined): string;
+
+/**
  * Compiles a mask string into the list of items that the other functions work with,
  * one item per character of the masked value: a regular expression for a user slot
  * and a string for a fixed character. The compiled mask also carries the set of every

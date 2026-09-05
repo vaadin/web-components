@@ -4,9 +4,9 @@ import { defineLit, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-
 import sinon from 'sinon';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
-import { ChunkFormatMixin } from '../src/chunk-format-mixin.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
 import { InputController } from '../src/input-controller.js';
+import { InputFormatMixin } from '../src/input-format-mixin.js';
 
 const IBAN = [4, 4, 4, 4, 2];
 const PHONE = [3, 3, 4];
@@ -32,9 +32,9 @@ function paste(input, text) {
   input.dispatchEvent(new InputEvent('input', options));
 }
 
-describe('ChunkFormatMixin', () => {
+describe('InputFormatMixin', () => {
   const tag = defineLit(
-    'chunk-format-mixin',
+    'input-format-mixin',
     `
       <div part="label">
         <slot name="label"></slot>
@@ -47,7 +47,7 @@ describe('ChunkFormatMixin', () => {
       <slot name="helper"></slot>
     `,
     (Base) =>
-      class extends ChunkFormatMixin(InputControlMixin(PolylitMixin(Base))) {
+      class extends InputFormatMixin(InputControlMixin(PolylitMixin(Base))) {
         get clearElement() {
           return this.$.clearButton;
         }
@@ -223,12 +223,15 @@ describe('ChunkFormatMixin', () => {
       expect(input.selectionStart).to.equal(3);
     });
 
-    it('should delete the character after the delimiter on Delete', async () => {
+    it('should delete the character after the delimiter on Delete and keep the caret past it', async () => {
       input.setSelectionRange(4, 4);
       await sendKeys({ press: 'Delete' });
       expect(element.value).to.equal('FI21678');
       expect(input.value).to.equal('FI21 678');
-      expect(input.selectionStart).to.equal(4);
+      // The caret stays next to the character that took the place of the deleted
+      // one, which is the first character of the next group rather than the
+      // delimiter in front of it.
+      expect(input.selectionStart).to.equal(5);
     });
 
     it('should delete natively on Backspace away from the delimiter', async () => {
@@ -672,9 +675,9 @@ describe('ChunkFormatMixin', () => {
 
   describe('without InputControlMixin', () => {
     const bareTag = defineLit(
-      'chunk-format-mixin-bare',
+      'input-format-mixin-bare',
       '<slot name="input"></slot>',
-      (Base) => class extends ChunkFormatMixin(PolylitMixin(Base)) {},
+      (Base) => class extends InputFormatMixin(PolylitMixin(Base)) {},
     );
 
     let bare, bareInput;
@@ -728,6 +731,274 @@ describe('ChunkFormatMixin', () => {
       bareInput.dispatchEvent(event);
       expect(event.defaultPrevented).to.be.false;
       expect(bare.hasAttribute('input-prevented')).to.be.false;
+    });
+  });
+  describe('format warnings', () => {
+    let warn;
+
+    beforeEach(() => {
+      warn = sinon.stub(console, 'warn');
+    });
+
+    afterEach(() => {
+      warn.restore();
+    });
+
+    it('should not warn when no format is configured', async () => {
+      element.value = 'FI211234';
+      await nextUpdate(element);
+      expect(warn).to.not.be.called;
+    });
+
+    it('should not warn when only the delimiter is set', async () => {
+      element.formatDelimiter = '-';
+      await nextUpdate(element);
+      expect(warn).to.not.be.called;
+    });
+
+    it('should not warn when only the text case is set', async () => {
+      element.formatTextCase = 'upper';
+      await nextUpdate(element);
+      expect(warn).to.not.be.called;
+    });
+
+    it('should warn once when a block is not a positive integer', async () => {
+      element.formatBlocks = [4, 0];
+      await nextUpdate(element);
+      expect(element._hasFormat).to.be.false;
+      expect(warn).to.be.calledOnce;
+    });
+
+    it('should warn once for repeated updates with the same invalid blocks', async () => {
+      element.formatBlocks = 'nope';
+      await nextUpdate(element);
+      element.formatBlocks = 'nope either';
+      await nextUpdate(element);
+      expect(warn).to.be.calledOnce;
+    });
+
+    it('should warn for the delimiter and the text case when both are invalid', async () => {
+      element.formatBlocks = IBAN;
+      element.formatDelimiter = '--';
+      element.formatTextCase = 'title';
+      await nextUpdate(element);
+      expect(element._hasFormat).to.be.true;
+      expect(warn).to.be.calledTwice;
+    });
+
+    it('should not warn when the delimiter and the text case are invalid without blocks', async () => {
+      element.formatDelimiter = '--';
+      element.formatTextCase = 'title';
+      await nextUpdate(element);
+      expect(warn).to.not.be.called;
+    });
+  });
+
+  describe('deleting a selection', () => {
+    beforeEach(async () => {
+      element.formatBlocks = IBAN;
+      element.value = 'FI215678';
+      await nextUpdate(element);
+      input.focus();
+    });
+
+    it('should remove exactly the selected range and regroup what is left', async () => {
+      input.setSelectionRange(3, 6);
+      await sendKeys({ press: 'Backspace' });
+      expect(element.value).to.equal('FI2678');
+      expect(input.value).to.equal('FI26 78');
+      expect(input.selectionStart).to.equal(3);
+    });
+
+    it('should keep the value when a selection covers the delimiter alone', async () => {
+      input.setSelectionRange(4, 5);
+      await sendKeys({ press: 'Backspace' });
+      expect(element.value).to.equal('FI215678');
+      expect(input.value).to.equal('FI21 5678');
+    });
+  });
+
+  describe('typing the delimiter', () => {
+    beforeEach(async () => {
+      element.formatBlocks = IBAN;
+      element.value = 'FI211234';
+      await nextUpdate(element);
+      input.focus();
+      input.setSelectionRange(2, 2);
+    });
+
+    it('should keep the presented text unchanged when the delimiter is typed inside a group', async () => {
+      await sendKeys({ type: ' ' });
+      expect(input.value).to.equal('FI21 1234');
+      expect(element.value).to.equal('FI211234');
+      expect(input.selectionStart).to.equal(2);
+    });
+
+    it('should not mark the input as prevented when the delimiter is typed inside a group', async () => {
+      await sendKeys({ type: ' ' });
+      expect(element.hasAttribute('input-prevented')).to.be.false;
+    });
+  });
+
+  describe('programmatic value that does not fit', () => {
+    let warn;
+
+    beforeEach(async () => {
+      warn = sinon.stub(console, 'warn');
+      element.formatBlocks = IBAN;
+      await nextUpdate(element);
+    });
+
+    afterEach(() => {
+      warn.restore();
+    });
+
+    it('should present a value that already holds the delimiter', async () => {
+      element.value = 'FI21 1234';
+      await nextUpdate(element);
+      expect(input.value).to.equal('FI21 1234');
+      expect(element.formattedValue).to.equal('FI21 1234');
+    });
+
+    it('should keep a value that already holds the delimiter as it was assigned', async () => {
+      element.value = 'FI21 1234';
+      await nextUpdate(element);
+      expect(element.value).to.equal('FI21 1234');
+    });
+
+    it('should warn once about a value that does not fit', async () => {
+      element.value = 'FI21 1234';
+      await nextUpdate(element);
+      expect(warn).to.be.calledOnce;
+    });
+
+    it('should not warn about a value that fits', async () => {
+      element.value = 'FI211234';
+      await nextUpdate(element);
+      expect(warn).to.not.be.called;
+    });
+  });
+
+  describe('formatMask', () => {
+    beforeEach(async () => {
+      element.formatMask = '00:00';
+      await nextUpdate(element);
+      input.focus();
+    });
+
+    it('should lay the typed text out with the mask', async () => {
+      await sendKeys({ type: '1234' });
+      expect(input.value).to.equal('12:34');
+      expect(element.formattedValue).to.equal('12:34');
+    });
+
+    it('should keep value without the characters that the mask inserts', async () => {
+      await sendKeys({ type: '1234' });
+      expect(element.value).to.equal('1234');
+    });
+
+    it('should consume a typed character that the mask inserts itself', async () => {
+      await sendKeys({ type: '12:34' });
+      expect(input.value).to.equal('12:34');
+      expect(element.value).to.equal('1234');
+    });
+
+    it('should not mark the input as prevented for a character that the mask inserts', async () => {
+      await sendKeys({ type: '12:' });
+      expect(element.hasAttribute('input-prevented')).to.be.false;
+    });
+
+    it('should drop a character that its slot does not accept', async () => {
+      await sendKeys({ type: '1x2' });
+      expect(input.value).to.equal('12');
+      expect(element.value).to.equal('12');
+    });
+
+    it('should mark the input as prevented for a character that its slot does not accept', async () => {
+      await sendKeys({ type: 'x' });
+      expect(element.hasAttribute('input-prevented')).to.be.true;
+    });
+
+    it('should truncate the text past the last slot of the mask', async () => {
+      await sendKeys({ type: '12345' });
+      expect(input.value).to.equal('12:34');
+      expect(element.value).to.equal('1234');
+    });
+
+    it('should delete the character before a fixed one on Backspace', async () => {
+      await sendKeys({ type: '1234' });
+      input.setSelectionRange(3, 3);
+      await sendKeys({ press: 'Backspace' });
+      expect(input.value).to.equal('13:4');
+      expect(element.value).to.equal('134');
+      expect(input.selectionStart).to.equal(1);
+    });
+
+    it('should present a value set programmatically in its masked form', async () => {
+      element.value = '1234';
+      await nextUpdate(element);
+      expect(input.value).to.equal('12:34');
+      expect(element.formattedValue).to.equal('12:34');
+    });
+
+    it('should present the raw value when the mask is removed', async () => {
+      element.value = '1234';
+      await nextUpdate(element);
+      element.formatMask = '';
+      await nextUpdate(element);
+      expect(element._hasFormat).to.be.false;
+      expect(input.value).to.equal('1234');
+      expect(element.formattedValue).to.equal('');
+    });
+
+    it('should lay out a mask with several fixed characters in a row', async () => {
+      element.formatMask = '(000) 000-0000';
+      await nextUpdate(element);
+      await sendKeys({ type: '5551234567' });
+      expect(input.value).to.equal('(555) 123-4567');
+      expect(element.value).to.equal('5551234567');
+    });
+
+    it('should accept a pasted string that holds the characters of the mask', async () => {
+      element.formatMask = '(000) 000-0000';
+      element.allowedCharPattern = '[0-9]';
+      await nextUpdate(element);
+      expect(element._shouldAcceptText('(555) 123-4567')).to.be.true;
+    });
+  });
+
+  describe('formatMask and formatBlocks', () => {
+    let warn;
+
+    beforeEach(async () => {
+      warn = sinon.stub(console, 'warn');
+      element.formatMask = '00:00';
+      element.formatBlocks = [4, 4];
+      await nextUpdate(element);
+      input.focus();
+    });
+
+    afterEach(() => {
+      warn.restore();
+    });
+
+    it('should lay the value out with the mask', async () => {
+      await sendKeys({ type: '1234' });
+      expect(input.value).to.equal('12:34');
+      expect(element.value).to.equal('1234');
+    });
+
+    it('should warn once that the blocks are ignored', () => {
+      expect(warn).to.be.calledOnce;
+    });
+
+    it('should group with the blocks again when the mask is removed', async () => {
+      element.formatMask = undefined;
+      await nextUpdate(element);
+      await sendKeys({ type: '1234' });
+      expect(input.value).to.equal('1234');
+      await sendKeys({ type: '5' });
+      expect(input.value).to.equal('1234 5');
     });
   });
 });

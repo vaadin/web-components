@@ -1,10 +1,10 @@
 export { CheckedMixin } from './src/checked-mixin.js';
-export { ChunkFormatMixin } from './src/chunk-format-mixin.js';
 export { FieldMixin } from './src/field-mixin.js';
 export { FormatMixin } from './src/format-mixin.js';
 export { InputController } from './src/input-controller.js';
 export { InputControlMixin } from './src/input-control-mixin.js';
 export { InputFieldMixin } from './src/input-field-mixin.js';
+export { InputFormatMixin } from './src/input-format-mixin.js';
 export { InputMixin } from './src/input-mixin.js';
 export { LabelledInputController } from './src/labelled-input-controller.js';
 export { LabelMixin } from './src/label-mixin.js';

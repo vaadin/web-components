@@ -3,9 +3,9 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ChunkFormatMixin } from '@vaadin/field-base/src/chunk-format-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
+import { InputFormatMixin } from '@vaadin/field-base/src/input-format-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 
 // The constraints that a configured format takes away from the input element and
@@ -16,7 +16,7 @@ const FORMAT_CONSTRAINTS = ['maxlength', 'minlength', 'pattern'];
  * A mixin providing common text field functionality.
  */
 export const TextFieldMixin = (superClass) =>
-  class TextFieldMixinClass extends ChunkFormatMixin(InputFieldMixin(superClass)) {
+  class TextFieldMixinClass extends InputFormatMixin(InputFieldMixin(superClass)) {
     /** @private */
     #previousFormatKey = null;
 
@@ -175,21 +175,22 @@ export const TextFieldMixin = (superClass) =>
       super._createConstraintsObserver();
 
       this._createMethodObserver(
-        '__formatConstraintsChanged(stateTarget, formatBlocks, formatDelimiter, formatTextCase)',
+        '__formatConstraintsChanged(stateTarget, formatBlocks, formatDelimiter, formatTextCase, formatMask)',
       );
     }
 
     /** @private */
-    __formatConstraintsChanged(stateTarget, formatBlocks, formatDelimiter, formatTextCase) {
+    __formatConstraintsChanged(stateTarget, formatBlocks, formatDelimiter, formatTextCase, formatMask) {
       if (!stateTarget) {
         return;
       }
 
-      // The three properties are compared as one JSON key rather than by identity,
+      // The four properties are compared as one JSON key rather than by identity,
       // so that a new array holding the same blocks is not read as a change, and
-      // the key is `null` while no blocks are configured, which is the state the
+      // the key is `null` while no format is configured, which is the state the
       // field starts in.
-      const formatKey = formatBlocks ? JSON.stringify([formatBlocks, formatDelimiter, formatTextCase]) : null;
+      const hasFormat = Boolean(formatMask) || Boolean(formatBlocks);
+      const formatKey = hasFormat ? JSON.stringify([formatMask, formatBlocks, formatDelimiter, formatTextCase]) : null;
 
       // The observer also runs when the state target is set, which is when the
       // constraints are delegated for the first time anyway. Only a format that
