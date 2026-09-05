@@ -53,6 +53,7 @@ assertType<ThemableMixinClass>(field);
 assertType<number[] | undefined>(field.formatBlocks);
 assertType<string | undefined>(field.formatDelimiter);
 assertType<string | undefined>(field.formatTextCase);
+assertType<string | undefined>(field.formatMask);
 assertType<string>(field.formattedValue);
 
 // Events
