@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { defineLit, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -186,6 +187,110 @@ describe('InputMixin', () => {
       await nextRender();
       input.dispatchEvent(new CustomEvent('change'));
       expect(changeSpy.called).to.be.false;
+    });
+  });
+
+  describe('model value seams', () => {
+    let seamsTag, modelValueStub, inputValueStub;
+
+    before(() => {
+      modelValueStub = sinon.stub();
+      inputValueStub = sinon.stub();
+
+      seamsTag = defineLit(
+        'input-mixin-seams',
+        '<slot name="input"></slot>',
+        (Base) =>
+          class extends InputMixin(PolylitMixin(Base)) {
+            _modelValueFromInput(viewValue, event) {
+              return modelValueStub(viewValue, event);
+            }
+
+            _inputValueFromModel(value) {
+              return inputValueStub(value);
+            }
+          },
+      );
+    });
+
+    beforeEach(async () => {
+      modelValueStub.reset();
+      modelValueStub.callsFake((viewValue) => viewValue);
+      inputValueStub.reset();
+      inputValueStub.callsFake((value) => value);
+
+      element = fixtureSync(`<${seamsTag}></${seamsTag}>`);
+      await nextRender();
+      input = document.createElement('input');
+      input.setAttribute('slot', 'input');
+      element.appendChild(input);
+      element._setInputElement(input);
+      await nextRender();
+    });
+
+    it('should pass the view value and the trusted input event to _modelValueFromInput', async () => {
+      input.focus();
+      await sendKeys({ press: 'F' });
+      expect(modelValueStub).to.be.calledOnce;
+      const [viewValue, event] = modelValueStub.firstCall.args;
+      expect(viewValue).to.equal('F');
+      expect(event.type).to.equal('input');
+      expect(event.isTrusted).to.be.true;
+    });
+
+    it('should pass an event with isTrusted false to _modelValueFromInput on a fake input event', () => {
+      input.value = 'foo';
+      input.dispatchEvent(new Event('input'));
+      const [, event] = modelValueStub.firstCall.args;
+      expect(event.isTrusted).to.be.false;
+    });
+
+    it('should set value to empty string when _modelValueFromInput returns null', () => {
+      modelValueStub.returns(null);
+      input.value = 'foo';
+      input.dispatchEvent(new Event('input'));
+      expect(element.value).to.equal('');
+    });
+
+    it('should set value to undefined when _modelValueFromInput returns undefined', () => {
+      modelValueStub.returns(undefined);
+      input.value = 'foo';
+      input.dispatchEvent(new Event('input'));
+      expect(element.value).to.be.undefined;
+    });
+
+    it('should propagate the value transformed by _inputValueFromModel to the input element', async () => {
+      inputValueStub.callsFake((value) => `[${value}]`);
+      element.value = 'foo';
+      await nextUpdate(element);
+      expect(input.value).to.equal('[foo]');
+    });
+
+    it('should pass an empty string to _inputValueFromModel when value is set to null', async () => {
+      inputValueStub.callsFake((value) => `[${value}]`);
+      element.value = 'foo';
+      await nextUpdate(element);
+      element.value = null;
+      await nextUpdate(element);
+      expect(input.value).to.equal('[]');
+    });
+
+    it('should not transform the value with the default seam implementations', async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await nextRender();
+      input = document.createElement('input');
+      input.setAttribute('slot', 'input');
+      element.appendChild(input);
+      element._setInputElement(input);
+      await nextRender();
+
+      input.focus();
+      await sendKeys({ type: 'foo' });
+      expect(element.value).to.equal('foo');
+
+      element.value = 'bar';
+      await nextUpdate(element);
+      expect(input.value).to.equal('bar');
     });
   });
 });

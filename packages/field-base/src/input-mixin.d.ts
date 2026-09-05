@@ -52,11 +52,31 @@ export declare class InputMixinClass {
 
   protected _removeInputListeners(input: HTMLElement): void;
 
+  /**
+   * Converts the model `value` into the text written to the input element.
+   * Override this method to present the value in a different form than
+   * the one stored in the `value` property, for example formatted.
+   * The default implementation returns the value as is.
+   */
+  protected _inputValueFromModel(value: string): string;
+
   protected _forwardInputValue(input: HTMLElement): void;
 
   protected _inputElementChanged(input: HTMLElement, oldInput: HTMLElement): void;
 
   protected _onChange(event: Event): void;
+
+  /**
+   * Converts the text entered in the input element into the model `value`.
+   * Override this method to derive the value from the entered text, for
+   * example by parsing it. The input event that caused the change is passed
+   * as a second argument, so that e.g. only trusted input is parsed.
+   *
+   * Returning `null` means that the entered text has no model value,
+   * in which case the `value` property is set to an empty string.
+   * The default implementation returns the entered text as is.
+   */
+  protected _modelValueFromInput(viewValue: string, event: Event): string | null;
 
   protected _onInput(event: Event): void;
 

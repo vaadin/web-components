@@ -78,9 +78,13 @@ export declare class InputControlMixinClass {
   title: string;
 
   /**
-   * Returns true when pasted, dropped or inserted text passes `allowedCharPattern`.
-   * Only called while the pattern is set. Override to accept text that the raw
-   * pattern test would reject.
+   * Returns true when the given text may be inserted into the field.
+   * Backs every `allowedCharPattern` check: the typed character on `keydown`,
+   * and the inserted text on `paste`, `drop` and `beforeinput`.
+   * Override to accept text that the raw `allowedCharPattern` test would reject,
+   * for example a formatted string that is valid once unformatted.
    */
   protected _shouldAcceptText(text: string): boolean;
+
+  protected _onBeforeInput(event: InputEvent): void;
 }

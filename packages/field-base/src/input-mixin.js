@@ -134,6 +134,20 @@ const InputMixinImplementation = (superclass) => {
     }
 
     /**
+     * Converts the model `value` into the text written to the input element.
+     * Override this method to present the value in a different form than
+     * the one stored in the `value` property, for example formatted.
+     * The default implementation returns the value as is.
+     *
+     * @param {string} value
+     * @return {string}
+     * @protected
+     */
+    _inputValueFromModel(value) {
+      return value;
+    }
+
+    /**
      * A method to forward the value property set on the field
      * programmatically back to the input element value.
      * Override this method to perform additional checks,
@@ -149,7 +163,7 @@ const InputMixinImplementation = (superclass) => {
         return;
       }
 
-      this._inputElementValue = value != null ? value : '';
+      this._inputElementValue = this._inputValueFromModel(value != null ? value : '');
     }
 
     /**
@@ -166,6 +180,25 @@ const InputMixinImplementation = (superclass) => {
     }
 
     /**
+     * Converts the text entered in the input element into the model `value`.
+     * Override this method to derive the value from the entered text, for
+     * example by parsing it. The input event that caused the change is passed
+     * as a second argument, so that e.g. only trusted input is parsed.
+     *
+     * Returning `null` means that the entered text has no model value,
+     * in which case the `value` property is set to an empty string.
+     * The default implementation returns the entered text as is.
+     *
+     * @param {string} viewValue
+     * @param {Event} _event
+     * @return {string | null}
+     * @protected
+     */
+    _modelValueFromInput(viewValue, _event) {
+      return viewValue;
+    }
+
+    /**
      * An input event listener used to update the field value.
      *
      * @param {Event} event
@@ -178,7 +211,8 @@ const InputMixinImplementation = (superclass) => {
       const target = event.composedPath()[0];
       // Ignore fake input events e.g. used by clear button.
       this.__userInput = event.isTrusted;
-      this.value = target.value;
+      const modelValue = this._modelValueFromInput(target.value, event);
+      this.value = modelValue === null ? '' : modelValue;
       this.__userInput = false;
     }
 

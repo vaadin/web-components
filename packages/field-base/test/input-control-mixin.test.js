@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
-import { defineLit, fixtureSync, keyDownOn, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { defineLit, fixtureSync, keyboardEventFor, keyDownOn, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
@@ -355,9 +355,156 @@ describe('InputControlMixin', () => {
       });
 
       it('should not throw an error when incorrect pattern provided', async () => {
-        fixtureSync(`<${tag} allowed-char-pattern="[a]*"></${tag}>`);
+        fixtureSync(`<${tag} allowed-char-pattern="[a"></${tag}>`);
         await nextRender();
         expect(console.error.calledOnce).to.be.true;
+      });
+    });
+  });
+
+  describe('_shouldAcceptText', () => {
+    // Omitting the argument fires an event that carries no clipboard data / data transfer.
+    const firePasteEvent = (pastedText) => {
+      const event = new Event('paste', {
+        bubbles: true,
+        cancelable: true,
+        composed: true,
+      });
+      if (pastedText !== undefined) {
+        event.clipboardData = {
+          getData: () => pastedText,
+        };
+      }
+      input.dispatchEvent(event);
+      return event;
+    };
+
+    const fireDropEvent = (draggedText) => {
+      const event = new Event('drop', {
+        bubbles: true,
+        cancelable: true,
+        composed: true,
+      });
+      if (draggedText !== undefined) {
+        event.dataTransfer = {
+          getData: () => draggedText,
+        };
+      }
+      input.dispatchEvent(event);
+      return event;
+    };
+
+    const fireBeforeInputEvent = (textToInput) => {
+      const event = new Event('beforeinput', {
+        bubbles: true,
+        cancelable: true,
+        composed: true,
+      });
+      event.data = textToInput;
+      event.inputType = 'insertFromPaste';
+      input.dispatchEvent(event);
+      return event;
+    };
+
+    const fireKeyDownEvent = (key) => {
+      const event = keyboardEventFor('keydown', key.charCodeAt(0), [], key);
+      input.dispatchEvent(event);
+      return event;
+    };
+
+    describe('allowed char pattern set', () => {
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag} allowed-char-pattern="[0-9]"></${tag}>`);
+        await nextRender();
+        input = element.querySelector('[slot=input]');
+      });
+
+      [
+        ['paste', firePasteEvent],
+        ['drop', fireDropEvent],
+        ['beforeinput', fireBeforeInputEvent],
+      ].forEach(([eventName, fireEvent]) => {
+        it(`should not prevent ${eventName} with text rejected by the pattern when accepted by _shouldAcceptText`, () => {
+          sinon.stub(element, '_shouldAcceptText').returns(true);
+          const event = fireEvent('foo');
+          expect(event.defaultPrevented).to.be.false;
+          expect(element.hasAttribute('input-prevented')).to.be.false;
+        });
+
+        it(`should prevent ${eventName} with text allowed by the pattern when rejected by _shouldAcceptText`, () => {
+          sinon.stub(element, '_shouldAcceptText').returns(false);
+          const event = fireEvent('123');
+          expect(event.defaultPrevented).to.be.true;
+          expect(element.hasAttribute('input-prevented')).to.be.true;
+        });
+      });
+
+      it('should not prevent keydown with a key rejected by the pattern when accepted by _shouldAcceptText', () => {
+        sinon.stub(element, '_shouldAcceptText').returns(true);
+        const event = fireKeyDownEvent('-');
+        expect(event.defaultPrevented).to.be.false;
+        expect(element.hasAttribute('input-prevented')).to.be.false;
+      });
+
+      it('should prevent keydown with a key allowed by the pattern when rejected by _shouldAcceptText', () => {
+        sinon.stub(element, '_shouldAcceptText').returns(false);
+        const event = fireKeyDownEvent('5');
+        expect(event.defaultPrevented).to.be.true;
+        expect(element.hasAttribute('input-prevented')).to.be.true;
+      });
+
+      it('should apply a pattern with a top-level alternation to the whole text', async () => {
+        element.allowedCharPattern = '[a-z]|[A-Z]';
+        await nextRender();
+        expect(element._shouldAcceptText('aB')).to.be.true;
+        expect(element._shouldAcceptText('a5')).to.be.false;
+        expect(element._shouldAcceptText('5')).to.be.false;
+      });
+
+      it('should prevent keydown with a key rejected by a pattern with a top-level alternation', async () => {
+        element.allowedCharPattern = '[a-z]|[A-Z]';
+        await nextRender();
+        const event = fireKeyDownEvent('5');
+        expect(event.defaultPrevented).to.be.true;
+        expect(element.hasAttribute('input-prevented')).to.be.true;
+      });
+
+      it('should not prevent paste event that has no clipboard data', () => {
+        const event = firePasteEvent();
+        expect(event.defaultPrevented).to.be.false;
+        expect(element.hasAttribute('input-prevented')).to.be.false;
+      });
+
+      it('should not prevent drop event that has no data transfer', () => {
+        const event = fireDropEvent();
+        expect(event.defaultPrevented).to.be.false;
+        expect(element.hasAttribute('input-prevented')).to.be.false;
+      });
+    });
+
+    describe('allowed char pattern not set', () => {
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag}></${tag}>`);
+        await nextRender();
+        input = element.querySelector('[slot=input]');
+      });
+
+      it('should not prevent paste event with arbitrary text', () => {
+        const event = firePasteEvent('foo');
+        expect(event.defaultPrevented).to.be.false;
+        expect(element.hasAttribute('input-prevented')).to.be.false;
+      });
+
+      it('should not prevent paste event that has no clipboard data', () => {
+        const event = firePasteEvent();
+        expect(event.defaultPrevented).to.be.false;
+        expect(element.hasAttribute('input-prevented')).to.be.false;
+      });
+
+      it('should not prevent drop event that has no data transfer', () => {
+        const event = fireDropEvent();
+        expect(event.defaultPrevented).to.be.false;
+        expect(element.hasAttribute('input-prevented')).to.be.false;
       });
     });
   });
