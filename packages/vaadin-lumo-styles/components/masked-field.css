@@ -11,6 +11,7 @@
 @import '../src/mixins/field-label.css';
 @import '../src/mixins/field-required.css';
 @import './input-container.css';
+@import '../src/components/masked-field.css';
 
 :root,
 :host {
@@ -22,5 +23,6 @@
     lumo_mixins_field-button,
     lumo_mixins_field-helper,
     lumo_mixins_field-helper-above,
-    lumo_mixins_field-base;
+    lumo_mixins_field-base,
+    lumo_components_masked-field;
 }
