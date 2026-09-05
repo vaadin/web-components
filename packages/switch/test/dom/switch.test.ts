@@ -4,10 +4,6 @@ import '../../vaadin-switch.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import type { Switch } from '../../vaadin-switch.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.switchComponent = true;
-
 describe('vaadin-switch', () => {
   let element: Switch;
 
