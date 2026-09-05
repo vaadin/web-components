@@ -15,6 +15,9 @@ An extension of [`<vaadin-text-field>`](https://www.npmjs.com/package/@vaadin/te
 <vaadin-masked-field label="Phone number" format-mask="+1 (000) 000-0000"></vaadin-masked-field>
 ```
 
+- `format-completion-required` makes a value that does not fill the mask invalid, checked on commit like the other constraints.
+- `format-prompt` shows the part of the mask the user has not filled yet, for example `+1 (___) ___-____`.
+
 ## Installation
 
 Install the component:

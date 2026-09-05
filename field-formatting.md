@@ -81,11 +81,29 @@ capability into text-field itself stays a future option. The component carries a
 - `value` — the model value (what Binder sees), unchanged unless a format is configured
 - `inputElement.value` — the presentation, owned by the mixin
 
-Three opt-in layers on top, in order of delivery:
+Three opt-in layers on top, all three on the branch:
 
 1. **Chunking formatter** — blocks + delimiter + case. IBAN, national phone, card.
-2. **Pattern mask** — per-position classes, literals, alternatives. Legacy masks, SSN, area codes.
-3. **Visible placeholder mask** — date/time first. Only after the a11y question is answered.
+2. **Pattern mask** — per-position classes, literals, trailing optional sections. Legacy masks, SSN,
+   ZIP+4.
+3. **Visible placeholder mask** — `formatPrompt`, drawn as a `prompt` shadow part beside the input
+   rather than as characters inside it, so the value, the caret and the deletions are untouched and
+   the part is `aria-hidden`.
+
+On top of the two-value contract, the prototype carries five behaviours adopted from USWDS, Ignite UI
+and the shadcn/ui thread:
+
+| Behaviour                      | Property                                               | Note                                                       |
+| ------------------------------ | ------------------------------------------------------ | ---------------------------------------------------------- |
+| Trailing optional sections     | `formatMask="00000[-0000]"`                            | trailing run only; sections enable left to right           |
+| Completeness as a constraint   | `formatCompletionRequired`                             | opt-in, checked on commit, no message of its own           |
+| Unicode digits stored as ASCII | —                                                      | typing path normalises the value, programmatic path warns  |
+| Derived `inputmode`            | —                                                      | `numeric` for an all-digit mask while `inputMode` is unset |
+| Visible shape while typing     | `formatPrompt="_"`, `prompt` part, `has-format-prompt` | hidden while a `placeholder` shows; nothing for blocks     |
+
+Deferred to the API RFC rather than built: announcing a rejected character to a screen reader (A1)
+and describing the accepted shape (A3), undo across the field's own edits, and a selector that picks
+one of several shapes from the value, which is what non-trailing optional sections need.
 
 Where it plugs into `input-mixin.js` today: `_onInput` → live format; `_onChange` → commit format;
 `_valueChanged` → programmatic format, gated by the reflect predicate; `_inputElementValue` setter →
@@ -222,13 +240,17 @@ API stays → 25.4 with a release note. A default flips or an API goes → 26.
    same list for comparison.
 6. **Write the API RFC** — property names, Flow classes, how `pattern` / `allowedCharPattern` compose with
    the format. Target the additive bucket for 25.4.
-7. **Then extend:** `text-area`; `date-picker` opt-in as-you-type from `dateFormat`; visible mask. The
-   pattern mask itself is on the branch: `formatMask` with the IMask token subset, one engine with chunking
-   (`InputFormatMixin` over `mask-utils.js`), widened deletes, regroup on every delete.
+7. **Then extend:** `text-area`; `date-picker` opt-in as-you-type from `dateFormat`. All three layers are
+   on the `proto/masked-field` branch: `formatMask` with the IMask token subset plus trailing `[…]`
+   sections, one engine with chunking (`InputFormatMixin` over `mask-utils.js`), widened deletes, regroup
+   on every delete, and the `formatPrompt` overlay.
+   - The whole engine lives in `packages/masked-field/src/` — `format-mixin.js`, `input-format-mixin.js`,
+     `mask-utils.js` and `chunk-mask.js` moved out of `field-base`, which keeps only the seams
+     (`_inputValueFromModel`, `_modelValueFromInput`, `_shouldAcceptText`). text-field, email-field,
+     password-field and grid-pro carry no diff at all.
    - Spec documents for the experimental `@vaadin/masked-field` package live in `packages/masked-field/spec/`
-     (problem statement, requirements, web component API, Flow API). Moving the mixins and utils out of
-     `field-base` into that package is recommended once the prototype settles.
-8. **Undo across live formatting** — dropped from the PoC. Every reformat is a script write and clears the
+     (problem statement, requirements, web component API, Flow API).
+8. **Undo across live formatting** — still dropped. Every reformat is a script write and clears the
    native undo stack, so RFC options are: accept absent undo (peer libraries do), route all presentation
    writes through `execCommand('insertText')`, or keep a field-owned history as Maskito does.
 9. **Coordinate with Component Factory** on a deprecation path for the two add-ons once layer 1 ships.

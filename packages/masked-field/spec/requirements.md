@@ -26,7 +26,8 @@ and the presented text `FI21 1234 5600 0007 85` can be read but not set._
 When a field is configured with a fixed shape, each position accepts one class of character
 (digit, letter, any) or holds a constant character. Constant characters appear on their own when
 the user reaches them; a run of constants in the middle of the shape appears as one. A character
-that does not fit its position is not accepted.
+that does not fit its position is not accepted. The end of a shape can be marked as an optional
+section with `[` and `]`, which requirement 18 describes.
 
 _Example: Shape `+7 (000) 000-00-00`: typing `9` into the empty field shows `+7 (9`. Shape
 `*\08\0\0\0-00-**-000000-0`: typing `C1` shows `C08000-1`._
@@ -190,6 +191,58 @@ the value is `FI2112345600000785`._
 
 ---
 
+## 18. Optional sections at the end of a shape
+
+A fixed shape can end with one or more optional sections. A section is not shown until the user
+types the first character of it, and it disappears again when that character is deleted, so a value
+that stops before the section is as complete as one that fills it. Sections are enabled from left to
+right, so a shape with two of them has three lengths the user can stop at.
+
+_Example: Shape `00000[-0000]` for a ZIP+4 code: typing `12345` shows `12345`; typing a sixth digit
+shows `12345-6`; Backspace shows `12345` again._
+
+---
+
+## 19. Requiring a complete shape
+
+A field with a fixed shape can be configured to require the shape to be filled. An incomplete value
+makes the field invalid, checked on commit like the other constraints, so the user is told when they
+leave the field rather than while they are still typing. An empty value is left to the required
+constraint, and a format configured with groups has no fixed length to fill, so the setting does
+nothing there. There is no message of its own: the field shows the error message the application
+set.
+
+_Example: A time field shaped `00:00` that requires completion: the user types `12:3` and tabs away,
+and the field turns invalid; they type the missing digit and tab away again, and it turns valid._
+
+---
+
+## 21. Digits are stored as ASCII digits
+
+A digit position accepts a digit written in any script. What the user types is shown and stored as
+the ASCII digit with the same numeric value, so the application always receives `0` to `9`. A value
+the application sets is presented with its digits normalised the same way, and kept as it was
+assigned, which is the case requirement 12 covers.
+
+_Example: A user typing `٣٤٥٦` on an Arabic keyboard into a field shaped `0000` sees `3456`, and the
+value is `3456`. Setting `٣٤٥٦` from the application shows `3456`, keeps the value `٣٤٥٦` and logs
+one warning._
+
+---
+
+## 22. Showing the shape while typing
+
+A field with a fixed shape can show the part of the shape the user has not filled yet, drawn after
+the text they entered in the same colour as a placeholder. It is a decoration: it is not part of the
+value, not part of the text of the input element, and hidden from screen readers. It is shown
+whether or not the field is focused, and a placeholder takes its place while the placeholder is
+showing. A format configured with groups has no fixed shape to show.
+
+_Example: A phone field shaped `+1 (000) 000-0000` showing the shape with `_` reads
+`+1 (___) ___-____` while empty, and `+1 (900) ___-____` once the user has typed `900`._
+
+---
+
 ## Discussion
 
 Questions posed while producing this document, with the answers.
@@ -229,3 +282,72 @@ stays a future option once the API is stable.
 **Q: Is the component gated?**
 
 Yes. It is experimental, behind the `maskedFieldComponent` feature flag, until the API review.
+
+**Q: Why one `[…]` section in the shape rather than a flag on each optional position?**
+
+`[…]` is the optional syntax that IMask and Inputmask share, so a shape written for either of them
+reads the same here, and both brackets stay writable as literals with the existing `\` escape. A
+per-position flag would need characters the grammar already uses: `9` is a literal in shapes such as
+`+7 (000)…`, `a` already means a letter, and `?` and `C` are literals too.
+
+**Q: Why can an optional section only be at the end of the shape?**
+
+Because a section that appends never has to regroup the characters before it, which makes the shape
+of a partly filled value exact. A section in the middle changes the position of every character
+after it, so the field would have to decide which layout the user meant from the count alone. The
+Brazilian phone shape `(99) [9]9999-9999`, an 8-digit landline or a 9-digit mobile written the same
+way, is the case that needs that and is deferred with it: no trailing section can express it,
+because `(00) 0000-0000[0]` shows `(11) 9876-54321` where the reader expects `(11) 98765-4321`. A
+way to select one of several shapes by the value is the follow-up that covers it.
+
+**Q: Should an incomplete value always be invalid?**
+
+No, it is opt-in per field. Making it the default would change the validity of every field that has
+a shape, and a shape configured with groups has no completeness to check at all. There is also no
+message of its own yet: the field has no per-constraint messages, so inventing a family of them for
+this one constraint is left to the API review. A field that fails completeness and a field that
+fails `required` therefore show the same message.
+
+**Q: Should a digit position accept only ASCII digits?**
+
+No. Narrowing it would block a user typing on an Arabic or Devanagari keyboard instead of helping
+them, so the position accepts any Unicode decimal digit and stores the ASCII one. The two paths
+differ in what they leave behind: what the user types normalises the value as well as the text,
+while a value the application sets is presented normalised and kept as it was given. That means a
+non-ASCII value set from the application now logs the requirement 12 warning, which it did not
+before, because the text shown no longer matches the value character for character.
+
+**Q: Should a `]` with no `[` before it stay a literal?**
+
+No, it is reported as an invalid shape. Every unrecognised character is a literal, so `]` was one
+before optional sections existed. `00[-00` and `00-00]` are two halves of the same typing slip, and
+warning about the first while silently accepting the second would be inconsistent. `\]` remains the
+way to write a literal `]`, so nothing became inexpressible.
+
+**Q: Is a rejected character announced to a screen reader?**
+
+Not in this scope. The brief visual flash of requirement 5 is the only feedback, which a screen
+reader user does not get. Announcing the rejection, with a reason for it, is designed and recorded
+as the first follow-up for the API review.
+
+**Q: Why is requirement 20 missing?**
+
+The number is reserved for the announcement of rejected input, which is designed but deferred, so
+that the follow-up can add it without renumbering the requirements after it.
+
+**Q: Why is the shape shown next to the input rather than typed into it?**
+
+Because the value, the caret and the deletions stay exactly as they are without it. The alternative,
+filling the input element with prompt characters, is what forces overwrite typing, a special
+deletion rule and a value that has to be stripped before it is read. Drawing the remaining shape
+beside the text keeps all of that untouched, at the cost of the shape being decoration only. With
+optional sections it shows the shape the value currently resolves to, so `00000[-0000]` shows five
+positions while empty, nothing at five digits, and the rest of the section at six, which is the same
+shape that requirement 19 asks to be complete.
+
+**Q: What does the shown shape not handle yet?**
+
+Three things, all recorded rather than solved: an input too narrow for its shape scrolls its text
+while the shape stays put; a right-to-left shape is not mirrored; and a screen reader is told
+nothing about the shape, because the decoration is hidden from it. Describing the accepted shape to
+a screen reader is a separate follow-up for the API review.

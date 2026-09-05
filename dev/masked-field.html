@@ -21,7 +21,7 @@
     <div class="section">
       <vaadin-masked-field
         id="iban"
-        label="IBAN"
+        label="IBAN (blocks)"
         format-blocks="[4,4,4,4,2]"
         format-text-case="upper"
         allowed-char-pattern="[A-Za-z0-9]"
@@ -38,7 +38,7 @@
     <div class="section">
       <vaadin-masked-field
         id="phone"
-        label="Phone (FI)"
+        label="Phone, FI (blocks)"
         format-blocks="[3,3,4]"
         inputmode="tel"
         allowed-char-pattern="[0-9]"
@@ -50,7 +50,7 @@
     <div class="section">
       <vaadin-masked-field
         id="us-phone"
-        label="Phone (US)"
+        label="Phone, US (mask + prompt)"
         format-mask="+1 (000) 000-0000"
         format-prompt="_"
         inputmode="tel"
@@ -64,9 +64,11 @@
     <div class="section">
       <vaadin-masked-field
         id="time"
-        label="Time"
+        label="Time (completion required)"
         format-mask="00:00"
         format-prompt="_"
+        format-completion-required
+        error-message="Enter a time as hh:mm"
         inputmode="numeric"
         clear-button-visible
       ></vaadin-masked-field>
@@ -75,8 +77,32 @@
 
     <div class="section">
       <vaadin-masked-field
+        id="date"
+        label="Date (completion required)"
+        format-mask="00/00/0000"
+        format-prompt="_"
+        format-completion-required
+        error-message="Enter a date as mm/dd/yyyy"
+        clear-button-visible
+      ></vaadin-masked-field>
+      <pre id="date-readout"></pre>
+    </div>
+
+    <div class="section">
+      <vaadin-masked-field
+        id="card"
+        label="Card number (derived inputmode)"
+        format-mask="0000 0000 0000 0000"
+        format-prompt="_"
+        clear-button-visible
+      ></vaadin-masked-field>
+      <pre id="card-readout"></pre>
+    </div>
+
+    <div class="section">
+      <vaadin-masked-field
         id="zip"
-        label="ZIP+4"
+        label="ZIP+4 (optional section)"
         format-mask="00000[-0000]"
         format-prompt="_"
         clear-button-visible
@@ -86,15 +112,13 @@
 
     <div class="section">
       <vaadin-masked-field
-        id="prefixed"
-        label="Phone (with prefix)"
-        format-mask="00 000 0000"
+        id="sections"
+        label="Two optional sections"
+        format-mask="00[-00][-00]"
         format-prompt="_"
         clear-button-visible
-      >
-        <span slot="prefix">+358</span>
-      </vaadin-masked-field>
-      <pre id="prefixed-readout"></pre>
+      ></vaadin-masked-field>
+      <pre id="sections-readout"></pre>
     </div>
 
     <div class="section">
@@ -106,6 +130,69 @@
         clear-button-visible
       ></vaadin-masked-field>
       <pre id="legacy-readout"></pre>
+    </div>
+
+    <div class="section">
+      <vaadin-masked-field
+        id="unicode"
+        label="Unicode digits"
+        helper-text="Type ٣٤٥٦"
+        format-mask="0000"
+        format-prompt="_"
+        clear-button-visible
+      ></vaadin-masked-field>
+      <pre id="unicode-readout"></pre>
+
+      <button id="unicode-set-value">Set ٣٤٥٦</button>
+    </div>
+
+    <div class="section">
+      <vaadin-masked-field
+        id="prefixed"
+        label="Phone with a prefix (prompt alignment)"
+        format-mask="00 000 0000"
+        format-prompt="_"
+        clear-button-visible
+      >
+        <span slot="prefix">+358</span>
+      </vaadin-masked-field>
+      <pre id="prefixed-readout"></pre>
+    </div>
+
+    <div class="section">
+      <vaadin-masked-field
+        id="placeholder"
+        label="Time with a placeholder"
+        placeholder="hh:mm"
+        format-mask="00:00"
+        format-prompt="_"
+        clear-button-visible
+      ></vaadin-masked-field>
+      <pre id="placeholder-readout"></pre>
+    </div>
+
+    <div class="section">
+      <vaadin-masked-field
+        id="readonly"
+        label="Readonly"
+        format-mask="+1 (000) 000-0000"
+        format-prompt="_"
+        format-completion-required
+        readonly
+      ></vaadin-masked-field>
+      <pre id="readonly-readout"></pre>
+    </div>
+
+    <div class="section">
+      <vaadin-masked-field
+        id="disabled"
+        label="Disabled"
+        format-mask="+1 (000) 000-0000"
+        format-prompt="_"
+        format-completion-required
+        disabled
+      ></vaadin-masked-field>
+      <pre id="disabled-readout"></pre>
     </div>
 
     <div class="section">
@@ -129,8 +216,9 @@
       8. Focus the IBAN field, put the caret mid-string, press its "Set value"; the caret stays put.<br />
       9. Focus the unformatted field, put the caret mid-string, press its "Set value"; the caret jumps to the end,
       exactly as today.<br />
-      10. Switch to the Japanese IME and compose into the phone field; the candidate window is not disturbed.<br />
-      11. Turn on VoiceOver and repeat step 1; record what is announced.<br />
+      10. Switch to the Japanese IME and compose into the FI phone field; the candidate window is not disturbed.<br />
+      11. Turn on VoiceOver and repeat step 1; record what is announced. Nothing is announced for a rejected character,
+      and nothing describes the shape — the prompt is <code>aria-hidden</code>.<br />
       12. Type a space into the middle of a group in the IBAN field; the delimiter is consumed, the text does not change
       and the field does not flash as prevented.<br />
       13. Type <code>9002011122</code> into the US phone field; it presents as <code>+1 (900) 201-1122</code> and stops
@@ -144,19 +232,33 @@
       the last slot of the mask.<br />
       17. Edit the IBAN field and Tab away; the change counter goes up by one per focus session, including for the
       keystrokes that the format applies itself.<br />
-      18. Look at the empty US phone, time and ZIP+4 fields; each shows the shape of its mask in the placeholder colour,
-      and <code>value</code> and the input element are both empty.<br />
+      18. Look at the empty US phone, time, date, card and ZIP+4 fields; each shows the shape of its mask in the
+      placeholder colour, and <code>value</code> and the input element are both empty.<br />
       19. Type into the time field; the shape shrinks one character per keystroke and disappears once the mask is
       full.<br />
       20. Type <code>12345</code> into the ZIP+4 field; the shape disappears. Type one more digit; the rest of the
-      optional section appears as <code>___</code>. Backspace; it disappears again.<br />
-      21. Press "Toggle prompt" on the US phone field; the shape appears and disappears while the value stays put.<br />
-      22. Look at the "Phone (with prefix)" field; the shape starts right after the <code>+358</code> prefix, aligned
+      optional section appears as <code>___</code> and the <code>-</code> appears with the digit. Backspace; both
+      disappear again.<br />
+      21. Type <code>1122</code> into the two-section field; the first section appears at the third digit and the second
+      at the fifth, one at a time.<br />
+      22. Press "Toggle prompt" on the US phone field; the shape appears and disappears while the value stays put.<br />
+      23. Look at the "Phone with a prefix" field; the shape starts right after the <code>+358</code> prefix, aligned
       with the caret.<br />
-      23. Set a <code>placeholder</code> on the time field from the console; while the field is empty the placeholder
-      shows and the shape does not, and the shape comes back on the first keystroke.<br />
-      24. Look at the IBAN field, which has a prompt-less blocks format; no shape is shown, since blocks grow with the
-      value and have no fixed shape.
+      24. Look at the "Time with a placeholder" field while it is empty; the placeholder shows and the shape does not.
+      Type one digit; the placeholder goes and the shape appears.<br />
+      25. Type <code>123</code> into the time field and Tab away; it turns invalid and shows its error message. Type the
+      fourth digit and Tab away; it turns valid. The same for the date field at four of eight digits.<br />
+      26. Clear the time field and Tab away; it is valid again — an empty value is left to <code>required</code>.<br />
+      27. Look at the readouts of the card and time fields; both report <code>inputMode: "numeric"</code>, which no
+      attribute on the card field asks for — an all-digit mask derives it. The IBAN and legacy readouts report
+      <code>""</code>, and the US and FI phone readouts report the <code>tel</code> the page set.<br />
+      28. Type <code>٣٤٥٦</code> into the unicode field, or paste it; the field shows <code>3456</code> and
+      <code>value</code> is <code>3456</code>. Press "Set ٣٤٥٦"; the field shows <code>3456</code>,
+      <code>value</code> stays <code>٣٤٥٦</code> and one warning is logged.<br />
+      29. Look at the readonly and disabled fields; both show a value with its shape and both report
+      <code>checkValidity(): true</code>, even though the value does not fill the mask.<br />
+      30. Set <code>formatPrompt</code> on the IBAN field from the console; no shape appears, since blocks grow with the
+      value and have no fixed shape to show.
     </p>
 
     <script type="module">
@@ -164,28 +266,41 @@
         let changes = 0;
         const update = () => {
           const counter = countChanges ? `\nchange events: ${changes}` : '';
-          readout.textContent = `value: ${JSON.stringify(field.value)}\nformattedValue: ${JSON.stringify(field.formattedValue)}${counter}`;
+          readout.textContent = [
+            `value: ${JSON.stringify(field.value)}`,
+            `formattedValue: ${JSON.stringify(field.formattedValue)}`,
+            `inputMode: ${JSON.stringify(field.inputElement ? field.inputElement.inputMode : null)}`,
+            `invalid: ${field.invalid}`,
+            `checkValidity(): ${field.checkValidity()}`,
+          ].join('\n');
+          readout.textContent += counter;
         };
         field.addEventListener('value-changed', update);
+        field.addEventListener('invalid-changed', update);
         field.addEventListener('input', update);
+        field.addEventListener('blur', update);
         if (countChanges) {
           field.addEventListener('change', () => {
             changes += 1;
             update();
           });
+        } else {
+          field.addEventListener('change', update);
         }
-        update();
+        // The derived `inputmode` is delegated in the first update, so the first
+        // readout waits for it rather than reporting the attribute as missing.
+        field.updateComplete.then(update);
         return update;
+      }
+
+      // The format properties fire no event of their own, so a button that changes
+      // one refreshes the readout once the field has re-presented.
+      function refreshAfterUpdate(field, update) {
+        field.updateComplete.then(update);
       }
 
       const iban = document.getElementById('iban');
       const updateIbanReadout = bindReadout(iban, document.getElementById('iban-readout'), { countChanges: true });
-
-      // The format properties fire no event of their own, so a button that
-      // changes one refreshes the readout once the field has re-presented.
-      function refreshIbanReadout() {
-        iban.updateComplete.then(updateIbanReadout);
-      }
 
       const ibanBlocks = [
         [4, 4, 4, 4, 2],
@@ -195,36 +310,57 @@
       document.getElementById('iban-swap').addEventListener('click', () => {
         ibanBlocksIndex = 1 - ibanBlocksIndex;
         iban.formatBlocks = ibanBlocks[ibanBlocksIndex];
-        refreshIbanReadout();
+        refreshAfterUpdate(iban, updateIbanReadout);
       });
       document.getElementById('iban-remove').addEventListener('click', () => {
         iban.formatBlocks = undefined;
         iban.formatMask = undefined;
-        refreshIbanReadout();
+        refreshAfterUpdate(iban, updateIbanReadout);
       });
       document.getElementById('iban-set-value').addEventListener('mousedown', (event) => {
         event.preventDefault();
         iban.value = 'FI2112345600000785';
       });
-
       document.getElementById('iban-mask').addEventListener('click', () => {
         iban.formatMask = 'aa00-0000-0000-0000-00';
-        refreshIbanReadout();
+        refreshAfterUpdate(iban, updateIbanReadout);
       });
 
-      const phone = document.getElementById('phone');
-      bindReadout(phone, document.getElementById('phone-readout'));
+      bindReadout(document.getElementById('phone'), document.getElementById('phone-readout'));
 
       const usPhone = document.getElementById('us-phone');
-      bindReadout(usPhone, document.getElementById('us-phone-readout'));
-      bindReadout(document.getElementById('time'), document.getElementById('time-readout'));
-      bindReadout(document.getElementById('zip'), document.getElementById('zip-readout'));
-      bindReadout(document.getElementById('prefixed'), document.getElementById('prefixed-readout'));
-
+      const updateUsPhoneReadout = bindReadout(usPhone, document.getElementById('us-phone-readout'));
       document.getElementById('toggle-prompt').addEventListener('click', () => {
         usPhone.formatPrompt = usPhone.formatPrompt === '_' ? undefined : '_';
+        refreshAfterUpdate(usPhone, updateUsPhoneReadout);
       });
+
+      bindReadout(document.getElementById('time'), document.getElementById('time-readout'));
+      bindReadout(document.getElementById('date'), document.getElementById('date-readout'));
+      bindReadout(document.getElementById('card'), document.getElementById('card-readout'));
+      bindReadout(document.getElementById('zip'), document.getElementById('zip-readout'));
+      bindReadout(document.getElementById('sections'), document.getElementById('sections-readout'));
       bindReadout(document.getElementById('legacy'), document.getElementById('legacy-readout'));
+      bindReadout(document.getElementById('prefixed'), document.getElementById('prefixed-readout'));
+      bindReadout(document.getElementById('placeholder'), document.getElementById('placeholder-readout'));
+
+      const unicode = document.getElementById('unicode');
+      const updateUnicodeReadout = bindReadout(unicode, document.getElementById('unicode-readout'));
+      document.getElementById('unicode-set-value').addEventListener('mousedown', (event) => {
+        event.preventDefault();
+        unicode.value = '٣٤٥٦';
+        refreshAfterUpdate(unicode, updateUnicodeReadout);
+      });
+
+      // A readonly and a disabled field are always valid, so both hold a value
+      // that does not fill the mask.
+      const readonly = document.getElementById('readonly');
+      readonly.value = '90020';
+      bindReadout(readonly, document.getElementById('readonly-readout'));
+
+      const disabled = document.getElementById('disabled');
+      disabled.value = '90020';
+      bindReadout(disabled, document.getElementById('disabled-readout'));
 
       const unformatted = document.getElementById('unformatted');
       bindReadout(unformatted, document.getElementById('unformatted-readout'));

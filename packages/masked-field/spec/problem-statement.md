@@ -66,8 +66,10 @@ all need workarounds. Masked Field runs inside the field's own input handling.
 
 ### Placeholder text
 
-A placeholder disappears as soon as typing starts. A visible placeholder mask that stays and fills
-in progressively is a related feature, deferred until its accessibility questions are answered.
+A placeholder disappears as soon as typing starts, and says nothing about the shape of what is
+expected. A masked field can instead show the shape itself, drawn after the text and shrinking as
+the user types. The two do not stack: while a placeholder is showing, the shape is not. The shape is
+a visual aid only, and a screen reader is told nothing about it.
 
 ## Use Cases
 
@@ -131,6 +133,21 @@ in progressively is a related feature, deferred until its accessibility question
    _Example: A form loads `9002011122` into the `+7 (000) 000-00-00` phone field and the user sees
    `+7 (900) 201-11-22`._
 
+10. **Entering a value whose last part is optional.** A user types a value that has a shorter and a
+    longer accepted form, and is not asked to fill the part they do not need.
+
+    _Example: A user types a 5-digit ZIP code into a `00000[-0000]` field and stops; another user
+    types the ZIP+4 form and the `-` appears with the sixth digit. A support agent types a phone
+    number and, only when there is one, an extension after it._
+
+11. **Seeing the shape that is expected before typing it.** A user looks at an empty field and sees
+    how much they are about to type and where the separators fall, instead of counting digits or
+    guessing from the label.
+
+    _Example: An empty phone field reads `(___) ___-____`, and the underscores disappear one by one
+    as the user types. The shape is a visual aid; the value and what a screen reader reads are
+    unchanged by it._
+
 ## Discussion
 
 **Q: Is number and currency formatting in scope?**
@@ -145,8 +162,11 @@ country from the digits is not.
 
 **Q: Is a visible placeholder mask (`__ __ ____`) in scope?**
 
-Not yet. It depends on an unresolved accessibility question: how screen readers should announce a
-placeholder that lives in the field's value. Deferred as a third layer.
+Yes, as a visual aid. The shape is drawn beside the input rather than typed into it, so the value,
+the caret and the deletions are unaffected and the accessibility question that blocked it does not
+arise: the drawing is hidden from screen readers. What is still out is telling a screen reader user
+what shape is expected, which needs wording per character class and is recorded as a follow-up for
+the API review.
 
 **Q: Are value-dependent groups (AMEX 4-6-5, German area codes) in scope?**
 
