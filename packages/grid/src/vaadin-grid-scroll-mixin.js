@@ -111,15 +111,17 @@ export const ScrollMixin = (superClass) =>
             // is inside the viewport. If the whole row fits into the viewport, then scroll
             // the row into view. This ensures that labels, helper texts and other related
             // elements of focusable elements within cells also become visible. When the row
-            // is larger than the viewport, scroll the focus event target into the viewport.
+            // is larger than the viewport, scroll the actually focused element into the viewport.
             // This works better when focusing elements within cells, which could otherwise
             // still be outside the viewport when scrolling to the top or bottom of the row.
+            // The composed path is used instead of the event target, which would be
+            // retargeted to the host element when focus lands inside a nested shadow root.
             const tableHeight = this.$.table.clientHeight;
             const headerHeight = this.$.header.clientHeight;
             const footerHeight = this.$.footer.clientHeight;
             const viewportHeight = tableHeight - headerHeight - footerHeight;
             const isRowLargerThanViewport = row.clientHeight > viewportHeight;
-            const scrollTarget = isRowLargerThanViewport ? e.target : row;
+            const scrollTarget = isRowLargerThanViewport ? composedPath[0] : row;
 
             this.__scrollIntoViewport(scrollTarget);
           }

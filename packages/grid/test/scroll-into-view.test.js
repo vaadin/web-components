@@ -135,4 +135,54 @@ describe('scroll into view', () => {
       verifyNotFullyVisible(secondRow);
     });
   });
+
+  describe('nested grid in row details', () => {
+    let nestedGrid, nestedFirstCell, nestedMiddleCell;
+
+    beforeEach(async () => {
+      grid.rowDetailsRenderer = (root) => {
+        if (!root.firstElementChild) {
+          root.innerHTML = `
+            <vaadin-grid all-rows-visible>
+              <vaadin-grid-column path="name"></vaadin-grid-column>
+            </vaadin-grid>
+          `;
+          root.firstElementChild.items = Array.from({ length: 20 }, (_, i) => ({ name: `Nested ${i}` }));
+        }
+      };
+      grid.openItemDetails(grid.items[0]);
+      flushGrid(grid);
+      await nextFrame();
+
+      nestedGrid = grid.querySelector('vaadin-grid');
+      flushGrid(nestedGrid);
+      await nextFrame();
+      await nextFrame();
+
+      nestedFirstCell = getContainerCell(nestedGrid.$.items, 0, 0);
+      nestedMiddleCell = getContainerCell(nestedGrid.$.items, 10, 0);
+    });
+
+    it('should not change scroll position when focused nested grid cell is visible', async () => {
+      // Scroll the outer grid so that the first nested cell is at the top of the viewport
+      const scrollerTop = grid.$.scroller.getBoundingClientRect().top;
+      grid.$.table.scrollTop = nestedFirstCell.getBoundingClientRect().top - scrollerTop;
+      await nextFrame();
+      verifyFullyVisible(nestedFirstCell);
+      const scrollTop = grid.$.table.scrollTop;
+
+      nestedFirstCell.focus();
+
+      expect(grid.$.table.scrollTop).to.equal(scrollTop);
+      verifyFullyVisible(nestedFirstCell);
+    });
+
+    it('should scroll focused nested grid cell into view', () => {
+      verifyNotFullyVisible(nestedMiddleCell);
+
+      nestedMiddleCell.focus();
+
+      verifyFullyVisible(nestedMiddleCell);
+    });
+  });
 });
