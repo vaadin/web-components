@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import sinon from 'sinon';
 import { clearWarnings } from '@vaadin/component-base/src/warnings.js';
+import { chunkMaskFor } from '../src/chunk-mask.js';
 import {
   calibrate,
   compileMask,
@@ -24,41 +25,9 @@ const LEGACY = compileMask('*\\08\\0\\0\\0-00-**-000000-0');
 
 const TIME = compileMask('00:00');
 
-// A dynamic mask that lays a value out in blocks joined by a delimiter, as a chunk
-// format does, so that a value laid out by one set of blocks can be mapped under another.
-function chunkMaskFor(blocks, delimiter = ' ') {
-  const slot = new RegExp(`[^${delimiter}]`, 'u');
-
-  return ({ value }) => {
-    const rawLength = value.split(delimiter).join('').length;
-    const items = [];
-    let covered = 0;
-
-    for (const block of blocks) {
-      if (items.length > 0) {
-        items.push(delimiter);
-      }
-
-      for (let i = 0; i < block; i++) {
-        items.push(slot);
-      }
-
-      covered += block;
-
-      if (covered >= rawLength) {
-        return { items, literalChars: new Set([delimiter]) };
-      }
-    }
-
-    items.push(delimiter);
-
-    for (let i = covered; i < rawLength; i++) {
-      items.push(slot);
-    }
-
-    return { items, literalChars: new Set([delimiter]) };
-  };
-}
+// A dynamic mask that lays a value out in blocks joined by a delimiter, so that a
+// value laid out by one set of blocks can be mapped under another.
+const BLOCKS_2_4_4 = chunkMaskFor({ blocks: [2, 4, 4], delimiter: ' ' });
 
 describe('compileMask', () => {
   beforeEach(() => {
@@ -277,7 +246,7 @@ describe('unmaskedIndex', () => {
   it('should count independently of where the fixed characters sit', () => {
     // Spike defect D-1: the value was laid out by the blocks [4, 4, 4, 4, 2] and is
     // counted under [2, 4, 4], where none of the delimiters sit at the same index.
-    expect(unmaskedIndex('FI21 1234 5600', chunkMaskFor([2, 4, 4]), 6)).to.equal(5);
+    expect(unmaskedIndex('FI21 1234 5600', BLOCKS_2_4_4, 6)).to.equal(5);
   });
 });
 
@@ -297,7 +266,7 @@ describe('maskedIndex', () => {
   it('should keep the caret next to the same character across a mask change', () => {
     // Spike defect D-1: the caret at 6 of a value laid out by the blocks [4, 4, 4, 4, 2]
     // counts five characters, and lands next to the same one after [2, 4, 4] laid it out again.
-    expect(maskedIndex('FI 2112 3456 00', chunkMaskFor([2, 4, 4]), 5)).to.equal(6);
+    expect(maskedIndex('FI 2112 3456 00', BLOCKS_2_4_4, 5)).to.equal(6);
   });
 });
 

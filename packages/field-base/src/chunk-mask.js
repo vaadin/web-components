@@ -57,6 +57,8 @@ export function chunkMask(format, rawLength) {
   const slot = slotFor(delimiter);
   const literalChars = new Set([delimiter]);
   const items = [];
+  // A length of zero still lays the first block out in full.
+  const length = rawLength || blocks[0];
   let covered = 0;
 
   for (let i = 0; i < blocks.length; i++) {
@@ -64,23 +66,20 @@ export function chunkMask(format, rawLength) {
       items.push(delimiter);
     }
 
-    const remaining = rawLength - covered;
-    const size = remaining > 0 ? Math.min(blocks[i], remaining) : blocks[i];
-
-    for (let j = 0; j < size; j++) {
+    for (let j = 0; j < Math.min(blocks[i], length - covered); j++) {
       items.push(slot);
     }
 
     covered += blocks[i];
 
-    if (covered >= rawLength) {
+    if (covered >= length) {
       return { items, literalChars, textCase };
     }
   }
 
   items.push(delimiter);
 
-  for (let j = covered; j < rawLength; j++) {
+  for (let j = covered; j < length; j++) {
     items.push(slot);
   }
 

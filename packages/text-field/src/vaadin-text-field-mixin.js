@@ -189,7 +189,7 @@ export const TextFieldMixin = (superClass) =>
       // so that a new array holding the same blocks is not read as a change, and
       // the key is `null` while no format is configured, which is the state the
       // field starts in.
-      const hasFormat = Boolean(formatMask) || Boolean(formatBlocks);
+      const hasFormat = Boolean(formatMask || formatBlocks);
       const formatKey = hasFormat ? JSON.stringify([formatMask, formatBlocks, formatDelimiter, formatTextCase]) : null;
 
       // The observer also runs when the state target is set, which is when the

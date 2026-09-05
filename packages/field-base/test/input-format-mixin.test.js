@@ -125,7 +125,7 @@ describe('InputFormatMixin', () => {
     });
 
     it('should use the configured delimiter', async () => {
-      element.formatBlocks = [3, 3, 4];
+      element.formatBlocks = PHONE;
       element.formatDelimiter = '-';
       await nextUpdate(element);
       await sendKeys({ type: '5551234567' });
@@ -209,10 +209,6 @@ describe('InputFormatMixin', () => {
       element.value = 'FI215678';
       await nextUpdate(element);
       input.focus();
-    });
-
-    afterEach(() => {
-      sinon.restore();
     });
 
     it('should delete the character before the delimiter on Backspace', async () => {
@@ -404,7 +400,7 @@ describe('InputFormatMixin', () => {
     beforeEach(async () => {
       // The text case makes the reformat observable: the composed text is presented
       // exactly as typed until the session ends, and uppercased afterwards.
-      element.formatBlocks = [4, 4, 4, 4, 2];
+      element.formatBlocks = IBAN;
       element.formatTextCase = 'upper';
       await nextUpdate(element);
       input.focus();
@@ -733,6 +729,7 @@ describe('InputFormatMixin', () => {
       expect(bare.hasAttribute('input-prevented')).to.be.false;
     });
   });
+
   describe('format warnings', () => {
     let warn;
 
