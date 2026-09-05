@@ -20,12 +20,12 @@ import {
  *
  * The `value` property stays the unformatted string. The grouped text is written
  * to the input element and mirrored in the read-only `formattedValue` property.
- * With no `format` configured the field behaves exactly as an unformatted one.
+ * With no `formatBlocks` configured the field behaves exactly as an unformatted one.
  *
  * Applies `FormatMixin`, which owns the presentation write path, so the mixin is
  * applied on its own rather than on top of it. Every behavior of this mixin is
- * conditional on its own `format`, so a layer above it can present a format of
- * its own and this one stays out of the way.
+ * conditional on its own format properties, so a layer above it can present a
+ * format of its own and this one stays out of the way.
  *
  * Requires `InputControlMixin` (or a mixin applying it) below this mixin in the
  * chain. The `beforeinput`, `paste` and `drop` listeners are registered there;
@@ -40,22 +40,45 @@ const ChunkFormatMixinImplementation = (superclass) =>
     static get properties() {
       return {
         /**
-         * Configuration for as-you-type chunking. When unset, the field behaves exactly
-         * as an unformatted text field. Assign a new object to change the format —
-         * mutating a key in place does not trigger an update.
+         * The group lengths for as-you-type chunking, e.g. `[4, 4, 4, 4, 2]` for an
+         * IBAN. When unset, the field behaves exactly as an unformatted text field
+         * and the other two format properties have no effect. Assign a new array to
+         * change the grouping — mutating it in place does not trigger an update.
          *
-         * - `blocks`    — group lengths, e.g. `[4, 4, 4, 4, 2]` for an IBAN
-         * - `delimiter` — the single character inserted between groups, defaults to `' '`
-         * - `case`      — `'upper' | 'lower'`, optional
+         * Settable as a JSON attribute: format-blocks='[4,4,4,4,2]'
          *
-         * Settable as a JSON attribute: format='{"blocks":[4,4,4,4,2],"delimiter":" "}'
+         * An invalid value is reported with a warning and treated as unset.
          *
-         * An invalid configuration is reported with a warning and treated as unset.
-         *
-         * @type {FieldFormat | undefined}
+         * @type {number[] | undefined}
          */
-        format: {
-          type: Object,
+        formatBlocks: {
+          type: Array,
+        },
+
+        /**
+         * The single character inserted between the groups of `formatBlocks`.
+         * Defaults to a space.
+         *
+         * An invalid value is reported with a warning, and a space is used instead.
+         *
+         * @attr {string} format-delimiter
+         * @type {string | undefined}
+         */
+        formatDelimiter: {
+          type: String,
+        },
+
+        /**
+         * The case applied to the value, either `'upper'` or `'lower'`. When unset,
+         * the value is kept as the user enters it.
+         *
+         * An invalid value is reported with a warning, and no case is applied.
+         *
+         * @attr {string} format-text-case
+         * @type {string | undefined}
+         */
+        formatTextCase: {
+          type: String,
         },
       };
     }
@@ -74,8 +97,8 @@ const ChunkFormatMixinImplementation = (superclass) =>
 
     /**
      * Override a method from `LitElement` to derive the normalized format before
-     * the value observer runs, so that a `format` and a `value` set in the same
-     * cycle are presented together.
+     * the value observer runs, so that the format properties and a `value` set in
+     * the same cycle are presented together.
      *
      * @param {!Object} props
      * @protected
@@ -84,8 +107,8 @@ const ChunkFormatMixinImplementation = (superclass) =>
     willUpdate(props) {
       super.willUpdate(props);
 
-      if (props.has('format')) {
-        this.#format = normalizeFormat(this.format);
+      if (this.#hasFormatChanged(props)) {
+        this.#format = normalizeFormat(this.formatBlocks, this.formatDelimiter, this.formatTextCase);
       }
     }
 
@@ -100,7 +123,7 @@ const ChunkFormatMixinImplementation = (superclass) =>
     updated(props) {
       super.updated(props);
 
-      if (props.has('format')) {
+      if (this.#hasFormatChanged(props)) {
         this._forwardInputValue(this.value);
 
         // Once the write site short-circuits on `!_hasFormat`, nothing else would
@@ -290,6 +313,16 @@ const ChunkFormatMixinImplementation = (superclass) =>
       }
 
       return formatChunks(unformat(value, this.#format), this.#format).formatted;
+    }
+
+    /**
+     * Returns true when any of the three format properties changed in the update
+     * cycle that the given changed properties describe.
+     *
+     * @private
+     */
+    #hasFormatChanged(props) {
+      return props.has('formatBlocks') || props.has('formatDelimiter') || props.has('formatTextCase');
     }
 
     /**

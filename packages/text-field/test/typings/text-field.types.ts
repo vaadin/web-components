@@ -10,7 +10,6 @@ import type { ChunkFormatMixinClass } from '@vaadin/field-base/src/chunk-format-
 import type { ClearButtonMixinClass } from '@vaadin/field-base/src/clear-button-mixin.js';
 import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
 import type { FormatMixinClass } from '@vaadin/field-base/src/format-mixin.js';
-import type { FieldFormat } from '@vaadin/field-base/src/format-utils.js';
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import type { InputFieldMixinClass } from '@vaadin/field-base/src/input-field-mixin.js';
@@ -51,7 +50,9 @@ assertType<ValidateMixinClass>(field);
 assertType<ThemableMixinClass>(field);
 
 // Properties
-assertType<FieldFormat | undefined>(field.format);
+assertType<number[] | undefined>(field.formatBlocks);
+assertType<string | undefined>(field.formatDelimiter);
+assertType<string | undefined>(field.formatTextCase);
 assertType<string>(field.formattedValue);
 
 // Events

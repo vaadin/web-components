@@ -18,7 +18,7 @@ const FORMAT_CONSTRAINTS = ['maxlength', 'minlength', 'pattern'];
 export const TextFieldMixin = (superClass) =>
   class TextFieldMixinClass extends ChunkFormatMixin(InputFieldMixin(superClass)) {
     /** @private */
-    #previousFormat;
+    #previousFormatKey = null;
 
     static get properties() {
       return {
@@ -162,10 +162,11 @@ export const TextFieldMixin = (superClass) =>
     }
 
     /**
-     * Override a method from `InputConstraintsMixin` to also observe `format`.
-     * It changes what the length and pattern constraints are matched against
-     * without being a constraint itself, so a field that already has a value or
-     * is already invalid has to be validated again when it is set or removed.
+     * Override a method from `InputConstraintsMixin` to also observe the format
+     * properties. They change what the length and pattern constraints are matched
+     * against without being constraints themselves, so a field that already has a
+     * value or is already invalid has to be validated again when the format is set
+     * or removed.
      *
      * @protected
      * @override
@@ -173,20 +174,28 @@ export const TextFieldMixin = (superClass) =>
     _createConstraintsObserver() {
       super._createConstraintsObserver();
 
-      this._createMethodObserver('__formatConstraintsChanged(stateTarget, format)');
+      this._createMethodObserver(
+        '__formatConstraintsChanged(stateTarget, formatBlocks, formatDelimiter, formatTextCase)',
+      );
     }
 
     /** @private */
-    __formatConstraintsChanged(stateTarget, format) {
+    __formatConstraintsChanged(stateTarget, formatBlocks, formatDelimiter, formatTextCase) {
       if (!stateTarget) {
         return;
       }
 
+      // The three properties are compared as one JSON key rather than by identity,
+      // so that a new array holding the same blocks is not read as a change, and
+      // the key is `null` while no blocks are configured, which is the state the
+      // field starts in.
+      const formatKey = formatBlocks ? JSON.stringify([formatBlocks, formatDelimiter, formatTextCase]) : null;
+
       // The observer also runs when the state target is set, which is when the
       // constraints are delegated for the first time anyway. Only a format that
       // has actually changed asks for anything to be done again.
-      const hasFormatChanged = format !== this.#previousFormat;
-      this.#previousFormat = format;
+      const hasFormatChanged = formatKey !== this.#previousFormatKey;
+      this.#previousFormatKey = formatKey;
 
       if (!hasFormatChanged) {
         return;

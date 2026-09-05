@@ -27,49 +27,52 @@ function applyCase(text, textCase) {
 }
 
 /**
- * Validates the given format configuration and returns a normalized copy of it,
+ * Validates the given format properties and returns a normalized copy of them,
  * with the delimiter defaulted when it is not set.
  *
- * Returns `null` when no format is configured. Also returns `null` when the
- * configuration is invalid, in which case a warning is logged and the format is
- * treated as unset:
+ * Returns `null` when no blocks are configured, in which case the delimiter and
+ * the case have no effect. Each property is validated on its own, so that one
+ * invalid value does not take the others down with it. An invalid value is
+ * reported with a warning and falls back as follows:
  *
- * - `blocks` is not a non-empty array of positive integers
- * - `delimiter` is set to something other than a single character
- * - `case` is set to something other than `'upper'` or `'lower'`
+ * - `blocks` is not a non-empty array of positive integers — the format is unset
+ * - `delimiter` is not a single character — a space is used instead
+ * - `textCase` is neither `'upper'` nor `'lower'` — no case is applied
  *
- * @param {FieldFormat | null | undefined} format
+ * @param {number[] | null | undefined} blocks
+ * @param {string | null | undefined} delimiter
+ * @param {string | null | undefined} textCase
  * @return {NormalizedFieldFormat | null}
  */
-export function normalizeFormat(format) {
-  if (format === undefined || format === null) {
+export function normalizeFormat(blocks, delimiter, textCase) {
+  if (blocks === undefined || blocks === null) {
     return null;
   }
-
-  const { blocks, delimiter, case: textCase } = format;
 
   if (!Array.isArray(blocks) || blocks.length === 0 || !blocks.every((block) => Number.isInteger(block) && block > 0)) {
-    issueWarning('Invalid "format": "blocks" must be a non-empty array of positive integers. Ignoring the format.');
-    return null;
-  }
-
-  if (delimiter !== undefined && (typeof delimiter !== 'string' || delimiter.length !== 1)) {
-    issueWarning('Invalid "format": "delimiter" must be a single character. Ignoring the format.');
-    return null;
-  }
-
-  if (textCase !== undefined && textCase !== 'upper' && textCase !== 'lower') {
-    issueWarning('Invalid "format": "case" must be either "upper" or "lower". Ignoring the format.');
+    issueWarning('Invalid "formatBlocks": must be a non-empty array of positive integers. Ignoring the format.');
     return null;
   }
 
   const normalized = {
     blocks: [...blocks],
-    delimiter: delimiter === undefined ? DEFAULT_DELIMITER : delimiter,
+    delimiter: DEFAULT_DELIMITER,
   };
 
-  if (textCase !== undefined) {
-    normalized.case = textCase;
+  if (delimiter !== undefined && delimiter !== null) {
+    if (typeof delimiter === 'string' && delimiter.length === 1) {
+      normalized.delimiter = delimiter;
+    } else {
+      issueWarning('Invalid "formatDelimiter": must be a single character. Using a space instead.');
+    }
+  }
+
+  if (textCase !== undefined && textCase !== null) {
+    if (textCase === 'upper' || textCase === 'lower') {
+      normalized.textCase = textCase;
+    } else {
+      issueWarning('Invalid "formatTextCase": must be either "upper" or "lower". Ignoring the case.');
+    }
   }
 
   return normalized;
@@ -88,7 +91,7 @@ export function normalizeFormat(format) {
  * @return {{ formatted: string }}
  */
 export function formatChunks(rawValue, options) {
-  const value = applyCase(rawValue, options.case);
+  const value = applyCase(rawValue, options.textCase);
 
   if (!value) {
     return { formatted: '' };
@@ -125,7 +128,7 @@ export function formatChunks(rawValue, options) {
  * @return {string}
  */
 export function unformat(viewValue, options) {
-  return applyCase(viewValue.split(options.delimiter).join(''), options.case);
+  return applyCase(viewValue.split(options.delimiter).join(''), options.textCase);
 }
 
 /**

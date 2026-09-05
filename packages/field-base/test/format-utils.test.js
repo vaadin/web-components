@@ -24,145 +24,155 @@ describe('normalizeFormat', () => {
     clearWarnings();
   });
 
-  it('should return null without warning when format is undefined', () => {
+  it('should return null without warning when blocks is undefined', () => {
     expect(normalizeFormat(undefined)).to.be.null;
     expect(console.warn).to.not.be.called;
   });
 
-  it('should return null without warning when format is null', () => {
+  it('should return null without warning when blocks is null', () => {
     expect(normalizeFormat(null)).to.be.null;
     expect(console.warn).to.not.be.called;
   });
 
   it('should default the delimiter to a space', () => {
-    expect(normalizeFormat({ blocks: IBAN_BLOCKS })).to.eql({ blocks: IBAN_BLOCKS, delimiter: ' ' });
+    expect(normalizeFormat(IBAN_BLOCKS)).to.eql({ blocks: IBAN_BLOCKS, delimiter: ' ' });
   });
 
   it('should keep a single character delimiter', () => {
-    expect(normalizeFormat({ blocks: [3, 3], delimiter: '-' })).to.eql({ blocks: [3, 3], delimiter: '-' });
+    expect(normalizeFormat([3, 3], '-')).to.eql({ blocks: [3, 3], delimiter: '-' });
   });
 
-  it('should keep a valid case', () => {
-    expect(normalizeFormat({ blocks: [3, 3], case: 'upper' }).case).to.equal('upper');
-    expect(normalizeFormat({ blocks: [3, 3], case: 'lower' }).case).to.equal('lower');
+  it('should keep a valid text case', () => {
+    expect(normalizeFormat([3, 3], undefined, 'upper').textCase).to.equal('upper');
+    expect(normalizeFormat([3, 3], undefined, 'lower').textCase).to.equal('lower');
   });
 
-  it('should omit case when it is not set', () => {
-    expect(normalizeFormat({ blocks: [3, 3] })).to.not.have.property('case');
+  it('should omit the text case when it is not set', () => {
+    expect(normalizeFormat([3, 3])).to.not.have.property('textCase');
   });
 
   it('should copy the blocks array so that mutating the original has no effect', () => {
     const blocks = [3, 3];
-    const normalized = normalizeFormat({ blocks });
+    const normalized = normalizeFormat(blocks);
     blocks.push(4);
     expect(normalized.blocks).to.eql([3, 3]);
   });
 
-  it('should return null and warn once when blocks is missing', () => {
-    expect(normalizeFormat({ delimiter: ' ' })).to.be.null;
-    expect(console.warn).to.be.calledOnce;
+  it('should return null without warning when only the delimiter is set', () => {
+    expect(normalizeFormat(undefined, '-')).to.be.null;
+    expect(console.warn).to.not.be.called;
+  });
+
+  it('should return null without warning when only the text case is set', () => {
+    expect(normalizeFormat(undefined, undefined, 'upper')).to.be.null;
+    expect(console.warn).to.not.be.called;
   });
 
   it('should return null and warn once when blocks is not an array', () => {
-    expect(normalizeFormat({ blocks: 'nope' })).to.be.null;
+    expect(normalizeFormat('nope')).to.be.null;
     expect(console.warn).to.be.calledOnce;
   });
 
   it('should return null and warn once when blocks is empty', () => {
-    expect(normalizeFormat({ blocks: [] })).to.be.null;
+    expect(normalizeFormat([])).to.be.null;
     expect(console.warn).to.be.calledOnce;
   });
 
   it('should return null and warn once when a block is not an integer', () => {
-    expect(normalizeFormat({ blocks: [4, 2.5] })).to.be.null;
+    expect(normalizeFormat([4, 2.5])).to.be.null;
     expect(console.warn).to.be.calledOnce;
   });
 
   it('should return null and warn once when a block is zero', () => {
-    expect(normalizeFormat({ blocks: [4, 0] })).to.be.null;
+    expect(normalizeFormat([4, 0])).to.be.null;
     expect(console.warn).to.be.calledOnce;
   });
 
   it('should return null and warn once when a block is negative', () => {
-    expect(normalizeFormat({ blocks: [4, -1] })).to.be.null;
+    expect(normalizeFormat([4, -1])).to.be.null;
     expect(console.warn).to.be.calledOnce;
   });
 
-  it('should return null and warn once when the delimiter is not a single character', () => {
-    expect(normalizeFormat({ blocks: IBAN_BLOCKS, delimiter: '--' })).to.be.null;
+  it('should fall back to a space and warn once when the delimiter is not a single character', () => {
+    expect(normalizeFormat(IBAN_BLOCKS, '--')).to.eql({ blocks: IBAN_BLOCKS, delimiter: ' ' });
     expect(console.warn).to.be.calledOnce;
   });
 
-  it('should return null and warn once when the delimiter is an empty string', () => {
-    expect(normalizeFormat({ blocks: IBAN_BLOCKS, delimiter: '' })).to.be.null;
+  it('should fall back to a space and warn once when the delimiter is an empty string', () => {
+    expect(normalizeFormat(IBAN_BLOCKS, '')).to.eql({ blocks: IBAN_BLOCKS, delimiter: ' ' });
     expect(console.warn).to.be.calledOnce;
   });
 
-  it('should return null and warn once when the delimiter is not a string', () => {
-    expect(normalizeFormat({ blocks: IBAN_BLOCKS, delimiter: 1 })).to.be.null;
+  it('should fall back to a space and warn once when the delimiter is not a string', () => {
+    expect(normalizeFormat(IBAN_BLOCKS, 1)).to.eql({ blocks: IBAN_BLOCKS, delimiter: ' ' });
     expect(console.warn).to.be.calledOnce;
   });
 
-  it('should return null and warn once when the case is unknown', () => {
-    expect(normalizeFormat({ blocks: IBAN_BLOCKS, case: 'title' })).to.be.null;
+  it('should apply no text case and warn once when the text case is unknown', () => {
+    expect(normalizeFormat(IBAN_BLOCKS, undefined, 'title')).to.eql({ blocks: IBAN_BLOCKS, delimiter: ' ' });
     expect(console.warn).to.be.calledOnce;
   });
 
-  it('should warn once for repeated calls with the same invalid config', () => {
-    normalizeFormat({ blocks: 'nope' });
-    normalizeFormat({ blocks: 'nope' });
+  it('should keep the blocks when both the delimiter and the text case are invalid', () => {
+    expect(normalizeFormat(IBAN_BLOCKS, '--', 'title')).to.eql({ blocks: IBAN_BLOCKS, delimiter: ' ' });
+    expect(console.warn).to.be.calledTwice;
+  });
+
+  it('should warn once for repeated calls with the same invalid blocks', () => {
+    normalizeFormat('nope');
+    normalizeFormat('nope');
     expect(console.warn).to.be.calledOnce;
   });
 
-  it('should not throw when format is not an object', () => {
-    expect(() => normalizeFormat('nope')).to.not.throw();
-    expect(normalizeFormat('nope')).to.be.null;
+  it('should not throw when blocks is of an unexpected type', () => {
+    expect(() => normalizeFormat(42)).to.not.throw();
+    expect(normalizeFormat(42)).to.be.null;
   });
 });
 
 describe('formatChunks', () => {
   it('should group an IBAN into blocks separated by a space', () => {
-    const options = normalizeFormat({ blocks: IBAN_BLOCKS });
+    const options = normalizeFormat(IBAN_BLOCKS);
     expect(formatChunks(IBAN_RAW, options).formatted).to.equal(IBAN_FORMATTED);
   });
 
   it('should group a phone number into blocks separated by a space', () => {
-    const options = normalizeFormat({ blocks: [3, 3, 4] });
+    const options = normalizeFormat([3, 3, 4]);
     expect(formatChunks('0401234567', options).formatted).to.equal('040 123 4567');
   });
 
   it('should group with a custom delimiter', () => {
-    const options = normalizeFormat({ blocks: [3, 3, 4], delimiter: '-' });
+    const options = normalizeFormat([3, 3, 4], '-');
     expect(formatChunks('0401234567', options).formatted).to.equal('040-123-4567');
   });
 
   it('should apply the upper case', () => {
-    const options = normalizeFormat({ blocks: IBAN_BLOCKS, case: 'upper' });
+    const options = normalizeFormat(IBAN_BLOCKS, undefined, 'upper');
     expect(formatChunks('fi2112345600000785', options).formatted).to.equal(IBAN_FORMATTED);
   });
 
   it('should apply the lower case', () => {
-    const options = normalizeFormat({ blocks: IBAN_BLOCKS, case: 'lower' });
+    const options = normalizeFormat(IBAN_BLOCKS, undefined, 'lower');
     expect(formatChunks(IBAN_RAW, options).formatted).to.equal('fi21 1234 5600 0007 85');
   });
 
   it('should return an empty string for an empty value', () => {
-    const options = normalizeFormat({ blocks: IBAN_BLOCKS });
+    const options = normalizeFormat(IBAN_BLOCKS);
     expect(formatChunks('', options).formatted).to.equal('');
   });
 
   it('should not pad a value shorter than the blocks describe', () => {
-    const options = normalizeFormat({ blocks: IBAN_BLOCKS });
+    const options = normalizeFormat(IBAN_BLOCKS);
     expect(formatChunks('FI211', options).formatted).to.equal('FI21 1');
   });
 
   it('should not emit a trailing delimiter when the value ends at a block boundary', () => {
-    const options = normalizeFormat({ blocks: IBAN_BLOCKS });
+    const options = normalizeFormat(IBAN_BLOCKS);
     expect(formatChunks('FI21', options).formatted).to.equal('FI21');
   });
 
   it('should keep overflow after one more delimiter instead of truncating it', () => {
-    const options = normalizeFormat({ blocks: IBAN_BLOCKS });
+    const options = normalizeFormat(IBAN_BLOCKS);
     const raw = 'FI2112345600000785ABCDEFG';
     const { formatted } = formatChunks(raw, options);
     expect(formatted).to.equal('FI21 1234 5600 0007 85 ABCDEFG');
@@ -172,39 +182,39 @@ describe('formatChunks', () => {
 
 describe('unformat', () => {
   it('should remove every delimiter', () => {
-    const options = normalizeFormat({ blocks: IBAN_BLOCKS });
+    const options = normalizeFormat(IBAN_BLOCKS);
     expect(unformat(IBAN_FORMATTED, options)).to.equal(IBAN_RAW);
   });
 
   it('should remove a custom delimiter', () => {
-    const options = normalizeFormat({ blocks: [3, 3, 4], delimiter: '-' });
+    const options = normalizeFormat([3, 3, 4], '-');
     expect(unformat('040-123-4567', options)).to.equal('0401234567');
   });
 
   it('should apply the case', () => {
-    const options = normalizeFormat({ blocks: IBAN_BLOCKS, case: 'upper' });
+    const options = normalizeFormat(IBAN_BLOCKS, undefined, 'upper');
     expect(unformat('fi21 1234 5600 0007 85', options)).to.equal(IBAN_RAW);
   });
 
   it('should return an empty string for an empty value', () => {
-    const options = normalizeFormat({ blocks: IBAN_BLOCKS });
+    const options = normalizeFormat(IBAN_BLOCKS);
     expect(unformat('', options)).to.equal('');
   });
 
   it('should be idempotent on an already unformatted value', () => {
-    const options = normalizeFormat({ blocks: IBAN_BLOCKS });
+    const options = normalizeFormat(IBAN_BLOCKS);
     expect(unformat(IBAN_RAW, options)).to.equal(IBAN_RAW);
     expect(unformat(unformat(IBAN_FORMATTED, options), options)).to.equal(IBAN_RAW);
   });
 
   it('should round-trip a value that is already unformatted', () => {
-    const options = normalizeFormat({ blocks: IBAN_BLOCKS });
+    const options = normalizeFormat(IBAN_BLOCKS);
     expect(unformat(formatChunks(IBAN_RAW, options).formatted, options)).to.equal(IBAN_RAW);
   });
 });
 
 describe('rawIndexFromViewIndex', () => {
-  const options = normalizeFormat({ blocks: IBAN_BLOCKS });
+  const options = normalizeFormat(IBAN_BLOCKS);
 
   it('should return 0 for the start of the value', () => {
     expect(rawIndexFromViewIndex(IBAN_FORMATTED, 0, options)).to.equal(0);
@@ -234,7 +244,7 @@ describe('rawIndexFromViewIndex', () => {
 });
 
 describe('viewIndexFromRawIndex', () => {
-  const options = normalizeFormat({ blocks: IBAN_BLOCKS });
+  const options = normalizeFormat(IBAN_BLOCKS);
 
   it('should return 0 for raw index 0', () => {
     expect(viewIndexFromRawIndex(IBAN_FORMATTED, 0, options)).to.equal(0);

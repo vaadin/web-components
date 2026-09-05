@@ -8,8 +8,8 @@ import { ChunkFormatMixin } from '../src/chunk-format-mixin.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
 import { InputController } from '../src/input-controller.js';
 
-const IBAN = { blocks: [4, 4, 4, 4, 2] };
-const PHONE = { blocks: [3, 3, 4] };
+const IBAN = [4, 4, 4, 4, 2];
+const PHONE = [3, 3, 4];
 
 const FORMATTED_IBAN = 'FI21 1234 5600 0007 85';
 const UNFORMATTED_IBAN = 'FI2112345600000785';
@@ -78,7 +78,7 @@ describe('ChunkFormatMixin', () => {
 
   describe('typing', () => {
     beforeEach(async () => {
-      element.format = IBAN;
+      element.formatBlocks = IBAN;
       await nextUpdate(element);
       input.focus();
     });
@@ -117,7 +117,7 @@ describe('ChunkFormatMixin', () => {
     });
 
     it('should group the typed text with another set of blocks', async () => {
-      element.format = PHONE;
+      element.formatBlocks = PHONE;
       await nextUpdate(element);
       await sendKeys({ type: '5551234567' });
       expect(input.value).to.equal('555 123 4567');
@@ -125,22 +125,25 @@ describe('ChunkFormatMixin', () => {
     });
 
     it('should use the configured delimiter', async () => {
-      element.format = { blocks: [3, 3, 4], delimiter: '-' };
+      element.formatBlocks = [3, 3, 4];
+      element.formatDelimiter = '-';
       await nextUpdate(element);
       await sendKeys({ type: '5551234567' });
       expect(input.value).to.equal('555-123-4567');
       expect(element.value).to.equal('5551234567');
     });
 
-    it('should apply the configured case to the presented text', async () => {
-      element.format = { blocks: [4, 4], case: 'upper' };
+    it('should apply the configured text case to the presented text', async () => {
+      element.formatBlocks = [4, 4];
+      element.formatTextCase = 'upper';
       await nextUpdate(element);
       await sendKeys({ type: 'fi211234' });
       expect(input.value).to.equal('FI21 1234');
     });
 
-    it('should apply the configured case to the value', async () => {
-      element.format = { blocks: [4, 4], case: 'upper' };
+    it('should apply the configured text case to the value', async () => {
+      element.formatBlocks = [4, 4];
+      element.formatTextCase = 'upper';
       await nextUpdate(element);
       await sendKeys({ type: 'fi211234' });
       expect(element.value).to.equal('FI211234');
@@ -149,13 +152,13 @@ describe('ChunkFormatMixin', () => {
 
   describe('format set as attribute', () => {
     beforeEach(async () => {
-      element = fixtureSync(`<${tag} format='{"blocks":[4,4]}'></${tag}>`);
+      element = fixtureSync(`<${tag} format-blocks='[4,4]'></${tag}>`);
       await nextRender();
       input = element.querySelector('[slot=input]');
       input.focus();
     });
 
-    it('should parse the format from the JSON attribute', async () => {
+    it('should parse the blocks from the JSON attribute', async () => {
       await sendKeys({ type: 'FI211234' });
       expect(input.value).to.equal('FI21 1234');
       expect(element.value).to.equal('FI211234');
@@ -164,7 +167,7 @@ describe('ChunkFormatMixin', () => {
 
   describe('caret while typing', () => {
     beforeEach(async () => {
-      element.format = IBAN;
+      element.formatBlocks = IBAN;
       element.value = 'FI211234';
       await nextUpdate(element);
       input.focus();
@@ -202,7 +205,7 @@ describe('ChunkFormatMixin', () => {
     // The delimiter of `FI21 5678` is at index 4, so the caret is next to it at
     // index 4 and at index 5, and away from it at index 2 and index 6.
     beforeEach(async () => {
-      element.format = IBAN;
+      element.formatBlocks = IBAN;
       element.value = 'FI215678';
       await nextUpdate(element);
       input.focus();
@@ -268,7 +271,7 @@ describe('ChunkFormatMixin', () => {
 
   describe('pasting', () => {
     beforeEach(async () => {
-      element.format = IBAN;
+      element.formatBlocks = IBAN;
       await nextUpdate(element);
       input.focus();
     });
@@ -336,7 +339,7 @@ describe('ChunkFormatMixin', () => {
 
   describe('pasting under allowedCharPattern', () => {
     beforeEach(async () => {
-      element.format = IBAN;
+      element.formatBlocks = IBAN;
       element.allowedCharPattern = '[A-Z0-9]';
       await nextUpdate(element);
     });
@@ -396,9 +399,10 @@ describe('ChunkFormatMixin', () => {
 
   describe('composition', () => {
     beforeEach(async () => {
-      // The case makes the reformat observable: the composed text is presented
+      // The text case makes the reformat observable: the composed text is presented
       // exactly as typed until the session ends, and uppercased afterwards.
-      element.format = { blocks: [4, 4, 4, 4, 2], case: 'upper' };
+      element.formatBlocks = [4, 4, 4, 4, 2];
+      element.formatTextCase = 'upper';
       await nextUpdate(element);
       input.focus();
       input.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true, composed: true }));
@@ -435,7 +439,7 @@ describe('ChunkFormatMixin', () => {
 
   describe('programmatic value', () => {
     beforeEach(async () => {
-      element.format = IBAN;
+      element.formatBlocks = IBAN;
       element.value = 'FI211234';
       await nextUpdate(element);
     });
@@ -474,41 +478,41 @@ describe('ChunkFormatMixin', () => {
 
   describe('changing format at runtime', () => {
     beforeEach(async () => {
-      element.format = IBAN;
+      element.formatBlocks = IBAN;
       element.value = 'FI2112345600000785';
       await nextUpdate(element);
     });
 
     it('should regroup the presented text when the blocks change', async () => {
-      element.format = { blocks: [2, 4, 4, 4, 4] };
+      element.formatBlocks = [2, 4, 4, 4, 4];
       await nextUpdate(element);
       expect(input.value).to.equal('FI 2112 3456 0000 0785');
       expect(element.formattedValue).to.equal('FI 2112 3456 0000 0785');
     });
 
     it('should not change value when the blocks change', async () => {
-      element.format = { blocks: [2, 4, 4, 4, 4] };
+      element.formatBlocks = [2, 4, 4, 4, 4];
       await nextUpdate(element);
       expect(element.value).to.equal('FI2112345600000785');
     });
 
-    it('should not regroup the presented text when a key is mutated in place', async () => {
-      // Assigned rather than reusing `IBAN`, since the test mutates the object.
-      element.format = { blocks: [4, 4, 4, 4, 2] };
+    it('should not regroup the presented text when the blocks are mutated in place', async () => {
+      // Assigned rather than reusing `IBAN`, since the test mutates the array.
+      element.formatBlocks = [4, 4, 4, 4, 2];
       await nextUpdate(element);
 
-      element.format.blocks = [2, 2];
+      element.formatBlocks[0] = 2;
       await nextUpdate(element);
       expect(input.value).to.equal('FI21 1234 5600 0007 85');
     });
   });
 
-  describe('removing format', () => {
+  describe('invalid or removed format', () => {
     let warn;
 
     beforeEach(async () => {
       warn = sinon.stub(console, 'warn');
-      element.format = IBAN;
+      element.formatBlocks = IBAN;
       element.value = 'FI2112345600000785';
       await nextUpdate(element);
     });
@@ -517,25 +521,57 @@ describe('ChunkFormatMixin', () => {
       warn.restore();
     });
 
-    it('should present the raw value when the format is unset', async () => {
-      element.format = undefined;
+    it('should present the raw value when the blocks are unset', async () => {
+      element.formatBlocks = undefined;
       await nextUpdate(element);
       expect(element.value).to.equal('FI2112345600000785');
       expect(input.value).to.equal('FI2112345600000785');
       expect(element.formattedValue).to.equal('');
     });
 
-    it('should present the raw value when the format is invalid', async () => {
-      element.format = { blocks: 'nope' };
+    it('should present the raw value when the blocks are set to null', async () => {
+      element.formatBlocks = null;
       await nextUpdate(element);
       expect(element.value).to.equal('FI2112345600000785');
       expect(input.value).to.equal('FI2112345600000785');
       expect(element.formattedValue).to.equal('');
     });
 
-    it('should warn once when the format is invalid', async () => {
-      element.format = { blocks: 'nope' };
+    it('should present the raw value when the blocks are emptied', async () => {
+      element.formatBlocks = [];
       await nextUpdate(element);
+      expect(element.value).to.equal('FI2112345600000785');
+      expect(input.value).to.equal('FI2112345600000785');
+      expect(element.formattedValue).to.equal('');
+    });
+
+    it('should present the raw value when the blocks are invalid', async () => {
+      element.formatBlocks = 'nope';
+      await nextUpdate(element);
+      expect(element.value).to.equal('FI2112345600000785');
+      expect(input.value).to.equal('FI2112345600000785');
+      expect(element.formattedValue).to.equal('');
+    });
+
+    it('should warn once when the blocks are invalid', async () => {
+      element.formatBlocks = 'nope';
+      await nextUpdate(element);
+      expect(warn).to.be.calledOnce;
+    });
+
+    it('should group with a space and warn once when the delimiter is invalid', async () => {
+      element.formatDelimiter = '--';
+      await nextUpdate(element);
+      expect(input.value).to.equal('FI21 1234 5600 0007 85');
+      expect(element.formattedValue).to.equal('FI21 1234 5600 0007 85');
+      expect(warn).to.be.calledOnce;
+    });
+
+    it('should group without a case and warn once when the text case is invalid', async () => {
+      element.formatTextCase = 'title';
+      await nextUpdate(element);
+      expect(input.value).to.equal('FI21 1234 5600 0007 85');
+      expect(element.formattedValue).to.equal('FI21 1234 5600 0007 85');
       expect(warn).to.be.calledOnce;
     });
   });
@@ -584,6 +620,24 @@ describe('ChunkFormatMixin', () => {
     it('should map no caret to the presented value', () => {
       expect(element._mapCaretToPresentedValue(input, 'FI21 1234')).to.be.undefined;
     });
+
+    it('should not present a format when only the delimiter is set', async () => {
+      element.formatDelimiter = '-';
+      element.value = 'FI211234';
+      await nextUpdate(element);
+      expect(element._hasFormat).to.be.false;
+      expect(input.value).to.equal('FI211234');
+      expect(element.formattedValue).to.equal('');
+    });
+
+    it('should not present a format when only the text case is set', async () => {
+      element.formatTextCase = 'upper';
+      element.value = 'fi211234';
+      await nextUpdate(element);
+      expect(element._hasFormat).to.be.false;
+      expect(input.value).to.equal('fi211234');
+      expect(element.formattedValue).to.equal('');
+    });
   });
 
   describe('properties set before attach', () => {
@@ -591,7 +645,7 @@ describe('ChunkFormatMixin', () => {
 
     beforeEach(async () => {
       detached = document.createElement(tag);
-      detached.format = IBAN;
+      detached.formatBlocks = IBAN;
       detached.value = 'FI2112345600000785';
       document.body.appendChild(detached);
       await nextRender();
@@ -607,7 +661,7 @@ describe('ChunkFormatMixin', () => {
     });
 
     it('should have the same value and formattedValue as the after-attach case', async () => {
-      element.format = IBAN;
+      element.formatBlocks = IBAN;
       element.value = 'FI2112345600000785';
       await nextUpdate(element);
       expect(detached.value).to.equal(element.value);
@@ -632,7 +686,7 @@ describe('ChunkFormatMixin', () => {
       bareInput.setAttribute('slot', 'input');
       bare.appendChild(bareInput);
       bare._setInputElement(bareInput);
-      bare.format = IBAN;
+      bare.formatBlocks = IBAN;
       await nextUpdate(bare);
       bareInput.focus();
     });
@@ -649,7 +703,7 @@ describe('ChunkFormatMixin', () => {
     });
 
     it('should accept any text when no format is configured', async () => {
-      bare.format = undefined;
+      bare.formatBlocks = undefined;
       await nextUpdate(bare);
       expect(bare._shouldAcceptText('anything')).to.be.true;
     });

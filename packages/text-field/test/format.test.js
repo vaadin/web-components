@@ -4,7 +4,7 @@ import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-text-field.js';
 
-const IBAN = { blocks: [4, 4, 4, 4, 2] };
+const IBAN = [4, 4, 4, 4, 2];
 const RAW_IBAN = 'FI2112345600000785';
 const FORMATTED_IBAN = 'FI21 1234 5600 0007 85';
 
@@ -41,7 +41,7 @@ describe('format', () => {
 
   describe('presentation', () => {
     it('should group the typed value once a format is set', async () => {
-      field.format = IBAN;
+      field.formatBlocks = IBAN;
       await nextUpdate(field);
 
       input.focus();
@@ -52,9 +52,9 @@ describe('format', () => {
       expect(field.value).to.equal(RAW_IBAN);
     });
 
-    it('should group the value with a format set as a JSON attribute', async () => {
+    it('should group the value with the format set as attributes', async () => {
       const element = fixtureSync(
-        `<vaadin-text-field format='{"blocks":[4,4,4,4,2],"delimiter":" "}'></vaadin-text-field>`,
+        `<vaadin-text-field format-blocks='[4,4,4,4,2]' format-delimiter=" "></vaadin-text-field>`,
       );
       await nextRender();
 
@@ -67,7 +67,7 @@ describe('format', () => {
     });
 
     it('should expose the unformatted value to a host input listener', async () => {
-      field.format = IBAN;
+      field.formatBlocks = IBAN;
       await nextUpdate(field);
 
       const seen = [];
@@ -101,7 +101,7 @@ describe('format', () => {
   describe('clear button', () => {
     beforeEach(async () => {
       field.clearButtonVisible = true;
-      field.format = IBAN;
+      field.formatBlocks = IBAN;
       field.value = RAW_IBAN;
       await nextUpdate(field);
     });
@@ -120,7 +120,7 @@ describe('format', () => {
   describe('allowedCharPattern', () => {
     beforeEach(async () => {
       field.allowedCharPattern = '[A-Z0-9]';
-      field.format = IBAN;
+      field.formatBlocks = IBAN;
       await nextUpdate(field);
     });
 
@@ -164,7 +164,7 @@ describe('format', () => {
   describe('required', () => {
     beforeEach(async () => {
       field.required = true;
-      field.format = IBAN;
+      field.formatBlocks = IBAN;
       await nextUpdate(field);
     });
 
@@ -183,7 +183,7 @@ describe('format', () => {
   describe('pattern', () => {
     beforeEach(async () => {
       field.pattern = '[A-Z]{2}\\d{16}';
-      field.format = IBAN;
+      field.formatBlocks = IBAN;
       await nextUpdate(field);
     });
 
@@ -192,7 +192,7 @@ describe('format', () => {
     });
 
     it('should delegate the pattern attribute again when the format is removed', async () => {
-      field.format = undefined;
+      field.formatBlocks = undefined;
       await nextUpdate(field);
 
       expect(input.getAttribute('pattern')).to.equal('[A-Z]{2}\\d{16}');
@@ -216,7 +216,7 @@ describe('format', () => {
   describe('maxlength', () => {
     beforeEach(async () => {
       field.maxlength = 18;
-      field.format = IBAN;
+      field.formatBlocks = IBAN;
       await nextUpdate(field);
     });
 
@@ -246,7 +246,7 @@ describe('format', () => {
   describe('minlength', () => {
     beforeEach(async () => {
       field.minlength = 18;
-      field.format = IBAN;
+      field.formatBlocks = IBAN;
       await nextUpdate(field);
     });
 
@@ -283,7 +283,7 @@ describe('format', () => {
       // edited, so the field starts out valid with the delimiters in its value.
       expect(field.checkValidity()).to.be.true;
 
-      field.format = IBAN;
+      field.formatBlocks = IBAN;
       await nextUpdate(field);
 
       expect(field.value).to.equal(FORMATTED_IBAN);
@@ -294,11 +294,11 @@ describe('format', () => {
     });
 
     it('should re-validate against the input element when the format is removed', async () => {
-      field.format = IBAN;
+      field.formatBlocks = IBAN;
       await nextUpdate(field);
       spy.resetHistory();
 
-      field.format = undefined;
+      field.formatBlocks = undefined;
       await nextUpdate(field);
 
       expect(field.value).to.equal(FORMATTED_IBAN);
@@ -320,7 +320,7 @@ describe('format', () => {
       await nextUpdate(field);
       expect(field.checkValidity()).to.be.true;
 
-      field.format = IBAN;
+      field.formatBlocks = IBAN;
       await nextUpdate(field);
       expect(field.checkValidity()).to.be.true;
     });
@@ -330,17 +330,13 @@ describe('format', () => {
       await nextUpdate(field);
       expect(field.checkValidity()).to.be.true;
 
-      field.format = IBAN;
+      field.formatBlocks = IBAN;
       await nextUpdate(field);
       expect(field.checkValidity()).to.be.true;
     });
   });
 
   describe('change event', () => {
-    // The case makes every keystroke below go through a script write, which is
-    // what removes the browser's own basis for firing `change`.
-    const UPPER_IBAN = { blocks: [4, 4, 4, 4, 2], case: 'upper' };
-
     let spy;
 
     beforeEach(() => {
@@ -349,7 +345,10 @@ describe('format', () => {
     });
 
     it('should fire change on blur after an edit that the format applied itself', async () => {
-      field.format = UPPER_IBAN;
+      // The text case makes every keystroke go through a script write, which is
+      // what removes the browser's own basis for firing `change`.
+      field.formatBlocks = IBAN;
+      field.formatTextCase = 'upper';
       field.value = 'FI2112345';
       await nextUpdate(field);
       expect(input.value).to.equal('FI21 1234 5');
@@ -367,7 +366,10 @@ describe('format', () => {
     });
 
     it('should fire change once on blur after typing a formatted value', async () => {
-      field.format = UPPER_IBAN;
+      // The text case makes every keystroke go through a script write, which is
+      // what removes the browser's own basis for firing `change`.
+      field.formatBlocks = IBAN;
+      field.formatTextCase = 'upper';
       await nextUpdate(field);
 
       input.focus();

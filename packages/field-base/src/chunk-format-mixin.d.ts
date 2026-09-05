@@ -5,7 +5,6 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { FormatMixinClass } from './format-mixin.js';
-import type { FieldFormat } from './format-utils.js';
 import type { InputMixinClass } from './input-mixin.js';
 
 /**
@@ -15,12 +14,12 @@ import type { InputMixinClass } from './input-mixin.js';
  *
  * The `value` property stays the unformatted string. The grouped text is written
  * to the input element and mirrored in the read-only `formattedValue` property.
- * With no `format` configured the field behaves exactly as an unformatted one.
+ * With no `formatBlocks` configured the field behaves exactly as an unformatted one.
  *
  * Applies `FormatMixin`, which owns the presentation write path, so the mixin is
  * applied on its own rather than on top of it. Every behavior of this mixin is
- * conditional on its own `format`, so a layer above it can present a format of
- * its own and this one stays out of the way.
+ * conditional on its own format properties, so a layer above it can present a
+ * format of its own and this one stays out of the way.
  *
  * Requires `InputControlMixin` (or a mixin applying it) below this mixin in the
  * chain. The `beforeinput`, `paste` and `drop` listeners are registered there;
@@ -33,17 +32,34 @@ export declare function ChunkFormatMixin<T extends Constructor<HTMLElement>>(
 
 export declare class ChunkFormatMixinClass {
   /**
-   * Configuration for as-you-type chunking. When unset, the field behaves exactly
-   * as an unformatted text field. Assign a new object to change the format —
-   * mutating a key in place does not trigger an update.
+   * The group lengths for as-you-type chunking, e.g. `[4, 4, 4, 4, 2]` for an
+   * IBAN. When unset, the field behaves exactly as an unformatted text field
+   * and the other two format properties have no effect. Assign a new array to
+   * change the grouping — mutating it in place does not trigger an update.
    *
-   * - `blocks`    — group lengths, e.g. `[4, 4, 4, 4, 2]` for an IBAN
-   * - `delimiter` — the single character inserted between groups, defaults to `' '`
-   * - `case`      — `'upper' | 'lower'`, optional
+   * Settable as a JSON attribute: format-blocks='[4,4,4,4,2]'
    *
-   * Settable as a JSON attribute: format='{"blocks":[4,4,4,4,2],"delimiter":" "}'
-   *
-   * An invalid configuration is reported with a warning and treated as unset.
+   * An invalid value is reported with a warning and treated as unset.
    */
-  format: FieldFormat | undefined;
+  formatBlocks: number[] | undefined;
+
+  /**
+   * The single character inserted between the groups of `formatBlocks`.
+   * Defaults to a space.
+   *
+   * An invalid value is reported with a warning, and a space is used instead.
+   *
+   * @attr {string} format-delimiter
+   */
+  formatDelimiter: string | undefined;
+
+  /**
+   * The case applied to the value, either `'upper'` or `'lower'`. When unset,
+   * the value is kept as the user enters it.
+   *
+   * An invalid value is reported with a warning, and no case is applied.
+   *
+   * @attr {string} format-text-case
+   */
+  formatTextCase: string | undefined;
 }

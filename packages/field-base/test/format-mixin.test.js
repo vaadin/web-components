@@ -203,9 +203,10 @@ describe('FormatMixin with a trivial formatter', () => {
       expect(element.formattedValue).to.equal('ABC');
     });
 
-    it('should not define a format property', () => {
-      expect('format' in element).to.be.false;
-      expect(element.format).to.be.undefined;
+    it('should not define the format properties', () => {
+      expect('formatBlocks' in element).to.be.false;
+      expect('formatDelimiter' in element).to.be.false;
+      expect('formatTextCase' in element).to.be.false;
     });
 
     it('should not call _forwardInputValue when typing', async () => {
@@ -680,7 +681,7 @@ describe('FormatMixin with a format from a layer above chunking', () => {
 
   it('should report a format with none configured for the layer below', () => {
     expect(element._hasFormat).to.be.true;
-    expect(element.format).to.be.undefined;
+    expect(element.formatBlocks).to.be.undefined;
   });
 
   it('should present the typed text as a field without a format does', async () => {

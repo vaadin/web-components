@@ -5,47 +5,32 @@
  */
 
 /**
- * Configuration for as-you-type chunking.
- */
-export interface FieldFormat {
-  /**
-   * The group lengths, e.g. `[4, 4, 4, 4, 2]` for an IBAN.
-   */
-  blocks: number[];
-
-  /**
-   * The single character inserted between groups. Defaults to a space.
-   */
-  delimiter?: string;
-
-  /**
-   * The case applied to the value.
-   */
-  case?: 'lower' | 'upper';
-}
-
-/**
  * A validated format configuration, with the delimiter defaulted when it is not set.
  */
 export interface NormalizedFieldFormat {
   blocks: number[];
   delimiter: string;
-  case?: 'lower' | 'upper';
+  textCase?: 'lower' | 'upper';
 }
 
 /**
- * Validates the given format configuration and returns a normalized copy of it,
+ * Validates the given format properties and returns a normalized copy of them,
  * with the delimiter defaulted when it is not set.
  *
- * Returns `null` when no format is configured. Also returns `null` when the
- * configuration is invalid, in which case a warning is logged and the format is
- * treated as unset:
+ * Returns `null` when no blocks are configured, in which case the delimiter and
+ * the case have no effect. Each property is validated on its own, so that one
+ * invalid value does not take the others down with it. An invalid value is
+ * reported with a warning and falls back as follows:
  *
- * - `blocks` is not a non-empty array of positive integers
- * - `delimiter` is set to something other than a single character
- * - `case` is set to something other than `'upper'` or `'lower'`
+ * - `blocks` is not a non-empty array of positive integers — the format is unset
+ * - `delimiter` is not a single character — a space is used instead
+ * - `textCase` is neither `'upper'` nor `'lower'` — no case is applied
  */
-export function normalizeFormat(format: FieldFormat | null | undefined): NormalizedFieldFormat | null;
+export function normalizeFormat(
+  blocks: number[] | null | undefined,
+  delimiter: string | null | undefined,
+  textCase: string | null | undefined,
+): NormalizedFieldFormat | null;
 
 /**
  * Groups the unformatted value into the blocks of the given format, joined with
