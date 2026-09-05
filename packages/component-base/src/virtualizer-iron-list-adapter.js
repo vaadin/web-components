@@ -464,7 +464,7 @@ export class IronListAdapter {
     const fragment = document.createDocumentFragment();
     physicalItems.forEach((el) => {
       el.style.position = 'absolute';
-      fragment.appendChild(el);
+      fragment.append(...[el.__startMarker, el, el.__endMarker].filter(Boolean));
       this.__resizeObserver.observe(el, { box: 'border-box' });
     });
     this.elementsContainer.appendChild(fragment);
@@ -792,11 +792,13 @@ export class IronListAdapter {
     const delta = visibleElements.indexOf(targetElement) - targetPhysicalIndex;
     if (delta > 0) {
       for (let i = 0; i < delta; i++) {
-        this.elementsContainer.appendChild(visibleElements[i]);
+        const el = visibleElements[i];
+        this.elementsContainer.append(...[el.__startMarker, el, el.__endMarker].filter(Boolean));
       }
     } else if (delta < 0) {
-      for (let i = visibleElements.length + delta; i < visibleElements.length; i++) {
-        this.elementsContainer.insertBefore(visibleElements[i], visibleElements[0]);
+      for (let i = visibleElements.length - 1; i >= visibleElements.length + delta; i--) {
+        const el = visibleElements[i];
+        this.elementsContainer.prepend(...[el.__startMarker, el, el.__endMarker].filter(Boolean));
       }
     }
 
