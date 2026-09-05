@@ -14,7 +14,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
+import { field, fieldLabelAside } from '@vaadin/field-base/src/styles/field-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sliderStyles } from './styles/vaadin-slider-base-styles.js';
@@ -134,6 +134,7 @@ class Slider extends FieldMixin(
   static get styles() {
     return [
       field,
+      fieldLabelAside,
       sliderStyles,
       css`
         :host([focus-ring]) [part='thumb'] {

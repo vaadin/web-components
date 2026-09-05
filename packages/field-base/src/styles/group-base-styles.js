@@ -26,4 +26,9 @@ export const group = css`
     padding-block: var(--vaadin-padding-block-container);
     border-block: var(--vaadin-input-field-border-width, 1px) solid transparent;
   }
+
+  :host([theme~='label-aside']) [part='group-field'] {
+    padding-block-start: var(--vaadin-padding-block-container);
+    border-block-start: var(--vaadin-input-field-border-width, 1px) solid transparent;
+  }
 `;
