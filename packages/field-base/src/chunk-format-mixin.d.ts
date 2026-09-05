@@ -18,7 +18,9 @@ import type { InputMixinClass } from './input-mixin.js';
  * With no `format` configured the field behaves exactly as an unformatted one.
  *
  * Applies `FormatMixin`, which owns the presentation write path, so the mixin is
- * applied on its own rather than on top of it.
+ * applied on its own rather than on top of it. Every behavior of this mixin is
+ * conditional on its own `format`, so a layer above it can present a format of
+ * its own and this one stays out of the way.
  *
  * Requires `InputControlMixin` (or a mixin applying it) below this mixin in the
  * chain. The `beforeinput`, `paste` and `drop` listeners are registered there;

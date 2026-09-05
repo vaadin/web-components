@@ -42,10 +42,10 @@ const FormatMixinImplementation = (superclass) =>
     #composing = false;
 
     /** @private */
-    #lastInputType;
+    #beforeInputEvent;
 
     /** @private */
-    #prevViewValue = '';
+    #prevState = { value: '', selection: [0, 0] };
 
     /** @private */
     #changeBaseline = '';
@@ -107,6 +107,23 @@ const FormatMixinImplementation = (superclass) =>
     }
 
     /**
+     * The text of the input element and the selection in it as they were before
+     * the edit that is being handled, which is what an edit is reconstructed
+     * against. Refreshed on `beforeinput`, on focus, and after every write the
+     * mixin makes, so that inside `_formatOnInput` it describes the state that
+     * the edit started from rather than its outcome.
+     *
+     * The value is a copy, so changing it does not affect the field.
+     *
+     * @return {{ value: string, selection: !Array<number> }}
+     * @protected
+     */
+    get _prevState() {
+      const { value, selection } = this.#prevState;
+      return { value, selection: [...selection] };
+    }
+
+    /**
      * Override a getter from `InputMixin` to keep it paired with the setter
      * below. A class that declares only the setter shadows the inherited getter
      * into `undefined`.
@@ -146,7 +163,7 @@ const FormatMixinImplementation = (superclass) =>
         // Writing the same string collapses the selection, so the write is
         // skipped altogether rather than followed by a caret restore.
         this._setFormattedValue(value);
-        this.#prevViewValue = value;
+        this.#recordState(input);
         return;
       }
 
@@ -164,7 +181,7 @@ const FormatMixinImplementation = (superclass) =>
       }
 
       this._setFormattedValue(value);
-      this.#prevViewValue = value;
+      this.#recordState(input);
     }
 
     /**
@@ -180,7 +197,24 @@ const FormatMixinImplementation = (superclass) =>
       if (!this._hasFormat || this.#composing) {
         return false;
       }
-      return !this.#isDeleteIntent(event);
+      return !this.#isDeleteIntent(event) || this._shouldFormatOnDelete(event);
+    }
+
+    /**
+     * Returns true when a live reformat should also run for an edit that removes
+     * characters. The default implementation returns false, which leaves the text
+     * that the deletion produced as it is.
+     *
+     * Override in a layer whose presentation is positional, where the characters
+     * that a deletion leaves behind no longer line up with the presentation and
+     * have to be laid out again.
+     *
+     * @param {Event} _event
+     * @return {boolean}
+     * @protected
+     */
+    _shouldFormatOnDelete(_event) {
+      return false;
     }
 
     /**
@@ -316,16 +350,20 @@ const FormatMixinImplementation = (superclass) =>
     _onBeforeInput(event) {
       super._onBeforeInput?.(event);
 
-      // An edit that a lower layer rejected is never applied, so it must not
-      // leave an intent behind for the next event to read.
-      if (event.defaultPrevented) {
-        return;
-      }
+      const input = event.composedPath()[0];
+
+      // Recorded even for an edit that a layer rejects: the snapshot describes
+      // the text that the input element holds now, which is where the next edit
+      // starts from either way, and a layer that rejects an edit to perform it
+      // itself needs it fresh.
+      this.#recordState(input);
 
       // The intent is recorded before any layer above performs the edit itself:
       // a scripted edit dispatches its `input` event synchronously, so `_onInput`
-      // can run before this method returns.
-      this.#lastInputType = event.inputType;
+      // can run before this method returns. Whether the edit was rejected is
+      // therefore read from the event when the intent is used, rather than here:
+      // a layer above calls `preventDefault()` only after this method returns.
+      this.#beforeInputEvent = event;
     }
 
     /**
@@ -342,10 +380,10 @@ const FormatMixinImplementation = (superclass) =>
         this._formatOnInput(event);
       }
 
-      // The setter owns the previous view value for every write it makes; this
-      // is the other owner, for an edit that writes nothing at all, such as a
+      // The setter owns the previous state for every write it makes; this is
+      // the other owner, for an edit that writes nothing at all, such as a
       // deletion that skips the reformat.
-      this.#prevViewValue = event.composedPath()[0].value;
+      this.#recordState(event.composedPath()[0]);
 
       this.#inputTurn = true;
       try {
@@ -354,7 +392,7 @@ const FormatMixinImplementation = (superclass) =>
         this.#inputTurn = false;
       }
 
-      this.#lastInputType = undefined;
+      this.#beforeInputEvent = undefined;
     }
 
     /**
@@ -391,6 +429,7 @@ const FormatMixinImplementation = (superclass) =>
      */
     #onFocus() {
       this.#changeBaseline = this._inputElementValue ?? '';
+      this.#recordState(this.inputElement);
     }
 
     /**
@@ -429,18 +468,46 @@ const FormatMixinImplementation = (superclass) =>
      * Returns true when the edit that caused the given input event removes
      * characters, in which case no reformat runs.
      *
-     * The primary signal is the `inputType` recorded in `beforeinput`. Synthetic
-     * input events carry none, and are classified by a view-length diff instead.
+     * The primary signal is the `inputType` of the `beforeinput` event recorded
+     * for the edit, which is ignored once some layer has rejected that edit.
+     * Synthetic input events carry no such event, and are classified by a
+     * view-length diff instead.
      *
      * @private
      */
     #isDeleteIntent(event) {
-      if (this.#lastInputType !== undefined) {
-        return this.#lastInputType.startsWith('delete');
+      const beforeInputEvent = this.#beforeInputEvent;
+      const inputType = beforeInputEvent?.defaultPrevented ? undefined : beforeInputEvent?.inputType;
+
+      if (inputType !== undefined) {
+        return inputType.startsWith('delete');
       }
 
       const input = event.composedPath()[0];
-      return !!input && input.value.length < this.#prevViewValue.length;
+      return !!input && input.value.length < this.#prevState.value.length;
+    }
+
+    /**
+     * Records the text of the input element and the selection in it as the state
+     * that the next edit starts from. An input type that exposes no selection is
+     * recorded with the caret at the end of the text.
+     *
+     * @private
+     */
+    #recordState(input) {
+      const value = (input && input[this._inputElementValueProperty]) ?? '';
+
+      let start, end;
+      if (input) {
+        try {
+          ({ selectionStart: start, selectionEnd: end } = input);
+        } catch {
+          // Some input types have no selection API. Fall back to the end below.
+        }
+      }
+
+      const hasSelection = typeof start === 'number' && typeof end === 'number';
+      this.#prevState = { value, selection: hasSelection ? [start, end] : [value.length, value.length] };
     }
 
     /**

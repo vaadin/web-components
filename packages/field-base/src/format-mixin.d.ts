@@ -7,6 +7,14 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { InputMixinClass } from './input-mixin.js';
 
 /**
+ * The text of an input element and the selection in it.
+ */
+export interface FormatState {
+  value: string;
+  selection: [number, number];
+}
+
+/**
  * A mixin that provides the machinery for presenting the field value in another
  * form than the one stored in the `value` property.
  *
@@ -48,11 +56,33 @@ export declare class FormatMixinClass {
   protected readonly _hasFormat: boolean;
 
   /**
+   * The text of the input element and the selection in it as they were before
+   * the edit that is being handled, which is what an edit is reconstructed
+   * against. Refreshed on `beforeinput`, on focus, and after every write the
+   * mixin makes, so that inside `_formatOnInput` it describes the state that
+   * the edit started from rather than its outcome.
+   *
+   * The value is a copy, so changing it does not affect the field.
+   */
+  protected readonly _prevState: FormatState;
+
+  /**
    * Returns true when a live reformat should run for this input event.
    * Override to format on commit instead of on input; the write site stays
    * reachable through `_presentValue`.
    */
   protected _shouldFormatOnInput(event: Event): boolean;
+
+  /**
+   * Returns true when a live reformat should also run for an edit that removes
+   * characters. The default implementation returns false, which leaves the text
+   * that the deletion produced as it is.
+   *
+   * Override in a layer whose presentation is positional, where the characters
+   * that a deletion leaves behind no longer line up with the presentation and
+   * have to be laid out again.
+   */
+  protected _shouldFormatOnDelete(event: Event): boolean;
 
   /**
    * Presents the text entered in the input element in its formatted form.

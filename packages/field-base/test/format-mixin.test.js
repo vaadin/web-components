@@ -3,6 +3,7 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { defineLit, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
+import { ChunkFormatMixin } from '../src/chunk-format-mixin.js';
 import { FormatMixin } from '../src/format-mixin.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
 import { InputController } from '../src/input-controller.js';
@@ -67,6 +68,10 @@ describe('FormatMixin', () => {
 
     it('should not format on input', () => {
       expect(element._shouldFormatOnInput(new Event('input'))).to.be.false;
+    });
+
+    it('should not format on delete', () => {
+      expect(element._shouldFormatOnDelete(new Event('input'))).to.be.false;
     });
 
     it('should present no text on input', () => {
@@ -277,6 +282,38 @@ describe('FormatMixin with a trivial formatter', () => {
     });
   });
 
+  describe('_prevState', () => {
+    beforeEach(() => {
+      input.focus();
+    });
+
+    it('should record the presented text and the caret it was written with', () => {
+      element._presentValue('FI21 5', 3);
+      expect(element._prevState).to.eql({ value: 'FI21 5', selection: [3, 3] });
+    });
+
+    it('should record the state of the input element before an edit', async () => {
+      await sendKeys({ type: 'abc' });
+      input.setSelectionRange(1, 2);
+      input.dispatchEvent(
+        new InputEvent('beforeinput', {
+          bubbles: true,
+          composed: true,
+          cancelable: true,
+          inputType: 'insertText',
+          data: 'x',
+        }),
+      );
+      expect(element._prevState).to.eql({ value: 'ABC', selection: [1, 2] });
+    });
+
+    it('should not let a caller change the recorded state', () => {
+      element._presentValue('FI21 5', 3);
+      element._prevState.selection[0] = 0;
+      expect(element._prevState).to.eql({ value: 'FI21 5', selection: [3, 3] });
+    });
+  });
+
   describe('caret intent before the input element exists', () => {
     let detached, detachedInput;
 
@@ -423,6 +460,33 @@ describe('FormatMixin with a trivial formatter', () => {
     });
 
     it('should format the view when a synthetic input event grows it', async () => {
+      input.value = 'ABCd';
+      input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+      await nextUpdate(element);
+      expect(spy).to.be.calledOnce;
+      expect(input.value).to.equal('ABCD');
+    });
+
+    it('should format the view on a deletion when the layer asks for it', async () => {
+      sinon.stub(element, '_shouldFormatOnDelete').returns(true);
+      await sendKeys({ press: 'Backspace' });
+      expect(spy).to.be.calledOnce;
+      expect(element.value).to.equal('AB');
+    });
+
+    it('should not apply a delete intent that a layer above prevented', async () => {
+      // Registered after the mixin's own listener, so that it prevents the edit
+      // once the intent for it has been recorded, the way a layer above does.
+      input.addEventListener('beforeinput', (event) => event.preventDefault());
+      input.dispatchEvent(
+        new InputEvent('beforeinput', {
+          bubbles: true,
+          composed: true,
+          cancelable: true,
+          inputType: 'deleteContentBackward',
+        }),
+      );
+
       input.value = 'ABCd';
       input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       await nextUpdate(element);
@@ -577,5 +641,92 @@ describe('FormatMixin with a trivial formatter', () => {
       expect(input.value).to.equal('abc');
       expect(spy).to.be.calledOnce;
     });
+  });
+});
+
+describe('FormatMixin with a format from a layer above chunking', () => {
+  // A layer that presents a format of its own on top of the chunking layer, the
+  // way a second format mixin in the chain does. It reports a format without
+  // configuring the chunking below it, so nothing but that layer's own guards
+  // keeps the field working.
+  const FormatLayerMixin = (superclass) =>
+    class extends FormatMixin(superclass) {
+      get _hasFormat() {
+        return true;
+      }
+    };
+
+  const tag = defineLit(
+    'format-mixin-layered',
+    `
+      <div part="label">
+        <slot name="label"></slot>
+      </div>
+      <slot name="input"></slot>
+      <button id="clearButton">Clear</button>
+      <div part="error-message">
+        <slot name="error-message"></slot>
+      </div>
+      <slot name="helper"></slot>
+    `,
+    (Base) =>
+      class extends FormatLayerMixin(ChunkFormatMixin(InputControlMixin(PolylitMixin(Base)))) {
+        get clearElement() {
+          return this.$.clearButton;
+        }
+
+        ready() {
+          super.ready();
+
+          this.addController(
+            new InputController(this, (input) => {
+              this._setInputElement(input);
+              this._setFocusElement(input);
+              this.stateTarget = input;
+              this.ariaTarget = input;
+            }),
+          );
+        }
+      },
+  );
+
+  let element, input;
+
+  beforeEach(async () => {
+    element = fixtureSync(`<${tag}></${tag}>`);
+    await nextRender();
+    input = element.querySelector('[slot=input]');
+    input.focus();
+  });
+
+  it('should report a format with none configured for the layer below', () => {
+    expect(element._hasFormat).to.be.true;
+    expect(element.format).to.be.undefined;
+  });
+
+  it('should present the typed text as a field without a format does', async () => {
+    await sendKeys({ type: 'abcd' });
+    expect(input.value).to.equal('abcd');
+    expect(element.value).to.equal('abcd');
+  });
+
+  it('should delete the character before the caret as a field without a format does', async () => {
+    await sendKeys({ type: 'abcd' });
+    input.setSelectionRange(2, 2);
+    await sendKeys({ press: 'Backspace' });
+    expect(input.value).to.equal('acd');
+    expect(element.value).to.equal('acd');
+  });
+
+  it('should accept a pasted string as a field without a format does', () => {
+    const event = new Event('paste', { bubbles: true, cancelable: true, composed: true });
+    event.clipboardData = { getData: () => 'FI21 1234' };
+    input.dispatchEvent(event);
+    expect(event.defaultPrevented).to.be.false;
+    expect(element.hasAttribute('input-prevented')).to.be.false;
+  });
+
+  it('should map no caret to the presented value', () => {
+    expect(element._mapCaretToPresentedValue(input, 'abc')).to.be.undefined;
   });
 });

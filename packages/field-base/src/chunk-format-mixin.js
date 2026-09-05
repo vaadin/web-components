@@ -23,7 +23,9 @@ import {
  * With no `format` configured the field behaves exactly as an unformatted one.
  *
  * Applies `FormatMixin`, which owns the presentation write path, so the mixin is
- * applied on its own rather than on top of it.
+ * applied on its own rather than on top of it. Every behavior of this mixin is
+ * conditional on its own `format`, so a layer above it can present a format of
+ * its own and this one stays out of the way.
  *
  * Requires `InputControlMixin` (or a mixin applying it) below this mixin in the
  * chain. The `beforeinput`, `paste` and `drop` listeners are registered there;
@@ -103,7 +105,9 @@ const ChunkFormatMixinImplementation = (superclass) =>
 
         // Once the write site short-circuits on `!_hasFormat`, nothing else would
         // clear the property, so a field that loses its format would keep reporting
-        // the last formatted string.
+        // the last formatted string. The property belongs to the whole chain, so
+        // this is the one place that reads `_hasFormat` rather than the format of
+        // this layer: a layer above may still be presenting one.
         if (!this._hasFormat) {
           this._setFormattedValue('');
         }
@@ -119,6 +123,11 @@ const ChunkFormatMixinImplementation = (superclass) =>
      * @override
      */
     _formatOnInput(event) {
+      if (!this.#format) {
+        super._formatOnInput(event);
+        return;
+      }
+
       const input = event.composedPath()[0] || this.inputElement;
       const format = this.#format;
 
@@ -154,10 +163,12 @@ const ChunkFormatMixinImplementation = (superclass) =>
       // below dispatches its own `input` event.
       super._onBeforeInput(event);
 
-      // The core makes the same check. Repeated here because rejecting an edit
-      // and performing it by hand are two different decisions, and the second
-      // one must not run for an edit that the first one has already dropped.
-      if (event.defaultPrevented || !this._hasFormat) {
+      // Rejecting an edit and performing it by hand are two different decisions,
+      // so an edit that a layer below has already dropped is left alone here. The
+      // widening below is this layer's own behavior, so it is conditional on this
+      // layer's own format rather than on the one that `_hasFormat` reports for
+      // the whole chain.
+      if (event.defaultPrevented || !this.#format) {
         return;
       }
 
@@ -215,7 +226,7 @@ const ChunkFormatMixinImplementation = (superclass) =>
      * @override
      */
     _shouldAcceptText(text) {
-      const candidate = this._hasFormat ? unformat(text, this.#format) : text;
+      const candidate = this.#format ? unformat(text, this.#format) : text;
       return super._shouldAcceptText?.(candidate) ?? true;
     }
 
@@ -231,7 +242,7 @@ const ChunkFormatMixinImplementation = (superclass) =>
      * @override
      */
     _mapCaretToPresentedValue(input, text) {
-      if (!this._hasFormat) {
+      if (!this.#format) {
         return undefined;
       }
 
@@ -257,7 +268,7 @@ const ChunkFormatMixinImplementation = (superclass) =>
      * @override
      */
     _modelValueFromInput(viewValue, event) {
-      if (!this._hasFormat) {
+      if (!this.#format) {
         return super._modelValueFromInput(viewValue, event);
       }
 
@@ -274,7 +285,7 @@ const ChunkFormatMixinImplementation = (superclass) =>
      * @override
      */
     _inputValueFromModel(value) {
-      if (!this._hasFormat) {
+      if (!this.#format) {
         return super._inputValueFromModel(value);
       }
 
