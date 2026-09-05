@@ -76,4 +76,11 @@ export declare class InputControlMixinClass {
    * The text usually displayed in a tooltip popup when the mouse is over the field.
    */
   title: string;
+
+  /**
+   * Returns true when pasted, dropped or inserted text passes `allowedCharPattern`.
+   * Only called while the pattern is set. Override to accept text that the raw
+   * pattern test would reject.
+   */
+  protected _shouldAcceptText(text: string): boolean;
 }
