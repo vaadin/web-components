@@ -35,9 +35,11 @@ export interface MaskStateInput {
 
 /**
  * A compiled mask, or a function that returns the compiled mask to use for a state,
- * for a mask that depends on the value.
+ * for a mask that depends on the value. A function carries `maximal` when the mask
+ * it describes has a maximal expansion, which is the case for a mask with optional
+ * sections and not for one that grows with the value.
  */
-export type MaskExpression = ((state: MaskState) => NormalizedMask) | NormalizedMask;
+export type MaskExpression = (((state: MaskState) => NormalizedMask) & { maximal?: NormalizedMask }) | NormalizedMask;
 
 /**
  * Options for compiling a mask.
@@ -119,17 +121,44 @@ export function applyTextCase(text: string, textCase: string | null | undefined)
  * - `0` any digit
  * - `a` any letter
  * - `*` any character
+ * - `[…]` an optional section at the end of the mask
  * - `\x` the literal character `x`
  * - every other character is a fixed character
  *
+ * A mask with optional sections describes several lengths rather than one, so it
+ * compiles to a mask expression instead of a single compiled mask: the sections are
+ * enabled left to right, which gives a chain of one expansion per section plus the
+ * one with none of them, and the expression returns the shortest expansion that
+ * holds the user characters of the state it is given. The maximal expansion is
+ * carried as the `maximal` property of the expression, for a caller that needs the
+ * mask as a whole rather than as it currently resolves.
+ *
  * Returns `null` when no mask is configured. Also returns `null` when the mask is
- * invalid, in which case a warning is logged and the mask is treated as unset:
+ * invalid, in which case a warning is logged and the mask is treated as unset. The
+ * first of these conditions that the mask meets is the one reported:
  *
  * - the mask is not a non-empty string
  * - the mask ends with a dangling `\`
+ * - an optional section is nested inside another, or is left unclosed
+ * - a `]` has no matching `[`, which `\]` is the way to write as a literal
+ * - an optional section is not at the end of the mask
+ * - an optional section has no user slot
+ * - the mask has no user slot outside its optional sections
+ * - the mask has more than four optional sections
  * - the mask has no user slot at all
  */
-export function compileMask(mask: string | null | undefined, options?: MaskCompileOptions): NormalizedMask | null;
+export function compileMask(mask: string | null | undefined, options?: MaskCompileOptions): MaskExpression | null;
+
+/**
+ * Returns the maximal expansion of the given compiled mask, that is the mask as a
+ * whole rather than as it currently resolves, or `undefined` when it has none.
+ *
+ * A plain compiled mask is its own maximal expansion. A mask expression that
+ * `compileMask` returned for a mask with optional sections carries one. Any other
+ * mask expression describes a mask that has no maximal expansion at all, such as a
+ * chunking one that grows with the value, and yields `undefined`.
+ */
+export function maximalOf(compiled: MaskExpression): NormalizedMask | undefined;
 
 /**
  * Returns whether the given value fits the given mask exactly, that is whether it has

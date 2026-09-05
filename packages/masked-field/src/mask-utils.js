@@ -16,6 +16,51 @@ const USER_SLOTS = new Map([
 ]);
 
 /**
+ * The largest number of optional sections that a mask may hold. The expansions of a
+ * mask are a chain of one per section plus one, so this is a readability cap rather
+ * than a limit the engine needs.
+ */
+const MAX_SECTIONS = 4;
+
+/**
+ * Returns whether the given mask items hold at least one user slot, that is at least
+ * one item that is not a fixed character.
+ *
+ * @param {Array<RegExp | string>} items
+ * @return {boolean}
+ */
+function hasUserSlot(items) {
+  return items.some((item) => typeof item !== 'string');
+}
+
+/**
+ * Returns the item lists of every expansion of the given mask segments, shortest
+ * first: the segments that are not optional, then those with the first optional
+ * section enabled, and so on up to the maximal expansion with every section enabled.
+ *
+ * Sections are only ever enabled left to right, so a mask with `n` of them expands
+ * to a chain of `n + 1` item lists rather than to every combination, and each list
+ * is one whole section longer than the one before it.
+ *
+ * @param {Array<{ items: Array<RegExp | string>, optional: boolean }>} segments
+ * @return {Array<Array<RegExp | string>>}
+ */
+function expand(segments) {
+  const expansions = [];
+  let items = [];
+
+  for (const segment of segments) {
+    if (segment.optional) {
+      expansions.push(items);
+    }
+
+    items = [...items, ...segment.items];
+  }
+
+  return [...expansions, items];
+}
+
+/**
  * Returns the given number limited to the given range.
  *
  * @param {number} value
@@ -277,19 +322,35 @@ function coversFixedOnly(value, items, from, to) {
  * - `0` any digit
  * - `a` any letter
  * - `*` any character
+ * - `[…]` an optional section at the end of the mask
  * - `\x` the literal character `x`
  * - every other character is a fixed character
  *
+ * A mask with optional sections describes several lengths rather than one, so it
+ * compiles to a mask expression instead of a single compiled mask: the sections are
+ * enabled left to right, which gives a chain of one expansion per section plus the
+ * one with none of them, and the expression returns the shortest expansion that
+ * holds the user characters of the state it is given. The maximal expansion is
+ * carried as the `maximal` property of the expression, for a caller that needs the
+ * mask as a whole rather than as it currently resolves.
+ *
  * Returns `null` when no mask is configured. Also returns `null` when the mask is
- * invalid, in which case a warning is logged and the mask is treated as unset:
+ * invalid, in which case a warning is logged and the mask is treated as unset. The
+ * first of these conditions that the mask meets is the one reported:
  *
  * - the mask is not a non-empty string
  * - the mask ends with a dangling `\`
+ * - an optional section is nested inside another, or is left unclosed
+ * - a `]` has no matching `[`, which `\]` is the way to write as a literal
+ * - an optional section is not at the end of the mask
+ * - an optional section has no user slot
+ * - the mask has no user slot outside its optional sections
+ * - the mask has more than four optional sections
  * - the mask has no user slot at all
  *
  * @param {string | null | undefined} mask
  * @param {MaskCompileOptions} [options]
- * @return {NormalizedMask | null}
+ * @return {NormalizedMask | MaskExpression | null}
  */
 export function compileMask(mask, options = {}) {
   if (mask === undefined || mask === null) {
@@ -301,9 +362,12 @@ export function compileMask(mask, options = {}) {
     return null;
   }
 
-  const items = [];
+  const segments = [{ items: [], optional: false }];
   const literalChars = new Set();
   let escaped = false;
+  let open = false;
+  let nested = false;
+  let unmatched = false;
 
   for (const char of mask.split('')) {
     if (char === '\\' && !escaped) {
@@ -311,8 +375,21 @@ export function compileMask(mask, options = {}) {
       continue;
     }
 
+    if (!escaped && (char === '[' || char === ']')) {
+      if (char === '[') {
+        nested ||= open;
+      } else {
+        unmatched ||= !open;
+      }
+
+      open = char === '[';
+      segments.push({ items: [], optional: open });
+      continue;
+    }
+
     const slot = escaped ? undefined : USER_SLOTS.get(char);
     escaped = false;
+    const { items } = segments[segments.length - 1];
 
     if (slot) {
       items.push(slot);
@@ -327,14 +404,94 @@ export function compileMask(mask, options = {}) {
     return null;
   }
 
-  if (items.every((item) => typeof item === 'string')) {
-    issueWarning('Invalid "mask": must have at least one "0", "a" or "*" slot. Ignoring the mask.');
+  if (nested) {
+    issueWarning('Invalid "mask": must not nest an optional section inside another. Ignoring the mask.');
+    return null;
+  }
+
+  if (open) {
+    issueWarning('Invalid "mask": must close every optional section with a "]". Ignoring the mask.');
+    return null;
+  }
+
+  if (unmatched) {
+    issueWarning('Invalid "mask": must not have a "]" without a matching "[". Ignoring the mask.');
+    return null;
+  }
+
+  const sections = segments.filter((segment) => segment.optional);
+  const first = segments.findIndex((segment) => segment.optional);
+
+  if (first !== -1 && segments.slice(first + 1).some((segment) => !segment.optional && segment.items.length > 0)) {
+    issueWarning('Invalid "mask": must have every optional section at the end of the mask. Ignoring the mask.');
+    return null;
+  }
+
+  if (sections.some((section) => !hasUserSlot(section.items))) {
+    issueWarning(
+      'Invalid "mask": must have at least one "0", "a" or "*" slot in every optional section. Ignoring the mask.',
+    );
+    return null;
+  }
+
+  const expansions = expand(segments);
+
+  if (sections.length > 0 && !hasUserSlot(expansions[0])) {
+    issueWarning(
+      'Invalid "mask": must have at least one "0", "a" or "*" slot outside the optional sections. Ignoring the mask.',
+    );
+    return null;
+  }
+
+  if (sections.length > MAX_SECTIONS) {
+    issueWarning(`Invalid "mask": must not have more than ${MAX_SECTIONS} optional sections. Ignoring the mask.`);
     return null;
   }
 
   const textCase = options.textCase === 'upper' || options.textCase === 'lower' ? options.textCase : undefined;
+  const normalized = expansions.map((items) => ({ items, literalChars, textCase }));
+  const maximal = normalized[normalized.length - 1];
 
-  return { items, literalChars, textCase };
+  if (!hasUserSlot(maximal.items)) {
+    issueWarning('Invalid "mask": must have at least one "0", "a" or "*" slot. Ignoring the mask.');
+    return null;
+  }
+
+  if (normalized.length === 1) {
+    return maximal;
+  }
+
+  const slotCounts = expansions.map((items) => items.filter((item) => typeof item !== 'string').length);
+
+  const expression = (state) => {
+    const { value } = state;
+    // The number of user characters that the state holds, counted against the maximal
+    // expansion, which every shorter one shares its prefix with.
+    const typed = positionalIndex(value, maximal.items, value.length);
+    const count = clamp(typed, slotCounts[0], slotCounts[slotCounts.length - 1]);
+
+    return normalized[slotCounts.findIndex((slots) => slots >= count)];
+  };
+
+  expression.maximal = maximal;
+
+  return expression;
+}
+
+/**
+ * Returns the maximal expansion of the given compiled mask, that is the mask as a
+ * whole rather than as it currently resolves, or `undefined` when it has none.
+ *
+ * A plain compiled mask is its own maximal expansion. A mask expression that
+ * `compileMask` returned for a mask with optional sections carries one. Any other
+ * mask expression describes a mask that has no maximal expansion at all, such as a
+ * chunking one that grows with the value, and yields `undefined`.
+ *
+ * @param {NormalizedMask | MaskExpression} compiled
+ * @return {NormalizedMask | undefined}
+ */
+export function maximalOf(compiled) {
+  return typeof compiled === 'function' ? compiled.maximal : compiled;
 }
 
 /**

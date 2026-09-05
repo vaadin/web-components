@@ -110,6 +110,8 @@ const InputFormatMixinImplementation = (superclass) =>
          * - `0` any digit
          * - `a` any letter
          * - `*` any character
+         * - `[…]` an optional section at the end of the mask, shown once the user
+         *   types into it, e.g. `'00000[-0000]'`
          * - `\x` the character `x` itself, e.g. `\0` for a literal zero
          * - every other character is inserted as it is
          *

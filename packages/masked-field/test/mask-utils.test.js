@@ -8,6 +8,7 @@ import {
   deleteRange,
   insertText,
   maskedIndex,
+  maximalOf,
   reconstructEdit,
   unmask,
   unmaskedIndex,
@@ -111,6 +112,88 @@ describe('compileMask', () => {
   it('should return null and warn once when every slot of the mask is escaped', () => {
     expect(compileMask('\\0\\a')).to.be.null;
     expect(console.warn).to.be.calledOnce;
+  });
+
+  it('should compile a mask with an optional section into a mask expression', () => {
+    const zip = compileMask('00000[-0000]');
+    expect(zip).to.be.a('function');
+    expect(zip.maximal.items).to.have.lengthOf(10);
+  });
+
+  it('should resolve the shortest expansion that holds the characters of the state', () => {
+    const zip = compileMask('00000[-0000]');
+    expect(zip({ value: '12345', selection: [5, 5] }).items).to.have.lengthOf(5);
+    expect(zip({ value: '12345-6', selection: [7, 7] }).items).to.have.lengthOf(10);
+  });
+
+  it('should collect the fixed characters of an optional section into every expansion', () => {
+    const zip = compileMask('00000[-0000]');
+    expect(zip({ value: '12345', selection: [5, 5] }).literalChars).to.eql(new Set(['-']));
+    expect(zip.maximal.literalChars).to.eql(new Set(['-']));
+  });
+
+  it('should compile an escaped bracket as a fixed character', () => {
+    expect(compileMask('0\\[0').items[1]).to.equal('[');
+    expect(compileMask('0\\]0').items[1]).to.equal(']');
+    expect(console.warn).to.not.be.called;
+  });
+
+  it('should return null and warn once when an optional section is left unclosed', () => {
+    expect(compileMask('00[0')).to.be.null;
+    expect(console.warn).to.be.calledOnce;
+    expect(console.warn).to.be.calledWithMatch(/close every optional section/u);
+  });
+
+  it('should return null and warn once when an optional section is nested in another', () => {
+    expect(compileMask('0[0[0]]')).to.be.null;
+    expect(console.warn).to.be.calledOnce;
+    expect(console.warn).to.be.calledWithMatch(/nest an optional section/u);
+  });
+
+  it('should return null and warn once when a closing bracket has no matching one', () => {
+    expect(compileMask('0]')).to.be.null;
+    expect(console.warn).to.be.calledOnce;
+    expect(console.warn).to.be.calledWithMatch(/without a matching/u);
+  });
+
+  it('should return null and warn once when an optional section is not at the end', () => {
+    expect(compileMask('[000]-00')).to.be.null;
+    expect(console.warn).to.be.calledOnce;
+    expect(console.warn).to.be.calledWithMatch(/at the end of the mask/u);
+  });
+
+  it('should return null and warn once when an optional section has no user slot', () => {
+    expect(compileMask('0[-]')).to.be.null;
+    expect(console.warn).to.be.calledOnce;
+    expect(console.warn).to.be.calledWithMatch(/in every optional section/u);
+  });
+
+  it('should return null and warn once when every user slot is in an optional section', () => {
+    expect(compileMask('[000]')).to.be.null;
+    expect(console.warn).to.be.calledOnce;
+    expect(console.warn).to.be.calledWithMatch(/outside the optional sections/u);
+  });
+
+  it('should return null and warn once when the mask has more than four optional sections', () => {
+    expect(compileMask('0[0][0][0][0][0]')).to.be.null;
+    expect(console.warn).to.be.calledOnce;
+    expect(console.warn).to.be.calledWithMatch(/more than 4 optional sections/u);
+  });
+});
+
+describe('maximalOf', () => {
+  it('should return a mask with no optional section as it is', () => {
+    expect(maximalOf(TIME)).to.equal(TIME);
+  });
+
+  it('should return the maximal expansion of a mask with an optional section', () => {
+    const zip = compileMask('00000[-0000]');
+    expect(maximalOf(zip)).to.equal(zip.maximal);
+    expect(maximalOf(zip).items).to.have.lengthOf(10);
+  });
+
+  it('should return undefined for a mask expression that has no maximal expansion', () => {
+    expect(maximalOf(BLOCKS_2_4_4)).to.be.undefined;
   });
 });
 

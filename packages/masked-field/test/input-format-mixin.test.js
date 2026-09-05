@@ -964,6 +964,87 @@ describe('InputFormatMixin', () => {
     });
   });
 
+  describe('formatMask with optional sections', () => {
+    beforeEach(async () => {
+      element.formatMask = '00000[-0000]';
+      await nextUpdate(element);
+      input.focus();
+    });
+
+    it('should lay the typed text out without the section until it is typed into', async () => {
+      await sendKeys({ type: '12345' });
+      expect(input.value).to.equal('12345');
+      expect(element.value).to.equal('12345');
+      expect(input.selectionStart).to.equal(5);
+    });
+
+    it('should not present the fixed characters of the section before it is typed into', async () => {
+      await sendKeys({ type: '12345' });
+      expect(element.formattedValue).to.equal('12345');
+    });
+
+    it('should lay the section out once the user types into it', async () => {
+      await sendKeys({ type: '123456' });
+      expect(input.value).to.equal('12345-6');
+      expect(element.value).to.equal('123456');
+      expect(input.selectionStart).to.equal(7);
+    });
+
+    it('should drop the section on Backspace over its first slot', async () => {
+      await sendKeys({ type: '123456' });
+      await sendKeys({ press: 'Backspace' });
+      expect(input.value).to.equal('12345');
+      expect(element.value).to.equal('12345');
+      expect(input.selectionStart).to.equal(5);
+    });
+
+    it('should delete the character before the fixed one of the section on Backspace', async () => {
+      await sendKeys({ type: '123456' });
+      input.setSelectionRange(6, 6);
+      await sendKeys({ press: 'Backspace' });
+      expect(input.value).to.equal('12346');
+      expect(element.value).to.equal('12346');
+      expect(input.selectionStart).to.equal(4);
+    });
+
+    it('should lay a pasted string out in the expansion that holds it', () => {
+      paste(input, '123456789');
+      expect(input.value).to.equal('12345-6789');
+      expect(element.value).to.equal('123456789');
+    });
+
+    it('should truncate the text past the last slot of the maximal expansion', async () => {
+      paste(input, '123456789');
+      await sendKeys({ type: '0' });
+      expect(input.value).to.equal('12345-6789');
+      expect(element.value).to.equal('123456789');
+      expect(element.hasAttribute('input-prevented')).to.be.true;
+    });
+
+    it('should enable two sections one at a time', async () => {
+      element.formatMask = '00[-00][-00]';
+      await nextUpdate(element);
+      const views = ['1', '12', '12-3', '12-34', '12-34-5', '12-34-56'];
+      const values = ['1', '12', '123', '1234', '12345', '123456'];
+
+      for (const [index, digit] of [...'123456'].entries()) {
+        await sendKeys({ type: digit });
+        expect(input.value).to.equal(views[index]);
+        expect(element.value).to.equal(values[index]);
+      }
+    });
+
+    it('should drop the second of two sections on Backspace over its first slot', async () => {
+      element.formatMask = '00[-00][-00]';
+      await nextUpdate(element);
+      await sendKeys({ type: '12345' });
+      await sendKeys({ press: 'Backspace' });
+      expect(input.value).to.equal('12-34');
+      expect(element.value).to.equal('1234');
+      expect(input.selectionStart).to.equal(5);
+    });
+  });
+
   describe('formatMask and formatBlocks', () => {
     let warn;
 
