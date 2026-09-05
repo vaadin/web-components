@@ -73,7 +73,10 @@ mask, so one engine serves groups and masks. Details in
 
 ## Proposed direction
 
-A mixin in `field-base`, applied to text-based fields, with an explicit two-value contract:
+A separate experimental component, `<vaadin-masked-field>` in `@vaadin/masked-field`, built on text-field
+(the way password-field is) and gated behind `window.Vaadin.featureFlags.maskedFieldComponent`, so text-field,
+email-field, password-field and grid-pro's editor are untouched while the behaviour is proven. Integrating the
+capability into text-field itself stays a future option. The component carries an explicit two-value contract:
 
 - `value` — the model value (what Binder sees), unchanged unless a format is configured
 - `inputElement.value` — the presentation, owned by the mixin
@@ -222,7 +225,7 @@ API stays → 25.4 with a release note. A default flips or an API goes → 26.
 7. **Then extend:** `text-area`; `date-picker` opt-in as-you-type from `dateFormat`; visible mask. The
    pattern mask itself is on the branch: `formatMask` with the IMask token subset, one engine with chunking
    (`InputFormatMixin` over `mask-utils.js`), widened deletes, regroup on every delete.
-   - Spec documents for the planned `@vaadin/format-base` package live in `packages/format-base/spec/`
+   - Spec documents for the experimental `@vaadin/masked-field` package live in `packages/masked-field/spec/`
      (problem statement, requirements, web component API, Flow API). Moving the mixins and utils out of
      `field-base` into that package is recommended once the prototype settles.
 8. **Undo across live formatting** — dropped from the PoC. Every reformat is a script write and clears the

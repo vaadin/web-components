@@ -1,4 +1,4 @@
-# Format Base Requirements
+# Masked Field Requirements
 
 ## 1. Grouping as the user types
 
@@ -154,13 +154,14 @@ confirm it; the shape is applied once, afterwards._
 
 ---
 
-## 15. Fields without a format are unchanged
+## 15. Other fields are unchanged
 
-A field that has no groups and no shape configured behaves exactly as it does without this
-infrastructure: same events, same timing, same caret behaviour.
+Text field, email field, password field and the grid-pro editor have none of the format behaviour,
+its events or its properties. A masked field with no groups and no shape configured behaves like a
+text field: same events, same timing, same caret behaviour.
 
-_Example: A plain text field with none of the format settings fires the same value and change
-events, in the same order, as before the infrastructure existed._
+_Example: A masked field with none of the format settings fires the same value and change events,
+in the same order, as a plain text field._
 
 ---
 
@@ -168,11 +169,12 @@ events, in the same order, as before the infrastructure existed._
 
 **Applies to:** flow
 
-The groups, delimiter, letter case and fixed shape are set from Java with typed setters, and the
-bound value stays the plain value, so existing bindings and converters keep working unchanged.
+The groups, delimiter, letter case and fixed shape of a `MaskedField` are set from Java with typed
+setters, and the bound value stays the plain value, so existing bindings and converters keep working
+unchanged.
 
-_Example: A Flow view configures an IBAN field with groups 4, 4, 4, 4, 2 and upper case; a Binder
-bound to the field reads `FI2112345600000785`._
+_Example: A Flow view configures a `MaskedField` for IBANs with groups 4, 4, 4, 4, 2 and upper case;
+a Binder bound to the field reads `FI2112345600000785`._
 
 ---
 
@@ -180,8 +182,8 @@ bound to the field reads `FI2112345600000785`._
 
 **Applies to:** flow
 
-The presented text is readable on the server for applications that need the decorated form, for
-instance to store it as the user saw it.
+The presented text of a `MaskedField` is readable on the server for applications that need the
+decorated form, for instance to store it as the user saw it.
 
 _Example: After the user types an IBAN, the view reads `FI21 1234 5600 0007 85` from the field while
 the value is `FI2112345600000785`._
@@ -217,3 +219,13 @@ invalid state are alternatives for the API review.
 
 No. Groups describe how to read the value, not how long it is, so extra characters go into an extra
 group. A fixed shape has a length by definition and keeps only what fits.
+
+**Q: Why a separate component rather than the format properties on Text Field?**
+
+To keep the impact at zero for text field and everything built on it — email field, password field,
+the grid-pro editor — while the behaviour is proven. Integrating the capability into text field
+stays a future option once the API is stable.
+
+**Q: Is the component gated?**
+
+Yes. It is experimental, behind the `maskedFieldComponent` feature flag, until the API review.

@@ -1,13 +1,21 @@
-# Format Base Developer API
+# Masked Field Developer API
 
 ## 1. Grouping as the user types
 
 Covers requirement(s): 1, 4, 6, 8
 
-```html
-<vaadin-text-field label="IBAN" format-blocks="[4, 4, 4, 4, 2]"></vaadin-text-field>
+The component is experimental. Enable the feature flag before importing it:
 
-<vaadin-text-field label="Phone" format-blocks="[3, 3, 4]" format-delimiter="-"></vaadin-text-field>
+```js
+window.Vaadin.featureFlags.maskedFieldComponent = true;
+
+import '@vaadin/masked-field';
+```
+
+```html
+<vaadin-masked-field label="IBAN" format-blocks="[4, 4, 4, 4, 2]"></vaadin-masked-field>
+
+<vaadin-masked-field label="Phone" format-blocks="[3, 3, 4]" format-delimiter="-"></vaadin-masked-field>
 ```
 
 ```js
@@ -45,9 +53,9 @@ Flow accessor has one property to synchronise. `pattern`, `minlength` and `maxle
 Covers requirement(s): 3, 4, 5, 7, 8
 
 ```html
-<vaadin-text-field label="Phone" format-mask="+7 (000) 000-00-00"></vaadin-text-field>
+<vaadin-masked-field label="Phone" format-mask="+7 (000) 000-00-00"></vaadin-masked-field>
 
-<vaadin-text-field label="Time" format-mask="00:00"></vaadin-text-field>
+<vaadin-masked-field label="Time" format-mask="00:00"></vaadin-masked-field>
 ```
 
 Mask tokens: `0` any digit, `a` any letter, `*` any character, `\x` the literal `x`, every other
@@ -65,7 +73,7 @@ definitions are not part of the grammar yet.
 Covers requirement(s): 3
 
 ```html
-<vaadin-text-field label="Code" format-mask="*\08\0\0\0-00-**-000000-0"></vaadin-text-field>
+<vaadin-masked-field label="Code" format-mask="*\08\0\0\0-00-**-000000-0"></vaadin-masked-field>
 ```
 
 Typing `C10476001374` shows `C08000-10-47-600137-4`; `value` is `C10476001374`.
@@ -81,7 +89,7 @@ unchanged.
 Covers requirement(s): 10
 
 ```html
-<vaadin-text-field label="IBAN" format-blocks="[4, 4, 4, 4, 2]" format-text-case="upper"></vaadin-text-field>
+<vaadin-masked-field label="IBAN" format-blocks="[4, 4, 4, 4, 2]" format-text-case="upper"></vaadin-masked-field>
 ```
 
 Values: `upper`, `lower`. Applies to grouped and fixed shapes alike.
@@ -139,23 +147,31 @@ and a second value change on assignment would surprise Binder. The field shows w
 
 ---
 
-## 9. Adopting the infrastructure in a field component
+## 9. Relationship to Text Field
 
 Covers requirement(s): 13, 14, 15
 
-```js
-import { InputFormatMixin } from '@vaadin/format-base/src/input-format-mixin.js';
-
-class MyFieldMixinClass extends InputFormatMixin(InputFieldMixin(superClass)) {}
+```html
+<vaadin-masked-field
+  label="IBAN"
+  helper-text="Your account number"
+  required
+  allowed-char-pattern="[0-9A-Za-z]"
+  format-blocks="[4, 4, 4, 4, 2]"
+  format-text-case="upper"
+></vaadin-masked-field>
 ```
 
-The mixin adds the four `format*` properties and `formattedValue`. It requires the input control
-behaviour of `@vaadin/field-base` below it, since the `beforeinput`, `paste` and `drop` handling
-lives there. With no format configured it is inert.
+`<vaadin-masked-field>` extends `<vaadin-text-field>` and inherits its whole API: `label`, helper,
+validation and its constraints, `allowedCharPattern`, `pattern`, prefix and suffix slots, theme
+variants. On top of that it adds `formatBlocks`, `formatDelimiter`, `formatTextCase`, `formatMask`
+and the read-only `formattedValue`. The mixins that carry them live in the `@vaadin/masked-field`
+package.
 
-**Why this shape:** Component authors get one mixin to apply. The core of the mixin, which owns the
-presentation write path, `formattedValue`, composition handling and the change event on leaving,
-is available separately for adopters whose presentation is not a text shape.
+**Why this shape:** A developer who knows text field only has to learn the `format*` family, and
+everything text field already does keeps working on the same element. Text field and the components
+built on it — email field, password field, the grid-pro editor — carry none of the format behaviour,
+and the feature flag keeps the new element opt-in while it is experimental.
 
 ---
 
@@ -196,3 +212,10 @@ engine reproduces every row but one caret index.
 
 Setting the decorated form would make two properties writable for one value. `value` is the only
 write channel; `formattedValue` is derived.
+
+**Q: Why is the API on a new element instead of `<vaadin-text-field>`?**
+
+Text field and everything built on it stay untouched while the behaviour is proven, and the feature
+flag keeps the new element opt-in. The element name also says what the field does, which an
+attribute on a plain text field would not. A later move of the properties into text field would keep
+the same names.

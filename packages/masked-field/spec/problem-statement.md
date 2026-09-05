@@ -1,4 +1,4 @@
-# Format Base Problem Statement
+# Masked Field Problem Statement
 
 ## Problem
 
@@ -9,8 +9,9 @@ Applications that want to help today reach for add-ons that patch the field from
 those break in the places that matter: the value the server receives, paste, caret position, and
 changing the format at runtime.
 
-Format Base is the shared infrastructure that lets a Vaadin text field present a value in its
-expected shape while the model value stays clean.
+Masked Field is a text field that presents a value in its expected shape while the model value
+stays clean. The user sees the separators, the constant characters and the letter case the value
+needs, and the application receives the plain value.
 
 ## Target Users
 
@@ -22,40 +23,46 @@ expected shape while the model value stays clean.
   not the decorated one, and who configure the shape declaratively from Java, TypeScript or HTML.
 - **Users of legacy desktop applications being migrated to Vaadin**, where fixed-shape masks with
   embedded constant characters are an established part of the data entry workflow.
-- **Component authors inside the Vaadin component set** who adopt the infrastructure in a field
-  component (text field first; text area, number field and date field are candidates).
+- **Later adopters inside the Vaadin component set** — text field itself, text area and number
+  field — once the experimental component proves the behaviour.
 
 ## Differentiation
 
+### Text Field
+
+Masked Field is the same field with the same API, plus the `format*` properties. A plain text field
+shows exactly the characters the user typed and never changes them. Choose Masked Field when the
+value has a shape the user should see while typing, and Text Field when it does not.
+
 ### `pattern` and `allowedCharPattern`
 
-These validate or reject what the user types. They never change what is shown. Format Base
+These validate or reject what the user types. They never change what is shown. Masked Field
 presents the value in its shape and leaves validation to the existing constraints, which apply to
 the plain model value.
 
 ### Number field
 
 Number field parses numbers and knows about steps, minimum and maximum, and locale-specific
-decimal separators. Numeral and currency formatting stay with number field. Format Base handles
+decimal separators. Numeral and currency formatting stay with number field. Masked Field handles
 text shapes only.
 
 ### Date picker and time picker
 
-These parse dates and times according to the configured formats and open a picker. Format Base
+These parse dates and times according to the configured formats and open a picker. Masked Field
 does not parse dates. Deriving a typing mask from the configured date format is a possible later
 adoption, not part of this scope.
 
 ### Binder converters and server-side parsing
 
-Converters run on commit and turn one type into another. Format Base runs on every keystroke in the
-browser and never changes the type of the value. The two compose: the field presents the shape,
+Converters run on commit and turn one type into another. Masked Field runs on every keystroke in
+the browser and never changes the type of the value. The two compose: the field presents the shape,
 the converter still parses the plain value.
 
 ### Add-ons that wrap a field
 
 Existing add-ons attach a formatter or mask engine to the field from the outside. They cannot run
 before the field reads its value, so eager value synchronisation, paste and runtime format changes
-all need workarounds. Format Base runs inside the field's own input handling.
+all need workarounds. Masked Field runs inside the field's own input handling.
 
 ### Placeholder text
 
@@ -129,7 +136,7 @@ in progressively is a related feature, deferred until its accessibility question
 **Q: Is number and currency formatting in scope?**
 
 No. Number field is moving to a text input first; numeral and currency formatting return with that
-work. Format Base covers text shapes, and number field is a later adopter of its core.
+work. Masked Field covers text shapes, and number field is a later adopter of its core.
 
 **Q: Is full international phone formatting in scope?**
 
@@ -145,3 +152,9 @@ placeholder that lives in the field's value. Deferred as a third layer.
 
 Deferred. The engine can carry them as a dynamic shape; the declarative way to select one shape
 from the value is an open API question.
+
+**Q: Why a separate experimental component rather than adding the format properties to Text Field?**
+
+To keep the impact at zero for text field and every component built on it — email field, password
+field, the grid-pro editor — while the behaviour is proven. The feature flag keeps the new component
+opt-in. Integrating the capability into text field stays a future option once the API is stable.
