@@ -247,7 +247,10 @@ export const InputControlMixin = (superclass) =>
     _allowedCharPatternChanged(charPattern) {
       if (charPattern) {
         try {
-          this.__allowedTextRegExp = new RegExp(`^${charPattern}*$`, 'u');
+          // Grouped, so that a pattern with a top-level alternation such as
+          // `[a-z]|[A-Z]` repeats as a whole instead of anchoring only its
+          // first branch and letting its last branch match an empty run.
+          this.__allowedTextRegExp = new RegExp(`^(?:${charPattern})*$`, 'u');
         } catch (e) {
           console.error(e);
         }

@@ -355,7 +355,7 @@ describe('InputControlMixin', () => {
       });
 
       it('should not throw an error when incorrect pattern provided', async () => {
-        fixtureSync(`<${tag} allowed-char-pattern="[a]*"></${tag}>`);
+        fixtureSync(`<${tag} allowed-char-pattern="[a"></${tag}>`);
         await nextRender();
         expect(console.error.calledOnce).to.be.true;
       });
@@ -448,6 +448,22 @@ describe('InputControlMixin', () => {
 
       it('should prevent keydown with a key allowed by the pattern when rejected by _shouldAcceptText', () => {
         sinon.stub(element, '_shouldAcceptText').returns(false);
+        const event = fireKeyDownEvent('5');
+        expect(event.defaultPrevented).to.be.true;
+        expect(element.hasAttribute('input-prevented')).to.be.true;
+      });
+
+      it('should apply a pattern with a top-level alternation to the whole text', async () => {
+        element.allowedCharPattern = '[a-z]|[A-Z]';
+        await nextRender();
+        expect(element._shouldAcceptText('aB')).to.be.true;
+        expect(element._shouldAcceptText('a5')).to.be.false;
+        expect(element._shouldAcceptText('5')).to.be.false;
+      });
+
+      it('should prevent keydown with a key rejected by a pattern with a top-level alternation', async () => {
+        element.allowedCharPattern = '[a-z]|[A-Z]';
+        await nextRender();
         const event = fireKeyDownEvent('5');
         expect(event.defaultPrevented).to.be.true;
         expect(element.hasAttribute('input-prevented')).to.be.true;
