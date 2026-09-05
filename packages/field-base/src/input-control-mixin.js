@@ -187,11 +187,9 @@ export const InputControlMixin = (superclass) =>
     }
 
     /**
-     * Returns true when text that is being pasted, dropped or inserted may enter
-     * the field. Called only while `allowedCharPattern` is set; typed characters
-     * are checked separately on `keydown`, against the pattern alone.
-     * Override to accept text that the raw `allowedCharPattern` test would reject,
-     * for example a formatted string that is valid once unformatted.
+     * Returns true when pasted, dropped or inserted text passes `allowedCharPattern`.
+     * Only called while the pattern is set. Override to accept text that the raw
+     * pattern test would reject.
      * @param {string} text
      * @return {boolean}
      * @protected
