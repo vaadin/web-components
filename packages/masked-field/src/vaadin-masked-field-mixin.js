@@ -66,6 +66,13 @@ export const MaskedFieldMixin = (superClass) =>
         }
       }
 
+      // An empty value is left to `required`, as a native input does. What is
+      // checked is the presented text rather than the value, since a value that
+      // the mask cannot lay out in full is kept and only partly shown.
+      if (this.formatCompletionRequired && value !== '' && !this._isFormatComplete()) {
+        return false;
+      }
+
       return true;
     }
 
@@ -103,22 +110,32 @@ export const MaskedFieldMixin = (superClass) =>
       super._createConstraintsObserver();
 
       this._createMethodObserver(
-        '__formatConstraintsChanged(stateTarget, formatBlocks, formatDelimiter, formatTextCase, formatMask)',
+        '__formatConstraintsChanged(stateTarget, formatBlocks, formatDelimiter, formatTextCase, formatMask, formatCompletionRequired)',
       );
     }
 
     /** @private */
-    __formatConstraintsChanged(stateTarget, formatBlocks, formatDelimiter, formatTextCase, formatMask) {
+    // eslint-disable-next-line @typescript-eslint/max-params
+    __formatConstraintsChanged(
+      stateTarget,
+      formatBlocks,
+      formatDelimiter,
+      formatTextCase,
+      formatMask,
+      formatCompletionRequired,
+    ) {
       if (!stateTarget) {
         return;
       }
 
-      // The four properties are compared as one JSON key rather than by identity,
+      // The five properties are compared as one JSON key rather than by identity,
       // so that a new array holding the same blocks is not read as a change, and
       // the key is `null` while no format is configured, which is the state the
       // field starts in.
       const hasFormat = Boolean(formatMask || formatBlocks);
-      const formatKey = hasFormat ? JSON.stringify([formatMask, formatBlocks, formatDelimiter, formatTextCase]) : null;
+      const formatKey = hasFormat
+        ? JSON.stringify([formatMask, formatBlocks, formatDelimiter, formatTextCase, formatCompletionRequired])
+        : null;
 
       // The observer also runs when the state target is set, which is when the
       // constraints are delegated for the first time anyway. Only a format that

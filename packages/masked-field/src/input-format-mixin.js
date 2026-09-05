@@ -17,6 +17,7 @@ import {
   reconstructEdit,
   unmask,
   unmaskedIndex,
+  validateWithMask,
 } from './mask-utils.js';
 
 const DEFAULT_DELIMITER = ' ';
@@ -126,6 +127,24 @@ const InputFormatMixinImplementation = (superclass) =>
          */
         formatMask: {
           type: String,
+        },
+
+        /**
+         * When true and a `formatMask` is set, a value that does not fill the mask
+         * makes the field invalid. Checked on commit, like the other constraints,
+         * so an incomplete value is reported when the user leaves the field, not
+         * while typing.
+         *
+         * Has no effect with `formatBlocks`, which has no fixed length to fill, and
+         * an empty value is left to `required`.
+         *
+         * @attr {boolean} format-completion-required
+         * @type {boolean}
+         */
+        formatCompletionRequired: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true,
         },
       };
     }
@@ -442,13 +461,37 @@ const InputFormatMixinImplementation = (superclass) =>
 
       const presented = calibrate({ value, selection: [0, 0] }, this.#mask, { raw: true }).value;
 
-      if (unmask(presented, this.#mask) !== value) {
+      if (!this.#roundTrips(presented, value)) {
         issueWarning(
           `The value "${value}" does not fit the configured format. Keeping the value and presenting "${presented}".`,
         );
       }
 
       return presented;
+    }
+
+    /**
+     * Returns whether the value fills the configured mask, which is what
+     * `formatCompletionRequired` makes a constraint.
+     *
+     * A field with no `formatMask` reports complete: `formatBlocks` has no fixed
+     * length to fill, so there is nothing for the value to be short of, and a mask
+     * that did not compile is treated as unset everywhere else as well.
+     *
+     * @return {boolean}
+     * @protected
+     */
+    _isFormatComplete() {
+      if (!this.formatMask || !this.#mask) {
+        return true;
+      }
+
+      // The presented text filling the mask is not enough on its own: a value that
+      // the mask cannot lay out in full is kept and only partly shown, so a longer
+      // value can present as a text that fills the mask exactly.
+      return (
+        validateWithMask(this.formattedValue, this.#mask) && this.#roundTrips(this.formattedValue, this.value ?? '')
+      );
     }
 
     /**
@@ -574,6 +617,17 @@ const InputFormatMixinImplementation = (superclass) =>
     #resolveMask(value) {
       const mask = this.#mask;
       return typeof mask === 'function' ? mask({ value, selection: [value.length, value.length] }) : mask;
+    }
+
+    /**
+     * Returns whether the given presented text unmasks back to the given value,
+     * that is whether the format laid the value out in full rather than keeping it
+     * and showing only the part of it that fits.
+     *
+     * @private
+     */
+    #roundTrips(presented, value) {
+      return unmask(presented, this.#mask) === value;
     }
 
     /**

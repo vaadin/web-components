@@ -96,4 +96,27 @@ export declare class InputFormatMixinClass {
    * @attr {string} format-mask
    */
   formatMask: string | undefined;
+
+  /**
+   * When true and a `formatMask` is set, a value that does not fill the mask
+   * makes the field invalid. Checked on commit, like the other constraints,
+   * so an incomplete value is reported when the user leaves the field, not
+   * while typing.
+   *
+   * Has no effect with `formatBlocks`, which has no fixed length to fill, and
+   * an empty value is left to `required`.
+   *
+   * @attr {boolean} format-completion-required
+   */
+  formatCompletionRequired: boolean;
+
+  /**
+   * Returns whether the value fills the configured mask, which is what
+   * `formatCompletionRequired` makes a constraint.
+   *
+   * A field with no `formatMask` reports complete: `formatBlocks` has no fixed
+   * length to fill, so there is nothing for the value to be short of, and a mask
+   * that did not compile is treated as unset everywhere else as well.
+   */
+  protected _isFormatComplete(): boolean;
 }

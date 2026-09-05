@@ -345,6 +345,146 @@ describe('formatMask', () => {
     });
   });
 
+  describe('formatCompletionRequired', () => {
+    beforeEach(() => {
+      field.formatCompletionRequired = true;
+    });
+
+    it('should be invalid while the value does not fill the mask', async () => {
+      field.formatMask = PHONE_MASK;
+      field.value = '900201';
+      await nextUpdate(field);
+
+      expect(field.checkValidity()).to.be.false;
+    });
+
+    it('should be valid once the value fills the mask', async () => {
+      field.formatMask = PHONE_MASK;
+      field.value = '9002011122';
+      await nextUpdate(field);
+
+      expect(field.checkValidity()).to.be.true;
+    });
+
+    it('should be valid with an empty value, which is left to required', async () => {
+      field.formatMask = PHONE_MASK;
+      field.value = '';
+      await nextUpdate(field);
+
+      expect(field.checkValidity()).to.be.true;
+    });
+
+    it('should not constrain completeness while the property is unset', async () => {
+      field.formatCompletionRequired = false;
+      field.formatMask = PHONE_MASK;
+      await nextUpdate(field);
+
+      for (const value of ['900201', '9002011122', '']) {
+        field.value = value;
+        await nextUpdate(field);
+
+        expect(field.checkValidity()).to.be.true;
+      }
+    });
+
+    it('should be valid at each expansion of a mask with an optional section', async () => {
+      field.formatMask = '00000[-0000]';
+      await nextUpdate(field);
+
+      for (const value of ['12345', '123456789']) {
+        field.value = value;
+        await nextUpdate(field);
+
+        expect(field.checkValidity()).to.be.true;
+      }
+    });
+
+    it('should be invalid between the expansions of a mask with an optional section', async () => {
+      field.formatMask = '00000[-0000]';
+      field.value = '1234567';
+      await nextUpdate(field);
+
+      expect(field.checkValidity()).to.be.false;
+    });
+
+    it('should be invalid for a value longer than the mask can lay out', async () => {
+      // The presented text `12:34` fills the mask, so only the round trip against
+      // the value catches the two digits that the layout dropped.
+      field.formatMask = '00:00';
+      field.value = '123456';
+      await nextUpdate(field);
+
+      expect(field.formattedValue).to.equal('12:34');
+      expect(field.checkValidity()).to.be.false;
+    });
+
+    it('should be valid with blocks, which have no length to fill', async () => {
+      field.formatBlocks = [4, 4];
+      await nextUpdate(field);
+
+      for (const value of ['FI2', 'FI2112']) {
+        field.value = value;
+        await nextUpdate(field);
+
+        expect(field.checkValidity()).to.be.true;
+      }
+    });
+
+    it('should report complete for blocks without resolving their mask', async () => {
+      // A text that the chunk mask does not accept, so the answer can only come
+      // from the guard on `formatMask` rather than from the mask itself.
+      field.formatBlocks = [4, 4];
+      await nextUpdate(field);
+      field._setFormattedValue('garbage');
+
+      expect(field._isFormatComplete()).to.be.true;
+    });
+
+    it('should be valid while readonly or disabled', async () => {
+      field.formatMask = '00:00';
+      field.value = '1';
+      await nextUpdate(field);
+      expect(field.checkValidity()).to.be.false;
+
+      field.readonly = true;
+      await nextUpdate(field);
+      expect(field.checkValidity()).to.be.true;
+
+      field.readonly = false;
+      field.disabled = true;
+      await nextUpdate(field);
+      expect(field.checkValidity()).to.be.true;
+    });
+
+    it('should validate completeness on blur rather than while typing', async () => {
+      field.formatMask = '00:00';
+      await nextUpdate(field);
+      input.focus();
+
+      const spy = sinon.spy();
+      field.addEventListener('validated', spy);
+
+      await sendKeys({ type: '1' });
+      expect(field.invalid).to.be.false;
+
+      // A real user blur validates twice, once from the native `change` event and
+      // once from the field losing focus, so the Tab key is what the row asserts.
+      await sendKeys({ press: 'Tab' });
+
+      expect(field.invalid).to.be.true;
+      expect(spy).to.be.calledTwice;
+      expect(spy.firstCall.args[0].detail.valid).to.be.false;
+      expect(spy.secondCall.args[0].detail.valid).to.be.false;
+
+      input.focus();
+      await sendKeys({ type: '2:34' });
+      await sendKeys({ press: 'Tab' });
+
+      expect(field.value).to.equal('1234');
+      expect(field.invalid).to.be.false;
+    });
+  });
+
   describe('composition', () => {
     beforeEach(async () => {
       field.formatMask = '00:00';
