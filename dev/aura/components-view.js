@@ -28,10 +28,6 @@ import '@vaadin/vertical-layout';
 import { html, render } from 'lit';
 import { Notification } from '@vaadin/notification';
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.switchComponent = true;
-
 const generateItems = (count) => {
   return Array.from({ length: count }, (_, i) => ({
     name: `First Lastname ${i + 1}`,

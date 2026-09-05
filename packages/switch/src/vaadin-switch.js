@@ -100,10 +100,6 @@ class Switch extends CheckboxMixin(ElementMixin(PolylitMixin(LumoInjectionMixin(
     return 'vaadin-switch';
   }
 
-  static get experimental() {
-    return true;
-  }
-
   static get styles() {
     return switchStyles;
   }
