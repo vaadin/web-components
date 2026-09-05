@@ -22,6 +22,7 @@ assertType<number[] | undefined>(field.formatBlocks);
 assertType<string | undefined>(field.formatDelimiter);
 assertType<string | undefined>(field.formatTextCase);
 assertType<string | undefined>(field.formatMask);
+assertType<string | undefined>(field.formatPrompt);
 assertType<boolean>(field.formatCompletionRequired);
 assertType<string>(field.formattedValue);
 

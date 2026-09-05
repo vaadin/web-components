@@ -52,16 +52,49 @@
         id="us-phone"
         label="Phone (US)"
         format-mask="+1 (000) 000-0000"
+        format-prompt="_"
         inputmode="tel"
         clear-button-visible
       ></vaadin-masked-field>
       <pre id="us-phone-readout"></pre>
+
+      <button id="toggle-prompt">Toggle prompt</button>
     </div>
 
     <div class="section">
-      <vaadin-masked-field id="time" label="Time" format-mask="00:00" inputmode="numeric" clear-button-visible>
-      </vaadin-masked-field>
+      <vaadin-masked-field
+        id="time"
+        label="Time"
+        format-mask="00:00"
+        format-prompt="_"
+        inputmode="numeric"
+        clear-button-visible
+      ></vaadin-masked-field>
       <pre id="time-readout"></pre>
+    </div>
+
+    <div class="section">
+      <vaadin-masked-field
+        id="zip"
+        label="ZIP+4"
+        format-mask="00000[-0000]"
+        format-prompt="_"
+        clear-button-visible
+      ></vaadin-masked-field>
+      <pre id="zip-readout"></pre>
+    </div>
+
+    <div class="section">
+      <vaadin-masked-field
+        id="prefixed"
+        label="Phone (with prefix)"
+        format-mask="00 000 0000"
+        format-prompt="_"
+        clear-button-visible
+      >
+        <span slot="prefix">+358</span>
+      </vaadin-masked-field>
+      <pre id="prefixed-readout"></pre>
     </div>
 
     <div class="section">
@@ -110,7 +143,20 @@
       both set, one warning is logged and the mask wins — the groups are joined by <code>-</code> and the text stops at
       the last slot of the mask.<br />
       17. Edit the IBAN field and Tab away; the change counter goes up by one per focus session, including for the
-      keystrokes that the format applies itself.
+      keystrokes that the format applies itself.<br />
+      18. Look at the empty US phone, time and ZIP+4 fields; each shows the shape of its mask in the placeholder colour,
+      and <code>value</code> and the input element are both empty.<br />
+      19. Type into the time field; the shape shrinks one character per keystroke and disappears once the mask is
+      full.<br />
+      20. Type <code>12345</code> into the ZIP+4 field; the shape disappears. Type one more digit; the rest of the
+      optional section appears as <code>___</code>. Backspace; it disappears again.<br />
+      21. Press "Toggle prompt" on the US phone field; the shape appears and disappears while the value stays put.<br />
+      22. Look at the "Phone (with prefix)" field; the shape starts right after the <code>+358</code> prefix, aligned
+      with the caret.<br />
+      23. Set a <code>placeholder</code> on the time field from the console; while the field is empty the placeholder
+      shows and the shape does not, and the shape comes back on the first keystroke.<br />
+      24. Look at the IBAN field, which has a prompt-less blocks format; no shape is shown, since blocks grow with the
+      value and have no fixed shape.
     </p>
 
     <script type="module">
@@ -169,8 +215,15 @@
       const phone = document.getElementById('phone');
       bindReadout(phone, document.getElementById('phone-readout'));
 
-      bindReadout(document.getElementById('us-phone'), document.getElementById('us-phone-readout'));
+      const usPhone = document.getElementById('us-phone');
+      bindReadout(usPhone, document.getElementById('us-phone-readout'));
       bindReadout(document.getElementById('time'), document.getElementById('time-readout'));
+      bindReadout(document.getElementById('zip'), document.getElementById('zip-readout'));
+      bindReadout(document.getElementById('prefixed'), document.getElementById('prefixed-readout'));
+
+      document.getElementById('toggle-prompt').addEventListener('click', () => {
+        usPhone.formatPrompt = usPhone.formatPrompt === '_' ? undefined : '_';
+      });
       bindReadout(document.getElementById('legacy'), document.getElementById('legacy-readout'));
 
       const unformatted = document.getElementById('unformatted');

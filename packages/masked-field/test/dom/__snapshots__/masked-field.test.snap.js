@@ -199,6 +199,13 @@ snapshots["vaadin-masked-field shadow default"] =
     </slot>
     <slot name="input">
     </slot>
+    <div
+      aria-hidden="true"
+      part="prompt"
+    >
+      <span>
+      </span>
+    </div>
     <slot
       name="suffix"
       slot="suffix"
@@ -248,6 +255,13 @@ snapshots["vaadin-masked-field shadow disabled"] =
     </slot>
     <slot name="input">
     </slot>
+    <div
+      aria-hidden="true"
+      part="prompt"
+    >
+      <span>
+      </span>
+    </div>
     <slot
       name="suffix"
       slot="suffix"
@@ -297,6 +311,13 @@ snapshots["vaadin-masked-field shadow readonly"] =
     </slot>
     <slot name="input">
     </slot>
+    <div
+      aria-hidden="true"
+      part="prompt"
+    >
+      <span>
+      </span>
+    </div>
     <slot
       name="suffix"
       slot="suffix"
@@ -346,6 +367,13 @@ snapshots["vaadin-masked-field shadow invalid"] =
     </slot>
     <slot name="input">
     </slot>
+    <div
+      aria-hidden="true"
+      part="prompt"
+    >
+      <span>
+      </span>
+    </div>
     <slot
       name="suffix"
       slot="suffix"
@@ -395,6 +423,13 @@ snapshots["vaadin-masked-field shadow theme"] =
     </slot>
     <slot name="input">
     </slot>
+    <div
+      aria-hidden="true"
+      part="prompt"
+    >
+      <span>
+      </span>
+    </div>
     <slot
       name="suffix"
       slot="suffix"

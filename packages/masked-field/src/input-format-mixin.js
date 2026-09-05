@@ -59,6 +59,9 @@ const InputFormatMixinImplementation = (superclass) =>
     /** @private */
     #mask = null;
 
+    /** @private */
+    #prompt;
+
     static get properties() {
       return {
         /**
@@ -132,6 +135,23 @@ const InputFormatMixinImplementation = (superclass) =>
         },
 
         /**
+         * A character shown in place of every slot the user has not filled yet,
+         * e.g. `'_'`, laid out after the text the user entered so that the
+         * remaining shape of the mask is visible.
+         *
+         * Only meaningful with `formatMask`; a format defined with `formatBlocks`
+         * has no fixed shape to show. Unset, nothing is shown.
+         *
+         * An invalid value is reported with a warning and treated as unset.
+         *
+         * @attr {string} format-prompt
+         * @type {string | undefined}
+         */
+        formatPrompt: {
+          type: String,
+        },
+
+        /**
          * When true and a `formatMask` is set, a value that does not fill the mask
          * makes the field invalid. Checked on commit, like the other constraints,
          * so an incomplete value is reported when the user leaves the field, not
@@ -184,6 +204,35 @@ const InputFormatMixinImplementation = (superclass) =>
     }
 
     /**
+     * The remainder of the mask that lays out the presented text, past the text
+     * itself, with every slot the user has not filled yet shown as `formatPrompt`.
+     * That is the part of the shape that is still to come, e.g. `-__` for a
+     * `'00000[-0000]'` mask presenting `12345-6`.
+     *
+     * Empty when no prompt is configured, when the resolved mask is full, and for
+     * a format that has no fixed shape to show, that is one defined with
+     * `formatBlocks`.
+     *
+     * @return {string}
+     * @protected
+     */
+    get _formatPromptRemainder() {
+      // A format whose mask grows with the value has no maximal expansion, so
+      // there is no shape past the text to show.
+      if (!this.#prompt || !maximalOf(this.#mask)) {
+        return '';
+      }
+
+      const view = this.formattedValue ?? '';
+      const { items } = this.#resolveMask(view);
+
+      return items
+        .slice(view.length)
+        .map((item) => (typeof item === 'string' ? item : this.#prompt))
+        .join('');
+    }
+
+    /**
      * Override a method from `LitElement` to compile the format before the value
      * observer runs, so that the format properties and a `value` set in the same
      * cycle are presented together.
@@ -197,6 +246,12 @@ const InputFormatMixinImplementation = (superclass) =>
 
       if (this.#hasFormatChanged(props)) {
         this.#mask = this.#compileFormat();
+      }
+
+      // Cached rather than normalized on read, so that an invalid value is
+      // reported once per change instead of once per render.
+      if (props.has('formatPrompt')) {
+        this.#prompt = this.#normalizePrompt();
       }
     }
 
@@ -627,6 +682,27 @@ const InputFormatMixinImplementation = (superclass) =>
       }
 
       issueWarning('Invalid "formatTextCase": must be either "upper" or "lower". Ignoring the case.');
+      return undefined;
+    }
+
+    /**
+     * Returns the configured prompt character, or `undefined` with a warning when
+     * it is neither unset nor a single character.
+     *
+     * @private
+     */
+    #normalizePrompt() {
+      const prompt = this.formatPrompt;
+
+      if (prompt === undefined || prompt === null || prompt === '') {
+        return undefined;
+      }
+
+      if (typeof prompt === 'string' && prompt.length === 1) {
+        return prompt;
+      }
+
+      issueWarning('Invalid "formatPrompt": must be a single character. Ignoring the prompt.');
       return undefined;
     }
 

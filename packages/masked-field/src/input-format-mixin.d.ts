@@ -98,6 +98,20 @@ export declare class InputFormatMixinClass {
   formatMask: string | undefined;
 
   /**
+   * A character shown in place of every slot the user has not filled yet,
+   * e.g. `'_'`, laid out after the text the user entered so that the
+   * remaining shape of the mask is visible.
+   *
+   * Only meaningful with `formatMask`; a format defined with `formatBlocks`
+   * has no fixed shape to show. Unset, nothing is shown.
+   *
+   * An invalid value is reported with a warning and treated as unset.
+   *
+   * @attr {string} format-prompt
+   */
+  formatPrompt: string | undefined;
+
+  /**
    * When true and a `formatMask` is set, a value that does not fill the mask
    * makes the field invalid. Checked on commit, like the other constraints,
    * so an incomplete value is reported when the user leaves the field, not
@@ -126,4 +140,16 @@ export declare class InputFormatMixinClass {
    * maximal expansion, so it does not change while the user types.
    */
   protected readonly _formatInputMode: string | undefined;
+
+  /**
+   * The remainder of the mask that lays out the presented text, past the text
+   * itself, with every slot the user has not filled yet shown as `formatPrompt`.
+   * That is the part of the shape that is still to come, e.g. `-__` for a
+   * `'00000[-0000]'` mask presenting `12345-6`.
+   *
+   * Empty when no prompt is configured, when the resolved mask is full, and for
+   * a format that has no fixed shape to show, that is one defined with
+   * `formatBlocks`.
+   */
+  protected readonly _formatPromptRemainder: string;
 }
