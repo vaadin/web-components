@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/lit-renderer",
-  "version": "23.6.5",
+  "version": "23.6.6",
   "publishConfig": {
     "access": "public"
   },
