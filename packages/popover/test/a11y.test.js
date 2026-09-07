@@ -449,6 +449,20 @@ describe('a11y', () => {
           expect(spy).to.be.calledOnce;
         });
 
+        it('should focus the overlay content on popover Tab', async () => {
+          target.focus();
+
+          // Move focus to the popover
+          await sendKeys({ press: 'Tab' });
+
+          const spy = sinon.spy(popover.querySelector('input'), 'focus');
+
+          // Move focus to the input inside the overlay
+          await sendKeys({ press: 'Tab' });
+
+          expect(spy).to.be.calledOnce;
+        });
+
         it('should focus the target on overlay content part Shift Tab', async () => {
           target.focus();
 
