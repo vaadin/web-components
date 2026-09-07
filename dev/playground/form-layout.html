@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Layout</title>
+    <script type="module" src="../common.js"></script>
+
+    <style>
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+        font-size: 0.875rem;
+      }
+
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+      }
+
+      .container {
+        border: 1px dashed gray;
+        box-sizing: border-box;
+        max-width: 100%;
+        overflow: hidden;
+        padding: 1rem;
+        resize: horizontal;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="controls">
+      <div class="control-group">
+        <vaadin-radio-group id="mode" label="Mode">
+          <vaadin-radio-button value="auto-responsive" label="Auto Responsive" checked></vaadin-radio-button>
+          <vaadin-radio-button value="responsive-steps" label="Responsive Steps"></vaadin-radio-button>
+        </vaadin-radio-group>
+        <vaadin-checkbox-group label="Auto Responsive Options">
+          <vaadin-checkbox id="autoRows" value="autoRows" label="Auto Rows" checked></vaadin-checkbox>
+          <vaadin-checkbox id="labelsAside" value="labelsAside" label="Labels Aside"></vaadin-checkbox>
+          <vaadin-checkbox id="expandColumns" value="expandColumns" label="Expand Columns"></vaadin-checkbox>
+          <vaadin-checkbox id="expandFields" value="expandFields" label="Expand Fields"></vaadin-checkbox>
+        </vaadin-checkbox-group>
+      </div>
+
+      <div class="control-group">
+        <vaadin-integer-field
+          id="minColumns"
+          label="Min Columns"
+          value="1"
+          min="1"
+          step-buttons-visible
+        ></vaadin-integer-field>
+        <vaadin-integer-field
+          id="maxColumns"
+          label="Max Columns"
+          value="2"
+          min="1"
+          step-buttons-visible
+        ></vaadin-integer-field>
+        <vaadin-text-field
+          id="columnWidth"
+          label="Column Width"
+          placeholder="12em"
+          clear-button-visible
+        ></vaadin-text-field>
+      </div>
+
+      <div class="control-group">
+        <vaadin-text-field
+          id="labelWidth"
+          label="Label Width"
+          placeholder="8em"
+          clear-button-visible
+        ></vaadin-text-field>
+        <vaadin-text-field
+          id="labelSpacing"
+          label="Label Spacing"
+          placeholder="var(--vaadin-gap-s)"
+          clear-button-visible
+        ></vaadin-text-field>
+        <vaadin-text-field
+          id="columnSpacing"
+          label="Column Spacing"
+          placeholder="var(--vaadin-gap-l)"
+          clear-button-visible
+        ></vaadin-text-field>
+        <vaadin-text-field
+          id="rowSpacing"
+          label="Row Spacing"
+          placeholder="var(--vaadin-gap-l)"
+          clear-button-visible
+        ></vaadin-text-field>
+      </div>
+
+      <div class="control-group">
+        <vaadin-radio-group id="content" label="Content">
+          <vaadin-radio-button value="fields" label="Fields" checked></vaadin-radio-button>
+          <vaadin-radio-button value="form-items" label="Form Items"></vaadin-radio-button>
+        </vaadin-radio-group>
+        <vaadin-checkbox-group label="Field Features">
+          <vaadin-checkbox id="mixed" value="mixed" label="Mixed Field Types"></vaadin-checkbox>
+          <vaadin-checkbox id="helper" value="helper" label="Helper Text"></vaadin-checkbox>
+          <vaadin-checkbox id="required" value="required" label="Required"></vaadin-checkbox>
+          <vaadin-checkbox id="longLabels" value="longLabels" label="Long Labels"></vaadin-checkbox>
+          <vaadin-checkbox id="submit" value="submit" label="Submit Button" checked></vaadin-checkbox>
+        </vaadin-checkbox-group>
+      </div>
+
+      <div class="control-group">
+        <vaadin-text-field
+          id="containerWidth"
+          label="Container Width"
+          placeholder="auto"
+          helper-text="The container is also resizable by dragging its corner"
+          clear-button-visible
+        ></vaadin-text-field>
+        <vaadin-checkbox id="rtl" label="RTL"></vaadin-checkbox>
+      </div>
+    </div>
+
+    <div class="container">
+      <vaadin-form-layout auto-responsive auto-rows max-columns="2"></vaadin-form-layout>
+    </div>
+
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/checkbox';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/combo-box';
+      import '@vaadin/date-picker';
+      import '@vaadin/email-field';
+      import '@vaadin/form-layout';
+      import '@vaadin/form-layout/vaadin-form-item.js';
+      import '@vaadin/integer-field';
+      import '@vaadin/password-field';
+      import '@vaadin/radio-group';
+      import '@vaadin/select';
+      import '@vaadin/text-area';
+      import '@vaadin/text-field';
+
+      const basicFields = [
+        { tag: 'vaadin-text-field', label: 'First name' },
+        { tag: 'vaadin-text-field', label: 'Last name' },
+        { tag: 'vaadin-email-field', label: 'Email', colspan: 2 },
+        { tag: 'vaadin-password-field', label: 'Password' },
+        { tag: 'vaadin-password-field', label: 'Confirm password' },
+        { tag: 'vaadin-text-area', label: 'Address', colspan: 2 },
+      ];
+
+      const mixedFields = [
+        { tag: 'vaadin-text-field', label: 'First name' },
+        { tag: 'vaadin-text-field', label: 'Last name' },
+        { tag: 'vaadin-email-field', label: 'Email', colspan: 2 },
+        { tag: 'vaadin-date-picker', label: 'Birth date' },
+        { tag: 'vaadin-integer-field', label: 'Age' },
+        { tag: 'vaadin-combo-box', label: 'Country', items: ['Finland', 'Germany', 'Sweden'] },
+        {
+          tag: 'vaadin-select',
+          label: 'Language',
+          items: [
+            { label: 'English', value: 'en' },
+            { label: 'Finnish', value: 'fi' },
+            { label: 'German', value: 'de' },
+          ],
+        },
+        { tag: 'vaadin-checkbox-group', label: 'Interests', items: ['Sports', 'Music', 'Travel'] },
+        { tag: 'vaadin-radio-group', label: 'Contact by', items: ['Email', 'Phone'] },
+        { tag: 'vaadin-checkbox', label: 'Subscribe to newsletter', colspan: 2 },
+        { tag: 'vaadin-text-area', label: 'Notes', colspan: 2 },
+      ];
+
+      const layout = document.querySelector('vaadin-form-layout');
+      const container = document.querySelector('.container');
+
+      const isChecked = (id) => document.getElementById(id).checked;
+
+      const createField = (config, label) => {
+        const field = document.createElement(config.tag);
+        if (label) {
+          field.label = label;
+        }
+        if (isChecked('helper')) {
+          field.helperText = 'Helper text';
+        }
+        if (isChecked('required')) {
+          field.required = true;
+        }
+
+        if (config.tag === 'vaadin-checkbox-group' || config.tag === 'vaadin-radio-group') {
+          const itemTag = config.tag === 'vaadin-checkbox-group' ? 'vaadin-checkbox' : 'vaadin-radio-button';
+          config.items.forEach((item) => {
+            const child = document.createElement(itemTag);
+            child.value = item;
+            child.label = item;
+            field.appendChild(child);
+          });
+        } else if (config.items) {
+          field.items = config.items;
+        }
+
+        return field;
+      };
+
+      const createChild = (config) => {
+        const label = isChecked('longLabels') ? `${config.label} with a much longer label text` : config.label;
+
+        let child;
+        if (document.getElementById('content').value === 'form-items') {
+          child = document.createElement('vaadin-form-item');
+          const labelElement = document.createElement('label');
+          labelElement.slot = 'label';
+          labelElement.textContent = label;
+          child.append(labelElement, createField(config));
+        } else {
+          child = createField(config, label);
+        }
+
+        if (config.colspan) {
+          child.setAttribute('colspan', config.colspan);
+        }
+
+        return child;
+      };
+
+      const renderContent = () => {
+        layout.innerHTML = '';
+
+        const fields = isChecked('mixed') ? mixedFields : basicFields;
+        fields.forEach((config) => layout.appendChild(createChild(config)));
+
+        if (isChecked('submit')) {
+          const button = document.createElement('vaadin-button');
+          button.setAttribute('theme', 'primary');
+          button.textContent = 'Submit';
+          layout.appendChild(button);
+        }
+      };
+
+      renderContent();
+
+      // Layout Controls
+      document.getElementById('mode').addEventListener('value-changed', (e) => {
+        layout.autoResponsive = e.detail.value === 'auto-responsive';
+      });
+
+      ['autoRows', 'labelsAside', 'expandColumns', 'expandFields'].forEach((prop) => {
+        document.getElementById(prop).addEventListener('checked-changed', (e) => {
+          layout[prop] = e.detail.value;
+        });
+      });
+
+      ['minColumns', 'maxColumns'].forEach((prop) => {
+        document.getElementById(prop).addEventListener('value-changed', (e) => {
+          if (e.detail.value) {
+            layout[prop] = parseInt(e.detail.value);
+          }
+        });
+      });
+
+      document.getElementById('columnWidth').addEventListener('value-changed', (e) => {
+        layout.columnWidth = e.detail.value;
+      });
+
+      // CSS Property Controls
+      const cssProperties = {
+        labelWidth: '--vaadin-form-layout-label-width',
+        labelSpacing: '--vaadin-form-layout-label-spacing',
+        columnSpacing: '--vaadin-form-layout-column-spacing',
+        rowSpacing: '--vaadin-form-layout-row-spacing',
+      };
+      Object.entries(cssProperties).forEach(([id, property]) => {
+        document.getElementById(id).addEventListener('value-changed', (e) => {
+          if (e.detail.value) {
+            layout.style.setProperty(property, e.detail.value);
+          } else {
+            layout.style.removeProperty(property);
+          }
+        });
+      });
+
+      // Content Controls
+      document.getElementById('content').addEventListener('value-changed', renderContent);
+      ['mixed', 'helper', 'required', 'longLabels', 'submit'].forEach((id) => {
+        document.getElementById(id).addEventListener('checked-changed', renderContent);
+      });
+
+      // Container Controls
+      document.getElementById('containerWidth').addEventListener('value-changed', (e) => {
+        container.style.width = e.detail.value;
+      });
+
+      document.getElementById('rtl').addEventListener('checked-changed', (e) => {
+        document.documentElement.dir = e.detail.value ? 'rtl' : 'ltr';
+      });
+    </script>
+  </body>
+</html>
