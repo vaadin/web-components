@@ -272,10 +272,9 @@ export const MessageListMixin = (superClass) =>
         aria-hidden="true"
         inert
         .userName="${this.__getTypingUserNames(users)}"
-        >${keyed(
-          users,
-          html`<vaadin-avatar-group slot="avatar" .items="${users}" .maxItemsVisible="${100}"></vaadin-avatar-group>`,
-        )}<span>${this._typingIndicatorText}</span></vaadin-message
+        >${keyed(users, html`<vaadin-avatar-group slot="avatar" .items="${users}"></vaadin-avatar-group>`)}<span
+          >${this._typingIndicatorText}</span
+        ></vaadin-message
       >`;
     }
 
