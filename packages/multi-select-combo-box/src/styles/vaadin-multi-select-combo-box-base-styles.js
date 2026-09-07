@@ -59,5 +59,33 @@ export const multiSelectComboBoxStyles = [
     :host([auto-expand-horizontally]) {
       --vaadin-field-default-width: auto;
     }
+
+    [part='select-all'] {
+      appearance: none;
+      flex: none;
+      box-sizing: border-box;
+      /* Do not let the label affect the width of the overlay */
+      contain: inline-size;
+      margin: var(--vaadin-item-overlay-padding, 4px);
+      margin-block-end: 0;
+      padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
+      border: 0;
+      border-radius: var(--vaadin-radius-m);
+      background: transparent;
+      color: var(--vaadin-text-color);
+      font: inherit;
+      font-weight: 500;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: var(--vaadin-clickable-cursor);
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    [part='select-all']:focus-visible {
+      outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
+    }
   `,
 ];

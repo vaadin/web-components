@@ -95,4 +95,38 @@
     color: var(--lumo-contrast-60pct);
     cursor: var(--lumo-clickable-cursor);
   }
+
+  /* Lumo replaces the base styles of this component, so the button reset is repeated here */
+  [part='select-all'] {
+    appearance: none;
+    flex: none;
+    box-sizing: border-box;
+    /* Do not let the label affect the width of the overlay */
+    contain: inline-size;
+    height: var(--lumo-size-m);
+    margin: var(--lumo-space-xs) var(--lumo-space-xs) 0;
+    padding: 0 calc(var(--lumo-size-m) / 6);
+    border: none;
+    border-radius: var(--lumo-border-radius-m);
+    background: transparent;
+    color: var(--lumo-primary-text-color);
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-m);
+    font-weight: 500;
+    line-height: var(--lumo-line-height-xs);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: var(--lumo-clickable-cursor);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  [part='select-all']:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 var(--vaadin-focus-ring-width, 2px)
+      var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+  }
 }

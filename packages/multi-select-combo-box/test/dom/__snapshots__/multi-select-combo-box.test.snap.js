@@ -753,3 +753,22 @@ snapshots["vaadin-multi-select-combo-box shadow invalid"] =
 `;
 /* end snapshot vaadin-multi-select-combo-box shadow invalid */
 
+snapshots["vaadin-multi-select-combo-box host opened overlay select all button"] = 
+`<vaadin-multi-select-combo-box-overlay
+  exportparts="overlay, content, loader"
+  id="overlay"
+  no-vertical-overlap=""
+  popover="manual"
+>
+  <button
+    part="select-all"
+    type="button"
+  >
+    Select all
+  </button>
+  <slot name="overlay">
+  </slot>
+</vaadin-multi-select-combo-box-overlay>
+`;
+/* end snapshot vaadin-multi-select-combo-box host opened overlay select all button */
+

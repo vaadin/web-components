@@ -10,3 +10,16 @@
 vaadin-multi-select-combo-box-chip {
   --vaadin-icon-size: 1.25em;
 }
+
+vaadin-multi-select-combo-box::part(select-all) {
+  padding-inline: var(--vaadin-padding-s);
+  border-radius: var(--vaadin-item-border-radius);
+  color: var(--aura-accent-text-color);
+  font-weight: var(--aura-font-weight-medium);
+}
+
+@media (any-hover: hover) {
+  vaadin-multi-select-combo-box::part(select-all):hover {
+    background: var(--_aura-highlight-color);
+  }
+}

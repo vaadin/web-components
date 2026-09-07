@@ -33,6 +33,8 @@ import type {
   MultiSelectComboBoxInvalidChangedEvent,
   MultiSelectComboBoxOpenedChangedEvent,
   MultiSelectComboBoxRenderer,
+  MultiSelectComboBoxSelectAllCallback,
+  MultiSelectComboBoxSelectAllState,
   MultiSelectComboBoxSelectedItemsChangedEvent,
   MultiSelectComboBoxValidatedEvent,
 } from '../../vaadin-multi-select-combo-box.js';
@@ -113,6 +115,19 @@ assertType<boolean>(narrowedComboBox.required);
 assertType<boolean>(narrowedComboBox.selectedItemsOnTop);
 assertType<boolean>(narrowedComboBox.autoExpandVertically);
 assertType<boolean>(narrowedComboBox.collapseChips);
+assertType<boolean>(narrowedComboBox.selectAllButtonVisible);
+assertType<MultiSelectComboBoxSelectAllState | null | undefined>(narrowedComboBox.selectAllState);
+assertType<'all' | 'none' | null | undefined>(narrowedComboBox.selectAllState);
+assertType<MultiSelectComboBoxSelectAllCallback | null | undefined>(narrowedComboBox.selectAllCallback);
+
+narrowedComboBox.selectAllCallback = (params) => {
+  assertType<string>(params.filter);
+  assertType<boolean>(params.selected);
+};
+
+narrowedComboBox.selectAllCallback = async (params) => {
+  assertType<{ filter: string; selected: boolean }>(params);
+};
 
 // Mixins
 assertType<ComboBoxBaseMixinClass>(narrowedComboBox);
@@ -159,3 +174,9 @@ assertType<ThemableMixinClass>(narrowedItem);
 // I18n
 assertType<MultiSelectComboBoxI18n>({});
 assertType<MultiSelectComboBoxI18n>({ cleared: 'Cleared' });
+assertType<MultiSelectComboBoxI18n>({
+  selectAll: 'Select all',
+  deselectAll: 'Deselect all',
+  selectFiltered: 'Select filtered',
+  deselectFiltered: 'Deselect filtered',
+});

@@ -3,7 +3,7 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
-import { getAllItems, getFirstItem } from './helpers.js';
+import { getAllItems, getFirstItem, getSelectAllButton } from './helpers.js';
 
 describe('accessibility', () => {
   let comboBox, inputElement;
@@ -127,6 +127,38 @@ describe('accessibility', () => {
         expect(items[0].getAttribute('aria-selected')).to.equal('false');
       });
     });
+
+    describe('select all button', () => {
+      let button;
+
+      beforeEach(async () => {
+        comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
+        comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
+        comboBox.selectAllButtonVisible = true;
+        await nextRender();
+        comboBox.inputElement.click();
+        button = getSelectAllButton(comboBox);
+      });
+
+      it('should be a native button that does not submit forms', () => {
+        expect(button.localName).to.equal('button');
+        expect(button.type).to.equal('button');
+      });
+
+      it('should have an accessible name from the label', () => {
+        expect(button.textContent.trim()).to.equal('Select all');
+      });
+
+      it('should update the accessible name when the label changes', () => {
+        comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
+        expect(button.textContent.trim()).to.equal('Deselect all');
+      });
+
+      it('should not be part of the listbox', () => {
+        expect(comboBox._scroller.contains(button)).to.be.false;
+        expect(button.closest('[role="listbox"]')).to.be.null;
+      });
+    });
   });
 
   describe('announcements', () => {
@@ -221,6 +253,65 @@ describe('accessibility', () => {
       clock.tick(150);
 
       expect(region.textContent).to.equal('Apple removed from selection 0 items selected');
+    });
+
+    describe('select all button', () => {
+      beforeEach(() => {
+        comboBox.selectAllButtonVisible = true;
+        inputElement.click();
+      });
+
+      it('should announce the total when selecting all items', () => {
+        getSelectAllButton(comboBox).click();
+
+        clock.tick(150);
+
+        expect(region.textContent).to.equal('4 items selected');
+      });
+
+      it('should announce the total when selecting filtered items', () => {
+        comboBox.selectedItems = [lemon];
+        inputElement.value = 'an';
+        inputElement.dispatchEvent(new Event('input'));
+
+        getSelectAllButton(comboBox).click();
+
+        clock.tick(150);
+
+        expect(region.textContent).to.equal('3 items selected');
+      });
+
+      it('should announce the total when deselecting filtered items', () => {
+        comboBox.selectedItems = [lemon, banana, orange];
+        inputElement.value = 'an';
+        inputElement.dispatchEvent(new Event('input'));
+
+        getSelectAllButton(comboBox).click();
+
+        clock.tick(150);
+
+        expect(region.textContent).to.equal('1 items selected');
+      });
+
+      it('should announce cleared selection when deselecting all items', () => {
+        comboBox.selectedItems = [...fruits];
+
+        getSelectAllButton(comboBox).click();
+
+        clock.tick(150);
+
+        expect(region.textContent).to.equal('Selection cleared');
+      });
+
+      it('should use custom i18n messages', () => {
+        comboBox.i18n = { total: '{count} selected' };
+
+        getSelectAllButton(comboBox).click();
+
+        clock.tick(150);
+
+        expect(region.textContent).to.equal('4 selected');
+      });
     });
   });
 });

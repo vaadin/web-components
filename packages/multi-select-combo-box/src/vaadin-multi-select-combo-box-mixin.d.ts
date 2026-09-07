@@ -37,7 +37,18 @@ export interface MultiSelectComboBoxI18n {
   selected?: string;
   deselected?: string;
   total?: string;
+  selectAll?: string;
+  deselectAll?: string;
+  selectFiltered?: string;
+  deselectFiltered?: string;
 }
+
+export type MultiSelectComboBoxSelectAllState = 'all' | 'none';
+
+export type MultiSelectComboBoxSelectAllCallback = (params: {
+  filter: string;
+  selected: boolean;
+}) => Promise<void> | void;
 
 export declare function MultiSelectComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
@@ -125,6 +136,16 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
    *   // Screen reader announcement of the selected items count.
    *   // {count} is replaced with the actual count of items.
    *   total: '{count} items selected',
+   *   // Label of the select all button when no filter is set.
+   *   selectAll: 'Select all',
+   *   // Label of the select all button when no filter is set
+   *   // and all items are selected.
+   *   deselectAll: 'Deselect all',
+   *   // Label of the select all button when a filter is set.
+   *   selectFiltered: 'Select filtered',
+   *   // Label of the select all button when a filter is set
+   *   // and all items matching the filter are selected.
+   *   deselectFiltered: 'Deselect filtered',
    * }
    * ```
    */
@@ -172,6 +193,49 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
    * @attr {boolean} selected-items-on-top
    */
   selectedItemsOnTop: boolean;
+
+  /**
+   * Set to true to show a button above the dropdown items for selecting
+   * or deselecting all items matching the current filter at once. Items
+   * that do not match the filter keep their selection state.
+   *
+   * When using `dataProvider` and not every item matching the current
+   * filter is loaded, the button is only shown when both `selectAllState`
+   * and `selectAllCallback` are set.
+   * @attr {boolean} select-all-button-visible
+   */
+  selectAllButtonVisible: boolean;
+
+  /**
+   * The state of the select all button, either `all` when every item
+   * matching the current filter is selected, or `none` otherwise. The button
+   * offers to deselect the items when the state is `all`, and to select them
+   * otherwise.
+   *
+   * Only used together with `dataProvider` when not every item matching
+   * the current filter is loaded, in which case the component can not
+   * compute the state itself. Ignored otherwise.
+   */
+  selectAllState: MultiSelectComboBoxSelectAllState | null | undefined;
+
+  /**
+   * A function called when the user clicks the select all button while
+   * using `dataProvider` and not every item matching the current filter
+   * is loaded, in which case the component can not update `selectedItems`
+   * itself. Ignored otherwise.
+   *
+   * Receives a single `params` object with the following properties:
+   *
+   * - `params.filter` The filter the user has typed into the input field.
+   * - `params.selected` `true` when all items matching the filter should be
+   *   added to `selectedItems`, `false` when they should be removed from it.
+   *
+   * The function must update `selectedItems` accordingly and return a promise
+   * that resolves once the update has been applied, or return `undefined` in
+   * case `selectedItems` was updated synchronously. The button ignores
+   * further clicks until the returned promise settles.
+   */
+  selectAllCallback: MultiSelectComboBoxSelectAllCallback | null | undefined;
 
   /**
    * Clears the selected items.

@@ -8,7 +8,7 @@ import './vaadin-multi-select-combo-box-container.js';
 import './vaadin-multi-select-combo-box-item.js';
 import './vaadin-multi-select-combo-box-overlay.js';
 import './vaadin-multi-select-combo-box-scroller.js';
-import { html, LitElement } from 'lit';
+import { html, LitElement, nothing } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -33,6 +33,16 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * comboBox.selectedItems = ['lemon', 'orange'];
  * ```
  *
+ * ### Select all
+ *
+ * Set `selectAllButtonVisible` to show a button above the dropdown items
+ * for selecting or deselecting all items matching the current filter at once.
+ * The button labels can be customized using the `i18n` property.
+ *
+ * ```html
+ * <vaadin-multi-select-combo-box select-all-button-visible></vaadin-multi-select-combo-box>
+ * ```
+ *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
@@ -48,6 +58,7 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * `helper-text`          | The helper text element wrapper
  * `required-indicator`   | The `required` state indicator element
  * `toggle-button`        | The toggle button
+ * `select-all`           | The button for selecting or deselecting all items, shown in the overlay
  * `overlay`              | The overlay container
  * `content`              | The overlay content
  * `loader`               | The loading indicator shown while loading items
@@ -206,6 +217,15 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         .positionTarget="${this._inputField}"
         no-vertical-overlap
       >
+        ${
+          this.__selectAllButtonRendered
+            ? html`
+                <button part="select-all" type="button" @click="${this.__onSelectAllButtonClick}">
+                  ${this.__selectAllButtonLabel}
+                </button>
+              `
+            : nothing
+        }
         <slot name="overlay"></slot>
       </vaadin-multi-select-combo-box-overlay>
     `;

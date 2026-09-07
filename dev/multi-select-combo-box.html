@@ -8,22 +8,66 @@
     <script type="module" src="./common.js"></script>
   </head>
   <body>
-    <vaadin-multi-select-combo-box
-      label="Element"
-      clear-button-visible
-      required
-      error-message="Select at least one"
-      allow-custom-value
-      auto-expand-horizontally
-      auto-expand-vertically
-    ></vaadin-multi-select-combo-box>
+    <div class="section">
+      <p class="heading">Basic</p>
+      <vaadin-multi-select-combo-box
+        id="basic"
+        label="Element"
+        clear-button-visible
+        required
+        error-message="Select at least one"
+        allow-custom-value
+        auto-expand-horizontally
+        auto-expand-vertically
+      ></vaadin-multi-select-combo-box>
+    </div>
+
+    <div class="section">
+      <p class="heading">Select all</p>
+      <vaadin-multi-select-combo-box
+        id="select-all"
+        label="Element"
+        clear-button-visible
+        select-all-button-visible
+      ></vaadin-multi-select-combo-box>
+      <vaadin-multi-select-combo-box
+        id="select-all-objects"
+        label="Element (objects, selected items on top)"
+        item-id-path="id"
+        item-label-path="name"
+        select-all-button-visible
+        selected-items-on-top
+      ></vaadin-multi-select-combo-box>
+    </div>
+
+    <div class="section">
+      <p class="heading">Select all with lazy loading</p>
+      <p>
+        Countries are loaded in pages of 20 with a simulated delay. With more than one page of results, the component
+        can not compute the select all state itself, so the page sets <code>selectAllState</code> and implements
+        <code>selectAllCallback</code>. Once the filter narrows the results to a single page, the component handles
+        select all on its own.
+      </p>
+      <vaadin-multi-select-combo-box
+        id="select-all-lazy"
+        label="Country"
+        clear-button-visible
+        select-all-button-visible
+        page-size="20"
+      ></vaadin-multi-select-combo-box>
+      <vaadin-multi-select-combo-box
+        id="select-all-lazy-no-callback"
+        label="Country (no select all callback)"
+        clear-button-visible
+        select-all-button-visible
+        page-size="20"
+      ></vaadin-multi-select-combo-box>
+    </div>
 
     <script type="module">
       import '@vaadin/multi-select-combo-box';
 
-      const comboBox = document.querySelector('vaadin-multi-select-combo-box');
-
-      comboBox.items = [
+      const elements = [
         'Hydrogen',
         'Helium',
         'Lithium',
@@ -56,13 +100,280 @@
         'Zinc',
       ];
 
-      comboBox.selectedItems = ['Hydrogen', 'Helium', 'Lithium'];
-
-      comboBox.addEventListener('custom-value-set', (event) => {
+      const basic = document.querySelector('#basic');
+      basic.items = elements;
+      basic.selectedItems = ['Hydrogen', 'Helium', 'Lithium'];
+      basic.addEventListener('custom-value-set', (event) => {
         const item = event.detail;
-        comboBox.items.push(item);
-        comboBox.selectedItems = [...comboBox.selectedItems, item];
+        basic.items.push(item);
+        basic.selectedItems = [...basic.selectedItems, item];
       });
+
+      const selectAll = document.querySelector('#select-all');
+      selectAll.items = elements;
+      selectAll.selectedItems = ['Hydrogen', 'Helium', 'Lithium'];
+
+      const selectAllObjects = document.querySelector('#select-all-objects');
+      selectAllObjects.items = elements.map((name, index) => ({ id: index + 1, name }));
+      selectAllObjects.selectedItems = [
+        { id: 2, name: 'Helium' },
+        { id: 6, name: 'Carbon' },
+      ];
+
+      // Lazy loading: the data is fully available on the page, the data provider
+      // only fakes loading with a delay to emulate a backend.
+      const countries = [
+        'Afghanistan',
+        'Albania',
+        'Algeria',
+        'Andorra',
+        'Angola',
+        'Antigua and Barbuda',
+        'Argentina',
+        'Armenia',
+        'Australia',
+        'Austria',
+        'Azerbaijan',
+        'Bahamas',
+        'Bahrain',
+        'Bangladesh',
+        'Barbados',
+        'Belarus',
+        'Belgium',
+        'Belize',
+        'Benin',
+        'Bhutan',
+        'Bolivia',
+        'Bosnia and Herzegovina',
+        'Botswana',
+        'Brazil',
+        'Brunei',
+        'Bulgaria',
+        'Burkina Faso',
+        'Burundi',
+        'Cambodia',
+        'Cameroon',
+        'Canada',
+        'Cape Verde',
+        'Central African Republic',
+        'Chad',
+        'Chile',
+        'China',
+        'Colombia',
+        'Comoros',
+        'Congo',
+        'Costa Rica',
+        'Croatia',
+        'Cuba',
+        'Cyprus',
+        'Czech Republic',
+        'Denmark',
+        'Djibouti',
+        'Dominica',
+        'Dominican Republic',
+        'Ecuador',
+        'Egypt',
+        'El Salvador',
+        'Equatorial Guinea',
+        'Eritrea',
+        'Estonia',
+        'Eswatini',
+        'Ethiopia',
+        'Fiji',
+        'Finland',
+        'France',
+        'Gabon',
+        'Gambia',
+        'Georgia',
+        'Germany',
+        'Ghana',
+        'Greece',
+        'Grenada',
+        'Guatemala',
+        'Guinea',
+        'Guinea-Bissau',
+        'Guyana',
+        'Haiti',
+        'Honduras',
+        'Hungary',
+        'Iceland',
+        'India',
+        'Indonesia',
+        'Iran',
+        'Iraq',
+        'Ireland',
+        'Israel',
+        'Italy',
+        'Jamaica',
+        'Japan',
+        'Jordan',
+        'Kazakhstan',
+        'Kenya',
+        'Kiribati',
+        'Kuwait',
+        'Kyrgyzstan',
+        'Laos',
+        'Latvia',
+        'Lebanon',
+        'Lesotho',
+        'Liberia',
+        'Libya',
+        'Liechtenstein',
+        'Lithuania',
+        'Luxembourg',
+        'Madagascar',
+        'Malawi',
+        'Malaysia',
+        'Maldives',
+        'Mali',
+        'Malta',
+        'Marshall Islands',
+        'Mauritania',
+        'Mauritius',
+        'Mexico',
+        'Micronesia',
+        'Moldova',
+        'Monaco',
+        'Mongolia',
+        'Montenegro',
+        'Morocco',
+        'Mozambique',
+        'Myanmar',
+        'Namibia',
+        'Nauru',
+        'Nepal',
+        'Netherlands',
+        'New Zealand',
+        'Nicaragua',
+        'Niger',
+        'Nigeria',
+        'North Korea',
+        'North Macedonia',
+        'Norway',
+        'Oman',
+        'Pakistan',
+        'Palau',
+        'Panama',
+        'Papua New Guinea',
+        'Paraguay',
+        'Peru',
+        'Philippines',
+        'Poland',
+        'Portugal',
+        'Qatar',
+        'Romania',
+        'Russia',
+        'Rwanda',
+        'Saint Kitts and Nevis',
+        'Saint Lucia',
+        'Saint Vincent and the Grenadines',
+        'Samoa',
+        'San Marino',
+        'Sao Tome and Principe',
+        'Saudi Arabia',
+        'Senegal',
+        'Serbia',
+        'Seychelles',
+        'Sierra Leone',
+        'Singapore',
+        'Slovakia',
+        'Slovenia',
+        'Solomon Islands',
+        'Somalia',
+        'South Africa',
+        'South Korea',
+        'South Sudan',
+        'Spain',
+        'Sri Lanka',
+        'Sudan',
+        'Suriname',
+        'Sweden',
+        'Switzerland',
+        'Syria',
+        'Taiwan',
+        'Tajikistan',
+        'Tanzania',
+        'Thailand',
+        'Timor-Leste',
+        'Togo',
+        'Tonga',
+        'Trinidad and Tobago',
+        'Tunisia',
+        'Turkey',
+        'Turkmenistan',
+        'Tuvalu',
+        'Uganda',
+        'Ukraine',
+        'United Arab Emirates',
+        'United Kingdom',
+        'United States',
+        'Uruguay',
+        'Uzbekistan',
+        'Vanuatu',
+        'Vatican City',
+        'Venezuela',
+        'Vietnam',
+        'Yemen',
+        'Zambia',
+        'Zimbabwe',
+      ];
+
+      const DELAY = 300;
+
+      function filterCountries(filter) {
+        const query = filter.toLowerCase();
+        return countries.filter((country) => country.toLowerCase().includes(query));
+      }
+
+      function dataProvider(params, callback) {
+        const filteredCountries = filterCountries(params.filter);
+        const offset = params.page * params.pageSize;
+        const page = filteredCountries.slice(offset, offset + params.pageSize);
+        // Emulate network latency for demo purpose
+        setTimeout(() => callback(page, filteredCountries.length), DELAY);
+      }
+
+      // Emulates a host (such as a server) that knows the full data set. It keeps
+      // `selectAllState` up to date for the current filter and implements the
+      // `selectAllCallback` contract: update `selectedItems` and resolve afterwards.
+      function setupSelectAllHost(comboBox) {
+        function updateSelectAllState() {
+          const filteredCountries = filterCountries(comboBox.filter);
+          const isSelected = (country) => comboBox.selectedItems.includes(country);
+          const allSelected = filteredCountries.length > 0 && filteredCountries.every(isSelected);
+          comboBox.selectAllState = allSelected ? 'all' : 'none';
+        }
+
+        comboBox.selectAllCallback = ({ filter, selected }) => {
+          return new Promise((resolve) => {
+            // Emulate network latency for demo purpose
+            setTimeout(() => {
+              const matches = filterCountries(filter);
+              if (selected) {
+                const missing = matches.filter((country) => !comboBox.selectedItems.includes(country));
+                comboBox.selectedItems = [...comboBox.selectedItems, ...missing];
+              } else {
+                comboBox.selectedItems = comboBox.selectedItems.filter((country) => !matches.includes(country));
+              }
+              resolve();
+            }, DELAY);
+          });
+        };
+
+        comboBox.addEventListener('filter-changed', updateSelectAllState);
+        comboBox.addEventListener('selected-items-changed', updateSelectAllState);
+        updateSelectAllState();
+      }
+
+      const lazy = document.querySelector('#select-all-lazy');
+      lazy.dataProvider = dataProvider;
+      lazy.selectedItems = ['Finland', 'Germany'];
+      setupSelectAllHost(lazy);
+
+      // Without `selectAllState` and `selectAllCallback` the button is only
+      // shown once the filter narrows the results down to a single page.
+      const lazyNoCallback = document.querySelector('#select-all-lazy-no-callback');
+      lazyNoCallback.dataProvider = dataProvider;
     </script>
   </body>
 </html>

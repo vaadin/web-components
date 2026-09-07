@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { ComboBoxDataProviderMixin } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxFocusIndexMixin } from '@vaadin/combo-box/src/vaadin-combo-box-focus-index-mixin.js';
 import { ComboBoxItemsMixin } from '@vaadin/combo-box/src/vaadin-combo-box-items-mixin.js';
@@ -22,6 +23,10 @@ const DEFAULT_I18N = {
   selected: 'added to selection',
   deselected: 'removed from selection',
   total: '{count} items selected',
+  selectAll: 'Select all',
+  deselectAll: 'Deselect all',
+  selectFiltered: 'Select filtered',
+  deselectFiltered: 'Deselect filtered',
 };
 
 export const MultiSelectComboBoxMixin = (superClass) =>
@@ -174,6 +179,59 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           sync: true,
         },
 
+        /**
+         * Set to true to show a button above the dropdown items for selecting
+         * or deselecting all items matching the current filter at once. Items
+         * that do not match the filter keep their selection state.
+         *
+         * When using `dataProvider` and not every item matching the current
+         * filter is loaded, the button is only shown when both `selectAllState`
+         * and `selectAllCallback` are set.
+         * @attr {boolean} select-all-button-visible
+         */
+        selectAllButtonVisible: {
+          type: Boolean,
+          value: false,
+          sync: true,
+        },
+
+        /**
+         * The state of the select all button, either `all` when every item
+         * matching the current filter is selected, or `none` otherwise. The button
+         * offers to deselect the items when the state is `all`, and to select them
+         * otherwise.
+         *
+         * Only used together with `dataProvider` when not every item matching
+         * the current filter is loaded, in which case the component can not
+         * compute the state itself. Ignored otherwise.
+         */
+        selectAllState: {
+          type: String,
+          sync: true,
+        },
+
+        /**
+         * A function called when the user clicks the select all button while
+         * using `dataProvider` and not every item matching the current filter
+         * is loaded, in which case the component can not update `selectedItems`
+         * itself. Ignored otherwise.
+         *
+         * Receives a single `params` object with the following properties:
+         *
+         * - `params.filter` The filter the user has typed into the input field.
+         * - `params.selected` `true` when all items matching the filter should be
+         *   added to `selectedItems`, `false` when they should be removed from it.
+         *
+         * The function must update `selectedItems` accordingly and return a promise
+         * that resolves once the update has been applied, or return `undefined` in
+         * case `selectedItems` was updated synchronously. The button ignores
+         * further clicks until the returned promise settles.
+         */
+        selectAllCallback: {
+          type: Object,
+          sync: true,
+        },
+
         /** @private */
         value: {
           type: String,
@@ -246,6 +304,16 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      *   // Screen reader announcement of the selected items count.
      *   // {count} is replaced with the actual count of items.
      *   total: '{count} items selected',
+     *   // Label of the select all button when no filter is set.
+     *   selectAll: 'Select all',
+     *   // Label of the select all button when no filter is set
+     *   // and all items are selected.
+     *   deselectAll: 'Deselect all',
+     *   // Label of the select all button when a filter is set.
+     *   selectFiltered: 'Select filtered',
+     *   // Label of the select all button when a filter is set
+     *   // and all items matching the filter are selected.
+     *   deselectFiltered: 'Deselect filtered',
      * }
      * ```
      * @type {!MultiSelectComboBoxI18n}
@@ -284,6 +352,15 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     /** @protected */
     get _chips() {
       return [...this.querySelectorAll('[slot="chip"]')];
+    }
+
+    /**
+     * The select all button element, if currently rendered.
+     * @private
+     * @return {HTMLButtonElement | null}
+     */
+    get __selectAllButton() {
+      return this.shadowRoot ? this.shadowRoot.querySelector('[part="select-all"]') : null;
     }
 
     /**
@@ -336,6 +413,28 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
       });
       this.addController(this._overflowController);
+    }
+
+    /** @protected */
+    willUpdate(props) {
+      super.willUpdate(props);
+
+      const selectAllProps = [
+        'selectAllButtonVisible',
+        'selectAllState',
+        'selectAllCallback',
+        'readonly',
+        'filteredItems',
+        'selectedItems',
+        'size',
+        'loading',
+        'filter',
+        'itemIdPath',
+        '__effectiveI18n',
+      ];
+      if (selectAllProps.some((prop) => props.has(prop))) {
+        this.__updateSelectAllButtonState();
+      }
     }
 
     /** @protected */
@@ -466,6 +565,11 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * @override
      */
     _onClosed() {
+      // Do not leave focus on the select all button, which is hidden together with the overlay.
+      if (this.__isSelectAllButtonFocused()) {
+        this.inputElement.focus();
+      }
+
       // Do not commit selected item again on outside click
       this._ignoreCommitValue = true;
 
@@ -604,6 +708,43 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       if (blurred && this.readonly) {
         this.close();
       }
+    }
+
+    /**
+     * Override method inherited from `FocusMixin` to not update the focused
+     * state when focus moves to the select all button, so that only the
+     * button shows a focus ring while it is focused.
+     *
+     * @param {FocusEvent} event
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldSetFocus(event) {
+      if (this.__isSelectAllButtonEvent(event)) {
+        return false;
+      }
+
+      return super._shouldSetFocus(event);
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to not remove the focused
+     * state when focus moves between the input and the select all button.
+     *
+     * @param {FocusEvent} event
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldRemoveFocus(event) {
+      // The button is in the shadow root, so when focus moves from the input to
+      // the button, `relatedTarget` is retargeted to the host element itself.
+      if (this.__selectAllButton && (event.relatedTarget === this || event.relatedTarget === this.inputElement)) {
+        return false;
+      }
+
+      return super._shouldRemoveFocus(event);
     }
 
     /**
@@ -1202,6 +1343,18 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * @override
      */
     _onKeyDown(event) {
+      if (this.__isSelectAllButtonEvent(event)) {
+        this.__onSelectAllButtonKeyDown(event);
+        return;
+      }
+
+      // Move focus to the select all button instead of leaving the component
+      if (event.key === 'Tab' && this._overlayOpened && this.__selectAllButton) {
+        event.preventDefault();
+        this.__focusSelectAllButton();
+        return;
+      }
+
       super._onKeyDown(event);
 
       const chips = this._chips;
@@ -1361,5 +1514,186 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // Prevent mousedown event to keep the input focused
       // and keep the overlay opened when clicking a chip.
       event.preventDefault();
+    }
+
+    /** @private */
+    __isSelectAllButtonEvent(event) {
+      const button = this.__selectAllButton;
+      return !!button && event.composedPath().includes(button);
+    }
+
+    /** @private */
+    __isSelectAllButtonFocused() {
+      const button = this.__selectAllButton;
+      return !!button && button === getDeepActiveElement();
+    }
+
+    /** @private */
+    __focusSelectAllButton() {
+      // Only the button should look focused, so reset the highlighted
+      // item and chip, and restore the input to show the filter instead
+      // of the label of the previously highlighted item.
+      if (this._focusedIndex > -1) {
+        this._focusedIndex = -1;
+        this._inputElementValue = this.filter;
+      }
+      this._focusedChipIndex = -1;
+
+      this.__selectAllButton.focus({ focusVisible: true });
+      this.removeAttribute('focus-ring');
+    }
+
+    /** @private */
+    __onSelectAllButtonKeyDown(event) {
+      switch (event.key) {
+        case 'Tab':
+          // Move focus back to the input instead of leaving the component
+          event.preventDefault();
+          this.inputElement.focus();
+          break;
+        case 'Escape':
+        case 'ArrowDown':
+        case 'ArrowUp':
+          // Move focus back to the input and handle the key as if pressed there.
+          this.inputElement.focus();
+          super._onKeyDown(event);
+          break;
+        default:
+          break;
+      }
+    }
+
+    /** @private */
+    __updateSelectAllButtonState() {
+      const state = this.__getEffectiveSelectAllState();
+      const rendered = this.selectAllButtonVisible && !this.readonly && state !== undefined;
+
+      // Do not drop focus to the body when the button is about to be removed.
+      if (this.__selectAllButtonRendered && !rendered && this.__isSelectAllButtonFocused()) {
+        this.inputElement.focus();
+      }
+
+      const { selectAll, deselectAll, selectFiltered, deselectFiltered } = this.__effectiveI18n;
+      const allSelected = state === 'all';
+      let label;
+      if (this.filter) {
+        label = allSelected ? deselectFiltered : selectFiltered;
+      } else {
+        label = allSelected ? deselectAll : selectAll;
+      }
+
+      this.__selectAllButtonRendered = rendered;
+      this.__effectiveSelectAllState = state;
+      this.__selectAllButtonLabel = label;
+    }
+
+    /**
+     * Returns the items matching the current filter that are loaded on the client.
+     * @private
+     */
+    __getLoadedFilteredItems() {
+      return (this.filteredItems || []).filter((item) => !(item instanceof ComboBoxPlaceholder));
+    }
+
+    /**
+     * Returns true when every item matching the current filter is available
+     * on the client, so that the select all state and toggling can be handled
+     * by the component itself.
+     * @private
+     */
+    __areAllFilteredItemsLoaded() {
+      if (!this.dataProvider) {
+        return true;
+      }
+
+      if (this.size === undefined || this.loading) {
+        return false;
+      }
+
+      return this.__getLoadedFilteredItems().length === this.size;
+    }
+
+    /** @private */
+    __getEffectiveSelectAllState() {
+      if (!this.__areAllFilteredItemsLoaded()) {
+        // The state can only be provided by the host, and only makes
+        // sense when the host also handles the button clicks.
+        return typeof this.selectAllCallback === 'function' ? this.selectAllState || undefined : undefined;
+      }
+
+      const items = this.__getLoadedFilteredItems();
+      const allSelected =
+        items.length > 0 && items.every((item) => this._findIndex(item, this.selectedItems, this.itemIdPath) > -1);
+      return allSelected ? 'all' : 'none';
+    }
+
+    /** @private */
+    __onSelectAllButtonClick() {
+      // Ignore clicks while the state might be stale.
+      if (this.loading || this.__selectAllPending) {
+        return;
+      }
+
+      const selected = this.__effectiveSelectAllState !== 'all';
+      if (this.__areAllFilteredItemsLoaded()) {
+        this.__setFilteredItemsSelected(selected);
+      } else if (typeof this.selectAllCallback === 'function') {
+        this.__delegateSelectAll(selected);
+      }
+    }
+
+    /** @private */
+    __setFilteredItemsSelected(selected) {
+      const filteredItems = this.__getLoadedFilteredItems();
+      let selectedItems;
+
+      if (selected) {
+        const missingItems = filteredItems.filter(
+          (item) => this._findIndex(item, this.selectedItems, this.itemIdPath) === -1,
+        );
+        selectedItems = [...this.selectedItems, ...missingItems];
+      } else {
+        selectedItems = this.selectedItems.filter(
+          (item) => this._findIndex(item, filteredItems, this.itemIdPath) === -1,
+        );
+      }
+
+      this.__updateSelection(selectedItems);
+      this.__announceSelectAllResult();
+    }
+
+    /** @private */
+    __delegateSelectAll(selected) {
+      this.__selectAllPending = true;
+
+      // Use the promise constructor so that both a synchronous
+      // exception and a rejected promise are handled the same way.
+      new Promise((resolve) => {
+        resolve(this.selectAllCallback({ filter: this.filter, selected }));
+      })
+        .then(
+          () => {
+            if (this.isConnected) {
+              this._requestValidation();
+              this.__announceSelectAllResult();
+            }
+          },
+          () => {
+            // The host did not apply the selection, nothing to announce.
+          },
+        )
+        .finally(() => {
+          this.__selectAllPending = false;
+        });
+    }
+
+    /** @private */
+    __announceSelectAllResult() {
+      const count = this.selectedItems.length;
+      if (count === 0) {
+        announce(this.__effectiveI18n.cleared);
+      } else {
+        announce(this.__effectiveI18n.total.replace('{count}', count));
+      }
     }
   };

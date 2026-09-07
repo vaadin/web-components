@@ -26,7 +26,12 @@ import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-th
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { MultiSelectComboBoxMixinClass } from './vaadin-multi-select-combo-box-mixin.js';
 
-export { MultiSelectComboBoxI18n, MultiSelectComboBoxRenderer } from './vaadin-multi-select-combo-box-mixin.js';
+export {
+  MultiSelectComboBoxI18n,
+  MultiSelectComboBoxRenderer,
+  MultiSelectComboBoxSelectAllCallback,
+  MultiSelectComboBoxSelectAllState,
+} from './vaadin-multi-select-combo-box-mixin.js';
 
 /**
  * Fired when the user commits a value change.
@@ -95,6 +100,16 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * comboBox.selectedItems = ['lemon', 'orange'];
  * ```
  *
+ * ### Select all
+ *
+ * Set `selectAllButtonVisible` to show a button above the dropdown items
+ * for selecting or deselecting all items matching the current filter at once.
+ * The button labels can be customized using the `i18n` property.
+ *
+ * ```html
+ * <vaadin-multi-select-combo-box select-all-button-visible></vaadin-multi-select-combo-box>
+ * ```
+ *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
@@ -110,6 +125,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `helper-text`          | The helper text element wrapper
  * `required-indicator`   | The `required` state indicator element
  * `toggle-button`        | The toggle button
+ * `select-all`           | The button for selecting or deselecting all items, shown in the overlay
  * `overlay`              | The overlay container
  * `content`              | The overlay content
  * `loader`               | The loading indicator shown while loading items
