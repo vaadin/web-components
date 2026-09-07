@@ -16,8 +16,8 @@ export const checkable = (part, propName = part) => css`
     grid-template-rows: repeat(auto-fill, minmax(0, max-content));
     -webkit-tap-highlight-color: transparent;
     --_cursor: var(--vaadin-clickable-cursor);
-    --_color: var(--vaadin-${unsafeCSS(propName)}-marker-color, var(--vaadin-${unsafeCSS(propName)}-background, var(--vaadin-background-color)));
-    --_filter: var(--vaadin-${unsafeCSS(propName)}-marker-color, saturate(0) invert(1) hue-rotate(180deg) contrast(100) brightness(100));
+    --_marker-color: var(--vaadin-${unsafeCSS(propName)}-marker-color, var(--vaadin-${unsafeCSS(propName)}-background, var(--vaadin-background-color)));
+    --_marker-filter: var(--vaadin-${unsafeCSS(propName)}-marker-color, saturate(0) invert(1) hue-rotate(180deg) contrast(100) brightness(100));
   }
 
   :host(:not([has-label])) {
@@ -90,7 +90,7 @@ export const checkable = (part, propName = part) => css`
     --_border-width: var(--vaadin-${unsafeCSS(propName)}-border-width, var(--vaadin-input-field-border-width, 1px));
     border-width: var(--_border-width);
     box-sizing: border-box;
-    color: var(--_color);
+    color: var(--_marker-color);
     height: var(--vaadin-${unsafeCSS(propName)}-size, round(1.125em, 2px));
     width: var(--vaadin-${unsafeCSS(propName)}-size, round(1.125em, 2px));
     position: relative;
@@ -148,7 +148,7 @@ export const checkable = (part, propName = part) => css`
     border-radius: inherit;
     display: flex;
     align-items: center;
-    filter: var(--_filter);
+    filter: var(--_marker-filter);
   }
 
   :host(:not([checked], [indeterminate])) [part='${unsafeCSS(part)}']::after {
