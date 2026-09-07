@@ -1,5 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { esc, fixtureSync, nextRender, nextUpdate, outsideClick } from '@vaadin/testing-helpers';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { Popover } from '../src/vaadin-popover.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
@@ -105,6 +107,22 @@ describe('nested popover', () => {
       await nextRender();
 
       expect(popover.opened).to.be.true;
+    });
+
+    it('should focus the nested target on Tab from the popover', async () => {
+      target.focus();
+      await nextRender();
+
+      nestedTarget.focus();
+      nestedTarget.click();
+      await nextRender();
+
+      // Move focus back to the popover
+      popover.focus();
+
+      await sendKeys({ press: 'Tab' });
+
+      expect(getDeepActiveElement()).to.equal(nestedTarget);
     });
 
     it('should not close on focusout caused by nested popover outside click', async () => {
