@@ -38,12 +38,11 @@ export const sliderStyles = css`
   }
 
   :host([min-max-visible]) {
-    grid-template:
-      'label' auto var(--_helper-above-field, 'helper' auto) 'baseline' 0 'input' 1fr 'marks' auto var(
-        --_helper-below-field,
-        'helper' auto
-      )
-      'error' auto / 100%;
+    --_rows-after-input: 'marks' auto;
+  }
+
+  :host([theme~='label-aside'][min-max-visible]) {
+    --_rows-after-input: 'label marks' auto;
   }
 
   #controls {
