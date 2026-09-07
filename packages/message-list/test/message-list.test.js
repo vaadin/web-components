@@ -217,6 +217,20 @@ describe('message-list', () => {
         expect(messageList.scrollTop).to.be.at.least(scrollTopBeforeMessage + 1);
       });
 
+      it('should scroll to bottom when the typing indicator is added', async () => {
+        messageList.scrollBy(0, 1000);
+        const scrollTopBefore = messageList.scrollTop;
+        messageList._usersTyping = [{ name: 'Steve Mops', abbr: 'SM' }];
+        await nextRender();
+        expect(messageList.scrollTop).to.be.at.least(scrollTopBefore + 1);
+      });
+
+      it('should not scroll to the typing indicator if not at the bottom', async () => {
+        messageList._usersTyping = [{ name: 'Steve Mops', abbr: 'SM' }];
+        await nextRender();
+        expect(messageList.scrollTop).to.be.equal(0);
+      });
+
       it('should not scroll if not at the bottom', async () => {
         messageList.items = [
           ...messageList.items,

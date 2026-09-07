@@ -225,7 +225,16 @@ export const MessageListMixin = (superClass) =>
 
     /** @private */
     __typingIndicatorChanged() {
+      const hadIndicator = !!this.querySelector('[slot="typing-indicator"]');
+      const closeToBottom = this.scrollHeight < this.clientHeight + this.scrollTop + 50;
+
       this._renderMessages(this.items);
+
+      if (closeToBottom && !hadIndicator && this.querySelector('[slot="typing-indicator"]')) {
+        // The indicator grows the list, keep it in view like a new message
+        this.__scrollToLastMessagePending = true;
+        this.__flushScrollToLastMessage();
+      }
     }
 
     /** @private */
