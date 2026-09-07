@@ -83,8 +83,8 @@ describe('vaadin-chart', () => {
   describe('organization', () => {
     let chart;
 
-    // Chart forces a resize to re-measure the labels, which are otherwise positioned
-    // before the styled-mode label CSS applies. See the TODO in vaadin-chart-mixin.js.
+    // Chart re-measures the labels, which are otherwise positioned before the
+    // styled-mode label CSS applies. See the TODO in vaadin-chart-mixin.js.
     // On 12.2.0: ~7 px deviation with the workaround, ~73 px without it.
     function worstLabelDeviation() {
       const nodes = chart.configuration.series[0].nodes.filter((node) => node.graphic && node.dataLabel);
@@ -99,11 +99,14 @@ describe('vaadin-chart', () => {
       }, 0);
     }
 
-    beforeEach(async () => {
-      chart = fixtureSync(`
-        <vaadin-chart type="organization" title="Acme" style="width: 800px; height: 500px"
+    // The type can sit on the chart or on the series, and only the series knows it
+    // by the time the labels are re-measured.
+    function fixtureWithType({ chartType = '', seriesType = '' } = {}) {
+      return fixtureSync(`
+        <vaadin-chart ${chartType} title="Acme" style="width: 800px; height: 500px"
           additional-options='{ "chart": { "inverted": true } }'>
           <vaadin-chart-series
+            ${seriesType}
             title="Acme"
             values='[
               ["Acme", "Head Office"], ["Acme", "Labs"],
@@ -121,14 +124,33 @@ describe('vaadin-chart', () => {
           ></vaadin-chart-series>
         </vaadin-chart>
       `);
+    }
+
+    async function whenLabelsMeasured() {
       await oneEvent(chart, 'chart-load');
       // Wait to the next animation frame for label re-measurement.
       await nextFrame();
       await nextFrame();
+    }
+
+    it('should centre every data label on its own node', async () => {
+      chart = fixtureWithType({ chartType: 'type="organization"' });
+      await whenLabelsMeasured();
+      expect(worstLabelDeviation()).to.be.below(20);
     });
 
-    it('should centre every data label on its own node', () => {
+    it('should centre the labels when only the series declares the type', async () => {
+      chart = fixtureWithType({ seriesType: 'type="organization"' });
+      await whenLabelsMeasured();
       expect(worstLabelDeviation()).to.be.below(20);
+    });
+
+    it('should not resize the chart while re-measuring the labels', async () => {
+      chart = fixtureWithType({ chartType: 'type="organization"' });
+      const spy = sinon.spy();
+      chart.addEventListener('chart-end-resize', spy);
+      await whenLabelsMeasured();
+      expect(spy).to.not.be.called;
     });
   });
 
