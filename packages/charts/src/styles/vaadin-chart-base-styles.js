@@ -58,8 +58,7 @@ const tooltipStyles = (scope) => css`
   ${unsafeCSS(scope)} .highcharts-tooltip text,
   ${unsafeCSS(scope)} .highcharts-tooltip foreignObject span {
     fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-data-label, var(--vaadin-text-color)));
-    /* The tooltip element carries the series colour, and stroke inherits into the
-       glyphs. Inside the shadow root .highcharts-root text already zeroes it. */
+    /* The tooltip carries the series color, and stroke inherits into the glyphs. */
     stroke-width: 0;
   }
 
@@ -91,8 +90,6 @@ const tooltipStyles = (scope) => css`
 addGlobalStyles(
   'vaadin-charts-tooltip',
   css`
-    /* An outside tooltip renders in document.body, out of reach of chartStyles,
-       so it needs the colour tokens and rules restated here. */
     .highcharts-tooltip-container {
       ${unsafeCSS(seriesColorTokens)}
     }
