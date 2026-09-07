@@ -1732,9 +1732,13 @@ export const ChartMixin = (superClass) =>
       // rather than capturing it also keeps a pending frame from holding a
       // destroyed chart alive.
       requestAnimationFrame(() => {
-        this.configuration?.series.forEach((series) => {
-          if (series.type === 'organization') {
-            series.drawDataLabels?.();
+        if (!this.configuration) {
+          return;
+        }
+
+        this.configuration.series.forEach((series) => {
+          if (series.type === 'organization' && series.drawDataLabels) {
+            series.drawDataLabels();
           }
         });
       });
