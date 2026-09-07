@@ -4,10 +4,6 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.css';
 import '../../../src/vaadin-breadcrumbs.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.breadcrumbsComponent = true;
-
 /*
  * Note: there is no `forced-colors: active` visual test here. The repository
  * has no `emulateMedia` / forced-colors infrastructure today, so a real

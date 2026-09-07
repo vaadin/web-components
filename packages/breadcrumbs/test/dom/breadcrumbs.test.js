@@ -2,10 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import '../../src/vaadin-breadcrumbs.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.breadcrumbsComponent = true;
-
 describe('vaadin-breadcrumbs', () => {
   let breadcrumbs;
 
