@@ -2,8 +2,6 @@
 
 A web component that displays the user's location within a hierarchy as a trail of links from the root to the current page.
 
-> ⚠️ This component is experimental and the API may change. In order to use it, enable the feature flag by setting `window.Vaadin.featureFlags.breadcrumbsComponent = true`.
-
 ```html
 <vaadin-breadcrumbs>
   <vaadin-breadcrumbs-item></vaadin-breadcrumbs-item>

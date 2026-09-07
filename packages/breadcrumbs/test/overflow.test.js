@@ -4,10 +4,6 @@ import { fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-h
 import '../vaadin-breadcrumbs.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.breadcrumbsComponent = true;
-
 describe('overflow', () => {
   let breadcrumbs, items, button, overlay;
 
