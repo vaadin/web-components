@@ -200,7 +200,7 @@ export const field = css`
 `;
 
 export const fieldLabelAside = css`
-  :host(:is([theme~='label-aside'], .form-layout-labels-aside)) {
+  :host([theme~='label-aside']) {
     --_side-label-width: 0px;
     --_side-label-gap: 0px;
 
@@ -215,20 +215,20 @@ export const fieldLabelAside = css`
     column-gap: var(--_side-label-gap);
   }
 
-  :host(:is([theme~='label-aside'], .form-layout-labels-aside)[has-label]) {
+  :host([theme~='label-aside']:is([has-label], [data-form-layout-item])) {
     --_side-label-width: var(--vaadin-field-side-label-width, auto);
     --_side-label-gap: var(--vaadin-field-side-label-gap, 1em);
   }
 
-  :host(:is([theme~='label-aside'], .form-layout-labels-aside)) [part='label'] {
+  :host([theme~='label-aside']) [part='label'] {
     width: auto;
     align-self: baseline;
     margin-bottom: 0;
   }
 
-  :host(:is([theme~='label-aside'], .form-layout-labels-aside)) [part='input-field'],
-  :host(:is([theme~='label-aside'], .form-layout-labels-aside)) [part='group-field'],
-  :host(:is([theme~='label-aside'], .form-layout-labels-aside)) [part='input-fields'] {
+  :host([theme~='label-aside']) [part='input-field'],
+  :host([theme~='label-aside']) [part='group-field'],
+  :host([theme~='label-aside']) [part='input-fields'] {
     align-self: baseline;
   }
 `;
