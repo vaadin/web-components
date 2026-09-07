@@ -12,7 +12,7 @@ import { AsyncDirective, directive } from 'lit/async-directive.js';
 class CellContentDirective extends AsyncDirective {
   #cell;
 
-  update(part, [grid, slotName, { textAlign, focusButton } = {}]) {
+  update(part, [grid, slotName, { textAlign } = {}]) {
     this.#cell = part.parentNode;
     this.#cell._content ??= document.createElement('vaadin-grid-cell-content');
     this.#cell._content.slot = slotName;
@@ -22,8 +22,7 @@ class CellContentDirective extends AsyncDirective {
       grid.appendChild(this.#cell._content);
     }
 
-    const slot = html`<slot name="${slotName}"></slot>`;
-    return focusButton ? html`<div role="button" tabindex="-1">${slot}</div>` : slot;
+    return html`<slot name="${slotName}"></slot>`;
   }
 
   disconnected() {

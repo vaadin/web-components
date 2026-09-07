@@ -288,7 +288,7 @@ export const ScrollMixin = (superClass) =>
 
       if (bodyContentHiddenChanged) {
         [...this.$.items.children].forEach((row) => {
-          this.__initRow(row, true);
+          this.__renderBodyRow(row);
           this.__updateRow(row);
         });
 

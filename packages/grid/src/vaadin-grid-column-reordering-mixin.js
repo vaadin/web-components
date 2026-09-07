@@ -444,9 +444,10 @@ export const ColumnReorderingMixin = (superClass) =>
     _swapColumnOrders(column1, column2) {
       [column1._order, column2._order] = [column2._order, column1._order];
 
-      [...this.$.items.children, this.$.sizer].forEach((row) => {
-        this.__initRow(row, true);
+      [...this.$.items.children].forEach((row) => {
+        this.__renderBodyRow(row);
       });
+      this.__renderSizerRow();
 
       this.__scheduleRenderHeaderFooter();
       this._debounceUpdateFrozenColumn();
