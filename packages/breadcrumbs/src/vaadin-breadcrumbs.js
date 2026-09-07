@@ -86,10 +86,6 @@ class Breadcrumbs extends KeyboardDirectionMixin(
     return breadcrumbsStyles;
   }
 
-  static get experimental() {
-    return 'breadcrumbsComponent';
-  }
-
   static get properties() {
     return {
       /** @private */
