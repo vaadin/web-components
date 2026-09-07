@@ -30,7 +30,6 @@ import {
   updateBooleanRowStates,
   updateCellsPart,
   updatePart,
-  updateState,
 } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { ResizeMixin } from './vaadin-grid-resize-mixin.js';
@@ -520,7 +519,7 @@ export const GridMixin = (superClass) =>
         return;
       }
 
-      this.__renderBodyRow(row, index);
+      row.index = index;
       this.__ensureRowItem(row);
       this.__ensureRowHierarchy(row);
       this.__updateRow(row);
@@ -584,11 +583,8 @@ export const GridMixin = (superClass) =>
      * @param {boolean} loading
      * @private
      */
-    __updateRowLoading(row, loading) {
+    __updateRowCellsLoading(row, loading) {
       const cells = getBodyRowCells(row);
-
-      // Row state attribute
-      updateState(row, 'loading', loading);
 
       // Cells part attribute
       updateCellsPart(cells, 'loading-row-cell', loading);
@@ -604,14 +600,16 @@ export const GridMixin = (superClass) =>
      * @private
      */
     __updateRow(row) {
+      this.__renderBodyRow(row);
+
       this.__a11yUpdateRowRowindex(row);
       this.__updateRowOrderParts(row);
 
       const item = this.__getRowItem(row);
       if (item) {
-        this.__updateRowLoading(row, false);
+        this.__updateRowCellsLoading(row, false);
       } else {
-        this.__updateRowLoading(row, true);
+        this.__updateRowCellsLoading(row, true);
         return;
       }
 

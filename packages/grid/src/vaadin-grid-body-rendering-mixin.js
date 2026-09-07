@@ -27,14 +27,16 @@ export const BodyRenderingMixin = (superClass) =>
     }
 
     /** @private */
-    __renderBodyRow(row, index) {
-      render(this.#bodyRowTemplate(index), row.parentNode, {
+    __renderBodyRow(row) {
+      const item = this.__getRowItem(row);
+
+      render(this.#bodyRowTemplate({ item }), row.parentNode, {
         host: this,
         renderBefore: row.__endMarker,
       });
     }
 
-    #bodyRowTemplate = (index) => {
-      return html`<tr role="row" tabindex="-1" part="row body-row" class="row body-row" .index="${index}"></tr>`;
+    #bodyRowTemplate = ({ item } = {}) => {
+      return html`<tr role="row" tabindex="-1" part="row body-row" class="row body-row" ?loading="${!item}"></tr>`;
     };
   };
