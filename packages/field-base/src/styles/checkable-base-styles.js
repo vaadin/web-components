@@ -24,7 +24,7 @@ export const checkable = (part, propName = part) => css`
     column-gap: 0;
   }
 
-  :host(.form-layout-labels-aside) {
+  :host([theme~='label-aside'][data-form-layout-item]) {
     padding-inline-start: calc(var(--vaadin-input-field-label-aside-width, 0px) + var(--vaadin-input-field-label-aside-gap, 0px));
   }
 
