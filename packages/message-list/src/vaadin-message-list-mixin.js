@@ -241,9 +241,14 @@ export const MessageListMixin = (superClass) =>
       this._renderMessages(this.items);
     }
 
-    /** @private */
+    /**
+     * Formats the names of the typing users as a localized list, falling back
+     * to the abbreviation for users that have no name.
+     * @private
+     */
     __getTypingUserNames(users) {
-      return new Intl.ListFormat(navigator.language, { type: 'conjunction' }).format(users.map((user) => user.name));
+      const names = users.map((user) => user.name || user.abbr).filter((name) => !!name);
+      return new Intl.ListFormat(navigator.language, { type: 'conjunction' }).format(names);
     }
 
     /**

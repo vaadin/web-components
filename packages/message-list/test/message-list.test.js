@@ -564,6 +564,18 @@ describe('message-list', () => {
       expect(getTypingIndicator().userName).to.equal('Linsey Listy and Matt Mambo');
     });
 
+    it('should fall back to the abbreviation for users without a name', async () => {
+      messageList._usersTyping = [{ abbr: 'LL' }, users[1]];
+      await nextRender();
+      expect(getTypingIndicator().userName).to.equal('LL and Matt Mambo');
+    });
+
+    it('should not render a name for users without a name or abbreviation', async () => {
+      messageList._usersTyping = [{ colorIndex: 3 }, users[1]];
+      await nextRender();
+      expect(getTypingIndicator().userName).to.equal('Matt Mambo');
+    });
+
     it('should set typing users as the avatar group items', async () => {
       messageList._usersTyping = users;
       await nextRender();
