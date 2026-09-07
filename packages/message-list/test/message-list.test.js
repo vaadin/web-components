@@ -550,7 +550,7 @@ describe('message-list', () => {
       await nextRender();
       const indicator = getTypingIndicator();
       expect(indicator.localName).to.equal('vaadin-message');
-      expect(indicator.hidden).to.be.false;
+      expect(indicator.checkVisibility()).to.be.true;
     });
 
     it('should create typing indicator synchronously when users start typing', () => {
@@ -581,7 +581,8 @@ describe('message-list', () => {
       await nextRender();
       const avatarGroup = getTypingIndicator().querySelector('vaadin-avatar-group');
       expect(avatarGroup.getAttribute('slot')).to.equal('avatar');
-      expect(avatarGroup.items).to.equal(users);
+      const avatars = [...avatarGroup.querySelectorAll('vaadin-avatar:not([slot])')];
+      expect(avatars.map((avatar) => avatar.name)).to.eql(users.map((user) => user.name));
     });
 
     it('should set the typing indicator text', async () => {
@@ -657,10 +658,12 @@ describe('message-list', () => {
     it('should keep the typing indicator when messages are removed', async () => {
       messageList._usersTyping = users;
       await nextRender();
+      const indicator = getTypingIndicator();
 
       messageList.items = [];
       await nextRender();
-      expect(getTypingIndicator().isConnected).to.be.true;
+      expect(getTypingIndicator()).to.equal(indicator);
+      expect(indicator.checkVisibility()).to.be.true;
     });
 
     it('should not include the typing indicator in the messages', async () => {
