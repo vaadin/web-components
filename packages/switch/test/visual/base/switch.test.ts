@@ -5,10 +5,6 @@ import '../not-animated-styles.css';
 import '../../../src/vaadin-switch.js';
 import type { Switch } from '../../../src/vaadin-switch.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.switchComponent = true;
-
 describe('switch', () => {
   let div: HTMLDivElement;
   let element: Switch;

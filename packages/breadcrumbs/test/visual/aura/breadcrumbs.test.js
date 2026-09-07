@@ -5,10 +5,6 @@ import '@vaadin/aura/aura.css';
 import '../not-animated-styles.css';
 import '../../../src/vaadin-breadcrumbs.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.breadcrumbsComponent = true;
-
 describe('breadcrumbs', () => {
   let div;
 

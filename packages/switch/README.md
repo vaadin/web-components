@@ -2,8 +2,6 @@
 
 A binary on/off switch control for a single setting.
 
-> ⚠️ This component is experimental and the API may change. In order to use it, enable the feature flag by setting `window.Vaadin.featureFlags.switchComponent = true`.
-
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/switch)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/switch)](https://www.npmjs.com/package/@vaadin/switch)

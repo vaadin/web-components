@@ -53,6 +53,11 @@ describe('slider', () => {
       element.value = 50;
       await visualDiff(div, 'readonly-value');
     });
+
+    it('label', async () => {
+      element.label = 'Label';
+      await visualDiff(div, 'label');
+    });
   });
 
   describe('interaction', () => {

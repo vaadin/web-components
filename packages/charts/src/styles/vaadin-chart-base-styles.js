@@ -21,9 +21,32 @@ import '@vaadin/component-base/src/styles/user-colors.js';
 import { css, unsafeCSS } from 'lit';
 import { addGlobalStyles } from '@vaadin/component-base/src/css-utils.js';
 
-/* Tooltip styles, to support `"tooltip": { "outside": true }` config option */
+const seriesColorTokens = Array.from(
+  { length: 10 },
+  (_, i) =>
+    `--_color-${i}: var(--highcharts-color-${i}, var(--vaadin-charts-color-${i}, var(--vaadin-user-color-${i})));`,
+).join('\n    ');
+
+// A non-split tooltip carries highcharts-color-N on the tooltip element itself,
+// a split one on its child boxes, so both selectors are needed.
+const seriesColorRules = Array.from(
+  { length: 10 },
+  (_, i) =>
+    `.highcharts-tooltip-container .highcharts-tooltip.highcharts-color-${i},
+    .highcharts-tooltip-container .highcharts-tooltip .highcharts-color-${i} { fill: var(--_color-${i}); stroke: var(--_color-${i}); }`,
+).join('\n');
+
+/* Emitted at both scopes, so it looks absent from upstream Highcharts. Do not prune. */
 // postcss-lit-disable-next-line
 const tooltipStyles = (scope) => css`
+  ${unsafeCSS(scope)} .highcharts-strong {
+    font-weight: bold;
+  }
+
+  ${unsafeCSS(scope)} .highcharts-emphasized {
+    font-style: italic;
+  }
+
   ${unsafeCSS(scope)} .highcharts-tooltip {
     cursor: default;
     pointer-events: none;
@@ -35,6 +58,8 @@ const tooltipStyles = (scope) => css`
   ${unsafeCSS(scope)} .highcharts-tooltip text,
   ${unsafeCSS(scope)} .highcharts-tooltip foreignObject span {
     fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-data-label, var(--vaadin-text-color)));
+    /* The tooltip carries the series color, and stroke inherits into the glyphs. */
+    stroke-width: 0;
   }
 
   ${unsafeCSS(scope)} .highcharts-tooltip .highcharts-tracker {
@@ -65,6 +90,12 @@ const tooltipStyles = (scope) => css`
 addGlobalStyles(
   'vaadin-charts-tooltip',
   css`
+    .highcharts-tooltip-container {
+      ${unsafeCSS(seriesColorTokens)}
+    }
+
+    ${unsafeCSS(seriesColorRules)}
+
     .highcharts-tooltip-container .highcharts-root {
       overflow: visible;
       font-size: var(--vaadin-charts-font-size, 0.75rem);
@@ -87,20 +118,13 @@ export const chartStyles = css`
     font-size: var(--vaadin-charts-font-size, 0.75rem);
     line-height: normal;
 
-    /* Needs to be a color, not a background image */
+    /* Needs to be a color, not a background image. A theme may set it to transparent. */
     --_bg: var(--vaadin-charts-background, var(--vaadin-background-color));
+    /* What elements drawn on the canvas read against. A transparent canvas has to
+       declare what shows through instead. */
+    --_surface: var(--vaadin-charts-surface, var(--_bg));
 
-    --_color-0: var(--highcharts-color-0, var(--vaadin-charts-color-0, var(--vaadin-user-color-0)));
-    --_color-1: var(--highcharts-color-1, var(--vaadin-charts-color-1, var(--vaadin-user-color-1)));
-    --_color-2: var(--highcharts-color-2, var(--vaadin-charts-color-2, var(--vaadin-user-color-2)));
-    --_color-3: var(--highcharts-color-3, var(--vaadin-charts-color-3, var(--vaadin-user-color-3)));
-    --_color-4: var(--highcharts-color-4, var(--vaadin-charts-color-4, var(--vaadin-user-color-4)));
-    --_color-5: var(--highcharts-color-5, var(--vaadin-charts-color-5, var(--vaadin-user-color-5)));
-    --_color-6: var(--highcharts-color-6, var(--vaadin-charts-color-6, var(--vaadin-user-color-6)));
-    --_color-7: var(--highcharts-color-7, var(--vaadin-charts-color-7, var(--vaadin-user-color-7)));
-    --_color-8: var(--highcharts-color-8, var(--vaadin-charts-color-8, var(--vaadin-user-color-8)));
-    --_color-9: var(--highcharts-color-9, var(--vaadin-charts-color-9, var(--vaadin-user-color-9)));
-
+    ${unsafeCSS(seriesColorTokens)}
     --_color-0-label: oklch(from var(--_color-0) clamp(0, (0.62 - l) * 1000, 1) 0 0);
     --_color-1-label: oklch(from var(--_color-1) clamp(0, (0.62 - l) * 1000, 1) 0 0);
     --_color-2-label: oklch(from var(--_color-2) clamp(0, (0.62 - l) * 1000, 1) 0 0);
@@ -118,7 +142,7 @@ export const chartStyles = css`
     --_label: var(--vaadin-charts-label, var(--vaadin-text-color));
     --_secondary-label: var(--vaadin-charts-secondary-label, var(--vaadin-text-color-secondary));
     --_disabled-label: var(--vaadin-charts-disabled-label, var(--vaadin-text-color-disabled));
-    --_point-border: var(--vaadin-charts-point-border, var(--_bg));
+    --_point-border: var(--vaadin-charts-point-border, var(--_surface));
     --_axis-line: var(--vaadin-charts-axis-line, var(--vaadin-border-color-secondary));
     --_axis-title: var(--vaadin-charts-axis-title, var(--_secondary-label));
     --_axis-label: var(--vaadin-charts-axis-label, var(--_secondary-label));
@@ -166,14 +190,6 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-root text {
     stroke-width: 0;
-  }
-
-  :where([styled-mode]) .highcharts-strong {
-    font-weight: bold;
-  }
-
-  :where([styled-mode]) .highcharts-emphasized {
-    font-style: italic;
   }
 
   :where([styled-mode]) .highcharts-anchor {
@@ -478,7 +494,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-markers {
     stroke-width: 1px;
-    stroke: var(--highcharts-background-color, var(--_bg));
+    stroke: var(--highcharts-background-color, var(--_surface));
   }
 
   :where([styled-mode])
@@ -717,7 +733,7 @@ export const chartStyles = css`
   /* Loading */
   :where([styled-mode]) .highcharts-loading {
     position: absolute;
-    background-color: var(--highcharts-background-color, var(--_bg));
+    background-color: var(--highcharts-background-color, var(--_surface));
     opacity: 0.5;
     text-align: center;
     z-index: 10;
@@ -761,7 +777,7 @@ export const chartStyles = css`
 
   /* Highcharts More and modules */
   :where([styled-mode]) .highcharts-boxplot-box {
-    fill: var(--highcharts-background-color, var(--_bg));
+    fill: var(--highcharts-background-color, var(--_surface));
   }
 
   :where([styled-mode]) .highcharts-boxplot-median {
@@ -856,7 +872,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-navigator-handle {
     stroke: var(--highcharts-neutral-color-40, var(--_grid-line));
-    fill: var(--highcharts-neutral-color-5, var(--_bg));
+    fill: var(--highcharts-neutral-color-5, var(--_surface));
     cursor: ew-resize;
   }
 
@@ -900,7 +916,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-scrollbar-button {
-    fill: var(--highcharts-neutral-color-10, var(--_bg));
+    fill: var(--highcharts-neutral-color-10, var(--_surface));
     stroke: var(--highcharts-neutral-color-20);
     stroke-width: 1px;
   }
@@ -946,6 +962,7 @@ export const chartStyles = css`
     fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-button-label, var(--_label)));
   }
 
+  /* Inverts like vaadin-button[theme~='primary']. Lumo and Aura override both. */
   :where([styled-mode]) .highcharts-button-pressed {
     font-weight: bold;
     fill: var(--highcharts-highlight-color-10, var(--vaadin-charts-button-active-background, var(--_label)));
@@ -953,7 +970,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-button-pressed text {
-    fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-button-active-label, var(--_bg)));
+    fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-button-active-label, var(--_surface)));
     font-weight: bold;
   }
 
@@ -1006,7 +1023,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-crosshair-label text {
-    fill: var(--highcharts-background-color, var(--_bg));
+    fill: var(--highcharts-background-color, var(--_surface));
     font-size: 0.9em;
   }
 
@@ -1046,7 +1063,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-flags-series .highcharts-point .highcharts-label-box {
     stroke: var(--highcharts-neutral-color-40, var(--_grid-line));
-    fill: var(--highcharts-background-color, var(--_bg));
+    fill: var(--highcharts-background-color, var(--_surface));
     transition: fill 250ms;
   }
 
@@ -1055,7 +1072,7 @@ export const chartStyles = css`
       --highcharts-neutral-color-100,
       color-mix(in srgb, var(--vaadin-charts-contrast, var(--_label)) 60%, transparent)
     );
-    fill: var(--highcharts-highlight-color-20, var(--_bg));
+    fill: var(--highcharts-highlight-color-20, var(--_surface));
   }
 
   :where([styled-mode]) .highcharts-flags-series .highcharts-point text {
@@ -1134,7 +1151,7 @@ export const chartStyles = css`
   /* Exporting module */
   :where([styled-mode]) .highcharts-contextbutton {
     /* Fill is needed to capture hover */
-    fill: var(--highcharts-background-color, var(--_bg));
+    fill: var(--highcharts-background-color, var(--_surface));
     stroke: none;
     stroke-linecap: round;
   }
@@ -1151,7 +1168,7 @@ export const chartStyles = css`
 
   :where([styled-mode]) .highcharts-menu {
     border: none;
-    background: var(--highcharts-background-color, var(--_bg));
+    background: var(--highcharts-background-color, var(--_surface));
     border-radius: 3px;
     padding: 0.5em;
     box-shadow: 3px 3px 10px #888;
@@ -1171,7 +1188,7 @@ export const chartStyles = css`
   }
 
   :where([styled-mode]) .highcharts-menu-item:hover {
-    background: var(--highcharts-neutral-color-5, var(--_bg));
+    background: var(--highcharts-neutral-color-5, var(--_surface));
   }
 
   /* Breadcrumbs */

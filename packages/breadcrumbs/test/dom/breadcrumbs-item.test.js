@@ -3,10 +3,6 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../../src/vaadin-breadcrumbs-item.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.breadcrumbsComponent = true;
-
 describe('vaadin-breadcrumbs-item', () => {
   let item;
 

@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
 import { enterKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-message-input.js';
@@ -165,6 +166,57 @@ describe('message-input', () => {
     it('should not throw on focus when not attached to the DOM', () => {
       const element = document.createElement('vaadin-message-input');
       expect(() => element.focus()).not.to.throw(Error);
+    });
+  });
+
+  describe('click', () => {
+    beforeEach(async () => {
+      // Extend message input host clickable area
+      messageInput.style.paddingInlineStart = '20px';
+      await nextFrame();
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    async function clickHostPadding() {
+      const rect = messageInput.getBoundingClientRect();
+      await sendMouse({
+        type: 'click',
+        position: [Math.round(rect.left + 10), Math.round(rect.top + rect.height / 2)],
+      });
+    }
+
+    it('should focus the text-area on host click', async () => {
+      await clickHostPadding();
+      expect(textArea.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should not set focus-ring on the text-area on host click', async () => {
+      await clickHostPadding();
+      expect(textArea.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should not blur the text-area on host click when it has focus', async () => {
+      textArea.focus();
+      const spy = sinon.spy();
+      textArea.addEventListener('focusout', spy);
+      await clickHostPadding();
+      expect(spy).to.be.not.called;
+    });
+
+    it('should allow selecting text on text-area click', async () => {
+      messageInput.value = 'hello world';
+      await nextFrame();
+      const input = textArea.inputElement;
+      const rect = input.getBoundingClientRect();
+      const y = Math.round(rect.top + rect.height / 2);
+      await sendMouse({ type: 'move', position: [Math.round(rect.left + 2), y] });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [Math.round(rect.left + 40), y] });
+      await sendMouse({ type: 'up' });
+      expect(input.selectionEnd).to.be.greaterThan(input.selectionStart);
     });
   });
 });

@@ -6,6 +6,9 @@ import '../../chart-not-animated-styles.js';
 import '../../../vaadin-chart.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { cleanupExport, prepareExport } from '../../../src/helpers.js';
+import { defineSharedScreenshotTests } from '../chart.common.js';
+
+defineSharedScreenshotTests();
 
 describe('chart', () => {
   let element;
