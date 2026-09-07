@@ -35,19 +35,19 @@ snapshots["vaadin-form-layout auto-responsive basic host labelsAside"] =
   style="--_min-columns: 1; --_max-columns: 1;"
 >
   <input
-    data-form-layout-labels-aside=""
+    class="form-layout-labels-aside"
     placeholder="First name"
   >
   <input
-    data-form-layout-labels-aside=""
+    class="form-layout-labels-aside"
     placeholder="Last name"
   >
   <input
-    data-form-layout-labels-aside=""
+    class="form-layout-labels-aside"
     placeholder="Email"
   >
   <input
-    data-form-layout-labels-aside=""
+    class="form-layout-labels-aside"
     placeholder="Phone"
   >
 </vaadin-form-layout>

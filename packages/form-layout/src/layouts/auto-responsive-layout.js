@@ -62,7 +62,7 @@ export class AutoResponsiveLayout extends AbstractLayout {
     this.__children.forEach((child) => {
       child.style.removeProperty('--_grid-colstart');
       child.style.removeProperty('--_grid-colspan');
-      child.removeAttribute('data-form-layout-labels-aside');
+      child.classList.remove('form-layout-labels-aside');
     });
   }
 
@@ -139,7 +139,7 @@ export class AutoResponsiveLayout extends AbstractLayout {
 
     children.forEach((child) => {
       if (!isBreakLine(child)) {
-        child.toggleAttribute('data-form-layout-labels-aside', labelsAsideActive);
+        child.classList.toggle('form-layout-labels-aside', labelsAsideActive);
       }
     });
 
