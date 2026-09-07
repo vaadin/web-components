@@ -29,14 +29,8 @@
     margin-inline-end: var(--lumo-space-s);
   }
 
-  :host(:has([slot='prefix'])) ::slotted([slot='textarea']) {
+  :host([has-prefix]) ::slotted([slot='textarea']) {
     margin-inline-start: var(--lumo-space-s);
-  }
-
-  @scope {
-    :scope:has([slot='prefix']) ::slotted([slot='textarea']) {
-      margin-inline-start: var(--lumo-space-s);
-    }
   }
 
   ::slotted([slot='header']),

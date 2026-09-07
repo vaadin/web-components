@@ -45,6 +45,9 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  * `disabled`     | Set when the element is disabled
  * `focused`      | Set when the text area is focused
  * `focus-ring`   | Set when the text area is focused using the keyboard
+ * `has-header`   | Set when the element has content in the header slot
+ * `has-prefix`   | Set when the element has content in the prefix slot
+ * `has-footer`   | Set when the element has content in the footer slot
  * `has-tooltip`  | Set when the element has a slotted tooltip
  *
  * ### Internal components

@@ -6,12 +6,15 @@
 import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 
 const DEFAULT_I18N = {
   send: 'Send',
   message: 'Message',
 };
+
+const CONTENT_SLOTS = ['header', 'prefix', 'footer'];
 
 export const MessageInputMixin = (superClass) =>
   class MessageInputMixinClass extends I18nMixin(FocusMixin(superClass)) {
@@ -125,6 +128,16 @@ export const MessageInputMixin = (superClass) =>
 
       this._tooltipController = new TooltipController(this);
       this.addController(this._tooltipController);
+
+      this.__slotObserver = new SlotObserver(
+        this.shadowRoot,
+        () => {
+          CONTENT_SLOTS.forEach((name) => {
+            this.toggleAttribute(`has-${name}`, !!this.querySelector(`[slot="${name}"]`));
+          });
+        },
+        { syncInitial: true },
+      );
 
       this.addEventListener('mousedown', (event) => {
         // Focus the text area when clicking the space around it.
