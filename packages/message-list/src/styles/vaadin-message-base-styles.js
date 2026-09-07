@@ -152,6 +152,10 @@ export const messageStyles = css`
     padding-inline-start: 0;
   }
 
+  :host([typing-indicator]) [part='time'] {
+    display: none;
+  }
+
   :host([typing-indicator]:not([typing-indicator='text'])) [part='message'],
   :host([typing-indicator='minimal']) [part='content'] {
     mask-image: linear-gradient(
@@ -164,14 +168,6 @@ export const messageStyles = css`
     animation: --_vaadin-message-typing-slide 1.5s ease-in-out infinite;
     width: fit-content !important;
     color: var(--vaadin-text-color) !important;
-
-    [part='time'] {
-      display: none;
-    }
-
-    [part='header'] {
-      display: contents;
-    }
   }
 
   @keyframes --_vaadin-message-typing-slide {
@@ -183,7 +179,6 @@ export const messageStyles = css`
   :host([typing-indicator='ellipsis']) {
     [part='message'] {
       line-height: inherit !important;
-      color: var(--vaadin-text-color-secondary) !important;
     }
 
     [part='message']::before {
