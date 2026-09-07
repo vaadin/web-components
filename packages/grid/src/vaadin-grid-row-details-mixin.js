@@ -84,8 +84,8 @@ export const RowDetailsMixin = (superClass) =>
       if (this._columnTree) {
         // Only update the rows if the column tree has already been initialized
         this._getRenderedRows().forEach((row) => {
-          if (!row.querySelector('[part~=details-cell]')) {
-            this.__initRow(row);
+          if (!row.__detailsCell) {
+            this.__renderBodyRow(row);
             this.__updateRow(row);
             return;
           }
