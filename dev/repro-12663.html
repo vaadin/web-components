@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repro #12663</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/badge';
+      import '@vaadin/button';
+      import '@vaadin/dialog';
+
+      const rows = document.querySelector('#rows');
+
+      function row(label) {
+        const div = document.createElement('div');
+        div.className = 'row';
+        div.innerHTML = `<code>${label}</code>`;
+        const host = document.createElement('span');
+        div.appendChild(host);
+        rows.appendChild(div);
+        return host;
+      }
+
+      // The failing pattern: an empty text node is appended to the badge, the badge is
+      // connected, and only then the text is written into the existing node. This is what
+      // Flow's client does - `TextBindingStrategy.create()` returns `createTextNode("")`
+      // and `bind()` later calls `htmlNode.setData(text)`.
+      function appendThenFillTextInPlace(host, id) {
+        const badge = document.createElement('vaadin-badge');
+        badge.id = id;
+        const text = document.createTextNode('');
+        badge.appendChild(text);
+        host.appendChild(badge);
+        text.data = 'Aktiv';
+      }
+
+      // Control: same node, but filled before the badge is connected.
+      function fillTextInPlaceThenAppend(host, id) {
+        const badge = document.createElement('vaadin-badge');
+        badge.id = id;
+        const text = document.createTextNode('');
+        badge.appendChild(text);
+        text.data = 'Aktiv';
+        host.appendChild(badge);
+      }
+
+      // Control: text set through `textContent`, which replaces the text node.
+      function appendThenSetTextContent(host, id) {
+        const badge = document.createElement('vaadin-badge');
+        badge.id = id;
+        host.appendChild(badge);
+        badge.textContent = 'Aktiv';
+      }
+
+      appendThenFillTextInPlace(row('2. FAILS: append, then fill the text node in place'), 'badge-fail');
+      fillTextInPlaceThenAppend(row('3. control: fill the text node in place, then append'), 'badge-control-order');
+      appendThenSetTextContent(row('4. control: append, then set textContent'), 'badge-control-textcontent');
+
+      // The reported case is a dialog, but the dialog is not the trigger: the same pattern
+      // fails outside any overlay, and a dialog badge built with `textContent` works.
+      const dialog = document.querySelector('#dialog');
+      dialog.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+        root.style.display = 'grid';
+        root.style.gap = '1rem';
+        root.style.justifyItems = 'start';
+        appendThenFillTextInPlace(root, 'badge-dialog-fail');
+        appendThenSetTextContent(root, 'badge-dialog-control');
+      };
+
+      document.querySelector('#open').addEventListener('click', () => {
+        dialog.opened = true;
+      });
+
+      window.report = () =>
+        [...document.querySelectorAll('vaadin-badge')].map((badge) => ({
+          id: badge.id,
+          text: badge.textContent,
+          hasContent: badge.hasAttribute('has-content'),
+          contentWidth: badge.shadowRoot.querySelector('[part="content"]').offsetWidth,
+        }));
+
+      window.printReport = () => {
+        document.querySelector('#result').textContent = window
+          .report()
+          .map(
+            (r) =>
+              `${r.hasContent ? 'OK  ' : 'FAIL'} ${r.id.padEnd(26)} has-content=${r.hasContent} contentWidth=${r.contentWidth} text="${r.text}"`,
+          )
+          .join('\n');
+      };
+
+      requestAnimationFrame(() => requestAnimationFrame(window.printReport));
+    </script>
+    <style>
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 0.5rem 0;
+      }
+      .row code {
+        min-width: 30rem;
+      }
+      #result {
+        background: #f5f5f5;
+        padding: 1rem;
+        white-space: pre;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2 class="heading">Badge: missing text (#12663)</h2>
+
+    <div id="rows">
+      <div class="row">
+        <code>1. control: static markup</code>
+        <span><vaadin-badge id="badge-control-static">Aktiv</vaadin-badge></span>
+      </div>
+    </div>
+
+    <pre id="result"></pre>
+
+    <p><vaadin-button id="open">Open dialog</vaadin-button></p>
+    <vaadin-dialog id="dialog" header-title="Dialog"></vaadin-dialog>
+  </body>
+</html>
