@@ -195,6 +195,12 @@ export * from './vaadin-form-layout-mixin.js';
  * `--vaadin-form-layout-row-spacing` | Length of the spacing between rows | `1em`
  * `--vaadin-form-layout-label-width` | Width of the label when labels are displayed aside | `8em`
  * `--vaadin-form-layout-label-spacing` | Length of the spacing between the label and the input when labels are displayed aside | `1em`
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute | Description
+ * ---|---
+ * `labels-aside-active` | Set when the `labelsAside` property is enabled and there is enough space to display labels beside the fields
  */
 declare class FormLayout extends FormLayoutMixin(ElementMixin(ThemableMixin(HTMLElement))) {}
 

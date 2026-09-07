@@ -36,6 +36,9 @@ export const formLayoutStyles = css`
     --_column-spacing: var(--vaadin-form-layout-column-spacing);
     --_row-spacing: var(--vaadin-form-layout-row-spacing);
 
+    --vaadin-field-side-label-width: var(--_label-width);
+    --vaadin-field-side-label-gap: var(--_label-spacing);
+
     align-self: stretch;
     display: block;
     max-width: 100%;
@@ -159,7 +162,7 @@ export const formLayoutStyles = css`
     --_max-width: var(--_max-width-labels-aside);
   }
 
-  :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
+  :host([auto-responsive][labels-aside-active]) #layout {
     --_form-item-labels-above: ' '; /* false */
     --_form-item-labels-aside: initial; /* true */
     --_grid-column-width: var(--_column-width-labels-aside);
