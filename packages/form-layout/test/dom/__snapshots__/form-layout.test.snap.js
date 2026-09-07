@@ -6,10 +6,22 @@ snapshots["vaadin-form-layout auto-responsive basic host default"] =
   auto-responsive=""
   style="--_min-columns: 1; --_max-columns: 1;"
 >
-  <input placeholder="First name">
-  <input placeholder="Last name">
-  <input placeholder="Email">
-  <input placeholder="Phone">
+  <input
+    data-form-layout-item=""
+    placeholder="First name"
+  >
+  <input
+    data-form-layout-item=""
+    placeholder="Last name"
+  >
+  <input
+    data-form-layout-item=""
+    placeholder="Email"
+  >
+  <input
+    data-form-layout-item=""
+    placeholder="Phone"
+  >
 </vaadin-form-layout>
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic host default */
@@ -19,10 +31,22 @@ snapshots["vaadin-form-layout auto-responsive basic host columnWidth"] =
   auto-responsive=""
   style="--_min-columns: 1; --_max-columns: 1; --_column-width: 15em;"
 >
-  <input placeholder="First name">
-  <input placeholder="Last name">
-  <input placeholder="Email">
-  <input placeholder="Phone">
+  <input
+    data-form-layout-item=""
+    placeholder="First name"
+  >
+  <input
+    data-form-layout-item=""
+    placeholder="Last name"
+  >
+  <input
+    data-form-layout-item=""
+    placeholder="Email"
+  >
+  <input
+    data-form-layout-item=""
+    placeholder="Phone"
+  >
 </vaadin-form-layout>
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic host columnWidth */
@@ -35,20 +59,24 @@ snapshots["vaadin-form-layout auto-responsive basic host labelsAside"] =
   style="--_min-columns: 1; --_max-columns: 1;"
 >
   <input
-    class="form-layout-labels-aside"
+    data-form-layout-item=""
     placeholder="First name"
+    theme="label-aside"
   >
   <input
-    class="form-layout-labels-aside"
+    data-form-layout-item=""
     placeholder="Last name"
+    theme="label-aside"
   >
   <input
-    class="form-layout-labels-aside"
+    data-form-layout-item=""
     placeholder="Email"
+    theme="label-aside"
   >
   <input
-    class="form-layout-labels-aside"
+    data-form-layout-item=""
     placeholder="Phone"
+    theme="label-aside"
   >
 </vaadin-form-layout>
 `;
@@ -60,10 +88,22 @@ snapshots["vaadin-form-layout auto-responsive basic host expandColumns"] =
   expand-columns=""
   style="--_min-columns: 1; --_max-columns: 1;"
 >
-  <input placeholder="First name">
-  <input placeholder="Last name">
-  <input placeholder="Email">
-  <input placeholder="Phone">
+  <input
+    data-form-layout-item=""
+    placeholder="First name"
+  >
+  <input
+    data-form-layout-item=""
+    placeholder="Last name"
+  >
+  <input
+    data-form-layout-item=""
+    placeholder="Email"
+  >
+  <input
+    data-form-layout-item=""
+    placeholder="Phone"
+  >
 </vaadin-form-layout>
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic host expandColumns */
@@ -74,10 +114,22 @@ snapshots["vaadin-form-layout auto-responsive basic host expandFields"] =
   expand-fields=""
   style="--_min-columns: 1; --_max-columns: 1;"
 >
-  <input placeholder="First name">
-  <input placeholder="Last name">
-  <input placeholder="Email">
-  <input placeholder="Phone">
+  <input
+    data-form-layout-item=""
+    placeholder="First name"
+  >
+  <input
+    data-form-layout-item=""
+    placeholder="Last name"
+  >
+  <input
+    data-form-layout-item=""
+    placeholder="Email"
+  >
+  <input
+    data-form-layout-item=""
+    placeholder="Phone"
+  >
 </vaadin-form-layout>
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic host expandFields */
@@ -122,14 +174,19 @@ snapshots["vaadin-form-layout auto-responsive host autoRows default"] =
   style="--_min-columns: 1; --_max-columns: 2;"
 >
   <input
+    data-form-layout-item=""
     placeholder="First name"
     style="--_grid-colstart: 1;"
   >
-  <input placeholder="Last name">
+  <input
+    data-form-layout-item=""
+    placeholder="Last name"
+  >
   <br>
   <input hidden="">
   <input
     colspan="2"
+    data-form-layout-item=""
     placeholder="Address"
     style="--_grid-colstart: 1; --_grid-colspan: 2;"
   >
@@ -144,14 +201,19 @@ snapshots["vaadin-form-layout auto-responsive host autoRows maxColumns < number 
   style="--_min-columns: 1; --_max-columns: 1;"
 >
   <input
+    data-form-layout-item=""
     placeholder="First name"
     style="--_grid-colstart: 1;"
   >
-  <input placeholder="Last name">
+  <input
+    data-form-layout-item=""
+    placeholder="Last name"
+  >
   <br>
   <input hidden="">
   <input
     colspan="2"
+    data-form-layout-item=""
     placeholder="Address"
     style="--_grid-colstart: 1; --_grid-colspan: 2;"
   >
@@ -166,14 +228,19 @@ snapshots["vaadin-form-layout auto-responsive host autoRows maxColumns > number 
   style="--_min-columns: 1; --_max-columns: 2;"
 >
   <input
+    data-form-layout-item=""
     placeholder="First name"
     style="--_grid-colstart: 1;"
   >
-  <input placeholder="Last name">
+  <input
+    data-form-layout-item=""
+    placeholder="Last name"
+  >
   <br>
   <input hidden="">
   <input
     colspan="2"
+    data-form-layout-item=""
     placeholder="Address"
     style="--_grid-colstart: 1; --_grid-colspan: 2;"
   >
@@ -188,14 +255,19 @@ snapshots["vaadin-form-layout auto-responsive host autoRows minColumns < number 
   style="--_min-columns: 1; --_max-columns: 2;"
 >
   <input
+    data-form-layout-item=""
     placeholder="First name"
     style="--_grid-colstart: 1;"
   >
-  <input placeholder="Last name">
+  <input
+    data-form-layout-item=""
+    placeholder="Last name"
+  >
   <br>
   <input hidden="">
   <input
     colspan="2"
+    data-form-layout-item=""
     placeholder="Address"
     style="--_grid-colstart: 1; --_grid-colspan: 2;"
   >
@@ -210,14 +282,19 @@ snapshots["vaadin-form-layout auto-responsive host autoRows minColumns > number 
   style="--_min-columns: 20; --_max-columns: 2;"
 >
   <input
+    data-form-layout-item=""
     placeholder="First name"
     style="--_grid-colstart: 1;"
   >
-  <input placeholder="Last name">
+  <input
+    data-form-layout-item=""
+    placeholder="Last name"
+  >
   <br>
   <input hidden="">
   <input
     colspan="2"
+    data-form-layout-item=""
     placeholder="Address"
     style="--_grid-colstart: 1; --_grid-colspan: 2;"
   >
@@ -231,13 +308,20 @@ snapshots["vaadin-form-layout auto-responsive host explicit rows default"] =
   style="--_min-columns: 1; --_max-columns: 2;"
 >
   <vaadin-form-row>
-    <input placeholder="First name">
-    <input placeholder="Last name">
+    <input
+      data-form-layout-item=""
+      placeholder="First name"
+    >
+    <input
+      data-form-layout-item=""
+      placeholder="Last name"
+    >
   </vaadin-form-row>
   <vaadin-form-row>
     <input hidden="">
     <input
       colspan="2"
+      data-form-layout-item=""
       placeholder="Address"
       style="--_grid-colspan: 2;"
     >
@@ -252,13 +336,20 @@ snapshots["vaadin-form-layout auto-responsive host explicit rows maxColumns < nu
   style="--_min-columns: 1; --_max-columns: 1;"
 >
   <vaadin-form-row>
-    <input placeholder="First name">
-    <input placeholder="Last name">
+    <input
+      data-form-layout-item=""
+      placeholder="First name"
+    >
+    <input
+      data-form-layout-item=""
+      placeholder="Last name"
+    >
   </vaadin-form-row>
   <vaadin-form-row>
     <input hidden="">
     <input
       colspan="2"
+      data-form-layout-item=""
       placeholder="Address"
       style="--_grid-colspan: 2;"
     >
@@ -273,13 +364,20 @@ snapshots["vaadin-form-layout auto-responsive host explicit rows maxColumns > nu
   style="--_min-columns: 1; --_max-columns: 2;"
 >
   <vaadin-form-row>
-    <input placeholder="First name">
-    <input placeholder="Last name">
+    <input
+      data-form-layout-item=""
+      placeholder="First name"
+    >
+    <input
+      data-form-layout-item=""
+      placeholder="Last name"
+    >
   </vaadin-form-row>
   <vaadin-form-row>
     <input hidden="">
     <input
       colspan="2"
+      data-form-layout-item=""
       placeholder="Address"
       style="--_grid-colspan: 2;"
     >
@@ -294,13 +392,20 @@ snapshots["vaadin-form-layout auto-responsive host explicit rows minColumns < nu
   style="--_min-columns: 1; --_max-columns: 2;"
 >
   <vaadin-form-row>
-    <input placeholder="First name">
-    <input placeholder="Last name">
+    <input
+      data-form-layout-item=""
+      placeholder="First name"
+    >
+    <input
+      data-form-layout-item=""
+      placeholder="Last name"
+    >
   </vaadin-form-row>
   <vaadin-form-row>
     <input hidden="">
     <input
       colspan="2"
+      data-form-layout-item=""
       placeholder="Address"
       style="--_grid-colspan: 2;"
     >
@@ -315,13 +420,20 @@ snapshots["vaadin-form-layout auto-responsive host explicit rows minColumns > nu
   style="--_min-columns: 20; --_max-columns: 2;"
 >
   <vaadin-form-row>
-    <input placeholder="First name">
-    <input placeholder="Last name">
+    <input
+      data-form-layout-item=""
+      placeholder="First name"
+    >
+    <input
+      data-form-layout-item=""
+      placeholder="Last name"
+    >
   </vaadin-form-row>
   <vaadin-form-row>
     <input hidden="">
     <input
       colspan="2"
+      data-form-layout-item=""
       placeholder="Address"
       style="--_grid-colspan: 2;"
     >
@@ -445,7 +557,10 @@ snapshots["vaadin-form-layout defaultAutoResponsiveFormLayout feature flag defau
   auto-responsive=""
   style="--_min-columns: 1; --_max-columns: 1;"
 >
-  <input placeholder="First name">
+  <input
+    data-form-layout-item=""
+    placeholder="First name"
+  >
 </vaadin-form-layout>
 `;
 /* end snapshot vaadin-form-layout defaultAutoResponsiveFormLayout feature flag default */
@@ -470,10 +585,12 @@ snapshots["vaadin-form-layout responsive-steps host switching to autoResponsive"
   style="--_min-columns: 1; --_max-columns: 1;"
 >
   <input
+    data-form-layout-item=""
     placeholder="First name"
     style=""
   >
   <input
+    data-form-layout-item=""
     placeholder="Last name"
     style=""
   >
