@@ -127,11 +127,11 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
     // Both slots use `syncInitial` because `has-content` and `has-icon` control the size of the
     // badge. Without it, consumers that measure content synchronously, e.g. auto-width columns in
     // vaadin-grid, would measure a badge whose content is still hidden by `display: none`.
-    const slot = this.shadowRoot.querySelector('slot:not([name])');
+    this.__contentSlot = this.shadowRoot.querySelector('slot:not([name])');
     this.__slotObserver = new SlotObserver(
-      slot,
-      ({ currentNodes }) => {
-        this.toggleAttribute('has-content', currentNodes.filter((node) => !isEmptyTextNode(node)).length > 0);
+      this.__contentSlot,
+      () => {
+        this.__updateHasContent();
       },
       { syncInitial: true },
     );
@@ -143,6 +143,22 @@ class Badge extends ElementMixin(ThemableMixin(PolylitMixin(LumoInjectionMixin(L
         this.toggleAttribute('has-icon', currentNodes.length > 0);
       },
       { syncInitial: true },
+    );
+
+    // Filling a slotted text node changes no assigned node, so it fires no `slotchange`.
+    // Flow relies on this: it appends an empty text node and sets its data later.
+    this.__textObserver = new MutationObserver(() => {
+      this.__updateHasContent();
+    });
+    this.__textObserver.observe(this, { characterData: true, subtree: true });
+  }
+
+  /** @private */
+  __updateHasContent() {
+    const nodes = this.__contentSlot.assignedNodes({ flatten: true });
+    this.toggleAttribute(
+      'has-content',
+      nodes.some((node) => !isEmptyTextNode(node)),
     );
   }
 }
