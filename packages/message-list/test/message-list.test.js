@@ -810,12 +810,14 @@ describe('message-list', () => {
     });
 
     it('should move focus out of the message list on Tab from the last message', async () => {
+      // A focusable element after the list, like the message input in a chat
+      const button = fixtureSync('<button>Send</button>');
       messageList._usersTyping = users;
       await nextRender();
       const lastMessage = messageList._messages[messageList._messages.length - 1];
       lastMessage.focus();
       await sendKeys({ press: 'Tab' });
-      expect(messageList.contains(document.activeElement)).to.be.false;
+      expect(document.activeElement).to.equal(button);
     });
   });
 
