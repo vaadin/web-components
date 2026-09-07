@@ -331,7 +331,7 @@ export const GridMixin = (superClass) =>
       for (let i = 0; i < count; i++) {
         const row = this.__createBodyRow();
         if (this._columnTree) {
-          this.__initRow(row, true);
+          this.__renderBodyRow(row);
         }
         rows.push(row);
       }
@@ -374,56 +374,6 @@ export const GridMixin = (superClass) =>
       // For now we only support tooltip on desktop
       if (!isAndroid && !isIOS) {
         this._hideTooltip(true);
-      }
-    }
-
-    /**
-     * @param {!HTMLTableRowElement} row
-     * @param {boolean} noNotify
-     * @private
-     */
-    __initRow(row, noNotify = false) {
-      this.__renderBodyRow(row);
-
-      const columns = this._columnTree[this._columnTree.length - 1];
-      const previousCells = row.__cells || [];
-      // Cache the cell references
-      row.__cells = [...row.children].filter((cell) => cell._column);
-      row.__detailsCell = row.querySelector('[part~="details-cell"]');
-
-      previousCells
-        .filter((cell) => !columns.includes(cell._column))
-        .forEach((cell) => {
-          const cells = cell._column._cells;
-          cells.splice(cells.indexOf(cell), 1);
-        });
-
-      row.__cells.forEach((cell) => {
-        const column = cell._column;
-        if (!column._cells) {
-          column._cells = [];
-        }
-        if (!column._cells.includes(cell)) {
-          column._cells.push(cell);
-        }
-        if (!noNotify) {
-          column._cells = [...column._cells];
-        }
-
-        if (column._focusButtonMode && !cell._focusButton) {
-          // Patch `focus()` to use the button
-          cell._focusButton = cell.firstElementChild;
-          cell.focus = (options) => cell._focusButton.focus(options);
-        }
-
-        if (row === this.$.sizer) {
-          column._sizerCell = cell;
-        }
-      });
-
-      if (row.__detailsCell) {
-        this._configureDetailsCell(row.__detailsCell);
-        this.__a11ySetRowDetailsCell(row, row.__detailsCell);
       }
     }
 
@@ -476,14 +426,18 @@ export const GridMixin = (superClass) =>
     /** @protected */
     _renderColumnTree() {
       iterateChildren(this.$.items, (row) => {
-        this.__initRow(row, true);
+        this.__renderBodyRow(row);
         this.__updateRow(row);
       });
 
       this.__renderHeaderFooter();
+      this.__renderSizerRow();
 
-      // Sizer rows
-      this.__initRow(this.$.sizer);
+      this._columnTree[this._columnTree.length - 1].forEach((column) => {
+        if (!column.hidden && column._cells) {
+          column._cells = [...column._cells];
+        }
+      });
 
       this._resizeHandler();
       this.__a11yUpdateHeaderRows();
