@@ -261,7 +261,12 @@ export const MessageListMixin = (superClass) =>
       const language = this.lang || document.documentElement.lang || navigator.language;
       if (this.__listFormatLanguage !== language) {
         this.__listFormatLanguage = language;
-        this.__listFormat = new Intl.ListFormat(language, { type: 'conjunction' });
+        try {
+          this.__listFormat = new Intl.ListFormat(language, { type: 'conjunction' });
+        } catch {
+          // Invalid language tag, e.g. "en_US", fall back to the browser language
+          this.__listFormat = new Intl.ListFormat(navigator.language, { type: 'conjunction' });
+        }
       }
       return this.__listFormat.format(names);
     }
