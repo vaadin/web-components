@@ -724,7 +724,7 @@ export const ChartMixin = (superClass) =>
         this.configuration = Highcharts.chart(this.$.chart, options);
       }
 
-      this.__forceResize();
+      this.__redrawOrganizationDataLabels();
     }
 
     /** @protected */
@@ -1480,24 +1480,26 @@ export const ChartMixin = (superClass) =>
     /**
      * @private
      * Workaround for https://github.com/highcharts/highcharts/issues/23443
-     * Forces a resize in the chart to make it calculate the labels positions
-     * correctly in a chart with "organization" series
+     * In styled mode the label CSS is not applied yet when "organization" data
+     * labels are first measured, so they need a second measurement pass.
      *
      * TODO: Remove when the related ticket is fixed
      */
-    __forceResize() {
-      const chart = this.configuration;
-      const { options } = chart;
-      const hasOrganizationSeries =
-        options.chart.styledMode &&
-        (options.chart.type === 'organization' || options.series.some((series) => series.type === 'organization'));
-      if (!hasOrganizationSeries) {
+    __redrawOrganizationDataLabels() {
+      if (!this.configuration.options.chart.styledMode) {
         return;
       }
 
+      // Series declared as <vaadin-chart-series> children are not on the chart yet,
+      // so the organization check waits for the frame too. Reading the chart there
+      // rather than capturing it also keeps a pending frame from holding a
+      // destroyed chart alive.
       requestAnimationFrame(() => {
-        chart.setSize(chart.chartWidth - 10, chart.chartHeight);
-        chart.setSize(null, null);
+        this.configuration?.series.forEach((series) => {
+          if (series.type === 'organization') {
+            series.drawDataLabels?.();
+          }
+        });
       });
     }
 
