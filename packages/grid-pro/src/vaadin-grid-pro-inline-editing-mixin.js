@@ -355,20 +355,22 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @private */
     _startEdit(cell, column) {
-      const isCellEditable = this._isCellEditable(cell);
-
       // TODO: remove `_editingDisabled` after Flow counterpart is updated.
-      if (this.disabled || this._editingDisabled || !isCellEditable) {
+      if (this.disabled || this._editingDisabled) {
         return;
       }
-      // Cancel debouncer enqueued on focusout
-      this._cancelStopEdit();
 
       // Scroll column into view synchronously, which also triggers lazy column
       // rendering to ensure cells for that column are in the DOM.
       this.scrollToColumn(column);
 
-      const model = this.__getRowModel(cell.__parentRow);
+      if (!this._isCellEditable(cell)) {
+        return;
+      }
+      // Cancel debouncer enqueued on focusout
+      this._cancelStopEdit();
+
+      const model = this.__getRowModel(cell.parentElement);
       this.__edited = { cell, column, model };
       column._startCellEdit(cell, model);
 
@@ -515,7 +517,7 @@ export const InlineEditingMixin = (superClass) =>
           const nextRow = this._getRowByIndex(nextIndex);
           // eslint-disable-next-line no-loop-func
           nextCell = nextRow && Array.from(nextRow.__cells).find((cell) => cell._column === nextColumn);
-          if (nextCell && this._isCellEditable(nextCell)) {
+          if (nextCell && this._isCellEditable(nextCell, nextRow)) {
             break;
           }
         }
@@ -546,7 +548,7 @@ export const InlineEditingMixin = (superClass) =>
         if (!this._isCellEditable(cell)) {
           // Cell is no longer editable, cancel edit
           this._stopEdit(true, true);
-        } else if (cell.__parentRow === row && item && this.getItemId(model.item) !== this.getItemId(item)) {
+        } else if (cell.parentElement === row && item && this.getItemId(model.item) !== this.getItemId(item)) {
           // Edited item identity has changed, stop edit
           this._stopEdit();
         }
@@ -564,17 +566,21 @@ export const InlineEditingMixin = (superClass) =>
       super._generateCellPartNames(row, model);
 
       iterateRowCells(row, (cell) => {
-        const isEditable = !row.hasAttribute('loading') && this._isCellEditable(cell);
+        const isEditable = !row.hasAttribute('loading') && this._isCellEditable(cell, row);
         const target = cell._focusButton || cell;
         updatePart(target, 'editable-cell', isEditable);
       });
     }
 
     /** @private */
-    _isCellEditable(cell) {
+    _isCellEditable(cell, row = cell.parentElement) {
       const column = cell._column;
       // Not editable if the column is not an edit column
       if (!this._isEditColumn(column)) {
+        return false;
+      }
+      // Not editable if the cell is detached from its row
+      if (!row) {
         return false;
       }
       // Cell is editable by default if isCellEditable is not configured
@@ -582,7 +588,6 @@ export const InlineEditingMixin = (superClass) =>
         return true;
       }
       // Otherwise, check isCellEditable function
-      const model = this.__getRowModel(cell.__parentRow);
-      return column.isCellEditable(model);
+      return column.isCellEditable(this.__getRowModel(row));
     }
   };

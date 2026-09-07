@@ -8,6 +8,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { getNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
 import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
+import { getBodyRowCells, iterateChildren } from './vaadin-grid-helpers.js';
 
 const timeouts = {
   SCROLLING: 500,
@@ -266,37 +267,43 @@ export const ScrollMixin = (superClass) =>
       this.__scrollToPendingColumn();
 
       const columnsInOrder = this._getColumnsInOrder();
-      let bodyContentHiddenChanged = false;
+
+      // Columns whose body content visibility changes, mapped to the new state
+      const changedColumns = new Map();
+      columnsInOrder.forEach((column) => {
+        const bodyContentHidden = this._lazyColumns && !this.__isColumnInViewport(column);
+        if (column._bodyContentHidden !== bodyContentHidden) {
+          changedColumns.set(column, bodyContentHidden);
+        }
+      });
 
       // Remove the column cells from the DOM if the column is outside the viewport.
       // Add the column cells to the DOM if the column is inside the viewport.
-      //
+      iterateChildren(this.$.items, (row) => {
+        getBodyRowCells(row).forEach((cell) => {
+          if (!changedColumns.has(cell._column)) {
+            return;
+          }
+
+          if (changedColumns.get(cell._column)) {
+            cell.remove();
+          } else {
+            // Add the cell to the correct DOM position in the row
+            const followingColumnCell = [...row.children].find(
+              (child) => columnsInOrder.indexOf(child._column) > columnsInOrder.indexOf(cell._column),
+            );
+            row.insertBefore(cell, followingColumnCell);
+          }
+        });
+      });
+
       // Update the _bodyContentHidden property of the column to reflect the current
       // visibility state and make it run renderers for the cells if necessary.
-      columnsInOrder.forEach((column) => {
-        const bodyContentHidden = this._lazyColumns && !this.__isColumnInViewport(column);
-
-        if (column._bodyContentHidden !== bodyContentHidden) {
-          bodyContentHiddenChanged = true;
-          column._cells.forEach((cell) => {
-            if (cell !== column._sizerCell) {
-              if (bodyContentHidden) {
-                cell.remove();
-              } else if (cell.__parentRow) {
-                // Add the cell to the correct DOM position in the row
-                const followingColumnCell = [...cell.__parentRow.children].find(
-                  (child) => columnsInOrder.indexOf(child._column) > columnsInOrder.indexOf(column),
-                );
-                cell.__parentRow.insertBefore(cell, followingColumnCell);
-              }
-            }
-          });
-        }
-
+      changedColumns.forEach((bodyContentHidden, column) => {
         column._bodyContentHidden = bodyContentHidden;
       });
 
-      if (bodyContentHiddenChanged) {
+      if (changedColumns.size > 0) {
         // Frozen columns may have changed their visibility
         this._frozenCellsChanged();
       }

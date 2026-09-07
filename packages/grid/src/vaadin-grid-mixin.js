@@ -461,7 +461,6 @@ export const GridMixin = (superClass) =>
             }
             updatePart(cell, 'cell', true);
             updatePart(cell, 'body-cell', true);
-            cell.__parentRow = row;
             // Cache the cell reference
             row.__cells.push(cell);
 
@@ -487,7 +486,6 @@ export const GridMixin = (superClass) =>
                 contentsFragment.appendChild(detailsCell._content);
               }
               this._configureDetailsCell(detailsCell);
-              detailsCell.__parentRow = row;
               row.appendChild(detailsCell);
               // Cache the details cell reference
               row.__detailsCell = detailsCell;

@@ -225,7 +225,8 @@ export const GridSelectionColumnBaseMixin = (superClass) =>
       // the row have run in the current task, as the selection column may
       // render before the row header column.
       queueMicrotask(() => {
-        const row = root.assignedSlot?.parentElement?.__parentRow;
+        const cell = root.assignedSlot?.parentElement;
+        const row = cell?.parentElement;
         if (!checkbox.isConnected || !row) {
           return;
         }
