@@ -7,10 +7,6 @@ import '../../../src/vaadin-breadcrumbs-item.js';
 import '@vaadin/icon';
 import '@vaadin/icons';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.breadcrumbsComponent = true;
-
 describe('breadcrumbs-item', () => {
   let div, element;
 
