@@ -57,58 +57,61 @@ describe('vaadin-chart styling', () => {
     });
   });
 
-  describe('contrast colours', () => {
+  describe('contrast colors', () => {
     const TRANSPARENT = 'rgba(0, 0, 0, 0)';
     const SURFACE = 'rgb(1, 2, 3)';
     const OPAQUE_BG = 'rgb(51, 51, 51)';
 
-    async function chartWith(style) {
+    let root;
+
+    // The properties are set before `chart-load`, as treemap points transition
+    // `stroke`: changing them afterwards would be read mid-transition.
+    async function chartWith(properties) {
       const chart = fixtureSync(`
-        <vaadin-chart type="treemap" timeline style="${style}">
+        <vaadin-chart type="treemap" timeline>
           <vaadin-chart-series values='[{ "name": "A", "value": 5 }, { "name": "B", "value": 3 }]'></vaadin-chart-series>
         </vaadin-chart>
       `);
+      Object.entries(properties).forEach(([name, value]) => chart.style.setProperty(name, value));
       await oneEvent(chart, 'chart-load');
-      return chart.shadowRoot;
+      root = chart.shadowRoot;
     }
 
     describe('transparent canvas', () => {
-      // Aura's configuration.
-      const STYLE = `--vaadin-charts-background: transparent; --vaadin-charts-surface: ${SURFACE}`;
-      let root;
-
       beforeEach(async () => {
-        root = await chartWith(STYLE);
+        // Aura's configuration.
+        await chartWith({ '--vaadin-charts-background': 'transparent', '--vaadin-charts-surface': SURFACE });
       });
 
       it('should leave the chart canvas transparent', () => {
         expect(getComputedStyle(root.querySelector('.highcharts-background')).fill).to.equal(TRANSPARENT);
       });
 
-      it('should paint treemap point borders in the surface colour', () => {
+      it('should paint treemap point borders in the surface color', () => {
         const point = root.querySelector('.highcharts-treemap-series .highcharts-point');
         expect(getComputedStyle(point).stroke).to.equal(SURFACE);
       });
 
-      it('should paint the pressed range selector label in the surface colour', () => {
+      it('should paint the pressed range selector label in the surface color', () => {
         expect(getComputedStyle(root.querySelector('.highcharts-button-pressed text')).fill).to.equal(SURFACE);
       });
 
-      // No screenshot covers the navigator handle.
-      it('should paint the navigator handle in the surface colour', () => {
+      it('should paint the navigator handle in the surface color', () => {
         expect(getComputedStyle(root.querySelector('.highcharts-navigator-handle')).fill).to.equal(SURFACE);
       });
     });
 
     describe('opaque canvas', () => {
-      it('should paint treemap point borders in the chart background colour', async () => {
-        const root = await chartWith(`--vaadin-charts-background: ${OPAQUE_BG}`);
+      beforeEach(async () => {
+        await chartWith({ '--vaadin-charts-background': OPAQUE_BG });
+      });
+
+      it('should paint treemap point borders in the chart background color', () => {
         const point = root.querySelector('.highcharts-treemap-series .highcharts-point');
         expect(getComputedStyle(point).stroke).to.equal(OPAQUE_BG);
       });
 
-      it('should paint the navigator handle in the chart background colour', async () => {
-        const root = await chartWith(`--vaadin-charts-background: ${OPAQUE_BG}`);
+      it('should paint the navigator handle in the chart background color', () => {
         expect(getComputedStyle(root.querySelector('.highcharts-navigator-handle')).fill).to.equal(OPAQUE_BG);
       });
     });
