@@ -148,6 +148,11 @@ export class PopoverFocusController {
     if (event.key !== 'Tab') {
       return;
     }
+    // Another controller (e.g. the one of a parent popover) has already moved
+    // focus for this event, so this one must not move it a second time.
+    if (event.defaultPrevented) {
+      return;
+    }
     if (event.shiftKey) {
       this.__handleShiftTab(event);
     } else {
