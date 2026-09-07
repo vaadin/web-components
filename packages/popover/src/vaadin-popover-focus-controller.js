@@ -56,6 +56,18 @@ export class PopoverFocusController {
       return;
     }
 
+    // Focus is on the popover itself: move into the content explicitly, so that
+    // the tab order does not depend on the browser's sequential focus navigation
+    // starting point (Firefox continues from the last clicked node).
+    if (!host.noTabFocus && isElementFocused(host)) {
+      const firstContent = getTabbableElements(host._overlayElement.$.content)[0];
+      if (firstContent) {
+        event.preventDefault();
+        firstContent.focus();
+        return;
+      }
+    }
+
     // Native Tab would land on the popover when DOM order places it right
     // after the current element. Skip past it via the logical list.
     const activeElement = getDeepActiveElement();
