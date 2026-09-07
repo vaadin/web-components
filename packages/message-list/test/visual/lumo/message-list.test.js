@@ -151,7 +151,7 @@ describe('message-list', () => {
         };
 
         const types = {
-          default: 'on',
+          default: '',
           ellipsis: 'ellipsis',
           minimal: 'minimal',
         };

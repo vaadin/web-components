@@ -81,7 +81,7 @@
       function updateTypingIndicator() {
         const type = typingIndicators.value;
         if (type !== 'off') {
-          list._typingIndicatorType = type;
+          list._typingIndicatorType = type === 'default' ? '' : type;
         }
         // Update in place with fresh user objects, like Flow does when it
         // sends a new JSON array, so that the avatar group sees every user
@@ -95,7 +95,7 @@
         const name = moreParticipants[(participants.length - 2) % moreParticipants.length];
         participants.push({ name, colorIndex: (participants.length + 3) % 7 });
         if (typingIndicators.value === 'off') {
-          typingIndicators.value = 'on';
+          typingIndicators.value = 'default';
         }
         updateTypingIndicator();
       });
@@ -127,7 +127,7 @@
       </vaadin-checkbox-group>
       <vaadin-radio-group id="typing-indicators" label="Typing Indicator" value="off">
         <vaadin-radio-button label="Off" value="off"></vaadin-radio-button>
-        <vaadin-radio-button label="Default" value="on"></vaadin-radio-button>
+        <vaadin-radio-button label="Default" value="default"></vaadin-radio-button>
         <vaadin-radio-button label="Ellipsis" value="ellipsis"></vaadin-radio-button>
         <vaadin-radio-button label="Minimal" value="minimal"></vaadin-radio-button>
       </vaadin-radio-group>
