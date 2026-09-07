@@ -252,12 +252,18 @@ export const MessageListMixin = (superClass) =>
 
     /**
      * Formats the names of the typing users as a localized list, falling back
-     * to the abbreviation for users that have no name.
+     * to the abbreviation for users that have no name. The list is joined in
+     * the language of the element, so that it matches the typing indicator text.
      * @private
      */
     __getTypingUserNames(users) {
       const names = users.map((user) => user.name || user.abbr).filter((name) => !!name);
-      return new Intl.ListFormat(navigator.language, { type: 'conjunction' }).format(names);
+      const language = this.lang || document.documentElement.lang || navigator.language;
+      if (this.__listFormatLanguage !== language) {
+        this.__listFormatLanguage = language;
+        this.__listFormat = new Intl.ListFormat(language, { type: 'conjunction' });
+      }
+      return this.__listFormat.format(names);
     }
 
     /**

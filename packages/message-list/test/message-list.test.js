@@ -590,6 +590,13 @@ describe('message-list', () => {
       expect(getTypingIndicator().userName).to.equal('Matt Mambo');
     });
 
+    it('should join the user names in the language of the element', async () => {
+      messageList.lang = 'fi';
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator().userName).to.equal('Linsey Listy ja Matt Mambo');
+    });
+
     it('should set typing users as the avatar group items', async () => {
       messageList._usersTyping = users;
       await nextRender();
