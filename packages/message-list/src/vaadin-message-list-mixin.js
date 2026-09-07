@@ -5,6 +5,7 @@
  */
 import { html, nothing, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { keyed } from 'lit/directives/keyed.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
@@ -102,6 +103,21 @@ export const MessageListMixin = (superClass) =>
     /** @protected */
     get _messages() {
       return [...this.querySelectorAll('vaadin-message:not([slot="typing-indicator"])')];
+    }
+
+    /**
+     * The text announced to assistive technology while users are typing,
+     * empty when no one is typing.
+     *
+     * @return {string}
+     * @private
+     */
+    get __typingStatus() {
+      const users = this._usersTyping;
+      if (!users || users.length === 0) {
+        return '';
+      }
+      return [this.__getTypingUserNames(users), this._typingIndicatorText].filter(Boolean).join(' ');
     }
 
     /** @protected */
@@ -226,22 +242,35 @@ export const MessageListMixin = (superClass) =>
     }
 
     /** @private */
+    __getTypingUserNames(users) {
+      return new Intl.ListFormat(navigator.language, { type: 'conjunction' }).format(users.map((user) => user.name));
+    }
+
+    /**
+     * Renders the typing indicator. It is inert and hidden from assistive
+     * technology, which is informed through the status live region instead.
+     *
+     * The avatar group is keyed by the users array so that a new group is
+     * created whenever the users change. Updating the items of an existing
+     * group would make it announce the changed users as joined and left.
+     * @private
+     */
     __renderTypingIndicator() {
       const users = this._usersTyping;
       if (users.length === 0) {
         return nothing;
       }
 
-      const userNames = new Intl.ListFormat(navigator.language, { type: 'conjunction' }).format(
-        users.map((user) => user.name),
-      );
-
       return html`<vaadin-message
         slot="typing-indicator"
         typing-indicator="${this._typingIndicatorType || ''}"
-        .userName="${userNames}"
-        ><vaadin-avatar-group slot="avatar" .items="${users}" .maxItemsVisible="${100}"></vaadin-avatar-group
-        ><span>${this._typingIndicatorText}</span></vaadin-message
+        aria-hidden="true"
+        inert
+        .userName="${this.__getTypingUserNames(users)}"
+        >${keyed(
+          users,
+          html`<vaadin-avatar-group slot="avatar" .items="${users}" .maxItemsVisible="${100}"></vaadin-avatar-group>`,
+        )}<span>${this._typingIndicatorText}</span></vaadin-message
       >`;
     }
 

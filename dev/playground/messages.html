@@ -8,6 +8,7 @@
     <script type="module" src="../common.js"></script>
 
     <script type="module">
+      import '@vaadin/button';
       import '@vaadin/checkbox-group';
       import '@vaadin/message-input';
       import '@vaadin/message-list';
@@ -74,12 +75,29 @@
         ];
       });
 
-      document.querySelector('#typing-indicators').addEventListener('change', (e) => {
-        list._usersTyping = [];
-        if (e.currentTarget.value !== 'off') {
-          list._typingIndicatorType = e.currentTarget.value;
-          list._usersTyping = participants;
+      const typingIndicators = document.querySelector('#typing-indicators');
+      const moreParticipants = ['Maya', 'Liam', 'Sofia', 'Noah', 'Aiden', 'Emma'];
+
+      function updateTypingIndicator() {
+        const type = typingIndicators.value;
+        if (type !== 'off') {
+          list._typingIndicatorType = type;
         }
+        // Update in place with fresh user objects, like Flow does when it
+        // sends a new JSON array, so that the avatar group sees every user
+        // as a new item
+        list._usersTyping = type === 'off' ? [] : participants.map((user) => ({ ...user }));
+      }
+
+      typingIndicators.addEventListener('change', updateTypingIndicator);
+
+      document.querySelector('#add-typing-user').addEventListener('click', () => {
+        const name = moreParticipants[(participants.length - 2) % moreParticipants.length];
+        participants.push({ name, colorIndex: (participants.length + 3) % 7 });
+        if (typingIndicators.value === 'off') {
+          typingIndicators.value = 'on';
+        }
+        updateTypingIndicator();
       });
     </script>
 
@@ -113,6 +131,7 @@
         <vaadin-radio-button label="Ellipsis" value="ellipsis"></vaadin-radio-button>
         <vaadin-radio-button label="Minimal" value="minimal"></vaadin-radio-button>
       </vaadin-radio-group>
+      <vaadin-button id="add-typing-user">Add typing user</vaadin-button>
     </section>
 
     <section class="section">

@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import {
   arrowDown,
   arrowRight,
@@ -667,6 +668,111 @@ describe('message-list', () => {
       arrowDown(lastMessage);
       expect(messageList._messages[0].hasAttribute('focused')).to.be.true;
       expect(getTypingIndicator().hasAttribute('focused')).to.be.false;
+    });
+
+    it('should hide the typing indicator from assistive technology', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator().getAttribute('aria-hidden')).to.equal('true');
+    });
+
+    it('should make the typing indicator inert', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      expect(getTypingIndicator().inert).to.be.true;
+    });
+
+    it('should not announce typing users changes', async () => {
+      // Global live region used by the avatar group announcements
+      const region = document.querySelector('body > [aria-live]');
+      messageList._usersTyping = users;
+      await nextRender();
+      region.textContent = '';
+
+      const clock = sinon.useFakeTimers();
+      try {
+        // Fresh user objects, like Flow sends them
+        messageList._usersTyping = [...users.map((user) => ({ ...user })), { name: 'Joan Doe', abbr: 'JD' }];
+        await clock.tickAsync(200);
+        expect(region.textContent).to.equal('');
+      } finally {
+        clock.restore();
+      }
+    });
+
+    it('should not focus the typing indicator avatars', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      const indicator = getTypingIndicator();
+      const avatar = indicator.querySelector('vaadin-avatar');
+      avatar.focus();
+      expect(indicator.contains(document.activeElement)).to.be.false;
+    });
+
+    describe('status live region', () => {
+      let status;
+
+      beforeEach(() => {
+        status = messageList.shadowRoot.querySelector('[role="status"]');
+      });
+
+      it('should have an empty status live region before anyone is typing', () => {
+        expect(status).to.be.ok;
+        expect(status.textContent.trim()).to.equal('');
+      });
+
+      it('should visually hide the status live region', async () => {
+        messageList._usersTyping = users;
+        await nextUpdate(messageList);
+        const rect = status.getBoundingClientRect();
+        expect(rect.width).to.be.at.most(1);
+        expect(rect.height).to.be.at.most(1);
+      });
+
+      it('should set the names of typing users and the text as status', async () => {
+        messageList._usersTyping = users;
+        await nextUpdate(messageList);
+        expect(status.textContent.trim()).to.equal('Linsey Listy and Matt Mambo Typing…');
+      });
+
+      it('should update the status when the typing users change', async () => {
+        messageList._usersTyping = users;
+        await nextUpdate(messageList);
+        messageList._usersTyping = [users[0]];
+        await nextUpdate(messageList);
+        expect(status.textContent.trim()).to.equal('Linsey Listy Typing…');
+      });
+
+      it('should update the status when the typing indicator text changes', async () => {
+        messageList._usersTyping = users;
+        messageList._typingIndicatorText = 'are typing';
+        await nextUpdate(messageList);
+        expect(status.textContent.trim()).to.equal('Linsey Listy and Matt Mambo are typing');
+      });
+
+      it('should only use the names when the typing indicator text is empty', async () => {
+        messageList._usersTyping = users;
+        messageList._typingIndicatorText = undefined;
+        await nextUpdate(messageList);
+        expect(status.textContent.trim()).to.equal('Linsey Listy and Matt Mambo');
+      });
+
+      it('should clear the status when no one is typing anymore', async () => {
+        messageList._usersTyping = users;
+        await nextUpdate(messageList);
+        messageList._usersTyping = [];
+        await nextUpdate(messageList);
+        expect(status.textContent.trim()).to.equal('');
+      });
+    });
+
+    it('should move focus out of the message list on Tab from the last message', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      const lastMessage = messageList._messages[messageList._messages.length - 1];
+      lastMessage.focus();
+      await sendKeys({ press: 'Tab' });
+      expect(messageList.contains(document.activeElement)).to.be.false;
     });
   });
 
