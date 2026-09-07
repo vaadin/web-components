@@ -459,6 +459,16 @@ describe('selecting items', () => {
         expectItems(['apple', 'banana', 'lemon', 'orange']);
       });
 
+      it('should update dropdown items after filter is cleared while opened', async () => {
+        comboBox.opened = true;
+        getFirstItem(comboBox).click();
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+        comboBox.inputElement.focus();
+        await sendKeys({ type: 'a' });
+        await sendKeys({ press: 'Backspace' });
+        expectItems(['orange', 'apple', 'banana', 'lemon']);
+      });
+
       it('should not include ghost items in the dropdown after clearing data provider cache', async () => {
         const allItems = ['apple', 'banana', 'lemon', 'orange'];
         comboBox.dataProvider = (_params, callback) => {

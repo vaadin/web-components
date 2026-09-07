@@ -110,6 +110,17 @@ describe('data provider filtering', () => {
       expect(openedSpy).to.be.not.called;
     });
 
+    it('should not toggle between opened and closed when clearing cache while loading', () => {
+      // Data provider that does not respond, like a pending server request
+      comboBox.dataProvider = sinon.spy();
+      comboBox.filter = 'Item';
+      // Clear the cache while the filtered page is still loading
+      comboBox.clearCache();
+      // Dropdown should not have been closed and re-opened
+      expect(openedSpy).to.be.not.called;
+      expect(comboBox.$.overlay.opened).to.be.true;
+    });
+
     it('should not toggle between opened and closed when setting a value', () => {
       // Filter for something that should return results
       comboBox.filter = 'Item';
