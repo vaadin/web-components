@@ -216,7 +216,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     static get observers() {
       return [
         '_selectedItemsChanged(selectedItems)',
-        '__openedOrItemsChanged(opened, _dropdownItems, loading, __keepOverlayOpened)',
+        '__openedOrItemsChanged(opened, _dropdownItems, loading)',
         '__updateOverflowChip(_overflow, _overflowItems, disabled, readonly)',
         '__updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
         '__updateTopGroup(selectedItemsOnTop, selectedItems, opened)',
@@ -492,10 +492,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /** @private */
-    __openedOrItemsChanged(opened, items, loading, keepOverlayOpened) {
+    __openedOrItemsChanged(opened, items, loading) {
       // Close the overlay if there are no items to display.
       // See https://github.com/vaadin/vaadin-combo-box/pull/964
-      this._overlayOpened = opened && (keepOverlayOpened || loading || !!items?.length);
+      this._overlayOpened = opened && (loading || !!items?.length);
     }
 
     /**

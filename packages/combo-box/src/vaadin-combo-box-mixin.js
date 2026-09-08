@@ -91,18 +91,12 @@ export const ComboBoxMixin = (superClass) =>
           type: String,
           sync: true,
         },
-
-        /** @private */
-        __keepOverlayOpened: {
-          type: Boolean,
-          sync: true,
-        },
       };
     }
 
     static get observers() {
       return [
-        '_openedOrItemsChanged(opened, _dropdownItems, loading, __keepOverlayOpened)',
+        '_openedOrItemsChanged(opened, _dropdownItems, loading)',
         '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
         '_updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
       ];
@@ -171,10 +165,10 @@ export const ComboBoxMixin = (superClass) =>
     }
 
     /** @private */
-    _openedOrItemsChanged(opened, items, loading, keepOverlayOpened) {
+    _openedOrItemsChanged(opened, items, loading) {
       // Close the overlay if there are no items to display.
       // See https://github.com/vaadin/vaadin-combo-box/pull/964
-      this._overlayOpened = opened && (keepOverlayOpened || loading || !!items?.length);
+      this._overlayOpened = opened && (loading || !!items?.length);
     }
 
     /**
