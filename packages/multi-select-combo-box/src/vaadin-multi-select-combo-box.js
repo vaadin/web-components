@@ -8,7 +8,7 @@ import './vaadin-multi-select-combo-box-container.js';
 import './vaadin-multi-select-combo-box-item.js';
 import './vaadin-multi-select-combo-box-overlay.js';
 import './vaadin-multi-select-combo-box-scroller.js';
-import { html, LitElement, nothing } from 'lit';
+import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -217,15 +217,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         .positionTarget="${this._inputField}"
         no-vertical-overlap
       >
-        ${
-          this._selectAllController.rendered
-            ? html`
-                <button part="select-all" type="button" @click="${this._selectAllController.onClick}">
-                  ${this._selectAllController.label}
-                </button>
-              `
-            : nothing
-        }
+        <button part="select-all" type="button" hidden></button>
         <slot name="overlay"></slot>
       </vaadin-multi-select-combo-box-overlay>
     `;

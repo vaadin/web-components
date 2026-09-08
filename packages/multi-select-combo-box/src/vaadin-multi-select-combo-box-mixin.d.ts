@@ -43,12 +43,22 @@ export interface MultiSelectComboBoxI18n {
   deselectFiltered?: string;
 }
 
-export type MultiSelectComboBoxSelectAllState = 'all' | 'none';
+export interface MultiSelectComboBoxSelectAllProvider {
+  /**
+   * Returns whether every item matching the given filter is selected,
+   * either directly or as a promise. May return `undefined` instead when
+   * the state can not be determined, in which case the button is not shown.
+   */
+  isAllSelected(params: { filter: string }): Promise<boolean | undefined> | boolean | undefined;
 
-export type MultiSelectComboBoxSelectAllCallback = (params: {
-  filter: string;
-  selected: boolean;
-}) => Promise<void> | void;
+  /**
+   * Adds every item matching the given filter to `selectedItems` when
+   * `selected` is `true`, and removes them otherwise. Returns a promise that
+   * resolves once `selectedItems` has been updated, or `undefined` when the
+   * update was applied synchronously.
+   */
+  setAllSelected(params: { filter: string; selected: boolean }): Promise<void> | void;
+}
 
 export declare function MultiSelectComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
@@ -200,42 +210,39 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
    * that do not match the filter keep their selection state.
    *
    * When using `dataProvider` and not every item matching the current
-   * filter is loaded, the button is only shown when both `selectAllState`
-   * and `selectAllCallback` are set.
+   * filter is loaded, the button is only shown when `selectAllProvider`
+   * is set.
    * @attr {boolean} select-all-button-visible
    */
   selectAllButtonVisible: boolean;
 
   /**
-   * The state of the select all button, either `all` when every item
-   * matching the current filter is selected, or `none` otherwise. The button
-   * offers to deselect the items when the state is `all`, and to select them
-   * otherwise.
+   * An object that handles the select all button while using `dataProvider`
+   * and not every item matching the current filter is loaded, in which
+   * case the component can neither compute the state of the button nor
+   * update `selectedItems` itself. Ignored otherwise. The button is not
+   * shown in that case unless the provider is set.
    *
-   * Only used together with `dataProvider` when not every item matching
-   * the current filter is loaded, in which case the component can not
-   * compute the state itself. Ignored otherwise.
+   * The object must implement the following functions:
+   *
+   * - `isAllSelected(params)` Called with `params.filter`, the filter the
+   *   user has typed into the input field, whenever the component needs to
+   *   know whether every item matching the filter is selected: after the
+   *   items for a filter have been loaded, and after `selectedItems` has
+   *   changed. Must return a boolean, or a promise resolving to one. May
+   *   return `undefined` instead when the state can not be determined, in
+   *   which case the button is not shown.
+   * - `setAllSelected(params)` Called when the user clicks the button, with
+   *   `params.filter` and `params.selected`, which is `true` when all items
+   *   matching the filter should be added to `selectedItems`, and `false`
+   *   when they should be removed from it. Must update `selectedItems`
+   *   accordingly and return a promise that resolves once the update has
+   *   been applied, or return `undefined` in case `selectedItems` was
+   *   updated synchronously.
+   *
+   * The button ignores clicks while waiting for either function to settle.
    */
-  selectAllState: MultiSelectComboBoxSelectAllState | null | undefined;
-
-  /**
-   * A function called when the user clicks the select all button while
-   * using `dataProvider` and not every item matching the current filter
-   * is loaded, in which case the component can not update `selectedItems`
-   * itself. Ignored otherwise.
-   *
-   * Receives a single `params` object with the following properties:
-   *
-   * - `params.filter` The filter the user has typed into the input field.
-   * - `params.selected` `true` when all items matching the filter should be
-   *   added to `selectedItems`, `false` when they should be removed from it.
-   *
-   * The function must update `selectedItems` accordingly and return a promise
-   * that resolves once the update has been applied, or return `undefined` in
-   * case `selectedItems` was updated synchronously. The button ignores
-   * further clicks until the returned promise settles.
-   */
-  selectAllCallback: MultiSelectComboBoxSelectAllCallback | null | undefined;
+  selectAllProvider: MultiSelectComboBoxSelectAllProvider | null | undefined;
 
   /**
    * Clears the selected items.

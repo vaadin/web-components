@@ -185,8 +185,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
          * that do not match the filter keep their selection state.
          *
          * When using `dataProvider` and not every item matching the current
-         * filter is loaded, the button is only shown when both `selectAllState`
-         * and `selectAllCallback` are set.
+         * filter is loaded, the button is only shown when `selectAllProvider`
+         * is set.
          * @attr {boolean} select-all-button-visible
          */
         selectAllButtonVisible: {
@@ -196,38 +196,34 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
 
         /**
-         * The state of the select all button, either `all` when every item
-         * matching the current filter is selected, or `none` otherwise. The button
-         * offers to deselect the items when the state is `all`, and to select them
-         * otherwise.
+         * An object that handles the select all button while using `dataProvider`
+         * and not every item matching the current filter is loaded, in which
+         * case the component can neither compute the state of the button nor
+         * update `selectedItems` itself. Ignored otherwise. The button is not
+         * shown in that case unless the provider is set.
          *
-         * Only used together with `dataProvider` when not every item matching
-         * the current filter is loaded, in which case the component can not
-         * compute the state itself. Ignored otherwise.
+         * The object must implement the following functions:
+         *
+         * - `isAllSelected(params)` Called with `params.filter`, the filter the
+         *   user has typed into the input field, whenever the component needs to
+         *   know whether every item matching the filter is selected: after the
+         *   items for a filter have been loaded, and after `selectedItems` has
+         *   changed. Must return a boolean, or a promise resolving to one. May
+         *   return `undefined` instead when the state can not be determined, in
+         *   which case the button is not shown.
+         * - `setAllSelected(params)` Called when the user clicks the button, with
+         *   `params.filter` and `params.selected`, which is `true` when all items
+         *   matching the filter should be added to `selectedItems`, and `false`
+         *   when they should be removed from it. Must update `selectedItems`
+         *   accordingly and return a promise that resolves once the update has
+         *   been applied, or return `undefined` in case `selectedItems` was
+         *   updated synchronously.
+         *
+         * The button ignores clicks while waiting for either function to settle.
+         *
+         * @type {MultiSelectComboBoxSelectAllProvider | null | undefined}
          */
-        selectAllState: {
-          type: String,
-          sync: true,
-        },
-
-        /**
-         * A function called when the user clicks the select all button while
-         * using `dataProvider` and not every item matching the current filter
-         * is loaded, in which case the component can not update `selectedItems`
-         * itself. Ignored otherwise.
-         *
-         * Receives a single `params` object with the following properties:
-         *
-         * - `params.filter` The filter the user has typed into the input field.
-         * - `params.selected` `true` when all items matching the filter should be
-         *   added to `selectedItems`, `false` when they should be removed from it.
-         *
-         * The function must update `selectedItems` accordingly and return a promise
-         * that resolves once the update has been applied, or return `undefined` in
-         * case `selectedItems` was updated synchronously. The button ignores
-         * further clicks until the returned promise settles.
-         */
-        selectAllCallback: {
+        selectAllProvider: {
           type: Object,
           sync: true,
         },
@@ -283,12 +279,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     static get defaultI18n() {
       return DEFAULT_I18N;
-    }
-
-    constructor() {
-      super();
-
-      this._selectAllController = new SelectAllController(this);
     }
 
     /**
@@ -413,10 +403,12 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /** @protected */
-    willUpdate(props) {
-      super.willUpdate(props);
+    firstUpdated(props) {
+      super.firstUpdated(props);
 
-      this._selectAllController.update(props);
+      // Created before `updated`, where observers run, so that the observers
+      // and the checks below can rely on the controller existing.
+      this._selectAllController = new SelectAllController(this, this.shadowRoot.querySelector('[part="select-all"]'));
     }
 
     /** @protected */
@@ -452,6 +444,24 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         if (this.dataProvider) {
           this.clearCache();
         }
+      }
+
+      const selectAllProps = [
+        'selectAllButtonVisible',
+        'selectAllProvider',
+        'readonly',
+        'opened',
+        'dataProvider',
+        'filteredItems',
+        'selectedItems',
+        'size',
+        'loading',
+        'filter',
+        'itemIdPath',
+        '__effectiveI18n',
+      ];
+      if (selectAllProps.some((prop) => props.has(prop))) {
+        this._selectAllController.update();
       }
     }
 

@@ -29,8 +29,7 @@ import type { MultiSelectComboBoxMixinClass } from './vaadin-multi-select-combo-
 export {
   MultiSelectComboBoxI18n,
   MultiSelectComboBoxRenderer,
-  MultiSelectComboBoxSelectAllCallback,
-  MultiSelectComboBoxSelectAllState,
+  MultiSelectComboBoxSelectAllProvider,
 } from './vaadin-multi-select-combo-box-mixin.js';
 
 /**

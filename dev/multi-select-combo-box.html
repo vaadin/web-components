@@ -44,9 +44,9 @@
       <p class="heading">Select all with lazy loading</p>
       <p>
         Countries are loaded in pages of 20 with a simulated delay. With more than one page of results, the component
-        can not compute the select all state itself, so the page sets <code>selectAllState</code> and implements
-        <code>selectAllCallback</code>. Once the filter narrows the results to a single page, the component handles
-        select all on its own.
+        can not compute the select all state itself, so the page provides a <code>selectAllProvider</code> that the
+        component asks for the state and delegates clicks to. Once the filter narrows the results to a single page, the
+        component handles select all on its own.
       </p>
       <vaadin-multi-select-combo-box
         id="select-all-lazy"
@@ -333,45 +333,47 @@
         setTimeout(() => callback(page, filteredCountries.length), DELAY);
       }
 
-      // Emulates a host (such as a server) that knows the full data set. It keeps
-      // `selectAllState` up to date for the current filter and implements the
-      // `selectAllCallback` contract: update `selectedItems` and resolve afterwards.
-      function setupSelectAllHost(comboBox) {
-        function updateSelectAllState() {
-          const filteredCountries = filterCountries(comboBox.filter);
-          const isSelected = (country) => comboBox.selectedItems.includes(country);
-          const allSelected = filteredCountries.length > 0 && filteredCountries.every(isSelected);
-          comboBox.selectAllState = allSelected ? 'all' : 'none';
-        }
+      // Emulates a host (such as a server) that knows the full data set and
+      // implements the `selectAllProvider` contract: answer whether every item
+      // matching the filter is selected, and update `selectedItems` on request.
+      function createSelectAllProvider(comboBox) {
+        return {
+          isAllSelected({ filter }) {
+            return new Promise((resolve) => {
+              // Emulate network latency for demo purpose
+              setTimeout(() => {
+                const matches = filterCountries(filter);
+                const isSelected = (country) => comboBox.selectedItems.includes(country);
+                resolve(matches.length > 0 && matches.every(isSelected));
+              }, DELAY);
+            });
+          },
 
-        comboBox.selectAllCallback = ({ filter, selected }) => {
-          return new Promise((resolve) => {
-            // Emulate network latency for demo purpose
-            setTimeout(() => {
-              const matches = filterCountries(filter);
-              if (selected) {
-                const missing = matches.filter((country) => !comboBox.selectedItems.includes(country));
-                comboBox.selectedItems = [...comboBox.selectedItems, ...missing];
-              } else {
-                comboBox.selectedItems = comboBox.selectedItems.filter((country) => !matches.includes(country));
-              }
-              resolve();
-            }, DELAY);
-          });
+          setAllSelected({ filter, selected }) {
+            return new Promise((resolve) => {
+              // Emulate network latency for demo purpose
+              setTimeout(() => {
+                const matches = filterCountries(filter);
+                if (selected) {
+                  const missing = matches.filter((country) => !comboBox.selectedItems.includes(country));
+                  comboBox.selectedItems = [...comboBox.selectedItems, ...missing];
+                } else {
+                  comboBox.selectedItems = comboBox.selectedItems.filter((country) => !matches.includes(country));
+                }
+                resolve();
+              }, DELAY);
+            });
+          },
         };
-
-        comboBox.addEventListener('filter-changed', updateSelectAllState);
-        comboBox.addEventListener('selected-items-changed', updateSelectAllState);
-        updateSelectAllState();
       }
 
       const lazy = document.querySelector('#select-all-lazy');
       lazy.dataProvider = dataProvider;
       lazy.selectedItems = ['Finland', 'Germany'];
-      setupSelectAllHost(lazy);
+      lazy.selectAllProvider = createSelectAllProvider(lazy);
 
-      // Without `selectAllState` and `selectAllCallback` the button is only
-      // shown once the filter narrows the results down to a single page.
+      // Without `selectAllProvider` the button is only shown once the filter
+      // narrows the results down to a single page.
       const lazyNoCallback = document.querySelector('#select-all-lazy-no-callback');
       lazyNoCallback.dataProvider = dataProvider;
     </script>

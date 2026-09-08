@@ -33,8 +33,7 @@ import type {
   MultiSelectComboBoxInvalidChangedEvent,
   MultiSelectComboBoxOpenedChangedEvent,
   MultiSelectComboBoxRenderer,
-  MultiSelectComboBoxSelectAllCallback,
-  MultiSelectComboBoxSelectAllState,
+  MultiSelectComboBoxSelectAllProvider,
   MultiSelectComboBoxSelectedItemsChangedEvent,
   MultiSelectComboBoxValidatedEvent,
 } from '../../vaadin-multi-select-combo-box.js';
@@ -116,17 +115,32 @@ assertType<boolean>(narrowedComboBox.selectedItemsOnTop);
 assertType<boolean>(narrowedComboBox.autoExpandVertically);
 assertType<boolean>(narrowedComboBox.collapseChips);
 assertType<boolean>(narrowedComboBox.selectAllButtonVisible);
-assertType<MultiSelectComboBoxSelectAllState | null | undefined>(narrowedComboBox.selectAllState);
-assertType<'all' | 'none' | null | undefined>(narrowedComboBox.selectAllState);
-assertType<MultiSelectComboBoxSelectAllCallback | null | undefined>(narrowedComboBox.selectAllCallback);
+assertType<MultiSelectComboBoxSelectAllProvider | null | undefined>(narrowedComboBox.selectAllProvider);
 
-narrowedComboBox.selectAllCallback = (params) => {
-  assertType<string>(params.filter);
-  assertType<boolean>(params.selected);
+narrowedComboBox.selectAllProvider = {
+  isAllSelected: (params) => {
+    assertType<string>(params.filter);
+    return false;
+  },
+  setAllSelected: (params) => {
+    assertType<string>(params.filter);
+    assertType<boolean>(params.selected);
+  },
 };
 
-narrowedComboBox.selectAllCallback = async (params) => {
-  assertType<{ filter: string; selected: boolean }>(params);
+narrowedComboBox.selectAllProvider = {
+  isAllSelected: async (params) => {
+    assertType<{ filter: string }>(params);
+    return true;
+  },
+  setAllSelected: async (params) => {
+    assertType<{ filter: string; selected: boolean }>(params);
+  },
+};
+
+narrowedComboBox.selectAllProvider = {
+  isAllSelected: () => undefined,
+  setAllSelected: () => {},
 };
 
 // Mixins

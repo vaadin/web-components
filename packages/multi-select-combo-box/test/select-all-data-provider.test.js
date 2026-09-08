@@ -11,6 +11,24 @@ describe('select all with data provider', () => {
 
   const clickButton = () => getSelectAllButton(comboBox).click();
 
+  /** Opens the overlay and waits for the state received from the provider to be rendered. */
+  const open = async () => {
+    comboBox.opened = true;
+    await nextRender();
+  };
+
+  /** Waits for the component to ask the provider for the state, which happens after a microtask. */
+  const untilProviderAsked = () => Promise.resolve();
+
+  /**
+   * Creates a provider that answers state requests synchronously with the
+   * given result, and records calls to both functions.
+   */
+  const createProvider = (allSelected = false) => ({
+    isAllSelected: sinon.spy(() => allSelected),
+    setAllSelected: sinon.spy(),
+  });
+
   beforeEach(async () => {
     comboBox = fixtureSync(`<vaadin-multi-select-combo-box select-all-button-visible></vaadin-multi-select-combo-box>`);
     await nextRender();
@@ -20,10 +38,12 @@ describe('select all with data provider', () => {
 
   describe('single page', () => {
     const items = ['Apple', 'Banana', 'Lemon', 'Orange'];
+    let provider;
 
     beforeEach(() => {
       comboBox.dataProvider = getDataProvider(items);
-      comboBox.selectAllCallback = sinon.spy();
+      provider = createProvider();
+      comboBox.selectAllProvider = provider;
     });
 
     it('should not render button before items are loaded', () => {
@@ -41,20 +61,28 @@ describe('select all with data provider', () => {
       expect(getLabel()).to.equal('Deselect all');
     });
 
-    it('should select all items without calling the callback', () => {
+    it('should not ask the provider for the state', async () => {
+      comboBox.opened = true;
+      comboBox.selectedItems = [...items];
+      setInputValue(comboBox, 'an');
+      await nextRender();
+      expect(provider.isAllSelected).to.not.be.called;
+    });
+
+    it('should select all items without calling the provider', () => {
       comboBox.opened = true;
       clickButton();
       expect(comboBox.selectedItems).to.deep.equal(items);
-      expect(comboBox.selectAllCallback).to.not.be.called;
+      expect(provider.setAllSelected).to.not.be.called;
       expect(changeSpy).to.be.calledOnce;
     });
 
-    it('should deselect all items without calling the callback', () => {
+    it('should deselect all items without calling the provider', () => {
       comboBox.selectedItems = [...items];
       comboBox.opened = true;
       clickButton();
       expect(comboBox.selectedItems).to.deep.equal([]);
-      expect(comboBox.selectAllCallback).to.not.be.called;
+      expect(provider.setAllSelected).to.not.be.called;
     });
 
     it('should select only filtered items', () => {
@@ -71,101 +99,326 @@ describe('select all with data provider', () => {
     beforeEach(() => {
       comboBox.pageSize = 10;
       comboBox.dataProvider = getDataProvider(items);
-      comboBox.opened = true;
     });
 
-    describe('state', () => {
-      it('should not render button when selectAllState is not set', () => {
-        comboBox.selectAllCallback = () => {};
+    describe('provider', () => {
+      beforeEach(() => {
+        comboBox.opened = true;
+      });
+
+      it('should not render button when selectAllProvider is not set', () => {
         expect(getSelectAllButton(comboBox)).to.be.null;
       });
 
-      it('should not render button when selectAllCallback is not set', () => {
-        comboBox.selectAllState = 'none';
+      it('should not render button when the provider does not implement isAllSelected', () => {
+        comboBox.selectAllProvider = { setAllSelected: () => {} };
         expect(getSelectAllButton(comboBox)).to.be.null;
       });
 
-      it('should render button when both selectAllState and selectAllCallback are set', () => {
-        comboBox.selectAllCallback = () => {};
-        comboBox.selectAllState = 'none';
+      it('should not render button when the provider does not implement setAllSelected', () => {
+        comboBox.selectAllProvider = { isAllSelected: () => false };
+        expect(getSelectAllButton(comboBox)).to.be.null;
+      });
+
+      it('should render button once the provider has returned the state', async () => {
+        comboBox.selectAllProvider = createProvider();
+        expect(getSelectAllButton(comboBox)).to.be.null;
+        await nextRender();
         expect(getSelectAllButton(comboBox)).to.be.ok;
       });
 
-      it('should remove button when selectAllState is cleared', () => {
-        comboBox.selectAllCallback = () => {};
-        comboBox.selectAllState = 'none';
-        comboBox.selectAllState = null;
+      it('should not render button when the provider returns undefined', () => {
+        comboBox.selectAllProvider = { isAllSelected: () => undefined, setAllSelected: () => {} };
         expect(getSelectAllButton(comboBox)).to.be.null;
       });
 
-      describe('rendered', () => {
-        beforeEach(() => {
-          comboBox.selectAllCallback = () => {};
-          comboBox.selectAllState = 'none';
-        });
+      it('should not render button when the provider returns null', () => {
+        comboBox.selectAllProvider = { isAllSelected: () => null, setAllSelected: () => {} };
+        expect(getSelectAllButton(comboBox)).to.be.null;
+      });
 
-        it('should use selectAll label for none state', () => {
-          expect(getLabel()).to.equal('Select all');
-        });
+      it('should remove button when the provider is cleared', async () => {
+        comboBox.selectAllProvider = createProvider();
+        await nextRender();
+        comboBox.selectAllProvider = null;
+        expect(getSelectAllButton(comboBox)).to.be.null;
+      });
+    });
 
-        it('should use deselectAll label for all state', () => {
-          comboBox.selectAllState = 'all';
-          expect(getLabel()).to.equal('Deselect all');
-        });
+    describe('state', () => {
+      let provider;
 
-        it('should use filtered labels when a filter is set', () => {
-          setInputValue(comboBox, '1');
-          expect(getLabel()).to.equal('Select filtered');
+      beforeEach(() => {
+        provider = createProvider();
+        comboBox.selectAllProvider = provider;
+      });
 
-          comboBox.selectAllState = 'all';
-          expect(getLabel()).to.equal('Deselect filtered');
-        });
+      it('should not ask the provider while closed', async () => {
+        await nextRender();
+        expect(provider.isAllSelected).to.not.be.called;
+      });
 
-        it('should ignore selected items when computing the label', () => {
-          comboBox.selectedItems = ['Item 0'];
-          expect(getLabel()).to.equal('Select all');
-        });
+      it('should ask the provider once the items are loaded', async () => {
+        comboBox.opened = true;
+        await untilProviderAsked();
+        expect(provider.isAllSelected).to.be.calledOnce;
+        expect(provider.isAllSelected.firstCall.args[0]).to.deep.equal({ filter: '' });
+      });
 
-        it('should switch to computing the label locally when all filtered items are loaded', () => {
-          comboBox.selectedItems = ['Item 99'];
-          setInputValue(comboBox, '99');
-          expect(getLabel()).to.equal('Deselect filtered');
-        });
+      it('should use selectAll label when not all items are selected', async () => {
+        await open();
+        expect(getLabel()).to.equal('Select all');
+      });
 
-        it('should switch back to selectAllState when the filter is widened', () => {
-          comboBox.selectedItems = ['Item 99'];
-          setInputValue(comboBox, '99');
-          setInputValue(comboBox, '');
-          expect(getLabel()).to.equal('Select all');
-        });
+      it('should use deselectAll label when all items are selected', async () => {
+        comboBox.selectAllProvider = createProvider(true);
+        await open();
+        expect(getLabel()).to.equal('Deselect all');
+      });
+
+      it('should not ask the provider again while nothing has changed', async () => {
+        await open();
+        comboBox.requestUpdate();
+        await nextRender();
+        expect(provider.isAllSelected).to.be.calledOnce;
+      });
+
+      it('should ask the provider again with the new filter once its items are loaded', async () => {
+        await open();
+        setInputValue(comboBox, '1');
+        await untilProviderAsked();
+        expect(provider.isAllSelected).to.be.calledTwice;
+        expect(provider.isAllSelected.lastCall.args[0]).to.deep.equal({ filter: '1' });
+      });
+
+      it('should use filtered labels when a filter is set', async () => {
+        await open();
+        setInputValue(comboBox, 'Item');
+        await nextRender();
+        expect(getLabel()).to.equal('Select filtered');
+
+        comboBox.selectAllProvider = createProvider(true);
+        await nextRender();
+        expect(getLabel()).to.equal('Deselect filtered');
+      });
+
+      it('should ask the provider again when selected items change', async () => {
+        await open();
+        comboBox.selectedItems = ['Item 0'];
+        await untilProviderAsked();
+        expect(provider.isAllSelected).to.be.calledTwice;
+      });
+
+      it('should ask the provider again when the provider changes', async () => {
+        await open();
+        const otherProvider = createProvider(true);
+        comboBox.selectAllProvider = otherProvider;
+        await untilProviderAsked();
+        expect(otherProvider.isAllSelected).to.be.calledOnce;
+        await nextRender();
+        expect(getLabel()).to.equal('Deselect all');
+      });
+
+      it('should ask the provider again when the number of items changes', async () => {
+        await open();
+        comboBox.dataProvider = getDataProvider(items.slice(0, 50));
+        await untilProviderAsked();
+        expect(provider.isAllSelected).to.be.calledTwice;
+      });
+
+      it('should not ask the provider for a selection change while closed', async () => {
+        await open();
+        comboBox.opened = false;
+        comboBox.selectedItems = ['Item 0'];
+        await nextRender();
+        expect(provider.isAllSelected).to.be.calledOnce;
+      });
+
+      it('should ask the provider when opened after a selection change', async () => {
+        await open();
+        comboBox.opened = false;
+        comboBox.selectedItems = ['Item 0'];
+        comboBox.opened = true;
+        await untilProviderAsked();
+        expect(provider.isAllSelected).to.be.calledTwice;
+      });
+
+      it('should not ask the provider when loading another page', async () => {
+        await open();
+        comboBox.__dataProviderController.ensureFlatIndexLoaded(50);
+        expect(comboBox.filteredItems.filter((item) => typeof item === 'string').length).to.be.above(10);
+        await nextRender();
+        expect(provider.isAllSelected).to.be.calledOnce;
+      });
+
+      it('should compute the state locally when all filtered items are loaded', async () => {
+        await open();
+        comboBox.selectedItems = ['Item 99'];
+        setInputValue(comboBox, '99');
+        expect(getLabel()).to.equal('Deselect filtered');
+        await nextRender();
+        expect(provider.isAllSelected).to.not.be.calledWithMatch({ filter: '99' });
+      });
+
+      it('should switch back to the provider when the filter is widened', async () => {
+        await open();
+        comboBox.selectedItems = ['Item 99'];
+        setInputValue(comboBox, '99');
+        setInputValue(comboBox, '');
+        await nextRender();
+        expect(getLabel()).to.equal('Select all');
+      });
+
+      it('should not render the button when readonly', () => {
+        comboBox.readonly = true;
+        comboBox.opened = true;
+        expect(getSelectAllButton(comboBox)).to.be.null;
+      });
+    });
+
+    describe('async state', () => {
+      let provider, resolveState, rejectState;
+
+      beforeEach(async () => {
+        provider = {
+          isAllSelected: sinon.spy(() => {
+            return new Promise((resolve, reject) => {
+              resolveState = resolve;
+              rejectState = reject;
+            });
+          }),
+          setAllSelected: sinon.spy(),
+        };
+        comboBox.selectAllProvider = provider;
+        comboBox.opened = true;
+        await untilProviderAsked();
+      });
+
+      it('should not render button before the first state is received', () => {
+        expect(getSelectAllButton(comboBox)).to.be.null;
+      });
+
+      it('should render button once the state is received', async () => {
+        resolveState(true);
+        await nextRender();
+        expect(getLabel()).to.equal('Deselect all');
+      });
+
+      it('should keep the previous label while waiting for the state', async () => {
+        resolveState(true);
+        await nextRender();
+        setInputValue(comboBox, '1');
+        expect(getLabel()).to.equal('Deselect filtered');
+      });
+
+      it('should ignore clicks while waiting for the state', async () => {
+        resolveState(false);
+        await nextRender();
+        comboBox.selectedItems = ['Item 0'];
+        clickButton();
+        expect(provider.setAllSelected).to.not.be.called;
+      });
+
+      it('should set aria-disabled on the button while waiting for the state', async () => {
+        resolveState(false);
+        await nextRender();
+        expect(getSelectAllButton(comboBox).hasAttribute('aria-disabled')).to.be.false;
+
+        comboBox.selectedItems = ['Item 0'];
+        expect(getSelectAllButton(comboBox).getAttribute('aria-disabled')).to.equal('true');
+
+        resolveState(false);
+        await nextRender();
+        expect(getSelectAllButton(comboBox).hasAttribute('aria-disabled')).to.be.false;
+      });
+
+      it('should hide the button when the provider resolves to undefined', async () => {
+        resolveState(false);
+        await nextRender();
+        comboBox.selectedItems = ['Item 0'];
+        resolveState(undefined);
+        await nextRender();
+        expect(getSelectAllButton(comboBox)).to.be.null;
+      });
+
+      it('should ask the provider again when the selection changes while a request is pending', async () => {
+        comboBox.selectedItems = ['Item 0'];
+        await untilProviderAsked();
+        expect(provider.isAllSelected).to.be.calledTwice;
+      });
+
+      it('should ignore an outdated result and ask again', async () => {
+        const resolveOutdated = resolveState;
+        comboBox.selectedItems = ['Item 0'];
+        await untilProviderAsked();
+        resolveOutdated(true);
+        await nextRender();
+        expect(getSelectAllButton(comboBox)).to.be.null;
+        expect(provider.isAllSelected).to.be.calledTwice;
+
+        resolveState(false);
+        await nextRender();
+        expect(getLabel()).to.equal('Select all');
+      });
+
+      it('should not ask again after the provider rejects until something changes', async () => {
+        rejectState(new Error('failed'));
+        await nextRender();
+        comboBox.requestUpdate();
+        await nextRender();
+        expect(provider.isAllSelected).to.be.calledOnce;
+        expect(getSelectAllButton(comboBox)).to.be.null;
+
+        comboBox.selectedItems = ['Item 0'];
+        await untilProviderAsked();
+        expect(provider.isAllSelected).to.be.calledTwice;
+      });
+
+      it('should handle the provider throwing synchronously', async () => {
+        comboBox.selectAllProvider = {
+          isAllSelected: sinon.spy(() => {
+            throw new Error('failed');
+          }),
+          setAllSelected: () => {},
+        };
+        await nextRender();
+        expect(getSelectAllButton(comboBox)).to.be.null;
+        comboBox.selectedItems = ['Item 0'];
+        await untilProviderAsked();
+        expect(comboBox.selectAllProvider.isAllSelected).to.be.calledTwice;
       });
     });
 
     describe('clicking', () => {
-      let callback;
+      let provider;
 
-      beforeEach(() => {
-        callback = sinon.spy();
-        comboBox.selectAllCallback = callback;
-        comboBox.selectAllState = 'none';
+      beforeEach(async () => {
+        provider = createProvider();
+        comboBox.selectAllProvider = provider;
+        await open();
       });
 
-      it('should call the callback with filter and selected', () => {
+      it('should call setAllSelected with filter and selected', () => {
         clickButton();
-        expect(callback).to.be.calledOnce;
-        expect(callback.firstCall.args[0]).to.deep.equal({ filter: '', selected: true });
+        expect(provider.setAllSelected).to.be.calledOnce;
+        expect(provider.setAllSelected.firstCall.args[0]).to.deep.equal({ filter: '', selected: true });
       });
 
-      it('should call the callback with the current filter', () => {
-        setInputValue(comboBox, '1');
+      it('should call setAllSelected with the current filter', async () => {
+        setInputValue(comboBox, 'Item');
+        await nextRender();
         clickButton();
-        expect(callback.firstCall.args[0]).to.deep.equal({ filter: '1', selected: true });
+        expect(provider.setAllSelected.firstCall.args[0]).to.deep.equal({ filter: 'Item', selected: true });
       });
 
-      it('should call the callback with selected set to false when all items are selected', () => {
-        comboBox.selectAllState = 'all';
+      it('should call setAllSelected with selected set to false when all items are selected', async () => {
+        comboBox.selectAllProvider = createProvider(true);
+        await nextRender();
         clickButton();
-        expect(callback.firstCall.args[0]).to.deep.equal({ filter: '', selected: false });
+        expect(comboBox.selectAllProvider.setAllSelected.firstCall.args[0]).to.deep.equal({
+          filter: '',
+          selected: false,
+        });
       });
 
       it('should not change selected items', () => {
@@ -178,45 +431,48 @@ describe('select all with data provider', () => {
         expect(changeSpy).to.not.be.called;
       });
 
-      it('should keep the label from selectAllState', async () => {
+      it('should ask the provider for the state once the selection was applied', async () => {
+        comboBox.selectAllProvider = {
+          isAllSelected: sinon.spy(() => comboBox.selectedItems.length === items.length),
+          setAllSelected: () => {
+            comboBox.selectedItems = [...items];
+          },
+        };
+        await nextRender();
         clickButton();
         await nextRender();
-        expect(getLabel()).to.equal('Select all');
-      });
-
-      it('should update the label when the callback updates selectAllState synchronously', () => {
-        comboBox.selectAllCallback = () => {
-          comboBox.selectAllState = 'all';
-        };
-        clickButton();
+        expect(comboBox.selectAllProvider.isAllSelected).to.be.calledTwice;
         expect(getLabel()).to.equal('Deselect all');
       });
 
-      it('should not call the callback when all filtered items are loaded', () => {
+      it('should not call setAllSelected when all filtered items are loaded', () => {
         setInputValue(comboBox, '99');
         clickButton();
-        expect(callback).to.not.be.called;
+        expect(provider.setAllSelected).to.not.be.called;
         expect(comboBox.selectedItems).to.deep.equal(['Item 99']);
         expect(changeSpy).to.be.calledOnce;
       });
     });
 
-    describe('pending callback', () => {
-      let callback, resolveCallback, rejectCallback, validatedSpy, region, clock;
+    describe('pending setAllSelected', () => {
+      let provider, resolveSelection, rejectSelection, validatedSpy, region, clock;
 
       before(() => {
         region = document.querySelector('[aria-live]');
       });
 
-      beforeEach(() => {
-        callback = sinon.spy(() => {
-          return new Promise((resolve, reject) => {
-            resolveCallback = resolve;
-            rejectCallback = reject;
-          });
-        });
-        comboBox.selectAllCallback = callback;
-        comboBox.selectAllState = 'none';
+      beforeEach(async () => {
+        provider = {
+          isAllSelected: sinon.spy(() => false),
+          setAllSelected: sinon.spy(() => {
+            return new Promise((resolve, reject) => {
+              resolveSelection = resolve;
+              rejectSelection = reject;
+            });
+          }),
+        };
+        comboBox.selectAllProvider = provider;
+        await open();
         validatedSpy = sinon.spy();
         comboBox.addEventListener('validated', validatedSpy);
         clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
@@ -226,97 +482,138 @@ describe('select all with data provider', () => {
         clock.restore();
       });
 
-      it('should ignore clicks while the callback is pending', async () => {
+      it('should ignore clicks while pending', async () => {
         clickButton();
         await clock.tickAsync(0);
         clickButton();
-        expect(callback).to.be.calledOnce;
+        expect(provider.setAllSelected).to.be.calledOnce;
       });
 
-      it('should not set disabled attribute on the button while pending', async () => {
+      it('should set aria-disabled instead of disabled on the button while pending', async () => {
         clickButton();
         await clock.tickAsync(0);
         expect(getSelectAllButton(comboBox).hasAttribute('disabled')).to.be.false;
+        expect(getSelectAllButton(comboBox).getAttribute('aria-disabled')).to.equal('true');
+
+        resolveSelection();
+        await clock.tickAsync(0);
+        expect(getSelectAllButton(comboBox).hasAttribute('aria-disabled')).to.be.false;
       });
 
-      it('should announce the total after the callback resolves', async () => {
+      it('should ask the provider for the state when the selection changes while pending', async () => {
         clickButton();
         comboBox.selectedItems = [...items];
-        comboBox.selectAllState = 'all';
-        resolveCallback();
+        await clock.tickAsync(0);
+        expect(provider.isAllSelected).to.be.calledTwice;
+      });
+
+      it('should update the label from the provider once the selection was applied', async () => {
+        provider.isAllSelected = sinon.spy(() => comboBox.selectedItems.length === items.length);
+        clickButton();
+        comboBox.selectedItems = [...items];
+        resolveSelection();
+        await clock.tickAsync(0);
+        expect(getLabel()).to.equal('Deselect all');
+      });
+
+      it('should keep ignoring clicks until the selection was applied', async () => {
+        clickButton();
+        comboBox.selectedItems = [...items];
+        await clock.tickAsync(0);
+        clickButton();
+        expect(provider.setAllSelected).to.be.calledOnce;
+
+        resolveSelection();
+        await clock.tickAsync(0);
+        clickButton();
+        expect(provider.setAllSelected).to.be.calledTwice;
+      });
+
+      it('should announce the total once resolved', async () => {
+        clickButton();
+        comboBox.selectedItems = [...items];
+        resolveSelection();
         await clock.tickAsync(150);
         expect(region.textContent).to.equal('100 items selected');
       });
 
-      it('should announce cleared selection after the callback resolves', async () => {
+      it('should announce cleared selection once resolved', async () => {
         comboBox.selectedItems = [...items];
-        comboBox.selectAllState = 'all';
+        comboBox.selectAllProvider = { ...provider, isAllSelected: () => true };
+        await clock.tickAsync(0);
         clickButton();
         comboBox.selectedItems = [];
-        comboBox.selectAllState = 'none';
-        resolveCallback();
+        resolveSelection();
         await clock.tickAsync(150);
         expect(region.textContent).to.equal('Selection cleared');
       });
 
-      it('should validate after the callback resolves', async () => {
+      it('should validate once resolved', async () => {
         clickButton();
         expect(validatedSpy).to.not.be.called;
-        resolveCallback();
+        resolveSelection();
         await clock.tickAsync(0);
         expect(validatedSpy).to.be.calledOnce;
       });
 
-      it('should accept clicks again after the callback resolves', async () => {
+      it('should accept clicks again once resolved', async () => {
         clickButton();
-        resolveCallback();
+        resolveSelection();
         await clock.tickAsync(0);
         clickButton();
-        expect(callback).to.be.calledTwice;
+        expect(provider.setAllSelected).to.be.calledTwice;
       });
 
-      it('should not announce or validate when the callback rejects', async () => {
+      it('should not announce or validate when rejected', async () => {
         region.textContent = '';
         clickButton();
-        rejectCallback(new Error('failed'));
+        rejectSelection(new Error('failed'));
         await clock.tickAsync(150);
         expect(region.textContent).to.equal('');
         expect(validatedSpy).to.not.be.called;
       });
 
-      it('should accept clicks again when the callback rejects', async () => {
+      it('should accept clicks again when rejected', async () => {
         clickButton();
-        rejectCallback(new Error('failed'));
+        rejectSelection(new Error('failed'));
         await clock.tickAsync(0);
         clickButton();
-        expect(callback).to.be.calledTwice;
+        expect(provider.setAllSelected).to.be.calledTwice;
       });
 
-      it('should handle a callback throwing synchronously', async () => {
-        comboBox.selectAllCallback = sinon.spy(() => {
-          throw new Error('failed');
-        });
-        clickButton();
-        await clock.tickAsync(0);
-        clickButton();
-        expect(comboBox.selectAllCallback).to.be.calledTwice;
-      });
-
-      it('should announce the total when the callback returns synchronously', async () => {
-        comboBox.selectAllCallback = () => {
-          comboBox.selectedItems = ['Item 0', 'Item 1'];
+      it('should handle setAllSelected throwing synchronously', async () => {
+        comboBox.selectAllProvider = {
+          isAllSelected: () => false,
+          setAllSelected: sinon.spy(() => {
+            throw new Error('failed');
+          }),
         };
+        await clock.tickAsync(0);
+        clickButton();
+        await clock.tickAsync(0);
+        clickButton();
+        expect(comboBox.selectAllProvider.setAllSelected).to.be.calledTwice;
+      });
+
+      it('should announce the total when setAllSelected returns synchronously', async () => {
+        comboBox.selectAllProvider = {
+          isAllSelected: () => false,
+          setAllSelected: () => {
+            comboBox.selectedItems = ['Item 0', 'Item 1'];
+          },
+        };
+        await clock.tickAsync(0);
         clickButton();
         await clock.tickAsync(150);
         expect(region.textContent).to.equal('2 items selected');
         expect(validatedSpy).to.be.calledOnce;
       });
 
-      it('should not announce when the element is detached before the callback resolves', async () => {
+      it('should not announce when the element is detached before resolved', async () => {
         region.textContent = '';
         clickButton();
         comboBox.remove();
-        resolveCallback();
+        resolveSelection();
         await clock.tickAsync(150);
         expect(region.textContent).to.equal('');
       });
@@ -325,15 +622,14 @@ describe('select all with data provider', () => {
 
   describe('loading', () => {
     const items = Array.from({ length: 100 }, (_, i) => `Item ${i}`);
-    let callback, clock;
+    let provider, clock;
 
     beforeEach(() => {
       clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
-      callback = sinon.spy();
+      provider = createProvider();
       comboBox.pageSize = 10;
       comboBox.dataProvider = getAsyncDataProvider(items);
-      comboBox.selectAllCallback = callback;
-      comboBox.selectAllState = 'none';
+      comboBox.selectAllProvider = provider;
       comboBox.opened = true;
     });
 
@@ -341,31 +637,58 @@ describe('select all with data provider', () => {
       clock.restore();
     });
 
-    it('should render button while loading', () => {
+    it('should not ask the provider while loading', async () => {
+      expect(comboBox.loading).to.be.true;
+      await untilProviderAsked();
+      expect(provider.isAllSelected).to.not.be.called;
+    });
+
+    it('should ask the provider once loading has finished', async () => {
+      await clock.tickAsync(0);
+      expect(comboBox.loading).to.be.false;
+      expect(provider.isAllSelected).to.be.calledOnce;
+      await clock.tickAsync(0);
+      expect(getSelectAllButton(comboBox)).to.be.ok;
+    });
+
+    it('should keep rendering the button while loading a filtered page', async () => {
+      await clock.tickAsync(0);
+      setInputValue(comboBox, '1');
       expect(comboBox.loading).to.be.true;
       expect(getSelectAllButton(comboBox)).to.be.ok;
       expect(getSelectAllButton(comboBox).hasAttribute('disabled')).to.be.false;
     });
 
-    it('should ignore clicks while loading', () => {
-      clickButton();
-      expect(callback).to.not.be.called;
-    });
-
-    it('should call the callback once loading has finished', async () => {
+    it('should set aria-disabled on the button while loading', async () => {
       await clock.tickAsync(0);
-      expect(comboBox.loading).to.be.false;
-      clickButton();
-      expect(callback).to.be.calledOnce;
+      setInputValue(comboBox, '1');
+      expect(getSelectAllButton(comboBox).getAttribute('aria-disabled')).to.equal('true');
+
+      await clock.tickAsync(0);
+      expect(getSelectAllButton(comboBox).hasAttribute('aria-disabled')).to.be.false;
     });
 
     it('should ignore clicks while loading a filtered page', async () => {
       await clock.tickAsync(0);
-      setInputValue(comboBox, '99');
-      expect(comboBox.loading).to.be.true;
+      setInputValue(comboBox, '1');
       clickButton();
-      expect(callback).to.not.be.called;
-      expect(comboBox.selectedItems).to.deep.equal([]);
+      expect(provider.setAllSelected).to.not.be.called;
+    });
+
+    it('should ask the provider again once the filtered page is loaded', async () => {
+      await clock.tickAsync(0);
+      setInputValue(comboBox, '1');
+      await untilProviderAsked();
+      expect(provider.isAllSelected).to.be.calledOnce;
+      await clock.tickAsync(0);
+      expect(provider.isAllSelected).to.be.calledTwice;
+      expect(provider.isAllSelected.lastCall.args[0]).to.deep.equal({ filter: '1' });
+    });
+
+    it('should call setAllSelected once loading has finished', async () => {
+      await clock.tickAsync(0);
+      clickButton();
+      expect(provider.setAllSelected).to.be.calledOnce;
     });
 
     it('should select filtered items locally once the filtered page is loaded', async () => {
@@ -373,7 +696,7 @@ describe('select all with data provider', () => {
       setInputValue(comboBox, '99');
       await clock.tickAsync(0);
       clickButton();
-      expect(callback).to.not.be.called;
+      expect(provider.setAllSelected).to.not.be.called;
       expect(comboBox.selectedItems).to.deep.equal(['Item 99']);
     });
   });
