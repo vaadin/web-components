@@ -133,7 +133,7 @@ export const MessageInputMixin = (superClass) =>
         this.shadowRoot,
         () => {
           CONTENT_SLOTS.forEach((name) => {
-            this.toggleAttribute(`has-${name}`, !!this.querySelector(`[slot="${name}"]`));
+            this.toggleAttribute(`has-${name}`, !!this.querySelector(`:scope > [slot="${name}"]`));
           });
         },
         { syncInitial: true },

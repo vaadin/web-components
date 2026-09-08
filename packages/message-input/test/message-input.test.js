@@ -305,5 +305,16 @@ describe('message-input', () => {
         expect(input.hasAttribute(attr)).to.be.true;
       });
     });
+
+    it('should only set attributes for slots used by direct children', async () => {
+      const content = document.createElement('div');
+      content.setAttribute('slot', 'footer');
+      content.innerHTML = '<span slot="prefix"></span>';
+      messageInput.appendChild(content);
+      await nextFrame();
+
+      expect(messageInput.hasAttribute('has-footer')).to.be.true;
+      expect(messageInput.hasAttribute('has-prefix')).to.be.false;
+    });
   });
 });
