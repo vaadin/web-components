@@ -45,6 +45,8 @@ describe('message-input', () => {
 
         it('button focused', async () => {
           await sendKeys({ press: 'Tab' });
+          // Type a character to enable Send button
+          await sendKeys({ type: 'H' });
           await sendKeys({ press: 'Tab' });
           await visualDiff(div, `${dir}-button-focused`);
         });
