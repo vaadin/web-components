@@ -286,16 +286,18 @@ export const MessageListMixin = (superClass) =>
         return nothing;
       }
 
-      return html`<vaadin-message
-        slot="typing-indicator"
-        typing-indicator="${this._typingIndicatorType || ''}"
-        aria-hidden="true"
-        inert
-        .userName="${this.__getTypingUserNames(users)}"
-        >${keyed(users, html`<vaadin-avatar-group slot="avatar" .items="${users}"></vaadin-avatar-group>`)}<span
-          >${this._typingIndicatorText}</span
-        ></vaadin-message
-      >`;
+      return html`
+        <vaadin-message
+          slot="typing-indicator"
+          typing-indicator="${this._typingIndicatorType || ''}"
+          aria-hidden="true"
+          inert
+          .userName="${this.__getTypingUserNames(users)}"
+          >${keyed(users, html`<vaadin-avatar-group slot="avatar" .items="${users}"></vaadin-avatar-group>`)}<span
+            >${this._typingIndicatorText}</span
+          >
+        </vaadin-message>
+      `;
     }
 
     /** @private */
