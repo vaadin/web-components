@@ -271,4 +271,50 @@ describe('message-input', () => {
       expect(input.selectionEnd).to.be.greaterThan(input.selectionStart);
     });
   });
+
+  describe('content slots', () => {
+    ['header', 'prefix', 'footer'].forEach((slot) => {
+      const attr = `has-${slot}`;
+
+      it(`should not set ${attr} attribute by default`, () => {
+        expect(messageInput.hasAttribute(attr)).to.be.false;
+      });
+
+      it(`should set ${attr} attribute when adding content to the ${slot} slot`, async () => {
+        const content = document.createElement('div');
+        content.setAttribute('slot', slot);
+        messageInput.appendChild(content);
+        await nextFrame();
+        expect(messageInput.hasAttribute(attr)).to.be.true;
+      });
+
+      it(`should remove ${attr} attribute when removing content from the ${slot} slot`, async () => {
+        const content = document.createElement('div');
+        content.setAttribute('slot', slot);
+        messageInput.appendChild(content);
+        await nextFrame();
+
+        content.remove();
+        await nextFrame();
+        expect(messageInput.hasAttribute(attr)).to.be.false;
+      });
+
+      it(`should set ${attr} attribute for content slotted before the initial render`, async () => {
+        const input = fixtureSync(`<vaadin-message-input><div slot="${slot}"></div></vaadin-message-input>`);
+        await nextRender();
+        expect(input.hasAttribute(attr)).to.be.true;
+      });
+    });
+
+    it('should only set attributes for slots used by direct children', async () => {
+      const content = document.createElement('div');
+      content.setAttribute('slot', 'footer');
+      content.innerHTML = '<span slot="prefix"></span>';
+      messageInput.appendChild(content);
+      await nextFrame();
+
+      expect(messageInput.hasAttribute('has-footer')).to.be.true;
+      expect(messageInput.hasAttribute('has-prefix')).to.be.false;
+    });
+  });
 });

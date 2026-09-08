@@ -26,6 +26,16 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  * <vaadin-message-input></vaadin-message-input>
  * ```
  *
+ * ### Slots
+ *
+ * The following slots are available for adding content around the message input:
+ *
+ * Name       | Description
+ * -----------|-------------
+ * `header`   | Content displayed above the text area and controls
+ * `prefix`   | Content displayed before the text area
+ * `footer`   | Content displayed below the text area and controls
+ *
  * ### Styling
  *
  * The following state attributes are available for styling:
@@ -35,6 +45,9 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  * `disabled`     | Set when the element is disabled
  * `focused`      | Set when the text area is focused
  * `focus-ring`   | Set when the text area is focused using the keyboard
+ * `has-header`   | Set when the element has content in the header slot
+ * `has-prefix`   | Set when the element has content in the prefix slot
+ * `has-footer`   | Set when the element has content in the footer slot
  * `has-tooltip`  | Set when the element has a slotted tooltip
  *
  * ### Internal components
@@ -67,9 +80,15 @@ class MessageInput extends MessageInputMixin(
   /** @protected */
   render() {
     return html`
+      <slot name="header"></slot>
+
+      <slot name="prefix"></slot>
+
       <slot name="textarea"></slot>
 
       <slot name="button"></slot>
+
+      <slot name="footer"></slot>
 
       <slot name="tooltip"></slot>
     `;

@@ -10,6 +10,7 @@ export const messageInputStyles = css`
   :host {
     box-sizing: border-box;
     display: flex;
+    flex-wrap: wrap;
     max-height: 50vh;
     flex-shrink: 0;
     border: var(--vaadin-input-field-border-width, 1px) solid
@@ -22,6 +23,11 @@ export const messageInputStyles = css`
       var(--vaadin-input-field-bottom-end-radius, var(--_radius))
       var(--vaadin-input-field-bottom-start-radius, var(--_radius));
     background: var(--vaadin-input-field-background, var(--vaadin-background-color));
+    padding: var(
+      --vaadin-input-field-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
+    gap: var(--vaadin-input-field-gap, var(--vaadin-gap-s));
   }
 
   :host([dir='rtl']) {
@@ -53,8 +59,21 @@ export const messageInputStyles = css`
 
   ::slotted([slot='textarea']) {
     flex: 1;
+    --vaadin-input-field-padding: 0px !important;
     --vaadin-input-field-border-width: 0px !important;
     --vaadin-focus-ring-width: 0;
     --vaadin-input-field-background: transparent !important;
+    --vaadin-input-field-disabled-background: transparent !important;
+    --vaadin-input-field-border-radius: 0px !important;
+    --vaadin-field-default-width: 8em;
+    align-self: center;
+  }
+
+  ::slotted([slot='button']) {
+    margin-inline-start: auto;
+  }
+
+  slot:is([name='header'], [name='footer'])::slotted(*) {
+    width: 100%;
   }
 `;
