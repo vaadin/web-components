@@ -3,8 +3,9 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, render } from 'lit';
+import { html, nothing, render } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { keyed } from 'lit/directives/keyed.js';
 import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction-mixin.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
@@ -63,12 +64,60 @@ export const MessageListMixin = (superClass) =>
           observer: '__announceChanged',
           sync: true,
         },
+
+        /**
+         * An array of objects which will be rendered as avatars.
+         * The user objects can have the following properties:
+         * ```js
+         * Array<{
+         *   name: string,
+         *   abbr: string,
+         *   img: string,
+         *   colorIndex: number
+         * }>
+         * ```
+         * @private
+         */
+        _usersTyping: {
+          type: Array,
+          value: () => [],
+          observer: '__typingIndicatorChanged',
+          sync: true,
+        },
+
+        /** @private */
+        _typingIndicatorText: {
+          type: String,
+          value: 'Typing…',
+          observer: '__typingIndicatorChanged',
+        },
+
+        /** @private */
+        _typingIndicatorType: {
+          type: String,
+          observer: '__typingIndicatorChanged',
+        },
       };
     }
 
     /** @protected */
     get _messages() {
-      return [...this.querySelectorAll('vaadin-message')];
+      return [...this.querySelectorAll('vaadin-message:not([slot="typing-indicator"])')];
+    }
+
+    /**
+     * The text announced to assistive technology while users are typing,
+     * empty when no one is typing.
+     *
+     * @return {string}
+     * @private
+     */
+    get __typingStatus() {
+      const users = this._usersTyping;
+      if (!users || users.length === 0) {
+        return '';
+      }
+      return [this.__getTypingUserNames(users), this._typingIndicatorText].filter(Boolean).join(' ');
     }
 
     /** @protected */
@@ -175,6 +224,20 @@ export const MessageListMixin = (superClass) =>
     }
 
     /** @private */
+    __typingIndicatorChanged() {
+      const hadIndicator = !!this.querySelector('[slot="typing-indicator"]');
+      const closeToBottom = this.scrollHeight < this.clientHeight + this.scrollTop + 50;
+
+      this._renderMessages(this.items);
+
+      if (closeToBottom && !hadIndicator && this.querySelector('[slot="typing-indicator"]')) {
+        // The indicator grows the list, keep it in view like a new message
+        this.__scrollToLastMessagePending = true;
+        this.__flushScrollToLastMessage();
+      }
+    }
+
+    /** @private */
     __markdownChanged(markdown) {
       if (markdown && !customElements.get('vaadin-markdown')) {
         // Dynamically import the markdown component
@@ -185,6 +248,54 @@ export const MessageListMixin = (superClass) =>
           .then(() => this.__flushScrollToLastMessage());
       }
       this._renderMessages(this.items);
+    }
+
+    /**
+     * Formats the names of the typing users as a localized list, falling back
+     * to the abbreviation for users that have no name. The list is joined in
+     * the language of the element, so that it matches the typing indicator text.
+     * @private
+     */
+    __getTypingUserNames(users) {
+      const names = users.map((user) => user.name || user.abbr).filter((name) => !!name);
+      const language = this.lang || document.documentElement.lang || navigator.language;
+      if (this.__listFormatLanguage !== language) {
+        this.__listFormatLanguage = language;
+        try {
+          this.__listFormat = new Intl.ListFormat(language, { type: 'conjunction' });
+        } catch {
+          // Invalid language tag, e.g. "en_US", fall back to the browser language
+          this.__listFormat = new Intl.ListFormat(navigator.language, { type: 'conjunction' });
+        }
+      }
+      return this.__listFormat.format(names);
+    }
+
+    /**
+     * Renders the typing indicator. It is inert and hidden from assistive
+     * technology, which is informed through the status live region instead.
+     *
+     * The avatar group is keyed by the users array so that a new group is
+     * created whenever the users change. Updating the items of an existing
+     * group would make it announce the changed users as joined and left.
+     * @private
+     */
+    __renderTypingIndicator() {
+      const users = this._usersTyping;
+      if (users.length === 0) {
+        return nothing;
+      }
+
+      return html`<vaadin-message
+        slot="typing-indicator"
+        typing-indicator="${this._typingIndicatorType || ''}"
+        aria-hidden="true"
+        inert
+        .userName="${this.__getTypingUserNames(users)}"
+        >${keyed(users, html`<vaadin-avatar-group slot="avatar" .items="${users}"></vaadin-avatar-group>`)}<span
+          >${this._typingIndicatorText}</span
+        ></vaadin-message
+      >`;
     }
 
     /** @private */
@@ -212,7 +323,7 @@ export const MessageListMixin = (superClass) =>
                 }<vaadin-avatar slot="avatar"></vaadin-avatar
               ></vaadin-message>
             `,
-          )}
+          )}${this.__renderTypingIndicator()}
         `,
         this,
         { host: this },

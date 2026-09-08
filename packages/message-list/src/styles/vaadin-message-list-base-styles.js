@@ -69,4 +69,8 @@ export const messageListStyles = css`
   :host([theme~='bubble'][theme~='one-to-one']) ::slotted(vaadin-message) {
     --_vaadin-message-avatar-display: none;
   }
+
+  :host([theme~='bubble'][theme~='one-to-one']) ::slotted(vaadin-message[typing-indicator]) {
+    --vaadin-message-gap: 0;
+  }
 `;
