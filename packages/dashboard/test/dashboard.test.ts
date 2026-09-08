@@ -61,22 +61,16 @@ describe('dashboard', () => {
     });
   });
 
-  it('should render widget content into a slotted subtree', async () => {
-    dashboard = fixtureSync('<vaadin-dashboard></vaadin-dashboard>');
-    let measured: string | undefined;
+  it('should render slot for a new item before calling renderer', async () => {
+    const fontSizes: string[] = [];
     dashboard.renderer = (root) => {
-      const widget = document.createElement('vaadin-dashboard-widget');
-      const span = document.createElement('span');
-      span.textContent = 'x';
-      widget.appendChild(span);
-      root.appendChild(widget);
-      // The component is measured here, the way vaadin-chart measures on connect
-      measured = getComputedStyle(span).getPropertyValue('font-size');
+      fontSizes.push(getComputedStyle(root).fontSize);
     };
-    dashboard.items = [{ id: '0' }];
+    dashboard.items = [...dashboard.items, { id: '2' }];
     await updateComplete(dashboard);
 
-    expect(measured).to.not.equal('');
+    expect(fontSizes).to.have.lengthOf(3);
+    expect(fontSizes).to.not.include('');
   });
 
   it('should render a new widget', async () => {
