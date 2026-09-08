@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -13,7 +14,7 @@ const DEFAULT_I18N = {
 };
 
 export const MessageInputMixin = (superClass) =>
-  class MessageInputMixinClass extends I18nMixin(superClass) {
+  class MessageInputMixinClass extends I18nMixin(FocusMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -135,10 +136,38 @@ export const MessageInputMixin = (superClass) =>
       });
     }
 
+    /**
+     * Override method inherited from `FocusMixin` to forward focus
+     * to the text area, which is the focusable part of the component.
+     *
+     * @param {FocusOptions=} options
+     * @protected
+     * @override
+     */
     focus(options) {
       if (this._textArea) {
         this._textArea.focus(options);
+
+        // Set focus-ring attribute on programmatic focus by default
+        // unless explicitly disabled by `{ focusVisible: false }`.
+        if (options?.focusVisible !== false) {
+          this.setAttribute('focus-ring', '');
+        }
       }
+    }
+
+    /**
+     * Override method inherited from `FocusMixin` to only set the `focused`
+     * attribute when the text area is focused, and not when focus moves to
+     * the send button.
+     *
+     * @param {FocusEvent} event
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldSetFocus(event) {
+      return event.composedPath().includes(this._textArea);
     }
 
     /** @private */
