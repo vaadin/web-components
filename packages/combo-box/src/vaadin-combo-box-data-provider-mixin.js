@@ -120,10 +120,8 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       if (this.__previousDataProviderFilter !== filter) {
         this.__previousDataProviderFilter = filter;
 
-        this.__keepOverlayOpened = true;
-        this.size = undefined;
+        this.__dataProviderController.rootCache.size = undefined;
         this.clearCache();
-        this.__keepOverlayOpened = false;
       }
     }
 
@@ -152,7 +150,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
     /** @private */
     __onDataProviderPageRequested() {
-      this.loading = true;
+      this.__synchronizeControllerState();
     }
 
     /** @private */
@@ -179,14 +177,18 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
       this.__dataProviderController.clearCache();
 
-      this.__synchronizeControllerState();
-
+      // Request the first page before synchronizing the component state.
+      // Otherwise the component would observe an intermediate state where
+      // the items are empty but no request is pending, which would close
+      // the overlay and re-open it right away.
       if (this._shouldFetchData()) {
         this._forceNextRequest = false;
         this.__dataProviderController.loadFirstPage();
       } else {
         this._forceNextRequest = true;
       }
+
+      this.__synchronizeControllerState();
     }
 
     /**
@@ -240,9 +242,13 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       // will be requested in the `ready()` callback.
       if (this.__dataProviderInitialized && this.dataProvider) {
         const { rootCache } = this.__dataProviderController;
-        this.size = rootCache.size;
-        this.filteredItems = rootCache.items;
-        this.loading = this.__dataProviderController.isLoading();
+        // Apply all properties in one update so that observers depending on
+        // several of them never see a partially synchronized state.
+        this.setProperties({
+          size: rootCache.size,
+          filteredItems: rootCache.items,
+          loading: this.__dataProviderController.isLoading(),
+        });
       }
     }
 
