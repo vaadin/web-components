@@ -311,6 +311,15 @@ class Dashboard extends DashboardLayoutMixin(
     // Remove the unused wrappers
     wrappers.forEach((wrapper) => wrapper.remove());
 
+    // Flush the pending shadow update so that the <slot name="slot-N"> elements exist
+    // before any content is added to the wrappers. Without this, the wrappers are
+    // unassigned light DOM children of a shadow host for the duration of the async Lit
+    // update, which makes the whole subtree non-rendered: getComputedStyle() returns an
+    // empty declaration there, and components that measure themselves on first render
+    // (e.g. vaadin-chart, which boots Highcharts from a microtask in connectedCallback)
+    // compute wrong sizes and do not recover.
+    hostElement.performUpdate();
+
     requestAnimationFrame(() => {
       if (focusedWrapperWillBeRemoved) {
         // The wrapper containing the focused element was removed. Try to focus the element in the closest wrapper.
