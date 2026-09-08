@@ -16,6 +16,12 @@ export const field = css`
     --_has-error: ;
     --_gap: var(--vaadin-input-field-container-gap, var(--vaadin-gap-xs));
     --_gap-s: round(var(--_gap) / 3, 2px);
+    /* Height of a single-line input-field part. Consumed on ::before only, so 1lh resolves there. */
+    --_field-content-height: calc(
+      1lh + var(--vaadin-padding-block-container) * 2 + var(--vaadin-input-field-border-width, 1px) * 2
+    );
+    /* Effective input-field height the baseline guide mirrors; input field components raise it to the custom property */
+    --_field-input-height: var(--_field-content-height);
     display: inline-grid;
     grid-template:
       'label' auto var(--_helper-above-field, 'helper' auto) 'baseline' 0 'input' 1fr var(
@@ -55,6 +61,11 @@ export const field = css`
     grid-column: 1;
     grid-row: 1 / baseline;
     align-self: end;
+    /* Mirror the input container box so the text sits where the input text sits */
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: var(--vaadin-field-baseline-input-height, var(--_field-input-height));
     font-size: var(--vaadin-input-field-value-font-size, inherit);
     line-height: var(--vaadin-input-field-value-line-height, inherit);
     padding: var(
@@ -63,13 +74,7 @@ export const field = css`
     );
     border: var(--vaadin-input-field-border-width, 1px) solid transparent;
     pointer-events: none;
-    margin-bottom: calc(
-      var(
-          --vaadin-field-baseline-input-height,
-          (1lh + var(--vaadin-padding-block-container) * 2 + var(--vaadin-input-field-border-width, 1px) * 2)
-        ) *
-        -1
-    );
+    margin-bottom: calc(var(--vaadin-field-baseline-input-height, var(--_field-input-height)) * -1);
   }
 
   [class$='container'] {
@@ -193,5 +198,15 @@ export const field = css`
     [part='error-message']::before {
       background: CanvasText;
     }
+  }
+`;
+
+/**
+ * For components whose input-field part centers its content: the baseline guide follows
+ * `--vaadin-input-field-height` the same way the input container does (as a minimum height).
+ */
+export const fieldInputHeight = css`
+  :host {
+    --_field-input-height: max(var(--vaadin-input-field-height, 0px), var(--_field-content-height));
   }
 `;
