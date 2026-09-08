@@ -37,7 +37,7 @@ export const messageInputStyles = css`
     display: none !important;
   }
 
-  :host(:focus-within) {
+  :host([focused]) {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-input-field-border-width, 1px) * -1);
   }

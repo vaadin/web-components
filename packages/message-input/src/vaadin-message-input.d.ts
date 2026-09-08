@@ -40,6 +40,8 @@ export type MessageInputEventMap = HTMLElementEventMap & MessageInputCustomEvent
  * Attribute      | Description
  * ---------------|---------------------------------
  * `disabled`     | Set when the element is disabled
+ * `focused`      | Set when the text area is focused
+ * `focus-ring`   | Set when the text area is focused using the keyboard
  * `has-tooltip`  | Set when the element has a slotted tooltip
  *
  * ### Internal components
