@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
-import { enterKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { enterKeyDown, fixtureSync, mousedown, nextFrame, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-message-input.js';
 
@@ -167,6 +167,57 @@ describe('message-input', () => {
       const element = document.createElement('vaadin-message-input');
       expect(() => element.focus()).not.to.throw(Error);
     });
+
+    it('should toggle focused attribute on text-area focus and blur', () => {
+      textArea.focus();
+      expect(messageInput.hasAttribute('focused')).to.be.true;
+
+      textArea.blur();
+      expect(messageInput.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should not set focused attribute when the send button is focused', () => {
+      messageInput.value = 'Hello';
+      button.focus();
+      expect(messageInput.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should set focus-ring attribute on text-area focus after Tab', () => {
+      tabKeyDown(document.body);
+      textArea.focus();
+      expect(messageInput.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should not set focus-ring attribute on text-area focus after mousedown', () => {
+      tabKeyDown(document.body);
+      mousedown(document.body);
+      textArea.focus();
+      expect(messageInput.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should set focus-ring attribute on programmatic focus', () => {
+      mousedown(document.body);
+      messageInput.focus();
+      expect(messageInput.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should not set focus-ring attribute on focus() with focusVisible: false', () => {
+      mousedown(document.body);
+      messageInput.focus({ focusVisible: false });
+      expect(messageInput.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should not set focus-ring attribute on focus() while disabled', () => {
+      messageInput.disabled = true;
+      messageInput.focus();
+      expect(messageInput.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should not set focus-ring attribute on focus() when not attached to the DOM', () => {
+      const element = document.createElement('vaadin-message-input');
+      element.focus();
+      expect(element.hasAttribute('focus-ring')).to.be.false;
+    });
   });
 
   describe('click', () => {
@@ -193,9 +244,10 @@ describe('message-input', () => {
       expect(textArea.hasAttribute('focused')).to.be.true;
     });
 
-    it('should not set focus-ring on the text-area on host click', async () => {
+    it('should not set focus-ring attribute on host click', async () => {
       await clickHostPadding();
       expect(textArea.hasAttribute('focus-ring')).to.be.false;
+      expect(messageInput.hasAttribute('focus-ring')).to.be.false;
     });
 
     it('should not blur the text-area on host click when it has focus', async () => {
