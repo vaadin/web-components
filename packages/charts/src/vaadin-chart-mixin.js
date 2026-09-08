@@ -57,7 +57,7 @@ Highcharts.wrap(Highcharts.Chart.prototype, 'getSVG', function (proceed, ...args
 /* eslint-disable @typescript-eslint/no-invalid-this */
 function withComposedTarget(proceed, e, ...args) {
   // Only a shadow host can be a retargeted event target.
-  if (!e.target?.shadowRoot) {
+  if (!e.target || !e.target.shadowRoot) {
     return proceed.call(this, e, ...args);
   }
 
