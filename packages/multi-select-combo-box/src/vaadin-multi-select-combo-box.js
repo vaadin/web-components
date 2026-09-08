@@ -218,10 +218,10 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         no-vertical-overlap
       >
         ${
-          this.__selectAllButtonRendered
+          this._selectAllController.rendered
             ? html`
-                <button part="select-all" type="button" @click="${this.__onSelectAllButtonClick}">
-                  ${this.__selectAllButtonLabel}
+                <button part="select-all" type="button" @click="${this._selectAllController.onClick}">
+                  ${this._selectAllController.label}
                 </button>
               `
             : nothing
