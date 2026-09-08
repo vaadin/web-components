@@ -1004,7 +1004,9 @@ export const ChartMixin = (superClass) =>
 
       Highcharts.addEvent(tooltip, 'refresh', () => {
         // `refresh` also fires when a formatter returns false, before any label exists.
-        tooltip.label?.element.classList.toggle('vaadin-chart-sticky-tooltip', tooltip.shouldStickOnContact());
+        if (tooltip.label) {
+          tooltip.label.element.classList.toggle('vaadin-chart-sticky-tooltip', tooltip.shouldStickOnContact());
+        }
       });
     }
 
