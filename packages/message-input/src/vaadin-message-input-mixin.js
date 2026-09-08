@@ -145,7 +145,7 @@ export const MessageInputMixin = (superClass) =>
      * @override
      */
     focus(options) {
-      if (this._textArea) {
+      if (this._textArea && !this.disabled) {
         this._textArea.focus(options);
 
         // Set focus-ring attribute on programmatic focus by default

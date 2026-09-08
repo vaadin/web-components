@@ -206,6 +206,12 @@ describe('message-input', () => {
       messageInput.focus({ focusVisible: false });
       expect(messageInput.hasAttribute('focus-ring')).to.be.false;
     });
+
+    it('should not set focus-ring attribute on focus() while disabled', () => {
+      messageInput.disabled = true;
+      messageInput.focus();
+      expect(messageInput.hasAttribute('focus-ring')).to.be.false;
+    });
   });
 
   describe('click', () => {
