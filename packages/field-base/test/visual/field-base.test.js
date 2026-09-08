@@ -71,60 +71,67 @@ describe('field-base', () => {
           element.setAttribute('theme', 'helper-above-field');
           await visualDiff(div, `${dir}-label-helper-above-field`);
         });
+      });
+    });
+  });
 
-        describe('label aside', () => {
-          beforeEach(() => {
-            element.setAttribute('theme', 'label-aside');
-          });
+  describe('label aside', () => {
+    ['ltr', 'rtl'].forEach((dir) => {
+      describe(dir, () => {
+        before(() => {
+          document.documentElement.setAttribute('dir', dir);
+        });
 
-          it('default', async () => {
-            await visualDiff(div, `${dir}-label-aside`);
-          });
+        after(() => {
+          document.documentElement.removeAttribute('dir');
+        });
 
-          it('label', async () => {
-            element.label = 'Label';
-            await visualDiff(div, `${dir}-label-aside-label`);
-          });
+        beforeEach(() => {
+          element.label = 'Label';
+          element.setAttribute('theme', 'label-aside');
+        });
 
-          it('long label', async () => {
-            element.label = 'Label that wraps on multiple lines';
-            element.style.setProperty('--vaadin-field-side-label-width', '8em');
-            await visualDiff(div, `${dir}-label-aside-long-label`);
-          });
+        it('default', async () => {
+          await visualDiff(div, `${dir}-label-aside`);
+        });
 
-          it('required', async () => {
-            element.label = 'Label';
-            element.required = true;
-            await visualDiff(div, `${dir}-label-aside-required`);
-          });
+        it('no label', async () => {
+          element.label = null;
+          await visualDiff(div, `${dir}-label-aside-no-label`);
+        });
 
-          it('error message', async () => {
-            element.label = 'Label';
-            element.errorMessage = 'This field is required';
-            element.required = true;
-            element.validate();
-            await visualDiff(div, `${dir}-label-aside-error-message`);
-          });
+        it('wrapped label', async () => {
+          element.label = 'Label that wraps on multiple lines';
+          element.style.setProperty('--vaadin-field-side-label-width', '8em');
+          await visualDiff(div, `${dir}-label-aside-wrapped-label`);
+        });
 
-          it('helper text', async () => {
-            element.label = 'Label';
-            element.helperText = 'Helper text';
-            await visualDiff(div, `${dir}-label-aside-helper-text`);
-          });
+        it('required', async () => {
+          element.required = true;
+          await visualDiff(div, `${dir}-label-aside-required`);
+        });
 
-          it('helper above field', async () => {
-            element.label = 'Label';
-            element.helperText = 'Helper text';
-            element.setAttribute('theme', 'label-aside helper-above-field');
-            await visualDiff(div, `${dir}-label-aside-helper-above-field`);
-          });
+        it('error message', async () => {
+          element.errorMessage = 'This field is required';
+          element.invalid = true;
+          await visualDiff(div, `${dir}-label-aside-error-message`);
+        });
 
-          it('custom label width and spacing', async () => {
-            element.label = 'Label';
-            element.style.setProperty('--vaadin-field-side-label-width', '6em');
-            element.style.setProperty('--vaadin-field-side-label-gap', '2em');
-            await visualDiff(div, `${dir}-label-aside-custom-width-gap`);
-          });
+        it('helper text', async () => {
+          element.helperText = 'Helper text';
+          await visualDiff(div, `${dir}-label-aside-helper-text`);
+        });
+
+        it('helper above field', async () => {
+          element.helperText = 'Helper text';
+          element.setAttribute('theme', 'label-aside helper-above-field');
+          await visualDiff(div, `${dir}-label-aside-helper-above-field`);
+        });
+
+        it('custom label width and gap', async () => {
+          element.style.setProperty('--vaadin-field-side-label-width', '6em');
+          element.style.setProperty('--vaadin-field-side-label-gap', '2em');
+          await visualDiff(div, `${dir}-label-aside-custom-width-gap`);
         });
       });
     });
