@@ -38,6 +38,19 @@ describe('message-input', () => {
           element.disabled = true;
           await visualDiff(div, `${dir}-disabled`);
         });
+
+        it('slots', async () => {
+          element.value = 'Hello';
+          element.insertAdjacentHTML(
+            'afterbegin',
+            `
+              <div slot="header">Header</div>
+              <span slot="prefix">Prefix</span>
+              <div slot="footer">Footer</div>
+            `,
+          );
+          await visualDiff(div, `${dir}-slots`);
+        });
       });
     });
   });
