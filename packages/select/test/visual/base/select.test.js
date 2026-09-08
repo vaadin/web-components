@@ -109,13 +109,13 @@ describe('select', () => {
     });
   });
 
-  describe('label-aside', () => {
+  describe('label aside', () => {
     beforeEach(() => {
       element.label = 'Label';
       element.setAttribute('theme', 'label-aside');
     });
 
-    it('empty', async () => {
+    it('default', async () => {
       await visualDiff(div, 'label-aside');
     });
 
