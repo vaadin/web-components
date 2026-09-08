@@ -696,6 +696,7 @@ export const ChartMixin = (superClass) =>
       }
 
       this.__syncOutsideTooltipColors();
+      this.__markStickyTooltip();
       this.__redrawOrganizationDataLabels();
     }
 
@@ -722,6 +723,22 @@ export const ChartMixin = (superClass) =>
         for (let i = 0; i < 10; i++) {
           container.style.setProperty(`--_color-${i}`, style.getPropertyValue(`--_color-${i}`));
         }
+      });
+    }
+
+    /**
+     * Marks the tooltip so the stylesheet can make it reachable by the pointer. CSS
+     * cannot see the `stickOnContact` option, and Highcharts only applies it itself
+     * when styled mode is off. See highcharts/highcharts#25310.
+     *
+     * @private
+     */
+    __markStickyTooltip() {
+      const { tooltip } = this.configuration;
+
+      Highcharts.addEvent(tooltip, 'refresh', () => {
+        // `refresh` also fires when a formatter returns false, before any label exists.
+        tooltip.label?.element.classList.toggle('vaadin-chart-sticky-tooltip', tooltip.shouldStickOnContact());
       });
     }
 

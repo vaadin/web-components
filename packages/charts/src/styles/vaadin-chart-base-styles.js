@@ -55,6 +55,12 @@ const tooltipStyles = (scope) => css`
     filter: drop-shadow(var(--vaadin-charts-tooltip-shadow, 0 4px 8px rgba(0, 0, 0, 0.2))) !important;
   }
 
+  /* Marked by the mixin for stickOnContact, which Highcharts itself only honours
+     outside styled mode. See highcharts/highcharts#25310. */
+  ${unsafeCSS(scope)} .highcharts-tooltip.vaadin-chart-sticky-tooltip {
+    pointer-events: auto;
+  }
+
   ${unsafeCSS(scope)} .highcharts-tooltip text,
   ${unsafeCSS(scope)} .highcharts-tooltip foreignObject span {
     fill: var(--highcharts-neutral-color-80, var(--vaadin-charts-data-label, var(--vaadin-text-color)));
