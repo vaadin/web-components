@@ -16,6 +16,49 @@ const DEFAULT_I18N = {
 
 const CONTENT_SLOTS = ['header', 'prefix', 'footer'];
 
+/**
+ * A controller for the send button slot.
+ */
+class MessageInputButtonController extends SlotController {
+  #hasCustomLabel = false;
+
+  constructor(host, initializer) {
+    super(host, 'button', 'vaadin-message-input-button', { initializer });
+  }
+
+  /**
+   * Override method from `SlotController` to store whether the custom button
+   * has own accessible name before setting a custom `aria-label`.
+   *
+   * @param {Node} node
+   * @protected
+   * @override
+   */
+  initCustomNode(node) {
+    this.#hasCustomLabel =
+      node.textContent.trim() !== '' || node.hasAttribute('aria-label') || node.hasAttribute('aria-labelledby');
+
+    super.initCustomNode(node);
+  }
+
+  /**
+   * Apply the localized send text to the button: as text content for the
+   * default button, and as an accessible name for a custom button that does
+   * not provide one itself.
+   *
+   * @param {string} label
+   */
+  setLabel(label) {
+    const { node } = this;
+
+    if (node === this.defaultNode) {
+      node.textContent = label;
+    } else if (!this.#hasCustomLabel) {
+      node.setAttribute('aria-label', label);
+    }
+  }
+}
+
 export const MessageInputMixin = (superClass) =>
   class MessageInputMixinClass extends I18nMixin(FocusMixin(superClass)) {
     static get properties() {
@@ -93,14 +136,12 @@ export const MessageInputMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this._buttonController = new SlotController(this, 'button', 'vaadin-message-input-button', {
-        initializer: (btn) => {
-          btn.addEventListener('click', () => {
-            this.__submit();
-          });
+      this._buttonController = new MessageInputButtonController(this, (btn) => {
+        btn.addEventListener('click', () => {
+          this.__submit();
+        });
 
-          this._button = btn;
-        },
+        this._button = btn;
       });
       this.addController(this._buttonController);
 
@@ -181,11 +222,8 @@ export const MessageInputMixin = (superClass) =>
     __buttonPropsChanged(button, disabled, effectiveI18n, value) {
       if (button) {
         button.disabled = disabled || !value;
-        if (button.localName === 'vaadin-message-input-button') {
-          button.textContent = effectiveI18n.send;
-        } else if (button.textContent.trim().length === 0) {
-          button.setAttribute('aria-label', effectiveI18n.send);
-        }
+
+        this._buttonController.setLabel(effectiveI18n.send);
       }
     }
 

@@ -126,6 +126,30 @@ describe('message-input', () => {
 
       expect(customButton.getAttribute('aria-label')).to.equal('Lähetä');
     });
+
+    it('should not override an aria-label set on a custom button', async () => {
+      const customButton = document.createElement('button');
+      customButton.slot = 'button';
+      customButton.setAttribute('aria-label', 'Send prompt');
+      customButton.innerHTML = '<svg aria-hidden="true"><path d="M0 0h1v1H0z"></path></svg>';
+      button.replaceWith(customButton);
+      messageInput.i18n = { send: 'Lähetä' };
+      await nextFrame();
+
+      expect(customButton.getAttribute('aria-label')).to.equal('Send prompt');
+    });
+
+    it('should not change text content of a custom button', async () => {
+      const customButton = document.createElement('button');
+      customButton.slot = 'button';
+      customButton.textContent = 'Publish';
+      button.replaceWith(customButton);
+      messageInput.i18n = { send: 'Lähetä' };
+      await nextFrame();
+
+      expect(customButton.textContent).to.equal('Publish');
+      expect(customButton.hasAttribute('aria-label')).to.be.false;
+    });
   });
 
   describe('disabled', () => {
