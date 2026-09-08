@@ -58,6 +58,18 @@ export const sliderStyles = css`
     --_track-width: calc(100% - var(--_thumb-width));
   }
 
+  :host([theme~='label-aside']) #controls {
+    align-self: baseline;
+  }
+
+  /* Baseline alignment guide */
+  #controls::before {
+    content: '\\2003' / '';
+    grid-row: 1;
+    grid-column: track-start / track-end;
+    pointer-events: none;
+  }
+
   [part='track'] {
     box-sizing: border-box;
     grid-row: 1;
