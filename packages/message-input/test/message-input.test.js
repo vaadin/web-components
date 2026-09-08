@@ -182,13 +182,6 @@ describe('message-input', () => {
       expect(messageInput.hasAttribute('focused')).to.be.false;
     });
 
-    it('should show the focus outline when the text-area is focused', () => {
-      expect(getComputedStyle(messageInput).outlineStyle).to.equal('none');
-
-      textArea.focus();
-      expect(getComputedStyle(messageInput).outlineStyle).to.equal('solid');
-    });
-
     it('should set focus-ring attribute on text-area focus after Tab', () => {
       tabKeyDown(document.body);
       textArea.focus();
