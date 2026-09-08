@@ -311,6 +311,10 @@ class Dashboard extends DashboardLayoutMixin(
     // Remove the unused wrappers
     wrappers.forEach((wrapper) => wrapper.remove());
 
+    // Flush the pending slot update so that content added to the wrappers is
+    // rendered and measurable immediately.
+    hostElement.performUpdate();
+
     requestAnimationFrame(() => {
       if (focusedWrapperWillBeRemoved) {
         // The wrapper containing the focused element was removed. Try to focus the element in the closest wrapper.
