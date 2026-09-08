@@ -212,6 +212,12 @@ describe('message-input', () => {
       messageInput.focus();
       expect(messageInput.hasAttribute('focus-ring')).to.be.false;
     });
+
+    it('should not set focus-ring attribute on focus() when not attached to the DOM', () => {
+      const element = document.createElement('vaadin-message-input');
+      element.focus();
+      expect(element.hasAttribute('focus-ring')).to.be.false;
+    });
   });
 
   describe('click', () => {

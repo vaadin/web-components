@@ -148,11 +148,9 @@ export const MessageInputMixin = (superClass) =>
       if (this._textArea && !this.disabled) {
         this._textArea.focus(options);
 
-        // Set focus-ring attribute on programmatic focus by default
-        // unless explicitly disabled by `{ focusVisible: false }`.
-        if (options?.focusVisible !== false) {
-          this.setAttribute('focus-ring', '');
-        }
+        // Let `FocusMixin` handle the focus-ring attribute. The host itself is
+        // not focusable, so the native focus call it makes is a no-op.
+        super.focus(options);
       }
     }
 
