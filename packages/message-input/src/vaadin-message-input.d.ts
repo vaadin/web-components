@@ -35,13 +35,19 @@ export type MessageInputEventMap = HTMLElementEventMap & MessageInputCustomEvent
  *
  * ### Slots
  *
- * The following slots are available for adding content around the message input:
+ * The following slots are available for adding content to the message input:
  *
  * Name       | Description
  * -----------|-------------
  * `header`   | Content displayed above the text area and controls
  * `prefix`   | Content displayed before the text area
+ * `button`   | Button that submits the message, replacing the default one
  * `footer`   | Content displayed below the text area and controls
+ *
+ * A button placed in the `button` slot submits the message when clicked, and is disabled
+ * while the message is empty. Its content is left as is. A button with no text content
+ * gets the localized send text as `aria-label`, unless it already provides an accessible
+ * name of its own.
  *
  * ### Styling
  *
