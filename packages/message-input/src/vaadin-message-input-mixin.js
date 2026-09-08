@@ -147,17 +147,13 @@ export const MessageInputMixin = (superClass) =>
     focus(options) {
       if (this._textArea && !this.disabled) {
         this._textArea.focus(options);
-
-        // Let `FocusMixin` handle the focus-ring attribute. The host itself is
-        // not focusable, so the native focus call it makes is a no-op.
         super.focus(options);
       }
     }
 
     /**
      * Override method inherited from `FocusMixin` to only set the `focused`
-     * attribute when the text area is focused, and not when focus moves to
-     * the send button.
+     * attribute when the text area is focused.
      *
      * @param {FocusEvent} event
      * @return {boolean}
