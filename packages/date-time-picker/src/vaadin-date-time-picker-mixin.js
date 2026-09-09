@@ -502,6 +502,12 @@ export const DateTimePickerMixin = (superClass) =>
       if (!opened && this.__outsideClickInProgress) {
         this.__commitPendingValueChange();
       }
+
+      // In fullscreen mode focus does not return to the input on close. Clear the focused state
+      // without committing a pending value change, which is handled above on outside click only.
+      if (!opened && !this.contains(this.getRootNode().activeElement)) {
+        super._setFocused(false);
+      }
     }
 
     /** @private */
