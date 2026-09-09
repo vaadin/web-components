@@ -40,31 +40,17 @@ function hasVisibleText(element) {
  * A controller for the send button slot.
  */
 class MessageInputButtonController extends SlotController {
-  #hasCustomLabel = false;
+  /** The `aria-label` this controller set, to tell it apart from one set by the app. */
+  #appliedLabel;
 
   constructor(host, initializer) {
     super(host, 'button', 'vaadin-message-input-button', { initializer });
   }
 
   /**
-   * Override method from `SlotController` to store whether the custom button
-   * has own accessible name before setting a custom `aria-label`.
-   *
-   * @param {Node} node
-   * @protected
-   * @override
-   */
-  initCustomNode(node) {
-    this.#hasCustomLabel =
-      hasVisibleText(node) || node.hasAttribute('aria-label') || node.hasAttribute('aria-labelledby');
-
-    super.initCustomNode(node);
-  }
-
-  /**
-   * Apply the localized send text to the button: as text content for the
-   * default button, and as an accessible name for a custom button that does
-   * not provide one itself.
+   * Apply the localized send text to the button: as text content for the default
+   * button, and as an accessible name for a custom button that has none. A name
+   * the app provides takes precedence, whenever it is set.
    *
    * @param {string} label
    */
@@ -73,9 +59,24 @@ class MessageInputButtonController extends SlotController {
 
     if (node === this.defaultNode) {
       node.textContent = label;
-    } else if (!this.#hasCustomLabel) {
-      node.setAttribute('aria-label', label);
+      return;
     }
+
+    // Leave an `aria-label` that the app set itself alone.
+    const currentLabel = node.getAttribute('aria-label');
+    if (currentLabel !== null && currentLabel !== this.#appliedLabel) {
+      return;
+    }
+
+    // Drop the generated label once the button provides its own accessible name.
+    if (hasVisibleText(node) || node.hasAttribute('aria-labelledby')) {
+      node.removeAttribute('aria-label');
+      this.#appliedLabel = undefined;
+      return;
+    }
+
+    node.setAttribute('aria-label', label);
+    this.#appliedLabel = label;
   }
 }
 
