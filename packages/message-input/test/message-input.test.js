@@ -91,6 +91,19 @@ describe('message-input', () => {
       button.click();
       expect(spy.called).to.be.true;
     });
+
+    it('should fire a submit event on custom button click', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      button.replaceWith(customButton);
+      await nextFrame();
+
+      const spy = sinon.spy();
+      messageInput.addEventListener('submit', spy);
+      messageInput.value = 'foo';
+      customButton.click();
+      expect(spy.calledOnce).to.be.true;
+    });
   });
 
   describe('i18n', () => {
@@ -114,6 +127,68 @@ describe('message-input', () => {
       messageInput.i18n = { send: 'Lähetä' };
       expect(button.innerText).to.be.equal('Lähetä');
       expect(textArea.placeholder).to.be.equal('Message');
+    });
+
+    it('should set aria-label on a custom button with only aria-hidden text', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      customButton.innerHTML = '<span aria-hidden="true">↑</span>';
+      button.replaceWith(customButton);
+      messageInput.i18n = { send: 'Lähetä' };
+      await nextFrame();
+
+      expect(customButton.getAttribute('aria-label')).to.equal('Lähetä');
+    });
+
+    it('should set aria-label on a custom button with only comment nodes', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      customButton.innerHTML = '<!-- lit marker --><svg aria-hidden="true"><path d="M0 0h1v1H0z"></path></svg>';
+      button.replaceWith(customButton);
+      messageInput.i18n = { send: 'Lähetä' };
+      await nextFrame();
+
+      expect(customButton.getAttribute('aria-label')).to.equal('Lähetä');
+    });
+
+    it('should set aria-label on a custom button with only named slot text', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      customButton.innerHTML = '<span slot="tooltip">Send prompt</span>';
+      button.replaceWith(customButton);
+      messageInput.i18n = { send: 'Lähetä' };
+      await nextFrame();
+
+      expect(customButton.getAttribute('aria-label')).to.equal('Lähetä');
+    });
+
+    it('should not override an aria-label set on a custom button after slotting', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      customButton.innerHTML = '<svg aria-hidden="true"><path d="M0 0h1v1H0z"></path></svg>';
+      button.replaceWith(customButton);
+      await nextFrame();
+
+      customButton.setAttribute('aria-label', 'Send prompt');
+      messageInput.value = 'foo';
+      await nextFrame();
+
+      expect(customButton.getAttribute('aria-label')).to.equal('Send prompt');
+    });
+
+    it('should remove aria-label when a custom button gets text content', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      customButton.innerHTML = '<svg aria-hidden="true"><path d="M0 0h1v1H0z"></path></svg>';
+      button.replaceWith(customButton);
+      await nextFrame();
+      expect(customButton.hasAttribute('aria-label')).to.be.true;
+
+      customButton.append('Publish');
+      messageInput.value = 'foo';
+      await nextFrame();
+
+      expect(customButton.hasAttribute('aria-label')).to.be.false;
     });
   });
 
@@ -153,6 +228,17 @@ describe('message-input', () => {
 
       messageInput.disabled = false;
       expect(button.disabled).to.be.false;
+    });
+
+    it('should toggle disabled state on a custom button when value is set', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      button.replaceWith(customButton);
+      await nextFrame();
+      expect(customButton.disabled).to.be.true;
+
+      messageInput.value = 'foo';
+      expect(customButton.disabled).to.be.false;
     });
   });
 
