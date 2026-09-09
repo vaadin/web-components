@@ -6,7 +6,7 @@ snapshots["vaadin-app-layout host default"] =
   no-anim=""
   overlay=""
   primary-section="navbar"
-  style="--_vaadin-app-layout-drawer-width: 0; --_vaadin-app-layout-drawer-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size: 16px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px;"
+  style="--_vaadin-app-layout-drawer-width: 0; --_vaadin-app-layout-drawer-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px;"
 >
 </vaadin-app-layout>
 `;

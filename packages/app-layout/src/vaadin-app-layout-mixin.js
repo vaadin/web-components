@@ -155,6 +155,7 @@ export const AppLayoutMixin = (superclass) =>
       this.__setAriaExpanded();
 
       this.__updateDrawerSize();
+      this.__onResize([{ target: this }]);
 
       this.$.drawer.addEventListener('transitionstart', () => {
         this.__isDrawerAnimating = true;

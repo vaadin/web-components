@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>App Layout initial layout shift</title>
+    <script type="module" src="./common.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+      }
+
+      vaadin-app-layout {
+        --vaadin-app-layout-drawer-width: 256px;
+      }
+
+      nav[slot='drawer'] {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem;
+      }
+
+      main {
+        padding: 1rem;
+      }
+
+      pre {
+        font: 12px/1.5 monospace;
+        white-space: pre-wrap;
+      }
+    </style>
+
+    <script type="module">
+      import '@vaadin/app-layout';
+      import '@vaadin/app-layout/vaadin-drawer-toggle.js';
+      import '@vaadin/button';
+
+      const template = document.querySelector('template');
+      const lines = [];
+      let layout;
+
+      function print(message) {
+        lines.push(`${performance.now().toFixed(1).padStart(7)} ms  ${message}`);
+        const log = layout?.querySelector('#log');
+        if (log) {
+          log.textContent = lines.join('\n');
+        }
+        console.log(lines.at(-1));
+      }
+
+      // Chrome only: reports layout shifts, the same metric as CLS in Lighthouse.
+      if (PerformanceObserver.supportedEntryTypes.includes('layout-shift')) {
+        new PerformanceObserver((list) => {
+          list.getEntries().forEach((entry) => {
+            const sources = entry.sources.map(({ node, previousRect, currentRect }) => {
+              const name = node?.tagName?.toLowerCase() ?? 'text';
+              return `${name} ${previousRect.left},${previousRect.top} -> ${currentRect.left},${currentRect.top}`;
+            });
+            print(`layout-shift: value=${entry.value.toFixed(3)} (${sources.join('; ')})`);
+          });
+        }).observe({ type: 'layout-shift' });
+      }
+
+      function attach() {
+        layout?.remove();
+        lines.length = 0;
+
+        layout = template.content.cloneNode(true).firstElementChild;
+        document.body.append(layout);
+        print('app layout attached');
+
+        layout.querySelector('vaadin-button').addEventListener('click', attach);
+
+        const drawer = layout.shadowRoot.querySelector('[part="drawer"]');
+        let lastWidth;
+
+        // Reports the content width for every rendered frame in which it changed.
+        new ResizeObserver(([entry]) => {
+          const { width } = entry.contentRect;
+          if (width === lastWidth || width === 0) {
+            return;
+          }
+          lastWidth = width;
+
+          const drawerOffset = layout.style.getPropertyValue('--_vaadin-app-layout-drawer-offset-size') || '(unset)';
+          const navbarOffset = layout.style.getPropertyValue('--_vaadin-app-layout-navbar-offset-size') || '(unset)';
+          print(
+            `content ${width}px, drawer ${drawer.getBoundingClientRect().width}px, drawer-opened=${layout.hasAttribute('drawer-opened')}, overlay=${layout.hasAttribute('overlay')}, drawer-offset=${drawerOffset}, navbar-offset=${navbarOffset}`,
+          );
+        }).observe(layout.querySelector('main'));
+      }
+
+      // Attach after the page has painted once, like Flow does when it renders the UI on the client.
+      new PerformanceObserver((_list, observer) => {
+        observer.disconnect();
+        attach();
+      }).observe({ type: 'paint', buffered: true });
+    </script>
+  </head>
+
+  <body>
+    <template>
+      <vaadin-app-layout>
+        <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
+        <div slot="navbar">Navbar</div>
+        <vaadin-button slot="navbar">Re-create app layout</vaadin-button>
+
+        <nav slot="drawer">
+          <a href="#">Dashboard</a>
+          <a href="#">Orders</a>
+          <a href="#">Customers</a>
+        </nav>
+
+        <main>
+          <p>
+            The app layout is attached after the page has painted once, like Flow does. Each line below is a rendered
+            frame in which the content width changed. A layout that reserves the drawer's space before painting produces
+            one content line and no layout-shift line. Press "Re-create app layout" or reload to run again.
+          </p>
+          <pre id="log"></pre>
+        </main>
+      </vaadin-app-layout>
+    </template>
+  </body>
+</html>
