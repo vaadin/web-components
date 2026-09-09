@@ -100,6 +100,11 @@ describe('field-base', () => {
           await visualDiff(div, `${dir}-label-aside-no-label`);
         });
 
+        it('short label', async () => {
+          element.label = 'ID';
+          await visualDiff(div, `${dir}-label-aside-short-label`);
+        });
+
         it('wrapped label', async () => {
           element.label = 'Label that wraps on multiple lines';
           element.style.setProperty('--vaadin-input-field-label-aside-width', '8em');

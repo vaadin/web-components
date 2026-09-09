@@ -56,7 +56,7 @@ export const field = css`
   /* Baseline alignment guide */
   :host::before {
     content: '\\2003' / '';
-    grid-column: 1;
+    grid-column: baseline;
     grid-row: 1 / baseline;
     align-self: end;
     font-size: var(--vaadin-input-field-value-font-size, inherit);
