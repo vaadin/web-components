@@ -149,9 +149,19 @@ describe('range-slider', () => {
     });
   });
 
-  it('label aside', async () => {
-    element.setAttribute('theme', 'label-aside');
-    element.label = 'Label';
-    await visualDiff(div, 'label-aside');
+  describe('label aside', () => {
+    beforeEach(() => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+    });
+
+    it('label aside', async () => {
+      await visualDiff(div, 'label-aside');
+    });
+
+    it('label aside min max visible', async () => {
+      element.minMaxVisible = true;
+      await visualDiff(div, 'label-aside-min-max-visible');
+    });
   });
 });
