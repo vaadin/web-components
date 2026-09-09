@@ -28,13 +28,17 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  *
  * ### Slots
  *
- * The following slots are available for adding content around the message input:
+ * The following slots are available for adding content to the message input:
  *
  * Name       | Description
  * -----------|-------------
  * `header`   | Content displayed above the text area and controls
  * `prefix`   | Content displayed before the text area
+ * `button`   | Button that submits the message, replacing the default one
  * `footer`   | Content displayed below the text area and controls
+ *
+ * When a custom button has no text content or accessible label, `aria-label` attribute
+ * is set based on the [`i18n`](#/elements/vaadin-message-input#property-i18n) property.
  *
  * ### Styling
  *

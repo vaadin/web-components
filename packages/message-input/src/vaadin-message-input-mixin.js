@@ -8,6 +8,7 @@ import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { ButtonController } from './button-controller.js';
 
 const DEFAULT_I18N = {
   send: 'Send',
@@ -93,14 +94,12 @@ export const MessageInputMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this._buttonController = new SlotController(this, 'button', 'vaadin-message-input-button', {
-        initializer: (btn) => {
-          btn.addEventListener('click', () => {
-            this.__submit();
-          });
+      this._buttonController = new ButtonController(this, (btn) => {
+        btn.addEventListener('click', () => {
+          this.__submit();
+        });
 
-          this._button = btn;
-        },
+        this._button = btn;
       });
       this.addController(this._buttonController);
 
@@ -181,7 +180,8 @@ export const MessageInputMixin = (superClass) =>
     __buttonPropsChanged(button, disabled, effectiveI18n, value) {
       if (button) {
         button.disabled = disabled || !value;
-        button.textContent = effectiveI18n.send;
+
+        this._buttonController.setLabel(effectiveI18n.send);
       }
     }
 
