@@ -1,7 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, focusin, focusout, nextRender } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement, setViewport } from '@vaadin/test-runner-commands';
+import { fixtureSync, focusin, focusout, nextRender, tap } from '@vaadin/testing-helpers';
 import '../src/vaadin-date-time-picker.js';
+import { getFocusableCell, open, untilOverlayRendered } from '@vaadin/date-picker/test/helpers.js';
 
 describe('focus', () => {
   let dateTimePicker;
@@ -109,6 +110,63 @@ describe('focus', () => {
 
       await sendMouseToElement({ type: 'click', element: datePicker.inputElement });
       expect(timePicker.hasAttribute('focus-ring')).to.be.false;
+    });
+  });
+
+  describe('fullscreen', () => {
+    let width, height;
+
+    before(() => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+    });
+
+    beforeEach(async () => {
+      await setViewport({ width: 420, height });
+      await nextRender();
+    });
+
+    afterEach(async () => {
+      await setViewport({ width, height });
+    });
+
+    // Real mouse click outside fullscreen overlay rather than outsideClick() which moves focus to the body
+    async function clickOutside() {
+      const { top } = datePicker.$.overlay.getBoundingClientRect();
+      await sendMouse({ type: 'click', position: [200, Math.round(top / 2)] });
+    }
+
+    it('should remove focused attribute when closing date overlay on outside click', async () => {
+      await open(datePicker);
+      expect(dateTimePicker.hasAttribute('focused')).to.be.true;
+
+      await clickOutside();
+      await nextRender();
+
+      expect(dateTimePicker.hasAttribute('focused')).to.be.false;
+      expect(datePicker.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should remove focused attribute when closing date overlay on date click', async () => {
+      await open(datePicker);
+      expect(dateTimePicker.hasAttribute('focused')).to.be.true;
+
+      tap(getFocusableCell(datePicker));
+      await nextRender();
+
+      expect(dateTimePicker.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should keep focused attribute when closing date overlay on Esc', async () => {
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'ArrowDown' });
+      await untilOverlayRendered(datePicker);
+
+      await sendKeys({ press: 'Escape' });
+      await nextRender();
+
+      expect(dateTimePicker.hasAttribute('focused')).to.be.true;
+      expect(dateTimePicker.hasAttribute('focus-ring')).to.be.true;
     });
   });
 });
