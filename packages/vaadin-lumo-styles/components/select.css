@@ -13,6 +13,7 @@
 @import '../src/mixins/menu-overlay-core.css';
 @import '../src/mixins/menu-overlay-ext.css';
 @import '../src/mixins/overlay.css';
+@import '../src/mixins/sr-only.css';
 @import '../src/components/item.css';
 @import '../src/components/list-box.css';
 @import '../src/components/select-overlay.css';
@@ -31,6 +32,7 @@
     lumo_mixins_field-helper,
     lumo_mixins_field-helper-above,
     lumo_mixins_field-base,
+    lumo_mixins_sr-only,
     lumo_components_select;
 
   --_lumo-vaadin-select-item-inject: 1;
