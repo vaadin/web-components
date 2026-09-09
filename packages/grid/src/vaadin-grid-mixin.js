@@ -12,6 +12,7 @@ import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 import { A11yMixin } from './vaadin-grid-a11y-mixin.js';
 import { ActiveItemMixin } from './vaadin-grid-active-item-mixin.js';
 import { ArrayDataProviderMixin } from './vaadin-grid-array-data-provider-mixin.js';
+import { BodyRenderingMixin } from './vaadin-grid-body-rendering-mixin.js';
 import { ColumnAutoWidthMixin } from './vaadin-grid-column-auto-width-mixin.js';
 import { ColumnReorderingMixin } from './vaadin-grid-column-reordering-mixin.js';
 import { ColumnResizingMixin } from './vaadin-grid-column-resizing-mixin.js';
@@ -29,7 +30,6 @@ import {
   updateBooleanRowStates,
   updateCellsPart,
   updatePart,
-  updateState,
 } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { ResizeMixin } from './vaadin-grid-resize-mixin.js';
@@ -48,18 +48,20 @@ export const GridMixin = (superClass) =>
       DataProviderMixin(
         DynamicColumnsMixin(
           HeaderFooterRenderingMixin(
-            ActiveItemMixin(
-              ScrollMixin(
-                SelectionMixin(
-                  SortMixin(
-                    RowDetailsMixin(
-                      KeyboardNavigationMixin(
-                        A11yMixin(
-                          FilterMixin(
-                            ColumnReorderingMixin(
-                              ColumnResizingMixin(
-                                EventContextMixin(
-                                  DragAndDropMixin(StylingMixin(TabindexMixin(ResizeMixin(superClass)))),
+            BodyRenderingMixin(
+              ActiveItemMixin(
+                ScrollMixin(
+                  SelectionMixin(
+                    SortMixin(
+                      RowDetailsMixin(
+                        KeyboardNavigationMixin(
+                          A11yMixin(
+                            FilterMixin(
+                              ColumnReorderingMixin(
+                                ColumnResizingMixin(
+                                  EventContextMixin(
+                                    DragAndDropMixin(StylingMixin(TabindexMixin(ResizeMixin(superClass)))),
+                                  ),
                                 ),
                               ),
                             ),
@@ -328,11 +330,7 @@ export const GridMixin = (superClass) =>
     __createVirtualizerElements(count) {
       const rows = [];
       for (let i = 0; i < count; i++) {
-        const row = document.createElement('tr');
-        row.setAttribute('role', 'row');
-        row.setAttribute('tabindex', '-1');
-        updatePart(row, 'row', true);
-        updatePart(row, 'body-row', true);
+        const row = this.__createBodyRow();
         if (this._columnTree) {
           this.__initRow(row, this._columnTree[this._columnTree.length - 1], 'body', true);
         }
@@ -585,11 +583,8 @@ export const GridMixin = (superClass) =>
      * @param {boolean} loading
      * @private
      */
-    __updateRowLoading(row, loading) {
+    __updateRowCellsLoading(row, loading) {
       const cells = getBodyRowCells(row);
-
-      // Row state attribute
-      updateState(row, 'loading', loading);
 
       // Cells part attribute
       updateCellsPart(cells, 'loading-row-cell', loading);
@@ -605,14 +600,16 @@ export const GridMixin = (superClass) =>
      * @private
      */
     __updateRow(row) {
+      this.__renderBodyRow(row);
+
       this.__a11yUpdateRowRowindex(row);
       this.__updateRowOrderParts(row);
 
       const item = this.__getRowItem(row);
       if (item) {
-        this.__updateRowLoading(row, false);
+        this.__updateRowCellsLoading(row, false);
       } else {
-        this.__updateRowLoading(row, true);
+        this.__updateRowCellsLoading(row, true);
         return;
       }
 
