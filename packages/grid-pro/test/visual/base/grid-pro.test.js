@@ -93,6 +93,32 @@ describe('grid-pro', () => {
     });
   });
 
+  describe('selection', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-grid-pro style="height: 100px;">
+            <vaadin-grid-selection-column></vaadin-grid-selection-column>
+            <vaadin-grid-pro-edit-column path="name.first"></vaadin-grid-pro-edit-column>
+          </vaadin-grid-pro>
+        `,
+        div,
+      );
+      element.items = users;
+      await nextRender();
+    });
+
+    it('select-all', async () => {
+      await visualDiff(div, 'select-all');
+    });
+
+    it('select-all-unavailable', async () => {
+      element.isItemSelectable = () => true;
+      await nextRender();
+      await visualDiff(div, 'select-all-unavailable');
+    });
+  });
+
   describe('edit-column-text', () => {
     beforeEach(async () => {
       element = fixtureSync(
@@ -133,22 +159,6 @@ describe('grid-pro', () => {
       cell._content.dispatchEvent(new CustomEvent('dblclick', { bubbles: true }));
       await visualDiff(div, 'edit-column-checkbox');
     });
-  });
-
-  it('select-all-unavailable', async () => {
-    element = fixtureSync(
-      `
-        <vaadin-grid-pro style="height: 100px;">
-          <vaadin-grid-selection-column></vaadin-grid-selection-column>
-          <vaadin-grid-pro-edit-column path="name.first"></vaadin-grid-pro-edit-column>
-        </vaadin-grid-pro>
-      `,
-      div,
-    );
-    element.items = users;
-    element.isItemSelectable = () => true;
-    await nextRender();
-    await visualDiff(div, 'select-all-unavailable');
   });
 
   describe('edit-column-select', () => {
