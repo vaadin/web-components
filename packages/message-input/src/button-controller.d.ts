@@ -12,9 +12,7 @@ export class ButtonController extends SlotController {
   constructor(host: HTMLElement, initializer: (node: HTMLElement, host: HTMLElement) => void);
 
   /**
-   * Apply the localized send text to the button: as text content for the default
-   * button, and as an accessible name for a custom button that has none. A name
-   * the app provides takes precedence, whenever it is set.
+   * Applies localized text to the button.
    */
   setLabel(label: string): void;
 }
