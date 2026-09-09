@@ -8,6 +8,7 @@ import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { ButtonController } from './button-controller.js';
 
 const DEFAULT_I18N = {
   send: 'Send',
@@ -15,70 +16,6 @@ const DEFAULT_I18N = {
 };
 
 const CONTENT_SLOTS = ['header', 'prefix', 'footer'];
-
-/**
- * Returns true if the element has text that is exposed to assistive technologies.
- * Content in a named slot or marked with `aria-hidden` does not count: a tooltip
- * writes its text to the light DOM, and `vaadin-button` renders the `prefix` and
- * `suffix` slots inside `aria-hidden` wrappers.
- *
- * @param {Element} element
- * @return {boolean}
- */
-function hasVisibleText(element) {
-  return Array.from(element.childNodes)
-    .filter((node) => {
-      if (node.nodeType !== Node.ELEMENT_NODE) {
-        return true;
-      }
-      return !node.slot && node.getAttribute('aria-hidden') !== 'true';
-    })
-    .some((node) => node.textContent.trim() !== '');
-}
-
-/**
- * A controller for the send button slot.
- */
-class MessageInputButtonController extends SlotController {
-  /** The `aria-label` this controller set, to tell it apart from one set by the app. */
-  #appliedLabel;
-
-  constructor(host, initializer) {
-    super(host, 'button', 'vaadin-message-input-button', { initializer });
-  }
-
-  /**
-   * Apply the localized send text to the button: as text content for the default
-   * button, and as an accessible name for a custom button that has none. A name
-   * the app provides takes precedence, whenever it is set.
-   *
-   * @param {string} label
-   */
-  setLabel(label) {
-    const { node } = this;
-
-    if (node === this.defaultNode) {
-      node.textContent = label;
-      return;
-    }
-
-    // Leave an `aria-label` that the app set itself alone.
-    const currentLabel = node.getAttribute('aria-label');
-    if (currentLabel !== null && currentLabel !== this.#appliedLabel) {
-      return;
-    }
-
-    // Drop the generated label once the button provides its own accessible name.
-    if (hasVisibleText(node) || node.hasAttribute('aria-labelledby')) {
-      node.removeAttribute('aria-label');
-      this.#appliedLabel = undefined;
-      return;
-    }
-
-    node.setAttribute('aria-label', label);
-    this.#appliedLabel = label;
-  }
-}
 
 export const MessageInputMixin = (superClass) =>
   class MessageInputMixinClass extends I18nMixin(FocusMixin(superClass)) {
@@ -157,7 +94,7 @@ export const MessageInputMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this._buttonController = new MessageInputButtonController(this, (btn) => {
+      this._buttonController = new ButtonController(this, (btn) => {
         btn.addEventListener('click', () => {
           this.__submit();
         });
