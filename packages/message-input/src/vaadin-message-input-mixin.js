@@ -17,6 +17,26 @@ const DEFAULT_I18N = {
 const CONTENT_SLOTS = ['header', 'prefix', 'footer'];
 
 /**
+ * Returns true if the element has text that is exposed to assistive technologies.
+ * Content in a named slot or marked with `aria-hidden` does not count: a tooltip
+ * writes its text to the light DOM, and `vaadin-button` renders the `prefix` and
+ * `suffix` slots inside `aria-hidden` wrappers.
+ *
+ * @param {Element} element
+ * @return {boolean}
+ */
+function hasVisibleText(element) {
+  return Array.from(element.childNodes)
+    .filter((node) => {
+      if (node.nodeType !== Node.ELEMENT_NODE) {
+        return true;
+      }
+      return !node.slot && node.getAttribute('aria-hidden') !== 'true';
+    })
+    .some((node) => node.textContent.trim() !== '');
+}
+
+/**
  * A controller for the send button slot.
  */
 class MessageInputButtonController extends SlotController {
@@ -36,7 +56,7 @@ class MessageInputButtonController extends SlotController {
    */
   initCustomNode(node) {
     this.#hasCustomLabel =
-      node.textContent.trim() !== '' || node.hasAttribute('aria-label') || node.hasAttribute('aria-labelledby');
+      hasVisibleText(node) || node.hasAttribute('aria-label') || node.hasAttribute('aria-labelledby');
 
     super.initCustomNode(node);
   }

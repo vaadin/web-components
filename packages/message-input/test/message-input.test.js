@@ -150,6 +150,28 @@ describe('message-input', () => {
       expect(customButton.textContent).to.equal('Publish');
       expect(customButton.hasAttribute('aria-label')).to.be.false;
     });
+
+    it('should set aria-label on a custom button with only aria-hidden text', async () => {
+      const customButton = document.createElement('button');
+      customButton.slot = 'button';
+      customButton.innerHTML = '<span aria-hidden="true">↑</span>';
+      button.replaceWith(customButton);
+      messageInput.i18n = { send: 'Lähetä' };
+      await nextFrame();
+
+      expect(customButton.getAttribute('aria-label')).to.equal('Lähetä');
+    });
+
+    it('should set aria-label on a custom button with only named slot text', async () => {
+      const customButton = document.createElement('button');
+      customButton.slot = 'button';
+      customButton.innerHTML = '<span slot="tooltip">Send prompt</span>';
+      button.replaceWith(customButton);
+      messageInput.i18n = { send: 'Lähetä' };
+      await nextFrame();
+
+      expect(customButton.getAttribute('aria-label')).to.equal('Lähetä');
+    });
   });
 
   describe('disabled', () => {
