@@ -155,6 +155,7 @@ export const AppLayoutMixin = (superclass) =>
       this.__setAriaExpanded();
 
       this.__updateDrawerSize();
+      this.__updateLayout();
 
       this.$.drawer.addEventListener('transitionstart', () => {
         this.__isDrawerAnimating = true;
@@ -177,8 +178,7 @@ export const AppLayoutMixin = (superclass) =>
 
     /** @private */
     __onNavbarSlotChange() {
-      this.__scheduleResize(this.$.navbarTop);
-      this.__scheduleResize(this.$.navbarBottom);
+      this.__setTouchOptimized(this.__isTouchOptimized());
       this.toggleAttribute('has-navbar', !!this.querySelector('[slot="navbar"]'));
     }
 
@@ -196,13 +196,9 @@ export const AppLayoutMixin = (superclass) =>
       const isHostResized = entries.some(({ target }) => target === this);
       const isNavbarResized = entries.some(({ target }) => [this.$.navbarTop, this.$.navbarBottom].includes(target));
 
-      const overlayMode = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') === 'true';
-      const touchOptimized = this._getCustomPropertyValue('--vaadin-app-layout-touch-optimized') === 'true';
-
-      const drawerRect = this.$.drawer.getBoundingClientRect();
-      const navbarTopRect = this.$.navbarTop.getBoundingClientRect();
-      const navbarBottomRect = this.$.navbarBottom.getBoundingClientRect();
-
+      const overlayMode = this.__isOverlayMode();
+      const touchOptimized = this.__isTouchOptimized();
+      const rects = this.__measureRects();
       const isDrawerAnimating = this.__isDrawerAnimating;
 
       this.__resizeRaf = requestAnimationFrame(() => {
@@ -216,11 +212,7 @@ export const AppLayoutMixin = (superclass) =>
         }
 
         if (!isDrawerAnimating) {
-          this.__setOffsetSize({
-            drawerRect,
-            navbarTopRect,
-            navbarBottomRect,
-          });
+          this.__setOffsetSize(rects);
         }
       });
     }
@@ -324,6 +316,44 @@ export const AppLayoutMixin = (superclass) =>
         this.$.drawer.removeAttribute('hidden');
         this.style.removeProperty('--_vaadin-app-layout-drawer-width');
       }
+    }
+
+    /**
+     * Updates the overlay mode, the navbar placement and the content offset
+     * synchronously, based on the current styles and dimensions, and updates
+     * the content offset once more before the next frame is painted, to
+     * account for slotted elements that render after this element.
+     *
+     * @private
+     */
+    __updateLayout() {
+      this._blockAnimationUntilAfterNextRender();
+      this.__setOverlayMode(this.__isOverlayMode());
+      this.__setTouchOptimized(this.__isTouchOptimized());
+      this.__setOffsetSize(this.__measureRects());
+
+      requestAnimationFrame(() => {
+        this.__setOffsetSize(this.__measureRects());
+      });
+    }
+
+    /** @private */
+    __isOverlayMode() {
+      return this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') === 'true';
+    }
+
+    /** @private */
+    __isTouchOptimized() {
+      return this._getCustomPropertyValue('--vaadin-app-layout-touch-optimized') === 'true';
+    }
+
+    /** @private */
+    __measureRects() {
+      return {
+        drawerRect: this.$.drawer.getBoundingClientRect(),
+        navbarTopRect: this.$.navbarTop.getBoundingClientRect(),
+        navbarBottomRect: this.$.navbarBottom.getBoundingClientRect(),
+      };
     }
 
     /** @private */
