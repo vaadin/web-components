@@ -69,6 +69,8 @@ import { NumberField } from '@vaadin/number-field/src/vaadin-number-field.js';
  * | `--vaadin-input-field-helper-font-size`          |
  * | `--vaadin-input-field-helper-font-weight`        |
  * | `--vaadin-input-field-helper-line-height`        |
+ * | `--vaadin-input-field-label-aside-gap`           |
+ * | `--vaadin-input-field-label-aside-width`         |
  * | `--vaadin-input-field-label-color`               |
  * | `--vaadin-input-field-label-font-size`           |
  * | `--vaadin-input-field-label-font-weight`         |

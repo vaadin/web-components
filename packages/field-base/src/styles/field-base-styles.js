@@ -201,8 +201,8 @@ export const field = css`
 
 export const fieldLabelAside = css`
   :host([theme~='label-aside']) {
-    --_side-label-width: 0px;
-    --_side-label-gap: 0px;
+    --_label-aside-width: 0px;
+    --_label-aside-gap: 0px;
 
     grid-template:
       var(--_helper-above-field, '.     helper' auto)
@@ -211,13 +211,13 @@ export const fieldLabelAside = css`
       var(--_rows-after-input,)
       var(--_helper-below-field, 'label helper' auto)
       '                           label error' auto
-      / var(--_side-label-width) minmax(0, 1fr);
-    column-gap: var(--_side-label-gap);
+      / var(--_label-aside-width) minmax(0, 1fr);
+    column-gap: var(--_label-aside-gap);
   }
 
   :host([theme~='label-aside'][has-label]) {
-    --_side-label-width: var(--vaadin-field-side-label-width, auto);
-    --_side-label-gap: var(--vaadin-field-side-label-gap, 1em);
+    --_label-aside-width: var(--vaadin-input-field-label-aside-width, auto);
+    --_label-aside-gap: var(--vaadin-input-field-label-aside-gap, 1em);
   }
 
   :host([theme~='label-aside']) [part='label'] {

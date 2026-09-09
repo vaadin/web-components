@@ -102,7 +102,7 @@ describe('field-base', () => {
 
         it('wrapped label', async () => {
           element.label = 'Label that wraps on multiple lines';
-          element.style.setProperty('--vaadin-field-side-label-width', '8em');
+          element.style.setProperty('--vaadin-input-field-label-aside-width', '8em');
           await visualDiff(div, `${dir}-label-aside-wrapped-label`);
         });
 
@@ -129,8 +129,8 @@ describe('field-base', () => {
         });
 
         it('custom label width and gap', async () => {
-          element.style.setProperty('--vaadin-field-side-label-width', '6em');
-          element.style.setProperty('--vaadin-field-side-label-gap', '2em');
+          element.style.setProperty('--vaadin-input-field-label-aside-width', '6em');
+          element.style.setProperty('--vaadin-input-field-label-aside-gap', '2em');
           await visualDiff(div, `${dir}-label-aside-custom-width-gap`);
         });
       });
