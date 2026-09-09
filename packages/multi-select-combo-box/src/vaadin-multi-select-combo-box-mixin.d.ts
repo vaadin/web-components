@@ -209,36 +209,35 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
    * or deselecting all items matching the current filter at once. Items
    * that do not match the filter keep their selection state.
    *
-   * When using `dataProvider` and not every item matching the current
-   * filter is loaded, the button is only shown when `selectAllProvider`
-   * is set.
+   * When using `dataProvider` you also need to configure
+   * `selectAllProvider`.
    * @attr {boolean} select-all-button-visible
    */
   selectAllButtonVisible: boolean;
 
   /**
-   * An object that handles the select all button while using `dataProvider`
-   * and not every item matching the current filter is loaded, in which
-   * case the component can neither compute the state of the button nor
-   * update `selectedItems` itself. Ignored otherwise. The button is not
-   * shown in that case unless the provider is set.
+   * An object that handles the select all button while using `dataProvider`.
+   * When using lazy loading, the component can neither compute the state of
+   * the button nor update `selectedItems` itself as it may not have all
+   * items loaded. Instead, the application must provide this provider
+   * object that holds functions for determining the current selection state
+   * and for applying selection changes. If this object is not set when a
+   * data provider is used, the button is not shown. When not using a data
+   * provider this object is ignored.
    *
    * The object must implement the following functions:
    *
-   * - `isAllSelected(params)` Called with `params.filter`, the filter the
-   *   user has typed into the input field, whenever the component needs to
-   *   know whether every item matching the filter is selected: after the
+   * - `isAllSelected(params)` Called with the filter the user has typed
+   *   into the input field as `params.filter`, whenever the component needs
+   *   to know whether every item matching the filter is selected: after the
    *   items for a filter have been loaded, and after `selectedItems` has
-   *   changed. Must return a boolean, or a promise resolving to one. May
-   *   return `undefined` instead when the state can not be determined, in
-   *   which case the button is not shown.
+   *   changed. Must return a boolean, or a promise resolving to one.
    * - `setAllSelected(params)` Called when the user clicks the button, with
    *   `params.filter` and `params.selected`, which is `true` when all items
    *   matching the filter should be added to `selectedItems`, and `false`
    *   when they should be removed from it. Must update `selectedItems`
    *   accordingly and return a promise that resolves once the update has
-   *   been applied, or return `undefined` in case `selectedItems` was
-   *   updated synchronously.
+   *   been applied.
    *
    * The button ignores clicks while waiting for either function to settle.
    */

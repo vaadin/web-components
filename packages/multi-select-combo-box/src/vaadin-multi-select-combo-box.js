@@ -33,16 +33,6 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * comboBox.selectedItems = ['lemon', 'orange'];
  * ```
  *
- * ### Select all
- *
- * Set `selectAllButtonVisible` to show a button above the dropdown items
- * for selecting or deselecting all items matching the current filter at once.
- * The button labels can be customized using the `i18n` property.
- *
- * ```html
- * <vaadin-multi-select-combo-box select-all-button-visible></vaadin-multi-select-combo-box>
- * ```
- *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:

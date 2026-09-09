@@ -11,11 +11,10 @@ import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-plac
  * A controller that manages the select all button of `<vaadin-multi-select-combo-box>`.
  * It shows or hides the button, updates its label, selects or deselects the items
  * matching the current filter when the button is clicked, and keeps focus inside
- * the component while moving between the input and the button. The button is
- * rendered by the host and passed to the controller once it exists.
+ * the component while moving between the input and the button.
  *
  * When every item matching the filter is available on the client, the controller
- * computes the state and applies the selection itself. Otherwise it asks the
+ * computes the state and applies the selection itself. Otherwise, it asks the
  * `selectAllProvider` of the host for the state whenever the filter, the number
  * of matching items or the selection has changed, and delegates clicks to it.
  *
@@ -88,8 +87,8 @@ export class SelectAllController {
       return;
     }
 
-    const key = this.#getKey();
-    const current = this.#matchesKey(this.#providedState, key);
+    const key = this.#getRequestKey();
+    const current = this.#matchesRequestKey(this.#providedState, key);
     if (!current && this.#canRequestProvidedState(key)) {
       this.#requestProvidedState(key); // Updates again once answered
     }
@@ -302,7 +301,7 @@ export class SelectAllController {
    * Returns the parts of the host state that the state received from the
    * provider depends on.
    */
-  #getKey() {
+  #getRequestKey() {
     const host = this.#host;
     return {
       filter: host.filter,
@@ -312,7 +311,7 @@ export class SelectAllController {
     };
   }
 
-  #matchesKey(stateOrRequest, key) {
+  #matchesRequestKey(stateOrRequest, key) {
     if (!stateOrRequest) {
       return false;
     }
@@ -332,7 +331,7 @@ export class SelectAllController {
    */
   #canRequestProvidedState(key) {
     const host = this.#host;
-    return host.opened && !host.loading && host.size !== undefined && !this.#matchesKey(this.#stateRequest, key);
+    return host.opened && !host.loading && host.size !== undefined && !this.#matchesRequestKey(this.#stateRequest, key);
   }
 
   async #requestProvidedState(key) {
@@ -386,7 +385,7 @@ export class SelectAllController {
    */
   async #updateSelectionViaProvider(selected) {
     const host = this.#host;
-    const { filter, provider } = this.#getKey();
+    const { filter, provider } = this.#getRequestKey();
 
     this.#pending = true;
     this.update();
