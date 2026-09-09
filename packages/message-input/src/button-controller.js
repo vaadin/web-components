@@ -57,7 +57,7 @@ export class ButtonController extends SlotController {
       return;
     }
 
-    // Only keep a generated label while the button has no accessible name of its own.
+    // Use generated label if the button doesn't have own accessible name.
     const needsLabel = !hasAccessibleText(node) && !node.hasAttribute('aria-labelledby');
     this.#label = needsLabel ? label : undefined;
     setOrRemoveAttribute(node, 'aria-label', this.#label);
