@@ -448,7 +448,7 @@ export const DataProviderMixin = (superClass) =>
 
     /** @private */
     __scrollToPendingIndexes() {
-      if (this.__pendingScrollToIndexes && this.$.items.children.length) {
+      if (this.__pendingScrollToIndexes) {
         const indexes = this.__pendingScrollToIndexes;
         delete this.__pendingScrollToIndexes;
         this.scrollToIndex(...indexes);
