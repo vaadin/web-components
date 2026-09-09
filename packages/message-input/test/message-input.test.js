@@ -94,7 +94,7 @@ describe('message-input', () => {
 
     it('should fire a submit event on custom button click', async () => {
       const customButton = document.createElement('button');
-      customButton.slot = 'button';
+      customButton.setAttribute('slot', 'button');
       button.replaceWith(customButton);
       await nextFrame();
 
@@ -131,7 +131,7 @@ describe('message-input', () => {
 
     it('should set aria-label on a custom button with only aria-hidden text', async () => {
       const customButton = document.createElement('button');
-      customButton.slot = 'button';
+      customButton.setAttribute('slot', 'button');
       customButton.innerHTML = '<span aria-hidden="true">↑</span>';
       button.replaceWith(customButton);
       messageInput.i18n = { send: 'Lähetä' };
@@ -142,7 +142,7 @@ describe('message-input', () => {
 
     it('should set aria-label on a custom button with only comment nodes', async () => {
       const customButton = document.createElement('button');
-      customButton.slot = 'button';
+      customButton.setAttribute('slot', 'button');
       customButton.innerHTML = '<!-- lit marker --><svg aria-hidden="true"><path d="M0 0h1v1H0z"></path></svg>';
       button.replaceWith(customButton);
       messageInput.i18n = { send: 'Lähetä' };
@@ -153,7 +153,7 @@ describe('message-input', () => {
 
     it('should set aria-label on a custom button with only named slot text', async () => {
       const customButton = document.createElement('button');
-      customButton.slot = 'button';
+      customButton.setAttribute('slot', 'button');
       customButton.innerHTML = '<span slot="tooltip">Send prompt</span>';
       button.replaceWith(customButton);
       messageInput.i18n = { send: 'Lähetä' };
@@ -164,7 +164,7 @@ describe('message-input', () => {
 
     it('should not override an aria-label set on a custom button after slotting', async () => {
       const customButton = document.createElement('button');
-      customButton.slot = 'button';
+      customButton.setAttribute('slot', 'button');
       customButton.innerHTML = '<svg aria-hidden="true"><path d="M0 0h1v1H0z"></path></svg>';
       button.replaceWith(customButton);
       await nextFrame();
@@ -178,7 +178,7 @@ describe('message-input', () => {
 
     it('should remove aria-label when a custom button gets text content', async () => {
       const customButton = document.createElement('button');
-      customButton.slot = 'button';
+      customButton.setAttribute('slot', 'button');
       customButton.innerHTML = '<svg aria-hidden="true"><path d="M0 0h1v1H0z"></path></svg>';
       button.replaceWith(customButton);
       await nextFrame();
@@ -232,7 +232,7 @@ describe('message-input', () => {
 
     it('should toggle disabled state on a custom button when value is set', async () => {
       const customButton = document.createElement('button');
-      customButton.slot = 'button';
+      customButton.setAttribute('slot', 'button');
       button.replaceWith(customButton);
       await nextFrame();
       expect(customButton.disabled).to.be.true;

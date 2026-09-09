@@ -56,7 +56,7 @@ describe('message-input', () => {
 
         it('custom button', async () => {
           const customButton = document.createElement('vaadin-button');
-          customButton.slot = 'button';
+          customButton.setAttribute('slot', 'button');
           customButton.setAttribute('theme', 'icon primary');
           customButton.innerHTML = '<vaadin-icon icon="vaadin:arrow-up"></vaadin-icon>';
           element.querySelector('[slot="button"]').replaceWith(customButton);
