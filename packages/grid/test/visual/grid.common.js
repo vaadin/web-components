@@ -216,6 +216,13 @@ describe('grid', () => {
             element.$.table.scrollLeft = element.__isRTL ? -20 : 20;
             await visualDiff(element, `${dir}-selection-start-frozen`);
           });
+
+          it('select all unavailable', async () => {
+            element.isItemSelectable = () => true;
+            flushGrid(element);
+            await nextRender();
+            await visualDiff(element, `${dir}-selection-start-select-all-unavailable`);
+          });
         });
 
         describe('end', () => {

@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @import '../src/mixins/field-button.css';
+@import '../src/mixins/sr-only.css';
 @import '../src/components/side-nav-item.css';
 
 :root,
@@ -11,5 +12,6 @@
   --_lumo-vaadin-side-nav-item-inject: 1;
   --_lumo-vaadin-side-nav-item-inject-modules:
     lumo_mixins_field-button,
+    lumo_mixins_sr-only,
     lumo_components_side-nav-item;
 }
