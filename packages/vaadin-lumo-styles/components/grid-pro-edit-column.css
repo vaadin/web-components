@@ -11,6 +11,7 @@
 @import '../src/mixins/field-label.css';
 @import '../src/mixins/field-required.css';
 @import '../src/mixins/grid-pro-editor.css';
+@import '../src/mixins/sr-only.css';
 @import '../src/components/checkbox.css';
 @import '../src/components/grid-pro-edit-select.css';
 @import '../src/components/select.css';
@@ -39,6 +40,7 @@
     lumo_mixins_field-helper,
     lumo_mixins_field-base,
     lumo_mixins_grid-pro-editor,
+    lumo_mixins_sr-only,
     lumo_components_select,
     lumo_components_grid-pro-edit-select;
 
