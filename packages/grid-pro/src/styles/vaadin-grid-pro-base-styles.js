@@ -10,9 +10,8 @@
  */
 import '@vaadin/component-base/src/styles/style-props.js';
 import { css } from 'lit';
-import { gridStyles } from '@vaadin/grid/src/styles/vaadin-grid-base-styles.js';
 
-const gridPro = css`
+export const gridProStyles = css`
   [part~='body-cell'] {
     --_highlight-color: color-mix(in srgb, currentColor 5%, transparent);
     --_highlight-color2: color-mix(in srgb, currentColor 10%, transparent);
@@ -112,5 +111,3 @@ const gridPro = css`
     pointer-events: none;
   }
 `;
-
-export const gridProStyles = [gridPro, gridStyles];
