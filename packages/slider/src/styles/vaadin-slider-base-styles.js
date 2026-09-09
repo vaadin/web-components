@@ -63,7 +63,7 @@ export const sliderStyles = css`
   }
 
   /* Baseline alignment guide */
-  #controls::before {
+  :host([theme~='label-aside']) #controls::before {
     content: '\\2003' / '';
     grid-row: 1;
     grid-column: track-start / track-end;
