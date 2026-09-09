@@ -14,6 +14,12 @@ describe('email-field', () => {
   });
 
   describe('states', () => {
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'state-label-aside');
+    });
+
     ['ltr', 'rtl'].forEach((dir) => {
       describe(dir, () => {
         before(() => {
@@ -35,11 +41,5 @@ describe('email-field', () => {
         });
       });
     });
-  });
-
-  it('label aside', async () => {
-    element.setAttribute('theme', 'label-aside');
-    element.label = 'Label';
-    await visualDiff(div, 'label-aside');
   });
 });

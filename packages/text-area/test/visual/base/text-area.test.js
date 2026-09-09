@@ -53,6 +53,12 @@ describe('text-area', () => {
       await visualDiff(div, 'state-flex');
     });
 
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'state-label-aside');
+    });
+
     describe('focus', () => {
       afterEach(async () => {
         await resetMouse();
@@ -151,11 +157,5 @@ describe('text-area', () => {
         });
       });
     });
-  });
-
-  it('label aside', async () => {
-    element.setAttribute('theme', 'label-aside');
-    element.label = 'Label';
-    await visualDiff(div, 'label-aside');
   });
 });

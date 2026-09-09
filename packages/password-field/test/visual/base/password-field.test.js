@@ -44,6 +44,12 @@ describe('password-field', () => {
       element.readonly = true;
       await visualDiff(div, 'state-readonly');
     });
+
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'state-label-aside');
+    });
   });
 
   describe('features', () => {
@@ -70,11 +76,5 @@ describe('password-field', () => {
         });
       });
     });
-  });
-
-  it('label aside', async () => {
-    element.setAttribute('theme', 'label-aside');
-    element.label = 'Label';
-    await visualDiff(div, 'label-aside');
   });
 });

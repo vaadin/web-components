@@ -45,6 +45,12 @@ describe('number-field', () => {
       await visualDiff(div, 'state-readonly');
     });
 
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'state-label-aside');
+    });
+
     describe('focus', () => {
       afterEach(async () => {
         await resetMouse();
@@ -100,11 +106,5 @@ describe('number-field', () => {
         });
       });
     });
-  });
-
-  it('label aside', async () => {
-    element.setAttribute('theme', 'label-aside');
-    element.label = 'Label';
-    await visualDiff(div, 'label-aside');
   });
 });

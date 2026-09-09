@@ -41,6 +41,12 @@ describe('select', () => {
       await visualDiff(div, 'state-readonly');
     });
 
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'state-label-aside');
+    });
+
     it('focus', async () => {
       await sendKeys({ press: 'Tab' });
       await visualDiff(div, 'state-focus');
@@ -107,21 +113,12 @@ describe('select', () => {
       element.value = 'custom';
       await visualDiff(div, 'value-multiline');
     });
-  });
 
-  describe('label aside', () => {
-    beforeEach(() => {
-      element.label = 'Label';
+    it('label aside', async () => {
       element.setAttribute('theme', 'label-aside');
-    });
-
-    it('default', async () => {
-      await visualDiff(div, 'label-aside');
-    });
-
-    it('value', async () => {
+      element.label = 'Label';
       element.value = 'value-1';
-      await visualDiff(div, 'label-aside-value');
+      await visualDiff(div, 'value-label-aside');
     });
   });
 
