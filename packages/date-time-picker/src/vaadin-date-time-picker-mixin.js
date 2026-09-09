@@ -1097,9 +1097,7 @@ export const DateTimePickerMixin = (superClass) =>
         return;
       }
 
-      const forwardedTheme = theme?.replace(/(^|\s)label-aside(\s|$)/u, ' ').trim();
-
-      [datePicker, timePicker].forEach((picker) => setOrRemoveAttribute(picker, 'theme', forwardedTheme));
+      [datePicker, timePicker].forEach((picker) => setOrRemoveAttribute(picker, 'theme', theme));
     }
 
     /** @private */
