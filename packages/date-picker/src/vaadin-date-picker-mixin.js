@@ -5,7 +5,7 @@
  */
 import { hideOthers } from '@vaadin/a11y-base/src/aria-hidden.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
@@ -995,6 +995,12 @@ export const DatePickerMixin = (subclass) =>
       // especially on outside click. On Esc key press, do not validate.
       if (!this.value && !this._keyboardActive) {
         this._requestValidation();
+      }
+
+      // Focusout events while closing arrive with `opened` still true and keep the focused state.
+      // Clear it here unless focus was restored to the input, as at a wide viewport or on Esc.
+      if (!this.inputElement || !isElementFocused(this.inputElement)) {
+        this._setFocused(false);
       }
     }
 
