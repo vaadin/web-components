@@ -14,6 +14,7 @@ export const field = css`
     --_has-helper: ;
     --_no-error: initial;
     --_has-error: ;
+    --_rows-after-input: ;
     --_gap: var(--vaadin-input-field-container-gap, var(--vaadin-gap-xs));
     --_gap-s: round(var(--_gap) / 3, 2px);
     display: inline-grid;
@@ -22,7 +23,7 @@ export const field = css`
       var(--_helper-above-field, 'helper' auto)
       '                           baseline' 0
       '                           input' 1fr
-      var(--_rows-after-input,)
+      var(--_rows-after-input)
       var(--_helper-below-field, 'helper' auto)
       '                           error' auto
       / 100%;
@@ -208,7 +209,7 @@ export const fieldLabelAside = css`
       var(--_helper-above-field, '.     helper' auto)
       '                           .     baseline' 0
       '                           label input' 1fr
-      var(--_rows-after-input,)
+      var(--_rows-after-input)
       var(--_helper-below-field, 'label helper' auto)
       '                           label error' auto
       / var(--_label-aside-width) minmax(0, 1fr);
