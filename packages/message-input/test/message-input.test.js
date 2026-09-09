@@ -186,6 +186,17 @@ describe('message-input', () => {
       expect(customButton.getAttribute('aria-label')).to.equal('Lähetä');
     });
 
+    it('should set aria-label on a custom button with only comment nodes', async () => {
+      const customButton = document.createElement('button');
+      customButton.slot = 'button';
+      customButton.innerHTML = '<!-- lit marker --><svg aria-hidden="true"><path d="M0 0h1v1H0z"></path></svg>';
+      button.replaceWith(customButton);
+      messageInput.i18n = { send: 'Lähetä' };
+      await nextFrame();
+
+      expect(customButton.getAttribute('aria-label')).to.equal('Lähetä');
+    });
+
     it('should not override an aria-label set on a custom button after slotting', async () => {
       const customButton = document.createElement('button');
       customButton.slot = 'button';
