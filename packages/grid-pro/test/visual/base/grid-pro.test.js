@@ -4,6 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../not-animated-styles.css';
 import '../../../src/vaadin-grid-pro.js';
 import '../../../src/vaadin-grid-pro-edit-column.js';
+import '@vaadin/grid/src/vaadin-grid-selection-column.js';
 import { getContainerCell } from '../../helpers.js';
 import { users } from '../users.js';
 
@@ -132,6 +133,22 @@ describe('grid-pro', () => {
       cell._content.dispatchEvent(new CustomEvent('dblclick', { bubbles: true }));
       await visualDiff(div, 'edit-column-checkbox');
     });
+  });
+
+  it('select-all-unavailable', async () => {
+    element = fixtureSync(
+      `
+        <vaadin-grid-pro style="height: 100px;">
+          <vaadin-grid-selection-column></vaadin-grid-selection-column>
+          <vaadin-grid-pro-edit-column path="name.first"></vaadin-grid-pro-edit-column>
+        </vaadin-grid-pro>
+      `,
+      div,
+    );
+    element.items = users;
+    element.isItemSelectable = () => true;
+    await nextRender();
+    await visualDiff(div, 'select-all-unavailable');
   });
 
   describe('edit-column-select', () => {

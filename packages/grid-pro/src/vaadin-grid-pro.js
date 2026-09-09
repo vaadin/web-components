@@ -86,7 +86,7 @@ class GridPro extends SlotStylesMixin(InlineEditingMixin(Grid)) {
   }
 
   static get styles() {
-    return [...super.styles, gridProStyles];
+    return [gridProStyles, ...super.styles];
   }
 
   get slotStyles() {
