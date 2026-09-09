@@ -37,10 +37,8 @@ import { MessageInputMixin } from './vaadin-message-input-mixin.js';
  * `button`   | Button that submits the message, replacing the default one
  * `footer`   | Content displayed below the text area and controls
  *
- * A button placed in the `button` slot submits the message when clicked, and is disabled
- * while the message is empty. Its content is left as is. A button with no text content
- * gets the localized send text as `aria-label`, unless it already provides an accessible
- * name of its own.
+ * When a custom button has no text content or accessible label, `aria-label` attribute
+ * is set based on the [`i18n`](#/elements/vaadin-message-input#property-i18n) property.
  *
  * ### Styling
  *
