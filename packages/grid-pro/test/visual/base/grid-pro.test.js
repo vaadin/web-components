@@ -4,6 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../not-animated-styles.css';
 import '../../../src/vaadin-grid-pro.js';
 import '../../../src/vaadin-grid-pro-edit-column.js';
+import '@vaadin/grid/src/vaadin-grid-selection-column.js';
 import { getContainerCell } from '../../helpers.js';
 import { users } from '../users.js';
 
@@ -89,6 +90,32 @@ describe('grid-pro', () => {
           await visualDiff(div, `theme-${theme}-focus`);
         });
       });
+    });
+  });
+
+  describe('selection', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-grid-pro style="height: 100px;">
+            <vaadin-grid-selection-column></vaadin-grid-selection-column>
+            <vaadin-grid-pro-edit-column path="name.first"></vaadin-grid-pro-edit-column>
+          </vaadin-grid-pro>
+        `,
+        div,
+      );
+      element.items = users;
+      await nextRender();
+    });
+
+    it('select-all', async () => {
+      await visualDiff(div, 'select-all');
+    });
+
+    it('select-all-unavailable', async () => {
+      element.isItemSelectable = () => true;
+      await nextRender();
+      await visualDiff(div, 'select-all-unavailable');
     });
   });
 
