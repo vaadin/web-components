@@ -19,6 +19,10 @@ export const textAreaStyles = css`
     );
   }
 
+  :host([theme~='label-aside']) [part='input-field'] {
+    height: 100%;
+  }
+
   ::slotted(textarea) {
     resize: none;
     white-space: pre-wrap;

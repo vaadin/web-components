@@ -14,7 +14,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
+import { field, fieldLabelAside } from '@vaadin/field-base/src/styles/field-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sliderStyles } from './styles/vaadin-slider-base-styles.js';
@@ -67,6 +67,8 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  * | `--vaadin-input-field-helper-color`            |
  * | `--vaadin-input-field-helper-font-size`        |
  * | `--vaadin-input-field-helper-font-weight`      |
+ * | `--vaadin-input-field-label-aside-gap`         |
+ * | `--vaadin-input-field-label-aside-width`       |
  * | `--vaadin-input-field-label-color`             |
  * | `--vaadin-input-field-label-font-size`         |
  * | `--vaadin-input-field-label-font-weight`       |
@@ -134,6 +136,7 @@ class Slider extends FieldMixin(
   static get styles() {
     return [
       field,
+      fieldLabelAside,
       sliderStyles,
       css`
         :host([focus-ring]) [part='thumb'] {

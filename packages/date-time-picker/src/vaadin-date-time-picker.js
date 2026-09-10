@@ -64,6 +64,8 @@ import { DateTimePickerMixin } from './vaadin-date-time-picker-mixin.js';
  * | `--vaadin-input-field-error-font-size`           |
  * | `--vaadin-input-field-error-font-weight`         |
  * | `--vaadin-input-field-error-line-height`         |
+ * | `--vaadin-input-field-label-aside-gap`           |
+ * | `--vaadin-input-field-label-aside-width`         |
  * | `--vaadin-input-field-label-color`               |
  * | `--vaadin-input-field-label-font-size`           |
  * | `--vaadin-input-field-label-font-weight`         |

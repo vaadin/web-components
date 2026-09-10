@@ -53,6 +53,12 @@ describe('text-area', () => {
       await visualDiff(div, 'state-flex');
     });
 
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'state-label-aside');
+    });
+
     describe('focus', () => {
       afterEach(async () => {
         await resetMouse();
@@ -79,6 +85,14 @@ describe('text-area', () => {
         element.value = 'a\nb\nc\nd\ne';
         element.focus();
         await visualDiff(div, 'state-scrolled');
+      });
+
+      it('label aside scrolled', async () => {
+        element.setAttribute('theme', 'label-aside');
+        element.label = 'Label';
+        element.style.height = '70px';
+        element.value = 'a\nb\nc\nd\ne';
+        await visualDiff(div, 'state-label-aside-scrolled');
       });
 
       it('scrolled with prefix, suffix, clear button', async () => {

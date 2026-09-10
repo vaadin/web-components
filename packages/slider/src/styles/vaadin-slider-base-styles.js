@@ -38,12 +38,11 @@ export const sliderStyles = css`
   }
 
   :host([min-max-visible]) {
-    grid-template:
-      'label' auto var(--_helper-above-field, 'helper' auto) 'baseline' 0 'input' 1fr 'marks' auto var(
-        --_helper-below-field,
-        'helper' auto
-      )
-      'error' auto / 100%;
+    --_rows-after-input: 'marks' auto;
+  }
+
+  :host([theme~='label-aside'][min-max-visible]) {
+    --_rows-after-input: 'label marks' auto;
   }
 
   #controls {
@@ -57,6 +56,18 @@ export const sliderStyles = css`
     border-block: var(--vaadin-input-field-border-width, 1px) solid transparent;
     padding-block: var(--vaadin-padding-block-container);
     --_track-width: calc(100% - var(--_thumb-width));
+  }
+
+  :host([theme~='label-aside']) #controls {
+    align-self: baseline;
+  }
+
+  /* Baseline alignment guide */
+  :host([theme~='label-aside']) #controls::before {
+    content: '\\2003' / '';
+    grid-row: 1;
+    grid-column: track-start / track-end;
+    pointer-events: none;
   }
 
   [part='track'] {
