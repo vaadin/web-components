@@ -87,9 +87,5 @@ export const multiSelectComboBoxStyles = [
     [part='select-all']:focus-visible {
       outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     }
-
-    [part='select-all'][hidden] {
-      display: none;
-    }
   `,
 ];
