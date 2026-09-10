@@ -87,6 +87,14 @@ describe('text-area', () => {
         await visualDiff(div, 'state-scrolled');
       });
 
+      it('label aside scrolled', async () => {
+        element.setAttribute('theme', 'label-aside');
+        element.label = 'Label';
+        element.style.height = '70px';
+        element.value = 'a\nb\nc\nd\ne';
+        await visualDiff(div, 'state-label-aside-scrolled');
+      });
+
       it('scrolled with prefix, suffix, clear button', async () => {
         const prefix = document.createElement('span');
         prefix.setAttribute('slot', 'prefix');
