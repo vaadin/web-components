@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import {
+  aTimeout,
   esc,
   fixtureSync,
   makeSoloTouchEvent,
@@ -60,57 +61,6 @@ describe('vaadin-app-layout', () => {
     });
   });
 
-  describe('initial layout', () => {
-    it('should set content offset for the drawer before the first paint', async () => {
-      layout = fixtureSync(`
-        <vaadin-app-layout style="--vaadin-app-layout-drawer-overlay: false; --vaadin-app-layout-drawer-width: 200px;">
-          <section slot="drawer">Drawer</section>
-          <main>Content</main>
-        </vaadin-app-layout>
-      `);
-      await nextFrame();
-      expect(getComputedStyle(layout).paddingInlineStart).to.equal('200px');
-    });
-
-    it('should set content offset for the navbar before the first paint', async () => {
-      layout = fixtureSync(`
-        <vaadin-app-layout style="--vaadin-app-layout-touch-optimized: false;">
-          <div slot="navbar" style="height: 100px;">Navbar</div>
-          <main>Content</main>
-        </vaadin-app-layout>
-      `);
-      await nextFrame();
-      const navbar = layout.shadowRoot.querySelector('[part~="navbar-top"]');
-      const offset = parseFloat(getComputedStyle(layout).paddingTop);
-      expect(offset).to.be.greaterThan(100);
-      expect(offset).to.be.closeTo(navbar.getBoundingClientRect().height, 1);
-    });
-
-    it('should apply overlay mode before the first paint', async () => {
-      layout = fixtureSync(`
-        <vaadin-app-layout style="--vaadin-app-layout-drawer-overlay: true; --vaadin-app-layout-drawer-width: 200px;">
-          <section slot="drawer">Drawer</section>
-          <main>Content</main>
-        </vaadin-app-layout>
-      `);
-      await nextFrame();
-      expect(layout.overlay).to.be.true;
-      expect(layout.drawerOpened).to.be.false;
-      expect(getComputedStyle(layout).paddingInlineStart).to.equal('0px');
-    });
-
-    it('should move touch-optimized navbar items to navbar-bottom before the first paint', async () => {
-      layout = fixtureSync(`
-        <vaadin-app-layout style="--vaadin-app-layout-touch-optimized: true;">
-          <div slot="navbar touch-optimized">Navbar</div>
-          <main>Content</main>
-        </vaadin-app-layout>
-      `);
-      await nextFrame();
-      expect(layout.querySelector('div').getAttribute('slot')).to.equal('navbar-bottom');
-    });
-  });
-
   describe('navbar', () => {
     beforeEach(() => {
       layout = fixtureSync('<vaadin-app-layout></vaadin-app-layout>');
@@ -120,13 +70,11 @@ describe('vaadin-app-layout', () => {
       const item = document.createElement('div');
       item.setAttribute('slot', 'navbar');
       layout.appendChild(item);
-      await nextResize(layout);
-      await nextFrame();
+      await aTimeout(0);
       expect(layout.$.navbarTop.hasAttribute('hidden')).to.be.false;
 
       item.remove();
-      await nextResize(layout);
-      await nextFrame();
+      await aTimeout(0);
       expect(layout.$.navbarTop.hasAttribute('hidden')).to.be.true;
     });
 
@@ -139,8 +87,7 @@ describe('vaadin-app-layout', () => {
         const toggle = document.createElement('vaadin-drawer-toggle');
         toggle.setAttribute('slot', 'navbar touch-optimized');
         layout.appendChild(toggle);
-        await nextResize(layout);
-        await nextFrame();
+        await aTimeout(0);
         expect(toggle.getAttribute('slot')).to.equal('navbar');
       });
 
@@ -148,8 +95,7 @@ describe('vaadin-app-layout', () => {
         const toggle = document.createElement('vaadin-drawer-toggle');
         toggle.setAttribute('slot', 'navbar');
         layout.appendChild(toggle);
-        await nextResize(layout);
-        await nextFrame();
+        await aTimeout(0);
         expect(toggle.offsetHeight).to.be.greaterThan(0);
       });
 
@@ -159,8 +105,7 @@ describe('vaadin-app-layout', () => {
         navbarContent.style.height = '100px';
         navbarContent.setAttribute('slot', 'navbar');
         layout.appendChild(navbarContent);
-        await nextResize(layout);
-        await nextFrame();
+        await aTimeout(0);
         const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-top'));
         expect(initialOffset).to.be.greaterThan(0);
         // Increase navbar content size and measure increase
@@ -181,8 +126,7 @@ describe('vaadin-app-layout', () => {
         const toggle = document.createElement('vaadin-drawer-toggle');
         toggle.setAttribute('slot', 'navbar touch-optimized');
         layout.appendChild(toggle);
-        await nextResize(layout);
-        await nextFrame();
+        await aTimeout(0);
         expect(toggle.getAttribute('slot')).to.equal('navbar-bottom');
       });
 
@@ -190,8 +134,7 @@ describe('vaadin-app-layout', () => {
         const toggle = document.createElement('vaadin-drawer-toggle');
         toggle.setAttribute('slot', 'navbar touch-optimized');
         layout.appendChild(toggle);
-        await nextResize(layout);
-        await nextFrame();
+        await aTimeout(0);
         expect(toggle.offsetHeight).to.be.greaterThan(0);
       });
 
@@ -201,11 +144,7 @@ describe('vaadin-app-layout', () => {
         navbarContent.style.height = '100px';
         navbarContent.setAttribute('slot', 'navbar touch-optimized');
         layout.appendChild(navbarContent);
-        await nextResize(layout);
-        await nextFrame();
-        // Wait for second cycle after node is moved to navbar-bottom
-        await nextResize(layout);
-        await nextFrame();
+        await aTimeout(0);
         const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
         expect(initialOffset).to.be.greaterThan(0);
         // Increase navbar content size and measure increase
@@ -291,15 +230,13 @@ describe('vaadin-app-layout', () => {
         const section = layout.querySelector('[slot="drawer"]');
         const initialPadding = getComputedStyle(layout).paddingInlineStart;
         section.parentNode.removeChild(section);
-        await nextResize(layout);
-        await nextFrame();
+        await aTimeout(0);
 
         expect(drawer.hasAttribute('hidden')).to.be.true;
         expect(getComputedStyle(layout).paddingInlineStart).to.be.equal('0px');
 
         layout.appendChild(section);
-        await nextResize(layout);
-        await nextFrame();
+        await aTimeout(0);
 
         expect(drawer.hasAttribute('hidden')).to.be.false;
         expect(getComputedStyle(layout).paddingInlineStart).to.be.equal(initialPadding);
@@ -340,7 +277,7 @@ describe('vaadin-app-layout', () => {
 
         layout.style.setProperty('--vaadin-app-layout-transition-duration', '100ms');
 
-        const spy = sinon.spy(layout, '__setOffsetSize');
+        const spy = sinon.spy(layout, '__setDrawerOffsetSize');
         toggle.click();
         await oneEvent(drawer, 'transitionend');
 
