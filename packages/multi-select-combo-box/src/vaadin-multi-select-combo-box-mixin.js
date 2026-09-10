@@ -355,11 +355,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
       });
       this.addController(this._overflowController);
-    }
-
-    /** @protected */
-    firstUpdated(props) {
-      super.firstUpdated(props);
 
       this._selectAllController = new SelectAllController(this, this.shadowRoot.querySelector('[part="select-all"]'));
     }
@@ -410,7 +405,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         '__effectiveI18n',
       ];
       if (selectAllProps.some((prop) => props.has(prop))) {
-        this._selectAllController.update();
+        this._selectAllController?.update();
       }
     }
 
