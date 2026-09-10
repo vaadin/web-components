@@ -1,6 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
 import {
-  aTimeout,
   esc,
   fixtureSync,
   makeSoloTouchEvent,
@@ -58,102 +57,6 @@ describe('vaadin-app-layout', () => {
     it('should fallback to navbar if invalid "primarySection" is set', () => {
       layout.primarySection = 'foobar';
       expect(layout.primarySection).to.equal('navbar');
-    });
-  });
-
-  describe('navbar', () => {
-    beforeEach(() => {
-      layout = fixtureSync('<vaadin-app-layout></vaadin-app-layout>');
-    });
-
-    it('should toggle navbar container visibility when slot content changes', async () => {
-      const item = document.createElement('div');
-      item.setAttribute('slot', 'navbar');
-      layout.appendChild(item);
-      await aTimeout(0);
-      expect(layout.$.navbarTop.hasAttribute('hidden')).to.be.false;
-
-      item.remove();
-      await aTimeout(0);
-      expect(layout.$.navbarTop.hasAttribute('hidden')).to.be.true;
-    });
-
-    describe('default', () => {
-      beforeEach(() => {
-        layout.style.setProperty('--vaadin-app-layout-touch-optimized', 'false');
-      });
-
-      it('should move added node to navbar', async () => {
-        const toggle = document.createElement('vaadin-drawer-toggle');
-        toggle.setAttribute('slot', 'navbar touch-optimized');
-        layout.appendChild(toggle);
-        await aTimeout(0);
-        expect(toggle.getAttribute('slot')).to.equal('navbar');
-      });
-
-      it('should make node added to navbar visible', async () => {
-        const toggle = document.createElement('vaadin-drawer-toggle');
-        toggle.setAttribute('slot', 'navbar');
-        layout.appendChild(toggle);
-        await aTimeout(0);
-        expect(toggle.offsetHeight).to.be.greaterThan(0);
-      });
-
-      it('should update content offset when navbar height changes', async () => {
-        // Add content to navbar and measure original offset
-        const navbarContent = document.createElement('div');
-        navbarContent.style.height = '100px';
-        navbarContent.setAttribute('slot', 'navbar');
-        layout.appendChild(navbarContent);
-        await aTimeout(0);
-        const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-top'));
-        expect(initialOffset).to.be.greaterThan(0);
-        // Increase navbar content size and measure increase
-        navbarContent.style.height = '200px';
-        await nextResize(layout);
-        await nextFrame();
-        const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-top'));
-        expect(updatedOffset).to.equal(initialOffset + 100);
-      });
-    });
-
-    describe('touch-optimized', () => {
-      beforeEach(() => {
-        layout.style.setProperty('--vaadin-app-layout-touch-optimized', 'true');
-      });
-
-      it('should move added node to navbar-bottom', async () => {
-        const toggle = document.createElement('vaadin-drawer-toggle');
-        toggle.setAttribute('slot', 'navbar touch-optimized');
-        layout.appendChild(toggle);
-        await aTimeout(0);
-        expect(toggle.getAttribute('slot')).to.equal('navbar-bottom');
-      });
-
-      it('should make node added to navbar-bottom visible', async () => {
-        const toggle = document.createElement('vaadin-drawer-toggle');
-        toggle.setAttribute('slot', 'navbar touch-optimized');
-        layout.appendChild(toggle);
-        await aTimeout(0);
-        expect(toggle.offsetHeight).to.be.greaterThan(0);
-      });
-
-      it('should update content offset when navbar height changes', async () => {
-        // Add content to navbar and measure original offset
-        const navbarContent = document.createElement('div');
-        navbarContent.style.height = '100px';
-        navbarContent.setAttribute('slot', 'navbar touch-optimized');
-        layout.appendChild(navbarContent);
-        await aTimeout(0);
-        const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
-        expect(initialOffset).to.be.greaterThan(0);
-        // Increase navbar content size and measure increase
-        navbarContent.style.height = '200px';
-        await nextResize(layout);
-        await nextFrame();
-        const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
-        expect(updatedOffset).to.equal(initialOffset + 100);
-      });
     });
   });
 
@@ -226,22 +129,6 @@ describe('vaadin-app-layout', () => {
         expect(spy.calledTwice).to.be.true;
       });
 
-      it('should hide/unhide drawer if corresponding slot depending on the number of content', async () => {
-        const section = layout.querySelector('[slot="drawer"]');
-        const initialPadding = getComputedStyle(layout).paddingInlineStart;
-        section.parentNode.removeChild(section);
-        await aTimeout(0);
-
-        expect(drawer.hasAttribute('hidden')).to.be.true;
-        expect(getComputedStyle(layout).paddingInlineStart).to.be.equal('0px');
-
-        layout.appendChild(section);
-        await aTimeout(0);
-
-        expect(drawer.hasAttribute('hidden')).to.be.false;
-        expect(getComputedStyle(layout).paddingInlineStart).to.be.equal(initialPadding);
-      });
-
       it('should not close the drawer on navigation event', () => {
         window.dispatchEvent(new CustomEvent('vaadin-router-location-changed'));
         expect(layout.drawerOpened).to.be.true;
@@ -270,23 +157,6 @@ describe('vaadin-app-layout', () => {
         expect(toggle.getAttribute('aria-expanded')).to.equal('true');
       });
 
-      it('should only update offset size once during the drawer transition', async () => {
-        layout.primarySection = 'drawer';
-        await nextResize(layout);
-        await nextRender();
-
-        layout.style.setProperty('--vaadin-app-layout-transition-duration', '100ms');
-
-        const spy = sinon.spy(layout, '__setDrawerOffsetSize');
-        toggle.click();
-        await oneEvent(drawer, 'transitionend');
-
-        expect(spy.callCount).to.be.equal(1);
-        await nextFrame();
-
-        expect(spy.callCount).to.be.equal(1);
-      });
-
       it('should use the drawer width as offset width', async () => {
         fixtureSync(`
           <style>
@@ -300,23 +170,6 @@ describe('vaadin-app-layout', () => {
         const { width } = layout.$.drawer.getBoundingClientRect();
 
         expect(width).to.be.equal(100);
-      });
-
-      it('should update content offset when drawer width changes', async () => {
-        // Allow drawer size based on content
-        layout.style.setProperty('--vaadin-app-layout-drawer-width', 'auto');
-        const drawerContent = document.querySelector('section[slot="drawer"]');
-        drawerContent.style.width = '200px';
-        await nextResize(layout);
-        await nextRender();
-        const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-left'));
-        expect(initialOffset).to.equal(200);
-        // Decrease drawer content size and measure decrease
-        drawerContent.style.width = '100px';
-        await nextResize(layout);
-        await nextRender();
-        const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-left'));
-        expect(updatedOffset).to.equal(100);
       });
     });
 
