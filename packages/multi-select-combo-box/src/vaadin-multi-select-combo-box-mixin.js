@@ -592,22 +592,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from `FocusMixin` to not update the focused
-     * state when focus moves to the select all button, so that only the
-     * button shows a focus ring while it is focused.
-     *
-     * @param {FocusEvent} event
-     * @return {boolean}
-     * @protected
-     * @override
-     */
-    _shouldSetFocus(event) {
-      return !this._selectAllController.isButtonEvent(event) && super._shouldSetFocus(event);
-    }
-
-    /**
      * Override method from `ComboBoxBaseMixin` to not remove the focused
-     * state when focus moves between the input and the select all button.
+     * state when focus moves to another focusable element of this component,
+     * such as the select all button. That button is in the shadow root, so
+     * `relatedTarget` is retargeted to the host element itself.
      *
      * @param {FocusEvent} event
      * @return {boolean}
@@ -615,7 +603,12 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * @override
      */
     _shouldRemoveFocus(event) {
-      return !this._selectAllController.isFocusMovingToInputOrButton(event) && super._shouldRemoveFocus(event);
+      const { relatedTarget } = event;
+      if (relatedTarget === this || relatedTarget === this.inputElement) {
+        return false;
+      }
+
+      return super._shouldRemoveFocus(event);
     }
 
     /**

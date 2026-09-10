@@ -49,7 +49,7 @@ export class SelectAllController {
     const visible = host.selectAllButtonVisible && !host.readonly && !host.dataProvider;
 
     // Do not drop focus to the body when the button is about to be hidden.
-    if (!visible && this.isButtonFocused()) {
+    if (!visible && this.#isButtonFocused()) {
       host.inputElement.focus();
     }
 
@@ -64,39 +64,6 @@ export class SelectAllController {
   }
 
   /**
-   * Returns true when the event originates from the button.
-   * @param {Event} event
-   * @return {boolean}
-   */
-  isButtonEvent(event) {
-    return event.composedPath().includes(this.#button);
-  }
-
-  /**
-   * Returns true when the button has focus.
-   * @return {boolean}
-   */
-  isButtonFocused() {
-    return this.#button === getDeepActiveElement();
-  }
-
-  /**
-   * Returns true when the focus event moves focus between the input and the
-   * button, in which case the host should keep its focused state.
-   * @param {FocusEvent} event
-   * @return {boolean}
-   */
-  isFocusMovingToInputOrButton(event) {
-    const host = this.#host;
-    if (this.#button.hidden) {
-      return false;
-    }
-    // The button is in the shadow root, so when focus moves from the input to
-    // the button, `relatedTarget` is retargeted to the host element itself.
-    return event.relatedTarget === host || event.relatedTarget === host.inputElement;
-  }
-
-  /**
    * Handles a keydown event of the host. Returns true when the event was
    * consumed and the host should not handle it any further.
    * @param {KeyboardEvent} event
@@ -105,7 +72,7 @@ export class SelectAllController {
   handleKeyDown(event) {
     const host = this.#host;
 
-    if (this.isButtonEvent(event)) {
+    if (this.#isButtonEvent(event)) {
       switch (event.key) {
         case 'Tab':
           // Move focus back to the input instead of leaving the component
@@ -140,7 +107,7 @@ export class SelectAllController {
    * overlay containing the button is about to close.
    */
   restoreFocus() {
-    if (this.isButtonFocused()) {
+    if (this.#isButtonFocused()) {
       this.#host.inputElement.focus();
     }
   }
@@ -181,6 +148,20 @@ export class SelectAllController {
 
     this.#button.focus({ focusVisible: true });
     host.removeAttribute('focus-ring');
+  }
+
+  /**
+   * Returns true when the event originates from the button.
+   */
+  #isButtonEvent(event) {
+    return event.composedPath().includes(this.#button);
+  }
+
+  /**
+   * Returns true when the button has focus.
+   */
+  #isButtonFocused() {
+    return this.#button === getDeepActiveElement();
   }
 
   /**
