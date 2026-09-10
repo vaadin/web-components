@@ -173,6 +173,22 @@ export const MonthCalendarMixin = (superClass) =>
       this.setAttribute('role', 'application');
 
       addListener(this.$.monthGrid, 'tap', this._handleTap.bind(this));
+      this.$.monthGrid.addEventListener('focusin', (e) => this._onDateFocusIn(e));
+    }
+
+    /**
+     * Reports the date whose button received focus, so the overlay can follow
+     * focus that was moved by something other than its own keyboard handling,
+     * such as a screen reader swiping to a date.
+     * @protected
+     */
+    _onDateFocusIn(e) {
+      const cell = e.target.closest('[part~=date]');
+      if (cell?.date) {
+        this.dispatchEvent(
+          new CustomEvent('date-focus', { detail: { date: cell.date }, bubbles: true, composed: true }),
+        );
+      }
     }
 
     /** @override */

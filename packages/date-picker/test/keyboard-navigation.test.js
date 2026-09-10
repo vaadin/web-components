@@ -3,7 +3,16 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { getDefaultI18n, getFocusedCell, open, untilOverlayRendered, untilOverlayScrolled } from './helpers.js';
+import {
+  getDateButton,
+  getDateCell,
+  getDefaultI18n,
+  getFocusedCell,
+  getMonthCalendar,
+  open,
+  untilOverlayRendered,
+  untilOverlayScrolled,
+} from './helpers.js';
 
 describe('keyboard navigation', () => {
   describe('date-picker', () => {
@@ -78,6 +87,13 @@ describe('keyboard navigation', () => {
         await sendKeys({ press: 'Space' });
 
         expect(content.focusedDate.getTime()).to.equal(focused.getTime());
+      });
+
+      it('should show a date focused from outside in the input', async () => {
+        await open(datePicker);
+        getDateButton(getDateCell(getMonthCalendar(datePicker, 2001, 0), 15)).focus();
+        await nextRender();
+        expect(input.value).to.equal('1/15/2001');
       });
     });
 
@@ -332,6 +348,49 @@ describe('keyboard navigation', () => {
       await sendKeys({ press: 'PageDown' });
       await untilOverlayScrolled(overlay);
       expect(overlay.focusedDate).to.eql(new Date(2000, 2, 31));
+    });
+
+    it('should follow focus moved to another date', async () => {
+      getDateButton(getDateCell(getMonthCalendar(overlay, 2000, 0), 15)).focus();
+      await nextRender();
+      expect(overlay.focusedDate).to.eql(new Date(2000, 0, 15));
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(2000, 0, 15));
+      expect(cell.getAttribute('part')).to.contain('focused');
+    });
+
+    it('should not notify when the focused date button regains focus', async () => {
+      const spy = sinon.spy();
+      overlay.addEventListener('focused-date-changed', spy);
+      const button = getDateButton(getDateCell(getMonthCalendar(overlay, 2000, 0), 1));
+      button.blur();
+      button.focus();
+      await nextRender();
+      expect(spy.called).to.be.false;
+    });
+
+    it('should not follow focus moved to a date outside max', async () => {
+      overlay.maxDate = new Date(2000, 0, 10);
+      await nextRender();
+      getDateButton(getDateCell(getMonthCalendar(overlay, 2000, 0), 15)).focus();
+      await nextRender();
+      expect(overlay.focusedDate).to.eql(new Date(2000, 0, 1));
+    });
+
+    it('should follow focus moved to a disabled date inside the range', async () => {
+      overlay.isDateDisabled = (date) => date.day === 15;
+      await nextRender();
+      getDateButton(getDateCell(getMonthCalendar(overlay, 2000, 0), 15)).focus();
+      await nextRender();
+      expect(overlay.focusedDate).to.eql(new Date(2000, 0, 15));
+    });
+
+    it('should keep the day of month of a date focused from outside on pagedown', async () => {
+      getDateButton(getDateCell(getMonthCalendar(overlay, 2000, 0), 15)).focus();
+      await nextRender();
+      await sendKeys({ press: 'PageDown' });
+      await untilOverlayScrolled(overlay);
+      expect(getFocusedCell(overlay).date).to.eql(new Date(2000, 1, 15));
     });
 
     it('should focus next year with shift and pagedown', async () => {

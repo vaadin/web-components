@@ -318,6 +318,10 @@ export const DatePickerOverlayContentMixin = (superClass) =>
                 calendar.addEventListener('selected-date-changed', (e) => {
                   this.selectedDate = e.detail.value;
                 });
+
+                calendar.addEventListener('date-focus', (e) => {
+                  this.__onDateFocus(e.detail.date);
+                });
               });
 
               this.calendars = calendars;
@@ -909,6 +913,25 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           this.focusableDateButton.focus();
         }
       }
+    }
+
+    /**
+     * Follows focus that something other than the keyboard handling moved to a date,
+     * such as a screen reader swiping to it, so that the arrow keys, the `focused` part
+     * and the day of month kept for PageUp / PageDown continue from that date.
+     * @private
+     */
+    __onDateFocus(date) {
+      // The calendar focuses the date this element already tracks, nothing to follow.
+      if (dateEquals(date, this.focusedDate)) {
+        return;
+      }
+      // Same rule as the arrow keys: a disabled date may take focus, a date outside min / max may not.
+      if (!this._dateAllowed(date, undefined, undefined, () => false)) {
+        return;
+      }
+      this.focusedDate = date;
+      this._focusedMonthDate = date.getDate();
     }
 
     async focusDate(date, keepMonth) {
