@@ -3,6 +3,7 @@
  * Copyright (c) 2023 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-side-nav-overlay.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
@@ -16,6 +17,12 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { location } from './location.js';
 import { sideNavItemStyles } from './styles/vaadin-side-nav-item-base-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
+
+/** Time the pointer has to rest on an item before its flyout opens. */
+const HOVER_OPEN_DELAY = 100;
+
+/** Grace period after the pointer leaves an item and its flyout, before it closes. */
+const HOVER_CLOSE_DELAY = 300;
 
 /**
  * A navigation item to be used within `<vaadin-side-nav>`. Represents a navigation target.
@@ -65,12 +72,14 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute      | Description
- * ---------------|-------------
- * `disabled`     | Set when the element is disabled.
- * `expanded`     | Set when the element is expanded.
- * `has-children` | Set when the element has child items.
- * `has-tooltip`  | Set when the element has a slotted tooltip.
+ * Attribute           | Description
+ * --------------------|-------------
+ * `disabled`          | Set when the element is disabled.
+ * `expanded`          | Set when the element is expanded.
+ * `has-children`      | Set when the element has child items.
+ * `has-current-child` | Set when a descendant item's path matches the current browser URL.
+ * `has-tooltip`       | Set when the element has a slotted tooltip.
+ * `overlay-children`  | Set when the child items are rendered in a flyout.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -86,6 +95,8 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  * | `--vaadin-side-nav-item-line-height`    |
  * | `--vaadin-side-nav-item-padding`        |
  * | `--vaadin-side-nav-item-text-color`     |
+ * | `--vaadin-side-nav-overlay-offset`      |
+ * | `--vaadin-side-nav-overlay-padding`     |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -128,6 +139,27 @@ class SideNavItem extends SideNavChildrenMixin(
         type: Boolean,
         value: false,
         notify: true,
+        reflectToAttribute: true,
+      },
+
+      /**
+       * When enabled, the child items are rendered in a flyout next to the item
+       * instead of in a list below it. The flyout opens and closes with the
+       * `expanded` property.
+       *
+       * On devices that support hovering, the flyout opens when the pointer rests
+       * on the item and closes when it leaves both the item and the flyout. On
+       * other devices, clicking an item that has child items opens the flyout
+       * instead of navigating to the item's own path.
+       *
+       * Set `overlay-children` on the parent `<vaadin-side-nav>` to enable this
+       * for all its top-level items, which is what a navigation rail needs.
+       *
+       * @attr {boolean} overlay-children
+       */
+      overlayChildren: {
+        type: Boolean,
+        value: false,
         reflectToAttribute: true,
       },
 
@@ -198,15 +230,32 @@ class SideNavItem extends SideNavChildrenMixin(
     return sideNavItemStyles;
   }
 
+  /** @private */
+  #hoverQuery;
+
+  /** @private */
+  #openTimeout;
+
+  /** @private */
+  #closeTimeout;
+
   constructor() {
     super();
 
     this.__boundUpdateCurrent = this.__updateCurrent.bind(this);
+
+    this.addEventListener('pointerenter', () => this.#onPointerEnter());
+    this.addEventListener('pointerleave', () => this.#onPointerLeave());
   }
 
   /** @protected */
   get _button() {
     return this.shadowRoot.querySelector('button');
+  }
+
+  /** @private */
+  get #overlay() {
+    return this.shadowRoot.querySelector('vaadin-side-nav-overlay');
   }
 
   /**
@@ -240,6 +289,12 @@ class SideNavItem extends SideNavChildrenMixin(
         item.disabled = this.disabled;
       });
     }
+
+    // The flyout only exists after the branch has been rendered, so the
+    // position target cannot be bound in the template itself.
+    if (props.has('overlayChildren') && this.overlayChildren) {
+      this.#overlay.positionTarget = this.$.content;
+    }
   }
 
   /** @protected */
@@ -255,6 +310,7 @@ class SideNavItem extends SideNavChildrenMixin(
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
+    this.#clearHoverTimeouts();
     window.removeEventListener('popstate', this.__boundUpdateCurrent);
     window.removeEventListener('vaadin-navigated', this.__boundUpdateCurrent);
     window.removeEventListener('side-nav-location-changed', this.__boundUpdateCurrent);
@@ -288,9 +344,7 @@ class SideNavItem extends SideNavChildrenMixin(
           aria-labelledby="link i18n"
         ></button>
       </div>
-      <ul part="children" role="list" ?hidden="${!this.expanded}" aria-hidden="${this.expanded ? 'false' : 'true'}">
-        <slot name="children"></slot>
-      </ul>
+      ${this.overlayChildren ? this.#renderFlyout() : this.#renderChildren(!this.expanded)}
       <div hidden id="i18n">${this.__effectiveI18n.toggle}</div>
       <slot name="tooltip"></slot>
     `;
@@ -325,8 +379,13 @@ class SideNavItem extends SideNavChildrenMixin(
 
   /** @private */
   _onContentClick(e) {
+    // Without hover, clicking is the only way to reach the flyout, so it takes
+    // precedence over navigating to the item's own path
+    if (this.overlayChildren && this.hasAttribute('has-children') && !this.disabled && !this.#canHover()) {
+      this.__toggleExpanded();
+    }
     // Navigate if path is defined and not clicking on the link directly
-    if (this.path && !e.composedPath().find((el) => el === this.$.link)) {
+    else if (this.path && !e.composedPath().find((el) => el === this.$.link)) {
       this.$.link.click();
     }
     // Toggle item expanded state unless the link has a non-empty path
@@ -345,7 +404,14 @@ class SideNavItem extends SideNavChildrenMixin(
     this._setCurrent(this.__isCurrent());
     if (this.current) {
       this.__expandParentItems();
-      this.expanded = this._items.length > 0;
+      // A flyout must not pop open just because it holds the current item
+      this.expanded = !this.overlayChildren && this._items.length > 0;
+    }
+
+    // The current item is not visible while its ancestor's flyout is closed,
+    // so the ancestors need a hook to mark themselves as the active branch
+    for (let item = this.__getParentItem(); item; item = item.__getParentItem()) {
+      item.toggleAttribute('has-current-child', item.#hasCurrentDescendant());
     }
   }
 
@@ -359,8 +425,81 @@ class SideNavItem extends SideNavChildrenMixin(
     const parentItem = this.__getParentItem();
     if (parentItem) {
       parentItem.__expandParentItems();
-      parentItem.expanded = true;
+      if (!parentItem.overlayChildren) {
+        parentItem.expanded = true;
+      }
     }
+  }
+
+  /** @private */
+  #hasCurrentDescendant() {
+    return this._items.some((item) => item instanceof SideNavItem && (item.current || item.#hasCurrentDescendant()));
+  }
+
+  /** @private */
+  #renderChildren(hidden) {
+    return html`
+      <ul id="children" part="children" role="list" ?hidden="${hidden}" aria-hidden="${hidden ? 'true' : 'false'}">
+        <slot name="children"></slot>
+      </ul>
+    `;
+  }
+
+  /** @private */
+  #renderFlyout() {
+    return html`
+      <vaadin-side-nav-overlay
+        theme="${ifDefined(this._theme)}"
+        .opened="${this.expanded && this._itemsCount > 0}"
+        horizontal-align="start"
+        vertical-align="top"
+        no-horizontal-overlap
+        modeless
+        restore-focus-on-close
+        @opened-changed="${this.#onFlyoutOpenedChanged}"
+      >
+        ${this.#renderChildren(false)}
+      </vaadin-side-nav-overlay>
+    `;
+  }
+
+  /** @private */
+  #onFlyoutOpenedChanged(event) {
+    this.expanded = event.detail.value;
+  }
+
+  /** @private */
+  #canHover() {
+    this.#hoverQuery ??= matchMedia('(hover: hover)');
+    return this.#hoverQuery.matches;
+  }
+
+  /** @private */
+  #onPointerEnter() {
+    if (!this.overlayChildren || this.disabled || !this.#canHover()) {
+      return;
+    }
+    this.#clearHoverTimeouts();
+    this.#openTimeout = setTimeout(() => {
+      this.expanded = true;
+    }, HOVER_OPEN_DELAY);
+  }
+
+  /** @private */
+  #onPointerLeave() {
+    if (!this.overlayChildren || this.disabled || !this.#canHover()) {
+      return;
+    }
+    this.#clearHoverTimeouts();
+    this.#closeTimeout = setTimeout(() => {
+      this.expanded = false;
+    }, HOVER_CLOSE_DELAY);
+  }
+
+  /** @private */
+  #clearHoverTimeouts() {
+    clearTimeout(this.#openTimeout);
+    clearTimeout(this.#closeTimeout);
   }
 
   /** @private */

@@ -67,12 +67,14 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  *
  * The following state attributes are available for styling:
  *
- * Attribute      | Description
- * ---------------|-------------
- * `disabled`     | Set when the element is disabled.
- * `expanded`     | Set when the element is expanded.
- * `has-children` | Set when the element has child items.
- * `has-tooltip`  | Set when the element has a slotted tooltip.
+ * Attribute           | Description
+ * --------------------|-------------
+ * `disabled`          | Set when the element is disabled.
+ * `expanded`          | Set when the element is expanded.
+ * `has-children`      | Set when the element has child items.
+ * `has-current-child` | Set when a descendant item's path matches the current browser URL.
+ * `has-tooltip`       | Set when the element has a slotted tooltip.
+ * `overlay-children`  | Set when the child items are rendered in a flyout.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -88,6 +90,8 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  * | `--vaadin-side-nav-item-line-height`    |
  * | `--vaadin-side-nav-item-padding`        |
  * | `--vaadin-side-nav-item-text-color`     |
+ * | `--vaadin-side-nav-overlay-offset`      |
+ * | `--vaadin-side-nav-overlay-padding`     |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -108,6 +112,23 @@ declare class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixi
    * Whether to show the child items or not
    */
   expanded: boolean;
+
+  /**
+   * When enabled, the child items are rendered in a flyout next to the item
+   * instead of in a list below it. The flyout opens and closes with the
+   * `expanded` property.
+   *
+   * On devices that support hovering, the flyout opens when the pointer rests
+   * on the item and closes when it leaves both the item and the flyout. On
+   * other devices, clicking an item that has child items opens the flyout
+   * instead of navigating to the item's own path.
+   *
+   * Set `overlay-children` on the parent `<vaadin-side-nav>` to enable this
+   * for all its top-level items, which is what a navigation rail needs.
+   *
+   * @attr {boolean} overlay-children
+   */
+  overlayChildren: boolean;
 
   /**
    * Whether to also match nested paths / routes. `false` by default.

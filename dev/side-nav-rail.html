@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Side Nav — overlay children (rail PoC)</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/app-layout';
+      import '@vaadin/badge';
+      import '@vaadin/checkbox';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+      import '@vaadin/side-nav';
+      import '@vaadin/tooltip';
+
+      const nav = document.querySelector('vaadin-side-nav');
+
+      document.querySelector('#overlay-children').addEventListener('checked-changed', (e) => {
+        nav.overlayChildren = e.detail.value;
+      });
+
+      document.querySelector('#rail').addEventListener('checked-changed', (e) => {
+        document.body.toggleAttribute('rail', e.detail.value);
+      });
+
+      // Fake navigation: prevent actual navigation, update 'current' item manually
+      nav.addEventListener('click', (e) => {
+        const link = e.composedPath().find((el) => el.localName === 'a');
+        if (link && link.href) {
+          e.preventDefault();
+          nav.querySelectorAll('vaadin-side-nav-item').forEach((item) => item.removeAttribute('current'));
+          e.composedPath()
+            .find((el) => el.localName === 'vaadin-side-nav-item')
+            .setAttribute('current', '');
+          window.dispatchEvent(new CustomEvent('side-nav-location-changed'));
+        }
+      });
+    </script>
+    <style>
+      vaadin-app-layout {
+        height: 100vh;
+      }
+
+      [slot='drawer'] {
+        display: flex;
+        flex-direction: column;
+        gap: var(--vaadin-gap-m);
+        padding: var(--vaadin-padding-m);
+      }
+
+      .controls {
+        display: flex;
+        flex-direction: column;
+        padding: var(--vaadin-padding-m);
+      }
+
+      /* The rail: icons only, labels reachable by screen readers and in the flyout */
+      body[rail] vaadin-app-layout {
+        --vaadin-app-layout-drawer-overlay: false;
+      }
+
+      body[rail] [slot='drawer'] {
+        padding: var(--vaadin-padding-s);
+      }
+
+      body[rail] vaadin-side-nav {
+        --vaadin-side-nav-item-padding: var(--vaadin-padding-s);
+        width: fit-content;
+      }
+
+      /* Hide the label visually but keep it in the accessibility tree.
+         An icons-only mode is not part of this PoC. */
+      body[rail] vaadin-side-nav > vaadin-side-nav-item > .label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      body[rail] vaadin-side-nav > vaadin-side-nav-item::part(toggle-button) {
+        display: none !important;
+      }
+
+      body[rail] vaadin-side-nav > vaadin-side-nav-item[has-current-child]::part(content) {
+        --vaadin-side-nav-item-background: var(--vaadin-background-container);
+      }
+    </style>
+  </head>
+  <body rail>
+    <vaadin-app-layout>
+      <h2 slot="navbar">Rail PoC</h2>
+
+      <div slot="drawer">
+        <vaadin-side-nav overlay-children no-auto-expand>
+          <vaadin-side-nav-item path="/dev/side-nav-rail.html">
+            <vaadin-icon icon="vaadin:home" slot="prefix"></vaadin-icon>
+            <span class="label">Dashboard</span>
+            <vaadin-tooltip slot="tooltip" text="Dashboard" position="end"></vaadin-tooltip>
+          </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item path="/dev/grid.html">
+            <vaadin-icon icon="vaadin:table" slot="prefix"></vaadin-icon>
+            <span class="label">Data</span>
+
+            <vaadin-side-nav-item path="/dev/grid.html" slot="children">Grid</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/dev/grid-pro.html" slot="children">
+              Grid Pro
+              <vaadin-badge slot="suffix" number="3" theme="number-only">new items</vaadin-badge>
+            </vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/dev/crud.html" slot="children">CRUD</vaadin-side-nav-item>
+          </vaadin-side-nav-item>
+
+          <!-- No own path: a pure grouping item -->
+          <vaadin-side-nav-item>
+            <vaadin-icon icon="vaadin:form" slot="prefix"></vaadin-icon>
+            <span class="label">Layouts</span>
+
+            <vaadin-side-nav-item path="/dev/app-layout.html" slot="children">App Layout</vaadin-side-nav-item>
+            <vaadin-side-nav-item path="/dev/form-layout.html" slot="children">Form Layout</vaadin-side-nav-item>
+
+            <!-- Third level: renders as a nested list inside the flyout -->
+            <vaadin-side-nav-item slot="children">
+              Split views
+              <vaadin-side-nav-item path="/dev/split-layout.html" slot="children">Split Layout</vaadin-side-nav-item>
+              <vaadin-side-nav-item path="/dev/master-detail-layout.html" slot="children">
+                Master-Detail Layout
+              </vaadin-side-nav-item>
+            </vaadin-side-nav-item>
+          </vaadin-side-nav-item>
+
+          <!-- Cascading flyout: opted in on the item itself -->
+          <vaadin-side-nav-item>
+            <vaadin-icon icon="vaadin:cog" slot="prefix"></vaadin-icon>
+            <span class="label">Settings</span>
+
+            <vaadin-side-nav-item path="/dev/text-field.html" slot="children">Profile</vaadin-side-nav-item>
+            <vaadin-side-nav-item slot="children" overlay-children>
+              Advanced
+              <vaadin-side-nav-item path="/dev/upload.html" slot="children">Uploads</vaadin-side-nav-item>
+              <vaadin-side-nav-item path="/dev/login.html" slot="children">Security</vaadin-side-nav-item>
+            </vaadin-side-nav-item>
+          </vaadin-side-nav-item>
+
+          <vaadin-side-nav-item disabled>
+            <vaadin-icon icon="vaadin:lock" slot="prefix"></vaadin-icon>
+            <span class="label">Disabled</span>
+            <vaadin-side-nav-item path="/dev/button.html" slot="children">Never reachable</vaadin-side-nav-item>
+          </vaadin-side-nav-item>
+        </vaadin-side-nav>
+      </div>
+
+      <div class="controls">
+        <vaadin-checkbox id="rail" label="Rail styling (icons only)" checked></vaadin-checkbox>
+        <vaadin-checkbox id="overlay-children" label="overlay-children" checked></vaadin-checkbox>
+        <p>
+          Hover a top-level item to open its flyout. With a keyboard, Tab into the item and press
+          <kbd>Enter</kbd> on the toggle button (visible when rail styling is off), then Tab into the flyout and
+          <kbd>Escape</kbd> to close it. With touch emulation, tapping an item opens the flyout instead of navigating.
+        </p>
+      </div>
+    </vaadin-app-layout>
+  </body>
+</html>

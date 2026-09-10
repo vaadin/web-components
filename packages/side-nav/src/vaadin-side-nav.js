@@ -57,11 +57,12 @@ import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description
- * -------------|-------------
- * `collapsed`  | Set when the element is collapsed.
- * `focus-ring` | Set when the label is focused using the keyboard.
- * `focused`    | Set when the label is focused.
+ * Attribute          | Description
+ * -------------------|-------------
+ * `collapsed`        | Set when the element is collapsed.
+ * `focus-ring`       | Set when the label is focused using the keyboard.
+ * `focused`          | Set when the label is focused.
+ * `overlay-children` | Set when top-level items render their children in a flyout.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -168,6 +169,22 @@ class SideNav extends SideNavChildrenMixin(
         reflectToAttribute: true,
         value: false,
       },
+
+      /**
+       * When enabled, the child items of every top-level item are rendered in a
+       * flyout next to that item, instead of in a list below it. Items deeper in
+       * the hierarchy keep rendering their children in a list inside the flyout.
+       *
+       * This is what a navigation rail needs, where there is no horizontal space
+       * for a nested list.
+       *
+       * @attr {boolean} overlay-children
+       */
+      overlayChildren: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false,
+      },
     };
   }
 
@@ -209,6 +226,20 @@ class SideNav extends SideNavChildrenMixin(
     // the role attribute is set to "navigation".
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'navigation');
+    }
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('overlayChildren') || props.has('_itemsCount')) {
+      this._items.forEach((item) => {
+        item.overlayChildren = this.overlayChildren;
+      });
     }
   }
 

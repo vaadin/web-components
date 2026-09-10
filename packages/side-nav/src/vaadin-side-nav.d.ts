@@ -72,11 +72,12 @@ export type NavigateEvent = {
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description
- * -------------|-------------
- * `collapsed`  | Set when the element is collapsed.
- * `focus-ring` | Set when the label is focused using the keyboard.
- * `focused`    | Set when the label is focused.
+ * Attribute          | Description
+ * -------------------|-------------
+ * `collapsed`        | Set when the element is collapsed.
+ * `focus-ring`       | Set when the label is focused using the keyboard.
+ * `focused`          | Set when the label is focused.
+ * `overlay-children` | Set when top-level items render their children in a flyout.
  *
  * The following custom CSS properties are available for styling:
  *
@@ -146,6 +147,18 @@ declare class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(Thema
    * @attr {boolean} no-auto-expand
    */
   noAutoExpand: boolean;
+
+  /**
+   * When enabled, the child items of every top-level item are rendered in a
+   * flyout next to that item, instead of in a list below it. Items deeper in
+   * the hierarchy keep rendering their children in a list inside the flyout.
+   *
+   * This is what a navigation rail needs, where there is no horizontal space
+   * for a nested list.
+   *
+   * @attr {boolean} overlay-children
+   */
+  overlayChildren: boolean;
 
   addEventListener<K extends keyof SideNavEventMap>(
     type: K,

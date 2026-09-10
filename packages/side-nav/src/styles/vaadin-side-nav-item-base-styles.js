@@ -109,6 +109,20 @@ const sideNavItem = css`
     --_level-2: var(--_level);
   }
 
+  /* A flyout starts a new hierarchy, so the indentation of the levels
+     above it must not carry over into it */
+  :host([overlay-children]) [part='children'] {
+    --_level: 0;
+    --_icon-indent: 0;
+  }
+
+  /* The flyout opens to the side, so the toggle button keeps pointing there
+     instead of rotating to point down */
+  :host([overlay-children][expanded]) [part='toggle-button'],
+  :host([dir='rtl'][overlay-children][expanded]) [part='toggle-button'] {
+    rotate: 0deg;
+  }
+
   @media (forced-colors: active) {
     [part='content'] {
       border: 1px solid Canvas !important;
