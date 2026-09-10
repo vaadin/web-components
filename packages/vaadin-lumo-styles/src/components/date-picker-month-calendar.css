@@ -8,43 +8,31 @@
     font-size: var(--lumo-font-size-m);
     color: var(--lumo-body-text-color);
     text-align: center;
+    padding: var(--vaadin-date-picker-month-padding, 0 var(--lumo-space-xs));
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     --_selection-color: var(--vaadin-selection-color, var(--lumo-primary-color));
     --_selection-color-text: var(--vaadin-selection-color-text, var(--lumo-primary-text-color));
-    --vaadin-date-picker-month-padding: 0 var(--lumo-space-xs);
-    --vaadin-date-picker-month-header-color: var(--lumo-header-text-color);
-    --vaadin-date-picker-month-header-font-size: var(--lumo-font-size-l);
-    --vaadin-date-picker-weekday-color: var(--lumo-secondary-text-color);
-    --vaadin-date-picker-weekday-font-size: var(--lumo-font-size-xxs);
-    --vaadin-date-picker-weekday-font-weight: normal;
-    --vaadin-date-picker-week-number-color: var(--lumo-secondary-text-color);
-    --vaadin-date-picker-week-number-font-size: var(--lumo-font-size-xxs);
-    --vaadin-date-picker-date-border-radius: var(--lumo-border-radius-m);
-    --vaadin-date-picker-date-height: var(--lumo-size-m);
-    --vaadin-date-picker-date-today-color: var(--_selection-color-text);
-    --vaadin-date-picker-date-selected-color: var(--lumo-primary-contrast-color);
-    --vaadin-date-picker-date-selected-background: var(--_selection-color);
-    --vaadin-date-picker-date-disabled-color: var(--lumo-disabled-text-color);
   }
 
   [part~='disabled'] {
     pointer-events: none;
   }
 
-  [disabled] {
-    opacity: 1;
-  }
-
   /* Month header */
 
   [part='month-header'] {
+    color: var(--vaadin-date-picker-month-header-color, var(--lumo-header-text-color));
+    font-size: var(--vaadin-date-picker-month-header-font-size, var(--lumo-font-size-l));
     margin-bottom: var(--lumo-space-m);
   }
 
   /* Week days and numbers */
 
   [part~='weekday'] {
+    color: var(--vaadin-date-picker-weekday-color, var(--lumo-secondary-text-color));
+    font-size: var(--vaadin-date-picker-weekday-font-size, var(--lumo-font-size-xxs));
+    font-weight: var(--vaadin-date-picker-weekday-font-weight, normal);
     line-height: 1;
     margin-bottom: var(--lumo-space-s);
   }
@@ -62,6 +50,8 @@
   }
 
   [part~='week-number'] {
+    color: var(--vaadin-date-picker-week-number-color, var(--lumo-secondary-text-color));
+    font-size: var(--vaadin-date-picker-week-number-font-size, var(--lumo-font-size-xxs));
     grid-column: auto;
     margin: 0;
   }
@@ -73,11 +63,25 @@
   /* Date cells */
 
   [part~='date'] {
+    border-radius: var(--vaadin-date-picker-date-border-radius, var(--lumo-border-radius-m));
+    height: var(--vaadin-date-picker-date-height, var(--lumo-size-m));
     transition: color 0.1s;
   }
 
   [part~='date']:not(:empty) {
     cursor: var(--lumo-clickable-cursor);
+  }
+
+  [part~='today'] {
+    color: var(--vaadin-date-picker-date-today-color, var(--_selection-color-text));
+  }
+
+  [part~='selected'] {
+    color: var(--vaadin-date-picker-date-selected-color, var(--lumo-primary-contrast-color));
+  }
+
+  [part~='selected']::after {
+    background: var(--vaadin-date-picker-date-selected-background, var(--_selection-color));
   }
 
   /* Selection, hover and focus indicator */
@@ -134,6 +138,11 @@
   }
 
   /* Disabled */
+
+  [disabled] {
+    color: var(--vaadin-date-picker-date-disabled-color, var(--lumo-disabled-text-color));
+    opacity: 1;
+  }
 
   :host([disabled]) * {
     color: var(--lumo-disabled-text-color) !important;
