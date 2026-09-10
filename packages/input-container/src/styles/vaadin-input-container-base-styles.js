@@ -10,6 +10,7 @@ export const inputContainerStyles = css`
   :host {
     display: flex;
     align-items: center;
+    min-height: var(--vaadin-input-field-height, auto);
     --_radius: var(--vaadin-input-field-border-radius, var(--vaadin-radius-m));
     border-radius:
       /* See https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius */
