@@ -48,6 +48,7 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * `helper-text`          | The helper text element wrapper
  * `required-indicator`   | The `required` state indicator element
  * `toggle-button`        | The toggle button
+ * `select-all`           | The button for selecting or deselecting all items, shown in the overlay
  * `overlay`              | The overlay container
  * `content`              | The overlay content
  * `loader`               | The loading indicator shown while loading items
@@ -208,6 +209,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         .positionTarget="${this._inputField}"
         no-vertical-overlap
       >
+        <button part="select-all" type="button" hidden></button>
         <slot name="overlay"></slot>
       </vaadin-multi-select-combo-box-overlay>
     `;

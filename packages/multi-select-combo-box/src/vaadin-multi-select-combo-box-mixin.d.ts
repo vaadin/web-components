@@ -37,6 +37,10 @@ export interface MultiSelectComboBoxI18n {
   selected?: string;
   deselected?: string;
   total?: string;
+  selectAll?: string;
+  deselectAll?: string;
+  selectFiltered?: string;
+  deselectFiltered?: string;
 }
 
 export declare function MultiSelectComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
@@ -119,6 +123,16 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
    *   // Screen reader announcement of the selected items count.
    *   // {count} is replaced with the actual count of items.
    *   total: '{count} items selected',
+   *   // Label of the select all button when no filter is set.
+   *   selectAll: 'Select all',
+   *   // Label of the select all button when no filter is set
+   *   // and all items are selected.
+   *   deselectAll: 'Deselect all',
+   *   // Label of the select all button when a filter is set.
+   *   selectFiltered: 'Select filtered',
+   *   // Label of the select all button when a filter is set
+   *   // and all items matching the filter are selected.
+   *   deselectFiltered: 'Deselect filtered',
    * }
    * ```
    */
@@ -166,6 +180,17 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
    * @attr {boolean} selected-items-on-top
    */
   selectedItemsOnTop: boolean;
+
+  /**
+   * Set to true to show a button above the dropdown items for selecting
+   * or deselecting all items matching the current filter at once. Items
+   * that do not match the filter keep their selection state.
+   *
+   * The button is only supported with the `items` API. It is not shown
+   * when using `dataProvider`.
+   * @attr {boolean} select-all-button-visible
+   */
+  selectAllButtonVisible: boolean;
 
   /**
    * Clears the selected items.
