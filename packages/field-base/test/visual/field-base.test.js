@@ -143,7 +143,7 @@ describe('field-base', () => {
           element.label = 'Label that wraps on multiple lines';
           element.required = true;
           element.style.setProperty('--vaadin-input-field-label-aside-width', '8em');
-          element.style.setProperty('--vaadin-input-field-label-aside-text-align', 'end');
+          element.style.setProperty('--vaadin-input-field-label-text-align', 'end');
           await visualDiff(div, `${dir}-label-aside-custom-text-align`);
         });
       });

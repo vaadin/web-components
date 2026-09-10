@@ -89,6 +89,7 @@ export const field = css`
     line-height: var(--vaadin-input-field-label-line-height, inherit);
     font-weight: var(--vaadin-input-field-label-font-weight, 500);
     color: var(--vaadin-input-field-label-color, var(--vaadin-text-color));
+    text-align: var(--vaadin-input-field-label-text-align, inherit);
     word-break: break-word;
     position: relative;
     grid-area: label;
@@ -226,7 +227,6 @@ export const fieldLabelAside = css`
     min-width: auto;
     align-self: baseline;
     margin-bottom: 0;
-    text-align: var(--vaadin-input-field-label-aside-text-align, inherit);
   }
 
   :host([theme~='label-aside']) [part='input-field'],

@@ -79,12 +79,12 @@ export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGrou
  * | `--vaadin-input-field-error-font-weight`         |
  * | `--vaadin-input-field-error-line-height`         |
  * | `--vaadin-input-field-label-aside-gap`           |
- * | `--vaadin-input-field-label-aside-text-align`    |
  * | `--vaadin-input-field-label-aside-width`         |
  * | `--vaadin-input-field-label-color`               |
  * | `--vaadin-input-field-label-font-size`           |
  * | `--vaadin-input-field-label-font-weight`         |
  * | `--vaadin-input-field-label-line-height`         |
+ * | `--vaadin-input-field-label-text-align`          |
  * | `--vaadin-input-field-helper-color`              |
  * | `--vaadin-input-field-helper-font-size`          |
  * | `--vaadin-input-field-helper-font-weight`        |
