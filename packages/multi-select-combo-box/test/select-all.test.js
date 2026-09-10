@@ -422,7 +422,7 @@ describe('select all', () => {
 
       await sendKeys({ press: 'Tab' });
       expect(comboBox.hasAttribute('focused')).to.be.true;
-      expect(comboBox.hasAttribute('focused')).to.be.true;
+      expect(comboBox.hasAttribute('focus-ring')).to.be.true;
       expect(button.matches(':focus-visible')).to.be.false;
     });
 
