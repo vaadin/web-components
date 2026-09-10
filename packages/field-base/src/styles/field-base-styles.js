@@ -223,6 +223,7 @@ export const fieldLabelAside = css`
 
   :host([theme~='label-aside']) [part='label'] {
     width: auto;
+    min-width: auto;
     align-self: baseline;
     margin-bottom: 0;
   }
