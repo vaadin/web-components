@@ -61,6 +61,16 @@ export const getFirstItem = (comboBox) => {
 };
 
 /**
+ * Returns the index of the currently focused item for a combo-box.
+ *
+ * @param {Element} comboBox
+ * @return {number}
+ */
+export const getFocusedItemIndex = (comboBox) => {
+  return getAllItems(comboBox).findIndex((item) => item.hasAttribute('focused'));
+};
+
+/**
  * Emulates the user filling in something in the combo-box input.
  *
  * @param {Element} comboBox

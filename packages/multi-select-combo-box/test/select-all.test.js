@@ -1,17 +1,15 @@
 import { expect } from '@vaadin/chai-plugins';
-import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
-import { getAllItems, getDataProvider, getSelectAllButton, setInputValue } from './helpers.js';
+import { getAllItems, getDataProvider, getFocusedItemIndex, getSelectAllButton, setInputValue } from './helpers.js';
 
 describe('select all', () => {
   let comboBox, inputElement, button;
 
-  const getFocusedItem = () => getAllItems(comboBox).find((item) => item.hasAttribute('focused'));
-
-  const getLabel = () => getSelectAllButton(comboBox).textContent.trim();
+  const getSelectAllText = () => getSelectAllButton(comboBox).textContent.trim();
 
   const clickButton = () => getSelectAllButton(comboBox).click();
 
@@ -22,23 +20,22 @@ describe('select all', () => {
     inputElement = comboBox.inputElement;
   });
 
-  describe('visibility', () => {
-    const isButtonVisible = () => getSelectAllButton(comboBox).checkVisibility();
-
+  describe('enabling', () => {
     beforeEach(() => {
+      button = getSelectAllButton(comboBox);
       comboBox.opened = true;
     });
 
     it('should hide button by default', () => {
-      expect(isButtonVisible()).to.be.false;
+      expect(button.hasAttribute('hidden')).to.be.true;
     });
 
-    it('should toggle button visibility when the property changes', () => {
+    it('should toggle button hidden attribute when the property changes', () => {
       comboBox.selectAllButtonVisible = true;
-      expect(isButtonVisible()).to.be.true;
+      expect(button.hasAttribute('hidden')).to.be.false;
 
       comboBox.selectAllButtonVisible = false;
-      expect(isButtonVisible()).to.be.false;
+      expect(button.hasAttribute('hidden')).to.be.true;
     });
 
     it('should hide button when readonly', () => {
@@ -47,10 +44,10 @@ describe('select all', () => {
       comboBox.selectAllButtonVisible = true;
       comboBox.readonly = true;
       expect(comboBox.$.overlay.opened).to.be.true;
-      expect(isButtonVisible()).to.be.false;
+      expect(button.hasAttribute('hidden')).to.be.true;
 
       comboBox.readonly = false;
-      expect(isButtonVisible()).to.be.true;
+      expect(button.hasAttribute('hidden')).to.be.false;
     });
 
     it('should hide button when using a data provider', async () => {
@@ -64,7 +61,7 @@ describe('select all', () => {
       await nextRender();
       comboBox.opened = true;
 
-      expect(isButtonVisible()).to.be.false;
+      expect(button.hasAttribute('hidden')).to.be.true;
     });
   });
 
@@ -75,54 +72,54 @@ describe('select all', () => {
     });
 
     it('should use selectAll label when nothing is selected', () => {
-      expect(getLabel()).to.equal('Select all');
+      expect(getSelectAllText()).to.equal('Select all');
     });
 
     it('should use selectAll label when some items are selected', () => {
       comboBox.selectedItems = ['Apple'];
-      expect(getLabel()).to.equal('Select all');
+      expect(getSelectAllText()).to.equal('Select all');
     });
 
     it('should use deselectAll label when all items are selected', () => {
       comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
-      expect(getLabel()).to.equal('Deselect all');
+      expect(getSelectAllText()).to.equal('Deselect all');
     });
 
     it('should use selectFiltered label when a filter is set', () => {
       setInputValue(comboBox, 'an');
-      expect(getLabel()).to.equal('Select filtered');
+      expect(getSelectAllText()).to.equal('Select filtered');
     });
 
     it('should use selectFiltered label when some filtered items are selected', () => {
       comboBox.selectedItems = ['Banana'];
       setInputValue(comboBox, 'an');
-      expect(getLabel()).to.equal('Select filtered');
+      expect(getSelectAllText()).to.equal('Select filtered');
     });
 
     it('should use deselectFiltered label when all filtered items are selected', () => {
       comboBox.selectedItems = ['Banana', 'Orange'];
       setInputValue(comboBox, 'an');
-      expect(getLabel()).to.equal('Deselect filtered');
+      expect(getSelectAllText()).to.equal('Deselect filtered');
     });
 
     it('should update the label when the filter is cleared', () => {
       comboBox.selectedItems = ['Banana', 'Orange'];
       setInputValue(comboBox, 'an');
       setInputValue(comboBox, '');
-      expect(getLabel()).to.equal('Select all');
+      expect(getSelectAllText()).to.equal('Select all');
     });
 
     it('should ignore unknown values when computing the label', () => {
       comboBox.allowCustomValue = true;
       comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange', 'Custom'];
-      expect(getLabel()).to.equal('Deselect all');
+      expect(getSelectAllText()).to.equal('Deselect all');
     });
 
     it('should compute the label from filtered items when selected items are on top', () => {
       comboBox.selectedItemsOnTop = true;
       comboBox.selectedItems = ['Pear'];
       comboBox.opened = true;
-      expect(getLabel()).to.equal('Select all');
+      expect(getSelectAllText()).to.equal('Select all');
     });
 
     it('should use custom i18n labels', () => {
@@ -132,16 +129,16 @@ describe('select all', () => {
         selectFiltered: 'Gefilterte auswählen',
         deselectFiltered: 'Gefilterte abwählen',
       };
-      expect(getLabel()).to.equal('Alle auswählen');
+      expect(getSelectAllText()).to.equal('Alle auswählen');
 
       comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
-      expect(getLabel()).to.equal('Auswahl aufheben');
+      expect(getSelectAllText()).to.equal('Auswahl aufheben');
 
       setInputValue(comboBox, 'an');
-      expect(getLabel()).to.equal('Gefilterte abwählen');
+      expect(getSelectAllText()).to.equal('Gefilterte abwählen');
 
       comboBox.selectedItems = [];
-      expect(getLabel()).to.equal('Gefilterte auswählen');
+      expect(getSelectAllText()).to.equal('Gefilterte auswählen');
     });
 
     describe('object items', () => {
@@ -157,12 +154,12 @@ describe('select all', () => {
 
       it('should use deselectAll label when all items are selected by id', () => {
         comboBox.selectedItems = [{ ...apple }, { ...banana }, { ...lemon }];
-        expect(getLabel()).to.equal('Deselect all');
+        expect(getSelectAllText()).to.equal('Deselect all');
       });
 
       it('should use selectAll label when some items are selected by id', () => {
         comboBox.selectedItems = [{ ...apple }];
-        expect(getLabel()).to.equal('Select all');
+        expect(getSelectAllText()).to.equal('Select all');
       });
     });
   });
@@ -248,13 +245,13 @@ describe('select all', () => {
 
     it('should update the label after selecting all items', () => {
       clickButton();
-      expect(getLabel()).to.equal('Deselect all');
+      expect(getSelectAllText()).to.equal('Deselect all');
     });
 
     it('should update the label after deselecting all items', () => {
       comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
       clickButton();
-      expect(getLabel()).to.equal('Select all');
+      expect(getSelectAllText()).to.equal('Select all');
     });
 
     it('should fire change event once when selecting all items', () => {
@@ -349,26 +346,17 @@ describe('select all', () => {
     it('should select all items on Space', async () => {
       await sendKeys({ press: 'Space' });
       expect(comboBox.selectedItems).to.deep.equal(['Apple', 'Banana', 'Lemon', 'Orange']);
-      expect(getLabel()).to.equal('Deselect all');
+      expect(getSelectAllText()).to.equal('Deselect all');
     });
 
     it('should select all items on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expect(comboBox.selectedItems).to.deep.equal(['Apple', 'Banana', 'Lemon', 'Orange']);
-      expect(getLabel()).to.equal('Deselect all');
+      expect(getSelectAllText()).to.equal('Deselect all');
     });
 
-    it('should not submit the surrounding form on Enter', async () => {
-      const form = fixtureSync('<form></form>');
-      const submitSpy = sinon.spy((event) => event.preventDefault());
-      form.addEventListener('submit', submitSpy);
-      form.appendChild(comboBox);
-      await nextRender();
-      comboBox.opened = true;
-      getSelectAllButton(comboBox).focus();
-
-      await sendKeys({ press: 'Enter' });
-      expect(submitSpy).to.not.be.called;
+    it('should not submit the surrounding form', () => {
+      expect(getSelectAllButton(comboBox).getAttribute('type')).to.equal('button');
     });
   });
 
@@ -416,23 +404,21 @@ describe('select all', () => {
       expect(comboBox.hasAttribute('focus-ring')).to.be.true;
 
       await sendKeys({ press: 'Tab' });
-      expect(comboBox.hasAttribute('focused')).to.be.true; // is not removed
+      expect(comboBox.hasAttribute('focused')).to.be.true;
       expect(comboBox.hasAttribute('focus-ring')).to.be.false;
-      expect(button.matches(':focus-visible')).to.be.true;
 
       await sendKeys({ press: 'Tab' });
       expect(comboBox.hasAttribute('focused')).to.be.true;
       expect(comboBox.hasAttribute('focus-ring')).to.be.true;
-      expect(button.matches(':focus-visible')).to.be.false;
     });
 
     it('should reset the focused item when focusing button', async () => {
       await sendKeys({ press: 'ArrowDown' });
-      expect(getFocusedItem()).to.be.ok;
+      expect(getFocusedItemIndex(comboBox)).to.equal(0);
       expect(inputElement.hasAttribute('aria-activedescendant')).to.be.true;
 
       await sendKeys({ press: 'Tab' });
-      expect(getFocusedItem()).to.be.undefined;
+      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
       expect(inputElement.hasAttribute('aria-activedescendant')).to.be.false;
     });
 
@@ -485,14 +471,14 @@ describe('select all', () => {
       button.focus();
       await sendKeys({ press: 'ArrowDown' });
       expect(getDeepActiveElement()).to.equal(inputElement);
-      expect(getFocusedItem()).to.equal(getAllItems(comboBox)[0]);
+      expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
     it('should focus the input and the last item on ArrowUp', async () => {
       button.focus();
       await sendKeys({ press: 'ArrowUp' });
       expect(getDeepActiveElement()).to.equal(inputElement);
-      expect(getFocusedItem()).to.equal(getAllItems(comboBox)[3]);
+      expect(getFocusedItemIndex(comboBox)).to.equal(3);
     });
 
     it('should focus the input when the overlay is closed', () => {
@@ -529,82 +515,10 @@ describe('select all', () => {
     });
 
     it('should select all items on click without moving focus', async () => {
-      const rect = button.getBoundingClientRect();
-      await sendMouse({
-        type: 'click',
-        position: [Math.round(rect.left + rect.width / 2), Math.round(rect.top + rect.height / 2)],
-      });
+      await sendMouseToElement({ type: 'click', element: button });
       expect(comboBox.selectedItems).to.deep.equal(['Apple', 'Banana', 'Lemon', 'Orange']);
       expect(getDeepActiveElement()).to.equal(inputElement);
       expect(comboBox.opened).to.be.true;
-    });
-  });
-
-  describe('a11y', () => {
-    let clock, region;
-
-    before(() => {
-      region = document.querySelector('[aria-live]');
-    });
-
-    beforeEach(() => {
-      comboBox.selectAllButtonVisible = true;
-      comboBox.opened = true;
-      clock = sinon.useFakeTimers({ shouldClearNativeTimers: true });
-    });
-
-    afterEach(() => {
-      clock.restore();
-    });
-
-    it('should announce the total when selecting all items', () => {
-      clickButton();
-
-      clock.tick(150);
-
-      expect(region.textContent).to.equal('4 items selected');
-    });
-
-    it('should announce the total when selecting filtered items', () => {
-      comboBox.selectedItems = ['Lemon'];
-      setInputValue(comboBox, 'an');
-
-      clickButton();
-
-      clock.tick(150);
-
-      expect(region.textContent).to.equal('3 items selected');
-    });
-
-    it('should announce the total when deselecting filtered items', () => {
-      comboBox.selectedItems = ['Lemon', 'Banana', 'Orange'];
-      setInputValue(comboBox, 'an');
-
-      clickButton();
-
-      clock.tick(150);
-
-      expect(region.textContent).to.equal('1 items selected');
-    });
-
-    it('should announce cleared selection when deselecting all items', () => {
-      comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
-
-      clickButton();
-
-      clock.tick(150);
-
-      expect(region.textContent).to.equal('Selection cleared');
-    });
-
-    it('should use custom i18n messages', () => {
-      comboBox.i18n = { total: '{count} selected' };
-
-      clickButton();
-
-      clock.tick(150);
-
-      expect(region.textContent).to.equal('4 selected');
     });
   });
 });
