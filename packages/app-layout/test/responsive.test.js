@@ -105,6 +105,7 @@ describe('responsive', () => {
         await nextResize(layout);
         await nextFrame();
         expect(layout.overlay).to.be.true;
+        expect(layout.drawerOpened).to.be.false;
         expect(getComputedStyle(layout).paddingInlineStart).to.equal('0px');
 
         layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
@@ -112,6 +113,7 @@ describe('responsive', () => {
         await nextResize(layout);
         await nextFrame();
         expect(layout.overlay).to.be.false;
+        expect(layout.drawerOpened).to.be.true;
         expect(getComputedStyle(layout).paddingInlineStart).to.equal('200px');
       });
     });

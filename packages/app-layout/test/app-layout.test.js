@@ -202,24 +202,6 @@ describe('vaadin-app-layout', () => {
         expect(spy.called).to.be.false;
       });
 
-      it('should keep drawer state when it resizes to overlay mode and back', () => {
-        // Force it to desktop layout
-        layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
-        layout.drawerOpened = true;
-        layout.__setOverlayMode(false);
-
-        // Force it to mobile layout
-        layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'true');
-        layout.__setOverlayMode(true);
-
-        expect(layout.drawerOpened).to.be.false;
-
-        // Force it to desktop layout
-        layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
-        layout.__setOverlayMode(false);
-        expect(layout.drawerOpened).to.be.true;
-      });
-
       it('should move focus to the drawer when opening the drawer', async () => {
         toggle.focus();
         layout.drawerOpened = true;
