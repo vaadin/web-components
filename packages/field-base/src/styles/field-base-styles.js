@@ -226,6 +226,7 @@ export const fieldLabelAside = css`
     min-width: auto;
     align-self: baseline;
     margin-bottom: 0;
+    text-align: var(--vaadin-input-field-label-aside-text-align, inherit);
   }
 
   :host([theme~='label-aside']) [part='input-field'],

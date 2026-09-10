@@ -58,6 +58,7 @@ import { CustomFieldMixin } from './vaadin-custom-field-mixin.js';
  * | `--vaadin-input-field-error-font-weight`         |
  * | `--vaadin-input-field-error-line-height`         |
  * | `--vaadin-input-field-label-aside-gap`           |
+ * | `--vaadin-input-field-label-aside-text-align`    |
  * | `--vaadin-input-field-label-aside-width`         |
  * | `--vaadin-input-field-label-color`               |
  * | `--vaadin-input-field-label-font-size`           |

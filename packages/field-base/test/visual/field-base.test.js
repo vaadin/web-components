@@ -138,6 +138,13 @@ describe('field-base', () => {
           element.style.setProperty('--vaadin-input-field-label-aside-gap', '2em');
           await visualDiff(div, `${dir}-label-aside-custom-width-gap`);
         });
+
+        it('custom label text align', async () => {
+          element.required = true;
+          element.style.setProperty('--vaadin-input-field-label-aside-width', '6em');
+          element.style.setProperty('--vaadin-input-field-label-aside-text-align', 'end');
+          await visualDiff(div, `${dir}-label-aside-custom-text-align`);
+        });
       });
     });
   });
