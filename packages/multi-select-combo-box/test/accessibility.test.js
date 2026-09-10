@@ -129,6 +129,11 @@ describe('accessibility', () => {
     });
 
     describe('overlay', () => {
+      beforeEach(async () => {
+        comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
+        await nextRender();
+      });
+
       it('should apply role="application" on the overlay', () => {
         // The overlay sets role="application" to prevent screen readers from
         // exiting focus mode when the select all button is focused. Without
