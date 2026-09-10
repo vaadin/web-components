@@ -155,6 +155,16 @@ export const AppLayoutMixin = (superclass) =>
       this.__setAriaExpanded();
 
       this.__updateDrawerSize();
+      this._blockAnimationUntilAfterNextRender();
+
+      const { overlayMode, touchOptimized } = this.__readCSSState();
+      this.__setOverlayMode(overlayMode);
+      this.__setTouchOptimized(touchOptimized);
+
+      const { drawerOffsetSize, navbarTopOffsetSize, navbarBottomOffsetSize } = this.__readCSSState();
+      this.__setDrawerOffsetSize(drawerOffsetSize);
+      this.__setNavbarTopOffsetSize(navbarTopOffsetSize);
+      this.__setNavbarBottomOffsetSize(navbarBottomOffsetSize);
 
       this.$.drawer.addEventListener('transitionstart', () => {
         this.__isDrawerAnimating = true;
@@ -177,16 +187,22 @@ export const AppLayoutMixin = (superclass) =>
 
     /** @private */
     __onNavbarSlotChange() {
-      this.__scheduleResize(this.$.navbarTop);
-      this.__scheduleResize(this.$.navbarBottom);
+      const { touchOptimized } = this.__readCSSState();
+      this.__setTouchOptimized(touchOptimized);
       this.toggleAttribute('has-navbar', !!this.querySelector('[slot="navbar"]'));
+
+      const { navbarTopOffsetSize, navbarBottomOffsetSize } = this.__readCSSState();
+      this.__setNavbarTopOffsetSize(navbarTopOffsetSize);
+      this.__setNavbarBottomOffsetSize(navbarBottomOffsetSize);
     }
 
     /** @private */
     __onDrawerSlotChange() {
-      this.__scheduleResize(this.$.drawer);
       this.__updateDrawerSize();
       this.toggleAttribute('has-drawer', !!this.querySelector('[slot="drawer"]'));
+
+      const { drawerOffsetSize } = this.__readCSSState();
+      this.__setDrawerOffsetSize(drawerOffsetSize);
     }
 
     /** @private */
@@ -196,12 +212,8 @@ export const AppLayoutMixin = (superclass) =>
       const isHostResized = entries.some(({ target }) => target === this);
       const isNavbarResized = entries.some(({ target }) => [this.$.navbarTop, this.$.navbarBottom].includes(target));
 
-      const overlayMode = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') === 'true';
-      const touchOptimized = this._getCustomPropertyValue('--vaadin-app-layout-touch-optimized') === 'true';
-
-      const drawerRect = this.$.drawer.getBoundingClientRect();
-      const navbarTopRect = this.$.navbarTop.getBoundingClientRect();
-      const navbarBottomRect = this.$.navbarBottom.getBoundingClientRect();
+      const { overlayMode, touchOptimized, drawerOffsetSize, navbarTopOffsetSize, navbarBottomOffsetSize } =
+        this.__readCSSState();
 
       const isDrawerAnimating = this.__isDrawerAnimating;
 
@@ -216,11 +228,9 @@ export const AppLayoutMixin = (superclass) =>
         }
 
         if (!isDrawerAnimating) {
-          this.__setOffsetSize({
-            drawerRect,
-            navbarTopRect,
-            navbarBottomRect,
-          });
+          this.__setDrawerOffsetSize(drawerOffsetSize);
+          this.__setNavbarTopOffsetSize(navbarTopOffsetSize);
+          this.__setNavbarBottomOffsetSize(navbarBottomOffsetSize);
         }
       });
     }
@@ -327,10 +337,18 @@ export const AppLayoutMixin = (superclass) =>
     }
 
     /** @private */
-    __setOffsetSize({ drawerRect, navbarTopRect, navbarBottomRect }) {
-      this.style.setProperty('--_vaadin-app-layout-drawer-offset-size', `${drawerRect.width}px`);
-      this.style.setProperty('--_vaadin-app-layout-navbar-offset-size', `${navbarTopRect.height}px`);
-      this.style.setProperty('--_vaadin-app-layout-navbar-offset-size-bottom', `${navbarBottomRect.height}px`);
+    __setDrawerOffsetSize(offsetSize) {
+      this.style.setProperty('--_vaadin-app-layout-drawer-offset-size', `${offsetSize}px`);
+    }
+
+    /** @private */
+    __setNavbarTopOffsetSize(offsetSize) {
+      this.style.setProperty('--_vaadin-app-layout-navbar-offset-size', `${offsetSize}px`);
+    }
+
+    /** @private */
+    __setNavbarBottomOffsetSize(offsetSize) {
+      this.style.setProperty('--_vaadin-app-layout-navbar-offset-size-bottom', `${offsetSize}px`);
     }
 
     /** @private */
@@ -539,5 +557,16 @@ export const AppLayoutMixin = (superclass) =>
     __scheduleResize(element) {
       this.__resizeObserver.unobserve(element);
       this.__resizeObserver.observe(element);
+    }
+
+    /** @private */
+    __readCSSState() {
+      return {
+        overlayMode: this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') === 'true',
+        touchOptimized: this._getCustomPropertyValue('--vaadin-app-layout-touch-optimized') === 'true',
+        drawerOffsetSize: this.$.drawer.getBoundingClientRect().width,
+        navbarTopOffsetSize: this.$.navbarTop.getBoundingClientRect().height,
+        navbarBottomOffsetSize: this.$.navbarBottom.getBoundingClientRect().height,
+      };
     }
   };
