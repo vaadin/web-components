@@ -177,12 +177,4 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
    * Clears the selected items.
    */
   clear(): void;
-
-  /**
-   * Requests an update for the content of items.
-   * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
-   *
-   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
-   */
-  requestContentUpdate(): void;
 }
