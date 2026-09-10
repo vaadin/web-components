@@ -127,6 +127,16 @@ describe('accessibility', () => {
         expect(items[0].getAttribute('aria-selected')).to.equal('false');
       });
     });
+
+    describe('overlay', () => {
+      it('should apply role="application" on the overlay', () => {
+        // The overlay sets role="application" to prevent screen readers from
+        // exiting focus mode when the select all button is focused. Without
+        // this pressing Arrow Down / Up from the button does not restore focus
+        // to the input and arrow key navigation breaks in NVDA and JAWS.
+        expect(comboBox.$.overlay.role).to.equal('application');
+      });
+    });
   });
 
   describe('announcements', () => {

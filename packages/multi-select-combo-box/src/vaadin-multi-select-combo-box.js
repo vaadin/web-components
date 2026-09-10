@@ -200,6 +200,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
       <vaadin-multi-select-combo-box-overlay
         id="overlay"
+        role="application"
         exportparts="overlay, content, loader"
         .owner="${this}"
         .dir="${this.dir}"
