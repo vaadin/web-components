@@ -171,6 +171,13 @@ export const ItemsMixin = (superClass) =>
         subMenu.removeAttribute('theme');
       }
 
+      // Set dir attribute from parent element
+      if (this.dir) {
+        subMenu.setAttribute('dir', this.dir);
+      } else {
+        subMenu.removeAttribute('dir');
+      }
+
       const content = subMenuOverlay.$.content;
       content.style.minWidth = '';
 
