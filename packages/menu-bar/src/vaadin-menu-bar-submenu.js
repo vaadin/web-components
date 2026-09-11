@@ -122,7 +122,7 @@ class MenuBarSubmenu extends ContextMenuMixin(ThemePropertyMixin(PolylitMixin(Li
     super.close();
 
     // Only handle 1st level submenu
-    if (this.hasAttribute('is-root')) {
+    if (this.isRoot) {
       this.parentElement._close();
     }
   }

@@ -615,9 +615,7 @@ export const MenuBarMixin = (superClass) =>
             const hasChildren = Boolean(item?.children);
 
             if (itemCopy.component) {
-              const component = this.__getComponent(itemCopy);
-              itemCopy.component = component;
-              component.item = itemCopy;
+              itemCopy.component = this.__getComponent(itemCopy);
             }
 
             return html`
@@ -983,13 +981,12 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     _focusFirstItem() {
-      const list = this._subMenu._overlayElement._contentRoot.firstElementChild;
-      list.focus();
+      this._subMenu._menuListBox.focus();
     }
 
     /** @private */
     _focusLastItem() {
-      const list = this._subMenu._overlayElement._contentRoot.firstElementChild;
+      const list = this._subMenu._menuListBox;
       const item = list.items[list.items.length - 1];
       if (item) {
         item.focus();
