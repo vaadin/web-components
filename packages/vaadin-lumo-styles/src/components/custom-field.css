@@ -101,16 +101,11 @@
   }
 
   :host([theme~='label-aside'][has-label]) {
+    --_input-height: calc(var(--lumo-text-field-size) + var(--lumo-space-xs));
     padding-top: 0;
   }
 
   :host([theme~='label-aside'][has-label]) [part='label'] {
     padding-bottom: 0;
-  }
-
-  /* Nested fields contribute their own outer padding to the input baseline. */
-  :host([theme~='label-aside'])::before,
-  :host([theme~='label-aside'][has-label])::before {
-    margin-bottom: calc((var(--lumo-text-field-size) + var(--lumo-space-xs)) * -1);
   }
 }
