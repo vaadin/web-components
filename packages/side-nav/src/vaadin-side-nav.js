@@ -185,6 +185,31 @@ class SideNav extends SideNavChildrenMixin(
         reflectToAttribute: true,
         value: false,
       },
+
+      /**
+       * The time in milliseconds that the pointer has to rest on a top-level item
+       * before its flyout opens. Set to `0` to open without a delay. Has no effect
+       * when another flyout is already open, which always switches without a delay.
+       *
+       * Only applies when `overlayChildren` is enabled.
+       *
+       * @attr {number} hover-delay
+       */
+      hoverDelay: {
+        type: Number,
+      },
+
+      /**
+       * The time in milliseconds to wait before closing a flyout after the pointer
+       * has left both the item and the flyout. Set to `0` to close without a delay.
+       *
+       * Only applies when `overlayChildren` is enabled.
+       *
+       * @attr {number} hide-delay
+       */
+      hideDelay: {
+        type: Number,
+      },
     };
   }
 
@@ -241,6 +266,14 @@ class SideNav extends SideNavChildrenMixin(
         item.overlayChildren = this.overlayChildren;
       });
     }
+
+    ['hoverDelay', 'hideDelay'].forEach((prop) => {
+      if ((props.has(prop) || props.has('_itemsCount')) && this[prop] != null) {
+        this._items.forEach((item) => {
+          item[prop] = this[prop];
+        });
+      }
+    });
   }
 
   /** @protected */

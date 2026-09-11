@@ -188,16 +188,27 @@ snapshots["vaadin-side-nav-item shadow default"] =
   >
   </button>
 </div>
-<ul
-  aria-hidden="true"
-  hidden=""
-  id="children"
-  part="children"
-  role="list"
+<vaadin-side-nav-overlay
+  exportparts="overlay: flyout, content: flyout-content"
+  horizontal-align="start"
+  inline=""
+  modeless=""
+  no-horizontal-overlap=""
+  popover="manual"
+  restore-focus-on-close=""
+  vertical-align="top"
 >
-  <slot name="children">
-  </slot>
-</ul>
+  <ul
+    aria-hidden="true"
+    hidden=""
+    id="children"
+    part="children"
+    role="list"
+  >
+    <slot name="children">
+    </slot>
+  </ul>
+</vaadin-side-nav-overlay>
 <div
   hidden=""
   id="i18n"
@@ -237,15 +248,26 @@ snapshots["vaadin-side-nav-item shadow expanded"] =
   >
   </button>
 </div>
-<ul
-  aria-hidden="false"
-  id="children"
-  part="children"
-  role="list"
+<vaadin-side-nav-overlay
+  exportparts="overlay: flyout, content: flyout-content"
+  horizontal-align="start"
+  inline=""
+  modeless=""
+  no-horizontal-overlap=""
+  popover="manual"
+  restore-focus-on-close=""
+  vertical-align="top"
 >
-  <slot name="children">
-  </slot>
-</ul>
+  <ul
+    aria-hidden="false"
+    id="children"
+    part="children"
+    role="list"
+  >
+    <slot name="children">
+    </slot>
+  </ul>
+</vaadin-side-nav-overlay>
 <div
   hidden=""
   id="i18n"
@@ -286,15 +308,26 @@ snapshots["vaadin-side-nav-item shadow current"] =
   >
   </button>
 </div>
-<ul
-  aria-hidden="false"
-  id="children"
-  part="children"
-  role="list"
+<vaadin-side-nav-overlay
+  exportparts="overlay: flyout, content: flyout-content"
+  horizontal-align="start"
+  inline=""
+  modeless=""
+  no-horizontal-overlap=""
+  popover="manual"
+  restore-focus-on-close=""
+  vertical-align="top"
 >
-  <slot name="children">
-  </slot>
-</ul>
+  <ul
+    aria-hidden="false"
+    id="children"
+    part="children"
+    role="list"
+  >
+    <slot name="children">
+    </slot>
+  </ul>
+</vaadin-side-nav-overlay>
 <div
   hidden=""
   id="i18n"
@@ -335,16 +368,27 @@ snapshots["vaadin-side-nav-item shadow path"] =
   >
   </button>
 </div>
-<ul
-  aria-hidden="true"
-  hidden=""
-  id="children"
-  part="children"
-  role="list"
+<vaadin-side-nav-overlay
+  exportparts="overlay: flyout, content: flyout-content"
+  horizontal-align="start"
+  inline=""
+  modeless=""
+  no-horizontal-overlap=""
+  popover="manual"
+  restore-focus-on-close=""
+  vertical-align="top"
 >
-  <slot name="children">
-  </slot>
-</ul>
+  <ul
+    aria-hidden="true"
+    hidden=""
+    id="children"
+    part="children"
+    role="list"
+  >
+    <slot name="children">
+    </slot>
+  </ul>
+</vaadin-side-nav-overlay>
 <div
   hidden=""
   id="i18n"
@@ -384,16 +428,27 @@ snapshots["vaadin-side-nav-item shadow null path"] =
   >
   </button>
 </div>
-<ul
-  aria-hidden="true"
-  hidden=""
-  id="children"
-  part="children"
-  role="list"
+<vaadin-side-nav-overlay
+  exportparts="overlay: flyout, content: flyout-content"
+  horizontal-align="start"
+  inline=""
+  modeless=""
+  no-horizontal-overlap=""
+  popover="manual"
+  restore-focus-on-close=""
+  vertical-align="top"
 >
-  <slot name="children">
-  </slot>
-</ul>
+  <ul
+    aria-hidden="true"
+    hidden=""
+    id="children"
+    part="children"
+    role="list"
+  >
+    <slot name="children">
+    </slot>
+  </ul>
+</vaadin-side-nav-overlay>
 <div
   hidden=""
   id="i18n"
@@ -433,16 +488,27 @@ snapshots["vaadin-side-nav-item shadow i18n"] =
   >
   </button>
 </div>
-<ul
-  aria-hidden="true"
-  hidden=""
-  id="children"
-  part="children"
-  role="list"
+<vaadin-side-nav-overlay
+  exportparts="overlay: flyout, content: flyout-content"
+  horizontal-align="start"
+  inline=""
+  modeless=""
+  no-horizontal-overlap=""
+  popover="manual"
+  restore-focus-on-close=""
+  vertical-align="top"
 >
-  <slot name="children">
-  </slot>
-</ul>
+  <ul
+    aria-hidden="true"
+    hidden=""
+    id="children"
+    part="children"
+    role="list"
+  >
+    <slot name="children">
+    </slot>
+  </ul>
+</vaadin-side-nav-overlay>
 <div
   hidden=""
   id="i18n"

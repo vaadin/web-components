@@ -7,6 +7,7 @@ import './vaadin-side-nav-overlay.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -18,11 +19,9 @@ import { location } from './location.js';
 import { sideNavItemStyles } from './styles/vaadin-side-nav-item-base-styles.js';
 import { SideNavChildrenMixin } from './vaadin-side-nav-children-mixin.js';
 
-/** Time the pointer has to rest on an item before its flyout opens. */
-const HOVER_OPEN_DELAY = 100;
+const DEFAULT_HOVER_DELAY = 100;
 
-/** Grace period after the pointer leaves an item and its flyout, before it closes. */
-const HOVER_CLOSE_DELAY = 300;
+const DEFAULT_HIDE_DELAY = 300;
 
 /**
  * A navigation item to be used within `<vaadin-side-nav>`. Represents a navigation target.
@@ -63,12 +62,14 @@ const HOVER_CLOSE_DELAY = 300;
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name       | Description
- * ----------------|----------------
- * `content`       | The element that wraps link and toggle button
- * `children`      | The element that wraps child items
- * `link`          | The clickable anchor used for navigation
- * `toggle-button` | The toggle button
+ * Part name        | Description
+ * -----------------|----------------
+ * `content`        | The element that wraps link and toggle button
+ * `children`       | The element that wraps child items
+ * `link`           | The clickable anchor used for navigation
+ * `toggle-button`  | The toggle button
+ * `flyout`         | The flyout that holds the child items in `overlayChildren` mode
+ * `flyout-content` | The scrolling content of the flyout
  *
  * The following state attributes are available for styling:
  *
@@ -164,6 +165,31 @@ class SideNavItem extends SideNavChildrenMixin(
       },
 
       /**
+       * The time in milliseconds that the pointer has to rest on the item before
+       * its flyout opens. Set to `0` to open without a delay. Has no effect when
+       * another flyout in the same group is already open, which always switches
+       * without a delay.
+       *
+       * @attr {number} hover-delay
+       */
+      hoverDelay: {
+        type: Number,
+        value: DEFAULT_HOVER_DELAY,
+      },
+
+      /**
+       * The time in milliseconds to wait before closing the flyout after the
+       * pointer has left both the item and the flyout. Set to `0` to close
+       * without a delay.
+       *
+       * @attr {number} hide-delay
+       */
+      hideDelay: {
+        type: Number,
+        value: DEFAULT_HIDE_DELAY,
+      },
+
+      /**
        * Whether to also match nested paths / routes. `false` by default.
        *
        * When enabled, an item with the path `/path` is considered current when
@@ -246,6 +272,7 @@ class SideNavItem extends SideNavChildrenMixin(
 
     this.addEventListener('pointerenter', () => this.#onPointerEnter());
     this.addEventListener('pointerleave', () => this.#onPointerLeave());
+    this.addEventListener('click', (event) => this.#onClick(event));
   }
 
   /** @protected */
@@ -270,6 +297,8 @@ class SideNavItem extends SideNavChildrenMixin(
     if (!this.hasAttribute('role')) {
       this.setAttribute('role', 'listitem');
     }
+
+    this.#overlay.positionTarget = this.$.content;
   }
 
   /**
@@ -290,10 +319,16 @@ class SideNavItem extends SideNavChildrenMixin(
       });
     }
 
-    // The flyout only exists after the branch has been rendered, so the
-    // position target cannot be bound in the template itself.
-    if (props.has('overlayChildren') && this.overlayChildren) {
-      this.#overlay.positionTarget = this.$.content;
+    // Only one flyout in a group is open at a time, the way a menu bar keeps a
+    // single sub-menu. Closing the siblings here rather than on hover also covers
+    // flyouts opened from the keyboard or by touch.
+    if (props.has('expanded') && this.expanded && this.overlayChildren) {
+      this.#siblings().forEach((item) => {
+        if (item.overlayChildren && item.expanded) {
+          item.#clearHoverTimeouts();
+          item.expanded = false;
+        }
+      });
     }
   }
 
@@ -344,7 +379,28 @@ class SideNavItem extends SideNavChildrenMixin(
           aria-labelledby="link i18n"
         ></button>
       </div>
-      ${this.overlayChildren ? this.#renderFlyout() : this.#renderChildren(!this.expanded)}
+      <vaadin-side-nav-overlay
+        theme="${ifDefined(this._theme)}"
+        exportparts="overlay: flyout, content: flyout-content"
+        ?inline="${!this.overlayChildren}"
+        .opened="${this.overlayChildren && this.expanded && this._itemsCount > 0}"
+        horizontal-align="start"
+        vertical-align="top"
+        no-horizontal-overlap
+        modeless
+        restore-focus-on-close
+        @opened-changed="${this.#onFlyoutOpenedChanged}"
+      >
+        <ul
+          id="children"
+          part="children"
+          role="list"
+          ?hidden="${!this.overlayChildren && !this.expanded}"
+          aria-hidden="${!this.overlayChildren && !this.expanded ? 'true' : 'false'}"
+        >
+          <slot name="children"></slot>
+        </ul>
+      </vaadin-side-nav-overlay>
       <div hidden id="i18n">${this.__effectiveI18n.toggle}</div>
       <slot name="tooltip"></slot>
     `;
@@ -437,35 +493,10 @@ class SideNavItem extends SideNavChildrenMixin(
   }
 
   /** @private */
-  #renderChildren(hidden) {
-    return html`
-      <ul id="children" part="children" role="list" ?hidden="${hidden}" aria-hidden="${hidden ? 'true' : 'false'}">
-        <slot name="children"></slot>
-      </ul>
-    `;
-  }
-
-  /** @private */
-  #renderFlyout() {
-    return html`
-      <vaadin-side-nav-overlay
-        theme="${ifDefined(this._theme)}"
-        .opened="${this.expanded && this._itemsCount > 0}"
-        horizontal-align="start"
-        vertical-align="top"
-        no-horizontal-overlap
-        modeless
-        restore-focus-on-close
-        @opened-changed="${this.#onFlyoutOpenedChanged}"
-      >
-        ${this.#renderChildren(false)}
-      </vaadin-side-nav-overlay>
-    `;
-  }
-
-  /** @private */
   #onFlyoutOpenedChanged(event) {
-    this.expanded = event.detail.value;
+    if (this.overlayChildren) {
+      this.expanded = event.detail.value;
+    }
   }
 
   /** @private */
@@ -474,26 +505,86 @@ class SideNavItem extends SideNavChildrenMixin(
     return this.#hoverQuery.matches;
   }
 
+  /**
+   * The items that share a flyout group with this one: the other children of the
+   * parent item, or of the side nav for a top-level item.
+   * @private
+   */
+  #siblings() {
+    const parent = this.__getParentItem() ?? this.closest('vaadin-side-nav');
+    if (!parent) {
+      return [];
+    }
+    return parent._items.filter((item) => item !== this && item instanceof SideNavItem);
+  }
+
+  /** @private */
+  #canOpenFlyout() {
+    return this.overlayChildren && !this.disabled && this._itemsCount > 0;
+  }
+
   /** @private */
   #onPointerEnter() {
-    if (!this.overlayChildren || this.disabled || !this.#canHover()) {
+    if (!this.#canOpenFlyout() || !this.#canHover()) {
       return;
     }
     this.#clearHoverTimeouts();
+
+    // Once a flyout in the group is open, moving along the group switches
+    // without a delay, so that traversing a rail does not feel sticky.
+    if (this.#siblings().some((item) => item.overlayChildren && item.expanded)) {
+      this.expanded = true;
+      return;
+    }
+
     this.#openTimeout = setTimeout(() => {
       this.expanded = true;
-    }, HOVER_OPEN_DELAY);
+    }, this.hoverDelay);
   }
 
   /** @private */
   #onPointerLeave() {
-    if (!this.overlayChildren || this.disabled || !this.#canHover()) {
+    if (!this.#canOpenFlyout() || !this.#canHover()) {
       return;
     }
     this.#clearHoverTimeouts();
     this.#closeTimeout = setTimeout(() => {
+      // Closing a flyout that the user has tabbed into would move their focus
+      // back out of it, triggered by a pointer they may not even be touching
+      if (!this.#hasFocus()) {
+        this.expanded = false;
+      }
+    }, this.hideDelay);
+  }
+
+  /**
+   * Whether focus is on this item or on any of its child items. Child items are
+   * slotted into the flyout rather than being its DOM descendants, so this walks
+   * up from the focused node instead of asking the flyout what it contains.
+   * @private
+   */
+  #hasFocus() {
+    for (let node = getDeepActiveElement(); node; node = node.parentNode || node.host) {
+      if (node === this) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Close the flyout once a child item is activated, the way a menu closes on
+   * select. Clicks that keep the user on the page are left alone.
+   * @private
+   */
+  #onClick(event) {
+    if (!this.overlayChildren || !this.expanded || event.metaKey || event.ctrlKey || event.shiftKey) {
+      return;
+    }
+    const anchor = event.composedPath().find((el) => el instanceof HTMLAnchorElement);
+    if (anchor && anchor !== this.$.link && anchor.href && anchor.target !== '_blank') {
       this.expanded = false;
-    }, HOVER_CLOSE_DELAY);
+    }
   }
 
   /** @private */

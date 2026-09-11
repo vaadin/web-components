@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Side Nav rail — stress</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/app-layout';
+      import '@vaadin/button';
+      import '@vaadin/dialog';
+      import '@vaadin/icon';
+      import '@vaadin/icons';
+      import '@vaadin/side-nav';
+      import '@vaadin/tooltip';
+
+      const nav = document.querySelector('#rail');
+
+      // Build many top-level items so the drawer scrolls, each with many children
+      // so the flyout is tall.
+      const ICONS = ['vaadin:home', 'vaadin:table', 'vaadin:form', 'vaadin:cog', 'vaadin:chart', 'vaadin:cube'];
+      for (let i = 0; i < 14; i++) {
+        const item = document.createElement('vaadin-side-nav-item');
+        item.innerHTML = `
+          <vaadin-icon icon="${ICONS[i % ICONS.length]}" slot="prefix"></vaadin-icon>
+          <span class="label">Section ${i}</span>
+        `;
+        const childCount = i % 3 === 0 ? 12 : 3;
+        for (let j = 0; j < childCount; j++) {
+          const child = document.createElement('vaadin-side-nav-item');
+          child.setAttribute('slot', 'children');
+          child.setAttribute('path', `/section-${i}/page-${j}`);
+          child.textContent = `Section ${i} — page ${j}`;
+          item.appendChild(child);
+        }
+        nav.appendChild(item);
+      }
+
+      // Stop real navigation, mimic a router
+      document.addEventListener('click', (e) => {
+        const a = e.composedPath().find((el) => el.localName === 'a');
+        if (a && a.href) {
+          e.preventDefault();
+          history.pushState({}, '', new URL(a.href).pathname);
+          window.dispatchEvent(new CustomEvent('side-nav-location-changed'));
+          document.querySelector('#log').textContent = `navigated: ${new URL(a.href).pathname}`;
+        }
+      });
+
+      document.querySelector('#rtl').addEventListener('click', () => {
+        document.documentElement.dir = document.documentElement.dir === 'rtl' ? 'ltr' : 'rtl';
+      });
+
+      document.querySelector('#open-dialog').addEventListener('click', () => {
+        document.querySelector('vaadin-dialog').opened = true;
+      });
+
+      document.querySelector('vaadin-dialog').renderer = (root) => {
+        root.textContent = 'Dialog content — press Escape';
+      };
+    </script>
+    <style>
+      vaadin-app-layout {
+        height: 100vh;
+      }
+
+      [slot='drawer'] {
+        padding: var(--vaadin-padding-s);
+      }
+
+      #rail {
+        --vaadin-side-nav-item-padding: var(--vaadin-padding-s);
+        width: fit-content;
+      }
+
+      #rail > vaadin-side-nav-item > .label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      #rail > vaadin-side-nav-item::part(toggle-button) {
+        display: none !important;
+      }
+
+      .controls {
+        display: flex;
+        gap: 0.5rem;
+        padding: var(--vaadin-padding-m);
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <vaadin-app-layout>
+      <h2 slot="navbar">Rail stress</h2>
+      <div slot="drawer">
+        <vaadin-side-nav id="rail" overlay-children no-auto-expand></vaadin-side-nav>
+      </div>
+
+      <div class="controls">
+        <vaadin-button id="rtl">Toggle RTL</vaadin-button>
+        <vaadin-button id="open-dialog">Open dialog</vaadin-button>
+        <span id="log"></span>
+      </div>
+    </vaadin-app-layout>
+
+    <vaadin-dialog header-title="Dialog"></vaadin-dialog>
+  </body>
+</html>

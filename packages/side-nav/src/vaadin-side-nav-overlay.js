@@ -32,6 +32,26 @@ class SideNavOverlay extends PositionMixin(
     return 'vaadin-side-nav-overlay';
   }
 
+  static get properties() {
+    return {
+      /**
+       * When enabled, the element renders as `display: contents` so that its
+       * content participates in the owner's layout instead of in a flyout.
+       *
+       * The element is always rendered, in both modes, so that the owner's
+       * `<slot>` is never replaced. Replacing it would leave the owner's
+       * `SlotController` bound to a detached slot.
+       *
+       * @attr {boolean} inline
+       */
+      inline: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+      },
+    };
+  }
+
   static get styles() {
     return sideNavOverlayStyles;
   }
@@ -47,6 +67,80 @@ class SideNavOverlay extends PositionMixin(
         <div part="content" id="content"><slot></slot></div>
       </div>
     `;
+  }
+
+  constructor() {
+    super();
+    this.__boundOnGlobalKeyDown = this.__onGlobalKeyDown.bind(this);
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('opened')) {
+      const method = this.opened ? 'addEventListener' : 'removeEventListener';
+      document[method]('keydown', this.__boundOnGlobalKeyDown, true);
+    }
+  }
+
+  /**
+   * Close on Escape and keep the key from reaching ancestors. Without this, the
+   * App Layout drawer holding the nav closes on the same key press, so one press
+   * would dismiss the whole navigation rather than just the flyout.
+   *
+   * @private
+   */
+  __onGlobalKeyDown(event) {
+    if (event.key === 'Escape' && this.opened && this._last) {
+      event.stopPropagation();
+      this.close(event);
+    }
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    // `OverlayMixin` only removes the element from the global overlay stack while
+    // closing, so an overlay that is detached while open would stay registered
+    // there for the lifetime of the page, retaining the owner and its listeners.
+    if (this.opened) {
+      this.opened = false;
+    }
+    document.removeEventListener('keydown', this.__boundOnGlobalKeyDown, true);
+  }
+
+  /**
+   * Override method from `PositionMixin` to close the flyout once its anchor is
+   * no longer on screen. The anchor keeps a non-zero rect when the App Layout
+   * drawer slides shut, so the base 0x0 check does not catch that case and the
+   * flyout would be left floating over the page.
+   *
+   * @protected
+   * @override
+   */
+  _updatePosition() {
+    if (this.opened && this.positionTarget && !this.__isTargetOnScreen()) {
+      this.close();
+      return;
+    }
+    super._updatePosition();
+  }
+
+  /** @private */
+  __isTargetOnScreen() {
+    if (!this.positionTarget.checkVisibility({ visibilityProperty: true })) {
+      return false;
+    }
+    const { top, right, bottom, left } = this.positionTarget.getBoundingClientRect();
+    return right > 0 && bottom > 0 && left < window.innerWidth && top < window.innerHeight;
   }
 
   /**

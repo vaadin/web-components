@@ -160,6 +160,27 @@ declare class SideNav extends SideNavChildrenMixin(FocusMixin(ElementMixin(Thema
    */
   overlayChildren: boolean;
 
+  /**
+   * The time in milliseconds that the pointer has to rest on a top-level item
+   * before its flyout opens. Set to `0` to open without a delay. Has no effect
+   * when another flyout is already open, which always switches without a delay.
+   *
+   * Only applies when `overlayChildren` is enabled.
+   *
+   * @attr {number} hover-delay
+   */
+  hoverDelay: number | null | undefined;
+
+  /**
+   * The time in milliseconds to wait before closing a flyout after the pointer
+   * has left both the item and the flyout. Set to `0` to close without a delay.
+   *
+   * Only applies when `overlayChildren` is enabled.
+   *
+   * @attr {number} hide-delay
+   */
+  hideDelay: number | null | undefined;
+
   addEventListener<K extends keyof SideNavEventMap>(
     type: K,
     listener: (this: SideNav, ev: SideNavEventMap[K]) => void,

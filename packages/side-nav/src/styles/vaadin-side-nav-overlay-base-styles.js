@@ -12,6 +12,25 @@ const sideNavOverlay = css`
     --_offset: var(--vaadin-side-nav-overlay-offset, 4px);
   }
 
+  /* Inline mode: no boxes of our own, so the slotted list lays out in the owner
+     exactly as it would without this element in between. The selectors have to
+     out-specify the base overlay's own display:none !important rules. */
+  :host([inline]),
+  :host([inline]:not([opened]):not([closing])) {
+    display: contents !important;
+  }
+
+  :host([inline]) [part='overlay'],
+  :host([inline]) [part='content'],
+  :host([inline]:not([opened]):not([closing])) [part='overlay'] {
+    display: contents !important;
+  }
+
+  /* An element with display:contents still generates pseudo-elements */
+  :host([inline]) [part='overlay']::before {
+    content: none;
+  }
+
   [part='overlay'] {
     position: relative;
     /* The gap bridge below must not be clipped, so scrolling lives on the content part */

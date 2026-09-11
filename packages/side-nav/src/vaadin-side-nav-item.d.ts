@@ -58,12 +58,14 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name       | Description
- * ----------------|----------------
- * `content`       | The element that wraps link and toggle button
- * `children`      | The element that wraps child items
- * `link`          | The clickable anchor used for navigation
- * `toggle-button` | The toggle button
+ * Part name        | Description
+ * -----------------|----------------
+ * `content`        | The element that wraps link and toggle button
+ * `children`       | The element that wraps child items
+ * `link`           | The clickable anchor used for navigation
+ * `toggle-button`  | The toggle button
+ * `flyout`         | The flyout that holds the child items in `overlayChildren` mode
+ * `flyout-content` | The scrolling content of the flyout
  *
  * The following state attributes are available for styling:
  *
@@ -129,6 +131,25 @@ declare class SideNavItem extends SideNavChildrenMixin(DisabledMixin(ElementMixi
    * @attr {boolean} overlay-children
    */
   overlayChildren: boolean;
+
+  /**
+   * The time in milliseconds that the pointer has to rest on the item before
+   * its flyout opens. Set to `0` to open without a delay. Has no effect when
+   * another flyout in the same group is already open, which always switches
+   * without a delay.
+   *
+   * @attr {number} hover-delay
+   */
+  hoverDelay: number;
+
+  /**
+   * The time in milliseconds to wait before closing the flyout after the
+   * pointer has left both the item and the flyout. Set to `0` to close
+   * without a delay.
+   *
+   * @attr {number} hide-delay
+   */
+  hideDelay: number;
 
   /**
    * Whether to also match nested paths / routes. `false` by default.
