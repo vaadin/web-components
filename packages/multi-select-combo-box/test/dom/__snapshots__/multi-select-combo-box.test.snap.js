@@ -484,7 +484,6 @@ snapshots["vaadin-multi-select-combo-box host opened overlay"] =
     part="select-all"
     type="button"
   >
-    Select All
   </button>
   <slot name="overlay">
   </slot>
@@ -577,7 +576,6 @@ snapshots["vaadin-multi-select-combo-box shadow default"] =
     part="select-all"
     type="button"
   >
-    Select All
   </button>
   <slot name="overlay">
   </slot>
@@ -653,7 +651,6 @@ snapshots["vaadin-multi-select-combo-box shadow disabled"] =
     part="select-all"
     type="button"
   >
-    Select All
   </button>
   <slot name="overlay">
   </slot>
@@ -729,7 +726,6 @@ snapshots["vaadin-multi-select-combo-box shadow readonly"] =
     part="select-all"
     type="button"
   >
-    Select All
   </button>
   <slot name="overlay">
   </slot>
@@ -805,7 +801,6 @@ snapshots["vaadin-multi-select-combo-box shadow invalid"] =
     part="select-all"
     type="button"
   >
-    Select All
   </button>
   <slot name="overlay">
   </slot>
