@@ -463,7 +463,6 @@ export const MenuBarMixin = (superClass) =>
           this.__restoreItem(button, item);
         }
       });
-      this.__updateOverflow([]);
     }
 
     /** @private */
@@ -541,6 +540,7 @@ export const MenuBarMixin = (superClass) =>
 
       // Reset all buttons in the menu bar and the overflow button
       this.__restoreButtons(buttons);
+      this.__updateOverflow([]);
 
       // Hide any overflowing buttons and put them in the 'overflow' button
       this.__setOverflowItems(buttons, overflow);
@@ -553,7 +553,11 @@ export const MenuBarMixin = (superClass) =>
       const isSingleButton = newOverflowCount === buttons.length || (newOverflowCount === 0 && buttons.length === 1);
       this.toggleAttribute('has-single-button', isSingleButton);
 
-      // Collect visible buttons to detect if tabindex should be updated
+      this.__updateVisibleButtons(buttons);
+    }
+
+    /** @private */
+    __updateVisibleButtons(buttons) {
       const visibleButtons = buttons.filter((btn) => btn.style.visibility !== 'hidden');
 
       if (!visibleButtons.length) {
@@ -565,8 +569,7 @@ export const MenuBarMixin = (superClass) =>
         this._setTabindex(visibleButtons[visibleButtons.length - 1], true);
       }
 
-      // Apply first/last visible attributes to the visible buttons
-      visibleButtons.forEach((btn, index, visibleButtons) => {
+      visibleButtons.forEach((btn, index) => {
         btn.toggleAttribute('first-visible', index === 0);
         btn.toggleAttribute('last-visible', !this._hasOverflow && index === visibleButtons.length - 1);
       });
