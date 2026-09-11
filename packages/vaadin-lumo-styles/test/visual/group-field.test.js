@@ -54,10 +54,16 @@ describe('group-field', () => {
   });
 
   it('helper above field', async () => {
-    element.label = 'Label';
     element.helperText = 'Helper text';
     element.setAttribute('theme', 'helper-above-field');
     await visualDiff(div, 'group-field-helper-above-field');
+  });
+
+  it('label and helper above field', async () => {
+    element.label = 'Label';
+    element.helperText = 'Helper text';
+    element.setAttribute('theme', 'helper-above-field');
+    await visualDiff(div, 'group-field-label-helper-above-field');
   });
 
   describe('vertical', () => {
@@ -75,10 +81,16 @@ describe('group-field', () => {
     });
 
     it('helper above field', async () => {
-      element.label = 'Label';
       element.helperText = 'Helper text';
       element.setAttribute('theme', 'vertical helper-above-field');
       await visualDiff(div, 'group-field-vertical-helper-above-field');
+    });
+
+    it('label and helper above field', async () => {
+      element.label = 'Label';
+      element.helperText = 'Helper text';
+      element.setAttribute('theme', 'vertical helper-above-field');
+      await visualDiff(div, 'group-field-vertical-label-helper-above-field');
     });
   });
 

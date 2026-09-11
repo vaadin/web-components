@@ -63,6 +63,12 @@ describe('field', () => {
         });
 
         it('helper above field', async () => {
+          element.helperText = 'Helper text';
+          element.setAttribute('theme', 'helper-above-field');
+          await visualDiff(div, `${dir}-field-helper-above-field`);
+        });
+
+        it('label and helper above field', async () => {
           element.label = 'Label';
           element.helperText = 'Helper text';
           element.setAttribute('theme', 'helper-above-field');
