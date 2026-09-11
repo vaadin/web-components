@@ -122,11 +122,9 @@ export class SelectAllController {
     let selectedItems;
 
     if (this.#allSelected) {
-      selectedItems = host.selectedItems.filter((item) => host._findIndex(item, filteredItems, host.itemIdPath) === -1);
+      selectedItems = host.selectedItems.filter((item) => host._findIndex(item, filteredItems) === -1);
     } else {
-      const missingItems = filteredItems.filter(
-        (item) => host._findIndex(item, host.selectedItems, host.itemIdPath) === -1,
-      );
+      const missingItems = filteredItems.filter((item) => host._findIndex(item, host.selectedItems) === -1);
       selectedItems = [...host.selectedItems, ...missingItems];
     }
 
@@ -178,7 +176,7 @@ export class SelectAllController {
   #isEveryFilteredItemSelected() {
     const host = this.#host;
     const items = this.#getFilteredItems();
-    return items.length > 0 && items.every((item) => host._findIndex(item, host.selectedItems, host.itemIdPath) > -1);
+    return items.length > 0 && items.every((item) => host._findIndex(item, host.selectedItems) > -1);
   }
 
   #announceResult() {
