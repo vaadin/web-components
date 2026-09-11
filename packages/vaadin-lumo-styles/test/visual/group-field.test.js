@@ -54,16 +54,10 @@ describe('group-field', () => {
   });
 
   it('helper above field', async () => {
-    element.helperText = 'Helper text';
-    element.setAttribute('theme', 'helper-above-field');
-    await visualDiff(div, 'group-field-helper-above-field');
-  });
-
-  it('label and helper above field', async () => {
     element.label = 'Label';
     element.helperText = 'Helper text';
     element.setAttribute('theme', 'helper-above-field');
-    await visualDiff(div, 'group-field-label-helper-above-field');
+    await visualDiff(div, 'group-field-helper-above-field');
   });
 
   describe('vertical', () => {
@@ -81,16 +75,48 @@ describe('group-field', () => {
     });
 
     it('helper above field', async () => {
+      element.label = 'Label';
       element.helperText = 'Helper text';
       element.setAttribute('theme', 'vertical helper-above-field');
       await visualDiff(div, 'group-field-vertical-helper-above-field');
     });
+  });
 
-    it('label and helper above field', async () => {
+  describe('label aside', () => {
+    beforeEach(() => {
       element.label = 'Label';
+      element.setAttribute('theme', 'label-aside');
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'group-field-label-aside');
+    });
+
+    it('no label', async () => {
+      element.label = null;
+      await visualDiff(div, 'group-field-label-aside-no-label');
+    });
+
+    it('error message', async () => {
+      element.errorMessage = 'This field is required';
+      element.invalid = true;
+      await visualDiff(div, 'group-field-label-aside-error-message');
+    });
+
+    it('helper text', async () => {
       element.helperText = 'Helper text';
-      element.setAttribute('theme', 'vertical helper-above-field');
-      await visualDiff(div, 'group-field-vertical-label-helper-above-field');
+      await visualDiff(div, 'group-field-label-aside-helper-text');
+    });
+
+    it('helper above field', async () => {
+      element.helperText = 'Helper text';
+      element.setAttribute('theme', 'label-aside helper-above-field');
+      await visualDiff(div, 'group-field-label-aside-helper-above-field');
+    });
+
+    it('vertical', async () => {
+      element.setAttribute('theme', 'label-aside vertical');
+      await visualDiff(div, 'group-field-label-aside-vertical');
     });
   });
 });
