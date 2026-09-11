@@ -45,7 +45,7 @@ describe('email-field', () => {
     });
   });
 
-  it('label-aside', async () => {
+  it('label aside', async () => {
     element.setAttribute('theme', 'label-aside');
     element.label = 'Label';
     await visualDiff(div, 'label-aside');
