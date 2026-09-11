@@ -72,54 +72,54 @@ describe('select all', () => {
     });
 
     it('should use selectAll label when nothing is selected', () => {
-      expect(getSelectAllText()).to.equal('Select all');
+      expect(getSelectAllText()).to.equal('Select All');
     });
 
     it('should use selectAll label when some items are selected', () => {
       comboBox.selectedItems = ['Apple'];
-      expect(getSelectAllText()).to.equal('Select all');
+      expect(getSelectAllText()).to.equal('Select All');
     });
 
     it('should use deselectAll label when all items are selected', () => {
       comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
-      expect(getSelectAllText()).to.equal('Deselect all');
+      expect(getSelectAllText()).to.equal('Deselect All');
     });
 
     it('should use selectFiltered label when a filter is set', () => {
       setInputValue(comboBox, 'an');
-      expect(getSelectAllText()).to.equal('Select filtered');
+      expect(getSelectAllText()).to.equal('Select Filtered');
     });
 
     it('should use selectFiltered label when some filtered items are selected', () => {
       comboBox.selectedItems = ['Banana'];
       setInputValue(comboBox, 'an');
-      expect(getSelectAllText()).to.equal('Select filtered');
+      expect(getSelectAllText()).to.equal('Select Filtered');
     });
 
     it('should use deselectFiltered label when all filtered items are selected', () => {
       comboBox.selectedItems = ['Banana', 'Orange'];
       setInputValue(comboBox, 'an');
-      expect(getSelectAllText()).to.equal('Deselect filtered');
+      expect(getSelectAllText()).to.equal('Deselect Filtered');
     });
 
     it('should update the label when the filter is cleared', () => {
       comboBox.selectedItems = ['Banana', 'Orange'];
       setInputValue(comboBox, 'an');
       setInputValue(comboBox, '');
-      expect(getSelectAllText()).to.equal('Select all');
+      expect(getSelectAllText()).to.equal('Select All');
     });
 
     it('should ignore unknown values when computing the label', () => {
       comboBox.allowCustomValue = true;
       comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange', 'Custom'];
-      expect(getSelectAllText()).to.equal('Deselect all');
+      expect(getSelectAllText()).to.equal('Deselect All');
     });
 
     it('should compute the label from filtered items when selected items are on top', () => {
       comboBox.selectedItemsOnTop = true;
       comboBox.selectedItems = ['Pear'];
       comboBox.opened = true;
-      expect(getSelectAllText()).to.equal('Select all');
+      expect(getSelectAllText()).to.equal('Select All');
     });
 
     it('should use custom i18n labels', () => {
@@ -154,12 +154,12 @@ describe('select all', () => {
 
       it('should use deselectAll label when all items are selected by id', () => {
         comboBox.selectedItems = [{ ...apple }, { ...banana }, { ...lemon }];
-        expect(getSelectAllText()).to.equal('Deselect all');
+        expect(getSelectAllText()).to.equal('Deselect All');
       });
 
       it('should use selectAll label when some items are selected by id', () => {
         comboBox.selectedItems = [{ ...apple }];
-        expect(getSelectAllText()).to.equal('Select all');
+        expect(getSelectAllText()).to.equal('Select All');
       });
     });
   });
@@ -245,13 +245,13 @@ describe('select all', () => {
 
     it('should update the label after selecting all items', () => {
       clickButton();
-      expect(getSelectAllText()).to.equal('Deselect all');
+      expect(getSelectAllText()).to.equal('Deselect All');
     });
 
     it('should update the label after deselecting all items', () => {
       comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
       clickButton();
-      expect(getSelectAllText()).to.equal('Select all');
+      expect(getSelectAllText()).to.equal('Select All');
     });
 
     it('should fire change event once when selecting all items', () => {
@@ -346,13 +346,13 @@ describe('select all', () => {
     it('should select all items on Space', async () => {
       await sendKeys({ press: 'Space' });
       expect(comboBox.selectedItems).to.deep.equal(['Apple', 'Banana', 'Lemon', 'Orange']);
-      expect(getSelectAllText()).to.equal('Deselect all');
+      expect(getSelectAllText()).to.equal('Deselect All');
     });
 
     it('should select all items on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expect(comboBox.selectedItems).to.deep.equal(['Apple', 'Banana', 'Lemon', 'Orange']);
-      expect(getSelectAllText()).to.equal('Deselect all');
+      expect(getSelectAllText()).to.equal('Deselect All');
     });
 
     it('should not submit the surrounding form', () => {

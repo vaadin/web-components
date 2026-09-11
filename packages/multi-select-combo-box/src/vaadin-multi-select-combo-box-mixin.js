@@ -23,10 +23,10 @@ const DEFAULT_I18N = {
   selected: 'added to selection',
   deselected: 'removed from selection',
   total: '{count} items selected',
-  selectAll: 'Select all',
-  deselectAll: 'Deselect all',
-  selectFiltered: 'Select filtered',
-  deselectFiltered: 'Deselect filtered',
+  selectAll: 'Select All',
+  deselectAll: 'Deselect All',
+  selectFiltered: 'Select Filtered',
+  deselectFiltered: 'Deselect Filtered',
 };
 
 export const MultiSelectComboBoxMixin = (superClass) =>
@@ -255,16 +255,16 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      *   // Screen reader announcement of the selected items count.
      *   // {count} is replaced with the actual count of items.
      *   total: '{count} items selected',
-     *   // Label of the select all button when no filter is set.
-     *   selectAll: 'Select all',
-     *   // Label of the select all button when no filter is set
+     *   // Text of the select all button when no filter is set.
+     *   selectAll: 'Select All',
+     *   // Text of the select all button when no filter is set
      *   // and all items are selected.
-     *   deselectAll: 'Deselect all',
-     *   // Label of the select all button when a filter is set.
-     *   selectFiltered: 'Select filtered',
-     *   // Label of the select all button when a filter is set
+     *   deselectAll: 'Deselect All',
+     *   // Text of the select all button when a filter is set.
+     *   selectFiltered: 'Select Filtered',
+     *   // Text of the select all button when a filter is set
      *   // and all items matching the filter are selected.
-     *   deselectFiltered: 'Deselect filtered',
+     *   deselectFiltered: 'Deselect Filtered',
      * }
      * ```
      * @type {!MultiSelectComboBoxI18n}
