@@ -684,11 +684,11 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * @override
      */
     _setDropdownItems(items) {
-      super._setDropdownItems(this.__getDropdownItems(items));
+      super._setDropdownItems(this.__generateDropdownItems(items));
     }
 
     /** @private */
-    __getDropdownItems(items) {
+    __generateDropdownItems(items) {
       if (this.readonly) {
         return this.selectedItems;
       }
