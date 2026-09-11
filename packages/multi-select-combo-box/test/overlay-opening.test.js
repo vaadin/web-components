@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { arrowDownKeyDown, arrowUpKeyDown, click, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-multi-select-combo-box.js';
+import { getChips } from './helpers.js';
 import { setInputValue } from './helpers.js';
 
 describe('overlay opening', () => {
@@ -80,6 +81,41 @@ describe('overlay opening', () => {
     it('should prevent default for the handled toggle button click', () => {
       const event = click(comboBox._toggleElement);
       expect(event.defaultPrevented).to.be.true;
+    });
+  });
+
+  describe('chips', () => {
+    // The overflow chip is rendered first, followed by a chip for each item
+    let overflow, chip;
+
+    beforeEach(async () => {
+      comboBox.selectedItems = ['foo', 'bar'];
+      await nextRender();
+      [overflow, chip] = getChips(comboBox);
+    });
+
+    it('should open by clicking chip', () => {
+      chip.click();
+
+      expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should open by clicking overflow chip', () => {
+      expect(overflow.hasAttribute('hidden')).to.be.false;
+
+      overflow.click();
+
+      expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not open by clicking chip remove button', () => {
+      chip.shadowRoot.querySelector('[part="remove-button"]').click();
+
+      expect(comboBox.selectedItems).to.deep.equal(['foo']);
+      expect(comboBox.opened).to.be.false;
+      expect(overlay.opened).to.be.false;
     });
   });
 
