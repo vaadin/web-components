@@ -11,8 +11,9 @@
  * `@vaadin/vaadin-core`, so that it ships every component.
  *
  * The packages that a meta package depends on but this repository does not
- * build, e.g. `@vaadin/router`, are kept from its committed `package.json`,
- * with the version declared there, as they have versions of their own.
+ * build are listed in `EXTERNAL_DEPENDENCIES` and kept from its committed
+ * `package.json`, with the version declared there, as they have versions of
+ * their own.
  *
  * The entry point imports the root level `vaadin-*.js` entry points of those
  * packages that register something when imported, either a custom element or an
@@ -42,6 +43,15 @@ const META_PACKAGES = [
 // The theme packages are dependencies of the meta packages, but their entry
 // points are styles and icons rather than components, so they are not imported.
 const THEME_PACKAGES = new Set(['aura', 'vaadin-lumo-styles']);
+
+// The packages that the meta packages depend on but this repository does not
+// build. Their version is the one their committed package.json declares, which
+// is where to bump them, rather than the version of this repository.
+const EXTERNAL_DEPENDENCIES = new Set([
+  '@vaadin/router',
+  '@vaadin/vaadin-development-mode-detector',
+  '@vaadin/vaadin-usage-statistics',
+]);
 
 // How a module registers a custom element or an iconset
 const REGISTRATION = /\b(?:defineCustomElement|customElements\.define|Iconset\.register)\(/u;
@@ -169,11 +179,10 @@ function createEntryPoint(imports) {
  * the external ones keep the version the committed `package.json` declares.
  * @param {object} packageJson - the committed `package.json`
  * @param {string[]} dependencies - the names of the packages of the workspace to depend on
- * @param {Set<string>} workspacePackages - the names of every package of the workspace
  * @returns {string}
  */
-function createPackageJson(packageJson, dependencies, workspacePackages) {
-  const external = Object.entries(packageJson.dependencies ?? {}).filter(([name]) => !workspacePackages.has(name));
+function createPackageJson(packageJson, dependencies) {
+  const external = Object.entries(packageJson.dependencies ?? {}).filter(([name]) => EXTERNAL_DEPENDENCIES.has(name));
   const pinned = dependencies.map((name) => [name, version]);
 
   const generated = {
@@ -187,7 +196,6 @@ function createPackageJson(packageJson, dependencies, workspacePackages) {
 
 const check = process.argv.includes('--check');
 const { core, commercial } = collectPackages();
-const workspacePackages = new Set([...core, ...commercial, ...META_PACKAGES].map((pkg) => pkg.name));
 const outdated = [];
 
 for (const metaPackage of META_PACKAGES) {
@@ -206,7 +214,7 @@ for (const metaPackage of META_PACKAGES) {
   }
 
   const files = {
-    'package.json': createPackageJson(packageJson, dependencies, workspacePackages),
+    'package.json': createPackageJson(packageJson, dependencies),
     [metaPackage.entryPoint]: createEntryPoint(imports),
   };
 
