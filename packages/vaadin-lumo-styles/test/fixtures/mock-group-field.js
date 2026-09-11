@@ -1,10 +1,11 @@
 import './mock-group-field.css';
 import { html, LitElement } from 'lit';
+import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 
-class MockGroupField extends FieldMixin(PolylitMixin(LumoInjectionMixin(LitElement))) {
+class MockGroupField extends FieldMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
   static get is() {
     return 'mock-group-field';
   }
