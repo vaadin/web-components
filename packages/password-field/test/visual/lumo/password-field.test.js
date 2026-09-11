@@ -16,6 +16,46 @@ describe('password-field', () => {
     element = fixtureSync('<vaadin-password-field></vaadin-password-field>', div);
   });
 
+  ['ltr', 'rtl'].forEach((dir) => {
+    describe(dir, () => {
+      before(() => {
+        document.documentElement.setAttribute('dir', dir);
+      });
+
+      after(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      it('basic', async () => {
+        await visualDiff(div, `${dir}-basic`);
+      });
+
+      it('value', async () => {
+        element.value = 'value';
+        await visualDiff(div, `${dir}-value`);
+      });
+
+      it('clear button', async () => {
+        element.value = 'value';
+        element.clearButtonVisible = true;
+        await visualDiff(div, `${dir}-clear-button`);
+      });
+
+      it('reveal button hidden', async () => {
+        element.value = 'value';
+        element.revealButtonHidden = true;
+        await visualDiff(div, `${dir}-reveal-button-hidden`);
+      });
+
+      it('reveal button focus', async () => {
+        element.label = 'Password';
+        element.focus();
+        await sendKeys({ press: 'Tab' });
+        await visualDiff(div, `${dir}-reveal-button-focus`);
+      });
+    });
+  });
+
   describe('label aside', () => {
     beforeEach(() => {
       element.setAttribute('theme', 'label-aside');
@@ -75,46 +115,6 @@ describe('password-field', () => {
     it('small', async () => {
       element.setAttribute('theme', 'label-aside small');
       await visualDiff(div, 'label-aside-small');
-    });
-  });
-
-  ['ltr', 'rtl'].forEach((dir) => {
-    describe(dir, () => {
-      before(() => {
-        document.documentElement.setAttribute('dir', dir);
-      });
-
-      after(() => {
-        document.documentElement.removeAttribute('dir');
-      });
-
-      it('basic', async () => {
-        await visualDiff(div, `${dir}-basic`);
-      });
-
-      it('value', async () => {
-        element.value = 'value';
-        await visualDiff(div, `${dir}-value`);
-      });
-
-      it('clear button', async () => {
-        element.value = 'value';
-        element.clearButtonVisible = true;
-        await visualDiff(div, `${dir}-clear-button`);
-      });
-
-      it('reveal button hidden', async () => {
-        element.value = 'value';
-        element.revealButtonHidden = true;
-        await visualDiff(div, `${dir}-reveal-button-hidden`);
-      });
-
-      it('reveal button focus', async () => {
-        element.label = 'Password';
-        element.focus();
-        await sendKeys({ press: 'Tab' });
-        await visualDiff(div, `${dir}-reveal-button-focus`);
-      });
     });
   });
 });
