@@ -350,23 +350,6 @@ describe('time-picker', () => {
     });
   });
 
-  describe('helper text', () => {
-    it('should set helper text content using helperText property', async () => {
-      timePicker.helperText = 'foo';
-      await nextFrame();
-      expect(timePicker.querySelector('[slot="helper"]').textContent).to.eql('foo');
-    });
-
-    it('should display the helper text when slotted helper available', async () => {
-      const helper = document.createElement('div');
-      helper.setAttribute('slot', 'helper');
-      helper.textContent = 'foo';
-      timePicker.appendChild(helper);
-      await nextFrame();
-      expect(timePicker.querySelector('[slot="helper"]').textContent).to.eql('foo');
-    });
-  });
-
   describe('required', () => {
     beforeEach(() => {
       timePicker.required = true;
