@@ -12,8 +12,9 @@ vaadin-multi-select-combo-box-chip {
 }
 
 vaadin-multi-select-combo-box::part(select-all) {
-  padding-inline: var(--vaadin-padding-s);
-  border-radius: var(--vaadin-item-border-radius);
+  padding-inline: max(0px, var(--vaadin-padding-inline-container) - var(--aura-item-overlay-padding-inline));
+  gap: var(--vaadin-gap-xs);
+  font-size: var(--aura-font-size-s);
   color: var(--aura-accent-text-color);
   font-weight: var(--aura-font-weight-medium);
 }
