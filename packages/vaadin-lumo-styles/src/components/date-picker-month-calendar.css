@@ -37,12 +37,8 @@
     margin-bottom: var(--lumo-space-s);
   }
 
-  table {
-    grid-template-columns: repeat(7, calc(100% / 7));
-  }
-
   :host([week-numbers]) table {
-    grid-template-columns: var(--lumo-size-xs) repeat(7, calc((100% - var(--lumo-size-xs)) / 7));
+    grid-template-columns: var(--lumo-size-xs) repeat(7, 1fr);
   }
 
   :host([week-numbers]) [part~='weekday']:empty {
