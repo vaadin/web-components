@@ -105,11 +105,7 @@ export const TimePickerMixin = (superClass) =>
     }
 
     static get observers() {
-      return [
-        '_openedOrItemsChanged(opened, _dropdownItems)',
-        '_updateScroller(opened, _dropdownItems, _focusedIndex, _theme, value)',
-        '__updateAriaAttributes(_dropdownItems, opened, inputElement)',
-      ];
+      return ['__updateAriaAttributes(_dropdownItems, opened, inputElement)'];
     }
 
     static get defaultI18n() {
@@ -248,6 +244,10 @@ export const TimePickerMixin = (superClass) =>
       if (props.has('__effectiveI18n') && this.value) {
         this.__updateInputValue(this.__getTimeObject(this.value));
       }
+
+      if (props.has('value') || props.has('_dropdownItems')) {
+        this._scroller.selectedItem = this._dropdownItems?.find((item) => item.value === this.value);
+      }
     }
 
     /**
@@ -271,30 +271,6 @@ export const TimePickerMixin = (superClass) =>
      */
     _getItemLabel(item) {
       return item ? item.label : '';
-    }
-
-    /** @private */
-    _updateScroller(opened, items, focusedIndex, theme, value) {
-      if (opened) {
-        this._scroller.style.maxHeight =
-          getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
-      }
-
-      const isClosing = this.hasAttribute('closing');
-
-      this._scroller.setProperties({
-        items: opened || isClosing ? items : [],
-        opened,
-        focusedIndex,
-        theme,
-        selectedItem: items?.find((item) => item.value === value),
-      });
-    }
-
-    /** @private */
-    _openedOrItemsChanged(opened, items) {
-      // Close the overlay if there are no items to display.
-      this._overlayOpened = opened && !!items?.length;
     }
 
     /**
