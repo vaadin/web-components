@@ -17,10 +17,6 @@ export const multiSelectComboBoxStyles = [
       --_wrapper-gap: var(--vaadin-multi-select-combo-box-chips-gap, 2px);
     }
 
-    [hidden] {
-      display: none !important;
-    }
-
     #chips {
       display: flex;
       align-items: center;
@@ -101,7 +97,7 @@ export const multiSelectComboBoxStyles = [
       outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
     }
 
-    [part='select-all']:not([hidden]) + slot::slotted(*) {
+    [part='select-all'] + slot::slotted(*) {
       border-top: 1px solid var(--vaadin-border-color-secondary);
     }
   `,

@@ -22,54 +22,50 @@ describe('select all', () => {
 
   describe('enabling', () => {
     beforeEach(() => {
-      button = getSelectAllButton(comboBox);
       comboBox.opened = true;
     });
 
-    it('should hide button by default', () => {
-      expect(button.hasAttribute('hidden')).to.be.true;
+    it('should not render button by default', () => {
+      expect(getSelectAllButton(comboBox)).to.be.null;
     });
 
-    it('should toggle button hidden attribute when the property changes', () => {
+    it('should toggle button when the property changes', () => {
       comboBox.selectAllButtonVisible = true;
-      expect(button.hasAttribute('hidden')).to.be.false;
+      expect(getSelectAllButton(comboBox)).to.be.ok;
 
       comboBox.selectAllButtonVisible = false;
-      expect(button.hasAttribute('hidden')).to.be.true;
+      expect(getSelectAllButton(comboBox)).to.be.null;
     });
 
-    it('should hide button when readonly', () => {
+    it('should not render button when readonly', () => {
       // Keep the overlay open in readonly mode, which only lists selected items
       comboBox.selectedItems = ['Apple'];
       comboBox.selectAllButtonVisible = true;
       comboBox.readonly = true;
       expect(comboBox.$.overlay.opened).to.be.true;
-      expect(button.hasAttribute('hidden')).to.be.true;
+      expect(getSelectAllButton(comboBox)).to.be.null;
 
       comboBox.readonly = false;
-      expect(button.hasAttribute('hidden')).to.be.false;
+      expect(getSelectAllButton(comboBox)).to.be.ok;
     });
 
-    it('should hide button when using a data provider', async () => {
+    it('should not render button when using a data provider', async () => {
       const items = Array.from({ length: 100 }, (_, i) => `Item ${i}`);
       comboBox = fixtureSync(
         `<vaadin-multi-select-combo-box select-all-button-visible></vaadin-multi-select-combo-box>`,
       );
-      button = getSelectAllButton(comboBox);
-      comboBox.selectAllButtonVisible = true;
       comboBox.pageSize = 10;
       comboBox.dataProvider = getDataProvider(items);
       await nextRender();
       comboBox.opened = true;
 
-      expect(button.hasAttribute('hidden')).to.be.true;
+      expect(getSelectAllButton(comboBox)).to.be.null;
     });
   });
 
   describe('label', () => {
     beforeEach(() => {
       comboBox.selectAllButtonVisible = true;
-      button = getSelectAllButton(comboBox);
     });
 
     it('should use selectAll label when nothing is selected', () => {
@@ -113,6 +109,20 @@ describe('select all', () => {
     it('should ignore unknown values when computing the label', () => {
       comboBox.allowCustomValue = true;
       comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange', 'Custom'];
+      expect(getSelectAllText()).to.equal('Deselect All');
+    });
+
+    it('should update the label when the button becomes visible', () => {
+      comboBox.selectAllButtonVisible = false;
+      comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
+      comboBox.selectAllButtonVisible = true;
+      expect(getSelectAllText()).to.equal('Deselect All');
+    });
+
+    it('should update the label when the button becomes visible after readonly', () => {
+      comboBox.readonly = true;
+      comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
+      comboBox.readonly = false;
       expect(getSelectAllText()).to.equal('Deselect All');
     });
 
@@ -170,7 +180,6 @@ describe('select all', () => {
 
     beforeEach(() => {
       comboBox.selectAllButtonVisible = true;
-      button = getSelectAllButton(comboBox);
       changeSpy = sinon.spy();
       comboBox.addEventListener('change', changeSpy);
       selectedItemsChangedSpy = sinon.spy();

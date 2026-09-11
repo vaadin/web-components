@@ -150,7 +150,7 @@
       var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
   }
 
-  [part='select-all']:not([hidden]) + slot::slotted(*) {
+  [part='select-all'] + slot::slotted(*) {
     border-top: 1px solid var(--vaadin-border-color-secondary);
   }
 }

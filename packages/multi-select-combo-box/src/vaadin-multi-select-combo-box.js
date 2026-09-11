@@ -210,7 +210,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         .positionTarget="${this._inputField}"
         no-vertical-overlap
       >
-        <button part="select-all" type="button" hidden></button>
+        ${this._selectAllController.render()}
         <slot name="overlay"></slot>
       </vaadin-multi-select-combo-box-overlay>
     `;

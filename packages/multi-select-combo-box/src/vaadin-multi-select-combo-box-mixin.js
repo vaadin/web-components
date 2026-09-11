@@ -325,6 +325,13 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       return 'vaadin-multi-select-combo-box';
     }
 
+    constructor() {
+      super();
+
+      // Created before the first render, as the template renders the button through the controller
+      this._selectAllController = new SelectAllController(this);
+    }
+
     /** @protected */
     ready() {
       super.ready();
@@ -355,8 +362,13 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
       });
       this.addController(this._overflowController);
+    }
 
-      this._selectAllController = new SelectAllController(this, this.shadowRoot.querySelector('[part="select-all"]'));
+    /** @protected */
+    willUpdate(props) {
+      super.willUpdate(props);
+
+      this._selectAllController.willUpdate(props);
     }
 
     /** @protected */
@@ -392,20 +404,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         if (this.dataProvider) {
           this.clearCache();
         }
-      }
-
-      const selectAllProps = [
-        'selectAllButtonVisible',
-        'readonly',
-        'dataProvider',
-        'filteredItems',
-        'selectedItems',
-        'filter',
-        'itemIdPath',
-        '__effectiveI18n',
-      ];
-      if (selectAllProps.some((prop) => props.has(prop))) {
-        this._selectAllController?.update();
       }
     }
 
@@ -483,9 +481,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * @override
      */
     _onClosed() {
-      // Do not leave focus on the select all button, which is hidden together with the overlay.
-      this._selectAllController.restoreFocus();
-
       // Do not commit selected item again on outside click
       this._ignoreCommitValue = true;
 

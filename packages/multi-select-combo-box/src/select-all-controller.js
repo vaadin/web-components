@@ -3,70 +3,77 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { html, nothing } from 'lit';
+import { createRef, ref } from 'lit/directives/ref.js';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 /**
  * A controller that manages the select all button of `<vaadin-multi-select-combo-box>`.
- * It shows or hides the button, updates its label, selects or deselects the items
- * matching the current filter when the button is clicked, and keeps focus inside
- * the component while moving between the input and the button.
+ * It renders the button with a label reflecting the current selection, selects or
+ * deselects the items matching the current filter when the button is clicked, and
+ * keeps focus inside the component while moving between the input and the button.
  *
  * The button is only supported with the `items` API. With a data provider, the
- * component may not have all items loaded, so the button is not shown.
+ * component may not have all items loaded, so the button is not rendered.
  *
- * The host renders the button and calls `update` after every change to a property
- * the button depends on.
+ * The host renders the button calling `render()` from its template, and updates
+ * the controller by calling the `willUpdate` hook.
  */
 export class SelectAllController {
-  #allSelected = false;
-
   #host;
 
-  #button;
+  #buttonRef = createRef();
+
+  #boundOnClick = this.#onClick.bind(this);
+
+  #visible = false;
+
+  #allSelected = false;
 
   /**
    * @param {HTMLElement} host the multi-select combo box
-   * @param {HTMLButtonElement} button the select all button rendered by the host
    */
-  constructor(host, button) {
+  constructor(host) {
     this.#host = host;
-    this.#button = button;
-    button.addEventListener('click', () => this.#onClick());
-    this.update();
   }
 
   /**
-   * Updates the button to reflect the current state of the host. To be called
-   * by the host whenever a property the button depends on has changed.
+   * @param {Map<string, unknown>} props the changed host properties
    */
-  update() {
+  willUpdate(props) {
     const host = this.#host;
-    const button = this.#button;
 
-    const visible = host.selectAllButtonVisible && !host.readonly && !host.dataProvider;
-    if (!visible) {
-      // Do not drop focus to the body when the button is about to be hidden.
-      if (this.#isButtonFocused()) {
-        host.inputElement.focus();
-      }
+    if (
+      ['filteredItems', 'selectedItems', 'itemIdPath', 'selectAllButtonVisible', 'readonly', 'dataProvider'].some(
+        (prop) => props.has(prop),
+      )
+    ) {
+      const items = this.#getFilteredItems();
+      this.#visible = host.selectAllButtonVisible && !host.readonly && !host.dataProvider;
+      this.#allSelected = items.length > 0 && items.every((item) => host._findIndex(item, host.selectedItems) > -1);
     }
 
-    button.hidden = !visible;
+    // When button is hidden or the overlay closes, move focus back to the
+    // input to avoid dropping focus to the body
+    if (this.#isButtonFocused() && (!this.#visible || !host._overlayOpened)) {
+      host.inputElement.focus();
+    }
+  }
 
-    if (!visible) {
-      // Skip further updates if the button is hidden anyway
-      return;
+  /**
+   * @return {TemplateResult | typeof nothing}
+   */
+  render() {
+    if (!this.#visible) {
+      return nothing;
     }
 
-    this.#allSelected = this.#isEveryFilteredItemSelected();
-
-    const { selectAll, deselectAll, selectFiltered, deselectFiltered } = host.__effectiveI18n;
-    if (host.filter) {
-      button.textContent = this.#allSelected ? deselectFiltered : selectFiltered;
-    } else {
-      button.textContent = this.#allSelected ? deselectAll : selectAll;
-    }
+    return html`
+      <button part="select-all" type="button" ${ref(this.#buttonRef)} @click="${this.#boundOnClick}">
+        ${this.#getText()}
+      </button>
+    `;
   }
 
   /**
@@ -99,7 +106,7 @@ export class SelectAllController {
     }
 
     // Move focus to the button instead of leaving the component
-    if (event.key === 'Tab' && host._overlayOpened && !this.#button.hidden) {
+    if (event.key === 'Tab' && host._overlayOpened && this.#button) {
       event.preventDefault();
       this.#focusButton();
       return true;
@@ -108,20 +115,21 @@ export class SelectAllController {
     return false;
   }
 
-  /**
-   * Moves focus back to the input if the button has focus, e.g. when the
-   * overlay containing the button is about to close.
-   */
-  restoreFocus() {
-    if (this.#isButtonFocused()) {
-      this.#host.inputElement.focus();
-    }
+  get #button() {
+    return this.#buttonRef.value;
   }
 
-  /**
-   * Selects the items matching the current filter, or deselects them when
-   * they are all selected already.
-   */
+  #getText() {
+    const host = this.#host;
+    const { selectAll, deselectAll, selectFiltered, deselectFiltered } = host.__effectiveI18n;
+
+    if (host.filter) {
+      return this.#allSelected ? deselectFiltered : selectFiltered;
+    }
+
+    return this.#allSelected ? deselectAll : selectAll;
+  }
+
   #onClick() {
     const host = this.#host;
     const filteredItems = this.#getFilteredItems();
@@ -154,35 +162,16 @@ export class SelectAllController {
     host.removeAttribute('focus-ring');
   }
 
-  /**
-   * Returns true when the event originates from the button.
-   */
   #isButtonEvent(event) {
-    return event.composedPath().includes(this.#button);
+    return !!this.#button && event.composedPath().includes(this.#button);
   }
 
-  /**
-   * Returns true when the button has focus.
-   */
   #isButtonFocused() {
-    return this.#button === getDeepActiveElement();
+    return !!this.#button && this.#button === getDeepActiveElement();
   }
 
-  /**
-   * Returns the items matching the current filter.
-   */
   #getFilteredItems() {
     return this.#host.filteredItems || [];
-  }
-
-  /**
-   * Returns true when there are items matching the current filter and
-   * all of them are selected.
-   */
-  #isEveryFilteredItemSelected() {
-    const host = this.#host;
-    const items = this.#getFilteredItems();
-    return items.length > 0 && items.every((item) => host._findIndex(item, host.selectedItems) > -1);
   }
 
   #announceResult() {
