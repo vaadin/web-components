@@ -146,15 +146,32 @@ export const MonthCalendarMixin = (superClass) =>
       return ['__focusedDateChanged(focusedDate, _days)', '_showWeekNumbersChanged(showWeekNumbers, i18n)'];
     }
 
+    /**
+     * The date cell of the focused date. It carries the `date` property and the date part names,
+     * while the button inside it is the element that takes DOM focus.
+     */
     get focusableDateElement() {
       return [...this.shadowRoot.querySelectorAll('[part~=date]')].find((datePart) => {
         return dateEquals(datePart.date, this.focusedDate);
       });
     }
 
+    /**
+     * The button inside the cell of the focused date. Screen readers get the date's name and state
+     * from this element, so it is also the element that takes DOM focus.
+     */
+    get focusableDateButton() {
+      const cell = this.focusableDateElement;
+      return cell ? cell.querySelector('[part~=date-button]') : undefined;
+    }
+
     /** @protected */
     ready() {
       super.ready();
+
+      // Use application to enforce focus mode for date cells in NVDA
+      this.setAttribute('role', 'application');
+
       addListener(this.$.monthGrid, 'tap', this._handleTap.bind(this));
     }
 
@@ -294,11 +311,11 @@ export const MonthCalendarMixin = (superClass) =>
 
     /** @protected */
     _handleTap(e) {
-      if (!this.ignoreTaps && !this._notTapping && e.target.date && !e.target.hasAttribute('disabled')) {
-        this.selectedDate = e.target.date;
-        this.dispatchEvent(
-          new CustomEvent('date-tap', { detail: { date: e.target.date }, bubbles: true, composed: true }),
-        );
+      // A tap can land on the button or on the cell padding around it.
+      const cell = e.target.closest('[part~=date]');
+      if (!this.ignoreTaps && !this._notTapping && cell?.date && !cell.hasAttribute('disabled')) {
+        this.selectedDate = cell.date;
+        this.dispatchEvent(new CustomEvent('date-tap', { detail: { date: cell.date }, bubbles: true, composed: true }));
       }
     }
 

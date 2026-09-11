@@ -69,7 +69,8 @@ export const monthCalendarStyles = css`
 
   [part~='weekday'],
   [part~='week-number'],
-  [part~='date'] {
+  [part~='date'],
+  [part~='date-button'] {
     align-items: center;
     display: flex;
     justify-content: center;
@@ -81,7 +82,6 @@ export const monthCalendarStyles = css`
     position: relative;
     height: var(--vaadin-date-picker-date-height, 2rem);
     cursor: var(--vaadin-clickable-cursor);
-    outline: none;
   }
 
   [part~='date']:empty {
@@ -97,7 +97,13 @@ export const monthCalendarStyles = css`
     aspect-ratio: 1;
   }
 
-  :where([part~='date']:focus-visible)::after {
+  [part~='date-button'] {
+    flex: 1;
+    align-self: stretch;
+    outline: none;
+  }
+
+  :where([part~='date']:has(:focus-visible))::after {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
