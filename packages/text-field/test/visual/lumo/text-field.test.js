@@ -232,4 +232,10 @@ describe('text-field', () => {
       await visualDiff(div, 'pointer-focus-ring-enabled-invalid');
     });
   });
+
+  it('label aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    await visualDiff(div, 'label-aside');
+  });
 });

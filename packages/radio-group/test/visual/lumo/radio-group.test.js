@@ -108,6 +108,12 @@ describe('radio-group', () => {
       });
       await visualDiff(div, 'full-width');
     });
+
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'label-aside');
+    });
   });
 
   describe('RTL', () => {

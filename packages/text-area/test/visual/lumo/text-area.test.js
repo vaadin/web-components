@@ -170,4 +170,21 @@ describe('text-area', () => {
       await visualDiff(div, 'pointer-focus-ring-enabled');
     });
   });
+
+  describe('label aside', () => {
+    beforeEach(() => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'label-aside');
+    });
+
+    it('scrolled', async () => {
+      element.style.height = '70px';
+      element.value = 'a\nb\nc\nd\ne';
+      await visualDiff(div, 'label-aside-scrolled');
+    });
+  });
 });

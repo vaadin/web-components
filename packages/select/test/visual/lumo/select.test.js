@@ -198,4 +198,31 @@ describe('select', () => {
     };
     await visualDiff(div, 'empty-value');
   });
+
+  describe('label aside', () => {
+    beforeEach(() => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'label-aside');
+    });
+
+    it('value', async () => {
+      element.value = 'value-1';
+      await visualDiff(div, 'label-aside-value');
+    });
+
+    it('small', async () => {
+      element.setAttribute('theme', 'label-aside small');
+      await visualDiff(div, 'label-aside-small');
+    });
+
+    it('small value', async () => {
+      element.setAttribute('theme', 'label-aside small');
+      element.value = 'value-1';
+      await visualDiff(div, 'label-aside-small-value');
+    });
+  });
 });

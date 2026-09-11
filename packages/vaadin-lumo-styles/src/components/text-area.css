@@ -8,6 +8,10 @@
     flex: auto;
   }
 
+  :host([theme~='label-aside']) [part='input-field'] {
+    height: 100%;
+  }
+
   /* The label, helper text and the error message should neither grow nor shrink. */
   [part='label'],
   [part='helper-text'],

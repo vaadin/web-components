@@ -77,6 +77,12 @@ describe('date-time-picker', () => {
       element.setAttribute('theme', 'helper-above-field');
       await visualDiff(div, 'helper-above-field');
     });
+
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'label-aside');
+    });
   });
 
   describe('focus', () => {

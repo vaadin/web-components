@@ -123,6 +123,12 @@ describe('custom-field', () => {
       inputs[1].style.display = 'none';
       await visualDiff(div, 'whitespace-theme');
     });
+
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'label-aside');
+    });
   });
 
   describe('alignment', () => {
@@ -208,6 +214,23 @@ describe('custom-field', () => {
 
       it('label + helper text alignment', async () => {
         await visualDiff(wrapper, 'alignment-label-helper-text');
+      });
+    });
+
+    describe('label aside', () => {
+      beforeEach(() => {
+        wrapper = fixtureSync(`
+          <div style="padding: 10px">
+            <vaadin-custom-field theme="label-aside" label="Custom field">
+              <vaadin-text-field value="Text"></vaadin-text-field>
+            </vaadin-custom-field>
+            <vaadin-text-field theme="label-aside" label="Text field" value="Text"></vaadin-text-field>
+          </div>
+        `);
+      });
+
+      it('label aside alignment', async () => {
+        await visualDiff(wrapper, 'alignment-label-aside');
       });
     });
   });
