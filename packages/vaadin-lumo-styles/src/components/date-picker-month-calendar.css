@@ -80,10 +80,6 @@
     color: var(--vaadin-date-picker-date-selected-color, var(--lumo-primary-contrast-color));
   }
 
-  [part~='selected']::after {
-    background: var(--vaadin-date-picker-date-selected-background, var(--_selection-color));
-  }
-
   /* Selection, hover and focus indicator */
 
   [part~='date']::after {
@@ -98,6 +94,10 @@
     max-height: 100%;
     aspect-ratio: auto;
     outline: none;
+  }
+
+  [part~='selected']::after {
+    background: var(--vaadin-date-picker-date-selected-background, var(--_selection-color));
   }
 
   [part~='date'][part~='focused']::after {
