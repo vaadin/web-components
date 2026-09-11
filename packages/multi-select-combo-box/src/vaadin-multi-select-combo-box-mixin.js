@@ -15,6 +15,7 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
+import { SelectAllController } from './select-all-controller.js';
 
 const DEFAULT_I18N = {
   cleared: 'Selection cleared',
@@ -22,6 +23,10 @@ const DEFAULT_I18N = {
   selected: 'added to selection',
   deselected: 'removed from selection',
   total: '{count} items selected',
+  selectAll: 'Select All',
+  deselectAll: 'Deselect All',
+  selectFiltered: 'Select Filtered',
+  deselectFiltered: 'Deselect Filtered',
 };
 
 export const MultiSelectComboBoxMixin = (superClass) =>
@@ -165,6 +170,21 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           sync: true,
         },
 
+        /**
+         * Set to true to show a button above the dropdown items for selecting
+         * or deselecting all items matching the current filter at once. Items
+         * that do not match the filter keep their selection state.
+         *
+         * The button is only supported with the `items` API. It is not shown
+         * when using `dataProvider`.
+         * @attr {boolean} select-all-button-visible
+         */
+        selectAllButtonVisible: {
+          type: Boolean,
+          value: false,
+          sync: true,
+        },
+
         /** @private */
         value: {
           type: String,
@@ -235,6 +255,16 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      *   // Screen reader announcement of the selected items count.
      *   // {count} is replaced with the actual count of items.
      *   total: '{count} items selected',
+     *   // Text of the select all button when no filter is set.
+     *   selectAll: 'Select All',
+     *   // Text of the select all button when no filter is set
+     *   // and all items are selected.
+     *   deselectAll: 'Deselect All',
+     *   // Text of the select all button when a filter is set.
+     *   selectFiltered: 'Select Filtered',
+     *   // Text of the select all button when a filter is set
+     *   // and all items matching the filter are selected.
+     *   deselectFiltered: 'Deselect Filtered',
      * }
      * ```
      * @type {!MultiSelectComboBoxI18n}
@@ -325,6 +355,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
       });
       this.addController(this._overflowController);
+
+      this._selectAllController = new SelectAllController(this, this.shadowRoot.querySelector('[part="select-all"]'));
     }
 
     /** @protected */
@@ -360,6 +392,20 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         if (this.dataProvider) {
           this.clearCache();
         }
+      }
+
+      const selectAllProps = [
+        'selectAllButtonVisible',
+        'readonly',
+        'dataProvider',
+        'filteredItems',
+        'selectedItems',
+        'filter',
+        'itemIdPath',
+        '__effectiveI18n',
+      ];
+      if (selectAllProps.some((prop) => props.has(prop))) {
+        this._selectAllController?.update();
       }
     }
 
@@ -437,6 +483,9 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * @override
      */
     _onClosed() {
+      // Do not leave focus on the select all button, which is hidden together with the overlay.
+      this._selectAllController.restoreFocus();
+
       // Do not commit selected item again on outside click
       this._ignoreCommitValue = true;
 
@@ -540,6 +589,26 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       if (blurred && this.readonly) {
         this.close();
       }
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to not remove the focused
+     * state when focus moves to another focusable element of this component,
+     * such as the select all button. That button is in the shadow root, so
+     * `relatedTarget` is retargeted to the host element itself.
+     *
+     * @param {FocusEvent} event
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldRemoveFocus(event) {
+      const { relatedTarget } = event;
+      if (relatedTarget === this || relatedTarget === this.inputElement) {
+        return false;
+      }
+
+      return super._shouldRemoveFocus(event);
     }
 
     /**
@@ -1093,6 +1162,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * @override
      */
     _onKeyDown(event) {
+      if (this._selectAllController.handleKeyDown(event)) {
+        return;
+      }
+
       super._onKeyDown(event);
 
       const chips = this._chips;

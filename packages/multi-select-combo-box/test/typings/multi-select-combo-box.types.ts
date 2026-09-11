@@ -113,6 +113,7 @@ assertType<boolean>(narrowedComboBox.required);
 assertType<boolean>(narrowedComboBox.selectedItemsOnTop);
 assertType<boolean>(narrowedComboBox.autoExpandVertically);
 assertType<boolean>(narrowedComboBox.collapseChips);
+assertType<boolean>(narrowedComboBox.selectAllButtonVisible);
 
 // Mixins
 assertType<ComboBoxBaseMixinClass>(narrowedComboBox);
@@ -159,3 +160,9 @@ assertType<ThemableMixinClass>(narrowedItem);
 // I18n
 assertType<MultiSelectComboBoxI18n>({});
 assertType<MultiSelectComboBoxI18n>({ cleared: 'Cleared' });
+assertType<MultiSelectComboBoxI18n>({
+  selectAll: 'Select all',
+  deselectAll: 'Deselect all',
+  selectFiltered: 'Select filtered',
+  deselectFiltered: 'Deselect filtered',
+});

@@ -61,6 +61,16 @@ export const getFirstItem = (comboBox) => {
 };
 
 /**
+ * Returns the index of the currently focused item for a combo-box.
+ *
+ * @param {Element} comboBox
+ * @return {number}
+ */
+export const getFocusedItemIndex = (comboBox) => {
+  return getAllItems(comboBox).findIndex((item) => item.hasAttribute('focused'));
+};
+
+/**
  * Emulates the user filling in something in the combo-box input.
  *
  * @param {Element} comboBox
@@ -75,3 +85,8 @@ export function setInputValue(comboBox, value) {
  * Returns all the chips of the combo-box.
  */
 export const getChips = (comboBox) => comboBox.querySelectorAll('vaadin-multi-select-combo-box-chip');
+
+/**
+ * Returns the select all button of the combo-box.
+ */
+export const getSelectAllButton = (comboBox) => comboBox.shadowRoot.querySelector('[part="select-all"]');

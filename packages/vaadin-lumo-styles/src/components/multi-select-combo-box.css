@@ -15,6 +15,10 @@
     pointer-events: auto;
   }
 
+  [hidden] {
+    display: none !important;
+  }
+
   #chips {
     display: flex;
     align-items: center;
@@ -94,5 +98,59 @@
   :host([readonly][has-value]) [part~='toggle-button'] {
     color: var(--lumo-contrast-60pct);
     cursor: var(--lumo-clickable-cursor);
+  }
+
+  [part='select-all'] {
+    appearance: none;
+    display: flex;
+    align-items: center;
+    flex: none;
+    box-sizing: border-box;
+    /* Do not let the label affect the width of the overlay */
+    contain: inline-size;
+    height: var(--lumo-size-s);
+    margin: var(--vaadin-item-overlay-padding, 4px);
+    padding: 0.5em calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4) 0.5em
+      var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius-m) / 4));
+    border: none;
+    border-radius: var(--lumo-border-radius-m);
+    background: transparent;
+    color: var(--lumo-primary-text-color);
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-s);
+    font-weight: 500;
+    line-height: var(--lumo-line-height-xs);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: var(--lumo-clickable-cursor);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Reserve the same space as the item checkmark icon */
+  [part='select-all']::before {
+    content: '';
+    font-size: var(--lumo-icon-size-m);
+    width: calc(var(--lumo-font-size-m) / var(--lumo-font-size-s) * 1em);
+    flex: none;
+    margin: calc((1 - var(--lumo-line-height-xs)) * var(--lumo-font-size-m) / 2) 0;
+  }
+
+  @media (any-hover: hover) {
+    [part='select-all']:hover {
+      background: var(--lumo-primary-color-10pct);
+    }
+  }
+
+  [part='select-all']:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 var(--vaadin-focus-ring-width, 2px)
+      var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+  }
+
+  [part='select-all']:not([hidden]) + slot::slotted(*) {
+    border-top: 1px solid var(--vaadin-border-color-secondary);
   }
 }
