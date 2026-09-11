@@ -267,6 +267,9 @@ yarn generate:meta
 `yarn lint:meta` fails when the committed files are out of date, and `yarn release` regenerates
 them before publishing.
 
+The packages that a meta package ships but this repository does not build, e.g. `@vaadin/router`,
+stay in its `package.json` with a version of their own, which is where to bump them.
+
 ### Generating icons
 
 Re-generate SVG icon sets and icon fonts from individual SVG files for the packages that have them (e.g. `vaadin-icons`):

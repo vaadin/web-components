@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "All the free Vaadin web components in a single package",
+  "description": "Vaadin components is an evolving set of free, open sourced custom HTML elements for building mobile and desktop web applications in modern browsers.",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -23,10 +23,13 @@
     "vaadin-core.js"
   ],
   "keywords": [
-    "Vaadin",
+    "vaadin",
     "core",
-    "web-components",
-    "web-component"
+    "elements",
+    "web",
+    "components",
+    "webcomponents",
+    "web-components"
   ],
   "dependencies": {
     "@vaadin/a11y-base": "25.4.0-alpha0",
@@ -77,6 +80,7 @@
     "@vaadin/popover": "25.4.0-alpha0",
     "@vaadin/progress-bar": "25.4.0-alpha0",
     "@vaadin/radio-group": "25.4.0-alpha0",
+    "@vaadin/router": "2.0.1",
     "@vaadin/scroller": "25.4.0-alpha0",
     "@vaadin/select": "25.4.0-alpha0",
     "@vaadin/side-nav": "25.4.0-alpha0",
@@ -90,8 +94,10 @@
     "@vaadin/time-picker": "25.4.0-alpha0",
     "@vaadin/tooltip": "25.4.0-alpha0",
     "@vaadin/upload": "25.4.0-alpha0",
+    "@vaadin/vaadin-development-mode-detector": "2.0.7",
     "@vaadin/vaadin-lumo-styles": "25.4.0-alpha0",
     "@vaadin/vaadin-themable-mixin": "25.4.0-alpha0",
+    "@vaadin/vaadin-usage-statistics": "2.1.3",
     "@vaadin/vertical-layout": "25.4.0-alpha0",
     "@vaadin/virtual-list": "25.4.0-alpha0"
   },

@@ -4,8 +4,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "All the Vaadin web components, free and commercial, in a single package",
-  "license": "SEE LICENSE IN LICENSE",
+  "description": "Vaadin components is an evolving set of open sourced custom HTML elements for building mobile and desktop web applications in modern browsers.",
+  "license": "(Apache-2.0 OR SEE LICENSE IN https://vaadin.com/license/cvdl-4.0)",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",
@@ -23,9 +23,13 @@
     "vaadin.js"
   ],
   "keywords": [
-    "Vaadin",
-    "web-components",
-    "web-component"
+    "vaadin",
+    "core",
+    "elements",
+    "web",
+    "components",
+    "webcomponents",
+    "web-components"
   ],
   "dependencies": {
     "@vaadin/board": "25.4.0-alpha0",

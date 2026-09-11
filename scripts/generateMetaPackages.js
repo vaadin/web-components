@@ -10,6 +10,10 @@
  * core components from the commercial ones. `@vaadin/vaadin` also depends on
  * `@vaadin/vaadin-core`, so that it ships every component.
  *
+ * The packages that a meta package depends on but this repository does not
+ * build, e.g. `@vaadin/router`, are kept from its committed `package.json`,
+ * with the version declared there, as they have versions of their own.
+ *
  * The entry point imports the root level `vaadin-*.js` entry points of those
  * packages that register something when imported, either a custom element or an
  * iconset. Whether they do is resolved by following their imports and re-exports
@@ -161,15 +165,21 @@ function createEntryPoint(imports) {
 /**
  * Creates the contents of the `package.json` of a meta package, keeping every
  * field of the committed one but the generated `version` and `dependencies`.
+ * The packages of the workspace are pinned to the version of the repository,
+ * the external ones keep the version the committed `package.json` declares.
  * @param {object} packageJson - the committed `package.json`
- * @param {string[]} dependencies - the names of the packages to depend on
+ * @param {string[]} dependencies - the names of the packages of the workspace to depend on
+ * @param {Set<string>} workspacePackages - the names of every package of the workspace
  * @returns {string}
  */
-function createPackageJson(packageJson, dependencies) {
+function createPackageJson(packageJson, dependencies, workspacePackages) {
+  const external = Object.entries(packageJson.dependencies ?? {}).filter(([name]) => !workspacePackages.has(name));
+  const pinned = dependencies.map((name) => [name, version]);
+
   const generated = {
     ...packageJson,
     version,
-    dependencies: Object.fromEntries([...dependencies].sort(byName).map((name) => [name, version])),
+    dependencies: Object.fromEntries([...external, ...pinned].sort(([a], [b]) => byName(a, b))),
   };
 
   return `${JSON.stringify(generated, null, 2)}\n`;
@@ -177,6 +187,7 @@ function createPackageJson(packageJson, dependencies) {
 
 const check = process.argv.includes('--check');
 const { core, commercial } = collectPackages();
+const workspacePackages = new Set([...core, ...commercial, ...META_PACKAGES].map((pkg) => pkg.name));
 const outdated = [];
 
 for (const metaPackage of META_PACKAGES) {
@@ -195,7 +206,7 @@ for (const metaPackage of META_PACKAGES) {
   }
 
   const files = {
-    'package.json': createPackageJson(packageJson, dependencies),
+    'package.json': createPackageJson(packageJson, dependencies, workspacePackages),
     [metaPackage.entryPoint]: createEntryPoint(imports),
   };
 
