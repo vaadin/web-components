@@ -422,6 +422,21 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
+     * Override method from `ComboBoxBaseMixin` to only open the dropdown
+     * when clicking on the label or the input field.
+     * @param {Event} event
+     * @protected
+     * @override
+     */
+    _onHostClick(event) {
+      const path = event.composedPath();
+
+      if (path.includes(this._labelNode) || path.includes(this._inputField)) {
+        super._onHostClick(event);
+      }
+    }
+
+    /**
      * Override method from `ComboBoxBaseMixin` to implement clearing logic.
      * @protected
      * @override
