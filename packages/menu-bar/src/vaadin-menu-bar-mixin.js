@@ -447,8 +447,7 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __getOverflowCount(overflow) {
-      // We can't use optional chaining due to webpack 4
-      return (overflow.item && overflow.item.children && overflow.item.children.length) || 0;
+      return overflow.item?.children?.length ?? 0;
     }
 
     /** @private */
@@ -459,12 +458,11 @@ export const MenuBarMixin = (superClass) =>
         button.style.width = '';
 
         // Teleport item component back from "overflow" sub-menu
-        const item = button.item && button.item.component;
+        const item = button.item?.component;
         if (item instanceof HTMLElement && item.getAttribute('role') === 'menuitem') {
           this.__restoreItem(button, item);
         }
       });
-      this.__updateOverflow([]);
     }
 
     /** @private */
@@ -542,6 +540,7 @@ export const MenuBarMixin = (superClass) =>
 
       // Reset all buttons in the menu bar and the overflow button
       this.__restoreButtons(buttons);
+      this.__updateOverflow([]);
 
       // Hide any overflowing buttons and put them in the 'overflow' button
       this.__setOverflowItems(buttons, overflow);
@@ -554,7 +553,11 @@ export const MenuBarMixin = (superClass) =>
       const isSingleButton = newOverflowCount === buttons.length || (newOverflowCount === 0 && buttons.length === 1);
       this.toggleAttribute('has-single-button', isSingleButton);
 
-      // Collect visible buttons to detect if tabindex should be updated
+      this.__updateVisibleButtons(buttons);
+    }
+
+    /** @private */
+    __updateVisibleButtons(buttons) {
       const visibleButtons = buttons.filter((btn) => btn.style.visibility !== 'hidden');
 
       if (!visibleButtons.length) {
@@ -566,8 +569,7 @@ export const MenuBarMixin = (superClass) =>
         this._setTabindex(visibleButtons[visibleButtons.length - 1], true);
       }
 
-      // Apply first/last visible attributes to the visible buttons
-      visibleButtons.forEach((btn, index, visibleButtons) => {
+      visibleButtons.forEach((btn, index) => {
         btn.toggleAttribute('first-visible', index === 0);
         btn.toggleAttribute('last-visible', !this._hasOverflow && index === visibleButtons.length - 1);
       });
@@ -615,9 +617,7 @@ export const MenuBarMixin = (superClass) =>
             const hasChildren = Boolean(item?.children);
 
             if (itemCopy.component) {
-              const component = this.__getComponent(itemCopy);
-              itemCopy.component = component;
-              component.item = itemCopy;
+              itemCopy.component = this.__getComponent(itemCopy);
             }
 
             return html`
@@ -645,7 +645,7 @@ export const MenuBarMixin = (superClass) =>
       const button = event.target;
       // Propagate click event from button to the item component if it was outside
       // it e.g. by calling `click()` on the button (used by the Flow counterpart).
-      if (button.item && button.item.component && !event.composedPath().includes(button.item.component)) {
+      if (button.item?.component && !event.composedPath().includes(button.item.component)) {
         event.stopPropagation();
         button.item.component.click();
       }
@@ -692,7 +692,7 @@ export const MenuBarMixin = (superClass) =>
 
       this._tooltipController.setTarget(button);
 
-      if (wasExpanded && button.item && button.item.children) {
+      if (wasExpanded && button.item?.children) {
         this.__openSubMenu(button, true, { keepFocus: true });
       } else if (!this._subMenu.opened) {
         this._tooltipController.open({ trigger: 'focus' });
@@ -983,13 +983,12 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     _focusFirstItem() {
-      const list = this._subMenu._overlayElement._contentRoot.firstElementChild;
-      list.focus();
+      this._subMenu._menuListBox.focus();
     }
 
     /** @private */
     _focusLastItem() {
-      const list = this._subMenu._overlayElement._contentRoot.firstElementChild;
+      const list = this._subMenu._menuListBox;
       const item = list.items[list.items.length - 1];
       if (item) {
         item.focus();
