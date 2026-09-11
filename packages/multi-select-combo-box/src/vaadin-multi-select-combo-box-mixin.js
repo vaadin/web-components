@@ -433,24 +433,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Requests an update for the content of items.
-     * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
-     *
-     * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
-     */
-    requestContentUpdate() {
-      if (!this._scroller) {
-        return;
-      }
-
-      this._scroller.requestContentUpdate();
-
-      this._getItemElements().forEach((item) => {
-        item.requestContentUpdate();
-      });
-    }
-
-    /**
      * Override method from `ComboBoxBaseMixin` to implement clearing logic.
      * @protected
      * @override
@@ -496,17 +478,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // Close the overlay if there are no items to display.
       // See https://github.com/vaadin/vaadin-combo-box/pull/964
       this._overlayOpened = opened && (loading || !!items?.length);
-    }
-
-    /**
-     * @protected
-     */
-    _closeOrCommit() {
-      if (!this.opened) {
-        this._commitValue();
-      } else {
-        this.close();
-      }
     }
 
     /**
@@ -705,67 +676,34 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override combo-box method to group selected
-     * items at the top of the overlay.
+     * Override method from `ComboBoxItemsMixin` to show only selected
+     * items when read-only, and to group selected items at the top
+     * of the overlay when `selectedItemsOnTop` is set.
      *
      * @protected
      * @override
      */
     _setDropdownItems(items) {
+      super._setDropdownItems(this.__generateDropdownItems(items));
+    }
+
+    /** @private */
+    __generateDropdownItems(items) {
       if (this.readonly) {
-        this.__setDropdownItems(this.selectedItems);
-        return;
+        return this.selectedItems;
       }
 
       if (this.filter || !this.selectedItemsOnTop) {
-        this.__setDropdownItems(items);
-        return;
+        return items;
       }
 
       if (items?.length && this._topGroup?.length) {
         // Filter out items included to the top group.
         const filteredItems = items.filter((item) => this._findIndex(item, this._topGroup, this.itemIdPath) === -1);
-
-        this.__setDropdownItems(this._topGroup.concat(filteredItems));
-        return;
+        return this._topGroup.concat(filteredItems);
       }
 
-      this.__setDropdownItems(items);
-    }
-
-    /** @private */
-    __setDropdownItems(newItems) {
-      const oldItems = this._dropdownItems;
-      this._dropdownItems = newItems;
-
-      // Store the currently focused item if any. The focused index preserves
-      // in the case when more filtered items are loading but it is reset
-      // when the user types in a filter query.
-      const focusedItem = oldItems ? oldItems[this._focusedIndex] : null;
-
-      // When both the previously-focused entry and the new entry at the
-      // same index are placeholders (e.g. the Flow connector mid-scroll
-      // re-pushing `__setDropdownItems`), preserve `_focusedIndex` until
-      // a follow-up call lands a real item at that position.
-      if (
-        oldItems &&
-        oldItems[this._focusedIndex] instanceof ComboBoxPlaceholder &&
-        newItems[this._focusedIndex] instanceof ComboBoxPlaceholder
-      ) {
-        return;
-      }
-
-      // Try to first set focus on the item that had been focused before `newItems` were updated
-      // if it is still present in the `newItems` array. Otherwise, set the focused index
-      // depending on the selected item or the filter query.
-      const focusedItemIndex = this.__getItemIndexByValue(newItems, this._getItemValue(focusedItem));
-      if (focusedItemIndex > -1) {
-        this._focusedIndex = focusedItemIndex;
-      } else {
-        // When the user filled in something that is different from the current value = filtering is enabled,
-        // set the focused index to the item that matches the filter query.
-        this._focusedIndex = this.__getItemIndexByFilter(newItems);
-      }
+      return items;
     }
 
     /** @private */
@@ -1076,19 +1014,16 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method from `ComboBoxBaseMixin` to deselect
-     * dropdown item by requesting content update on clear.
+     * Override method from `ComboBoxItemsMixin` to stop
+     * propagation of the clear button click event.
      * @param {Event} event
      * @protected
+     * @override
      */
     _onClearButtonClick(event) {
       event.stopPropagation();
 
       super._onClearButtonClick(event);
-
-      if (this.opened) {
-        this.requestContentUpdate();
-      }
     }
 
     /**

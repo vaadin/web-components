@@ -160,6 +160,39 @@ export const ComboBoxItemsMixin = (superClass) =>
     }
 
     /**
+     * Requests an update for the content of items.
+     * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
+     *
+     * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+     */
+    requestContentUpdate() {
+      if (!this._scroller) {
+        return;
+      }
+
+      this._scroller.requestContentUpdate();
+
+      this._getItemElements().forEach((item) => {
+        item.requestContentUpdate();
+      });
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to deselect
+     * dropdown item by requesting content update on clear.
+     * @param {Event} event
+     * @protected
+     * @override
+     */
+    _onClearButtonClick(event) {
+      super._onClearButtonClick(event);
+
+      if (this.opened) {
+        this.requestContentUpdate();
+      }
+    }
+
+    /**
      * Override an event listener from `ComboBoxBaseMixin` to handle
      * batched setting of both `opened` and `filter` properties.
      * @param {!Event} event
@@ -276,12 +309,44 @@ export const ComboBoxItemsMixin = (superClass) =>
     }
 
     /**
-     * Provide items to be rendered in the dropdown.
-     * Override to provide actual implementation.
+     * Provide items to be rendered in the dropdown. Override this method
+     * to change the items to render, e.g. to show custom items.
+     *
+     * @param {Array} newItems
      * @protected
      */
-    _setDropdownItems() {
-      // To be implemented
+    _setDropdownItems(newItems) {
+      const oldItems = this._dropdownItems;
+      this._dropdownItems = newItems;
+
+      // Store the currently focused item if any. The focused index preserves
+      // in the case when more filtered items are loading but it is reset
+      // when the user types in a filter query.
+      const focusedItem = oldItems ? oldItems[this._focusedIndex] : null;
+
+      // When both the previously-focused entry and the new entry at the
+      // same index are placeholders (e.g. the Flow connector mid-scroll
+      // re-pushing `_setDropdownItems`), preserve `_focusedIndex` until
+      // a follow-up call lands a real item at that position.
+      if (
+        oldItems &&
+        oldItems[this._focusedIndex] instanceof ComboBoxPlaceholder &&
+        newItems[this._focusedIndex] instanceof ComboBoxPlaceholder
+      ) {
+        return;
+      }
+
+      // Try to first set focus on the item that had been focused before `newItems` were updated
+      // if it is still present in the `newItems` array. Otherwise, set the focused index
+      // depending on the selected item or the filter query.
+      const focusedItemIndex = this.__getItemIndexByValue(newItems, this._getItemValue(focusedItem));
+      if (focusedItemIndex > -1) {
+        this._focusedIndex = focusedItemIndex;
+      } else {
+        // When the user filled in something that is different from the current value = filtering is enabled,
+        // set the focused index to the item that matches the filter query.
+        this._focusedIndex = this.__getItemIndexByFilter(newItems);
+      }
     }
 
     /** @private */

@@ -5,7 +5,6 @@
  */
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { ComboBoxItemsMixin } from './vaadin-combo-box-items-mixin.js';
-import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
  * Checks if the value is supported as an item value in this control.
@@ -116,24 +115,6 @@ export const ComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Requests an update for the content of items.
-     * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
-     *
-     * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
-     */
-    requestContentUpdate() {
-      if (!this._scroller) {
-        return;
-      }
-
-      this._scroller.requestContentUpdate();
-
-      this._getItemElements().forEach((item) => {
-        item.requestContentUpdate();
-      });
-    }
-
-    /**
      * @param {Object} props
      * @protected
      */
@@ -169,20 +150,6 @@ export const ComboBoxMixin = (superClass) =>
       // Close the overlay if there are no items to display.
       // See https://github.com/vaadin/vaadin-combo-box/pull/964
       this._overlayOpened = opened && (loading || !!items?.length);
-    }
-
-    /**
-     * Override method from `ComboBoxBaseMixin` to deselect
-     * dropdown item by requesting content update on clear.
-     * @param {Event} event
-     * @protected
-     */
-    _onClearButtonClick(event) {
-      super._onClearButtonClick(event);
-
-      if (this.opened) {
-        this.requestContentUpdate();
-      }
     }
 
     /**
@@ -493,20 +460,14 @@ export const ComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Provide items to be rendered in the dropdown.
-     * Override this method to show custom items.
+     * Override method from `ComboBoxItemsMixin` to sync `selectedItem`
+     * based on `value` once a new set of items is available.
      *
      * @protected
      * @override
      */
     _setDropdownItems(newItems) {
-      const oldItems = this._dropdownItems;
-      this._dropdownItems = newItems;
-
-      // Store the currently focused item if any. The focused index preserves
-      // in the case when more filtered items are loading but it is reset
-      // when the user types in a filter query.
-      const focusedItem = oldItems ? oldItems[this._focusedIndex] : null;
+      super._setDropdownItems(newItems);
 
       // Try to sync `selectedItem` based on `value` once a new set of `filteredItems` is available
       // (as a result of external filtering or when they have been loaded by the data provider).
@@ -515,30 +476,6 @@ export const ComboBoxMixin = (superClass) =>
       const valueIndex = this.__getItemIndexByValue(newItems, this.value);
       if ((this.selectedItem === null || this.selectedItem === undefined) && valueIndex >= 0) {
         this.selectedItem = newItems[valueIndex];
-      }
-
-      // When both the previously-focused entry and the new entry at the
-      // same index are placeholders (e.g. the Flow connector mid-scroll
-      // re-pushing `_setDropdownItems`), preserve `_focusedIndex` until
-      // a follow-up call lands a real item at that position.
-      if (
-        oldItems &&
-        oldItems[this._focusedIndex] instanceof ComboBoxPlaceholder &&
-        newItems[this._focusedIndex] instanceof ComboBoxPlaceholder
-      ) {
-        return;
-      }
-
-      // Try to first set focus on the item that had been focused before `newItems` were updated
-      // if it is still present in the `newItems` array. Otherwise, set the focused index
-      // depending on the selected item or the filter query.
-      const focusedItemIndex = this.__getItemIndexByValue(newItems, this._getItemValue(focusedItem));
-      if (focusedItemIndex > -1) {
-        this._focusedIndex = focusedItemIndex;
-      } else {
-        // When the user filled in something that is different from the current value = filtering is enabled,
-        // set the focused index to the item that matches the filter query.
-        this._focusedIndex = this.__getItemIndexByFilter(newItems);
       }
     }
 
