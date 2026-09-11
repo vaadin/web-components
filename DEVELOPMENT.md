@@ -261,7 +261,7 @@ Their dependencies and the imports of their entry point are generated from the w
 component lands in them by running:
 
 ```sh
-yarn generate:meta
+yarn release:meta
 ```
 
 `yarn lint:meta` fails when the committed files are out of date, and `yarn release` regenerates

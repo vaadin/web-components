@@ -2450,27 +2450,15 @@
   dependencies:
     lit "^3.0.0"
 
-"@vaadin/vaadin-development-mode-detector@2.0.7":
+"@vaadin/vaadin-development-mode-detector@2.0.7", "@vaadin/vaadin-development-mode-detector@^2.0.0":
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/@vaadin/vaadin-development-mode-detector/-/vaadin-development-mode-detector-2.0.7.tgz#fea2f6c8cd8e16a312a28d5d1acfb5206892a752"
   integrity sha512-9FhVhr0ynSR3X2ao+vaIEttcNU5XfzCbxtmYOV8uIRnUCtNgbvMOIcyGBvntsX9I5kvIP2dV3cFAOG9SILJzEA==
 
-"@vaadin/vaadin-development-mode-detector@^2.0.0":
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/@vaadin/vaadin-development-mode-detector/-/vaadin-development-mode-detector-2.0.5.tgz#5098216dae30d8eeabe46c7cbe494a352fe09691"
-  integrity sha512-miirBQw10UHjKwRv29iZniXCo41cLg3wFotoyTeUZ2PTGIDk/fZVFr4Q4WVKZrp3D15878vz94nNQROSmPLjdg==
-
-"@vaadin/vaadin-usage-statistics@2.1.3", "@vaadin/vaadin-usage-statistics@^2.1.3":
+"@vaadin/vaadin-usage-statistics@2.1.3", "@vaadin/vaadin-usage-statistics@^2.1.0", "@vaadin/vaadin-usage-statistics@^2.1.3":
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/@vaadin/vaadin-usage-statistics/-/vaadin-usage-statistics-2.1.3.tgz#e75aa5c9d33fbbaf87a5f10ff3148d427bb6da37"
   integrity sha512-8r4TNknD7OJQADe3VygeofFR7UNAXZ2/jjBFP5dgI8+2uMfnuGYgbuHivasKr9WSQ64sPej6m8rDoM1uSllXjQ==
-  dependencies:
-    "@vaadin/vaadin-development-mode-detector" "^2.0.0"
-
-"@vaadin/vaadin-usage-statistics@^2.1.0":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@vaadin/vaadin-usage-statistics/-/vaadin-usage-statistics-2.1.2.tgz#a0a211b298e647742b60c6d4d1d8834381e3c77f"
-  integrity sha512-xKs1PvRfTXsG0eWWcImLXWjv7D+f1vfoIvovppv6pZ5QX8xgcxWUdNgERlOOdGt3CTuxQXukTBW3+Qfva+OXSg==
   dependencies:
     "@vaadin/vaadin-development-mode-detector" "^2.0.0"
 

@@ -240,7 +240,7 @@ if (outdated.length > 0) {
   console.error(
     [
       `The meta packages are out of date: ${outdated.join(', ')}`,
-      'Run `yarn generate:meta` and commit the result.',
+      'Run `yarn release:meta` and commit the result.',
     ].join('\n'),
   );
   process.exit(1);
