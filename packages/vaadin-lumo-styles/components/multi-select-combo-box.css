@@ -11,6 +11,7 @@
 @import '../src/mixins/field-helper.css';
 @import '../src/mixins/field-helper-above.css';
 @import '../src/mixins/field-label.css';
+@import '../src/mixins/field-label-aside.css';
 @import '../src/mixins/field-required.css';
 @import '../src/mixins/loader.css';
 @import '../src/mixins/menu-overlay-core.css';
@@ -60,5 +61,6 @@
     lumo_mixins_field-helper,
     lumo_mixins_field-helper-above,
     lumo_mixins_field-base,
+    lumo_mixins_field-label-aside,
     lumo_components_multi-select-combo-box;
 }
