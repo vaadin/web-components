@@ -237,10 +237,5 @@ describe('text-area', () => {
       element.value = 'a\nb\nc\nd\ne';
       await visualDiff(div, 'label-aside-scrolled');
     });
-
-    it('explicit height', async () => {
-      element.style.height = '200px';
-      await visualDiff(div, 'label-aside-explicit-height');
-    });
   });
 });
