@@ -17,6 +17,12 @@
 :host {
   --_lumo-mock-field-inject: 1;
   --_lumo-mock-field-inject-modules:
-    lumo_mixins_field-label, lumo_mixins_field-required, lumo_mixins_field-error-message, lumo_mixins_field-button,
-    lumo_mixins_field-helper, lumo_mixins_field-helper-above, lumo_mixins_field-base, lumo_mixins_field-label-aside;
+    lumo_mixins_field-label,
+    lumo_mixins_field-required,
+    lumo_mixins_field-error-message,
+    lumo_mixins_field-button,
+    lumo_mixins_field-helper,
+    lumo_mixins_field-helper-above,
+    lumo_mixins_field-base,
+    lumo_mixins_field-label-aside;
 }
