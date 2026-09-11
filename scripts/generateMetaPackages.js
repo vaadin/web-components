@@ -37,7 +37,7 @@ const META_PACKAGES = [
 
 // The theme packages are dependencies of the meta packages, but their entry
 // points are styles and icons rather than components, so they are not imported.
-const THEME_PACKAGES = ['aura', 'vaadin-lumo-styles'];
+const THEME_PACKAGES = new Set(['aura', 'vaadin-lumo-styles']);
 
 // How a module registers a custom element or an iconset
 const REGISTRATION = /\b(?:defineCustomElement|customElements\.define|Iconset\.register)\(/u;
@@ -45,7 +45,11 @@ const REGISTRATION = /\b(?:defineCustomElement|customElements\.define|Iconset\.r
 // The relative imports and re-exports of a module, which stay within the package
 const RELATIVE_IMPORTS = /(?:^|[\s,{}])(?:from|import)\s*['"](\.[^'"]+)['"]/gmu;
 
-const metaPackageDirs = META_PACKAGES.map((metaPackage) => metaPackage.dir);
+const metaPackageDirs = new Set(META_PACKAGES.map((metaPackage) => metaPackage.dir));
+
+// Sorts names alphabetically, with an explicit locale so that the generated
+// files come out the same whichever locale the machine of the build has
+const byName = (a, b) => a.localeCompare(b, 'en');
 
 /**
  * Reads the `package.json` of a package of the workspace.
@@ -66,8 +70,8 @@ function collectPackages() {
   const core = [];
   const commercial = [];
 
-  for (const dir of fs.readdirSync(packagesDir).sort()) {
-    if (metaPackageDirs.includes(dir)) {
+  for (const dir of fs.readdirSync(packagesDir).sort(byName)) {
+    if (metaPackageDirs.has(dir)) {
       continue;
     }
 
@@ -116,7 +120,7 @@ function registersComponent(file, visited = new Set()) {
  * @returns {string[]} - e.g. ["@vaadin/login", "@vaadin/login/vaadin-login-form.js"]
  */
 function collectImports(packageJson) {
-  if (THEME_PACKAGES.includes(packageJson.dir)) {
+  if (THEME_PACKAGES.has(packageJson.dir)) {
     return [];
   }
 
@@ -125,7 +129,7 @@ function collectImports(packageJson) {
     .readdirSync(packageDir)
     .filter((file) => /^vaadin-.*\.js$/u.test(file))
     .filter((file) => registersComponent(path.join(packageDir, file)))
-    .sort();
+    .sort(byName);
 
   // The main entry point of the package comes first, imported by package name
   const main = entryPoints.indexOf(packageJson.main);
@@ -160,7 +164,7 @@ function createPackageJson(packageJson, dependencies) {
   const generated = {
     ...packageJson,
     version,
-    dependencies: Object.fromEntries([...dependencies].sort().map((name) => [name, version])),
+    dependencies: Object.fromEntries([...dependencies].sort(byName).map((name) => [name, version])),
   };
 
   return `${JSON.stringify(generated, null, 2)}\n`;
