@@ -124,7 +124,7 @@ describe('custom-field', () => {
       await visualDiff(div, 'whitespace-theme');
     });
 
-    it('label-aside', async () => {
+    it('label aside', async () => {
       element.setAttribute('theme', 'label-aside');
       element.label = 'Label';
       await visualDiff(div, 'label-aside');

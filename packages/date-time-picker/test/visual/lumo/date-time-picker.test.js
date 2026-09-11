@@ -78,7 +78,7 @@ describe('date-time-picker', () => {
       await visualDiff(div, 'helper-above-field');
     });
 
-    it('label-aside', async () => {
+    it('label aside', async () => {
       element.setAttribute('theme', 'label-aside');
       element.label = 'Label';
       await visualDiff(div, 'label-aside');
