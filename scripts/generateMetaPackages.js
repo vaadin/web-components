@@ -47,9 +47,14 @@ const RELATIVE_IMPORTS = /(?:^|[\s,{}])(?:from|import)\s*['"](\.[^'"]+)['"]/gmu;
 
 const metaPackageDirs = new Set(META_PACKAGES.map((metaPackage) => metaPackage.dir));
 
-// Sorts names alphabetically, with an explicit locale so that the generated
-// files come out the same whichever locale the machine of the build has
-const byName = (a, b) => a.localeCompare(b, 'en');
+// Sorts names by code unit, the order of a sort with no compare function, which
+// keeps the generated files byte for byte the same on every machine
+const byName = (a, b) => {
+  if (a === b) {
+    return 0;
+  }
+  return a < b ? -1 : 1;
+};
 
 /**
  * Reads the `package.json` of a package of the workspace.
