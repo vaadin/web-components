@@ -55,6 +55,7 @@ describe('select all', () => {
       comboBox = fixtureSync(
         `<vaadin-multi-select-combo-box select-all-button-visible></vaadin-multi-select-combo-box>`,
       );
+      button = getSelectAllButton(comboBox);
       comboBox.selectAllButtonVisible = true;
       comboBox.pageSize = 10;
       comboBox.dataProvider = getDataProvider(items);

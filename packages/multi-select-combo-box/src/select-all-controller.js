@@ -44,14 +44,22 @@ export class SelectAllController {
     const host = this.#host;
     const button = this.#button;
 
-    this.#allSelected = this.#isEveryFilteredItemSelected();
-
     const visible = host.selectAllButtonVisible && !host.readonly && !host.dataProvider;
-
-    // Do not drop focus to the body when the button is about to be hidden.
-    if (!visible && this.#isButtonFocused()) {
-      host.inputElement.focus();
+    if (!visible) {
+      // Do not drop focus to the body when the button is about to be hidden.
+      if (this.#isButtonFocused()) {
+        host.inputElement.focus();
+      }
     }
+
+    button.hidden = !visible;
+
+    if (!visible) {
+      // Skip further updates if the button is hidden anyway
+      return;
+    }
+
+    this.#allSelected = this.#isEveryFilteredItemSelected();
 
     const { selectAll, deselectAll, selectFiltered, deselectFiltered } = host.__effectiveI18n;
     if (host.filter) {
@@ -59,8 +67,6 @@ export class SelectAllController {
     } else {
       button.textContent = this.#allSelected ? deselectAll : selectAll;
     }
-
-    button.hidden = !visible;
   }
 
   /**
