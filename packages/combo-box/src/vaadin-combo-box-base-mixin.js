@@ -487,6 +487,18 @@ export const ComboBoxBaseMixin = (superClass) =>
       return item ? item.toString() : '';
     }
 
+    /**
+     * Returns true when both items refer to the same item.
+     * Override to provide logic for item id path.
+     * @param {unknown} item
+     * @param {unknown} other
+     * @return {boolean}
+     * @protected
+     */
+    _isSameItem(item, other) {
+      return item === other;
+    }
+
     /** @private */
     _onArrowDown() {
       if (this.opened) {

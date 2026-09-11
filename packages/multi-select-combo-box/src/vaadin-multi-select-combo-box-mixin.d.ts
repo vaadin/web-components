@@ -101,12 +101,6 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
   itemClassNameGenerator: (item: TItem) => string;
 
   /**
-   * Path for the id of the item, used to detect whether the item is selected.
-   * @attr {string} item-id-path
-   */
-  itemIdPath: string;
-
-  /**
    * The object used to localize this component. To change the default
    * localization, replace this with an object that provides all properties, or
    * just the individual properties you want to change.

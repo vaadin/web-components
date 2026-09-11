@@ -18,11 +18,6 @@ export declare class ComboBoxScrollerMixinClass<TItem, TOwner> {
   focusedIndex: number;
 
   /**
-   * Path for the id of the item, used to detect whether the item is selected.
-   */
-  itemIdPath: string | null | undefined;
-
-  /**
    * A full set of items to filter the visible options from.
    * Set to an empty array when combo-box is not opened.
    */
@@ -78,7 +73,7 @@ export declare class ComboBoxScrollerMixinClass<TItem, TOwner> {
    */
   scrollIntoView(index: number, alignToCenter?: boolean): void;
 
-  protected _isItemSelected(item: TItem, selectedItem: TItem, itemIdPath: string | null | undefined): void;
+  protected _isItemSelected(item: TItem, selectedItem: TItem): boolean;
 
   protected _updateElement(el: HTMLElement, index: number): void;
 }
