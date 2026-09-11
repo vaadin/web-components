@@ -148,14 +148,9 @@ describe('combo-box', () => {
     });
   });
 
-  describe('label aside', () => {
-    beforeEach(() => {
-      element.setAttribute('theme', 'label-aside');
-      element.label = 'Label';
-    });
-
-    it('default', async () => {
-      await visualDiff(div, 'label-aside');
-    });
+  it('label-aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    await visualDiff(div, 'label-aside');
   });
 });
