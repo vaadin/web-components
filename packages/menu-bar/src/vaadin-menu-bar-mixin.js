@@ -360,6 +360,14 @@ export const MenuBarMixin = (superClass) =>
         this._themeChanged(this._theme);
       }
 
+      if (props.has('dir')) {
+        if (this.dir) {
+          this._subMenu.setAttribute('dir', this.dir);
+        } else {
+          this._subMenu.removeAttribute('dir');
+        }
+      }
+
       if (props.has('disabled')) {
         this._overflow.toggleAttribute('disabled', this.disabled);
       }
@@ -896,12 +904,16 @@ export const MenuBarMixin = (superClass) =>
       const item = Array.from(e.composedPath()).find((el) => el._item);
       if (item) {
         const list = item.parentNode;
-        if (e.keyCode === 38 && item === list.items[0]) {
+        if (e.key === 'ArrowUp' && item === list.items[0]) {
           this._close(true);
         }
-        // ArrowLeft, or ArrowRight on non-parent submenu item,
-        if (e.keyCode === 37 || (e.keyCode === 39 && !item._item.children)) {
-          // Prevent ArrowLeft from being handled in context-menu
+
+        // Switch menu-bar button or open sub-menu on item arrow key.
+        const prevKey = this.__isRTL ? 'ArrowRight' : 'ArrowLeft';
+        const nextKey = this.__isRTL ? 'ArrowLeft' : 'ArrowRight';
+
+        if (e.key === prevKey || (e.key === nextKey && !item._item.children)) {
+          // Prevent the key from being handled in context-menu
           e.stopImmediatePropagation();
           this._handleKeyDown(e);
         }
