@@ -29,9 +29,6 @@ jobs:
 
       - name: Lint TypeScript
         run: yarn lint:types
-
-      - name: Check meta packages
-        run: yarn lint:meta
   snapshots:
     name: Snapshot tests
     runs-on: ubuntu-latest

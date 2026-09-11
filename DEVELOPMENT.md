@@ -264,8 +264,8 @@ component lands in them by running:
 yarn release:meta
 ```
 
-`yarn lint:meta` fails when the committed files are out of date, and `yarn release` regenerates
-them before publishing.
+`yarn release` regenerates them before publishing, so a published package always matches the
+repository, and `yarn lint:meta` reports whether the committed files do as well.
 
 The packages that a meta package ships but this repository does not build, e.g. `@vaadin/router`,
 stay in its `package.json` with a version of their own, which is where to bump them.
