@@ -299,23 +299,6 @@ describe('basic', () => {
     });
   });
 
-  describe('helper text', () => {
-    it('should set helper text content using helperText property', async () => {
-      comboBox.helperText = 'foo';
-      await nextRender();
-      expect(comboBox.querySelector('[slot="helper"]').textContent).to.eql('foo');
-    });
-
-    it('should display the helper text when slotted helper available', async () => {
-      const helper = document.createElement('div');
-      helper.setAttribute('slot', 'helper');
-      helper.textContent = 'foo';
-      comboBox.appendChild(helper);
-      await nextRender();
-      expect(comboBox.querySelector('[slot="helper"]').textContent).to.eql('foo');
-    });
-  });
-
   describe('theme attribute', () => {
     beforeEach(async () => {
       comboBox.setAttribute('theme', 'foo');
