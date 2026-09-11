@@ -30,6 +30,11 @@ describe('group-field', () => {
     await visualDiff(div, 'group-field-label');
   });
 
+  it('wrapped', async () => {
+    element.style.width = '150px';
+    await visualDiff(div, 'group-field-wrapped');
+  });
+
   it('required', async () => {
     element.label = 'Label';
     element.required = true;
@@ -72,11 +77,6 @@ describe('group-field', () => {
     it('label', async () => {
       element.label = 'Label';
       await visualDiff(div, 'group-field-vertical-label');
-    });
-
-    it('wrapped', async () => {
-      element.style.width = '150px';
-      await visualDiff(div, 'group-field-vertical-wrapped');
     });
 
     it('helper above field', async () => {
