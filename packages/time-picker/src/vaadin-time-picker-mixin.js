@@ -350,19 +350,6 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
-     * Override method from `ComboBoxBaseMixin` to handle loading.
-     * @protected
-     * @override
-     */
-    _closeOrCommit() {
-      if (!this.opened) {
-        this._commitValue();
-      } else {
-        this.close();
-      }
-    }
-
-    /**
      * Override method from `ComboBoxBaseMixin` to handle reverting value.
      * @protected
      * @override
