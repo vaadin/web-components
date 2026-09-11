@@ -80,15 +80,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
 
         /**
-         * Path for the id of the item, used to detect whether the item is selected.
-         * @attr {string} item-id-path
-         */
-        itemIdPath: {
-          type: String,
-          sync: true,
-        },
-
-        /**
          * When true, filter string isn't cleared after selecting an item.
          */
         keepFilter: {
@@ -340,7 +331,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      ['loading', 'itemIdPath', 'itemClassNameGenerator', 'renderer'].forEach((prop) => {
+      ['loading', 'itemClassNameGenerator', 'renderer'].forEach((prop) => {
         if (props.has(prop)) {
           this._scroller[prop] = this[prop];
         }
@@ -487,7 +478,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         if (
           this._lastFilter &&
           this._lastFilter === this._inputElementValue &&
-          this._findIndex(focusedItem, this.selectedItems, this.itemIdPath) !== -1
+          this._findIndex(focusedItem, this.selectedItems) !== -1
         ) {
           this.__clearInternalValue();
           return;
@@ -673,7 +664,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
       if (items?.length && this._topGroup?.length) {
         // Filter out items included to the top group.
-        const filteredItems = items.filter((item) => this._findIndex(item, this._topGroup, this.itemIdPath) === -1);
+        const filteredItems = items.filter((item) => this._findIndex(item, this._topGroup) === -1);
         return this._topGroup.concat(filteredItems);
       }
 
@@ -686,17 +677,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /** @private */
-    _findIndex(item, selectedItems, itemIdPath) {
-      if (itemIdPath && item) {
-        for (let index = 0; index < selectedItems.length; index++) {
-          if (selectedItems[index] && selectedItems[index][itemIdPath] === item[itemIdPath]) {
-            return index;
-          }
-        }
-        return -1;
-      }
-
-      return selectedItems.indexOf(item);
+    _findIndex(item, items) {
+      return items.findIndex((other) => this._isSameItem(item, other));
     }
 
     /**
@@ -729,7 +711,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     /** @private */
     __removeItem(item) {
       const itemsCopy = [...this.selectedItems];
-      itemsCopy.splice(itemsCopy.indexOf(item), 1);
+      itemsCopy.splice(this._findIndex(item, itemsCopy), 1);
       this.__updateSelection(itemsCopy);
       const itemLabel = this._getItemLabel(item);
       this.__announceItem(itemLabel, false, itemsCopy.length);
@@ -739,7 +721,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     __selectItem(item) {
       const itemsCopy = [...this.selectedItems];
 
-      const index = this._findIndex(item, itemsCopy, this.itemIdPath);
+      const index = this._findIndex(item, itemsCopy);
       const itemLabel = this._getItemLabel(item);
 
       let isSelected = false;
@@ -793,7 +775,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       return (
         this._topGroup &&
         this._topGroup.some((item) => {
-          const selectedItem = this.selectedItems[this._findIndex(item, this.selectedItems, this.itemIdPath)];
+          const selectedItem = this.selectedItems[this._findIndex(item, this.selectedItems)];
           return selectedItem && item !== selectedItem;
         })
       );
