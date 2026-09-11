@@ -447,8 +447,7 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __getOverflowCount(overflow) {
-      // We can't use optional chaining due to webpack 4
-      return (overflow.item && overflow.item.children && overflow.item.children.length) || 0;
+      return overflow.item?.children?.length ?? 0;
     }
 
     /** @private */
@@ -459,7 +458,7 @@ export const MenuBarMixin = (superClass) =>
         button.style.width = '';
 
         // Teleport item component back from "overflow" sub-menu
-        const item = button.item && button.item.component;
+        const item = button.item?.component;
         if (item instanceof HTMLElement && item.getAttribute('role') === 'menuitem') {
           this.__restoreItem(button, item);
         }
@@ -643,7 +642,7 @@ export const MenuBarMixin = (superClass) =>
       const button = event.target;
       // Propagate click event from button to the item component if it was outside
       // it e.g. by calling `click()` on the button (used by the Flow counterpart).
-      if (button.item && button.item.component && !event.composedPath().includes(button.item.component)) {
+      if (button.item?.component && !event.composedPath().includes(button.item.component)) {
         event.stopPropagation();
         button.item.component.click();
       }
@@ -690,7 +689,7 @@ export const MenuBarMixin = (superClass) =>
 
       this._tooltipController.setTarget(button);
 
-      if (wasExpanded && button.item && button.item.children) {
+      if (wasExpanded && button.item?.children) {
         this.__openSubMenu(button, true, { keepFocus: true });
       } else if (!this._subMenu.opened) {
         this._tooltipController.open({ trigger: 'focus' });
