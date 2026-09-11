@@ -1,0 +1,47 @@
+{
+  "name": "@vaadin/vaadin",
+  "version": "25.4.0-alpha0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Vaadin components is an evolving set of open sourced custom HTML elements for building mobile and desktop web applications in modern browsers.",
+  "license": "(Apache-2.0 OR SEE LICENSE IN https://vaadin.com/license/cvdl-4.0)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin.js",
+  "module": "vaadin.js",
+  "type": "module",
+  "files": [
+    "vaadin.js"
+  ],
+  "keywords": [
+    "vaadin",
+    "core",
+    "elements",
+    "web",
+    "components",
+    "webcomponents",
+    "web-components"
+  ],
+  "dependencies": {
+    "@vaadin/board": "25.4.0-alpha0",
+    "@vaadin/charts": "25.4.0-alpha0",
+    "@vaadin/crud": "25.4.0-alpha0",
+    "@vaadin/dashboard": "25.4.0-alpha0",
+    "@vaadin/grid-pro": "25.4.0-alpha0",
+    "@vaadin/map": "25.4.0-alpha0",
+    "@vaadin/rich-text-editor": "25.4.0-alpha0",
+    "@vaadin/vaadin-core": "25.4.0-alpha0"
+  },
+  "devDependencies": {
+    "@vaadin/chai-plugins": "25.4.0-alpha0"
+  }
+}
