@@ -216,9 +216,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     static get observers() {
       return [
         '_selectedItemsChanged(selectedItems)',
-        '__openedOrItemsChanged(opened, _dropdownItems, loading)',
         '__updateOverflowChip(_overflow, _overflowItems, disabled, readonly)',
-        '__updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
         '__updateTopGroup(selectedItemsOnTop, selectedItems, opened)',
       ];
     }
@@ -454,30 +452,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       if (!this.loading || this.allowCustomValue) {
         this._commitValue();
       }
-    }
-
-    /** @private */
-    __updateScroller(opened, items, focusedIndex, theme) {
-      if (opened) {
-        this._scroller.style.maxHeight =
-          getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
-      }
-
-      const isClosing = this.hasAttribute('closing');
-
-      this._scroller.setProperties({
-        items: opened || isClosing ? items : [],
-        opened,
-        focusedIndex,
-        theme,
-      });
-    }
-
-    /** @private */
-    __openedOrItemsChanged(opened, items, loading) {
-      // Close the overlay if there are no items to display.
-      // See https://github.com/vaadin/vaadin-combo-box/pull/964
-      this._overlayOpened = opened && (loading || !!items?.length);
     }
 
     /**
