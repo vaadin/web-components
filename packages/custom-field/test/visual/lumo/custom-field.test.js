@@ -216,6 +216,23 @@ describe('custom-field', () => {
         await visualDiff(wrapper, 'alignment-label-helper-text');
       });
     });
+
+    describe('label aside', () => {
+      beforeEach(() => {
+        wrapper = fixtureSync(`
+          <div style="padding: 10px">
+            <vaadin-custom-field theme="label-aside" label="Custom field">
+              <vaadin-text-field value="Text"></vaadin-text-field>
+            </vaadin-custom-field>
+            <vaadin-text-field theme="label-aside" label="Text field" value="Text"></vaadin-text-field>
+          </div>
+        `);
+      });
+
+      it('label aside alignment', async () => {
+        await visualDiff(wrapper, 'alignment-label-aside');
+      });
+    });
   });
 
   describe('form-layout', () => {
