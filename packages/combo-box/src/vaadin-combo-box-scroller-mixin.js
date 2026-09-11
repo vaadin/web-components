@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
-import { get } from '@vaadin/component-base/src/path-utils.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
@@ -70,13 +69,6 @@ export const ComboBoxScrollerMixin = (superClass) =>
         itemClassNameGenerator: {
           type: Object,
           observer: '__itemClassNameGeneratorChanged',
-        },
-
-        /**
-         * Path for the id of the item, used to detect whether the item is selected.
-         */
-        itemIdPath: {
-          type: String,
         },
 
         /**
@@ -244,16 +236,15 @@ export const ComboBoxScrollerMixin = (superClass) =>
     /**
      * @param {string | object} item
      * @param {string | object} selectedItem
-     * @param {string} itemIdPath
+     * @return {boolean}
      * @protected
      */
-    _isItemSelected(item, selectedItem, itemIdPath) {
+    _isItemSelected(item, selectedItem) {
       if (item instanceof ComboBoxPlaceholder) {
         return false;
-      } else if (itemIdPath && item !== undefined && selectedItem !== undefined) {
-        return get(itemIdPath, item) === get(itemIdPath, selectedItem);
       }
-      return item === selectedItem;
+
+      return this.owner._isSameItem(item, selectedItem);
     }
 
     /** @private */
@@ -367,7 +358,7 @@ export const ComboBoxScrollerMixin = (superClass) =>
     _updateElement(el, index) {
       const item = this.items[index];
       const focusedIndex = this.focusedIndex;
-      const selected = this._isItemSelected(item, this.selectedItem, this.itemIdPath);
+      const selected = this._isItemSelected(item, this.selectedItem);
 
       el.setProperties({
         item,

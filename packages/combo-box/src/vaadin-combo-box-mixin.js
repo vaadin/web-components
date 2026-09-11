@@ -78,18 +78,6 @@ export const ComboBoxMixin = (superClass) =>
         itemClassNameGenerator: {
           type: Object,
         },
-
-        /**
-         * Path for the id of the item. If `items` is an array of objects,
-         * the `itemIdPath` is used to compare and identify the same item
-         * in `selectedItem` and `filteredItems` (items given by the
-         * `dataProvider` callback).
-         * @attr {string} item-id-path
-         */
-        itemIdPath: {
-          type: String,
-          sync: true,
-        },
       };
     }
 
@@ -117,7 +105,7 @@ export const ComboBoxMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      ['loading', 'itemIdPath', 'itemClassNameGenerator', 'renderer', 'selectedItem'].forEach((prop) => {
+      ['loading', 'itemClassNameGenerator', 'renderer', 'selectedItem'].forEach((prop) => {
         if (props.has(prop)) {
           this._scroller[prop] = this[prop];
         }

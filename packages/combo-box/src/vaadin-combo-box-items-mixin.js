@@ -113,6 +113,18 @@ export const ComboBoxItemsMixin = (superClass) =>
         },
 
         /**
+         * Path for the id of the item. If `items` is an array of objects,
+         * the `itemIdPath` is used to compare and identify the same item
+         * in the selection and in `filteredItems` (items given by the
+         * `dataProvider` callback).
+         * @attr {string} item-id-path
+         */
+        itemIdPath: {
+          type: String,
+          sync: true,
+        },
+
+        /**
          * Controls which item is automatically set to be selected, for
          * example on Enter, when the typed filter only partially matches
          * its label. The item that will be selected is highlighted in the
@@ -263,6 +275,26 @@ export const ComboBoxItemsMixin = (superClass) =>
         value = item ? item.toString() : '';
       }
       return value;
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to compare object items
+     * by the value at `itemIdPath` instead of by identity.
+     * @param {unknown} item
+     * @param {unknown} other
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _isSameItem(item, other) {
+      if (this.itemIdPath && item && other) {
+        const id = get(this.itemIdPath, item);
+        if (id !== undefined) {
+          return id === get(this.itemIdPath, other);
+        }
+      }
+
+      return super._isSameItem(item, other);
     }
 
     /** @private */
