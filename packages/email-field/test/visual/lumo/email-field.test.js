@@ -15,6 +15,36 @@ describe('email-field', () => {
     element = fixtureSync('<vaadin-email-field></vaadin-email-field>', div);
   });
 
+  it('placeholder', async () => {
+    element.placeholder = 'Placeholder';
+    await visualDiff(div, 'placeholder');
+  });
+
+  it('value', async () => {
+    element.value = 'serguey.kulikov@gmail.com';
+    await visualDiff(div, 'value');
+  });
+
+  describe('RTL', () => {
+    before(() => {
+      document.documentElement.setAttribute('dir', 'rtl');
+    });
+
+    after(() => {
+      document.documentElement.removeAttribute('dir');
+    });
+
+    it('RTL value', async () => {
+      element.value = 'serguey.kulikov@gmail.com';
+      await visualDiff(div, 'rtl-value');
+    });
+
+    it('RTL placeholder', async () => {
+      element.placeholder = 'Placeholder';
+      await visualDiff(div, 'rtl-placeholder');
+    });
+  });
+
   describe('label aside', () => {
     beforeEach(() => {
       element.setAttribute('theme', 'label-aside');
@@ -74,36 +104,6 @@ describe('email-field', () => {
     it('small', async () => {
       element.setAttribute('theme', 'label-aside small');
       await visualDiff(div, 'label-aside-small');
-    });
-  });
-
-  it('placeholder', async () => {
-    element.placeholder = 'Placeholder';
-    await visualDiff(div, 'placeholder');
-  });
-
-  it('value', async () => {
-    element.value = 'serguey.kulikov@gmail.com';
-    await visualDiff(div, 'value');
-  });
-
-  describe('RTL', () => {
-    before(() => {
-      document.documentElement.setAttribute('dir', 'rtl');
-    });
-
-    after(() => {
-      document.documentElement.removeAttribute('dir');
-    });
-
-    it('RTL value', async () => {
-      element.value = 'serguey.kulikov@gmail.com';
-      await visualDiff(div, 'rtl-value');
-    });
-
-    it('RTL placeholder', async () => {
-      element.placeholder = 'Placeholder';
-      await visualDiff(div, 'rtl-placeholder');
     });
   });
 });

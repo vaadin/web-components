@@ -48,76 +48,6 @@ describe('custom-field', () => {
       inputs = element.querySelectorAll('input');
     });
 
-    describe('label aside', () => {
-      beforeEach(() => {
-        element.setAttribute('theme', 'label-aside');
-        element.label = 'Label';
-      });
-
-      it('default', async () => {
-        await visualDiff(div, 'label-aside');
-      });
-
-      it('nested fields with helper above field', async () => {
-        element.innerHTML = '<vaadin-text-field></vaadin-text-field><vaadin-text-field></vaadin-text-field>';
-        element.setAttribute('theme', 'label-aside helper-above-field');
-        element.helperText = 'Helper text';
-        div.appendChild(document.createElement('vaadin-text-field'));
-        await visualDiff(div, 'label-aside-nested-fields-helper-above-field');
-      });
-
-      it('no label', async () => {
-        element.label = '';
-        await visualDiff(div, 'label-aside-no-label');
-      });
-
-      it('wrapped label', async () => {
-        element.label = 'Label that wraps on multiple lines';
-        element.style.setProperty('--vaadin-input-field-label-aside-width', '8em');
-        await visualDiff(div, 'label-aside-wrapped-label');
-      });
-
-      it('required', async () => {
-        element.required = true;
-        await visualDiff(div, 'label-aside-required');
-      });
-
-      it('helper text', async () => {
-        element.helperText = 'Helper text';
-        await visualDiff(div, 'label-aside-helper-text');
-      });
-
-      it('error message', async () => {
-        element.errorMessage = 'This field is required';
-        element.invalid = true;
-        await visualDiff(div, 'label-aside-error-message');
-      });
-
-      it('helper above field', async () => {
-        element.helperText = 'Helper text';
-        element.setAttribute('theme', 'label-aside helper-above-field');
-        await visualDiff(div, 'label-aside-helper-above-field');
-      });
-
-      it('custom width and gap', async () => {
-        element.style.setProperty('--vaadin-input-field-label-aside-width', '6em');
-        element.style.setProperty('--vaadin-input-field-label-aside-gap', '2em');
-        await visualDiff(div, 'label-aside-custom-width-gap');
-      });
-
-      it('RTL', async () => {
-        element.setAttribute('dir', 'rtl');
-        element.required = true;
-        element.helperText = 'Helper text';
-        await visualDiff(div, 'label-aside-rtl');
-      });
-
-      it('small', async () => {
-        element.setAttribute('theme', 'label-aside small');
-        await visualDiff(div, 'label-aside-small');
-      });
-    });
-
     it('basic', async () => {
       await visualDiff(div, 'basic-default');
     });
@@ -192,6 +122,68 @@ describe('custom-field', () => {
       inputs[0].style.display = 'block';
       inputs[1].style.display = 'none';
       await visualDiff(div, 'whitespace-theme');
+    });
+
+    describe('label aside', () => {
+      beforeEach(() => {
+        element.setAttribute('theme', 'label-aside');
+        element.label = 'Label';
+      });
+
+      it('default', async () => {
+        await visualDiff(div, 'label-aside');
+      });
+
+      it('no label', async () => {
+        element.label = '';
+        await visualDiff(div, 'label-aside-no-label');
+      });
+
+      it('wrapped label', async () => {
+        element.label = 'Label that wraps on multiple lines';
+        element.style.setProperty('--vaadin-input-field-label-aside-width', '8em');
+        await visualDiff(div, 'label-aside-wrapped-label');
+      });
+
+      it('required', async () => {
+        element.required = true;
+        await visualDiff(div, 'label-aside-required');
+      });
+
+      it('helper text', async () => {
+        element.helperText = 'Helper text';
+        await visualDiff(div, 'label-aside-helper-text');
+      });
+
+      it('error message', async () => {
+        element.errorMessage = 'This field is required';
+        element.invalid = true;
+        await visualDiff(div, 'label-aside-error-message');
+      });
+
+      it('helper above field', async () => {
+        element.helperText = 'Helper text';
+        element.setAttribute('theme', 'label-aside helper-above-field');
+        await visualDiff(div, 'label-aside-helper-above-field');
+      });
+
+      it('custom width and gap', async () => {
+        element.style.setProperty('--vaadin-input-field-label-aside-width', '6em');
+        element.style.setProperty('--vaadin-input-field-label-aside-gap', '2em');
+        await visualDiff(div, 'label-aside-custom-width-gap');
+      });
+
+      it('RTL', async () => {
+        element.setAttribute('dir', 'rtl');
+        element.required = true;
+        element.helperText = 'Helper text';
+        await visualDiff(div, 'label-aside-rtl');
+      });
+
+      it('small', async () => {
+        element.setAttribute('theme', 'label-aside small');
+        await visualDiff(div, 'label-aside-small');
+      });
     });
   });
 
