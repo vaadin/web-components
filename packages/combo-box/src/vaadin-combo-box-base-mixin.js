@@ -171,6 +171,24 @@ export const ComboBoxBaseMixin = (superClass) =>
     }
 
     /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      // Note: `loading` is only declared by components that support a data provider.
+      if (props.has('opened') || props.has('_dropdownItems') || props.has('loading')) {
+        // Close the overlay if there are no items to display.
+        // See https://github.com/vaadin/vaadin-combo-box/pull/964
+        this._overlayOpened = this.opened && (!!this.loading || this._hasDropdownItems);
+      }
+
+      // Update the scroller only once the overlay is actually opened, so that the
+      // virtualizer does not measure and render items while the overlay is hidden.
+      if (['_overlayOpened', '_dropdownItems', '_focusedIndex', '_theme'].some((prop) => props.has(prop))) {
+        this._updateScroller();
+      }
+    }
+
+    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
 
@@ -246,6 +264,29 @@ export const ComboBoxBaseMixin = (superClass) =>
       // Prevent focusing scroller on input Tab
       scroller.setAttribute('tabindex', '-1');
       this.appendChild(scroller);
+    }
+
+    /**
+     * Update the scroller to reflect the dropdown items, the focused item
+     * and whether the overlay is opened.
+     * @protected
+     */
+    _updateScroller() {
+      const opened = this._overlayOpened;
+
+      if (opened) {
+        this._scroller.style.maxHeight =
+          getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
+      }
+
+      const isClosing = this.hasAttribute('closing');
+
+      this._scroller.setProperties({
+        items: opened || isClosing ? this._dropdownItems : [],
+        opened,
+        focusedIndex: this._focusedIndex,
+        theme: this._theme,
+      });
     }
 
     /**
