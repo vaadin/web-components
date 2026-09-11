@@ -59,6 +59,12 @@ Run TypeScript to check typings:
 yarn lint:types
 ```
 
+Check that the meta packages are up to date:
+
+```sh
+yarn lint:meta
+```
+
 ## Testing
 
 ### Unit tests
@@ -243,6 +249,23 @@ The script requires:
 3. Update [`check-branches.js`](https://github.com/vaadin/components-team-tasks/blob/master/release-app/check-branches.js) in the release app to include the new version branch
 
 ## Miscellaneous
+
+### Meta packages
+
+`@vaadin/vaadin-core` and `@vaadin/vaadin` ship every component of the repository in a single
+package, the free ones and, in the case of `@vaadin/vaadin`, the commercial ones as well. A package
+belongs to `@vaadin/vaadin-core` when it is licensed under Apache-2.0 and to `@vaadin/vaadin` when
+it is not.
+
+Their dependencies and the imports of their entry point are generated from the workspace, so a new
+component lands in them by running:
+
+```sh
+yarn generate:meta
+```
+
+`yarn lint:meta` fails when the committed files are out of date, and `yarn release` regenerates
+them before publishing.
 
 ### Generating icons
 

@@ -1,0 +1,43 @@
+{
+  "name": "@vaadin/vaadin",
+  "version": "25.4.0-alpha0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "All the Vaadin web components, free and commercial, in a single package",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin.js",
+  "module": "vaadin.js",
+  "type": "module",
+  "files": [
+    "vaadin.js"
+  ],
+  "keywords": [
+    "Vaadin",
+    "web-components",
+    "web-component"
+  ],
+  "dependencies": {
+    "@vaadin/board": "25.4.0-alpha0",
+    "@vaadin/charts": "25.4.0-alpha0",
+    "@vaadin/crud": "25.4.0-alpha0",
+    "@vaadin/dashboard": "25.4.0-alpha0",
+    "@vaadin/grid-pro": "25.4.0-alpha0",
+    "@vaadin/map": "25.4.0-alpha0",
+    "@vaadin/rich-text-editor": "25.4.0-alpha0",
+    "@vaadin/vaadin-core": "25.4.0-alpha0"
+  },
+  "devDependencies": {
+    "@vaadin/chai-plugins": "25.4.0-alpha0"
+  }
+}
