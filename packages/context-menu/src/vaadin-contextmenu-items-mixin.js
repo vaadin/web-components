@@ -131,6 +131,7 @@ export const ItemsMixin = (superClass) =>
 
       // Set theme attribute from parent element
       setOrRemoveAttribute(subMenu, 'theme', parent.getAttribute('theme'));
+      setOrRemoveAttribute(subMenu, 'dir', this.dir);
 
       const content = subMenuOverlay.$.content;
       content.style.minWidth = '';
