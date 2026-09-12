@@ -79,7 +79,7 @@ class ContextMenuItem extends ItemMixin(ThemableMixin(DirMixin(PolylitMixin(Lumo
 
   /** @override */
   __shouldAllowFocusWhenDisabled() {
-    return window.Vaadin.featureFlags.accessibleDisabledMenuItems;
+    return true;
   }
 }
 

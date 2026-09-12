@@ -274,7 +274,7 @@ class UploadButton extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(L
 
   /** @override */
   __shouldAllowFocusWhenDisabled() {
-    return window.Vaadin.featureFlags.accessibleDisabledButtons;
+    return true;
   }
 }
 

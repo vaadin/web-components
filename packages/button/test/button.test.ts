@@ -136,58 +136,6 @@ describe('vaadin-button', () => {
       await resetMouse();
     });
 
-    it('should prevent programmatic focus when disabled', () => {
-      lastGlobalFocusable.focus();
-      button.focus();
-      expect(document.activeElement).to.equal(lastGlobalFocusable);
-    });
-
-    it('should prevent pointer focus when disabled', async () => {
-      await sendMouseToElement({ type: 'click', element: button });
-      expect(document.activeElement).to.equal(document.body);
-    });
-
-    it('should prevent keyboard focus when disabled', async () => {
-      await sendKeys({ press: 'Tab' });
-      expect(document.activeElement).to.equal(lastGlobalFocusable);
-    });
-
-    ['mousedown', 'mouseup', 'click', 'dblclick', 'keypress', 'keydown', 'keyup'].forEach((eventType) => {
-      it(`should suppress ${eventType} events when disabled`, () => {
-        const spy = sinon.spy();
-        button.addEventListener(eventType, spy, true);
-        fire(button, eventType);
-        expect(spy.called).to.be.false;
-      });
-    });
-  });
-
-  describe('disabled and accessible', () => {
-    let lastGlobalFocusable: HTMLInputElement;
-
-    before(() => {
-      window.Vaadin.featureFlags ??= {};
-      window.Vaadin.featureFlags.accessibleDisabledButtons = true;
-    });
-
-    after(() => {
-      window.Vaadin.featureFlags!.accessibleDisabledButtons = false;
-    });
-
-    beforeEach(async () => {
-      [button, lastGlobalFocusable] = fixtureSync(
-        `<div>
-          <vaadin-button disabled>Press me</vaadin-button>
-          <input id="last-global-focusable" />
-        </div>`,
-      ).children as unknown as [Button, HTMLInputElement];
-      await nextRender();
-    });
-
-    afterEach(async () => {
-      await resetMouse();
-    });
-
     it('should allow programmatic focus when disabled', () => {
       button.focus();
       expect(document.activeElement).to.equal(button);
@@ -204,6 +152,15 @@ describe('vaadin-button', () => {
 
       await sendKeys({ press: 'Tab' });
       expect(document.activeElement).to.equal(lastGlobalFocusable);
+    });
+
+    ['mousedown', 'mouseup', 'click', 'dblclick', 'keypress', 'keydown', 'keyup'].forEach((eventType) => {
+      it(`should suppress ${eventType} events when disabled`, () => {
+        const spy = sinon.spy();
+        button.addEventListener(eventType, spy, true);
+        fire(button, eventType);
+        expect(spy.called).to.be.false;
+      });
     });
   });
 });

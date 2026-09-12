@@ -36,8 +36,8 @@ describe('vaadin-upload-button', () => {
       expect(button.hasAttribute('disabled')).to.be.true;
     });
 
-    it('should have tabindex="-1" when no manager is set', () => {
-      expect(button.getAttribute('tabindex')).to.equal('-1');
+    it('should remain focusable when no manager is set', () => {
+      expect(button.getAttribute('tabindex')).to.equal('0');
     });
 
     it('should be enabled when manager is set', async () => {
@@ -468,26 +468,13 @@ describe('vaadin-upload-button', () => {
         expect(spy.called).to.be.false;
       });
 
-      it('should not be focusable when disabled due to maxFilesReached', async () => {
+      it('should remain focusable when disabled due to maxFilesReached', async () => {
         uploadManager.maxFiles = 1;
         button.manager = uploadManager;
         await nextFrame();
         expect(button.getAttribute('tabindex')).to.equal('0');
 
         uploadManager.addFiles([createFile(100, 'text/plain')]);
-        await nextFrame();
-        expect(button.getAttribute('tabindex')).to.equal('-1');
-      });
-
-      it('should restore tabindex when maxFilesReached becomes false', async () => {
-        uploadManager.maxFiles = 1;
-        button.manager = uploadManager;
-
-        uploadManager.addFiles([createFile(100, 'text/plain')]);
-        await nextFrame();
-        expect(button.getAttribute('tabindex')).to.equal('-1');
-
-        uploadManager.removeFile(uploadManager.files[0]);
         await nextFrame();
         expect(button.getAttribute('tabindex')).to.equal('0');
       });
@@ -582,24 +569,12 @@ describe('vaadin-upload-button', () => {
         expect(spy.called).to.be.false;
       });
 
-      it('should not be focusable when manager is disabled', async () => {
+      it('should remain focusable when manager is disabled', async () => {
         button.manager = uploadManager;
         await nextFrame();
         expect(button.getAttribute('tabindex')).to.equal('0');
 
         uploadManager.disabled = true;
-        await nextFrame();
-        expect(button.getAttribute('tabindex')).to.equal('-1');
-      });
-
-      it('should restore tabindex when manager is re-enabled', async () => {
-        button.manager = uploadManager;
-
-        uploadManager.disabled = true;
-        await nextFrame();
-        expect(button.getAttribute('tabindex')).to.equal('-1');
-
-        uploadManager.disabled = false;
         await nextFrame();
         expect(button.getAttribute('tabindex')).to.equal('0');
       });
