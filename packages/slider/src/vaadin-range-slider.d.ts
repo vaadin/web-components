@@ -108,6 +108,7 @@ export interface RangeSliderEventMap extends HTMLElementEventMap, RangeSliderCus
  * | `--vaadin-input-field-label-color`             |
  * | `--vaadin-input-field-label-font-size`         |
  * | `--vaadin-input-field-label-font-weight`       |
+ * | `--vaadin-input-field-label-text-align`        |
  * | `--vaadin-input-field-required-indicator`      |
  * | `--vaadin-slider-bubble-arrow-border-radius`   |
  * | `--vaadin-slider-bubble-arrow-size`            |

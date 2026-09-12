@@ -60,6 +60,7 @@ export * from './vaadin-radio-group-mixin.js';
  * | `--vaadin-input-field-label-font-size`           |
  * | `--vaadin-input-field-label-font-weight`         |
  * | `--vaadin-input-field-label-line-height`         |
+ * | `--vaadin-input-field-label-text-align`          |
  * | `--vaadin-input-field-helper-color`              |
  * | `--vaadin-input-field-helper-font-size`          |
  * | `--vaadin-input-field-helper-font-weight`        |

@@ -75,6 +75,7 @@ import { NumberField } from '@vaadin/number-field/src/vaadin-number-field.js';
  * | `--vaadin-input-field-label-font-size`           |
  * | `--vaadin-input-field-label-font-weight`         |
  * | `--vaadin-input-field-label-line-height`         |
+ * | `--vaadin-input-field-label-text-align`          |
  * | `--vaadin-input-field-padding`                   |
  * | `--vaadin-input-field-placeholder-color`         |
  * | `--vaadin-input-field-required-indicator`        |
