@@ -2,14 +2,10 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, outsideClick } from '@vaadin/testing-helpers';
 import '../src/vaadin-multi-select-combo-box.js';
-import { getAllItems } from './helpers.js';
+import { getFocusedItemIndex } from './helpers.js';
 
 describe('partial-match-mode', () => {
   let comboBox, inputElement;
-
-  function getFocusedItemIndex() {
-    return getAllItems(comboBox).findIndex((item) => item.hasAttribute('focused'));
-  }
 
   beforeEach(async () => {
     comboBox = fixtureSync('<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>');
@@ -29,12 +25,12 @@ describe('partial-match-mode', () => {
 
     it('should highlight the exact match', async () => {
       await sendKeys({ type: 'grape' });
-      expect(getFocusedItemIndex()).to.equal(1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
 
     it('should not highlight partial matches', async () => {
       await sendKeys({ type: 'gra' });
-      expect(getFocusedItemIndex()).to.equal(-1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
     describe('value commit', () => {
@@ -66,23 +62,23 @@ describe('partial-match-mode', () => {
 
     it('should highlight the first partial match', async () => {
       await sendKeys({ type: 'gra' });
-      expect(getFocusedItemIndex()).to.equal(0);
+      expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
     it('should highlight the exact match when there is one', async () => {
       await sendKeys({ type: 'grape' });
-      expect(getFocusedItemIndex()).to.equal(1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
 
     it('should not highlight the first partial match when custom values are allowed', async () => {
       comboBox.allowCustomValue = true;
       await sendKeys({ type: 'gra' });
-      expect(getFocusedItemIndex()).to.equal(-1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
     it('should not highlight anything when the filter is empty', () => {
       comboBox.open();
-      expect(getFocusedItemIndex()).to.equal(-1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
     describe('value commit', () => {
@@ -146,17 +142,17 @@ describe('partial-match-mode', () => {
 
     it('should highlight the only partial match', async () => {
       await sendKeys({ type: 'ban' });
-      expect(getFocusedItemIndex()).to.equal(0);
+      expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
     it('should not highlight anything when multiple items match', async () => {
       await sendKeys({ type: 'gra' });
-      expect(getFocusedItemIndex()).to.equal(-1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
     it('should highlight the exact match when there is one', async () => {
       await sendKeys({ type: 'grape' });
-      expect(getFocusedItemIndex()).to.equal(1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
 
     describe('value commit', () => {
@@ -197,7 +193,7 @@ describe('partial-match-mode', () => {
     it('should highlight the first partial match when opening the dropdown after typing', async () => {
       await sendKeys({ type: 'grap' });
       await sendKeys({ press: 'ArrowDown' });
-      expect(getFocusedItemIndex()).to.equal(0);
+      expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
     it('should select the first partial match on Enter after opening the dropdown', async () => {

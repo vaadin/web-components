@@ -3,7 +3,7 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
-import { getAllItems, getFirstItem } from './helpers.js';
+import { getAllItems, getFirstItem, getSelectAllButton, setInputValue } from './helpers.js';
 
 describe('accessibility', () => {
   let comboBox, inputElement;
@@ -127,6 +127,21 @@ describe('accessibility', () => {
         expect(items[0].getAttribute('aria-selected')).to.equal('false');
       });
     });
+
+    describe('overlay', () => {
+      beforeEach(async () => {
+        comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
+        await nextRender();
+      });
+
+      it('should apply role="application" on the overlay', () => {
+        // The overlay sets role="application" to prevent screen readers from
+        // exiting focus mode when the select all button is focused. Without
+        // this pressing Arrow Down / Up from the button does not restore focus
+        // to the input and arrow key navigation breaks in NVDA and JAWS.
+        expect(comboBox.$.overlay.role).to.equal('application');
+      });
+    });
   });
 
   describe('announcements', () => {
@@ -221,6 +236,63 @@ describe('accessibility', () => {
       clock.tick(150);
 
       expect(region.textContent).to.equal('Apple removed from selection 0 items selected');
+    });
+
+    describe('select all', () => {
+      beforeEach(() => {
+        comboBox.selectAllButtonVisible = true;
+        comboBox.opened = true;
+      });
+
+      it('should announce the total when selecting all items', () => {
+        getSelectAllButton(comboBox).click();
+
+        clock.tick(150);
+
+        expect(region.textContent).to.equal('4 items selected');
+      });
+
+      it('should announce the total when selecting filtered items', () => {
+        comboBox.selectedItems = [lemon];
+        setInputValue(comboBox, 'an');
+
+        getSelectAllButton(comboBox).click();
+
+        clock.tick(150);
+
+        expect(region.textContent).to.equal('3 items selected');
+      });
+
+      it('should announce the total when deselecting filtered items', () => {
+        comboBox.selectedItems = [lemon, banana, orange];
+        setInputValue(comboBox, 'an');
+
+        getSelectAllButton(comboBox).click();
+
+        clock.tick(150);
+
+        expect(region.textContent).to.equal('1 items selected');
+      });
+
+      it('should announce cleared selection when deselecting all items', () => {
+        comboBox.selectedItems = fruits;
+
+        getSelectAllButton(comboBox).click();
+
+        clock.tick(150);
+
+        expect(region.textContent).to.equal('Selection cleared');
+      });
+
+      it('should use custom i18n messages', () => {
+        comboBox.i18n = { total: '{count} selected' };
+
+        getSelectAllButton(comboBox).click();
+
+        clock.tick(150);
+
+        expect(region.textContent).to.equal('4 selected');
+      });
     });
   });
 });

@@ -50,6 +50,11 @@
           <vaadin-checkbox id="autoOpenDisabled" value="autoOpenDisabled" label="Auto open disabled"></vaadin-checkbox>
           <vaadin-checkbox id="keepFilter" value="keepFilter" label="Keep filter"></vaadin-checkbox>
           <vaadin-checkbox
+            id="selectAllButtonVisible"
+            value="selectAllButtonVisible"
+            label="Select all button visible"
+          ></vaadin-checkbox>
+          <vaadin-checkbox
             id="selectedItemsOnTop"
             value="selectedItemsOnTop"
             label="Selected items on top"
@@ -129,6 +134,7 @@
         'autoExpandVertically',
         'autoOpenDisabled',
         'keepFilter',
+        'selectAllButtonVisible',
         'selectedItemsOnTop',
       ].forEach((prop) => {
         document.getElementById(prop).addEventListener('checked-changed', (e) => {

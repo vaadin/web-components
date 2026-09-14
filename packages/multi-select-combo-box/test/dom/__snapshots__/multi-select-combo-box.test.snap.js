@@ -477,12 +477,33 @@ snapshots["vaadin-multi-select-combo-box host opened overlay"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="application"
 >
   <slot name="overlay">
   </slot>
 </vaadin-multi-select-combo-box-overlay>
 `;
 /* end snapshot vaadin-multi-select-combo-box host opened overlay */
+
+snapshots["vaadin-multi-select-combo-box host opened overlay select all button"] = 
+`<vaadin-multi-select-combo-box-overlay
+  exportparts="overlay, content, loader"
+  id="overlay"
+  no-vertical-overlap=""
+  popover="manual"
+  role="application"
+>
+  <button
+    part="select-all"
+    type="button"
+  >
+    Select All
+  </button>
+  <slot name="overlay">
+  </slot>
+</vaadin-multi-select-combo-box-overlay>
+`;
+/* end snapshot vaadin-multi-select-combo-box host opened overlay select all button */
 
 snapshots["vaadin-multi-select-combo-box shadow default"] = 
 `<div class="vaadin-multi-select-combo-box-container">
@@ -542,6 +563,7 @@ snapshots["vaadin-multi-select-combo-box shadow default"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="application"
 >
   <slot name="overlay">
   </slot>
@@ -610,6 +632,7 @@ snapshots["vaadin-multi-select-combo-box shadow disabled"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="application"
 >
   <slot name="overlay">
   </slot>
@@ -678,6 +701,7 @@ snapshots["vaadin-multi-select-combo-box shadow readonly"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="application"
 >
   <slot name="overlay">
   </slot>
@@ -746,6 +770,7 @@ snapshots["vaadin-multi-select-combo-box shadow invalid"] =
   id="overlay"
   no-vertical-overlap=""
   popover="manual"
+  role="application"
 >
   <slot name="overlay">
   </slot>
