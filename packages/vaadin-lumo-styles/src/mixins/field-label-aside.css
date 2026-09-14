@@ -80,6 +80,10 @@
     padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
   }
 
+  :host([theme~='label-aside'][dir='rtl']) [part='error-message'] {
+    margin-right: 0;
+  }
+
   :host([theme~='label-aside']) [part='helper-text'] {
     grid-area: helper;
   }
