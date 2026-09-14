@@ -132,8 +132,8 @@
   /* Reserve the same space as the item checkmark icon */
   [part='select-all']::before {
     content: '';
-    font-size: var(--lumo-icon-size-m);
-    width: calc(var(--lumo-font-size-m) / var(--lumo-font-size-s) * 1em);
+    font-size: var(--lumo-font-size-m);
+    width: var(--lumo-icon-size-m);
     flex: none;
     margin: calc((1 - var(--lumo-line-height-xs)) * var(--lumo-font-size-m) / 2) 0;
   }

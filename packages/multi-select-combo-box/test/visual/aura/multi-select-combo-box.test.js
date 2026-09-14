@@ -1,4 +1,5 @@
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { sendKeys } from '@vaadin/test-runner-commands';
+import { fixtureSync, mousedown } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
 import '../../not-animated-styles.css';
@@ -13,6 +14,13 @@ describe('multi-select-combo-box', () => {
     div.style.padding = '10px';
     element = fixtureSync('<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>', div);
     element.items = ['Apple', 'Banana', 'Lemon', 'Pear'];
+  });
+
+  afterEach(() => {
+    // After tests which use sendKeys() the focus-utils.js -> isKeyboardActive is set to true.
+    // Click once here on body to reset it so other tests are not affected by it.
+    // An unwanted focus-ring would be shown in other tests otherwise.
+    mousedown(document.body);
   });
 
   it('basic', async () => {
@@ -72,6 +80,33 @@ describe('multi-select-combo-box', () => {
       element.readonly = true;
       element.inputElement.click();
       await visualDiff(div, 'opened-readonly');
+    });
+  });
+
+  describe('select all', () => {
+    beforeEach(() => {
+      div.style.height = '250px';
+      element.selectAllButtonVisible = true;
+      element.selectedItems = ['Apple'];
+    });
+
+    it('select all', async () => {
+      element.inputElement.click();
+      await visualDiff(div, 'select-all');
+    });
+
+    it('select all focus-ring', async () => {
+      element.inputElement.focus();
+      element.inputElement.click();
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'select-all-focus-ring');
+    });
+
+    it('select all truncated label', async () => {
+      element.style.width = '200px';
+      element.i18n = { selectAll: 'Select all of the available items' };
+      element.inputElement.click();
+      await visualDiff(div, 'select-all-truncated-label');
     });
   });
 });
