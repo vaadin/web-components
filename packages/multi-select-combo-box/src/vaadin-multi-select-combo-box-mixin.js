@@ -446,6 +446,17 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
+     * Override method from `ComboBoxBaseMixin` to revert the input to the
+     * filter, as this component does not use `value` for the input text.
+     * @protected
+     * @override
+     */
+    _revertInputValue() {
+      this._inputElementValue = this.filter;
+      this._clearSelectionRange();
+    }
+
+    /**
      * @protected
      * @override
      */
