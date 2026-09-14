@@ -10,6 +10,8 @@ import { KeyboardDirectionMixin } from '@vaadin/a11y-base/src/keyboard-direction
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
+const DEFAULT_TYPING_INDICATOR_TEXT = 'Typing…';
+
 export const MessageListMixin = (superClass) =>
   class MessageListMixinClass extends KeyboardDirectionMixin(superClass) {
     static get properties() {
@@ -88,7 +90,7 @@ export const MessageListMixin = (superClass) =>
         /** @private */
         _typingIndicatorText: {
           type: String,
-          value: 'Typing…',
+          value: DEFAULT_TYPING_INDICATOR_TEXT,
           observer: '__typingIndicatorChanged',
         },
 
@@ -117,7 +119,19 @@ export const MessageListMixin = (superClass) =>
       if (!users || users.length === 0) {
         return '';
       }
-      return [this.__getTypingUserNames(users), this._typingIndicatorText].filter(Boolean).join(' ');
+      return [this.__getTypingUserNames(users), this.__typingIndicatorText].filter(Boolean).join(' ');
+    }
+
+    /**
+     * The text shown next to the names of the typing users. Falls back to the
+     * default text when the property is cleared, which is what a server-side
+     * integration does when it removes the property.
+     *
+     * @return {string}
+     * @private
+     */
+    get __typingIndicatorText() {
+      return this._typingIndicatorText ?? DEFAULT_TYPING_INDICATOR_TEXT;
     }
 
     /** @protected */
@@ -293,7 +307,7 @@ export const MessageListMixin = (superClass) =>
         inert
         .userName="${this.__getTypingUserNames(users)}"
         >${keyed(users, html`<vaadin-avatar-group slot="avatar" .items="${users}"></vaadin-avatar-group>`)}<span
-          >${this._typingIndicatorText}</span
+          >${this.__typingIndicatorText}</span
         ></vaadin-message
       >`;
     }
