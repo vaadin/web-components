@@ -54,7 +54,7 @@
     padding-bottom: 0;
   }
 
-  :host([theme~='label-aside'][has-helper][theme~='helper-above-field']) [part='label'] {
+  :host([theme~='label-aside'][theme~='helper-above-field']) [part='label'] {
     padding-bottom: 0;
   }
 
