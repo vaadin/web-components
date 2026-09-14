@@ -5,7 +5,7 @@
  */
 @media lumo_mixins_field-error-message {
   [part='error-message'] {
-    margin-inline-start: calc(var(--lumo-border-radius-m) / 4);
+    margin-left: calc(var(--lumo-border-radius-m) / 4);
     font-size: var(--vaadin-input-field-error-font-size, var(--lumo-font-size-xs));
     line-height: var(--lumo-line-height-xs);
     font-weight: var(--vaadin-input-field-error-font-weight, 400);
@@ -24,5 +24,12 @@
   :host(:not([invalid])) [part='error-message'] {
     max-height: 0;
     overflow: hidden;
+  }
+
+  /* RTL specific styles */
+
+  :host([dir='rtl']) [part='error-message'] {
+    margin-left: 0;
+    margin-right: calc(var(--lumo-border-radius-m) / 4);
   }
 }
