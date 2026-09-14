@@ -102,8 +102,6 @@
 
   [part='select-all'] {
     appearance: none;
-    display: flex;
-    align-items: center;
     flex: none;
     box-sizing: border-box;
     /* Do not let the label affect the width of the overlay */
@@ -123,6 +121,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: start;
     cursor: var(--lumo-clickable-cursor);
     -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
@@ -132,10 +131,9 @@
   /* Reserve the same space as the item checkmark icon */
   [part='select-all']::before {
     content: '';
+    display: inline-block;
     font-size: var(--lumo-font-size-m);
     width: var(--lumo-icon-size-m);
-    flex: none;
-    margin: calc((1 - var(--lumo-line-height-xs)) * var(--lumo-font-size-m) / 2) 0;
   }
 
   @media (any-hover: hover) {
