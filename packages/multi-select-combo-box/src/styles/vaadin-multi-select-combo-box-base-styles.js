@@ -62,15 +62,12 @@ export const multiSelectComboBoxStyles = [
 
     [part='select-all'] {
       appearance: none;
-      display: flex;
-      align-items: center;
       flex: none;
       box-sizing: border-box;
       /* Do not let the label affect the width of the overlay */
       contain: inline-size;
       margin: var(--vaadin-item-overlay-padding, 4px);
       padding: var(--vaadin-item-padding, var(--vaadin-padding-xs) var(--vaadin-padding-inline-container));
-      column-gap: var(--vaadin-item-gap, var(--vaadin-gap-s));
       border: 0;
       border-radius: var(--vaadin-item-border-radius, var(--vaadin-radius-m));
       background: transparent;
@@ -80,6 +77,7 @@ export const multiSelectComboBoxStyles = [
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      text-align: start;
       cursor: var(--vaadin-clickable-cursor);
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
@@ -88,8 +86,10 @@ export const multiSelectComboBoxStyles = [
     /* Reserve the same space as the item checkmark icon */
     [part='select-all']::before {
       content: '';
+      display: inline-block;
       width: var(--vaadin-icon-size, 1lh);
       flex: none;
+      margin-inline-end: var(--vaadin-item-gap, var(--vaadin-gap-s));
     }
 
     [part='select-all']:focus-visible {

@@ -19,6 +19,10 @@ vaadin-multi-select-combo-box::part(select-all) {
   font-weight: var(--aura-font-weight-medium);
 }
 
+vaadin-multi-select-combo-box::part(select-all)::before {
+  margin-inline-end: var(--vaadin-gap-xs);
+}
+
 @media (any-hover: hover) {
   vaadin-multi-select-combo-box::part(select-all):hover {
     background: var(--_aura-highlight-color);

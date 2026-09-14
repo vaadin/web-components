@@ -184,4 +184,31 @@ describe('multi-select-combo-box', () => {
       await visualDiff(div, 'keyboard-focus-ring');
     });
   });
+
+  describe('select all', () => {
+    beforeEach(() => {
+      div.style.height = '250px';
+      element.selectAllButtonVisible = true;
+      element.selectedItems = ['Apple'];
+    });
+
+    it('select all', async () => {
+      element.inputElement.click();
+      await visualDiff(div, 'select-all');
+    });
+
+    it('select all focus-ring', async () => {
+      element.inputElement.focus();
+      element.inputElement.click();
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'select-all-focus-ring');
+    });
+
+    it('select all truncated label', async () => {
+      element.style.width = '200px';
+      element.i18n = { selectAll: 'Select all of the available items' };
+      element.inputElement.click();
+      await visualDiff(div, 'select-all-truncated-label');
+    });
+  });
 });
