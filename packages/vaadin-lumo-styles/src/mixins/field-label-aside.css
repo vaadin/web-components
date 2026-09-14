@@ -33,13 +33,16 @@
     --_helper-below-field: ;
   }
 
-  :host([theme~='label-aside'])::before,
-  :host([theme~='label-aside'][theme~='small'])::before {
+  :host([theme~='label-aside'])::before {
     grid-column: baseline;
     grid-row: 1 / baseline;
     align-self: end;
-    margin-top: 0;
     margin-bottom: calc(var(--_input-height, var(--lumo-size-s)) * -1);
+  }
+
+  :host([theme~='label-aside'][has-label])::before,
+  :host([theme~='label-aside'][theme~='small'][has-label])::before {
+    margin-top: 0;
   }
 
   :host([theme~='label-aside']) [class$='container'] {
@@ -54,7 +57,7 @@
     padding-bottom: 0;
   }
 
-  :host([theme~='label-aside'][theme~='helper-above-field']) [part='label'] {
+  :host([theme~='label-aside'][theme~='helper-above-field'][has-helper]) [part='label'] {
     padding-bottom: 0;
   }
 
