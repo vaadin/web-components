@@ -25,17 +25,18 @@
   --_lumo-vaadin-grid-pro-edit-text-field-inject: 1;
   --_lumo-vaadin-grid-pro-edit-text-field-inject-modules:
     lumo_mixins_field-label,
+    lumo_mixins_field-label-aside,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
     lumo_mixins_field-button,
     lumo_mixins_field-helper,
     lumo_mixins_field-base,
-    lumo_mixins_grid-pro-editor,
-    lumo_mixins_field-label-aside;
+    lumo_mixins_grid-pro-editor;
 
   --_lumo-vaadin-grid-pro-edit-select-inject: 1;
   --_lumo-vaadin-grid-pro-edit-select-inject-modules:
     lumo_mixins_field-label,
+    lumo_mixins_field-label-aside,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
     lumo_mixins_field-button,
@@ -43,7 +44,6 @@
     lumo_mixins_field-base,
     lumo_mixins_grid-pro-editor,
     lumo_mixins_sr-only,
-    lumo_mixins_field-label-aside,
     lumo_components_select,
     lumo_components_grid-pro-edit-select;
 

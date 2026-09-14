@@ -19,12 +19,12 @@
   --_lumo-vaadin-range-slider-inject: 1;
   --_lumo-vaadin-range-slider-inject-modules:
     lumo_mixins_field-label,
+    lumo_mixins_field-label-aside,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
     lumo_mixins_field-helper,
     lumo_mixins_field-helper-above,
     lumo_mixins_slider,
-    lumo_mixins_field-label-aside,
     lumo_components_range-slider;
 
   --_lumo-vaadin-slider-bubble-overlay-inject: 1;

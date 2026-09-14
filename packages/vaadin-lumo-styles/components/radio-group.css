@@ -19,10 +19,10 @@
   --_lumo-vaadin-radio-group-inject-modules:
     lumo_mixins_group-field,
     lumo_mixins_field-label,
+    lumo_mixins_field-label-aside,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
     lumo_mixins_field-helper,
     lumo_mixins_field-helper-above,
-    lumo_mixins_field-label-aside,
     lumo_components_radio-group;
 }
