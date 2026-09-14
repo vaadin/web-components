@@ -69,10 +69,11 @@ export class SelectAllController {
       return nothing;
     }
 
+    /* avoid unnecessary white space characters before and after the text */
     return html`
-      <button part="select-all" type="button" ${ref(this.#buttonRef)} @click="${this.#boundOnClick}">
-        ${this.#getText()}
-      </button>
+      <button part="select-all" type="button" ${ref(this.#buttonRef)} @click="${this.#boundOnClick}"
+        >${this.#getText()}</button
+      >
     `;
   }
 
