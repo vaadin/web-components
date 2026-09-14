@@ -627,6 +627,18 @@ describe('message-list', () => {
       expect(getTypingIndicator().querySelector('span').textContent).to.equal('is typing');
     });
 
+    it('should restore the default typing indicator text when cleared', async () => {
+      messageList._usersTyping = users;
+      await nextRender();
+      messageList._typingIndicatorText = 'is typing';
+      await nextUpdate(messageList);
+
+      messageList._typingIndicatorText = null;
+      await nextUpdate(messageList);
+
+      expect(getTypingIndicator().querySelector('span').textContent).to.equal('Typing…');
+    });
+
     it('should reflect the typing indicator type to an attribute', async () => {
       messageList._typingIndicatorType = 'ellipsis';
       messageList._usersTyping = users;
@@ -795,9 +807,20 @@ describe('message-list', () => {
 
       it('should only use the names when the typing indicator text is empty', async () => {
         messageList._usersTyping = users;
-        messageList._typingIndicatorText = undefined;
+        messageList._typingIndicatorText = '';
         await nextUpdate(messageList);
         expect(status.textContent.trim()).to.equal('Linsey Listy and Matt Mambo');
+      });
+
+      it('should use the default text in the status when the text is cleared', async () => {
+        messageList._usersTyping = users;
+        messageList._typingIndicatorText = 'are typing';
+        await nextUpdate(messageList);
+
+        messageList._typingIndicatorText = null;
+        await nextUpdate(messageList);
+
+        expect(status.textContent.trim()).to.equal('Linsey Listy and Matt Mambo Typing…');
       });
 
       it('should clear the status when no one is typing anymore', async () => {
