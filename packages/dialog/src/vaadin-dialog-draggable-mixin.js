@@ -86,6 +86,8 @@ export const DialogDraggableMixin = (superClass) =>
         if ((isResizerContainer && !isResizerContainerScrollbar) || isContentPart || isDraggable) {
           // Signal that we're handling this drag event, so parent dialogs won't also drag
           e.preventDefault();
+          // `preventDefault()` above cancels the native focus change, restored in `_stopDrag()`
+          this._saveGestureStart(e);
           this._originalBounds = this.$.overlay.getBounds();
           const event = getMouseOrFirstTouchEvent(e);
           this._originalMouseCoords = { top: event.pageY, left: event.pageX };
@@ -128,7 +130,8 @@ export const DialogDraggableMixin = (superClass) =>
     }
 
     /** @private */
-    _stopDrag() {
+    _stopDrag(e) {
+      this._focusOnGestureEnd(e);
       this.dispatchEvent(new CustomEvent('dragged', { detail: { top: this.top, left: this.left } }));
       window.removeEventListener('mouseup', this._stopDrag);
       window.removeEventListener('touchend', this._stopDrag);

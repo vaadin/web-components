@@ -6,13 +6,14 @@
 
 /**
  * Checks if the argument is a touch event and if so, returns a first touch.
+ * On `touchend`, `touches` is empty and the released point is in `changedTouches`.
  * Otherwise, if the mouse event was passed, returns it as is.
  * @param {!MouseEvent | !TouchEvent} e
  * @return {!MouseEvent | !Touch}
  * @protected
  */
 export function getMouseOrFirstTouchEvent(e) {
-  return e.touches ? e.touches[0] : e;
+  return e.touches ? e.touches[0] || e.changedTouches[0] : e;
 }
 
 /**

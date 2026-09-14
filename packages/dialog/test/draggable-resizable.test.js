@@ -1,4 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
+import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './draggable-resizable-styles.js';
@@ -33,12 +34,16 @@ function dispatchMouseEvent(target, type, coords = { x: 0, y: 0 }, button = 0) {
   target.dispatchEvent(e);
 }
 
-function resize(target, dx, dy, mouseButton = 0) {
+function centerOf(target) {
   const bounds = target.getBoundingClientRect();
-  const fromXY = {
+  return {
     x: Math.floor(bounds.left + bounds.width / 2),
     y: Math.floor(bounds.top + bounds.height / 2),
   };
+}
+
+function dragBy(target, dx, dy, mouseButton = 0) {
+  const fromXY = centerOf(target);
   const toXY = { x: fromXY.x + dx, y: fromXY.y + dy };
   dispatchMouseEvent(target, 'mousedown', fromXY, mouseButton);
   dispatchMouseEvent(target, 'mousemove', fromXY, mouseButton);
@@ -131,7 +136,7 @@ describe('resizable', () => {
   });
 
   it('should resize dialog from top right corner', async () => {
-    resize(overlayPart.querySelector('.ne'), dx, -dx);
+    dragBy(overlayPart.querySelector('.ne'), dx, -dx);
     await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top - dx));
@@ -141,7 +146,7 @@ describe('resizable', () => {
   });
 
   it('should resize dialog from bottom right corner', async () => {
-    resize(overlayPart.querySelector('.se'), dx, dx);
+    dragBy(overlayPart.querySelector('.se'), dx, dx);
     await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top));
@@ -151,7 +156,7 @@ describe('resizable', () => {
   });
 
   it('should resize dialog from bottom left corner', async () => {
-    resize(overlayPart.querySelector('.sw'), -dx, dx);
+    dragBy(overlayPart.querySelector('.sw'), -dx, dx);
     await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top));
@@ -161,7 +166,7 @@ describe('resizable', () => {
   });
 
   it('should resize dialog from top left corner', async () => {
-    resize(overlayPart.querySelector('.nw'), -dx, -dx);
+    dragBy(overlayPart.querySelector('.nw'), -dx, -dx);
     await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top - dx));
@@ -171,7 +176,7 @@ describe('resizable', () => {
   });
 
   it('should resize dialog from top edge', async () => {
-    resize(overlayPart.querySelector('.n'), 0, -dx);
+    dragBy(overlayPart.querySelector('.n'), 0, -dx);
     await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top - dx));
@@ -181,7 +186,7 @@ describe('resizable', () => {
   });
 
   it('should resize dialog from right edge', async () => {
-    resize(overlayPart.querySelector('.e'), dx, 0);
+    dragBy(overlayPart.querySelector('.e'), dx, 0);
     await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top));
@@ -191,7 +196,7 @@ describe('resizable', () => {
   });
 
   it('should resize dialog from bottom edge', async () => {
-    resize(overlayPart.querySelector('.s'), 0, dx);
+    dragBy(overlayPart.querySelector('.s'), 0, dx);
     await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top));
@@ -201,7 +206,7 @@ describe('resizable', () => {
   });
 
   it('should resize dialog from left edge', async () => {
-    resize(overlayPart.querySelector('.w'), -dx, 0);
+    dragBy(overlayPart.querySelector('.w'), -dx, 0);
     await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top));
@@ -211,7 +216,7 @@ describe('resizable', () => {
   });
 
   it('should resize content part when the overlay is resized', async () => {
-    resize(overlayPart.querySelector('.w'), -dx, 0);
+    dragBy(overlayPart.querySelector('.w'), -dx, 0);
     await nextRender();
 
     const resizedBounds = overlayPart.getBoundingClientRect();
@@ -223,7 +228,7 @@ describe('resizable', () => {
   });
 
   it('should resize content part when the overlay is expanded vertically', async () => {
-    resize(overlayPart.querySelector('.s'), 0, 10);
+    dragBy(overlayPart.querySelector('.s'), 0, 10);
     await nextRender();
 
     const resizedBounds = overlayPart.getBoundingClientRect();
@@ -258,7 +263,7 @@ describe('resizable', () => {
   });
 
   it('should expand content with relative height', () => {
-    resize(overlayPart.querySelector('.s'), 0, 10);
+    dragBy(overlayPart.querySelector('.s'), 0, 10);
 
     // Set the dialog content to have 100% height
     const contentElement = dialog.$.overlay._rendererRoot.firstElementChild;
@@ -270,7 +275,7 @@ describe('resizable', () => {
   });
 
   it('should not resize dialog if not left mouse button', () => {
-    resize(overlayPart.querySelector('.w'), -dx, 0, 1);
+    dragBy(overlayPart.querySelector('.w'), -dx, 0, 1);
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top));
     expect(Math.floor(resizedBounds.left)).to.be.eql(Math.floor(bounds.left));
@@ -280,7 +285,7 @@ describe('resizable', () => {
 
   it('should remove mousemove and mouseup event handlers after resize', () => {
     const resizer = overlayPart.querySelector('.n');
-    resize(resizer, 0, -dx);
+    dragBy(resizer, 0, -dx);
     dialog._resizeListeners.resize.n = sinon.spy();
     dialog._resizeListeners.stop.n = sinon.spy();
     dispatchMouseEvent(resizer, 'mousemove');
@@ -291,7 +296,7 @@ describe('resizable', () => {
 
   it('should not resize dialog past window left edge', () => {
     dx = Math.floor(window.innerWidth + dx);
-    resize(overlayPart.querySelector('.w'), -dx, 0);
+    dragBy(overlayPart.querySelector('.w'), -dx, 0);
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.top)).to.be.eql(Math.floor(bounds.top));
     expect(Math.floor(resizedBounds.left)).to.be.eql(Math.floor(bounds.left));
@@ -303,7 +308,7 @@ describe('resizable', () => {
     dx = 20;
     dialog.$.overlay.setBounds({ left: -dx });
     dx = Math.floor(window.innerWidth - bounds.width + 5);
-    resize(overlayPart.querySelector('.e'), dx, 0);
+    dragBy(overlayPart.querySelector('.e'), dx, 0);
     await nextRender();
     const resizedBounds = overlayPart.getBoundingClientRect();
     expect(Math.floor(resizedBounds.width)).to.be.eql(Math.floor(bounds.width + dx));
@@ -333,7 +338,7 @@ describe('resizable', () => {
     const onResize = sinon.spy();
     dialog.addEventListener('resize', onResize);
 
-    resize(overlayPart.querySelector('.w'), -dx, 0);
+    dragBy(overlayPart.querySelector('.w'), -dx, 0);
 
     const { detail } = onResize.firstCall.args[0];
     const resizedBounds = overlayPart.getBoundingClientRect();
@@ -346,7 +351,7 @@ describe('resizable', () => {
   });
 
   it('should update "width" and "height" properties on resize', async () => {
-    resize(overlayPart.querySelector('.sw'), -dx, dx);
+    dragBy(overlayPart.querySelector('.sw'), -dx, dx);
     await nextRender();
     const overlay = dialog.$.overlay.$.overlay;
     const bounds = overlay.getBoundingClientRect();
@@ -358,7 +363,7 @@ describe('resizable', () => {
     dialog.width = '200px';
     const overlay = dialog.$.overlay.$.overlay;
     const bounds = overlay.getBoundingClientRect();
-    resize(overlayPart.querySelector('.w'), dx, 0);
+    dragBy(overlayPart.querySelector('.w'), dx, 0);
     await nextRender();
     expect(Math.floor(bounds.height)).to.equal(parseInt(overlay.style.height));
   });
@@ -367,13 +372,13 @@ describe('resizable', () => {
     dialog.height = '100px';
     const overlay = dialog.$.overlay.$.overlay;
     const bounds = overlay.getBoundingClientRect();
-    resize(overlayPart.querySelector('.s'), 0, dx);
+    dragBy(overlayPart.querySelector('.s'), 0, dx);
     await nextRender();
     expect(Math.floor(bounds.width)).to.equal(parseInt(overlay.style.width));
   });
 
   it('should set overlay max-width to none on resize', async () => {
-    resize(overlayPart.querySelector('.s'), 0, dx);
+    dragBy(overlayPart.querySelector('.s'), 0, dx);
     await nextRender();
     expect(getComputedStyle(dialog.$.overlay.$.overlay).maxWidth).to.equal('none');
   });
@@ -530,7 +535,7 @@ describe('draggable', () => {
   });
 
   it('should drag and move dialog after resizing', async () => {
-    resize(container.querySelector('.s'), 0, dx);
+    dragBy(container.querySelector('.s'), 0, dx);
     await nextRender();
     const bounds = container.getBoundingClientRect();
     const coords = { y: bounds.top + bounds.height / 2, x: bounds.left + bounds.width / 2 };
@@ -916,7 +921,7 @@ describe('nested resizable dialogs', () => {
     const spy = sinon.spy();
     parentDialog.addEventListener('resize-start', spy);
 
-    resize(childResizer, dx, dx);
+    dragBy(childResizer, dx, dx);
 
     expect(spy.called).to.be.false;
   });
@@ -925,7 +930,7 @@ describe('nested resizable dialogs', () => {
     const spy = sinon.spy();
     parentDialog.addEventListener('resize', spy);
 
-    resize(childResizer, dx, dx);
+    dragBy(childResizer, dx, dx);
 
     expect(spy.called).to.be.false;
   });
@@ -1184,8 +1189,160 @@ describe('overflowing content', () => {
     await nextFrame();
     overlay.$.content.style.padding = '20px';
     overlay.$.content.scrollTop = 100;
-    resize(overlayPart.querySelector('.s'), 0, -50);
+    dragBy(overlayPart.querySelector('.s'), 0, -50);
     await nextFrame();
     expect(overlay.$.content.scrollTop).to.equal(100);
+  });
+});
+
+describe('focus', () => {
+  let wrapper, dialog, background, container, overlayPart;
+
+  function clickOn(target) {
+    const coords = centerOf(target);
+    dispatchMouseEvent(target, 'mousedown', coords);
+    dispatchMouseEvent(target, 'mouseup', coords);
+  }
+
+  // Unlike `touchstart`, `touchend` has an empty `touches` list
+  function tapOn(target) {
+    const { x, y } = centerOf(target);
+    const point = { clientX: x, clientY: y, pageX: x, pageY: y };
+    [
+      ['touchstart', [point]],
+      ['touchend', []],
+    ].forEach(([type, touches]) => {
+      const e = new CustomEvent(type, { bubbles: true, cancelable: true, composed: true });
+      e.touches = touches;
+      e.changedTouches = [point];
+      target.dispatchEvent(e);
+    });
+  }
+
+  async function open() {
+    dialog.opened = true;
+    await nextRender();
+    container = dialog.$.overlay.$.resizerContainer;
+    overlayPart = dialog.$.overlay.$.overlay;
+  }
+
+  beforeEach(async () => {
+    wrapper = fixtureSync(`
+      <div>
+        <input id="background" />
+        <vaadin-dialog modeless header-title="Title"></vaadin-dialog>
+      </div>
+    `);
+    background = wrapper.querySelector('#background');
+    dialog = wrapper.querySelector('vaadin-dialog');
+    await nextRender();
+    dialog.renderer = (root) => {
+      root.innerHTML = `
+        <div class="draggable">Draggable area</div>
+        <input id="content-input" />
+      `;
+    };
+    await nextUpdate(dialog);
+  });
+
+  describe('draggable', () => {
+    beforeEach(async () => {
+      dialog.draggable = true;
+      await open();
+      background.focus();
+    });
+
+    it('should focus dialog on click on the resizer container', () => {
+      clickOn(container);
+      expect(document.activeElement).to.equal(dialog);
+    });
+
+    it('should focus dialog on click on the header title', () => {
+      clickOn(dialog.querySelector('[slot="title"]'));
+      expect(document.activeElement).to.equal(dialog);
+    });
+
+    it('should focus dialog on tap on the resizer container', () => {
+      tapOn(container);
+      expect(document.activeElement).to.equal(dialog);
+    });
+
+    it('should not move focus on click when the dialog contains focus', () => {
+      const input = dialog.querySelector('#content-input');
+      input.focus();
+      clickOn(container);
+      expect(document.activeElement).to.equal(input);
+    });
+
+    it('should close on Escape press after click on the resizer container', async () => {
+      clickOn(container);
+      await sendKeys({ press: 'Escape' });
+      await nextUpdate(dialog);
+      expect(dialog.opened).to.be.false;
+    });
+
+    it('should not move focus when the dialog is dragged', () => {
+      dragBy(container, 50, 50);
+      expect(document.activeElement).to.equal(background);
+    });
+
+    it('should focus dialog when the pointer moves less than the drag distance', () => {
+      dragBy(container, 4, 4);
+      expect(document.activeElement).to.equal(dialog);
+    });
+  });
+
+  describe('resizable', () => {
+    beforeEach(async () => {
+      dialog.resizable = true;
+      await open();
+      background.focus();
+    });
+
+    it('should focus dialog on click on a resize handle', () => {
+      clickOn(overlayPart.querySelector('.e'));
+      expect(document.activeElement).to.equal(dialog);
+    });
+
+    it('should not move focus when the dialog is resized', () => {
+      dragBy(overlayPart.querySelector('.e'), 50, 0);
+      expect(document.activeElement).to.equal(background);
+    });
+  });
+
+  // Synthetic events don't move focus, so these drive the real browser pointer
+  describe('real pointer input', () => {
+    beforeEach(async () => {
+      dialog.draggable = true;
+      await open();
+      background.focus();
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    // The slotted title is `display: contents`, so aim at the title part instead
+    let titlePart;
+
+    beforeEach(() => {
+      titlePart = dialog.$.overlay.shadowRoot.querySelector('[part="title"]');
+    });
+
+    it('should close on Escape press after clicking the header title', async () => {
+      await sendMouseToElement({ type: 'click', element: titlePart });
+      await sendKeys({ press: 'Escape' });
+      await nextUpdate(dialog);
+      expect(dialog.opened).to.be.false;
+    });
+
+    it('should keep focus on the background element when the header is dragged', async () => {
+      const { x, y } = centerOf(titlePart);
+      await sendMouse({ type: 'move', position: [x, y] });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [x + 50, y + 50] });
+      await sendMouse({ type: 'up' });
+      expect(document.activeElement).to.equal(background);
+    });
   });
 });

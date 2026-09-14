@@ -35,7 +35,7 @@ export const DialogResizableMixin = (superClass) =>
         const resizer = document.createElement('div');
         this._resizeListeners.start[direction] = (e) => this._startResize(e, direction);
         this._resizeListeners.resize[direction] = (e) => this._resize(e, direction);
-        this._resizeListeners.stop[direction] = () => this._stopResize(direction);
+        this._resizeListeners.stop[direction] = (e) => this._stopResize(e, direction);
         if (direction.length === 1) {
           resizer.classList.add('edge');
         }
@@ -60,6 +60,8 @@ export const DialogResizableMixin = (superClass) =>
 
       if (e.button === 0 || e.touches) {
         e.preventDefault();
+        // `preventDefault()` above cancels the native focus change, restored in `_stopResize()`
+        this._saveGestureStart(e);
 
         this._originalBounds = this.$.overlay.getBounds();
         const event = getMouseOrFirstTouchEvent(e);
@@ -127,10 +129,12 @@ export const DialogResizableMixin = (superClass) =>
     }
 
     /**
+     * @param {!MouseEvent | !TouchEvent} e
      * @param {!DialogResizableDirection} direction
      * @protected
      */
-    _stopResize(direction) {
+    _stopResize(e, direction) {
+      this._focusOnGestureEnd(e);
       window.removeEventListener('mousemove', this._resizeListeners.resize[direction]);
       window.removeEventListener('touchmove', this._resizeListeners.resize[direction]);
       window.removeEventListener('mouseup', this._resizeListeners.stop[direction]);

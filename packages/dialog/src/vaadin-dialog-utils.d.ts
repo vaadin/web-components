@@ -6,6 +6,7 @@
 
 /**
  * Checks if the argument is a touch event and if so, returns a first touch.
+ * On `touchend`, `touches` is empty and the released point is in `changedTouches`.
  * Otherwise, if the mouse event was passed, returns it as is.
  */
 declare function getMouseOrFirstTouchEvent(e: MouseEvent | TouchEvent): MouseEvent | Touch;
