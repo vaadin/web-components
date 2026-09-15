@@ -31,7 +31,6 @@ snapshots["vaadin-form-layout auto-responsive basic host labelsAside"] =
 `<vaadin-form-layout
   auto-responsive=""
   labels-aside=""
-  labels-aside-active=""
   style="--_min-columns: 1; --_max-columns: 1;"
 >
   <input
@@ -106,6 +105,7 @@ snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in narrow
 
 snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in wide container"] = 
 `<div
+  fits-labels-aside=""
   id="layout"
   style="--_grid-rendered-column-count: 1;"
 >
