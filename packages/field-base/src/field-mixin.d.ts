@@ -62,4 +62,6 @@ export declare class FieldMixinClass {
   protected readonly _errorNode: HTMLElement;
 
   protected readonly _helperNode?: HTMLElement;
+
+  protected _hasVaadinFieldMixin: boolean;
 }

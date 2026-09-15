@@ -25,7 +25,7 @@
   }
 
   /* Use a text baseline instead of the empty chips wrapper. */
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) [part='input-field']::before {
+  :host([theme~='label-aside']) [part='input-field']::before {
     content: '\2003' / '';
     width: 0;
     align-self: start;
