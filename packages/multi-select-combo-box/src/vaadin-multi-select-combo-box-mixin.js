@@ -16,6 +16,7 @@ import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { SelectAllController } from './select-all-controller.js';
+import { MultiSelectComboBoxFocusModel } from './vaadin-multi-select-combo-box-focus-model.js';
 
 const DEFAULT_I18N = {
   cleared: 'Selection cleared',
@@ -198,13 +199,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
 
         /** @private */
-        _focusedChipIndex: {
-          type: Number,
-          value: -1,
-          observer: '_focusedChipIndexChanged',
-        },
-
-        /** @private */
         _lastFilter: {
           type: String,
           sync: true,
@@ -303,6 +297,44 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     /** @protected */
     get _chips() {
       return [...this.querySelectorAll('[slot="chip"]')];
+    }
+
+    /**
+     * Override getter from `ComboBoxBaseMixin` to provide the chips to the focus model.
+     * @protected
+     * @override
+     */
+    get _focusModelConfig() {
+      return { ...super._focusModelConfig, getChips: () => this._chips };
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to add the chip highlight to the focus model.
+     * @protected
+     * @override
+     */
+    _createFocusModel() {
+      return new MultiSelectComboBoxFocusModel(this._focusModelConfig);
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to render the chip highlight.
+     * @protected
+     * @override
+     */
+    _focusStateChanged() {
+      super._focusStateChanged();
+
+      const { focusedChip } = this._focusModel;
+      if (focusedChip !== this.__focusedChip) {
+        this.__focusedChip?.removeAttribute('focused');
+        focusedChip?.setAttribute('focused', '');
+        this.__focusedChip = focusedChip;
+
+        if (focusedChip) {
+          announce(`${this._getItemLabel(focusedChip.item)} ${this.__effectiveI18n.focused}`);
+        }
+      }
     }
 
     /**
@@ -512,7 +544,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // Do not commit focused item on not blur / outside click
       if (this._ignoreCommitValue) {
         this._inputElementValue = '';
-        this._focusedIndex = -1;
+        this._focusModel.clearItemFocus();
         this._ignoreCommitValue = false;
       } else {
         this.__commitUserInput();
@@ -526,8 +558,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     /** @private */
     __commitUserInput() {
-      if (this._focusedIndex > -1) {
-        const focusedItem = this._dropdownItems[this._focusedIndex];
+      if (this._focusModel.hasFocusedItem) {
+        const focusedItem = this._focusModel.focusedItem;
         // Do not unselect an already selected item when it was focused by
         // filtering, in which case the input value still equals the filter.
         if (
@@ -588,7 +620,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (blurred && document.hasFocus()) {
-        this._focusedChipIndex = -1;
+        this._focusModel.clearChipFocus();
         this._requestValidation();
       }
 
@@ -696,7 +728,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * @override
      */
     _hasValidInputValue() {
-      const hasInvalidOption = this._focusedIndex < 0 && this._inputElementValue !== '';
+      const hasInvalidOption = !this._focusModel.hasFocusedItem && this._inputElementValue !== '';
       return this.allowCustomValue || !hasInvalidOption;
     }
 
@@ -1122,9 +1154,9 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           this.close();
         } else if (this._hasValidInputValue()) {
           // Keep selected item focused after committing on Enter.
-          const focusedItem = this._dropdownItems[this._focusedIndex];
+          const focusedItem = this._focusModel.focusedItem;
           this._commitValue();
-          this._focusedIndex = this._dropdownItems.indexOf(focusedItem);
+          this._focusModel.focusItem(focusedItem);
         }
 
         return;
@@ -1174,121 +1206,60 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
       super._onKeyDown(event);
 
-      const chips = this._chips;
-
-      if (!this.readonly && chips.length > 0) {
+      if (!this.readonly && this._chips.length > 0) {
         switch (event.key) {
           case 'Backspace':
-            this._onBackSpace(chips);
+            this._onBackSpace();
             break;
           case 'ArrowLeft':
-            this._onArrowLeft(chips, event);
-            break;
           case 'ArrowRight':
-            this._onArrowRight(chips, event);
+            this._onChipArrow(event);
             break;
           default:
-            this._focusedChipIndex = -1;
+            this._focusModel.clearChipFocus();
             break;
         }
       }
     }
 
     /** @private */
-    _onArrowLeft(chips, event) {
+    _onChipArrow(event) {
       if (this.inputElement.selectionStart !== 0) {
         return;
       }
 
-      const idx = this._focusedChipIndex;
-      if (idx !== -1) {
+      if (this._focusModel.hasFocusedChip) {
         event.preventDefault();
       }
-      let newIdx;
 
-      if (!this.__isRTL) {
-        if (idx === -1) {
-          // Focus last chip
-          newIdx = chips.length - 1;
-        } else if (idx > 0) {
-          // Focus prev chip
-          newIdx = idx - 1;
-        }
-      } else if (idx === chips.length - 1) {
-        // Blur last chip
-        newIdx = -1;
-      } else if (idx > -1) {
-        // Focus next chip
-        newIdx = idx + 1;
-      }
+      const hadFocusedItem = this._focusModel.hasFocusedItem;
 
-      if (newIdx !== undefined) {
-        this._focusedChipIndex = newIdx;
-      }
-    }
-
-    /** @private */
-    _onArrowRight(chips, event) {
-      if (this.inputElement.selectionStart !== 0) {
-        return;
-      }
-
-      const idx = this._focusedChipIndex;
-      if (idx !== -1) {
-        event.preventDefault();
-      }
-      let newIdx;
-
-      if (this.__isRTL) {
-        if (idx === -1) {
-          // Focus last chip
-          newIdx = chips.length - 1;
-        } else if (idx > 0) {
-          // Focus prev chip
-          newIdx = idx - 1;
-        }
-      } else if (idx === chips.length - 1) {
-        // Blur last chip
-        newIdx = -1;
-      } else if (idx > -1) {
-        // Focus next chip
-        newIdx = idx + 1;
-      }
-
-      if (newIdx !== undefined) {
-        this._focusedChipIndex = newIdx;
-      }
-    }
-
-    /** @private */
-    _onBackSpace(chips) {
-      if (this.inputElement.selectionStart !== 0) {
-        return;
-      }
-
-      const idx = this._focusedChipIndex;
-      if (idx === -1) {
-        this._focusedChipIndex = chips.length - 1;
+      const isPrevKey = this.__isRTL ? event.key === 'ArrowRight' : event.key === 'ArrowLeft';
+      if (isPrevKey) {
+        this._focusModel.focusPrevChip();
       } else {
-        this.__removeItem(chips[idx].item);
-        this._focusedChipIndex = -1;
+        this._focusModel.focusNextChip();
+      }
+
+      // The label of the highlighted item was prefilled into the input, so
+      // restore the filter once the highlight moved from the item to a chip.
+      if (hadFocusedItem && this._focusModel.hasFocusedChip) {
+        this._revertInputValue();
       }
     }
 
     /** @private */
-    _focusedChipIndexChanged(focusedIndex, oldFocusedIndex) {
-      if (focusedIndex > -1 || oldFocusedIndex > -1) {
-        const chips = this._chips;
-        chips.forEach((chip, index) => {
-          chip.toggleAttribute('focused', index === focusedIndex);
-        });
+    _onBackSpace() {
+      if (this.inputElement.selectionStart !== 0) {
+        return;
+      }
 
-        // Announce focused chip
-        if (focusedIndex > -1) {
-          const item = chips[focusedIndex].item;
-          const itemLabel = this._getItemLabel(item);
-          announce(`${itemLabel} ${this.__effectiveI18n.focused}`);
-        }
+      const { focusedChip } = this._focusModel;
+      if (focusedChip) {
+        this.__removeItem(focusedChip.item);
+        this._focusModel.clearChipFocus();
+      } else {
+        this._focusModel.focusLastChip();
       }
     }
 

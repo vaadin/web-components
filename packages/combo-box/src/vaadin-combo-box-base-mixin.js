@@ -10,6 +10,7 @@ import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
+import { ComboBoxFocusModel } from './vaadin-combo-box-focus-model.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 export const ComboBoxBaseMixin = (superClass) =>
@@ -44,16 +45,6 @@ export const ComboBoxBaseMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
-        },
-
-        /**
-         * @protected
-         */
-        _focusedIndex: {
-          type: Number,
-          observer: '_focusedIndexChanged',
-          value: -1,
-          sync: true,
         },
 
         /**
@@ -104,6 +95,9 @@ export const ComboBoxBaseMixin = (superClass) =>
        * @protected
        */
       this._closeOnBlurIsPrevented;
+
+      /** @protected */
+      this._focusModel = this._createFocusModel();
 
       this._boundOverlaySelectedItemChanged = this._overlaySelectedItemChanged.bind(this);
       this._boundOnClearButtonMouseDown = this.__onClearButtonMouseDown.bind(this);
@@ -183,7 +177,7 @@ export const ComboBoxBaseMixin = (superClass) =>
 
       // Update the scroller only once the overlay is actually opened, so that the
       // virtualizer does not measure and render items while the overlay is hidden.
-      if (['_overlayOpened', '_dropdownItems', '_focusedIndex', '_theme'].some((prop) => props.has(prop))) {
+      if (['_overlayOpened', '_dropdownItems', '_theme'].some((prop) => props.has(prop))) {
         this._updateScroller();
       }
     }
@@ -211,6 +205,25 @@ export const ComboBoxBaseMixin = (superClass) =>
      */
     close() {
       this.opened = false;
+    }
+
+    /** @protected */
+    get _focusModelConfig() {
+      return {
+        getItems: () => this._dropdownItems,
+        onChange: () => this._focusStateChanged(),
+      };
+    }
+
+    /** @protected */
+    _createFocusModel() {
+      return new ComboBoxFocusModel(this._focusModelConfig);
+    }
+
+    /** @protected */
+    _focusStateChanged() {
+      this._updateScroller();
+      this._updateActiveDescendant();
     }
 
     /** @private */
@@ -284,7 +297,7 @@ export const ComboBoxBaseMixin = (superClass) =>
       this._scroller.setProperties({
         items: opened || isClosing ? this._dropdownItems : [],
         opened,
-        focusedIndex: this._focusedIndex,
+        focusedIndex: this._focusModel.focusedItemIndex,
         theme: this._theme,
       });
     }
@@ -306,26 +319,19 @@ export const ComboBoxBaseMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    _focusedIndexChanged(index, oldIndex) {
-      if (oldIndex === undefined) {
-        return;
-      }
-      this._updateActiveDescendant(index);
-    }
-
     /** @protected */
     _isInputFocused() {
       return this.inputElement && isElementFocused(this.inputElement);
     }
 
-    /** @private */
-    _updateActiveDescendant(index) {
+    /** @protected */
+    _updateActiveDescendant() {
       const input = this.inputElement;
       if (!input) {
         return;
       }
 
+      const index = this._focusModel.focusedItemIndex;
       const item = this._getItemElements().find((el) => el.index === index);
       setOrRemoveAttribute(input, 'aria-activedescendant', item?.id);
     }
@@ -502,11 +508,8 @@ export const ComboBoxBaseMixin = (superClass) =>
     /** @private */
     _onArrowDown() {
       if (this.opened) {
-        const items = this._dropdownItems;
-        if (items) {
-          this._focusedIndex = Math.min(items.length - 1, this._focusedIndex + 1);
-          this._prefillFocusedItemLabel();
-        }
+        this._focusModel.focusNextItem();
+        this._prefillFocusedItemLabel();
       } else {
         this.open();
       }
@@ -515,15 +518,7 @@ export const ComboBoxBaseMixin = (superClass) =>
     /** @private */
     _onArrowUp() {
       if (this.opened) {
-        if (this._focusedIndex > -1) {
-          this._focusedIndex = Math.max(0, this._focusedIndex - 1);
-        } else {
-          const items = this._dropdownItems;
-          if (items) {
-            this._focusedIndex = items.length - 1;
-          }
-        }
-
+        this._focusModel.focusPrevItem();
         this._prefillFocusedItemLabel();
       } else {
         this.open();
@@ -532,9 +527,8 @@ export const ComboBoxBaseMixin = (superClass) =>
 
     /** @private */
     _prefillFocusedItemLabel() {
-      if (this._focusedIndex > -1) {
-        const focusedItem = this._dropdownItems[this._focusedIndex];
-        this._inputElementValue = this._getItemLabel(focusedItem);
+      if (this._focusModel.hasFocusedItem) {
+        this._inputElementValue = this._getItemLabel(this._focusModel.focusedItem);
         this._markAllSelectionRange();
       }
     }
@@ -633,16 +627,16 @@ export const ComboBoxBaseMixin = (superClass) =>
         // The overlay is open or
         // The input value has changed but the change hasn't been committed, so cancel it.
         e.stopPropagation();
-        this._focusedIndex = -1;
+        this._focusModel.clearItemFocus();
         this._onEscapeCancel();
       } else if (this.opened) {
         // Auto-open is enabled
         // The overlay is open
         e.stopPropagation();
 
-        if (this._focusedIndex > -1) {
+        if (this._focusModel.hasFocusedItem) {
           // An item is focused, revert the input to the filtered value
-          this._focusedIndex = -1;
+          this._focusModel.clearItemFocus();
           this._revertInputValue();
         } else {
           // No item is focused, cancel the change and close the overlay
@@ -766,7 +760,7 @@ export const ComboBoxBaseMixin = (superClass) =>
       }
 
       if (this.opened) {
-        this._focusedIndex = this._dropdownItems.indexOf(e.detail.item);
+        this._focusModel.focusItem(e.detail.item);
         this.close();
       }
     }

@@ -146,7 +146,7 @@ export const ComboBoxMixin = (superClass) =>
      */
     _hasValidInputValue() {
       const hasInvalidOption =
-        this._focusedIndex < 0 &&
+        !this._focusModel.hasFocusedItem &&
         this._inputElementValue !== '' &&
         this._getItemLabel(this.selectedItem) !== this._inputElementValue;
 
@@ -236,14 +236,14 @@ export const ComboBoxMixin = (superClass) =>
      * @override
      */
     _commitValue() {
-      if (this._focusedIndex > -1) {
-        const focusedItem = this._dropdownItems[this._focusedIndex];
+      if (this._focusModel.hasFocusedItem) {
+        const focusedItem = this._focusModel.focusedItem;
         if (this.selectedItem !== focusedItem) {
           this.selectedItem = focusedItem;
         }
         // Make sure input field is updated in case value doesn't change (i.e. FOO -> foo)
         this._inputElementValue = this._getItemLabel(this.selectedItem);
-        this._focusedIndex = -1;
+        this._focusModel.clearItemFocus();
       } else if (this._inputElementValue === '' || this._inputElementValue === undefined) {
         this.selectedItem = null;
 

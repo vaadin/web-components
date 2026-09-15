@@ -153,11 +153,10 @@ export class SelectAllController {
     // Only the button should look focused, so reset the highlighted
     // item and chip, and restore the input to show the filter instead
     // of the label of the previously highlighted item.
-    if (host._focusedIndex > -1) {
-      host._focusedIndex = -1;
+    if (host._focusModel.hasFocusedItem) {
       host._inputElementValue = host.filter;
     }
-    host._focusedChipIndex = -1;
+    host._focusModel.clear();
 
     this.#button.focus({ focusVisible: true });
     host.removeAttribute('focus-ring');

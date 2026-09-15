@@ -44,7 +44,7 @@ describe('__focusIndex', () => {
     it('should set the focused index to the given index', () => {
       comboBox.opened = true;
       comboBox.__focusIndex(100);
-      expect(comboBox._focusedIndex).to.equal(100);
+      expect(comboBox._focusModel.focusedItemIndex).to.equal(100);
     });
 
     it('should place the target in the middle of the viewport when opened', async () => {
@@ -68,7 +68,7 @@ describe('__focusIndex', () => {
       arrowDownKeyDown(comboBox.inputElement);
       await nextFrame();
 
-      expect(comboBox._focusedIndex).to.equal(101);
+      expect(comboBox._focusModel.focusedItemIndex).to.equal(101);
       expect(comboBox._scroller.scrollTop).to.be.closeTo(scrollTopBefore, 1);
     });
 
@@ -113,7 +113,7 @@ describe('__focusIndex', () => {
       comboBox.__focusIndex(100);
       flushComboBox(comboBox);
 
-      expect(comboBox._focusedIndex).to.equal(-1);
+      expect(comboBox._focusModel.focusedItemIndex).to.equal(-1);
       expect(getViewportItems(comboBox)[0].index).to.equal(0);
     });
 
@@ -364,14 +364,14 @@ describe('__focusIndex', () => {
       // because only page 0 has been drained.
       arrowUpKeyDown(comboBox.inputElement);
       const lastIndex = comboBox._dropdownItems.length - 1;
-      expect(comboBox._focusedIndex).to.equal(lastIndex);
+      expect(comboBox._focusModel.focusedItemIndex).to.equal(lastIndex);
       expect(comboBox._dropdownItems[lastIndex]).to.be.instanceof(ComboBoxPlaceholder);
 
       // Clearing the cache should preserve the focused index,
       // even though it is still a placeholder after the clear.
       comboBox.clearCache();
 
-      expect(comboBox._focusedIndex).to.equal(lastIndex);
+      expect(comboBox._focusModel.focusedItemIndex).to.equal(lastIndex);
     });
 
     it('should render real content (not placeholders) at the top on reopen after a scroll', async () => {
