@@ -99,4 +99,13 @@
   :host([theme~='whitespace'][has-label]) [part='label'] {
     padding-bottom: 0.5em;
   }
+
+  :host([theme~='label-aside'][has-label]) {
+    --_input-height: calc(var(--lumo-text-field-size) + var(--lumo-space-xs));
+    padding-top: 0;
+  }
+
+  :host([theme~='label-aside'][has-label]) [part='label'] {
+    padding-bottom: 0;
+  }
 }

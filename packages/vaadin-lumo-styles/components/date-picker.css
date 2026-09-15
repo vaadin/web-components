@@ -9,6 +9,7 @@
 @import '../src/mixins/field-helper.css';
 @import '../src/mixins/field-helper-above.css';
 @import '../src/mixins/field-label.css';
+@import '../src/mixins/field-label-aside.css';
 @import '../src/mixins/field-required.css';
 @import '../src/mixins/loader.css';
 @import '../src/mixins/menu-overlay-core.css';
@@ -27,6 +28,7 @@
   --_lumo-vaadin-date-picker-inject: 1;
   --_lumo-vaadin-date-picker-inject-modules:
     lumo_mixins_field-label,
+    lumo_mixins_field-label-aside,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
     lumo_mixins_field-button,
