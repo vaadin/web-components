@@ -55,6 +55,7 @@
     white-space: normal;
     word-break: break-word;
     padding-bottom: 0;
+    text-align: var(--vaadin-input-field-label-aside-text-align, inherit);
   }
 
   :host([theme~='label-aside'][theme~='helper-above-field'][has-helper]) [part='label'] {
