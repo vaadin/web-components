@@ -333,6 +333,7 @@ describe('chips', () => {
         const chips = getChips(comboBox);
         expect(chips[1].hasAttribute('focused')).to.be.false;
         expect(chips[2].hasAttribute('focused')).to.be.true;
+        expect(getFocusedItemIndex(comboBox)).to.equal(-1);
       });
 
       it('should not mark last chip on Backspace as focused when readonly', async () => {
