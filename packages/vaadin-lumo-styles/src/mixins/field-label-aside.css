@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_mixins_field-label-aside {
-  :host([theme~='label-aside']) {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) {
     --_label-aside-width: 0px;
     --_label-aside-gap: 0px;
     --_helper-above-field: ;
@@ -22,34 +22,34 @@
     column-gap: var(--_label-aside-gap);
   }
 
-  :host([theme~='label-aside'][has-label]) {
+  :host(:is([theme~='label-aside'][has-label], [data-form-layout-labels-aside])) {
     --_label-aside-width: var(--vaadin-input-field-label-aside-width, auto);
     --_label-aside-gap: var(--vaadin-input-field-label-aside-gap, 1em);
     padding-top: var(--lumo-space-xs);
   }
 
-  :host([theme~='label-aside'][theme~='helper-above-field']) {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])[theme~='helper-above-field']) {
     --_helper-above-field: initial;
     --_helper-below-field: ;
   }
 
-  :host([theme~='label-aside'])::before {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside]))::before {
     grid-column: baseline;
     grid-row: 1 / baseline;
     align-self: end;
     margin-bottom: calc(var(--_input-height, var(--lumo-size-s)) * -1);
   }
 
-  :host([theme~='label-aside'][has-label])::before,
-  :host([theme~='label-aside'][theme~='small'][has-label])::before {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])[has-label])::before,
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])[theme~='small'][has-label])::before {
     margin-top: 0;
   }
 
-  :host([theme~='label-aside']) [class$='container'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) [class$='container'] {
     display: contents;
   }
 
-  :host([theme~='label-aside']) [part='label'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) [part='label'] {
     grid-area: label;
     align-self: baseline;
     white-space: normal;
@@ -58,47 +58,48 @@
     text-align: var(--vaadin-input-field-label-aside-text-align, inherit);
   }
 
-  :host([theme~='label-aside'][theme~='helper-above-field'][has-helper]) [part='label'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])[theme~='helper-above-field'][has-helper])
+    [part='label'] {
     padding-bottom: 0;
   }
 
-  :host([theme~='label-aside'][required]) [part='required-indicator']::after {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])[required]) [part='required-indicator']::after {
     right: auto;
     left: auto;
   }
 
-  :host([theme~='label-aside']) [part='input-field'],
-  :host([theme~='label-aside']) [part='input-fields'],
-  :host([theme~='label-aside']) [part='group-field'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) [part='input-field'],
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) [part='input-fields'],
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) [part='group-field'] {
     grid-area: input;
     align-self: baseline;
   }
 
-  :host([theme~='label-aside']) [part='input-field'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) [part='input-field'] {
     width: var(--vaadin-field-default-width, 12em);
     min-width: 100%;
     max-width: 100%;
   }
 
-  :host([theme~='label-aside']) [part='helper-text'],
-  :host([theme~='label-aside']) [part='error-message'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) [part='helper-text'],
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) [part='error-message'] {
     margin-inline: 0;
     padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
   }
 
-  :host([theme~='label-aside'][dir='rtl']) [part='error-message'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])[dir='rtl']) [part='error-message'] {
     margin-right: 0;
   }
 
-  :host([theme~='label-aside']) [part='helper-text'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) [part='helper-text'] {
     grid-area: helper;
   }
 
-  :host([theme~='label-aside']) [part='error-message'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) [part='error-message'] {
     grid-area: error;
   }
 
-  :host([theme~='label-aside'][has-label]) ::slotted([slot='tooltip']) {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])[has-label]) ::slotted([slot='tooltip']) {
     --vaadin-tooltip-offset-bottom: 0px;
   }
 }

@@ -23,7 +23,7 @@
   }
 
   /* Use a text baseline instead of the selected item's empty checkmark. */
-  :host([theme~='label-aside']) [part='input-field']::before {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) [part='input-field']::before {
     content: '\2003' / '';
     width: 0;
     font-size: var(--vaadin-input-field-value-font-size, var(--lumo-font-size-m));

@@ -8,7 +8,7 @@
     flex: auto;
   }
 
-  :host([theme~='label-aside']) [part='input-field'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside])) [part='input-field'] {
     height: 100%;
   }
 
