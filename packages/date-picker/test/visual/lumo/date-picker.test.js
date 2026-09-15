@@ -59,6 +59,12 @@ describe('date-picker', () => {
         await visualDiff(div, `${dir}-label`);
       });
 
+      it('label aside', async () => {
+        element.setAttribute('theme', 'label-aside');
+        element.label = 'Label';
+        await visualDiff(div, `${dir}-label-aside`);
+      });
+
       it('placeholder', async () => {
         element.placeholder = 'Placeholder';
         await visualDiff(div, `${dir}-placeholder`);
@@ -174,11 +180,5 @@ describe('date-picker', () => {
       await sendMouseToElement({ type: 'click', element });
       await visualDiff(div, 'pointer-focus-ring-enabled');
     });
-  });
-
-  it('label aside', async () => {
-    element.setAttribute('theme', 'label-aside');
-    element.label = 'Label';
-    await visualDiff(div, 'label-aside');
   });
 });

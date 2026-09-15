@@ -43,6 +43,12 @@ describe('multi-select-combo-box', () => {
     await visualDiff(div, 'label');
   });
 
+  it('label aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    await visualDiff(div, 'label-aside');
+  });
+
   it('placeholder', async () => {
     element.placeholder = 'Placeholder';
     await visualDiff(div, 'placeholder');
@@ -237,11 +243,5 @@ describe('multi-select-combo-box', () => {
       element.inputElement.click();
       await visualDiff(div, 'select-all-truncated-label');
     });
-  });
-
-  it('label aside', async () => {
-    element.setAttribute('theme', 'label-aside');
-    element.label = 'Label';
-    await visualDiff(div, 'label-aside');
   });
 });

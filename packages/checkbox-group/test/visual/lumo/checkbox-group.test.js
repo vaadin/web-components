@@ -66,6 +66,12 @@ describe('checkbox-group', () => {
       await visualDiff(div, 'label-disabled');
     });
 
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'label-aside');
+    });
+
     it('value', async () => {
       element.value = ['a', 'c'];
       await visualDiff(div, 'value');
@@ -121,12 +127,6 @@ describe('checkbox-group', () => {
         checkbox.style.marginRight = '-3px';
       });
       await visualDiff(div, 'full-width');
-    });
-
-    it('label aside', async () => {
-      element.setAttribute('theme', 'label-aside');
-      element.label = 'Label';
-      await visualDiff(div, 'label-aside');
     });
   });
 

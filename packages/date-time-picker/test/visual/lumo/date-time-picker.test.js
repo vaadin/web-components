@@ -38,6 +38,12 @@ describe('date-time-picker', () => {
       await visualDiff(div, 'label');
     });
 
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'label-aside');
+    });
+
     it('placeholder', async () => {
       element.datePlaceholder = 'Date';
       element.timePlaceholder = 'Time';
@@ -76,12 +82,6 @@ describe('date-time-picker', () => {
       element.helperText = 'Helper text';
       element.setAttribute('theme', 'helper-above-field');
       await visualDiff(div, 'helper-above-field');
-    });
-
-    it('label aside', async () => {
-      element.setAttribute('theme', 'label-aside');
-      element.label = 'Label';
-      await visualDiff(div, 'label-aside');
     });
   });
 
