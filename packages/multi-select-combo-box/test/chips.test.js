@@ -487,6 +487,26 @@ describe('chips', () => {
             expect(inputElement.value).to.equal('lem');
           });
 
+          it(`should move caret to the start on ${PREV_KEY} when a dropdown item is focused with non-empty filter`, async () => {
+            await sendKeys({ type: 'lem' });
+            await nextRender();
+            await sendKeys({ press: 'ArrowDown' });
+            await sendKeys({ press: PREV_KEY });
+            expect(inputElement.selectionStart).to.equal(0);
+            expect(inputElement.selectionEnd).to.equal(0);
+          });
+
+          it(`should mark previous chip on second ${PREV_KEY} when a dropdown item is focused with non-empty filter`, async () => {
+            await sendKeys({ type: 'lem' });
+            await nextRender();
+            await sendKeys({ press: 'ArrowDown' });
+            await sendKeys({ press: PREV_KEY });
+            await sendKeys({ press: PREV_KEY });
+            const chips = getChips(comboBox);
+            expect(chips[1].hasAttribute('focused')).to.be.true;
+            expect(chips[2].hasAttribute('focused')).to.be.false;
+          });
+
           it(`should keep the dropdown item focused on ${NEXT_KEY} when no chip is focused`, async () => {
             await sendKeys({ press: 'ArrowDown' });
             await sendKeys({ press: 'ArrowDown' });

@@ -1243,8 +1243,12 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
       // The label of the highlighted item was prefilled into the input, so
       // restore the filter once the highlight moved from the item to a chip.
+      // Place the caret at the start of the input, so that the next arrow
+      // key press continues to navigate the chips instead of moving the caret.
       if (hadFocusedItem && this._focusModel.hasFocusedChip) {
-        this._revertInputValue();
+        event.preventDefault();
+        this._inputElementValue = this.filter;
+        this._setSelectionRange(0, 0);
       }
     }
 
