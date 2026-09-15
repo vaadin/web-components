@@ -162,7 +162,7 @@ export const formLayoutStyles = css`
     --_max-width: var(--_max-width-labels-aside);
   }
 
-  :host([auto-responsive][labels-aside-active]) #layout {
+  :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
     --_form-item-labels-above: ' '; /* false */
     --_form-item-labels-aside: initial; /* true */
     --_grid-column-width: var(--_column-width-labels-aside);
