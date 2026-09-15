@@ -77,6 +77,8 @@ export const FieldMixin = (superclass) =>
     constructor() {
       super();
 
+      this._hasVaadinFieldMixin = true;
+
       this._labelController.addEventListener('slot-content-changed', (event) => {
         this.#onLabelSlotContentChange(event);
       });
