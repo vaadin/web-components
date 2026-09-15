@@ -37,6 +37,7 @@
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
+    "@vaadin/a11y-base": "~25.1.14",
     "@vaadin/component-base": "~25.1.14",
     "@vaadin/lit-renderer": "~25.1.14",
     "@vaadin/overlay": "~25.1.14",

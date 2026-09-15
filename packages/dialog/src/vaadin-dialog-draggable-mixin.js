@@ -3,8 +3,9 @@
  * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
+import { ClickTracker, eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
 
 /**
  * @polymerMixin
@@ -48,6 +49,7 @@ export const DialogDraggableMixin = (superClass) =>
       super.ready();
       this._originalBounds = {};
       this._originalMouseCoords = {};
+      this.__dragTracker = new ClickTracker();
       this._startDrag = this._startDrag.bind(this);
       this._drag = this._drag.bind(this);
       this._stopDrag = this._stopDrag.bind(this);
@@ -90,6 +92,8 @@ export const DialogDraggableMixin = (superClass) =>
         if ((isResizerContainer && !isResizerContainerScrollbar) || isContentPart || isDraggable) {
           // Signal that we're handling this drag event, so parent dialogs won't also drag
           e.preventDefault();
+          // `preventDefault()` above cancels the native focus change, restored in `_stopDrag()`
+          this.__dragTracker.start(e);
           this._originalBounds = this.$.overlay.getBounds();
           const event = getMouseOrFirstTouchEvent(e);
           this._originalMouseCoords = { top: event.pageY, left: event.pageX };
@@ -132,7 +136,12 @@ export const DialogDraggableMixin = (superClass) =>
     }
 
     /** @private */
-    _stopDrag() {
+    _stopDrag(e) {
+      // Focus on click, not on drag, so that moving the dialog doesn't interrupt editing
+      if (this.__dragTracker.isClick(e) && !this.$.overlay.containsFocus()) {
+        this.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+      }
+
       this.dispatchEvent(new CustomEvent('dragged', { detail: { top: this.top, left: this.left } }));
       window.removeEventListener('mouseup', this._stopDrag);
       window.removeEventListener('touchend', this._stopDrag);
