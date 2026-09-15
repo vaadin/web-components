@@ -19,3 +19,18 @@ export { getMouseOrFirstTouchEvent };
 declare function eventInWindow(e: MouseEvent | TouchEvent): boolean;
 
 export { eventInWindow };
+
+/**
+ * Remembers where a pointer gesture started, to tell a click from a drag once it ends.
+ */
+export declare class ClickTracker {
+  /**
+   * Stores the position where the gesture started.
+   */
+  start(e: MouseEvent | TouchEvent): void;
+
+  /**
+   * Returns true if the pointer hasn't moved since the gesture started.
+   */
+  isClick(e: MouseEvent | TouchEvent): boolean;
+}

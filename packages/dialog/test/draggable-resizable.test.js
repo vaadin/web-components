@@ -1,6 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse, sendMouseToElement } from '@vaadin/test-runner-commands';
-import { fixtureSync, nextFrame, nextRender, nextResize, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
+import {
+  fixtureSync,
+  middleOfNode,
+  nextFrame,
+  nextRender,
+  nextResize,
+  nextUpdate,
+  oneEvent,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './draggable-resizable-styles.js';
 import '../src/vaadin-dialog.js';
@@ -34,16 +42,8 @@ function dispatchMouseEvent(target, type, coords = { x: 0, y: 0 }, button = 0) {
   target.dispatchEvent(e);
 }
 
-function centerOf(target) {
-  const bounds = target.getBoundingClientRect();
-  return {
-    x: Math.floor(bounds.left + bounds.width / 2),
-    y: Math.floor(bounds.top + bounds.height / 2),
-  };
-}
-
 function dragBy(target, dx, dy, mouseButton = 0) {
-  const fromXY = centerOf(target);
+  const fromXY = middleOfNode(target);
   const toXY = { x: fromXY.x + dx, y: fromXY.y + dy };
   dispatchMouseEvent(target, 'mousedown', fromXY, mouseButton);
   dispatchMouseEvent(target, 'mousemove', fromXY, mouseButton);
@@ -1199,14 +1199,14 @@ describe('focus', () => {
   let wrapper, dialog, background, container, overlayPart;
 
   function clickOn(target) {
-    const coords = centerOf(target);
+    const coords = middleOfNode(target);
     dispatchMouseEvent(target, 'mousedown', coords);
     dispatchMouseEvent(target, 'mouseup', coords);
   }
 
   // Unlike `touchstart`, `touchend` has an empty `touches` list
   function tapOn(target) {
-    const { x, y } = centerOf(target);
+    const { x, y } = middleOfNode(target);
     const point = { clientX: x, clientY: y, pageX: x, pageY: y };
     [
       ['touchstart', [point]],
@@ -1312,21 +1312,18 @@ describe('focus', () => {
 
   // Synthetic events don't move focus, so these drive the real browser pointer
   describe('real pointer input', () => {
+    let titlePart;
+
     beforeEach(async () => {
       dialog.draggable = true;
       await open();
       background.focus();
+      // The slotted title is `display: contents`, so aim at the title part instead
+      titlePart = dialog.$.overlay.shadowRoot.querySelector('[part="title"]');
     });
 
     afterEach(async () => {
       await resetMouse();
-    });
-
-    // The slotted title is `display: contents`, so aim at the title part instead
-    let titlePart;
-
-    beforeEach(() => {
-      titlePart = dialog.$.overlay.shadowRoot.querySelector('[part="title"]');
     });
 
     it('should close on Escape press after clicking the header title', async () => {
@@ -1337,10 +1334,12 @@ describe('focus', () => {
     });
 
     it('should keep focus on the background element when the header is dragged', async () => {
-      const { x, y } = centerOf(titlePart);
-      await sendMouse({ type: 'move', position: [x, y] });
+      // `sendMouse` takes integer viewport coordinates
+      const { x, y } = middleOfNode(titlePart);
+      const [fromX, fromY] = [Math.round(x), Math.round(y)];
+      await sendMouse({ type: 'move', position: [fromX, fromY] });
       await sendMouse({ type: 'down' });
-      await sendMouse({ type: 'move', position: [x + 50, y + 50] });
+      await sendMouse({ type: 'move', position: [fromX + 50, fromY + 50] });
       await sendMouse({ type: 'up' });
       expect(document.activeElement).to.equal(background);
     });

@@ -3,19 +3,10 @@
  * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { getDeepActiveElement, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
-import { getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
-
-// Pointer movement in pixels above which a gesture is a drag, not a click.
-// Same value as `TRACK_DISTANCE` in `@vaadin/component-base/src/gestures.js`.
-const DRAG_DISTANCE = 5;
 
 export const DialogBaseMixin = (superClass) =>
   class DialogBaseMixin extends superClass {
-    /** Pointer position where the current drag or resize gesture started */
-    #gestureStart = null;
-
     static get properties() {
       return {
         /**
@@ -167,42 +158,6 @@ export const DialogBaseMixin = (superClass) =>
     /** @private */
     __handleOverlayClosed() {
       this.dispatchEvent(new CustomEvent('closed'));
-    }
-
-    /**
-     * Remembers where a drag or resize gesture started, so that `_focusOnGestureEnd()`
-     * can tell a click from a drag. Does nothing when the dialog already contains focus.
-     *
-     * @param {!MouseEvent | !TouchEvent} event
-     * @protected
-     */
-    _saveGestureStart(event) {
-      const hasFocus = this.$.overlay._deepContains(getDeepActiveElement());
-      const { clientX, clientY } = getMouseOrFirstTouchEvent(event);
-      this.#gestureStart = hasFocus ? null : { x: clientX, y: clientY };
-    }
-
-    /**
-     * Focuses the dialog when a drag or resize gesture ends without the pointer moving,
-     * so that a modeless dialog responds to Esc after being clicked. A real drag leaves
-     * focus alone, to not interrupt editing elsewhere.
-     *
-     * @param {!MouseEvent | !TouchEvent} event
-     * @protected
-     */
-    _focusOnGestureEnd(event) {
-      const start = this.#gestureStart;
-      this.#gestureStart = null;
-
-      if (!start) {
-        return;
-      }
-
-      // Viewport coordinates, so scrolling during the gesture doesn't count as movement
-      const { clientX, clientY } = getMouseOrFirstTouchEvent(event);
-      if (Math.abs(clientX - start.x) < DRAG_DISTANCE && Math.abs(clientY - start.y) < DRAG_DISTANCE) {
-        this.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
-      }
     }
 
     /** @protected */
