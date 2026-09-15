@@ -48,6 +48,12 @@ describe('combo-box', () => {
     await visualDiff(div, 'label');
   });
 
+  it('label aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    await visualDiff(div, 'label-aside');
+  });
+
   it('placeholder', async () => {
     element.placeholder = 'Placeholder';
     await visualDiff(div, 'placeholder');
@@ -146,11 +152,5 @@ describe('combo-box', () => {
       await sendMouseToElement({ type: 'click', element });
       await visualDiff(div, 'pointer-focus-ring-enabled');
     });
-  });
-
-  it('label aside', async () => {
-    element.setAttribute('theme', 'label-aside');
-    element.label = 'Label';
-    await visualDiff(div, 'label-aside');
   });
 });

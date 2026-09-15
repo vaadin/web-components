@@ -49,6 +49,12 @@ describe('text-field', () => {
     await visualDiff(div, 'label');
   });
 
+  it('label aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    await visualDiff(div, 'label-aside');
+  });
+
   it('placeholder', async () => {
     element.placeholder = 'Placeholder';
     await visualDiff(div, 'placeholder');
@@ -231,11 +237,5 @@ describe('text-field', () => {
       await sendMouseToElement({ type: 'click', element });
       await visualDiff(div, 'pointer-focus-ring-enabled-invalid');
     });
-  });
-
-  it('label aside', async () => {
-    element.setAttribute('theme', 'label-aside');
-    element.label = 'Label';
-    await visualDiff(div, 'label-aside');
   });
 });

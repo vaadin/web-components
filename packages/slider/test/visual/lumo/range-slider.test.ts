@@ -82,6 +82,22 @@ describe('range-slider', () => {
       await visualDiff(div, 'label-disabled');
     });
 
+    describe('label aside', () => {
+      beforeEach(() => {
+        element.setAttribute('theme', 'label-aside');
+        element.label = 'Label';
+      });
+
+      it('default', async () => {
+        await visualDiff(div, 'label-aside');
+      });
+
+      it('min max visible', async () => {
+        element.minMaxVisible = true;
+        await visualDiff(div, 'label-aside-min-max-visible');
+      });
+    });
+
     it('required', async () => {
       element.label = 'Label';
       element.required = true;
@@ -98,22 +114,6 @@ describe('range-slider', () => {
       element.helperText = 'Helper text';
       element.setAttribute('theme', 'helper-above-field');
       await visualDiff(div, 'helper-above-field');
-    });
-
-    describe('label aside', () => {
-      beforeEach(() => {
-        element.setAttribute('theme', 'label-aside');
-        element.label = 'Label';
-      });
-
-      it('default', async () => {
-        await visualDiff(div, 'label-aside');
-      });
-
-      it('min max visible', async () => {
-        element.minMaxVisible = true;
-        await visualDiff(div, 'label-aside-min-max-visible');
-      });
     });
   });
 
