@@ -61,6 +61,11 @@
     padding-bottom: 0;
   }
 
+  :host([theme~='label-aside'][required]) [part='required-indicator']::after {
+    right: auto;
+    left: auto;
+  }
+
   :host([theme~='label-aside']) [part='input-field'],
   :host([theme~='label-aside']) [part='input-fields'],
   :host([theme~='label-aside']) [part='group-field'] {

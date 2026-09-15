@@ -119,6 +119,13 @@ describe('field', () => {
           await visualDiff(div, `${dir}-field-label-aside-required`);
         });
 
+        it('required and wrapped label', async () => {
+          element.label = 'Label that wraps on multiple lines';
+          element.required = true;
+          element.style.setProperty('--vaadin-input-field-label-aside-width', '8em');
+          await visualDiff(div, `${dir}-field-label-aside-required-wrapped-label`);
+        });
+
         it('error message', async () => {
           element.errorMessage = 'This field is required';
           element.invalid = true;
