@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isElementHidden } from '@vaadin/a11y-base/src/focus-utils.js';
+import { addValuesToAttribute, removeValuesFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { AbstractLayout } from './abstract-layout.js';
 
 /**
@@ -62,6 +63,9 @@ export class AutoResponsiveLayout extends AbstractLayout {
     this.__children.forEach((child) => {
       child.style.removeProperty('--_grid-colstart');
       child.style.removeProperty('--_grid-colspan');
+
+      child.removeAttribute('data-form-layout-labels-aside-active');
+      removeValuesFromAttribute(child, 'theme', 'label-aside');
     });
   }
 
@@ -133,7 +137,25 @@ export class AutoResponsiveLayout extends AbstractLayout {
     host.style.setProperty('--_min-columns', props.minColumns);
     host.style.setProperty('--_max-columns', Math.min(Math.max(props.minColumns, props.maxColumns), maxColumns));
 
-    host.$.layout.toggleAttribute('fits-labels-aside', this.props.labelsAside && this.__fitsLabelsAside);
+    const labelsAsideActive = props.labelsAside && this.__fitsLabelsAside;
+    host.$.layout.toggleAttribute('fits-labels-aside', labelsAsideActive);
+
+    children.forEach((child) => {
+      if (isBreakLine(child)) {
+        return;
+      }
+
+      child.toggleAttribute('data-form-layout-labels-aside-active', labelsAsideActive);
+
+      if (child._hasVaadinFieldMixin && !['checkbox', 'radio'].includes(child.type)) {
+        if (labelsAsideActive) {
+          addValuesToAttribute(child, 'theme', 'label-aside');
+        } else {
+          removeValuesFromAttribute(child, 'theme', 'label-aside');
+        }
+      }
+    });
+
     host.$.layout.style.setProperty('--_grid-rendered-column-count', this.__renderedColumnCount);
   }
 

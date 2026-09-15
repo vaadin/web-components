@@ -100,7 +100,7 @@
     padding-bottom: 0.5em;
   }
 
-  :host([theme~='label-aside'][has-label]) {
+  :host([theme~='label-aside']:is([has-label], [data-form-layout-labels-aside-active])) {
     --_input-height: calc(var(--lumo-text-field-size) + var(--lumo-space-xs));
     padding-top: 0;
   }

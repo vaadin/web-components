@@ -216,7 +216,7 @@ export const fieldLabelAside = css`
     column-gap: var(--_label-aside-gap);
   }
 
-  :host([theme~='label-aside'][has-label]) {
+  :host([theme~='label-aside']:is([has-label], [data-form-layout-labels-aside-active])) {
     --_label-aside-width: var(--vaadin-input-field-label-aside-width, auto);
     --_label-aside-gap: var(--vaadin-input-field-label-aside-gap, 1em);
   }
