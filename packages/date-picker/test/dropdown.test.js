@@ -3,7 +3,7 @@ import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
 import { aTimeout, fire, fixtureSync, mousedown, nextRender, oneEvent, touchstart } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { getFocusableCell, monthsEqual, open, untilOverlayRendered } from './helpers.js';
+import { getFocusableDateButton, monthsEqual, open, untilOverlayRendered } from './helpers.js';
 
 describe('dropdown', () => {
   let datePicker, input, overlay;
@@ -273,10 +273,10 @@ describe('dropdown', () => {
 
   describe('date tap', () => {
     function dateTap() {
-      const date = getFocusableCell(datePicker);
-      mousedown(date);
-      date.focus();
-      date.click();
+      const button = getFocusableDateButton(datePicker);
+      mousedown(button);
+      button.focus();
+      button.click();
     }
 
     it('should close the overlay on date tap', async () => {
