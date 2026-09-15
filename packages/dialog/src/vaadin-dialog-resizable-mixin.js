@@ -3,7 +3,9 @@
  * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
+import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { ClickTracker, eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
+
 /**
  * @polymerMixin
  */
@@ -27,6 +29,7 @@ export const DialogResizableMixin = (superClass) =>
       super.ready();
       this._originalBounds = {};
       this._originalMouseCoords = {};
+      this.__resizeTracker = new ClickTracker();
       this._resizeListeners = { start: {}, resize: {}, stop: {} };
       this._addResizeListeners();
     }
@@ -38,7 +41,7 @@ export const DialogResizableMixin = (superClass) =>
         const resizer = document.createElement('div');
         this._resizeListeners.start[direction] = (e) => this._startResize(e, direction);
         this._resizeListeners.resize[direction] = (e) => this._resize(e, direction);
-        this._resizeListeners.stop[direction] = () => this._stopResize(direction);
+        this._resizeListeners.stop[direction] = (e) => this._stopResize(e, direction);
         if (direction.length === 1) {
           resizer.classList.add('edge');
         }
@@ -63,6 +66,8 @@ export const DialogResizableMixin = (superClass) =>
 
       if (e.button === 0 || e.touches) {
         e.preventDefault();
+        // `preventDefault()` above cancels the native focus change, restored in `_stopResize()`
+        this.__resizeTracker.start(e);
 
         this._originalBounds = this.$.overlay.getBounds();
         const event = getMouseOrFirstTouchEvent(e);
@@ -130,10 +135,16 @@ export const DialogResizableMixin = (superClass) =>
     }
 
     /**
+     * @param {!MouseEvent | !TouchEvent} e
      * @param {!DialogResizableDirection} direction
      * @protected
      */
-    _stopResize(direction) {
+    _stopResize(e, direction) {
+      // Focus on click, not on resize, so that resizing the dialog doesn't interrupt editing
+      if (this.__resizeTracker.isClick(e) && !this.$.overlay.containsFocus()) {
+        this.focus({ preventScroll: true, focusVisible: isKeyboardActive() });
+      }
+
       window.removeEventListener('mousemove', this._resizeListeners.resize[direction]);
       window.removeEventListener('touchmove', this._resizeListeners.resize[direction]);
       window.removeEventListener('mouseup', this._resizeListeners.stop[direction]);

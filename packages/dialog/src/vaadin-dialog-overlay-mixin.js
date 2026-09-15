@@ -3,6 +3,7 @@
  * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { OverlayMixin } from '@vaadin/overlay/src/vaadin-overlay-mixin.js';
 import { setOverlayStateAttribute } from '@vaadin/overlay/src/vaadin-overlay-utils.js';
@@ -60,6 +61,15 @@ export const DialogOverlayMixin = (superClass) =>
      */
     get _contentRoot() {
       return this.owner;
+    }
+
+    /**
+     * Returns true if the overlay contains focus, including nested shadow roots.
+     *
+     * @return {boolean}
+     */
+    containsFocus() {
+      return this._deepContains(getDeepActiveElement());
     }
 
     /**
