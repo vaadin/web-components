@@ -43,7 +43,7 @@ describe('items', () => {
       });
 
       it(`should change the 'model.focused' property`, () => {
-        comboBox._focusedIndex = 0;
+        comboBox._focusModel.focusItemAt(0);
 
         const model = comboBox.renderer.lastCall.args[2];
 

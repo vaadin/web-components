@@ -137,7 +137,7 @@ describe('i18n', () => {
     it('should set the value from the focused item without using the parser', () => {
       const parseTime = sinon.spy(strictAmPmI18n, 'parseTime');
       timePicker.open();
-      timePicker._focusedIndex = 10;
+      timePicker._focusModel.focusItemAt(10);
       enter(inputElement);
       parseTime.restore();
       expect(parseTime).to.be.not.called;

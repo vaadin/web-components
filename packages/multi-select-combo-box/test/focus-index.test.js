@@ -110,14 +110,14 @@ describe('__focusIndex', () => {
 
       arrowUpKeyDown(comboBox.inputElement);
       const lastIndex = comboBox._dropdownItems.length - 1;
-      expect(comboBox._focusedIndex).to.equal(lastIndex);
+      expect(comboBox._focusModel.focusedItemIndex).to.equal(lastIndex);
       expect(comboBox._dropdownItems[lastIndex]).to.be.instanceof(ComboBoxPlaceholder);
 
       // Clearing the cache should preserve the focused index,
       // even though it is still a placeholder after the clear.
       comboBox.clearCache();
 
-      expect(comboBox._focusedIndex).to.equal(lastIndex);
+      expect(comboBox._focusModel.focusedItemIndex).to.equal(lastIndex);
     });
   });
 });

@@ -128,7 +128,7 @@ describe('basic features', () => {
 
       comboBox.open();
       setInputValue(comboBox, 'a');
-      comboBox._focusedIndex = -1;
+      comboBox._focusModel.clear();
       outsideClick();
 
       expect(comboBox.value).to.eql('foo');
