@@ -69,7 +69,6 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * `loading`              | Set when loading items from the data provider
  * `opened`               | Set when the dropdown is open
  * `readonly`             | Set to a readonly element
- * `has-select-all`       | Set on the overlay when the select all button is shown
  *
  * The following custom CSS properties are available for styling:
  *
