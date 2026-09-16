@@ -20,7 +20,7 @@ describe('select all', () => {
     inputElement = comboBox.inputElement;
   });
 
-  describe('enabling', () => {
+  describe('basic', () => {
     beforeEach(() => {
       comboBox.opened = true;
     });
@@ -35,6 +35,13 @@ describe('select all', () => {
 
       comboBox.selectAllButtonVisible = false;
       expect(getSelectAllButton(comboBox)).to.be.null;
+    });
+
+    it('should render the button with the button role and out of the tab order', () => {
+      comboBox.selectAllButtonVisible = true;
+      button = getSelectAllButton(comboBox);
+      expect(button.getAttribute('role')).to.equal('button');
+      expect(button.getAttribute('tabindex')).to.equal('-1');
     });
 
     it('should not render button when readonly', () => {
@@ -375,10 +382,6 @@ describe('select all', () => {
 
       await sendKeys({ press: 'Enter' });
       expect(submitSpy).to.be.not.called;
-    });
-
-    it('should have the button role', () => {
-      expect(button.getAttribute('role')).to.equal('button');
     });
   });
 
