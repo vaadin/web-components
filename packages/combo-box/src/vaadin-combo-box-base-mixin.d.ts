@@ -9,10 +9,12 @@ import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
+import type { ComboBoxHighlightMixinClass } from './vaadin-combo-box-highlight-mixin.js';
 
 export declare function ComboBoxBaseMixin<T extends Constructor<HTMLElement>>(
   base: T,
 ): Constructor<ComboBoxBaseMixinClass> &
+  Constructor<ComboBoxHighlightMixinClass> &
   Constructor<DisabledMixinClass> &
   Constructor<FocusMixinClass> &
   Constructor<InputMixinClass> &
