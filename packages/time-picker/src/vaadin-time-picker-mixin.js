@@ -309,11 +309,10 @@ export const TimePickerMixin = (superClass) =>
      * @override
      */
     _commitValue() {
-      if (this._focusedIndex > -1) {
-        // Commit value based on focused index
-        const focusedItem = this._dropdownItems[this._focusedIndex];
-        this.__setValueFromTime(parseISOTime(focusedItem.value));
-        this._focusedIndex = -1;
+      if (this._hasHighlightedItem) {
+        // Commit value based on the highlighted item
+        this.__setValueFromTime(parseISOTime(this._highlightedItem.value));
+        this._clearItemHighlight();
       } else if (this._inputElementValue !== this._comboBoxValue) {
         // Committing text that did not change would parse and format it again,
         // and set the value from the result, so skip it.
