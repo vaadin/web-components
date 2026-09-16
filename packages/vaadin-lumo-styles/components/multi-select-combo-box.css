@@ -23,6 +23,7 @@
 @import '../src/components/multi-select-combo-box-container.css';
 @import '../src/components/multi-select-combo-box-item.css';
 @import '../src/components/multi-select-combo-box-overlay.css';
+@import '../src/components/multi-select-combo-box-select-all-button.css';
 @import '../src/components/multi-select-combo-box.css';
 
 :root,
@@ -51,6 +52,9 @@
     lumo_components_item,
     lumo_components_combo-box-item,
     lumo_components_multi-select-combo-box-item;
+
+  --_lumo-vaadin-multi-select-combo-box-select-all-button-inject: 1;
+  --_lumo-vaadin-multi-select-combo-box-select-all-button-inject-modules: lumo_components_multi-select-combo-box-select-all-button;
 
   --_lumo-vaadin-multi-select-combo-box-inject: 1;
   --_lumo-vaadin-multi-select-combo-box-inject-modules:

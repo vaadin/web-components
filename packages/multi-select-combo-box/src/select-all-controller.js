@@ -3,29 +3,26 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, nothing } from 'lit';
-import { createRef, ref } from 'lit/directives/ref.js';
 import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
 /**
  * A controller that manages the select all button of `<vaadin-multi-select-combo-box>`.
- * It renders the button with a label reflecting the current selection, selects or
- * deselects the items matching the current filter when the button is clicked, and
- * keeps focus inside the component while moving between the input and the button.
+ * It adds the button to the light DOM of the host in the `select-all` slot while it is
+ * visible, updates the label to reflect the current selection, selects or deselects
+ * the items matching the current filter when the button is activated, and keeps focus
+ * inside the component while moving between the input and the button.
  *
  * The button is only supported with the `items` API. With a data provider, the
  * component may not have all items loaded, so the button is not rendered.
  *
- * The host renders the button calling `render()` from its template, and updates
- * the controller by calling the `willUpdate` hook.
+ * The host updates the controller by calling the `willUpdate` hook, and passes
+ * its keydown events to `handleKeyDown`.
  */
 export class SelectAllController {
   #host;
 
-  #buttonRef = createRef();
-
-  #boundOnClick = this.#onClick.bind(this);
+  #element;
 
   #visible = false;
 
@@ -36,6 +33,27 @@ export class SelectAllController {
    */
   constructor(host) {
     this.#host = host;
+
+    const element = document.createElement('vaadin-multi-select-combo-box-select-all-button');
+    element.setAttribute('slot', 'select-all');
+    element.addEventListener('click', () => this.toggleSelection());
+    this.#element = element;
+  }
+
+  /**
+   * Whether the button is currently shown.
+   * @return {boolean}
+   */
+  get visible() {
+    return this.#visible;
+  }
+
+  /**
+   * The button element. Only attached to the host while the button is visible.
+   * @return {HTMLElement}
+   */
+  get element() {
+    return this.#element;
   }
 
   /**
@@ -59,22 +77,8 @@ export class SelectAllController {
     if (this.#isButtonFocused() && (!this.#visible || !host._overlayOpened)) {
       host.inputElement.focus();
     }
-  }
 
-  /**
-   * @return {TemplateResult | typeof nothing}
-   */
-  render() {
-    if (!this.#visible) {
-      return nothing;
-    }
-
-    /* avoid unnecessary white space characters before and after the text */
-    return html`
-      <button part="select-all" type="button" ${ref(this.#buttonRef)} @click="${this.#boundOnClick}"
-        >${this.#getText()}</button
-      >
-    `;
+    this.#updateElement();
   }
 
   /**
@@ -100,14 +104,19 @@ export class SelectAllController {
           host.inputElement.focus();
           event.preventDefault();
           return false;
+        case 'Enter':
+        case ' ':
+          // The button is not a native button, so activate it here
+          event.preventDefault();
+          this.toggleSelection();
+          return true;
         default:
-          // Leave other keys to the button, e.g. Enter and Space activating it.
           return true;
       }
     }
 
     // Move focus to the button instead of leaving the component
-    if (event.key === 'Tab' && host._overlayOpened && this.#button) {
+    if (event.key === 'Tab' && host._overlayOpened && this.#visible) {
       event.preventDefault();
       this.#focusButton();
       return true;
@@ -116,22 +125,11 @@ export class SelectAllController {
     return false;
   }
 
-  get #button() {
-    return this.#buttonRef.value;
-  }
-
-  #getText() {
-    const host = this.#host;
-    const { selectAll, deselectAll, selectFiltered, deselectFiltered } = host.__effectiveI18n;
-
-    if (host.filter) {
-      return this.#allSelected ? deselectFiltered : selectFiltered;
-    }
-
-    return this.#allSelected ? deselectAll : selectAll;
-  }
-
-  #onClick() {
+  /**
+   * Selects all items matching the current filter, or deselects
+   * them when all of them are already selected.
+   */
+  toggleSelection() {
     const host = this.#host;
     const filteredItems = this.#getFilteredItems();
     let selectedItems;
@@ -147,6 +145,33 @@ export class SelectAllController {
     this.#announceResult();
   }
 
+  #updateElement() {
+    const host = this.#host;
+    const element = this.#element;
+
+    if (!this.#visible) {
+      element.remove();
+      return;
+    }
+
+    element.label = this.#getText();
+
+    if (element.parentNode !== host) {
+      host.appendChild(element);
+    }
+  }
+
+  #getText() {
+    const host = this.#host;
+    const { selectAll, deselectAll, selectFiltered, deselectFiltered } = host.__effectiveI18n;
+
+    if (host.filter) {
+      return this.#allSelected ? deselectFiltered : selectFiltered;
+    }
+
+    return this.#allSelected ? deselectAll : selectAll;
+  }
+
   #focusButton() {
     const host = this.#host;
 
@@ -158,16 +183,16 @@ export class SelectAllController {
     }
     host._clearHighlight();
 
-    this.#button.focus({ focusVisible: true });
+    this.#element.focus({ focusVisible: true });
     host.removeAttribute('focus-ring');
   }
 
   #isButtonEvent(event) {
-    return !!this.#button && event.composedPath().includes(this.#button);
+    return event.composedPath().includes(this.#element);
   }
 
   #isButtonFocused() {
-    return !!this.#button && this.#button === getDeepActiveElement();
+    return this.#element === getDeepActiveElement();
   }
 
   #getFilteredItems() {

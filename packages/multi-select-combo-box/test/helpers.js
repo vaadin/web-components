@@ -89,4 +89,4 @@ export const getChips = (comboBox) => comboBox.querySelectorAll('vaadin-multi-se
 /**
  * Returns the select all button of the combo-box, or null when it is not rendered.
  */
-export const getSelectAllButton = (comboBox) => comboBox.shadowRoot.querySelector('[part="select-all"]');
+export const getSelectAllButton = (comboBox) => comboBox.querySelector('[slot="select-all"]');

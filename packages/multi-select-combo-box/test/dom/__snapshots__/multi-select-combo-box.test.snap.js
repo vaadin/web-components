@@ -479,31 +479,13 @@ snapshots["vaadin-multi-select-combo-box host opened overlay"] =
   popover="manual"
   role="application"
 >
+  <slot name="select-all">
+  </slot>
   <slot name="overlay">
   </slot>
 </vaadin-multi-select-combo-box-overlay>
 `;
 /* end snapshot vaadin-multi-select-combo-box host opened overlay */
-
-snapshots["vaadin-multi-select-combo-box host opened overlay select all button"] = 
-`<vaadin-multi-select-combo-box-overlay
-  exportparts="overlay, content, loader"
-  id="overlay"
-  no-vertical-overlap=""
-  popover="manual"
-  role="application"
->
-  <button
-    part="select-all"
-    type="button"
-  >
-    Select All
-  </button>
-  <slot name="overlay">
-  </slot>
-</vaadin-multi-select-combo-box-overlay>
-`;
-/* end snapshot vaadin-multi-select-combo-box host opened overlay select all button */
 
 snapshots["vaadin-multi-select-combo-box shadow default"] = 
 `<div class="vaadin-multi-select-combo-box-container">
@@ -565,6 +547,8 @@ snapshots["vaadin-multi-select-combo-box shadow default"] =
   popover="manual"
   role="application"
 >
+  <slot name="select-all">
+  </slot>
   <slot name="overlay">
   </slot>
 </vaadin-multi-select-combo-box-overlay>
@@ -634,6 +618,8 @@ snapshots["vaadin-multi-select-combo-box shadow disabled"] =
   popover="manual"
   role="application"
 >
+  <slot name="select-all">
+  </slot>
   <slot name="overlay">
   </slot>
 </vaadin-multi-select-combo-box-overlay>
@@ -703,6 +689,8 @@ snapshots["vaadin-multi-select-combo-box shadow readonly"] =
   popover="manual"
   role="application"
 >
+  <slot name="select-all">
+  </slot>
   <slot name="overlay">
   </slot>
 </vaadin-multi-select-combo-box-overlay>
@@ -772,9 +760,65 @@ snapshots["vaadin-multi-select-combo-box shadow invalid"] =
   popover="manual"
   role="application"
 >
+  <slot name="select-all">
+  </slot>
   <slot name="overlay">
   </slot>
 </vaadin-multi-select-combo-box-overlay>
 `;
 /* end snapshot vaadin-multi-select-combo-box shadow invalid */
+
+snapshots["vaadin-multi-select-combo-box host opened select all button"] = 
+`<vaadin-multi-select-combo-box
+  focused=""
+  opened=""
+>
+  <vaadin-multi-select-combo-box-scroller
+    aria-multiselectable="true"
+    id="vaadin-multi-select-combo-box-scroller-3"
+    role="listbox"
+    slot="overlay"
+    tabindex="-1"
+  >
+  </vaadin-multi-select-combo-box-scroller>
+  <label
+    for="input-vaadin-multi-select-combo-box-4"
+    id="label-vaadin-multi-select-combo-box-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-multi-select-combo-box-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-autocomplete="list"
+    aria-controls="vaadin-multi-select-combo-box-scroller-3"
+    aria-expanded="true"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    id="input-vaadin-multi-select-combo-box-4"
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+  <vaadin-multi-select-combo-box-chip
+    count="0"
+    hidden=""
+    slot="overflow"
+    title=""
+  >
+  </vaadin-multi-select-combo-box-chip>
+  <vaadin-multi-select-combo-box-select-all-button
+    role="button"
+    slot="select-all"
+    tabindex="-1"
+  >
+  </vaadin-multi-select-combo-box-select-all-button>
+</vaadin-multi-select-combo-box>
+`;
+/* end snapshot vaadin-multi-select-combo-box host opened select all button */
 

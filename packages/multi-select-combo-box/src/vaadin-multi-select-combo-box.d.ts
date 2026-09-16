@@ -110,7 +110,6 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `helper-text`          | The helper text element wrapper
  * `required-indicator`   | The `required` state indicator element
  * `toggle-button`        | The toggle button
- * `select-all`           | The button for selecting or deselecting all items, shown in the overlay
  * `overlay`              | The overlay container
  * `content`              | The overlay content
  * `loader`               | The loading indicator shown while loading items
@@ -198,6 +197,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  *
  * - `<vaadin-multi-select-combo-box-chip>`
  * - `<vaadin-multi-select-combo-box-item>` - has the same API as `<vaadin-item>`.
+ * - `<vaadin-multi-select-combo-box-select-all-button>`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *

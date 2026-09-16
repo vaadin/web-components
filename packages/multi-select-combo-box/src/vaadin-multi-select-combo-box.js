@@ -8,6 +8,7 @@ import './vaadin-multi-select-combo-box-container.js';
 import './vaadin-multi-select-combo-box-item.js';
 import './vaadin-multi-select-combo-box-overlay.js';
 import './vaadin-multi-select-combo-box-scroller.js';
+import './vaadin-multi-select-combo-box-select-all-button.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -48,7 +49,6 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * `helper-text`          | The helper text element wrapper
  * `required-indicator`   | The `required` state indicator element
  * `toggle-button`        | The toggle button
- * `select-all`           | The button for selecting or deselecting all items, shown in the overlay
  * `overlay`              | The overlay container
  * `content`              | The overlay content
  * `loader`               | The loading indicator shown while loading items
@@ -136,6 +136,7 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  *
  * - `<vaadin-multi-select-combo-box-chip>`
  * - `<vaadin-multi-select-combo-box-item>` - has the same API as `<vaadin-item>`.
+ * - `<vaadin-multi-select-combo-box-select-all-button>`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -209,9 +210,10 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         ?loading="${this.loading}"
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this._inputField}"
+        ?has-select-all="${this._selectAllController.visible}"
         no-vertical-overlap
       >
-        ${this._selectAllController.render()}
+        <slot name="select-all"></slot>
         <slot name="overlay"></slot>
       </vaadin-multi-select-combo-box-overlay>
     `;

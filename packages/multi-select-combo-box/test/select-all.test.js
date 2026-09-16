@@ -9,7 +9,7 @@ import { getAllItems, getDataProvider, getFocusedItemIndex, getSelectAllButton, 
 describe('select all', () => {
   let comboBox, inputElement, button;
 
-  const getSelectAllText = () => getSelectAllButton(comboBox).textContent.trim();
+  const getSelectAllText = () => getSelectAllButton(comboBox).shadowRoot.textContent.trim();
 
   const clickButton = () => getSelectAllButton(comboBox).click();
 
@@ -20,7 +20,7 @@ describe('select all', () => {
     inputElement = comboBox.inputElement;
   });
 
-  describe('enabling', () => {
+  describe('basic', () => {
     beforeEach(() => {
       comboBox.opened = true;
     });
@@ -35,6 +35,13 @@ describe('select all', () => {
 
       comboBox.selectAllButtonVisible = false;
       expect(getSelectAllButton(comboBox)).to.be.null;
+    });
+
+    it('should render the button with the button role and out of the tab order', () => {
+      comboBox.selectAllButtonVisible = true;
+      button = getSelectAllButton(comboBox);
+      expect(button.getAttribute('role')).to.equal('button');
+      expect(button.getAttribute('tabindex')).to.equal('-1');
     });
 
     it('should not render button when readonly', () => {
@@ -365,8 +372,16 @@ describe('select all', () => {
       expect(getSelectAllText()).to.equal('Deselect All');
     });
 
-    it('should not submit the surrounding form', () => {
-      expect(getSelectAllButton(comboBox).getAttribute('type')).to.equal('button');
+    it('should not submit the surrounding form on Enter', async () => {
+      const form = fixtureSync('<form></form>');
+      form.appendChild(comboBox);
+      const submitSpy = sinon.spy((e) => e.preventDefault());
+      form.addEventListener('submit', submitSpy);
+      await nextRender();
+      button.focus();
+
+      await sendKeys({ press: 'Enter' });
+      expect(submitSpy).to.be.not.called;
     });
   });
 
