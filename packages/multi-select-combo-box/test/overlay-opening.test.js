@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { arrowDownKeyDown, arrowUpKeyDown, click, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { arrowDownKeyDown, arrowUpKeyDown, click, fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../src/vaadin-multi-select-combo-box.js';
 import { getChips } from './helpers.js';
 import { setInputValue } from './helpers.js';
@@ -159,6 +159,23 @@ describe('overlay opening', () => {
   });
 
   describe('opening disallowed', () => {
+    it('should not open on helper element click', async () => {
+      comboBox.helperText = 'Helper Text';
+      await nextUpdate(comboBox);
+      comboBox.querySelector('[slot=helper]').click();
+
+      expect(comboBox.opened).to.be.false;
+    });
+
+    it('should not open on error message element click', () => {
+      comboBox.invalid = true;
+      comboBox.errorMessage = 'Error message';
+
+      comboBox.querySelector('[slot=error-message]').click();
+
+      expect(comboBox.opened).to.be.false;
+    });
+
     it('should not open overlay when disabled is set to true', () => {
       comboBox.disabled = true;
       comboBox.open();
