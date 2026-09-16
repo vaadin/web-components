@@ -123,6 +123,13 @@ describe('multi-select-combo-box', () => {
       await visualDiff(div, 'auto-expand-max-width');
     });
 
+    it('auto expand label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      element.style.maxWidth = '250px';
+      await visualDiff(div, 'auto-expand-label-aside');
+    });
+
     it('auto expand height', async () => {
       element.label = 'Label';
       element.style.width = '300px';

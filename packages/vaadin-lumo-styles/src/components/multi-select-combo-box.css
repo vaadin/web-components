@@ -28,6 +28,8 @@
   :host([theme~='label-aside']) [part='input-field']::before {
     content: '\2003' / '';
     width: 0;
+    align-self: start;
+    line-height: var(--vaadin-input-field-height, var(--_input-height));
   }
 
   ::slotted(input) {
@@ -85,6 +87,10 @@
 
   :host([auto-expand-vertically]) ::slotted([slot='input']) {
     min-height: calc(var(--lumo-text-field-size, var(--lumo-size-m)) - 2 * var(--lumo-space-xs));
+  }
+
+  :host([theme~='label-aside'][auto-expand-vertically]) [part='input-field']::before {
+    line-height: calc(var(--lumo-text-field-size, var(--lumo-size-m)) - 2 * var(--lumo-space-xs));
   }
 
   ::slotted([slot='chip']:not(:last-of-type)),

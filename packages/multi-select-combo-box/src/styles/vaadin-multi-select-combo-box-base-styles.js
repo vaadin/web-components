@@ -23,8 +23,11 @@ export const multiSelectComboBoxStyles = [
       gap: var(--vaadin-multi-select-combo-box-chips-gap, 2px);
     }
 
-    :host(:not([has-value])) #chips {
-      display: none;
+    :host([theme~='label-aside']) [part='input-field']::before {
+      content: '\\2003' / '';
+      width: 0;
+      align-self: start;
+      margin-inline-end: calc(var(--vaadin-input-field-gap, var(--vaadin-gap-s)) * -1);
     }
 
     ::slotted(input) {
