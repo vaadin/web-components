@@ -13,13 +13,14 @@ import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js'
  * the items matching the current filter when the button is activated.
  *
  * The button is never focused. The host highlights it through its highlight state,
- * reflected with the `focused` attribute and `aria-activedescendant`.
+ * which the controller reflects with the `focused` attribute while the input
+ * references the button with `aria-activedescendant`.
  *
  * The button is only supported with the `items` API. With a data provider, the
  * component may not have all items loaded, so the button is not rendered.
  *
- * The host updates the controller by calling the `willUpdate` hook, highlights
- * the button with `focused`, and references it with `id`.
+ * The host updates the controller by calling the `willUpdate` hook, and
+ * references the button with `id`.
  */
 export class SelectAllController {
   #host;
@@ -49,14 +50,6 @@ export class SelectAllController {
    */
   get visible() {
     return this.#visible;
-  }
-
-  get focused() {
-    return this.#element.focused;
-  }
-
-  set focused(focused) {
-    this.#element.focused = focused;
   }
 
   get id() {
@@ -112,6 +105,7 @@ export class SelectAllController {
     }
 
     element.label = this.#getText();
+    element.focused = host._isSelectAllHighlighted;
 
     if (element.parentNode !== host) {
       host.appendChild(element);

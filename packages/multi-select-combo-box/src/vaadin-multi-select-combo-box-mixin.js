@@ -422,7 +422,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
       if (props.has('_highlightState')) {
         this.__updateChipHighlight(props.get('_highlightState'));
-        this._selectAllController.focused = this._isSelectAllHighlighted;
       }
 
       if (props.has('readonly')) {
