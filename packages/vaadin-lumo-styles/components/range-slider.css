@@ -7,6 +7,7 @@
 @import '../src/mixins/field-helper.css';
 @import '../src/mixins/field-helper-above.css';
 @import '../src/mixins/field-label.css';
+@import '../src/mixins/field-label-aside.css';
 @import '../src/mixins/field-required.css';
 @import '../src/mixins/overlay.css';
 @import '../src/mixins/slider.css';
@@ -18,6 +19,7 @@
   --_lumo-vaadin-range-slider-inject: 1;
   --_lumo-vaadin-range-slider-inject-modules:
     lumo_mixins_field-label,
+    lumo_mixins_field-label-aside,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
     lumo_mixins_field-helper,

@@ -53,6 +53,12 @@ describe('time-picker', () => {
         await visualDiff(div, `${dir}-label`);
       });
 
+      it('label aside', async () => {
+        element.setAttribute('theme', 'label-aside');
+        element.label = 'Label';
+        await visualDiff(div, `${dir}-label-aside`);
+      });
+
       it('placeholder', async () => {
         element.placeholder = 'Placeholder';
         await visualDiff(div, `${dir}-placeholder`);
