@@ -56,7 +56,7 @@ export class AutoResponsiveLayout extends AbstractLayout {
     const { host } = this;
     host.style.removeProperty('--_column-width');
     host.style.removeProperty('--_max-columns');
-    host.$.layout.removeAttribute('fits-labels-aside');
+    host.removeAttribute('labels-aside-active');
     host.$.layout.style.removeProperty('--_grid-rendered-column-count');
 
     this.__children.forEach((child) => {
@@ -136,7 +136,7 @@ export class AutoResponsiveLayout extends AbstractLayout {
     host.style.setProperty('--_max-columns', Math.min(Math.max(props.minColumns, props.maxColumns), maxColumns));
 
     const labelsAsideActive = props.labelsAside && this.__fitsLabelsAside;
-    host.$.layout.toggleAttribute('fits-labels-aside', labelsAsideActive);
+    host.toggleAttribute('labels-aside-active', labelsAsideActive);
 
     children.forEach((child) => {
       if (isBreakLine(child)) {
