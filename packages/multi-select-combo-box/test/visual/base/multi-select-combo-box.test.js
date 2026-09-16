@@ -213,7 +213,7 @@ describe('multi-select-combo-box', () => {
     it('select all focus-ring', async () => {
       element.inputElement.focus();
       element.inputElement.click();
-      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'ArrowDown' });
       await visualDiff(div, 'select-all-focus-ring');
     });
 
