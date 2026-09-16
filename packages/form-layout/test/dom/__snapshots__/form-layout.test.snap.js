@@ -45,6 +45,7 @@ snapshots["vaadin-form-layout auto-responsive basic host labelsAside in wide con
 `<vaadin-form-layout
   auto-responsive=""
   labels-aside=""
+  labels-aside-active=""
   style="--_min-columns: 1; --_max-columns: 1; width: 40em;"
 >
   <input
@@ -105,29 +106,6 @@ snapshots["vaadin-form-layout auto-responsive basic shadow default"] =
 </div>
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic shadow default */
-
-snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in narrow container"] = 
-`<div
-  id="layout"
-  style="--_grid-rendered-column-count: 1;"
->
-  <slot id="slot">
-  </slot>
-</div>
-`;
-/* end snapshot vaadin-form-layout auto-responsive basic shadow labelsAside in narrow container */
-
-snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in wide container"] = 
-`<div
-  fits-labels-aside=""
-  id="layout"
-  style="--_grid-rendered-column-count: 1;"
->
-  <slot id="slot">
-  </slot>
-</div>
-`;
-/* end snapshot vaadin-form-layout auto-responsive basic shadow labelsAside in wide container */
 
 snapshots["vaadin-form-layout auto-responsive host autoRows default"] = 
 `<vaadin-form-layout
@@ -516,3 +494,4 @@ snapshots["vaadin-form-layout responsive-steps shadow switching to autoResponsiv
 </div>
 `;
 /* end snapshot vaadin-form-layout responsive-steps shadow switching to autoResponsive */
+

@@ -60,20 +60,6 @@ describe('vaadin-form-layout', () => {
         it('default', async () => {
           await expect(layout).shadowDom.to.equalSnapshot();
         });
-
-        it('labelsAside in narrow container', async () => {
-          layout.style.width = `calc(${DEFAULT_COLUMN_WIDTH} + 6em)`;
-          layout.labelsAside = true;
-          await nextResize(layout);
-          await expect(layout).shadowDom.to.equalSnapshot();
-        });
-
-        it('labelsAside in wide container', async () => {
-          layout.style.width = '40em';
-          layout.labelsAside = true;
-          await nextResize(layout);
-          await expect(layout).shadowDom.to.equalSnapshot();
-        });
       });
     });
 
