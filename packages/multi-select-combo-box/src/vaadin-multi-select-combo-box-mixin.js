@@ -16,6 +16,7 @@ import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { SelectAllController } from './select-all-controller.js';
+import { MultiSelectComboBoxHighlightMixin } from './vaadin-multi-select-combo-box-highlight-mixin.js';
 
 const DEFAULT_I18N = {
   cleared: 'Selection cleared',
@@ -31,7 +32,11 @@ const DEFAULT_I18N = {
 
 export const MultiSelectComboBoxMixin = (superClass) =>
   class MultiSelectComboBoxMixinClass extends I18nMixin(
-    ComboBoxFocusIndexMixin(ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass))))),
+    MultiSelectComboBoxHighlightMixin(
+      ComboBoxFocusIndexMixin(
+        ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass)))),
+      ),
+    ),
   ) {
     static get properties() {
       return {
@@ -296,18 +301,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     /** @protected */
     get _chips() {
       return [...this.querySelectorAll('[slot="chip"]')];
-    }
-
-    /**
-     * @protected
-     */
-    get _hasHighlightedChip() {
-      return this._highlightState.type === 'chip';
-    }
-
-    /** @protected */
-    get _highlightedChip() {
-      return this._hasHighlightedChip ? this._chips[this._highlightState.index] : undefined;
     }
 
     /**
@@ -1256,48 +1249,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         this._clearChipHighlight();
       } else {
         this._highlightLastChip();
-      }
-    }
-
-    /** @protected */
-    _highlightPrevChip() {
-      if (this._hasHighlightedChip) {
-        this._highlightChipAt(Math.max(0, this._highlightState.index - 1));
-      } else {
-        this._highlightLastChip();
-      }
-    }
-
-    /**
-     * @protected
-     */
-    _highlightNextChip() {
-      if (this._hasHighlightedChip) {
-        const lastIndex = this._chips.length - 1;
-        this._highlightChipAt(this._highlightState.index < lastIndex ? this._highlightState.index + 1 : -1);
-      }
-    }
-
-    /** @protected */
-    _highlightLastChip() {
-      this._highlightChipAt(this._chips.length - 1);
-    }
-
-    /** @protected */
-    _highlightChipAt(index) {
-      if (index > -1) {
-        this._setHighlightState({ type: 'chip', index });
-      } else {
-        this._clearChipHighlight();
-      }
-    }
-
-    /**
-     * @protected
-     */
-    _clearChipHighlight() {
-      if (this._hasHighlightedChip) {
-        this._clearHighlight();
       }
     }
 

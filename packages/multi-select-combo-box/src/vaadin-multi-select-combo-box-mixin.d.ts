@@ -24,6 +24,7 @@ import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { MultiSelectComboBox } from './vaadin-multi-select-combo-box.js';
+import type { MultiSelectComboBoxHighlightMixinClass } from './vaadin-multi-select-combo-box-highlight-mixin.js';
 
 export type MultiSelectComboBoxRenderer<TItem> = (
   root: HTMLElement,
@@ -60,6 +61,7 @@ export declare function MultiSelectComboBoxMixin<TItem, T extends Constructor<HT
   Constructor<InputMixinClass> &
   Constructor<KeyboardMixinClass> &
   Constructor<LabelMixinClass> &
+  Constructor<MultiSelectComboBoxHighlightMixinClass> &
   Constructor<MultiSelectComboBoxMixinClass<TItem>> &
   Constructor<ResizeMixinClass> &
   Constructor<SlotStylesMixinClass> &
