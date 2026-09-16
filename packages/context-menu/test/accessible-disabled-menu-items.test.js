@@ -9,15 +9,6 @@ import { activateItem, getMenuItems, getSubMenu, openMenu } from './helpers.js';
 describe('accessible disabled menu items', () => {
   let rootMenu, subMenu, target, items;
 
-  before(() => {
-    window.Vaadin.featureFlags ??= {};
-    window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
-  });
-
-  after(() => {
-    window.Vaadin.featureFlags.accessibleDisabledMenuItems = false;
-  });
-
   beforeEach(async () => {
     // Firefox: when a previous test ends with focus on an overlay item
     // that then gets removed during fixture teardown, element.focus()
@@ -115,38 +106,5 @@ describe('accessible disabled menu items', () => {
 
   it('should set --_vaadin-item-disabled-pointer-events on disabled item', () => {
     expect(items[1].style.getPropertyValue('--_vaadin-item-disabled-pointer-events')).to.equal('auto');
-  });
-});
-
-describe('accessible disabled menu items (feature flag disabled)', () => {
-  let rootMenu, target, items;
-
-  beforeEach(async () => {
-    const wrapper = fixtureSync(`
-      <div>
-        <input id="first-global-focusable" />
-        <vaadin-context-menu>
-          <button id="target"></button>
-        </vaadin-context-menu>
-      </div>
-    `);
-    rootMenu = wrapper.querySelector('vaadin-context-menu');
-    rootMenu.openOn = isTouch ? 'click' : 'mouseover';
-    target = rootMenu.firstElementChild;
-    rootMenu.items = [{ text: 'Item 0' }, { text: 'Item 1', disabled: true }, { text: 'Item 2' }];
-    await nextRender();
-    await openMenu(target);
-    items = getMenuItems(rootMenu);
-  });
-
-  it('should not allow programmatic focus on disabled item', () => {
-    items[1].focus();
-    expect(document.activeElement).to.not.equal(items[1]);
-  });
-
-  it('should skip disabled items in arrow key navigation', async () => {
-    items[0].focus();
-    await sendKeys({ press: 'ArrowDown' });
-    expect(document.activeElement).to.equal(items[2]);
   });
 });
