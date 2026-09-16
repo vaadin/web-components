@@ -132,4 +132,16 @@ describe('switch', () => {
       });
     });
   });
+
+  describe('form layout labels aside', () => {
+    beforeEach(() => {
+      element.setAttribute('data-form-layout-labels-aside-active', '');
+      element.style.setProperty('--vaadin-form-layout-label-width', '8em');
+      element.style.setProperty('--vaadin-form-layout-label-spacing', '1em');
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'form-layout-labels-aside');
+    });
+  });
 });

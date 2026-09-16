@@ -208,6 +208,22 @@ describe('form-layout auto responsive', () => {
       assertFormLayoutLabelPosition(layout, { position: 'aside' });
     });
 
+    it('should toggle labels-aside-active data attribute on children based on container width', async () => {
+      const breakpoints = [
+        { width: '250px', labelsAsideActive: true },
+        { width: '200px', labelsAsideActive: false },
+        { width: '250px', labelsAsideActive: true },
+      ];
+
+      for (const { width, labelsAsideActive } of breakpoints) {
+        container.style.width = width;
+        await nextResize(layout);
+        [...layout.children].forEach((child) => {
+          expect(child.hasAttribute('data-form-layout-labels-aside-active')).to.equal(labelsAsideActive);
+        });
+      }
+    });
+
     it('should adjust number of columns and label position based on container width', async () => {
       const breakpoints = [
         { width: '500px', columns: 2, rows: 2, labelPosition: 'aside' },

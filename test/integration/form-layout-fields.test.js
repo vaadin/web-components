@@ -61,7 +61,7 @@ describe('fields in form-layout', () => {
       let field;
 
       beforeEach(() => {
-        field = layout.querySelector(tag);
+        field = layout.querySelector(`:scope > ${tag}`);
       });
 
       it('should add label-aside theme variant when labels are aside', () => {
