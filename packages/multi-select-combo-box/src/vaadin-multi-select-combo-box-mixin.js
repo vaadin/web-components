@@ -326,7 +326,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     constructor() {
       super();
 
-      // Created before the first render, as the template renders the button through the controller
+      // Used by `willUpdate()` and the template, so it must exist before the first update
       this._selectAllController = new SelectAllController(this);
     }
 
@@ -616,9 +616,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     /**
      * Override method from `ComboBoxBaseMixin` to not remove the focused
-     * state when focus moves to another focusable element of this component,
-     * such as the select all button. That button is in the shadow root, so
-     * `relatedTarget` is retargeted to the host element itself.
+     * state when focus moves between the input and the select all button.
      *
      * @param {FocusEvent} event
      * @return {boolean}
@@ -627,7 +625,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      */
     _shouldRemoveFocus(event) {
       const { relatedTarget } = event;
-      if (relatedTarget === this || relatedTarget === this.inputElement) {
+      if (relatedTarget === this.inputElement || relatedTarget === this._selectAllController.element) {
         return false;
       }
 
