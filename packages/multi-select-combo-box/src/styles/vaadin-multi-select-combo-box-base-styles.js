@@ -23,6 +23,10 @@ export const multiSelectComboBoxStyles = [
       gap: var(--vaadin-multi-select-combo-box-chips-gap, 2px);
     }
 
+    :host(:not([has-value])) #chips {
+      display: none;
+    }
+
     ::slotted(input) {
       box-sizing: border-box;
       flex: 1 0 var(--_input-min-width);

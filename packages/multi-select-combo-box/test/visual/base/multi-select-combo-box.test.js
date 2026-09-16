@@ -69,6 +69,12 @@ describe('multi-select-combo-box', () => {
       await visualDiff(div, 'selected');
     });
 
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'selected-label-aside');
+    });
+
     it('overflow 2', async () => {
       element.selectedItems = ['Apple', 'Banana', 'Lemon'];
       await visualDiff(div, 'selected-overflow-2');
