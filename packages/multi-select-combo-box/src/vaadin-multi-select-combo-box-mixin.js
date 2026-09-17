@@ -391,6 +391,11 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       super.willUpdate(props);
 
       this._selectAllController.willUpdate(props);
+
+      // Clear select all highlight when the button becomes invisible or the filter changes
+      if (props.has('filter') || !this._isSelectAllAvailable) {
+        this._clearSelectAllHighlight();
+      }
     }
 
     /** @protected */
@@ -430,13 +435,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         if (this.dataProvider) {
           this.clearCache();
         }
-      }
-
-      // The button can only be highlighted while it is shown in the opened overlay.
-      // Also drop the highlight when the filter changes the label of the button,
-      // so that Enter does not act on a button the user did not target.
-      if (props.has('filter') || !this._isSelectAllAvailable) {
-        this._clearSelectAllHighlight();
       }
     }
 

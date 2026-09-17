@@ -52,6 +52,10 @@ export class SelectAllController {
     return this.#visible;
   }
 
+  /**
+   * The ID of the button, used to reference it with aria-activedescendant.
+   * @return {string}
+   */
   get id() {
     return this.#element.id;
   }
