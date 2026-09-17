@@ -6,10 +6,13 @@
 @media lumo_components_form-item {
   [part='label'] {
     /* font-weight, margin-bottom, transition and line-height same as for part label in text-field */
-    color: var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color));
+    color: var(--vaadin-form-item-label-color, var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color)));
     font-family: var(--lumo-font-family);
-    font-size: var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s));
-    font-weight: var(--vaadin-input-field-label-font-weight, 500);
+    font-size: var(
+      --vaadin-form-item-label-font-size,
+      var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s))
+    );
+    font-weight: var(--vaadin-form-item-label-font-weight, var(--vaadin-input-field-label-font-weight, 500));
     margin-top: var(--lumo-space-m);
     margin-left: calc(var(--lumo-border-radius-m) / 4);
     margin-bottom: var(--lumo-space-xs);
