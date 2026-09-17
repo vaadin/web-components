@@ -36,9 +36,6 @@ export const formLayoutStyles = css`
     --_column-spacing: var(--vaadin-form-layout-column-spacing);
     --_row-spacing: var(--vaadin-form-layout-row-spacing);
 
-    --vaadin-input-field-label-aside-width: var(--_label-width);
-    --vaadin-input-field-label-aside-gap: var(--_label-spacing);
-
     align-self: stretch;
     display: block;
     max-width: 100%;
@@ -160,6 +157,9 @@ export const formLayoutStyles = css`
 
   :host([auto-responsive][labels-aside]) {
     --_max-width: var(--_max-width-labels-aside);
+
+    --vaadin-input-field-label-aside-width: var(--_label-width);
+    --vaadin-input-field-label-aside-gap: var(--_label-spacing);
   }
 
   :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
