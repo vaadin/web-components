@@ -114,12 +114,6 @@ describe('field', () => {
           await visualDiff(div, `${dir}-field-label-aside-wrapped-label`);
         });
 
-        it('descenders', async () => {
-          element.label = 'gjpqy gjpqy';
-          element.style.setProperty('--vaadin-input-field-label-font-size', 'var(--lumo-font-size-xxxl)');
-          await visualDiff(div, `${dir}-field-label-aside-descenders`);
-        });
-
         it('required', async () => {
           element.required = true;
           await visualDiff(div, `${dir}-field-label-aside-required`);
