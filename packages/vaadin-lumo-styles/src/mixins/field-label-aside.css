@@ -52,6 +52,7 @@
   :host([theme~='label-aside']) [part='label'] {
     grid-area: label;
     align-self: baseline;
+    overflow: visible;
     white-space: normal;
     word-break: break-word;
     padding-bottom: 0;
