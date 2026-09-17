@@ -94,6 +94,10 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  * `--vaadin-input-field-label-line-height` |
  * `--vaadin-input-field-required-indicator` |
  * `--vaadin-input-field-required-indicator-color` |
+ * `--vaadin-form-item-label-color` | Deprecated and will be removed in Vaadin 26. Use `--vaadin-input-field-label-color` instead
+ * `--vaadin-form-item-label-font-size` | Deprecated and will be removed in Vaadin 26. Use `--vaadin-input-field-label-font-size` instead
+ * `--vaadin-form-item-label-font-weight` | Deprecated and will be removed in Vaadin 26. Use `--vaadin-input-field-label-font-weight` instead
+ * `--vaadin-form-item-label-line-height` | Deprecated and will be removed in Vaadin 26. Use `--vaadin-input-field-label-line-height` instead
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
