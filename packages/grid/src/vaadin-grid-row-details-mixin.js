@@ -39,14 +39,6 @@ export const RowDetailsMixin = (superClass) =>
         },
 
         /**
-         * @type {!Array<!HTMLElement> | undefined}
-         * @protected
-         */
-        _detailsCells: {
-          type: Array,
-        },
-
-        /**
          * Set of opened details item ids
          * @private
          */
@@ -111,13 +103,6 @@ export const RowDetailsMixin = (superClass) =>
      * @protected
      */
     _configureDetailsCell(cell) {
-      if (!this._detailsCells) {
-        this._detailsCells = [];
-      }
-      if (!this._detailsCells.includes(cell)) {
-        this._detailsCells.push(cell);
-      }
-
       this._detailsCellResizeObserver.observe(cell);
     }
 
@@ -132,7 +117,6 @@ export const RowDetailsMixin = (superClass) =>
      */
     _teardownDetailsCell(cell) {
       this._detailsCellResizeObserver.unobserve(cell);
-      this._detailsCells.splice(this._detailsCells.indexOf(cell), 1);
     }
 
     /**
