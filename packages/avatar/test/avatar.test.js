@@ -149,12 +149,6 @@ describe('vaadin-avatar', () => {
       });
     });
 
-    describe('i18n property', () => {
-      it('should set default value for i18n property', () => {
-        expect(avatar.i18n).to.deep.equal({ anonymous: 'anonymous' });
-      });
-    });
-
     describe('img fallback', () => {
       beforeEach(() => {
         sinon.stub(console, 'warn');

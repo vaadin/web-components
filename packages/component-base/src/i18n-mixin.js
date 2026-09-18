@@ -48,18 +48,20 @@ export const I18nMixin = (superClass) =>
     constructor() {
       super();
 
-      this.i18n = deepMergePartials({}, this.constructor.defaultI18n);
+      this.__updateEffectiveI18n();
     }
 
     /**
      * The object used to localize this component. To change the default
-     * localization, replace this with an object that provides all properties, or
+     * localization, set this to an object that provides all properties, or
      * just the individual properties you want to change.
+     *
+     * The property is `undefined` unless a value is set.
      *
      * Should be overridden by subclasses to provide a custom JSDoc with the
      * default I18N properties.
      *
-     * @type {Object}
+     * @type {Object | undefined}
      */
     get i18n() {
       return this.__customI18n;
@@ -70,6 +72,11 @@ export const I18nMixin = (superClass) =>
         return;
       }
       this.__customI18n = value;
+      this.__updateEffectiveI18n();
+    }
+
+    /** @private */
+    __updateEffectiveI18n() {
       this.__effectiveI18n = deepMergePartials({}, this.constructor.defaultI18n, this.__customI18n);
     }
   };

@@ -17,8 +17,10 @@ export declare function AppLayoutMixin<T extends Constructor<HTMLElement>>(
 export declare class AppLayoutMixinClass {
   /**
    * The object used to localize this component. To change the default
-   * localization, replace this with an object that provides all properties, or
+   * localization, set this to an object that provides all properties, or
    * just the individual properties you want to change.
+   *
+   * The property is `undefined` unless a value is set.
    *
    * The object has the following structure and default values:
    * ```js
@@ -27,7 +29,7 @@ export declare class AppLayoutMixinClass {
    * }
    * ```
    */
-  i18n: AppLayoutI18n;
+  i18n: AppLayoutI18n | undefined;
 
   /**
    * Defines whether navbar or drawer will come first visually.

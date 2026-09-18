@@ -21,7 +21,7 @@ const overlay = document.createElement('vaadin-login-overlay');
 assertType<ElementMixinClass>(overlay);
 
 assertType<number>(overlay.headingLevel);
-assertType<LoginI18n>(overlay.i18n);
+assertType<LoginI18n | undefined>(overlay.i18n);
 
 overlay.addEventListener('login', (event) => {
   assertType<LoginOverlayLoginEvent>(event);
@@ -52,7 +52,7 @@ overlay.addEventListener('closed', (event) => {
 const form = document.createElement('vaadin-login-form');
 
 assertType<number>(form.headingLevel);
-assertType<LoginI18n>(form.i18n);
+assertType<LoginI18n | undefined>(form.i18n);
 
 form.addEventListener('login', (event) => {
   assertType<LoginFormLoginEvent>(event);

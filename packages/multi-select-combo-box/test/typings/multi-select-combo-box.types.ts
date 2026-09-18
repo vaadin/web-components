@@ -98,7 +98,7 @@ assertType<((item: TestComboBoxItem) => string) | undefined>(narrowedComboBox.it
 assertType<string | null | undefined>(narrowedComboBox.itemIdPath);
 assertType<string>(narrowedComboBox.itemLabelPath);
 assertType<string>(narrowedComboBox.itemValuePath);
-assertType<MultiSelectComboBoxI18n>(narrowedComboBox.i18n);
+assertType<MultiSelectComboBoxI18n | undefined>(narrowedComboBox.i18n);
 assertType<MultiSelectComboBoxRenderer<TestComboBoxItem> | null | undefined>(narrowedComboBox.renderer);
 assertType<boolean>(narrowedComboBox.invalid);
 assertType<HTMLElement | null | undefined>(narrowedComboBox.focusElement);

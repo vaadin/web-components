@@ -23,7 +23,7 @@ assertType<'drawer' | 'navbar'>(layout.primarySection);
 assertType<boolean>(layout.drawerOpened);
 assertType<boolean>(layout.overlay);
 assertType<string>(layout.closeDrawerOn);
-assertType<AppLayoutI18n>(layout.i18n);
+assertType<AppLayoutI18n | undefined>(layout.i18n);
 
 // I18n
 assertType<AppLayoutI18n>({});

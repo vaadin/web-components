@@ -42,7 +42,7 @@ describe('crud buttons', () => {
       describe('i18n', () => {
         (isDefault ? describe : describe.skip)('i18n', () => {
           it('should set the label for the delete button', () => {
-            expect(deleteButton.textContent).to.equal(crud.i18n.deleteItem);
+            expect(deleteButton.textContent).to.equal('Delete...');
           });
 
           it('should update the label of the delete button on i18n property change', () => {
@@ -51,7 +51,7 @@ describe('crud buttons', () => {
           });
 
           it('should set the label for the save button', () => {
-            expect(saveButton.textContent).to.equal(crud.i18n.saveItem);
+            expect(saveButton.textContent).to.equal('Save');
           });
 
           it('should update the label of the save button on i18n property change', () => {
@@ -60,7 +60,7 @@ describe('crud buttons', () => {
           });
 
           it('should set the label for the cancel button', () => {
-            expect(cancelButton.textContent).to.equal(crud.i18n.cancel);
+            expect(cancelButton.textContent).to.equal('Cancel');
           });
 
           it('should update the label of the cancel button on i18n property change', () => {
@@ -732,7 +732,7 @@ describe('crud buttons', () => {
         crud.appendChild(button);
         await nextRender();
 
-        expect(button.textContent).to.equal(crud.i18n.newItem);
+        expect(button.textContent).to.equal('New item');
       });
 
       it('should update the new item button marked as default on i18n property change', async () => {
@@ -787,7 +787,7 @@ describe('crud buttons', () => {
         crud.appendChild(button);
         await nextRender();
 
-        expect(button.textContent).to.equal(crud.i18n.deleteItem);
+        expect(button.textContent).to.equal('Delete...');
       });
 
       it('should update the delete button marked as default on i18n property change', async () => {
@@ -842,7 +842,7 @@ describe('crud buttons', () => {
         crud.appendChild(button);
         await nextRender();
 
-        expect(button.textContent).to.equal(crud.i18n.saveItem);
+        expect(button.textContent).to.equal('Save');
       });
 
       it('should update the save button marked as default on i18n property change', async () => {
@@ -897,7 +897,7 @@ describe('crud buttons', () => {
         crud.appendChild(button);
         await nextRender();
 
-        expect(button.textContent).to.equal(crud.i18n.cancel);
+        expect(button.textContent).to.equal('Cancel');
       });
 
       it('should update the cancel button marked as default on i18n property change', async () => {

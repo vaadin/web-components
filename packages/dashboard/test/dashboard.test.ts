@@ -451,7 +451,7 @@ describe('dashboard', () => {
 
   describe('i18n', () => {
     it('should have default values', () => {
-      expect(dashboard.i18n).to.eql({
+      expect(dashboard.__effectiveI18n).to.eql({
         selectSection: 'Select section for editing',
         selectWidget: 'Select widget for editing',
         remove: 'Remove',

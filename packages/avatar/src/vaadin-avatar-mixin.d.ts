@@ -44,8 +44,10 @@ export declare class AvatarMixinClass {
 
   /**
    * The object used to localize this component. To change the default
-   * localization, replace this with an object that provides all properties, or
+   * localization, set this to an object that provides all properties, or
    * just the individual properties you want to change.
+   *
+   * The property is `undefined` unless a value is set.
    *
    * The object has the following JSON structure and default values:
    * ```js
@@ -55,7 +57,7 @@ export declare class AvatarMixinClass {
    * }
    * ```
    */
-  i18n: AvatarI18n;
+  i18n: AvatarI18n | undefined;
 
   /**
    * When true, the avatar has tooltip shown on hover and focus.
