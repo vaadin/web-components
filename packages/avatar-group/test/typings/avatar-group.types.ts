@@ -13,7 +13,7 @@ const group = document.createElement('vaadin-avatar-group');
 // Properties
 assertType<AvatarGroupItem[] | undefined>(group.items);
 assertType<number | null | undefined>(group.maxItemsVisible);
-assertType<AvatarGroupI18n>(group.i18n);
+assertType<AvatarGroupI18n | undefined>(group.i18n);
 
 // Item properties
 const item: AvatarGroupItem = group.items ? group.items[0] : {};

@@ -204,8 +204,10 @@ export declare class DateTimePickerMixinClass {
 
   /**
    * The object used to localize this component. To change the default
-   * localization, replace this with an object that provides all properties, or
+   * localization, set this to an object that provides all properties, or
    * just the individual properties you want to change.
+   *
+   * The property is `undefined` unless a value is set.
    *
    * The object has the following structure and default values:
    *
@@ -229,7 +231,7 @@ export declare class DateTimePickerMixinClass {
    * [`<vaadin-date-picker>`](#/elements/vaadin-date-picker) and
    * [`<vaadin-time-picker>`](#/elements/vaadin-time-picker) are supported.
    */
-  i18n: DateTimePickerI18n;
+  i18n: DateTimePickerI18n | undefined;
 
   /**
    * Clears the `dateMetadataProvider` cache and reloads the date metadata.

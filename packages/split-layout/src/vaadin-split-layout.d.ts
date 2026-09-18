@@ -192,8 +192,10 @@ declare class SplitLayout extends SplitLayoutMixin(
 ) {
   /**
    * The object used to localize this component. To change the default
-   * localization, replace this with an object that provides all properties, or
+   * localization, set this to an object that provides all properties, or
    * just the individual properties you want to change.
+   *
+   * The property is `undefined` unless a value is set.
    *
    * The object has the following JSON structure and default values:
    *
@@ -204,7 +206,7 @@ declare class SplitLayout extends SplitLayoutMixin(
    * }
    * ```
    */
-  i18n: SplitLayoutI18n;
+  i18n: SplitLayoutI18n | undefined;
 
   addEventListener<K extends keyof SplitLayoutEventMap>(
     type: K,

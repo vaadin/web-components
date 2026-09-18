@@ -104,8 +104,10 @@ export const LoginMixin = (superClass) =>
 
     /**
      * The object used to localize this component. To change the default
-     * localization, replace this with an object that provides all properties, or
+     * localization, set this to an object that provides all properties, or
      * just the individual properties you want to change.
+     *
+     * The property is `undefined` unless a value is set.
      *
      * The object has the following JSON structure (by default it doesn't include `additionalInformation`
      * and `header` sections, `header` can be added to override `title` and `description` properties
@@ -133,7 +135,7 @@ export const LoginMixin = (superClass) =>
      *   additionalInformation: 'In case you need to provide some additional info for the user.'
      * }
      * ```
-     * @type {!LoginI18n}
+     * @type {LoginI18n | undefined}
      */
     get i18n() {
       return super.i18n;

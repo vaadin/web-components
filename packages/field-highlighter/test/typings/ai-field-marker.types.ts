@@ -10,13 +10,13 @@ assertType<CSSResult>(aiFieldMarkerHostStyles);
 
 // Element
 const marker = document.createElement('vaadin-ai-field-marker');
-assertType<AiFieldMarkerI18n>(marker.i18n);
+assertType<AiFieldMarkerI18n | undefined>(marker.i18n);
 assertType<Node | null | undefined>(marker.content);
 assertType<boolean>(marker.working);
 assertType<'high' | 'low' | 'medium' | null>(marker.confidence);
-assertType<string | undefined>(marker.i18n.confidence?.low);
-assertType<string | undefined>(marker.i18n.confidence?.medium);
-assertType<string | undefined>(marker.i18n.confidence?.high);
+assertType<string | undefined>(marker.i18n?.confidence?.low);
+assertType<string | undefined>(marker.i18n?.confidence?.medium);
+assertType<string | undefined>(marker.i18n?.confidence?.high);
 
 // Revert event
 assertType<CustomEvent<{ value: unknown }>>({} as AiFieldRevertEvent);
