@@ -123,6 +123,14 @@ export const RowDetailsMixin = (superClass) =>
     }
 
     /**
+     * @param {!HTMLElement} cell
+     * @protected
+     */
+    _teardownDetailsCell(cell) {
+      this._detailsCellResizeObserver.unobserve(cell);
+    }
+
+    /**
      * @param {!HTMLElement} row
      * @param {boolean} detailsOpened
      * @protected
