@@ -9,6 +9,7 @@ const LIT_WEB_TYPES_FILE = 'web-types.lit.json';
 const API_DOCS_BASE_PATH = 'https://cdn.vaadin.com/vaadin-web-components';
 
 const blacklistedPackages = [
+  /^vaadin$/u,
   /^vaadin-/u,
   /^a11y-base/u,
   /^component-base/u,
