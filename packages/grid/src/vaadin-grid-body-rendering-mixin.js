@@ -19,7 +19,7 @@ export const BodyRenderingMixin = (superClass) =>
     /** @private */
     __createBodyRow() {
       const renderRoot = document.createDocumentFragment();
-      render(this.#bodyRowTemplate({ cells: [] }), renderRoot, { host: this });
+      render(this.#bodyRowTemplate(), renderRoot, { host: this });
 
       const row = renderRoot.firstElementChild;
       row.__id = generateUniqueId();
@@ -60,10 +60,6 @@ export const BodyRenderingMixin = (superClass) =>
       render(this.#sizerRowTemplate(), row, { host: this });
 
       this.#updateRowReferences(row);
-
-      row.__cells.forEach((cell) => {
-        cell._column._sizerCell = cell;
-      });
     }
 
     #getRowState(row) {
@@ -71,7 +67,7 @@ export const BodyRenderingMixin = (superClass) =>
       const visibleColumns = columns.filter((column) => !column.hidden);
 
       return {
-        id: row.__id,
+        rowId: row.__id,
         item: this.__getRowItem(row),
         cells: columns.map((column) => {
           return {
@@ -83,11 +79,11 @@ export const BodyRenderingMixin = (superClass) =>
       };
     }
 
-    #bodyRowTemplate = ({ id: rowId, item, cells }) => {
+    #bodyRowTemplate = ({ rowId, item, cells } = {}) => {
       return html`
         <tr role="row" tabindex="-1" part="row body-row" class="row body-row" ?loading="${!item}">
           ${repeat(
-            cells,
+            cells ?? [],
             ({ column }) => column._id,
             ({ column, isFirstCell, isLastCell }) => {
               if (column.hidden || column._bodyContentHidden) {
