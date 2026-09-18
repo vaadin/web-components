@@ -81,14 +81,14 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property | Description
- * ---|---
- * `--vaadin-input-field-label-color` |
- * `--vaadin-input-field-label-font-size` |
- * `--vaadin-input-field-label-font-weight` |
- * `--vaadin-input-field-label-line-height` |
- * `--vaadin-input-field-required-indicator` |
- * `--vaadin-input-field-required-indicator-color` |
+ * Custom CSS property                                |
+ * :--------------------------------------------------|
+ * | `--vaadin-input-field-label-color`               |
+ * | `--vaadin-input-field-label-font-size`           |
+ * | `--vaadin-input-field-label-font-weight`         |
+ * | `--vaadin-input-field-label-line-height`         |
+ * | `--vaadin-input-field-required-indicator`        |
+ * | `--vaadin-input-field-required-indicator-color`  |
  *
  * **Deprecation note:** The `--vaadin-form-item-label-*` properties are deprecated and will be removed
  * in Vaadin 26. Use the `--vaadin-input-field-label-*` properties instead.
