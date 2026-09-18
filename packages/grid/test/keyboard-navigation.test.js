@@ -1628,14 +1628,14 @@ describe('keyboard navigation', () => {
 
     it('should add the part to cell when focused', () => {
       focusItem(5);
-      const cell = getPhysicalItems(grid)[5].firstChild;
+      const cell = getPhysicalItems(grid)[5].firstElementChild;
       expect(cell.getAttribute('part')).to.contain('focused-cell');
     });
 
     it('should remove the part from cell when blurred', () => {
       focusItem(5);
       focusable.focus();
-      const cell = getPhysicalItems(grid)[5].firstChild;
+      const cell = getPhysicalItems(grid)[5].firstElementChild;
       expect(cell.getAttribute('part')).to.not.contain('focused-cell');
     });
 
@@ -1643,7 +1643,7 @@ describe('keyboard navigation', () => {
       focusItem(5);
       grid.scrollToIndex(2);
       flushGrid(grid);
-      const cell = getPhysicalItems(grid)[5].firstChild;
+      const cell = getPhysicalItems(grid)[5].firstElementChild;
       expect(cell.getAttribute('part')).to.contain('focused-cell');
     });
 
@@ -1664,7 +1664,7 @@ describe('keyboard navigation', () => {
       grid.$.table.scrollTop = 0;
       flushGrid(grid);
 
-      const cell = getPhysicalItems(grid)[5].firstChild;
+      const cell = getPhysicalItems(grid)[5].firstElementChild;
       expect(cell.getAttribute('part')).to.contain('focused-cell');
     });
 
