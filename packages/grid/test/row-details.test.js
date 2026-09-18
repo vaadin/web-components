@@ -414,32 +414,6 @@ describe('row details', () => {
     });
   });
 
-  describe('unset details renderer', () => {
-    beforeEach(async () => {
-      grid = fixtureSync(`
-        <vaadin-grid>
-          <vaadin-grid-column path="name"></vaadin-grid-column>
-          <vaadin-grid-column path="name"></vaadin-grid-column>
-        </vaadin-grid>
-      `);
-      grid.rowDetailsRenderer = (root) => {
-        root.innerHTML = '<div style="height: 100px;">Details</div>';
-      };
-      grid.items = [{ name: 'foo' }];
-      grid.detailsOpenedItems = [...grid.items];
-      flushGrid(grid);
-      await nextFrame();
-      grid.rowDetailsRenderer = null;
-    });
-
-    it('should not throw after the column tree is updated', async () => {
-      grid.querySelector('vaadin-grid-column').hidden = true;
-      flushGrid(grid);
-      await nextFrame();
-      expect(grid.shadowRoot.querySelector('[part~="details-cell"]')).to.be.null;
-    });
-  });
-
   describe('details cell height change', () => {
     let bodyRow;
     let updateDetailsCellHeight;
@@ -491,6 +465,15 @@ describe('row details', () => {
       updateDetailsCellHeight();
       await nextFrame();
       expect(bodyRow.offsetHeight).to.equal(detailsRowHeight + 50);
+    });
+
+    it('should not throw when columns change after renderer is cleared', async () => {
+      grid.detailsOpenedItems = [...grid.items];
+      grid.rowDetailsRenderer = null;
+      grid.querySelector('vaadin-grid-column').hidden = true;
+      flushGrid(grid);
+      await nextFrame();
+      expect(grid.shadowRoot.querySelector('[part~="details-cell"]')).to.be.null;
     });
   });
 });
