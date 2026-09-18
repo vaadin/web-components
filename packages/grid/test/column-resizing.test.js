@@ -327,6 +327,14 @@ describe('column group resizing', () => {
     expect(newColumn.resizable).to.be.true;
   });
 
+  it('should initialize resizable from the parent group', () => {
+    // Parse the column inside the group so that its default value function
+    // sees the group as parent, and read the value before the group cascades.
+    grid._columnTree[0][0].insertAdjacentHTML('beforeend', '<vaadin-grid-column></vaadin-grid-column>');
+
+    expect(grid._columnTree[0][0].lastElementChild.resizable).to.be.true;
+  });
+
   it('should have resizable false by default on column', () => {
     const newColumn = document.createElement('vaadin-grid-column');
 
