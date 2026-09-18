@@ -100,12 +100,12 @@
     padding-bottom: 0.5em;
   }
 
-  :host([theme~='label-aside'][has-label]) {
+  :host(:is([theme~='label-aside'][has-label], [data-form-layout-labels-aside-active])) {
     --_input-height: calc(var(--lumo-text-field-size) + var(--lumo-space-xs));
     padding-top: 0;
   }
 
-  :host([theme~='label-aside'][has-label]) [part='label'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])[has-label]) [part='label'] {
     padding-bottom: 0;
   }
 }

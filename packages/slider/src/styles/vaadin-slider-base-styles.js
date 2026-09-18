@@ -41,7 +41,7 @@ export const sliderStyles = css`
     --_rows-after-input: 'marks' auto;
   }
 
-  :host([theme~='label-aside'][min-max-visible]) {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])[min-max-visible]) {
     --_rows-after-input: 'label marks' auto;
   }
 
@@ -58,12 +58,12 @@ export const sliderStyles = css`
     --_track-width: calc(100% - var(--_thumb-width));
   }
 
-  :host([theme~='label-aside']) #controls {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) #controls {
     align-self: baseline;
   }
 
   /* Baseline alignment guide */
-  :host([theme~='label-aside']) #controls::before {
+  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) #controls::before {
     content: '\\2003' / '';
     grid-row: 1;
     grid-column: track-start / track-end;

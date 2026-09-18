@@ -24,6 +24,10 @@ export const checkable = (part, propName = part) => css`
     column-gap: 0;
   }
 
+  :host([data-form-layout-labels-aside-active]) {
+    padding-inline-start: calc(var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing));
+  }
+
   [part='${unsafeCSS(part)}'],
   ::slotted(input),
   [part='label'],
