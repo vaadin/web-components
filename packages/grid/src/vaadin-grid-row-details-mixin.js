@@ -104,11 +104,13 @@ export const RowDetailsMixin = (superClass) =>
      */
     _configureDetailsCell(cell) {
       this._detailsCellResizeObserver.observe(cell);
+      this._frozenCellsChanged();
     }
 
     /** @private */
     __teardownDetailsCell(cell) {
       this._detailsCellResizeObserver.unobserve(cell);
+      this._frozenCellsChanged();
     }
 
     /**

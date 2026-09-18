@@ -2728,6 +2728,7 @@ snapshots["vaadin-grid column reordering reordered details opened"] =
         id="vaadin-grid-details-cell-64"
         part="cell details-cell"
         role="gridcell"
+        style="transform: translate(0px, 0px);"
         tabindex="-1"
       >
         <slot name="vaadin-grid-details-cell-content-64">
@@ -2783,6 +2784,7 @@ snapshots["vaadin-grid column reordering reordered details opened"] =
         id="vaadin-grid-details-cell-65"
         part="cell details-cell"
         role="gridcell"
+        style="transform: translate(0px, 0px);"
         tabindex="-1"
       >
         <slot name="vaadin-grid-details-cell-content-65">
