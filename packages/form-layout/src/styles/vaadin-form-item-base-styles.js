@@ -28,11 +28,11 @@ export const formItemStyles = css`
   }
 
   [part='label'] {
-    color: var(--vaadin-form-item-label-color, var(--vaadin-text-color));
+    color: var(--vaadin-form-item-label-color, var(--vaadin-input-field-label-color, var(--vaadin-text-color)));
     flex: 0 0 auto;
-    font-size: var(--vaadin-form-item-label-font-size, inherit);
-    font-weight: var(--vaadin-form-item-label-font-weight, 500);
-    line-height: var(--vaadin-form-item-label-line-height, inherit);
+    font-size: var(--vaadin-form-item-label-font-size, var(--vaadin-input-field-label-font-size, inherit));
+    font-weight: var(--vaadin-form-item-label-font-weight, var(--vaadin-input-field-label-font-weight, 500));
+    line-height: var(--vaadin-form-item-label-line-height, var(--vaadin-input-field-label-line-height, inherit));
     position: relative;
     width: var(--_form-item-labels-aside, var(--_label-width, 8em));
     word-break: break-word;
