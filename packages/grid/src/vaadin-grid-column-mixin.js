@@ -612,7 +612,7 @@ export const ColumnBaseMixin = (superClass) =>
      * @protected
      */
     _renderBodyCellsContent(renderer, cells) {
-      if (!cells || !renderer || this._bodyContentHidden) {
+      if (!cells || !renderer) {
         return;
       }
 
