@@ -5,8 +5,16 @@
  */
 
 /* Opt-in styles for a native <table>. Applied through the `vaadin-table`
-   class, so that a table can opt out again by dropping the class. */
+   class, so that a table can opt out again by dropping the class. The values
+   follow what Lumo does to a <vaadin-grid>: a square box with a stronger line
+   around it than between the rows, and a header told apart by type rather
+   than by a background. */
 :where(.vaadin-table) {
+  /* Zeroed by the `no-row-borders` variant. */
+  --_row-border-width: 1px;
+
+  background: var(--lumo-base-color);
+  border: 1px solid var(--lumo-contrast-20pct);
   border-spacing: 0;
 
   caption {
@@ -16,14 +24,12 @@
   }
 
   :is(th, td) {
-    border-block-end: 1px solid var(--lumo-contrast-10pct);
     padding: var(--lumo-space-xs) var(--lumo-space-m);
     /* The UA stylesheet centers <th>, which leaves a header out of line with
        the column below it. */
     text-align: start;
   }
 
-  /* Lumo tells a grid header apart by type rather than by a background. */
   :is(thead, tfoot) :is(th, td) {
     font-size: var(--lumo-font-size-s);
   }
@@ -36,11 +42,37 @@
     font-weight: 400;
   }
 
+  /* A line between every two consecutive rows, wherever the section boundary
+     falls. Drawing it above a row rather than below one leaves the outer
+     edges to the table's own border. */
+  :where(tr:not(:first-child) :is(th, td)),
+  :where(:is(thead, tbody, tfoot) ~ :is(tbody, tfoot) tr:first-child :is(th, td)) {
+    border-block-start: var(--_row-border-width) solid var(--lumo-contrast-10pct);
+  }
+
+  /* Variants, named after the <vaadin-grid> ones. */
+
+  &[theme~='no-row-borders'] {
+    --_row-border-width: 0px;
+  }
+
   &[theme~='row-stripes'] tbody tr:nth-child(even) :is(th, td) {
     background: var(--lumo-contrast-5pct);
   }
 
   &[theme~='column-borders'] :is(th, td):not(:last-child) {
     border-inline-end: 1px solid var(--lumo-contrast-10pct);
+  }
+
+  &[theme~='compact'] {
+    font-size: var(--lumo-font-size-s);
+
+    :is(th, td) {
+      padding: calc(var(--lumo-space-xs) / 2) var(--lumo-space-s);
+    }
+
+    :is(thead, tfoot) :is(th, td) {
+      font-size: var(--lumo-font-size-xs);
+    }
   }
 }

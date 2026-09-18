@@ -59,15 +59,16 @@ describe('table', () => {
     await loadCSS('/packages/vaadin-lumo-styles/src/global/index.css');
   });
 
-  it('should style cells only when the table has the vaadin-table class', () => {
-    const styled = fixtureTable({ classes: 'vaadin-table' }).querySelector('td');
-    const plain = fixtureTable().querySelector('td');
+  it('should style the table only when it has the vaadin-table class', () => {
+    const styled = fixtureTable({ classes: 'vaadin-table' });
+    const plain = fixtureTable();
 
-    expect(getStyle(styled, 'padding')).to.equal('4px 16px');
-    expect(getStyle(styled, 'border-bottom-width')).to.equal('1px');
+    expect(getStyle(styled, 'border-top-width')).to.equal('1px');
+    expect(getStyle(styled, 'border-top-color')).to.equal(resolveColor('--lumo-contrast-20pct'));
+    expect(getStyle(styled.querySelector('td'), 'padding')).to.equal('4px 16px');
 
-    expect(getStyle(plain, 'padding')).to.equal('1px');
-    expect(getStyle(plain, 'border-bottom-width')).to.equal('0px');
+    expect(getStyle(plain, 'border-top-width')).to.equal('0px');
+    expect(getStyle(plain.querySelector('td'), 'padding')).to.equal('1px');
   });
 
   it('should align header cells with the column instead of centering them', () => {
@@ -91,6 +92,32 @@ describe('table', () => {
     expect(getStyle(body, 'font-size')).to.equal('16px');
   });
 
+  it('should draw a line between rows but not along the outer edges', () => {
+    const table = fixtureTable({ classes: 'vaadin-table' });
+    const header = table.querySelector('thead td, thead th');
+    const [firstBody, secondBody] = [...table.querySelectorAll('tbody td')];
+    const footer = table.querySelector('tfoot td');
+
+    // The table's own border closes the top and the bottom
+    expect(getStyle(header, 'border-top-width')).to.equal('0px');
+    expect(getStyle(footer, 'border-bottom-width')).to.equal('0px');
+
+    // A line above every following row, across the section boundaries too
+    expect(getStyle(firstBody, 'border-top-width')).to.equal('1px');
+    expect(getStyle(firstBody, 'border-top-color')).to.equal(resolveColor('--lumo-contrast-10pct'));
+    expect(getStyle(secondBody, 'border-top-width')).to.equal('1px');
+    expect(getStyle(footer, 'border-top-width')).to.equal('1px');
+  });
+
+  it('should drop the lines between rows with theme="no-row-borders"', () => {
+    const table = fixtureTable({ classes: 'vaadin-table', theme: 'no-row-borders' });
+
+    expect(getStyle(table.querySelector('tbody td'), 'border-top-width')).to.equal('0px');
+    expect(getStyle(table.querySelector('tfoot td'), 'border-top-width')).to.equal('0px');
+    // The border around the table stays
+    expect(getStyle(table, 'border-top-width')).to.equal('1px');
+  });
+
   it('should tint every other body row with theme="row-stripes"', () => {
     const rows = fixtureTable({ classes: 'vaadin-table', theme: 'row-stripes' }).querySelectorAll('tbody td');
 
@@ -105,5 +132,13 @@ describe('table', () => {
 
     expect(getStyle(cells[0], 'border-inline-end-width')).to.equal('1px');
     expect(getStyle(cells[1], 'border-inline-end-width')).to.equal('0px');
+  });
+
+  it('should tighten the cells and the type with theme="compact"', () => {
+    const table = fixtureTable({ classes: 'vaadin-table', theme: 'compact' });
+
+    expect(getStyle(table.querySelector('tbody td'), 'padding')).to.equal('2px 8px');
+    expect(getStyle(table.querySelector('tbody td'), 'font-size')).to.equal('14px');
+    expect(getStyle(table.querySelector('thead th'), 'font-size')).to.equal('13px');
   });
 });
