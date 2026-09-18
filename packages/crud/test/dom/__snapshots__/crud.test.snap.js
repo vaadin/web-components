@@ -197,19 +197,19 @@ snapshots["vaadin-crud host default"] =
     </vaadin-grid-cell-content>
     <vaadin-grid-cell-content slot="vaadin-grid-footer-cell-content-0-4">
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-0">
+    <vaadin-grid-cell-content slot="vaadin-grid-sizer-cell-content-1">
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-1">
+    <vaadin-grid-cell-content slot="vaadin-grid-sizer-cell-content-3">
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-2">
+    <vaadin-grid-cell-content slot="vaadin-grid-sizer-cell-content-4">
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-3">
+    <vaadin-grid-cell-content slot="vaadin-grid-body-cell-content-13-1">
       John
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-4">
+    <vaadin-grid-cell-content slot="vaadin-grid-body-cell-content-13-3">
       30
     </vaadin-grid-cell-content>
-    <vaadin-grid-cell-content slot="vaadin-grid-cell-content-5">
+    <vaadin-grid-cell-content slot="vaadin-grid-body-cell-content-13-4">
       <vaadin-crud-edit
         aria-label="Edit"
         role="button"
