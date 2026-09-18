@@ -336,7 +336,7 @@ export const GridMixin = (superClass) =>
       }
 
       if (this._columnTree) {
-        this._columnTree[this._columnTree.length - 1].forEach((c) => {
+        this._columnTree.at(-1).forEach((c) => {
           c.performUpdate?.();
         });
       }
@@ -430,7 +430,7 @@ export const GridMixin = (superClass) =>
       this.__renderHeaderFooter();
       this.__renderSizerRow();
 
-      this._columnTree[this._columnTree.length - 1].forEach((column) => {
+      this._columnTree.at(-1).forEach((column) => {
         column.performUpdate?.();
       });
 
