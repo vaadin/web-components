@@ -31,7 +31,7 @@ export const BodyRenderingMixin = (superClass) =>
     __renderBodyRow(row) {
       render(this.#bodyRowTemplate(this.#getRowState(row)), row.__renderRoot, { host: this });
 
-      this.#updateRowCells(row);
+      this.#updateRowReferences(row);
 
       row.querySelectorAll('[role="button"]').forEach((button) => {
         const cell = button.parentElement;
@@ -59,7 +59,7 @@ export const BodyRenderingMixin = (superClass) =>
       const row = this.$.sizer;
       render(this.#sizerRowTemplate(), row, { host: this });
 
-      this.#updateRowCells(row);
+      this.#updateRowReferences(row);
 
       row.__cells.forEach((cell) => {
         cell._column._sizerCell = cell;
@@ -168,28 +168,39 @@ export const BodyRenderingMixin = (superClass) =>
       `;
     };
 
-    #updateRowCells(row) {
+    #updateRowReferences(row) {
       const columns = this._columnTree.at(-1);
-      const previousCells = row.__cells || [];
-      const children = [...row.children];
 
-      children.forEach((cell) => {
-        cell.__parentRow = row;
+      // Remove references to cells that no longer belong to this row
+      row.__cells?.forEach((cell) => {
+        const column = cell._column;
+        if (columns.includes(column)) {
+          return;
+        }
+
+        column._cells = column._cells.filter((c) => c !== cell);
+
+        if (row === this.$.sizer) {
+          column._sizerCell = null;
+        }
       });
 
-      row.__cells = children.filter((cell) => cell._column);
+      row.__cells = [...row.children].filter((cell) => cell._column);
 
-      previousCells
-        .filter((cell) => !columns.includes(cell._column))
-        .forEach((cell) => {
-          cell._column._cells = cell._column._cells.filter((c) => c !== cell);
-        });
-
+      // Add references to cells that belong to this row but are not yet tracked by the column
       row.__cells.forEach((cell) => {
         const column = cell._column;
         if (!column._cells?.includes(cell)) {
-          column._cells = [...(column._cells || []), cell];
+          column._cells = [...(column._cells ?? []), cell];
         }
+
+        if (row === this.$.sizer) {
+          column._sizerCell = cell;
+        }
+      });
+
+      [...row.children].forEach((cell) => {
+        cell.__parentRow = row;
       });
     }
   };
