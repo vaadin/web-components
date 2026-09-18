@@ -415,7 +415,7 @@ describe('row details', () => {
   });
 
   describe('unset details renderer', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid>
           <vaadin-grid-column path="name"></vaadin-grid-column>
@@ -428,6 +428,7 @@ describe('row details', () => {
       grid.items = [{ name: 'foo' }];
       grid.detailsOpenedItems = [...grid.items];
       flushGrid(grid);
+      await nextFrame();
       grid.rowDetailsRenderer = null;
     });
 
