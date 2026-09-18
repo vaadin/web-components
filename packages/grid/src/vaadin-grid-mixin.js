@@ -335,11 +335,9 @@ export const GridMixin = (superClass) =>
         rows.push(row);
       }
 
-      if (this._columnTree) {
-        this._columnTree.at(-1).forEach((c) => {
-          c.performUpdate?.();
-        });
-      }
+      this._columnTree?.at(-1).forEach((column) => {
+        column.performUpdate?.();
+      });
 
       return rows;
     }
