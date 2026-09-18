@@ -337,9 +337,7 @@ export const GridMixin = (superClass) =>
 
       if (this._columnTree) {
         this._columnTree[this._columnTree.length - 1].forEach((c) => {
-          if (c.isConnected && c._cells) {
-            c._cells = [...c._cells];
-          }
+          c.performUpdate?.();
         });
       }
 
@@ -433,9 +431,7 @@ export const GridMixin = (superClass) =>
       this.__renderSizerRow();
 
       this._columnTree[this._columnTree.length - 1].forEach((column) => {
-        if (!column.hidden && column._cells) {
-          column._cells = [...column._cells];
-        }
+        column.performUpdate?.();
       });
 
       this._resizeHandler();

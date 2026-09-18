@@ -136,7 +136,6 @@ export const ColumnBaseMixin = (superClass) =>
         _bodyContentHidden: {
           type: Boolean,
           value: false,
-          sync: true,
         },
 
         /**
@@ -863,7 +862,6 @@ export const GridColumnMixin = (superClass) =>
          */
         _cells: {
           type: Array,
-          sync: true,
         },
       };
     }

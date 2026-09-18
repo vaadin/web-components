@@ -182,15 +182,13 @@ export const BodyRenderingMixin = (superClass) =>
       previousCells
         .filter((cell) => !columns.includes(cell._column))
         .forEach((cell) => {
-          const cells = cell._column._cells;
-          cells.splice(cells.indexOf(cell), 1);
+          cell._column._cells = cell._column._cells.filter((c) => c !== cell);
         });
 
       row.__cells.forEach((cell) => {
         const column = cell._column;
-        column._cells ||= [];
-        if (!column._cells.includes(cell)) {
-          column._cells.push(cell);
+        if (!column._cells?.includes(cell)) {
+          column._cells = [...(column._cells || []), cell];
         }
       });
     }

@@ -268,8 +268,7 @@ export const ScrollMixin = (superClass) =>
       this.__scrollToPendingColumn();
 
       const columnsInOrder = this._getColumnsInOrder();
-      const revealedColumns = [];
-      let bodyContentHiddenChanged = false;
+      const changedColumns = [];
 
       // Update the _bodyContentHidden property of the column to reflect the current
       // visibility state.
@@ -277,23 +276,20 @@ export const ScrollMixin = (superClass) =>
         const bodyContentHidden = this._lazyColumns && !this.__isColumnInViewport(column);
 
         if (column._bodyContentHidden !== bodyContentHidden) {
-          bodyContentHiddenChanged = true;
-          if (!bodyContentHidden) {
-            revealedColumns.push(column);
-          }
+          changedColumns.push(column);
         }
 
         column._bodyContentHidden = bodyContentHidden;
       });
 
-      if (bodyContentHiddenChanged) {
+      if (changedColumns.length > 0) {
         [...this.$.items.children].forEach((row) => {
           this.__renderBodyRow(row);
           this.__updateRow(row);
         });
 
-        revealedColumns.forEach((column) => {
-          column._cells = [...column._cells];
+        changedColumns.forEach((column) => {
+          column.performUpdate?.();
         });
 
         // Frozen columns may have changed their visibility
