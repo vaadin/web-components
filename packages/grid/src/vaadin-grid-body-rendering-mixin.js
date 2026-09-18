@@ -46,7 +46,7 @@ export const BodyRenderingMixin = (superClass) =>
       row.__detailsCell = row.querySelector('[part~="details-cell"]');
 
       if (previousDetailsCell && previousDetailsCell !== row.__detailsCell) {
-        this._teardownDetailsCell(previousDetailsCell);
+        this.__teardownDetailsCell(previousDetailsCell);
       }
 
       if (row.__detailsCell && row.__detailsCell !== previousDetailsCell) {
