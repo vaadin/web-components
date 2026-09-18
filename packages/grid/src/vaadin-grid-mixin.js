@@ -439,7 +439,7 @@ export const GridMixin = (superClass) =>
         // Clear the cached cell references
         row.__cells = [];
         if (row.__detailsCell) {
-          this._teardownDetailsCell(row.__detailsCell);
+          this.__teardownDetailsCell(row.__detailsCell);
         }
         row.__detailsCell = null;
       }
