@@ -1,0 +1,46 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+
+/* Opt-in styles for a native <table>. Applied through the `vaadin-table`
+   class, so that a table can opt out again by dropping the class. */
+:where(.vaadin-table) {
+  border-spacing: 0;
+
+  caption {
+    padding-block-end: var(--lumo-space-xs);
+    color: var(--lumo-secondary-text-color);
+    text-align: start;
+  }
+
+  :is(th, td) {
+    border-block-end: 1px solid var(--lumo-contrast-10pct);
+    padding: var(--lumo-space-xs) var(--lumo-space-m);
+    /* The UA stylesheet centers <th>, which leaves a header out of line with
+       the column below it. */
+    text-align: start;
+  }
+
+  /* Lumo tells a grid header apart by type rather than by a background. */
+  :is(thead, tfoot) :is(th, td) {
+    font-size: var(--lumo-font-size-s);
+  }
+
+  th {
+    font-weight: 500;
+  }
+
+  tfoot :is(th, td) {
+    font-weight: 400;
+  }
+
+  &[theme~='row-stripes'] tbody tr:nth-child(even) :is(th, td) {
+    background: var(--lumo-contrast-5pct);
+  }
+
+  &[theme~='column-borders'] :is(th, td):not(:last-child) {
+    border-inline-end: 1px solid var(--lumo-contrast-10pct);
+  }
+}
