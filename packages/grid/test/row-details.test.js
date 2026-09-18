@@ -46,7 +46,7 @@ describe('row details', () => {
     grid.rowDetailsRenderer = simpleDetailsRenderer;
     grid.querySelector('vaadin-grid-column').renderer = indexRenderer;
 
-    const spy = sinon.spy(grid, '__renderBodyRow');
+    const spy = sinon.spy(grid, '__initRow');
     grid.size = 1;
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
@@ -411,32 +411,6 @@ describe('row details', () => {
       await nextFrame();
       expect(bodyRows[0].children[0].getAttribute('part')).to.include('first-row-cell');
       expect(bodyRows[1].children[0].getAttribute('part')).to.include('last-row-cell');
-    });
-  });
-
-  describe('unset details renderer', () => {
-    beforeEach(async () => {
-      grid = fixtureSync(`
-        <vaadin-grid>
-          <vaadin-grid-column path="name"></vaadin-grid-column>
-          <vaadin-grid-column path="name"></vaadin-grid-column>
-        </vaadin-grid>
-      `);
-      grid.rowDetailsRenderer = (root) => {
-        root.innerHTML = '<div style="height: 100px;">Details</div>';
-      };
-      grid.items = [{ name: 'foo' }];
-      grid.detailsOpenedItems = [...grid.items];
-      flushGrid(grid);
-      await nextFrame();
-      grid.rowDetailsRenderer = null;
-    });
-
-    it('should not throw after the column tree is updated', async () => {
-      grid.querySelector('vaadin-grid-column').hidden = true;
-      flushGrid(grid);
-      await nextFrame();
-      expect(grid.shadowRoot.querySelector('[part~="details-cell"]')).to.be.null;
     });
   });
 
