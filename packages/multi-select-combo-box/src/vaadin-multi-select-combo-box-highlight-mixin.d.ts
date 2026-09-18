@@ -7,9 +7,9 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { ComboBoxHighlightMixinClass } from '@vaadin/combo-box/src/vaadin-combo-box-highlight-mixin.js';
 
 /**
- * A mixin that extends `ComboBoxHighlightMixin` with a highlight state for the
- * chips of the selected items, so that chips can be navigated with arrow keys
- * while the DOM focus stays in the input.
+ * A mixin that extends `ComboBoxHighlightMixin` with highlight states for the
+ * chips of the selected items and for the select all button, so that both can
+ * be navigated with arrow keys while the DOM focus stays in the input.
  */
 export declare function MultiSelectComboBoxHighlightMixin<T extends Constructor<HTMLElement>>(
   base: T,

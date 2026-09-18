@@ -37,11 +37,11 @@ describe('select all', () => {
       expect(getSelectAllButton(comboBox)).to.be.null;
     });
 
-    it('should render the button with the button role and out of the tab order', () => {
+    it('should render the button with the button role and without tabindex', () => {
       comboBox.selectAllButtonVisible = true;
       button = getSelectAllButton(comboBox);
       expect(button.getAttribute('role')).to.equal('button');
-      expect(button.getAttribute('tabindex')).to.equal('-1');
+      expect(button.hasAttribute('tabindex')).to.be.false;
     });
 
     it('should not render button when readonly', () => {
@@ -353,186 +353,181 @@ describe('select all', () => {
   });
 
   describe('keyboard', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox.selectAllButtonVisible = true;
-      comboBox.opened = true;
-      button = getSelectAllButton(comboBox);
-      button.focus();
-    });
-
-    it('should select all items on Space', async () => {
-      await sendKeys({ press: 'Space' });
-      expect(comboBox.selectedItems).to.deep.equal(['Apple', 'Banana', 'Lemon', 'Orange']);
-      expect(getSelectAllText()).to.equal('Deselect All');
-    });
-
-    it('should select all items on Enter', async () => {
-      await sendKeys({ press: 'Enter' });
-      expect(comboBox.selectedItems).to.deep.equal(['Apple', 'Banana', 'Lemon', 'Orange']);
-      expect(getSelectAllText()).to.equal('Deselect All');
-    });
-
-    it('should not submit the surrounding form on Enter', async () => {
-      const form = fixtureSync('<form></form>');
-      form.appendChild(comboBox);
-      const submitSpy = sinon.spy((e) => e.preventDefault());
-      form.addEventListener('submit', submitSpy);
-      await nextRender();
-      button.focus();
-
-      await sendKeys({ press: 'Enter' });
-      expect(submitSpy).to.be.not.called;
-    });
-  });
-
-  describe('focus handling', () => {
-    let lastGlobalFocusable;
-
-    beforeEach(() => {
-      comboBox.selectAllButtonVisible = true;
-      button = getSelectAllButton(comboBox);
-      lastGlobalFocusable = fixtureSync('<input id="last-global-focusable" />');
       inputElement.focus();
       comboBox.opened = true;
+      await nextRender();
+      button = getSelectAllButton(comboBox);
     });
 
     afterEach(async () => {
       await resetMouse();
     });
 
-    it('should trap focus between input and button', async () => {
-      await sendKeys({ press: 'Tab' });
-      expect(getDeepActiveElement()).to.equal(button);
-
-      await sendKeys({ press: 'Tab' });
-      expect(getDeepActiveElement()).to.equal(inputElement);
-
-      await sendKeys({ press: 'Shift+Tab' });
-      expect(getDeepActiveElement()).to.equal(button);
-
-      await sendKeys({ press: 'Shift+Tab' });
-      expect(getDeepActiveElement()).to.equal(inputElement);
-    });
-
-    it('should keep the overlay opened when switching between input and button', async () => {
-      await sendKeys({ press: 'Tab' });
-      expect(comboBox.opened).to.be.true;
-      expect(comboBox.$.overlay.opened).to.be.true;
-
-      await sendKeys({ press: 'Tab' });
-      expect(comboBox.opened).to.be.true;
-      expect(comboBox.$.overlay.opened).to.be.true;
-    });
-
-    it('should update focus attribute when switching between input and button', async () => {
-      expect(comboBox.hasAttribute('focused')).to.be.true;
-      expect(comboBox.hasAttribute('focus-ring')).to.be.true;
-
-      await sendKeys({ press: 'Tab' });
-      expect(comboBox.hasAttribute('focused')).to.be.true;
-      expect(comboBox.hasAttribute('focus-ring')).to.be.false;
-
-      await sendKeys({ press: 'Tab' });
-      expect(comboBox.hasAttribute('focused')).to.be.true;
-      expect(comboBox.hasAttribute('focus-ring')).to.be.true;
-    });
-
-    it('should reset the focused item when focusing button', async () => {
+    it('should highlight the button on first ArrowDown', async () => {
       await sendKeys({ press: 'ArrowDown' });
-      expect(getFocusedItemIndex(comboBox)).to.equal(0);
-      expect(inputElement.hasAttribute('aria-activedescendant')).to.be.true;
-
-      await sendKeys({ press: 'Tab' });
+      expect(button.hasAttribute('focused')).to.be.true;
       expect(getFocusedItemIndex(comboBox)).to.equal(-1);
-      expect(inputElement.hasAttribute('aria-activedescendant')).to.be.false;
     });
 
-    it('should restore the filter to the input when focusing button', async () => {
+    it('should highlight the first item on second ArrowDown', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'ArrowDown' });
+      expect(button.hasAttribute('focused')).to.be.false;
+      expect(getFocusedItemIndex(comboBox)).to.equal(0);
+    });
+
+    it('should highlight the button on ArrowUp from the first item', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'ArrowUp' });
+      expect(button.hasAttribute('focused')).to.be.true;
+      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
+    });
+
+    it('should highlight the last item on ArrowUp when nothing is highlighted', async () => {
+      await sendKeys({ press: 'ArrowUp' });
+      expect(button.hasAttribute('focused')).to.be.false;
+      expect(getFocusedItemIndex(comboBox)).to.equal(3);
+    });
+
+    it('should keep the button highlighted on ArrowUp', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'ArrowUp' });
+      expect(button.hasAttribute('focused')).to.be.true;
+      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
+    });
+
+    it('should set aria-activedescendant to the button while it is highlighted', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      expect(button.id).to.be.ok;
+      expect(inputElement.getAttribute('aria-activedescendant')).to.equal(button.id);
+
+      await sendKeys({ press: 'ArrowDown' });
+      expect(inputElement.getAttribute('aria-activedescendant')).to.equal(getAllItems(comboBox)[0].id);
+
+      await sendKeys({ press: 'ArrowUp' });
+      expect(inputElement.getAttribute('aria-activedescendant')).to.equal(button.id);
+    });
+
+    it('should restore the filter to the input when highlighting the button', async () => {
       await sendKeys({ type: 'an' });
+      await sendKeys({ press: 'ArrowDown' });
       await sendKeys({ press: 'ArrowDown' });
       expect(inputElement.value).to.equal('Banana');
 
-      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'ArrowUp' });
       expect(inputElement.value).to.equal('an');
       expect(comboBox.filter).to.equal('an');
     });
 
-    it('should not trap focus in the component when the button is not visible', async () => {
-      comboBox.selectAllButtonVisible = false;
-
-      await sendKeys({ press: 'Tab' });
-      expect(comboBox.opened).to.be.false;
-      expect(getDeepActiveElement()).to.equal(lastGlobalFocusable);
-    });
-
-    it('should not focus the button on Tab when the overlay is closed', async () => {
-      await sendKeys({ press: 'Escape' });
-      await sendKeys({ press: 'Tab' });
-      expect(getDeepActiveElement()).to.equal(lastGlobalFocusable);
-    });
-
-    it('should not focus the button on Tab when readonly', async () => {
-      comboBox.readonly = true;
-      comboBox.selectedItems = ['Apple'];
-      await sendKeys({ press: 'Tab' });
-      expect(getDeepActiveElement()).to.equal(lastGlobalFocusable);
-    });
-
-    it('should keep the button focused after selecting all items', async () => {
-      button.focus();
-      await sendKeys({ press: 'Space' });
-      expect(getDeepActiveElement()).to.equal(button);
-      expect(comboBox.opened).to.be.true;
-    });
-
-    it('should close the overlay and focus the input on Escape', async () => {
-      button.focus();
-      await sendKeys({ press: 'Escape' });
-      expect(comboBox.opened).to.be.false;
-      expect(getDeepActiveElement()).to.equal(inputElement);
-    });
-
-    it('should focus the input and the first item on ArrowDown', async () => {
-      button.focus();
+    it('should select all items on Enter', async () => {
       await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'Enter' });
+      expect(comboBox.selectedItems).to.deep.equal(['Apple', 'Banana', 'Lemon', 'Orange']);
+      expect(getSelectAllText()).to.equal('Deselect All');
+    });
+
+    it('should deselect all items on Enter', async () => {
+      comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'Enter' });
+      expect(comboBox.selectedItems).to.deep.equal([]);
+    });
+
+    it('should select filtered items on Enter', async () => {
+      await sendKeys({ type: 'an' });
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'Enter' });
+      expect(comboBox.selectedItems).to.deep.equal(['Banana', 'Orange']);
+      expect(comboBox.filter).to.equal('an');
+    });
+
+    it('should keep the button highlighted and the overlay opened on Enter', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'Enter' });
+      expect(button.hasAttribute('focused')).to.be.true;
+      expect(comboBox.opened).to.be.true;
       expect(getDeepActiveElement()).to.equal(inputElement);
+    });
+
+    it('should close the overlay on Escape', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'Escape' });
+      expect(comboBox.opened).to.be.false;
+      expect(getDeepActiveElement()).to.equal(inputElement);
+    });
+
+    it('should clear the highlight when the overlay is closed', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      comboBox.close();
+      await nextRender();
+      expect(button.hasAttribute('focused')).to.be.false;
+      expect(inputElement.hasAttribute('aria-activedescendant')).to.be.false;
+    });
+
+    it('should clear the highlight when the overlay is closed on outside click', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await sendMouse({ type: 'click', position: [400, 400] });
+      await nextRender();
+      expect(comboBox.opened).to.be.false;
+      expect(button.hasAttribute('focused')).to.be.false;
+      expect(inputElement.hasAttribute('aria-activedescendant')).to.be.false;
+    });
+
+    it('should clear the highlight when the button is hidden', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      comboBox.selectAllButtonVisible = false;
+      await nextRender();
+      expect(inputElement.hasAttribute('aria-activedescendant')).to.be.false;
+      expect(comboBox.opened).to.be.true;
+
+      comboBox.selectAllButtonVisible = true;
+      await nextRender();
+      expect(getSelectAllButton(comboBox).hasAttribute('focused')).to.be.false;
+    });
+
+    it('should clear the highlight when the filter changes', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ type: 'an' });
+      expect(button.hasAttribute('focused')).to.be.false;
+      expect(inputElement.hasAttribute('aria-activedescendant')).to.be.false;
+    });
+
+    it('should not highlight the button when it is not visible', async () => {
+      comboBox.selectAllButtonVisible = false;
+      await nextRender();
+      await sendKeys({ press: 'ArrowDown' });
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
-    it('should focus the input and the last item on ArrowUp', async () => {
-      button.focus();
-      await sendKeys({ press: 'ArrowUp' });
-      expect(getDeepActiveElement()).to.equal(inputElement);
-      expect(getFocusedItemIndex(comboBox)).to.equal(3);
+    it('should not highlight the button when readonly', async () => {
+      comboBox.readonly = true;
+      comboBox.selectedItems = ['Apple'];
+      await nextRender();
+      await sendKeys({ press: 'ArrowDown' });
+      expect(inputElement.hasAttribute('aria-activedescendant')).to.be.false;
     });
 
-    it('should focus the input when the overlay is closed', () => {
-      button.focus();
-      comboBox.close();
-      expect(getDeepActiveElement()).to.equal(inputElement);
-    });
+    it('should not highlight the button when the filter matches no items', async () => {
+      await sendKeys({ type: 'xyz' });
+      await nextRender();
+      expect(comboBox.$.overlay.opened).to.be.false;
 
-    it('should focus the input when the overlay is closed on outside click', async () => {
-      button.focus();
-      await sendMouse({ type: 'click', position: [400, 400] });
-      expect(comboBox.opened).to.be.false;
-      expect(getDeepActiveElement()).to.equal(inputElement);
-    });
-
-    it('should focus the input when the button is removed', () => {
-      button.focus();
-      comboBox.selectAllButtonVisible = false;
-      expect(getDeepActiveElement()).to.equal(inputElement);
-      expect(comboBox.opened).to.be.true;
+      await sendKeys({ press: 'ArrowDown' });
+      expect(button.hasAttribute('focused')).to.be.false;
+      expect(inputElement.hasAttribute('aria-activedescendant')).to.be.false;
     });
   });
 
   describe('pointer', () => {
     beforeEach(async () => {
       comboBox.selectAllButtonVisible = true;
-      button = getSelectAllButton(comboBox);
       inputElement.focus();
       await sendKeys({ press: 'ArrowDown' });
+      await nextRender();
+      button = getSelectAllButton(comboBox);
     });
 
     afterEach(async () => {

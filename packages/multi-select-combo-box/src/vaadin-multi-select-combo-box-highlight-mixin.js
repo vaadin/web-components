@@ -6,21 +6,77 @@
 import { ComboBoxHighlightMixin } from '@vaadin/combo-box/src/vaadin-combo-box-highlight-mixin.js';
 
 /**
- * A mixin that extends `ComboBoxHighlightMixin` with a highlight state for the
- * chips of the selected items, so that chips can be navigated with arrow keys
- * while the DOM focus stays in the input.
+ * A mixin that extends `ComboBoxHighlightMixin` with highlight states for the
+ * chips of the selected items and for the select all button, so that both can
+ * be navigated with arrow keys while the DOM focus stays in the input.
  *
  * In addition to the states of `ComboBoxHighlightMixin`, the state can be:
  *
  * - `{ type: 'chip', index }`: the chip at `index`.
+ * - `{ type: 'select-all' }`: the select all button.
  *
- * Expects the host to provide a `_chips` getter that returns the chip elements.
+ * The select all button is part of the item navigation and comes before the
+ * first item, so `_highlightNextItem()` and `_highlightPrevItem()` move the
+ * highlight to it while it is available.
+ *
+ * Expects the host to provide a `_chips` getter that returns the chip elements,
+ * and an `_isSelectAllAvailable` getter that tells whether the select all
+ * button can be highlighted.
  *
  * @polymerMixin
  * @mixes ComboBoxHighlightMixin
  */
 export const MultiSelectComboBoxHighlightMixin = (superClass) =>
   class MultiSelectComboBoxHighlightMixinClass extends ComboBoxHighlightMixin(superClass) {
+    /** @protected */
+    get _isSelectAllHighlighted() {
+      return this._highlightState.type === 'select-all';
+    }
+
+    /**
+     * Override method from `ComboBoxHighlightMixin` to highlight
+     * the select all button before the first item.
+     * @protected
+     * @override
+     */
+    _highlightNextItem() {
+      if (!this._hasHighlightedItem && !this._isSelectAllHighlighted && this._isSelectAllAvailable) {
+        this._highlightSelectAll();
+      } else {
+        super._highlightNextItem();
+      }
+    }
+
+    /**
+     * Override method from `ComboBoxHighlightMixin` to highlight
+     * the select all button when moving up from the first item.
+     * @protected
+     * @override
+     */
+    _highlightPrevItem() {
+      if (this._isSelectAllHighlighted) {
+        return;
+      }
+
+      if (this._highlightedItemIndex === 0 && this._isSelectAllAvailable) {
+        this._highlightSelectAll();
+      } else {
+        super._highlightPrevItem();
+      }
+    }
+
+    /** @protected */
+    _highlightSelectAll() {
+      this._setHighlightState({ type: 'select-all' });
+    }
+
+    /** @protected */
+    _clearSelectAllHighlight() {
+      if (this._isSelectAllHighlighted) {
+        this._clearHighlight();
+      }
+    }
+
     /** @protected */
     get _hasHighlightedChip() {
       return this._highlightState.type === 'chip';

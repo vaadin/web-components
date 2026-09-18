@@ -37,7 +37,7 @@ export const multiSelectComboBoxSelectAllButtonStyles = css`
     margin-inline-end: var(--vaadin-item-gap, var(--vaadin-gap-s));
   }
 
-  :host(:focus-visible) {
+  :host([focused]) {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }

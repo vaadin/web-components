@@ -11,9 +11,17 @@ import { multiSelectComboBoxSelectAllButtonStyles } from './styles/vaadin-multi-
 
 /**
  * An element used by `<vaadin-multi-select-combo-box>` to select or deselect
- * all items shown in the dropdown.
+ * all items shown in the dropdown. The element is not focusable itself, the
+ * keyboard highlight is reflected with the `focused` attribute while the DOM
+ * focus stays in the input.
  *
  * ### Styling
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute   | Description
+ * ------------|-------------
+ * `focused`   | Set when the button is highlighted with the keyboard
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -39,6 +47,16 @@ class MultiSelectComboBoxSelectAllButton extends PolylitMixin(LumoInjectionMixin
         type: String,
         sync: true,
       },
+
+      /**
+       * True when the button is highlighted with the keyboard.
+       */
+      focused: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        sync: true,
+      },
     };
   }
 
@@ -52,7 +70,6 @@ class MultiSelectComboBoxSelectAllButton extends PolylitMixin(LumoInjectionMixin
     super.firstUpdated();
 
     this.setAttribute('role', 'button');
-    this.setAttribute('tabindex', '-1');
   }
 }
 

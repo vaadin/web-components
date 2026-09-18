@@ -44,7 +44,7 @@
     }
   }
 
-  :host(:focus-visible) {
+  :host([focused]) {
     outline: none;
     box-shadow: inset 0 0 0 var(--vaadin-focus-ring-width, 2px)
       var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
