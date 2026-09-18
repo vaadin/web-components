@@ -16,17 +16,10 @@ import { cellContent } from './directives/cell-content-directive.js';
  */
 export const BodyRenderingMixin = (superClass) =>
   class BodyRenderingMixin extends superClass {
-    /** @protected */
-    ready() {
-      super.ready();
-
-      this.$.sizer.__id = 'sizer';
-    }
-
     /** @private */
     __createBodyRow() {
       const renderRoot = document.createDocumentFragment();
-      render(this.#bodyRowTemplate(), renderRoot, { host: this });
+      render(this.#bodyRowTemplate({ cells: [] }), renderRoot, { host: this });
 
       const row = renderRoot.firstElementChild;
       row.__id = generateUniqueId();
@@ -36,8 +29,7 @@ export const BodyRenderingMixin = (superClass) =>
 
     /** @private */
     __renderBodyRow(row) {
-      const item = this.__getRowItem(row);
-      render(this.#bodyRowTemplate({ row, item }), row.__renderRoot, { host: this });
+      render(this.#bodyRowTemplate(this.#getRowState(row)), row.__renderRoot, { host: this });
 
       this.#updateRowCells(row);
 
@@ -53,6 +45,10 @@ export const BodyRenderingMixin = (superClass) =>
       const previousDetailsCell = row.__detailsCell;
       row.__detailsCell = row.querySelector('[part~="details-cell"]');
 
+      if (previousDetailsCell && previousDetailsCell !== row.__detailsCell) {
+        this._teardownDetailsCell(previousDetailsCell);
+      }
+
       if (row.__detailsCell && row.__detailsCell !== previousDetailsCell) {
         this._configureDetailsCell(row.__detailsCell);
       }
@@ -65,7 +61,7 @@ export const BodyRenderingMixin = (superClass) =>
     /** @private */
     __renderSizerRow() {
       const row = this.$.sizer;
-      render(this.#bodyCellsTemplate(row), row, { host: this });
+      render(this.#sizerRowTemplate(), row, { host: this });
 
       this.#updateRowCells(row);
 
@@ -75,8 +71,12 @@ export const BodyRenderingMixin = (superClass) =>
     }
 
     #updateRowCells(row) {
-      const columns = this._columnTree[this._columnTree.length - 1];
+      const columns = this._columnTree.at(-1);
       const previousCells = row.__cells || [];
+
+      [...row.children].forEach((cell) => {
+        cell.__parentRow = row;
+      });
 
       row.__cells = [...row.children].filter((cell) => cell._column);
 
@@ -96,80 +96,106 @@ export const BodyRenderingMixin = (superClass) =>
       });
     }
 
-    #bodyRowTemplate = ({ row, item } = {}) => {
+    #getRowState(row) {
+      const columns = this._columnTree.at(-1).toSorted((a, b) => a._order - b._order);
+      const visibleColumns = columns.filter((column) => !column.hidden);
+
+      return {
+        id: row.__id,
+        item: this.__getRowItem(row),
+        cells: columns.map((column) => {
+          return {
+            column,
+            isFirstCell: column === visibleColumns.at(0),
+            isLastCell: column === visibleColumns.at(-1),
+            isHidden: column.hidden || column._bodyContentHidden,
+          };
+        }),
+        hasDetailsCell: !!this.rowDetailsRenderer,
+      };
+    }
+
+    #bodyRowTemplate = ({ id, item, cells, hasDetailsCell }) => {
       return html`
         <tr role="row" tabindex="-1" part="row body-row" class="row body-row" ?loading="${!item}">
-          ${row ? this.#bodyCellsTemplate(row) : nothing}
+          ${repeat(
+            cells,
+            ({ column }) => column._id,
+            ({ column, isFirstCell, isLastCell, isHidden }) => {
+              if (isHidden) {
+                return cache(nothing);
+              }
+
+              const cellParts = {
+                'first-column-cell': isFirstCell,
+                'last-column-cell': isLastCell,
+              };
+
+              return cache(html`
+                <td
+                  role="${column.rowHeader ? 'rowheader' : 'gridcell'}"
+                  part="cell body-cell${partMap(cellParts)}"
+                  class="cell body-cell${classMap(cellParts)}"
+                  ?first-column="${isFirstCell}"
+                  ?last-column="${isLastCell}"
+                  tabindex="${column._focusButtonMode ? nothing : '-1'}"
+                  @keydown="${this.__onCellKeyDown}"
+                  @mousedown=${this.__onCellMouseDown}
+                  @mouseenter=${this.__onCellMouseEnter}
+                  @mouseleave=${this.__onCellMouseLeave}
+                  ._column=${column}
+                >
+                  ${cellContent(this, `vaadin-grid-body-cell-content-${id}-${column._id}`, {
+                    textAlign: column.textAlign,
+                    focusButton: column._focusButtonMode,
+                  })}
+                </td>
+              `);
+            },
+          )}
+          ${
+            hasDetailsCell
+              ? html`
+                  <td
+                    id="vaadin-grid-details-cell-${id}"
+                    role="gridcell"
+                    part="cell details-cell"
+                    class="cell details-cell"
+                    tabindex="-1"
+                    frozen
+                    @keydown="${this.__onCellKeyDown}"
+                    @mousedown=${this.__onCellMouseDown}
+                    @mouseenter=${this.__onCellMouseEnter}
+                    @mouseleave=${this.__onCellMouseLeave}
+                  >
+                    ${cellContent(this, `vaadin-grid-details-cell-content-${id}`)}
+                  </td>
+                `
+              : nothing
+          }
         </tr>
       `;
     };
 
-    #bodyCellsTemplate = (row) => {
-      const isSizerRow = row === this.$.sizer;
+    #sizerRowTemplate = () => {
       const columns = this._columnTree.at(-1).toSorted((a, b) => a._order - b._order);
-      const visibleColumns = columns.filter((column) => !column.hidden);
 
       return html`
         ${repeat(
           columns,
           (column) => column._id,
           (column) => {
-            if (column.hidden || (column._bodyContentHidden && !isSizerRow)) {
+            if (column.hidden) {
               return cache(nothing);
             }
 
-            const isFirstCell = column === visibleColumns.at(0);
-            const isLastCell = column === visibleColumns.at(-1);
-            const cellParts = {
-              'first-column-cell': isFirstCell,
-              'last-column-cell': isLastCell,
-            };
-
-            const content = cellContent(this, `vaadin-grid-body-cell-content-${row.__id}-${column._id}`, {
-              textAlign: column.textAlign,
-            });
-
             return cache(html`
-              <td
-                role="${column.rowHeader ? 'rowheader' : 'gridcell'}"
-                part="cell body-cell${partMap(cellParts)}"
-                class="cell body-cell${classMap(cellParts)}"
-                ?first-column="${isFirstCell}"
-                ?last-column="${isLastCell}"
-                tabindex="${column._focusButtonMode ? nothing : '-1'}"
-                @keydown="${this.__onCellKeyDown}"
-                @mousedown=${this.__onCellMouseDown}
-                @mouseenter=${this.__onCellMouseEnter}
-                @mouseleave=${this.__onCellMouseLeave}
-                ._column=${column}
-                .__parentRow=${row}
-              >
-                ${column._focusButtonMode ? html`<div role="button" tabindex="-1">${content}</div>` : content}
+              <td part="cell body-cell" class="cell body-cell" ._column=${column}>
+                ${cellContent(this, `vaadin-grid-sizer-cell-content-${column._id}`)}
               </td>
             `);
           },
         )}
-        ${
-          this.rowDetailsRenderer || row.__detailsCell
-            ? html`
-                <td
-                  id="vaadin-grid-details-cell-${row.__id}"
-                  role="gridcell"
-                  part="cell details-cell"
-                  class="cell details-cell"
-                  tabindex="-1"
-                  frozen
-                  @keydown="${this.__onCellKeyDown}"
-                  @mousedown=${this.__onCellMouseDown}
-                  @mouseenter=${this.__onCellMouseEnter}
-                  @mouseleave=${this.__onCellMouseLeave}
-                  .__parentRow=${row}
-                >
-                  ${cellContent(this, `vaadin-grid-details-cell-content-${row.__id}`)}
-                </td>
-              `
-            : nothing
-        }
       `;
     };
   };
