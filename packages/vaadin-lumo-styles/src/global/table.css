@@ -4,12 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-/* Opt-in styles for a native <table>. Applied through the `vaadin-table`
-   class, so that a table can opt out again by dropping the class. The values
+/* Opt-in styles for a native <table>. Applied through the `vaadin-default`
+   class, the one class that opts a native element into the theme's styles for
+   it, so that an element can opt out again by dropping the class. The values
    follow what Lumo does to a <vaadin-grid>: a square box with a stronger line
    around it than between the rows, and a header told apart by type rather
    than by a background. */
-:where(.vaadin-table) {
+:where(table.vaadin-default) {
   background: var(--lumo-base-color);
   border: 1px solid var(--lumo-contrast-20pct);
   border-spacing: 0;
