@@ -3,7 +3,10 @@
    top spacing, so the label sits closer to them than a standalone field's label —
    reduce the label padding-bottom by space-xs. The whitespace theme opts back into the
    full standalone spacing. */
-:where(vaadin-custom-field, vaadin-date-time-picker)[has-label]::part(label) {
+:where(vaadin-custom-field, vaadin-date-time-picker)[has-label]:not(
+    [theme~='label-aside'],
+    [data-form-layout-has-labels-aside]
+  )::part(label) {
   padding-bottom: calc(0.5em - var(--lumo-space-xs));
 }
 
