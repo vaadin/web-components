@@ -41,9 +41,9 @@
     min-height: var(--lumo-size-s);
   }
 
-  /* Field part spacing: the field.css paddings and spacers replace the base grid margins */
-  &::part(helper-text) {
-    margin: 0;
+  /* No helper inset outside label aside, as in legacy */
+  &:not([theme~='label-aside'], [data-form-layout-has-labels-aside])::part(helper-text) {
+    padding-inline-start: 0;
   }
 
   &::part(marks) {
