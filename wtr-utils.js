@@ -160,15 +160,22 @@ const getVisualTestGroups = (packages, theme) => {
     packages = packages.filter((pkg) => !pkg.includes('lumo'));
   }
 
-  return packages.map((pkg) => {
-    return {
-      name: pkg,
-      files: [
-        `packages/${pkg}/test/visual/${filesGlob}.test.{js,ts}`,
-        `packages/${pkg}/test/visual/${theme}/${filesGlob}.test.{js,ts}`,
-      ],
-    };
-  });
+  return (
+    packages
+      .map((pkg) => {
+        return {
+          name: pkg,
+          files: [
+            `packages/${pkg}/test/visual/${filesGlob}.test.{js,ts}`,
+            `packages/${pkg}/test/visual/${theme}/${filesGlob}.test.{js,ts}`,
+          ],
+        };
+      })
+      // A package can have visual tests for one theme only, e.g. the theme
+      // packages themselves. The runner errors out on a group that matches no
+      // files, so leave those out of the other themes' runs.
+      .filter((group) => group.files.some((pattern) => globSync(pattern).length > 0))
+  );
 };
 
 const getTestRunnerHtml = (theme) => (testFramework) =>
