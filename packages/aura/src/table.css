@@ -1,0 +1,59 @@
+/* Opt-in styles for a native <table>. Applied through the `vaadin-default`
+   class, the one class that opts a native element into the theme's styles for
+   it, so that an element can opt out again by dropping the class. */
+:where(table.vaadin-default) {
+  /* The corner cells have to stay inside the table's own border. */
+  --_inner-radius: max(0px, calc(var(--vaadin-radius-m) - 1px));
+
+  background: var(--vaadin-background-color);
+  border: 1px solid var(--vaadin-border-color);
+  border-radius: var(--vaadin-radius-m);
+  border-spacing: 0;
+
+  caption {
+    padding-block-end: var(--vaadin-gap-s);
+    color: var(--vaadin-text-color-secondary);
+    text-align: start;
+  }
+
+  :is(th, td) {
+    padding: var(--vaadin-padding-s) var(--vaadin-padding-m);
+    /* The UA stylesheet centers <th>, which leaves a header out of line with
+       the column below it. */
+    text-align: start;
+  }
+
+  th {
+    font-weight: var(--aura-font-weight-medium);
+  }
+
+  :is(thead, tfoot) :is(th, td) {
+    background: var(--vaadin-background-container);
+  }
+
+  /* A line between every two consecutive rows, wherever the section boundary
+     falls. Drawing it above a row rather than below one leaves the outer
+     edges to the table's own border. */
+  :where(tr:not(:first-child) :is(th, td)),
+  :where(:is(thead, tbody, tfoot) ~ :is(tbody, tfoot) tr:first-child :is(th, td)) {
+    border-block-start: 1px solid var(--vaadin-border-color);
+  }
+
+  /* Round the corner cells so that a header or footer background does not
+     fill in the corners of the rounded border. */
+  :where(thead:first-of-type tr:first-child :is(th, td):first-child) {
+    border-start-start-radius: var(--_inner-radius);
+  }
+
+  :where(thead:first-of-type tr:first-child :is(th, td):last-child) {
+    border-start-end-radius: var(--_inner-radius);
+  }
+
+  :where(:is(tbody, tfoot):last-of-type tr:last-child :is(th, td):first-child) {
+    border-end-start-radius: var(--_inner-radius);
+  }
+
+  :where(:is(tbody, tfoot):last-of-type tr:last-child :is(th, td):last-child) {
+    border-end-end-radius: var(--_inner-radius);
+  }
+}
