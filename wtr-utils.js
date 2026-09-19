@@ -160,22 +160,15 @@ const getVisualTestGroups = (packages, theme) => {
     packages = packages.filter((pkg) => !pkg.includes('lumo'));
   }
 
-  return (
-    packages
-      .map((pkg) => {
-        return {
-          name: pkg,
-          files: [
-            `packages/${pkg}/test/visual/${filesGlob}.test.{js,ts}`,
-            `packages/${pkg}/test/visual/${theme}/${filesGlob}.test.{js,ts}`,
-          ],
-        };
-      })
-      // A package can have visual tests for one theme only, e.g. the theme
-      // packages themselves. The runner errors out on a group that matches no
-      // files, so leave those out of the other themes' runs.
-      .filter((group) => group.files.some((pattern) => globSync(pattern).length > 0))
-  );
+  return packages.map((pkg) => {
+    return {
+      name: pkg,
+      files: [
+        `packages/${pkg}/test/visual/${filesGlob}.test.{js,ts}`,
+        `packages/${pkg}/test/visual/${theme}/${filesGlob}.test.{js,ts}`,
+      ],
+    };
+  });
 };
 
 const getTestRunnerHtml = (theme) => (testFramework) =>
@@ -267,13 +260,14 @@ const createUnitTestsConfig = (config) => {
 };
 
 const createVisualTestsConfig = (theme) => {
+  // A theme package only has visual tests for its own theme
   let visualPackages;
   if (theme === 'base') {
-    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles');
+    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles' && dir !== 'aura');
   } else if (theme === 'aura') {
     visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles' && dir !== 'field-base');
   } else {
-    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'field-base');
+    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'field-base' && dir !== 'aura');
   }
 
   const packages = getTestPackages(visualPackages);
