@@ -12,6 +12,10 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { formatISOTime, parseISOTime, validateTime } from './vaadin-time-picker-helper.js';
 
+/**
+ * @typedef {import('./vaadin-time-picker-helper.js').TimePickerTime} TimePickerTime
+ */
+
 export const timePickerI18nDefaults = Object.freeze({
   formatTime: formatISOTime,
   parseTime: parseISOTime,
@@ -428,7 +432,8 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
-     * Returning milliseconds from Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+     * @param {TimePickerTime | undefined} obj Time object
+     * @return {number} milliseconds
      * @private
      */
     __getMsec(obj) {
@@ -450,8 +455,8 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
-     * Returning Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
-     * from an ISO 8601 time, truncated to the resolution defined by the step.
+     * @param {string} timeString ISO 8601 time string
+     * @return {TimePickerTime | undefined} time object truncated to the step resolution
      * @private
      */
     __getTimeObject(timeString) {
@@ -459,7 +464,8 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
-     * Returning seconds from Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+     * @param {!TimePickerTime} obj Time object
+     * @return {number} seconds
      * @private
      */
     __getSec(obj) {
@@ -472,9 +478,10 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
-     * Returning Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
-     * from the result of adding step value in milliseconds to the milliseconds amount.
-     * With `precision` parameter rounding the value to the closest step valid interval.
+     * @param {number} msec Milliseconds amount
+     * @param {number} step Step in milliseconds to add
+     * @param {boolean} precision Whether to round the value to the closest step valid interval.
+     * @return {!TimePickerTime} time object
      * @private
      */
     __addStep(msec, step, precision) {
@@ -629,7 +636,10 @@ export const TimePickerMixin = (superClass) =>
       this._comboBoxValue = text;
     }
 
-    /** @private */
+    /**
+     * @param {TimePickerTime | undefined} obj Time object
+     * @private
+     */
     __updateInputValue(obj) {
       const text = this.__effectiveI18n.formatTime(obj) || '';
       this._inputElementValue = text;
@@ -637,8 +647,6 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
-     * Returns true if `time` satisfies the `min` and `max` constraints (if any).
-     *
      * @param {!TimePickerTime} time Value to check against constraints
      * @return {boolean} True if `time` satisfies the constraints
      * @protected
@@ -669,13 +677,14 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
+     * Override method inherited from `ComboBoxBaseMixin` to only
+     * open overlay when clicking on label or the input container.
      * @param {Event} event
      * @protected
      */
     _onHostClick(event) {
       const path = event.composedPath();
 
-      // Open dropdown only when clicking on the label or input field
       if (path.includes(this._labelNode) || path.includes(this._inputContainer)) {
         super._onHostClick(event);
       }
