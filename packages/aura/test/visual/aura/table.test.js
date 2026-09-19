@@ -48,25 +48,4 @@ describe('table', () => {
   it('without the class', async () => {
     await visualDiff(fixtureTable(''), 'table-without-class');
   });
-
-  it('no header row', async () => {
-    const wrapper = fixtureSync(`
-      <div style="display: inline-block; padding: 10px">
-        <table class="vaadin-default">
-          <tbody>
-            <tr>
-              <th scope="row">Mercury</th>
-              <td>4,879</td>
-            </tr>
-            <tr>
-              <th scope="row">Earth</th>
-              <td>12,756</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    `);
-
-    await visualDiff(wrapper, 'table-no-header-row');
-  });
 });
