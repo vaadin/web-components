@@ -44,7 +44,7 @@
        overflow/ellipsis truncates it — matching original Lumo (which stayed at the
        field width). Without this, the grid sizes to the full label text. */
     width: 0;
-    padding-inline: calc(var(--lumo-border-radius-m) / 4) 1em;
+    padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
     /* Workaround for diacritics being cut off: top padding compensated by a negative margin */
     padding-top: 0.25em;
     margin-top: -0.25em;
@@ -57,6 +57,11 @@
     transition: color 0.2s;
   }
 
+  /* Room for the absolutely positioned required indicator (required fields only) */
+  &[required]::part(label) {
+    padding-inline-end: 1em;
+  }
+
   &[focused]:not([readonly])::part(label) {
     color: var(--vaadin-input-field-focused-label-color, var(--lumo-primary-text-color));
   }
@@ -65,7 +70,9 @@
     --vaadin-input-field-required-indicator-color: var(--lumo-error-text-color);
   }
 
+  /* The ::before/::after spacers space the helper; drop the base grid margin */
   &::part(helper-text) {
+    margin-block: 0;
     margin-inline-start: calc(var(--lumo-border-radius-m) / 4);
     transition: color 0.2s;
   }
@@ -94,7 +101,7 @@
      keeps its base display (flex when shown, none otherwise), so an empty field
      adds no height. The top gap comes from a margin instead of a flex-item spacer. */
   &::part(error-message) {
-    margin-top: 0.4em;
+    margin-block: 0.4em;
     margin-inline-start: calc(var(--lumo-border-radius-m) / 4);
   }
 
@@ -115,6 +122,40 @@
     content: '';
     display: block;
     height: var(--vaadin-input-field-helper-spacing, 0.4em);
+  }
+
+  /* Label aside (theme or form-layout driven). The base provides the two-column grid,
+     the baseline guide, align-self: baseline, text-align and the input width. The
+     single-column label rule above must be undone here: as a document rule it beats
+     the base's width:auto regardless of specificity, collapsing the label column,
+     blocking wrap and clipping descenders. */
+  &:is([theme~='label-aside'][has-label], [data-form-layout-has-labels-aside]) {
+    padding-top: var(--lumo-space-xs);
+  }
+
+  &:is([theme~='label-aside'], [data-form-layout-has-labels-aside])::part(label) {
+    width: auto;
+    white-space: normal;
+    overflow: visible;
+    word-break: break-word;
+    padding-bottom: 0;
+  }
+
+  /* Outranks the helper-above-field label padding above */
+  &:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[has-helper][theme~='helper-above-field']::part(
+      label
+    ) {
+    padding-bottom: 0;
+  }
+
+  &:is([theme~='label-aside'], [data-form-layout-has-labels-aside])::part(helper-text),
+  &:is([theme~='label-aside'], [data-form-layout-has-labels-aside])::part(error-message) {
+    margin-inline: 0;
+    padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
+  }
+
+  &:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[has-label] > [slot='tooltip'] {
+    --vaadin-tooltip-offset-bottom: 0px;
   }
 }
 

@@ -29,6 +29,14 @@
   --vaadin-item-checkmark-display: block;
 }
 
+/* Label aside: keep the value row one text line tall while the value is empty, so the
+   baseline guide has something to align the label to (legacy #12729). */
+:where(vaadin-select):is([theme~='label-aside'], [data-form-layout-has-labels-aside])::part(input-field)::before {
+  content: '\2003' / '';
+  width: 0;
+  font-size: var(--vaadin-input-field-value-font-size, var(--lumo-font-size-m));
+}
+
 /* The selected item keeps the default item height; shrink it with the small field */
 :where(vaadin-select)[theme~='small'] > vaadin-select-value-button > vaadin-select-item {
   min-height: var(--lumo-size-s);
