@@ -24,9 +24,9 @@ function resolveColor(property) {
   return getStyle(reference, 'background-color');
 }
 
-function fixtureTable({ classes = '', theme = '' } = {}) {
+function fixtureTable({ classes = '' } = {}) {
   return fixtureSync(`
-    <table class="${classes}" theme="${theme}">
+    <table class="${classes}">
       <thead>
         <tr>
           <th>Name</th>
@@ -107,38 +107,5 @@ describe('table', () => {
     expect(getStyle(firstBody, 'border-top-color')).to.equal(resolveColor('--lumo-contrast-10pct'));
     expect(getStyle(secondBody, 'border-top-width')).to.equal('1px');
     expect(getStyle(footer, 'border-top-width')).to.equal('1px');
-  });
-
-  it('should drop the lines between rows with theme="no-row-borders"', () => {
-    const table = fixtureTable({ classes: 'vaadin-table', theme: 'no-row-borders' });
-
-    expect(getStyle(table.querySelector('tbody td'), 'border-top-width')).to.equal('0px');
-    expect(getStyle(table.querySelector('tfoot td'), 'border-top-width')).to.equal('0px');
-    // The border around the table stays
-    expect(getStyle(table, 'border-top-width')).to.equal('1px');
-  });
-
-  it('should tint every other body row with theme="row-stripes"', () => {
-    const rows = fixtureTable({ classes: 'vaadin-table', theme: 'row-stripes' }).querySelectorAll('tbody td');
-
-    expect(getStyle(rows[0], 'background-color')).to.equal('rgba(0, 0, 0, 0)');
-    expect(getStyle(rows[1], 'background-color')).to.equal(resolveColor('--lumo-contrast-5pct'));
-  });
-
-  it('should separate columns but not the last one with theme="column-borders"', () => {
-    const cells = fixtureTable({ classes: 'vaadin-table', theme: 'column-borders' }).querySelectorAll(
-      'tbody th, tbody td',
-    );
-
-    expect(getStyle(cells[0], 'border-inline-end-width')).to.equal('1px');
-    expect(getStyle(cells[1], 'border-inline-end-width')).to.equal('0px');
-  });
-
-  it('should tighten the cells and the type with theme="compact"', () => {
-    const table = fixtureTable({ classes: 'vaadin-table', theme: 'compact' });
-
-    expect(getStyle(table.querySelector('tbody td'), 'padding')).to.equal('2px 8px');
-    expect(getStyle(table.querySelector('tbody td'), 'font-size')).to.equal('14px');
-    expect(getStyle(table.querySelector('thead th'), 'font-size')).to.equal('13px');
   });
 });

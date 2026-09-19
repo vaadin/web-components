@@ -1,8 +1,6 @@
 /* Opt-in styles for a native <table>. Applied through the `vaadin-table`
    class, so that a table can opt out again by dropping the class. */
 :where(.vaadin-table) {
-  /* Zeroed by the `no-row-borders` variant. */
-  --_row-border-width: 1px;
   /* The corner cells have to stay inside the table's own border. */
   --_inner-radius: max(0px, calc(var(--vaadin-radius-m) - 1px));
 
@@ -37,7 +35,7 @@
      edges to the table's own border. */
   :where(tr:not(:first-child) :is(th, td)),
   :where(:is(thead, tbody, tfoot) ~ :is(tbody, tfoot) tr:first-child :is(th, td)) {
-    border-block-start: var(--_row-border-width) solid var(--vaadin-border-color);
+    border-block-start: 1px solid var(--vaadin-border-color);
   }
 
   /* Round the corner cells so that a header or footer background does not
@@ -56,27 +54,5 @@
 
   :where(:is(tbody, tfoot):last-of-type tr:last-child :is(th, td):last-child) {
     border-end-end-radius: var(--_inner-radius);
-  }
-
-  /* Variants, named after the <vaadin-grid> ones. */
-
-  &[theme~='no-row-borders'] {
-    --_row-border-width: 0px;
-  }
-
-  &[theme~='row-stripes'] tbody tr:nth-child(even) :is(th, td) {
-    background: var(--vaadin-background-container);
-  }
-
-  &[theme~='column-borders'] :is(th, td):not(:last-child) {
-    border-inline-end: 1px solid var(--vaadin-border-color);
-  }
-
-  &[theme~='compact'] {
-    font-size: var(--aura-font-size-s);
-
-    :is(th, td) {
-      padding: var(--vaadin-padding-xs) var(--vaadin-padding-s);
-    }
   }
 }
