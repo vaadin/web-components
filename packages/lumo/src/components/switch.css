@@ -11,6 +11,7 @@
   --vaadin-switch-gap: 0px;
   --vaadin-switch-label-color: var(--lumo-body-text-color);
   --vaadin-switch-label-font-size: var(--lumo-font-size-m);
+  --vaadin-switch-label-line-height: var(--lumo-line-height-s);
   --vaadin-switch-label-font-weight: 400;
 
   /* Track fill and (no) border, except readonly — which keeps the base's transparent
@@ -72,44 +73,11 @@
   &[invalid] {
     --vaadin-switch-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-50pct));
     --vaadin-focus-ring-color: var(--lumo-error-color-50pct);
-    --vaadin-input-field-required-indicator-color: var(--lumo-error-text-color);
   }
 
   /* Active press */
   &[active]::part(switch) {
     transform: scale(0.95);
     transition-duration: 0.05s;
-  }
-
-  /* Label spacing: pad the slotted <label> (not the label part) — block padding for
-     the row height, a small leading gap to the switch and a larger trailing gap. */
-  &[has-label] > label {
-    padding-block: var(--lumo-space-xs);
-    padding-inline: var(--lumo-space-xs) var(--lumo-space-s);
-  }
-
-  /* Helper text and error message (switch is not part of the shared field list) */
-  &::part(helper-text) {
-    padding-inline-start: var(--lumo-space-xs);
-    margin-top: 0;
-  }
-
-  &[has-helper]::part(helper-text)::before {
-    display: none;
-  }
-
-  &[has-helper]::part(helper-text)::after {
-    content: '';
-    display: block;
-    height: 0.4em;
-  }
-
-  &::part(error-message) {
-    padding-inline-start: var(--lumo-space-xs);
-    margin: 0;
-  }
-
-  &::part(error-message)::before {
-    content: none;
   }
 }

@@ -13,7 +13,8 @@
   padding: var(--lumo-space-m);
 }
 
-:where(vaadin-dialog)::part(title) {
+:where(vaadin-dialog)::part(title),
+:where(vaadin-confirm-dialog)::part(header) {
   margin-inline-start: calc(var(--vaadin-dialog-padding) - var(--lumo-space-m));
 }
 
@@ -27,6 +28,8 @@
   line-height: var(--lumo-line-height-s);
 }
 
-:where(vaadin-dialog[has-footer])::part(content) {
+/* confirm-dialog always has a footer (its has-footer attribute is not mirrored to
+   the host, so it is listed unconditionally). */
+:where(vaadin-dialog[has-footer], vaadin-confirm-dialog)::part(content) {
   padding-bottom: var(--vaadin-dialog-padding);
 }

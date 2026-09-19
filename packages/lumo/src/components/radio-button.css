@@ -6,21 +6,25 @@
   --vaadin-radio-button-background: var(--lumo-contrast-20pct);
   --vaadin-radio-button-marker-color: var(--vaadin-radio-button-dot-color, var(--lumo-primary-contrast-color));
   --vaadin-radio-button-marker-size: 6px;
-  --vaadin-radio-button-gap: var(--lumo-space-xs);
+  /* The dot-to-label gap is the label's leading padding plus the dot margin (see
+     checkable-field.css), so the grid gap is collapsed like checkbox and switch. */
+  --vaadin-radio-button-gap: 0px;
   --vaadin-radio-button-label-color: var(--lumo-body-text-color);
   --vaadin-radio-button-label-font-size: var(--lumo-font-size-m);
   --vaadin-radio-button-label-line-height: var(--lumo-line-height-s);
   --vaadin-radio-button-label-font-weight: 400;
 }
 
-:where(vaadin-radio-button) {
-  /* Restore Lumo's label padding for the row height and click target. Radio-button
-     has no label-part wrapper; the slotted <label> is a grid item directly, so pad
-     it. The dot-to-label gap comes from --vaadin-radio-button-gap (input-covered). */
-  &[has-label] > [slot='label'] {
-    padding: var(--vaadin-radio-button-label-padding, var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) 0);
+/* Legacy Lumo override for the label padding. When set, the four-value shorthand
+   replaces the shared logical default from checkable-field.css and is applied as-is,
+   matching legacy. */
+@container style(--vaadin-radio-button-label-padding) {
+  :where(vaadin-radio-button)[has-label] > label {
+    padding: var(--vaadin-radio-button-label-padding);
   }
+}
 
+:where(vaadin-radio-button) {
   /* Animate the hover tint and the active press; the margin matches Lumo's inset */
   &::part(radio) {
     margin: var(--lumo-space-xs);

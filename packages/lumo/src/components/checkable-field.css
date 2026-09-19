@@ -1,0 +1,68 @@
+/* Shared Lumo rules for the checkable fields: checkbox, radio-button and switch. The base
+   provides the control/label grid and the states; this supplies the Lumo label padding
+   for all three, and the checkable helper/error geometry for the two that carry their
+   own helper and error (a radio's helper and error belong to its group). */
+
+/* Label: block padding for the row height, a small leading gap to the control and a
+   larger trailing gap. The control-to-label distance is this leading padding plus the
+   control's own margin, so each component collapses the base grid gap to 0. */
+:where(vaadin-checkbox, vaadin-radio-button, vaadin-switch)[has-label] > label {
+  padding-block: var(--lumo-space-xs);
+  padding-inline: var(--lumo-space-xs) var(--lumo-space-s);
+}
+
+:where(vaadin-checkbox, vaadin-switch) {
+  /* Helper and error sit under the label, flush with its leading padding, with no top
+     margin and no base icon; the spacer follows the helper rather than preceding it. */
+  &::part(helper-text) {
+    padding-inline-start: var(--lumo-space-xs);
+    margin-top: 0;
+  }
+
+  &[has-helper]::part(helper-text)::before {
+    display: none;
+  }
+
+  &[has-helper]::part(helper-text)::after {
+    content: '';
+    display: block;
+    height: 0.4em;
+  }
+
+  &::part(error-message) {
+    padding-inline-start: var(--lumo-space-xs);
+    margin: 0 0 0.4em;
+  }
+
+  &::part(error-message)::before {
+    content: none;
+  }
+
+  &[invalid] {
+    --vaadin-input-field-required-indicator-color: var(--lumo-error-text-color);
+  }
+
+  /* Required: the indicator sits at the end of the label, inside its end padding */
+  &[required]::part(label) {
+    display: flex;
+    position: relative;
+    max-width: max-content;
+    /* The slotted label reserves the room; drop the base's part end padding */
+    padding-inline-end: 0;
+  }
+
+  &[has-label][required] > label {
+    padding-inline-end: var(--lumo-space-m);
+  }
+
+  &[required]::part(required-indicator) {
+    width: auto;
+    inset-block-start: var(--lumo-space-xs);
+    inset-inline: auto var(--lumo-space-xs);
+  }
+
+  /* A helper or error below adds its own spacing */
+  &:is([has-helper], [has-error-message]) > label {
+    padding-bottom: 0;
+  }
+}

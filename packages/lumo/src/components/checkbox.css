@@ -15,15 +15,11 @@
 }
 
 :where(vaadin-checkbox) {
-  /* Label spacing: pad the slotted <label> (not the label part) — block padding for
-     the row height, a small leading gap to the box and a larger trailing gap. The
-     label is a block so its block padding counts toward the row height (an inline
-     label would ignore it); block-level keeps the inline content flowing normally,
-     so whitespace around nested elements (e.g. links) is preserved. */
+  /* The label is a block so its shared padding (checkable-field.css) counts toward the
+     row height; an inline label would ignore it. Block-level still lets nested inline
+     content (e.g. links) flow normally. */
   &[has-label] > label {
     display: block;
-    padding-block: var(--lumo-space-xs);
-    padding-inline: var(--lumo-space-xs) var(--lumo-space-s);
   }
 
   /* Animate the hover tint and the active press. The margin gives the box the
