@@ -3,10 +3,10 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../src/props/index.css';
 import '../../src/global/index.css';
 
-function fixtureTable(className) {
+function fixtureTable({ wrapperClass = '', tableClass = '' } = {}) {
   return fixtureSync(`
-    <div class="${className}" style="display: inline-block; padding: 10px">
-      <table>
+    <div class="${wrapperClass}" style="display: inline-block; padding: 10px">
+      <table class="${tableClass}">
         <caption>
           Planets of the inner solar system
         </caption>
@@ -43,10 +43,16 @@ function fixtureTable(className) {
 
 describe('table', () => {
   it('default', async () => {
-    await visualDiff(fixtureTable('vaadin-default'), 'table-default');
+    await visualDiff(fixtureTable({ wrapperClass: 'vaadin-default' }), 'table-default');
+  });
+
+  // Renders the same as 'default', and is here to keep the other half of the
+  // selector — the class on the element itself — from going unnoticed
+  it('class on the table', async () => {
+    await visualDiff(fixtureTable({ tableClass: 'vaadin-default' }), 'table-class-on-table');
   });
 
   it('without the class', async () => {
-    await visualDiff(fixtureTable(''), 'table-without-class');
+    await visualDiff(fixtureTable(), 'table-without-class');
   });
 });
