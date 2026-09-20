@@ -1,7 +1,7 @@
-/* Styles a native <table> with the theme in use. The `vaadin-themed` class
+/* Styles a native <table> with the theme in use. The `vaadin-themed-html` class
    asks for them, either on an ancestor, which covers every native element
    inside it, or on the element itself. */
-:where(.vaadin-themed table, table.vaadin-themed) {
+:where(.vaadin-themed-html table, table.vaadin-themed-html) {
   /* The corner cells have to stay inside the table's own border. */
   --_inner-radius: max(0px, calc(var(--vaadin-radius-m) - 1px));
 

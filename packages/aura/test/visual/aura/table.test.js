@@ -42,13 +42,13 @@ function fixtureTable({ wrapperClass = '', tableClass = '' } = {}) {
 
 describe('table', () => {
   it('default', async () => {
-    await visualDiff(fixtureTable({ wrapperClass: 'vaadin-themed' }), 'table-default');
+    await visualDiff(fixtureTable({ wrapperClass: 'vaadin-themed-html' }), 'table-default');
   });
 
   // Renders the same as 'default', and is here to keep the other half of the
   // selector — the class on the element itself — from going unnoticed
   it('class on the table', async () => {
-    await visualDiff(fixtureTable({ tableClass: 'vaadin-themed' }), 'table-class-on-table');
+    await visualDiff(fixtureTable({ tableClass: 'vaadin-themed-html' }), 'table-class-on-table');
   });
 
   it('without the class', async () => {
