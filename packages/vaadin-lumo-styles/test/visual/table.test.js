@@ -5,8 +5,8 @@ import '../../src/global/index.css';
 
 function fixtureTable(className) {
   return fixtureSync(`
-    <div style="display: inline-block; padding: 10px">
-      <table class="${className}">
+    <div class="${className}" style="display: inline-block; padding: 10px">
+      <table>
         <caption>
           Planets of the inner solar system
         </caption>
