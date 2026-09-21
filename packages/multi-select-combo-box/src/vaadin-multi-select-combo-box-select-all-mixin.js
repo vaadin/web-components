@@ -76,11 +76,13 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
         'selectedItems',
         'itemIdPath',
         'filter',
-        '_highlightState',
         '__effectiveI18n',
       ];
       if (buttonProps.some((prop) => props.has(prop))) {
         this.#updateButton();
+      } else if (props.has('_highlightState')) {
+        // The label cannot change from a highlight change, so only update the state.
+        this.#button.focused = this._isSelectAllHighlighted;
       }
     }
 
