@@ -514,17 +514,17 @@ export const MenuBarMixin = (superClass) =>
 
         const isRTL = this.__isRTL;
         const containerLeft = container.offsetLeft;
+        const containerWidth = container.offsetWidth;
 
         const remaining = [...buttons];
         while (remaining.length) {
-          const lastButton = remaining[remaining.length - 1];
-          const btnLeft = lastButton.offsetLeft - containerLeft;
+          // The overflow button follows the last remaining one, so its far edge is what has
+          // to fit. Auto margins move the whole row but cannot push that edge past the end.
+          const overflowEnd = isRTL
+            ? containerWidth - (overflow.offsetLeft - containerLeft)
+            : overflow.offsetLeft + overflow.offsetWidth - containerLeft;
 
-          // If this button isn't overflowing, then the rest aren't either
-          if (
-            (!isRTL && btnLeft + lastButton.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
-            (isRTL && btnLeft >= overflow.offsetWidth)
-          ) {
+          if (overflowEnd <= containerWidth) {
             break;
           }
 
