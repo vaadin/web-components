@@ -304,6 +304,30 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
+     * Used by `MultiSelectComboBoxHighlightMixin` to tell whether the select
+     * all button can be highlighted. The button is slotted into the overlay,
+     * so it is only shown while the overlay is opened.
+     * @protected
+     */
+    get _isSelectAllAvailable() {
+      return this._overlayOpened && this._selectAllController.visible;
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to reference the select all
+     * button from the input while the button is highlighted.
+     * @protected
+     * @override
+     */
+    _updateActiveDescendant() {
+      if (this._isSelectAllHighlighted) {
+        this.inputElement?.setAttribute('aria-activedescendant', this._selectAllController.id);
+      } else {
+        super._updateActiveDescendant();
+      }
+    }
+
+    /**
      * Override a getter from `InputMixin` to compute
      * the presence of value based on `selectedItems`.
      *
@@ -367,6 +391,11 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       super.willUpdate(props);
 
       this._selectAllController.willUpdate(props);
+
+      // Clear select all highlight when the button becomes invisible or the filter changes
+      if (props.has('filter') || !this._isSelectAllAvailable) {
+        this._clearSelectAllHighlight();
+      }
     }
 
     /** @protected */
@@ -612,24 +641,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       if (blurred && this.readonly) {
         this.close();
       }
-    }
-
-    /**
-     * Override method from `ComboBoxBaseMixin` to not remove the focused
-     * state when focus moves between the input and the select all button.
-     *
-     * @param {FocusEvent} event
-     * @return {boolean}
-     * @protected
-     * @override
-     */
-    _shouldRemoveFocus(event) {
-      const { relatedTarget } = event;
-      if (relatedTarget === this.inputElement || relatedTarget === this._selectAllController.element) {
-        return false;
-      }
-
-      return super._shouldRemoveFocus(event);
     }
 
     /**
@@ -1135,6 +1146,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
         if (this.readonly) {
           this.close();
+        } else if (this._isSelectAllHighlighted) {
+          this._selectAllController.toggleSelection();
         } else if (this._hasValidInputValue()) {
           // Keep selected item focused after committing on Enter.
           const focusedItem = this._highlightedItem;
@@ -1163,16 +1176,24 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from the combo-box
-     * to not update focused item when readonly.
+     * Override method inherited from the combo-box to not update focused
+     * item when readonly, and to restore the filter to the input when the
+     * highlight moves from the first item to the select all button.
      * @protected
      * @override
      */
     _onArrowUp() {
-      if (!this.readonly) {
-        super._onArrowUp();
-      } else if (!this.opened) {
-        this.open();
+      if (this.readonly) {
+        if (!this.opened) {
+          this.open();
+        }
+        return;
+      }
+
+      super._onArrowUp();
+
+      if (this._isSelectAllHighlighted) {
+        this._revertInputValue();
       }
     }
 
@@ -1183,10 +1204,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * @override
      */
     _onKeyDown(event) {
-      if (this._selectAllController.handleKeyDown(event)) {
-        return;
-      }
-
       super._onKeyDown(event);
 
       if (!this.readonly && this._chips.length > 0) {

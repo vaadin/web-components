@@ -5,14 +5,14 @@ snapshots["vaadin-multi-select-combo-box host default"] =
 `<vaadin-multi-select-combo-box>
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
-    id="vaadin-multi-select-combo-box-scroller-3"
+    id="vaadin-multi-select-combo-box-scroller-4"
     role="listbox"
     slot="overlay"
     tabindex="-1"
   >
   </vaadin-multi-select-combo-box-scroller>
   <label
-    for="input-vaadin-multi-select-combo-box-4"
+    for="input-vaadin-multi-select-combo-box-5"
     id="label-vaadin-multi-select-combo-box-0"
     slot="label"
   >
@@ -29,7 +29,7 @@ snapshots["vaadin-multi-select-combo-box host default"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-multi-select-combo-box-4"
+    id="input-vaadin-multi-select-combo-box-5"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -49,14 +49,14 @@ snapshots["vaadin-multi-select-combo-box host label"] =
 `<vaadin-multi-select-combo-box has-label="">
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
-    id="vaadin-multi-select-combo-box-scroller-3"
+    id="vaadin-multi-select-combo-box-scroller-4"
     role="listbox"
     slot="overlay"
     tabindex="-1"
   >
   </vaadin-multi-select-combo-box-scroller>
   <label
-    for="input-vaadin-multi-select-combo-box-4"
+    for="input-vaadin-multi-select-combo-box-5"
     id="label-vaadin-multi-select-combo-box-0"
     slot="label"
   >
@@ -75,7 +75,7 @@ snapshots["vaadin-multi-select-combo-box host label"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-multi-select-combo-box-4"
+    id="input-vaadin-multi-select-combo-box-5"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -95,14 +95,14 @@ snapshots["vaadin-multi-select-combo-box host helper"] =
 `<vaadin-multi-select-combo-box has-helper="">
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
-    id="vaadin-multi-select-combo-box-scroller-3"
+    id="vaadin-multi-select-combo-box-scroller-4"
     role="listbox"
     slot="overlay"
     tabindex="-1"
   >
   </vaadin-multi-select-combo-box-scroller>
   <label
-    for="input-vaadin-multi-select-combo-box-4"
+    for="input-vaadin-multi-select-combo-box-5"
     id="label-vaadin-multi-select-combo-box-0"
     slot="label"
   >
@@ -120,7 +120,7 @@ snapshots["vaadin-multi-select-combo-box host helper"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-multi-select-combo-box-4"
+    id="input-vaadin-multi-select-combo-box-5"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -149,14 +149,14 @@ snapshots["vaadin-multi-select-combo-box host error"] =
 >
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
-    id="vaadin-multi-select-combo-box-scroller-3"
+    id="vaadin-multi-select-combo-box-scroller-4"
     role="listbox"
     slot="overlay"
     tabindex="-1"
   >
   </vaadin-multi-select-combo-box-scroller>
   <label
-    for="input-vaadin-multi-select-combo-box-4"
+    for="input-vaadin-multi-select-combo-box-5"
     id="label-vaadin-multi-select-combo-box-0"
     slot="label"
   >
@@ -175,7 +175,7 @@ snapshots["vaadin-multi-select-combo-box host error"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-multi-select-combo-box-4"
+    id="input-vaadin-multi-select-combo-box-5"
     invalid=""
     role="combobox"
     slot="input"
@@ -196,14 +196,14 @@ snapshots["vaadin-multi-select-combo-box host accessibleDescriptionRef"] =
 `<vaadin-multi-select-combo-box>
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
-    id="vaadin-multi-select-combo-box-scroller-3"
+    id="vaadin-multi-select-combo-box-scroller-4"
     role="listbox"
     slot="overlay"
     tabindex="-1"
   >
   </vaadin-multi-select-combo-box-scroller>
   <label
-    for="input-vaadin-multi-select-combo-box-4"
+    for="input-vaadin-multi-select-combo-box-5"
     id="label-vaadin-multi-select-combo-box-0"
     slot="label"
   >
@@ -221,7 +221,7 @@ snapshots["vaadin-multi-select-combo-box host accessibleDescriptionRef"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-multi-select-combo-box-4"
+    id="input-vaadin-multi-select-combo-box-5"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -241,14 +241,14 @@ snapshots["vaadin-multi-select-combo-box host required"] =
 `<vaadin-multi-select-combo-box required="">
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
-    id="vaadin-multi-select-combo-box-scroller-3"
+    id="vaadin-multi-select-combo-box-scroller-4"
     role="listbox"
     slot="overlay"
     tabindex="-1"
   >
   </vaadin-multi-select-combo-box-scroller>
   <label
-    for="input-vaadin-multi-select-combo-box-4"
+    for="input-vaadin-multi-select-combo-box-5"
     id="label-vaadin-multi-select-combo-box-0"
     slot="label"
   >
@@ -266,7 +266,7 @@ snapshots["vaadin-multi-select-combo-box host required"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-multi-select-combo-box-4"
+    id="input-vaadin-multi-select-combo-box-5"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -289,14 +289,14 @@ snapshots["vaadin-multi-select-combo-box host disabled"] =
 >
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
-    id="vaadin-multi-select-combo-box-scroller-3"
+    id="vaadin-multi-select-combo-box-scroller-4"
     role="listbox"
     slot="overlay"
     tabindex="-1"
   >
   </vaadin-multi-select-combo-box-scroller>
   <label
-    for="input-vaadin-multi-select-combo-box-4"
+    for="input-vaadin-multi-select-combo-box-5"
     id="label-vaadin-multi-select-combo-box-0"
     slot="label"
   >
@@ -314,7 +314,7 @@ snapshots["vaadin-multi-select-combo-box host disabled"] =
     autocomplete="off"
     autocorrect="off"
     disabled=""
-    id="input-vaadin-multi-select-combo-box-4"
+    id="input-vaadin-multi-select-combo-box-5"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -336,14 +336,14 @@ snapshots["vaadin-multi-select-combo-box host readonly"] =
 `<vaadin-multi-select-combo-box readonly="">
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
-    id="vaadin-multi-select-combo-box-scroller-3"
+    id="vaadin-multi-select-combo-box-scroller-4"
     role="listbox"
     slot="overlay"
     tabindex="-1"
   >
   </vaadin-multi-select-combo-box-scroller>
   <label
-    for="input-vaadin-multi-select-combo-box-4"
+    for="input-vaadin-multi-select-combo-box-5"
     id="label-vaadin-multi-select-combo-box-0"
     slot="label"
   >
@@ -360,7 +360,7 @@ snapshots["vaadin-multi-select-combo-box host readonly"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-multi-select-combo-box-4"
+    id="input-vaadin-multi-select-combo-box-5"
     readonly=""
     role="combobox"
     slot="input"
@@ -382,14 +382,14 @@ snapshots["vaadin-multi-select-combo-box host placeholder"] =
 `<vaadin-multi-select-combo-box placeholder="Placeholder">
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
-    id="vaadin-multi-select-combo-box-scroller-3"
+    id="vaadin-multi-select-combo-box-scroller-4"
     role="listbox"
     slot="overlay"
     tabindex="-1"
   >
   </vaadin-multi-select-combo-box-scroller>
   <label
-    for="input-vaadin-multi-select-combo-box-4"
+    for="input-vaadin-multi-select-combo-box-5"
     id="label-vaadin-multi-select-combo-box-0"
     slot="label"
   >
@@ -406,7 +406,7 @@ snapshots["vaadin-multi-select-combo-box host placeholder"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-multi-select-combo-box-4"
+    id="input-vaadin-multi-select-combo-box-5"
     placeholder="Placeholder"
     role="combobox"
     slot="input"
@@ -430,14 +430,14 @@ snapshots["vaadin-multi-select-combo-box host opened default"] =
 >
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
-    id="vaadin-multi-select-combo-box-scroller-3"
+    id="vaadin-multi-select-combo-box-scroller-4"
     role="listbox"
     slot="overlay"
     tabindex="-1"
   >
   </vaadin-multi-select-combo-box-scroller>
   <label
-    for="input-vaadin-multi-select-combo-box-4"
+    for="input-vaadin-multi-select-combo-box-5"
     id="label-vaadin-multi-select-combo-box-0"
     slot="label"
   >
@@ -450,12 +450,12 @@ snapshots["vaadin-multi-select-combo-box host opened default"] =
   </div>
   <input
     aria-autocomplete="list"
-    aria-controls="vaadin-multi-select-combo-box-scroller-3"
+    aria-controls="vaadin-multi-select-combo-box-scroller-4"
     aria-expanded="true"
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-multi-select-combo-box-4"
+    id="input-vaadin-multi-select-combo-box-5"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -775,14 +775,14 @@ snapshots["vaadin-multi-select-combo-box host opened select all button"] =
 >
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
-    id="vaadin-multi-select-combo-box-scroller-3"
+    id="vaadin-multi-select-combo-box-scroller-4"
     role="listbox"
     slot="overlay"
     tabindex="-1"
   >
   </vaadin-multi-select-combo-box-scroller>
   <label
-    for="input-vaadin-multi-select-combo-box-4"
+    for="input-vaadin-multi-select-combo-box-5"
     id="label-vaadin-multi-select-combo-box-0"
     slot="label"
   >
@@ -795,12 +795,12 @@ snapshots["vaadin-multi-select-combo-box host opened select all button"] =
   </div>
   <input
     aria-autocomplete="list"
-    aria-controls="vaadin-multi-select-combo-box-scroller-3"
+    aria-controls="vaadin-multi-select-combo-box-scroller-4"
     aria-expanded="true"
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-multi-select-combo-box-4"
+    id="input-vaadin-multi-select-combo-box-5"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -813,9 +813,9 @@ snapshots["vaadin-multi-select-combo-box host opened select all button"] =
   >
   </vaadin-multi-select-combo-box-chip>
   <vaadin-multi-select-combo-box-select-all-button
+    id="select-all-vaadin-multi-select-combo-box-3"
     role="button"
     slot="select-all"
-    tabindex="-1"
   >
   </vaadin-multi-select-combo-box-select-all-button>
 </vaadin-multi-select-combo-box>
