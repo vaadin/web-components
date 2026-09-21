@@ -771,6 +771,7 @@ snapshots["vaadin-multi-select-combo-box shadow invalid"] =
 snapshots["vaadin-multi-select-combo-box host opened select all button"] = 
 `<vaadin-multi-select-combo-box
   focused=""
+  has-select-all=""
   opened=""
   start-aligned=""
   top-aligned=""

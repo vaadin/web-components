@@ -118,6 +118,8 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
     }
 
     #updateButton() {
+      this.toggleAttribute('has-select-all', this._hasSelectAllButton);
+
       if (!this._hasSelectAllButton) {
         this.#button.remove();
         return;
