@@ -37,6 +37,12 @@ describe('multi-select-combo-box', () => {
     await visualDiff(div, 'readonly');
   });
 
+  it('label aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    await visualDiff(div, 'label-aside');
+  });
+
   describe('selected items', () => {
     beforeEach(() => {
       element.style.width = '250px';

@@ -39,6 +39,12 @@ describe('select', () => {
     await visualDiff(div, 'readonly');
   });
 
+  it('label aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    await visualDiff(div, 'label-aside');
+  });
+
   it('opened', async () => {
     div.style.height = '200px';
     div.style.width = '200px';

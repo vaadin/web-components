@@ -56,4 +56,10 @@ describe('checkbox-group', () => {
     element.value = ['a', 'c'];
     await visualDiff(div, 'readonly');
   });
+
+  it('label aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    await visualDiff(div, 'label-aside');
+  });
 });
