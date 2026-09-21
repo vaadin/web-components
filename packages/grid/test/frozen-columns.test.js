@@ -4,9 +4,17 @@ import { fixtureSync, listenOnce, nextRender, nextResize } from '@vaadin/testing
 import sinon from 'sinon';
 import './grid-test-styles.js';
 import '../src/vaadin-grid.js';
+import '../src/vaadin-grid-column-group.js';
 import { isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 import { setNormalizedScrollLeft } from '@vaadin/component-base/src/dir-utils.js';
-import { flushGrid, getRowCells, getRows, infiniteDataProvider, isWithinParentConstraints } from './helpers.js';
+import {
+  flushGrid,
+  getContainerCell,
+  getRowCells,
+  getRows,
+  infiniteDataProvider,
+  isWithinParentConstraints,
+} from './helpers.js';
 
 // Returns true if the element's computed transform style matches with the
 // computed transform style of a div element with the given transform applied
@@ -394,5 +402,34 @@ const frozenGridFixture = (frozen, frozenToEnd) => {
         });
       });
     });
+  });
+});
+
+describe('frozen columns in a column group', () => {
+  let grid;
+
+  beforeEach(async () => {
+    grid = fixtureSync(`
+      <vaadin-grid style="width: 400px; height: 400px;" size="10">
+        <vaadin-grid-column-group header="group1">
+          <vaadin-grid-column frozen header="foo"></vaadin-grid-column>
+        </vaadin-grid-column-group>
+        <vaadin-grid-column header="bar"></vaadin-grid-column>
+        <vaadin-grid-column-group header="group2">
+          <vaadin-grid-column frozen-to-end header="baz"></vaadin-grid-column>
+        </vaadin-grid-column-group>
+      </vaadin-grid>
+    `);
+    grid.dataProvider = infiniteDataProvider;
+    flushGrid(grid);
+    await nextRender();
+  });
+
+  it('should propagate last-frozen from the child column to the group cell', () => {
+    expect(getContainerCell(grid.$.header, 0, 0).hasAttribute('last-frozen')).to.be.true;
+  });
+
+  it('should propagate first-frozen-to-end from the child column to the group cell', () => {
+    expect(getContainerCell(grid.$.header, 0, 2).hasAttribute('first-frozen-to-end')).to.be.true;
   });
 });
