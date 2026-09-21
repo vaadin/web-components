@@ -68,6 +68,12 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
         this._revertInputValue();
       }
 
+      if (props.has('_highlightState')) {
+        this.#button.focused = this._isSelectAllHighlighted;
+      }
+
+      // Computing the label compares every filtered item against every selected
+      // item, so it must not be triggered by the highlight moving.
       const buttonProps = [
         'selectAllButtonVisible',
         'readonly',
@@ -80,9 +86,6 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
       ];
       if (buttonProps.some((prop) => props.has(prop))) {
         this.#updateButton();
-      } else if (props.has('_highlightState')) {
-        // The label cannot change from a highlight change, so only update the state.
-        this.#button.focused = this._isSelectAllHighlighted;
       }
     }
 
@@ -129,7 +132,6 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
 
       const button = this.#button;
       button.label = this.#getButtonLabel();
-      button.focused = this._isSelectAllHighlighted;
 
       if (button.parentNode !== this) {
         this.appendChild(button);
