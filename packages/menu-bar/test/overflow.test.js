@@ -19,6 +19,8 @@ const assertVisible = (elem) => {
 
 const BUTTON_WIDTH = 60;
 
+const createItems = (count) => [...new Array(count)].map((_, i) => ({ text: `Item ${i + 1}` }));
+
 function makeComponent(id) {
   const div = document.createElement('div');
   div.style.width = `${BUTTON_WIDTH}px`;
@@ -52,7 +54,7 @@ describe('overflow', () => {
         </div>
       `);
       menu = wrapper.querySelector('vaadin-menu-bar');
-      menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
+      menu.items = createItems(5);
       await nextResize(menu);
       buttons = menu._buttons;
       overflow = buttons.at(-1);
@@ -130,7 +132,7 @@ describe('overflow', () => {
 
     it('should hide overflow button and reset its items when all buttons fit after changing items', async () => {
       // See https://github.com/vaadin/vaadin-menu-bar/issues/133
-      menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }];
+      menu.items = createItems(2);
       await nextResize(menu);
       buttons = menu._buttons;
       overflow = buttons[2];
@@ -234,7 +236,7 @@ describe('overflow', () => {
 
     beforeEach(async () => {
       menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
-      menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }];
+      menu.items = createItems(4);
       await nextResize(menu);
       buttons = menu._buttons;
       overflow = buttons[buttons.length - 1];
@@ -311,7 +313,7 @@ describe('overflow', () => {
 
       container.style.width = `${BUTTON_WIDTH * 2.5}px`;
 
-      menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
+      menu.items = createItems(5);
       await nextRender();
       buttons = menu._buttons;
       overflow = buttons[buttons.length - 1];
@@ -338,7 +340,7 @@ describe('overflow', () => {
   });
 
   describe('layout combinations', () => {
-    const items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
+    const items = createItems(5);
 
     async function initMenuBar(container) {
       const menu = container.querySelector('vaadin-menu-bar');
@@ -432,14 +434,7 @@ describe('overflow', () => {
           </div>
         `);
         menu = container.querySelector('vaadin-menu-bar');
-        menu.items = [
-          { text: 'Item 1' },
-          { text: 'Item 2' },
-          { text: 'Item 3' },
-          { text: 'Item 4' },
-          { text: 'Item 5' },
-          { text: 'Item 6' },
-        ];
+        menu.items = createItems(6);
         await nextResize(menu);
         buttons = menu._buttons;
         overflow = buttons.at(-1);
@@ -464,7 +459,7 @@ describe('overflow', () => {
       text = document.createElement('div');
       text.textContent = 'Sibling';
       menu = document.createElement('vaadin-menu-bar');
-      menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }];
+      menu.items = createItems(4);
       menu.style.minWidth = `${BUTTON_WIDTH * 1.5}px`;
     });
 
@@ -612,7 +607,7 @@ describe('overflow', () => {
     });
 
     it('should only detect overflow twice on initial render', async () => {
-      menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
+      menu.items = createItems(5);
       await nextResize(menu);
       await nextUpdate(menu);
       expect(spy.set.callCount).to.equal(2);
