@@ -15,8 +15,8 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { SelectAllController } from './select-all-controller.js';
 import { MultiSelectComboBoxHighlightMixin } from './vaadin-multi-select-combo-box-highlight-mixin.js';
+import { MultiSelectComboBoxSelectAllMixin } from './vaadin-multi-select-combo-box-select-all-mixin.js';
 
 const DEFAULT_I18N = {
   cleared: 'Selection cleared',
@@ -32,9 +32,11 @@ const DEFAULT_I18N = {
 
 export const MultiSelectComboBoxMixin = (superClass) =>
   class MultiSelectComboBoxMixinClass extends I18nMixin(
-    MultiSelectComboBoxHighlightMixin(
-      ComboBoxFocusIndexMixin(
-        ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass)))),
+    MultiSelectComboBoxSelectAllMixin(
+      MultiSelectComboBoxHighlightMixin(
+        ComboBoxFocusIndexMixin(
+          ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass)))),
+        ),
       ),
     ),
   ) {
@@ -175,21 +177,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
           sync: true,
         },
 
-        /**
-         * Set to true to show a button above the dropdown items for selecting
-         * or deselecting all items matching the current filter at once. Items
-         * that do not match the filter keep their selection state.
-         *
-         * The button is only supported with the `items` API. It is not shown
-         * when using `dataProvider`.
-         * @attr {boolean} select-all-button-visible
-         */
-        selectAllButtonVisible: {
-          type: Boolean,
-          value: false,
-          sync: true,
-        },
-
         /** @private */
         value: {
           type: String,
@@ -306,30 +293,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Used by `MultiSelectComboBoxHighlightMixin` to tell whether the select
-     * all button can be highlighted. The button is slotted into the overlay,
-     * so it is only shown while the overlay is opened.
-     * @protected
-     */
-    get _isSelectAllAvailable() {
-      return this._overlayOpened && this._selectAllController.visible;
-    }
-
-    /**
-     * Override method from `ComboBoxBaseMixin` to reference the select all
-     * button from the input while the button is highlighted.
-     * @protected
-     * @override
-     */
-    _updateActiveDescendant() {
-      if (this._isSelectAllHighlighted) {
-        this.inputElement?.setAttribute('aria-activedescendant', this._selectAllController.id);
-      } else {
-        super._updateActiveDescendant();
-      }
-    }
-
-    /**
      * Override a getter from `InputMixin` to compute
      * the presence of value based on `selectedItems`.
      *
@@ -347,13 +310,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      */
     get _tagNamePrefix() {
       return 'vaadin-multi-select-combo-box';
-    }
-
-    constructor() {
-      super();
-
-      // Used by `willUpdate()` and the template, so it must exist before the first update
-      this._selectAllController = new SelectAllController(this);
     }
 
     /** @protected */
@@ -386,18 +342,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
       });
       this.addController(this._overflowController);
-    }
-
-    /** @protected */
-    willUpdate(props) {
-      super.willUpdate(props);
-
-      this._selectAllController.willUpdate(props);
-
-      // Clear select all highlight when the button becomes invisible or the filter changes
-      if (props.has('filter') || !this._isSelectAllAvailable) {
-        this._clearSelectAllHighlight();
-      }
     }
 
     /** @protected */
@@ -463,9 +407,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * Clears the selected items.
      */
     clear() {
-      this.__updateSelection([]);
-
-      announce(this.__effectiveI18n.cleared);
+      this.__updateSelection([], true);
     }
 
     /** @private */
@@ -729,8 +671,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from the combo-box
-     * to not request data provider when read-only.
+     * Override method from `ComboBoxDataProviderMixin` to not request
+     * data provider when read-only.
      *
      * @protected
      * @override
@@ -852,12 +794,18 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /** @private */
-    __updateSelection(selectedItems) {
+    __updateSelection(selectedItems, announceSelection = false) {
       this.selectedItems = selectedItems;
 
       this._requestValidation();
 
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+
+      if (announceSelection) {
+        const { cleared, total } = this.__effectiveI18n;
+        const count = this.selectedItems.length;
+        announce(count === 0 ? cleared : total.replace('{count}', count));
+      }
     }
 
     /** @private */
@@ -1149,7 +1097,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         if (this.readonly) {
           this.close();
         } else if (this._isSelectAllHighlighted) {
-          this._selectAllController.toggleSelection();
+          this._toggleSelectAll();
         } else if (this._hasValidInputValue()) {
           // Keep selected item focused after committing on Enter.
           const focusedItem = this._highlightedItem;
@@ -1164,8 +1112,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from the combo-box
-     * to not update focused item when readonly.
+     * Override method from `ComboBoxBaseMixin` to not update focused
+     * item when readonly.
      * @protected
      * @override
      */
@@ -1178,24 +1126,16 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from the combo-box to not update focused
-     * item when readonly, and to restore the filter to the input when the
-     * highlight moves from the first item to the select all button.
+     * Override method from `ComboBoxBaseMixin` to not update focused
+     * item when readonly.
      * @protected
      * @override
      */
     _onArrowUp() {
-      if (this.readonly) {
-        if (!this.opened) {
-          this.open();
-        }
-        return;
-      }
-
-      super._onArrowUp();
-
-      if (this._isSelectAllHighlighted) {
-        this._revertInputValue();
+      if (!this.readonly) {
+        super._onArrowUp();
+      } else if (!this.opened) {
+        this.open();
       }
     }
 

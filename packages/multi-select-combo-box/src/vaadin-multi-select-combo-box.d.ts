@@ -25,6 +25,7 @@ import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.j
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { MultiSelectComboBoxMixinClass } from './vaadin-multi-select-combo-box-mixin.js';
+import type { MultiSelectComboBoxSelectAllMixinClass } from './vaadin-multi-select-combo-box-select-all-mixin.js';
 
 export { MultiSelectComboBoxI18n, MultiSelectComboBoxRenderer } from './vaadin-multi-select-combo-box-mixin.js';
 
@@ -123,6 +124,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `has-label`            | Set when the element has a label
  * `has-helper`           | Set when the element has helper text or slot
  * `has-error-message`    | Set when the element has an error message
+ * `has-select-all`       | Set when the select all button is shown in the dropdown
  * `has-tooltip`          | Set when the element has a slotted tooltip
  * `invalid`              | Set when the element is invalid
  * `focused`              | Set when the element is focused
@@ -242,6 +244,7 @@ interface MultiSelectComboBox<TItem = ComboBoxDefaultItem>
     DelegateStateMixinClass,
     DelegateFocusMixinClass,
     MultiSelectComboBoxMixinClass<TItem>,
+    MultiSelectComboBoxSelectAllMixinClass,
     ResizeMixinClass,
     ThemableMixinClass,
     ThemePropertyMixinClass,

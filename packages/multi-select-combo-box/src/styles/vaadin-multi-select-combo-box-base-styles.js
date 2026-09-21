@@ -67,7 +67,7 @@ export const multiSelectComboBoxStyles = [
       --vaadin-field-default-width: auto;
     }
 
-    #overlay[has-select-all] slot[name='overlay']::slotted(*) {
+    :host([has-select-all]) #overlay slot[name='overlay']::slotted(*) {
       border-top: 1px solid var(--vaadin-border-color-secondary);
     }
   `,

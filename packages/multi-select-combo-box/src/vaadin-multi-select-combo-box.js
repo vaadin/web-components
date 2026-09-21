@@ -62,6 +62,7 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * `has-label`            | Set when the element has a label
  * `has-helper`           | Set when the element has helper text or slot
  * `has-error-message`    | Set when the element has an error message
+ * `has-select-all`       | Set when the select all button is shown in the dropdown
  * `has-tooltip`          | Set when the element has a slotted tooltip
  * `invalid`              | Set when the element is invalid
  * `focused`              | Set when the element is focused
@@ -210,7 +211,6 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         ?loading="${this.loading}"
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this._inputField}"
-        ?has-select-all="${this._selectAllController.visible}"
         no-vertical-overlap
       >
         <slot name="select-all"></slot>
