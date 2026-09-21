@@ -108,6 +108,16 @@
 
       const direction = document.querySelector('#direction');
       direction.addEventListener('value-changed', (e) => menuBar.setAttribute('dir', e.detail.value));
+
+      const collapseOrder = document.querySelector('#collapse-order');
+      collapseOrder.addEventListener('value-changed', (e) => {
+        menuBar.reverseCollapse = e.detail.value === 'reverse';
+      });
+
+      const maxWidth = document.querySelector('#max-width');
+      maxWidth.addEventListener('value-changed', (e) => {
+        menuBar.style.maxWidth = e.detail.value === 'none' ? '' : e.detail.value;
+      });
     </script>
   </head>
 
@@ -139,6 +149,20 @@
           <vaadin-radio-button label="RTL" value="rtl"></vaadin-radio-button>
         </vaadin-radio-group>
       </div>
+      <div class="control-group">
+        <vaadin-radio-group label="Collapse order" id="collapse-order">
+          <vaadin-radio-button label="Default" value="default" checked></vaadin-radio-button>
+          <vaadin-radio-button label="Reverse" value="reverse"></vaadin-radio-button>
+        </vaadin-radio-group>
+      </div>
+      <div class="control-group">
+        <vaadin-radio-group label="Max width" id="max-width">
+          <vaadin-radio-button label="None" value="none" checked></vaadin-radio-button>
+          <vaadin-radio-button label="400px" value="400px"></vaadin-radio-button>
+          <vaadin-radio-button label="300px" value="300px"></vaadin-radio-button>
+          <vaadin-radio-button label="200px" value="200px"></vaadin-radio-button>
+        </vaadin-radio-group>
+      </div>
     </div>
     <vaadin-split-layout>
       <div style="padding: 3px">
@@ -146,7 +170,7 @@
           <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
         </vaadin-menu-bar>
       </div>
-      <span>Resize to show overflow button</span>
+      <span>Resize the splitter or set a max width to show the overflow button</span>
     </vaadin-split-layout>
   </body>
 </html>
