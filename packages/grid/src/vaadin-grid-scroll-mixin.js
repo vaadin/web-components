@@ -284,7 +284,6 @@ export const ScrollMixin = (superClass) =>
 
       if (changedColumns.length > 0) {
         [...this.$.items.children].forEach((row) => {
-          this.__renderBodyRow(row);
           this.__updateRow(row);
         });
 

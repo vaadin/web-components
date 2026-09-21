@@ -421,7 +421,6 @@ export const GridMixin = (superClass) =>
     /** @protected */
     _renderColumnTree() {
       iterateChildren(this.$.items, (row) => {
-        this.__renderBodyRow(row);
         this.__updateRow(row);
       });
 
