@@ -8,8 +8,6 @@ import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js'
 
 /**
  * A mixin that manages the select all button of `<vaadin-multi-select-combo-box>`.
- *
- * @polymerMixin
  */
 export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
   class MultiSelectComboBoxSelectAllMixinClass extends superClass {

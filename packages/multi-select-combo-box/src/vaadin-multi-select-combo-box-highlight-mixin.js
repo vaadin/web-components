@@ -23,7 +23,6 @@ import { ComboBoxHighlightMixin } from '@vaadin/combo-box/src/vaadin-combo-box-h
  * and a `_hasSelectAllButton` getter that tells whether the select all button
  * is rendered and can be highlighted.
  *
- * @polymerMixin
  * @mixes ComboBoxHighlightMixin
  */
 export const MultiSelectComboBoxHighlightMixin = (superClass) =>

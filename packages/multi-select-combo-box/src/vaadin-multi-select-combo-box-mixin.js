@@ -671,8 +671,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from the combo-box
-     * to not request data provider when read-only.
+     * Override method from `ComboBoxDataProviderMixin` to not request
+     * data provider when read-only.
      *
      * @protected
      * @override
@@ -1106,8 +1106,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from the combo-box
-     * to not update focused item when readonly.
+     * Override method from `ComboBoxBaseMixin` to not update focused
+     * item when readonly.
      * @protected
      * @override
      */
@@ -1120,8 +1120,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from the combo-box
-     * to not update focused item when readonly.
+     * Override method from `ComboBoxBaseMixin` to not update focused
+     * item when readonly.
      * @protected
      * @override
      */

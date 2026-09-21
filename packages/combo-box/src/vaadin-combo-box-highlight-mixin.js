@@ -16,8 +16,6 @@ import { dedupeMixin } from '@open-wc/dedupe-mixin';
  * - `{ type: 'item', index }`: the dropdown item at `index`.
  *
  * Mixins applied on top can add more types by calling `_setHighlightState()`.
- *
- * @polymerMixin
  */
 const ComboBoxHighlightMixinImplementation = (superClass) =>
   class ComboBoxHighlightMixinClass extends superClass {
