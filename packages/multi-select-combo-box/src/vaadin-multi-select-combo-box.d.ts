@@ -25,6 +25,7 @@ import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.j
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { MultiSelectComboBoxMixinClass } from './vaadin-multi-select-combo-box-mixin.js';
+import type { MultiSelectComboBoxSelectAllMixinClass } from './vaadin-multi-select-combo-box-select-all-mixin.js';
 
 export { MultiSelectComboBoxI18n, MultiSelectComboBoxRenderer } from './vaadin-multi-select-combo-box-mixin.js';
 
@@ -242,6 +243,7 @@ interface MultiSelectComboBox<TItem = ComboBoxDefaultItem>
     DelegateStateMixinClass,
     DelegateFocusMixinClass,
     MultiSelectComboBoxMixinClass<TItem>,
+    MultiSelectComboBoxSelectAllMixinClass,
     ResizeMixinClass,
     ThemableMixinClass,
     ThemePropertyMixinClass,

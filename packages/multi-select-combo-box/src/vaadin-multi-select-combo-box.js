@@ -210,7 +210,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         ?loading="${this.loading}"
         theme="${ifDefined(this._theme)}"
         .positionTarget="${this._inputField}"
-        ?has-select-all="${this._selectAllController.visible}"
+        ?has-select-all="${this._hasSelectAllButton}"
         no-vertical-overlap
       >
         <slot name="select-all"></slot>

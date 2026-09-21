@@ -25,6 +25,7 @@ import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { MultiSelectComboBox } from './vaadin-multi-select-combo-box.js';
 import type { MultiSelectComboBoxHighlightMixinClass } from './vaadin-multi-select-combo-box-highlight-mixin.js';
+import type { MultiSelectComboBoxSelectAllMixinClass } from './vaadin-multi-select-combo-box-select-all-mixin.js';
 
 export type MultiSelectComboBoxRenderer<TItem> = (
   root: HTMLElement,
@@ -63,6 +64,7 @@ export declare function MultiSelectComboBoxMixin<TItem, T extends Constructor<HT
   Constructor<LabelMixinClass> &
   Constructor<MultiSelectComboBoxHighlightMixinClass> &
   Constructor<MultiSelectComboBoxMixinClass<TItem>> &
+  Constructor<MultiSelectComboBoxSelectAllMixinClass> &
   Constructor<ResizeMixinClass> &
   Constructor<SlotStylesMixinClass> &
   Constructor<ValidateMixinClass> &
@@ -182,17 +184,6 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
    * @attr {boolean} selected-items-on-top
    */
   selectedItemsOnTop: boolean;
-
-  /**
-   * Set to true to show a button above the dropdown items for selecting
-   * or deselecting all items matching the current filter at once. Items
-   * that do not match the filter keep their selection state.
-   *
-   * The button is only supported with the `items` API. It is not shown
-   * when using `dataProvider`.
-   * @attr {boolean} select-all-button-visible
-   */
-  selectAllButtonVisible: boolean;
 
   /**
    * Clears the selected items.

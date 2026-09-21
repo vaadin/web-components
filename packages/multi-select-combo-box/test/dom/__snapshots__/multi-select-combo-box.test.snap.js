@@ -772,6 +772,8 @@ snapshots["vaadin-multi-select-combo-box host opened select all button"] =
 `<vaadin-multi-select-combo-box
   focused=""
   opened=""
+  start-aligned=""
+  top-aligned=""
 >
   <vaadin-multi-select-combo-box-scroller
     aria-multiselectable="true"
@@ -780,6 +782,26 @@ snapshots["vaadin-multi-select-combo-box host opened select all button"] =
     slot="overlay"
     tabindex="-1"
   >
+    <vaadin-multi-select-combo-box-item
+      aria-posinset="1"
+      aria-selected="false"
+      aria-setsize="2"
+      id="vaadin-multi-select-combo-box-item-0"
+      role="option"
+      tabindex="-1"
+    >
+      Apple
+    </vaadin-multi-select-combo-box-item>
+    <vaadin-multi-select-combo-box-item
+      aria-posinset="2"
+      aria-selected="false"
+      aria-setsize="2"
+      id="vaadin-multi-select-combo-box-item-1"
+      role="option"
+      tabindex="-1"
+    >
+      Banana
+    </vaadin-multi-select-combo-box-item>
   </vaadin-multi-select-combo-box-scroller>
   <label
     for="input-vaadin-multi-select-combo-box-5"

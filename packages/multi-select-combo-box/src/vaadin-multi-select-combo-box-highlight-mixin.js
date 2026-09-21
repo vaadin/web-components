@@ -20,8 +20,8 @@ import { ComboBoxHighlightMixin } from '@vaadin/combo-box/src/vaadin-combo-box-h
  * highlight to it while it is available.
  *
  * Expects the host to provide a `_chips` getter that returns the chip elements,
- * and an `_isSelectAllAvailable` getter that tells whether the select all
- * button can be highlighted.
+ * and a `_hasSelectAllButton` getter that tells whether the select all button
+ * is rendered and can be highlighted.
  *
  * @polymerMixin
  * @mixes ComboBoxHighlightMixin
@@ -40,7 +40,7 @@ export const MultiSelectComboBoxHighlightMixin = (superClass) =>
      * @override
      */
     _highlightNextItem() {
-      if (!this._hasHighlightedItem && !this._isSelectAllHighlighted && this._isSelectAllAvailable) {
+      if (!this._hasHighlightedItem && !this._isSelectAllHighlighted && this._hasSelectAllButton) {
         this._highlightSelectAll();
       } else {
         super._highlightNextItem();
@@ -58,7 +58,7 @@ export const MultiSelectComboBoxHighlightMixin = (superClass) =>
         return;
       }
 
-      if (this._highlightedItemIndex === 0 && this._isSelectAllAvailable) {
+      if (this._highlightedItemIndex === 0 && this._hasSelectAllButton) {
         this._highlightSelectAll();
       } else {
         super._highlightPrevItem();
