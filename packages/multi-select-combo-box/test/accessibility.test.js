@@ -135,10 +135,10 @@ describe('accessibility', () => {
       });
 
       it('should apply role="application" on the overlay', () => {
-        // The overlay sets role="application" to prevent screen readers from
-        // exiting focus mode when the select all button is focused. Without
-        // this pressing Arrow Down / Up from the button does not restore focus
-        // to the input and arrow key navigation breaks in NVDA and JAWS.
+        // The overlay sets role="application" so that NVDA and JAWS stay in focus
+        // mode while the dropdown is open. The select all button and the items
+        // are never focused, only referenced with aria-activedescendant, which
+        // screen readers do not announce outside of focus mode.
         expect(comboBox.$.overlay.role).to.equal('application');
       });
     });
