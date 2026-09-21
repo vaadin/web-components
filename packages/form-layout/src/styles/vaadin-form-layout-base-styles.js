@@ -162,7 +162,7 @@ export const formLayoutStyles = css`
     --vaadin-input-field-label-aside-gap: var(--_label-spacing);
   }
 
-  :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
+  :host([auto-responsive][labels-aside-active]) #layout {
     --_form-item-labels-above: ' '; /* false */
     --_form-item-labels-aside: initial; /* true */
     --_grid-column-width: var(--_column-width-labels-aside);
