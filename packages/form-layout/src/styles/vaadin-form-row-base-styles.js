@@ -7,7 +7,24 @@ import { css } from 'lit';
 
 export const formRowStyles = css`
   :host {
-    display: contents;
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+
+    /*
+      Same as in the parent layout: auto-columns are excluded from
+      --_grid-rendered-column-count, which is used to cap the colspan.
+    */
+    grid-auto-columns: 0;
+
+    /* The column gap comes from the parent grid, the row gap does not */
+    row-gap: var(--_row-spacing);
+
+    place-items: baseline start;
+  }
+
+  :host([empty]) {
+    display: none;
   }
 
   :host([hidden]) {
@@ -20,9 +37,5 @@ export const formRowStyles = css`
     --_form-item-labels-aside: inherit;
 
     grid-column: auto / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
-  }
-
-  ::slotted(:first-child) {
-    grid-column-start: 1;
   }
 `;

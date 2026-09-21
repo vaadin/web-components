@@ -65,6 +65,8 @@ export class AutoResponsiveLayout extends AbstractLayout {
 
       child.removeAttribute('data-form-layout-labels-aside-active');
     });
+
+    this.__rows.forEach((row) => row.removeAttribute('empty'));
   }
 
   /** @override */
@@ -82,6 +84,10 @@ export class AutoResponsiveLayout extends AbstractLayout {
     if (!this.isConnected || isElementHidden(host)) {
       return;
     }
+
+    // Reset before measuring, so that children of a row hidden on the previous
+    // run are not reported as hidden themselves
+    this.__rows.forEach((row) => row.removeAttribute('empty'));
 
     let columnCount = 0;
     let maxColumns = 0;
@@ -146,6 +152,12 @@ export class AutoResponsiveLayout extends AbstractLayout {
       child.toggleAttribute('data-form-layout-labels-aside-active', labelsAsideActive);
     });
 
+    // A row is a grid item on its own, so an empty one would take up a grid row
+    this.__rows.forEach((row) => {
+      const hasVisibleChildren = [...row.children].some((child) => !isElementHidden(child));
+      row.toggleAttribute('empty', !hasVisibleChildren);
+    });
+
     host.$.layout.style.setProperty('--_grid-rendered-column-count', this.__renderedColumnCount);
   }
 
@@ -166,6 +178,11 @@ export class AutoResponsiveLayout extends AbstractLayout {
     if (shouldUpdateLayout) {
       this.updateLayout();
     }
+  }
+
+  /** @private */
+  get __rows() {
+    return [...this.host.children].filter((child) => child.localName === 'vaadin-form-row');
   }
 
   /** @private */

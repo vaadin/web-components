@@ -139,7 +139,7 @@ export const formLayoutStyles = css`
     width: var(--_max-width);
   }
 
-  :host([auto-responsive]) #layout ::slotted(*) {
+  :host([auto-responsive]) #layout ::slotted(*:not(vaadin-form-row)) {
     /* Make form items inherit label position from the layout */
     --_form-item-labels-above: inherit;
     --_form-item-labels-aside: inherit;
@@ -151,7 +151,7 @@ export const formLayoutStyles = css`
     margin: 0;
   }
 
-  :host([auto-responsive][auto-rows]) #layout ::slotted(*) {
+  :host([auto-responsive][auto-rows]) #layout ::slotted(*:not(vaadin-form-row)) {
     grid-column-start: var(--_grid-colstart, auto);
   }
 
@@ -204,5 +204,10 @@ export const formLayoutSlotStyles = css`
     vaadin-form-layout[auto-responsive][expand-fields] vaadin-form-item > *
   ) {
     min-width: 100%;
+  }
+
+  /* <vaadin-form-row> is a subgrid, which has no effect outside auto-responsive mode */
+  :where(vaadin-form-layout:not([auto-responsive]) > vaadin-form-row) {
+    display: contents;
   }
 `;
