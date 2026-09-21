@@ -64,6 +64,22 @@ describe('range-slider', () => {
       element.label = 'Label';
       await visualDiff(div, 'label');
     });
+
+    describe('label aside', () => {
+      beforeEach(() => {
+        element.setAttribute('theme', 'label-aside');
+        element.label = 'Label';
+      });
+
+      it('default', async () => {
+        await visualDiff(div, 'label-aside');
+      });
+
+      it('min max visible', async () => {
+        element.minMaxVisible = true;
+        await visualDiff(div, 'label-aside-min-max-visible');
+      });
+    });
   });
 
   describe('focus', () => {

@@ -37,6 +37,12 @@ describe('multi-select-combo-box', () => {
     await visualDiff(div, 'readonly');
   });
 
+  it('label aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    await visualDiff(div, 'label-aside');
+  });
+
   describe('selected items', () => {
     beforeEach(() => {
       element.style.width = '250px';
@@ -47,6 +53,12 @@ describe('multi-select-combo-box', () => {
       await visualDiff(div, 'selected');
     });
 
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'selected-label-aside');
+    });
+
     it('readonly', async () => {
       element.readonly = true;
       await visualDiff(div, 'selected-readonly');
@@ -55,6 +67,21 @@ describe('multi-select-combo-box', () => {
     it('disabled', async () => {
       element.disabled = true;
       await visualDiff(div, 'selected-disabled');
+    });
+  });
+
+  describe('auto expand', () => {
+    beforeEach(() => {
+      element.selectedItems = [...element.items];
+      element.autoExpandHorizontally = true;
+      element.autoExpandVertically = true;
+    });
+
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      element.style.maxWidth = '250px';
+      await visualDiff(div, 'auto-expand-label-aside');
     });
   });
 
