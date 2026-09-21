@@ -59,10 +59,20 @@ describe('slider', () => {
       await visualDiff(div, 'label');
     });
 
-    it('label aside', async () => {
-      element.setAttribute('theme', 'label-aside');
-      element.label = 'Label';
-      await visualDiff(div, 'label-aside');
+    describe('label aside', () => {
+      beforeEach(() => {
+        element.setAttribute('theme', 'label-aside');
+        element.label = 'Label';
+      });
+
+      it('default', async () => {
+        await visualDiff(div, 'label-aside');
+      });
+
+      it('min max visible', async () => {
+        element.minMaxVisible = true;
+        await visualDiff(div, 'label-aside-min-max-visible');
+      });
     });
   });
 

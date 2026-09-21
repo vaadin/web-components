@@ -60,6 +60,13 @@ describe('select', () => {
       await visualDiff(div, 'value');
     });
 
+    it('value label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      element.value = 'value-1';
+      await visualDiff(div, 'value-label-aside');
+    });
+
     it('disabled value', async () => {
       element.disabled = true;
       element.value = 'value-1';
