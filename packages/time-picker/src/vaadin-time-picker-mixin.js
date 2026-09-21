@@ -136,8 +136,10 @@ export const TimePickerMixin = (superClass) =>
 
     /**
      * The object used to localize this component. To change the default
-     * localization, replace this with an object that provides both the
+     * localization, set this to an object that provides both the
      * time parsing and formatting functions.
+     *
+     * When not set, defaults to `undefined`.
      *
      * The object has the following JSON structure:
      *
@@ -168,7 +170,7 @@ export const TimePickerMixin = (superClass) =>
      * ISO 8601 format, and are never passed to `parseTime`, so implementations
      * do not need to accept ISO 8601 input.
      *
-     * @type {!TimePickerI18n}
+     * @type {TimePickerI18n | undefined}
      */
     get i18n() {
       return super.i18n;

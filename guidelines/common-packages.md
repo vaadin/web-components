@@ -15,7 +15,7 @@ Core utilities used by every component.
 | `ResizeMixin`          | `src/resize-mixin.js`           | ResizeObserver-driven `_onResize()` callback; supports parent-resize observation.                   |
 | `DelegateStateMixin`   | `src/delegate-state-mixin.js`   | Forwards properties and attributes from the host to a `stateTarget` (see below).                    |
 | `SlotStylesMixin`      | `src/slot-styles-mixin.js`      | Injects styles into the outer scope to reach slotted children when `::slotted()` isn't enough.      |
-| `I18nMixin`            | `src/i18n-mixin.js`             | Adds an `i18n` property that deep-merges over a default object — the standard localization pattern. |
+| `I18nMixin`            | `src/i18n-mixin.js`             | Deep-merges the partial localization values set by the application over the component's defaults.   |
 | `defineCustomElement`  | `src/define.js`                 | Wraps `customElements.define`; logs a warning if the tag is already registered.                     |
 | `deepMerge`            | `src/object-utils.js`           | Recursive object merge; `deepMergePartials` merges sources that provide only some properties.       |
 | `SlotController`       | `src/slot-controller.js`        | Observes a named slot; can create a default node when empty.                                        |

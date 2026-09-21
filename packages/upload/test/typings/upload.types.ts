@@ -38,7 +38,7 @@ assertType<number>(upload.maxFileSize);
 assertType<boolean>(upload.noAuto);
 assertType<boolean>(upload.withCredentials);
 assertType<string | null | undefined>(upload.capture);
-assertType<UploadI18n>(upload.i18n);
+assertType<UploadI18n | undefined>(upload.i18n);
 
 // Events
 upload.addEventListener('max-files-reached-changed', (event) => {

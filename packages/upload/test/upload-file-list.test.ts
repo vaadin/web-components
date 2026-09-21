@@ -48,13 +48,6 @@ describe('vaadin-upload-file-list', () => {
   });
 
   describe('basic', () => {
-    it('should have i18n property with defaults', () => {
-      expect(fileList.i18n).to.exist;
-      expect(fileList.i18n.file?.retry).to.equal('Retry');
-      expect(fileList.i18n.file?.start).to.equal('Start');
-      expect(fileList.i18n.file?.remove).to.equal('Remove');
-    });
-
     it('should have disabled property defaulting to false', () => {
       expect(fileList.disabled).to.be.false;
     });

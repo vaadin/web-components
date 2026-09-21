@@ -67,8 +67,10 @@ export const MessageInputMixin = (superClass) =>
 
     /**
      * The object used to localize this component. To change the default
-     * localization, replace this with an object that provides all properties, or
+     * localization, set this to an object that provides all properties, or
      * just the individual properties you want to change.
+     *
+     * When not set, defaults to `undefined`.
      *
      * The object has the following JSON structure and default values:
      * ```js
@@ -80,7 +82,7 @@ export const MessageInputMixin = (superClass) =>
      *   message: 'Message'
      * }
      * ```
-     * @type {!MessageInputI18n}
+     * @type {MessageInputI18n | undefined}
      */
     get i18n() {
       return super.i18n;

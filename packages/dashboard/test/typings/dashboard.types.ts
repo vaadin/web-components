@@ -41,21 +41,24 @@ assertType<Array<DashboardItem | DashboardSectionItem<DashboardItem>> | null | u
 assertType<boolean>(genericDashboard.editable);
 assertType<boolean>(genericDashboard.denseLayout);
 
-assertType<{
-  selectWidget?: string;
-  selectSection?: string;
-  remove?: string;
-  resize?: string;
-  move?: string;
-  resizeApply?: string;
-  resizeShrinkWidth?: string;
-  resizeGrowWidth?: string;
-  resizeShrinkHeight?: string;
-  resizeGrowHeight?: string;
-  moveApply?: string;
-  moveForward?: string;
-  moveBackward?: string;
-}>(genericDashboard.i18n);
+assertType<
+  | {
+      selectWidget?: string;
+      selectSection?: string;
+      remove?: string;
+      resize?: string;
+      move?: string;
+      resizeApply?: string;
+      resizeShrinkWidth?: string;
+      resizeGrowWidth?: string;
+      resizeShrinkHeight?: string;
+      resizeGrowHeight?: string;
+      moveApply?: string;
+      moveForward?: string;
+      moveBackward?: string;
+    }
+  | undefined
+>(genericDashboard.i18n);
 
 const narrowedDashboard = document.createElement('vaadin-dashboard') as unknown as Dashboard<TestDashboardItem>;
 assertType<Dashboard<TestDashboardItem>>(narrowedDashboard);

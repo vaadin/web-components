@@ -17,8 +17,10 @@ export declare function SideNavChildrenMixin<T extends Constructor<HTMLElement>>
 export declare class SideNavChildrenMixinClass {
   /**
    * The object used to localize this component. To change the default
-   * localization, replace this with an object that provides all properties, or
+   * localization, set this to an object that provides all properties, or
    * just the individual properties you want to change.
+   *
+   * When not set, defaults to `undefined`.
    *
    * The object has the following structure and default values:
    * ```js
@@ -27,7 +29,7 @@ export declare class SideNavChildrenMixinClass {
    * }
    * ```
    */
-  i18n: SideNavI18n;
+  i18n: SideNavI18n | undefined;
 
   /**
    * List of child items of this component.
