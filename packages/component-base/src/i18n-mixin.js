@@ -56,7 +56,7 @@ export const I18nMixin = (superClass) =>
      * localization, set this to an object that provides all properties, or
      * just the individual properties you want to change.
      *
-     * The property is `undefined` unless a value is set.
+     * When not set, defaults to `undefined`.
      *
      * Should be overridden by subclasses to provide a custom JSDoc with the
      * default I18N properties.

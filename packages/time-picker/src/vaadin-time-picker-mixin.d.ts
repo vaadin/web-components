@@ -106,7 +106,7 @@ export declare class TimePickerMixinClass {
    * localization, set this to an object that provides both the
    * time parsing and formatting functions.
    *
-   * The property is `undefined` unless a value is set.
+   * When not set, defaults to `undefined`.
    *
    * The object has the following JSON structure:
    *

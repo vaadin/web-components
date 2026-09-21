@@ -251,7 +251,7 @@ export const RichTextEditorMixin = (superClass) =>
      * localization, set this to an object that provides all properties, or
      * just the individual properties you want to change.
      *
-     * The property is `undefined` unless a value is set.
+     * When not set, defaults to `undefined`.
      *
      * The properties are used e.g. as the tooltips for the editor toolbar
      * buttons.

@@ -107,7 +107,7 @@ export const AvatarGroupMixin = (superClass) =>
      * localization, set this to an object that provides all properties, or
      * just the individual properties you want to change.
      *
-     * The property is `undefined` unless a value is set.
+     * When not set, defaults to `undefined`.
      *
      * The object has the following JSON structure and default values:
      * ```js
