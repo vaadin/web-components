@@ -3,7 +3,6 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { announce } from '@vaadin/a11y-base/src/announce.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 /**
@@ -115,8 +114,7 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
         selectedItems = [...this.selectedItems, ...missingItems];
       }
 
-      this.__updateSelection(selectedItems);
-      this.#announceSelection();
+      this.__updateSelection(selectedItems, true);
     }
 
     #updateButton() {
@@ -156,14 +154,5 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
 
     #includesItem(items, item) {
       return items.some((other) => this._isSameItem(item, other));
-    }
-
-    #announceSelection() {
-      const count = this.selectedItems.length;
-      if (count === 0) {
-        announce(this.__effectiveI18n.cleared);
-      } else {
-        announce(this.__effectiveI18n.total.replace('{count}', count));
-      }
     }
   };
