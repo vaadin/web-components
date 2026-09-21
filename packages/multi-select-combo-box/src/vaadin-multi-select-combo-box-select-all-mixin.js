@@ -59,21 +59,15 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      if (
-        props.has('_highlightState') &&
-        props.get('_highlightState')?.type === 'item' &&
-        this._isSelectAllHighlighted
-      ) {
-        // When highlighting the button, revert input value to the filter
-        this._revertInputValue();
-      }
-
       if (props.has('_highlightState')) {
         this.#button.focused = this._isSelectAllHighlighted;
+
+        if (props.get('_highlightState')?.type === 'item' && this._isSelectAllHighlighted) {
+          // When highlighting the button, revert input value to the filter
+          this._revertInputValue();
+        }
       }
 
-      // Computing the label compares every filtered item against every selected
-      // item, so it must not be triggered by the highlight moving.
       const buttonProps = [
         'selectAllButtonVisible',
         'readonly',
