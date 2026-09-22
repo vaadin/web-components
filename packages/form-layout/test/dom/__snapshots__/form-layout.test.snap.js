@@ -44,24 +44,24 @@ snapshots["vaadin-form-layout auto-responsive basic host labelsAside in narrow c
 snapshots["vaadin-form-layout auto-responsive basic host labelsAside in wide container"] = 
 `<vaadin-form-layout
   auto-responsive=""
+  has-labels-aside=""
   labels-aside=""
-  labels-aside-active=""
   style="--_min-columns: 1; --_max-columns: 1; width: 40em;"
 >
   <input
-    data-form-layout-labels-aside-active=""
+    data-form-layout-has-labels-aside=""
     placeholder="First name"
   >
   <input
-    data-form-layout-labels-aside-active=""
+    data-form-layout-has-labels-aside=""
     placeholder="Last name"
   >
   <input
-    data-form-layout-labels-aside-active=""
+    data-form-layout-has-labels-aside=""
     placeholder="Email"
   >
   <input
-    data-form-layout-labels-aside-active=""
+    data-form-layout-has-labels-aside=""
     placeholder="Phone"
   >
 </vaadin-form-layout>

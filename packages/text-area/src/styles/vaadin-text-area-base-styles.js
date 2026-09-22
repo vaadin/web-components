@@ -19,7 +19,7 @@ export const textAreaStyles = css`
     );
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) [part='input-field'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='input-field'] {
     height: 100%;
   }
 

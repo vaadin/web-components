@@ -200,7 +200,7 @@ export * from './vaadin-form-layout-mixin.js';
  *
  * Attribute | Description
  * ---|---
- * `labels-aside-active` | Set when the `labelsAside` property is enabled and there is enough space to display labels beside the fields
+ * `has-labels-aside` | Set when the `labelsAside` property is enabled and there is enough space to display labels beside the fields
  */
 declare class FormLayout extends FormLayoutMixin(ElementMixin(ThemableMixin(HTMLElement))) {}
 
