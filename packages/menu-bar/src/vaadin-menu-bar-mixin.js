@@ -580,8 +580,7 @@ export const MenuBarMixin = (superClass) =>
         const layout = this.__measureButtons(buttons, overflow);
         const containerWidth = container.getBoundingClientRect().width;
         const collapsed = this.__getCollapsedButtons(buttons, layout, containerWidth);
-        // Save width for buttons with component. Read button widths once outside
-        // of the loop to avoid repetitive layout.
+        // Read button widths once outside of the loop to avoid repetitive layout
         const widths = collapsed.map((btn) => getComputedStyle(btn).width);
 
         // Write the DOM state
