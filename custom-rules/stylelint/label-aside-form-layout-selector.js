@@ -8,11 +8,11 @@ const {
 const ruleName = 'custom-rules/label-aside-form-layout-selector';
 
 const THEME_ATTRIBUTE = /\[theme~=(['"]?)label-aside\1\]/u;
-const FORM_LAYOUT_ATTRIBUTE = '[data-form-layout-labels-aside-active]';
+const FORM_LAYOUT_ATTRIBUTE = '[data-form-layout-has-labels-aside]';
 
 const messages = {
   expected: () =>
-    `Expected a selector matching "[theme~='label-aside']" to also match "[data-form-layout-labels-aside-active]"`,
+    `Expected a selector matching "[theme~='label-aside']" to also match "[data-form-layout-has-labels-aside]"`,
 };
 
 const ruleFunction = () => {

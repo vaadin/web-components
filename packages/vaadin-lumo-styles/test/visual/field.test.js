@@ -162,7 +162,7 @@ describe('field', () => {
 
   describe('form layout labels aside', () => {
     beforeEach(() => {
-      element.setAttribute('data-form-layout-labels-aside-active', '');
+      element.setAttribute('data-form-layout-has-labels-aside', '');
       element.style.setProperty('--vaadin-input-field-label-aside-width', '8em');
       element.style.setProperty('--vaadin-input-field-label-aside-gap', '1em');
     });

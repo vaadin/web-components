@@ -66,7 +66,7 @@ describe('radio-button', () => {
 
   describe('form layout labels aside', () => {
     beforeEach(() => {
-      element.setAttribute('data-form-layout-labels-aside-active', '');
+      element.setAttribute('data-form-layout-has-labels-aside', '');
       element.style.setProperty('--vaadin-form-layout-label-width', '8em');
       element.style.setProperty('--vaadin-form-layout-label-spacing', '1em');
     });

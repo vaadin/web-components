@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_mixins_field-label-aside {
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) {
     --_label-aside-width: 0px;
     --_label-aside-gap: 0px;
     --_helper-above-field: ;
@@ -22,34 +22,34 @@
     column-gap: var(--_label-aside-gap);
   }
 
-  :host(:is([theme~='label-aside'][has-label], [data-form-layout-labels-aside-active])) {
+  :host(:is([theme~='label-aside'][has-label], [data-form-layout-has-labels-aside])) {
     --_label-aside-width: var(--vaadin-input-field-label-aside-width, auto);
     --_label-aside-gap: var(--vaadin-input-field-label-aside-gap, 1em);
     padding-top: var(--lumo-space-xs);
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])[theme~='helper-above-field']) {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[theme~='helper-above-field']) {
     --_helper-above-field: initial;
     --_helper-below-field: ;
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active]))::before {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside]))::before {
     grid-column: baseline;
     grid-row: 1 / baseline;
     align-self: end;
     margin-bottom: calc(var(--_input-height, var(--lumo-size-s)) * -1);
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])[has-label])::before,
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])[theme~='small'][has-label])::before {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[has-label])::before,
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[theme~='small'][has-label])::before {
     margin-top: 0;
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) [class$='container'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [class$='container'] {
     display: contents;
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) [part='label'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='label'] {
     grid-area: label;
     align-self: baseline;
     overflow: visible;
@@ -59,49 +59,48 @@
     text-align: var(--vaadin-input-field-label-aside-text-align, inherit);
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])[theme~='helper-above-field'][has-helper])
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[theme~='helper-above-field'][has-helper])
     [part='label'] {
     padding-bottom: 0;
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])[required])
-    [part='required-indicator']::after {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[required]) [part='required-indicator']::after {
     right: auto;
     left: auto;
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) [part='input-field'],
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) [part='input-fields'],
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) [part='group-field'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='input-field'],
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='input-fields'],
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='group-field'] {
     grid-area: input;
     align-self: baseline;
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) [part='input-field'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='input-field'] {
     width: var(--vaadin-field-default-width, 12em);
     min-width: 100%;
     max-width: 100%;
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) [part='helper-text'],
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) [part='error-message'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='helper-text'],
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='error-message'] {
     margin-inline: 0;
     padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])[dir='rtl']) [part='error-message'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[dir='rtl']) [part='error-message'] {
     margin-right: 0;
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) [part='helper-text'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='helper-text'] {
     grid-area: helper;
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) [part='error-message'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='error-message'] {
     grid-area: error;
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])[has-label]) ::slotted([slot='tooltip']) {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[has-label]) ::slotted([slot='tooltip']) {
     --vaadin-tooltip-offset-bottom: 0px;
   }
 }

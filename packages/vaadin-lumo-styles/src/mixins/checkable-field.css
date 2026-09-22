@@ -28,7 +28,7 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  :host([data-form-layout-labels-aside-active]) {
+  :host([data-form-layout-has-labels-aside]) {
     padding-inline-start: calc(var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing));
   }
 

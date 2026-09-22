@@ -24,7 +24,7 @@ export const checkable = (part, propName = part) => css`
     column-gap: 0;
   }
 
-  :host([data-form-layout-labels-aside-active]) {
+  :host([data-form-layout-has-labels-aside]) {
     padding-inline-start: calc(var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing));
   }
 

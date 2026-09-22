@@ -23,7 +23,7 @@ export const multiSelectComboBoxStyles = [
       gap: var(--vaadin-multi-select-combo-box-chips-gap, 2px);
     }
 
-    :host(:is([theme~='label-aside'], [data-form-layout-labels-aside-active])) [part='input-field']::before {
+    :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='input-field']::before {
       content: '\\2003' / '';
       width: 0;
       align-self: start;
