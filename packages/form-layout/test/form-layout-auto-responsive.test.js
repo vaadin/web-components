@@ -239,6 +239,7 @@ describe('form-layout auto responsive', () => {
           style="
             --vaadin-form-layout-label-width: 100px;
             --vaadin-form-layout-label-spacing: 50px;
+            --vaadin-form-layout-label-text-align: end;
           "
         >
           <input placeholder="First name" />
@@ -256,6 +257,10 @@ describe('form-layout auto responsive', () => {
       expect(getComputedStyle(field).getPropertyValue('--vaadin-input-field-label-aside-gap')).to.equal('50px');
     });
 
+    it('should set label-aside text-align on fields', () => {
+      expect(getComputedStyle(field).getPropertyValue('--vaadin-input-field-label-aside-text-align')).to.equal('end');
+    });
+
     it('should unset label-aside width on fields when labelsAside is disabled', () => {
       layout.labelsAside = false;
       expect(getComputedStyle(field).getPropertyValue('--vaadin-input-field-label-aside-width')).to.equal('');
@@ -264,6 +269,11 @@ describe('form-layout auto responsive', () => {
     it('should unset label-aside gap on fields when labelsAside is disabled', () => {
       layout.labelsAside = false;
       expect(getComputedStyle(field).getPropertyValue('--vaadin-input-field-label-aside-gap')).to.equal('');
+    });
+
+    it('should unset label-aside text-align on fields when labelsAside is disabled', () => {
+      layout.labelsAside = false;
+      expect(getComputedStyle(field).getPropertyValue('--vaadin-input-field-label-aside-text-align')).to.equal('');
     });
   });
 

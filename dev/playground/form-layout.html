@@ -84,6 +84,12 @@
           clear-button-visible
         ></vaadin-text-field>
         <vaadin-text-field
+          id="labelTextAlign"
+          label="Label Text Align"
+          placeholder="start"
+          clear-button-visible
+        ></vaadin-text-field>
+        <vaadin-text-field
           id="columnSpacing"
           label="Column Spacing"
           placeholder="var(--vaadin-gap-l)"
@@ -270,6 +276,7 @@
       const cssProperties = {
         labelWidth: '--vaadin-form-layout-label-width',
         labelSpacing: '--vaadin-form-layout-label-spacing',
+        labelTextAlign: '--vaadin-form-layout-label-text-align',
         columnSpacing: '--vaadin-form-layout-column-spacing',
         rowSpacing: '--vaadin-form-layout-row-spacing',
       };

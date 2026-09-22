@@ -210,6 +210,7 @@ import { FormLayoutMixin } from './vaadin-form-layout-mixin.js';
  * `--vaadin-form-layout-row-spacing` | Length of the spacing between rows | `1em`
  * `--vaadin-form-layout-label-width` | Width of the label when labels are displayed aside | `8em`
  * `--vaadin-form-layout-label-spacing` | Length of the spacing between the label and the field when labels are displayed aside | `1em`
+ * `--vaadin-form-layout-label-text-align` | Alignment of the label when labels are displayed aside | `start`
  *
  * The following state attributes are available for styling:
  *

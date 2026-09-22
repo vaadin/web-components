@@ -34,6 +34,7 @@ export const formItemStyles = css`
     font-weight: var(--vaadin-form-item-label-font-weight, var(--vaadin-input-field-label-font-weight, 500));
     line-height: var(--vaadin-form-item-label-line-height, var(--vaadin-input-field-label-line-height, inherit));
     position: relative;
+    text-align: var(--_form-item-labels-aside, var(--_label-text-align, start));
     width: var(--_form-item-labels-aside, var(--_label-width, 8em));
     word-break: break-word;
     box-sizing: border-box;
