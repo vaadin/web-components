@@ -194,8 +194,8 @@ export * from './vaadin-form-layout-mixin.js';
  * When this feature is enabled, all Vaadin field components placed directly in
  * the layout show labels beside the inputs without additional configuration.
  * For custom components, you must implement the label position yourself. When
- * the labels fit beside the inputs, Form Layout sets the `labels-aside-active`
- * attribute on its host element and the `data-form-layout-labels-aside-active`
+ * the labels fit beside the inputs, Form Layout sets the `has-labels-aside`
+ * attribute on its host element and the `data-form-layout-has-labels-aside`
  * attribute on its children. Use these attributes to apply custom styles or
  * behavior with CSS or JS.
  *
