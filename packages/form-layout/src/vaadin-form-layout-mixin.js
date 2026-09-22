@@ -185,10 +185,10 @@ export const FormLayoutMixin = (superClass) =>
         },
 
         /**
-         * When enabled with `autoResponsive`, the layout prefers positioning
-         * labels beside the fields. If the layout is too narrow to fit a single column
-         * with a side label, the component will automatically switch labels to their
-         * default position above the fields.
+         * When enabled with `autoResponsive`, the layout puts labels beside the
+         * fields. If the layout is too narrow for a single column with a label
+         * beside the field, the labels automatically return to their default
+         * position above the fields.
          *
          * The default value is `false`.
          *
