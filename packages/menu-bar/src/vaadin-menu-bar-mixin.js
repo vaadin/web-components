@@ -57,6 +57,9 @@ const DEFAULT_I18N = {
   moreOptions: 'More options',
 };
 
+// Two client rects of the same edge can differ by float noise, a few 1e-5 px under browser zoom
+const OVERFLOW_TOLERANCE = 0.1;
+
 export const MenuBarMixin = (superClass) =>
   class MenuBarMixinClass extends I18nMixin(
     KeyboardDirectionMixin(ResizeMixin(FocusMixin(DisabledMixin(superClass)))),
@@ -506,7 +509,7 @@ export const MenuBarMixin = (superClass) =>
       const width = container.offsetWidth;
       const lastButton = buttons.at(-1);
 
-      if (lastButton && this.__getInlineEnd(lastButton) > this.__getInlineEnd(container)) {
+      if (lastButton && this.__getInlineEnd(lastButton) > this.__getInlineEnd(container) + OVERFLOW_TOLERANCE) {
         // Prevent the container from shrinking while buttons are being hidden.
         // The host has min-width: 0 so it can shrink inside flex/grid layouts.
         // Without this lock, hiding a button reduces the host width, which
@@ -516,7 +519,7 @@ export const MenuBarMixin = (superClass) =>
         this._hasOverflow = true;
 
         // Read again with the overflow button in flow
-        const containerEnd = this.__getInlineEnd(container);
+        const containerEnd = this.__getInlineEnd(container) + OVERFLOW_TOLERANCE;
 
         const remaining = [...buttons];
         while (remaining.length) {
