@@ -258,6 +258,29 @@ describe('overflow', () => {
     });
   });
 
+  describe('sub-pixel rounding', () => {
+    let menu;
+
+    beforeEach(async () => {
+      // Exactly as wide as five buttons that overlap by 1px, like a menu bar sized by its content
+      menu = fixtureSync('<vaadin-menu-bar style="width: 296px"></vaadin-menu-bar>');
+      menu.items = createItems(5);
+      await nextResize(menu);
+    });
+
+    it('should not collapse when scrollWidth rounds one pixel above offsetWidth', async () => {
+      // Browser zoom makes the two round the same fractional width differently
+      const container = menu._container;
+      const { get } = Object.getOwnPropertyDescriptor(Element.prototype, 'scrollWidth');
+      Object.defineProperty(container, 'scrollWidth', { configurable: true, get: () => get.call(container) + 1 });
+
+      menu.items = [...menu.items];
+      await nextUpdate(menu);
+
+      expectCollapsed(menu, []);
+    });
+  });
+
   describe('has-single-button attribute', () => {
     let menu, buttons, overflow;
 

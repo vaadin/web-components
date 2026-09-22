@@ -57,6 +57,9 @@ const DEFAULT_I18N = {
   moreOptions: 'More options',
 };
 
+// Two client rects of the same edge can differ by float noise, a few 1e-5 px under browser zoom
+const OVERFLOW_TOLERANCE = 0.1;
+
 export const MenuBarMixin = (superClass) =>
   class MenuBarMixinClass extends I18nMixin(
     KeyboardDirectionMixin(ResizeMixin(FocusMixin(DisabledMixin(superClass)))),
@@ -484,13 +487,27 @@ export const MenuBarMixin = (superClass) =>
       this._hasOverflow = items.length > 0;
     }
 
+    /**
+     * Inline end edge of the element, mirrored in RTL. Unlike `offsetWidth` and `scrollWidth`,
+     * the rect keeps the fraction that browser zoom leaves on the width.
+     *
+     * @param {!HTMLElement} el
+     * @return {number}
+     * @private
+     */
+    __getInlineEnd(el) {
+      const { left, right } = el.getBoundingClientRect();
+      return this.__isRTL ? -left : right;
+    }
+
     /** @private */
     __setOverflowItems(buttons, overflow) {
       const container = this._container;
       // Read before any write, so a menu bar that fits forces no layout
       const width = container.offsetWidth;
+      const lastButton = buttons.at(-1);
 
-      if (width < container.scrollWidth) {
+      if (lastButton && this.__getInlineEnd(lastButton) > this.__getInlineEnd(container) + OVERFLOW_TOLERANCE) {
         // Prevent the container from shrinking while buttons are being hidden.
         // The host has min-width: 0 so it can shrink inside flex/grid layouts.
         // Without this lock, hiding a button reduces the host width, which
@@ -499,19 +516,14 @@ export const MenuBarMixin = (superClass) =>
         container.style.minWidth = `${width}px`;
         this._hasOverflow = true;
 
-        const isRTL = this.__isRTL;
-        const containerLeft = container.offsetLeft;
-        const containerWidth = container.offsetWidth;
+        // Read again with the overflow button in flow
+        const containerEnd = this.__getInlineEnd(container) + OVERFLOW_TOLERANCE;
 
         const remaining = [...buttons];
         while (remaining.length) {
           // The overflow button follows the last remaining one, so its far edge is what has
           // to fit. Auto margins move the whole row but cannot push that edge past the end.
-          const overflowEnd = isRTL
-            ? containerWidth - (overflow.offsetLeft - containerLeft)
-            : overflow.offsetLeft + overflow.offsetWidth - containerLeft;
-
-          if (overflowEnd <= containerWidth) {
+          if (this.__getInlineEnd(overflow) <= containerEnd) {
             break;
           }
 
