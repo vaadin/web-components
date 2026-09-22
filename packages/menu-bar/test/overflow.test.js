@@ -210,6 +210,9 @@ describe('overflow', () => {
         });
 
         it('should count the start margin of the first kept button', async () => {
+          // The two kept buttons span 119px and the overflow button adds 59px, as each of
+          // them overlaps its predecessor by the 1px border. The first kept button keeps
+          // that -1px margin as well, so the range ends exactly at 177px.
           menu.style.width = '177px';
           await nextResize(menu);
           expectCollapsed(menu, [0, 1, 2]);
@@ -655,14 +658,14 @@ describe('overflow', () => {
   });
 
   describe('performance', () => {
-    let menu, spy;
+    let menu;
 
     beforeEach(() => {
       menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
-      spy = sinon.spy(menu, '_hasOverflow', ['get', 'set']);
     });
 
     it('should only detect overflow twice on initial render', async () => {
+      const spy = sinon.spy(menu, '_hasOverflow', ['get', 'set']);
       menu.items = createItems(5);
       await nextResize(menu);
       await nextUpdate(menu);
@@ -674,16 +677,16 @@ describe('overflow', () => {
       menu.items = createItems(5);
       await nextResize(menu);
 
-      // Record every position read that happens after a button was taken out of flow,
-      // as each of those forces a layout.
+      // Split the position reads by whether a button was already taken out of flow.
+      // Every read after the first one is hidden forces another layout.
       const buttons = menu._buttons;
       const { getBoundingClientRect } = Element.prototype;
+      const readsBeforeHide = [];
       const readsAfterHide = [];
       buttons.forEach((btn) => {
         btn.getBoundingClientRect = function () {
-          if (buttons.some((b) => b.style.visibility === 'hidden')) {
-            readsAfterHide.push(this);
-          }
+          const hidden = buttons.some((b) => b.style.visibility === 'hidden');
+          (hidden ? readsAfterHide : readsBeforeHide).push(this);
           return getBoundingClientRect.call(this);
         };
       });
@@ -692,7 +695,9 @@ describe('overflow', () => {
       await nextUpdate(menu);
       buttons.forEach((btn) => delete btn.getBoundingClientRect);
 
-      expect(readsAfterHide).to.be.empty;
+      // Proves a detection ran, so that the next assertion does not hold by default
+      expect(readsBeforeHide.length, 'positions read before hiding').to.be.above(0);
+      expect(readsAfterHide.length, 'positions read after hiding').to.equal(0);
       expectCollapsed(menu, [2, 3, 4]);
     });
   });
