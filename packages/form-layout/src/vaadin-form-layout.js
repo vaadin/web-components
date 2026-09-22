@@ -158,7 +158,7 @@ import { FormLayoutMixin } from './vaadin-form-layout-mixin.js';
  *
  * #### Customizing Label Position
  *
- * By default, Form Layout displays labels above the fields. To put labels beside the fields,
+ * By default, Form Layout displays labels above the inputs. To put labels beside the inputs,
  * enable the [`labelsAside`](#/elements/vaadin-form-layout#property-labelsAside) property:
  *
  * ```html
@@ -178,13 +178,28 @@ import { FormLayoutMixin } from './vaadin-form-layout-mixin.js';
  * </vaadin-form-layout>
  * ```
  *
- * When there isn't enough space for labels beside fields, Form Layout returns them
- * to the default position above the fields.
+ * When there isn't enough space for labels beside inputs, Form Layout returns
+ * them to the default position above the inputs.
  *
- * By default, non-field components placed in Form Layout, such as buttons, start in
- * the label column. To align such components with the input column when labels are aside,
- * wrap them in a `<vaadin-form-item>`, as in the example above with the Submit button.
- * The Form Item reserves space for the label, so the component moves to the input column.
+ * To customize the label width and the gap between the label and the field,
+ * use the following CSS properties:
+ *
+ * - `--vaadin-form-layout-label-width`
+ * - `--vaadin-form-layout-label-spacing`
+ *
+ * By default, non-field components placed in Form Layout, such as buttons,
+ * start in the label column. To align such components with the input column
+ * when labels are aside, wrap them in a `<vaadin-form-item>`, as in the example
+ * above with the Submit button. The Form Item reserves space for the label, so
+ * the component moves to the input column.
+ *
+ * When this feature is enabled, all Vaadin field components placed directly in
+ * the layout show labels beside the inputs without additional configuration.
+ * For custom components, you must implement the label position yourself. When
+ * the labels fit beside the inputs, Form Layout sets the `labels-aside-active`
+ * attribute on its host element and the `data-form-layout-labels-aside-active`
+ * attribute on its children. Use these attributes to apply custom styles or
+ * behavior with CSS or JS.
  *
  * ### CSS Properties Reference
  *

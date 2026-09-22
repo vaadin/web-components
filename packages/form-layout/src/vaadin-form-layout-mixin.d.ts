@@ -144,17 +144,11 @@ export declare class FormLayoutMixinClass {
 
   /**
    * When enabled with `autoResponsive`, the layout puts labels beside the
-   * fields. If the layout is too narrow for a single column with a label
-   * beside the field, the labels automatically return to their default
-   * position above the fields.
+   * inputs. If the layout is too narrow for a single column with a label
+   * beside the input, the labels automatically return to their default
+   * position above the inputs.
    *
    * The default value is `false`.
-   *
-   * To customize the label width and the gap between the label and the field,
-   * use the following CSS properties:
-   *
-   * - `--vaadin-form-layout-label-width`
-   * - `--vaadin-form-layout-label-spacing`
    *
    * @attr {boolean} labels-aside
    */
