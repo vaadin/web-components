@@ -500,6 +500,64 @@ export const MenuBarMixin = (superClass) =>
       return this.__isRTL ? -left : right;
     }
 
+    /**
+     * Positions of the buttons, read in one batch before any of them is hidden.
+     * Mirrored in RTL so that a larger value is always further along the inline axis.
+     *
+     * @typedef {object} MenuBarOverflowLayout
+     * @property {number[]} starts Inline start of each button
+     * @property {number[]} ends Inline end of each button
+     * @property {number[]} margins Inline start margin of each button
+     * @property {number} overflowExtent Space the overflow button adds after the last button
+     */
+
+    /**
+     * @param {!Array<!HTMLElement>} buttons
+     * @param {!HTMLElement} overflow
+     * @return {!MenuBarOverflowLayout}
+     * @private
+     */
+    __measureButtons(buttons, overflow) {
+      const isRTL = this.__isRTL;
+      const rects = buttons.map((btn) => btn.getBoundingClientRect());
+      const ends = rects.map(({ left, right }) => (isRTL ? -left : right));
+
+      return {
+        starts: rects.map(({ left, right }) => (isRTL ? -right : left)),
+        ends,
+        // `auto` resolves to 0 while the content overflows.
+        margins: buttons.map((btn) => parseFloat(getComputedStyle(btn).marginInlineStart) || 0),
+        overflowExtent: this.__getInlineEnd(overflow) - ends.at(-1),
+      };
+    }
+
+    /**
+     * Picks the buttons to collapse so that the rest plus the overflow button end inside
+     * the container. Hiding a button only shifts the buttons after it, so the end of any
+     * kept range follows from one measurement.
+     *
+     * @param {!Array<!HTMLElement>} buttons
+     * @param {!MenuBarOverflowLayout} layout
+     * @param {number} containerWidth
+     * @return {!Array<!HTMLElement>} buttons to collapse, in DOM order
+     * @private
+     */
+    __getCollapsedButtons(buttons, { starts, ends, margins, overflowExtent }, containerWidth) {
+      let lo = 0;
+      let hi = buttons.length - 1;
+
+      // The first kept button keeps its own start margin in front of the range.
+      while (lo <= hi && margins[lo] + ends[hi] - starts[lo] + overflowExtent > containerWidth + OVERFLOW_TOLERANCE) {
+        if (this.reverseCollapse) {
+          lo += 1;
+        } else {
+          hi -= 1;
+        }
+      }
+
+      return buttons.filter((_, i) => i < lo || i > hi);
+    }
+
     /** @private */
     __setOverflowItems(buttons, overflow) {
       const container = this._container;
@@ -516,27 +574,20 @@ export const MenuBarMixin = (superClass) =>
         container.style.minWidth = `${width}px`;
         this._hasOverflow = true;
 
-        // Read again with the overflow button in flow
-        const containerEnd = this.__getInlineEnd(container) + OVERFLOW_TOLERANCE;
+        // Read the layout once the overflow button is in flow
+        const layout = this.__measureButtons(buttons, overflow);
+        const containerWidth = container.getBoundingClientRect().width;
+        const collapsed = this.__getCollapsedButtons(buttons, layout, containerWidth);
+        // Read button widths once outside of the loop to avoid repetitive layout
+        const widths = collapsed.map((btn) => getComputedStyle(btn).width);
 
-        const remaining = [...buttons];
-        while (remaining.length) {
-          // The overflow button follows the last remaining one, so its far edge is what has
-          // to fit. Auto margins move the whole row but cannot push that edge past the end.
-          if (this.__getInlineEnd(overflow) <= containerEnd) {
-            break;
-          }
-
-          const btn = this.reverseCollapse ? remaining.shift() : remaining.pop();
-
-          // Save width for buttons with component
-          btn.style.width = getComputedStyle(btn).width;
+        // Write the DOM state
+        collapsed.forEach((btn, i) => {
+          btn.style.width = widths[i];
           btn.style.visibility = 'hidden';
           btn.style.position = 'absolute';
-        }
-
-        const items = buttons.filter((b) => !remaining.includes(b)).map((b) => b.item);
-        this.__updateOverflow(items);
+        });
+        this.__updateOverflow(collapsed.map((btn) => btn.item));
 
         container.style.minWidth = '';
       }

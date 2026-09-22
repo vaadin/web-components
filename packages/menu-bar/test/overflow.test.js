@@ -209,6 +209,15 @@ describe('overflow', () => {
           expectCollapsed(menu, [0, 1]);
         });
 
+        it('should count the start margin of the first kept button', async () => {
+          // The two kept buttons span 119px and the overflow button adds 59px, as each of
+          // them overlaps its predecessor by the 1px border. The first kept button keeps
+          // that -1px margin as well, so the range ends exactly at 177px.
+          menu.style.width = '177px';
+          await nextResize(menu);
+          expectCollapsed(menu, [0, 1, 2]);
+        });
+
         it('should collapse trailing buttons when reverseCollapse is unset', async () => {
           menu.reverseCollapse = false;
           await nextUpdate(menu);
@@ -649,18 +658,35 @@ describe('overflow', () => {
   });
 
   describe('performance', () => {
-    let menu, spy;
+    let menu;
 
     beforeEach(() => {
       menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
-      spy = sinon.spy(menu, '_hasOverflow', ['get', 'set']);
     });
 
     it('should only detect overflow twice on initial render', async () => {
+      const spy = sinon.spy(menu, '_hasOverflow', ['get', 'set']);
       menu.items = createItems(5);
       await nextResize(menu);
       await nextUpdate(menu);
       expect(spy.set.callCount).to.equal(2);
+    });
+
+    it('should read the overflow button position once per detection', async () => {
+      menu.items = createItems(5);
+      await nextResize(menu);
+      expectCollapsed(menu, []);
+
+      // Reading it again after hiding a button would force another layout
+      const spy = sinon.spy(menu._overflow, 'getBoundingClientRect');
+
+      menu.style.width = `${BUTTON_WIDTH * 3}px`;
+      await nextResize(menu);
+      spy.restore();
+
+      // Collapsing proves that a detection ran while the reads were counted
+      expectCollapsed(menu, [2, 3, 4]);
+      expect(spy.callCount, 'overflow button position reads').to.equal(1);
     });
   });
 });
