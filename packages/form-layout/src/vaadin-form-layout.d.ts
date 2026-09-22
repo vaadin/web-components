@@ -179,12 +179,6 @@ export * from './vaadin-form-layout-mixin.js';
  * When there isn't enough space for side labels, Form Layout returns
  * the labels to the default position above the fields.
  *
- * To customize the label width and the gap between the label and the field,
- * use the following CSS properties:
- *
- * - `--vaadin-form-layout-label-width`
- * - `--vaadin-form-layout-label-spacing`
- *
  * By default, non-field components placed in Form Layout, such as buttons,
  * start in the label column. To align such components with the field column
  * when labels are aside, wrap them in a `<vaadin-form-item>`, as in the example
