@@ -560,21 +560,6 @@ export const MenuBarMixin = (superClass) =>
       return buttons.filter((_, i) => i < lo || i > hi);
     }
 
-    /**
-     * Takes the buttons out of flow. Writes only.
-     *
-     * @param {!Array<!HTMLElement>} buttons
-     * @param {!Array<string>} widths Width of each button, read while it was in flow
-     * @private
-     */
-    __hideButtons(buttons, widths) {
-      buttons.forEach((btn, i) => {
-        btn.style.width = widths[i];
-        btn.style.visibility = 'hidden';
-        btn.style.position = 'absolute';
-      });
-    }
-
     /** @private */
     __setOverflowItems(buttons, overflow) {
       const container = this._container;
@@ -599,7 +584,11 @@ export const MenuBarMixin = (superClass) =>
         const widths = collapsed.map((btn) => getComputedStyle(btn).width);
 
         // Write the DOM state
-        this.__hideButtons(collapsed, widths);
+        collapsed.forEach((btn, i) => {
+          btn.style.width = widths[i];
+          btn.style.visibility = 'hidden';
+          btn.style.position = 'absolute';
+        });
         this.__updateOverflow(collapsed.map((btn) => btn.item));
 
         container.style.minWidth = '';
