@@ -82,6 +82,8 @@
         white-space: nowrap;
       }
 
+      /* Cosmetic only: no room for a chevron beside a bare icon. The item's own
+         link is the trigger, so hiding it costs no tab stop. */
       #rail > vaadin-side-nav-item::part(toggle-button) {
         display: none !important;
       }

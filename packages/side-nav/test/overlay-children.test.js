@@ -1,7 +1,9 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-side-nav.js';
+import { getTabbableElements } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('overlay children', () => {
   let sideNav, items;
@@ -109,10 +111,57 @@ describe('overlay children', () => {
       expect(flyout(items[1]).positionTarget).to.equal(items[1].$.content);
     });
 
-    it('should open the flyout on the toggle button click', async () => {
-      items[1]._button.click();
+    it('should not render a toggle button, the item itself is the trigger', () => {
+      expect(items[1]._button).to.not.exist;
+    });
+
+    it('should mark the item whose flyout is open', async () => {
+      const closed = getComputedStyle(items[1].$.content).backgroundColor;
+      items[1].expanded = true;
       await nextUpdate(items[1]);
-      expect(flyout(items[1]).opened).to.be.true;
+      const open = getComputedStyle(items[1].$.content).backgroundColor;
+
+      expect(open).to.not.equal(closed);
+    });
+
+    it('should not mark the item when its children render inline', async () => {
+      sideNav.overlayChildren = false;
+      await nextRender();
+      const closed = getComputedStyle(items[1].$.content).backgroundColor;
+      items[1].expanded = true;
+      await nextUpdate(items[1]);
+
+      expect(getComputedStyle(items[1].$.content).backgroundColor).to.equal(closed);
+    });
+
+    it('should still show an indicator that the item has child items', () => {
+      const indicator = items[1].shadowRoot.querySelector('[part="toggle-button"]');
+      expect(indicator).to.exist;
+      expect(getComputedStyle(indicator).display).to.not.equal('none');
+    });
+
+    it('should show the indicator on a nested item with its own flyout', async () => {
+      const nested = items[1]._items[0];
+      nested.overlayChildren = true;
+      const child = fixtureSync('<vaadin-side-nav-item slot="children" path="/deep">Deep</vaadin-side-nav-item>');
+      nested.appendChild(child);
+      await nextRender();
+
+      const indicator = nested.shadowRoot.querySelector('[part="toggle-button"]');
+      expect(indicator).to.exist;
+      expect(getComputedStyle(indicator).display).to.not.equal('none');
+    });
+
+    it('should not make the indicator focusable', () => {
+      const indicator = items[1].shadowRoot.querySelector('[part="toggle-button"]');
+      expect(indicator.tabIndex).to.be.below(0);
+      expect(getTabbableElements(items[1])).to.have.lengthOf(1);
+    });
+
+    it('should render the toggle button when overlayChildren is disabled', async () => {
+      sideNav.overlayChildren = false;
+      await nextRender();
+      expect(items[1]._button).to.exist;
     });
   });
 
@@ -288,6 +337,59 @@ describe('overlay children', () => {
     });
   });
 
+  describe('parent link in the flyout', () => {
+    const parentLink = (item) => item.shadowRoot.querySelector('[part="parent-link"]');
+
+    it('should repeat the item page as the first entry of its flyout', () => {
+      const link = parentLink(items[1]);
+      expect(link).to.exist;
+      expect(link.getAttribute('href')).to.equal('/data');
+      expect(link.textContent.trim()).to.equal('Data');
+    });
+
+    it('should place the parent link before the child items', () => {
+      const first = list(items[1]).firstElementChild;
+      expect(first.getAttribute('part')).to.equal('parent-link-item');
+    });
+
+    it('should not repeat the page for an item that has no path', async () => {
+      const group = fixtureSync(`
+        <vaadin-side-nav-item>
+          Reports
+          <vaadin-side-nav-item path="/reports/daily" slot="children">Daily</vaadin-side-nav-item>
+        </vaadin-side-nav-item>
+      `);
+      sideNav.appendChild(group);
+      await nextRender();
+      expect(parentLink(group)).to.not.exist;
+    });
+
+    it('should not repeat the page for an item that has no children', () => {
+      expect(parentLink(items[0])).to.not.exist;
+    });
+
+    it('should mark the parent link as current when the item is current', async () => {
+      history.pushState({}, '', '/data');
+      window.dispatchEvent(new CustomEvent('side-nav-location-changed'));
+      await nextRender();
+      expect(parentLink(items[1]).getAttribute('aria-current')).to.equal('page');
+
+      history.pushState({}, '', '/');
+      window.dispatchEvent(new CustomEvent('side-nav-location-changed'));
+    });
+
+    it('should carry the page on a separate control from the trigger', () => {
+      // On touch, tapping the item opens the flyout instead of navigating, so
+      // the page has to be reachable from a control that is not the trigger
+      const link = parentLink(items[1]);
+      expect(link).to.not.equal(items[1].shadowRoot.getElementById('link'));
+      expect(link.getAttribute('href')).to.equal(items[1].path);
+    });
+
+    // Visibility is driven by `@media (hover: hover)`, which the test runner
+    // cannot emulate; covered manually and in the Playwright walkthrough.
+  });
+
   describe('click without hover', () => {
     let canHover;
 
@@ -345,10 +447,150 @@ describe('overlay children', () => {
     });
   });
 
+  describe('keyboard', () => {
+    let group;
+
+    const trigger = (item) => item.shadowRoot.getElementById('link');
+    const deepActive = () => {
+      let el = document.activeElement;
+      while (el && el.shadowRoot && el.shadowRoot.activeElement) {
+        el = el.shadowRoot.activeElement;
+      }
+      return el;
+    };
+
+    beforeEach(async () => {
+      // A pathless parent, the case that had no focusable element at all
+      group = fixtureSync(`
+        <vaadin-side-nav-item>
+          Reports
+          <vaadin-side-nav-item path="/reports/daily" slot="children">Daily</vaadin-side-nav-item>
+          <vaadin-side-nav-item path="/reports/weekly" slot="children">Weekly</vaadin-side-nav-item>
+        </vaadin-side-nav-item>
+      `);
+      sideNav.appendChild(group);
+      await nextRender();
+    });
+
+    it('should make every enabled item focusable', () => {
+      [items[0], items[1], group].forEach((item) => {
+        expect(getTabbableElements(item)).to.have.lengthOf(1);
+      });
+    });
+
+    it('should not make a disabled item focusable', async () => {
+      group.disabled = true;
+      await nextUpdate(group);
+      expect(getTabbableElements(group)).to.be.empty;
+    });
+
+    it('should open the flyout and focus its first item on arrow key', async () => {
+      trigger(group).focus();
+      await sendKeys({ press: 'ArrowRight' });
+      await nextRender();
+
+      expect(group.expanded).to.be.true;
+      expect(deepActive()).to.equal(trigger(group._items[0]));
+    });
+
+    it('should close the flyout and restore focus on the opposite arrow key', async () => {
+      trigger(group).focus();
+      await sendKeys({ press: 'ArrowRight' });
+      await nextRender();
+      await sendKeys({ press: 'ArrowLeft' });
+      await nextRender();
+
+      expect(group.expanded).to.be.false;
+      expect(deepActive()).to.equal(trigger(group));
+    });
+
+    it('should mirror the arrow keys in RTL', async () => {
+      document.documentElement.setAttribute('dir', 'rtl');
+      await nextRender();
+      trigger(group).focus();
+      await sendKeys({ press: 'ArrowLeft' });
+      await nextRender();
+
+      expect(group.expanded).to.be.true;
+      document.documentElement.removeAttribute('dir');
+    });
+
+    it('should toggle a pathless trigger with Enter', async () => {
+      trigger(group).focus();
+      await sendKeys({ press: 'Enter' });
+      await nextRender();
+      expect(group.expanded).to.be.true;
+    });
+
+    it('should not toggle the flyout with Enter when the item has a path', async () => {
+      trigger(items[1]).focus();
+      await sendKeys({ press: 'ArrowRight' });
+      await nextRender();
+      expect(items[1].expanded).to.be.true;
+    });
+
+    it('should not open the flyout merely by focusing the item', async () => {
+      trigger(group).focus();
+      await nextRender();
+      expect(group.expanded).to.be.false;
+    });
+
+    it('should close the flyout and restore focus on Escape', async () => {
+      trigger(group).focus();
+      await sendKeys({ press: 'ArrowRight' });
+      await nextRender();
+      await sendKeys({ press: 'Escape' });
+      await nextRender();
+
+      expect(group.expanded).to.be.false;
+      expect(deepActive()).to.equal(trigger(group));
+    });
+
+    it('should move focus from the last child item to the next item', async () => {
+      trigger(group).focus();
+      await sendKeys({ press: 'ArrowRight' });
+      await nextRender();
+      // first child -> second child -> out of the flyout
+      await sendKeys({ press: 'Tab' });
+      expect(deepActive()).to.equal(trigger(group._items[1]));
+
+      await sendKeys({ press: 'Tab' });
+      await nextRender();
+      expect(deepActive()).to.not.equal(trigger(group._items[1]));
+    });
+
+    it('should close the flyout once focus leaves it', async () => {
+      trigger(group).focus();
+      await sendKeys({ press: 'ArrowRight' });
+      await nextRender();
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      await nextRender();
+
+      expect(group.expanded).to.be.false;
+    });
+  });
+
   describe('accessibility', () => {
-    it('should reference the child list from the toggle button', () => {
-      const controls = items[1]._button.getAttribute('aria-controls');
+    const trigger = (item) => item.shadowRoot.getElementById('link');
+
+    it('should reference the child list from the trigger', () => {
+      const controls = trigger(items[1]).getAttribute('aria-controls');
       expect(items[1].shadowRoot.getElementById(controls)).to.equal(list(items[1]));
+    });
+
+    it('should expose the disclosure state on the trigger', async () => {
+      expect(trigger(items[1]).getAttribute('aria-haspopup')).to.equal('true');
+      expect(trigger(items[1]).getAttribute('aria-expanded')).to.equal('false');
+
+      items[1].expanded = true;
+      await nextUpdate(items[1]);
+      expect(trigger(items[1]).getAttribute('aria-expanded')).to.equal('true');
+    });
+
+    it('should not mark an item without children as a popup trigger', () => {
+      expect(trigger(items[0]).hasAttribute('aria-haspopup')).to.be.false;
+      expect(trigger(items[0]).hasAttribute('aria-expanded')).to.be.false;
     });
 
     it('should keep the child items in document order for tab navigation', async () => {

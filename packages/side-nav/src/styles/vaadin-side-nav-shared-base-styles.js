@@ -38,6 +38,8 @@ export const sharedStyles = css`
   [part='toggle-button'] {
     border-radius: var(--vaadin-side-nav-item-border-radius, var(--vaadin-radius-s));
     color: var(--vaadin-text-color-secondary);
+    /* Also applies when the part is a plain indicator rather than a button */
+    flex: none;
   }
 
   [part='toggle-button']::before {

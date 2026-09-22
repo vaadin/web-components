@@ -4,10 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-side-nav-overlay.js';
-import { html, LitElement } from 'lit';
+import { html, LitElement, nothing } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { DisabledMixin } from '@vaadin/a11y-base/src/disabled-mixin.js';
-import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement, getTabbableElements, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -67,7 +67,7 @@ const DEFAULT_HIDE_DELAY = 300;
  * `content`        | The element that wraps link and toggle button
  * `children`       | The element that wraps child items
  * `link`           | The clickable anchor used for navigation
- * `toggle-button`  | The toggle button
+ * `toggle-button`  | The toggle button, or a non-interactive indicator in `overlayChildren` mode
  * `flyout`         | The flyout that holds the child items in `overlayChildren` mode
  * `flyout-content` | The scrolling content of the flyout
  *
@@ -265,6 +265,9 @@ class SideNavItem extends SideNavChildrenMixin(
   /** @private */
   #closeTimeout;
 
+  /** @private */
+  #label = '';
+
   constructor() {
     super();
 
@@ -273,6 +276,8 @@ class SideNavItem extends SideNavChildrenMixin(
     this.addEventListener('pointerenter', () => this.#onPointerEnter());
     this.addEventListener('pointerleave', () => this.#onPointerLeave());
     this.addEventListener('click', (event) => this.#onClick(event));
+    this.addEventListener('keydown', (event) => this.#onKeyDown(event));
+    this.addEventListener('focusout', (event) => this.#onFocusOut(event));
   }
 
   /** @protected */
@@ -283,6 +288,45 @@ class SideNavItem extends SideNavChildrenMixin(
   /** @private */
   get #overlay() {
     return this.shadowRoot.querySelector('vaadin-side-nav-overlay');
+  }
+
+  /**
+   * Whether the item's own content acts as the disclosure trigger for a flyout.
+   * A rail has no room for a separate toggle button next to the link, so in
+   * flyout mode the content takes over that role.
+   * @private
+   */
+  get #isDisclosureTrigger() {
+    return this.overlayChildren && !this.disabled && this._itemsCount > 0;
+  }
+
+  /**
+   * A pathless item renders an anchor with no `href`, which is not focusable on
+   * its own. It still has to be reachable when it is the only control that can
+   * open a flyout.
+   * @private
+   */
+  get #isTriggerFocusable() {
+    if (this.disabled) {
+      return false;
+    }
+    return this.path != null || this.#isDisclosureTrigger;
+  }
+
+  /** @private */
+  get #trigger() {
+    return this.$.link;
+  }
+
+  /**
+   * An item that is both a link and a parent cannot expose both actions from one
+   * tap target, so the flyout repeats the item's own page as its first entry.
+   * It is hidden where a pointer can hover, since there the item itself is
+   * already clickable while the flyout is open.
+   * @private
+   */
+  get #hasOwnPage() {
+    return this.#isDisclosureTrigger && this.path != null;
   }
 
   /**
@@ -358,26 +402,38 @@ class SideNavItem extends SideNavChildrenMixin(
         <a
           id="link"
           ?disabled="${this.disabled}"
-          tabindex="${this.disabled || this.path == null ? '-1' : '0'}"
+          tabindex="${this.#isTriggerFocusable ? '0' : '-1'}"
+          role="${ifDefined(this.#isDisclosureTrigger && this.path == null ? 'button' : undefined)}"
           href="${ifDefined(this.disabled ? null : this.path)}"
           target="${ifDefined(this.target)}"
           ?router-ignore="${this.routerIgnore}"
           part="link"
           aria-current="${this.current ? 'page' : 'false'}"
+          aria-haspopup="${ifDefined(this.#isDisclosureTrigger ? 'true' : undefined)}"
+          aria-controls="${ifDefined(this.#isDisclosureTrigger ? 'children' : undefined)}"
+          aria-expanded="${ifDefined(this.#isDisclosureTrigger ? String(this.expanded) : undefined)}"
         >
           <slot name="prefix"></slot>
-          <slot></slot>
+          <slot @slotchange="${this.#onLabelSlotChange}"></slot>
           <div class="sr-only">${this.__tooltipText}</div>
           <slot name="suffix"></slot>
         </a>
-        <button
-          part="toggle-button"
-          ?disabled="${this.disabled}"
-          @click="${this._onButtonClick}"
-          aria-controls="children"
-          aria-expanded="${this.expanded}"
-          aria-labelledby="link i18n"
-        ></button>
+        ${
+          this.overlayChildren
+            ? // The trigger itself carries the disclosure state and handles activation,
+              // so the chevron is left as a visual cue that must not take a second tab stop
+              html`<span part="toggle-button" aria-hidden="true"></span>`
+            : html`
+                <button
+                  part="toggle-button"
+                  ?disabled="${this.disabled}"
+                  @click="${this._onButtonClick}"
+                  aria-controls="children"
+                  aria-expanded="${this.expanded}"
+                  aria-labelledby="link i18n"
+                ></button>
+              `
+        }
       </div>
       <vaadin-side-nav-overlay
         theme="${ifDefined(this._theme)}"
@@ -388,7 +444,6 @@ class SideNavItem extends SideNavChildrenMixin(
         vertical-align="top"
         no-horizontal-overlap
         modeless
-        restore-focus-on-close
         @opened-changed="${this.#onFlyoutOpenedChanged}"
       >
         <ul
@@ -398,6 +453,22 @@ class SideNavItem extends SideNavChildrenMixin(
           ?hidden="${!this.overlayChildren && !this.expanded}"
           aria-hidden="${!this.overlayChildren && !this.expanded ? 'true' : 'false'}"
         >
+          ${
+            this.#hasOwnPage
+              ? html`
+                  <li part="parent-link-item" role="listitem">
+                    <a
+                      part="parent-link"
+                      href="${ifDefined(this.path)}"
+                      target="${ifDefined(this.target)}"
+                      ?router-ignore="${this.routerIgnore}"
+                      aria-current="${this.current ? 'page' : 'false'}"
+                      >${this.#label}</a
+                    >
+                  </li>
+                `
+              : nothing
+          }
           <slot name="children"></slot>
         </ul>
       </vaadin-side-nav-overlay>
@@ -492,10 +563,36 @@ class SideNavItem extends SideNavChildrenMixin(
     return this._items.some((item) => item instanceof SideNavItem && (item.current || item.#hasCurrentDescendant()));
   }
 
+  /**
+   * The item's own label text, used for the repeated parent link. Read from the
+   * default slot rather than `textContent`, which would also pick up the labels
+   * of the child items slotted into `children`.
+   * @private
+   */
+  #onLabelSlotChange(event) {
+    const label = event.target
+      .assignedNodes()
+      .map((node) => node.textContent)
+      .join(' ')
+      .trim();
+    if (label !== this.#label) {
+      this.#label = label;
+      this.requestUpdate();
+    }
+  }
+
   /** @private */
   #onFlyoutOpenedChanged(event) {
-    if (this.overlayChildren) {
-      this.expanded = event.detail.value;
+    if (!this.overlayChildren) {
+      return;
+    }
+    // Hand focus back to the trigger deliberately rather than relying on the
+    // overlay's `restoreFocusOnClose`, which would restore whatever happened to
+    // be focused when a hover opened the flyout
+    const shouldRestoreFocus = !event.detail.value && this.expanded && this.#hasFocus();
+    this.expanded = event.detail.value;
+    if (shouldRestoreFocus) {
+      this.#trigger.focus({ focusVisible: isKeyboardActive() });
     }
   }
 
@@ -570,6 +667,84 @@ class SideNavItem extends SideNavChildrenMixin(
       }
     }
     return false;
+  }
+
+  /**
+   * The flyout opens towards the inline end, so the horizontal axis is the one
+   * that means "into the flyout" and "back out of it". This follows the keys
+   * that `<vaadin-context-menu>` uses for its sub-menus rather than the vertical
+   * ones from `<vaadin-menu-bar>`, whose bar is horizontal.
+   * @private
+   */
+  #onKeyDown(event) {
+    if (event.defaultPrevented || !this.overlayChildren) {
+      return;
+    }
+
+    const forward = this.__isRTL ? 'ArrowLeft' : 'ArrowRight';
+    const backward = this.__isRTL ? 'ArrowRight' : 'ArrowLeft';
+    const onOwnTrigger = event.composedPath().includes(this.#trigger);
+
+    if (onOwnTrigger && event.key === forward && this.#canOpenFlyout()) {
+      event.preventDefault();
+      this.#openFlyoutWithFocus();
+    } else if (onOwnTrigger && event.key === backward && this.expanded) {
+      event.preventDefault();
+      this.#closeFlyoutAndRestoreFocus();
+    } else if (onOwnTrigger && this.path == null && (event.key === 'Enter' || event.key === ' ')) {
+      // `role="button"` on an anchor does not get native activation
+      event.preventDefault();
+      if (this.#canOpenFlyout()) {
+        this.__toggleExpanded();
+        if (this.expanded) {
+          this.#openFlyoutWithFocus();
+        }
+      }
+    } else if (!onOwnTrigger && event.key === backward && this.expanded) {
+      // Pressed on a child item, so step back out to the flyout's own trigger
+      event.preventDefault();
+      event.stopPropagation();
+      this.#closeFlyoutAndRestoreFocus();
+    }
+  }
+
+  /** @private */
+  #openFlyoutWithFocus() {
+    this.expanded = true;
+    // The overlay only becomes focusable once the update that opens it lands
+    this.updateComplete.then(() => {
+      const [first] = getTabbableElements(this.#overlay);
+      if (first) {
+        first.focus({ focusVisible: isKeyboardActive() });
+      }
+    });
+  }
+
+  /** @private */
+  #closeFlyoutAndRestoreFocus() {
+    this.expanded = false;
+    this.#trigger.focus({ focusVisible: isKeyboardActive() });
+  }
+
+  /**
+   * Collapse once focus leaves the item entirely, so that tabbing past the last
+   * child item does not leave the flyout on screen. A pointer resting on the
+   * item keeps it open, which is the hover behaviour taking precedence.
+   * @private
+   */
+  #onFocusOut(event) {
+    if (!this.overlayChildren || !this.expanded || this.matches(':hover')) {
+      return;
+    }
+    const next = event.relatedTarget;
+    if (!next || !this.contains(next)) {
+      // Focus may still be settling inside a nested shadow root
+      requestAnimationFrame(() => {
+        if (!this.#hasFocus() && !this.matches(':hover')) {
+          this.expanded = false;
+        }
+      });
+    }
   }
 
   /**

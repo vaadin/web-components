@@ -95,5 +95,21 @@ describe('vaadin-side-nav-item', () => {
       await nextRender();
       await expect(sideNavItem).shadowDom.to.equalSnapshot();
     });
+
+    it('overlay children', async () => {
+      sideNavItem.overlayChildren = true;
+      await nextRender();
+      await expect(sideNavItem).shadowDom.to.equalSnapshot();
+    });
+
+    // Not snapshotting the expanded state: an open flyout carries inline
+    // positioning that depends on the viewport, which would be flaky.
+
+    it('overlay children with path', async () => {
+      sideNavItem.overlayChildren = true;
+      sideNavItem.path = '/path';
+      await nextRender();
+      await expect(sideNavItem).shadowDom.to.equalSnapshot();
+    });
   });
 });

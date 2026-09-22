@@ -195,7 +195,6 @@ snapshots["vaadin-side-nav-item shadow default"] =
   modeless=""
   no-horizontal-overlap=""
   popover="manual"
-  restore-focus-on-close=""
   vertical-align="top"
 >
   <ul
@@ -255,7 +254,6 @@ snapshots["vaadin-side-nav-item shadow expanded"] =
   modeless=""
   no-horizontal-overlap=""
   popover="manual"
-  restore-focus-on-close=""
   vertical-align="top"
 >
   <ul
@@ -315,7 +313,6 @@ snapshots["vaadin-side-nav-item shadow current"] =
   modeless=""
   no-horizontal-overlap=""
   popover="manual"
-  restore-focus-on-close=""
   vertical-align="top"
 >
   <ul
@@ -375,7 +372,6 @@ snapshots["vaadin-side-nav-item shadow path"] =
   modeless=""
   no-horizontal-overlap=""
   popover="manual"
-  restore-focus-on-close=""
   vertical-align="top"
 >
   <ul
@@ -435,7 +431,6 @@ snapshots["vaadin-side-nav-item shadow null path"] =
   modeless=""
   no-horizontal-overlap=""
   popover="manual"
-  restore-focus-on-close=""
   vertical-align="top"
 >
   <ul
@@ -495,7 +490,6 @@ snapshots["vaadin-side-nav-item shadow i18n"] =
   modeless=""
   no-horizontal-overlap=""
   popover="manual"
-  restore-focus-on-close=""
   vertical-align="top"
 >
   <ul
@@ -519,4 +513,136 @@ snapshots["vaadin-side-nav-item shadow i18n"] =
 </slot>
 `;
 /* end snapshot vaadin-side-nav-item shadow i18n */
+
+snapshots["vaadin-side-nav-item shadow overlay children"] = 
+`<div
+  id="content"
+  part="content"
+>
+  <a
+    aria-controls="children"
+    aria-current="false"
+    aria-expanded="false"
+    aria-haspopup="true"
+    id="link"
+    part="link"
+    role="button"
+    tabindex="0"
+  >
+    <slot name="prefix">
+    </slot>
+    <slot>
+    </slot>
+    <div class="sr-only">
+    </div>
+    <slot name="suffix">
+    </slot>
+  </a>
+  <span
+    aria-hidden="true"
+    part="toggle-button"
+  >
+  </span>
+</div>
+<vaadin-side-nav-overlay
+  exportparts="overlay: flyout, content: flyout-content"
+  horizontal-align="start"
+  modeless=""
+  no-horizontal-overlap=""
+  popover="manual"
+  vertical-align="top"
+>
+  <ul
+    aria-hidden="false"
+    id="children"
+    part="children"
+    role="list"
+  >
+    <slot name="children">
+    </slot>
+  </ul>
+</vaadin-side-nav-overlay>
+<div
+  hidden=""
+  id="i18n"
+>
+  Toggle child items
+</div>
+<slot name="tooltip">
+</slot>
+`;
+/* end snapshot vaadin-side-nav-item shadow overlay children */
+
+/* end snapshot vaadin-side-nav-item shadow overlay children expanded */
+
+snapshots["vaadin-side-nav-item shadow overlay children with path"] = 
+`<div
+  id="content"
+  part="content"
+>
+  <a
+    aria-controls="children"
+    aria-current="false"
+    aria-expanded="false"
+    aria-haspopup="true"
+    href="/path"
+    id="link"
+    part="link"
+    tabindex="0"
+  >
+    <slot name="prefix">
+    </slot>
+    <slot>
+    </slot>
+    <div class="sr-only">
+    </div>
+    <slot name="suffix">
+    </slot>
+  </a>
+  <span
+    aria-hidden="true"
+    part="toggle-button"
+  >
+  </span>
+</div>
+<vaadin-side-nav-overlay
+  exportparts="overlay: flyout, content: flyout-content"
+  horizontal-align="start"
+  modeless=""
+  no-horizontal-overlap=""
+  popover="manual"
+  vertical-align="top"
+>
+  <ul
+    aria-hidden="false"
+    id="children"
+    part="children"
+    role="list"
+  >
+    <li
+      part="parent-link-item"
+      role="listitem"
+    >
+      <a
+        aria-current="false"
+        href="/path"
+        part="parent-link"
+      >
+        Item
+      </a>
+    </li>
+    <slot name="children">
+    </slot>
+  </ul>
+</vaadin-side-nav-overlay>
+<div
+  hidden=""
+  id="i18n"
+>
+  Toggle child items
+</div>
+<slot name="tooltip">
+</slot>
+`;
+/* end snapshot vaadin-side-nav-item shadow overlay children with path */
 

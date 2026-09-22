@@ -80,6 +80,9 @@
         white-space: nowrap;
       }
 
+      /* Cosmetic only: the chevron does not fit beside a bare icon. Safe to hide
+         because the item's own link is the trigger, so no tab stop is lost.
+         Items inside the flyouts keep their chevron. */
       body[rail] vaadin-side-nav > vaadin-side-nav-item::part(toggle-button) {
         display: none !important;
       }

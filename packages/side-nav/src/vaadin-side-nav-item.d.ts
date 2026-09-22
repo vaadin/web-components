@@ -63,7 +63,7 @@ export type SideNavItemEventMap = HTMLElementEventMap & SideNavItemCustomEventMa
  * `content`        | The element that wraps link and toggle button
  * `children`       | The element that wraps child items
  * `link`           | The clickable anchor used for navigation
- * `toggle-button`  | The toggle button
+ * `toggle-button`  | The toggle button, or a non-interactive indicator in `overlayChildren` mode
  * `flyout`         | The flyout that holds the child items in `overlayChildren` mode
  * `flyout-content` | The scrolling content of the flyout
  *

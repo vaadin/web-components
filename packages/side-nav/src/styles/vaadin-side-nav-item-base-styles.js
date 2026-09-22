@@ -38,6 +38,14 @@ const sideNavItem = css`
     --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
   }
 
+  /* A flyout is detached from the item it belongs to, so the item has to show
+     that it is the open one. Inline children need no such cue, since they
+     appear directly below the item. */
+  :host([overlay-children][expanded]) [part='content'] {
+    --vaadin-side-nav-item-background: var(--vaadin-background-container);
+    --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
+  }
+
   :host([disabled]) {
     --vaadin-clickable-cursor: var(--vaadin-disabled-cursor);
   }
@@ -116,6 +124,40 @@ const sideNavItem = css`
     --_icon-indent: 0;
   }
 
+  /* The item's own page, repeated as the first entry of its flyout. Styled to
+     match the sibling items rather than the trigger it came from. */
+  [part='parent-link'] {
+    display: flex;
+    align-items: center;
+    gap: var(--vaadin-side-nav-item-gap, var(--vaadin-gap-s));
+    padding: var(
+      --vaadin-side-nav-item-padding,
+      var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container)
+    );
+    font-size: var(--vaadin-side-nav-item-font-size, 1em);
+    font-weight: var(--vaadin-side-nav-item-font-weight, 500);
+    line-height: var(--vaadin-side-nav-item-line-height, inherit);
+    color: var(--vaadin-side-nav-item-text-color, var(--vaadin-text-color-secondary));
+    background: var(--vaadin-side-nav-item-background, transparent);
+    border-radius: var(--vaadin-side-nav-item-border-radius, var(--vaadin-radius-m));
+    cursor: var(--vaadin-clickable-cursor);
+    text-decoration: none;
+    touch-action: manipulation;
+  }
+
+  [part='parent-link'][aria-current='page'] {
+    --vaadin-side-nav-item-background: var(--vaadin-background-container);
+    --vaadin-side-nav-item-text-color: var(--vaadin-text-color);
+  }
+
+  /* Where the pointer can hover, the item itself stays clickable while its
+     flyout is open, so repeating its page would only be noise. */
+  @media (hover: hover) {
+    [part='parent-link-item'] {
+      display: none;
+    }
+  }
+
   /* The flyout opens to the side, so the toggle button keeps pointing there
      instead of rotating to point down */
   :host([overlay-children][expanded]) [part='toggle-button'],
@@ -128,7 +170,8 @@ const sideNavItem = css`
       border: 1px solid Canvas !important;
     }
 
-    :host([current]) [part='content'] {
+    :host([current]) [part='content'],
+    :host([overlay-children][expanded]) [part='content'] {
       color: Highlight !important;
       border-color: Highlight !important;
     }
