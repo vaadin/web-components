@@ -178,8 +178,8 @@ import { FormLayoutMixin } from './vaadin-form-layout-mixin.js';
  * </vaadin-form-layout>
  * ```
  *
- * When there isn't enough space for labels next to fields, Form Layout returns
- * them to the default position above the fields.
+ * When there isn't enough space for side labels, Form Layout returns
+ * the labels to the default position above the fields.
  *
  * To customize the label width and the gap between the label and the field,
  * use the following CSS properties:

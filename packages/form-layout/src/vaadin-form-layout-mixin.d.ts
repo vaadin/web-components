@@ -145,8 +145,8 @@ export declare class FormLayoutMixinClass {
   /**
    * When enabled with `autoResponsive`, the layout puts labels next to
    * the fields. If the layout is too narrow for a single column with a
-   * label aside, the labels automatically return to their default
-   * position above the fields.
+   * side label, the labels automatically return to their default position
+   * above the fields.
    *
    * The default value is `false`.
    *
