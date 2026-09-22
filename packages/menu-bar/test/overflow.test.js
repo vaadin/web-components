@@ -209,6 +209,12 @@ describe('overflow', () => {
           expectCollapsed(menu, [0, 1]);
         });
 
+        it('should count the start margin of the first kept button', async () => {
+          menu.style.width = '177px';
+          await nextResize(menu);
+          expectCollapsed(menu, [0, 1, 2]);
+        });
+
         it('should collapse trailing buttons when reverseCollapse is unset', async () => {
           menu.reverseCollapse = false;
           await nextUpdate(menu);
@@ -661,6 +667,33 @@ describe('overflow', () => {
       await nextResize(menu);
       await nextUpdate(menu);
       expect(spy.set.callCount).to.equal(2);
+    });
+
+    it('should read button positions before hiding any button', async () => {
+      menu.style.width = `${BUTTON_WIDTH * 3}px`;
+      menu.items = createItems(5);
+      await nextResize(menu);
+
+      // Record every position read that happens after a button was taken out of flow,
+      // as each of those forces a layout.
+      const buttons = menu._buttons;
+      const { getBoundingClientRect } = Element.prototype;
+      const readsAfterHide = [];
+      buttons.forEach((btn) => {
+        btn.getBoundingClientRect = function () {
+          if (buttons.some((b) => b.style.visibility === 'hidden')) {
+            readsAfterHide.push(this);
+          }
+          return getBoundingClientRect.call(this);
+        };
+      });
+
+      menu.items = [...menu.items];
+      await nextUpdate(menu);
+      buttons.forEach((btn) => delete btn.getBoundingClientRect);
+
+      expect(readsAfterHide).to.be.empty;
+      expectCollapsed(menu, [2, 3, 4]);
     });
   });
 });
