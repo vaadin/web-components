@@ -179,7 +179,7 @@ export * from './vaadin-form-layout-mixin.js';
  * When there isn't enough space for labels beside inputs, Form Layout returns
  * them to the default position above the inputs.
  *
- * To customize the label width and the gap between the label and the field,
+ * To customize the label width and the gap between the label and the input,
  * use the following CSS properties:
  *
  * - `--vaadin-form-layout-label-width`
