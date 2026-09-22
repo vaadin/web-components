@@ -96,6 +96,16 @@ export interface DatePickerI18n {
    */
   dialogAccessibleName?: string;
   /**
+   * Accessible name of the button that moves focus to the previous month.
+   * The button is only reachable with a screen reader.
+   */
+  previousMonth?: string;
+  /**
+   * Accessible name of the button that moves focus to the next month.
+   * The button is only reachable with a screen reader.
+   */
+  nextMonth?: string;
+  /**
    * Used for adjusting the year value when parsing dates with short years.
    * The year values between 0 and 99 are evaluated and adjusted.
    * Example: for a referenceDate of 1970-10-30;
@@ -225,6 +235,11 @@ export declare class DatePickerMixinClass {
    *   // Accessible name of the overlay content, announced by screen readers
    *   // when the overlay opens.
    *   dialogAccessibleName: 'Calendar',
+   *
+   *   // Accessible name of the buttons that move focus to the previous and the
+   *   // next month. The buttons are only reachable with a screen reader.
+   *   previousMonth: 'Previous month',
+   *   nextMonth: 'Next month',
    *
    *   // Used for adjusting the year value when parsing dates with short years.
    *   // The year values between 0 and 99 are evaluated and adjusted.

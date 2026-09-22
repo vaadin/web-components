@@ -1,8 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
-import { click, fixtureSync, listenOnce, tap } from '@vaadin/testing-helpers';
+import { click, fixtureSync, listenOnce, nextUpdate, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker-overlay-content.js';
-import { getDefaultI18n, getFirstVisibleItem, monthsEqual, untilOverlayScrolled } from './helpers.js';
+import { getDefaultI18n, getFirstVisibleItem, getFocusedCell, monthsEqual, untilOverlayScrolled } from './helpers.js';
 
 async function customizeFixture({ initialPosition, monthScrollerItems, monthScrollerOffset }) {
   const overlay = fixtureSync(`<vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>`);
@@ -124,6 +124,67 @@ describe('overlay', () => {
         clock.tick(350);
         tap(overlay._yearScroller);
         expect(spy.called).to.be.false;
+      });
+    });
+
+    describe('month navigation buttons', () => {
+      let previousMonthButton, nextMonthButton;
+
+      beforeEach(async () => {
+        previousMonthButton = overlay.$.previousMonthButton;
+        nextMonthButton = overlay.$.nextMonthButton;
+        await overlay.focusDate(new Date(2021, 1, 15));
+        await untilOverlayScrolled(overlay);
+      });
+
+      it('should place the buttons around the month scroller', () => {
+        const children = [...overlay.shadowRoot.children];
+        const monthsSlot = overlay.shadowRoot.querySelector('slot[name="months"]');
+        expect(children.indexOf(previousMonthButton)).to.be.lessThan(children.indexOf(monthsSlot));
+        expect(children.indexOf(nextMonthButton)).to.be.greaterThan(children.indexOf(monthsSlot));
+      });
+
+      it('should keep the buttons out of the tab order', () => {
+        expect(previousMonthButton.tabIndex).to.equal(-1);
+        expect(nextMonthButton.tabIndex).to.equal(-1);
+      });
+
+      it('should use i18n for the button text', () => {
+        expect(previousMonthButton.textContent.trim()).to.equal('Previous month');
+        expect(nextMonthButton.textContent.trim()).to.equal('Next month');
+      });
+
+      it('should update the button text when i18n changes', async () => {
+        overlay.i18n = { ...getDefaultI18n(), previousMonth: 'Edellinen kuukausi', nextMonth: 'Seuraava kuukausi' };
+        await nextUpdate(overlay);
+        expect(previousMonthButton.textContent.trim()).to.equal('Edellinen kuukausi');
+        expect(nextMonthButton.textContent.trim()).to.equal('Seuraava kuukausi');
+      });
+
+      it('should focus first day of the next month on next month click', async () => {
+        click(nextMonthButton);
+        await untilOverlayScrolled(overlay);
+        expect(getFocusedCell(overlay).date).to.eql(new Date(2021, 2, 1));
+      });
+
+      it('should focus first day of the previous month on previous month click', async () => {
+        click(previousMonthButton);
+        await untilOverlayScrolled(overlay);
+        expect(getFocusedCell(overlay).date).to.eql(new Date(2021, 0, 1));
+      });
+
+      it('should focus max date when the next month is after max', async () => {
+        overlay.maxDate = new Date(2021, 1, 20);
+        click(nextMonthButton);
+        await untilOverlayScrolled(overlay);
+        expect(getFocusedCell(overlay).date).to.eql(new Date(2021, 1, 20));
+      });
+
+      it('should focus min date when the previous month is before min', async () => {
+        overlay.minDate = new Date(2021, 1, 5);
+        click(previousMonthButton);
+        await untilOverlayScrolled(overlay);
+        expect(getFocusedCell(overlay).date).to.eql(new Date(2021, 1, 5));
       });
     });
 

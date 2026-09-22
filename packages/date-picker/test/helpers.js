@@ -35,6 +35,8 @@ export function getDefaultI18n() {
     today: 'Today',
     cancel: 'Cancel',
     dialogAccessibleName: 'Calendar',
+    previousMonth: 'Previous month',
+    nextMonth: 'Next month',
     formatDate(d) {
       return `${d.month + 1}/${d.day}/${d.year}`;
     },

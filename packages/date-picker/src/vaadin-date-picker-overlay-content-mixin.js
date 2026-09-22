@@ -1008,6 +1008,26 @@ export const DatePickerOverlayContentMixin = (superClass) =>
     }
 
     /** @private */
+    __onPreviousMonthClick() {
+      this.__focusAdjacentMonth(-1);
+    }
+
+    /** @private */
+    __onNextMonthClick() {
+      this.__focusAdjacentMonth(1);
+    }
+
+    /**
+     * Focuses the first date of the month before or after the focused month, and scrolls it into
+     * view. Falls back to `minDate` or `maxDate` when the adjacent month is out of range.
+     * @param {number} months
+     * @private
+     */
+    __focusAdjacentMonth(months) {
+      this._focusAllowedDate(this._getDateDiff(months), months, false);
+    }
+
+    /** @private */
     _moveFocusInsideMonth(focusedDate, property) {
       const dateToFocus = property === 'minDate' ? firstOfMonth(focusedDate) : lastOfMonth(focusedDate);
 

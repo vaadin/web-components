@@ -9,6 +9,7 @@ import './vaadin-date-picker-year-scroller.js';
 import './vaadin-date-picker-year.js';
 import './vaadin-month-calendar.js';
 import { html, LitElement } from 'lit';
+import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -32,7 +33,7 @@ class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
   }
 
   static get styles() {
-    return [loaderStyles, overlayContentStyles];
+    return [loaderStyles, screenReaderOnly, overlayContentStyles];
   }
 
   static get lumoInjector() {
@@ -41,8 +42,23 @@ class DatePickerOverlayContent extends DatePickerOverlayContentMixin(
 
   /** @protected */
   render() {
+    // Touch screen readers move through the calendar by swiping, which follows DOM order and
+    // stops at the edges of the visible month. The buttons bracket the months so that a swipe
+    // past either edge reaches a control that moves to the adjacent month.
     return html`
+      <button
+        id="previousMonthButton"
+        class="sr-only"
+        type="button"
+        tabindex="-1"
+        @click="${this.__onPreviousMonthClick}"
+      >
+        ${this.i18n?.previousMonth}
+      </button>
       <slot name="months"></slot>
+      <button id="nextMonthButton" class="sr-only" type="button" tabindex="-1" @click="${this.__onNextMonthClick}">
+        ${this.i18n?.nextMonth}
+      </button>
       <slot name="years"></slot>
 
       <div part="loader" aria-hidden="true"></div>
