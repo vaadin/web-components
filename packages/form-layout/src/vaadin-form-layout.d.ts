@@ -156,34 +156,33 @@ export * from './vaadin-form-layout-mixin.js';
  *
  * #### Customizing Label Position
  *
- * By default, Form Layout displays labels above the fields. To position labels beside fields, you
- * need to wrap each field in a `<vaadin-form-item>` element and define its labels on the wrapper.
- * Then, you can enable the [`labelsAside`](#/elements/vaadin-form-layout#property-labelsAside)
- * property:
+ * By default, Form Layout displays labels above the fields. To put labels beside the fields,
+ * enable the [`labelsAside`](#/elements/vaadin-form-layout#property-labelsAside) property:
  *
  * ```html
  * <vaadin-form-layout auto-responsive labels-aside>
  *   <vaadin-form-row>
- *     <vaadin-form-item>
- *       <label slot="label">First Name</label>
- *       <vaadin-text-field></vaadin-text-field>
- *    </vaadin-form-item>
- *    <vaadin-form-item>
- *      <label slot="label">Last Name</label>
- *       <vaadin-text-field></vaadin-text-field>
- *     </vaadin-form-item>
+ *     <vaadin-text-field label="First Name"></vaadin-text-field>
+ *     <vaadin-text-field label="Last Name"></vaadin-text-field>
  *   </vaadin-form-row>
  *   <vaadin-form-row>
- *     <vaadin-form-item colspan="2">
- *       <label slot="label">Address</label>
- *       <vaadin-text-area></vaadin-text-area>
+ *     <vaadin-text-area label="Address" colspan="2"></vaadin-text-area>
+ *   </vaadin-form-row>
+ *   <vaadin-form-row>
+ *     <vaadin-form-item>
+ *       <vaadin-button>Submit</vaadin-button>
  *     </vaadin-form-item>
  *   </vaadin-form-row>
  * </vaadin-form-layout>
  * ```
  *
- * With this, FormLayout will display labels beside fields, falling back to
- * the default position above the fields only when there isn't enough space.
+ * When there isn't enough space for labels beside fields, Form Layout returns them
+ * to the default position above the fields.
+ *
+ * By default, non-field components placed in Form Layout, such as buttons, start in
+ * the label column. To align such components with the input column when labels are aside,
+ * wrap them in a `<vaadin-form-item>`, as in the example above with the Submit button.
+ * The Form Item reserves space for the label, so the component moves to the input column.
  *
  * ### CSS Properties Reference
  *

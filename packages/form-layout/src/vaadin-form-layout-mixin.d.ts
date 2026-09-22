@@ -143,7 +143,7 @@ export declare class FormLayoutMixinClass {
   autoRows: boolean;
 
   /**
-   * When enabled with `autoResponsive`, `<vaadin-form-item>` prefers positioning
+   * When enabled with `autoResponsive`, the layout prefers positioning
    * labels beside the fields. If the layout is too narrow to fit a single column
    * with a side label, the component will automatically switch labels to their
    * default position above the fields.
