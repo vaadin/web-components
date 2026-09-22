@@ -187,10 +187,7 @@ snapshots["menu-bar overlay"] =
 /* end snapshot menu-bar overlay */
 
 snapshots["menu-bar shadow"] = 
-`<div
-  part="container"
-  style=""
->
+`<div part="container">
   <slot>
   </slot>
   <slot name="overflow">
