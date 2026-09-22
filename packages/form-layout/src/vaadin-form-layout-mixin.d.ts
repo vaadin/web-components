@@ -143,10 +143,10 @@ export declare class FormLayoutMixinClass {
   autoRows: boolean;
 
   /**
-   * When enabled with `autoResponsive`, the layout puts labels beside the
-   * inputs. If the layout is too narrow for a single column with a label
-   * beside the input, the labels automatically return to their default
-   * position above the inputs.
+   * When enabled with `autoResponsive`, the layout puts labels next to
+   * the fields. If the layout is too narrow for a single column with a
+   * label next to the field, the labels automatically return to their
+   * default position above the fields.
    *
    * The default value is `false`.
    *

@@ -156,7 +156,7 @@ export * from './vaadin-form-layout-mixin.js';
  *
  * #### Customizing Label Position
  *
- * By default, Form Layout displays labels above the inputs. To put labels beside the inputs,
+ * By default, Form Layout displays labels above the fields. To put labels next to the fields,
  * enable the [`labelsAside`](#/elements/vaadin-form-layout#property-labelsAside) property:
  *
  * ```html
@@ -176,28 +176,28 @@ export * from './vaadin-form-layout-mixin.js';
  * </vaadin-form-layout>
  * ```
  *
- * When there isn't enough space for labels beside inputs, Form Layout returns
- * them to the default position above the inputs.
+ * When there isn't enough space for labels next to fields, Form Layout returns
+ * them to the default position above the fields.
  *
- * To customize the label width and the gap between the label and the input,
+ * To customize the label width and the gap between the label and the field,
  * use the following CSS properties:
  *
  * - `--vaadin-form-layout-label-width`
  * - `--vaadin-form-layout-label-spacing`
  *
  * By default, non-field components placed in Form Layout, such as buttons,
- * start in the label column. To align such components with the input column
+ * start in the label column. To align such components with the field column
  * when labels are aside, wrap them in a `<vaadin-form-item>`, as in the example
  * above with the Submit button. The Form Item reserves space for the label, so
- * the component moves to the input column.
+ * the component moves to the field column.
  *
  * When this feature is enabled, all Vaadin field components placed directly in
- * the layout show labels beside the inputs without additional configuration.
- * For custom components, you must implement the label position yourself. When
- * the labels fit beside the inputs, Form Layout sets the `has-labels-aside`
- * attribute on its host element and the `data-form-layout-has-labels-aside`
- * attribute on its children. Use these attributes to apply custom styles or
- * behavior with CSS or JS.
+ * the layout show labels aside without additional configuration. For custom
+ * components, you must implement the label position yourself. When the labels
+ * fit next to the fields, Form Layout sets the `has-labels-aside` attribute on
+ * its host element and the `data-form-layout-has-labels-aside` attribute on
+ * its children. Use these attributes to apply custom styles or behavior with
+ * CSS or JS.
  *
  * ### CSS Properties Reference
  *
@@ -208,13 +208,13 @@ export * from './vaadin-form-layout-mixin.js';
  * `--vaadin-form-layout-column-spacing` | Length of the spacing between columns | `2em`
  * `--vaadin-form-layout-row-spacing` | Length of the spacing between rows | `1em`
  * `--vaadin-form-layout-label-width` | Width of the label when labels are displayed aside | `8em`
- * `--vaadin-form-layout-label-spacing` | Length of the spacing between the label and the input when labels are displayed aside | `1em`
+ * `--vaadin-form-layout-label-spacing` | Length of the spacing between the label and the field when labels are displayed aside | `1em`
  *
  * The following state attributes are available for styling:
  *
  * Attribute | Description
  * ---|---
- * `has-labels-aside` | Set when the `labelsAside` property is enabled and there is enough space to display labels beside the fields
+ * `has-labels-aside` | Set when the `labelsAside` property is enabled and there is enough space to display labels next to the fields
  */
 declare class FormLayout extends FormLayoutMixin(ElementMixin(ThemableMixin(HTMLElement))) {}
 
