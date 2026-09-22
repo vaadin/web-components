@@ -672,33 +672,21 @@ describe('overflow', () => {
       expect(spy.set.callCount).to.equal(2);
     });
 
-    it('should read button positions before hiding any button', async () => {
-      menu.style.width = `${BUTTON_WIDTH * 3}px`;
+    it('should read the overflow button position once per detection', async () => {
       menu.items = createItems(5);
       await nextResize(menu);
+      expectCollapsed(menu, []);
 
-      // Split the position reads by whether a button was already taken out of flow.
-      // Every read after the first one is hidden forces another layout.
-      const buttons = menu._buttons;
-      const { getBoundingClientRect } = Element.prototype;
-      const readsBeforeHide = [];
-      const readsAfterHide = [];
-      buttons.forEach((btn) => {
-        btn.getBoundingClientRect = function () {
-          const hidden = buttons.some((b) => b.style.visibility === 'hidden');
-          (hidden ? readsAfterHide : readsBeforeHide).push(this);
-          return getBoundingClientRect.call(this);
-        };
-      });
+      // Reading it again after hiding a button would force another layout
+      const spy = sinon.spy(menu._overflow, 'getBoundingClientRect');
 
-      menu.items = [...menu.items];
-      await nextUpdate(menu);
-      buttons.forEach((btn) => delete btn.getBoundingClientRect);
+      menu.style.width = `${BUTTON_WIDTH * 3}px`;
+      await nextResize(menu);
+      spy.restore();
 
-      // Proves a detection ran, so that the next assertion does not hold by default
-      expect(readsBeforeHide.length, 'positions read before hiding').to.be.above(0);
-      expect(readsAfterHide.length, 'positions read after hiding').to.equal(0);
+      // Collapsing proves that a detection ran while the reads were counted
       expectCollapsed(menu, [2, 3, 4]);
+      expect(spy.callCount, 'overflow button position reads').to.equal(1);
     });
   });
 });
