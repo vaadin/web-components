@@ -3,6 +3,7 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
+import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
 import { getDataProvider, getSelectAllButton, setInputValue } from './helpers.js';
 
 describe('select all provider', () => {
@@ -14,8 +15,6 @@ describe('select all provider', () => {
 
   const createProvider = () => {
     const result = {
-      allSelected: false,
-      isAllSelected: sinon.spy(() => result.allSelected),
       toggleSelectAll: sinon.spy(() => Promise.resolve()),
     };
     return result;
@@ -56,6 +55,7 @@ describe('select all provider', () => {
       };
       comboBox.addEventListener('change', changeSpy);
       comboBox._selectAllProvider = provider;
+      comboBox._allSelected = false;
       await nextRender();
       inputElement = comboBox.inputElement;
       comboBox.opened = true;
@@ -83,12 +83,10 @@ describe('select all provider', () => {
     });
 
     describe('label', () => {
-      it('should use provider.isAllSelected result to compute the label', async () => {
+      it('should use _allSelected to compute the label', () => {
         expect(getSelectAllText()).to.equal('Select All');
 
-        provider.allSelected = true;
-        comboBox.selectedItems = ['Item 0'];
-        await nextRender();
+        comboBox._allSelected = true;
         expect(getSelectAllText()).to.equal('Deselect All');
       });
 
@@ -98,45 +96,16 @@ describe('select all provider', () => {
         await nextRender();
         expect(getSelectAllText()).to.equal('Select Filtered');
 
-        provider.allSelected = true;
-        comboBox.selectedItems = ['Item 1'];
-        await nextRender();
+        comboBox._allSelected = true;
         expect(getSelectAllText()).to.equal('Deselect Filtered');
       });
 
-      it('should update the label when requesting a select all update', () => {
-        provider.allSelected = true;
-        comboBox._requestSelectAllUpdate();
-        expect(getSelectAllText()).to.equal('Deselect All');
-      });
-    });
-
-    describe('isAllSelected', () => {
-      beforeEach(() => {
-        provider.isAllSelected.resetHistory();
-      });
-
-      it('should query isAllSelected when selectedItems change', async () => {
-        comboBox.selectedItems = ['Item 0'];
+      it('should not compute the label from the loaded pages', async () => {
+        // Only the first page is loaded and all of it is selected, but the
+        // server says that not all items are selected
+        comboBox.selectedItems = Array.from({ length: 10 }, (_, i) => `Item ${i}`);
         await nextRender();
-        expect(provider.isAllSelected).to.be.calledOnce;
-      });
-
-      it('should query isAllSelected once the filtered items are loaded', async () => {
-        setInputValue(comboBox, 'Item 1');
-        await nextRender();
-        expect(provider.isAllSelected).to.not.be.called;
-
-        flushDataProvider();
-        await nextRender();
-        expect(provider.isAllSelected).to.be.calledOnce;
-      });
-
-      it('should not query isAllSelected on keyboard navigation', async () => {
-        inputElement.focus();
-        await sendKeys({ press: 'ArrowDown' });
-        await sendKeys({ press: 'ArrowDown' });
-        expect(provider.isAllSelected).to.not.be.called;
+        expect(getSelectAllText()).to.equal('Select All');
       });
     });
 
@@ -234,20 +203,71 @@ describe('select all provider', () => {
         await nextRender();
         expect(consoleError).to.be.calledOnce;
       });
+    });
+  });
 
-      it('should log an error and use the select label when isAllSelected throws', async () => {
-        provider.isAllSelected = () => {
-          throw new Error('failed');
-        };
-        comboBox.selectedItems = ['Item 0'];
-        await nextRender();
-        expect(consoleError).to.be.calledOnce;
-        expect(getSelectAllText()).to.equal('Select All');
+  describe('data provider without _allSelected', () => {
+    let pendingRequests;
 
-        provider.isAllSelected = () => true;
-        comboBox._requestSelectAllUpdate();
-        expect(getSelectAllText()).to.equal('Deselect All');
-      });
+    const flushDataProvider = () => {
+      pendingRequests.forEach((request) => request());
+      pendingRequests = [];
+    };
+
+    beforeEach(async () => {
+      // All items fit in one page, like with client-side filtering in Flow.
+      // The server does not set `_allSelected` in that case.
+      const dataProvider = getDataProvider(['Apple', 'Banana', 'Lemon', 'Orange']);
+      pendingRequests = [];
+
+      comboBox = fixtureSync(
+        `<vaadin-multi-select-combo-box select-all-button-visible></vaadin-multi-select-combo-box>`,
+      );
+      comboBox.dataProvider = (params, callback) => {
+        pendingRequests.push(() => dataProvider(params, callback));
+      };
+      comboBox.addEventListener('change', changeSpy);
+      comboBox._selectAllProvider = provider;
+      await nextRender();
+      comboBox.opened = true;
+      flushDataProvider();
+      await nextRender();
+    });
+
+    it('should compute the label from the filtered items', async () => {
+      expect(getSelectAllText()).to.equal('Select All');
+
+      comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
+      await nextRender();
+      expect(getSelectAllText()).to.equal('Deselect All');
+    });
+
+    it('should toggle the selection locally and fire change', () => {
+      clickButton();
+      expect(comboBox.selectedItems).to.deep.equal(['Apple', 'Banana', 'Lemon', 'Orange']);
+      expect(changeSpy).to.be.calledOnce;
+      expect(provider.toggleSelectAll).to.not.be.called;
+    });
+
+    it('should not select placeholders while the items are refreshed', () => {
+      // Mimic the Flow connector, which replaces the loaded items with
+      // placeholders in place until the new data arrives
+      const filteredItems = comboBox.filteredItems;
+      for (let i = 0; i < filteredItems.length; i++) {
+        filteredItems[i] = new ComboBoxPlaceholder();
+      }
+
+      clickButton();
+      expect(comboBox.selectedItems).to.deep.equal([]);
+    });
+
+    it('should switch to the state from the server once it is set', () => {
+      comboBox._allSelected = true;
+      expect(getSelectAllText()).to.equal('Deselect All');
+
+      clickButton();
+      expect(provider.toggleSelectAll).to.be.calledOnce;
+      expect(comboBox.selectedItems).to.deep.equal([]);
     });
   });
 
@@ -265,10 +285,10 @@ describe('select all provider', () => {
     });
 
     it('should ignore the provider when computing selection state', async () => {
+      comboBox._allSelected = false;
       comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
       await nextRender();
       expect(getSelectAllText()).to.equal('Deselect All');
-      expect(provider.isAllSelected).to.not.be.called;
     });
 
     it('should toggle the selection locally', () => {
