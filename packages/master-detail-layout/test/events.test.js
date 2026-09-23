@@ -5,6 +5,7 @@ import sinon from 'sinon';
 import '../src/vaadin-master-detail-layout.js';
 import './helpers/master-content.js';
 import './helpers/detail-content.js';
+import { markEventConsumed } from '@vaadin/component-base/src/event-utils.js';
 import { onceResized } from './helpers.js';
 
 describe('events', () => {
@@ -51,6 +52,14 @@ describe('events', () => {
         const backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
         const bounds = backdrop.getBoundingClientRect();
         backdrop.addEventListener('click', (event) => event.preventDefault(), { capture: true });
+        await sendMouse({ type: 'click', position: [bounds.x + 10, bounds.y + 10] });
+        expect(spy).to.not.be.called;
+      });
+
+      it('should not fire backdrop-click event on backdrop click if the event was consumed', async () => {
+        const backdrop = layout.shadowRoot.querySelector('[part="backdrop"]');
+        const bounds = backdrop.getBoundingClientRect();
+        backdrop.addEventListener('click', (event) => markEventConsumed(event), { capture: true });
         await sendMouse({ type: 'click', position: [bounds.x + 10, bounds.y + 10] });
         expect(spy).to.not.be.called;
       });
