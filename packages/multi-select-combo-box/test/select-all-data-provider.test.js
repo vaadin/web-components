@@ -261,6 +261,19 @@ describe('select all with data provider', () => {
       expect(handler).to.be.calledOnce;
       expect(comboBox.selectedItems).to.deep.equal([]);
     });
+
+    it('should switch back to the local state once it is removed', () => {
+      comboBox._allSelected = true;
+      expect(getSelectAllText()).to.equal('Deselect All');
+
+      comboBox._allSelected = null;
+      expect(getSelectAllText()).to.equal('Select All');
+
+      clickButton();
+      expect(comboBox.selectedItems).to.deep.equal(['Apple', 'Banana', 'Lemon', 'Orange']);
+      expect(changeSpy).to.be.calledOnce;
+      expect(handler).to.not.be.called;
+    });
   });
 
   describe('with items', () => {
