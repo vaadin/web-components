@@ -8,6 +8,7 @@ import { getTabbableElements, isKeyboardActive } from '@vaadin/a11y-base/src/foc
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { getClosestElement } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { isEventConsumed } from '@vaadin/component-base/src/event-utils.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { masterDetailLayoutStyles } from './styles/vaadin-master-detail-layout-base-styles.js';
@@ -490,7 +491,8 @@ class MasterDetailLayout extends ElementMixin(ThemableMixin(PolylitMixin(LitElem
 
   /** @private */
   __onBackdropClick(event) {
-    if (event.defaultPrevented) {
+    // Ignore the click that closed a modal overlay, e.g. a combo-box dropdown
+    if (event.defaultPrevented || isEventConsumed(event)) {
       return;
     }
 
