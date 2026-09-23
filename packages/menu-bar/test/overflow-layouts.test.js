@@ -153,6 +153,55 @@ describe('overflow in layouts', () => {
       expectCollapsed(menu, [2, 3, 4]);
       expectOverflowInside(menu);
     });
+
+    it('should keep the overflow button inside the menu bar in a flex item sized by content', async () => {
+      // Both flex items shrink in proportion to their content, like split layout panes
+      const { menu } = await fixtureMenuBar(`
+        <div style="display: flex; width: ${BUTTON_WIDTH * 5}px">
+          <div style="min-width: 0"><vaadin-menu-bar></vaadin-menu-bar></div>
+          <div style="min-width: 0"><div style="width: ${BUTTON_WIDTH * 3}px"></div></div>
+        </div>
+      `);
+      expectCollapsed(menu, [2, 3, 4]);
+      expectOverflowInside(menu);
+    });
+
+    it('should keep the overflow button inside the menu bar next to a full width sibling', async () => {
+      // Reproduces the layout from https://github.com/vaadin/web-components/issues/8004:
+      // the sibling asks for the whole row, so the menu bar can never show every item
+      const { menu } = await fixtureMenuBar(`
+        <div style="display: flex; width: ${BUTTON_WIDTH * 5}px">
+          <div style="width: 100%"></div>
+          <vaadin-menu-bar></vaadin-menu-bar>
+        </div>
+      `);
+      expectCollapsed(menu, [1, 2, 3, 4]);
+      expectOverflowInside(menu);
+    });
+
+    it('should shrink a flex item sized by content when items are removed', async () => {
+      const { menu } = await fixtureMenuBar(`
+        <div style="display: flex; width: ${BUTTON_WIDTH * 5}px">
+          <div style="min-width: 0"><vaadin-menu-bar></vaadin-menu-bar></div>
+          <div style="min-width: 0"><div style="width: ${BUTTON_WIDTH * 3}px"></div></div>
+        </div>
+      `);
+      expectCollapsed(menu, [2, 3, 4]);
+
+      menu.items = createItems(1);
+      await nextResize(menu);
+      expect(menu.offsetWidth).to.be.closeTo(BUTTON_WIDTH, 1);
+    });
+
+    it('should not keep space after the overflow button in an inline-block menu bar', async () => {
+      const { menu } = await fixtureMenuBar(`
+        <div style="width: ${BUTTON_WIDTH * 3.5}px">
+          <vaadin-menu-bar style="display: inline-block; max-width: 100%"></vaadin-menu-bar>
+        </div>
+      `);
+      expectCollapsed(menu, [2, 3, 4]);
+      expect(menu.getBoundingClientRect().right).to.be.closeTo(menu._overflow.getBoundingClientRect().right, 1);
+    });
   });
 
   describe('parent resize', () => {
