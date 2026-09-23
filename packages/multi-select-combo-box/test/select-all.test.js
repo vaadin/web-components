@@ -136,6 +136,7 @@ describe('select all', () => {
     it('should compute the label from filtered items when selected items are on top', () => {
       comboBox.selectedItemsOnTop = true;
       comboBox.selectedItems = ['Pear'];
+      comboBox.opened = true;
       expect(getSelectAllText()).to.equal('Select All');
     });
 
