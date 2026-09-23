@@ -113,7 +113,8 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
         selectedItems = [...this.selectedItems, ...missingItems];
       }
 
-      this.__updateSelection(selectedItems, true);
+      this.__updateSelection(selectedItems);
+      this.__announceSelection();
     }
 
     #updateButton() {
