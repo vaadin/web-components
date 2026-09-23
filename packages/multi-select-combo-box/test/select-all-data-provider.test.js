@@ -6,19 +6,12 @@ import '../src/vaadin-multi-select-combo-box.js';
 import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
 import { getDataProvider, getSelectAllButton, setInputValue } from './helpers.js';
 
-describe('select all provider', () => {
-  let comboBox, inputElement, provider, changeSpy;
+describe('select all with data provider', () => {
+  let comboBox, inputElement, handler, changeSpy;
 
   const getSelectAllText = () => getSelectAllButton(comboBox).shadowRoot.textContent.trim();
 
   const clickButton = () => getSelectAllButton(comboBox).click();
-
-  const createProvider = () => {
-    const result = {
-      toggleSelectAll: sinon.spy(() => Promise.resolve()),
-    };
-    return result;
-  };
 
   const createDeferred = () => {
     let resolve;
@@ -29,11 +22,11 @@ describe('select all provider', () => {
   };
 
   beforeEach(() => {
-    provider = createProvider();
+    handler = sinon.spy(() => Promise.resolve());
     changeSpy = sinon.spy();
   });
 
-  describe('data provider', () => {
+  describe('with _allSelected', () => {
     let pendingRequests;
 
     const flushDataProvider = () => {
@@ -54,7 +47,7 @@ describe('select all provider', () => {
         pendingRequests.push(() => dataProvider(params, callback));
       };
       comboBox.addEventListener('change', changeSpy);
-      comboBox._selectAllProvider = provider;
+      comboBox._toggleSelectAllHandler = handler;
       comboBox._allSelected = false;
       await nextRender();
       inputElement = comboBox.inputElement;
@@ -64,10 +57,10 @@ describe('select all provider', () => {
     });
 
     describe('button', () => {
-      it('should render the button while the provider is set', () => {
+      it('should render the button while the handler is set', () => {
         expect(getSelectAllButton(comboBox)).to.be.ok;
 
-        comboBox._selectAllProvider = null;
+        comboBox._toggleSelectAllHandler = null;
         expect(getSelectAllButton(comboBox)).to.be.null;
       });
 
@@ -109,19 +102,19 @@ describe('select all provider', () => {
       });
     });
 
-    describe('toggleSelectAll', () => {
-      it('should call toggleSelectAll on click without changing the selection', () => {
+    describe('toggle', () => {
+      it('should call the handler on click without changing the selection', () => {
         clickButton();
-        expect(provider.toggleSelectAll).to.be.calledOnce;
+        expect(handler).to.be.calledOnce;
         expect(comboBox.selectedItems).to.deep.equal([]);
         expect(changeSpy).to.not.be.called;
       });
 
-      it('should call toggleSelectAll on Enter without changing the selection', async () => {
+      it('should call the handler on Enter without changing the selection', async () => {
         inputElement.focus();
         await sendKeys({ press: 'ArrowDown' });
         await sendKeys({ press: 'Enter' });
-        expect(provider.toggleSelectAll).to.be.calledOnce;
+        expect(handler).to.be.calledOnce;
         expect(comboBox.selectedItems).to.deep.equal([]);
         expect(changeSpy).to.not.be.called;
       });
@@ -142,9 +135,9 @@ describe('select all provider', () => {
         consoleError.restore();
       });
 
-      it('should announce the total after toggleSelectAll resolves', async () => {
+      it('should announce the total after the handler resolves', async () => {
         const deferred = createDeferred();
-        provider.toggleSelectAll = () => deferred.promise;
+        comboBox._toggleSelectAllHandler = () => deferred.promise;
 
         clickButton();
         await clock.tickAsync(150);
@@ -156,9 +149,9 @@ describe('select all provider', () => {
         expect(region.textContent).to.equal('4 items selected');
       });
 
-      it('should announce cleared selection after toggleSelectAll resolves', async () => {
+      it('should announce cleared selection after the handler resolves', async () => {
         comboBox.selectedItems = ['Item 0', 'Item 1', 'Item 2', 'Item 3'];
-        provider.toggleSelectAll = () => {
+        comboBox._toggleSelectAllHandler = () => {
           comboBox.selectedItems = [];
           return Promise.resolve();
         };
@@ -168,8 +161,8 @@ describe('select all provider', () => {
         expect(region.textContent).to.equal('Selection cleared');
       });
 
-      it('should not announce when toggleSelectAll rejects', async () => {
-        provider.toggleSelectAll = () => Promise.reject(new Error('failed'));
+      it('should not announce when the handler rejects', async () => {
+        comboBox._toggleSelectAllHandler = () => Promise.reject(new Error('failed'));
 
         clickButton();
         await clock.tickAsync(150);
@@ -188,15 +181,15 @@ describe('select all provider', () => {
         consoleError.restore();
       });
 
-      it('should log an error when toggleSelectAll rejects', async () => {
-        provider.toggleSelectAll = () => Promise.reject(new Error('failed'));
+      it('should log an error when the handler rejects', async () => {
+        comboBox._toggleSelectAllHandler = () => Promise.reject(new Error('failed'));
         clickButton();
         await nextRender();
         expect(consoleError).to.be.calledOnce;
       });
 
-      it('should log an error when toggleSelectAll throws', async () => {
-        provider.toggleSelectAll = () => {
+      it('should log an error when the handler throws', async () => {
+        comboBox._toggleSelectAllHandler = () => {
           throw new Error('failed');
         };
         clickButton();
@@ -206,7 +199,7 @@ describe('select all provider', () => {
     });
   });
 
-  describe('data provider without _allSelected', () => {
+  describe('without _allSelected', () => {
     let pendingRequests;
 
     const flushDataProvider = () => {
@@ -227,7 +220,7 @@ describe('select all provider', () => {
         pendingRequests.push(() => dataProvider(params, callback));
       };
       comboBox.addEventListener('change', changeSpy);
-      comboBox._selectAllProvider = provider;
+      comboBox._toggleSelectAllHandler = handler;
       await nextRender();
       comboBox.opened = true;
       flushDataProvider();
@@ -246,7 +239,7 @@ describe('select all provider', () => {
       clickButton();
       expect(comboBox.selectedItems).to.deep.equal(['Apple', 'Banana', 'Lemon', 'Orange']);
       expect(changeSpy).to.be.calledOnce;
-      expect(provider.toggleSelectAll).to.not.be.called;
+      expect(handler).to.not.be.called;
     });
 
     it('should not select placeholders while the items are refreshed', () => {
@@ -266,25 +259,25 @@ describe('select all provider', () => {
       expect(getSelectAllText()).to.equal('Deselect All');
 
       clickButton();
-      expect(provider.toggleSelectAll).to.be.calledOnce;
+      expect(handler).to.be.calledOnce;
       expect(comboBox.selectedItems).to.deep.equal([]);
     });
   });
 
-  describe('items', () => {
+  describe('with items', () => {
     beforeEach(async () => {
       comboBox = fixtureSync(
         `<vaadin-multi-select-combo-box select-all-button-visible></vaadin-multi-select-combo-box>`,
       );
       comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
       comboBox.addEventListener('change', changeSpy);
-      comboBox._selectAllProvider = provider;
+      comboBox._toggleSelectAllHandler = handler;
       await nextRender();
       comboBox.opened = true;
       await nextRender();
     });
 
-    it('should ignore the provider when computing selection state', async () => {
+    it('should ignore the handler when computing selection state', async () => {
       comboBox._allSelected = false;
       comboBox.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
       await nextRender();
@@ -295,11 +288,11 @@ describe('select all provider', () => {
       clickButton();
       expect(comboBox.selectedItems).to.deep.equal(['Apple', 'Banana', 'Lemon', 'Orange']);
       expect(changeSpy).to.be.calledOnce;
-      expect(provider.toggleSelectAll).to.not.be.called;
+      expect(handler).to.not.be.called;
     });
 
-    it('should render the button without the provider', () => {
-      comboBox._selectAllProvider = null;
+    it('should render the button without the handler', () => {
+      comboBox._toggleSelectAllHandler = null;
       expect(getSelectAllButton(comboBox)).to.be.ok;
     });
   });

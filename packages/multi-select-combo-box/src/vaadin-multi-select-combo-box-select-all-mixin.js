@@ -29,15 +29,15 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
         },
 
         /**
-         * Shows the select all button with `dataProvider`, and toggles the
-         * selection while `_allSelected` is set. Must provide `toggleSelectAll()`,
-         * which updates `selectedItems` and may return a promise. The component
-         * announces the result after it resolves, without firing `change`.
+         * Shows the select all button with `dataProvider`, and is called instead of
+         * the local toggle while `_allSelected` is set. The function must update
+         * `selectedItems` and may return a promise. The component announces the
+         * result after it resolves, without firing `change`.
          * Internal API for the Flow component.
          * @private
          */
-        _selectAllProvider: {
-          type: Object,
+        _toggleSelectAllHandler: {
+          type: Function,
           attribute: false,
           sync: true,
         },
@@ -72,7 +72,7 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
       return (
         this.selectAllButtonVisible &&
         !this.readonly &&
-        (!this.dataProvider || this.#hasActiveProvider) &&
+        (!this.dataProvider || this.#hasActiveHandler) &&
         this.#getFilteredItems().length > 0
       );
     }
@@ -103,7 +103,7 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
       // of the button
       const buttonProps = [
         'selectAllButtonVisible',
-        '_selectAllProvider',
+        '_toggleSelectAllHandler',
         '_allSelected',
         'readonly',
         'dataProvider',
@@ -136,12 +136,12 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
     /**
      * Selects all items matching the current filter, or deselects
      * them when all of them are already selected. Delegates to
-     * `_selectAllProvider.toggleSelectAll` while `_allSelected` is set.
+     * `_toggleSelectAllHandler` while `_allSelected` is set.
      * @protected
      */
     _toggleSelectAll() {
       if (this.#hasServerState) {
-        this.#toggleSelectAllWithProvider();
+        this.#toggleSelectAllWithHandler();
         return;
       }
 
@@ -185,12 +185,12 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
       return items.length > 0 && items.every((item) => this.#includesItem(this.selectedItems, item));
     }
 
-    get #hasActiveProvider() {
-      return !!this.dataProvider && !!this._selectAllProvider;
+    get #hasActiveHandler() {
+      return !!this.dataProvider && !!this._toggleSelectAllHandler;
     }
 
     get #hasServerState() {
-      return this.#hasActiveProvider && this._allSelected != null;
+      return this.#hasActiveHandler && this._allSelected != null;
     }
 
     #updateButton() {
@@ -209,12 +209,12 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
       }
     }
 
-    async #toggleSelectAllWithProvider() {
-      // The provider owns the selection and is expected to update
+    async #toggleSelectAllWithHandler() {
+      // The handler owns the selection and is expected to update
       // `selectedItems` itself. Intentionally do not fire `change` and do
       // not request validation here, only announce the result.
       try {
-        await this._selectAllProvider.toggleSelectAll();
+        await this._toggleSelectAllHandler();
       } catch (error) {
         console.error(error);
         return;
