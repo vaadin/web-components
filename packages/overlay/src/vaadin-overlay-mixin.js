@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
+import { markEventConsumed } from '@vaadin/component-base/src/event-utils.js';
 import { OverlayFocusMixin } from './vaadin-overlay-focus-mixin.js';
 import { OverlayStackMixin } from './vaadin-overlay-stack-mixin.js';
 import { setOverlayStateAttribute } from './vaadin-overlay-utils.js';
@@ -559,8 +560,9 @@ export const OverlayMixin = (superClass) =>
         this.close(event);
 
         // Only for modal overlays which make underlying content non-interactive.
+        // Not using preventDefault() to keep the default action of synthetic clicks.
         if (!this.opened && !this.modeless) {
-          event.preventDefault();
+          markEventConsumed(event);
         }
       }
     }
