@@ -12,5 +12,7 @@ export declare function markEventConsumed(event: Event): void;
 
 /**
  * Returns true if the event was marked as consumed with `markEventConsumed()`.
+ * Only check it where a click that closed an overlay must be ignored, e.g. a backdrop.
+ * Do not use it in regular click handlers, so that synthetic clicks keep working.
  */
 export declare function isEventConsumed(event: Event): boolean;
