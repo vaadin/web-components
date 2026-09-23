@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 /**
@@ -26,6 +27,31 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
           value: false,
           sync: true,
         },
+
+        /**
+         * Shows the select all button with `dataProvider`, and is called instead of
+         * the local toggle while `_allSelected` is set. The function must update
+         * `selectedItems` and may return a promise. The component announces the
+         * result after it resolves, without firing `change`.
+         * Internal API for the Flow component.
+         * @private
+         */
+        _toggleSelectAllHandler: {
+          type: Function,
+          attribute: false,
+          sync: true,
+        },
+
+        /**
+         * Whether all items matching the filter are selected, set by the server
+         * with a data provider. When not set, the component computes it locally.
+         * @private
+         */
+        _allSelected: {
+          type: Boolean,
+          attribute: false,
+          sync: true,
+        },
       };
     }
 
@@ -43,7 +69,12 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
 
     /** @protected */
     get _hasSelectAllButton() {
-      return this.selectAllButtonVisible && !this.readonly && !this.dataProvider && this.#getFilteredItems().length > 0;
+      return (
+        this.selectAllButtonVisible &&
+        !this.readonly &&
+        (!this.dataProvider || this.#hasActiveHandler) &&
+        this.#hasLoadedFilteredItems()
+      );
     }
 
     /** @protected */
@@ -68,8 +99,12 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
         }
       }
 
+      // Properties that affect whether the button is shown, or the label
+      // of the button
       const buttonProps = [
         'selectAllButtonVisible',
+        '_toggleSelectAllHandler',
+        '_allSelected',
         'readonly',
         'dataProvider',
         'filteredItems',
@@ -78,6 +113,7 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
         'filter',
         '__effectiveI18n',
       ];
+
       if (buttonProps.some((prop) => props.has(prop))) {
         this.#updateButton();
       }
@@ -99,22 +135,24 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
 
     /**
      * Selects all items matching the current filter, or deselects
-     * them when all of them are already selected.
+     * them when all of them are already selected. Delegates to
+     * `_toggleSelectAllHandler` while `_allSelected` is set.
      * @protected
      */
     _toggleSelectAll() {
-      const filteredItems = this.#getFilteredItems();
-      let selectedItems;
-
-      if (this.#areAllFilteredItemsSelected()) {
-        selectedItems = this.selectedItems.filter((item) => !this.#includesItem(filteredItems, item));
+      if (this.#hasServerState) {
+        this.#toggleSelectAllWithHandler();
       } else {
-        const missingItems = filteredItems.filter((item) => !this.#includesItem(this.selectedItems, item));
-        selectedItems = [...this.selectedItems, ...missingItems];
+        this.#toggleSelectAllLocally();
       }
+    }
 
-      this.__updateSelection(selectedItems);
-      this.__announceSelection();
+    get #hasActiveHandler() {
+      return !!this.dataProvider && !!this._toggleSelectAllHandler;
+    }
+
+    get #hasServerState() {
+      return this.#hasActiveHandler && this._allSelected != null;
     }
 
     #updateButton() {
@@ -135,7 +173,7 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
 
     #getButtonLabel() {
       const { selectAll, deselectAll, selectFiltered, deselectFiltered } = this.__effectiveI18n;
-      const allSelected = this.#areAllFilteredItemsSelected();
+      const allSelected = this.#hasServerState ? this._allSelected : this.#areAllFilteredItemsSelected();
 
       if (this.filter) {
         return allSelected ? deselectFiltered : selectFiltered;
@@ -144,13 +182,47 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
       return allSelected ? deselectAll : selectAll;
     }
 
-    #getFilteredItems() {
-      return this.filteredItems || [];
+    async #toggleSelectAllWithHandler() {
+      // The handler owns the selection and is expected to update
+      // `selectedItems` itself. Intentionally do not fire `change` and do
+      // not request validation here, only announce the result.
+      try {
+        await this._toggleSelectAllHandler();
+      } catch (error) {
+        console.error(error);
+        return;
+      }
+
+      this.__announceSelection();
+    }
+
+    #toggleSelectAllLocally() {
+      const filteredItems = this.#getFilteredItems();
+      let selectedItems;
+
+      if (this.#areAllFilteredItemsSelected()) {
+        selectedItems = this.selectedItems.filter((item) => !this.#includesItem(filteredItems, item));
+      } else {
+        const missingItems = filteredItems.filter((item) => !this.#includesItem(this.selectedItems, item));
+        selectedItems = [...this.selectedItems, ...missingItems];
+      }
+
+      this.__updateSelection(selectedItems);
+      this.__announceSelection();
     }
 
     #areAllFilteredItemsSelected() {
       const items = this.#getFilteredItems();
       return items.length > 0 && items.every((item) => this.#includesItem(this.selectedItems, item));
+    }
+
+    #hasLoadedFilteredItems() {
+      // Hide the button while no page is loaded, for example after `clearCache()`
+      return (this.filteredItems || []).some((item) => !(item instanceof ComboBoxPlaceholder));
+    }
+
+    #getFilteredItems() {
+      return this.filteredItems || [];
     }
 
     #includesItem(items, item) {
