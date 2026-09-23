@@ -18,8 +18,16 @@
       <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
     </vaadin-menu-bar>
 
+    <h2>Split layout</h2>
+
+    <vaadin-split-layout>
+      <div><vaadin-menu-bar id="split-layout-menu-bar"></vaadin-menu-bar></div>
+      <div>Resize the splitter to show the overflow button</div>
+    </vaadin-split-layout>
+
     <script type="module">
       import '@vaadin/menu-bar';
+      import '@vaadin/split-layout';
       import '@vaadin/tooltip';
       import '@vaadin/icon';
       import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
@@ -80,6 +88,15 @@
           item.checked = !item.checked;
         }
       });
+
+      document.querySelector('#split-layout-menu-bar').items = [
+        'View',
+        'Edit',
+        'Share',
+        'Move',
+        'Duplicate',
+        'Archive',
+      ].map((text) => ({ text, children: [{ text: `${text} all` }] }));
     </script>
   </body>
 </html>

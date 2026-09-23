@@ -461,6 +461,9 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __restoreButtons(buttons) {
+      this.removeAttribute('overflow-frozen');
+      this.style.removeProperty('--_vaadin-menu-bar-content-width');
+
       buttons.forEach((button) => {
         button.style.visibility = '';
         button.style.position = '';
@@ -511,6 +514,7 @@ export const MenuBarMixin = (superClass) =>
      * @property {number[]} ends Inline end of each button
      * @property {number[]} margins Inline start margin of each button
      * @property {number} overflowExtent Space the overflow button adds after the last button
+     * @property {number} overflowWidth Space the overflow button needs when every button collapses
      */
 
     /**
@@ -523,13 +527,15 @@ export const MenuBarMixin = (superClass) =>
       const isRTL = this.__isRTL;
       const rects = buttons.map((btn) => btn.getBoundingClientRect());
       const ends = rects.map(({ left, right }) => (isRTL ? -left : right));
+      const overflowRect = overflow.getBoundingClientRect();
 
       return {
         starts: rects.map(({ left, right }) => (isRTL ? -right : left)),
         ends,
         // `auto` resolves to 0 while the content overflows.
         margins: buttons.map((btn) => parseFloat(getComputedStyle(btn).marginInlineStart) || 0),
-        overflowExtent: this.__getInlineEnd(overflow) - ends.at(-1),
+        overflowExtent: (isRTL ? -overflowRect.left : overflowRect.right) - ends.at(-1),
+        overflowWidth: overflowRect.width + (parseFloat(getComputedStyle(overflow).marginInlineStart) || 0),
       };
     }
 
@@ -578,10 +584,21 @@ export const MenuBarMixin = (superClass) =>
 
         // Read the layout once the overflow button is in flow
         const layout = this.__measureButtons(buttons, overflow);
-        const containerWidth = container.getBoundingClientRect().width;
-        const collapsed = this.__getCollapsedButtons(buttons, layout, containerWidth);
+        const { starts, ends, margins, overflowExtent, overflowWidth } = layout;
+        const containerRect = container.getBoundingClientRect();
+        const collapsed = this.__getCollapsedButtons(buttons, layout, containerRect.width);
         // Read button widths once outside of the loop to avoid repetitive layout
         const widths = collapsed.map((btn) => getComputedStyle(btn).width);
+
+        // Content width with every button and the overflow button in flow
+        const containerStart = this.__isRTL ? -containerRect.right : containerRect.left;
+        const contentWidth = ends.at(-1) + overflowExtent - containerStart;
+
+        // Width the kept range plus the overflow button needs, as in `__getCollapsedButtons`
+        const kept = buttons.map((_, i) => i).filter((i) => !collapsed.includes(buttons[i]));
+        const required = kept.length
+          ? margins[kept[0]] + ends[kept.at(-1)] - starts[kept[0]] + overflowExtent
+          : overflowWidth;
 
         // Write the DOM state
         collapsed.forEach((btn, i) => {
@@ -592,6 +609,14 @@ export const MenuBarMixin = (superClass) =>
         this.__updateOverflow(collapsed.map((btn) => btn.item));
 
         container.style.minWidth = '';
+
+        // A content-sized parent may shrink the host once the buttons are out of flow,
+        // for example a split layout pane. Keep the intrinsic width the host had with
+        // every button in flow, so the decision made for that width still holds.
+        if (required > container.getBoundingClientRect().width + OVERFLOW_TOLERANCE) {
+          this.style.setProperty('--_vaadin-menu-bar-content-width', `${contentWidth}px`);
+          this.setAttribute('overflow-frozen', '');
+        }
       }
     }
 
