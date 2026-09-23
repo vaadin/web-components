@@ -73,7 +73,7 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
         this.selectAllButtonVisible &&
         !this.readonly &&
         (!this.dataProvider || this.#hasActiveHandler) &&
-        this.#getFilteredItems().length > 0
+        this.#hasLoadedFilteredItems()
       );
     }
 
@@ -216,9 +216,13 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
       return items.length > 0 && items.every((item) => this.#includesItem(this.selectedItems, item));
     }
 
+    #hasLoadedFilteredItems() {
+      // Hide the button while no page is loaded, for example after `clearCache()`
+      return (this.filteredItems || []).some((item) => !(item instanceof ComboBoxPlaceholder));
+    }
+
     #getFilteredItems() {
-      // Skip placeholders of pages that are not loaded, so they are never selected
-      return (this.filteredItems || []).filter((item) => !(item instanceof ComboBoxPlaceholder));
+      return this.filteredItems || [];
     }
 
     #includesItem(items, item) {

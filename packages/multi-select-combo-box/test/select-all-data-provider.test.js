@@ -3,7 +3,6 @@ import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
-import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
 import { getDataProvider, getSelectAllButton, setInputValue } from './helpers.js';
 
 describe('select all with data provider', () => {
@@ -242,16 +241,16 @@ describe('select all with data provider', () => {
       expect(handler).to.not.be.called;
     });
 
-    it('should not select placeholders while the items are refreshed', () => {
-      // Mimic the Flow connector, which replaces the loaded items with
-      // placeholders in place until the new data arrives
-      const filteredItems = comboBox.filteredItems;
-      for (let i = 0; i < filteredItems.length; i++) {
-        filteredItems[i] = new ComboBoxPlaceholder();
-      }
+    it('should hide the button while the items are refreshed', async () => {
+      // Mimic the Flow connector, which clears the cache on refresh. The cache
+      // keeps the size, so the items are placeholders until the new data arrives
+      comboBox.clearCache();
+      await nextRender();
+      expect(getSelectAllButton(comboBox)).to.be.null;
 
-      clickButton();
-      expect(comboBox.selectedItems).to.deep.equal([]);
+      flushDataProvider();
+      await nextRender();
+      expect(getSelectAllButton(comboBox)).to.be.ok;
     });
 
     it('should switch to the state from the server once it is set', () => {
