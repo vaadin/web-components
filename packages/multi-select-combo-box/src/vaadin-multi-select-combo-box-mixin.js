@@ -407,7 +407,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * Clears the selected items.
      */
     clear() {
-      this.__updateSelection([], true);
+      this.__updateSelection([]);
+      this.__announceSelection(0);
     }
 
     /** @private */
@@ -794,18 +795,22 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /** @private */
-    __updateSelection(selectedItems, announceSelection = false) {
+    __updateSelection(selectedItems) {
       this.selectedItems = selectedItems;
 
       this._requestValidation();
 
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+    }
 
-      if (announceSelection) {
-        const { cleared, total } = this.__effectiveI18n;
-        const count = this.selectedItems.length;
-        announce(count === 0 ? cleared : total.replace('{count}', count));
-      }
+    /**
+     * Announces the number of selected items to screen readers.
+     * @param {number} count
+     * @private
+     */
+    __announceSelection(count) {
+      const { cleared, total } = this.__effectiveI18n;
+      announce(count === 0 ? cleared : total.replace('{count}', count));
     }
 
     /** @private */
