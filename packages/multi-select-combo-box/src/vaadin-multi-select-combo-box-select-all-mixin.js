@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 /**
@@ -29,19 +30,11 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
 
         /**
          * When set together with `dataProvider`, shows the select all button
-         * and delegates the selection state and the toggle to the provider.
+         * and delegates the toggle to the provider while `_allSelected` is set.
          * The provider is ignored with the `items` API.
          *
-         * The object must provide the following callbacks:
+         * The object must provide the following callback:
          *
-         * - `isAllSelected()`: returns `true` when all items matching the
-         *   current filter are selected. The component calls it synchronously
-         *   each time it updates the button, for example after `selectedItems`,
-         *   `filter` or `filteredItems` change. The callback must return
-         *   quickly and must not start a request. When the state comes from
-         *   elsewhere, for example from the server, return the last known
-         *   state and call `_requestSelectAllUpdate()` when a new state is
-         *   available.
          * - `toggleSelectAll()`: selects all items matching the current filter,
          *   or deselects them when they are all selected. May return a promise.
          *   The provider must update `selectedItems`. After the promise
@@ -55,6 +48,26 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
          */
         _selectAllProvider: {
           type: Object,
+          attribute: false,
+          sync: true,
+        },
+
+        /**
+         * Whether all items matching the current filter are selected, as
+         * computed by the server. With a data provider, the component may not
+         * have all items loaded, so it can not always tell by itself.
+         *
+         * - set: the component uses it for the label, and toggles the
+         *   selection through `_selectAllProvider`
+         * - not set: the component computes it and toggles locally, the same
+         *   as with the `items` API
+         *
+         * The server sets it with server-side filtering, and removes it with
+         * client-side filtering, where all items are loaded in one page.
+         * @private
+         */
+        _allSelected: {
+          type: Boolean,
           attribute: false,
           sync: true,
         },
@@ -110,6 +123,7 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
       const buttonProps = [
         'selectAllButtonVisible',
         '_selectAllProvider',
+        '_allSelected',
         'readonly',
         'dataProvider',
         'filteredItems',
@@ -141,12 +155,11 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
     /**
      * Selects all items matching the current filter, or deselects
      * them when all of them are already selected. Delegates to
-     * `_selectAllProvider.toggleSelectAll` when it is set and
-     * a data provider is used.
+     * `_selectAllProvider.toggleSelectAll` while `_allSelected` is set.
      * @protected
      */
     _toggleSelectAll() {
-      if (this.#hasActiveProvider) {
+      if (this.#hasServerState) {
         this.#toggleSelectAllWithProvider();
         return;
       }
@@ -191,21 +204,12 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
       return items.length > 0 && items.every((item) => this.#includesItem(this.selectedItems, item));
     }
 
-    /**
-     * Updates the select all button, so that its label shows the current
-     * result of `_selectAllProvider.isAllSelected()`. Call this method
-     * when the provider has a new selection state.
-     *
-     * Only exposed as protected method to be used by the Flow component
-     * connector.
-     * @protected
-     */
-    _requestSelectAllUpdate() {
-      this.#updateButton();
-    }
-
     get #hasActiveProvider() {
       return !!this.dataProvider && !!this._selectAllProvider;
+    }
+
+    get #hasServerState() {
+      return this.#hasActiveProvider && this._allSelected != null;
     }
 
     #updateButton() {
@@ -238,22 +242,9 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
       this.__announceSelection(this.selectedItems.length);
     }
 
-    #isAllSelectedWithProvider() {
-      // Fall back to "not all selected" so that an error in the provider
-      // does not break the update of the component
-      try {
-        return this._selectAllProvider.isAllSelected();
-      } catch (error) {
-        console.error(error);
-        return false;
-      }
-    }
-
     #getButtonLabel() {
       const { selectAll, deselectAll, selectFiltered, deselectFiltered } = this.__effectiveI18n;
-      const allSelected = this.#hasActiveProvider
-        ? this.#isAllSelectedWithProvider()
-        : this._areAllFilteredItemsSelected();
+      const allSelected = this.#hasServerState ? this._allSelected : this._areAllFilteredItemsSelected();
 
       if (this.filter) {
         return allSelected ? deselectFiltered : selectFiltered;
@@ -263,7 +254,8 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
     }
 
     #getFilteredItems() {
-      return this.filteredItems || [];
+      // Skip placeholders of pages that are not loaded, so they are never selected
+      return (this.filteredItems || []).filter((item) => !(item instanceof ComboBoxPlaceholder));
     }
 
     #includesItem(items, item) {
