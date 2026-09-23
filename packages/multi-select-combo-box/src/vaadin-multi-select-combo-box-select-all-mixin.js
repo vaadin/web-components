@@ -142,47 +142,9 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
     _toggleSelectAll() {
       if (this.#hasServerState) {
         this.#toggleSelectAllWithHandler();
-        return;
-      }
-
-      this._toggleSelectAllLocally();
-      this.__announceSelection();
-    }
-
-    /**
-     * Selects all items matching the current filter, or deselects
-     * them when all of them are already selected, by updating
-     * `selectedItems`.
-     *
-     * Only exposed as protected method to be used by the Flow component
-     * connector.
-     * @protected
-     */
-    _toggleSelectAllLocally() {
-      const filteredItems = this.#getFilteredItems();
-      let selectedItems;
-
-      if (this._areAllFilteredItemsSelected()) {
-        selectedItems = this.selectedItems.filter((item) => !this.#includesItem(filteredItems, item));
       } else {
-        const missingItems = filteredItems.filter((item) => !this.#includesItem(this.selectedItems, item));
-        selectedItems = [...this.selectedItems, ...missingItems];
+        this.#toggleSelectAllLocally();
       }
-
-      this.__updateSelection(selectedItems);
-    }
-
-    /**
-     * Returns true when all items matching the current filter are selected.
-     *
-     * Only exposed as protected method to be used by the Flow component
-     * connector.
-     * @return {boolean}
-     * @protected
-     */
-    _areAllFilteredItemsSelected() {
-      const items = this.#getFilteredItems();
-      return items.length > 0 && items.every((item) => this.#includesItem(this.selectedItems, item));
     }
 
     get #hasActiveHandler() {
@@ -209,6 +171,17 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
       }
     }
 
+    #getButtonLabel() {
+      const { selectAll, deselectAll, selectFiltered, deselectFiltered } = this.__effectiveI18n;
+      const allSelected = this.#hasServerState ? this._allSelected : this.#areAllFilteredItemsSelected();
+
+      if (this.filter) {
+        return allSelected ? deselectFiltered : selectFiltered;
+      }
+
+      return allSelected ? deselectAll : selectAll;
+    }
+
     async #toggleSelectAllWithHandler() {
       // The handler owns the selection and is expected to update
       // `selectedItems` itself. Intentionally do not fire `change` and do
@@ -223,15 +196,24 @@ export const MultiSelectComboBoxSelectAllMixin = (superClass) =>
       this.__announceSelection();
     }
 
-    #getButtonLabel() {
-      const { selectAll, deselectAll, selectFiltered, deselectFiltered } = this.__effectiveI18n;
-      const allSelected = this.#hasServerState ? this._allSelected : this._areAllFilteredItemsSelected();
+    #toggleSelectAllLocally() {
+      const filteredItems = this.#getFilteredItems();
+      let selectedItems;
 
-      if (this.filter) {
-        return allSelected ? deselectFiltered : selectFiltered;
+      if (this.#areAllFilteredItemsSelected()) {
+        selectedItems = this.selectedItems.filter((item) => !this.#includesItem(filteredItems, item));
+      } else {
+        const missingItems = filteredItems.filter((item) => !this.#includesItem(this.selectedItems, item));
+        selectedItems = [...this.selectedItems, ...missingItems];
       }
 
-      return allSelected ? deselectAll : selectAll;
+      this.__updateSelection(selectedItems);
+      this.__announceSelection();
+    }
+
+    #areAllFilteredItemsSelected() {
+      const items = this.#getFilteredItems();
+      return items.length > 0 && items.every((item) => this.#includesItem(this.selectedItems, item));
     }
 
     #getFilteredItems() {
