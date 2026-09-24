@@ -18,8 +18,23 @@
       <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
     </vaadin-menu-bar>
 
+    <h2>Split layout</h2>
+
+    <vaadin-split-layout>
+      <div><vaadin-menu-bar id="split-layout-menu-bar"></vaadin-menu-bar></div>
+      <div>Resize the splitter to show the overflow button</div>
+    </vaadin-split-layout>
+
+    <h2>Two menu bars</h2>
+
+    <div style="display: flex">
+      <vaadin-menu-bar id="two-bars-start" style="flex: 1 1 auto"></vaadin-menu-bar>
+      <vaadin-menu-bar id="two-bars-end" style="flex: 1 1 auto" theme="end-aligned"></vaadin-menu-bar>
+    </div>
+
     <script type="module">
       import '@vaadin/menu-bar';
+      import '@vaadin/split-layout';
       import '@vaadin/tooltip';
       import '@vaadin/icon';
       import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
@@ -80,6 +95,29 @@
           item.checked = !item.checked;
         }
       });
+
+      const simpleItems = (texts) => texts.map((text) => ({ text, children: [{ text: `${text} all` }] }));
+
+      document.querySelector('#split-layout-menu-bar').items = simpleItems([
+        'View',
+        'Edit',
+        'Share',
+        'Move',
+        'Duplicate',
+        'Archive',
+      ]);
+
+      document.querySelector('#two-bars-start').items = simpleItems([
+        'File',
+        'Edit',
+        'View',
+        'Insert',
+        'Format',
+        'Tools',
+        'Window',
+        'Help',
+      ]);
+      document.querySelector('#two-bars-end').items = simpleItems(['Profile', 'Settings', 'Sign out']);
     </script>
   </body>
 </html>
