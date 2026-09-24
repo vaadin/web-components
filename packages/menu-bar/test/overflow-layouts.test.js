@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextResize } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-menu-bar.js';
 import {
   assertHidden,
@@ -152,6 +153,98 @@ describe('overflow in layouts', () => {
       `);
       expectCollapsed(menu, [2, 3, 4]);
       expectOverflowInside(menu);
+    });
+
+    it('should keep the overflow button inside the menu bar in a flex item sized by content', async () => {
+      // Both flex items shrink in proportion to their content, like split layout panes
+      const { menu } = await fixtureMenuBar(`
+        <div style="display: flex; width: ${BUTTON_WIDTH * 5}px">
+          <div style="min-width: 0"><vaadin-menu-bar></vaadin-menu-bar></div>
+          <div style="min-width: 0"><div style="width: ${BUTTON_WIDTH * 3}px"></div></div>
+        </div>
+      `);
+      expectCollapsed(menu, [2, 3, 4]);
+      expectOverflowInside(menu);
+    });
+
+    it('should keep the overflow button inside the menu bar next to a full width sibling', async () => {
+      // Reproduces the layout from https://github.com/vaadin/web-components/issues/8004:
+      // the sibling asks for the whole row, so the menu bar can never show every item
+      const { menu } = await fixtureMenuBar(`
+        <div style="display: flex; width: ${BUTTON_WIDTH * 5}px">
+          <div style="width: 100%"></div>
+          <vaadin-menu-bar></vaadin-menu-bar>
+        </div>
+      `);
+      expectCollapsed(menu, [1, 2, 3, 4]);
+      expectOverflowInside(menu);
+    });
+
+    it('should restore buttons and release the width when a flex item sized by content gets wider', async () => {
+      const { container, menu } = await fixtureMenuBar(`
+        <div style="display: flex; width: ${BUTTON_WIDTH * 5}px">
+          <div style="min-width: 0"><vaadin-menu-bar></vaadin-menu-bar></div>
+          <div style="min-width: 0"><div style="width: ${BUTTON_WIDTH * 3}px"></div></div>
+        </div>
+      `);
+      container.style.width = `${BUTTON_WIDTH * 9}px`;
+      await nextResize(menu);
+      expectCollapsed(menu, []);
+      // The menu bar shrinks back to its buttons, no width is kept from the collapsed state
+      const lastButton = menu._buttons.at(-2);
+      expect(lastButton.getBoundingClientRect().right).to.be.closeTo(menu.getBoundingClientRect().right, 0.5);
+    });
+  });
+
+  describe('two menu bars in one row', () => {
+    // Each round lets the resize observer run and the detection that it schedules
+    async function nextRounds(count = 5) {
+      for (let i = 0; i < count; i++) {
+        await nextFrame();
+        await aTimeout(0);
+      }
+    }
+
+    async function fixtureTwoMenuBars(startCount, endCount) {
+      const row = fixtureSync(`
+        <div style="display: flex; width: ${BUTTON_WIDTH * 5}px">
+          <vaadin-menu-bar style="flex: 1 1 auto"></vaadin-menu-bar>
+          <vaadin-menu-bar style="flex: 1 1 auto" theme="end-aligned"></vaadin-menu-bar>
+        </div>
+      `);
+      const [start, end] = row.querySelectorAll('vaadin-menu-bar');
+      start.items = createItems(startCount);
+      end.items = createItems(endCount);
+      await nextResize(start);
+      await nextResize(end);
+      // Give the two menu bars time to react to each other
+      await nextRounds();
+      return { row, start, end };
+    }
+
+    async function expectDetectionsToStop(...menus) {
+      const spies = menus.map((menu) => sinon.spy(menu, '__detectOverflow'));
+      await nextRounds();
+      spies.forEach((spy, i) => expect(spy, `detections of menu bar ${i}`).to.not.be.called);
+    }
+
+    it('should share the row equally and keep both overflow buttons inside with equal items', async () => {
+      const { start, end } = await fixtureTwoMenuBars(5, 5);
+      await expectDetectionsToStop(start, end);
+      expectCollapsed(start, [1, 2, 3, 4]);
+      expectCollapsed(end, [1, 2, 3, 4]);
+      expectOverflowInside(start);
+      expectOverflowInside(end);
+    });
+
+    it('should give the menu bar with more items more room and keep both overflow buttons inside', async () => {
+      const { start, end } = await fixtureTwoMenuBars(8, 3);
+      await expectDetectionsToStop(start, end);
+      expect(start.getBoundingClientRect().width).to.be.greaterThan(end.getBoundingClientRect().width);
+      expectCollapsed(start, [2, 3, 4, 5, 6, 7]);
+      expectCollapsed(end, [0, 1, 2]);
+      expectOverflowInside(start);
+      expectOverflowInside(end);
     });
   });
 

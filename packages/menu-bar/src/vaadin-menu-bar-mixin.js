@@ -571,10 +571,14 @@ export const MenuBarMixin = (superClass) =>
 
         // Read the layout once the overflow button is in flow
         const layout = this.__measureButtons(buttons, overflow);
-        const containerWidth = container.getBoundingClientRect().width;
-        const collapsed = this.__getCollapsedButtons(buttons, layout, containerWidth);
+        const containerRect = container.getBoundingClientRect();
+        const collapsed = this.__getCollapsedButtons(buttons, layout, containerRect.width);
         // Read button widths once outside of the loop to avoid repetitive layout
         const widths = collapsed.map((btn) => getComputedStyle(btn).width);
+
+        // Content width with every button and the overflow button in flow
+        const containerStart = this.__isRTL ? -containerRect.right : containerRect.left;
+        const contentWidth = layout.ends.at(-1) + layout.overflowExtent - containerStart;
 
         // Write the DOM state
         collapsed.forEach((btn, i) => {
@@ -582,6 +586,9 @@ export const MenuBarMixin = (superClass) =>
           btn.style.visibility = 'hidden';
           btn.style.position = 'absolute';
         });
+        // Kept as the intrinsic width while `has-overflow` is set, so a parent
+        // sized by content does not shrink the menu bar after the collapse
+        this.style.setProperty('--_vaadin-menu-bar-content-width', `${contentWidth}px`);
         this.__updateOverflow(collapsed.map((btn) => btn.item));
       }
     }
@@ -602,6 +609,7 @@ export const MenuBarMixin = (superClass) =>
       // Reset all buttons in the menu bar and the overflow button
       this.__restoreButtons(buttons);
       this.__updateOverflow([]);
+      this.style.removeProperty('--_vaadin-menu-bar-content-width');
 
       // Hide any overflowing buttons and put them in the 'overflow' button
       this.__setOverflowItems(buttons, overflow);

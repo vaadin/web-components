@@ -118,6 +118,20 @@
       maxWidth.addEventListener('value-changed', (e) => {
         menuBar.style.maxWidth = e.detail.value === 'none' ? '' : e.detail.value;
       });
+
+      const simpleItems = (texts) => texts.map((text) => ({ text, children: [{ text: `${text} all` }] }));
+
+      document.querySelector('#two-bars-start').items = simpleItems([
+        'File',
+        'Edit',
+        'View',
+        'Insert',
+        'Format',
+        'Tools',
+        'Window',
+        'Help',
+      ]);
+      document.querySelector('#two-bars-end').items = simpleItems(['Profile', 'Settings', 'Sign out']);
     </script>
   </head>
 
@@ -172,5 +186,11 @@
       </div>
       <span>Resize the splitter or set a max width to show the overflow button</span>
     </vaadin-split-layout>
+
+    <h3>Two menu bars</h3>
+    <div style="display: flex">
+      <vaadin-menu-bar id="two-bars-start" style="flex: 1 1 auto"></vaadin-menu-bar>
+      <vaadin-menu-bar id="two-bars-end" style="flex: 1 1 auto" theme="end-aligned"></vaadin-menu-bar>
+    </div>
   </body>
 </html>
