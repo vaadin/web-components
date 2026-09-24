@@ -10,19 +10,38 @@
     <script type="module">
       import '@vaadin/form-layout';
       import '@vaadin/form-layout/vaadin-form-item.js';
+      import '@vaadin/form-layout/vaadin-form-row.js';
       import '@vaadin/text-field';
-      import '@vaadin/password-field';
     </script>
 
     <style>
-      vaadin-form-item > *:not(label) {
-        width: 100%;
+      .row-highlight {
+        position: absolute;
+        /* Paints behind the fields, in front of the page background */
+        z-index: -1;
+        /* Extends the highlight beyond the row */
+        margin: -6px;
+        padding: 6px;
+        background: var(--vaadin-background-container);
+        border: 1px solid var(--vaadin-border-color-secondary);
+        border-radius: 8px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 80ms;
       }
     </style>
   </head>
 
   <body>
-    <vaadin-form-layout>
+    <h2 class="heading">Row highlight on hover</h2>
+    <p>
+      The highlight is placed from the used <code>grid-template-rows</code> track sizes, so it follows rows that wrap.
+      Resize the window to see the card row wrap and the highlight follow it.
+    </p>
+
+    <div class="row-highlight"></div>
+
+    <vaadin-form-layout auto-responsive auto-rows max-columns="3">
       <vaadin-form-item>
         <label slot="label">First name</label>
         <vaadin-text-field></vaadin-text-field>
@@ -33,20 +52,106 @@
         <vaadin-text-field></vaadin-text-field>
       </vaadin-form-item>
 
-      <vaadin-form-item colspan="2">
-        <label slot="label">Username</label>
-        <vaadin-text-field required></vaadin-text-field>
-      </vaadin-form-item>
+      <vaadin-form-row>
+        <vaadin-form-item>
+          <label slot="label">Street</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
 
-      <vaadin-form-item>
-        <label slot="label">Password</label>
-        <vaadin-password-field></vaadin-password-field>
-      </vaadin-form-item>
+        <vaadin-form-item>
+          <label slot="label">City</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+      </vaadin-form-row>
 
-      <vaadin-form-item>
-        <label slot="label">Confirm</label>
-        <vaadin-password-field></vaadin-password-field>
-      </vaadin-form-item>
+      <vaadin-form-row>
+        <vaadin-form-item>
+          <label slot="label">Card number</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Month</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">Year</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+
+        <vaadin-form-item>
+          <label slot="label">CVV</label>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-item>
+      </vaadin-form-row>
+
+      <vaadin-form-row>
+        <vaadin-form-item colspan="2">
+          <label slot="label">Username</label>
+          <vaadin-text-field required></vaadin-text-field>
+        </vaadin-form-item>
+      </vaadin-form-row>
     </vaadin-form-layout>
+
+    <script type="module">
+      const formLayout = document.querySelector('vaadin-form-layout');
+      const highlight = document.querySelector('.row-highlight');
+
+      await customElements.whenDefined('vaadin-form-layout');
+
+      // The page must not change the component, so it reads the grid from the shadow root
+      const grid = formLayout.shadowRoot.querySelector('#layout');
+
+      // Start and end offset of every row, relative to the top of the grid
+      let rows = [];
+
+      function measure() {
+        const gridTop = grid.getBoundingClientRect().top;
+        const { gridTemplateRows, rowGap } = getComputedStyle(grid);
+        const gap = parseFloat(rowGap);
+
+        let offset = 0;
+        const tracks = gridTemplateRows.split(' ').map((size) => {
+          const start = offset;
+          offset += parseFloat(size) + gap;
+          return { start, end: offset - gap };
+        });
+
+        // A field can only sit lower inside its own track, never past the next track's start
+        function trackOf(field) {
+          const top = field.getBoundingClientRect().top - gridTop;
+          return tracks[tracks.findLastIndex((track) => track.start <= top + 0.5)];
+        }
+
+        // A <vaadin-form-row> covers every track its fields ended up in, a loose field
+        // covers the single track it shares with the other loose fields of that track
+        rows = [...formLayout.children].map((child) => {
+          const fields = child.localName === 'vaadin-form-row' ? [...child.children] : [child];
+          return { start: trackOf(fields[0]).start, end: trackOf(fields[fields.length - 1]).end };
+        });
+      }
+
+      formLayout.addEventListener('pointermove', (event) => {
+        const { top, left, width } = grid.getBoundingClientRect();
+        const row = rows.find(({ start, end }) => event.clientY - top >= start && event.clientY - top <= end);
+
+        // No row when the pointer is in a row gap
+        highlight.style.opacity = row ? '1' : '0';
+        if (row) {
+          highlight.style.top = `${top + row.start + window.scrollY}px`;
+          highlight.style.left = `${left + window.scrollX}px`;
+          highlight.style.width = `${width}px`;
+          highlight.style.height = `${row.end - row.start}px`;
+        }
+      });
+
+      formLayout.addEventListener('pointerleave', () => {
+        highlight.style.opacity = '0';
+      });
+
+      // Also runs once to take the initial measurement
+      new ResizeObserver(measure).observe(formLayout);
+    </script>
   </body>
 </html>
