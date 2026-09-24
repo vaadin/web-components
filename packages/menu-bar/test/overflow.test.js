@@ -55,6 +55,18 @@ describe('overflow', () => {
       expect(overflow.hasAttribute('hidden')).to.be.false;
     });
 
+    it('should toggle has-overflow attribute when buttons collapse and fit again', async () => {
+      expect(menu.hasAttribute('has-overflow')).to.be.true;
+
+      menu.style.width = 'auto';
+      await nextResize(menu);
+      expect(menu.hasAttribute('has-overflow')).to.be.false;
+
+      menu.style.width = `${BUTTON_WIDTH * 3}px`;
+      await nextResize(menu);
+      expect(menu.hasAttribute('has-overflow')).to.be.true;
+    });
+
     it('should hide overflow button and reset its items when all buttons fit after changing items', async () => {
       // See https://github.com/vaadin/vaadin-menu-bar/issues/133
       menu.items = createItems(2);

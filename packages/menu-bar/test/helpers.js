@@ -25,6 +25,7 @@ export const expectCollapsed = (menu, hiddenIndexes) => {
     .slice(0, -1)
     .forEach((btn, i) => (hiddenIndexes.includes(i) ? assertHidden : assertVisible)(btn, `button ${i}`));
   expect(overflow.hasAttribute('hidden'), 'overflow button hidden').to.equal(hiddenIndexes.length === 0);
+  expect(menu.hasAttribute('has-overflow'), 'has-overflow').to.equal(hiddenIndexes.length > 0);
   expect(overflow.item.children, 'overflow items').to.deep.equal(hiddenIndexes.map((i) => menu.items[i]));
   expect(menu.hasAttribute('has-single-button'), 'has-single-button').to.equal(
     hiddenIndexes.length === buttons.length - 1,

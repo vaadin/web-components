@@ -487,6 +487,7 @@ export const MenuBarMixin = (superClass) =>
     __updateOverflow(items) {
       this._overflow.item = { children: items };
       this._hasOverflow = items.length > 0;
+      this.toggleAttribute('has-overflow', this._hasOverflow);
     }
 
     /**
