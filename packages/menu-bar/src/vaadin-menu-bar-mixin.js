@@ -464,7 +464,6 @@ export const MenuBarMixin = (superClass) =>
       buttons.forEach((button) => {
         button.style.visibility = '';
         button.style.position = '';
-        button.style.width = '';
 
         // Teleport item component back from "overflow" sub-menu
         const item = button.item?.component;
@@ -602,12 +601,9 @@ export const MenuBarMixin = (superClass) =>
      */
     __collapseButtons(buttons, layout) {
       const collapsed = this.__getButtonsToCollapse(buttons, layout);
-      // Read button widths once outside of the loop to avoid repetitive layout
-      const widths = collapsed.map((btn) => getComputedStyle(btn).width);
 
       // Write the DOM state
-      collapsed.forEach((btn, i) => {
-        btn.style.width = widths[i];
+      collapsed.forEach((btn) => {
         btn.style.visibility = 'hidden';
         btn.style.position = 'absolute';
       });
