@@ -26,6 +26,10 @@ class MonthCalendar extends MonthCalendarMixin(ThemableMixin(PolylitMixin(LumoIn
     return monthCalendarStyles;
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   /** @protected */
   render() {
     const weekDayNames = this.__computeWeekDayNames(this.i18n, this.showWeekNumbers);

@@ -18,4 +18,4 @@ class TestElement extends I18nMixin<typeof HTMLElement, typeof DEFAULT_I18N>(HTM
 
 const element = new TestElement();
 
-assertType<typeof DEFAULT_I18N>(element.i18n);
+assertType<typeof DEFAULT_I18N | undefined>(element.i18n);

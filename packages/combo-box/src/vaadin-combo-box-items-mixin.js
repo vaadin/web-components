@@ -113,6 +113,18 @@ export const ComboBoxItemsMixin = (superClass) =>
         },
 
         /**
+         * Path for the id of the item. If `items` is an array of objects,
+         * the `itemIdPath` is used to compare and identify the same item
+         * in the selection and in `filteredItems` (items given by the
+         * `dataProvider` callback).
+         * @attr {string} item-id-path
+         */
+        itemIdPath: {
+          type: String,
+          sync: true,
+        },
+
+        /**
          * Controls which item is automatically set to be selected, for
          * example on Enter, when the typed filter only partially matches
          * its label. The item that will be selected is highlighted in the
@@ -160,6 +172,39 @@ export const ComboBoxItemsMixin = (superClass) =>
     }
 
     /**
+     * Requests an update for the content of items.
+     * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
+     *
+     * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+     */
+    requestContentUpdate() {
+      if (!this._scroller) {
+        return;
+      }
+
+      this._scroller.requestContentUpdate();
+
+      this._getItemElements().forEach((item) => {
+        item.requestContentUpdate();
+      });
+    }
+
+    /**
+     * Override method from `ComboBoxBaseMixin` to deselect
+     * dropdown item by requesting content update on clear.
+     * @param {Event} event
+     * @protected
+     * @override
+     */
+    _onClearButtonClick(event) {
+      super._onClearButtonClick(event);
+
+      if (this.opened) {
+        this.requestContentUpdate();
+      }
+    }
+
+    /**
      * Override an event listener from `ComboBoxBaseMixin` to handle
      * batched setting of both `opened` and `filter` properties.
      * @param {!Event} event
@@ -201,8 +246,8 @@ export const ComboBoxItemsMixin = (superClass) =>
     _onOpened() {
       super._onOpened();
 
-      if (this.filter && this._focusedIndex === -1) {
-        this._focusedIndex = this.__getItemIndexByFilter(this._dropdownItems);
+      if (this.filter && !this._hasHighlightedItem) {
+        this._highlightItemAt(this.__getItemIndexByFilter(this._dropdownItems));
       }
     }
 
@@ -232,6 +277,26 @@ export const ComboBoxItemsMixin = (superClass) =>
       return value;
     }
 
+    /**
+     * Override method from `ComboBoxBaseMixin` to compare object items
+     * by the value at `itemIdPath` instead of by identity.
+     * @param {unknown} item
+     * @param {unknown} other
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _isSameItem(item, other) {
+      if (this.itemIdPath && item && other) {
+        const id = get(this.itemIdPath, item);
+        if (id !== undefined) {
+          return id === get(this.itemIdPath, other);
+        }
+      }
+
+      return super._isSameItem(item, other);
+    }
+
     /** @private */
     _itemLabelPathChanged(itemLabelPath) {
       if (typeof itemLabelPath !== 'string') {
@@ -244,7 +309,7 @@ export const ComboBoxItemsMixin = (superClass) =>
       // Scroll to the top of the list whenever the filter changes.
       this._scrollIntoView(0);
 
-      this._focusedIndex = -1;
+      this._clearItemHighlight();
 
       if (this.items) {
         this.filteredItems = this._filterItems(this.items, filter);
@@ -276,12 +341,38 @@ export const ComboBoxItemsMixin = (superClass) =>
     }
 
     /**
-     * Provide items to be rendered in the dropdown.
-     * Override to provide actual implementation.
+     * Provide items to be rendered in the dropdown. Override this method
+     * to change the items to render, e.g. to show custom items.
+     *
+     * @param {Array} newItems
      * @protected
      */
-    _setDropdownItems() {
-      // To be implemented
+    _setDropdownItems(newItems) {
+      const highlightedItem = this._highlightedItem;
+      this._dropdownItems = newItems;
+
+      this.__restoreItemHighlight(highlightedItem);
+    }
+
+    /**
+     * Highlights the given item again if it is still among the dropdown
+     * items, which keeps the highlight in place when more items are
+     * loading. Otherwise the item matching the filter is highlighted, or none.
+     * @private
+     */
+    __restoreItemHighlight(item) {
+      const items = this._dropdownItems;
+
+      // When both the previously highlighted entry and the new entry at the
+      // same index are placeholders (e.g. the Flow connector mid-scroll
+      // re-pushing `_setDropdownItems`), preserve the highlight until
+      // a follow-up call lands a real item at that position.
+      if (item instanceof ComboBoxPlaceholder && items[this._highlightedItemIndex] instanceof ComboBoxPlaceholder) {
+        return;
+      }
+
+      const index = this.__getItemIndexByValue(items, this._getItemValue(item));
+      this._highlightItemAt(index > -1 ? index : this.__getItemIndexByFilter(items));
     }
 
     /** @private */

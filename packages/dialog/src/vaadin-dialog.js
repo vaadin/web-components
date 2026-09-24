@@ -105,6 +105,7 @@ export { DialogOverlay } from './vaadin-dialog-overlay.js';
  * |`--vaadin-dialog-title-font-size`           |
  * |`--vaadin-dialog-title-font-weight`         |
  * |`--vaadin-dialog-title-line-height`         |
+ * |`--vaadin-dialog-toolbar-gap`               |
  * |`--vaadin-overlay-backdrop-background`      |
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.

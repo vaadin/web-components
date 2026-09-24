@@ -4,6 +4,9 @@ import '../../chart-not-animated-styles.js';
 import '../../../src/vaadin-chart.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { cleanupExport, prepareExport } from '../../../src/helpers.js';
+import { BASE_ONLY_FIXTURES, defineScreenshotTests, defineSharedScreenshotTests } from '../chart.common.js';
+
+defineSharedScreenshotTests();
 
 describe('chart', () => {
   let element;
@@ -148,6 +151,19 @@ describe('chart', () => {
 
     it('styled mode', async () => {
       await visualDiff(exporting, 'styled-mode');
+    });
+  });
+
+  describe('base only', () => {
+    defineScreenshotTests(BASE_ONLY_FIXTURES);
+  });
+
+  // Only fixtures whose base styles resolve a colour through `light-dark()` or a
+  // Vaadin token get a dark baseline. Aura runs every scenario in both schemes
+  // (`yarn test:aura:dark`); Lumo has no dark mode in the visual runner.
+  describe('dark', () => {
+    defineScreenshotTests(['gauge', 'solidgauge', 'treemap', 'organization', 'exporting-menu', 'no-data'], {
+      dark: true,
     });
   });
 });

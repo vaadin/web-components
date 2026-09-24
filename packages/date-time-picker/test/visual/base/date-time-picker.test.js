@@ -46,6 +46,12 @@ describe('date-time-picker', () => {
       element.value = '2019-09-16T15:00';
       await visualDiff(div, 'value');
     });
+
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'label-aside');
+    });
   });
 
   describe('RTL', () => {

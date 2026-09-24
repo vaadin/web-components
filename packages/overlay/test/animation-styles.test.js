@@ -212,7 +212,7 @@ describe('animation properties', () => {
     });
   });
 
-  describe('fill during the animation delay', () => {
+  describe('fill outside the active animation', () => {
     beforeEach(async () => {
       overlay.setAttribute('themed-parts', '');
       overlay.style.setProperty('--vaadin-overlay-animation-delay', '2s');
@@ -236,6 +236,21 @@ describe('animation properties', () => {
       // is not declared in the keyframes, so the part keeps its own opacity and does not
       // jump to a different value before the closing animation starts.
       expect(getComputedStyle(overlay.$.overlay).opacity).to.equal('0.5');
+    });
+
+    it('should keep the closed value after the closing animation ends', () => {
+      overlay.opened = true;
+      overlay._flushAnimation('opening');
+      overlay.opened = false;
+
+      // Pause first so that reaching the end does not finish the animation and end the state
+      const animation = getAnimation(overlay.$.overlay, '--fade');
+      animation.pause();
+      animation.currentTime = 12000;
+
+      // The part must not return to its own opacity while the overlay is still closing
+      expect(overlay.hasAttribute('closing')).to.be.true;
+      expect(getComputedStyle(overlay.$.overlay).opacity).to.equal('0');
     });
   });
 });
@@ -262,79 +277,5 @@ describe('animation delay without duration', () => {
     overlay.opened = true;
     overlay.opened = false;
     expect(overlay.hasAttribute('closing')).to.be.false;
-  });
-});
-
-/**
- * The `[opening]` and `[closing]` attributes follow the animation on the host, which is defined
- * separately from the overlay animation properties and can therefore outlast the part animations.
- * These cover `animation-fill-mode: backwards`: filling forwards would pin the parts on their
- * last keyframe for the rest of that window, covering the styles set on them, and while closing
- * that keyframe is the closed one, so the overlay would vanish instead of fading out.
- */
-describe('theme animation on the host', () => {
-  let overlay;
-
-  // The styles the theme applies to the parts, see `fixtures/mock-animated-overlay.js`
-  const themeStyles = {
-    transform: 'matrix(0.707107, 0.707107, -0.707107, 0.707107, 0, 0)',
-    translate: '11px 12px',
-    scale: '0.75',
-    opacity: '0.5',
-  };
-
-  function expectThemeStyles(element) {
-    const style = getComputedStyle(element);
-    expect(style.transform).to.equal(themeStyles.transform);
-    expect(style.translate).to.equal(themeStyles.translate);
-    expect(style.scale).to.equal(themeStyles.scale);
-    expect(style.opacity).to.equal(themeStyles.opacity);
-  }
-
-  beforeEach(async () => {
-    overlay = fixtureSync('<mock-animated-overlay>overlay content</mock-animated-overlay>');
-    // A 5s animation on the host, while --vaadin-overlay-animation-duration stays 0s
-    overlay.setAttribute('long-animation', '');
-    overlay.setAttribute('themed-parts', '');
-    overlay.withBackdrop = true;
-    await nextRender();
-  });
-
-  afterEach(() => {
-    overlay._flushAnimation('opening');
-    overlay._flushAnimation('closing');
-    overlay.opened = false;
-  });
-
-  it('should keep the theme styles on the overlay part while opening', () => {
-    overlay.opened = true;
-
-    expect(overlay.hasAttribute('opening')).to.be.true;
-    expectThemeStyles(overlay.$.overlay);
-  });
-
-  it('should keep the theme styles on the backdrop while opening', () => {
-    overlay.opened = true;
-
-    expect(overlay.hasAttribute('opening')).to.be.true;
-    expectThemeStyles(overlay.$.backdrop);
-  });
-
-  it('should keep the theme styles on the overlay part while closing', () => {
-    overlay.opened = true;
-    overlay._flushAnimation('opening');
-    overlay.opened = false;
-
-    expect(overlay.hasAttribute('closing')).to.be.true;
-    expectThemeStyles(overlay.$.overlay);
-  });
-
-  it('should keep the theme styles on the backdrop while closing', () => {
-    overlay.opened = true;
-    overlay._flushAnimation('opening');
-    overlay.opened = false;
-
-    expect(overlay.hasAttribute('closing')).to.be.true;
-    expectThemeStyles(overlay.$.backdrop);
   });
 });

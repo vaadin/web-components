@@ -391,6 +391,57 @@ describe('keyboard navigation', () => {
       });
     });
 
+    describe('RTL mode', () => {
+      let nestedMenu;
+
+      before(() => {
+        document.documentElement.setAttribute('dir', 'rtl');
+      });
+
+      after(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      beforeEach(async () => {
+        menu.items = [
+          {
+            text: 'Menu Item 1',
+            children: [{ text: 'Menu Item 1 1', children: [{ text: 'Menu Item 1 1 1' }] }, { text: 'Menu Item 1 2' }],
+          },
+          { text: 'Menu Item 2' },
+        ];
+        await nextUpdate(menu);
+        buttons = menu._buttons;
+
+        buttons[0].focus();
+        await sendKeys({ press: 'ArrowDown' });
+        await nextRender();
+        nestedMenu = subMenu._subMenu;
+      });
+
+      it('should open nested submenu on item Arrow Left', async () => {
+        await sendKeys({ press: 'ArrowLeft' });
+        await nextRender();
+
+        expect(nestedMenu.opened).to.be.true;
+      });
+
+      it('should not open nested submenu on item Arrow Right', async () => {
+        await sendKeys({ press: 'ArrowRight' });
+        await nextRender();
+
+        expect(nestedMenu.opened).to.be.false;
+      });
+
+      it('should switch menubar button without items and focus it on item Arrow Right', async () => {
+        await sendKeys({ press: 'ArrowRight' });
+        await nextRender();
+
+        expect(subMenu.opened).to.be.false;
+        expect(document.activeElement).to.equal(buttons[1]);
+      });
+    });
+
     describe('tab navigation mode', () => {
       beforeEach(() => {
         menu.tabNavigation = true;

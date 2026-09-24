@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vaadin charts | exporting (local)</title>
+    <script type="module" src="../common.js"></script>
+    <script type="module">
+      // Import order replicates the application in
+      // https://github.com/vaadin/web-components/issues/11911: Vaadin Charts first, then the
+      // optional Highcharts module added by the application itself. Once it is loaded, every
+      // download menu item exports client-side through `exportChartLocal`.
+      import '@vaadin/charts';
+      import 'highcharts/es-modules/masters/modules/offline-exporting.src.js';
+      import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+      // Styles defined in the shadow root: the exported image must keep these colors
+      registerStyles(
+        'vaadin-chart',
+        css`
+          .highcharts-color-0 {
+            fill: #7b2ff7;
+            stroke: #7b2ff7;
+          }
+
+          .highcharts-color-1 {
+            fill: #00c2a8;
+            stroke: #00c2a8;
+          }
+        `,
+      );
+
+      const log = document.querySelector('#log');
+      const chart = document.querySelector('vaadin-chart');
+
+      for (const name of ['chart-before-export', 'chart-after-export']) {
+        chart.addEventListener(name, () => {
+          log.textContent += `${name}\n`;
+        });
+      }
+
+      window.addEventListener('error', (e) => {
+        log.textContent += `ERROR: ${e.message}\n`;
+      });
+
+      document.querySelector('#clear').addEventListener('click', () => {
+        log.textContent = '';
+      });
+
+      // Same call the application in #11911 makes from its own menu item
+      document.querySelector('#export-local').addEventListener('click', () => {
+        chart.configuration.exportChartLocal();
+      });
+    </script>
+    <style>
+      #log {
+        background: #f4f4f4;
+        border-radius: 4px;
+        min-height: 6em;
+        padding: 0.5em 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <theme-switcher></theme-switcher>
+
+    <h1>Client-side (local) exporting</h1>
+
+    <ol>
+      <li>
+        Press <em>Export locally</em>. It calls <code>exportChartLocal()</code> directly, the same way the reporting
+        application does from its own menu item. A PNG must download, keeping the purple and teal series colors defined
+        in the shadow root, and the log must show one <code>chart-before-export</code> / one
+        <code>chart-after-export</code>.
+      </li>
+      <li>
+        Open the chart's context menu (☰, top right) and pick <em>Download PNG image</em>. Same result: the download
+        happens in the browser, with no export server involved.
+      </li>
+    </ol>
+
+    <p>
+      Both steps fail on <code>main</code>: step 1 logs
+      <code>ERROR: Cannot read properties of undefined (reading 'apply')</code>, and step 2 silently posts to
+      <code>export.highcharts.com</code> instead of exporting in the browser — the broken wrapper also stops the module
+      from switching the menu items to their local variants.
+    </p>
+
+    <vaadin-chart style="height: 400px" title="Monthly sales" additional-options='{ "exporting": { "enabled": true } }'>
+      <vaadin-chart-series title="2025" values="[19, 12, 9, 24, 5]"></vaadin-chart-series>
+      <vaadin-chart-series title="2026" values="[14, 18, 21, 11, 17]"></vaadin-chart-series>
+    </vaadin-chart>
+
+    <p><button id="export-local">Export locally</button></p>
+
+    <h2>Export events <button id="clear">Clear</button></h2>
+    <pre id="log"></pre>
+  </body>
+</html>

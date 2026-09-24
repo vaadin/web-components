@@ -27,9 +27,9 @@
     /* prettier-ignore */
     --vaadin-infinite-scroller-item-height:
       calc(
-          var(--lumo-font-size-l) + var(--lumo-space-m)
-        + var(--lumo-font-size-xs) + var(--lumo-space-s)
-        + var(--lumo-size-m) * 6
+          var(--vaadin-date-picker-month-header-font-size, var(--lumo-font-size-l)) + var(--lumo-space-m)
+        + var(--vaadin-date-picker-weekday-font-size, var(--lumo-font-size-xs)) + var(--lumo-space-s)
+        + var(--vaadin-date-picker-date-height, var(--lumo-size-m)) * 6
         + var(--lumo-space-s)
       );
     --vaadin-infinite-scroller-buffer-offset: 10%;

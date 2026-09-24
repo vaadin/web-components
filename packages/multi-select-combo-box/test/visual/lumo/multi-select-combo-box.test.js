@@ -43,6 +43,12 @@ describe('multi-select-combo-box', () => {
     await visualDiff(div, 'label');
   });
 
+  it('label aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    await visualDiff(div, 'label-aside');
+  });
+
   it('placeholder', async () => {
     element.placeholder = 'Placeholder';
     await visualDiff(div, 'placeholder');
@@ -82,6 +88,12 @@ describe('multi-select-combo-box', () => {
 
     it('default', async () => {
       await visualDiff(div, 'selected');
+    });
+
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'selected-label-aside');
     });
 
     it('overflow 2', async () => {
@@ -130,6 +142,13 @@ describe('multi-select-combo-box', () => {
     it('auto expand max width', async () => {
       element.style.maxWidth = '250px';
       await visualDiff(div, 'auto-expand-max-width');
+    });
+
+    it('auto expand label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      element.style.maxWidth = '250px';
+      await visualDiff(div, 'auto-expand-label-aside');
     });
 
     it('auto expand visible height', async () => {
@@ -209,6 +228,33 @@ describe('multi-select-combo-box', () => {
       element.style.setProperty('--lumo-input-field-pointer-focus-visible', '1');
       await sendMouseToElement({ type: 'click', element });
       await visualDiff(div, 'pointer-focus-ring-enabled');
+    });
+  });
+
+  describe('select all', () => {
+    beforeEach(() => {
+      div.style.height = '250px';
+      element.selectAllButtonVisible = true;
+      element.selectedItems = ['Apple'];
+    });
+
+    it('select all', async () => {
+      element.inputElement.click();
+      await visualDiff(div, 'select-all');
+    });
+
+    it('select all focus-ring', async () => {
+      element.inputElement.focus();
+      element.inputElement.click();
+      await sendKeys({ press: 'ArrowDown' });
+      await visualDiff(div, 'select-all-focus-ring');
+    });
+
+    it('select all truncated label', async () => {
+      element.style.width = '200px';
+      element.i18n = { selectAll: 'Select all of the available items' };
+      element.inputElement.click();
+      await visualDiff(div, 'select-all-truncated-label');
     });
   });
 });

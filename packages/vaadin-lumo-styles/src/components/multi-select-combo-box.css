@@ -15,9 +15,21 @@
     pointer-events: auto;
   }
 
+  [hidden] {
+    display: none !important;
+  }
+
   #chips {
     display: flex;
     align-items: center;
+  }
+
+  /* Use a text baseline instead of the empty chips wrapper. */
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='input-field']::before {
+    content: '\2003' / '';
+    width: 0;
+    align-self: start;
+    line-height: var(--vaadin-input-field-height, var(--_input-height));
   }
 
   ::slotted(input) {
@@ -73,8 +85,8 @@
     padding-inline-end: 0;
   }
 
-  :host([auto-expand-vertically]) ::slotted([slot='input']) {
-    min-height: calc(var(--lumo-text-field-size, var(--lumo-size-m)) - 2 * var(--lumo-space-xs));
+  :host([auto-expand-vertically]) [part='input-field'] {
+    --vaadin-input-field-height: calc(var(--lumo-text-field-size, var(--lumo-size-m)) - 2 * var(--lumo-space-xs));
   }
 
   ::slotted([slot='chip']:not(:last-of-type)),
@@ -94,5 +106,9 @@
   :host([readonly][has-value]) [part~='toggle-button'] {
     color: var(--lumo-contrast-60pct);
     cursor: var(--lumo-clickable-cursor);
+  }
+
+  :host([has-select-all]) #overlay slot[name='overlay']::slotted(*) {
+    border-top: 1px solid var(--vaadin-border-color-secondary);
   }
 }

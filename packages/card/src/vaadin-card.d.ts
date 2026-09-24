@@ -46,6 +46,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * | `--vaadin-card-shadow`               |
  * | `--vaadin-card-subtitle-color`       |
  * | `--vaadin-card-subtitle-font-size`   |
+ * | `--vaadin-card-subtitle-font-weight` |
  * | `--vaadin-card-subtitle-line-height` |
  * | `--vaadin-card-title-color`          |
  * | `--vaadin-card-title-font-size`      |

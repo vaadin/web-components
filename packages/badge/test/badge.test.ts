@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../src/vaadin-badge.js';
 import type { Badge } from '../src/vaadin-badge.js';
 
@@ -57,6 +57,29 @@ describe('vaadin-badge', () => {
     it('should not set has-content attribute when content is only whitespace', async () => {
       badge.textContent = '   ';
       await nextUpdate(badge);
+      expect(badge.hasAttribute('has-content')).to.be.false;
+    });
+
+    it('should toggle has-content attribute on slotted text node data change', async () => {
+      const text = document.createTextNode('');
+      badge.appendChild(text);
+      await nextFrame();
+
+      text.data = 'Text';
+      await nextFrame();
+      expect(badge.hasAttribute('has-content')).to.be.true;
+
+      text.data = '';
+      await nextFrame();
+      expect(badge.hasAttribute('has-content')).to.be.false;
+    });
+
+    it('should not set has-content attribute when a slotted text node data is only whitespace', async () => {
+      const text = document.createTextNode('');
+      badge.appendChild(text);
+      await nextFrame();
+      text.data = '   ';
+      await nextFrame();
       expect(badge.hasAttribute('has-content')).to.be.false;
     });
   });

@@ -23,8 +23,6 @@ describe('vaadin-app-layout', () => {
       drawer.setAttribute('slot', 'drawer');
       drawer.textContent = 'Drawer Content';
       layout.appendChild(drawer);
-      await nextResize(layout);
-      await nextFrame();
       await aTimeout(0);
       await expect(layout).dom.to.equalSnapshot();
     });
@@ -34,8 +32,6 @@ describe('vaadin-app-layout', () => {
       navbar.setAttribute('slot', 'navbar');
       navbar.textContent = 'Navbar Content';
       layout.appendChild(navbar);
-      await nextResize(layout);
-      await nextFrame();
       await aTimeout(0);
       await expect(layout).dom.to.equalSnapshot();
     });

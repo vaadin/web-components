@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextResize, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
+import './chart-not-animated-styles.js';
 import './theme-styles.js';
 import '../src/vaadin-chart.js';
 
@@ -57,6 +58,66 @@ describe('vaadin-chart styling', () => {
     });
   });
 
+  describe('contrast colors', () => {
+    const TRANSPARENT = 'rgba(0, 0, 0, 0)';
+    const SURFACE = 'rgb(1, 2, 3)';
+    const OPAQUE_BG = 'rgb(51, 51, 51)';
+
+    let root;
+
+    // The properties are set before `chart-load`, as treemap points transition
+    // `stroke`: changing them afterwards would be read mid-transition.
+    async function chartWith(properties) {
+      const chart = fixtureSync(`
+        <vaadin-chart type="treemap" timeline>
+          <vaadin-chart-series values='[{ "name": "A", "value": 5 }, { "name": "B", "value": 3 }]'></vaadin-chart-series>
+        </vaadin-chart>
+      `);
+      Object.entries(properties).forEach(([name, value]) => chart.style.setProperty(name, value));
+      await oneEvent(chart, 'chart-load');
+      root = chart.shadowRoot;
+    }
+
+    describe('transparent canvas', () => {
+      beforeEach(async () => {
+        // Aura's configuration.
+        await chartWith({ '--vaadin-charts-background': 'transparent', '--vaadin-charts-surface': SURFACE });
+      });
+
+      it('should leave the chart canvas transparent', () => {
+        expect(getComputedStyle(root.querySelector('.highcharts-background')).fill).to.equal(TRANSPARENT);
+      });
+
+      it('should paint treemap point borders in the surface color', () => {
+        const point = root.querySelector('.highcharts-treemap-series .highcharts-point');
+        expect(getComputedStyle(point).stroke).to.equal(SURFACE);
+      });
+
+      it('should paint the pressed range selector label in the surface color', () => {
+        expect(getComputedStyle(root.querySelector('.highcharts-button-pressed text')).fill).to.equal(SURFACE);
+      });
+
+      it('should paint the navigator handle in the surface color', () => {
+        expect(getComputedStyle(root.querySelector('.highcharts-navigator-handle')).fill).to.equal(SURFACE);
+      });
+    });
+
+    describe('opaque canvas', () => {
+      beforeEach(async () => {
+        await chartWith({ '--vaadin-charts-background': OPAQUE_BG });
+      });
+
+      it('should paint treemap point borders in the chart background color', () => {
+        const point = root.querySelector('.highcharts-treemap-series .highcharts-point');
+        expect(getComputedStyle(point).stroke).to.equal(OPAQUE_BG);
+      });
+
+      it('should paint the navigator handle in the chart background color', () => {
+        expect(getComputedStyle(root.querySelector('.highcharts-navigator-handle')).fill).to.equal(OPAQUE_BG);
+      });
+    });
+  });
+
   describe('CSS custom properties', () => {
     let chart, configuration;
 
@@ -80,6 +141,58 @@ describe('vaadin-chart styling', () => {
       const rects = chart.$.chart.querySelectorAll('.highcharts-legend-item > rect');
       expect(rects).to.have.lengthOf(1);
       expect(getComputedStyle(rects[0]).fill).to.equal('rgb(0, 255, 0)');
+    });
+  });
+
+  describe('tooltip rendered outside the shadow root', () => {
+    // Resolved value of --_color-0, i.e. --vaadin-user-color-0.
+    const SERIES_COLOR = 'oklch(0.52 0.2 240)';
+
+    async function fixtureTooltip(outside, style = '') {
+      const chart = fixtureSync(`
+        <vaadin-chart type="column" tooltip style="${style}" additional-options='{ "tooltip": { "outside": ${outside} } }'>
+          <vaadin-chart-series title="Installation" values="[43934, 52503, 57177]"></vaadin-chart-series>
+          <vaadin-chart-series title="Manufacturing" values="[24916, 24064, 29742]"></vaadin-chart-series>
+        </vaadin-chart>
+      `);
+      await oneEvent(chart, 'chart-load');
+      chart.configuration.series[0].points[1].onMouseOver();
+      await nextFrame();
+
+      const root = outside ? document.querySelector('.highcharts-tooltip-container') : chart.shadowRoot;
+      return root.querySelector('.highcharts-tooltip');
+    }
+
+    function tooltipStyles(tooltip) {
+      // Scoping matters: unscoped, the inside lookup finds a series graphic.
+      const colored = tooltip.matches('.highcharts-color-0') ? tooltip : tooltip.querySelector('.highcharts-color-0');
+      return {
+        seriesColor: getComputedStyle(colored).fill,
+        // The series color must not bleed into the text, through the fill or the stroke.
+        textFill: getComputedStyle(tooltip.querySelector('text')).fill,
+        textStrokeWidth: getComputedStyle(tooltip.querySelector('text')).strokeWidth,
+        markerFill: getComputedStyle(tooltip.querySelector('tspan.highcharts-color-0')).fill,
+        strongFill: getComputedStyle(tooltip.querySelector('tspan.highcharts-strong')).fill,
+        fontWeight: getComputedStyle(tooltip.querySelector('.highcharts-strong')).fontWeight,
+      };
+    }
+
+    it('should style an outside tooltip like one inside the shadow root', async () => {
+      const outside = tooltipStyles(await fixtureTooltip(true));
+      // Unfixed, the outside tooltip falls back to the SVG defaults.
+      expect(outside.seriesColor).to.equal(SERIES_COLOR);
+      expect(outside.markerFill).to.equal(SERIES_COLOR);
+      expect(outside.fontWeight).to.equal('700');
+      expect(outside.textFill).to.not.equal(SERIES_COLOR);
+      expect(outside.textStrokeWidth).to.equal('0px');
+      expect(outside).to.deep.equal(tooltipStyles(await fixtureTooltip(false)));
+    });
+
+    // The container is in document.body, so it inherits no chart-scoped palette.
+    it('should apply a series color set on the chart to an outside tooltip', async () => {
+      const styles = tooltipStyles(await fixtureTooltip(true, '--vaadin-charts-color-0: rgb(1, 2, 3)'));
+      expect(styles.seriesColor).to.equal('rgb(1, 2, 3)');
+      expect(styles.markerFill).to.equal('rgb(1, 2, 3)');
     });
   });
 });

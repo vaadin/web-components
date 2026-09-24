@@ -27,4 +27,10 @@ describe('integer-field', () => {
     element.value = 5;
     await visualDiff(div, 'step-buttons-visible');
   });
+
+  it('label aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    await visualDiff(div, 'label-aside');
+  });
 });

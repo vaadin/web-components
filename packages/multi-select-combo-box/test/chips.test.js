@@ -2,7 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import '../src/vaadin-multi-select-combo-box.js';
-import { getChips } from './helpers.js';
+import { getChips, getFocusedItemIndex } from './helpers.js';
 
 describe('chips', () => {
   let comboBox, inputElement;
@@ -326,6 +326,16 @@ describe('chips', () => {
         expect(chips[2].hasAttribute('focused')).to.be.true;
       });
 
+      it('should mark last chip on Backspace as focused when a dropdown item is focused', async () => {
+        await sendKeys({ press: 'ArrowDown' });
+        await sendKeys({ press: 'ArrowDown' });
+        await sendKeys({ press: 'Backspace' });
+        const chips = getChips(comboBox);
+        expect(chips[1].hasAttribute('focused')).to.be.false;
+        expect(chips[2].hasAttribute('focused')).to.be.true;
+        expect(getFocusedItemIndex(comboBox)).to.equal(-1);
+      });
+
       it('should not mark last chip on Backspace as focused when readonly', async () => {
         comboBox.readonly = true;
         // Prevent navigating to about:blank in WebKit
@@ -452,7 +462,80 @@ describe('chips', () => {
             await sendKeys({ press: NEXT_KEY });
             expect(inputElement.selectionStart).to.equal(0);
           });
+
+          it(`should remove focused attribute from dropdown item on ${PREV_KEY}`, async () => {
+            await sendKeys({ press: 'ArrowDown' });
+            await sendKeys({ press: 'ArrowDown' });
+            expect(getFocusedItemIndex(comboBox)).to.equal(0);
+            await sendKeys({ press: PREV_KEY });
+            expect(getFocusedItemIndex(comboBox)).to.equal(-1);
+          });
+
+          it(`should restore the filter in the input on ${PREV_KEY} when a dropdown item is focused`, async () => {
+            await sendKeys({ press: 'ArrowDown' });
+            await sendKeys({ press: 'ArrowDown' });
+            expect(inputElement.value).to.equal('apple');
+            await sendKeys({ press: PREV_KEY });
+            expect(inputElement.value).to.equal('');
+          });
+
+          it(`should restore a non-empty filter in the input on ${PREV_KEY} when a dropdown item is focused`, async () => {
+            await sendKeys({ type: 'lem' });
+            await nextRender();
+            await sendKeys({ press: 'ArrowDown' });
+            expect(inputElement.value).to.equal('lemon');
+            await sendKeys({ press: PREV_KEY });
+            expect(inputElement.value).to.equal('lem');
+          });
+
+          it(`should move caret to the start on ${PREV_KEY} when a dropdown item is focused with non-empty filter`, async () => {
+            await sendKeys({ type: 'lem' });
+            await nextRender();
+            await sendKeys({ press: 'ArrowDown' });
+            await sendKeys({ press: PREV_KEY });
+            expect(inputElement.selectionStart).to.equal(0);
+            expect(inputElement.selectionEnd).to.equal(0);
+          });
+
+          it(`should mark previous chip on second ${PREV_KEY} when a dropdown item is focused with non-empty filter`, async () => {
+            await sendKeys({ type: 'lem' });
+            await nextRender();
+            await sendKeys({ press: 'ArrowDown' });
+            await sendKeys({ press: PREV_KEY });
+            await sendKeys({ press: PREV_KEY });
+            const chips = getChips(comboBox);
+            expect(chips[1].hasAttribute('focused')).to.be.true;
+            expect(chips[2].hasAttribute('focused')).to.be.false;
+          });
+
+          it(`should keep the dropdown item focused on ${NEXT_KEY} when no chip is focused`, async () => {
+            await sendKeys({ press: 'ArrowDown' });
+            await sendKeys({ press: 'ArrowDown' });
+            await sendKeys({ press: NEXT_KEY });
+            expect(getFocusedItemIndex(comboBox)).to.equal(0);
+            expect(inputElement.value).to.equal('apple');
+          });
         });
+      });
+    });
+
+    describe('updating items', () => {
+      it('should keep the focused attribute on the chip when items are updated', async () => {
+        await sendKeys({ press: 'Backspace' });
+        comboBox.items = [...comboBox.items, 'melon'];
+        await nextUpdate(comboBox);
+        const chips = getChips(comboBox);
+        expect(chips[1].hasAttribute('focused')).to.be.false;
+        expect(chips[2].hasAttribute('focused')).to.be.true;
+      });
+
+      it('should keep the focused attribute on the chip when filteredItems are updated', async () => {
+        await sendKeys({ press: 'Backspace' });
+        comboBox.filteredItems = [...comboBox.items];
+        await nextUpdate(comboBox);
+        const chips = getChips(comboBox);
+        expect(chips[1].hasAttribute('focused')).to.be.false;
+        expect(chips[2].hasAttribute('focused')).to.be.true;
       });
     });
   });

@@ -80,9 +80,6 @@
 
   #controls {
     min-height: var(--lumo-size-s);
-  }
-
-  :host([has-label]) #controls {
     padding: 0;
     border: 0;
   }

@@ -43,10 +43,12 @@ class MultiSelectComboBoxScroller extends ComboBoxScrollerMixin(PolylitMixin(Lit
   }
 
   /**
+   * Override method from `ComboBoxScrollerMixin` to check
+   * the item against the selected items of the owner.
    * @protected
    * @override
    */
-  _isItemSelected(item, _selectedItem, itemIdPath) {
+  _isItemSelected(item) {
     if (item instanceof ComboBoxPlaceholder) {
       return false;
     }
@@ -55,7 +57,7 @@ class MultiSelectComboBoxScroller extends ComboBoxScrollerMixin(PolylitMixin(Lit
       return false;
     }
 
-    return this.owner._findIndex(item, this.owner.selectedItems, itemIdPath) > -1;
+    return this.owner.selectedItems.some((selectedItem) => this.owner._isSameItem(item, selectedItem));
   }
 
   /**

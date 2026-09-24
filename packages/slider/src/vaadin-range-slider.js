@@ -14,7 +14,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
-import { field } from '@vaadin/field-base/src/styles/field-base-styles.js';
+import { field, fieldLabelAside } from '@vaadin/field-base/src/styles/field-base-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { sliderStyles } from './styles/vaadin-slider-base-styles.js';
@@ -63,49 +63,54 @@ import { SliderMixin } from './vaadin-slider-mixin.js';
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom CSS property                          |
- * :--------------------------------------------|
- * `--vaadin-field-default-width`               |
- * `--vaadin-input-field-error-color`           |
- * `--vaadin-input-field-error-font-size`       |
- * `--vaadin-input-field-error-font-weight`     |
- * `--vaadin-input-field-helper-color`          |
- * `--vaadin-input-field-helper-font-size`      |
- * `--vaadin-input-field-helper-font-weight`    |
- * `--vaadin-input-field-label-color`           |
- * `--vaadin-input-field-label-font-size`       |
- * `--vaadin-input-field-label-font-weight`     |
- * `--vaadin-input-field-required-indicator`    |
- * `--vaadin-slider-bubble-arrow-size`          |
- * `--vaadin-slider-bubble-background`          |
- * `--vaadin-slider-bubble-border-color`        |
- * `--vaadin-slider-bubble-border-radius`       |
- * `--vaadin-slider-bubble-border-width`        |
- * `--vaadin-slider-bubble-offset`              |
- * `--vaadin-slider-bubble-padding`             |
- * `--vaadin-slider-bubble-shadow`              |
- * `--vaadin-slider-bubble-text-color`          |
- * `--vaadin-slider-bubble-font-size`           |
- * `--vaadin-slider-bubble-font-weight`         |
- * `--vaadin-slider-bubble-line-height`         |
- * `--vaadin-slider-fill-background`            |
- * `--vaadin-slider-fill-border-color`          |
- * `--vaadin-slider-fill-border-width`          |
- * `--vaadin-slider-marks-color`                |
- * `--vaadin-slider-marks-font-size`            |
- * `--vaadin-slider-marks-font-weight`          |
- * `--vaadin-slider-thumb-border-color`         |
- * `--vaadin-slider-thumb-border-radius`        |
- * `--vaadin-slider-thumb-border-width`         |
- * `--vaadin-slider-thumb-cursor`               |
- * `--vaadin-slider-thumb-cursor-active`        |
- * `--vaadin-slider-thumb-height`               |
- * `--vaadin-slider-thumb-width`                |
- * `--vaadin-slider-track-background`           |
- * `--vaadin-slider-track-border-color`         |
- * `--vaadin-slider-track-border-radius`        |
- * `--vaadin-slider-track-border-width`         |
- * `--vaadin-slider-track-height`               |
+ * Custom CSS property                              |
+ * :------------------------------------------------|
+ * | `--vaadin-field-default-width`                 |
+ * | `--vaadin-input-field-error-color`             |
+ * | `--vaadin-input-field-error-font-size`         |
+ * | `--vaadin-input-field-error-font-weight`       |
+ * | `--vaadin-input-field-helper-color`            |
+ * | `--vaadin-input-field-helper-font-size`        |
+ * | `--vaadin-input-field-helper-font-weight`      |
+ * | `--vaadin-input-field-label-aside-gap`         |
+ * | `--vaadin-input-field-label-aside-text-align`  |
+ * | `--vaadin-input-field-label-aside-width`       |
+ * | `--vaadin-input-field-label-color`             |
+ * | `--vaadin-input-field-label-font-size`         |
+ * | `--vaadin-input-field-label-font-weight`       |
+ * | `--vaadin-input-field-required-indicator`      |
+ * | `--vaadin-slider-bubble-arrow-border-radius`   |
+ * | `--vaadin-slider-bubble-arrow-size`            |
+ * | `--vaadin-slider-bubble-background`            |
+ * | `--vaadin-slider-bubble-border-color`          |
+ * | `--vaadin-slider-bubble-border-radius`         |
+ * | `--vaadin-slider-bubble-border-width`          |
+ * | `--vaadin-slider-bubble-font-size`             |
+ * | `--vaadin-slider-bubble-font-weight`           |
+ * | `--vaadin-slider-bubble-line-height`           |
+ * | `--vaadin-slider-bubble-offset`                |
+ * | `--vaadin-slider-bubble-padding`               |
+ * | `--vaadin-slider-bubble-shadow`                |
+ * | `--vaadin-slider-bubble-text-color`            |
+ * | `--vaadin-slider-fill-background`              |
+ * | `--vaadin-slider-fill-border-color`            |
+ * | `--vaadin-slider-fill-border-width`            |
+ * | `--vaadin-slider-marks-color`                  |
+ * | `--vaadin-slider-marks-font-size`              |
+ * | `--vaadin-slider-marks-font-weight`            |
+ * | `--vaadin-slider-thumb-background`             |
+ * | `--vaadin-slider-thumb-border-color`           |
+ * | `--vaadin-slider-thumb-border-radius`          |
+ * | `--vaadin-slider-thumb-border-width`           |
+ * | `--vaadin-slider-thumb-cursor`                 |
+ * | `--vaadin-slider-thumb-cursor-active`          |
+ * | `--vaadin-slider-thumb-height`                 |
+ * | `--vaadin-slider-thumb-width`                  |
+ * | `--vaadin-slider-track-background`             |
+ * | `--vaadin-slider-track-border-color`           |
+ * | `--vaadin-slider-track-border-radius`          |
+ * | `--vaadin-slider-track-border-width`           |
+ * | `--vaadin-slider-track-height`                 |
  *
  * In order to style the slider bubble, use `<vaadin-slider-bubble>` shadow DOM parts:
  *
@@ -137,6 +142,7 @@ class RangeSlider extends FieldMixin(
   static get styles() {
     return [
       field,
+      fieldLabelAside,
       sliderStyles,
       css`
         :host([focus-ring][start-focused]) [part~='thumb-start'],

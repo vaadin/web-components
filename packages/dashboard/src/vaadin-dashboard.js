@@ -176,8 +176,10 @@ class Dashboard extends DashboardLayoutMixin(
 
   /**
    * The object used to localize this component. To change the default
-   * localization, replace this with an object that provides all properties, or
+   * localization, set this to an object that provides all properties, or
    * just the individual properties you want to change.
+   *
+   * When not set, defaults to `undefined`.
    *
    * The object has the following structure and default values:
    * ```js
@@ -197,7 +199,7 @@ class Dashboard extends DashboardLayoutMixin(
    *   moveBackward: 'Move Backward',
    * }
    * ```
-   * @type {!DashboardI18n}
+   * @type {DashboardI18n | undefined}
    */
   get i18n() {
     return super.i18n;
@@ -310,6 +312,10 @@ class Dashboard extends DashboardLayoutMixin(
 
     // Remove the unused wrappers
     wrappers.forEach((wrapper) => wrapper.remove());
+
+    // Flush the pending slot update so that content added to the wrappers is
+    // rendered and measurable immediately.
+    hostElement.performUpdate();
 
     requestAnimationFrame(() => {
       if (focusedWrapperWillBeRemoved) {

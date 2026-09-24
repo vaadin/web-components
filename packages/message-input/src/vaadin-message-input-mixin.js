@@ -3,17 +3,22 @@
  * Copyright (c) 2021 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { I18nMixin } from '@vaadin/component-base/src/i18n-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+import { ButtonController } from './button-controller.js';
 
 const DEFAULT_I18N = {
   send: 'Send',
   message: 'Message',
 };
 
+const CONTENT_SLOTS = ['header', 'prefix', 'footer'];
+
 export const MessageInputMixin = (superClass) =>
-  class MessageInputMixinClass extends I18nMixin(superClass) {
+  class MessageInputMixinClass extends I18nMixin(FocusMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -62,8 +67,10 @@ export const MessageInputMixin = (superClass) =>
 
     /**
      * The object used to localize this component. To change the default
-     * localization, replace this with an object that provides all properties, or
+     * localization, set this to an object that provides all properties, or
      * just the individual properties you want to change.
+     *
+     * When not set, defaults to `undefined`.
      *
      * The object has the following JSON structure and default values:
      * ```js
@@ -75,7 +82,7 @@ export const MessageInputMixin = (superClass) =>
      *   message: 'Message'
      * }
      * ```
-     * @type {!MessageInputI18n}
+     * @type {MessageInputI18n | undefined}
      */
     get i18n() {
       return super.i18n;
@@ -89,14 +96,12 @@ export const MessageInputMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this._buttonController = new SlotController(this, 'button', 'vaadin-message-input-button', {
-        initializer: (btn) => {
-          btn.addEventListener('click', () => {
-            this.__submit();
-          });
+      this._buttonController = new ButtonController(this, (btn) => {
+        btn.addEventListener('click', () => {
+          this.__submit();
+        });
 
-          this._button = btn;
-        },
+        this._button = btn;
       });
       this.addController(this._buttonController);
 
@@ -124,19 +129,61 @@ export const MessageInputMixin = (superClass) =>
 
       this._tooltipController = new TooltipController(this);
       this.addController(this._tooltipController);
+
+      this.__slotObserver = new SlotObserver(
+        this.shadowRoot,
+        () => {
+          CONTENT_SLOTS.forEach((name) => {
+            this.toggleAttribute(`has-${name}`, !!this.querySelector(`:scope > [slot="${name}"]`));
+          });
+        },
+        { syncInitial: true },
+      );
+
+      this.addEventListener('mousedown', (event) => {
+        // Focus the text area when clicking the space around it.
+        if (event.target === this) {
+          // Prevent mousedown to avoid blur and re-focus if already focused.
+          event.preventDefault();
+          this.focus({ focusVisible: false });
+        }
+      });
     }
 
+    /**
+     * Override method inherited from `FocusMixin` to forward focus
+     * to the text area, which is the focusable part of the component.
+     *
+     * @param {FocusOptions=} options
+     * @protected
+     * @override
+     */
     focus(options) {
-      if (this._textArea) {
+      if (this._textArea && !this.disabled) {
         this._textArea.focus(options);
+        super.focus(options);
       }
+    }
+
+    /**
+     * Override method inherited from `FocusMixin` to only set the `focused`
+     * attribute when the text area is focused.
+     *
+     * @param {FocusEvent} event
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldSetFocus(event) {
+      return event.composedPath().includes(this._textArea);
     }
 
     /** @private */
     __buttonPropsChanged(button, disabled, effectiveI18n, value) {
       if (button) {
         button.disabled = disabled || !value;
-        button.textContent = effectiveI18n.send;
+
+        this._buttonController.setLabel(effectiveI18n.send);
       }
     }
 

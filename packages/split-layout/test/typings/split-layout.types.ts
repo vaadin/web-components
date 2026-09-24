@@ -9,7 +9,7 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 const layout = document.createElement('vaadin-split-layout');
 
 // Properties
-assertType<SplitLayoutI18n>(layout.i18n);
+assertType<SplitLayoutI18n | undefined>(layout.i18n);
 assertType<'horizontal' | 'vertical'>(layout.orientation);
 
 // Mixins

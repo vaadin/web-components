@@ -24,6 +24,8 @@ import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { MultiSelectComboBox } from './vaadin-multi-select-combo-box.js';
+import type { MultiSelectComboBoxHighlightMixinClass } from './vaadin-multi-select-combo-box-highlight-mixin.js';
+import type { MultiSelectComboBoxSelectAllMixinClass } from './vaadin-multi-select-combo-box-select-all-mixin.js';
 
 export type MultiSelectComboBoxRenderer<TItem> = (
   root: HTMLElement,
@@ -37,6 +39,10 @@ export interface MultiSelectComboBoxI18n {
   selected?: string;
   deselected?: string;
   total?: string;
+  selectAll?: string;
+  deselectAll?: string;
+  selectFiltered?: string;
+  deselectFiltered?: string;
 }
 
 export declare function MultiSelectComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
@@ -56,7 +62,9 @@ export declare function MultiSelectComboBoxMixin<TItem, T extends Constructor<HT
   Constructor<InputMixinClass> &
   Constructor<KeyboardMixinClass> &
   Constructor<LabelMixinClass> &
+  Constructor<MultiSelectComboBoxHighlightMixinClass> &
   Constructor<MultiSelectComboBoxMixinClass<TItem>> &
+  Constructor<MultiSelectComboBoxSelectAllMixinClass> &
   Constructor<ResizeMixinClass> &
   Constructor<SlotStylesMixinClass> &
   Constructor<ValidateMixinClass> &
@@ -101,15 +109,11 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
   itemClassNameGenerator: (item: TItem) => string;
 
   /**
-   * Path for the id of the item, used to detect whether the item is selected.
-   * @attr {string} item-id-path
-   */
-  itemIdPath: string;
-
-  /**
    * The object used to localize this component. To change the default
-   * localization, replace this with an object that provides all properties, or
+   * localization, set this to an object that provides all properties, or
    * just the individual properties you want to change.
+   *
+   * When not set, defaults to `undefined`.
    *
    * The object has the following JSON structure and default values:
    * ```js
@@ -125,10 +129,20 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
    *   // Screen reader announcement of the selected items count.
    *   // {count} is replaced with the actual count of items.
    *   total: '{count} items selected',
+   *   // Text of the select all button when no filter is set.
+   *   selectAll: 'Select All',
+   *   // Text of the select all button when no filter is set
+   *   // and all items are selected.
+   *   deselectAll: 'Deselect All',
+   *   // Text of the select all button when a filter is set.
+   *   selectFiltered: 'Select Filtered',
+   *   // Text of the select all button when a filter is set
+   *   // and all items matching the filter are selected.
+   *   deselectFiltered: 'Deselect Filtered',
    * }
    * ```
    */
-  i18n: MultiSelectComboBoxI18n;
+  i18n: MultiSelectComboBoxI18n | undefined;
 
   /**
    * When true, filter string isn't cleared after selecting an item.
@@ -177,12 +191,4 @@ export declare class MultiSelectComboBoxMixinClass<TItem> {
    * Clears the selected items.
    */
   clear(): void;
-
-  /**
-   * Requests an update for the content of items.
-   * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
-   *
-   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
-   */
-  requestContentUpdate(): void;
 }

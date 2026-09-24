@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, listenOnce, nextFrame, nextResize } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, listenOnce, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import './grid-test-styles.js';
 import '../all-imports.js';
 import {
@@ -188,6 +188,34 @@ describe('scroll to index', () => {
           cb(new Array(grid.pageSize).fill().map((_, index) => `foo${index}`));
         }
       };
+    });
+  });
+
+  describe('empty grid', () => {
+    let grid;
+
+    beforeEach(() => {
+      grid = createGrid(500, 0);
+      grid.dataProvider = (params, callback) => {
+        setTimeout(() => {
+          if (grid.size === 0) {
+            callback([], 0);
+          } else {
+            infiniteDataProvider(params, callback);
+          }
+        });
+      };
+      flushGrid(grid);
+    });
+
+    it('should not scroll to previously requested index after items are added', async () => {
+      grid.scrollToIndex(100);
+      await aTimeout(0);
+
+      grid.size = 1000;
+      await aTimeout(0);
+
+      expect(getFirstVisibleItem(grid).index).to.equal(0);
     });
   });
 

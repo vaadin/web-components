@@ -80,6 +80,7 @@ export const overlayAnimationStyles = css`
 
   :host(:where([closing])) :is([part='overlay'], [part='backdrop']) {
     animation-direction: reverse;
+    animation-fill-mode: both;
   }
 
   @keyframes --no-op {

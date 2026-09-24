@@ -4,10 +4,6 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '../not-animated-styles.css';
 import '../../../src/vaadin-breadcrumbs-item.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.breadcrumbsComponent = true;
-
 describe('breadcrumbs-item', () => {
   let div, element;
 

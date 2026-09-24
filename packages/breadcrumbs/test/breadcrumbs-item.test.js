@@ -3,10 +3,6 @@ import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import '../vaadin-breadcrumbs-item.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.breadcrumbsComponent = true;
-
 describe('vaadin-breadcrumbs-item', () => {
   let item;
 

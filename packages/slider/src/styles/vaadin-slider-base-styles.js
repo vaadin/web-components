@@ -38,27 +38,36 @@ export const sliderStyles = css`
   }
 
   :host([min-max-visible]) {
-    grid-template:
-      'label' auto var(--_helper-above-field, 'helper' auto) 'baseline' 0 'input' 1fr 'marks' auto var(
-        --_helper-below-field,
-        'helper' auto
-      )
-      'error' auto / 100%;
+    --_rows-after-input: 'marks' auto;
+  }
+
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[min-max-visible]) {
+    --_rows-after-input: 'label marks' auto;
   }
 
   #controls {
     grid-area: input;
     display: inline-grid;
+    grid-template-rows: minmax(1lh, auto);
     align-items: center;
     width: var(--vaadin-field-default-width, 12em);
     max-width: 100%;
     min-width: 100%;
+    border-block: var(--vaadin-input-field-border-width, 1px) solid transparent;
+    padding-block: var(--vaadin-padding-block-container);
     --_track-width: calc(100% - var(--_thumb-width));
   }
 
-  :host([has-label]) #controls {
-    border-block: var(--vaadin-input-field-border-width, 1px) solid transparent;
-    padding-block: var(--vaadin-padding-block-container);
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) #controls {
+    align-self: baseline;
+  }
+
+  /* Baseline alignment guide */
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) #controls::before {
+    content: '\\2003' / '';
+    grid-row: 1;
+    grid-column: track-start / track-end;
+    pointer-events: none;
   }
 
   [part='track'] {

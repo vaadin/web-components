@@ -27,11 +27,11 @@ snapshots["vaadin-form-layout auto-responsive basic host columnWidth"] =
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic host columnWidth */
 
-snapshots["vaadin-form-layout auto-responsive basic host labelsAside"] = 
+snapshots["vaadin-form-layout auto-responsive basic host labelsAside in narrow container"] = 
 `<vaadin-form-layout
   auto-responsive=""
   labels-aside=""
-  style="--_min-columns: 1; --_max-columns: 1;"
+  style="--_min-columns: 1; --_max-columns: 1; width: calc(18em);"
 >
   <input placeholder="First name">
   <input placeholder="Last name">
@@ -39,7 +39,34 @@ snapshots["vaadin-form-layout auto-responsive basic host labelsAside"] =
   <input placeholder="Phone">
 </vaadin-form-layout>
 `;
-/* end snapshot vaadin-form-layout auto-responsive basic host labelsAside */
+/* end snapshot vaadin-form-layout auto-responsive basic host labelsAside in narrow container */
+
+snapshots["vaadin-form-layout auto-responsive basic host labelsAside in wide container"] = 
+`<vaadin-form-layout
+  auto-responsive=""
+  has-labels-aside=""
+  labels-aside=""
+  style="--_min-columns: 1; --_max-columns: 1; width: 40em;"
+>
+  <input
+    data-form-layout-has-labels-aside=""
+    placeholder="First name"
+  >
+  <input
+    data-form-layout-has-labels-aside=""
+    placeholder="Last name"
+  >
+  <input
+    data-form-layout-has-labels-aside=""
+    placeholder="Email"
+  >
+  <input
+    data-form-layout-has-labels-aside=""
+    placeholder="Phone"
+  >
+</vaadin-form-layout>
+`;
+/* end snapshot vaadin-form-layout auto-responsive basic host labelsAside in wide container */
 
 snapshots["vaadin-form-layout auto-responsive basic host expandColumns"] = 
 `<vaadin-form-layout
@@ -79,29 +106,6 @@ snapshots["vaadin-form-layout auto-responsive basic shadow default"] =
 </div>
 `;
 /* end snapshot vaadin-form-layout auto-responsive basic shadow default */
-
-snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in narrow container"] = 
-`<div
-  id="layout"
-  style="--_grid-rendered-column-count: 1;"
->
-  <slot id="slot">
-  </slot>
-</div>
-`;
-/* end snapshot vaadin-form-layout auto-responsive basic shadow labelsAside in narrow container */
-
-snapshots["vaadin-form-layout auto-responsive basic shadow labelsAside in wide container"] = 
-`<div
-  fits-labels-aside=""
-  id="layout"
-  style="--_grid-rendered-column-count: 1;"
->
-  <slot id="slot">
-  </slot>
-</div>
-`;
-/* end snapshot vaadin-form-layout auto-responsive basic shadow labelsAside in wide container */
 
 snapshots["vaadin-form-layout auto-responsive host autoRows default"] = 
 `<vaadin-form-layout

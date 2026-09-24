@@ -38,10 +38,12 @@ import { tabStyles } from './styles/vaadin-tab-base-styles.js';
  * :------------------------------|
  * | `--vaadin-tab-background`    |
  * | `--vaadin-tab-border-color`  |
+ * | `--vaadin-tab-border-radius` |
  * | `--vaadin-tab-border-width`  |
  * | `--vaadin-tab-font-size`     |
  * | `--vaadin-tab-font-weight`   |
  * | `--vaadin-tab-gap`           |
+ * | `--vaadin-tab-line-height`   |
  * | `--vaadin-tab-padding`       |
  * | `--vaadin-tab-text-color`    |
  *

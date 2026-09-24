@@ -77,8 +77,8 @@ yarn start:aura       # Start with Aura theme specifically
 ```bash
 yarn test                                            # Run tests for changed packages only
 yarn test --all                                      # Run tests for all packages
-yarn test --group combo-box                          # Run tests for specific component
-yarn test --group combo-box --glob="data-provider*"  # Run specific tests for specific component
+yarn test --group combo-box                          # Run tests for single package
+yarn test --group combo-box --glob="data-provider*"  # Run specific tests for single package
 yarn test:firefox                                    # Run tests in Firefox
 yarn test:webkit                                     # Run tests in WebKit
 ```

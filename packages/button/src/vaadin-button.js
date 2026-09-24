@@ -48,6 +48,7 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  * | `--vaadin-button-border-color`   |
  * | `--vaadin-button-border-radius`  |
  * | `--vaadin-button-border-width`   |
+ * | `--vaadin-button-font-family`    |
  * | `--vaadin-button-font-size`      |
  * | `--vaadin-button-font-weight`    |
  * | `--vaadin-button-gap`            |
@@ -103,7 +104,7 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolylitMixin(LumoInj
   /** @protected */
   render() {
     return html`
-      <div class="vaadin-button-container">
+      <div class="vaadin-button-container" role="presentation">
         <span part="prefix" aria-hidden="true">
           <slot name="prefix"></slot>
         </span>

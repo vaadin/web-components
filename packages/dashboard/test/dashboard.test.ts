@@ -61,6 +61,18 @@ describe('dashboard', () => {
     });
   });
 
+  it('should render slot for a new item before calling renderer', async () => {
+    const fontSizes: string[] = [];
+    dashboard.renderer = (root) => {
+      fontSizes.push(getComputedStyle(root).fontSize);
+    };
+    dashboard.items = [...dashboard.items, { id: '2' }];
+    await updateComplete(dashboard);
+
+    expect(fontSizes).to.have.lengthOf(3);
+    expect(fontSizes).to.not.include('');
+  });
+
   it('should render a new widget', async () => {
     dashboard.items = [...dashboard.items, { id: '2' }];
     await updateComplete(dashboard);
@@ -439,7 +451,7 @@ describe('dashboard', () => {
 
   describe('i18n', () => {
     it('should have default values', () => {
-      expect(dashboard.i18n).to.eql({
+      expect(dashboard.__effectiveI18n).to.eql({
         selectSection: 'Select section for editing',
         selectWidget: 'Select widget for editing',
         remove: 'Remove',

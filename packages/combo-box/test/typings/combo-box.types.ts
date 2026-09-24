@@ -20,6 +20,7 @@ import type { ComboBoxItem } from '../../src/vaadin-combo-box-item';
 import type { ComboBoxItemMixinClass, ComboBoxItemRenderer } from '../../src/vaadin-combo-box-item-mixin';
 import type { ComboBoxItemsMixinClass } from '../../src/vaadin-combo-box-items-mixin';
 import type { ComboBoxMixinClass } from '../../src/vaadin-combo-box-mixin';
+import { ComboBoxPlaceholder } from '../../src/vaadin-combo-box-placeholder';
 import type {
   ComboBox,
   ComboBoxChangeEvent,
@@ -163,3 +164,15 @@ assertType<() => void>(narrowedItem.requestContentUpdate);
 assertType<ComboBoxItemMixinClass<TestComboBoxItem, ComboBox>>(narrowedItem);
 assertType<DirMixinClass>(narrowedItem);
 assertType<ThemableMixinClass>(narrowedItem);
+
+// Placeholder
+// @ts-expect-error the placeholder is nominal, structurally matching values are not assignable
+assertType<ComboBoxPlaceholder>('not a placeholder');
+
+const itemOrPlaceholder = narrowedItem.item as TestComboBoxItem | ComboBoxPlaceholder;
+const isPlaceholder = (item: unknown): item is ComboBoxPlaceholder => item instanceof ComboBoxPlaceholder;
+if (isPlaceholder(itemOrPlaceholder)) {
+  assertType<ComboBoxPlaceholder>(itemOrPlaceholder);
+} else {
+  assertType<string>(itemOrPlaceholder.testProperty);
+}

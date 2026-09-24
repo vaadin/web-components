@@ -297,6 +297,49 @@ describe('selecting items', () => {
     });
   });
 
+  describe('item id path', () => {
+    beforeEach(() => {
+      comboBox.itemIdPath = 'db.key';
+      comboBox.itemLabelPath = 'label';
+      comboBox.items = [
+        { db: { key: '0' }, label: 'apple' },
+        { db: { key: '1' }, label: 'banana' },
+        { db: { key: '2' }, label: 'lemon' },
+      ];
+      comboBox.selectedItems = [{ db: { key: '1' }, label: 'banana' }];
+    });
+
+    it('should mark item as selected using a nested id path', () => {
+      comboBox.opened = true;
+      const items = getAllItems(comboBox);
+      expect(items[0].selected).to.be.false;
+      expect(items[1].selected).to.be.true;
+      expect(items[2].selected).to.be.false;
+    });
+
+    it('should deselect item matching by a nested id path on click', () => {
+      comboBox.opened = true;
+      getAllItems(comboBox)[1].click();
+      expect(comboBox.selectedItems).to.deep.equal([]);
+    });
+
+    it('should move item matching by a nested id path to the top', () => {
+      comboBox.selectedItemsOnTop = true;
+      comboBox.opened = true;
+      expectItems(['banana', 'apple', 'lemon']);
+    });
+
+    it('should compare primitive items by identity when id path is set', () => {
+      comboBox.items = ['apple', 'banana', 'lemon'];
+      comboBox.selectedItems = ['banana'];
+      comboBox.opened = true;
+      const items = getAllItems(comboBox);
+      expect(items[0].selected).to.be.false;
+      expect(items[1].selected).to.be.true;
+      expect(items[2].selected).to.be.false;
+    });
+  });
+
   describe('selected items on top', () => {
     beforeEach(() => {
       comboBox.selectedItemsOnTop = true;
@@ -459,6 +502,16 @@ describe('selecting items', () => {
         expectItems(['apple', 'banana', 'lemon', 'orange']);
       });
 
+      it('should update dropdown items after filter is cleared while opened', async () => {
+        comboBox.opened = true;
+        getFirstItem(comboBox).click();
+        expectItems(['lemon', 'orange', 'apple', 'banana']);
+        comboBox.inputElement.focus();
+        await sendKeys({ type: 'a' });
+        await sendKeys({ press: 'Backspace' });
+        expectItems(['orange', 'apple', 'banana', 'lemon']);
+      });
+
       it('should not include ghost items in the dropdown after clearing data provider cache', async () => {
         const allItems = ['apple', 'banana', 'lemon', 'orange'];
         comboBox.dataProvider = (_params, callback) => {
@@ -531,6 +584,35 @@ describe('selecting items', () => {
         expect(item.label).to.equal('item 5');
         expect(item.hasAttribute('selected')).to.be.false;
       });
+    });
+  });
+
+  describe('escape with focused item', () => {
+    beforeEach(() => {
+      comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
+    });
+
+    it('should restore the filter to the input on Escape', async () => {
+      await sendKeys({ type: 'an' });
+      await sendKeys({ press: 'ArrowDown' });
+      expect(inputElement.value).to.equal('banana');
+
+      await sendKeys({ press: 'Escape' });
+      expect(comboBox.opened).to.be.true;
+      expect(comboBox.filter).to.equal('an');
+      expect(inputElement.value).to.equal('an');
+    });
+
+    it('should restore the filter to the input on Escape when keepFilter is set', async () => {
+      comboBox.keepFilter = true;
+      await sendKeys({ type: 'an' });
+      await sendKeys({ press: 'ArrowDown' });
+      expect(inputElement.value).to.equal('banana');
+
+      await sendKeys({ press: 'Escape' });
+      expect(comboBox.opened).to.be.true;
+      expect(comboBox.filter).to.equal('an');
+      expect(inputElement.value).to.equal('an');
     });
   });
 

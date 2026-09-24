@@ -29,7 +29,7 @@
 
   #level-spacer {
     display: inline-block;
-    width: calc(var(--_level, '0') * var(--vaadin-grid-tree-toggle-level-offset));
+    width: calc(var(--_level, 0) * var(--vaadin-grid-tree-toggle-level-offset));
   }
 
   [part='toggle']::before {

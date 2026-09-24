@@ -257,6 +257,29 @@ const DEFAULT_I18N = {
  * `drag-disabled`       | Set to a row that isn't available for dragging                                                    | row
  * `drop-disabled`       | Set to a row that can't be dropped on top of                                                      | row
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                                |
+ * :--------------------------------------------------|
+ * | `--vaadin-grid-background`                       |
+ * | `--vaadin-grid-border-color`                     |
+ * | `--vaadin-grid-border-radius`                    |
+ * | `--vaadin-grid-border-width`                     |
+ * | `--vaadin-grid-cell-background-color`            |
+ * | `--vaadin-grid-cell-padding`                     |
+ * | `--vaadin-grid-cell-text-overflow`               |
+ * | `--vaadin-grid-column-border-width`              |
+ * | `--vaadin-grid-column-resize-handle-color`       |
+ * | `--vaadin-grid-header-font-size`                 |
+ * | `--vaadin-grid-header-font-weight`               |
+ * | `--vaadin-grid-header-text-color`                |
+ * | `--vaadin-grid-row-background-color`             |
+ * | `--vaadin-grid-row-border-width`                 |
+ * | `--vaadin-grid-row-highlight-background-color`   |
+ * | `--vaadin-grid-row-hover-background-color`       |
+ * | `--vaadin-grid-row-odd-background-color`         |
+ * | `--vaadin-grid-row-selected-background-color`    |
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @fires {CustomEvent} active-item-changed - Fired when the `activeItem` property changes.
@@ -293,8 +316,10 @@ class Grid extends GridMixin(I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(L
 
   /**
    * The object used to localize this component. To change the default
-   * localization, replace this with an object that provides all properties, or
+   * localization, set this to an object that provides all properties, or
    * just the individual properties you want to change.
+   *
+   * When not set, defaults to `undefined`.
    *
    * The object has the following JSON structure and default values:
    *
@@ -316,7 +341,7 @@ class Grid extends GridMixin(I18nMixin(ElementMixin(ThemableMixin(PolylitMixin(L
    * }
    * ```
    *
-   * @return {!GridI18n}
+   * @type {GridI18n | undefined}
    */
   get i18n() {
     return super.i18n;

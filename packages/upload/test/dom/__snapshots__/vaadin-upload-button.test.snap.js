@@ -69,7 +69,10 @@ snapshots["vaadin-upload-button host active"] =
 /* end snapshot vaadin-upload-button host active */
 
 snapshots["vaadin-upload-button shadow default"] = 
-`<div class="vaadin-button-container">
+`<div
+  class="vaadin-button-container"
+  role="presentation"
+>
   <span
     aria-hidden="true"
     part="prefix"

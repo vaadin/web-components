@@ -29,10 +29,6 @@ import { TimePicker } from '@vaadin/time-picker/src/vaadin-time-picker.js';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
-window.Vaadin ||= {};
-window.Vaadin.featureFlags ||= {};
-window.Vaadin.featureFlags.switchComponent = true;
-
 before(() => {
   Tooltip.setDefaultFocusDelay(0);
   Tooltip.setDefaultHoverDelay(0);

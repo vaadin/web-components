@@ -97,10 +97,6 @@ class BreadcrumbsItem extends FocusMixin(DisabledMixin(ElementMixin(PolylitMixin
     return breadcrumbsItemStyles;
   }
 
-  static get experimental() {
-    return 'breadcrumbsComponent';
-  }
-
   /** @protected */
   firstUpdated() {
     super.firstUpdated();

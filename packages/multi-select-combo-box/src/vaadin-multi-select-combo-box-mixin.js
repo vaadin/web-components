@@ -15,6 +15,8 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
+import { MultiSelectComboBoxHighlightMixin } from './vaadin-multi-select-combo-box-highlight-mixin.js';
+import { MultiSelectComboBoxSelectAllMixin } from './vaadin-multi-select-combo-box-select-all-mixin.js';
 
 const DEFAULT_I18N = {
   cleared: 'Selection cleared',
@@ -22,11 +24,21 @@ const DEFAULT_I18N = {
   selected: 'added to selection',
   deselected: 'removed from selection',
   total: '{count} items selected',
+  selectAll: 'Select All',
+  deselectAll: 'Deselect All',
+  selectFiltered: 'Select Filtered',
+  deselectFiltered: 'Deselect Filtered',
 };
 
 export const MultiSelectComboBoxMixin = (superClass) =>
   class MultiSelectComboBoxMixinClass extends I18nMixin(
-    ComboBoxFocusIndexMixin(ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass))))),
+    MultiSelectComboBoxSelectAllMixin(
+      MultiSelectComboBoxHighlightMixin(
+        ComboBoxFocusIndexMixin(
+          ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass)))),
+        ),
+      ),
+    ),
   ) {
     static get properties() {
       return {
@@ -76,15 +88,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
          */
         itemClassNameGenerator: {
           type: Object,
-          sync: true,
-        },
-
-        /**
-         * Path for the id of the item, used to detect whether the item is selected.
-         * @attr {string} item-id-path
-         */
-        itemIdPath: {
-          type: String,
           sync: true,
         },
 
@@ -187,13 +190,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
 
         /** @private */
-        _focusedChipIndex: {
-          type: Number,
-          value: -1,
-          observer: '_focusedChipIndexChanged',
-        },
-
-        /** @private */
         _lastFilter: {
           type: String,
           sync: true,
@@ -216,9 +212,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     static get observers() {
       return [
         '_selectedItemsChanged(selectedItems)',
-        '__openedOrItemsChanged(opened, _dropdownItems, loading, __keepOverlayOpened)',
         '__updateOverflowChip(_overflow, _overflowItems, disabled, readonly)',
-        '__updateScroller(opened, _dropdownItems, _focusedIndex, _theme)',
         '__updateTopGroup(selectedItemsOnTop, selectedItems, opened)',
       ];
     }
@@ -229,8 +223,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     /**
      * The object used to localize this component. To change the default
-     * localization, replace this with an object that provides all properties, or
+     * localization, set this to an object that provides all properties, or
      * just the individual properties you want to change.
+     *
+     * When not set, defaults to `undefined`.
      *
      * The object has the following JSON structure and default values:
      * ```js
@@ -246,9 +242,19 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      *   // Screen reader announcement of the selected items count.
      *   // {count} is replaced with the actual count of items.
      *   total: '{count} items selected',
+     *   // Text of the select all button when no filter is set.
+     *   selectAll: 'Select All',
+     *   // Text of the select all button when no filter is set
+     *   // and all items are selected.
+     *   deselectAll: 'Deselect All',
+     *   // Text of the select all button when a filter is set.
+     *   selectFiltered: 'Select Filtered',
+     *   // Text of the select all button when a filter is set
+     *   // and all items matching the filter are selected.
+     *   deselectFiltered: 'Deselect Filtered',
      * }
      * ```
-     * @type {!MultiSelectComboBoxI18n}
+     * @type {MultiSelectComboBoxI18n | undefined}
      */
     get i18n() {
       return super.i18n;
@@ -342,7 +348,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     updated(props) {
       super.updated(props);
 
-      ['loading', 'itemIdPath', 'itemClassNameGenerator', 'renderer'].forEach((prop) => {
+      ['loading', 'itemClassNameGenerator', 'renderer'].forEach((prop) => {
         if (props.has(prop)) {
           this._scroller[prop] = this[prop];
         }
@@ -363,6 +369,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       ];
       if (chipProps.some((prop) => props.has(prop))) {
         this.__updateChips();
+      }
+
+      if (props.has('_highlightState')) {
+        this.__updateChipHighlight(props.get('_highlightState'));
       }
 
       if (props.has('readonly')) {
@@ -398,8 +408,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      */
     clear() {
       this.__updateSelection([]);
-
-      announce(this.__effectiveI18n.cleared);
+      this.__announceSelection();
     }
 
     /** @private */
@@ -433,21 +442,18 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Requests an update for the content of items.
-     * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
-     *
-     * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+     * Override method from `ComboBoxBaseMixin` to only open the dropdown
+     * when clicking on the label or the input field.
+     * @param {Event} event
+     * @protected
+     * @override
      */
-    requestContentUpdate() {
-      if (!this._scroller) {
-        return;
+    _onHostClick(event) {
+      const path = event.composedPath();
+
+      if (path.includes(this._labelNode) || path.includes(this._inputField)) {
+        super._onHostClick(event);
       }
-
-      this._scroller.requestContentUpdate();
-
-      this._getItemElements().forEach((item) => {
-        item.requestContentUpdate();
-      });
     }
 
     /**
@@ -474,39 +480,15 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       }
     }
 
-    /** @private */
-    __updateScroller(opened, items, focusedIndex, theme) {
-      if (opened) {
-        this._scroller.style.maxHeight =
-          getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
-      }
-
-      const isClosing = this.hasAttribute('closing');
-
-      this._scroller.setProperties({
-        items: opened || isClosing ? items : [],
-        opened,
-        focusedIndex,
-        theme,
-      });
-    }
-
-    /** @private */
-    __openedOrItemsChanged(opened, items, loading, keepOverlayOpened) {
-      // Close the overlay if there are no items to display.
-      // See https://github.com/vaadin/vaadin-combo-box/pull/964
-      this._overlayOpened = opened && (keepOverlayOpened || loading || !!items?.length);
-    }
-
     /**
+     * Override method from `ComboBoxBaseMixin` to revert the input to the
+     * filter, as this component does not use `value` for the input text.
      * @protected
+     * @override
      */
-    _closeOrCommit() {
-      if (!this.opened) {
-        this._commitValue();
-      } else {
-        this.close();
-      }
+    _revertInputValue() {
+      this._inputElementValue = this.filter;
+      this._clearSelectionRange();
     }
 
     /**
@@ -521,7 +503,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // Do not commit focused item on not blur / outside click
       if (this._ignoreCommitValue) {
         this._inputElementValue = '';
-        this._focusedIndex = -1;
+        this._clearItemHighlight();
         this._ignoreCommitValue = false;
       } else {
         this.__commitUserInput();
@@ -535,14 +517,14 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     /** @private */
     __commitUserInput() {
-      if (this._focusedIndex > -1) {
-        const focusedItem = this._dropdownItems[this._focusedIndex];
+      if (this._hasHighlightedItem) {
+        const focusedItem = this._highlightedItem;
         // Do not unselect an already selected item when it was focused by
         // filtering, in which case the input value still equals the filter.
         if (
           this._lastFilter &&
           this._lastFilter === this._inputElementValue &&
-          this._findIndex(focusedItem, this.selectedItems, this.itemIdPath) !== -1
+          this._findIndex(focusedItem, this.selectedItems) !== -1
         ) {
           this.__clearInternalValue();
           return;
@@ -597,7 +579,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (blurred && document.hasFocus()) {
-        this._focusedChipIndex = -1;
+        this._clearChipHighlight();
         this._requestValidation();
       }
 
@@ -685,13 +667,13 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * @override
      */
     _hasValidInputValue() {
-      const hasInvalidOption = this._focusedIndex < 0 && this._inputElementValue !== '';
+      const hasInvalidOption = !this._hasHighlightedItem && this._inputElementValue !== '';
       return this.allowCustomValue || !hasInvalidOption;
     }
 
     /**
-     * Override method inherited from the combo-box
-     * to not request data provider when read-only.
+     * Override method from `ComboBoxDataProviderMixin` to not request
+     * data provider when read-only.
      *
      * @protected
      * @override
@@ -705,67 +687,34 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override combo-box method to group selected
-     * items at the top of the overlay.
+     * Override method from `ComboBoxItemsMixin` to show only selected
+     * items when read-only, and to group selected items at the top
+     * of the overlay when `selectedItemsOnTop` is set.
      *
      * @protected
      * @override
      */
     _setDropdownItems(items) {
+      super._setDropdownItems(this.__generateDropdownItems(items));
+    }
+
+    /** @private */
+    __generateDropdownItems(items) {
       if (this.readonly) {
-        this.__setDropdownItems(this.selectedItems);
-        return;
+        return this.selectedItems;
       }
 
       if (this.filter || !this.selectedItemsOnTop) {
-        this.__setDropdownItems(items);
-        return;
+        return items;
       }
 
       if (items?.length && this._topGroup?.length) {
         // Filter out items included to the top group.
-        const filteredItems = items.filter((item) => this._findIndex(item, this._topGroup, this.itemIdPath) === -1);
-
-        this.__setDropdownItems(this._topGroup.concat(filteredItems));
-        return;
+        const filteredItems = items.filter((item) => this._findIndex(item, this._topGroup) === -1);
+        return this._topGroup.concat(filteredItems);
       }
 
-      this.__setDropdownItems(items);
-    }
-
-    /** @private */
-    __setDropdownItems(newItems) {
-      const oldItems = this._dropdownItems;
-      this._dropdownItems = newItems;
-
-      // Store the currently focused item if any. The focused index preserves
-      // in the case when more filtered items are loading but it is reset
-      // when the user types in a filter query.
-      const focusedItem = oldItems ? oldItems[this._focusedIndex] : null;
-
-      // When both the previously-focused entry and the new entry at the
-      // same index are placeholders (e.g. the Flow connector mid-scroll
-      // re-pushing `__setDropdownItems`), preserve `_focusedIndex` until
-      // a follow-up call lands a real item at that position.
-      if (
-        oldItems &&
-        oldItems[this._focusedIndex] instanceof ComboBoxPlaceholder &&
-        newItems[this._focusedIndex] instanceof ComboBoxPlaceholder
-      ) {
-        return;
-      }
-
-      // Try to first set focus on the item that had been focused before `newItems` were updated
-      // if it is still present in the `newItems` array. Otherwise, set the focused index
-      // depending on the selected item or the filter query.
-      const focusedItemIndex = this.__getItemIndexByValue(newItems, this._getItemValue(focusedItem));
-      if (focusedItemIndex > -1) {
-        this._focusedIndex = focusedItemIndex;
-      } else {
-        // When the user filled in something that is different from the current value = filtering is enabled,
-        // set the focused index to the item that matches the filter query.
-        this._focusedIndex = this.__getItemIndexByFilter(newItems);
-      }
+      return items;
     }
 
     /** @private */
@@ -774,17 +723,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /** @private */
-    _findIndex(item, selectedItems, itemIdPath) {
-      if (itemIdPath && item) {
-        for (let index = 0; index < selectedItems.length; index++) {
-          if (selectedItems[index] && selectedItems[index][itemIdPath] === item[itemIdPath]) {
-            return index;
-          }
-        }
-        return -1;
-      }
-
-      return selectedItems.indexOf(item);
+    _findIndex(item, items) {
+      return items.findIndex((other) => this._isSameItem(item, other));
     }
 
     /**
@@ -817,7 +757,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     /** @private */
     __removeItem(item) {
       const itemsCopy = [...this.selectedItems];
-      itemsCopy.splice(itemsCopy.indexOf(item), 1);
+      itemsCopy.splice(this._findIndex(item, itemsCopy), 1);
       this.__updateSelection(itemsCopy);
       const itemLabel = this._getItemLabel(item);
       this.__announceItem(itemLabel, false, itemsCopy.length);
@@ -827,7 +767,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     __selectItem(item) {
       const itemsCopy = [...this.selectedItems];
 
-      const index = this._findIndex(item, itemsCopy, this.itemIdPath);
+      const index = this._findIndex(item, itemsCopy);
       const itemLabel = this._getItemLabel(item);
 
       let isSelected = false;
@@ -863,6 +803,16 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     }
 
+    /**
+     * Announces the number of selected items to screen readers.
+     * @private
+     */
+    __announceSelection() {
+      const { cleared, total } = this.__effectiveI18n;
+      const count = this.selectedItems.length;
+      announce(count === 0 ? cleared : total.replace('{count}', count));
+    }
+
     /** @private */
     __updateTopGroup(selectedItemsOnTop, selectedItems, opened) {
       if (!selectedItemsOnTop) {
@@ -881,7 +831,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       return (
         this._topGroup &&
         this._topGroup.some((item) => {
-          const selectedItem = this.selectedItems[this._findIndex(item, this.selectedItems, this.itemIdPath)];
+          const selectedItem = this.selectedItems[this._findIndex(item, this.selectedItems)];
           return selectedItem && item !== selectedItem;
         })
       );
@@ -1076,19 +1026,16 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method from `ComboBoxBaseMixin` to deselect
-     * dropdown item by requesting content update on clear.
+     * Override method from `ComboBoxItemsMixin` to stop
+     * propagation of the clear button click event.
      * @param {Event} event
      * @protected
+     * @override
      */
     _onClearButtonClick(event) {
       event.stopPropagation();
 
       super._onClearButtonClick(event);
-
-      if (this.opened) {
-        this.requestContentUpdate();
-      }
     }
 
     /**
@@ -1154,11 +1101,13 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
         if (this.readonly) {
           this.close();
+        } else if (this._isSelectAllHighlighted) {
+          this._toggleSelectAll();
         } else if (this._hasValidInputValue()) {
           // Keep selected item focused after committing on Enter.
-          const focusedItem = this._dropdownItems[this._focusedIndex];
+          const focusedItem = this._highlightedItem;
           this._commitValue();
-          this._focusedIndex = this._dropdownItems.indexOf(focusedItem);
+          this._highlightItem(focusedItem);
         }
 
         return;
@@ -1168,8 +1117,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from the combo-box
-     * to not update focused item when readonly.
+     * Override method from `ComboBoxBaseMixin` to not update focused
+     * item when readonly.
      * @protected
      * @override
      */
@@ -1182,8 +1131,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from the combo-box
-     * to not update focused item when readonly.
+     * Override method from `ComboBoxBaseMixin` to not update focused
+     * item when readonly.
      * @protected
      * @override
      */
@@ -1204,120 +1153,80 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     _onKeyDown(event) {
       super._onKeyDown(event);
 
-      const chips = this._chips;
-
-      if (!this.readonly && chips.length > 0) {
+      if (!this.readonly && this._chips.length > 0) {
         switch (event.key) {
           case 'Backspace':
-            this._onBackSpace(chips);
+            this._onBackSpace();
             break;
           case 'ArrowLeft':
-            this._onArrowLeft(chips, event);
-            break;
           case 'ArrowRight':
-            this._onArrowRight(chips, event);
+            this._onChipArrow(event);
             break;
           default:
-            this._focusedChipIndex = -1;
+            this._clearChipHighlight();
             break;
         }
       }
     }
 
     /** @private */
-    _onArrowLeft(chips, event) {
+    _onChipArrow(event) {
       if (this.inputElement.selectionStart !== 0) {
         return;
       }
 
-      const idx = this._focusedChipIndex;
-      if (idx !== -1) {
+      if (this._hasHighlightedChip) {
         event.preventDefault();
       }
-      let newIdx;
 
-      if (!this.__isRTL) {
-        if (idx === -1) {
-          // Focus last chip
-          newIdx = chips.length - 1;
-        } else if (idx > 0) {
-          // Focus prev chip
-          newIdx = idx - 1;
-        }
-      } else if (idx === chips.length - 1) {
-        // Blur last chip
-        newIdx = -1;
-      } else if (idx > -1) {
-        // Focus next chip
-        newIdx = idx + 1;
-      }
+      const hadHighlightedItem = this._hasHighlightedItem;
 
-      if (newIdx !== undefined) {
-        this._focusedChipIndex = newIdx;
-      }
-    }
-
-    /** @private */
-    _onArrowRight(chips, event) {
-      if (this.inputElement.selectionStart !== 0) {
-        return;
-      }
-
-      const idx = this._focusedChipIndex;
-      if (idx !== -1) {
-        event.preventDefault();
-      }
-      let newIdx;
-
-      if (this.__isRTL) {
-        if (idx === -1) {
-          // Focus last chip
-          newIdx = chips.length - 1;
-        } else if (idx > 0) {
-          // Focus prev chip
-          newIdx = idx - 1;
-        }
-      } else if (idx === chips.length - 1) {
-        // Blur last chip
-        newIdx = -1;
-      } else if (idx > -1) {
-        // Focus next chip
-        newIdx = idx + 1;
-      }
-
-      if (newIdx !== undefined) {
-        this._focusedChipIndex = newIdx;
-      }
-    }
-
-    /** @private */
-    _onBackSpace(chips) {
-      if (this.inputElement.selectionStart !== 0) {
-        return;
-      }
-
-      const idx = this._focusedChipIndex;
-      if (idx === -1) {
-        this._focusedChipIndex = chips.length - 1;
+      const isPrevKey = this.__isRTL ? event.key === 'ArrowRight' : event.key === 'ArrowLeft';
+      if (isPrevKey) {
+        this._highlightPrevChip();
       } else {
-        this.__removeItem(chips[idx].item);
-        this._focusedChipIndex = -1;
+        this._highlightNextChip();
+      }
+
+      // The label of the highlighted item was prefilled into the input, so
+      // restore the filter once the highlight moved from the item to a chip.
+      // Place the caret at the start of the input, so that the next arrow
+      // key press continues to navigate the chips instead of moving the caret.
+      if (hadHighlightedItem && this._hasHighlightedChip) {
+        event.preventDefault();
+        this._inputElementValue = this.filter;
+        this._setSelectionRange(0, 0);
       }
     }
 
     /** @private */
-    _focusedChipIndexChanged(focusedIndex, oldFocusedIndex) {
-      if (focusedIndex > -1 || oldFocusedIndex > -1) {
-        const chips = this._chips;
-        chips.forEach((chip, index) => {
-          chip.toggleAttribute('focused', index === focusedIndex);
-        });
+    _onBackSpace() {
+      if (this.inputElement.selectionStart !== 0) {
+        return;
+      }
 
-        // Announce focused chip
-        if (focusedIndex > -1) {
-          const item = chips[focusedIndex].item;
-          const itemLabel = this._getItemLabel(item);
-          announce(`${itemLabel} ${this.__effectiveI18n.focused}`);
+      const chip = this._highlightedChip;
+      if (chip) {
+        this.__removeItem(chip.item);
+        this._clearChipHighlight();
+      } else {
+        this._highlightLastChip();
+      }
+    }
+
+    /** @private */
+    __updateChipHighlight(oldState) {
+      const chips = this._chips;
+
+      if (oldState?.type === 'chip') {
+        chips[oldState.index]?.removeAttribute('focused');
+      }
+
+      if (this._hasHighlightedChip) {
+        const chip = chips[this._highlightState.index];
+        if (chip) {
+          chip.setAttribute('focused', '');
+          announce(`${this._getItemLabel(chip.item)} ${this.__effectiveI18n.focused}`);
         }
       }
     }

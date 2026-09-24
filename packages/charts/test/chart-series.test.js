@@ -395,4 +395,32 @@ describe('vaadin-chart-series', () => {
       expect(legend.classList.contains(HIDDEN)).to.be.true;
     });
   });
+  // `dataSorting` moved out of the Highcharts core into `modules/data-sorting.js`
+  // in 13.x, which `vaadin-chart-mixin.js` does not import. A missing module fails
+  // silently: the option is ignored and the points keep their input order.
+  describe('dataSorting', () => {
+    let chart;
+
+    beforeEach(async () => {
+      chart = fixtureSync(`
+        <vaadin-chart type="column">
+          <vaadin-chart-series
+            values='[{ "name": "A", "y": 3 }, { "name": "B", "y": 1 }, { "name": "C", "y": 2 }]'
+            additional-options='{ "dataSorting": { "enabled": true, "sortKey": "y" } }'
+          ></vaadin-chart-series>
+        </vaadin-chart>
+      `);
+      await oneEvent(chart, 'chart-load');
+    });
+
+    it('should order the points by the sort key rather than by input order', () => {
+      const names = chart.configuration.series[0].points
+        .slice()
+        .sort((a, b) => a.x - b.x)
+        .map((point) => point.name);
+
+      // Input order is A, B, C; sorted by descending `y` it is A(3), C(2), B(1).
+      expect(names).to.eql(['A', 'C', 'B']);
+    });
+  });
 });

@@ -25,6 +25,7 @@ import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.j
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { MultiSelectComboBoxMixinClass } from './vaadin-multi-select-combo-box-mixin.js';
+import type { MultiSelectComboBoxSelectAllMixinClass } from './vaadin-multi-select-combo-box-select-all-mixin.js';
 
 export { MultiSelectComboBoxI18n, MultiSelectComboBoxRenderer } from './vaadin-multi-select-combo-box-mixin.js';
 
@@ -123,6 +124,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `has-label`            | Set when the element has a label
  * `has-helper`           | Set when the element has helper text or slot
  * `has-error-message`    | Set when the element has an error message
+ * `has-select-all`       | Set when the select all button is shown in the dropdown
  * `has-tooltip`          | Set when the element has a slotted tooltip
  * `invalid`              | Set when the element is invalid
  * `focused`              | Set when the element is focused
@@ -133,12 +135,62 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  *
  * The following custom CSS properties are available for styling:
  *
- * Custom property                                      | Description                | Default
- * -----------------------------------------------------|----------------------------|--------
- * `--vaadin-field-default-width`                       | Default width of the field | `12em`
- * `--vaadin-multi-select-combo-box-overlay-width`      | Width of the overlay       | `auto`
- * `--vaadin-multi-select-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
- * `--vaadin-multi-select-combo-box-input-min-width`    | Min width of the input     | `4em`
+ * Custom CSS property                                     |
+ * :-------------------------------------------------------|
+ * | `--vaadin-chip-background`                            |
+ * | `--vaadin-chip-border-color`                          |
+ * | `--vaadin-chip-border-radius`                         |
+ * | `--vaadin-chip-border-width`                          |
+ * | `--vaadin-chip-font-size`                             |
+ * | `--vaadin-chip-font-weight`                           |
+ * | `--vaadin-chip-gap`                                   |
+ * | `--vaadin-chip-height`                                |
+ * | `--vaadin-chip-padding`                               |
+ * | `--vaadin-chip-remove-button-text-color`              |
+ * | `--vaadin-chip-text-color`                            |
+ * | `--vaadin-field-default-width`                        |
+ * | `--vaadin-input-field-background`                     |
+ * | `--vaadin-input-field-border-color`                   |
+ * | `--vaadin-input-field-border-radius`                  |
+ * | `--vaadin-input-field-border-width`                   |
+ * | `--vaadin-input-field-bottom-end-radius`              |
+ * | `--vaadin-input-field-bottom-start-radius`            |
+ * | `--vaadin-input-field-button-text-color`              |
+ * | `--vaadin-input-field-container-gap`                  |
+ * | `--vaadin-input-field-disabled-background`            |
+ * | `--vaadin-input-field-disabled-text-color`            |
+ * | `--vaadin-input-field-error-color`                    |
+ * | `--vaadin-input-field-error-font-size`                |
+ * | `--vaadin-input-field-error-font-weight`              |
+ * | `--vaadin-input-field-error-line-height`              |
+ * | `--vaadin-input-field-gap`                            |
+ * | `--vaadin-input-field-helper-color`                   |
+ * | `--vaadin-input-field-helper-font-size`               |
+ * | `--vaadin-input-field-helper-font-weight`             |
+ * | `--vaadin-input-field-helper-line-height`             |
+ * | `--vaadin-input-field-label-aside-gap`                |
+ * | `--vaadin-input-field-label-aside-text-align`         |
+ * | `--vaadin-input-field-label-aside-width`              |
+ * | `--vaadin-input-field-label-color`                    |
+ * | `--vaadin-input-field-label-font-size`                |
+ * | `--vaadin-input-field-label-font-weight`              |
+ * | `--vaadin-input-field-label-line-height`              |
+ * | `--vaadin-input-field-padding`                        |
+ * | `--vaadin-input-field-placeholder-color`              |
+ * | `--vaadin-input-field-required-indicator`             |
+ * | `--vaadin-input-field-required-indicator-color`       |
+ * | `--vaadin-input-field-top-end-radius`                 |
+ * | `--vaadin-input-field-top-start-radius`               |
+ * | `--vaadin-input-field-value-color`                    |
+ * | `--vaadin-input-field-value-font-size`                |
+ * | `--vaadin-input-field-value-font-weight`              |
+ * | `--vaadin-input-field-value-line-height`              |
+ * | `--vaadin-item-overlay-padding`                       |
+ * | `--vaadin-multi-select-combo-box-chip-min-width`      |
+ * | `--vaadin-multi-select-combo-box-chips-gap`           |
+ * | `--vaadin-multi-select-combo-box-input-min-width`     |
+ * | `--vaadin-multi-select-combo-box-overlay-max-height`  |
+ * | `--vaadin-multi-select-combo-box-overlay-width`       |
  *
  * ### Internal components
  *
@@ -147,6 +199,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  *
  * - `<vaadin-multi-select-combo-box-chip>`
  * - `<vaadin-multi-select-combo-box-item>` - has the same API as `<vaadin-item>`.
+ * - `<vaadin-multi-select-combo-box-select-all-button>`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -191,6 +244,7 @@ interface MultiSelectComboBox<TItem = ComboBoxDefaultItem>
     DelegateStateMixinClass,
     DelegateFocusMixinClass,
     MultiSelectComboBoxMixinClass<TItem>,
+    MultiSelectComboBoxSelectAllMixinClass,
     ResizeMixinClass,
     ThemableMixinClass,
     ThemePropertyMixinClass,

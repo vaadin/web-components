@@ -5,10 +5,6 @@ import '../not-animated-styles.css';
 import '../../../src/vaadin-switch.js';
 import type { Switch } from '../../../src/vaadin-switch.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.switchComponent = true;
-
 describe('switch', () => {
   let div: HTMLDivElement;
   let element: Switch;
@@ -151,6 +147,18 @@ describe('switch', () => {
     it('checked', async () => {
       element.checked = true;
       await visualDiff(div, 'theme-icon-checked');
+    });
+  });
+
+  describe('form layout labels aside', () => {
+    beforeEach(() => {
+      element.setAttribute('data-form-layout-has-labels-aside', '');
+      element.style.setProperty('--vaadin-form-layout-label-width', '8em');
+      element.style.setProperty('--vaadin-form-layout-label-spacing', '1em');
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'form-layout-labels-aside');
     });
   });
 });

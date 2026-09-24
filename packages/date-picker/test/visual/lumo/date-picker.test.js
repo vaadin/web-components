@@ -59,6 +59,12 @@ describe('date-picker', () => {
         await visualDiff(div, `${dir}-label`);
       });
 
+      it('label aside', async () => {
+        element.setAttribute('theme', 'label-aside');
+        element.label = 'Label';
+        await visualDiff(div, `${dir}-label-aside`);
+      });
+
       it('placeholder', async () => {
         element.placeholder = 'Placeholder';
         await visualDiff(div, `${dir}-placeholder`);
@@ -122,6 +128,14 @@ describe('date-picker', () => {
           element.dateMetadataProvider = () => new Promise(() => {});
           await openOverlay();
           await visualDiff(div, `${dir}-date-metadata-loading`);
+        });
+
+        it('disabled dates', async () => {
+          element.value = '2000-01-01';
+          element.min = '2000-01-01';
+          element.max = '2000-01-20';
+          await openOverlay();
+          await visualDiff(div, `${dir}-disabled-dates`);
         });
 
         it('week numbers', async () => {

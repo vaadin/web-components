@@ -466,5 +466,14 @@ describe('row details', () => {
       await nextFrame();
       expect(bodyRow.offsetHeight).to.equal(detailsRowHeight + 50);
     });
+
+    it('should not throw when columns change after renderer is cleared', async () => {
+      grid.detailsOpenedItems = [...grid.items];
+      grid.rowDetailsRenderer = null;
+      grid.querySelector('vaadin-grid-column').hidden = true;
+      flushGrid(grid);
+      await nextFrame();
+      expect(grid.shadowRoot.querySelector('[part~="details-cell"]')).to.be.null;
+    });
   });
 });

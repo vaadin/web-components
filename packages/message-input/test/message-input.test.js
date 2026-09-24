@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
-import { enterKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { resetMouse, sendMouse } from '@vaadin/test-runner-commands';
+import { enterKeyDown, fixtureSync, mousedown, nextFrame, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-message-input.js';
 
@@ -90,6 +91,19 @@ describe('message-input', () => {
       button.click();
       expect(spy.called).to.be.true;
     });
+
+    it('should fire a submit event on custom button click', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      button.replaceWith(customButton);
+      await nextFrame();
+
+      const spy = sinon.spy();
+      messageInput.addEventListener('submit', spy);
+      messageInput.value = 'foo';
+      customButton.click();
+      expect(spy.calledOnce).to.be.true;
+    });
   });
 
   describe('i18n', () => {
@@ -113,6 +127,68 @@ describe('message-input', () => {
       messageInput.i18n = { send: 'Lähetä' };
       expect(button.innerText).to.be.equal('Lähetä');
       expect(textArea.placeholder).to.be.equal('Message');
+    });
+
+    it('should set aria-label on a custom button with only aria-hidden text', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      customButton.innerHTML = '<span aria-hidden="true">↑</span>';
+      button.replaceWith(customButton);
+      messageInput.i18n = { send: 'Lähetä' };
+      await nextFrame();
+
+      expect(customButton.getAttribute('aria-label')).to.equal('Lähetä');
+    });
+
+    it('should set aria-label on a custom button with only comment nodes', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      customButton.innerHTML = '<!-- lit marker --><svg aria-hidden="true"><path d="M0 0h1v1H0z"></path></svg>';
+      button.replaceWith(customButton);
+      messageInput.i18n = { send: 'Lähetä' };
+      await nextFrame();
+
+      expect(customButton.getAttribute('aria-label')).to.equal('Lähetä');
+    });
+
+    it('should set aria-label on a custom button with only named slot text', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      customButton.innerHTML = '<span slot="tooltip">Send prompt</span>';
+      button.replaceWith(customButton);
+      messageInput.i18n = { send: 'Lähetä' };
+      await nextFrame();
+
+      expect(customButton.getAttribute('aria-label')).to.equal('Lähetä');
+    });
+
+    it('should not override an aria-label set on a custom button after slotting', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      customButton.innerHTML = '<svg aria-hidden="true"><path d="M0 0h1v1H0z"></path></svg>';
+      button.replaceWith(customButton);
+      await nextFrame();
+
+      customButton.setAttribute('aria-label', 'Send prompt');
+      messageInput.value = 'foo';
+      await nextFrame();
+
+      expect(customButton.getAttribute('aria-label')).to.equal('Send prompt');
+    });
+
+    it('should remove aria-label when a custom button gets text content', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      customButton.innerHTML = '<svg aria-hidden="true"><path d="M0 0h1v1H0z"></path></svg>';
+      button.replaceWith(customButton);
+      await nextFrame();
+      expect(customButton.hasAttribute('aria-label')).to.be.true;
+
+      customButton.append('Publish');
+      messageInput.value = 'foo';
+      await nextFrame();
+
+      expect(customButton.hasAttribute('aria-label')).to.be.false;
     });
   });
 
@@ -153,6 +229,17 @@ describe('message-input', () => {
       messageInput.disabled = false;
       expect(button.disabled).to.be.false;
     });
+
+    it('should toggle disabled state on a custom button when value is set', async () => {
+      const customButton = document.createElement('button');
+      customButton.setAttribute('slot', 'button');
+      button.replaceWith(customButton);
+      await nextFrame();
+      expect(customButton.disabled).to.be.true;
+
+      messageInput.value = 'foo';
+      expect(customButton.disabled).to.be.false;
+    });
   });
 
   describe('focus', () => {
@@ -165,6 +252,155 @@ describe('message-input', () => {
     it('should not throw on focus when not attached to the DOM', () => {
       const element = document.createElement('vaadin-message-input');
       expect(() => element.focus()).not.to.throw(Error);
+    });
+
+    it('should toggle focused attribute on text-area focus and blur', () => {
+      textArea.focus();
+      expect(messageInput.hasAttribute('focused')).to.be.true;
+
+      textArea.blur();
+      expect(messageInput.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should not set focused attribute when the send button is focused', () => {
+      messageInput.value = 'Hello';
+      button.focus();
+      expect(messageInput.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should set focus-ring attribute on text-area focus after Tab', () => {
+      tabKeyDown(document.body);
+      textArea.focus();
+      expect(messageInput.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should not set focus-ring attribute on text-area focus after mousedown', () => {
+      tabKeyDown(document.body);
+      mousedown(document.body);
+      textArea.focus();
+      expect(messageInput.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should set focus-ring attribute on programmatic focus', () => {
+      mousedown(document.body);
+      messageInput.focus();
+      expect(messageInput.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should not set focus-ring attribute on focus() with focusVisible: false', () => {
+      mousedown(document.body);
+      messageInput.focus({ focusVisible: false });
+      expect(messageInput.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should not set focus-ring attribute on focus() while disabled', () => {
+      messageInput.disabled = true;
+      messageInput.focus();
+      expect(messageInput.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should not set focus-ring attribute on focus() when not attached to the DOM', () => {
+      const element = document.createElement('vaadin-message-input');
+      element.focus();
+      expect(element.hasAttribute('focus-ring')).to.be.false;
+    });
+  });
+
+  describe('click', () => {
+    beforeEach(async () => {
+      // Extend message input host clickable area
+      messageInput.style.paddingInlineStart = '20px';
+      await nextFrame();
+    });
+
+    afterEach(async () => {
+      await resetMouse();
+    });
+
+    async function clickHostPadding() {
+      const rect = messageInput.getBoundingClientRect();
+      await sendMouse({
+        type: 'click',
+        position: [Math.round(rect.left + 10), Math.round(rect.top + rect.height / 2)],
+      });
+    }
+
+    it('should focus the text-area on host click', async () => {
+      await clickHostPadding();
+      expect(textArea.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should not set focus-ring attribute on host click', async () => {
+      await clickHostPadding();
+      expect(textArea.hasAttribute('focus-ring')).to.be.false;
+      expect(messageInput.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should not blur the text-area on host click when it has focus', async () => {
+      textArea.focus();
+      const spy = sinon.spy();
+      textArea.addEventListener('focusout', spy);
+      await clickHostPadding();
+      expect(spy).to.be.not.called;
+    });
+
+    it('should allow selecting text on text-area click', async () => {
+      messageInput.value = 'hello world';
+      await nextFrame();
+      const input = textArea.inputElement;
+      const rect = input.getBoundingClientRect();
+      const y = Math.round(rect.top + rect.height / 2);
+      await sendMouse({ type: 'move', position: [Math.round(rect.left + 2), y] });
+      await sendMouse({ type: 'down' });
+      await sendMouse({ type: 'move', position: [Math.round(rect.left + 40), y] });
+      await sendMouse({ type: 'up' });
+      expect(input.selectionEnd).to.be.greaterThan(input.selectionStart);
+    });
+  });
+
+  describe('content slots', () => {
+    ['header', 'prefix', 'footer'].forEach((slot) => {
+      const attr = `has-${slot}`;
+
+      it(`should not set ${attr} attribute by default`, () => {
+        expect(messageInput.hasAttribute(attr)).to.be.false;
+      });
+
+      it(`should set ${attr} attribute when adding content to the ${slot} slot`, async () => {
+        const content = document.createElement('div');
+        content.setAttribute('slot', slot);
+        messageInput.appendChild(content);
+        await nextFrame();
+        expect(messageInput.hasAttribute(attr)).to.be.true;
+      });
+
+      it(`should remove ${attr} attribute when removing content from the ${slot} slot`, async () => {
+        const content = document.createElement('div');
+        content.setAttribute('slot', slot);
+        messageInput.appendChild(content);
+        await nextFrame();
+
+        content.remove();
+        await nextFrame();
+        expect(messageInput.hasAttribute(attr)).to.be.false;
+      });
+
+      it(`should set ${attr} attribute for content slotted before the initial render`, async () => {
+        const input = fixtureSync(`<vaadin-message-input><div slot="${slot}"></div></vaadin-message-input>`);
+        await nextRender();
+        expect(input.hasAttribute(attr)).to.be.true;
+      });
+    });
+
+    it('should only set attributes for slots used by direct children', async () => {
+      const content = document.createElement('div');
+      content.setAttribute('slot', 'footer');
+      content.innerHTML = '<span slot="prefix"></span>';
+      messageInput.appendChild(content);
+      await nextFrame();
+
+      expect(messageInput.hasAttribute('has-footer')).to.be.true;
+      expect(messageInput.hasAttribute('has-prefix')).to.be.false;
     });
   });
 });

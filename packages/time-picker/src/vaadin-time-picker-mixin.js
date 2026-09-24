@@ -105,11 +105,7 @@ export const TimePickerMixin = (superClass) =>
     }
 
     static get observers() {
-      return [
-        '_openedOrItemsChanged(opened, _dropdownItems)',
-        '_updateScroller(opened, _dropdownItems, _focusedIndex, _theme, value)',
-        '__updateAriaAttributes(_dropdownItems, opened, inputElement)',
-      ];
+      return ['__updateAriaAttributes(_dropdownItems, opened, inputElement)'];
     }
 
     static get defaultI18n() {
@@ -140,8 +136,10 @@ export const TimePickerMixin = (superClass) =>
 
     /**
      * The object used to localize this component. To change the default
-     * localization, replace this with an object that provides both the
+     * localization, set this to an object that provides both the
      * time parsing and formatting functions.
+     *
+     * When not set, defaults to `undefined`.
      *
      * The object has the following JSON structure:
      *
@@ -172,7 +170,7 @@ export const TimePickerMixin = (superClass) =>
      * ISO 8601 format, and are never passed to `parseTime`, so implementations
      * do not need to accept ISO 8601 input.
      *
-     * @type {!TimePickerI18n}
+     * @type {TimePickerI18n | undefined}
      */
     get i18n() {
       return super.i18n;
@@ -248,6 +246,10 @@ export const TimePickerMixin = (superClass) =>
       if (props.has('__effectiveI18n') && this.value) {
         this.__updateInputValue(this.__getTimeObject(this.value));
       }
+
+      if (props.has('value') || props.has('_dropdownItems')) {
+        this._scroller.selectedItem = this._dropdownItems?.find((item) => item.value === this.value);
+      }
     }
 
     /**
@@ -271,30 +273,6 @@ export const TimePickerMixin = (superClass) =>
      */
     _getItemLabel(item) {
       return item ? item.label : '';
-    }
-
-    /** @private */
-    _updateScroller(opened, items, focusedIndex, theme, value) {
-      if (opened) {
-        this._scroller.style.maxHeight =
-          getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
-      }
-
-      const isClosing = this.hasAttribute('closing');
-
-      this._scroller.setProperties({
-        items: opened || isClosing ? items : [],
-        opened,
-        focusedIndex,
-        theme,
-        selectedItem: items?.find((item) => item.value === value),
-      });
-    }
-
-    /** @private */
-    _openedOrItemsChanged(opened, items) {
-      // Close the overlay if there are no items to display.
-      this._overlayOpened = opened && !!items?.length;
     }
 
     /**
@@ -333,11 +311,10 @@ export const TimePickerMixin = (superClass) =>
      * @override
      */
     _commitValue() {
-      if (this._focusedIndex > -1) {
-        // Commit value based on focused index
-        const focusedItem = this._dropdownItems[this._focusedIndex];
-        this.__setValueFromTime(parseISOTime(focusedItem.value));
-        this._focusedIndex = -1;
+      if (this._hasHighlightedItem) {
+        // Commit value based on the highlighted item
+        this.__setValueFromTime(parseISOTime(this._highlightedItem.value));
+        this._clearItemHighlight();
       } else if (this._inputElementValue !== this._comboBoxValue) {
         // Committing text that did not change would parse and format it again,
         // and set the value from the result, so skip it.
@@ -347,19 +324,6 @@ export const TimePickerMixin = (superClass) =>
       this.__commitValueChange();
 
       this._clearSelectionRange();
-    }
-
-    /**
-     * Override method from `ComboBoxBaseMixin` to handle loading.
-     * @protected
-     * @override
-     */
-    _closeOrCommit() {
-      if (!this.opened) {
-        this._commitValue();
-      } else {
-        this.close();
-      }
     }
 
     /**

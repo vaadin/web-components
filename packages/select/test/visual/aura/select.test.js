@@ -39,6 +39,12 @@ describe('select', () => {
     await visualDiff(div, 'readonly');
   });
 
+  it('label aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    await visualDiff(div, 'label-aside');
+  });
+
   it('opened', async () => {
     div.style.height = '200px';
     div.style.width = '200px';
@@ -52,6 +58,13 @@ describe('select', () => {
     it('value', async () => {
       element.value = 'value-1';
       await visualDiff(div, 'value');
+    });
+
+    it('value label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      element.value = 'value-1';
+      await visualDiff(div, 'value-label-aside');
     });
 
     it('disabled value', async () => {

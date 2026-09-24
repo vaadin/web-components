@@ -5,7 +5,7 @@
  */
 import { hideOthers } from '@vaadin/a11y-base/src/aria-hidden.js';
 import { DelegateFocusMixin } from '@vaadin/a11y-base/src/delegate-focus-mixin.js';
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { isElementFocused, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/a11y-base/src/keyboard-mixin.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
@@ -338,8 +338,10 @@ export const DatePickerMixin = (subclass) =>
 
     /**
      * The object used to localize this component. To change the default
-     * localization, replace this with an object that provides all properties, or
+     * localization, set this to an object that provides all properties, or
      * just the individual properties you want to change.
+     *
+     * When not set, defaults to `undefined`.
      *
      * The object has the following JSON structure and default values:
      *
@@ -414,7 +416,7 @@ export const DatePickerMixin = (subclass) =>
      *   }
      * }
      * ```
-     * @type {!DatePickerI18n}
+     * @type {DatePickerI18n | undefined}
      */
     get i18n() {
       return super.i18n;
@@ -1123,6 +1125,12 @@ export const DatePickerMixin = (subclass) =>
       // especially on outside click. On Esc key press, do not validate.
       if (!this.value && !this._keyboardActive) {
         this._requestValidation();
+      }
+
+      // Focusout events while closing arrive with `opened` still true and keep the focused state.
+      // Clear it here unless focus was restored to the input, as at a wide viewport or on Esc.
+      if (!this.inputElement || !isElementFocused(this.inputElement)) {
+        this._setFocused(false);
       }
     }
 

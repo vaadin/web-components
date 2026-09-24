@@ -186,6 +186,18 @@ export const InputControlMixin = (superclass) =>
       });
     }
 
+    /**
+     * Returns true when pasted, dropped or inserted text passes `allowedCharPattern`.
+     * Only called while the pattern is set. Override to accept text that the raw
+     * pattern test would reject.
+     * @param {string} text
+     * @return {boolean}
+     * @protected
+     */
+    _shouldAcceptText(text) {
+      return this.__allowedTextRegExp.test(text);
+    }
+
     /** @private */
     __shouldAcceptKey(event) {
       return (
@@ -201,7 +213,7 @@ export const InputControlMixin = (superclass) =>
     _onPaste(e) {
       if (this.allowedCharPattern) {
         const pastedText = e.clipboardData.getData('text');
-        if (!this.__allowedTextRegExp.test(pastedText)) {
+        if (!this._shouldAcceptText(pastedText)) {
           e.preventDefault();
           this._markInputPrevented();
         }
@@ -212,7 +224,7 @@ export const InputControlMixin = (superclass) =>
     _onDrop(e) {
       if (this.allowedCharPattern) {
         const draggedText = e.dataTransfer.getData('text');
-        if (!this.__allowedTextRegExp.test(draggedText)) {
+        if (!this._shouldAcceptText(draggedText)) {
           e.preventDefault();
           this._markInputPrevented();
         }
@@ -225,7 +237,7 @@ export const InputControlMixin = (superclass) =>
       // but it is still experimental technology so we can't rely on it. It's used here just as an additional check,
       // because it seems to be the only way to detect and prevent specific keys on mobile devices.
       // See https://github.com/vaadin/vaadin-text-field/issues/429
-      if (this.allowedCharPattern && e.data && !this.__allowedTextRegExp.test(e.data)) {
+      if (this.allowedCharPattern && e.data && !this._shouldAcceptText(e.data)) {
         e.preventDefault();
         this._markInputPrevented();
       }

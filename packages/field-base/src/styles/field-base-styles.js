@@ -10,30 +10,27 @@ export const field = css`
   :host {
     --_helper-below-field: initial;
     --_helper-above-field: ;
-    --_no-label: initial;
-    --_has-label: ;
     --_no-helper: initial;
     --_has-helper: ;
     --_no-error: initial;
     --_has-error: ;
+    --_rows-after-input: ;
     --_gap: var(--vaadin-input-field-container-gap, var(--vaadin-gap-xs));
     --_gap-s: round(var(--_gap) / 3, 2px);
     display: inline-grid;
     grid-template:
-      'label' auto var(--_helper-above-field, 'helper' auto) 'baseline' 0 'input' 1fr var(
-        --_helper-below-field,
-        'helper' auto
-      )
-      'error' auto / 100%;
+      '                           label' auto
+      var(--_helper-above-field, 'helper' auto)
+      '                           baseline' 0
+      '                           input' 1fr
+      var(--_rows-after-input)
+      var(--_helper-below-field, 'helper' auto)
+      '                           error' auto
+      / 100%;
     height: fit-content;
     outline: none;
     cursor: default;
     -webkit-tap-highlight-color: transparent;
-  }
-
-  :host([has-label]) {
-    --_has-label: initial;
-    --_no-label: ;
   }
 
   :host([has-helper]) {
@@ -59,9 +56,9 @@ export const field = css`
   /* Baseline alignment guide */
   :host::before {
     content: '\\2003' / '';
-    grid-column: 1;
-    grid-row: var(--_has-label, label / baseline) var(--_no-label, label / input);
-    align-self: var(--_has-label, end) var(--_no-label, start);
+    grid-column: baseline;
+    grid-row: 1 / baseline;
+    align-self: end;
     font-size: var(--vaadin-input-field-value-font-size, inherit);
     line-height: var(--vaadin-input-field-value-line-height, inherit);
     padding: var(
@@ -70,17 +67,13 @@ export const field = css`
     );
     border: var(--vaadin-input-field-border-width, 1px) solid transparent;
     pointer-events: none;
-    margin-bottom: var(--_no-label, 0)
+    margin-bottom: calc(
       var(
-        --_has-label,
-        calc(
-          var(
-              --vaadin-field-baseline-input-height,
-              (1lh + var(--vaadin-padding-block-container) * 2 + var(--vaadin-input-field-border-width, 1px) * 2)
-            ) *
-            -1
-        )
-      );
+          --vaadin-field-baseline-input-height,
+          (1lh + var(--vaadin-padding-block-container) * 2 + var(--vaadin-input-field-border-width, 1px) * 2)
+        ) *
+        -1
+    );
   }
 
   [class$='container'] {
@@ -204,5 +197,41 @@ export const field = css`
     [part='error-message']::before {
       background: CanvasText;
     }
+  }
+`;
+
+export const fieldLabelAside = css`
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) {
+    --_label-aside-width: 0px;
+    --_label-aside-gap: 0px;
+
+    grid-template:
+      var(--_helper-above-field, '.     helper' auto)
+      '                           .     baseline' 0
+      '                           label input' 1fr
+      var(--_rows-after-input)
+      var(--_helper-below-field, 'label helper' auto)
+      '                           label error' auto
+      / var(--_label-aside-width) minmax(0, 1fr);
+    column-gap: var(--_label-aside-gap);
+  }
+
+  :host(:is([theme~='label-aside'][has-label], [data-form-layout-has-labels-aside])) {
+    --_label-aside-width: var(--vaadin-input-field-label-aside-width, auto);
+    --_label-aside-gap: var(--vaadin-input-field-label-aside-gap, 1em);
+  }
+
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='label'] {
+    width: auto;
+    min-width: auto;
+    align-self: baseline;
+    margin-bottom: 0;
+    text-align: var(--vaadin-input-field-label-aside-text-align, inherit);
+  }
+
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='input-field'],
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='group-field'],
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='input-fields'] {
+    align-self: baseline;
   }
 `;

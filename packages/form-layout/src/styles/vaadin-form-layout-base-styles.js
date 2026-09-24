@@ -20,6 +20,7 @@ addGlobalStyles(
     @layer vaadin.base {
       html {
         --vaadin-form-layout-label-spacing: var(--vaadin-gap-s);
+        --vaadin-form-layout-label-text-align: start;
         --vaadin-form-layout-label-width: 8em;
         --vaadin-form-layout-column-spacing: var(--vaadin-gap-l);
         --vaadin-form-layout-row-spacing: var(--vaadin-gap-l);
@@ -32,6 +33,7 @@ export const formLayoutStyles = css`
   :host {
     /* Default values */
     --_label-spacing: var(--vaadin-form-layout-label-spacing);
+    --_label-text-align: var(--vaadin-form-layout-label-text-align);
     --_label-width: var(--vaadin-form-layout-label-width);
     --_column-spacing: var(--vaadin-form-layout-column-spacing);
     --_row-spacing: var(--vaadin-form-layout-row-spacing);
@@ -157,9 +159,13 @@ export const formLayoutStyles = css`
 
   :host([auto-responsive][labels-aside]) {
     --_max-width: var(--_max-width-labels-aside);
+
+    --vaadin-input-field-label-aside-width: var(--_label-width);
+    --vaadin-input-field-label-aside-gap: var(--_label-spacing);
+    --vaadin-input-field-label-aside-text-align: var(--_label-text-align);
   }
 
-  :host([auto-responsive][labels-aside]) #layout[fits-labels-aside] {
+  :host([auto-responsive][has-labels-aside]) #layout {
     --_form-item-labels-above: ' '; /* false */
     --_form-item-labels-aside: initial; /* true */
     --_grid-column-width: var(--_column-width-labels-aside);

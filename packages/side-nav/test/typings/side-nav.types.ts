@@ -15,7 +15,7 @@ const sideNav: SideNav = document.createElement('vaadin-side-nav');
 // Properties
 assertType<boolean>(sideNav.collapsed);
 assertType<boolean>(sideNav.collapsible);
-assertType<SideNavI18n>(sideNav.i18n);
+assertType<SideNavI18n | undefined>(sideNav.i18n);
 
 // Mixins
 assertType<ElementMixinClass>(sideNav);
@@ -52,7 +52,7 @@ assertType<string | null | undefined>(sideNavItem.path);
 assertType<boolean>(sideNavItem.current);
 assertType<boolean>(sideNavItem.disabled);
 assertType<boolean>(sideNavItem.expanded);
-assertType<SideNavI18n>(sideNavItem.i18n);
+assertType<SideNavI18n | undefined>(sideNavItem.i18n);
 
 // Item mixins
 assertType<DisabledMixinClass>(sideNavItem);

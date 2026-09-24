@@ -761,7 +761,7 @@ describe('edit column', () => {
 
     (isMac ? it : it.skip)('should call focus on the div element inside of the editable cell', () => {
       cell = getContainerCell(grid.$.items, 0, 0);
-      const spy = sinon.spy(cell.firstChild, 'focus');
+      const spy = sinon.spy(cell.firstElementChild, 'focus');
       cell.focus();
       expect(spy.calledOnce).to.be.true;
     });
@@ -784,20 +784,20 @@ describe('edit column', () => {
     });
 
     it('should set role="button" on the focusable div inside the editable cell', () => {
-      expect(firstCell.firstChild.getAttribute('role')).to.equal('button');
+      expect(firstCell.firstElementChild.getAttribute('role')).to.equal('button');
     });
 
     it('should remove role from the focusable div when entering edit mode', () => {
       enter(firstCell);
-      expect(firstCell.firstChild.hasAttribute('role')).to.be.false;
+      expect(firstCell.firstElementChild.hasAttribute('role')).to.be.false;
     });
 
     it('should restore role on the focusable div after exiting edit mode', () => {
       enter(firstCell);
-      expect(firstCell.firstChild.hasAttribute('role')).to.be.false;
+      expect(firstCell.firstElementChild.hasAttribute('role')).to.be.false;
       input = getCellEditor(firstCell);
       enter(input);
-      expect(firstCell.firstChild.getAttribute('role')).to.equal('button');
+      expect(firstCell.firstElementChild.getAttribute('role')).to.equal('button');
     });
   });
 

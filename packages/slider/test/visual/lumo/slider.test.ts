@@ -71,6 +71,22 @@ describe('slider', () => {
       await visualDiff(div, 'label-disabled');
     });
 
+    describe('label aside', () => {
+      beforeEach(() => {
+        element.setAttribute('theme', 'label-aside');
+        element.label = 'Label';
+      });
+
+      it('default', async () => {
+        await visualDiff(div, 'label-aside');
+      });
+
+      it('min max visible', async () => {
+        element.minMaxVisible = true;
+        await visualDiff(div, 'label-aside-min-max-visible');
+      });
+    });
+
     it('required', async () => {
       element.label = 'Label';
       element.required = true;
@@ -147,6 +163,38 @@ describe('slider', () => {
     it('min max visible', async () => {
       element.minMaxVisible = true;
       await visualDiff(div, 'rtl-min-max-visible');
+    });
+  });
+
+  describe('baseline', () => {
+    beforeEach(() => {
+      div = fixtureSync<HTMLDivElement>(`
+        <div style="display: inline-block; padding: 10px">
+          Baseline
+          <vaadin-slider></vaadin-slider>
+        </div>
+      `);
+      element = div.querySelector<Slider>('vaadin-slider')!;
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'baseline-default');
+    });
+
+    it('label', async () => {
+      element.label = 'Label';
+      await visualDiff(div, 'baseline-label');
+    });
+
+    it('helper above field', async () => {
+      element.helperText = 'Helper text';
+      element.setAttribute('theme', 'helper-above-field');
+      await visualDiff(div, 'baseline-helper-above-field');
+    });
+
+    it('min max visible', async () => {
+      element.minMaxVisible = true;
+      await visualDiff(div, 'baseline-min-max-visible');
     });
   });
 });

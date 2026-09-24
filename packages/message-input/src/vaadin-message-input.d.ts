@@ -33,6 +33,20 @@ export type MessageInputEventMap = HTMLElementEventMap & MessageInputCustomEvent
  * <vaadin-message-input></vaadin-message-input>
  * ```
  *
+ * ### Slots
+ *
+ * The following slots are available for adding content to the message input:
+ *
+ * Name       | Description
+ * -----------|-------------
+ * `header`   | Content displayed above the text area and controls
+ * `prefix`   | Content displayed before the text area
+ * `button`   | Button that submits the message, replacing the default one
+ * `footer`   | Content displayed below the text area and controls
+ *
+ * When a custom button has no text content or accessible label, `aria-label` attribute
+ * is set based on the [`i18n`](#/elements/vaadin-message-input#property-i18n) property.
+ *
  * ### Styling
  *
  * The following state attributes are available for styling:
@@ -40,6 +54,11 @@ export type MessageInputEventMap = HTMLElementEventMap & MessageInputCustomEvent
  * Attribute      | Description
  * ---------------|---------------------------------
  * `disabled`     | Set when the element is disabled
+ * `focused`      | Set when the text area is focused
+ * `focus-ring`   | Set when the text area is focused using the keyboard
+ * `has-header`   | Set when the element has content in the header slot
+ * `has-prefix`   | Set when the element has content in the prefix slot
+ * `has-footer`   | Set when the element has content in the footer slot
  * `has-tooltip`  | Set when the element has a slotted tooltip
  *
  * ### Internal components

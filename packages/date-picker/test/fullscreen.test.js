@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { sendKeys, setViewport } from '@vaadin/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse, setViewport } from '@vaadin/test-runner-commands';
 import { aTimeout, fixtureSync, nextRender, nextUpdate, outsideClick, tabKeyDown, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
@@ -22,8 +22,15 @@ describe('fullscreen mode', () => {
   });
 
   afterEach(async () => {
+    await resetMouse();
     await setViewport({ width, height });
   });
+
+  // Real mouse click outside fullscreen overlay rather than outsideClick() which moves focus to the body
+  async function clickOutside() {
+    const { top } = overlay.getBoundingClientRect();
+    await sendMouse({ type: 'click', position: [200, Math.round(top / 2)] });
+  }
 
   describe('overlay attribute', () => {
     it('should set fullscreen attribute on the overlay when a viewport is small', async () => {
@@ -118,6 +125,71 @@ describe('fullscreen mode', () => {
         await aTimeout(0);
         expect(spy.called).to.be.false;
       });
+
+      it('should remove focused attribute when closing overlay on outside click', async () => {
+        await open(datePicker);
+        expect(datePicker.hasAttribute('focused')).to.be.true;
+
+        await clickOutside();
+        await nextRender();
+
+        expect(datePicker.hasAttribute('focused')).to.be.false;
+      });
+
+      it('should remove focused attribute when closing overlay on date click', async () => {
+        await open(datePicker);
+        expect(datePicker.hasAttribute('focused')).to.be.true;
+
+        tap(getFocusableCell(datePicker));
+        await nextRender();
+
+        expect(datePicker.hasAttribute('focused')).to.be.false;
+      });
+
+      it('should remove focused attribute when closing overlay on Today click', async () => {
+        await open(datePicker);
+        expect(datePicker.hasAttribute('focused')).to.be.true;
+
+        datePicker._overlayContent._todayButton.click();
+        await nextRender();
+
+        expect(datePicker.hasAttribute('focused')).to.be.false;
+      });
+
+      it('should remove focused attribute when closing overlay on Cancel click', async () => {
+        await open(datePicker);
+        expect(datePicker.hasAttribute('focused')).to.be.true;
+
+        datePicker._overlayContent._cancelButton.click();
+        await nextRender();
+
+        expect(datePicker.hasAttribute('focused')).to.be.false;
+      });
+
+      it('should remove focus-ring attribute when closing overlay on outside click after keyboard open', async () => {
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ press: 'ArrowDown' });
+        await untilOverlayRendered(datePicker);
+        expect(datePicker.hasAttribute('focus-ring')).to.be.true;
+
+        await clickOutside();
+        await nextRender();
+
+        expect(datePicker.hasAttribute('focused')).to.be.false;
+        expect(datePicker.hasAttribute('focus-ring')).to.be.false;
+      });
+
+      it('should keep focused attribute when closing overlay on Esc', async () => {
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ press: 'ArrowDown' });
+        await untilOverlayRendered(datePicker);
+
+        await sendKeys({ press: 'Escape' });
+        await nextRender();
+
+        expect(datePicker.hasAttribute('focused')).to.be.true;
+        expect(datePicker.hasAttribute('focus-ring')).to.be.true;
+      });
     });
 
     describe('auto open disabled', () => {
@@ -153,6 +225,16 @@ describe('fullscreen mode', () => {
         await open(datePicker);
         expect(document.activeElement).to.not.equal(input);
       });
+
+      it('should remove focused attribute when closing overlay on outside click', async () => {
+        await open(datePicker);
+        expect(datePicker.hasAttribute('focused')).to.be.true;
+
+        await clickOutside();
+        await nextRender();
+
+        expect(datePicker.hasAttribute('focused')).to.be.false;
+      });
     });
   });
 
@@ -179,15 +261,26 @@ describe('fullscreen mode', () => {
       expect(datePicker.invalid).to.be.false;
     });
 
-    it('should validate when closing overlay on outside click', async () => {
+    it('should validate once when closing overlay on outside click', async () => {
       await open(datePicker);
       validateSpy.resetHistory();
 
       outsideClick();
       await nextRender();
 
-      expect(validateSpy.called).to.be.true;
+      expect(validateSpy.calledOnce).to.be.true;
       expect(datePicker.invalid).to.be.true;
+    });
+
+    it('should validate once when closing overlay on Today click', async () => {
+      await open(datePicker);
+      validateSpy.resetHistory();
+
+      datePicker._overlayContent._todayButton.click();
+      await nextRender();
+
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(datePicker.invalid).to.be.false;
     });
 
     it('should validate on blur after the input has been blurred internally', async () => {

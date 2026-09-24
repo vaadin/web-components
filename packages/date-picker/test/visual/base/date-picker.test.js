@@ -15,6 +15,13 @@ describe('date-picker', () => {
     element = fixtureSync('<vaadin-date-picker></vaadin-date-picker>', div);
   });
 
+  afterEach(() => {
+    // After tests which use sendKeys() the focus-utils.js -> isKeyboardActive is set to true.
+    // Click once here on body to reset it so other tests are not affected by it.
+    // An unwanted focus-ring would be shown in other tests otherwise.
+    mousedown(document.body);
+  });
+
   describe('states', () => {
     it('basic', async () => {
       await visualDiff(div, 'state-basic');
@@ -30,13 +37,15 @@ describe('date-picker', () => {
       await visualDiff(div, 'state-readonly');
     });
 
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'state-label-aside');
+    });
+
     describe('focus', () => {
       afterEach(async () => {
         await resetMouse();
-        // After tests which use sendKeys() the focus-utils.js -> isKeyboardActive is set to true.
-        // Click once here on body to reset it so other tests are not affected by it.
-        // An unwanted focus-ring would be shown in other tests otherwise.
-        mousedown(document.body);
       });
 
       it('keyboard focus', async () => {
@@ -101,6 +110,23 @@ describe('date-picker', () => {
             openOverlay();
             await untilOverlayRendered(element);
             await visualDiff(div, `${dir}-date-metadata-loading`);
+          });
+
+          it('disabled dates', async () => {
+            element.value = '2000-01-01';
+            element.min = '2000-01-01';
+            element.max = '2000-01-20';
+            openOverlay();
+            await visualDiff(div, `${dir}-disabled-dates`);
+          });
+
+          it('keyboard focused date', async () => {
+            element.value = '2000-01-01';
+            openOverlay();
+            await untilOverlayRendered(element);
+            element.inputElement.focus();
+            await sendKeys({ press: 'Tab' });
+            await visualDiff(div, `${dir}-focused-date`);
           });
 
           it('week numbers', async () => {

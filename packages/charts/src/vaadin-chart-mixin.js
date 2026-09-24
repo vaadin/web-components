@@ -28,7 +28,6 @@ import 'highcharts/es-modules/masters/modules/bullet.src.js';
 import 'highcharts/es-modules/masters/modules/gantt.src.js';
 import 'highcharts/es-modules/masters/modules/draggable-points.src.js';
 import KeyboardNavigation from 'highcharts/es-modules/Accessibility/KeyboardNavigation.js';
-import HTMLUtilities from 'highcharts/es-modules/Accessibility/Utils/HTMLUtilities.js';
 import Pointer from 'highcharts/es-modules/Core/Pointer.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { deepMerge } from '@vaadin/component-base/src/object-utils.js';
@@ -37,67 +36,42 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotObserver } from '@vaadin/component-base/src/slot-observer.js';
 import { cleanupExport, inflateFunctions, prepareExport } from './helpers.js';
 
-['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
-  /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
-  Highcharts.wrap(Highcharts.Chart.prototype, methodName, function (proceed, ...args) {
-    Highcharts.fireEvent(this, 'beforeExport');
-    const result = proceed.apply(this, args);
-    Highcharts.fireEvent(this, 'afterExport');
-    return result;
-  });
-  /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
+// Highcharts moves a copy of the chart into the document body when exporting, losing the styles
+// defined in the shadow root. The `beforeExport` and `afterExport` events copy them over for the
+// duration of the export. Wrapping `getSVG` covers every export path, as both `exportChart` and
+// `exportChartLocal` call it through `getSVGForExport`.
+// Workaround for https://github.com/vaadin/vaadin-charts/issues/389
+/* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
+Highcharts.wrap(Highcharts.Chart.prototype, 'getSVG', function (proceed, ...args) {
+  Highcharts.fireEvent(this, 'beforeExport');
+  const result = proceed.apply(this, args);
+  Highcharts.fireEvent(this, 'afterExport');
+  return result;
 });
+/* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
 
-// Monkeypatch the onDocumentMouseMove method to fix the check for the source of the event
-// Due to the fact that the event is attached to the document, the target of the event is
-// the <vaadin-chart> element, so we need to use the composedPath to get the actual target (#7107)
-Pointer.prototype.onDocumentMouseMove = function (e) {
-  const chart = this.chart;
-  const chartPosition = this.chartPosition;
-  const pEvt = this.normalize(e, chartPosition);
-  const tooltip = chart.tooltip;
-  // If we're outside, hide the tooltip
-  if (
-    chartPosition &&
-    (!tooltip || !tooltip.isSticky) &&
-    !chart.isInsidePlot(pEvt.chartX - chart.plotLeft, pEvt.chartY - chart.plotTop, {
-      visiblePlotOnly: true,
-    }) &&
-    // Use the first element from the composed path instead of the actual target
-    !this.inClass(pEvt.composedPath()[0], 'highcharts-tracker')
-  ) {
-    this.reset();
+// Document-level handlers see <vaadin-chart> as the target inside a shadow root, so retarget
+// to the composed path. Remove when fixed: vaadin/web-components#7107 (onDocumentMouseMove)
+// and highcharts/highcharts#23490 (onMouseUp).
+/* eslint-disable @typescript-eslint/no-invalid-this */
+function withComposedTarget(proceed, e, ...args) {
+  // Only a shadow host can be a retargeted event target.
+  if (!e.target?.shadowRoot) {
+    return proceed.call(this, e, ...args);
   }
-};
 
-// As the `mouseup` event is attached to the document element, the target will reference
-// the instance of the `vaadin-chart` element instead of the element the event originated from.
-// That causes some mishbehaviors, e.g. in a drilldown series, clicking in the point does not
-// drills down the series in some cases.
-// Change to check for the first element in the composed path as the target of the event.
-// Workaround for https://github.com/highcharts/highcharts/issues/23490
-//
-// TODO: Remove this monkeypatch once the referenced issue is fixed
-const { simulatedEventTarget } = HTMLUtilities;
-KeyboardNavigation.prototype.onMouseUp = function (e) {
-  delete this.isClickingChart;
-  if (!this.keyboardReset && e.relatedTarget !== simulatedEventTarget) {
-    const chart = this.chart;
-    const target = e.composedPath()[0];
-    if (!target || !chart.container.contains(target)) {
-      const curMod = this.modules?.[this.currentModuleIx || 0];
-      if (curMod?.terminate) {
-        curMod.terminate();
-      }
-      this.currentModuleIx = 0;
-    }
-    if (chart.focusElement) {
-      chart.focusElement.removeFocusBorder();
-      delete chart.focusElement;
-    }
-    this.keyboardReset = true;
+  // `delete` restores the inherited Event.prototype.target accessor.
+  Object.defineProperty(e, 'target', { value: e.composedPath()[0], configurable: true });
+  try {
+    return proceed.call(this, e, ...args);
+  } finally {
+    delete e.target;
   }
-};
+}
+/* eslint-enable @typescript-eslint/no-invalid-this */
+
+Highcharts.wrap(Pointer.prototype, 'onDocumentMouseMove', withComposedTarget);
+Highcharts.wrap(KeyboardNavigation.prototype, 'onMouseUp', withComposedTarget);
 
 // Init Highcharts global language defaults
 // No data message should be empty by default
@@ -721,7 +695,51 @@ export const ChartMixin = (superClass) =>
         this.configuration = Highcharts.chart(this.$.chart, options);
       }
 
-      this.__forceResize();
+      this.__syncOutsideTooltipColors();
+      this.__markStickyTooltip();
+      this.__redrawOrganizationDataLabels();
+    }
+
+    /**
+     * A `tooltip: { outside: true }` tooltip renders in `document.body`, so it
+     * inherits neither the palette a theme scopes to `vaadin-chart` nor any
+     * `--vaadin-charts-color-*` set on this element. Copy the resolved series
+     * colours onto its container instead.
+     *
+     * @private
+     */
+    __syncOutsideTooltipColors() {
+      const { tooltip } = this.configuration;
+      if (!tooltip || !tooltip.outside) {
+        return;
+      }
+
+      Highcharts.addEvent(tooltip, 'refresh', () => {
+        const { container } = tooltip;
+        if (!container) {
+          return;
+        }
+        const style = getComputedStyle(this);
+        for (let i = 0; i < 10; i++) {
+          container.style.setProperty(`--_color-${i}`, style.getPropertyValue(`--_color-${i}`));
+        }
+      });
+    }
+
+    /**
+     * Marks the tooltip so the stylesheet can make it reachable by the pointer. CSS
+     * cannot see the `stickOnContact` option, and Highcharts only applies it itself
+     * when styled mode is off. See highcharts/highcharts#25310.
+     *
+     * @private
+     */
+    __markStickyTooltip() {
+      const { tooltip } = this.configuration;
+
+      Highcharts.addEvent(tooltip, 'refresh', () => {
+        // `refresh` also fires when a formatter returns false, before any label exists.
+        tooltip.label?.element.classList.toggle('vaadin-chart-sticky-tooltip', tooltip.shouldStickOnContact());
+      });
     }
 
     /** @protected */
@@ -1477,24 +1495,26 @@ export const ChartMixin = (superClass) =>
     /**
      * @private
      * Workaround for https://github.com/highcharts/highcharts/issues/23443
-     * Forces a resize in the chart to make it calculate the labels positions
-     * correctly in a chart with "organization" series
+     * In styled mode the label CSS is not applied yet when "organization" data
+     * labels are first measured, so they need a second measurement pass.
      *
      * TODO: Remove when the related ticket is fixed
      */
-    __forceResize() {
-      const chart = this.configuration;
-      const { options } = chart;
-      const hasOrganizationSeries =
-        options.chart.styledMode &&
-        (options.chart.type === 'organization' || options.series.some((series) => series.type === 'organization'));
-      if (!hasOrganizationSeries) {
+    __redrawOrganizationDataLabels() {
+      if (!this.configuration.options.chart.styledMode) {
         return;
       }
 
+      // Series declared as <vaadin-chart-series> children are not on the chart yet,
+      // so the organization check waits for the frame too. Reading the chart there
+      // rather than capturing it also keeps a pending frame from holding a
+      // destroyed chart alive.
       requestAnimationFrame(() => {
-        chart.setSize(chart.chartWidth - 10, chart.chartHeight);
-        chart.setSize(null, null);
+        this.configuration?.series.forEach((series) => {
+          if (series.type === 'organization') {
+            series.drawDataLabels?.();
+          }
+        });
       });
     }
 

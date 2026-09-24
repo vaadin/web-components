@@ -46,10 +46,11 @@ export type MessageEventMap = HTMLElementEventMap & {
  *
  * The following state attributes are available for styling:
  *
- * Attribute    | Description
- * -------------|-------------
- * `focus-ring` | Set when the message is focused using the keyboard.
- * `focused`    | Set when the message is focused.
+ * Attribute           | Description
+ * --------------------|-------------
+ * `focus-ring`        | Set when the message is focused using the keyboard.
+ * `focused`           | Set when the message is focused.
+ * `typing-indicator`  | Set when the message is rendered as a typing indicator. The value is the indicator style: empty, `ellipsis` or `minimal`.
  *
  * The following custom CSS properties are available for styling:
  *

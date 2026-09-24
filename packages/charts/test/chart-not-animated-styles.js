@@ -1,4 +1,26 @@
+import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
+import { addGlobalStyles } from '@vaadin/component-base/src/css-utils.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin';
+
+// Highcharts' own animations. The CSS transitions the base styles declare are
+// disabled by the rules below.
+Highcharts.setOptions({
+  chart: { animation: false },
+  plotOptions: { series: { animation: false } },
+  tooltip: { animation: false, hideDelay: 0 },
+});
+
+// An `outside` tooltip renders into `document.body`, so the `registerStyles`
+// rules below cannot reach it. The base styles apply theirs at both scopes too.
+addGlobalStyles(
+  'vaadin-chart-not-animated-tooltip',
+  css`
+    .highcharts-tooltip-container .highcharts-tooltip,
+    .highcharts-tooltip-container .highcharts-label-box {
+      transition: none;
+    }
+  `,
+);
 
 registerStyles(
   'vaadin-chart',

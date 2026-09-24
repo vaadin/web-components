@@ -23,6 +23,13 @@ export const multiSelectComboBoxStyles = [
       gap: var(--vaadin-multi-select-combo-box-chips-gap, 2px);
     }
 
+    :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='input-field']::before {
+      content: '\\2003' / '';
+      width: 0;
+      align-self: start;
+      margin-inline-end: calc(var(--vaadin-input-field-gap, var(--vaadin-gap-s)) * -1);
+    }
+
     ::slotted(input) {
       box-sizing: border-box;
       flex: 1 0 var(--_input-min-width);
@@ -58,6 +65,10 @@ export const multiSelectComboBoxStyles = [
 
     :host([auto-expand-horizontally]) {
       --vaadin-field-default-width: auto;
+    }
+
+    :host([has-select-all]) #overlay slot[name='overlay']::slotted(*) {
+      border-top: 1px solid var(--vaadin-border-color-secondary);
     }
   `,
 ];

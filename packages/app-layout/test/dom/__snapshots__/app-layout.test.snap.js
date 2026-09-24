@@ -6,7 +6,7 @@ snapshots["vaadin-app-layout host default"] =
   no-anim=""
   overlay=""
   primary-section="navbar"
-  style="--_vaadin-app-layout-drawer-width: 0; --_vaadin-app-layout-drawer-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size: 16px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px;"
+  style="--_vaadin-app-layout-drawer-width: 0; --_vaadin-app-layout-drawer-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px;"
 >
 </vaadin-app-layout>
 `;
@@ -15,6 +15,7 @@ snapshots["vaadin-app-layout host default"] =
 snapshots["vaadin-app-layout host with drawer"] = 
 `<vaadin-app-layout
   has-drawer=""
+  no-anim=""
   overlay=""
   primary-section="navbar"
   style="--_vaadin-app-layout-drawer-offset-size: 320px; --_vaadin-app-layout-navbar-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px;"
@@ -29,9 +30,10 @@ snapshots["vaadin-app-layout host with drawer"] =
 snapshots["vaadin-app-layout host with navbar"] = 
 `<vaadin-app-layout
   has-navbar=""
+  no-anim=""
   overlay=""
   primary-section="navbar"
-  style="--_vaadin-app-layout-drawer-width: 0; --_vaadin-app-layout-drawer-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px;"
+  style="--_vaadin-app-layout-drawer-width: 0; --_vaadin-app-layout-drawer-offset-size: 0px; --_vaadin-app-layout-navbar-offset-size: 34px; --_vaadin-app-layout-navbar-offset-size-bottom: 0px;"
 >
   <div slot="navbar">
     Navbar Content

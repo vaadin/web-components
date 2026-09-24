@@ -2,22 +2,14 @@ import { expect } from '@vaadin/chai-plugins';
 import { arrowRight, fixtureSync, nextRender, nextResize, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-menu-bar.js';
-
-// Utility function to assert a menu item is not visible
-const assertHidden = (elem) => {
-  const style = getComputedStyle(elem);
-  expect(style.visibility).to.equal('hidden');
-  expect(style.position).to.equal('absolute');
-};
-
-// Utility function to assert a menu item is visible
-const assertVisible = (elem) => {
-  const style = getComputedStyle(elem);
-  expect(style.visibility).to.equal('visible');
-  expect(style.position).to.not.equal('absolute');
-};
-
-const BUTTON_WIDTH = 60;
+import {
+  assertHidden,
+  assertVisible,
+  BUTTON_WIDTH,
+  createItems,
+  expectCollapsed,
+  expectOverflowInside,
+} from './helpers.js';
 
 function makeComponent(id) {
   const div = document.createElement('div');
@@ -52,25 +44,10 @@ describe('overflow', () => {
         </div>
       `);
       menu = wrapper.querySelector('vaadin-menu-bar');
-      menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
+      menu.items = createItems(5);
       await nextResize(menu);
       buttons = menu._buttons;
       overflow = buttons.at(-1);
-    });
-
-    it('should show overflow button and hide the buttons which do not fit', () => {
-      assertHidden(buttons[2]);
-      assertHidden(buttons[3]);
-      expect(overflow.hasAttribute('hidden')).to.be.false;
-    });
-
-    it('should set items to overflow button for buttons which do not fit', () => {
-      expect(overflow.item).to.be.instanceOf(Object);
-      expect(overflow.item.children).to.be.instanceOf(Array);
-      expect(overflow.item.children.length).to.equal(3);
-      expect(overflow.item.children[0]).to.deep.equal(menu.items[2]);
-      expect(overflow.item.children[1]).to.deep.equal(menu.items[3]);
-      expect(overflow.item.children[2]).to.deep.equal(menu.items[4]);
     });
 
     it('should show overflow button after assigning the same items', () => {
@@ -78,66 +55,11 @@ describe('overflow', () => {
       expect(overflow.hasAttribute('hidden')).to.be.false;
     });
 
-    it('should show buttons and update overflow items when width increased', async () => {
-      menu.style.width = `${BUTTON_WIDTH * 4.5}px`;
-      await nextResize(menu);
-      assertVisible(buttons[2]);
-      expect(overflow.item.children.length).to.equal(2);
-      expect(overflow.item.children[0]).to.deep.equal(menu.items[3]);
-    });
-
-    it('should show buttons and update overflow items when width increased in RTL', async () => {
-      menu.setAttribute('dir', 'rtl');
-      menu.style.width = `${BUTTON_WIDTH * 4.5}px`;
-      await nextResize(menu);
-      assertVisible(buttons[2]);
-      expect(overflow.item.children.length).to.equal(2);
-      expect(overflow.item.children[0]).to.deep.equal(menu.items[3]);
-    });
-
-    it('should hide buttons and update overflow items when width decreased', async () => {
-      menu.style.width = `${BUTTON_WIDTH * 2.5}px`;
-      await nextResize(menu);
-      assertHidden(buttons[1]);
-      expect(overflow.item.children.length).to.equal(4);
-      expect(overflow.item.children[0]).to.deep.equal(menu.items[1]);
-      expect(overflow.item.children[1]).to.deep.equal(menu.items[2]);
-      expect(overflow.item.children[2]).to.deep.equal(menu.items[3]);
-      expect(overflow.item.children[3]).to.deep.equal(menu.items[4]);
-    });
-
-    it('should hide buttons and update overflow items when width decreased in RTL', async () => {
-      menu.setAttribute('dir', 'rtl');
-      menu.style.width = `${BUTTON_WIDTH * 2.5}px`;
-      await nextResize(menu);
-      assertHidden(buttons[1]);
-      expect(overflow.item.children.length).to.equal(4);
-      expect(overflow.item.children[0]).to.deep.equal(menu.items[1]);
-      expect(overflow.item.children[1]).to.deep.equal(menu.items[2]);
-      expect(overflow.item.children[2]).to.deep.equal(menu.items[3]);
-      expect(overflow.item.children[3]).to.deep.equal(menu.items[4]);
-    });
-
-    it('should hide overflow button and reset its items when all buttons fit', async () => {
-      menu.style.width = 'auto';
-      await nextResize(menu);
-      assertVisible(buttons[2]);
-      assertVisible(buttons[3]);
-      assertVisible(buttons[4]);
-      expect(overflow.hasAttribute('hidden')).to.be.true;
-      expect(overflow.item.children.length).to.equal(0);
-    });
-
     it('should hide overflow button and reset its items when all buttons fit after changing items', async () => {
       // See https://github.com/vaadin/vaadin-menu-bar/issues/133
-      menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }];
+      menu.items = createItems(2);
       await nextResize(menu);
-      buttons = menu._buttons;
-      overflow = buttons[2];
-      assertVisible(buttons[1]);
-
-      expect(overflow.hasAttribute('hidden')).to.be.true;
-      expect(overflow.item.children.length).to.equal(0);
+      expectCollapsed(menu, []);
     });
 
     it('should show overflow button when theme makes buttons do not fit', async () => {
@@ -191,41 +113,150 @@ describe('overflow', () => {
       menu.i18n = { ...menu.i18n, moreOptions: '' };
       expect(overflow.hasAttribute('aria-label')).to.be.false;
     });
+  });
 
-    describe('reverse-collapse', () => {
+  ['ltr', 'rtl'].forEach((dir) => {
+    describe(`collapse in ${dir}`, () => {
+      let menu;
+
       beforeEach(async () => {
-        menu.reverseCollapse = true;
-        await nextUpdate(menu);
+        const wrapper = fixtureSync(`
+          <div style="display: flex">
+            <div style="width: 100px;"></div>
+            <vaadin-menu-bar dir="${dir}" style="width: ${BUTTON_WIDTH * 3}px"></vaadin-menu-bar>
+          </div>
+        `);
+        menu = wrapper.querySelector('vaadin-menu-bar');
+        menu.items = createItems(5);
+        await nextResize(menu);
       });
 
-      it('should show overflow button and hide the buttons which do not fit', () => {
-        assertHidden(buttons[0]);
-        assertHidden(buttons[1]);
-        assertHidden(buttons[2]);
-        assertVisible(buttons[3]);
-        assertVisible(buttons[4]);
+      describe('default order', () => {
+        it('should collapse trailing buttons that do not fit', () => {
+          expectCollapsed(menu, [2, 3, 4]);
+        });
 
-        expect(overflow.hasAttribute('hidden')).to.be.false;
+        it('should restore trailing buttons when width increases', async () => {
+          menu.style.width = `${BUTTON_WIDTH * 4.5}px`;
+          await nextResize(menu);
+          expectCollapsed(menu, [3, 4]);
+        });
+
+        it('should collapse more trailing buttons when width decreases', async () => {
+          menu.style.width = `${BUTTON_WIDTH * 2.5}px`;
+          await nextResize(menu);
+          expectCollapsed(menu, [1, 2, 3, 4]);
+        });
+
+        it('should show all buttons when they fit', async () => {
+          menu.style.width = 'auto';
+          await nextResize(menu);
+          expectCollapsed(menu, []);
+        });
+
+        it('should keep the overflow button inside the menu bar when gap is set', async () => {
+          menu.style.setProperty('--vaadin-menu-bar-gap', '10px');
+          menu.style.width = '195px';
+          await nextResize(menu);
+          expectCollapsed(menu, [1, 2, 3, 4]);
+          expectOverflowInside(menu);
+        });
       });
 
-      it('should set items to overflow button for buttons which do not fit', () => {
-        expect(overflow.item).to.be.instanceOf(Object);
-        expect(overflow.item.children).to.be.instanceOf(Array);
-        expect(overflow.item.children.length).to.equal(3);
-        expect(overflow.item.children[0]).to.deep.equal(menu.items[0]);
-        expect(overflow.item.children[1]).to.deep.equal(menu.items[1]);
-        expect(overflow.item.children[2]).to.deep.equal(menu.items[2]);
+      describe('reverse order', () => {
+        beforeEach(async () => {
+          menu.reverseCollapse = true;
+          await nextUpdate(menu);
+        });
+
+        it('should collapse leading buttons that do not fit', () => {
+          expectCollapsed(menu, [0, 1, 2]);
+        });
+
+        it('should restore leading buttons when width increases', async () => {
+          menu.style.width = `${BUTTON_WIDTH * 4.5}px`;
+          await nextResize(menu);
+          expectCollapsed(menu, [0, 1]);
+        });
+
+        it('should count the start margin of the first kept button', async () => {
+          // The two kept buttons span 119px and the overflow button adds 59px, as each of
+          // them overlaps its predecessor by the 1px border. The first kept button keeps
+          // that -1px margin as well, so the range ends exactly at 177px.
+          menu.style.width = '177px';
+          await nextResize(menu);
+          expectCollapsed(menu, [0, 1, 2]);
+        });
+
+        it('should collapse trailing buttons when reverseCollapse is unset', async () => {
+          menu.reverseCollapse = false;
+          await nextUpdate(menu);
+          expectCollapsed(menu, [2, 3, 4]);
+        });
       });
 
-      it('should update overflow when reverseCollapse changes', async () => {
-        menu.reverseCollapse = false;
-        await nextUpdate(menu);
-        assertVisible(buttons[0]);
-        assertVisible(buttons[1]);
-        assertHidden(buttons[2]);
-        assertHidden(buttons[3]);
-        assertHidden(buttons[4]);
+      describe('end-aligned', () => {
+        beforeEach(async () => {
+          menu.setAttribute('theme', 'end-aligned');
+          await nextUpdate(menu);
+        });
+
+        it('should keep buttons that fit visible', () => {
+          expectCollapsed(menu, [2, 3, 4]);
+        });
+
+        it('should keep the same buttons visible on a second detection', async () => {
+          menu.items = [...menu.items];
+          await nextUpdate(menu);
+          expectCollapsed(menu, [2, 3, 4]);
+        });
+
+        it('should restore buttons when widening from a fully collapsed state', async () => {
+          menu.style.width = '100px';
+          await nextResize(menu);
+          expectCollapsed(menu, [0, 1, 2, 3, 4]);
+
+          menu.style.width = '180px';
+          await nextResize(menu);
+          expectCollapsed(menu, [2, 3, 4]);
+        });
+
+        describe('reverse order', () => {
+          beforeEach(async () => {
+            menu.reverseCollapse = true;
+            await nextUpdate(menu);
+          });
+
+          it('should keep buttons that fit visible at the collapse boundary', async () => {
+            menu.style.width = '178px';
+            await nextResize(menu);
+            expectCollapsed(menu, [0, 1, 2]);
+          });
+        });
       });
+    });
+  });
+
+  describe('sub-pixel rounding', () => {
+    let menu;
+
+    beforeEach(async () => {
+      // Exactly as wide as five buttons that overlap by 1px, like a menu bar sized by its content
+      menu = fixtureSync('<vaadin-menu-bar style="width: 296px"></vaadin-menu-bar>');
+      menu.items = createItems(5);
+      await nextResize(menu);
+    });
+
+    it('should not collapse when scrollWidth rounds one pixel above offsetWidth', async () => {
+      // Browser zoom makes the two round the same fractional width differently
+      const container = menu._container;
+      const { get } = Object.getOwnPropertyDescriptor(Element.prototype, 'scrollWidth');
+      Object.defineProperty(container, 'scrollWidth', { configurable: true, get: () => get.call(container) + 1 });
+
+      menu.items = [...menu.items];
+      await nextUpdate(menu);
+
+      expectCollapsed(menu, []);
     });
   });
 
@@ -234,7 +265,7 @@ describe('overflow', () => {
 
     beforeEach(async () => {
       menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
-      menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }];
+      menu.items = createItems(4);
       await nextResize(menu);
       buttons = menu._buttons;
       overflow = buttons[buttons.length - 1];
@@ -297,228 +328,6 @@ describe('overflow', () => {
       menu.items = [{ text: 'Edit' }, { text: 'Delete' }];
       await nextResize(menu);
       expect(menu.hasAttribute('has-single-button')).to.be.false;
-    });
-  });
-
-  describe('responsive behavior in container', () => {
-    let container, menu, buttons, overflow;
-
-    beforeEach(async () => {
-      container = fixtureSync(
-        '<div style="display: flex;"><vaadin-menu-bar style="min-width: 100%"></vaadin-menu-bar></div>',
-      );
-      menu = container.firstChild;
-
-      container.style.width = `${BUTTON_WIDTH * 2.5}px`;
-
-      menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
-      await nextRender();
-      buttons = menu._buttons;
-      overflow = buttons[buttons.length - 1];
-    });
-
-    it('should hide overflow button and reset its items when all buttons fit', async () => {
-      // Must work even if menu-bar won't automatically resize to a larger size
-      // when more space becomes available
-      // see https://github.com/vaadin/vaadin-menu-bar/issues/130
-      menu.style.minWidth = '0';
-      container.style.width = `${BUTTON_WIDTH * 1.5}px`;
-      await nextResize(menu);
-      assertHidden(buttons[2]);
-      assertHidden(buttons[3]);
-
-      container.style.width = `${BUTTON_WIDTH * 5}px`;
-      await nextResize(menu);
-      assertVisible(buttons[2]);
-      assertVisible(buttons[3]);
-      assertVisible(buttons[4]);
-      expect(overflow.hasAttribute('hidden')).to.be.true;
-      expect(overflow.item.children.length).to.equal(0);
-    });
-  });
-
-  describe('layout combinations', () => {
-    const items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
-
-    async function initMenuBar(container) {
-      const menu = container.querySelector('vaadin-menu-bar');
-      menu.items = items;
-      await nextResize(menu);
-      const buttons = menu._buttons;
-      const overflow = buttons[buttons.length - 1];
-      return { menu, buttons, overflow };
-    }
-
-    describe('flex row with sibling', () => {
-      let container, overflow;
-
-      beforeEach(async () => {
-        container = fixtureSync(`
-          <div style="display: flex; width: ${BUTTON_WIDTH * 5}px">
-            <vaadin-menu-bar style="width: 100%"></vaadin-menu-bar>
-            <div style="min-width: ${BUTTON_WIDTH * 2}px">Sibling</div>
-          </div>
-        `);
-        overflow = (await initMenuBar(container)).overflow;
-      });
-
-      it('should collapse items into overflow when sibling takes space', () => {
-        expect(overflow.hasAttribute('hidden')).to.be.false;
-        expect(overflow.item.children.length).to.be.greaterThan(0);
-        expect(overflow.item.children.length).to.be.lessThan(items.length);
-      });
-    });
-
-    describe('css grid with sibling', () => {
-      let container, overflow;
-
-      beforeEach(async () => {
-        container = fixtureSync(`
-          <div style="display: grid; grid-template-columns: 1fr ${BUTTON_WIDTH * 2}px; width: ${BUTTON_WIDTH * 5}px">
-            <vaadin-menu-bar></vaadin-menu-bar>
-            <div>Sibling</div>
-          </div>
-        `);
-        overflow = (await initMenuBar(container)).overflow;
-      });
-
-      it('should collapse items into overflow', () => {
-        expect(overflow.hasAttribute('hidden')).to.be.false;
-        expect(overflow.item.children.length).to.be.greaterThan(0);
-        expect(overflow.item.children.length).to.be.lessThan(items.length);
-      });
-    });
-
-    describe('flex row-reverse with no width on menu-bar', () => {
-      let container, menu, buttons, overflow;
-
-      beforeEach(async () => {
-        container = fixtureSync(`
-          <div style="display: flex; flex-direction: row-reverse; width: ${BUTTON_WIDTH * 5}px">
-            <div style="min-width: ${BUTTON_WIDTH * 2}px">Sibling</div>
-            <vaadin-menu-bar></vaadin-menu-bar>
-          </div>
-        `);
-        ({ menu, buttons, overflow } = await initMenuBar(container));
-      });
-
-      it('should collapse items into overflow', () => {
-        expect(overflow.hasAttribute('hidden')).to.be.false;
-        expect(overflow.item.children.length).to.be.greaterThan(0);
-        expect(overflow.item.children.length).to.be.lessThan(items.length);
-      });
-
-      it('should restore items when container width increases', async () => {
-        container.style.width = `${BUTTON_WIDTH * 8}px`;
-        await nextResize(menu);
-        buttons.slice(0, -1).forEach((btn) => assertVisible(btn));
-        expect(overflow.hasAttribute('hidden')).to.be.true;
-      });
-    });
-
-    describe('gradual collapse in flex container', () => {
-      let container, menu, buttons, overflow;
-
-      beforeEach(async () => {
-        // Reproduces the layout from https://github.com/vaadin/web-components/issues/11269:
-        // a flex container with a menu-bar (no explicit width) and a sibling.
-        // Without the containerWidth snapshot fix, hiding a button causes
-        // the host to shrink (min-width: 0), which shrinks the container,
-        // causing cascading collapse where ALL items end up in overflow.
-        container = fixtureSync(`
-          <div style="display: flex; width: ${BUTTON_WIDTH * 3.5}px">
-            <vaadin-menu-bar></vaadin-menu-bar>
-            <button>Sibling</button>
-          </div>
-        `);
-        menu = container.querySelector('vaadin-menu-bar');
-        menu.items = [
-          { text: 'Item 1' },
-          { text: 'Item 2' },
-          { text: 'Item 3' },
-          { text: 'Item 4' },
-          { text: 'Item 5' },
-          { text: 'Item 6' },
-        ];
-        await nextResize(menu);
-        buttons = menu._buttons;
-        overflow = buttons.at(-1);
-      });
-
-      it('should not collapse all items at once', () => {
-        const visibleButtons = buttons.filter(
-          (btn) => btn !== overflow && getComputedStyle(btn).visibility !== 'hidden',
-        );
-        expect(visibleButtons.length).to.be.greaterThan(0);
-        expect(overflow.item.children.length).to.be.greaterThan(0);
-        expect(overflow.item.children.length).to.be.lessThan(menu.items.length);
-      });
-    });
-  });
-
-  describe('parent resize', () => {
-    let container, text, menu, buttons;
-
-    beforeEach(() => {
-      container = fixtureSync(`<div style="display: flex; max-width: ${BUTTON_WIDTH * 3}px"></div>`);
-      text = document.createElement('div');
-      text.textContent = 'Sibling';
-      menu = document.createElement('vaadin-menu-bar');
-      menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }];
-      menu.style.minWidth = `${BUTTON_WIDTH * 1.5}px`;
-    });
-
-    describe('container', () => {
-      beforeEach(async () => {
-        container.append(text, menu);
-        await nextResize(menu);
-        buttons = menu._buttons;
-      });
-
-      it('should show buttons when container width increases and menu-bar width stays the same', async () => {
-        assertHidden(buttons[2]);
-        assertHidden(buttons[3]);
-
-        container.style.maxWidth = `${BUTTON_WIDTH * 5}px`;
-        await nextResize(menu);
-
-        assertVisible(buttons[2]);
-        assertVisible(buttons[3]);
-      });
-
-      it('should show buttons after attaching another container and increasing its width', async () => {
-        const other = document.createElement('div');
-        other.style.display = 'flex';
-        other.style.maxWidth = `${BUTTON_WIDTH * 4}px`;
-        container.parentNode.appendChild(other);
-
-        other.append(text, menu);
-        other.style.maxWidth = `${BUTTON_WIDTH * 5}px`;
-        await nextResize(menu);
-
-        assertVisible(buttons[2]);
-        assertVisible(buttons[3]);
-      });
-    });
-
-    describe('shadow host', () => {
-      beforeEach(async () => {
-        container.attachShadow({ mode: 'open' });
-        container.shadowRoot.append(text, menu);
-        await nextResize(menu);
-        buttons = menu._buttons;
-      });
-
-      it('should show buttons when shadow host width increases and menu-bar width stays the same', async () => {
-        assertHidden(buttons[2]);
-        assertHidden(buttons[3]);
-
-        container.style.maxWidth = `${BUTTON_WIDTH * 6}px`;
-        await nextResize(menu);
-
-        assertVisible(buttons[2]);
-        assertVisible(buttons[3]);
-      });
     });
   });
 
@@ -604,18 +413,35 @@ describe('overflow', () => {
   });
 
   describe('performance', () => {
-    let menu, spy;
+    let menu;
 
     beforeEach(() => {
       menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
-      spy = sinon.spy(menu, '_hasOverflow', ['get', 'set']);
     });
 
     it('should only detect overflow twice on initial render', async () => {
-      menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }, { text: 'Item 5' }];
+      const spy = sinon.spy(menu, '_hasOverflow', ['get', 'set']);
+      menu.items = createItems(5);
       await nextResize(menu);
       await nextUpdate(menu);
       expect(spy.set.callCount).to.equal(2);
+    });
+
+    it('should read the overflow button position once per detection', async () => {
+      menu.items = createItems(5);
+      await nextResize(menu);
+      expectCollapsed(menu, []);
+
+      // Reading it again after hiding a button would force another layout
+      const spy = sinon.spy(menu._overflow, 'getBoundingClientRect');
+
+      menu.style.width = `${BUTTON_WIDTH * 3}px`;
+      await nextResize(menu);
+      spy.restore();
+
+      // Collapsing proves that a detection ran while the reads were counted
+      expectCollapsed(menu, [2, 3, 4]);
+      expect(spy.callCount, 'overflow button position reads').to.equal(1);
     });
   });
 });

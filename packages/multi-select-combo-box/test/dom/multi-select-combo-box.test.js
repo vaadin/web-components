@@ -81,6 +81,13 @@ describe('vaadin-multi-select-combo-box', () => {
       it('overlay', async () => {
         await expect(multiSelectComboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
+
+      it('select all button', async () => {
+        multiSelectComboBox.items = ['Apple', 'Banana'];
+        multiSelectComboBox.selectAllButtonVisible = true;
+        await nextRender();
+        await expect(multiSelectComboBox).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
     });
   });
 

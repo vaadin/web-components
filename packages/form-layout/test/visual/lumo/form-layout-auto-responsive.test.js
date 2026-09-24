@@ -296,6 +296,7 @@ describe('form-layout auto responsive', () => {
       element.labelsAside = true;
       element.style.setProperty('--vaadin-form-layout-label-width', '200px');
       element.style.setProperty('--vaadin-form-layout-label-spacing', '60px');
+      element.style.setProperty('--vaadin-form-layout-label-text-align', 'end');
       await nextResize(element);
       await visualDiff(container, 'form-items-labels-aside-custom-css-properties');
     });

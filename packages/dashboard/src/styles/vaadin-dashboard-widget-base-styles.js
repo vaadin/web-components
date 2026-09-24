@@ -41,6 +41,7 @@ const widgetStyles = css`
     flex: 1;
     overflow: hidden;
     min-height: 1em;
+    padding: 0 var(--vaadin-dashboard-widget-padding, 0) var(--vaadin-dashboard-widget-padding, 0);
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
   }

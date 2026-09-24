@@ -78,21 +78,4 @@ export declare class ComboBoxMixinClass<TItem> {
    * The selected item from the `items` array.
    */
   selectedItem: TItem | null | undefined;
-
-  /**
-   * Path for the id of the item. If `items` is an array of objects,
-   * the `itemIdPath` is used to compare and identify the same item
-   * in `selectedItem` and `filteredItems` (items given by the
-   * `dataProvider` callback).
-   * @attr {string} item-id-path
-   */
-  itemIdPath: string | null | undefined;
-
-  /**
-   * Requests an update for the content of items.
-   * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
-   *
-   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
-   */
-  requestContentUpdate(): void;
 }

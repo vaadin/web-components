@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { FocusMixinClass } from '@vaadin/a11y-base/src/focus-mixin.js';
 import type { I18nMixinClass } from '@vaadin/component-base/src/i18n-mixin.js';
 
 export interface MessageInputI18n {
@@ -13,7 +14,10 @@ export interface MessageInputI18n {
 
 export declare function MessageInputMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<I18nMixinClass<MessageInputI18n>> & Constructor<MessageInputMixinClass> & T;
+): Constructor<FocusMixinClass> &
+  Constructor<I18nMixinClass<MessageInputI18n>> &
+  Constructor<MessageInputMixinClass> &
+  T;
 
 export declare class MessageInputMixinClass {
   /**
@@ -23,8 +27,10 @@ export declare class MessageInputMixinClass {
 
   /**
    * The object used to localize this component. To change the default
-   * localization, replace this with an object that provides all properties, or
+   * localization, set this to an object that provides all properties, or
    * just the individual properties you want to change.
+   *
+   * When not set, defaults to `undefined`.
    *
    * The object has the following JSON structure and default values:
    * ```js
@@ -37,7 +43,7 @@ export declare class MessageInputMixinClass {
    * }
    * ```
    */
-  i18n: MessageInputI18n;
+  i18n: MessageInputI18n | undefined;
 
   /**
    * Set to true to disable this element.

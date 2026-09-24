@@ -10,6 +10,9 @@ export const monthCalendarStyles = css`
   :host {
     display: block;
     padding: var(--vaadin-date-picker-month-padding, var(--vaadin-padding-s));
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   [part='month-header'] {

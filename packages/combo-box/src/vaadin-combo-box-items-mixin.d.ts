@@ -61,6 +61,15 @@ export declare class ComboBoxItemsMixinClass<TItem> {
   itemValuePath: string;
 
   /**
+   * Path for the id of the item. If `items` is an array of objects,
+   * the `itemIdPath` is used to compare and identify the same item
+   * in the selection and in `filteredItems` (items given by the
+   * `dataProvider` callback).
+   * @attr {string} item-id-path
+   */
+  itemIdPath: string | null | undefined;
+
+  /**
    * Controls which item is automatically set to be selected, for
    * example on Enter, when the typed filter only partially matches
    * its label. The item that will be selected is highlighted in the
@@ -85,4 +94,12 @@ export declare class ComboBoxItemsMixinClass<TItem> {
    * @attr {none|first-match|only-match} partial-match-mode
    */
   partialMatchMode: ComboBoxPartialMatchMode;
+
+  /**
+   * Requests an update for the content of items.
+   * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   */
+  requestContentUpdate(): void;
 }

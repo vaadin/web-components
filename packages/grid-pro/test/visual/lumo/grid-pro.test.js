@@ -4,9 +4,11 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/grid-pro.css';
 import '@vaadin/vaadin-lumo-styles/components/grid-pro-edit-column.css';
+import '@vaadin/vaadin-lumo-styles/components/grid-selection-column.css';
 import '../../not-animated-styles.css';
 import '../../../vaadin-grid-pro.js';
 import '../../../vaadin-grid-pro-edit-column.js';
+import '@vaadin/grid/vaadin-grid-selection-column.js';
 import { getContainerCell } from '../../helpers.js';
 import { users } from '../users.js';
 
@@ -80,6 +82,32 @@ describe('grid-pro', () => {
           await visualDiff(div, `theme-${theme}-focus`);
         });
       });
+    });
+  });
+
+  describe('selection', () => {
+    beforeEach(async () => {
+      element = fixtureSync(
+        `
+          <vaadin-grid-pro style="height: 100px;">
+            <vaadin-grid-selection-column></vaadin-grid-selection-column>
+            <vaadin-grid-pro-edit-column path="name.first"></vaadin-grid-pro-edit-column>
+          </vaadin-grid-pro>
+        `,
+        div,
+      );
+      element.items = users;
+      await nextRender();
+    });
+
+    it('select-all', async () => {
+      await visualDiff(div, 'select-all');
+    });
+
+    it('select-all-unavailable', async () => {
+      element.isItemSelectable = () => true;
+      await nextRender();
+      await visualDiff(div, 'select-all-unavailable');
     });
   });
 

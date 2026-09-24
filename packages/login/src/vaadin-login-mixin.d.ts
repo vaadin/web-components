@@ -62,8 +62,10 @@ export declare class LoginMixinClass {
 
   /**
    * The object used to localize this component. To change the default
-   * localization, replace this with an object that provides all properties, or
+   * localization, set this to an object that provides all properties, or
    * just the individual properties you want to change.
+   *
+   * When not set, defaults to `undefined`.
    *
    * The object has the following JSON structure (by default it doesn't include `additionalInformation`
    * and `header` sections, `header` can be added to override `title` and `description` properties
@@ -92,7 +94,7 @@ export declare class LoginMixinClass {
    * }
    * ```
    */
-  i18n: LoginI18n;
+  i18n: LoginI18n | undefined;
 
   /**
    * Sets the root heading level (`aria-level`) for the heading hierarchy. Default value: 1.

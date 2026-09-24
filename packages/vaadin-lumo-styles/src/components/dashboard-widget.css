@@ -39,9 +39,6 @@
 
   #content {
     min-height: var(--lumo-size-m);
-    padding-inline: var(--vaadin-dashboard-widget-padding, 0);
-    padding-bottom: var(--vaadin-dashboard-widget-padding, 0);
-    padding-top: 0;
     border-radius: inherit;
     border-top-left-radius: 0;
     border-top-right-radius: 0;

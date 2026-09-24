@@ -3,6 +3,7 @@
  * Copyright (c) 2000 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+@import '../src/mixins/sr-only.css';
 @import '../src/components/grid-pro.css';
 @import '../src/components/grid.css';
 
@@ -10,6 +11,7 @@
 :host {
   --_lumo-vaadin-grid-pro-inject: 1;
   --_lumo-vaadin-grid-pro-inject-modules:
+    lumo_mixins_sr-only,
     lumo_components_grid,
     lumo_components_grid-pro;
 }

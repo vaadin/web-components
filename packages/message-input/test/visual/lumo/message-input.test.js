@@ -1,5 +1,8 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/button';
+import '@vaadin/icon';
+import '@vaadin/icons';
 import '@vaadin/vaadin-lumo-styles/src/props/index.css';
 import '@vaadin/vaadin-lumo-styles/components/message-input.css';
 import '../../../vaadin-message-input.js';
@@ -37,6 +40,29 @@ describe('message-input', () => {
           element.value = 'Hello';
           element.disabled = true;
           await visualDiff(div, `${dir}-disabled`);
+        });
+
+        it('custom button', async () => {
+          const customButton = document.createElement('vaadin-button');
+          customButton.slot = 'button';
+          customButton.setAttribute('theme', 'icon primary');
+          customButton.innerHTML = '<vaadin-icon icon="vaadin:arrow-up"></vaadin-icon>';
+          element.querySelector('[slot="button"]').replaceWith(customButton);
+          element.value = 'Hello';
+          await visualDiff(div, `${dir}-custom-button`);
+        });
+
+        it('slots', async () => {
+          element.value = 'Hello';
+          element.insertAdjacentHTML(
+            'afterbegin',
+            `
+              <div slot="header">Header</div>
+              <span slot="prefix">Prefix</span>
+              <div slot="footer">Footer</div>
+            `,
+          );
+          await visualDiff(div, `${dir}-slots`);
         });
       });
     });

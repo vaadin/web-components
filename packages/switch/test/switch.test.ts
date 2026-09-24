@@ -3,10 +3,6 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-switch.js';
 import type { Switch } from '../src/vaadin-switch.js';
 
-window.Vaadin ??= {};
-window.Vaadin.featureFlags ??= {};
-window.Vaadin.featureFlags.switchComponent = true;
-
 describe('vaadin-switch', () => {
   let element: Switch;
 

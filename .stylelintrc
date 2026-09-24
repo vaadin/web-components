@@ -3,7 +3,8 @@
   "plugins": [
     "./custom-rules/stylelint/no-shorthand-with-unresolved-longhand.js",
     "./custom-rules/stylelint/license-header.js",
-    "./custom-rules/stylelint/content-with-css-escape.js"
+    "./custom-rules/stylelint/content-with-css-escape.js",
+    "./custom-rules/stylelint/label-aside-form-layout-selector.js"
   ],
   "overrides": [
     {
@@ -24,6 +25,7 @@
   "rules": {
     "color-function-notation": "legacy",
     "custom-property-empty-line-before": ["never", { "ignore": ["after-custom-property"] }],
+    "custom-rules/label-aside-form-layout-selector": true,
     "length-zero-no-unit": [true, { "ignore": ["custom-properties"] }],
     "no-duplicate-selectors": true,
     "property-no-vendor-prefix": [

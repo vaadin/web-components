@@ -57,6 +57,9 @@ const DEFAULT_I18N = {
   moreOptions: 'More options',
 };
 
+// Two client rects of the same edge can differ by float noise, a few 1e-5 px under browser zoom
+const OVERFLOW_TOLERANCE = 0.1;
+
 export const MenuBarMixin = (superClass) =>
   class MenuBarMixinClass extends I18nMixin(
     KeyboardDirectionMixin(ResizeMixin(FocusMixin(DisabledMixin(superClass)))),
@@ -203,8 +206,10 @@ export const MenuBarMixin = (superClass) =>
 
     /**
      * The object used to localize this component. To change the default
-     * localization, replace this with an object that provides all properties, or
+     * localization, set this to an object that provides all properties, or
      * just the individual properties you want to change.
+     *
+     * When not set, defaults to `undefined`.
      *
      * The object has the following JSON structure and default values:
      * ```js
@@ -212,7 +217,7 @@ export const MenuBarMixin = (superClass) =>
      *   moreOptions: 'More options'
      * }
      * ```
-     * @type {!MenuBarI18n}
+     * @type {MenuBarI18n | undefined}
      */
     get i18n() {
       return super.i18n;
@@ -361,6 +366,10 @@ export const MenuBarMixin = (superClass) =>
         this._themeChanged(this._theme);
       }
 
+      if (props.has('dir')) {
+        setOrRemoveAttribute(this._subMenu, 'dir', this.dir);
+      }
+
       if (props.has('disabled')) {
         this._overflow.toggleAttribute('disabled', this.disabled);
       }
@@ -447,8 +456,7 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     __getOverflowCount(overflow) {
-      // We can't use optional chaining due to webpack 4
-      return (overflow.item && overflow.item.children && overflow.item.children.length) || 0;
+      return overflow.item?.children?.length ?? 0;
     }
 
     /** @private */
@@ -459,12 +467,11 @@ export const MenuBarMixin = (superClass) =>
         button.style.width = '';
 
         // Teleport item component back from "overflow" sub-menu
-        const item = button.item && button.item.component;
+        const item = button.item?.component;
         if (item instanceof HTMLElement && item.getAttribute('role') === 'menuitem') {
           this.__restoreItem(button, item);
         }
       });
-      this.__updateOverflow([]);
     }
 
     /** @private */
@@ -482,49 +489,100 @@ export const MenuBarMixin = (superClass) =>
       this._hasOverflow = items.length > 0;
     }
 
+    /**
+     * Inline end edge of the element, mirrored in RTL. Unlike `offsetWidth` and `scrollWidth`,
+     * the rect keeps the fraction that browser zoom leaves on the width.
+     *
+     * @param {!HTMLElement} el
+     * @return {number}
+     * @private
+     */
+    __getInlineEnd(el) {
+      const { left, right } = el.getBoundingClientRect();
+      return this.__isRTL ? -left : right;
+    }
+
+    /**
+     * Positions of the buttons, read in one batch before any of them is hidden.
+     * Mirrored in RTL so that a larger value is always further along the inline axis.
+     *
+     * @typedef {object} MenuBarOverflowLayout
+     * @property {number[]} starts Inline start of each button
+     * @property {number[]} ends Inline end of each button
+     * @property {number[]} margins Inline start margin of each button
+     * @property {number} overflowExtent Space the overflow button adds after the last button
+     */
+
+    /**
+     * @param {!Array<!HTMLElement>} buttons
+     * @param {!HTMLElement} overflow
+     * @return {!MenuBarOverflowLayout}
+     * @private
+     */
+    __measureButtons(buttons, overflow) {
+      const isRTL = this.__isRTL;
+      const rects = buttons.map((btn) => btn.getBoundingClientRect());
+      const ends = rects.map(({ left, right }) => (isRTL ? -left : right));
+
+      return {
+        starts: rects.map(({ left, right }) => (isRTL ? -right : left)),
+        ends,
+        // `auto` resolves to 0 while the content overflows.
+        margins: buttons.map((btn) => parseFloat(getComputedStyle(btn).marginInlineStart) || 0),
+        overflowExtent: this.__getInlineEnd(overflow) - ends.at(-1),
+      };
+    }
+
+    /**
+     * Picks the buttons to collapse so that the rest plus the overflow button end inside
+     * the container. Hiding a button only shifts the buttons after it, so the end of any
+     * kept range follows from one measurement.
+     *
+     * @param {!Array<!HTMLElement>} buttons
+     * @param {!MenuBarOverflowLayout} layout
+     * @param {number} containerWidth
+     * @return {!Array<!HTMLElement>} buttons to collapse, in DOM order
+     * @private
+     */
+    __getCollapsedButtons(buttons, { starts, ends, margins, overflowExtent }, containerWidth) {
+      let lo = 0;
+      let hi = buttons.length - 1;
+
+      // The first kept button keeps its own start margin in front of the range.
+      while (lo <= hi && margins[lo] + ends[hi] - starts[lo] + overflowExtent > containerWidth + OVERFLOW_TOLERANCE) {
+        if (this.reverseCollapse) {
+          lo += 1;
+        } else {
+          hi -= 1;
+        }
+      }
+
+      return buttons.filter((_, i) => i < lo || i > hi);
+    }
+
     /** @private */
     __setOverflowItems(buttons, overflow) {
       const container = this._container;
+      const lastButton = buttons.at(-1);
 
-      // Prevent the container from shrinking while buttons are being hidden.
-      // The host has min-width: 0 so it can shrink inside flex/grid layouts.
-      // Without this lock, hiding a button reduces the host width, which
-      // shrinks the container (width: 100%), shifting all button positions
-      // and causing a cascading collapse where every button appears to overflow.
-      container.style.minWidth = `${container.offsetWidth}px`;
-
-      if (container.offsetWidth < container.scrollWidth) {
+      if (lastButton && this.__getInlineEnd(lastButton) > this.__getInlineEnd(container) + OVERFLOW_TOLERANCE) {
         this._hasOverflow = true;
 
-        const isRTL = this.__isRTL;
-        const containerLeft = container.offsetLeft;
+        // Read the layout once the overflow button is in flow
+        const layout = this.__measureButtons(buttons, overflow);
+        const containerWidth = container.getBoundingClientRect().width;
+        const collapsed = this.__getCollapsedButtons(buttons, layout, containerWidth);
+        // Read button widths once outside of the loop to avoid repetitive layout
+        const widths = collapsed.map((btn) => getComputedStyle(btn).width);
 
-        const remaining = [...buttons];
-        while (remaining.length) {
-          const lastButton = remaining[remaining.length - 1];
-          const btnLeft = lastButton.offsetLeft - containerLeft;
-
-          // If this button isn't overflowing, then the rest aren't either
-          if (
-            (!isRTL && btnLeft + lastButton.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
-            (isRTL && btnLeft >= overflow.offsetWidth)
-          ) {
-            break;
-          }
-
-          const btn = this.reverseCollapse ? remaining.shift() : remaining.pop();
-
-          // Save width for buttons with component
-          btn.style.width = getComputedStyle(btn).width;
+        // Write the DOM state
+        collapsed.forEach((btn, i) => {
+          btn.style.width = widths[i];
           btn.style.visibility = 'hidden';
           btn.style.position = 'absolute';
-        }
-
-        const items = buttons.filter((b) => !remaining.includes(b)).map((b) => b.item);
-        this.__updateOverflow(items);
+        });
+        this.__updateOverflow(collapsed.map((btn) => btn.item));
       }
-
-      container.style.minWidth = '';
     }
 
     /** @private */
@@ -542,6 +600,7 @@ export const MenuBarMixin = (superClass) =>
 
       // Reset all buttons in the menu bar and the overflow button
       this.__restoreButtons(buttons);
+      this.__updateOverflow([]);
 
       // Hide any overflowing buttons and put them in the 'overflow' button
       this.__setOverflowItems(buttons, overflow);
@@ -554,7 +613,11 @@ export const MenuBarMixin = (superClass) =>
       const isSingleButton = newOverflowCount === buttons.length || (newOverflowCount === 0 && buttons.length === 1);
       this.toggleAttribute('has-single-button', isSingleButton);
 
-      // Collect visible buttons to detect if tabindex should be updated
+      this.__updateVisibleButtons(buttons);
+    }
+
+    /** @private */
+    __updateVisibleButtons(buttons) {
       const visibleButtons = buttons.filter((btn) => btn.style.visibility !== 'hidden');
 
       if (!visibleButtons.length) {
@@ -566,8 +629,7 @@ export const MenuBarMixin = (superClass) =>
         this._setTabindex(visibleButtons[visibleButtons.length - 1], true);
       }
 
-      // Apply first/last visible attributes to the visible buttons
-      visibleButtons.forEach((btn, index, visibleButtons) => {
+      visibleButtons.forEach((btn, index) => {
         btn.toggleAttribute('first-visible', index === 0);
         btn.toggleAttribute('last-visible', !this._hasOverflow && index === visibleButtons.length - 1);
       });
@@ -615,9 +677,7 @@ export const MenuBarMixin = (superClass) =>
             const hasChildren = Boolean(item?.children);
 
             if (itemCopy.component) {
-              const component = this.__getComponent(itemCopy);
-              itemCopy.component = component;
-              component.item = itemCopy;
+              itemCopy.component = this.__getComponent(itemCopy);
             }
 
             return html`
@@ -645,7 +705,7 @@ export const MenuBarMixin = (superClass) =>
       const button = event.target;
       // Propagate click event from button to the item component if it was outside
       // it e.g. by calling `click()` on the button (used by the Flow counterpart).
-      if (button.item && button.item.component && !event.composedPath().includes(button.item.component)) {
+      if (button.item?.component && !event.composedPath().includes(button.item.component)) {
         event.stopPropagation();
         button.item.component.click();
       }
@@ -692,7 +752,7 @@ export const MenuBarMixin = (superClass) =>
 
       this._tooltipController.setTarget(button);
 
-      if (wasExpanded && button.item && button.item.children) {
+      if (wasExpanded && button.item?.children) {
         this.__openSubMenu(button, true, { keepFocus: true });
       } else if (!this._subMenu.opened) {
         this._tooltipController.open({ trigger: 'focus' });
@@ -888,12 +948,16 @@ export const MenuBarMixin = (superClass) =>
       const item = Array.from(e.composedPath()).find((el) => el._item);
       if (item) {
         const list = item.parentNode;
-        if (e.keyCode === 38 && item === list.items[0]) {
+        if (e.key === 'ArrowUp' && item === list.items[0]) {
           this._close(true);
         }
-        // ArrowLeft, or ArrowRight on non-parent submenu item,
-        if (e.keyCode === 37 || (e.keyCode === 39 && !item._item.children)) {
-          // Prevent ArrowLeft from being handled in context-menu
+
+        // Switch menu-bar button or open sub-menu on item arrow key.
+        const prevKey = this.__isRTL ? 'ArrowRight' : 'ArrowLeft';
+        const nextKey = this.__isRTL ? 'ArrowLeft' : 'ArrowRight';
+
+        if (e.key === prevKey || (e.key === nextKey && !item._item.children)) {
+          // Prevent the key from being handled in context-menu
           e.stopImmediatePropagation();
           this._handleKeyDown(e);
         }
@@ -983,13 +1047,12 @@ export const MenuBarMixin = (superClass) =>
 
     /** @private */
     _focusFirstItem() {
-      const list = this._subMenu._overlayElement._contentRoot.firstElementChild;
-      list.focus();
+      this._subMenu._menuListBox.focus();
     }
 
     /** @private */
     _focusLastItem() {
-      const list = this._subMenu._overlayElement._contentRoot.firstElementChild;
+      const list = this._subMenu._menuListBox;
       const item = list.items[list.items.length - 1];
       if (item) {
         item.focus();
