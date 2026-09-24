@@ -575,17 +575,9 @@ export const MenuBarMixin = (superClass) =>
     /** @private */
     __setOverflowItems(buttons, overflow) {
       const container = this._container;
-      // Read before any write, so a menu bar that fits forces no layout
-      const width = container.offsetWidth;
       const lastButton = buttons.at(-1);
 
       if (lastButton && this.__getInlineEnd(lastButton) > this.__getInlineEnd(container) + OVERFLOW_TOLERANCE) {
-        // Prevent the container from shrinking while buttons are being hidden.
-        // The host has min-width: 0 so it can shrink inside flex/grid layouts.
-        // Without this lock, hiding a button reduces the host width, which
-        // shrinks the container (width: 100%), shifting all button positions
-        // and causing a cascading collapse where every button appears to overflow.
-        container.style.minWidth = `${width}px`;
         this._hasOverflow = true;
 
         // Read the layout once the overflow button is in flow
@@ -602,8 +594,6 @@ export const MenuBarMixin = (superClass) =>
           btn.style.position = 'absolute';
         });
         this.__updateOverflow(collapsed.map((btn) => btn.item));
-
-        container.style.minWidth = '';
       }
     }
 
