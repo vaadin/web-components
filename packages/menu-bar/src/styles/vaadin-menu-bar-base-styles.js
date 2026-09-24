@@ -15,6 +15,13 @@ export const menuBarStyles = css`
     display: none !important;
   }
 
+  /* Keep the width the menu bar had with every button in flow while buttons are collapsed,
+     so a parent sized by content does not shrink it after the collapse. */
+  :host([overflow-frozen]) {
+    contain: inline-size !important;
+    contain-intrinsic-inline-size: var(--_vaadin-menu-bar-content-width);
+  }
+
   [part='container'] {
     display: flex;
     flex-wrap: nowrap;

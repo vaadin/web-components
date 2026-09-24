@@ -511,6 +511,7 @@ export const MenuBarMixin = (superClass) =>
      * @property {number[]} ends Inline end of each button
      * @property {number[]} margins Inline start margin of each button
      * @property {number} overflowExtent Space the overflow button adds after the last button
+     * @property {number} overflowWidth Space the overflow button needs when every button collapses
      */
 
     /**
@@ -523,33 +524,50 @@ export const MenuBarMixin = (superClass) =>
       const isRTL = this.__isRTL;
       const rects = buttons.map((btn) => btn.getBoundingClientRect());
       const ends = rects.map(({ left, right }) => (isRTL ? -left : right));
+      const overflowRect = overflow.getBoundingClientRect();
 
       return {
         starts: rects.map(({ left, right }) => (isRTL ? -right : left)),
         ends,
         // `auto` resolves to 0 while the content overflows.
         margins: buttons.map((btn) => parseFloat(getComputedStyle(btn).marginInlineStart) || 0),
-        overflowExtent: this.__getInlineEnd(overflow) - ends.at(-1),
+        overflowExtent: (isRTL ? -overflowRect.left : overflowRect.right) - ends.at(-1),
+        overflowWidth: overflowRect.width + (parseFloat(getComputedStyle(overflow).marginInlineStart) || 0),
       };
     }
 
     /**
-     * Picks the buttons to collapse so that the rest plus the overflow button end inside
+     * Width that the buttons from `lo` to `hi` plus the overflow button need.
+     *
+     * @param {!MenuBarOverflowLayout} layout
+     * @param {number} lo
+     * @param {number} hi
+     * @return {number}
+     * @private
+     */
+    __getRequiredWidth({ starts, ends, margins, overflowExtent, overflowWidth }, lo, hi) {
+      if (lo > hi) {
+        return overflowWidth;
+      }
+      // The first kept button keeps its own start margin in front of the range.
+      return margins[lo] + ends[hi] - starts[lo] + overflowExtent;
+    }
+
+    /**
+     * Picks the range of buttons to keep so that it plus the overflow button end inside
      * the container. Hiding a button only shifts the buttons after it, so the end of any
      * kept range follows from one measurement.
      *
-     * @param {!Array<!HTMLElement>} buttons
      * @param {!MenuBarOverflowLayout} layout
      * @param {number} containerWidth
-     * @return {!Array<!HTMLElement>} buttons to collapse, in DOM order
+     * @return {{ lo: number, hi: number }} indexes of the first and last kept button
      * @private
      */
-    __getCollapsedButtons(buttons, { starts, ends, margins, overflowExtent }, containerWidth) {
+    __getKeptRange(layout, containerWidth) {
       let lo = 0;
-      let hi = buttons.length - 1;
+      let hi = layout.ends.length - 1;
 
-      // The first kept button keeps its own start margin in front of the range.
-      while (lo <= hi && margins[lo] + ends[hi] - starts[lo] + overflowExtent > containerWidth + OVERFLOW_TOLERANCE) {
+      while (lo <= hi && this.__getRequiredWidth(layout, lo, hi) > containerWidth + OVERFLOW_TOLERANCE) {
         if (this.reverseCollapse) {
           lo += 1;
         } else {
@@ -557,23 +575,49 @@ export const MenuBarMixin = (superClass) =>
         }
       }
 
-      return buttons.filter((_, i) => i < lo || i > hi);
+      return { lo, hi };
+    }
+
+    /**
+     * Keeps the intrinsic width of the host at the given value, or clears it with `null`.
+     *
+     * @param {?number} width
+     * @private
+     */
+    __setFrozenWidth(width) {
+      if (width === null) {
+        this.style.removeProperty('--_vaadin-menu-bar-content-width');
+      } else {
+        this.style.setProperty('--_vaadin-menu-bar-content-width', `${width}px`);
+      }
+      this.toggleAttribute('overflow-frozen', width !== null);
     }
 
     /** @private */
     __setOverflowItems(buttons, overflow) {
       const container = this._container;
       const lastButton = buttons.at(-1);
+      const frozen = this.hasAttribute('overflow-frozen');
 
-      if (lastButton && this.__getInlineEnd(lastButton) > this.__getInlineEnd(container) + OVERFLOW_TOLERANCE) {
+      // A frozen host is as wide as every button plus the overflow button, so the quick
+      // check below would report a fit one overflow button too early. Measure instead.
+      const overflows =
+        lastButton && this.__getInlineEnd(lastButton) > this.__getInlineEnd(container) + OVERFLOW_TOLERANCE;
+
+      if (lastButton && (frozen || overflows)) {
         this._hasOverflow = true;
 
         // Read the layout once the overflow button is in flow
         const layout = this.__measureButtons(buttons, overflow);
-        const containerWidth = container.getBoundingClientRect().width;
-        const collapsed = this.__getCollapsedButtons(buttons, layout, containerWidth);
+        const containerRect = container.getBoundingClientRect();
+        const { lo, hi } = this.__getKeptRange(layout, containerRect.width);
+        const collapsed = buttons.filter((_, i) => i < lo || i > hi);
         // Read button widths once outside of the loop to avoid repetitive layout
         const widths = collapsed.map((btn) => getComputedStyle(btn).width);
+
+        // Content width with every button and the overflow button in flow
+        const containerStart = this.__isRTL ? -containerRect.right : containerRect.left;
+        const contentWidth = layout.ends.at(-1) + layout.overflowExtent - containerStart;
 
         // Write the DOM state
         collapsed.forEach((btn, i) => {
@@ -582,6 +626,22 @@ export const MenuBarMixin = (superClass) =>
           btn.style.position = 'absolute';
         });
         this.__updateOverflow(collapsed.map((btn) => btn.item));
+
+        if (collapsed.length === 0) {
+          this.__setFrozenWidth(null);
+        } else if (
+          frozen ||
+          this.__getRequiredWidth(layout, lo, hi) > container.getBoundingClientRect().width + OVERFLOW_TOLERANCE
+        ) {
+          // A content-sized parent shrinks the host once the buttons are out of flow, for
+          // example a split layout pane. Keep the intrinsic width the host had with every
+          // button in flow, so the decision made for that width still holds. The freeze stays
+          // until every button fits again, so that its flex basis does not flip between
+          // detections when another element in the same row also depends on it.
+          this.__setFrozenWidth(contentWidth);
+        }
+      } else {
+        this.__setFrozenWidth(null);
       }
     }
 
