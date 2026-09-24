@@ -104,9 +104,9 @@ describe('overflow in layouts', () => {
     it('should not collapse all items at once in a flex container with a sibling', async () => {
       // Reproduces the layout from https://github.com/vaadin/web-components/issues/11269:
       // a flex container with a menu-bar (no explicit width) and a sibling.
-      // Without the containerWidth snapshot fix, hiding a button causes
-      // the host to shrink (min-width: 0), which shrinks the container,
-      // causing cascading collapse where ALL items end up in overflow.
+      // Measuring again after hiding a button would let the host shrink
+      // (min-width: 0), which shrinks the container, causing cascading
+      // collapse where ALL items end up in overflow.
       const { menu, buttons, overflow } = await fixtureMenuBar(
         `
           <div style="display: flex; width: ${BUTTON_WIDTH * 3.5}px">
