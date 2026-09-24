@@ -44,6 +44,7 @@ import { MenuBarMixin } from './vaadin-menu-bar-mixin.js';
  * Attribute           | Description
  * --------------------|----------------------------------
  * `disabled`          | Set when the menu bar is disabled
+ * `has-overflow`      | Set when one or more buttons are collapsed into the overflow sub-menu
  * `has-single-button` | Set when there is only one button visible
  *
  * The following custom CSS properties are available for styling:
