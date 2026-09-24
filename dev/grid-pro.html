@@ -17,6 +17,7 @@
         editor-options='["mr", "mrs", "ms"]'
       ></vaadin-grid-pro-edit-column>
       <vaadin-grid-pro-edit-column path="married" editor-type="checkbox"></vaadin-grid-pro-edit-column>
+      <vaadin-grid-pro-edit-column path="location.city"></vaadin-grid-pro-edit-column>
     </vaadin-grid-pro>
 
     <script type="module">
@@ -27,6 +28,18 @@
 
       const grid = document.querySelector('vaadin-grid-pro');
       grid.items = users;
+
+      // Custom editor that cannot be focused, so it never fires focusout
+      const cityColumn = grid.querySelector('[path="location.city"]');
+      cityColumn.editModeRenderer = (root, _, model) => {
+        if (!root.firstElementChild) {
+          root.innerHTML = '<div><button>Set to Berlin</button></div>';
+          root.firstElementChild.querySelector('button').addEventListener('click', () => {
+            root.firstElementChild.value = 'berlin';
+          });
+        }
+        root.firstElementChild.value = model.item.location.city;
+      };
     </script>
   </body>
 </html>
