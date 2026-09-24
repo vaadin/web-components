@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["menu-bar basic"] = 
+snapshots["menu-bar host default"] = 
 `<vaadin-menu-bar role="menubar">
   <vaadin-menu-bar-submenu
     is-root=""
@@ -64,9 +64,9 @@ snapshots["menu-bar basic"] =
   </vaadin-menu-bar-button>
 </vaadin-menu-bar>
 `;
-/* end snapshot menu-bar basic */
+/* end snapshot menu-bar host default */
 
-snapshots["menu-bar opened"] = 
+snapshots["menu-bar host opened"] = 
 `<vaadin-menu-bar
   role="menubar"
   style="pointer-events: auto;"
@@ -164,9 +164,9 @@ snapshots["menu-bar opened"] =
   </vaadin-menu-bar-button>
 </vaadin-menu-bar>
 `;
-/* end snapshot menu-bar opened */
+/* end snapshot menu-bar host opened */
 
-snapshots["menu-bar overlay"] = 
+snapshots["menu-bar host overlay"] = 
 `<vaadin-menu-bar-overlay
   exportparts="backdrop, overlay, content"
   id="overlay"
@@ -184,9 +184,152 @@ snapshots["menu-bar overlay"] =
   </slot>
 </vaadin-menu-bar-overlay>
 `;
-/* end snapshot menu-bar overlay */
+/* end snapshot menu-bar host overlay */
 
-snapshots["menu-bar shadow"] = 
+snapshots["menu-bar host has-overflow"] = 
+`<vaadin-menu-bar
+  has-overflow=""
+  role="menubar"
+  style="width: 180px;"
+>
+  <vaadin-menu-bar-submenu
+    is-root=""
+    slot="submenu"
+  >
+    <div
+      slot="overlay"
+      style="display: contents;"
+    >
+    </div>
+  </vaadin-menu-bar-submenu>
+  <vaadin-menu-bar-button
+    class="home"
+    first-visible=""
+    role="menuitem"
+    tabindex="0"
+  >
+    Home
+  </vaadin-menu-bar-button>
+  <vaadin-menu-bar-button
+    aria-expanded="false"
+    aria-haspopup="true"
+    role="menuitem"
+    tabindex="0"
+  >
+    Reports
+  </vaadin-menu-bar-button>
+  <vaadin-menu-bar-button
+    aria-disabled="true"
+    disabled=""
+    role="menuitem"
+    style="width: 60px; visibility: hidden; position: absolute;"
+    tabindex="-1"
+  >
+    Dashboard
+  </vaadin-menu-bar-button>
+  <vaadin-menu-bar-button
+    class="help"
+    last-visible=""
+    role="menuitem"
+    style="width: 60px; visibility: hidden; position: absolute;"
+    tabindex="0"
+  >
+    <vaadin-menu-bar-item aria-selected="false">
+      <strong>
+        Help
+      </strong>
+    </vaadin-menu-bar-item>
+  </vaadin-menu-bar-button>
+  <vaadin-menu-bar-button
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-label="More options"
+    role="menuitem"
+    slot="overflow"
+    tabindex="0"
+  >
+    <div aria-hidden="true">
+      ···
+    </div>
+  </vaadin-menu-bar-button>
+</vaadin-menu-bar>
+`;
+/* end snapshot menu-bar host has-overflow */
+
+snapshots["menu-bar host has-single-button"] = 
+`<vaadin-menu-bar
+  has-overflow=""
+  has-single-button=""
+  role="menubar"
+  style="width: 100px;"
+>
+  <vaadin-menu-bar-submenu
+    is-root=""
+    slot="submenu"
+  >
+    <div
+      slot="overlay"
+      style="display: contents;"
+    >
+    </div>
+  </vaadin-menu-bar-submenu>
+  <vaadin-menu-bar-button
+    class="home"
+    first-visible=""
+    role="menuitem"
+    style="width: 60px; visibility: hidden; position: absolute;"
+    tabindex="0"
+  >
+    Home
+  </vaadin-menu-bar-button>
+  <vaadin-menu-bar-button
+    aria-expanded="false"
+    aria-haspopup="true"
+    role="menuitem"
+    style="width: 60px; visibility: hidden; position: absolute;"
+    tabindex="0"
+  >
+    Reports
+  </vaadin-menu-bar-button>
+  <vaadin-menu-bar-button
+    aria-disabled="true"
+    disabled=""
+    role="menuitem"
+    style="width: 60px; visibility: hidden; position: absolute;"
+    tabindex="-1"
+  >
+    Dashboard
+  </vaadin-menu-bar-button>
+  <vaadin-menu-bar-button
+    class="help"
+    last-visible=""
+    role="menuitem"
+    style="width: 60px; visibility: hidden; position: absolute;"
+    tabindex="0"
+  >
+    <vaadin-menu-bar-item aria-selected="false">
+      <strong>
+        Help
+      </strong>
+    </vaadin-menu-bar-item>
+  </vaadin-menu-bar-button>
+  <vaadin-menu-bar-button
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-label="More options"
+    role="menuitem"
+    slot="overflow"
+    tabindex="0"
+  >
+    <div aria-hidden="true">
+      ···
+    </div>
+  </vaadin-menu-bar-button>
+</vaadin-menu-bar>
+`;
+/* end snapshot menu-bar host has-single-button */
+
+snapshots["menu-bar shadow default"] = 
 `<div part="container">
   <slot>
   </slot>
@@ -198,5 +341,5 @@ snapshots["menu-bar shadow"] =
 <slot name="tooltip">
 </slot>
 `;
-/* end snapshot menu-bar shadow */
+/* end snapshot menu-bar shadow default */
 
