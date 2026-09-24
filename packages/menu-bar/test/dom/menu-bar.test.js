@@ -11,6 +11,11 @@ describe('menu-bar', () => {
     ignoreAttributes: ['style'],
   };
 
+  // Inline styles on the host come from the test setup and from layout measurements
+  const HOST_CONFIG = {
+    ignoreAttributes: [{ tags: ['vaadin-menu-bar'], attributes: ['style'] }],
+  };
+
   beforeEach(async () => {
     // Fixed button width so that the collapsed set does not depend on the font
     fixtureSync(`
@@ -62,13 +67,13 @@ describe('menu-bar', () => {
     it('has-overflow', async () => {
       menu.style.width = '180px';
       await nextResize(menu);
-      await expect(menu).dom.to.equalSnapshot();
+      await expect(menu).dom.to.equalSnapshot(HOST_CONFIG);
     });
 
     it('has-single-button', async () => {
       menu.style.width = '100px';
       await nextResize(menu);
-      await expect(menu).dom.to.equalSnapshot();
+      await expect(menu).dom.to.equalSnapshot(HOST_CONFIG);
     });
   });
 

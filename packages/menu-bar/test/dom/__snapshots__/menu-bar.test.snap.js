@@ -190,7 +190,6 @@ snapshots["menu-bar host has-overflow"] =
 `<vaadin-menu-bar
   has-overflow=""
   role="menubar"
-  style="width: 180px;"
 >
   <vaadin-menu-bar-submenu
     is-root=""
@@ -261,7 +260,6 @@ snapshots["menu-bar host has-single-button"] =
   has-overflow=""
   has-single-button=""
   role="menubar"
-  style="width: 100px;"
 >
   <vaadin-menu-bar-submenu
     is-root=""
