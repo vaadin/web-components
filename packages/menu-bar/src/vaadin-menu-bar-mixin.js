@@ -602,6 +602,10 @@ export const MenuBarMixin = (superClass) =>
       // Reset all buttons in the menu bar and the overflow button
       this.__restoreButtons(buttons);
       this.__updateOverflow([]);
+      // Update the state attributes for the restored buttons before measuring,
+      // as the themes use them to change button margins
+      this.toggleAttribute('has-single-button', buttons.length === 1);
+      this.__updateVisibleAttributes(buttons);
 
       // Hide any overflowing buttons and put them in the 'overflow' button
       this.__setOverflowItems(buttons, overflow);
@@ -630,6 +634,11 @@ export const MenuBarMixin = (superClass) =>
         this._setTabindex(visibleButtons[visibleButtons.length - 1], true);
       }
 
+      this.__updateVisibleAttributes(visibleButtons);
+    }
+
+    /** @private */
+    __updateVisibleAttributes(visibleButtons) {
       visibleButtons.forEach((btn, index) => {
         btn.toggleAttribute('first-visible', index === 0);
         btn.toggleAttribute('last-visible', !this._hasOverflow && index === visibleButtons.length - 1);
