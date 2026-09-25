@@ -1,6 +1,5 @@
-/* vaadin-message-input-button is a full Lumo button too. Its own base styles make it
-   transparent and padding-less, so the button vars are set at element scope here to
-   override those (they beat the base :host from the outer/document context). */
+/* The message-input-button base makes it transparent and unpadded. Element-scope vars beat
+   that base :host. */
 :where(:root),
 :where(:host),
 :where(vaadin-message-input-button) {
