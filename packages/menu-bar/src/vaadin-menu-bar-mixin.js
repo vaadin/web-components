@@ -528,6 +528,17 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
+     * Whether the element ends past the container, with the tolerance for fractional widths.
+     *
+     * @param {!HTMLElement} el
+     * @return {boolean}
+     * @private
+     */
+    __isPastContainerEnd(el) {
+      return this.__getInlineEnd(el) > this.__getInlineEnd(this._container) + OVERFLOW_TOLERANCE;
+    }
+
+    /**
      * Positions of the buttons, read in one batch before any of them is hidden.
      * Mirrored in RTL so that a larger value is always further along the inline axis.
      *
@@ -536,6 +547,7 @@ export const MenuBarMixin = (superClass) =>
      * @property {number[]} ends Inline end of each button
      * @property {number[]} margins Inline start margin of each button
      * @property {number} overflowExtent Space the overflow button adds after the last button
+     * @property {number} containerWidth Width of the container
      */
 
     /**
@@ -555,6 +567,7 @@ export const MenuBarMixin = (superClass) =>
         // `auto` resolves to 0 while the content overflows.
         margins: buttons.map((btn) => parseFloat(getComputedStyle(btn).marginInlineStart) || 0),
         overflowExtent: this.__getInlineEnd(overflow) - ends.at(-1),
+        containerWidth: this._container.getBoundingClientRect().width,
       };
     }
 
@@ -565,11 +578,10 @@ export const MenuBarMixin = (superClass) =>
      *
      * @param {!Array<!HTMLElement>} buttons
      * @param {!MenuBarOverflowLayout} layout
-     * @param {number} containerWidth
      * @return {!Array<!HTMLElement>} buttons to collapse, in DOM order
      * @private
      */
-    __getCollapsedButtons(buttons, { starts, ends, margins, overflowExtent }, containerWidth) {
+    __getButtonsToCollapse(buttons, { starts, ends, margins, overflowExtent, containerWidth }) {
       let lo = 0;
       let hi = buttons.length - 1;
 
@@ -585,29 +597,47 @@ export const MenuBarMixin = (superClass) =>
       return buttons.filter((_, i) => i < lo || i > hi);
     }
 
-    /** @private */
+    /**
+     * Hides the buttons that do not fit next to the overflow button.
+     *
+     * @param {!Array<!HTMLElement>} buttons
+     * @param {!MenuBarOverflowLayout} layout
+     * @return {!Array<!HTMLElement>} hidden buttons, in DOM order
+     * @private
+     */
+    __collapseButtons(buttons, layout) {
+      const collapsed = this.__getButtonsToCollapse(buttons, layout);
+      // Read button widths once outside of the loop to avoid repetitive layout
+      const widths = collapsed.map((btn) => getComputedStyle(btn).width);
+
+      // Write the DOM state
+      collapsed.forEach((btn, i) => {
+        btn.style.width = widths[i];
+        btn.style.visibility = 'hidden';
+        btn.style.position = 'absolute';
+      });
+      return collapsed;
+    }
+
+    /**
+     * Shows the overflow button and collapses buttons into it when the last button
+     * does not fit in the container.
+     *
+     * @param {!Array<!HTMLElement>} buttons
+     * @param {!HTMLElement} overflow
+     * @private
+     */
     __setOverflowItems(buttons, overflow) {
-      const container = this._container;
       const lastButton = buttons.at(-1);
-
-      if (lastButton && this.__getInlineEnd(lastButton) > this.__getInlineEnd(container) + OVERFLOW_TOLERANCE) {
-        this._hasOverflow = true;
-
-        // Read the layout once the overflow button is in flow
-        const layout = this.__measureButtons(buttons, overflow);
-        const containerWidth = container.getBoundingClientRect().width;
-        const collapsed = this.__getCollapsedButtons(buttons, layout, containerWidth);
-        // Read button widths once outside of the loop to avoid repetitive layout
-        const widths = collapsed.map((btn) => getComputedStyle(btn).width);
-
-        // Write the DOM state
-        collapsed.forEach((btn, i) => {
-          btn.style.width = widths[i];
-          btn.style.visibility = 'hidden';
-          btn.style.position = 'absolute';
-        });
-        this.__updateOverflow(collapsed.map((btn) => btn.item));
+      if (!lastButton || !this.__isPastContainerEnd(lastButton)) {
+        return;
       }
+      this._hasOverflow = true;
+
+      // Read the layout once the overflow button is in flow
+      const layout = this.__measureButtons(buttons, overflow);
+      const collapsed = this.__collapseButtons(buttons, layout);
+      this.__updateOverflow(collapsed.map((btn) => btn.item));
     }
 
     /** @private */
