@@ -43,16 +43,25 @@ function fixtureTable({ wrapperClass = '', tableClass = '' } = {}) {
 
 describe('table', () => {
   it('default', async () => {
-    await visualDiff(fixtureTable({ wrapperClass: 'vaadin-themed-html-elements' }), 'table-default');
+    await visualDiff(fixtureTable({ wrapperClass: 'vaadin-themed-html' }), 'table-default');
   });
 
   // Renders the same as 'default', and is here to keep the other half of the
   // selector — the class on the element itself — from going unnoticed
   it('class on the table', async () => {
-    await visualDiff(fixtureTable({ tableClass: 'vaadin-themed-html-elements' }), 'table-class-on-table');
+    await visualDiff(fixtureTable({ tableClass: 'vaadin-themed-html' }), 'table-class-on-table');
   });
 
   it('without the class', async () => {
     await visualDiff(fixtureTable(), 'table-without-class');
+  });
+
+  // Renders the same as 'without the class': a themed ancestor must not reach
+  // a table that opted out
+  it('opted out', async () => {
+    await visualDiff(
+      fixtureTable({ wrapperClass: 'vaadin-themed-html', tableClass: 'vaadin-unthemed-html' }),
+      'table-opted-out',
+    );
   });
 });
