@@ -524,7 +524,7 @@ export const MenuBarMixin = (superClass) =>
      * @return {boolean}
      * @private
      */
-    __endsOutsideContainer(el) {
+    __isPastContainerEnd(el) {
       return this.__getInlineEnd(el) > this.__getInlineEnd(this._container) + OVERFLOW_TOLERANCE;
     }
 
@@ -619,7 +619,7 @@ export const MenuBarMixin = (superClass) =>
      */
     __setOverflowItems(buttons, overflow) {
       const lastButton = buttons.at(-1);
-      if (!lastButton || !this.__endsOutsideContainer(lastButton)) {
+      if (!lastButton || !this.__isPastContainerEnd(lastButton)) {
         return;
       }
       this._hasOverflow = true;
