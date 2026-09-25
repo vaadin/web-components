@@ -13,7 +13,6 @@
   --vaadin-icon-visual-size: 75%;
 }
 
-/* Overflow button */
 @media (any-hover: hover) {
   :where(vaadin-breadcrumbs)::part(overflow-button):hover {
     color: var(--lumo-body-text-color);
@@ -25,7 +24,6 @@
 }
 
 :where(vaadin-breadcrumbs-item) {
-  /* Item */
   &[current] {
     font-weight: 500;
   }
@@ -48,7 +46,6 @@
     color: var(--lumo-header-text-color);
   }
 
-  /* Prefix icon */
   & > [slot='prefix']:is(vaadin-icon, [class*='icon']) {
     width: var(--lumo-icon-size-s);
     height: var(--lumo-icon-size-s);
