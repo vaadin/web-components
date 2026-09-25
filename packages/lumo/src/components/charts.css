@@ -1,19 +1,12 @@
-/* Charts is styled entirely through documented --vaadin-charts-* tokens. Most of Lumo's
-   values already fall out of the base fallbacks via the color.css remaps (background,
-   axis/data/secondary/disabled labels, tooltip background, button background, the zero
-   x-axis line width) — only the values that genuinely differ are set here, plus Lumo's
-   series palettes, which the base falls back to the shared user colors for. */
+/* Only values that differ from the base fallbacks, plus Lumo's series palettes. */
 :where(:root),
 :where(:host) {
-  /* Titles and the contrast color use the full-contrast color, not the body text */
   --vaadin-charts-title-label: var(--lumo-header-text-color);
   --vaadin-charts-contrast: var(--lumo-contrast);
 
-  /* The axis line is fainter and the grid line stronger than the shared border color */
   --vaadin-charts-axis-line: var(--lumo-contrast-5pct);
   --vaadin-charts-grid-line: var(--lumo-contrast-20pct);
 
-  /* Range selector buttons are primary-tinted, with a tighter radius */
   --vaadin-charts-button-label: var(--lumo-primary-text-color);
   --vaadin-charts-button-hover-background: var(--lumo-primary-color-10pct);
   --vaadin-charts-button-active-label: var(--lumo-primary-contrast-color);
