@@ -538,6 +538,7 @@ export const MenuBarMixin = (superClass) =>
      * @property {number[]} margins Inline start margin of each button
      * @property {number} overflowExtent Space the overflow button adds after the last button
      * @property {number} containerWidth Width of the container
+     * @property {number} contentWidth Width of all buttons and the overflow button in flow
      */
 
     /**
@@ -550,14 +551,18 @@ export const MenuBarMixin = (superClass) =>
       const isRTL = this.__isRTL;
       const rects = buttons.map((btn) => btn.getBoundingClientRect());
       const ends = rects.map(({ left, right }) => (isRTL ? -left : right));
+      const overflowExtent = this.__getInlineEnd(overflow) - ends.at(-1);
+      const containerRect = this._container.getBoundingClientRect();
+      const containerStart = isRTL ? -containerRect.right : containerRect.left;
 
       return {
         starts: rects.map(({ left, right }) => (isRTL ? -right : left)),
         ends,
         // `auto` resolves to 0 while the content overflows.
         margins: buttons.map((btn) => parseFloat(getComputedStyle(btn).marginInlineStart) || 0),
-        overflowExtent: this.__getInlineEnd(overflow) - ends.at(-1),
-        containerWidth: this._container.getBoundingClientRect().width,
+        overflowExtent,
+        containerWidth: containerRect.width,
+        contentWidth: ends.at(-1) + overflowExtent - containerStart,
       };
     }
 
@@ -610,8 +615,31 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
+     * Keeps the intrinsic width of the host at the given value. A parent sized by content,
+     * such as a split layout pane, shrinks the host once the buttons are out of flow. The
+     * width the host had with all buttons in flow keeps the decision made for that width.
+     * The `overflow-frozen` attribute is internal and only used by the component styles.
+     *
+     * @param {number} width
+     * @private
+     */
+    __freezeWidth(width) {
+      this.style.setProperty('--_vaadin-menu-bar-content-width', `${width}px`);
+      this.setAttribute('overflow-frozen', '');
+    }
+
+    /** @private */
+    __unfreezeWidth() {
+      this.style.removeProperty('--_vaadin-menu-bar-content-width');
+      this.removeAttribute('overflow-frozen');
+    }
+
+    /**
      * Shows the overflow button and collapses buttons into it when the last button
-     * does not fit in the container.
+     * does not fit in the container. Freezes the host width when the parent shrinks
+     * the host after the collapse. A frozen host stays frozen until all buttons fit,
+     * so that its flex basis does not change between detections when another element
+     * in the same row depends on it.
      *
      * @param {!Array<!HTMLElement>} buttons
      * @param {!HTMLElement} overflow
@@ -619,7 +647,11 @@ export const MenuBarMixin = (superClass) =>
      */
     __setOverflowItems(buttons, overflow) {
       const lastButton = buttons.at(-1);
-      if (!lastButton || !this.__isPastContainerEnd(lastButton)) {
+      // A frozen host is as wide as all buttons plus the overflow button, so the quick
+      // check would report a fit one overflow button too early. Measure instead.
+      const wasFrozen = this.hasAttribute('overflow-frozen');
+      if (!lastButton || (!wasFrozen && !this.__isPastContainerEnd(lastButton))) {
+        this.__unfreezeWidth();
         return;
       }
       this._hasOverflow = true;
@@ -628,6 +660,12 @@ export const MenuBarMixin = (superClass) =>
       const layout = this.__measureButtons(buttons, overflow);
       const collapsed = this.__collapseButtons(buttons, layout);
       this.__updateOverflow(collapsed.map((btn) => btn.item));
+
+      if (collapsed.length === 0) {
+        this.__unfreezeWidth();
+      } else if (wasFrozen || this.__isPastContainerEnd(overflow)) {
+        this.__freezeWidth(layout.contentWidth);
+      }
     }
 
     /** @private */

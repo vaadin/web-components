@@ -451,12 +451,14 @@ describe('overflow', () => {
       expect(spy.set.callCount).to.equal(2);
     });
 
-    it('should read the overflow button position once per detection', async () => {
+    it('should read the overflow button position twice per detection', async () => {
       menu.items = createItems(5);
       await nextResize(menu);
       expectCollapsed(menu, []);
 
-      // Reading it again after hiding a button would force another layout
+      // Once to measure the buttons, and once after hiding the buttons to check that
+      // the parent did not shrink the menu bar. Reading right after the writes runs
+      // the layout that the browser would run before the next paint anyway.
       const spy = sinon.spy(menu._overflow, 'getBoundingClientRect');
 
       menu.style.width = `${BUTTON_WIDTH * 3}px`;
@@ -465,7 +467,7 @@ describe('overflow', () => {
 
       // Collapsing proves that a detection ran while the reads were counted
       expectCollapsed(menu, [2, 3, 4]);
-      expect(spy.callCount, 'overflow button position reads').to.equal(1);
+      expect(spy.callCount, 'overflow button position reads').to.equal(2);
     });
   });
 });
