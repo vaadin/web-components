@@ -297,6 +297,18 @@ describe('overflow', () => {
       expect(menu.hasAttribute('has-single-button')).to.be.false;
     });
 
+    it('should keep the buttons that fit when the width increases after all buttons were collapsed', async () => {
+      menu.style.width = `${BUTTON_WIDTH * 0.5}px`;
+      await nextResize(menu);
+
+      // Two buttons and the overflow button, each button after the first overlaps
+      // the previous one by its 1px border. Without the attribute reset before
+      // measuring, the buttons keep the single button margins and one more collapses.
+      menu.style.width = `${BUTTON_WIDTH * 3 - 2}px`;
+      await nextResize(menu);
+      expectCollapsed(menu, [2, 3]);
+    });
+
     it('should set when theme attribute makes other buttons not fit', async () => {
       menu.style.width = `${BUTTON_WIDTH * 2}px`;
       await nextResize(menu);

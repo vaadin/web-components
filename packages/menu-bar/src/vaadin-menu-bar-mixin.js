@@ -472,6 +472,20 @@ export const MenuBarMixin = (superClass) =>
       });
     }
 
+    /**
+     * Restores all buttons, the overflow button and the state attributes, so that
+     * the measurement does not use the button margins of the previous state.
+     *
+     * @param {!Array<!HTMLElement>} buttons
+     * @private
+     */
+    __restoreState(buttons) {
+      this.__restoreButtons(buttons);
+      this.__updateOverflow([]);
+      this.toggleAttribute('has-single-button', buttons.length === 1);
+      this.__updateVisibleAttributes(buttons);
+    }
+
     /** @private */
     __restoreItem(button, item) {
       button.appendChild(item);
@@ -596,9 +610,7 @@ export const MenuBarMixin = (superClass) =>
       const buttons = this._buttons.filter((btn) => btn !== overflow);
       const oldOverflowCount = this.__getOverflowCount(overflow);
 
-      // Reset all buttons in the menu bar and the overflow button
-      this.__restoreButtons(buttons);
-      this.__updateOverflow([]);
+      this.__restoreState(buttons);
 
       // Hide any overflowing buttons and put them in the 'overflow' button
       this.__setOverflowItems(buttons, overflow);
@@ -627,6 +639,11 @@ export const MenuBarMixin = (superClass) =>
         this._setTabindex(visibleButtons[visibleButtons.length - 1], true);
       }
 
+      this.__updateVisibleAttributes(visibleButtons);
+    }
+
+    /** @private */
+    __updateVisibleAttributes(visibleButtons) {
       visibleButtons.forEach((btn, index) => {
         btn.toggleAttribute('first-visible', index === 0);
         btn.toggleAttribute('last-visible', !this._hasOverflow && index === visibleButtons.length - 1);
