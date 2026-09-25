@@ -18,7 +18,7 @@
   }
 
   :is(th, td) {
-    padding: var(--vaadin-padding-s) var(--vaadin-padding-m);
+    padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
     /* The UA stylesheet centers <th>, which leaves a header out of line with
        the column below it. */
     text-align: start;
