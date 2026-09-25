@@ -571,7 +571,7 @@ export const MenuBarMixin = (superClass) =>
      * @return {!Array<!HTMLElement>} buttons to collapse, in DOM order
      * @private
      */
-    __getCollapsedButtons(buttons, { starts, ends, margins, overflowExtent, containerWidth }) {
+    __getButtonsToCollapse(buttons, { starts, ends, margins, overflowExtent, containerWidth }) {
       let lo = 0;
       let hi = buttons.length - 1;
 
@@ -596,7 +596,7 @@ export const MenuBarMixin = (superClass) =>
      * @private
      */
     __collapseButtons(buttons, layout) {
-      const collapsed = this.__getCollapsedButtons(buttons, layout);
+      const collapsed = this.__getButtonsToCollapse(buttons, layout);
       // Read button widths once outside of the loop to avoid repetitive layout
       const widths = collapsed.map((btn) => getComputedStyle(btn).width);
 
