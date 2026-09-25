@@ -136,19 +136,6 @@ export const A11yMixin = (superClass) =>
       setOrRemoveAttribute(row, 'aria-level', hasLevel && level + 1);
     }
 
-    /**
-     * @param {!HTMLElement} row
-     * @param {!HTMLElement} detailsCell
-     * @private
-     */
-    __a11ySetRowDetailsCell(row, detailsCell) {
-      iterateRowCells(row, (cell) => {
-        if (cell !== detailsCell) {
-          cell.setAttribute('aria-controls', detailsCell.id);
-        }
-      });
-    }
-
     /** @private */
     __a11yUpdateSorters() {
       Array.from(this.querySelectorAll('vaadin-grid-sorter')).forEach((sorter) => {

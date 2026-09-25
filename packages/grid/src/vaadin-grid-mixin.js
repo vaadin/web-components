@@ -26,10 +26,8 @@ import {
   getBodyRowCells,
   getClosestCell,
   iterateChildren,
-  iterateRowCells,
   updateBooleanRowStates,
   updateCellsPart,
-  updatePart,
 } from './vaadin-grid-helpers.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { ResizeMixin } from './vaadin-grid-resize-mixin.js';
@@ -332,18 +330,14 @@ export const GridMixin = (superClass) =>
       for (let i = 0; i < count; i++) {
         const row = this.__createBodyRow();
         if (this._columnTree) {
-          this.__initRow(row, this._columnTree[this._columnTree.length - 1], 'body', true);
+          this.__renderBodyRow(row);
         }
         rows.push(row);
       }
 
-      if (this._columnTree) {
-        this._columnTree[this._columnTree.length - 1].forEach((c) => {
-          if (c.isConnected && c._cells) {
-            c._cells = [...c._cells];
-          }
-        });
-      }
+      this._columnTree?.at(-1).forEach((column) => {
+        column.performUpdate?.();
+      });
 
       return rows;
     }
@@ -379,142 +373,6 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _createCell(tagName, column) {
-      const contentId = (this._contentIndex = this._contentIndex + 1 || 0);
-      const slotName = `vaadin-grid-cell-content-${contentId}`;
-
-      const cellContent = document.createElement('vaadin-grid-cell-content');
-      cellContent.setAttribute('slot', slotName);
-
-      const cell = document.createElement(tagName);
-      cell.id = slotName.replace('-content-', '-');
-      cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
-
-      cell.addEventListener('mouseenter', this.__onCellMouseEnter);
-      cell.addEventListener('mouseleave', this.__onCellMouseLeave);
-      cell.addEventListener('mousedown', this.__onCellMouseDown);
-      cell.addEventListener('keydown', this.__onCellKeyDown);
-
-      const slot = document.createElement('slot');
-      slot.setAttribute('name', slotName);
-
-      if (column?._focusButtonMode) {
-        const div = document.createElement('div');
-        div.setAttribute('role', 'button');
-        div.setAttribute('tabindex', '-1');
-        cell.appendChild(div);
-
-        // Patch `focus()` to use the button
-        cell._focusButton = div;
-        cell.focus = function (options) {
-          cell._focusButton.focus(options);
-        };
-
-        div.appendChild(slot);
-      } else {
-        cell.setAttribute('tabindex', '-1');
-        cell.appendChild(slot);
-      }
-
-      cell._content = cellContent;
-
-      return cell;
-    }
-
-    /**
-     * @param {!HTMLTableRowElement} row
-     * @param {!Array<!GridColumn>} columns
-     * @param {?string} section
-     * @param {boolean} noNotify
-     * @private
-     */
-    __initRow(row, columns, section = 'body', noNotify = false) {
-      const contentsFragment = document.createDocumentFragment();
-
-      iterateRowCells(row, (cell) => {
-        cell._vacant = true;
-      });
-      row.innerHTML = '';
-      if (section === 'body') {
-        // Clear the cached cell references
-        row.__cells = [];
-        if (row.__detailsCell) {
-          this.__teardownDetailsCell(row.__detailsCell);
-        }
-        row.__detailsCell = null;
-      }
-
-      columns
-        .filter((column) => !column.hidden)
-        .toSorted((a, b) => a._order - b._order)
-        .forEach((column, index, cols) => {
-          let cell;
-
-          if (section === 'body') {
-            // Body
-            if (!column._cells) {
-              column._cells = [];
-            }
-            cell = column._cells.find((cell) => cell._vacant);
-            if (!cell) {
-              cell = this._createCell('td', column);
-              column._cells.push(cell);
-            }
-            updatePart(cell, 'cell', true);
-            updatePart(cell, 'body-cell', true);
-            cell.__parentRow = row;
-            // Cache the cell reference
-            row.__cells.push(cell);
-
-            const isSizerRow = row === this.$.sizer;
-            if (!column._bodyContentHidden || isSizerRow) {
-              row.appendChild(cell);
-            }
-
-            if (isSizerRow) {
-              column._sizerCell = cell;
-            }
-
-            if (index === cols.length - 1 && this.rowDetailsRenderer) {
-              // Add details cell as last cell to body rows
-              if (!this._detailsCells) {
-                this._detailsCells = [];
-              }
-              const detailsCell = this._detailsCells.find((cell) => cell._vacant) || this._createCell('td');
-              if (this._detailsCells.indexOf(detailsCell) === -1) {
-                this._detailsCells.push(detailsCell);
-              }
-              if (!detailsCell._content.parentElement) {
-                contentsFragment.appendChild(detailsCell._content);
-              }
-              this._configureDetailsCell(detailsCell);
-              detailsCell.__parentRow = row;
-              row.appendChild(detailsCell);
-              // Cache the details cell reference
-              row.__detailsCell = detailsCell;
-              this.__a11ySetRowDetailsCell(row, detailsCell);
-              detailsCell._vacant = false;
-            }
-
-            if (!noNotify) {
-              column._cells = [...column._cells];
-            }
-          }
-
-          if (!cell._content.parentElement) {
-            contentsFragment.appendChild(cell._content);
-          }
-          cell._vacant = false;
-          cell._column = column;
-        });
-
-      // Might be empty if only cache was used
-      this.appendChild(contentsFragment);
-
-      this._updateFirstAndLastColumnForRow(row);
-    }
-
-    /** @private */
     __updateVirtualizerElement(row, index) {
       this._preventScrollerRotatingCellFocus(row, index);
 
@@ -529,8 +387,8 @@ export const GridMixin = (superClass) =>
     }
 
     /** @private */
-    _columnTreeChanged(columnTree) {
-      this._renderColumnTree(columnTree);
+    _columnTreeChanged() {
+      this._renderColumnTree();
       this.__updateColumnsBodyContentHidden();
     }
 
@@ -560,20 +418,18 @@ export const GridMixin = (superClass) =>
       return flatSize === 0 && hasEmptyStateContent;
     }
 
-    /**
-     * @param {!Array<!GridColumn>} columnTree
-     * @protected
-     */
-    _renderColumnTree(columnTree) {
+    /** @protected */
+    _renderColumnTree() {
       iterateChildren(this.$.items, (row) => {
-        this.__initRow(row, columnTree[columnTree.length - 1], 'body', true);
         this.__updateRow(row);
       });
 
       this.__renderHeaderFooter();
+      this.__renderSizerRow();
 
-      // Sizer rows
-      this.__initRow(this.$.sizer, columnTree[columnTree.length - 1]);
+      this._columnTree.at(-1).forEach((column) => {
+        column.performUpdate?.();
+      });
 
       this._resizeHandler();
       this.__a11yUpdateHeaderRows();

@@ -268,37 +268,29 @@ export const ScrollMixin = (superClass) =>
       this.__scrollToPendingColumn();
 
       const columnsInOrder = this._getColumnsInOrder();
-      let bodyContentHiddenChanged = false;
+      const changedColumns = [];
 
-      // Remove the column cells from the DOM if the column is outside the viewport.
-      // Add the column cells to the DOM if the column is inside the viewport.
-      //
       // Update the _bodyContentHidden property of the column to reflect the current
-      // visibility state and make it run renderers for the cells if necessary.
+      // visibility state.
       columnsInOrder.forEach((column) => {
         const bodyContentHidden = this._lazyColumns && !this.__isColumnInViewport(column);
 
         if (column._bodyContentHidden !== bodyContentHidden) {
-          bodyContentHiddenChanged = true;
-          column._cells.forEach((cell) => {
-            if (cell !== column._sizerCell) {
-              if (bodyContentHidden) {
-                cell.remove();
-              } else if (cell.__parentRow) {
-                // Add the cell to the correct DOM position in the row
-                const followingColumnCell = [...cell.__parentRow.children].find(
-                  (child) => columnsInOrder.indexOf(child._column) > columnsInOrder.indexOf(column),
-                );
-                cell.__parentRow.insertBefore(cell, followingColumnCell);
-              }
-            }
-          });
+          changedColumns.push(column);
         }
 
         column._bodyContentHidden = bodyContentHidden;
       });
 
-      if (bodyContentHiddenChanged) {
+      if (changedColumns.length > 0) {
+        [...this.$.items.children].forEach((row) => {
+          this.__updateRow(row);
+        });
+
+        changedColumns.forEach((column) => {
+          column.performUpdate?.();
+        });
+
         // Frozen columns may have changed their visibility
         this._frozenCellsChanged();
       }
