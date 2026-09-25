@@ -123,23 +123,10 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
    *
    * #### Disabled items
    *
-   * When disabled, menu bar items are rendered as "dimmed".
-   *
-   * By default, disabled items are not focusable and don't react to hover.
-   * As a result, they are hidden from assistive technologies, and it's not
-   * possible to show a tooltip to explain why they are disabled. This can be
-   * addressed by enabling several feature flags, which makes disabled items
-   * focusable and hoverable, while still preventing them from being activated:
-   *
-   * ```js
-   * // Allow focus and hover interactions with disabled menu bar root items (buttons)
-   * window.Vaadin.featureFlags.accessibleDisabledButtons = true;
-   *
-   * // Allow focus and hover interactions with disabled menu bar sub-menu items
-   * window.Vaadin.featureFlags.accessibleDisabledMenuItems = true;
-   * ```
-   *
-   * Both flags must be set before any menu bar is attached to the DOM.
+   * When disabled, menu bar items are rendered as "dimmed" and prevented
+   * from being activated. Disabled items remain focusable and hoverable,
+   * so they stay visible to assistive technologies and can show a
+   * tooltip to explain why they are disabled.
    *
    * #### Item tooltips
    *

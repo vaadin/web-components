@@ -101,6 +101,7 @@ snapshots["vaadin-login-overlay host default"] =
   <vaadin-button
     role="button"
     slot="submit"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="primary submit"
   >
@@ -109,6 +110,7 @@ snapshots["vaadin-login-overlay host default"] =
   <vaadin-button
     role="button"
     slot="forgot-password"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary small"
   >
@@ -226,6 +228,7 @@ snapshots["vaadin-login-overlay host i18n"] =
   <vaadin-button
     role="button"
     slot="submit"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="primary submit"
   >
@@ -234,6 +237,7 @@ snapshots["vaadin-login-overlay host i18n"] =
   <vaadin-button
     role="button"
     slot="forgot-password"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary small"
   >
@@ -351,6 +355,7 @@ snapshots["vaadin-login-overlay host i18n-partial"] =
   <vaadin-button
     role="button"
     slot="submit"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="primary submit"
   >
@@ -359,6 +364,7 @@ snapshots["vaadin-login-overlay host i18n-partial"] =
   <vaadin-button
     role="button"
     slot="forgot-password"
+    style="--_vaadin-button-disabled-pointer-events: auto;"
     tabindex="0"
     theme="tertiary small"
   >
