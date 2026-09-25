@@ -1,17 +1,10 @@
-/* combo-box is a filled input: the fill/label/helper/error/toggle/clear styles
-   come from input-container.css and field.css, its dropdown items from item.css,
-   and the overlay background/shadow/font from overlay.css — all widened to include
-   vaadin-combo-box / vaadin-combo-box-item. The base already covers the toggle
-   icon mask, the opened pointer-events, the readonly toggle, the item focus ring
-   and the selected checkmark display. The item hover transition is shared with
-   time-picker, whose items reuse the combo-box-item base styles. */
+/* Shared field and overlay styles live in input-container.css, field.css, item.css and
+   overlay.css. The item transition also covers time-picker. */
 :where(vaadin-combo-box-item, vaadin-time-picker-item) {
   transition: background-color 100ms;
 }
 
-/* Small gap between the input field and the anchored overlay (top/bottom-aligned
-   reflect to the host via setOverlayStateAttribute). Shared with time-picker and
-   date-picker, which all place their overlay right below/above the field. */
+/* Gap between the field and the overlay. Shared with time-picker and date-picker. */
 :where(vaadin-combo-box, vaadin-time-picker, vaadin-date-picker)[top-aligned]::part(overlay) {
   margin-top: var(--lumo-space-xs);
 }
@@ -20,8 +13,7 @@
   margin-bottom: var(--lumo-space-xs);
 }
 
-/* Loader: restore Lumo's two-tone spinner (the base uses a mask-based single-color
-   spinner) and position it at the top end of the overlay. */
+/* Lumo's two-tone spinner at the overlay's top end (base: single-color mask) */
 :where(vaadin-combo-box)::part(loader) {
   --vaadin-spinner-size: var(--lumo-icon-size-s);
   top: var(--lumo-space-s);

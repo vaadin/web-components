@@ -1,15 +1,10 @@
-/* Dashboard, its layout, sections and widgets. The base provides the grid, the widget
-   border/radius/shadow system and the header/title/content parts, driven by documented
-   --vaadin-dashboard-* vars — this restores Lumo's wider grid gap, the larger bolder
-   titles, the roomier headers, the editable/selected tints and the three layout theme
-   variants (which the base does not implement at all). */
+/* Restores Lumo's grid gap, titles, header spacing, editable and selected tints, and the
+   three layout theme variants the base lacks. */
 :where(:root),
 :where(:host) {
-  /* Lumo spaces the grid wider than the base (gap-s) */
   --vaadin-dashboard-gap: var(--lumo-space-m);
 }
 
-/* Layout theme variants */
 :where(vaadin-dashboard, vaadin-dashboard-layout) {
   &[theme~='shaded-background'] {
     background: var(--lumo-shade-5pct);
@@ -28,14 +23,13 @@
   }
 }
 
-/* Widgets and sections share the title vars, so each scopes its own — Lumo titles are
-   larger and bolder than the base 1em/500, and section titles one step larger again. */
+/* Widgets and sections share the title vars, so each element sets its own */
 :where(vaadin-dashboard-widget) {
   --vaadin-dashboard-widget-title-font-size: var(--lumo-font-size-l);
   --vaadin-dashboard-widget-title-font-weight: 600;
   --vaadin-dashboard-widget-header-padding: var(--lumo-space-xs) var(--lumo-space-m);
 
-  /* Editable mode tightens the header padding to make room for the controls */
+  /* Room for the mode controls */
   &[editable] {
     --vaadin-dashboard-widget-header-padding: var(--lumo-space-xs);
     --vaadin-dashboard-widget-border-color: var(--lumo-contrast-20pct);
@@ -45,13 +39,11 @@
     --vaadin-dashboard-widget-background: var(--lumo-primary-color-10pct);
   }
 
-  /* Roomier than the base's 1em minimum */
   &::part(content) {
     min-height: var(--lumo-size-m);
   }
 
-  /* While moving or resizing, blur the content behind the mode controls (the base
-     draws the controls but leaves the content untouched) */
+  /* Blur the content behind the move and resize controls (the base leaves it untouched) */
   &:is([resize-mode], [move-mode])::part(content) {
     opacity: 0.75;
     filter: blur(10px);
@@ -63,7 +55,6 @@
   --vaadin-dashboard-widget-title-font-weight: 600;
   --vaadin-dashboard-widget-title-line-height: var(--lumo-line-height-m);
 
-  /* Editable sections sit on a faint fill; selecting tints it primary */
   &[editable] {
     background: var(--lumo-contrast-5pct);
   }
@@ -86,21 +77,18 @@
   }
 }
 
-/* Chrome shared by widgets and sections */
 :where(vaadin-dashboard-widget, vaadin-dashboard-section) {
   &::part(header) {
     min-height: var(--lumo-size-l);
   }
 
-  /* The base's cross icon fills the whole button; Lumo's is lighter and smaller */
+  /* Lumo's cross icon is smaller than the base's */
   &::part(remove-button) {
     --vaadin-icon-visual-size: 75%;
   }
 
-  /* Move/resize mode controls are theme="primary" buttons, but they live inside the
-     widget's shadow tree, so button.css cannot reach them by tag — give them Lumo's
-     primary fill through their parts instead (an outer-context rule, so it beats the
-     button's own :host([theme~='primary']) declaration). */
+  /* Mode controls are theme="primary" buttons inside the widget's shadow root, out of reach
+     for button.css. Style them through their parts. */
   &::part(move-apply-button),
   &::part(move-backward-button),
   &::part(move-forward-button),

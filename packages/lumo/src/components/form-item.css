@@ -1,17 +1,13 @@
 :where(vaadin-form-item) {
-  /* form-item. The base label reads the shared --vaadin-input-field-label-* vars, which
-     field.css sets for single-column fields with a line-height of 1; Lumo form-item labels
-     use a looser 1.333. The required indicator turns red while the wrapped field is
-     invalid (form-item mirrors the field's invalid attribute). */
+  /* field.css sets label line-height 1 for fields. Form-item labels use 1.333. The indicator
+     turns red while the field is invalid. */
   --vaadin-form-item-label-line-height: 1.333;
 
   &[invalid] {
     --vaadin-input-field-required-indicator-color: var(--lumo-error-text-color);
   }
 
-  /* Label spacing: a top margin that lines the label up with a field's own label
-     padding, a small leading inset, and a gap before the field when labels sit above.
-     min-height keeps an empty label from collapsing the row. */
+  /* min-height keeps an empty label from collapsing the row */
   &::part(label) {
     margin-top: var(--lumo-space-m);
     margin-inline-start: calc(var(--lumo-border-radius-m) / 4);
