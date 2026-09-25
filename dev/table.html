@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Table</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+
+  <body>
+    <section class="section vaadin-themed-html">
+      <h2 class="heading">Inside an element with the vaadin-themed-html class</h2>
+      <table>
+        <caption> Planets of the inner solar system </caption>
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Mass (10²⁴kg)</th>
+            <th scope="col">Diameter (km)</th>
+            <th scope="col">Moons</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Mercury</th>
+            <td>0.330</td>
+            <td>4,879</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <th scope="row">Venus</th>
+            <td>4.87</td>
+            <td>12,104</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <th scope="row">Earth</th>
+            <td>5.97</td>
+            <td>12,756</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <th scope="row">Mars</th>
+            <td>0.642</td>
+            <td>6,792</td>
+            <td>2</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row">Total</th>
+            <td>11.81</td>
+            <td>36,531</td>
+            <td>3</td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Without the class</h2>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Moons</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Earth</th>
+            <td>1</td>
+          </tr>
+          <tr>
+            <th scope="row">Mars</th>
+            <td>2</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section vaadin-themed-html">
+      <h2 class="heading">Inside a themed element, opted out with vaadin-unthemed-html</h2>
+      <table class="vaadin-unthemed-html">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Moons</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Earth</th>
+            <td>1</td>
+          </tr>
+          <tr>
+            <th scope="row">Mars</th>
+            <td>2</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">No header row, class on the table itself</h2>
+      <table class="vaadin-themed-html">
+        <tbody>
+          <tr>
+            <th scope="row">Mercury</th>
+            <td>0.330</td>
+            <td>4,879</td>
+          </tr>
+          <tr>
+            <th scope="row">Venus</th>
+            <td>4.87</td>
+            <td>12,104</td>
+          </tr>
+          <tr>
+            <th scope="row">Earth</th>
+            <td>5.97</td>
+            <td>12,756</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section vaadin-themed-html">
+      <h2 class="heading">Spanning cells</h2>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="2" scope="colgroup">Animals</th>
+            <th scope="col">Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th rowspan="2" scope="rowgroup">Birds</th>
+            <td>Owl</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>Parrot</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <th rowspan="2" scope="rowgroup">Fish</th>
+            <td>Cod</td>
+            <td>9</td>
+          </tr>
+          <tr>
+            <td>Salmon</td>
+            <td>4</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </body>
+</html>

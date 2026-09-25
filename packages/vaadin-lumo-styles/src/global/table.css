@@ -1,0 +1,44 @@
+/**
+ * @license
+ * Copyright (c) 2017 - 2026 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+
+:where(.vaadin-themed-html table:not(.vaadin-unthemed-html), table.vaadin-themed-html) {
+  background: var(--lumo-base-color);
+  border: 1px solid var(--lumo-contrast-20pct);
+  border-spacing: 0;
+
+  caption {
+    padding-block-end: var(--lumo-space-xs);
+    color: var(--lumo-secondary-text-color);
+    text-align: start;
+  }
+
+  :is(th, td) {
+    padding: var(--lumo-space-xs) var(--lumo-space-m);
+    /* The UA stylesheet centers <th>, which leaves a header out of line with
+       the column below it. */
+    text-align: start;
+  }
+
+  :is(thead, tfoot) :is(th, td) {
+    font-size: var(--lumo-font-size-s);
+  }
+
+  th {
+    font-weight: 500;
+  }
+
+  tfoot :is(th, td) {
+    font-weight: 400;
+  }
+
+  /* A line between every two consecutive rows, wherever the section boundary
+     falls. Drawing it above a row rather than below one leaves the outer
+     edges to the table's own border. */
+  :where(tr:not(:first-child) :is(th, td)),
+  :where(:is(thead, tbody, tfoot) ~ :is(tbody, tfoot) tr:first-child :is(th, td)) {
+    border-block-start: 1px solid var(--lumo-contrast-10pct);
+  }
+}

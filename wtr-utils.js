@@ -260,13 +260,14 @@ const createUnitTestsConfig = (config) => {
 };
 
 const createVisualTestsConfig = (theme) => {
+  // A theme package only has visual tests for its own theme
   let visualPackages;
   if (theme === 'base') {
-    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles');
+    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles' && dir !== 'aura');
   } else if (theme === 'aura') {
     visualPackages = getAllVisualPackages().filter((dir) => dir !== 'vaadin-lumo-styles' && dir !== 'field-base');
   } else {
-    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'field-base');
+    visualPackages = getAllVisualPackages().filter((dir) => dir !== 'field-base' && dir !== 'aura');
   }
 
   const packages = getTestPackages(visualPackages);
