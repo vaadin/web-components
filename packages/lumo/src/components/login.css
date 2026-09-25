@@ -1,16 +1,12 @@
-/* Login form + overlay. The base drives the whole layout through documented vars;
-   this restores Lumo's tinted surfaces, the primary brand panel, the boxed error
-   message and the larger titles. */
+/* Restores Lumo's tinted surfaces, primary brand panel, boxed error and larger titles. */
 :where(:root),
 :where(:host) {
-  /* Form surface and typography */
   --vaadin-login-form-background: var(--lumo-base-color) linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
   --vaadin-login-form-title-color: var(--lumo-header-text-color);
   --vaadin-login-form-title-font-size: var(--lumo-font-size-xxl);
   --vaadin-login-form-title-line-height: var(--lumo-line-height-xs);
   --vaadin-login-form-error-color: var(--lumo-error-text-color);
 
-  /* Overlay card and brand panel */
   --vaadin-login-overlay-background: var(--lumo-base-color)
     linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
   --vaadin-login-overlay-border-width: 0px;
@@ -23,8 +19,7 @@
 }
 
 :where(vaadin-login-form, vaadin-login-overlay) {
-  /* Boxed error message (the base renders it inline). The form-wrapper parts are
-     forwarded (exportparts) to both the standalone form and the overlay hosts. */
+  /* Boxed error (base: inline). The wrapper parts are exported to both hosts. */
   &::part(error-message) {
     padding: var(--lumo-space-m);
     border-radius: var(--vaadin-radius-m);
@@ -45,7 +40,6 @@
   }
 }
 
-/* Brand panel: primary surface with light text, title bottom-aligned */
 :where(vaadin-login-overlay)::part(brand) {
   justify-content: flex-end;
   box-sizing: border-box;
@@ -55,7 +49,7 @@
   color: var(--lumo-primary-contrast-color);
 }
 
-/* Softer backdrop than the default overlay shade */
+/* Softer backdrop than the default */
 :where(vaadin-login-overlay)::part(backdrop) {
   background: var(--lumo-base-color) linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
 }

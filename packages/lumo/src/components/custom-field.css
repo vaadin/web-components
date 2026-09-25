@@ -1,8 +1,5 @@
-/* custom-field and date-time-picker reuse the shared field label/helper/error styles
-   (widened into field.css). Their only unique rule: the child fields carry their own
-   top spacing, so the label sits closer to them than a standalone field's label —
-   reduce the label padding-bottom by space-xs. The whitespace theme opts back into the
-   full standalone spacing. */
+/* Child fields add their own top spacing, so the label padding shrinks by space-xs. The
+   whitespace theme restores it. */
 :where(vaadin-custom-field, vaadin-date-time-picker)[has-label]:not(
     [theme~='label-aside'],
     [data-form-layout-has-labels-aside]

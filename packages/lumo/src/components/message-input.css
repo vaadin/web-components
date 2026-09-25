@@ -1,8 +1,6 @@
 :where(vaadin-message-input) {
-  /* Lumo message-input is a borderless, transparent row: the slotted text-area is a
-     filled Lumo field (styled by input-container.css) and the send button sits beside
-     it. The base instead wraps the row in a bordered input box — neutralize that box
-     and restore Lumo's padding and the text-area/button flex layout. */
+  /* The base wraps the row in a bordered box. Lumo is a borderless row with a filled text-
+     area. */
   align-items: flex-start;
   overflow: hidden;
   padding: var(--lumo-space-s) var(--lumo-space-m);
@@ -10,26 +8,23 @@
   border-radius: 0;
   background: transparent;
 
-  /* No container focus ring — the filled text-area shows its own focus highlight */
+  /* The filled text-area shows its own focus highlight */
   &:focus-within {
     outline: none;
   }
 
-  /* Stretch the text-area to the row height and space it from the button */
   & > vaadin-text-area {
     align-self: stretch;
     margin-inline-end: var(--lumo-space-s);
   }
 
-  /* Use the standard Lumo button margin instead of the base's field-padding-derived one:
-     0 inline (so the only gap to the button is the text-area's trailing margin) and the
-     space-xs block margin, which also keeps the button's margin box from stretching the
-     text-area (via align-self) taller than one Lumo field. */
+  /* Standard Lumo button margin: 0 inline and space-xs block. It also stops the text-area
+     stretching past one field height. */
   & > vaadin-message-input-button {
     margin: var(--lumo-space-xs) 0;
   }
 
-  /* A prefix pushes the textarea off it by a small gap (the base only wraps the row) */
+  /* Gap between a prefix and the textarea */
   &[has-prefix] > [slot='textarea'] {
     margin-inline-start: var(--lumo-space-s);
   }

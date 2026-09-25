@@ -6,21 +6,16 @@
   --vaadin-checkbox-border-color: var(--vaadin-input-field-border-color, var(--lumo-contrast-50pct));
   --vaadin-checkbox-background: var(--lumo-contrast-20pct);
   --vaadin-checkbox-marker-color: var(--lumo-primary-contrast-color);
-  /* The box-to-label gap comes from the box margin plus the label's leading
-     padding, so the grid column gap is collapsed. */
   --vaadin-checkbox-gap: 0px;
 }
 
 :where(vaadin-checkbox) {
-  /* The label is a block so its shared padding (checkable-field.css) counts toward the
-     row height; an inline label would ignore it. Block-level still lets nested inline
-     content (e.g. links) flow normally. */
+  /* Block, so the shared label padding counts toward the row height */
   &[has-label] > label {
     display: block;
   }
 
-  /* Animate the hover tint and the active press. The margin gives the box the
-     same inset breathing room as original Lumo. */
+  /* The margin gives the box Lumo's inset */
   &::part(checkbox) {
     margin: var(--lumo-space-xs);
     transition:
@@ -34,14 +29,13 @@
     }
   }
 
-  /* Invalid: error-tinted fill + error focus ring */
   &[invalid] {
     --vaadin-checkbox-background: var(--lumo-error-color-10pct);
     --vaadin-checkbox-border-color: var(--lumo-error-color);
     --vaadin-focus-ring-color: var(--lumo-error-color-50pct);
   }
 
-  /* Checked / indeterminate: primary fill (source order beats the invalid tint) */
+  /* Source order beats the invalid tint */
   &:is([checked], [indeterminate]) {
     --vaadin-checkbox-background: var(--lumo-primary-color);
     --vaadin-checkbox-border-color: transparent;
@@ -52,7 +46,6 @@
     outline-offset: 1px;
   }
 
-  /* Active press effect */
   &[active]::part(checkbox) {
     transform: scale(0.9);
     transition-duration: 0.05s;
@@ -62,14 +55,13 @@
     transform: scale(1.1);
   }
 
-  /* Disabled */
   &[disabled] {
     --vaadin-checkbox-background: var(--lumo-contrast-10pct);
     --vaadin-checkbox-border-color: var(--lumo-contrast-20pct);
     --vaadin-checkbox-marker-color: var(--lumo-contrast-30pct);
   }
 
-  /* Readonly: dashed outline box; re-enable the border removed for the filled look */
+  /* Readonly re-enables the border removed for the filled look */
   &[readonly] {
     --vaadin-checkbox-background: transparent;
     --vaadin-checkbox-border-width: 1px;

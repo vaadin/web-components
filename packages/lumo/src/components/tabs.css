@@ -32,7 +32,6 @@
     --_lumo-tab-marker-display: none;
   }
 
-  /* Centered */
   &[theme~='centered'][orientation='horizontal'] > vaadin-tab:first-of-type {
     margin-inline-start: auto;
   }
@@ -41,7 +40,6 @@
     margin-inline-end: auto;
   }
 
-  /* Equal-width tabs */
   &[theme~='equal-width-tabs'] {
     flex: auto;
   }
@@ -50,7 +48,7 @@
     flex: 1 0 0%;
   }
 
-  /* Scroll buttons (base provides the SVG chevrons; Lumo only tints them) */
+  /* The base provides the chevrons. Lumo only tints them. */
   &::part(back-button),
   &::part(forward-button) {
     color: var(--lumo-tertiary-text-color);
@@ -103,7 +101,6 @@
     min-width: 0;
   }
 
-  /* Color states */
   &:is(:hover, [focus-ring]) {
     --vaadin-tab-text-color: var(--lumo-body-text-color);
   }
@@ -184,13 +181,11 @@
     transform-origin: 0% 50%;
   }
 
-  /* Icon-on-top */
   &[theme~='icon-on-top'] {
     flex-direction: column;
     justify-content: center;
   }
 
-  /* Slotted icons */
   & > vaadin-icon[icon^='vaadin:'] {
     padding: 0.25rem;
   }

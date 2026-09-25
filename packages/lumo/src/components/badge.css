@@ -4,9 +4,8 @@
   --vaadin-badge-text-color: var(--lumo-primary-text-color);
   --vaadin-badge-font-size: var(--lumo-font-size-s);
   --vaadin-badge-line-height: var(--lumo-line-height-m);
-  /* Lumo badges show no border, but keep the base's 1px so the size math (height,
-     min-width, negative margin) stays consistent and --vaadin-badge-border-color
-     still draws a border when set. */
+  /* No visible border, but keep the base's 1px so the size math holds and --vaadin-badge-
+     border-color still works. */
   --vaadin-badge-border-color: transparent;
 }
 
@@ -61,9 +60,8 @@
   }
 }
 
-/* Lumo also styles the `theme="badge"` convention on any plain element (a span, an
-   anchor, a vaadin-icon). Those elements have no base styles behind them, so unlike
-   vaadin-badge above they need the full appearance spelled out here rather than vars. */
+/* theme="badge" on plain elements. Nothing in the base styles them, so the full appearance
+   is set here, not vars. */
 [theme~='badge'] {
   display: inline-flex;
   align-items: center;
@@ -143,7 +141,7 @@
   text-decoration: none;
 }
 
-/* Slotted icons are pulled into the badge's padding */
+/* Pull slotted icons into the badge padding */
 [theme~='badge'] > vaadin-icon {
   margin-block: -0.25em;
 }
