@@ -12,9 +12,8 @@
     align-items: center;
   }
 
-  /* Lumo defaults groups to horizontal (row wrap); vertical is the opt-in variant
-     (base defaults the other way). Spacing between options comes from each
-     checkbox's own margin, so the group adds no gap. */
+  /* Lumo defaults groups to horizontal (base: vertical). Options space themselves with their
+     own margins. */
   &::part(group-field) {
     flex-flow: row wrap;
     gap: 0;

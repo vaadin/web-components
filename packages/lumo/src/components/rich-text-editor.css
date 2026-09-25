@@ -8,7 +8,6 @@
   --vaadin-rich-text-editor-toolbar-button-border-width: 0px;
   --vaadin-rich-text-editor-content-padding: var(--lumo-space-s) var(--lumo-space-m);
 
-  /* Color popup */
   --vaadin-rich-text-editor-overlay-padding: var(--lumo-space-xs);
   --vaadin-rich-text-editor-overlay-gap: var(--lumo-space-xs);
   --vaadin-rich-text-editor-overlay-color-option-border-radius: 0;
@@ -32,7 +31,6 @@
     border-top: 1px solid var(--lumo-contrast-20pct);
   }
 
-  /* Toolbar buttons: fixed square targets with a centered icon */
   &::part(toolbar-button) {
     display: inline-flex;
     align-items: center;
@@ -69,7 +67,6 @@
     --vaadin-rich-text-editor-toolbar-button-text-color: var(--lumo-primary-contrast-color);
   }
 
-  /* Compact */
   &[theme~='compact'] {
     min-height: calc(var(--lumo-size-m) * 6);
     --vaadin-rich-text-editor-toolbar-padding: var(--lumo-space-xs) 0;

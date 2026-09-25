@@ -1,7 +1,5 @@
-/* form-layout is styled purely through its documented spacing tokens. The base sets
-   them on html inside @layer vaadin.base, so these unlayered root values win. The
-   label width already matches (8em). Row spacing is a length, hence 0px, not 0: the
-   base multiplies it in calc() and a unitless 0 would invalidate the margin. */
+/* The base sets these in @layer vaadin.base, so unlayered values win. Row spacing is 0px,
+   not 0: the base uses it in calc(). */
 :where(:root),
 :where(:host) {
   --vaadin-form-layout-label-spacing: 1em;

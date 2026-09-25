@@ -1,6 +1,5 @@
-/* Shared Lumo styles for the field mixin parts: label, helper text, error message,
-   required indicator (ported from the legacy field-* mixins). Widen the shared
-   selector list below as more field components are ported. */
+/* Shared label, helper, error and required-indicator styles. Widen the list as fields are
+   ported. */
 :where(:root),
 :where(:host) {
   --vaadin-input-field-label-color: var(--lumo-secondary-text-color);
@@ -42,7 +41,7 @@
   &::part(label) {
     padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
     padding-bottom: 0.5em;
-    /* Label→input spacing comes from padding-bottom; drop the base grid margin */
+    /* Label-to-input spacing comes from padding-bottom */
     margin-bottom: 0;
     transition: color 0.2s;
   }
@@ -74,9 +73,7 @@
     }
   }
 
-  /* Lumo has no error icon; remove the base warn icon entirely. The error-message
-     keeps its base display (flex when shown, none otherwise), so an empty field
-     adds no height. The top gap comes from a margin instead of a flex-item spacer. */
+  /* Lumo has no error icon. The top gap is a margin, not a flex spacer. */
   &::part(error-message) {
     margin-block: 0.4em;
     padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
@@ -86,7 +83,6 @@
     content: none;
   }
 
-  /* Helper above the field */
   &[has-helper][theme~='helper-above-field']::part(label) {
     padding-bottom: var(--vaadin-input-field-helper-spacing, 0.4em);
   }
@@ -96,11 +92,7 @@
     margin-top: 0;
   }
 
-  /* Label aside (theme or form-layout driven). The base provides the two-column grid,
-     the baseline guide, align-self: baseline, text-align and the input width. The
-     single-column label rule above must be undone here: as a document rule it beats
-     the base's width:auto regardless of specificity, collapsing the label column,
-     blocking wrap and clipping descenders. */
+  /* Label aside. The base supplies the grid and alignment. */
   &:is([theme~='label-aside'][has-label], [data-form-layout-has-labels-aside]) {
     padding-top: var(--lumo-space-xs);
   }
