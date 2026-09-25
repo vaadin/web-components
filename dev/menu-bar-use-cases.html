@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menu bar use cases</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/button';
+      import '@vaadin/horizontal-layout';
+      import '@vaadin/menu-bar';
+
+      const texts = ['View', 'Edit', 'Share', 'Move', 'Duplicate', 'Archive'];
+      const createItems = (list) => list.map((text) => ({ text, children: [{ text: `${text} all` }] }));
+
+      document.querySelectorAll('vaadin-menu-bar').forEach((menuBar) => {
+        menuBar.items = createItems(menuBar.dataset.items ? menuBar.dataset.items.split(',') : texts);
+      });
+    </script>
+
+    <style>
+      .section {
+        flex-direction: column;
+        align-items: initial;
+      }
+
+      .case {
+        width: 600px;
+        padding: 4px;
+        border: 1px dashed #bbb;
+      }
+
+      vaadin-menu-bar {
+        outline: 1px solid rgba(0, 0, 255, 0.6);
+        outline-offset: -1px;
+      }
+
+      .sibling {
+        background: #ffe9b3;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section class="section">
+      <h2 class="heading">Block</h2>
+
+      <p>Default display</p>
+      <div class="case" style="width: 200px">
+        <vaadin-menu-bar></vaadin-menu-bar>
+      </div>
+
+      <p>Full width</p>
+      <div class="case" style="width: 200px">
+        <vaadin-menu-bar style="width: 100%"></vaadin-menu-bar>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Shrink to fit</h2>
+
+      <p>Inline block wrapper, all items fit</p>
+      <div class="case">
+        <div style="display: inline-block">
+          <vaadin-menu-bar></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Inline block wrapper, max-width on menu bar</p>
+      <div class="case">
+        <div style="display: inline-block">
+          <vaadin-menu-bar style="max-width: 200px"></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Inline block wrapper with max-width</p>
+      <div class="case">
+        <div style="display: inline-block; max-width: 200px">
+          <vaadin-menu-bar></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Inline block wrapper, two items, max-width on menu bar</p>
+      <div class="case">
+        <div style="display: inline-block">
+          <vaadin-menu-bar style="max-width: 80px" data-items="View,Edit"></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Long last item, max-width on menu bar</p>
+      <div class="case">
+        <div style="display: inline-block">
+          <vaadin-menu-bar
+            style="max-width: 230px"
+            data-items="View,Edit,Share,A very long menu item label here"
+          ></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Fit content wrapper with max-width</p>
+      <div class="case">
+        <div style="width: fit-content; max-width: 220px">
+          <vaadin-menu-bar></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Inline flex wrapper with max-width</p>
+      <div class="case">
+        <div style="display: inline-flex; max-width: 220px">
+          <vaadin-menu-bar></vaadin-menu-bar>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Flex row</h2>
+
+      <p>Next to a button</p>
+      <div class="case">
+        <div style="display: flex; gap: 4px; width: 260px">
+          <vaadin-menu-bar></vaadin-menu-bar>
+          <vaadin-button>Save</vaadin-button>
+        </div>
+      </div>
+
+      <p>Next to two buttons that do not shrink</p>
+      <div class="case">
+        <div style="display: flex; gap: 4px; width: 300px">
+          <vaadin-menu-bar></vaadin-menu-bar>
+          <vaadin-button style="flex: none">Save</vaadin-button>
+          <vaadin-button style="flex: none">Cancel</vaadin-button>
+        </div>
+      </div>
+
+      <p>After a title with <code>flex: 1</code></p>
+      <div class="case">
+        <div style="display: flex; width: 300px">
+          <div class="sibling" style="flex: 1">Project title</div>
+          <vaadin-menu-bar></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Baseline alignment with a label</p>
+      <div class="case">
+        <div style="display: flex; align-items: baseline; gap: 6px; width: 300px">
+          <span style="font-size: 20px">Label</span>
+          <vaadin-menu-bar></vaadin-menu-bar>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Flex column</h2>
+
+      <p>Items aligned to start</p>
+      <div class="case">
+        <div style="display: flex; flex-direction: column; align-items: flex-start; width: 220px">
+          <vaadin-menu-bar style="max-width: 100%"></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Items aligned to end</p>
+      <div class="case">
+        <div style="display: flex; flex-direction: column; align-items: flex-end; width: 220px">
+          <vaadin-menu-bar style="max-width: 100%"></vaadin-menu-bar>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Grid</h2>
+
+      <p>Columns <code>auto 1fr</code></p>
+      <div class="case">
+        <div style="display: grid; grid-template-columns: auto 1fr; width: 260px">
+          <vaadin-menu-bar></vaadin-menu-bar>
+          <div class="sibling">1fr column</div>
+        </div>
+      </div>
+
+      <p>Columns <code>auto auto</code></p>
+      <div class="case">
+        <div style="display: grid; grid-template-columns: auto auto; width: 260px">
+          <vaadin-menu-bar></vaadin-menu-bar>
+          <div class="sibling">Some long sibling text</div>
+        </div>
+      </div>
+
+      <p>Columns <code>minmax(0, auto) 1fr</code></p>
+      <div class="case">
+        <div style="display: grid; grid-template-columns: minmax(0, auto) 1fr; width: 220px">
+          <vaadin-menu-bar></vaadin-menu-bar>
+          <div class="sibling">1fr</div>
+        </div>
+      </div>
+
+      <p>Items justified to start</p>
+      <div class="case">
+        <div style="display: grid; justify-items: start; width: 220px">
+          <vaadin-menu-bar style="max-width: 100%"></vaadin-menu-bar>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Positioned, float and table</h2>
+
+      <p>Absolute position with max-width</p>
+      <div class="case">
+        <div style="position: relative; height: 40px">
+          <vaadin-menu-bar style="position: absolute; left: 0; max-width: 220px"></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Absolute position at the end of a narrow parent</p>
+      <div class="case">
+        <div style="position: relative; height: 40px; width: 220px">
+          <vaadin-menu-bar style="position: absolute; right: 0; max-width: 100%"></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Float with max-width</p>
+      <div class="case">
+        <div style="overflow: hidden">
+          <vaadin-menu-bar style="float: left; max-width: 220px"></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Table cell next to a full width cell</p>
+      <div class="case">
+        <table style="width: 260px; border-collapse: collapse">
+          <tr>
+            <td style="padding: 0"><vaadin-menu-bar style="max-width: 100%"></vaadin-menu-bar></td>
+            <td class="sibling" style="width: 100%">Cell</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Horizontal layout</h2>
+
+      <p>Toolbar with a title and a button</p>
+      <div class="case">
+        <vaadin-horizontal-layout theme="spacing" style="width: 360px; align-items: center">
+          <span class="sibling">Documents</span>
+          <vaadin-menu-bar></vaadin-menu-bar>
+          <vaadin-button>Save</vaadin-button>
+        </vaadin-horizontal-layout>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Options</h2>
+
+      <p>End aligned theme, max-width on menu bar</p>
+      <div class="case">
+        <div style="display: inline-block">
+          <vaadin-menu-bar theme="end-aligned" style="max-width: 200px"></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Reverse collapse, max-width on menu bar</p>
+      <div class="case">
+        <div style="display: inline-block">
+          <vaadin-menu-bar reverse-collapse style="max-width: 200px"></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Right-to-left, max-width on menu bar</p>
+      <div class="case">
+        <div style="display: inline-block">
+          <vaadin-menu-bar dir="rtl" style="max-width: 200px"></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Padding and border on menu bar, max-width</p>
+      <div class="case">
+        <div style="display: inline-block">
+          <vaadin-menu-bar
+            style="max-width: 200px; box-sizing: border-box; padding: 0 12px; border: 3px solid orange"
+          ></vaadin-menu-bar>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
