@@ -10,7 +10,7 @@
     transition: 0.1s background-color;
   }
 
-  /* Handle color set via inheritance into the handle part (the handle reads --vaadin-split-layout-handle-background) */
+  /* The handle reads this var by inheritance */
   &::part(splitter):active {
     --vaadin-split-layout-handle-background: var(--lumo-contrast-50pct);
   }
@@ -26,14 +26,13 @@
     --vaadin-split-layout-splitter-background: var(--lumo-contrast-10pct);
   }
 
-  /* Minimal */
   &[theme~='minimal']::part(splitter) {
     --vaadin-split-layout-splitter-size: 0px;
     --vaadin-split-layout-handle-size: 5px;
     --vaadin-split-layout-splitter-target-size: 5px;
   }
 
-  /* Handle hidden until hover/active; opacity driven via inheritance from the splitter part */
+  /* Hidden until hover. Opacity inherits from the splitter. */
   &[theme~='minimal']::part(handle) {
     opacity: var(--_lumo-split-layout-minimal-handle-opacity, 0);
   }

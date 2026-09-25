@@ -6,8 +6,6 @@
   --vaadin-radio-button-background: var(--lumo-contrast-20pct);
   --vaadin-radio-button-marker-color: var(--vaadin-radio-button-dot-color, var(--lumo-primary-contrast-color));
   --vaadin-radio-button-marker-size: 6px;
-  /* The dot-to-label gap is the label's leading padding plus the dot margin (see
-     checkable-field.css), so the grid gap is collapsed like checkbox and switch. */
   --vaadin-radio-button-gap: 0px;
   --vaadin-radio-button-label-color: var(--lumo-body-text-color);
   --vaadin-radio-button-label-font-size: var(--lumo-font-size-m);
@@ -15,9 +13,7 @@
   --vaadin-radio-button-label-font-weight: 400;
 }
 
-/* Legacy Lumo override for the label padding. When set, the four-value shorthand
-   replaces the shared logical default from checkable-field.css and is applied as-is,
-   matching legacy. */
+/* Legacy override. When set, it applies as a raw shorthand over the shared default. */
 @container style(--vaadin-radio-button-label-padding) {
   :where(vaadin-radio-button)[has-label] > label {
     padding: var(--vaadin-radio-button-label-padding);
@@ -25,7 +21,7 @@
 }
 
 :where(vaadin-radio-button) {
-  /* Animate the hover tint and the active press; the margin matches Lumo's inset */
+  /* The margin gives the dot Lumo's inset */
   &::part(radio) {
     margin: var(--lumo-space-xs);
     transition:
@@ -39,12 +35,10 @@
     }
   }
 
-  /* Checked: primary fill */
   &[checked] {
     --vaadin-radio-button-background: var(--lumo-primary-color);
   }
 
-  /* Active press effect */
   &[active]::part(radio) {
     transform: scale(0.9);
     transition-duration: 0.05s;
@@ -54,15 +48,13 @@
     transform: scale(1.1);
   }
 
-  /* Disabled */
   &[disabled] {
     --vaadin-radio-button-background: var(--vaadin-radio-button-disabled-background, var(--lumo-contrast-10pct));
     --vaadin-radio-button-marker-color: var(--vaadin-radio-button-disabled-dot-color, var(--lumo-contrast-30pct));
   }
 }
 
-/* Readonly radios keep the normal filled look in Lumo (legacy had no distinct
-   readonly style). Neutralize the base group's readonly transparent/dashed treatment. */
+/* Readonly keeps the filled look. Neutralize the base group's dashed readonly style. */
 :where(vaadin-radio-group)[readonly] > vaadin-radio-button {
   --vaadin-radio-button-background: var(--lumo-contrast-20pct);
   --vaadin-radio-button-border-width: 0px;

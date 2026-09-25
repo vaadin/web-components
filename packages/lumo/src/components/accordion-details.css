@@ -45,7 +45,6 @@
   }
 }
 
-/* Filled */
 :where(vaadin-accordion-panel:not(:last-child, [theme~='filled'])) {
   border-bottom: 1px solid var(--lumo-contrast-10pct);
 }
@@ -66,7 +65,6 @@
 }
 
 :where(vaadin-details, vaadin-accordion-panel) {
-  /* Small */
   &[theme~='small'] {
     --vaadin-details-summary-padding: var(--lumo-space-xs) 0;
     --vaadin-details-summary-gap: calc(var(--lumo-space-xs) / 2);
@@ -84,7 +82,6 @@
   }
 }
 
-/* Reverse */
 /* The toggle keeps its negative start margin and hugs the growing content, as in legacy */
 :is(vaadin-details-summary, vaadin-accordion-heading)[theme~='reverse'] {
   --vaadin-details-summary-gap: 0px;
@@ -99,7 +96,6 @@
   order: 1;
 }
 
-/* Filled reverse */
 :is(vaadin-details-summary, vaadin-accordion-heading)[theme~='reverse'][theme~='filled'] {
   padding-inline-start: 0;
 }

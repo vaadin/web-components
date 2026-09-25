@@ -1,19 +1,15 @@
-/* Shared Lumo rules for the checkable fields: checkbox, radio-button and switch. The base
-   provides the control/label grid and the states; this supplies the Lumo label padding
-   for all three, and the checkable helper/error geometry for the two that carry their
-   own helper and error (a radio's helper and error belong to its group). */
+/* Label padding for checkbox, radio-button and switch. Helper and error geometry for
+   checkbox and switch (a radio's belong to its group). */
 
-/* Label: block padding for the row height, a small leading gap to the control and a
-   larger trailing gap. The control-to-label distance is this leading padding plus the
-   control's own margin, so each component collapses the base grid gap to 0. */
+/* The control-to-label distance is this leading padding plus the control margin, so each
+   component sets its grid gap to 0px. */
 :where(vaadin-checkbox, vaadin-radio-button, vaadin-switch)[has-label] > label {
   padding-block: var(--lumo-space-xs);
   padding-inline: var(--lumo-space-xs) var(--lumo-space-s);
 }
 
 :where(vaadin-checkbox, vaadin-switch) {
-  /* Helper and error sit under the label, flush with its leading padding, with no top
-     margin and no base icon; the spacer follows the helper rather than preceding it. */
+  /* Helper and error align with the label padding. The spacer follows the helper. */
   &::part(helper-text) {
     padding-inline-start: var(--lumo-space-xs);
     margin-top: 0;

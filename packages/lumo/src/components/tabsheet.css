@@ -18,7 +18,7 @@
     --vaadin-scroller-padding-inline: var(--lumo-space-m);
   }
 
-  /* Slotted tabs sit flush inside the tabs-container; drop their own underline (the container provides it) */
+  /* Tabs sit flush. The container draws the line. */
   & > vaadin-tabs[slot='tabs'] {
     box-shadow: none;
     margin: calc(var(--lumo-space-xs) * -1) calc(var(--lumo-space-s) * -1);

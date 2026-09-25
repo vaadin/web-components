@@ -1,6 +1,5 @@
-/* Shared Lumo styles for the field mixin parts: label, helper text, error message,
-   required indicator (ported from the legacy field-* mixins). Widen the shared
-   selector list below as more field components are ported. */
+/* Shared label, helper, error and required-indicator styles. Widen the list as fields are
+   ported. */
 :where(:root),
 :where(:host) {
   --vaadin-input-field-label-color: var(--lumo-secondary-text-color);
@@ -39,17 +38,15 @@
 
   &::part(label) {
     max-width: 100%;
-    /* Don't let the nowrap label's min-content width grow the field's grid column.
-       The base's min-width:100% still makes the label fill the field, and
-       overflow/ellipsis truncates it — matching original Lumo (which stayed at the
-       field width). Without this, the grid sizes to the full label text. */
+    /* Stop the nowrap label's min-content from widening the grid column. min-width:100%
+       still fills the field and the ellipsis truncates. */
     width: 0;
     padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
     /* Workaround for diacritics being cut off: top padding compensated by a negative margin */
     padding-top: 0.25em;
     margin-top: -0.25em;
     padding-bottom: 0.5em;
-    /* Label→input spacing comes from padding-bottom; drop the base grid margin */
+    /* Label-to-input spacing comes from padding-bottom */
     margin-bottom: 0;
     overflow: hidden;
     white-space: nowrap;
@@ -57,7 +54,7 @@
     transition: color 0.2s;
   }
 
-  /* Room for the absolutely positioned required indicator (required fields only) */
+  /* Room for the absolute required indicator */
   &[required]::part(label) {
     padding-inline-end: 1em;
   }
@@ -97,9 +94,7 @@
     }
   }
 
-  /* Lumo has no error icon; remove the base warn icon entirely. The error-message
-     keeps its base display (flex when shown, none otherwise), so an empty field
-     adds no height. The top gap comes from a margin instead of a flex-item spacer. */
+  /* Lumo has no error icon. The top gap is a margin, not a flex spacer. */
   &::part(error-message) {
     margin-block: 0.4em;
     margin-inline-start: calc(var(--lumo-border-radius-m) / 4);
@@ -109,7 +104,6 @@
     content: none;
   }
 
-  /* Helper above the field */
   &[has-helper][theme~='helper-above-field']::part(label) {
     padding-bottom: var(--vaadin-input-field-helper-spacing, 0.4em);
   }
@@ -124,11 +118,8 @@
     height: var(--vaadin-input-field-helper-spacing, 0.4em);
   }
 
-  /* Label aside (theme or form-layout driven). The base provides the two-column grid,
-     the baseline guide, align-self: baseline, text-align and the input width. The
-     single-column label rule above must be undone here: as a document rule it beats
-     the base's width:auto regardless of specificity, collapsing the label column,
-     blocking wrap and clipping descenders. */
+  /* Label aside. The base supplies the grid and alignment. Undo the single-column label
+     rule above: as a document rule it beats the base's width:auto. */
   &:is([theme~='label-aside'][has-label], [data-form-layout-has-labels-aside]) {
     padding-top: var(--lumo-space-xs);
   }
@@ -159,10 +150,8 @@
   }
 }
 
-/* The label width:0 above is only for the single-column input fields, whose label
-   would otherwise grow the field's fixed-width grid. Group and slider fields have no
-   fixed width and grow to fit their label instead, so their label must size to its
-   content (width:0 would collapse it — their base uses min-width:auto). */
+/* Groups and sliders size to their label. width:0 would collapse it (their base uses min-
+   width:auto). */
 :where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group)::part(label) {
   width: auto;
 }

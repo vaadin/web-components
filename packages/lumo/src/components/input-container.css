@@ -1,8 +1,5 @@
-/* Lumo's filled input paradigm: a contrast-10pct fill with no border and an
-   animated hover/activation highlight drawn by ::after (the base input-container
-   has no ::after and renders an outlined input). Restores the classic Lumo look
-   over the base. Widen the shared selector list below as more field components
-   are ported. */
+/* Lumo's filled input: contrast fill, no border, ::after highlight (the base draws an
+   outline). Widen the list as fields are ported. */
 :where(
   vaadin-text-field,
   vaadin-password-field,
@@ -17,9 +14,8 @@
 ) {
   padding: var(--lumo-space-xs) 0;
   --vaadin-input-field-button-text-color: var(--lumo-contrast-60pct);
-  /* Set the field padding at the host scope so the base baseline guide (:host::before)
-     uses the same value as the input-field — otherwise it falls back to the default
-     block padding and inflates the field height when there is no label. */
+  /* Host scope, so the base baseline guide uses the same padding. Otherwise unlabeled
+     fields grow. */
   --vaadin-input-field-padding: 0 calc(0.375em + var(--vaadin-radius-m) / 4 - 1px);
 
   &::part(input-field) {
@@ -28,7 +24,7 @@
     --vaadin-input-field-background: var(--lumo-contrast-10pct);
     --vaadin-input-field-border-width: 0px;
     --vaadin-input-field-value-font-weight: 500;
-    /* Tighten spacing between the value and the field buttons (base gap-s is too wide) */
+    /* The base gap-s is too wide */
     --vaadin-input-field-gap: 0px;
   }
 
@@ -53,7 +49,7 @@
     transition-duration: 0.15s, 1s;
   }
 
-  /* Field button icon sizing (matches Aura): field buttons at 90%, clear button smaller */
+  /* Field buttons at 90%, clear button smaller (as in Aura) */
   &::part(field-button) {
     --vaadin-icon-visual-size: 90%;
   }
@@ -62,7 +58,7 @@
     --vaadin-icon-visual-size: 75%;
   }
 
-  /* Readonly: transparent fill with a dashed outline drawn by ::after */
+  /* Readonly: dashed outline drawn by ::after */
   &[readonly]::part(input-field) {
     --vaadin-input-field-background: transparent;
   }
@@ -73,23 +69,20 @@
     border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-30pct));
   }
 
-  /* Disabled: lighter fill */
   &[disabled]::part(input-field) {
     --vaadin-input-field-background: var(--lumo-contrast-5pct);
   }
 
-  /* Invalid: error-tinted fill and red focus ring */
   &[invalid]::part(input-field) {
     --vaadin-input-field-background: var(--lumo-error-color-10pct);
     --vaadin-focus-ring-color: var(--lumo-error-color-50pct);
   }
 
-  /* Slotted prefix/suffix icons (icon.css already sizes them to icon-size-m) */
+  /* Size comes from icon.css */
   & > vaadin-icon {
     color: var(--lumo-contrast-60pct);
   }
 
-  /* Small theme */
   &[theme~='small'] {
     font-size: var(--lumo-font-size-s);
     --vaadin-input-field-label-font-size: var(--lumo-font-size-xs);
@@ -115,18 +108,15 @@
   }
 }
 
-/* The reveal button is a full vaadin-button. Size it to its icon (button.css sets
-   a fixed height that would top-align the icon under display:block) and drop the
-   standalone-button margin, so the base field-button padding keeps the
-   reveal-button part square and centered in the field. */
+/* Size the reveal button to its icon and drop the button.css height and margin, so the
+   field-button part stays square. */
 :where(vaadin-password-field) > vaadin-password-field-button {
   --vaadin-button-height: auto;
   --vaadin-button-margin: 0;
 }
 
-/* The slotted input, textarea or select value keeps a small inline inset inside the
-   container (legacy `::slotted(:not([slot$='fix'])) { padding: 0 0.25em }`); the base
-   zeroes it. em resolves on the slotted element, so small fields scale with it. */
+/* Legacy inset for the slotted input, textarea and select value (base: 0). em scales with
+   small fields. */
 :where(
     vaadin-text-field,
     vaadin-password-field,
