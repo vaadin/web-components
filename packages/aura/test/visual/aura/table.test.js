@@ -2,65 +2,65 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/aura/aura.css';
 
-function fixtureTable({ wrapperClass = '', tableClass = '' } = {}) {
-  return fixtureSync(`
-    <div class="${wrapperClass}" style="display: inline-block; padding: 10px">
-      <table class="${tableClass}">
-        <caption>
-          Planets of the inner solar system
-        </caption>
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Diameter (km)</th>
-            <th scope="col">Moons</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">Mercury</th>
-            <td>4,879</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <th scope="row">Earth</th>
-            <td>12,756</td>
-            <td>1</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th scope="row">Total</th>
-            <td>17,635</td>
-            <td>1</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-  `);
-}
-
 describe('table', () => {
-  it('default', async () => {
-    await visualDiff(fixtureTable({ wrapperClass: 'vaadin-themed-html' }), 'table-default');
+  let wrapper, table;
+
+  beforeEach(() => {
+    wrapper = fixtureSync(`
+      <div style="display: inline-block; padding: 10px">
+        <table>
+          <caption>
+            Planets of the inner solar system
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Diameter (km)</th>
+              <th scope="col">Moons</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Mercury</th>
+              <td>4,879</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <th scope="row">Earth</th>
+              <td>12,756</td>
+              <td>1</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row">Total</th>
+              <td>17,635</td>
+              <td>1</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    `);
+    table = wrapper.querySelector('table');
   });
 
-  // Renders the same as 'default', and is here to keep the other half of the
-  // selector — the class on the element itself — from going unnoticed
+  it('default', async () => {
+    wrapper.classList.add('vaadin-themed-html');
+    await visualDiff(wrapper, 'table-default');
+  });
+
   it('class on the table', async () => {
-    await visualDiff(fixtureTable({ tableClass: 'vaadin-themed-html' }), 'table-class-on-table');
+    table.classList.add('vaadin-themed-html');
+    await visualDiff(wrapper, 'table-class-on-table');
   });
 
   it('without the class', async () => {
-    await visualDiff(fixtureTable(), 'table-without-class');
+    await visualDiff(wrapper, 'table-without-class');
   });
 
-  // Renders the same as 'without the class': a themed ancestor must not reach
-  // a table that opted out
   it('opted out', async () => {
-    await visualDiff(
-      fixtureTable({ wrapperClass: 'vaadin-themed-html', tableClass: 'vaadin-unthemed-html' }),
-      'table-opted-out',
-    );
+    wrapper.classList.add('vaadin-themed-html');
+    table.classList.add('vaadin-unthemed-html');
+    await visualDiff(wrapper, 'table-opted-out');
   });
 });

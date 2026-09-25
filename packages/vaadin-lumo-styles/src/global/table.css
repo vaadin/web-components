@@ -4,13 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-/* Styles a native <table> with the theme in use. The `vaadin-themed-html`
-   class asks for them, either on an ancestor, which covers every native
-   element inside it, or on the element itself. Under a themed ancestor, a
-   table with the `vaadin-unthemed-html` class is left to the browser. The
-   values follow what Lumo does to a <vaadin-grid>: a square box with a
-   stronger line around it than between the rows, and a header told apart by
-   type rather than by a background. */
 :where(.vaadin-themed-html table:not(.vaadin-unthemed-html), table.vaadin-themed-html) {
   background: var(--lumo-base-color);
   border: 1px solid var(--lumo-contrast-20pct);
