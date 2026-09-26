@@ -34,6 +34,30 @@
   vaadin-custom-field,
   vaadin-date-time-picker
 ) {
+  /* Baseline guide, as in legacy Lumo: one input tall with centered text over the input.
+     Compound fields start it below the child field's top padding. */
+  --_lumo-field-input-height: var(--vaadin-input-field-height, var(--lumo-size-m));
+  --_lumo-field-input-offset: 0px;
+  --_lumo-field-guide-height: var(--_lumo-field-input-height);
+  --vaadin-field-baseline-input-height: calc(var(--_lumo-field-guide-height) + var(--_lumo-field-input-offset));
+
+  &::before {
+    box-sizing: border-box;
+    height: var(--_lumo-field-guide-height);
+    padding: 0;
+    border: 0;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &:where(vaadin-slider, vaadin-range-slider, vaadin-checkbox-group, vaadin-radio-group) {
+    --_lumo-field-input-height: var(--lumo-size-s);
+  }
+
+  &:where(vaadin-custom-field, vaadin-date-time-picker) {
+    --_lumo-field-input-offset: var(--lumo-space-xs);
+  }
+
   &[has-label] {
     padding-top: var(--lumo-space-m);
   }

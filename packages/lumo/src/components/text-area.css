@@ -1,4 +1,11 @@
 :where(vaadin-text-area) {
+  /* Use default height for baseline alignment */
+  --_lumo-field-guide-height: var(--lumo-size-m);
+
+  &[theme~='small'] {
+    --_lumo-field-guide-height: var(--lumo-size-s);
+  }
+
   /* The ::after highlight cannot follow scrolled content, so hover uses the background. */
   &::part(input-field) {
     /* Match the vertical centering of single-line fields */
