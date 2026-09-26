@@ -17,6 +17,20 @@
   /* Host scope, so the base baseline guide uses the same padding. Otherwise unlabeled
      fields grow. */
   --vaadin-input-field-padding: 0 calc(0.375em + var(--vaadin-radius-m) / 4 - 1px);
+  /* Baseline guide with legacy geometry: one Lumo input tall with centered text, so it
+     overlays the input and the field's baseline is the input text's. The base sizes the
+     guide from its own input padding and border, which Lumo does not use. */
+  --_lumo-field-input-height: var(--lumo-size-m);
+  --vaadin-field-baseline-input-height: var(--_lumo-field-input-height);
+
+  &::before {
+    box-sizing: border-box;
+    height: var(--_lumo-field-input-height);
+    padding-block: 0;
+    border-block-width: 0;
+    display: inline-flex;
+    align-items: center;
+  }
 
   &::part(input-field) {
     position: relative;
@@ -84,6 +98,7 @@
   }
 
   &[theme~='small'] {
+    --_lumo-field-input-height: var(--lumo-size-s);
     font-size: var(--lumo-font-size-s);
     --vaadin-input-field-label-font-size: var(--lumo-font-size-xs);
     --vaadin-input-field-error-font-size: var(--lumo-font-size-xxs);

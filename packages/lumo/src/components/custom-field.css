@@ -1,3 +1,38 @@
+/* Compound fields: the input row is a row of child fields, not one input. */
+:where(vaadin-custom-field, vaadin-date-time-picker) {
+  /* The baseline guide overlays the first child's input: one Lumo input tall with
+     centered text, starting below the child field's top padding. */
+  --_lumo-field-input-height: var(--lumo-size-m);
+  --vaadin-field-baseline-input-height: calc(var(--_lumo-field-input-height) + var(--lumo-space-xs));
+
+  &::before {
+    box-sizing: border-box;
+    height: var(--_lumo-field-input-height);
+    padding-block: 0;
+    border-block-width: 0;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &[theme~='small'] {
+    --_lumo-field-input-height: var(--lumo-size-s);
+    font-size: var(--lumo-font-size-s);
+    --vaadin-input-field-label-font-size: var(--lumo-font-size-xs);
+    --vaadin-input-field-error-font-size: var(--lumo-font-size-xxs);
+  }
+
+  /* The child fields keep their own one-line baseline guide */
+  & > * {
+    --vaadin-field-baseline-input-height: initial;
+  }
+
+  /* Label aside: the child fields carry the top spacing, not the host. The trailing
+     [has-label] outranks the field.css label-aside padding, which loads later. */
+  &:is([theme~='label-aside'][has-label], [data-form-layout-has-labels-aside])[has-label] {
+    padding-top: 0;
+  }
+}
+
 /* Child fields add their own top spacing, so the label padding shrinks by space-xs. The
    whitespace theme restores it. */
 :where(vaadin-custom-field, vaadin-date-time-picker)[has-label]:not(
@@ -9,4 +44,23 @@
 
 :where(vaadin-custom-field, vaadin-date-time-picker)[theme~='whitespace'][has-label]::part(label) {
   padding-bottom: 0.5em;
+}
+
+/* The child fields carry their own bottom spacing, so the error sits closer */
+:where(vaadin-custom-field, vaadin-date-time-picker)[has-error-message]::part(error-message) {
+  margin-top: calc(0.4em - var(--lumo-space-xs));
+}
+
+/* The input row is one text-field row tall, so slotted native inputs center in it as in
+   legacy. Other children (Vaadin fields) get the body line-height back instead of
+   inheriting it, and align to the top so no descender space opens below them. */
+:where(vaadin-custom-field) {
+  &::part(input-fields) {
+    line-height: calc(var(--_lumo-field-input-height) + 2 * var(--lumo-space-xs));
+  }
+
+  & > :not([slot], input, select, textarea) {
+    line-height: var(--lumo-line-height-m);
+    vertical-align: top;
+  }
 }
