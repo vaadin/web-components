@@ -5,8 +5,10 @@
  */
 @media lumo_components_custom-field {
   :host {
-    display: inline-flex;
+    display: inline-grid;
     --lumo-text-field-size: var(--lumo-size-m);
+    /* The guide overlays the first child's input, below the child field's top padding */
+    --_input-height: calc(var(--lumo-text-field-size) + var(--lumo-space-xs));
     color: var(--lumo-body-text-color);
     font-size: var(--lumo-font-size-m);
     /* align with text-field height + vertical paddings */
@@ -21,9 +23,6 @@
   :host::before {
     content: '\2003';
     width: 0;
-    /* Size and position this element on the same vertical position as the input-field element
-           to make vertical align for the host element work as expected */
-    margin-top: var(--lumo-space-xs);
     height: var(--lumo-text-field-size);
     box-sizing: border-box;
     display: inline-flex;
@@ -36,8 +35,6 @@
 
   .vaadin-custom-field-container {
     width: 100%;
-    display: flex;
-    flex-direction: column;
   }
 
   .inputs-wrapper {
@@ -49,8 +46,7 @@
     padding-bottom: calc(0.5em - var(--lumo-space-xs));
   }
 
-  :host(:not([has-label])) [part='label'],
-  :host(:not([has-label]))::before {
+  :host(:not([has-label])) [part='label'] {
     display: none;
   }
 
@@ -101,7 +97,6 @@
   }
 
   :host(:is([theme~='label-aside'][has-label], [data-form-layout-has-labels-aside])) {
-    --_input-height: calc(var(--lumo-text-field-size) + var(--lumo-space-xs));
     padding-top: 0;
   }
 

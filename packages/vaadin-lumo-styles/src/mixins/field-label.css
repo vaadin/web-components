@@ -5,7 +5,8 @@
  */
 @media lumo_mixins_field-label {
   [part='label'] {
-    align-self: flex-start;
+    grid-row: label;
+    place-self: start;
     color: var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color));
     font-weight: var(--vaadin-input-field-label-font-weight, 500);
     font-size: var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s));
@@ -48,19 +49,66 @@
     padding-inline-end: 1em;
   }
 
-  :host([has-label])::before {
-    margin-top: calc(var(--lumo-font-size-s) * 1.5);
-  }
-
-  :host([has-label][theme~='small'])::before {
-    margin-top: calc(var(--lumo-font-size-xs) * 1.5);
-  }
-
   :host([has-label]) {
     padding-top: var(--lumo-space-m);
   }
 
   :host([has-label]) ::slotted([slot='tooltip']) {
     --vaadin-tooltip-offset-bottom: calc((var(--lumo-space-m) - var(--lumo-space-xs)) * -1);
+  }
+
+  /* Baseline alignment, same as the base styles: the host is a grid with a zero-height
+     baseline row above the input. The ::before guide ends at that row and is pulled down
+     over the input, so the host baseline is the input text baseline, whatever is above it.
+     The container spans all rows as a subgrid, so it keeps its own width. Its column
+     carries the area names, so parts placed by area (base styles) stay in it. Extra host
+     height goes below the parts, unless a field grows its input row (text area). Rows
+     do not shrink below their content when the host is too short, as in a flex column. */
+  :host {
+    align-content: start;
+    --_helper-above-field: ;
+    --_helper-below-field: initial;
+    --_rows-after-input: ;
+    grid-template:
+      'label' max-content
+      var(--_helper-above-field, 'helper' max-content)
+      'baseline' 0
+      'input' var(--_input-row-size, max-content)
+      var(--_rows-after-input)
+      var(--_helper-below-field, 'helper' max-content)
+      'error' max-content
+      / 100%;
+  }
+
+  :host::before {
+    grid-column: baseline;
+    grid-row: 1 / baseline;
+    align-self: end;
+    margin-bottom: calc(var(--_input-height, var(--lumo-size-s)) * -1);
+  }
+
+  [class$='container'] {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-template-columns:
+      [label-start helper-start baseline-start input-start marks-start error-start]
+      minmax(0, 1fr)
+      [label-end helper-end baseline-end input-end marks-end error-end];
+  }
+
+  [part='input-field'],
+  [part='input-fields'],
+  [part='group-field'] {
+    grid-row: input;
+  }
+
+  [part='helper-text'] {
+    grid-row: helper;
+  }
+
+  [part='error-message'] {
+    grid-row: error;
   }
 }
