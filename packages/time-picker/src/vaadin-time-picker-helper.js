@@ -55,45 +55,62 @@ export function parseISOTime(timeString) {
   }
 }
 
-function getStepSegment(stepValue) {
+/**
+ * Returns the finest time unit needed to represent the given step:
+ * `'minutes'`, `'seconds'` or `'milliseconds'`. A step that is not set,
+ * zero, or not a number, defaults to minutes.
+ *
+ * @param {number | string | null | undefined} stepValue
+ * @return {'minutes' | 'seconds' | 'milliseconds'}
+ */
+export function getStepResolution(stepValue) {
   const step = stepValue == null ? 60 : parseFloat(stepValue);
-  if (step % 3600 === 0) {
-    // Accept hours
-    return 1;
-  } else if (step % 60 === 0 || !step) {
-    // Accept minutes
-    return 2;
-  } else if (step % 1 === 0) {
-    // Accept seconds
-    return 3;
-  } else if (step < 1) {
-    // Accept milliseconds
-    return 4;
+  if (!step || step % 60 === 0) {
+    return 'minutes';
   }
+  if (step % 1 === 0) {
+    return 'seconds';
+  }
+  return 'milliseconds';
 }
 
 /**
- * A function to validate the time object based on the given step.
+ * Returns a copy of the time object truncated to the given resolution, with
+ * every remaining part converted to a number. An unknown resolution truncates
+ * to minutes.
  *
  * Returns a new object, so that a time object owned by the caller, such as one
  * returned by the `i18n.parseTime` function, is left as it is.
  *
  * @param {object} timeObject
- * @param {number} step
+ * @param {'minutes' | 'seconds' | 'milliseconds'} resolution
  * @return {object | undefined}
  */
-export function validateTime(timeObject, step) {
+export function truncateTime(timeObject, resolution) {
   if (!timeObject) {
     return timeObject;
   }
 
-  const stepSegment = getStepSegment(step);
+  const includeMilliseconds = resolution === 'milliseconds';
+  const includeSeconds = includeMilliseconds || resolution === 'seconds';
 
   return {
     ...timeObject,
     hours: parseInt(timeObject.hours),
     minutes: parseInt(timeObject.minutes || 0),
-    seconds: stepSegment < 3 ? undefined : parseInt(timeObject.seconds || 0),
-    milliseconds: stepSegment < 4 ? undefined : parseInt(timeObject.milliseconds || 0),
+    seconds: includeSeconds ? parseInt(timeObject.seconds || 0) : undefined,
+    milliseconds: includeMilliseconds ? parseInt(timeObject.milliseconds || 0) : undefined,
   };
+}
+
+/**
+ * Returns a copy of the time object truncated to the resolution defined by
+ * the given step, see `getStepResolution` and `truncateTime`.
+ *
+ * @param {object} timeObject
+ * @param {number | null | undefined} step
+ * @return {object | undefined}
+ */
+export function validateTime(timeObject, step) {
+  return truncateTime(timeObject, getStepResolution(step));
 }
