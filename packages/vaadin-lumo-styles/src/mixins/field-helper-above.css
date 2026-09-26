@@ -15,19 +15,11 @@
   }
 
   :host([has-helper][theme~='helper-above-field']) [part='label'] {
-    order: 0;
     padding-bottom: var(--_helper-spacing);
   }
 
-  :host([has-helper][theme~='helper-above-field']) [part='helper-text'] {
-    order: 1;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='label'] + * {
-    order: 2;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='error-message'] {
-    order: 3;
+  :host([theme~='helper-above-field']) {
+    --_helper-above-field: initial;
+    --_helper-below-field: ;
   }
 }
