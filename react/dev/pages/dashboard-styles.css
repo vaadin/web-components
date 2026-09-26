@@ -1,0 +1,21 @@
+html {
+  --vaadin-dashboard-col-min-width: 300px;
+  --vaadin-dashboard-col-max-width: 500px;
+  --vaadin-dashboard-col-max-count: 3;
+  --vaadin-dashboard-row-min-height: 300px;
+}
+
+.kpi-number {
+  font-size: 80px;
+  font-weight: bold;
+  color: #4caf50;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart {
+  height: 100%;
+  background: repeating-linear-gradient(45deg, #e0e0e0, #e0e0e0 10px, #f5f5f5 10px, #f5f5f5 20px);
+}

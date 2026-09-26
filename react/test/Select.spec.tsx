@@ -1,0 +1,174 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { render } from 'vitest-browser-react';
+import userEvent, { type UserEvent } from '@testing-library/user-event';
+import type { ReactElement } from 'react';
+import { Select, SelectElement } from '../../packages/react-components/src/Select.js';
+import { SelectItem } from '../../packages/react-components/src/SelectItem.js';
+import { SelectListBox } from '../../packages/react-components/src/SelectListBox.js';
+import { findByQuerySelector } from './utils/findByQuerySelector.js';
+
+describe('Select', () => {
+  const items = [
+    { label: 'Foo', value: 'foo' },
+    { label: 'Bar', value: 'bar' },
+  ];
+
+  function Renderer(): ReactElement {
+    return (
+      <SelectListBox>
+        <SelectItem value="foo">Foo</SelectItem>
+        <SelectItem value="bar">Bar</SelectItem>
+      </SelectListBox>
+    );
+  }
+
+  async function assert(user: ReturnType<UserEvent['setup']>) {
+    const select = await findByQuerySelector('vaadin-select');
+
+    const valueButton = await findByQuerySelector('vaadin-select-value-button', select);
+    await vi.waitFor(() => {
+      expect(valueButton).to.have.text('Bar');
+    });
+
+    await user.click(valueButton);
+
+    await vi.waitFor(() => {
+      const listBox = select.querySelector('vaadin-select-list-box');
+      expect(listBox).to.exist;
+
+      const items = listBox!.querySelectorAll('vaadin-select-item');
+      expect(items[0]).to.have.text('Foo');
+      expect(items[1]).to.have.text('Bar');
+    });
+  }
+
+  let user: ReturnType<UserEvent['setup']>;
+
+  beforeEach(async () => {
+    user = userEvent.setup();
+  });
+
+  it('should use items if no renderer property set', async () => {
+    await render(<Select items={items} value="bar" />);
+    await assert(user);
+  });
+
+  it('should correctly render the value if default value changed', async () => {
+    const { rerender } = await render(<Select renderer={Renderer} value="bar" />);
+    await expect(findByQuerySelector('vaadin-select-value-button')).to.eventually.have.text('Bar');
+
+    await rerender(<Select renderer={Renderer} value="foo" />);
+    await expect(findByQuerySelector('vaadin-select-value-button')).to.eventually.have.text('Foo');
+  });
+
+  describe('renderer', () => {
+    function NewRenderer() {
+      return (
+        <SelectListBox>
+          <SelectItem value="foo">Foo</SelectItem>
+          <SelectItem value="bar">Bar</SelectItem>
+          <SelectItem value="baz">Baz</SelectItem>
+        </SelectListBox>
+      );
+    }
+
+    it('should use renderer prop if it is set', async () => {
+      await render(<Select renderer={Renderer} value="bar" />);
+      await assert(user);
+    });
+
+    it('should use children render function as a renderer prop', async () => {
+      await render(<Select value="bar">{Renderer}</Select>);
+      await assert(user);
+    });
+
+    it('should correctly render the value if renderer prop is changed', async () => {
+      await render(<Select renderer={Renderer} value="bar" />);
+      await findByQuerySelector('vaadin-select-value-button');
+
+      await render(<Select renderer={NewRenderer} value="bar" />);
+
+      await expect(findByQuerySelector('vaadin-select-value-button')).to.eventually.have.text('Bar');
+    });
+
+    it('should correctly render the value if children prop is changed', async () => {
+      await render(<Select value="bar">{Renderer}</Select>);
+      await findByQuerySelector('vaadin-select-value-button');
+      await render(<Select value="bar">{NewRenderer}</Select>);
+
+      await expect(findByQuerySelector('vaadin-select-value-button')).to.eventually.have.text('Bar');
+    });
+  });
+
+  describe('slot', () => {
+    it('should render the element with slot if renderer prop is set', async () => {
+      await render(
+        <Select renderer={Renderer}>
+          <div slot="prefix">Value:</div>
+        </Select>,
+      );
+
+      await expect(findByQuerySelector('div[slot="prefix"]')).to.eventually.have.text('Value:');
+    });
+
+    it('should render the element with slot if items prop is set', async () => {
+      await render(
+        <Select items={items}>
+          <div slot="prefix">Value:</div>
+        </Select>,
+      );
+
+      await expect(findByQuerySelector('div[slot="prefix"]')).to.eventually.have.text('Value:');
+    });
+
+    it('should render the element with slot if children render function is set', async () => {
+      await render(
+        <Select>
+          {Renderer}
+          <div slot="prefix">Value:</div>
+        </Select>,
+      );
+
+      await expect(findByQuerySelector('div[slot="prefix"]')).to.eventually.have.text('Value:');
+    });
+
+    it('should render the element with slot if children component is set', async () => {
+      await render(
+        <Select>
+          <SelectListBox>
+            <SelectItem value="foo">Foo</SelectItem>
+            <SelectItem value="bar">Bar</SelectItem>
+          </SelectListBox>
+          <div slot="prefix">Value:</div>
+        </Select>,
+      );
+
+      await expect(findByQuerySelector('div[slot="prefix"]')).to.eventually.have.text('Value:');
+    });
+  });
+
+  describe('boolean property', () => {
+    const booleanProperties: Array<keyof typeof SelectElement.prototype & string> = [
+      'disabled',
+      'hidden',
+      'opened',
+      'draggable',
+    ];
+
+    booleanProperties.forEach((property) => {
+      describe(property, () => {
+        it(`should be true in the element if ${property} prop is true`, async () => {
+          await render(<Select items={[{ label: 'foo', value: 'foo' }]} {...{ [property]: true }} />);
+          const select = await findByQuerySelector('vaadin-select');
+          expect(select[property]).to.be.ok;
+        });
+
+        it(`should be false in the element if ${property} prop is false`, async () => {
+          await render(<Select items={[{ label: 'foo', value: 'foo' }]} {...{ [property]: false }} />);
+          const select = await findByQuerySelector('vaadin-select');
+          expect(select[property]).not.to.be.ok;
+        });
+      });
+    });
+  });
+});

@@ -44,3 +44,14 @@ tsconfig.build.tsbuildinfo
 # API docs generated files
 api-docs/dist
 api-docs/content/elements
+
+# React components generated sources and build output
+packages/react-components*/css
+packages/react-components*/generated
+packages/react-components*/renderers
+packages/react-components*/utils
+packages/react-components*/src/generated
+packages/react-components*/*.d.ts
+packages/react-components*/*.d.ts.map
+packages/react-components*/*.js
+packages/react-components*/*.js.map

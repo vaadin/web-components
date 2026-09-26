@@ -1,0 +1,24 @@
+{
+  "name": "react-components-workspace",
+  "type": "module",
+  "version": "25.4.0-alpha1",
+  "private": true,
+  "scripts": {
+    "build": "yarn build:load-schema && yarn workspace @vaadin/react-components build && yarn workspace @vaadin/react-components-pro build",
+    "build:load-schema": "tsx scripts/schema-loader.ts",
+    "dev": "vite dev --open /dev/",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "validate": "concurrently yarn:validate:*",
+    "validate:types": "tsc --noEmit",
+    "validate:prettier": "prettier -c scripts ../packages/react-components*/src/*.ts \"../packages/react-components*/src/{utils,renderers}/*.ts\" test types vite.config.ts vitest.config.ts",
+    "validate:build": "tsx scripts/validate-build.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "react"
+  },
+  "author": "Vaadin Ltd.",
+  "license": "(Apache-2.0 OR SEE LICENSE IN https://vaadin.com/commercial-license-and-service-terms)"
+}

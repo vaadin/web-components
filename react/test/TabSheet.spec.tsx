@@ -1,0 +1,230 @@
+import { describe, expect, it } from 'vitest';
+import { render } from 'vitest-browser-react';
+import { TabSheet, TabSheetTab } from '../../packages/react-components/src/TabSheet.js';
+import type { TabElement } from '../../packages/react-components/src/Tab.js';
+import { useState } from 'react';
+
+function getTabSheet() {
+  return document.querySelector('vaadin-tabsheet')!;
+}
+
+function getTabContent(tab: TabElement) {
+  return getTabSheet().querySelector(`[tab="${tab.id}"]`);
+}
+
+async function until(predicate: () => boolean) {
+  while (!predicate()) {
+    await new Promise((r) => setTimeout(r, 10));
+  }
+}
+
+describe('TabSheet', () => {
+  it('should render two tabs', async () => {
+    await render(
+      <TabSheet>
+        <TabSheetTab label="Tab 1">Content 1</TabSheetTab>
+        <TabSheetTab label="Tab 2">Content 2</TabSheetTab>
+      </TabSheet>,
+    );
+
+    const tabs = getTabSheet().querySelectorAll('vaadin-tab');
+    expect(tabs).to.have.length(2);
+
+    expect(tabs[0]).to.have.text('Tab 1');
+    expect(tabs[1]).to.have.text('Tab 2');
+
+    expect(getTabContent(tabs[0])).to.have.text('Content 1');
+    expect(getTabContent(tabs[1])).to.have.text('Content 2');
+  });
+
+  it('should have the second tab selected', async () => {
+    await render(
+      <TabSheet selected={1}>
+        <TabSheetTab label="Tab 1">Content 1</TabSheetTab>
+        <TabSheetTab label="Tab 2">Content 2</TabSheetTab>
+      </TabSheet>,
+    );
+
+    const tabs = getTabSheet().querySelectorAll('vaadin-tab');
+
+    await until(() => tabs[1].selected);
+    expect(tabs[0].selected).to.be.false;
+  });
+
+  it('should have the second tab disabled', async () => {
+    await render(
+      <TabSheet>
+        <TabSheetTab label="Tab 1">Content 1</TabSheetTab>
+        <TabSheetTab label="Tab 2" disabled>
+          Content 2
+        </TabSheetTab>
+      </TabSheet>,
+    );
+
+    const tabs = getTabSheet().querySelectorAll('vaadin-tab');
+
+    await until(() => tabs[1].disabled);
+    expect(tabs[0].disabled).to.be.false;
+  });
+
+  it('should pass props to the tab', async () => {
+    await render(
+      <TabSheet>
+        <TabSheetTab label="Tab 1" aria-label="tab">
+          Content 1
+        </TabSheetTab>
+      </TabSheet>,
+    );
+
+    const tab = getTabSheet().querySelector('vaadin-tab')!;
+    expect(tab.ariaLabel).to.equal('tab');
+  });
+
+  it('should support custom id for tab', async () => {
+    await render(
+      <TabSheet>
+        <TabSheetTab label="Tab 1" id="foo">
+          Content 1
+        </TabSheetTab>
+      </TabSheet>,
+    );
+
+    const tab = getTabSheet().querySelector('vaadin-tab')!;
+    expect(tab.id).to.equal('foo');
+    expect(getTabContent(tab)).to.have.text('Content 1');
+  });
+
+  it('should maintain selected tab on re-render', async () => {
+    function Test() {
+      const [count, setCount] = useState(2);
+      return (
+        <>
+          <TabSheet>
+            {Array.from({ length: count }, (_, i) => (
+              <TabSheetTab label={`Tab ${i + 1}`} key={i}>
+                Content {i + 1}
+              </TabSheetTab>
+            ))}
+          </TabSheet>
+
+          <button onClick={() => setCount(count + 1)}>Add tab</button>
+        </>
+      );
+    }
+
+    await render(<Test />);
+    const addTabButton = document.querySelector('button')!;
+    getTabSheet().selected = 1;
+    addTabButton.click();
+
+    await until(() => getTabSheet().querySelectorAll('vaadin-tab').length === 3);
+
+    const tabs = getTabSheet().querySelectorAll('vaadin-tab');
+    expect(getTabContent(tabs[0])).to.have.text('Content 1');
+    expect(getTabContent(tabs[1])).to.have.text('Content 2');
+    expect(getTabContent(tabs[2])).to.have.text('Content 3');
+
+    expect(getTabSheet().selected).to.equal(1);
+  });
+
+  it('should not remount tab content on re-render', async () => {
+    function Test() {
+      const [count, setCount] = useState(0);
+      return (
+        <>
+          <TabSheet>
+            <TabSheetTab label="Tab 1">
+              <input id="tab-input" />
+              <span id="render-count">{count}</span>
+            </TabSheetTab>
+          </TabSheet>
+
+          <button onClick={() => setCount(count + 1)}>Re-render</button>
+        </>
+      );
+    }
+
+    await render(<Test />);
+
+    const tab = getTabSheet().querySelector('vaadin-tab')!;
+    const tabId = tab.id;
+    const content = getTabContent(tab);
+    const input = document.querySelector<HTMLInputElement>('#tab-input')!;
+    input.focus();
+
+    document.querySelector('button')!.click();
+    await until(() => document.querySelector('#render-count')!.textContent === '1');
+
+    expect(getTabSheet().querySelector('vaadin-tab')!.id).to.equal(tabId);
+    expect(getTabSheet().querySelector('vaadin-tab')).to.equal(tab);
+    expect(getTabContent(tab)).to.equal(content);
+    expect(document.querySelector('#tab-input')).to.equal(input);
+    expect(document.activeElement).to.equal(input);
+  });
+
+  it('should not remount tab content of keyed tabs when adding a tab', async () => {
+    function Test() {
+      const [labels, setLabels] = useState(['two']);
+      return (
+        <>
+          <TabSheet>
+            {labels.map((label) => (
+              <TabSheetTab label={label} key={label}>
+                <input id={`input-${label}`} />
+              </TabSheetTab>
+            ))}
+          </TabSheet>
+
+          <button onClick={() => setLabels(['one', ...labels])}>Prepend tab</button>
+        </>
+      );
+    }
+
+    await render(<Test />);
+
+    const tab = getTabSheet().querySelector('vaadin-tab')!;
+    const tabId = tab.id;
+    const content = getTabContent(tab);
+    const input = document.querySelector('#input-two');
+
+    document.querySelector('button')!.click();
+    await until(() => getTabSheet().querySelectorAll('vaadin-tab').length === 2);
+
+    expect(getTabSheet().querySelectorAll('vaadin-tab')[1].id).to.equal(tabId);
+    expect(getTabSheet().querySelectorAll('vaadin-tab')[1]).to.equal(tab);
+    expect(getTabContent(tab)).to.equal(content);
+    expect(document.querySelector('#input-two')).to.equal(input);
+  });
+
+  it('should render prefix and suffix', async () => {
+    await render(
+      <TabSheet>
+        <div slot="prefix">PREFIX</div>
+        <div slot="suffix">SUFFIX</div>
+      </TabSheet>,
+    );
+
+    const prefix = getTabSheet().querySelector('[slot="prefix"]');
+    expect(prefix).to.have.text('PREFIX');
+
+    const suffix = getTabSheet().querySelector('[slot="suffix"]');
+    expect(suffix).to.have.text('SUFFIX');
+  });
+
+  it('should expand content element to full size', async () => {
+    await render(
+      <TabSheet style={{ height: '500px', width: '600px' }} theme="no-padding">
+        <TabSheetTab style={{ height: '50px' }} label="Tab">
+          <div style={{ height: '100%' }} id="content-div"></div>
+        </TabSheetTab>
+      </TabSheet>,
+    );
+
+    const tabsContainer = getTabSheet().shadowRoot!.querySelector('[part="tabs-container"]')!;
+    const tabsContainerHeight = tabsContainer.clientHeight;
+    const content = getTabSheet().querySelector('#content-div');
+
+    expect(content?.clientWidth).toBe(600);
+    expect(content?.clientHeight).toBe(500 - tabsContainerHeight);
+  });
+});

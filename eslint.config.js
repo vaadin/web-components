@@ -40,6 +40,9 @@ export default [
       'packages/**/dist/*.js',
       'packages/**/test/dom/__snapshots__/*.snap.js',
       'packages/**/test/*.generated.test.js',
+      // React packages and tooling are formatted with Prettier and type-checked separately for now
+      'packages/react-components*/**/*',
+      'react/**/*',
     ],
   },
   ...typescript,

@@ -69,3 +69,29 @@ jobs:
 
       - name: Test
         run: yarn test:webkit
+  react:
+    name: React
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      - name: Install Playwright
+        run: npx playwright install chromium --with-deps
+
+      - name: Build
+        run: yarn react:build
+
+      - name: Validate
+        run: yarn react:validate
+
+      - name: Test
+        run: yarn react:test
