@@ -7,10 +7,6 @@
   :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) {
     --_label-aside-width: 0px;
     --_label-aside-gap: 0px;
-    --_helper-above-field: ;
-    --_helper-below-field: initial;
-    --_rows-after-input: ;
-    display: inline-grid;
     grid-template:
       var(--_helper-above-field, '.     helper' auto)
       '                           .     baseline' 0
@@ -28,30 +24,13 @@
     padding-top: var(--lumo-space-xs);
   }
 
-  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[theme~='helper-above-field']) {
-    --_helper-above-field: initial;
-    --_helper-below-field: ;
-  }
-
-  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside]))::before {
-    grid-column: baseline;
-    grid-row: 1 / baseline;
-    align-self: end;
-    margin-bottom: calc(var(--_input-height, var(--lumo-size-s)) * -1);
-  }
-
-  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[has-label])::before,
-  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[theme~='small'][has-label])::before {
-    margin-top: 0;
-  }
-
   :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [class$='container'] {
     display: contents;
   }
 
   :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='label'] {
     grid-area: label;
-    align-self: baseline;
+    place-self: baseline stretch;
     overflow: visible;
     white-space: normal;
     word-break: break-word;
