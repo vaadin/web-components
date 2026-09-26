@@ -26,7 +26,8 @@
 
   &::part(input-field) {
     position: relative;
-    min-height: var(--vaadin-input-field-height, var(--lumo-size-m));
+    /* As tall as the baseline guide, which reads --vaadin-input-field-height */
+    min-height: var(--_lumo-field-input-height);
     --vaadin-input-field-background: var(--_lumo-input-field-background);
     --vaadin-input-field-border-width: var(--_lumo-input-field-border-width);
     --vaadin-input-field-value-font-weight: var(--_lumo-input-field-value-font-weight);
@@ -101,13 +102,10 @@
   }
 
   &[theme~='small'] {
+    --_lumo-field-input-height: var(--vaadin-input-field-height, var(--lumo-size-s));
     font-size: var(--lumo-font-size-s);
     --vaadin-input-field-label-font-size: var(--lumo-font-size-xs);
     --vaadin-input-field-error-font-size: var(--lumo-font-size-xxs);
-  }
-
-  &[theme~='small']::part(input-field) {
-    min-height: var(--vaadin-input-field-height, var(--lumo-size-s));
   }
 
   @media (any-hover: hover) {
