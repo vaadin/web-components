@@ -5,12 +5,6 @@
 }
 
 :where(vaadin-date-time-picker) {
-  /* The baseline guide assumes a one-line input. Here the input row is a child field: its
-     input height, its padding and the input's top padding. */
-  --vaadin-field-baseline-input-height: calc(
-    var(--lumo-size-m) + var(--lumo-space-s) + var(--vaadin-padding-block-container)
-  );
-
   /* Logical radii keep the seam centered in RTL */
   & > [slot='date-picker'] {
     --vaadin-input-field-top-end-radius: 0px;
