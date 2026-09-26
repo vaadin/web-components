@@ -85,7 +85,7 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Install Playwright
-        run: npx playwright install chromium --with-deps
+        run: yarn playwright install chromium --with-deps
 
       - name: Build
         run: yarn react:build
