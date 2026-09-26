@@ -1,8 +1,8 @@
 import '@vaadin/icons';
 import { useMemo, useRef, useState } from 'react';
-import { DatePicker, type DatePickerElement } from '../../packages/react-components/src/DatePicker.js';
-import { Icon } from '../../packages/react-components/src/Icon.js';
-import { Tooltip } from '../../packages/react-components/src/Tooltip.js';
+import { DatePicker, type DatePickerElement } from '../../../packages/react-components/src/DatePicker.js';
+import { Icon } from '../../../packages/react-components/src/Icon.js';
+import { Tooltip } from '../../../packages/react-components/src/Tooltip.js';
 
 export default function DatePickerPage() {
   const [label, setLabel] = useState('Label');

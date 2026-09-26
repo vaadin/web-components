@@ -1,6 +1,6 @@
 import { type PropsWithChildren, useState } from 'react';
-import { Button } from '../../packages/react-components/src/Button.js';
-import { Dialog } from '../../packages/react-components/src/Dialog.js';
+import { Button } from '../../../packages/react-components/src/Button.js';
+import { Dialog } from '../../../packages/react-components/src/Dialog.js';
 
 export type DialogComponentProps = Readonly<{
   opened: boolean;

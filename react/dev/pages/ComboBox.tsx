@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ComboBox } from '../../packages/react-components/src/ComboBox.js';
+import { ComboBox } from '../../../packages/react-components/src/ComboBox.js';
 import type {
   ComboBoxValueChangedEvent,
   ComboBoxCustomValueSetEvent,
@@ -8,8 +8,8 @@ import type {
   ComboBoxValidatedEvent,
   ComboBoxOpenedChangedEvent,
 } from '@vaadin/combo-box';
-import { Tooltip } from '../../packages/react-components/src/Tooltip.js';
-import { Icon } from '../../packages/react-components/src/Icon.js';
+import { Tooltip } from '../../../packages/react-components/src/Tooltip.js';
+import { Icon } from '../../../packages/react-components/src/Icon.js';
 import '@vaadin/icons';
 
 interface Person {

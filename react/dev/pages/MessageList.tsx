@@ -1,5 +1,5 @@
-import { MessageList, type MessageListItem } from '../../packages/react-components/src/MessageList.js';
-import { MessageInput, type MessageInputSubmitEvent } from '../../packages/react-components/src/MessageInput.js';
+import { MessageList, type MessageListItem } from '../../../packages/react-components/src/MessageList.js';
+import { MessageInput, type MessageInputSubmitEvent } from '../../../packages/react-components/src/MessageInput.js';
 import { useState } from 'react';
 
 export default function MessageListPage() {

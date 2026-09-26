@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { ComboBox } from '../packages/react-components/src/ComboBox.js';
+import { ComboBox } from '../../packages/react-components/src/ComboBox.js';
 import sinon from 'sinon';
 
 describe('ComboBox', () => {

@@ -4,30 +4,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Monorepo containing React wrappers for Vaadin web components. Uses `@lit/react` to bridge Vaadin's Lit-based web components into React 19. Two packages:
+React wrappers for Vaadin web components, living in the web-components monorepo. Uses `@lit/react` to bridge Vaadin's Lit-based web components into React 19. Two packages:
 
 - `packages/react-components/` — Open-source components (~80 components)
 - `packages/react-components-pro/` — Commercial/premium components (Board, Charts, Crud, Dashboard, GridPro, Map, RichTextEditor)
 
 ## Commands
 
-```bash
-npm run dev              # Vite dev server at localhost:5173/dev/
-npm run build            # Full build (schema load + code gen + compile)
-npm run test             # Browser tests (Vitest + Playwright chromium)
-npm run test:watch       # Tests in watch mode
-npm run validate         # Type check + prettier check + build validation (parallel)
-npm run validate:types   # tsc --noEmit
-npm run validate:prettier # Check formatting only
-```
-
-Individual build steps:
+Run from the repository root:
 
 ```bash
-npm run build:load-schema   # Load JSON schemas from Vaadin web component packages
-npm run build:code:ts       # Compile with esbuild
-npm run build:code:dts      # Generate .d.ts files
+yarn react:build         # Build web-types, then generate and compile both React packages
+yarn react:dev           # Vite dev server at localhost:5173/dev/
+yarn react:test          # Browser tests (Vitest + Playwright chromium)
+yarn react:validate      # Type check + prettier check + build validation (parallel)
 ```
+
+The React code generator reads the `web-types.json` files of the local web component packages, so `yarn react:build` runs `yarn release:cem` and `yarn release:web-types` first. Tooling (`scripts/`, `test/`, `dev/`, `types/`, Vite and Vitest configs) lives in `react/`.
 
 ## Architecture
 
@@ -35,7 +28,7 @@ npm run build:code:dts      # Generate .d.ts files
 
 Most components are **auto-generated** from Vaadin web component JSON schemas:
 
-1. `scripts/generator.ts` reads schemas from `types/` directory
+1. `react/scripts/generator.ts` reads the `web-types.json` of each web component package
 2. Generates React wrappers in `packages/*/src/generated/` using `createComponent()` from `@lit/react`
 3. Each generated file exports the component, its element class, and prop types
 
@@ -65,14 +58,13 @@ The renderer hooks are the core abstraction for bridging React rendering into we
 
 ## Development
 
-- Dev pages in `dev/pages/` — one `.tsx` per component for manual testing
-- Kitchen sink at `dev/kitchen-sink/` — all components in one view
-- Tests in `test/*.spec.tsx` — browser-based, use `vitest-browser-react` render function
+- Dev pages in `react/dev/pages/` — one `.tsx` per component for manual testing
+- Kitchen sink at `react/dev/kitchen-sink/` — all components in one view
+- Tests in `react/test/*.spec.tsx` — browser-based, use `vitest-browser-react` render function
 - Test helpers: `nextRender()` (wait for animation frame + microtask), `findByQuerySelector()`, `catchRender()`
 
 ## Code Style
 
 - Prettier: single quotes, 120 char width, trailing commas
 - Pure ESM — all imports use `.js` extensions
-- Pre-commit hook runs prettier via lint-staged
 - Strict TypeScript with `react-jsx` transform

@@ -11,19 +11,19 @@
   "types": "index.d.ts",
   "repository": {
     "type": "git",
-    "url": "github.com/vaadin/react-components"
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/react-components"
   },
   "scripts": {
-    "build": "npm run build:dev && npm run build:code && npm run build:update-packagejson",
-    "build:dev": "npm run build:generate && npm run build:generate-css",
-    "build:generate": "tsx ../../scripts/generator.ts",
-    "build:generate-css": "tsx --experimental-vm-modules ../../scripts/css-generator.ts",
-    "build:update-packagejson": "tsx ../../scripts/package-json-update.ts",
-    "build:code": "concurrently npm:build:code:*",
-    "build:code:ts": "tsx ../../scripts/build.ts",
+    "build": "yarn run build:dev && yarn run build:code && yarn run build:update-packagejson",
+    "build:dev": "yarn run build:generate && yarn run build:generate-css",
+    "build:generate": "tsx ../../react/scripts/generator.ts",
+    "build:generate-css": "tsx --experimental-vm-modules ../../react/scripts/css-generator.ts",
+    "build:update-packagejson": "tsx ../../react/scripts/package-json-update.ts",
+    "build:code": "concurrently yarn:build:code:*",
+    "build:code:ts": "tsx ../../react/scripts/build.ts",
     "build:code:dts": "tsc -p tsconfig.build.json",
-    "build:code:copy-dts": "tsx ../../scripts/copy-dts.ts",
-    "version": "tsx ../../scripts/package-json-version.ts"
+    "build:code:copy-dts": "tsx ../../react/scripts/copy-dts.ts"
   },
   "dependencies": {
     "@lit/react": "^1.0.7",
@@ -594,5 +594,9 @@
     "./renderers/useSimpleRenderer.d.ts.map": "./renderers/useSimpleRenderer.d.ts.map",
     "./renderers/useSimpleRenderer.js": "./renderers/useSimpleRenderer.js",
     "./renderers/useSimpleRenderer.js.map": "./renderers/useSimpleRenderer.js.map"
+  },
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
   }
 }

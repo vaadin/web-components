@@ -1,4 +1,4 @@
-import { Switch } from '../../packages/react-components/src/Switch.js';
+import { Switch } from '../../../packages/react-components/src/Switch.js';
 import { useState } from 'react';
 import type { SwitchCheckedChangedEvent } from '@vaadin/switch';
 

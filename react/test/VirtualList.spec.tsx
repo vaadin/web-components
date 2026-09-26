@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { VirtualList, type VirtualListReactRendererProps } from '../packages/react-components/src/VirtualList.js';
+import { VirtualList, type VirtualListReactRendererProps } from '../../packages/react-components/src/VirtualList.js';
 
 describe('VirtualList', () => {
   type Item = Readonly<{ value: string; index: number }>;

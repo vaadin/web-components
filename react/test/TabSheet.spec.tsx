@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { TabSheet, TabSheetTab } from '../packages/react-components/src/TabSheet.js';
-import type { TabElement } from '../packages/react-components/src/Tab.js';
+import { TabSheet, TabSheetTab } from '../../packages/react-components/src/TabSheet.js';
+import type { TabElement } from '../../packages/react-components/src/Tab.js';
 import { useState } from 'react';
 
 function getTabSheet() {

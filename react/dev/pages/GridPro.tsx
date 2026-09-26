@@ -1,6 +1,6 @@
-import { GridPro } from '../../packages/react-components-pro/src/GridPro.js';
-import { GridProEditColumn } from '../../packages/react-components-pro/src/GridProEditColumn.js';
-import { TextField } from '../../packages/react-components/src/TextField.js';
+import { GridPro } from '../../../packages/react-components-pro/src/GridPro.js';
+import { GridProEditColumn } from '../../../packages/react-components-pro/src/GridProEditColumn.js';
+import { TextField } from '../../../packages/react-components/src/TextField.js';
 
 type Item = {
   firstName: string;

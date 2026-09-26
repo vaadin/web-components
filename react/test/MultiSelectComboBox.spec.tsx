@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { MultiSelectComboBox } from '../packages/react-components/src/MultiSelectComboBox.js';
+import { MultiSelectComboBox } from '../../packages/react-components/src/MultiSelectComboBox.js';
 import sinon from 'sinon';
 
 describe('MultiSelectComboBox', () => {

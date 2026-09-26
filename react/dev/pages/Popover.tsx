@@ -3,9 +3,9 @@ import {
   type PopoverPosition,
   type PopoverOpenedChangedEvent,
   type PopoverTrigger,
-} from '../../packages/react-components/src/Popover.js';
-import { Button } from '../../packages/react-components/src/Button.js';
-import { Tooltip } from '../../packages/react-components/src/Tooltip.js';
+} from '../../../packages/react-components/src/Popover.js';
+import { Button } from '../../../packages/react-components/src/Button.js';
+import { Tooltip } from '../../../packages/react-components/src/Tooltip.js';
 import { useState } from 'react';
 
 export default function PopoverPage() {

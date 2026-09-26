@@ -1,5 +1,5 @@
-import { Breadcrumbs } from '../../packages/react-components/src/Breadcrumbs.js';
-import { BreadcrumbsItem } from '../../packages/react-components/src/BreadcrumbsItem.js';
+import { Breadcrumbs } from '../../../packages/react-components/src/Breadcrumbs.js';
+import { BreadcrumbsItem } from '../../../packages/react-components/src/BreadcrumbsItem.js';
 import { useState } from 'react';
 
 const items = [

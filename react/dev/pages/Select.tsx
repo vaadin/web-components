@@ -1,8 +1,8 @@
-import { Select } from '../../packages/react-components/src/Select.js';
-import type { SelectItemData } from '../../packages/react-components/src/Select.js';
-import { SelectItem } from '../../packages/react-components/src/SelectItem.js';
-import { SelectListBox } from '../../packages/react-components/src/SelectListBox.js';
-import { Tooltip } from '../../packages/react-components/src/Tooltip.js';
+import { Select } from '../../../packages/react-components/src/Select.js';
+import type { SelectItemData } from '../../../packages/react-components/src/Select.js';
+import { SelectItem } from '../../../packages/react-components/src/SelectItem.js';
+import { SelectListBox } from '../../../packages/react-components/src/SelectListBox.js';
+import { Tooltip } from '../../../packages/react-components/src/Tooltip.js';
 import { useEffect, useState } from 'react';
 import type { SelectInvalidChangedEvent, SelectValidatedEvent } from '@vaadin/select';
 

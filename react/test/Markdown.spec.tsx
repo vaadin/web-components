@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { Markdown } from '../packages/react-components/src/Markdown.js';
+import { Markdown } from '../../packages/react-components/src/Markdown.js';
 
 describe('Markdown', () => {
   it('should render child markdown', async () => {

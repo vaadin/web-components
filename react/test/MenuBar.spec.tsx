@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { MenuBar, MenuBarElement } from '../packages/react-components/src/MenuBar.js';
+import { MenuBar, MenuBarElement } from '../../packages/react-components/src/MenuBar.js';
 import sinon from 'sinon';
 
 const subMenuTag = 'vaadin-menu-bar-submenu';

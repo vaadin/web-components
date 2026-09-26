@@ -3,10 +3,10 @@ import {
   ContextMenu,
   type ContextMenuItemData,
   type ContextMenuItemSelectedEvent,
-} from '../../packages/react-components/src/ContextMenu.js';
-import { Icon } from '../../packages/react-components/src/Icon.js';
-import { RadioGroup } from '../../packages/react-components/src/RadioGroup.js';
-import { RadioButton } from '../../packages/react-components/src/RadioButton.js';
+} from '../../../packages/react-components/src/ContextMenu.js';
+import { Icon } from '../../../packages/react-components/src/Icon.js';
+import { RadioGroup } from '../../../packages/react-components/src/RadioGroup.js';
+import { RadioButton } from '../../../packages/react-components/src/RadioButton.js';
 import '@vaadin/icons';
 
 function createItem(iconName: string, text: string) {

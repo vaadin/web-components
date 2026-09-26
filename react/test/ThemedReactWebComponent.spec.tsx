@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { Accordion } from '../packages/react-components/src/Accordion.js';
-import { Breadcrumbs } from '../packages/react-components/src/Breadcrumbs.js';
-import { Switch } from '../packages/react-components/src/Switch.js';
+import { Accordion } from '../../packages/react-components/src/Accordion.js';
+import { Breadcrumbs } from '../../packages/react-components/src/Breadcrumbs.js';
+import { Switch } from '../../packages/react-components/src/Switch.js';
 
 describe('ThemedReactWebComponent', () => {
   it('should add a "theme" attribute', async () => {

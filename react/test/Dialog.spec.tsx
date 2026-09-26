@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
 import sinon from 'sinon';
-import { Dialog } from '../packages/react-components/src/Dialog.js';
+import { Dialog } from '../../packages/react-components/src/Dialog.js';
 import { nextRender } from './utils/nextRender.js';
 import { useState } from 'react';
 

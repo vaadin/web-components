@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { SideNav, SideNavElement } from '../packages/react-components/src/SideNav.js';
+import { SideNav, SideNavElement } from '../../packages/react-components/src/SideNav.js';
 import { findByQuerySelector } from './utils/findByQuerySelector.js';
 
 describe('SideNav', () => {

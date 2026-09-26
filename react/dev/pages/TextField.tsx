@@ -1,9 +1,9 @@
 import '@vaadin/icons';
 import type { TextFieldInvalidChangedEvent, TextFieldValidatedEvent } from '@vaadin/text-field';
 import { useState } from 'react';
-import { Icon } from '../../packages/react-components/src/Icon.js';
-import { TextField, type TextFieldElement } from '../../packages/react-components/src/TextField.js';
-import { Tooltip } from '../../packages/react-components/src/Tooltip.js';
+import { Icon } from '../../../packages/react-components/src/Icon.js';
+import { TextField, type TextFieldElement } from '../../../packages/react-components/src/TextField.js';
+import { Tooltip } from '../../../packages/react-components/src/Tooltip.js';
 
 export default function TextFieldPage() {
   const [value, setValue] = useState('');

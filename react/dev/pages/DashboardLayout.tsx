@@ -1,6 +1,6 @@
-import { DashboardLayout } from '../../packages/react-components-pro/src/DashboardLayout.js';
-import { DashboardWidget } from '../../packages/react-components-pro/src/DashboardWidget.js';
-import { DashboardSection } from '../../packages/react-components-pro/src/DashboardSection.js';
+import { DashboardLayout } from '../../../packages/react-components-pro/src/DashboardLayout.js';
+import { DashboardWidget } from '../../../packages/react-components-pro/src/DashboardWidget.js';
+import { DashboardSection } from '../../../packages/react-components-pro/src/DashboardSection.js';
 import type { CSSProperties } from 'react';
 import './dashboard-styles.css';
 

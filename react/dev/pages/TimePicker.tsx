@@ -1,6 +1,6 @@
-import type { TimePickerElement } from '../../packages/react-components/src/TimePicker.js';
-import { TimePicker } from '../../packages/react-components/src/TimePicker.js';
-import { Tooltip } from '../../packages/react-components/src/Tooltip.js';
+import type { TimePickerElement } from '../../../packages/react-components/src/TimePicker.js';
+import { TimePicker } from '../../../packages/react-components/src/TimePicker.js';
+import { Tooltip } from '../../../packages/react-components/src/Tooltip.js';
 import { useState } from 'react';
 
 export default function TimePickerPage() {

@@ -34,7 +34,7 @@ function useLocalReactComponents(nodeModules: string): PluginOption {
 }
 
 const customConfig: UserConfigFn = (env) => ({
-  plugins: [useLocalReactComponents('/path/to/react-components/node_modules')],
+  plugins: [useLocalReactComponents('/path/to/web-components/node_modules')],
 });
 
 export default overrideVaadinConfig(customConfig);

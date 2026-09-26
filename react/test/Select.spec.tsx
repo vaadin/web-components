@@ -2,9 +2,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render } from 'vitest-browser-react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import type { ReactElement } from 'react';
-import { Select, SelectElement } from '../packages/react-components/src/Select.js';
-import { SelectItem } from '../packages/react-components/src/SelectItem.js';
-import { SelectListBox } from '../packages/react-components/src/SelectListBox.js';
+import { Select, SelectElement } from '../../packages/react-components/src/Select.js';
+import { SelectItem } from '../../packages/react-components/src/SelectItem.js';
+import { SelectListBox } from '../../packages/react-components/src/SelectListBox.js';
 import { findByQuerySelector } from './utils/findByQuerySelector.js';
 
 describe('Select', () => {

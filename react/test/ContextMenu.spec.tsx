@@ -4,9 +4,9 @@ import {
   ContextMenu,
   type ContextMenuItem,
   type ContextMenuReactRendererProps,
-} from '../packages/react-components/src/ContextMenu.js';
-import { Item } from '../packages/react-components/src/Item.js';
-import { ListBox } from '../packages/react-components/src/ListBox.js';
+} from '../../packages/react-components/src/ContextMenu.js';
+import { Item } from '../../packages/react-components/src/Item.js';
+import { ListBox } from '../../packages/react-components/src/ListBox.js';
 import catchRender from './utils/catchRender.js';
 import { nextRender } from './utils/nextRender.js';
 import sinon from 'sinon';

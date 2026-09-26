@@ -2,8 +2,8 @@ import {
   Dashboard,
   type DashboardItem,
   type DashboardProps,
-} from '../../packages/react-components-pro/src/Dashboard.js';
-import { DashboardWidget } from '../../packages/react-components-pro/src/DashboardWidget.js';
+} from '../../../packages/react-components-pro/src/Dashboard.js';
+import { DashboardWidget } from '../../../packages/react-components-pro/src/DashboardWidget.js';
 import './dashboard-styles.css';
 
 window.Vaadin ||= {};

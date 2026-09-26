@@ -3,7 +3,10 @@ import { render, type RenderResult } from 'vitest-browser-react';
 import type { ReactNode } from 'react';
 import sinon from 'sinon';
 import { LitElement, html } from 'lit';
-import { MasterDetailLayout, MasterDetailLayoutElement } from '../packages/react-components/src/MasterDetailLayout.js';
+import {
+  MasterDetailLayout,
+  MasterDetailLayoutElement,
+} from '../../packages/react-components/src/MasterDetailLayout.js';
 
 declare module 'react' {
   namespace JSX {

@@ -1,10 +1,10 @@
 import {
   ConfirmDialog,
   type ConfirmDialogOpenedChangedEvent,
-} from '../../packages/react-components/src/ConfirmDialog.js';
-import { Button } from '../../packages/react-components/src/Button.js';
-import { TextField } from '../../packages/react-components/src/TextField.js';
-import { Checkbox } from '../../packages/react-components/src/Checkbox.js';
+} from '../../../packages/react-components/src/ConfirmDialog.js';
+import { Button } from '../../../packages/react-components/src/Button.js';
+import { TextField } from '../../../packages/react-components/src/TextField.js';
+import { Checkbox } from '../../../packages/react-components/src/Checkbox.js';
 import { useState } from 'react';
 
 export default function ConfirmDialogPage() {

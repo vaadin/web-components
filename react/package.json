@@ -4,59 +4,21 @@
   "version": "25.4.0-alpha1",
   "private": true,
   "scripts": {
-    "build": "npm run build:load-schema && npm run build -w packages/react-components && npm run build -w packages/react-components-pro",
+    "build": "yarn build:load-schema && yarn workspace @vaadin/react-components build && yarn workspace @vaadin/react-components-pro build",
     "build:load-schema": "tsx scripts/schema-loader.ts",
-    "clean": "git clean -dXf -e !.vscode -e !.vscode/** -e !.idea -e !.idea/** -e !node_modules -e !node_modules/**",
-    "clean:dev": "git clean -dXf -e .vscode -e .vscode/** -e !.idea -e !.idea/** -e !node_modules -e !node_modules/** -e !src/generated -e !css",
-    "start": "npm run dev",
     "dev": "vite dev --open /dev/",
-    "prepack": "npm run clean",
-    "prepare": "npm run build",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "validate": "concurrently npm:validate:*",
+    "validate": "concurrently yarn:validate:*",
     "validate:types": "tsc --noEmit",
-    "validate:prettier": "prettier -c scripts packages/**/src/*.ts packages/**/src/{utils,renderers}/*.ts test types vite.config.ts vitest.config.ts",
-    "validate:build": "tsx scripts/validate-build.ts",
-    "version": "npm run version -ws && git add packages/**/package.json && rimraf package-lock.json node_modules && npm install"
+    "validate:prettier": "prettier -c scripts ../packages/react-components*/src/*.ts \"../packages/react-components*/src/{utils,renderers}/*.ts\" test types vite.config.ts vitest.config.ts",
+    "validate:build": "tsx scripts/validate-build.ts"
   },
   "repository": {
     "type": "git",
-    "url": "github.com/vaadin/react-components"
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "react"
   },
   "author": "Vaadin Ltd.",
-  "license": "(Apache-2.0 OR SEE LICENSE IN https://vaadin.com/commercial-license-and-service-terms)",
-  "devDependencies": {
-    "@testing-library/user-event": "^14.5.2",
-    "@types/chai-as-promised": "^8.0.1",
-    "@types/chai-dom": "^1.11.3",
-    "@types/node": "^22.15.17",
-    "@types/react": "^19.1.13",
-    "@types/react-dom": "^19.1.9",
-    "@types/sinon": "^17.0.3",
-    "@vitejs/plugin-react": "^6.0.1",
-    "@vitest/browser-playwright": "^4.1.2",
-    "chai-as-promised": "^8.0.1",
-    "chai-dom": "^1.12.0",
-    "concurrently": "^9.1.0",
-    "esbuild": "^0.27.0",
-    "glob": "^10.4.5",
-    "json-schema-to-typescript": "^14.0.5",
-    "lint-staged": "^15.2.10",
-    "micromatch": "^4.0.8",
-    "playwright": "^1.52.0",
-    "prettier": "^3.4.2",
-    "rimraf": "^5.0.0",
-    "simple-git-hooks": "^2.11.1",
-    "sinon": "^19.0.2",
-    "tsx": "^4.19.2",
-    "type-fest": "4.30.1",
-    "typescript": "^6.0.3",
-    "vite": "^8.0.3",
-    "vitest": "^4.1.2",
-    "vitest-browser-react": "^2.1.0"
-  },
-  "workspaces": [
-    "packages/*"
-  ]
+  "license": "(Apache-2.0 OR SEE LICENSE IN https://vaadin.com/commercial-license-and-service-terms)"
 }

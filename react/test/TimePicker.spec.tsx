@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { TimePicker } from '../packages/react-components/src/TimePicker.js';
+import { TimePicker } from '../../packages/react-components/src/TimePicker.js';
 
 describe('TimePicker', () => {
   it('should apply "value" the last', async () => {

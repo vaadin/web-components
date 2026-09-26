@@ -1,12 +1,12 @@
-import { Accordion } from '../../packages/react-components/src/Accordion.js';
-import { AccordionPanel } from '../../packages/react-components/src/AccordionPanel.js';
-import { AccordionHeading } from '../../packages/react-components/src/AccordionHeading.js';
-import { VerticalLayout } from '../../packages/react-components/src/VerticalLayout.js';
-import { HorizontalLayout } from '../../packages/react-components/src/HorizontalLayout.js';
-import { Button } from '../../packages/react-components/src/Button.js';
-import { TextField } from '../../packages/react-components/src/TextField.js';
-import { TextArea } from '../../packages/react-components/src/TextArea.js';
-import { Checkbox } from '../../packages/react-components/src/Checkbox.js';
+import { Accordion } from '../../../packages/react-components/src/Accordion.js';
+import { AccordionPanel } from '../../../packages/react-components/src/AccordionPanel.js';
+import { AccordionHeading } from '../../../packages/react-components/src/AccordionHeading.js';
+import { VerticalLayout } from '../../../packages/react-components/src/VerticalLayout.js';
+import { HorizontalLayout } from '../../../packages/react-components/src/HorizontalLayout.js';
+import { Button } from '../../../packages/react-components/src/Button.js';
+import { TextField } from '../../../packages/react-components/src/TextField.js';
+import { TextArea } from '../../../packages/react-components/src/TextArea.js';
+import { Checkbox } from '../../../packages/react-components/src/Checkbox.js';
 import { useState } from 'react';
 import type { AccordionOpenedChangedEvent } from '@vaadin/accordion';
 

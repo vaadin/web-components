@@ -1,5 +1,5 @@
-import { BoardRow } from '../../packages/react-components-pro/src/BoardRow.js';
-import { TabSheet, TabSheetTab } from '../../packages/react-components/src/TabSheet.js';
+import { BoardRow } from '../../../packages/react-components-pro/src/BoardRow.js';
+import { TabSheet, TabSheetTab } from '../../../packages/react-components/src/TabSheet.js';
 
 export default function Row10() {
   return (

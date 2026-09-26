@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { Popover, type PopoverElement } from '../packages/react-components/src/Popover.js';
+import { Popover, type PopoverElement } from '../../packages/react-components/src/Popover.js';
 
 describe('Popover', () => {
   async function assert(popover: PopoverElement) {

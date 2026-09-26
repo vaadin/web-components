@@ -1,4 +1,4 @@
-import { Markdown } from '../../packages/react-components/src/Markdown.js';
+import { Markdown } from '../../../packages/react-components/src/Markdown.js';
 
 const markdown = `
 # H1 – Main Title

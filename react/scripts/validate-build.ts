@@ -4,7 +4,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const rootDir = resolve(__dirname, '..');
+const rootDir = resolve(__dirname, '../..');
 const packagesDir = resolve(rootDir, 'packages');
 const corePackage = 'react-components';
 const proPackage = 'react-components-pro';

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { MasterDetailLayout } from '../../packages/react-components/src/MasterDetailLayout.js';
-import { Button } from '../../packages/react-components/src/Button.js';
-import { Checkbox } from '../../packages/react-components/src/Checkbox.js';
-import { RadioButton } from '../../packages/react-components/src/RadioButton.js';
-import { RadioGroup } from '../../packages/react-components/src/RadioGroup.js';
-import { TextField } from '../../packages/react-components/src/TextField.js';
+import { MasterDetailLayout } from '../../../packages/react-components/src/MasterDetailLayout.js';
+import { Button } from '../../../packages/react-components/src/Button.js';
+import { Checkbox } from '../../../packages/react-components/src/Checkbox.js';
+import { RadioButton } from '../../../packages/react-components/src/RadioButton.js';
+import { RadioGroup } from '../../../packages/react-components/src/RadioGroup.js';
+import { TextField } from '../../../packages/react-components/src/TextField.js';
 import './master-detail-layout-styles.css';
 
 window.Vaadin ||= {};

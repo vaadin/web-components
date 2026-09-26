@@ -2,7 +2,7 @@ import {
   AvatarGroup,
   type AvatarGroupI18n,
   type AvatarGroupItem,
-} from '../../packages/react-components/src/AvatarGroup.js';
+} from '../../../packages/react-components/src/AvatarGroup.js';
 import { useState } from 'react';
 
 interface EditableAvatarItem extends AvatarGroupItem {

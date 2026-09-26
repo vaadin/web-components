@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { Notification, type NotificationElement } from '../packages/react-components/src/Notification.js';
+import { Notification, type NotificationElement } from '../../packages/react-components/src/Notification.js';
 import createOverlayCloseCatcher from './utils/createOverlayCloseCatcher.js';
 
 describe('Notification', () => {

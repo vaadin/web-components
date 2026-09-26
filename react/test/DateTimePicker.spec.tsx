@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
-import { DateTimePicker } from '../packages/react-components/src/DateTimePicker.js';
+import { DateTimePicker } from '../../packages/react-components/src/DateTimePicker.js';
 
 describe('DatePicker', () => {
   it('should apply "value" the last', async () => {

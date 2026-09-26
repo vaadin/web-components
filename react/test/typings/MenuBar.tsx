@@ -1,4 +1,4 @@
-import { MenuBar, type MenuBarItem } from '../../packages/react-components/src/MenuBar.js';
+import { MenuBar, type MenuBarItem } from '../../../packages/react-components/src/MenuBar.js';
 
 const assertType = function <TExpected>(value: TExpected) {
   return value;

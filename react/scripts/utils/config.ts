@@ -4,14 +4,14 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const cwd = process.cwd();
-export const rootDir = resolve(__dirname, '../..');
+export const rootDir = resolve(__dirname, '../../..');
 const packagesDir = cwd;
 export const packageDir = resolve(packagesDir, packagesDir);
 export const srcDir = resolve(packageDir, 'src');
 export const generatedDir = resolve(srcDir, 'generated');
 export const utilsDir = resolve(srcDir, 'utils');
 export const nodeModulesDir = resolve(rootDir, 'node_modules');
-export const typesDir = resolve(rootDir, 'types');
+export const typesDir = resolve(rootDir, 'react/types');
 
 export const rootURL = pathToFileURL(`${rootDir}/`);
 export const packageURL = pathToFileURL(`${packageDir}/`);

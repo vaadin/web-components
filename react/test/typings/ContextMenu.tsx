@@ -1,4 +1,4 @@
-import { ContextMenu, type ContextMenuItemData } from '../../packages/react-components/src/ContextMenu.js';
+import { ContextMenu, type ContextMenuItemData } from '../../../packages/react-components/src/ContextMenu.js';
 
 const assertType = function <TExpected>(value: TExpected) {
   return value;

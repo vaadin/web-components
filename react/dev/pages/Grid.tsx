@@ -1,8 +1,8 @@
-import { Grid, type GridDataProvider } from '../../packages/react-components/src/Grid.js';
-import { GridSelectionColumn } from '../../packages/react-components/src/GridSelectionColumn.js';
-import { GridTreeColumn } from '../../packages/react-components/src/GridTreeColumn.js';
-import { GridColumn, GridColumnElement } from '../../packages/react-components/src/GridColumn.js';
-import { Tooltip } from '../../packages/react-components/src/Tooltip.js';
+import { Grid, type GridDataProvider } from '../../../packages/react-components/src/Grid.js';
+import { GridSelectionColumn } from '../../../packages/react-components/src/GridSelectionColumn.js';
+import { GridTreeColumn } from '../../../packages/react-components/src/GridTreeColumn.js';
+import { GridColumn, GridColumnElement } from '../../../packages/react-components/src/GridColumn.js';
+import { Tooltip } from '../../../packages/react-components/src/Tooltip.js';
 
 type Item = {
   name: string;
