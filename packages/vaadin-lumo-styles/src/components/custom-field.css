@@ -5,7 +5,7 @@
  */
 @media lumo_components_custom-field {
   :host {
-    display: inline-flex;
+    display: inline-grid;
     --lumo-text-field-size: var(--lumo-size-m);
     /* The height of the child fields, which follow the same property */
     --_input-height: var(--vaadin-input-field-height, var(--lumo-text-field-size));
@@ -37,8 +37,6 @@
 
   .vaadin-custom-field-container {
     width: 100%;
-    display: flex;
-    flex-direction: column;
   }
 
   .inputs-wrapper {
@@ -50,8 +48,7 @@
     --_lumo-field-outer-padding: 0px;
   }
 
-  :host(:not([has-label])) [part='label'],
-  :host(:not([has-label]))::before {
+  :host(:not([has-label])) [part='label'] {
     display: none;
   }
 

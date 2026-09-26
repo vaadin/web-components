@@ -10,6 +10,8 @@
     padding: 0;
     font-size: inherit;
     --lumo-text-field-size: 27px;
+    /* The input fills the cell */
+    --_input-row-size: 1fr;
     /* outline similar to what grid uses */
     box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }
@@ -17,7 +19,6 @@
   :host([theme~='grid-pro-editor']) [part='input-field'] {
     padding: 0;
     border-radius: 0;
-    flex-grow: 1;
     font-weight: 400;
     --vaadin-input-field-border-color: transparent;
   }
