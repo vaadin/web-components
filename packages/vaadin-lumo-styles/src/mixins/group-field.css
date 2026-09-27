@@ -41,6 +41,13 @@
     display: none;
   }
 
+  /* The group grows to its label, as in the base styles. Outranks the field-label mixin,
+     which loads later. */
+  :host([has-label]) [part='label'] {
+    width: auto;
+    min-width: auto;
+  }
+
   :host([theme~='vertical']) [part='group-field'] {
     flex-direction: column;
   }
