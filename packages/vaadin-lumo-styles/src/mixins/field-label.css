@@ -14,16 +14,14 @@
     line-height: 1;
     padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
     padding-bottom: 0.5em;
-    /* As a workaround for diacritics being cut off, add a top padding and a
-  negative margin to compensate */
-    padding-top: 0.25em;
-    margin-top: -0.25em;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     position: relative;
+    /* Wraps inside the field width. min-content keeps a long label from widening an
+       unconstrained field, as in the base styles. */
+    width: min-content;
+    min-width: 100%;
     max-width: 100%;
     box-sizing: border-box;
+    word-break: break-word;
   }
 
   :host([focused]:not([readonly])) [part='label'] {

@@ -10,8 +10,8 @@
       --vaadin-input-field-required-indicator-color,
       var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color))
     );
+    /* After the last word of the label, inside its end padding */
     position: absolute;
-    right: 0;
     width: 1em;
     text-align: center;
   }
@@ -21,12 +21,5 @@
       --vaadin-input-field-required-indicator-color,
       var(--lumo-required-field-indicator-color, var(--lumo-error-text-color))
     );
-  }
-
-  /* RTL specific styles */
-
-  :host([dir='rtl']) [part='required-indicator']::after {
-    right: auto;
-    left: 0;
   }
 }
