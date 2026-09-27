@@ -31,9 +31,8 @@
   :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='label'] {
     grid-area: label;
     place-self: baseline stretch;
-    overflow: visible;
-    white-space: normal;
-    word-break: break-word;
+    width: auto;
+    min-width: auto;
     padding-bottom: 0;
     text-align: var(--vaadin-input-field-label-aside-text-align, inherit);
   }
@@ -41,11 +40,6 @@
   :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[theme~='helper-above-field'][has-helper])
     [part='label'] {
     padding-bottom: 0;
-  }
-
-  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[required]) [part='required-indicator']::after {
-    right: auto;
-    left: auto;
   }
 
   :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='input-field'],
