@@ -548,7 +548,7 @@ export const MenuBarMixin = (superClass) =>
      * @return {!MenuBarOverflowLayout}
      * @private
      */
-    __measureButtons(buttons, overflow) {
+    __getOverflowLayout(buttons, overflow) {
       const isRTL = this.__isRTL;
       const rects = buttons.map((btn) => btn.getBoundingClientRect());
       const ends = rects.map(({ left, right }) => (isRTL ? -left : right));
@@ -658,7 +658,7 @@ export const MenuBarMixin = (superClass) =>
       this._hasOverflow = true;
 
       // Read the layout once the overflow button is in flow
-      const layout = this.__measureButtons(buttons, overflow);
+      const layout = this.__getOverflowLayout(buttons, overflow);
       const collapsed = this.__collapseButtons(buttons, layout);
       this.__updateOverflow(collapsed.map((btn) => btn.item));
 
