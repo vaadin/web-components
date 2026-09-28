@@ -45,6 +45,11 @@ describe('theme', () => {
     await visualDiff(element, 'row-border-width');
   });
 
+  it('column-borders', async () => {
+    element.setAttribute('theme', 'column-borders');
+    await visualDiff(element, 'theme-column-borders');
+  });
+
   it('row-stripes', async () => {
     element.setAttribute('theme', 'row-stripes');
     await visualDiff(element, 'theme-row-stripes');
