@@ -274,6 +274,20 @@ describe('menu-bar', () => {
           await visualDiff(div, `${dir}-overflow-flex-layout`);
         });
       });
+
+      it('overflow in content-sized parent', async () => {
+        div = fixtureSync(`
+          <div style="display: flex; width: 300px; padding: 10px">
+            <div style="width: 100%">Sibling</div>
+            <vaadin-menu-bar></vaadin-menu-bar>
+          </div>
+        `);
+        element = div.querySelector('vaadin-menu-bar');
+        element.items = ['View', 'Edit', 'Share', 'Move', 'Duplicate', 'Archive'].map((text) => ({ text }));
+        await nextResize(element);
+        await nextRender();
+        await visualDiff(div, `${dir}-overflow-content-sized-parent`);
+      });
     });
   });
 
