@@ -221,7 +221,7 @@ snapshots["menu-bar host has-overflow"] =
     aria-disabled="true"
     disabled=""
     role="menuitem"
-    style="width: 60px; visibility: hidden; position: absolute;"
+    style="visibility: hidden; position: absolute;"
     tabindex="-1"
   >
     Dashboard
@@ -230,7 +230,7 @@ snapshots["menu-bar host has-overflow"] =
     class="help"
     last-visible=""
     role="menuitem"
-    style="width: 60px; visibility: hidden; position: absolute;"
+    style="visibility: hidden; position: absolute;"
     tabindex="0"
   >
     <vaadin-menu-bar-item aria-selected="false">
@@ -275,7 +275,7 @@ snapshots["menu-bar host has-single-button"] =
     class="home"
     first-visible=""
     role="menuitem"
-    style="width: 60px; visibility: hidden; position: absolute;"
+    style="visibility: hidden; position: absolute;"
     tabindex="0"
   >
     Home
@@ -284,7 +284,7 @@ snapshots["menu-bar host has-single-button"] =
     aria-expanded="false"
     aria-haspopup="true"
     role="menuitem"
-    style="width: 60px; visibility: hidden; position: absolute;"
+    style="visibility: hidden; position: absolute;"
     tabindex="0"
   >
     Reports
@@ -293,7 +293,7 @@ snapshots["menu-bar host has-single-button"] =
     aria-disabled="true"
     disabled=""
     role="menuitem"
-    style="width: 60px; visibility: hidden; position: absolute;"
+    style="visibility: hidden; position: absolute;"
     tabindex="-1"
   >
     Dashboard
@@ -302,7 +302,7 @@ snapshots["menu-bar host has-single-button"] =
     class="help"
     last-visible=""
     role="menuitem"
-    style="width: 60px; visibility: hidden; position: absolute;"
+    style="visibility: hidden; position: absolute;"
     tabindex="0"
   >
     <vaadin-menu-bar-item aria-selected="false">
