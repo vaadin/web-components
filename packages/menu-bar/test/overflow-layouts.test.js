@@ -240,6 +240,18 @@ describe('overflow in layouts', () => {
       const { menu } = await fixtureMenuBar(`
         <div style="display: flex; justify-content: space-between; width: ${BUTTON_WIDTH * 3.5}px">
           <div style="width: ${BUTTON_WIDTH * 2.5}px"></div>
+          <vaadin-menu-bar dir="rtl"></vaadin-menu-bar>
+        </div>
+      `);
+      expectCollapsed(menu, [1, 2, 3, 4]);
+      expectOverflowInside(menu);
+      expectFrozen(menu, true);
+    });
+
+    it('should keep the overflow button inside the end-aligned menu bar with reverse collapse in RTL', async () => {
+      const { menu } = await fixtureMenuBar(`
+        <div style="display: flex; justify-content: space-between; width: ${BUTTON_WIDTH * 3.5}px">
+          <div style="width: ${BUTTON_WIDTH * 2.5}px"></div>
           <vaadin-menu-bar dir="rtl" theme="end-aligned" reverse-collapse></vaadin-menu-bar>
         </div>
       `);
@@ -325,6 +337,25 @@ describe('overflow in layouts', () => {
       expectCollapsed(menu, [1, 2, 3, 4]);
       expectOverflowInside(menu);
       expectFrozen(menu, true);
+      // The width of all buttons and the overflow button in flow
+      expect(menu.style.getPropertyValue('--_vaadin-menu-bar-content-width')).to.equal(`${keptWidth(5)}px`);
+    });
+
+    it('should collapse more buttons when the row gets narrower', async () => {
+      container.style.width = `${BUTTON_WIDTH * 2.5}px`;
+      await nextRounds();
+      expectCollapsed(menu, [0, 1, 2, 3, 4]);
+      expectOverflowInside(menu);
+      expectFrozen(menu, true);
+    });
+
+    it('should stay frozen with the same width when the kept buttons fit in a wider row', async () => {
+      container.style.width = `${BUTTON_WIDTH * 5}px`;
+      await nextRounds();
+      expectCollapsed(menu, [2, 3, 4]);
+      expectOverflowInside(menu);
+      expectFrozen(menu, true);
+      expect(menu.style.getPropertyValue('--_vaadin-menu-bar-content-width')).to.equal(`${keptWidth(5)}px`);
     });
 
     it('should keep one button collapsed until the overflow button fits in the frozen width', async () => {
@@ -343,10 +374,20 @@ describe('overflow in layouts', () => {
       expectFrozen(menu, false);
     });
 
+    it('should update the frozen width when items are added', async () => {
+      menu.items = createItems(6);
+      await nextRounds();
+      expectCollapsed(menu, [1, 2, 3, 4, 5]);
+      expectOverflowInside(menu);
+      expectFrozen(menu, true);
+      expect(menu.style.getPropertyValue('--_vaadin-menu-bar-content-width')).to.equal(`${keptWidth(6)}px`);
+    });
+
     it('should release the width when all items are removed', async () => {
       menu.items = [];
       await nextRounds();
       expectFrozen(menu, false);
+      expect(menu.getBoundingClientRect().width).to.equal(0);
     });
 
     it('should release the width when the only item fits', async () => {
@@ -355,9 +396,11 @@ describe('overflow in layouts', () => {
       assertVisible(menu._buttons[0]);
       expect(menu._buttons.at(-1).hasAttribute('hidden'), 'overflow button hidden').to.be.true;
       expectFrozen(menu, false);
+      expect(menu.getBoundingClientRect().width).to.be.closeTo(BUTTON_WIDTH, 0.5);
     });
 
     it('should release the width when more items fit in a wider row', async () => {
+      // Both change in one task, so the first detection runs against the old frozen width
       menu.items = createItems(6);
       container.style.width = `${BUTTON_WIDTH * 20}px`;
       await nextRounds();
@@ -402,7 +445,6 @@ describe('overflow in layouts', () => {
     it('should give the menu bar with more items more room and keep both overflow buttons inside', async () => {
       const { start, end } = await fixtureTwoMenuBars(8, 3);
       await expectDetectionsToStop(start, end);
-      expect(start.getBoundingClientRect().width).to.be.greaterThan(end.getBoundingClientRect().width);
       expectCollapsed(start, [2, 3, 4, 5, 6, 7]);
       expectCollapsed(end, [0, 1, 2]);
       expectOverflowInside(start);

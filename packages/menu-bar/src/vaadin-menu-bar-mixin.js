@@ -552,7 +552,7 @@ export const MenuBarMixin = (superClass) =>
       const isRTL = this.__isRTL;
       const rects = buttons.map((btn) => btn.getBoundingClientRect());
       const ends = rects.map(({ left, right }) => (isRTL ? -left : right));
-      const overflowExtent = this.__getInlineEnd(overflow) - ends.at(-1);
+      const overflowEnd = this.__getInlineEnd(overflow);
       const containerRect = this._container.getBoundingClientRect();
       const containerStart = isRTL ? -containerRect.right : containerRect.left;
 
@@ -561,9 +561,9 @@ export const MenuBarMixin = (superClass) =>
         ends,
         // `auto` resolves to 0 while the content overflows.
         margins: buttons.map((btn) => parseFloat(getComputedStyle(btn).marginInlineStart) || 0),
-        overflowExtent,
+        overflowExtent: overflowEnd - ends.at(-1),
         containerWidth: containerRect.width,
-        contentWidth: ends.at(-1) + overflowExtent - containerStart,
+        contentWidth: overflowEnd - containerStart,
       };
     }
 
@@ -618,8 +618,9 @@ export const MenuBarMixin = (superClass) =>
     /**
      * Keeps the intrinsic width of the host at the given value. A parent sized by content,
      * such as a split layout pane, shrinks the host once the buttons are out of flow. The
-     * width the host had with all buttons in flow keeps the decision made for that width.
-     * The `overflow-frozen` attribute is internal and only used by the component styles.
+     * width the host had with all buttons in flow keeps the collapse that was decided for it.
+     * The `overflow-frozen` attribute marks the frozen state for the styles and for the next
+     * detection. It is internal and not documented.
      *
      * @param {number} width
      * @private
@@ -638,9 +639,9 @@ export const MenuBarMixin = (superClass) =>
     /**
      * Shows the overflow button and collapses buttons into it when the last button
      * does not fit in the container. Freezes the host width when the parent shrinks
-     * the host after the collapse. A frozen host stays frozen until all buttons fit,
-     * so that its flex basis does not change between detections when another element
-     * in the same row depends on it.
+     * the host after the collapse. A frozen host stays frozen until all buttons and the
+     * overflow button fit, so that its flex basis does not change between detections
+     * when another element in the same row depends on it.
      *
      * @param {!Array<!HTMLElement>} buttons
      * @param {!HTMLElement} overflow
