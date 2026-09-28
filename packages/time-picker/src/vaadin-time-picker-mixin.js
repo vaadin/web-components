@@ -386,7 +386,7 @@ export const TimePickerMixin = (superClass) =>
 
     /** @private */
     __onArrowPressWithStep(step) {
-      const objWithStep = this.__addStep(this.__getMsec(this.__memoValue), step, true);
+      const objWithStep = this.__addStep(this.__getMsec(this.__memoValue), step);
       this.__memoValue = objWithStep;
 
       // Only commit when the formatted text changes, so that a step finer than
@@ -464,42 +464,11 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
-     * @param {!TimePickerTime} obj Time object
-     * @return {number} seconds
-     * @private
-     */
-    __getSec(obj) {
-      let result = (obj?.hours || 0) * 60 * 60;
-      result += (obj?.minutes || 0) * 60;
-      result += obj?.seconds || 0;
-      result += (obj?.milliseconds || 0) / 1000;
-
-      return result;
-    }
-
-    /**
-     * @param {number} msec Milliseconds amount
-     * @param {number} step Step in milliseconds to add
-     * @param {boolean} precision Whether to round the value to the closest step valid interval.
+     * @param {number} msec Milliseconds since midnight, `24:00` becomes `00:00`
      * @return {!TimePickerTime} time object
      * @private
      */
-    __addStep(msec, step, precision) {
-      // If the time is `00:00` and step changes value downwards, it should be considered as `24:00`
-      if (msec === 0 && step < 0) {
-        msec = 24 * 60 * 60 * 1000;
-      }
-
-      const stepMsec = step * 1000;
-      const diffToNext = msec % stepMsec;
-      if (stepMsec < 0 && diffToNext && precision) {
-        msec -= diffToNext;
-      } else if (stepMsec > 0 && diffToNext && precision) {
-        msec -= diffToNext - stepMsec;
-      } else {
-        msec += stepMsec;
-      }
-
+    __getTimeFromMsec(msec) {
       const hh = Math.floor(msec / 1000 / 60 / 60);
       msec -= hh * 1000 * 60 * 60;
       const mm = Math.floor(msec / 1000 / 60);
@@ -510,12 +479,37 @@ export const TimePickerMixin = (superClass) =>
       return { hours: hh < 24 ? hh : 0, minutes: mm, seconds: ss, milliseconds: msec };
     }
 
+    /**
+     * @param {number} msec Milliseconds since midnight
+     * @param {number} step Step in seconds, negative to subtract
+     * @return {!TimePickerTime} time object moved to the next step interval
+     * @private
+     */
+    __addStep(msec, step) {
+      // If the time is `00:00` and step changes value downwards, it should be considered as `24:00`
+      if (msec === 0 && step < 0) {
+        msec = 24 * 60 * 60 * 1000;
+      }
+
+      const stepMsec = step * 1000;
+      const diffToNext = msec % stepMsec;
+      if (stepMsec < 0 && diffToNext) {
+        msec -= diffToNext;
+      } else if (stepMsec > 0 && diffToNext) {
+        msec -= diffToNext - stepMsec;
+      } else {
+        msec += stepMsec;
+      }
+
+      return this.__getTimeFromMsec(msec);
+    }
+
     /** @private */
     __updateDropdownItems() {
-      const minSec = this.__getSec(this.__getTimeObject(this.min || MIN_ALLOWED_TIME));
-      const maxSec = this.__getSec(this.__getTimeObject(this.max || MAX_ALLOWED_TIME));
+      const minMsec = this.__getMsec(this.__getTimeObject(this.min || MIN_ALLOWED_TIME));
+      const maxMsec = this.__getMsec(this.__getTimeObject(this.max || MAX_ALLOWED_TIME));
 
-      this._dropdownItems = this.__generateDropdownList(minSec, maxSec, this.step);
+      this._dropdownItems = this.__generateDropdownList(minMsec, maxMsec, this.step);
     }
 
     /** @private */
@@ -534,22 +528,18 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /** @private */
-    __generateDropdownList(minSec, maxSec, step) {
+    __generateDropdownList(minMsec, maxMsec, step) {
       if (step < 15 * 60 || !this.__validDayDivisor(step)) {
         return [];
       }
 
+      // Default step in overlay items is 1 hour
+      const stepMsec = (step || 3600) * 1000;
+
       const generatedList = [];
 
-      // Default step in overlay items is 1 hour
-      if (!step) {
-        step = 3600;
-      }
-
-      let time = -step + minSec;
-      while (time + step >= minSec && time + step <= maxSec) {
-        const timeObj = this.__truncateTime(this.__addStep(time * 1000, step));
-        time += step;
+      for (let msec = minMsec; msec <= maxMsec; msec += stepMsec) {
+        const timeObj = validateTime(this.__getTimeFromMsec(msec), step);
         const formatted = this.__effectiveI18n.formatTime(timeObj);
         generatedList.push({ label: formatted, value: formatISOTime(timeObj) });
       }
