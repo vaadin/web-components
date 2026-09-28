@@ -529,8 +529,9 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
-     * Positions of the buttons, read in one batch before any of them is hidden.
-     * Mirrored in RTL so that a larger value is always further along the inline axis.
+     * Layout of the buttons, the overflow button and the container, read in one batch
+     * before any button is hidden. Positions are mirrored in RTL so that a larger value
+     * is always further along the inline axis.
      *
      * @typedef {object} MenuBarOverflowLayout
      * @property {number[]} starts Inline start of each button
@@ -538,6 +539,7 @@ export const MenuBarMixin = (superClass) =>
      * @property {number[]} margins Inline start margin of each button
      * @property {number} overflowExtent Space the overflow button adds after the last button
      * @property {number} containerWidth Width of the container
+     * @property {number} contentWidth Width of all buttons and the overflow button in flow
      */
 
     /**
@@ -546,18 +548,22 @@ export const MenuBarMixin = (superClass) =>
      * @return {!MenuBarOverflowLayout}
      * @private
      */
-    __measureButtons(buttons, overflow) {
+    __getOverflowLayout(buttons, overflow) {
       const isRTL = this.__isRTL;
       const rects = buttons.map((btn) => btn.getBoundingClientRect());
       const ends = rects.map(({ left, right }) => (isRTL ? -left : right));
+      const overflowEnd = this.__getInlineEnd(overflow);
+      const containerRect = this._container.getBoundingClientRect();
+      const containerStart = isRTL ? -containerRect.right : containerRect.left;
 
       return {
         starts: rects.map(({ left, right }) => (isRTL ? -right : left)),
         ends,
         // `auto` resolves to 0 while the content overflows.
         margins: buttons.map((btn) => parseFloat(getComputedStyle(btn).marginInlineStart) || 0),
-        overflowExtent: this.__getInlineEnd(overflow) - ends.at(-1),
-        containerWidth: this._container.getBoundingClientRect().width,
+        overflowExtent: overflowEnd - ends.at(-1),
+        containerWidth: containerRect.width,
+        contentWidth: overflowEnd - containerStart,
       };
     }
 
@@ -610,8 +616,32 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
+     * Keeps the intrinsic width of the host at the given value. A parent sized by content,
+     * such as a split layout pane, shrinks the host once the buttons are out of flow. The
+     * width the host had with all buttons in flow keeps the collapse that was decided for it.
+     * The `overflow-frozen` attribute marks the frozen state for the styles and for the next
+     * detection. It is internal and not documented.
+     *
+     * @param {number} width
+     * @private
+     */
+    __freezeWidth(width) {
+      this.style.setProperty('--_vaadin-menu-bar-content-width', `${width}px`);
+      this.setAttribute('overflow-frozen', '');
+    }
+
+    /** @private */
+    __unfreezeWidth() {
+      this.style.removeProperty('--_vaadin-menu-bar-content-width');
+      this.removeAttribute('overflow-frozen');
+    }
+
+    /**
      * Shows the overflow button and collapses buttons into it when the last button
-     * does not fit in the container.
+     * does not fit in the container. Freezes the host width when the parent shrinks
+     * the host after the collapse. A frozen host stays frozen until all buttons and the
+     * overflow button fit, so that its flex basis does not change between detections
+     * when another element in the same row depends on it.
      *
      * @param {!Array<!HTMLElement>} buttons
      * @param {!HTMLElement} overflow
@@ -619,15 +649,25 @@ export const MenuBarMixin = (superClass) =>
      */
     __setOverflowItems(buttons, overflow) {
       const lastButton = buttons.at(-1);
-      if (!lastButton || !this.__isPastContainerEnd(lastButton)) {
+      // A frozen host is as wide as all buttons plus the overflow button, so the quick
+      // check would report a fit one overflow button too early. Measure instead.
+      const wasFrozen = this.hasAttribute('overflow-frozen');
+      if (!lastButton || (!wasFrozen && !this.__isPastContainerEnd(lastButton))) {
+        this.__unfreezeWidth();
         return;
       }
       this._hasOverflow = true;
 
       // Read the layout once the overflow button is in flow
-      const layout = this.__measureButtons(buttons, overflow);
+      const layout = this.__getOverflowLayout(buttons, overflow);
       const collapsed = this.__collapseButtons(buttons, layout);
       this.__updateOverflow(collapsed.map((btn) => btn.item));
+
+      if (collapsed.length === 0) {
+        this.__unfreezeWidth();
+      } else if (wasFrozen || this.__isPastContainerEnd(overflow)) {
+        this.__freezeWidth(layout.contentWidth);
+      }
     }
 
     /** @private */
