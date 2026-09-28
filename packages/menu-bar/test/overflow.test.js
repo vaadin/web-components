@@ -467,7 +467,7 @@ describe('overflow', () => {
 
       // Collapsing proves that a detection ran while the reads were counted
       expectCollapsed(menu, [2, 3, 4]);
-      expect(spy.callCount, 'overflow button position reads').to.equal(2);
+      expect(spy, 'overflow button position reads').to.be.calledTwice;
     });
   });
 });

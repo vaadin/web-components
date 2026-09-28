@@ -529,8 +529,9 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
-     * Positions of the buttons, read in one batch before any of them is hidden.
-     * Mirrored in RTL so that a larger value is always further along the inline axis.
+     * Layout of the buttons, the overflow button and the container, read in one batch
+     * before any button is hidden. Positions are mirrored in RTL so that a larger value
+     * is always further along the inline axis.
      *
      * @typedef {object} MenuBarOverflowLayout
      * @property {number[]} starts Inline start of each button
