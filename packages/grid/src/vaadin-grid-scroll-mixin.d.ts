@@ -50,6 +50,21 @@ export declare class ScrollMixinClass {
   columnRendering: ColumnRendering;
 
   /**
+   * Scroll to a specific row index in the virtual list. Note that the row index is
+   * not always the same for any particular item. For example, sorting or filtering
+   * items can affect the row index related to an item.
+   *
+   * The `indexes` parameter can be either a single number or multiple numbers.
+   * The grid will first try to scroll to the item at the first index on the top level.
+   * In case the item at the first index is expanded, the grid will then try scroll to the
+   * item at the second index within the children of the expanded first item, and so on.
+   * Each given index points to a child of the item at the previous index.
+   *
+   * Using `Infinity` as an index will point to the last item on the level.
+   */
+  scrollToIndex(...indexes: number[]): void;
+
+  /**
    * Scroll to a flat index in the grid. The method doesn't take into account
    * the hierarchy of the items.
    */
