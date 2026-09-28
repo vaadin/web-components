@@ -274,6 +274,9 @@ class Popover extends PopoverPositionMixin(
       /**
        * When true, the popover content automatically receives focus after
        * it is opened. Modal popovers use this behavior by default.
+       *
+       * A field with `autofocus` inside the popover receives focus on open
+       * even when this is false.
        */
       autofocus: {
         type: Boolean,
@@ -528,6 +531,7 @@ class Popover extends PopoverPositionMixin(
         .position="${effectivePosition}"
         .opened="${this.opened}"
         .modeless="${!this.modal}"
+        .autofocus="${this.autofocus}"
         .focusTrap="${this.modal}"
         .withBackdrop="${this.withBackdrop}"
         ?no-horizontal-overlap="${this.__computeNoHorizontalOverlap(effectivePosition)}"
@@ -545,7 +549,6 @@ class Popover extends PopoverPositionMixin(
         exportparts="backdrop, overlay, content, arrow"
         @vaadin-overlay-escape-press="${this.__onEscapePress}"
         @vaadin-overlay-outside-click="${this.__onOutsideClick}"
-        @vaadin-overlay-open="${this.__onOverlayOpened}"
         @vaadin-overlay-closed="${this.__onOverlayClosed}"
       >
         <slot></slot>
@@ -893,13 +896,6 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __onOpenedChanged(event) {
     this.opened = event.detail.value;
-  }
-
-  /** @private */
-  __onOverlayOpened() {
-    if (this.autofocus && !this.modal) {
-      this.focus();
-    }
   }
 
   /** @private */
