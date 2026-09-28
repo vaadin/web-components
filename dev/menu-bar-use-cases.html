@@ -11,12 +11,14 @@
       import '@vaadin/button';
       import '@vaadin/horizontal-layout';
       import '@vaadin/menu-bar';
+      import '@vaadin/split-layout';
 
       const texts = ['View', 'Edit', 'Share', 'Move', 'Duplicate', 'Archive'];
       const createItems = (list) => list.map((text) => ({ text, children: [{ text: `${text} all` }] }));
 
       document.querySelectorAll('vaadin-menu-bar').forEach((menuBar) => {
-        menuBar.items = createItems(menuBar.dataset.items ? menuBar.dataset.items.split(',') : texts);
+        const list = menuBar.dataset.items ? menuBar.dataset.items.split(',') : texts;
+        menuBar.items = createItems(menuBar.dataset.count ? list.slice(0, menuBar.dataset.count) : list);
       });
     </script>
 
@@ -282,6 +284,88 @@
           <vaadin-menu-bar
             style="max-width: 200px; box-sizing: border-box; padding: 0 12px; border: 3px solid orange"
           ></vaadin-menu-bar>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <h2 class="heading">Parent sized by content</h2>
+
+      <p>Split layout, resize the splitter to show the overflow button</p>
+      <div class="case">
+        <vaadin-split-layout style="width: 500px">
+          <div><vaadin-menu-bar></vaadin-menu-bar></div>
+          <div class="sibling">Details pane content</div>
+        </vaadin-split-layout>
+      </div>
+
+      <p>After a title in a <code>space-between</code> row</p>
+      <div class="case">
+        <div style="display: flex; justify-content: space-between; width: 300px">
+          <span class="sibling">Project settings overview</span>
+          <vaadin-menu-bar></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>After a full width sibling</p>
+      <div class="case">
+        <div style="display: flex; width: 300px">
+          <div class="sibling" style="width: 100%">Sibling</div>
+          <vaadin-menu-bar></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>End aligned theme after a full width sibling</p>
+      <div class="case">
+        <div style="display: flex; width: 300px">
+          <div class="sibling" style="width: 100%">Sibling</div>
+          <vaadin-menu-bar theme="end-aligned"></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Right-to-left after a full width sibling</p>
+      <div class="case">
+        <div dir="rtl" style="display: flex; width: 300px">
+          <div class="sibling" style="width: 100%">Sibling</div>
+          <vaadin-menu-bar dir="rtl"></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Padding and border on menu bar after a full width sibling</p>
+      <div class="case">
+        <div style="display: flex; width: 300px">
+          <div class="sibling" style="width: 100%">Sibling</div>
+          <vaadin-menu-bar style="padding: 0 12px; border: 3px solid orange"></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Menu bar with <code>contain: paint</code> after a full width sibling</p>
+      <div class="case">
+        <div style="display: flex; width: 300px">
+          <div class="sibling" style="width: 100%">Sibling</div>
+          <vaadin-menu-bar style="contain: paint"></vaadin-menu-bar>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Two menu bars</h2>
+
+      <p>Same number of items</p>
+      <div class="case">
+        <div style="display: flex; width: 300px">
+          <vaadin-menu-bar style="flex: 1 1 auto"></vaadin-menu-bar>
+          <vaadin-menu-bar style="flex: 1 1 auto" theme="end-aligned"></vaadin-menu-bar>
+        </div>
+      </div>
+
+      <p>Different number of items</p>
+      <div class="case">
+        <div style="display: flex; width: 300px">
+          <vaadin-menu-bar
+            style="flex: 1 1 auto"
+            data-items="View,Edit,Share,Move,Duplicate,Archive,Export,Print"
+          ></vaadin-menu-bar>
+          <vaadin-menu-bar style="flex: 1 1 auto" theme="end-aligned" data-count="3"></vaadin-menu-bar>
         </div>
       </div>
     </section>
