@@ -593,25 +593,6 @@ export const MenuBarMixin = (superClass) =>
     }
 
     /**
-     * Hides the buttons that do not fit next to the overflow button.
-     *
-     * @param {!Array<!HTMLElement>} buttons
-     * @param {!MenuBarOverflowLayout} layout
-     * @return {!Array<!HTMLElement>} hidden buttons, in DOM order
-     * @private
-     */
-    __collapseButtons(buttons, layout) {
-      const collapsed = this.__getButtonsToCollapse(buttons, layout);
-
-      // Write the DOM state
-      collapsed.forEach((btn) => {
-        btn.style.visibility = 'hidden';
-        btn.style.position = 'absolute';
-      });
-      return collapsed;
-    }
-
-    /**
      * Keeps the intrinsic width of the host at the given value. A parent sized by content,
      * such as a split layout pane, shrinks the host once the buttons are out of flow. The
      * width the host had with all buttons in flow keeps the collapse that was decided for it.
@@ -656,7 +637,13 @@ export const MenuBarMixin = (superClass) =>
 
       // Read the layout once the overflow button is in flow
       const layout = this.__getOverflowLayout(buttons, overflow);
-      const collapsed = this.__collapseButtons(buttons, layout);
+      const collapsed = this.__getButtonsToCollapse(buttons, layout);
+
+      // Write the DOM state
+      collapsed.forEach((btn) => {
+        btn.style.visibility = 'hidden';
+        btn.style.position = 'absolute';
+      });
       this.__updateOverflow(collapsed.map((btn) => btn.item));
 
       if (collapsed.length === 0) {
