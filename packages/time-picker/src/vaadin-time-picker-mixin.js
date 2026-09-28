@@ -441,12 +441,21 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
+     * @param {TimePickerTime | undefined} time Time object
+     * @return {TimePickerTime | undefined} time object truncated to the step resolution
+     * @private
+     */
+    __truncateTime(time) {
+      return validateTime(time, this.step);
+    }
+
+    /**
      * Returning Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
-     * from an ISO 8601 time, stripped to the resolution defined by the step.
+     * from an ISO 8601 time, truncated to the resolution defined by the step.
      * @private
      */
     __getTimeObject(timeString) {
-      return validateTime(parseISOTime(timeString), this.step);
+      return this.__truncateTime(parseISOTime(timeString));
     }
 
     /**
@@ -532,7 +541,7 @@ export const TimePickerMixin = (superClass) =>
 
       let time = -step + minSec;
       while (time + step >= minSec && time + step <= maxSec) {
-        const timeObj = validateTime(this.__addStep(time * 1000, step), step);
+        const timeObj = this.__truncateTime(this.__addStep(time * 1000, step));
         time += step;
         const formatted = this.__effectiveI18n.formatTime(timeObj);
         generatedList.push({ label: formatted, value: formatISOTime(timeObj) });
@@ -547,7 +556,7 @@ export const TimePickerMixin = (superClass) =>
      * @override
      */
     _valueChanged(value, oldValue) {
-      // Strip value to the step resolution before marking as committed.
+      // Truncate value to the step resolution before marking as committed.
       const parsedObj = (this.__memoValue = this.__getTimeObject(value));
       const newValue = formatISOTime(parsedObj);
 
@@ -587,15 +596,15 @@ export const TimePickerMixin = (superClass) =>
 
     /**
      * Sets the value and the input text from the given time,
-     * stripped to the resolution defined by the step.
+     * truncated to the resolution defined by the step.
      *
      * @param {!TimePickerTime} time
      * @private
      */
     __setValueFromTime(time) {
-      const stripped = validateTime(time, this.step);
-      this.__setUncommittedValue(formatISOTime(stripped));
-      this.__updateInputValue(stripped);
+      const truncated = this.__truncateTime(time);
+      this.__setUncommittedValue(formatISOTime(truncated));
+      this.__updateInputValue(truncated);
     }
 
     /**
