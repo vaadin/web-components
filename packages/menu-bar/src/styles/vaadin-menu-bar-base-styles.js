@@ -15,6 +15,12 @@ export const menuBarStyles = css`
     display: none !important;
   }
 
+  /* Keep the width measured with all buttons in flow while the host is frozen */
+  :host([overflow-frozen]) {
+    contain: inline-size !important;
+    contain-intrinsic-inline-size: var(--_vaadin-menu-bar-content-width);
+  }
+
   [part='container'] {
     display: flex;
     flex-wrap: nowrap;
