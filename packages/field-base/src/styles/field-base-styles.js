@@ -61,6 +61,7 @@ export const field = css`
 
   /* Baseline alignment guide */
   :host::before {
+    --_baseline-height: var(--vaadin-field-baseline-input-height, var(--_field-input-height));
     content: '\\2003' / '';
     grid-column: baseline;
     grid-row: 1 / baseline;
@@ -69,7 +70,7 @@ export const field = css`
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    height: var(--vaadin-field-baseline-input-height, var(--_field-input-height));
+    height: var(--_baseline-height);
     font-size: var(--vaadin-input-field-value-font-size, inherit);
     line-height: var(--vaadin-input-field-value-line-height, inherit);
     padding: var(
@@ -78,7 +79,7 @@ export const field = css`
     );
     border: var(--vaadin-input-field-border-width, 1px) solid transparent;
     pointer-events: none;
-    margin-bottom: calc(var(--vaadin-field-baseline-input-height, var(--_field-input-height)) * -1);
+    margin-bottom: calc(var(--_baseline-height) * -1);
   }
 
   [class$='container'] {
