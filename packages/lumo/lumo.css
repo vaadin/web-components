@@ -43,6 +43,7 @@
 @import './src/components/ordered-layout.css';
 @import './src/components/overlay.css';
 @import './src/components/popover.css';
+@import './src/components/progress-bar.css';
 @import './src/components/radio-button.css';
 @import './src/components/rich-text-editor.css';
 @import './src/components/select.css';
