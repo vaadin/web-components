@@ -4,6 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_text-area {
+  /* Use default height for baseline alignment */
+  :host {
+    --_input-height: var(--lumo-text-field-size);
+  }
+
   .vaadin-text-area-container {
     flex: auto;
   }
