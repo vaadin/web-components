@@ -1,5 +1,5 @@
 :where(vaadin-checkbox-group, vaadin-radio-group) {
-  padding: var(--lumo-space-xs) 0;
+  padding: var(--_lumo-field-outer-padding, var(--lumo-space-xs)) 0;
   /* Lumo defaults groups to horizontal (base: vertical). Options space themselves with their
      own margins. */
   &::part(group-field) {
