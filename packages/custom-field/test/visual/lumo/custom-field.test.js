@@ -194,6 +194,11 @@ describe('custom-field', () => {
       it('label aside alignment', async () => {
         await visualDiff(wrapper, 'alignment-label-aside');
       });
+
+      it('label aside alignment with input field height', async () => {
+        wrapper.style.setProperty('--vaadin-input-field-height', '56px');
+        await visualDiff(wrapper, 'alignment-label-aside-input-field-height');
+      });
     });
 
     describe('label + error message', () => {
