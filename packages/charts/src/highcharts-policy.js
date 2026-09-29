@@ -13,9 +13,13 @@
 const { trustedTypes } = window;
 
 let policy;
+let createPolicy;
+let hasOwnCreatePolicy = false;
 
 if (trustedTypes && typeof trustedTypes.createPolicy === 'function') {
-  const createPolicy = trustedTypes.createPolicy;
+  createPolicy = trustedTypes.createPolicy;
+  // A polyfill or another library can define the method on the object itself
+  hasOwnCreatePolicy = Object.hasOwn(trustedTypes, 'createPolicy');
   trustedTypes.createPolicy = function (name, rules) {
     const result = createPolicy.call(this, name, rules);
     if (name === 'highcharts' && !policy) {
@@ -29,10 +33,16 @@ if (trustedTypes && typeof trustedTypes.createPolicy === 'function') {
  * Stops listening for new policies. Must be called after Highcharts has loaded.
  */
 export function releasePolicyFactory() {
-  if (trustedTypes && Object.hasOwn(trustedTypes, 'createPolicy')) {
+  if (!createPolicy) {
+    return;
+  }
+  if (hasOwnCreatePolicy) {
+    trustedTypes.createPolicy = createPolicy;
+  } else {
     // `delete` restores the inherited TrustedTypePolicyFactory.prototype.createPolicy method.
     delete trustedTypes.createPolicy;
   }
+  createPolicy = undefined;
 }
 
 /**

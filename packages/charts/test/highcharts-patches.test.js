@@ -3,6 +3,7 @@ import { aTimeout, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-hel
 import sinon from 'sinon';
 import '../src/vaadin-chart.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
+import { getHighchartsPolicy } from '../src/highcharts-policy.js';
 
 // eslint-disable-next-line no-script-url
 const UNSUPPORTED_URL = 'javascript:void(0)';
@@ -53,20 +54,37 @@ describe('vaadin-chart option values', () => {
   });
 
   describe('credits', () => {
-    it('should keep supported credits links', async () => {
-      chart.updateConfiguration({ credits: { enabled: true, href: 'https://vaadin.com' } });
+    async function setCreditsHref(href) {
+      chart.updateConfiguration({ credits: { enabled: true, href } });
       await oneEvent(chart, 'chart-redraw');
-      expect(chart.configuration.options.credits.href).to.equal('https://vaadin.com');
+    }
+
+    [
+      'https://vaadin.com',
+      'HTTPS://VAADIN.COM',
+      'about.html',
+      '/about',
+      '#about',
+      'tel:+123',
+      'ftp://vaadin.com',
+    ].forEach((href) => {
+      it(`should keep supported credits links: ${href}`, async () => {
+        await setCreditsHref(href);
+        expect(chart.configuration.options.credits.href).to.equal(href);
+      });
     });
 
-    it('should ignore credits links that do not use a supported URL scheme', async () => {
-      chart.updateConfiguration({ credits: { enabled: true, href: UNSUPPORTED_URL } });
-      await oneEvent(chart, 'chart-redraw');
-      expect(chartContainer.querySelector('.highcharts-credits')).to.be.ok;
-      expect(chart.configuration.options.credits.href).to.be.undefined;
-    });
+    [UNSUPPORTED_URL, ` JAVASCRIPT:void(0)`, `java\tscript:void(0)`, 'data:text/html,Text', 'vbscript:Text'].forEach(
+      (href) => {
+        it(`should ignore credits links that use an unsupported URL scheme: ${JSON.stringify(href)}`, async () => {
+          await setCreditsHref(href);
+          expect(chartContainer.querySelector('.highcharts-credits')).to.be.ok;
+          expect(chart.configuration.options.credits.href).to.be.undefined;
+        });
+      },
+    );
 
-    it('should ignore credits links that do not use a supported URL scheme on update', async () => {
+    it('should ignore credits links that use an unsupported URL scheme on update', async () => {
       chart.updateConfiguration({ credits: { enabled: true } });
       await oneEvent(chart, 'chart-redraw');
       chart.configuration.credits.update({ href: UNSUPPORTED_URL });
@@ -122,6 +140,11 @@ describe('vaadin-chart option values', () => {
       expect(ast.nodes[0].children[0].textContent).to.equal('Text');
     });
 
+    it('should lowercase tag names', () => {
+      const ast = new Highcharts.AST('<svg><clipPath></clipPath></svg>');
+      expect(ast.nodes[0].children[0].tagName).to.equal('clippath');
+    });
+
     describe('parser failure', () => {
       beforeEach(() => {
         sinon.stub(DOMParser.prototype, 'parseFromString').throws(new Error('Unavailable'));
@@ -169,6 +192,48 @@ describe('vaadin-chart option values', () => {
       chart.updateConfiguration({ title: { useHTML: true, text: `<a xlink:href="${UNSUPPORTED_URL}">Title</a>` } });
       await oneEvent(chart, 'chart-redraw');
       expect(getTitleLink().hasAttribute('xlink:href')).to.be.false;
+    });
+  });
+});
+
+describe('vaadin-chart trusted types policy', () => {
+  (window.trustedTypes ? describe : describe.skip)('native policy factory', () => {
+    it('should keep the policy created by Highcharts', () => {
+      expect(getHighchartsPolicy()).to.be.ok;
+      expect(getHighchartsPolicy().name).to.equal('highcharts');
+    });
+
+    it('should restore the inherited createPolicy method', () => {
+      expect(Object.hasOwn(window.trustedTypes, 'createPolicy')).to.be.false;
+    });
+  });
+
+  describe('policy factory with own createPolicy method', () => {
+    let descriptor, createPolicy;
+
+    beforeEach(() => {
+      descriptor = Object.getOwnPropertyDescriptor(window, 'trustedTypes');
+      createPolicy = sinon.spy((name) => ({ name }));
+      Object.defineProperty(window, 'trustedTypes', { value: { createPolicy }, configurable: true });
+    });
+
+    afterEach(() => {
+      if (descriptor) {
+        Object.defineProperty(window, 'trustedTypes', descriptor);
+      } else {
+        delete window.trustedTypes;
+      }
+    });
+
+    it('should restore the own createPolicy method', async () => {
+      // Load a separate instance of the module, so that it wraps the factory defined above
+      const policyModule = await import('../src/highcharts-policy.js?own-factory');
+      const factory = window.trustedTypes;
+      factory.createPolicy('highcharts', {});
+      policyModule.releasePolicyFactory();
+      expect(factory.createPolicy).to.equal(createPolicy);
+      expect(createPolicy).to.be.calledOnceWith('highcharts');
+      expect(policyModule.getHighchartsPolicy()).to.eql({ name: 'highcharts' });
     });
   });
 });

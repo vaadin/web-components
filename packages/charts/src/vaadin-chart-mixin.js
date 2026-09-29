@@ -7,6 +7,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+// Must be imported before Highcharts, see highcharts-policy.js
 import './highcharts-policy.js';
 import 'highcharts/es-modules/masters/highstock.src.js';
 import 'highcharts/es-modules/masters/modules/accessibility.src.js';

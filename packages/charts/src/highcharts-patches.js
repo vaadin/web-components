@@ -10,7 +10,7 @@
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { getHighchartsPolicy, releasePolicyFactory } from './highcharts-policy.js';
 
-// Remove when upgrading Highcharts (#12213).
+// TODO: Remove when upgrading Highcharts, see vaadin/web-components#12213
 
 releasePolicyFactory();
 
@@ -21,7 +21,21 @@ const RESERVED_KEYS = ['__proto__', 'constructor'];
 const isReservedKey = (key) => RESERVED_KEYS.includes(key);
 
 const isAllowedReference = (value) =>
-  typeof value === 'string' && AST.allowedReferences.some((ref) => value.indexOf(ref) === 0);
+  typeof value === 'string' && AST.allowedReferences.some((ref) => value.startsWith(ref));
+
+const UNSUPPORTED_SCHEMES = ['javascript', 'vbscript', 'data'];
+
+const isUnsupportedLink = (value) => {
+  if (typeof value !== 'string') {
+    return true;
+  }
+  try {
+    // The URL parser normalizes case and whitespace the same way as navigation does
+    return UNSUPPORTED_SCHEMES.includes(new URL(value, document.baseURI).protocol.slice(0, -1));
+  } catch (_) {
+    return true;
+  }
+};
 
 /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
 
@@ -46,22 +60,24 @@ Highcharts.wrap(Point.prototype, 'setNestedProperty', function (proceed, object,
   return proceed.call(this, object, value, key);
 });
 
-// Ignore credits links that do not use a supported URL scheme
+// Ignore credits links that use an unsupported URL scheme
 Highcharts.wrap(Chart.prototype, 'addCredits', function (proceed, credits) {
   const options = Highcharts.merge(true, this.options.credits, credits);
-  if (options && options.href && !isAllowedReference(options.href)) {
+  if (options?.href && isUnsupportedLink(options.href)) {
+    Highcharts.error(33, false, this, { 'Invalid attribute in config': 'credits.href' });
     delete options.href;
   }
   return proceed.call(this, options);
 });
 
-// Ignore event attribute names, e.g. from style options that are applied as attributes
-Highcharts.wrap(SVGElement.prototype, '_defaultSetter', function (proceed, value, key, element) {
-  if (/^on/iu.test(key)) {
-    return;
+// Ignore event attribute names, e.g. from style options that are applied as attributes.
+// Not using `Highcharts.wrap`, as this setter runs for most attributes on every render.
+const defaultSetter = SVGElement.prototype._defaultSetter;
+SVGElement.prototype._defaultSetter = function (value, key, element) {
+  if (!/^on/iu.test(key)) {
+    defaultSetter.call(this, value, key, element);
   }
-  proceed.call(this, value, key, element);
-});
+};
 
 // Remove unsupported xlink:href values from text markup
 Highcharts.wrap(AST, 'filterUserAttributes', function (proceed, attributes) {
@@ -92,7 +108,7 @@ function parseDocument(markup) {
   // Parse in an inert document, so that nothing in the markup runs before it is filtered
   const doc = document.implementation.createHTMLDocument('');
   try {
-    doc.body.innerHTML = markup;
+    doc.body.innerHTML = policy ? policy.createHTML(markup) : markup;
   } catch (_) {
     // Leave the document empty
   }
@@ -100,7 +116,7 @@ function parseDocument(markup) {
 }
 
 function toNode(domNode, nodes) {
-  const tagName = domNode.localName || domNode.nodeName.toLowerCase();
+  const tagName = domNode.nodeName.toLowerCase();
   const node = { tagName };
 
   if (tagName === '#text') {
