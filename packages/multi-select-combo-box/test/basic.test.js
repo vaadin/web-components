@@ -1,6 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouse } from '@vaadin/test-runner-commands';
-import { fire, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, middleOfNode, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-multi-select-combo-box.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
@@ -346,8 +346,7 @@ describe('basic', () => {
     const reference = row.querySelector('span');
     row.appendChild(comboBox);
     await nextRender();
-    const center = (el) => el.getBoundingClientRect().top + el.getBoundingClientRect().height / 2;
-    const inputOffset = () => center(inputElement) - center(reference);
+    const inputOffset = () => middleOfNode(inputElement).y - middleOfNode(reference).y;
     const before = inputOffset();
 
     row.style.setProperty('--vaadin-input-field-height', '100px');
