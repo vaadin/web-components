@@ -1,0 +1,28 @@
+:where(:root),
+:where(:host) {
+  --vaadin-progress-bar-height: round(var(--lumo-size-l) / 10, 1px);
+  /* A flat track with no border */
+  --vaadin-progress-bar-border-width: 0px;
+  --vaadin-progress-bar-background: var(--lumo-contrast-10pct);
+  --vaadin-progress-bar-value-background: var(--lumo-primary-color);
+}
+
+:where(vaadin-progress-bar) {
+  margin: var(--lumo-space-s) 0;
+
+  &::part(value) {
+    transition: width 0.1s linear;
+  }
+
+  &[theme~='contrast'] {
+    --vaadin-progress-bar-value-background: var(--lumo-contrast-80pct);
+  }
+
+  &[theme~='error'] {
+    --vaadin-progress-bar-value-background: var(--lumo-error-color);
+  }
+
+  &[theme~='success'] {
+    --vaadin-progress-bar-value-background: var(--lumo-success-color);
+  }
+}
