@@ -7,10 +7,12 @@
   :host {
     display: inline-flex;
     --lumo-text-field-size: var(--lumo-size-m);
+    /* The height of the child fields, which follow the same property */
+    --_child-input-height: var(--vaadin-input-field-height, var(--lumo-text-field-size));
     color: var(--lumo-body-text-color);
     font-size: var(--lumo-font-size-m);
     /* align with text-field height + vertical paddings */
-    line-height: calc(var(--lumo-text-field-size) + 2 * var(--lumo-space-xs));
+    line-height: calc(var(--_child-input-height) + 2 * var(--lumo-space-xs));
     font-family: var(--lumo-font-family);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -24,7 +26,7 @@
     /* Size and position this element on the same vertical position as the input-field element
            to make vertical align for the host element work as expected */
     margin-top: var(--lumo-space-xs);
-    height: var(--lumo-text-field-size);
+    height: var(--_child-input-height);
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;

@@ -210,6 +210,27 @@ describe('custom-field', () => {
         await visualDiff(wrapper, 'alignment-label-helper-text');
       });
     });
+
+    describe('input field height', () => {
+      beforeEach(() => {
+        wrapper = fixtureSync(`
+          <div style="padding: 10px; --vaadin-input-field-height: 56px">
+            <vaadin-custom-field label="Custom field">
+              <vaadin-text-field value="Text"></vaadin-text-field>
+            </vaadin-custom-field>
+            <vaadin-text-field label="Text field" value="Text"></vaadin-text-field>
+            <vaadin-custom-field>
+              <vaadin-text-field value="Text"></vaadin-text-field>
+            </vaadin-custom-field>
+            <vaadin-text-field value="Text"></vaadin-text-field>
+          </div>
+        `);
+      });
+
+      it('input field height alignment', async () => {
+        await visualDiff(wrapper, 'alignment-input-field-height');
+      });
+    });
   });
 
   describe('form-layout', () => {
