@@ -7,6 +7,7 @@
  * See https://vaadin.com/commercial-license-and-service-terms for the full
  * license.
  */
+import './highcharts-policy.js';
 import 'highcharts/es-modules/masters/highstock.src.js';
 import 'highcharts/es-modules/masters/modules/accessibility.src.js';
 import 'highcharts/es-modules/masters/modules/annotations.src.js';
@@ -27,6 +28,7 @@ import 'highcharts/es-modules/masters/modules/xrange.src.js';
 import 'highcharts/es-modules/masters/modules/bullet.src.js';
 import 'highcharts/es-modules/masters/modules/gantt.src.js';
 import 'highcharts/es-modules/masters/modules/draggable-points.src.js';
+import './highcharts-patches.js';
 import KeyboardNavigation from 'highcharts/es-modules/Accessibility/KeyboardNavigation.js';
 import Pointer from 'highcharts/es-modules/Core/Pointer.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
