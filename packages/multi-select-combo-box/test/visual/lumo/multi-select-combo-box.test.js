@@ -162,6 +162,15 @@ describe('multi-select-combo-box', () => {
       await visualDiff(div, 'auto-expand-height');
     });
 
+    it('auto expand input field height', async () => {
+      div.style.display = 'inline-flex';
+      div.style.alignItems = 'baseline';
+      div.style.setProperty('--vaadin-input-field-height', '56px');
+      div.insertAdjacentHTML('afterbegin', '<span>Text</span>');
+      element.label = 'Label';
+      await visualDiff(div, 'auto-expand-input-field-height');
+    });
+
     it('auto expand long chip', async () => {
       element.style.maxWidth = '300px';
       const items = [...element.items];
