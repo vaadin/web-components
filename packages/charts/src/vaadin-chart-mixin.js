@@ -28,6 +28,7 @@ import 'highcharts/es-modules/masters/modules/xrange.src.js';
 import 'highcharts/es-modules/masters/modules/bullet.src.js';
 import 'highcharts/es-modules/masters/modules/gantt.src.js';
 import 'highcharts/es-modules/masters/modules/draggable-points.src.js';
+import './highcharts-patches.js';
 import Pointer from 'highcharts/es-modules/Core/Pointer.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { deepMerge } from '@vaadin/component-base/src/object-utils.js';
