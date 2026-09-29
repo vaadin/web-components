@@ -5,6 +5,7 @@
  */
 import { dedupeMixin } from '@open-wc/dedupe-mixin';
 import { FocusMixin } from './focus-mixin.js';
+import { isElementFocused } from './focus-utils.js';
 import { TabindexMixin } from './tabindex-mixin.js';
 
 /**
@@ -81,6 +82,11 @@ const DelegateFocusMixinImplementation = (superclass) => {
       if (this.focusElement && !this.disabled) {
         // Only forward the native option, `focusVisible` is handled below.
         this.focusElement.focus({ preventScroll: !!options?.preventScroll });
+
+        // Focus did not move, e.g. while hidden in a closed dialog
+        if (!isElementFocused(this.focusElement)) {
+          return;
+        }
 
         // Set focus-ring attribute on programmatic focus by default
         // unless explicitly disabled by `{ focusVisible: false }`.
