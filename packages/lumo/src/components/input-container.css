@@ -12,7 +12,7 @@
   vaadin-date-picker,
   vaadin-select
 ) {
-  padding: var(--lumo-space-xs) 0;
+  padding: var(--_lumo-field-outer-padding, var(--lumo-space-xs)) 0;
   --vaadin-input-field-button-text-color: var(--lumo-contrast-60pct);
   /* Host scope, so the base baseline guide uses the same padding. Otherwise unlabeled
      fields grow. */
