@@ -9,13 +9,12 @@
     --lumo-text-field-size: var(--lumo-size-m);
     /* The height of the child fields, which follow the same property */
     --_input-height: var(--vaadin-input-field-height, var(--lumo-text-field-size));
-    /* The outer padding of the child fields. The input row overlaps the host padding
-       by this amount, so the label, helper and error keep the text field spacing. */
-    --_child-padding: var(--lumo-space-xs);
+    /* The host carries the outer padding, so the child fields drop theirs */
+    --_lumo-field-outer-padding: 0px;
     color: var(--lumo-body-text-color);
     font-size: var(--lumo-font-size-m);
-    /* Centers native inputs in a row as tall as the child fields */
-    line-height: calc(var(--_input-height) + 2 * var(--_child-padding));
+    /* Centers native inputs in the input row */
+    line-height: var(--_input-height);
     font-family: var(--lumo-font-family);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -46,10 +45,6 @@
 
   .inputs-wrapper {
     flex: none;
-  }
-
-  [part='input-fields'] {
-    margin-block: calc(var(--_child-padding) * -1);
   }
 
   :host(:not([has-label])) [part='label'],
@@ -91,10 +86,5 @@
 
   :host([theme~='small']) [part='error-message'] {
     font-size: var(--lumo-font-size-xxs);
-  }
-
-  /* When custom-field is used with components without outer margin */
-  :host([theme~='whitespace']) {
-    --_child-padding: 0px;
   }
 }
