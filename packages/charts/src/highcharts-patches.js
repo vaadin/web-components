@@ -40,7 +40,7 @@ Highcharts.wrap(Point.prototype, 'optionsToObject', function (proceed, options) 
     options &&
     typeof options === 'object' &&
     !Array.isArray(options) &&
-    RESERVED_KEYS.some((key) => Object.hasOwn(options, key))
+    RESERVED_KEYS.some((key) => Object.prototype.hasOwnProperty.call(options, key))
   ) {
     options = Object.fromEntries(Object.entries(options).filter(([key]) => !isReservedKey(key)));
   }
