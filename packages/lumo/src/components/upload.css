@@ -1,0 +1,137 @@
+/* upload, upload-file and upload-file-list. upload-button shares the button rules, and
+   upload-icon needs nothing. */
+:where(:root),
+:where(:host) {
+  --vaadin-upload-border-color: var(--lumo-contrast-20pct);
+  --vaadin-upload-border-radius: var(--lumo-border-radius-l);
+  --vaadin-upload-padding: var(--lumo-space-m);
+  --vaadin-upload-gap: 0px;
+  --vaadin-upload-drop-label-color: var(--lumo-secondary-text-color);
+  --vaadin-upload-drop-label-gap: var(--lumo-space-xs);
+  --vaadin-upload-file-list-divider-color: var(--lumo-contrast-10pct);
+  --vaadin-upload-file-padding: var(--lumo-space-s) 0;
+  --vaadin-upload-file-gap: 0 var(--lumo-space-xs);
+  --vaadin-upload-file-border-radius: var(--lumo-border-radius-s);
+  --vaadin-upload-file-status-font-size: var(--lumo-font-size-s);
+  --vaadin-upload-file-error-color: var(--lumo-error-text-color);
+  --vaadin-upload-file-error-font-size: var(--lumo-font-size-s);
+  --vaadin-upload-file-done-color: var(--lumo-primary-text-color);
+  --vaadin-upload-file-warning-color: var(--lumo-error-text-color);
+  --vaadin-upload-file-button-border-radius: var(--lumo-border-radius-s);
+  --vaadin-upload-file-button-text-color: var(--lumo-contrast-60pct);
+}
+
+:where(vaadin-upload) {
+  /* A dashed drop zone */
+  border-style: dashed;
+  transition:
+    background-color 0.6s,
+    border-color 0.6s;
+
+  &[nodrop] {
+    --vaadin-upload-border-width: 0px;
+    --vaadin-upload-border-radius: 0px;
+    --vaadin-upload-padding: 0px;
+    transition: none;
+  }
+
+  &[dragover-valid] {
+    --vaadin-upload-background: var(--lumo-primary-color-10pct);
+    --vaadin-upload-border-color: var(--lumo-primary-color-50pct);
+    --vaadin-upload-drop-label-color: var(--lumo-primary-text-color);
+    transition:
+      background-color 0.1s,
+      border-color 0.1s;
+  }
+
+  &:is([disabled], [max-files-reached]) {
+    --vaadin-upload-drop-label-color: var(--lumo-disabled-text-color);
+  }
+
+  /* The drop label padding spaces it from the button */
+  &::part(primary-buttons) {
+    gap: 0;
+  }
+
+  &::part(drop-label) {
+    padding: 0 var(--lumo-space-s);
+  }
+}
+
+:where(vaadin-upload-file) {
+  /* Lumo icon glyphs are smaller than the icon box */
+  --vaadin-icon-visual-size: 75%;
+
+  &::part(name) {
+    white-space: nowrap;
+  }
+
+  &::part(commands) {
+    align-self: start;
+  }
+
+  &::part(start-button),
+  &::part(retry-button),
+  &::part(remove-button) {
+    transition: color 0.2s;
+  }
+
+  @media (any-hover: hover) {
+    &::part(start-button):hover,
+    &::part(retry-button):hover,
+    &::part(remove-button):hover {
+      --vaadin-upload-file-button-text-color: var(--lumo-contrast-90pct);
+    }
+  }
+
+  /* A small primary spinner while uploading (base shows it only with thumbnails) */
+  &[uploading]::part(loader) {
+    display: flex;
+    --vaadin-icon-size: var(--lumo-icon-size-s);
+    --vaadin-spinner-color: var(--lumo-primary-color);
+  }
+
+  /* Ends before the command buttons */
+  & > [slot='progress'] {
+    margin-inline-end: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
+  }
+
+  &[theme~='thumbnails'] {
+    --vaadin-upload-file-border-radius: var(--lumo-border-radius-l);
+    --vaadin-upload-file-gap: 0px;
+    /* Pads the icon column on all sides */
+    --vaadin-upload-file-padding: var(--lumo-space-s);
+
+    &::part(done-icon) {
+      background: var(--lumo-contrast-5pct);
+    }
+
+    &::part(warning-icon) {
+      background: var(--lumo-error-color-10pct);
+    }
+
+    &::part(meta) {
+      margin-inline-start: var(--lumo-space-s);
+      overflow: hidden;
+    }
+
+    &::part(commands) {
+      padding: var(--lumo-space-s) var(--lumo-space-xs);
+      align-self: center;
+    }
+
+    &::part(start-button),
+    &::part(retry-button),
+    &::part(remove-button) {
+      width: var(--lumo-size-xs);
+      height: var(--lumo-size-xs);
+    }
+
+    /* A faint fill over the thumbnail instead of a translucent bar */
+    & > [slot='progress'] {
+      opacity: 1;
+      margin: 0;
+      --vaadin-progress-bar-value-background: var(--lumo-primary-color-10pct);
+    }
+  }
+}
