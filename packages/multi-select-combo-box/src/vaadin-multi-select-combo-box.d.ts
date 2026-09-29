@@ -164,7 +164,6 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * | `--vaadin-input-field-error-font-weight`              |
  * | `--vaadin-input-field-error-line-height`              |
  * | `--vaadin-input-field-gap`                            |
- * | `--vaadin-input-field-height`                         |
  * | `--vaadin-input-field-helper-color`                   |
  * | `--vaadin-input-field-helper-font-size`               |
  * | `--vaadin-input-field-helper-font-weight`             |
