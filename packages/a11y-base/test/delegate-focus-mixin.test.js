@@ -92,6 +92,12 @@ describe('DelegateFocusMixin', () => {
       expect(element.hasAttribute('focus-ring')).to.be.false;
     });
 
+    it('should not set focus-ring attribute when focus() does not move focus', () => {
+      element.style.display = 'none';
+      element.focus();
+      expect(element.hasAttribute('focus-ring')).to.be.false;
+    });
+
     it('should propagate disabled property to the input', () => {
       element.disabled = true;
       expect(input.disabled).to.be.true;
