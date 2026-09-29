@@ -6,7 +6,7 @@
 import './vaadin-popover-overlay.js';
 import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { setOrRemoveAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -901,7 +901,7 @@ class Popover extends PopoverPositionMixin(
   /** @private */
   __onOverlayOpened() {
     // Do not take focus from the content, e.g. from an element with `autofocus`
-    if (this.autofocus && !this.modal && !this.contains(document.activeElement)) {
+    if (this.autofocus && !this.modal && !this._overlayElement._deepContains(getDeepActiveElement())) {
       this.focus();
     }
   }

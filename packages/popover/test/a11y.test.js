@@ -256,6 +256,16 @@ describe('a11y', () => {
         expect(getDeepActiveElement()).to.equal(input);
         expect(popover.opened).to.be.true;
       });
+
+      it('should focus the element with autofocus if autofocus is true in a shadow root', async () => {
+        const host = fixtureSync('<div></div>');
+        host.attachShadow({ mode: 'open' }).append(target, popover);
+        popover.autofocus = true;
+        await nextRender();
+        target.click();
+        await oneEvent(overlay, 'vaadin-overlay-open');
+        expect(getDeepActiveElement()).to.equal(input);
+      });
     });
   });
 
