@@ -1,0 +1,10 @@
+.row {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px;
+}
+
+.row > * {
+  flex: none;
+}

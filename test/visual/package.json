@@ -1,0 +1,33 @@
+{
+  "name": "@vaadin/visual-tests",
+  "version": "25.4.0-alpha1",
+  "private": true,
+  "description": "Vaadin web components cross-component visual tests",
+  "license": "Apache-2.0",
+  "author": "Vaadin Ltd",
+  "devDependencies": {
+    "@vaadin/aura": "25.4.0-alpha1",
+    "@vaadin/avatar": "25.4.0-alpha1",
+    "@vaadin/badge": "25.4.0-alpha1",
+    "@vaadin/button": "25.4.0-alpha1",
+    "@vaadin/checkbox": "25.4.0-alpha1",
+    "@vaadin/checkbox-group": "25.4.0-alpha1",
+    "@vaadin/custom-field": "25.4.0-alpha1",
+    "@vaadin/date-time-picker": "25.4.0-alpha1",
+    "@vaadin/form-layout": "25.4.0-alpha1",
+    "@vaadin/icon": "25.4.0-alpha1",
+    "@vaadin/icons": "25.4.0-alpha1",
+    "@vaadin/item": "25.4.0-alpha1",
+    "@vaadin/list-box": "25.4.0-alpha1",
+    "@vaadin/menu-bar": "25.4.0-alpha1",
+    "@vaadin/number-field": "25.4.0-alpha1",
+    "@vaadin/radio-group": "25.4.0-alpha1",
+    "@vaadin/select": "25.4.0-alpha1",
+    "@vaadin/slider": "25.4.0-alpha1",
+    "@vaadin/testing-helpers": "^2.0.0",
+    "@vaadin/text-area": "25.4.0-alpha1",
+    "@vaadin/text-field": "25.4.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "25.4.0-alpha1",
+    "@vaadin/vertical-layout": "25.4.0-alpha1"
+  }
+}

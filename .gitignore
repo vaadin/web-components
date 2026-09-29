@@ -9,10 +9,12 @@ yarn-error.log
 # Failed screenshots from visual test runs
 packages/*/test/visual/screenshots/failed
 packages/*/test/visual/*/screenshots/**/*/failed
+test/visual/*/screenshots/**/*/failed
 
 # Screenshots from local visual test runs
 packages/*/test/visual/screenshots/local-*
 packages/*/test/visual/*/screenshots/*/local-*
+test/visual/*/screenshots/*/local-*
 
 # Generated theme folders .ts files
 packages/**/theme/**/*.d.ts

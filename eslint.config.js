@@ -106,7 +106,7 @@ export default [
     },
   },
   {
-    files: ['packages/**/*', 'test/integration/**', 'dev/**/*', 'api-docs/js/**'],
+    files: ['packages/**/*', 'test/integration/**', 'test/visual/**', 'dev/**/*', 'api-docs/js/**'],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -172,7 +172,7 @@ export default [
     },
   },
   {
-    files: ['packages/**/test/**', 'test/integration/**'],
+    files: ['packages/**/test/**', 'test/integration/**', 'test/visual/**'],
     languageOptions: {
       globals: {
         ...globals.mocha,

@@ -161,6 +161,11 @@ const getVisualTestGroups = (packages, theme) => {
   }
 
   return packages.map((pkg) => {
+    // Cross-component visual tests live outside `packages/`
+    if (pkg === 'visual-tests') {
+      return { name: pkg, files: `test/visual/${theme}/${filesGlob}.test.{js,ts}` };
+    }
+
     return {
       name: pkg,
       files: [
@@ -210,7 +215,10 @@ const getScreenshotFileName = ({ name, testFile }, type, diff) => {
     folder = path.join(folder, `${argv.dark ? 'dark' : 'default'}`);
   }
 
-  if (path.matchesGlob(testFile, '**/packages/!(vaadin-lumo-styles|field-base)/**')) {
+  if (
+    path.matchesGlob(testFile, '**/packages/!(vaadin-lumo-styles|field-base)/**') ||
+    path.matchesGlob(testFile, '**/test/visual/**')
+  ) {
     folder = path.join(folder, path.basename(testFile).replace(/\.test\.(js|ts)$/u, ''));
   }
 
@@ -269,6 +277,9 @@ const createVisualTestsConfig = (theme) => {
   } else {
     visualPackages = getAllVisualPackages().filter((dir) => dir !== 'field-base' && dir !== 'aura');
   }
+
+  // Cross-component visual tests from `test/visual` run with every theme
+  visualPackages.push('visual-tests');
 
   const packages = getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
