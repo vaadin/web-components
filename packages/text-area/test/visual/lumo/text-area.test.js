@@ -149,6 +149,23 @@ describe('text-area', () => {
     await visualDiff(div, 'single-row');
   });
 
+  describe('input field height', () => {
+    let wrapper;
+
+    beforeEach(() => {
+      wrapper = fixtureSync(`
+        <div style="padding: 10px; --vaadin-input-field-height: 56px">
+          <vaadin-text-area label="Text area" value="value"></vaadin-text-area>
+          <vaadin-text-area min-rows="1" value="value"></vaadin-text-area>
+        </div>
+      `);
+    });
+
+    it('alignment', async () => {
+      await visualDiff(wrapper, 'input-field-height-alignment');
+    });
+  });
+
   describe('focus', () => {
     afterEach(async () => {
       await resetMouse();
