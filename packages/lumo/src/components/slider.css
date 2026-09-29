@@ -17,7 +17,7 @@
 
 :where(vaadin-slider, vaadin-range-slider) {
   /* The bubble cascades from the tooltip.css and overlay.css vars */
-  padding: var(--lumo-space-xs) 0;
+  padding: var(--_lumo-field-outer-padding, var(--lumo-space-xs)) 0;
   /* The controls row is one fixed-height line: drop the base input-field border and
      padding the base adds to it */
   --vaadin-input-field-border-width: 0px;
