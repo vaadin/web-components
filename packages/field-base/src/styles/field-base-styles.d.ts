@@ -8,3 +8,5 @@ import type { CSSResult } from 'lit';
 export const field: CSSResult;
 
 export const fieldLabelAside: CSSResult;
+
+export const fieldInputHeight: CSSResult;

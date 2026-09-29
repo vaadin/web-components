@@ -93,6 +93,24 @@ describe('text-area', () => {
       expect(parseFloat(window.getComputedStyle(inputField).height)).to.equal(100);
     });
 
+    it('should keep the first line on the baseline when the input field height property is set', async () => {
+      const row = fixtureSync(
+        '<div style="display: flex; align-items: baseline; gap: 8px"><span>Reference</span></div>',
+      );
+      const reference = row.querySelector('span');
+      row.appendChild(textArea);
+      await nextUpdate(textArea);
+      // The first line starts at the top of the textarea, so its offset from the reference must not change
+      const firstLineOffset = () =>
+        textArea.inputElement.getBoundingClientRect().top - reference.getBoundingClientRect().top;
+      const before = firstLineOffset();
+
+      row.style.setProperty('--vaadin-input-field-height', '100px');
+      await nextUpdate(textArea);
+
+      expect(firstLineOffset()).to.be.closeTo(before, 1);
+    });
+
     it('should not grow over max-height', async () => {
       inputField.style.padding = '0';
       inputField.style.border = 'none';
