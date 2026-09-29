@@ -1,5 +1,6 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
+import './fixtures/mock-dialog.js';
 import './fixtures/mock-overlay.js';
 import './fixtures/mock-unmanaged-overlay.js';
 import { getDeepActiveElement, getTabbableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
@@ -98,6 +99,28 @@ describe('autofocus', () => {
     };
     await open();
     expect(isElementFocused(overlay.querySelectorAll('button')[1])).to.be.true;
+  });
+});
+
+describe('autofocus with content slotted from the owner', () => {
+  let wrapper, overlay;
+
+  beforeEach(async () => {
+    // Like `<vaadin-date-picker autofocus>`: the content is in the owner's light DOM
+    wrapper = fixtureSync('<mock-dialog autofocus></mock-dialog>');
+    await nextRender();
+    overlay = wrapper.shadowRoot.querySelector('mock-dialog-overlay');
+    overlay.focusTrap = false;
+  });
+
+  afterEach(() => {
+    overlay.opened = false;
+  });
+
+  it('should not treat autofocus on the owner as autofocus on the content', async () => {
+    overlay.opened = true;
+    await oneEvent(overlay, 'vaadin-overlay-open');
+    expect(getDeepActiveElement()).to.equal(document.body);
   });
 });
 

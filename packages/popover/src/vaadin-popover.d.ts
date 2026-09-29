@@ -114,9 +114,6 @@ declare class Popover extends PopoverPositionMixin(PopoverTargetMixin(ThemePrope
   /**
    * When true, the popover content automatically receives focus after
    * it is opened. Modal popovers use this behavior by default.
-   *
-   * A field with `autofocus` inside the popover receives focus on open
-   * even when this is false.
    */
   autofocus: boolean;
 

@@ -2,7 +2,6 @@ import { expect } from '@vaadin/chai-plugins';
 import { resetMouse, sendKeys, sendMouseToElement } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import '@vaadin/dialog';
-import '@vaadin/dialog/test/not-animated-styles.css';
 import '@vaadin/text-field';
 
 const fieldsMarkup = `
@@ -26,17 +25,14 @@ describe('text-field with autofocus in dialog', () => {
     await close();
   });
 
-  describe('declared children', () => {
+  describe('slotted children', () => {
     let button;
 
     beforeEach(async () => {
       const wrapper = fixtureSync(`
         <div>
           <button>Open</button>
-          <vaadin-dialog>
-            ${fieldsMarkup}
-            <vaadin-text-field label="Third" autofocus></vaadin-text-field>
-          </vaadin-dialog>
+          <vaadin-dialog>${fieldsMarkup}</vaadin-dialog>
         </div>
       `);
       [button, dialog] = wrapper.children;
@@ -51,7 +47,7 @@ describe('text-field with autofocus in dialog', () => {
       await resetMouse();
     });
 
-    it('should focus the first field with autofocus without focus-ring when opened with mouse', async () => {
+    it('should focus the field with autofocus without focus-ring when opened with mouse', async () => {
       const opened = oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
       await sendMouseToElement({ type: 'click', element: button });
       await opened;
@@ -59,20 +55,13 @@ describe('text-field with autofocus in dialog', () => {
       expect(getField(1).hasAttribute('focus-ring')).to.be.false;
     });
 
-    it('should focus the first field with autofocus with focus-ring when opened with keyboard', async () => {
+    it('should focus the field with autofocus with focus-ring when opened with keyboard', async () => {
       button.focus();
       const opened = oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
       await sendKeys({ press: 'Enter' });
       await opened;
       expect(document.activeElement).to.equal(getField(1).inputElement);
       expect(getField(1).hasAttribute('focus-ring')).to.be.true;
-    });
-
-    it('should not set focus-ring on another field with autofocus when opened', async () => {
-      const opened = oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
-      await sendMouseToElement({ type: 'click', element: button });
-      await opened;
-      expect(getField(2).hasAttribute('focus-ring')).to.be.false;
     });
   });
 

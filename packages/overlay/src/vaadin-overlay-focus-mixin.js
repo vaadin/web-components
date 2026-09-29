@@ -220,6 +220,8 @@ export const OverlayFocusMixin = (superClass) =>
      * element that has it (e.g. the input of `<vaadin-text-field autofocus>`).
      * As with native `autofocus`, a plain `<div autofocus>` does not apply to
      * its children. Stops at the focus root, whose `autofocus` refers to the overlay.
+     * Walks the flat tree, the same way tabbables are collected from the focus root,
+     * so it never leaves the overlay when content is slotted from the owner.
      *
      * @param {HTMLElement} element
      * @return {boolean}
@@ -231,7 +233,7 @@ export const OverlayFocusMixin = (superClass) =>
         if (node.autofocus && (node === element || customElements.get(node.localName))) {
           return true;
         }
-        node = node.parentNode || node.host;
+        node = node.assignedSlot || node.parentNode || node.host;
       }
       return false;
     }
