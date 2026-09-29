@@ -16,6 +16,12 @@ export const RADIO_BUTTONS = `
   <vaadin-radio-button value="b" label="B"></vaadin-radio-button>
 `;
 
+export const LIST_ITEMS = `
+  <vaadin-item>Option</vaadin-item>
+  <vaadin-item>Other</vaadin-item>
+  <vaadin-item>Third</vaadin-item>
+`;
+
 export const DATE_TIME = '2024-01-15T10:30';
 
 /** Child fields of a custom field. They follow the small mode only, since they have no label. */
@@ -72,5 +78,74 @@ export const FIELDS = [
     children: 'Button',
     stateless: true,
     modes: { default: ['plain'], small: ['plain'], 'input field height': ['plain'], rtl: ['plain'] },
+  },
+];
+
+const BUTTON = { tag: 'vaadin-button', children: 'Button', stateless: true };
+
+const SELECT = {
+  tag: 'vaadin-select',
+  attrs: { value: 'a' },
+  stateless: true,
+  setup: (el) => {
+    el.items = SELECT_ITEMS;
+  },
+};
+
+/** Controls that render next to a button. `defs` are the components after the reference text field. */
+export const CONTROLS = [
+  { name: 'button', defs: [BUTTON], modes: ['small', 'large', 'button height'] },
+  {
+    name: 'menu-bar',
+    defs: [
+      BUTTON,
+      {
+        tag: 'vaadin-menu-bar',
+        stateless: true,
+        setup: (el) => {
+          el.items = [{ text: 'Menu' }, { text: 'Bar' }];
+        },
+      },
+    ],
+    modes: ['default', 'small', 'button height'],
+  },
+  { name: 'badge', defs: [BUTTON, { tag: 'vaadin-badge', children: 'Badge', stateless: true }], modes: ['default'] },
+  {
+    name: 'avatar',
+    defs: [BUTTON, { tag: 'vaadin-avatar', attrs: { abbr: 'AB' }, stateless: true }],
+    modes: ['default'],
+  },
+  { name: 'select', defs: [BUTTON, SELECT], modes: ['default'] },
+];
+
+/** Components that render a list of items. */
+export const ITEM_LISTS = [
+  {
+    name: 'list-box',
+    defs: [
+      { tag: 'vaadin-list-box', attrs: { selected: '0' }, children: LIST_ITEMS, stateless: true },
+      {
+        tag: 'vaadin-list-box',
+        attrs: { multiple: '' },
+        children: LIST_ITEMS,
+        stateless: true,
+        setup: (el) => {
+          el.selectedValues = [0, 1];
+        },
+      },
+    ],
+  },
+  {
+    name: 'select',
+    defs: [
+      {
+        ...SELECT,
+        overlay: true,
+        setup: (el) => {
+          SELECT.setup(el);
+          el.opened = true;
+        },
+      },
+    ],
   },
 ];

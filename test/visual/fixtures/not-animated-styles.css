@@ -2,7 +2,8 @@ vaadin-text-field,
 vaadin-email-field,
 vaadin-integer-field,
 vaadin-number-field,
-vaadin-password-field {
+vaadin-password-field,
+vaadin-select {
   &[focused] input {
     caret-color: transparent;
   }
@@ -21,4 +22,9 @@ vaadin-password-field {
       transition: none !important;
     }
   }
+}
+
+vaadin-select[opening]::part(overlay),
+vaadin-select[closing]::part(overlay) {
+  animation: none !important;
 }

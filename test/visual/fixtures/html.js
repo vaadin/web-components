@@ -96,8 +96,9 @@ function containerAttrs(mode, className) {
 export function row(defs, options = {}) {
   defs = [defs].flat();
   const { mode = 'default' } = options;
+  const className = defs.some((def) => def.overlay) ? 'row overlay' : 'row';
   const container = fixtureSync(`
-    <div ${containerAttrs(mode, 'row')}>
+    <div ${containerAttrs(mode, className)}>
       <span>Text</span>
       ${field(REFERENCE, options)}
       ${defs.map((def) => field(def, options)).join('')}

@@ -8,3 +8,8 @@
 .row > * {
   flex: none;
 }
+
+/* Leaves room for an opened overlay inside the screenshot */
+.row.overlay {
+  min-height: 200px;
+}
