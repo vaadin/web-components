@@ -1,0 +1,24 @@
+import '@vaadin/vaadin-lumo-styles/src/props/index.css';
+import '@vaadin/vaadin-lumo-styles/src/global/index.css';
+import '@vaadin/vaadin-lumo-styles/components/checkbox-group.css';
+import '@vaadin/vaadin-lumo-styles/components/custom-field.css';
+import '@vaadin/vaadin-lumo-styles/components/date-time-picker.css';
+import '@vaadin/vaadin-lumo-styles/components/form-item.css';
+import '@vaadin/vaadin-lumo-styles/components/form-layout.css';
+import '@vaadin/vaadin-lumo-styles/components/number-field.css';
+import '@vaadin/vaadin-lumo-styles/components/select.css';
+import '@vaadin/vaadin-lumo-styles/components/text-area.css';
+import '@vaadin/vaadin-lumo-styles/components/text-field.css';
+import '../fixtures/not-animated-styles.css';
+import '@vaadin/checkbox-group';
+import '@vaadin/custom-field';
+import '@vaadin/date-time-picker';
+import '@vaadin/form-layout';
+import '@vaadin/form-layout/vaadin-form-item.js';
+import '@vaadin/number-field';
+import '@vaadin/select';
+import '@vaadin/text-area';
+import '@vaadin/text-field';
+import { formLayoutSuite } from '../suites/form-layout.js';
+
+formLayoutSuite();

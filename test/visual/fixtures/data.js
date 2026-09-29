@@ -149,3 +149,66 @@ export const ITEM_LISTS = [
     ],
   },
 ];
+
+const TEXT_FIELD = { tag: 'vaadin-text-field', attrs: { value: 'Value' } };
+
+const fieldByTag = (tag) => FIELDS.find((def) => def.tag === tag);
+
+/** Fields of the form layout, in the order of the form. */
+export const FORM_FIELDS = [
+  TEXT_FIELD,
+  fieldByTag('vaadin-text-area'),
+  fieldByTag('vaadin-checkbox-group'),
+  fieldByTag('vaadin-custom-field'),
+  fieldByTag('vaadin-date-time-picker'),
+  fieldByTag('vaadin-select'),
+];
+
+/** Components of the vertical layout, in the order of the stack. */
+export const STACK_FIELDS = [
+  TEXT_FIELD,
+  fieldByTag('vaadin-text-area'),
+  fieldByTag('vaadin-select'),
+  fieldByTag('vaadin-checkbox-group'),
+  BUTTON,
+];
+
+const ICON = '<vaadin-icon icon="vaadin:user" slot="prefix"></vaadin-icon>';
+const TEXT_AFFIXES = '<span slot="prefix">$</span><span slot="suffix">.00</span>';
+
+/** Components with slotted content, grouped by state. `defs` are the components after the reference text field. */
+export const SLOTTED = [
+  {
+    name: 'text-field',
+    states: {
+      'text affixes': [
+        { tag: 'vaadin-text-field', attrs: { value: 'Value' }, children: TEXT_AFFIXES },
+        { ...BUTTON, children: `${TEXT_AFFIXES}Button` },
+      ],
+      'icon prefix': [
+        { tag: 'vaadin-text-field', attrs: { value: 'Value' }, children: ICON },
+        { ...BUTTON, children: `${ICON}Button` },
+      ],
+    },
+  },
+  {
+    name: 'custom-field',
+    states: {
+      plain: [
+        {
+          tag: 'vaadin-custom-field',
+          children: ({ mode }) =>
+            [
+              '<input value="Native" />',
+              field(SELECT, { mode }),
+              field({ tag: 'vaadin-checkbox-group', children: CHECKBOXES, stateless: true }, { mode }),
+            ].join(''),
+          setup: (el) => {
+            SELECT.setup(el.querySelector('vaadin-select'));
+            el.querySelector('vaadin-checkbox-group').value = ['a'];
+          },
+        },
+      ],
+    },
+  },
+];

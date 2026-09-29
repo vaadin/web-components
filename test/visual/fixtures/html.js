@@ -1,4 +1,4 @@
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextResize } from '@vaadin/testing-helpers';
 import './styles.css';
 
 /** Attributes that each state adds to a field. */
@@ -8,6 +8,7 @@ export const STATES = {
   helper: { label: 'Label', 'helper-text': 'Helper' },
   'helper above': { label: 'Label', 'helper-text': 'Helper', theme: 'helper-above-field' },
   error: { label: 'Label', 'error-message': 'Error', invalid: '' },
+  'required with helper above': { label: 'Label', 'helper-text': 'Helper', required: '', theme: 'helper-above-field' },
 };
 
 /**
@@ -62,16 +63,17 @@ function renderAttrs(attrs) {
  * Returns the HTML of one component with the attributes of the given mode and state.
  * A component with `stateless: true` only receives the mode attributes.
  * A `children` function receives the options, so that child components can follow the mode.
+ * The `attrs` option overrides attributes last, `undefined` removes one.
  * @param {{ tag: string, attrs?: object, children?: string | Function, stateless?: boolean }} def
- * @param {{ mode?: string, state?: string }} options
+ * @param {{ mode?: string, state?: string, attrs?: object }} options
  * @return {string}
  */
-export function field(def, { mode = 'default', state = 'plain' } = {}) {
+export function field(def, { mode = 'default', state = 'plain', attrs: overrides } = {}) {
   const { theme: modeTheme } = MODES[mode];
   const { theme: stateTheme, ...stateAttrs } = def.stateless ? {} : STATES[state];
   const { theme: ownTheme, ...ownAttrs } = def.attrs || {};
   const theme = [ownTheme, modeTheme, stateTheme].filter(Boolean).join(' ') || undefined;
-  const attrs = renderAttrs({ ...ownAttrs, ...stateAttrs, theme });
+  const attrs = renderAttrs({ ...ownAttrs, ...stateAttrs, theme, ...overrides });
   const children = typeof def.children === 'function' ? def.children({ mode, state }) : def.children;
   return `<${def.tag} ${attrs}>${children || ''}</${def.tag}>`;
 }
@@ -105,4 +107,65 @@ export function row(defs, options = {}) {
     </div>
   `);
   return setup(container, defs, 2);
+}
+
+/**
+ * Renders components in a vertical layout.
+ * @param {object[]} defs
+ * @param {{ mode?: string, state?: string }} options
+ * @return {Promise<HTMLElement>}
+ */
+export async function stack(defs, options = {}) {
+  const { mode = 'default' } = options;
+  const container = fixtureSync(`
+    <div ${containerAttrs(mode, 'stack')}>
+      <vaadin-vertical-layout>
+        ${defs.map((def) => field(def, options)).join('')}
+      </vaadin-vertical-layout>
+    </div>
+  `);
+  await setup(container.firstElementChild, defs, 0);
+  return container;
+}
+
+/** Form layout configurations. `formItems` wraps each field in a form item that holds the label. */
+export const FORM_LAYOUTS = {
+  'labels on top': { steps: [{ columns: 2 }] },
+  'labels aside': { steps: [{ columns: 2, labelsPosition: 'aside' }], formItems: true },
+  'auto-responsive labels aside': { attrs: { 'auto-responsive': '', 'labels-aside': '', 'max-columns': '2' } },
+};
+
+function formItem(def, options) {
+  const html = field(def, { ...options, attrs: { label: undefined } });
+  return `<vaadin-form-item><label slot="label">Label</label>${html}</vaadin-form-item>`;
+}
+
+/**
+ * Renders fields in a form layout.
+ * @param {object[]} defs
+ * @param {{ layout: string, state?: string }} options
+ * @return {Promise<HTMLElement>}
+ */
+export async function form(defs, { layout, state }) {
+  const { steps, attrs = {}, formItems } = FORM_LAYOUTS[layout];
+  const render = formItems ? formItem : field;
+  const container = fixtureSync(`
+    <div class="form">
+      <vaadin-form-layout ${renderAttrs(attrs)}>
+        ${defs.map((def) => render(def, { state })).join('')}
+      </vaadin-form-layout>
+    </div>
+  `);
+  const layoutElement = container.firstElementChild;
+  if (steps) {
+    layoutElement.responsiveSteps = steps;
+  }
+  const fields = defs.map((_, index) => {
+    const child = layoutElement.children[index];
+    return formItems ? child.lastElementChild : child;
+  });
+  await Promise.all(defs.map((def, index) => def.setup && def.setup(fields[index])));
+  await nextResize(layoutElement);
+  await nextFrame();
+  return container;
 }
