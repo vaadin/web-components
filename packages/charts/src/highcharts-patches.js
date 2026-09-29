@@ -10,16 +10,27 @@
  */
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 
-// Remove when upgrading Highcharts (#12213).
+// TODO: Remove when upgrading Highcharts, see vaadin/web-components#12213
 
-const { AST, Chart, Point } = Highcharts;
+const { Chart, Point } = Highcharts;
 
 const RESERVED_KEYS = ['__proto__', 'constructor'];
 
 const isReservedKey = (key) => RESERVED_KEYS.includes(key);
 
-const isAllowedReference = (value) =>
-  typeof value === 'string' && AST.allowedReferences.some((ref) => value.indexOf(ref) === 0);
+const UNSUPPORTED_SCHEMES = ['javascript', 'vbscript', 'data'];
+
+const isUnsupportedLink = (value) => {
+  if (typeof value !== 'string') {
+    return true;
+  }
+  try {
+    // The URL parser normalizes case and whitespace the same way as navigation does
+    return UNSUPPORTED_SCHEMES.includes(new URL(value, document.baseURI).protocol.slice(0, -1));
+  } catch (_) {
+    return true;
+  }
+};
 
 /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
 
@@ -44,10 +55,11 @@ Highcharts.wrap(Point.prototype, 'setNestedProperty', function (proceed, object,
   return proceed.call(this, object, value, key);
 });
 
-// Ignore credits links that do not use a supported URL scheme
+// Ignore credits links that use an unsupported URL scheme
 Highcharts.wrap(Chart.prototype, 'addCredits', function (proceed, credits) {
   const options = Highcharts.merge(true, this.options.credits, credits);
-  if (options && options.href && !isAllowedReference(options.href)) {
+  if (options?.href && isUnsupportedLink(options.href)) {
+    Highcharts.error(33, false, this, { 'Invalid attribute in config': 'credits.href' });
     delete options.href;
   }
   return proceed.call(this, options);

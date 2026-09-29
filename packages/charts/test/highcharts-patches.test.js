@@ -52,20 +52,37 @@ describe('vaadin-chart option values', () => {
   });
 
   describe('credits', () => {
-    it('should keep supported credits links', async () => {
-      chart.updateConfiguration({ credits: { enabled: true, href: 'https://vaadin.com' } });
+    async function setCreditsHref(href) {
+      chart.updateConfiguration({ credits: { enabled: true, href } });
       await oneEvent(chart, 'chart-redraw');
-      expect(chart.configuration.options.credits.href).to.equal('https://vaadin.com');
+    }
+
+    [
+      'https://vaadin.com',
+      'HTTPS://VAADIN.COM',
+      'about.html',
+      '/about',
+      '#about',
+      'tel:+123',
+      'ftp://vaadin.com',
+    ].forEach((href) => {
+      it(`should keep supported credits links: ${href}`, async () => {
+        await setCreditsHref(href);
+        expect(chart.configuration.options.credits.href).to.equal(href);
+      });
     });
 
-    it('should ignore credits links that do not use a supported URL scheme', async () => {
-      chart.updateConfiguration({ credits: { enabled: true, href: UNSUPPORTED_URL } });
-      await oneEvent(chart, 'chart-redraw');
-      expect(chartContainer.querySelector('.highcharts-credits')).to.be.ok;
-      expect(chart.configuration.options.credits.href).to.be.undefined;
-    });
+    [UNSUPPORTED_URL, ` JAVASCRIPT:void(0)`, `java\tscript:void(0)`, 'data:text/html,Text', 'vbscript:Text'].forEach(
+      (href) => {
+        it(`should ignore credits links that use an unsupported URL scheme: ${JSON.stringify(href)}`, async () => {
+          await setCreditsHref(href);
+          expect(chartContainer.querySelector('.highcharts-credits')).to.be.ok;
+          expect(chart.configuration.options.credits.href).to.be.undefined;
+        });
+      },
+    );
 
-    it('should ignore credits links that do not use a supported URL scheme on update', async () => {
+    it('should ignore credits links that use an unsupported URL scheme on update', async () => {
       chart.updateConfiguration({ credits: { enabled: true } });
       await oneEvent(chart, 'chart-redraw');
       chart.configuration.credits.update({ href: UNSUPPORTED_URL });
