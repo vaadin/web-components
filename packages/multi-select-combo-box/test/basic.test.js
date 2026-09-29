@@ -346,15 +346,13 @@ describe('basic', () => {
     const reference = row.querySelector('span');
     row.appendChild(comboBox);
     await nextRender();
-    const center = (rect) => rect.top + rect.height / 2;
-    const before = center(inputElement.getBoundingClientRect()) - center(reference.getBoundingClientRect());
+    const center = (el) => el.getBoundingClientRect().top + el.getBoundingClientRect().height / 2;
+    const inputOffset = () => center(inputElement) - center(reference);
+    const before = inputOffset();
 
     row.style.setProperty('--vaadin-input-field-height', '100px');
     await nextRender();
 
-    expect(center(inputElement.getBoundingClientRect()) - center(reference.getBoundingClientRect())).to.be.closeTo(
-      before,
-      1,
-    );
+    expect(inputOffset()).to.be.closeTo(before, 1);
   });
 });

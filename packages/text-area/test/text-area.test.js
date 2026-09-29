@@ -100,7 +100,7 @@ describe('text-area', () => {
       const reference = row.querySelector('span');
       row.appendChild(textArea);
       await nextUpdate(textArea);
-      // The first line starts at the top of the textarea, so its offset from the reference must not change
+      // The first line stays at the top, so its offset must not change
       const firstLineOffset = () =>
         textArea.inputElement.getBoundingClientRect().top - reference.getBoundingClientRect().top;
       const before = firstLineOffset();

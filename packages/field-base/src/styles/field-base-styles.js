@@ -17,11 +17,11 @@ export const field = css`
     --_rows-after-input: ;
     --_gap: var(--vaadin-input-field-container-gap, var(--vaadin-gap-xs));
     --_gap-s: round(var(--_gap) / 3, 2px);
-    /* Height of a single-line input-field part. Consumed on ::before only, so 1lh resolves there. */
+    /* Single-line input-field height. Only used on ::before, where 1lh resolves */
     --_field-content-height: calc(
       1lh + var(--vaadin-padding-block-container) * 2 + var(--vaadin-input-field-border-width, 1px) * 2
     );
-    /* Effective input-field height the baseline guide mirrors; input field components raise it to the custom property */
+    /* Input-field height that the baseline guide mirrors */
     --_field-input-height: var(--_field-content-height);
     display: inline-grid;
     grid-template:
@@ -65,7 +65,7 @@ export const field = css`
     grid-column: baseline;
     grid-row: 1 / baseline;
     align-self: end;
-    /* Mirror the input container box so the text sits where the input text sits */
+    /* Center the text the same way as the input container */
     display: flex;
     align-items: center;
     box-sizing: border-box;
@@ -241,10 +241,6 @@ export const fieldLabelAside = css`
   }
 `;
 
-/**
- * For components whose input-field part centers its content: the baseline guide follows
- * `--vaadin-input-field-height` the same way the input container does (as a minimum height).
- */
 export const fieldInputHeight = css`
   :host {
     --_field-input-height: max(var(--vaadin-input-field-height, 0px), var(--_field-content-height));
