@@ -1,14 +1,8 @@
-/* Unique select rules: value weight, readonly color, toggle hover, checkmark, label-aside
-   em-space. */
+/* Unique select rules: value weight, toggle hover, checkmark, label-aside em-space. */
 
 /* The base leaves it at 400 */
 :where(vaadin-select-value-button) {
   font-weight: var(--vaadin-input-field-value-font-weight, 500);
-}
-
-/* The value button inherits its color from the input container */
-:where(vaadin-select[readonly]) {
-  --vaadin-input-field-value-color: var(--lumo-secondary-text-color);
 }
 
 @media (any-hover: hover) {
