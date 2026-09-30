@@ -9,8 +9,6 @@
     --lumo-text-field-size: var(--lumo-size-m);
     /* The height of the child fields, which follow the same property */
     --_input-height: var(--vaadin-input-field-height, var(--lumo-text-field-size));
-    /* The host carries the outer padding, so the child fields drop theirs */
-    --_lumo-field-outer-padding: 0px;
     color: var(--lumo-body-text-color);
     font-size: var(--lumo-font-size-m);
     /* Centers native inputs in the input row */
@@ -19,7 +17,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
-    padding: var(--lumo-space-xs) 0;
+    padding: var(--_lumo-field-outer-padding, var(--lumo-space-xs)) 0;
   }
 
   :host::before {
@@ -45,6 +43,11 @@
 
   .inputs-wrapper {
     flex: none;
+  }
+
+  /* The host carries the outer padding, so the child fields drop theirs */
+  [part='input-fields'] ::slotted(*) {
+    --_lumo-field-outer-padding: 0px;
   }
 
   :host(:not([has-label])) [part='label'],
