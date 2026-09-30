@@ -1,5 +1,67 @@
 /* Lumo's filled input: contrast fill, no border, ::after highlight (the base draws an
-   outline). Widen the list as fields are ported. */
+   outline). Widen the list as fields are ported. The Lumo defaults for the documented
+   input-field vars resolve here, so a value set on the field or inherited from the page
+   wins. The input-field part, or a standalone container, reads them. */
+:where(
+  vaadin-text-field,
+  vaadin-password-field,
+  vaadin-email-field,
+  vaadin-number-field,
+  vaadin-integer-field,
+  vaadin-text-area,
+  vaadin-combo-box,
+  vaadin-time-picker,
+  vaadin-date-picker,
+  vaadin-select,
+  vaadin-input-container
+) {
+  --vaadin-input-field-button-text-color: var(--lumo-contrast-60pct);
+  --_lumo-input-field-background: var(--vaadin-input-field-background, var(--lumo-contrast-10pct));
+  --_lumo-input-field-border-width: var(--vaadin-input-field-border-width, 0px);
+  --_lumo-input-field-value-font-weight: var(--vaadin-input-field-value-font-weight, 500);
+  --_lumo-input-field-gap: var(--vaadin-input-field-gap, 0px);
+
+  /* State fills. Readonly and disabled win over invalid, as in legacy. */
+  &[invalid] {
+    --_lumo-input-field-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-10pct));
+  }
+
+  /* Readonly: dashed outline drawn by ::after */
+  &[readonly] {
+    --_lumo-input-field-background: transparent;
+    /* Hide the base dashed border, the ::after draws the outline */
+    --vaadin-input-field-border-color: transparent;
+    --vaadin-input-field-value-color: var(--lumo-secondary-text-color);
+  }
+
+  &[disabled] {
+    --_lumo-input-field-background: var(--vaadin-input-field-disabled-background, var(--lumo-contrast-5pct));
+    /* Legacy name of the disabled value color */
+    --vaadin-input-field-disabled-text-color: var(
+      --vaadin-input-field-disabled-value-color,
+      var(--lumo-disabled-text-color)
+    );
+  }
+
+  /* Size comes from icon.css */
+  & > vaadin-icon {
+    color: var(--lumo-contrast-60pct);
+  }
+
+  /* Vaadin icons use a 16px grid and look too big at the Lumo icon size */
+  & > vaadin-icon[icon^='vaadin:'] {
+    padding: 0.25em;
+  }
+
+  &[theme~='small'] {
+    --_lumo-field-input-height: var(--vaadin-input-field-height, var(--lumo-size-s));
+    font-size: var(--lumo-font-size-s);
+    --vaadin-input-field-label-font-size: var(--lumo-font-size-xs);
+    --vaadin-input-field-error-font-size: var(--lumo-font-size-xxs);
+  }
+}
+
+/* Fields: outer padding, and the input-field part reads the defaults above */
 :where(
   vaadin-text-field,
   vaadin-password-field,
@@ -13,16 +75,9 @@
   vaadin-select
 ) {
   padding: var(--_lumo-field-outer-padding, var(--lumo-space-xs)) 0;
-  --vaadin-input-field-button-text-color: var(--lumo-contrast-60pct);
   /* Host scope, so the base baseline guide uses the same padding. Otherwise unlabeled
      fields grow. */
   --vaadin-input-field-padding: 0 calc(0.375em + var(--vaadin-radius-m) / 4 - 1px);
-  /* Lumo defaults for the documented input-field vars, resolved on the host so a value set
-     on the field or inherited from the page wins. The input-field part reads them. */
-  --_lumo-input-field-background: var(--vaadin-input-field-background, var(--lumo-contrast-10pct));
-  --_lumo-input-field-border-width: var(--vaadin-input-field-border-width, 0px);
-  --_lumo-input-field-value-font-weight: var(--vaadin-input-field-value-font-weight, 500);
-  --_lumo-input-field-gap: var(--vaadin-input-field-gap, 0px);
 
   &::part(input-field) {
     position: relative;
@@ -56,6 +111,12 @@
     transition-duration: 0.15s, 1s;
   }
 
+  &[readonly]::part(input-field)::after {
+    opacity: 1;
+    background: transparent;
+    border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-30pct));
+  }
+
   /* Field buttons at 90%, clear button smaller (as in Aura) */
   &::part(field-button) {
     --vaadin-icon-visual-size: 90%;
@@ -65,47 +126,8 @@
     --vaadin-icon-visual-size: 75%;
   }
 
-  /* State fills. Readonly and disabled win over invalid, as in legacy. */
-  &[invalid] {
-    --_lumo-input-field-background: var(--vaadin-input-field-invalid-background, var(--lumo-error-color-10pct));
-  }
-
-  /* Readonly: dashed outline drawn by ::after */
-  &[readonly] {
-    --_lumo-input-field-background: transparent;
-    /* Hide the base dashed border, the ::after draws the outline */
-    --vaadin-input-field-border-color: transparent;
-  }
-
-  &[readonly]::part(input-field)::after {
-    opacity: 1;
-    background: transparent;
-    border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-30pct));
-  }
-
-  &[disabled] {
-    --_lumo-input-field-background: var(--vaadin-input-field-disabled-background, var(--lumo-contrast-5pct));
-  }
-
   &[invalid]::part(input-field) {
     --vaadin-focus-ring-color: var(--lumo-error-color-50pct);
-  }
-
-  /* Size comes from icon.css */
-  & > vaadin-icon {
-    color: var(--lumo-contrast-60pct);
-  }
-
-  /* Vaadin icons use a 16px grid and look too big at the Lumo icon size */
-  & > vaadin-icon[icon^='vaadin:'] {
-    padding: 0.25em;
-  }
-
-  &[theme~='small'] {
-    --_lumo-field-input-height: var(--vaadin-input-field-height, var(--lumo-size-s));
-    font-size: var(--lumo-font-size-s);
-    --vaadin-input-field-label-font-size: var(--lumo-font-size-xs);
-    --vaadin-input-field-error-font-size: var(--lumo-font-size-xxs);
   }
 
   @media (any-hover: hover) {
@@ -118,6 +140,60 @@
     }
 
     &[invalid]:hover:not([readonly], [focused], [disabled])::part(input-field)::after {
+      background: var(--lumo-error-color-50pct);
+    }
+  }
+}
+
+/* A standalone container has no part to hand the defaults to, so it reads them directly */
+:where(vaadin-input-container) {
+  position: relative;
+  min-height: var(--_lumo-field-input-height, var(--lumo-size-m));
+  --vaadin-input-field-padding: 0 calc(0.375em + var(--vaadin-radius-m) / 4 - 1px);
+  /* Inherits the text color, as in legacy. Fields set it on the host instead. */
+  color: var(--vaadin-input-field-value-color, inherit);
+  background: var(--_lumo-input-field-background);
+  border-width: var(--_lumo-input-field-border-width);
+  font-weight: var(--_lumo-input-field-value-font-weight);
+  gap: var(--_lumo-input-field-gap);
+
+  &:focus-within {
+    outline-offset: calc(var(--_lumo-input-field-border-width) * -1);
+  }
+
+  &[invalid] {
+    --vaadin-focus-ring-color: var(--lumo-error-color-50pct);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: calc(var(--_lumo-input-field-border-width) * -1);
+    border-radius: inherit;
+    pointer-events: none;
+    background: var(--lumo-contrast-50pct);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  &[readonly]::after {
+    opacity: 1;
+    background: transparent;
+    border: var(--vaadin-input-field-readonly-border, 1px dashed var(--lumo-contrast-30pct));
+  }
+
+  & > :is(input, textarea) {
+    padding-block: 0;
+    padding-inline: 0.25em;
+    line-height: normal;
+  }
+
+  @media (any-hover: hover) {
+    &:hover:not([readonly], [disabled], :focus-within)::after {
+      opacity: var(--vaadin-input-field-hover-highlight-opacity, 0.1);
+    }
+
+    &[invalid]:hover:not([readonly], [disabled], :focus-within)::after {
       background: var(--lumo-error-color-50pct);
     }
   }
@@ -147,4 +223,54 @@
   > :is([slot='input'], [slot='textarea'], [slot='value']) {
   padding-block: 0;
   padding-inline: 0.25em;
+}
+
+/* The input keeps its own line height, as in legacy, so a large font does not stretch it */
+:where(
+    vaadin-text-field,
+    vaadin-password-field,
+    vaadin-email-field,
+    vaadin-number-field,
+    vaadin-integer-field,
+    vaadin-combo-box,
+    vaadin-time-picker,
+    vaadin-date-picker
+  )
+  > [slot='input'] {
+  line-height: normal;
+}
+
+/* Legacy aligns to the writing direction: align-left is start and align-right is end */
+:where(
+    vaadin-text-field,
+    vaadin-password-field,
+    vaadin-email-field,
+    vaadin-number-field,
+    vaadin-integer-field,
+    vaadin-text-area,
+    vaadin-combo-box,
+    vaadin-time-picker,
+    vaadin-date-picker,
+    vaadin-select,
+    vaadin-input-container
+  )[theme~='align-left']
+  > :is([slot='input'], [slot='textarea'], [slot='value'], input, textarea) {
+  text-align: start;
+}
+
+:where(
+    vaadin-text-field,
+    vaadin-password-field,
+    vaadin-email-field,
+    vaadin-number-field,
+    vaadin-integer-field,
+    vaadin-text-area,
+    vaadin-combo-box,
+    vaadin-time-picker,
+    vaadin-date-picker,
+    vaadin-select,
+    vaadin-input-container
+  )[theme~='align-right']
+  > :is([slot='input'], [slot='textarea'], [slot='value'], input, textarea) {
+  text-align: end;
 }
