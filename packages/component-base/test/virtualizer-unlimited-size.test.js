@@ -127,7 +127,7 @@ describe('unlimited size', () => {
   it('should manually scroll to end after scroll to index', async () => {
     virtualizer.scrollToIndex(Math.floor(virtualizer.size / 2));
 
-    while (scrollTarget.scrollTop < scrollTarget.scrollHeight - scrollTarget.clientHeight) {
+    while (Math.ceil(scrollTarget.scrollTop) < scrollTarget.scrollHeight - scrollTarget.clientHeight) {
       scrollTarget.scrollTop = scrollTarget.scrollHeight - scrollTarget.clientHeight;
       await oneEvent(scrollTarget, 'scroll');
     }
@@ -139,7 +139,7 @@ describe('unlimited size', () => {
   it('should manually scroll to end after scroll to start', async () => {
     virtualizer.scrollToIndex(0);
 
-    while (scrollTarget.scrollTop < scrollTarget.scrollHeight - scrollTarget.clientHeight) {
+    while (Math.ceil(scrollTarget.scrollTop) < scrollTarget.scrollHeight - scrollTarget.clientHeight) {
       scrollTarget.scrollTop = scrollTarget.scrollHeight - scrollTarget.clientHeight;
       await oneEvent(scrollTarget, 'scroll');
     }
@@ -176,7 +176,7 @@ describe('unlimited size', () => {
     const elementCount = elementsContainer.children.length;
 
     let largestIndex;
-    while (scrollTarget.scrollTop < scrollTarget.scrollHeight - scrollTarget.clientHeight) {
+    while (Math.ceil(scrollTarget.scrollTop) < scrollTarget.scrollHeight - scrollTarget.clientHeight) {
       largestIndex = Math.max(...Array.from(elementsContainer.children).map((el) => el.index));
 
       scrollTarget.scrollTop += (elementHeight * elementCount) / 2;
