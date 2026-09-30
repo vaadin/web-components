@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-custom-field",
-  "version": "23.6.6",
+  "version": "23.6.7",
   "publishConfig": {
     "access": "public"
   },
@@ -33,6 +33,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/custom-field": "~23.6.6"
+    "@vaadin/custom-field": "~23.6.7"
   }
 }
