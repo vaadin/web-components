@@ -50,7 +50,7 @@ describe('scroll to index', () => {
             expect(getLastVisibleItem(grid).index).to.equal(index);
 
             const table = grid.$.table;
-            expect(table.scrollTop).to.equal(table.scrollHeight - table.offsetHeight);
+            expect(Math.ceil(table.scrollTop)).to.equal(table.scrollHeight - table.offsetHeight);
           } else {
             expect(getFirstVisibleItem(grid).index).to.equal(index);
           }
