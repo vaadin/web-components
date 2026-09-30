@@ -6,9 +6,9 @@
 @media lumo_components_custom-field {
   :host {
     display: inline-flex;
-    --lumo-text-field-size: var(--lumo-size-m);
+    --_lumo-field-size: var(--lumo-size-m);
     /* The height of the child fields, which follow the same property */
-    --_input-height: var(--vaadin-input-field-height, var(--lumo-text-field-size));
+    --_input-height: var(--vaadin-input-field-height, var(--_lumo-field-size));
     color: var(--lumo-body-text-color);
     font-size: var(--lumo-font-size-m);
     /* Centers native inputs in the input row */
@@ -80,7 +80,7 @@
   /* Small theme */
   :host([theme~='small']) {
     font-size: var(--lumo-font-size-s);
-    --lumo-text-field-size: var(--lumo-size-s);
+    --_lumo-field-size: var(--lumo-size-s);
   }
 
   :host([theme~='small']) [part='label'] {

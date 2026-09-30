@@ -7,7 +7,8 @@
   :host {
     display: inline-flex;
     outline: none;
-    --lumo-text-field-size: var(--lumo-size-m);
+    /* The default field height. The public --vaadin-input-field-height takes priority. */
+    --_lumo-field-size: var(--lumo-size-m);
     color: var(--vaadin-input-field-value-color, var(--lumo-body-text-color));
     font-size: var(--vaadin-input-field-value-font-size, var(--lumo-font-size-m));
     font-family: var(--lumo-font-family);
@@ -17,7 +18,7 @@
     padding: var(--_lumo-field-outer-padding, var(--lumo-space-xs)) 0;
     --_focus-ring-color: var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
-    --_input-height: var(--vaadin-input-field-height, var(--lumo-text-field-size));
+    --_input-height: var(--vaadin-input-field-height, var(--_lumo-field-size));
     --_disabled-value-color: var(--vaadin-input-field-disabled-value-color, var(--lumo-disabled-text-color));
   }
 
@@ -149,7 +150,7 @@
   /* Small theme */
   :host([theme~='small']) {
     font-size: var(--lumo-font-size-s);
-    --lumo-text-field-size: var(--lumo-size-s);
+    --_lumo-field-size: var(--lumo-size-s);
   }
 
   :host([theme~='small']) [part='label'] {

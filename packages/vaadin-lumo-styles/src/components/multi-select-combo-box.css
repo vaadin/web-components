@@ -87,11 +87,11 @@
 
   /* The chips stay at the top when the field is taller, so the guide keeps the default height */
   :host([auto-expand-vertically]) {
-    --_input-height: var(--lumo-text-field-size);
+    --_input-height: var(--_lumo-field-size);
   }
 
   :host([auto-expand-vertically]) [part='input-field'] {
-    --vaadin-input-field-height: calc(var(--lumo-text-field-size, var(--lumo-size-m)) - 2 * var(--lumo-space-xs));
+    --vaadin-input-field-height: calc(var(--_lumo-field-size) - 2 * var(--lumo-space-xs));
   }
 
   ::slotted([slot='chip']:not(:last-of-type)),
