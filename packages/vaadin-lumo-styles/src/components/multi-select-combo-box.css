@@ -73,6 +73,11 @@
     padding-inline-end: 0;
   }
 
+  /* The chips stay at the top when the field is taller, so the guide keeps the default height */
+  :host([auto-expand-vertically]) {
+    --_input-height: var(--lumo-text-field-size);
+  }
+
   :host([auto-expand-vertically]) ::slotted([slot='input']) {
     min-height: calc(var(--lumo-text-field-size, var(--lumo-size-m)) - 2 * var(--lumo-space-xs));
   }
