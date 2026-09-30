@@ -32,9 +32,10 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import Pointer from 'highcharts/es-modules/Core/Pointer.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
+import { deepMerge } from '@vaadin/component-base/src/object-utils.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
-import { deepMerge, inflateFunctions } from './helpers.js';
+import { inflateFunctions } from './helpers.js';
 
 ['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
   /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
