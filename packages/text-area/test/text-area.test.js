@@ -77,40 +77,6 @@ describe('text-area', () => {
       expect(newHeight).to.be.at.least(originalHeight + 10);
     });
 
-    it('should grow over the input field height custom property', async () => {
-      textArea.style.setProperty('--vaadin-input-field-height', '100px');
-      textArea.value = Array(400).join('400');
-      await nextUpdate(textArea);
-
-      expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.above(100);
-    });
-
-    it('should use the property as the input field height with one row', async () => {
-      textArea.minRows = 1;
-      await nextUpdate(textArea);
-
-      textArea.style.setProperty('--vaadin-input-field-height', '100px');
-      expect(parseFloat(window.getComputedStyle(inputField).height)).to.equal(100);
-    });
-
-    it('should keep the first line on the baseline when the input field height property is set', async () => {
-      const row = fixtureSync(
-        '<div style="display: flex; align-items: baseline; gap: 8px"><span>Reference</span></div>',
-      );
-      const reference = row.querySelector('span');
-      row.appendChild(textArea);
-      await nextUpdate(textArea);
-      // The first line stays at the top, so its offset must not change
-      const firstLineOffset = () =>
-        textArea.inputElement.getBoundingClientRect().top - reference.getBoundingClientRect().top;
-      const before = firstLineOffset();
-
-      row.style.setProperty('--vaadin-input-field-height', '100px');
-      await nextUpdate(textArea);
-
-      expect(firstLineOffset()).to.be.closeTo(before, 1);
-    });
-
     it('should not grow over max-height', async () => {
       inputField.style.padding = '0';
       inputField.style.border = 'none';
