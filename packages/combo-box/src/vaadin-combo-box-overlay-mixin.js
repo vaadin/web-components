@@ -8,6 +8,15 @@ import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin
 
 export const ComboBoxOverlayMixin = (superClass) =>
   class ComboBoxOverlayMixin extends PositionMixin(superClass) {
+    /**
+     * Override method from `OverlayFocusMixin` to opt out of focus management.
+     * @protected
+     * @override
+     */
+    static get manageFocus() {
+      return false;
+    }
+
     constructor() {
       super();
 
