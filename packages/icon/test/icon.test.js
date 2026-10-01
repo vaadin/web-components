@@ -397,6 +397,15 @@ describe('vaadin-icon', () => {
         expect(getComputedStyle(icon).fill).to.equal('rgb(0, 0, 255)');
       });
 
+      it('should use custom color for SVG elements with currentColor', () => {
+        icon.svg = unsafeSvgLiteral('<path fill="currentColor" stroke="currentColor"></path>');
+        icon.style.setProperty('--vaadin-icon-color', 'rgb(0, 0, 255)');
+        const path = svgElement.querySelector('path');
+
+        expect(getComputedStyle(path).fill).to.equal('rgb(0, 0, 255)');
+        expect(getComputedStyle(path).stroke).to.equal('rgb(0, 0, 255)');
+      });
+
       it('should override fill color', () => {
         icon.style.color = 'rgb(0, 0, 255)';
         icon.style.fill = 'rgb(0, 255, 0)';
