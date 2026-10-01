@@ -65,11 +65,25 @@ export const OverlayFocusMixin = (superClass) =>
       };
     }
 
+    /**
+     * Whether the overlay moves, traps and restores focus. Override to return
+     * false in overlays that never do: focus properties are then ignored and
+     * the focus controllers are not created.
+     * @protected
+     */
+    static get manageFocus() {
+      return true;
+    }
+
     constructor() {
       super();
 
-      this.__focusTrapController = new FocusTrapController(this);
-      this.__focusRestorationController = new FocusRestorationController();
+      this.__manageFocus = this.constructor.manageFocus;
+
+      if (this.__manageFocus) {
+        this.__focusTrapController = new FocusTrapController(this);
+        this.__focusRestorationController = new FocusRestorationController();
+      }
     }
 
     /**
@@ -85,8 +99,10 @@ export const OverlayFocusMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this.addController(this.__focusTrapController);
-      this.addController(this.__focusRestorationController);
+      if (this.__manageFocus) {
+        this.addController(this.__focusTrapController);
+        this.addController(this.__focusRestorationController);
+      }
     }
 
     /**
@@ -104,6 +120,10 @@ export const OverlayFocusMixin = (superClass) =>
      * @protected
      */
     _resetFocus() {
+      if (!this.__manageFocus) {
+        return;
+      }
+
       if (this.focusTrap) {
         this.__focusTrapController.releaseFocus();
       }
@@ -121,6 +141,10 @@ export const OverlayFocusMixin = (superClass) =>
      * @protected
      */
     _saveFocus() {
+      if (!this.__manageFocus) {
+        return;
+      }
+
       if (this.restoreFocusOnClose) {
         this.__focusRestorationController.saveFocus(this.restoreFocusNode);
       }
@@ -134,7 +158,7 @@ export const OverlayFocusMixin = (superClass) =>
      * @protected
      */
     _initFocus() {
-      if (isElementHidden(this._focusRoot)) {
+      if (!this.__manageFocus || isElementHidden(this._focusRoot)) {
         return;
       }
 
