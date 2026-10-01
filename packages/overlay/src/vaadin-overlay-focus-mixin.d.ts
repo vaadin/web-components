@@ -13,6 +13,9 @@ export declare class OverlayFocusMixinClass {
   /**
    * When true, opening the overlay moves focus to the first focusable child,
    * or to the overlay part with tabindex if there are no focusable children.
+   *
+   * An element inside the overlay that has `autofocus` set, such as
+   * `<vaadin-text-field autofocus>`, receives focus on open instead.
    * @attr {boolean} focus-trap
    */
   focusTrap: boolean;

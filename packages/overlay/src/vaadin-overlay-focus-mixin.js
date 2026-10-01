@@ -5,7 +5,13 @@
  */
 import { FocusRestorationController } from '@vaadin/a11y-base/src/focus-restoration-controller.js';
 import { FocusTrapController } from '@vaadin/a11y-base/src/focus-trap-controller.js';
-import { getDeepActiveElement, isElementHidden, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import {
+  getDeepActiveElement,
+  getFocusableElements,
+  isElementFocused,
+  isElementHidden,
+  isKeyboardActive,
+} from '@vaadin/a11y-base/src/focus-utils.js';
 
 export const OverlayFocusMixin = (superClass) =>
   class OverlayFocusMixin extends superClass {
@@ -14,6 +20,9 @@ export const OverlayFocusMixin = (superClass) =>
         /**
          * When true, opening the overlay moves focus to the first focusable child,
          * or to the overlay part with tabindex if there are no focusable children.
+         *
+         * An element inside the overlay that has `autofocus` set, such as
+         * `<vaadin-text-field autofocus>`, receives focus on open instead.
          * @attr {boolean} focus-trap
          */
         focusTrap: {
@@ -127,7 +136,9 @@ export const OverlayFocusMixin = (superClass) =>
     }
 
     /**
-     * Trap focus within the overlay after opening has completed.
+     * Trap focus within the overlay after opening has completed. Focus moves
+     * to the first element with `autofocus` inside the overlay, otherwise to
+     * the first focusable element.
      *
      * @protected
      */
@@ -137,6 +148,12 @@ export const OverlayFocusMixin = (superClass) =>
       }
 
       if (this.focusTrap && !isElementHidden(this._focusTrapRoot)) {
+        const focusables = getFocusableElements(this._focusTrapRoot);
+        if (!focusables.some(isElementFocused)) {
+          const target = focusables.find((el) => this.#hasAutofocus(el));
+          target?.focus({ focusVisible: isKeyboardActive() });
+        }
+
         this.__focusTrapController.trapFocus(this._focusTrapRoot);
       }
     }
@@ -176,5 +193,28 @@ export const OverlayFocusMixin = (superClass) =>
         n = n.parentNode || n.host;
       }
       return n === this._contentRoot;
+    }
+
+    /**
+     * Returns true if the element has `autofocus`, or belongs to a custom
+     * element that has it (e.g. the input of `<vaadin-text-field autofocus>`).
+     * As with native `autofocus`, a plain `<div autofocus>` does not apply to
+     * its children. Stops at the focus trap root, whose `autofocus` refers to the overlay.
+     * Walks the flat tree, the same way focusable elements are collected from the
+     * focus trap root, so it never leaves the overlay when content is slotted from the owner.
+     *
+     * @param {HTMLElement} element
+     * @return {boolean}
+     */
+    #hasAutofocus(element) {
+      const focusTrapRoot = this._focusTrapRoot;
+      let node = element;
+      while (node && node !== focusTrapRoot && node !== this) {
+        if (node.autofocus && (node === element || customElements.get(node.localName))) {
+          return true;
+        }
+        node = node.assignedSlot || node.parentNode || node.host;
+      }
+      return false;
     }
   };

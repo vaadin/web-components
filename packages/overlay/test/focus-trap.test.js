@@ -4,6 +4,66 @@ import '../src/vaadin-overlay.js';
 import './fixtures/mock-unmanaged-overlay.js';
 import { getFocusableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
+// A component that is not focusable itself, like a field that forwards focus to its input
+customElements.define('autofocus-host', class extends HTMLElement {});
+
+describe('autofocus', () => {
+  let overlay;
+
+  beforeEach(async () => {
+    overlay = fixtureSync('<vaadin-overlay focus-trap></vaadin-overlay>');
+    await nextRender();
+  });
+
+  afterEach(() => {
+    overlay.opened = false;
+  });
+
+  async function open() {
+    overlay.opened = true;
+    await oneEvent(overlay, 'vaadin-overlay-open');
+  }
+
+  function setContent(html) {
+    overlay.renderer = (root) => {
+      if (!root.firstChild) {
+        root.innerHTML = html;
+      }
+    };
+  }
+
+  function getButton(index) {
+    return overlay.querySelectorAll('button')[index];
+  }
+
+  it('should focus the element with autofocus attribute when opened', async () => {
+    setContent('<button>Button 1</button><button autofocus>Button 2</button>');
+    await open();
+    expect(isElementFocused(getButton(1))).to.be.true;
+  });
+
+  it('should focus the element inside a component with autofocus when opened', async () => {
+    setContent('<button>Button 1</button><autofocus-host autofocus><button>Button 2</button></autofocus-host>');
+    await open();
+    expect(isElementFocused(getButton(1))).to.be.true;
+  });
+
+  it('should not focus the element inside a plain element with autofocus when opened', async () => {
+    setContent('<button>Button 1</button><div autofocus><button>Button 2</button></div>');
+    await open();
+    expect(isElementFocused(overlay.$.overlay)).to.be.true;
+  });
+
+  it('should not move focus when an element inside the overlay is already focused', async () => {
+    overlay.renderer = (root) => {
+      root.innerHTML = '<button>Button 1</button><button autofocus>Button 2</button>';
+      root.querySelectorAll('button')[0].focus();
+    };
+    await open();
+    expect(isElementFocused(getButton(0))).to.be.true;
+  });
+});
+
 describe('focus-trap', () => {
   let overlay, overlayPart, focusableElements;
 
