@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/virtual-list",
-  "version": "24.4.18",
+  "version": "24.4.19",
   "publishConfig": {
     "access": "public"
   },
@@ -26,10 +26,10 @@
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
-    "web-types.json",
-    "web-types.lit.json",
     "!vaadin-lit-*.d.ts",
-    "!vaadin-lit-*.js"
+    "!vaadin-lit-*.js",
+    "web-types.json",
+    "web-types.lit.json"
   ],
   "keywords": [
     "Vaadin",
@@ -41,11 +41,11 @@
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "~24.4.18",
-    "@vaadin/lit-renderer": "~24.4.18",
-    "@vaadin/vaadin-lumo-styles": "~24.4.18",
-    "@vaadin/vaadin-material-styles": "~24.4.18",
-    "@vaadin/vaadin-themable-mixin": "~24.4.18",
+    "@vaadin/component-base": "~24.4.19",
+    "@vaadin/lit-renderer": "~24.4.19",
+    "@vaadin/vaadin-lumo-styles": "~24.4.19",
+    "@vaadin/vaadin-material-styles": "~24.4.19",
+    "@vaadin/vaadin-themable-mixin": "~24.4.19",
     "lit": "^3.0.0"
   },
   "devDependencies": {
