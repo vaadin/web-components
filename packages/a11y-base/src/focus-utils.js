@@ -284,7 +284,7 @@ export function getTabbableElements(element) {
  *
  * The method traverses nodes in shadow DOM trees too if any.
  *
- * @deprecated Use `getTabbableElements` instead.
+ * @deprecated This function is deprecated and will be removed in Vaadin 26. Use `getTabbableElements` instead.
  * @param {HTMLElement} element
  * @return {HTMLElement[]}
  */

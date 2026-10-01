@@ -63,6 +63,6 @@ export declare function getTabbableElements(element: HTMLElement): HTMLElement[]
  *
  * The method traverses nodes in shadow DOM trees too if any.
  *
- * @deprecated Use `getTabbableElements` instead.
+ * @deprecated This function is deprecated and will be removed in Vaadin 26. Use `getTabbableElements` instead.
  */
 export declare function getFocusableElements(element: HTMLElement): HTMLElement[];
