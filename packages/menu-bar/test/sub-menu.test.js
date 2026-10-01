@@ -201,21 +201,21 @@ describe('sub-menu', () => {
     expect(items[0].hasAttribute('focus-ring')).to.be.true;
   });
 
-  it('should focus first non-disabled item after re-opening when using components', async () => {
+  it('should focus first item after re-opening even if it is disabled when using components', async () => {
     menu.items[2].children[0].disabled = true;
 
     arrowDown(buttons[2]);
     await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
 
     const items = subMenuOverlay._contentRoot.querySelectorAll('vaadin-menu-bar-item');
-    expect(items[1].hasAttribute('focus-ring')).to.be.true;
+    expect(items[0].hasAttribute('focus-ring')).to.be.true;
 
     // Close and re-open
-    esc(items[1]);
+    esc(items[0]);
     arrowDown(buttons[2]);
     await oneEvent(subMenuOverlay, 'vaadin-overlay-open');
 
-    expect(items[1].hasAttribute('focus-ring')).to.be.true;
+    expect(items[0].hasAttribute('focus-ring')).to.be.true;
   });
 
   it('should close sub-menu on first item arrow up', async () => {
