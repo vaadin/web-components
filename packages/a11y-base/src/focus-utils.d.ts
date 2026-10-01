@@ -56,3 +56,13 @@ export declare function isElementFocused(element: HTMLElement): boolean;
  * The method traverses nodes in shadow DOM trees too if any.
  */
 export declare function getTabbableElements(element: HTMLElement): HTMLElement[];
+
+/**
+ * Returns a tab-ordered array of focusable elements for a root element.
+ * The resulting array will include the root element if it is focusable.
+ *
+ * The method traverses nodes in shadow DOM trees too if any.
+ *
+ * @deprecated Use `getTabbableElements` instead.
+ */
+export declare function getFocusableElements(element: HTMLElement): HTMLElement[];

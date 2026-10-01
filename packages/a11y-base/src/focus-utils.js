@@ -277,3 +277,17 @@ export function getTabbableElements(element) {
   }
   return focusableElements;
 }
+
+/**
+ * Returns a tab-ordered array of focusable elements for a root element.
+ * The resulting array will include the root element if it is focusable.
+ *
+ * The method traverses nodes in shadow DOM trees too if any.
+ *
+ * @deprecated Use `getTabbableElements` instead.
+ * @param {HTMLElement} element
+ * @return {HTMLElement[]}
+ */
+export function getFocusableElements(element) {
+  return getTabbableElements(element);
+}
