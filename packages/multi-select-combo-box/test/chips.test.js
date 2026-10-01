@@ -166,12 +166,60 @@ describe('chips', () => {
       expect(title).to.equal('apple, banana');
     });
 
+    describe('two-digit count', () => {
+      ['ltr', 'rtl'].forEach((dir) => {
+        describe(dir, () => {
+          before(() => {
+            document.documentElement.setAttribute('dir', dir);
+          });
+
+          after(() => {
+            document.documentElement.removeAttribute('dir');
+          });
+
+          beforeEach(async () => {
+            const items = Array.from({ length: 12 }, (_, i) => `Long item label ${i + 1}`);
+            comboBox.items = items;
+            // Select items one by one, so that the count of the overflow chip grows from one to two digits
+            for (let i = 1; i <= items.length; i++) {
+              comboBox.selectedItems = items.slice(0, i);
+              await nextRender();
+            }
+          });
+
+          it('should not shrink overflow chip below its label', () => {
+            expect(overflow.label).to.equal('11');
+            const label = overflow.shadowRoot.querySelector('[part="label"]');
+            expect(label.scrollWidth).to.be.at.most(label.clientWidth);
+          });
+
+          it('should fit chips and input into the input field', () => {
+            const wrapper = comboBox._inputField.$.wrapper.getBoundingClientRect();
+            const input = inputElement.getBoundingClientRect();
+            if (dir === 'ltr') {
+              expect(input.right).to.be.at.most(wrapper.right);
+            } else {
+              expect(input.left).to.be.at.least(wrapper.left);
+            }
+          });
+        });
+      });
+    });
+
     describe('resize', () => {
       beforeEach(async () => {
         comboBox.style.width = '250px';
         await nextResize(comboBox);
         comboBox.selectedItems = ['apple', 'banana', 'orange'];
         await nextRender();
+      });
+
+      it('should show all chips when they fit without the overflow chip', async () => {
+        comboBox.style.width = '340px';
+        await nextResize(comboBox);
+
+        expect(getChips(comboBox).length).to.equal(4);
+        expect(overflow.hasAttribute('hidden')).to.be.true;
       });
 
       it('should update overflow chip on resize when width changes', async () => {
@@ -187,7 +235,7 @@ describe('chips', () => {
       });
 
       it('should update overflow chip on clear button state change', async () => {
-        comboBox.style.width = '370px';
+        comboBox.style.width = '350px';
         await nextResize(comboBox);
 
         comboBox.clearButtonVisible = true;

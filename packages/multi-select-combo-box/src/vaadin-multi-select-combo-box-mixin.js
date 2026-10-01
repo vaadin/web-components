@@ -861,30 +861,39 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /** @private */
-    __getWrapperWidth() {
-      return this._inputField.$.wrapper.clientWidth;
+    __getWrapperGap() {
+      // The gap computes to `normal` when not set, which is 0 in a flex container
+      return parseFloat(getComputedStyle(this._inputField.$.wrapper).columnGap) || 0;
     }
 
     /** @private */
-    __getOverflowWidth() {
+    __getWrapperWidth() {
+      // Exclude the gap between the chips and the input, which is always present
+      return this._inputField.$.wrapper.clientWidth - this.__getWrapperGap();
+    }
+
+    /**
+     * Returns the space that the overflow chip with the given count takes in front of
+     * the chips, including its margins and the gap after it.
+     * @private
+     */
+    __getOverflowWidth(count) {
       const chip = this._overflow;
 
+      // The observer of `_overflowItems` sets the final label and count after the layout
       chip.style.visibility = 'hidden';
       chip.removeAttribute('hidden');
+      chip.label = `${count}`;
+      chip.setAttribute('count', `${count}`);
 
-      const count = chip.getAttribute('count');
+      const { marginInlineStart, marginInlineEnd } = getComputedStyle(chip);
+      const overflowWidth =
+        chip.offsetWidth + parseFloat(marginInlineStart) + parseFloat(marginInlineEnd) + this.__getWrapperGap();
 
-      // Detect max possible width of the overflow chip
-      // by measuring it with widest number (2 digits)
-      chip.setAttribute('count', '99');
-      const overflowStyle = getComputedStyle(chip);
-      const overflowWidth = chip.clientWidth + parseInt(overflowStyle.marginInlineStart);
-
-      chip.setAttribute('count', count);
       chip.setAttribute('hidden', '');
       chip.style.visibility = '';
 
-      return overflowWidth;
+      return Math.ceil(overflowWidth);
     }
 
     /** @private */
@@ -958,21 +967,23 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
       // Remove chips from the end until there is enough width for the input element to fit,
       // keeping at least one chip visible
-      const overflowWidth = this.__getOverflowWidth();
+      const wrapperWidth = this.__getWrapperWidth();
       let visibleCount = chips.length;
+      let overflowWidth = 0;
 
       while (visibleCount > 1) {
         visibleCount -= 1;
         chips[visibleCount].remove();
+        overflowWidth = this.__getOverflowWidth(items.length - visibleCount);
 
-        if (this.__getWrapperWidth() - this.$.chips.clientWidth >= inputWidth + overflowWidth) {
+        if (wrapperWidth - this.$.chips.clientWidth >= inputWidth + overflowWidth) {
           break;
         }
       }
 
       if (visibleCount === 1) {
         const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
-        const remainingWidth = this.__getWrapperWidth() - inputWidth - overflowWidth;
+        const remainingWidth = wrapperWidth - inputWidth - overflowWidth;
         chips[0].style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;
       }
 
@@ -981,11 +992,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     /** @private */
     __updateChipsDefault(items, inputWidth) {
-      let remainingWidth = this.__getWrapperWidth() - inputWidth;
-
-      if (items.length > 1) {
-        remainingWidth -= this.__getOverflowWidth();
-      }
+      const availableWidth = this.__getWrapperWidth() - inputWidth;
 
       const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
 
@@ -993,6 +1000,9 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       for (let i = items.length - 1, refNode = null; i >= 0; i--) {
         const chip = this.__createChip(items[i]);
         this.insertBefore(chip, refNode);
+
+        // Reserve space for the overflow chip with the items that are not added yet
+        const remainingWidth = availableWidth - (i > 0 ? this.__getOverflowWidth(i) : 0);
 
         if (this.$.chips.clientWidth > remainingWidth) {
           // If there is no more space for chips, or if there is at least one
