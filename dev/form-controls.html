@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form controls</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/text-field';
+      import '@vaadin/checkbox';
+    </script>
+  </head>
+
+  <body>
+    <section class="section vaadin-themed-html">
+      <h2 class="heading">Inside an element with the vaadin-themed-html class</h2>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+        <input placeholder="Text" />
+        <input type="email" placeholder="Email" />
+        <input type="number" value="42" />
+        <input type="date" />
+        <input value="Read-only" readonly />
+        <input value="Disabled" disabled />
+        <input required placeholder="Required" />
+        <select>
+          <option>Option one</option>
+          <option>Option two</option>
+        </select>
+        <textarea placeholder="Text area"></textarea>
+        <button>Button</button>
+        <input type="submit" />
+        <button disabled>Disabled</button>
+        <input type="file" />
+        <label><input type="checkbox" checked /> Checkbox</label>
+        <label><input type="radio" name="radio" checked /> Radio</label>
+        <label><input type="radio" name="radio" /> Radio</label>
+        <input type="range" />
+        <progress value="0.5"></progress>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="heading">Without the class</h2>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+        <input placeholder="Text" />
+        <input type="email" placeholder="Email" />
+        <input type="number" value="42" />
+        <input type="date" />
+        <input value="Read-only" readonly />
+        <input value="Disabled" disabled />
+        <input required placeholder="Required" />
+        <select>
+          <option>Option one</option>
+          <option>Option two</option>
+        </select>
+        <textarea placeholder="Text area"></textarea>
+        <button>Button</button>
+        <input type="submit" />
+        <button disabled>Disabled</button>
+        <input type="file" />
+        <label><input type="checkbox" checked /> Checkbox</label>
+        <label><input type="radio" name="radio" checked /> Radio</label>
+        <label><input type="radio" name="radio" /> Radio</label>
+        <input type="range" />
+        <progress value="0.5"></progress>
+      </div>
+    </section>
+
+    <section class="section vaadin-themed-html">
+      <h2 class="heading">Next to Vaadin components</h2>
+      <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px">
+        <vaadin-text-field placeholder="Vaadin text field"></vaadin-text-field>
+        <input placeholder="Native input" />
+        <vaadin-checkbox label="Vaadin checkbox" checked></vaadin-checkbox>
+        <label><input type="checkbox" checked /> Native checkbox</label>
+      </div>
+    </section>
+  </body>
+</html>

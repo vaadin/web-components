@@ -1,0 +1,157 @@
+:where(
+  .vaadin-themed-html :is(button, input, meter, progress, select, textarea):not(.vaadin-unthemed-html),
+  :is(button, input, meter, progress, select, textarea).vaadin-themed-html
+):where(:not([slot='input'], [slot='textarea'])) {
+  /* The UA stylesheet gives form controls a system font of their own. */
+  font-family: inherit;
+  line-height: inherit;
+  accent-color: var(--aura-accent-color);
+
+  /* Text inputs, text areas and selects look like the input field of a Vaadin text field. */
+  &:where(
+    input:not([type]),
+    input:is(
+      [type='date'],
+      [type='datetime-local'],
+      [type='email'],
+      [type='month'],
+      [type='number'],
+      [type='password'],
+      [type='search'],
+      [type='tel'],
+      [type='text'],
+      [type='time'],
+      [type='url'],
+      [type='week']
+    ),
+    select,
+    textarea
+  ) {
+    --aura-surface-level: 4;
+    --aura-surface-opacity: 0.7;
+    box-sizing: border-box;
+    padding: var(--vaadin-padding-block-container) var(--vaadin-padding-inline-container);
+    border: 1px solid var(--vaadin-border-color);
+    border-radius: var(--vaadin-radius-m);
+    background: var(--aura-surface-color) padding-box;
+    box-shadow: var(--aura-shadow-xs);
+    color: var(--vaadin-text-color);
+    caret-color: var(--vaadin-focus-ring-color);
+    font-size: var(--vaadin-input-field-value-font-size, inherit);
+
+    &::placeholder {
+      color: var(--vaadin-text-color-secondary);
+      opacity: 1;
+    }
+
+    &:focus-visible {
+      outline: var(--vaadin-focus-ring-width, 2px) solid var(--vaadin-focus-ring-color);
+      outline-offset: -1px;
+    }
+
+    &:user-invalid {
+      border-color: var(--vaadin-input-field-error-color);
+    }
+
+    /* Not :read-only, which also matches a <select> */
+    &[readonly] {
+      --aura-surface-opacity: 0;
+      border-style: dashed;
+      box-shadow: none;
+
+      &:focus-visible {
+        outline-style: dashed;
+      }
+    }
+
+    &:disabled {
+      border-color: transparent;
+      background-color: var(--vaadin-background-container-strong);
+      box-shadow: none;
+      color: var(--vaadin-text-color-disabled);
+      cursor: var(--vaadin-disabled-cursor, not-allowed);
+    }
+  }
+
+  /* Buttons look like a Vaadin button. */
+  &:where(button, input:is([type='button'], [type='reset'], [type='submit'])),
+  &[type='file']::file-selector-button {
+    --aura-surface-level: 4;
+    --aura-surface-opacity: 0.5;
+    box-sizing: border-box;
+    padding: var(--vaadin-padding-block-container) var(--vaadin-padding-m);
+    border: 1px solid var(--aura-accent-border-color);
+    border-radius: var(--vaadin-radius-m);
+    background: var(--aura-accent-surface) padding-box;
+    box-shadow: var(--aura-shadow-xs);
+    color: var(--aura-accent-text-color);
+    font: inherit;
+    font-weight: var(--aura-font-weight-medium);
+    cursor: var(--vaadin-clickable-cursor, pointer);
+    transition: background-color 100ms;
+  }
+
+  &:where(button, input:is([type='button'], [type='reset'], [type='submit'])) {
+    &:focus-visible {
+      outline: var(--vaadin-focus-ring-width, 2px) solid var(--vaadin-focus-ring-color);
+      outline-offset: -1px;
+    }
+
+    &:active:not(:disabled) {
+      box-shadow: none;
+      background-image: linear-gradient(color-mix(in srgb, currentColor 8%, transparent) 0 0);
+    }
+
+    &:disabled {
+      box-shadow: none;
+      opacity: 0.5;
+      cursor: var(--vaadin-disabled-cursor, not-allowed);
+    }
+  }
+
+  @media (any-hover: hover) {
+    &:where(button, input:is([type='button'], [type='reset'], [type='submit'])):hover:not(:disabled, :active),
+    &[type='file']:hover:not(:disabled)::file-selector-button {
+      background-image: linear-gradient(color-mix(in srgb, currentColor 3%, transparent) 0 0);
+    }
+  }
+
+  &[type='file'] {
+    color: var(--vaadin-text-color-secondary);
+
+    &::file-selector-button {
+      margin-inline-end: var(--vaadin-gap-s);
+    }
+
+    &:focus-visible {
+      outline: var(--vaadin-focus-ring-width, 2px) solid var(--vaadin-focus-ring-color);
+      outline-offset: 1px;
+      border-radius: var(--vaadin-radius-m);
+    }
+  }
+
+  /* Checkboxes, radio buttons and sliders keep the native look, in the accent color and at
+     the size of a Vaadin checkbox. */
+  &[type='checkbox'] {
+    width: var(--vaadin-checkbox-size);
+    height: var(--vaadin-checkbox-size);
+  }
+
+  &[type='radio'] {
+    width: var(--vaadin-radio-button-size);
+    height: var(--vaadin-radio-button-size);
+  }
+
+  &:where([type='checkbox'], [type='radio'], [type='range']) {
+    cursor: var(--vaadin-clickable-cursor, pointer);
+
+    &:focus-visible {
+      outline: var(--vaadin-focus-ring-width, 2px) solid var(--vaadin-focus-ring-color);
+      outline-offset: 1px;
+    }
+
+    &:disabled {
+      cursor: var(--vaadin-disabled-cursor, not-allowed);
+    }
+  }
+}

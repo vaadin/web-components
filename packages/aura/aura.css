@@ -6,6 +6,8 @@
 @import './src/surface.css';
 @import './src/table.css';
 @import './src/typography.css';
+/* After surface.css, so that a form control can adjust its own surface opacity */
+@import './src/form-controls.css';
 
 @import './src/components/overlay.css';
 @import './src/components/item-overlay.css';

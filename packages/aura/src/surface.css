@@ -34,6 +34,11 @@ vaadin-tab,
 vaadin-tabs,
 vaadin-upload,
 vaadin-upload-file,
+:where(
+  .vaadin-themed-html
+    :is(button, input, select, textarea):not(.vaadin-unthemed-html, [slot='input'], [slot='textarea']),
+  :is(button, input, select, textarea).vaadin-themed-html:not([slot='input'], [slot='textarea'])
+),
 ::part(input-field),
 :where(
   vaadin-avatar-group,
