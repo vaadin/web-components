@@ -26,6 +26,7 @@ import 'highcharts/es-modules/masters/modules/timeline.src.js';
 import 'highcharts/es-modules/masters/modules/organization.src.js';
 import 'highcharts/es-modules/masters/modules/xrange.src.js';
 import 'highcharts/es-modules/masters/modules/bullet.src.js';
+import './highcharts-patches.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
