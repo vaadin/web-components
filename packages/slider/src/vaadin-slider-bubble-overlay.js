@@ -35,6 +35,15 @@ class SliderBubbleOverlay extends PositionMixin(
     return { ...super.lumoInjector, includeBaseStyles: true };
   }
 
+  /**
+   * Override method from `OverlayFocusMixin` to opt out of focus management.
+   * @protected
+   * @override
+   */
+  static get manageFocus() {
+    return false;
+  }
+
   /** @protected */
   render() {
     return html`
