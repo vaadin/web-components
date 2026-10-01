@@ -4,6 +4,7 @@
 @import './src/shadow.css';
 @import './src/size.css';
 @import './src/surface.css';
+@import './src/table.css';
 @import './src/typography.css';
 
 @import './src/components/overlay.css';
