@@ -50,6 +50,25 @@ describe('multi-select-combo-box', () => {
     });
   });
 
+  describe('RTL', () => {
+    before(() => {
+      document.documentElement.setAttribute('dir', 'rtl');
+    });
+
+    after(() => {
+      document.documentElement.removeAttribute('dir');
+    });
+
+    beforeEach(() => {
+      element.style.width = '250px';
+      element.selectedItems = ['Apple', 'Banana', 'Lemon', 'Pear'];
+    });
+
+    it('overflow', async () => {
+      await visualDiff(div, 'selected-overflow-rtl');
+    });
+  });
+
   describe('opened', () => {
     beforeEach(() => {
       div.style.height = '200px';

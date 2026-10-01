@@ -52,6 +52,10 @@ export const multiSelectComboBoxChipStyles = css`
     translate: 25%;
   }
 
+  :host(:dir(rtl)) [part='remove-button'] {
+    translate: -25%;
+  }
+
   [part='remove-button']::before {
     content: '';
     display: block;
@@ -90,11 +94,11 @@ export const multiSelectComboBoxChipStyles = css`
   }
 
   :host([slot='overflow'])::before {
-    left: calc(-4px - var(--vaadin-chip-border-width, 1px));
+    inset-inline-start: calc(-4px - var(--vaadin-chip-border-width, 1px));
   }
 
   :host([slot='overflow'])::after {
-    left: calc(-8px - var(--vaadin-chip-border-width, 1px));
+    inset-inline-start: calc(-8px - var(--vaadin-chip-border-width, 1px));
   }
 
   :host([count='2']) {
