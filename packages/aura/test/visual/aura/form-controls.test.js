@@ -59,6 +59,18 @@ describe('form-controls', () => {
     await visualDiff(wrapper, 'form-controls-focus-visible');
   });
 
+  it('user-invalid', async () => {
+    wrapper.classList.add('vaadin-themed-html');
+    const input = controls[1];
+    input.value = '';
+    input.required = true;
+    input.focus();
+    await sendKeys({ type: 'a' });
+    await sendKeys({ press: 'Backspace' });
+    input.blur();
+    await visualDiff(wrapper, 'form-controls-user-invalid');
+  });
+
   it('slotted input of a component', async () => {
     wrapper.classList.add('vaadin-themed-html');
     controls.forEach((control) =>

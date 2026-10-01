@@ -1,3 +1,5 @@
+/* Keep the selector in sync with the native form control selectors in color.css and surface.css,
+   which compute the surface and accent colors that these styles use. */
 :where(
   .vaadin-themed-html :is(button, input, meter, progress, select, textarea):not(.vaadin-unthemed-html),
   :is(button, input, meter, progress, select, textarea).vaadin-themed-html
@@ -88,7 +90,6 @@
     font: inherit;
     font-weight: var(--aura-font-weight-medium);
     cursor: var(--vaadin-clickable-cursor, pointer);
-    transition: background-color 100ms;
   }
 
   &:where(button, input:is([type='button'], [type='reset'], [type='submit'])) {
