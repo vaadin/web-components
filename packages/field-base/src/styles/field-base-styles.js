@@ -17,11 +17,11 @@ export const field = css`
     --_rows-after-input: ;
     --_gap: var(--vaadin-input-field-container-gap, var(--vaadin-gap-xs));
     --_gap-s: round(var(--_gap) / 3, 2px);
-    /* Single-line input-field height. Only used on ::before, where 1lh resolves */
+    /* Single-line input-field height, 1lh resolves on ::before */
     --_field-input-default-height: calc(
       1lh + var(--vaadin-padding-block-container) * 2 + var(--vaadin-input-field-border-width, 1px) * 2
     );
-    /* Input-field height that the baseline guide mirrors */
+    /* Input-field height mirrored by the baseline guide */
     --_field-input-height: var(--_field-input-default-height);
     display: inline-grid;
     grid-template:
@@ -66,7 +66,7 @@ export const field = css`
     grid-column: baseline;
     grid-row: 1 / baseline;
     align-self: end;
-    /* Center the text the same way as the input container */
+    /* Center text like the input container */
     display: flex;
     align-items: center;
     box-sizing: border-box;

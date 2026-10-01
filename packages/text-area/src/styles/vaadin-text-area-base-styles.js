@@ -9,7 +9,7 @@ import { css } from 'lit';
 export const textAreaStyles = css`
   :host {
     height: auto;
-    /* Content stays at the top of a taller input field, so the baseline guide keeps the default height */
+    /* Content stays at the top, keep the default guide height */
     --_field-input-height: var(--_field-input-default-height);
   }
 
