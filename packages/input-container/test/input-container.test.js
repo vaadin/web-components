@@ -86,7 +86,7 @@ describe('vaadin-input-container', () => {
       expect(container.getBoundingClientRect().height).to.equal(height + 20);
     });
 
-    it('should not shrink the input container below its content height', () => {
+    it('should not shrink the input container below its default height', () => {
       const height = container.getBoundingClientRect().height;
       container.style.setProperty('--vaadin-input-field-height', '1px');
       expect(container.getBoundingClientRect().height).to.equal(height);

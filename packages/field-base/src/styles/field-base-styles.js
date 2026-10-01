@@ -18,11 +18,11 @@ export const field = css`
     --_gap: var(--vaadin-input-field-container-gap, var(--vaadin-gap-xs));
     --_gap-s: round(var(--_gap) / 3, 2px);
     /* Single-line input-field height. Only used on ::before, where 1lh resolves */
-    --_field-content-height: calc(
+    --_field-input-default-height: calc(
       1lh + var(--vaadin-padding-block-container) * 2 + var(--vaadin-input-field-border-width, 1px) * 2
     );
     /* Input-field height that the baseline guide mirrors */
-    --_field-input-height: var(--_field-content-height);
+    --_field-input-height: var(--_field-input-default-height);
     display: inline-grid;
     grid-template:
       '                           label' auto
@@ -244,6 +244,6 @@ export const fieldLabelAside = css`
 
 export const fieldInputHeight = css`
   :host {
-    --_field-input-height: max(var(--vaadin-input-field-height, 0px), var(--_field-content-height));
+    --_field-input-height: max(var(--vaadin-input-field-height, 0px), var(--_field-input-default-height));
   }
 `;
