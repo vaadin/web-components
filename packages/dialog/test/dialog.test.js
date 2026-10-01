@@ -317,6 +317,32 @@ describe('vaadin-dialog', () => {
     });
   });
 
+  describe('autofocus', () => {
+    let dialog;
+
+    beforeEach(async () => {
+      dialog = fixtureSync(`
+        <vaadin-dialog>
+          <input />
+          <input autofocus />
+        </vaadin-dialog>
+      `);
+      await nextRender();
+    });
+
+    afterEach(async () => {
+      dialog.opened = false;
+      await nextRender();
+    });
+
+    it('should focus the element with autofocus on open', async () => {
+      const opened = oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
+      dialog.opened = true;
+      await opened;
+      expect(getDeepActiveElement()).to.equal(dialog.querySelectorAll('input')[1]);
+    });
+  });
+
   describe('position/sizing', () => {
     let dialog, overlay;
 
