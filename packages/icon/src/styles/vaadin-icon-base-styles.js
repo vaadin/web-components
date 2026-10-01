@@ -15,7 +15,8 @@ export const iconStyles = css`
     width: var(--vaadin-icon-size, 1lh);
     height: var(--vaadin-icon-size, 1lh);
     flex: none;
-    fill: var(--vaadin-icon-color, currentColor);
+    color: var(--vaadin-icon-color, currentColor);
+    fill: currentColor;
     container-type: size;
   }
 
