@@ -618,6 +618,24 @@ describe('text-area', () => {
 
         expect(textArea.clientHeight).to.equal(lineHeight * 4 + padding + border);
       });
+
+      it('should use the input field height property as minimum over max-height', async () => {
+        textArea.maxRows = 2;
+        textArea.style.setProperty('--vaadin-input-field-height', `${lineHeight * 4 + padding + border}px`);
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 4 + padding + border);
+      });
+
+      it('should stop growing at max-rows when the input field height property is below', async () => {
+        textArea.maxRows = 2;
+        textArea.style.setProperty('--vaadin-input-field-height', '1px');
+        textArea.value = Array(400).join('400');
+        await nextUpdate(textArea);
+
+        expect(textArea.clientHeight).to.equal(lineHeight * 2 + padding + border);
+      });
     });
 
     describe('--_text-area-vertical-scroll-position CSS variable', () => {

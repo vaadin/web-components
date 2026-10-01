@@ -71,6 +71,19 @@ describe('field-base', () => {
           element.setAttribute('theme', 'helper-above-field');
           await visualDiff(div, `${dir}-label-helper-above-field`);
         });
+
+        describe('custom CSS properties', () => {
+          it('custom input field height', async () => {
+            div.style.setProperty('--vaadin-input-field-height', '56px');
+            await visualDiff(div, `${dir}-css-props-height`);
+          });
+
+          it('label and custom input field height', async () => {
+            element.label = 'Label';
+            div.style.setProperty('--vaadin-input-field-height', '56px');
+            await visualDiff(div, `${dir}-css-props-label-height`);
+          });
+        });
       });
     });
   });

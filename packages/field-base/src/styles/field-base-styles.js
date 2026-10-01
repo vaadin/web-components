@@ -17,6 +17,12 @@ export const field = css`
     --_rows-after-input: ;
     --_gap: var(--vaadin-input-field-container-gap, var(--vaadin-gap-xs));
     --_gap-s: round(var(--_gap) / 3, 2px);
+    /* Single-line input-field height, 1lh resolves on ::before */
+    --_field-input-default-height: calc(
+      1lh + var(--vaadin-padding-block-container) * 2 + var(--vaadin-input-field-border-width, 1px) * 2
+    );
+    /* Input-field height mirrored by the baseline guide */
+    --_field-input-height: var(--_field-input-default-height);
     display: inline-grid;
     grid-template:
       '                           label' auto
@@ -55,10 +61,16 @@ export const field = css`
 
   /* Baseline alignment guide */
   :host::before {
+    --_baseline-height: var(--vaadin-field-baseline-input-height, var(--_field-input-height));
     content: '\\2003' / '';
     grid-column: baseline;
     grid-row: 1 / baseline;
     align-self: end;
+    /* Center text like the input container */
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: var(--_baseline-height);
     font-size: var(--vaadin-input-field-value-font-size, inherit);
     line-height: var(--vaadin-input-field-value-line-height, inherit);
     padding: var(
@@ -67,13 +79,7 @@ export const field = css`
     );
     border: var(--vaadin-input-field-border-width, 1px) solid transparent;
     pointer-events: none;
-    margin-bottom: calc(
-      var(
-          --vaadin-field-baseline-input-height,
-          (1lh + var(--vaadin-padding-block-container) * 2 + var(--vaadin-input-field-border-width, 1px) * 2)
-        ) *
-        -1
-    );
+    margin-bottom: calc(var(--_baseline-height) * -1);
   }
 
   [class$='container'] {
@@ -233,5 +239,11 @@ export const fieldLabelAside = css`
   :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='group-field'],
   :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='input-fields'] {
     align-self: baseline;
+  }
+`;
+
+export const fieldInputHeight = css`
+  :host {
+    --_field-input-height: max(var(--vaadin-input-field-height, 0px), var(--_field-input-default-height));
   }
 `;

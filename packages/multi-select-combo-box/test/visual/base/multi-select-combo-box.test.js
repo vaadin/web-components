@@ -158,6 +158,18 @@ describe('multi-select-combo-box', () => {
     });
   });
 
+  describe('custom CSS properties', () => {
+    it('custom input field height', async () => {
+      div.style.display = 'inline-flex';
+      div.style.alignItems = 'baseline';
+      div.style.setProperty('--vaadin-input-field-height', '56px');
+      div.insertAdjacentHTML('afterbegin', '<span>Text</span>');
+      element.label = 'Label';
+      element.selectedItems = ['Apple', 'Banana'];
+      await visualDiff(div, 'css-props-height');
+    });
+  });
+
   describe('opened', () => {
     beforeEach(() => {
       div.style.height = '200px';

@@ -12,6 +12,8 @@ export const multiSelectComboBoxStyles = [
   css`
     :host {
       max-width: 100%;
+      /* Content stays at the top, keep the default guide height */
+      --_field-input-height: var(--_field-input-default-height);
       --_input-min-width: var(--vaadin-multi-select-combo-box-input-min-width, 4rem);
       --_chip-min-width: var(--vaadin-multi-select-combo-box-chip-min-width, 48px);
       --_wrapper-gap: var(--vaadin-multi-select-combo-box-chips-gap, 2px);
