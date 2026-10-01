@@ -6,7 +6,7 @@
 import './vaadin-popover-overlay.js';
 import { css, html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
+import { getDeepActiveElement, isKeyboardActive } from '@vaadin/a11y-base/src/focus-utils.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
@@ -272,6 +272,9 @@ class Popover extends PopoverPositionMixin(
       /**
        * When true, the popover content automatically receives focus after
        * it is opened. Modal popovers use this behavior by default.
+       *
+       * A field with `autofocus` inside the popover receives focus on open
+       * even when this is false.
        */
       autofocus: {
         type: Boolean,
@@ -907,7 +910,8 @@ class Popover extends PopoverPositionMixin(
 
   /** @private */
   __onOverlayOpened() {
-    if (this.autofocus && !this.modal) {
+    // Do not take focus from the content, e.g. from an element with `autofocus`
+    if (this.autofocus && !this.modal && !this._overlayElement._deepContains(getDeepActiveElement())) {
       this.focus();
     }
   }
