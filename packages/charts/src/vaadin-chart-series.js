@@ -10,7 +10,8 @@
  */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
-import { Chart, deepMerge } from './vaadin-chart.js';
+import { deepMerge } from '@vaadin/component-base/src/object-utils.js';
+import { Chart } from './vaadin-chart.js';
 
 /**
  * `<vaadin-chart-series>` is a custom element for creating series for Vaadin Charts.
