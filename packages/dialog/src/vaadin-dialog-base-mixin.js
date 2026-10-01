@@ -50,6 +50,9 @@ export const DialogBaseMixin = (superClass) =>
          * Set to true to prevent the dialog from receiving focus
          * on open and trapping it inside.
          *
+         * A field with `autofocus` inside the dialog still receives
+         * focus on open.
+         *
          * @attr {boolean} no-focus-trap
          * @deprecated This property is deprecated and will be removed in Vaadin 26.
          */
@@ -63,6 +66,9 @@ export const DialogBaseMixin = (superClass) =>
          *
          * This property only works for non-modal dialogs and is ignored
          * for modal ones, where focus must always stay inside.
+         *
+         * A field with `autofocus` inside the dialog still receives
+         * focus on open.
          *
          * @attr {boolean} no-autofocus
          */
