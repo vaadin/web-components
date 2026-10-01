@@ -128,6 +128,26 @@ describe('multi-select-combo-box', () => {
     });
   });
 
+  describe('RTL', () => {
+    before(() => {
+      document.documentElement.setAttribute('dir', 'rtl');
+    });
+
+    after(() => {
+      document.documentElement.removeAttribute('dir');
+    });
+
+    beforeEach(async () => {
+      element.style.width = '250px';
+      element.selectedItems = ['Apple', 'Banana', 'Lemon', 'Pear'];
+      await nextResize(element);
+    });
+
+    it('overflow', async () => {
+      await visualDiff(div, 'selected-overflow-rtl');
+    });
+  });
+
   describe('auto expand', () => {
     beforeEach(() => {
       element.selectedItems = [...element.items];
