@@ -1,6 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import '../src/vaadin-overlay.js';
+import './fixtures/mock-unmanaged-overlay.js';
 import { getFocusableElements, isElementFocused } from '@vaadin/a11y-base/src/focus-utils.js';
 
 describe('focus-trap', () => {
@@ -148,6 +149,95 @@ describe('focus-trap', () => {
       tabKeyDown(button);
 
       expect(getFocusedElementIndex()).to.equal(0);
+    });
+  });
+});
+
+describe('manageFocus', () => {
+  let wrapper, overlay, outsideButton;
+
+  function createOverlay(tag) {
+    wrapper = fixtureSync(`
+      <div>
+        <button id="outside">Outside</button>
+        <${tag} focus-trap restore-focus-on-close></${tag}>
+      </div>
+    `);
+    outsideButton = wrapper.querySelector('#outside');
+    overlay = wrapper.lastElementChild;
+    overlay.renderer = (root) => {
+      if (!root.firstChild) {
+        root.innerHTML = `
+          <button>Button 1</button>
+          <button>Button 2</button>
+        `;
+      }
+    };
+  }
+
+  async function open() {
+    overlay.opened = true;
+    await oneEvent(overlay, 'vaadin-overlay-open');
+  }
+
+  afterEach(() => {
+    overlay.opened = false;
+  });
+
+  describe('default', () => {
+    beforeEach(async () => {
+      createOverlay('vaadin-overlay');
+      await nextRender();
+      outsideButton.focus();
+    });
+
+    it('should move focus into the overlay on open', async () => {
+      await open();
+      expect(isElementFocused(overlay.$.overlay)).to.be.true;
+    });
+
+    it('should wrap focus to the first element on Tab from the last element', async () => {
+      await open();
+      const tabbables = getFocusableElements(overlay.$.overlay);
+      const last = tabbables[tabbables.length - 1];
+      last.focus();
+      tabKeyDown(last);
+      expect(isElementFocused(tabbables[0])).to.be.true;
+    });
+
+    it('should restore focus on close', async () => {
+      await open();
+      overlay.opened = false;
+      expect(isElementFocused(outsideButton)).to.be.true;
+    });
+  });
+
+  describe('false', () => {
+    beforeEach(async () => {
+      createOverlay('mock-unmanaged-overlay');
+      await nextRender();
+      outsideButton.focus();
+    });
+
+    it('should not move focus into the overlay on open', async () => {
+      await open();
+      expect(isElementFocused(outsideButton)).to.be.true;
+    });
+
+    it('should not wrap focus to the first element on Tab from the last element', async () => {
+      await open();
+      const tabbables = getFocusableElements(overlay.$.overlay);
+      const last = tabbables[tabbables.length - 1];
+      last.focus();
+      tabKeyDown(last);
+      expect(isElementFocused(tabbables[0])).to.be.false;
+    });
+
+    it('should not restore focus on close', async () => {
+      await open();
+      overlay.querySelector('button').focus();
+      overlay.opened = false;
+      expect(isElementFocused(outsideButton)).to.be.false;
     });
   });
 });
