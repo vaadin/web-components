@@ -33,17 +33,10 @@
     height: 0.4em;
   }
 
+  /* The error icon reset and the invalid indicator color come from field.css */
   &::part(error-message) {
     padding-inline-start: var(--lumo-space-xs);
     margin: 0 0 0.4em;
-  }
-
-  &::part(error-message)::before {
-    content: none;
-  }
-
-  &[invalid] {
-    --vaadin-input-field-required-indicator-color: var(--lumo-error-text-color);
   }
 
   /* Required: the indicator sits at the end of the label, inside its end padding */
