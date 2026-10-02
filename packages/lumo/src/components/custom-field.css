@@ -2,13 +2,6 @@
    the outer padding, so the child fields drop theirs. */
 :where(vaadin-custom-field, vaadin-date-time-picker) {
   padding: var(--_lumo-field-outer-padding, var(--lumo-space-xs)) 0;
-
-  &[theme~='small'] {
-    --_lumo-field-input-height: var(--vaadin-input-field-height, var(--lumo-size-s));
-    font-size: var(--lumo-font-size-s);
-    --vaadin-input-field-label-font-size: var(--lumo-font-size-xs);
-    --vaadin-input-field-error-font-size: var(--lumo-font-size-xxs);
-  }
 }
 
 /* The children read the reset, the host reads the inherited value, so nesting works */
