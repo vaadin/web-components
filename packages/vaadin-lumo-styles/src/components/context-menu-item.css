@@ -16,7 +16,6 @@
 
   :host([aria-haspopup='true'])::after {
     font-family: lumo-icons;
-    font-size: var(--lumo-icon-size-xs);
     content: var(--lumo-icons-angle-right);
     color: var(--lumo-tertiary-text-color);
   }
