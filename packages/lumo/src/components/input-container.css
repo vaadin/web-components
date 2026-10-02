@@ -53,13 +53,6 @@
   & > vaadin-icon[icon^='vaadin:'] {
     padding: 0.25em;
   }
-
-  &[theme~='small'] {
-    --_lumo-field-input-height: var(--vaadin-input-field-height, var(--lumo-size-s));
-    font-size: var(--lumo-font-size-s);
-    --vaadin-input-field-label-font-size: var(--lumo-font-size-xs);
-    --vaadin-input-field-error-font-size: var(--lumo-font-size-xxs);
-  }
 }
 
 /* Fields: outer padding, and the input-field part reads the defaults above */
