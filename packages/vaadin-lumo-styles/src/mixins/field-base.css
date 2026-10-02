@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_mixins_field-base {
+  /* Layout comes from the base field styles. Lumo sets the colors, fonts and spacing. */
   :host {
-    display: inline-grid;
     outline: none;
     --lumo-text-field-size: var(--lumo-size-m);
     color: var(--vaadin-input-field-value-color, var(--lumo-body-text-color));
@@ -19,27 +19,6 @@
     --_focus-ring-width: var(--vaadin-focus-ring-width, 2px);
     --_input-height: var(--vaadin-input-field-height, var(--lumo-text-field-size));
     --_disabled-value-color: var(--vaadin-input-field-disabled-value-color, var(--lumo-disabled-text-color));
-  }
-
-  :host::before {
-    content: '\2003';
-    width: 0;
-    /* Size and position this element on the same vertical position as the input-field element
-          to make vertical align for the host element work as expected */
-    height: var(--_input-height);
-    box-sizing: border-box;
-    display: inline-flex;
-    align-items: center;
-  }
-
-  [class$='container'] {
-    min-width: 100%;
-    max-width: 100%;
-    width: var(--vaadin-field-default-width, 12em);
-  }
-
-  :host([hidden]) {
-    display: none !important;
   }
 
   :host([focused]) [part='input-field'] ::slotted(:is(input, textarea)) {
@@ -117,6 +96,8 @@
   :host([disabled]) [part='input-field'] ::slotted([slot$='fix']) {
     color: var(--lumo-disabled-text-color);
     -webkit-text-fill-color: var(--lumo-disabled-text-color);
+    /* The base dims the label with opacity, Lumo uses the color */
+    opacity: 1;
   }
 
   :host([disabled]) [part='input-field'] ::slotted(:not([slot$='fix'])) {

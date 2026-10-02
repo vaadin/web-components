@@ -160,6 +160,10 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
     return 'vaadin-multi-select-combo-box';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get styles() {
     return [inputFieldShared, multiSelectComboBoxStyles];
   }

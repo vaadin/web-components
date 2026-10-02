@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_mixins_group-field {
+  /* Layout comes from the base field and group styles. Lumo sets the colors, fonts and spacing. */
   :host {
-    display: inline-grid;
     color: var(--lumo-body-text-color);
     font-size: var(--lumo-font-size-m);
     font-family: var(--lumo-font-family);
@@ -15,37 +15,18 @@
     padding: var(--_lumo-field-outer-padding, var(--lumo-space-xs)) 0;
   }
 
-  :host::before {
-    content: '\2003';
-    width: 0;
-    height: var(--lumo-size-s);
-    box-sizing: border-box;
-    display: inline-flex;
-    align-items: center;
-  }
-
-  :host([hidden]) {
-    display: none !important;
-  }
-
-  .vaadin-group-field-container {
-    width: 100%;
-  }
-
+  /* Lumo defaults groups to horizontal (base: vertical). The options space themselves with
+     their own padding, and the base input-field padding and border would misalign them. */
   [part='group-field'] {
-    display: flex;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
+    gap: 0;
+    padding-block: 0;
+    border-block-width: 0;
   }
 
-  :host(:not([has-label])) [part='label'] {
-    display: none;
-  }
-
-  /* The group grows to its label, as in the base styles. Outranks the field-label mixin,
-     which loads later. */
-  :host([has-label]) [part='label'] {
-    width: auto;
-    min-width: auto;
+  :host(:is([theme~='horizontal'], [theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='group-field'] {
+    padding-block: 0;
+    border-block-width: 0;
   }
 
   :host([theme~='vertical']) [part='group-field'] {
@@ -55,6 +36,8 @@
   :host([disabled]) [part='label'] {
     color: var(--lumo-disabled-text-color);
     -webkit-text-fill-color: var(--lumo-disabled-text-color);
+    /* The base dims the label with opacity, Lumo uses the color */
+    opacity: 1;
   }
 
   :host([focused]:not([readonly])) [part='label'] {

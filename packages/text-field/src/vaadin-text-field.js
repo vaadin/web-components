@@ -128,6 +128,10 @@ class TextField extends TextFieldMixin(ThemableMixin(ElementMixin(PolylitMixin(L
     return 'vaadin-text-field';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get styles() {
     return [inputFieldShared];
   }

@@ -5,7 +5,6 @@
  */
 @media lumo_mixins_slider {
   :host {
-    display: inline-grid;
     color: var(--lumo-body-text-color);
     font-size: var(--lumo-font-size-m);
     font-family: var(--lumo-font-family);
@@ -18,23 +17,6 @@
     --_fill-background: var(--vaadin-slider-fill-background, var(--lumo-primary-color));
     --_thumb-width: var(--vaadin-slider-thumb-width, calc(var(--lumo-size-m) / 2));
     --_thumb-height: var(--vaadin-slider-thumb-height, calc(var(--lumo-size-m) / 2));
-  }
-
-  :host::before {
-    content: '\2003';
-    height: var(--lumo-size-s);
-    width: 0;
-    box-sizing: border-box;
-    display: inline-flex;
-    align-items: center;
-    border: 0;
-    padding: 0;
-  }
-
-  [class$='container'] {
-    min-width: 100%;
-    max-width: 100%;
-    width: var(--vaadin-field-default-width, 12em);
   }
 
   :host([readonly]) {
@@ -70,7 +52,7 @@
   }
 
   [part='helper-text'] {
-    margin: 0;
+    margin-inline: 0;
   }
 
   #controls {

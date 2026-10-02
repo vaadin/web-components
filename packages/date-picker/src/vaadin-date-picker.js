@@ -225,6 +225,10 @@ class DatePicker extends DatePickerMixin(
     return 'vaadin-date-picker';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get styles() {
     return [inputFieldShared, datePickerStyles];
   }

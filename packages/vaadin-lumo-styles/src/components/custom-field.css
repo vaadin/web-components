@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_custom-field {
+  /* Layout comes from the base field styles. Lumo sets the colors, fonts and spacing. */
   :host {
-    display: inline-grid;
     --lumo-text-field-size: var(--lumo-size-m);
     /* The height of the child fields, which follow the same property */
     --_input-height: var(--vaadin-input-field-height, var(--lumo-text-field-size));
@@ -20,36 +20,9 @@
     padding: var(--_lumo-field-outer-padding, var(--lumo-space-xs)) 0;
   }
 
-  :host::before {
-    content: '\2003';
-    width: 0;
-    /* Size and position this element on the same vertical position as the input-field element
-           to make vertical align for the host element work as expected */
-    height: var(--_input-height);
-    box-sizing: border-box;
-    display: inline-flex;
-    align-items: center;
-  }
-
-  :host([hidden]) {
-    display: none !important;
-  }
-
-  .vaadin-custom-field-container {
-    width: 100%;
-  }
-
-  .inputs-wrapper {
-    flex: none;
-  }
-
   /* The host carries the outer padding, so the child fields drop theirs */
   [part='input-fields'] ::slotted(*) {
     --_lumo-field-outer-padding: 0px;
-  }
-
-  :host(:not([has-label])) [part='label'] {
-    display: none;
   }
 
   :host([focused]:not([readonly]):not([disabled])) [part='label'] {

@@ -150,6 +150,10 @@ class TimePicker extends TimePickerMixin(ThemableMixin(ElementMixin(PolylitMixin
     return 'vaadin-time-picker';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get styles() {
     return [inputFieldShared, timePickerStyles];
   }

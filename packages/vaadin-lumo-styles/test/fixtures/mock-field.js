@@ -5,6 +5,7 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
+import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { LumoInjectionMixin } from '@vaadin/vaadin-themable-mixin/lumo-injection-mixin.js';
 
 class MockField extends InputFieldMixin(DirMixin(PolylitMixin(LumoInjectionMixin(LitElement)))) {
@@ -14,6 +15,14 @@ class MockField extends InputFieldMixin(DirMixin(PolylitMixin(LumoInjectionMixin
 
   static get version() {
     return '1.0.0';
+  }
+
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
+  static get styles() {
+    return inputFieldShared;
   }
 
   get clearElement() {

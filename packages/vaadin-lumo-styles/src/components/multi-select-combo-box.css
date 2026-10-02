@@ -22,6 +22,8 @@
   #chips {
     display: flex;
     align-items: center;
+    /* The chips space themselves with margins, not with the base gap */
+    gap: 0;
   }
 
   /* Use a text baseline instead of the empty chips wrapper. */
@@ -29,6 +31,8 @@
     content: '\2003' / '';
     width: 0;
     align-self: start;
+    /* The base pulls the chips over the guide by the field gap, Lumo has no gap */
+    margin-inline-end: 0;
     line-height: var(--vaadin-input-field-height, var(--_input-height));
   }
 
@@ -54,10 +58,6 @@
 
   :host([auto-expand-vertically]) #chips {
     display: contents;
-  }
-
-  :host([auto-expand-horizontally]) [class$='container'] {
-    width: auto;
   }
 
   :host([has-value]) {

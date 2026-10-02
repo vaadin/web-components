@@ -214,6 +214,10 @@ class ComboBox extends ComboBoxFocusIndexMixin(
     return 'vaadin-combo-box';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get styles() {
     return [inputFieldShared, comboBoxStyles];
   }

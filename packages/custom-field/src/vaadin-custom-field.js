@@ -87,6 +87,10 @@ class CustomField extends CustomFieldMixin(ThemableMixin(ElementMixin(PolylitMix
     return 'vaadin-custom-field';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get styles() {
     return [field, fieldLabelAside, fieldInputHeight];
   }

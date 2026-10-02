@@ -4,13 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @media lumo_components_date-time-picker {
-  .vaadin-date-time-picker-container {
-    --vaadin-field-default-width: auto;
-  }
-
   [part='input-fields'] {
-    display: flex;
-    --vaadin-field-default-width: 12em;
+    gap: var(--vaadin-date-time-picker-gap, 2px);
   }
 
   [part='input-fields'] ::slotted([slot='date-picker']) {
@@ -24,7 +19,6 @@
   }
 
   ::slotted([slot='date-picker']) {
-    margin-inline-end: 2px;
     --vaadin-input-field-top-end-radius: 0;
     --vaadin-input-field-bottom-end-radius: 0;
   }

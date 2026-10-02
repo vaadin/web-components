@@ -26,9 +26,15 @@
     cursor: default;
   }
 
+  /* Lumo draws the icons with the lumo-icons font, not with the base masks */
   [part$='button']::before {
     font-family: 'lumo-icons';
     display: block;
+    background: none;
+    mask: none;
+    /* The glyph centers in the button, which can be wider than the base icon box */
+    width: auto;
+    height: auto;
   }
 
   [part~='clear-button'] {

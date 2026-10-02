@@ -197,6 +197,10 @@ class Select extends SelectBaseMixin(ElementMixin(ThemableMixin(PolylitMixin(Lum
     return 'vaadin-select';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get styles() {
     return [inputFieldShared, screenReaderOnly, selectStyles];
   }

@@ -90,6 +90,10 @@ class CheckboxGroup extends CheckboxGroupMixin(
     return 'vaadin-checkbox-group';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get styles() {
     return checkboxGroupStyles;
   }

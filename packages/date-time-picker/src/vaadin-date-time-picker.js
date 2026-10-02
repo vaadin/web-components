@@ -126,6 +126,10 @@ class DateTimePicker extends DateTimePickerMixin(
     return 'vaadin-date-time-picker';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get styles() {
     return [inputFieldShared, dateTimePickerStyles];
   }

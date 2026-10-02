@@ -5,23 +5,15 @@
  */
 @media lumo_mixins_field-label {
   [part='label'] {
-    grid-row: label;
-    place-self: start;
     color: var(--vaadin-input-field-label-color, var(--lumo-secondary-text-color));
     font-weight: var(--vaadin-input-field-label-font-weight, 500);
     font-size: var(--vaadin-input-field-label-font-size, var(--lumo-font-size-s));
     transition: color 0.2s;
     line-height: 1;
     padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
+    /* The label-to-input spacing comes from the padding, not from the base margin */
     padding-bottom: 0.5em;
-    position: relative;
-    /* Wraps inside the field width. min-content keeps a long label from widening an
-       unconstrained field, as in the base styles. */
-    width: min-content;
-    min-width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    word-break: break-word;
+    margin-bottom: 0;
   }
 
   :host([focused]:not([readonly])) [part='label'] {
@@ -39,14 +31,6 @@
     }
   }
 
-  :host(:not([has-label])) [part='label'] {
-    display: none;
-  }
-
-  :host([required]) [part='label'] {
-    padding-inline-end: 1em;
-  }
-
   :host([has-label]) {
     padding-top: var(--lumo-space-m);
   }
@@ -55,58 +39,8 @@
     --vaadin-tooltip-offset-bottom: calc((var(--lumo-space-m) - var(--lumo-space-xs)) * -1);
   }
 
-  /* Baseline alignment, same as the base styles: the host is a grid with a zero-height
-     baseline row above the input. The ::before guide ends at that row and is pulled down
-     over the input, so the host baseline is the input text baseline, whatever is above it.
-     The container spans all rows as a subgrid, so it keeps its own width. Its column
-     carries the area names, so parts placed by area (base styles) stay in it. Extra host
-     height goes below the parts, unless a field grows its input row (text area). Rows
-     do not shrink below their content when the host is too short, as in a flex column. */
+  /* The base baseline guide is one input tall, as in Lumo. Groups and sliders use the small size. */
   :host {
-    align-content: start;
-    --_helper-above-field: ;
-    --_helper-below-field: initial;
-    --_rows-after-input: ;
-    grid-template:
-      'label' max-content
-      var(--_helper-above-field, 'helper' max-content)
-      'baseline' 0
-      'input' var(--_input-row-size, max-content)
-      var(--_rows-after-input)
-      var(--_helper-below-field, 'helper' max-content)
-      'error' max-content
-      / 100%;
-  }
-
-  :host::before {
-    grid-column: baseline;
-    grid-row: 1 / baseline;
-    align-self: end;
-    margin-bottom: calc(var(--_input-height, var(--lumo-size-s)) * -1);
-  }
-
-  [class$='container'] {
-    grid-column: 1;
-    grid-row: 1 / -1;
-    display: grid;
-    grid-template-rows: subgrid;
-    grid-template-columns:
-      [label-start helper-start baseline-start input-start marks-start error-start]
-      minmax(0, 1fr)
-      [label-end helper-end baseline-end input-end marks-end error-end];
-  }
-
-  [part='input-field'],
-  [part='input-fields'],
-  [part='group-field'] {
-    grid-row: input;
-  }
-
-  [part='helper-text'] {
-    grid-row: helper;
-  }
-
-  [part='error-message'] {
-    grid-row: error;
+    --vaadin-field-baseline-input-height: var(--_input-height, var(--lumo-size-s));
   }
 }

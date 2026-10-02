@@ -87,6 +87,10 @@ class RadioGroup extends RadioGroupMixin(ElementMixin(ThemableMixin(PolylitMixin
     return 'vaadin-radio-group';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get styles() {
     return radioGroupStyles;
   }

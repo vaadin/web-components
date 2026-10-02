@@ -11,7 +11,7 @@
     font-size: inherit;
     --lumo-text-field-size: 27px;
     /* The input fills the cell */
-    --_input-row-size: 1fr;
+    height: auto;
     /* outline similar to what grid uses */
     box-shadow: inset 0 0 0 var(--_focus-ring-width) var(--_focus-ring-color);
   }

@@ -6,16 +6,11 @@
 @media lumo_mixins_field-helper {
   :host {
     --_helper-spacing: var(--vaadin-input-field-helper-spacing, 0.4em);
-  }
-
-  :host([has-helper]) [part='helper-text']::before {
-    content: '';
-    display: block;
-    height: var(--_helper-spacing);
+    /* The base helper and error margins use this gap */
+    --vaadin-input-field-container-gap: var(--_helper-spacing);
   }
 
   [part='helper-text'] {
-    display: block;
     color: var(--vaadin-input-field-helper-color, var(--lumo-secondary-text-color));
     font-size: var(--vaadin-input-field-helper-font-size, var(--lumo-font-size-xs));
     line-height: var(--lumo-line-height-xs);

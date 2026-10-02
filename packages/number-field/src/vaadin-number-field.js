@@ -136,6 +136,10 @@ class NumberField extends NumberFieldMixin(ThemableMixin(ElementMixin(PolylitMix
     return 'vaadin-number-field';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get styles() {
     return [inputFieldShared, numberFieldStyles];
   }

@@ -129,6 +129,10 @@ class TextArea extends TextAreaMixin(ThemableMixin(ElementMixin(PolylitMixin(Lum
     return 'vaadin-text-area';
   }
 
+  static get lumoInjector() {
+    return { ...super.lumoInjector, includeBaseStyles: true };
+  }
+
   static get styles() {
     return [inputFieldShared, textAreaStyles];
   }
