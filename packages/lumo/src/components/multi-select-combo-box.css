@@ -1,0 +1,134 @@
+/* Shared field, input container, item and overlay styles live in field.css,
+   input-container.css, item.css, overlay.css and combo-box.css. This file holds the chips,
+   the select-all button and the auto-expand rules. */
+:where(:root),
+:where(:host) {
+  --vaadin-multi-select-combo-box-chip-min-width: 50px;
+  /* Chips are spaced with margins (below), so the input keeps the text-field inset */
+  --vaadin-multi-select-combo-box-chips-gap: 0px;
+  --vaadin-chip-font-size: var(--lumo-font-size-xxs);
+  --vaadin-chip-height: 1.875em;
+  --vaadin-chip-padding: calc(0.5em + var(--lumo-border-radius-s) / 4);
+  --vaadin-chip-background: var(--lumo-contrast-20pct);
+  --vaadin-chip-border-radius: var(--lumo-border-radius-s);
+  --vaadin-chip-border-width: 0px;
+  /* The overflow chip stack reads the border color, the chip itself has no border */
+  --vaadin-chip-border-color: var(--lumo-contrast-30pct);
+}
+
+:where(vaadin-multi-select-combo-box) {
+  /* Scales with the field font size, as in legacy (base: 4rem). Set on the host, so the
+     em resolves against the field font size. */
+  --vaadin-multi-select-combo-box-input-min-width: 4em;
+
+  /* Readonly shows the toggle button to open the selected items. Without a value there is
+     nothing to show, so it is faded like a disabled one (base: always active). */
+  &[readonly]:not([has-value])::part(toggle-button) {
+    --vaadin-input-field-button-text-color: var(--lumo-contrast-20pct);
+    cursor: default;
+  }
+
+  /* The chips wrapper sits at the top of the input field, so the input itself is one input
+     tall and centers its text, as in legacy */
+  & > [slot='input'] {
+    min-height: var(--_lumo-field-input-height);
+  }
+
+  & > :is([slot='chip'], [slot='overflow']):not(:last-of-type) {
+    margin-inline-end: var(--lumo-space-xs);
+  }
+
+  /* The label aside aligns to the em space at the top of the input field, so the space is as
+     tall as the input, or one row when auto-expanding, and its baseline is centered */
+  &:is([theme~='label-aside'], [data-form-layout-has-labels-aside])::part(input-field)::before {
+    line-height: var(--_lumo-mscb-row-height, var(--_lumo-field-input-height));
+  }
+
+  /* No gap after the chips: the input collapses to zero width */
+  &:is([readonly], [disabled]) > [slot='input'] {
+    padding: 0;
+  }
+
+  &[auto-expand-vertically] {
+    /* The chips stay at the top when the field is taller, so the guide keeps the default
+       height */
+    --vaadin-field-baseline-input-height: var(--lumo-size-m);
+    /* A row of chips and the input is one default input tall */
+    --_lumo-mscb-row-height: calc(var(--lumo-size-m) - 2 * var(--lumo-space-xs));
+
+    &[theme~='small'] {
+      --vaadin-field-baseline-input-height: var(--lumo-size-s);
+      --_lumo-mscb-row-height: calc(var(--lumo-size-s) - 2 * var(--lumo-space-xs));
+    }
+
+    /* Vertical padding around the wrapped rows. The field grows with the rows, so the
+       shared min-height gives way to the base one, which lets the rows size the field. */
+    &::part(input-field) {
+      --vaadin-input-field-padding: var(--lumo-space-xs) calc(0.375em + var(--vaadin-radius-m) / 4 - 1px);
+      min-height: var(--vaadin-input-field-height, auto);
+    }
+
+    & > [slot='input'] {
+      min-height: var(--_lumo-mscb-row-height);
+    }
+
+    /* Spaces the wrapped rows */
+    & > [slot='chip'] {
+      margin-block: calc(var(--lumo-space-xs) / 2);
+    }
+  }
+}
+
+:where(vaadin-multi-select-combo-box-chip) {
+  /* The remove button is as tall as the chip and flush with its end, as the legacy glyph */
+  --vaadin-icon-size: var(--vaadin-chip-height);
+  /* Centered in the input row, which is taller than the chip */
+  align-self: center;
+  line-height: var(--lumo-line-height-xs);
+
+  &:not([readonly], [disabled], [slot='overflow']) {
+    padding-inline-end: 0;
+  }
+
+  &::part(remove-button) {
+    translate: none;
+  }
+
+  /* The base mask fills the icon box; the legacy glyph is smaller */
+  &::part(remove-button)::before {
+    mask-size: 60%;
+    mask-position: center;
+    mask-repeat: no-repeat;
+  }
+
+  &[disabled] {
+    --vaadin-chip-background: var(--lumo-contrast-10pct);
+  }
+
+  /* A filled chip instead of the base focus outline */
+  &[focused] {
+    outline: none;
+    --vaadin-chip-background: var(--vaadin-selection-color, var(--lumo-primary-color));
+    --vaadin-chip-text-color: var(--lumo-primary-contrast-color);
+  }
+
+  &[focused]::part(remove-button) {
+    color: inherit;
+  }
+}
+
+:where(vaadin-multi-select-combo-box-select-all-button) {
+  height: var(--lumo-size-s);
+  padding-block: 0.5em;
+  color: var(--lumo-primary-text-color);
+  font-size: var(--lumo-font-size-s);
+  line-height: var(--lumo-line-height-xs);
+  /* Reserve the item checkmark box: one item text line, at the item font size */
+  --vaadin-icon-size: calc(var(--lumo-font-size-m) * var(--lumo-line-height-xs));
+
+  @media (any-hover: hover) {
+    &:hover {
+      background: var(--lumo-primary-color-10pct);
+    }
+  }
+}

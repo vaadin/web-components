@@ -11,6 +11,7 @@
   vaadin-menu-bar-item,
   vaadin-avatar-group-menu-item,
   vaadin-combo-box-item,
+  vaadin-multi-select-combo-box-item,
   vaadin-time-picker-item,
   vaadin-select-item
 ) {
@@ -23,6 +24,7 @@
   vaadin-context-menu-item,
   vaadin-menu-bar-item,
   vaadin-combo-box-item,
+  vaadin-multi-select-combo-box-item,
   vaadin-time-picker-item,
   vaadin-select-item
 )::part(checkmark) {
@@ -31,7 +33,6 @@
   --vaadin-icon-size: 1lh;
 }
 
-
 @media (any-hover: hover) {
   :where(
       vaadin-item,
@@ -39,9 +40,10 @@
       vaadin-menu-bar-item,
       vaadin-avatar-group-menu-item,
       vaadin-combo-box-item,
+      vaadin-multi-select-combo-box-item,
       vaadin-time-picker-item,
       vaadin-select-item
-    ):hover:not([disabled]) {
+    ):hover:not([disabled], [readonly]) {
     background-color: var(--lumo-primary-color-10pct);
   }
 }
@@ -52,6 +54,7 @@
   vaadin-menu-bar-item,
   vaadin-avatar-group-menu-item,
   vaadin-combo-box-item,
+  vaadin-multi-select-combo-box-item,
   vaadin-time-picker-item,
   vaadin-select-item
 )[disabled] {
