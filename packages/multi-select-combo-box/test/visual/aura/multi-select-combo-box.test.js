@@ -39,6 +39,13 @@ describe('multi-select-combo-box', () => {
       await visualDiff(div, 'selected');
     });
 
+    it('overflow two-digit count', async () => {
+      const items = Array.from({ length: 12 }, (_, i) => `Item with a long label ${i + 1}`);
+      element.items = items;
+      element.selectedItems = items;
+      await visualDiff(div, 'selected-overflow-two-digit');
+    });
+
     it('readonly', async () => {
       element.readonly = true;
       await visualDiff(div, 'selected-readonly');

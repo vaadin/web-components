@@ -830,27 +830,49 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       return chip;
     }
 
-    /** @private */
-    __getWrapperWidth() {
-      return this._inputField.$.wrapper.clientWidth;
+    /**
+     * Returns the width of the element with its fraction, unlike `clientWidth`.
+     * The chips do not shrink below their `max-width`, so a rounding error moves the input out.
+     * @private
+     */
+    __getUsedWidth(element) {
+      return parseFloat(getComputedStyle(element).width);
     }
 
     /** @private */
-    __getOverflowWidth() {
+    __getWrapperGap() {
+      // The gap computes to `normal` when not set, which is 0 in a flex container
+      return parseFloat(getComputedStyle(this._inputField.$.wrapper).columnGap) || 0;
+    }
+
+    /** @private */
+    __getWrapperWidth() {
+      // Exclude the gap between the chips and the input
+      return this.__getUsedWidth(this._inputField.$.wrapper) - this.__getWrapperGap();
+    }
+
+    /**
+     * Returns the width that the overflow chip with the given count takes,
+     * including its margins and the gap between it and the chips.
+     * @private
+     */
+    __getOverflowWidth(count) {
       const chip = this._overflow;
 
+      // The `_overflowItems` observer sets the final label and count afterwards
       chip.style.visibility = 'hidden';
       chip.removeAttribute('hidden');
+      chip.label = `${count}`;
+      chip.setAttribute('count', `${count}`);
 
-      const count = chip.getAttribute('count');
+      // The chip uses `box-sizing: border-box`, so its width includes padding and border
+      const { marginInlineStart, marginInlineEnd } = getComputedStyle(chip);
+      const overflowWidth =
+        this.__getUsedWidth(chip) +
+        parseFloat(marginInlineStart) +
+        parseFloat(marginInlineEnd) +
+        this.__getWrapperGap();
 
-      // Detect max possible width of the overflow chip
-      // by measuring it with widest number (2 digits)
-      chip.setAttribute('count', '99');
-      const overflowStyle = getComputedStyle(chip);
-      const overflowWidth = chip.clientWidth + parseInt(overflowStyle.marginInlineStart);
-
-      chip.setAttribute('count', count);
       chip.setAttribute('hidden', '');
       chip.style.visibility = '';
 
@@ -882,7 +904,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         return;
       }
 
-      const inputWidth = parseInt(getComputedStyle(this.inputElement).flexBasis);
+      const inputWidth = parseFloat(getComputedStyle(this.inputElement).flexBasis);
 
       if (this.collapseChips) {
         this._overflowItems = this.__updateChipsCollapsed(this.selectedItems, inputWidth);
@@ -901,7 +923,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         return chip;
       });
 
-      const allChipsFit = this.__getWrapperWidth() - this.$.chips.clientWidth >= inputWidth;
+      const allChipsFit = this.__getWrapperWidth() - this.__getUsedWidth(this.$.chips) >= inputWidth;
       return { chips, allChipsFit };
     }
 
@@ -928,21 +950,28 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
       // Remove chips from the end until there is enough width for the input element to fit,
       // keeping at least one chip visible
-      const overflowWidth = this.__getOverflowWidth();
+      const wrapperWidth = this.__getWrapperWidth();
+      // Start from the width for the largest count, and measure the exact count only
+      // when the chips would fit with the estimate, as the label width varies per count
+      let overflowWidth = this.__getOverflowWidth(items.length - 1);
       let visibleCount = chips.length;
 
       while (visibleCount > 1) {
         visibleCount -= 1;
         chips[visibleCount].remove();
 
-        if (this.__getWrapperWidth() - this.$.chips.clientWidth >= inputWidth + overflowWidth) {
-          break;
+        const chipsWidth = this.__getUsedWidth(this.$.chips);
+        if (wrapperWidth - chipsWidth >= inputWidth + overflowWidth) {
+          overflowWidth = this.__getOverflowWidth(items.length - visibleCount);
+          if (wrapperWidth - chipsWidth >= inputWidth + overflowWidth) {
+            break;
+          }
         }
       }
 
       if (visibleCount === 1) {
         const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
-        const remainingWidth = this.__getWrapperWidth() - inputWidth - overflowWidth;
+        const remainingWidth = wrapperWidth - inputWidth - overflowWidth;
         chips[0].style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;
       }
 
@@ -951,11 +980,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     /** @private */
     __updateChipsDefault(items, inputWidth) {
-      let remainingWidth = this.__getWrapperWidth() - inputWidth;
-
-      if (items.length > 1) {
-        remainingWidth -= this.__getOverflowWidth();
-      }
+      const availableWidth = this.__getWrapperWidth() - inputWidth;
 
       const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
 
@@ -964,7 +989,12 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         const chip = this.__createChip(items[i]);
         this.insertBefore(chip, refNode);
 
-        if (this.$.chips.clientWidth > remainingWidth) {
+        // Reserve space for the overflow chip with the count of the items that are not
+        // added yet, measured with a chip rendered so that the spacing between them counts
+        const remainingWidth =
+          items.length > 1 ? availableWidth - this.__getOverflowWidth(Math.max(i, 1)) : availableWidth;
+
+        if (this.__getUsedWidth(this.$.chips) > remainingWidth) {
           // If there is no more space for chips, or if there is at least one
           // chip already shown, collapse all remaining chips to the overflow
           if (remainingWidth < chipMinWidth || refNode !== null) {
