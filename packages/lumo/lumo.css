@@ -38,6 +38,7 @@
 @import './src/components/menu-bar.css';
 @import './src/components/message-input.css';
 @import './src/components/message-list.css';
+@import './src/components/multi-select-combo-box.css';
 @import './src/components/notification.css';
 @import './src/components/number-field.css';
 @import './src/components/ordered-layout.css';
