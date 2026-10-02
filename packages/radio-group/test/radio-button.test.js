@@ -273,7 +273,7 @@ describe('radio-button', () => {
     });
   });
 
-  describe('opacity', () => {
+  describe('input styles', () => {
     beforeEach(async () => {
       radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
       await nextRender();
@@ -287,9 +287,25 @@ describe('radio-button', () => {
           input {
             opacity: 1;
           }
-        </script>
+        </style>
       `);
       expect(getComputedStyle(input).opacity).to.equal('0');
+    });
+
+    it('should stretch the slotted input over the radio part', () => {
+      // Emulate fixed size set by iOS UA styles or CSS resets
+      fixtureSync(`
+        <style>
+          input {
+            width: 1rem;
+            height: 1rem;
+          }
+        </style>
+      `);
+      const inputRect = input.getBoundingClientRect();
+      const partRect = radio.shadowRoot.querySelector("[part='radio']").getBoundingClientRect();
+      expect(inputRect.width).to.be.at.least(partRect.width);
+      expect(inputRect.height).to.be.at.least(partRect.height);
     });
   });
 });
