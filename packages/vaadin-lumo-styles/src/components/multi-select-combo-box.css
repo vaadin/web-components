@@ -56,8 +56,9 @@
     display: contents;
   }
 
-  :host([auto-expand-horizontally]) [class$='container'] {
-    width: auto;
+  /* The container and the label-aside input field read the default width */
+  :host([auto-expand-horizontally]) {
+    --vaadin-field-default-width: auto;
   }
 
   :host([has-value]) {
