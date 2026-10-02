@@ -1,20 +1,23 @@
 /* Shared field and overlay styles live in input-container.css, field.css, item.css and
    overlay.css. The item transition also covers time-picker. */
-:where(vaadin-combo-box-item, vaadin-time-picker-item) {
+:where(vaadin-combo-box-item, vaadin-multi-select-combo-box-item, vaadin-time-picker-item) {
   transition: background-color 100ms;
 }
 
-/* Gap between the field and the overlay. Shared with time-picker and date-picker. */
-:where(vaadin-combo-box, vaadin-time-picker, vaadin-date-picker)[top-aligned]::part(overlay) {
-  margin-top: var(--lumo-space-xs);
-}
+/* Gap between the field and the overlay. Shared with the multi-select, time-picker and
+   date-picker. */
+:where(vaadin-combo-box, vaadin-multi-select-combo-box, vaadin-time-picker, vaadin-date-picker) {
+  &[top-aligned]::part(overlay) {
+    margin-top: var(--lumo-space-xs);
+  }
 
-:where(vaadin-combo-box, vaadin-time-picker, vaadin-date-picker)[bottom-aligned]::part(overlay) {
-  margin-bottom: var(--lumo-space-xs);
+  &[bottom-aligned]::part(overlay) {
+    margin-bottom: var(--lumo-space-xs);
+  }
 }
 
 /* Lumo's two-tone spinner at the overlay's top end (base: single-color mask) */
-:where(vaadin-combo-box)::part(loader) {
+:where(vaadin-combo-box, vaadin-multi-select-combo-box)::part(loader) {
   --vaadin-spinner-size: var(--lumo-icon-size-s);
   top: var(--lumo-space-s);
   inset-inline: auto var(--lumo-space-s);
