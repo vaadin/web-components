@@ -1,6 +1,8 @@
 import { expect } from '@vaadin/chai-plugins';
+import { sendKeys } from '@vaadin/test-runner-commands';
 import { fixtureSync, nextRender, nextUpdate } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import '../../button/src/vaadin-button.js';
 import '../src/vaadin-dialog.js';
 import { createRenderer } from './helpers.js';
 
@@ -16,6 +18,51 @@ describe('header/footer feature', () => {
   afterEach(async () => {
     dialog.opened = false;
     await nextRender();
+  });
+
+  describe('content focus ring', () => {
+    ['title', 'renderer', 'none'].forEach((header) => {
+      it(`should leave room for the focus ring with a ${header} header and footer`, async () => {
+        if (header === 'title') {
+          dialog.headerTitle = 'Title';
+        } else if (header === 'renderer') {
+          dialog.headerRenderer = createRenderer('Header');
+        }
+        dialog.footerRenderer = createRenderer('Footer');
+        dialog.renderer = (root) => {
+          if (!root.firstChild) {
+            const button = document.createElement('vaadin-button');
+            button.textContent = 'Content action';
+            root.appendChild(button);
+          }
+        };
+        dialog.opened = true;
+        await nextRender();
+        const button = dialog.querySelector('vaadin-button');
+        await sendKeys({ press: 'Tab' });
+        button.focus();
+        await nextRender();
+
+        expect(button.hasAttribute('focus-ring')).to.be.true;
+        const style = getComputedStyle(button);
+        const extent = parseFloat(style.outlineWidth) + parseFloat(style.outlineOffset);
+        const buttonRect = button.getBoundingClientRect();
+        const contentRect = overlay.$.content.getBoundingClientRect();
+        expect(buttonRect.top - contentRect.top).to.be.at.least(extent - 0.5);
+        expect(contentRect.bottom - buttonRect.bottom).to.be.at.least(extent - 0.5);
+      });
+    });
+
+    it('should preserve the explicit no-padding theme', async () => {
+      dialog.setAttribute('theme', 'no-padding');
+      dialog.headerTitle = 'Title';
+      dialog.footerRenderer = createRenderer('Footer');
+      dialog.opened = true;
+      await nextRender();
+      const style = getComputedStyle(overlay.$.content);
+      expect(style.paddingTop).to.equal('0px');
+      expect(style.paddingBottom).to.equal('0px');
+    });
   });
 
   describe('vaadin-dialog header-title attribute', () => {
