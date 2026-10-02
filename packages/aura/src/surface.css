@@ -34,7 +34,7 @@ vaadin-tab,
 vaadin-tabs,
 vaadin-upload,
 vaadin-upload-file,
-/* Native form controls, keep in sync with html-elements.css and color.css */
+/* Native form controls, keep in sync with form-controls.css and color.css */
 :where(
   .vaadin-themed-html
     :is(button, input, select, textarea):not(.vaadin-unthemed-html, [slot='input'], [slot='textarea']),

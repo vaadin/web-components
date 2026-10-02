@@ -79,7 +79,7 @@ vaadin-side-nav-item::part(content),
 vaadin-select-item,
 vaadin-tab,
 vaadin-upload-file,
-/* Native form controls, keep in sync with html-elements.css and surface.css */
+/* Native form controls, keep in sync with form-controls.css and surface.css */
 :where(
   .vaadin-themed-html
     :is(button, input, select, textarea):not(.vaadin-unthemed-html, [slot='input'], [slot='textarea']),
