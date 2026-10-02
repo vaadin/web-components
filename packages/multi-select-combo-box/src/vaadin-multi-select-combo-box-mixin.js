@@ -909,15 +909,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       return overflowWidth;
     }
 
-    /**
-     * Returns the width of the overflow chip with the largest count it can show,
-     * when all items except one collapse to it.
-     * @private
-     */
-    __getMaxOverflowWidth(items) {
-      return items.length > 1 ? this.__getOverflowWidth(items.length - 1) : 0;
-    }
-
     /** @private */
     __updateChips() {
       if (!this._inputField || !this.inputElement) {
@@ -990,15 +981,21 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // Remove chips from the end until there is enough width for the input element to fit,
       // keeping at least one chip visible
       const wrapperWidth = this.__getWrapperWidth();
-      const overflowWidth = this.__getMaxOverflowWidth(items);
+      // Start from the width for the largest count, and measure the exact count only
+      // when the chips would fit with the estimate, as the label width varies per count
+      let overflowWidth = this.__getOverflowWidth(items.length - 1);
       let visibleCount = chips.length;
 
       while (visibleCount > 1) {
         visibleCount -= 1;
         chips[visibleCount].remove();
 
-        if (wrapperWidth - this.__getUsedWidth(this.$.chips) >= inputWidth + overflowWidth) {
-          break;
+        const chipsWidth = this.__getUsedWidth(this.$.chips);
+        if (wrapperWidth - chipsWidth >= inputWidth + overflowWidth) {
+          overflowWidth = this.__getOverflowWidth(items.length - visibleCount);
+          if (wrapperWidth - chipsWidth >= inputWidth + overflowWidth) {
+            break;
+          }
         }
       }
 
@@ -1013,7 +1010,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     /** @private */
     __updateChipsDefault(items, inputWidth) {
-      const remainingWidth = this.__getWrapperWidth() - inputWidth - this.__getMaxOverflowWidth(items);
+      const availableWidth = this.__getWrapperWidth() - inputWidth;
 
       const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
 
@@ -1021,6 +1018,11 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       for (let i = items.length - 1, refNode = null; i >= 0; i--) {
         const chip = this.__createChip(items[i]);
         this.insertBefore(chip, refNode);
+
+        // Reserve space for the overflow chip with the count of the items that are not
+        // added yet, measured with a chip rendered so that the spacing between them counts
+        const remainingWidth =
+          items.length > 1 ? availableWidth - this.__getOverflowWidth(Math.max(i, 1)) : availableWidth;
 
         if (this.__getUsedWidth(this.$.chips) > remainingWidth) {
           // If there is no more space for chips, or if there is at least one
