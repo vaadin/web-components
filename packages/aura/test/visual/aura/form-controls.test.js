@@ -59,6 +59,26 @@ describe('form-controls', () => {
     await visualDiff(wrapper, 'form-controls-focus-visible');
   });
 
+  [
+    ['button', 'button'],
+    ['file', '[type="file"]'],
+    ['radio', '[type="radio"]'],
+  ].forEach(([name, selector]) => {
+    it(`focus-visible ${name}`, async () => {
+      wrapper.classList.add('vaadin-themed-html');
+      // Keyboard interaction first, so that the programmatic focus is focus-visible
+      await sendKeys({ press: 'Tab' });
+      wrapper.querySelector(selector).focus();
+      await visualDiff(wrapper, `form-controls-focus-visible-${name}`);
+    });
+  });
+
+  it('disabled file input', async () => {
+    wrapper.classList.add('vaadin-themed-html');
+    wrapper.querySelector('[type="file"]').disabled = true;
+    await visualDiff(wrapper, 'form-controls-disabled-file');
+  });
+
   it('user-invalid', async () => {
     wrapper.classList.add('vaadin-themed-html');
     const input = controls[1];

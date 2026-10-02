@@ -75,11 +75,15 @@
     }
   }
 
-  /* Buttons look like a Vaadin button. */
-  &:where(button, input:is([type='button'], [type='reset'], [type='submit'])),
-  &[type='file']::file-selector-button {
+  /* Buttons look like a Vaadin button. The surface is set on the file input itself, since
+     color.css resolves the accent surface on the element and not on its file selector button. */
+  &:where(button, input:is([type='button'], [type='file'], [type='reset'], [type='submit'])) {
     --aura-surface-level: 4;
     --aura-surface-opacity: 0.5;
+  }
+
+  &:where(button, input:is([type='button'], [type='reset'], [type='submit'])),
+  &[type='file']::file-selector-button {
     box-sizing: border-box;
     padding: var(--vaadin-padding-block-container) var(--vaadin-padding-m);
     border: 1px solid var(--aura-accent-border-color);
@@ -129,6 +133,17 @@
       outline-offset: 1px;
       border-radius: var(--vaadin-radius-m);
     }
+
+    &:disabled {
+      color: var(--vaadin-text-color-disabled);
+      cursor: var(--vaadin-disabled-cursor, not-allowed);
+
+      &::file-selector-button {
+        box-shadow: none;
+        opacity: 0.5;
+        cursor: inherit;
+      }
+    }
   }
 
   /* Checkboxes, radio buttons and sliders keep the native look, in the accent color and at
@@ -141,6 +156,11 @@
   &[type='radio'] {
     width: var(--vaadin-radio-button-size);
     height: var(--vaadin-radio-button-size);
+
+    /* A solid outline is square around a native radio button, an auto outline follows its round shape. */
+    &:focus-visible {
+      outline: var(--vaadin-focus-ring-width, 2px) auto var(--vaadin-focus-ring-color);
+    }
   }
 
   &:where([type='checkbox'], [type='radio'], [type='range']) {

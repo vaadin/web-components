@@ -151,6 +151,15 @@
       border-radius: var(--lumo-border-radius-m);
       box-shadow: var(--_focus-ring);
     }
+
+    &:disabled {
+      color: var(--lumo-disabled-text-color);
+
+      &::file-selector-button {
+        color: var(--lumo-disabled-text-color);
+        cursor: default;
+      }
+    }
   }
 
   /* Checkboxes, radio buttons and sliders keep the native look, in the primary color and at
@@ -160,10 +169,14 @@
     height: calc(var(--lumo-size-m) / 2);
   }
 
+  /* A solid outline is square around a native radio button, an auto outline follows its round shape. */
+  &[type='radio']:focus-visible {
+    outline: var(--vaadin-focus-ring-width, 2px) auto var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
+  }
+
   &:where([type='checkbox'], [type='radio'], [type='range']) {
     cursor: var(--lumo-clickable-cursor);
 
-    /* A box shadow would not follow the round shape of a radio button. */
     &:focus-visible {
       outline: var(--vaadin-focus-ring-width, 2px) solid var(--vaadin-focus-ring-color, var(--lumo-primary-color-50pct));
       outline-offset: 1px;
