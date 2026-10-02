@@ -45,16 +45,16 @@
     content: '';
     width: 100%;
     height: 100%;
-    border-left: calc(var(--lumo-space-s) / 4) solid var(--lumo-contrast-30pct);
+    border-inline-start: calc(var(--lumo-space-s) / 4) solid var(--lumo-contrast-30pct);
     border-radius: var(--lumo-border-radius-s);
   }
 
   :host([slot='overflow'])::before {
-    left: calc(-1 * var(--lumo-space-s) / 2);
+    inset-inline-start: calc(-1 * var(--lumo-space-s) / 2);
   }
 
   :host([slot='overflow'])::after {
-    left: calc(-1 * var(--lumo-space-s));
+    inset-inline-start: calc(-1 * var(--lumo-space-s));
   }
 
   :host([count='2']) {
