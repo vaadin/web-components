@@ -26,4 +26,40 @@ describe('vaadin-switch', () => {
       expect((customElements.get(tagName) as any).is).to.equal(tagName);
     });
   });
+
+  describe('input styles', () => {
+    let input: HTMLInputElement;
+
+    beforeEach(() => {
+      input = element.inputElement as HTMLInputElement;
+    });
+
+    it('should apply opacity: 0 on the slotted input', () => {
+      // Emulate CSS normalize styles like used by Tailwind
+      fixtureSync(`
+        <style>
+          input {
+            opacity: 1;
+          }
+        </style>
+      `);
+      expect(getComputedStyle(input).opacity).to.equal('0');
+    });
+
+    it('should stretch the slotted input over the switch part', () => {
+      // Emulate fixed size set by iOS UA styles or CSS resets
+      fixtureSync(`
+        <style>
+          input {
+            width: 1rem;
+            height: 1rem;
+          }
+        </style>
+      `);
+      const inputRect = input.getBoundingClientRect();
+      const partRect = element.shadowRoot!.querySelector("[part='switch']")!.getBoundingClientRect();
+      expect(inputRect.width).to.be.at.least(partRect.width);
+      expect(inputRect.height).to.be.at.least(partRect.height);
+    });
+  });
 });
