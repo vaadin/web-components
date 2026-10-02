@@ -59,10 +59,6 @@
     color: var(--vaadin-input-field-focused-label-color, var(--lumo-primary-text-color));
   }
 
-  &[invalid] {
-    --vaadin-input-field-required-indicator-color: var(--lumo-error-text-color);
-  }
-
   &::part(helper-text) {
     padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
     transition: color 0.2s;
@@ -82,14 +78,10 @@
     }
   }
 
-  /* Lumo has no error icon. The top gap is a margin, not a flex spacer. */
+  /* The top gap is a margin, not a flex spacer */
   &::part(error-message) {
     margin-block: 0.4em;
     padding-inline-start: calc(var(--lumo-border-radius-m) / 4);
-  }
-
-  &::part(error-message)::before {
-    content: none;
   }
 
   &[has-helper][theme~='helper-above-field']::part(label) {
@@ -119,5 +111,36 @@
 
   &:is([theme~='label-aside'], [data-form-layout-has-labels-aside])[has-label] > [slot='tooltip'] {
     --vaadin-tooltip-offset-bottom: 0px;
+  }
+}
+
+/* Every field with an error message, including the checkables. Lumo has no error icon. */
+:where(
+  vaadin-slider,
+  vaadin-range-slider,
+  vaadin-checkbox-group,
+  vaadin-radio-group,
+  vaadin-checkbox,
+  vaadin-switch,
+  vaadin-text-field,
+  vaadin-password-field,
+  vaadin-email-field,
+  vaadin-number-field,
+  vaadin-integer-field,
+  vaadin-text-area,
+  vaadin-combo-box,
+  vaadin-multi-select-combo-box,
+  vaadin-time-picker,
+  vaadin-date-picker,
+  vaadin-select,
+  vaadin-custom-field,
+  vaadin-date-time-picker
+) {
+  &::part(error-message)::before {
+    content: none;
+  }
+
+  &[invalid] {
+    --vaadin-input-field-required-indicator-color: var(--lumo-error-text-color);
   }
 }
