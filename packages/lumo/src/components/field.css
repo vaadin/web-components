@@ -114,6 +114,29 @@
   }
 }
 
+/* Small theme: one small input tall, smaller fonts. Groups and sliders have no small theme. */
+:where(
+  vaadin-text-field,
+  vaadin-password-field,
+  vaadin-email-field,
+  vaadin-number-field,
+  vaadin-integer-field,
+  vaadin-text-area,
+  vaadin-combo-box,
+  vaadin-multi-select-combo-box,
+  vaadin-time-picker,
+  vaadin-date-picker,
+  vaadin-select,
+  vaadin-custom-field,
+  vaadin-date-time-picker,
+  vaadin-input-container
+)[theme~='small'] {
+  --_lumo-field-input-height: var(--vaadin-input-field-height, var(--lumo-size-s));
+  font-size: var(--lumo-font-size-s);
+  --vaadin-input-field-label-font-size: var(--lumo-font-size-xs);
+  --vaadin-input-field-error-font-size: var(--lumo-font-size-xxs);
+}
+
 /* Every field with an error message, including the checkables. Lumo has no error icon. */
 :where(
   vaadin-slider,
