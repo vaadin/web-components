@@ -308,9 +308,9 @@ describe('checkbox', () => {
     });
   });
 
-  describe('opacity', () => {
+  describe('input styles', () => {
     beforeEach(async () => {
-      checkbox = fixtureSync(`<vaadin-checkbox></vaadin-checkbox>`);
+      checkbox = fixtureSync('<vaadin-checkbox></vaadin-checkbox>');
       await nextRender();
       input = checkbox.inputElement;
     });
@@ -322,9 +322,25 @@ describe('checkbox', () => {
           input {
             opacity: 1;
           }
-        </script>
+        </style>
       `);
       expect(getComputedStyle(input).opacity).to.equal('0');
+    });
+
+    it('should stretch the slotted input over the checkbox part', () => {
+      // Emulate fixed size set by iOS UA styles or CSS resets
+      fixtureSync(`
+        <style>
+          input {
+            width: 1rem;
+            height: 1rem;
+          }
+        </style>
+      `);
+      const inputRect = input.getBoundingClientRect();
+      const partRect = checkbox.shadowRoot.querySelector("[part='checkbox']").getBoundingClientRect();
+      expect(inputRect.width).to.be.at.least(partRect.width);
+      expect(inputRect.height).to.be.at.least(partRect.height);
     });
   });
 });
