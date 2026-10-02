@@ -37,13 +37,13 @@ export const multiSelectComboBoxStyles = [
       flex: 1 0 var(--_input-min-width);
     }
 
-    ::slotted([slot='chip']),
-    ::slotted([slot='overflow']) {
+    ::slotted([slot='chip']) {
       flex: 0 1 auto;
+      overflow: hidden;
     }
 
-    ::slotted([slot='chip']) {
-      overflow: hidden;
+    ::slotted([slot='overflow']) {
+      flex: none;
     }
 
     :host(:is([readonly], [disabled])) ::slotted(input) {
