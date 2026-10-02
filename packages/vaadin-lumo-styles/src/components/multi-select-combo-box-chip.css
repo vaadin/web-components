@@ -35,7 +35,6 @@
 
   :host([slot='overflow']) {
     position: relative;
-    min-width: var(--lumo-size-xxs);
     margin-inline-start: var(--lumo-space-s);
   }
 
