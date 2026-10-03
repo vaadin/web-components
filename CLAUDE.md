@@ -15,6 +15,8 @@ This is the Vaadin Web Components monorepo - a collection of high-quality, acces
 - `packages/aura/`: Aura theme
 - `packages/vaadin-lumo-styles/`: Lumo theme
 - `packages/vaadin-themable-mixin/`: Theming infrastructure
+- `packages/react-components/`, `packages/react-components-pro/`: React wrappers for the web components (see `react/CLAUDE.md`)
+- `react/`: Tooling for the React packages: code generator, Vitest tests and Vite dev pages
 - `test/integration/`: Cross-component integration tests
 - `dev/`: Development playground with component examples for manual testing
 

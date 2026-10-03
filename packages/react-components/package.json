@@ -1,0 +1,602 @@
+{
+  "name": "@vaadin/react-components",
+  "version": "25.4.0-alpha1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "React wrappers for Vaadin components",
+  "type": "module",
+  "module": "index.js",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/react-components"
+  },
+  "scripts": {
+    "build": "yarn run build:dev && yarn run build:code && yarn run build:update-packagejson",
+    "build:dev": "yarn run build:generate && yarn run build:generate-css",
+    "build:generate": "tsx ../../react/scripts/generator.ts",
+    "build:generate-css": "tsx --experimental-vm-modules ../../react/scripts/css-generator.ts",
+    "build:update-packagejson": "tsx ../../react/scripts/package-json-update.ts",
+    "build:code": "concurrently yarn:build:code:*",
+    "build:code:ts": "tsx ../../react/scripts/build.ts",
+    "build:code:dts": "tsc -p tsconfig.build.json",
+    "build:code:copy-dts": "tsx ../../react/scripts/copy-dts.ts"
+  },
+  "dependencies": {
+    "@lit/react": "^1.0.7",
+    "@vaadin/a11y-base": "25.4.0-alpha1",
+    "@vaadin/accordion": "25.4.0-alpha1",
+    "@vaadin/app-layout": "25.4.0-alpha1",
+    "@vaadin/avatar": "25.4.0-alpha1",
+    "@vaadin/avatar-group": "25.4.0-alpha1",
+    "@vaadin/badge": "25.4.0-alpha1",
+    "@vaadin/breadcrumbs": "25.4.0-alpha1",
+    "@vaadin/button": "25.4.0-alpha1",
+    "@vaadin/card": "25.4.0-alpha1",
+    "@vaadin/checkbox": "25.4.0-alpha1",
+    "@vaadin/checkbox-group": "25.4.0-alpha1",
+    "@vaadin/combo-box": "25.4.0-alpha1",
+    "@vaadin/component-base": "25.4.0-alpha1",
+    "@vaadin/confirm-dialog": "25.4.0-alpha1",
+    "@vaadin/context-menu": "25.4.0-alpha1",
+    "@vaadin/custom-field": "25.4.0-alpha1",
+    "@vaadin/date-picker": "25.4.0-alpha1",
+    "@vaadin/date-time-picker": "25.4.0-alpha1",
+    "@vaadin/details": "25.4.0-alpha1",
+    "@vaadin/dialog": "25.4.0-alpha1",
+    "@vaadin/email-field": "25.4.0-alpha1",
+    "@vaadin/field-base": "25.4.0-alpha1",
+    "@vaadin/field-highlighter": "25.4.0-alpha1",
+    "@vaadin/form-layout": "25.4.0-alpha1",
+    "@vaadin/grid": "25.4.0-alpha1",
+    "@vaadin/horizontal-layout": "25.4.0-alpha1",
+    "@vaadin/icon": "25.4.0-alpha1",
+    "@vaadin/icons": "25.4.0-alpha1",
+    "@vaadin/input-container": "25.4.0-alpha1",
+    "@vaadin/integer-field": "25.4.0-alpha1",
+    "@vaadin/item": "25.4.0-alpha1",
+    "@vaadin/list-box": "25.4.0-alpha1",
+    "@vaadin/lit-renderer": "25.4.0-alpha1",
+    "@vaadin/login": "25.4.0-alpha1",
+    "@vaadin/markdown": "25.4.0-alpha1",
+    "@vaadin/master-detail-layout": "25.4.0-alpha1",
+    "@vaadin/menu-bar": "25.4.0-alpha1",
+    "@vaadin/message-input": "25.4.0-alpha1",
+    "@vaadin/message-list": "25.4.0-alpha1",
+    "@vaadin/multi-select-combo-box": "25.4.0-alpha1",
+    "@vaadin/notification": "25.4.0-alpha1",
+    "@vaadin/number-field": "25.4.0-alpha1",
+    "@vaadin/overlay": "25.4.0-alpha1",
+    "@vaadin/password-field": "25.4.0-alpha1",
+    "@vaadin/popover": "25.4.0-alpha1",
+    "@vaadin/progress-bar": "25.4.0-alpha1",
+    "@vaadin/radio-group": "25.4.0-alpha1",
+    "@vaadin/scroller": "25.4.0-alpha1",
+    "@vaadin/select": "25.4.0-alpha1",
+    "@vaadin/side-nav": "25.4.0-alpha1",
+    "@vaadin/slider": "25.4.0-alpha1",
+    "@vaadin/split-layout": "25.4.0-alpha1",
+    "@vaadin/switch": "25.4.0-alpha1",
+    "@vaadin/tabs": "25.4.0-alpha1",
+    "@vaadin/tabsheet": "25.4.0-alpha1",
+    "@vaadin/text-area": "25.4.0-alpha1",
+    "@vaadin/text-field": "25.4.0-alpha1",
+    "@vaadin/time-picker": "25.4.0-alpha1",
+    "@vaadin/tooltip": "25.4.0-alpha1",
+    "@vaadin/upload": "25.4.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "25.4.0-alpha1",
+    "@vaadin/vaadin-themable-mixin": "25.4.0-alpha1",
+    "@vaadin/vertical-layout": "25.4.0-alpha1",
+    "@vaadin/virtual-list": "25.4.0-alpha1"
+  },
+  "author": "Vaadin Ltd.",
+  "license": "Apache-2.0",
+  "peerDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    },
+    "@types/react-dom": {
+      "optional": true
+    }
+  },
+  "sideEffects": false,
+  "files": [
+    "css",
+    "generated",
+    "renderers",
+    "utils",
+    "*.d.ts",
+    "*.d.ts.map",
+    "*.js",
+    "*.js.map"
+  ],
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./package.json": "./package.json",
+    "./Accordion.js": {
+      "types": "./Accordion.d.ts",
+      "default": "./Accordion.js"
+    },
+    "./AccordionHeading.js": {
+      "types": "./AccordionHeading.d.ts",
+      "default": "./AccordionHeading.js"
+    },
+    "./AccordionPanel.js": {
+      "types": "./AccordionPanel.d.ts",
+      "default": "./AccordionPanel.js"
+    },
+    "./AppLayout.js": {
+      "types": "./AppLayout.d.ts",
+      "default": "./AppLayout.js"
+    },
+    "./Avatar.js": {
+      "types": "./Avatar.d.ts",
+      "default": "./Avatar.js"
+    },
+    "./AvatarGroup.js": {
+      "types": "./AvatarGroup.d.ts",
+      "default": "./AvatarGroup.js"
+    },
+    "./Badge.js": {
+      "types": "./Badge.d.ts",
+      "default": "./Badge.js"
+    },
+    "./Breadcrumbs.js": {
+      "types": "./Breadcrumbs.d.ts",
+      "default": "./Breadcrumbs.js"
+    },
+    "./BreadcrumbsItem.js": {
+      "types": "./BreadcrumbsItem.d.ts",
+      "default": "./BreadcrumbsItem.js"
+    },
+    "./Button.js": {
+      "types": "./Button.d.ts",
+      "default": "./Button.js"
+    },
+    "./Card.js": {
+      "types": "./Card.d.ts",
+      "default": "./Card.js"
+    },
+    "./Checkbox.js": {
+      "types": "./Checkbox.d.ts",
+      "default": "./Checkbox.js"
+    },
+    "./CheckboxGroup.js": {
+      "types": "./CheckboxGroup.d.ts",
+      "default": "./CheckboxGroup.js"
+    },
+    "./ComboBox.js": {
+      "types": "./ComboBox.d.ts",
+      "default": "./ComboBox.js"
+    },
+    "./ConfirmDialog.js": {
+      "types": "./ConfirmDialog.d.ts",
+      "default": "./ConfirmDialog.js"
+    },
+    "./ContextMenu.js": {
+      "types": "./ContextMenu.d.ts",
+      "default": "./ContextMenu.js"
+    },
+    "./ContextMenuItem.js": {
+      "types": "./ContextMenuItem.d.ts",
+      "default": "./ContextMenuItem.js"
+    },
+    "./ContextMenuListBox.js": {
+      "types": "./ContextMenuListBox.d.ts",
+      "default": "./ContextMenuListBox.js"
+    },
+    "./CustomField.js": {
+      "types": "./CustomField.d.ts",
+      "default": "./CustomField.js"
+    },
+    "./DatePicker.js": {
+      "types": "./DatePicker.d.ts",
+      "default": "./DatePicker.js"
+    },
+    "./DateTimePicker.js": {
+      "types": "./DateTimePicker.d.ts",
+      "default": "./DateTimePicker.js"
+    },
+    "./Details.js": {
+      "types": "./Details.d.ts",
+      "default": "./Details.js"
+    },
+    "./DetailsSummary.js": {
+      "types": "./DetailsSummary.d.ts",
+      "default": "./DetailsSummary.js"
+    },
+    "./Dialog.js": {
+      "types": "./Dialog.d.ts",
+      "default": "./Dialog.js"
+    },
+    "./DrawerToggle.js": {
+      "types": "./DrawerToggle.d.ts",
+      "default": "./DrawerToggle.js"
+    },
+    "./EmailField.js": {
+      "types": "./EmailField.d.ts",
+      "default": "./EmailField.js"
+    },
+    "./FormItem.js": {
+      "types": "./FormItem.d.ts",
+      "default": "./FormItem.js"
+    },
+    "./FormLayout.js": {
+      "types": "./FormLayout.d.ts",
+      "default": "./FormLayout.js"
+    },
+    "./FormRow.js": {
+      "types": "./FormRow.d.ts",
+      "default": "./FormRow.js"
+    },
+    "./Grid.js": {
+      "types": "./Grid.d.ts",
+      "default": "./Grid.js"
+    },
+    "./GridColumn.js": {
+      "types": "./GridColumn.d.ts",
+      "default": "./GridColumn.js"
+    },
+    "./GridColumnGroup.js": {
+      "types": "./GridColumnGroup.d.ts",
+      "default": "./GridColumnGroup.js"
+    },
+    "./GridFilter.js": {
+      "types": "./GridFilter.d.ts",
+      "default": "./GridFilter.js"
+    },
+    "./GridFilterColumn.js": {
+      "types": "./GridFilterColumn.d.ts",
+      "default": "./GridFilterColumn.js"
+    },
+    "./GridSelectionColumn.js": {
+      "types": "./GridSelectionColumn.d.ts",
+      "default": "./GridSelectionColumn.js"
+    },
+    "./GridSortColumn.js": {
+      "types": "./GridSortColumn.d.ts",
+      "default": "./GridSortColumn.js"
+    },
+    "./GridSorter.js": {
+      "types": "./GridSorter.d.ts",
+      "default": "./GridSorter.js"
+    },
+    "./GridTreeColumn.js": {
+      "types": "./GridTreeColumn.d.ts",
+      "default": "./GridTreeColumn.js"
+    },
+    "./GridTreeToggle.js": {
+      "types": "./GridTreeToggle.d.ts",
+      "default": "./GridTreeToggle.js"
+    },
+    "./HorizontalLayout.js": {
+      "types": "./HorizontalLayout.d.ts",
+      "default": "./HorizontalLayout.js"
+    },
+    "./Icon.js": {
+      "types": "./Icon.d.ts",
+      "default": "./Icon.js"
+    },
+    "./Iconset.js": {
+      "types": "./Iconset.d.ts",
+      "default": "./Iconset.js"
+    },
+    "./IntegerField.js": {
+      "types": "./IntegerField.d.ts",
+      "default": "./IntegerField.js"
+    },
+    "./Item.js": {
+      "types": "./Item.d.ts",
+      "default": "./Item.js"
+    },
+    "./ListBox.js": {
+      "types": "./ListBox.d.ts",
+      "default": "./ListBox.js"
+    },
+    "./LoginForm.js": {
+      "types": "./LoginForm.d.ts",
+      "default": "./LoginForm.js"
+    },
+    "./LoginOverlay.js": {
+      "types": "./LoginOverlay.d.ts",
+      "default": "./LoginOverlay.js"
+    },
+    "./Markdown.js": {
+      "types": "./Markdown.d.ts",
+      "default": "./Markdown.js"
+    },
+    "./MasterDetailLayout.js": {
+      "types": "./MasterDetailLayout.d.ts",
+      "default": "./MasterDetailLayout.js"
+    },
+    "./MenuBar.js": {
+      "types": "./MenuBar.d.ts",
+      "default": "./MenuBar.js"
+    },
+    "./Message.js": {
+      "types": "./Message.d.ts",
+      "default": "./Message.js"
+    },
+    "./MessageInput.js": {
+      "types": "./MessageInput.d.ts",
+      "default": "./MessageInput.js"
+    },
+    "./MessageList.js": {
+      "types": "./MessageList.d.ts",
+      "default": "./MessageList.js"
+    },
+    "./MultiSelectComboBox.js": {
+      "types": "./MultiSelectComboBox.d.ts",
+      "default": "./MultiSelectComboBox.js"
+    },
+    "./Notification.js": {
+      "types": "./Notification.d.ts",
+      "default": "./Notification.js"
+    },
+    "./NumberField.js": {
+      "types": "./NumberField.d.ts",
+      "default": "./NumberField.js"
+    },
+    "./PasswordField.js": {
+      "types": "./PasswordField.d.ts",
+      "default": "./PasswordField.js"
+    },
+    "./Popover.js": {
+      "types": "./Popover.d.ts",
+      "default": "./Popover.js"
+    },
+    "./ProgressBar.js": {
+      "types": "./ProgressBar.d.ts",
+      "default": "./ProgressBar.js"
+    },
+    "./RadioButton.js": {
+      "types": "./RadioButton.d.ts",
+      "default": "./RadioButton.js"
+    },
+    "./RadioGroup.js": {
+      "types": "./RadioGroup.d.ts",
+      "default": "./RadioGroup.js"
+    },
+    "./RangeSlider.js": {
+      "types": "./RangeSlider.d.ts",
+      "default": "./RangeSlider.js"
+    },
+    "./Scroller.js": {
+      "types": "./Scroller.d.ts",
+      "default": "./Scroller.js"
+    },
+    "./Select.js": {
+      "types": "./Select.d.ts",
+      "default": "./Select.js"
+    },
+    "./SelectItem.js": {
+      "types": "./SelectItem.d.ts",
+      "default": "./SelectItem.js"
+    },
+    "./SelectListBox.js": {
+      "types": "./SelectListBox.d.ts",
+      "default": "./SelectListBox.js"
+    },
+    "./SideNav.js": {
+      "types": "./SideNav.d.ts",
+      "default": "./SideNav.js"
+    },
+    "./SideNavItem.js": {
+      "types": "./SideNavItem.d.ts",
+      "default": "./SideNavItem.js"
+    },
+    "./Slider.js": {
+      "types": "./Slider.d.ts",
+      "default": "./Slider.js"
+    },
+    "./SplitLayout.js": {
+      "types": "./SplitLayout.d.ts",
+      "default": "./SplitLayout.js"
+    },
+    "./Switch.js": {
+      "types": "./Switch.d.ts",
+      "default": "./Switch.js"
+    },
+    "./Tab.js": {
+      "types": "./Tab.d.ts",
+      "default": "./Tab.js"
+    },
+    "./Tabs.js": {
+      "types": "./Tabs.d.ts",
+      "default": "./Tabs.js"
+    },
+    "./TabSheet.js": {
+      "types": "./TabSheet.d.ts",
+      "default": "./TabSheet.js"
+    },
+    "./TextArea.js": {
+      "types": "./TextArea.d.ts",
+      "default": "./TextArea.js"
+    },
+    "./TextField.js": {
+      "types": "./TextField.d.ts",
+      "default": "./TextField.js"
+    },
+    "./TimePicker.js": {
+      "types": "./TimePicker.d.ts",
+      "default": "./TimePicker.js"
+    },
+    "./Tooltip.js": {
+      "types": "./Tooltip.d.ts",
+      "default": "./Tooltip.js"
+    },
+    "./Upload.js": {
+      "types": "./Upload.d.ts",
+      "default": "./Upload.js"
+    },
+    "./UploadButton.js": {
+      "types": "./UploadButton.d.ts",
+      "default": "./UploadButton.js"
+    },
+    "./UploadDropZone.js": {
+      "types": "./UploadDropZone.d.ts",
+      "default": "./UploadDropZone.js"
+    },
+    "./UploadFileList.js": {
+      "types": "./UploadFileList.d.ts",
+      "default": "./UploadFileList.js"
+    },
+    "./VerticalLayout.js": {
+      "types": "./VerticalLayout.d.ts",
+      "default": "./VerticalLayout.js"
+    },
+    "./VirtualList.js": {
+      "types": "./VirtualList.d.ts",
+      "default": "./VirtualList.js"
+    },
+    "./Accordion": "./Accordion.js",
+    "./AccordionHeading": "./AccordionHeading.js",
+    "./AccordionPanel": "./AccordionPanel.js",
+    "./AppLayout": "./AppLayout.js",
+    "./Avatar": "./Avatar.js",
+    "./AvatarGroup": "./AvatarGroup.js",
+    "./Badge": "./Badge.js",
+    "./Breadcrumbs": "./Breadcrumbs.js",
+    "./BreadcrumbsItem": "./BreadcrumbsItem.js",
+    "./Button": "./Button.js",
+    "./Card": "./Card.js",
+    "./Checkbox": "./Checkbox.js",
+    "./CheckboxGroup": "./CheckboxGroup.js",
+    "./ComboBox": "./ComboBox.js",
+    "./ConfirmDialog": "./ConfirmDialog.js",
+    "./ContextMenu": "./ContextMenu.js",
+    "./ContextMenuItem": "./ContextMenuItem.js",
+    "./ContextMenuListBox": "./ContextMenuListBox.js",
+    "./CustomField": "./CustomField.js",
+    "./DatePicker": "./DatePicker.js",
+    "./DateTimePicker": "./DateTimePicker.js",
+    "./Details": "./Details.js",
+    "./DetailsSummary": "./DetailsSummary.js",
+    "./Dialog": "./Dialog.js",
+    "./DrawerToggle": "./DrawerToggle.js",
+    "./EmailField": "./EmailField.js",
+    "./FormItem": "./FormItem.js",
+    "./FormLayout": "./FormLayout.js",
+    "./FormRow": "./FormRow.js",
+    "./Grid": "./Grid.js",
+    "./GridColumn": "./GridColumn.js",
+    "./GridColumnGroup": "./GridColumnGroup.js",
+    "./GridFilter": "./GridFilter.js",
+    "./GridFilterColumn": "./GridFilterColumn.js",
+    "./GridSelectionColumn": "./GridSelectionColumn.js",
+    "./GridSortColumn": "./GridSortColumn.js",
+    "./GridSorter": "./GridSorter.js",
+    "./GridTreeColumn": "./GridTreeColumn.js",
+    "./GridTreeToggle": "./GridTreeToggle.js",
+    "./HorizontalLayout": "./HorizontalLayout.js",
+    "./Icon": "./Icon.js",
+    "./Iconset": "./Iconset.js",
+    "./IntegerField": "./IntegerField.js",
+    "./Item": "./Item.js",
+    "./ListBox": "./ListBox.js",
+    "./LoginForm": "./LoginForm.js",
+    "./LoginOverlay": "./LoginOverlay.js",
+    "./Markdown": "./Markdown.js",
+    "./MasterDetailLayout": "./MasterDetailLayout.js",
+    "./MenuBar": "./MenuBar.js",
+    "./Message": "./Message.js",
+    "./MessageInput": "./MessageInput.js",
+    "./MessageList": "./MessageList.js",
+    "./MultiSelectComboBox": "./MultiSelectComboBox.js",
+    "./Notification": "./Notification.js",
+    "./NumberField": "./NumberField.js",
+    "./PasswordField": "./PasswordField.js",
+    "./Popover": "./Popover.js",
+    "./ProgressBar": "./ProgressBar.js",
+    "./RadioButton": "./RadioButton.js",
+    "./RadioGroup": "./RadioGroup.js",
+    "./RangeSlider": "./RangeSlider.js",
+    "./Scroller": "./Scroller.js",
+    "./Select": "./Select.js",
+    "./SelectItem": "./SelectItem.js",
+    "./SelectListBox": "./SelectListBox.js",
+    "./SideNav": "./SideNav.js",
+    "./SideNavItem": "./SideNavItem.js",
+    "./Slider": "./Slider.js",
+    "./SplitLayout": "./SplitLayout.js",
+    "./Switch": "./Switch.js",
+    "./Tab": "./Tab.js",
+    "./Tabs": "./Tabs.js",
+    "./TabSheet": "./TabSheet.js",
+    "./TextArea": "./TextArea.js",
+    "./TextField": "./TextField.js",
+    "./TimePicker": "./TimePicker.js",
+    "./Tooltip": "./Tooltip.js",
+    "./Upload": "./Upload.js",
+    "./UploadButton": "./UploadButton.js",
+    "./UploadDropZone": "./UploadDropZone.js",
+    "./UploadFileList": "./UploadFileList.js",
+    "./VerticalLayout": "./VerticalLayout.js",
+    "./VirtualList": "./VirtualList.js",
+    "./css/lumo/Utility.module.css": "./css/lumo/Utility.module.css",
+    "./utils/createComponent.d.ts": "./utils/createComponent.d.ts",
+    "./utils/createComponent.d.ts.map": "./utils/createComponent.d.ts.map",
+    "./utils/createComponent.js": "./utils/createComponent.js",
+    "./utils/createComponent.js.map": "./utils/createComponent.js.map",
+    "./utils/createComponentWithOrderedProps.d.ts": "./utils/createComponentWithOrderedProps.d.ts",
+    "./utils/createComponentWithOrderedProps.d.ts.map": "./utils/createComponentWithOrderedProps.d.ts.map",
+    "./utils/createComponentWithOrderedProps.js": "./utils/createComponentWithOrderedProps.js",
+    "./utils/createComponentWithOrderedProps.js.map": "./utils/createComponentWithOrderedProps.js.map",
+    "./utils/flushMicrotask.d.ts": "./utils/flushMicrotask.d.ts",
+    "./utils/flushMicrotask.d.ts.map": "./utils/flushMicrotask.d.ts.map",
+    "./utils/flushMicrotask.js": "./utils/flushMicrotask.js",
+    "./utils/flushMicrotask.js.map": "./utils/flushMicrotask.js.map",
+    "./utils/mapItemsWithComponents.d.ts": "./utils/mapItemsWithComponents.d.ts",
+    "./utils/mapItemsWithComponents.d.ts.map": "./utils/mapItemsWithComponents.d.ts.map",
+    "./utils/mapItemsWithComponents.js": "./utils/mapItemsWithComponents.js",
+    "./utils/mapItemsWithComponents.js.map": "./utils/mapItemsWithComponents.js.map",
+    "./utils/useMergedRefs.d.ts": "./utils/useMergedRefs.d.ts",
+    "./utils/useMergedRefs.d.ts.map": "./utils/useMergedRefs.d.ts.map",
+    "./utils/useMergedRefs.js": "./utils/useMergedRefs.js",
+    "./utils/useMergedRefs.js.map": "./utils/useMergedRefs.js.map",
+    "./utils/warnings.d.ts": "./utils/warnings.d.ts",
+    "./utils/warnings.d.ts.map": "./utils/warnings.d.ts.map",
+    "./utils/warnings.js": "./utils/warnings.js",
+    "./utils/warnings.js.map": "./utils/warnings.js.map",
+    "./renderers/combobox.d.ts": "./renderers/combobox.d.ts",
+    "./renderers/grid.d.ts": "./renderers/grid.d.ts",
+    "./renderers/multiSelectCombobox.d.ts": "./renderers/multiSelectCombobox.d.ts",
+    "./renderers/renderer.d.ts": "./renderers/renderer.d.ts",
+    "./renderers/useContextRenderer.d.ts": "./renderers/useContextRenderer.d.ts",
+    "./renderers/useContextRenderer.d.ts.map": "./renderers/useContextRenderer.d.ts.map",
+    "./renderers/useContextRenderer.js": "./renderers/useContextRenderer.js",
+    "./renderers/useContextRenderer.js.map": "./renderers/useContextRenderer.js.map",
+    "./renderers/useModelRenderer.d.ts": "./renderers/useModelRenderer.d.ts",
+    "./renderers/useModelRenderer.d.ts.map": "./renderers/useModelRenderer.d.ts.map",
+    "./renderers/useModelRenderer.js": "./renderers/useModelRenderer.js",
+    "./renderers/useModelRenderer.js.map": "./renderers/useModelRenderer.js.map",
+    "./renderers/useRenderer.d.ts": "./renderers/useRenderer.d.ts",
+    "./renderers/useRenderer.d.ts.map": "./renderers/useRenderer.d.ts.map",
+    "./renderers/useRenderer.js": "./renderers/useRenderer.js",
+    "./renderers/useRenderer.js.map": "./renderers/useRenderer.js.map",
+    "./renderers/useSimpleOrChildrenRenderer.d.ts": "./renderers/useSimpleOrChildrenRenderer.d.ts",
+    "./renderers/useSimpleOrChildrenRenderer.d.ts.map": "./renderers/useSimpleOrChildrenRenderer.d.ts.map",
+    "./renderers/useSimpleOrChildrenRenderer.js": "./renderers/useSimpleOrChildrenRenderer.js",
+    "./renderers/useSimpleOrChildrenRenderer.js.map": "./renderers/useSimpleOrChildrenRenderer.js.map",
+    "./renderers/useSimpleRenderer.d.ts": "./renderers/useSimpleRenderer.d.ts",
+    "./renderers/useSimpleRenderer.d.ts.map": "./renderers/useSimpleRenderer.d.ts.map",
+    "./renderers/useSimpleRenderer.js": "./renderers/useSimpleRenderer.js",
+    "./renderers/useSimpleRenderer.js.map": "./renderers/useSimpleRenderer.js.map"
+  },
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  }
+}

@@ -1,0 +1,216 @@
+import {
+  MasterDetailLayout as _MasterDetailLayout,
+  MasterDetailLayoutElement,
+} from './generated/MasterDetailLayout.js';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+
+export * from './generated/MasterDetailLayout.js';
+
+type MasterProps = React.PropsWithChildren<{}>;
+type DetailProps = React.PropsWithChildren<{}>;
+type DetailPlaceholderProps = React.PropsWithChildren<{}>;
+
+type MasterDetailLayoutElementWithInternalAPI = MasterDetailLayoutElement & {
+  _startTransition: (transitionType: 'add' | 'remove' | 'replace', callback: () => void) => Promise<void>;
+};
+
+function Master({ children }: MasterProps) {
+  return children;
+}
+
+function DetailPlaceholder({ children }: DetailPlaceholderProps) {
+  return (
+    <div slot="detail-placeholder" style={{ height: '100%' }}>
+      {children}
+    </div>
+  );
+}
+
+/**
+ * Compares two sets of React children to detect meaningful changes, ignoring text nodes.
+ * Compares by component type and key.
+ *
+ * @param prevChildren Previous children
+ * @param nextChildren Current children
+ * @returns True if the non-text children are meaningfully different, false otherwise
+ */
+function areChildrenDifferent(prevChildren: React.ReactNode, nextChildren: React.ReactNode): boolean {
+  // Convert to arrays and filter out text nodes
+  const prevArray = React.Children.toArray(prevChildren).filter((child) => React.isValidElement(child));
+  const nextArray = React.Children.toArray(nextChildren).filter((child) => React.isValidElement(child));
+
+  // If lengths are different, children have changed
+  if (prevArray.length !== nextArray.length) {
+    return true;
+  }
+
+  // Compare each element by type and key
+  for (let i = 0; i < prevArray.length; i++) {
+    const prevChild = prevArray[i] as React.ReactElement;
+    const nextChild = nextArray[i] as React.ReactElement;
+
+    // Compare by type
+    if (prevChild.type !== nextChild.type) {
+      return true;
+    }
+
+    // Compare by key (React.Children.toArray adds keys if missing)
+    if (prevChild.key !== nextChild.key) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function Detail({ children }: DetailProps) {
+  const currentDetailsRef = useRef<HTMLDivElement>(null);
+  const currentDetailsKey = useRef<number>(0);
+  const nextDetailsRef = useRef<HTMLDivElement>(null);
+  const nextDetailsKey = currentDetailsKey.current + 1;
+  const [state, setState] = useState('idle');
+  const [currentChildren, setCurrentChildren] = useState(children);
+
+  useLayoutEffect(() => {
+    const layout = currentDetailsRef.current?.closest(
+      'vaadin-master-detail-layout',
+    ) as MasterDetailLayoutElementWithInternalAPI;
+    if (!layout) {
+      return;
+    }
+
+    if (state === 'idle') {
+      // No transition in progress — just update slot name
+      const hasChildren = currentDetailsRef.current!.childElementCount > 0;
+      currentDetailsRef.current!.setAttribute('slot', hasChildren ? 'detail' : 'detail-hidden');
+    } else if (state === 'starting') {
+      // Transition is starting and old and (invisible) new details are rendered.
+      // Determine the transition type based on old and new detail contents.
+      const hasCurrentDetails = currentDetailsRef.current!.childElementCount > 0;
+      const hasNextDetails = nextDetailsRef.current!.childElementCount > 0;
+      const transitionType = hasCurrentDetails && hasNextDetails ? 'replace' : hasCurrentDetails ? 'remove' : 'add';
+
+      // _startTransition calls the callback synchronously for add/replace,
+      // and asynchronously for remove.
+      layout
+        ._startTransition(transitionType, async () => {
+          if (transitionType === 'replace' && currentDetailsRef.current) {
+            // For replace, _startTransition moved the current div to the
+            // detail-outgoing slot for the outgoing animation. Clone it so the
+            // WC can animate the clone out, then hide the React-managed original
+            // so the WC's post-animation cleanup won't remove it from the DOM.
+            const clone = currentDetailsRef.current.cloneNode(true) as HTMLElement;
+            clone.setAttribute('slot', 'detail-outgoing');
+            layout.appendChild(clone);
+            currentDetailsRef.current.setAttribute('slot', 'detail-hidden');
+          } else if (currentDetailsRef.current) {
+            currentDetailsRef.current.setAttribute('slot', 'detail-hidden');
+          }
+          if (nextDetailsRef.current) {
+            nextDetailsRef.current.style.display = '';
+            const hasNext = nextDetailsRef.current.childElementCount > 0;
+            nextDetailsRef.current.setAttribute('slot', hasNext ? 'detail' : 'detail-hidden');
+          }
+
+          // Wait for Lit elements to render
+          await Promise.resolve();
+
+          // Recompute layout state with the new DOM
+          layout.recalculateLayout();
+        })
+        .then(() => {
+          // Animation finished — sync React state to match DOM reality
+          setCurrentChildren(children);
+          currentDetailsKey.current = nextDetailsKey;
+          setState('idle');
+        });
+    }
+  }, [state, currentChildren]);
+
+  useEffect(() => {
+    if (state !== 'idle') {
+      return;
+    }
+    if (areChildrenDifferent(currentChildren, children)) {
+      setState('starting');
+    } else {
+      setCurrentChildren(children);
+    }
+  }, [state, children]);
+
+  return (
+    <>
+      <div ref={currentDetailsRef} key={currentDetailsKey.current} style={{ height: '100%' }}>
+        {currentChildren}
+      </div>
+      {state === 'starting' && (
+        <div ref={nextDetailsRef} key={nextDetailsKey} style={{ display: 'none', height: '100%' }}>
+          {children}
+        </div>
+      )}
+    </>
+  );
+}
+
+function validateChildren(children: React.ReactNode) {
+  React.Children.forEach(children, (child) => {
+    // Ignore non-React elements
+    // We especially want to ignore text nodes to allow for whitespace resulting from formatting
+    if (
+      React.isValidElement(child) &&
+      child.type !== Master &&
+      child.type !== Detail &&
+      child.type !== DetailPlaceholder
+    ) {
+      throw new Error(
+        'Invalid child in MasterDetailLayout. Only <MasterDetailLayout.Master>, <MasterDetailLayout.Detail>, and <MasterDetailLayout.DetailPlaceholder> components are allowed. Check the component docs for proper usage.',
+      );
+    }
+  });
+}
+
+const MasterDetailLayoutWithValidation: React.FC<React.ComponentProps<typeof _MasterDetailLayout>> = (props) => {
+  validateChildren(props.children);
+
+  return <_MasterDetailLayout {...props} />;
+};
+
+/**
+ * `MasterDetailLayout` is a React component for building UIs with a master
+ * (or primary) area and a detail (or secondary) area that is displayed next to, or
+ * overlaid on top of, the master area, depending on configuration and viewport size.
+ *
+ * Content for each area should be wrapped into the respective
+ * `MasterDetailLayout.Master`, `MasterDetailLayout.Detail`, and optionally
+ * `MasterDetailLayout.DetailPlaceholder` wrapper components.
+ * Using any other component as a child will throw an error. To ensure that view
+ * transitions are run properly, details content should be rendered conditionally
+ * into the `MasterDetailLayout.Detail` component. The `DetailPlaceholder` is shown
+ * in the detail area when no detail is selected, and is hidden when the viewport
+ * is too narrow (unlike detail, it does not become an overlay).
+ *
+ * @example
+ * ```tsx
+ * const selectedProduct = useSignal<Product | null>(null);
+ *
+ * <MasterDetailLayout>
+ *   <MasterDetailLayout.Master>
+ *     <ProductList onSelect={(product) => { selectedProduct.value = product }} />
+ *   </MasterDetailLayout.Master>
+ *   <MasterDetailLayout.Detail>
+ *     { selectedProduct.value && <ProductDetail product={selectedProduct.value} /> }
+ *   </MasterDetailLayout.Detail>
+ * </MasterDetailLayout>
+ * ```
+ */
+const MasterDetailLayout = MasterDetailLayoutWithValidation as typeof MasterDetailLayoutWithValidation & {
+  Master: React.FC<MasterProps>;
+  Detail: React.FC<DetailProps>;
+  DetailPlaceholder: React.FC<DetailPlaceholderProps>;
+};
+
+MasterDetailLayout.Master = Master;
+MasterDetailLayout.Detail = Detail;
+MasterDetailLayout.DetailPlaceholder = DetailPlaceholder;
+
+export { MasterDetailLayout };
