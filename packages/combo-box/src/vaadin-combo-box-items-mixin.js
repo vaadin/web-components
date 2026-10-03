@@ -160,11 +160,13 @@ export const ComboBoxItemsMixin = (superClass) =>
      * @protected
      */
     updated(props) {
-      super.updated(props);
-
+      // Filter before the base mixin decides whether to open the overlay, so
+      // it does not briefly show items from the previous filter.
       if (props.has('filter')) {
         this._filterChanged(this.filter);
       }
+
+      super.updated(props);
 
       if (props.has('itemLabelGenerator')) {
         this.requestContentUpdate();
