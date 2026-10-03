@@ -15,6 +15,27 @@ describe('overlay opening', () => {
   });
 
   describe('default (auto open)', () => {
+    [false, true].forEach((allowCustomValue) => {
+      it(`should not briefly open for an unmatched filter with allowCustomValue=${allowCustomValue}`, async () => {
+        comboBox.allowCustomValue = allowCustomValue;
+        const openedValues = [];
+        overlay.addEventListener('opened-changed', (event) => openedValues.push(event.detail.value));
+
+        setInputValue(comboBox, 'no match');
+        await nextRender();
+
+        expect(comboBox.opened).to.be.true;
+        expect(overlay.opened).to.be.false;
+        expect(openedValues).not.to.include(true);
+
+        setInputValue(comboBox, 'foo');
+        await nextRender();
+
+        expect(overlay.opened).to.be.true;
+        expect(comboBox.filteredItems).to.deep.equal(['foo']);
+      });
+    });
+
     it('should set opened to false by default', () => {
       expect(comboBox.opened).to.be.false;
     });
