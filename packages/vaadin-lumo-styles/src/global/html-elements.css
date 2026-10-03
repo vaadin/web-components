@@ -3,7 +3,5 @@
  * Copyright (c) 2017 - 2026 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-@import './badge.css';
-@import './color-scheme.css';
-@import './html-elements.css';
-@import './typography.css';
+@import './form-controls.css';
+@import './table.css';
