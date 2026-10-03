@@ -1,0 +1,6 @@
+vaadin-dropdown-menu[opening]::part(overlay),
+vaadin-dropdown-menu[closing]::part(overlay),
+vaadin-dropdown-menu-submenu[opening]::part(overlay),
+vaadin-dropdown-menu-submenu[closing]::part(overlay) {
+  animation: none !important;
+}
