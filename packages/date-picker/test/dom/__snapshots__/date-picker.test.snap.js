@@ -389,27 +389,42 @@ snapshots["vaadin-date-picker host opened default"] =
     </vaadin-button>
     <vaadin-date-picker-month-scroller slot="months">
       <div slot="vaadin-infinite-scroller-item-content-4">
-        <vaadin-month-calendar aria-hidden="true">
+        <vaadin-month-calendar
+          aria-hidden="true"
+          role="application"
+        >
         </vaadin-month-calendar>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-5">
-        <vaadin-month-calendar aria-hidden="true">
+        <vaadin-month-calendar
+          aria-hidden="true"
+          role="application"
+        >
         </vaadin-month-calendar>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-6">
-        <vaadin-month-calendar aria-hidden="true">
+        <vaadin-month-calendar
+          aria-hidden="true"
+          role="application"
+        >
         </vaadin-month-calendar>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-7">
-        <vaadin-month-calendar>
+        <vaadin-month-calendar role="application">
         </vaadin-month-calendar>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-8">
-        <vaadin-month-calendar aria-hidden="true">
+        <vaadin-month-calendar
+          aria-hidden="true"
+          role="application"
+        >
         </vaadin-month-calendar>
       </div>
       <div slot="vaadin-infinite-scroller-item-content-9">
-        <vaadin-month-calendar aria-hidden="true">
+        <vaadin-month-calendar
+          aria-hidden="true"
+          role="application"
+        >
         </vaadin-month-calendar>
       </div>
     </vaadin-date-picker-month-scroller>
