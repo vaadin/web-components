@@ -1,7 +1,7 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import '../src/vaadin-context-menu.js';
+import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { ContextMenu } from '../src/vaadin-context-menu.js';
 import { getMenuItems, openMenu, openSubMenu } from './helpers.js';
 
 describe('items rendering', () => {
@@ -282,5 +282,42 @@ describe('items theme', () => {
     const item = getMenuItems(subMenu)[2];
 
     expect(item.getAttribute('theme')).to.equal('bar-1');
+  });
+});
+
+describe('custom sub-menu tag', () => {
+  let menu;
+
+  before(() => {
+    customElements.define('test-sub-menu', class extends ContextMenu {});
+    customElements.define(
+      'test-root-menu',
+      class extends ContextMenu {
+        get _subMenuTagName() {
+          return 'test-sub-menu';
+        }
+      },
+    );
+  });
+
+  beforeEach(async () => {
+    menu = fixtureSync(`
+      <test-root-menu open-on="click">
+        <button></button>
+      </test-root-menu>
+    `);
+    menu.items = [{ text: 'foo', children: [{ text: 'bar' }] }];
+    await nextRender();
+  });
+
+  afterEach(() => {
+    menu.close();
+  });
+
+  it('should create nested sub-menu with the tag from _subMenuTagName', async () => {
+    const opened = oneEvent(menu._overlayElement, 'vaadin-overlay-open');
+    menu.firstElementChild.click();
+    await opened;
+    expect(menu.querySelector(':scope > [slot="submenu"]').localName).to.equal('test-sub-menu');
   });
 });

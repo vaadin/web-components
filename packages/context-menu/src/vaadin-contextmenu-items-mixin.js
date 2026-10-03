@@ -96,6 +96,15 @@ export const ItemsMixin = (superClass) =>
       return 'vaadin-context-menu';
     }
 
+    /**
+     * Tag name of the element created for nested sub-menus.
+     * @protected
+     * @return {string}
+     */
+    get _subMenuTagName() {
+      return this.constructor.is;
+    }
+
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
@@ -303,7 +312,7 @@ export const ItemsMixin = (superClass) =>
 
     /** @private */
     __initSubMenu() {
-      const subMenu = document.createElement(this.constructor.is);
+      const subMenu = document.createElement(this._subMenuTagName);
 
       // The slotted `<vaadin-tooltip>` lives on the outer `<vaadin-context-menu>`
       // host. Its tooltip controller instance is shared across sub-menus to

@@ -85,4 +85,9 @@ export declare class ItemsMixinClass<TItem extends ContextMenuItemData = Context
    * Tag name prefix used by overlay, list-box and items.
    */
   protected readonly _tagNamePrefix: string;
+
+  /**
+   * Tag name of the element created for nested sub-menus.
+   */
+  protected readonly _subMenuTagName: string;
 }
