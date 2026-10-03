@@ -32,9 +32,6 @@ addGlobalStyles(
 export const formLayoutStyles = css`
   :host {
     /* Default values */
-    --_label-spacing: var(--vaadin-form-layout-label-spacing);
-    --_label-text-align: var(--vaadin-form-layout-label-text-align);
-    --_label-width: var(--vaadin-form-layout-label-width);
     --_column-spacing: var(--vaadin-form-layout-column-spacing);
     --_row-spacing: var(--vaadin-form-layout-row-spacing);
 
@@ -77,7 +74,9 @@ export const formLayoutStyles = css`
     /* Column width */
     --_column-width: var(--vaadin-field-default-width, 12em);
     --_column-width-labels-above: var(--_column-width);
-    --_column-width-labels-aside: calc(var(--_column-width) + var(--_label-width) + var(--_label-spacing));
+    --_column-width-labels-aside: calc(
+      var(--_column-width) + var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing)
+    );
 
     /* Column gap */
     --_min-total-gap: calc((var(--_min-columns) - 1) * var(--_column-spacing));
@@ -98,10 +97,6 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout {
-    /* By default, labels should be displayed above the fields */
-    --_form-item-labels-above: initial; /* true */
-    --_form-item-labels-aside: ' '; /* false */
-
     /* CSS grid related properties */
     --_grid-column-width: var(--_column-width-labels-above);
     --_grid-repeat: var(--_grid-column-width);
@@ -142,10 +137,6 @@ export const formLayoutStyles = css`
   }
 
   :host([auto-responsive]) #layout ::slotted(*) {
-    /* Make form items inherit label position from the layout */
-    --_form-item-labels-above: inherit;
-    --_form-item-labels-aside: inherit;
-
     /* By default, place each child on a new row */
     grid-column: 1 / span min(var(--_grid-colspan, 1), var(--_grid-rendered-column-count));
 
@@ -160,14 +151,12 @@ export const formLayoutStyles = css`
   :host([auto-responsive][labels-aside]) {
     --_max-width: var(--_max-width-labels-aside);
 
-    --vaadin-input-field-label-aside-width: var(--_label-width);
-    --vaadin-input-field-label-aside-gap: var(--_label-spacing);
-    --vaadin-input-field-label-aside-text-align: var(--_label-text-align);
+    --vaadin-input-field-label-aside-width: var(--vaadin-form-layout-label-width);
+    --vaadin-input-field-label-aside-gap: var(--vaadin-form-layout-label-spacing);
+    --vaadin-input-field-label-aside-text-align: var(--vaadin-form-layout-label-text-align);
   }
 
   :host([auto-responsive][has-labels-aside]) #layout {
-    --_form-item-labels-above: ' '; /* false */
-    --_form-item-labels-aside: initial; /* true */
     --_grid-column-width: var(--_column-width-labels-aside);
   }
 
