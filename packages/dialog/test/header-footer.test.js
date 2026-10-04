@@ -21,6 +21,27 @@ describe('header/footer feature', () => {
   });
 
   describe('content focus ring', () => {
+    [2, 6].forEach((width) => {
+      it(`should preserve header and footer spacing with a ${width}px focus ring`, async () => {
+        overlay.style.setProperty('--vaadin-focus-ring-width', `${width}px`);
+        dialog.headerTitle = 'Title';
+        dialog.footerRenderer = createRenderer('Footer');
+        const content = document.createElement('div');
+        content.textContent = 'Content';
+        dialog.renderer = (root) => {
+          root.appendChild(content);
+        };
+        dialog.opened = true;
+        await nextRender();
+
+        const contentRect = content.getBoundingClientRect();
+        const headerRect = overlay.shadowRoot.querySelector('[part="header"]').getBoundingClientRect();
+        const footerRect = overlay.shadowRoot.querySelector('[part="footer"]').getBoundingClientRect();
+        expect(contentRect.top).to.be.closeTo(headerRect.bottom, 0.5);
+        expect(contentRect.bottom).to.be.closeTo(footerRect.top, 0.5);
+      });
+    });
+
     ['title', 'renderer', 'none'].forEach((header) => {
       it(`should leave room for the focus ring with a ${header} header and footer`, async () => {
         if (header === 'title') {
@@ -62,6 +83,8 @@ describe('header/footer feature', () => {
       const style = getComputedStyle(overlay.$.content);
       expect(style.paddingTop).to.equal('0px');
       expect(style.paddingBottom).to.equal('0px');
+      expect(style.marginTop).to.equal('0px');
+      expect(style.marginBottom).to.equal('0px');
     });
   });
 
