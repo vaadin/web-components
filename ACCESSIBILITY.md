@@ -7,7 +7,7 @@ Most of existing digital accessibility laws worldwide, such as the European Acce
 ## How we test
 
 - We test new UI features with screen readers during development and before each release.
-- The reputable accessibility agency [TetraLogical](https://tetralogical.com/) tests Vaadin web components once a year.
+- The reputable accessibility agency [TetraLogical](https://tetralogical.com) tests Vaadin web components once a year.
 - We add known accessibility issues to our backlog and fix them as part of regular maintenance.
 
 ## Recommended environments
@@ -51,4 +51,4 @@ Accessible components alone do not make an application accessible. Developers mu
 Check out the following posts on the Vaadin blog:
 
 - [Basic Tips for Improving Accessibility](https://vaadin.com/blog/basic-tips-for-improving-accessibility)
-- [How We Built an Accessible Dashboard Component](https://vaadin.com/blog/basic-tips-for-improving-accessibility)
+- [How We Built an Accessible Dashboard Component](https://vaadin.com/blog/how-we-built-an-accessible-dashboard-component)
