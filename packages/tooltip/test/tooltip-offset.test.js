@@ -25,6 +25,69 @@ describe('offset', () => {
     await oneEvent(overlay, 'vaadin-overlay-open');
   }
 
+  ['top', 'bottom'].forEach((position) => {
+    it(`should flip from ${position} when the tooltip fits but its offset does not`, async () => {
+      tooltip.position = position;
+      tooltip.style.setProperty('--vaadin-tooltip-offset-top', '10px');
+      tooltip.style.setProperty('--vaadin-tooltip-offset-bottom', '10px');
+      Object.assign(target.style, { position: 'fixed', margin: '0', top: '200px', left: '200px' });
+      await nextUpdate(tooltip);
+      await open();
+      const height = overlay.$.overlay.offsetHeight;
+      const margin = parseFloat(getComputedStyle(overlay)[position]);
+      const available = height + margin + 5;
+      target.style.top = position === 'top' ? `${available}px` : 'auto';
+      target.style.bottom = position === 'bottom' ? `${available}px` : 'auto';
+      overlay._updatePosition();
+      await nextRender();
+      expect(overlay.hasAttribute(position === 'top' ? 'top-aligned' : 'bottom-aligned')).to.be.true;
+      expect(overlay.$.content.scrollHeight).to.be.at.most(overlay.$.content.clientHeight);
+    });
+  });
+
+  ['start', 'end'].forEach((position) => {
+    ['ltr', 'rtl'].forEach((dir) => {
+      describe(`${position} ${dir} offset fit`, () => {
+        before(() => document.documentElement.setAttribute('dir', dir));
+        after(() => document.documentElement.removeAttribute('dir'));
+        it('should include the offset when flipping horizontally', async () => {
+          tooltip.position = position;
+          tooltip.style.setProperty('--vaadin-tooltip-offset-start', '10px');
+          tooltip.style.setProperty('--vaadin-tooltip-offset-end', '10px');
+          Object.assign(target.style, { position: 'fixed', margin: '0', top: '200px', left: '200px' });
+          await nextUpdate(tooltip);
+          await open();
+          const side = (position === 'start') === (dir === 'ltr') ? 'left' : 'right';
+          const available = overlay.$.overlay.offsetWidth + parseFloat(getComputedStyle(overlay)[side]) + 5;
+          target.style.left = side === 'left' ? `${available}px` : 'auto';
+          target.style.right = side === 'right' ? `${available}px` : 'auto';
+          overlay._updatePosition();
+          await nextRender();
+          expect(overlay.hasAttribute(position === 'start' ? 'start-aligned' : 'end-aligned')).to.be.true;
+          expect(overlay.$.content.scrollWidth).to.be.at.most(overlay.$.content.clientWidth);
+        });
+      });
+    });
+  });
+
+  it('should keep the same side across repeated updates with asymmetric offsets', async () => {
+    tooltip.position = 'bottom';
+    tooltip.style.setProperty('--vaadin-tooltip-offset-top', '30px');
+    tooltip.style.setProperty('--vaadin-tooltip-offset-bottom', '10px');
+    Object.assign(target.style, { position: 'fixed', margin: '0', top: '200px', left: '200px' });
+    await nextUpdate(tooltip);
+    await open();
+    const available = overlay.$.overlay.offsetHeight + parseFloat(getComputedStyle(overlay).bottom) + 15;
+    target.style.top = 'auto';
+    target.style.bottom = `${available}px`;
+    for (let i = 0; i < 5; i++) {
+      overlay._updatePosition();
+      await nextRender();
+      expect(overlay.hasAttribute('bottom-aligned')).to.be.true;
+      expect(overlay.$.content.scrollHeight).to.be.at.most(overlay.$.content.clientHeight);
+    }
+  });
+
   ['top-start', 'top', 'top-end'].forEach((position) => {
     describe(`${position} offset`, () => {
       beforeEach(async () => {
