@@ -13,6 +13,8 @@ type MockXhr = {
     onloadstart: (() => void) | null;
   };
   onreadystatechange: (() => void) | null;
+  onload: (() => void) | null;
+  onerror: (() => void) | null;
   onabort: (() => void) | null;
   ontimeout: (() => void) | null;
   requestHeaders: Record<string, string>;
@@ -39,6 +41,8 @@ function createMockXhr(options: MockXhrOptions = {}): MockXhr {
       onloadstart: null,
     },
     onreadystatechange: null,
+    onload: null,
+    onerror: null,
     onabort: null,
     ontimeout: null,
     requestHeaders: {},
@@ -80,6 +84,8 @@ function setMockXhrFactory(manager: UploadManager, options: MockXhrOptions = {})
 
 function scheduleXhrTimeout(xhr: MockXhr, delay: number) {
   setTimeout(() => {
+    xhr.readyState = 4;
+    xhr.onreadystatechange?.();
     if (xhr.ontimeout) {
       xhr.ontimeout();
     }
@@ -92,9 +98,8 @@ function scheduleXhrComplete(xhr: MockXhr, delay: number, onComplete?: () => voi
       onComplete();
     }
     xhr.readyState = 4;
-    if (xhr.onreadystatechange) {
-      xhr.onreadystatechange();
-    }
+    xhr.onreadystatechange?.();
+    xhr.onload?.();
   }, delay);
 }
 
@@ -1487,35 +1492,49 @@ describe('UploadManager', () => {
       clock.restore();
     });
 
-    it('should distinguish between timeout and network error', async () => {
-      let timeoutFired = false;
-      let capturedXhr: MockXhr | null = null;
-      const onTimeoutComplete = () => {
-        timeoutFired = true;
-        if (capturedXhr?.ontimeout) {
-          capturedXhr.ontimeout();
-        }
-      };
-
+    it('should distinguish a timeout after readyState DONE from a network error', async () => {
       setMockXhr(manager, {
         onSend(xhr) {
-          capturedXhr = xhr;
-          if (xhr.upload.onloadstart) {
-            xhr.upload.onloadstart();
-          }
-          scheduleXhrComplete(xhr, 1000, onTimeoutComplete);
+          scheduleXhrTimeout(xhr, 1000);
         },
       });
-
+      const errorSpy = sinon.spy();
+      const responseSpy = sinon.spy();
+      manager.addEventListener('upload-error', errorSpy);
+      manager.addEventListener('upload-response', responseSpy);
       manager.addFiles([createFile(100, 'text/plain')]);
       const file = manager.files[0];
       manager.uploadFiles();
+      await clock.tickAsync(1000);
 
-      // Wait for timeout
-      await clock.tickAsync(1100);
-
-      expect(timeoutFired).to.be.true;
       expect(file.errorKey).to.equal('timeout');
+      expect(errorSpy.calledOnce).to.be.true;
+      expect(responseSpy.called).to.be.false;
+    });
+
+    it('should release exactly one upload slot after a timeout', async () => {
+      manager.maxConcurrentUploads = 1;
+      const requests: MockXhr[] = [];
+      setMockXhrFactory(manager, {
+        onSend(xhr) {
+          requests.push(xhr);
+        },
+      });
+      manager.addFiles(createFiles(3, 100, 'text/plain'));
+      manager.uploadFiles();
+      expect(requests).to.have.lengthOf(1);
+      scheduleXhrTimeout(requests[0], 1000);
+      await clock.tickAsync(1000);
+      expect(requests).to.have.lengthOf(2);
+      requests[1].status = 200;
+      scheduleXhrComplete(requests[1], 10);
+      await clock.tickAsync(10);
+      expect(requests).to.have.lengthOf(3);
+      requests[2].status = 200;
+      scheduleXhrComplete(requests[2], 10);
+      await clock.tickAsync(10);
+      expect(manager.files.filter((file) => file.complete)).to.have.lengthOf(2);
+      expect(manager.files.filter((file) => file.errorKey === 'timeout')).to.have.lengthOf(1);
     });
 
     it('should dispatch upload-error event on timeout', async () => {
@@ -1567,6 +1586,19 @@ describe('UploadManager', () => {
         target: '/api/upload',
         noAuto: true,
       });
+    });
+
+    it('should report one network error after readyState DONE', () => {
+      const xhr = setMockXhr(manager);
+      const errorSpy = sinon.spy();
+      manager.addEventListener('upload-error', errorSpy);
+      manager.addFiles([createFile(100, 'text/plain')]);
+      manager.uploadFiles();
+      xhr.readyState = 4;
+      xhr.onreadystatechange?.();
+      xhr.onerror?.();
+      expect(manager.files[0].errorKey).to.equal('serverUnavailable');
+      expect(errorSpy.calledOnce).to.be.true;
     });
 
     it('should set file.errorKey to serverUnavailable on status 0', () => {
@@ -1691,7 +1723,8 @@ describe('UploadManager', () => {
 
       expect(capturedXhr.upload.onprogress).to.be.null;
       expect(capturedXhr.upload.onloadstart).to.be.null;
-      expect(capturedXhr.onreadystatechange).to.be.null;
+      expect(capturedXhr.onload).to.be.null;
+      expect(capturedXhr.onerror).to.be.null;
       expect(capturedXhr.onabort).to.be.null;
       expect(capturedXhr.ontimeout).to.be.null;
     });
@@ -1714,7 +1747,8 @@ describe('UploadManager', () => {
       manager.uploadFiles();
 
       expect(capturedXhr.upload.onprogress).to.be.null;
-      expect(capturedXhr.onreadystatechange).to.be.null;
+      expect(capturedXhr.onload).to.be.null;
+      expect(capturedXhr.onerror).to.be.null;
     });
   });
 
@@ -2084,9 +2118,8 @@ describe('UploadManager', () => {
           }
           // Complete immediately (synchronous)
           xhr.readyState = 4;
-          if (xhr.onreadystatechange) {
-            xhr.onreadystatechange();
-          }
+          xhr.onreadystatechange?.();
+          xhr.onload?.();
         },
       });
 
@@ -2153,7 +2186,8 @@ describe('UploadManager', () => {
 
       // Handlers should be cleaned up immediately after abort
       expect(xhr.upload.onprogress).to.be.null;
-      expect(xhr.onreadystatechange).to.be.null;
+      expect(xhr.onload).to.be.null;
+      expect(xhr.onerror).to.be.null;
       expect(xhr.onabort).to.be.null;
     });
   });
@@ -2388,14 +2422,14 @@ describe('UploadManager', () => {
       expect(filesChangedSpy.called).to.be.true;
     });
 
-    it('should dispatch files-changed on upload completion via onreadystatechange', () => {
-      // This test verifies that onreadystatechange dispatches files-changed after completion
-      let readystateCallback: (() => void) | null = null;
+    it('should dispatch files-changed on upload completion via onload', () => {
+      // The response completion handler notifies subscribers after updating the file.
+      let loadCallback: (() => void) | null = null;
 
       setMockXhr(manager, {
         status: 200,
         onSend(xhr) {
-          readystateCallback = xhr.onreadystatechange;
+          loadCallback = xhr.onload;
           if (xhr.upload.onloadstart) {
             xhr.upload.onloadstart();
           }
@@ -2410,18 +2444,18 @@ describe('UploadManager', () => {
       // Complete the upload
       const xhr = manager.files[0].xhr as any;
       xhr.readyState = 4;
-      readystateCallback!();
+      loadCallback!();
 
       expect(filesChangedSpy.called).to.be.true;
     });
 
-    it('should dispatch files-changed on upload error via onreadystatechange', () => {
-      let readystateCallback: (() => void) | null = null;
+    it('should dispatch files-changed on upload error via onload', () => {
+      let loadCallback: (() => void) | null = null;
 
       setMockXhr(manager, {
         status: 500,
         onSend(xhr) {
-          readystateCallback = xhr.onreadystatechange;
+          loadCallback = xhr.onload;
           if (xhr.upload.onloadstart) {
             xhr.upload.onloadstart();
           }
@@ -2436,7 +2470,7 @@ describe('UploadManager', () => {
       // Complete with error
       const xhr = manager.files[0].xhr as any;
       xhr.readyState = 4;
-      readystateCallback!();
+      loadCallback!();
 
       expect(filesChangedSpy.called).to.be.true;
     });
@@ -2469,47 +2503,22 @@ describe('UploadManager', () => {
       }
     });
 
-    it('should not dispatch double upload-error when timeout followed by readystatechange', () => {
+    it('should not report an upload error when aborted after readyState DONE', () => {
       const errorSpy = sinon.spy();
       manager.addEventListener('upload-error', errorSpy);
-
-      let savedOnReadyStateChange: any;
-      const mockXhr = setMockXhr(manager, {
-        onSend(xhr) {
-          if (xhr.upload.onloadstart) {
-            xhr.upload.onloadstart();
-          }
+      const xhr = setMockXhr(manager, {
+        onAbort(request) {
+          request.readyState = 4;
+          request.onreadystatechange?.();
         },
       });
-
-      // Add custom getter/setter to capture onreadystatechange before cleanup nullifies it
-      let _onreadystatechange: any = null;
-      Object.defineProperty(mockXhr, 'onreadystatechange', {
-        get() {
-          return _onreadystatechange;
-        },
-        set(fn: any) {
-          _onreadystatechange = fn;
-          if (fn) {
-            savedOnReadyStateChange = fn;
-          }
-        },
-      });
-
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
-
-      // Simulate timeout firing first
-      mockXhr.ontimeout!();
-
-      // Simulate readystatechange firing after (which can happen in some browsers)
-      // Use saved reference since cleanup nullified the property
-      mockXhr.readyState = 4;
-      mockXhr.status = 0;
-      savedOnReadyStateChange();
-
-      // Should only have one upload-error event, not two
-      expect(errorSpy.callCount).to.equal(1);
+      manager.abortUpload(manager.files[0]);
+      expect(errorSpy.called).to.be.false;
+      expect(xhr.onload).to.be.null;
+      expect(xhr.onerror).to.be.null;
+      expect(xhr.ontimeout).to.be.null;
     });
 
     it('should dispatch files-changed when upload-before is prevented', () => {
@@ -2835,7 +2844,7 @@ describe('UploadManager', () => {
       // Complete the upload before stalled fires
       mockXhr.readyState = 4;
       mockXhr.status = 200;
-      mockXhr.onreadystatechange!();
+      mockXhr.onload!();
 
       expect(file.stalled).to.be.false;
     });
