@@ -77,24 +77,6 @@ describe('dialog', () => {
     await visualDiff(div, 'header-title-long-single-word');
   });
 
-  describe('no-padding', () => {
-    before(() => {
-      const contentStyles = new CSSStyleSheet();
-      contentStyles.insertRule('vaadin-dialog::part(content) { padding: 20px; }');
-      document.adoptedStyleSheets = [contentStyles];
-    });
-
-    after(() => {
-      document.adoptedStyleSheets = [];
-    });
-
-    it('should not contain padding with no-padding theme', async () => {
-      element.setAttribute('theme', 'no-padding');
-      await nextUpdate(element);
-      await visualDiff(div, 'content-no-padding-theme');
-    });
-  });
-
   it('content-overflow', async () => {
     element.$.overlay.style.maxWidth = '200px';
     element.renderer = (root) => {
@@ -108,5 +90,23 @@ describe('dialog', () => {
     };
     await nextRender();
     await visualDiff(div, 'content-overflow');
+  });
+
+  describe('no-padding', () => {
+    before(() => {
+      const contentStyles = new CSSStyleSheet();
+      contentStyles.insertRule('vaadin-dialog::part(content) { padding: 20px; }');
+      document.adoptedStyleSheets = [contentStyles];
+    });
+
+    after(() => {
+      document.adoptedStyleSheets = [];
+    });
+
+    it('no-padding theme', async () => {
+      element.setAttribute('theme', 'no-padding');
+      await nextUpdate(element);
+      await visualDiff(div, 'content-no-padding-theme');
+    });
   });
 });
