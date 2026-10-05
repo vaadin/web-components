@@ -330,7 +330,7 @@ export const TimePickerMixin = (superClass) =>
      * @override
      */
     _onInput(event) {
-      this._clearItemHighlight();
+      this._focusedIndex = -1;
       super._onInput(event);
     }
 
