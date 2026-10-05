@@ -587,6 +587,35 @@ describe('selecting items', () => {
     });
   });
 
+  describe('escape with focused item', () => {
+    beforeEach(() => {
+      comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
+    });
+
+    it('should restore the filter to the input on Escape', async () => {
+      await sendKeys({ type: 'an' });
+      await sendKeys({ press: 'ArrowDown' });
+      expect(inputElement.value).to.equal('banana');
+
+      await sendKeys({ press: 'Escape' });
+      expect(comboBox.opened).to.be.true;
+      expect(comboBox.filter).to.equal('an');
+      expect(inputElement.value).to.equal('an');
+    });
+
+    it('should restore the filter to the input on Escape when keepFilter is set', async () => {
+      comboBox.keepFilter = true;
+      await sendKeys({ type: 'an' });
+      await sendKeys({ press: 'ArrowDown' });
+      expect(inputElement.value).to.equal('banana');
+
+      await sendKeys({ press: 'Escape' });
+      expect(comboBox.opened).to.be.true;
+      expect(comboBox.filter).to.equal('an');
+      expect(inputElement.value).to.equal('an');
+    });
+  });
+
   describe('keep filter', () => {
     beforeEach(() => {
       comboBox.items = ['apple', 'banana', 'lemon', 'orange'];

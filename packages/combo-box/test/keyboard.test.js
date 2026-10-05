@@ -19,7 +19,7 @@ describe('keyboard', () => {
   let comboBox, input, lastGlobalFocusable;
 
   function getFocusedIndex() {
-    return comboBox._focusedIndex;
+    return comboBox._highlightedItemIndex;
   }
 
   beforeEach(async () => {
@@ -221,7 +221,7 @@ describe('keyboard', () => {
         enterKeyDown(input);
         // Simulate user or data provider mixin resetting filtered items after closing overlay
         comboBox.filteredItems = [];
-        expect(comboBox._focusedIndex).to.equal(-1);
+        expect(getFocusedIndex()).to.equal(-1);
 
         verifyEnterKeyPropagation(true);
       });
@@ -280,16 +280,16 @@ describe('keyboard', () => {
       });
 
       it('should remove focus with escape', () => {
-        comboBox._focusedIndex = 0;
+        comboBox._highlightItemAt(0);
 
         escKeyDown(input);
 
         expect(comboBox.opened).to.equal(true);
-        expect(comboBox._focusedIndex).to.eql(-1);
+        expect(getFocusedIndex()).to.equal(-1);
       });
 
       it('should close the overlay with escape if there is no focus', () => {
-        comboBox._focusedIndex = -1;
+        comboBox._clearHighlight();
 
         escKeyDown(input);
 
@@ -438,7 +438,7 @@ describe('keyboard', () => {
         enterKeyDown(input);
         // Simulate user or data provider mixin resetting filtered items after closing overlay
         comboBox.filteredItems = [];
-        expect(comboBox._focusedIndex).to.equal(-1);
+        expect(getFocusedIndex()).to.equal(-1);
 
         verifyEnterKeyPropagation(true);
       });
@@ -475,7 +475,7 @@ describe('keyboard', () => {
 
     it('should scroll down after reaching the last visible item', () => {
       scrollToIndex(comboBox, 0);
-      comboBox._focusedIndex = getVisibleItemsCount(comboBox) - 1;
+      comboBox._highlightItemAt(getVisibleItemsCount(comboBox) - 1);
       expect(getViewportItems(comboBox)[0].index).to.eql(0);
 
       arrowDownKeyDown(input);
@@ -484,7 +484,7 @@ describe('keyboard', () => {
     });
 
     it('should scroll up after reaching the first visible item', async () => {
-      comboBox._focusedIndex = 2;
+      comboBox._highlightItemAt(2);
       scrollToIndex(comboBox, 2);
       await nextFrame();
 
@@ -496,7 +496,7 @@ describe('keyboard', () => {
     });
 
     it('should scroll to first visible when navigating down above viewport', () => {
-      comboBox._focusedIndex = 5;
+      comboBox._highlightItemAt(5);
       scrollToIndex(comboBox, 50);
 
       arrowDownKeyDown(input);
@@ -505,7 +505,7 @@ describe('keyboard', () => {
     });
 
     it('should scroll to first visible when navigating up above viewport', () => {
-      comboBox._focusedIndex = 5;
+      comboBox._highlightItemAt(5);
       scrollToIndex(comboBox, 50);
 
       arrowUpKeyDown(input);
@@ -514,7 +514,7 @@ describe('keyboard', () => {
     });
 
     it('should scroll to last visible when navigating up below viewport', () => {
-      comboBox._focusedIndex = 50;
+      comboBox._highlightItemAt(50);
       scrollToIndex(comboBox, 0);
       expect(getViewportItems(comboBox)[0].index).to.eql(0);
 
@@ -524,7 +524,7 @@ describe('keyboard', () => {
     });
 
     it('should scroll to last visible when navigating down below viewport', () => {
-      comboBox._focusedIndex = 50;
+      comboBox._highlightItemAt(50);
       scrollToIndex(comboBox, 0);
       expect(getViewportItems(comboBox)[0].index).to.eql(0);
 
@@ -680,7 +680,7 @@ describe('keyboard', () => {
     }
 
     function getFocusedItem() {
-      return [...comboBox._scroller.children].find((el) => !el.hidden && el.index === comboBox._focusedIndex);
+      return [...comboBox._scroller.children].find((el) => !el.hidden && el.index === getFocusedIndex());
     }
 
     function expectFocusedItemInsideViewport(comboBox) {

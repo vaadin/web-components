@@ -158,34 +158,61 @@ import { FormLayoutMixin } from './vaadin-form-layout-mixin.js';
  *
  * #### Customizing Label Position
  *
- * By default, Form Layout displays labels above the fields. To position labels beside fields, you
- * need to wrap each field in a `<vaadin-form-item>` element and define its labels on the wrapper.
- * Then, you can enable the [`labelsAside`](#/elements/vaadin-form-layout#property-labelsAside)
- * property:
+ * By default, Form Layout displays labels above the fields. To put labels next to the fields,
+ * enable the [`labelsAside`](#/elements/vaadin-form-layout#property-labelsAside) property:
  *
  * ```html
  * <vaadin-form-layout auto-responsive labels-aside>
  *   <vaadin-form-row>
- *     <vaadin-form-item>
- *       <label slot="label">First Name</label>
- *       <vaadin-text-field></vaadin-text-field>
- *    </vaadin-form-item>
- *    <vaadin-form-item>
- *      <label slot="label">Last Name</label>
- *       <vaadin-text-field></vaadin-text-field>
- *     </vaadin-form-item>
+ *     <vaadin-text-field label="First Name"></vaadin-text-field>
+ *     <vaadin-text-field label="Last Name"></vaadin-text-field>
  *   </vaadin-form-row>
  *   <vaadin-form-row>
- *     <vaadin-form-item colspan="2">
- *       <label slot="label">Address</label>
- *       <vaadin-text-area></vaadin-text-area>
- *     </vaadin-form-item>
+ *     <vaadin-text-area label="Address" colspan="2"></vaadin-text-area>
  *   </vaadin-form-row>
  * </vaadin-form-layout>
  * ```
  *
- * With this, FormLayout will display labels beside fields, falling back to
- * the default position above the fields only when there isn't enough space.
+ * When there isn't enough space for side labels, Form Layout returns the labels to
+ * the default position above the fields.
+ *
+ * All Vaadin input field components placed directly in the Form Layout support labels-aside
+ * mode out of the box, showing their label next to the field. Checkable fields, such as
+ * `<vaadin-checkbox>`, work differently: their label remains in place, and Form Layout only
+ * indents such fields so they align with the input column.
+ *
+ * Any other components, such as buttons or custom components, are just placed at the start of
+ * the label column. How they should be laid out in this mode is left to the developer and can
+ * be handled in one of two ways:
+ *
+ * 1. Wrap the component in a Form Item, with or without providing a label. The Form Item
+ *    reserves space for the label, so the component ends up in the input column, aligned
+ *    with the other fields:
+ *
+ *    ```html
+ *    <vaadin-form-item>
+ *      <label slot="label">Name</label>
+ *      <input type="text" />
+ *    </vaadin-form-item>
+ *
+ *    <vaadin-form-item>
+ *      <vaadin-button>Submit</vaadin-button>
+ *    </vaadin-form-item>
+ *    ```
+ *
+ * 2. Write custom CSS. When labels are rendered next to fields, Form Layout sets the
+ *    `has-labels-aside` attribute on its host element and the `data-form-layout-has-labels-aside`
+ *    attribute on children. You can rely on these attributes to adapt your components to
+ *    labels-aside mode, for example:
+ *
+ *    ```css
+ *    vaadin-button[data-form-layout-has-labels-aside] {
+ *      margin-inline-start: calc(
+ *        var(--vaadin-form-layout-label-width) +
+ *        var(--vaadin-form-layout-label-spacing)
+ *      );
+ *    }
+ *    ```
  *
  * ### CSS Properties Reference
  *
@@ -196,7 +223,14 @@ import { FormLayoutMixin } from './vaadin-form-layout-mixin.js';
  * `--vaadin-form-layout-column-spacing` | Length of the spacing between columns | `2em`
  * `--vaadin-form-layout-row-spacing` | Length of the spacing between rows | `1em`
  * `--vaadin-form-layout-label-width` | Width of the label when labels are displayed aside | `8em`
- * `--vaadin-form-layout-label-spacing` | Length of the spacing between the label and the input when labels are displayed aside | `1em`
+ * `--vaadin-form-layout-label-spacing` | Length of the spacing between the label and the field when labels are displayed aside | `1em`
+ * `--vaadin-form-layout-label-text-align` | Alignment of the label when labels are displayed aside | `start`
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute | Description
+ * ---|---
+ * `has-labels-aside` | Set when the `labelsAside` property is enabled and there is enough space to display labels next to the fields
  *
  * @attr {string} theme - The theme variants to apply to the component.
  * @customElement vaadin-form-layout

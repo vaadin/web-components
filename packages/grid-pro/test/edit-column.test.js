@@ -208,6 +208,26 @@ describe('edit column', () => {
       expect(spy.called).to.be.false;
     });
 
+    it('should not be fired again if a listener stops the edit synchronously', () => {
+      const spy = sinon.spy();
+      grid.addEventListener('item-property-changed', () => grid._stopEdit());
+      grid.addEventListener('item-property-changed', spy);
+      enter(firstCell);
+      input = getCellEditor(firstCell);
+      input.value = 'new';
+      enter(input);
+      expect(spy).to.be.calledOnce;
+    });
+
+    it('should ignore a cancel requested while the edit is being stopped', () => {
+      grid.addEventListener('item-property-changed', () => grid._stopEdit(true));
+      enter(firstCell);
+      input = getCellEditor(firstCell);
+      input.value = 'new';
+      enter(input);
+      expect(grid.items[0].name).to.equal('new');
+    });
+
     it('should be not modify the cell content if prevented by user', (done) => {
       grid.addEventListener('item-property-changed', (e) => {
         e.preventDefault();
@@ -761,7 +781,7 @@ describe('edit column', () => {
 
     (isMac ? it : it.skip)('should call focus on the div element inside of the editable cell', () => {
       cell = getContainerCell(grid.$.items, 0, 0);
-      const spy = sinon.spy(cell.firstChild, 'focus');
+      const spy = sinon.spy(cell.firstElementChild, 'focus');
       cell.focus();
       expect(spy.calledOnce).to.be.true;
     });
@@ -784,20 +804,20 @@ describe('edit column', () => {
     });
 
     it('should set role="button" on the focusable div inside the editable cell', () => {
-      expect(firstCell.firstChild.getAttribute('role')).to.equal('button');
+      expect(firstCell.firstElementChild.getAttribute('role')).to.equal('button');
     });
 
     it('should remove role from the focusable div when entering edit mode', () => {
       enter(firstCell);
-      expect(firstCell.firstChild.hasAttribute('role')).to.be.false;
+      expect(firstCell.firstElementChild.hasAttribute('role')).to.be.false;
     });
 
     it('should restore role on the focusable div after exiting edit mode', () => {
       enter(firstCell);
-      expect(firstCell.firstChild.hasAttribute('role')).to.be.false;
+      expect(firstCell.firstElementChild.hasAttribute('role')).to.be.false;
       input = getCellEditor(firstCell);
       enter(input);
-      expect(firstCell.firstChild.getAttribute('role')).to.equal('button');
+      expect(firstCell.firstElementChild.getAttribute('role')).to.equal('button');
     });
   });
 

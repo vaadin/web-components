@@ -48,6 +48,23 @@ describe('text-area', () => {
     await visualDiff(div, 'label');
   });
 
+  describe('label aside', () => {
+    beforeEach(() => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'label-aside');
+    });
+
+    it('scrolled', async () => {
+      element.style.height = '70px';
+      element.value = 'a\nb\nc\nd\ne';
+      await visualDiff(div, 'label-aside-scrolled');
+    });
+  });
+
   it('placeholder', async () => {
     element.placeholder = 'Placeholder';
     await visualDiff(div, 'placeholder');
@@ -147,6 +164,23 @@ describe('text-area', () => {
     element.clearButtonVisible = true;
 
     await visualDiff(div, 'single-row');
+  });
+
+  describe('input field height', () => {
+    let wrapper;
+
+    beforeEach(() => {
+      wrapper = fixtureSync(`
+        <div style="padding: 10px; --vaadin-input-field-height: 56px">
+          <vaadin-text-area label="Text area" value="value"></vaadin-text-area>
+          <vaadin-text-area min-rows="1" value="value"></vaadin-text-area>
+        </div>
+      `);
+    });
+
+    it('alignment', async () => {
+      await visualDiff(wrapper, 'input-field-height-alignment');
+    });
   });
 
   describe('focus', () => {

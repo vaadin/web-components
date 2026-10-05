@@ -12,14 +12,14 @@ describe('i18n property', () => {
     timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
   });
 
-  it('should have default i18n properties coming from date and time pickers', () => {
+  it('should have default i18n values coming from date and time pickers', () => {
     // From date picker
-    expect(dateTimePicker.i18n).to.have.property('formatDate').that.is.a('function');
-    expect(dateTimePicker.i18n).to.have.property('parseDate').that.is.a('function');
-    expect(dateTimePicker.i18n).to.have.property('cancel').that.is.a('string');
+    expect(dateTimePicker.__effectiveI18n).to.have.property('formatDate').that.is.a('function');
+    expect(dateTimePicker.__effectiveI18n).to.have.property('parseDate').that.is.a('function');
+    expect(dateTimePicker.__effectiveI18n).to.have.property('cancel').that.is.a('string');
     // From time picker
-    expect(dateTimePicker.i18n).to.have.property('formatTime').that.is.a('function');
-    expect(dateTimePicker.i18n).to.have.property('parseTime').that.is.a('function');
+    expect(dateTimePicker.__effectiveI18n).to.have.property('formatTime').that.is.a('function');
+    expect(dateTimePicker.__effectiveI18n).to.have.property('parseTime').that.is.a('function');
   });
 
   it('should propagate relevant properties to sub-components', () => {
@@ -74,8 +74,8 @@ describe('i18n property', () => {
       const i18n = { cancel: 'Peruuta', formatDate: () => 'formatted-date' };
       dateTimePicker.i18n = i18n;
 
-      expect(datePicker.i18n.cancel).to.not.equal(i18n.cancel);
-      expect(datePicker.i18n.formatDate).to.not.equal(i18n.formatDate);
+      expect(datePicker.i18n).to.be.undefined;
+      expect(timePicker.i18n).to.be.undefined;
     });
   });
 });
@@ -91,7 +91,7 @@ describe('accessibility', () => {
     });
 
     it(`should be undefined by default`, () => {
-      expect(dateTimePicker.i18n[`${part}Label`]).to.be.undefined;
+      expect(dateTimePicker.__effectiveI18n[`${part}Label`]).to.be.undefined;
       expect(pickerFocusElement.getAttribute('aria-label')).to.be.null;
     });
 

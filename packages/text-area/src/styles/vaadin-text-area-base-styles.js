@@ -9,6 +9,8 @@ import { css } from 'lit';
 export const textAreaStyles = css`
   :host {
     height: auto;
+    /* Content stays at the top, keep the default guide height */
+    --_field-input-height: var(--_field-input-default-height);
   }
 
   [part='input-field'] {
@@ -19,7 +21,7 @@ export const textAreaStyles = css`
     );
   }
 
-  :host([theme~='label-aside']) [part='input-field'] {
+  :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='input-field'] {
     height: 100%;
   }
 

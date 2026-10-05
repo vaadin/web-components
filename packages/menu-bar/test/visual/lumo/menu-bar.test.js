@@ -256,23 +256,37 @@ describe('menu-bar', () => {
           await visualDiff(div, `${dir}-dropdown-indicators-icon`);
         });
       });
-    });
 
-    describe(`overflow in flex layout (${dir})`, () => {
-      beforeEach(async () => {
+      describe('overflow in flex layout', () => {
+        beforeEach(async () => {
+          div = fixtureSync(`
+            <div style="display: flex; width: 300px; padding: 10px">
+              <vaadin-menu-bar style="width: 100%"></vaadin-menu-bar>
+              <div style="min-width: 120px">Sibling</div>
+            </div>
+          `);
+          element = div.querySelector('vaadin-menu-bar');
+          element.items = [{ text: 'Home' }, { text: 'Reports' }, { text: 'Dashboard' }, { text: 'Help' }];
+          await nextResize(element);
+        });
+
+        it('overflow in flex layout', async () => {
+          await visualDiff(div, `${dir}-overflow-flex-layout`);
+        });
+      });
+
+      it('overflow in content-sized parent', async () => {
         div = fixtureSync(`
           <div style="display: flex; width: 300px; padding: 10px">
-            <vaadin-menu-bar style="width: 100%"></vaadin-menu-bar>
-            <div style="min-width: 120px">Sibling</div>
+            <div style="width: 100%">Sibling</div>
+            <vaadin-menu-bar></vaadin-menu-bar>
           </div>
         `);
         element = div.querySelector('vaadin-menu-bar');
-        element.items = [{ text: 'Home' }, { text: 'Reports' }, { text: 'Dashboard' }, { text: 'Help' }];
+        element.items = ['View', 'Edit', 'Share', 'Move', 'Duplicate', 'Archive'].map((text) => ({ text }));
         await nextResize(element);
-      });
-
-      it('overflow in flex layout', async () => {
-        await visualDiff(div, `${dir}-overflow-flex-layout`);
+        await nextRender();
+        await visualDiff(div, `${dir}-overflow-content-sized-parent`);
       });
     });
   });

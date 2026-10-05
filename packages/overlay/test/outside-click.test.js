@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { click, fixtureSync, mousedown, mouseup, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './fixtures/mock-overlay.js';
+import { isEventConsumed } from '@vaadin/component-base/src/event-utils.js';
 
 describe('outside click', () => {
   describe('single overlay', () => {
@@ -49,16 +50,31 @@ describe('outside click', () => {
       });
     });
 
-    describe('click prevention', () => {
-      it('should prevent default on outside click by default', () => {
-        expect(click(parent).defaultPrevented).to.be.true;
+    describe('click consumption', () => {
+      it('should mark outside click as consumed by default', () => {
+        expect(isEventConsumed(click(parent))).to.be.true;
       });
 
-      it('should not prevent default on inside click', () => {
-        expect(click(overlayPart).defaultPrevented).to.be.false;
+      it('should not prevent default on outside click', () => {
+        expect(click(parent).defaultPrevented).to.be.false;
       });
 
-      it('should not prevent default on outside click when modeless', () => {
+      it('should not cancel default action of synthetic outside click', () => {
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        parent.appendChild(checkbox);
+
+        checkbox.click();
+
+        expect(overlay.opened).to.be.false;
+        expect(checkbox.checked).to.be.true;
+      });
+
+      it('should not mark inside click as consumed', () => {
+        expect(isEventConsumed(click(overlayPart))).to.be.false;
+      });
+
+      it('should not mark outside click as consumed when modeless', () => {
         // Mimic vaadin-popover, which adds the outside click listener also when modeless
         overlay._shouldAddGlobalListeners = () => true;
         overlay.modeless = true;
@@ -66,19 +82,19 @@ describe('outside click', () => {
         const event = click(parent);
 
         expect(overlay.opened).to.be.false;
-        expect(event.defaultPrevented).to.be.false;
+        expect(isEventConsumed(event)).to.be.false;
       });
 
-      it('should not prevent default if vaadin-overlay-outside-click was prevented', () => {
+      it('should not mark outside click as consumed if vaadin-overlay-outside-click was prevented', () => {
         overlay.addEventListener('vaadin-overlay-outside-click', (e) => e.preventDefault());
 
-        expect(click(parent).defaultPrevented).to.be.false;
+        expect(isEventConsumed(click(parent))).to.be.false;
       });
 
-      it('should not prevent default if vaadin-overlay-close was prevented', () => {
+      it('should not mark outside click as consumed if vaadin-overlay-close was prevented', () => {
         overlay.addEventListener('vaadin-overlay-close', (e) => e.preventDefault());
 
-        expect(click(parent).defaultPrevented).to.be.false;
+        expect(isEventConsumed(click(parent))).to.be.false;
         expect(overlay.opened).to.be.true;
       });
     });

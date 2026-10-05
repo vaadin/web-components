@@ -246,8 +246,8 @@ export const ComboBoxItemsMixin = (superClass) =>
     _onOpened() {
       super._onOpened();
 
-      if (this.filter && this._focusedIndex === -1) {
-        this._focusedIndex = this.__getItemIndexByFilter(this._dropdownItems);
+      if (this.filter && !this._hasHighlightedItem) {
+        this._highlightItemAt(this.__getItemIndexByFilter(this._dropdownItems));
       }
     }
 
@@ -309,7 +309,7 @@ export const ComboBoxItemsMixin = (superClass) =>
       // Scroll to the top of the list whenever the filter changes.
       this._scrollIntoView(0);
 
-      this._focusedIndex = -1;
+      this._clearItemHighlight();
 
       if (this.items) {
         this.filteredItems = this._filterItems(this.items, filter);
@@ -348,37 +348,31 @@ export const ComboBoxItemsMixin = (superClass) =>
      * @protected
      */
     _setDropdownItems(newItems) {
-      const oldItems = this._dropdownItems;
+      const highlightedItem = this._highlightedItem;
       this._dropdownItems = newItems;
 
-      // Store the currently focused item if any. The focused index preserves
-      // in the case when more filtered items are loading but it is reset
-      // when the user types in a filter query.
-      const focusedItem = oldItems ? oldItems[this._focusedIndex] : null;
+      this.__restoreItemHighlight(highlightedItem);
+    }
 
-      // When both the previously-focused entry and the new entry at the
+    /**
+     * Highlights the given item again if it is still among the dropdown
+     * items, which keeps the highlight in place when more items are
+     * loading. Otherwise the item matching the filter is highlighted, or none.
+     * @private
+     */
+    __restoreItemHighlight(item) {
+      const items = this._dropdownItems;
+
+      // When both the previously highlighted entry and the new entry at the
       // same index are placeholders (e.g. the Flow connector mid-scroll
-      // re-pushing `_setDropdownItems`), preserve `_focusedIndex` until
+      // re-pushing `_setDropdownItems`), preserve the highlight until
       // a follow-up call lands a real item at that position.
-      if (
-        oldItems &&
-        oldItems[this._focusedIndex] instanceof ComboBoxPlaceholder &&
-        newItems[this._focusedIndex] instanceof ComboBoxPlaceholder
-      ) {
+      if (item instanceof ComboBoxPlaceholder && items[this._highlightedItemIndex] instanceof ComboBoxPlaceholder) {
         return;
       }
 
-      // Try to first set focus on the item that had been focused before `newItems` were updated
-      // if it is still present in the `newItems` array. Otherwise, set the focused index
-      // depending on the selected item or the filter query.
-      const focusedItemIndex = this.__getItemIndexByValue(newItems, this._getItemValue(focusedItem));
-      if (focusedItemIndex > -1) {
-        this._focusedIndex = focusedItemIndex;
-      } else {
-        // When the user filled in something that is different from the current value = filtering is enabled,
-        // set the focused index to the item that matches the filter query.
-        this._focusedIndex = this.__getItemIndexByFilter(newItems);
-      }
+      const index = this.__getItemIndexByValue(items, this._getItemValue(item));
+      this._highlightItemAt(index > -1 ? index : this.__getItemIndexByFilter(items));
     }
 
     /** @private */

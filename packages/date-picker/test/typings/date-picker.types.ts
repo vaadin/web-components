@@ -94,7 +94,7 @@ assertType<string>(datePicker.placeholder);
 assertType<string | null | undefined>(datePicker.helperText);
 assertType<boolean>(datePicker.readonly);
 assertType<string | null | undefined>(datePicker.label);
-assertType<DatePickerI18n>(datePicker.i18n);
+assertType<DatePickerI18n | undefined>(datePicker.i18n);
 assertType<string>(datePicker.value);
 assertType<boolean>(datePicker.required);
 assertType<string>(datePicker.name);

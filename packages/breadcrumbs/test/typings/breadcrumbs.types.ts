@@ -12,7 +12,7 @@ const breadcrumbs = document.createElement('vaadin-breadcrumbs');
 assertType<Breadcrumbs>(breadcrumbs);
 
 // Properties
-assertType<BreadcrumbsI18n>(breadcrumbs.i18n);
+assertType<BreadcrumbsI18n | undefined>(breadcrumbs.i18n);
 
 // I18n
 assertType<BreadcrumbsI18n>({});

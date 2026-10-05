@@ -12,6 +12,10 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { formatISOTime, parseISOTime, validateTime } from './vaadin-time-picker-helper.js';
 
+/**
+ * @typedef {import('./vaadin-time-picker-helper.js').TimePickerTime} TimePickerTime
+ */
+
 export const timePickerI18nDefaults = Object.freeze({
   formatTime: formatISOTime,
   parseTime: parseISOTime,
@@ -136,8 +140,10 @@ export const TimePickerMixin = (superClass) =>
 
     /**
      * The object used to localize this component. To change the default
-     * localization, replace this with an object that provides both the
+     * localization, set this to an object that provides both the
      * time parsing and formatting functions.
+     *
+     * When not set, defaults to `undefined`.
      *
      * The object has the following JSON structure:
      *
@@ -168,7 +174,7 @@ export const TimePickerMixin = (superClass) =>
      * ISO 8601 format, and are never passed to `parseTime`, so implementations
      * do not need to accept ISO 8601 input.
      *
-     * @type {!TimePickerI18n}
+     * @type {TimePickerI18n | undefined}
      */
     get i18n() {
       return super.i18n;
@@ -309,11 +315,10 @@ export const TimePickerMixin = (superClass) =>
      * @override
      */
     _commitValue() {
-      if (this._focusedIndex > -1) {
-        // Commit value based on focused index
-        const focusedItem = this._dropdownItems[this._focusedIndex];
-        this.__setValueFromTime(parseISOTime(focusedItem.value));
-        this._focusedIndex = -1;
+      if (this._hasHighlightedItem) {
+        // Commit value based on the highlighted item
+        this.__setValueFromTime(parseISOTime(this._highlightedItem.value));
+        this._clearItemHighlight();
       } else if (this._inputElementValue !== this._comboBoxValue) {
         // Committing text that did not change would parse and format it again,
         // and set the value from the result, so skip it.
@@ -381,7 +386,7 @@ export const TimePickerMixin = (superClass) =>
 
     /** @private */
     __onArrowPressWithStep(step) {
-      const objWithStep = this.__addStep(this.__getMsec(this.__memoValue), step, true);
+      const objWithStep = this.__addStep(this.__getMsec(this.__memoValue), step);
       this.__memoValue = objWithStep;
 
       // Only commit when the formatted text changes, so that a step finer than
@@ -427,7 +432,8 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
-     * Returning milliseconds from Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+     * @param {TimePickerTime | undefined} obj Time object
+     * @return {number} milliseconds
      * @private
      */
     __getMsec(obj) {
@@ -440,49 +446,29 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
-     * Returning Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
-     * from an ISO 8601 time, stripped to the resolution defined by the step.
+     * @param {TimePickerTime | undefined} time Time object
+     * @return {TimePickerTime | undefined} time object truncated to the step resolution
+     * @private
+     */
+    __truncateTime(time) {
+      return validateTime(time, this.step);
+    }
+
+    /**
+     * @param {string} timeString ISO 8601 time string
+     * @return {TimePickerTime | undefined} time object truncated to the step resolution
      * @private
      */
     __getTimeObject(timeString) {
-      return validateTime(parseISOTime(timeString), this.step);
+      return this.__truncateTime(parseISOTime(timeString));
     }
 
     /**
-     * Returning seconds from Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+     * @param {number} msec Milliseconds since midnight, `24:00` becomes `00:00`
+     * @return {!TimePickerTime} time object
      * @private
      */
-    __getSec(obj) {
-      let result = (obj?.hours || 0) * 60 * 60;
-      result += (obj?.minutes || 0) * 60;
-      result += obj?.seconds || 0;
-      result += (obj?.milliseconds || 0) / 1000;
-
-      return result;
-    }
-
-    /**
-     * Returning Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
-     * from the result of adding step value in milliseconds to the milliseconds amount.
-     * With `precision` parameter rounding the value to the closest step valid interval.
-     * @private
-     */
-    __addStep(msec, step, precision) {
-      // If the time is `00:00` and step changes value downwards, it should be considered as `24:00`
-      if (msec === 0 && step < 0) {
-        msec = 24 * 60 * 60 * 1000;
-      }
-
-      const stepMsec = step * 1000;
-      const diffToNext = msec % stepMsec;
-      if (stepMsec < 0 && diffToNext && precision) {
-        msec -= diffToNext;
-      } else if (stepMsec > 0 && diffToNext && precision) {
-        msec -= diffToNext - stepMsec;
-      } else {
-        msec += stepMsec;
-      }
-
+    __getTimeFromMsec(msec) {
       const hh = Math.floor(msec / 1000 / 60 / 60);
       msec -= hh * 1000 * 60 * 60;
       const mm = Math.floor(msec / 1000 / 60);
@@ -493,12 +479,37 @@ export const TimePickerMixin = (superClass) =>
       return { hours: hh < 24 ? hh : 0, minutes: mm, seconds: ss, milliseconds: msec };
     }
 
+    /**
+     * @param {number} msec Milliseconds since midnight
+     * @param {number} step Step in seconds, negative to subtract
+     * @return {!TimePickerTime} time object moved to the next step interval
+     * @private
+     */
+    __addStep(msec, step) {
+      // If the time is `00:00` and step changes value downwards, it should be considered as `24:00`
+      if (msec === 0 && step < 0) {
+        msec = 24 * 60 * 60 * 1000;
+      }
+
+      const stepMsec = step * 1000;
+      const diffToNext = msec % stepMsec;
+      if (stepMsec < 0 && diffToNext) {
+        msec -= diffToNext;
+      } else if (stepMsec > 0 && diffToNext) {
+        msec -= diffToNext - stepMsec;
+      } else {
+        msec += stepMsec;
+      }
+
+      return this.__getTimeFromMsec(msec);
+    }
+
     /** @private */
     __updateDropdownItems() {
-      const minSec = this.__getSec(this.__getTimeObject(this.min || MIN_ALLOWED_TIME));
-      const maxSec = this.__getSec(this.__getTimeObject(this.max || MAX_ALLOWED_TIME));
+      const minMsec = this.__getMsec(this.__getTimeObject(this.min || MIN_ALLOWED_TIME));
+      const maxMsec = this.__getMsec(this.__getTimeObject(this.max || MAX_ALLOWED_TIME));
 
-      this._dropdownItems = this.__generateDropdownList(minSec, maxSec, this.step);
+      this._dropdownItems = this.__generateDropdownList(minMsec, maxMsec, this.step);
     }
 
     /** @private */
@@ -517,22 +528,18 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /** @private */
-    __generateDropdownList(minSec, maxSec, step) {
+    __generateDropdownList(minMsec, maxMsec, step) {
       if (step < 15 * 60 || !this.__validDayDivisor(step)) {
         return [];
       }
 
+      // Default step in overlay items is 1 hour
+      const stepMsec = (step || 3600) * 1000;
+
       const generatedList = [];
 
-      // Default step in overlay items is 1 hour
-      if (!step) {
-        step = 3600;
-      }
-
-      let time = -step + minSec;
-      while (time + step >= minSec && time + step <= maxSec) {
-        const timeObj = validateTime(this.__addStep(time * 1000, step), step);
-        time += step;
+      for (let msec = minMsec; msec <= maxMsec; msec += stepMsec) {
+        const timeObj = validateTime(this.__getTimeFromMsec(msec), step);
         const formatted = this.__effectiveI18n.formatTime(timeObj);
         generatedList.push({ label: formatted, value: formatISOTime(timeObj) });
       }
@@ -546,7 +553,7 @@ export const TimePickerMixin = (superClass) =>
      * @override
      */
     _valueChanged(value, oldValue) {
-      // Strip value to the step resolution before marking as committed.
+      // Truncate value to the step resolution before marking as committed.
       const parsedObj = (this.__memoValue = this.__getTimeObject(value));
       const newValue = formatISOTime(parsedObj);
 
@@ -586,15 +593,15 @@ export const TimePickerMixin = (superClass) =>
 
     /**
      * Sets the value and the input text from the given time,
-     * stripped to the resolution defined by the step.
+     * truncated to the resolution defined by the step.
      *
      * @param {!TimePickerTime} time
      * @private
      */
     __setValueFromTime(time) {
-      const stripped = validateTime(time, this.step);
-      this.__setUncommittedValue(formatISOTime(stripped));
-      this.__updateInputValue(stripped);
+      const truncated = this.__truncateTime(time);
+      this.__setUncommittedValue(formatISOTime(truncated));
+      this.__updateInputValue(truncated);
     }
 
     /**
@@ -619,7 +626,10 @@ export const TimePickerMixin = (superClass) =>
       this._comboBoxValue = text;
     }
 
-    /** @private */
+    /**
+     * @param {TimePickerTime | undefined} obj Time object
+     * @private
+     */
     __updateInputValue(obj) {
       const text = this.__effectiveI18n.formatTime(obj) || '';
       this._inputElementValue = text;
@@ -627,8 +637,6 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
-     * Returns true if `time` satisfies the `min` and `max` constraints (if any).
-     *
      * @param {!TimePickerTime} time Value to check against constraints
      * @return {boolean} True if `time` satisfies the constraints
      * @protected
@@ -659,13 +667,14 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
+     * Override method inherited from `ComboBoxBaseMixin` to only
+     * open overlay when clicking on label or the input container.
      * @param {Event} event
      * @protected
      */
     _onHostClick(event) {
       const path = event.composedPath();
 
-      // Open dropdown only when clicking on the label or input field
       if (path.includes(this._labelNode) || path.includes(this._inputContainer)) {
         super._onHostClick(event);
       }

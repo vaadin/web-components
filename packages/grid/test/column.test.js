@@ -98,6 +98,22 @@ describe('column', () => {
       });
     });
 
+    describe('text align', () => {
+      it('should be bound to header cells', async () => {
+        column.textAlign = 'center';
+        await nextRender();
+
+        expect(getHeaderCellContent(grid, 1, 0).style.textAlign).to.equal('center');
+      });
+
+      it('should be bound to row cells', async () => {
+        column.textAlign = 'center';
+        await nextRender();
+
+        expect(getBodyCellContent(grid, 0, 0).style.textAlign).to.equal('center');
+      });
+    });
+
     describe('hidden', () => {
       it('should default to false', () => {
         expect(column.hidden).to.be.false;
@@ -485,6 +501,27 @@ describe('column', () => {
       });
     });
 
+    it('should keep the cell content when the grid is detached', async () => {
+      const content = getBodyCellContent(grid, 0, 0);
+      grid.remove();
+      await nextFrame();
+
+      expect(content.parentElement).to.equal(grid);
+    });
+
+    it('should not throw when the column is detached again before its cells are re-attached', async () => {
+      const group = column.parentElement;
+      const content = getBodyCellContent(grid, 0, 0);
+      column.remove();
+      await nextFrame();
+
+      group.appendChild(column);
+      column.remove();
+      await nextFrame();
+
+      expect(content.parentElement).to.be.null;
+    });
+
     it('should render cell content when column is added back', async () => {
       const group = column.parentElement;
       column.remove();
@@ -497,6 +534,30 @@ describe('column', () => {
       expect(getHeaderCellContent(grid, 1, 0).textContent).to.equal('header1');
       expect(getContainerCellContent(grid.$.footer, 0, 0).textContent).to.equal('footer1');
       expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('cell');
+    });
+  });
+
+  describe('removed column', () => {
+    afterEach(() => {
+      document.documentElement.removeAttribute('dir');
+    });
+
+    it('should stop syncing dir from the document when the column is removed', async () => {
+      column.remove();
+      document.documentElement.setAttribute('dir', 'rtl');
+      await nextFrame();
+
+      expect(column.hasAttribute('dir')).to.be.false;
+    });
+
+    it('should not throw when setting a renderer on a removed column', () => {
+      column.remove();
+
+      expect(() => {
+        column.renderer = (root) => {
+          root.textContent = 'foo';
+        };
+      }).to.not.throw();
     });
   });
 

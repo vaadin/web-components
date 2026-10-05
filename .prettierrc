@@ -8,7 +8,7 @@
   "endOfLine": "auto",
   "overrides": [
     {
-      "files": ["packages/vaadin-lumo-styles/components/*.css"],
+      "files": ["packages/vaadin-lumo-styles/components/*.css", "packages/vaadin-lumo-styles/test/fixtures/*.css"],
       "options": {
         "printWidth": 40
       }

@@ -57,6 +57,9 @@ const DEFAULT_I18N = {
   moreOptions: 'More options',
 };
 
+// Two client rects of the same edge can differ by float noise, a few 1e-5 px under browser zoom
+const OVERFLOW_TOLERANCE = 0.1;
+
 export const MenuBarMixin = (superClass) =>
   class MenuBarMixinClass extends I18nMixin(
     KeyboardDirectionMixin(ResizeMixin(FocusMixin(DisabledMixin(superClass)))),
@@ -203,8 +206,10 @@ export const MenuBarMixin = (superClass) =>
 
     /**
      * The object used to localize this component. To change the default
-     * localization, replace this with an object that provides all properties, or
+     * localization, set this to an object that provides all properties, or
      * just the individual properties you want to change.
+     *
+     * When not set, defaults to `undefined`.
      *
      * The object has the following JSON structure and default values:
      * ```js
@@ -212,7 +217,7 @@ export const MenuBarMixin = (superClass) =>
      *   moreOptions: 'More options'
      * }
      * ```
-     * @type {!MenuBarI18n}
+     * @type {MenuBarI18n | undefined}
      */
     get i18n() {
       return super.i18n;
@@ -459,7 +464,6 @@ export const MenuBarMixin = (superClass) =>
       buttons.forEach((button) => {
         button.style.visibility = '';
         button.style.position = '';
-        button.style.width = '';
 
         // Teleport item component back from "overflow" sub-menu
         const item = button.item?.component;
@@ -467,6 +471,20 @@ export const MenuBarMixin = (superClass) =>
           this.__restoreItem(button, item);
         }
       });
+    }
+
+    /**
+     * Restores all buttons, the overflow button and the state attributes, so that
+     * the measurement does not use the button margins of the previous state.
+     *
+     * @param {!Array<!HTMLElement>} buttons
+     * @private
+     */
+    __restoreState(buttons) {
+      this.__restoreButtons(buttons);
+      this.__updateOverflow([]);
+      this.toggleAttribute('has-single-button', buttons.length === 1);
+      this.__updateVisibleAttributes(buttons);
     }
 
     /** @private */
@@ -482,51 +500,157 @@ export const MenuBarMixin = (superClass) =>
     __updateOverflow(items) {
       this._overflow.item = { children: items };
       this._hasOverflow = items.length > 0;
+      this.toggleAttribute('has-overflow', this._hasOverflow);
+    }
+
+    /**
+     * Inline end edge of the element, mirrored in RTL. Unlike `offsetWidth` and `scrollWidth`,
+     * the rect keeps the fraction that browser zoom leaves on the width.
+     *
+     * @param {!HTMLElement} el
+     * @return {number}
+     * @private
+     */
+    __getInlineEnd(el) {
+      const { left, right } = el.getBoundingClientRect();
+      return this.__isRTL ? -left : right;
+    }
+
+    /**
+     * Whether the element ends past the container, with the tolerance for fractional widths.
+     *
+     * @param {!HTMLElement} el
+     * @return {boolean}
+     * @private
+     */
+    __isPastContainerEnd(el) {
+      return this.__getInlineEnd(el) > this.__getInlineEnd(this._container) + OVERFLOW_TOLERANCE;
+    }
+
+    /**
+     * Layout of the buttons, the overflow button and the container, read in one batch
+     * before any button is hidden. Positions are mirrored in RTL so that a larger value
+     * is always further along the inline axis.
+     *
+     * @typedef {object} MenuBarOverflowLayout
+     * @property {number[]} starts Inline start of each button
+     * @property {number[]} ends Inline end of each button
+     * @property {number[]} margins Inline start margin of each button
+     * @property {number} overflowExtent Space the overflow button adds after the last button
+     * @property {number} containerWidth Width of the container
+     * @property {number} contentWidth Width of all buttons and the overflow button in flow
+     */
+
+    /**
+     * @param {!Array<!HTMLElement>} buttons
+     * @param {!HTMLElement} overflow
+     * @return {!MenuBarOverflowLayout}
+     * @private
+     */
+    __getOverflowLayout(buttons, overflow) {
+      const isRTL = this.__isRTL;
+      const rects = buttons.map((btn) => btn.getBoundingClientRect());
+      const ends = rects.map(({ left, right }) => (isRTL ? -left : right));
+      const overflowEnd = this.__getInlineEnd(overflow);
+      const containerRect = this._container.getBoundingClientRect();
+      const containerStart = isRTL ? -containerRect.right : containerRect.left;
+
+      return {
+        starts: rects.map(({ left, right }) => (isRTL ? -right : left)),
+        ends,
+        // `auto` resolves to 0 while the content overflows.
+        margins: buttons.map((btn) => parseFloat(getComputedStyle(btn).marginInlineStart) || 0),
+        overflowExtent: overflowEnd - ends.at(-1),
+        containerWidth: containerRect.width,
+        contentWidth: overflowEnd - containerStart,
+      };
+    }
+
+    /**
+     * Picks the buttons to collapse so that the rest plus the overflow button end inside
+     * the container. Hiding a button only shifts the buttons after it, so the end of any
+     * kept range follows from one measurement.
+     *
+     * @param {!Array<!HTMLElement>} buttons
+     * @param {!MenuBarOverflowLayout} layout
+     * @return {!Array<!HTMLElement>} buttons to collapse, in DOM order
+     * @private
+     */
+    __getButtonsToCollapse(buttons, { starts, ends, margins, overflowExtent, containerWidth }) {
+      let lo = 0;
+      let hi = buttons.length - 1;
+
+      // The first kept button keeps its own start margin in front of the range.
+      while (lo <= hi && margins[lo] + ends[hi] - starts[lo] + overflowExtent > containerWidth + OVERFLOW_TOLERANCE) {
+        if (this.reverseCollapse) {
+          lo += 1;
+        } else {
+          hi -= 1;
+        }
+      }
+
+      return buttons.filter((_, i) => i < lo || i > hi);
+    }
+
+    /**
+     * Keeps the intrinsic width of the host at the given value. A parent sized by content,
+     * such as a split layout pane, shrinks the host once the buttons are out of flow. The
+     * width the host had with all buttons in flow keeps the collapse that was decided for it.
+     * The `overflow-frozen` attribute marks the frozen state for the styles and for the next
+     * detection. It is internal and not documented.
+     *
+     * @param {number} width
+     * @private
+     */
+    __freezeWidth(width) {
+      this.style.setProperty('--_vaadin-menu-bar-content-width', `${width}px`);
+      this.setAttribute('overflow-frozen', '');
     }
 
     /** @private */
+    __unfreezeWidth() {
+      this.style.removeProperty('--_vaadin-menu-bar-content-width');
+      this.removeAttribute('overflow-frozen');
+    }
+
+    /**
+     * Shows the overflow button and collapses buttons into it when the last button
+     * does not fit in the container. Freezes the host width when the parent shrinks
+     * the host after the collapse. A frozen host stays frozen until all buttons and the
+     * overflow button fit, so that its flex basis does not change between detections
+     * when another element in the same row depends on it.
+     *
+     * @param {!Array<!HTMLElement>} buttons
+     * @param {!HTMLElement} overflow
+     * @private
+     */
     __setOverflowItems(buttons, overflow) {
-      const container = this._container;
-
-      // Prevent the container from shrinking while buttons are being hidden.
-      // The host has min-width: 0 so it can shrink inside flex/grid layouts.
-      // Without this lock, hiding a button reduces the host width, which
-      // shrinks the container (width: 100%), shifting all button positions
-      // and causing a cascading collapse where every button appears to overflow.
-      container.style.minWidth = `${container.offsetWidth}px`;
-
-      if (container.offsetWidth < container.scrollWidth) {
-        this._hasOverflow = true;
-
-        const isRTL = this.__isRTL;
-        const containerLeft = container.offsetLeft;
-
-        const remaining = [...buttons];
-        while (remaining.length) {
-          const lastButton = remaining[remaining.length - 1];
-          const btnLeft = lastButton.offsetLeft - containerLeft;
-
-          // If this button isn't overflowing, then the rest aren't either
-          if (
-            (!isRTL && btnLeft + lastButton.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
-            (isRTL && btnLeft >= overflow.offsetWidth)
-          ) {
-            break;
-          }
-
-          const btn = this.reverseCollapse ? remaining.shift() : remaining.pop();
-
-          // Save width for buttons with component
-          btn.style.width = getComputedStyle(btn).width;
-          btn.style.visibility = 'hidden';
-          btn.style.position = 'absolute';
-        }
-
-        const items = buttons.filter((b) => !remaining.includes(b)).map((b) => b.item);
-        this.__updateOverflow(items);
+      const lastButton = buttons.at(-1);
+      // A frozen host is as wide as all buttons plus the overflow button, so the quick
+      // check would report a fit one overflow button too early. Measure instead.
+      const wasFrozen = this.hasAttribute('overflow-frozen');
+      if (!lastButton || (!wasFrozen && !this.__isPastContainerEnd(lastButton))) {
+        this.__unfreezeWidth();
+        return;
       }
+      this._hasOverflow = true;
 
-      container.style.minWidth = '';
+      // Read the layout once the overflow button is in flow
+      const layout = this.__getOverflowLayout(buttons, overflow);
+      const collapsed = this.__getButtonsToCollapse(buttons, layout);
+
+      // Write the DOM state
+      collapsed.forEach((btn) => {
+        btn.style.visibility = 'hidden';
+        btn.style.position = 'absolute';
+      });
+      this.__updateOverflow(collapsed.map((btn) => btn.item));
+
+      if (collapsed.length === 0) {
+        this.__unfreezeWidth();
+      } else if (wasFrozen || this.__isPastContainerEnd(overflow)) {
+        this.__freezeWidth(layout.contentWidth);
+      }
     }
 
     /** @private */
@@ -542,9 +666,7 @@ export const MenuBarMixin = (superClass) =>
       const buttons = this._buttons.filter((btn) => btn !== overflow);
       const oldOverflowCount = this.__getOverflowCount(overflow);
 
-      // Reset all buttons in the menu bar and the overflow button
-      this.__restoreButtons(buttons);
-      this.__updateOverflow([]);
+      this.__restoreState(buttons);
 
       // Hide any overflowing buttons and put them in the 'overflow' button
       this.__setOverflowItems(buttons, overflow);
@@ -573,6 +695,11 @@ export const MenuBarMixin = (superClass) =>
         this._setTabindex(visibleButtons[visibleButtons.length - 1], true);
       }
 
+      this.__updateVisibleAttributes(visibleButtons);
+    }
+
+    /** @private */
+    __updateVisibleAttributes(visibleButtons) {
       visibleButtons.forEach((btn, index) => {
         btn.toggleAttribute('first-visible', index === 0);
         btn.toggleAttribute('last-visible', !this._hasOverflow && index === visibleButtons.length - 1);

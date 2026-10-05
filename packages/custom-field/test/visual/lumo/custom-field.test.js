@@ -57,6 +57,12 @@ describe('custom-field', () => {
       await visualDiff(div, 'basic-label');
     });
 
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'label-aside');
+    });
+
     it('value', async () => {
       element.label = 'Home address';
       inputs[0].value = 'Foo street';
@@ -173,6 +179,28 @@ describe('custom-field', () => {
       });
     });
 
+    describe('label aside', () => {
+      beforeEach(() => {
+        wrapper = fixtureSync(`
+          <div style="padding: 10px">
+            <vaadin-custom-field theme="label-aside" label="Custom field">
+              <vaadin-text-field value="Text"></vaadin-text-field>
+            </vaadin-custom-field>
+            <vaadin-text-field theme="label-aside" label="Text field" value="Text"></vaadin-text-field>
+          </div>
+        `);
+      });
+
+      it('label aside alignment', async () => {
+        await visualDiff(wrapper, 'alignment-label-aside');
+      });
+
+      it('label aside alignment with input field height', async () => {
+        wrapper.style.setProperty('--vaadin-input-field-height', '56px');
+        await visualDiff(wrapper, 'alignment-label-aside-input-field-height');
+      });
+    });
+
     describe('label + error message', () => {
       beforeEach(() => {
         wrapper = fixtureSync(`
@@ -208,6 +236,27 @@ describe('custom-field', () => {
 
       it('label + helper text alignment', async () => {
         await visualDiff(wrapper, 'alignment-label-helper-text');
+      });
+    });
+
+    describe('input field height', () => {
+      beforeEach(() => {
+        wrapper = fixtureSync(`
+          <div style="padding: 10px; --vaadin-input-field-height: 56px">
+            <vaadin-custom-field label="Custom field">
+              <vaadin-text-field value="Text"></vaadin-text-field>
+            </vaadin-custom-field>
+            <vaadin-text-field label="Text field" value="Text"></vaadin-text-field>
+            <vaadin-custom-field>
+              <vaadin-text-field value="Text"></vaadin-text-field>
+            </vaadin-custom-field>
+            <vaadin-text-field value="Text"></vaadin-text-field>
+          </div>
+        `);
+      });
+
+      it('input field height alignment', async () => {
+        await visualDiff(wrapper, 'alignment-input-field-height');
       });
     });
   });

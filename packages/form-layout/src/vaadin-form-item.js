@@ -84,6 +84,20 @@ import { FormItemMixin } from './vaadin-form-item-mixin.js';
  * `label`              | The slotted label element wrapper
  * `required-indicator` | The `required` state indicator element
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom CSS property                                |
+ * :--------------------------------------------------|
+ * | `--vaadin-input-field-label-color`               |
+ * | `--vaadin-input-field-label-font-size`           |
+ * | `--vaadin-input-field-label-font-weight`         |
+ * | `--vaadin-input-field-label-line-height`         |
+ * | `--vaadin-input-field-required-indicator`        |
+ * | `--vaadin-input-field-required-indicator-color`  |
+ *
+ * **Deprecation note:** The `--vaadin-form-item-label-*` properties are deprecated and will be removed
+ * in Vaadin 26. Use the `--vaadin-input-field-label-*` properties instead.
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
  * @attr {string} theme - The theme variants to apply to the component.

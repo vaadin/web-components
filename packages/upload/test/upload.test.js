@@ -2,6 +2,7 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextUpdate, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-upload.js';
+import { DEFAULT_I18N } from '../src/vaadin-upload-mixin.js';
 import { addFilesViaInput, createFile, createFiles, removeFile, xhrCreator } from './helpers.js';
 
 describe('upload', () => {
@@ -765,18 +766,18 @@ describe('upload', () => {
 
       [400, 401, 403, 404, 451].forEach((status) => {
         it(`should fail with forbidden error for status code ${status}`, async () => {
-          await expectResponseErrorForStatus(upload.i18n.uploading.error.forbidden, status);
+          await expectResponseErrorForStatus(DEFAULT_I18N.uploading.error.forbidden, status);
         });
       });
 
       [500, 501, 502, 503, 504].forEach((status) => {
         it(`should fail with unexpected error for status code ${status}`, async () => {
-          await expectResponseErrorForStatus(upload.i18n.uploading.error.unexpectedServerError, status);
+          await expectResponseErrorForStatus(DEFAULT_I18N.uploading.error.unexpectedServerError, status);
         });
       });
 
       it('should fail with file too large error for status code 413', async () => {
-        await expectResponseErrorForStatus(upload.i18n.uploading.error.fileTooLarge, 413);
+        await expectResponseErrorForStatus(DEFAULT_I18N.uploading.error.fileTooLarge, 413);
       });
     });
   });
@@ -804,7 +805,7 @@ describe('upload', () => {
       upload.uploadFiles(file);
       await clock.tickAsync(200);
       expect(file.indeterminate).to.be.ok;
-      expect(file.status).to.be.equal(upload.i18n.uploading.status.connecting);
+      expect(file.status).to.be.equal(DEFAULT_I18N.uploading.status.connecting);
     });
 
     it('should not be indeterminate when progressing', async () => {
@@ -813,7 +814,7 @@ describe('upload', () => {
       upload.uploadFiles(file);
       await clock.tickAsync(600);
       const e = spy.firstCall.args[0];
-      expect(e.detail.file.status).to.contain(upload.i18n.uploading.remainingTime.prefix);
+      expect(e.detail.file.status).to.contain(DEFAULT_I18N.uploading.remainingTime.prefix);
       expect(e.detail.file.indeterminate).not.to.be.ok;
     });
 
@@ -821,7 +822,7 @@ describe('upload', () => {
       upload.uploadFiles(file);
       await clock.tickAsync(800);
       expect(file.indeterminate).to.be.ok;
-      expect(file.status).to.be.equal(upload.i18n.uploading.status.processing);
+      expect(file.status).to.be.equal(DEFAULT_I18N.uploading.status.processing);
     });
   });
 
@@ -845,14 +846,14 @@ describe('upload', () => {
     it('should be stalled when progress is not updated for more than 2 sec.', async () => {
       upload.uploadFiles(file);
       await clock.tickAsync(2200);
-      expect(file.status).to.be.equal(upload.i18n.uploading.status.stalled);
+      expect(file.status).to.be.equal(DEFAULT_I18N.uploading.status.stalled);
     });
 
     it('should not be stalled when progress updates within 2 sec.', async () => {
       upload._createXhr = xhrCreator({ size: file.size, uploadTime: 6000, stepTime: 1500 });
       upload.uploadFiles(file);
       await clock.tickAsync(2500);
-      expect(file.status).to.not.equal(upload.i18n.uploading.status.stalled);
+      expect(file.status).to.not.equal(DEFAULT_I18N.uploading.status.stalled);
     });
 
     it('should not become stalled after upload fails between progress updates', async () => {
@@ -863,7 +864,7 @@ describe('upload', () => {
       await clock.tickAsync(100);
       file.xhr.err();
       await clock.tickAsync(2400);
-      expect(file.status).to.not.equal(upload.i18n.uploading.status.stalled);
+      expect(file.status).to.not.equal(DEFAULT_I18N.uploading.status.stalled);
     });
 
     it('should clear status and progress state on progress update after upload failed', async () => {
@@ -1030,7 +1031,7 @@ describe('upload', () => {
       await nextRender();
       expect(file.uploaded).not.to.be.ok;
       expect(file.held).to.be.true;
-      expect(file.status).to.be.equal(upload.i18n.uploading.status.held);
+      expect(file.status).to.be.equal(DEFAULT_I18N.uploading.status.held);
     });
 
     it('should initialize loaded to zero when a file is added', async () => {
@@ -1122,7 +1123,7 @@ describe('upload', () => {
 
       expect(file.uploaded).not.to.be.ok;
       expect(file.held).to.be.true;
-      expect(file.status).to.be.equal(upload.i18n.uploading.status.held);
+      expect(file.status).to.be.equal(DEFAULT_I18N.uploading.status.held);
 
       const startSpy = sinon.spy();
       upload.addEventListener('upload-start', startSpy);

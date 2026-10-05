@@ -4,6 +4,9 @@ import { fixtureSync, keyboardEventFor, nextRender, nextUpdate } from '@vaadin/t
 import sinon from 'sinon';
 import '../src/vaadin-rich-text-editor.js';
 import { getDeepActiveElement } from '@vaadin/a11y-base/src/focus-utils.js';
+import { RichTextEditor } from '../src/vaadin-rich-text-editor.js';
+
+const DEFAULT_I18N = RichTextEditor.defaultI18n;
 
 describe('accessibility', () => {
   let rte, content, buttons, announcer, editor;
@@ -26,23 +29,21 @@ describe('accessibility', () => {
 
     it('should have aria-label for the buttons', () => {
       buttons.forEach((button, index) => {
-        const expectedLabel = rte.i18n[Object.keys(rte.i18n)[index]];
+        const expectedLabel = DEFAULT_I18N[Object.keys(DEFAULT_I18N)[index]];
         expect(button.ariaLabel).to.equal(expectedLabel);
       });
     });
 
     it('should localize aria-label for the buttons', async () => {
-      const defaultI18n = rte.i18n;
-
       const localized = {};
-      Object.keys(defaultI18n).forEach((key) => {
-        localized[key] = `${defaultI18n[key]} localized`;
+      Object.keys(DEFAULT_I18N).forEach((key) => {
+        localized[key] = `${DEFAULT_I18N[key]} localized`;
       });
       rte.i18n = localized;
       await nextUpdate(rte);
 
       buttons.forEach((button, index) => {
-        const expectedLabel = `${defaultI18n[Object.keys(defaultI18n)[index]]} localized`;
+        const expectedLabel = `${DEFAULT_I18N[Object.keys(DEFAULT_I18N)[index]]} localized`;
         expect(button.ariaLabel).to.equal(expectedLabel);
       });
     });

@@ -9,6 +9,7 @@
 @import '../src/mixins/field-helper.css';
 @import '../src/mixins/field-helper-above.css';
 @import '../src/mixins/field-label.css';
+@import '../src/mixins/field-label-aside.css';
 @import '../src/mixins/field-required.css';
 @import '../src/components/email-field.css';
 @import './input-container.css';
@@ -18,6 +19,7 @@
   --_lumo-vaadin-email-field-inject: 1;
   --_lumo-vaadin-email-field-inject-modules:
     lumo_mixins_field-label,
+    lumo_mixins_field-label-aside,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
     lumo_mixins_field-button,

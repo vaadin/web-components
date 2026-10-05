@@ -7,15 +7,17 @@
   :host {
     display: inline-flex;
     --lumo-text-field-size: var(--lumo-size-m);
+    /* The height of the child fields, which follow the same property */
+    --_input-height: var(--vaadin-input-field-height, var(--lumo-text-field-size));
     color: var(--lumo-body-text-color);
     font-size: var(--lumo-font-size-m);
-    /* align with text-field height + vertical paddings */
-    line-height: calc(var(--lumo-text-field-size) + 2 * var(--lumo-space-xs));
+    /* Centers native inputs in the input row */
+    line-height: var(--_input-height);
     font-family: var(--lumo-font-family);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
-    padding: 0;
+    padding: var(--_lumo-field-outer-padding, var(--lumo-space-xs)) 0;
   }
 
   :host::before {
@@ -23,8 +25,7 @@
     width: 0;
     /* Size and position this element on the same vertical position as the input-field element
            to make vertical align for the host element work as expected */
-    margin-top: var(--lumo-space-xs);
-    height: var(--lumo-text-field-size);
+    height: var(--_input-height);
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
@@ -44,19 +45,14 @@
     flex: none;
   }
 
-  /* align with text-field label */
-  :host([has-label]) [part='label'] {
-    padding-bottom: calc(0.5em - var(--lumo-space-xs));
+  /* The host carries the outer padding, so the child fields drop theirs */
+  [part='input-fields'] ::slotted(*) {
+    --_lumo-field-outer-padding: 0px;
   }
 
   :host(:not([has-label])) [part='label'],
   :host(:not([has-label]))::before {
     display: none;
-  }
-
-  /* align with text-field error message */
-  :host([has-error-message]) [part='error-message']::before {
-    height: calc(0.4em - var(--lumo-space-xs));
   }
 
   :host([focused]:not([readonly]):not([disabled])) [part='label'] {
@@ -93,10 +89,5 @@
 
   :host([theme~='small']) [part='error-message'] {
     font-size: var(--lumo-font-size-xxs);
-  }
-
-  /* When custom-field is used with components without outer margin */
-  :host([theme~='whitespace'][has-label]) [part='label'] {
-    padding-bottom: 0.5em;
   }
 }

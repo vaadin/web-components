@@ -71,6 +71,19 @@ describe('field-base', () => {
           element.setAttribute('theme', 'helper-above-field');
           await visualDiff(div, `${dir}-label-helper-above-field`);
         });
+
+        describe('custom CSS properties', () => {
+          it('custom input field height', async () => {
+            div.style.setProperty('--vaadin-input-field-height', '56px');
+            await visualDiff(div, `${dir}-css-props-height`);
+          });
+
+          it('label and custom input field height', async () => {
+            element.label = 'Label';
+            div.style.setProperty('--vaadin-input-field-height', '56px');
+            await visualDiff(div, `${dir}-css-props-label-height`);
+          });
+        });
       });
     });
   });
@@ -138,7 +151,27 @@ describe('field-base', () => {
           element.style.setProperty('--vaadin-input-field-label-aside-gap', '2em');
           await visualDiff(div, `${dir}-label-aside-custom-width-gap`);
         });
+
+        it('custom label text align', async () => {
+          element.label = 'Label that wraps on multiple lines';
+          element.required = true;
+          element.style.setProperty('--vaadin-input-field-label-aside-width', '12em');
+          element.style.setProperty('--vaadin-input-field-label-aside-text-align', 'end');
+          await visualDiff(div, `${dir}-label-aside-custom-text-align`);
+        });
       });
+    });
+  });
+
+  describe('form layout labels aside', () => {
+    beforeEach(() => {
+      element.setAttribute('data-form-layout-has-labels-aside', '');
+      element.style.setProperty('--vaadin-input-field-label-aside-width', '8em');
+      element.style.setProperty('--vaadin-input-field-label-aside-gap', '1em');
+    });
+
+    it('default', async () => {
+      await visualDiff(div, 'form-layout-labels-aside');
     });
   });
 });

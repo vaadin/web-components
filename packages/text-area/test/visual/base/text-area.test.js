@@ -137,6 +137,19 @@ describe('text-area', () => {
     });
   });
 
+  describe('custom CSS properties', () => {
+    it('custom input field height', async () => {
+      div.style.display = 'inline-flex';
+      div.style.alignItems = 'baseline';
+      div.style.setProperty('--vaadin-input-field-height', '56px');
+      div.insertAdjacentHTML('afterbegin', '<span>Text</span>');
+      div.insertAdjacentHTML('beforeend', '<vaadin-text-area value="value\nvalue\nvalue\nvalue"></vaadin-text-area>');
+      element.minRows = 1;
+      element.value = 'value';
+      await visualDiff(div, 'css-props-height');
+    });
+  });
+
   describe('features', () => {
     ['ltr', 'rtl'].forEach((dir) => {
       describe(dir, () => {

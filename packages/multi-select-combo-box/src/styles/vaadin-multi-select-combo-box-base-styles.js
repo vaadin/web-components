@@ -12,6 +12,8 @@ export const multiSelectComboBoxStyles = [
   css`
     :host {
       max-width: 100%;
+      /* Content stays at the top, keep the default guide height */
+      --_field-input-height: var(--_field-input-default-height);
       --_input-min-width: var(--vaadin-multi-select-combo-box-input-min-width, 4rem);
       --_chip-min-width: var(--vaadin-multi-select-combo-box-chip-min-width, 48px);
       --_wrapper-gap: var(--vaadin-multi-select-combo-box-chips-gap, 2px);
@@ -23,18 +25,25 @@ export const multiSelectComboBoxStyles = [
       gap: var(--vaadin-multi-select-combo-box-chips-gap, 2px);
     }
 
+    :host(:is([theme~='label-aside'], [data-form-layout-has-labels-aside])) [part='input-field']::before {
+      content: '\\2003' / '';
+      width: 0;
+      align-self: start;
+      margin-inline-end: calc(var(--vaadin-input-field-gap, var(--vaadin-gap-s)) * -1);
+    }
+
     ::slotted(input) {
       box-sizing: border-box;
       flex: 1 0 var(--_input-min-width);
     }
 
-    ::slotted([slot='chip']),
-    ::slotted([slot='overflow']) {
+    ::slotted([slot='chip']) {
       flex: 0 1 auto;
+      overflow: hidden;
     }
 
-    ::slotted([slot='chip']) {
-      overflow: hidden;
+    ::slotted([slot='overflow']) {
+      flex: none;
     }
 
     :host(:is([readonly], [disabled])) ::slotted(input) {
@@ -58,6 +67,10 @@ export const multiSelectComboBoxStyles = [
 
     :host([auto-expand-horizontally]) {
       --vaadin-field-default-width: auto;
+    }
+
+    :host([has-select-all]) #overlay slot[name='overlay']::slotted(*) {
+      border-top: 1px solid var(--vaadin-border-color-secondary);
     }
   `,
 ];

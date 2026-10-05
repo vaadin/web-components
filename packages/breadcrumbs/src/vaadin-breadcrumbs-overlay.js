@@ -78,6 +78,15 @@ class BreadcrumbsOverlay extends PositionMixin(OverlayMixin(DirMixin(PolylitMixi
   get _contentRoot() {
     return this.owner;
   }
+
+  /**
+   * Override method from `OverlayFocusMixin` to skip moving focus on open.
+   * Focus stays on the overflow button, and only focus restoration is used.
+   *
+   * @protected
+   * @override
+   */
+  _initFocus() {}
 }
 
 defineCustomElement(BreadcrumbsOverlay);

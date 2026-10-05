@@ -98,7 +98,7 @@ assertType<((item: TestComboBoxItem) => string) | undefined>(narrowedComboBox.it
 assertType<string | null | undefined>(narrowedComboBox.itemIdPath);
 assertType<string>(narrowedComboBox.itemLabelPath);
 assertType<string>(narrowedComboBox.itemValuePath);
-assertType<MultiSelectComboBoxI18n>(narrowedComboBox.i18n);
+assertType<MultiSelectComboBoxI18n | undefined>(narrowedComboBox.i18n);
 assertType<MultiSelectComboBoxRenderer<TestComboBoxItem> | null | undefined>(narrowedComboBox.renderer);
 assertType<boolean>(narrowedComboBox.invalid);
 assertType<HTMLElement | null | undefined>(narrowedComboBox.focusElement);
@@ -113,6 +113,7 @@ assertType<boolean>(narrowedComboBox.required);
 assertType<boolean>(narrowedComboBox.selectedItemsOnTop);
 assertType<boolean>(narrowedComboBox.autoExpandVertically);
 assertType<boolean>(narrowedComboBox.collapseChips);
+assertType<boolean>(narrowedComboBox.selectAllButtonVisible);
 
 // Mixins
 assertType<ComboBoxBaseMixinClass>(narrowedComboBox);
@@ -159,3 +160,9 @@ assertType<ThemableMixinClass>(narrowedItem);
 // I18n
 assertType<MultiSelectComboBoxI18n>({});
 assertType<MultiSelectComboBoxI18n>({ cleared: 'Cleared' });
+assertType<MultiSelectComboBoxI18n>({
+  selectAll: 'Select all',
+  deselectAll: 'Deselect all',
+  selectFiltered: 'Select filtered',
+  deselectFiltered: 'Deselect filtered',
+});

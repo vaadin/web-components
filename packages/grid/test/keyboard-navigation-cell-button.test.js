@@ -45,17 +45,17 @@ describe('keyboard navigation - focus button mode', () => {
   });
 
   it('should create a focusable div with role="button" inside the cell', () => {
-    expect(cell.firstChild.localName).to.equal('div');
-    expect(cell.firstChild.getAttribute('role')).to.equal('button');
+    expect(cell.firstElementChild.localName).to.equal('div');
+    expect(cell.firstElementChild.getAttribute('role')).to.equal('button');
   });
 
   it('should set tabindex on the focusable div inside the cell', () => {
     expect(cell.hasAttribute('tabindex')).to.be.false;
-    expect(cell.firstChild.getAttribute('tabindex')).to.equal('0');
+    expect(cell.firstElementChild.getAttribute('tabindex')).to.equal('0');
   });
 
   it('should focus the focusable div when calling `focus()` on the cell', () => {
-    const spy = sinon.spy(cell.firstChild, 'focus');
+    const spy = sinon.spy(cell.firstElementChild, 'focus');
     cell.focus();
     expect(spy.calledOnce).to.be.true;
   });
@@ -65,35 +65,35 @@ describe('keyboard navigation - focus button mode', () => {
 
     cell2.focus();
 
-    expect(cell.firstChild.getAttribute('tabindex')).to.equal('-1');
-    expect(cell2.firstChild.getAttribute('tabindex')).to.equal('0');
+    expect(cell.firstElementChild.getAttribute('tabindex')).to.equal('-1');
+    expect(cell2.firstElementChild.getAttribute('tabindex')).to.equal('0');
   });
 
   it('should update tabindex on the div when enabling row focus mode', () => {
     cell.focus();
-    arrowLeft(cell.firstChild);
-    expect(cell.firstChild.getAttribute('tabindex')).to.equal('-1');
+    arrowLeft(cell.firstElementChild);
+    expect(cell.firstElementChild.getAttribute('tabindex')).to.equal('-1');
   });
 
   it('should restore tabindex on the div when disabling row focus mode', () => {
     cell.focus();
-    arrowLeft(cell.firstChild);
-    arrowRight(cell.firstChild);
-    expect(cell.firstChild.getAttribute('tabindex')).to.equal('0');
+    arrowLeft(cell.firstElementChild);
+    arrowRight(cell.firstElementChild);
+    expect(cell.firstElementChild.getAttribute('tabindex')).to.equal('0');
   });
 
   it('should set focused-cell part on the div when focusing the cell', () => {
     cell.focus();
-    expect(cell.firstChild.getAttribute('part')).to.equal('focused-cell');
+    expect(cell.firstElementChild.getAttribute('part')).to.equal('focused-cell');
   });
 
   it('should remove focused-cell part from the div when focusing other cell', () => {
     cell.focus();
-    expect(cell.firstChild.getAttribute('part')).to.equal('focused-cell');
+    expect(cell.firstElementChild.getAttribute('part')).to.equal('focused-cell');
 
     const cell2 = getRowFirstCell(1);
     cell2.focus();
-    expect(cell.firstChild.getAttribute('part')).to.be.null;
+    expect(cell.firstElementChild.getAttribute('part')).to.be.null;
   });
 
   it('should not create a focusable div with role="button" inside the header cell', () => {

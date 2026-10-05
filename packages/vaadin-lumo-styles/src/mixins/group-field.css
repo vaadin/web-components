@@ -12,7 +12,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
-    padding: var(--lumo-space-xs) 0;
+    padding: var(--_lumo-field-outer-padding, var(--lumo-space-xs)) 0;
   }
 
   :host::before {

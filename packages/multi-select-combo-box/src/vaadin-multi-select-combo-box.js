@@ -8,6 +8,7 @@ import './vaadin-multi-select-combo-box-container.js';
 import './vaadin-multi-select-combo-box-item.js';
 import './vaadin-multi-select-combo-box-overlay.js';
 import './vaadin-multi-select-combo-box-scroller.js';
+import './vaadin-multi-select-combo-box-select-all-button.js';
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { defineCustomElement } from '@vaadin/component-base/src/define.js';
@@ -61,6 +62,7 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * `has-label`            | Set when the element has a label
  * `has-helper`           | Set when the element has helper text or slot
  * `has-error-message`    | Set when the element has an error message
+ * `has-select-all`       | Set when the select all button is shown in the dropdown
  * `has-tooltip`          | Set when the element has a slotted tooltip
  * `invalid`              | Set when the element is invalid
  * `focused`              | Set when the element is focused
@@ -105,6 +107,7 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * | `--vaadin-input-field-helper-font-weight`             |
  * | `--vaadin-input-field-helper-line-height`             |
  * | `--vaadin-input-field-label-aside-gap`                |
+ * | `--vaadin-input-field-label-aside-text-align`         |
  * | `--vaadin-input-field-label-aside-width`              |
  * | `--vaadin-input-field-label-color`                    |
  * | `--vaadin-input-field-label-font-size`                |
@@ -134,6 +137,7 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  *
  * - `<vaadin-multi-select-combo-box-chip>`
  * - `<vaadin-multi-select-combo-box-item>` - has the same API as `<vaadin-item>`.
+ * - `<vaadin-multi-select-combo-box-select-all-button>`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/styling-components) documentation.
  *
@@ -199,6 +203,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
       <vaadin-multi-select-combo-box-overlay
         id="overlay"
+        role="application"
         exportparts="overlay, content, loader"
         .owner="${this}"
         .dir="${this.dir}"
@@ -208,6 +213,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         .positionTarget="${this._inputField}"
         no-vertical-overlap
       >
+        <slot name="select-all"></slot>
         <slot name="overlay"></slot>
       </vaadin-multi-select-combo-box-overlay>
     `;

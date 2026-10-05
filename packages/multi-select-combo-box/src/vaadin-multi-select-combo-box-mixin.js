@@ -15,6 +15,8 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
+import { MultiSelectComboBoxHighlightMixin } from './vaadin-multi-select-combo-box-highlight-mixin.js';
+import { MultiSelectComboBoxSelectAllMixin } from './vaadin-multi-select-combo-box-select-all-mixin.js';
 
 const DEFAULT_I18N = {
   cleared: 'Selection cleared',
@@ -22,11 +24,21 @@ const DEFAULT_I18N = {
   selected: 'added to selection',
   deselected: 'removed from selection',
   total: '{count} items selected',
+  selectAll: 'Select All',
+  deselectAll: 'Deselect All',
+  selectFiltered: 'Select Filtered',
+  deselectFiltered: 'Deselect Filtered',
 };
 
 export const MultiSelectComboBoxMixin = (superClass) =>
   class MultiSelectComboBoxMixinClass extends I18nMixin(
-    ComboBoxFocusIndexMixin(ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass))))),
+    MultiSelectComboBoxSelectAllMixin(
+      MultiSelectComboBoxHighlightMixin(
+        ComboBoxFocusIndexMixin(
+          ComboBoxDataProviderMixin(ComboBoxItemsMixin(InputControlMixin(ResizeMixin(superClass)))),
+        ),
+      ),
+    ),
   ) {
     static get properties() {
       return {
@@ -178,13 +190,6 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         },
 
         /** @private */
-        _focusedChipIndex: {
-          type: Number,
-          value: -1,
-          observer: '_focusedChipIndexChanged',
-        },
-
-        /** @private */
         _lastFilter: {
           type: String,
           sync: true,
@@ -218,8 +223,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     /**
      * The object used to localize this component. To change the default
-     * localization, replace this with an object that provides all properties, or
+     * localization, set this to an object that provides all properties, or
      * just the individual properties you want to change.
+     *
+     * When not set, defaults to `undefined`.
      *
      * The object has the following JSON structure and default values:
      * ```js
@@ -235,9 +242,19 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      *   // Screen reader announcement of the selected items count.
      *   // {count} is replaced with the actual count of items.
      *   total: '{count} items selected',
+     *   // Text of the select all button when no filter is set.
+     *   selectAll: 'Select All',
+     *   // Text of the select all button when no filter is set
+     *   // and all items are selected.
+     *   deselectAll: 'Deselect All',
+     *   // Text of the select all button when a filter is set.
+     *   selectFiltered: 'Select Filtered',
+     *   // Text of the select all button when a filter is set
+     *   // and all items matching the filter are selected.
+     *   deselectFiltered: 'Deselect Filtered',
      * }
      * ```
-     * @type {!MultiSelectComboBoxI18n}
+     * @type {MultiSelectComboBoxI18n | undefined}
      */
     get i18n() {
       return super.i18n;
@@ -354,6 +371,10 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         this.__updateChips();
       }
 
+      if (props.has('_highlightState')) {
+        this.__updateChipHighlight(props.get('_highlightState'));
+      }
+
       if (props.has('readonly')) {
         this._setDropdownItems(this.filteredItems);
 
@@ -387,8 +408,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      */
     clear() {
       this.__updateSelection([]);
-
-      announce(this.__effectiveI18n.cleared);
+      this.__announceSelection();
     }
 
     /** @private */
@@ -422,6 +442,21 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
+     * Override method from `ComboBoxBaseMixin` to only open the dropdown
+     * when clicking on the label or the input field.
+     * @param {Event} event
+     * @protected
+     * @override
+     */
+    _onHostClick(event) {
+      const path = event.composedPath();
+
+      if (path.includes(this._labelNode) || path.includes(this._inputField)) {
+        super._onHostClick(event);
+      }
+    }
+
+    /**
      * Override method from `ComboBoxBaseMixin` to implement clearing logic.
      * @protected
      * @override
@@ -446,6 +481,17 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
+     * Override method from `ComboBoxBaseMixin` to revert the input to the
+     * filter, as this component does not use `value` for the input text.
+     * @protected
+     * @override
+     */
+    _revertInputValue() {
+      this._inputElementValue = this.filter;
+      this._clearSelectionRange();
+    }
+
+    /**
      * @protected
      * @override
      */
@@ -457,7 +503,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // Do not commit focused item on not blur / outside click
       if (this._ignoreCommitValue) {
         this._inputElementValue = '';
-        this._focusedIndex = -1;
+        this._clearItemHighlight();
         this._ignoreCommitValue = false;
       } else {
         this.__commitUserInput();
@@ -471,8 +517,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     /** @private */
     __commitUserInput() {
-      if (this._focusedIndex > -1) {
-        const focusedItem = this._dropdownItems[this._focusedIndex];
+      if (this._hasHighlightedItem) {
+        const focusedItem = this._highlightedItem;
         // Do not unselect an already selected item when it was focused by
         // filtering, in which case the input value still equals the filter.
         if (
@@ -533,7 +579,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       // Do not validate when focusout is caused by document
       // losing focus, which happens on browser tab switch.
       if (blurred && document.hasFocus()) {
-        this._focusedChipIndex = -1;
+        this._clearChipHighlight();
         this._requestValidation();
       }
 
@@ -621,13 +667,13 @@ export const MultiSelectComboBoxMixin = (superClass) =>
      * @override
      */
     _hasValidInputValue() {
-      const hasInvalidOption = this._focusedIndex < 0 && this._inputElementValue !== '';
+      const hasInvalidOption = !this._hasHighlightedItem && this._inputElementValue !== '';
       return this.allowCustomValue || !hasInvalidOption;
     }
 
     /**
-     * Override method inherited from the combo-box
-     * to not request data provider when read-only.
+     * Override method from `ComboBoxDataProviderMixin` to not request
+     * data provider when read-only.
      *
      * @protected
      * @override
@@ -757,6 +803,16 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     }
 
+    /**
+     * Announces the number of selected items to screen readers.
+     * @private
+     */
+    __announceSelection() {
+      const { cleared, total } = this.__effectiveI18n;
+      const count = this.selectedItems.length;
+      announce(count === 0 ? cleared : total.replace('{count}', count));
+    }
+
     /** @private */
     __updateTopGroup(selectedItemsOnTop, selectedItems, opened) {
       if (!selectedItemsOnTop) {
@@ -804,27 +860,49 @@ export const MultiSelectComboBoxMixin = (superClass) =>
       return chip;
     }
 
-    /** @private */
-    __getWrapperWidth() {
-      return this._inputField.$.wrapper.clientWidth;
+    /**
+     * Returns the width of the element with its fraction, unlike `clientWidth`.
+     * The chips do not shrink below their `max-width`, so a rounding error moves the input out.
+     * @private
+     */
+    __getUsedWidth(element) {
+      return parseFloat(getComputedStyle(element).width);
     }
 
     /** @private */
-    __getOverflowWidth() {
+    __getWrapperGap() {
+      // The gap computes to `normal` when not set, which is 0 in a flex container
+      return parseFloat(getComputedStyle(this._inputField.$.wrapper).columnGap) || 0;
+    }
+
+    /** @private */
+    __getWrapperWidth() {
+      // Exclude the gap between the chips and the input
+      return this.__getUsedWidth(this._inputField.$.wrapper) - this.__getWrapperGap();
+    }
+
+    /**
+     * Returns the width that the overflow chip with the given count takes,
+     * including its margins and the gap between it and the chips.
+     * @private
+     */
+    __getOverflowWidth(count) {
       const chip = this._overflow;
 
+      // The `_overflowItems` observer sets the final label and count afterwards
       chip.style.visibility = 'hidden';
       chip.removeAttribute('hidden');
+      chip.label = `${count}`;
+      chip.setAttribute('count', `${count}`);
 
-      const count = chip.getAttribute('count');
+      // The chip uses `box-sizing: border-box`, so its width includes padding and border
+      const { marginInlineStart, marginInlineEnd } = getComputedStyle(chip);
+      const overflowWidth =
+        this.__getUsedWidth(chip) +
+        parseFloat(marginInlineStart) +
+        parseFloat(marginInlineEnd) +
+        this.__getWrapperGap();
 
-      // Detect max possible width of the overflow chip
-      // by measuring it with widest number (2 digits)
-      chip.setAttribute('count', '99');
-      const overflowStyle = getComputedStyle(chip);
-      const overflowWidth = chip.clientWidth + parseInt(overflowStyle.marginInlineStart);
-
-      chip.setAttribute('count', count);
       chip.setAttribute('hidden', '');
       chip.style.visibility = '';
 
@@ -856,7 +934,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         return;
       }
 
-      const inputWidth = parseInt(getComputedStyle(this.inputElement).flexBasis);
+      const inputWidth = parseFloat(getComputedStyle(this.inputElement).flexBasis);
 
       if (this.collapseChips) {
         this._overflowItems = this.__updateChipsCollapsed(this.selectedItems, inputWidth);
@@ -875,7 +953,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         return chip;
       });
 
-      const allChipsFit = this.__getWrapperWidth() - this.$.chips.clientWidth >= inputWidth;
+      const allChipsFit = this.__getWrapperWidth() - this.__getUsedWidth(this.$.chips) >= inputWidth;
       return { chips, allChipsFit };
     }
 
@@ -902,21 +980,28 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
       // Remove chips from the end until there is enough width for the input element to fit,
       // keeping at least one chip visible
-      const overflowWidth = this.__getOverflowWidth();
+      const wrapperWidth = this.__getWrapperWidth();
+      // Start from the width for the largest count, and measure the exact count only
+      // when the chips would fit with the estimate, as the label width varies per count
+      let overflowWidth = this.__getOverflowWidth(items.length - 1);
       let visibleCount = chips.length;
 
       while (visibleCount > 1) {
         visibleCount -= 1;
         chips[visibleCount].remove();
 
-        if (this.__getWrapperWidth() - this.$.chips.clientWidth >= inputWidth + overflowWidth) {
-          break;
+        const chipsWidth = this.__getUsedWidth(this.$.chips);
+        if (wrapperWidth - chipsWidth >= inputWidth + overflowWidth) {
+          overflowWidth = this.__getOverflowWidth(items.length - visibleCount);
+          if (wrapperWidth - chipsWidth >= inputWidth + overflowWidth) {
+            break;
+          }
         }
       }
 
       if (visibleCount === 1) {
         const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
-        const remainingWidth = this.__getWrapperWidth() - inputWidth - overflowWidth;
+        const remainingWidth = wrapperWidth - inputWidth - overflowWidth;
         chips[0].style.maxWidth = `${Math.max(chipMinWidth, remainingWidth)}px`;
       }
 
@@ -925,11 +1010,7 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
     /** @private */
     __updateChipsDefault(items, inputWidth) {
-      let remainingWidth = this.__getWrapperWidth() - inputWidth;
-
-      if (items.length > 1) {
-        remainingWidth -= this.__getOverflowWidth();
-      }
+      const availableWidth = this.__getWrapperWidth() - inputWidth;
 
       const chipMinWidth = parseInt(getComputedStyle(this).getPropertyValue('--_chip-min-width'));
 
@@ -938,7 +1019,12 @@ export const MultiSelectComboBoxMixin = (superClass) =>
         const chip = this.__createChip(items[i]);
         this.insertBefore(chip, refNode);
 
-        if (this.$.chips.clientWidth > remainingWidth) {
+        // Reserve space for the overflow chip with the count of the items that are not
+        // added yet, measured with a chip rendered so that the spacing between them counts
+        const remainingWidth =
+          items.length > 1 ? availableWidth - this.__getOverflowWidth(Math.max(i, 1)) : availableWidth;
+
+        if (this.__getUsedWidth(this.$.chips) > remainingWidth) {
           // If there is no more space for chips, or if there is at least one
           // chip already shown, collapse all remaining chips to the overflow
           if (remainingWidth < chipMinWidth || refNode !== null) {
@@ -1045,11 +1131,13 @@ export const MultiSelectComboBoxMixin = (superClass) =>
 
         if (this.readonly) {
           this.close();
+        } else if (this._isSelectAllHighlighted) {
+          this._toggleSelectAll();
         } else if (this._hasValidInputValue()) {
           // Keep selected item focused after committing on Enter.
-          const focusedItem = this._dropdownItems[this._focusedIndex];
+          const focusedItem = this._highlightedItem;
           this._commitValue();
-          this._focusedIndex = this._dropdownItems.indexOf(focusedItem);
+          this._highlightItem(focusedItem);
         }
 
         return;
@@ -1059,8 +1147,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from the combo-box
-     * to not update focused item when readonly.
+     * Override method from `ComboBoxBaseMixin` to not update focused
+     * item when readonly.
      * @protected
      * @override
      */
@@ -1073,8 +1161,8 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     }
 
     /**
-     * Override method inherited from the combo-box
-     * to not update focused item when readonly.
+     * Override method from `ComboBoxBaseMixin` to not update focused
+     * item when readonly.
      * @protected
      * @override
      */
@@ -1095,120 +1183,80 @@ export const MultiSelectComboBoxMixin = (superClass) =>
     _onKeyDown(event) {
       super._onKeyDown(event);
 
-      const chips = this._chips;
-
-      if (!this.readonly && chips.length > 0) {
+      if (!this.readonly && this._chips.length > 0) {
         switch (event.key) {
           case 'Backspace':
-            this._onBackSpace(chips);
+            this._onBackSpace();
             break;
           case 'ArrowLeft':
-            this._onArrowLeft(chips, event);
-            break;
           case 'ArrowRight':
-            this._onArrowRight(chips, event);
+            this._onChipArrow(event);
             break;
           default:
-            this._focusedChipIndex = -1;
+            this._clearChipHighlight();
             break;
         }
       }
     }
 
     /** @private */
-    _onArrowLeft(chips, event) {
+    _onChipArrow(event) {
       if (this.inputElement.selectionStart !== 0) {
         return;
       }
 
-      const idx = this._focusedChipIndex;
-      if (idx !== -1) {
+      if (this._hasHighlightedChip) {
         event.preventDefault();
       }
-      let newIdx;
 
-      if (!this.__isRTL) {
-        if (idx === -1) {
-          // Focus last chip
-          newIdx = chips.length - 1;
-        } else if (idx > 0) {
-          // Focus prev chip
-          newIdx = idx - 1;
-        }
-      } else if (idx === chips.length - 1) {
-        // Blur last chip
-        newIdx = -1;
-      } else if (idx > -1) {
-        // Focus next chip
-        newIdx = idx + 1;
-      }
+      const hadHighlightedItem = this._hasHighlightedItem;
 
-      if (newIdx !== undefined) {
-        this._focusedChipIndex = newIdx;
-      }
-    }
-
-    /** @private */
-    _onArrowRight(chips, event) {
-      if (this.inputElement.selectionStart !== 0) {
-        return;
-      }
-
-      const idx = this._focusedChipIndex;
-      if (idx !== -1) {
-        event.preventDefault();
-      }
-      let newIdx;
-
-      if (this.__isRTL) {
-        if (idx === -1) {
-          // Focus last chip
-          newIdx = chips.length - 1;
-        } else if (idx > 0) {
-          // Focus prev chip
-          newIdx = idx - 1;
-        }
-      } else if (idx === chips.length - 1) {
-        // Blur last chip
-        newIdx = -1;
-      } else if (idx > -1) {
-        // Focus next chip
-        newIdx = idx + 1;
-      }
-
-      if (newIdx !== undefined) {
-        this._focusedChipIndex = newIdx;
-      }
-    }
-
-    /** @private */
-    _onBackSpace(chips) {
-      if (this.inputElement.selectionStart !== 0) {
-        return;
-      }
-
-      const idx = this._focusedChipIndex;
-      if (idx === -1) {
-        this._focusedChipIndex = chips.length - 1;
+      const isPrevKey = this.__isRTL ? event.key === 'ArrowRight' : event.key === 'ArrowLeft';
+      if (isPrevKey) {
+        this._highlightPrevChip();
       } else {
-        this.__removeItem(chips[idx].item);
-        this._focusedChipIndex = -1;
+        this._highlightNextChip();
+      }
+
+      // The label of the highlighted item was prefilled into the input, so
+      // restore the filter once the highlight moved from the item to a chip.
+      // Place the caret at the start of the input, so that the next arrow
+      // key press continues to navigate the chips instead of moving the caret.
+      if (hadHighlightedItem && this._hasHighlightedChip) {
+        event.preventDefault();
+        this._inputElementValue = this.filter;
+        this._setSelectionRange(0, 0);
       }
     }
 
     /** @private */
-    _focusedChipIndexChanged(focusedIndex, oldFocusedIndex) {
-      if (focusedIndex > -1 || oldFocusedIndex > -1) {
-        const chips = this._chips;
-        chips.forEach((chip, index) => {
-          chip.toggleAttribute('focused', index === focusedIndex);
-        });
+    _onBackSpace() {
+      if (this.inputElement.selectionStart !== 0) {
+        return;
+      }
 
-        // Announce focused chip
-        if (focusedIndex > -1) {
-          const item = chips[focusedIndex].item;
-          const itemLabel = this._getItemLabel(item);
-          announce(`${itemLabel} ${this.__effectiveI18n.focused}`);
+      const chip = this._highlightedChip;
+      if (chip) {
+        this.__removeItem(chip.item);
+        this._clearChipHighlight();
+      } else {
+        this._highlightLastChip();
+      }
+    }
+
+    /** @private */
+    __updateChipHighlight(oldState) {
+      const chips = this._chips;
+
+      if (oldState?.type === 'chip') {
+        chips[oldState.index]?.removeAttribute('focused');
+      }
+
+      if (this._hasHighlightedChip) {
+        const chip = chips[this._highlightState.index];
+        if (chip) {
+          chip.setAttribute('focused', '');
+          announce(`${this._getItemLabel(chip.item)} ${this.__effectiveI18n.focused}`);
         }
       }
     }

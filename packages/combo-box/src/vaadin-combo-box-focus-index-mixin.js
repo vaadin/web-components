@@ -47,7 +47,7 @@ export const ComboBoxFocusIndexMixin = (superClass) =>
       // wins. Rendering rows around `index` also lets placeholder rows fire
       // `index-requested`, loading any missing pages via the data-provider
       // chain.
-      this._focusedIndex = index;
+      this._highlightItemAt(index);
       this._scrollIntoView(index, true);
 
       // A page-load may have kicked in during the scroll (placeholder
@@ -61,7 +61,7 @@ export const ComboBoxFocusIndexMixin = (superClass) =>
       delete this.__pendingFocusIndex;
       requestAnimationFrame(() => {
         if (this.isConnected) {
-          this._updateActiveDescendant(index);
+          this._updateActiveDescendant();
         }
       });
     }

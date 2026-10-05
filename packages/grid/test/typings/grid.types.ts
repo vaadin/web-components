@@ -184,7 +184,7 @@ assertType<TestGridItem[]>(narrowedGrid.selectedItems);
 assertType<TestGridItem[]>(narrowedGrid.detailsOpenedItems);
 assertType<TestGridItem[]>(narrowedGrid.expandedItems);
 
-assertType<GridI18n>(narrowedGrid.i18n);
+assertType<GridI18n | undefined>(narrowedGrid.i18n);
 
 assertType<(arg0: TestGridItem) => TestGridItem | unknown>(narrowedGrid.getItemId);
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.expandItem);

@@ -44,4 +44,9 @@ export declare class DialogOverlayMixinClass {
    * Retrieves the coordinates of the overlay.
    */
   getBounds(): DialogOverlayBounds;
+
+  /**
+   * Returns true if the overlay contains focus, including nested shadow roots.
+   */
+  containsFocus(): boolean;
 }

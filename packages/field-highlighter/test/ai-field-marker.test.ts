@@ -680,12 +680,16 @@ describe('ai field marker', () => {
   });
 
   describe('i18n', () => {
-    it('should return the default texts from the i18n property', () => {
-      const marker = document.createElement('vaadin-ai-field-marker');
-      expect(marker.i18n.message).to.equal(DEFAULT_MESSAGE);
-      expect(marker.i18n.revert).to.equal(DEFAULT_REVERT_TEXT);
-      expect(marker.i18n.badgeLabel).to.equal(DEFAULT_BADGE_LABEL);
-      expect(marker.i18n.badgeTooltip).to.equal(DEFAULT_BADGE_TOOLTIP);
+    it('should render the default texts on the marker', async () => {
+      const marker = mark(field);
+      await nextRender();
+
+      expect(marker.querySelector('.message')!.textContent).to.equal(DEFAULT_MESSAGE);
+      expect(marker.querySelector<HTMLButtonElement>('.actions > button')!.textContent).to.equal(DEFAULT_REVERT_TEXT);
+      expect(marker.querySelector<HTMLButtonElement>('.badge')!.getAttribute('aria-label')).to.equal(
+        DEFAULT_BADGE_LABEL,
+      );
+      expect(marker.querySelector('vaadin-tooltip')!.text).to.equal(DEFAULT_BADGE_TOOLTIP);
     });
 
     it('should apply localized texts to the marker', async () => {

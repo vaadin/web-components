@@ -38,6 +38,12 @@ describe('date-time-picker', () => {
       await visualDiff(div, 'label');
     });
 
+    it('label aside', async () => {
+      element.setAttribute('theme', 'label-aside');
+      element.label = 'Label';
+      await visualDiff(div, 'label-aside');
+    });
+
     it('placeholder', async () => {
       element.datePlaceholder = 'Date';
       element.timePlaceholder = 'Time';

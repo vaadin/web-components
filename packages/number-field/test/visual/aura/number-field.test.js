@@ -49,4 +49,10 @@ describe('number-field', () => {
     element.stepButtonsVisible = true;
     await visualDiff(div, 'step-buttons');
   });
+
+  it('label aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    await visualDiff(div, 'label-aside');
+  });
 });

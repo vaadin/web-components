@@ -24,6 +24,10 @@ export const checkable = (part, propName = part) => css`
     column-gap: 0;
   }
 
+  :host([data-form-layout-has-labels-aside]) {
+    padding-inline-start: calc(var(--vaadin-form-layout-label-width) + var(--vaadin-form-layout-label-spacing));
+  }
+
   [part='${unsafeCSS(part)}'],
   ::slotted(input),
   [part='label'],
@@ -68,6 +72,7 @@ export const checkable = (part, propName = part) => css`
     margin: 0;
     padding: 0;
     border: 0;
+    height: auto;
   }
 
   /* visually hidden */
@@ -76,6 +81,9 @@ export const checkable = (part, propName = part) => css`
     align-self: stretch;
     appearance: none;
     cursor: var(--_cursor);
+    /* Override 16px from iOS UA stylesheet and CSS resets */
+    width: auto !important;
+    height: auto !important;
     /* Ensure minimum click target (WCAG) */
     margin: min(0px, (24px - 100%) / -2) !important;
     /* Extend the input to cover the gap between the checkbox/radio and label */

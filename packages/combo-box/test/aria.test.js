@@ -1,7 +1,14 @@
 import { expect } from '@vaadin/chai-plugins';
-import { arrowDownKeyDown, escKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import {
+  arrowDownKeyDown,
+  arrowUpKeyDown,
+  escKeyDown,
+  fixtureSync,
+  nextFrame,
+  nextRender,
+} from '@vaadin/testing-helpers';
 import '../src/vaadin-combo-box.js';
-import { getAllItems } from './helpers.js';
+import { getAllItems, makeItems } from './helpers.js';
 
 describe('ARIA', () => {
   let comboBox, input;
@@ -51,6 +58,24 @@ describe('ARIA', () => {
       comboBox.value = 'bar';
       expect(items[0].getAttribute('aria-selected')).to.equal('false');
       expect(items[1].getAttribute('aria-selected')).to.equal('true');
+    });
+  });
+
+  describe('opened with virtualized items', () => {
+    beforeEach(async () => {
+      comboBox.items = makeItems(100);
+      await nextRender();
+      arrowDownKeyDown(input);
+      await nextFrame();
+    });
+
+    it('should set aria-activedescendant when focusing an item outside the viewport', async () => {
+      // Move focus to the last item, which is not rendered until it scrolls into view.
+      arrowUpKeyDown(input);
+      await nextFrame();
+
+      const lastItem = getAllItems(comboBox).find((item) => item.index === comboBox.items.length - 1);
+      expect(input.getAttribute('aria-activedescendant')).to.equal(lastItem.id);
     });
   });
 });

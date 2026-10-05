@@ -158,8 +158,10 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
 
   /**
    * The object used to localize this component. To change the default
-   * localization, replace this with an object that provides all properties, or
+   * localization, set this to an object that provides all properties, or
    * just the individual properties you want to change.
+   *
+   * When not set, defaults to `undefined`.
    *
    * The object has the following JSON structure and default values:
    * ```js
@@ -168,7 +170,7 @@ export declare class MenuBarMixinClass<TItem extends MenuBarItem = MenuBarItem> 
    * }
    * ```
    */
-  i18n: MenuBarI18n;
+  i18n: MenuBarI18n | undefined;
 
   /**
    * If true, the submenu will open on hover (mouseover) instead of click.

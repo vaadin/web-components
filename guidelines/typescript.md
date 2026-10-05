@@ -152,7 +152,7 @@ const element = document.createElement('vaadin-{name}');
 
 // Properties
 assertType<string>(element.value);
-assertType<{Name}I18n>(element.i18n);
+assertType<{Name}I18n | undefined>(element.i18n);
 
 // Methods
 assertType<() => boolean>(element.checkValidity);

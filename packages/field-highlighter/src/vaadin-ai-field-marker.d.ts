@@ -100,8 +100,10 @@ export type AiFieldRevertEvent = CustomEvent<{ value: unknown }>;
 declare class AiFieldMarker extends I18nMixin<typeof HTMLElement, AiFieldMarkerI18n>(HTMLElement) {
   /**
    * The object used to localize this component. To change the default
-   * localization, replace this with an object that provides all properties, or
+   * localization, set this to an object that provides all properties, or
    * just the individual properties you want to change.
+   *
+   * When not set, defaults to `undefined`.
    *
    * The object has the following JSON structure and default values:
    *
@@ -124,7 +126,7 @@ declare class AiFieldMarker extends I18nMixin<typeof HTMLElement, AiFieldMarkerI
    * }
    * ```
    */
-  i18n: AiFieldMarkerI18n;
+  i18n: AiFieldMarkerI18n | undefined;
 
   /**
    * A DOM node to show in the popover, between the message and the revert

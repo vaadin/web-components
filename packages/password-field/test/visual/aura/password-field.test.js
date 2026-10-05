@@ -45,6 +45,12 @@ describe('password-field', () => {
     await visualDiff(div, 'readonly');
   });
 
+  it('label aside', async () => {
+    element.setAttribute('theme', 'label-aside');
+    element.label = 'Label';
+    await visualDiff(div, 'label-aside');
+  });
+
   it('reveal button hidden', async () => {
     element.value = 'value';
     element.revealButtonHidden = true;

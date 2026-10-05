@@ -14,6 +14,9 @@ import { iterateRowCells, updatePart } from '@vaadin/grid/src/vaadin-grid-helper
 
 export const InlineEditingMixin = (superClass) =>
   class InlineEditingMixin extends superClass {
+    /** @type {boolean} */
+    #stoppingEdit = false;
+
     static get properties() {
       return {
         /**
@@ -355,14 +358,26 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @private */
     _startEdit(cell, column) {
-      const isCellEditable = this._isCellEditable(cell);
-
       // TODO: remove `_editingDisabled` after Flow counterpart is updated.
-      if (this.disabled || this._editingDisabled || !isCellEditable) {
+      if (this.disabled || this._editingDisabled || !this._isCellEditable(cell)) {
         return;
       }
-      // Cancel debouncer enqueued on focusout
+
+      // Unfocusable editors never fire focusout, so no stop was scheduled.
+      // Stop the previous edit here.
+      if (this.__edited?.cell !== cell) {
+        this._stopEdit();
+      }
+
+      // Cancel debouncer enqueued on focusout, including one enqueued by the
+      // blur() in the stop above
       this._cancelStopEdit();
+
+      // Stopping the previous edit runs listeners that may have made this cell
+      // non-editable
+      if (!this._isCellEditable(cell)) {
+        return;
+      }
 
       // Scroll column into view synchronously, which also triggers lazy column
       // rendering to ensure cells for that column are in the DOM.
@@ -394,42 +409,49 @@ export const InlineEditingMixin = (superClass) =>
       if (!this.__edited) {
         return;
       }
+      if (this.#stoppingEdit) {
+        // `item-property-changed` listeners may re-render and re-enter here
+        // before `__edited` is cleared, so ignore nested calls, including cancels
+        return;
+      }
       const { cell, column, model } = this.__edited;
+      this.#stoppingEdit = true;
 
-      if (!shouldCancel && !this.hasAttribute('loading-editor')) {
-        const editor = column._getEditorComponent(cell);
-        if (editor) {
-          const value = column._getEditorValue(editor);
-          if (value !== get(column.path, model.item)) {
-            // In some cases, where the value comes from the editor's change
-            // event (eg. custom editor in vaadin-grid-pro-flow), the event is
-            // not dispatched in FF/Safari/Edge. That's due the change event
-            // doesn't occur when the editor is removed from the DOM. Manually
-            // calling blur makes the event to be dispatched.
-            editor.blur();
+      try {
+        if (!shouldCancel && !this.hasAttribute('loading-editor')) {
+          const editor = column._getEditorComponent(cell);
+          if (editor) {
+            const value = column._getEditorValue(editor);
+            if (value !== get(column.path, model.item)) {
+              // Some browsers skip the change event when the editor is
+              // removed from the DOM, so blur to dispatch it.
+              editor.blur();
 
-            this.dispatchEvent(
-              new CustomEvent('item-property-changed', {
-                detail: {
-                  index: model.index,
-                  item: model.item,
-                  path: column.path,
-                  value,
-                },
-                bubbles: true,
-                cancelable: true,
-                composed: true,
-              }),
-            );
+              this.dispatchEvent(
+                new CustomEvent('item-property-changed', {
+                  detail: {
+                    index: model.index,
+                    item: model.item,
+                    path: column.path,
+                    value,
+                  },
+                  bubbles: true,
+                  cancelable: true,
+                  composed: true,
+                }),
+              );
+            }
           }
         }
+
+        column._stopCellEdit(cell, model);
+
+        this.__edited = null;
+
+        this.removeEventListener('item-property-changed', this.__boundItemPropertyChanged);
+      } finally {
+        this.#stoppingEdit = false;
       }
-
-      column._stopCellEdit(cell, model);
-
-      this.__edited = null;
-
-      this.removeEventListener('item-property-changed', this.__boundItemPropertyChanged);
 
       if (shouldRestoreFocus) {
         cell.focus();

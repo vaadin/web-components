@@ -97,13 +97,15 @@ export declare class RichTextEditorMixinClass {
 
   /**
    * The object used to localize this component. To change the default
-   * localization, replace this with an object that provides all properties, or
+   * localization, set this to an object that provides all properties, or
    * just the individual properties you want to change.
+   *
+   * When not set, defaults to `undefined`.
    *
    * The properties are used e.g. as the tooltips for the editor toolbar
    * buttons.
    */
-  i18n: RichTextEditorI18n;
+  i18n: RichTextEditorI18n | undefined;
 
   /**
    * The list of colors used by the background and text color

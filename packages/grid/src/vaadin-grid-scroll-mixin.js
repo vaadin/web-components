@@ -135,6 +135,39 @@ export const ScrollMixin = (superClass) =>
     }
 
     /**
+     * Scroll to a specific row index in the virtual list. Note that the row index is
+     * not always the same for any particular item. For example, sorting or filtering
+     * items can affect the row index related to an item.
+     *
+     * The `indexes` parameter can be either a single number or multiple numbers.
+     * The grid will first try to scroll to the item at the first index on the top level.
+     * In case the item at the first index is expanded, the grid will then try scroll to the
+     * item at the second index within the children of the expanded first item, and so on.
+     * Each given index points to a child of the item at the previous index.
+     *
+     * Using `Infinity` as an index will point to the last item on the level.
+     *
+     * @param indexes {...number} Row indexes to scroll to
+     */
+    scrollToIndex(...indexes) {
+      if (!this.clientHeight || !this._columnTree) {
+        this.__pendingScrollToIndexes = indexes;
+        return;
+      }
+      // Synchronous data provider may cause changes to the cache on scroll without
+      // ending up in a loading state. Try scrolling to the index until the target
+      // index stabilizes.
+      let targetIndex;
+      while (targetIndex !== (targetIndex = this._dataProviderController.getFlatIndexByPath(indexes))) {
+        this._scrollToFlatIndex(targetIndex);
+      }
+
+      if (this._dataProviderController.isLoading()) {
+        this.__pendingScrollToIndexes = indexes;
+      }
+    }
+
+    /**
      * Scroll to a flat index in the grid. The method doesn't take into account
      * the hierarchy of the items.
      *
@@ -191,6 +224,15 @@ export const ScrollMixin = (superClass) =>
       this.__updateHorizontalScrollPosition();
       // Synchronously update cells when using lazy column rendering
       this.__updateColumnsBodyContentHidden();
+    }
+
+    /** @private */
+    __scrollToPendingIndexes() {
+      if (this.__pendingScrollToIndexes) {
+        const indexes = this.__pendingScrollToIndexes;
+        delete this.__pendingScrollToIndexes;
+        this.scrollToIndex(...indexes);
+      }
     }
 
     /** @private */

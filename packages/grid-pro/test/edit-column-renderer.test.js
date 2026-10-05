@@ -222,6 +222,63 @@ describe('edit column renderer', () => {
       expect(cell._content.textContent).to.equal('Foo');
     });
 
+    describe('editor that cannot be focused', () => {
+      let otherCell;
+
+      beforeEach(() => {
+        column.editModeRenderer = function (root) {
+          root.innerHTML = '<div></div>';
+        };
+        otherCell = getContainerCell(grid.$.items, 1, 0);
+      });
+
+      it('should stop editing the previous cell when starting to edit another cell', () => {
+        const spy = sinon.spy();
+        grid.addEventListener('item-property-changed', spy);
+
+        dblclick(cell._content);
+        dblclick(otherCell._content);
+
+        expect(getCellEditor(cell)).to.not.be.ok;
+        expect(getCellEditor(otherCell)).to.be.ok;
+        expect(cell._content.textContent).to.equal('foo');
+        expect(spy).to.not.be.called;
+      });
+
+      it('should not start editing a cell that a listener made non-editable', () => {
+        let locked = false;
+        column.isCellEditable = () => !locked;
+        grid.addEventListener('item-property-changed', () => {
+          locked = true;
+        });
+
+        dblclick(cell._content);
+        // Make the stop of this edit dispatch item-property-changed
+        getCellEditor(cell).value = 'new';
+
+        dblclick(otherCell._content);
+        expect(getCellEditor(otherCell)).to.not.be.ok;
+      });
+
+      it('should not stop the new edit when blurring the previous editor schedules a stop', async () => {
+        // Unlike the other tests, the previous editor is focusable and the new
+        // one is not, so nothing cancels a stop scheduled by the blur() while
+        // committing the previous edit.
+        column.editModeRenderer = function (root, _, model) {
+          root.innerHTML = model.index === 0 ? '<input>' : '<div></div>';
+        };
+
+        dblclick(cell._content);
+        getCellEditor(cell).value = 'new';
+
+        // Enter edit directly, so that no focusout has been scheduled yet
+        grid._startEdit(otherCell, column);
+        await nextFrame();
+
+        expect(getCellEditor(otherCell)).to.be.ok;
+      });
+    });
+
     it('should set the column `editorType` to custom when renderer is defined', () => {
       column.editModeRenderer = function (root) {
         root.innerHTML = '<input>';

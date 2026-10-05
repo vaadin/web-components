@@ -2,17 +2,27 @@ import { expect } from '@vaadin/chai-plugins';
 import { fixtureSync, nextRender, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import '@vaadin/dialog';
 import '@vaadin/menu-bar/test/menu-bar-test-styles.js';
-import '@vaadin/menu-bar/src/vaadin-menu-bar.js';
-import '@vaadin/vertical-layout/src/vaadin-vertical-layout.js';
+import '@vaadin/menu-bar';
+import '@vaadin/vertical-layout';
 
-// Do not import `not-animated-styles.css` as the original issue that
-// this test covers was caused by the Lumo dialog opening animation.
+// The original issue that this test covers was caused by the dialog opening animation,
+// which scales the overlay while the menu bar measures itself. Base styles do not
+// animate on their own, so the test turns the animation on the way Lumo does.
 
 describe('menu-bar in dialog', () => {
   let dialog, menuBar;
 
   beforeEach(async () => {
-    dialog = fixtureSync(`<vaadin-dialog width="650px" theme="no-padding"></vaadin-dialog>`);
+    fixtureSync(`
+      <style>
+        vaadin-dialog {
+          --vaadin-overlay-animation-duration: 0.12s;
+          --vaadin-overlay-animation-delay: 0.05s;
+          --vaadin-overlay-scale-closed: 0.95;
+        }
+      </style>
+    `);
+    dialog = fixtureSync(`<vaadin-dialog width="620px" theme="no-padding"></vaadin-dialog>`);
     dialog.renderer = (root) => {
       if (!root.firstChild) {
         root.innerHTML = `
@@ -48,7 +58,6 @@ describe('menu-bar in dialog', () => {
 
   it('should place correct elements in the overflow menu', () => {
     const overflow = menuBar._overflow;
-    expect(overflow.item.children[0]).to.deep.equal(menuBar.items[7]);
-    expect(overflow.item.children[1]).to.deep.equal(menuBar.items[8]);
+    expect(overflow.item.children).to.deep.equal(menuBar.items.slice(6));
   });
 });

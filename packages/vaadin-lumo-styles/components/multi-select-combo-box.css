@@ -11,6 +11,7 @@
 @import '../src/mixins/field-helper.css';
 @import '../src/mixins/field-helper-above.css';
 @import '../src/mixins/field-label.css';
+@import '../src/mixins/field-label-aside.css';
 @import '../src/mixins/field-required.css';
 @import '../src/mixins/loader.css';
 @import '../src/mixins/menu-overlay-core.css';
@@ -22,6 +23,7 @@
 @import '../src/components/multi-select-combo-box-container.css';
 @import '../src/components/multi-select-combo-box-item.css';
 @import '../src/components/multi-select-combo-box-overlay.css';
+@import '../src/components/multi-select-combo-box-select-all-button.css';
 @import '../src/components/multi-select-combo-box.css';
 
 :root,
@@ -51,9 +53,13 @@
     lumo_components_combo-box-item,
     lumo_components_multi-select-combo-box-item;
 
+  --_lumo-vaadin-multi-select-combo-box-select-all-button-inject: 1;
+  --_lumo-vaadin-multi-select-combo-box-select-all-button-inject-modules: lumo_components_multi-select-combo-box-select-all-button;
+
   --_lumo-vaadin-multi-select-combo-box-inject: 1;
   --_lumo-vaadin-multi-select-combo-box-inject-modules:
     lumo_mixins_field-label,
+    lumo_mixins_field-label-aside,
     lumo_mixins_field-required,
     lumo_mixins_field-error-message,
     lumo_mixins_field-button,

@@ -33,12 +33,11 @@ describe('I18nMixin', () => {
     await nextRender();
   });
 
-  it('should initialize with deep copy of defaults', () => {
-    expect(element.i18n).to.deep.equal(DEFAULT_I18N);
-    expect(element.i18n).to.not.equal(DEFAULT_I18N);
-    expect(element.i18n.bar).to.not.equal(DEFAULT_I18N.bar);
-    expect(element.i18n.qux).to.not.equal(DEFAULT_I18N.qux);
+  it('should not set default values on the i18n property', () => {
+    expect(element.i18n).to.be.undefined;
+  });
 
+  it('should initialize effective i18n with deep copy of defaults', () => {
     expect(element.__effectiveI18n).to.deep.equal(DEFAULT_I18N);
     expect(element.__effectiveI18n).to.not.equal(DEFAULT_I18N);
     expect(element.__effectiveI18n.bar).to.not.equal(DEFAULT_I18N.bar);
@@ -49,6 +48,21 @@ describe('I18nMixin', () => {
     const customI18n = { foo: 'Custom Foo' };
     element.i18n = customI18n;
     expect(element.i18n).to.equal(customI18n);
+  });
+
+  it('should restore defaults when setting i18n back to undefined', () => {
+    element.i18n = { foo: 'Custom Foo' };
+    element.i18n = undefined;
+
+    expect(element.i18n).to.be.undefined;
+    expect(element.__effectiveI18n).to.deep.equal(DEFAULT_I18N);
+  });
+
+  it('should support composing custom i18n from the i18n property', () => {
+    element.i18n = { ...element.i18n, foo: 'Custom Foo' };
+
+    expect(element.i18n).to.deep.equal({ foo: 'Custom Foo' });
+    expect(element.__effectiveI18n).to.deep.equal({ ...DEFAULT_I18N, foo: 'Custom Foo' });
   });
 
   it('should deep merge custom i18n with default i18n', () => {

@@ -39,6 +39,10 @@ export const OverlayFocusMixin = (superClass) =>
          * Focus moves to the first tabbable element in the tab order. This
          * can be the overlay itself if it has `tabindex` attribute set to `0`
          * on the host element or the `overlay` shadow DOM part.
+         *
+         * An element inside the overlay that has `autofocus` set, such as
+         * `<vaadin-text-field autofocus>`, receives focus on open instead,
+         * even when this property is false.
          */
         autofocus: {
           type: Boolean,
@@ -65,11 +69,25 @@ export const OverlayFocusMixin = (superClass) =>
       };
     }
 
+    /**
+     * Whether the overlay moves, traps and restores focus. Override to return
+     * false in overlays that never do: focus properties are then ignored and
+     * the focus controllers are not created.
+     * @protected
+     */
+    static get manageFocus() {
+      return true;
+    }
+
     constructor() {
       super();
 
-      this.__focusTrapController = new FocusTrapController(this);
-      this.__focusRestorationController = new FocusRestorationController();
+      this.__manageFocus = this.constructor.manageFocus;
+
+      if (this.__manageFocus) {
+        this.__focusTrapController = new FocusTrapController(this);
+        this.__focusRestorationController = new FocusRestorationController();
+      }
     }
 
     /**
@@ -85,8 +103,10 @@ export const OverlayFocusMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this.addController(this.__focusTrapController);
-      this.addController(this.__focusRestorationController);
+      if (this.__manageFocus) {
+        this.addController(this.__focusTrapController);
+        this.addController(this.__focusRestorationController);
+      }
     }
 
     /**
@@ -104,6 +124,10 @@ export const OverlayFocusMixin = (superClass) =>
      * @protected
      */
     _resetFocus() {
+      if (!this.__manageFocus) {
+        return;
+      }
+
       if (this.focusTrap) {
         this.__focusTrapController.releaseFocus();
       }
@@ -121,28 +145,32 @@ export const OverlayFocusMixin = (superClass) =>
      * @protected
      */
     _saveFocus() {
+      if (!this.__manageFocus) {
+        return;
+      }
+
       if (this.restoreFocusOnClose) {
         this.__focusRestorationController.saveFocus(this.restoreFocusNode);
       }
     }
 
     /**
-     * Sets up focus after the overlay opening has completed: moves focus into
-     * the overlay if `autofocus` is enabled, and traps focus within the overlay
-     * if `focusTrap` is enabled.
+     * Sets up focus after the overlay opening has completed: moves focus to
+     * the first element with `autofocus` inside the overlay, otherwise to the
+     * first tabbable element if the `autofocus` property is set, and traps
+     * focus if `focusTrap` is set.
      *
      * @protected
      */
     _initFocus() {
-      if (isElementHidden(this._focusRoot)) {
+      if (!this.__manageFocus || isElementHidden(this._focusRoot)) {
         return;
       }
 
-      if (this.autofocus) {
-        const tabbables = getTabbableElements(this._focusRoot);
-        if (!tabbables.some(isElementFocused)) {
-          tabbables[0]?.focus({ focusVisible: isKeyboardActive() });
-        }
+      const tabbables = getTabbableElements(this._focusRoot);
+      if (!tabbables.some(isElementFocused)) {
+        const target = tabbables.find((el) => this.#hasAutofocus(el)) ?? (this.autofocus ? tabbables[0] : null);
+        target?.focus({ focusVisible: isKeyboardActive() });
       }
 
       if (this.focusTrap) {
@@ -185,5 +213,28 @@ export const OverlayFocusMixin = (superClass) =>
         n = n.parentNode || n.host;
       }
       return n === this._contentRoot;
+    }
+
+    /**
+     * Returns true if the element has `autofocus`, or belongs to a custom
+     * element that has it (e.g. the input of `<vaadin-text-field autofocus>`).
+     * As with native `autofocus`, a plain `<div autofocus>` does not apply to
+     * its children. Stops at the focus root, whose `autofocus` refers to the overlay.
+     * Walks the flat tree, the same way tabbables are collected from the focus root,
+     * so it never leaves the overlay when content is slotted from the owner.
+     *
+     * @param {HTMLElement} element
+     * @return {boolean}
+     */
+    #hasAutofocus(element) {
+      const focusRoot = this._focusRoot;
+      let node = element;
+      while (node && node !== focusRoot && node !== this) {
+        if (node.autofocus && (node === element || customElements.get(node.localName))) {
+          return true;
+        }
+        node = node.assignedSlot || node.parentNode || node.host;
+      }
+      return false;
     }
   };

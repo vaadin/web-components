@@ -56,12 +56,14 @@ export class AutoResponsiveLayout extends AbstractLayout {
     const { host } = this;
     host.style.removeProperty('--_column-width');
     host.style.removeProperty('--_max-columns');
-    host.$.layout.removeAttribute('fits-labels-aside');
+    host.removeAttribute('has-labels-aside');
     host.$.layout.style.removeProperty('--_grid-rendered-column-count');
 
     this.__children.forEach((child) => {
       child.style.removeProperty('--_grid-colstart');
       child.style.removeProperty('--_grid-colspan');
+
+      child.removeAttribute('data-form-layout-has-labels-aside');
     });
   }
 
@@ -133,7 +135,17 @@ export class AutoResponsiveLayout extends AbstractLayout {
     host.style.setProperty('--_min-columns', props.minColumns);
     host.style.setProperty('--_max-columns', Math.min(Math.max(props.minColumns, props.maxColumns), maxColumns));
 
-    host.$.layout.toggleAttribute('fits-labels-aside', this.props.labelsAside && this.__fitsLabelsAside);
+    const hasLabelsAside = props.labelsAside && this.__fitsLabelsAside;
+    host.toggleAttribute('has-labels-aside', hasLabelsAside);
+
+    children.forEach((child) => {
+      if (isBreakLine(child)) {
+        return;
+      }
+
+      child.toggleAttribute('data-form-layout-has-labels-aside', hasLabelsAside);
+    });
+
     host.$.layout.style.setProperty('--_grid-rendered-column-count', this.__renderedColumnCount);
   }
 

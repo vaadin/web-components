@@ -362,7 +362,7 @@ describe('keyboard', () => {
 
     async function checkYearOffset(offsetToAdd, expectedOffset) {
       input.value = '';
-      const referenceDateYear = datePicker.i18n.referenceDate
+      const referenceDateYear = datePicker.i18n?.referenceDate
         ? new Date(datePicker.i18n.referenceDate).getFullYear()
         : today.getFullYear();
       const yearToTest = referenceDateYear + offsetToAdd;

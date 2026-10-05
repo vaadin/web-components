@@ -15,7 +15,7 @@ assertType<string | null | undefined>(avatar.img);
 assertType<string | null | undefined>(avatar.abbr);
 assertType<string | null | undefined>(avatar.name);
 assertType<number | null | undefined>(avatar.colorIndex);
-assertType<AvatarI18n>(avatar.i18n);
+assertType<AvatarI18n | undefined>(avatar.i18n);
 assertType<boolean>(avatar.withTooltip);
 
 // Mixins
