@@ -5556,10 +5556,10 @@ hermes-parser@^0.25.1:
   dependencies:
     hermes-estree "0.25.1"
 
-highcharts@12.2.0:
-  version "12.2.0"
-  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-12.2.0.tgz#264633af7e815f0f6291c0d570b1da12e323e9de"
-  integrity sha512-UUN+osTP3aeGc4KmoMuWAjzpKif8GYHFozzYI4O8h1ILGof25M/ZGBpXLvgqf1z0LVh7N9eG7i0HnzMfjcR4nA==
+highcharts@12.6.2:
+  version "12.6.2"
+  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-12.6.2.tgz#1d5fbbaa18bf7edc6ee7b16cb257e9476cc08d15"
+  integrity sha512-I089uxv6AN2+qIQGhOSzFMjZJFnW+TAuP3WaEj1qRrH7XN3UR8wYzPsoIYX1sDTdQiHl4KJwGd+4bAwhaF1/3w==
 
 hookified@^1.14.0, hookified@^1.15.0, hookified@^1.15.1:
   version "1.15.1"
