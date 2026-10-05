@@ -268,6 +268,39 @@ describe('vaadin-month-calendar', () => {
       expect(monthCalendar.hasAttribute('disabled')).to.be.false;
     });
 
+    it('should toggle disabled attribute on month change with same-month limits', () => {
+      monthCalendar.minDate = new Date(2016, 1, 15);
+      monthCalendar.maxDate = new Date(2016, 1, 20);
+      expect(monthCalendar.hasAttribute('disabled')).to.be.false;
+
+      monthCalendar.month = new Date(2015, 1, 1);
+      expect(monthCalendar.hasAttribute('disabled')).to.be.true;
+
+      monthCalendar.month = new Date(2017, 1, 1);
+      expect(monthCalendar.hasAttribute('disabled')).to.be.true;
+    });
+
+    it('should toggle disabled attribute on month change with limits in different years', () => {
+      monthCalendar.minDate = new Date(2015, 1, 10);
+      monthCalendar.maxDate = new Date(2017, 1, 15);
+      expect(monthCalendar.hasAttribute('disabled')).to.be.false;
+
+      monthCalendar.month = new Date(2018, 1, 1);
+      expect(monthCalendar.hasAttribute('disabled')).to.be.true;
+    });
+
+    it('should be disabled when the limits are reversed', () => {
+      monthCalendar.minDate = new Date(2016, 1, 20);
+      monthCalendar.maxDate = new Date(2016, 1, 15);
+      expect(monthCalendar.hasAttribute('disabled')).to.be.true;
+    });
+
+    it('should not be disabled if only one date is enabled', () => {
+      monthCalendar.minDate = new Date(2016, 1, 15);
+      monthCalendar.maxDate = new Date(2016, 1, 15);
+      expect(monthCalendar.hasAttribute('disabled')).to.be.false;
+    });
+
     it('should not be disabled when no dates are disabled', () => {
       expect(monthCalendar.hasAttribute('disabled')).to.be.false;
     });
