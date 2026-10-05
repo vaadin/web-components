@@ -285,25 +285,48 @@ describe('vaadin-chart styling', () => {
       });
     }
 
-    it('should keep color classes when stops are defined', async () => {
+    it('should paint points with their color class when no stops are defined', async () => {
+      await createChart();
+      expect(points().map((point) => point.getAttribute('class'))).to.eql([
+        'highcharts-point highcharts-color-1',
+        'highcharts-point highcharts-color-3',
+      ]);
+      expect(getComputedStyle(points()[0]).fill).to.not.equal('none');
+    });
+
+    it('should update the color class when colorIndex changes', async () => {
+      await createChart();
+      chart.configuration.series[0].points[0].update({ colorIndex: 5 });
+      expect(points()[0].getAttribute('class')).to.equal('highcharts-point highcharts-color-5');
+    });
+
+    it('should keep the point state class when points are redrawn', async () => {
+      await createChart();
+      chart.configuration.series[0].points[0].setState('hover');
+      chart.configuration.setSize(300, 300, false);
+      expect(points()[0].classList.contains('highcharts-point-hover')).to.be.true;
+      expect(points()[0].classList.contains('highcharts-color-1')).to.be.true;
+    });
+
+    it('should not add color classes when stops are defined', async () => {
       await createChart({
         stops: [
           [0, '#ff0000'],
           [1, '#0000ff'],
         ],
       });
-      expect(points().map((point) => point.getAttribute('class'))).to.eql([
-        'highcharts-point highcharts-color-1',
-        'highcharts-point highcharts-color-3',
-      ]);
+      points().forEach((point) => {
+        expect(point.getAttribute('class')).to.equal('highcharts-point');
+        expect(point.getAttribute('fill')).to.not.equal('none');
+      });
     });
 
-    it('should keep color classes when minColor and maxColor are defined', async () => {
+    it('should not add color classes when minColor and maxColor are defined', async () => {
       await createChart({ minColor: '#ff0000', maxColor: '#0000ff' });
-      expect(points().map((point) => point.getAttribute('class'))).to.eql([
-        'highcharts-point highcharts-color-1',
-        'highcharts-point highcharts-color-3',
-      ]);
+      points().forEach((point) => {
+        expect(point.getAttribute('class')).to.equal('highcharts-point');
+        expect(point.getAttribute('fill')).to.not.equal('none');
+      });
     });
   });
 });
