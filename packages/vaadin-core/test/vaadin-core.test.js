@@ -3,8 +3,7 @@ import '../vaadin-core.js';
 
 describe('vaadin-core', () => {
   it('should register the core components', () => {
-    // A spread of components, including the ones added after the entry point
-    // was last maintained by hand
+    // A spread of components
     const tagNames = [
       'vaadin-badge',
       'vaadin-button',
@@ -27,14 +26,13 @@ describe('vaadin-core', () => {
   it('should register the components of the other entry points', () => {
     // Components that the main entry point of their package does not register
     const tagNames = [
-      'vaadin-breadcrumbs-item',
       'vaadin-drawer-toggle',
       'vaadin-form-item',
-      'vaadin-grid-column',
+      'vaadin-form-row',
+      'vaadin-grid-filter-column',
       'vaadin-grid-sorter',
+      'vaadin-grid-tree-column',
       'vaadin-login-form',
-      'vaadin-select-item',
-      'vaadin-tab',
     ];
 
     for (const tagName of tagNames) {

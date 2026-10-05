@@ -43,7 +43,6 @@ import '@vaadin/horizontal-layout';
 import '@vaadin/icon';
 import '@vaadin/icon/vaadin-iconset.js';
 import '@vaadin/icons';
-import '@vaadin/icons/vaadin-icons.js';
 import '@vaadin/input-container';
 import '@vaadin/integer-field';
 import '@vaadin/item';

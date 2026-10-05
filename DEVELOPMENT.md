@@ -257,10 +257,11 @@ package, the free ones and, in the case of `@vaadin/vaadin`, the commercial ones
 belongs to `@vaadin/vaadin-core` when it is licensed under Apache-2.0 and to `@vaadin/vaadin` when
 it is not.
 
-Their dependencies and the imports of their entry point are generated from the workspace, so a new
-component lands in them by running:
+Their dependencies and the imports of their entry point are generated from the workspace and its
+custom elements manifests, so a new component lands in them by running:
 
 ```sh
+yarn release:cem
 yarn release:meta
 ```
 
