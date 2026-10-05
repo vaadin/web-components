@@ -13,7 +13,6 @@
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint --ignore-path .gitignore \"packages/**/src/**/*.js\" \"packages/vaadin-lumo-styles/mixins/*.js\" \"packages/**/*.css\" \"dev/**/*.html\"",
     "lint:js": "eslint",
-    "lint:meta": "yarn release:cem && node scripts/generateMetaPackages.js --check",
     "lint:types": "tsc",
     "postinstall": "patch-package",
     "prepare": "husky",

@@ -22,7 +22,7 @@
  * iconset rather than a custom element are listed in `ICONSET_PACKAGES`.
  *
  * Run with: yarn release:meta
- * Verify that the committed files are up to date: yarn lint:meta
+ * Verify that the committed files are up to date: yarn release:meta --check
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -177,9 +177,7 @@ function createPackageJson(packageJson, dependencies) {
 const check = process.argv.includes('--check');
 
 if (!fs.existsSync(path.join(rootDir, 'custom-elements.json'))) {
-  console.error(
-    'The custom elements manifests are missing. Run `yarn release:meta` or `yarn lint:meta`, which generate them first.',
-  );
+  console.error('The custom elements manifests are missing. Run `yarn release:meta`, which generates them first.');
   process.exit(1);
 }
 

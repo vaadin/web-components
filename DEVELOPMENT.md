@@ -62,7 +62,7 @@ yarn lint:types
 Check that the meta packages are up to date:
 
 ```sh
-yarn lint:meta
+yarn release:meta --check
 ```
 
 ## Testing
@@ -265,7 +265,7 @@ yarn release:meta
 ```
 
 `yarn release` regenerates them before publishing, so a published package always matches the
-repository, and `yarn lint:meta` reports whether the committed files do as well.
+repository, and `yarn release:meta --check` reports whether the committed files do as well.
 
 The packages that a meta package ships but this repository does not build, e.g. `@vaadin/router`,
 stay in its `package.json` with a version of their own, which is where to bump them.
