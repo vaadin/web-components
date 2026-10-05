@@ -118,6 +118,32 @@ Highcharts.wrap(Highcharts.seriesTypes.solidgauge.prototype, 'drawPoints', funct
     }
   });
 });
+
+// Since Highcharts 12.5 a `setClip` listener offsets the clip box of a series on a gauge or polar
+// chart by the pane position, which cuts off the top and left of an animated solid gauge. Upstream
+// removes the listener and uses the plot area as the clip box for series on radial axes instead.
+// TODO: Remove once fixed upstream, see https://github.com/highcharts/highcharts/issues/24460
+Highcharts.removeEvent(Highcharts.Series, 'setClip');
+Highcharts.wrap(Highcharts.Chart.prototype, 'getClipBox', function (proceed, series, chartCoords) {
+  const clipBox = proceed.call(this, series, chartCoords);
+  const { xAxis, yAxis } = series || {};
+  if (!xAxis?.isRadial && !yAxis?.isRadial) {
+    return clipBox;
+  }
+
+  // Same as `getClipBox`, except that the length of a radial axis is not a usable size
+  let { width, height } = this.clipBox;
+  if (xAxis && !xAxis.isRadial && xAxis.len !== this.plotSizeX) {
+    width = xAxis.len;
+  }
+  if (yAxis && !yAxis.isRadial && yAxis.len !== this.plotSizeY) {
+    height = yAxis.len;
+  }
+  if (this.inverted && !series.invertible) {
+    [width, height] = [height, width];
+  }
+  return { ...clipBox, width, height };
+});
 /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
 
 // Init Highcharts global language defaults
