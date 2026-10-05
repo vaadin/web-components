@@ -75,22 +75,19 @@ describe('dialog', () => {
     await visualDiff(div, 'header-title-long-single-word');
   });
 
-  describe('custom styles', () => {
-    let originalStyles;
-
-    beforeEach(() => {
-      originalStyles = document.adoptedStyleSheets;
+  describe('no-padding', () => {
+    before(() => {
+      const contentStyles = new CSSStyleSheet();
+      contentStyles.insertRule('vaadin-dialog::part(content) { padding: 20px; }');
+      document.adoptedStyleSheets = [contentStyles];
     });
 
-    afterEach(() => {
-      document.adoptedStyleSheets = originalStyles;
+    after(() => {
+      document.adoptedStyleSheets = [];
     });
 
     it('no-padding theme', async () => {
       element.setAttribute('theme', 'no-padding');
-      const contentStyles = new CSSStyleSheet();
-      contentStyles.insertRule('vaadin-dialog[theme~="no-padding"]::part(content) { padding: 20px; }');
-      document.adoptedStyleSheets = [contentStyles];
       await nextUpdate(element);
       await visualDiff(div, 'content-no-padding-theme');
     });
