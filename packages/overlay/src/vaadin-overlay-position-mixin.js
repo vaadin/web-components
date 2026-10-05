@@ -335,7 +335,9 @@ export const PositionMixin = (superClass) =>
       // smaller than its current space before the fit-calculations.
       const style = getComputedStyle(this.$.overlay);
       const width =
-        this.$.overlay.offsetWidth + (parseFloat(style.marginLeft) || 0) + (parseFloat(style.marginRight) || 0);
+        this.$.overlay.offsetWidth +
+        (Number.parseFloat(style.marginLeft) || 0) +
+        (Number.parseFloat(style.marginRight) || 0);
       const contentWidth = Math.max(this.__oldContentWidth || 0, width);
       this.__oldContentWidth = width;
 
@@ -358,7 +360,9 @@ export const PositionMixin = (superClass) =>
       // smaller than its current space before the fit-calculations.
       const style = getComputedStyle(this.$.overlay);
       const height =
-        this.$.overlay.offsetHeight + (parseFloat(style.marginTop) || 0) + (parseFloat(style.marginBottom) || 0);
+        this.$.overlay.offsetHeight +
+        (Number.parseFloat(style.marginTop) || 0) +
+        (Number.parseFloat(style.marginBottom) || 0);
       const contentHeight = this.requiredVerticalSpace || Math.max(this.__oldContentHeight || 0, height);
       this.__oldContentHeight = height;
 
