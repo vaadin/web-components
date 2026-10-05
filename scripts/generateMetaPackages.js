@@ -88,7 +88,8 @@ function collectPackages() {
   const pathToLerna = path.normalize('./node_modules/.bin/lerna');
   const output = execSync(`${pathToLerna} ls --json --loglevel silent`, { cwd: rootDir }); // NOSONAR
   const dirs = JSON.parse(output.toString())
-    .map((project) => path.relative(packagesDir, project.location))
+    .filter((project) => path.dirname(project.location) === packagesDir)
+    .map((project) => path.basename(project.location))
     .filter((dir) => !metaPackageDirs.has(dir))
     .sort(byName);
 
