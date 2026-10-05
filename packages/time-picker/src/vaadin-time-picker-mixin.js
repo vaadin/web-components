@@ -323,6 +323,18 @@ export const TimePickerMixin = (superClass) =>
     }
 
     /**
+     * Override an event listener from `ComboBoxBaseMixin` to clear the item
+     * highlight, so that the typed text is committed instead of the item.
+     * @param {!Event} event
+     * @protected
+     * @override
+     */
+    _onInput(event) {
+      this._focusedIndex = -1;
+      super._onInput(event);
+    }
+
+    /**
      * Override method from `ComboBoxBaseMixin` to implement value commit logic.
      * @protected
      * @override
