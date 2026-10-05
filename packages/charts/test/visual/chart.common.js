@@ -1,4 +1,5 @@
-import { click, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { emulateMedia } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import { temperatures } from './temperature-data.js';
 
@@ -876,6 +877,117 @@ const baseOnlyFixtures = {
   `,
 };
 
+/** A solid gauge whose colour comes from `yAxis.stops`, or from the series when `stops` is null. */
+function buildStopsGauge(y, stops) {
+  return `
+    <vaadin-chart
+      title="${stops ? 'Stops' : 'No stops'}"
+      type="solidgauge"
+      style="width: 200px; height: 260px"
+      additional-options='{
+        "pane": {
+          "center": ["50%", "85%"],
+          "startAngle": -90,
+          "endAngle": 90,
+          "background": { "innerRadius": "60%", "outerRadius": "100%", "shape": "arc" }
+        },
+        "yAxis": {
+          "min": 0,
+          "max": 100,
+          "minorTickInterval": null,
+          "tickAmount": 2,
+          "labels": { "y": 16 }
+          ${stops ? `, "stops": ${JSON.stringify(stops)}` : ''}
+        }
+      }'
+    >
+      <vaadin-chart-series title="Value" values="[${y}]"></vaadin-chart-series>
+    </vaadin-chart>
+  `;
+}
+
+const GAUGE_STOPS = [
+  [0.1, '#55BF3B'],
+  [0.5, '#DDDF0D'],
+  [0.9, '#DF5353'],
+];
+
+/**
+ * Fixtures rendered only by `base/chart-non-styled.test.js`. They cover chart
+ * types and code paths that only differ outside styled mode.
+ */
+const nonStyledFixtures = {
+  // Basic cartesian types, which the shared fixtures leave to the styled-mode
+  // `pie` / `exporting` tests of each theme.
+  cartesian: `
+    <div style="display: flex; flex-wrap: wrap; width: 800px; height: 600px">
+      ${['line', 'area', 'bar', 'scatter']
+        .map(
+          (type) => `
+            <vaadin-chart type="${type}" title="${type}" style="width: 400px; height: 300px" categories="${SOLAR_CATEGORIES}">
+              <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
+              <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
+            </vaadin-chart>
+          `,
+        )
+        .join('')}
+    </div>
+  `,
+
+  pie: `
+    <vaadin-chart type="pie" title="Browser share" style="width: 500px; height: 400px">
+      <vaadin-chart-series
+        title="Brands"
+        values='[["Chrome", 70.7], ["Safari", 8.9], ["Firefox", 7.7], ["Edge", 5.8], ["Other", 6.9]]'
+        additional-options='{ "dataLabels": { "enabled": true } }'
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  `,
+
+  // highcharts#23279: the gradient case. With `stops` the colour must follow the
+  // stops; without them it falls back to the series colour.
+  'solidgauge-stops': `
+    <div style="display: flex; width: 800px; height: 260px">
+      ${buildStopsGauge(5, GAUGE_STOPS)}
+      ${buildStopsGauge(50, GAUGE_STOPS)}
+      ${buildStopsGauge(95, GAUGE_STOPS)}
+      ${buildStopsGauge(50, null)}
+    </div>
+  `,
+
+  // The chart and the SVG `getSVG()` produces for it, side by side.
+  'export-svg': `
+    <div style="display: flex; width: 900px; height: 320px">
+      <vaadin-chart
+        type="column"
+        title="Exported chart"
+        style="width: 450px; height: 300px"
+        categories="${SOLAR_CATEGORIES}"
+        additional-options='{ "exporting": { "enabled": true } }'
+      >
+        <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
+        <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
+      </vaadin-chart>
+      <div class="export-output" style="width: 450px; height: 300px"></div>
+    </div>
+  `,
+};
+
+/** Renders the SVG export of the chart next to it. */
+async function renderExport(chart) {
+  chart.parentElement.querySelector('.export-output').innerHTML = chart.configuration.getSVG();
+  await nextFrame();
+}
+
+/**
+ * Turns styled mode off the way the Flow `Chart` does: Flow sends
+ * `chart.styledMode: false` through `updateConfiguration()` before the chart
+ * initializes. Highcharts reads `styledMode` at init only.
+ */
+function disableStyledMode(chart) {
+  chart.updateConfiguration({ chart: { ...chart.options.chart, styledMode: false } });
+}
+
 /** Hovers a point so that the tooltip is rendered. */
 async function showTooltip(chart) {
   chart.configuration.series[0].points[2].onMouseOver();
@@ -922,20 +1034,37 @@ const interactions = {
   'exporting-menu': openExportMenu,
   'point-states': selectAndHoverPoints,
   'legend-states': hideSeriesAndPageLegend,
+  'export-svg': renderExport,
 };
 
-const allFixtures = { ...fixtures, ...baseOnlyFixtures };
+const allFixtures = { ...fixtures, ...baseOnlyFixtures, ...nonStyledFixtures };
 
 /** Names of the fixtures `base/chart.test.js` renders on its own. */
 export const BASE_ONLY_FIXTURES = Object.keys(baseOnlyFixtures);
 
+/** Names of the shared fixtures every theme renders. */
+export const SHARED_FIXTURES = Object.keys(fixtures);
+
+/** Names of the fixtures only the non-styled-mode tests render. */
+export const NON_STYLED_FIXTURES = Object.keys(nonStyledFixtures);
+
 /** Renders the named fixture and returns the element to snapshot. */
-async function renderFixture(name) {
+async function renderFixture(name, { styledMode = true } = {}) {
   const root = fixtureSync(allFixtures[name]);
   const charts = root.localName === 'vaadin-chart' ? [root] : [...root.querySelectorAll('vaadin-chart')];
+  if (!styledMode) {
+    charts.forEach(disableStyledMode);
+  }
   await whenRendered(charts);
+  if (!styledMode && charts.some((chart) => chart.configuration.styledMode !== false)) {
+    throw new Error(`${name}: styled mode is still on`);
+  }
   if (interactions[name]) {
     await interactions[name](charts[0]);
+    if (!styledMode) {
+      // Outside styled mode, hover and inactive states fade in with JS animations.
+      await aTimeout(400);
+    }
   }
   return root;
 }
@@ -943,9 +1072,11 @@ async function renderFixture(name) {
 /**
  * Declares one screenshot test per fixture. Passing `dark` renders them with a
  * dark colour scheme and appends `-dark` to the screenshot names, so that the
- * scheme and the name it produces are declared in one place.
+ * scheme and the name it produces are declared in one place. `prefersDark`
+ * emulates `prefers-color-scheme: dark` instead and appends `-prefers-dark`.
+ * `styledMode: false` renders the charts the way the Flow `Chart` does by default.
  */
-export function defineScreenshotTests(names, { dark = false } = {}) {
+export function defineScreenshotTests(names, { dark = false, prefersDark = false, styledMode = true } = {}) {
   if (dark) {
     beforeEach(() => {
       document.documentElement.style.setProperty('color-scheme', 'dark');
@@ -956,10 +1087,25 @@ export function defineScreenshotTests(names, { dark = false } = {}) {
     });
   }
 
+  if (prefersDark) {
+    beforeEach(async () => {
+      await emulateMedia({ colorScheme: 'dark' });
+    });
+
+    afterEach(async () => {
+      await emulateMedia({ colorScheme: 'light' });
+    });
+  }
+
   names.forEach((name) => {
-    const screenshot = dark ? `${name}-dark` : name;
+    let screenshot = name;
+    if (dark) {
+      screenshot += '-dark';
+    } else if (prefersDark) {
+      screenshot += '-prefers-dark';
+    }
     it(screenshot, async () => {
-      await visualDiff(await renderFixture(name), screenshot);
+      await visualDiff(await renderFixture(name, { styledMode }), screenshot);
     });
   });
 }
