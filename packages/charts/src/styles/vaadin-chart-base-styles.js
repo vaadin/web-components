@@ -101,7 +101,7 @@ const tooltipStyles = (scope) => css`
 addGlobalStyles(
   'vaadin-charts-tooltip',
   css`
-    /* Same as styledOutsideTooltip, written out so that Stylelint can parse the template */
+    /* Can't use styledOutsideTooltip due to Stylelint */
     .highcharts-tooltip-container:where(.highcharts-styled-mode) {
       ${unsafeCSS(seriesColorTokens)}
     }
