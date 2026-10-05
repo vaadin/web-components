@@ -1,5 +1,5 @@
 import { expect } from '@vaadin/chai-plugins';
-import { fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextResize, oneEvent } from '@vaadin/testing-helpers';
 import './chart-not-animated-styles.js';
 import './theme-styles.js';
 import '../src/vaadin-chart.js';
@@ -249,6 +249,32 @@ describe('vaadin-chart styling', () => {
         expect(point.getAttribute('class')).to.equal('highcharts-point');
         expect(point.getAttribute('fill')).to.not.equal('none');
       });
+    });
+
+    it('should not clip an animated solid gauge', async () => {
+      chart = fixtureSync(`
+        <vaadin-chart
+          type="solidgauge"
+          style="width: 400px; height: 400px"
+          additional-options='{
+            "chart": { "animation": { "duration": 50 } },
+            "plotOptions": { "series": { "animation": { "duration": 50 } } },
+            "pane": { "startAngle": 0, "endAngle": 360 },
+            "yAxis": { "min": 0, "max": 100 }
+          }'
+        >
+          <vaadin-chart-series values='[{ "y": 80, "radius": "112%", "innerRadius": "88%" }]'></vaadin-chart-series>
+        </vaadin-chart>
+      `);
+      await oneEvent(chart, 'chart-load');
+      await aTimeout(100);
+
+      const series = chart.configuration.series[0];
+      const clipId = series.group.element.getAttribute('clip-path').match(/#([^)]+)/u)[1];
+      const clip = chart.$.chart.querySelector(`[id="${clipId}"] rect`).getBBox();
+      const point = series.points[0].graphic.element.getBBox();
+      expect(clip.x).to.be.at.most(point.x);
+      expect(clip.y).to.be.at.most(point.y);
     });
 
     it('should not add color classes when minColor and maxColor are defined', async () => {
