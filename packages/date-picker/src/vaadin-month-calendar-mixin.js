@@ -163,6 +163,8 @@ export const MonthCalendarMixin = (superClass) =>
       if (
         minDate &&
         maxDate &&
+        minDate.getFullYear() === maxDate.getFullYear() &&
+        minDate.getFullYear() === month.getFullYear() &&
         minDate.getMonth() === maxDate.getMonth() &&
         minDate.getMonth() === month.getMonth() &&
         maxDate.getDate() - minDate.getDate() >= 0
