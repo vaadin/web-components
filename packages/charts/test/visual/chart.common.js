@@ -669,6 +669,211 @@ const baseOnlyFixtures = {
       ></vaadin-chart-series>
     </vaadin-chart>
   `,
+
+  // Stack totals and per-point data labels, which both position relative to the stack.
+  'stacked-column': `
+    <vaadin-chart
+      type="column"
+      title="Stacked column"
+      stacking="normal"
+      style="width: 600px; height: 400px"
+      categories="${SOLAR_CATEGORIES}"
+      additional-options='{
+        "yAxis": { "stackLabels": { "enabled": true } },
+        "plotOptions": { "series": { "dataLabels": { "enabled": true } } }
+      }'
+    >
+      <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
+      <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
+    </vaadin-chart>
+  `,
+
+  'stacked-area': `
+    <vaadin-chart
+      type="area"
+      title="Percent stacked area"
+      stacking="percent"
+      style="width: 600px; height: 400px"
+      categories="${SOLAR_CATEGORIES}"
+    >
+      <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
+      <vaadin-chart-series title="Manufacturing" values="${SOLAR_MANUFACTURING}"></vaadin-chart-series>
+      <vaadin-chart-series
+        type="areaspline"
+        title="Other"
+        values="[12908, 5948, 8105, 11248, 8989]"
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  `,
+
+  // Range series from `highcharts-more`, with data labels on both ends of each range.
+  ranges: `
+    <vaadin-chart
+      title="Temperature ranges"
+      style="width: 600px; height: 400px"
+      categories='["Jan", "Feb", "Mar", "Apr", "May", "Jun"]'
+      additional-options='{ "plotOptions": { "columnrange": { "dataLabels": { "enabled": true } } } }'
+    >
+      <vaadin-chart-series
+        type="columnrange"
+        title="Monthly range"
+        values="[[-9, 3], [-8, 5], [-4, 10], [1, 16], [6, 21], [10, 25]]"
+      ></vaadin-chart-series>
+      <vaadin-chart-series
+        type="arearange"
+        title="Normal range"
+        values="[[-6, 1], [-5, 2], [-1, 7], [3, 13], [8, 18], [12, 22]]"
+      ></vaadin-chart-series>
+      <vaadin-chart-series type="line" title="Average" values="[-3, -2, 3, 8, 13, 17]"></vaadin-chart-series>
+    </vaadin-chart>
+  `,
+
+  waterfall: `
+    <vaadin-chart type="waterfall" title="Waterfall" style="width: 600px; height: 400px">
+      <vaadin-chart-series
+        title="Balance"
+        values='[
+          { "name": "Start", "y": 120 },
+          { "name": "Revenue", "y": 60 },
+          { "name": "Costs", "y": -45 },
+          { "name": "Subtotal", "isIntermediateSum": true },
+          { "name": "Tax", "y": -20 },
+          { "name": "Total", "isSum": true }
+        ]'
+        additional-options='{ "dataLabels": { "enabled": true } }'
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  `,
+
+  // SVG data labels on an inverted chart with negative values, and on a line.
+  'data-labels': `
+    <div style="display: flex; width: 800px; height: 400px">
+      <vaadin-chart
+        type="bar"
+        title="Bar"
+        style="width: 400px; height: 400px"
+        categories='["A", "B", "C", "D"]'
+        additional-options='{ "plotOptions": { "series": { "dataLabels": { "enabled": true } } } }'
+      >
+        <vaadin-chart-series title="Change" values="[12, -7, 5, -3]"></vaadin-chart-series>
+      </vaadin-chart>
+      <vaadin-chart
+        type="line"
+        title="Line"
+        style="width: 400px; height: 400px"
+        categories='["A", "B", "C", "D"]'
+        additional-options='{ "plotOptions": { "series": { "dataLabels": { "enabled": true } } } }'
+      >
+        <vaadin-chart-series title="Value" values="[3, 9, 4, 7]"></vaadin-chart-series>
+      </vaadin-chart>
+    </div>
+  `,
+
+  // Covers the `highcharts-3d` module, which `chart3d` turns on.
+  chart3d: `
+    <div style="display: flex; width: 800px; height: 400px">
+      <vaadin-chart
+        type="column"
+        title="3D column"
+        chart3d
+        style="width: 400px; height: 400px"
+        categories="${SOLAR_CATEGORIES}"
+      >
+        <vaadin-chart-series title="Installation" values="${SOLAR_INSTALLATION}"></vaadin-chart-series>
+      </vaadin-chart>
+      <vaadin-chart
+        type="pie"
+        title="3D pie"
+        chart3d
+        style="width: 400px; height: 400px"
+        additional-options='{ "plotOptions": { "pie": { "depth": 35 } } }'
+      >
+        <vaadin-chart-series
+          title="Share"
+          values='[["Alpha", 45], ["Bravo", 25], ["Charlie", 20], ["Delta", 10]]'
+        ></vaadin-chart-series>
+      </vaadin-chart>
+    </div>
+  `,
+
+  annotations: `
+    <vaadin-chart
+      type="line"
+      title="Annotations"
+      style="width: 600px; height: 400px"
+      additional-options='{
+        "annotations": [
+          {
+            "labels": [
+              { "point": { "x": 2, "y": 8, "xAxis": 0, "yAxis": 0 }, "text": "Peak" },
+              { "point": { "x": 4, "y": 2, "xAxis": 0, "yAxis": 0 }, "text": "Dip" }
+            ]
+          }
+        ]
+      }'
+    >
+      <vaadin-chart-series title="Value" values="[3, 5, 8, 6, 2, 4]"></vaadin-chart-series>
+    </vaadin-chart>
+  `,
+
+  // Drilled down into the first point, so the breadcrumbs button renders.
+  drilldown: `
+    <vaadin-chart
+      type="column"
+      title="Drilldown"
+      style="width: 600px; height: 400px"
+      additional-options='{
+        "xAxis": { "type": "category" },
+        "drilldown": {
+          "animation": false,
+          "series": [
+            { "id": "fruit", "name": "Fruit", "data": [["Apples", 4], ["Pears", 2], ["Plums", 1]] }
+          ]
+        }
+      }'
+    >
+      <vaadin-chart-series
+        title="Food"
+        values='[
+          { "name": "Fruit", "y": 7, "drilldown": "fruit" },
+          { "name": "Vegetables", "y": 5 }
+        ]'
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  `,
+
+  // Flags on a stock chart. The navigator and range selector are covered by `navigator`.
+  flags: `
+    <vaadin-chart
+      title="Flags"
+      timeline
+      style="width: 700px; height: 400px"
+      additional-options='{
+        "time": { "timezone": "UTC" },
+        "rangeSelector": { "enabled": false },
+        "navigator": { "enabled": false },
+        "scrollbar": { "enabled": false }
+      }'
+    >
+      <vaadin-chart-series
+        title="Price"
+        values='[
+          [${day(0)}, 10], [${day(1)}, 12], [${day(2)}, 11], [${day(3)}, 15],
+          [${day(4)}, 14], [${day(5)}, 17], [${day(6)}, 16], [${day(7)}, 19]
+        ]'
+        additional-options='{ "id": "price" }'
+      ></vaadin-chart-series>
+      <vaadin-chart-series
+        type="flags"
+        title="Events"
+        values='[
+          { "x": ${day(2)}, "title": "A", "text": "First event" },
+          { "x": ${day(5)}, "title": "B", "text": "Second event" }
+        ]'
+        additional-options='{ "onSeries": "price", "shape": "squarepin" }'
+      ></vaadin-chart-series>
+    </vaadin-chart>
+  `,
 };
 
 /** Hovers a point so that the tooltip is rendered. */
@@ -702,8 +907,15 @@ async function hideSeriesAndPageLegend(chart) {
   await nextFrame();
 }
 
+/** Drills down into the first point. */
+async function drillDown(chart) {
+  chart.configuration.series[0].points[0].doDrilldown();
+  await nextFrame();
+}
+
 /** Extra work a fixture needs after rendering, applied to its first chart. */
 const interactions = {
+  drilldown: drillDown,
   tooltip: showTooltip,
   'tooltip-outside': showTooltip,
   'use-html': showTooltip,
