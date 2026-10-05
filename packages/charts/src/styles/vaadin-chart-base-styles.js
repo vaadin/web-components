@@ -27,9 +27,8 @@ const seriesColorTokens = Array.from(
     `--_color-${i}: var(--highcharts-color-${i}, var(--vaadin-charts-color-${i}, var(--vaadin-user-color-${i})));`,
 ).join('\n    ');
 
-// Highcharts copies the highcharts-styled-mode class, which the mixin sets on the
-// chart element in styled mode, to the container. A non-styled tooltip keeps the
-// look Highcharts gives it. :where() keeps the specificity without the class.
+// Only a styled-mode tooltip gets these styles, through a class that Highcharts
+// copies from the chart element. :where() keeps the old specificity.
 const styledOutsideTooltip = '.highcharts-tooltip-container:where(.highcharts-styled-mode)';
 
 // A non-split tooltip carries highcharts-color-N on the tooltip element itself,
