@@ -83,7 +83,7 @@ class DetailsSummary extends ButtonMixin(DirMixin(ThemableMixin(PolylitMixin(Lum
   render() {
     return html`
       <span part="toggle" aria-hidden="true"></span>
-      <div part="content"><slot></slot></div>
+      <div part="content" role="presentation"><slot></slot></div>
     `;
   }
 }
