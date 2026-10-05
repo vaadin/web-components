@@ -4,11 +4,17 @@ import sinon from 'sinon';
 import './exporting-styles.js';
 import '../src/vaadin-chart.js';
 import HttpUtilities from 'highcharts/es-modules/Core/HttpUtilities.js';
+import { Exporting } from 'highcharts/es-modules/Extensions/Exporting/Exporting.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 
 describe('vaadin-chart exporting', () => {
-  let chart, chartContainer, fireEventSpy, postStub;
+  let chart, chartContainer, fireEventSpy, postStub, downloadStub;
   const attributeName = 'styled-mode';
+
+  // The export renders the chart copy asynchronously, so it is only done once `chart-after-export` fires
+  function waitForExport() {
+    return oneEvent(chart, 'chart-after-export');
+  }
 
   function simulateExportToPNG() {
     const exportingButton = chartContainer.querySelector('.highcharts-exporting-group > .highcharts-no-tooltip');
@@ -36,7 +42,9 @@ describe('vaadin-chart exporting', () => {
 
     observer.observe(targetNode, config);
 
+    const exported = waitForExport();
     simulateExportToPNG();
+    await exported;
 
     expect(fireEventSpy.lastCall.args[1]).to.be.equal('afterExport');
     await nextRender();
@@ -44,8 +52,10 @@ describe('vaadin-chart exporting', () => {
   }
 
   before(() => {
-    // Prevent posting the export to the export server
+    // Prevent posting the export to the export server, and downloading it in the
+    // browser, which `exporting.local` opts into
     postStub = sinon.stub(HttpUtilities, 'post');
+    downloadStub = sinon.stub(Exporting.prototype, 'downloadSVG');
     // Hook into Highcharts events
     fireEventSpy = sinon.spy(Highcharts, 'fireEvent');
   });
@@ -64,6 +74,7 @@ describe('vaadin-chart exporting', () => {
   afterEach(() => {
     fireEventSpy.resetHistory();
     postStub.resetHistory();
+    downloadStub.resetHistory();
   });
 
   describe('export path', () => {
@@ -86,8 +97,10 @@ describe('vaadin-chart exporting', () => {
     });
   });
 
-  it('should return no value from exportChart', () => {
-    expect(chart.configuration.exportChart()).to.be.undefined;
+  it('should return a promise from exportChart', async () => {
+    const result = chart.configuration.exportChart();
+    expect(result).to.be.instanceOf(Promise);
+    await result;
   });
 
   it('should temporarily copy shadow styles to the body before export', async () => {
@@ -107,9 +120,11 @@ describe('vaadin-chart exporting', () => {
 
     observer.observe(document.body, { childList: true });
 
+    const exported = waitForExport();
     simulateExportToPNG();
 
     expect(fireEventSpy.firstCall.args[1]).to.be.equal('beforeExport');
+    await exported;
     await nextRender();
     expect(styleCopiedToBody).to.be.true;
     expect(styleContent).to.include('.highcharts-color-0');
@@ -130,7 +145,9 @@ describe('vaadin-chart exporting', () => {
 
     observer.observe(document.body, { childList: true });
 
+    const exported = waitForExport();
     simulateExportToPNG();
+    await exported;
 
     expect(fireEventSpy.lastCall.args[1]).to.be.equal('afterExport');
     await nextRender();
@@ -140,8 +157,8 @@ describe('vaadin-chart exporting', () => {
   // The export copy renders outside the shadow root, so without the style copying
   // above the SVG loses its paint attributes.
   // Workaround for https://github.com/vaadin/vaadin-charts/issues/389
-  it('should inline paint attributes into the exported SVG', () => {
-    const svg = chart.configuration.getSVGForExport({}, {});
+  it('should inline paint attributes into the exported SVG', async () => {
+    const svg = await chart.configuration.exporting.getSVGForExport({}, {});
     expect(svg.match(/fill="/gu)).to.have.length.above(20);
   });
 
@@ -150,14 +167,42 @@ describe('vaadin-chart exporting', () => {
     expect(svg.match(/fill="/gu)).to.have.length.above(20);
   });
 
-  it('should dispatch export events once per export', () => {
+  it('should dispatch export events once per export', async () => {
     const events = [];
     chart.addEventListener('chart-before-export', () => events.push('before'));
     chart.addEventListener('chart-after-export', () => events.push('after'));
 
-    chart.configuration.exportChart();
+    await chart.configuration.exportChart();
 
     expect(events).to.eql(['before', 'after']);
+  });
+
+  it('should keep the shadow styles in the body until the chart copy has rendered', async () => {
+    // The chart copy only renders asynchronously while it has an image to load. The
+    // renderer caches image sizes by URL, so the image needs a URL of its own.
+    const url = URL.createObjectURL(
+      new Blob(['<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8"/></svg>'], {
+        type: 'image/svg+xml',
+      }),
+    );
+    chart.updateConfiguration({ series: [{ data: [1, 2, 3], marker: { symbol: `url(${url})` } }] });
+    await nextRender();
+
+    // Highcharts fires `getSVG` right after it has inlined the styles of the chart copy
+    const stylesPresent = [];
+    const removeListener = Highcharts.addEvent(chart.configuration, 'getSVG', () => {
+      stylesPresent.push(document.body.hasAttribute(attributeName));
+    });
+
+    try {
+      await chart.configuration.exporting.getSVGForExport({}, {});
+    } finally {
+      removeListener();
+      URL.revokeObjectURL(url);
+    }
+
+    expect(stylesPresent).to.eql([true]);
+    expect(document.body.hasAttribute(attributeName)).to.be.false;
   });
 
   it('should add styled-mode attribute to body before export and delete it afterwards', async () => {
