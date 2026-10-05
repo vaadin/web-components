@@ -24,6 +24,7 @@
  * Run with: yarn release:meta
  * Verify that the committed files are up to date: yarn release:meta --check
  */
+import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -83,16 +84,16 @@ function collectPackages() {
   const core = [];
   const commercial = [];
 
-  for (const dir of fs.readdirSync(packagesDir).sort(byName)) {
-    if (metaPackageDirs.has(dir)) {
-      continue;
-    }
+  // `lerna ls` lists the public packages of the workspace, like in scripts/buildWebtypes.js
+  const pathToLerna = path.normalize('./node_modules/.bin/lerna');
+  const output = execSync(`${pathToLerna} ls --json --loglevel silent`, { cwd: rootDir }); // NOSONAR
+  const dirs = JSON.parse(output.toString())
+    .map((project) => path.relative(packagesDir, project.location))
+    .filter((dir) => !metaPackageDirs.has(dir))
+    .sort(byName);
 
+  for (const dir of dirs) {
     const packageJson = readPackageJson(dir);
-    if (!packageJson || packageJson.private) {
-      continue;
-    }
-
     const group = packageJson.license === 'Apache-2.0' ? core : commercial;
     group.push({ dir, ...packageJson });
   }
