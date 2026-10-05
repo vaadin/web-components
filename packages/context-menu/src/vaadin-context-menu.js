@@ -54,9 +54,6 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  *
  * **NOTE:** when the `items` array is defined, the renderer cannot be used.
  *
- * The host uses `display: contents` so wrapping a target does not affect its layout.
- * Apply layout styles to the target, or set an explicit display value on the host.
- *
  * #### Disabled menu items
  *
  * When disabled, menu items are rendered as "dimmed".
@@ -222,6 +219,8 @@ import { ContextMenuMixin } from './vaadin-context-menu-mixin.js';
  * ```
  *
  * ### Styling
+ *
+ * The host uses `display: contents` so wrapping a target does not affect its layout.
  *
  * The following shadow DOM parts are available for styling:
  *
