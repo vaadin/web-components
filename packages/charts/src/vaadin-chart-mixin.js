@@ -698,22 +698,45 @@ export const ChartMixin = (superClass) =>
         this.configuration = Highcharts.chart(this.$.chart, options);
       }
 
+      this.__markStyledOutsideTooltip();
       this.__syncOutsideTooltipColors();
       this.__markStickyTooltip();
       this.__redrawOrganizationDataLabels();
     }
 
     /**
+     * Marks the container of a `tooltip: { outside: true }` tooltip in styled mode,
+     * so the global tooltip styles leave a non-styled tooltip as Highcharts draws it.
+     * The mark must exist before Highcharts measures the label, which happens before
+     * the `refresh` event fires.
+     *
+     * @private
+     */
+    __markStyledOutsideTooltip() {
+      const { tooltip } = this.configuration;
+      if (!tooltip) {
+        return;
+      }
+
+      // Wraps the instance, not the prototype, to leave other Highcharts charts alone.
+      Highcharts.wrap(tooltip, 'getLabel', (proceed) => {
+        const label = proceed();
+        tooltip.container?.toggleAttribute('styled-mode', tooltip.chart.styledMode);
+        return label;
+      });
+    }
+
+    /**
      * A `tooltip: { outside: true }` tooltip renders in `document.body`, so it
      * inherits neither the palette a theme scopes to `vaadin-chart` nor any
      * `--vaadin-charts-color-*` set on this element. Copy the resolved series
-     * colours onto its container instead.
+     * colours onto its container instead. A non-styled tooltip uses no such colours.
      *
      * @private
      */
     __syncOutsideTooltipColors() {
-      const { tooltip } = this.configuration;
-      if (!tooltip || !tooltip.outside) {
+      const { tooltip, styledMode } = this.configuration;
+      if (!tooltip || !tooltip.outside || !styledMode) {
         return;
       }
 
