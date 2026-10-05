@@ -1,0 +1,77 @@
+name: Cherry Pick
+
+on:
+  # Merges into main.
+  push:
+    branches:
+      - main
+  # Catches PRs merged into maintenance branches and target/* labels added
+  # after the merge.
+  schedule:
+    - cron: '0 */3 * * *'
+  workflow_dispatch:
+
+# Every run picks up everything that is pending, so queue runs instead of
+# running them in parallel.
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  cherry-pick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          # The action pushes with an explicit token; no credentials are kept
+          # in .git/config so Claude cannot push.
+          persist-credentials: false
+
+      # Node 24 and yarn also build the maintenance branches (23.6 and newer).
+      # Dependencies are not installed here: they differ per target branch, so
+      # Claude installs them on the branch it resolves a conflict on.
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'yarn'
+
+      - name: Cherry-pick
+        uses: vaadin/github-actions/cherry-pick@main
+        env:
+          # yarn install sets up the husky lint-staged hook, which would then
+          # run on every pick commit. Claude formats the changes explicitly.
+          HUSKY: '0'
+        with:
+          github-token: ${{ secrets.CHERRY_PICK_TOKEN }}
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Rollout: only log what would be picked while the existing
+          # cherry-pick job is still active.
+          dry-run: true
+          verify-instructions: |
+            - Install the dependencies of the target branch first:
+              yarn --frozen-lockfile --no-progress --non-interactive
+            - Format the changed files: npx eslint --fix <files> and
+              npx prettier --write <files> for .js and .ts files,
+              npx stylelint --fix <files> and npx prettier --write <files> for
+              .css files.
+            - Run the type check: yarn lint:types
+            - Run the unit tests of the affected package(s), always with
+              --group, e.g. yarn test --group combo-box. Without --group the
+              test runner compares against a branch that may not exist.
+              A resolved pick often uses an API that does not exist on the
+              target branch; adapt the change to what the branch has instead of
+              committing code that fails.
+            - Do not run the visual tests (yarn test:lumo, test:aura,
+              test:base); they need Docker. The validation workflow of the pull
+              request runs the remaining checks.
+          extra-allowed-tools: |
+            Bash(yarn:*)
+            Bash(npx eslint:*)
+            Bash(npx prettier:*)
+            Bash(npx stylelint:*)
