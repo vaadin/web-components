@@ -144,6 +144,21 @@ Highcharts.wrap(Highcharts.Chart.prototype, 'getClipBox', function (proceed, ser
   }
   return { ...clipBox, width, height };
 });
+
+// Since Highcharts 12.6 an outside tooltip adds the scroll offset of a scrollable plot area to the
+// default position, which already accounts for it, so the tooltip moves away from the point by the
+// scrolled distance. Upstream only adds the offset for a custom `positioner` or a `fixed` tooltip.
+// TODO: Remove once fixed upstream, see https://github.com/highcharts/highcharts/issues/24548
+Highcharts.wrap(Highcharts.Tooltip.prototype, 'getPosition', function (proceed, ...args) {
+  const position = proceed.apply(this, args);
+  const { fixed, positioner } = this.options;
+  if (this.outside && !fixed && !positioner) {
+    const { scrollLeft = 0, scrollTop = 0 } = this.chart.scrollablePlotArea?.scrollingContainer || {};
+    position.x -= scrollLeft;
+    position.y -= scrollTop;
+  }
+  return position;
+});
 /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
 
 // Init Highcharts global language defaults
