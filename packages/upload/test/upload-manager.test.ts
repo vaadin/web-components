@@ -2446,7 +2446,8 @@ describe('UploadManager', () => {
       xhr.readyState = 4;
       loadCallback!();
 
-      expect(filesChangedSpy.called).to.be.true;
+      expect(filesChangedSpy.callCount).to.equal(1);
+      expect(manager.files[0].complete).to.equal(true);
     });
 
     it('should dispatch files-changed on upload error via onload', () => {
@@ -2472,7 +2473,8 @@ describe('UploadManager', () => {
       xhr.readyState = 4;
       loadCallback!();
 
-      expect(filesChangedSpy.called).to.be.true;
+      expect(filesChangedSpy.callCount).to.equal(1);
+      expect(manager.files[0].errorKey).to.equal('unexpectedServerError');
     });
 
     it('should dispatch files-changed on timeout via ontimeout', async () => {
@@ -2515,7 +2517,7 @@ describe('UploadManager', () => {
       manager.addFiles([createFile(100, 'text/plain')]);
       manager.uploadFiles();
       manager.abortUpload(manager.files[0]);
-      expect(errorSpy.called).to.be.false;
+      expect(errorSpy.callCount).to.equal(0);
       expect(xhr.onload).to.be.null;
       expect(xhr.onerror).to.be.null;
       expect(xhr.ontimeout).to.be.null;
