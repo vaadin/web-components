@@ -148,14 +148,23 @@ describe('vaadin-chart styling', () => {
     // Resolved value of --_color-0, i.e. --vaadin-user-color-0.
     const SERIES_COLOR = 'oklch(0.52 0.2 240)';
 
-    async function fixtureTooltip(outside, style = '') {
+    async function fixtureTooltip(outside, { style = '', styledMode = true, outsideLater = false } = {}) {
       const chart = fixtureSync(`
-        <vaadin-chart type="column" tooltip style="${style}" additional-options='{ "tooltip": { "outside": ${outside} } }'>
+        <vaadin-chart
+          type="column"
+          tooltip
+          style="${style}"
+          additional-options='{ "chart": { "styledMode": ${styledMode} }, "tooltip": { "outside": ${outside && !outsideLater} } }'
+        >
           <vaadin-chart-series title="Installation" values="[43934, 52503, 57177]"></vaadin-chart-series>
           <vaadin-chart-series title="Manufacturing" values="[24916, 24064, 29742]"></vaadin-chart-series>
         </vaadin-chart>
       `);
       await oneEvent(chart, 'chart-load');
+      if (outsideLater) {
+        chart.updateConfiguration({ tooltip: { outside: true } });
+        await nextFrame();
+      }
       chart.configuration.series[0].points[1].onMouseOver();
       await nextFrame();
 
@@ -177,6 +186,10 @@ describe('vaadin-chart styling', () => {
       };
     }
 
+    function boxWidth(tooltip) {
+      return tooltip.querySelector('.highcharts-tooltip-box').getBBox().width;
+    }
+
     it('should style an outside tooltip like one inside the shadow root', async () => {
       const outside = tooltipStyles(await fixtureTooltip(true));
       // Unfixed, the outside tooltip falls back to the SVG defaults.
@@ -188,11 +201,56 @@ describe('vaadin-chart styling', () => {
       expect(outside).to.deep.equal(tooltipStyles(await fixtureTooltip(false)));
     });
 
+    // Highcharts sizes the box from the text, so the styles must apply before it measures.
+    it('should size an outside tooltip like one inside the shadow root', async () => {
+      const outside = boxWidth(await fixtureTooltip(true));
+      // Firefox measures the two up to 1px apart. Measured too early, they differ by ~30px.
+      expect(outside).to.be.closeTo(boxWidth(await fixtureTooltip(false)), 2);
+    });
+
     // The container is in document.body, so it inherits no chart-scoped palette.
     it('should apply a series color set on the chart to an outside tooltip', async () => {
-      const styles = tooltipStyles(await fixtureTooltip(true, '--vaadin-charts-color-0: rgb(1, 2, 3)'));
+      const styles = tooltipStyles(await fixtureTooltip(true, { style: '--vaadin-charts-color-0: rgb(1, 2, 3)' }));
       expect(styles.seriesColor).to.equal('rgb(1, 2, 3)');
       expect(styles.markerFill).to.equal('rgb(1, 2, 3)');
+    });
+
+    // Highcharts reuses the tooltip instance on update, so the styled-mode mark must stay.
+    it('should style a tooltip moved outside after the chart renders', async () => {
+      const outside = tooltipStyles(await fixtureTooltip(true, { outsideLater: true }));
+      expect(outside).to.deep.equal(tooltipStyles(await fixtureTooltip(false)));
+    });
+
+    describe('non-styled mode', () => {
+      beforeEach(() => {
+        // The Vaadin tooltip background is dark here, the Highcharts one is not.
+        document.documentElement.style.setProperty('color-scheme', 'dark');
+      });
+
+      afterEach(() => {
+        document.documentElement.style.removeProperty('color-scheme');
+      });
+
+      function nonStyledTooltipStyles(tooltip) {
+        const box = getComputedStyle(tooltip.querySelector('.highcharts-tooltip-box'));
+        const text = getComputedStyle(tooltip.querySelector('text'));
+        return {
+          boxFill: box.fill,
+          boxStroke: box.stroke,
+          boxStrokeWidth: box.strokeWidth,
+          textFill: text.fill,
+          textFontSize: text.fontSize,
+          // Highcharts applies its own shadow as an SVG filter reference.
+          usesHighchartsShadow: getComputedStyle(tooltip).filter.startsWith('url('),
+        };
+      }
+
+      it('should not apply Vaadin tooltip styles to an outside tooltip', async () => {
+        const outside = nonStyledTooltipStyles(await fixtureTooltip(true, { styledMode: false }));
+        expect(outside.boxFill).to.equal('rgb(255, 255, 255)');
+        expect(outside.usesHighchartsShadow).to.be.true;
+        expect(outside).to.deep.equal(nonStyledTooltipStyles(await fixtureTooltip(false, { styledMode: false })));
+      });
     });
   });
 });
