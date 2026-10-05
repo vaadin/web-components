@@ -148,20 +148,21 @@ describe('vaadin-chart styling', () => {
     // Resolved value of --_color-0, i.e. --vaadin-user-color-0.
     const SERIES_COLOR = 'oklch(0.52 0.2 240)';
 
-    async function fixtureTooltip(outside, { style = '', styledMode = true, outsideLater = false } = {}) {
+    /** `outside` is `true`, `false`, or `'later'` to move the tooltip outside after the chart renders. */
+    async function fixtureTooltip(outside, { style = '', styledMode = true } = {}) {
       const chart = fixtureSync(`
         <vaadin-chart
           type="column"
           tooltip
           style="${style}"
-          additional-options='{ "chart": { "styledMode": ${styledMode} }, "tooltip": { "outside": ${outside && !outsideLater} } }'
+          additional-options='{ "chart": { "styledMode": ${styledMode} }, "tooltip": { "outside": ${outside === true} } }'
         >
           <vaadin-chart-series title="Installation" values="[43934, 52503, 57177]"></vaadin-chart-series>
           <vaadin-chart-series title="Manufacturing" values="[24916, 24064, 29742]"></vaadin-chart-series>
         </vaadin-chart>
       `);
       await oneEvent(chart, 'chart-load');
-      if (outsideLater) {
+      if (outside === 'later') {
         chart.updateConfiguration({ tooltip: { outside: true } });
         await nextFrame();
       }
@@ -215,9 +216,9 @@ describe('vaadin-chart styling', () => {
       expect(styles.markerFill).to.equal('rgb(1, 2, 3)');
     });
 
-    // Highcharts reuses the tooltip instance on update, so the styled-mode mark must stay.
+    // Highcharts creates a new container on update, which must get the styled-mode class too.
     it('should style a tooltip moved outside after the chart renders', async () => {
-      const outside = tooltipStyles(await fixtureTooltip(true, { outsideLater: true }));
+      const outside = tooltipStyles(await fixtureTooltip('later'));
       expect(outside).to.deep.equal(tooltipStyles(await fixtureTooltip(false)));
     });
 

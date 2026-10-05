@@ -690,6 +690,9 @@ export const ChartMixin = (superClass) =>
     __initChart(options) {
       this.__initEventsListeners(options);
       this.__styledMode = options.chart.styledMode;
+      // Highcharts copies highcharts-* classes of the chart element to the container
+      // of an outside tooltip, which lets the global tooltip styles skip non-styled mode.
+      this.$.chart.classList.toggle('highcharts-styled-mode', !!this.__styledMode);
       if (options.chart.type === 'gantt') {
         this.configuration = Highcharts.ganttChart(this.$.chart, options);
       } else if (this.timeline) {
@@ -698,32 +701,9 @@ export const ChartMixin = (superClass) =>
         this.configuration = Highcharts.chart(this.$.chart, options);
       }
 
-      this.__markStyledOutsideTooltip();
       this.__syncOutsideTooltipColors();
       this.__markStickyTooltip();
       this.__redrawOrganizationDataLabels();
-    }
-
-    /**
-     * Marks the container of a `tooltip: { outside: true }` tooltip in styled mode,
-     * so the global tooltip styles leave a non-styled tooltip as Highcharts draws it.
-     * The mark must exist before Highcharts measures the label, which happens before
-     * the `refresh` event fires.
-     *
-     * @private
-     */
-    __markStyledOutsideTooltip() {
-      const { tooltip } = this.configuration;
-      if (!tooltip) {
-        return;
-      }
-
-      // Wraps the instance, not the prototype, to leave other Highcharts charts alone.
-      Highcharts.wrap(tooltip, 'getLabel', (proceed) => {
-        const label = proceed();
-        tooltip.container?.toggleAttribute('styled-mode', tooltip.chart.styledMode);
-        return label;
-      });
     }
 
     /**
@@ -735,8 +715,8 @@ export const ChartMixin = (superClass) =>
      * @private
      */
     __syncOutsideTooltipColors() {
-      const { tooltip, styledMode } = this.configuration;
-      if (!tooltip || !tooltip.outside || !styledMode) {
+      const { tooltip } = this.configuration;
+      if (!tooltip || !tooltip.outside || !this.__styledMode) {
         return;
       }
 
