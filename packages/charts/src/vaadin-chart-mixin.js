@@ -690,8 +690,7 @@ export const ChartMixin = (superClass) =>
     __initChart(options) {
       this.__initEventsListeners(options);
       this.__styledMode = options.chart.styledMode;
-      // Highcharts copies highcharts-* classes of the chart element to the container
-      // of an outside tooltip, which lets the global tooltip styles skip non-styled mode.
+      // Highcharts copies this class to the container of an outside tooltip.
       this.$.chart.classList.toggle('highcharts-styled-mode', !!this.__styledMode);
       if (options.chart.type === 'gantt') {
         this.configuration = Highcharts.ganttChart(this.$.chart, options);
@@ -710,7 +709,7 @@ export const ChartMixin = (superClass) =>
      * A `tooltip: { outside: true }` tooltip renders in `document.body`, so it
      * inherits neither the palette a theme scopes to `vaadin-chart` nor any
      * `--vaadin-charts-color-*` set on this element. Copy the resolved series
-     * colours onto its container instead. A non-styled tooltip uses no such colours.
+     * colors onto its container instead. Only styled mode needs them.
      *
      * @private
      */

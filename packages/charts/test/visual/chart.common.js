@@ -672,7 +672,7 @@ const baseOnlyFixtures = {
   `,
 
   // Not a module: the global tooltip stylesheet must leave a non-styled outside
-  // tooltip as Highcharts draws it, also in a dark colour scheme.
+  // tooltip as Highcharts draws it, also in a dark color scheme.
   'tooltip-outside-non-styled': buildTooltipFixture(true, { styledMode: false }),
 };
 
