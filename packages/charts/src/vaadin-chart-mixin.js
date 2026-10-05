@@ -32,6 +32,7 @@ import 'highcharts/es-modules/masters/modules/draggable-points.src.js';
 import './highcharts-patches.js';
 import KeyboardNavigation from 'highcharts/es-modules/Accessibility/KeyboardNavigation.js';
 import Pointer from 'highcharts/es-modules/Core/Pointer.js';
+import { Exporting } from 'highcharts/es-modules/Extensions/Exporting/Exporting.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { deepMerge } from '@vaadin/component-base/src/object-utils.js';
 import { get } from '@vaadin/component-base/src/path-utils.js';
@@ -42,13 +43,31 @@ import { cleanupExport, inflateFunctions, prepareExport } from './helpers.js';
 // Highcharts moves a copy of the chart into the document body when exporting, losing the styles
 // defined in the shadow root. The `beforeExport` and `afterExport` events copy them over for the
 // duration of the export. Wrapping `getSVG` covers every export path, as both `exportChart` and
-// `exportChartLocal` call it through `getSVGForExport`.
+// `exportChartLocal` call it through `getSVGForExport`. It has to be the `Exporting` method: the
+// `getSVG` left on `Chart` is a proxy that nothing in Highcharts calls.
 // Workaround for https://github.com/vaadin/vaadin-charts/issues/389
 /* eslint-disable @typescript-eslint/no-invalid-this, prefer-arrow-callback */
-Highcharts.wrap(Highcharts.Chart.prototype, 'getSVG', function (proceed, ...args) {
-  Highcharts.fireEvent(this, 'beforeExport');
-  const result = proceed.apply(this, args);
-  Highcharts.fireEvent(this, 'afterExport');
+Highcharts.wrap(Exporting.prototype, 'getSVG', function (proceed, ...args) {
+  const chart = this.chart;
+  const fireAfterExport = () => Highcharts.fireEvent(chart, 'afterExport');
+
+  Highcharts.fireEvent(chart, 'beforeExport');
+
+  let result;
+  try {
+    result = proceed.apply(this, args);
+  } catch (error) {
+    fireAfterExport();
+    throw error;
+  }
+
+  // In async mode, which `getSVGForExport` uses, the result is a promise that settles once the
+  // chart copy has rendered. Removing the styles before that would produce an unstyled export.
+  if (result instanceof Promise) {
+    return result.finally(fireAfterExport);
+  }
+
+  fireAfterExport();
   return result;
 });
 /* eslint-enable @typescript-eslint/no-invalid-this, prefer-arrow-callback */

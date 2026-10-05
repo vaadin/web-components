@@ -6,14 +6,15 @@ import '../src/vaadin-chart.js';
 // Loaded after Vaadin Charts, like an app adding the optional module itself, see
 // https://github.com/vaadin/web-components/issues/11911
 import 'highcharts/es-modules/masters/modules/offline-exporting.src.js';
-import OfflineExporting from 'highcharts/es-modules/Extensions/OfflineExporting/OfflineExporting.js';
+import { Exporting } from 'highcharts/es-modules/Extensions/Exporting/Exporting.js';
 
 describe('vaadin-chart local exporting', () => {
   let chart, downloadStub;
 
   before(() => {
-    // Prevent downloading the export
-    downloadStub = sinon.stub(OfflineExporting, 'downloadSVGLocal');
+    // Prevent downloading the export. The local export runs in the core exporting
+    // module, so the download goes through `Exporting` rather than `OfflineExporting`.
+    downloadStub = sinon.stub(Exporting.prototype, 'downloadSVG');
   });
 
   beforeEach(async () => {
@@ -27,31 +28,32 @@ describe('vaadin-chart local exporting', () => {
     downloadStub.resetHistory();
   });
 
-  it('should export locally without throwing', () => {
-    chart.configuration.exportChartLocal();
+  it('should export locally without throwing', async () => {
+    await chart.configuration.exportChartLocal();
 
     expect(downloadStub).to.be.calledOnce;
   });
 
-  it('should dispatch export events once per local export', () => {
+  it('should dispatch export events once per local export', async () => {
     const events = [];
     chart.addEventListener('chart-before-export', () => events.push('before'));
     chart.addEventListener('chart-after-export', () => events.push('after'));
 
-    chart.configuration.exportChartLocal();
+    await chart.configuration.exportChartLocal();
 
     expect(events).to.eql(['before', 'after']);
   });
 
-  it('should apply the shadow styles to the exported SVG', () => {
-    chart.configuration.exportChartLocal();
+  it('should apply the shadow styles to the exported SVG', async () => {
+    await chart.configuration.exportChartLocal();
 
     // Blue comes from the `:host(#chart)` rule in exporting-styles.js
     expect(downloadStub.firstCall.args[0]).to.include('fill="rgb(0, 0, 255)"');
   });
 
-  it('should not leave the temporary style in the document body', () => {
-    chart.configuration.exportChartLocal();
+  it('should not leave the temporary style in the document body', async () => {
+    await chart.configuration.exportChartLocal();
+
     expect(chart.tempBodyStyle).to.be.undefined;
     expect(document.body.hasAttribute('styled-mode')).to.be.false;
   });
