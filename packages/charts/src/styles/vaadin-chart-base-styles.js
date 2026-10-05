@@ -27,8 +27,9 @@ const seriesColorTokens = Array.from(
     `--_color-${i}: var(--highcharts-color-${i}, var(--vaadin-charts-color-${i}, var(--vaadin-user-color-${i})));`,
 ).join('\n    ');
 
-// Only a styled-mode tooltip gets these styles, through a class that Highcharts
-// copies from the chart element. :where() keeps the old specificity.
+// Only a styled-mode tooltip gets these styles. Highcharts copies highcharts-*
+// classes of the chart element to an outside tooltip (see tooltip.outside docs).
+// :where() keeps the old specificity.
 const styledOutsideTooltip = '.highcharts-tooltip-container:where(.highcharts-styled-mode)';
 
 // A non-split tooltip carries highcharts-color-N on the tooltip element itself,
