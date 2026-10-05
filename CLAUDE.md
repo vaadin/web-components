@@ -21,7 +21,7 @@ This is the Vaadin Web Components monorepo - a collection of high-quality, acces
 
 ### Component Package Structure
 
-All component packages under `packages/` follow the same file structure. The packages that are not components differ: the base packages (`a11y-base`, `component-base`, `field-base`, `lit-renderer`), the theme packages (`aura`, `vaadin-lumo-styles`, `vaadin-themable-mixin`), `icons`, and the generated meta packages (`vaadin-core`, `vaadin`).
+All component packages under `packages/` follow the same file structure (the meta and theme packages are exceptions):
 
 ```
 packages/button/
