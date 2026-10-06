@@ -152,6 +152,16 @@ export const monthCalendarStyles = css`
     border-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
   }
 
+  /* The end of the range being edited is outlined, the other end stays filled */
+  [part~='range-editing'] {
+    color: var(--vaadin-date-picker-date-range-editing-color, var(--vaadin-text-color));
+  }
+
+  [part~='range-editing']::after {
+    background: transparent;
+    box-shadow: inset 0 0 0 2px var(--_range-edge);
+  }
+
   [disabled] {
     cursor: var(--vaadin-disabled-cursor);
     color: var(--vaadin-date-picker-date-disabled-color, var(--vaadin-text-color-disabled));

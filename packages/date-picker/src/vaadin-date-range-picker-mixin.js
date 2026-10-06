@@ -582,6 +582,8 @@ export const DateRangePickerMixin = (superClass) =>
       if (this.opened) {
         this.close();
       } else {
+        // The calendar button always starts from the start date, for predictability.
+        this._activePart = 'start';
         this.__focusActiveInput();
         this.open();
       }

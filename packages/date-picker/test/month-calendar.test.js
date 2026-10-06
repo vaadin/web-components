@@ -361,6 +361,30 @@ describe('vaadin-month-calendar', () => {
       expect(parts(14)).to.not.include('selected');
     });
 
+    it('should mark the end being edited', async () => {
+      const isEditing = (day) => parts(day).includes('range-editing');
+      monthCalendar.rangeEditing = 'end';
+      await nextRender();
+      expect(isEditing(14)).to.be.true;
+      expect(isEditing(10)).to.be.false;
+
+      monthCalendar.rangeEditing = 'start';
+      await nextRender();
+      expect(isEditing(10)).to.be.true;
+      expect(isEditing(14)).to.be.false;
+
+      monthCalendar.rangeEditing = null;
+      await nextRender();
+      expect(isEditing(10) || isEditing(14)).to.be.false;
+    });
+
+    it('should not mark a single-day range as being edited', async () => {
+      monthCalendar.rangeEnd = new Date(2016, 1, 10);
+      monthCalendar.rangeEditing = 'end';
+      await nextRender();
+      expect(parts(10)).to.not.include('range-editing');
+    });
+
     it('should mark a range that continues past the displayed month', async () => {
       monthCalendar.rangeStart = new Date(2016, 0, 20);
       monthCalendar.rangeEnd = new Date(2016, 2, 5);

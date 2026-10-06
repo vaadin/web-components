@@ -539,6 +539,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       calendars.forEach((calendar) => {
         calendar.rangeStart = displayedStart;
         calendar.rangeEnd = displayedEnd;
+        calendar.rangeEditing = rangePreview;
       });
     }
 

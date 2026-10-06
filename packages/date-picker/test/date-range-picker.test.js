@@ -138,6 +138,24 @@ describe('date-range-picker', () => {
       expect(getParts(20)).to.not.include('range-start');
     });
 
+    it('should mark the end being edited, depending on the focused input', async () => {
+      await openFrom(endInput);
+      expect(getParts(15)).to.include('range-editing');
+      expect(getParts(10)).to.not.include('range-editing');
+
+      startInput.focus();
+      await untilOverlayRendered(picker);
+      expect(getParts(10)).to.include('range-editing');
+      expect(getParts(15)).to.not.include('range-editing');
+    });
+
+    it('should mark the previewed end as being edited', async () => {
+      await openFrom(endInput);
+      await sendMouseToElement({ type: 'move', element: getCell(20) });
+      expect(getParts(20)).to.include('range-editing');
+      expect(getParts(10)).to.not.include('range-editing');
+    });
+
     it('should restore the range on Escape', async () => {
       await openFrom(startInput);
       await pick(20);
@@ -159,6 +177,20 @@ describe('date-range-picker', () => {
     it('should show both dates in the inputs', () => {
       expect(startInput.value).to.equal('3/10/2026');
       expect(endInput.value).to.equal('3/15/2026');
+    });
+  });
+
+  describe('picking the end first', () => {
+    it('should keep the end when picking a start before it afterwards', async () => {
+      await openFrom(endInput);
+      await pick(20);
+      expect(picker.endValue).to.equal('2026-03-20');
+      expect(picker.opened).to.be.false;
+
+      await openFrom(startInput);
+      await pick(12);
+      expect(picker.startValue).to.equal('2026-03-12');
+      expect(picker.endValue).to.equal('2026-03-20');
     });
   });
 
@@ -345,6 +377,17 @@ describe('date-range-picker', () => {
       startInput.click();
       await nextRender();
       expect(picker.opened).to.be.not.ok;
+    });
+
+    it('should always focus the start input when opening with the calendar button', async () => {
+      endInput.focus();
+      endInput.blur();
+      const toggle = picker.shadowRoot.querySelector('[part~="toggle-button"]');
+      await sendMouseToElement({ type: 'click', element: toggle });
+      await untilOverlayRendered(picker);
+      expect(picker.opened).to.be.true;
+      expect(document.activeElement).to.equal(startInput);
+      expect(picker.getAttribute('active-part')).to.equal('start');
     });
 
     it('should toggle aria-expanded on both inputs', async () => {

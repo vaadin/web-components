@@ -65,6 +65,15 @@ export const MonthCalendarMixin = (superClass) =>
         },
 
         /**
+         * The end of the range being edited: `start` or `end`. The date of that end
+         * is marked with the `range-editing` part. Used by the date range picker.
+         */
+        rangeEditing: {
+          type: String,
+          sync: true,
+        },
+
+        /**
          * Set true to display ISO-8601 week numbers in the calendar. Notice that
          * displaying week numbers is only supported when `i18n.firstDayOfWeek`
          * is 1 (Monday).
@@ -399,6 +408,10 @@ export const MonthCalendarMixin = (superClass) =>
         result.push('in-range');
       }
 
+      if (this.__isRangeEditingDate(date)) {
+        result.push('range-editing');
+      }
+
       if (this._isToday(date)) {
         result.push('today');
       }
@@ -425,6 +438,19 @@ export const MonthCalendarMixin = (superClass) =>
       // In a range, both the start and the end date are selected.
       const rangeRole = this.__getRangeRole(date);
       return dateEquals(date, selectedDate) || rangeRole === 'range-start' || rangeRole === 'range-end';
+    }
+
+    /**
+     * Whether the date is the end of the range being edited, so that it can be told
+     * apart from the end that stays as it is. Not marked for a single-day range.
+     * @private
+     */
+    __isRangeEditingDate(date) {
+      const { rangeStart, rangeEnd, rangeEditing } = this;
+      if (!date || !rangeStart || !rangeEnd || dateEquals(rangeStart, rangeEnd)) {
+        return false;
+      }
+      return dateEquals(date, rangeEditing === 'start' ? rangeStart : rangeEditing === 'end' ? rangeEnd : null);
     }
 
     /**

@@ -122,3 +122,13 @@ vaadin-month-calendar::part(date selected):hover::after {
 vaadin-month-calendar::part(in-range) {
   --vaadin-date-picker-date-in-range-background: color-mix(in srgb, var(--aura-accent-color) 14%, transparent);
 }
+
+vaadin-month-calendar::part(range-editing) {
+  color: var(--vaadin-text-color);
+}
+
+vaadin-month-calendar::part(range-editing)::after,
+vaadin-month-calendar::part(range-editing):hover::after {
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--aura-accent-color);
+}
