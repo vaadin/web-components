@@ -82,9 +82,9 @@ const DEFAULT_I18N = {
  * `thumbnail`            | A page thumbnail. Also has the `current` part name for the current page.
  * `sidebar-header`       | The header of the sidebar with the buttons that switch between thumbnails and outline.
  * `outline`              | The outline (bookmarks) of the document in the sidebar.
- * `outline-item`         | An item of the outline.
+ * `outline-item`         | An item of the outline. Also has the `current` part name for the item of the current page.
  * `outline-item-content` | The row of an outline item, with its toggle and title.
- * `outline-toggle`       | The button that expands or collapses an outline item. Has the `expanded` attribute when expanded.
+ * `outline-toggle`       | The button that expands or collapses an outline item. Also has the `expanded` part name when expanded.
  * `outline-item-title`   | The title of an outline item.
  * `content`              | The scrollable area that contains the pages.
  * `page`                 | A page of the document.
@@ -114,9 +114,11 @@ const DEFAULT_I18N = {
  * | `--vaadin-pdf-viewer-icon-download`                |
  * | `--vaadin-pdf-viewer-icon-find`                    |
  * | `--vaadin-pdf-viewer-icon-next-page`               |
+ * | `--vaadin-pdf-viewer-icon-outline`                 |
  * | `--vaadin-pdf-viewer-icon-previous-page`           |
  * | `--vaadin-pdf-viewer-icon-print`                   |
  * | `--vaadin-pdf-viewer-icon-sidebar`                 |
+ * | `--vaadin-pdf-viewer-icon-thumbnails`              |
  * | `--vaadin-pdf-viewer-icon-zoom-in`                 |
  * | `--vaadin-pdf-viewer-icon-zoom-out`                |
  * | `--vaadin-pdf-viewer-match-background`             |
@@ -133,6 +135,7 @@ const DEFAULT_I18N = {
  * | `--vaadin-pdf-viewer-sidebar-width`                |
  * | `--vaadin-pdf-viewer-text-color`                   |
  * | `--vaadin-pdf-viewer-thumbnail-current-background` |
+ * | `--vaadin-pdf-viewer-thumbnail-current-color`      |
  * | `--vaadin-pdf-viewer-thumbnail-font-size`          |
  * | `--vaadin-pdf-viewer-toolbar-background`           |
  * | `--vaadin-pdf-viewer-toolbar-gap`                  |

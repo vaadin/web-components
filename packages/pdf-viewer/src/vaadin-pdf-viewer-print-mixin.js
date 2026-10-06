@@ -242,7 +242,13 @@ export const PdfViewerPrintMixin = (superClass) =>
       if (!pdfDocument) {
         return;
       }
-      const data = await pdfDocument.getData();
+      let data;
+      try {
+        data = await pdfDocument.getData();
+      } catch {
+        // The document was unloaded meanwhile.
+        return;
+      }
       const url = URL.createObjectURL(new Blob([data], { type: 'application/pdf' }));
       const link = document.createElement('a');
       link.href = url;

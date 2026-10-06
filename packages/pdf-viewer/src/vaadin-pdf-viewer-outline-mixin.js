@@ -147,7 +147,7 @@ export const PdfViewerOutlineMixin = (superClass) =>
         return html`
           <div
             role="treeitem"
-            part="outline-item"
+            part="${item === current ? 'outline-item current' : 'outline-item'}"
             data-id="${item.id}"
             aria-label="${item.title}"
             aria-level="${level}"
@@ -159,7 +159,11 @@ export const PdfViewerOutlineMixin = (superClass) =>
             tabindex="${item === focused ? '0' : '-1'}"
           >
             <div part="outline-item-content" style="--_level: ${level - 1}">
-              <span part="outline-toggle" ?hidden="${!hasChildren}" ?expanded="${expanded}"></span>
+              <span
+                part="${expanded ? 'outline-toggle expanded' : 'outline-toggle'}"
+                ?hidden="${!hasChildren}"
+                ?expanded="${expanded}"
+              ></span>
               <span part="outline-item-title">${item.title}</span>
             </div>
             ${expanded ? html`<div role="group">${this.#renderOutlineItems(item.items, level + 1, current)}</div>` : nothing}
@@ -182,10 +186,13 @@ export const PdfViewerOutlineMixin = (superClass) =>
      */
     #activateItem(item) {
       this.#activatedItem = item;
+      // Mark the item, also when the page does not change.
+      this.requestUpdate();
       if (item.url) {
         window.open(item.url, '_blank', 'noopener,noreferrer');
       } else if (this.#hasTarget(item)) {
         this._goToDestination(item.destination);
+        this._closeSidebarOverlay();
       }
     }
 

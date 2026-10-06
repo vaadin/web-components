@@ -156,9 +156,7 @@ export const PdfViewerFindMixin = (superClass) =>
       }
       this.__findOpened = false;
       this.#closedMatchIndex = this.__findCurrentIndex;
-      // Select the current match, so that reading with a screen reader or
-      // caret browsing continues from it, like with the find of browsers.
-      this.#selectCurrentMatch();
+      const matchSelection = this.#getCurrentMatchRange();
       this.#resetSearch();
       this.#highlightPages();
 
@@ -170,15 +168,26 @@ export const PdfViewerFindMixin = (superClass) =>
       if (target) {
         target.focus({ focusVisible: isKeyboardActive() });
       }
+
+      // Select the current match, so that reading with a screen reader or caret
+      // browsing continues from it, like with the find of browsers. After moving
+      // focus, as focusing a field clears the selection.
+      if (matchSelection) {
+        window.getSelection().setBaseAndExtent(...matchSelection);
+      }
     }
 
-    /** @private */
-    #selectCurrentMatch() {
+    /**
+     * Returns the start node and offset and the end node and offset of the
+     * current match in the text layer, or null.
+     * @private
+     */
+    #getCurrentMatchRange() {
       const match = this.#matches[this.__findCurrentIndex];
       const page = match && this._getPageView(match.pageIndex + 1);
       const pageText = match && this.#loadedPageTexts.get(match.pageIndex);
       if (!page || !page.textLayer || !pageText) {
-        return;
+        return null;
       }
       const parts = getMatchParts(pageText, match);
       const { textDivs } = page.textLayer;
@@ -186,9 +195,7 @@ export const PdfViewerFindMixin = (superClass) =>
       const last = parts[parts.length - 1];
       const startNode = textDivs[first.itemIndex] && textDivs[first.itemIndex].firstChild;
       const endNode = textDivs[last.itemIndex] && textDivs[last.itemIndex].firstChild;
-      if (startNode && endNode) {
-        window.getSelection().setBaseAndExtent(startNode, first.start, endNode, last.end);
-      }
+      return startNode && endNode ? [startNode, first.start, endNode, last.end] : null;
     }
 
     /**

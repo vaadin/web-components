@@ -147,6 +147,12 @@ describe('sidebar', () => {
       });
     });
 
+    it('should keep the sidebar open after going to a clicked thumbnail', async () => {
+      getThumbnails()[3].click();
+      await nextRenderIdle(viewer);
+      expect(viewer.sidebarOpened).to.be.true;
+    });
+
     it('should keep one tab stop after clicking a thumbnail and moving focus', async () => {
       getThumbnails()[3].focus();
       getThumbnails()[3].click();
@@ -186,6 +192,24 @@ describe('sidebar', () => {
       await nextRender();
       expect(viewer.sidebarOpened).to.be.false;
       expect(document.activeElement).to.equal(getToggle());
+    });
+
+    it('should close the sidebar and focus the toggle button after going to a clicked thumbnail', async () => {
+      getThumbnails()[3].focus();
+      getThumbnails()[3].click();
+      await nextRenderIdle(viewer);
+      expect(viewer.page).to.equal(4);
+      expect(viewer.sidebarOpened).to.be.false;
+      expect(document.activeElement).to.equal(getToggle());
+    });
+
+    it('should close the sidebar after going to a thumbnail with Enter', async () => {
+      getThumbnails()[0].focus();
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'Enter' });
+      await nextRenderIdle(viewer);
+      expect(viewer.page).to.equal(2);
+      expect(viewer.sidebarOpened).to.be.false;
     });
 
     it('should keep the width of the pages', () => {

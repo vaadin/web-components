@@ -4,9 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 @import '../src/components/pdf-viewer.css';
+@import './button.css';
 @import './integer-field.css';
 @import './pdf-viewer-button.css';
+@import './progress-bar.css';
 @import './select.css';
+@import './text-field.css';
 @import './tooltip.css';
 
 :root,

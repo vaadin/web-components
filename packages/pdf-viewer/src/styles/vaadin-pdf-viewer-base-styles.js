@@ -157,7 +157,7 @@ const pdfViewerBaseStyles = css`
     padding: var(--vaadin-padding-xs);
   }
 
-  [part='outline-item'] {
+  [part~='outline-item'] {
     outline: none;
   }
 
@@ -173,13 +173,13 @@ const pdfViewerBaseStyles = css`
     line-height: 1.4;
   }
 
-  [part='outline-item']:focus-visible > [part='outline-item-content'] {
+  [part~='outline-item']:focus-visible > [part='outline-item-content'] {
     outline: var(--vaadin-focus-ring-width) solid var(--vaadin-focus-ring-color);
     outline-offset: calc(var(--vaadin-focus-ring-width) * -1);
   }
 
   /* The item of the current page, marked by more than a color */
-  [part='outline-item'][aria-current] > [part='outline-item-content'] {
+  [part~='outline-item'][aria-current] > [part='outline-item-content'] {
     font-weight: 600;
     border-inline-start: 2px solid currentColor;
     /* A straight bar, not following the rounded corners */
@@ -190,7 +190,7 @@ const pdfViewerBaseStyles = css`
     );
   }
 
-  [part='outline-item'][aria-disabled='true'] > [part='outline-item-content'] {
+  [part~='outline-item'][aria-disabled='true'] > [part='outline-item-content'] {
     cursor: default;
   }
 
@@ -200,7 +200,7 @@ const pdfViewerBaseStyles = css`
     }
   }
 
-  [part='outline-toggle'] {
+  [part~='outline-toggle'] {
     flex: none;
     width: 1lh;
     height: 1lh;
@@ -208,21 +208,21 @@ const pdfViewerBaseStyles = css`
     mask: var(--_vaadin-icon-chevron-right) 50% / 80% no-repeat;
   }
 
-  [part='outline-toggle'][expanded] {
+  [part~='outline-toggle'][expanded] {
     rotate: 90deg;
   }
 
-  [part='outline-toggle']:dir(rtl):not([expanded]) {
+  [part~='outline-toggle']:dir(rtl):not([expanded]) {
     scale: -1 1;
   }
 
-  [part='outline-toggle'][hidden] {
+  [part~='outline-toggle'][hidden] {
     display: block;
     visibility: hidden;
   }
 
   @media (forced-colors: active) {
-    [part='outline-toggle'] {
+    [part~='outline-toggle'] {
       background: CanvasText;
     }
   }

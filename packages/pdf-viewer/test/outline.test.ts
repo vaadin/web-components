@@ -63,6 +63,18 @@ describe('outline', () => {
       expect(getViewButtons()[0].getAttribute('aria-pressed')).to.equal('true');
     });
 
+    it('should keep the rendered thumbnails while the outline is shown', async () => {
+      const getCanvas = () => viewer.shadowRoot!.querySelector('[part~="thumbnail"] canvas');
+      for (let i = 0; i < 100 && !getCanvas(); i++) {
+        await nextFrame();
+      }
+      expect(getCanvas()).to.be.ok;
+      getViewButtons()[1].click();
+      await nextRender();
+      await nextRender();
+      expect(getCanvas()).to.be.ok;
+    });
+
     describe('outline view', () => {
       beforeEach(async () => {
         getViewButtons()[1].click();
@@ -86,13 +98,27 @@ describe('outline', () => {
       });
 
       it('should mark a clicked item that starts on the same page as others', async () => {
-        getItem('Chapter 1').querySelector<HTMLElement>('[part="outline-toggle"]')!.click();
+        getItem('Chapter 1').querySelector<HTMLElement>('[part~="outline-toggle"]')!.click();
         await nextRender();
         getItem('Section 1.2').querySelector<HTMLElement>('[part="outline-item-title"]')!.click();
         await nextRender();
         await nextRender();
         expect(getItem('Section 1.2').getAttribute('aria-current')).to.equal('location');
         expect(getItem('Chapter 1').hasAttribute('aria-current')).to.be.false;
+      });
+
+      it('should add the current part name to the item of the current page', async () => {
+        await nextRender();
+        expect(getItem('Chapter 1').part.contains('current')).to.be.true;
+        expect(getItem('Chapter 3').part.contains('current')).to.be.false;
+      });
+
+      it('should add the expanded part name to the toggle of an expanded item', async () => {
+        const toggle = () => getItem('Chapter 1').querySelector<HTMLElement>('[part~="outline-toggle"]')!;
+        expect(toggle().part.contains('expanded')).to.be.false;
+        toggle().click();
+        await nextRender();
+        expect(toggle().part.contains('expanded')).to.be.true;
       });
 
       it('should show the top-level items collapsed', () => {
@@ -106,7 +132,7 @@ describe('outline', () => {
       });
 
       it('should name an item by its title only, also when expanded', async () => {
-        getItem('Chapter 1').querySelector<HTMLElement>('[part="outline-toggle"]')!.click();
+        getItem('Chapter 1').querySelector<HTMLElement>('[part~="outline-toggle"]')!.click();
         await nextRender();
         expect(getItem('Chapter 1').getAttribute('aria-label')).to.equal('Chapter 1');
       });
@@ -119,7 +145,7 @@ describe('outline', () => {
       });
 
       it('should expand an item when clicking its toggle', async () => {
-        getItem('Chapter 1').querySelector<HTMLElement>('[part="outline-toggle"]')!.click();
+        getItem('Chapter 1').querySelector<HTMLElement>('[part~="outline-toggle"]')!.click();
         await nextRender();
         expect(getItem('Chapter 1').getAttribute('aria-expanded')).to.equal('true');
         expect(getItem('Section 1.2').getAttribute('aria-level')).to.equal('2');

@@ -18,7 +18,11 @@ let pdfjsPromise;
  * @return {Promise<typeof import('pdfjs-dist')>}
  */
 export function loadPdfjs() {
-  pdfjsPromise ||= import('pdfjs-dist/legacy/build/pdf.mjs');
+  pdfjsPromise ||= import('pdfjs-dist/legacy/build/pdf.mjs').catch((error) => {
+    // Allow trying again, e.g. after a network error while loading the chunk.
+    pdfjsPromise = null;
+    throw error;
+  });
   return pdfjsPromise;
 }
 

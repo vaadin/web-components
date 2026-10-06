@@ -41,6 +41,7 @@ export const PdfViewerToolbarMixin = (superClass) =>
     disconnectedCallback() {
       super.disconnectedCallback();
       // A tooltip that is open when removed keeps listening to Escape on the document.
+      // `vaadin-tooltip` has no public API to close it without delays, so use its state controller.
       const tooltip = this.querySelector(':scope > vaadin-tooltip[slot="toolbar-tooltip"]');
       tooltip?._stateController.close(true);
     }

@@ -32,8 +32,8 @@ export declare class PdfViewerMixinClass {
 
   /**
    * The zoom level of the pages:
-   * - `page-width` (default) fits the width of the current page to the viewer.
-   * - `page-fit` fits the whole current page into the viewer.
+   * - `page-width` (default) fits the width of the first page to the viewer.
+   * - `page-fit` fits the whole first page into the viewer.
    * - A number scales the pages relative to their actual size, e.g. `1` for 100%.
    */
   zoom: PdfViewerZoom;

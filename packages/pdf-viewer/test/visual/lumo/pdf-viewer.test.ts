@@ -126,7 +126,7 @@ describe('pdf-viewer', () => {
     }
     element.querySelectorAll<HTMLElement>('vaadin-pdf-viewer-button[slot="sidebar-header"]')[1].click();
     await nextRender();
-    element.shadowRoot!.querySelector<HTMLElement>('[part="outline-toggle"]')!.click();
+    element.shadowRoot!.querySelector<HTMLElement>('[part~="outline-toggle"]')!.click();
     await nextRender();
     element.shadowRoot!.querySelector<HTMLElement>('[role="treeitem"]')!.focus();
     await sendKeys({ press: 'ArrowDown' });

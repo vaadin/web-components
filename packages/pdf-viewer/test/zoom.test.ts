@@ -63,6 +63,7 @@ describe('zoom', () => {
   it('should accept a numeric zoom set as attribute', async () => {
     viewer.setAttribute('zoom', '0.5');
     await nextRenderIdle(viewer);
+    expect(viewer.zoom).to.equal(0.5);
     expect(getPages()[0].offsetWidth).to.be.closeTo(A4_WIDTH / 2, 1);
   });
 

@@ -45,11 +45,12 @@ import '@vaadin/pdf-viewer';
 ```
 
 - `src`: the URL of the document. Range requests are used when the server supports them.
+  Changing it loads the new document and goes back to page 1, unless `page` is set together with it.
 - `page`: the current page, starting from 1. Updated while scrolling (`page-changed`), and
   scrolls to the page when set.
 - `zoom`: `page-width` (default), `page-fit`, or a number (`1` for 100%). Fires `zoom-changed`.
 - `sidebarOpened`: shows the sidebar with page thumbnails and, when the document has one, its
-  outline.
+  outline. Fires `sidebar-opened-changed`.
 - `fileName`: the name of a downloaded file. Defaults to the name in `src`, or the document title.
 - `print()`: prints the document.
 - `i18n`: the texts of the component, for localization.
@@ -63,12 +64,15 @@ The viewer has a default height of 400px. Set its `height` to fit your layout.
 - **pdf.js:** the component uses [pdf.js](https://mozilla.github.io/pdf.js/) (legacy build).
   It is only loaded when a `src` is first set, so importing the component costs little.
 - **Worker:** pdf.js runs in a module worker that the component creates from a file in this
-  package (`new Worker(new URL(...), import.meta.url)`). This works with Vite (dev server and
+  package (`new Worker(new URL('...', import.meta.url), { type: 'module' })`). This works with Vite (dev server and
   production build) without configuration. Other bundlers must support module workers created
   with `new URL(..., import.meta.url)`.
 - **Content Security Policy:** the worker is a same-origin script (`worker-src 'self'`).
   Downloading and printing use `blob:` URLs, and printing shows them as images
   (`img-src blob:`). Inline scripts and styles are not needed.
+- **Install size:** pdf.js (`pdfjs-dist`) has an optional dependency, `@napi-rs/canvas`, which is
+  only used when pdf.js runs in Node.js. npm installs it by default (native binaries of about
+  36 MB); it is not part of the browser bundle. `pdfjs-dist` declares Node.js 22.13 or newer.
 - **Fonts and images:** the CMaps, standard fonts and WebAssembly decoders of pdf.js are not
   shipped. Fonts that are not embedded in a PDF use the browser's fonts. Some JPEG 2000 and
   JBIG2 images decode more slowly.
@@ -84,7 +88,8 @@ Vaadin components (latest Chrome, Edge and Firefox).
 ## Known limitations
 
 - Password-protected documents, form filling, annotations and PDF JavaScript are not
-  supported. Encrypted documents fire `document-error` with the reason `password`.
+  supported. Documents that need a password to open fire `document-error` with the reason
+  `password`. Encrypted documents without a password to open work.
 - Pages are shown in one continuous vertical list. There are no single page, spread or
   rotation modes.
 - To keep memory use low, only the pages near the visible area are rendered and have

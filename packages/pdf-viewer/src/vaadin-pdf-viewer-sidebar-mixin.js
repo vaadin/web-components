@@ -61,21 +61,21 @@ export const PdfViewerSidebarMixin = (superClass) =>
     }
 
     /** @protected */
-    disconnectedCallback() {
-      super.disconnectedCallback();
-      this.#observer?.disconnect();
-      this.#observer = null;
-      // Stop rendering. The observer adds the visible thumbnails again when attached.
-      this.#visibleThumbnails.clear();
-    }
-
-    /** @protected */
     connectedCallback() {
       super.connectedCallback();
       // Observe the thumbnails again after being moved in the DOM.
       if (this.#thumbnails.length) {
         this.#observeThumbnails();
       }
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this.#observer?.disconnect();
+      this.#observer = null;
+      // Stop rendering. The observer adds the visible thumbnails again when attached.
+      this.#visibleThumbnails.clear();
     }
 
     /** @protected */
@@ -145,6 +145,19 @@ export const PdfViewerSidebarMixin = (superClass) =>
     }
 
     /**
+     * Closes the sidebar when it covers the pages, i.e. on narrow viewers, so
+     * that the page the user went to is visible. Focus moves to the toggle.
+     * @protected
+     */
+    _closeSidebarOverlay() {
+      const sidebar = this.shadowRoot.querySelector('[part="sidebar"]');
+      if (this.sidebarOpened && getComputedStyle(sidebar).position === 'absolute') {
+        this.#moveFocusOutOfSidebar();
+        this.sidebarOpened = false;
+      }
+    }
+
+    /**
      * Closes the sidebar with Escape when it covers the pages on narrow viewers.
      * @private
      */
@@ -208,6 +221,10 @@ export const PdfViewerSidebarMixin = (superClass) =>
 
     /** @private */
     #onThumbnailIntersection(entries) {
+      // Hiding the list, e.g. when switching to the outline, is not leaving the view.
+      if (!this.$.thumbnails.checkVisibility()) {
+        return;
+      }
       entries.forEach(({ target, isIntersecting }) => {
         const thumbnail = this.#thumbnails[Number(target.dataset.page) - 1];
         if (!thumbnail) {
@@ -349,6 +366,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
       if (element) {
         this.#setTabStop(element);
         this._goToPage(Number(element.dataset.page));
+        this._closeSidebarOverlay();
       }
     }
 
@@ -373,6 +391,7 @@ export const PdfViewerSidebarMixin = (superClass) =>
         this.#scrollThumbnailIntoView(target);
       } else if (event.key === 'Enter' || event.key === ' ') {
         this._goToPage(index + 1);
+        this._closeSidebarOverlay();
       } else {
         return;
       }

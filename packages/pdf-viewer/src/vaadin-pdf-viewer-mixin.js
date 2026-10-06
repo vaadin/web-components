@@ -84,8 +84,8 @@ export const PdfViewerMixin = (superClass) =>
 
         /**
          * The zoom level of the pages:
-         * - `page-width` (default) fits the width of the current page to the viewer.
-         * - `page-fit` fits the whole current page into the viewer.
+         * - `page-width` (default) fits the width of the first page to the viewer.
+         * - `page-fit` fits the whole first page into the viewer.
          * - A number scales the pages relative to their actual size, e.g. `1` for 100%.
          *
          * @type {string | number}
@@ -93,6 +93,10 @@ export const PdfViewerMixin = (superClass) =>
         zoom: {
           value: 'page-width',
           notify: true,
+          // Numbers set as attribute, e.g. zoom="1.5", become numbers.
+          converter: {
+            fromAttribute: (value) => (value !== null && value.trim() !== '' && !isNaN(value) ? Number(value) : value),
+          },
         },
 
         /**
@@ -114,6 +118,7 @@ export const PdfViewerMixin = (superClass) =>
           type: Number,
           value: 0,
           readOnly: true,
+          attribute: false,
         },
 
         /** @private */
