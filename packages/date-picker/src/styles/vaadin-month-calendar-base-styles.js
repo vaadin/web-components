@@ -115,6 +115,33 @@ export const monthCalendarStyles = css`
     outline-offset: 1px;
   }
 
+  /* Range band, drawn behind the date indicators */
+  [part~='in-range'] {
+    --_range-band: var(
+      --vaadin-date-picker-date-in-range-background,
+      color-mix(in srgb, var(--vaadin-date-picker-date-selected-background, var(--vaadin-text-color)) 12%, transparent)
+    );
+    --_range-band-height: min(2em, 100%);
+    isolation: isolate;
+    border-radius: 0;
+    background: linear-gradient(var(--_range-band), var(--_range-band)) center / 100% var(--_range-band-height)
+      no-repeat;
+  }
+
+  [part~='in-range'][part~='range-start'] {
+    background-position: right center;
+    background-size: 50% var(--_range-band-height);
+  }
+
+  [part~='in-range'][part~='range-end'] {
+    background-position: left center;
+    background-size: 50% var(--_range-band-height);
+  }
+
+  [part~='in-range']::after {
+    border-radius: var(--vaadin-date-picker-date-border-radius, var(--vaadin-radius-m));
+  }
+
   [disabled] {
     cursor: var(--vaadin-disabled-cursor);
     color: var(--vaadin-date-picker-date-disabled-color, var(--vaadin-text-color-disabled));

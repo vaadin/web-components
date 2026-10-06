@@ -102,6 +102,17 @@
       0 0 0 calc(var(--_focus-ring-width) + 1px) var(--_focus-ring-color);
   }
 
+  /* Range */
+
+  [part~='in-range'] {
+    --_range-band: var(--vaadin-date-picker-date-in-range-background, var(--lumo-primary-color-10pct));
+    --_range-band-height: 80%;
+  }
+
+  [part~='in-range']::after {
+    border-radius: var(--vaadin-date-picker-date-border-radius, var(--lumo-border-radius-m));
+  }
+
   :host(:not([focused])) [part~='date'][part~='focused']::after {
     animation: vaadin-date-picker-month-calendar-focus-date 1.4s infinite;
   }

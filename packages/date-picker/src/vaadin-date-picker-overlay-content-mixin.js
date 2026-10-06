@@ -50,6 +50,44 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           sync: true,
         },
 
+        /**
+         * The first date of the selected range. Used by the date range picker.
+         */
+        rangeStart: {
+          type: Object,
+          sync: true,
+        },
+
+        /**
+         * The last date of the selected range. Used by the date range picker.
+         */
+        rangeEnd: {
+          type: Object,
+          sync: true,
+        },
+
+        /**
+         * When true, hovering or focusing a date on or after `rangeStart`
+         * previews the range that would be selected by picking that date.
+         */
+        rangePreview: {
+          type: Boolean,
+          value: false,
+          sync: true,
+        },
+
+        /** @private */
+        _hoveredDate: {
+          type: Object,
+          sync: true,
+        },
+
+        /** @private */
+        _calendarFocused: {
+          type: Boolean,
+          sync: true,
+        },
+
         _focusedMonthDate: Number,
 
         /**
@@ -175,6 +213,7 @@ export const DatePickerOverlayContentMixin = (superClass) =>
       return [
         '__updateCalendarsConfig(calendars, i18n, minDate, maxDate, showWeekNumbers, isDateDisabled, _theme, _dateMetadataController)',
         '__updateCalendarsState(calendars, selectedDate, focusedDate, enteredDate, _ignoreTaps)',
+        '__updateCalendarsRange(calendars, rangeStart, rangeEnd, rangePreview, _hoveredDate, focusedDate, _calendarFocused)',
         '__updateCancelButton(_cancelButton, i18n)',
         '__updateYears(years, selectedDate, _theme)',
       ];
@@ -304,6 +343,26 @@ export const DatePickerOverlayContentMixin = (superClass) =>
 
             scroller.addEventListener('keydown', (e) => {
               this.__onMonthCalendarKeyDown(e);
+            });
+
+            // Use mousemove, as mouseover does not fire reliably for the date cells.
+            scroller.addEventListener('mousemove', (e) => {
+              const date = e.composedPath()[0].date || null;
+              if (!dateEquals(date, this._hoveredDate)) {
+                this._hoveredDate = date;
+              }
+            });
+
+            scroller.addEventListener('mouseleave', () => {
+              this._hoveredDate = null;
+            });
+
+            scroller.addEventListener('focusin', () => {
+              this._calendarFocused = true;
+            });
+
+            scroller.addEventListener('focusout', () => {
+              this._calendarFocused = false;
             });
 
             scroller.addEventListener('init-done', () => {
@@ -457,6 +516,30 @@ export const DatePickerOverlayContentMixin = (superClass) =>
           calendar.ignoreTaps = ignoreTaps;
         });
       }
+    }
+
+    /**
+     * Range state: the selected range, or the previewed range while picking its end.
+     * @private
+     */
+    // eslint-disable-next-line @typescript-eslint/max-params
+    __updateCalendarsRange(calendars, rangeStart, rangeEnd, rangePreview, hoveredDate, focusedDate, calendarFocused) {
+      if (!calendars?.length) {
+        return;
+      }
+
+      let displayedEnd = rangeEnd;
+      if (rangePreview && rangeStart) {
+        const previewEnd = hoveredDate || (calendarFocused ? focusedDate : null);
+        if (previewEnd && previewEnd >= rangeStart) {
+          displayedEnd = previewEnd;
+        }
+      }
+
+      calendars.forEach((calendar) => {
+        calendar.rangeStart = rangeStart;
+        calendar.rangeEnd = displayedEnd;
+      });
     }
 
     /** @private */

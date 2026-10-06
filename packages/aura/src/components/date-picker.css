@@ -102,7 +102,8 @@ vaadin-month-calendar::part(date selected):hover::after {
 }
 
 @media (max-width: 450px), (max-height: 450px) {
-  vaadin-date-picker {
+  vaadin-date-picker,
+  vaadin-date-range-picker {
     --vaadin-overlay-opacity-closed: 1;
     --vaadin-overlay-translate-closed: 0% 110%;
 
@@ -116,4 +117,8 @@ vaadin-month-calendar::part(date selected):hover::after {
       --vaadin-overlay-animation-delay: 100ms;
     }
   }
+}
+
+vaadin-month-calendar::part(in-range) {
+  --vaadin-date-picker-date-in-range-background: color-mix(in srgb, var(--aura-accent-color) 14%, transparent);
 }
