@@ -14,8 +14,9 @@ VoiceOver + Safari (macOS), VoiceOver + Safari (iOS).
 - [ ] The viewer is announced as a region named after the PDF title ("Multi-page
       fixture"), or "PDF document" for `standard-font.pdf`.
 - [ ] The toolbar is announced as a toolbar named "PDF toolbar".
-- [ ] The page area is announced as "Pages, document" (or similar), and each page as a
-      group "Page N" when reading into it.
+- [ ] The page area is announced as "Pages, document" (or similar), only once, and each page
+      as a group "Page N" when reading into it. While a document loads, VoiceOver may say "busy";
+      switching documents is not announced half-way.
 - [ ] The find bar is announced as a search landmark named "Find in document".
 
 ## 2. Toolbar
@@ -36,11 +37,21 @@ VoiceOver + Safari (macOS), VoiceOver + Safari (iOS).
       in a new tab)"), and work with Enter.
 - [ ] `tagged.pdf`: headings are announced with their level and can be navigated with the
       heading keys (H / 1–6), the list is announced with 2 items, the table with rows,
-      column headers and cells (table navigation keys work), and the figure reads
-      "A blue square".
+      column headers and cells (table navigation keys work, cells read their column header),
+      and the figure reads "A blue square".
+- [ ] `tagged.pdf`: the link "Vaadin website" is announced once, as one link.
+- [ ] `tagged.pdf`: "Hej världen" is read with a Swedish voice where the screen reader switches
+      languages.
+- [ ] VoiceOver + Safari: the rotor lists the headings of `tagged.pdf` with their text. (The
+      structure uses `aria-owns`, which WebKit supports only partly in shadow DOM. If the rotor
+      shows empty headings, the text is still read, but without structure. Note the result.)
 - [ ] Known limitation: only pages near the view have text. Check what happens when
       reading past the last rendered page in browse mode (expected: reading stops; scrolling
-      with the keyboard in the page area renders the next pages). Note how disruptive this is.
+      with the keyboard in the page area renders the next pages). NVDA may scroll an empty page
+      group into view, which renders its text: note whether the virtual buffer then updates, and
+      how disruptive this is.
+- [ ] The error message of `invalid.pdf` can also be reached in browse mode, not only heard
+      as an alert.
 - [ ] Text selection with the keyboard (Shift + arrows in caret browsing, where supported)
       and copying gives the right text.
 
@@ -53,7 +64,9 @@ VoiceOver + Safari (macOS), VoiceOver + Safari (iOS).
 - [ ] Enter / Shift+Enter announce the next / previous result; with no matches, Enter
       announces "No matches".
 - [ ] Escape closes the find bar from any of its controls and returns focus to where it was.
-- [ ] After closing, browse mode / caret browsing continues from the current match.
+- [ ] After closing, with caret browsing (F7 in Chrome / Firefox) the caret is at the current
+      match. In NVDA / JAWS browse mode, note where reading continues (focus returns to where it
+      was, so reading may continue from there rather than from the match).
 
 ## 5. Sidebar
 
@@ -70,8 +83,9 @@ VoiceOver + Safari (macOS), VoiceOver + Safari (iOS).
 
 ## 6. Download and print
 
-- [ ] "Preparing to print…" is announced when printing starts; the progress bar and Cancel
-      are reachable; Cancel stops it.
+- [ ] "Preparing to print…" is announced when printing starts from the print button, focus
+      moves to Cancel, Escape or Cancel stops it, and focus returns to the print button. (Escape
+      in the find field or an overlaid sidebar closes those first.)
 - [ ] Print preview in Chrome, Firefox and Safari shows all pages at their own size
       (`multi-page.pdf`: 5 portrait + 1 landscape A4), sharp enough to read.
 - [ ] Download saves `multi-page.pdf` with the original content.
@@ -99,6 +113,12 @@ Test in Windows with a dark and a light contrast theme, in Chrome / Edge and Fir
 
 - [ ] At 200% browser zoom and with large text settings, all controls stay usable
       (wrapping, no clipping), and the pages can still be read.
+- [ ] Reflow at 320 CSS px (WCAG 1.4.10): the toolbar wraps (up to 3 rows) without horizontal
+      scrolling of the page; note how much height it takes.
+- [ ] Text spacing (WCAG 1.4.12, e.g. with a text spacing bookmarklet): toolbar, find bar,
+      sidebar and outline texts are not clipped.
+- [ ] On touch devices, toolbar buttons, thumbnails and outline items are comfortable to tap
+      (WCAG 2.5.5 is AAA, so this is advisory).
 - [ ] On iOS with VoiceOver, swiping through the toolbar, sidebar and pages works, and
       double-tap activates controls.
 

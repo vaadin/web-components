@@ -60,9 +60,21 @@ describe('tagged PDF structure', () => {
       expect(table.querySelectorAll('[role="cell"]')).to.have.lengthOf(4);
     });
 
-    it('should expose the alternative text of figures', () => {
+    it('should expose the alternative text of figures as an image', () => {
       const figure = getTree()!.querySelector('[role="figure"]')!;
-      expect(figure.getAttribute('aria-label')).to.equal('A blue square');
+      expect(figure.querySelector('[role="img"]')!.getAttribute('aria-label')).to.equal('A blue square');
+    });
+
+    it('should not expose tagged links as a second link next to the link element', () => {
+      expect(getTree()!.querySelector('[role="link"]')).to.be.null;
+      const links = [...viewer.shadowRoot!.querySelectorAll('a.link')];
+      expect(links).to.have.lengthOf(1);
+      expect(links[0].getAttribute('aria-label')).to.equal('Vaadin website (opens in a new tab)');
+    });
+
+    it('should set the language of text in another language', () => {
+      const swedish = getTree()!.querySelector('[lang="sv"]')!;
+      expect(getOwnedText(swedish)).to.equal('Hej världen');
     });
 
     it('should reference text layer elements that exist', () => {

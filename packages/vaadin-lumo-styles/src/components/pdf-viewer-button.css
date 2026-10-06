@@ -77,6 +77,16 @@
     content: none;
   }
 
+  @media (forced-colors: active) {
+    :host(:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon'] {
+      background: CanvasText;
+    }
+
+    :host([disabled]:is([icon='print'], [icon='thumbnails'], [icon='outline'])) [part='icon'] {
+      background: GrayText;
+    }
+  }
+
   :host([icon='find']) {
     --_icon: var(--vaadin-pdf-viewer-icon-find);
   }

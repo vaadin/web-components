@@ -181,11 +181,13 @@ const pdfViewerBaseStyles = css`
   /* The item of the current page, marked by more than a color */
   [part='outline-item'][aria-current] > [part='outline-item-content'] {
     font-weight: 600;
-    box-shadow: inset 2px 0 0 currentColor;
-  }
-
-  [part='outline-item'][aria-current]:dir(rtl) > [part='outline-item-content'] {
-    box-shadow: inset -2px 0 0 currentColor;
+    border-inline-start: 2px solid currentColor;
+    /* A straight bar, not following the rounded corners */
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+    padding-inline-start: calc(
+      var(--_level) * var(--vaadin-pdf-viewer-outline-indent, 1em) + var(--vaadin-padding-xs) - 2px
+    );
   }
 
   [part='outline-item'][aria-disabled='true'] > [part='outline-item-content'] {
@@ -307,6 +309,12 @@ const pdfViewerBaseStyles = css`
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   }
 
+  @media (forced-colors: active) {
+    [part='print-progress'] {
+      border: 1px solid CanvasText;
+    }
+  }
+
   [part='print-progress'][hidden] {
     display: none;
   }
@@ -412,7 +420,8 @@ const pdfViewerBaseStyles = css`
 
   .text-layer ::selection {
     color: transparent;
-    background: var(--vaadin-pdf-viewer-selection-background, color-mix(in srgb, Highlight 40%, transparent));
+    /* The system color, which is translucent where the system needs it */
+    background: var(--vaadin-pdf-viewer-selection-background, Highlight);
   }
 
   .text-layer br::selection {

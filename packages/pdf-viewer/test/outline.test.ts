@@ -85,6 +85,16 @@ describe('outline', () => {
         expect(getItem('Chapter 1').hasAttribute('aria-current')).to.be.false;
       });
 
+      it('should mark a clicked item that starts on the same page as others', async () => {
+        getItem('Chapter 1').querySelector<HTMLElement>('[part="outline-toggle"]')!.click();
+        await nextRender();
+        getItem('Section 1.2').querySelector<HTMLElement>('[part="outline-item-title"]')!.click();
+        await nextRender();
+        await nextRender();
+        expect(getItem('Section 1.2').getAttribute('aria-current')).to.equal('location');
+        expect(getItem('Chapter 1').hasAttribute('aria-current')).to.be.false;
+      });
+
       it('should show the top-level items collapsed', () => {
         expect(getItems().map((item) => item.textContent!.trim())).to.deep.equal([
           'Chapter 1',

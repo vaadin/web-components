@@ -81,6 +81,9 @@ export const PdfViewerOutlineMixin = (superClass) =>
       };
     }
 
+    /** The item that was activated last. */
+    #activatedItem = null;
+
     /** @protected */
     updated(props) {
       super.updated(props);
@@ -99,6 +102,7 @@ export const PdfViewerOutlineMixin = (superClass) =>
     _documentUnloaded() {
       super._documentUnloaded();
       this.__outline = null;
+      this.#activatedItem = null;
       this.__sidebarView = 'thumbnails';
       this.__expandedOutlineItems = new Set();
       this.__focusedOutlineItem = undefined;
@@ -177,6 +181,7 @@ export const PdfViewerOutlineMixin = (superClass) =>
      * @private
      */
     #activateItem(item) {
+      this.#activatedItem = item;
       if (item.url) {
         window.open(item.url, '_blank', 'noopener,noreferrer');
       } else if (this.#hasTarget(item)) {
@@ -202,14 +207,18 @@ export const PdfViewerOutlineMixin = (superClass) =>
         this.__sidebarView = 'thumbnails';
         return;
       }
-      // Resolve the pages of the items, to mark the item of the current page.
+      this.__outline = outline;
+      // Resolve the pages of the items in the background, to mark the item of the current page.
+      // Named actions like NextPage depend on the current page, so they are not marked.
       await Promise.all(
         this.#getAllItems(outline).map(async (item) => {
-          item.page = item.url ? null : await this._getDestinationPage(item.destination);
+          if (!item.url && !item.destination.action) {
+            item.page = await this._getDestinationPage(item.destination);
+          }
         }),
       );
       if (this._pdfDocument === pdfDocument) {
-        this.__outline = outline;
+        this.requestUpdate();
       }
     }
 
@@ -238,11 +247,16 @@ export const PdfViewerOutlineMixin = (superClass) =>
     }
 
     /**
-     * Returns the visible item for the current page: the first item that
-     * starts on the last page, on or before the current page, that has items.
+     * Returns the visible item for the current page: of the items that start
+     * on or before the current page, the first one on the nearest page.
      * @private
      */
     #getCurrentItem() {
+      // The item the user chose, while its page is current, e.g. one of several sections of a page.
+      const activated = this.#activatedItem;
+      if (activated && activated.page === this.page && this.#getVisibleItems().includes(activated)) {
+        return activated;
+      }
       let current = null;
       this.#getVisibleItems().forEach((item) => {
         if (item.page && item.page <= this.page && (!current || item.page > current.page)) {

@@ -12,7 +12,7 @@
 /*
  * Adapted from StructTreeLayerBuilder in pdf_viewer.mjs of pdf.js 6.3.289
  * (Apache License 2.0, Copyright Mozilla Foundation), without MathML,
- * table header references and link ownership.
+ * table header references, link ownership and figure positions.
  */
 
 /** The ARIA roles of the standard structure types of tagged PDFs. */
@@ -32,7 +32,7 @@ const PDF_ROLE_TO_ARIA_ROLE = {
   Strong: 'strong',
   Note: 'note',
   Code: 'code',
-  Link: 'link',
+  // No role for Link, as the viewer places its own link element next to the text of the link.
   Annot: 'note',
   Form: 'form',
   L: 'list',
@@ -59,13 +59,14 @@ const HEADING_PATTERN = /^H(\d+)$/u;
  * @param {HTMLElement} element
  */
 function setAttributes(node, element) {
-  const { alt, id, lang, rowSpan, colSpan } = node;
-  if (alt !== undefined) {
-    const role = element.getAttribute('role') || 'generic';
+  const { alt, id, lang, rowSpan, colSpan, type } = node;
+  const role = element.getAttribute('role') || 'generic';
+  if (alt !== undefined && role !== 'none') {
     element.setAttribute(ROLES_WITHOUT_NAME.has(role) ? 'aria-description' : 'aria-label', alt);
   }
   // Takes the elements of the text layer that hold the content into this element.
-  if (id !== undefined) {
+  // Annotations and objects have no element in the text layer.
+  if (id !== undefined && (type === undefined || type === 'content')) {
     element.setAttribute('aria-owns', id);
   }
   if (lang !== undefined) {
@@ -119,6 +120,15 @@ function walk(node, parents) {
     }
   }
   setAttributes(node, element);
+
+  // An image with the alternative text, as a figure that owns no text has no content to read.
+  if (node.role === 'Figure' && node.alt) {
+    element.removeAttribute('aria-label');
+    const image = document.createElement('span');
+    image.setAttribute('role', 'img');
+    image.setAttribute('aria-label', node.alt);
+    element.append(image);
+  }
 
   const children = node.children || [];
   if (

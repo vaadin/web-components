@@ -226,6 +226,20 @@ describe('download and print', () => {
       expect(document.activeElement).to.equal(getButton('print'));
     });
 
+    it('should keep focus on an element outside the viewer when printing from it', async () => {
+      const button = document.createElement('button');
+      document.body.append(button);
+      try {
+        button.focus();
+        viewer.print();
+        await waitForPrint();
+        await nextRender();
+        expect(document.activeElement).to.equal(button);
+      } finally {
+        button.remove();
+      }
+    });
+
     it('should cancel printing with Escape', async () => {
       getButton('print').focus();
       getButton('print').click();

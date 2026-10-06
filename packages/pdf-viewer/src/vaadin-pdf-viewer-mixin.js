@@ -9,6 +9,7 @@
  * license.
  */
 import { announce } from '@vaadin/a11y-base/src/announce.js';
+import { isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { issueWarning } from '@vaadin/component-base/src/warnings.js';
 import { MAX_CANVAS_PIXELS, PdfViewerPage } from './pdf-viewer-page.js';
@@ -1150,12 +1151,15 @@ export const PdfViewerMixin = (superClass) =>
     }
 
     /**
-     * Scrolls the pages with the keyboard. Browsers do this natively for a
-     * focused scroll container, except Safari, so the viewer does it itself
-     * for consistent behavior.
+     * Scrolls the pages with the keyboard in Safari, which does not do it for
+     * a focused scroll container.
      * @private
      */
     #onContentKeyDown(event) {
+      // Other browsers scroll natively, which also keeps caret browsing (F7) working.
+      if (!isSafari) {
+        return;
+      }
       // Shift with the arrow keys extends a text selection.
       const isSelecting = event.shiftKey && event.key !== ' ';
       if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey || isSelecting) {

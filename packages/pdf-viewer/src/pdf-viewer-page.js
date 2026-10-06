@@ -68,6 +68,9 @@ export class PdfViewerPage {
     /** @type {HTMLElement | null} */
     this.structTreeElement = null;
 
+    /** Set when the page has no structure, i.e. it is not tagged. */
+    this.hasNoStructTree = false;
+
     /** The scale and output scale of the current canvas, to know when it is outdated. */
     this.renderedScale = 0;
     this.renderedOutputScale = 0;
@@ -248,11 +251,18 @@ export class PdfViewerPage {
    * @return {Promise<void>}
    */
   async renderStructTree() {
-    if (this.structTreeElement || !this.textLayerElement) {
+    if (this.structTreeElement || this.hasNoStructTree || !this.textLayerElement) {
       return;
     }
     const textLayerElement = this.textLayerElement;
-    const tree = await this.pdfPage.getStructTree();
+    let tree = null;
+    try {
+      tree = await this.pdfPage.getStructTree();
+    } catch {
+      // The structure is optional. A page with a broken one is shown as untagged.
+    }
+    // Remembered, so that rendering the page again does not ask the worker again.
+    this.hasNoStructTree = !tree;
     const element = createStructTreeElement(tree);
     // The text layer may have been released meanwhile.
     if (element && this.textLayerElement === textLayerElement && !this.structTreeElement) {

@@ -125,7 +125,7 @@ export const PdfViewerPrintMixin = (superClass) =>
       this.#printId += 1;
       const printId = this.#printId;
       const isCancelled = () => printId !== this.#printId || this._pdfDocument !== pdfDocument;
-      this.#printReturnFocus = this.#getFocusedElement();
+      this.#printReturnFocus = this.#getDeepActiveElement();
       this.__printProgress = 0;
       announce(this.__effectiveI18n.printing);
 
@@ -198,15 +198,15 @@ export const PdfViewerPrintMixin = (superClass) =>
     }
 
     /**
-     * Returns the focused element when it is in the viewer.
+     * Returns the focused element, also inside shadow roots.
      * @private
      */
-    #getFocusedElement() {
-      let active = this.getRootNode().activeElement;
-      if (active === this) {
-        active = this.shadowRoot.activeElement;
+    #getDeepActiveElement() {
+      let active = document.activeElement;
+      while (active && active.shadowRoot && active.shadowRoot.activeElement) {
+        active = active.shadowRoot.activeElement;
       }
-      return active && (this.contains(active) || this.shadowRoot.contains(active)) ? active : null;
+      return active && active !== document.body ? active : null;
     }
 
     /**
@@ -218,10 +218,17 @@ export const PdfViewerPrintMixin = (superClass) =>
       const returnFocus = this.#printReturnFocus;
       this.#printReturnFocus = null;
       await this.updateComplete;
-      const active = document.activeElement;
-      const isLost = !active || active === document.body || active.localName === 'iframe';
-      if (returnFocus && returnFocus.isConnected && !returnFocus.disabled && (isLost || this.#getFocusedElement())) {
+      const active = this.#getDeepActiveElement();
+      // Focus is lost when on nothing, on the print frame, or on an element that is gone or hidden.
+      const isLost = !active || active.localName === 'iframe' || !active.isConnected || !active.checkVisibility();
+      if (!isLost) {
+        return;
+      }
+      if (returnFocus && returnFocus.isConnected && !returnFocus.disabled && returnFocus.checkVisibility()) {
         returnFocus.focus({ focusVisible: isKeyboardActive() });
+      }
+      if (this.#getDeepActiveElement() !== returnFocus && this.pageCount) {
+        this.$.content.focus({ focusVisible: isKeyboardActive() });
       }
     }
 

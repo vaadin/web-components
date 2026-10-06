@@ -19,18 +19,18 @@ specific to the PDF viewer. It does not repeat those documents.
 
 Status values: `todo`, `in progress`, `in review`, `done`, `blocked`.
 
-| #   | Slice                                    | Status | Reviews (code / visual) | Notes                  |
-| --- | ---------------------------------------- | ------ | ----------------------- | ---------------------- |
-| 0   | Tracer bullet: package + first page      | done   | ✅ / ✅                 | 561906b4d0, 59ff4a2850 |
-| 1   | Continuous scroll, zoom, page tracking   | done   | ✅ / ✅ (+ re-review)   | 1e173c331e, b2d2a73c16 |
-| 2   | Toolbar: page navigation + zoom controls | done   | – / –                   |                        |
-| 3   | Text layer, links, keyboard, a11y basics | todo   | – / –                   |                        |
-| 4   | Find                                     | done   | – / –                   |                        |
-| 5   | Sidebar: thumbnails                      | todo   | – / –                   |                        |
-| 6   | Sidebar: outline                         | todo   | – / –                   |                        |
-| 7   | Download and print                       | done   | – / –                   |                        |
-| 8   | Tagged PDFs, AT audit, forced colors     | todo   | – / –                   |                        |
-| 9   | API docs, typings, README, release prep  | todo   | – / –                   |                        |
+| #   | Slice                                    | Status      | Reviews (code / visual) | Notes                                    |
+| --- | ---------------------------------------- | ----------- | ----------------------- | ---------------------------------------- |
+| 0   | Tracer bullet: package + first page      | done        | ✅ / ✅                 | 561906b4d0, 59ff4a2850                   |
+| 1   | Continuous scroll, zoom, page tracking   | done        | ✅ / ✅ + re-review     | 1e173c331e, b2d2a73c16                   |
+| 2   | Toolbar: page navigation + zoom controls | done        | ✅ / ✅                 | 538b068c2c, fixes in a4f29b51f9          |
+| 3   | Text layer, links, keyboard, a11y basics | done        | ✅ / ✅ + a11y          | a4f29b51f9, fixes in f4ac2da176          |
+| 4   | Find                                     | done        | ✅ / ✅ + a11y          | f4ac2da176, fixes in 5266a798ad          |
+| 5   | Sidebar: thumbnails                      | done        | ✅ / ✅ + a11y          | 5266a798ad (with 6), fixes in 5651cb1492 |
+| 6   | Sidebar: outline                         | done        | ✅ / ✅ + a11y          | 5266a798ad (with 5), fixes in 5651cb1492 |
+| 7   | Download and print                       | done        | ✅ / ✅                 | 5651cb1492, fixes in 3d2039d73f          |
+| 8   | Tagged PDFs, AT audit, forced colors     | done        | ✅ / ✅ + a11y          | 3d2039d73f; manual AT run open           |
+| 9   | API docs, typings, README, release prep  | in progress | – / –                   |                                          |
 
 ---
 
@@ -690,6 +690,29 @@ Newest entry at the top. Format:
 - Visual review: <summary>
 - Follow-ups: …
 ```
+
+### 2026-10-06 — Slice 8: Tagged PDFs, AT audit, forced colors — done (manual AT run open)
+
+- Base commit: 5651cb1492 Head: 3d2039d73f, review fixes committed together with slice 9
+- Shipped: tagged PDF structure for assistive technology, `aria-busy`, current outline entry,
+  selection of the current match when find closes, forced-colors outlines, the manual checklist
+  `plans/pdf-viewer-at-checklist.md`, slice 7 review fixes.
+- Code review: 0 blockers, 3 should-fix (tagged `Link` making a nested second link, a failing
+  `getStructTree()` breaking the page's links, the outline waiting for all destinations), nits
+  (dangling `aria-owns` for annotations / objects, alt on `role="none"`, repeated structure
+  requests for untagged pages, logical properties for the outline marker). All fixed; `tagged.pdf`
+  now has a link and a Swedish paragraph.
+- Visual review: 0 blockers, 4 should-fix (focus after `print()` called from outside the viewer,
+  faint selection with macOS `Highlight`, forced colors for the outline marker and the print
+  overlay, Lumo mask icons in forced colors). All fixed. Nits: the clicked outline entry is
+  marked; the marker is a straight bar.
+- A11y review: 0 blockers, 3 should-fix (nested tagged link, figure alt text without content,
+  find close and NVDA / JAWS reading position). Fixed: no role for `Link`, an `img` child with the
+  alt text for figures; the reading position is a checklist item, as focus returns to where it was.
+  The custom keyboard scrolling now only runs in Safari, so caret browsing (F7) works elsewhere.
+  Checklist and README limitations extended with the reviewer's items.
+- Open: the manual run of the checklist with real screen readers and Windows High Contrast, and
+  the Firefox / Safari print previews. These need a person.
 
 ### 2026-10-06 — Slice 7: Download and print — done
 

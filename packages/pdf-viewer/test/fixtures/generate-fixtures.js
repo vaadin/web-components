@@ -98,6 +98,8 @@ const fixtures = {
       <title>Tagged fixture</title>
       <style>${baseStyles} table { border-collapse: collapse; } td, th { border: 1px solid #000; padding: 4px; }</style>
       <h1>Tagged document</h1>
+      <p>Visit the <a href="https://vaadin.com/">Vaadin website</a>.</p>
+      <p lang="sv">Hej världen</p>
       <h2>A list</h2>
       <ul><li>First item</li><li>Second item</li></ul>
       <h2>A table</h2>
