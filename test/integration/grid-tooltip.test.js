@@ -18,6 +18,7 @@ import sinon from 'sinon';
 import '@vaadin/grid/src/vaadin-grid.js';
 import { flushGrid, getCell, getContainerCell } from '@vaadin/grid/test/helpers.js';
 import { Tooltip } from '@vaadin/tooltip/src/vaadin-tooltip.js';
+import { resetGlobalTooltipState } from '@vaadin/tooltip/src/vaadin-tooltip-mixin.js';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
 function getHeaderCell(grid, index = 0) {
@@ -271,21 +272,33 @@ describe('tooltip', () => {
           await nextRender();
         });
 
-        it('should not show tooltip when cell not fully visible at the start', async () => {
+        afterEach(() => {
+          // Showing a tooltip warms up the global state shared by all tooltips
+          resetGlobalTooltipState();
+        });
+
+        it('should show tooltip when cell not fully visible at the start', async () => {
           grid.$.table.scrollLeft = isRTL ? -150 : 150;
           await nextRender();
           flushGrid(grid);
 
           mouseenter(getCell(grid, 0));
-          expect(tooltip.opened).to.be.false;
+          expect(tooltip.opened).to.be.true;
         });
 
-        it('should not show tooltip when cell not fully visible at the end', () => {
+        it('should show tooltip when cell not fully visible at the end', () => {
           mouseenter(getCell(grid, 1));
-          expect(tooltip.opened).to.be.false;
+          expect(tooltip.opened).to.be.true;
         });
 
-        it('should not show tooltip when cell is partially covered by frozen cell', async () => {
+        it('should show tooltip on cell keyboard focus when cell not fully visible', () => {
+          tooltip.focusDelay = 0;
+          tabKeyDown(document.body);
+          focusin(getCell(grid, 1));
+          expect(tooltip.opened).to.be.true;
+        });
+
+        it('should show tooltip when cell is partially covered by frozen cell', async () => {
           grid.querySelector('vaadin-grid-column').frozen = true;
           await nextRender();
 
@@ -294,10 +307,10 @@ describe('tooltip', () => {
           flushGrid(grid);
 
           mouseenter(getCell(grid, 1));
-          expect(tooltip.opened).to.be.false;
+          expect(tooltip.opened).to.be.true;
         });
 
-        it('should not show tooltip when cell is partially covered by frozen to end cell', async () => {
+        it('should show tooltip when cell is partially covered by frozen to end cell', async () => {
           grid.querySelectorAll('vaadin-grid-column')[2].frozenToEnd = true;
           await nextRender();
 
@@ -306,7 +319,18 @@ describe('tooltip', () => {
           flushGrid(grid);
 
           mouseenter(getCell(grid, 1));
-          expect(tooltip.opened).to.be.false;
+          expect(tooltip.opened).to.be.true;
+        });
+
+        it('should show tooltip when cell is wider than the area next to frozen cell', async () => {
+          const [frozenColumn, column] = grid.querySelectorAll('vaadin-grid-column');
+          frozenColumn.frozen = true;
+          column.width = '200px';
+          await nextRender();
+          flushGrid(grid);
+
+          mouseenter(getCell(grid, 1));
+          expect(tooltip.opened).to.be.true;
         });
       });
     });
